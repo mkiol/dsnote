@@ -25,6 +25,6 @@ ApplicationWindow {
     initialPage: notesPage
 
     Dsnote {
-        id: app
+        id: app 
     }
 }

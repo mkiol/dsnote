@@ -28,6 +28,7 @@ class dsnote_app : public QObject
     Q_PROPERTY (QVariantList langs READ langs NOTIFY langs_changed)
     Q_PROPERTY (QVariantList available_langs READ available_langs NOTIFY langs_changed)
     Q_PROPERTY (bool speech READ speech WRITE set_speech NOTIFY speech_changed)
+    Q_PROPERTY (bool busy READ busy NOTIFY busy_changed)
 
 public:
     dsnote_app();
@@ -41,6 +42,7 @@ signals:
     void lang_download_progress(const QString& id, double progress);
     void intermediate_text_changed();
     void speech_changed();
+    void busy_changed();
 
 private:
     std::unique_ptr<deepspeech_wrapper> ds;
@@ -61,6 +63,7 @@ private:
     void restart_ds(const QString& model_file, const QString& scorer_file = {});
     void restart_recording();
     void stop();
+    [[nodiscard]] inline bool busy() const { return manager.busy(); }
     [[nodiscard]] bool speech() const;
     std::optional<std::pair<QString, QString>> setup_active_lang();
     inline bool recording() const { return mic ? true : false; };

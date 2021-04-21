@@ -59,4 +59,4 @@ sailfishapp {
         $${SRC_DIR}/dirmodel.h
 }
 
-LIBS += -L$${LIB_DIR} -l:libdeepspeech.so
+LIBS += -llzma -L$${LIB_DIR} -l:libdeepspeech.so

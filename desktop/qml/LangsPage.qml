@@ -19,6 +19,7 @@ Page {
     // [1] - friendly name
     // [2] - model availability
     // [3] - download in progress
+    // [4] - download progress
 
     Flickable {
         anchors.fill: parent
@@ -51,7 +52,7 @@ Page {
                 ProgressBar {
                     id: bar
                     Layout.fillWidth: true
-                    value: modelData[2] ? 1 : 0
+                    value: modelData[2] ? 1 : modelData[4]
 
                     Connections {
                         target: app

@@ -50,6 +50,17 @@ Page {
                 onClicked: Qt.openUrlExternally(PAGE)
             }
 
+            Button {
+                visible: false
+                text: qsTr("Changes")
+                anchors.horizontalCenter: parent.horizontalCenter
+                onClicked: pageStack.push(Qt.resolvedUrl("ChangelogPage.qml"))
+            }
+
+            SectionHeader {
+                text: qsTr("Authors")
+            }
+
             PaddedLabel {
                 horizontalAlignment: Text.AlignLeft
                 textFormat: Text.RichText
@@ -64,6 +75,20 @@ Page {
                 text: qsTr("%1 is developed as an open source project under %2.")
                 .arg(APP_NAME)
                 .arg("<a href=\"" + LICENSE_URL + "\">" + LICENSE + "</a>")
+            }
+
+            SectionHeader {
+                visible: false
+                text: qsTr("Translators")
+            }
+
+            SectionHeader {
+                text: qsTr("Libraries in use")
+            }
+
+            PaddedLabel {
+                horizontalAlignment: Text.AlignLeft
+                text: "DeepSpeech"
             }
 
             Spacer {}

@@ -33,6 +33,7 @@ Page {
             }
 
             ComboBox {
+                id: langCombo
                 label: qsTr("Language")
                 visible: configured
                 currentIndex: app.active_lang_idx
@@ -43,7 +44,14 @@ Page {
                     }
                 }
 
-                onCurrentIndexChanged: app.set_active_lang_idx(currentIndex)
+                onCurrentIndexChanged: {
+                    app.set_active_lang_idx(currentIndex)
+                }
+
+                Connections {
+                    target: app
+                    onLangs_changed: langCombo.currentIndex = app.active_lang_idx
+                }
             }
 
             Button {

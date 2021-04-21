@@ -19,6 +19,7 @@ Page {
     allowedOrientations: Orientation.All
 
     SilicaFlickable {
+        id: flick
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
@@ -35,6 +36,8 @@ Page {
             spacing: Theme.paddingLarge
 
             PullDownMenu {
+                busy: app.busy
+
                 MenuItem {
                     text: qsTr("About %1").arg(APP_NAME)
                     onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
@@ -70,14 +73,25 @@ Page {
             onTextChanged: {
                 cursorPosition = text.length
                 _settings.note = text
+                flick.scrollToBottom()
             }
         }
 
         ViewPlaceholder {
-            enabled: !configured
+            enabled: !configured && !app.busy
             text: qsTr("Language is not configured")
             hintText: qsTr("Pull down and select Settings to configure language")
         }
+    }
+
+    VerticalScrollDecorator {
+        flickable: flick
+    }
+
+    BusyIndicator {
+        anchors.centerIn: parent
+        running: app.busy
+        size: BusyIndicatorSize.Large
     }
 
     SilicaItem {

@@ -29,12 +29,15 @@ Page {
         delegate: SimpleListItem {
             id: listItem
 
+            visible: !app.busy
+
             property color itemColor: highlighted ? Theme.highlightColor : Theme.primaryColor
             property color secondaryItemColor: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
 
             property string langId: modelData[0]
             property bool available: modelData[2]
             property bool downloading: modelData[3]
+            property double progress: modelData[4]
 
             title.text: modelData[1]
 
@@ -81,6 +84,8 @@ Page {
                     color: Theme.highlightColor
                     anchors.centerIn: parent
                     font.pixelSize: Theme.fontSizeTiny
+                    text:  listItem.progress > 0.0 ?
+                               Math.round(listItem.progress * 100) + "%" : ""
                 }
 
                 Connections {
@@ -97,9 +102,15 @@ Page {
         }
 
         ViewPlaceholder {
-            enabled: listView.count === 0
+            enabled: listView.count === 0 && !app.busy
             text: qsTr("No languages")
         }
+    }
+
+    BusyIndicator {
+        anchors.centerIn: parent
+        running: app.busy
+        size: BusyIndicatorSize.Large
     }
 
     VerticalScrollDecorator {

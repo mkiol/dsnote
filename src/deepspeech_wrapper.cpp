@@ -139,13 +139,11 @@ std::pair<char*, int64_t> deepspeech_wrapper::borrow_buff()
 {
     std::pair<char*, int64_t> c_buf{nullptr, 0};
 
-    if (!lock_buff(lock_type::borrowed)) {
-        //qDebug() << "no free buff to borrow";
+    if (!lock_buff(lock_type::borrowed))
         return c_buf;
-    }
 
     if (buff_struct.full()) {
-        qWarning() << "cannot borrow, buff is full";
+        //qWarning() << "cannot borrow, buff is full";
         free_buff();
         return c_buf;
     }
@@ -159,7 +157,7 @@ std::pair<char*, int64_t> deepspeech_wrapper::borrow_buff()
 void deepspeech_wrapper::return_buff(char* c_buff, int64_t size)
 {
     if (buff_struct.lock != lock_type::borrowed) {
-        qWarning() << "cannot return, buff not borrowed";
+        //qWarning() << "cannot return, buff not borrowed";
         return;
     }
 
@@ -171,10 +169,8 @@ void deepspeech_wrapper::return_buff(char* c_buff, int64_t size)
 
 bool deepspeech_wrapper::lock_buff_for_processing()
 {
-    if (!lock_buff(lock_type::processed)) {
-        qWarning() << "no free buff to borrow";
+    if (!lock_buff(lock_type::processed))
         return false;
-    }
 
     if (buff_struct.size < frame_size) {
         free_buff();

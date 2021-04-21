@@ -5,7 +5,7 @@ Release: 1
 # The contents of the Group field should be one of the groups listed here:
 # https://github.com/mer-tools/spectacle/blob/master/data/GROUPS
 Group: Qt/Qt
-URL: http://example.org/
+URL: https://github.com/mkiol/dsnote
 License: LICENSE
 # This must be generated before uploading a package to a remote build service.
 # Usually this line does not need to be modified.
@@ -22,10 +22,10 @@ PkgConfigBR:
   - Qt5Core
   - Qt5Qml
   - Qt5Quick
+  - liblzma
 
 # Build dependencies without a pkgconfig setup can be listed here
-PkgBR:
-  - boost-devel
+#PkgBR:
 
 # Runtime dependencies which are not automatically detected
 Requires:

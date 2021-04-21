@@ -13,7 +13,7 @@ Version:    1.0.0
 Release:    1
 Group:      Qt/Qt
 License:    LICENSE
-URL:        http://example.org/
+URL:        https://github.com/mkiol/dsnote
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-dsnote.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
@@ -21,7 +21,7 @@ BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
-BuildRequires:  boost-devel
+BuildRequires:  pkgconfig(liblzma)
 BuildRequires:  desktop-file-utils
 
 %description

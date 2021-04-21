@@ -20,6 +20,7 @@ dsnote_app::dsnote_app() : QObject{}
     connect(&manager, &models_manager::download_progress, this, [this](const QString& id, double progress) {
         emit lang_download_progress(id, progress);
     });
+    connect(&manager, &models_manager::busy_changed, this, [this] { emit busy_changed(); });
 
     handle_models_changed();
 }
@@ -137,7 +138,8 @@ QVariantList dsnote_app::langs() const
             lang.id,
             QString{"%1 (%2)"}.arg(lang.name, lang.id),
             lang.available,
-            lang.downloading};
+            lang.downloading,
+            lang.download_progress};
     });
 
     return list;
