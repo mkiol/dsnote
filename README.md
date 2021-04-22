@@ -1,10 +1,10 @@
-# Voice Note
+# Speech Note
 
 Sailfish OS app for note taking with speech to text
 
 ## Description
 
-Voice Note app converts speech to text using [DeepSpeech](https://github.com/mozilla/DeepSpeech) library and language models. All voice processing is entirely done locally on the device. Internet connection is only required for model download during app initial configuration.
+Speech Note app converts speech to text using [DeepSpeech](https://github.com/mozilla/DeepSpeech) library and language models. All voice processing is entirely done locally on the device. Internet connection is only required for model download during app initial configuration.
 
 ## Language models
 
@@ -22,5 +22,5 @@ DeepSpeech models for particular language can be downloaded from the app. Follow
 
 ## License
 
-Voice Note is developed as an open source project under
+Speech Note is developed as an open source project under
 [Mozilla Public License Version 2.0](https://www.mozilla.org/MPL/2.0/).
