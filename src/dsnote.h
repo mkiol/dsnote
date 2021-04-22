@@ -42,6 +42,7 @@ signals:
     void lang_download_progress(const QString& id, double progress);
     void intermediate_text_changed();
     void speech_changed();
+    void speech_clear();
     void busy_changed();
 
 private:
@@ -60,6 +61,7 @@ private:
     void handle_intermediate_text_decoded(const std::string &text);
     void handle_audio_available();
     void handle_speech_status_changed(bool speech_detected);
+    void handle_speech_clear();
     void restart_ds(const QString& model_file, const QString& scorer_file = {});
     void restart_recording();
     void stop();

@@ -274,7 +274,6 @@ void deepspeech_wrapper::flush()
     frames_without_change = 0;
 
     if (intermediate_text && !intermediate_text->empty()) {
-        qDebug() << intermediate_text->size();
         if (intermediate_text->size() >= min_text_size)
             call_backs.text_decoded(intermediate_text.value());
         set_intermediate_text("");

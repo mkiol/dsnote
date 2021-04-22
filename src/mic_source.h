@@ -23,6 +23,7 @@ public:
     ~mic_source();
     bool ok() const;
     int64_t read_audio(char* buff, int64_t max_size);
+    void clear();
 
 signals:
     void audio_available();

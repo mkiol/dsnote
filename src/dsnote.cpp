@@ -14,6 +14,7 @@
 
 dsnote_app::dsnote_app() : QObject{}
 {
+    connect(this, &dsnote_app::speech_clear, this, &dsnote_app::handle_speech_clear);
     connect(settings::instance(), &settings::lang_changed, this, &dsnote_app::handle_models_changed);
     connect(settings::instance(), &settings::speech_mode_changed, this, &dsnote_app::handle_models_changed);
     connect(&manager, &models_manager::models_changed, this, &dsnote_app::handle_models_changed);
@@ -123,9 +124,17 @@ void dsnote_app::handle_text_decoded(const std::string &text)
     emit intermediate_text_changed();
 }
 
-void dsnote_app::handle_speech_status_changed(bool)
+void dsnote_app::handle_speech_status_changed(bool speech_detected)
 {
+    if (!speech_detected)
+        emit speech_clear();
     emit speech_changed();
+}
+
+void dsnote_app::handle_speech_clear()
+{
+    if (mic && settings::instance()->speech_mode() == settings::speech_mode_type::SpeechAutomatic)
+        mic->clear();
 }
 
 QVariantList dsnote_app::langs() const

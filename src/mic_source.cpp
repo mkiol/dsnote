@@ -67,6 +67,13 @@ void mic_source::handle_read_timeout()
     emit audio_available();
 }
 
+void mic_source::clear()
+{
+    char buff[std::numeric_limits<short>::max()];
+    while (audio_device->read(buff, std::numeric_limits<short>::max()))
+        continue;
+}
+
 int64_t mic_source::read_audio(char* buff, int64_t max_size)
 {
     return audio_device->read(buff, max_size);
