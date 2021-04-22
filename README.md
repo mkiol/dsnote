@@ -10,7 +10,7 @@ Voice Note app converts speech to text using [DeepSpeech](https://github.com/moz
 
 DeepSpeech models for particular language can be downloaded from the app. Following models are currently configured for download:
 
-| Language        | URL                                                   |
+| Language        | Original source                                       |
 |:----------------|:------------------------------------------------------|
 | English (en)    | https://github.com/mozilla/DeepSpeech                 |
 | German (de)     | https://gitlab.com/Jaco-Assistant/deepspeech-polyglot |
