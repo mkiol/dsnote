@@ -50,7 +50,7 @@ Page {
 
             RowLayout {
                 Label {
-                    text: qsTr("Location of language files")
+                    text: qsTr("Location of language models")
                 }
                 TextField {
                     Layout.fillWidth: true

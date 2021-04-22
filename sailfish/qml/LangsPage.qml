@@ -23,7 +23,7 @@ Page {
         model: app.langs
 
         header: PageHeader {
-            title: qsTr("Languages")
+            title: qsTr("Language models")
         }
 
         delegate: SimpleListItem {
@@ -103,7 +103,7 @@ Page {
 
         ViewPlaceholder {
             enabled: listView.count === 0 && !app.busy
-            text: qsTr("No languages")
+            text: qsTr("No language models")
         }
     }
 

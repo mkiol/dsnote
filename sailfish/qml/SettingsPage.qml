@@ -34,7 +34,7 @@ Page {
 
             ComboBox {
                 id: langCombo
-                label: qsTr("Language")
+                label: qsTr("Active language")
                 visible: configured
                 currentIndex: app.active_lang_idx
                 menu: ContextMenu {
@@ -55,7 +55,7 @@ Page {
             }
 
             Button {
-                text: qsTr("Languages configuration")
+                text: qsTr("Language models download")
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: pageStack.push(Qt.resolvedUrl("LangsPage.qml"))
             }
@@ -71,16 +71,14 @@ Page {
                 }
                 onCurrentIndexChanged: _settings.speech_mode = currentIndex === 0 ?
                                            Settings.SpeechAutomatic : Settings.SpeechManual
-                description: qsTr("Speech is automatically recognized and translated to text (Automatic) " +
+                description: qsTr("Speech is automatically recognized and converted to text (Automatic) " +
                                   "or tap on bottom panel triggers speech recognition (Manual).");
             }
 
             ItemBox {
-                title: qsTr("Location of language files")
+                title: qsTr("Location of language models")
                 value: _settings.lang_models_dir_name
-                description: qsTr("Directory where language files are downloaded to. " +
-                                  "File size is around 1 GB, so make " +
-                                  "sure to have enough space on your device to download it.")
+                description: qsTr("Directory where language models are downloaded to and stored.")
 
                 menu: ContextMenu {
                     MenuItem {

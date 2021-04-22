@@ -49,13 +49,13 @@ Page {
                 }
 
                 MenuItem {
-                    visible: configured
+                    visible: textArea.text.length > 0
                     text: qsTr("Clear")
                     onClicked: _settings.note = ""
                 }
 
                 MenuItem {
-                    visible: configured
+                    visible: textArea.text.length > 0
                     text: qsTr("Copy")
                     onClicked: Clipboard.text = textArea.text
                 }
@@ -64,7 +64,8 @@ Page {
 
         TextArea {
             id: textArea
-            visible: configured
+            opacity: configured && !app.busy ? 1.0 : 0.3
+            Behavior on opacity { NumberAnimation { duration: 150 } }
             anchors.bottom: parent.bottom
             text: _settings.note
             verticalAlignment: TextEdit.AlignBottom
@@ -79,8 +80,8 @@ Page {
 
         ViewPlaceholder {
             enabled: !configured && !app.busy
-            text: qsTr("Language is not configured")
-            hintText: qsTr("Pull down and select Settings to configure language")
+            text: qsTr("Language model is not configured")
+            hintText: qsTr("Pull down and select Settings to download language model")
         }
     }
 
@@ -96,7 +97,8 @@ Page {
 
     SilicaItem {
         id: panel
-        visible: configured
+        opacity: configured && !app.busy ? 1.0 : 0.3
+        Behavior on opacity { NumberAnimation { duration: 150 } }
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
