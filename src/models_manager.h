@@ -87,6 +87,7 @@ private:
     void handle_download_progress(qint64 received, qint64 total);
     void handle_download_finished();
     void handle_download_ready_read();
+    void handle_ssl_errors(const QList<QSslError> &errors);
     static QString make_checksum(const QString& file);
     static QString model_path(const QString& file_name);
     static void init_config();

@@ -173,11 +173,20 @@ void models_manager::download(const QString& id, download_type type)
         connect(reply, &QNetworkReply::downloadProgress, this, &models_manager::handle_download_progress);
         connect(reply, &QNetworkReply::finished, this, &models_manager::handle_download_finished);
         connect(reply, &QNetworkReply::readyRead, this, &models_manager::handle_download_ready_read);
+        connect(reply, &QNetworkReply::sslErrors, this, &models_manager::handle_ssl_errors);
 
         emit models_changed();
     } else {
         qWarning() << "no model with id:" << id;
     }
+}
+
+void models_manager::handle_ssl_errors(const QList<QSslError> &errors)
+{
+    qWarning() << "ssl error:" << errors;
+
+    // workaround for outdated cert db on Jolla 1
+    static_cast<QNetworkReply*>(sender())->ignoreSslErrors();
 }
 
 void models_manager::handle_download_ready_read()
@@ -284,7 +293,8 @@ void models_manager::handle_download_finished()
     delete static_cast<std::ofstream*>(reply->property("out_file").value<void*>());
 
     if (reply->error() != QNetworkReply::NoError) {
-        qWarning() << "error in download:" << (type == download_type::scorer ? "scorer" : "model") << id;
+        qWarning() << "error in download:" << (type == download_type::scorer ? "scorer" : "model") << id
+                   << "error type:" << reply->error();
         emit download_error(id);
     } else {
         auto path = reply->property("out_path").toString();
