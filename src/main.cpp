@@ -11,6 +11,9 @@
 #include <QUrl>
 #include <QString>
 #include <QDebug>
+#include <QLocale>
+#include <QTranslator>
+#include <QTextCodec>
 
 #ifdef SAILFISH
 #ifdef QT_QML_DEBUG
@@ -44,6 +47,28 @@ void register_types()
 #endif
 }
 
+#ifdef SAILFISH
+void install_translator(QGuiApplication* app)
+#else
+void install_translator(const std::unique_ptr<QGuiApplication>& app)
+#endif
+{
+    auto translator = new QTranslator();
+#ifdef SAILFISH
+    auto trans_dir = SailfishApp::pathTo("translations").toLocalFile();
+#else
+    QString trans_dir = ":/translations";
+#endif
+    if(!translator->load(QLocale::system().name(), QStringLiteral("dsnote"), QStringLiteral("-"), trans_dir, QStringLiteral(".qm"))) {
+        qDebug() << "cannot load translation:" << QLocale::system().name() << trans_dir;
+        if (!translator->load("dsnote-en", trans_dir)) {
+            qDebug() << "cannot load default translation";
+        }
+    }
+
+    app->installTranslator(translator);
+}
+
 int main(int argc, char* argv[])
 {
 #ifdef SAILFISH
@@ -63,6 +88,7 @@ int main(int argc, char* argv[])
     app->setApplicationVersion(dsnote::APP_VERSION);
 
     register_types();
+    install_translator(app);
 
     context->setContextProperty("APP_NAME", dsnote::APP_NAME);
     context->setContextProperty("APP_ID", dsnote::APP_ID);

@@ -12,7 +12,7 @@ import QtQuick.Layouts 1.3
 Page {
     id: root
 
-    title: qsTr("Language models")
+    title: qsTr("Languages")
 
     // app.langs:
     // [0] - id

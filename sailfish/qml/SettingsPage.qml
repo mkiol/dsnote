@@ -55,7 +55,7 @@ Page {
             }
 
             Button {
-                text: qsTr("Language models download")
+                text: qsTr("Language download")
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: pageStack.push(Qt.resolvedUrl("LangsPage.qml"))
             }
@@ -76,9 +76,9 @@ Page {
             }
 
             ItemBox {
-                title: qsTr("Location of language models")
+                title: qsTr("Location of language files")
                 value: _settings.lang_models_dir_name
-                description: qsTr("Directory where language models are downloaded to and stored.")
+                description: qsTr("Directory where language files are downloaded to and stored.")
 
                 menu: ContextMenu {
                     MenuItem {

@@ -80,8 +80,8 @@ Page {
 
         ViewPlaceholder {
             enabled: !configured && !app.busy
-            text: qsTr("Language model is not configured")
-            hintText: qsTr("Pull down and select Settings to download language model")
+            text: qsTr("Language is not configured")
+            hintText: qsTr("Pull down and select Settings to download language")
         }
     }
 

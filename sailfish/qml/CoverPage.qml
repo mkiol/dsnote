@@ -13,19 +13,6 @@ import harbour.dsnote.Settings 1.0
 CoverBackground {
     id: root
 
-
-    /*Label {
-        id: noteLabel
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        clip: true
-        anchors.margins: Theme.paddingLarge
-        wrapMode: Text.NoWrap
-        text: _settings.note_short
-        font.pixelSize: Theme.fontSizeSmall
-    }*/
-
     Label {
         id: noteLabel
         anchors.margins: Theme.paddingLarge
