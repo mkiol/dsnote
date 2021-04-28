@@ -75,6 +75,8 @@ int main(int argc, char* argv[])
     context->setContextProperty("LICENSE", dsnote::LICENSE);
     context->setContextProperty("LICENSE_URL", dsnote::LICENSE_URL);
     context->setContextProperty("LICENSE_SPDX", dsnote::LICENSE_SPDX);
+    context->setContextProperty("TENSORFLOW_VERSION", dsnote::TENSORFLOW_VERSION);
+    context->setContextProperty("DEEPSPEECH_VERSION", dsnote::DEEPSPEECH_VERSION);
 
     context->setContextProperty("_settings", settings::instance());
 

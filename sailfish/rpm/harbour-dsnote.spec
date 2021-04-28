@@ -6,12 +6,10 @@
 Name:       harbour-dsnote
 
 # >> macros
-%define __provides_exclude_from ^%{_datadir}/.*$
-%define __requires_exclude ^libdeepspeech.*$
 # << macros
 
 Summary:    Note taking with speech to text
-Version:    1.0.0
+Version:    1.0.1
 Release:    1
 Group:      Qt/Qt
 License:    LICENSE

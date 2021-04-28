@@ -12,5 +12,8 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* We Apr 28 2021 Michal Kosciesza <michal@mkiol.net> 1.0.1-1
+- DeepSpeech lib update
+
 * Thu Apr 22 2021 Michal Kosciesza <michal@mkiol.net> 1.0.0-1
 - Initial version

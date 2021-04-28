@@ -30,6 +30,8 @@ Page {
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
+                height: Theme.itemSizeHuge
+                width: Theme.itemSizeHuge
                 source: _settings.app_icon()
             }
 
@@ -51,7 +53,6 @@ Page {
             }
 
             Button {
-                visible: false
                 text: qsTr("Changes")
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: pageStack.push(Qt.resolvedUrl("ChangelogPage.qml"))
@@ -83,12 +84,16 @@ Page {
             }
 
             SectionHeader {
-                text: qsTr("Libraries in use")
+                text: qsTr("Libraries")
             }
 
-            PaddedLabel {
-                horizontalAlignment: Text.AlignLeft
-                text: "DeepSpeech"
+            DetailItem {
+                label: "DeepSpeech"
+                value: DEEPSPEECH_VERSION
+            }
+            DetailItem {
+                label: "TensorFlow"
+                value: TENSORFLOW_VERSION
             }
 
             Spacer {}
