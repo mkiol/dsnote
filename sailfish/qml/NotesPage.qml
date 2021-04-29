@@ -71,10 +71,13 @@ Page {
             verticalAlignment: TextEdit.AlignBottom
             background: null
             labelComponent: null
-            onTextChanged: {
-                cursorPosition = text.length
-                _settings.note = text
-                flick.scrollToBottom()
+            onTextChanged: _settings.note = text
+
+            Connections {
+                target: app
+                onText_changed: {
+                    flick.scrollToBottom()
+                }
             }
         }
 

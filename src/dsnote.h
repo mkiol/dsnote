@@ -41,6 +41,7 @@ signals:
     void langs_changed();
     void lang_download_progress(const QString& id, double progress);
     void intermediate_text_changed();
+    void text_changed();
     void speech_changed();
     void speech_clear();
     void busy_changed();

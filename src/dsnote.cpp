@@ -121,6 +121,7 @@ void dsnote_app::handle_text_decoded(const std::string &text)
 
     this->intermediate_text_value.clear();
 
+    emit text_changed();
     emit intermediate_text_changed();
 }
 
