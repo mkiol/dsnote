@@ -1,10 +1,10 @@
 # Speech Note
 
-Sailfish OS app for note taking with speech to text
+Experimental Sailfish OS app for note taking with speech to text
 
 ## Description
 
-Speech Note app converts speech to text using [DeepSpeech](https://github.com/mozilla/DeepSpeech) library and language models. All voice processing is entirely done locally on the device. Internet connection is only required for model download during app initial configuration.
+Speech Note converts speech to text using [DeepSpeech](https://github.com/mozilla/DeepSpeech) library and language models. All voice processing is entirely done locally on the device. Internet connection is only required for model download during app initial configuration. Speech Note respects your privacy and provides truly offline speech-to-text capability.
 
 ## Language models
 
@@ -13,12 +13,19 @@ DeepSpeech models for particular language can be downloaded from the app. Follow
 | Language        | Original source                                       |
 |:----------------|:------------------------------------------------------|
 | English (en)    | https://github.com/mozilla/DeepSpeech                 |
-| German (de)     | https://gitlab.com/Jaco-Assistant/deepspeech-polyglot |
-| Spanish (es)    | https://gitlab.com/Jaco-Assistant/deepspeech-polyglot |
-| French (fr)     | https://gitlab.com/Jaco-Assistant/deepspeech-polyglot |
-| Italian (it)    | https://gitlab.com/Jaco-Assistant/deepspeech-polyglot |
-| Polish (pl)     | https://gitlab.com/Jaco-Assistant/deepspeech-polyglot |
+| German (de)     | https://gitlab.com/Jaco-Assistant/Scribosermo         |
+| Spanish (es)    | https://gitlab.com/Jaco-Assistant/Scribosermo         |
+| French (fr)     | https://gitlab.com/Jaco-Assistant/Scribosermo         |
+| Italian (it)    | https://gitlab.com/Jaco-Assistant/Scribosermo         |
+| Polish (pl)     | https://gitlab.com/Jaco-Assistant/Scribosermo         |
 | Chinese (zh-CN) | https://github.com/mozilla/DeepSpeech                 |
+
+
+The quality of speech recognition strongly depends on language model. In general it is not perfect but for some languages is surprisingly fine.
+
+## Download
+
+Packages for Sailfish OS are available on [OpenRepos](https://openrepos.net/content/mkiol/speech-note).
 
 ## License
 
