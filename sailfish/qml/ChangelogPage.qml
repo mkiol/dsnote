@@ -34,14 +34,20 @@ Page {
 
             LogItem {
                 title: "DeepSpeech lib update"
-                description: "DeepSpeech library was updated to 0.10.0-alpha.3 version. " +
-                             "Speech recognition accuracy is much better now."
+                description: "DeepSpeech library has been updated to version '0.10.0-alpha.3'. " +
+                             "Thanks to this update speech recognition accuracy is much better now."
             }
 
             LogItem {
                 title: "Support for Jolla 1, Jolla C and PinePhone"
-                description: "DeepSpeech library update made possible to run app on more ARM devices. " +
-                             "Unfortunately Jolla Tablet is still not supported."
+                description: "DeepSpeech library update made possible to run app on more devices. " +
+                             "Unfortunately only ARM-based devices are supported therefore app still " +
+                             "does not work on Jolla Tablet."
+            }
+
+            LogItem {
+                title: "Minor UI improvements"
+                description: "Translation has been polished and few UI glitches have been fixed."
             }
 
             Spacer {}
