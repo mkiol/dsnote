@@ -12,6 +12,8 @@
 #include <array>
 #include <atomic>
 #include <thread>
+#include <mutex>
+#include <condition_variable>
 #include <string>
 #include <utility>
 #include <functional>
@@ -61,6 +63,8 @@ private:
 
     callbacks_type call_backs;
     std::thread processing_thread;
+    std::mutex processing_mtx;
+    std::condition_variable processing_cv;
     bool thread_exit_requested = false;
     buff_struct_type buff_struct;
     std::optional<std::string> intermediate_text;

@@ -32,6 +32,7 @@ deepspeech_wrapper::deepspeech_wrapper(const std::string& model_file,
 deepspeech_wrapper::~deepspeech_wrapper()
 {
     thread_exit_requested = true;
+    processing_cv.notify_all();
     processing_thread.join();
 
     speech_detected_value = false;
@@ -45,9 +46,12 @@ void deepspeech_wrapper::start_processing()
 
     thread_exit_requested = false;
 
-    while (!thread_exit_requested)
-        if (!process_buff())
-            std::this_thread::sleep_for(200ms);
+    while (!thread_exit_requested) {
+        if (!process_buff()) {
+            std::unique_lock lock{processing_mtx};
+            processing_cv.wait(lock);
+        }
+    }
 
     flush();
 
@@ -165,6 +169,7 @@ void deepspeech_wrapper::return_buff(char* c_buff, int64_t size)
             sizeof (buff_type::value_type);
 
     free_buff();
+    processing_cv.notify_one();
 }
 
 bool deepspeech_wrapper::lock_buff_for_processing()
