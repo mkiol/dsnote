@@ -135,7 +135,7 @@ Page {
             anchors.leftMargin: Theme.paddingMedium * 0.7
             text: inactive ?
                       _settings.speech_mode === Settings.SpeechAutomatic || app.speech ?
-                      qsTr("Say something...") : qsTr("Tap and say something...") :
+                      qsTr("Say something...") : qsTr("Press and say something...") :
                       app.intermediate_text
             wrapMode: inactive ? Text.NoWrap : Text.WordWrap
             truncationMode: inactive ? TruncationMode.Fade : TruncationMode.None

@@ -51,7 +51,7 @@ Page {
                 Layout.fillWidth: true
                 readOnly: true
                 placeholderText: _settings.speech_mode === Settings.SpeechAutomatic || app.speech ?
-                                     qsTr("Say something...") : qsTr("Tap and say something...")
+                                     qsTr("Say something...") : qsTr("Press and say something...")
                 font.italic: true
                 text: app.intermediate_text
                 leftPadding: 0
@@ -68,7 +68,7 @@ Page {
                 id: toolButton
 
                 visible: _settings.speech_mode === Settings.SpeechManual && configured
-                text: qsTr("Tap to speek")
+                text: qsTr("Press and hold to speek")
                 onPressed: app.speech = true
                 onReleased: app.speech = false
             }

@@ -72,7 +72,7 @@ Page {
                 onCurrentIndexChanged: _settings.speech_mode = currentIndex === 0 ?
                                            Settings.SpeechAutomatic : Settings.SpeechManual
                 description: qsTr("Speech is automatically recognized and converted to text (Automatic) " +
-                                  "or tap on bottom panel triggers speech recognition (Manual).");
+                                  "or press and hold on bottom panel triggers speech recognition (Manual).");
             }
 
             ItemBox {
