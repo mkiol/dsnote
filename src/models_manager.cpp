@@ -467,7 +467,7 @@ void models_manager::init_config()
 #else
             << "{ \"name\": \"English\", \"id\": \"en\", "
             << "\"file_name\": \"en.pbmm\", \"md5\": \"8b15ccb86d0214657e48371287b7a49a\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.pbmm\", \"size\": \"188915987\", "
-            << "\"scorer_file_name\": \"en.scorer\", \"scorer_md5\": \"08a02b383a9bc93c8a8ad188dbf79bc9\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer\", \"scorer_size\": \"953363776\"},\n"
+            << "\"scorer_file_name\": \"en.scorer\", \"scorer_md5\": \"08a02b383a9bc93c8a8ad188dbf79bc9\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer\", \"scorer_size\": \"953363776\"},\n"
 
             << "{ \"name\": \"Deutsch\", \"id\": \"de\", "
             << "\"file_name\": \"de.pbmm\", \"md5\": \"ccb15318053a245487a15b90bf052cca\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_de.pbmm.xz\", \"size\": \"171571572\", "
