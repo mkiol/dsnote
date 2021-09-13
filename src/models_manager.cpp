@@ -503,7 +503,7 @@ auto models_manager::check_lang_file(const QJsonArray& langs)
 
     QDir dir{settings::instance()->lang_models_dir()};
 
-    for (const auto ele : langs) {
+    for (const auto& ele : langs) {
         auto obj = ele.toObject();
         auto id = obj.value("id").toString();
 

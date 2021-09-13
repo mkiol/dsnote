@@ -40,7 +40,6 @@ public:
     void return_buff(char* c_buff, int64_t size);
     bool ok() const;
     void flush();
-    void translate();
     void set_speech_status(bool started);
     [[nodiscard]] inline bool speech_detected() const { return speech_detected_value; }
 

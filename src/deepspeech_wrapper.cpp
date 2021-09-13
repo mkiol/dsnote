@@ -31,12 +31,13 @@ deepspeech_wrapper::deepspeech_wrapper(const std::string& model_file,
 
 deepspeech_wrapper::~deepspeech_wrapper()
 {
-    thread_exit_requested = true;
+    {
+        std::lock_guard lock{processing_mtx};
+        thread_exit_requested = true;
+    }
     processing_cv.notify_all();
     processing_thread.join();
-
     speech_detected_value = false;
-
     call_backs.speech_status_changed(false);
 }
 
@@ -46,11 +47,10 @@ void deepspeech_wrapper::start_processing()
 
     thread_exit_requested = false;
 
-    while (!thread_exit_requested) {
-        if (!process_buff()) {
-            std::unique_lock lock{processing_mtx};
-            processing_cv.wait(lock);
-        }
+    while (true) {
+        std::unique_lock lock{processing_mtx};
+        if (thread_exit_requested) break;
+        if (!process_buff()) processing_cv.wait(lock);
     }
 
     flush();
