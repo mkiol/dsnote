@@ -30,6 +30,7 @@ SRC_DIR = $${ROOT_DIR}/src
 LIB_DIR = $${ROOT_DIR}/libs/$${ARCH}
 
 SOURCES += \
+    $${SRC_DIR}/file_source.cpp \
     $${SRC_DIR}/deepspeech_wrapper.cpp \
     $${SRC_DIR}/main.cpp \
     $${SRC_DIR}/mic_source.cpp \
@@ -38,6 +39,8 @@ SOURCES += \
     $${SRC_DIR}/dsnote.cpp
 
 HEADERS += \
+    $${SRC_DIR}/audio_source.h \
+    $${SRC_DIR}/file_source.h \
     $${SRC_DIR}/info.h \
     $${SRC_DIR}/deepspeech_wrapper.h \
     $${SRC_DIR}/mic_source.h \

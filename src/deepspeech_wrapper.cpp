@@ -50,6 +50,10 @@ void deepspeech_wrapper::start_processing()
     while (true) {
         std::unique_lock lock{processing_mtx};
         if (thread_exit_requested) break;
+        if (restart_requested) {
+            restart_requested = false;
+            flush(true);
+        }
         if (!process_buff()) processing_cv.wait(lock);
     }
 
@@ -272,11 +276,18 @@ void deepspeech_wrapper::trim_buff(buff_type::const_iterator begin)
     std::copy(begin, begin + buff_struct.size, buff_struct.buff.begin());
 }
 
-void deepspeech_wrapper::flush()
+void deepspeech_wrapper::flush(bool clear_buff)
 {
     free_stream();
 
     frames_without_change = 0;
+
+    set_speech_detected(false);
+
+    if (clear_buff) {
+        if (lock_buff_for_processing())
+            buff_struct.size = 0;
+    }
 
     if (intermediate_text && !intermediate_text->empty()) {
         if (intermediate_text->size() >= min_text_size)

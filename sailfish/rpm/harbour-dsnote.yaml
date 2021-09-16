@@ -1,6 +1,6 @@
 Name: harbour-dsnote
 Summary: Note taking with speech to text
-Version: 1.0.1
+Version: 1.0.2
 Release: 1
 # The contents of the Group field should be one of the groups listed here:
 # https://github.com/mer-tools/spectacle/blob/master/data/GROUPS
@@ -30,6 +30,7 @@ PkgConfigBR:
 # Runtime dependencies which are not automatically detected
 Requires:
   - sailfishsilica-qt5 >= 0.10.9 
+  - qt5-qtmultimedia-plugin-mediaservice-gstaudiodecoder
 
 # All installed files
 Files:
@@ -40,3 +41,8 @@ Files:
 
 # For more information about yaml and what's supported in Sailfish OS
 # build system, please see https://wiki.merproject.org/wiki/Spectacle
+
+# >> macros
+# %define __provides_exclude_from ^%{_datadir}/.*$
+# %define __requires_exclude ^libdeepspeech.*$
+# << macros

@@ -6,10 +6,12 @@
 Name:       harbour-dsnote
 
 # >> macros
+%define __provides_exclude_from ^%{_datadir}/.*$
+%define __requires_exclude ^libdeepspeech.*$
 # << macros
 
 Summary:    Note taking with speech to text
-Version:    1.0.1
+Version:    1.0.2
 Release:    1
 Group:      Qt/Qt
 License:    LICENSE
@@ -17,6 +19,7 @@ URL:        https://github.com/mkiol/dsnote
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-dsnote.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
+Requires:   qt5-qtmultimedia-plugin-mediaservice-gstaudiodecoder
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)

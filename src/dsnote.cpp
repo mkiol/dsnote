@@ -11,6 +11,8 @@
 #include <algorithm>
 
 #include "settings.h"
+#include "file_source.h"
+#include "mic_source.h"
 
 dsnote_app::dsnote_app() : QObject{}
 {
@@ -24,6 +26,17 @@ dsnote_app::dsnote_app() : QObject{}
     connect(&manager, &models_manager::busy_changed, this, [this] { emit busy_changed(); });
 
     handle_models_changed();
+}
+
+dsnote_app::source_type dsnote_app::audio_source_type() const
+{
+    if (!source)
+        return source_type::SourceNone;
+    if (source->type() == audio_source::source_type::mic)
+        return source_type::SourceMic;
+    if (source->type() == audio_source::source_type::file)
+        return source_type::SourceFile;
+    return source_type::SourceNone;
 }
 
 std::optional<std::pair<QString, QString>> dsnote_app::setup_active_lang()
@@ -60,7 +73,7 @@ std::optional<std::pair<QString, QString>> dsnote_app::setup_active_lang()
 void dsnote_app::stop()
 {
     ds.reset();
-    restart_recording();
+    restart_audio_source();
 }
 
 void dsnote_app::handle_models_changed()
@@ -68,7 +81,7 @@ void dsnote_app::handle_models_changed()
     if (auto active_files = setup_active_lang()) {
         restart_ds(active_files->first, active_files->second);
         if (ds->ok()) {
-            restart_recording();
+            restart_audio_source();
             emit langs_changed();
             return;
         }
@@ -79,7 +92,14 @@ void dsnote_app::handle_models_changed()
     emit langs_changed();
 }
 
-void dsnote_app::restart_ds(const QString& model_file, const QString& scorer_file)
+void dsnote_app::restart_ds(speech_mode_req_type speech_mode_req)
+{
+    if (auto active_files = setup_active_lang()) {
+        restart_ds(active_files->first, active_files->second, speech_mode_req);
+    }
+}
+
+void dsnote_app::restart_ds(const QString& model_file, const QString& scorer_file, speech_mode_req_type speech_mode_req)
 {
     deepspeech_wrapper::callbacks_type call_backs{
         std::bind(&dsnote_app::handle_text_decoded, this, std::placeholders::_1),
@@ -91,9 +111,13 @@ void dsnote_app::restart_ds(const QString& model_file, const QString& scorer_fil
                 model_file.toStdString(),
                 scorer_file.toStdString(),
                 call_backs,
-                settings::instance()->speech_mode() == settings::speech_mode_type::SpeechAutomatic ?
-                          deepspeech_wrapper::speech_mode_type::automatic :
-                          deepspeech_wrapper::speech_mode_type::manual);
+                speech_mode_req == speech_mode_req_type::settings ?
+                    settings::instance()->speech_mode() == settings::speech_mode_type::SpeechAutomatic ?
+                              deepspeech_wrapper::speech_mode_type::automatic :
+                              deepspeech_wrapper::speech_mode_type::manual :
+                speech_mode_req == speech_mode_req_type::automatic ?
+                        deepspeech_wrapper::speech_mode_type::automatic :
+                        deepspeech_wrapper::speech_mode_type::manual);
 
     if (!ds->ok())
         qWarning() << "cannot init engine"; 
@@ -134,8 +158,8 @@ void dsnote_app::handle_speech_status_changed(bool speech_detected)
 
 void dsnote_app::handle_speech_clear()
 {
-    if (mic && settings::instance()->speech_mode() == settings::speech_mode_type::SpeechAutomatic)
-        mic->clear();
+    if (source && settings::instance()->speech_mode() == settings::speech_mode_type::SpeechAutomatic)
+        source->clear();
 }
 
 QVariantList dsnote_app::langs() const
@@ -182,22 +206,90 @@ void dsnote_app::set_active_lang_idx(int idx)
 
 void dsnote_app::handle_audio_available()
 {
-    if (mic && ds && ds->ok()) {
+    //qDebug() << "handle_audio_available";
+    if (source && ds && ds->ok()) {
         auto [buff, max_size] = ds->borrow_buff();
-        if (buff && max_size > 0)
-            ds->return_buff(buff, mic->read_audio(buff, max_size));
+        if (buff && max_size > 0) {
+            ds->return_buff(buff, source->read_audio(buff, max_size));
+
+            set_progress(source->progress());
+        }
     }
 }
 
-void dsnote_app::restart_recording()
+void dsnote_app::set_progress(double p)
+{
+    if (p != progress_value) {
+        progress_value = p;
+        emit progress_changed();
+    }
+}
+
+void dsnote_app::cancel_file_source()
+{
+    if (source && source->type() == audio_source::source_type::file) {
+        restart_ds(speech_mode_req_type::settings);
+        restart_audio_source();
+    }
+}
+
+void dsnote_app::set_file_source(const QString& source_file)
+{
+    restart_ds(speech_mode_req_type::automatic);
+    restart_audio_source(source_file);
+}
+
+void dsnote_app::set_file_source(const QUrl& source_file)
+{
+    restart_ds(speech_mode_req_type::automatic);
+    restart_audio_source(source_file.toLocalFile());
+}
+
+void dsnote_app::handle_audio_error()
+{
+    if (source->type() == audio_source::source_type::file) {
+        qWarning() << "cannot start file audio source";
+        emit error(error_type::ErrorFileSource);
+        restart_ds(speech_mode_req_type::settings);
+        restart_audio_source();
+    } else {
+        qWarning() << "cannot start mic audio source";
+        emit error(error_type::ErrorMicSource);
+    }
+}
+
+void dsnote_app::handle_audio_ended()
+{
+    if (source->type() == audio_source::source_type::file) {
+        qDebug() << "file audio source ended successfuly";
+        restart_ds(speech_mode_req_type::settings);
+        restart_audio_source();
+        emit transcribe_done();
+    } else {
+        qWarning() << "mic audio source ended unexpectedly";
+        emit error(error_type::ErrorMicSource);
+    }
+}
+
+void dsnote_app::restart_audio_source(const QString& source_file)
 {
     if (ds && ds->ok()) {
-        mic = std::make_unique<mic_source>();
-        connect(mic.get(), &mic_source::audio_available, this, &dsnote_app::handle_audio_available);
+        ds->restart();
+        if (source_file.isEmpty())
+            source = std::make_unique<mic_source>();
+        else
+            source = std::make_unique<file_source>(source_file);
+        set_progress(source->progress());
+        connect(source.get(), &audio_source::audio_available, this, &dsnote_app::handle_audio_available, Qt::QueuedConnection);
+        connect(source.get(), &audio_source::error, this, &dsnote_app::handle_audio_error, Qt::QueuedConnection);
+        connect(source.get(), &audio_source::ended, this, &dsnote_app::handle_audio_ended, Qt::QueuedConnection);
     } else {
-        qWarning() << "ds is not inited, cannot start mic";
-        mic.reset();
+        qWarning() << "ds is not inited, cannot start audio source";
+        source.reset();
+        set_progress(-1);
     }
+
+    emit audio_source_type_changed();
 }
 
 bool dsnote_app::speech() const

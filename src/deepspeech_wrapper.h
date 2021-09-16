@@ -39,8 +39,8 @@ public:
     std::pair<char*, int64_t> borrow_buff();
     void return_buff(char* c_buff, int64_t size);
     bool ok() const;
-    void flush();
     void set_speech_status(bool started);
+    inline void restart() { restart_requested = true; }
     [[nodiscard]] inline bool speech_detected() const { return speech_detected_value; }
 
 private:
@@ -73,12 +73,14 @@ private:
     bool speech_detected_value = false;
     bool last_frame_done = false;
     speech_mode_type speech_mode_value;
+    bool restart_requested = false;
 
     static std::string error_msg(int status);
     void create_model(const std::string& model_file, const std::string& scorer_file = {});
     void create_stream();
     void free_stream();
     int sample_rate() const;
+    void flush(bool clear_buff = false);
     void start_processing();
     bool process_buff();
     void process_buff(buff_type::const_iterator begin,

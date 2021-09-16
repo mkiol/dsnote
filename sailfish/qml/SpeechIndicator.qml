@@ -57,6 +57,7 @@ Item {
     }
 
     Row {
+        id: row
         x: root.width / 8
         spacing: root.width / 8
         Repeater {

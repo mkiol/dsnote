@@ -61,6 +61,7 @@ ApplicationWindow {
                     drawer.close()
                 }
             }
+
             ItemDelegate {
                 text: qsTr("Quit")
                 width: parent.width
@@ -77,5 +78,18 @@ ApplicationWindow {
 
     Dsnote {
         id: app
+
+        onError: {
+            switch (type) {
+            case Dsnote.ErrorFileSource:
+                console.log("File source error")
+                break;
+            case Dsnote.ErrorMicSource:
+                console.log("Mic source error")
+                break;
+            default:
+                console.log("Unknown error")
+            }
+        }
     }
 }

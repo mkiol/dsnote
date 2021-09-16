@@ -7,6 +7,7 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Nemo.Notifications 1.0
 
 import harbour.dsnote.Dsnote 1.0
 
@@ -24,7 +25,32 @@ ApplicationWindow {
 
     initialPage: notesPage
 
+    Notification {
+        id: notification
+
+        function show(summary) {
+            notification.summary = summary
+            notification.previewSummary = summary
+            notification.publish()
+        }
+    }
+
     Dsnote {
-        id: app 
+        id: app
+
+        onError: {
+            switch (type) {
+            case Dsnote.ErrorFileSource:
+                notification.show("Audio file couldn't be transcribed.")
+                break;
+            case Dsnote.ErrorMicSource:
+                notification.show("Couldn't connect to microphone")
+                break;
+            default:
+                console.log("Unknown error")
+            }
+        }
+
+        onTranscribe_done: notification.show("Audio file transcription is completed")
     }
 }

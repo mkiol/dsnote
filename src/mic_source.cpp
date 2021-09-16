@@ -10,7 +10,7 @@
 #include <QAudioFormat>
 #include <QDebug>
 
-mic_source::mic_source(QObject *parent) : QObject{parent}
+mic_source::mic_source(QObject *parent) : audio_source{parent}
 {
     init_audio();
     start();
@@ -64,6 +64,13 @@ void mic_source::handle_state_changed(QAudio::State new_state)
 
 void mic_source::handle_read_timeout()
 {
+    if (audio_input->error() != QAudio::NoError) {
+        qWarning() << "audio input error:" << audio_input->error();
+        audio_input->stop();
+        timer.stop();
+        emit error();
+    }
+
     emit audio_available();
 }
 

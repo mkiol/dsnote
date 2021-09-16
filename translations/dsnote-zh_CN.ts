@@ -109,59 +109,87 @@
 <context>
     <name>NotesPage</name>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="42"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="44"/>
         <source>About %1</source>
         <translation>关于 %1</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="47"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="49"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="53"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="55"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="99"/>
+        <source>Transcribe audio file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfish/qml/NotesPage.qml" line="75"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="98"/>
+        <source>Cancel file transcribtion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfish/qml/NotesPage.qml" line="83"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="181"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="60"/>
+        <source>Transcribing audio file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfish/qml/NotesPage.qml" line="63"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="91"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="59"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="69"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="83"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="110"/>
         <source>Language is not configured</source>
         <translation>语言尚未配置</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="84"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="111"/>
         <source>Pull down and select Settings to download language</source>
         <translation>下拉并选择设置以下载语言</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="135"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="54"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="183"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="62"/>
         <source>Say something...</source>
         <translation>说点什么吧…</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="135"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="54"/>
-        <source>Tap and say something...</source>
-        <translation>点击并说点什么…</translation>
+        <location filename="../sailfish/qml/NotesPage.qml" line="183"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="62"/>
+        <source>Press and say something...</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/NotesPage.qml" line="19"/>
+        <source>Tap and say something...</source>
+        <translation type="vanished">点击并说点什么…</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/NotesPage.qml" line="21"/>
         <source>Note</source>
         <translation>笔记</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/NotesPage.qml" line="71"/>
-        <source>Tap to speek</source>
-        <translation>点击以说话</translation>
+        <location filename="../desktop/qml/NotesPage.qml" line="84"/>
+        <source>Press and hold to speek</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/NotesPage.qml" line="83"/>
+        <source>Tap to speek</source>
+        <translation type="vanished">点击以说话</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/NotesPage.qml" line="115"/>
         <source>No language is configured</source>
         <translation>尚未配置语言</translation>
     </message>
@@ -204,8 +232,12 @@
     </message>
     <message>
         <location filename="../sailfish/qml/SettingsPage.qml" line="74"/>
+        <source>Speech is automatically recognized and converted to text (Automatic) or press and hold on bottom panel triggers speech recognition (Manual).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Speech is automatically recognized and converted to text (Automatic) or tap on bottom panel triggers speech recognition (Manual).</source>
-        <translation>自动识别演说并转换为文本（自动）或点击仪表盘底部开启演说侦测（手动）。</translation>
+        <translation type="vanished">自动识别演说并转换为文本（自动）或点击仪表盘底部开启演说侦测（手动）。</translation>
     </message>
     <message>
         <location filename="../sailfish/qml/SettingsPage.qml" line="79"/>
@@ -248,7 +280,7 @@
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="65"/>
+        <location filename="../desktop/qml/main.qml" line="66"/>
         <source>Quit</source>
         <translation>退出</translation>
     </message>

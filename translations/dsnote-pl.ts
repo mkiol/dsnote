@@ -109,59 +109,87 @@
 <context>
     <name>NotesPage</name>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="42"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="44"/>
         <source>About %1</source>
         <translation>O %1</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="47"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="49"/>
         <source>Settings</source>
         <translation>Ustawienia</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="53"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="55"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="99"/>
+        <source>Transcribe audio file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfish/qml/NotesPage.qml" line="75"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="98"/>
+        <source>Cancel file transcribtion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfish/qml/NotesPage.qml" line="83"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="181"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="60"/>
+        <source>Transcribing audio file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfish/qml/NotesPage.qml" line="63"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="91"/>
         <source>Clear</source>
         <translation>Wyczyść</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="59"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="69"/>
         <source>Copy</source>
         <translation>Kopiuj</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="83"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="110"/>
         <source>Language is not configured</source>
         <translation>Język nie jest skonfigurowany</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="84"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="111"/>
         <source>Pull down and select Settings to download language</source>
         <translation>Przejdź do Ustawień aby pobrać plik z obsługą języka</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="135"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="54"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="183"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="62"/>
         <source>Say something...</source>
         <translation>Powiedz coś...</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="135"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="54"/>
-        <source>Tap and say something...</source>
-        <translation>Dotknij i powiedz coś...</translation>
+        <location filename="../sailfish/qml/NotesPage.qml" line="183"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="62"/>
+        <source>Press and say something...</source>
+        <translation>Naciśnij i powiedz coś...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/NotesPage.qml" line="19"/>
+        <source>Tap and say something...</source>
+        <translation type="vanished">Dotknij i powiedz coś...</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/NotesPage.qml" line="21"/>
         <source>Note</source>
         <translation>Notatka</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/NotesPage.qml" line="71"/>
-        <source>Tap to speek</source>
-        <translation>Dotknij aby mówić</translation>
+        <location filename="../desktop/qml/NotesPage.qml" line="84"/>
+        <source>Press and hold to speek</source>
+        <translation>Naciśnij aby mówić</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/NotesPage.qml" line="83"/>
+        <source>Tap to speek</source>
+        <translation type="vanished">Dotknij aby mówić</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/NotesPage.qml" line="115"/>
         <source>No language is configured</source>
         <translation>Język nie jest skonfigurowany</translation>
     </message>
@@ -204,8 +232,12 @@
     </message>
     <message>
         <location filename="../sailfish/qml/SettingsPage.qml" line="74"/>
+        <source>Speech is automatically recognized and converted to text (Automatic) or press and hold on bottom panel triggers speech recognition (Manual).</source>
+        <translation>Mówienie jest automatycznie rozpoznawane i zapisywane jako tekst (tryb Automatyczny) albo naciśnięcie na dolny panel powoduje rozpoznawanie mowy (tryb Manualny).</translation>
+    </message>
+    <message>
         <source>Speech is automatically recognized and converted to text (Automatic) or tap on bottom panel triggers speech recognition (Manual).</source>
-        <translation>Mówienie jest automatycznie rozpoznawane i zapisywane jako tekst (tryb Automatyczny) albo dotknięcie na dolny panel powoduje rozpoznawanie mowy (tryb Manualny).</translation>
+        <translation type="vanished">Mówienie jest automatycznie rozpoznawane i zapisywane jako tekst (tryb Automatyczny) albo dotknięcie na dolny panel powoduje rozpoznawanie mowy (tryb Manualny).</translation>
     </message>
     <message>
         <location filename="../sailfish/qml/SettingsPage.qml" line="79"/>
@@ -248,7 +280,7 @@
         <translation>Ustawienia</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="65"/>
+        <location filename="../desktop/qml/main.qml" line="66"/>
         <source>Quit</source>
         <translation>Wyjście</translation>
     </message>

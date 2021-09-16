@@ -7,8 +7,10 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Sailfish.Pickers 1.0
 
 import harbour.dsnote.Settings 1.0
+import harbour.dsnote.Dsnote 1.0
 
 Page {
     id: root
@@ -36,7 +38,7 @@ Page {
             spacing: Theme.paddingLarge
 
             PullDownMenu {
-                busy: app.busy
+                busy: app.busy || app.audio_source_type === Dsnote.SourceFile
 
                 MenuItem {
                     text: qsTr("About %1").arg(APP_NAME)
@@ -49,6 +51,14 @@ Page {
                 }
 
                 MenuItem {
+                    visible: app.audio_source_type !== Dsnote.SourceFile
+                    text: qsTr("Transcribe audio file")
+                    onClicked: {
+                        pageStack.push(fileDialog)
+                    }
+                }
+
+                MenuItem {
                     visible: textArea.text.length > 0
                     text: qsTr("Clear")
                     onClicked: _settings.note = ""
@@ -58,6 +68,20 @@ Page {
                     visible: textArea.text.length > 0
                     text: qsTr("Copy")
                     onClicked: Clipboard.text = textArea.text
+                }
+
+                MenuItem {
+                    visible: app.audio_source_type === Dsnote.SourceFile
+                    text: qsTr("Cancel file transcribtion")
+                    onClicked: {
+                        app.cancel_file_source()
+                    }
+                }
+
+                MenuLabel {
+                    visible: app.audio_source_type === Dsnote.SourceFile
+                    text: qsTr("Transcribing audio file...") +
+                          (app.progress > -1 ? " " + parseFloat(app.progress * 100).toFixed(1) + "%" : "")
                 }
             }
         }
@@ -108,8 +132,16 @@ Page {
         height: intermediateLabel.height + 2 * Theme.paddingLarge
         highlighted: mouse.pressed
 
-        property color pColor: _settings.speech_mode === Settings.SpeechAutomatic || highlighted ? Theme.highlightColor : Theme.primaryColor
-        property color sColor: _settings.speech_mode === Settings.SpeechAutomatic || highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+        property color pColor: _settings.speech_mode === Settings.SpeechAutomatic || app.audio_source_type === Dsnote.SourceFile || highlighted ? Theme.highlightColor : Theme.primaryColor
+        property color sColor: _settings.speech_mode === Settings.SpeechAutomatic || app.audio_source_type === Dsnote.SourceFile || highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+
+        Rectangle {
+            anchors.fill: parent
+            gradient: Gradient {
+                GradientStop { position: 1.0; color: Theme.rgba(root.palette.highlightBackgroundColor, 0.05) }
+                GradientStop { position: 0.0; color: Theme.rgba(root.palette.highlightBackgroundColor, 0.10) }
+            }
+        }
 
         SpeechIndicator {
             id: indicator
@@ -123,6 +155,17 @@ Page {
             Component.onCompleted: {
                 height = parent.height / 2
             }
+
+            visible: opacity > 0.0
+            opacity: busyIndicator.running ? 0.0 : 1.0
+            Behavior on opacity { NumberAnimation { duration: 100 } }
+        }
+
+        BusyIndicator {
+            id: busyIndicator
+            size: BusyIndicatorSize.Medium
+            anchors.centerIn: indicator
+            running: app.audio_source_type === Dsnote.SourceFile && !indicator.active
         }
 
         Label {
@@ -134,6 +177,8 @@ Page {
             anchors.rightMargin: Theme.horizontalPageMargin
             anchors.leftMargin: Theme.paddingMedium * 0.7
             text: inactive ?
+                      app.audio_source_type === Dsnote.SourceFile ?
+                          qsTr("Transcribing audio file...") + (app.progress > -1 ? " " + parseFloat(app.progress * 100).toFixed(1) + "%" : "") :
                       _settings.speech_mode === Settings.SpeechAutomatic || app.speech ?
                       qsTr("Say something...") : qsTr("Press and say something...") :
                       app.intermediate_text
@@ -143,21 +188,23 @@ Page {
             font.italic: inactive
         }
 
-        Rectangle {
-            anchors.fill: parent
-            gradient: Gradient {
-                GradientStop { position: 1.0; color: Theme.rgba(root.palette.highlightBackgroundColor, 0.05) }
-                GradientStop { position: 0.0; color: Theme.rgba(root.palette.highlightBackgroundColor, 0.10) }
-            }
-        }
-
         MouseArea {
             id: mouse
-            enabled: _settings.speech_mode === Settings.SpeechManual
+            enabled: _settings.speech_mode === Settings.SpeechManual && app.audio_source_type !== Dsnote.SourceFile
             anchors.fill: parent
 
             onPressed: app.speech = true
             onReleased: app.speech = false
+        }
+    }
+
+    Component {
+        id: fileDialog
+        FilePickerPage {
+            nameFilters: [ '*.wav', '*.mp3', '*.ogg', '*.flac', '*.m4a', '*.aac', '*.opus' ]
+            onSelectedContentPropertiesChanged: {
+                app.set_file_source(selectedContentProperties.filePath)
+            }
         }
     }
 }

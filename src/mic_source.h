@@ -15,18 +15,18 @@
 
 #include <memory>
 
-class mic_source : public QObject
+#include "audio_source.h"
+
+class mic_source : public audio_source
 {
     Q_OBJECT
 public:
     explicit mic_source(QObject *parent = nullptr);
-    ~mic_source();
-    bool ok() const;
-    int64_t read_audio(char* buff, int64_t max_size);
-    void clear();
-
-signals:
-    void audio_available();
+    ~mic_source() override;
+    bool ok() const override;
+    int64_t read_audio(char* buff, int64_t max_size) override;
+    void clear() override;
+    inline source_type type() const override { return source_type::mic; }
 
 private slots:
     void handle_state_changed(QAudio::State new_state);
