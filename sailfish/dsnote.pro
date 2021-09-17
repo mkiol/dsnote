@@ -9,7 +9,6 @@ include($${SRC_DIR}/dsnote.pri)
 
 DISTFILES += \
     qml/*.qml \
-    qml/ItemBox.qml \
     rpm/*.*
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172

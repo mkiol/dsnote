@@ -57,7 +57,7 @@ Page {
                 readOnly: true
                 wrapMode: TextEdit.WordWrap
                 placeholderText: app.audio_source_type === Dsnote.SourceFile ?
-                                     qsTr("Transcribing audio file...") +(app.progress > -1 ? " " + parseFloat(app.progress * 100).toFixed(1) + "%" : "") :
+                                     qsTr("Transcribing audio file...") +(app.progress > -1 ? " " + Math.round(app.progress) + "%" : "") :
                                      _settings.speech_mode === Settings.SpeechAutomatic || app.speech ?
                                      qsTr("Say something...") : qsTr("Press and say something...")
                 font.italic: true
@@ -95,7 +95,7 @@ Page {
             ToolButton {
                 visible: app.audio_source_type !== Dsnote.SourceNone
                 text: app.audio_source_type === Dsnote.SourceFile ?
-                          qsTr("Cancel file transcribtion") :
+                          qsTr("Cancel file transcription") :
                           qsTr("Transcribe audio file")
                 onClicked: {
                     if (app.audio_source_type === Dsnote.SourceFile)

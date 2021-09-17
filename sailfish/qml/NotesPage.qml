@@ -51,15 +51,17 @@ Page {
                 }
 
                 MenuItem {
-                    visible: app.audio_source_type !== Dsnote.SourceFile
-                    text: qsTr("Transcribe audio file")
+                    text: app.audio_source_type === Dsnote.SourceFile ? qsTr("Cancel file transcription") : qsTr("Transcribe audio file")
                     onClicked: {
-                        pageStack.push(fileDialog)
+                        if (app.audio_source_type === Dsnote.SourceFile)
+                            app.cancel_file_source()
+                        else
+                            pageStack.push(fileDialog)
                     }
                 }
 
                 MenuItem {
-                    visible: textArea.text.length > 0
+                    enabled: textArea.text.length > 0
                     text: qsTr("Clear")
                     onClicked: _settings.note = ""
                 }
@@ -68,20 +70,6 @@ Page {
                     visible: textArea.text.length > 0
                     text: qsTr("Copy")
                     onClicked: Clipboard.text = textArea.text
-                }
-
-                MenuItem {
-                    visible: app.audio_source_type === Dsnote.SourceFile
-                    text: qsTr("Cancel file transcribtion")
-                    onClicked: {
-                        app.cancel_file_source()
-                    }
-                }
-
-                MenuLabel {
-                    visible: app.audio_source_type === Dsnote.SourceFile
-                    text: qsTr("Transcribing audio file...") +
-                          (app.progress > -1 ? " " + parseFloat(app.progress * 100).toFixed(1) + "%" : "")
                 }
             }
         }
@@ -157,15 +145,23 @@ Page {
             }
 
             visible: opacity > 0.0
-            opacity: busyIndicator.running ? 0.0 : 1.0
-            Behavior on opacity { NumberAnimation { duration: 100 } }
+            opacity: app.audio_source_type === Dsnote.SourceFile ? 0.0 : 1.0
+            Behavior on opacity { NumberAnimation { duration: 150 } }
         }
 
         BusyIndicator {
             id: busyIndicator
             size: BusyIndicatorSize.Medium
             anchors.centerIn: indicator
-            running: app.audio_source_type === Dsnote.SourceFile && !indicator.active
+            running: app.audio_source_type === Dsnote.SourceFile
+
+            Label {
+                visible: app.progress > -1
+                color: Theme.highlightColor
+                anchors.centerIn: parent
+                font.pixelSize: Theme.fontSizeTiny
+                text:  Math.round(app.progress * 100) + "%"
+            }
         }
 
         Label {
@@ -177,8 +173,7 @@ Page {
             anchors.rightMargin: Theme.horizontalPageMargin
             anchors.leftMargin: Theme.paddingMedium * 0.7
             text: inactive ?
-                      app.audio_source_type === Dsnote.SourceFile ?
-                          qsTr("Transcribing audio file...") + (app.progress > -1 ? " " + parseFloat(app.progress * 100).toFixed(1) + "%" : "") :
+                      app.audio_source_type === Dsnote.SourceFile ? qsTr("Transcribing audio file...") :
                       _settings.speech_mode === Settings.SpeechAutomatic || app.speech ?
                       qsTr("Say something...") : qsTr("Press and say something...") :
                       app.intermediate_text
@@ -206,6 +201,29 @@ Page {
                 app.set_file_source(selectedContentProperties.filePath)
             }
         }
+    }
+
+    Toast {
+        id: notification
+    }
+
+    Connections {
+        target: app
+
+        onError: {
+            switch (type) {
+            case Dsnote.ErrorFileSource:
+                notification.show(qsTr("Audio file couldn't be transcribed."))
+                break;
+            case Dsnote.ErrorMicSource:
+                notification.show(qsTr("Cannot connect to microphone."))
+                break;
+            default:
+                notification.show(qsTr("Oops! Something went wrong!"))
+            }
+        }
+
+        onTranscribe_done: notification.show(qsTr("Audio file transcription is successfully completed."))
     }
 }
 
