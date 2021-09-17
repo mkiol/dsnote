@@ -51,6 +51,7 @@ Page {
                 }
 
                 MenuItem {
+                    enabled: !app.busy
                     text: app.audio_source_type === Dsnote.SourceFile ? qsTr("Cancel file transcription") : qsTr("Transcribe audio file")
                     onClicked: {
                         if (app.audio_source_type === Dsnote.SourceFile)
@@ -76,6 +77,7 @@ Page {
 
         TextArea {
             id: textArea
+            width: root.width
             opacity: configured && !app.busy ? 1.0 : 0.3
             Behavior on opacity { NumberAnimation { duration: 150 } }
             anchors.bottom: parent.bottom
@@ -185,7 +187,7 @@ Page {
 
         MouseArea {
             id: mouse
-            enabled: _settings.speech_mode === Settings.SpeechManual && app.audio_source_type !== Dsnote.SourceFile
+            enabled: !app.busy && _settings.speech_mode === Settings.SpeechManual && app.audio_source_type !== Dsnote.SourceFile
             anchors.fill: parent
 
             onPressed: app.speech = true
