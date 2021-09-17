@@ -265,9 +265,6 @@ void dsnote_app::handle_audio_ended()
         restart_ds(speech_mode_req_type::settings);
         restart_audio_source();
         emit transcribe_done();
-    } else {
-        qWarning() << "mic audio source ended unexpectedly";
-        emit error(error_type::ErrorMicSource);
     }
 }
 
