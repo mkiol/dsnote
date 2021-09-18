@@ -5,6 +5,7 @@ Item {
 
     property color color: "black"
     property bool active: false
+    property bool off: false
 
     Component {
         id: indicator
@@ -64,5 +65,15 @@ Item {
             delegate: indicator
             model: 3
         }
+    }
+
+    Rectangle {
+        visible: root.off
+        anchors.centerIn: parent
+        width: root.width
+        height: root.width / 12
+        radius: height
+        rotation: 45
+        color: root.color
     }
 }

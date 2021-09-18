@@ -15,7 +15,7 @@ import harbour.dsnote.Dsnote 1.0
 Page {
     id: root
 
-    readonly property bool configured: app.available_langs.length > 0
+    readonly property bool configured: app.available_langs.length > 0 && !app.busy
     readonly property bool inactive: app.intermediate_text.length === 0
 
     allowedOrientations: Orientation.All
@@ -51,7 +51,7 @@ Page {
                 }
 
                 MenuItem {
-                    enabled: !app.busy
+                    enabled: configured
                     text: app.audio_source_type === Dsnote.SourceFile ? qsTr("Cancel file transcription") : qsTr("Transcribe audio file")
                     onClicked: {
                         if (app.audio_source_type === Dsnote.SourceFile)
@@ -59,6 +59,12 @@ Page {
                         else
                             pageStack.push(fileDialog)
                     }
+                }
+
+                MenuItem {
+                    visible: configured && app.audio_source_type === Dsnote.SourceNone
+                    text: qsTr("Connect microphone")
+                    onClicked: app.set_mic_source()
                 }
 
                 MenuItem {
@@ -78,7 +84,7 @@ Page {
         TextArea {
             id: textArea
             width: root.width
-            opacity: configured && !app.busy ? 1.0 : 0.3
+            opacity: configured ? 1.0 : 0.3
             Behavior on opacity { NumberAnimation { duration: 150 } }
             anchors.bottom: parent.bottom
             text: _settings.note
@@ -114,7 +120,8 @@ Page {
 
     SilicaItem {
         id: panel
-        opacity: configured && !app.busy ? 1.0 : 0.3
+        visible: opacity > 0.0
+        opacity: configured ? 1.0 : 0.0
         Behavior on opacity { NumberAnimation { duration: 150 } }
         anchors.left: parent.left
         anchors.right: parent.right
@@ -122,8 +129,8 @@ Page {
         height: intermediateLabel.height + 2 * Theme.paddingLarge
         highlighted: mouse.pressed
 
-        property color pColor: _settings.speech_mode === Settings.SpeechAutomatic || app.audio_source_type === Dsnote.SourceFile || highlighted ? Theme.highlightColor : Theme.primaryColor
-        property color sColor: _settings.speech_mode === Settings.SpeechAutomatic || app.audio_source_type === Dsnote.SourceFile || highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+        property color pColor: _settings.speech_mode === Settings.SpeechAutomatic || app.audio_source_type !== Dsnote.SourceMic || highlighted ? Theme.highlightColor : Theme.primaryColor
+        property color sColor: _settings.speech_mode === Settings.SpeechAutomatic || app.audio_source_type !== Dsnote.SourceMic || highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
 
         Rectangle {
             anchors.fill: parent
@@ -142,6 +149,7 @@ Page {
             width: Theme.itemSizeSmall
             color: panel.pColor
             active: app.speech
+            off: app.audio_source_type === Dsnote.SourceNone
             Component.onCompleted: {
                 height = parent.height / 2
             }
@@ -176,9 +184,10 @@ Page {
             anchors.leftMargin: Theme.paddingMedium * 0.7
             text: inactive ?
                       app.audio_source_type === Dsnote.SourceFile ? qsTr("Transcribing audio file...") :
-                      _settings.speech_mode === Settings.SpeechAutomatic || app.speech ?
-                      qsTr("Say something...") : qsTr("Press and say something...") :
-                      app.intermediate_text
+                      app.audio_source_type === Dsnote.SourceMic ?
+                        _settings.speech_mode === Settings.SpeechAutomatic || app.speech ?
+                        qsTr("Say something...") : qsTr("Press and say something...") :
+                      "" : app.intermediate_text
             wrapMode: inactive ? Text.NoWrap : Text.WordWrap
             truncationMode: inactive ? TruncationMode.Fade : TruncationMode.None
             color: inactive ? panel.sColor : panel.pColor
@@ -187,7 +196,8 @@ Page {
 
         MouseArea {
             id: mouse
-            enabled: !app.busy && _settings.speech_mode === Settings.SpeechManual && app.audio_source_type !== Dsnote.SourceFile
+            enabled: configured && _settings.speech_mode === Settings.SpeechManual &&
+                     app.audio_source_type === Dsnote.SourceMic
             anchors.fill: parent
 
             onPressed: app.speech = true
@@ -218,14 +228,13 @@ Page {
                 notification.show(qsTr("Audio file couldn't be transcribed."))
                 break;
             case Dsnote.ErrorMicSource:
-                notification.show(qsTr("Cannot connect to microphone."))
+                notification.show(qsTr("Microphone was unexpectedly disconnected."))
                 break;
             default:
-                notification.show(qsTr("Oops! Something went wrong!"))
+                notification.show(qsTr("Oops! Something went wrong."))
             }
         }
 
-        onTranscribe_done: notification.show(qsTr("Audio file transcription is successfully completed."))
+        onTranscribe_done: notification.show(qsTr("Audio file transcription is completed."))
     }
 }
-

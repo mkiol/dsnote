@@ -34,6 +34,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         font.pixelSize: Theme.fontSizeExtraSmall
         color: Theme.primaryColor
+        wrapMode: Text.WordWrap
     }
 
     MouseArea {
