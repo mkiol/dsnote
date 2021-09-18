@@ -64,11 +64,12 @@ void mic_source::handle_state_changed(QAudio::State new_state)
 
 void mic_source::handle_read_timeout()
 {
-    if (audio_input->error() != QAudio::NoError) {
-        qWarning() << "audio input error:" << audio_input->error();
-        audio_input->stop();
+    if ((audio_input->state() != QAudio::ActiveState && audio_input->state() != QAudio::IdleState) || audio_input->error() != QAudio::NoError) {
+        if (audio_input->error() != QAudio::NoError)
+            qWarning() << "audio input error:" << audio_input->error();
         timer.stop();
         emit error();
+        return;
     }
 
     emit audio_available();
@@ -83,5 +84,10 @@ void mic_source::clear()
 
 int64_t mic_source::read_audio(char* buff, int64_t max_size)
 {
+    if (audio_input->state() != QAudio::ActiveState && audio_input->state() != QAudio::IdleState) {
+        qWarning() << "audio input is not active and cannot read audio";
+        return 0;
+    }
+
     return audio_device->read(buff, max_size);
 }

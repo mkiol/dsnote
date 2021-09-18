@@ -44,6 +44,7 @@ public:
     Q_INVOKABLE void set_active_lang_idx(int idx);
     Q_INVOKABLE void set_file_source(const QString& source_file);
     Q_INVOKABLE void set_file_source(const QUrl& source_file);
+    Q_INVOKABLE void set_mic_source();
     Q_INVOKABLE void cancel_file_source();
 
 signals:

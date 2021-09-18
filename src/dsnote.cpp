@@ -245,6 +245,12 @@ void dsnote_app::set_file_source(const QUrl& source_file)
     restart_audio_source(source_file.toLocalFile());
 }
 
+void dsnote_app::set_mic_source()
+{
+    restart_ds(speech_mode_req_type::automatic);
+    restart_audio_source();
+}
+
 void dsnote_app::handle_audio_error()
 {
     if (source->type() == audio_source::source_type::file) {
@@ -255,6 +261,9 @@ void dsnote_app::handle_audio_error()
     } else {
         qWarning() << "cannot start mic audio source";
         emit error(error_type::ErrorMicSource);
+        source.reset();
+        emit audio_source_type_changed();
+        if (ds) ds->restart();
     }
 }
 
