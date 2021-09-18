@@ -53,6 +53,7 @@
     </message>
     <message>
         <location filename="../sailfish/qml/ChangelogPage.qml" line="32"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="42"/>
         <source>Version %1</source>
         <translation>Wersja %1</translation>
     </message>
@@ -119,75 +120,80 @@
         <translation>Ustawienia</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="54"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="55"/>
         <location filename="../desktop/qml/NotesPage.qml" line="99"/>
         <source>Transcribe audio file</source>
-        <translation type="unfinished"></translation>
+        <translation>Transkrybuj plik audio</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="176"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="186"/>
         <location filename="../desktop/qml/NotesPage.qml" line="60"/>
         <source>Transcribing audio file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Transkrybuję plik audio...</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="65"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="72"/>
         <location filename="../desktop/qml/NotesPage.qml" line="91"/>
         <source>Clear</source>
         <translation>Wyczyść</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="54"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="55"/>
         <location filename="../desktop/qml/NotesPage.qml" line="98"/>
         <source>Cancel file transcription</source>
-        <translation type="unfinished"></translation>
+        <translation>Anuluj transkrypcję pliku</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="71"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="66"/>
+        <source>Connect microphone</source>
+        <translation>Podłącz mikrofon</translation>
+    </message>
+    <message>
+        <location filename="../sailfish/qml/NotesPage.qml" line="78"/>
         <source>Copy</source>
         <translation>Kopiuj</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="98"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="106"/>
         <source>Language is not configured</source>
         <translation>Język nie jest skonfigurowany</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="99"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="107"/>
         <source>Pull down and select Settings to download language</source>
         <translation>Przejdź do Ustawień aby pobrać plik z obsługą języka</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="178"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="189"/>
         <location filename="../desktop/qml/NotesPage.qml" line="62"/>
         <source>Say something...</source>
         <translation>Powiedz coś...</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="178"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="189"/>
         <location filename="../desktop/qml/NotesPage.qml" line="62"/>
         <source>Press and say something...</source>
         <translation>Naciśnij i powiedz coś...</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="216"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="228"/>
         <source>Audio file couldn&apos;t be transcribed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Transkrypcja pliku audio nie powiodła się.</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="219"/>
-        <source>Cannot connect to microphone.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../sailfish/qml/NotesPage.qml" line="231"/>
+        <source>Microphone was unexpectedly disconnected.</source>
+        <translation>Mikrofon został niespodziewanie odłaczony.</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="222"/>
-        <source>Oops! Something went wrong!</source>
-        <translation type="unfinished"></translation>
+        <location filename="../sailfish/qml/NotesPage.qml" line="234"/>
+        <source>Oops! Something went wrong.</source>
+        <translation>Wystąpił nieoczekiwany błąd!</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="226"/>
-        <source>Audio file transcription is successfully completed.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../sailfish/qml/NotesPage.qml" line="238"/>
+        <source>Audio file transcription is completed.</source>
+        <translation>Zakończyła się transkrypcja pliku audio.</translation>
     </message>
     <message>
         <source>Tap and say something...</source>
