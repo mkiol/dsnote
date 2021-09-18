@@ -29,12 +29,22 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Version %1").arg("1.2.0")
+            }
+
+            LogItem {
+                title: "Transcribe audio file option"
+                description: "New option to transcribe speech from audio file was added. " +
+                             "Following file formats are supported: wav, mp3, ogg, flac, m4a, aac, opus."
+            }
+
+            SectionHeader {
                 text: qsTr("Version %1").arg("1.0.1")
             }
 
             LogItem {
                 title: "DeepSpeech lib update"
-                description: "DeepSpeech library has been updated to version '0.10.0-alpha.3'. " +
+                description: "DeepSpeech library was updated to version '0.10.0-alpha.3'. " +
                              "Thanks to this update speech recognition accuracy is much better now."
             }
 
