@@ -24,7 +24,7 @@ static constexpr const char* APP_ID = "org.mkiol.Dsnote";
     static constexpr const char* APP_ID = "dsnote";
 #endif
 #endif // SAILFISH
-    static const int CONF_VERSION = 1;
+    static const int CONF_VERSION = 2;
     static constexpr const char* DEEPSPEECH_VERSION = "0.10.0-alpha.3";
     static constexpr const char* TENSORFLOW_VERSION = "2.3.0-6";
     static constexpr const char* ORG = "org.mkiol";

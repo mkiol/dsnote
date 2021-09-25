@@ -20,6 +20,13 @@ Page {
 
         currentIndex: -1
 
+        // app.langs:
+        // [0] - model id
+        // [1] - lang id
+        // [2] - friendly name
+        // [3] - model availability
+        // [4] - download in progress
+        // [5] - download progress
         model: app.langs
 
         header: PageHeader {
@@ -34,12 +41,12 @@ Page {
             property color itemColor: highlighted ? Theme.highlightColor : Theme.primaryColor
             property color secondaryItemColor: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
 
-            property string langId: modelData[0]
-            property bool available: modelData[2]
-            property bool downloading: modelData[3]
-            property double progress: modelData[4]
+            property string modelId: modelData[0]
+            property bool available: modelData[3]
+            property bool downloading: modelData[4]
+            property double progress: modelData[5]
 
-            title.text: modelData[1]
+            title.text: modelData[2]
 
             Component {
                 id: menuComp
@@ -49,9 +56,9 @@ Page {
                         text: listItem.available ? qsTr("Delete") : qsTr("Download")
                         onClicked: {
                             if (listItem.available) {
-                                app.delete_lang(listItem.langId)
+                                app.delete_lang(listItem.modelId)
                             } else {
-                                app.download_lang(listItem.langId)
+                                app.download_lang(listItem.modelId)
                             }
                         }
                     }
@@ -91,7 +98,7 @@ Page {
                 Connections {
                     target: app
                     onLang_download_progress: {
-                        if (listItem.langId === id) {
+                        if (listItem.modelId === id) {
                             progressLabel.text = Math.round(progress * 100) + "%"
                         }
                     }

@@ -72,6 +72,7 @@ std::vector<models_manager::lang_t> models_manager::langs() const
                 [&dir](decltype(models)::value_type const& pair) {
         return lang_t{
             pair.first,
+            pair.second.lang_id,
             pair.second.name,
             pair.second.scorer_file_name.isEmpty() ? "" : dir.filePath(pair.second.scorer_file_name),
             pair.second.scorer_file_name.isEmpty() ? "" : dir.filePath(pair.second.scorer_file_name),
@@ -94,6 +95,7 @@ std::vector<models_manager::lang_t> models_manager::available_langs() const
         const auto model_file = dir.filePath(model.file_name);
         if (model.available && QFile::exists(model_file))
             list.push_back({id,
+                            model.lang_id,
                             model.name,
                             model_file,
                             model.scorer_file_name.isEmpty() ? "" : dir.filePath(model.scorer_file_name),
@@ -163,7 +165,7 @@ void models_manager::download(const QString& id, download_type type)
 
         reply->setProperty("out_file", QVariant::fromValue(static_cast<void*>(out_file)));
         reply->setProperty("out_path", path);
-        reply->setProperty("lang_id", id);
+        reply->setProperty("model_id", id);
         reply->setProperty("download_type", static_cast<int>(type));
         reply->setProperty("download_next_type", static_cast<int>(next_type));
         reply->setProperty("checksum", md5);
@@ -287,7 +289,7 @@ void models_manager::handle_download_finished()
 {
     auto reply = qobject_cast<QNetworkReply*>(sender());
 
-    const auto id = reply->property("lang_id").toString();
+    const auto id = reply->property("model_id").toString();
     const auto type = static_cast<download_type>(reply->property("download_type").toInt());
 
     delete static_cast<std::ofstream*>(reply->property("out_file").value<void*>());
@@ -346,7 +348,7 @@ QString models_manager::make_checksum(const QString& file)
 void models_manager::handle_download_progress(qint64 received, qint64 total)
 {
     const auto reply = qobject_cast<const QNetworkReply*>(sender());
-    const auto id = reply->property("lang_id").toString();
+    const auto id = reply->property("model_id").toString();
     const auto type = static_cast<download_type>(reply->property("download_type").toInt());
 
     if (total <= 0)
@@ -418,17 +420,18 @@ void models_manager::init_config()
        "langs: [
        {
          "name": "<native language name (M)>",
+         "model_id": "unique model id (M)>",
          "id": "<ISO 639-1 language code (M)>",
-         "file_name": "<file name of ds model (O)>",
-         "md5": "<md5 hash of ds model file (M)>",
-         "xz": <true if url points to lzma compressed model file (O)>
-         "url": "<download URL of ds model file (M)>",
-         "size": "<size in bytes of ds model file (O)>",
-         "scorer_file_name": "<file name of ds model (O)>",
-         "scorer_md5": "<md5 hash of ds model file (M if scorer is provided)>",
-         "scorer_xz": <true if url points to lzma compressed scorer file (O)>
-         "scorer_url": "<download URL of ds model file (O)>",
-         "scorer_size": "<size in bytes of ds model file (O)>"
+         "file_name": "<file name of deep-speech model (O)>",
+         "md5": "<md5 hash of (not compressed) model file (M)>",
+         "xz": <true if 'url' points to lzma compressed model file (O)>
+         "url": "<download URL of model file, might be compressd file (M)>",
+         "size": "<size in bytes of file provided in 'url' (O)>",
+         "scorer_file_name": "<file name of deep-speech scorer (O)>",
+         "scorer_md5": "<md5 hash of (not compressed) scorer file (M if scorer is provided)>",
+         "scorer_xz": <true if 'url' points to lzma compressed scorer file (O)>
+         "scorer_url": "<download URL of scorer file, might be compressd file (O)>",
+         "scorer_size": "<size in bytes of file provided in 'scorer_url' (O)>"
        } ]
     }
     */
@@ -437,67 +440,67 @@ void models_manager::init_config()
     outfile << "{\n\"version\": " << dsnote::CONF_VERSION << ",\n\"langs\": [\n"
 
 #ifdef TF_LITE
-            << "{ \"name\": \"Czech\", \"id\": \"cs\", "
+            << "{ \"name\": \"Czech\", \"model_id\": \"cs\", \"id\": \"cs\", "
             << "\"file_name\": \"cs.tflite\", \"md5\": \"10cbdafa216b498445034c9e861bfba4\", \"url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.tflite\", \"size\": \"47360928\", "
             << "\"scorer_file_name\": \"cs.scorer\", \"scorer_md5\": \"a5e7e891276b1f539b7d9a9cb11ce966\", \"scorer_url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/o4-500k-wnc-2011.scorer\", \"scorer_size\": \"539766416\"},\n"
 
-            << "{ \"name\": \"English\", \"id\": \"en\", "
+            << "{ \"name\": \"English\", \"model_id\": \"en\", \"id\": \"en\", "
             << "\"file_name\": \"en.tflite\", \"md5\": \"afcc08e56f024655c30187a41c4e8c9c\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.tflite\", \"size\": \"47331784\", "
             << "\"scorer_file_name\": \"en.scorer\", \"scorer_md5\": \"08a02b383a9bc93c8a8ad188dbf79bc9\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer\", \"scorer_size\": \"953363776\"},\n"
 
-            << "{ \"name\": \"Deutsch\", \"id\": \"de\", "
+            << "{ \"name\": \"Deutsch\", \"model_id\": \"de\", \"id\": \"de\", "
             << "\"file_name\": \"de.tflite\", \"md5\": \"bc31379c31052392b2ea881eefede747\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_de.tflite.xz\", \"size\": \"18512148\", "
             << "\"scorer_file_name\": \"de.scorer\", \"scorer_md5\": \"e1fbc58d92c0872f7a1502d33416a23c\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_de.scorer.xz\", \"scorer_size\": \"191358684\"},\n"
 
-            << "{ \"name\": \"Español\", \"id\": \"es\", "
+            << "{ \"name\": \"Español\", \"model_id\": \"es\", \"id\": \"es\", "
             << "\"file_name\": \"es.tflite\", \"md5\": \"cc618b45dd01b8a6cc6b1d781653f89a\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_es.tflite.xz\", \"size\": \"18728916\", "
             << "\"scorer_file_name\": \"es.scorer\", \"scorer_md5\": \"650e2325ebf70d08a69ae5bf238ad5bd\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_es.scorer.xz\", \"scorer_size\": \"223163180\"},\n"
 
-            << "{ \"name\": \"Français\", \"id\": \"fr\", "
+            << "{ \"name\": \"Français\", \"model_id\": \"fr\", \"id\": \"fr\", "
             << "\"file_name\": \"fr.tflite\", \"md5\": \"fcf644611a833f4f8e9767b2ab6b16ea\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_fr.tflite.xz\", \"size\": \"18741120\", "
             << "\"scorer_file_name\": \"fr.scorer\", \"scorer_md5\": \"35224069b08e801c84051d65e810bdd1\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_fr.scorer.xz\", \"scorer_size\": \"204224996\"},\n"
 
-            << "{ \"name\": \"Italiano\", \"id\": \"it\", "
+            << "{ \"name\": \"Italiano\", \"model_id\": \"it\", \"id\": \"it\", "
             << "\"file_name\": \"it.tflite\", \"md5\": \"11c9980d444f04e28bff007fedbac882\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_it.tflite.xz\", \"size\": \"18794812\", "
             << "\"scorer_file_name\": \"it.scorer\", \"scorer_md5\": \"9b2df256185e442246159b33cd05fc2d\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_it.scorer.xz\", \"scorer_size\": \"4713388\"},\n"
 
-            << "{ \"name\": \"Polski\", \"id\": \"pl\", "
+            << "{ \"name\": \"Polski\", \"model_id\": \"pl\", \"id\": \"pl\", "
             << "\"file_name\": \"pl.tflite\", \"md5\": \"a56c693bb0d644af5dc53f0e59f0da76\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_pl.tflite.xz\", \"size\": \"18961196\", "
             << "\"scorer_file_name\": \"pl.scorer\", \"scorer_md5\": \"0984ebda29d9c51a87e5823bd301d980\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_pl.scorer.xz\", \"scorer_size\": \"2659936\"},\n"
 
-            << "{ \"name\": \"简体中文\", \"id\": \"zh-CN\", "
+            << "{ \"name\": \"简体中文\", \"model_id\": \"zh-CN\", \"id\": \"zh-CN\", "
             << "\"file_name\": \"zh-CN.tflite\", \"md5\": \"5664793cafe796d0821a3e49d56eb797\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.tflite\", \"size\": \"47798728\", "
             << "\"scorer_file_name\": \"zh-CN.scorer\", \"scorer_md5\": \"628e68fd8e0dd82c4a840d56c4cdc661\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer\", \"scorer_size\": \"67141744\"}\n"
 #else
-            << "{ \"name\": \"Czech\", \"id\": \"cs\", "
+            << "{ \"name\": \"Czech\", \"model_id\": \"cs\", \"id\": \"cs\", "
             << "\"file_name\": \"cs.pbmm\", \"md5\": \"071c0cefc8484908770028752f04c692\", \"url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.pbmm\", \"size\": \"189031154\", "
             << "\"scorer_file_name\": \"cs.scorer\", \"scorer_md5\": \"a5e7e891276b1f539b7d9a9cb11ce966\", \"scorer_url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/o4-500k-wnc-2011.scorer\", \"scorer_size\": \"539766416\"},\n"
 
-            << "{ \"name\": \"English\", \"id\": \"en\", "
+            << "{ \"name\": \"English\", \"model_id\": \"en\", \"id\": \"en\", "
             << "\"file_name\": \"en.pbmm\", \"md5\": \"8b15ccb86d0214657e48371287b7a49a\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.pbmm\", \"size\": \"188915987\", "
             << "\"scorer_file_name\": \"en.scorer\", \"scorer_md5\": \"08a02b383a9bc93c8a8ad188dbf79bc9\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer\", \"scorer_size\": \"953363776\"},\n"
 
-            << "{ \"name\": \"Deutsch\", \"id\": \"de\", "
+            << "{ \"name\": \"Deutsch\", \"model_id\": \"de\", \"id\": \"de\", "
             << "\"file_name\": \"de.pbmm\", \"md5\": \"ccb15318053a245487a15b90bf052cca\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_de.pbmm.xz\", \"size\": \"171571572\", "
             << "\"scorer_file_name\": \"de.scorer\", \"scorer_md5\": \"e1fbc58d92c0872f7a1502d33416a23c\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_de.scorer.xz\", \"scorer_size\": \"191358684\"},\n"
 
-            << "{ \"name\": \"Español\", \"id\": \"es\", "
+            << "{ \"name\": \"Español\", \"model_id\": \"es\", \"id\": \"es\", "
             << "\"file_name\": \"es.pbmm\", \"md5\": \"8b0739839abd0f98f2638be166fb3b74\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_es.pbmm.xz\", \"size\": \"171549140\", "
             << "\"scorer_file_name\": \"es.scorer\", \"scorer_md5\": \"650e2325ebf70d08a69ae5bf238ad5bd\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_es.scorer.xz\", \"scorer_size\": \"223163180\"},\n"
 
-            << "{ \"name\": \"Français\", \"id\": \"fr\", "
+            << "{ \"name\": \"Français\", \"model_id\": \"fr\", \"id\": \"fr\", "
             << "\"file_name\": \"fr.pbmm\", \"md5\": \"079fa68c49feff6aa2bd3cc22aab6226\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_fr.pbmm.xz\", \"size\": \"171661600\", "
             << "\"scorer_file_name\": \"fr.scorer\", \"scorer_md5\": \"35224069b08e801c84051d65e810bdd1\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_fr.scorer.xz\", \"scorer_size\": \"204224996\"},\n"
 
-            << "{ \"name\": \"Italiano\", \"id\": \"it\", "
+            << "{ \"name\": \"Italiano\", \"model_id\": \"it\", \"id\": \"it\", "
             << "\"file_name\": \"it.pbmm\", \"md5\": \"ec10ea9d01cc9ab3135e4e5b0341821e\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_it.pbmm.xz\", \"size\": \"171591992\", "
             << "\"scorer_file_name\": \"it.scorer\", \"scorer_md5\": \"9b2df256185e442246159b33cd05fc2d\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_it.scorer.xz\", \"scorer_size\": \"4713388\"},\n"
 
-            << "{ \"name\": \"Polski\", \"id\": \"pl\", "
+            << "{ \"name\": \"Polski\", \"model_id\": \"pl\", \"id\": \"pl\", "
             << "\"file_name\": \"pl.pbmm\", \"md5\": \"69d0069a0d68f33f6634e8b2c0e06af6\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_pl.pbmm.xz\", \"size\": \"171639032\", "
             << "\"scorer_file_name\": \"pl.scorer\", \"scorer_md5\": \"0984ebda29d9c51a87e5823bd301d980\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_pl.scorer.xz\", \"scorer_size\": \"2659936\"},\n"
 
-            << "{ \"name\": \"简体中文\", \"id\": \"zh-CN\", "
+            << "{ \"name\": \"简体中文\", \"model_id\": \"zh-CN\", \"id\": \"zh-CN\", "
             << "\"file_name\": \"zh-CN.pbmm\", \"md5\": \"57b99451aaabbada2708e3b6a28e55c8\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.pbmm\", \"size\": \"190777619\", "
             << "\"scorer_file_name\": \"zh-CN.scorer\", \"scorer_md5\": \"628e68fd8e0dd82c4a840d56c4cdc661\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer\", \"scorer_size\": \"67141744\"}\n"
 #endif
@@ -513,34 +516,40 @@ auto models_manager::check_lang_file(const QJsonArray& langs)
 
     for (const auto& ele : langs) {
         auto obj = ele.toObject();
-        auto id = obj.value("id").toString();
+        auto model_id = obj.value("model_id").toString();
 
-        if (id.isEmpty()) {
-            qWarning() << "empty id in lang models file";
+        if (model_id.isEmpty()) {
+            qWarning() << "empty model id in lang models file";
             continue;
         }
 
-        if (models.find(id) != models.end()) {
-            qWarning() << "duplicate id in lang models file:" << id;
+        if (models.find(model_id) != models.end()) {
+            qWarning() << "duplicate model id in lang models file:" << model_id;
+            continue;
+        }
+
+        auto lang_id = obj.value("id").toString();
+        if (lang_id.isEmpty()) {
+            qWarning() << "empty lang id in lang models file";
             continue;
         }
 
         auto md5 = obj.value("md5").toString();
 
         if (md5.isEmpty()) {
-            qWarning() << "md5 checksum cannot be empty:" << id;
+            qWarning() << "md5 checksum cannot be empty:" << model_id;
             continue;
         }
 
         auto file_name = obj.value("file_name").toString();
         if (file_name.isEmpty())
-            file_name = file_name_from_id(id);
+            file_name = file_name_from_id(model_id);
 
         auto scorer_md5 = obj.value("scorer_md5").toString();
         auto scorer_url = QUrl{obj.value("scorer_url").toString()};
         auto scorer_file_name = obj.value("scorer_file_name").toString();
         if (scorer_file_name.isEmpty())
-            scorer_file_name = scorer_file_name_from_id(id);
+            scorer_file_name = scorer_file_name_from_id(model_id);
 
         bool available =
             dir.exists(file_name) &&
@@ -549,7 +558,8 @@ auto models_manager::check_lang_file(const QJsonArray& langs)
               scorer_md5 == make_checksum(dir.filePath(scorer_file_name))) ||
              scorer_url.isEmpty());
 
-        models[id] = {
+        models[model_id] = {
+            lang_id,
             obj.value("name").toString(),
             file_name,
             md5,

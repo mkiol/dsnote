@@ -27,6 +27,7 @@ class models_manager : public QObject
 public:
     struct lang_t {
         QString id;
+        QString lang_id;
         QString name;
         QString model_file;
         QString scorer_file;
@@ -56,6 +57,7 @@ private:
     enum class download_type { none, all, model, scorer };
 
     struct model_t {
+        QString lang_id;
         QString name;
         QString file_name;
         QString md5;

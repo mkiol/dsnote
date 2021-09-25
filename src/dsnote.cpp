@@ -58,7 +58,7 @@ std::optional<std::pair<QString, QString>> dsnote_app::setup_active_lang()
             active_files.second = lang.scorer_file;
         }
 
-        available_langs_list.push_back(QString{"%1 (%2)"}.arg(lang.name, lang.id));
+        available_langs_list.push_back(QString{"%1 (%2)"}.arg(lang.name, lang.lang_id));
 
         ++idx;
     }
@@ -170,7 +170,8 @@ QVariantList dsnote_app::langs() const
     std::transform(langs.cbegin(), langs.cend(), std::back_inserter(list), [](const auto& lang) {
         return QVariantList{
             lang.id,
-            QString{"%1 (%2)"}.arg(lang.name, lang.id),
+            lang.lang_id,
+            QString{"%1 (%2)"}.arg(lang.name, lang.lang_id),
             lang.available,
             lang.downloading,
             lang.download_progress};

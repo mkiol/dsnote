@@ -15,11 +15,12 @@ Page {
     title: qsTr("Languages")
 
     // app.langs:
-    // [0] - id
-    // [1] - friendly name
-    // [2] - model availability
-    // [3] - download in progress
-    // [4] - download progress
+    // [0] - model id
+    // [1] - lang id
+    // [2] - friendly name
+    // [3] - model availability
+    // [4] - download in progress
+    // [5] - download progress
 
     Flickable {
         anchors.fill: parent
@@ -43,7 +44,7 @@ Page {
             Repeater {
                 model: app.langs
                 Label {
-                    text: modelData[1]
+                    text: modelData[2]
                 }
             }
 
@@ -52,7 +53,7 @@ Page {
                 ProgressBar {
                     id: bar
                     Layout.fillWidth: true
-                    value: modelData[2] ? 1 : modelData[4]
+                    value: modelData[3] ? 1 : modelData[5]
 
                     Connections {
                         target: app
@@ -68,10 +69,10 @@ Page {
             Repeater {
                 model: app.langs
                 Button {
-                    enabled: !modelData[3]
-                    text: modelData[3] ? qsTr("Downloading...") : modelData[2] ? qsTr("Delete") : qsTr("Download")
+                    enabled: !modelData[4]
+                    text: modelData[4] ? qsTr("Downloading...") : modelData[3] ? qsTr("Delete") : qsTr("Download")
                     onClicked: {
-                        if (modelData[2])
+                        if (modelData[3])
                             app.delete_lang(modelData[0])
                         else
                             app.download_lang(modelData[0])
