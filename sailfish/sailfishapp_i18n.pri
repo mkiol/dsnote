@@ -60,7 +60,7 @@ qm.CONFIG += no_check_exist
 sailfishapp_i18n_include_obsolete {
     qm.commands += lupdate $${TRANSLATION_SOURCES} -ts $$TRANSLATIONS_IN && \
         mkdir -p translations && \
-        [ \"$${OUT_PWD}\" != \"$${_PRO_FILE_PWD_}\" -a $$HAVE_TRANSLATIONS -eq 1 ] && \
+        [ $$HAVE_TRANSLATIONS -eq 1 ] && \
         cp -af $${TRANSLATIONS_IN} $${OUT_PWD}/translations || :
 } else {
     qm.commands += lupdate -noobsolete $${TRANSLATION_SOURCES} -ts $$TRANSLATIONS_IN && \

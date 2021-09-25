@@ -19,6 +19,7 @@ TRANSLATION_SOURCE_DIRS += $${ROOT_DIR}/src \
 CONFIG += sailfishapp_i18n_include_obsolete
 TRANSLATIONS_DIR = $${ROOT_DIR}/translations
 TRANSLATIONS += \
+    $${TRANSLATIONS_DIR}/dsnote-cs_CZ.ts \
     $${TRANSLATIONS_DIR}/dsnote-en.ts \
     $${TRANSLATIONS_DIR}/dsnote-pl.ts \
     $${TRANSLATIONS_DIR}/dsnote-zh_CN.ts
