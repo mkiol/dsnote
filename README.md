@@ -12,6 +12,7 @@ DeepSpeech models for particular language can be downloaded from the app. Follow
 
 | Language        | Original source                                       |
 |:----------------|:------------------------------------------------------|
+| Czech (cs)      | https://github.com/comodoro/deepspeech-cs             |
 | English (en)    | https://github.com/mozilla/DeepSpeech                 |
 | German (de)     | https://gitlab.com/Jaco-Assistant/Scribosermo         |
 | Spanish (es)    | https://gitlab.com/Jaco-Assistant/Scribosermo         |

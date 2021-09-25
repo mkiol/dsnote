@@ -437,6 +437,10 @@ void models_manager::init_config()
     outfile << "{\n\"version\": " << dsnote::CONF_VERSION << ",\n\"langs\": [\n"
 
 #ifdef TF_LITE
+            << "{ \"name\": \"Czech\", \"id\": \"cs\", "
+            << "\"file_name\": \"cs.tflite\", \"md5\": \"10cbdafa216b498445034c9e861bfba4\", \"url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.tflite\", \"size\": \"47360928\", "
+            << "\"scorer_file_name\": \"cs.scorer\", \"scorer_md5\": \"a5e7e891276b1f539b7d9a9cb11ce966\", \"scorer_url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/o4-500k-wnc-2011.scorer\", \"scorer_size\": \"539766416\"},\n"
+
             << "{ \"name\": \"English\", \"id\": \"en\", "
             << "\"file_name\": \"en.tflite\", \"md5\": \"afcc08e56f024655c30187a41c4e8c9c\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.tflite\", \"size\": \"47331784\", "
             << "\"scorer_file_name\": \"en.scorer\", \"scorer_md5\": \"08a02b383a9bc93c8a8ad188dbf79bc9\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer\", \"scorer_size\": \"953363776\"},\n"
@@ -465,6 +469,10 @@ void models_manager::init_config()
             << "\"file_name\": \"zh-CN.tflite\", \"md5\": \"5664793cafe796d0821a3e49d56eb797\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.tflite\", \"size\": \"47798728\", "
             << "\"scorer_file_name\": \"zh-CN.scorer\", \"scorer_md5\": \"628e68fd8e0dd82c4a840d56c4cdc661\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer\", \"scorer_size\": \"67141744\"}\n"
 #else
+            << "{ \"name\": \"Czech\", \"id\": \"cs\", "
+            << "\"file_name\": \"cs.pbmm\", \"md5\": \"071c0cefc8484908770028752f04c692\", \"url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.pbmm\", \"size\": \"189031154\", "
+            << "\"scorer_file_name\": \"cs.scorer\", \"scorer_md5\": \"a5e7e891276b1f539b7d9a9cb11ce966\", \"scorer_url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/o4-500k-wnc-2011.scorer\", \"scorer_size\": \"539766416\"},\n"
+
             << "{ \"name\": \"English\", \"id\": \"en\", "
             << "\"file_name\": \"en.pbmm\", \"md5\": \"8b15ccb86d0214657e48371287b7a49a\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.pbmm\", \"size\": \"188915987\", "
             << "\"scorer_file_name\": \"en.scorer\", \"scorer_md5\": \"08a02b383a9bc93c8a8ad188dbf79bc9\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer\", \"scorer_size\": \"953363776\"},\n"
