@@ -23,6 +23,7 @@ PkgConfigBR:
   - Qt5Qml
   - Qt5Quick
   - liblzma
+  - zlib
 
 # Build dependencies without a pkgconfig setup can be listed here
 #PkgBR:

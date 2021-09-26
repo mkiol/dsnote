@@ -55,18 +55,19 @@ signals:
 
 private:
     enum class download_type { none, all, model, scorer };
+    enum class comp_type { none, xz, gz };
 
     struct model_t {
         QString lang_id;
         QString name;
         QString file_name;
         QString md5;
-        bool xz = false;
+        comp_type comp = comp_type::none;
         QUrl url;
         qint64 size = 0;
         QString scorer_file_name;
         QString scorer_md5;
-        bool scorer_xz = false;
+        comp_type scorer_comp = comp_type::none;
         QUrl scorer_url;
         qint64 scorer_size = 0;
         bool available = false;
@@ -95,8 +96,11 @@ private:
     static void init_config();
     static void backup_config(const QString& lang_models_file);
     static bool xz_decode(const QString& file_in, const QString& file_out);
-    bool check_download(const QString& file, const QString& checksum, bool xz);
+    static bool gz_decode(const QString& file_in, const QString& file_out);
+    bool check_download(const QString& file, const QString& checksum, comp_type comp);
     static auto check_lang_file(const QJsonArray& langs);
+    static comp_type str2comp(const QString& str);
+    static QString comp_filename(const QString& filename, comp_type comp);
 };
 
 #endif // MODELS_MANAGER_H

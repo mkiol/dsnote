@@ -25,6 +25,7 @@ BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(liblzma)
+BuildRequires:  pkgconfig(zlib)
 BuildRequires:  desktop-file-utils
 
 %description

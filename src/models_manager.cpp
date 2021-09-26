@@ -33,6 +33,7 @@
 #include <thread>
 
 #include <lzma.h>
+#include <zlib.h>
 
 #include "settings.h"
 #include "info.h"
@@ -128,7 +129,7 @@ void models_manager::download(const QString& id, download_type type)
         QNetworkReply* reply;
         QString path;
         QString md5;
-        bool xz;
+        comp_type comp;
         qint64 size;
         auto next_type = download_type::none;
         if (type == download_type::all) {
@@ -138,7 +139,7 @@ void models_manager::download(const QString& id, download_type type)
             reply = nam.get(request);
             path = model_path(model.file_name);
             md5 = model.md5;
-            xz = model.xz;
+            comp = model.comp;
             size = model.size;
             type = download_type::model;
             if (!model.scorer_file_name.isEmpty() && !model.scorer_md5.isEmpty() && !model.scorer_url.isEmpty()) {
@@ -152,7 +153,7 @@ void models_manager::download(const QString& id, download_type type)
             reply = nam.get(request);
             path = model_path(model.scorer_file_name);
             md5 = model.scorer_md5;
-            xz = model.scorer_xz;
+            comp = model.scorer_comp;
             size = model.scorer_size;
             next_type = download_type::none;
             model.current_dl = download_type::all;
@@ -161,7 +162,7 @@ void models_manager::download(const QString& id, download_type type)
             return;
         }
 
-        auto out_file = new std::ofstream{xz ? path.toStdString() + ".xz" : path.toStdString(), std::ofstream::out};
+        auto out_file = new std::ofstream{comp_filename(path, comp).toStdString(), std::ofstream::out};
 
         reply->setProperty("out_file", QVariant::fromValue(static_cast<void*>(out_file)));
         reply->setProperty("out_path", path);
@@ -169,7 +170,7 @@ void models_manager::download(const QString& id, download_type type)
         reply->setProperty("download_type", static_cast<int>(type));
         reply->setProperty("download_next_type", static_cast<int>(next_type));
         reply->setProperty("checksum", md5);
-        reply->setProperty("xz", xz);
+        reply->setProperty("comp", static_cast<int>(comp));
         reply->setProperty("size", size);
 
         connect(reply, &QNetworkReply::downloadProgress, this, &models_manager::handle_download_progress);
@@ -229,20 +230,18 @@ bool models_manager::xz_decode(const QString& file_in, const QString& file_out)
                     strm.avail_in = input.gcount();
                 }
 
-                if (!input)
-                    action = LZMA_FINISH;
+                if (!input) action = LZMA_FINISH;
 
                 auto ret = lzma_code(&strm, action);
 
                 if (strm.avail_out == 0 || ret == LZMA_STREAM_END) {
                     output.write(buff_out, sizeof buff_out - strm.avail_out);
 
-                    strm.next_out = reinterpret_cast<uint8_t*>(buff_out);;
+                    strm.next_out = reinterpret_cast<uint8_t*>(buff_out);
                     strm.avail_out = sizeof buff_out;
                 }
 
-                if (ret == LZMA_STREAM_END)
-                    break;
+                if (ret == LZMA_STREAM_END) break;
 
                 if (ret != LZMA_OK) {
                     qWarning() << "xz decoder error:" << ret;
@@ -264,16 +263,84 @@ bool models_manager::xz_decode(const QString& file_in, const QString& file_out)
     return false;
 }
 
-bool models_manager::check_download(const QString& file, const QString& checksum, bool xz)
+bool models_manager::gz_decode(const QString& file_in, const QString& file_out)
+{
+    if (std::ifstream input{file_in.toStdString(), std::ios::in | std::ifstream::binary}) {
+        if (std::ofstream output{file_out.toStdString(), std::ios::out | std::ifstream::binary}) {
+            z_stream strm;
+            strm.zalloc = Z_NULL;
+            strm.zfree = Z_NULL;
+            strm.opaque = Z_NULL;
+
+            if (int ret = inflateInit2(&strm, MAX_WBITS | 16); ret != Z_OK) {
+                qWarning() << "error initializing the gzip decoder:" << ret;
+                return false;
+            }
+
+            char buff_out[std::numeric_limits<unsigned short>::max()];
+            char buff_in[std::numeric_limits<unsigned short>::max()];
+
+            strm.next_in = reinterpret_cast<uint8_t*>(buff_in);
+            strm.next_out = reinterpret_cast<uint8_t*>(buff_out);
+            strm.avail_out = sizeof buff_out;
+            strm.avail_out = sizeof buff_out;
+            strm.avail_in = 0;
+
+            while (true) {
+                if (strm.avail_in == 0 && input) {
+                    strm.next_in = reinterpret_cast<uint8_t*>(buff_in);
+                    input.read(buff_in, sizeof buff_in);
+                    strm.avail_in = input.gcount();
+                }
+
+                if (input.bad()) {
+                    inflateEnd(&strm);
+                    return false;
+                }
+
+                auto ret = inflate(&strm, Z_NO_FLUSH);
+
+                if (strm.avail_out == 0 || ret == Z_STREAM_END) {
+                    output.write(buff_out, sizeof buff_out - strm.avail_out);
+
+                    strm.next_out = reinterpret_cast<uint8_t*>(buff_out);
+                    strm.avail_out = sizeof buff_out;
+                }
+
+                if (ret == Z_STREAM_END) break;
+
+                if (ret != Z_OK) {
+                    qWarning() << "gzip decoder error:" << ret;
+                    inflateEnd(&strm);
+                    return false;
+                }
+            }
+
+            inflateEnd(&strm);
+
+            return true;
+        } else {
+            qWarning() << "error opening out file:" << file_out;
+        }
+    } else {
+        qWarning() << "error opening in file:" << file_in;
+    }
+
+    return false;
+}
+
+bool models_manager::check_download(const QString& file, const QString& checksum, comp_type comp)
 {
     QEventLoop loop;
 
     bool ok = false;
 
-    std::thread thread{[&file, &checksum, xz, &ok, &loop] {
-        if (xz) {
-            xz_decode(file + ".xz", file);
-            QFile::remove(file + ".xz");
+    std::thread thread{[&file, &checksum, comp, &ok, &loop] {
+        if (comp != comp_type::none) {
+            auto comp_file = comp_filename(file, comp);
+            if (comp == comp_type::gz) gz_decode(comp_file, file);
+            else if (comp == comp_type::xz) xz_decode(comp_file, file);
+            QFile::remove(comp_file);
         }
         ok = make_checksum(file) == checksum;
         loop.quit();
@@ -285,6 +352,8 @@ bool models_manager::check_download(const QString& file, const QString& checksum
     return ok;
 }
 
+
+
 void models_manager::handle_download_finished()
 {
     auto reply = qobject_cast<QNetworkReply*>(sender());
@@ -294,14 +363,16 @@ void models_manager::handle_download_finished()
 
     delete static_cast<std::ofstream*>(reply->property("out_file").value<void*>());
 
+    auto path = reply->property("out_path").toString();
+    auto comp = static_cast<comp_type>(reply->property("comp").toInt());
+
     if (reply->error() != QNetworkReply::NoError) {
         qWarning() << "error in download:" << (type == download_type::scorer ? "scorer" : "model") << id
                    << "error type:" << reply->error();
+        QFile::remove(comp_filename(path, comp));
         emit download_error(id);
     } else {
-        auto path = reply->property("out_path").toString();
-
-        if (check_download(path, reply->property("checksum").toString(), reply->property("xz").toBool())) {
+        if (check_download(path, reply->property("checksum").toString(), comp)) {
             qDebug() << "successfully downloaded:" << (type == download_type::scorer ? "scorer" : "model") << id;
 
             if (static_cast<download_type>(reply->property("download_next_type").toInt()) == download_type::scorer) {
@@ -322,6 +393,7 @@ void models_manager::handle_download_finished()
     reply->deleteLater();
 
     models[id].current_dl = download_type::none;
+    models[id].download_progress = 0.0;
     emit models_changed();
 }
 
@@ -422,15 +494,15 @@ void models_manager::init_config()
          "name": "<native language name (M)>",
          "model_id": "unique model id (M)>",
          "id": "<ISO 639-1 language code (M)>",
-         "file_name": "<file name of deep-speech model (O)>",
-         "md5": "<md5 hash of (not compressed) model file (M)>",
-         "xz": <true if 'url' points to lzma compressed model file (O)>
          "url": "<download URL of model file, might be compressd file (M)>",
+         "md5": "<md5 hash of (not compressed) model file (M)>",
+         "file_name": "<file name of deep-speech model (O)>",
+         "comp": <type of compression for model file provided in 'url', following are supported: 'xz', 'gz' (O)>
          "size": "<size in bytes of file provided in 'url' (O)>",
-         "scorer_file_name": "<file name of deep-speech scorer (O)>",
-         "scorer_md5": "<md5 hash of (not compressed) scorer file (M if scorer is provided)>",
-         "scorer_xz": <true if 'url' points to lzma compressed scorer file (O)>
          "scorer_url": "<download URL of scorer file, might be compressd file (O)>",
+         "scorer_md5": "<md5 hash of (not compressed) scorer file (M if scorer is provided)>",
+         "scorer_file_name": "<file name of deep-speech scorer (O)>",
+         "scorer_comp": <type of compression for scorer file provided in 'scorer_url', following are supported: 'xz', 'gz' (O)>
          "scorer_size": "<size in bytes of file provided in 'scorer_url' (O)>"
        } ]
     }
@@ -441,71 +513,87 @@ void models_manager::init_config()
 
 #ifdef TF_LITE
             << "{ \"name\": \"Czech\", \"model_id\": \"cs\", \"id\": \"cs\", "
-            << "\"file_name\": \"cs.tflite\", \"md5\": \"10cbdafa216b498445034c9e861bfba4\", \"url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.tflite\", \"size\": \"47360928\", "
-            << "\"scorer_file_name\": \"cs.scorer\", \"scorer_md5\": \"a5e7e891276b1f539b7d9a9cb11ce966\", \"scorer_url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/o4-500k-wnc-2011.scorer\", \"scorer_size\": \"539766416\"},\n"
+            << "\"md5\": \"10cbdafa216b498445034c9e861bfba4\", \"url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.tflite\", \"size\": \"47360928\", "
+            << "\"scorer_md5\": \"a5e7e891276b1f539b7d9a9cb11ce966\", \"scorer_url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/o4-500k-wnc-2011.scorer\", \"scorer_size\": \"539766416\"},\n"
 
             << "{ \"name\": \"English\", \"model_id\": \"en\", \"id\": \"en\", "
-            << "\"file_name\": \"en.tflite\", \"md5\": \"afcc08e56f024655c30187a41c4e8c9c\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.tflite\", \"size\": \"47331784\", "
-            << "\"scorer_file_name\": \"en.scorer\", \"scorer_md5\": \"08a02b383a9bc93c8a8ad188dbf79bc9\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer\", \"scorer_size\": \"953363776\"},\n"
+            << "\"md5\": \"afcc08e56f024655c30187a41c4e8c9c\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.tflite\", \"size\": \"47331784\", "
+            << "\"scorer_md5\": \"08a02b383a9bc93c8a8ad188dbf79bc9\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer\", \"scorer_size\": \"953363776\"},\n"
 
             << "{ \"name\": \"Deutsch\", \"model_id\": \"de\", \"id\": \"de\", "
-            << "\"file_name\": \"de.tflite\", \"md5\": \"bc31379c31052392b2ea881eefede747\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_de.tflite.xz\", \"size\": \"18512148\", "
-            << "\"scorer_file_name\": \"de.scorer\", \"scorer_md5\": \"e1fbc58d92c0872f7a1502d33416a23c\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_de.scorer.xz\", \"scorer_size\": \"191358684\"},\n"
+            << "\"md5\": \"bc31379c31052392b2ea881eefede747\", \"comp\": \"xz\", \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_de.tflite.xz\", \"size\": \"18512148\", "
+            << "\"scorer_md5\": \"e1fbc58d92c0872f7a1502d33416a23c\", \"scorer_comp\": \"xz\", \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_de.scorer.xz\", \"scorer_size\": \"191358684\"},\n"
 
             << "{ \"name\": \"Español\", \"model_id\": \"es\", \"id\": \"es\", "
-            << "\"file_name\": \"es.tflite\", \"md5\": \"cc618b45dd01b8a6cc6b1d781653f89a\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_es.tflite.xz\", \"size\": \"18728916\", "
-            << "\"scorer_file_name\": \"es.scorer\", \"scorer_md5\": \"650e2325ebf70d08a69ae5bf238ad5bd\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_es.scorer.xz\", \"scorer_size\": \"223163180\"},\n"
+            << "\"md5\": \"cc618b45dd01b8a6cc6b1d781653f89a\", \"comp\": \"xz\", \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_es.tflite.xz\", \"size\": \"18728916\", "
+            << "\"scorer_md5\": \"650e2325ebf70d08a69ae5bf238ad5bd\", \"scorer_comp\": \"xz\", \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_es.scorer.xz\", \"scorer_size\": \"223163180\"},\n"
 
             << "{ \"name\": \"Français\", \"model_id\": \"fr\", \"id\": \"fr\", "
-            << "\"file_name\": \"fr.tflite\", \"md5\": \"fcf644611a833f4f8e9767b2ab6b16ea\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_fr.tflite.xz\", \"size\": \"18741120\", "
-            << "\"scorer_file_name\": \"fr.scorer\", \"scorer_md5\": \"35224069b08e801c84051d65e810bdd1\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_fr.scorer.xz\", \"scorer_size\": \"204224996\"},\n"
+            << "\"md5\": \"fcf644611a833f4f8e9767b2ab6b16ea\", \"comp\": \"xz\", \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_fr.tflite.xz\", \"size\": \"18741120\", "
+            << "\"scorer_md5\": \"35224069b08e801c84051d65e810bdd1\", \"scorer_comp\": \"xz\", \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_fr.scorer.xz\", \"scorer_size\": \"204224996\"},\n"
 
             << "{ \"name\": \"Italiano\", \"model_id\": \"it\", \"id\": \"it\", "
-            << "\"file_name\": \"it.tflite\", \"md5\": \"11c9980d444f04e28bff007fedbac882\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_it.tflite.xz\", \"size\": \"18794812\", "
-            << "\"scorer_file_name\": \"it.scorer\", \"scorer_md5\": \"9b2df256185e442246159b33cd05fc2d\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_it.scorer.xz\", \"scorer_size\": \"4713388\"},\n"
+            << "\"md5\": \"11c9980d444f04e28bff007fedbac882\", \"comp\": \"xz\", \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_it.tflite.xz\", \"size\": \"18794812\", "
+            << "\"scorer_md5\": \"9b2df256185e442246159b33cd05fc2d\", \"scorer_comp\": \"xz\", \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_it.scorer.xz\", \"scorer_size\": \"4713388\"},\n"
 
             << "{ \"name\": \"Polski\", \"model_id\": \"pl\", \"id\": \"pl\", "
-            << "\"file_name\": \"pl.tflite\", \"md5\": \"a56c693bb0d644af5dc53f0e59f0da76\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_pl.tflite.xz\", \"size\": \"18961196\", "
-            << "\"scorer_file_name\": \"pl.scorer\", \"scorer_md5\": \"0984ebda29d9c51a87e5823bd301d980\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_pl.scorer.xz\", \"scorer_size\": \"2659936\"},\n"
+            << "\"md5\": \"a56c693bb0d644af5dc53f0e59f0da76\", \"comp\": \"gz\", \"url\": \"https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/output_graph.tflite.gz\", \"size\": \"20752162\", "
+            << "\"scorer_md5\": \"0984ebda29d9c51a87e5823bd301d980\", \"scorer_comp\": \"gz\", \"scorer_url\": \"https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/base.scorer.gz\", \"scorer_size\": \"3000583\"},\n"
 
             << "{ \"name\": \"简体中文\", \"model_id\": \"zh-CN\", \"id\": \"zh-CN\", "
-            << "\"file_name\": \"zh-CN.tflite\", \"md5\": \"5664793cafe796d0821a3e49d56eb797\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.tflite\", \"size\": \"47798728\", "
-            << "\"scorer_file_name\": \"zh-CN.scorer\", \"scorer_md5\": \"628e68fd8e0dd82c4a840d56c4cdc661\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer\", \"scorer_size\": \"67141744\"}\n"
+            << "\"md5\": \"5664793cafe796d0821a3e49d56eb797\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.tflite\", \"size\": \"47798728\", "
+            << "\"scorer_md5\": \"628e68fd8e0dd82c4a840d56c4cdc661\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer\", \"scorer_size\": \"67141744\"}\n"
 #else
             << "{ \"name\": \"Czech\", \"model_id\": \"cs\", \"id\": \"cs\", "
-            << "\"file_name\": \"cs.pbmm\", \"md5\": \"071c0cefc8484908770028752f04c692\", \"url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.pbmm\", \"size\": \"189031154\", "
-            << "\"scorer_file_name\": \"cs.scorer\", \"scorer_md5\": \"a5e7e891276b1f539b7d9a9cb11ce966\", \"scorer_url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/o4-500k-wnc-2011.scorer\", \"scorer_size\": \"539766416\"},\n"
+            << "\"md5\": \"071c0cefc8484908770028752f04c692\", \"url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.pbmm\", \"size\": \"189031154\", "
+            << "\"scorer_md5\": \"a5e7e891276b1f539b7d9a9cb11ce966\", \"scorer_url\": \"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/o4-500k-wnc-2011.scorer\", \"scorer_size\": \"539766416\"},\n"
 
             << "{ \"name\": \"English\", \"model_id\": \"en\", \"id\": \"en\", "
-            << "\"file_name\": \"en.pbmm\", \"md5\": \"8b15ccb86d0214657e48371287b7a49a\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.pbmm\", \"size\": \"188915987\", "
-            << "\"scorer_file_name\": \"en.scorer\", \"scorer_md5\": \"08a02b383a9bc93c8a8ad188dbf79bc9\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer\", \"scorer_size\": \"953363776\"},\n"
+            << "\"md5\": \"8b15ccb86d0214657e48371287b7a49a\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.pbmm\", \"size\": \"188915987\", "
+            << "\"scorer_md5\": \"08a02b383a9bc93c8a8ad188dbf79bc9\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer\", \"scorer_size\": \"953363776\"},\n"
 
             << "{ \"name\": \"Deutsch\", \"model_id\": \"de\", \"id\": \"de\", "
-            << "\"file_name\": \"de.pbmm\", \"md5\": \"ccb15318053a245487a15b90bf052cca\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_de.pbmm.xz\", \"size\": \"171571572\", "
-            << "\"scorer_file_name\": \"de.scorer\", \"scorer_md5\": \"e1fbc58d92c0872f7a1502d33416a23c\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_de.scorer.xz\", \"scorer_size\": \"191358684\"},\n"
+            << "\"md5\": \"ccb15318053a245487a15b90bf052cca\", \"comp\": \"xz\", \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_de.pbmm.xz\", \"size\": \"171571572\", "
+            << "\"scorer_md5\": \"e1fbc58d92c0872f7a1502d33416a23c\", \"scorer_comp\": \"xz\", \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_de.scorer.xz\", \"scorer_size\": \"191358684\"},\n"
 
             << "{ \"name\": \"Español\", \"model_id\": \"es\", \"id\": \"es\", "
-            << "\"file_name\": \"es.pbmm\", \"md5\": \"8b0739839abd0f98f2638be166fb3b74\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_es.pbmm.xz\", \"size\": \"171549140\", "
-            << "\"scorer_file_name\": \"es.scorer\", \"scorer_md5\": \"650e2325ebf70d08a69ae5bf238ad5bd\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_es.scorer.xz\", \"scorer_size\": \"223163180\"},\n"
+            << "\"md5\": \"8b0739839abd0f98f2638be166fb3b74\", \"comp\": \"xz\", \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_es.pbmm.xz\", \"size\": \"171549140\", "
+            << "\"scorer_md5\": \"650e2325ebf70d08a69ae5bf238ad5bd\", \"scorer_comp\": \"xz\", \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_es.scorer.xz\", \"scorer_size\": \"223163180\"},\n"
 
             << "{ \"name\": \"Français\", \"model_id\": \"fr\", \"id\": \"fr\", "
-            << "\"file_name\": \"fr.pbmm\", \"md5\": \"079fa68c49feff6aa2bd3cc22aab6226\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_fr.pbmm.xz\", \"size\": \"171661600\", "
-            << "\"scorer_file_name\": \"fr.scorer\", \"scorer_md5\": \"35224069b08e801c84051d65e810bdd1\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_fr.scorer.xz\", \"scorer_size\": \"204224996\"},\n"
+            << "\"md5\": \"079fa68c49feff6aa2bd3cc22aab6226\", \"comp\": \"xz\", \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_fr.pbmm.xz\", \"size\": \"171661600\", "
+            << "\"scorer_md5\": \"35224069b08e801c84051d65e810bdd1\", \"scorer_comp\": \"xz\", \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_fr.scorer.xz\", \"scorer_size\": \"204224996\"},\n"
 
             << "{ \"name\": \"Italiano\", \"model_id\": \"it\", \"id\": \"it\", "
-            << "\"file_name\": \"it.pbmm\", \"md5\": \"ec10ea9d01cc9ab3135e4e5b0341821e\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_it.pbmm.xz\", \"size\": \"171591992\", "
-            << "\"scorer_file_name\": \"it.scorer\", \"scorer_md5\": \"9b2df256185e442246159b33cd05fc2d\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_it.scorer.xz\", \"scorer_size\": \"4713388\"},\n"
+            << "\"md5\": \"ec10ea9d01cc9ab3135e4e5b0341821e\", \"comp\": \"xz\", \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_it.pbmm.xz\", \"size\": \"171591992\", "
+            << "\"scorer_md5\": \"9b2df256185e442246159b33cd05fc2d\", \"scorer_comp\": \"xz\", \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_it.scorer.xz\", \"scorer_size\": \"4713388\"},\n"
 
             << "{ \"name\": \"Polski\", \"model_id\": \"pl\", \"id\": \"pl\", "
-            << "\"file_name\": \"pl.pbmm\", \"md5\": \"69d0069a0d68f33f6634e8b2c0e06af6\", \"xz\": true, \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_pl.pbmm.xz\", \"size\": \"171639032\", "
-            << "\"scorer_file_name\": \"pl.scorer\", \"scorer_md5\": \"0984ebda29d9c51a87e5823bd301d980\", \"scorer_xz\": true, \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_pl.scorer.xz\", \"scorer_size\": \"2659936\"},\n"
+            << "\"md5\": \"69d0069a0d68f33f6634e8b2c0e06af6\", \"comp\": \"xz\", \"url\": \"https://github.com/mkiol/dsnote/raw/main/models/output_graph_pl.pbmm.xz\", \"size\": \"171639032\", "
+            << "\"scorer_md5\": \"0984ebda29d9c51a87e5823bd301d980\", \"scorer_comp\": \"xz\", \"scorer_url\": \"https://github.com/mkiol/dsnote/raw/main/models/kenlm_pl.scorer.xz\", \"scorer_size\": \"2659936\"},\n"
 
             << "{ \"name\": \"简体中文\", \"model_id\": \"zh-CN\", \"id\": \"zh-CN\", "
-            << "\"file_name\": \"zh-CN.pbmm\", \"md5\": \"57b99451aaabbada2708e3b6a28e55c8\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.pbmm\", \"size\": \"190777619\", "
-            << "\"scorer_file_name\": \"zh-CN.scorer\", \"scorer_md5\": \"628e68fd8e0dd82c4a840d56c4cdc661\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer\", \"scorer_size\": \"67141744\"}\n"
+            << "\"md5\": \"57b99451aaabbada2708e3b6a28e55c8\", \"url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.pbmm\", \"size\": \"190777619\", "
+            << "\"scorer_md5\": \"628e68fd8e0dd82c4a840d56c4cdc661\", \"scorer_url\": \"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer\", \"scorer_size\": \"67141744\"}\n"
 #endif
             << "]\n}\n";
     outfile.close();
+}
+
+models_manager::comp_type models_manager::str2comp(const QString& str)
+{
+    if (!str.compare("gz", Qt::CaseInsensitive)) return comp_type::gz;
+    if (!str.compare("xz", Qt::CaseInsensitive)) return comp_type::xz;
+    return comp_type::none;
+}
+
+QString models_manager::comp_filename(const QString& filename, comp_type comp)
+{
+    switch (comp) {
+    case comp_type::gz: return filename + ".gz";
+    case comp_type::xz: return filename + ".xz";
+    default: return filename;
+    }
 }
 
 auto models_manager::check_lang_file(const QJsonArray& langs)
@@ -563,12 +651,12 @@ auto models_manager::check_lang_file(const QJsonArray& langs)
             obj.value("name").toString(),
             file_name,
             md5,
-            obj.value("xz").toBool(),
+            str2comp(obj.value("comp").toString()),
             QUrl{obj.value("url").toString()},
             obj.value("size").toString().toLongLong(),
             scorer_file_name,
             scorer_md5,
-            obj.value("scorer_xz").toBool(),
+            str2comp(obj.value("scorer_comp").toString()),
             scorer_url,
             obj.value("scorer_size").toString().toLongLong(),
             available,
