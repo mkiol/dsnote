@@ -54,8 +54,8 @@ signals:
     void busy_changed();
 
 private:
-    enum class download_type { none, all, model, scorer };
-    enum class comp_type { none, xz, gz };
+    enum class download_type { none, all, model, scorer, model_scorer };
+    enum class comp_type { none, xz, gz, tar, tarxz };
 
     struct model_t {
         QString lang_id;
@@ -71,7 +71,7 @@ private:
         std::vector<QUrl> scorer_urls;
         qint64 scorer_size = 0;
         bool available = false;
-        download_type current_dl = download_type::none;
+        bool downloading = false;
         double download_progress = 0.0;
         qint64 downloaded_part_data = 0;
     };
@@ -98,11 +98,15 @@ private:
     static void backup_config(const QString& lang_models_file);
     static bool xz_decode(const QString& file_in, const QString& file_out);
     static bool gz_decode(const QString& file_in, const QString& file_out);
+    static bool tar_decode(const QString& file_in, std::map<QString, QString>&& files_out);
     static bool join_part_files(const QString& file_out, int parts);
-    bool check_download(const QString& file, const QString& checksum, comp_type comp, int parts = -1);
+    bool handle_download(const QString& path, const QString& checksum, const QString& path_in_archive,
+                         const QString& path_2, const QString& checksum_2, const QString& path_in_archive_2,
+                         comp_type comp, int parts);
     static auto check_lang_file(const QJsonArray& langs);
     static comp_type str2comp(const QString& str);
     static QString download_filename(const QString& filename, comp_type comp, int part = -1);
+    static bool model_scorer_same_url(const model_t& id);
 };
 
 #endif // MODELS_MANAGER_H
