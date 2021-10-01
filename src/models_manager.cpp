@@ -815,6 +815,14 @@ void models_manager::init_config()
             << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-08\"], "
             << "\"scorer_size\": \"225945743\"},\n"
 
+            << "{ \"name\": \"Français (Common Voice)\", \"model_id\": \"fr_cv\", \"id\": \"fr\", "
+            << "\"md5\": \"11e226e00322d684a3da987aee4eb099\", \"comp\": \"tarxz\", "
+            << "\"urls\": [\"https://github.com/common-voice/commonvoice-fr/releases/download/fr-v0.6/model_tflite_fr.tar.xz?file=output_graph.tflite\"], "
+            << "\"size\": \"615568844\", "
+            << "\"scorer_md5\": \"29b0148c1dbab776e33cc55dacc917b6\", \"scorer_comp\": \"tarxz\", "
+            << "\"scorer_urls\": [\"https://github.com/common-voice/commonvoice-fr/releases/download/fr-v0.6/model_tflite_fr.tar.xz?file=kenlm.scorer\"], "
+            << "\"scorer_size\": \"615568844\"},\n"
+
             << "{ \"name\": \"Italiano\", \"model_id\": \"it\", \"id\": \"it\", "
             << "\"md5\": \"11c9980d444f04e28bff007fedbac882\", \"comp\": \"gz\", "
             << "\"urls\": [\"https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/output_graph.tflite.gz\"], "
@@ -823,7 +831,7 @@ void models_manager::init_config()
             << "\"scorer_urls\": [\"https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/base.scorer.gz\"], "
             << "\"scorer_size\": \"5350776\"},\n"
 
-            << "{ \"name\": \"Italiano (MozillaItalia)\", \"model_id\": \"it_mozz\", \"id\": \"it\", "
+            << "{ \"name\": \"Italiano (Mozilla Italia)\", \"model_id\": \"it_mozz\", \"id\": \"it\", "
             << "\"md5\": \"310fd14b81612f9409008f626e8be869\", \"comp\": \"tarxz\", "
             << "\"urls\": [\"https://github.com/MozillaItalia/DeepSpeech-Italian-Model/releases/download/2020.08.07/model_tflite_it.tar.xz?file=output_graph.tflite\"], "
             << "\"size\": \"172342504\", "
@@ -936,6 +944,14 @@ void models_manager::init_config()
             << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-08\"], "
             << "\"scorer_size\": \"225945743\"},\n"
 
+            << "{ \"name\": \"Français (Common Voice)\", \"model_id\": \"fr_cv\", \"id\": \"fr\", "
+            << "\"md5\": \"b78f73aa50e943e502d7bfa1d51e3ed3\", \"comp\": \"tarxz\", "
+            << "\"urls\": [\"https://github.com/common-voice/commonvoice-fr/releases/download/fr-v0.6/model_tensorflow_fr.tar.xz?file=output_graph.pbmm\"], "
+            << "\"size\": \"764474076\", "
+            << "\"scorer_md5\": \"29b0148c1dbab776e33cc55dacc917b6\", \"scorer_comp\": \"tarxz\", "
+            << "\"scorer_urls\": [\"https://github.com/common-voice/commonvoice-fr/releases/download/fr-v0.6/model_tensorflow_fr.tar.xz?file=kenlm.scorer\"], "
+            << "\"scorer_size\": \"764474076\"},\n"
+
             << "{ \"name\": \"Italiano\", \"model_id\": \"it\", \"id\": \"it\", "
             << "\"md5\": \"ec10ea9d01cc9ab3135e4e5b0341821e\", \"comp\": \"gz\", "
             << "\"urls\": [ "
@@ -951,7 +967,7 @@ void models_manager::init_config()
             << "\"scorer_urls\": [\"https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/base.scorer.gz\"], "
             << "\"scorer_size\": \"5350776\"},\n"
 
-            << "{ \"name\": \"Italiano (MozillaItalia)\", \"model_id\": \"it_mozz\", \"id\": \"it\", "
+            << "{ \"name\": \"Italiano (Mozilla Italia)\", \"model_id\": \"it_mozz\", \"id\": \"it\", "
             << "\"md5\": \"8b445aef3c54801d73444b66f5f8eb32\", \"comp\": \"tarxz\", "
             << "\"urls\": [\"https://github.com/MozillaItalia/DeepSpeech-Italian-Model/releases/download/2020.08.07/model_tensorflow_it.tar.xz?file=output_graph.pbmm\"], "
             << "\"size\": \"315068264\", "

@@ -10,16 +10,18 @@ Speech Note converts speech to text using [DeepSpeech](https://github.com/mozill
 
 DeepSpeech models for particular language can be downloaded from the app. Following models are currently configured for download:
 
-| Language        | Original source                                       |
-|:----------------|:------------------------------------------------------|
-| Czech (cs)      | https://github.com/comodoro/deepspeech-cs             |
-| English (en)    | https://github.com/mozilla/DeepSpeech                 |
-| German (de)     | https://gitlab.com/Jaco-Assistant/Scribosermo         |
-| Spanish (es)    | https://gitlab.com/Jaco-Assistant/Scribosermo         |
-| French (fr)     | https://gitlab.com/Jaco-Assistant/Scribosermo         |
-| Italian (it)    | https://gitlab.com/Jaco-Assistant/Scribosermo         |
-| Polish (pl)     | https://gitlab.com/Jaco-Assistant/Scribosermo         |
-| Chinese (zh-CN) | https://github.com/mozilla/DeepSpeech                 |
+| Language                      | Source                                                                                                                                                   |
+|:------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Czech / cs                    | [comodoro/deepspeech-cs](https://github.com/comodoro/deepspeech-cs)                                                                                      |
+| English / en                  | [mozilla/DeepSpeech](https://github.com/mozilla/DeepSpeech)                                                                                              |
+| German / de                   | [Jaco-Assistant/Scribosermo](https://gitlab.com/Jaco-Assistant/Scribosermo), [rhasspy/de_deepspeech-jaco](https://github.com/rhasspy/de_deepspeech-jaco) |
+| Spanish / es                  | [Jaco-Assistant/Scribosermo](https://gitlab.com/Jaco-Assistant/Scribosermo), [rhasspy/es_deepspeech-jaco](https://github.com/rhasspy/es_deepspeech-jaco) |
+| French / fr                   | [Jaco-Assistant/Scribosermo](https://gitlab.com/Jaco-Assistant/Scribosermo), [rhasspy/fr_deepspeech-jaco](https://github.com/rhasspy/fr_deepspeech-jaco) |
+| French (Common Voice) / fr    | [common-voice/commonvoice-fr](https://github.com/common-voice/commonvoice-fr)                                                                            |
+| Italian / it                  | [Jaco-Assistant/Scribosermo](https://gitlab.com/Jaco-Assistant/Scribosermo), [rhasspy/it_deepspeech-jaco](https://github.com/rhasspy/it_deepspeech-jaco) |
+| Italian (Mozzila Italia) / it | [MozillaItalia/DeepSpeech-Italian-Model](https://github.com/MozillaItalia/DeepSpeech-Italian-Model)                                                      |
+| Polish / pl                   | [Jaco-Assistant/Scribosermo](https://gitlab.com/Jaco-Assistant/Scribosermo), [rhasspy/pl_deepspeech-jaco](https://github.com/rhasspy/pl_deepspeech-jaco) |
+| Chinese / zh-CN               | [mozilla/DeepSpeech](https://github.com/mozilla/DeepSpeech)                                                                                              |
 
 
 The quality of speech recognition strongly depends on language model. In general it is not perfect but for some languages is surprisingly fine.
