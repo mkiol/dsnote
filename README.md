@@ -19,7 +19,7 @@ DeepSpeech models for particular language can be downloaded from the app. Follow
 | French / fr                   | [Jaco-Assistant/Scribosermo](https://gitlab.com/Jaco-Assistant/Scribosermo), [rhasspy/fr_deepspeech-jaco](https://github.com/rhasspy/fr_deepspeech-jaco) |
 | French (Common Voice) / fr    | [common-voice/commonvoice-fr](https://github.com/common-voice/commonvoice-fr)                                                                            |
 | Italian / it                  | [Jaco-Assistant/Scribosermo](https://gitlab.com/Jaco-Assistant/Scribosermo), [rhasspy/it_deepspeech-jaco](https://github.com/rhasspy/it_deepspeech-jaco) |
-| Italian (Mozzila Italia) / it | [MozillaItalia/DeepSpeech-Italian-Model](https://github.com/MozillaItalia/DeepSpeech-Italian-Model)                                                      |
+| Italian (Mozilla Italia) / it | [MozillaItalia/DeepSpeech-Italian-Model](https://github.com/MozillaItalia/DeepSpeech-Italian-Model)                                                      |
 | Polish / pl                   | [Jaco-Assistant/Scribosermo](https://gitlab.com/Jaco-Assistant/Scribosermo), [rhasspy/pl_deepspeech-jaco](https://github.com/rhasspy/pl_deepspeech-jaco) |
 | Chinese / zh-CN               | [mozilla/DeepSpeech](https://github.com/mozilla/DeepSpeech)                                                                                              |
 
