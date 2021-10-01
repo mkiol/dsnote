@@ -29,6 +29,20 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Version %1").arg("1.3.0")
+            }
+
+            LogItem {
+                title: "Czech language model and translation"
+                description: "Thanks to community member contribution, Czech language is now supported!"
+            }
+
+            LogItem {
+                title: "New language models for French and Italian."
+                description: "Additional models come from Common Voice and Mozilla Italia projects."
+            }
+
+            SectionHeader {
                 text: qsTr("Version %1").arg("1.2.0")
             }
 
