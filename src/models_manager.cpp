@@ -747,7 +747,7 @@ void models_manager::init_config()
     outfile << "{\n\"version\": " << dsnote::CONF_VERSION << ",\n\"langs\": [\n"
 
 #ifdef TF_LITE
-            << "{ \"name\": \"Czech\", \"model_id\": \"cs\", \"id\": \"cs\", "
+            << "{ \"name\": \"Čeština\", \"model_id\": \"cs\", \"id\": \"cs\", "
             << "\"md5\": \"10cbdafa216b498445034c9e861bfba4\", "
             << "\"urls\": [\"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.tflite\"], "
             << "\"size\": \"47360928\", "
@@ -847,7 +847,7 @@ void models_manager::init_config()
             << "\"scorer_urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer\"], "
             << "\"scorer_size\": \"67141744\"}\n"
 #else
-            << "{ \"name\": \"Czech\", \"model_id\": \"cs\", \"id\": \"cs\", "
+            << "{ \"name\": \"Čeština\", \"model_id\": \"cs\", \"id\": \"cs\", "
             << "\"md5\": \"071c0cefc8484908770028752f04c692\", "
             << "\"urls\": [\"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.pbmm\"], "
             << "\"size\": \"189031154\", "
