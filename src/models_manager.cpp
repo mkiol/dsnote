@@ -845,6 +845,14 @@ void models_manager::init_config()
             << "\"scorer_urls\": [\"https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/base.scorer.gz\"], "
             << "\"scorer_size\": \"3000583\"},\n"
 
+            << "{ \"name\": \"Română\", \"model_id\": \"ro_exp\", \"id\": \"ro\", "
+            << "\"md5\": \"e1edb6e017ba6833b15d4a3f2bab0466\", \"comp\": \"xz\", "
+            << "\"urls\": [\"https://github.com/mkiol/dsnote/raw/main/models/ro_exp.tflite.xz\"], "
+            << "\"size\": \"19142612\", "
+            << "\"scorer_md5\": \"aa83c08ba153bf6f110754eb43dd9d73\", \"scorer_comp\": \"xz\", "
+            << "\"scorer_urls\": [\"https://github.com/mkiol/dsnote/raw/main/models/ro_exp.scorer.xz\"], "
+            << "\"scorer_size\": \"583536296\"},\n"
+
             << "{ \"name\": \"简体中文\", \"model_id\": \"zh-CN\", \"id\": \"zh-CN\", "
             << "\"md5\": \"5664793cafe796d0821a3e49d56eb797\", "
             << "\"urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.tflite\"], "
