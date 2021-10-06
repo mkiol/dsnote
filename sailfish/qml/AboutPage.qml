@@ -88,8 +88,8 @@ Page {
             }
 
             DetailItem {
-                label: "DeepSpeech"
-                value: DEEPSPEECH_VERSION
+                label: "Coqui STT"
+                value: STT_VERSION
             }
             DetailItem {
                 label: "TensorFlow"

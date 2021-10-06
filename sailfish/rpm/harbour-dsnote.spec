@@ -7,7 +7,7 @@ Name:       harbour-dsnote
 
 # >> macros
 %define __provides_exclude_from ^%{_datadir}/.*$
-%define __requires_exclude ^libdeepspeech.*$
+%define __requires_exclude ^libstt.*|libtensorflowlite.*|libtflitedelegates.*|libkenlm.*$
 # << macros
 
 Summary:    Note taking with speech to text

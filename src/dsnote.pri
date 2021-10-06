@@ -46,10 +46,11 @@ HEADERS += \
     $${SRC_DIR}/mic_source.h \
     $${SRC_DIR}/models_manager.h \
     $${SRC_DIR}/settings.h \
-    $${SRC_DIR}/dsnote.h
+    $${SRC_DIR}/dsnote.h \
+    $${SRC_DIR}/coqui-stt.h
 
 sailfishapp {
-    DEFINES += TF_LITE SAILFISH
+    DEFINES += SAILFISH
 
     SOURCES += \
         $${SRC_DIR}/listmodel.cpp \
@@ -62,4 +63,4 @@ sailfishapp {
         $${SRC_DIR}/dirmodel.h
 }
 
-LIBS += -lz -llzma -larchive -L$${LIB_DIR} -l:libdeepspeech.so
+LIBS += -lz -llzma -larchive -L$${LIB_DIR} -l:libstt.so -l:libtensorflowlite.so -l:libtflitedelegates.so -l:libkenlm.so

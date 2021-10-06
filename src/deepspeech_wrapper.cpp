@@ -64,7 +64,7 @@ void deepspeech_wrapper::start_processing()
 
 std::string deepspeech_wrapper::error_msg(int status)
 {
-    auto error_mgs_raw = DS_ErrorCodeToErrorMessage(status);
+    auto error_mgs_raw = STT_ErrorCodeToErrorMessage(status);
     std::string error_mgs{error_mgs_raw};
     delete error_mgs_raw;
     return error_mgs;
@@ -78,14 +78,14 @@ bool deepspeech_wrapper::ok() const
 void deepspeech_wrapper::create_model(const std::string& model_file, const std::string& scorer_file)
 {
     ModelState* state;
-    int status = DS_CreateModel(model_file.c_str(), &state);
+    int status = STT_CreateModel(model_file.c_str(), &state);
 
     if (status == 0) {
         model = model_ptr{state, [](ModelState* state){
-            DS_FreeModel(state);
+            STT_FreeModel(state);
         }};
         if (!scorer_file.empty()) {
-            DS_EnableExternalScorer(model.get(), scorer_file.c_str());
+            STT_EnableExternalScorer(model.get(), scorer_file.c_str());
         }
     } else {
         qDebug() << "could not create model:" << QString::fromStdString(error_msg(status));
@@ -94,7 +94,7 @@ void deepspeech_wrapper::create_model(const std::string& model_file, const std::
 
 void deepspeech_wrapper::create_stream()
 {
-    int status = DS_CreateStream(model.get(), &stream);
+    int status = STT_CreateStream(model.get(), &stream);
 
     if (status != 0) {
         qDebug() << "could not create stream:" << QString::fromStdString(error_msg(status));
@@ -105,14 +105,14 @@ void deepspeech_wrapper::create_stream()
 void deepspeech_wrapper::free_stream()
 {
     if (stream) {
-        DS_FreeStream(stream);
+        STT_FreeStream(stream);
         stream = nullptr;
     }
 }
 
 int deepspeech_wrapper::sample_rate() const
 {
-    return DS_GetModelSampleRate(model.get());
+    return STT_GetModelSampleRate(model.get());
 }
 
 unsigned int deepspeech_wrapper::accumulate_abs(buff_type::const_iterator begin,
@@ -233,9 +233,9 @@ void deepspeech_wrapper::process_buff(buff_type::const_iterator begin,
     if (!stream)
         create_stream();
 
-    DS_FeedAudioContent(stream, &(*begin), std::distance(begin, end));
+    STT_FeedAudioContent(stream, &(*begin), std::distance(begin, end));
 
-    auto result = DS_IntermediateDecode(stream);
+    auto result = STT_IntermediateDecode(stream);
 
     if (speech_mode_value == speech_mode_type::automatic &&
             intermediate_text && intermediate_text == result)
@@ -258,7 +258,7 @@ void deepspeech_wrapper::process_buff(buff_type::const_iterator begin,
             set_speech_detected(false);
     }
 
-    DS_FreeString(result);
+    STT_FreeString(result);
 }
 
 void deepspeech_wrapper::set_intermediate_text(const char* text)

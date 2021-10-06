@@ -4,7 +4,7 @@ Experimental Sailfish OS app for note taking with speech to text
 
 ## Description
 
-Speech Note converts speech to text using [DeepSpeech](https://github.com/mozilla/DeepSpeech) library and language models. All voice processing is entirely done locally on the device. Internet connection is only required for model download during app initial configuration. Speech Note respects your privacy and provides truly offline speech-to-text capability.
+Speech Note converts speech to text using [Coqui STT](https://github.com/coqui-ai/STT) (a fork of [Mozilla's DeepSpeech](https://github.com/mozilla/DeepSpeech)) library and language models. All voice processing is entirely done locally on the device. Internet connection is only required for model download during app initial configuration. Speech Note respects your privacy and provides truly offline speech-to-text capability.
 
 ## Language models
 

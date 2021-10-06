@@ -729,7 +729,7 @@ void models_manager::init_config()
          "name": "<native language name (M)>",
          "model_id": "unique model id (M)>",
          "id": "<ISO 639-1 language code (M)>",
-         "urls": "<array of download URL(s) of model file, might be compressd file(s) (M)>",
+         "urls": "<array of download URL(s) of model file (*.tflite), might be compressd file(s) (M)>",
          "md5": "<md5 hash of (not compressed) model file (M)>",
          "file_name": "<file name of deep-speech model (O)>",
          "comp": <type of compression for model file provided in 'url', following are supported: 'xz', 'gz' (O)>
@@ -745,8 +745,6 @@ void models_manager::init_config()
 
     std::ofstream outfile{lang_models_file_path.toStdString(), std::ofstream::out | std::ofstream::trunc};
     outfile << "{\n\"version\": " << dsnote::CONF_VERSION << ",\n\"langs\": [\n"
-
-#ifdef TF_LITE
             << "{ \"name\": \"Čeština\", \"model_id\": \"cs\", \"id\": \"cs\", "
             << "\"md5\": \"10cbdafa216b498445034c9e861bfba4\", "
             << "\"urls\": [\"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.tflite\"], "
@@ -854,150 +852,7 @@ void models_manager::init_config()
             << "\"scorer_md5\": \"628e68fd8e0dd82c4a840d56c4cdc661\", "
             << "\"scorer_urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer\"], "
             << "\"scorer_size\": \"67141744\"}\n"
-#else
-            << "{ \"name\": \"Čeština\", \"model_id\": \"cs\", \"id\": \"cs\", "
-            << "\"md5\": \"071c0cefc8484908770028752f04c692\", "
-            << "\"urls\": [\"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.pbmm\"], "
-            << "\"size\": \"189031154\", "
-            << "\"scorer_md5\": \"a5e7e891276b1f539b7d9a9cb11ce966\", "
-            << "\"scorer_urls\": [\"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/o4-500k-wnc-2011.scorer\"], "
-            << "\"scorer_size\": \"539766416\"},\n"
 
-            << "{ \"name\": \"English\", \"model_id\": \"en\", \"id\": \"en\", "
-            << "\"md5\": \"8b15ccb86d0214657e48371287b7a49a\", "
-            << "\"urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.pbmm\"], "
-            << "\"size\": \"188915987\", "
-            << "\"scorer_md5\": \"08a02b383a9bc93c8a8ad188dbf79bc9\", "
-            << "\"scorer_urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer\"], "
-            << "\"scorer_size\": \"953363776\"},\n"
-
-            << "{ \"name\": \"Deutsch\", \"model_id\": \"de\", \"id\": \"de\", "
-            << "\"md5\": \"ccb15318053a245487a15b90bf052cca\", \"comp\": \"gz\", "
-            << "\"urls\": [ "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-00\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-01\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-02\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-03\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-04\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-05\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-06\"], "
-            << "\"size\": \"175382475\", "
-            << "\"scorer_md5\": \"e1fbc58d92c0872f7a1502d33416a23c\", \"scorer_comp\": \"gz\", "
-            << "\"scorer_urls\": [ "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-01\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-02\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-03\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-04\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-05\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-06\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-07\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-08\"], "
-            << "\"scorer_size\": \"229904847\"},\n"
-
-            << "{ \"name\": \"Español\", \"model_id\": \"es\", \"id\": \"es\", "
-            << "\"md5\": \"8b0739839abd0f98f2638be166fb3b74\", \"comp\": \"gz\", "
-            << "\"urls\": [ "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-00\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-01\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-02\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-03\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-04\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-05\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-06\"], "
-            << "\"size\": \"175381280\", "
-            << "\"scorer_md5\": \"650e2325ebf70d08a69ae5bf238ad5bd\", \"scorer_comp\": \"gz\", "
-            << "\"scorer_urls\": [ "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-01\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-02\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-03\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-04\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-05\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-06\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-07\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-08\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-09\"], "
-            << "\"scorer_size\": \"247688532\"},\n"
-
-            << "{ \"name\": \"Français\", \"model_id\": \"fr\", \"id\": \"fr\", "
-            << "\"md5\": \"079fa68c49feff6aa2bd3cc22aab6226\", \"comp\": \"gz\", "
-            << "\"urls\": [ "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-00\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-01\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-02\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-03\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-04\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-05\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-06\"], "
-            << "\"size\": \"175494759\", "
-            << "\"scorer_md5\": \"35224069b08e801c84051d65e810bdd1\", \"scorer_comp\": \"gz\", "
-            << "\"scorer_urls\": [ "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-01\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-02\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-03\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-04\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-05\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-06\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-07\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-08\"], "
-            << "\"scorer_size\": \"225945743\"},\n"
-
-            << "{ \"name\": \"Français (Common Voice)\", \"model_id\": \"fr_cv\", \"id\": \"fr\", "
-            << "\"md5\": \"b78f73aa50e943e502d7bfa1d51e3ed3\", \"comp\": \"tarxz\", "
-            << "\"urls\": [\"https://github.com/common-voice/commonvoice-fr/releases/download/fr-v0.6/model_tensorflow_fr.tar.xz?file=output_graph.pbmm\"], "
-            << "\"size\": \"764474076\", "
-            << "\"scorer_md5\": \"29b0148c1dbab776e33cc55dacc917b6\", \"scorer_comp\": \"tarxz\", "
-            << "\"scorer_urls\": [\"https://github.com/common-voice/commonvoice-fr/releases/download/fr-v0.6/model_tensorflow_fr.tar.xz?file=kenlm.scorer\"], "
-            << "\"scorer_size\": \"764474076\"},\n"
-
-            << "{ \"name\": \"Italiano\", \"model_id\": \"it\", \"id\": \"it\", "
-            << "\"md5\": \"ec10ea9d01cc9ab3135e4e5b0341821e\", \"comp\": \"gz\", "
-            << "\"urls\": [ "
-            << "\"https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-00\", "
-            << "\"https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-01\", "
-            << "\"https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-02\", "
-            << "\"https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-03\", "
-            << "\"https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-04\", "
-            << "\"https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-05\", "
-            << "\"https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-06\"], "
-            << "\"size\": \"175358136\", "
-            << "\"scorer_md5\": \"9b2df256185e442246159b33cd05fc2d\", \"scorer_comp\": \"gz\", "
-            << "\"scorer_urls\": [\"https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/base.scorer.gz\"], "
-            << "\"scorer_size\": \"5350776\"},\n"
-
-            << "{ \"name\": \"Italiano (Mozilla Italia)\", \"model_id\": \"it_mozz\", \"id\": \"it\", "
-            << "\"md5\": \"8b445aef3c54801d73444b66f5f8eb32\", \"comp\": \"tarxz\", "
-            << "\"urls\": [\"https://github.com/MozillaItalia/DeepSpeech-Italian-Model/releases/download/2020.08.07/model_tensorflow_it.tar.xz?file=output_graph.pbmm\"], "
-            << "\"size\": \"315068264\", "
-            << "\"scorer_md5\": \"7abbe30b5ee8591360c73a0a0cb47813\", \"scorer_comp\": \"tarxz\", "
-            << "\"scorer_urls\": [\"https://github.com/MozillaItalia/DeepSpeech-Italian-Model/releases/download/2020.08.07/model_tensorflow_it.tar.xz?file=scorer\"], "
-            << "\"scorer_size\": \"315068264\"},\n"
-
-            << "{ \"name\": \"Polski\", \"model_id\": \"pl\", \"id\": \"pl\", "
-            << "\"md5\": \"69d0069a0d68f33f6634e8b2c0e06af6\", \"comp\": \"gz\", "
-            << "\"urls\": [ "
-            << "\"https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-00\", "
-            << "\"https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-01\", "
-            << "\"https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-02\", "
-            << "\"https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-03\", "
-            << "\"https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-04\", "
-            << "\"https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-05\", "
-            << "\"https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/output_graph.pbmm.gz.part-06\"], "
-            << "\"size\": \"175414854\", "
-            << "\"scorer_md5\": \"0984ebda29d9c51a87e5823bd301d980\", \"scorer_comp\": \"gz\", "
-            << "\"scorer_urls\": [\"https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/base.scorer.gz\"], "
-            << "\"scorer_size\": \"3000583\"},\n"
-
-            << "{ \"name\": \"简体中文\", \"model_id\": \"zh-CN\", \"id\": \"zh-CN\", "
-            << "\"md5\": \"57b99451aaabbada2708e3b6a28e55c8\", "
-            << "\"urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.pbmm\"], "
-            << "\"size\": \"190777619\", "
-            << "\"scorer_md5\": \"628e68fd8e0dd82c4a840d56c4cdc661\", "
-            << "\"scorer_urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer\"], "
-            << "\"scorer_size\": \"67141744\"}\n"
-#endif
             << "]\n}\n";
     outfile.close();
 }
@@ -1168,11 +1023,7 @@ std::map<QString, models_manager::model_t> models_manager::parse_models_file(boo
 
 QString models_manager::file_name_from_id(const QString& id)
 {
-#ifdef TF_LITE
     return id + ".tflite";
-#else
-    return id + ".pbmm";
-#endif
 }
 
 QString models_manager::scorer_file_name_from_id(const QString& id)

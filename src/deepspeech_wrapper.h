@@ -19,7 +19,7 @@
 #include <functional>
 #include <optional>
 
-#include "deepspeech.h"
+#include "coqui-stt.h"
 
 class deepspeech_wrapper
 {

@@ -45,6 +45,6 @@ Files:
 # build system, please see https://wiki.merproject.org/wiki/Spectacle
 
 # >> macros
-# %define __provides_exclude_from ^%{_datadir}/.*$
-# %define __requires_exclude ^libdeepspeech.*$
+#%define __provides_exclude_from ^%{_datadir}/.*$
+#%define __requires_exclude ^libstt.*|libtensorflowlite.*|libtflitedelegates.*|libkenlm.*$
 # << macros
