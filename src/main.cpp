@@ -33,17 +33,21 @@
 
 #include "info.h"
 #include "settings.h"
-#include "dsnote.h"
+#include "dsnote_app.h"
+#include "stt_service.h"
+#include "stt_config.h"
 
 void register_types()
 {
 #ifdef SAILFISH
     qmlRegisterUncreatableType<settings>("harbour.dsnote.Settings", 1, 0, "Settings", "Singleton");
-    qmlRegisterType<dsnote_app>("harbour.dsnote.Dsnote", 1, 0, "Dsnote");
+    qmlRegisterType<dsnote_app>("harbour.dsnote.Dsnote", 1, 0, "DsnoteApp");
+    qmlRegisterType<stt_config>("harbour.dsnote.Dsnote", 1, 0, "SttConfig");
     qmlRegisterType<DirModel>("harbour.dsnote.DirModel", 1, 0, "DirModel");
 #else
     qmlRegisterUncreatableType<settings>("org.mkiol.dsnote.Settings", 1, 0, "Settings", "Singleton");
-    qmlRegisterType<dsnote_app>("org.mkiol.dsnote.Dsnote", 1, 0, "Dsnote");
+    qmlRegisterType<dsnote_app>("org.mkiol.dsnote.Dsnote", 1, 0, "DsnoteApp");
+    qmlRegisterType<stt_config>("org.mkiol.dsnote.Dsnote", 1, 0, "SttConfig");
 #endif
 }
 
@@ -59,7 +63,7 @@ void install_translator(const std::unique_ptr<QGuiApplication>& app)
 #else
     QString trans_dir = ":/translations";
 #endif
-    if(!translator->load(QLocale::system().name(), QStringLiteral("dsnote"), QStringLiteral("-"), trans_dir, QStringLiteral(".qm"))) {
+    if(!translator->load(QLocale::system().name(), "dsnote", "-", trans_dir, ".qm")) {
         qDebug() << "cannot load translation:" << QLocale::system().name() << trans_dir;
         if (!translator->load("dsnote-en", trans_dir)) {
             qDebug() << "cannot load default translation";
@@ -89,6 +93,8 @@ int main(int argc, char* argv[])
 
     register_types();
     install_translator(app);
+
+    stt_service service;
 
     context->setContextProperty("APP_NAME", dsnote::APP_NAME);
     context->setContextProperty("APP_ID", dsnote::APP_ID);

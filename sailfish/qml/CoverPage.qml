@@ -9,6 +9,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 import harbour.dsnote.Settings 1.0
+import harbour.dsnote.Dsnote 1.0
 
 CoverBackground {
     id: root
@@ -31,12 +32,25 @@ CoverBackground {
     }
 
     SpeechIndicator {
+        id: indicator
         y: app.speech ? 2 * Theme.paddingLarge : (root.height - height) / 2
         anchors.horizontalCenter: parent.horizontalCenter
         width: Theme.coverSizeLarge.width - 2 * Theme.paddingMedium
         height: width / 2
         color: Theme.primaryColor
         active: app.speech
+        off: !app.configured
         Behavior on y { NumberAnimation { duration: 300; easing {type: Easing.OutBack} } }
+        visible: opacity > 0.0
+        opacity: app.state === DsnoteApp.SttTranscribingFile ? 0.0 : 1.0
+        Behavior on opacity { NumberAnimation { duration: 150 } }
+    }
+
+    BusyIndicatorWithProgress {
+        id: busyIndicator
+        size: BusyIndicatorSize.Large
+        anchors.centerIn: indicator
+        running: app.state === DsnoteApp.SttTranscribingFile
+        progress: app.transcribe_progress
     }
 }

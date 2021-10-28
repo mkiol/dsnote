@@ -25,6 +25,7 @@ public:
     double progress() const override;
     void clear() override;
     inline source_type type() const override { return source_type::file; }
+    inline QString audio_file() const { return file; };
 
 private slots:
     void handle_state_changed(QAudioDecoder::State new_state);
@@ -37,8 +38,9 @@ private:
     QTimer timer;
     std::array<char, buff_max_size> buff;
     size_t buff_size = 0;
+    QString file;
 
-    void init_audio(const QString &file);
+    void init_audio();
     void start();
 };
 

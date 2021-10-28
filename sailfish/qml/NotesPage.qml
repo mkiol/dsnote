@@ -15,7 +15,7 @@ import harbour.dsnote.Dsnote 1.0
 Page {
     id: root
 
-    readonly property bool configured: app.available_langs.length > 0 && !app.busy
+    readonly property bool configured: app.configured && !app.busy
     readonly property bool inactive: app.intermediate_text.length === 0
 
     allowedOrientations: Orientation.All
@@ -38,7 +38,7 @@ Page {
             spacing: Theme.paddingLarge
 
             PullDownMenu {
-                busy: app.busy || app.audio_source_type === Dsnote.SourceFile
+                busy: app.busy || app.state === DsnoteApp.SttTranscribingFile
 
                 MenuItem {
                     text: qsTr("About %1").arg(APP_NAME)
@@ -52,19 +52,13 @@ Page {
 
                 MenuItem {
                     enabled: configured
-                    text: app.audio_source_type === Dsnote.SourceFile ? qsTr("Cancel file transcription") : qsTr("Transcribe audio file")
+                    text: app.state === DsnoteApp.SttTranscribingFile ? qsTr("Cancel file transcription") : qsTr("Transcribe audio file")
                     onClicked: {
-                        if (app.audio_source_type === Dsnote.SourceFile)
-                            app.cancel_file_source()
+                        if (app.state === DsnoteApp.SttTranscribingFile)
+                            app.cancel_transcribe()
                         else
                             pageStack.push(fileDialog)
                     }
-                }
-
-                MenuItem {
-                    visible: configured && app.audio_source_type === Dsnote.SourceNone
-                    text: qsTr("Connect microphone")
-                    onClicked: app.set_mic_source()
                 }
 
                 MenuItem {
@@ -129,8 +123,9 @@ Page {
         height: intermediateLabel.height + 2 * Theme.paddingLarge
         highlighted: mouse.pressed
 
-        property color pColor: _settings.speech_mode === Settings.SpeechAutomatic || app.audio_source_type !== Dsnote.SourceMic || highlighted ? Theme.highlightColor : Theme.primaryColor
-        property color sColor: _settings.speech_mode === Settings.SpeechAutomatic || app.audio_source_type !== Dsnote.SourceMic || highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+        readonly property bool active: app.state === DsnoteApp.SttListeningManual || app.state === DsnoteApp.SttListeningAuto || app.state === DsnoteApp.SttTranscribingFile || highlighted
+        readonly property color pColor: active ? Theme.highlightColor : Theme.primaryColor
+        readonly property color sColor: active ? Theme.secondaryHighlightColor : Theme.secondaryColor
 
         Rectangle {
             anchors.fill: parent
@@ -149,29 +144,22 @@ Page {
             width: Theme.itemSizeSmall
             color: panel.pColor
             active: app.speech
-            off: app.audio_source_type === Dsnote.SourceNone
+            off: app.state === DsnoteApp.SttUnknown || app.state === DsnoteApp.SttNotConfigured
             Component.onCompleted: {
                 height = parent.height / 2
             }
 
             visible: opacity > 0.0
-            opacity: app.audio_source_type === Dsnote.SourceFile ? 0.0 : 1.0
+            opacity: app.state === DsnoteApp.SttTranscribingFile ? 0.0 : 1.0
             Behavior on opacity { NumberAnimation { duration: 150 } }
         }
 
-        BusyIndicator {
+        BusyIndicatorWithProgress {
             id: busyIndicator
             size: BusyIndicatorSize.Medium
             anchors.centerIn: indicator
-            running: app.audio_source_type === Dsnote.SourceFile
-
-            Label {
-                visible: app.progress > -1
-                color: Theme.highlightColor
-                anchors.centerIn: parent
-                font.pixelSize: Theme.fontSizeTiny
-                text:  Math.round(app.progress * 100) + "%"
-            }
+            running: app.state === DsnoteApp.SttTranscribingFile
+            progress: app.transcribe_progress
         }
 
         Label {
@@ -183,10 +171,9 @@ Page {
             anchors.rightMargin: Theme.horizontalPageMargin
             anchors.leftMargin: Theme.paddingMedium * 0.7
             text: inactive ?
-                      app.audio_source_type === Dsnote.SourceFile ? qsTr("Transcribing audio file...") :
-                      app.audio_source_type === Dsnote.SourceMic ?
-                        _settings.speech_mode === Settings.SpeechAutomatic || app.speech ?
-                        qsTr("Say something...") : qsTr("Press and say something...") :
+                      app.state === DsnoteApp.SttTranscribingFile ? qsTr("Transcribing audio file...") :
+                      app.state === DsnoteApp.SttListeningAuto || app.state === DsnoteApp.SttListeningManual ? qsTr("Say something...") :
+                      app.state === DsnoteApp.SttIdle ? qsTr("Press and say something...") :
                       "" : app.intermediate_text
             wrapMode: inactive ? Text.NoWrap : Text.WordWrap
             truncationMode: inactive ? TruncationMode.Fade : TruncationMode.None
@@ -197,11 +184,11 @@ Page {
         MouseArea {
             id: mouse
             enabled: configured && _settings.speech_mode === Settings.SpeechManual &&
-                     app.audio_source_type === Dsnote.SourceMic
+                     app.state !== DsnoteApp.SttTranscribingFile
             anchors.fill: parent
 
-            onPressed: app.speech = true
-            onReleased: app.speech = false
+            onPressed: app.listen()
+            onReleased: app.stop_listen()
         }
     }
 
@@ -210,7 +197,7 @@ Page {
         FilePickerPage {
             nameFilters: [ '*.wav', '*.mp3', '*.ogg', '*.flac', '*.m4a', '*.aac', '*.opus' ]
             onSelectedContentPropertiesChanged: {
-                app.set_file_source(selectedContentProperties.filePath)
+                app.transcribe_file(selectedContentProperties.filePath)
             }
         }
     }
@@ -224,10 +211,10 @@ Page {
 
         onError: {
             switch (type) {
-            case Dsnote.ErrorFileSource:
+            case DsnoteApp.ErrorFileSource:
                 notification.show(qsTr("Audio file couldn't be transcribed."))
                 break;
-            case Dsnote.ErrorMicSource:
+            case DsnoteApp.ErrorMicSource:
                 notification.show(qsTr("Microphone was unexpectedly disconnected."))
                 break;
             default:

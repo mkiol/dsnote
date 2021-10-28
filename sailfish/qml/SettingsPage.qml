@@ -13,8 +13,6 @@ import harbour.dsnote.Settings 1.0
 Page {
     id: root
 
-    readonly property bool configured: app.available_langs.length > 0
-
     allowedOrientations: Orientation.All
 
     SilicaFlickable {
@@ -35,7 +33,7 @@ Page {
             ComboBox {
                 id: langCombo
                 label: qsTr("Active language")
-                visible: configured
+                visible: app.configured
                 currentIndex: app.active_lang_idx
                 menu: ContextMenu {
                     Repeater {
@@ -50,7 +48,7 @@ Page {
 
                 Connections {
                     target: app
-                    onLangs_changed: langCombo.currentIndex = app.active_lang_idx
+                    onAvailable_langs_changed: langCombo.currentIndex = app.active_lang_idx
                 }
             }
 
@@ -77,7 +75,7 @@ Page {
 
             ItemBox {
                 title: qsTr("Location of language files")
-                value: _settings.lang_models_dir_name
+                value: _settings.models_dir_name
                 description: qsTr("Directory where language files are downloaded to and stored.")
 
                 menu: ContextMenu {
@@ -86,14 +84,14 @@ Page {
                         onClicked: {
                             var obj = pageStack.push(Qt.resolvedUrl("DirPage.qml"));
                             obj.accepted.connect(function() {
-                                _settings.lang_models_dir = obj.selectedPath
+                                _settings.models_dir = obj.selectedPath
                             })
                         }
                     }
                     MenuItem {
                         text: qsTr("Set default")
                         onClicked: {
-                            _settings.lang_models_dir = ""
+                            _settings.models_dir = ""
                         }
                     }
                 }

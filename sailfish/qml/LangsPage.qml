@@ -20,14 +20,14 @@ Page {
 
         currentIndex: -1
 
-        // app.langs:
+        // service.all_models:
         // [0] - model id
         // [1] - lang id
         // [2] - friendly name
         // [3] - model availability
         // [4] - download in progress
         // [5] - download progress
-        model: app.langs
+        model: service.all_models
 
         header: PageHeader {
             title: qsTr("Languages")
@@ -36,7 +36,7 @@ Page {
         delegate: SimpleListItem {
             id: listItem
 
-            visible: !app.busy
+            visible: !service.busy
 
             property color itemColor: highlighted ? Theme.highlightColor : Theme.primaryColor
             property color secondaryItemColor: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
@@ -56,9 +56,9 @@ Page {
                         text: listItem.available ? qsTr("Delete") : qsTr("Download")
                         onClicked: {
                             if (listItem.available) {
-                                app.delete_lang(listItem.modelId)
+                                service.delete_model(listItem.modelId)
                             } else {
-                                app.download_lang(listItem.modelId)
+                                service.download_model(listItem.modelId)
                             }
                         }
                     }
@@ -96,8 +96,8 @@ Page {
                 }
 
                 Connections {
-                    target: app
-                    onLang_download_progress: {
+                    target: service
+                    onModel_download_progress: {
                         if (listItem.modelId === id) {
                             progressLabel.text = Math.round(progress * 100) + "%"
                         }
@@ -109,14 +109,14 @@ Page {
         }
 
         ViewPlaceholder {
-            enabled: listView.count === 0 && !app.busy
+            enabled: listView.count === 0 && !service.busy
             text: qsTr("No languages")
         }
     }
 
     BusyIndicator {
         anchors.centerIn: parent
-        running: app.busy
+        running: service.busy
         size: BusyIndicatorSize.Large
     }
 

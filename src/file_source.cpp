@@ -9,9 +9,9 @@
 
 #include <QAudioFormat>
 
-file_source::file_source(const QString &file, QObject *parent) : audio_source{parent}
+file_source::file_source(const QString &file, QObject *parent) : audio_source{parent}, file{file}
 {
-    init_audio(file);
+    init_audio();
     start();
 }
 
@@ -20,7 +20,7 @@ bool file_source::ok() const
     return decoder.error() == QAudioDecoder::NoError;
 }
 
-void file_source::init_audio(const QString &file)
+void file_source::init_audio()
 {
     QAudioFormat format;
     format.setSampleRate(16000);

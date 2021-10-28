@@ -39,12 +39,13 @@ public:
     models_manager(QObject *parent = nullptr);
     ~models_manager();
     [[nodiscard]] bool ok() const;
-    std::vector<lang_t> available_langs() const;
+    std::vector<lang_t> available_models() const;
     std::vector<lang_t> langs() const;
     [[nodiscard]] bool model_exists(const QString& id) const;
     void download_model(const QString& id);
     void delete_model(const QString& id);
     [[nodiscard]] inline bool busy() const { return busy_value; }
+    void reload();
 
 signals:
     void download_progress(const QString& id, double progress);
@@ -82,8 +83,9 @@ private:
     QNetworkAccessManager nam;
     std::atomic_bool busy_value = false;
     std::thread thread;
+    bool pending_reload = false;
 
-    void parse_models_file();
+    bool parse_models_file();
     static std::map<QString, model_t> parse_models_file(bool reset);
     static QString file_name_from_id(const QString& id);
     static QString scorer_file_name_from_id(const QString& id);

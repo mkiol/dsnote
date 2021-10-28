@@ -1,0 +1,273 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+    <interface name="org.mkiol.Stt">
+        <!--
+            State:
+
+            State of the service.
+            Valid states: 0 = Unknown, 1 = Not Configured, 2 = Busy,
+                          3 = Idle, 4 = Listening Manual, 4 = Listening Auto,
+                          5 = Transcribing File.
+            Unrecognized states should be considered equal to Unknown.
+        -->
+        <property name="State" type="i" access="read" />
+
+        <!--
+            StatePropertyChanged:
+            @status: new value of State property
+
+            Emitted whenever State property changes.
+        -->
+        <signal name="StatePropertyChanged">
+          <arg name="state" type="i" direction="out" />
+        </signal>
+
+        <!--
+            Speech:
+
+            An indicator of speech presence. %TRUE when speech is detected,
+            %FALSE otherwise.
+        -->
+        <property name="Speech" type="b" access="read" />
+
+        <!--
+            SpeechPropertyChanged:
+            @speech: new value of Speech property
+
+            Emitted whenever Speech property changes.
+        -->
+        <signal name="SpeechPropertyChanged">
+          <arg name="speech" type="b" direction="out" />
+        </signal>
+
+        <!--
+            DefaultLang:
+
+            An id of language which is default.
+            The default language is used when @lang is empty in StartListen or
+            TranscribeFile methods.
+        -->
+        <property name="DefaultLang" type="s" access="readwrite" />
+
+        <!--
+            DefaultLangPropertyChanged:
+            @lang: new value of DefaultLang property
+
+            Emitted whenever DefaultLang property changes.
+        -->
+        <signal name="DefaultLangPropertyChanged">
+          <arg name="lang" type="s" direction="out" />
+        </signal>
+
+        <!--
+            Langs:
+
+            A dict of available languages (lang id => array of properties).
+        -->
+        <property name="Langs" type="a{sv}" access="read">
+            <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantMap"/>
+        </property>
+
+        <!--
+            LangsChanged:
+            @speech: new value of Langs property
+
+            Emitted whenever Langs property changes.
+        -->
+        <signal name="LangsPropertyChanged">
+          <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
+          <arg name="langs" type="a{sv}" direction="out" />
+        </signal>
+
+        <!--
+            CurrentTask:
+
+            Id of taks that is currently active. Task id is returned in
+            StartListen and TranscribeFile methods. Task id less than 0
+            idicates idle state.
+        -->
+        <property name="CurrentTask" type="i" access="read" />
+
+        <!--
+            CurrentTaskPropertyChanged:
+            @task: new value of CurrentTask property
+
+            Emitted whenever CurrentTask property changes.
+        -->
+        <signal name="CurrentTaskPropertyChanged">
+          <arg name="task" type="i" direction="out" />
+        </signal>
+
+        <!--
+            IntermediateTextDecoded:
+            @text: intermediate text that was decoded from speech
+            @lang: language code (ISO 639-1) of decoded @text
+            @task: id of task returned in StartListen or TranscribeFile call
+
+            Emitted whenever intermediate text was decoded.
+        -->
+        <signal name="IntermediateTextDecoded">
+            <arg name="text" type="s" direction="out" />
+            <arg name="lang" type="s" direction="out" />
+            <arg name="task" type="i" direction="out" />
+        </signal>
+
+        <!--
+            TextDecoded:
+            @text: text that was decoded from speech
+            @lang: language code (ISO 639-1) of decoded @text
+            @task: id of task returned in StartListen or TranscribeFile call
+
+            Emitted whenever text was decoded.
+            When TranscribeFile or StartListen (@mode set to Automatic) was called,
+            TextDecoded signal is emitted everytime when silent is detected in the speech.
+            When StartListen (@mode set to Manual) was called, exacly one TextDecoded signal
+            is emitted (after StopListen call).
+        -->
+        <signal name="TextDecoded">
+            <arg name="text" type="s" direction="out" />
+            <arg name="lang" type="s" direction="out" />
+            <arg name="task" type="i" direction="out" />
+        </signal>
+
+        <!--
+            FileTranscribeFinished:
+            @task: id of task returned in TranscribeFile call
+
+            Emitted whenever file transcription is completely finished.
+        -->
+        <signal name="FileTranscribeFinished">
+            <arg name="task" type="i" direction="out" />
+        </signal>
+
+        <!--
+            FileTranscribeProgress:
+            @progress: progress of file transcription (0.0 - 1.0)
+            @task: id of task returned in TranscribeFile call
+
+            Emitted whenever file transcription progress changed.
+        -->
+        <signal name="FileTranscribeProgress">
+            <arg name="progress" type="d" direction="out" />
+            <arg name="task" type="i" direction="out" />
+        </signal>
+
+        <!--
+            GetFileTranscribeProgress:
+            @task: id of task returned in TranscribeFile call
+            @progress: progress of file transcription (0.0 - 1.0)
+        -->
+        <method name="GetFileTranscribeProgress">
+            <arg name="task" type="i" direction="in" />
+            <arg name="progress" type="d" direction="out" />
+        </method>
+
+        <!--
+            ErrorOccured:
+            @code: 0 - Generic, 1 - Microphone error, 2 - File source error
+
+            Emitted whenever error occurs.
+        -->
+        <signal name="ErrorOccured">
+            <arg name="code" type="i" direction="out" />
+        </signal>
+
+        <!--
+            StartListen:
+            @lang: language code (ISO 639-1)
+            @mode: 0 - Automatic, 1 - Manual
+            @task: returned id of task which will be included in
+                   IntermediateTextDecoded and TextDecoded signals,
+                   @task less than 0 idicates an error
+
+            When @mode is Automatic, TextDecoded signal is emitted everytime
+            when silent is detected in the speech. When @mode is Manual,
+            exacly one TextDecoded signal is emitted (after StopListen call).
+        -->
+        <method name="StartListen">
+            <arg name="mode" type="i" direction="in" />
+            <arg name="lang" type="s" direction="in" />
+            <arg name="task" type="i" direction="out" />
+        </method>
+
+        <!--
+            StopListen:
+            @task: id of task returned in StartListen call
+            @result: 0 - success, any other value - error
+
+            Stops speech decoding.
+        -->
+        <method name="StopListen">
+            <arg name="task" type="i" direction="in" />
+            <arg name="result" type="i" direction="out" />
+        </method>
+
+        <!--
+            TranscribeFile:
+            @file: path or URL to audio file
+            @lang: language code (ISO 639-1)
+            @task: returned id of task which will be included in
+                   IntermediateTextDecoded and TextDecoded signals,
+                   @task less than 0 idicates an error
+
+            Starts audio file transcription. Result of transcription is
+            reported in IntermediateTextDecoded and TextDecoded signals.
+            Progress of transcription is included in FileTranscribeProgress signal.
+            When file transcription is completely finished (whole file was transcribed),
+            FileTranscribeProgress signal is emitted.
+        -->
+        <method name="TranscribeFile">
+            <arg name="file" type="s" direction="in" />
+            <arg name="lang" type="s" direction="in" />
+            <arg name="task" type="i" direction="out" />
+        </method>
+
+        <!--
+            CancelTranscribeFile:
+            @task: id of task returned in TranscribeFile call
+            @result: 0 - success, any other value - error
+
+            Cancels file transcription.
+        -->
+        <method name="CancelTranscribeFile">
+            <arg name="task" type="i" direction="in" />
+            <arg name="result" type="i" direction="out" />
+        </method>
+
+        <!--
+            Reload:
+            @result: 0 - success, any other value - error
+
+            Reload the service. This method should be called after change in
+            model files.
+        -->
+        <method name="Reload">
+            <arg name="result" type="i" direction="out" />
+        </method>
+
+        <!--
+            KeepAliveTask:
+            @task: id of task returned in StartListen or TranscribeFile call
+            @timer: number of miliseconds to task kill
+
+            Resets task kill timer. Should be called periodically to keep task
+            active. When timer timeouts, service kills the task.
+        -->
+        <method name="KeepAliveTask">
+            <arg name="task" type="i" direction="in" />
+            <arg name="timer" type="i" direction="out" />
+        </method>
+
+        <!--
+            KeepAliveService:
+            @timer: number of miliseconds to service shutdown
+
+            Resets service self-shutdown timer. Should be called periodically to
+            keep service running. When timer timeouts, service shutdowns.
+        -->
+        <method name="KeepAliveService">
+            <arg name="timer" type="i" direction="out" />
+        </method>
+    </interface>
+</node>

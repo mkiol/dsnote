@@ -22,7 +22,11 @@ ApplicationWindow {
         NotesPage {}
     }
 
-    Dsnote {
+    SttConfig {
+        id: service
+    }
+
+    DsnoteApp {
         id: app
     }
 

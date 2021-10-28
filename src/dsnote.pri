@@ -1,4 +1,4 @@
-QT += multimedia
+QT += dbus multimedia
 CONFIG += c++1z
 
 contains(QT_ARCH, i386){
@@ -28,17 +28,43 @@ contains(QT_ARCH, i386){
 ROOT_DIR = $${PWD}/..
 SRC_DIR = $${ROOT_DIR}/src
 LIB_DIR = $${ROOT_DIR}/libs/$${ARCH}
+DBUS_DIR = $${ROOT_DIR}/dbus
+
+message(Qt is installed in $${QT_INSTALL_PREFIX})
+
+QT_BIN_DIR = "$${QT_INSTALL_PREFIX}/bin"
+exists("$${QT_BIN_DIR}/qdbusxml2cpp-qt5") {
+    QDBUSXML2CPP = "$${QT_BIN_DIR}/qdbusxml2cpp-qt5"
+} else {
+    QDBUSXML2CPP = "$${QT_BIN_DIR}/qdbusxml2cpp"
+}
+
+DBUS_STT_XML = "$${DBUS_DIR}/org.mkiol.Stt.xml"
+
+#message("$${QDBUSXML2CPP}" "$${DBUS_STT_XML}" -a $${SRC_DIR}/dbus_stt_adaptor)
+#system("$${QDBUSXML2CPP}" "$${DBUS_STT_XML}" -a $${SRC_DIR}/dbus_stt_adaptor)
+#message("$${QDBUSXML2CPP}" "$${DBUS_STT_XML}" -p $${SRC_DIR}/dbus_stt_inf)
+#system("$${QDBUSXML2CPP}" "$${DBUS_STT_XML}" -p $${SRC_DIR}/dbus_stt_inf)
+
+OTHER_FILES += \
+    $${DBUS_STT_XML}
 
 SOURCES += \
+    $${SRC_DIR}/stt_service.cpp \
+    $${SRC_DIR}/stt_config.cpp \
     $${SRC_DIR}/file_source.cpp \
     $${SRC_DIR}/deepspeech_wrapper.cpp \
     $${SRC_DIR}/main.cpp \
     $${SRC_DIR}/mic_source.cpp \
     $${SRC_DIR}/models_manager.cpp \
     $${SRC_DIR}/settings.cpp \
-    $${SRC_DIR}/dsnote.cpp
+    $${SRC_DIR}/dsnote_app.cpp \
+    $${SRC_DIR}/dbus_stt_adaptor.cpp \
+    $${SRC_DIR}/dbus_stt_inf.cpp
 
 HEADERS += \
+    $${SRC_DIR}/stt_service.h \
+    $${SRC_DIR}/stt_config.h \
     $${SRC_DIR}/audio_source.h \
     $${SRC_DIR}/file_source.h \
     $${SRC_DIR}/info.h \
@@ -46,8 +72,10 @@ HEADERS += \
     $${SRC_DIR}/mic_source.h \
     $${SRC_DIR}/models_manager.h \
     $${SRC_DIR}/settings.h \
-    $${SRC_DIR}/dsnote.h \
-    $${SRC_DIR}/coqui-stt.h
+    $${SRC_DIR}/dsnote_app.h \
+    $${SRC_DIR}/coqui-stt.h \
+    $${SRC_DIR}/dbus_stt_adaptor.h \
+    $${SRC_DIR}/dbus_stt_inf.h
 
 sailfishapp {
     DEFINES += SAILFISH

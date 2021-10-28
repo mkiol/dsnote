@@ -21,12 +21,16 @@ using namespace std::chrono_literals;
 deepspeech_wrapper::deepspeech_wrapper(const std::string& model_file,
                                        const std::string& scorer_file,
                                        const callbacks_type& call_backs,
-                                       speech_mode_type speech_mode) :
+                                       speech_mode_type speech_mode,
+                                       bool speech_started) :
+    model_file_value{model_file},
+    scorer_file_value{scorer_file},
     call_backs{call_backs},
     processing_thread{&deepspeech_wrapper::start_processing, this},
+    speech_started_value{speech_started},
     speech_mode_value{speech_mode}
 {
-    create_model(model_file, scorer_file);
+    create_model();
 }
 
 deepspeech_wrapper::~deepspeech_wrapper()
@@ -37,8 +41,8 @@ deepspeech_wrapper::~deepspeech_wrapper()
     }
     processing_cv.notify_all();
     processing_thread.join();
-    speech_detected_value = false;
-    call_backs.speech_status_changed(false);
+    speech_started_value = false;
+    set_speech_detected(false);
 }
 
 void deepspeech_wrapper::start_processing()
@@ -70,25 +74,21 @@ std::string deepspeech_wrapper::error_msg(int status)
     return error_mgs;
 }
 
-bool deepspeech_wrapper::ok() const
-{
-    return model ? true : false;
-}
-
-void deepspeech_wrapper::create_model(const std::string& model_file, const std::string& scorer_file)
+void deepspeech_wrapper::create_model()
 {
     ModelState* state;
-    int status = STT_CreateModel(model_file.c_str(), &state);
+    int status = STT_CreateModel(model_file_value.c_str(), &state);
 
     if (status == 0) {
         model = model_ptr{state, [](ModelState* state){
             STT_FreeModel(state);
         }};
-        if (!scorer_file.empty()) {
-            STT_EnableExternalScorer(model.get(), scorer_file.c_str());
+        if (!scorer_file_value.empty()) {
+            STT_EnableExternalScorer(model.get(), scorer_file_value.c_str());
         }
     } else {
         qDebug() << "could not create model:" << QString::fromStdString(error_msg(status));
+        throw std::runtime_error("could not create model");
     }
 }
 
@@ -99,6 +99,7 @@ void deepspeech_wrapper::create_stream()
     if (status != 0) {
         qDebug() << "could not create stream:" << QString::fromStdString(error_msg(status));
         free_stream();
+        throw std::runtime_error("could not create stream");
     }
 }
 
@@ -145,6 +146,7 @@ void deepspeech_wrapper::free_buff()
 
 std::pair<char*, int64_t> deepspeech_wrapper::borrow_buff()
 {
+    //qDebug() << "borrow_buff";
     std::pair<char*, int64_t> c_buf{nullptr, 0};
 
     if (!lock_buff(lock_type::borrowed))
@@ -164,6 +166,7 @@ std::pair<char*, int64_t> deepspeech_wrapper::borrow_buff()
 
 void deepspeech_wrapper::return_buff(char* c_buff, int64_t size)
 {
+    //qDebug() << "return_buff";
     if (buff_struct.lock != lock_type::borrowed) {
         //qWarning() << "cannot return, buff not borrowed";
         return;
@@ -205,7 +208,8 @@ bool deepspeech_wrapper::process_buff()
         }
     }
 
-    //qDebug() << "process_buff start:" << buff_struct.size;
+//    qDebug() << "process_buff start:" << static_cast<int>(speech_mode_value)
+//             << last_frame_done << speech_detected_value << buff_struct.size;
 
     auto begin = buff_struct.buff.begin(), end = begin + frame_size;
     auto max_end = begin + buff_struct.size;
@@ -218,7 +222,7 @@ bool deepspeech_wrapper::process_buff()
 
     trim_buff(end - frame_size);
 
-    //qDebug() << "process_buff end";
+//    qDebug() << "process_buff end";
 
     free_buff();
 
@@ -282,7 +286,8 @@ void deepspeech_wrapper::flush(bool clear_buff)
 
     frames_without_change = 0;
 
-    set_speech_detected(false);
+    if (speech_mode_value == speech_mode_type::automatic)
+        set_speech_detected(false);
 
     if (clear_buff) {
         if (lock_buff_for_processing())
@@ -298,12 +303,21 @@ void deepspeech_wrapper::flush(bool clear_buff)
     intermediate_text.reset();
 }
 
-void deepspeech_wrapper::set_speech_status(bool started)
+void deepspeech_wrapper::set_speech_mode(speech_mode_type mode)
 {
-    if (speech_mode_value == speech_mode_type::manual) {
-        set_speech_detected(started);
-    } else {
-        qWarning() << "speech status can be changed only in manual mode";
+    if (speech_mode_value != mode) {
+        speech_mode_value = mode;
+        set_speech_started(false);
+    }
+}
+
+void deepspeech_wrapper::set_speech_started(bool value)
+{
+    if (speech_started_value != value) {
+        speech_started_value = value;
+        if (speech_mode_value == speech_mode_type::manual) {
+            set_speech_detected(value);
+        }
     }
 }
 

@@ -16,8 +16,6 @@ import org.mkiol.dsnote.Dsnote 1.0
 Page {
     id: root
 
-    readonly property bool configured: app.available_langs.length > 0
-
     title: qsTr("Note")
 
     ColumnLayout {
@@ -37,7 +35,7 @@ Page {
             }
         }
         RowLayout {
-            visible: configured
+            visible: app.configured
 
             Layout.fillWidth: true
 
@@ -56,9 +54,9 @@ Page {
                 Layout.fillWidth: true
                 readOnly: true
                 wrapMode: TextEdit.WordWrap
-                placeholderText: app.audio_source_type === Dsnote.SourceFile ?
-                                     qsTr("Transcribing audio file...") +(app.progress > -1 ? " " + Math.round(app.progress) + "%" : "") :
-                                     _settings.speech_mode === Settings.SpeechAutomatic || app.speech ?
+                placeholderText: app.state === DsnoteApp.SttTranscribingFile ?
+                                     qsTr("Transcribing audio file...") + (app.transcribe_progress > 0.0 ? " " + Math.round(app.transcribe_progress * 100) + "%" : "") :
+                                     app.state === DsnoteApp.SttListeningAuto || app.speech ?
                                      qsTr("Say something...") : qsTr("Press and say something...")
                 font.italic: true
                 text: app.intermediate_text
@@ -79,11 +77,10 @@ Page {
                 id: toolButton
 
                 visible: _settings.speech_mode === Settings.SpeechManual &&
-                         configured &&
-                         app.audio_source_type === Dsnote.SourceMic
+                         (app.state === DsnoteApp.SttListeningManual || app.state === DsnoteApp.SttIdle)
                 text: qsTr("Press and hold to speek")
-                onPressed: app.speech = true
-                onReleased: app.speech = false
+                onPressed: app.listen()
+                onReleased: app.stop_listen()
             }
 
             ToolButton {
@@ -93,13 +90,16 @@ Page {
             }
 
             ToolButton {
-                visible: app.audio_source_type !== Dsnote.SourceNone
-                text: app.audio_source_type === Dsnote.SourceFile ?
-                          qsTr("Cancel file transcription") :
+                visible: (app.state === DsnoteApp.SttListeningManual ||
+                          app.state === DsnoteApp.SttListeningAuto ||
+                          app.state === DsnoteApp.SttTranscribingFile ||
+                          app.state === DsnoteApp.SttIdle)
+                text: app.state === DsnoteApp.SttTranscribingFile ?
+                          qsTr("Cancel file transcription") + (app.transcribe_progress > 0.0 ? " (" + Math.round(app.transcribe_progress * 100) + "%)" : "") :
                           qsTr("Transcribe audio file")
                 onClicked: {
-                    if (app.audio_source_type === Dsnote.SourceFile)
-                        app.cancel_file_source()
+                    if (app.state === DsnoteApp.SttTranscribingFile)
+                        app.cancel_transcribe()
                     else
                         fileDialog.open()
                 }
@@ -111,12 +111,12 @@ Page {
 
             Label {
                 Layout.rightMargin: 10
-                visible: !configured
+                visible: !app.configured
                 text: qsTr("No language is configured")
             }
 
             ComboBox {
-                visible: configured
+                visible: app.configured
                 currentIndex: app.active_lang_idx
                 model: app.available_langs
                 onActivated: app.set_active_lang_idx(index)
@@ -129,6 +129,6 @@ Page {
         title: "Please choose a file"
         folder: shortcuts.home
         selectMultiple: false
-        onAccepted: app.set_file_source(fileDialog.fileUrl)
+        onAccepted: app.transcribe_file(fileDialog.fileUrl)
     }
 }

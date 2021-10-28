@@ -14,7 +14,7 @@ Page {
 
     title: qsTr("Languages")
 
-    // app.langs:
+    // service.all_models:
     // [0] - model id
     // [1] - lang id
     // [2] - friendly name
@@ -39,25 +39,25 @@ Page {
             columnSpacing: 10
             rowSpacing: 10
             columns: 3
-            rows: app.langs.length
+            rows: service.all_models.length
 
             Repeater {
-                model: app.langs
+                model: service.all_models
                 Label {
                     text: modelData[2]
                 }
             }
 
             Repeater {
-                model: app.langs
+                model: service.all_models
                 ProgressBar {
                     id: bar
                     Layout.fillWidth: true
                     value: modelData[3] ? 1 : modelData[5]
 
                     Connections {
-                        target: app
-                        function onLang_download_progress(id, progress) {
+                        target: service
+                        function onModel_download_progress(id, progress) {
                             if (modelData[0] === id) {
                                 bar.value = progress
                             }
@@ -67,15 +67,15 @@ Page {
             }
 
             Repeater {
-                model: app.langs
+                model: service.all_models
                 Button {
                     enabled: !modelData[4]
                     text: modelData[4] ? qsTr("Downloading...") : modelData[3] ? qsTr("Delete") : qsTr("Download")
                     onClicked: {
                         if (modelData[3])
-                            app.delete_lang(modelData[0])
+                            service.delete_model(modelData[0])
                         else
-                            app.download_lang(modelData[0])
+                            service.download_model(modelData[0])
                     }
                 }
             }

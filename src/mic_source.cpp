@@ -39,8 +39,7 @@ void mic_source::init_audio()
 
     auto info = QAudioDeviceInfo::defaultInputDevice();
     if (!info.isFormatSupported(format)) {
-        qWarning() << "mic audio format is not supported";
-        return;
+        throw std::runtime_error("mic audio format is not supported");
     }
 
     audio_input = std::make_unique<QAudioInput>(format);
@@ -65,8 +64,7 @@ void mic_source::handle_state_changed(QAudio::State new_state)
 void mic_source::handle_read_timeout()
 {
     if ((audio_input->state() != QAudio::ActiveState && audio_input->state() != QAudio::IdleState) || audio_input->error() != QAudio::NoError) {
-        if (audio_input->error() != QAudio::NoError)
-            qWarning() << "audio input error:" << audio_input->error();
+        if (audio_input->error() != QAudio::NoError) qWarning() << "audio input error:" << audio_input->error();
         timer.stop();
         emit error();
         return;

@@ -76,15 +76,19 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
-    Dsnote {
+    SttConfig {
+        id: service
+    }
+
+    DsnoteApp {
         id: app
 
         onError: {
             switch (type) {
-            case Dsnote.ErrorFileSource:
+            case DsnoteApp.ErrorFileSource:
                 console.log("File source error")
                 break;
-            case Dsnote.ErrorMicSource:
+            case DsnoteApp.ErrorMicSource:
                 console.log("Mic source error")
                 break;
             default:

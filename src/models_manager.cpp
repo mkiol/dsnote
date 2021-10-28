@@ -50,8 +50,8 @@ models_manager::models_manager(QObject *parent)
     nam.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 #endif
 
-    connect(settings::instance(), &settings::lang_models_dir_changed, this,
-            static_cast<void (models_manager::*)()>(&models_manager::parse_models_file));
+    connect(settings::instance(), &settings::models_dir_changed, this,
+            static_cast<bool (models_manager::*)()>(&models_manager::parse_models_file));
 
     parse_models_file();
 }
@@ -70,7 +70,7 @@ std::vector<models_manager::lang_t> models_manager::langs() const
 {
     std::vector<lang_t> list;
 
-    QDir dir{settings::instance()->lang_models_dir()};
+    QDir dir{settings::instance()->models_dir()};
 
     std::transform(models.cbegin(), models.cend(), std::back_inserter(list),
                 [&dir](decltype(models)::value_type const& pair) {
@@ -89,11 +89,11 @@ std::vector<models_manager::lang_t> models_manager::langs() const
     return list;
 }
 
-std::vector<models_manager::lang_t> models_manager::available_langs() const
+std::vector<models_manager::lang_t> models_manager::available_models() const
 {
     std::vector<lang_t> list;
 
-    QDir dir{settings::instance()->lang_models_dir()};
+    QDir dir{settings::instance()->models_dir()};
 
     for (const auto& [id, model] : models) {
         const auto model_file = dir.filePath(model.file_name);
@@ -896,7 +896,7 @@ auto models_manager::check_lang_file(const QJsonArray& langs)
 {
     std::map<QString, models_manager::model_t> models;
 
-    QDir dir{settings::instance()->lang_models_dir()};
+    QDir dir{settings::instance()->models_dir()};
 
     for (const auto& ele : langs) {
         auto obj = ele.toObject();
@@ -967,11 +967,16 @@ auto models_manager::check_lang_file(const QJsonArray& langs)
     return models;
 }
 
-void models_manager::parse_models_file()
+void models_manager::reload()
+{
+    if (!parse_models_file()) pending_reload = true;
+}
+
+bool models_manager::parse_models_file()
 {
     bool expected = false;
     if (!busy_value.compare_exchange_strong(expected, true))
-        return;
+        return false;
 
     emit busy_changed();
 
@@ -979,12 +984,17 @@ void models_manager::parse_models_file()
         thread.join();
 
     thread = std::thread{[this]{
-        models = parse_models_file(false);
-        emit models_changed();
+        do {
+            pending_reload = false;
+            models = parse_models_file(false);
+        } while (pending_reload);
 
+        emit models_changed();
         busy_value.store(false);
         emit busy_changed();
     }};
+
+    return true;
 }
 
 std::map<QString, models_manager::model_t> models_manager::parse_models_file(bool reset)
@@ -1029,17 +1039,17 @@ std::map<QString, models_manager::model_t> models_manager::parse_models_file(boo
     return models;
 }
 
-QString models_manager::file_name_from_id(const QString& id)
+inline QString models_manager::file_name_from_id(const QString& id)
 {
     return id + ".tflite";
 }
 
-QString models_manager::scorer_file_name_from_id(const QString& id)
+inline QString models_manager::scorer_file_name_from_id(const QString& id)
 {
     return id + ".scorer";
 }
 
-QString models_manager::model_path(const QString& file_name)
+inline QString models_manager::model_path(const QString& file_name)
 {
-    return QDir{settings::instance()->lang_models_dir()}.filePath(file_name);
+    return QDir{settings::instance()->models_dir()}.filePath(file_name);
 }

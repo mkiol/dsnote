@@ -34,14 +34,19 @@ public:
     deepspeech_wrapper(const std::string& model_file,
                        const std::string& scorer_file,
                        const callbacks_type& call_backs,
-                       speech_mode_type speech_mode = speech_mode_type::automatic);
+                       speech_mode_type speech_mode = speech_mode_type::automatic,
+                       bool speech_started = false);
     ~deepspeech_wrapper();
     std::pair<char*, int64_t> borrow_buff();
     void return_buff(char* c_buff, int64_t size);
-    bool ok() const;
-    void set_speech_status(bool started);
     inline void restart() { restart_requested = true; }
     [[nodiscard]] inline bool speech_detected() const { return speech_detected_value; }
+    void set_speech_mode(speech_mode_type mode);
+    [[nodiscard]] inline speech_mode_type speech_mode() const { return speech_mode_value; }
+    void set_speech_started(bool value);
+    [[nodiscard]] inline bool speech_status() const { return speech_started_value; }
+    [[nodiscard]] inline const std::string& model_file() const { return model_file_value; }
+    [[nodiscard]] inline const std::string& scorer_file() const { return scorer_file_value; }
 
 private:
     static const int frame_size = 16000; // 1s
@@ -60,6 +65,8 @@ private:
         [[nodiscard]] inline bool full() const { return size == buff.size(); }
     };
 
+    std::string model_file_value;
+    std::string scorer_file_value;
     callbacks_type call_backs;
     std::thread processing_thread;
     std::mutex processing_mtx;
@@ -71,12 +78,13 @@ private:
     model_ptr model;
     StreamingState* stream = nullptr;
     bool speech_detected_value = false;
+    bool speech_started_value = false;
     bool last_frame_done = false;
     speech_mode_type speech_mode_value;
     bool restart_requested = false;
 
     static std::string error_msg(int status);
-    void create_model(const std::string& model_file, const std::string& scorer_file = {});
+    void create_model();
     void create_stream();
     void free_stream();
     int sample_rate() const;

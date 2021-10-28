@@ -18,21 +18,15 @@
 
 settings* settings::m_instance = nullptr;
 
-settings::settings(QObject* parent)
-    : QSettings{parent}
-{}
-
 settings* settings::instance()
 {
-    if (settings::m_instance == nullptr)
-        settings::m_instance = new settings();
-
+    if (settings::m_instance == nullptr) settings::m_instance = new settings{};
     return settings::m_instance;
 }
 
-QString settings::lang_models_dir() const
+QString settings::models_dir() const
 {
-    auto dir = value("lang_models_dir", "").toString();
+    auto dir = value("service/models_dir", value("lang_models_dir")).toString();
     if (dir.isEmpty()) {
         dir = QDir{QStandardPaths::writableLocation(QStandardPaths::DownloadLocation)}
                   .filePath("DeepSpeech models");
@@ -42,39 +36,39 @@ QString settings::lang_models_dir() const
     return dir;
 }
 
-QUrl settings::lang_models_dir_url() const
+QUrl settings::models_dir_url() const
 {
-    return QUrl::fromLocalFile(lang_models_dir());
+    return QUrl::fromLocalFile(models_dir());
 }
 
-void settings::set_lang_models_dir(const QString& value)
+void settings::set_models_dir(const QString &value)
 {
-    if (lang_models_dir() != value) {
-        setValue("lang_models_dir", value);
-        emit lang_models_dir_changed();
+    if (models_dir() != value) {
+        setValue("service/models_dir", value);
+        emit models_dir_changed();
     }
 }
 
-void settings::set_lang_models_dir_url(const QUrl& value)
+void settings::set_models_dir_url(const QUrl &value)
 {
-    set_lang_models_dir(value.toLocalFile());
+    set_models_dir(value.toLocalFile());
 }
 
-QString settings::lang_models_dir_name() const
+QString settings::models_dir_name() const
 {
-    return lang_models_dir_url().fileName();
+    return models_dir_url().fileName();
 }
 
-QString settings::lang() const
+QString settings::default_model() const
 {
-    return value("lang", "en").toString(); // english is a default;
+    return value("service/default_model", value("lang", "en")).toString(); // english is a default;
 }
 
-void settings::set_lang(const QString& value)
+void settings::set_default_model(const QString &value)
 {
-    if (lang() != value) {
-        setValue("lang", value);
-        emit lang_changed();
+    if (default_model() != value) {
+        setValue("service/default_model", value);
+        emit default_model_changed();
     }
 }
 

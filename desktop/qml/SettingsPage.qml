@@ -54,7 +54,7 @@ Page {
                 }
                 TextField {
                     Layout.fillWidth: true
-                    text: _settings.lang_models_dir
+                    text: _settings.models_dir
                     enabled: false
 
                 }
@@ -69,9 +69,9 @@ Page {
                 title: qsTr("Please choose a directory")
                 selectFolder: true
                 selectExisting: true
-                folder:  _settings.lang_models_dir_url
+                folder:  _settings.models_dir_url
                 onAccepted: {
-                    _settings.lang_models_dir_url = fileUrl
+                    _settings.models_dir_url = fileUrl
                 }
             }
         }
