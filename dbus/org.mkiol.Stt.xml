@@ -269,5 +269,10 @@
         <method name="KeepAliveService">
             <arg name="timer" type="i" direction="out" />
         </method>
+
+        <!-- private -->
+        <property name="Translations" type="a{sv}" access="read">
+            <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantMap"/>
+        </property>
     </interface>
 </node>

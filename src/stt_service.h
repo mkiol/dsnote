@@ -33,6 +33,7 @@ class stt_service : public QObject
     Q_PROPERTY(QVariantMap Langs READ available_models)
     Q_PROPERTY(QString DefaultLang READ default_model WRITE set_default_model)
     Q_PROPERTY(int CurrentTask READ current_task_id)
+    Q_PROPERTY(QVariantMap Translations READ translations)
 public:
     enum class state_type {
         unknown = 0,
@@ -171,6 +172,7 @@ private:
     inline int current_task_id() const { return current_task ? current_task->id : INVALID_TASK; }
     void handle_keepalive_timeout();
     void handle_keepalive_task_timeout();
+    QVariantMap translations() const;
 
     // DBus
     Q_INVOKABLE int StartListen(int mode, const QString &lang);

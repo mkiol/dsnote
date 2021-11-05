@@ -57,6 +57,10 @@ public:
     inline int state() const
     { return qvariant_cast< int >(property("State")); }
 
+    Q_PROPERTY(QVariantMap Translations READ translations)
+    inline QVariantMap translations() const
+    { return qvariant_cast< QVariantMap >(property("Translations")); }
+
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<int> CancelTranscribeFile(int task)
     {

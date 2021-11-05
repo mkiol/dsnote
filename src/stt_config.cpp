@@ -22,6 +22,7 @@ stt_config::stt_config(QObject *parent) :
     connect(&manager, &models_manager::models_changed, this, &stt_config::handle_models_changed, Qt::QueuedConnection);
     connect(&manager, &models_manager::busy_changed, this, [this]{ emit busy_changed(); });
     connect(&manager, &models_manager::download_progress, this, [this](const QString &id, double progress) {
+        qDebug() << "download_progress:" << id << progress;
         emit model_download_progress(id, progress);
     });
 }
@@ -70,7 +71,6 @@ void stt_config::download_model(const QString& id)
 
 void stt_config::delete_model(const QString& id)
 {
-    //TO-DO: stop service
     manager.delete_model(id);
 }
 

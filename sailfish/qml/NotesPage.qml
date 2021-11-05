@@ -15,7 +15,6 @@ import harbour.dsnote.Dsnote 1.0
 Page {
     id: root
 
-    readonly property bool configured: app.configured && !app.busy
     readonly property bool inactive: app.intermediate_text.length === 0
 
     allowedOrientations: Orientation.All
@@ -51,7 +50,7 @@ Page {
                 }
 
                 MenuItem {
-                    enabled: configured
+                    enabled: app.configured
                     text: app.state === DsnoteApp.SttTranscribingFile ? qsTr("Cancel file transcription") : qsTr("Transcribe audio file")
                     onClicked: {
                         if (app.state === DsnoteApp.SttTranscribingFile)
@@ -78,7 +77,8 @@ Page {
         TextArea {
             id: textArea
             width: root.width
-            opacity: configured ? 1.0 : 0.3
+            visible: opacity > 0.0
+            opacity: app.configured ? app.busy ? 0.3 : 1.0 : 0.0
             Behavior on opacity { NumberAnimation { duration: 150 } }
             anchors.bottom: parent.bottom
             text: _settings.note
@@ -96,7 +96,7 @@ Page {
         }
 
         ViewPlaceholder {
-            enabled: !configured && !app.busy
+            enabled: !app.configured && !app.busy
             text: qsTr("Language is not configured")
             hintText: qsTr("Pull down and select Settings to download language")
         }
@@ -115,7 +115,7 @@ Page {
     SilicaItem {
         id: panel
         visible: opacity > 0.0
-        opacity: configured ? 1.0 : 0.0
+        opacity: app.configured ? app.busy ? 0.3 : 1.0 : 0.0
         Behavior on opacity { NumberAnimation { duration: 150 } }
         anchors.left: parent.left
         anchors.right: parent.right
@@ -144,7 +144,7 @@ Page {
             width: Theme.itemSizeSmall
             color: panel.pColor
             active: app.speech
-            off: app.state === DsnoteApp.SttUnknown || app.state === DsnoteApp.SttNotConfigured
+            off: !app.configured
             Component.onCompleted: {
                 height = parent.height / 2
             }
@@ -183,10 +183,8 @@ Page {
 
         MouseArea {
             id: mouse
-            enabled: configured && _settings.speech_mode === Settings.SpeechManual &&
-                     app.state !== DsnoteApp.SttTranscribingFile
+            enabled: app.configured && !app.busy
             anchors.fill: parent
-
             onPressed: app.listen()
             onReleased: app.stop_listen()
         }

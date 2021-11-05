@@ -69,6 +69,12 @@ int SttAdaptor::state() const
     return qvariant_cast< int >(parent()->property("State"));
 }
 
+QVariantMap SttAdaptor::translations() const
+{
+    // get the value of property Translations
+    return qvariant_cast< QVariantMap >(parent()->property("Translations"));
+}
+
 int SttAdaptor::CancelTranscribeFile(int task)
 {
     // handle method call org.mkiol.Stt.CancelTranscribeFile

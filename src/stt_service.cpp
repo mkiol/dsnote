@@ -9,6 +9,7 @@
 
 #include <QDebug>
 #include <QDBusConnection>
+#include <QCoreApplication>
 #include <functional>
 #include <algorithm>
 
@@ -447,8 +448,8 @@ void stt_service::restart_audio_source(const QString &source_file)
 
 void stt_service::handle_keepalive_timeout()
 {
-    qWarning() << "keepalive timeout";
-    keepalive_timer.start();
+    qWarning() << "keepalive timeout => shutting down";
+    QCoreApplication::instance()->quit();
 }
 
 void stt_service::handle_keepalive_task_timeout()
@@ -544,6 +545,17 @@ void stt_service::set_default_model(const QString &model_id) const
     } else {
         qWarning() << "invalid default model";
     }
+}
+
+QVariantMap stt_service::translations() const
+{
+    QVariantMap map;
+
+    map.insert("lang_not_conf", tr("Language is not configured"));
+    map.insert("say_smth", tr("Say something..."));
+    map.insert("press_say_smth", tr("Press and say something..."));
+
+    return map;
 }
 
 // DBus

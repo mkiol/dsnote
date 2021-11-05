@@ -14,12 +14,8 @@
 #include "file_source.h"
 #include "mic_source.h"
 
-dsnote_app::dsnote_app() :
-    QObject{},
-    stt{DBUS_SERVICE_NAME, DBUS_SERVICE_PATH, QDBusConnection::sessionBus()}
+dsnote_app::dsnote_app() : QObject{}, stt{DBUS_SERVICE_NAME, DBUS_SERVICE_PATH, QDBusConnection::sessionBus()}
 {
-    if (!stt.isValid()) throw std::runtime_error("cannot connect to stt service");
-
     connect(settings::instance(), &settings::speech_mode_changed, this, &dsnote_app::update_listen);
     connect(this, &dsnote_app::stt_state_changed, this, [this] {
         if (stt_state() != SttUnknown && stt_state() != SttBusy) {
@@ -36,7 +32,65 @@ dsnote_app::dsnote_app() :
     connect(this, &dsnote_app::active_lang_changed, this, &dsnote_app::update_listen);
     connect(this, &dsnote_app::available_langs_changed, this, &dsnote_app::update_listen);
 
-    // DBus
+    keepalive_timer.setSingleShot(true);
+    keepalive_timer.setTimerType(Qt::VeryCoarseTimer);
+    connect(&keepalive_timer, &QTimer::timeout, this, &dsnote_app::do_keepalive);
+    keepalive_timer.start(KEEPALIVE_TIME);
+
+    keepalive_current_task_timer.setSingleShot(true);
+    keepalive_current_task_timer.setTimerType(Qt::VeryCoarseTimer);
+    connect(&keepalive_current_task_timer, &QTimer::timeout, this, &dsnote_app::handle_keepalive_task_timeout);
+
+    connect_dbus_signals();
+    do_keepalive();
+}
+
+void dsnote_app::update_listen()
+{
+    if (settings::instance()->speech_mode() == settings::speech_mode_type::SpeechAutomatic) {
+        listen();
+    } else {
+        stop_listen();
+    }
+}
+
+void dsnote_app::set_intermediate_text(const QString &text, const QString &lang, int task)
+{
+    qDebug() << "[dbus => app] signal IntermediateTextDecoded:" << text << lang << task;
+
+    if (listen_task != task && transcribe_task != task) {
+        qWarning() << "invalid task id";
+        return;
+    }
+
+    if (intermediate_text_value != text) {
+        intermediate_text_value = text;
+        emit intermediate_text_changed();
+    }
+}
+
+void dsnote_app::handle_text_decoded(const QString &text, const QString &lang, int task)
+{
+    qDebug() << "[dbus => app] signal TextDecoded:" << text << lang << task;
+
+    if (listen_task != task && transcribe_task != task) {
+        qWarning() << "invalid task id";
+        return;
+    }
+
+    auto note = settings::instance()->note();
+
+    if (note.isEmpty()) settings::instance()->set_note(text);
+    else settings::instance()->set_note(note + "\n" + text);
+
+    this->intermediate_text_value.clear();
+
+    emit text_changed();
+    emit intermediate_text_changed();
+}
+
+void dsnote_app::connect_dbus_signals()
+{
     connect(&stt, &OrgMkiolSttInterface::LangsPropertyChanged, this, [this](const auto &langs) {
         qDebug() << "[dbus => app] signal LangsPropertyChanged";
         available_langs_map = langs;
@@ -110,61 +164,6 @@ dsnote_app::dsnote_app() :
     });
     connect(&stt, &OrgMkiolSttInterface::IntermediateTextDecoded, this, &dsnote_app::set_intermediate_text);
     connect(&stt, &OrgMkiolSttInterface::TextDecoded, this, &dsnote_app::handle_text_decoded);
-
-    keepalive_timer.setSingleShot(true);
-    keepalive_timer.setTimerType(Qt::VeryCoarseTimer);
-    connect(&keepalive_timer, &QTimer::timeout, this, &dsnote_app::handle_keepalive_timeout);
-    keepalive_timer.start(KEEPALIVE_TIME);
-
-    keepalive_current_task_timer.setSingleShot(true);
-    keepalive_current_task_timer.setTimerType(Qt::VeryCoarseTimer);
-    connect(&keepalive_current_task_timer, &QTimer::timeout, this, &dsnote_app::handle_keepalive_task_timeout);
-
-    update_stt_state();
-}
-
-void dsnote_app::update_listen()
-{
-    if (settings::instance()->speech_mode() == settings::speech_mode_type::SpeechAutomatic) {
-        listen();
-    } else {
-        stop_listen();
-    }
-}
-
-void dsnote_app::set_intermediate_text(const QString &text, const QString &lang, int task)
-{
-    qDebug() << "[dbus => app] signal IntermediateTextDecoded:" << text << lang << task;
-
-    if (listen_task != task && transcribe_task != task) {
-        qWarning() << "invalid task id";
-        return;
-    }
-
-    if (intermediate_text_value != text) {
-        intermediate_text_value = text;
-        emit intermediate_text_changed();
-    }
-}
-
-void dsnote_app::handle_text_decoded(const QString &text, const QString &lang, int task)
-{
-    qDebug() << "[dbus => app] signal TextDecoded:" << text << lang << task;
-
-    if (listen_task != task && transcribe_task != task) {
-        qWarning() << "invalid task id";
-        return;
-    }
-
-    auto note = settings::instance()->note();
-
-    if (note.isEmpty()) settings::instance()->set_note(text);
-    else settings::instance()->set_note(note + "\n" + text);
-
-    this->intermediate_text_value.clear();
-
-    emit text_changed();
-    emit intermediate_text_changed();
 }
 
 void dsnote_app::update_progress()
@@ -313,12 +312,25 @@ void dsnote_app::update_active_lang()
     }
 }
 
-void dsnote_app::handle_keepalive_timeout()
+void dsnote_app::do_keepalive()
 {
     qDebug() << "[app => dbus] call KeepAliveService";
     const auto time = stt.KeepAliveService();
-    if (time > 0) {
+
+    if (!stt.isValid()) {
+        if (init_attempts >= MAX_INIT_ATTEMPTS) {
+            emit error(error_type::ErrorNoSttService);
+            qWarning() << "cannot connect to stt service";
+        } else {
+            keepalive_timer.start(KEEPALIVE_TIME);
+            init_attempts++;
+        }
+    } else if (time > 0) {
         keepalive_timer.start(time * 0.75);
+        if (init_attempts > 0) {
+            update_stt_state();
+            init_attempts = 0;
+        }
     }
 }
 

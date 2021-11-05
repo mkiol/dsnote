@@ -30,24 +30,17 @@ SRC_DIR = $${ROOT_DIR}/src
 LIB_DIR = $${ROOT_DIR}/libs/$${ARCH}
 DBUS_DIR = $${ROOT_DIR}/dbus
 
-message(Qt is installed in $${QT_INSTALL_PREFIX})
-
-QT_BIN_DIR = "$${QT_INSTALL_PREFIX}/bin"
-exists("$${QT_BIN_DIR}/qdbusxml2cpp-qt5") {
-    QDBUSXML2CPP = "$${QT_BIN_DIR}/qdbusxml2cpp-qt5"
-} else {
-    QDBUSXML2CPP = "$${QT_BIN_DIR}/qdbusxml2cpp"
-}
-
-DBUS_STT_XML = "$${DBUS_DIR}/org.mkiol.Stt.xml"
-
+#QT_BIN_DIR = "$${QT_INSTALL_PREFIX}/bin"
+#exists("$${QT_BIN_DIR}/qdbusxml2cpp-qt5") {
+#    QDBUSXML2CPP = "$${QT_BIN_DIR}/qdbusxml2cpp-qt5"
+#} else {
+#    QDBUSXML2CPP = "$${QT_BIN_DIR}/qdbusxml2cpp"
+#}
+#DBUS_STT_XML = "$${DBUS_DIR}/org.mkiol.Stt.xml"
 #message("$${QDBUSXML2CPP}" "$${DBUS_STT_XML}" -a $${SRC_DIR}/dbus_stt_adaptor)
 #system("$${QDBUSXML2CPP}" "$${DBUS_STT_XML}" -a $${SRC_DIR}/dbus_stt_adaptor)
 #message("$${QDBUSXML2CPP}" "$${DBUS_STT_XML}" -p $${SRC_DIR}/dbus_stt_inf)
 #system("$${QDBUSXML2CPP}" "$${DBUS_STT_XML}" -p $${SRC_DIR}/dbus_stt_inf)
-
-OTHER_FILES += \
-    $${DBUS_STT_XML}
 
 SOURCES += \
     $${SRC_DIR}/stt_service.cpp \
@@ -91,4 +84,7 @@ sailfishapp {
         $${SRC_DIR}/dirmodel.h
 }
 
-LIBS += -lz -llzma -larchive -L$${LIB_DIR} -l:libstt.so -l:libtensorflowlite.so -l:libtflitedelegates.so -l:libkenlm.so
+LIBS += \
+    -lz -llzma -larchive \
+    -L$${LIB_DIR} -l:libstt.so -l:libtensorflowlite.so \
+    -l:libtflitedelegates.so -l:libkenlm.so

@@ -668,11 +668,11 @@ void models_manager::handle_download_progress(qint64 received, qint64 real_total
 
     if (total > 0) {
         auto& model = models.at(id);
-        received += model.downloaded_part_data;
-        model.download_progress = static_cast<double>(received)/total;
-
-        //qDebug("download progress for %s: %lld / %lld", id.toLatin1().data(), received, total);
-        emit download_progress(id, model.download_progress);
+        const auto new_download_progress = static_cast<double>(received + model.downloaded_part_data)/total;
+        if (new_download_progress - model.download_progress >= 0.01) {
+            model.download_progress = new_download_progress;
+            emit download_progress(id, new_download_progress);
+        }
     }
 }
 

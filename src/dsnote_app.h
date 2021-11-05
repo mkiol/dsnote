@@ -44,7 +44,8 @@ public:
     enum error_type {
         ErrorGeneric = 0,
         ErrorMicSource = 1,
-        ErrorFileSource = 2
+        ErrorFileSource = 2,
+        ErrorNoSttService = 3
     };
     Q_ENUM(error_type)
 
@@ -76,6 +77,7 @@ private:
     static const int FAILURE = -1;
     static const int INVALID_TASK = -1;
     static const int KEEPALIVE_TIME = 1000; // 1s
+    static const int MAX_INIT_ATTEMPTS = 5;
 
     struct task_type {
         int current = INVALID_TASK;
@@ -97,14 +99,14 @@ private:
     task_type listen_task;
     task_type transcribe_task;
     int current_task_value = INVALID_TASK;
-    bool inited = false;
+    int init_attempts = -1;
     QTimer keepalive_timer;
     QTimer keepalive_current_task_timer;
 
     [[nodiscard]] QVariantList available_langs() const;
     void handle_models_changed();
     void handle_text_decoded(const QString &text, const QString &lang, int task);
-    [[nodiscard]] inline bool busy() const { return stt_state_value == stt_state_type::SttBusy; }
+    [[nodiscard]] inline bool busy() const { return !stt.isValid() || stt_state_value == stt_state_type::SttBusy; }
     [[nodiscard]] inline bool configured() const { return stt_state_value != stt_state_type::SttUnknown && stt_state_value != stt_state_type::SttNotConfigured; }
     [[nodiscard]] inline double transcribe_progress() const { return transcribe_progress_value; }
     void update_progress();
@@ -121,8 +123,9 @@ private:
     void update_active_lang_idx();
     [[nodiscard]] inline stt_state_type stt_state() const { return stt_state_value; }
     [[nodiscard]] inline bool speech() const { return speech_value; }
-    void handle_keepalive_timeout();
+    void do_keepalive();
     void handle_keepalive_task_timeout();
+    void connect_dbus_signals();
 };
 
 #endif // DSNOTE_APP_H

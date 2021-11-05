@@ -107,6 +107,9 @@ class SttAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"KeepAliveService\">\n"
 "      <arg direction=\"out\" type=\"i\" name=\"timer\"/>\n"
 "    </method>\n"
+"    <property access=\"read\" type=\"a{sv}\" name=\"Translations\">\n"
+"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName\"/>\n"
+"    </property>\n"
 "  </interface>\n"
         "")
 public:
@@ -129,6 +132,9 @@ public: // PROPERTIES
 
     Q_PROPERTY(int State READ state)
     int state() const;
+
+    Q_PROPERTY(QVariantMap Translations READ translations)
+    QVariantMap translations() const;
 
 public Q_SLOTS: // METHODS
     int CancelTranscribeFile(int task);
