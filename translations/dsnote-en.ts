@@ -111,83 +111,92 @@
 <context>
     <name>NotesPage</name>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="43"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="41"/>
         <source>About %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="48"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="46"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="54"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="52"/>
         <location filename="../desktop/qml/NotesPage.qml" line="99"/>
         <source>Transcribe audio file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="174"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="132"/>
         <location filename="../desktop/qml/NotesPage.qml" line="58"/>
         <source>Transcribing audio file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="65"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="63"/>
         <location filename="../desktop/qml/NotesPage.qml" line="88"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="54"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="52"/>
         <location filename="../desktop/qml/NotesPage.qml" line="98"/>
         <source>Cancel file transcription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="71"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="69"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="100"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="98"/>
         <source>Language is not configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="101"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="99"/>
         <source>Pull down and select Settings to download language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="175"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="130"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="134"/>
+        <source>Starting...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/NotesPage.qml" line="60"/>
         <source>Say something...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="176"/>
         <location filename="../desktop/qml/NotesPage.qml" line="60"/>
         <source>Press and say something...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="213"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="160"/>
         <source>Audio file couldn&apos;t be transcribed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="216"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="163"/>
         <source>Microphone was unexpectedly disconnected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="219"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="166"/>
+        <source>Unable to start service.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfish/qml/NotesPage.qml" line="169"/>
         <source>Oops! Something went wrong.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="223"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="173"/>
         <source>Audio file transcription is completed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -216,57 +225,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="35"/>
+        <location filename="../sailfish/qml/SettingsPage.qml" line="41"/>
         <source>Active language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="56"/>
+        <location filename="../sailfish/qml/SettingsPage.qml" line="75"/>
         <source>Language download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="64"/>
+        <location filename="../sailfish/qml/SettingsPage.qml" line="83"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="38"/>
         <source>Speech detection mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="67"/>
+        <location filename="../sailfish/qml/SettingsPage.qml" line="86"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="43"/>
         <source>Automatic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="68"/>
+        <location filename="../sailfish/qml/SettingsPage.qml" line="87"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="44"/>
         <source>Manual</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="72"/>
+        <location filename="../sailfish/qml/SettingsPage.qml" line="91"/>
         <source>Speech is automatically recognized and converted to text (Automatic) or press and hold on bottom panel triggers speech recognition (Manual).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="77"/>
+        <location filename="../sailfish/qml/SettingsPage.qml" line="96"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="53"/>
         <source>Location of language files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="79"/>
+        <location filename="../sailfish/qml/SettingsPage.qml" line="98"/>
         <source>Directory where language files are downloaded to and stored.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="83"/>
+        <location filename="../sailfish/qml/SettingsPage.qml" line="102"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="62"/>
         <source>Change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="92"/>
+        <location filename="../sailfish/qml/SettingsPage.qml" line="111"/>
         <source>Set default</source>
         <translation type="unfinished"></translation>
     </message>
@@ -297,18 +306,28 @@
 <context>
     <name>stt_service</name>
     <message>
-        <location filename="../src/stt_service.cpp" line="558"/>
+        <location filename="../src/stt_service.cpp" line="574"/>
         <source>Language is not configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="559"/>
+        <location filename="../src/stt_service.cpp" line="575"/>
         <source>Say something...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="560"/>
+        <location filename="../src/stt_service.cpp" line="576"/>
         <source>Press and say something...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/stt_service.cpp" line="577"/>
+        <source>Busy...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/stt_service.cpp" line="578"/>
+        <source>Starting...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

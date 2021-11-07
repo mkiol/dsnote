@@ -282,6 +282,11 @@ double stt_service::transcribe_file_progress(int task) const
 
 int stt_service::cancel_file(int task)
 {
+    if (state() == state_type::unknown || state() == state_type::not_configured || state() == state_type::busy) {
+        qWarning() << "cannot cancel_file, invalid state";
+        return FAILURE;
+    }
+
     if (audio_source_type() == source_type::file) {
         if (current_task && current_task->id == task) {
             if (pending_task) {
@@ -313,6 +318,11 @@ int stt_service::next_task_id()
 
 int stt_service::transcribe_file(const QString &file, const QString &lang)
 {
+    if (state() == state_type::unknown || state() == state_type::not_configured || state() == state_type::busy) {
+        qWarning() << "cannot transcribe_file, invalid state";
+        return INVALID_TASK;
+    }
+
     if (current_task && audio_source_type() == source_type::mic) {
         pending_task = current_task;
     }
@@ -338,6 +348,11 @@ int stt_service::transcribe_file(const QString &file, const QString &lang)
 
 int stt_service::start_listen(speech_mode_type mode, const QString &lang)
 {
+    if (state() == state_type::unknown || state() == state_type::not_configured || state() == state_type::busy) {
+        qWarning() << "cannot start_listen, invalid state";
+        return INVALID_TASK;
+    }
+
     if (audio_source_type() == source_type::file) {
         pending_task = {next_task_id(), mode, lang};
         return pending_task->id;
@@ -358,6 +373,11 @@ int stt_service::start_listen(speech_mode_type mode, const QString &lang)
 
 int stt_service::stop_listen(int task)
 {
+    if (state() == state_type::unknown || state() == state_type::not_configured || state() == state_type::busy) {
+        qWarning() << "cannot stop_listen, invalid state";
+        return FAILURE;
+    }
+
     if (audio_source_type() == source_type::file) {
         if (pending_task && pending_task->id == task) pending_task.reset();
         else qWarning() << "invalid task id";
@@ -554,6 +574,8 @@ QVariantMap stt_service::translations() const
     map.insert("lang_not_conf", tr("Language is not configured"));
     map.insert("say_smth", tr("Say something..."));
     map.insert("press_say_smth", tr("Press and say something..."));
+    map.insert("another_app", tr("Busy..."));
+    map.insert("busy_stt", tr("Starting..."));
 
     return map;
 }

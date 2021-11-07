@@ -30,10 +30,16 @@ Page {
                 title: qsTr("Settings")
             }
 
+
+            PullDownMenu {
+                enabled: false
+                busy: service.busy || app.busy
+            }
+
             ComboBox {
                 id: langCombo
                 label: qsTr("Active language")
-                visible: app.configured
+                visible: app.configured && !service.busy && !app.busy
                 currentIndex: app.active_lang_idx
                 menu: ContextMenu {
                     Repeater {
@@ -46,13 +52,26 @@ Page {
                     app.set_active_lang_idx(currentIndex)
                 }
 
+                function update() {
+                    if (!app.busy && !service.busy && app.configured) {
+                        langCombo.currentIndex = app.active_lang_idx
+                    }
+                }
+
                 Connections {
                     target: app
-                    onAvailable_langs_changed: langCombo.currentIndex = app.active_lang_idx
+                    onAvailable_langs_changed: langCombo.update()
+                    onBusyChanged: langCombo.update()
+                    onConfiguredChanged: langCombo.update()
+                }
+                Connections {
+                    target: service
+                    onBusyChanged: langCombo.update()
                 }
             }
 
             Button {
+                enabled: !service.busy && !app.busy
                 text: qsTr("Language download")
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: pageStack.push(Qt.resolvedUrl("LangsPage.qml"))

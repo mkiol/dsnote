@@ -853,7 +853,7 @@ void models_manager::init_config()
             << "\"scorer_urls\": [\"https://github.com/mkiol/dsnote/raw/main/models/ro_exp.scorer.xz\"], "
             << "\"scorer_size\": \"583536296\"},\n"
 
-            << "{ \"name\": \"简体中文\", \"model_id\": \"zh-CN\", \"id\": \"zh-CN\", "
+            << "{ \"name\": \"中文 (简体)\", \"model_id\": \"zh-CN\", \"id\": \"zh-CN\", "
             << "\"md5\": \"5664793cafe796d0821a3e49d56eb797\", "
             << "\"urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.tflite\"], "
             << "\"size\": \"47798728\", "

@@ -26,8 +26,11 @@ class dsnote_app : public QObject
     Q_PROPERTY (bool speech READ speech NOTIFY speech_changed)
     Q_PROPERTY (bool busy READ busy NOTIFY busy_changed)
     Q_PROPERTY (bool configured READ configured NOTIFY configured_changed)
+    Q_PROPERTY (bool connected READ connected NOTIFY connected_changed)
+    Q_PROPERTY (bool another_app_connected READ another_app_connected NOTIFY another_app_connected_changed)
     Q_PROPERTY (double transcribe_progress READ transcribe_progress NOTIFY transcribe_progress_changed)
     Q_PROPERTY (stt_state_type state READ stt_state NOTIFY stt_state_changed)
+    Q_PROPERTY (QVariantMap translate READ translate NOTIFY connected_changed)
 
 public:
     enum stt_state_type {
@@ -65,6 +68,8 @@ signals:
     void speech_changed();
     void busy_changed();
     void configured_changed();
+    void connected_changed();
+    void another_app_connected_changed();
     void transcribe_progress_changed();
     void error(error_type type);
     void transcribe_done();
@@ -106,9 +111,12 @@ private:
     [[nodiscard]] QVariantList available_langs() const;
     void handle_models_changed();
     void handle_text_decoded(const QString &text, const QString &lang, int task);
-    [[nodiscard]] inline bool busy() const { return !stt.isValid() || stt_state_value == stt_state_type::SttBusy; }
-    [[nodiscard]] inline bool configured() const { return stt_state_value != stt_state_type::SttUnknown && stt_state_value != stt_state_type::SttNotConfigured; }
+    [[nodiscard]] inline bool busy() const { return !stt.isValid() || stt_state_value == stt_state_type::SttBusy || another_app_connected(); }
+    [[nodiscard]] inline bool configured() const { return stt.isValid() && stt_state_value != stt_state_type::SttUnknown && stt_state_value != stt_state_type::SttNotConfigured; }
+    [[nodiscard]] inline bool connected() const { return stt.isValid() && stt_state_value != stt_state_type::SttUnknown; }
     [[nodiscard]] inline double transcribe_progress() const { return transcribe_progress_value; }
+    [[nodiscard]] inline bool another_app_connected() const { return stt.isValid() &&
+               current_task_value != INVALID_TASK && listen_task != current_task_value && transcribe_task != current_task_value; }
     void update_progress();
     void update_stt_state();
     void update_speech();
@@ -126,6 +134,7 @@ private:
     void do_keepalive();
     void handle_keepalive_task_timeout();
     void connect_dbus_signals();
+    QVariantMap translate() const;
 };
 
 #endif // DSNOTE_APP_H

@@ -15,8 +15,6 @@ import harbour.dsnote.Dsnote 1.0
 Page {
     id: root
 
-    readonly property bool inactive: app.intermediate_text.length === 0
-
     allowedOrientations: Orientation.All
 
     SilicaFlickable {
@@ -50,7 +48,7 @@ Page {
                 }
 
                 MenuItem {
-                    enabled: app.configured
+                    enabled: !app.busy && !service.busy
                     text: app.state === DsnoteApp.SttTranscribingFile ? qsTr("Cancel file transcription") : qsTr("Transcribe audio file")
                     onClicked: {
                         if (app.state === DsnoteApp.SttTranscribingFile)
@@ -78,7 +76,7 @@ Page {
             id: textArea
             width: root.width
             visible: opacity > 0.0
-            opacity: app.configured ? app.busy ? 0.3 : 1.0 : 0.0
+            opacity: app.configured ? 1.0 : 0.0
             Behavior on opacity { NumberAnimation { duration: 150 } }
             anchors.bottom: parent.bottom
             text: _settings.note
@@ -96,7 +94,7 @@ Page {
         }
 
         ViewPlaceholder {
-            enabled: !app.configured && !app.busy
+            enabled: !app.configured && !app.busy && !service.busy
             text: qsTr("Language is not configured")
             hintText: qsTr("Pull down and select Settings to download language")
         }
@@ -106,88 +104,37 @@ Page {
         flickable: flick
     }
 
-    BusyIndicator {
-        anchors.centerIn: parent
-        running: app.busy
-        size: BusyIndicatorSize.Large
+    Connections {
+        target: app
+        onSpeechChanged: console.log("speech:", app.speech)
+        onStateChanged: console.log("state:", app.state)
+        onConfiguredChanged: console.log("configured:", app.configured)
+        onBusyChanged: console.log("busy:", app.busy)
+        onConnectedChanged: console.log("connected:", app.connected)
+        onAnother_app_connectedChanged: console.log("another_app_connected:", app.another_app_connected)
     }
 
-    SilicaItem {
+    SttPanel {
         id: panel
-        visible: opacity > 0.0
-        opacity: app.configured ? app.busy ? 0.3 : 1.0 : 0.0
-        Behavior on opacity { NumberAnimation { duration: 150 } }
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        height: intermediateLabel.height + 2 * Theme.paddingLarge
-        highlighted: mouse.pressed
 
-        readonly property bool active: app.state === DsnoteApp.SttListeningManual || app.state === DsnoteApp.SttListeningAuto || app.state === DsnoteApp.SttTranscribingFile || highlighted
-        readonly property color pColor: active ? Theme.highlightColor : Theme.primaryColor
-        readonly property color sColor: active ? Theme.secondaryHighlightColor : Theme.secondaryColor
-
-        Rectangle {
-            anchors.fill: parent
-            gradient: Gradient {
-                GradientStop { position: 1.0; color: Theme.rgba(root.palette.highlightBackgroundColor, 0.05) }
-                GradientStop { position: 0.0; color: Theme.rgba(root.palette.highlightBackgroundColor, 0.10) }
-            }
-        }
-
-        SpeechIndicator {
-            id: indicator
-            anchors.topMargin: Theme.paddingLarge
-            anchors.top: parent.top
-            anchors.leftMargin: Theme.paddingSmall
-            anchors.left: parent.left
-            width: Theme.itemSizeSmall
-            color: panel.pColor
-            active: app.speech
-            off: !app.configured
-            Component.onCompleted: {
-                height = parent.height / 2
-            }
-
-            visible: opacity > 0.0
-            opacity: app.state === DsnoteApp.SttTranscribingFile ? 0.0 : 1.0
-            Behavior on opacity { NumberAnimation { duration: 150 } }
-        }
-
-        BusyIndicatorWithProgress {
-            id: busyIndicator
-            size: BusyIndicatorSize.Medium
-            anchors.centerIn: indicator
-            running: app.state === DsnoteApp.SttTranscribingFile
-            progress: app.transcribe_progress
-        }
-
-        Label {
-            id: intermediateLabel
-            anchors.topMargin: Theme.paddingLarge
-            anchors.top: parent.top
-            anchors.left: indicator.right
-            anchors.right: parent.right
-            anchors.rightMargin: Theme.horizontalPageMargin
-            anchors.leftMargin: Theme.paddingMedium * 0.7
-            text: inactive ?
-                      app.state === DsnoteApp.SttTranscribingFile ? qsTr("Transcribing audio file...") :
-                      app.state === DsnoteApp.SttListeningAuto || app.state === DsnoteApp.SttListeningManual ? qsTr("Say something...") :
-                      app.state === DsnoteApp.SttIdle ? qsTr("Press and say something...") :
-                      "" : app.intermediate_text
-            wrapMode: inactive ? Text.NoWrap : Text.WordWrap
-            truncationMode: inactive ? TruncationMode.Fade : TruncationMode.None
-            color: inactive ? panel.sColor : panel.pColor
-            font.italic: inactive
-        }
-
-        MouseArea {
-            id: mouse
-            enabled: app.configured && !app.busy
-            anchors.fill: parent
-            onPressed: app.listen()
-            onReleased: app.stop_listen()
-        }
+        enabled: app.state !== DsnoteApp.SttListeningAuto
+        active: app.speech
+        configured: app.configured
+        busy: app.busy || service.busy || app.state === DsnoteApp.SttTranscribingFile
+        text: app.intermediate_text
+        textPlaceholder: app.translate["press_say_smth"]
+        textPlaceholderActive: app.translate["say_smth"]
+        textPlaceholderNotConfigured: app.connected ? app.translate["lang_not_conf"] : qsTr("Starting...")
+        textPlaceholderBusy: app.connected ?
+                                 app.state === DsnoteApp.SttTranscribingFile ? qsTr("Transcribing audio file...") :
+                                 app.another_app_connected ? app.translate["another_app"] : app.translate["busy_stt"] :
+                                 qsTr("Starting...")
+        progress: app.transcribe_progress
+        onPressed: app.listen()
+        onReleased: app.stop_listen()
     }
 
     Component {
@@ -214,6 +161,9 @@ Page {
                 break;
             case DsnoteApp.ErrorMicSource:
                 notification.show(qsTr("Microphone was unexpectedly disconnected."))
+                break;
+            case DsnoteApp.ErrorNoSttService:
+                notification.show(qsTr("Unable to start service."))
                 break;
             default:
                 notification.show(qsTr("Oops! Something went wrong."))

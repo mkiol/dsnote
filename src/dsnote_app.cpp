@@ -18,15 +18,27 @@ dsnote_app::dsnote_app() : QObject{}, stt{DBUS_SERVICE_NAME, DBUS_SERVICE_PATH, 
 {
     connect(settings::instance(), &settings::speech_mode_changed, this, &dsnote_app::update_listen);
     connect(this, &dsnote_app::stt_state_changed, this, [this] {
+        const auto reset_progress = [this]() {
+            if (transcribe_progress_value != -1.0) {
+                transcribe_progress_value = -1.0;
+                emit transcribe_progress_changed();
+            }
+        };
         if (stt_state() != SttUnknown && stt_state() != SttBusy) {
             update_available_langs();
             update_active_lang();
             update_current_task();
             update_speech();
-            if (stt_state() == SttTranscribingFile) update_progress();
+            if (stt_state() == SttTranscribingFile) {
+                update_progress();
+            } else {
+                reset_progress();
+            }
         } else {
             transcribe_task.reset();
             listen_task.reset();
+            current_task_value = INVALID_TASK;
+            reset_progress();
         }
     });
     connect(this, &dsnote_app::active_lang_changed, this, &dsnote_app::update_listen);
@@ -101,10 +113,12 @@ void dsnote_app::connect_dbus_signals()
         qDebug() << "[dbus => app] signal StatusPropertyChanged:" << status;
         const auto old_busy = busy();
         const auto old_configured = configured();
+        const auto old_connected = connected();
         stt_state_value = static_cast<stt_state_type>(status);
         emit stt_state_changed();
         if (old_busy != busy()) emit busy_changed();
         if (old_configured != configured()) emit configured_changed();
+        if (old_connected != connected()) emit connected_changed();
     });
     connect(&stt, &OrgMkiolSttInterface::SpeechPropertyChanged, this, [this](bool speech) {
         qDebug() << "[dbus => app] signal SpeechPropertyChanged:" << speech;
@@ -117,7 +131,11 @@ void dsnote_app::connect_dbus_signals()
     });
     connect(&stt, &OrgMkiolSttInterface::CurrentTaskPropertyChanged, this, [this](int task) {
         qDebug() << "[dbus => app] signal CurrentTaskPropertyChanged:" << task;
+        const auto old = another_app_connected();
+        const auto old_busy = busy();
         current_task_value = task;
+        if (old != another_app_connected()) emit another_app_connected_changed();
+        if (old_busy != busy()) emit busy_changed();
         update_speech();
     });
     connect(&stt, &OrgMkiolSttInterface::DefaultLangPropertyChanged, this, [this](const auto &lang) {
@@ -179,7 +197,9 @@ void dsnote_app::update_progress()
 void dsnote_app::update_current_task()
 {
     qDebug() << "[app => dbus] get CurrentTask";
+    const auto old = another_app_connected();
     current_task_value = stt.currentTask();
+    if (old != another_app_connected()) emit another_app_connected_changed();
 }
 
 void dsnote_app::update_stt_state()
@@ -189,10 +209,12 @@ void dsnote_app::update_stt_state()
     if (stt_state_value != new_state) {
         const auto old_busy = busy();
         const auto old_configured = configured();
+        const auto old_connected = connected();
         stt_state_value = new_state;
         emit stt_state_changed();
         if (old_busy != busy()) emit busy_changed();
         if (old_configured != configured()) emit configured_changed();
+        if (old_connected != connected()) emit connected_changed();
     }
 }
 
@@ -352,5 +374,14 @@ void dsnote_app::handle_keepalive_task_timeout()
     if (time > 0) {
         keepalive_current_task_timer.start(time * 0.75);
     }
+}
+
+QVariantMap dsnote_app::translate() const
+{
+    if (connected()) {
+        return stt.translations();
+    }
+
+    return QVariantMap{};
 }
 

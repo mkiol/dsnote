@@ -13,6 +13,14 @@ import harbour.dsnote.Dsnote 1.0
 ApplicationWindow {
     id: root
 
+    SttConfig {
+        id: service
+    }
+
+    DsnoteApp {
+        id: app
+    }
+
     allowedOrientations: Orientation.All
 
     cover: Qt.resolvedUrl("CoverPage.qml")
@@ -20,14 +28,6 @@ ApplicationWindow {
     Component {
         id: notesPage
         NotesPage {}
-    }
-
-    SttConfig {
-        id: service
-    }
-
-    DsnoteApp {
-        id: app
     }
 
     initialPage: notesPage

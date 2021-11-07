@@ -112,7 +112,7 @@ private:
     };
 
     struct task_type {
-        int id;
+        int id = INVALID_TASK;
         speech_mode_type speech_mode;
         QString model_id;
     };
