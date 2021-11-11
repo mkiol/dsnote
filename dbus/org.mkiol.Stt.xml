@@ -83,7 +83,7 @@
         <!--
             CurrentTask:
 
-            Id of taks that is currently active. Task id is returned in
+            Id of task that is currently active. Task id is returned in
             StartListen and TranscribeFile methods. Task id less than 0
             idicates idle state.
         -->

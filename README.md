@@ -25,7 +25,13 @@ DeepSpeech models for particular language can be downloaded from the app. Follow
 | Chinese / zh-CN               | [mozilla/DeepSpeech](https://github.com/mozilla/DeepSpeech)                                                                                              |
 
 
-The quality of speech recognition strongly depends on language model. In general it is not perfect but for some languages is surprisingly fine.
+The quality of speech recognition strongly depends on a model. In general it is not perfect but for some languages is surprisingly fine.
+
+## Systemd service and D-Bus API
+
+Speech Note provides systemd service (`harbour-dsnote`) for speech-to-text conversion. This service is accessible via D-Bus interface. The detailed description is in [org.mkiol.Stt.xml](https://github.com/mkiol/dsnote/blob/main/dbus/org.mkiol.Stt.xml) document.
+
+An example of QML-only and easy to re-use component that encapsulate complexity of D-Bus interface is [SttService.qml](https://github.com/mkiol/dskeyboard/blob/main/qml/SttService.qml).
 
 ## Download
 
