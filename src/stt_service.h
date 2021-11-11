@@ -137,6 +137,8 @@ private:
     QTimer ds_reset_timer;
     QTimer keepalive_timer;
     QTimer keepalive_current_task_timer;
+    int last_intermediate_text_task = INVALID_TASK;
+    std::optional<task_type> previous_task;
     std::optional<task_type> current_task;
     std::optional<task_type> pending_task;
 

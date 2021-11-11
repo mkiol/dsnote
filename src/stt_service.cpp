@@ -125,8 +125,9 @@ std::optional<stt_service::model_files_type> stt_service::choose_model_files(con
 
     model_files_type active_files;
 
+    // search by model id
     for (const auto& model : models) {
-        if (id == model.id) {
+        if (!id.compare(model.id, Qt::CaseInsensitive)) {
             active_files.model_id = model.id;
             active_files.model_file = model.model_file;
             active_files.scorer_file = model.scorer_file;
@@ -134,6 +135,19 @@ std::optional<stt_service::model_files_type> stt_service::choose_model_files(con
         available_models_map.emplace(model.id, model_data_type{model.id, model.lang_id, model.name});
     }
 
+    // search by lang id
+    if (active_files.model_id.isEmpty()) {
+        for (const auto& model : models) {
+            if (!id.compare(model.lang_id, Qt::CaseInsensitive)) {
+                active_files.model_id = model.id;
+                active_files.model_file = model.model_file;
+                active_files.scorer_file = model.scorer_file;
+                break;
+            }
+        }
+    }
+
+    // fallback to first model
     if (active_files.model_id.isEmpty()) {
         const auto& model = models.front();
         active_files.model_id = model.id;
@@ -191,6 +205,7 @@ QString stt_service::restart_ds(speech_mode_type speech_mode, const QString& mod
 void stt_service::handle_intermediate_text_decoded(const std::string& text)
 {
     if (current_task) {
+        last_intermediate_text_task = current_task->id;
         emit intermediate_text_decoded(QString::fromStdString(text), current_task->model_id, current_task->id);
     } else {
         qWarning() << "current task does not exist";
@@ -198,12 +213,18 @@ void stt_service::handle_intermediate_text_decoded(const std::string& text)
 }
 
 void stt_service::handle_text_decoded(const std::string &text)
-{    
+{
     if (current_task) {
-        emit text_decoded(QString::fromStdString(text), current_task->model_id, current_task->id);
+        if (previous_task && last_intermediate_text_task == previous_task->id) {
+            emit text_decoded(QString::fromStdString(text), previous_task->model_id, previous_task->id);
+        } else {
+            emit text_decoded(QString::fromStdString(text), current_task->model_id, current_task->id);
+        }
     } else {
         qWarning() << "current task does not exist";
     }
+
+    previous_task.reset();
 }
 
 void stt_service::handle_speech_status_changed(bool speech_detected)
@@ -290,6 +311,7 @@ int stt_service::cancel_file(int task)
     if (audio_source_type() == source_type::file) {
         if (current_task && current_task->id == task) {
             if (pending_task) {
+                previous_task = current_task;
                 restart_ds(pending_task->speech_mode, pending_task->model_id);
                 restart_audio_source();
                 current_task = pending_task;
@@ -574,8 +596,7 @@ QVariantMap stt_service::translations() const
     map.insert("lang_not_conf", tr("Language is not configured"));
     map.insert("say_smth", tr("Say something..."));
     map.insert("press_say_smth", tr("Press and say something..."));
-    map.insert("another_app", tr("Busy..."));
-    map.insert("busy_stt", tr("Starting..."));
+    map.insert("busy_stt", tr("Busy..."));
 
     return map;
 }

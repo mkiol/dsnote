@@ -111,12 +111,11 @@ private:
     [[nodiscard]] QVariantList available_langs() const;
     void handle_models_changed();
     void handle_text_decoded(const QString &text, const QString &lang, int task);
-    [[nodiscard]] inline bool busy() const { return !stt.isValid() || stt_state_value == stt_state_type::SttBusy || another_app_connected(); }
-    [[nodiscard]] inline bool configured() const { return stt.isValid() && stt_state_value != stt_state_type::SttUnknown && stt_state_value != stt_state_type::SttNotConfigured; }
-    [[nodiscard]] inline bool connected() const { return stt.isValid() && stt_state_value != stt_state_type::SttUnknown; }
+    [[nodiscard]] inline bool busy() const { return stt_state_value == stt_state_type::SttBusy || another_app_connected(); }
+    [[nodiscard]] inline bool configured() const { return stt_state_value != stt_state_type::SttUnknown && stt_state_value != stt_state_type::SttNotConfigured; }
+    [[nodiscard]] inline bool connected() const { return stt_state_value != stt_state_type::SttUnknown; }
     [[nodiscard]] inline double transcribe_progress() const { return transcribe_progress_value; }
-    [[nodiscard]] inline bool another_app_connected() const { return stt.isValid() &&
-               current_task_value != INVALID_TASK && listen_task != current_task_value && transcribe_task != current_task_value; }
+    [[nodiscard]] inline bool another_app_connected() const { return current_task_value != INVALID_TASK && listen_task != current_task_value && transcribe_task != current_task_value; }
     void update_progress();
     void update_stt_state();
     void update_speech();
@@ -134,6 +133,8 @@ private:
     void do_keepalive();
     void handle_keepalive_task_timeout();
     void connect_dbus_signals();
+    void start_keepalive();
+    void check_transcribe_taks();
     QVariantMap translate() const;
 };
 

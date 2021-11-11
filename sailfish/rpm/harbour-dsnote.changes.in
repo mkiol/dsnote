@@ -12,6 +12,11 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Thu Nov 11 2021 Michal Kosciesza <michal@mkiol.net> 1.4.0-1
+- Coqui STT lib instead of Deepspeech
+- STT service as systemd daemon
+- D-Bus API
+
 * We Apr 28 2021 Michal Kosciesza <michal@mkiol.net> 1.0.1-1
 - DeepSpeech lib update
 

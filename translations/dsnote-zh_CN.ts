@@ -127,7 +127,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="132"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="118"/>
         <location filename="../desktop/qml/NotesPage.qml" line="58"/>
         <source>Transcribing audio file...</source>
         <translation type="unfinished"></translation>
@@ -150,54 +150,56 @@
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="98"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="95"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="119"/>
         <source>Language is not configured</source>
         <translation>语言尚未配置</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="99"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="96"/>
         <source>Pull down and select Settings to download language</source>
         <translation>下拉并选择设置以下载语言</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="130"/>
-        <location filename="../sailfish/qml/NotesPage.qml" line="134"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="120"/>
         <source>Starting...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../sailfish/qml/NotesPage.qml" line="119"/>
         <location filename="../desktop/qml/NotesPage.qml" line="60"/>
         <source>Say something...</source>
         <translation>说点什么吧…</translation>
     </message>
     <message>
+        <location filename="../sailfish/qml/NotesPage.qml" line="115"/>
         <location filename="../desktop/qml/NotesPage.qml" line="60"/>
         <source>Press and say something...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="160"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="118"/>
+        <source>Busy...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfish/qml/NotesPage.qml" line="146"/>
         <source>Audio file couldn&apos;t be transcribed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="163"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="149"/>
         <source>Microphone was unexpectedly disconnected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="166"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="152"/>
         <source>Unable to start service.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="169"/>
+        <location filename="../sailfish/qml/NotesPage.qml" line="155"/>
         <source>Oops! Something went wrong.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="173"/>
-        <source>Audio file transcription is completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -238,9 +240,13 @@
         <translation>启用语言</translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="75"/>
         <source>Language download</source>
-        <translation>语言下载</translation>
+        <translation type="vanished">语言下载</translation>
+    </message>
+    <message>
+        <location filename="../sailfish/qml/SettingsPage.qml" line="75"/>
+        <source>Languages</source>
+        <translation type="unfinished">语言</translation>
     </message>
     <message>
         <location filename="../sailfish/qml/SettingsPage.qml" line="83"/>
@@ -318,28 +324,23 @@
 <context>
     <name>stt_service</name>
     <message>
-        <location filename="../src/stt_service.cpp" line="574"/>
+        <location filename="../src/stt_service.cpp" line="596"/>
         <source>Language is not configured</source>
         <translation type="unfinished">语言尚未配置</translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="575"/>
+        <location filename="../src/stt_service.cpp" line="597"/>
         <source>Say something...</source>
         <translation type="unfinished">说点什么吧…</translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="576"/>
+        <location filename="../src/stt_service.cpp" line="598"/>
         <source>Press and say something...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="577"/>
+        <location filename="../src/stt_service.cpp" line="599"/>
         <source>Busy...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/stt_service.cpp" line="578"/>
-        <source>Starting...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

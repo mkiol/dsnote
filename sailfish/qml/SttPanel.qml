@@ -14,10 +14,9 @@ SilicaItem {
     property string text: ""
     property string textPlaceholder: ""
     property string textPlaceholderActive: ""
-    property string textPlaceholderNotConfigured: ""
-    property string textPlaceholderBusy: ""
-    property alias active: indicator.active
-    property bool configured: false
+    property alias speech: indicator.active
+    property bool clickable: true
+    property alias off: indicator.off
     property alias busy: busyIndicator.running
     readonly property alias down: mouse.pressed
     property alias progress: busyIndicator.progress
@@ -48,8 +47,8 @@ SilicaItem {
         anchors.left: parent.left
         width: Theme.itemSizeSmall
         color: root._pColor
-        off: !root.configured
         active: false
+        off: false
         visible: opacity > 0.0
         opacity: busyIndicator.running ? 0.0 : 1.0
         Behavior on opacity { NumberAnimation { duration: 150 } }
@@ -73,14 +72,9 @@ SilicaItem {
         anchors.rightMargin: Theme.horizontalPageMargin
         anchors.leftMargin: Theme.paddingMedium * 0.7
         text: {
-            if (root._empty) {
-                if (root.configured) {
-                    if (root.busy) return root.textPlaceholderBusy
-                    return root._active ? root.textPlaceholderActive : root.textPlaceholder
-                } else {
-                    return root.textPlaceholderNotConfigured
-                }
-            }
+            if (root._empty) return root._active ?
+                                 root.textPlaceholderActive :
+                                 root.textPlaceholder
             return root.text
         }
         wrapMode: root._empty ? Text.NoWrap : Text.WordWrap
@@ -91,7 +85,7 @@ SilicaItem {
 
     MouseArea {
         id: mouse
-        enabled: root.enabled && root.configured && !root.busy
+        enabled: root.clickable && !root.busy && !root.off
         anchors.fill: parent
         onPressedChanged: {
             if (pressed) root.pressed()

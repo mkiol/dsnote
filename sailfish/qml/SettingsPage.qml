@@ -71,8 +71,8 @@ Page {
             }
 
             Button {
-                enabled: !service.busy && !app.busy
-                text: qsTr("Language download")
+                enabled: !service.busy
+                text: qsTr("Languages")
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: pageStack.push(Qt.resolvedUrl("LangsPage.qml"))
             }

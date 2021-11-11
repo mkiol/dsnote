@@ -136,6 +136,9 @@ void dsnote_app::connect_dbus_signals()
         current_task_value = task;
         if (old != another_app_connected()) emit another_app_connected_changed();
         if (old_busy != busy()) emit busy_changed();
+
+        check_transcribe_taks();
+        start_keepalive();
         update_speech();
     });
     connect(&stt, &OrgMkiolSttInterface::DefaultLangPropertyChanged, this, [this](const auto &lang) {
@@ -145,29 +148,19 @@ void dsnote_app::connect_dbus_signals()
     });
     connect(&stt, &OrgMkiolSttInterface::FileTranscribeProgress, this, [this](double new_progress, int task) {
         qDebug() << "[dbus => app] signal FileTranscribeProgress:" << new_progress << task;
-
         if (transcribe_task != task) {
             qWarning() << "invalid task id";
             return;
         }
-
         transcribe_progress_value = new_progress;
         emit transcribe_progress_changed();
     });
     connect(&stt, &OrgMkiolSttInterface::FileTranscribeFinished, this, [this](int task) {
         qDebug() << "[dbus => app] signal FileTranscribeFinished:" << task;
-
         if (transcribe_task != task) {
             qWarning() << "invalid task id";
             return;
         }
-
-        if (listen_task) {
-            keepalive_current_task_timer.start(KEEPALIVE_TIME);
-        } else {
-            keepalive_current_task_timer.stop();
-        }
-
         emit transcribe_done();
     });
     connect(&stt, &OrgMkiolSttInterface::ErrorOccured, this, [this](int code) {
@@ -182,6 +175,14 @@ void dsnote_app::connect_dbus_signals()
     });
     connect(&stt, &OrgMkiolSttInterface::IntermediateTextDecoded, this, &dsnote_app::set_intermediate_text);
     connect(&stt, &OrgMkiolSttInterface::TextDecoded, this, &dsnote_app::handle_text_decoded);
+}
+
+void dsnote_app::check_transcribe_taks()
+{
+    if (transcribe_task && transcribe_task.current != current_task_value) {
+        qDebug() << "transcribe task has finished";
+        transcribe_task.reset();
+    }
 }
 
 void dsnote_app::update_progress()
@@ -200,6 +201,8 @@ void dsnote_app::update_current_task()
     const auto old = another_app_connected();
     current_task_value = stt.currentTask();
     if (old != another_app_connected()) emit another_app_connected_changed();
+
+    start_keepalive();
 }
 
 void dsnote_app::update_stt_state()
@@ -263,7 +266,6 @@ void dsnote_app::cancel_transcribe()
         qDebug() << "[app => dbus] call CancelTranscribeFile";
         stt.CancelTranscribeFile(transcribe_task.current);
         transcribe_task.reset();
-        if (listen_task) keepalive_current_task_timer.start(KEEPALIVE_TIME);
     }
 }
 
@@ -271,21 +273,18 @@ void dsnote_app::transcribe_file(const QString& source_file)
 {
     qDebug() << "[app => dbus] call TranscribeFile";
     transcribe_task.set(stt.TranscribeFile(source_file, {}));
-    keepalive_current_task_timer.start(KEEPALIVE_TIME);
 }
 
 void dsnote_app::transcribe_file(const QUrl& source_file)
 {
     qDebug() << "[app => dbus] call TranscribeFile";
     transcribe_task.set(stt.TranscribeFile(source_file.toLocalFile(), {}));
-    keepalive_current_task_timer.start(KEEPALIVE_TIME);
 }
 
 void dsnote_app::listen()
 {
     qDebug() << "[app => dbus] call StartListen";
     listen_task.set(stt.StartListen(static_cast<int>(settings::instance()->speech_mode()), {}));
-    keepalive_current_task_timer.start(KEEPALIVE_TIME);
 }
 
 void dsnote_app::stop_listen()
@@ -294,7 +293,6 @@ void dsnote_app::stop_listen()
         qDebug() << "[app => dbus] call StopListen";
         stt.StopListen(listen_task.current);
         listen_task.reset();
-        keepalive_current_task_timer.stop();
     }
 }
 
@@ -356,23 +354,34 @@ void dsnote_app::do_keepalive()
     }
 }
 
+void dsnote_app::start_keepalive()
+{
+    if (!keepalive_current_task_timer.isActive() &&
+        (listen_task == current_task_value || transcribe_task == current_task_value)) {
+        if (listen_task == current_task_value) qDebug() << "starting keepalive listen_task";
+        if (transcribe_task == current_task_value) qDebug() << "starting keepalive transcribe_task";
+        keepalive_current_task_timer.start(KEEPALIVE_TIME);
+    }
+}
+
 void dsnote_app::handle_keepalive_task_timeout()
 {
-    int task;
+    const auto send_ka = [this](int task) {
+        qDebug() << "[app => dbus] call KeepAliveTask";
+        const auto time = stt.KeepAliveTask(task);
+        if (time > 0) {
+            keepalive_current_task_timer.start(time * 0.75);
+        }
+    };
+
     if (transcribe_task.current > INVALID_TASK) {
         qDebug() << "keepalive transcribe task timeout:" << transcribe_task.current;
-        task = transcribe_task.current;
-    } else if (listen_task.current > INVALID_TASK) {
-        qDebug() << "keepalive listen task timeout:" << listen_task.current;
-        task = listen_task.current;;
-    } else {
-        return;
+        send_ka(transcribe_task.current);
     }
 
-    qDebug() << "[app => dbus] call KeepAliveTask";
-    const auto time = stt.KeepAliveTask(task);
-    if (time > 0) {
-        keepalive_current_task_timer.start(time * 0.75);
+    if (listen_task.current > INVALID_TASK) {
+        qDebug() << "keepalive listen task timeout:" << listen_task.current;
+        send_ka(listen_task.current);
     }
 }
 

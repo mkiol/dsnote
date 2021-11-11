@@ -6,14 +6,13 @@ Name:       harbour-dsnote
 # << macros
 
 Summary:    Note taking with speech to text
-Version:    1.3.0
+Version:    1.4.0
 Release:    1
 Group:      Qt/Qt
 License:    LICENSE
 URL:        https://github.com/mkiol/dsnote
 Source0:    %{name}-%{version}.tar.bz2
-Requires:   sailfishsilica-qt5 >= 0.10.9
-Requires:   qt5-qtmultimedia-plugin-mediaservice-gstaudiodecoder
+Requires:   sailfishsilica-qt5 >= 0.10.9, qt5-qtmultimedia-plugin-mediaservice-gstaudiodecoder
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
@@ -50,18 +49,17 @@ rm -rf %{buildroot}
 # << install pre
 %qmake5_install
 
-# >> install post
+desktop-file-install --delete-original       \
+  --dir %{buildroot}%{_datadir}/applications             \
+   %{buildroot}%{_datadir}/applications/*.desktop
+
 %post
 systemctl-user stop %{name}.service
 
 %preun
 systemctl-user stop %{name}.service
-
 # << install post
-
-desktop-file-install --delete-original       \
-  --dir %{buildroot}%{_datadir}/applications             \
-   %{buildroot}%{_datadir}/applications/*.desktop
+# >> install post
 
 %files
 %defattr(-,root,root,-)

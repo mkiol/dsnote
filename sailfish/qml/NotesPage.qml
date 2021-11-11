@@ -35,7 +35,7 @@ Page {
             spacing: Theme.paddingLarge
 
             PullDownMenu {
-                busy: app.busy || app.state === DsnoteApp.SttTranscribingFile
+                busy: app.busy || service.busy || app.state === DsnoteApp.SttTranscribingFile
 
                 MenuItem {
                     text: qsTr("About %1").arg(APP_NAME)
@@ -75,9 +75,6 @@ Page {
         TextArea {
             id: textArea
             width: root.width
-            visible: opacity > 0.0
-            opacity: app.configured ? 1.0 : 0.0
-            Behavior on opacity { NumberAnimation { duration: 150 } }
             anchors.bottom: parent.bottom
             text: _settings.note
             verticalAlignment: TextEdit.AlignBottom
@@ -94,7 +91,7 @@ Page {
         }
 
         ViewPlaceholder {
-            enabled: !app.configured && !app.busy && !service.busy
+            enabled: textArea.text.length === 0 && !app.configured && !app.busy && !service.busy
             text: qsTr("Language is not configured")
             hintText: qsTr("Pull down and select Settings to download language")
         }
@@ -104,34 +101,23 @@ Page {
         flickable: flick
     }
 
-    Connections {
-        target: app
-        onSpeechChanged: console.log("speech:", app.speech)
-        onStateChanged: console.log("state:", app.state)
-        onConfiguredChanged: console.log("configured:", app.configured)
-        onBusyChanged: console.log("busy:", app.busy)
-        onConnectedChanged: console.log("connected:", app.connected)
-        onAnother_app_connectedChanged: console.log("another_app_connected:", app.another_app_connected)
-    }
-
     SttPanel {
         id: panel
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        enabled: app.state !== DsnoteApp.SttListeningAuto
-        active: app.speech
-        configured: app.configured
-        busy: app.busy || service.busy || app.state === DsnoteApp.SttTranscribingFile
+        clickable: app.state !== DsnoteApp.SttListeningAuto && app.state !== DsnoteApp.SttTranscribingFile
+        speech: app.speech
+        off: !app.configured || !app.connected
+        busy: app.busy || service.busy || !app.connected || app.state === DsnoteApp.SttTranscribingFile
         text: app.intermediate_text
-        textPlaceholder: app.translate["press_say_smth"]
-        textPlaceholderActive: app.translate["say_smth"]
-        textPlaceholderNotConfigured: app.connected ? app.translate["lang_not_conf"] : qsTr("Starting...")
-        textPlaceholderBusy: app.connected ?
-                                 app.state === DsnoteApp.SttTranscribingFile ? qsTr("Transcribing audio file...") :
-                                 app.another_app_connected ? app.translate["another_app"] : app.translate["busy_stt"] :
-                                 qsTr("Starting...")
+        textPlaceholder: qsTr("Press and say something...")
+        textPlaceholderActive: app.connected ?
+                                   app.configured ?
+                                       busy ? app.state === DsnoteApp.SttTranscribingFile ? qsTr("Transcribing audio file...") : qsTr("Busy...") :
+                                       qsTr("Say something...") : qsTr("Language is not configured") :
+                                   qsTr("Starting...")
         progress: app.transcribe_progress
         onPressed: app.listen()
         onReleased: app.stop_listen()
@@ -169,7 +155,5 @@ Page {
                 notification.show(qsTr("Oops! Something went wrong."))
             }
         }
-
-        onTranscribe_done: notification.show(qsTr("Audio file transcription is completed."))
     }
 }
