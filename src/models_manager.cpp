@@ -32,6 +32,7 @@
 #include <string>
 #include <functional>
 #include <thread>
+#include <sstream>
 
 #include <lzma.h>
 #include <zlib.h>
@@ -170,11 +171,11 @@ void models_manager::download(const QString& id, download_type type, int part)
 
     auto url = urls.at(part < 0 ? 0 : part);
 
-    QString path, path_2, md5, md5_2, path_in_archive, path_in_archive_2;
+    QString path, path_2, checksum, checksum_2, path_in_archive, path_in_archive_2;
     comp_type comp;
     auto next_type = download_type::none;
     const auto next_part = part < 0 || part >= static_cast<int>(urls.size()) - 1 ? -1 : part + 1;
-    const bool scorer_exists = !model.scorer_file_name.isEmpty() && !model.scorer_md5.isEmpty() && !url.isEmpty();
+    const bool scorer_exists = !model.scorer_file_name.isEmpty() && !model.scorer_checksum.isEmpty() && !url.isEmpty();
     const qint64 size = type != download_type::model_scorer && scorer_exists ? model.size + model.scorer_size : model.size;
 
     QNetworkRequest request{url};
@@ -182,7 +183,7 @@ void models_manager::download(const QString& id, download_type type, int part)
 
     if (type == download_type::all || type == download_type::model_scorer) {
         path = model_path(model.file_name);
-        md5 = model.md5;
+        checksum = model.checksum;
         comp = model.comp;
 
         if (type == download_type::all) {
@@ -194,12 +195,12 @@ void models_manager::download(const QString& id, download_type type, int part)
             }
         } else { // model_scorer
             path_2 = model_path(model.scorer_file_name);
-            md5_2 = model.scorer_md5;
+            checksum_2 = model.scorer_checksum;
             next_type = download_type::none;
         }
     } else { // scorer
         path = model_path(model.scorer_file_name);
-        md5 = model.scorer_md5;
+        checksum = model.scorer_checksum;
         comp = model.scorer_comp;
         next_type = next_part > 0 ? download_type::scorer : download_type::none;
     }
@@ -227,8 +228,8 @@ void models_manager::download(const QString& id, download_type type, int part)
     reply->setProperty("model_id", id);
     reply->setProperty("download_type", static_cast<int>(type));
     reply->setProperty("download_next_type", static_cast<int>(next_type));
-    reply->setProperty("checksum", md5);
-    reply->setProperty("checksum_2", md5_2);
+    reply->setProperty("checksum", checksum);
+    reply->setProperty("checksum_2", checksum_2);
     reply->setProperty("comp", static_cast<int>(comp));
     reply->setProperty("size", size);
     reply->setProperty("part", part);
@@ -531,8 +532,10 @@ bool models_manager::handle_download(const QString& path, const QString& checksu
         if (comp != comp_type::none) {
             if (comp == comp_type::gz) {
                 gz_decode(comp_file, path);
+                QFile::remove(comp_file);
             } else if (comp == comp_type::xz) {
                 xz_decode(comp_file, path);
+                QFile::remove(comp_file);
             } else if (comp == comp_type::tarxz) {
                 auto tar_file = download_filename(path, comp_type::tar);
                 xz_decode(comp_file, tar_file);
@@ -638,19 +641,20 @@ void models_manager::handle_download_finished()
     emit models_changed();
 }
 
-QString models_manager::make_checksum(const QString& file)
+QString models_manager::make_checksum(const QString &file)
 {
     if (std::ifstream input{file.toStdString(), std::ios::in | std::ifstream::binary}) {
-        QCryptographicHash hash{QCryptographicHash::Md5};
+        auto checksum = crc32(0L, Z_NULL, 0);
         char buff[std::numeric_limits<unsigned short>::max()];
-
         while (input) {
             input.read(buff, sizeof buff);
-            hash.addData(buff, static_cast<int>(input.gcount()));
+            checksum = crc32(checksum, reinterpret_cast<unsigned char*>(buff),
+                             static_cast<unsigned int>(input.gcount()));
         }
-
-        qDebug() << "md5 checksum:" << hash.result().toHex() << file;
-        return hash.result().toHex();
+        std::stringstream ss; ss << std::hex << checksum;
+        const auto hex = QString::fromStdString(ss.str());
+        qDebug() << "crc checksum:" << hex << file;
+        return hex;
     } else {
         qWarning() << "cannot open file:" << file;
     }
@@ -730,12 +734,12 @@ void models_manager::init_config()
          "model_id": "unique model id (M)>",
          "id": "<ISO 639-1 language code (M)>",
          "urls": "<array of download URL(s) of model file (*.tflite), might be compressd file(s) (M)>",
-         "md5": "<md5 hash of (not compressed) model file (M)>",
+         "checksum": "<CRC-32 hash of (not compressed) model file (M)>",
          "file_name": "<file name of deep-speech model (O)>",
          "comp": <type of compression for model file provided in 'url', following are supported: 'xz', 'gz' (O)>
          "size": "<size in bytes of file provided in 'url' (O)>",
          "scorer_urls": "<array download URL(s) of scorer file, might be compressd file(s) (O)>",
-         "scorer_md5": "<md5 hash of (not compressed) scorer file (M if scorer is provided)>",
+         "scorer_checksum": "<CRC-32 hash of (not compressed) scorer file (M if scorer is provided)>",
          "scorer_file_name": "<file name of deep-speech scorer (O)>",
          "scorer_comp": <type of compression for scorer file provided in 'scorer_url', following are supported: 'xz', 'gz', 'tarxz' (O)>
          "scorer_size": "<size in bytes of file provided in 'scorer_url' (O)>"
@@ -746,26 +750,26 @@ void models_manager::init_config()
     std::ofstream outfile{lang_models_file_path.toStdString(), std::ofstream::out | std::ofstream::trunc};
     outfile << "{\n\"version\": " << dsnote::CONF_VERSION << ",\n\"langs\": [\n"
             << "{ \"name\": \"Čeština\", \"model_id\": \"cs\", \"id\": \"cs\", "
-            << "\"md5\": \"10cbdafa216b498445034c9e861bfba4\", "
+            << "\"checksum\": \"45c77814\", "
             << "\"urls\": [\"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.tflite\"], "
             << "\"size\": \"47360928\", "
-            << "\"scorer_md5\": \"a5e7e891276b1f539b7d9a9cb11ce966\", "
+            << "\"scorer_checksum\": \"a58d1800\", "
             << "\"scorer_urls\": [\"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/o4-500k-wnc-2011.scorer\"], "
             << "\"scorer_size\": \"539766416\"},\n"
 
             << "{ \"name\": \"English\", \"model_id\": \"en\", \"id\": \"en\", "
-            << "\"md5\": \"afcc08e56f024655c30187a41c4e8c9c\", "
+            << "\"checksum\": \"6d38ae6e\", "
             << "\"urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.tflite\"], "
             << "\"size\": \"47331784\", "
-            << "\"scorer_md5\": \"08a02b383a9bc93c8a8ad188dbf79bc9\", "
+            << "\"scorer_checksum\": \"969d9b57\", "
             << "\"scorer_urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer\"], "
             << "\"scorer_size\": \"953363776\"},\n"
 
             << "{ \"name\": \"Deutsch\", \"model_id\": \"de\", \"id\": \"de\", "
-            << "\"md5\": \"bc31379c31052392b2ea881eefede747\", \"comp\": \"gz\", "
+            << "\"checksum\": \"a5943fb8\", \"comp\": \"gz\", "
             << "\"urls\": [\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/output_graph.tflite.gz\"], "
             << "\"size\": \"20296313\", "
-            << "\"scorer_md5\": \"e1fbc58d92c0872f7a1502d33416a23c\", \"scorer_comp\": \"gz\", "
+            << "\"scorer_checksum\": \"66f887a9\", \"scorer_comp\": \"gz\", "
             << "\"scorer_urls\": [ "
             << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00\", "
             << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-01\", "
@@ -779,10 +783,10 @@ void models_manager::init_config()
             << "\"scorer_size\": \"229904847\"},\n"
 
             << "{ \"name\": \"Español\", \"model_id\": \"es\", \"id\": \"es\", "
-            << "\"md5\": \"cc618b45dd01b8a6cc6b1d781653f89a\", \"comp\": \"gz\", "
+            << "\"checksum\": \"8b01dece\", \"comp\": \"gz\", "
             << "\"urls\": [\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/output_graph.tflite.gz\"], "
             << "\"size\": \"20430228\", "
-            << "\"scorer_md5\": \"650e2325ebf70d08a69ae5bf238ad5bd\", \"scorer_comp\": \"gz\", "
+            << "\"scorer_checksum\": \"4497fc72\", \"scorer_comp\": \"gz\", "
             << "\"scorer_urls\": [ "
             << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00\", "
             << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-01\", "
@@ -797,10 +801,10 @@ void models_manager::init_config()
             << "\"scorer_size\": \"247688532\"},\n"
 
             << "{ \"name\": \"Français\", \"model_id\": \"fr\", \"id\": \"fr\", "
-            << "\"md5\": \"fcf644611a833f4f8e9767b2ab6b16ea\", \"comp\": \"gz\", "
+            << "\"checksum\": \"59a6bd0a\", \"comp\": \"gz\", "
             << "\"urls\": [\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/output_graph.tflite.gz\"], "
             << "\"size\": \"20519594\", "
-            << "\"scorer_md5\": \"35224069b08e801c84051d65e810bdd1\", \"scorer_comp\": \"gz\", "
+            << "\"scorer_checksum\": \"68afdb05\", \"scorer_comp\": \"gz\", "
             << "\"scorer_urls\": [ "
             << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00\", "
             << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-01\", "
@@ -814,50 +818,50 @@ void models_manager::init_config()
             << "\"scorer_size\": \"225945743\"},\n"
 
             << "{ \"name\": \"Français (Common Voice)\", \"model_id\": \"fr_cv\", \"id\": \"fr\", "
-            << "\"md5\": \"11e226e00322d684a3da987aee4eb099\", \"comp\": \"tarxz\", "
+            << "\"checksum\": \"24aba517\", \"comp\": \"tarxz\", "
             << "\"urls\": [\"https://github.com/common-voice/commonvoice-fr/releases/download/fr-v0.6/model_tflite_fr.tar.xz?file=output_graph.tflite\"], "
             << "\"size\": \"615568844\", "
-            << "\"scorer_md5\": \"29b0148c1dbab776e33cc55dacc917b6\", \"scorer_comp\": \"tarxz\", "
+            << "\"scorer_checksum\": \"f15bf736\", \"scorer_comp\": \"tarxz\", "
             << "\"scorer_urls\": [\"https://github.com/common-voice/commonvoice-fr/releases/download/fr-v0.6/model_tflite_fr.tar.xz?file=kenlm.scorer\"], "
             << "\"scorer_size\": \"615568844\"},\n"
 
             << "{ \"name\": \"Italiano\", \"model_id\": \"it\", \"id\": \"it\", "
-            << "\"md5\": \"11c9980d444f04e28bff007fedbac882\", \"comp\": \"gz\", "
+            << "\"checksum\": \"6811059d\", \"comp\": \"gz\", "
             << "\"urls\": [\"https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/output_graph.tflite.gz\"], "
             << "\"size\": \"20542809\", "
-            << "\"scorer_md5\": \"9b2df256185e442246159b33cd05fc2d\", \"scorer_comp\": \"gz\", "
+            << "\"scorer_checksum\": \"6ef01083\", \"scorer_comp\": \"gz\", "
             << "\"scorer_urls\": [\"https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/base.scorer.gz\"], "
             << "\"scorer_size\": \"5350776\"},\n"
 
             << "{ \"name\": \"Italiano (Mozilla Italia)\", \"model_id\": \"it_mozz\", \"id\": \"it\", "
-            << "\"md5\": \"310fd14b81612f9409008f626e8be869\", \"comp\": \"tarxz\", "
+            << "\"checksum\": \"922bbca1\", \"comp\": \"tarxz\", "
             << "\"urls\": [\"https://github.com/MozillaItalia/DeepSpeech-Italian-Model/releases/download/2020.08.07/model_tflite_it.tar.xz?file=output_graph.tflite\"], "
             << "\"size\": \"172342504\", "
-            << "\"scorer_md5\": \"7abbe30b5ee8591360c73a0a0cb47813\", \"scorer_comp\": \"tarxz\", "
+            << "\"scorer_checksum\": \"1c806059\", \"scorer_comp\": \"tarxz\", "
             << "\"scorer_urls\": [\"https://github.com/MozillaItalia/DeepSpeech-Italian-Model/releases/download/2020.08.07/model_tflite_it.tar.xz?file=scorer\"], "
             << "\"scorer_size\": \"172342504\"},\n"
 
             << "{ \"name\": \"Polski\", \"model_id\": \"pl\", \"id\": \"pl\", "
-            << "\"md5\": \"a56c693bb0d644af5dc53f0e59f0da76\", \"comp\": \"gz\", "
+            << "\"checksum\": \"2ed9292d\", \"comp\": \"gz\", "
             << "\"urls\": [\"https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/output_graph.tflite.gz\"], "
             << "\"size\": \"20752162\", "
-            << "\"scorer_md5\": \"0984ebda29d9c51a87e5823bd301d980\", \"scorer_comp\": \"gz\", "
+            << "\"scorer_checksum\": \"4dc90a2d\", \"scorer_comp\": \"gz\", "
             << "\"scorer_urls\": [\"https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/base.scorer.gz\"], "
             << "\"scorer_size\": \"3000583\"},\n"
 
             << "{ \"name\": \"Română\", \"model_id\": \"ro_exp\", \"id\": \"ro\", "
-            << "\"md5\": \"e1edb6e017ba6833b15d4a3f2bab0466\", \"comp\": \"xz\", "
+            << "\"checksum\": \"d2897477\", \"comp\": \"xz\", "
             << "\"urls\": [\"https://github.com/mkiol/dsnote/raw/main/models/ro_exp.tflite.xz\"], "
             << "\"size\": \"19142612\", "
-            << "\"scorer_md5\": \"aa83c08ba153bf6f110754eb43dd9d73\", \"scorer_comp\": \"xz\", "
+            << "\"scorer_checksum\": \"bb913443\", \"scorer_comp\": \"xz\", "
             << "\"scorer_urls\": [\"https://github.com/mkiol/dsnote/raw/main/models/ro_exp.scorer.xz\"], "
             << "\"scorer_size\": \"583536296\"},\n"
 
             << "{ \"name\": \"中文 (简体)\", \"model_id\": \"zh-CN\", \"id\": \"zh-CN\", "
-            << "\"md5\": \"5664793cafe796d0821a3e49d56eb797\", "
+            << "\"checksum\": \"73eef4d8\", "
             << "\"urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.tflite\"], "
             << "\"size\": \"47798728\", "
-            << "\"scorer_md5\": \"628e68fd8e0dd82c4a840d56c4cdc661\", "
+            << "\"scorer_checksum\": \"f101bc46\", "
             << "\"scorer_urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer\"], "
             << "\"scorer_size\": \"67141744\"}\n"
 
@@ -918,9 +922,9 @@ auto models_manager::check_lang_file(const QJsonArray& langs)
             continue;
         }
 
-        auto md5 = obj.value("md5").toString();
-        if (md5.isEmpty()) {
-            qWarning() << "md5 checksum cannot be empty:" << model_id;
+        auto checksum = obj.value("checksum").toString();
+        if (checksum.isEmpty()) {
+            qWarning() << "checksum cannot be empty:" << model_id;
             continue;
         }
 
@@ -934,12 +938,12 @@ auto models_manager::check_lang_file(const QJsonArray& langs)
             lang_id,
             obj.value("name").toString(),
             file_name,
-            md5,
+            checksum,
             str2comp(obj.value("comp").toString()),
             {},
             obj.value("size").toString().toLongLong(),
             scorer_file_name,
-            obj.value("scorer_md5").toString(),
+            obj.value("scorer_checksum").toString(),
             str2comp(obj.value("scorer_comp").toString()),
             {},
             obj.value("scorer_size").toString().toLongLong(),
@@ -957,8 +961,8 @@ auto models_manager::check_lang_file(const QJsonArray& langs)
         auto scorer_urls = obj.value("scorer_urls").toArray();
         for (auto url : scorer_urls) model.scorer_urls.emplace_back(url.toString());
 
-        model.available = dir.exists(file_name) && md5 == make_checksum(dir.filePath(file_name)) &&
-                ((dir.exists(scorer_file_name) && model.scorer_md5 == make_checksum(dir.filePath(scorer_file_name))) ||
+        model.available = dir.exists(file_name) && checksum == make_checksum(dir.filePath(file_name)) &&
+                ((dir.exists(scorer_file_name) && model.scorer_checksum == make_checksum(dir.filePath(scorer_file_name))) ||
                  model.scorer_urls.empty());
 
         models.insert({model_id, std::move(model)});
@@ -1049,7 +1053,7 @@ inline QString models_manager::scorer_file_name_from_id(const QString& id)
     return id + ".scorer";
 }
 
-inline QString models_manager::model_path(const QString& file_name)
+QString models_manager::model_path(const QString& file_name)
 {
     return QDir{settings::instance()->models_dir()}.filePath(file_name);
 }

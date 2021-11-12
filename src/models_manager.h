@@ -62,12 +62,12 @@ private:
         QString lang_id;
         QString name;
         QString file_name;
-        QString md5;
+        QString checksum;
         comp_type comp = comp_type::none;
         std::vector<QUrl> urls;
         qint64 size = 0;
         QString scorer_file_name;
-        QString scorer_md5;
+        QString scorer_checksum;
         comp_type scorer_comp = comp_type::none;
         std::vector<QUrl> scorer_urls;
         qint64 scorer_size = 0;
