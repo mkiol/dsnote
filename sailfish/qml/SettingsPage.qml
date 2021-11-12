@@ -33,6 +33,7 @@ Page {
 
             PullDownMenu {
                 enabled: false
+                visible: busy
                 busy: service.busy || app.busy
             }
 
