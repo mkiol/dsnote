@@ -61,6 +61,25 @@
         </signal>
 
         <!--
+            DefaultModel:
+
+            An id of model which is default.
+            The default model is used when @lang is empty in StartListen or
+            TranscribeFile methods.
+        -->
+        <property name="DefaultModel" type="s" access="readwrite" />
+
+        <!--
+            DefaultModelPropertyChanged:
+            @lang: new value of DefaultModel property
+
+            Emitted whenever DefaultModel property changes.
+        -->
+        <signal name="DefaultModelPropertyChanged">
+          <arg name="model" type="s" direction="out" />
+        </signal>
+
+        <!--
             Langs:
 
             A dict of available languages (lang id => array of properties).
@@ -71,13 +90,33 @@
 
         <!--
             LangsChanged:
-            @speech: new value of Langs property
+            @langs: new value of Langs property
 
             Emitted whenever Langs property changes.
         -->
         <signal name="LangsPropertyChanged">
           <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
           <arg name="langs" type="a{sv}" direction="out" />
+        </signal>
+
+        <!--
+            Models:
+
+            A dict of available models (model id => array of properties).
+        -->
+        <property name="Models" type="a{sv}" access="read">
+            <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantMap"/>
+        </property>
+
+        <!--
+            ModelsChanged:
+            @models: new value of Models property
+
+            Emitted whenever Models property changes.
+        -->
+        <signal name="ModelsPropertyChanged">
+          <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
+          <arg name="models" type="a{sv}" direction="out" />
         </signal>
 
         <!--
@@ -175,7 +214,7 @@
 
         <!--
             StartListen:
-            @lang: language code (ISO 639-1)
+            @lang: language code (ISO 639-1) or model id
             @mode: 0 - Automatic, 1 - Manual
             @task: returned id of task which will be included in
                    IntermediateTextDecoded and TextDecoded signals,
@@ -206,7 +245,7 @@
         <!--
             TranscribeFile:
             @file: path or URL to audio file
-            @lang: language code (ISO 639-1)
+            @lang: language code (ISO 639-1) or model id
             @task: returned id of task which will be included in
                    IntermediateTextDecoded and TextDecoded signals,
                    @task less than 0 idicates an error

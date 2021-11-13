@@ -30,8 +30,10 @@ class stt_service : public QObject
     // DBus
     Q_PROPERTY(int State READ dbus_state)
     Q_PROPERTY(bool Speech READ speech)
-    Q_PROPERTY(QVariantMap Langs READ available_models)
-    Q_PROPERTY(QString DefaultLang READ default_model WRITE set_default_model)
+    Q_PROPERTY(QVariantMap Langs READ available_langs)
+    Q_PROPERTY(QString DefaultLang READ default_lang WRITE set_default_lang)
+    Q_PROPERTY(QVariantMap Models READ available_models)
+    Q_PROPERTY(QString DefaultModel READ default_model WRITE set_default_model)
     Q_PROPERTY(int CurrentTask READ current_task_id)
     Q_PROPERTY(QVariantMap Translations READ translations)
 public:
@@ -96,6 +98,8 @@ signals:
     void SpeechPropertyChanged(bool speech);
     void LangsPropertyChanged(const QVariantMap &langs);
     void DefaultLangPropertyChanged(const QString &lang);
+    void ModelsPropertyChanged(const QVariantMap &models);
+    void DefaultModelPropertyChanged(const QString &model);
     void CurrentTaskPropertyChanged(int task);
 
 private:
@@ -143,6 +147,7 @@ private:
     std::optional<task_type> pending_task;
 
     QVariantMap available_models() const;
+    QVariantMap available_langs() const;
     void handle_models_changed();
     void handle_text_decoded(const std::string &text);
     void handle_intermediate_text_decoded(const std::string &text);
@@ -168,8 +173,10 @@ private:
     void reset_ds_gracefully();
     void reset_ds();
     QString default_model() const;
+    QString default_lang() const;
     QString test_default_model(const QString &lang) const;
     void set_default_model(const QString &model_id) const;
+    void set_default_lang(const QString &lang_id) const;
     int next_task_id();
     inline int current_task_id() const { return current_task ? current_task->id : INVALID_TASK; }
     void handle_keepalive_timeout();

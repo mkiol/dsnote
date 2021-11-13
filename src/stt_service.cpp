@@ -58,15 +58,23 @@ stt_service::stt_service(QObject *parent) :
     });
     connect(this, &stt_service::models_changed, this, [this]() {
         const auto models_list = available_models();
-        qDebug() << "[service => dbus] signal LangsPropertyChanged:" << models_list;
-        emit LangsPropertyChanged(models_list);
+        qDebug() << "[service => dbus] signal ModelsPropertyChanged:" << models_list;
+        emit ModelsPropertyChanged(models_list);
+
+        const auto langs_list = available_langs();
+        qDebug() << "[service => dbus] signal LangsPropertyChanged:" << langs_list;
+        emit LangsPropertyChanged(langs_list);
     });
     connect(this, &stt_service::transcribe_file_progress_changed, this, [this](double progress, int task) {
         qDebug() << "[service => dbus] signal FileTranscribeProgress:" << progress << task;
         emit FileTranscribeProgress(progress, task);
     });
     connect(settings::instance(), &settings::default_model_changed, this, [this]() {
-        const auto lang = default_model();
+        const auto model = default_model();
+        qDebug() << "[service => dbus] signal DefaultModelPropertyChanged:" << model;
+        emit DefaultModelPropertyChanged(model);
+
+        const auto lang = default_lang();
         qDebug() << "[service => dbus] signal DefaultLangPropertyChanged:" << lang;
         emit DefaultLangPropertyChanged(lang);
     });
@@ -251,6 +259,24 @@ QVariantMap stt_service::available_models() const
             QString{"%1 / %2"}.arg(p.second.name, p.second.lang_id)
         });
     });
+
+    return map;
+}
+
+QVariantMap stt_service::available_langs() const
+{
+    QVariantMap map;
+
+    std::for_each(available_models_map.cbegin(), available_models_map.cend(),
+                  [&map](const auto& p) {
+                      if (!map.contains(p.second.lang_id)) {
+                          map.insert(p.second.lang_id,
+                                         QStringList{
+                                            p.second.model_id,
+                                            QString{"%1 / %2"}.arg(p.second.name, p.second.lang_id)
+                                         });
+                      }
+                  });
 
     return map;
 }
@@ -563,6 +589,11 @@ QString stt_service::default_model() const
     return test_default_model(settings::instance()->default_model());
 }
 
+QString stt_service::default_lang() const
+{
+    return available_models_map.at(test_default_model(settings::instance()->default_model())).lang_id;
+}
+
 QString stt_service::test_default_model(const QString &lang) const
 {
     if (available_models_map.empty()) return {};
@@ -587,6 +618,11 @@ void stt_service::set_default_model(const QString &model_id) const
     } else {
         qWarning() << "invalid default model";
     }
+}
+
+void stt_service::set_default_lang(const QString &lang_id) const
+{
+    settings::instance()->set_default_model(test_default_model(lang_id));
 }
 
 QVariantMap stt_service::translations() const

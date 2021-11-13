@@ -103,8 +103,8 @@ void dsnote_app::handle_text_decoded(const QString &text, const QString &lang, i
 
 void dsnote_app::connect_dbus_signals()
 {
-    connect(&stt, &OrgMkiolSttInterface::LangsPropertyChanged, this, [this](const auto &langs) {
-        qDebug() << "[dbus => app] signal LangsPropertyChanged";
+    connect(&stt, &OrgMkiolSttInterface::ModelsPropertyChanged, this, [this](const auto &langs) {
+        qDebug() << "[dbus => app] signal ModelsPropertyChanged";
         available_langs_map = langs;
         emit available_langs_changed();
         emit active_lang_changed();
@@ -141,8 +141,8 @@ void dsnote_app::connect_dbus_signals()
         start_keepalive();
         update_speech();
     });
-    connect(&stt, &OrgMkiolSttInterface::DefaultLangPropertyChanged, this, [this](const auto &lang) {
-        qDebug() << "[dbus => app] signal DefaultLangPropertyChanged:" << lang;
+    connect(&stt, &OrgMkiolSttInterface::DefaultModelPropertyChanged, this, [this](const auto &lang) {
+        qDebug() << "[dbus => app] signal DefaultModelPropertyChanged:" << lang;
         active_lang_value = lang;
         emit active_lang_changed();
     });
@@ -233,7 +233,7 @@ void dsnote_app::update_active_lang_idx()
 
 void dsnote_app::update_available_langs()
 {
-    auto new_available_langs_map = stt.langs();
+    auto new_available_langs_map = stt.models();
     if (available_langs_map != new_available_langs_map) {
         available_langs_map = std::move(new_available_langs_map);
         emit available_langs_changed();
@@ -255,8 +255,8 @@ void dsnote_app::set_active_lang_idx(int idx)
 {
     if (active_lang_idx() != idx && idx > -1 && idx < available_langs_map.size()) {
         const auto& id = std::next(available_langs_map.cbegin(), idx).key();
-        qDebug() << "[app => dbus] set DefaultLang:" << idx << id;
-        stt.setDefaultLang(id);
+        qDebug() << "[app => dbus] set DefaultModel:" << idx << id;
+        stt.setDefaultModel(id);
     }
 }
 
@@ -321,11 +321,10 @@ int dsnote_app::active_lang_idx() const
     }
 }
 
-void dsnote_app::update_active_lang()
-{
-    qDebug() << "[app => dbus] get DefaultLang";
+void dsnote_app::update_active_lang() {
+    qDebug() << "[app => dbus] get DefaultModel";
 
-    auto new_lang = stt.defaultLang();
+    auto new_lang = stt.defaultModel();
     if (active_lang_value != new_lang) {
         active_lang_value = std::move(new_lang);
         emit active_lang_changed();

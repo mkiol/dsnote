@@ -8,7 +8,7 @@ TRANSLATIONS_TS_DIR = $${ROOT_DIR}/translations
 
 include($${SRC_DIR}/dsnote.pri)
 
-DISTFILES += \
+OTHER_FILES += \
     qml/*.qml \
     rpm/*.* \
     $${ROOT_DIR}/systemd/*.* \
