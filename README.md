@@ -21,7 +21,8 @@ DeepSpeech models for particular language can be downloaded from the app. Follow
 | Italian / it                  | [Jaco-Assistant/Scribosermo](https://gitlab.com/Jaco-Assistant/Scribosermo), [rhasspy/it_deepspeech-jaco](https://github.com/rhasspy/it_deepspeech-jaco) |
 | Italian (Mozilla Italia) / it | [MozillaItalia/DeepSpeech-Italian-Model](https://github.com/MozillaItalia/DeepSpeech-Italian-Model)                                                      |
 | Polish / pl                   | [Jaco-Assistant/Scribosermo](https://gitlab.com/Jaco-Assistant/Scribosermo), [rhasspy/pl_deepspeech-jaco](https://github.com/rhasspy/pl_deepspeech-jaco) |
-| Romanian / ro                 | [Google Drive](https://drive.google.com/drive/folders/1rd3RQXDXv_GVp9UgyHu-qjLzcadunJxt)                                                                 |
+| Romanian / ro                 | [Conqui](https://coqui.ai/romanian/itml/v0.1.0)                                                                 |
+| Russian / ru                  | [Conqui](https://coqui.ai/russian/jemeyer/v0.1.0)                                                                 |
 | Chinese / zh-CN               | [mozilla/DeepSpeech](https://github.com/mozilla/DeepSpeech)                                                                                              |
 
 

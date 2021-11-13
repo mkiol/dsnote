@@ -177,20 +177,28 @@
         },
         {
             "name": "Română",
-            "model_id": "ro_exp",
+            "model_id": "ro",
             "lang_id": "ro",
-            "checksum": "d2897477",
-            "comp": "xz",
+            "checksum": "ba5f9c81",
             "urls": [
-                "https://github.com/mkiol/dsnote/raw/main/models/ro_exp.tflite.xz"
+                "https://github.com/coqui-ai/STT-models/releases/download/romanian/itml/v0.1.1/model.tflite"
             ],
-            "size": "19142612",
-            "scorer_checksum": "bb913443",
-            "scorer_comp": "xz",
+            "size": "47340344"
+        },
+        {
+            "name": "Русский",
+            "model_id": "ru",
+            "lang_id": "ru",
+            "checksum": "3bd98e76",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/russian/jemeyer/v0.1.0/model.tflite"
+            ],
+            "size": "47344496",
+            "scorer_checksum": "e5e298a0",
             "scorer_urls": [
-                "https://github.com/mkiol/dsnote/raw/main/models/ro_exp.scorer.xz"
+                "https://github.com/coqui-ai/STT-models/releases/download/russian/jemeyer/v0.1.0/wiki-ru-6gram.scorer"
             ],
-            "scorer_size": "583536296"
+            "scorer_size": "719764672"
         },
         {
             "name": "中文 (简体)",
