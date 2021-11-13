@@ -2,13 +2,9 @@ TARGET = harbour-dsnote
 
 CONFIG += sailfishapp
 
-# dirs
-
 ROOT_DIR = $${PWD}/..
 SRC_DIR = $${ROOT_DIR}/src
 TRANSLATIONS_TS_DIR = $${ROOT_DIR}/translations
-
-# defines
 
 include($${SRC_DIR}/dsnote.pri)
 
@@ -18,11 +14,9 @@ DISTFILES += \
     $${ROOT_DIR}/systemd/*.* \
     $${ROOT_DIR}/dbus/*.*
 
-# icons
+RESOURCES += res.qrc
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
-
-# translations
 
 TRANSLATION_SOURCE_DIRS += $${ROOT_DIR}/src \
                            $${ROOT_DIR}/sailfish/qml \

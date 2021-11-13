@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="config/models.json">../config/models.json</file>
+    </qresource>
+</RCC>

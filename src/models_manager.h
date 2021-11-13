@@ -77,7 +77,7 @@ private:
         qint64 downloaded_part_data = 0;
     };
 
-    static const QString lang_models_file;
+    inline static const QString models_file{"models.json"};
 
     std::map<QString, model_t> models;
     QNetworkAccessManager nam;
@@ -105,7 +105,7 @@ private:
     bool handle_download(const QString& path, const QString& checksum, const QString& path_in_archive,
                          const QString& path_2, const QString& checksum_2, const QString& path_in_archive_2,
                          comp_type comp, int parts);
-    static auto check_lang_file(const QJsonArray& langs);
+    static auto check_models_file(const QJsonArray &models_jarray);
     static comp_type str2comp(const QString& str);
     static QString download_filename(const QString& filename, comp_type comp, int part = -1);
     static bool model_scorer_same_url(const model_t& id);

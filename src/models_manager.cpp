@@ -42,8 +42,6 @@
 #include "settings.h"
 #include "info.h"
 
-const QString models_manager::lang_models_file{"lang_models.json"};
-
 models_manager::models_manager(QObject *parent)
     : QObject(parent)
 {
@@ -715,158 +713,27 @@ void models_manager::backup_config(const QString& lang_models_file)
 
 void models_manager::init_config()
 {
-    const QString data_dir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)};
-    const auto lang_models_file_path = QDir{data_dir}.filePath(lang_models_file);
-
-    if (QFile::exists(lang_models_file_path))
-        backup_config(lang_models_file_path);
-
-    QDir{}.mkpath(data_dir);
-
-    /*
-     M - mandatory
-     O - optional
-
-     { "version": <config_version>,
-       "langs: [
-       {
-         "name": "<native language name (M)>",
-         "model_id": "unique model id (M)>",
-         "id": "<ISO 639-1 language code (M)>",
-         "urls": "<array of download URL(s) of model file (*.tflite), might be compressd file(s) (M)>",
-         "checksum": "<CRC-32 hash of (not compressed) model file (M)>",
-         "file_name": "<file name of deep-speech model (O)>",
-         "comp": <type of compression for model file provided in 'url', following are supported: 'xz', 'gz' (O)>
-         "size": "<size in bytes of file provided in 'url' (O)>",
-         "scorer_urls": "<array download URL(s) of scorer file, might be compressd file(s) (O)>",
-         "scorer_checksum": "<CRC-32 hash of (not compressed) scorer file (M if scorer is provided)>",
-         "scorer_file_name": "<file name of deep-speech scorer (O)>",
-         "scorer_comp": <type of compression for scorer file provided in 'scorer_url', following are supported: 'xz', 'gz', 'tarxz' (O)>
-         "scorer_size": "<size in bytes of file provided in 'scorer_url' (O)>"
-       } ]
+    QFile default_models_file{":/config/" + models_file};
+    if (!default_models_file.exists()) {
+        qWarning() << "default models file does not exist";
+        return;
     }
-    */
+    if (!default_models_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "cannot open default models file";
+        return;
+    }
 
-    std::ofstream outfile{lang_models_file_path.toStdString(), std::ofstream::out | std::ofstream::trunc};
-    outfile << "{\n\"version\": " << dsnote::CONF_VERSION << ",\n\"langs\": [\n"
-            << "{ \"name\": \"Čeština\", \"model_id\": \"cs\", \"id\": \"cs\", "
-            << "\"checksum\": \"45c77814\", "
-            << "\"urls\": [\"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.tflite\"], "
-            << "\"size\": \"47360928\", "
-            << "\"scorer_checksum\": \"a58d1800\", "
-            << "\"scorer_urls\": [\"https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/o4-500k-wnc-2011.scorer\"], "
-            << "\"scorer_size\": \"539766416\"},\n"
+    const QString data_dir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)};
+    QFile models{QDir{data_dir}.filePath(models_file)};
+    if (models.exists()) backup_config(QFileInfo{models}.absoluteFilePath());
 
-            << "{ \"name\": \"English\", \"model_id\": \"en\", \"id\": \"en\", "
-            << "\"checksum\": \"6d38ae6e\", "
-            << "\"urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.tflite\"], "
-            << "\"size\": \"47331784\", "
-            << "\"scorer_checksum\": \"969d9b57\", "
-            << "\"scorer_urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer\"], "
-            << "\"scorer_size\": \"953363776\"},\n"
+    if (!models.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qWarning() << "cannot open models file";
+        return;
+    }
 
-            << "{ \"name\": \"Deutsch\", \"model_id\": \"de\", \"id\": \"de\", "
-            << "\"checksum\": \"a5943fb8\", \"comp\": \"gz\", "
-            << "\"urls\": [\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/output_graph.tflite.gz\"], "
-            << "\"size\": \"20296313\", "
-            << "\"scorer_checksum\": \"66f887a9\", \"scorer_comp\": \"gz\", "
-            << "\"scorer_urls\": [ "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-01\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-02\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-03\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-04\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-05\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-06\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-07\", "
-            << "\"https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-08\"], "
-            << "\"scorer_size\": \"229904847\"},\n"
-
-            << "{ \"name\": \"Español\", \"model_id\": \"es\", \"id\": \"es\", "
-            << "\"checksum\": \"8b01dece\", \"comp\": \"gz\", "
-            << "\"urls\": [\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/output_graph.tflite.gz\"], "
-            << "\"size\": \"20430228\", "
-            << "\"scorer_checksum\": \"4497fc72\", \"scorer_comp\": \"gz\", "
-            << "\"scorer_urls\": [ "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-01\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-02\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-03\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-04\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-05\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-06\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-07\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-08\", "
-            << "\"https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-09\"], "
-            << "\"scorer_size\": \"247688532\"},\n"
-
-            << "{ \"name\": \"Français\", \"model_id\": \"fr\", \"id\": \"fr\", "
-            << "\"checksum\": \"59a6bd0a\", \"comp\": \"gz\", "
-            << "\"urls\": [\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/output_graph.tflite.gz\"], "
-            << "\"size\": \"20519594\", "
-            << "\"scorer_checksum\": \"68afdb05\", \"scorer_comp\": \"gz\", "
-            << "\"scorer_urls\": [ "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-01\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-02\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-03\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-04\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-05\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-06\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-07\", "
-            << "\"https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-08\"], "
-            << "\"scorer_size\": \"225945743\"},\n"
-
-            << "{ \"name\": \"Français (Common Voice)\", \"model_id\": \"fr_cv\", \"id\": \"fr\", "
-            << "\"checksum\": \"24aba517\", \"comp\": \"tarxz\", "
-            << "\"urls\": [\"https://github.com/common-voice/commonvoice-fr/releases/download/fr-v0.6/model_tflite_fr.tar.xz?file=output_graph.tflite\"], "
-            << "\"size\": \"615568844\", "
-            << "\"scorer_checksum\": \"f15bf736\", \"scorer_comp\": \"tarxz\", "
-            << "\"scorer_urls\": [\"https://github.com/common-voice/commonvoice-fr/releases/download/fr-v0.6/model_tflite_fr.tar.xz?file=kenlm.scorer\"], "
-            << "\"scorer_size\": \"615568844\"},\n"
-
-            << "{ \"name\": \"Italiano\", \"model_id\": \"it\", \"id\": \"it\", "
-            << "\"checksum\": \"6811059d\", \"comp\": \"gz\", "
-            << "\"urls\": [\"https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/output_graph.tflite.gz\"], "
-            << "\"size\": \"20542809\", "
-            << "\"scorer_checksum\": \"6ef01083\", \"scorer_comp\": \"gz\", "
-            << "\"scorer_urls\": [\"https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/base.scorer.gz\"], "
-            << "\"scorer_size\": \"5350776\"},\n"
-
-            << "{ \"name\": \"Italiano (Mozilla Italia)\", \"model_id\": \"it_mozz\", \"id\": \"it\", "
-            << "\"checksum\": \"922bbca1\", \"comp\": \"tarxz\", "
-            << "\"urls\": [\"https://github.com/MozillaItalia/DeepSpeech-Italian-Model/releases/download/2020.08.07/model_tflite_it.tar.xz?file=output_graph.tflite\"], "
-            << "\"size\": \"172342504\", "
-            << "\"scorer_checksum\": \"1c806059\", \"scorer_comp\": \"tarxz\", "
-            << "\"scorer_urls\": [\"https://github.com/MozillaItalia/DeepSpeech-Italian-Model/releases/download/2020.08.07/model_tflite_it.tar.xz?file=scorer\"], "
-            << "\"scorer_size\": \"172342504\"},\n"
-
-            << "{ \"name\": \"Polski\", \"model_id\": \"pl\", \"id\": \"pl\", "
-            << "\"checksum\": \"2ed9292d\", \"comp\": \"gz\", "
-            << "\"urls\": [\"https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/output_graph.tflite.gz\"], "
-            << "\"size\": \"20752162\", "
-            << "\"scorer_checksum\": \"4dc90a2d\", \"scorer_comp\": \"gz\", "
-            << "\"scorer_urls\": [\"https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/base.scorer.gz\"], "
-            << "\"scorer_size\": \"3000583\"},\n"
-
-            << "{ \"name\": \"Română\", \"model_id\": \"ro_exp\", \"id\": \"ro\", "
-            << "\"checksum\": \"d2897477\", \"comp\": \"xz\", "
-            << "\"urls\": [\"https://github.com/mkiol/dsnote/raw/main/models/ro_exp.tflite.xz\"], "
-            << "\"size\": \"19142612\", "
-            << "\"scorer_checksum\": \"bb913443\", \"scorer_comp\": \"xz\", "
-            << "\"scorer_urls\": [\"https://github.com/mkiol/dsnote/raw/main/models/ro_exp.scorer.xz\"], "
-            << "\"scorer_size\": \"583536296\"},\n"
-
-            << "{ \"name\": \"中文 (简体)\", \"model_id\": \"zh-CN\", \"id\": \"zh-CN\", "
-            << "\"checksum\": \"73eef4d8\", "
-            << "\"urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.tflite\"], "
-            << "\"size\": \"47798728\", "
-            << "\"scorer_checksum\": \"f101bc46\", "
-            << "\"scorer_urls\": [\"https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer\"], "
-            << "\"scorer_size\": \"67141744\"}\n"
-
-            << "]\n}\n";
-    outfile.close();
+    models.write(default_models_file.readAll()
+            .replace("%VERSION%", std::to_string(dsnote::CONF_VERSION).c_str()));
 }
 
 models_manager::comp_type models_manager::str2comp(const QString& str)
@@ -896,13 +763,13 @@ QString models_manager::download_filename(const QString& filename, comp_type com
     return ret_name;
 }
 
-auto models_manager::check_lang_file(const QJsonArray& langs)
+auto models_manager::check_models_file(const QJsonArray &models_jarray)
 {
     std::map<QString, models_manager::model_t> models;
 
     QDir dir{settings::instance()->models_dir()};
 
-    for (const auto& ele : langs) {
+    for (const auto& ele : models_jarray) {
         auto obj = ele.toObject();
         auto model_id = obj.value("model_id").toString();
 
@@ -916,7 +783,7 @@ auto models_manager::check_lang_file(const QJsonArray& langs)
             continue;
         }
 
-        auto lang_id = obj.value("id").toString();
+        auto lang_id = obj.value("lang_id").toString();
         if (lang_id.isEmpty()) {
             qWarning() << "empty lang id in lang models file";
             continue;
@@ -1005,12 +872,10 @@ std::map<QString, models_manager::model_t> models_manager::parse_models_file(boo
 {
     std::map<QString, models_manager::model_t> models;
 
-    const auto lang_models_file_path = QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
-                                           .filePath(lang_models_file);
-    if (!QFile::exists(lang_models_file_path))
-        init_config();
+    const auto models_file_path = QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}.filePath(models_file);
+    if (!QFile::exists(models_file_path)) init_config();
 
-    if (std::ifstream input{lang_models_file_path.toStdString(), std::ifstream::in | std::ifstream::binary}) {
+    if (std::ifstream input{models_file_path.toStdString(), std::ifstream::in | std::ifstream::binary}) {
         const std::vector<char> buff{std::istreambuf_iterator<char>{input}, {}};
 
         QJsonParseError err;
@@ -1033,7 +898,7 @@ std::map<QString, models_manager::model_t> models_manager::parse_models_file(boo
                     models = parse_models_file(true);
                 }
             } else {
-                models = check_lang_file(json.object().value("langs").toArray());
+                models = check_models_file(json.object().value("models").toArray());
             }
         }
     } else {

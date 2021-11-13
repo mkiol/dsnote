@@ -4,8 +4,6 @@ TEMPLATE = app
 
 QT += quick quickcontrols2
 
-# dirs
-
 ROOT_DIR = $${PWD}/..
 SRC_DIR = $${ROOT_DIR}/src
 QT_BIN_DIR = $${QT_INSTALL_PREFIX}/bin
@@ -18,15 +16,11 @@ TRANSLATION_SOURCE_DIRS += \
 TRANSLATIONS_TS_DIR = $${ROOT_DIR}/translations
 TRANSLATIONS_QM_DIR = translations
 
-# defines
-
 DEFINES += DESKTOP
 
 include($${SRC_DIR}/dsnote.pri)
 
-RESOURCES += qml.qrc
-
-# translations
+RESOURCES += res.qrc
 
 TRANSLATIONS += \
     $${TRANSLATIONS_TS_DIR}/dsnote-cs_CZ.ts \

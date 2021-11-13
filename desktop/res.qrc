@@ -9,5 +9,6 @@
         <file>translations/dsnote-en.qm</file>
         <file>translations/dsnote-pl.qm</file>
         <file>translations/dsnote-zh_CN.qm</file>
+        <file alias="config/models.json">../config/models.json</file>
     </qresource>
 </RCC>
