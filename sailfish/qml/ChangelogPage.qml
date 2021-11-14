@@ -29,6 +29,20 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Version %1").arg("1.4.0")
+            }
+
+            LogItem {
+                title: "Russian and Ukrainian language models"
+                description: "Russian and Ukrainian models are configured for download directly from the app."
+            }
+
+            LogItem {
+                title: "Speech-to-text D-Bus service"
+                description: "Integration with 3rd-party applications is now possible thanks to D-Bus interface and service."
+            }
+
+            SectionHeader {
                 text: qsTr("Version %1").arg("1.3.0")
             }
 
