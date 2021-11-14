@@ -31,11 +31,16 @@ include(sailfishapp_i18n.pri)
 
 # install
 
+SYS_LIBS = /usr/lib
+contains(QT_ARCH, arm64) {
+    SYS_LIBS = /usr/lib64
+}
+
 install_libs.files = $${LIB_DIR}/*
 install_libs.path = /usr/share/$${TARGET}/lib
 INSTALLS += install_libs
 
-install_systemd.path = /usr/lib/systemd/user
+install_systemd.path = $${SYS_LIBS}/systemd/user
 install_systemd.files = $${OUT_PWD}/systemd/$${TARGET}.service
 install_systemd.CONFIG = no_check_exist
 install_systemd.extra += mkdir -p $${OUT_PWD}/systemd && sed s/%TARGET%/\\\/usr\\\/bin\\\/$${TARGET}/g < $${ROOT_DIR}/systemd/dsnote.service > $${OUT_PWD}/systemd/$${TARGET}.service
