@@ -48,7 +48,7 @@ Page {
                 }
 
                 MenuItem {
-                    enabled: !app.busy && !service.busy
+                    enabled: app.configured && !app.busy && !service.busy
                     text: app.state === DsnoteApp.SttTranscribingFile ? qsTr("Cancel file transcription") : qsTr("Transcribe audio file")
                     onClicked: {
                         if (app.state === DsnoteApp.SttTranscribingFile)
