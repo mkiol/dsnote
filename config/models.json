@@ -176,16 +176,6 @@
             "scorer_size": "3000583"
         },
         {
-            "name": "Română",
-            "model_id": "ro",
-            "lang_id": "ro",
-            "checksum": "ba5f9c81",
-            "urls": [
-                "https://github.com/coqui-ai/STT-models/releases/download/romanian/itml/v0.1.1/model.tflite"
-            ],
-            "size": "47340344"
-        },
-        {
             "name": "Русский",
             "model_id": "ru",
             "lang_id": "ru",
