@@ -201,6 +201,21 @@
             "scorer_size": "719764672"
         },
         {
+            "name": "Українська мова",
+            "model_id": "uk",
+            "lang_id": "uk",
+            "checksum": "d7246303",
+            "urls": [
+                "https://github.com/robinhad/voice-recognition-ua/releases/download/v0.4/uk.tflite"
+            ],
+            "size": "47346544",
+            "scorer_checksum": "33ad40f3",
+            "scorer_urls": [
+                "https://github.com/robinhad/voice-recognition-ua/releases/download/v0.4/kenlm.scorer"
+            ],
+            "scorer_size": "420827024"
+        },
+        {
             "name": "中文 (简体)",
             "model_id": "zh-CN",
             "lang_id": "zh-CN",
