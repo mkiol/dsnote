@@ -19,9 +19,9 @@ class stt_config : public QObject
     Q_OBJECT
 
     Q_PROPERTY (QVariantList all_models READ all_models NOTIFY models_changed)
+    Q_PROPERTY (QVariantList all_experimental_models READ all_experimental_models NOTIFY models_changed)
     Q_PROPERTY (QVariantList available_models READ available_models NOTIFY models_changed)
     Q_PROPERTY (bool busy READ busy NOTIFY busy_changed)
-    Q_PROPERTY (QString default_model READ default_model WRITE set_default_model NOTIFY default_model_changed)
 
 public:
     explicit stt_config(QObject *parent = nullptr);
@@ -36,27 +36,18 @@ signals:
     void default_model_changed();
 
 private:
-    struct model_data_type {
-        QString model_id;
-        QString lang_id;
-        QString name;
-    };
-
     inline static const QString DBUS_SERVICE_NAME{"org.mkiol.Stt"};
     inline static const QString DBUS_SERVICE_PATH{"/"};
     static const int SUCCESS = 0;
     static const int FAILURE = -1;
 
     models_manager manager;
-    std::map<QString,model_data_type> available_models_map;
 
     QVariantList all_models() const;
+    QVariantList all_experimental_models() const;
     QVariantList available_models() const;
     void handle_models_changed();
     inline bool busy() const { return manager.busy(); }
-    QString default_model() const;
-    QString test_default_model(const QString &lang) const;
-    void set_default_model(const QString &model_id) const;
     void reload();
 };
 

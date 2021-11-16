@@ -37,15 +37,37 @@ QVariantList stt_config::all_models() const
 {
     QVariantList list;
 
-    auto langs = manager.langs();
-    std::transform(langs.cbegin(), langs.cend(), std::back_inserter(list), [](const auto& model) {
-        return QVariantList{
+    const auto langs = manager.langs();
+
+    std::for_each(langs.cbegin(), langs.cend(), [&](const auto& model) {
+        if (model.experimental) return;
+        list.push_back(QVariantList{
             model.id,
             model.lang_id,
             QString{"%1 / %2"}.arg(model.name, model.lang_id),
             model.available,
             model.downloading,
-            model.download_progress};
+            model.download_progress});
+    });
+
+    return list;
+}
+
+QVariantList stt_config::all_experimental_models() const
+{
+    QVariantList list;
+
+    const auto langs = manager.langs();
+
+    std::for_each(langs.cbegin(), langs.cend(), [&](const auto& model) {
+        if (!model.experimental) return;
+        list.push_back(QVariantList{
+            model.id,
+            model.lang_id,
+            QString{"%1 / %2"}.arg(model.name, model.lang_id),
+            model.available,
+            model.downloading,
+            model.download_progress});
     });
 
     return list;
@@ -72,37 +94,6 @@ void stt_config::download_model(const QString& id)
 void stt_config::delete_model(const QString& id)
 {
     manager.delete_model(id);
-}
-
-QString stt_config::default_model() const
-{
-    return test_default_model(settings::instance()->default_model());
-}
-
-QString stt_config::test_default_model(const QString &lang) const
-{
-    if (available_models_map.empty()) return {};
-
-    const auto it = available_models_map.find(lang);
-
-    if (it == available_models_map.cend()) {
-        const auto it = std::find_if(available_models_map.cbegin(), available_models_map.cend(),
-                                     [&lang](const auto& p){ return p.second.lang_id == lang; });
-        if (it != available_models_map.cend()) return it->first;
-    } else {
-        return it->first;
-    }
-
-    return available_models_map.begin()->first;
-}
-
-void stt_config::set_default_model(const QString &model_id) const
-{
-    if (test_default_model(model_id) == model_id) {
-        settings::instance()->set_default_model(model_id);
-    } else {
-        qWarning() << "invalid default model";
-    }
 }
 
 void stt_config::reload()

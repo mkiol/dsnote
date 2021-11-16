@@ -171,6 +171,8 @@ void dsnote_app::connect_dbus_signals()
             qWarning() << "switching to manual mode due to error";
             settings::instance()->set_speech_mode(settings::speech_mode_type::SpeechManual);
         }
+        this->intermediate_text_value.clear();
+        emit intermediate_text_changed();
         emit error(error_code);
     });
     connect(&stt, &OrgMkiolSttInterface::IntermediateTextDecoded, this, &dsnote_app::set_intermediate_text);

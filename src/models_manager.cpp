@@ -79,10 +79,17 @@ std::vector<models_manager::lang_t> models_manager::langs() const
             pair.second.name,
             pair.second.scorer_file_name.isEmpty() ? "" : dir.filePath(pair.second.scorer_file_name),
             pair.second.scorer_file_name.isEmpty() ? "" : dir.filePath(pair.second.scorer_file_name),
+            pair.second.experimental,
             pair.second.available,
             pair.second.downloading,
             pair.second.download_progress
         };
+    });
+
+    std::sort(list.begin(), list.end(), [](const lang_t &a, const lang_t &b) {
+        if (a.experimental && !b.experimental) return false;
+        if (!a.experimental && b.experimental) return true;
+        return QString::compare(a.id, b.id, Qt::CaseInsensitive) < 0;
     });
 
     return list;
@@ -102,6 +109,7 @@ std::vector<models_manager::lang_t> models_manager::available_models() const
                             model.name,
                             model_file,
                             model.scorer_file_name.isEmpty() ? "" : dir.filePath(model.scorer_file_name),
+                            model.experimental,
                             model.available,
                             model.downloading,
                             model.download_progress});
@@ -814,6 +822,7 @@ auto models_manager::check_models_file(const QJsonArray &models_jarray)
             str2comp(obj.value("scorer_comp").toString()),
             {},
             obj.value("scorer_size").toString().toLongLong(),
+            obj.value("experimental").toBool(),
             false,
             false
         };
