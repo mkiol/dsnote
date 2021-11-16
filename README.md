@@ -8,26 +8,13 @@ Sailfish OS app for note taking with speech to text
 
 ## Models
 
-DeepSpeech models for particular language can be downloaded directly from the app. Following models are currently configured for download:
+DeepSpeech models for particular language can be downloaded directly from the app.
 
-| Language                      | Source                                                                                                                                                   |
-|:------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Czech / cs                    | [comodoro/deepspeech-cs](https://github.com/comodoro/deepspeech-cs)                                                                                      |
-| English / en                  | [mozilla/DeepSpeech](https://github.com/mozilla/DeepSpeech)                                                                                              |
-| German / de                   | [Jaco-Assistant/Scribosermo](https://gitlab.com/Jaco-Assistant/Scribosermo), [rhasspy/de_deepspeech-jaco](https://github.com/rhasspy/de_deepspeech-jaco) |
-| Spanish / es                  | [Jaco-Assistant/Scribosermo](https://gitlab.com/Jaco-Assistant/Scribosermo), [rhasspy/es_deepspeech-jaco](https://github.com/rhasspy/es_deepspeech-jaco) |
-| French / fr                   | [Jaco-Assistant/Scribosermo](https://gitlab.com/Jaco-Assistant/Scribosermo), [rhasspy/fr_deepspeech-jaco](https://github.com/rhasspy/fr_deepspeech-jaco) |
-| French (Common Voice) / fr    | [common-voice/commonvoice-fr](https://github.com/common-voice/commonvoice-fr)                                                                            |
-| Italian / it                  | [Jaco-Assistant/Scribosermo](https://gitlab.com/Jaco-Assistant/Scribosermo), [rhasspy/it_deepspeech-jaco](https://github.com/rhasspy/it_deepspeech-jaco) |
-| Italian (Mozilla Italia) / it | [MozillaItalia/DeepSpeech-Italian-Model](https://github.com/MozillaItalia/DeepSpeech-Italian-Model)                                                      |
-| Polish / pl                   | [Jaco-Assistant/Scribosermo](https://gitlab.com/Jaco-Assistant/Scribosermo), [rhasspy/pl_deepspeech-jaco](https://github.com/rhasspy/pl_deepspeech-jaco) |
-| Russian / ru                  | [Coqui](https://coqui.ai/russian/jemeyer/v0.1.0)                                                                                                         |
-| Ukrainian / uk                | [robinhad/voice-recognition-ua](https://github.com/robinhad/voice-recognition-ua)                                                                        |
-| Chinese / zh-CN               | [mozilla/DeepSpeech](https://github.com/mozilla/DeepSpeech)                                                                                              |
+Details of models which are currently configured for download are described in JSON file: [models.json](https://github.com/mkiol/dsnote/blob/main/config/models.json).
 
 The quality of speech recognition strongly depends on a model. In general it is not perfect but for some languages is surprisingly fine.
 
-Default models configuration is stored in JSON format in [models.json](https://github.com/mkiol/dsnote/blob/main/config/models.json) file. To play and test new model, add model description to `$HOME/.local/share/harbour-dsnote/harbour-dsnote/models.json` file on the device.
+To play and test new model, add model description to `$HOME/.local/share/harbour-dsnote/harbour-dsnote/models.json` file and restart the app.
 
 ## Systemd service and D-Bus API
 
