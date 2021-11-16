@@ -12,6 +12,11 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Tue Nov 16 2021 Michal Kosciesza <michal@mkiol.net> 1.5.0-1
+- Catalan model
+- Experimental models
+- Bug fixes for ARM64
+
 * Su Nov 14 2021 Michal Kosciesza <michal@mkiol.net> 1.4.0-1
 - Coqui STT lib instead of Deepspeech
 - STT service as systemd daemon

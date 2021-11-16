@@ -11,9 +11,9 @@
 namespace dsnote {
     static constexpr const char* APP_NAME = "Speech Note";
 #ifdef QT_DEBUG
-static constexpr const char* APP_VERSION = "1.4.0 (debug)";
+static constexpr const char* APP_VERSION = "1.5.0 (debug)";
 #else
-    static constexpr const char* APP_VERSION = "1.4.0";
+    static constexpr const char* APP_VERSION = "1.5.0";
 #endif
 #ifdef SAILFISH
 static constexpr const char* APP_ID = "harbour-dsnote";
@@ -24,7 +24,7 @@ static constexpr const char* APP_ID = "org.mkiol.Dsnote";
     static constexpr const char* APP_ID = "dsnote";
 #endif
 #endif // SAILFISH
-    static const int CONF_VERSION = 3;
+    static const int CONF_VERSION = 4;
     static constexpr const char* STT_VERSION = "1.0.0-0";
     static constexpr const char* TENSORFLOW_VERSION = "2.3.0-14";
     static constexpr const char* ORG = "org.mkiol";

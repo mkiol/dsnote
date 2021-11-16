@@ -29,6 +29,29 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Version %1").arg("1.5.0")
+            }
+
+            LogItem {
+                title: "Catalan language model"
+                description: "Catalan model is configured for download directly from the app."
+            }
+
+            LogItem {
+                title: "Many new experimental models"
+                description: "New section in Language menu with experimental models for various languages. " +
+                             "Most of these models provide very bad accuracy and some are redundant. They are for experiments and testing. " +
+                             "Following new experimental models are configured: " +
+                             "English (Huge Vocabulary), Dutch, Yoruba, Amharic, Basque, Turkish, Thai, " +
+                             "Slovenian, Romanian, Portuguese, Latvian, Indonesian, Greek, Hungarian."
+            }
+
+            LogItem {
+                title: "Bug fixes"
+                description: "Previous version did not work on ARM64 devices. Hopefully this problem is now resolved."
+            }
+
+            SectionHeader {
                 text: qsTr("Version %1").arg("1.4.0")
             }
 
