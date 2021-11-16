@@ -73,7 +73,8 @@ install_libs.path = $${PREFIX}/lib
 install_libs.files = $${ROOT_DIR}/libs/amd64/*.so
 
 BIN_DIR = $${PREFIX}/bin/
-install_systemd.path = $${PREFIX}/lib/systemd/user
+USER_UNIT_DIR = $${PREFIX}/lib/systemd/user
+install_systemd.path = $${USER_UNIT_DIR}
 install_systemd.files = $${OUT_PWD}/systemd/$${TARGET}.service
 install_systemd.CONFIG = no_check_exist
 install_systemd.extra += mkdir -p $${OUT_PWD}/systemd && sed s/%TARGET%/$$replace(BIN_DIR, /, \\\/)$${TARGET}/g < $${ROOT_DIR}/systemd/$${TARGET}.service > $${OUT_PWD}/systemd/$${TARGET}.service

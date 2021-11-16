@@ -5,14 +5,14 @@ Name:       harbour-dsnote
 %define __requires_exclude ^libstt.*|libtensorflowlite.*|libtflitedelegates.*|libkenlm.*$
 # << macros
 
-Summary:    Note taking with speech to text
-Version:    1.4.0
-Release:    1
-Group:      Qt/Qt
-License:    LICENSE
-URL:        https://github.com/mkiol/dsnote
-Source0:    %{name}-%{version}.tar.bz2
-Requires:   sailfishsilica-qt5 >= 0.10.9, qt5-qtmultimedia-plugin-mediaservice-gstaudiodecoder
+Summary:        Note taking with speech to text
+Version:        1.5.0
+Release:        1
+Group:          Qt/Qt
+License:        LICENSE
+URL:            https://github.com/mkiol/dsnote
+Source0:        %{name}-%{version}.tar.bz2
+Requires:       sailfishsilica-qt5 >= 0.10.9, qt5-qtmultimedia-plugin-mediaservice-gstaudiodecoder
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
@@ -54,12 +54,10 @@ desktop-file-install --delete-original       \
    %{buildroot}%{_datadir}/applications/*.desktop
 
 %post
-systemctl-user stop %{name}.service
+systemctl-user stop %{name}.service >/dev/null 2>&1 || :
 
 %preun
-systemctl-user stop %{name}.service
-# << install post
-# >> install post
+systemctl-user stop %{name}.service >/dev/null 2>&1 || :
 
 %files
 %defattr(-,root,root,-)
@@ -68,6 +66,6 @@ systemctl-user stop %{name}.service
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_datadir}/dbus-1/services/org.mkiol.Stt.service
-%{_libdir}/systemd/user/%{name}.service
+%{_userunitdir}/%{name}.service
 # >> files
 # << files

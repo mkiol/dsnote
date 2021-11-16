@@ -2,6 +2,21 @@
     "version": %VERSION%,
     "models": [
         {
+            "name": "Català",
+            "model_id": "ca",
+            "lang_id": "ca",
+            "checksum": "c7e0dc53",
+            "urls": [
+                "https://github.com/ccoreilly/deepspeech-catala/releases/download/0.14.0/output_graph.tflite"
+            ],
+            "size": "47356808",
+            "scorer_checksum": "b0c380f1",
+            "scorer_urls": [
+                "https://github.com/ccoreilly/deepspeech-catala/releases/download/0.14.0/kenlm-aina-3-p10.scorer"
+            ],
+            "scorer_size": "304365616"
+        },
+        {
             "name": "Čeština",
             "model_id": "cs",
             "lang_id": "cs",
@@ -30,6 +45,22 @@
                 "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer"
             ],
             "scorer_size": "953363776"
+        },
+        {
+            "name": "English (Huge Vocabulary)",
+            "model_id": "en_hv",
+            "lang_id": "en",
+            "experimental": true,
+            "checksum": "822d8ec3",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv1.0.0-huge-vocab/model.tflite"
+            ],
+            "size": "47332120",
+            "scorer_checksum": "19314759",
+            "scorer_urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv1.0.0-huge-vocab/huge-vocabulary.scorer"
+            ],
+            "scorer_size": "978407904"
         },
         {
             "name": "Deutsch",
@@ -111,6 +142,7 @@
             "name": "Français (Common Voice)",
             "model_id": "fr_cv",
             "lang_id": "fr",
+            "experimental": true,
             "checksum": "24aba517",
             "comp": "tarxz",
             "urls": [
@@ -145,6 +177,7 @@
             "name": "Italiano (Mozilla Italia)",
             "model_id": "it_mozz",
             "lang_id": "it",
+            "experimental": true,
             "checksum": "922bbca1",
             "comp": "tarxz",
             "urls": [
@@ -191,7 +224,7 @@
             "scorer_size": "719764672"
         },
         {
-            "name": "Українська мова",
+            "name": "Українська",
             "model_id": "uk",
             "lang_id": "uk",
             "checksum": "d7246303",
@@ -219,6 +252,159 @@
                 "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer"
             ],
             "scorer_size": "67141744"
+        },
+        {
+            "name": "Nederlands",
+            "model_id": "nl",
+            "lang_id": "nl",
+            "experimental": true,
+            "checksum": "c02bf69d",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/dutch%2Facabunoc%2Fv0.0.1/model.tflite"
+            ],
+            "size": "225512",
+            "scorer_checksum": "e0330cd0",
+            "scorer_urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/dutch%2Facabunoc%2Fv0.0.1/nl-acabunoc-1-prune-kenlm.scorer"
+            ],
+            "scorer_size": "323345856"
+        },
+        {
+            "name": "Yorùbá",
+            "model_id": "yo",
+            "lang_id": "yo",
+            "experimental": true,
+            "checksum": "2eda09ad",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/yoruba%2Fitml%2Fv0.1.0/model.tflite"
+            ],
+            "size": "47332120"
+        },
+        {
+            "name": "አማርኛ",
+            "model_id": "am",
+            "lang_id": "am",
+            "experimental": true,
+            "checksum": "8e3392d5",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/amharic%2Fitml%2Fv0.1.0/model.tflite"
+            ],
+            "size": "47867504"
+        },
+        {
+            "name": "Euskara",
+            "model_id": "eu",
+            "lang_id": "eu",
+            "experimental": true,
+            "checksum": "fb948406",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/basque%2Fitml%2Fv0.1.1/model.tflite"
+            ],
+            "size": "47332112"
+        },
+        {
+            "name": "Türkçe",
+            "model_id": "tr",
+            "lang_id": "tr",
+            "experimental": true,
+            "checksum": "6ad171a",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/turkish%2Fitml%2Fv0.1.0/model.tflite"
+            ],
+            "size": "47344464"
+        },
+        {
+            "name": "ไทย",
+            "model_id": "th",
+            "lang_id": "th",
+            "experimental": true,
+            "checksum": "fc7a544f",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/thai%2Fitml%2Fv0.1.0/model.tflite"
+            ],
+            "size": "47414528"
+        },
+        {
+            "name": "Slovenščina",
+            "model_id": "sl",
+            "lang_id": "sl",
+            "experimental": true,
+            "checksum": "6d6717e2",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/slovenian%2Fitml%2Fv0.1.1/model.tflite"
+            ],
+            "size": "47334176"
+        },
+        {
+            "name": "Română",
+            "model_id": "ro",
+            "lang_id": "ro",
+            "experimental": true,
+            "checksum": "ba5f9c81",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/romanian%2Fitml%2Fv0.1.1/model.tflite"
+            ],
+            "size": "47340344"
+        },
+        {
+            "name": "Português",
+            "model_id": "pt",
+            "lang_id": "pt",
+            "experimental": true,
+            "checksum": "b8618205",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/portuguese%2Fitml%2Fv0.1.1/model.tflite"
+            ],
+            "size": "47360928",
+            "scorer_checksum": "47a7be4",
+            "scorer_urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/portuguese%2Fitml%2Fv0.1.1/pt-itml-0-prune-kenlm.scorer"
+            ],
+            "scorer_size": "242241040"
+        },
+        {
+            "name": "Latviešu",
+            "model_id": "lv",
+            "lang_id": "lv",
+            "experimental": true,
+            "checksum": "1a9ee430",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/latvian%2Fitml%2Fv0.1.1/model.tflite"
+            ],
+            "size": "47346520"
+        },
+        {
+            "name": "Bahasa Indonesia",
+            "model_id": "id",
+            "lang_id": "id",
+            "experimental": true,
+            "checksum": "25f71127",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/indonesian%2Fitml%2Fv0.1.1/model.tflite"
+            ],
+            "size": "47328000"
+        },
+        {
+            "name": "Ελληνικά",
+            "model_id": "el",
+            "lang_id": "el",
+            "experimental": true,
+            "checksum": "b9ff4d3d",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/greek%2Fitml%2Fv0.1.1/model.tflite"
+            ],
+            "size": "47348608"
+        },
+        {
+            "name": "Magyar",
+            "model_id": "hu",
+            "lang_id": "hu",
+            "experimental": true,
+            "checksum": "202f48bc",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/hungarian%2Fitml%2Fv0.1.0/model.tflite"
+            ],
+            "size": "47348584"
         }
     ]
 }
