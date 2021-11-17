@@ -726,13 +726,18 @@ void models_manager::init_config()
         qWarning() << "default models file does not exist";
         return;
     }
+
     if (!default_models_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning() << "cannot open default models file";
         return;
     }
 
     const QString data_dir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)};
-    QFile models{QDir{data_dir}.filePath(models_file)};
+    QDir dir{data_dir};
+    if (!dir.exists()) if (!dir.mkpath(data_dir)) qWarning() << "unable to create data dir";
+
+    QFile models{dir.filePath(models_file)};
+
     if (models.exists()) backup_config(QFileInfo{models}.absoluteFilePath());
 
     if (!models.open(QIODevice::WriteOnly | QIODevice::Text)) {
