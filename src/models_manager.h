@@ -64,11 +64,13 @@ private:
         QString name;
         QString file_name;
         QString checksum;
+        QString checksum_quick;
         comp_type comp = comp_type::none;
         std::vector<QUrl> urls;
         qint64 size = 0;
         QString scorer_file_name;
         QString scorer_checksum;
+        QString scorer_checksum_quick;
         comp_type scorer_comp = comp_type::none;
         std::vector<QUrl> scorer_urls;
         qint64 scorer_size = 0;
@@ -97,6 +99,7 @@ private:
     void handle_download_ready_read();
     void handle_ssl_errors(const QList<QSslError> &errors);
     static QString make_checksum(const QString& file);
+    static QString make_quick_checksum(const QString& file);
     static QString model_path(const QString& file_name);
     static void init_config();
     static void backup_config(const QString& lang_models_file);

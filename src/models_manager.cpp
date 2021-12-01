@@ -43,7 +43,7 @@
 #include "info.h"
 
 models_manager::models_manager(QObject *parent)
-    : QObject(parent)
+    : QObject{parent}
 {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 9, 0)
     nam.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
@@ -647,6 +647,39 @@ void models_manager::handle_download_finished()
     emit models_changed();
 }
 
+QString models_manager::make_quick_checksum(const QString &file)
+{
+    if (std::ifstream input{file.toStdString(), std::ios::in | std::ifstream::binary | std::ios::ate}) {
+        const auto chunk = static_cast<std::ifstream::pos_type>(std::numeric_limits<unsigned short>::max());
+        const auto end_pos = input.tellg();
+        if (end_pos < 2 * chunk) {
+            qWarning() << "file size too short for quick checksum";
+            return {};
+        }
+
+        auto checksum = crc32(0L, Z_NULL, 0);
+        char buff[std::numeric_limits<unsigned short>::max()];
+
+        input.seekg(end_pos - chunk);
+        input.read(buff, sizeof buff);
+        checksum = crc32(checksum, reinterpret_cast<unsigned char*>(buff),
+                                   static_cast<unsigned int>(input.gcount()));
+        input.seekg(0);
+        input.read(buff, sizeof buff);
+        checksum = crc32(checksum, reinterpret_cast<unsigned char*>(buff),
+                                   static_cast<unsigned int>(input.gcount()));
+
+        std::stringstream ss; ss << std::hex << checksum;
+        const auto hex = QString::fromStdString(ss.str());
+        qDebug() << "crc quick checksum:" << hex << file;
+        return hex;
+    } else {
+        qWarning() << "cannot open file:" << file;
+    }
+
+    return {};
+}
+
 QString models_manager::make_checksum(const QString &file)
 {
     if (std::ifstream input{file.toStdString(), std::ios::in | std::ifstream::binary}) {
@@ -784,7 +817,7 @@ auto models_manager::check_models_file(const QJsonArray &models_jarray)
 
     for (const auto& ele : models_jarray) {
         auto obj = ele.toObject();
-        auto model_id = obj.value("model_id").toString();
+        const auto model_id = obj.value("model_id").toString();
 
         if (model_id.isEmpty()) {
             qWarning() << "empty model id in lang models file";
@@ -796,13 +829,13 @@ auto models_manager::check_models_file(const QJsonArray &models_jarray)
             continue;
         }
 
-        auto lang_id = obj.value("lang_id").toString();
+        const auto lang_id = obj.value("lang_id").toString();
         if (lang_id.isEmpty()) {
             qWarning() << "empty lang id in lang models file";
             continue;
         }
 
-        auto checksum = obj.value("checksum").toString();
+        const auto checksum = obj.value("checksum").toString();
         if (checksum.isEmpty()) {
             qWarning() << "checksum cannot be empty:" << model_id;
             continue;
@@ -815,15 +848,17 @@ auto models_manager::check_models_file(const QJsonArray &models_jarray)
         if (scorer_file_name.isEmpty()) scorer_file_name = scorer_file_name_from_id(model_id);
 
         model_t model {
-            lang_id,
+            std::move(lang_id),
             obj.value("name").toString(),
-            file_name,
-            checksum,
+            std::move(file_name),
+            std::move(checksum),
+            obj.value("checksum_quick").toString(),
             str2comp(obj.value("comp").toString()),
             {},
             obj.value("size").toString().toLongLong(),
-            scorer_file_name,
+            std::move(scorer_file_name),
             obj.value("scorer_checksum").toString(),
+            obj.value("scorer_checksum_quick").toString(),
             str2comp(obj.value("scorer_comp").toString()),
             {},
             obj.value("scorer_size").toString().toLongLong(),
@@ -832,7 +867,7 @@ auto models_manager::check_models_file(const QJsonArray &models_jarray)
             false
         };
 
-        auto urls = obj.value("urls").toArray();
+        const auto urls = obj.value("urls").toArray();
         if (urls.isEmpty()) {
             qWarning() << "urls should be non empty array";
             continue;
@@ -842,9 +877,25 @@ auto models_manager::check_models_file(const QJsonArray &models_jarray)
         auto scorer_urls = obj.value("scorer_urls").toArray();
         for (auto url : scorer_urls) model.scorer_urls.emplace_back(url.toString());
 
-        model.available = dir.exists(file_name) && checksum == make_checksum(dir.filePath(file_name)) &&
-                ((dir.exists(scorer_file_name) && model.scorer_checksum == make_checksum(dir.filePath(scorer_file_name))) ||
-                 model.scorer_urls.empty());
+        const auto checksum_ok = [&dir](const QString &checksum, const QString &checksum_quick, const QString &file_name) {
+            if (checksum_quick.isEmpty()) {
+                return checksum == make_checksum(dir.filePath(file_name));
+            } else {
+                return checksum_quick == make_quick_checksum(dir.filePath(file_name));
+            }
+        };
+
+        if (dir.exists(model.file_name)) {
+            if (checksum_ok(model.checksum, model.checksum_quick, model.file_name)) {
+                if (model.scorer_urls.empty()) {
+                    model.available = true;
+                } else if (dir.exists(model.scorer_file_name)) {
+                    if (checksum_ok(model.scorer_checksum, model.scorer_checksum_quick, model.scorer_file_name)) {
+                        model.available = true;
+                    }
+                }
+            }
+        }
 
         models.insert({model_id, std::move(model)});
     }

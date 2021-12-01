@@ -6,11 +6,13 @@
             "model_id": "ca",
             "lang_id": "ca",
             "checksum": "c7e0dc53",
+            "checksum_quick": "29744fa9",
             "urls": [
                 "https://github.com/ccoreilly/deepspeech-catala/releases/download/0.14.0/output_graph.tflite"
             ],
             "size": "47356808",
             "scorer_checksum": "b0c380f1",
+            "scorer_checksum_quick": "9c457b5f",
             "scorer_urls": [
                 "https://github.com/ccoreilly/deepspeech-catala/releases/download/0.14.0/kenlm-aina-3-p10.scorer"
             ],
@@ -21,11 +23,13 @@
             "model_id": "cs",
             "lang_id": "cs",
             "checksum": "45c77814",
+            "checksum_quick": "651b42a5",
             "urls": [
                 "https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.tflite"
             ],
             "size": "47360928",
             "scorer_checksum": "a58d1800",
+            "scorer_checksum_quick": "8a5d866b",
             "scorer_urls": [
                 "https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/o4-500k-wnc-2011.scorer"
             ],
@@ -36,11 +40,13 @@
             "model_id": "en",
             "lang_id": "en",
             "checksum": "6d38ae6e",
+            "checksum_quick": "6f7d6d9b",
             "urls": [
                 "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.tflite"
             ],
             "size": "47331784",
             "scorer_checksum": "969d9b57",
+            "scorer_checksum_quick": "7b82eb9e",
             "scorer_urls": [
                 "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer"
             ],
@@ -52,11 +58,13 @@
             "lang_id": "en",
             "experimental": true,
             "checksum": "822d8ec3",
+            "checksum_quick": "fc0dd76f",
             "urls": [
                 "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv1.0.0-huge-vocab/model.tflite"
             ],
             "size": "47332120",
             "scorer_checksum": "19314759",
+            "scorer_checksum_quick": "80ebcb2e",
             "scorer_urls": [
                 "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv1.0.0-huge-vocab/huge-vocabulary.scorer"
             ],
@@ -67,12 +75,14 @@
             "model_id": "de",
             "lang_id": "de",
             "checksum": "a5943fb8",
+            "checksum_quick": "c2519e7d",
             "comp": "gz",
             "urls": [
                 "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/output_graph.tflite.gz"
             ],
             "size": "20296313",
             "scorer_checksum": "66f887a9",
+            "scorer_checksum_quick": "e748fbe7",
             "scorer_comp": "gz",
             "scorer_urls": [
                 "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00",
@@ -92,12 +102,14 @@
             "model_id": "es",
             "lang_id": "es",
             "checksum": "8b01dece",
+            "checksum_quick": "9477f00e",
             "comp": "gz",
             "urls": [
                 "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/output_graph.tflite.gz"
             ],
             "size": "20430228",
             "scorer_checksum": "4497fc72",
+            "scorer_checksum_quick": "1b68ba87",
             "scorer_comp": "gz",
             "scorer_urls": [
                 "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00",
@@ -118,12 +130,14 @@
             "model_id": "fr",
             "lang_id": "fr",
             "checksum": "59a6bd0a",
+            "checksum_quick": "fac0a70c",
             "comp": "gz",
             "urls": [
                 "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/output_graph.tflite.gz"
             ],
             "size": "20519594",
             "scorer_checksum": "68afdb05",
+            "scorer_checksum_quick": "df731e4d",
             "scorer_comp": "gz",
             "scorer_urls": [
                 "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00",
@@ -144,12 +158,14 @@
             "lang_id": "fr",
             "experimental": true,
             "checksum": "24aba517",
+            "checksum_quick": "7385ddab",
             "comp": "tarxz",
             "urls": [
                 "https://github.com/common-voice/commonvoice-fr/releases/download/fr-v0.6/model_tflite_fr.tar.xz?file=output_graph.tflite"
             ],
             "size": "615568844",
             "scorer_checksum": "f15bf736",
+            "scorer_checksum_quick": "1a4c5835",
             "scorer_comp": "tarxz",
             "scorer_urls": [
                 "https://github.com/common-voice/commonvoice-fr/releases/download/fr-v0.6/model_tflite_fr.tar.xz?file=kenlm.scorer"
@@ -161,12 +177,14 @@
             "model_id": "it",
             "lang_id": "it",
             "checksum": "6811059d",
+            "checksum_quick": "acc87664",
             "comp": "gz",
             "urls": [
                 "https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/output_graph.tflite.gz"
             ],
             "size": "20542809",
             "scorer_checksum": "6ef01083",
+            "scorer_checksum_quick": "ee330186",
             "scorer_comp": "gz",
             "scorer_urls": [
                 "https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/base.scorer.gz"
@@ -179,12 +197,14 @@
             "lang_id": "it",
             "experimental": true,
             "checksum": "922bbca1",
+            "checksum_quick": "a4c9e57b",
             "comp": "tarxz",
             "urls": [
                 "https://github.com/MozillaItalia/DeepSpeech-Italian-Model/releases/download/2020.08.07/model_tflite_it.tar.xz?file=output_graph.tflite"
             ],
             "size": "172342504",
             "scorer_checksum": "1c806059",
+            "scorer_checksum_quick": "fa3bc3d9",
             "scorer_comp": "tarxz",
             "scorer_urls": [
                 "https://github.com/MozillaItalia/DeepSpeech-Italian-Model/releases/download/2020.08.07/model_tflite_it.tar.xz?file=scorer"
@@ -196,12 +216,14 @@
             "model_id": "pl",
             "lang_id": "pl",
             "checksum": "2ed9292d",
+            "checksum_quick": "c811f2cd",
             "comp": "gz",
             "urls": [
                 "https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/output_graph.tflite.gz"
             ],
             "size": "20752162",
             "scorer_checksum": "4dc90a2d",
+            "scorer_checksum_quick": "d280e705",
             "scorer_comp": "gz",
             "scorer_urls": [
                 "https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/base.scorer.gz"
@@ -213,11 +235,13 @@
             "model_id": "ru",
             "lang_id": "ru",
             "checksum": "3bd98e76",
+            "checksum_quick": "8bcdd013",
             "urls": [
                 "https://github.com/coqui-ai/STT-models/releases/download/russian/jemeyer/v0.1.0/model.tflite"
             ],
             "size": "47344496",
             "scorer_checksum": "e5e298a0",
+            "scorer_checksum_quick": "57e0556a",
             "scorer_urls": [
                 "https://github.com/coqui-ai/STT-models/releases/download/russian/jemeyer/v0.1.0/wiki-ru-6gram.scorer"
             ],
@@ -228,11 +252,13 @@
             "model_id": "uk",
             "lang_id": "uk",
             "checksum": "d7246303",
+            "checksum_quick": "2f979011",
             "urls": [
                 "https://github.com/robinhad/voice-recognition-ua/releases/download/v0.4/uk.tflite"
             ],
             "size": "47346544",
             "scorer_checksum": "33ad40f3",
+            "scorer_checksum_quick": "ae5979f5",
             "scorer_urls": [
                 "https://github.com/robinhad/voice-recognition-ua/releases/download/v0.4/kenlm.scorer"
             ],
@@ -243,11 +269,13 @@
             "model_id": "zh-CN",
             "lang_id": "zh-CN",
             "checksum": "73eef4d8",
+            "checksum_quick": "8aec1b54",
             "urls": [
                 "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.tflite"
             ],
             "size": "47798728",
             "scorer_checksum": "f101bc46",
+            "scorer_checksum_quick": "951c137e",
             "scorer_urls": [
                 "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer"
             ],
