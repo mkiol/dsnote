@@ -255,9 +255,6 @@ void models_manager::download(const QString& id, download_type type, int part)
 void models_manager::handle_ssl_errors(const QList<QSslError> &errors)
 {
     qWarning() << "ssl error:" << errors;
-
-    // workaround for outdated cert db on Jolla 1
-    static_cast<QNetworkReply*>(sender())->ignoreSslErrors();
 }
 
 void models_manager::handle_download_ready_read()
