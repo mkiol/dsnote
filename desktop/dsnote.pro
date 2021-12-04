@@ -22,6 +22,11 @@ include($${SRC_DIR}/dsnote.pri)
 
 RESOURCES += res.qrc
 
+OTHER_FILES += \
+    $${ROOT_DIR}/dbus/*.* \
+    $${ROOT_DIR}/systemd/*.* \
+    $${ROOT_DIR}/config/*.json \
+
 TRANSLATIONS += \
     $${TRANSLATIONS_TS_DIR}/dsnote-cs_CZ.ts \
     $${TRANSLATIONS_TS_DIR}/dsnote-en.ts \

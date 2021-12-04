@@ -64,11 +64,17 @@ void ItemModel::clear()
     emit countChanged();
 }
 
+void ItemModel::beforeUpdate(const QList<ListItem*> &, const QList<ListItem*> &)
+{
+}
+
 void ItemModel::workerDone()
 {
     auto worker = qobject_cast<ItemWorker*>(sender());
     if (worker) {
-        int old_l = m_list.length();
+        const int old_l = m_list.length();
+
+        beforeUpdate(m_list, worker->items);
 
         if (m_list.length() != 0)
             removeRows(0,rowCount());

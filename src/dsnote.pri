@@ -53,7 +53,10 @@ SOURCES += \
     $${SRC_DIR}/settings.cpp \
     $${SRC_DIR}/dsnote_app.cpp \
     $${SRC_DIR}/dbus_stt_adaptor.cpp \
-    $${SRC_DIR}/dbus_stt_inf.cpp
+    $${SRC_DIR}/dbus_stt_inf.cpp \
+    $${SRC_DIR}/listmodel.cpp \
+    $${SRC_DIR}/itemmodel.cpp \
+    $${SRC_DIR}/lang_list_model.cpp
 
 HEADERS += \
     $${SRC_DIR}/stt_service.h \
@@ -68,19 +71,18 @@ HEADERS += \
     $${SRC_DIR}/dsnote_app.h \
     $${SRC_DIR}/coqui-stt.h \
     $${SRC_DIR}/dbus_stt_adaptor.h \
-    $${SRC_DIR}/dbus_stt_inf.h
+    $${SRC_DIR}/dbus_stt_inf.h \
+    $${SRC_DIR}/listmodel.h \
+    $${SRC_DIR}/itemmodel.h \
+    $${SRC_DIR}/lang_list_model.h
 
 sailfishapp {
     DEFINES += SAILFISH
 
     SOURCES += \
-        $${SRC_DIR}/listmodel.cpp \
-        $${SRC_DIR}/itemmodel.cpp \
         $${SRC_DIR}/dirmodel.cpp
 
     HEADERS += \
-        $${SRC_DIR}/listmodel.h \
-        $${SRC_DIR}/itemmodel.h \
         $${SRC_DIR}/dirmodel.h
 }
 

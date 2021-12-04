@@ -49,6 +49,9 @@ public:
 
 public slots:
     virtual void updateModel(const QString &data = {});
+    bool isBusy() const;
+public:
+    virtual void beforeUpdate(const QList<ListItem*> &oldItems, const QList<ListItem*> &newItems);
 
 signals:
     void busyChanged();
@@ -63,9 +66,6 @@ protected:
     virtual void postMakeItems(const QList<ListItem*> &items);
     virtual void clear();
     void setBusy(bool busy);
-
-private slots:
-    bool isBusy() const;
 
 private:
     bool m_busy = true;

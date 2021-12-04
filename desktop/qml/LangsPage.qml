@@ -14,14 +14,6 @@ Page {
 
     title: qsTr("Languages")
 
-    // service.all_models:
-    // [0] - model id
-    // [1] - lang id
-    // [2] - friendly name
-    // [3] - model availability
-    // [4] - download in progress
-    // [5] - download progress
-
     Flickable {
         anchors.fill: parent
         contentWidth: width
@@ -39,43 +31,39 @@ Page {
             columnSpacing: 10
             rowSpacing: 10
             columns: 3
-            rows: service.all_models.length
+            rows: service.lang_model.count
 
             Repeater {
-                model: service.all_models
+                model: service.lang_model
                 Label {
-                    text: modelData[2]
+                    text: model.name
                 }
             }
 
             Repeater {
-                model: service.all_models
+                model: service.lang_model
                 ProgressBar {
                     id: bar
                     Layout.fillWidth: true
-                    value: modelData[3] ? 1 : modelData[5]
+                    value: model.available ? 1 : model.progress
 
                     Connections {
                         target: service
                         function onModel_download_progress(id, progress) {
-                            if (modelData[0] === id) {
-                                bar.value = progress
-                            }
+                            if (model.id === id) bar.value = progress
                         }
                     }
                 }
             }
 
             Repeater {
-                model: service.all_models
+                model: service.lang_model
                 Button {
-                    enabled: !modelData[4]
-                    text: modelData[4] ? qsTr("Downloading...") : modelData[3] ? qsTr("Delete") : qsTr("Download")
+                    enabled: !model.downloading
+                    text: model.downloading ? qsTr("Downloading...") : model.available ? qsTr("Delete") : qsTr("Download")
                     onClicked: {
-                        if (modelData[3])
-                            service.delete_model(modelData[0])
-                        else
-                            service.download_model(modelData[0])
+                        if (model.available) service.delete_model(model.id)
+                        else service.download_model(model.id)
                     }
                 }
             }

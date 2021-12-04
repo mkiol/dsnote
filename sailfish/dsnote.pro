@@ -12,7 +12,8 @@ OTHER_FILES += \
     qml/*.qml \
     rpm/*.* \
     $${ROOT_DIR}/systemd/*.* \
-    $${ROOT_DIR}/dbus/*.*
+    $${ROOT_DIR}/dbus/*.* \
+    $${ROOT_DIR}/config/*.*
 
 RESOURCES += res.qrc
 
@@ -47,6 +48,3 @@ install_dbus.files = $${OUT_PWD}/dbus/org.mkiol.Stt.service
 install_dbus.CONFIG = no_check_exist
 install_dbus.extra += mkdir -p $${OUT_PWD}/dbus && sed s/%TARGET%/$${TARGET}/g < $${ROOT_DIR}/dbus/org.mkiol.Stt.service > $${OUT_PWD}/dbus/org.mkiol.Stt.service
 INSTALLS += install_dbus
-
-DISTFILES += \
-    qml/LangList.qml

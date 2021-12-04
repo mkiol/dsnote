@@ -13,16 +13,15 @@
 #include <QVariantList>
 
 #include "models_manager.h"
+#include "lang_list_model.h"
 
 class stt_config : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY (QVariantList all_models READ all_models NOTIFY models_changed)
-    Q_PROPERTY (QVariantList all_experimental_models READ all_experimental_models NOTIFY models_changed)
     Q_PROPERTY (QVariantList available_models READ available_models NOTIFY models_changed)
+    Q_PROPERTY (LangListModel* lang_model READ lang_model)
     Q_PROPERTY (bool busy READ busy NOTIFY busy_changed)
-
 public:
     explicit stt_config(QObject *parent = nullptr);
 
@@ -41,13 +40,13 @@ private:
     static const int SUCCESS = 0;
     static const int FAILURE = -1;
 
-    models_manager manager;
+    models_manager m_manager;
+    LangListModel m_lang_model;
 
-    QVariantList all_models() const;
-    QVariantList all_experimental_models() const;
     QVariantList available_models() const;
+    LangListModel *lang_model();
     void handle_models_changed();
-    inline bool busy() const { return manager.busy(); }
+    inline bool busy() const { return m_manager.busy(); }
     void reload();
 };
 

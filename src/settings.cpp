@@ -86,6 +86,19 @@ void settings::set_speech_mode(speech_mode_type value)
     }
 }
 
+bool settings::show_experimental() const
+{
+    return value("show_experimental", true).toBool();
+}
+
+void settings::set_show_experimental(bool value)
+{
+    if (show_experimental() != value) {
+        setValue("show_experimental", value);
+        emit show_experimental_changed();
+    }
+}
+
 QString settings::note() const
 {
     return value("note", "").toString();

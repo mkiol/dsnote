@@ -13,48 +13,51 @@ Page {
 
     allowedOrientations: Orientation.All
 
-    SilicaFlickable {
-        id: flick
+    SilicaListView {
+        id: listView
+
         anchors.fill: parent
-        contentHeight: column.height
+        currentIndex: -1
+        model: service.lang_model
 
-        Column {
-            id: column
-
-            width: root.width
-
-            PageHeader {
-                title: qsTr("Languages")
+        Connections {
+            target: service.lang_model
+            onItemChanged: {
+                listView.positionViewAtIndex(idx, ListView.Center)
             }
+        }
 
-            // service.all_models:
-            // [0] - model id
-            // [1] - lang id
-            // [2] - friendly name
-            // [3] - model availability
-            // [4] - download in progress
-            // [5] - download progress
+        Binding {
+            target: service.lang_model
+            property: "showExperimental"
+            value: _settings.show_experimental
+        }
 
-            LangList {
-                width: root.width
-                model: service.all_models
-                visible: !service.busy
-            }
+        PullDownMenu {
+            busy: app.busy || service.busy || service.lang_model.downloading
 
-            ExpandingSectionGroup {
-                ExpandingSection {
-                    expanded: false
-                    title: qsTr("Experimental")
-
-                    content.sourceComponent: Column {
-                        LangList {
-                            width: root.width
-                            model: service.all_experimental_models
-                            visible: !service.busy
-                        }
-                    }
+            MenuItem {
+                text: _settings.show_experimental ? qsTr("Hide experimental") : qsTr("Show experimental")
+                onClicked: {
+                    _settings.show_experimental = !_settings.show_experimental
                 }
             }
+        }
+
+        header: SearchPageHeader {
+            implicitWidth: root.width
+            title: qsTr("Languages")
+            model: listView.model
+            view: listView
+        }
+
+        delegate: LangItem {
+            name: model.name
+            modelId: model.id
+            available: model.available
+            experimental: model.experimental
+            downloading: model.downloading
+            progress: model.progress
         }
     }
 
@@ -65,6 +68,6 @@ Page {
     }
 
     VerticalScrollDecorator {
-        flickable: flick
+        flickable: listView
     }
 }

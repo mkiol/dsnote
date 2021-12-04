@@ -15,13 +15,14 @@
 #include "dbus_stt_inf.h"
 
 stt_config::stt_config(QObject *parent) :
-    QObject{parent}
+    QObject{parent},
+    m_lang_model{m_manager}
 {
     connect(settings::instance(), &settings::models_dir_changed, this, &stt_config::reload, Qt::QueuedConnection);
     connect(settings::instance(), &settings::default_model_changed, this, [this]{ emit default_model_changed(); });
-    connect(&manager, &models_manager::models_changed, this, &stt_config::handle_models_changed, Qt::QueuedConnection);
-    connect(&manager, &models_manager::busy_changed, this, [this]{ emit busy_changed(); });
-    connect(&manager, &models_manager::download_progress, this, [this](const QString &id, double progress) {
+    connect(&m_manager, &models_manager::models_changed, this, &stt_config::handle_models_changed, Qt::QueuedConnection);
+    connect(&m_manager, &models_manager::busy_changed, this, [this]{ emit busy_changed(); });
+    connect(&m_manager, &models_manager::download_progress, this, [this](const QString &id, double progress) {
         qDebug() << "download_progress:" << id << progress;
         emit model_download_progress(id, progress);
     });
@@ -33,49 +34,14 @@ void stt_config::handle_models_changed()
     emit models_changed();
 }
 
-QVariantList stt_config::all_models() const
+LangListModel* stt_config::lang_model()
 {
-    QVariantList list;
-
-    const auto langs = manager.langs();
-
-    std::for_each(langs.cbegin(), langs.cend(), [&](const auto& model) {
-        if (model.experimental) return;
-        list.push_back(QVariantList{
-            model.id,
-            model.lang_id,
-            QString{"%1 / %2"}.arg(model.name, model.lang_id),
-            model.available,
-            model.downloading,
-            model.download_progress});
-    });
-
-    return list;
-}
-
-QVariantList stt_config::all_experimental_models() const
-{
-    QVariantList list;
-
-    const auto langs = manager.langs();
-
-    std::for_each(langs.cbegin(), langs.cend(), [&](const auto& model) {
-        if (!model.experimental) return;
-        list.push_back(QVariantList{
-            model.id,
-            model.lang_id,
-            QString{"%1 / %2"}.arg(model.name, model.lang_id),
-            model.available,
-            model.downloading,
-            model.download_progress});
-    });
-
-    return list;
+    return &m_lang_model;
 }
 
 QVariantList stt_config::available_models() const
 {
-    const auto available_models_map = manager.available_models();
+    const auto available_models_map = m_manager.available_models();
 
     QVariantList list;
     std::transform(available_models_map.cbegin(), available_models_map.cend(), std::back_inserter(list),
@@ -88,12 +54,12 @@ QVariantList stt_config::available_models() const
 
 void stt_config::download_model(const QString& id)
 {
-    manager.download_model(id);
+    m_manager.download_model(id);
 }
 
 void stt_config::delete_model(const QString& id)
 {
-    manager.delete_model(id);
+    m_manager.delete_model(id);
 }
 
 void stt_config::reload()
