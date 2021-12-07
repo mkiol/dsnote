@@ -29,6 +29,34 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Version %1").arg("1.6.0")
+            }
+
+            LogItem {
+                title: "New listening mode: One sentence"
+                description: "Following listening modes are available: " +
+                             "One sentence (Clicking on the bottom panel starts listening, which ends when the first sentence is recognized), " +
+                             "Press and hold (Pressing and holding on the bottom panel enables listening. When you stop holding, listening will turn off), " +
+                             "Always on (Listening is always turn on). " +
+                             "The default is 'One sentence'. You can change listening mode in the Settings."
+            }
+
+            LogItem {
+                title: "Cover action"
+                description: "When 'One sentence' mode is set, cover displays action to enable/cancel listening."
+            }
+
+            LogItem {
+                title: "Improved language viewer"
+                description: "Language viewer has a search bar and hide/show experimental models option."
+            }
+
+            LogItem {
+                title: "Coqui STT lib update"
+                description: "STT library has been updated to the most recent version (1.1.0)."
+            }
+
+            SectionHeader {
                 text: qsTr("Version %1").arg("1.5.0")
             }
 

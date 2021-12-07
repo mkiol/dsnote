@@ -11,9 +11,9 @@
 namespace dsnote {
     static constexpr const char* APP_NAME = "Speech Note";
 #ifdef QT_DEBUG
-static constexpr const char* APP_VERSION = "1.5.1 (debug)";
+static constexpr const char* APP_VERSION = "1.6.0 (debug)";
 #else
-    static constexpr const char* APP_VERSION = "1.5.1";
+    static constexpr const char* APP_VERSION = "1.6.0";
 #endif
 #ifdef SAILFISH
 static constexpr const char* APP_ID = "harbour-dsnote";
@@ -32,7 +32,7 @@ static constexpr const char* APP_ID = "org.mkiol.Dsnote";
     static constexpr const char* AUTHOR_EMAIL = "michal@mkiol.net";
     static constexpr const char* COPYRIGHT_YEAR = "2021";
     static constexpr const char* SUPPORT_EMAIL = "dsnote@mkiol.net";
-    static constexpr const char* PAGE = "https://github.com/mkiol/Dsnote";
+    static constexpr const char* PAGE = "https://github.com/mkiol/dsnote";
     static constexpr const char* LICENSE = "Mozilla Public License 2.0";
     static constexpr const char* LICENSE_URL = "http://mozilla.org/MPL/2.0/";
     static constexpr const char* LICENSE_SPDX = "MPL-2.0";
