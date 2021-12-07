@@ -7,8 +7,8 @@
 
             State of the service.
             Valid states: 0 = Unknown, 1 = Not Configured, 2 = Busy,
-                          3 = Idle, 4 = Listening Manual, 4 = Listening Auto,
-                          5 = Transcribing File.
+                          3 = Idle, 4 = Listening Manual, 5 = Listening Auto,
+                          6 = Transcribing File, 7 = Listening One-sentence.
             Unrecognized states should be considered equal to Unknown.
         -->
         <property name="State" type="i" access="read" />
@@ -27,7 +27,8 @@
             Speech:
 
             An indicator of speech presence. %TRUE when speech is detected,
-            %FALSE otherwise.
+            %FALSE otherwise. When state is 4 or 7 (Listening Manual,
+            Listening One-sentence) speech indication is always present.
         -->
         <property name="Speech" type="b" access="read" />
 
@@ -215,14 +216,14 @@
         <!--
             StartListen:
             @lang: language code (ISO 639-1) or model id
-            @mode: 0 - Automatic, 1 - Manual
+            @mode: 0 - Automatic, 1 - Manual, 2 - One Sentence
             @task: returned id of task which will be included in
                    IntermediateTextDecoded and TextDecoded signals,
                    @task less than 0 idicates an error
 
             When @mode is Automatic, TextDecoded signal is emitted everytime
-            when silent is detected in the speech. When @mode is Manual,
-            exacly one TextDecoded signal is emitted (after StopListen call).
+            when silent is detected in the speech. When @mode is Manual or
+            One Sentence, exacly one TextDecoded signal is emitted.
         -->
         <method name="StartListen">
             <arg name="mode" type="i" direction="in" />

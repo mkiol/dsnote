@@ -122,7 +122,7 @@ void dsnote_app::connect_dbus_signals()
     });
     connect(&stt, &OrgMkiolSttInterface::SpeechPropertyChanged, this, [this](bool speech) {
         qDebug() << "[dbus => app] signal SpeechPropertyChanged:" << speech;
-        if (listen_task != current_task_value) {
+        if (listen_task != current_task_value && transcribe_task != current_task_value) {
             qWarning() << "ignore SpeechPropertyChanged signal";
             return;
         }
@@ -285,7 +285,7 @@ void dsnote_app::transcribe_file(const QUrl& source_file)
 
 void dsnote_app::listen()
 {
-    qDebug() << "[app => dbus] call StartListen";
+    qDebug() << "[app => dbus] call StartListen:" << static_cast<int>(settings::instance()->speech_mode());
     listen_task.set(stt.StartListen(static_cast<int>(settings::instance()->speech_mode()), {}));
 }
 

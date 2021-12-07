@@ -24,7 +24,7 @@
 class deepspeech_wrapper
 {
 public:
-    enum class speech_mode_type { automatic = 0, manual = 1 };
+    enum class speech_mode_type { automatic = 0, manual = 1, single_sentence = 2 };
     struct callbacks_type {
         std::function<void(const std::string& text)> text_decoded;
         std::function<void(const std::string& text)> intermediate_text_decoded;
@@ -57,6 +57,7 @@ private:
     typedef std::shared_ptr<ModelState> model_ptr;
 
     enum class lock_type { free, processed, borrowed };
+    enum class flush_type { regular, exit, restart };
 
     struct buff_struct_type {
         buff_type buff;
@@ -79,6 +80,7 @@ private:
     StreamingState* stream = nullptr;
     bool speech_detected_value = false;
     bool speech_started_value = false;
+    bool speech_stop_value = false;
     bool last_frame_done = false;
     speech_mode_type speech_mode_value;
     bool restart_requested = false;
@@ -88,7 +90,7 @@ private:
     void create_stream();
     void free_stream();
     int sample_rate() const;
-    void flush(bool clear_buff = false);
+    void flush(flush_type type = flush_type::regular);
     void start_processing();
     bool process_buff();
     void process_buff(buff_type::const_iterator begin,

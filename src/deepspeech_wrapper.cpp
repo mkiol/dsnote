@@ -56,12 +56,12 @@ void deepspeech_wrapper::start_processing()
         if (thread_exit_requested) break;
         if (restart_requested) {
             restart_requested = false;
-            flush(true);
+            flush(flush_type::restart);
         }
         if (!process_buff()) processing_cv.wait(lock);
     }
 
-    flush();
+    flush(flush_type::exit);
 
     qDebug() << "processing thread ended";
 }
@@ -146,14 +146,15 @@ void deepspeech_wrapper::free_buff()
 
 std::pair<char*, int64_t> deepspeech_wrapper::borrow_buff()
 {
-    //qDebug() << "borrow_buff";
     std::pair<char*, int64_t> c_buf{nullptr, 0};
 
-    if (!lock_buff(lock_type::borrowed))
+    if (!lock_buff(lock_type::borrowed)) {
+        //qWarning() << "cannot return, buff is not free";
         return c_buf;
+    }
 
     if (buff_struct.full()) {
-        //qWarning() << "cannot borrow, buff is full";
+        qWarning() << "cannot borrow, buff is full";
         free_buff();
         return c_buf;
     }
@@ -166,7 +167,6 @@ std::pair<char*, int64_t> deepspeech_wrapper::borrow_buff()
 
 void deepspeech_wrapper::return_buff(char* c_buff, int64_t size)
 {
-    //qDebug() << "return_buff";
     if (buff_struct.lock != lock_type::borrowed) {
         //qWarning() << "cannot return, buff not borrowed";
         return;
@@ -181,8 +181,10 @@ void deepspeech_wrapper::return_buff(char* c_buff, int64_t size)
 
 bool deepspeech_wrapper::lock_buff_for_processing()
 {
-    if (!lock_buff(lock_type::processed))
+    if (!lock_buff(lock_type::processed)) {
+        qWarning() << "cannot lock for processing, buff not free";
         return false;
+    }
 
     if (buff_struct.size < frame_size) {
         free_buff();
@@ -194,8 +196,13 @@ bool deepspeech_wrapper::lock_buff_for_processing()
 
 bool deepspeech_wrapper::process_buff()
 {
-    if (!lock_buff_for_processing())
+    if (!lock_buff_for_processing()) return false;
+
+    if (speech_stop_value) {
+        buff_struct.size = 0;
+        free_buff();
         return false;
+    }
 
     if (speech_mode_value == speech_mode_type::manual) {
         if (last_frame_done) {
@@ -226,40 +233,37 @@ bool deepspeech_wrapper::process_buff()
 
     free_buff();
 
-    if (speech_mode_value == speech_mode_type::manual)
-        return !last_frame_done;
+    if (speech_mode_value == speech_mode_type::manual) return !last_frame_done;
     return true;
 }
 
 void deepspeech_wrapper::process_buff(buff_type::const_iterator begin,
                                       buff_type::const_iterator end)
 {
-    if (!stream)
-        create_stream();
+    if (!stream) create_stream();
 
     STT_FeedAudioContent(stream, &(*begin), std::distance(begin, end));
 
     auto result = STT_IntermediateDecode(stream);
 
-    if (speech_mode_value == speech_mode_type::automatic &&
-            intermediate_text && intermediate_text == result)
+    if ((speech_mode_value == speech_mode_type::automatic ||
+         speech_mode_value == speech_mode_type::single_sentence) &&
+            intermediate_text && intermediate_text == result) {
         frames_without_change++;
+    }
 
     if (frames_without_change < silent_level) {
         //qDebug("result: %d %s %s", frames_without_change, intermediate_text ? intermediate_text->c_str() : "null", result);
-        if (speech_mode_value == speech_mode_type::automatic) {
-            if (intermediate_text || std::strlen(result) != 0)
-                set_intermediate_text(result);
-            if (intermediate_text && !intermediate_text->empty())
-                set_speech_detected(true);
+        if (speech_mode_value == speech_mode_type::automatic ||
+                speech_mode_value == speech_mode_type::single_sentence) {
+            if (intermediate_text || std::strlen(result) != 0) set_intermediate_text(result);
+            if (intermediate_text && !intermediate_text->empty()) set_speech_detected(true);
         } else {
             set_intermediate_text(result);
         }
     } else {
         //qDebug("flush: %d %s %s", frames_without_change, intermediate_text ? intermediate_text->c_str() : "null", result);
         flush();
-        if (speech_mode_value == speech_mode_type::automatic)
-            set_speech_detected(false);
     }
 
     STT_FreeString(result);
@@ -269,8 +273,9 @@ void deepspeech_wrapper::set_intermediate_text(const char* text)
 {
     if (intermediate_text != text) {
         intermediate_text = text;
-        if (intermediate_text->size() >= min_text_size)
+        if (intermediate_text->empty() || intermediate_text->size() >= min_text_size) {
             call_backs.intermediate_text_decoded(intermediate_text.value());
+        }
     }
 }
 
@@ -280,23 +285,32 @@ void deepspeech_wrapper::trim_buff(buff_type::const_iterator begin)
     std::copy(begin, begin + buff_struct.size, buff_struct.buff.begin());
 }
 
-void deepspeech_wrapper::flush(bool clear_buff)
+void deepspeech_wrapper::flush(flush_type type)
 {
     free_stream();
 
     frames_without_change = 0;
 
-    if (speech_mode_value == speech_mode_type::automatic)
+    if (speech_mode_value == speech_mode_type::automatic) {
         set_speech_detected(false);
+    }
 
-    if (clear_buff) {
-        if (lock_buff_for_processing())
+    if (type == flush_type::restart) {
+        if (lock_buff_for_processing()) {
             buff_struct.size = 0;
+            free_buff();
+        }
     }
 
     if (intermediate_text && !intermediate_text->empty()) {
-        if (intermediate_text->size() >= min_text_size)
+        if ((type == flush_type::regular || speech_mode_value != speech_mode_type::single_sentence)
+            && intermediate_text->size() >= min_text_size) {
             call_backs.text_decoded(intermediate_text.value());
+            if (speech_mode_value == speech_mode_type::single_sentence) {
+                set_speech_started(false);
+                speech_stop_value = true;
+            }
+        }
         set_intermediate_text("");
     }
 
@@ -306,6 +320,7 @@ void deepspeech_wrapper::flush(bool clear_buff)
 void deepspeech_wrapper::set_speech_mode(speech_mode_type mode)
 {
     if (speech_mode_value != mode) {
+        speech_stop_value = false;
         speech_mode_value = mode;
         set_speech_started(false);
     }
@@ -313,15 +328,18 @@ void deepspeech_wrapper::set_speech_mode(speech_mode_type mode)
 
 void deepspeech_wrapper::set_speech_started(bool value)
 {
+    if (value) speech_stop_value = false;
     if (speech_started_value != value) {
         speech_started_value = value;
-        if (speech_mode_value == speech_mode_type::manual) {
+        if (speech_mode_value == speech_mode_type::manual ||
+                speech_mode_value == speech_mode_type::single_sentence) {
             set_speech_detected(value);
         }
     }
 }
 
 void deepspeech_wrapper::set_speech_detected(bool detected) {
+    qDebug() << "set_speech_detected:" << speech_detected_value << detected;
     if (speech_detected_value != detected) {
         last_frame_done = false;
         speech_detected_value = detected;

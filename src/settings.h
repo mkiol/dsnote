@@ -29,7 +29,7 @@ class settings : public QSettings
     Q_PROPERTY (QString default_model READ default_model WRITE set_default_model NOTIFY default_model_changed)
 
 public:
-    enum class speech_mode_type { SpeechAutomatic = 0, SpeechManual = 1 };
+    enum class speech_mode_type { SpeechAutomatic = 0, SpeechManual = 1, SpeechSingleSentence = 2 };
     Q_ENUM(speech_mode_type)
 
     static settings* instance();

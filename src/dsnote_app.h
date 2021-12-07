@@ -40,7 +40,8 @@ public:
         SttIdle = 3,
         SttListeningManual = 4,
         SttListeningAuto = 5,
-        SttTranscribingFile = 6
+        SttTranscribingFile = 6,
+        SttListeningSingleSentence = 7
     };
     Q_ENUM(stt_state_type)
 

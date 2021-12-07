@@ -112,15 +112,22 @@ Page {
         off: !app.configured || !app.connected
         busy: app.busy || service.busy || !app.connected || app.state === DsnoteApp.SttTranscribingFile
         text: app.intermediate_text
-        textPlaceholder: qsTr("Press and say something...")
+        textPlaceholder: app.state === DsnoteApp.SttListeningSingleSentence ? qsTr("Say something...") :
+                         _settings.speech_mode === Settings.SpeechSingleSentence ?
+                             qsTr("Click and say something...") : qsTr("Press and say something...")
         textPlaceholderActive: app.connected ?
                                    app.configured ?
                                        busy ? app.state === DsnoteApp.SttTranscribingFile ? qsTr("Transcribing audio file...") : qsTr("Busy...") :
                                        qsTr("Say something...") : qsTr("Language is not configured") :
                                    qsTr("Starting...")
         progress: app.transcribe_progress
-        onPressed: app.listen()
-        onReleased: app.stop_listen()
+        onPressed: {
+            if (app.state === DsnoteApp.SttListeningSingleSentence) app.stop_listen()
+            else app.listen()
+        }
+        onReleased: {
+            if (_settings.speech_mode !== Settings.SpeechSingleSentence) app.stop_listen()
+        }
     }
 
     Component {

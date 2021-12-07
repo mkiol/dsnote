@@ -81,16 +81,29 @@ Page {
             Spacer {}
 
             ComboBox {
-                label: qsTr("Speech detection mode")
-                currentIndex: _settings.speech_mode == Settings.SpeechAutomatic ? 0 : 1
-                menu: ContextMenu {
-                    MenuItem { text: qsTr("Automatic") }
-                    MenuItem { text: qsTr("Manual") }
+                label: qsTr("Listening mode")
+                currentIndex: {
+                    if (_settings.speech_mode === Settings.SpeechSingleSentence) return 0
+                    if (_settings.speech_mode === Settings.SpeechAutomatic) return 2
+                    return 1
                 }
-                onCurrentIndexChanged: _settings.speech_mode = currentIndex === 0 ?
-                                           Settings.SpeechAutomatic : Settings.SpeechManual
-                description: qsTr("Speech is automatically recognized and converted to text (Automatic) " +
-                                  "or press and hold on bottom panel triggers speech recognition (Manual).");
+                menu: ContextMenu {
+                    MenuItem { text: qsTr("One sentence") }
+                    MenuItem { text: qsTr("Press and hold") }
+                    MenuItem { text: qsTr("Always on") }
+                }
+                onCurrentIndexChanged: {
+                    if (currentIndex === 0) {
+                        _settings.speech_mode = Settings.SpeechSingleSentence
+                    } else if (currentIndex === 2) {
+                        _settings.speech_mode = Settings.SpeechAutomatic
+                    } else {
+                        _settings.speech_mode = Settings.SpeechManual
+                    }
+                }
+                description: qsTr("One sentence: Clicking on the bottom panel starts listening, which ends when the first sentence is recognized.\n" +
+                                  "Press and hold: Pressing and holding on the bottom panel enables listening. When you stop holding, listening will turn off.\n" +
+                                  "Always on: Listening is always turn on.")
             }
 
             ItemBox {

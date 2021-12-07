@@ -67,7 +67,9 @@ void file_source::handle_read_timeout()
         return;
     }
 
-    if (decoder.bufferAvailable() || buff_size > 0) emit audio_available();
+    if (decoder.bufferAvailable() || buff_size > 0) {
+        emit audio_available();
+    }
 }
 
 void file_source::clear()
@@ -112,7 +114,6 @@ int64_t file_source::read_audio(char* buff, int64_t max_size)
         }
 
         if (size_to_buff > 0) {
-            qDebug() << "size_to_buff:" << size_to_buff;
             memcpy(&this->buff.front(), src, size_to_buff);
             this->buff_size = size_to_buff;
             break;

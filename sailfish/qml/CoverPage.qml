@@ -17,6 +17,7 @@ CoverBackground {
     Label {
         id: noteLabel
         anchors.margins: Theme.paddingLarge
+        anchors.bottomMargin: Theme.itemSizeExtraSmall
         anchors.fill: parent
         clip: true
         wrapMode: Text.WordWrap
@@ -52,5 +53,20 @@ CoverBackground {
         anchors.centerIn: indicator
         running: app.state === DsnoteApp.SttTranscribingFile
         progress: app.transcribe_progress
+    }
+
+    CoverActionList {
+        id: actions
+        iconBackground: true
+        enabled: _settings.speech_mode === Settings.SpeechSingleSentence &&
+                 (app.state === DsnoteApp.SttListeningSingleSentence || app.state === DsnoteApp.SttIdle)
+
+        CoverAction {
+            iconSource: app.state === DsnoteApp.SttListeningSingleSentence ? "image://theme/icon-cover-cancel" : "image://theme/icon-cover-unmute"
+            onTriggered: {
+                if (app.state === DsnoteApp.SttListeningSingleSentence) app.stop_listen()
+                else app.listen()
+            }
+        }
     }
 }

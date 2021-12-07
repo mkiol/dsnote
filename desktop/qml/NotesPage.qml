@@ -57,7 +57,8 @@ Page {
                 placeholderText: app.state === DsnoteApp.SttTranscribingFile ?
                                      qsTr("Transcribing audio file...") + (app.transcribe_progress > 0.0 ? " " + Math.round(app.transcribe_progress * 100) + "%" : "") :
                                      app.state === DsnoteApp.SttListeningAuto || app.speech ?
-                                     qsTr("Say something...") : qsTr("Press and say something...")
+                                     qsTr("Say something...") : _settings.speech_mode === Settings.SpeechSingleSentence ?
+                                             qsTr("Click and say something...") : qsTr("Press and say something...")
                 font.italic: true
                 text: app.intermediate_text
                 leftPadding: 0
@@ -78,9 +79,19 @@ Page {
 
                 visible: _settings.speech_mode === Settings.SpeechManual &&
                          (app.state === DsnoteApp.SttListeningManual || app.state === DsnoteApp.SttIdle)
-                text: qsTr("Press and hold to speek")
+                text: qsTr("Press and hold to start listening")
                 onPressed: app.listen()
                 onReleased: app.stop_listen()
+            }
+
+            ToolButton {
+                visible: _settings.speech_mode === Settings.SpeechSingleSentence &&
+                         (app.state === DsnoteApp.SttListeningSingleSentence || app.state === DsnoteApp.SttIdle)
+                text: app.state === DsnoteApp.SttListeningSingleSentence ? qsTr("Cancel") : qsTr("Click to start listening")
+                onClicked: {
+                    if (app.state === DsnoteApp.SttListeningSingleSentence) app.stop_listen()
+                    else app.listen()
+                }
             }
 
             ToolButton {
@@ -92,6 +103,7 @@ Page {
             ToolButton {
                 visible: (app.state === DsnoteApp.SttListeningManual ||
                           app.state === DsnoteApp.SttListeningAuto ||
+                          app.state === DsnoteApp.SttListeningSingleSentence ||
                           app.state === DsnoteApp.SttTranscribingFile ||
                           app.state === DsnoteApp.SttIdle)
                 text: app.state === DsnoteApp.SttTranscribingFile ?

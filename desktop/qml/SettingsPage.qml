@@ -35,16 +35,28 @@ Page {
             RowLayout {
                 Label {
                     Layout.fillWidth: true
-                    text: qsTr("Speech detection mode")
+                    text: qsTr("Listening mode")
                 }
                 ComboBox {
-                    currentIndex: _settings.speech_mode == Settings.SpeechAutomatic ? 0 : 1
-                    model: ListModel {
-                        ListElement { text: qsTr("Automatic") }
-                        ListElement { text: qsTr("Manual") }
+                    currentIndex: {
+                        if (_settings.speech_mode === Settings.SpeechSingleSentence) return 0
+                        if (_settings.speech_mode === Settings.SpeechAutomatic) return 2
+                        return 1
                     }
-                    onActivated: _settings.speech_mode = index === 0 ?
-                                     Settings.SpeechAutomatic : Settings.SpeechManual
+                    model: ListModel {
+                        ListElement { text: qsTr("One sentence") }
+                        ListElement { text: qsTr("Press and hold") }
+                        ListElement { text: qsTr("Always on") }
+                    }
+                    onActivated: {
+                        if (index === 0) {
+                            _settings.speech_mode = Settings.SpeechSingleSentence
+                        } else if (index === 2) {
+                            _settings.speech_mode = Settings.SpeechAutomatic
+                        } else {
+                            _settings.speech_mode = Settings.SpeechManual
+                        }
+                    }
                 }
             }
 

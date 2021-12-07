@@ -44,12 +44,14 @@ public:
         idle = 3,
         listening_manual = 4,
         listening_auto = 5,
-        transcribing_file = 6
+        transcribing_file = 6,
+        listening_single_sentence = 7
     };
 
     enum class speech_mode_type {
         automatic = 0,
-        manual = 1
+        manual = 1,
+        single_sentence = 2
     };
 
     enum class source_type {
@@ -129,6 +131,7 @@ private:
     static const int DS_RESTART_TIME = 2000; // 2s
     static const int KEEPALIVE_TIME = 60000; // 60s
     static const int KEEPALIVE_TASK_TIME = 10000; // 10s
+    static const int SINGLE_SENTENCE_TIMEOUT = 10000; // 10s
 
     int last_task_id = INVALID_TASK;
     std::unique_ptr<deepspeech_wrapper> ds;
@@ -141,6 +144,7 @@ private:
     QTimer ds_reset_timer;
     QTimer keepalive_timer;
     QTimer keepalive_current_task_timer;
+    QTimer single_sentence_task_timer;
     int last_intermediate_text_task = INVALID_TASK;
     std::optional<task_type> previous_task;
     std::optional<task_type> current_task;
@@ -150,7 +154,9 @@ private:
     QVariantMap available_langs() const;
     void handle_models_changed();
     void handle_text_decoded(const std::string &text);
+    void handle_text_decoded(const QString &text, const QString &model_id, int task_id);
     void handle_intermediate_text_decoded(const std::string &text);
+    void handle_intermediate_text_decoded(const QString &text, const QString &model_id, int task_id);
     void handle_audio_available();
     void handle_speech_status_changed(bool speech_detected);
     void handle_processing_changed(bool processing);
@@ -180,7 +186,7 @@ private:
     int next_task_id();
     inline int current_task_id() const { return current_task ? current_task->id : INVALID_TASK; }
     void handle_keepalive_timeout();
-    void handle_keepalive_task_timeout();
+    void handle_task_timeout();
     QVariantMap translations() const;
 
     // DBus

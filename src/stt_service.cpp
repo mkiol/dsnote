@@ -44,10 +44,16 @@ stt_service::stt_service(QObject *parent) :
         qDebug() << "[service => dbus] signal FileTranscribeFinished:" << task;
         emit FileTranscribeFinished(task);
     });
+    connect(this, &stt_service::intermediate_text_decoded, this,
+            static_cast<void(stt_service::*)(const QString&, const QString&, int)>(&stt_service::handle_intermediate_text_decoded),
+            Qt::QueuedConnection);
     connect(this, &stt_service::intermediate_text_decoded, this, [this](const QString &text, const QString &lang, int task) {
         qDebug() << "[service => dbus] signal IntermediateTextDecoded:" << text << lang << task;
         emit IntermediateTextDecoded(text, lang, task);
     });
+    connect(this, &stt_service::text_decoded, this,
+            static_cast<void(stt_service::*)(const QString&, const QString&, int)>(&stt_service::handle_text_decoded),
+            Qt::QueuedConnection);
     connect(this, &stt_service::text_decoded, this, [this](const QString &text, const QString &lang, int task) {
         qDebug() << "[service => dbus] signal TextDecoded:" << text << lang << task;
         emit TextDecoded(text, lang, task);
@@ -93,7 +99,12 @@ stt_service::stt_service(QObject *parent) :
     keepalive_current_task_timer.setSingleShot(true);
     keepalive_current_task_timer.setTimerType(Qt::VeryCoarseTimer);
     keepalive_current_task_timer.setInterval(KEEPALIVE_TASK_TIME);
-    connect(&keepalive_current_task_timer, &QTimer::timeout, this, &stt_service::handle_keepalive_task_timeout);
+    connect(&keepalive_current_task_timer, &QTimer::timeout, this, &stt_service::handle_task_timeout);
+
+    single_sentence_task_timer.setSingleShot(true);
+    single_sentence_task_timer.setTimerType(Qt::VeryCoarseTimer);
+    single_sentence_task_timer.setInterval(SINGLE_SENTENCE_TIMEOUT);
+    connect(&single_sentence_task_timer, &QTimer::timeout, this, &stt_service::handle_task_timeout);
 
     // DBus
     auto con = QDBusConnection::sessionBus();
@@ -185,18 +196,19 @@ QString stt_service::restart_ds(speech_mode_type speech_mode, const QString& mod
 
         const auto model_file_str = model_files->model_file.toStdString();
         const auto scorer_file_str = model_files->scorer_file.toStdString();
-        const auto speech_mode_val = speech_mode == speech_mode_type::automatic ?
-                    deepspeech_wrapper::speech_mode_type::automatic : deepspeech_wrapper::speech_mode_type::manual;
+        const auto speech_mode_val = static_cast<deepspeech_wrapper::speech_mode_type>(speech_mode);
 
         if (ds && ds->model_file() == model_file_str && ds->scorer_file() == scorer_file_str) {
-            qDebug() << "restart ds not required";
+            qDebug() << "restart ds not required:" << static_cast<int>(speech_mode_val);
             ds->set_speech_mode(speech_mode_val);
         } else {
             qDebug() << "restart ds required";
 
             deepspeech_wrapper::callbacks_type call_backs{
-                std::bind(&stt_service::handle_text_decoded, this, std::placeholders::_1),
-                std::bind(&stt_service::handle_intermediate_text_decoded, this, std::placeholders::_1),
+                std::bind(static_cast<void(stt_service::*)(const std::string&)>(&stt_service::handle_text_decoded),
+                          this, std::placeholders::_1),
+                std::bind(static_cast<void(stt_service::*)(const std::string&)>(&stt_service::handle_intermediate_text_decoded),
+                          this, std::placeholders::_1),
                 std::bind(&stt_service::handle_speech_status_changed, this, std::placeholders::_1)
             };
 
@@ -210,6 +222,14 @@ QString stt_service::restart_ds(speech_mode_type speech_mode, const QString& mod
     return {};
 }
 
+void stt_service::handle_intermediate_text_decoded(const QString &, const QString &, int task_id)
+{
+    if (current_task && current_task->id == task_id &&
+        current_task->speech_mode == speech_mode_type::single_sentence) {
+        single_sentence_task_timer.start();
+    }
+}
+
 void stt_service::handle_intermediate_text_decoded(const std::string& text)
 {
     if (current_task) {
@@ -217,6 +237,14 @@ void stt_service::handle_intermediate_text_decoded(const std::string& text)
         emit intermediate_text_decoded(QString::fromStdString(text), current_task->model_id, current_task->id);
     } else {
         qWarning() << "current task does not exist";
+    }
+}
+
+void stt_service::handle_text_decoded(const QString &, const QString &, int task_id)
+{
+    if (current_task && current_task->id == task_id &&
+        current_task->speech_mode == speech_mode_type::single_sentence) {
+        stop_listen(current_task->id);
     }
 }
 
@@ -343,6 +371,9 @@ int stt_service::cancel_file(int task)
                 current_task = pending_task;
                 pending_task.reset();
                 keepalive_current_task_timer.start();
+                if (current_task->speech_mode == speech_mode_type::single_sentence) {
+                    single_sentence_task_timer.start();
+                }
                 emit current_task_changed();
             } else {
                 reset_ds();
@@ -371,8 +402,11 @@ int stt_service::transcribe_file(const QString &file, const QString &lang)
         return INVALID_TASK;
     }
 
-    if (current_task && audio_source_type() == source_type::mic) {
+    if (current_task && current_task->speech_mode != speech_mode_type::single_sentence &&
+            audio_source_type() == source_type::mic) {
         pending_task = current_task;
+    } else {
+        single_sentence_task_timer.stop();
     }
 
     current_task = {next_task_id(),
@@ -411,6 +445,11 @@ int stt_service::start_listen(speech_mode_type mode, const QString &lang)
     if (ds) ds->set_speech_started(true);
 
     keepalive_current_task_timer.start();
+    if (mode == speech_mode_type::single_sentence) {
+        single_sentence_task_timer.start();
+    } else {
+        single_sentence_task_timer.stop();
+    }
 
     emit current_task_changed();
 
@@ -426,13 +465,19 @@ int stt_service::stop_listen(int task)
         return FAILURE;
     }
 
+    single_sentence_task_timer.stop();
+
     if (audio_source_type() == source_type::file) {
         if (pending_task && pending_task->id == task) pending_task.reset();
         else qWarning() << "invalid task id";
     } else if (audio_source_type() == source_type::mic) {
         if (current_task && current_task->id == task) {
-            reset_ds_gracefully();
             keepalive_current_task_timer.stop();
+            if (current_task->speech_mode == speech_mode_type::single_sentence ||
+                    current_task->speech_mode == speech_mode_type::automatic) {
+                reset_ds();
+            }
+            else reset_ds_gracefully();
         } else {
             qWarning() << "invalid task id";
             return FAILURE;
@@ -453,12 +498,14 @@ void stt_service::reset_ds_gracefully()
 
 void stt_service::reset_ds()
 {
+    if (ds) ds->set_speech_started(false);
     ds.reset();
     restart_audio_source();
     pending_task.reset();
     if (current_task) {
         current_task.reset();
         keepalive_current_task_timer.stop();
+        single_sentence_task_timer.stop();
         emit current_task_changed();
     }
     refresh_status();
@@ -520,10 +567,14 @@ void stt_service::handle_keepalive_timeout()
     QCoreApplication::instance()->quit();
 }
 
-void stt_service::handle_keepalive_task_timeout()
+void stt_service::handle_task_timeout()
 {
     if (current_task) {
-        qWarning() << "keepalive task timeout:" << current_task->id;
+        qWarning() << "task timeout:" << current_task->id;
+        if (current_task->speech_mode == speech_mode_type::single_sentence) {
+            keepalive_current_task_timer.stop();
+            single_sentence_task_timer.stop();
+        }
         if (audio_source_type() == source_type::file) {
             cancel_file(current_task->id);
         } else if (audio_source_type() == source_type::mic) {
@@ -557,8 +608,13 @@ void stt_service::refresh_status()
         }
         if (current_task->speech_mode == speech_mode_type::manual) {
             new_state = ds && ds->speech_status() ? state_type::listening_manual : state_type::idle;
-        } else {
+        } else if (current_task->speech_mode == speech_mode_type::automatic) {
             new_state = state_type::listening_auto;
+        } else if (current_task->speech_mode == speech_mode_type::single_sentence) {
+            new_state = state_type::listening_single_sentence;
+        } else {
+            qWarning() << "unknown ds speech mode";
+            new_state = state_type::unknown;
         }
     } else {
         new_state = state_type::idle;
@@ -580,6 +636,7 @@ QString stt_service::state_str(state_type state_value)
     case state_type::listening_auto: return "listening_auto";
     case state_type::not_configured: return "not_configured";
     case state_type::transcribing_file: return "transcribing_file";
+    case state_type::listening_single_sentence: return "listening_single_sentence";
     default: return "unknown";
     }
 }
@@ -632,6 +689,7 @@ QVariantMap stt_service::translations() const
     map.insert("lang_not_conf", tr("Language is not configured"));
     map.insert("say_smth", tr("Say something..."));
     map.insert("press_say_smth", tr("Press and say something..."));
+    map.insert("click_say_smth", tr("Click and say something..."));
     map.insert("busy_stt", tr("Busy..."));
 
     return map;
