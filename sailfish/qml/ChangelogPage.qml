@@ -56,6 +56,11 @@ Page {
                 description: "STT library has been updated to the most recent version (1.1.0)."
             }
 
+            LogItem {
+                title: "Bug fixes and performance improvements"
+                description: "Many minor bugs were fixed. App starts quicker even with multiple languages enabled."
+            }
+
             SectionHeader {
                 text: qsTr("Version %1").arg("1.5.0")
             }
