@@ -74,14 +74,14 @@ void settings::set_default_model(const QString &value)
 
 settings::speech_mode_type settings::speech_mode() const
 {
-    return static_cast<speech_mode_type>(value("speech_mode",
+    return static_cast<speech_mode_type>(value("speech_mode2",
                       static_cast<int>(speech_mode_type::SpeechSingleSentence)).toInt());
 }
 
 void settings::set_speech_mode(speech_mode_type value)
 {
     if (speech_mode() != value) {
-        setValue("speech_mode", static_cast<int>(value));
+        setValue("speech_mode2", static_cast<int>(value));
         emit speech_mode_changed();
     }
 }
