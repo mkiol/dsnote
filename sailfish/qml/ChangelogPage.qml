@@ -29,7 +29,7 @@ Page {
             }
 
             SectionHeader {
-                text: qsTr("Version %1").arg("1.6.0")
+                text: qsTr("Version %1").arg("1.6")
             }
 
             LogItem {
@@ -62,7 +62,7 @@ Page {
             }
 
             SectionHeader {
-                text: qsTr("Version %1").arg("1.5.0")
+                text: qsTr("Version %1").arg("1.5")
             }
 
             LogItem {
@@ -85,7 +85,7 @@ Page {
             }
 
             SectionHeader {
-                text: qsTr("Version %1").arg("1.4.0")
+                text: qsTr("Version %1").arg("1.4")
             }
 
             LogItem {
@@ -99,7 +99,7 @@ Page {
             }
 
             SectionHeader {
-                text: qsTr("Version %1").arg("1.3.0")
+                text: qsTr("Version %1").arg("1.3")
             }
 
             LogItem {
@@ -113,7 +113,7 @@ Page {
             }
 
             SectionHeader {
-                text: qsTr("Version %1").arg("1.2.0")
+                text: qsTr("Version %1").arg("1.2")
             }
 
             LogItem {
@@ -123,7 +123,7 @@ Page {
             }
 
             SectionHeader {
-                text: qsTr("Version %1").arg("1.0.1")
+                text: qsTr("Version %1").arg("1.0")
             }
 
             LogItem {
