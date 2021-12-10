@@ -433,6 +433,24 @@
                 "https://github.com/coqui-ai/STT-models/releases/download/hungarian%2Fitml%2Fv0.1.0/model.tflite"
             ],
             "size": "47348584"
+        },
+        {
+            "name": "Deutsch (Aashish Agarwal)",
+            "model_id": "de_aa",
+            "lang_id": "de",
+            "experimental": true,
+            "checksum": "4f9b4f32",
+            "checksum_quick": "b565cad0",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/german/AASHISHAG/v0.9.0/model.tflite"
+            ],
+            "size": "47338296",
+            "scorer_checksum": "7819e04d",
+            "scorer_checksum_quick": "1adc8f8f",
+            "scorer_urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/german/AASHISHAG/v0.9.0/de-aashishag-1-prune-kenlm.scorer"
+            ],
+            "scorer_size": "564845728"
         }
     ]
 }
