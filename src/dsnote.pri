@@ -43,6 +43,7 @@ DBUS_DIR = $${ROOT_DIR}/dbus
 #system("$${QDBUSXML2CPP}" "$${DBUS_STT_XML}" -p $${SRC_DIR}/dbus_stt_inf)
 
 SOURCES += \
+    $${SRC_DIR}/log.cpp \
     $${SRC_DIR}/stt_service.cpp \
     $${SRC_DIR}/stt_config.cpp \
     $${SRC_DIR}/file_source.cpp \
@@ -59,6 +60,7 @@ SOURCES += \
     $${SRC_DIR}/lang_list_model.cpp
 
 HEADERS += \
+    $${SRC_DIR}/log.h \
     $${SRC_DIR}/stt_service.h \
     $${SRC_DIR}/stt_config.h \
     $${SRC_DIR}/audio_source.h \
