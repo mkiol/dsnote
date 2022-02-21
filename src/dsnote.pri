@@ -57,7 +57,8 @@ SOURCES += \
     $${SRC_DIR}/dbus_stt_inf.cpp \
     $${SRC_DIR}/listmodel.cpp \
     $${SRC_DIR}/itemmodel.cpp \
-    $${SRC_DIR}/lang_list_model.cpp
+    $${SRC_DIR}/models_list_model.cpp \
+    $${SRC_DIR}/langs_list_model.cpp
 
 HEADERS += \
     $${SRC_DIR}/log.h \
@@ -76,7 +77,8 @@ HEADERS += \
     $${SRC_DIR}/dbus_stt_inf.h \
     $${SRC_DIR}/listmodel.h \
     $${SRC_DIR}/itemmodel.h \
-    $${SRC_DIR}/lang_list_model.h
+    $${SRC_DIR}/models_list_model.h \
+    $${SRC_DIR}/langs_list_model.h
 
 sailfishapp {
     DEFINES += SAILFISH

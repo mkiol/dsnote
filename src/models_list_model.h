@@ -1,59 +1,66 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef LANGLISTMODEL_H
-#define LANGLISTMODEL_H
+#ifndef MODELSLISTMODEL_H
+#define MODELSLISTMODEL_H
 
+#include <QByteArray>
+#include <QDebug>
+#include <QHash>
 #include <QObject>
 #include <QString>
-#include <QHash>
-#include <QDebug>
-#include <QByteArray>
+#include <QUrl>
 #include <QVariant>
 #include <QVariantList>
-#include <QUrl>
 #include <optional>
 
-#include "listmodel.h"
 #include "itemmodel.h"
+#include "listmodel.h"
 #include "models_manager.h"
 
-class LangListModel : public SelectableItemModel
-{
+class ModelsListModel : public SelectableItemModel {
     Q_OBJECT
-    Q_PROPERTY (bool showExperimental READ showExperimental WRITE setShowExperimental NOTIFY showExperimentalChanged)
-    Q_PROPERTY (bool downloading READ downloading NOTIFY downloadingChanged)
-public:
-    explicit LangListModel(models_manager& manager, QObject *parent = nullptr);
-    ~LangListModel();
+    Q_PROPERTY(bool showExperimental READ showExperimental WRITE
+                   setShowExperimental NOTIFY showExperimentalChanged)
+    Q_PROPERTY(bool downloading READ downloading NOTIFY downloadingChanged)
+    Q_PROPERTY(QString lang READ lang WRITE setLang NOTIFY langChanged)
+   public:
+    explicit ModelsListModel(models_manager &manager,
+                                QObject *parent = nullptr);
+    ~ModelsListModel();
 
-signals:
+   signals:
     void itemChanged(int idx);
     void showExperimentalChanged();
     void downloadingChanged();
+    void langChanged();
 
-private:
-    models_manager& m_manager;
+   private:
+    models_manager &m_manager;
     int m_changedItem = -1;
     bool m_showExperimental = true;
     bool m_downloading = false;
+    QString m_lang;
 
-    QList<ListItem*> makeItems() override;
-    void beforeUpdate(const QList<ListItem*> &oldItems, const QList<ListItem*> &newItems) override;
+    QList<ListItem *> makeItems() override;
+    static ListItem *makeItem(const models_manager::model_t &model);
+    void beforeUpdate(const QList<ListItem *> &oldItems,
+                      const QList<ListItem *> &newItems) override;
     void setShowExperimental(bool value);
     inline bool showExperimental() const { return m_showExperimental; }
     inline bool downloading() const { return m_downloading; }
-    void updateDownloading(const std::vector<models_manager::lang_t> &models);
+    inline QString lang() const { return m_lang; }
+    void setLang(const QString &lang);
+    void updateDownloading(const std::vector<models_manager::model_t> &models);
 };
 
-class LangListItem : public SelectableItem
-{
+class ModelsListItem : public SelectableItem {
     Q_OBJECT
-public:
+   public:
     enum Roles {
         NameRole = Qt::DisplayRole,
         IdRole = Qt::UserRole,
@@ -64,16 +71,12 @@ public:
         ProgressRole
     };
 
-public:
-    LangListItem(QObject *parent = nullptr): SelectableItem{parent} {}
-    explicit LangListItem(const QString &id,
-                      const QString &name,
-                      const QString &langId,
-                      bool available,
-                      bool experimental,
-                      bool downloading,
-                      double progress,
-                      QObject *parent = nullptr);
+   public:
+    ModelsListItem(QObject *parent = nullptr) : SelectableItem{parent} {}
+    ModelsListItem(const QString &id, const QString &name,
+                   const QString &langId = {}, bool available = true,
+                   bool experimental = false, bool downloading = false,
+                   double progress = 0.0, QObject *parent = nullptr);
     QVariant data(int role) const override;
     QHash<int, QByteArray> roleNames() const override;
     inline QString id() const override { return m_id; }
@@ -84,7 +87,7 @@ public:
     inline bool downloading() const { return m_downloading; }
     inline bool progress() const { return m_progress; }
 
-private:
+   private:
     QString m_id;
     QString m_name;
     QString m_langId;
@@ -94,4 +97,4 @@ private:
     double m_progress = 0.0;
 };
 
-#endif // LANGLISTMODEL_H
+#endif  // MODELSLISTMODEL_H

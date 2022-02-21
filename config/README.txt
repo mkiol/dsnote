@@ -7,9 +7,15 @@ Following schema applies:
 
 { 
     "version": <config_version>,
-    "models: [
+    "langs": [
         {
             "name": "<native language name (M)>",
+            "id": "<ISO 639-1 language code (M)>"
+        }
+    ],
+    "models: [
+        {
+            "name": "<model name (M)>",
             "model_id": "unique model id (M)>",
             "lang_id": "<ISO 639-1 language code (M)>",
             "experimental": <'true' if model should be listed as experimental (O)>,

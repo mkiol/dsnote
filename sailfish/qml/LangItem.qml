@@ -12,38 +12,35 @@ SimpleListItem {
     id: listItem
 
     property string name
-    property string modelId
+    property string langId
     property bool available: true
-    property bool experimental: false
     property bool downloading: false
-    property double progress: 0.0
 
     readonly property color itemColor: highlighted ? Theme.highlightColor : Theme.primaryColor
     readonly property color secondaryItemColor: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
 
-    title.text: experimental ? "🔬 " + name : name
+    title.text: name
+
+    function showModels() {
+        pageStack.push(Qt.resolvedUrl("LangsPage.qml"), {langId: langId, langName: name})
+    }
 
     Component {
         id: menuComp
         ContextMenu {
             MenuItem {
-                enabled: !listItem.downloading
-                text: listItem.available ? qsTr("Delete") : qsTr("Download")
-                onClicked: {
-                    if (listItem.available) {
-                        service.delete_model(listItem.modelId)
-                    } else {
-                        service.download_model(listItem.modelId)
-                    }
-                }
+                text: qsTr("Show models")
+                onClicked: showModels()
             }
         }
     }
 
-    menu: listItem.downloading ? null : menuComp
+    onClicked: showModels()
+
+    menu: menuComp
 
     Image {
-        visible: listItem.available
+        visible: listItem.available && !listItem.downloading
         source: "image://theme/icon-m-certificates?" + listItem.itemColor
         anchors.right: parent.right
         anchors.rightMargin: Theme.horizontalPageMargin
@@ -60,25 +57,5 @@ SimpleListItem {
         height: Theme.iconSizeMedium
         width: Theme.iconSizeMedium
         running: visible
-
-        Label {
-            id: progressLabel
-            color: Theme.highlightColor
-            anchors.centerIn: parent
-            font.pixelSize: Theme.fontSizeTiny
-            text:  listItem.progress > 0.0 ?
-                       Math.round(listItem.progress * 100) + "%" : ""
-        }
-
-        Connections {
-            target: service
-            onModel_download_progress: {
-                if (listItem.modelId === id) {
-                    progressLabel.text = Math.round(progress * 100) + "%"
-                }
-            }
-        }
     }
-
-    onClicked: openMenu()
 }

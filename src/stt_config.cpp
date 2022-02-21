@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,17 +14,15 @@
 #include "settings.h"
 #include "dbus_stt_inf.h"
 
-stt_config::stt_config(QObject *parent) :
-    QObject{parent},
-    m_lang_model{m_manager}
-{
+stt_config::stt_config(QObject *parent)
+    : QObject{parent}, m_langs_model{m_manager}, m_models_model{m_manager} {
     connect(settings::instance(), &settings::models_dir_changed, this, &stt_config::reload, Qt::QueuedConnection);
     connect(settings::instance(), &settings::default_model_changed, this, [this]{ emit default_model_changed(); });
     connect(&m_manager, &models_manager::models_changed, this, &stt_config::handle_models_changed, Qt::QueuedConnection);
     connect(&m_manager, &models_manager::busy_changed, this, [this]{ emit busy_changed(); });
     connect(&m_manager, &models_manager::download_progress, this, [this](const QString &id, double progress) {
         qDebug() << "download_progress:" << id << progress;
-        emit model_download_progress(id, progress);
+        emit model_download_progress_changed(id, progress);
     });
 }
 
@@ -34,10 +32,9 @@ void stt_config::handle_models_changed()
     emit models_changed();
 }
 
-LangListModel* stt_config::lang_model()
-{
-    return &m_lang_model;
-}
+ModelsListModel *stt_config::models_model() { return &m_models_model; }
+
+LangsListModel *stt_config::langs_model() { return &m_langs_model; }
 
 QVariantList stt_config::available_models() const
 {
@@ -60,6 +57,10 @@ void stt_config::download_model(const QString& id)
 void stt_config::delete_model(const QString& id)
 {
     m_manager.delete_model(id);
+}
+
+double stt_config::model_download_progress(const QString &id) const {
+    return m_manager.model_download_progress(id);
 }
 
 void stt_config::reload()

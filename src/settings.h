@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -20,7 +20,6 @@ class settings : public QSettings
     // app
     Q_PROPERTY (QString note READ note WRITE set_note NOTIFY note_changed)
     Q_PROPERTY (speech_mode_type speech_mode READ speech_mode WRITE set_speech_mode NOTIFY speech_mode_changed)
-    Q_PROPERTY (bool show_experimental READ show_experimental WRITE set_show_experimental NOTIFY show_experimental_changed)
 
     // service
     Q_PROPERTY (QString models_dir READ models_dir WRITE set_models_dir NOTIFY models_dir_changed)
@@ -39,8 +38,6 @@ public:
     void set_note(const QString &value);
     speech_mode_type speech_mode() const;
     void set_speech_mode(speech_mode_type value);
-    bool show_experimental() const;
-    void set_show_experimental(bool value);
     Q_INVOKABLE QUrl app_icon() const;
 
     // service
@@ -56,7 +53,6 @@ signals:
     // app
     void speech_mode_changed();
     void note_changed();
-    void show_experimental_changed();
 
     // service
     void models_dir_changed();

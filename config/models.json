@@ -1,8 +1,106 @@
 {
     "version": %VERSION%,
-    "models": [
+    "langs": [
         {
             "name": "Català",
+            "id": "ca"
+        },
+        {
+            "name": "Čeština",
+            "id": "cs"
+        },
+        {
+            "name": "English",
+            "id": "en"
+        },
+        {
+            "name": "Deutsch",
+            "id": "de"
+        },
+        {
+            "name": "Español",
+            "id": "es"
+        },
+        {
+            "name": "Français",
+            "id": "fr"
+        },
+        {
+            "name": "Italiano",
+            "id": "it"
+        },
+        {
+            "name": "Polski",
+            "id": "pl"
+        },
+        {
+            "name": "Русский",
+            "id": "ru"
+        },
+        {
+            "name": "Українська",
+            "id": "uk"
+        },
+        {
+            "name": "中文 (简体)",
+            "id": "zh-CN"
+        },
+        {
+            "name": "Nederlands",
+            "id": "nl"
+        },
+        {
+            "name": "Yorùbá",
+            "id": "yo"
+        },
+        {
+            "name": "Amarəñña",
+            "id": "am"
+        },
+        {
+            "name": "Euskara",
+            "id": "eu"
+        },
+        {
+            "name": "Türkçe",
+            "id": "tr"
+        },
+        {
+            "name": "ไทย",
+            "id": "th"
+        },
+        {
+            "name": "Slovenščina",
+            "id": "sl"
+        },
+        {
+            "name": "Română",
+            "id": "ro"
+        },
+        {
+            "name": "Português",
+            "id": "pt"
+        },
+        {
+            "name": "Latviešu",
+            "id": "lv"
+        },
+        {
+            "name": "Bahasa Indonesia",
+            "id": "id"
+        },
+        {
+            "name": "Ελληνικά",
+            "id": "el"
+        },
+        {
+            "name": "Magyar",
+            "id": "hu"
+        }
+    ],
+    "models": [
+        {
+            "name": "Català (ccoreilly)",
             "model_id": "ca",
             "lang_id": "ca",
             "checksum": "c7e0dc53",
@@ -19,7 +117,7 @@
             "scorer_size": "304365616"
         },
         {
-            "name": "Čeština",
+            "name": "Čeština (comodoro)",
             "model_id": "cs",
             "lang_id": "cs",
             "checksum": "45c77814",
@@ -36,7 +134,7 @@
             "scorer_size": "539766416"
         },
         {
-            "name": "English",
+            "name": "English (Mozilla)",
             "model_id": "en",
             "lang_id": "en",
             "checksum": "6d38ae6e",
@@ -71,7 +169,7 @@
             "scorer_size": "978407904"
         },
         {
-            "name": "Deutsch",
+            "name": "Deutsch (Jaco)",
             "model_id": "de",
             "lang_id": "de",
             "checksum": "a5943fb8",
@@ -98,7 +196,7 @@
             "scorer_size": "229904847"
         },
         {
-            "name": "Español",
+            "name": "Español (Jaco)",
             "model_id": "es",
             "lang_id": "es",
             "checksum": "8b01dece",
@@ -126,7 +224,7 @@
             "scorer_size": "247688532"
         },
         {
-            "name": "Français",
+            "name": "Français (Jaco)",
             "model_id": "fr",
             "lang_id": "fr",
             "checksum": "59a6bd0a",
@@ -173,7 +271,7 @@
             "scorer_size": "615568844"
         },
         {
-            "name": "Italiano",
+            "name": "Italiano (Jaco)",
             "model_id": "it",
             "lang_id": "it",
             "checksum": "6811059d",
@@ -212,7 +310,7 @@
             "scorer_size": "172342504"
         },
         {
-            "name": "Polski",
+            "name": "Polski (Jaco)",
             "model_id": "pl",
             "lang_id": "pl",
             "checksum": "2ed9292d",
@@ -231,7 +329,7 @@
             "scorer_size": "3000583"
         },
         {
-            "name": "Русский",
+            "name": "Русский (Joe Meyer)",
             "model_id": "ru",
             "lang_id": "ru",
             "checksum": "3bd98e76",
@@ -248,7 +346,7 @@
             "scorer_size": "719764672"
         },
         {
-            "name": "Українська",
+            "name": "Українська (robinhad)",
             "model_id": "uk",
             "lang_id": "uk",
             "checksum": "d7246303",
@@ -265,7 +363,7 @@
             "scorer_size": "420827024"
         },
         {
-            "name": "中文 (简体)",
+            "name": "中文 简体 (Mozilla)",
             "model_id": "zh-CN",
             "lang_id": "zh-CN",
             "checksum": "73eef4d8",
@@ -282,7 +380,7 @@
             "scorer_size": "67141744"
         },
         {
-            "name": "Nederlands",
+            "name": "Nederlands (acabunoc)",
             "model_id": "nl",
             "lang_id": "nl",
             "experimental": true,
@@ -298,7 +396,7 @@
             "scorer_size": "323345856"
         },
         {
-            "name": "Yorùbá",
+            "name": "Yorùbá (ITML)",
             "model_id": "yo",
             "lang_id": "yo",
             "experimental": true,
@@ -309,7 +407,7 @@
             "size": "47332120"
         },
         {
-            "name": "Amarəñña",
+            "name": "Amarəñña (ITML)",
             "model_id": "am",
             "lang_id": "am",
             "experimental": true,
@@ -320,7 +418,7 @@
             "size": "47867504"
         },
         {
-            "name": "Euskara",
+            "name": "Euskara (ITML)",
             "model_id": "eu",
             "lang_id": "eu",
             "experimental": true,
@@ -331,7 +429,7 @@
             "size": "47332112"
         },
         {
-            "name": "Türkçe",
+            "name": "Türkçe (ITML)",
             "model_id": "tr",
             "lang_id": "tr",
             "experimental": true,
@@ -342,7 +440,7 @@
             "size": "47344464"
         },
         {
-            "name": "ไทย",
+            "name": "ไทย (ITML)",
             "model_id": "th",
             "lang_id": "th",
             "experimental": true,
@@ -353,7 +451,7 @@
             "size": "47414528"
         },
         {
-            "name": "Slovenščina",
+            "name": "Slovenščina (ITML)",
             "model_id": "sl",
             "lang_id": "sl",
             "experimental": true,
@@ -364,7 +462,7 @@
             "size": "47334176"
         },
         {
-            "name": "Română",
+            "name": "Română (ITML)",
             "model_id": "ro",
             "lang_id": "ro",
             "experimental": true,
@@ -375,7 +473,7 @@
             "size": "47340344"
         },
         {
-            "name": "Português",
+            "name": "Português (ITML)",
             "model_id": "pt",
             "lang_id": "pt",
             "experimental": true,
@@ -391,7 +489,7 @@
             "scorer_size": "242241040"
         },
         {
-            "name": "Latviešu",
+            "name": "Latviešu (ITML)",
             "model_id": "lv",
             "lang_id": "lv",
             "experimental": true,
@@ -402,7 +500,7 @@
             "size": "47346520"
         },
         {
-            "name": "Bahasa Indonesia",
+            "name": "Bahasa Indonesia (ITML)",
             "model_id": "id",
             "lang_id": "id",
             "experimental": true,
@@ -413,7 +511,7 @@
             "size": "47328000"
         },
         {
-            "name": "Ελληνικά",
+            "name": "Ελληνικά (ITML)",
             "model_id": "el",
             "lang_id": "el",
             "experimental": true,
@@ -424,7 +522,7 @@
             "size": "47348608"
         },
         {
-            "name": "Magyar",
+            "name": "Magyar (ITML)",
             "model_id": "hu",
             "lang_id": "hu",
             "experimental": true,

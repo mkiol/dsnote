@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -83,19 +83,6 @@ void settings::set_speech_mode(speech_mode_type value)
     if (speech_mode() != value) {
         setValue("speech_mode2", static_cast<int>(value));
         emit speech_mode_changed();
-    }
-}
-
-bool settings::show_experimental() const
-{
-    return value("show_experimental", true).toBool();
-}
-
-void settings::set_show_experimental(bool value)
-{
-    if (show_experimental() != value) {
-        setValue("show_experimental", value);
-        emit show_experimental_changed();
     }
 }
 
