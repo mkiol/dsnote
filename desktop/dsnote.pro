@@ -4,6 +4,10 @@ TEMPLATE = app
 
 QT += quick quickcontrols2
 
+CONFIG(debug, debug|release) {
+    CONFIG += sanitizer sanitize_address sanitize_undefined
+}
+
 ROOT_DIR = $${PWD}/..
 SRC_DIR = $${ROOT_DIR}/src
 QT_BIN_DIR = $${QT_INSTALL_PREFIX}/bin
