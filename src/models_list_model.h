@@ -24,8 +24,6 @@
 
 class ModelsListModel : public SelectableItemModel {
     Q_OBJECT
-    Q_PROPERTY(bool showExperimental READ showExperimental WRITE
-                   setShowExperimental NOTIFY showExperimentalChanged)
     Q_PROPERTY(bool downloading READ downloading NOTIFY downloadingChanged)
     Q_PROPERTY(QString lang READ lang WRITE setLang NOTIFY langChanged)
    public:
@@ -35,14 +33,12 @@ class ModelsListModel : public SelectableItemModel {
 
    signals:
     void itemChanged(int idx);
-    void showExperimentalChanged();
     void downloadingChanged();
     void langChanged();
 
    private:
     models_manager &m_manager;
     int m_changedItem = -1;
-    bool m_showExperimental = true;
     bool m_downloading = false;
     QString m_lang;
 
@@ -51,7 +47,6 @@ class ModelsListModel : public SelectableItemModel {
     void beforeUpdate(const QList<ListItem *> &oldItems,
                       const QList<ListItem *> &newItems) override;
     void setShowExperimental(bool value);
-    inline bool showExperimental() const { return m_showExperimental; }
     inline bool downloading() const { return m_downloading; }
     inline QString lang() const { return m_lang; }
     void setLang(const QString &lang);
@@ -85,7 +80,7 @@ class ModelsListItem : public SelectableItem {
     inline bool available() const { return m_available; }
     inline bool experimental() const { return m_experimental; }
     inline bool downloading() const { return m_downloading; }
-    inline bool progress() const { return m_progress; }
+    inline double progress() const { return m_progress; }
 
    private:
     QString m_id;

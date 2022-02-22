@@ -29,14 +29,6 @@ ModelsListModel::ModelsListModel(models_manager &manager, QObject *parent)
 
 ModelsListModel::~ModelsListModel() { m_worker.reset(); }
 
-void ModelsListModel::setShowExperimental(bool value) {
-    if (m_showExperimental != value) {
-        m_showExperimental = value;
-        emit showExperimentalChanged();
-        updateModel();
-    }
-}
-
 void ModelsListModel::beforeUpdate(const QList<ListItem *> &oldItems,
                                    const QList<ListItem *> &newItems) {
     const auto &[it, _] = std::mismatch(
@@ -72,16 +64,13 @@ QList<ListItem *> ModelsListModel::makeItems() {
 
     if (phase.isEmpty()) {
         std::for_each(models.cbegin(), models.cend(), [&](const auto &model) {
-            if (m_showExperimental || !model.experimental)
-                items << makeItem(model);
+            items.push_back(makeItem(model));
         });
     } else {
         std::for_each(models.cbegin(), models.cend(), [&](const auto &model) {
-            if (m_showExperimental || !model.experimental) {
-                if (model.name.contains(phase, Qt::CaseInsensitive) ||
-                    model.lang_id.contains(phase, Qt::CaseInsensitive)) {
-                    items << makeItem(model);
-                }
+            if (model.name.contains(phase, Qt::CaseInsensitive) ||
+                model.lang_id.contains(phase, Qt::CaseInsensitive)) {
+                items.push_back(makeItem(model));
             }
         });
     }
