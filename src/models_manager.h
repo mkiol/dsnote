@@ -15,6 +15,7 @@
 #include <QUrl>
 #include <atomic>
 #include <map>
+#include <set>
 #include <thread>
 #include <tuple>
 #include <vector>
@@ -49,6 +50,7 @@ class models_manager : public QObject {
     std::vector<lang_t> langs() const;
     [[nodiscard]] bool model_exists(const QString& id) const;
     void download_model(const QString& id);
+    void cancel_model_download(const QString& id);
     void delete_model(const QString& id);
     [[nodiscard]] inline bool busy() const { return m_busy_value; }
     void reload();
@@ -96,6 +98,7 @@ class models_manager : public QObject {
     QNetworkAccessManager m_nam;
     std::atomic_bool m_busy_value = false;
     std::thread m_thread;
+    std::set<QString> models_to_cancel;
     bool m_pending_reload = false;
 
     bool parse_models_file_might_reset();
@@ -130,6 +133,7 @@ class models_manager : public QObject {
     static bool model_scorer_same_url(const priv_model_t& id);
     [[nodiscard]] bool lang_available(const QString& id) const;
     [[nodiscard]] bool lang_downloading(const QString& id) const;
+    bool check_model_download_cancel(QNetworkReply* reply);
 };
 
 #endif  // MODELS_MANAGER_H

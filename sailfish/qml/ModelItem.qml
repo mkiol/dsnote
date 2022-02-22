@@ -30,14 +30,11 @@ SimpleListItem {
         id: menuComp
         ContextMenu {
             MenuItem {
-                enabled: !listItem.downloading
-                text: listItem.available ? qsTr("Delete") : qsTr("Download")
+                text: listItem.downloading ? qsTr("Cancel") : listItem.available ? qsTr("Delete") : qsTr("Download")
                 onClicked: {
-                    if (listItem.available) {
-                        service.delete_model(listItem.modelId)
-                    } else {
-                        service.download_model(listItem.modelId)
-                    }
+                    if (listItem.downloading) service.cancel_model_download(listItem.modelId)
+                    else if (listItem.available) service.delete_model(listItem.modelId)
+                    else service.download_model(listItem.modelId)
                 }
             }
         }
@@ -59,7 +56,7 @@ SimpleListItem {
         }
     }
 
-    menu: listItem.downloading ? null : menuComp
+    menu: menuComp
 
     Image {
         visible: listItem.available

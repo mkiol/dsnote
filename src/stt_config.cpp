@@ -54,6 +54,10 @@ void stt_config::download_model(const QString& id)
     m_manager.download_model(id);
 }
 
+void stt_config::cancel_model_download(const QString &id) {
+    m_manager.cancel_model_download(id);
+}
+
 void stt_config::delete_model(const QString& id)
 {
     m_manager.delete_model(id);

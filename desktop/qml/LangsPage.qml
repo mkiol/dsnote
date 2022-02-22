@@ -95,10 +95,10 @@ Page {
             Repeater {
                 model: langsView ? null : service.models_model
                 Button {
-                    enabled: !model.downloading
-                    text: model.downloading ? qsTr("Downloading...") : model.available ? qsTr("Delete") : qsTr("Download")
+                    text: model.downloading ? qsTr("Cancel") : model.available ? qsTr("Delete") : qsTr("Download")
                     onClicked: {
-                        if (model.available) service.delete_model(model.id)
+                        if (model.downloading) service.cancel_model_download(model.id)
+                        else if (model.available) service.delete_model(model.id)
                         else service.download_model(model.id)
                     }
                 }

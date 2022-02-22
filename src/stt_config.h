@@ -28,6 +28,7 @@ class stt_config : public QObject {
     explicit stt_config(QObject *parent = nullptr);
 
     Q_INVOKABLE void download_model(const QString &id);
+    Q_INVOKABLE void cancel_model_download(const QString &id);
     Q_INVOKABLE void delete_model(const QString &id);
     Q_INVOKABLE double model_download_progress(const QString &id) const;
 

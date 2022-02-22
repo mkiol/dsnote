@@ -153,6 +153,10 @@ void models_manager::download_model(const QString& id) {
     download(id, download_type::all);
 }
 
+void models_manager::cancel_model_download(const QString& id) {
+    models_to_cancel.insert(id);
+}
+
 bool models_manager::model_scorer_same_url(const priv_model_t& model) {
     if (model.comp == comp_type::tarxz && model.comp == model.scorer_comp &&
         model.urls.size() == 1 && model.scorer_urls.size() == 1) {
@@ -294,6 +298,8 @@ void models_manager::handle_ssl_errors(const QList<QSslError>& errors) {
 
 void models_manager::handle_download_ready_read() {
     auto reply = qobject_cast<QNetworkReply*>(sender());
+
+    if (check_model_download_cancel(reply)) return;
 
     if (reply->bytesAvailable() > 0) {
         auto data = reply->readAll();
@@ -620,6 +626,17 @@ bool models_manager::handle_download(const QString& path,
     return ok;
 }
 
+bool models_manager::check_model_download_cancel(QNetworkReply* reply) {
+    const auto id = reply->property("model_id").toString();
+
+    auto it = models_to_cancel.find(id);
+    if (it == models_to_cancel.end()) return false;
+    models_to_cancel.erase(it);
+
+    reply->abort();
+    return true;
+}
+
 void models_manager::handle_download_finished() {
     auto reply = qobject_cast<QNetworkReply*>(sender());
 
@@ -628,9 +645,6 @@ void models_manager::handle_download_finished() {
 
     const auto id = reply->property("model_id").toString();
 
-    if (m_models.find(id) == m_models.cend())
-        throw std::runtime_error("invalid id");
-
     auto& model = m_models.at(id);
     const auto type =
         static_cast<download_type>(reply->property("download_type").toInt());
@@ -638,14 +652,20 @@ void models_manager::handle_download_finished() {
     const auto comp = static_cast<comp_type>(reply->property("comp").toInt());
     const auto part = reply->property("part").toInt();
 
-    if (reply->error() != QNetworkReply::NoError) {
+    if (auto cancel = check_model_download_cancel(reply);
+        cancel || reply->error() != QNetworkReply::NoError) {
         qWarning() << "download error:" << reply->error();
         QFile::remove(download_filename(path, comp, part));
-        if (part > 0)
-            for (int i = 0; i < part; ++i)
+        if (part > 0) {
+            for (int i = 0; i < part; ++i) {
                 QFile::remove(download_filename(path, comp, i));
+            }
+        }
 
-        emit download_error(id);
+        if (!cancel &&
+            reply->error() != QNetworkReply::OperationCanceledError) {
+            emit download_error(id);
+        }
     } else {
         const auto next_part = reply->property("next_part").toInt();
 
@@ -774,6 +794,9 @@ QString models_manager::make_checksum(const QString& file) {
 void models_manager::handle_download_progress(qint64 received,
                                               qint64 real_total) {
     const auto reply = qobject_cast<const QNetworkReply*>(sender());
+
+    if (reply->isFinished()) return;
+
     const auto id = reply->property("model_id").toString();
 
     auto total = reply->property("size").toLongLong();
