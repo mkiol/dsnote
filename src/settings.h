@@ -8,30 +8,38 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <QSettings>
 #include <QObject>
+#include <QSettings>
 #include <QString>
 #include <QUrl>
 
-class settings : public QSettings
-{
+class settings : public QSettings {
     Q_OBJECT
 
     // app
-    Q_PROPERTY (QString note READ note WRITE set_note NOTIFY note_changed)
-    Q_PROPERTY (speech_mode_type speech_mode READ speech_mode WRITE set_speech_mode NOTIFY speech_mode_changed)
+    Q_PROPERTY(QString note READ note WRITE set_note NOTIFY note_changed)
+    Q_PROPERTY(speech_mode_type speech_mode READ speech_mode WRITE
+                   set_speech_mode NOTIFY speech_mode_changed)
 
     // service
-    Q_PROPERTY (QString models_dir READ models_dir WRITE set_models_dir NOTIFY models_dir_changed)
-    Q_PROPERTY (QUrl models_dir_url READ models_dir_url WRITE set_models_dir_url NOTIFY models_dir_changed)
-    Q_PROPERTY (QString models_dir_name READ models_dir_name NOTIFY models_dir_changed)
-    Q_PROPERTY (QString default_model READ default_model WRITE set_default_model NOTIFY default_model_changed)
+    Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
+                   models_dir_changed)
+    Q_PROPERTY(QUrl models_dir_url READ models_dir_url WRITE set_models_dir_url
+                   NOTIFY models_dir_changed)
+    Q_PROPERTY(
+        QString models_dir_name READ models_dir_name NOTIFY models_dir_changed)
+    Q_PROPERTY(QString default_model READ default_model WRITE set_default_model
+                   NOTIFY default_model_changed)
 
-public:
-    enum class speech_mode_type { SpeechAutomatic = 0, SpeechManual = 1, SpeechSingleSentence = 2 };
+   public:
+    enum class speech_mode_type {
+        SpeechAutomatic = 0,
+        SpeechManual = 1,
+        SpeechSingleSentence = 2
+    };
     Q_ENUM(speech_mode_type)
 
-    static settings* instance();
+    static settings *instance();
 
     // app
     QString note() const;
@@ -49,7 +57,7 @@ public:
     QString default_model() const;
     void set_default_model(const QString &value);
 
-signals:
+   signals:
     // app
     void speech_mode_changed();
     void note_changed();
@@ -58,9 +66,9 @@ signals:
     void models_dir_changed();
     void default_model_changed();
 
-private:
-    static settings* m_instance;
+   private:
+    static settings *m_instance;
     settings() = default;
 };
 
-#endif // SETTINGS_H
+#endif  // SETTINGS_H

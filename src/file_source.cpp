@@ -9,19 +9,17 @@
 
 #include <QAudioFormat>
 
-file_source::file_source(const QString &file, QObject *parent) : audio_source{parent}, file{file}
-{
+file_source::file_source(const QString &file, QObject *parent)
+    : audio_source{parent}, file{file} {
     init_audio();
     start();
 }
 
-bool file_source::ok() const
-{
+bool file_source::ok() const {
     return decoder.error() == QAudioDecoder::NoError;
 }
 
-void file_source::init_audio()
-{
+void file_source::init_audio() {
     QAudioFormat format;
     format.setSampleRate(16000);
     format.setChannelCount(1);
@@ -33,20 +31,19 @@ void file_source::init_audio()
     decoder.setAudioFormat(format);
     decoder.setSourceFilename(file);
 
-    connect(&decoder, &QAudioDecoder::stateChanged, this, &file_source::handle_state_changed);
+    connect(&decoder, &QAudioDecoder::stateChanged, this,
+            &file_source::handle_state_changed);
 }
 
-void file_source::start()
-{
+void file_source::start() {
     decoder.start();
 
-    timer.setInterval(200); // 200 ms
+    timer.setInterval(200);  // 200 ms
     connect(&timer, &QTimer::timeout, this, &file_source::handle_read_timeout);
     timer.start();
 }
 
-void file_source::handle_state_changed(QAudioDecoder::State new_state)
-{
+void file_source::handle_state_changed(QAudioDecoder::State new_state) {
     qDebug() << "audio state:" << new_state;
 
     if (new_state == QAudioDecoder::StoppedState) {
@@ -57,8 +54,7 @@ void file_source::handle_state_changed(QAudioDecoder::State new_state)
     }
 }
 
-void file_source::handle_read_timeout()
-{
+void file_source::handle_read_timeout() {
     if (decoder.error() != QAudioDecoder::NoError) {
         qWarning() << "audio decoder error:" << decoder.errorString();
         decoder.stop();
@@ -72,23 +68,19 @@ void file_source::handle_read_timeout()
     }
 }
 
-void file_source::clear()
-{
+void file_source::clear() {
     while (decoder.bufferAvailable()) decoder.read();
 }
 
-double file_source::progress() const
-{
-    if (decoder.duration() <= 0)
-        return -1;
+double file_source::progress() const {
+    if (decoder.duration() <= 0) return -1;
 
     if (decoder.position() <= 0) return 0;
 
     return static_cast<double>(decoder.position()) / decoder.duration();
 }
 
-int64_t file_source::read_audio(char* buff, int64_t max_size)
-{
+int64_t file_source::read_audio(char *buff, int64_t max_size) {
     int64_t size = 0;
     if (this->buff_size > 0) {
         memcpy(buff, &this->buff.front(), this->buff_size);

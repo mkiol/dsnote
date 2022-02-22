@@ -119,7 +119,7 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
         if (model.available && QFile::exists(model_file))
             list.push_back({id, model.lang_id, model.name, model_file,
                             model.scorer_file_name.isEmpty()
-                                ? ""
+                                ? QString{}
                                 : dir.filePath(model.scorer_file_name),
                             model.experimental, model.available,
                             model.downloading, model.download_progress});
@@ -163,9 +163,10 @@ bool models_manager::model_scorer_same_url(const priv_model_t& model) {
         QUrl model_url{model.urls.front()};
         QUrl scorer_url{model.urls.front()};
 
-        if (model_url.hasQuery() && QUrlQuery{model_url}.hasQueryItem("file") &&
+        if (model_url.hasQuery() &&
+            QUrlQuery{model_url}.hasQueryItem(QStringLiteral("file")) &&
             scorer_url.hasQuery() &&
-            QUrlQuery{scorer_url}.hasQueryItem("file")) {
+            QUrlQuery{scorer_url}.hasQueryItem(QStringLiteral("file"))) {
             model_url.setQuery(QUrlQuery{});
             scorer_url.setQuery(QUrlQuery{});
             return model_url == scorer_url;
@@ -245,13 +246,14 @@ void models_manager::download(const QString& id, download_type type, int part) {
     }
 
     if (comp == comp_type::tarxz && url.hasQuery()) {
-        if (QUrlQuery query{url}; query.hasQueryItem("file")) {
-            path_in_archive = query.queryItemValue("file");
+        if (QUrlQuery query{url}; query.hasQueryItem(QStringLiteral("file"))) {
+            path_in_archive = query.queryItemValue(QStringLiteral("file"));
             if (type == download_type::model_scorer) {
                 path_in_archive_2 =
-                    QUrlQuery{model.scorer_urls.front()}.queryItemValue("file");
+                    QUrlQuery{model.scorer_urls.front()}.queryItemValue(
+                        QStringLiteral("file"));
             }
-            query.removeQueryItem("file");
+            query.removeQueryItem(QStringLiteral("file"));
             url.setQuery(query);
         }
     }
@@ -532,7 +534,7 @@ bool models_manager::tar_decode(const QString& file_in,
                 const auto std_file_out = it->second.toStdString();
                 archive_entry_set_pathname(entry, std_file_out.c_str());
 
-                int ret = archive_write_header(ext, entry);
+                ret = archive_write_header(ext, entry);
                 if (ret != ARCHIVE_OK) {
                     qWarning() << "error archive_write_header:" << file_in
                                << archive_error_string(ext);

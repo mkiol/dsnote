@@ -42,7 +42,7 @@ class models_manager : public QObject {
         double download_progress = 0.0;
     };
 
-    models_manager(QObject* parent = nullptr);
+    explicit models_manager(QObject* parent = nullptr);
     ~models_manager();
     [[nodiscard]] bool ok() const;
     std::vector<model_t> available_models() const;

@@ -123,13 +123,13 @@ ModelsListItem::ModelsListItem(const QString &id, const QString &name,
 
 QHash<int, QByteArray> ModelsListItem::roleNames() const {
     QHash<int, QByteArray> names;
-    names[IdRole] = "id";
-    names[NameRole] = "name";
-    names[LangIdRole] = "lang_id";
-    names[AvailableRole] = "available";
-    names[ExperimentalRole] = "experimental";
-    names[DownloadingRole] = "downloading";
-    names[ProgressRole] = "progress";
+    names[IdRole] = QByteArrayLiteral("id");
+    names[NameRole] = QByteArrayLiteral("name");
+    names[LangIdRole] = QByteArrayLiteral("lang_id");
+    names[AvailableRole] = QByteArrayLiteral("available");
+    names[ExperimentalRole] = QByteArrayLiteral("experimental");
+    names[DownloadingRole] = QByteArrayLiteral("downloading");
+    names[ProgressRole] = QByteArrayLiteral("progress");
     return names;
 }
 

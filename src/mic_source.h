@@ -8,31 +8,29 @@
 #ifndef MIC_SOURCE_H
 #define MIC_SOURCE_H
 
-#include <QObject>
 #include <QAudioInput>
 #include <QIODevice>
+#include <QObject>
 #include <QTimer>
-
 #include <memory>
 
 #include "audio_source.h"
 
-class mic_source : public audio_source
-{
+class mic_source : public audio_source {
     Q_OBJECT
-public:
-    explicit mic_source(QObject *parent = nullptr);
+   public:
+    explicit mic_source(QObject* parent = nullptr);
     ~mic_source() override;
     bool ok() const override;
     int64_t read_audio(char* buff, int64_t max_size) override;
     void clear() override;
     inline source_type type() const override { return source_type::mic; }
 
-private slots:
+   private slots:
     void handle_state_changed(QAudio::State new_state);
     void handle_read_timeout();
 
-private:
+   private:
     std::unique_ptr<QAudioInput> audio_input;
     QTimer timer;
     QIODevice* audio_device;
@@ -41,4 +39,4 @@ private:
     void start();
 };
 
-#endif // MIC_SOURCE_H
+#endif  // MIC_SOURCE_H

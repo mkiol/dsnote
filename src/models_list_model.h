@@ -28,7 +28,7 @@ class ModelsListModel : public SelectableItemModel {
     Q_PROPERTY(QString lang READ lang WRITE setLang NOTIFY langChanged)
    public:
     explicit ModelsListModel(models_manager &manager,
-                                QObject *parent = nullptr);
+                             QObject *parent = nullptr);
     ~ModelsListModel();
 
    signals:

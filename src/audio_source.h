@@ -10,12 +10,11 @@
 
 #include <QObject>
 
-class audio_source : public QObject
-{
+class audio_source : public QObject {
     Q_OBJECT
-public:
+   public:
     enum class source_type { mic, file };
-    explicit audio_source(QObject *parent = nullptr) : QObject(parent) {}
+    explicit audio_source(QObject* parent = nullptr) : QObject{parent} {}
     virtual bool ok() const = 0;
     virtual int64_t read_audio(char* buff, int64_t max_size) = 0;
     virtual void clear() = 0;
@@ -23,10 +22,10 @@ public:
     virtual source_type type() const = 0;
     virtual ~audio_source() = default;
 
-signals:
+   signals:
     void audio_available();
     void error();
     void ended();
 };
 
-#endif // AUDIO_SOURCE_H
+#endif  // AUDIO_SOURCE_H

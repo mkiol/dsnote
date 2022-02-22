@@ -10,33 +10,32 @@
 
 #include <QObject>
 #include <QString>
-#include <QVariantList>
 #include <QTimer>
+#include <QVariantList>
+#include <map>
 #include <memory>
 #include <optional>
-#include <utility>
-#include <map>
 #include <string>
+#include <utility>
 
-#include "dbus_stt_adaptor.h"
-#include "models_manager.h"
-#include "deepspeech_wrapper.h"
 #include "audio_source.h"
+#include "dbus_stt_adaptor.h"
+#include "deepspeech_wrapper.h"
+#include "models_manager.h"
 
-class stt_service : public QObject
-{
+class stt_service : public QObject {
     Q_OBJECT
 
     // DBus
-    Q_PROPERTY(int State READ dbus_state)
-    Q_PROPERTY(bool Speech READ speech)
-    Q_PROPERTY(QVariantMap Langs READ available_langs)
+    Q_PROPERTY(int State READ dbus_state CONSTANT)
+    Q_PROPERTY(bool Speech READ speech CONSTANT)
+    Q_PROPERTY(QVariantMap Langs READ available_langs CONSTANT)
     Q_PROPERTY(QString DefaultLang READ default_lang WRITE set_default_lang)
-    Q_PROPERTY(QVariantMap Models READ available_models)
+    Q_PROPERTY(QVariantMap Models READ available_models CONSTANT)
     Q_PROPERTY(QString DefaultModel READ default_model WRITE set_default_model)
-    Q_PROPERTY(int CurrentTask READ current_task_id)
-    Q_PROPERTY(QVariantMap Translations READ translations)
-public:
+    Q_PROPERTY(int CurrentTask READ current_task_id CONSTANT)
+    Q_PROPERTY(QVariantMap Translations READ translations CONSTANT)
+   public:
     enum class state_type {
         unknown = 0,
         not_configured = 1,
@@ -54,29 +53,22 @@ public:
         single_sentence = 2
     };
 
-    enum class source_type {
-        none = 0,
-        mic = 1,
-        file = 2
-    };
+    enum class source_type { none = 0, mic = 1, file = 2 };
 
-    enum class error_type {
-        generic = 0,
-        mic_source = 1,
-        file_source = 2
-    };
+    enum class error_type { generic = 0, mic_source = 1, file_source = 2 };
 
     explicit stt_service(QObject *parent = nullptr);
 
     Q_INVOKABLE void download_model(const QString &id);
     Q_INVOKABLE void delete_model(const QString &id);
 
-    Q_INVOKABLE int start_listen(speech_mode_type mode, const QString &lang);
+    Q_INVOKABLE int start_listen(stt_service::speech_mode_type mode,
+                                 const QString &lang);
     Q_INVOKABLE int stop_listen(int task);
     Q_INVOKABLE int transcribe_file(const QString &file, const QString &lang);
     Q_INVOKABLE int cancel_file(int task);
 
-signals:
+   signals:
     void models_changed();
     void model_download_progress(const QString &id, double progress);
     void speech_changed();
@@ -84,9 +76,10 @@ signals:
     void state_changed();
     void buff_ready();
     void transcribe_file_progress_changed(double progress, int task);
-    void error(error_type type);
+    void error(stt_service::error_type type);
     void file_transcribe_finished(int task);
-    void intermediate_text_decoded(const QString &text, const QString &lang, int task);
+    void intermediate_text_decoded(const QString &text, const QString &lang,
+                                   int task);
     void text_decoded(const QString &text, const QString &lang, int task);
     void current_task_changed();
 
@@ -94,7 +87,8 @@ signals:
     void ErrorOccured(int code);
     void FileTranscribeFinished(int task);
     void FileTranscribeProgress(double progress, int task);
-    void IntermediateTextDecoded(const QString &text, const QString &lang, int task);
+    void IntermediateTextDecoded(const QString &text, const QString &lang,
+                                 int task);
     void StatePropertyChanged(int state);
     void TextDecoded(const QString &text, const QString &lang, int task);
     void SpeechPropertyChanged(bool speech);
@@ -104,7 +98,7 @@ signals:
     void DefaultModelPropertyChanged(const QString &model);
     void CurrentTaskPropertyChanged(int task);
 
-private:
+   private:
     struct model_data_type {
         QString model_id;
         QString lang_id;
@@ -128,16 +122,16 @@ private:
     static const int SUCCESS = 0;
     static const int FAILURE = -1;
     static const int INVALID_TASK = -1;
-    static const int DS_RESTART_TIME = 2000; // 2s
-    static const int KEEPALIVE_TIME = 60000; // 60s
-    static const int KEEPALIVE_TASK_TIME = 10000; // 10s
-    static const int SINGLE_SENTENCE_TIMEOUT = 10000; // 10s
+    static const int DS_RESTART_TIME = 2000;           // 2s
+    static const int KEEPALIVE_TIME = 60000;           // 60s
+    static const int KEEPALIVE_TASK_TIME = 10000;      // 10s
+    static const int SINGLE_SENTENCE_TIMEOUT = 10000;  // 10s
 
     int last_task_id = INVALID_TASK;
     std::unique_ptr<deepspeech_wrapper> ds;
     std::unique_ptr<audio_source> source;
     models_manager manager;
-    std::map<QString,model_data_type> available_models_map;
+    std::map<QString, model_data_type> available_models_map;
     double progress_value = -1;
     state_type state_value = state_type::unknown;
     SttAdaptor stt_adaptor;
@@ -154,9 +148,11 @@ private:
     QVariantMap available_langs() const;
     void handle_models_changed();
     void handle_text_decoded(const std::string &text);
-    void handle_text_decoded(const QString &text, const QString &model_id, int task_id);
+    void handle_text_decoded(const QString &text, const QString &model_id,
+                             int task_id);
     void handle_intermediate_text_decoded(const std::string &text);
-    void handle_intermediate_text_decoded(const QString &text, const QString &model_id, int task_id);
+    void handle_intermediate_text_decoded(const QString &text,
+                                          const QString &model_id, int task_id);
     void handle_audio_available();
     void handle_speech_status_changed(bool speech_detected);
     void handle_processing_changed(bool processing);
@@ -170,7 +166,8 @@ private:
     [[nodiscard]] double transcribe_file_progress(int task) const;
     [[nodiscard]] source_type audio_source_type() const;
     void set_progress(double progress);
-    std::optional<model_files_type> choose_model_files(const QString &model_id = {});
+    std::optional<model_files_type> choose_model_files(
+        const QString &model_id = {});
     inline bool recording() const { return source ? true : false; };
     inline state_type state() const { return state_value; };
     void refresh_status();
@@ -184,7 +181,9 @@ private:
     void set_default_model(const QString &model_id) const;
     void set_default_lang(const QString &lang_id) const;
     int next_task_id();
-    inline int current_task_id() const { return current_task ? current_task->id : INVALID_TASK; }
+    inline int current_task_id() const {
+        return current_task ? current_task->id : INVALID_TASK;
+    }
     void handle_keepalive_timeout();
     void handle_task_timeout();
     QVariantMap translations() const;
@@ -200,4 +199,4 @@ private:
     Q_INVOKABLE int Reload();
 };
 
-#endif // STT_SERVICE_H
+#endif  // STT_SERVICE_H

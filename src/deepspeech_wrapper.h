@@ -38,7 +38,7 @@ public:
                        bool speech_started = false);
     ~deepspeech_wrapper();
     std::pair<char*, int64_t> borrow_buff();
-    void return_buff(char* c_buff, int64_t size);
+    void return_buff(const char* c_buff, int64_t size);
     inline void restart() { restart_requested = true; }
     [[nodiscard]] inline bool speech_detected() const { return speech_detected_value; }
     void set_speech_mode(speech_mode_type mode);

@@ -8,30 +8,29 @@
 #ifndef FILE_SOURCE_H
 #define FILE_SOURCE_H
 
-#include <QObject>
 #include <QAudioDecoder>
+#include <QObject>
 #include <QString>
 #include <QTimer>
 
 #include "audio_source.h"
 
-class file_source : public audio_source
-{
+class file_source : public audio_source {
     Q_OBJECT
-public:
+   public:
     explicit file_source(const QString &file, QObject *parent = nullptr);
     bool ok() const override;
-    int64_t read_audio(char* buff, int64_t max_size) override;
+    int64_t read_audio(char *buff, int64_t max_size) override;
     double progress() const override;
     void clear() override;
     inline source_type type() const override { return source_type::file; }
     inline QString audio_file() const { return file; };
 
-private slots:
+   private slots:
     void handle_state_changed(QAudioDecoder::State new_state);
     void handle_read_timeout();
 
-private:
+   private:
     static const size_t buff_max_size = 16000;
 
     QAudioDecoder decoder;
@@ -44,4 +43,4 @@ private:
     void start();
 };
 
-#endif // FILE_SOURCE_H
+#endif  // FILE_SOURCE_H

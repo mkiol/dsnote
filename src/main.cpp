@@ -57,19 +57,15 @@ void register_types() {
 }
 
 #ifdef SAILFISH
-void install_translator(QGuiApplication* app)
-#else
-void install_translator(const std::unique_ptr<QGuiApplication>& app)
-#endif
-{
-    auto translator = new QTranslator{};
-#ifdef SAILFISH
+void install_translator(QGuiApplication* app) {
+    auto translator = new QTranslator{app};
     auto trans_dir = SailfishApp::pathTo("translations").toLocalFile();
 #else
+void install_translator(const std::unique_ptr<QGuiApplication>& app) {
+    auto translator = new QTranslator{app.get()};
     QString trans_dir = ":/translations";
 #endif
-    const QString locale = QLocale::system().name();
-    if (!translator->load(locale, QStringLiteral("dsnote"), "-", trans_dir,
+    if (!translator->load(QLocale{}, QStringLiteral("dsnote"), "-", trans_dir,
                           QStringLiteral(".qm"))) {
         qDebug() << "cannot load translation:" << QLocale::system().name()
                  << trans_dir;

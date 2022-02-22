@@ -8,8 +8,8 @@
 #ifndef ITEMMODEL_H
 #define ITEMMODEL_H
 
-#include <QObject>
 #include <QList>
+#include <QObject>
 #include <QThread>
 #include <memory>
 
@@ -17,89 +17,90 @@
 
 class ItemModel;
 
-class ItemWorker : public QThread
-{
+class ItemWorker : public QThread {
     Q_OBJECT
-friend class ItemModel;
-friend class SelectableItemModel;
+    friend class ItemModel;
+    friend class SelectableItemModel;
 
-public:
+   public:
     explicit ItemWorker(ItemModel *model, const QString &data = {});
     ~ItemWorker();
 
-private:
+   private:
     QString data;
     ItemModel *model;
-    QList<ListItem*> items;
+    QList<ListItem *> items;
     void run();
 };
 
-class ItemModel : public ListModel
-{
+class ItemModel : public ListModel {
     Q_OBJECT
-    Q_PROPERTY (bool busy READ isBusy NOTIFY busyChanged)
-    Q_PROPERTY (int count READ getCount NOTIFY countChanged)
+    Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
+    Q_PROPERTY(int count READ getCount NOTIFY countChanged)
 
-friend class ItemWorker;
+    friend class ItemWorker;
 
-public:
+   public:
     explicit ItemModel(ListItem *prototype, QObject *parent = nullptr);
     ~ItemModel();
     int getCount() const;
-
-public slots:
-    virtual void updateModel(const QString &data = {});
     bool isBusy() const;
-public:
-    virtual void beforeUpdate(const QList<ListItem*> &oldItems, const QList<ListItem*> &newItems);
 
-signals:
+   public slots:
+    virtual void updateModel(const QString &data = {});
+
+   public:
+    virtual void beforeUpdate(const QList<ListItem *> &oldItems,
+                              const QList<ListItem *> &newItems);
+
+   signals:
     void busyChanged();
     void countChanged();
 
-protected slots:
+   protected slots:
     virtual void workerDone();
 
-protected:
+   protected:
     std::unique_ptr<ItemWorker> m_worker;
-    virtual QList<ListItem*> makeItems() = 0;
-    virtual void postMakeItems(const QList<ListItem*> &items);
+    virtual QList<ListItem *> makeItems() = 0;
+    virtual void postMakeItems(const QList<ListItem *> &items);
     virtual void clear();
     void setBusy(bool busy);
 
-private:
+   private:
     bool m_busy = true;
 };
 
-class SelectableItem: public ListItem
-{
+class SelectableItem : public ListItem {
     Q_OBJECT
 
-public:
-    SelectableItem(QObject* parent = nullptr) : ListItem(parent) {}
+   public:
+    explicit SelectableItem(QObject *parent = nullptr) : ListItem{parent} {}
     inline bool selected() const { return m_selected; }
     inline bool selectable() const { return m_selectable; }
     void setSelected(bool value);
 
-protected:
+   protected:
     bool m_selectable = true;
 
-private:
+   private:
     bool m_selected = false;
 };
 
-class SelectableItemModel : public ItemModel
-{
+class SelectableItemModel : public ItemModel {
     Q_OBJECT
-    Q_PROPERTY (QString filter READ getFilter WRITE setFilter NOTIFY filterChanged)
-    Q_PROPERTY (int selectedCount READ selectedCount NOTIFY selectedCountChanged)
-    Q_PROPERTY (int selectableCount READ selectableCount NOTIFY selectableCountChanged)
+    Q_PROPERTY(
+        QString filter READ getFilter WRITE setFilter NOTIFY filterChanged)
+    Q_PROPERTY(int selectedCount READ selectedCount NOTIFY selectedCountChanged)
+    Q_PROPERTY(
+        int selectableCount READ selectableCount NOTIFY selectableCountChanged)
 
-public:
-    explicit SelectableItemModel(SelectableItem *prototype, QObject *parent = nullptr);
-    void setFilter(const QString& filter);
-    void setFilterNoUpdate(const QString& filter);
-    const QString& getFilter() const;
+   public:
+    explicit SelectableItemModel(SelectableItem *prototype,
+                                 QObject *parent = nullptr);
+    void setFilter(const QString &filter);
+    void setFilterNoUpdate(const QString &filter);
+    const QString &getFilter() const;
     int selectedCount();
     int selectableCount();
 
@@ -107,23 +108,23 @@ public:
     Q_INVOKABLE void setAllSelected(bool value);
     Q_INVOKABLE virtual QVariantList selectedItems();
 
-public slots:
-    virtual void updateModel(const QString &data = QString());
+   public slots:
+    virtual void updateModel(const QString &data = {}) override;
 
-signals:
+   signals:
     void filterChanged();
     void selectedCountChanged();
     void selectableCountChanged();
 
-protected slots:
-    virtual void workerDone();
+   protected slots:
+    virtual void workerDone() override;
 
-private:
+   private:
     QString m_filter;
     int m_selectedCount = 0;
     int m_selectableCount = 0;
-    void clear();
-    void postMakeItems(const QList<ListItem*> &items);
+    void clear() override;
+    void postMakeItems(const QList<ListItem *> &items) override;
 };
 
-#endif // ITEMMODEL_H
+#endif  // ITEMMODEL_H
