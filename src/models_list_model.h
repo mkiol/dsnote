@@ -66,7 +66,6 @@ class ModelsListItem : public SelectableItem {
         ProgressRole
     };
 
-   public:
     ModelsListItem(QObject *parent = nullptr) : SelectableItem{parent} {}
     ModelsListItem(const QString &id, const QString &name,
                    const QString &langId = {}, bool available = true,

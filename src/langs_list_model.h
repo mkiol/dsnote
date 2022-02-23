@@ -56,7 +56,6 @@ class LangsListItem : public SelectableItem {
         DownloadingRole
     };
 
-   public:
     LangsListItem(QObject *parent = nullptr) : SelectableItem{parent} {}
     LangsListItem(const QString &id, const QString &name,
                   bool available = false, bool downloading = false,

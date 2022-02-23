@@ -8,49 +8,62 @@
 #ifndef DEEP_SPEECH_WRAPPER_H
 #define DEEP_SPEECH_WRAPPER_H
 
-#include <memory>
 #include <array>
 #include <atomic>
-#include <thread>
-#include <mutex>
 #include <condition_variable>
-#include <string>
-#include <utility>
 #include <functional>
+#include <memory>
+#include <mutex>
 #include <optional>
+#include <string>
+#include <thread>
+#include <utility>
 
 #include "coqui-stt.h"
 
-class deepspeech_wrapper
-{
-public:
-    enum class speech_mode_type { automatic = 0, manual = 1, single_sentence = 2 };
+class deepspeech_wrapper {
+   public:
+    enum class speech_mode_type {
+        automatic = 0,
+        manual = 1,
+        single_sentence = 2
+    };
     struct callbacks_type {
         std::function<void(const std::string& text)> text_decoded;
         std::function<void(const std::string& text)> intermediate_text_decoded;
         std::function<void(bool speech_detected)> speech_status_changed;
     };
 
-    deepspeech_wrapper(const std::string& model_file,
-                       const std::string& scorer_file,
-                       const callbacks_type& call_backs,
-                       speech_mode_type speech_mode = speech_mode_type::automatic,
-                       bool speech_started = false);
+    deepspeech_wrapper(
+        const std::string& model_file, const std::string& scorer_file,
+        const callbacks_type& call_backs,
+        speech_mode_type speech_mode = speech_mode_type::automatic,
+        bool speech_started = false);
     ~deepspeech_wrapper();
     std::pair<char*, int64_t> borrow_buff();
     void return_buff(const char* c_buff, int64_t size);
     inline void restart() { restart_requested = true; }
-    [[nodiscard]] inline bool speech_detected() const { return speech_detected_value; }
+    [[nodiscard]] inline bool speech_detected() const {
+        return speech_detected_value;
+    }
     void set_speech_mode(speech_mode_type mode);
-    [[nodiscard]] inline speech_mode_type speech_mode() const { return speech_mode_value; }
+    [[nodiscard]] inline speech_mode_type speech_mode() const {
+        return speech_mode_value;
+    }
     void set_speech_started(bool value);
-    [[nodiscard]] inline bool speech_status() const { return speech_started_value; }
-    [[nodiscard]] inline const std::string& model_file() const { return model_file_value; }
-    [[nodiscard]] inline const std::string& scorer_file() const { return scorer_file_value; }
+    [[nodiscard]] inline bool speech_status() const {
+        return speech_started_value;
+    }
+    [[nodiscard]] inline const std::string& model_file() const {
+        return model_file_value;
+    }
+    [[nodiscard]] inline const std::string& scorer_file() const {
+        return scorer_file_value;
+    }
 
-private:
-    static const int frame_size = 16000; // 1s
-    static const unsigned int silent_level = 2; // number of frames
+   private:
+    static const int frame_size = 16000;         // 1s
+    static const unsigned int silent_level = 2;  // number of frames
     static const unsigned int min_text_size = 4;
 
     typedef std::array<short, 2 * frame_size> buff_type;
@@ -96,16 +109,16 @@ private:
     void process_buff(buff_type::const_iterator begin,
                       buff_type::const_iterator end);
     void trim_buff(buff_type::const_iterator begin);
-    unsigned int accumulate_abs(buff_type::const_iterator begin,
-                                buff_type::const_iterator end) const;
+    static unsigned int accumulate_abs(buff_type::const_iterator begin,
+                                       buff_type::const_iterator end);
     [[nodiscard]] bool detect_silent(buff_type::const_iterator begin,
-                       buff_type::const_iterator end);
+                                     buff_type::const_iterator end);
     bool lock_buff(lock_type desired_lock);
     bool lock_buff_for_processing();
     void free_buff(lock_type lock);
     void free_buff();
     void set_speech_detected(bool detected);
-    void set_intermediate_text(const char *text);
+    void set_intermediate_text(const char* text);
 };
 
-#endif // DEEP_SPEECH_WRAPPER_H
+#endif  // DEEP_SPEECH_WRAPPER_H

@@ -44,7 +44,7 @@ void LangsListModel::beforeUpdate(const QList<ListItem *> &oldItems,
 
 ListItem *LangsListModel::makeItem(const models_manager::lang_t &lang) {
     return new LangsListItem{lang.id,
-                             QString{"%1 / %2"}.arg(lang.name, lang.id),
+                             QStringLiteral("%1 / %2").arg(lang.name, lang.id),
                              lang.available, lang.downloading};
 }
 

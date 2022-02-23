@@ -39,8 +39,9 @@ class stt_config : public QObject {
     void default_model_changed();
 
    private:
-    inline static const QString DBUS_SERVICE_NAME{"org.mkiol.Stt"};
-    inline static const QString DBUS_SERVICE_PATH{"/"};
+    inline static const QString DBUS_SERVICE_NAME{
+        QStringLiteral("org.mkiol.Stt")};
+    inline static const QString DBUS_SERVICE_PATH{QStringLiteral("/")};
     static const int SUCCESS = 0;
     static const int FAILURE = -1;
 
@@ -53,7 +54,7 @@ class stt_config : public QObject {
     ModelsListModel *models_model();
     void handle_models_changed();
     inline bool busy() const { return m_manager.busy(); }
-    void reload();
+    void reload() const;
 };
 
 #endif  // STT_CONFIG_H

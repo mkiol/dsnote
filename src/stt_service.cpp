@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+﻿/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -176,7 +176,7 @@ std::optional<stt_service::model_files_type> stt_service::choose_model_files(
 
     // search by model id
     for (const auto &model : models) {
-        if (!id.compare(model.id, Qt::CaseInsensitive)) {
+        if (id.compare(model.id, Qt::CaseInsensitive) == 0) {
             active_files.model_id = model.id;
             active_files.model_file = model.model_file;
             active_files.scorer_file = model.scorer_file;
@@ -188,7 +188,7 @@ std::optional<stt_service::model_files_type> stt_service::choose_model_files(
     // search by lang id
     if (active_files.model_id.isEmpty()) {
         for (const auto &model : models) {
-            if (!id.compare(model.lang_id, Qt::CaseInsensitive)) {
+            if (id.compare(model.lang_id, Qt::CaseInsensitive) == 0) {
                 active_files.model_id = model.id;
                 active_files.model_file = model.model_file;
                 active_files.scorer_file = model.scorer_file;
@@ -322,10 +322,11 @@ QVariantMap stt_service::available_models() const {
 
     std::for_each(available_models_map.cbegin(), available_models_map.cend(),
                   [&map](const auto &p) {
-                      map.insert(p.first, QStringList{p.second.model_id,
-                                                      QString{"%1 / %2"}.arg(
-                                                          p.second.name,
-                                                          p.second.lang_id)});
+                      map.insert(
+                          p.first,
+                          QStringList{p.second.model_id,
+                                      QStringLiteral("%1 / %2").arg(
+                                          p.second.name, p.second.lang_id)});
                   });
 
     return map;
@@ -340,7 +341,7 @@ QVariantMap stt_service::available_langs() const {
             if (!map.contains(p.second.lang_id)) {
                 map.insert(p.second.lang_id,
                            QStringList{p.second.model_id,
-                                       QString{"%1 / %2"}.arg(
+                                       QStringLiteral("%1 / %2").arg(
                                            p.second.name, p.second.lang_id)});
             }
         });
@@ -382,9 +383,8 @@ double stt_service::transcribe_file_progress(int task) const {
     if (audio_source_type() == source_type::file) {
         if (current_task && current_task->id == task) {
             return progress_value;
-        } else {
-            qWarning() << "invalid task id";
         }
+        qWarning() << "invalid task id";
     }
 
     return -1.0;
@@ -578,7 +578,7 @@ void stt_service::restart_audio_source(const QString &source_file) {
     if (ds) {
         ds->restart();
 
-        if (source) source.get()->disconnect();
+        if (source) source->disconnect();
 
         if (source_file.isEmpty())
             source = std::make_unique<mic_source>();
@@ -600,7 +600,7 @@ void stt_service::restart_audio_source(const QString &source_file) {
 
 void stt_service::handle_keepalive_timeout() {
     qWarning() << "keepalive timeout => shutting down";
-    QCoreApplication::instance()->quit();
+    QCoreApplication::quit();
 }
 
 void stt_service::handle_task_timeout() {
@@ -789,7 +789,8 @@ int stt_service::KeepAliveTask(int task) {
     if (current_task && current_task->id == task) {
         keepalive_current_task_timer.start();
         return keepalive_current_task_timer.remainingTime();
-    } else if (pending_task && pending_task->id == task) {
+    }
+    if (pending_task && pending_task->id == task) {
         qDebug() << "pending:" << task;
         return KEEPALIVE_TASK_TIME;
     }

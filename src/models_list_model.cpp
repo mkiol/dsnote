@@ -34,8 +34,8 @@ void ModelsListModel::beforeUpdate(const QList<ListItem *> &oldItems,
     const auto &[it, _] = std::mismatch(
         oldItems.cbegin(), oldItems.cend(), newItems.cbegin(), newItems.cend(),
         [](const ListItem *a, const ListItem *b) {
-            const auto aa = static_cast<const ModelsListItem *>(a);
-            const auto bb = static_cast<const ModelsListItem *>(b);
+            const auto *aa = dynamic_cast<const ModelsListItem *>(a);
+            const auto *bb = dynamic_cast<const ModelsListItem *>(b);
             return aa->available() == bb->available() &&
                    aa->downloading() == bb->downloading() &&
                    aa->progress() == bb->progress();
@@ -44,13 +44,14 @@ void ModelsListModel::beforeUpdate(const QList<ListItem *> &oldItems,
 }
 
 ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
-    return new ModelsListItem{model.id,
-                              QString{"%1 / %2"}.arg(model.name, model.lang_id),
-                              model.lang_id,
-                              model.available,
-                              model.experimental,
-                              model.downloading,
-                              model.download_progress};
+    return new ModelsListItem{
+        /*id=*/model.id,
+        /*name=*/QStringLiteral("%1 / %2").arg(model.name, model.lang_id),
+        /*langId=*/model.lang_id,
+        /*available=*/model.available,
+        /*experimental=*/model.experimental,
+        /*downloading=*/model.downloading,
+        /*progress=*/model.download_progress};
 }
 
 QList<ListItem *> ModelsListModel::makeItems() {
@@ -77,8 +78,8 @@ QList<ListItem *> ModelsListModel::makeItems() {
 
     std::sort(
         items.begin(), items.end(), [](const ListItem *a, const ListItem *b) {
-            const auto aa = static_cast<const ModelsListItem *>(a);
-            const auto bb = static_cast<const ModelsListItem *>(b);
+            const auto *aa = qobject_cast<const ModelsListItem *>(a);
+            const auto *bb = qobject_cast<const ModelsListItem *>(b);
             if (aa->experimental() == bb->experimental()) {
                 return aa->id().compare(bb->id(), Qt::CaseInsensitive) < 0;
             }

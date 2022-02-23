@@ -57,7 +57,7 @@ class dsnote_app : public QObject {
     };
     Q_ENUM(error_type)
 
-    dsnote_app();
+    dsnote_app(QObject *parent = nullptr);
     Q_INVOKABLE void set_active_lang_idx(int idx);
     Q_INVOKABLE void transcribe_file(const QString &source_file);
     Q_INVOKABLE void transcribe_file(const QUrl &source_file);
@@ -81,8 +81,9 @@ class dsnote_app : public QObject {
     void stt_state_changed();
 
    private:
-    inline static const QString DBUS_SERVICE_NAME{"org.mkiol.Stt"};
-    inline static const QString DBUS_SERVICE_PATH{"/"};
+    inline static const QString DBUS_SERVICE_NAME{
+        QStringLiteral("org.mkiol.Stt")};
+    inline static const QString DBUS_SERVICE_PATH{QStringLiteral("/")};
     static const int SUCCESS = 0;
     static const int FAILURE = -1;
     static const int INVALID_TASK = -1;
@@ -109,7 +110,7 @@ class dsnote_app : public QObject {
     QString intermediate_text_value;
     double transcribe_progress_value = -1.0;
     OrgMkiolSttInterface stt;
-    stt_state_type stt_state_value;
+    stt_state_type stt_state_value = stt_state_type::SttUnknown;
     bool speech_value = false;
     task_type listen_task;
     task_type transcribe_task;

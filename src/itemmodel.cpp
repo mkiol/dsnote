@@ -92,9 +92,9 @@ SelectableItemModel::SelectableItemModel(SelectableItem *prototype,
                                          QObject *parent)
     : ItemModel(prototype, parent) {}
 
-int SelectableItemModel::selectedCount() { return m_selectedCount; }
+int SelectableItemModel::selectedCount() const { return m_selectedCount; }
 
-int SelectableItemModel::selectableCount() { return m_selectableCount; }
+int SelectableItemModel::selectableCount() const { return m_selectableCount; }
 
 void SelectableItemModel::clear() {
     ItemModel::clear();

@@ -46,9 +46,9 @@ QVariantList stt_config::available_models() const {
     QVariantList list;
     std::transform(available_models_map.cbegin(), available_models_map.cend(),
                    std::back_inserter(list), [](const auto &model) {
-                       return QStringList{
-                           model.id,
-                           QString{"%1 / %2"}.arg(model.name, model.lang_id)};
+                       return QStringList{model.id,
+                                          QStringLiteral("%1 / %2").arg(
+                                              model.name, model.lang_id)};
                    });
 
     return list;
@@ -68,7 +68,7 @@ double stt_config::model_download_progress(const QString &id) const {
     return m_manager.model_download_progress(id);
 }
 
-void stt_config::reload() {
+void stt_config::reload() const {
     OrgMkiolSttInterface stt{DBUS_SERVICE_NAME, DBUS_SERVICE_PATH,
                              QDBusConnection::sessionBus()};
     if (!stt.isValid()) {

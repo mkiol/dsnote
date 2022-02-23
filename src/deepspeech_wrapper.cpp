@@ -108,8 +108,8 @@ int deepspeech_wrapper::sample_rate() const {
     return STT_GetModelSampleRate(model.get());
 }
 
-unsigned int deepspeech_wrapper::accumulate_abs(
-    buff_type::const_iterator begin, buff_type::const_iterator end) const {
+unsigned int deepspeech_wrapper::accumulate_abs(buff_type::const_iterator begin,
+                                                buff_type::const_iterator end) {
     unsigned int sum = 0;
 
     std::for_each(begin, end, [&](const auto& v) { sum += std::abs(v); });
@@ -197,7 +197,8 @@ bool deepspeech_wrapper::process_buff() {
             buff_struct.size = 0;
             free_buff();
             return false;
-        } else if (!speech_detected_value) {
+        }
+        if (!speech_detected_value) {
             last_frame_done = true;
         }
     }

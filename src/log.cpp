@@ -40,7 +40,7 @@ void qtLog(QtMsgType type, const QMessageLogContext &context,
 
     fprintf(stderr, "[%c] %s %p %s:%u - %s\n", t,
             QDateTime::currentDateTime()
-                .toString("hh:mm:ss.zzz")
+                .toString(QStringLiteral("hh:mm:ss.zzz"))
                 .toLatin1()
                 .constData(),
             static_cast<void *>(QThread::currentThread()),

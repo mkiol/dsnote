@@ -117,8 +117,9 @@ class stt_service : public QObject {
         QString model_id;
     };
 
-    inline static const QString DBUS_SERVICE_NAME{"org.mkiol.Stt"};
-    inline static const QString DBUS_SERVICE_PATH{"/"};
+    inline static const QString DBUS_SERVICE_NAME{
+        QStringLiteral("org.mkiol.Stt")};
+    inline static const QString DBUS_SERVICE_PATH{QStringLiteral("/")};
     static const int SUCCESS = 0;
     static const int FAILURE = -1;
     static const int INVALID_TASK = -1;
@@ -168,7 +169,7 @@ class stt_service : public QObject {
     void set_progress(double progress);
     std::optional<model_files_type> choose_model_files(
         const QString &model_id = {});
-    inline bool recording() const { return source ? true : false; };
+    inline bool recording() const { return static_cast<bool>(source); };
     inline state_type state() const { return state_value; };
     void refresh_status();
     static QString state_str(state_type state_value);

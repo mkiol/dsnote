@@ -30,7 +30,7 @@ class ItemWorker : public QThread {
     QString data;
     ItemModel *model;
     QList<ListItem *> items;
-    void run();
+    void run() final;
 };
 
 class ItemModel : public ListModel {
@@ -46,19 +46,15 @@ class ItemModel : public ListModel {
     int getCount() const;
     bool isBusy() const;
 
-   public slots:
-    virtual void updateModel(const QString &data = {});
-
-   public:
-    virtual void beforeUpdate(const QList<ListItem *> &oldItems,
-                              const QList<ListItem *> &newItems);
-
    signals:
     void busyChanged();
     void countChanged();
 
-   protected slots:
-    virtual void workerDone();
+   public slots:
+    virtual void updateModel(const QString &data = {});
+
+    virtual void beforeUpdate(const QList<ListItem *> &oldItems,
+                              const QList<ListItem *> &newItems);
 
    protected:
     std::unique_ptr<ItemWorker> m_worker;
@@ -66,6 +62,9 @@ class ItemModel : public ListModel {
     virtual void postMakeItems(const QList<ListItem *> &items);
     virtual void clear();
     void setBusy(bool busy);
+
+   protected slots:
+    virtual void workerDone();
 
    private:
     bool m_busy = true;
@@ -101,15 +100,15 @@ class SelectableItemModel : public ItemModel {
     void setFilter(const QString &filter);
     void setFilterNoUpdate(const QString &filter);
     const QString &getFilter() const;
-    int selectedCount();
-    int selectableCount();
+    int selectedCount() const;
+    int selectableCount() const;
 
     Q_INVOKABLE void setSelected(int index, bool value);
     Q_INVOKABLE void setAllSelected(bool value);
     Q_INVOKABLE virtual QVariantList selectedItems();
 
    public slots:
-    virtual void updateModel(const QString &data = {}) override;
+    void updateModel(const QString &data = {}) override;
 
    signals:
     void filterChanged();
@@ -117,7 +116,7 @@ class SelectableItemModel : public ItemModel {
     void selectableCountChanged();
 
    protected slots:
-    virtual void workerDone() override;
+    void workerDone() override;
 
    private:
     QString m_filter;

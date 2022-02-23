@@ -14,8 +14,8 @@
 #include "mic_source.h"
 #include "settings.h"
 
-dsnote_app::dsnote_app()
-    : QObject{},
+dsnote_app::dsnote_app(QObject *parent)
+    : QObject{parent},
       stt{DBUS_SERVICE_NAME, DBUS_SERVICE_PATH, QDBusConnection::sessionBus()} {
     connect(settings::instance(), &settings::speech_mode_changed, this,
             &dsnote_app::update_listen);
@@ -335,9 +335,8 @@ int dsnote_app::active_lang_idx() const {
     const auto it = available_langs_map.find(active_lang_value);
     if (it == available_langs_map.end()) {
         return -1;
-    } else {
-        return std::distance(available_langs_map.begin(), it);
     }
+    return std::distance(available_langs_map.begin(), it);
 }
 
 void dsnote_app::update_active_lang() {

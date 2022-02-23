@@ -26,10 +26,6 @@ class file_source : public audio_source {
     inline source_type type() const override { return source_type::file; }
     inline QString audio_file() const { return file; };
 
-   private slots:
-    void handle_state_changed(QAudioDecoder::State new_state);
-    void handle_read_timeout();
-
    private:
     static const size_t buff_max_size = 16000;
 
@@ -41,6 +37,10 @@ class file_source : public audio_source {
 
     void init_audio();
     void start();
+
+   private slots:
+    void handle_state_changed(QAudioDecoder::State new_state);
+    void handle_read_timeout();
 };
 
 #endif  // FILE_SOURCE_H

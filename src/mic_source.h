@@ -26,10 +26,6 @@ class mic_source : public audio_source {
     void clear() override;
     inline source_type type() const override { return source_type::mic; }
 
-   private slots:
-    void handle_state_changed(QAudio::State new_state);
-    void handle_read_timeout();
-
    private:
     std::unique_ptr<QAudioInput> audio_input;
     QTimer timer;
@@ -37,6 +33,8 @@ class mic_source : public audio_source {
 
     void init_audio();
     void start();
+    void handle_state_changed(QAudio::State new_state);
+    void handle_read_timeout();
 };
 
 #endif  // MIC_SOURCE_H

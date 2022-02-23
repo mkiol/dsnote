@@ -43,6 +43,10 @@ class models_manager : public QObject {
     };
 
     explicit models_manager(QObject* parent = nullptr);
+    models_manager(const models_manager&) = delete;
+    models_manager& operator=(const models_manager&) = delete;
+    models_manager(models_manager&&) = delete;
+    models_manager& operator=(models_manager&&) = delete;
     ~models_manager();
     [[nodiscard]] bool ok() const;
     std::vector<model_t> available_models() const;
@@ -89,7 +93,7 @@ class models_manager : public QObject {
         qint64 downloaded_part_data = 0;
     };
 
-    inline static const QString models_file{"models.json"};
+    inline static const QString models_file{QStringLiteral("models.json")};
     using langs_t = std::map<QString, QString>;
     using models_t = std::map<QString, priv_model_t>;
 

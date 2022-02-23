@@ -75,6 +75,6 @@ QVariant DirItem::data(int role) const {
         case PathRole:
             return path();
         default:
-            return QVariant();
+            return {};
     }
 }
