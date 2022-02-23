@@ -96,6 +96,18 @@
         {
             "name": "Magyar",
             "id": "hu"
+        },
+        {
+            "name": "Монгол",
+            "id": "mn"
+        },
+        {
+            "name": "Suomi",
+            "id": "fi"
+        },
+        {
+            "name": "Eesti",
+            "id": "et"
         }
     ],
     "models": [
@@ -151,10 +163,26 @@
             "scorer_size": "953363776"
         },
         {
-            "name": "English (Huge Vocabulary)",
+            "name": "English (Coqui)",
+            "model_id": "en_co",
+            "lang_id": "en",
+            "checksum": "6d38ae6e",
+            "checksum_quick": "6f7d6d9b",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv0.9.3/model.tflite"
+            ],
+            "size": "47331784",
+            "scorer_checksum": "969d9b57",
+            "scorer_checksum_quick": "7b82eb9e",
+            "scorer_urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv0.9.3/coqui-stt-0.9.3-models.scorer"
+            ],
+            "scorer_size": "953363776"
+        },
+        {
+            "name": "English (Coqui Huge Vocabulary)",
             "model_id": "en_hv",
             "lang_id": "en",
-            "experimental": true,
             "checksum": "822d8ec3",
             "checksum_quick": "fc0dd76f",
             "urls": [
@@ -194,6 +222,23 @@
                 "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-08"
             ],
             "scorer_size": "229904847"
+        },
+        {
+            "name": "Deutsch (Aashish Agarwal)",
+            "model_id": "de_aa",
+            "lang_id": "de",
+            "checksum": "4f9b4f32",
+            "checksum_quick": "b565cad0",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/german/AASHISHAG/v0.9.0/model.tflite"
+            ],
+            "size": "47338296",
+            "scorer_checksum": "7819e04d",
+            "scorer_checksum_quick": "1adc8f8f",
+            "scorer_urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/german/AASHISHAG/v0.9.0/de-aashishag-1-prune-kenlm.scorer"
+            ],
+            "scorer_size": "564845728"
         },
         {
             "name": "Español (Jaco)",
@@ -254,7 +299,6 @@
             "name": "Français (Common Voice)",
             "model_id": "fr_cv",
             "lang_id": "fr",
-            "experimental": true,
             "checksum": "24aba517",
             "checksum_quick": "7385ddab",
             "comp": "tarxz",
@@ -293,7 +337,6 @@
             "name": "Italiano (Mozilla Italia)",
             "model_id": "it_mozz",
             "lang_id": "it",
-            "experimental": true,
             "checksum": "922bbca1",
             "checksum_quick": "a4c9e57b",
             "comp": "tarxz",
@@ -533,22 +576,40 @@
             "size": "47348584"
         },
         {
-            "name": "Deutsch (Aashish Agarwal)",
-            "model_id": "de_aa",
-            "lang_id": "de",
+            "name": "Монгол (ITML)",
+            "model_id": "mn",
+            "lang_id": "mn",
             "experimental": true,
-            "checksum": "4f9b4f32",
-            "checksum_quick": "b565cad0",
+            "checksum": "c59d566c",
+            "checksum_quick": "171308d9",
             "urls": [
-                "https://github.com/coqui-ai/STT-models/releases/download/german/AASHISHAG/v0.9.0/model.tflite"
+                "https://github.com/coqui-ai/STT-models/releases/download/mongolian%2Fitml%2Fv0.1.1/model.tflite"
             ],
-            "size": "47338296",
-            "scorer_checksum": "7819e04d",
-            "scorer_checksum_quick": "1adc8f8f",
-            "scorer_urls": [
-                "https://github.com/coqui-ai/STT-models/releases/download/german/AASHISHAG/v0.9.0/de-aashishag-1-prune-kenlm.scorer"
+            "size": "47346544"
+        },
+        {
+            "name": "Suomi (ITML)",
+            "model_id": "fi",
+            "lang_id": "fi",
+            "experimental": true,
+            "checksum": "ddc7f585",
+            "checksum_quick": "44efb576",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/finnish%2Fitml%2Fv0.1.1/model.tflite"
             ],
-            "scorer_size": "564845728"
+            "size": "47332112"
+        },
+        {
+            "name": "Eesti (ITML)",
+            "model_id": "et",
+            "lang_id": "et",
+            "experimental": true,
+            "checksum": "62cec9ed",
+            "checksum_quick": "716ae8b3",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/estonian%2Fitml%2Fv0.1.1/model.tflite"
+            ],
+            "size": "47344464"
         }
     ]
 }
