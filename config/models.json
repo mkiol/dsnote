@@ -163,23 +163,6 @@
             "scorer_size": "953363776"
         },
         {
-            "name": "English (Coqui)",
-            "model_id": "en_co",
-            "lang_id": "en",
-            "checksum": "6d38ae6e",
-            "checksum_quick": "6f7d6d9b",
-            "urls": [
-                "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv0.9.3/model.tflite"
-            ],
-            "size": "47331784",
-            "scorer_checksum": "969d9b57",
-            "scorer_checksum_quick": "7b82eb9e",
-            "scorer_urls": [
-                "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv0.9.3/coqui-stt-0.9.3-models.scorer"
-            ],
-            "scorer_size": "953363776"
-        },
-        {
             "name": "English (Coqui Huge Vocabulary)",
             "model_id": "en_hv",
             "lang_id": "en",
@@ -195,6 +178,24 @@
                 "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv1.0.0-huge-vocab/huge-vocabulary.scorer"
             ],
             "scorer_size": "978407904"
+        },
+        {
+            "name": "English (Coqui Large Vocabulary)",
+            "model_id": "en_lv",
+            "lang_id": "en",
+            "checksum": "822d8ec3",
+            "checksum_quick": "fc0dd76f",
+            "file_name": "en_hv.tflite",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv1.0.0-large-vocab/model.tflite"
+            ],
+            "size": "47332120",
+            "scorer_checksum": "74b0d450",
+            "scorer_checksum_quick": "a77be13f",
+            "scorer_urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv1.0.0-large-vocab/large_vocabulary.scorer"
+            ],
+            "scorer_size": "132644544"
         },
         {
             "name": "Deutsch (Jaco)",

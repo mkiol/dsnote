@@ -116,13 +116,14 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
 
     for (const auto& [id, model] : m_models) {
         auto model_file = dir.filePath(model.file_name);
-        if (model.available && QFile::exists(model_file))
+        if (model.available && QFile::exists(model_file)) {
             list.push_back({id, model.lang_id, model.name, model_file,
                             model.scorer_file_name.isEmpty()
                                 ? QString{}
                                 : dir.filePath(model.scorer_file_name),
                             model.experimental, model.available,
                             model.downloading, model.download_progress});
+        }
     }
 
     return list;
@@ -178,7 +179,7 @@ bool models_manager::model_scorer_same_url(const priv_model_t& model) {
 
 void models_manager::download(const QString& id, download_type type, int part) {
     if (type != download_type::all && type != download_type::scorer) {
-        qWarning() << "incorrect dl type requested:" << static_cast<int>(type);
+        qWarning() << "incorrect dl type requested:" << download_type_str(type);
         return;
     }
 
@@ -189,6 +190,30 @@ void models_manager::download(const QString& id, download_type type, int part) {
     }
 
     auto& model = it->second;
+
+    if (part < 0) {
+        bool m_cs =
+            checksum_ok(model.checksum, model.checksum_quick, model.file_name);
+        bool s_cs =
+            checksum_ok(model.scorer_checksum, model.scorer_checksum_quick,
+                        model.scorer_file_name);
+        if ((type == download_type::all && m_cs && s_cs) ||
+            (type == download_type::scorer && s_cs)) {
+            qWarning() << "both model and scorer exist, download not needed";
+            model.available = true;
+            emit download_finished(id);
+            model.downloading = false;
+            model.download_progress = 0.0;
+            model.downloaded_part_data = 0;
+            emit models_changed();
+            return;
+        }
+        if (type == download_type::all && m_cs) {
+            qDebug() << "model already exists, downloading only scorer";
+            model.downloaded_part_data = model.size;
+            type = download_type::scorer;
+        }
+    }
 
     if (type == download_type::all && part < 0 &&
         model_scorer_same_url(model)) {
@@ -258,11 +283,12 @@ void models_manager::download(const QString& id, download_type type, int part) {
         }
     }
 
-    auto out_file = new std::ofstream{
+    auto* out_file = new std::ofstream{
         download_filename(path, comp, part).toStdString(), std::ofstream::out};
 
     QNetworkReply* reply = m_nam.get(request);
-    qDebug() << "downloading:" << url << "type:" << static_cast<int>(type);
+    qDebug() << "downloading:" << url << ", type:" << download_type_str(type)
+             << ", comp:" << comp_type_str(comp);
     qDebug() << "out path:" << path << path_2;
 
     reply->setProperty("out_file",
@@ -366,9 +392,8 @@ bool models_manager::xz_decode(const QString& file_in,
             lzma_end(&strm);
 
             return true;
-        } else {
-            qWarning() << "error opening out-file:" << file_out;
         }
+        qWarning() << "error opening out-file:" << file_out;
     } else {
         qWarning() << "error opening in-file:" << file_in;
     }
@@ -687,35 +712,29 @@ void models_manager::handle_download_finished() {
 
             if (handle_download(path, checksum, path_in_archive, path_2,
                                 checksum_2, path_in_archive_2, comp, parts)) {
-                qDebug() << "successfully downloaded:"
-                         << (type == download_type::scorer ? "scorer"
-                             : type == download_type::model_scorer
-                                 ? "model and scorer"
-                                 : "model")
-                         << id;
+                const auto next_type = static_cast<download_type>(
+                    reply->property("download_next_type").toInt());
+                qDebug() << "successfully downloaded:" << id
+                         << ", type:" << download_type_str(type)
+                         << ", next_type:" << download_type_str(next_type);
 
-                if (static_cast<download_type>(
-                        reply->property("download_next_type").toInt()) ==
-                    download_type::scorer) {
+                if (next_type == download_type::scorer) {
                     model.downloaded_part_data += downloaded_part_data;
                     download(id, download_type::scorer);
                     reply->deleteLater();
                     return;
-                } else {
-                    model.available = true;
-                    emit download_finished(id);
                 }
+
+                model.available = true;
+                emit download_finished(id);
             } else {
                 QFile::remove(path);
                 emit download_error(id);
             }
         } else {
-            qDebug() << "successfully downloaded:"
-                     << (type == download_type::scorer ? "scorer"
-                         : type == download_type::model_scorer
-                             ? "model and scorer"
-                             : "model")
-                     << id << "part:" << part;
+            qDebug() << "successfully downloaded:" << id
+                     << ", type:" << download_type_str(type)
+                     << ", part:" << part;
             model.downloaded_part_data +=
                 QFileInfo{download_filename(path, comp, part)}.size();
             download(id,
@@ -761,12 +780,12 @@ QString models_manager::make_quick_checksum(const QString& file) {
 
         std::stringstream ss;
         ss << std::hex << checksum;
-        const auto hex = QString::fromStdString(ss.str());
+        auto hex = QString::fromStdString(ss.str());
         qDebug() << "crc quick checksum:" << hex << file;
         return hex;
-    } else {
-        qWarning() << "cannot open file:" << file;
     }
+
+    qWarning() << "cannot open file:" << file;
 
     return {};
 }
@@ -783,12 +802,11 @@ QString models_manager::make_checksum(const QString& file) {
         }
         std::stringstream ss;
         ss << std::hex << checksum;
-        const auto hex = QString::fromStdString(ss.str());
+        auto hex = QString::fromStdString(ss.str());
         qDebug() << "crc checksum:" << hex << file;
         return hex;
-    } else {
-        qWarning() << "cannot open file:" << file;
     }
+    qWarning() << "cannot open file:" << file;
 
     return {};
 }
@@ -818,8 +836,29 @@ void models_manager::handle_download_progress(qint64 received,
 void models_manager::delete_model(const QString& id) {
     if (const auto it = m_models.find(id); it != std::cend(m_models)) {
         auto& model = it->second;
-        QFile::remove(model_path(model.file_name));
-        QFile::remove(model_path(model.scorer_file_name));
+
+        if (!std::any_of(
+                m_models.cbegin(), m_models.cend(),
+                [id = it->first, file_name = model.file_name](const auto& p) {
+                    return p.second.available && p.first != id &&
+                           p.second.file_name == file_name;
+                })) {
+            QFile::remove(model_path(model.file_name));
+        } else {
+            qDebug() << "not removing model file because other model uses it:"
+                     << model.file_name;
+        }
+        if (!std::any_of(m_models.cbegin(), m_models.cend(),
+                         [id = it->first,
+                          file_name = model.scorer_file_name](const auto& p) {
+                             return p.second.available && p.first != id &&
+                                    p.second.scorer_file_name == file_name;
+                         })) {
+            QFile::remove(model_path(model.scorer_file_name));
+        } else {
+            qDebug() << "not removing scorer file because other model uses it:"
+                     << model.scorer_file_name;
+        }
         model.available = false;
         model.download_progress = 0.0;
         model.downloaded_part_data = 0;
@@ -837,8 +876,9 @@ void models_manager::backup_config(const QString& lang_models_file) {
 
     int i = 0;
     do {
-        backup_file = backup_file_stem + ".old" +
-                      (i == 0 ? "" : QString::number(i)) + ".json";
+        backup_file = backup_file_stem + QStringLiteral(".old") +
+                      (i == 0 ? QLatin1String{} : QString::number(i)) +
+                      QStringLiteral(".json");
         ++i;
     } while (QFile::exists(backup_file) && i < 1000);
 
@@ -880,9 +920,12 @@ void models_manager::init_config() {
 }
 
 models_manager::comp_type models_manager::str2comp(const QString& str) {
-    if (!str.compare("gz", Qt::CaseInsensitive)) return comp_type::gz;
-    if (!str.compare("xz", Qt::CaseInsensitive)) return comp_type::xz;
-    if (!str.compare("tarxz", Qt::CaseInsensitive)) return comp_type::tarxz;
+    if (!str.compare(QStringLiteral("gz"), Qt::CaseInsensitive))
+        return comp_type::gz;
+    if (!str.compare(QStringLiteral("xz"), Qt::CaseInsensitive))
+        return comp_type::xz;
+    if (!str.compare(QStringLiteral("tarxz"), Qt::CaseInsensitive))
+        return comp_type::tarxz;
     return comp_type::none;
 }
 
@@ -892,22 +935,23 @@ QString models_manager::download_filename(const QString& filename,
 
     switch (comp) {
         case comp_type::gz:
-            ret_name += ".gz";
+            ret_name += QStringLiteral(".gz");
             break;
         case comp_type::xz:
-            ret_name += ".xz";
+            ret_name += QStringLiteral(".xz");
             break;
         case comp_type::tar:
-            ret_name += ".tar";
+            ret_name += QStringLiteral(".tar");
             break;
         case comp_type::tarxz:
-            ret_name += ".tar.xz";
+            ret_name += QStringLiteral(".tar.xz");
             break;
         default:;
     }
 
     if (part > -1) {
-        ret_name += QString(".part-%1").arg(part, 2, 10, QLatin1Char('0'));
+        ret_name +=
+            QStringLiteral(".part-%1").arg(part, 2, 10, QLatin1Char{'0'});
     }
 
     return ret_name;
@@ -919,7 +963,7 @@ auto models_manager::extract_langs(const QJsonArray& langs_jarray) {
     for (const auto& ele : langs_jarray) {
         auto obj = ele.toObject();
 
-        const auto lang_id = obj.value("id").toString();
+        const auto lang_id = obj.value(QLatin1String{"id"}).toString();
         if (lang_id.isEmpty()) {
             qWarning() << "empty model id";
             continue;
@@ -930,11 +974,20 @@ auto models_manager::extract_langs(const QJsonArray& langs_jarray) {
             continue;
         }
 
-        langs.insert({lang_id, obj.value("name").toString()});
+        langs.insert({lang_id, obj.value(QLatin1String{"name"}).toString()});
     }
 
     return langs;
 }
+
+bool models_manager::checksum_ok(const QString& checksum,
+                                 const QString& checksum_quick,
+                                 const QString& file_name) {
+    if (checksum_quick.isEmpty()) {
+        return checksum == make_checksum(model_path(file_name));
+    }
+    return checksum_quick == make_quick_checksum(model_path(file_name));
+};
 
 auto models_manager::extract_models(const QJsonArray& models_jarray) {
     models_t models;
@@ -943,7 +996,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
 
     for (const auto& ele : models_jarray) {
         auto obj = ele.toObject();
-        const auto model_id = obj.value("model_id").toString();
+        const auto model_id = obj.value(QLatin1String{"model_id"}).toString();
 
         if (model_id.isEmpty()) {
             qWarning() << "empty model id in lang models file";
@@ -955,64 +1008,55 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             continue;
         }
 
-        const auto lang_id = obj.value("lang_id").toString();
+        auto lang_id = obj.value(QLatin1String{"lang_id"}).toString();
         if (lang_id.isEmpty()) {
             qWarning() << "empty lang id in lang models file";
             continue;
         }
 
-        const auto checksum = obj.value("checksum").toString();
+        auto checksum = obj.value(QLatin1String{"checksum"}).toString();
         if (checksum.isEmpty()) {
             qWarning() << "checksum cannot be empty:" << model_id;
             continue;
         }
 
-        auto file_name = obj.value("file_name").toString();
+        auto file_name = obj.value(QLatin1String{"file_name"}).toString();
         if (file_name.isEmpty()) file_name = file_name_from_id(model_id);
 
-        auto scorer_file_name = obj.value("scorer_file_name").toString();
+        auto scorer_file_name =
+            obj.value(QLatin1String{"scorer_file_name"}).toString();
         if (scorer_file_name.isEmpty())
             scorer_file_name = scorer_file_name_from_id(model_id);
 
-        priv_model_t model{std::move(lang_id),
-                           obj.value("name").toString(),
-                           std::move(file_name),
-                           std::move(checksum),
-                           obj.value("checksum_quick").toString(),
-                           str2comp(obj.value("comp").toString()),
-                           {},
-                           obj.value("size").toString().toLongLong(),
-                           std::move(scorer_file_name),
-                           obj.value("scorer_checksum").toString(),
-                           obj.value("scorer_checksum_quick").toString(),
-                           str2comp(obj.value("scorer_comp").toString()),
-                           {},
-                           obj.value("scorer_size").toString().toLongLong(),
-                           obj.value("experimental").toBool(),
-                           false,
-                           false};
+        priv_model_t model{
+            std::move(lang_id),
+            obj.value(QLatin1String{"name"}).toString(),
+            std::move(file_name),
+            std::move(checksum),
+            obj.value(QLatin1String{"checksum_quick"}).toString(),
+            str2comp(obj.value(QLatin1String{"comp"}).toString()),
+            {},
+            obj.value(QLatin1String{"size"}).toString().toLongLong(),
+            std::move(scorer_file_name),
+            obj.value(QLatin1String{"scorer_checksum"}).toString(),
+            obj.value(QLatin1String{"scorer_checksum_quick"}).toString(),
+            str2comp(obj.value(QLatin1String{"scorer_comp"}).toString()),
+            {},
+            obj.value(QLatin1String{"scorer_size"}).toString().toLongLong(),
+            obj.value(QLatin1String{"experimental"}).toBool(),
+            false,
+            false};
 
-        const auto urls = obj.value("urls").toArray();
+        const auto urls = obj.value(QLatin1String{"urls"}).toArray();
         if (urls.isEmpty()) {
             qWarning() << "urls should be non empty array";
             continue;
         }
         for (const auto& url : urls) model.urls.emplace_back(url.toString());
 
-        auto scorer_urls = obj.value("scorer_urls").toArray();
+        auto scorer_urls = obj.value(QLatin1String{"scorer_urls"}).toArray();
         for (auto url : scorer_urls)
             model.scorer_urls.emplace_back(url.toString());
-
-        const auto checksum_ok = [&dir](const QString& checksum,
-                                        const QString& checksum_quick,
-                                        const QString& file_name) {
-            if (checksum_quick.isEmpty()) {
-                return checksum == make_checksum(dir.filePath(file_name));
-            } else {
-                return checksum_quick ==
-                       make_quick_checksum(dir.filePath(file_name));
-            }
-        };
 
         if (dir.exists(model.file_name)) {
             if (checksum_ok(model.checksum, model.checksum_quick,
@@ -1083,7 +1127,8 @@ void models_manager::parse_models_file(bool reset, langs_t* langs,
                 parse_models_file(true, langs, models);
             }
         } else {
-            auto version = json.object().value("version").toInt();
+            auto version =
+                json.object().value(QStringLiteral("version")).toInt();
 
             if (version < dsnote::CONF_VERSION) {
                 qWarning("version mismatch, has %d but requires %d", version,
@@ -1094,9 +1139,10 @@ void models_manager::parse_models_file(bool reset, langs_t* langs,
                     parse_models_file(true, langs, models);
                 }
             } else {
-                *langs = extract_langs(json.object().value("langs").toArray());
-                *models =
-                    extract_models(json.object().value("models").toArray());
+                *langs = extract_langs(
+                    json.object().value(QStringLiteral("langs")).toArray());
+                *models = extract_models(
+                    json.object().value(QStringLiteral("models")).toArray());
             }
         }
     } else {
@@ -1122,4 +1168,36 @@ double models_manager::model_download_progress(const QString& id) const {
     } catch (const std::out_of_range&) {
     }
     return 0.0;
+}
+
+QLatin1String models_manager::download_type_str(download_type type) {
+    switch (type) {
+        case download_type::all:
+            return QLatin1String("all");
+        case download_type::model:
+            return QLatin1String("model");
+        case download_type::model_scorer:
+            return QLatin1String("model_scorer");
+        case download_type::scorer:
+            return QLatin1String("scorer");
+        case download_type::none:
+            return QLatin1String("none");
+    }
+    return QLatin1String("unknown");
+}
+
+QLatin1String models_manager::comp_type_str(comp_type type) {
+    switch (type) {
+        case comp_type::gz:
+            return QLatin1String("gz");
+        case comp_type::tar:
+            return QLatin1String("tar");
+        case comp_type::tarxz:
+            return QLatin1String("tarxz");
+        case comp_type::xz:
+            return QLatin1String("xz");
+        case comp_type::none:
+            return QLatin1String("none");
+    }
+    return QLatin1String("unknown");
 }

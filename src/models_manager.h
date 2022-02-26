@@ -105,6 +105,8 @@ class models_manager : public QObject {
     std::set<QString> models_to_cancel;
     bool m_pending_reload = false;
 
+    static QLatin1String download_type_str(download_type type);
+    static QLatin1String comp_type_str(comp_type type);
     bool parse_models_file_might_reset();
     static void parse_models_file(bool reset, langs_t* langs, models_t* models);
     static QString file_name_from_id(const QString& id);
@@ -138,6 +140,9 @@ class models_manager : public QObject {
     [[nodiscard]] bool lang_available(const QString& id) const;
     [[nodiscard]] bool lang_downloading(const QString& id) const;
     bool check_model_download_cancel(QNetworkReply* reply);
+    static bool checksum_ok(const QString& checksum,
+                            const QString& checksum_quick,
+                            const QString& file_name);
 };
 
 #endif  // MODELS_MANAGER_H
