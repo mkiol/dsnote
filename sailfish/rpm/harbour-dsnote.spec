@@ -6,7 +6,7 @@ Name:       harbour-dsnote
 # << macros
 
 Summary:        Note taking with speech to text
-Version:        1.6.1
+Version:        1.7.0
 Release:        1
 Group:          Qt/Qt
 License:        LICENSE
