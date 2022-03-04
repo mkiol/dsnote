@@ -7,8 +7,6 @@
 
 #include "log.h"
 
-#include <libavutil/log.h>
-
 #include <QByteArray>
 #include <QDateTime>
 #include <QDir>
