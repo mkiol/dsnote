@@ -27,6 +27,7 @@ class models_manager : public QObject {
     struct lang_t {
         QString id;
         QString name;
+        QString name_en;
         bool available = false;
         bool downloading = false;
     };
@@ -94,7 +95,7 @@ class models_manager : public QObject {
     };
 
     inline static const QString models_file{QStringLiteral("models.json")};
-    using langs_t = std::map<QString, QString>;
+    using langs_t = std::map<QString, std::pair<QString, QString>>;
     using models_t = std::map<QString, priv_model_t>;
 
     models_t m_models;

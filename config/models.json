@@ -3,110 +3,137 @@
     "langs": [
         {
             "name": "Català",
+            "name_en": "Catalan",
             "id": "ca"
         },
         {
             "name": "Čeština",
+            "name_en": "Czech",
             "id": "cs"
         },
         {
             "name": "English",
+            "name_en": "English",
             "id": "en"
         },
         {
             "name": "Deutsch",
+            "name_en": "German",
             "id": "de"
         },
         {
             "name": "Español",
+            "name_en": "Spanish",
             "id": "es"
         },
         {
             "name": "Français",
+            "name_en": "French",
             "id": "fr"
         },
         {
             "name": "Italiano",
+            "name_en": "Italian",
             "id": "it"
         },
         {
             "name": "Polski",
+            "name_en": "Polish",
             "id": "pl"
         },
         {
             "name": "Русский",
+            "name_en": "Russian",
             "id": "ru"
         },
         {
             "name": "Українська",
+            "name_en": "Ukrainian",
             "id": "uk"
         },
         {
             "name": "中文 (简体)",
+            "name_en": "Chinese (Simplified)",
             "id": "zh-CN"
         },
         {
             "name": "Nederlands",
+            "name_en": "Dutch",
             "id": "nl"
         },
         {
             "name": "Yorùbá",
+            "name_en": "Yoruba",
             "id": "yo"
         },
         {
             "name": "Amarəñña",
+            "name_en": "Amharic",
             "id": "am"
         },
         {
             "name": "Euskara",
+            "name_en": "Basque",
             "id": "eu"
         },
         {
             "name": "Türkçe",
+            "name_en": "Turkish",
             "id": "tr"
         },
         {
             "name": "ไทย",
+            "name_en": "Thai",
             "id": "th"
         },
         {
             "name": "Slovenščina",
+            "name_en": "Slovenian",
             "id": "sl"
         },
         {
             "name": "Română",
+            "name_en": "Romanian",
             "id": "ro"
         },
         {
             "name": "Português",
+            "name_en": "Portuguese",
             "id": "pt"
         },
         {
             "name": "Latviešu",
+            "name_en": "Latvian",
             "id": "lv"
         },
         {
             "name": "Bahasa Indonesia",
+            "name_en": "Indonesian",
             "id": "id"
         },
         {
             "name": "Ελληνικά",
+            "name_en": "Greek",
             "id": "el"
         },
         {
             "name": "Magyar",
+            "name_en": "Hungarian",
             "id": "hu"
         },
         {
             "name": "Монгол",
+            "name_en": "Mongolian",
             "id": "mn"
         },
         {
             "name": "Suomi",
+            "name_en": "Finnish",
             "id": "fi"
         },
         {
             "name": "Eesti",
+            "name_en": "Estonian",
             "id": "et"
         }
     ],

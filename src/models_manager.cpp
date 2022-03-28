@@ -64,7 +64,8 @@ std::vector<models_manager::lang_t> models_manager::langs() const {
                    [this](const auto& pair) {
                        return lang_t{
                            pair.first,
-                           pair.second,
+                           pair.second.first,
+                           pair.second.second,
                            lang_available(pair.first),
                            lang_downloading(pair.first),
                        };
@@ -974,7 +975,9 @@ auto models_manager::extract_langs(const QJsonArray& langs_jarray) {
             continue;
         }
 
-        langs.insert({lang_id, obj.value(QLatin1String{"name"}).toString()});
+        langs.insert({lang_id,
+                      {obj.value(QLatin1String{"name"}).toString(),
+                       obj.value(QLatin1String{"name_en"}).toString()}});
     }
 
     return langs;

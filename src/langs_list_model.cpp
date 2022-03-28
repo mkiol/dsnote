@@ -39,13 +39,15 @@ void LangsListModel::beforeUpdate(const QList<ListItem *> &oldItems,
             return aa->available() == bb->available() &&
                    aa->downloading() == bb->downloading();
         });
-    m_changedItem = std::distance(oldItems.cbegin(), it);
+    m_changedItem = static_cast<int>(std::distance(oldItems.cbegin(), it));
 }
 
 ListItem *LangsListModel::makeItem(const models_manager::lang_t &lang) {
-    return new LangsListItem{lang.id,
-                             QStringLiteral("%1 / %2").arg(lang.name, lang.id),
-                             lang.available, lang.downloading};
+    return new LangsListItem{
+        /*id=*/lang.id,
+        /*name=*/QStringLiteral("%1 / %2").arg(lang.name, lang.id),
+        /*name_en=*/lang.name_en, /*available=*/lang.available,
+        /*downloading=*/lang.downloading};
 }
 
 QList<ListItem *> LangsListModel::makeItems() {
@@ -63,7 +65,8 @@ QList<ListItem *> LangsListModel::makeItems() {
     } else {
         std::for_each(langs.cbegin(), langs.cend(), [&](const auto &lang) {
             if (lang.name.contains(phase, Qt::CaseInsensitive) ||
-                lang.id.contains(phase, Qt::CaseInsensitive)) {
+                lang.id.contains(phase, Qt::CaseInsensitive) ||
+                lang.name_en.contains(phase, Qt::CaseInsensitive)) {
                 items.push_back(makeItem(lang));
             }
         });
@@ -84,10 +87,12 @@ void LangsListModel::updateDownloading(
 }
 
 LangsListItem::LangsListItem(const QString &id, const QString &name,
-                             bool available, bool downloading, QObject *parent)
+                             const QString &name_en, bool available,
+                             bool downloading, QObject *parent)
     : SelectableItem{parent},
       m_id{id},
       m_name{name},
+      m_name_en{name_en},
       m_available{available},
       m_downloading{downloading} {
     m_selectable = false;
@@ -97,6 +102,7 @@ QHash<int, QByteArray> LangsListItem::roleNames() const {
     QHash<int, QByteArray> names;
     names[IdRole] = "id";
     names[NameRole] = "name";
+    names[NameEnRole] = "name_en";
     names[AvailableRole] = "available";
     names[DownloadingRole] = "downloading";
     return names;
@@ -108,6 +114,8 @@ QVariant LangsListItem::data(int role) const {
             return id();
         case NameRole:
             return name();
+        case NameEnRole:
+            return name_en();
         case AvailableRole:
             return available();
         case DownloadingRole:

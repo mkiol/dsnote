@@ -52,24 +52,27 @@ class LangsListItem : public SelectableItem {
     enum Roles {
         NameRole = Qt::DisplayRole,
         IdRole = Qt::UserRole,
+        NameEnRole,
         AvailableRole,
         DownloadingRole
     };
 
     LangsListItem(QObject *parent = nullptr) : SelectableItem{parent} {}
     LangsListItem(const QString &id, const QString &name,
-                  bool available = false, bool downloading = false,
-                  QObject *parent = nullptr);
+                  const QString &name_en, bool available = false,
+                  bool downloading = false, QObject *parent = nullptr);
     QVariant data(int role) const override;
     QHash<int, QByteArray> roleNames() const override;
     inline QString id() const override { return m_id; }
     inline QString name() const { return m_name; }
+    inline QString name_en() const { return m_name_en; }
     inline bool available() const { return m_available; }
     inline bool downloading() const { return m_downloading; }
 
    private:
     QString m_id;
     QString m_name;
+    QString m_name_en;
     bool m_available = false;
     bool m_downloading = false;
 };
