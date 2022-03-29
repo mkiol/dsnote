@@ -659,21 +659,20 @@
             "name": "Suomi (ITML)",
             "model_id": "fi",
             "lang_id": "fi",
-            "experimental": true,
             "checksum": "ddc7f585",
             "checksum_quick": "44efb576",
             "urls": [
                 "https://github.com/coqui-ai/STT-models/releases/download/finnish%2Fitml%2Fv0.1.1/model.tflite"
             ],
             "size": "47332112",
-            "scorer_checksum": "62c1e50f",
-            "scorer_checksum_quick": "cefa5adc",
-            "scorer_file_name": "fi-mkiol.scorer",
+            "scorer_checksum": "3541e721",
+            "scorer_checksum_quick": "8875537a",
+            "scorer_file_name": "fi_mkiol.scorer",
             "scorer_comp": "xz",
             "scorer_urls": [
-                "https://github.com/mkiol/dsnote/releases/download/v1.8.0/fi-mkiol.scorer.xz"
+                "https://github.com/mkiol/dsnote/releases/download/v1.8.0/fi_mkiol.scorer.xz"
             ],
-            "scorer_size": "51074964"
+            "scorer_size": "51100092"
         },
         {
             "name": "Eesti (ITML)",
