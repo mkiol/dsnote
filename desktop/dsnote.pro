@@ -56,7 +56,7 @@ for(dir, TRANSLATION_SOURCE_DIRS) {
         TRANSLATION_SOURCES += $$clean_path($$dir)
     }
 }
-system("$$LUPDATE_BIN" $${TRANSLATION_SOURCES} -ts $$TRANSLATIONS)
+system("$$LUPDATE_BIN" -no-obsolete $${TRANSLATION_SOURCES} -ts $$TRANSLATIONS)
 for(t, TRANSLATIONS) {
     qmfile = $$replace(t, \.ts, .qm)
     system("$$LRELEASE_BIN" "$$t" -qm $${TRANSLATIONS_QM_DIR}/$$basename(qmfile))

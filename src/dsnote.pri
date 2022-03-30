@@ -92,5 +92,4 @@ sailfishapp {
 
 LIBS += \
     -lz -llzma -larchive \
-    -L$${LIB_DIR} -l:libstt.so -l:libtensorflowlite.so \
-    -l:libtflitedelegates.so -l:libkenlm.so
+    -L$${LIB_DIR} -l:libstt.so -l:libkenlm.so
