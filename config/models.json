@@ -269,26 +269,6 @@
             "scorer_size": "564845728"
         },
         {
-            "name": "Deutsch (med narrow)",
-            "model_id": "de_medn",
-            "lang_id": "de",
-            "experimental": true,
-            "checksum": "4f9b4f32",
-            "checksum_quick": "b565cad0",
-            "file_name": "de_aa.tflite",
-            "urls": [
-                "https://github.com/coqui-ai/STT-models/releases/download/german/AASHISHAG/v0.9.0/model.tflite"
-            ],
-            "size": "47338296",
-            "scorer_checksum": "57a7870c",
-            "scorer_checksum_quick": "9f72d54e",
-            "scorer_comp": "xz",
-            "scorer_urls": [
-                "https://github.com/mkiol/dsnote/releases/download/v1.7.0/de-medn.scorer.xz"
-            ],
-            "scorer_size": "979520"
-        },
-        {
             "name": "Deutsch (med)",
             "model_id": "de_med",
             "lang_id": "de",
