@@ -420,6 +420,26 @@
             "scorer_size": "3000583"
         },
         {
+            "name": "Polski (mkiol)",
+            "model_id": "pl_mkiol",
+            "lang_id": "pl",
+            "checksum": "2ed9292d",
+            "checksum_quick": "c811f2cd",
+            "comp": "gz",
+            "file_name": "pl.tflite",
+            "urls": [
+                "https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/output_graph.tflite.gz"
+            ],
+            "size": "20752162",
+            "scorer_checksum": "fcab9943",
+            "scorer_checksum_quick": "c317fe2",
+            "scorer_comp": "xz",
+            "scorer_urls": [
+                "https://github.com/mkiol/dsnote/releases/download/v1.8.0/pl_mkiol.scorer.xz"
+            ],
+            "scorer_size": "493554424"
+        },
+        {
             "name": "Русский (Joe Meyer)",
             "model_id": "ru",
             "lang_id": "ru",
