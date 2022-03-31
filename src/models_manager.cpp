@@ -916,8 +916,9 @@ void models_manager::init_config() {
         return;
     }
 
-    models.write(default_models_file.readAll().replace(
-        "%VERSION%", std::to_string(dsnote::CONF_VERSION).c_str()));
+    auto data = default_models_file.readAll();
+    models.write(data.replace("%VERSION%",
+                              std::to_string(dsnote::CONF_VERSION).c_str()));
 }
 
 models_manager::comp_type models_manager::str2comp(const QString& str) {
@@ -1130,10 +1131,14 @@ void models_manager::parse_models_file(bool reset, langs_t* langs,
                 parse_models_file(true, langs, models);
             }
         } else {
-            auto version =
-                json.object().value(QStringLiteral("version")).toInt();
+            auto version = json.object()
+                               .value(QStringLiteral("version"))
+                               .toString()
+                               .toInt();
 
-            if (version < dsnote::CONF_VERSION) {
+            qDebug() << "config version:" << version << dsnote::CONF_VERSION;
+
+            if (version != dsnote::CONF_VERSION) {
                 qWarning("version mismatch, has %d but requires %d", version,
                          dsnote::CONF_VERSION);
                 input.close();
