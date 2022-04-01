@@ -11,9 +11,9 @@
 namespace dsnote {
 static constexpr const char* APP_NAME = "Speech Note";
 #ifdef QT_DEBUG
-static constexpr const char* APP_VERSION = "1.7.0 (debug)";
+static constexpr const char* APP_VERSION = "1.8.0 (debug)";
 #else
-static constexpr const char* APP_VERSION = "1.7.0";
+static constexpr const char* APP_VERSION = "1.8.0";
 #endif
 #ifdef FLATPAK
 static constexpr const char* APP_ID = "org.mkiol.Dsnote";
