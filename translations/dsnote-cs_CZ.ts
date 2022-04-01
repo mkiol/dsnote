@@ -53,11 +53,11 @@
     </message>
     <message>
         <location filename="../sailfish/qml/ChangelogPage.qml" line="32"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="60"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="83"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="97"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="111"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="121"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="65"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="88"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="102"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="116"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="126"/>
         <source>Version %1</source>
         <translation>Verze %1</translation>
     </message>
@@ -83,63 +83,51 @@
 <context>
     <name>LangItem</name>
     <message>
-        <location filename="../sailfish/qml/LangItem.qml" line="31"/>
-        <source>Delete</source>
-        <translation type="unfinished">Smazat</translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/LangItem.qml" line="31"/>
-        <source>Download</source>
-        <translation type="unfinished">Stáhnout</translation>
-    </message>
-</context>
-<context>
-    <name>LangList</name>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">Smazat</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="obsolete">Stáhnout</translation>
+        <location filename="../sailfish/qml/LangItem.qml" line="32"/>
+        <source>Show models</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>LangsPage</name>
     <message>
-        <location filename="../sailfish/qml/LangsPage.qml" line="40"/>
-        <source>Hide experimental</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/LangsPage.qml" line="40"/>
-        <source>Show experimental</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/LangsPage.qml" line="49"/>
-        <location filename="../desktop/qml/LangsPage.qml" line="15"/>
+        <location filename="../sailfish/qml/LangsPage.qml" line="41"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="19"/>
         <source>Languages</source>
         <translation>Jazyky</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="63"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="98"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="63"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="98"/>
         <source>Download</source>
         <translation>Stáhnout</translation>
     </message>
     <message>
-        <source>No languages</source>
-        <translation type="vanished">Žádné jazyky</translation>
+        <location filename="../desktop/qml/LangsPage.qml" line="98"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ModelItem</name>
+    <message>
+        <location filename="../sailfish/qml/ModelItem.qml" line="33"/>
+        <source>Delete</source>
+        <translation type="unfinished">Smazat</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="63"/>
-        <source>Downloading...</source>
-        <translation>Stahuji...</translation>
+        <location filename="../sailfish/qml/ModelItem.qml" line="33"/>
+        <source>Download</source>
+        <translation type="unfinished">Stáhnout</translation>
+    </message>
+    <message>
+        <location filename="../sailfish/qml/ModelItem.qml" line="33"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -182,10 +170,6 @@
         <location filename="../desktop/qml/NotesPage.qml" line="110"/>
         <source>Cancel file transcription</source>
         <translation>Zrušit přepisování souboru</translation>
-    </message>
-    <message>
-        <source>Connect microphone</source>
-        <translation type="vanished">Připojit mikrofon</translation>
     </message>
     <message>
         <location filename="../sailfish/qml/NotesPage.qml" line="69"/>
@@ -248,10 +232,6 @@
         <translation>Jejda! Něco se nepovedlo.</translation>
     </message>
     <message>
-        <source>Audio file transcription is completed.</source>
-        <translation type="vanished">Přepis audio souboru je kompletní.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/NotesPage.qml" line="19"/>
         <source>Note</source>
         <translation>Poznámka</translation>
@@ -265,10 +245,6 @@
         <location filename="../desktop/qml/NotesPage.qml" line="90"/>
         <source>Click to start listening</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Press and hold to speek</source>
-        <translation type="vanished">Stiskněte a držte pro záznam</translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="90"/>
@@ -295,29 +271,9 @@
         <translation>Aktivní jazyk</translation>
     </message>
     <message>
-        <source>Language download</source>
-        <translation type="vanished">Stažení jazyka</translation>
-    </message>
-    <message>
         <location filename="../sailfish/qml/SettingsPage.qml" line="76"/>
         <source>Languages</source>
         <translation type="unfinished">Jazyky</translation>
-    </message>
-    <message>
-        <source>Speech detection mode</source>
-        <translation type="vanished">Mód detekce řeči</translation>
-    </message>
-    <message>
-        <source>Automatic</source>
-        <translation type="vanished">Automatický</translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="vanished">Manuální</translation>
-    </message>
-    <message>
-        <source>Speech is automatically recognized and converted to text (Automatic) or press and hold on bottom panel triggers speech recognition (Manual).</source>
-        <translation type="vanished">Řeč je automaticky rozpoznána a konvertována na text (Automatický) nebo je použito tlačítko pro spuštění rozpoznávání řeči (Manuální).</translation>
     </message>
     <message>
         <location filename="../sailfish/qml/SettingsPage.qml" line="84"/>
@@ -399,27 +355,27 @@ Always on: Listening is always turn on.</source>
 <context>
     <name>stt_service</name>
     <message>
-        <location filename="../src/stt_service.cpp" line="689"/>
+        <location filename="../src/stt_service.cpp" line="730"/>
         <source>Language is not configured</source>
         <translation type="unfinished">Není nastaven jazyk</translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="690"/>
+        <location filename="../src/stt_service.cpp" line="731"/>
         <source>Say something...</source>
         <translation type="unfinished">Řekněte něco...</translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="691"/>
+        <location filename="../src/stt_service.cpp" line="733"/>
         <source>Press and say something...</source>
         <translation type="unfinished">Stiskněte a řekněte něco...</translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="692"/>
+        <location filename="../src/stt_service.cpp" line="735"/>
         <source>Click and say something...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="693"/>
+        <location filename="../src/stt_service.cpp" line="736"/>
         <source>Busy...</source>
         <translation type="unfinished"></translation>
     </message>

@@ -53,11 +53,11 @@
     </message>
     <message>
         <location filename="../sailfish/qml/ChangelogPage.qml" line="32"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="60"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="83"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="97"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="111"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="121"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="65"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="88"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="102"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="116"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="126"/>
         <source>Version %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -83,47 +83,50 @@
 <context>
     <name>LangItem</name>
     <message>
-        <location filename="../sailfish/qml/LangItem.qml" line="31"/>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/LangItem.qml" line="31"/>
-        <source>Download</source>
+        <location filename="../sailfish/qml/LangItem.qml" line="32"/>
+        <source>Show models</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>LangsPage</name>
     <message>
-        <location filename="../sailfish/qml/LangsPage.qml" line="40"/>
-        <source>Hide experimental</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/LangsPage.qml" line="40"/>
-        <source>Show experimental</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/LangsPage.qml" line="49"/>
-        <location filename="../desktop/qml/LangsPage.qml" line="15"/>
+        <location filename="../sailfish/qml/LangsPage.qml" line="41"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="19"/>
         <source>Languages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="63"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="98"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="63"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="98"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="63"/>
-        <source>Downloading...</source>
+        <location filename="../desktop/qml/LangsPage.qml" line="98"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ModelItem</name>
+    <message>
+        <location filename="../sailfish/qml/ModelItem.qml" line="33"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfish/qml/ModelItem.qml" line="33"/>
+        <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sailfish/qml/ModelItem.qml" line="33"/>
+        <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -352,27 +355,27 @@ Always on: Listening is always turn on.</source>
 <context>
     <name>stt_service</name>
     <message>
-        <location filename="../src/stt_service.cpp" line="689"/>
+        <location filename="../src/stt_service.cpp" line="730"/>
         <source>Language is not configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="690"/>
+        <location filename="../src/stt_service.cpp" line="731"/>
         <source>Say something...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="691"/>
+        <location filename="../src/stt_service.cpp" line="733"/>
         <source>Press and say something...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="692"/>
+        <location filename="../src/stt_service.cpp" line="735"/>
         <source>Click and say something...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="693"/>
+        <location filename="../src/stt_service.cpp" line="736"/>
         <source>Busy...</source>
         <translation type="unfinished"></translation>
     </message>

@@ -53,11 +53,11 @@
     </message>
     <message>
         <location filename="../sailfish/qml/ChangelogPage.qml" line="32"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="60"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="83"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="97"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="111"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="121"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="65"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="88"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="102"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="116"/>
+        <location filename="../sailfish/qml/ChangelogPage.qml" line="126"/>
         <source>Version %1</source>
         <translation>Wersja %1</translation>
     </message>
@@ -83,63 +83,51 @@
 <context>
     <name>LangItem</name>
     <message>
-        <location filename="../sailfish/qml/LangItem.qml" line="31"/>
-        <source>Delete</source>
-        <translation>Usuń</translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/LangItem.qml" line="31"/>
-        <source>Download</source>
-        <translation>Pobierz</translation>
-    </message>
-</context>
-<context>
-    <name>LangList</name>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">Usuń</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="obsolete">Pobierz</translation>
+        <location filename="../sailfish/qml/LangItem.qml" line="32"/>
+        <source>Show models</source>
+        <translation>Pokaż modele</translation>
     </message>
 </context>
 <context>
     <name>LangsPage</name>
     <message>
-        <location filename="../sailfish/qml/LangsPage.qml" line="40"/>
-        <source>Hide experimental</source>
-        <translation>Ukryj eksperymentalne</translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/LangsPage.qml" line="40"/>
-        <source>Show experimental</source>
-        <translation>Pokaż eksperymentalne</translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/LangsPage.qml" line="49"/>
-        <location filename="../desktop/qml/LangsPage.qml" line="15"/>
+        <location filename="../sailfish/qml/LangsPage.qml" line="41"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="19"/>
         <source>Languages</source>
         <translation>Języki</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="63"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="98"/>
         <source>Delete</source>
         <translation>Usuń</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="63"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="98"/>
         <source>Download</source>
         <translation>Pobierz</translation>
     </message>
     <message>
-        <source>No languages</source>
-        <translation type="vanished">Brak języków</translation>
+        <location filename="../desktop/qml/LangsPage.qml" line="98"/>
+        <source>Cancel</source>
+        <translation>Anuluj</translation>
+    </message>
+</context>
+<context>
+    <name>ModelItem</name>
+    <message>
+        <location filename="../sailfish/qml/ModelItem.qml" line="33"/>
+        <source>Delete</source>
+        <translation>Usuń</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="63"/>
-        <source>Downloading...</source>
-        <translation>Pobieranie...</translation>
+        <location filename="../sailfish/qml/ModelItem.qml" line="33"/>
+        <source>Download</source>
+        <translation>Pobierz</translation>
+    </message>
+    <message>
+        <location filename="../sailfish/qml/ModelItem.qml" line="33"/>
+        <source>Cancel</source>
+        <translation>Anuluj</translation>
     </message>
 </context>
 <context>
@@ -182,10 +170,6 @@
         <location filename="../desktop/qml/NotesPage.qml" line="110"/>
         <source>Cancel file transcription</source>
         <translation>Anuluj transkrypcję pliku</translation>
-    </message>
-    <message>
-        <source>Connect microphone</source>
-        <translation type="vanished">Podłącz mikrofon</translation>
     </message>
     <message>
         <location filename="../sailfish/qml/NotesPage.qml" line="69"/>
@@ -248,14 +232,6 @@
         <translation>Wystąpił nieoczekiwany błąd!</translation>
     </message>
     <message>
-        <source>Audio file transcription is completed.</source>
-        <translation type="vanished">Zakończyła się transkrypcja pliku audio.</translation>
-    </message>
-    <message>
-        <source>Tap and say something...</source>
-        <translation type="vanished">Dotknij i powiedz coś...</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/NotesPage.qml" line="19"/>
         <source>Note</source>
         <translation>Notatka</translation>
@@ -271,17 +247,9 @@
         <translation>Kliknij aby rozpocząć nasłuchiwanie</translation>
     </message>
     <message>
-        <source>Press and hold to speek</source>
-        <translation type="vanished">Naciśnij aby mówić</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/NotesPage.qml" line="90"/>
         <source>Cancel</source>
         <translation>Anuluj</translation>
-    </message>
-    <message>
-        <source>Tap to speek</source>
-        <translation type="vanished">Dotknij aby mówić</translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="127"/>
@@ -303,33 +271,9 @@
         <translation>Aktywny język</translation>
     </message>
     <message>
-        <source>Language download</source>
-        <translation type="vanished">Pobieranie obsługi języków</translation>
-    </message>
-    <message>
         <location filename="../sailfish/qml/SettingsPage.qml" line="76"/>
         <source>Languages</source>
         <translation>Języki</translation>
-    </message>
-    <message>
-        <source>Speech detection mode</source>
-        <translation type="vanished">Tryb rozpoznawania mowy</translation>
-    </message>
-    <message>
-        <source>Automatic</source>
-        <translation type="vanished">Automatyczny</translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="vanished">Manualny</translation>
-    </message>
-    <message>
-        <source>Speech is automatically recognized and converted to text (Automatic) or press and hold on bottom panel triggers speech recognition (Manual).</source>
-        <translation type="vanished">Mówienie jest automatycznie rozpoznawane i zapisywane jako tekst (tryb Automatyczny) albo naciśnięcie na dolny panel powoduje rozpoznawanie mowy (tryb Manualny).</translation>
-    </message>
-    <message>
-        <source>Speech is automatically recognized and converted to text (Automatic) or tap on bottom panel triggers speech recognition (Manual).</source>
-        <translation type="vanished">Mówienie jest automatycznie rozpoznawane i zapisywane jako tekst (tryb Automatyczny) albo dotknięcie na dolny panel powoduje rozpoznawanie mowy (tryb Manualny).</translation>
     </message>
     <message>
         <location filename="../sailfish/qml/SettingsPage.qml" line="84"/>
@@ -413,33 +357,29 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
 <context>
     <name>stt_service</name>
     <message>
-        <location filename="../src/stt_service.cpp" line="689"/>
+        <location filename="../src/stt_service.cpp" line="730"/>
         <source>Language is not configured</source>
         <translation>Język nie jest skonfigurowany</translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="690"/>
+        <location filename="../src/stt_service.cpp" line="731"/>
         <source>Say something...</source>
         <translation>Powiedz coś...</translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="691"/>
+        <location filename="../src/stt_service.cpp" line="733"/>
         <source>Press and say something...</source>
         <translation>Naciśnij i powiedz coś...</translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="692"/>
+        <location filename="../src/stt_service.cpp" line="735"/>
         <source>Click and say something...</source>
         <translation>Kliknij i powiedz coś...</translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="693"/>
+        <location filename="../src/stt_service.cpp" line="736"/>
         <source>Busy...</source>
         <translation>Zajęty...</translation>
-    </message>
-    <message>
-        <source>Starting...</source>
-        <translation type="vanished">Uruchamianie...</translation>
     </message>
 </context>
 </TS>
