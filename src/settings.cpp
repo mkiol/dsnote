@@ -7,6 +7,7 @@
 
 #include "settings.h"
 
+#include <QCoreApplication>
 #include <QDebug>
 #include <QDir>
 #include <QStandardPaths>
@@ -16,6 +17,30 @@
 #include "info.h"
 
 settings* settings::m_instance = nullptr;
+
+settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
+    qDebug() << "app:" << dsnote::ORG << dsnote::APP_ID;
+    qDebug() << "config location:"
+             << QStandardPaths::writableLocation(
+                    QStandardPaths::ConfigLocation);
+    qDebug() << "data location:"
+             << QStandardPaths::writableLocation(
+                    QStandardPaths::AppDataLocation);
+    qDebug() << "cache location:"
+             << QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    qDebug() << "settings file:" << fileName();
+}
+
+QString settings::settings_filepath() {
+    QDir conf_dir{
+        QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)};
+    conf_dir.mkpath(QCoreApplication::organizationName() + QDir::separator() +
+                    QCoreApplication::applicationName());
+    return conf_dir.absolutePath() + QDir::separator() +
+           QCoreApplication::organizationName() + QDir::separator() +
+           QCoreApplication::applicationName() + QDir::separator() +
+           settings_filename;
+}
 
 settings* settings::instance() {
     if (!settings::m_instance) settings::m_instance = new settings{};
@@ -70,14 +95,14 @@ void settings::set_default_model(const QString& value) {
 
 settings::speech_mode_type settings::speech_mode() const {
     return static_cast<speech_mode_type>(
-        value(QStringLiteral("speech_mode2"),
+        value(QStringLiteral("speech_mode"),
               static_cast<int>(speech_mode_type::SpeechSingleSentence))
             .toInt());
 }
 
 void settings::set_speech_mode(speech_mode_type value) {
     if (speech_mode() != value) {
-        setValue(QStringLiteral("speech_mode2"), static_cast<int>(value));
+        setValue(QStringLiteral("speech_mode"), static_cast<int>(value));
         emit speech_mode_changed();
     }
 }

@@ -630,6 +630,7 @@ bool models_manager::handle_download(const QString& path,
                     tar_decode(tar_file, {{path_in_archive, path},
                                           {path_in_archive_2, path_2}});
                     ok_2 = make_checksum(path_2) == checksum_2;
+                    make_quick_checksum(path_2);  // log quick checksum
                     if (!ok_2) qWarning() << "checksum 2 is invalid";
                 } else {
                     tar_decode(tar_file, {{path_in_archive, path}});
@@ -642,6 +643,7 @@ bool models_manager::handle_download(const QString& path,
 
         if (ok_2) {
             ok = make_checksum(path) == checksum;
+            make_quick_checksum(path);  // log quick checksum
             if (!ok) qWarning() << "checksum is invalid";
         }
 

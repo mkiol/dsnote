@@ -67,8 +67,11 @@ class settings : public QSettings {
     void default_model_changed();
 
    private:
+    inline static const QString settings_filename =
+        QStringLiteral("settings.conf");
     static settings *m_instance;
-    settings() = default;
+    settings();
+    static QString settings_filepath();
 };
 
 #endif  // SETTINGS_H
