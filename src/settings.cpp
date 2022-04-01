@@ -121,5 +121,5 @@ void settings::set_note(const QString& value) {
 QUrl settings::app_icon() const {
     return QUrl::fromLocalFile(
         QString(QStringLiteral("/usr/share/icons/hicolor/172x172/apps/%1.png"))
-            .arg(dsnote::APP_ID));
+            .arg(dsnote::APP_BINARY_ID));
 }
