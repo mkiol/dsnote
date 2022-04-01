@@ -47,17 +47,20 @@ void deepspeech_wrapper::start_processing() {
 
     thread_exit_requested = false;
 
-    while (true) {
-        std::unique_lock lock{processing_mtx};
-        if (thread_exit_requested) break;
-        if (restart_requested) {
-            restart_requested = false;
-            flush(flush_type::restart);
+    try {
+        while (true) {
+            std::unique_lock lock{processing_mtx};
+            if (thread_exit_requested) break;
+            if (restart_requested) {
+                restart_requested = false;
+                flush(flush_type::restart);
+            }
+            if (!process_buff()) processing_cv.wait(lock);
         }
-        if (!process_buff()) processing_cv.wait(lock);
+        flush(flush_type::exit);
+    } catch (const std::system_error&) {
+        qCritical() << "system error";
     }
-
-    flush(flush_type::exit);
 
     qDebug() << "processing thread ended";
 }
