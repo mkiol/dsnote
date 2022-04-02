@@ -29,6 +29,44 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Version %1").arg("1.8")
+            }
+
+            LogItem {
+                title: "New languages: Finnish, Mongolian (experimental), Estonian (experimental)"
+                description: "New models are configured for download directly from the app. " +
+                             "Unfortunately experimental models provide very bad accuracy " +
+                             "and most likely they are not suitable for any use right now."
+            }
+
+            LogItem {
+                title: "Improved model for Polish language: 'Polski (mkiol)'"
+                description: "New model is slower than 'Polski (Jaco)' but provides larger vocabulary. " +
+                             "Improved language model was trained on text from polish Wikipedia and 5K random movie subtitles."
+            }
+
+            LogItem {
+                title: "Experimental German medical model: 'Deutsch (med)'"
+                description: "New language model is similar to 'Deutsch (Aashish Agarwal)' " +
+                             "but is able to recognize enhanced medical vocabulary."
+            }
+
+            LogItem {
+                title: "New models for English: 'English (Coqui Huge Vocabulary)', 'English (Coqui Large Vocabulary)'"
+                description: "New models provide larger vocabulary for English language."
+            }
+
+            LogItem {
+                title: "Improved languages browser"
+                description: "Available models are grouped by languages and also it is possible to search by name."
+            }
+
+            LogItem {
+                title: "Support for SFOS 4.4"
+                description: "Sandboxing is explicitly disabled which allows you to run the application on latest SFOS version."
+            }
+
+            SectionHeader {
                 text: qsTr("Version %1").arg("1.6")
             }
 
