@@ -1,6 +1,9 @@
 QT += dbus multimedia
 CONFIG += c++1z
 
+QMAKE_CXXFLAGS_RELEASE -= -O2
+QMAKE_CXXFLAGS_RELEASE += -O3
+
 contains(QT_ARCH, i386){
    CONFIG += x86
    DEFINES += X86
@@ -61,6 +64,7 @@ SOURCES += \
     $${SRC_DIR}/langs_list_model.cpp
 
 HEADERS += \
+    $$PWD/performance.h \
     $${SRC_DIR}/log.h \
     $${SRC_DIR}/stt_service.h \
     $${SRC_DIR}/stt_config.h \
@@ -92,4 +96,5 @@ sailfishapp {
 
 LIBS += \
     -lz -llzma -larchive \
-    -L$${LIB_DIR} -l:libstt.so -l:libkenlm.so
+    -L$${LIB_DIR} \
+    -l:libkenlm.so -l:libstt.so -l:libtensorflowlite.so -l:libtflitedelegates.so

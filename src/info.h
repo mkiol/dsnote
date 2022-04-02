@@ -26,8 +26,8 @@ static constexpr const char* APP_BINARY_ID = "harbour-dsnote";
 static constexpr const char* APP_BINARY_ID = "dsnote";
 #endif
 static constexpr int CONF_VERSION = 8;
-static constexpr const char* STT_VERSION = "1.3.0-0";
-static constexpr const char* TENSORFLOW_VERSION = "v2.8.0-8";
+static constexpr const char* STT_VERSION = "1.1.0-0";
+static constexpr const char* TENSORFLOW_VERSION = "2.3.0-14";
 static constexpr const char* ORG = "org.mkiol";
 static constexpr const char* AUTHOR = "Michal Kosciesza";
 static constexpr const char* AUTHOR_EMAIL = "michal@mkiol.net";
