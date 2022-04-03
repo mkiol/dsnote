@@ -27,7 +27,8 @@ TRANSLATIONS += \
     $${TRANSLATIONS_TS_DIR}/dsnote-cs_CZ.ts \
     $${TRANSLATIONS_TS_DIR}/dsnote-en.ts \
     $${TRANSLATIONS_TS_DIR}/dsnote-pl.ts \
-    $${TRANSLATIONS_TS_DIR}/dsnote-zh_CN.ts
+    $${TRANSLATIONS_TS_DIR}/dsnote-zh_CN.ts \
+    $${TRANSLATIONS_TS_DIR}/dsnote-fr.ts
 include(sailfishapp_i18n.pri)
 
 # install
