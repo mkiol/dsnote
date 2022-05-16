@@ -79,8 +79,12 @@ Page {
             }
 
             SectionHeader {
-                visible: false
                 text: qsTr("Translators")
+            }
+
+            PaddedLabel {
+                horizontalAlignment: Text.AlignLeft
+                text: "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry"
             }
 
             SectionHeader {
