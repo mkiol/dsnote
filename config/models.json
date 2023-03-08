@@ -1,5 +1,5 @@
 {
-    "version": "%VERSION%",
+    "version": "@VERSION@",
     "langs": [
         {
             "name": "Català",

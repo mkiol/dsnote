@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,6 +14,8 @@
 #include <cstring>
 #include <fstream>
 #include <numeric>
+
+// #include "performance.h"
 
 using namespace std::chrono_literals;
 
@@ -232,6 +234,8 @@ bool deepspeech_wrapper::process_buff() {
 
 void deepspeech_wrapper::process_buff(buff_type::const_iterator begin,
                                       buff_type::const_iterator end) {
+    // performance::timer timer;
+
     if (!stream) create_stream();
 
     STT_FeedAudioContent(stream, &(*begin), std::distance(begin, end));

@@ -1,89 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="cs_CZ" sourcelanguage="en_US">
+<TS version="2.1">
 <context>
     <name>AboutPage</name>
     <message>
-        <location filename="../sailfish/qml/AboutPage.qml" line="28"/>
+        <location filename="../sfos/qml/AboutPage.qml" line="28"/>
         <source>About %1</source>
-        <translation>O %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/AboutPage.qml" line="46"/>
+        <location filename="../sfos/qml/AboutPage.qml" line="46"/>
         <source>Version %1</source>
-        <translation>Verze %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/AboutPage.qml" line="50"/>
+        <location filename="../sfos/qml/AboutPage.qml" line="53"/>
         <source>Project website</source>
-        <translation>Web projektu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/AboutPage.qml" line="56"/>
+        <location filename="../sfos/qml/AboutPage.qml" line="57"/>
         <source>Changes</source>
-        <translation>Změny</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/AboutPage.qml" line="62"/>
+        <location filename="../sfos/qml/AboutPage.qml" line="63"/>
         <source>Authors</source>
-        <translation>Autoři</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/AboutPage.qml" line="76"/>
+        <location filename="../sfos/qml/AboutPage.qml" line="77"/>
         <source>%1 is developed as an open source project under %2.</source>
-        <translation>%1 je vyvýjen jako open-source projekt pod %2.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/AboutPage.qml" line="83"/>
+        <location filename="../sfos/qml/AboutPage.qml" line="83"/>
         <source>Translators</source>
-        <translation>Překladatelé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/AboutPage.qml" line="87"/>
-        <source>Libraries</source>
-        <translation>Knihovny</translation>
+        <location filename="../sfos/qml/AboutPage.qml" line="92"/>
+        <source>Libraries in use</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ChangelogPage</name>
     <message>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="28"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="28"/>
         <source>Changes</source>
-        <translation>Změny</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="32"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="65"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="88"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="102"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="116"/>
-        <location filename="../sailfish/qml/ChangelogPage.qml" line="126"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="32"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="70"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="103"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="126"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="140"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="154"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="164"/>
         <source>Version %1</source>
-        <translation>Verze %1</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DirPage</name>
     <message>
-        <location filename="../sailfish/qml/DirPage.qml" line="61"/>
+        <location filename="../sfos/qml/DirPage.qml" line="61"/>
         <source>SD Card</source>
-        <translation>SD karta</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/DirPage.qml" line="66"/>
+        <location filename="../sfos/qml/DirPage.qml" line="66"/>
         <source>Home</source>
-        <translation>Domovská složka</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/DirPage.qml" line="82"/>
+        <location filename="../sfos/qml/DirPage.qml" line="82"/>
         <source>No directories</source>
-        <translation>Žádné složky</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>LangItem</name>
     <message>
-        <location filename="../sailfish/qml/LangItem.qml" line="32"/>
+        <location filename="../sfos/qml/LangItem.qml" line="32"/>
         <source>Show models</source>
         <translation type="unfinished"></translation>
     </message>
@@ -91,150 +92,150 @@
 <context>
     <name>LangsPage</name>
     <message>
-        <location filename="../sailfish/qml/LangsPage.qml" line="41"/>
+        <location filename="../sfos/qml/LangsPage.qml" line="41"/>
         <location filename="../desktop/qml/LangsPage.qml" line="19"/>
         <source>Languages</source>
-        <translation>Jazyky</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="98"/>
-        <source>Delete</source>
-        <translation>Smazat</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="98"/>
-        <source>Download</source>
-        <translation>Stáhnout</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="98"/>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/LangsPage.qml" line="98"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/LangsPage.qml" line="98"/>
+        <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ModelItem</name>
     <message>
-        <location filename="../sailfish/qml/ModelItem.qml" line="33"/>
-        <source>Delete</source>
-        <translation type="unfinished">Smazat</translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/ModelItem.qml" line="33"/>
-        <source>Download</source>
-        <translation type="unfinished">Stáhnout</translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/ModelItem.qml" line="33"/>
+        <location filename="../sfos/qml/ModelItem.qml" line="33"/>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/ModelItem.qml" line="33"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/ModelItem.qml" line="33"/>
+        <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>NotesPage</name>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="41"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="41"/>
         <source>About %1</source>
-        <translation>O %1</translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="46"/>
-        <source>Settings</source>
-        <translation>Nastavení</translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="52"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="111"/>
-        <source>Transcribe audio file</source>
-        <translation>Přepsat audio soubor</translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="120"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="58"/>
-        <source>Transcribing audio file...</source>
-        <translation>Přepisuji audio soubor...</translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="122"/>
-        <source>Starting...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="63"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="99"/>
-        <source>Clear</source>
-        <translation>Smazat</translation>
+        <location filename="../sfos/qml/NotesPage.qml" line="46"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="52"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="52"/>
         <location filename="../desktop/qml/NotesPage.qml" line="110"/>
         <source>Cancel file transcription</source>
-        <translation>Zrušit přepisování souboru</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="69"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="52"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="111"/>
+        <source>Transcribe audio file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/NotesPage.qml" line="63"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="99"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/NotesPage.qml" line="69"/>
         <source>Copy</source>
-        <translation>Kopírovat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="95"/>
-        <location filename="../sailfish/qml/NotesPage.qml" line="121"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="95"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="121"/>
         <source>Language is not configured</source>
-        <translation>Není nastaven jazyk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="96"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="96"/>
         <source>Pull down and select Settings to download language</source>
-        <translation>Táhněte dolů a vyberte Nastavení pro stáhnutí jazyka</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="115"/>
-        <location filename="../sailfish/qml/NotesPage.qml" line="121"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="115"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="121"/>
         <location filename="../desktop/qml/NotesPage.qml" line="60"/>
         <source>Say something...</source>
-        <translation>Řekněte něco...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="117"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="61"/>
-        <source>Press and say something...</source>
-        <translation>Stiskněte a řekněte něco...</translation>
-    </message>
-    <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="117"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="117"/>
         <location filename="../desktop/qml/NotesPage.qml" line="61"/>
         <source>Click and say something...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="120"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="117"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="61"/>
+        <source>Press and say something...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/NotesPage.qml" line="120"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="58"/>
+        <source>Transcribing audio file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/NotesPage.qml" line="120"/>
         <source>Busy...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="153"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="122"/>
+        <source>Starting...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/NotesPage.qml" line="153"/>
         <source>Audio file couldn&apos;t be transcribed.</source>
-        <translation>Audio soubor nemůže být přepsán.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="156"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="156"/>
         <source>Microphone was unexpectedly disconnected.</source>
-        <translation>Mikrofon byl neočekávaně odpojen.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="159"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="159"/>
         <source>Unable to start service.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/NotesPage.qml" line="162"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="162"/>
         <source>Oops! Something went wrong.</source>
-        <translation>Jejda! Něco se nepovedlo.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="19"/>
         <source>Note</source>
-        <translation>Poznámka</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="82"/>
@@ -243,95 +244,95 @@
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="90"/>
-        <source>Click to start listening</source>
+        <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="90"/>
-        <source>Cancel</source>
+        <source>Click to start listening</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="127"/>
         <source>No language is configured</source>
-        <translation>Žádný jazyk není nastaven</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>SettingsPage</name>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="30"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="30"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="18"/>
         <source>Settings</source>
-        <translation>Nastavení</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="42"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="42"/>
         <source>Active language</source>
-        <translation>Aktivní jazyk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="76"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="76"/>
         <source>Languages</source>
-        <translation type="unfinished">Jazyky</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="84"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="84"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="38"/>
         <source>Listening mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="91"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="91"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="47"/>
         <source>One sentence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="92"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="92"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="48"/>
         <source>Press and hold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="93"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="93"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="49"/>
         <source>Always on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="104"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="104"/>
         <source>One sentence: Clicking on the bottom panel starts listening, which ends when the first sentence is recognized.
 Press and hold: Pressing and holding on the bottom panel enables listening. When you stop holding, listening will turn off.
 Always on: Listening is always turn on.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="110"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="110"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="65"/>
         <source>Location of language files</source>
-        <translation>Umístění jazykových souborů</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="112"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="112"/>
         <source>Directory where language files are downloaded to and stored.</source>
-        <translation>Složka kam jsou staženy a uloženy jazykové soubory.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="116"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="116"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="74"/>
         <source>Change</source>
-        <translation>Změnit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sailfish/qml/SettingsPage.qml" line="125"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="125"/>
         <source>Set default</source>
-        <translation>Použít defaultní</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="81"/>
         <source>Please choose a directory</source>
-        <translation>Prosím vyberte složku</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -339,17 +340,17 @@ Always on: Listening is always turn on.</source>
     <message>
         <location filename="../desktop/qml/main.qml" line="49"/>
         <source>Languages configuration</source>
-        <translation>Nastavení jazyka</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="57"/>
         <source>Settings</source>
-        <translation>Nastavení</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="66"/>
         <source>Quit</source>
-        <translation>Ukončit</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -357,17 +358,17 @@ Always on: Listening is always turn on.</source>
     <message>
         <location filename="../src/stt_service.cpp" line="730"/>
         <source>Language is not configured</source>
-        <translation type="unfinished">Není nastaven jazyk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/stt_service.cpp" line="731"/>
         <source>Say something...</source>
-        <translation type="unfinished">Řekněte něco...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/stt_service.cpp" line="733"/>
         <source>Press and say something...</source>
-        <translation type="unfinished">Stiskněte a řekněte něco...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/stt_service.cpp" line="735"/>

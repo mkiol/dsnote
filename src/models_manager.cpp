@@ -38,7 +38,7 @@
 #include <utility>
 #include <vector>
 
-#include "info.h"
+#include "config.h"
 #include "settings.h"
 
 models_manager::models_manager(QObject* parent) : QObject{parent} {
@@ -919,8 +919,7 @@ void models_manager::init_config() {
     }
 
     auto data = default_models_file.readAll();
-    models.write(data.replace("%VERSION%",
-                              std::to_string(dsnote::CONF_VERSION).c_str()));
+    models.write(data.replace("@VERSION@", APP_CONF_VERSION));
 }
 
 models_manager::comp_type models_manager::str2comp(const QString& str) {
@@ -993,7 +992,7 @@ bool models_manager::checksum_ok(const QString& checksum,
         return checksum == make_checksum(model_path(file_name));
     }
     return checksum_quick == make_quick_checksum(model_path(file_name));
-};
+}
 
 auto models_manager::extract_models(const QJsonArray& models_jarray) {
     models_t models;
@@ -1120,7 +1119,7 @@ void models_manager::parse_models_file(bool reset, langs_t* langs,
 
     if (std::ifstream input{models_file_path.toStdString(),
                             std::ifstream::in | std::ifstream::binary}) {
-        const std::vector<char> buff{std::istreambuf_iterator<char>{input}, {}};
+        std::vector<char> buff{std::istreambuf_iterator<char>{input}, {}};
 
         QJsonParseError err;
         auto json = QJsonDocument::fromJson(
@@ -1138,11 +1137,13 @@ void models_manager::parse_models_file(bool reset, langs_t* langs,
                                .toString()
                                .toInt();
 
-            qDebug() << "config version:" << version << dsnote::CONF_VERSION;
+            auto required_version = std::stoi(APP_CONF_VERSION);
 
-            if (version != dsnote::CONF_VERSION) {
+            qDebug() << "config version:" << version << APP_CONF_VERSION;
+
+            if (version != required_version) {
                 qWarning("version mismatch, has %d but requires %d", version,
-                         dsnote::CONF_VERSION);
+                         required_version);
                 input.close();
                 if (!reset) {
                     init_config();
@@ -1160,11 +1161,11 @@ void models_manager::parse_models_file(bool reset, langs_t* langs,
     }
 }
 
-inline QString models_manager::file_name_from_id(const QString& id) {
+QString models_manager::file_name_from_id(const QString& id) {
     return id + ".tflite";
 }
 
-inline QString models_manager::scorer_file_name_from_id(const QString& id) {
+QString models_manager::scorer_file_name_from_id(const QString& id) {
     return id + ".scorer";
 }
 

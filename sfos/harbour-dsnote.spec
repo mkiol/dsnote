@@ -2,11 +2,11 @@ Name:       harbour-dsnote
 
 # >> macros
 %define __provides_exclude_from ^%{_datadir}/.*$
-%define __requires_exclude ^libstt.*|libtensorflowlite.*|libtflitedelegates.*|libkenlm.*$
+%define __requires_exclude ^libstt.*|libkenlm.*$
 # << macros
 
 Summary:        Note taking with speech to text
-Version:        1.8.0
+Version:        2.0.0
 Release:        1
 Group:          Qt/Qt
 License:        LICENSE
@@ -17,10 +17,9 @@ BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
-BuildRequires:  pkgconfig(liblzma)
 BuildRequires:  pkgconfig(zlib)
-BuildRequires:  pkgconfig(libarchive)
 BuildRequires:  desktop-file-utils
+BuildRequires:  curl
 
 %description
 Note taking with speech to text
@@ -35,9 +34,7 @@ Note taking with speech to text
 %build
 # >> build pre
 # << build pre
-
-%qmake5 
-
+%cmake .
 make %{?_smp_mflags}
 
 # >> build post
@@ -47,7 +44,7 @@ make %{?_smp_mflags}
 rm -rf %{buildroot}
 # >> install pre
 # << install pre
-%qmake5_install
+%make_install
 
 desktop-file-install --delete-original       \
   --dir %{buildroot}%{_datadir}/applications             \

@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,7 +15,7 @@
 #include <QTranslator>
 #include <QUrl>
 
-#ifdef SAILFISH
+#ifdef USE_SFOS
 #ifdef QT_QML_DEBUG
 #include <QtQuick>
 #endif
@@ -32,15 +32,15 @@
 #include <memory>
 #endif
 
+#include "config.h"
 #include "dsnote_app.h"
-#include "info.h"
 #include "log.h"
 #include "settings.h"
 #include "stt_config.h"
 #include "stt_service.h"
 
 void register_types() {
-#ifdef SAILFISH
+#ifdef USE_SFOS
     qmlRegisterUncreatableType<settings>("harbour.dsnote.Settings", 1, 0,
                                          "Settings",
                                          QStringLiteral("Singleton"));
@@ -56,27 +56,31 @@ void register_types() {
 #endif
 }
 
-#ifdef SAILFISH
-void install_translator(QGuiApplication* app) {
-    auto translator = new QTranslator{app};
-    auto trans_dir = SailfishApp::pathTo("translations").toLocalFile();
+static void install_translator() {
+    auto* translator = new QTranslator{QCoreApplication::instance()};
+#ifdef USE_SFOS
+    auto trans_dir =
+        SailfishApp::pathTo(QStringLiteral("translations")).toLocalFile();
 #else
-void install_translator(const std::unique_ptr<QGuiApplication>& app) {
-    auto translator = new QTranslator{app.get()};
-    QString trans_dir = QStringLiteral(":/translations");
+    auto trans_dir = QStringLiteral(":/translations");
 #endif
-    if (!translator->load(QLocale{}, QStringLiteral("dsnote"), "-", trans_dir,
+    if (!translator->load(QLocale{}, QStringLiteral("dsnote"),
+                          QStringLiteral("-"), trans_dir,
                           QStringLiteral(".qm"))) {
-        qDebug() << "cannot load translation:" << QLocale::system().name()
+        qDebug() << "failed to load translation:" << QLocale::system().name()
                  << trans_dir;
         if (!translator->load(QStringLiteral("dsnote-en"), trans_dir)) {
-            qDebug() << "cannot load default translation";
+            qDebug() << "failed to load default translation";
             delete translator;
             return;
         }
+    } else {
+        qDebug() << "translation:" << QLocale::system().name();
     }
 
-    app->installTranslator(translator);
+    if (!QGuiApplication::installTranslator(translator)) {
+        qWarning() << "failed to install translation";
+    }
 }
 
 bool is_daemon(int argc, char* argv[]) {
@@ -89,72 +93,71 @@ bool is_daemon(int argc, char* argv[]) {
 
 int main(int argc, char* argv[]) {
     qInstallMessageHandler(qtLog);
-#ifdef SAILFISH
-    auto app = SailfishApp::application(argc, argv);
+#ifdef USE_SFOS
+    SailfishApp::application(argc, argv);
 #else
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    auto app = std::make_unique<QGuiApplication>(argc, argv);
+    QGuiApplication app(argc, argv);
 #endif
 
-    app->setApplicationName(dsnote::APP_ID);
-    app->setOrganizationName(dsnote::ORG);
-    app->setApplicationDisplayName(dsnote::APP_NAME);
-    app->setApplicationVersion(dsnote::APP_VERSION);
+    QGuiApplication::setApplicationName(QStringLiteral(APP_ID));
+    QGuiApplication::setOrganizationName(QStringLiteral(APP_ORG));
+    QGuiApplication::setApplicationDisplayName(QStringLiteral(APP_NAME));
+    QGuiApplication::setApplicationVersion(QStringLiteral(APP_VERSION));
 
-    install_translator(app);
+    install_translator();
 
     if (is_daemon(argc, argv)) {
         qDebug() << "starting service";
         stt_service service;
-        return app->exec();
+        return QGuiApplication::exec();
     }
 
     qDebug() << "starting configuration";
-#ifdef SAILFISH
-    auto view = SailfishApp::createView();
-    auto context = view->rootContext();
+#ifdef USE_SFOS
+    auto* view = SailfishApp::createView();
+    auto* context = view->rootContext();
 #else
     auto engine = std::make_unique<QQmlApplicationEngine>();
-    auto context = engine->rootContext();
+    auto* context = engine->rootContext();
 #endif
     register_types();
 
-    context->setContextProperty(QStringLiteral("APP_NAME"), dsnote::APP_NAME);
-    context->setContextProperty(QStringLiteral("APP_ID"), dsnote::APP_ID);
-    context->setContextProperty(QStringLiteral("APP_VERSION"),
-                                dsnote::APP_VERSION);
-    context->setContextProperty(QStringLiteral("COPYRIGHT_YEAR"),
-                                dsnote::COPYRIGHT_YEAR);
-    context->setContextProperty(QStringLiteral("AUTHOR"), dsnote::AUTHOR);
-    context->setContextProperty(QStringLiteral("AUTHOR_EMAIL"),
-                                dsnote::AUTHOR_EMAIL);
-    context->setContextProperty(QStringLiteral("SUPPORT_EMAIL"),
-                                dsnote::SUPPORT_EMAIL);
-    context->setContextProperty(QStringLiteral("PAGE"), dsnote::PAGE);
-    context->setContextProperty(QStringLiteral("LICENSE"), dsnote::LICENSE);
-    context->setContextProperty(QStringLiteral("LICENSE_URL"),
-                                dsnote::LICENSE_URL);
-    context->setContextProperty(QStringLiteral("LICENSE_SPDX"),
-                                dsnote::LICENSE_SPDX);
-    context->setContextProperty(QStringLiteral("TENSORFLOW_VERSION"),
-                                dsnote::TENSORFLOW_VERSION);
-    context->setContextProperty(QStringLiteral("STT_VERSION"),
-                                dsnote::STT_VERSION);
+    context->setContextProperty(QStringLiteral("APP_NAME"), APP_NAME);
+    context->setContextProperty(QStringLiteral("APP_ID"), APP_ID);
+    context->setContextProperty(QStringLiteral("APP_VERSION"), APP_VERSION);
+    context->setContextProperty(QStringLiteral("APP_COPYRIGHT_YEAR"),
+                                APP_COPYRIGHT_YEAR);
+    context->setContextProperty(QStringLiteral("APP_AUTHOR"), APP_AUTHOR);
+    context->setContextProperty(QStringLiteral("APP_AUTHOR_EMAIL"),
+                                APP_AUTHOR_EMAIL);
+    context->setContextProperty(QStringLiteral("APP_SUPPORT_EMAIL"),
+                                APP_SUPPORT_EMAIL);
+    context->setContextProperty(QStringLiteral("APP_WEBPAGE"), APP_WEBPAGE);
+    context->setContextProperty(QStringLiteral("APP_LICENSE"), APP_LICENSE);
+    context->setContextProperty(QStringLiteral("APP_LICENSE_URL"),
+                                APP_LICENSE_URL);
+    context->setContextProperty(QStringLiteral("APP_LICENSE_SPDX"),
+                                APP_LICENSE_SPDX);
+    context->setContextProperty(QStringLiteral("APP_TRANSLATORS_STR"),
+                                APP_TRANSLATORS_STR);
+    context->setContextProperty(QStringLiteral("APP_LIBS_STR"), APP_LIBS_STR);
     context->setContextProperty(QStringLiteral("_settings"),
                                 settings::instance());
 
-#ifdef SAILFISH
+#ifdef USE_SFOS
     view->setSource(SailfishApp::pathTo("qml/main.qml"));
     view->show();
 #else
     const QUrl url{QStringLiteral("qrc:/qml/main.qml")};
     QObject::connect(
-        engine.get(), &QQmlApplicationEngine::objectCreated, app.get(),
+        engine.get(), &QQmlApplicationEngine::objectCreated,
+        QCoreApplication::instance(),
         [url](const QObject* obj, const QUrl& objUrl) {
             if (!obj && url == objUrl) QCoreApplication::exit(-1);
         },
         Qt::QueuedConnection);
     engine->load(url);
 #endif
-    return app->exec();
+    return QGuiApplication::exec();
 }

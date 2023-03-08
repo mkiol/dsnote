@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -30,8 +30,8 @@ Page {
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
-                height: Theme.itemSizeHuge
-                width: Theme.itemSizeHuge
+                height: root.isPortrait ? Theme.itemSizeHuge : Theme.iconSizeLarge
+                width: root.isPortrait ? Theme.itemSizeHuge : Theme.iconSizeLarge
                 source: _settings.app_icon()
             }
 
@@ -46,16 +46,17 @@ Page {
                 text: qsTr("Version %1").arg(APP_VERSION);
             }
 
-            Button {
-                text: qsTr("Project website")
+            Flow {
                 anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: Qt.openUrlExternally(PAGE)
-            }
-
-            Button {
-                text: qsTr("Changes")
-                anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: pageStack.push(Qt.resolvedUrl("ChangelogPage.qml"))
+                spacing: Theme.paddingLarge
+                Button {
+                    text: qsTr("Project website")
+                    onClicked: Qt.openUrlExternally(APP_WEBPAGE)
+                }
+                Button {
+                    text: qsTr("Changes")
+                    onClicked: pageStack.push(Qt.resolvedUrl("ChangelogPage.qml"))
+                }
             }
 
             SectionHeader {
@@ -66,8 +67,8 @@ Page {
                 horizontalAlignment: Text.AlignLeft
                 textFormat: Text.RichText
                 text: ("Copyright &copy; %1 %2")
-                .arg(COPYRIGHT_YEAR)
-                .arg(AUTHOR)
+                .arg(APP_COPYRIGHT_YEAR)
+                .arg(APP_AUTHOR)
             }
 
             PaddedLabel {
@@ -75,7 +76,7 @@ Page {
                 textFormat: Text.StyledText
                 text: qsTr("%1 is developed as an open source project under %2.")
                 .arg(APP_NAME)
-                .arg("<a href=\"" + LICENSE_URL + "\">" + LICENSE + "</a>")
+                .arg("<a href=\"" + APP_LICENSE_URL + "\">" + APP_LICENSE + "</a>")
             }
 
             SectionHeader {
@@ -84,20 +85,16 @@ Page {
 
             PaddedLabel {
                 horizontalAlignment: Text.AlignLeft
-                text: "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry"
+                text: APP_TRANSLATORS_STR
             }
 
             SectionHeader {
-                text: qsTr("Libraries")
+                text: qsTr("Libraries in use")
             }
 
-            DetailItem {
-                label: "Coqui STT"
-                value: STT_VERSION
-            }
-            DetailItem {
-                label: "TensorFlow"
-                value: TENSORFLOW_VERSION
+            PaddedLabel {
+                horizontalAlignment: Text.AlignLeft
+                text: APP_LIBS_STR
             }
 
             Spacer {}

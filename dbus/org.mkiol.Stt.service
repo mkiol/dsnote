@@ -1,5 +1,5 @@
 [D-BUS Service]
-Name=org.mkiol.Stt
-Interface=org.mkiol.Stt
+Name=@info_dbus_service@
+Interface=@info_dbus_interface@
 Exec=/bin/false
-SystemdService=%TARGET%.service
+SystemdService=@info_binary_id@.service

@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,12 +14,10 @@
 #include <fstream>
 #include <iostream>
 
-#include "info.h"
-
-settings* settings::m_instance = nullptr;
+#include "config.h"
 
 settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
-    qDebug() << "app:" << dsnote::ORG << dsnote::APP_ID;
+    qDebug() << "app:" << APP_ORG << APP_ID;
     qDebug() << "config location:"
              << QStandardPaths::writableLocation(
                     QStandardPaths::ConfigLocation);
@@ -40,11 +38,6 @@ QString settings::settings_filepath() {
            QCoreApplication::organizationName() + QDir::separator() +
            QCoreApplication::applicationName() + QDir::separator() +
            settings_filename;
-}
-
-settings* settings::instance() {
-    if (!settings::m_instance) settings::m_instance = new settings{};
-    return settings::m_instance;
 }
 
 QString settings::models_dir() const {
@@ -120,6 +113,6 @@ void settings::set_note(const QString& value) {
 
 QUrl settings::app_icon() const {
     return QUrl::fromLocalFile(
-        QString(QStringLiteral("/usr/share/icons/hicolor/172x172/apps/%1.png"))
-            .arg(dsnote::APP_BINARY_ID));
+        QStringLiteral("/usr/share/icons/hicolor/172x172/apps/%1.png")
+            .arg(QLatin1String{APP_BINARY_ID}));
 }

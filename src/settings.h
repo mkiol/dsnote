@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,7 +13,9 @@
 #include <QString>
 #include <QUrl>
 
-class settings : public QSettings {
+#include "singleton.h"
+
+class settings : public QSettings, public singleton<settings> {
     Q_OBJECT
 
     // app
@@ -39,7 +41,7 @@ class settings : public QSettings {
     };
     Q_ENUM(speech_mode_type)
 
-    static settings *instance();
+    settings();
 
     // app
     QString note() const;
@@ -69,8 +71,6 @@ class settings : public QSettings {
    private:
     inline static const QString settings_filename =
         QStringLiteral("settings.conf");
-    static settings *m_instance;
-    settings();
     static QString settings_filepath();
 };
 

@@ -1,0 +1,30 @@
+/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#define APP_ID "@info_id@"
+#define APP_BINARY_ID "@info_binary_id@"
+#define APP_NAME "@info_name@"
+#define APP_VERSION "@PROJECT_VERSION@"
+#define APP_ORG "@info_org@"
+#define APP_AUTHOR "@info_author@"
+#define APP_AUTHOR_EMAIL "@info_author_email@"
+#define APP_COPYRIGHT_YEAR "@info_copyright_year@"
+#define APP_SUPPORT_EMAIL "@info_support_email@"
+#define APP_WEBPAGE "@info_webpage@"
+#define APP_LICENSE "@info_license@"
+#define APP_LICENSE_URL "@info_license_url@"
+#define APP_LICENSE_SPDX "@info_license_spdx@"
+#define APP_DBUS_SERVICE "@info_dbus_service@"
+#define APP_DBUS_INTERFACE "@info_dbus_interface@"
+#define APP_TRANSLATORS_STR "@info_translators_str@"
+#define APP_LIBS_STR "@info_libs_str@"
+#define APP_CONF_VERSION "@info_conf_version@"
+
+#endif // CONFIG_H
