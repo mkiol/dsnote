@@ -58,8 +58,6 @@ set(info_conf_version "8")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry")
 set(info_libs_str "Qt · Coqui STT · {fmt}")
 
-
-
 set(libstt_x86_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.Linux.tar.xz")
 set(libstt_arm64_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.aarch64.tar.xz")
 set(libstt_arm_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.armv7.tar.xz")
@@ -138,8 +136,6 @@ set(dsnote_lib_sources
     ${sources_dir}/langs_list_model.h
     ${sources_dir}/listmodel.cpp
     ${sources_dir}/listmodel.h
-    ${sources_dir}/log.cpp
-    ${sources_dir}/log.h
     ${sources_dir}/mic_source.cpp
     ${sources_dir}/mic_source.h
     ${sources_dir}/models_list_model.cpp
@@ -153,7 +149,11 @@ set(dsnote_lib_sources
     ${sources_dir}/stt_config.cpp
     ${sources_dir}/stt_config.h
     ${sources_dir}/stt_service.cpp
-    ${sources_dir}/stt_service.h)
+    ${sources_dir}/stt_service.h
+    ${sources_dir}/logger.cpp
+    ${sources_dir}/logger.hpp
+    ${sources_dir}/qtlogger.cpp
+    ${sources_dir}/qtlogger.hpp)
 
 configure_file(config.h.in config.h)
 

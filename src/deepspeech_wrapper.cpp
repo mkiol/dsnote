@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -7,7 +7,6 @@
 
 #include "deepspeech_wrapper.h"
 
-#include <QDebug>
 #include <algorithm>
 #include <chrono>
 #include <cmath>
@@ -15,7 +14,7 @@
 #include <fstream>
 #include <numeric>
 
-// #include "performance.h"
+#include "logger.hpp"
 
 using namespace std::chrono_literals;
 
@@ -45,7 +44,7 @@ deepspeech_wrapper::~deepspeech_wrapper() {
 }
 
 void deepspeech_wrapper::start_processing() {
-    qDebug() << "processing thread started";
+    LOGD("processing thread started");
 
     thread_exit_requested = false;
 
@@ -60,11 +59,11 @@ void deepspeech_wrapper::start_processing() {
             if (!process_buff()) processing_cv.wait(lock);
         }
         flush(flush_type::exit);
-    } catch (const std::system_error&) {
-        qCritical() << "system error";
+    } catch (const std::system_error& e) {
+        LOGE("system error: " << e.what());
     }
 
-    qDebug() << "processing thread ended";
+    LOGD("processing thread ended");
 }
 
 std::string deepspeech_wrapper::error_msg(int status) {
@@ -85,8 +84,7 @@ void deepspeech_wrapper::create_model() {
             STT_EnableExternalScorer(model.get(), scorer_file_value.c_str());
         }
     } else {
-        qDebug() << "could not create model:"
-                 << QString::fromStdString(error_msg(status));
+        LOGD("could not create model: " << error_msg(status));
         throw std::runtime_error("could not create model");
     }
 }
@@ -95,8 +93,7 @@ void deepspeech_wrapper::create_stream() {
     int status = STT_CreateStream(model.get(), &stream);
 
     if (status != 0) {
-        qDebug() << "could not create stream:"
-                 << QString::fromStdString(error_msg(status));
+        LOGD("could not create stream:" << error_msg(status));
         free_stream();
         throw std::runtime_error("could not create stream");
     }
@@ -141,12 +138,11 @@ std::pair<char*, int64_t> deepspeech_wrapper::borrow_buff() {
     std::pair<char*, int64_t> c_buf{nullptr, 0};
 
     if (!lock_buff(lock_type::borrowed)) {
-        // qWarning() << "cannot return, buff is not free";
         return c_buf;
     }
 
     if (buff_struct.full()) {
-        qWarning() << "cannot borrow, buff is full";
+        LOGD("cannot borrow, buff is full");
         free_buff();
         return c_buf;
     }
@@ -161,7 +157,6 @@ std::pair<char*, int64_t> deepspeech_wrapper::borrow_buff() {
 
 void deepspeech_wrapper::return_buff(const char* c_buff, int64_t size) {
     if (buff_struct.lock != lock_type::borrowed) {
-        // qWarning() << "cannot return, buff not borrowed";
         return;
     }
 
@@ -175,7 +170,7 @@ void deepspeech_wrapper::return_buff(const char* c_buff, int64_t size) {
 
 bool deepspeech_wrapper::lock_buff_for_processing() {
     if (!lock_buff(lock_type::processed)) {
-        qWarning() << "cannot lock for processing, buff not free";
+        LOGW("cannot lock for processing, buff not free");
         return false;
     }
 
@@ -208,10 +203,10 @@ bool deepspeech_wrapper::process_buff() {
         }
     }
 
-    //    qDebug() << "process_buff start:" <<
+    //    LOGD("process_buff start: " <<
     //    static_cast<int>(speech_mode_value)
     //             << last_frame_done << speech_detected_value <<
-    //             buff_struct.size;
+    //             buff_struct.size);
 
     auto begin = buff_struct.buff.begin(), end = begin + frame_size;
     auto max_end = begin + buff_struct.size;
@@ -224,7 +219,7 @@ bool deepspeech_wrapper::process_buff() {
 
     trim_buff(end - frame_size);
 
-    //    qDebug() << "process_buff end";
+    //    LOGD("process_buff end");
 
     free_buff();
 
@@ -234,8 +229,6 @@ bool deepspeech_wrapper::process_buff() {
 
 void deepspeech_wrapper::process_buff(buff_type::const_iterator begin,
                                       buff_type::const_iterator end) {
-    // performance::timer timer;
-
     if (!stream) create_stream();
 
     STT_FeedAudioContent(stream, &(*begin), std::distance(begin, end));
@@ -249,8 +242,6 @@ void deepspeech_wrapper::process_buff(buff_type::const_iterator begin,
     }
 
     if (frames_without_change < silent_level) {
-        // qDebug("result: %d %s %s", frames_without_change, intermediate_text ?
-        // intermediate_text->c_str() : "null", result);
         if (speech_mode_value == speech_mode_type::automatic ||
             speech_mode_value == speech_mode_type::single_sentence) {
             if (intermediate_text || std::strlen(result) != 0)
@@ -261,8 +252,6 @@ void deepspeech_wrapper::process_buff(buff_type::const_iterator begin,
             set_intermediate_text(result);
         }
     } else {
-        // qDebug("flush: %d %s %s", frames_without_change, intermediate_text ?
-        // intermediate_text->c_str() : "null", result);
         flush();
     }
 
@@ -336,7 +325,8 @@ void deepspeech_wrapper::set_speech_started(bool value) {
 }
 
 void deepspeech_wrapper::set_speech_detected(bool detected) {
-    qDebug() << "set_speech_detected:" << speech_detected_value << detected;
+    LOGD("set_speech_detected: old=" << speech_detected_value
+                                     << " new=" << detected);
     if (speech_detected_value != detected) {
         last_frame_done = false;
         speech_detected_value = detected;

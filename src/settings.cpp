@@ -47,7 +47,7 @@ QString settings::models_dir() const {
     if (dir.isEmpty()) {
         dir = QDir{QStandardPaths::writableLocation(
                        QStandardPaths::DownloadLocation)}
-                  .filePath(QStringLiteral("DeepSpeech models"));
+                  .filePath(QStringLiteral("STT-models"));
         QDir{}.mkpath(dir);
     }
 

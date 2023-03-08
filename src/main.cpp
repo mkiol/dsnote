@@ -34,7 +34,8 @@
 
 #include "config.h"
 #include "dsnote_app.h"
-#include "log.h"
+#include "logger.hpp"
+#include "qtlogger.hpp"
 #include "settings.h"
 #include "stt_config.h"
 #include "stt_service.h"
@@ -92,7 +93,9 @@ bool is_daemon(int argc, char* argv[]) {
 }
 
 int main(int argc, char* argv[]) {
-    qInstallMessageHandler(qtLog);
+    Logger::init(Logger::LogType::Trace);
+    initQtLogger();
+
 #ifdef USE_SFOS
     SailfishApp::application(argc, argv);
 #else
