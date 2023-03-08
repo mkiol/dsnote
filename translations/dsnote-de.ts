@@ -143,7 +143,7 @@
         <source>Settings</source>
         <translation>Einstellungen‎</translation>
     </message>
-    <message
+    <message>
         <location filename="../sailfish/qml/NotesPage.qml" line="52"/>
         <location filename="../desktop/qml/NotesPage.qml" line="111"/>
         <source>Transcribe Audio file</source>
