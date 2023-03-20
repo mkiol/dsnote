@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+﻿/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -20,7 +20,7 @@
 
 #include "audio_source.h"
 #include "dbus_stt_adaptor.h"
-#include "deepspeech_wrapper.h"
+#include "engine_wrapper.hpp"
 #include "models_manager.h"
 
 class stt_service : public QObject {
@@ -35,8 +35,9 @@ class stt_service : public QObject {
     Q_PROPERTY(QString DefaultModel READ default_model WRITE set_default_model)
     Q_PROPERTY(int CurrentTask READ current_task_id CONSTANT)
     Q_PROPERTY(QVariantMap Translations READ translations CONSTANT)
+
    public:
-    enum class state_type {
+    enum class state_t {
         unknown = 0,
         not_configured = 1,
         busy = 2,
@@ -47,22 +48,18 @@ class stt_service : public QObject {
         listening_single_sentence = 7
     };
 
-    enum class speech_mode_type {
-        automatic = 0,
-        manual = 1,
-        single_sentence = 2
-    };
+    enum class speech_mode_t { automatic = 0, manual = 1, single_sentence = 2 };
 
-    enum class source_type { none = 0, mic = 1, file = 2 };
+    enum class source_t { none = 0, mic = 1, file = 2 };
 
-    enum class error_type { generic = 0, mic_source = 1, file_source = 2 };
+    enum class error_t { generic = 0, mic_source = 1, file_source = 2 };
 
     explicit stt_service(QObject *parent = nullptr);
 
     Q_INVOKABLE void download_model(const QString &id);
     Q_INVOKABLE void delete_model(const QString &id);
 
-    Q_INVOKABLE int start_listen(stt_service::speech_mode_type mode,
+    Q_INVOKABLE int start_listen(stt_service::speech_mode_t mode,
                                  const QString &lang);
     Q_INVOKABLE int stop_listen(int task);
     Q_INVOKABLE int transcribe_file(const QString &file, const QString &lang);
@@ -76,12 +73,13 @@ class stt_service : public QObject {
     void state_changed();
     void buff_ready();
     void transcribe_file_progress_changed(double progress, int task);
-    void error(stt_service::error_type type);
+    void error(stt_service::error_t type);
     void file_transcribe_finished(int task);
     void intermediate_text_decoded(const QString &text, const QString &lang,
                                    int task);
     void text_decoded(const QString &text, const QString &lang, int task);
     void current_task_changed();
+    void sentence_timeout(int task_id);
 
     // DBus
     void ErrorOccured(int code);
@@ -91,7 +89,7 @@ class stt_service : public QObject {
                                  int task);
     void StatePropertyChanged(int state);
     void TextDecoded(const QString &text, const QString &lang, int task);
-    void SpeechPropertyChanged(bool speech);
+    void SpeechPropertyChanged(int speech);
     void LangsPropertyChanged(const QVariantMap &langs);
     void DefaultLangPropertyChanged(const QString &lang);
     void ModelsPropertyChanged(const QVariantMap &models);
@@ -99,21 +97,24 @@ class stt_service : public QObject {
     void CurrentTaskPropertyChanged(int task);
 
    private:
-    struct model_data_type {
+    struct model_data_t {
         QString model_id;
         QString lang_id;
+        models_manager::model_engine engine = models_manager::model_engine::ds;
         QString name;
     };
 
-    struct model_files_type {
+    struct model_files_t {
         QString model_id;
+        QString lang_id;
+        models_manager::model_engine engine = models_manager::model_engine::ds;
         QString model_file;
         QString scorer_file;
     };
 
-    struct task_type {
+    struct task_t {
         int id = INVALID_TASK;
-        speech_mode_type speech_mode;
+        speech_mode_t speech_mode;
         QString model_id;
     };
 
@@ -128,66 +129,66 @@ class stt_service : public QObject {
     static const int KEEPALIVE_TASK_TIME = 10000;      // 10s
     static const int SINGLE_SENTENCE_TIMEOUT = 10000;  // 10s
 
-    int last_task_id = INVALID_TASK;
-    std::unique_ptr<deepspeech_wrapper> ds;
-    std::unique_ptr<audio_source> source;
-    models_manager manager;
-    std::map<QString, model_data_type> available_models_map;
-    double progress_value = -1;
-    state_type state_value = state_type::unknown;
-    SttAdaptor stt_adaptor;
-    QTimer ds_reset_timer;
-    QTimer keepalive_timer;
-    QTimer keepalive_current_task_timer;
-    QTimer single_sentence_task_timer;
-    int last_intermediate_text_task = INVALID_TASK;
-    std::optional<task_type> previous_task;
-    std::optional<task_type> current_task;
-    std::optional<task_type> pending_task;
+    int m_last_task_id = INVALID_TASK;
+    std::unique_ptr<engine_wrapper> m_engine;
+    std::unique_ptr<audio_source> m_source;
+    models_manager m_manager;
+    std::map<QString, model_data_t> m_available_models_map;
+    double m_progress = -1;
+    state_t m_state = state_t::unknown;
+    SttAdaptor m_stt_adaptor;
+    QTimer m_engine_reset_timer;
+    QTimer m_keepalive_timer;
+    QTimer m_keepalive_current_task_timer;
+    int m_last_intermediate_text_task = INVALID_TASK;
+    std::optional<task_t> m_previous_task;
+    std::optional<task_t> m_current_task;
+    std::optional<task_t> m_pending_task;
 
     QVariantMap available_models() const;
     QVariantMap available_langs() const;
     void handle_models_changed();
+    void handle_sentence_timeout();
+    void handle_sentence_timeout(int task_id);
     void handle_text_decoded(const std::string &text);
     void handle_text_decoded(const QString &text, const QString &model_id,
                              int task_id);
     void handle_intermediate_text_decoded(const std::string &text);
-    void handle_intermediate_text_decoded(const QString &text,
-                                          const QString &model_id, int task_id);
     void handle_audio_available();
-    void handle_speech_status_changed(bool speech_detected);
+    void handle_speech_detection_status_changed(
+        engine_wrapper::speech_detection_status_t status);
     void handle_processing_changed(bool processing);
     void handle_speech_clear();
     void handle_audio_error();
     void handle_audio_ended();
-    QString restart_ds(speech_mode_type speech_mode, const QString &model_id);
+    QString restart_engine(speech_mode_t speech_mode, const QString &model_id);
     void restart_audio_source(const QString &source_file = {});
     void stop();
-    [[nodiscard]] bool speech() const;
-    [[nodiscard]] double transcribe_file_progress(int task) const;
-    [[nodiscard]] source_type audio_source_type() const;
+    int speech() const;
+    double transcribe_file_progress(int task) const;
+    source_t audio_source_type() const;
     void set_progress(double progress);
-    std::optional<model_files_type> choose_model_files(
-        const QString &model_id = {});
-    inline bool recording() const { return static_cast<bool>(source); };
-    inline state_type state() const { return state_value; };
+    std::optional<model_files_t> choose_model_files(QString model_id = {});
+    inline auto recording() const { return static_cast<bool>(m_source); };
+    inline auto state() const { return m_state; };
     void refresh_status();
-    static QString state_str(state_type state_value);
-    inline int dbus_state() const { return static_cast<int>(state()); };
-    void reset_ds_gracefully();
-    void reset_ds();
+    static QString state_str(state_t state_value);
+    inline auto dbus_state() const { return static_cast<int>(state()); };
+    void reset_engine_gracefully();
+    void reset_engine();
     QString default_model() const;
     QString default_lang() const;
     QString test_default_model(const QString &lang) const;
     void set_default_model(const QString &model_id) const;
     void set_default_lang(const QString &lang_id) const;
     int next_task_id();
-    inline int current_task_id() const {
-        return current_task ? current_task->id : INVALID_TASK;
+    inline auto current_task_id() const {
+        return m_current_task ? m_current_task->id : INVALID_TASK;
     }
     void handle_keepalive_timeout();
     void handle_task_timeout();
     QVariantMap translations() const;
+    static QString lang_from_model_id(const QString &model_id);
 
     // DBus
     Q_INVOKABLE int StartListen(int mode, const QString &lang);

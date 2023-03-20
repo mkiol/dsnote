@@ -1,0 +1,29 @@
+diff -ruN CMakeLists.txt CMakeLists.txt
+--- CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ CMakeLists.txt	2023-03-13 16:41:27.366712887 +0100
+@@ -0,0 +1,25 @@
++cmake_minimum_required(VERSION 3.5)
++
++project(vad VERSION 1.0.0)
++
++set(BUILD_SHARED_LIBS OFF)
++set(CMAKE_POSITION_INDEPENDENT_CODE ON)
++
++add_library(compiler_flags INTERFACE)
++target_compile_options(compiler_flags INTERFACE "-pie;-O3;-ffast-math")
++
++file(GLOB_RECURSE sp_src common_audio/signal_processing/*.c)
++list(FILTER sp_src EXCLUDE REGEX ".*_unittest.c")
++list(FILTER sp_src EXCLUDE REGEX ".*_mips.c")
++list(FILTER sp_src EXCLUDE REGEX ".*_neon.c")
++
++file(GLOB_RECURSE vad_src common_audio/vad/*.c)
++list(FILTER vad_src EXCLUDE REGEX ".*_unittest.c")
++
++add_library(${CMAKE_PROJECT_NAME} STATIC ${sp_src} ${vad_src})
++
++target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
++target_link_libraries(${CMAKE_PROJECT_NAME} compiler_flags)
++
++install(TARGETS ${CMAKE_PROJECT_NAME} RUNTIME DESTINATION lib)
++install(FILES "common_audio/vad/include/webrtc_vad.h" DESTINATION include)

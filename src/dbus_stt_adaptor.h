@@ -36,9 +36,9 @@ class SttAdaptor: public QDBusAbstractAdaptor
 "    <signal name=\"StatePropertyChanged\">\n"
 "      <arg direction=\"out\" type=\"i\" name=\"state\"/>\n"
 "    </signal>\n"
-"    <property access=\"read\" type=\"b\" name=\"Speech\"/>\n"
+"    <property access=\"read\" type=\"i\" name=\"Speech\"/>\n"
 "    <signal name=\"SpeechPropertyChanged\">\n"
-"      <arg direction=\"out\" type=\"b\" name=\"speech\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"speech\"/>\n"
 "    </signal>\n"
 "    <property access=\"readwrite\" type=\"s\" name=\"DefaultLang\"/>\n"
 "    <signal name=\"DefaultLangPropertyChanged\">\n"
@@ -145,8 +145,8 @@ public: // PROPERTIES
     Q_PROPERTY(QVariantMap Models READ models)
     QVariantMap models() const;
 
-    Q_PROPERTY(bool Speech READ speech)
-    bool speech() const;
+    Q_PROPERTY(int Speech READ speech)
+    int speech() const;
 
     Q_PROPERTY(int State READ state)
     int state() const;
@@ -173,7 +173,7 @@ Q_SIGNALS: // SIGNALS
     void IntermediateTextDecoded(const QString &text, const QString &lang, int task);
     void LangsPropertyChanged(const QVariantMap &langs);
     void ModelsPropertyChanged(const QVariantMap &models);
-    void SpeechPropertyChanged(bool speech);
+    void SpeechPropertyChanged(int speech);
     void StatePropertyChanged(int state);
     void TextDecoded(const QString &text, const QString &lang, int task);
 };

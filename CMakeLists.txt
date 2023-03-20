@@ -20,6 +20,8 @@ option(download_libstt "download and install libstt shared lib" OFF)
 option(build_libarchive "download libarchive, build and link statically" ON)
 option(build_fmt "download fmt, build and link statically" ON)
 option(build_catch2 "download catch2, build and link statically" ON)
+option(build_whispercpp "download whisper.cpp, build and link statically" ON)
+option(build_webrtcvad "download webrtc vad, build and link statically" ON)
 
 if(${with_desktop} AND ${with_sfos})
     message(FATAL_ERROR "options with_desktop and with_sfos cannot be set together")
@@ -54,7 +56,7 @@ set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_dbus_service "org.mkiol.Stt")
 set(info_dbus_interface "org.mkiol.Stt")
-set(info_conf_version "8")
+set(info_conf_version "9")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry")
 set(info_libs_str "Qt · Coqui STT · {fmt}")
 
@@ -67,6 +69,10 @@ set(libarchive_source_url "https://libarchive.org/downloads/libarchive-3.6.2.tar
 set(libarchive_checksum "b5b8efa8cba29396816d0dd5f61f3de3")
 set(catch2_source_url "https://github.com/catchorg/Catch2/archive/refs/tags/v3.3.2.tar.gz")
 set(catch2_checksum "6a15aa49dbdee13f279b73cab16ae203")
+set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.2.1.tar.gz")
+set(whispercpp_checksum "fe9516678337cc5dc4a44d0c3ea18c6c")
+set(webrtcvad_source_url "https://github.com/webrtc-mirror/webrtc/archive/ac87c8df2780cb12c74942ec8a473718c76cb5b7.zip")
+set(webrtcvad_checksum "f1489c137b354594632d260978b283a4")
 
 project(${info_id} VERSION 2.0.0)
 
@@ -122,8 +128,6 @@ set(dsnote_lib_sources
     ${sources_dir}/dbus_stt_adaptor.h
     ${sources_dir}/dbus_stt_inf.cpp
     ${sources_dir}/dbus_stt_inf.h
-    ${sources_dir}/deepspeech_wrapper.cpp
-    ${sources_dir}/deepspeech_wrapper.h
     ${sources_dir}/dirmodel.cpp
     ${sources_dir}/dirmodel.h
     ${sources_dir}/dsnote_app.cpp
@@ -153,7 +157,15 @@ set(dsnote_lib_sources
     ${sources_dir}/logger.cpp
     ${sources_dir}/logger.hpp
     ${sources_dir}/qtlogger.cpp
-    ${sources_dir}/qtlogger.hpp)
+    ${sources_dir}/qtlogger.hpp
+    ${sources_dir}/engine_wrapper.cpp
+    ${sources_dir}/engine_wrapper.hpp
+    ${sources_dir}/deepspeech_wrapper.cpp
+    ${sources_dir}/deepspeech_wrapper.hpp
+    ${sources_dir}/whisper_wrapper.cpp
+    ${sources_dir}/whisper_wrapper.hpp
+    ${sources_dir}/vad_wrapper.cpp
+    ${sources_dir}/vad_wrapper.hpp)
 
 configure_file(config.h.in config.h)
 
@@ -366,6 +378,48 @@ else()
     pkg_search_module(fmt REQUIRED fmt)
     list(APPEND deps_libs ${fmt_LIBRARIES})
     list(APPEND includes ${fmt_INCLUDE_DIRS})
+endif()
+
+if(build_whispercpp)
+    ExternalProject_Add(whispercpp
+        SOURCE_DIR ${external_dir}/whispercpp
+        BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercpp
+        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+        URL "${whispercpp_source_url}"
+        URL_MD5 "${whispercpp_checksum}"
+        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ -DCMAKE_INSTALL_LIBDIR=/lib
+            -DCMAKE_INSTALL_INCLUDEDIR=/include -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF
+            -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF -DWHISPER_SUPPORT_OPENBLAS=OFF
+            -DCMAKE_C_FLAGS="-ffast-math" -DCMAKE_CXX_FLAGS="-ffast-math"
+        BUILD_ALWAYS False
+        INSTALL_COMMAND make DESTDIR=${PROJECT_BINARY_DIR}/external install/local)
+    list(APPEND deps_libs ${external_lib_dir}/static/libwhisper.a)
+    list(APPEND deps whispercpp)
+else()
+    find_library(whispercpp_path whisper REQUIRED)
+    list(APPEND deps_libs ${whispercpp_path})
+endif()
+
+if(build_webrtcvad)
+    ExternalProject_Add(webrtcvad
+        SOURCE_DIR ${external_dir}/webrtcvad
+        BINARY_DIR ${PROJECT_BINARY_DIR}/external/webrtcvad
+        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+        URL "${webrtcvad_source_url}"
+        URL_MD5 "${webrtcvad_checksum}"
+        PATCH_COMMAND patch --forward --unified -p0 <SOURCE_DIR>/CMakeLists.txt
+                    -i ${patches_dir}/webrtcvad.patch ||
+                        echo "patch cmd failed, likely already patched"
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=/ -DCMAKE_INSTALL_LIBDIR=/lib
+            -DCMAKE_INSTALL_INCLUDEDIR=/include -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+            -DCMAKE_BUILD_TYPE=Release
+        BUILD_ALWAYS False
+        INSTALL_COMMAND make DESTDIR=${PROJECT_BINARY_DIR}/external install)
+    list(APPEND deps_libs ${external_lib_dir}/libvad.a)
+    list(APPEND deps webrtcvad)
+else()
+    find_library(webrtcvad_path vad REQUIRED)
+    list(APPEND deps_libs ${webrtcvad_path})
 endif()
 
 if(with_sfos)

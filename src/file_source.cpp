@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,15 +8,16 @@
 #include "file_source.h"
 
 #include <QAudioFormat>
+#include <numeric>
 
 file_source::file_source(const QString &file, QObject *parent)
-    : audio_source{parent}, file{file} {
+    : audio_source{parent}, m_file{file} {
     init_audio();
     start();
 }
 
 bool file_source::ok() const {
-    return decoder.error() == QAudioDecoder::NoError;
+    return m_decoder.error() == QAudioDecoder::NoError;
 }
 
 void file_source::init_audio() {
@@ -24,93 +25,120 @@ void file_source::init_audio() {
     format.setSampleRate(16000);
     format.setChannelCount(1);
     format.setSampleSize(16);
-    format.setCodec("audio/pcm");
+    format.setCodec(QStringLiteral("audio/pcm"));
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SignedInt);
 
-    decoder.setAudioFormat(format);
-    decoder.setSourceFilename(file);
+    m_decoder.setAudioFormat(format);
+    m_decoder.setSourceFilename(m_file);
 
-    connect(&decoder, &QAudioDecoder::stateChanged, this,
+    connect(&m_decoder, &QAudioDecoder::stateChanged, this,
             &file_source::handle_state_changed);
 }
 
 void file_source::start() {
-    decoder.start();
+    m_decoder.start();
 
-    timer.setInterval(200);  // 200 ms
-    connect(&timer, &QTimer::timeout, this, &file_source::handle_read_timeout);
-    timer.start();
+    m_timer.setInterval(200);  // 200 ms
+    connect(&m_timer, &QTimer::timeout, this,
+            &file_source::handle_read_timeout);
+    m_timer.start();
 }
 
 void file_source::handle_state_changed(QAudioDecoder::State new_state) {
     qDebug() << "audio state:" << new_state;
 
     if (new_state == QAudioDecoder::StoppedState) {
-        qDebug() << "Decoding ended";
-        if (decoder.error() == QAudioDecoder::NoError) {
+        qDebug() << "decoding ended";
+        if (m_decoder.error() == QAudioDecoder::NoError) m_eof = true;
+    }
+}
+
+void file_source::handle_read_timeout() {
+    if (m_decoder.error() != QAudioDecoder::NoError) {
+        qWarning() << "audio decoder error:" << m_decoder.errorString();
+        m_decoder.stop();
+        m_timer.stop();
+        emit error();
+        return;
+    }
+
+    if (m_decoder.bufferAvailable() || !m_buf.empty() || m_eof) {
+        emit audio_available();
+        if (m_eof && m_buf.empty()) {
             emit ended();
         }
     }
 }
 
-void file_source::handle_read_timeout() {
-    if (decoder.error() != QAudioDecoder::NoError) {
-        qWarning() << "audio decoder error:" << decoder.errorString();
-        decoder.stop();
-        timer.stop();
-        emit error();
-        return;
-    }
-
-    if (decoder.bufferAvailable() || buff_size > 0) {
-        emit audio_available();
-    }
-}
-
 void file_source::clear() {
-    while (decoder.bufferAvailable()) decoder.read();
+    while (m_decoder.bufferAvailable()) m_decoder.read();
 }
 
 double file_source::progress() const {
-    if (decoder.duration() <= 0) return -1;
+    if (m_decoder.duration() <= 0) return -1;
 
-    if (decoder.position() <= 0) return 0;
+    if (m_decoder.position() <= 0) return 0;
 
-    return static_cast<double>(decoder.position()) / decoder.duration();
+    return static_cast<double>(m_decoder.position()) / m_decoder.duration();
 }
 
-int64_t file_source::read_audio(char *buff, int64_t max_size) {
-    int64_t size = 0;
-    if (this->buff_size > 0) {
-        memcpy(buff, &this->buff.front(), this->buff_size);
-        buff += this->buff_size;
-        size = this->buff_size;
-        this->buff_size = 0;
-    }
+void file_source::decode_available_buffer() {
+    while (m_decoder.bufferAvailable()) {
+        auto audio_buf = m_decoder.read();
 
-    while (decoder.bufferAvailable() && size <= max_size) {
-        auto abuff = decoder.read();
-        if (!abuff.isValid()) break;
-
-        char *src = abuff.data<char>();
-
-        auto asize = static_cast<int64_t>(abuff.byteCount());
-        auto size_to_return = std::min(max_size - size, asize);
-        auto size_to_buff = asize - size_to_return;
-
-        if (size_to_return > 0) {
-            memcpy(buff, src, size_to_return);
-            size += size_to_return;
-            buff += size_to_return;
-        }
-
-        if (size_to_buff > 0) {
-            memcpy(&this->buff.front(), src, size_to_buff);
-            this->buff_size = size_to_buff;
+        if (!audio_buf.isValid()) {
+            qWarning() << "audio buf is invalid";
             break;
         }
+
+        auto size = static_cast<size_t>(audio_buf.byteCount());
+
+        if (size <= 0) {
+            qWarning() << "audio buf empty";
+            break;
+        }
+
+        m_buf.reserve(m_buf.size() + size);
+
+        auto *src = audio_buf.data<char>();
+
+        for (size_t i = 0; i < size; ++i) m_buf.push_back(src[i]);
+    }
+}
+
+static void shift_left(std::vector<char> &vec, size_t distance) {
+    if (distance >= vec.size()) {
+        vec.clear();
+        return;
     }
 
-    return size;
+    auto beg = vec.cbegin();
+    std::advance(beg, distance);
+
+    std::copy(beg, vec.cend(), vec.begin());
+
+    vec.resize(vec.size() - distance);
+}
+
+file_source::audio_data file_source::read_audio(char *buf, size_t max_size) {
+    decode_available_buffer();
+
+    audio_data data;
+    data.data = buf;
+
+    if (m_buf.empty()) return data;
+
+    data.size = std::min(max_size, m_buf.size());
+
+    memcpy(buf, m_buf.data(), data.size);
+
+    shift_left(m_buf, data.size);  // TO-DO: avoid huge mem copy
+
+    data.eof = m_eof && m_buf.empty();
+    data.sof = m_sof;
+
+    m_sof = false;
+
+    return data;
 }

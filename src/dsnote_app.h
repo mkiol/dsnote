@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -25,7 +25,7 @@ class dsnote_app : public QObject {
     Q_PROPERTY(QString active_lang READ active_lang NOTIFY active_lang_changed)
     Q_PROPERTY(QVariantList available_langs READ available_langs NOTIFY
                    available_langs_changed)
-    Q_PROPERTY(bool speech READ speech NOTIFY speech_changed)
+    Q_PROPERTY(stt_speech_state_type speech READ speech NOTIFY speech_changed)
     Q_PROPERTY(bool busy READ busy NOTIFY busy_changed)
     Q_PROPERTY(bool configured READ configured NOTIFY configured_changed)
     Q_PROPERTY(bool connected READ connected NOTIFY connected_changed)
@@ -48,6 +48,13 @@ class dsnote_app : public QObject {
         SttListeningSingleSentence = 7
     };
     Q_ENUM(stt_state_type)
+
+    enum stt_speech_state_type {
+        SttNoSpeech = 0,
+        SttSpeechDetected = 1,
+        SttSpeechDecoding = 2
+    };
+    Q_ENUM(stt_speech_state_type)
 
     enum error_type {
         ErrorGeneric = 0,
@@ -111,7 +118,7 @@ class dsnote_app : public QObject {
     double transcribe_progress_value = -1.0;
     OrgMkiolSttInterface stt;
     stt_state_type stt_state_value = stt_state_type::SttUnknown;
-    bool speech_value = false;
+    stt_speech_state_type speech_state = stt_speech_state_type::SttNoSpeech;
     task_type listen_task;
     task_type transcribe_task;
     int current_task_value = INVALID_TASK;
@@ -160,7 +167,7 @@ class dsnote_app : public QObject {
     [[nodiscard]] inline stt_state_type stt_state() const {
         return stt_state_value;
     }
-    [[nodiscard]] inline bool speech() const { return speech_value; }
+    [[nodiscard]] inline auto speech() const { return speech_state; }
     void do_keepalive();
     void handle_keepalive_task_timeout();
     void connect_dbus_signals();

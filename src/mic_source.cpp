@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -74,12 +74,20 @@ void mic_source::clear() {
         continue;
 }
 
-int64_t mic_source::read_audio(char* buff, int64_t max_size) {
+audio_source::audio_data mic_source::read_audio(char* buf, size_t max_size) {
+    audio_data data;
+    data.data = buf;
+
     if (audio_input->state() != QAudio::ActiveState &&
         audio_input->state() != QAudio::IdleState) {
         qWarning() << "audio input is not active and cannot read audio";
-        return 0;
+        return data;
     }
 
-    return audio_device->read(buff, max_size);
+    data.size = audio_device->read(buf, max_size);
+    data.sof = m_sof;
+
+    m_sof = false;
+
+    return data;
 }

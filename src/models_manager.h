@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -24,6 +24,8 @@ class models_manager : public QObject {
     Q_OBJECT
     Q_PROPERTY(bool busy READ busy NOTIFY busy_changed)
    public:
+    enum class model_engine { ds, whisper };
+
     struct lang_t {
         QString id;
         QString name;
@@ -31,8 +33,10 @@ class models_manager : public QObject {
         bool available = false;
         bool downloading = false;
     };
+
     struct model_t {
         QString id;
+        model_engine engine = model_engine::ds;
         QString lang_id;
         QString name;
         QString model_file;
@@ -48,7 +52,7 @@ class models_manager : public QObject {
     models_manager& operator=(const models_manager&) = delete;
     models_manager(models_manager&&) = delete;
     models_manager& operator=(models_manager&&) = delete;
-    ~models_manager();
+    ~models_manager() override;
     [[nodiscard]] bool ok() const;
     std::vector<model_t> available_models() const;
     std::vector<model_t> models(const QString& lang_id = {}) const;
@@ -73,6 +77,7 @@ class models_manager : public QObject {
     enum class comp_type { none, xz, gz, tar, tarxz };
 
     struct priv_model_t {
+        model_engine engine = model_engine::ds;
         QString lang_id;
         QString name;
         QString file_name;
@@ -110,7 +115,7 @@ class models_manager : public QObject {
     static QLatin1String comp_type_str(comp_type type);
     bool parse_models_file_might_reset();
     static void parse_models_file(bool reset, langs_t* langs, models_t* models);
-    static QString file_name_from_id(const QString& id);
+    static QString file_name_from_id(const QString& id, model_engine engine);
     static QString scorer_file_name_from_id(const QString& id);
     void download(const QString& id, download_type type, int part = -1);
     void handle_download_progress(qint64 received, qint64 real_total);
@@ -144,6 +149,7 @@ class models_manager : public QObject {
     static bool checksum_ok(const QString& checksum,
                             const QString& checksum_quick,
                             const QString& file_name);
+    static model_engine engine_from_name(const QString& name);
 };
 
 #endif  // MODELS_MANAGER_H

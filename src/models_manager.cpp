@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
+﻿/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -89,7 +89,8 @@ std::vector<models_manager::model_t> models_manager::models(
         [&dir, &list, &lang_id](const auto& pair) {
             if (lang_id.isEmpty() || lang_id == pair.second.lang_id) {
                 list.push_back(
-                    {pair.first, pair.second.lang_id, pair.second.name,
+                    {pair.first, pair.second.engine, pair.second.lang_id,
+                     pair.second.name,
                      pair.second.scorer_file_name.isEmpty()
                          ? ""
                          : dir.filePath(pair.second.scorer_file_name),
@@ -118,7 +119,8 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
     for (const auto& [id, model] : m_models) {
         auto model_file = dir.filePath(model.file_name);
         if (model.available && QFile::exists(model_file)) {
-            list.push_back({id, model.lang_id, model.name, model_file,
+            list.push_back({id, model.engine, model.lang_id, model.name,
+                            model_file,
                             model.scorer_file_name.isEmpty()
                                 ? QString{}
                                 : dir.filePath(model.scorer_file_name),
@@ -131,7 +133,7 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
 }
 
 bool models_manager::model_exists(const QString& id) const {
-    const auto it = m_models.find(id);
+    auto it = m_models.find(id);
 
     return it != std::cend(m_models) &&
            QFile::exists(model_path(it->second.file_name));
@@ -326,7 +328,7 @@ void models_manager::handle_ssl_errors(const QList<QSslError>& errors) {
 }
 
 void models_manager::handle_download_ready_read() {
-    auto reply = qobject_cast<QNetworkReply*>(sender());
+    auto* reply = qobject_cast<QNetworkReply*>(sender());
 
     if (check_model_download_cancel(reply)) return;
 
@@ -408,8 +410,7 @@ bool models_manager::join_part_files(const QString& file_out, int parts) {
     if (std::ofstream output{file_out.toStdString(),
                              std::ios::out | std::ifstream::binary}) {
         for (int i = 0; i < parts; ++i) {
-            const auto file_in =
-                download_filename(file_out, comp_type::none, i);
+            auto file_in = download_filename(file_out, comp_type::none, i);
             if (std::ifstream input{file_in.toStdString(),
                                     std::ios::in | std::ifstream::binary}) {
                 char buff[std::numeric_limits<unsigned short>::max()];
@@ -537,7 +538,8 @@ bool models_manager::tar_decode(const QString& file_in,
                    << archive_error_string(a);
         ok = false;
     } else {
-        struct archive_entry* entry;
+        archive_entry* entry{};
+
         while (true) {
             int ret = archive_read_next_header(a, &entry);
             if (ret == ARCHIVE_EOF) break;
@@ -548,16 +550,15 @@ bool models_manager::tar_decode(const QString& file_in,
                 break;
             }
 
-            const QString entry_path{archive_entry_pathname_utf8(entry)};
+            QString entry_path{archive_entry_pathname_utf8(entry)};
 
             qDebug() << "found file in tar archive:" << entry_path;
 
-            if (const auto it = files_out.find(entry_path);
-                it != files_out.cend()) {
+            if (auto it = files_out.find(entry_path); it != files_out.cend()) {
                 qDebug() << "extracting file:" << entry_path << "to"
                          << it->second;
 
-                const auto std_file_out = it->second.toStdString();
+                auto std_file_out = it->second.toStdString();
                 archive_entry_set_pathname(entry, std_file_out.c_str());
 
                 ret = archive_write_header(ext, entry);
@@ -657,9 +658,7 @@ bool models_manager::handle_download(const QString& path,
 }
 
 bool models_manager::check_model_download_cancel(QNetworkReply* reply) {
-    const auto id = reply->property("model_id").toString();
-
-    auto it = models_to_cancel.find(id);
+    auto it = models_to_cancel.find(reply->property("model_id").toString());
     if (it == models_to_cancel.end()) return false;
     models_to_cancel.erase(it);
 
@@ -673,14 +672,14 @@ void models_manager::handle_download_finished() {
     delete static_cast<std::ofstream*>(
         reply->property("out_file").value<void*>());
 
-    const auto id = reply->property("model_id").toString();
+    auto id = reply->property("model_id").toString();
 
     auto& model = m_models.at(id);
-    const auto type =
+    auto type =
         static_cast<download_type>(reply->property("download_type").toInt());
-    const auto path = reply->property("out_path").toString();
-    const auto comp = static_cast<comp_type>(reply->property("comp").toInt());
-    const auto part = reply->property("part").toInt();
+    auto path = reply->property("out_path").toString();
+    auto comp = static_cast<comp_type>(reply->property("comp").toInt());
+    auto part = reply->property("part").toInt();
 
     if (auto cancel = check_model_download_cancel(reply);
         cancel || reply->error() != QNetworkReply::NoError) {
@@ -697,25 +696,25 @@ void models_manager::handle_download_finished() {
             emit download_error(id);
         }
     } else {
-        const auto next_part = reply->property("next_part").toInt();
+        auto next_part = reply->property("next_part").toInt();
 
         if (next_part < 0) {
-            const auto parts = type == download_type::scorer
-                                   ? model.scorer_urls.size()
-                                   : model.urls.size();
-            const auto downloaded_part_data =
+            auto parts = type == download_type::scorer
+                             ? model.scorer_urls.size()
+                             : model.urls.size();
+            auto downloaded_part_data =
                 QFileInfo{download_filename(path, comp, part)}.size();
-            const auto path_2 = reply->property("out_path_2").toString();
-            const auto checksum = reply->property("checksum").toString();
-            const auto checksum_2 = reply->property("checksum_2").toString();
-            const auto path_in_archive =
+            auto path_2 = reply->property("out_path_2").toString();
+            auto checksum = reply->property("checksum").toString();
+            auto checksum_2 = reply->property("checksum_2").toString();
+            auto path_in_archive =
                 reply->property("path_in_archive").toString();
-            const auto path_in_archive_2 =
+            auto path_in_archive_2 =
                 reply->property("path_in_archive_2").toString();
 
             if (handle_download(path, checksum, path_in_archive, path_2,
                                 checksum_2, path_in_archive_2, comp, parts)) {
-                const auto next_type = static_cast<download_type>(
+                auto next_type = static_cast<download_type>(
                     reply->property("download_next_type").toInt());
                 qDebug() << "successfully downloaded:" << id
                          << ", type:" << download_type_str(type)
@@ -761,9 +760,9 @@ QString models_manager::make_quick_checksum(const QString& file) {
     if (std::ifstream input{file.toStdString(), std::ios::in |
                                                     std::ifstream::binary |
                                                     std::ios::ate}) {
-        const auto chunk = static_cast<std::ifstream::pos_type>(
+        auto chunk = static_cast<std::ifstream::pos_type>(
             std::numeric_limits<unsigned short>::max());
-        const auto end_pos = input.tellg();
+        auto end_pos = input.tellg();
         if (end_pos < 2 * chunk) {
             qWarning() << "file size too short for quick checksum";
             return {};
@@ -816,18 +815,18 @@ QString models_manager::make_checksum(const QString& file) {
 
 void models_manager::handle_download_progress(qint64 received,
                                               qint64 real_total) {
-    const auto reply = qobject_cast<const QNetworkReply*>(sender());
+    auto* reply = qobject_cast<const QNetworkReply*>(sender());
 
     if (reply->isFinished()) return;
 
-    const auto id = reply->property("model_id").toString();
+    auto id = reply->property("model_id").toString();
 
     auto total = reply->property("size").toLongLong();
     if (total <= 0) total = real_total;
 
     if (total > 0) {
         auto& model = m_models.at(id);
-        const auto new_download_progress =
+        auto new_download_progress =
             static_cast<double>(received + model.downloaded_part_data) / total;
         if (new_download_progress - model.download_progress >= 0.01) {
             model.download_progress = new_download_progress;
@@ -837,7 +836,7 @@ void models_manager::handle_download_progress(qint64 received,
 }
 
 void models_manager::delete_model(const QString& id) {
-    if (const auto it = m_models.find(id); it != std::cend(m_models)) {
+    if (auto it = m_models.find(id); it != std::cend(m_models)) {
         auto& model = it->second;
 
         if (!std::any_of(
@@ -903,7 +902,7 @@ void models_manager::init_config() {
         return;
     }
 
-    const QString data_dir{
+    QString data_dir{
         QStandardPaths::writableLocation(QStandardPaths::DataLocation)};
     QDir dir{data_dir};
     if (!dir.exists())
@@ -994,6 +993,13 @@ bool models_manager::checksum_ok(const QString& checksum,
     return checksum_quick == make_quick_checksum(model_path(file_name));
 }
 
+models_manager::model_engine models_manager::engine_from_name(
+    const QString& name) {
+    if (name == "ds") return model_engine::ds;
+    if (name == "whisper") return model_engine::whisper;
+    return model_engine::ds;  // default
+}
+
 auto models_manager::extract_models(const QJsonArray& models_jarray) {
     models_t models;
 
@@ -1001,7 +1007,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
 
     for (const auto& ele : models_jarray) {
         auto obj = ele.toObject();
-        const auto model_id = obj.value(QLatin1String{"model_id"}).toString();
+        auto model_id = obj.value(QLatin1String{"model_id"}).toString();
 
         if (model_id.isEmpty()) {
             qWarning() << "empty model id in lang models file";
@@ -1025,8 +1031,12 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             continue;
         }
 
+        auto engine =
+            engine_from_name(obj.value(QLatin1String{"engine"}).toString());
+
         auto file_name = obj.value(QLatin1String{"file_name"}).toString();
-        if (file_name.isEmpty()) file_name = file_name_from_id(model_id);
+        if (file_name.isEmpty())
+            file_name = file_name_from_id(model_id, engine);
 
         auto scorer_file_name =
             obj.value(QLatin1String{"scorer_file_name"}).toString();
@@ -1034,6 +1044,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             scorer_file_name = scorer_file_name_from_id(model_id);
 
         priv_model_t model{
+            engine,
             std::move(lang_id),
             obj.value(QLatin1String{"name"}).toString(),
             std::move(file_name),
@@ -1161,8 +1172,16 @@ void models_manager::parse_models_file(bool reset, langs_t* langs,
     }
 }
 
-QString models_manager::file_name_from_id(const QString& id) {
-    return id + ".tflite";
+QString models_manager::file_name_from_id(const QString& id,
+                                          model_engine engine) {
+    switch (engine) {
+        case model_engine::ds:
+            return id + ".tflite";
+        case model_engine::whisper:
+            return id + ".h5";
+    }
+
+    throw std::runtime_error{"unknown model engine"};
 }
 
 QString models_manager::scorer_file_name_from_id(const QString& id) {

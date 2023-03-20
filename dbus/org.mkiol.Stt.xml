@@ -26,11 +26,12 @@
         <!--
             Speech:
 
-            An indicator of speech presence. %TRUE when speech is detected,
-            %FALSE otherwise. When state is 4 or 7 (Listening Manual,
-            Listening One-sentence) speech indication is always present.
+            An indicator of speech detection status.
+            Valid states: 0 = No Speech, 1 = Speech Detected, 2 = Speech Decoding in progress.
+            When state is 4 or 7 (Listening Manual, Listening One-sentence) speech detection
+            status is never 0.
         -->
-        <property name="Speech" type="b" access="read" />
+        <property name="Speech" type="i" access="read" />
 
         <!--
             SpeechPropertyChanged:
@@ -39,7 +40,7 @@
             Emitted whenever Speech property changes.
         -->
         <signal name="SpeechPropertyChanged">
-          <arg name="speech" type="b" direction="out" />
+          <arg name="speech" type="i" direction="out" />
         </signal>
 
         <!--

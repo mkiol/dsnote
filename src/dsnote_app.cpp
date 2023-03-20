@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -10,8 +10,6 @@
 #include <QDBusConnection>
 #include <algorithm>
 
-#include "file_source.h"
-#include "mic_source.h"
 #include "settings.h"
 
 dsnote_app::dsnote_app(QObject *parent)
@@ -132,7 +130,7 @@ void dsnote_app::connect_dbus_signals() {
                 if (old_connected != connected()) emit connected_changed();
             });
     connect(&stt, &OrgMkiolSttInterface::SpeechPropertyChanged, this,
-            [this](bool speech) {
+            [this](int speech) {
                 qDebug() << "[dbus => app] signal SpeechPropertyChanged:"
                          << speech;
                 if (listen_task != current_task_value &&
@@ -140,7 +138,19 @@ void dsnote_app::connect_dbus_signals() {
                     qWarning() << "ignore SpeechPropertyChanged signal";
                     return;
                 }
-                speech_value = speech;
+
+                speech_state = [speech] {
+                    switch (speech) {
+                        case 0:
+                            return stt_speech_state_type::SttNoSpeech;
+                        case 1:
+                            return stt_speech_state_type::SttSpeechDetected;
+                        case 2:
+                            return stt_speech_state_type::SttSpeechDecoding;
+                    }
+                    return stt_speech_state_type::SttNoSpeech;
+                }();
+
                 emit speech_changed();
             });
     connect(&stt, &OrgMkiolSttInterface::CurrentTaskPropertyChanged, this,
@@ -324,9 +334,21 @@ void dsnote_app::update_speech() {
     }
 
     qDebug() << "[app => dbus] get Speech";
-    const auto new_value = stt.speech();
-    if (speech_value != new_value) {
-        speech_value = new_value;
+
+    auto new_value = [speech = stt.speech()] {
+        switch (speech) {
+            case 0:
+                return stt_speech_state_type::SttNoSpeech;
+            case 1:
+                return stt_speech_state_type::SttSpeechDetected;
+            case 2:
+                return stt_speech_state_type::SttSpeechDecoding;
+        }
+        return stt_speech_state_type::SttNoSpeech;
+    }();
+
+    if (speech_state != new_value) {
+        speech_state = new_value;
         emit speech_changed();
     }
 }

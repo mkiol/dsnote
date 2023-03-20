@@ -9,10 +9,11 @@
  */
 
 #include "dbus_stt_adaptor.h"
-#include <QtCore/QMetaObject>
+
 #include <QtCore/QByteArray>
 #include <QtCore/QList>
 #include <QtCore/QMap>
+#include <QtCore/QMetaObject>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
@@ -75,10 +76,10 @@ QVariantMap SttAdaptor::models() const
     return qvariant_cast< QVariantMap >(parent()->property("Models"));
 }
 
-bool SttAdaptor::speech() const
+int SttAdaptor::speech() const
 {
     // get the value of property Speech
-    return qvariant_cast< bool >(parent()->property("Speech"));
+    return qvariant_cast< int >(parent()->property("Speech"));
 }
 
 int SttAdaptor::state() const

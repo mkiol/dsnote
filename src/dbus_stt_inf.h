@@ -59,9 +59,9 @@ public:
     inline QVariantMap models() const
     { return qvariant_cast< QVariantMap >(property("Models")); }
 
-    Q_PROPERTY(bool Speech READ speech)
-    inline bool speech() const
-    { return qvariant_cast< bool >(property("Speech")); }
+    Q_PROPERTY(int Speech READ speech)
+    inline int speech() const
+    { return qvariant_cast< int >(property("Speech")); }
 
     Q_PROPERTY(int State READ state)
     inline int state() const
@@ -136,7 +136,7 @@ Q_SIGNALS: // SIGNALS
     void IntermediateTextDecoded(const QString &text, const QString &lang, int task);
     void LangsPropertyChanged(const QVariantMap &langs);
     void ModelsPropertyChanged(const QVariantMap &models);
-    void SpeechPropertyChanged(bool speech);
+    void SpeechPropertyChanged(int speech);
     void StatePropertyChanged(int state);
     void TextDecoded(const QString &text, const QString &lang, int task);
 };
