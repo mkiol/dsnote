@@ -386,6 +386,9 @@ if(build_whispercpp)
         INSTALL_DIR ${PROJECT_BINARY_DIR}/external
         URL "${whispercpp_source_url}"
         URL_MD5 "${whispercpp_checksum}"
+        PATCH_COMMAND patch --unified -p1 --directory=<SOURCE_DIR>
+                    -i ${patches_dir}/whispercpp.patch ||
+                        echo "patch cmd failed, likely already patched"
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ -DCMAKE_INSTALL_LIBDIR=/lib
             -DCMAKE_INSTALL_INCLUDEDIR=/include -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF
             -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF -DWHISPER_SUPPORT_OPENBLAS=OFF
