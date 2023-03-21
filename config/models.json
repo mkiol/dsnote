@@ -160,6 +160,36 @@
             "name": "Eesti",
             "name_en": "Estonian",
             "id": "et"
+        },
+        {
+            "name": "Tiếng Việt",
+            "name_en": "Vietnamese",
+            "id": "vi"
+        },
+        {
+            "name": "Hrvatski",
+            "name_en": "Croatian",
+            "id": "hr"
+        },
+        {
+            "name": "Български",
+            "name_en": "Bulgarian",
+            "id": "bg"
+        },
+        {
+            "name": "Bosanski",
+            "name_en": "Bosnian",
+            "id": "bs"
+        },
+        {
+            "name": "Македонски",
+            "name_en": "Macedonian",
+            "id": "mk"
+        },
+        {
+            "name": "Српски",
+            "name_en": "Serbian",
+            "id": "sr"
         }
     ],
     "models": [
@@ -1773,6 +1803,526 @@
             "model_id": "zh-CN_whisper_medium",
             "engine": "whisper",
             "lang_id": "zh-CN",
+            "checksum": "ddea3cce",
+            "checksum_quick": "61f4c798",
+            "file_name": "multilang_whisper_medium.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
+            ],
+            "size": "1533763059"
+        },
+        {
+            "name": "Tiếng Việt (Whisper tiny)",
+            "model_id": "vi_whisper_tiny",
+            "engine": "whisper",
+            "lang_id": "vi",
+            "checksum": "285b19e9",
+            "checksum_quick": "ebde78",
+            "file_name": "multilang_whisper_tiny.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
+            ],
+            "size": "77691713"
+        },
+        {
+            "name": "Tiếng Việt (Whisper base)",
+            "model_id": "vi_whisper_base",
+            "engine": "whisper",
+            "lang_id": "vi",
+            "checksum": "34e32ec8",
+            "checksum_quick": "5c83c786",
+            "file_name": "multilang_whisper_base.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
+            ],
+            "size": "147951465"
+        },
+        {
+            "name": "Tiếng Việt (Whisper small)",
+            "model_id": "vi_whisper_small",
+            "engine": "whisper",
+            "lang_id": "vi",
+            "checksum": "5fad3693",
+            "checksum_quick": "f879b605",
+            "file_name": "multilang_whisper_small.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
+            ],
+            "size": "487601967"
+        },
+        {
+            "name": "Tiếng Việt (Whisper medium)",
+            "model_id": "vi_whisper_medium",
+            "engine": "whisper",
+            "lang_id": "vi",
+            "checksum": "ddea3cce",
+            "checksum_quick": "61f4c798",
+            "file_name": "multilang_whisper_medium.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
+            ],
+            "size": "1533763059"
+        },
+        {
+            "name": "ไทย (Whisper tiny)",
+            "model_id": "th_whisper_tiny",
+            "engine": "whisper",
+            "lang_id": "th",
+            "checksum": "285b19e9",
+            "checksum_quick": "ebde78",
+            "file_name": "multilang_whisper_tiny.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
+            ],
+            "size": "77691713"
+        },
+        {
+            "name": "ไทย (Whisper base)",
+            "model_id": "th_whisper_base",
+            "engine": "whisper",
+            "lang_id": "th",
+            "checksum": "34e32ec8",
+            "checksum_quick": "5c83c786",
+            "file_name": "multilang_whisper_base.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
+            ],
+            "size": "147951465"
+        },
+        {
+            "name": "ไทย (Whisper small)",
+            "model_id": "th_whisper_small",
+            "engine": "whisper",
+            "lang_id": "th",
+            "checksum": "5fad3693",
+            "checksum_quick": "f879b605",
+            "file_name": "multilang_whisper_small.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
+            ],
+            "size": "487601967"
+        },
+        {
+            "name": "ไทย (Whisper medium)",
+            "model_id": "th_whisper_medium",
+            "engine": "whisper",
+            "lang_id": "th",
+            "checksum": "ddea3cce",
+            "checksum_quick": "61f4c798",
+            "file_name": "multilang_whisper_medium.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
+            ],
+            "size": "1533763059"
+        },
+        {
+            "name": "Ελληνικά (Whisper tiny)",
+            "model_id": "el_whisper_tiny",
+            "engine": "whisper",
+            "lang_id": "el",
+            "checksum": "285b19e9",
+            "checksum_quick": "ebde78",
+            "file_name": "multilang_whisper_tiny.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
+            ],
+            "size": "77691713"
+        },
+        {
+            "name": "Ελληνικά (Whisper base)",
+            "model_id": "el_whisper_base",
+            "engine": "whisper",
+            "lang_id": "el",
+            "checksum": "34e32ec8",
+            "checksum_quick": "5c83c786",
+            "file_name": "multilang_whisper_base.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
+            ],
+            "size": "147951465"
+        },
+        {
+            "name": "Ελληνικά (Whisper small)",
+            "model_id": "el_whisper_small",
+            "engine": "whisper",
+            "lang_id": "el",
+            "checksum": "5fad3693",
+            "checksum_quick": "f879b605",
+            "file_name": "multilang_whisper_small.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
+            ],
+            "size": "487601967"
+        },
+        {
+            "name": "Ελληνικά (Whisper medium)",
+            "model_id": "el_whisper_medium",
+            "engine": "whisper",
+            "lang_id": "el",
+            "checksum": "ddea3cce",
+            "checksum_quick": "61f4c798",
+            "file_name": "multilang_whisper_medium.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
+            ],
+            "size": "1533763059"
+        },
+        {
+            "name": "Hrvatski (Whisper tiny)",
+            "model_id": "hr_whisper_tiny",
+            "engine": "whisper",
+            "lang_id": "hr",
+            "checksum": "285b19e9",
+            "checksum_quick": "ebde78",
+            "file_name": "multilang_whisper_tiny.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
+            ],
+            "size": "77691713"
+        },
+        {
+            "name": "Hrvatski (Whisper base)",
+            "model_id": "hr_whisper_base",
+            "engine": "whisper",
+            "lang_id": "hr",
+            "checksum": "34e32ec8",
+            "checksum_quick": "5c83c786",
+            "file_name": "multilang_whisper_base.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
+            ],
+            "size": "147951465"
+        },
+        {
+            "name": "Hrvatski (Whisper small)",
+            "model_id": "hr_whisper_small",
+            "engine": "whisper",
+            "lang_id": "hr",
+            "checksum": "5fad3693",
+            "checksum_quick": "f879b605",
+            "file_name": "multilang_whisper_small.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
+            ],
+            "size": "487601967"
+        },
+        {
+            "name": "Hrvatski (Whisper medium)",
+            "model_id": "hr_whisper_medium",
+            "engine": "whisper",
+            "lang_id": "hr",
+            "checksum": "ddea3cce",
+            "checksum_quick": "61f4c798",
+            "file_name": "multilang_whisper_medium.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
+            ],
+            "size": "1533763059"
+        },
+        {
+            "name": "Български (Whisper tiny)",
+            "model_id": "bg_whisper_tiny",
+            "engine": "whisper",
+            "lang_id": "bg",
+            "checksum": "285b19e9",
+            "checksum_quick": "ebde78",
+            "file_name": "multilang_whisper_tiny.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
+            ],
+            "size": "77691713"
+        },
+        {
+            "name": "Български (Whisper base)",
+            "model_id": "bg_whisper_base",
+            "engine": "whisper",
+            "lang_id": "bg",
+            "checksum": "34e32ec8",
+            "checksum_quick": "5c83c786",
+            "file_name": "multilang_whisper_base.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
+            ],
+            "size": "147951465"
+        },
+        {
+            "name": "Български (Whisper small)",
+            "model_id": "bg_whisper_small",
+            "engine": "whisper",
+            "lang_id": "bg",
+            "checksum": "5fad3693",
+            "checksum_quick": "f879b605",
+            "file_name": "multilang_whisper_small.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
+            ],
+            "size": "487601967"
+        },
+        {
+            "name": "Български (Whisper medium)",
+            "model_id": "bg_whisper_medium",
+            "engine": "whisper",
+            "lang_id": "bg",
+            "checksum": "ddea3cce",
+            "checksum_quick": "61f4c798",
+            "file_name": "multilang_whisper_medium.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
+            ],
+            "size": "1533763059"
+        },
+        {
+            "name": "Română (Whisper tiny)",
+            "model_id": "ro_whisper_tiny",
+            "engine": "whisper",
+            "lang_id": "ro",
+            "checksum": "285b19e9",
+            "checksum_quick": "ebde78",
+            "file_name": "multilang_whisper_tiny.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
+            ],
+            "size": "77691713"
+        },
+        {
+            "name": "Română (Whisper base)",
+            "model_id": "ro_whisper_base",
+            "engine": "whisper",
+            "lang_id": "ro",
+            "checksum": "34e32ec8",
+            "checksum_quick": "5c83c786",
+            "file_name": "multilang_whisper_base.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
+            ],
+            "size": "147951465"
+        },
+        {
+            "name": "Română (Whisper small)",
+            "model_id": "ro_whisper_small",
+            "engine": "whisper",
+            "lang_id": "ro",
+            "checksum": "5fad3693",
+            "checksum_quick": "f879b605",
+            "file_name": "multilang_whisper_small.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
+            ],
+            "size": "487601967"
+        },
+        {
+            "name": "Română (Whisper medium)",
+            "model_id": "ro_whisper_medium",
+            "engine": "whisper",
+            "lang_id": "ro",
+            "checksum": "ddea3cce",
+            "checksum_quick": "61f4c798",
+            "file_name": "multilang_whisper_medium.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
+            ],
+            "size": "1533763059"
+        },
+        {
+            "name": "Slovenščina (Whisper tiny)",
+            "model_id": "sl_whisper_tiny",
+            "engine": "whisper",
+            "lang_id": "sl",
+            "checksum": "285b19e9",
+            "checksum_quick": "ebde78",
+            "file_name": "multilang_whisper_tiny.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
+            ],
+            "size": "77691713"
+        },
+        {
+            "name": "Slovenščina (Whisper base)",
+            "model_id": "sl_whisper_base",
+            "engine": "whisper",
+            "lang_id": "sl",
+            "checksum": "34e32ec8",
+            "checksum_quick": "5c83c786",
+            "file_name": "multilang_whisper_base.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
+            ],
+            "size": "147951465"
+        },
+        {
+            "name": "Slovenščina (Whisper small)",
+            "model_id": "sl_whisper_small",
+            "engine": "whisper",
+            "lang_id": "sl",
+            "checksum": "5fad3693",
+            "checksum_quick": "f879b605",
+            "file_name": "multilang_whisper_small.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
+            ],
+            "size": "487601967"
+        },
+        {
+            "name": "Slovenščina (Whisper medium)",
+            "model_id": "sl_whisper_medium",
+            "engine": "whisper",
+            "lang_id": "sl",
+            "checksum": "ddea3cce",
+            "checksum_quick": "61f4c798",
+            "file_name": "multilang_whisper_medium.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
+            ],
+            "size": "1533763059"
+        },
+        {
+            "name": "Bosanski (Whisper tiny)",
+            "model_id": "bs_whisper_tiny",
+            "engine": "whisper",
+            "lang_id": "bs",
+            "checksum": "285b19e9",
+            "checksum_quick": "ebde78",
+            "file_name": "multilang_whisper_tiny.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
+            ],
+            "size": "77691713"
+        },
+        {
+            "name": "Bosanski (Whisper base)",
+            "model_id": "bs_whisper_base",
+            "engine": "whisper",
+            "lang_id": "bs",
+            "checksum": "34e32ec8",
+            "checksum_quick": "5c83c786",
+            "file_name": "multilang_whisper_base.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
+            ],
+            "size": "147951465"
+        },
+        {
+            "name": "Bosanski (Whisper small)",
+            "model_id": "bs_whisper_small",
+            "engine": "whisper",
+            "lang_id": "bs",
+            "checksum": "5fad3693",
+            "checksum_quick": "f879b605",
+            "file_name": "multilang_whisper_small.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
+            ],
+            "size": "487601967"
+        },
+        {
+            "name": "Bosanski (Whisper medium)",
+            "model_id": "bs_whisper_medium",
+            "engine": "whisper",
+            "lang_id": "bs",
+            "checksum": "ddea3cce",
+            "checksum_quick": "61f4c798",
+            "file_name": "multilang_whisper_medium.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
+            ],
+            "size": "1533763059"
+        },
+        {
+            "name": "Македонски (Whisper tiny)",
+            "model_id": "mk_whisper_tiny",
+            "engine": "whisper",
+            "lang_id": "mk",
+            "checksum": "285b19e9",
+            "checksum_quick": "ebde78",
+            "file_name": "multilang_whisper_tiny.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
+            ],
+            "size": "77691713"
+        },
+        {
+            "name": "Македонски (Whisper base)",
+            "model_id": "mk_whisper_base",
+            "engine": "whisper",
+            "lang_id": "mk",
+            "checksum": "34e32ec8",
+            "checksum_quick": "5c83c786",
+            "file_name": "multilang_whisper_base.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
+            ],
+            "size": "147951465"
+        },
+        {
+            "name": "Македонски (Whisper small)",
+            "model_id": "mk_whisper_small",
+            "engine": "whisper",
+            "lang_id": "mk",
+            "checksum": "5fad3693",
+            "checksum_quick": "f879b605",
+            "file_name": "multilang_whisper_small.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
+            ],
+            "size": "487601967"
+        },
+        {
+            "name": "Македонски (Whisper medium)",
+            "model_id": "mk_whisper_medium",
+            "engine": "whisper",
+            "lang_id": "mk",
+            "checksum": "ddea3cce",
+            "checksum_quick": "61f4c798",
+            "file_name": "multilang_whisper_medium.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
+            ],
+            "size": "1533763059"
+        },
+        {
+            "name": "Српски (Whisper tiny)",
+            "model_id": "sr_whisper_tiny",
+            "engine": "whisper",
+            "lang_id": "sr",
+            "checksum": "285b19e9",
+            "checksum_quick": "ebde78",
+            "file_name": "multilang_whisper_tiny.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
+            ],
+            "size": "77691713"
+        },
+        {
+            "name": "Српски (Whisper base)",
+            "model_id": "sr_whisper_base",
+            "engine": "whisper",
+            "lang_id": "sr",
+            "checksum": "34e32ec8",
+            "checksum_quick": "5c83c786",
+            "file_name": "multilang_whisper_base.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
+            ],
+            "size": "147951465"
+        },
+        {
+            "name": "Српски (Whisper small)",
+            "model_id": "sr_whisper_small",
+            "engine": "whisper",
+            "lang_id": "sr",
+            "checksum": "5fad3693",
+            "checksum_quick": "f879b605",
+            "file_name": "multilang_whisper_small.h5",
+            "urls": [
+                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
+            ],
+            "size": "487601967"
+        },
+        {
+            "name": "Српски (Whisper medium)",
+            "model_id": "sr_whisper_medium",
+            "engine": "whisper",
+            "lang_id": "sr",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
             "file_name": "multilang_whisper_medium.h5",
