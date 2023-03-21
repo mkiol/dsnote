@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -6,17 +6,21 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 2.15
 
 Item {
     id: root
 
+    // status values:
+    // 0 - no speech, 1 - speech detected, 2 - speech decoding
+    property int status: 0
+
     property color color: "black"
-    property bool active: false
 
     Component {
-        id: indicator
+        id: waveIndicator
         Rectangle {
-            id: rect
+            id: waveRect
             property double initValue: {
                 if (model.modelData === 0)
                     return 0.5
@@ -29,27 +33,25 @@ Item {
 
             Connections {
                 target: root
-                function onActiveChanged() {
-                    if (!active)
-                        rect.value = rect.initValue
+                function onStatusChanged() {
+                    if (status !== 1)
+                        waveRect.value = waveRect.initValue
                 }
             }
 
             radius: 10
             y: (root.height - height) / 2
             color: root.color
-            opacity: root.active ? 1.0 : 0.5
+            opacity: root.status !== 0 ? 1.0 : 0.5
             width: root.width / 4
             height: root.height * value
 
             SequentialAnimation {
-                id: animation
-
-                running: root.active
+                running: root.status === 1
                 loops: Animation.Infinite
 
                 NumberAnimation {
-                    target: rect
+                    target: waveRect
                     properties: "value"
                     from: model.modelData === 1 ? 1.0 : 0.5
                     to: model.modelData === 1 ? 0.5 : 1.0
@@ -58,7 +60,7 @@ Item {
                     easing {type: Easing.OutBack}
                 }
                 NumberAnimation {
-                    target: rect
+                    target: waveRect
                     properties: "value"
                     from: model.modelData === 1 ? 0.5 : 1.0
                     to: model.modelData === 1 ? 1.0 : 0.5
@@ -70,12 +72,74 @@ Item {
         }
     }
 
+    Component {
+        id: squareIndicator
+        Rectangle {
+            id: squareRect
+            property int value: 0
+            property int vid: {
+                switch(model.modelData) {
+                case 0:
+                case 1:
+                    return model.modelData
+                case 2:
+                    return model.modelData + 1
+                case 3:
+                   return model.modelData - 1
+                }
+            }
+
+            Connections {
+                target: root
+                function onStatusChanged() {
+                    if (status !== 2)
+                        squareRect.value = 0
+                }
+            }
+
+            radius: 10
+            y: (root.height - height) / 2
+            color: root.color
+            opacity: value == vid ? 1.0 : 0.0
+            Behavior on opacity {
+                 NumberAnimation { duration: 100 }
+            }
+
+            width: root.width / 3
+            height: root.height / 3
+
+            NumberAnimation {
+                loops: Animation.Infinite
+                running: root.status === 2
+                target: squareRect
+                properties: "value"
+                from: 0
+                to: 3
+
+                duration: 800
+            }
+        }
+    }
+
     Row {
+        visible: root.status !== 2
         x: root.width / 16
         spacing: root.width / 16
         Repeater {
-            delegate: indicator
+            delegate: waveIndicator
             model: 3
+        }
+    }
+
+    Grid {
+        visible: root.status === 2
+        columns: 2
+        // anchors.centerIn: parent
+        x: root.width / 16
+        spacing: root.width / 8
+        Repeater {
+            delegate: squareIndicator
+            model: 4
         }
     }
 }

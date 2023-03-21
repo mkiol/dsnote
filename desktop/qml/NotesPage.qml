@@ -44,7 +44,14 @@ Page {
                 width: 20
                 Layout.leftMargin: 10
                 height: speechText.height / 2
-                active: app.speech
+                status: {
+                    switch (app.speech) {
+                    case DsnoteApp.SttNoSpeech: return 0;
+                    case DsnoteApp.SttSpeechDetected: return 1;
+                    case DsnoteApp.SttSpeechDecoding: return 2;
+                    }
+                    return 0;
+                }
                 Layout.alignment: Qt.AlignTop
                 color: palette.text
             }
@@ -54,11 +61,22 @@ Page {
                 Layout.fillWidth: true
                 readOnly: true
                 wrapMode: TextEdit.WordWrap
-                placeholderText: app.state === DsnoteApp.SttTranscribingFile ?
-                                     qsTr("Transcribing audio file...") + (app.transcribe_progress > 0.0 ? " " + Math.round(app.transcribe_progress * 100) + "%" : "") :
-                                     app.state === DsnoteApp.SttListeningAuto || app.speech ?
-                                     qsTr("Say something...") : _settings.speech_mode === Settings.SpeechSingleSentence ?
-                                             qsTr("Click and say something...") : qsTr("Press and say something...")
+                placeholderText: {
+                    if (app.state === DsnoteApp.SttTranscribingFile)
+                        return qsTr("Transcribing audio file...") +
+                                (app.transcribe_progress > 0.0 ? " " +
+                                        Math.round(app.transcribe_progress * 100) + "%" : "")
+                    if (app.state === DsnoteApp.SttListeningAuto)
+                        return qsTr("Say something...")
+                    if (app.speech === DsnoteApp.SttSpeechDetected)
+                        return qsTr("Say something...")
+                    if (app.speech === DsnoteApp.SttSpeechDecoding)
+                        return qsTr("Decoding, please wait...")
+                    if (_settings.speech_mode === Settings.SpeechSingleSentence)
+                        return qsTr("Click and say something...")
+                    return qsTr("Press and say something...")
+                }
+
                 font.italic: true
                 text: app.intermediate_text
                 leftPadding: 0
@@ -128,6 +146,7 @@ Page {
             }
 
             ComboBox {
+                implicitWidth: parent.width / 3
                 visible: app.configured
                 currentIndex: app.active_lang_idx
                 model: app.available_langs

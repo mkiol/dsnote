@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -107,19 +107,52 @@ Page {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        clickable: app.state !== DsnoteApp.SttListeningAuto && app.state !== DsnoteApp.SttTranscribingFile
-        speech: app.speech
+        clickable: app.speech != DsnoteApp.SttSpeechDecoding &&
+                   app.state !== DsnoteApp.SttListeningAuto &&
+                   app.state !== DsnoteApp.SttTranscribingFile
+        status: {
+            switch (app.speech) {
+            case DsnoteApp.SttNoSpeech: return 0;
+            case DsnoteApp.SttSpeechDetected: return 1;
+            case DsnoteApp.SttSpeechDecoding: return 2;
+            }
+            return 0;
+        }
         off: !app.configured || !app.connected
-        busy: app.busy || service.busy || !app.connected || app.state === DsnoteApp.SttTranscribingFile
+        busy: app.busy || service.busy || !app.connected ||
+              app.state === DsnoteApp.SttTranscribingFile
         text: app.intermediate_text
-        textPlaceholder: app.state === DsnoteApp.SttListeningSingleSentence ? qsTr("Say something...") :
-                         _settings.speech_mode === Settings.SpeechSingleSentence ?
-                             qsTr("Click and say something...") : qsTr("Press and say something...")
-        textPlaceholderActive: app.connected ?
-                                   app.configured ?
-                                       busy ? app.state === DsnoteApp.SttTranscribingFile ? qsTr("Transcribing audio file...") : qsTr("Busy...") :
-                                       qsTr("Say something...") : qsTr("Language is not configured") :
-                                   qsTr("Starting...")
+        textPlaceholder: {
+            if (app.state === DsnoteApp.SttListeningSingleSentence) return qsTr("Say something...")
+            if (_settings.speech_mode === Settings.SpeechSingleSentence) return qsTr("Click and say something...")
+            return qsTr("Press and say something...")
+        }
+        textPlaceholderActive: {
+            if (!app.connected) return qsTr("Starting...")
+            if (!app.configured) return qsTr("Language is not configured")
+            if (app.speech === DsnoteApp.SttSpeechDecoding) return qsTr("Decoding, please wait...")
+            if (!busy) return qsTr("Say something...")
+            if (app.state === DsnoteApp.SttTranscribingFile) return qsTr("Transcribing audio file...")
+            return qsTr("Busy...")
+        }
+
+
+//        textPlaceholder: {
+//           if (app.state === DsnoteApp.SttTranscribingFile)
+//               return qsTr("Transcribing audio file...") +
+//                       (app.transcribe_progress > 0.0 ? " " +
+//                               Math.round(app.transcribe_progress * 100) + "%" : "")
+//           if (app.state === DsnoteApp.SttListeningAuto)
+//               return qsTr("Say something...")
+//           if (app.speech === DsnoteApp.SttSpeechDetected)
+//               return qsTr("Say something...")
+//           if (app.speech === DsnoteApp.SttSpeechDecoding)
+//               return qsTr("Decoding, please wait...")
+//           if (_settings.speech_mode === Settings.SpeechSingleSentence)
+//               return qsTr("Click and say something...")
+//           return qsTr("Press and say something...")
+//        }
+
         progress: app.transcribe_progress
         onPressed: {
             if (app.state === DsnoteApp.SttListeningSingleSentence) app.stop_listen()
