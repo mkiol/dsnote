@@ -55,6 +55,7 @@ class engine_wrapper {
         std::function<void(speech_detection_status_t status)>
             speech_detection_status_changed;
         std::function<void()> sentence_timeout;
+        std::function<void()> eof;
     };
 
     struct config_t {
@@ -86,7 +87,7 @@ class engine_wrapper {
     enum class lock_type_t { free, processed, borrowed };
     friend std::ostream& operator<<(std::ostream& os, lock_type_t lock_type);
 
-    enum class flush_t { regular, exit, restart };
+    enum class flush_t { regular, eof, exit, restart };
     friend std::ostream& operator<<(std::ostream& os, flush_t flush_type);
 
     enum class samples_process_result_t { wait_for_samples, no_samples_needed };
@@ -131,7 +132,7 @@ class engine_wrapper {
     speech_mode_t m_speech_mode;
     bool m_restart_requested = false;
     std::optional<std::chrono::steady_clock::time_point> m_start_time;
-    void flush(flush_t type = flush_t::regular);
+    void flush(flush_t type);
     void start_processing();
     void stop_processing();
     virtual samples_process_result_t process_buff();
@@ -144,7 +145,8 @@ class engine_wrapper {
     static std::string merge_texts(const std::string& old_text,
                                    std::string&& new_text);
     void reset();
-    virtual void reset_engine() = 0;
+    virtual void reset_impl() = 0;
+    virtual void stop_processing_impl() = 0;
     static void ltrim(std::string& s);
     static void rtrim(std::string& s);
 };

@@ -81,6 +81,10 @@ stt_service::stt_service(QObject *parent)
             static_cast<void (stt_service::*)(int)>(
                 &stt_service::handle_sentence_timeout),
             Qt::QueuedConnection);
+    connect(this, &stt_service::engine_eof, this,
+            static_cast<void (stt_service::*)(int)>(
+                &stt_service::handle_engine_eof),
+            Qt::QueuedConnection);
     connect(this, &stt_service::speech_changed, this, [this]() {
         qDebug() << "[service => dbus] signal SpeechPropertyChanged:"
                  << speech();
@@ -263,18 +267,25 @@ QString stt_service::restart_engine(speech_mode_t speech_mode,
             qDebug() << "restart engine required";
 
             engine_wrapper::callbacks_t call_backs{
-                std::bind(
+                /*text_decoded=*/std::bind(
                     static_cast<void (stt_service::*)(const std::string &)>(
                         &stt_service::handle_text_decoded),
                     this, std::placeholders::_1),
+                /*intermediate_text_decoded=*/
                 std::bind(
                     static_cast<void (stt_service::*)(const std::string &)>(
                         &stt_service::handle_intermediate_text_decoded),
                     this, std::placeholders::_1),
+                /*speech_detection_status_changed=*/
                 std::bind(&stt_service::handle_speech_detection_status_changed,
                           this, std::placeholders::_1),
+                /*sentence_timeout=*/
                 std::bind(static_cast<void (stt_service::*)()>(
                               &stt_service::handle_sentence_timeout),
+                          this),
+                /*eof=*/
+                std::bind(static_cast<void (stt_service::*)()>(
+                              &stt_service::handle_engine_eof),
                           this)};
 
             switch (model_files->engine) {
@@ -327,6 +338,15 @@ void stt_service::handle_sentence_timeout() {
         m_current_task->speech_mode == speech_mode_t::single_sentence) {
         emit sentence_timeout(m_current_task->id);
     }
+}
+
+void stt_service::handle_engine_eof(int task_id) {
+    emit file_transcribe_finished(task_id);
+    cancel_file(task_id);
+}
+
+void stt_service::handle_engine_eof() {
+    if (m_current_task) emit engine_eof(m_current_task->id);
 }
 
 void stt_service::handle_text_decoded(const std::string &text) {
@@ -599,8 +619,6 @@ void stt_service::handle_audio_error() {
 void stt_service::handle_audio_ended() {
     if (audio_source_type() == source_t::file && m_current_task) {
         qDebug() << "file audio source ended successfuly";
-        emit file_transcribe_finished(m_current_task->id);
-        cancel_file(m_current_task->id);
     } else {
         qDebug() << "audio ended";
     }
@@ -688,7 +706,7 @@ void stt_service::refresh_status() {
                    speech_mode_t::single_sentence) {
             new_state = state_t::listening_single_sentence;
         } else {
-            qWarning() << "unknown ds speech mode";
+            qWarning() << "unknown speech mode";
             new_state = state_t::unknown;
         }
     } else {

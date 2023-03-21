@@ -37,11 +37,9 @@ class deepspeech_wrapper : public engine_wrapper {
     void free_ds_stream();
     samples_process_result_t process_buff() override;
     void decode_speech(const ds_buf_t& buf);
-    void reset_engine() override;
+    void reset_impl() override;
+    void stop_processing_impl() override;
     bool sentence_timer_timed_out();
-    //    void process_buff(buff_type::const_iterator begin,
-    //                      buff_type::const_iterator end);
-    //    void trim_buff(buff_type::const_iterator begin);
 };
 
 #endif  // DEEP_SPEECH_WRAPPER_H

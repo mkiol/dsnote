@@ -36,7 +36,8 @@ class whisper_wrapper : public engine_wrapper {
         whisper_buf_t& whisper_buf);
     bool sentence_timer_timed_out();
     whisper_full_params make_wparams() const;
-    void reset_engine() override;
+    void reset_impl() override;
+    void stop_processing_impl() override;
 };
 
 #endif  // WHISPER_WRAPPER_H

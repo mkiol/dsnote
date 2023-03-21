@@ -52,7 +52,14 @@ bool whisper_wrapper::sentence_timer_timed_out() {
     return false;
 }
 
-void whisper_wrapper::reset_engine() { m_speech_buf.clear(); }
+void whisper_wrapper::reset_impl() { m_speech_buf.clear(); }
+
+void whisper_wrapper::stop_processing_impl() {
+    if (m_whisper_ctx) {
+        LOGD("whisper cancel");
+        whisper_cancel(m_whisper_ctx.get());
+    }
+}
 
 engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
     if (!lock_buff_for_processing())
@@ -127,7 +134,7 @@ engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
     if (!decode_samples) {
         if (m_speech_mode == speech_mode_t::manual &&
             m_speech_detection_status == speech_detection_status_t::no_speech) {
-            flush();
+            flush(eof ? flush_t::eof : flush_t::regular);
             free_buf();
             return samples_process_result_t::no_samples_needed;
         }
@@ -140,6 +147,11 @@ engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
     //    file1.write(
     //        reinterpret_cast<char*>(m_speech_buf.data()),
     //        m_speech_buf.size() * sizeof(decltype(m_speech_buf)::value_type));
+
+    if (m_thread_exit_requested) {
+        free_buf();
+        return samples_process_result_t::no_samples_needed;
+    }
 
     auto old_status = m_speech_detection_status;
 
@@ -154,7 +166,7 @@ engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
 
     set_speech_detection_status(old_status);
 
-    flush();
+    flush(eof ? flush_t::eof : flush_t::regular);
 
     free_buf();
 
@@ -204,7 +216,6 @@ void whisper_wrapper::decode_speech(const whisper_buf_t& buf) {
     auto result =
         merge_texts(m_intermediate_text.value_or(std::string{}), os.str());
 
-    if (m_intermediate_text && m_intermediate_text == result) return;
-
-    set_intermediate_text(result);
+    if (!m_intermediate_text || m_intermediate_text != result)
+        set_intermediate_text(result);
 }

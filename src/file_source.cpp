@@ -67,6 +67,7 @@ void file_source::handle_read_timeout() {
         emit audio_available();
         if (m_eof && m_buf.empty()) {
             emit ended();
+            m_eof = false;
         }
     }
 }

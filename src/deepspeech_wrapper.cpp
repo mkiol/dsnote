@@ -69,7 +69,9 @@ void deepspeech_wrapper::free_ds_stream() {
     }
 }
 
-void deepspeech_wrapper::reset_engine() { m_speech_buf.clear(); }
+void deepspeech_wrapper::reset_impl() { m_speech_buf.clear(); }
+
+void deepspeech_wrapper::stop_processing_impl() {}
 
 engine_wrapper::samples_process_result_t deepspeech_wrapper::process_buff() {
     if (!lock_buff_for_processing())
@@ -139,7 +141,7 @@ engine_wrapper::samples_process_result_t deepspeech_wrapper::process_buff() {
     if (!do_decode_speech) {
         if (m_speech_detection_status == speech_detection_status_t::no_speech) {
             free_ds_stream();
-            flush();
+            flush(eof ? flush_t::eof : flush_t::regular);
             free_buf();
 
             if (m_speech_mode == speech_mode_t::manual)
@@ -151,10 +153,10 @@ engine_wrapper::samples_process_result_t deepspeech_wrapper::process_buff() {
         return samples_process_result_t::wait_for_samples;
     }
 
-    static std::ofstream file1{"/home/mkiol/after-vad.pcm"};
-    file1.write(
-        reinterpret_cast<char*>(m_speech_buf.data()),
-        m_speech_buf.size() * sizeof(decltype(m_speech_buf)::value_type));
+    if (m_thread_exit_requested) {
+        free_buf();
+        return samples_process_result_t::no_samples_needed;
+    }
 
     auto old_status = m_speech_detection_status;
 
@@ -170,7 +172,7 @@ engine_wrapper::samples_process_result_t deepspeech_wrapper::process_buff() {
 
     set_speech_detection_status(old_status);
 
-    free_buf();
+    flush(eof ? flush_t::eof : flush_t::regular);
 
     return samples_process_result_t::wait_for_samples;
 }
@@ -200,28 +202,6 @@ void deepspeech_wrapper::decode_speech(const ds_buf_t& buf) {
     std::string result{cstr};
     STT_FreeString(cstr);
 
-    if (m_intermediate_text && m_intermediate_text == result) return;
-
-    set_intermediate_text(result);
-
-    //    if (frames_without_change < silent_level) {
-    //        if (speech_mode_value == speech_mode_type::automatic ||
-    //            speech_mode_value == speech_mode_type::single_sentence) {
-    //            if (intermediate_text || std::strlen(result) != 0)
-    //                set_intermediate_text(result);
-    //            if (intermediate_text && !intermediate_text->empty())
-    //                set_speech_detected(true);
-    //        } else {
-    //            set_intermediate_text(result);
-    //        }
-    //    } else {
-    //        flush();
-    //    }
-
-    //    STT_FreeString(result);
+    if (!m_intermediate_text || m_intermediate_text != result)
+        set_intermediate_text(result);
 }
-
-// void deepspeech_wrapper::trim_buff(buff_type::const_iterator begin) {
-//     buff_struct.size -= std::distance(buff_struct.buff.cbegin(), begin);
-//     std::copy(begin, begin + buff_struct.size, buff_struct.buff.begin());
-// }

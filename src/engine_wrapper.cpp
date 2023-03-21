@@ -75,6 +75,9 @@ std::ostream& operator<<(std::ostream& os,
         case engine_wrapper::flush_t::regular:
             os << "regular";
             break;
+        case engine_wrapper::flush_t::eof:
+            os << "eof";
+            break;
         case engine_wrapper::flush_t::restart:
             os << "restart";
             break;
@@ -140,11 +143,11 @@ engine_wrapper::engine_wrapper(config_t config, callbacks_t call_backs)
 engine_wrapper::~engine_wrapper() { LOGD("engine dtor"); }
 
 void engine_wrapper::stop_processing() {
-    {
-        std::lock_guard lock{m_processing_mtx};
-        m_thread_exit_requested = true;
-        LOGD("exit requested");
-    }
+    m_thread_exit_requested = true;
+
+    LOGD("exit requested");
+
+    stop_processing_impl();
 
     m_processing_cv.notify_all();
     m_processing_thread.join();
@@ -168,7 +171,8 @@ void engine_wrapper::start_processing() {
                 flush(flush_t::restart);
             }
 
-            if (process_buff() == samples_process_result_t::wait_for_samples)
+            if (process_buff() == samples_process_result_t::wait_for_samples &&
+                !m_thread_exit_requested)
                 m_processing_cv.wait(lock);
         }
 
@@ -247,7 +251,7 @@ void engine_wrapper::reset() {
     m_start_time.reset();
     m_vad.reset();
 
-    reset_engine();
+    reset_impl();
 }
 
 engine_wrapper::samples_process_result_t engine_wrapper::process_buff() {
@@ -303,7 +307,7 @@ void engine_wrapper::flush(flush_t type) {
     }
 
     if (m_intermediate_text && !m_intermediate_text->empty()) {
-        if ((type == flush_t::regular ||
+        if ((type == flush_t::regular || type == flush_t::eof ||
              m_speech_mode != speech_mode_t::single_sentence) &&
             m_intermediate_text->size() >= m_min_text_size) {
             m_call_backs.text_decoded(m_intermediate_text.value());
@@ -317,6 +321,8 @@ void engine_wrapper::flush(flush_t type) {
     }
 
     m_intermediate_text.reset();
+
+    if (type == flush_t::eof) m_call_backs.eof();
 }
 
 void engine_wrapper::set_speech_mode(speech_mode_t mode) {

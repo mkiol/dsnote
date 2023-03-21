@@ -80,6 +80,7 @@ class stt_service : public QObject {
     void text_decoded(const QString &text, const QString &lang, int task);
     void current_task_changed();
     void sentence_timeout(int task_id);
+    void engine_eof(int task_id);
 
     // DBus
     void ErrorOccured(int code);
@@ -150,6 +151,8 @@ class stt_service : public QObject {
     void handle_models_changed();
     void handle_sentence_timeout();
     void handle_sentence_timeout(int task_id);
+    void handle_engine_eof();
+    void handle_engine_eof(int task_id);
     void handle_text_decoded(const std::string &text);
     void handle_text_decoded(const QString &text, const QString &model_id,
                              int task_id);
