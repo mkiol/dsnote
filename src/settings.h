@@ -11,6 +11,7 @@
 #include <QObject>
 #include <QSettings>
 #include <QString>
+#include <QStringList>
 #include <QUrl>
 
 #include "singleton.h"
@@ -58,6 +59,8 @@ class settings : public QSettings, public singleton<settings> {
     QString models_dir_name() const;
     QString default_model() const;
     void set_default_model(const QString &value);
+    QStringList enabled_models();
+    void set_enabled_models(const QStringList &value);
 
    signals:
     // app
@@ -67,6 +70,7 @@ class settings : public QSettings, public singleton<settings> {
     // service
     void models_dir_changed();
     void default_model_changed();
+    void enabled_models_changed();
 
    private:
     inline static const QString settings_filename =

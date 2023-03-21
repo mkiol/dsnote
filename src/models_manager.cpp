@@ -203,6 +203,11 @@ void models_manager::download(const QString& id, download_type type, int part) {
         if ((type == download_type::all && m_cs && s_cs) ||
             (type == download_type::scorer && s_cs)) {
             qWarning() << "both model and scorer exist, download not needed";
+
+            auto models = settings::instance()->enabled_models();
+            models.push_back(id);
+            settings::instance()->set_enabled_models(models);
+
             model.available = true;
             emit download_finished(id);
             model.downloading = false;
@@ -727,6 +732,10 @@ void models_manager::handle_download_finished() {
                     return;
                 }
 
+                auto models = settings::instance()->enabled_models();
+                models.push_back(id);
+                settings::instance()->set_enabled_models(models);
+
                 model.available = true;
                 emit download_finished(id);
             } else {
@@ -861,6 +870,11 @@ void models_manager::delete_model(const QString& id) {
             qDebug() << "not removing scorer file because other model uses it:"
                      << model.scorer_file_name;
         }
+
+        auto models = settings::instance()->enabled_models();
+        models.removeAll(id);
+        settings::instance()->set_enabled_models(models);
+
         model.available = false;
         model.download_progress = 0.0;
         model.downloaded_part_data = 0;
@@ -898,7 +912,7 @@ void models_manager::init_config() {
     }
 
     if (!default_models_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning() << "cannot open default models file";
+        qWarning() << "failed to open default models file";
         return;
     }
 
@@ -906,14 +920,14 @@ void models_manager::init_config() {
         QStandardPaths::writableLocation(QStandardPaths::DataLocation)};
     QDir dir{data_dir};
     if (!dir.exists())
-        if (!dir.mkpath(data_dir)) qWarning() << "unable to create data dir";
+        if (!dir.mkpath(data_dir)) qWarning() << "failed to create data dir";
 
     QFile models{dir.filePath(models_file)};
 
     if (models.exists()) backup_config(QFileInfo{models}.absoluteFilePath());
 
     if (!models.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qWarning() << "cannot open models file";
+        qWarning() << "failed to open models file";
         return;
     }
 
@@ -995,13 +1009,15 @@ bool models_manager::checksum_ok(const QString& checksum,
 
 models_manager::model_engine models_manager::engine_from_name(
     const QString& name) {
-    if (name == "ds") return model_engine::ds;
-    if (name == "whisper") return model_engine::whisper;
+    if (name == QStringLiteral("ds")) return model_engine::ds;
+    if (name == QStringLiteral("whisper")) return model_engine::whisper;
     return model_engine::ds;  // default
 }
 
 auto models_manager::extract_models(const QJsonArray& models_jarray) {
     models_t models;
+
+    auto enabled_models = settings::instance()->enabled_models();
 
     QDir dir{settings::instance()->models_dir()};
 
@@ -1089,8 +1105,18 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             }
         }
 
+        auto model_is_enabled = enabled_models.contains(model_id);
+        if (model.available) {
+            qDebug() << "files for not enabled model exist:" << model_id;
+            model.available = model_is_enabled;
+        } else if (model_is_enabled) {
+            enabled_models.removeAll(model_id);
+        }
+
         models.insert({model_id, std::move(model)});
     }
+
+    settings::instance()->set_enabled_models(enabled_models);
 
     return models;
 }

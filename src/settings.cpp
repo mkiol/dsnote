@@ -86,6 +86,18 @@ void settings::set_default_model(const QString& value) {
     }
 }
 
+QStringList settings::enabled_models() {
+    sync();  // needed to update changes app -> service
+    return value(QStringLiteral("service/enabled_models"), {}).toStringList();
+}
+
+void settings::set_enabled_models(const QStringList& value) {
+    if (enabled_models() != value) {
+        setValue(QStringLiteral("service/enabled_models"), value);
+        emit enabled_models_changed();
+    }
+}
+
 settings::speech_mode_type settings::speech_mode() const {
     return static_cast<speech_mode_type>(
         value(QStringLiteral("speech_mode"),
