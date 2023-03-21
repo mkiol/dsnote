@@ -146,7 +146,6 @@ set(dsnote_lib_sources
     ${sources_dir}/models_list_model.h
     ${sources_dir}/models_manager.cpp
     ${sources_dir}/models_manager.h
-    ${sources_dir}/performance.h
     ${sources_dir}/settings.cpp
     ${sources_dir}/settings.h
     ${sources_dir}/singleton.h
