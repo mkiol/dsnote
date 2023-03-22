@@ -184,7 +184,9 @@ whisper_full_params whisper_wrapper::make_wparams() const {
     // wparams.translate = true;
     wparams.no_context = true;
     wparams.n_threads =
-        std::max(1, static_cast<int>(std::thread::hardware_concurrency()) - 1);
+        std::max(1, static_cast<int>(std::thread::hardware_concurrency()) - 2);
+
+    LOGD("using threads: " << wparams.n_threads);
 
     return wparams;
 }
