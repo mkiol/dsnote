@@ -16,7 +16,7 @@ BusyIndicator {
 
     Label {
         visible: progress >= 0.0
-        color: Theme.highlightColor
+        color: parent.color
         anchors.centerIn: parent
         font.pixelSize: {
             switch(size) {

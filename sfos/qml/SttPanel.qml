@@ -58,6 +58,7 @@ SilicaItem {
 
     BusyIndicatorWithProgress {
         id: busyIndicator
+        color: root._pColor
         size: BusyIndicatorSize.Medium
         anchors.centerIn: indicator
         running: false
@@ -86,7 +87,7 @@ SilicaItem {
 
     MouseArea {
         id: mouse
-        enabled: root.clickable && !root.busy && !root.off
+        enabled: root.clickable && !root.off
         anchors.fill: parent
         onPressedChanged: {
             if (pressed) root.pressed()

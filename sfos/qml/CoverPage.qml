@@ -39,7 +39,14 @@ CoverBackground {
         width: Theme.coverSizeLarge.width - 2 * Theme.paddingMedium
         height: width / 2
         color: Theme.primaryColor
-        active: app.speech
+        status: {
+            switch (app.speech) {
+            case DsnoteApp.SttNoSpeech: return 0;
+            case DsnoteApp.SttSpeechDetected: return 1;
+            case DsnoteApp.SttSpeechDecoding: return 2;
+            }
+            return 0;
+        }
         off: !app.configured
         Behavior on y { NumberAnimation { duration: 300; easing {type: Easing.OutBack} } }
         visible: opacity > 0.0

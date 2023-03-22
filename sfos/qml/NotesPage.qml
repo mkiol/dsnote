@@ -49,10 +49,13 @@ Page {
 
                 MenuItem {
                     enabled: app.configured && !app.busy && !service.busy
-                    text: app.state === DsnoteApp.SttTranscribingFile ? qsTr("Cancel file transcription") : qsTr("Transcribe audio file")
+                    text: app.state === DsnoteApp.SttTranscribingFile ||
+                          app.speech === DsnoteApp.SttSpeechDecoding ? qsTr("Cancel") : qsTr("Transcribe audio file")
                     onClicked: {
                         if (app.state === DsnoteApp.SttTranscribingFile)
                             app.cancel_transcribe()
+                        else if (app.speech == DsnoteApp.SttSpeechDecoding)
+                            app.stop_listen()
                         else
                             pageStack.push(fileDialog)
                     }
@@ -107,9 +110,9 @@ Page {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        clickable: app.speech != DsnoteApp.SttSpeechDecoding &&
-                   app.state !== DsnoteApp.SttListeningAuto &&
-                   app.state !== DsnoteApp.SttTranscribingFile
+        clickable: (app.speech == DsnoteApp.SttSpeechDecoding ||
+                   app.state !== DsnoteApp.SttListeningAuto) &&
+                   !app.busy && !service.busy && app.connected
         status: {
             switch (app.speech) {
             case DsnoteApp.SttNoSpeech: return 0;
@@ -119,11 +122,13 @@ Page {
             return 0;
         }
         off: !app.configured || !app.connected
-        busy: app.busy || service.busy || !app.connected ||
-              app.state === DsnoteApp.SttTranscribingFile
+        busy: app.speech !== DsnoteApp.SttSpeechDecoding && (app.busy || service.busy || !app.connected ||
+              app.state === DsnoteApp.SttTranscribingFile)
         text: app.intermediate_text
         textPlaceholder: {
+            if (app.speech === DsnoteApp.SttSpeechDecoding) return qsTr("Decoding, please wait...")
             if (app.state === DsnoteApp.SttListeningSingleSentence) return qsTr("Say something...")
+            if (app.state === DsnoteApp.SttTranscribingFile) return qsTr("Transcribing audio file...")
             if (_settings.speech_mode === Settings.SpeechSingleSentence) return qsTr("Click and say something...")
             return qsTr("Press and say something...")
         }
@@ -136,25 +141,14 @@ Page {
             return qsTr("Busy...")
         }
 
-
-//        textPlaceholder: {
-//           if (app.state === DsnoteApp.SttTranscribingFile)
-//               return qsTr("Transcribing audio file...") +
-//                       (app.transcribe_progress > 0.0 ? " " +
-//                               Math.round(app.transcribe_progress * 100) + "%" : "")
-//           if (app.state === DsnoteApp.SttListeningAuto)
-//               return qsTr("Say something...")
-//           if (app.speech === DsnoteApp.SttSpeechDetected)
-//               return qsTr("Say something...")
-//           if (app.speech === DsnoteApp.SttSpeechDecoding)
-//               return qsTr("Decoding, please wait...")
-//           if (_settings.speech_mode === Settings.SpeechSingleSentence)
-//               return qsTr("Click and say something...")
-//           return qsTr("Press and say something...")
-//        }
-
         progress: app.transcribe_progress
         onPressed: {
+            if (app.speech === DsnoteApp.SttSpeechDecoding || app.state === DsnoteApp.SttTranscribingFile) {
+                if (app.state === DsnoteApp.SttTranscribingFile) app.cancel_transcribe()
+                else app.stop_listen()
+                return
+            }
+
             if (app.state === DsnoteApp.SttListeningSingleSentence) app.stop_listen()
             else app.listen()
         }
