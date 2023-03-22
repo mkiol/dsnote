@@ -63,11 +63,11 @@ void file_source::handle_read_timeout() {
         return;
     }
 
-    if (m_decoder.bufferAvailable() || !m_buf.empty() || m_eof) {
+    if (m_decoder.bufferAvailable() || !m_buf.empty() || (m_eof && !m_ended)) {
         emit audio_available();
         if (m_eof && m_buf.empty()) {
             emit ended();
-            m_eof = false;
+            m_ended = true;
         }
     }
 }
@@ -85,27 +85,27 @@ double file_source::progress() const {
 }
 
 void file_source::decode_available_buffer() {
-    while (m_decoder.bufferAvailable()) {
-        auto audio_buf = m_decoder.read();
+    if (!m_decoder.bufferAvailable()) return;
 
-        if (!audio_buf.isValid()) {
-            qWarning() << "audio buf is invalid";
-            break;
-        }
+    auto audio_buf = m_decoder.read();
 
-        auto size = static_cast<size_t>(audio_buf.byteCount());
-
-        if (size <= 0) {
-            qWarning() << "audio buf empty";
-            break;
-        }
-
-        m_buf.reserve(m_buf.size() + size);
-
-        auto *src = audio_buf.data<char>();
-
-        for (size_t i = 0; i < size; ++i) m_buf.push_back(src[i]);
+    if (!audio_buf.isValid()) {
+        qWarning() << "audio buf is invalid";
+        return;
     }
+
+    auto size = static_cast<size_t>(audio_buf.byteCount());
+
+    if (size <= 0) {
+        qWarning() << "audio buf empty";
+        return;
+    }
+
+    m_buf.reserve(m_buf.size() + size);
+
+    auto *src = audio_buf.data<char>();
+
+    for (size_t i = 0; i < size; ++i) m_buf.push_back(src[i]);
 }
 
 static void shift_left(std::vector<char> &vec, size_t distance) {
@@ -127,8 +127,13 @@ file_source::audio_data file_source::read_audio(char *buf, size_t max_size) {
 
     audio_data data;
     data.data = buf;
+    data.sof = m_sof;
 
-    if (m_buf.empty()) return data;
+    if (m_buf.empty()) {
+        data.eof = m_eof;
+        m_ended = false;
+        return data;
+    }
 
     data.size = std::min(max_size, m_buf.size());
 
@@ -137,7 +142,6 @@ file_source::audio_data file_source::read_audio(char *buf, size_t max_size) {
     shift_left(m_buf, data.size);  // TO-DO: avoid huge mem copy
 
     data.eof = m_eof && m_buf.empty();
-    data.sof = m_sof;
 
     m_sof = false;
 

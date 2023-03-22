@@ -35,6 +35,7 @@ class file_source : public audio_source {
     QString m_file;
     bool m_eof = false;
     bool m_sof = true;
+    bool m_ended = false;
 
     void init_audio();
     void start();
