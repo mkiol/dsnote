@@ -22,6 +22,7 @@ option(build_fmt "download fmt, build and link statically" ON)
 option(build_catch2 "download catch2, build and link statically" ON)
 option(build_whispercpp "download whisper.cpp, build and link statically" ON)
 option(build_webrtcvad "download webrtc vad, build and link statically" ON)
+option(build_openblas "download openblas, build and link statically" ON)
 
 if(${with_desktop} AND ${with_sfos})
     message(FATAL_ERROR "options with_desktop and with_sfos cannot be set together")
@@ -73,14 +74,18 @@ set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/refs
 set(whispercpp_checksum "fe9516678337cc5dc4a44d0c3ea18c6c")
 set(webrtcvad_source_url "https://github.com/webrtc-mirror/webrtc/archive/ac87c8df2780cb12c74942ec8a473718c76cb5b7.zip")
 set(webrtcvad_checksum "f1489c137b354594632d260978b283a4")
+set(openblas_source_url "https://github.com/xianyi/OpenBLAS/releases/download/v0.3.21/OpenBLAS-0.3.21.tar.gz")
+set(openblas_checksum "ffb6120e2309a2280471716301824805")
 
 project(${info_id} VERSION 2.0.0)
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "^.*arm*.$")
     message(STATUS "arm architecture detected")
+    set(openblas_target "-DTARGET=ARMV7")
     set(libstt_url ${libstt_arm_url})
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^.*aarch64*.$")
     message(STATUS "arm64 architecture detected")
+    set(openblas_target "-DTARGET=ARMV8")
     set(libstt_url ${libstt_arm64_url})
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^.*86_64*.$")
     message(STATUS "x86_64 architecture detected")
@@ -366,7 +371,7 @@ if(build_fmt)
         INSTALL_DIR ${PROJECT_BINARY_DIR}/external
         URL "${fmt_source_url}"
         URL_MD5 "${fmt_checksum}"
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=/ -DCMAKE_INSTALL_LIBDIR=/lib
+        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ -DCMAKE_INSTALL_LIBDIR=/lib
             -DCMAKE_INSTALL_INCLUDEDIR=/include -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DFMT_DOC=OFF
             -DFMT_TEST=OFF -DFMT_FUZZ=OFF
         BUILD_ALWAYS False
@@ -380,6 +385,7 @@ else()
 endif()
 
 if(build_whispercpp)
+    set(whispercpp_flags "-ffast-math -O3 -I${external_include_dir}/openblas")
     ExternalProject_Add(whispercpp
         SOURCE_DIR ${external_dir}/whispercpp
         BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercpp
@@ -390,16 +396,41 @@ if(build_whispercpp)
                     -i ${patches_dir}/whispercpp.patch ||
                         echo "patch cmd failed, likely already patched"
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ -DCMAKE_INSTALL_LIBDIR=/lib
+            -DCMAKE_LIBRARY_PATH=${external_lib_dir}
             -DCMAKE_INSTALL_INCLUDEDIR=/include -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF
-            -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF -DWHISPER_SUPPORT_OPENBLAS=OFF
-            -DCMAKE_C_FLAGS="-ffast-math" -DCMAKE_CXX_FLAGS="-ffast-math"
+            -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF -DWHISPER_SUPPORT_OPENBLAS=ON
+            -DCMAKE_C_FLAGS=${whispercpp_flags}
+            -DCMAKE_CXX_FLAGS=${whispercpp_flags}
         BUILD_ALWAYS False
-        INSTALL_COMMAND make DESTDIR=${PROJECT_BINARY_DIR}/external install/local)
+        INSTALL_COMMAND make DESTDIR=${PROJECT_BINARY_DIR}/external install)
     list(APPEND deps_libs ${external_lib_dir}/static/libwhisper.a)
     list(APPEND deps whispercpp)
 else()
     find_library(whispercpp_path whisper REQUIRED)
     list(APPEND deps_libs ${whispercpp_path})
+endif()
+
+if(build_openblas)
+    set(openblas_flags "-ffast-math -O3")
+    ExternalProject_Add(openblas
+        SOURCE_DIR ${external_dir}/openblas
+        BINARY_DIR ${PROJECT_BINARY_DIR}/external/openblas
+        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+        URL "${openblas_source_url}"
+        URL_MD5 "${openblas_checksum}"
+        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ -DCMAKE_INSTALL_LIBDIR=/lib
+            -DCMAKE_INSTALL_INCLUDEDIR=/include -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_TESTING=OFF
+            -DBUILD_WITHOUT_LAPACK=ON -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF -DDYNAMIC_ARCH=ON
+            -DCMAKE_C_FLAGS=${openblas_flags} -DCMAKE_CXX_FLAGS=${openblas_flags} ${openblas_target}
+        BUILD_ALWAYS False
+        INSTALL_COMMAND make DESTDIR=${PROJECT_BINARY_DIR}/external install)
+    ExternalProject_Add_StepDependencies(whispercpp configure openblas)
+    list(APPEND deps_libs ${external_lib_dir}/libopenblas.a)
+    list(APPEND deps openblas)
+else()
+    pkg_search_module(openblas REQUIRED openblas)
+    list(APPEND deps_libs ${openblas_LIBRARIES})
+    list(APPEND includes ${openblas_INCLUDE_DIRS})
 endif()
 
 if(build_webrtcvad)
@@ -413,8 +444,7 @@ if(build_webrtcvad)
                     -i ${patches_dir}/webrtcvad.patch ||
                         echo "patch cmd failed, likely already patched"
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=/ -DCMAKE_INSTALL_LIBDIR=/lib
-            -DCMAKE_INSTALL_INCLUDEDIR=/include -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-            -DCMAKE_BUILD_TYPE=Release
+            -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_BUILD_TYPE=Release
         BUILD_ALWAYS False
         INSTALL_COMMAND make DESTDIR=${PROJECT_BINARY_DIR}/external install)
     list(APPEND deps_libs ${external_lib_dir}/libvad.a)
