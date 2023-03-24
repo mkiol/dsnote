@@ -8,7 +8,7 @@
 #include "whisper_wrapper.hpp"
 
 #include <algorithm>
-#include <fstream>
+// #include <fstream>
 #include <sstream>
 
 #include "logger.hpp"
@@ -70,14 +70,8 @@ engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
 
     LOGD("process samples buf: mode="
          << m_speech_mode << ", in-buf size=" << m_in_buf.size
-         << ", speech-buf size=" << m_speech_buf.size() << ", speech-stop="
-         << m_speech_stop << ", sof=" << sof << ", eof=" << eof);
-
-    if (m_speech_stop) {
-        reset();
-        free_buf();
-        return samples_process_result_t::no_samples_needed;
-    }
+         << ", speech-buf size=" << m_speech_buf.size() << ", sof=" << sof
+         << ", eof=" << eof);
 
     if (sof) {
         m_speech_buf.clear();
@@ -117,15 +111,18 @@ engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
             LOGD("speech buf reached max size");
             return true;
         }
+
         if (m_speech_buf.empty()) return false;
+
         if ((m_speech_mode != speech_mode_t::manual ||
              m_speech_detection_status ==
                  speech_detection_status_t::speech_detected) &&
             vad_status && !eof)
             return false;
+
         if (m_speech_mode == speech_mode_t::manual &&
-            m_speech_detection_status ==
-                speech_detection_status_t::speech_detected)
+            m_speech_detection_status == speech_detection_status_t::no_speech &&
+            !eof)
             return false;
 
         return true;
@@ -175,9 +172,10 @@ engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
 
 whisper_full_params whisper_wrapper::make_wparams() const {
     whisper_full_params wparams =
-        whisper_full_default_params(WHISPER_SAMPLING_BEAM_SEARCH);
+        whisper_full_default_params(WHISPER_SAMPLING_GREEDY);
     wparams.language = m_lang.c_str();
     wparams.speed_up = true;
+    wparams.temperature_inc = 0.0F;
     wparams.suppress_blank = true;
     wparams.suppress_non_speech_tokens = true;
     wparams.single_segment = false;
@@ -187,6 +185,7 @@ whisper_full_params whisper_wrapper::make_wparams() const {
         std::max(1, static_cast<int>(std::thread::hardware_concurrency()) - 2);
 
     LOGD("using threads: " << wparams.n_threads);
+    LOGD("system info: " << whisper_print_system_info());
 
     return wparams;
 }
@@ -197,6 +196,7 @@ void whisper_wrapper::decode_speech(const whisper_buf_t& buf) {
     if (whisper_full(m_whisper_ctx.get(), m_wparams, buf.data(), buf.size()) ==
         0) {
         auto n = whisper_full_n_segments(m_whisper_ctx.get());
+        LOGD("wisper segments: " << n);
 
         for (auto i = 0; i < n; ++i) {
             std::string text =

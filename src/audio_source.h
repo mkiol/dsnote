@@ -28,6 +28,7 @@ class audio_source : public QObject {
     virtual void clear() = 0;
     virtual double progress() const { return -1; };
     virtual source_type type() const = 0;
+    virtual void stop() = 0;
     ~audio_source() override = default;
 
    signals:

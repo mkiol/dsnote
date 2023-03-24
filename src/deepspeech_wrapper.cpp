@@ -71,8 +71,6 @@ void deepspeech_wrapper::free_ds_stream() {
 
 void deepspeech_wrapper::reset_impl() { m_speech_buf.clear(); }
 
-void deepspeech_wrapper::stop_processing_impl() {}
-
 engine_wrapper::samples_process_result_t deepspeech_wrapper::process_buff() {
     if (!lock_buff_for_processing())
         return samples_process_result_t::wait_for_samples;
@@ -82,14 +80,8 @@ engine_wrapper::samples_process_result_t deepspeech_wrapper::process_buff() {
 
     LOGD("process samples buf: mode="
          << m_speech_mode << ", in-buf size=" << m_in_buf.size
-         << ", speech-buf size=" << m_speech_buf.size() << ", speech-stop="
-         << m_speech_stop << ", sof=" << sof << ", eof=" << eof);
-
-    if (m_speech_stop) {
-        reset();
-        free_buf();
-        return samples_process_result_t::no_samples_needed;
-    }
+         << ", speech-buf size=" << m_speech_buf.size() << ", sof=" << sof
+         << ", eof=" << eof);
 
     if (sof) {
         m_speech_buf.clear();
@@ -103,6 +95,8 @@ engine_wrapper::samples_process_result_t deepspeech_wrapper::process_buff() {
     m_in_buf.clear();
 
     bool vad_status = !vad_buf.empty();
+
+    m_in_buf.clear();
 
     if (vad_status) {
         LOGD("vad: speech detected");
@@ -134,7 +128,14 @@ engine_wrapper::samples_process_result_t deepspeech_wrapper::process_buff() {
             LOGD("speech buf reached max size");
             return true;
         }
+
         if (m_speech_buf.empty()) return false;
+
+        if (m_speech_mode == speech_mode_t::manual &&
+            m_speech_detection_status == speech_detection_status_t::no_speech &&
+            !eof)
+            return false;
+
         return true;
     }();
 
@@ -170,9 +171,14 @@ engine_wrapper::samples_process_result_t deepspeech_wrapper::process_buff() {
 
     m_speech_buf.clear();
 
-    set_speech_detection_status(old_status);
+    if (m_speech_mode == speech_mode_t::manual && !m_speech_started)
+        set_speech_detection_status(speech_detection_status_t::no_speech);
+    else
+        set_speech_detection_status(old_status);
 
-    flush(eof ? flush_t::eof : flush_t::regular);
+    if (eof) flush(flush_t::eof);
+
+    free_buf();
 
     return samples_process_result_t::wait_for_samples;
 }

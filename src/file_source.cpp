@@ -36,6 +36,11 @@ void file_source::init_audio() {
             &file_source::handle_state_changed);
 }
 
+void file_source::stop() {
+    qDebug() << "file source stop";
+    m_decoder.stop();
+}
+
 void file_source::start() {
     m_decoder.start();
 
@@ -65,6 +70,7 @@ void file_source::handle_read_timeout() {
 
     if (m_decoder.bufferAvailable() || !m_buf.empty() || (m_eof && !m_ended)) {
         emit audio_available();
+
         if (m_eof && m_buf.empty()) {
             emit ended();
             m_ended = true;

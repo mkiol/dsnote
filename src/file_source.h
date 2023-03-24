@@ -25,6 +25,7 @@ class file_source : public audio_source {
     audio_data read_audio(char *buf, size_t max_size) override;
     double progress() const override;
     void clear() override;
+    void stop() override;
     inline source_type type() const override { return source_type::file; }
     inline QString audio_file() const { return m_file; }
 

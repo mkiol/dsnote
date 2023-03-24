@@ -38,7 +38,6 @@ class deepspeech_wrapper : public engine_wrapper {
     samples_process_result_t process_buff() override;
     void decode_speech(const ds_buf_t& buf);
     void reset_impl() override;
-    void stop_processing_impl() override;
     bool sentence_timer_timed_out();
 };
 

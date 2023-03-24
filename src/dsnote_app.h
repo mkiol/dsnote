@@ -68,7 +68,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void set_active_lang_idx(int idx);
     Q_INVOKABLE void transcribe_file(const QString &source_file);
     Q_INVOKABLE void transcribe_file(const QUrl &source_file);
-    Q_INVOKABLE void cancel_transcribe();
+    Q_INVOKABLE void cancel();
     Q_INVOKABLE void listen();
     Q_INVOKABLE void stop_listen();
 

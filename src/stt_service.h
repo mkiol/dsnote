@@ -63,7 +63,7 @@ class stt_service : public QObject {
                                  const QString &lang);
     Q_INVOKABLE int stop_listen(int task);
     Q_INVOKABLE int transcribe_file(const QString &file, const QString &lang);
-    Q_INVOKABLE int cancel_file(int task);
+    Q_INVOKABLE int cancel(int task);
 
    signals:
     void models_changed();
@@ -81,6 +81,7 @@ class stt_service : public QObject {
     void current_task_changed();
     void sentence_timeout(int task_id);
     void engine_eof(int task_id);
+    void engine_shutdown();
 
     // DBus
     void ErrorOccured(int code);
@@ -138,7 +139,6 @@ class stt_service : public QObject {
     double m_progress = -1;
     state_t m_state = state_t::unknown;
     SttAdaptor m_stt_adaptor;
-    QTimer m_engine_reset_timer;
     QTimer m_keepalive_timer;
     QTimer m_keepalive_current_task_timer;
     int m_last_intermediate_text_task = INVALID_TASK;
@@ -178,7 +178,7 @@ class stt_service : public QObject {
     static QString state_str(state_t state_value);
     inline auto dbus_state() const { return static_cast<int>(state()); };
     void reset_engine_gracefully();
-    void reset_engine();
+    void reset_engine(bool soft);
     QString default_model() const;
     QString default_lang() const;
     QString test_default_model(const QString &lang) const;
@@ -196,7 +196,7 @@ class stt_service : public QObject {
     // DBus
     Q_INVOKABLE int StartListen(int mode, const QString &lang);
     Q_INVOKABLE int StopListen(int task);
-    Q_INVOKABLE int CancelTranscribeFile(int task);
+    Q_INVOKABLE int Cancel(int task);
     Q_INVOKABLE int TranscribeFile(const QString &file, const QString &lang);
     Q_INVOKABLE double GetFileTranscribeProgress(int task);
     Q_INVOKABLE int KeepAliveService();

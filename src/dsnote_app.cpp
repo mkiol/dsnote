@@ -294,11 +294,16 @@ void dsnote_app::set_active_lang_idx(int idx) {
     }
 }
 
-void dsnote_app::cancel_transcribe() {
+void dsnote_app::cancel() {
+    qDebug() << "[app => dbus] call Cancel";
     if (transcribe_task) {
-        qDebug() << "[app => dbus] call CancelTranscribeFile";
-        stt.CancelTranscribeFile(transcribe_task.current);
+        stt.Cancel(transcribe_task.current);
         transcribe_task.reset();
+    } else if (listen_task) {
+        stt.Cancel(listen_task.current);
+        listen_task.reset();
+    } else {
+        stt.Cancel(listen_task.previous);
     }
 }
 

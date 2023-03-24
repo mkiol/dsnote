@@ -72,11 +72,11 @@ public:
     { return qvariant_cast< QVariantMap >(property("Translations")); }
 
 public Q_SLOTS: // METHODS
-    inline QDBusPendingReply<int> CancelTranscribeFile(int task)
+    inline QDBusPendingReply<int> Cancel(int task)
     {
         QList<QVariant> argumentList;
         argumentList << QVariant::fromValue(task);
-        return asyncCallWithArgumentList(QStringLiteral("CancelTranscribeFile"), argumentList);
+        return asyncCallWithArgumentList(QStringLiteral("Cancel"), argumentList);
     }
 
     inline QDBusPendingReply<double> GetFileTranscribeProgress(int task)

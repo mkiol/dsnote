@@ -16,11 +16,18 @@ mic_source::mic_source(QObject* parent) : audio_source{parent} {
 }
 
 mic_source::~mic_source() {
-    timer.stop();
-    audio_input->stop();
+    qDebug() << "mic source dtor";
+    m_audio_input->suspend();
+    m_stopped = true;
 }
 
-bool mic_source::ok() const { return audio_input ? true : false; }
+bool mic_source::ok() const { return static_cast<bool>(m_audio_input); }
+
+void mic_source::stop() {
+    qDebug() << "mic source stop";
+    m_audio_input->suspend();
+    m_stopped = true;
+}
 
 void mic_source::init_audio() {
     QAudioFormat format;
@@ -36,58 +43,88 @@ void mic_source::init_audio() {
         throw std::runtime_error("mic audio format is not supported");
     }
 
-    audio_input = std::make_unique<QAudioInput>(format);
+    m_audio_input = std::make_unique<QAudioInput>(format);
 
-    connect(audio_input.get(), &QAudioInput::stateChanged, this,
+    connect(m_audio_input.get(), &QAudioInput::stateChanged, this,
             &mic_source::handle_state_changed);
 }
 
 void mic_source::start() {
-    audio_device = audio_input->start();
+    m_audio_device = m_audio_input->start();
 
-    timer.setInterval(200);  // 200 ms
-    connect(&timer, &QTimer::timeout, this, &mic_source::handle_read_timeout);
-    timer.start();
+    m_timer.setInterval(200);  // 200 ms
+    connect(&m_timer, &QTimer::timeout, this, &mic_source::handle_read_timeout);
+    m_timer.start();
 }
 
 void mic_source::handle_state_changed(QAudio::State new_state) {
     qDebug() << "audio state:" << new_state;
+
+    if (new_state == QAudio::State::StoppedState ||
+        new_state == QAudio::State::SuspendedState || m_stopped) {
+        qDebug() << "audio ended";
+        if (m_audio_input->error() == QAudio::NoError) m_eof = true;
+    }
 }
 
 void mic_source::handle_read_timeout() {
-    if ((audio_input->state() != QAudio::ActiveState &&
-         audio_input->state() != QAudio::IdleState) ||
-        audio_input->error() != QAudio::NoError) {
-        if (audio_input->error() != QAudio::NoError)
-            qWarning() << "audio input error:" << audio_input->error();
-        timer.stop();
+    if (m_audio_input->error() != QAudio::NoError) {
+        qWarning() << "audio input error:" << m_audio_input->error();
+        m_timer.stop();
         emit error();
         return;
     }
 
-    emit audio_available();
+    if (m_stopped && m_audio_input->state() != QAudio::State::SuspendedState)
+        stop();
+
+    bool bytes_available = !m_eof || m_audio_input->bytesReady() > 0;
+
+    /*qDebug() << "mic read timeout: b_avai=" << bytes_available
+             << "eof=" << m_eof << "ended=" << m_ended << "sof=" << m_sof
+             << "b_ready=" << m_audio_input->bytesReady();*/
+
+    if (bytes_available || (m_eof && !m_ended)) {
+        emit audio_available();
+
+        if (m_ended) m_timer.stop();
+
+        if (m_eof && !bytes_available) {
+            emit ended();
+            m_ended = true;
+        }
+    }
 }
 
 void mic_source::clear() {
     char buff[std::numeric_limits<short>::max()];
-    while (audio_device->read(buff, std::numeric_limits<short>::max()))
+    while (m_audio_device->read(buff, std::numeric_limits<short>::max()))
         continue;
 }
 
 audio_source::audio_data mic_source::read_audio(char* buf, size_t max_size) {
     audio_data data;
     data.data = buf;
+    data.sof = m_sof;
 
-    if (audio_input->state() != QAudio::ActiveState &&
-        audio_input->state() != QAudio::IdleState) {
-        qWarning() << "audio input is not active and cannot read audio";
+    bool bytes_available = !m_eof || m_audio_input->bytesReady() > 0;
+
+    /*qDebug() << "read_audio: b_avai=" << bytes_available << "eof=" << m_eof
+             << "ended=" << m_ended << "sof=" << m_sof
+             << "b_ready=" << m_audio_input->bytesReady();*/
+
+    if (!bytes_available) {
+        data.eof = m_eof;
+        if (m_ended) m_timer.stop();
         return data;
     }
 
-    data.size = audio_device->read(buf, max_size);
-    data.sof = m_sof;
+    data.size = m_audio_device->read(buf, max_size);
+    data.eof = m_eof && !bytes_available;
 
     m_sof = false;
+
+    if (m_ended) m_timer.stop();
 
     return data;
 }

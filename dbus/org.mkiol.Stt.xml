@@ -237,7 +237,8 @@
             @task: id of task returned in StartListen call
             @result: 0 - success, any other value - error
 
-            Stops speech decoding.
+            Stops speech listening. It doesn't break already started
+            speech decoding.
         -->
         <method name="StopListen">
             <arg name="task" type="i" direction="in" />
@@ -265,13 +266,13 @@
         </method>
 
         <!--
-            CancelTranscribeFile:
-            @task: id of task returned in TranscribeFile call
+            Cancel:
+            @task: id of task returned in StartListen aor TranscribeFile call
             @result: 0 - success, any other value - error
 
-            Cancels file transcription.
+            Cancels speech decoding and file transcription.
         -->
-        <method name="CancelTranscribeFile">
+        <method name="Cancel">
             <arg name="task" type="i" direction="in" />
             <arg name="result" type="i" direction="out" />
         </method>

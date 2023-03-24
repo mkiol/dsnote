@@ -94,11 +94,11 @@ QVariantMap SttAdaptor::translations() const
     return qvariant_cast< QVariantMap >(parent()->property("Translations"));
 }
 
-int SttAdaptor::CancelTranscribeFile(int task)
+int SttAdaptor::Cancel(int task)
 {
-    // handle method call org.mkiol.Stt.CancelTranscribeFile
+    // handle method call org.mkiol.Stt.Cancel
     int result;
-    QMetaObject::invokeMethod(parent(), "CancelTranscribeFile", Q_RETURN_ARG(int, result), Q_ARG(int, task));
+    QMetaObject::invokeMethod(parent(), "Cancel", Q_RETURN_ARG(int, result), Q_ARG(int, task));
     return result;
 }
 

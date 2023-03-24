@@ -91,12 +91,12 @@ stt_service::stt_service(QObject *parent)
         emit SpeechPropertyChanged(speech());
     });
     connect(this, &stt_service::models_changed, this, [this]() {
-        const auto models_list = available_models();
+        auto models_list = available_models();
         qDebug() << "[service => dbus] signal ModelsPropertyChanged:"
                  << models_list;
         emit ModelsPropertyChanged(models_list);
 
-        const auto langs_list = available_langs();
+        auto langs_list = available_langs();
         qDebug() << "[service => dbus] signal LangsPropertyChanged:"
                  << langs_list;
         emit LangsPropertyChanged(langs_list);
@@ -109,22 +109,18 @@ stt_service::stt_service(QObject *parent)
             });
     connect(
         settings::instance(), &settings::default_model_changed, this, [this]() {
-            const auto model = default_model();
+            auto model = default_model();
             qDebug() << "[service => dbus] signal DefaultModelPropertyChanged:"
                      << model;
             emit DefaultModelPropertyChanged(model);
 
-            const auto lang = default_lang();
+            auto lang = default_lang();
             qDebug() << "[service => dbus] signal DefaultLangPropertyChanged:"
                      << lang;
             emit DefaultLangPropertyChanged(lang);
         });
-
-    m_engine_reset_timer.setSingleShot(true);
-    m_engine_reset_timer.setTimerType(Qt::VeryCoarseTimer);
-    m_engine_reset_timer.setInterval(DS_RESTART_TIME);
-    connect(&m_engine_reset_timer, &QTimer::timeout, this,
-            &stt_service::reset_engine);
+    connect(this, &stt_service::engine_shutdown, this,
+            [this] { reset_engine(false); });
 
     m_keepalive_timer.setSingleShot(true);
     m_keepalive_timer.setTimerType(Qt::VeryCoarseTimer);
@@ -240,8 +236,6 @@ QString stt_service::lang_from_model_id(const QString &model_id) {
 QString stt_service::restart_engine(speech_mode_t speech_mode,
                                     const QString &model_id) {
     if (auto model_files = choose_model_files(model_id)) {
-        m_engine_reset_timer.stop();
-
         engine_wrapper::config_t config;
 
         config.model_file = {model_files->model_file.toStdString(),
@@ -341,8 +335,9 @@ void stt_service::handle_sentence_timeout() {
 }
 
 void stt_service::handle_engine_eof(int task_id) {
+    qDebug() << "engine eof";
     emit file_transcribe_finished(task_id);
-    cancel_file(task_id);
+    cancel(task_id);
 }
 
 void stt_service::handle_engine_eof() {
@@ -456,38 +451,6 @@ double stt_service::transcribe_file_progress(int task) const {
     return -1.0;
 }
 
-int stt_service::cancel_file(int task) {
-    if (state() == state_t::unknown || state() == state_t::not_configured ||
-        state() == state_t::busy) {
-        qWarning() << "cannot cancel_file, invalid state";
-        return FAILURE;
-    }
-
-    if (audio_source_type() == source_t::file) {
-        if (m_current_task && m_current_task->id == task) {
-            if (m_pending_task) {
-                m_previous_task = m_current_task;
-                restart_engine(m_pending_task->speech_mode,
-                               m_pending_task->model_id);
-                restart_audio_source();
-                m_current_task = m_pending_task;
-                m_pending_task.reset();
-                m_keepalive_current_task_timer.start();
-                emit current_task_changed();
-            } else {
-                reset_engine();
-                m_keepalive_current_task_timer.stop();
-            }
-        } else {
-            qWarning() << "invalid task id";
-            return FAILURE;
-        }
-    }
-
-    refresh_status();
-    return SUCCESS;
-}
-
 int stt_service::next_task_id() {
     m_last_task_id = (m_last_task_id + 1) % std::numeric_limits<int>::max();
     return m_last_task_id;
@@ -549,6 +512,48 @@ int stt_service::start_listen(speech_mode_t mode, const QString &lang) {
     return m_current_task->id;
 }
 
+int stt_service::cancel(int task) {
+    if (state() == state_t::unknown || state() == state_t::not_configured ||
+        state() == state_t::busy) {
+        qWarning() << "cannot cancel, invalid state";
+        return FAILURE;
+    }
+
+    qDebug() << "cancel";
+
+    if (audio_source_type() == source_t::file) {
+        if (m_current_task && m_current_task->id == task) {
+            if (m_pending_task) {
+                m_previous_task = m_current_task;
+                restart_engine(m_pending_task->speech_mode,
+                               m_pending_task->model_id);
+                restart_audio_source();
+                m_current_task = m_pending_task;
+                m_keepalive_current_task_timer.start();
+                m_pending_task.reset();
+                emit current_task_changed();
+            } else {
+                reset_engine(false);
+                m_keepalive_current_task_timer.stop();
+            }
+        } else {
+            qWarning() << "invalid task id";
+            return FAILURE;
+        }
+    } else if (audio_source_type() == source_t::mic) {
+        if (m_current_task && m_current_task->id == task) {
+            m_keepalive_current_task_timer.stop();
+            reset_engine(false);
+        } else {
+            qWarning() << "invalid task id";
+            return FAILURE;
+        }
+    }
+
+    refresh_status();
+    return SUCCESS;
+}
+
 int stt_service::stop_listen(int task) {
     if (state() == state_t::unknown || state() == state_t::not_configured ||
         state() == state_t::busy) {
@@ -566,9 +571,12 @@ int stt_service::stop_listen(int task) {
             m_keepalive_current_task_timer.stop();
             if (m_current_task->speech_mode == speech_mode_t::single_sentence ||
                 m_current_task->speech_mode == speech_mode_t::automatic) {
-                reset_engine();
-            } else
+                reset_engine(true);
+            } else if (m_engine) {
                 reset_engine_gracefully();
+            } else {
+                reset_engine(true);
+            }
         } else {
             qWarning() << "invalid task id";
             return FAILURE;
@@ -579,38 +587,44 @@ int stt_service::stop_listen(int task) {
 }
 
 void stt_service::reset_engine_gracefully() {
-    if (m_engine) {
-        m_engine->set_speech_started(false);
-        m_engine_reset_timer.start();
-        refresh_status();
+    qDebug() << "reset engine gracefully";
+
+    if (m_source) {
+        if (m_engine) m_engine->set_speech_started(false);
+        m_source->stop();
+    } else {
+        reset_engine(false);
     }
 }
 
-void stt_service::reset_engine() {
-    if (m_engine) m_engine->set_speech_started(false);
+void stt_service::reset_engine(bool soft) {
+    qDebug() << "reset engine: soft=" << soft;
+
     m_engine.reset();
     restart_audio_source();
     m_pending_task.reset();
+
     if (m_current_task) {
         m_current_task.reset();
         m_keepalive_current_task_timer.stop();
         emit current_task_changed();
     }
+
     refresh_status();
 }
 
 void stt_service::stop() {
     qDebug() << "stop";
-    reset_engine();
+    reset_engine(false);
 }
 
 void stt_service::handle_audio_error() {
     if (audio_source_type() == source_t::file && m_current_task) {
-        qWarning() << "cannot start file audio source";
+        qWarning() << "file audio source error";
         emit error(error_t::file_source);
-        cancel_file(m_current_task->id);
+        cancel(m_current_task->id);
     } else {
-        qWarning() << "cannot start mic audio source";
+        qWarning() << "audio source error";
         emit error(error_t::mic_source);
         stop();
     }
@@ -620,7 +634,7 @@ void stt_service::handle_audio_ended() {
     if (audio_source_type() == source_t::file && m_current_task) {
         qDebug() << "file audio source ended successfuly";
     } else {
-        qDebug() << "audio ended";
+        qDebug() << "audio source ended successfuly";
     }
 }
 
@@ -656,10 +670,9 @@ void stt_service::handle_task_timeout() {
         qWarning() << "task timeout:" << m_current_task->id;
         if (m_current_task->speech_mode == speech_mode_t::single_sentence)
             m_keepalive_current_task_timer.stop();
-        if (audio_source_type() == source_t::file) {
-            cancel_file(m_current_task->id);
-        } else if (audio_source_type() == source_t::mic) {
-            stop_listen(m_current_task->id);
+        if (audio_source_type() == source_t::file ||
+            audio_source_type() == source_t::mic) {
+            cancel(m_current_task->id);
         } else {
             m_current_task.reset();
             emit current_task_changed();
@@ -812,11 +825,11 @@ int stt_service::StopListen(int task) {
     return stop_listen(task);
 }
 
-int stt_service::CancelTranscribeFile(int task) {
-    qDebug() << "[dbus => service] called CancelTranscribeFile:" << task;
+int stt_service::Cancel(int task) {
+    qDebug() << "[dbus => service] called Cancel:" << task;
     m_keepalive_timer.start();
 
-    return cancel_file(task);
+    return cancel(task);
 }
 
 int stt_service::TranscribeFile(const QString &file, const QString &lang) {

@@ -25,12 +25,16 @@ class mic_source : public audio_source {
     audio_data read_audio(char* buf, size_t max_size) override;
     void clear() override;
     inline source_type type() const override { return source_type::mic; }
+    void stop() override;
 
    private:
-    std::unique_ptr<QAudioInput> audio_input;
-    QTimer timer;
-    QIODevice* audio_device;
-    int m_sof = true;
+    std::unique_ptr<QAudioInput> m_audio_input;
+    QTimer m_timer;
+    QIODevice* m_audio_device = nullptr;
+    bool m_eof = false;
+    bool m_sof = true;
+    bool m_ended = false;
+    bool m_stopped = false;
 
     void init_audio();
     void start();

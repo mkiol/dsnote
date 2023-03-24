@@ -142,12 +142,19 @@ engine_wrapper::engine_wrapper(config_t config, callbacks_t call_backs)
 
 engine_wrapper::~engine_wrapper() { LOGD("engine dtor"); }
 
+void engine_wrapper::stop_processing_impl() {}
+
 void engine_wrapper::stop_processing() {
     m_thread_exit_requested = true;
 
     LOGD("exit requested");
 
     stop_processing_impl();
+
+    if (!m_processing_thread.joinable()) {
+        LOGD("processing thread already stopped");
+        return;
+    }
 
     m_processing_cv.notify_all();
     m_processing_thread.join();
@@ -162,6 +169,8 @@ void engine_wrapper::start_processing() {
 
     try {
         while (true) {
+            LOGD("processing iter");
+
             std::unique_lock lock{m_processing_mtx};
 
             if (m_thread_exit_requested) break;
@@ -216,15 +225,15 @@ std::pair<char*, size_t> engine_wrapper::borrow_buf() {
     return c_buf;
 }
 
-void engine_wrapper::return_buf(const char* c_buf, size_t size, bool begin,
-                                 bool eof) {
+void engine_wrapper::return_buf(const char* c_buf, size_t size, bool sof,
+                                bool eof) {
     if (m_in_buf.lock != lock_type_t::borrowed) return;
 
     m_in_buf.size =
         (c_buf - reinterpret_cast<char*>(m_in_buf.buf.data()) + size) /
         sizeof(in_buf_t::buf_t::value_type);
     m_in_buf.eof = eof;
-    m_in_buf.sof = begin;
+    if (sof) m_in_buf.sof = sof;
 
     free_buf();
     m_processing_cv.notify_one();
@@ -235,6 +244,9 @@ bool engine_wrapper::lock_buff_for_processing() {
         LOGW("failed to lock for processing, buf is not free");
         return false;
     }
+
+    LOGT("lock buff for processing: eof=" << m_in_buf.eof << ", buf size"
+                                          << m_in_buf.size);
 
     if (!m_in_buf.eof && m_in_buf.size < m_in_buf_max_size) {
         free_buf();
@@ -262,7 +274,7 @@ std::string engine_wrapper::merge_texts(const std::string& old_text,
                                         std::string&& new_text) {
     if (new_text.empty()) return old_text;
 
-    if (old_text.empty()) return new_text;
+    if (old_text.empty()) return std::move(new_text);
 
     size_t i = 1, idx = 0;
     auto l = std::min(old_text.size(), new_text.size());
@@ -303,7 +315,6 @@ void engine_wrapper::flush(flush_t type) {
     } else if (type != flush_t::restart &&
                m_speech_mode == speech_mode_t::manual) {
         set_speech_started(false);
-        m_speech_stop = true;
     }
 
     if (m_intermediate_text && !m_intermediate_text->empty()) {
@@ -314,7 +325,6 @@ void engine_wrapper::flush(flush_t type) {
 
             if (m_speech_mode == speech_mode_t::single_sentence) {
                 set_speech_started(false);
-                m_speech_stop = true;
             }
         }
         set_intermediate_text("");
@@ -322,21 +332,21 @@ void engine_wrapper::flush(flush_t type) {
 
     m_intermediate_text.reset();
 
-    if (type == flush_t::eof) m_call_backs.eof();
+    if (type == flush_t::eof) {
+        m_call_backs.eof();
+    }
 }
 
 void engine_wrapper::set_speech_mode(speech_mode_t mode) {
     if (m_speech_mode != mode) {
         LOGD("speech mode: " << m_speech_mode << " => " << mode);
 
-        m_speech_stop = false;
         m_speech_mode = mode;
         set_speech_started(false);
     }
 }
 
 void engine_wrapper::set_speech_started(bool value) {
-    if (value) m_speech_stop = false;
     if (m_speech_started != value) {
         LOGD("speech started: " << m_speech_started << " => " << value);
 

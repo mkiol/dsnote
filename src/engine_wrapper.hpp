@@ -70,8 +70,7 @@ class engine_wrapper {
     engine_wrapper(config_t config, callbacks_t call_backs);
     virtual ~engine_wrapper();
     std::pair<char*, size_t> borrow_buf();
-    void return_buf(const char* c_buf, size_t size, bool begin,
-                    bool eof = false);
+    void return_buf(const char* c_buf, size_t size, bool sof, bool eof);
     inline void restart() { m_restart_requested = true; }
     inline auto speech_detection_status() const {
         return m_speech_detection_status;
@@ -110,7 +109,7 @@ class engine_wrapper {
         [[nodiscard]] inline bool full() const { return size == buf.size(); }
         inline void clear() {
             size = 0;
-            sof = true;
+            sof = false;
             eof = false;
         }
     };
@@ -128,10 +127,10 @@ class engine_wrapper {
     speech_detection_status_t m_speech_detection_status =
         speech_detection_status_t::no_speech;
     bool m_speech_started = false;
-    bool m_speech_stop = false;
     speech_mode_t m_speech_mode;
     bool m_restart_requested = false;
     std::optional<std::chrono::steady_clock::time_point> m_start_time;
+
     void flush(flush_t type);
     void start_processing();
     void stop_processing();
@@ -146,7 +145,7 @@ class engine_wrapper {
                                    std::string&& new_text);
     void reset();
     virtual void reset_impl() = 0;
-    virtual void stop_processing_impl() = 0;
+    virtual void stop_processing_impl();
     static void ltrim(std::string& s);
     static void rtrim(std::string& s);
 };

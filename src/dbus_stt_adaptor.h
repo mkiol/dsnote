@@ -104,7 +104,7 @@ class SttAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"in\" type=\"s\" name=\"lang\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </method>\n"
-"    <method name=\"CancelTranscribeFile\">\n"
+"    <method name=\"Cancel\">\n"
 "      <arg direction=\"in\" type=\"i\" name=\"task\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
 "    </method>\n"
@@ -155,7 +155,7 @@ public: // PROPERTIES
     QVariantMap translations() const;
 
 public Q_SLOTS: // METHODS
-    int CancelTranscribeFile(int task);
+    int Cancel(int task);
     double GetFileTranscribeProgress(int task);
     int KeepAliveService();
     int KeepAliveTask(int task);
