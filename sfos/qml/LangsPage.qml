@@ -50,6 +50,7 @@ Page {
                 available: model.available
                 downloading: model.downloading
                 progress: model.progress
+                experimental: model.experimental
             }
         }
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,10 +9,11 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 SimpleListItem {
-    id: listItem
+    id: root
 
     property string name
     property string modelId
+    property bool experimental: false
     property bool available: true
     property bool downloading: false
     property double progress: 0.0
@@ -24,17 +25,17 @@ SimpleListItem {
         return progress > 0.0 ? Math.round(progress * 100) + "%" : ""
     }
 
-    title.text: name
+    title.text: (experimental ? "🧪 " : "") + name
 
     Component {
         id: menuComp
         ContextMenu {
             MenuItem {
-                text: listItem.downloading ? qsTr("Cancel") : listItem.available ? qsTr("Delete") : qsTr("Download")
+                text: root.downloading ? qsTr("Cancel") : root.available ? qsTr("Delete") : qsTr("Download")
                 onClicked: {
-                    if (listItem.downloading) service.cancel_model_download(listItem.modelId)
-                    else if (listItem.available) service.delete_model(listItem.modelId)
-                    else service.download_model(listItem.modelId)
+                    if (root.downloading) service.cancel_model_download(root.modelId)
+                    else if (root.available) service.delete_model(root.modelId)
+                    else service.download_model(root.modelId)
                 }
             }
         }
@@ -44,7 +45,7 @@ SimpleListItem {
     Connections {
         target: service
         onModel_download_progress_changed: {
-            if (listItem.modelId === id) {
+            if (root.modelId === id) {
                 progressLabel.text = formatProgress(progress)
             }
         }
@@ -52,15 +53,15 @@ SimpleListItem {
     Component.onCompleted: {
         if (downloading) {
             progressLabel.text = formatProgress(
-                        service.model_download_progress(listItem.modelId))
+                        service.model_download_progress(root.modelId))
         }
     }
 
     menu: menuComp
 
     Image {
-        visible: listItem.available
-        source: "image://theme/icon-m-certificates?" + listItem.itemColor
+        visible: root.available
+        source: "image://theme/icon-m-certificates?" + root.itemColor
         anchors.right: parent.right
         anchors.rightMargin: Theme.horizontalPageMargin
         anchors.verticalCenter: parent.verticalCenter
@@ -69,7 +70,7 @@ SimpleListItem {
     }
 
     BusyIndicator {
-        visible: listItem.downloading
+        visible: root.downloading
         anchors.right: parent.right
         anchors.rightMargin: Theme.horizontalPageMargin
         anchors.verticalCenter: parent.verticalCenter
