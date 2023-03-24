@@ -47,7 +47,7 @@ QString settings::models_dir() const {
     if (dir.isEmpty()) {
         dir = QDir{QStandardPaths::writableLocation(
                        QStandardPaths::DownloadLocation)}
-                  .filePath(QStringLiteral("STT-models"));
+                  .filePath(QStringLiteral("speech-models"));
         QDir{}.mkpath(dir);
     }
 
@@ -87,7 +87,6 @@ void settings::set_default_model(const QString& value) {
 }
 
 QStringList settings::enabled_models() {
-    sync();  // needed to update changes app -> service
     return value(QStringLiteral("service/enabled_models"), {}).toStringList();
 }
 

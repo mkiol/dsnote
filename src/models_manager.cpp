@@ -1122,6 +1122,8 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
 }
 
 void models_manager::reload() {
+    settings::instance()->sync();  // needed to update changes app -> service
+
     if (!parse_models_file_might_reset()) m_pending_reload = true;
 }
 
