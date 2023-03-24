@@ -59,7 +59,7 @@ set(info_dbus_service "org.mkiol.Stt")
 set(info_dbus_interface "org.mkiol.Stt")
 set(info_conf_version "9")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry")
-set(info_libs_str "Qt · Coqui STT · {fmt}")
+set(info_libs_str "Qt · Coqui STT · whisper.cpp · WebRTC VAD · libarchive · {fmt}")
 
 set(libstt_x86_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.Linux.tar.xz")
 set(libstt_arm64_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.aarch64.tar.xz")
