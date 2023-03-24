@@ -40,6 +40,7 @@ class vad_wrapper {
     buf_t m_input_samples;
     buf_t m_output_samples;
     size_t m_dup_size = 0;
+    bool m_end_adjacent = false;
 
     std::vector<bool> vad_process(const buf_t& samples) const;
     static void shift_left(std::vector<int16_t>& vec, size_t distance);
