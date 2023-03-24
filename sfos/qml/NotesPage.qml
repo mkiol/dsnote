@@ -52,10 +52,9 @@ Page {
                     text: app.state === DsnoteApp.SttTranscribingFile ||
                           app.speech === DsnoteApp.SttSpeechDecoding ? qsTr("Cancel") : qsTr("Transcribe audio file")
                     onClicked: {
-                        if (app.state === DsnoteApp.SttTranscribingFile)
-                            app.cancel_transcribe()
-                        else if (app.speech == DsnoteApp.SttSpeechDecoding)
-                            app.stop_listen()
+                        if (app.state === DsnoteApp.SttTranscribingFile ||
+                                app.speech == DsnoteApp.SttSpeechDecoding)
+                            app.cancel()
                         else
                             pageStack.push(fileDialog)
                     }
@@ -110,7 +109,7 @@ Page {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        clickable: (app.speech == DsnoteApp.SttSpeechDecoding ||
+        clickable: (app.speech === DsnoteApp.SttSpeechDecoding ||
                    app.state !== DsnoteApp.SttListeningAuto) &&
                    !app.busy && !service.busy && app.connected
         status: {
@@ -144,8 +143,7 @@ Page {
         progress: app.transcribe_progress
         onPressed: {
             if (app.speech === DsnoteApp.SttSpeechDecoding || app.state === DsnoteApp.SttTranscribingFile) {
-                if (app.state === DsnoteApp.SttTranscribingFile) app.cancel_transcribe()
-                else app.stop_listen()
+                app.cancel()
                 return
             }
 

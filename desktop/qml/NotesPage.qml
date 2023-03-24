@@ -103,11 +103,20 @@ Page {
             }
 
             ToolButton {
-                visible: _settings.speech_mode === Settings.SpeechSingleSentence &&
-                         (app.state === DsnoteApp.SttListeningSingleSentence || app.state === DsnoteApp.SttIdle)
-                text: app.state === DsnoteApp.SttListeningSingleSentence ? qsTr("Cancel") : qsTr("Click to start listening")
+                visible: app.speech === DsnoteApp.SttSpeechDecoding ||
+                         app.state === DsnoteApp.SttTranscribingFile ? true :
+                       _settings.speech_mode === Settings.SpeechSingleSentence &&
+                                                (app.state === DsnoteApp.SttListeningSingleSentence ||
+                                                 app.state === DsnoteApp.SttIdle)
+
+                text: app.speech === DsnoteApp.SttSpeechDecoding ||
+                      app.state === DsnoteApp.SttTranscribingFile ||
+                      app.state === DsnoteApp.SttListeningSingleSentence ?
+                          qsTr("Cancel") : qsTr("Click to start listening")
                 onClicked: {
-                    if (app.state === DsnoteApp.SttListeningSingleSentence) app.stop_listen()
+                    if (app.speech === DsnoteApp.SttSpeechDecoding ||
+                        app.state === DsnoteApp.SttTranscribingFile ||
+                        app.state === DsnoteApp.SttListeningSingleSentence) app.cancel()
                     else app.listen()
                 }
             }
@@ -125,12 +134,10 @@ Page {
                           app.state === DsnoteApp.SttTranscribingFile ||
                           app.state === DsnoteApp.SttIdle)
                 text: app.state === DsnoteApp.SttTranscribingFile ?
-                          qsTr("Cancel file transcription") + (app.transcribe_progress > 0.0 ? " (" + Math.round(app.transcribe_progress * 100) + "%)" : "") :
+                          qsTr("Transcribing audio file...") + (app.transcribe_progress > 0.0 ? " (" + Math.round(app.transcribe_progress * 100) + "%)" : "") :
                           qsTr("Transcribe audio file")
                 onClicked: {
-                    if (app.state === DsnoteApp.SttTranscribingFile)
-                        app.cancel_transcribe()
-                    else
+                    if (app.state !== DsnoteApp.SttTranscribingFile)
                         fileDialog.open()
                 }
             }

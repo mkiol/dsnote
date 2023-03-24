@@ -49,28 +49,36 @@ CoverBackground {
         }
         off: !app.configured
         Behavior on y { NumberAnimation { duration: 300; easing {type: Easing.OutBack} } }
-        visible: opacity > 0.0
-        opacity: app.state === DsnoteApp.SttTranscribingFile ? 0.0 : 1.0
-        Behavior on opacity { NumberAnimation { duration: 150 } }
     }
 
     BusyIndicatorWithProgress {
         id: busyIndicator
         size: BusyIndicatorSize.Large
         anchors.centerIn: indicator
-        running: app.state === DsnoteApp.SttTranscribingFile
+        running: app.state === DsnoteApp.SttTranscribingFile &&
+                 app.speech !== DsnoteApp.SttSpeechDecoding
         progress: app.transcribe_progress
     }
 
     CoverActionList {
         id: actions
         iconBackground: true
-        enabled: _settings.speech_mode === Settings.SpeechSingleSentence &&
-                 (app.state === DsnoteApp.SttListeningSingleSentence || app.state === DsnoteApp.SttIdle)
+        enabled: app.speech === DsnoteApp.SttSpeechDecoding ||
+                 app.state === DsnoteApp.SttTranscribingFile ||
+                 (_settings.speech_mode === Settings.SpeechSingleSentence &&
+                 (app.state === DsnoteApp.SttListeningSingleSentence || app.state === DsnoteApp.SttIdle))
 
         CoverAction {
-            iconSource: app.state === DsnoteApp.SttListeningSingleSentence ? "image://theme/icon-cover-cancel" : "image://theme/icon-cover-unmute"
+            iconSource: app.speech === DsnoteApp.SttSpeechDecoding ||
+                        app.state === DsnoteApp.SttListeningSingleSentence ||
+                        app.state === DsnoteApp.SttTranscribingFile ?
+                            "image://theme/icon-cover-cancel" : "image://theme/icon-cover-unmute"
             onTriggered: {
+                if (app.speech === DsnoteApp.SttSpeechDecoding || app.state === DsnoteApp.SttTranscribingFile) {
+                    app.cancel()
+                    return
+                }
+
                 if (app.state === DsnoteApp.SttListeningSingleSentence) app.stop_listen()
                 else app.listen()
             }
