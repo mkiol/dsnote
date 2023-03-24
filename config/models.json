@@ -830,7 +830,7 @@
             "lang_id": "es",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -843,7 +843,7 @@
             "lang_id": "es",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -856,7 +856,7 @@
             "lang_id": "es",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -869,7 +869,7 @@
             "lang_id": "es",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -882,7 +882,7 @@
             "lang_id": "it",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -895,7 +895,7 @@
             "lang_id": "it",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -908,7 +908,7 @@
             "lang_id": "it",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -921,7 +921,7 @@
             "lang_id": "it",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -934,7 +934,7 @@
             "lang_id": "pt",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -947,7 +947,7 @@
             "lang_id": "pt",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -960,7 +960,7 @@
             "lang_id": "pt",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -973,7 +973,7 @@
             "lang_id": "pt",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -986,7 +986,7 @@
             "lang_id": "de",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -999,7 +999,7 @@
             "lang_id": "de",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1012,7 +1012,7 @@
             "lang_id": "de",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1025,7 +1025,7 @@
             "lang_id": "de",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1038,7 +1038,7 @@
             "lang_id": "jp",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1051,7 +1051,7 @@
             "lang_id": "jp",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1064,7 +1064,7 @@
             "lang_id": "jp",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1077,7 +1077,7 @@
             "lang_id": "jp",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1090,7 +1090,7 @@
             "lang_id": "ru",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1103,7 +1103,7 @@
             "lang_id": "ru",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1116,7 +1116,7 @@
             "lang_id": "ru",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1129,7 +1129,7 @@
             "lang_id": "ru",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1142,7 +1142,7 @@
             "lang_id": "nl",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1155,7 +1155,7 @@
             "lang_id": "nl",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1168,7 +1168,7 @@
             "lang_id": "nl",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1181,7 +1181,7 @@
             "lang_id": "nl",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1194,7 +1194,7 @@
             "lang_id": "id",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1207,7 +1207,7 @@
             "lang_id": "id",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1220,7 +1220,7 @@
             "lang_id": "id",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1233,7 +1233,7 @@
             "lang_id": "id",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1246,7 +1246,7 @@
             "lang_id": "ca",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1259,7 +1259,7 @@
             "lang_id": "ca",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1272,7 +1272,7 @@
             "lang_id": "ca",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1285,7 +1285,7 @@
             "lang_id": "ca",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1298,7 +1298,7 @@
             "lang_id": "fr",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1311,7 +1311,7 @@
             "lang_id": "fr",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1324,7 +1324,7 @@
             "lang_id": "fr",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1337,7 +1337,7 @@
             "lang_id": "fr",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1350,7 +1350,7 @@
             "lang_id": "tr",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1363,7 +1363,7 @@
             "lang_id": "tr",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1376,7 +1376,7 @@
             "lang_id": "tr",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1389,7 +1389,7 @@
             "lang_id": "tr",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1402,7 +1402,7 @@
             "lang_id": "sv",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1415,7 +1415,7 @@
             "lang_id": "sv",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1428,7 +1428,7 @@
             "lang_id": "sv",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1441,7 +1441,7 @@
             "lang_id": "sv",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1454,7 +1454,7 @@
             "lang_id": "uk",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1467,7 +1467,7 @@
             "lang_id": "uk",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1480,7 +1480,7 @@
             "lang_id": "uk",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1493,7 +1493,7 @@
             "lang_id": "uk",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1506,7 +1506,7 @@
             "lang_id": "ms",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1519,7 +1519,7 @@
             "lang_id": "ms",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1532,7 +1532,7 @@
             "lang_id": "ms",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1545,7 +1545,7 @@
             "lang_id": "ms",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1558,7 +1558,7 @@
             "lang_id": "no",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1571,7 +1571,7 @@
             "lang_id": "no",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1584,7 +1584,7 @@
             "lang_id": "no",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1597,7 +1597,7 @@
             "lang_id": "no",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1610,7 +1610,7 @@
             "lang_id": "fi",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1623,7 +1623,7 @@
             "lang_id": "fi",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1636,7 +1636,7 @@
             "lang_id": "fi",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1649,7 +1649,7 @@
             "lang_id": "fi",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1662,7 +1662,7 @@
             "lang_id": "cs",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1675,7 +1675,7 @@
             "lang_id": "cs",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1688,7 +1688,7 @@
             "lang_id": "cs",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1701,7 +1701,7 @@
             "lang_id": "cs",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1714,7 +1714,7 @@
             "lang_id": "sk",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1727,7 +1727,7 @@
             "lang_id": "sk",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1740,7 +1740,7 @@
             "lang_id": "sk",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1753,7 +1753,7 @@
             "lang_id": "sk",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1766,7 +1766,7 @@
             "lang_id": "zh-CN",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1779,7 +1779,7 @@
             "lang_id": "zh-CN",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1792,7 +1792,7 @@
             "lang_id": "zh-CN",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1805,7 +1805,7 @@
             "lang_id": "zh-CN",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1818,7 +1818,7 @@
             "lang_id": "vi",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1831,7 +1831,7 @@
             "lang_id": "vi",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1844,7 +1844,7 @@
             "lang_id": "vi",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1857,7 +1857,7 @@
             "lang_id": "vi",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1870,7 +1870,7 @@
             "lang_id": "th",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1883,7 +1883,7 @@
             "lang_id": "th",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1896,7 +1896,7 @@
             "lang_id": "th",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1909,7 +1909,7 @@
             "lang_id": "th",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1922,7 +1922,7 @@
             "lang_id": "el",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1935,7 +1935,7 @@
             "lang_id": "el",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -1948,7 +1948,7 @@
             "lang_id": "el",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -1961,7 +1961,7 @@
             "lang_id": "el",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -1974,7 +1974,7 @@
             "lang_id": "hr",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -1987,7 +1987,7 @@
             "lang_id": "hr",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -2000,7 +2000,7 @@
             "lang_id": "hr",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -2013,7 +2013,7 @@
             "lang_id": "hr",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -2026,7 +2026,7 @@
             "lang_id": "bg",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -2039,7 +2039,7 @@
             "lang_id": "bg",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -2052,7 +2052,7 @@
             "lang_id": "bg",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -2065,7 +2065,7 @@
             "lang_id": "bg",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -2078,7 +2078,7 @@
             "lang_id": "ro",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -2091,7 +2091,7 @@
             "lang_id": "ro",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -2104,7 +2104,7 @@
             "lang_id": "ro",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -2117,7 +2117,7 @@
             "lang_id": "ro",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -2130,7 +2130,7 @@
             "lang_id": "sl",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -2143,7 +2143,7 @@
             "lang_id": "sl",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -2156,7 +2156,7 @@
             "lang_id": "sl",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -2169,7 +2169,7 @@
             "lang_id": "sl",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -2182,7 +2182,7 @@
             "lang_id": "bs",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -2195,7 +2195,7 @@
             "lang_id": "bs",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -2208,7 +2208,7 @@
             "lang_id": "bs",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -2221,7 +2221,7 @@
             "lang_id": "bs",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -2234,7 +2234,7 @@
             "lang_id": "mk",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -2247,7 +2247,7 @@
             "lang_id": "mk",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -2260,7 +2260,7 @@
             "lang_id": "mk",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -2273,7 +2273,7 @@
             "lang_id": "mk",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -2286,7 +2286,7 @@
             "lang_id": "sr",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -2299,7 +2299,7 @@
             "lang_id": "sr",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -2312,7 +2312,7 @@
             "lang_id": "sr",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -2325,7 +2325,7 @@
             "lang_id": "sr",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
@@ -2338,7 +2338,7 @@
             "lang_id": "pl",
             "checksum": "285b19e9",
             "checksum_quick": "ebde78",
-            "file_name": "multilang_whisper_tiny.h5",
+            "file_name": "multilang_whisper_tiny.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
@@ -2351,7 +2351,7 @@
             "lang_id": "pl",
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
-            "file_name": "multilang_whisper_base.h5",
+            "file_name": "multilang_whisper_base.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
@@ -2364,7 +2364,7 @@
             "lang_id": "pl",
             "checksum": "5fad3693",
             "checksum_quick": "f879b605",
-            "file_name": "multilang_whisper_small.h5",
+            "file_name": "multilang_whisper_small.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
@@ -2377,7 +2377,7 @@
             "lang_id": "pl",
             "checksum": "ddea3cce",
             "checksum_quick": "61f4c798",
-            "file_name": "multilang_whisper_medium.h5",
+            "file_name": "multilang_whisper_medium.ggml",
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],

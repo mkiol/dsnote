@@ -1206,7 +1206,7 @@ QString models_manager::file_name_from_id(const QString& id,
         case model_engine::ds:
             return id + ".tflite";
         case model_engine::whisper:
-            return id + ".h5";
+            return id + ".ggml";
     }
 
     throw std::runtime_error{"unknown model engine"};
