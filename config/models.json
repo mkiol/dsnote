@@ -2338,7 +2338,7 @@
             "size": "1533763059"
         },
         {
-            "name": "Српски (Whisper tiny)",
+            "name": "Srpski (Whisper tiny)",
             "model_id": "sr_whisper_tiny",
             "engine": "whisper",
             "lang_id": "sr",
@@ -2351,7 +2351,7 @@
             "size": "77691713"
         },
         {
-            "name": "Српски (Whisper base)",
+            "name": "Srpski (Whisper base)",
             "model_id": "sr_whisper_base",
             "engine": "whisper",
             "lang_id": "sr",
@@ -2364,7 +2364,7 @@
             "size": "147951465"
         },
         {
-            "name": "Српски (Whisper small)",
+            "name": "Srpski (Whisper small)",
             "model_id": "sr_whisper_small",
             "engine": "whisper",
             "lang_id": "sr",
@@ -2378,7 +2378,7 @@
             "size": "487601967"
         },
         {
-            "name": "Српски (Whisper medium)",
+            "name": "Srpski (Whisper medium)",
             "model_id": "sr_whisper_medium",
             "engine": "whisper",
             "lang_id": "sr",
