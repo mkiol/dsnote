@@ -792,7 +792,6 @@ QString models_manager::make_quick_checksum(const QString& file) {
         std::stringstream ss;
         ss << std::hex << checksum;
         auto hex = QString::fromStdString(ss.str());
-        qDebug() << "crc quick checksum:" << hex << file;
         return hex;
     }
 
@@ -814,7 +813,6 @@ QString models_manager::make_checksum(const QString& file) {
         std::stringstream ss;
         ss << std::hex << checksum;
         auto hex = QString::fromStdString(ss.str());
-        qDebug() << "crc checksum:" << hex << file;
         return hex;
     }
     qWarning() << "cannot open file:" << file;
@@ -1001,10 +999,26 @@ auto models_manager::extract_langs(const QJsonArray& langs_jarray) {
 bool models_manager::checksum_ok(const QString& checksum,
                                  const QString& checksum_quick,
                                  const QString& file_name) {
+    QString expected_checksum;
+    QString real_checksum;
+
     if (checksum_quick.isEmpty()) {
-        return checksum == make_checksum(model_path(file_name));
+        expected_checksum = checksum;
+        real_checksum = make_checksum(model_path(file_name));
+    } else {
+        expected_checksum = checksum_quick;
+        real_checksum = make_quick_checksum(model_path(file_name));
     }
-    return checksum_quick == make_quick_checksum(model_path(file_name));
+
+    auto ok = expected_checksum == real_checksum;
+
+    if (ok)
+        qDebug() << "checksum ok:" << real_checksum << file_name;
+    else
+        qWarning() << "checksum mismatch:" << real_checksum
+                   << "(expected:" << expected_checksum << ")" << file_name;
+
+    return ok;
 }
 
 models_manager::model_engine models_manager::engine_from_name(
@@ -1105,9 +1119,10 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             }
         }
 
+        if (model.available) qDebug() << "found model:" << model_id;
+
         auto model_is_enabled = enabled_models.contains(model_id);
         if (model.available) {
-            qDebug() << "files for not enabled model exist:" << model_id;
             model.available = model_is_enabled;
         } else if (model_is_enabled) {
             enabled_models.removeAll(model_id);

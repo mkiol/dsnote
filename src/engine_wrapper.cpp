@@ -169,7 +169,7 @@ void engine_wrapper::start_processing() {
 
     try {
         while (true) {
-            LOGD("processing iter");
+            LOGT("processing iter");
 
             std::unique_lock lock{m_processing_mtx};
 
