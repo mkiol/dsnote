@@ -9,6 +9,7 @@
 
 #include <algorithm>
 // #include <fstream>
+#include <chrono>
 #include <sstream>
 
 #include "logger.hpp"
@@ -182,7 +183,7 @@ whisper_full_params whisper_wrapper::make_wparams() const {
     // wparams.translate = true;
     wparams.no_context = true;
     wparams.n_threads =
-        std::max(1, static_cast<int>(std::thread::hardware_concurrency()) - 2);
+        std::min(2, static_cast<int>(std::thread::hardware_concurrency()));
 
     LOGD("using threads: " << wparams.n_threads);
     LOGD("system info: " << whisper_print_system_info());
@@ -192,6 +193,8 @@ whisper_full_params whisper_wrapper::make_wparams() const {
 
 void whisper_wrapper::decode_speech(const whisper_buf_t& buf) {
     std::ostringstream os;
+
+    auto decoding_start = std::chrono::steady_clock::now();
 
     if (whisper_full(m_whisper_ctx.get(), m_wparams, buf.data(), buf.size()) ==
         0) {
@@ -214,6 +217,15 @@ void whisper_wrapper::decode_speech(const whisper_buf_t& buf) {
         LOGE("whisper error");
         return;
     }
+
+    auto decoding_dur = std::chrono::duration_cast<std::chrono::milliseconds>(
+                            std::chrono::steady_clock::now() - decoding_start)
+                            .count();
+
+    LOGD("whisper decoding stats: samples="
+         << buf.size() << ", duration=" << decoding_dur << "ms ("
+         << (static_cast<double>(decoding_dur) / buf.size())
+         << "ms per sample)");
 
     auto result =
         merge_texts(m_intermediate_text.value_or(std::string{}), os.str());
