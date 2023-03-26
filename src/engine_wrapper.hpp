@@ -63,6 +63,7 @@ class engine_wrapper {
         model_file_t model_file;
         speech_mode_t speech_mode = speech_mode_t::automatic;
         vad_mode_t vad_mode = vad_mode_t::aggressiveness3;
+        bool translate = false; /*extra whisper feature*/
         bool speech_started = false;
     };
     friend std::ostream& operator<<(std::ostream& os, const config_t& config);
@@ -81,6 +82,7 @@ class engine_wrapper {
     inline auto speech_status() const { return m_speech_started; }
     inline const model_file_t& model_file() const { return m_model_file; }
     inline const std::string& lang() const { return m_lang; }
+    inline auto translate() const { return m_translate; }
 
    protected:
     enum class lock_type_t { free, processed, borrowed };
@@ -130,6 +132,7 @@ class engine_wrapper {
     speech_mode_t m_speech_mode;
     bool m_restart_requested = false;
     std::optional<std::chrono::steady_clock::time_point> m_start_time;
+    bool m_translate = false;
 
     void flush(flush_t type);
     void start_processing();

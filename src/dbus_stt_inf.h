@@ -105,10 +105,10 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("Reload"), argumentList);
     }
 
-    inline QDBusPendingReply<int> StartListen(int mode, const QString &lang)
+    inline QDBusPendingReply<int> StartListen(int mode, const QString &lang, bool translate)
     {
         QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(mode) << QVariant::fromValue(lang);
+        argumentList << QVariant::fromValue(mode) << QVariant::fromValue(lang) << QVariant::fromValue(translate);
         return asyncCallWithArgumentList(QStringLiteral("StartListen"), argumentList);
     }
 
@@ -119,10 +119,10 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("StopListen"), argumentList);
     }
 
-    inline QDBusPendingReply<int> TranscribeFile(const QString &file, const QString &lang)
+    inline QDBusPendingReply<int> TranscribeFile(const QString &file, const QString &lang, bool translate)
     {
         QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(file) << QVariant::fromValue(lang);
+        argumentList << QVariant::fromValue(file) << QVariant::fromValue(lang) << QVariant::fromValue(translate);
         return asyncCallWithArgumentList(QStringLiteral("TranscribeFile"), argumentList);
     }
 

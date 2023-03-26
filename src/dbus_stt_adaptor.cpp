@@ -134,11 +134,11 @@ int SttAdaptor::Reload()
     return result;
 }
 
-int SttAdaptor::StartListen(int mode, const QString &lang)
+int SttAdaptor::StartListen(int mode, const QString &lang, bool translate)
 {
     // handle method call org.mkiol.Stt.StartListen
     int task;
-    QMetaObject::invokeMethod(parent(), "StartListen", Q_RETURN_ARG(int, task), Q_ARG(int, mode), Q_ARG(QString, lang));
+    QMetaObject::invokeMethod(parent(), "StartListen", Q_RETURN_ARG(int, task), Q_ARG(int, mode), Q_ARG(QString, lang), Q_ARG(bool, translate));
     return task;
 }
 
@@ -150,11 +150,11 @@ int SttAdaptor::StopListen(int task)
     return result;
 }
 
-int SttAdaptor::TranscribeFile(const QString &file, const QString &lang)
+int SttAdaptor::TranscribeFile(const QString &file, const QString &lang, bool translate)
 {
     // handle method call org.mkiol.Stt.TranscribeFile
     int task;
-    QMetaObject::invokeMethod(parent(), "TranscribeFile", Q_RETURN_ARG(int, task), Q_ARG(QString, file), Q_ARG(QString, lang));
+    QMetaObject::invokeMethod(parent(), "TranscribeFile", Q_RETURN_ARG(int, task), Q_ARG(QString, file), Q_ARG(QString, lang), Q_ARG(bool, translate));
     return task;
 }
 

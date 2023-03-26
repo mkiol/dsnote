@@ -76,6 +76,14 @@ Page {
                 }
             }
 
+            CheckBox {
+                checked: _settings.translate
+                text: qsTr("Translate to English")
+                onCheckedChanged: {
+                    _settings.translate = checked
+                }
+            }
+
             FileDialog {
                 id: fileDialog
                 title: qsTr("Please choose a directory")

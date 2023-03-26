@@ -60,9 +60,10 @@ class stt_service : public QObject {
     Q_INVOKABLE void delete_model(const QString &id);
 
     Q_INVOKABLE int start_listen(stt_service::speech_mode_t mode,
-                                 const QString &lang);
+                                 const QString &lang, bool translate);
     Q_INVOKABLE int stop_listen(int task);
-    Q_INVOKABLE int transcribe_file(const QString &file, const QString &lang);
+    Q_INVOKABLE int transcribe_file(const QString &file, const QString &lang,
+                                    bool translate);
     Q_INVOKABLE int cancel(int task);
 
    signals:
@@ -117,6 +118,7 @@ class stt_service : public QObject {
         int id = INVALID_TASK;
         speech_mode_t speech_mode;
         QString model_id;
+        bool translate = false;
     };
 
     inline static const QString DBUS_SERVICE_NAME{
@@ -162,7 +164,8 @@ class stt_service : public QObject {
     void handle_processing_changed(bool processing);
     void handle_audio_error();
     void handle_audio_ended();
-    QString restart_engine(speech_mode_t speech_mode, const QString &model_id);
+    QString restart_engine(speech_mode_t speech_mode, const QString &model_id,
+                           bool translate);
     void restart_audio_source(const QString &source_file = {});
     void stop();
     int speech() const;
@@ -192,10 +195,11 @@ class stt_service : public QObject {
     static QString lang_from_model_id(const QString &model_id);
 
     // DBus
-    Q_INVOKABLE int StartListen(int mode, const QString &lang);
+    Q_INVOKABLE int StartListen(int mode, const QString &lang, bool translate);
     Q_INVOKABLE int StopListen(int task);
     Q_INVOKABLE int Cancel(int task);
-    Q_INVOKABLE int TranscribeFile(const QString &file, const QString &lang);
+    Q_INVOKABLE int TranscribeFile(const QString &file, const QString &lang,
+                                   bool translate);
     Q_INVOKABLE double GetFileTranscribeProgress(int task);
     Q_INVOKABLE int KeepAliveService();
     Q_INVOKABLE int KeepAliveTask(int task);

@@ -106,6 +106,16 @@ Page {
                                   "Always on: Listening is always turn on.")
             }
 
+            TextSwitch {
+                checked: _settings.translate
+                automaticCheck: false
+                text: qsTr("Translate to English")
+                description: qsTr("Decoded text is translated to English. This option works only with Whisper models.")
+                onClicked: {
+                    _settings.translate = !_settings.translate
+                }
+            }
+
             ItemBox {
                 title: qsTr("Location of language files")
                 value: _settings.models_dir_name

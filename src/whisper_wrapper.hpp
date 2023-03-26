@@ -29,6 +29,7 @@ class whisper_wrapper : public engine_wrapper {
     whisper_buf_t m_speech_buf;
     std::unique_ptr<whisper_context, decltype(&whisper_free)> m_whisper_ctx;
     whisper_full_params m_wparams{};
+
     samples_process_result_t process_buff() override;
     void decode_speech(const whisper_buf_t& buf);
     static void push_buf_to_whisper_buf(

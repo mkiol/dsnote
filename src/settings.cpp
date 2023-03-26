@@ -122,6 +122,17 @@ void settings::set_note(const QString& value) {
     }
 }
 
+bool settings::translate() const {
+    return value(QStringLiteral("translate"), false).toBool();
+}
+
+void settings::set_translate(bool value) {
+    if (translate() != value) {
+        setValue(QStringLiteral("translate"), value);
+        emit translate_changed();
+    }
+}
+
 QUrl settings::app_icon() const {
     return QUrl::fromLocalFile(
         QStringLiteral("/usr/share/icons/hicolor/172x172/apps/%1.png")

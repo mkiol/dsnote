@@ -309,19 +309,22 @@ void dsnote_app::cancel() {
 
 void dsnote_app::transcribe_file(const QString &source_file) {
     qDebug() << "[app => dbus] call TranscribeFile";
-    transcribe_task.set(stt.TranscribeFile(source_file, {}));
+    transcribe_task.set(
+        stt.TranscribeFile(source_file, {}, settings::instance()->translate()));
 }
 
 void dsnote_app::transcribe_file(const QUrl &source_file) {
     qDebug() << "[app => dbus] call TranscribeFile";
-    transcribe_task.set(stt.TranscribeFile(source_file.toLocalFile(), {}));
+    transcribe_task.set(stt.TranscribeFile(source_file.toLocalFile(), {},
+                                           settings::instance()->translate()));
 }
 
 void dsnote_app::listen() {
     qDebug() << "[app => dbus] call StartListen:"
              << static_cast<int>(settings::instance()->speech_mode());
-    listen_task.set(stt.StartListen(
-        static_cast<int>(settings::instance()->speech_mode()), {}));
+    auto *s = settings::instance();
+    listen_task.set(stt.StartListen(static_cast<int>(s->speech_mode()), {},
+                                    s->translate()));
 }
 
 void dsnote_app::stop_listen() {

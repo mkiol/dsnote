@@ -180,7 +180,7 @@ whisper_full_params whisper_wrapper::make_wparams() const {
     wparams.suppress_blank = true;
     wparams.suppress_non_speech_tokens = true;
     wparams.single_segment = false;
-    // wparams.translate = true;
+    wparams.translate = m_translate;
     wparams.no_context = true;
     wparams.n_threads =
         std::min(2, static_cast<int>(std::thread::hardware_concurrency()));

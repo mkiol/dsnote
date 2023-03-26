@@ -93,6 +93,7 @@ class SttAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"StartListen\">\n"
 "      <arg direction=\"in\" type=\"i\" name=\"mode\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"lang\"/>\n"
+"      <arg direction=\"in\" type=\"b\" name=\"translate\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </method>\n"
 "    <method name=\"StopListen\">\n"
@@ -102,6 +103,7 @@ class SttAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"TranscribeFile\">\n"
 "      <arg direction=\"in\" type=\"s\" name=\"file\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"lang\"/>\n"
+"      <arg direction=\"in\" type=\"b\" name=\"translate\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </method>\n"
 "    <method name=\"Cancel\">\n"
@@ -160,9 +162,9 @@ public Q_SLOTS: // METHODS
     int KeepAliveService();
     int KeepAliveTask(int task);
     int Reload();
-    int StartListen(int mode, const QString &lang);
+    int StartListen(int mode, const QString &lang, bool translate);
     int StopListen(int task);
-    int TranscribeFile(const QString &file, const QString &lang);
+    int TranscribeFile(const QString &file, const QString &lang, bool translate);
 Q_SIGNALS: // SIGNALS
     void CurrentTaskPropertyChanged(int task);
     void DefaultLangPropertyChanged(const QString &lang);
