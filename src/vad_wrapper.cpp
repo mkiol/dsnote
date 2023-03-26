@@ -36,7 +36,6 @@ void vad_wrapper::reset() {
     m_output_samples.clear();
     m_input_samples.clear();
     m_dup_size = 0;
-    m_end_adjacent = false;
 }
 
 vad_wrapper::~vad_wrapper() { WebRtcVad_Free(m_handle); }
@@ -95,11 +94,11 @@ const vad_wrapper::buf_t& vad_wrapper::process(const buf_t::value_type* frame,
                                                size_t frame_size) {
     m_output_samples.clear();
 
-    auto old_end_adjacent = m_end_adjacent;
-
     for (size_t i = 0; i < frame_size; ++i) m_input_samples.push_back(frame[i]);
 
     if (m_input_samples.size() < m_chunk_size) return m_output_samples;
+
+    LOGT("input samples: size=" << m_input_samples.size());
 
     auto vad_results = vad_process(m_input_samples);
 
@@ -167,13 +166,10 @@ const vad_wrapper::buf_t& vad_wrapper::process(const buf_t::value_type* frame,
 
     if (cut_start) {
         cut_stop.emplace(m_input_samples.size());
-        m_end_adjacent = true;
 
         LOGT("cut stop: " << *cut_stop);
 
         insert_to_vec(m_input_samples, *cut_start, *cut_stop, m_output_samples);
-    } else {
-        m_end_adjacent = false;
     }
 
     if (cut_stop) {
@@ -181,18 +177,9 @@ const vad_wrapper::buf_t& vad_wrapper::process(const buf_t::value_type* frame,
         if (not_cut < dup_size) m_dup_size = dup_size - not_cut;
     }
 
-    LOGT("dup size=" << dup_size << ", m_size=" << m_dup_size);
+    LOGT("dup: added size=" << dup_size << ", to remove size=" << m_dup_size);
 
     shift_left(m_input_samples, m_input_samples.size() - dup_size);
-
-    if (m_output_samples.empty() && old_end_adjacent) {
-        LOGD("adding extra samples because of adjacent end");
-
-        auto end = m_input_samples.cbegin();
-        std::advance(end, std::min(2 * m_chunk_size, m_input_samples.size()));
-        m_output_samples.insert(m_output_samples.begin(),
-                                m_input_samples.cbegin(), end);
-    }
 
     return m_output_samples;
 }

@@ -31,7 +31,7 @@ class vad_wrapper {
 
    private:
     inline static const size_t m_chunk_size = 480;
-    inline static const size_t m_dup_max_size = 7 * m_chunk_size;
+    inline static const size_t m_dup_max_size = 10 * m_chunk_size;
     inline static const size_t m_chunks_in_frame = 25;
 
     VadInst* m_handle = nullptr;
@@ -40,7 +40,6 @@ class vad_wrapper {
     buf_t m_input_samples;
     buf_t m_output_samples;
     size_t m_dup_size = 0;
-    bool m_end_adjacent = false;
 
     std::vector<bool> vad_process(const buf_t& samples) const;
     static void shift_left(std::vector<int16_t>& vec, size_t distance);

@@ -69,7 +69,6 @@ class stt_service : public QObject {
     void models_changed();
     void model_download_progress(const QString &id, double progress);
     void speech_changed();
-    void speech_clear();
     void state_changed();
     void buff_ready();
     void transcribe_file_progress_changed(double progress, int task);
@@ -161,7 +160,6 @@ class stt_service : public QObject {
     void handle_speech_detection_status_changed(
         engine_wrapper::speech_detection_status_t status);
     void handle_processing_changed(bool processing);
-    void handle_speech_clear();
     void handle_audio_error();
     void handle_audio_ended();
     QString restart_engine(speech_mode_t speech_mode, const QString &model_id);

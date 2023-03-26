@@ -21,8 +21,6 @@
 
 stt_service::stt_service(QObject *parent)
     : QObject{parent}, m_stt_adaptor{this} {
-    connect(this, &stt_service::speech_clear, this,
-            &stt_service::handle_speech_clear);
     connect(this, &stt_service::models_changed, this,
             &stt_service::refresh_status);
     connect(&m_manager, &models_manager::models_changed, this,
@@ -362,17 +360,8 @@ void stt_service::handle_text_decoded(const std::string &text) {
 }
 
 void stt_service::handle_speech_detection_status_changed(
-    engine_wrapper::speech_detection_status_t status) {
-    if (status == engine_wrapper::speech_detection_status_t::no_speech)
-        emit speech_clear();
+    [[maybe_unused]] engine_wrapper::speech_detection_status_t status) {
     emit speech_changed();
-}
-
-void stt_service::handle_speech_clear() {
-    if (m_source && (state() == state_t::listening_auto ||
-                     state() == state_t::transcribing_file)) {
-        m_source->clear();
-    }
 }
 
 QVariantMap stt_service::available_models() const {
