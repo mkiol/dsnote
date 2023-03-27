@@ -51,6 +51,7 @@ Page {
                 downloading: model.downloading
                 progress: model.progress
                 score: model.score
+                defaultModelForLang: model.default_for_lang
             }
         }
 

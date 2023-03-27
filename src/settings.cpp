@@ -93,7 +93,18 @@ QStringList settings::enabled_models() {
 void settings::set_enabled_models(const QStringList& value) {
     if (enabled_models() != value) {
         setValue(QStringLiteral("service/enabled_models"), value);
-        emit enabled_models_changed();
+    }
+}
+
+QString settings::default_model_for_lang(const QString& lang) {
+    return value(QStringLiteral("service/default_model_%1").arg(lang), {})
+        .toString();
+}
+
+void settings::set_default_model_for_lang(const QString& lang,
+                                          const QString& value) {
+    if (default_model_for_lang(lang) != value) {
+        setValue(QStringLiteral("service/default_model_%1").arg(lang), value);
     }
 }
 

@@ -57,6 +57,31 @@ models_manager::~models_manager() { m_thread.join(); }
 
 bool models_manager::ok() const { return !m_models.empty(); }
 
+void models_manager::set_default_model_for_lang(const QString& model_id) {
+    if (m_models.count(model_id) == 0) return;
+
+    auto& model = m_models.at(model_id);
+
+    qDebug() << "set_default_model_for_lang:" << model_id << model.lang_id;
+
+    if (model.default_for_lang) {
+        qWarning() << "model is already default for lang";
+        return;
+    }
+
+    model.default_for_lang = true;
+
+    if (auto old_default_model_id =
+            settings::instance()->default_model_for_lang(model.lang_id);
+        m_models.count(old_default_model_id) > 0) {
+        m_models.at(old_default_model_id).default_for_lang = false;
+    }
+
+    settings::instance()->set_default_model_for_lang(model.lang_id, model_id);
+
+    emit models_changed();
+}
+
 std::vector<models_manager::lang_t> models_manager::langs() const {
     std::vector<lang_t> list;
 
@@ -97,8 +122,9 @@ std::vector<models_manager::model_t> models_manager::models(
                      pair.second.scorer_file_name.isEmpty()
                          ? ""
                          : dir.filePath(pair.second.scorer_file_name),
-                     pair.second.score, pair.second.available,
-                     pair.second.downloading, pair.second.download_progress});
+                     pair.second.score, pair.second.default_for_lang,
+                     pair.second.available, pair.second.downloading,
+                     pair.second.download_progress});
             }
         });
 
@@ -119,13 +145,13 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
     for (const auto& [id, model] : m_models) {
         auto model_file = dir.filePath(model.file_name);
         if (model.available && QFile::exists(model_file)) {
-            list.push_back({id, model.engine, model.lang_id, model.name,
-                            model_file,
-                            model.scorer_file_name.isEmpty()
-                                ? QString{}
-                                : dir.filePath(model.scorer_file_name),
-                            model.score, model.available, model.downloading,
-                            model.download_progress});
+            list.push_back(
+                {id, model.engine, model.lang_id, model.name, model_file,
+                 model.scorer_file_name.isEmpty()
+                     ? QString{}
+                     : dir.filePath(model.scorer_file_name),
+                 model.score, model.default_for_lang, model.available,
+                 model.downloading, model.download_progress});
         }
     }
 
@@ -1073,6 +1099,9 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         if (scorer_file_name.isEmpty())
             scorer_file_name = scorer_file_name_from_id(model_id);
 
+        bool is_default_model_for_lang =
+            settings::instance()->default_model_for_lang(lang_id) == model_id;
+
         priv_model_t model{
             /*engine=*/engine,
             /*lang_id=*/std::move(lang_id),
@@ -1095,6 +1124,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             /*scorer_size=*/
             obj.value(QLatin1String{"scorer_size"}).toString().toLongLong(),
             /*score=*/obj.value(QLatin1String{"score"}).toInt(2),
+            /*default_for_lang=*/is_default_model_for_lang,
             /*available=*/false,
             /*downloading=*/false};
 
@@ -1129,8 +1159,10 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         auto model_is_enabled = enabled_models.contains(model_id);
         if (model.available) {
             model.available = model_is_enabled;
-        } else if (model_is_enabled) {
-            enabled_models.removeAll(model_id);
+        } else {
+            if (model_is_enabled) enabled_models.removeAll(model_id);
+            if (is_default_model_for_lang)
+                settings::instance()->set_default_model_for_lang(lang_id, {});
         }
 
         models.insert({model_id, std::move(model)});

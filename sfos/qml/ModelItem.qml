@@ -14,6 +14,7 @@ SimpleListItem {
     property string name
     property string modelId
     property int score: 2
+    property bool defaultModelForLang: false
     property bool available: true
     property bool downloading: false
     property double progress: 0.0
@@ -25,11 +26,24 @@ SimpleListItem {
         return progress > 0.0 ? Math.round(progress * 100) + "%" : ""
     }
 
-    title.text: (score === 0 ? "🧪 " : "") + name
+    title.text: {
+        if (defaultModelForLang) return "⭐ " + name
+        if (score === 0) return "🧪 " + name
+        return name
+    }
+
 
     Component {
         id: menuComp
         ContextMenu {
+            MenuItem {
+                visible: root.available && !root.defaultModelForLang
+                text: qsTr("Set as default for this language")
+                onClicked: {
+                    if (root.default_model_for_lang) return
+                    service.set_default_model_for_lang(modelId)
+                }
+            }
             MenuItem {
                 text: root.downloading ? qsTr("Cancel") : root.available ? qsTr("Delete") : qsTr("Download")
                 onClicked: {

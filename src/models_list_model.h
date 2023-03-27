@@ -61,6 +61,7 @@ class ModelsListItem : public SelectableItem {
         LangIdRole,
         AvailableRole,
         ScoreRole,
+        DefaultRole,
         DownloadingRole,
         ProgressRole
     };
@@ -68,8 +69,9 @@ class ModelsListItem : public SelectableItem {
     ModelsListItem(QObject *parent = nullptr) : SelectableItem{parent} {}
     ModelsListItem(const QString &id, const QString &name,
                    const QString &langId = {}, bool available = true,
-                   int score = 2, bool downloading = false,
-                   double progress = 0.0, QObject *parent = nullptr);
+                   int score = 2, bool default_for_lang = false,
+                   bool downloading = false, double progress = 0.0,
+                   QObject *parent = nullptr);
     QVariant data(int role) const override;
     QHash<int, QByteArray> roleNames() const override;
     inline QString id() const override { return m_id; }
@@ -77,6 +79,7 @@ class ModelsListItem : public SelectableItem {
     inline QString langId() const { return m_langId; }
     inline bool available() const { return m_available; }
     inline int score() const { return m_score; }
+    inline bool default_for_lang() const { return m_default_for_lang; }
     inline bool downloading() const { return m_downloading; }
     inline double progress() const { return m_progress; }
 
@@ -86,6 +89,7 @@ class ModelsListItem : public SelectableItem {
     QString m_langId;
     bool m_available = false;
     int m_score = 2;
+    bool m_default_for_lang = false;
     bool m_downloading = false;
     double m_progress = 0.0;
 };

@@ -182,15 +182,31 @@ std::optional<stt_service::model_files_t> stt_service::choose_model_files(QStrin
 
     // search by lang id
     if (active_files.model_id.isEmpty()) {
+        int best_score = -1;
+        const decltype(models)::value_type *best_model = nullptr;
+
         for (const auto &model : models) {
             if (model_id.compare(model.lang_id, Qt::CaseInsensitive) == 0) {
-                active_files.model_id = model.id;
-                active_files.engine = model.engine;
-                active_files.lang_id = model.lang_id;
-                active_files.model_file = model.model_file;
-                active_files.scorer_file = model.scorer_file;
-                break;
+                if (model.default_for_lang) {
+                    best_model = &model;
+                    qDebug() << "best model is default model for lang:"
+                             << model.lang_id << model.id;
+                    break;
+                }
+
+                if (model.score > best_score) {
+                    best_model = &model;
+                    best_score = model.score;
+                }
             }
+        }
+
+        if (best_model) {
+            active_files.model_id = best_model->id;
+            active_files.engine = best_model->engine;
+            active_files.lang_id = best_model->lang_id;
+            active_files.model_file = best_model->model_file;
+            active_files.scorer_file = best_model->scorer_file;
         }
     }
 

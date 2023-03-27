@@ -65,6 +65,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_default_model(const QString &value);
     QStringList enabled_models();
     void set_enabled_models(const QStringList &value);
+    QString default_model_for_lang(const QString &lang);
+    void set_default_model_for_lang(const QString &lang, const QString &value);
 
    signals:
     // app
@@ -75,7 +77,7 @@ class settings : public QSettings, public singleton<settings> {
     // service
     void models_dir_changed();
     void default_model_changed();
-    void enabled_models_changed();
+    void default_models_changed(const QString &lang);
 
    private:
     inline static const QString settings_filename =

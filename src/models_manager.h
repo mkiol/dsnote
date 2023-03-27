@@ -42,6 +42,7 @@ class models_manager : public QObject {
         QString model_file;
         QString scorer_file;
         int score = 2; /* 0-3 */
+        bool default_for_lang = false;
         bool available = false;
         bool downloading = false;
         double download_progress = 0.0;
@@ -64,6 +65,7 @@ class models_manager : public QObject {
     [[nodiscard]] inline bool busy() const { return m_busy_value; }
     void reload();
     double model_download_progress(const QString& id) const;
+    void set_default_model_for_lang(const QString& model_id);
 
    signals:
     void download_progress(const QString& id, double progress);
@@ -93,6 +95,7 @@ class models_manager : public QObject {
         std::vector<QUrl> scorer_urls;
         qint64 scorer_size = 0;
         int score = 2; /* 0-3 */
+        bool default_for_lang = false;
         bool available = false;
         bool downloading = false;
         double download_progress = 0.0;
@@ -150,6 +153,7 @@ class models_manager : public QObject {
                             const QString& checksum_quick,
                             const QString& file_name);
     static model_engine engine_from_name(const QString& name);
+    void update_default_model_for_lang(const QString& lang_id);
 };
 
 #endif  // MODELS_MANAGER_H

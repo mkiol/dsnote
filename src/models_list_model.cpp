@@ -50,6 +50,7 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
         /*langId=*/model.lang_id,
         /*available=*/model.available,
         /*score=*/model.score,
+        /*default_for_lang=*/model.default_for_lang,
         /*downloading=*/model.downloading,
         /*progress=*/model.download_progress};
 }
@@ -109,10 +110,11 @@ void ModelsListModel::updateDownloading(
 
 ModelsListItem::ModelsListItem(const QString &id, const QString &name,
                                const QString &langId, bool available, int score,
-                               bool downloading, double progress,
-                               QObject *parent)
+                               bool default_for_lang, bool downloading,
+                               double progress, QObject *parent)
     : SelectableItem{parent}, m_id{id}, m_name{name}, m_langId{langId},
-      m_available{available}, m_score{score}, m_downloading{downloading},
+      m_available{available}, m_score{score},
+      m_default_for_lang{default_for_lang}, m_downloading{downloading},
       m_progress{progress} {
     m_selectable = false;
 }
@@ -124,6 +126,7 @@ QHash<int, QByteArray> ModelsListItem::roleNames() const {
     names[LangIdRole] = QByteArrayLiteral("lang_id");
     names[AvailableRole] = QByteArrayLiteral("available");
     names[ScoreRole] = QByteArrayLiteral("score");
+    names[DefaultRole] = QByteArrayLiteral("default_for_lang");
     names[DownloadingRole] = QByteArrayLiteral("downloading");
     names[ProgressRole] = QByteArrayLiteral("progress");
     return names;
@@ -141,6 +144,8 @@ QVariant ModelsListItem::data(int role) const {
             return available();
         case ScoreRole:
             return score();
+        case DefaultRole:
+            return default_for_lang();
         case DownloadingRole:
             return downloading();
         case ProgressRole:

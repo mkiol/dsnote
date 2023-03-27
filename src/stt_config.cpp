@@ -68,6 +68,10 @@ double stt_config::model_download_progress(const QString &id) const {
     return m_manager.model_download_progress(id);
 }
 
+void stt_config::set_default_model_for_lang(const QString &model_id) {
+    m_manager.set_default_model_for_lang(model_id);
+}
+
 void stt_config::reload() const {
     OrgMkiolSttInterface stt{DBUS_SERVICE_NAME, DBUS_SERVICE_PATH,
                              QDBusConnection::sessionBus()};
