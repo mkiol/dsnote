@@ -12,7 +12,7 @@ privacy and does not send any data to the Internet.
 
 ## Models
 
-DeepSpeech models for particular language can be downloaded directly from the app.
+Language models can be downloaded directly from the app.
 
 Details of models which are currently configured for download are described in
 [models.json](https://github.com/mkiol/dsnote/blob/main/config/models.json).
