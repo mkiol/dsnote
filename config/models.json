@@ -2220,6 +2220,7 @@
             "name": "Slovenščina (Whisper base)",
             "model_id": "sl_whisper_base",
             "engine": "whisper",
+            "lang_id": "sl",
             "score": 0,
             "checksum": "34e32ec8",
             "checksum_quick": "5c83c786",
