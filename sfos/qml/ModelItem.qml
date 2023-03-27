@@ -13,7 +13,7 @@ SimpleListItem {
 
     property string name
     property string modelId
-    property bool experimental: false
+    property int score: 2
     property bool available: true
     property bool downloading: false
     property double progress: 0.0
@@ -25,7 +25,7 @@ SimpleListItem {
         return progress > 0.0 ? Math.round(progress * 100) + "%" : ""
     }
 
-    title.text: (experimental ? "🧪 " : "") + name
+    title.text: (score === 0 ? "🧪 " : "") + name
 
     Component {
         id: menuComp

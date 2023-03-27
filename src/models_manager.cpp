@@ -97,15 +97,15 @@ std::vector<models_manager::model_t> models_manager::models(
                      pair.second.scorer_file_name.isEmpty()
                          ? ""
                          : dir.filePath(pair.second.scorer_file_name),
-                     pair.second.experimental, pair.second.available,
+                     pair.second.score, pair.second.available,
                      pair.second.downloading, pair.second.download_progress});
             }
         });
 
     std::sort(list.begin(), list.end(), [](const auto& a, const auto& b) {
-        if (a.experimental && !b.experimental) return false;
-        if (!a.experimental && b.experimental) return true;
-        return QString::compare(a.id, b.id, Qt::CaseInsensitive) < 0;
+        if (a.score == b.score)
+            return QString::compare(a.id, b.id, Qt::CaseInsensitive) < 0;
+        return a.score > b.score;
     });
 
     return list;
@@ -124,8 +124,8 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
                             model.scorer_file_name.isEmpty()
                                 ? QString{}
                                 : dir.filePath(model.scorer_file_name),
-                            model.experimental, model.available,
-                            model.downloading, model.download_progress});
+                            model.score, model.available, model.downloading,
+                            model.download_progress});
         }
     }
 
@@ -1074,24 +1074,29 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             scorer_file_name = scorer_file_name_from_id(model_id);
 
         priv_model_t model{
-            engine,
-            std::move(lang_id),
-            obj.value(QLatin1String{"name"}).toString(),
-            std::move(file_name),
-            std::move(checksum),
+            /*engine=*/engine,
+            /*lang_id=*/std::move(lang_id),
+            /*name=*/obj.value(QLatin1String{"name"}).toString(),
+            /*file_name=*/std::move(file_name),
+            /*checksum=*/std::move(checksum),
+            /*checksum_quick=*/
             obj.value(QLatin1String{"checksum_quick"}).toString(),
-            str2comp(obj.value(QLatin1String{"comp"}).toString()),
-            {},
-            obj.value(QLatin1String{"size"}).toString().toLongLong(),
-            std::move(scorer_file_name),
+            /*comp=*/str2comp(obj.value(QLatin1String{"comp"}).toString()),
+            /*urls=*/{},
+            /*size=*/obj.value(QLatin1String{"size"}).toString().toLongLong(),
+            /*scorer_file_name=*/std::move(scorer_file_name),
+            /*scorer_checksum=*/
             obj.value(QLatin1String{"scorer_checksum"}).toString(),
+            /*scorer_checksum_quick=*/
             obj.value(QLatin1String{"scorer_checksum_quick"}).toString(),
+            /*scorer_comp=*/
             str2comp(obj.value(QLatin1String{"scorer_comp"}).toString()),
-            {},
+            /*scorer_urls=*/{},
+            /*scorer_size=*/
             obj.value(QLatin1String{"scorer_size"}).toString().toLongLong(),
-            obj.value(QLatin1String{"experimental"}).toBool(),
-            false,
-            false};
+            /*score=*/obj.value(QLatin1String{"score"}).toInt(2),
+            /*available=*/false,
+            /*downloading=*/false};
 
         const auto urls = obj.value(QLatin1String{"urls"}).toArray();
         if (urls.isEmpty()) {

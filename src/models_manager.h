@@ -41,7 +41,7 @@ class models_manager : public QObject {
         QString name;
         QString model_file;
         QString scorer_file;
-        bool experimental = false;
+        int score = 2; /* 0-3 */
         bool available = false;
         bool downloading = false;
         double download_progress = 0.0;
@@ -92,7 +92,7 @@ class models_manager : public QObject {
         comp_type scorer_comp = comp_type::none;
         std::vector<QUrl> scorer_urls;
         qint64 scorer_size = 0;
-        bool experimental = false;
+        int score = 2; /* 0-3 */
         bool available = false;
         bool downloading = false;
         double download_progress = 0.0;

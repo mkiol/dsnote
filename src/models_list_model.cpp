@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -34,8 +34,8 @@ void ModelsListModel::beforeUpdate(const QList<ListItem *> &oldItems,
     const auto &[it, _] = std::mismatch(
         oldItems.cbegin(), oldItems.cend(), newItems.cbegin(), newItems.cend(),
         [](const ListItem *a, const ListItem *b) {
-            const auto *aa = dynamic_cast<const ModelsListItem *>(a);
-            const auto *bb = dynamic_cast<const ModelsListItem *>(b);
+            const auto *aa = qobject_cast<const ModelsListItem *>(a);
+            const auto *bb = qobject_cast<const ModelsListItem *>(b);
             return aa->available() == bb->available() &&
                    aa->downloading() == bb->downloading() &&
                    aa->progress() == bb->progress();
@@ -49,7 +49,7 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
         /*name=*/QStringLiteral("%1 / %2").arg(model.name, model.lang_id),
         /*langId=*/model.lang_id,
         /*available=*/model.available,
-        /*experimental=*/model.experimental,
+        /*score=*/model.score,
         /*downloading=*/model.downloading,
         /*progress=*/model.download_progress};
 }
@@ -80,10 +80,10 @@ QList<ListItem *> ModelsListModel::makeItems() {
         items.begin(), items.end(), [](const ListItem *a, const ListItem *b) {
             const auto *aa = qobject_cast<const ModelsListItem *>(a);
             const auto *bb = qobject_cast<const ModelsListItem *>(b);
-            if (aa->experimental() == bb->experimental()) {
+            if (aa->score() == bb->score()) {
                 return aa->id().compare(bb->id(), Qt::CaseInsensitive) < 0;
             }
-            return !aa->experimental() && bb->experimental();
+            return aa->score() > bb->score();
         });
     return items;
 }
@@ -108,16 +108,11 @@ void ModelsListModel::updateDownloading(
 }
 
 ModelsListItem::ModelsListItem(const QString &id, const QString &name,
-                               const QString &langId, bool available,
-                               bool experimental, bool downloading,
-                               double progress, QObject *parent)
-    : SelectableItem{parent},
-      m_id{id},
-      m_name{name},
-      m_langId{langId},
-      m_available{available},
-      m_experimental{experimental},
-      m_downloading{downloading},
+                               const QString &langId, bool available, int score,
+                               bool downloading, double progress,
+                               QObject *parent)
+    : SelectableItem{parent}, m_id{id}, m_name{name}, m_langId{langId},
+      m_available{available}, m_score{score}, m_downloading{downloading},
       m_progress{progress} {
     m_selectable = false;
 }
@@ -128,7 +123,7 @@ QHash<int, QByteArray> ModelsListItem::roleNames() const {
     names[NameRole] = QByteArrayLiteral("name");
     names[LangIdRole] = QByteArrayLiteral("lang_id");
     names[AvailableRole] = QByteArrayLiteral("available");
-    names[ExperimentalRole] = QByteArrayLiteral("experimental");
+    names[ScoreRole] = QByteArrayLiteral("score");
     names[DownloadingRole] = QByteArrayLiteral("downloading");
     names[ProgressRole] = QByteArrayLiteral("progress");
     return names;
@@ -144,8 +139,8 @@ QVariant ModelsListItem::data(int role) const {
             return langId();
         case AvailableRole:
             return available();
-        case ExperimentalRole:
-            return experimental();
+        case ScoreRole:
+            return score();
         case DownloadingRole:
             return downloading();
         case ProgressRole:

@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -67,7 +67,8 @@ Page {
                 model: langsView ? null : service.models_model
                 Label {
                     Layout.margins: 10
-                    text: model.name
+                    text: (model.score === 0 ? "(e) " :
+                           model.score === 3 ? "(r) " : "") + model.name
                 }
             }
 

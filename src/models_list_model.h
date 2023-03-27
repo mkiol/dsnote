@@ -29,7 +29,7 @@ class ModelsListModel : public SelectableItemModel {
    public:
     explicit ModelsListModel(models_manager &manager,
                              QObject *parent = nullptr);
-    ~ModelsListModel();
+    ~ModelsListModel() override;
 
    signals:
     void itemChanged(int idx);
@@ -46,7 +46,6 @@ class ModelsListModel : public SelectableItemModel {
     static ListItem *makeItem(const models_manager::model_t &model);
     void beforeUpdate(const QList<ListItem *> &oldItems,
                       const QList<ListItem *> &newItems) override;
-    void setShowExperimental(bool value);
     inline bool downloading() const { return m_downloading; }
     inline QString lang() const { return m_lang; }
     void setLang(const QString &lang);
@@ -61,7 +60,7 @@ class ModelsListItem : public SelectableItem {
         IdRole = Qt::UserRole,
         LangIdRole,
         AvailableRole,
-        ExperimentalRole,
+        ScoreRole,
         DownloadingRole,
         ProgressRole
     };
@@ -69,7 +68,7 @@ class ModelsListItem : public SelectableItem {
     ModelsListItem(QObject *parent = nullptr) : SelectableItem{parent} {}
     ModelsListItem(const QString &id, const QString &name,
                    const QString &langId = {}, bool available = true,
-                   bool experimental = false, bool downloading = false,
+                   int score = 2, bool downloading = false,
                    double progress = 0.0, QObject *parent = nullptr);
     QVariant data(int role) const override;
     QHash<int, QByteArray> roleNames() const override;
@@ -77,7 +76,7 @@ class ModelsListItem : public SelectableItem {
     inline QString name() const { return m_name; }
     inline QString langId() const { return m_langId; }
     inline bool available() const { return m_available; }
-    inline bool experimental() const { return m_experimental; }
+    inline int score() const { return m_score; }
     inline bool downloading() const { return m_downloading; }
     inline double progress() const { return m_progress; }
 
@@ -86,7 +85,7 @@ class ModelsListItem : public SelectableItem {
     QString m_name;
     QString m_langId;
     bool m_available = false;
-    bool m_experimental = false;
+    int m_score = 2;
     bool m_downloading = false;
     double m_progress = 0.0;
 };
