@@ -8,6 +8,7 @@
 #include "dsnote_app.h"
 
 #include <QDBusConnection>
+#include <QTextStream>
 #include <algorithm>
 
 #include "settings.h"
@@ -97,10 +98,24 @@ void dsnote_app::handle_text_decoded(const QString &text, const QString &lang,
 
     auto note = settings::instance()->note();
 
-    if (note.isEmpty())
-        settings::instance()->set_note(text);
-    else
-        settings::instance()->set_note(note + "\n" + text);
+    QTextStream ss{&note, QIODevice::WriteOnly};
+
+    if (!note.isEmpty() && !note.back().isSpace()) {
+        if (note.back() == '.')
+            ss << ' ';
+        else
+            ss << ". ";
+    }
+
+    auto upper_text{text};
+
+    if (!upper_text.isEmpty()) {
+        upper_text.front() = upper_text.front().toUpper();
+    }
+
+    ss << upper_text;
+
+    settings::instance()->set_note(note);
 
     this->intermediate_text_value.clear();
 
