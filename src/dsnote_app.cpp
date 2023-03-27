@@ -73,8 +73,13 @@ void dsnote_app::update_listen() {
 
 void dsnote_app::set_intermediate_text(const QString &text, const QString &lang,
                                        int task) {
+#ifdef DEBUG
     qDebug() << "[dbus => app] signal IntermediateTextDecoded:" << text << lang
              << task;
+#else
+    qDebug() << "[dbus => app] signal IntermediateTextDecoded: ***" << lang
+             << task;
+#endif
 
     if (listen_task != task && transcribe_task != task) {
         qWarning() << "invalid task id";
@@ -89,8 +94,11 @@ void dsnote_app::set_intermediate_text(const QString &text, const QString &lang,
 
 void dsnote_app::handle_text_decoded(const QString &text, const QString &lang,
                                      int task) {
+#ifdef DEBUG
     qDebug() << "[dbus => app] signal TextDecoded:" << text << lang << task;
-
+#else
+    qDebug() << "[dbus => app] signal TextDecoded: ***" << lang << task;
+#endif
     if (listen_task != task && transcribe_task != task) {
         qWarning() << "invalid task id";
         return;

@@ -9,7 +9,6 @@
 
 #include <algorithm>
 #include <chrono>
-#include <fstream>
 #include <sstream>
 
 #include "logger.hpp"
@@ -153,11 +152,6 @@ engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
     LOGD("speech frame: samples=" << m_speech_buf.size() << ", duration="
                                   << (m_speech_buf.size() / m_sample_rate));
 
-    /*static std::ofstream file1{"/home/mkiol/after-vad.pcm"};
-    file1.write(
-        reinterpret_cast<char*>(m_speech_buf.data()),
-        m_speech_buf.size() * sizeof(decltype(m_speech_buf)::value_type));*/
-
     decode_speech(m_speech_buf);
 
     m_speech_buf.clear();
@@ -207,7 +201,7 @@ void whisper_wrapper::decode_speech(const whisper_buf_t& buf) {
             rtrim(text);
             ltrim(text);
 
-            LOGD("whisper segment: " << text);
+            LOGT("whisper segment: " << text);
 
             if (i != 0) os << ' ';
 

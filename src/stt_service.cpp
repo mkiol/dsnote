@@ -61,13 +61,13 @@ stt_service::stt_service(QObject *parent)
     connect(this, &stt_service::intermediate_text_decoded, this,
             [this](const QString &text, const QString &lang, int task) {
                 qDebug() << "[service => dbus] signal IntermediateTextDecoded:"
-                         << text << lang << task;
+                         << lang << task;
                 emit IntermediateTextDecoded(text, lang, task);
             });
     connect(this, &stt_service::text_decoded, this,
             [this](const QString &text, const QString &lang, int task) {
-                qDebug() << "[service => dbus] signal TextDecoded:" << text
-                         << lang << task;
+                qDebug() << "[service => dbus] signal TextDecoded:" << lang
+                         << task;
                 emit TextDecoded(text, lang, task);
             });
     connect(this, &stt_service::text_decoded, this,
