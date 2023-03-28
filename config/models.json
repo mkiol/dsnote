@@ -424,20 +424,20 @@
             "model_id": "fr_cv",
             "engine": "ds",
             "lang_id": "fr",
-            "checksum": "24aba517",
-            "checksum_quick": "7385ddab",
+            "checksum": "3b34ed93",
+            "checksum_quick": "a9021ced",
             "comp": "tarxz",
             "urls": [
-                "https://github.com/common-voice/commonvoice-fr/releases/download/fr-v0.6/model_tflite_fr.tar.xz?file=output_graph.tflite"
+                "https://github.com/wasertech/commonvoice-fr/releases/download/v0.9.0-fr-0.1/model_tflite_fr.tar.xz?file=output_graph.tflite"
             ],
-            "size": "615568844",
-            "scorer_checksum": "f15bf736",
-            "scorer_checksum_quick": "1a4c5835",
+            "size": "622173540",
+            "scorer_checksum": "5a12ace5",
+            "scorer_checksum_quick": "844476e8",
             "scorer_comp": "tarxz",
             "scorer_urls": [
-                "https://github.com/common-voice/commonvoice-fr/releases/download/fr-v0.6/model_tflite_fr.tar.xz?file=kenlm.scorer"
+                "https://github.com/wasertech/commonvoice-fr/releases/download/v0.9.0-fr-0.1/model_tflite_fr.tar.xz?file=kenlm.scorer"
             ],
-            "scorer_size": "615568844"
+            "scorer_size": "622173540"
         },
         {
             "name": "فارسی (DeepSpeech)",
