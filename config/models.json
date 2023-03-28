@@ -107,6 +107,11 @@
             "id": "sv"
         },
         {
+            "name": "Kiswahili",
+            "name_en": "Swahili",
+            "id": "sw"
+        },
+        {
             "name": "Slovenčina",
             "name_en": "Slovak",
             "id": "sk"
@@ -613,6 +618,25 @@
                 "https://github.com/coqui-ai/STT-models/releases/download/dutch%2Facabunoc%2Fv0.0.1/nl-acabunoc-1-prune-kenlm.scorer"
             ],
             "scorer_size": "323345856"
+        },
+        {
+            "name": "Kiswahili (Coqui)",
+            "model_id": "sw_ds_coqui",
+            "engine": "ds",
+            "lang_id": "sw",
+            "score": 3,
+            "checksum": "2e697767",
+            "checksum_quick": "8b3c18b8",
+            "urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/swahili%2Fcoqui%2Fv8.0/model.tflite"
+            ],
+            "size": "47332120",
+            "scorer_checksum": "1118586",
+            "scorer_checksum_quick": "a7371226",
+            "scorer_urls": [
+                "https://github.com/coqui-ai/STT-models/releases/download/swahili%2Fcoqui%2Fv8.0/large-vocabulary.scorer"
+            ],
+            "scorer_size": "336411664"
         },
         {
             "name": "Yorùbá (ITML)",
