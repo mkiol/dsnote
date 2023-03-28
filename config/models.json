@@ -223,18 +223,18 @@
             "engine": "ds",
             "lang_id": "cs",
             "score": 3,
-            "checksum": "45c77814",
-            "checksum_quick": "651b42a5",
+            "checksum": "a3d9843f",
+            "checksum_quick": "d5f0679c",
             "urls": [
-                "https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/output_graph.tflite"
+                "https://github.com/comodoro/deepspeech-cs/releases/download/2022-05-31/stt-comodoro-czech-2022-05-31_quantized.tflite"
             ],
             "size": "47360928",
-            "scorer_checksum": "a58d1800",
-            "scorer_checksum_quick": "8a5d866b",
+            "scorer_checksum": "f89142b6",
+            "scorer_checksum_quick": "14f3870e",
             "scorer_urls": [
-                "https://github.com/comodoro/deepspeech-cs/releases/download/2021-07-21/o4-500k-wnc-2011.scorer"
+                "https://github.com/comodoro/deepspeech-cs/releases/download/2022-05-31/czech-large-vocab.scorer"
             ],
-            "scorer_size": "539766416"
+            "scorer_size": "484210096"
         },
         {
             "name": "English (Mozilla)",
