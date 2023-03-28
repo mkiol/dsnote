@@ -27,6 +27,11 @@
             "id": "es"
         },
         {
+            "name": "فارسی",
+            "name_en": "Persian",
+            "id": "fa"
+        },
+        {
             "name": "Français",
             "name_en": "French",
             "id": "fr"
@@ -433,6 +438,24 @@
                 "https://github.com/common-voice/commonvoice-fr/releases/download/fr-v0.6/model_tflite_fr.tar.xz?file=kenlm.scorer"
             ],
             "scorer_size": "615568844"
+        },
+        {
+            "name": "فارسی (DeepSpeech)",
+            "model_id": "fa_ds_oct",
+            "engine": "ds",
+            "lang_id": "fa",
+            "checksum": "69763210",
+            "checksum_quick": "ab3011ce",
+            "urls": [
+                "https://github.com/Oct4Pie/persian-stt/releases/download/v0.1.0/persian_stt.tflite"
+            ],
+            "size": "47455328",
+            "scorer_checksum": "66c6e5d3",
+            "scorer_checksum_quick": "2a698c2c",
+            "scorer_urls": [
+                "https://github.com/Oct4Pie/persian-stt/releases/download/v0.1.0/kenlm-persian.scorer"
+            ],
+            "scorer_size": "1753625792"
         },
         {
             "name": "Italiano (Jaco)",
