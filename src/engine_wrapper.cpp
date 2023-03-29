@@ -136,11 +136,16 @@ std::ostream& operator<<(std::ostream& os,
 engine_wrapper::engine_wrapper(config_t config, callbacks_t call_backs)
     : m_model_file{std::move(config.model_file)},
       m_lang{std::move(config.lang)}, m_call_backs{std::move(call_backs)},
-      m_processing_thread{&engine_wrapper::start_processing, this},
       m_speech_started{config.speech_started},
       m_speech_mode{config.speech_mode}, m_translate{config.translate} {}
 
 engine_wrapper::~engine_wrapper() { LOGD("engine dtor"); }
+
+void engine_wrapper::start_engine() {
+    LOGD("starting engine");
+
+    m_processing_thread = std::thread{&engine_wrapper::start_processing, this};
+}
 
 void engine_wrapper::stop_processing_impl() {}
 

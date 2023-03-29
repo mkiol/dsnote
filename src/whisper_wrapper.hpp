@@ -23,11 +23,12 @@ class whisper_wrapper : public engine_wrapper {
 
    private:
     using whisper_buf_t = std::vector<float>;
+    using whisper_ctx_t = std::shared_ptr<whisper_context>;
 
     inline static const size_t m_speech_max_size = m_sample_rate * 60;  // 60s
 
     whisper_buf_t m_speech_buf;
-    std::unique_ptr<whisper_context, decltype(&whisper_free)> m_whisper_ctx;
+    whisper_ctx_t m_whisper_ctx;
     whisper_full_params m_wparams{};
 
     samples_process_result_t process_buff() override;
@@ -39,6 +40,7 @@ class whisper_wrapper : public engine_wrapper {
     whisper_full_params make_wparams() const;
     void reset_impl() override;
     void stop_processing_impl() override;
+    void init_whisper();
 };
 
 #endif  // WHISPER_WRAPPER_H

@@ -11,14 +11,14 @@
 #include <chrono>
 #include <sstream>
 
+#include "cpu_tools.hpp"
 #include "logger.hpp"
 
 whisper_wrapper::whisper_wrapper(config_t config, callbacks_t call_backs)
     : engine_wrapper{std::move(config), std::move(call_backs)},
-      m_whisper_ctx{whisper_init_from_file(m_model_file.first.c_str()),
-                    &whisper_free},
       m_wparams{make_wparams()} {
     m_speech_buf.reserve(m_speech_max_size);
+    start_engine();
 }
 
 whisper_wrapper::~whisper_wrapper() {
@@ -61,7 +61,21 @@ void whisper_wrapper::stop_processing_impl() {
     }
 }
 
+void whisper_wrapper::init_whisper() {
+    if (m_whisper_ctx) return;
+
+    LOGD("initing whisper");
+
+    m_whisper_ctx =
+        whisper_ctx_t{whisper_init_from_file(m_model_file.first.c_str()),
+                      [](whisper_context* ctx) { whisper_free(ctx); }};
+
+    LOGD("whisper inited successfully");
+}
+
 engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
+    init_whisper();
+
     if (!lock_buff_for_processing())
         return samples_process_result_t::wait_for_samples;
 
@@ -176,10 +190,13 @@ whisper_full_params whisper_wrapper::make_wparams() const {
     wparams.single_segment = false;
     wparams.translate = m_translate;
     wparams.no_context = true;
-    wparams.n_threads =
-        std::min(2, static_cast<int>(std::thread::hardware_concurrency()));
+    wparams.n_threads = std::min(2, cpu_tools::number_of_cores());
 
-    LOGD("using threads: " << wparams.n_threads);
+    LOGD("cpu info: arch=" << cpu_tools::arch()
+                           << ", cores=" << cpu_tools::number_of_cores()
+                           << ", neon=" << cpu_tools::neon_supported());
+    LOGD("using threads: " << wparams.n_threads << "/"
+                           << cpu_tools::number_of_cores());
     LOGD("system info: " << whisper_print_system_info());
 
     return wparams;
@@ -192,6 +209,7 @@ void whisper_wrapper::decode_speech(const whisper_buf_t& buf) {
 
     if (whisper_full(m_whisper_ctx.get(), m_wparams, buf.data(), buf.size()) ==
         0) {
+        LOGD("whisper_full ok");
         auto n = whisper_full_n_segments(m_whisper_ctx.get());
         LOGD("wisper segments: " << n);
 

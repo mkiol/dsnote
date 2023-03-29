@@ -19,6 +19,7 @@ deepspeech_wrapper::deepspeech_wrapper(config_t config, callbacks_t call_backs)
     : engine_wrapper{std::move(config), std::move(call_backs)} {
     create_ds_model();
     m_speech_buf.reserve(m_speech_max_size);
+    start_engine();
 }
 
 deepspeech_wrapper::~deepspeech_wrapper() {

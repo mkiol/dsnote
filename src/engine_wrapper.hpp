@@ -151,6 +151,7 @@ class engine_wrapper {
     virtual void stop_processing_impl();
     static void ltrim(std::string& s);
     static void rtrim(std::string& s);
+    void start_engine();
 };
 
 #endif  // ENGINE_WRAPPER_H

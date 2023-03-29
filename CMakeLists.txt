@@ -167,7 +167,9 @@ set(dsnote_lib_sources
     ${sources_dir}/whisper_wrapper.cpp
     ${sources_dir}/whisper_wrapper.hpp
     ${sources_dir}/vad_wrapper.cpp
-    ${sources_dir}/vad_wrapper.hpp)
+    ${sources_dir}/vad_wrapper.hpp
+    ${sources_dir}/cpu_tools.cpp
+    ${sources_dir}/cpu_tools.hpp)
 
 configure_file(config.h.in config.h)
 
@@ -430,16 +432,16 @@ endif()
 if(build_openblas)
     if(x8664_arch)
         set(openblas_flags "-O3 -ffast-math")
-        set(openblas_opts "-DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF")
-        set(openblas_lib "${external_lib_dir}/libopenblas.a")
+        set(openblas_opts -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF)
+        set(openblas_shared 0)
     elseif(arm32_arch)
-        set(openblas_flags "-O3 -ffast-math -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16")
-        set(openblas_opts "-DTARGET=ARMV7 -DBUILD_STATIC_LIBS=OFF -DBUILD_SHARED_LIBS=ON")
-        set(openblas_lib "${external_lib_dir}/libopenblas.so")
+        set(openblas_flags "-O3 -ffast-math -mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access")
+        set(openblas_opts -DTARGET=ARMV7 -DBUILD_STATIC_LIBS=OFF -DBUILD_SHARED_LIBS=ON)
+        set(openblas_shared 1)
     elseif(arm64_arch)
         set(openblas_flags "-O3 -ffast-math")
-        set(openblas_opts "-DTARGET=ARMV8 -DBUILD_STATIC_LIBS=OFF -DBUILD_SHARED_LIBS=ON")
-        set(openblas_lib "${external_lib_dir}/libopenblas.so")
+        set(openblas_opts -DTARGET=ARMV8 -DBUILD_STATIC_LIBS=OFF -DBUILD_SHARED_LIBS=ON)
+        set(openblas_shared 1)
     endif()
 
     ExternalProject_Add(openblas
@@ -455,7 +457,13 @@ if(build_openblas)
         BUILD_ALWAYS False
         INSTALL_COMMAND make DESTDIR=${PROJECT_BINARY_DIR}/external install)
     ExternalProject_Add_StepDependencies(whispercpp configure openblas)
-    list(APPEND deps_libs ${openblas_lib})
+
+    if(openblas_shared)
+        list(APPEND deps_libs "${external_lib_dir}/libopenblas.so")
+    else()
+        list(APPEND deps_libs "${external_lib_dir}/libopenblas.a")
+    endif()
+
     list(APPEND deps openblas)
 else()
     pkg_search_module(openblas REQUIRED openblas)
