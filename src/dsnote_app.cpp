@@ -108,17 +108,19 @@ void dsnote_app::handle_text_decoded(const QString &text, const QString &lang,
 
     QTextStream ss{&note, QIODevice::WriteOnly};
 
-    if (!note.isEmpty() && !note.back().isSpace()) {
-        if (note.back() == '.')
-            ss << ' ';
-        else
-            ss << ". ";
+    if (!note.isEmpty()) {
+        if (auto last_char = note.at(note.length() - 1); !last_char.isSpace()) {
+            if (last_char.isLetterOrNumber())
+                ss << ". ";
+            else
+                ss << ' ';
+        }
     }
 
     auto upper_text{text};
 
     if (!upper_text.isEmpty()) {
-        upper_text.front() = upper_text.front().toUpper();
+        upper_text[0] = upper_text[0].toUpper();
     }
 
     ss << upper_text;
@@ -358,6 +360,14 @@ void dsnote_app::stop_listen() {
     }
 }
 
+void dsnote_app::set_speech(stt_speech_state_type new_state) {
+    if (speech_state != new_state) {
+        qDebug() << "speech state:" << speech_state << "=>" << new_state;
+        speech_state = new_state;
+        emit speech_changed();
+    }
+}
+
 void dsnote_app::update_speech() {
     if (listen_task != current_task_value) {
         qWarning() << "ignore update speech";
@@ -378,10 +388,7 @@ void dsnote_app::update_speech() {
         return stt_speech_state_type::SttNoSpeech;
     }();
 
-    if (speech_state != new_value) {
-        speech_state = new_value;
-        emit speech_changed();
-    }
+    set_speech(new_value);
 }
 
 int dsnote_app::active_lang_idx() const {
@@ -415,7 +422,7 @@ void dsnote_app::do_keepalive() {
             init_attempts++;
         }
     } else if (time > 0) {
-        keepalive_timer.start(time * 0.75);
+        keepalive_timer.start(static_cast<int>(time * 0.75));
         if (init_attempts > 0) {
             update_stt_state();
             init_attempts = 0;
@@ -440,7 +447,18 @@ void dsnote_app::handle_keepalive_task_timeout() {
         qDebug() << "[app => dbus] call KeepAliveTask";
         const auto time = stt.KeepAliveTask(task);
         if (time > 0) {
-            keepalive_current_task_timer.start(time * 0.75);
+            keepalive_current_task_timer.start(static_cast<int>(time * 0.75));
+        } else {
+            qWarning() << "keepalive task failed";
+            if (transcribe_task)
+                transcribe_task.reset();
+            else if (listen_task)
+                listen_task.reset();
+
+            update_current_task();
+            update_stt_state();
+
+            set_speech(stt_speech_state_type::SttNoSpeech);
         }
     };
 

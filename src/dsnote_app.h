@@ -156,6 +156,7 @@ class dsnote_app : public QObject {
     void update_available_langs();
     void update_listen();
     void update_current_task();
+    void set_speech(stt_speech_state_type speech);
     void set_intermediate_text(const QString &text, const QString &lang,
                                int task);
     [[nodiscard]] int active_lang_idx() const;
