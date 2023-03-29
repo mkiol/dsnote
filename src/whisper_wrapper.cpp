@@ -163,8 +163,7 @@ engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
 
     set_speech_detection_status(speech_detection_status_t::decoding);
 
-    LOGD("speech frame: samples=" << m_speech_buf.size() << ", duration="
-                                  << (m_speech_buf.size() / m_sample_rate));
+    LOGD("speech frame: samples=" << m_speech_buf.size());
 
     decode_speech(m_speech_buf);
 
@@ -205,11 +204,12 @@ whisper_full_params whisper_wrapper::make_wparams() const {
 void whisper_wrapper::decode_speech(const whisper_buf_t& buf) {
     std::ostringstream os;
 
+    LOGD("speech decoding started");
+
     auto decoding_start = std::chrono::steady_clock::now();
 
     if (whisper_full(m_whisper_ctx.get(), m_wparams, buf.data(), buf.size()) ==
         0) {
-        LOGD("whisper_full ok");
         auto n = whisper_full_n_segments(m_whisper_ctx.get());
         LOGD("wisper segments: " << n);
 
@@ -234,10 +234,11 @@ void whisper_wrapper::decode_speech(const whisper_buf_t& buf) {
                             std::chrono::steady_clock::now() - decoding_start)
                             .count();
 
-    LOGD("whisper decoding stats: samples="
+    LOGD("decoding stats: samples="
          << buf.size() << ", duration=" << decoding_dur << "ms ("
-         << (static_cast<double>(decoding_dur) / buf.size())
-         << "ms per sample)");
+         << static_cast<double>(decoding_dur) /
+                ((1000 * buf.size()) / static_cast<double>(m_sample_rate))
+         << ")");
 
     auto result =
         merge_texts(m_intermediate_text.value_or(std::string{}), os.str());

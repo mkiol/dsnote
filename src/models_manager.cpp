@@ -661,9 +661,17 @@ bool models_manager::handle_download(const QString& path,
                 if (!path_in_archive_2.isEmpty() && !path_2.isEmpty()) {
                     tar_decode(tar_file, {{path_in_archive, path},
                                           {path_in_archive_2, path_2}});
-                    ok_2 = make_checksum(path_2) == checksum_2;
-                    make_quick_checksum(path_2);  // log quick checksum
-                    if (!ok_2) qWarning() << "checksum 2 is invalid";
+
+                    auto real_checksum = make_checksum(path_2);
+                    auto real_quick_checksum = make_quick_checksum(path_2);
+
+                    ok_2 = real_checksum == checksum_2;
+
+                    if (!ok_2) {
+                        qWarning() << "checksum 2 is invalid:" << real_checksum
+                                   << "(expected" << checksum_2 << ")";
+                        qDebug() << "quick checksum 2:" << real_quick_checksum;
+                    }
                 } else {
                     tar_decode(tar_file, {{path_in_archive, path}});
                 }
@@ -674,9 +682,16 @@ bool models_manager::handle_download(const QString& path,
         }
 
         if (ok_2) {
-            ok = make_checksum(path) == checksum;
-            make_quick_checksum(path);  // log quick checksum
-            if (!ok) qWarning() << "checksum is invalid";
+            auto real_checksum = make_checksum(path);
+            auto real_quick_checksum = make_quick_checksum(path);
+
+            ok = real_checksum == checksum;
+
+            if (!ok) {
+                qWarning() << "checksum 1 is invalid:" << real_checksum
+                           << "(expected" << checksum << ")";
+                qDebug() << "quick checksum 1:" << real_quick_checksum;
+            }
         }
 
         loop.quit();
