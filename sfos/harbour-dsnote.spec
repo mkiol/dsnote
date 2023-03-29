@@ -2,7 +2,7 @@ Name:       harbour-dsnote
 
 # >> macros
 %define __provides_exclude_from ^%{_datadir}/.*$
-%define __requires_exclude ^libstt.*|libkenlm.*$
+%define __requires_exclude ^libstt.*|libkenlm.*|libopenblas.*$
 # << macros
 
 Summary:        Note taking with speech to text

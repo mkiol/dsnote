@@ -79,19 +79,17 @@ set(openblas_checksum "ffb6120e2309a2280471716301824805")
 
 project(${info_id} VERSION 2.0.0)
 
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "^.*arm*.$")
+if(CMAKE_SYSTEM_PROCESSOR MATCHES ".*arm.*")
     message(STATUS "arm architecture detected")
-    set(openblas_target "-DTARGET=ARMV7")
-    set(libstt_url ${libstt_arm_url})
-elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^.*aarch64*.$")
+    set(arm32_arch 1)
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES ".*aarch64.*")
     message(STATUS "arm64 architecture detected")
-    set(openblas_target "-DTARGET=ARMV8")
-    set(libstt_url ${libstt_arm64_url})
-elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^.*86_64*.$")
+    set(arm64_arch 1)
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES ".*86_64.*")
     message(STATUS "x86_64 architecture detected")
-    set(libstt_url ${libstt_x86_url})
+    set(x8664_arch 1)
 else()
-    message(FATAL "unsupported architecture: ${CMAKE_SYSTEM_PROCESSOR}")
+    message(FATAL_ERROR "unsupported architecture: ${CMAKE_SYSTEM_PROCESSOR}")
 endif()
 
 # dirs
@@ -273,6 +271,9 @@ target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${with_sfos}>:USE_
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${with_desktop}>:USE_DESKTOP>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<CONFIG:Debug>:DEBUG>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>")
+target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${x8664_arch}>:ARCH_X86_64>")
+target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arm32_arch}>:ARCH_ARM_32>")
+target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arm64_arch}>:ARCH_ARM_64>")
 
 # translations
 
@@ -342,7 +343,16 @@ else()
 endif()
 
 if(download_libstt)
+    if(x8664_arch)
+        set(libstt_url ${libstt_x86_url})
+    elseif(arm32_arch)
+        set(libstt_url ${libstt_arm_url})
+    elseif(arm64_arch)
+        set(libstt_url ${libstt_arm64_url})
+    endif()
+
     set(libstt_archive "${PROJECT_BINARY_DIR}/libstt.tar.xz")
+
     file(DOWNLOAD ${libstt_url} ${libstt_archive} ${external_lib_dir} STATUS libstt_status)
     file(ARCHIVE_EXTRACT INPUT ${libstt_archive} DESTINATION ${external_lib_dir} 
         PATTERNS *.so VERBOSE)
@@ -385,7 +395,14 @@ else()
 endif()
 
 if(build_whispercpp)
-    set(whispercpp_flags "-ffast-math -O3 -I${external_include_dir}/openblas")
+    if(x8664_arch)
+        set(whispercpp_flags "-O3 -ffast-math -I${external_include_dir}/openblas")
+    elseif(arm32_arch)
+        set(whispercpp_flags "-O3 -ffast-math -mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access -I${external_include_dir}/openblas")
+    elseif(arm64_arch)
+        set(whispercpp_flags "-O3 -ffast-math -I${external_include_dir}/openblas")
+    endif()
+
     ExternalProject_Add(whispercpp
         SOURCE_DIR ${external_dir}/whispercpp
         BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercpp
@@ -411,7 +428,20 @@ else()
 endif()
 
 if(build_openblas)
-    set(openblas_flags "-ffast-math -O3")
+    if(x8664_arch)
+        set(openblas_flags "-O3 -ffast-math")
+        set(openblas_opts "-DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF")
+        set(openblas_lib "${external_lib_dir}/libopenblas.a")
+    elseif(arm32_arch)
+        set(openblas_flags "-O3 -ffast-math -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16")
+        set(openblas_opts "-DTARGET=ARMV7 -DBUILD_STATIC_LIBS=OFF -DBUILD_SHARED_LIBS=ON")
+        set(openblas_lib "${external_lib_dir}/libopenblas.so")
+    elseif(arm64_arch)
+        set(openblas_flags "-O3 -ffast-math")
+        set(openblas_opts "-DTARGET=ARMV8 -DBUILD_STATIC_LIBS=OFF -DBUILD_SHARED_LIBS=ON")
+        set(openblas_lib "${external_lib_dir}/libopenblas.so")
+    endif()
+
     ExternalProject_Add(openblas
         SOURCE_DIR ${external_dir}/openblas
         BINARY_DIR ${PROJECT_BINARY_DIR}/external/openblas
@@ -420,12 +450,12 @@ if(build_openblas)
         URL_MD5 "${openblas_checksum}"
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ -DCMAKE_INSTALL_LIBDIR=/lib
             -DCMAKE_INSTALL_INCLUDEDIR=/include -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_TESTING=OFF
-            -DBUILD_WITHOUT_LAPACK=OFF -DC_LAPACK=ON -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF -DDYNAMIC_ARCH=ON
-            -DCMAKE_C_FLAGS=${openblas_flags} -DCMAKE_CXX_FLAGS=${openblas_flags} ${openblas_target}
+            -DBUILD_WITHOUT_LAPACK=OFF -DC_LAPACK=ON -DDYNAMIC_ARCH=ON
+            -DCMAKE_C_FLAGS=${openblas_flags} -DCMAKE_CXX_FLAGS=${openblas_flags} ${openblas_opts}
         BUILD_ALWAYS False
         INSTALL_COMMAND make DESTDIR=${PROJECT_BINARY_DIR}/external install)
     ExternalProject_Add_StepDependencies(whispercpp configure openblas)
-    list(APPEND deps_libs ${external_lib_dir}/libopenblas.a)
+    list(APPEND deps_libs ${openblas_lib})
     list(APPEND deps openblas)
 else()
     pkg_search_module(openblas REQUIRED openblas)
@@ -499,6 +529,7 @@ if(with_sfos)
     if(download_libstt)
         install(FILES "${external_lib_dir}/libstt.so" DESTINATION share/${info_binary_id}/lib)
         install(FILES "${external_lib_dir}/libkenlm.so" DESTINATION share/${info_binary_id}/lib)
+        install(FILES "${external_lib_dir}/libopenblas.so.0.3" DESTINATION share/${info_binary_id}/lib RENAME libopenblas.so.0)
     endif()
 
     install(FILES "${sfos_dir}/icons/86x86/${info_binary_id}.png" DESTINATION share/icons/hicolor/86x86/apps)
