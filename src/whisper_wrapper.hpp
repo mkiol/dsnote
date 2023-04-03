@@ -23,24 +23,22 @@ class whisper_wrapper : public engine_wrapper {
 
    private:
     using whisper_buf_t = std::vector<float>;
-    using whisper_ctx_t = std::shared_ptr<whisper_context>;
 
     inline static const size_t m_speech_max_size = m_sample_rate * 60;  // 60s
 
     whisper_buf_t m_speech_buf;
-    whisper_ctx_t m_whisper_ctx;
+    whisper_context* m_whisper_ctx = nullptr;
     whisper_full_params m_wparams{};
 
+    void create_whisper_model();
     samples_process_result_t process_buff() override;
     void decode_speech(const whisper_buf_t& buf);
     static void push_buf_to_whisper_buf(
         const std::vector<in_buf_t::buf_t::value_type>& buf,
         whisper_buf_t& whisper_buf);
-    bool sentence_timer_timed_out();
     whisper_full_params make_wparams() const;
     void reset_impl() override;
     void stop_processing_impl() override;
-    void init_whisper();
 };
 
 #endif  // WHISPER_WRAPPER_H

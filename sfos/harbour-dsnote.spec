@@ -2,7 +2,7 @@ Name:       harbour-dsnote
 
 # >> macros
 %define __provides_exclude_from ^%{_datadir}/.*$
-%define __requires_exclude ^libstt.*|libkenlm.*|libopenblas.*$
+%define __requires_exclude ^libstt.*|libkenlm.*|libopenblas.*|libvosk.*$
 # << macros
 
 Summary:        Note taking with speech to text
@@ -21,6 +21,10 @@ BuildRequires:  pkgconfig(zlib)
 BuildRequires:  pkgconfig(liblzma)
 BuildRequires:  desktop-file-utils
 BuildRequires:  curl
+BuildRequires:  cmake
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  libtool
 
 %description
 Note taking with speech to text

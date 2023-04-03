@@ -25,6 +25,11 @@ whisper_wrapper::~whisper_wrapper() {
     LOGD("whisper dtor");
 
     stop_processing();
+
+    if (m_whisper_ctx) {
+        whisper_free(m_whisper_ctx);
+        m_whisper_ctx = nullptr;
+    }
 }
 
 void whisper_wrapper::push_buf_to_whisper_buf(
@@ -37,45 +42,31 @@ void whisper_wrapper::push_buf_to_whisper_buf(
                    });
 }
 
-bool whisper_wrapper::sentence_timer_timed_out() {
-    if (m_start_time) {
-        if (m_speech_buf.empty() &&
-            m_timeout > std::chrono::steady_clock::now() - *m_start_time) {
-            LOGD("sentence timeout");
-            return true;
-        }
-    } else {
-        LOGD("staring sentence timer");
-        m_start_time = std::chrono::steady_clock::now();
-    }
-
-    return false;
-}
-
 void whisper_wrapper::reset_impl() { m_speech_buf.clear(); }
 
 void whisper_wrapper::stop_processing_impl() {
     if (m_whisper_ctx) {
         LOGD("whisper cancel");
-        whisper_cancel(m_whisper_ctx.get());
+        whisper_cancel(m_whisper_ctx);
     }
 }
 
-void whisper_wrapper::init_whisper() {
+void whisper_wrapper::create_whisper_model() {
     if (m_whisper_ctx) return;
 
-    LOGD("initing whisper");
+    LOGD("creating whisper model");
 
-    m_whisper_ctx =
-        whisper_ctx_t{whisper_init_from_file(m_model_file.first.c_str()),
-                      [](whisper_context* ctx) { whisper_free(ctx); }};
+    m_whisper_ctx = whisper_init_from_file(m_model_file.first.c_str());
 
-    LOGD("whisper inited successfully");
+    if (m_whisper_ctx == nullptr) {
+        LOGE("failed to create whisper ctx");
+        throw std::runtime_error("failed to create whisper ctx");
+    }
+
+    LOGD("whisper model created");
 }
 
 engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
-    init_whisper();
-
     if (!lock_buff_for_processing())
         return samples_process_result_t::wait_for_samples;
 
@@ -94,7 +85,7 @@ engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
     }
 
     const auto& vad_buf =
-        m_vad.process(m_in_buf.buf.data(), m_in_buf.buf.size());
+        m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.buf.size());
 
     m_in_buf.clear();
 
@@ -108,11 +99,14 @@ engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
                 speech_detection_status_t::speech_detected);
 
         push_buf_to_whisper_buf(vad_buf, m_speech_buf);
+
+        restart_sentence_timer();
     } else {
         LOGD("vad: no speech");
 
         if (m_speech_mode == speech_mode_t::single_sentence &&
-            sentence_timer_timed_out()) {
+            m_speech_buf.empty() && sentence_timer_timed_out()) {
+            LOGD("sentence timeout");
             m_call_backs.sentence_timeout();
         }
 
@@ -202,20 +196,20 @@ whisper_full_params whisper_wrapper::make_wparams() const {
 }
 
 void whisper_wrapper::decode_speech(const whisper_buf_t& buf) {
-    std::ostringstream os;
-
     LOGD("speech decoding started");
+
+    create_whisper_model();
 
     auto decoding_start = std::chrono::steady_clock::now();
 
-    if (whisper_full(m_whisper_ctx.get(), m_wparams, buf.data(), buf.size()) ==
-        0) {
-        auto n = whisper_full_n_segments(m_whisper_ctx.get());
+    std::ostringstream os;
+
+    if (whisper_full(m_whisper_ctx, m_wparams, buf.data(), buf.size()) == 0) {
+        auto n = whisper_full_n_segments(m_whisper_ctx);
         LOGD("wisper segments: " << n);
 
         for (auto i = 0; i < n; ++i) {
-            std::string text =
-                whisper_full_get_segment_text(m_whisper_ctx.get(), i);
+            std::string text = whisper_full_get_segment_text(m_whisper_ctx, i);
             rtrim(text);
             ltrim(text);
 
@@ -234,7 +228,7 @@ void whisper_wrapper::decode_speech(const whisper_buf_t& buf) {
                             std::chrono::steady_clock::now() - decoding_start)
                             .count();
 
-    LOGD("decoding stats: samples="
+    LOGD("speech decoded, stats: samples="
          << buf.size() << ", duration=" << decoding_dur << "ms ("
          << static_cast<double>(decoding_dur) /
                 ((1000 * buf.size()) / static_cast<double>(m_sample_rate))

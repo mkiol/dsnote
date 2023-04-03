@@ -24,7 +24,7 @@ class models_manager : public QObject {
     Q_OBJECT
     Q_PROPERTY(bool busy READ busy NOTIFY busy_changed)
    public:
-    enum class model_engine { ds, whisper };
+    enum class model_engine { ds, vosk, whisper };
 
     struct lang_t {
         QString id;
@@ -76,7 +76,7 @@ class models_manager : public QObject {
 
    private:
     enum class download_type { none, all, model, scorer, model_scorer };
-    enum class comp_type { none, xz, gz, tar, tarxz };
+    enum class comp_type { none, xz, gz, tar, tarxz, zip };
 
     struct priv_model_t {
         model_engine engine = model_engine::ds;
@@ -125,15 +125,9 @@ class models_manager : public QObject {
     void handle_download_finished();
     void handle_download_ready_read();
     void handle_ssl_errors(const QList<QSslError>& errors);
-    static QString make_checksum(const QString& file);
-    static QString make_quick_checksum(const QString& file);
     static QString model_path(const QString& file_name);
     static void init_config();
     static void backup_config(const QString& lang_models_file);
-    static bool xz_decode(const QString& file_in, const QString& file_out);
-    static bool gz_decode(const QString& file_in, const QString& file_out);
-    static bool tar_decode(const QString& file_in,
-                           std::map<QString, QString>&& files_out);
     static bool join_part_files(const QString& file_out, int parts);
     bool handle_download(const QString& path, const QString& checksum,
                          const QString& path_in_archive, const QString& path_2,
@@ -154,6 +148,13 @@ class models_manager : public QObject {
                             const QString& file_name);
     static model_engine engine_from_name(const QString& name);
     void update_default_model_for_lang(const QString& lang_id);
+    bool extract_from_archive(const QString& archive_path, comp_type comp,
+                              const QString& out_path, const QString& checksum,
+                              const QString& path_in_archive,
+                              const QString& out_path_2,
+                              const QString& checksum_2,
+                              const QString& path_in_archive_2);
+    static bool check_checksum(const QString& path, const QString& checksum);
 };
 
 #endif  // MODELS_MANAGER_H

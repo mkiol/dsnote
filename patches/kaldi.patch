@@ -1,0 +1,24 @@
+--- a/CMakeLists.txt	2023-04-02 22:46:54.480268569 +0200
++++ b/CMakeLists.txt	2023-04-02 22:45:21.896440148 +0200
+@@ -65,6 +65,7 @@
+ option(KALDI_BUILD_EXE "If disabled, will make add_kaldi_executable a no-op" ON)
+ option(KALDI_BUILD_TEST "If disabled, will make add_kaldi_test_executable a no-op" ON)
+ option(KALDI_USE_PATCH_NUMBER "Use MAJOR.MINOR.PATCH format, otherwise MAJOR.MINOR" OFF)
++option(ENABLE_CUDA "If disabled, CUDA will not be used" ON)
+ 
+ if (KALDI_BUILD_TEST)
+     include(CTest)
+@@ -164,8 +165,11 @@
+     endif()
+ endif()
+ 
+-find_package(CUDAToolkit)
+-find_package(CUDA)
++if(ENABLE_CUDA)
++    find_package(CUDAToolkit)
++    find_package(CUDA)
++endif()
++
+ if(CUDA_FOUND)
+     set(CUDA_PROPAGATE_HOST_FLAGS ON)
+     if(MSVC)

@@ -16,13 +16,14 @@ option(with_trace_logs "enable trace logging" OFF)
 option(with_sanitizers "enable asan and ubsan in debug build" ON)
 option(with_static_sanitizers "link asan and ubsan statically in debug build" OFF)
 
-option(download_libstt "download and install libstt shared lib" OFF)
+option(download_libstt "download and install libstt shared lib" ON)
+option(build_vosk "download vosk, build and install shared lib" ON)
 option(build_libarchive "download libarchive, build and link statically" ON)
 option(build_fmt "download fmt, build and link statically" ON)
 option(build_catch2 "download catch2, build and link statically" ON)
 option(build_whispercpp "download whisper.cpp, build and link statically" ON)
 option(build_webrtcvad "download webrtc vad, build and link statically" ON)
-option(build_openblas "download openblas, build and link statically" ON)
+option(build_openblas "download openblas, build and link shared lib" ON)
 
 if(${with_desktop} AND ${with_sfos})
     message(FATAL_ERROR "options with_desktop and with_sfos cannot be set together")
@@ -30,10 +31,6 @@ endif()
 
 if(NOT ${with_desktop} AND NOT ${with_sfos})
     message(FATAL_ERROR "one of the options should be set (with_desktop or with_sfos)")
-endif()
-
-if(with_sfos)
-    set(download_libstt ON)
 endif()
 
 set(info_id "dsnote")
@@ -59,11 +56,11 @@ set(info_dbus_service "org.mkiol.Stt")
 set(info_dbus_interface "org.mkiol.Stt")
 set(info_conf_version "9")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry")
-set(info_libs_str "Qt · Coqui STT · whisper.cpp · WebRTC VAD · libarchive · {fmt}")
+set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC VAD · libarchive · {fmt}")
 
-set(libstt_x86_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.Linux.tar.xz")
+set(libstt_x8664_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.Linux.tar.xz")
 set(libstt_arm64_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.aarch64.tar.xz")
-set(libstt_arm_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.armv7.tar.xz")
+set(libstt_arm32_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.armv7.tar.xz")
 set(fmt_source_url "https://github.com/fmtlib/fmt/releases/download/9.1.0/fmt-9.1.0.zip")
 set(fmt_checksum "6133244fe8ef6f75c5601e8069b37b04")
 set(libarchive_source_url "https://libarchive.org/downloads/libarchive-3.6.2.tar.gz")
@@ -76,18 +73,24 @@ set(webrtcvad_source_url "https://github.com/webrtc-mirror/webrtc/archive/ac87c8
 set(webrtcvad_checksum "f1489c137b354594632d260978b283a4")
 set(openblas_source_url "https://github.com/xianyi/OpenBLAS/releases/download/v0.3.21/OpenBLAS-0.3.21.tar.gz")
 set(openblas_checksum "ffb6120e2309a2280471716301824805")
+set(openfst_source_url "https://github.com/alphacep/openfst/archive/7dfd808194105162f20084bb4d8e4ee4b65266d5.zip")
+set(openfst_checksum "734084e424d42f16424bd5279e4f0786")
+set(kaldi_source_url "https://github.com/alphacep/kaldi/archive/2abed6b15990d9438f70863f2b58bd8af8432043.zip")
+set(kaldi_checksum "4923c5b7599184c36db3342579676fbc")
+set(vosk_source_url "https://github.com/alphacep/vosk-api/archive/128c216c6137a36fbf5b0bf64d03501e91a6eeaa.zip")
+set(vosk_checksum "1f716b8132d5678823db0531b2c8285a")
 
 project(${info_id} VERSION 2.0.0)
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES ".*arm.*")
     message(STATUS "arm architecture detected")
-    set(arm32_arch 1)
+    set(arch_arm32 1)
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES ".*aarch64.*")
     message(STATUS "arm64 architecture detected")
-    set(arm64_arch 1)
+    set(arch_arm64 1)
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES ".*86_64.*")
     message(STATUS "x86_64 architecture detected")
-    set(x8664_arch 1)
+    set(arch_x8664 1)
 else()
     message(FATAL_ERROR "unsupported architecture: ${CMAKE_SYSTEM_PROCESSOR}")
 endif()
@@ -166,10 +169,16 @@ set(dsnote_lib_sources
     ${sources_dir}/deepspeech_wrapper.hpp
     ${sources_dir}/whisper_wrapper.cpp
     ${sources_dir}/whisper_wrapper.hpp
+    ${sources_dir}/vosk_wrapper.cpp
+    ${sources_dir}/vosk_wrapper.hpp
     ${sources_dir}/vad_wrapper.cpp
     ${sources_dir}/vad_wrapper.hpp
     ${sources_dir}/cpu_tools.cpp
-    ${sources_dir}/cpu_tools.hpp)
+    ${sources_dir}/cpu_tools.hpp
+    ${sources_dir}/comp_tools.cpp
+    ${sources_dir}/comp_tools.hpp
+    ${sources_dir}/checksum_tools.cpp
+    ${sources_dir}/checksum_tools.hpp)
 
 configure_file(config.h.in config.h)
 
@@ -273,9 +282,9 @@ target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${with_sfos}>:USE_
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${with_desktop}>:USE_DESKTOP>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<CONFIG:Debug>:DEBUG>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>")
-target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${x8664_arch}>:ARCH_X86_64>")
-target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arm32_arch}>:ARCH_ARM_32>")
-target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arm64_arch}>:ARCH_ARM_64>")
+target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arch_x8664}>:ARCH_X86_64>")
+target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arch_arm32}>:ARCH_ARM_32>")
+target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arch_arm64}>:ARCH_ARM_64>")
 
 # translations
 
@@ -303,7 +312,7 @@ target_link_libraries(${info_binary_id} translations)
 # dependencies
 
 set(deps "")
-set(deps_libs compiler_flags pthread)
+set(deps_libs compiler_flags pthread ${CMAKE_DL_LIBS})
 set(deps_dirs "")
 
 include(FindPkgConfig)
@@ -331,7 +340,7 @@ if(build_libarchive)
         CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --bindir=<INSTALL_DIR>/bin
             --enable-shared=no --enable-static=yes --disable-acl --disable-xattr --disable-largefile
             --without-zstd --without-lz4 --without-libiconv-prefix --without-iconv --without-libb2
-            --without-bz2lib --without-zlib --without-cng --without-openssl --without-xml2 --without-expat
+            --without-bz2lib --with-zlib --without-cng --without-openssl --without-xml2 --without-expat
             --without-lzma --with-pic=yes
         BUILD_COMMAND ${MAKE}
         BUILD_ALWAYS False
@@ -345,35 +354,81 @@ else()
 endif()
 
 if(download_libstt)
-    if(x8664_arch)
-        set(libstt_url ${libstt_x86_url})
-    elseif(arm32_arch)
-        set(libstt_url ${libstt_arm_url})
-    elseif(arm64_arch)
+    if(arch_x8664)
+        set(libstt_url ${libstt_x8664_url})
+    elseif(arch_arm32)
+        set(libstt_url ${libstt_arm32_url})
+    elseif(arch_arm64)
         set(libstt_url ${libstt_arm64_url})
     endif()
 
     set(libstt_archive "${PROJECT_BINARY_DIR}/libstt.tar.xz")
 
     file(DOWNLOAD ${libstt_url} ${libstt_archive} ${external_lib_dir} STATUS libstt_status)
-    file(ARCHIVE_EXTRACT INPUT ${libstt_archive} DESTINATION ${external_lib_dir} 
+    file(ARCHIVE_EXTRACT INPUT ${libstt_archive} DESTINATION ${external_lib_dir}
         PATTERNS *.so VERBOSE)
-    file(ARCHIVE_EXTRACT INPUT ${libstt_archive} DESTINATION ${external_include_dir} 
-        PATTERNS *.h VERBOSE)
 
-    add_library(stt SHARED ${external_lib_dir}/libstt.so)
+    add_library(stt SHARED IMPORTED)
+    set_property(TARGET stt PROPERTY IMPORTED_LOCATION ${external_lib_dir}/libstt.so)
     list(APPEND deps stt)
-    list(APPEND deps_libs ${external_lib_dir}/libstt.so)
 
-    add_library(kenlm SHARED ${external_lib_dir}/libkenlm.so)
+    add_library(kenlm SHARED IMPORTED)
+    set_property(TARGET kenlm PROPERTY IMPORTED_LOCATION ${external_lib_dir}/libkenlm.so)
     list(APPEND deps kenlm)
-    list(APPEND deps_libs ${external_lib_dir}/libkenlm.so)
-else()
-    find_library(stt_path stt REQUIRED)
-    list(APPEND deps_libs ${stt_path})
+endif()
 
-    find_library(kenlm_path kenlm REQUIRED)
-    list(APPEND deps_libs ${kenlm_path})
+if(build_vosk)
+    ExternalProject_Add(openfst
+            SOURCE_DIR ${external_dir}/openfst
+            BINARY_DIR ${PROJECT_BINARY_DIR}/external/openfst
+            INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+            URL "${openfst_source_url}"
+            URL_MD5 "${openfst_checksum}"
+            CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> && autoreconf -fi &&
+                <BINARY_DIR>/configure --prefix=<INSTALL_DIR>
+                --disable-bin --disable-dependency-tracking --enable-compact-fsts --enable-compress
+                --enable-const-fsts --enable-far --enable-linear-fsts --enable-lookahead-fsts
+                --enable-mpdt --enable-ngram-fsts --enable-pdt --disable-shared --enable-static
+                --with-pic
+            BUILD_COMMAND ${MAKE}
+            BUILD_ALWAYS False
+            INSTALL_COMMAND make DESTDIR=/ install)
+
+    set(kaldi_flags "-O3 -I${external_include_dir}")
+    ExternalProject_Add(kaldi
+        SOURCE_DIR ${external_dir}/kaldi
+        BINARY_DIR ${PROJECT_BINARY_DIR}/external/kaldi
+        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+        URL "${kaldi_source_url}"
+        URL_MD5 "${kaldi_checksum}"
+        PATCH_COMMAND patch --forward --unified <SOURCE_DIR>/CMakeLists.txt
+            -i ${patches_dir}/kaldi.patch ||
+                echo "patch cmd failed, likely already patched"
+        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
+            -DCMAKE_INSTALL_INCLUDEDIR=${external_include_dir} -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+            -DBUILD_SHARED_LIBS=OFF -DKALDI_BUILD_EXE=OFF -DKALDI_BUILD_TEST=OFF -DKALDI_VERSION=1
+            -DCMAKE_CXX_FLAGS=${kaldi_flags} -DENABLE_CUDA=OFF
+        BUILD_ALWAYS False)
+    ExternalProject_Add_StepDependencies(kaldi configure openfst)
+
+    ExternalProject_Add(vosk
+        SOURCE_DIR ${external_dir}/vosk
+        BINARY_DIR ${PROJECT_BINARY_DIR}/external/vosk
+        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+        URL "${vosk_source_url}"
+        URL_MD5 "${vosk_checksum}"
+        PATCH_COMMAND patch --forward --unified <SOURCE_DIR>/CMakeLists.txt
+            -i ${patches_dir}/vosk.patch ||
+                echo "patch cmd failed, likely already patched"
+        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
+            -DCMAKE_INSTALL_INCLUDEDIR=${external_include_dir} -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+            -DCMAKE_LIBRARY_PATH=${external_lib_dir} -DCMAKE_INCLUDE_PATH=${external_include_dir}
+            -DCMAKE_CXX_FLAGS=-O3
+        BUILD_ALWAYS False)
+    ExternalProject_Add_StepDependencies(vosk configure kaldi)
+    ExternalProject_Add_StepDependencies(vosk configure openblas)
+
+    list(APPEND deps vosk)
 endif()
 
 if(build_fmt)
@@ -383,11 +438,9 @@ if(build_fmt)
         INSTALL_DIR ${PROJECT_BINARY_DIR}/external
         URL "${fmt_source_url}"
         URL_MD5 "${fmt_checksum}"
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ -DCMAKE_INSTALL_LIBDIR=/lib
-            -DCMAKE_INSTALL_INCLUDEDIR=/include -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DFMT_DOC=OFF
-            -DFMT_TEST=OFF -DFMT_FUZZ=OFF
-        BUILD_ALWAYS False
-        INSTALL_COMMAND make DESTDIR=${PROJECT_BINARY_DIR}/external install/local)
+        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
+            -DCMAKE_INSTALL_INCLUDEDIR=${external_include_dir} -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DFMT_DOC=OFF -DFMT_TEST=OFF -DFMT_FUZZ=OFF
+        BUILD_ALWAYS False)
     list(APPEND deps_libs ${external_lib_dir}/libfmt.a)
     list(APPEND deps fmt)
 else()
@@ -397,13 +450,11 @@ else()
 endif()
 
 if(build_whispercpp)
-    if(x8664_arch)
-        set(whispercpp_flags "-O3 -ffast-math -I${external_include_dir}/openblas")
-    elseif(arm32_arch)
-        set(whispercpp_flags "-O3 -ffast-math -mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access -I${external_include_dir}/openblas")
-    elseif(arm64_arch)
-        set(whispercpp_flags "-O3 -ffast-math -I${external_include_dir}/openblas")
+    set(whispercpp_flags -O3 -ffast-math -I${external_include_dir}/openblas)
+    if(arch_arm32)
+        list(APPEND whispercpp_flags -mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access)
     endif()
+    list(JOIN whispercpp_flags " " whispercpp_flags)
 
     ExternalProject_Add(whispercpp
         SOURCE_DIR ${external_dir}/whispercpp
@@ -414,61 +465,19 @@ if(build_whispercpp)
         PATCH_COMMAND patch --unified -p1 --directory=<SOURCE_DIR>
                     -i ${patches_dir}/whispercpp.patch ||
                         echo "patch cmd failed, likely already patched"
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ -DCMAKE_INSTALL_LIBDIR=/lib
+        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
             -DCMAKE_LIBRARY_PATH=${external_lib_dir}
-            -DCMAKE_INSTALL_INCLUDEDIR=/include -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF
+            -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF
             -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF -DWHISPER_SUPPORT_OPENBLAS=ON
-            -DCMAKE_C_FLAGS=${whispercpp_flags}
-            -DCMAKE_CXX_FLAGS=${whispercpp_flags}
-        BUILD_ALWAYS False
-        INSTALL_COMMAND make DESTDIR=${PROJECT_BINARY_DIR}/external install)
+            -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
+        BUILD_ALWAYS False)
+    ExternalProject_Add_StepDependencies(whispercpp configure openblas)
+
     list(APPEND deps_libs ${external_lib_dir}/static/libwhisper.a)
     list(APPEND deps whispercpp)
 else()
     find_library(whispercpp_path whisper REQUIRED)
     list(APPEND deps_libs ${whispercpp_path})
-endif()
-
-if(build_openblas)
-    if(x8664_arch)
-        set(openblas_flags "-O3 -ffast-math")
-        set(openblas_opts -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF)
-        set(openblas_shared 0)
-    elseif(arm32_arch)
-        set(openblas_flags "-O3 -ffast-math -mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access")
-        set(openblas_opts -DTARGET=ARMV7 -DBUILD_STATIC_LIBS=OFF -DBUILD_SHARED_LIBS=ON)
-        set(openblas_shared 1)
-    elseif(arm64_arch)
-        set(openblas_flags "-O3 -ffast-math")
-        set(openblas_opts -DTARGET=ARMV8 -DBUILD_STATIC_LIBS=OFF -DBUILD_SHARED_LIBS=ON)
-        set(openblas_shared 1)
-    endif()
-
-    ExternalProject_Add(openblas
-        SOURCE_DIR ${external_dir}/openblas
-        BINARY_DIR ${PROJECT_BINARY_DIR}/external/openblas
-        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-        URL "${openblas_source_url}"
-        URL_MD5 "${openblas_checksum}"
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ -DCMAKE_INSTALL_LIBDIR=/lib
-            -DCMAKE_INSTALL_INCLUDEDIR=/include -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_TESTING=OFF
-            -DBUILD_WITHOUT_LAPACK=OFF -DC_LAPACK=ON -DDYNAMIC_ARCH=ON
-            -DCMAKE_C_FLAGS=${openblas_flags} -DCMAKE_CXX_FLAGS=${openblas_flags} ${openblas_opts}
-        BUILD_ALWAYS False
-        INSTALL_COMMAND make DESTDIR=${PROJECT_BINARY_DIR}/external install)
-    ExternalProject_Add_StepDependencies(whispercpp configure openblas)
-
-    if(openblas_shared)
-        list(APPEND deps_libs "${external_lib_dir}/libopenblas.so")
-    else()
-        list(APPEND deps_libs "${external_lib_dir}/libopenblas.a")
-    endif()
-
-    list(APPEND deps openblas)
-else()
-    pkg_search_module(openblas REQUIRED openblas)
-    list(APPEND deps_libs ${openblas_LIBRARIES})
-    list(APPEND includes ${openblas_INCLUDE_DIRS})
 endif()
 
 if(build_webrtcvad)
@@ -481,15 +490,53 @@ if(build_webrtcvad)
         PATCH_COMMAND patch --forward --unified -p0 <SOURCE_DIR>/CMakeLists.txt
                     -i ${patches_dir}/webrtcvad.patch ||
                         echo "patch cmd failed, likely already patched"
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=/ -DCMAKE_INSTALL_LIBDIR=/lib
-            -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_BUILD_TYPE=Release
-        BUILD_ALWAYS False
-        INSTALL_COMMAND make DESTDIR=${PROJECT_BINARY_DIR}/external install)
+        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
+            -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        BUILD_ALWAYS False)
     list(APPEND deps_libs ${external_lib_dir}/libvad.a)
     list(APPEND deps webrtcvad)
 else()
     find_library(webrtcvad_path vad REQUIRED)
     list(APPEND deps_libs ${webrtcvad_path})
+endif()
+
+if(build_openblas)
+    set(openblas_opts
+        -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/external
+        -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
+        -DCMAKE_INSTALL_INCLUDEDIR=${external_include_dir}
+        -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        -DBUILD_TESTING=OFF
+        -DBUILD_WITHOUT_LAPACK=OFF
+        -DC_LAPACK=ON
+        -DDYNAMIC_ARCH=ON
+        -DBUILD_STATIC_LIBS=OFF
+        -DBUILD_SHARED_LIBS=ON
+    )
+    if(arch_arm32)
+        list(APPEND openblas_opts
+            "-DCMAKE_C_FLAGS=-mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access"
+            -DTARGET=ARMV7)
+    elseif(arch_arm64)
+        list(APPEND openblas_opts -DTARGET=ARMV8)
+    endif()
+
+    ExternalProject_Add(openblas
+        SOURCE_DIR ${external_dir}/openblas
+        BINARY_DIR ${PROJECT_BINARY_DIR}/external/openblas
+        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+        URL "${openblas_source_url}"
+        URL_MD5 "${openblas_checksum}"
+        CMAKE_ARGS ${openblas_opts}
+        BUILD_ALWAYS False)
+
+    list(APPEND deps_libs "${external_lib_dir}/libopenblas.so")
+    list(APPEND deps openblas)
+else()
+    pkg_search_module(openblas REQUIRED openblas)
+    list(APPEND deps_libs ${openblas_LIBRARIES})
+    list(APPEND includes ${openblas_INCLUDE_DIRS})
 endif()
 
 if(with_sfos)
@@ -537,7 +584,14 @@ if(with_sfos)
     if(download_libstt)
         install(FILES "${external_lib_dir}/libstt.so" DESTINATION share/${info_binary_id}/lib)
         install(FILES "${external_lib_dir}/libkenlm.so" DESTINATION share/${info_binary_id}/lib)
+    endif()
+
+    if(build_openblas)
         install(FILES "${external_lib_dir}/libopenblas.so.0.3" DESTINATION share/${info_binary_id}/lib RENAME libopenblas.so.0)
+    endif()
+
+    if(build_vosk)
+        install(FILES "${external_lib_dir}/libvosk.so" DESTINATION share/${info_binary_id}/lib)
     endif()
 
     install(FILES "${sfos_dir}/icons/86x86/${info_binary_id}.png" DESTINATION share/icons/hicolor/86x86/apps)
@@ -563,6 +617,14 @@ if(with_desktop)
     if(download_libstt)
         install(FILES "${external_lib_dir}/libstt.so" DESTINATION lib)
         install(FILES "${external_lib_dir}/libkenlm.so" DESTINATION lib)
+    endif()
+
+    if(build_openblas)
+        install(FILES "${external_lib_dir}/libopenblas.so.0.3" DESTINATION lib RENAME libopenblas.so.0)
+    endif()
+
+    if(build_vosk)
+        install(FILES "${external_lib_dir}/libvosk.so" DESTINATION lib)
     endif()
 
     configure_file("${systemd_dir}/${info_id}.service" "${PROJECT_BINARY_DIR}/${info_binary_id}.service")

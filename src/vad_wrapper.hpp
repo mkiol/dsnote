@@ -27,7 +27,8 @@ class vad_wrapper {
     ~vad_wrapper();
     void reset();
     void restart();
-    const buf_t& process(const buf_t::value_type* frame, size_t frame_size);
+    const buf_t& remove_silence(const buf_t::value_type* frame, size_t frame_size);
+    bool is_speech(const buf_t::value_type* frame, size_t frame_size);
 
    private:
     inline static const size_t m_chunk_size = 480;

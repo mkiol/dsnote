@@ -4,8 +4,9 @@ Sailfish OS app for note taking with speech to text
 
 ## Description
 
-**Speech Note** converts speech to text using [Coqui STT](https://github.com/coqui-ai/STT)
-and [whisper.cpp](https://github.com/ggerganov/whisper.cpp) libraries and language models.
+**Speech Note** converts speech to text using [Coqui STT](https://github.com/coqui-ai/STT),
+[Vosk](https://alphacephei.com/vosk) and [whisper.cpp](https://github.com/ggerganov/whisper.cpp)
+engines and language models.
 All voice processing is entirely done locally on the device. Internet connection is only
 required for model download during app initial configuration. **Speech Note** respects your
 privacy and does not send any data to the Internet.
@@ -62,6 +63,7 @@ sfdk package
 
 - [Qt](https://www.qt.io/)
 - [Coqui STT](https://github.com/coqui-ai/STT)
+- [Vosk](https://alphacephei.com/vosk)
 - [whisper.cpp](https://github.com/ggerganov/whisper.cpp)
 - [WebRTC VAD](https://webrtc.org/)
 - [libarchive](https://libarchive.org/)

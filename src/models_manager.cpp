@@ -7,11 +7,6 @@
 
 #include "models_manager.h"
 
-#include <archive.h>
-#include <archive_entry.h>
-#include <lzma.h>
-#include <zlib.h>
-
 #include <QByteArray>
 #include <QCoreApplication>
 #include <QCryptographicHash>
@@ -38,6 +33,8 @@
 #include <utility>
 #include <vector>
 
+#include "checksum_tools.hpp"
+#include "comp_tools.hpp"
 #include "config.h"
 #include "settings.h"
 
@@ -53,7 +50,9 @@ models_manager::models_manager(QObject* parent) : QObject{parent} {
     parse_models_file_might_reset();
 }
 
-models_manager::~models_manager() { m_thread.join(); }
+models_manager::~models_manager() {
+    if (m_thread.joinable()) m_thread.join();
+}
 
 bool models_manager::ok() const { return !m_models.empty(); }
 
@@ -224,6 +223,8 @@ void models_manager::download(const QString& id, download_type type, int part) {
         bool m_cs =
             checksum_ok(model.checksum, model.checksum_quick, model.file_name);
         bool s_cs =
+            model.scorer_checksum.isEmpty() ||
+            model.scorer_file_name.isEmpty() || model.scorer_urls.empty() ||
             checksum_ok(model.scorer_checksum, model.scorer_checksum_quick,
                         model.scorer_file_name);
         if ((type == download_type::all && m_cs && s_cs) ||
@@ -304,7 +305,8 @@ void models_manager::download(const QString& id, download_type type, int part) {
         next_type = next_part > 0 ? download_type::scorer : download_type::none;
     }
 
-    if (comp == comp_type::tarxz && url.hasQuery()) {
+    if ((comp == comp_type::tarxz || comp == comp_type::zip) &&
+        url.hasQuery()) {
         if (QUrlQuery query{url}; query.hasQueryItem(QStringLiteral("file"))) {
             path_in_archive = query.queryItemValue(QStringLiteral("file"));
             if (type == download_type::model_scorer) {
@@ -371,256 +373,64 @@ void models_manager::handle_download_ready_read() {
     }
 }
 
-bool models_manager::xz_decode(const QString& file_in,
-                               const QString& file_out) {
-    qDebug() << "extracting xz archive:" << file_in;
+bool models_manager::check_checksum(const QString& path,
+                                    const QString& checksum) {
+    auto real_checksum = checksum_tools::make_checksum(path);
+    auto real_quick_checksum = checksum_tools::make_quick_checksum(path);
 
-    if (std::ifstream input{file_in.toStdString(),
-                            std::ios::in | std::ifstream::binary}) {
-        if (std::ofstream output{file_out.toStdString(),
-                                 std::ios::out | std::ifstream::binary}) {
-            lzma_stream strm = LZMA_STREAM_INIT;
-            if (lzma_ret ret = lzma_stream_decoder(&strm, UINT64_MAX, 0);
-                ret != LZMA_OK) {
-                qWarning() << "error initializing the xz decoder:" << ret;
-                return false;
-            }
+    bool ok = real_checksum == checksum;
 
-            lzma_action action = LZMA_RUN;
-
-            char buff_out[std::numeric_limits<unsigned short>::max()];
-            char buff_in[std::numeric_limits<unsigned short>::max()];
-
-            strm.next_in = reinterpret_cast<uint8_t*>(buff_in);
-            strm.next_out = reinterpret_cast<uint8_t*>(buff_out);
-            strm.avail_out = sizeof buff_out;
-            strm.avail_in = 0;
-
-            while (true) {
-                if (strm.avail_in == 0 && input) {
-                    strm.next_in = reinterpret_cast<uint8_t*>(buff_in);
-                    input.read(buff_in, sizeof buff_in);
-                    strm.avail_in = input.gcount();
-                }
-
-                if (!input) action = LZMA_FINISH;
-
-                auto ret = lzma_code(&strm, action);
-
-                if (strm.avail_out == 0 || ret == LZMA_STREAM_END) {
-                    output.write(buff_out, sizeof buff_out - strm.avail_out);
-
-                    strm.next_out = reinterpret_cast<uint8_t*>(buff_out);
-                    strm.avail_out = sizeof buff_out;
-                }
-
-                if (ret == LZMA_STREAM_END) break;
-
-                if (ret != LZMA_OK) {
-                    qWarning() << "xz decoder error:" << ret;
-                    lzma_end(&strm);
-                    return false;
-                }
-            }
-
-            lzma_end(&strm);
-
-            return true;
-        }
-        qWarning() << "error opening out-file:" << file_out;
-    } else {
-        qWarning() << "error opening in-file:" << file_in;
+    if (!ok) {
+        qWarning() << "checksum 1 is invalid:" << real_checksum << "(expected"
+                   << checksum << ")";
+        qDebug() << "quick checksum 1:" << real_quick_checksum;
     }
-
-    return false;
-}
-
-bool models_manager::join_part_files(const QString& file_out, int parts) {
-    qDebug() << "joining files:" << file_out;
-
-    if (std::ofstream output{file_out.toStdString(),
-                             std::ios::out | std::ifstream::binary}) {
-        for (int i = 0; i < parts; ++i) {
-            auto file_in = download_filename(file_out, comp_type::none, i);
-            if (std::ifstream input{file_in.toStdString(),
-                                    std::ios::in | std::ifstream::binary}) {
-                char buff[std::numeric_limits<unsigned short>::max()];
-                while (input) {
-                    input.read(buff, sizeof buff);
-                    output.write(buff, static_cast<int>(input.gcount()));
-                }
-            } else {
-                qWarning() << "error opening in-file:" << file_in;
-                return false;
-            }
-        }
-    } else {
-        qWarning() << "error opening out-file:" << file_out;
-        return false;
-    }
-
-    return true;
-}
-
-bool models_manager::gz_decode(const QString& file_in,
-                               const QString& file_out) {
-    qDebug() << "extracting gz archive:" << file_in;
-
-    if (std::ifstream input{file_in.toStdString(),
-                            std::ios::in | std::ifstream::binary}) {
-        if (std::ofstream output{file_out.toStdString(),
-                                 std::ios::out | std::ifstream::binary}) {
-            z_stream strm;
-            strm.zalloc = Z_NULL;
-            strm.zfree = Z_NULL;
-            strm.opaque = Z_NULL;
-
-            if (int ret = inflateInit2(&strm, MAX_WBITS | 16); ret != Z_OK) {
-                qWarning() << "error initializing the gzip decoder:" << ret;
-                return false;
-            }
-
-            char buff_out[std::numeric_limits<unsigned short>::max()];
-            char buff_in[std::numeric_limits<unsigned short>::max()];
-
-            strm.next_in = reinterpret_cast<uint8_t*>(buff_in);
-            strm.next_out = reinterpret_cast<uint8_t*>(buff_out);
-            strm.avail_out = sizeof buff_out;
-            strm.avail_out = sizeof buff_out;
-            strm.avail_in = 0;
-
-            while (true) {
-                if (strm.avail_in == 0 && input) {
-                    strm.next_in = reinterpret_cast<uint8_t*>(buff_in);
-                    input.read(buff_in, sizeof buff_in);
-                    strm.avail_in = input.gcount();
-                }
-
-                if (input.bad()) {
-                    inflateEnd(&strm);
-                    return false;
-                }
-
-                auto ret = inflate(&strm, Z_NO_FLUSH);
-
-                if (strm.avail_out == 0 || ret == Z_STREAM_END) {
-                    output.write(buff_out, sizeof buff_out - strm.avail_out);
-
-                    strm.next_out = reinterpret_cast<uint8_t*>(buff_out);
-                    strm.avail_out = sizeof buff_out;
-                }
-
-                if (ret == Z_STREAM_END) break;
-
-                if (ret != Z_OK) {
-                    qWarning() << "gzip decoder error:" << ret;
-                    inflateEnd(&strm);
-                    return false;
-                }
-            }
-
-            inflateEnd(&strm);
-
-            return true;
-        } else {
-            qWarning() << "error opening out-file:" << file_out;
-        }
-    } else {
-        qWarning() << "error opening in-file:" << file_in;
-    }
-
-    return false;
-}
-
-// source: https://github.com/libarchive/libarchive/blob/master/examples/untar.c
-static int copy_data(struct archive* ar, struct archive* aw) {
-    int r;
-    const void* buff;
-    size_t size;
-#if ARCHIVE_VERSION_NUMBER >= 3000000
-    int64_t offset;
-#else
-    off_t offset;
-#endif
-
-    for (;;) {
-        r = archive_read_data_block(ar, &buff, &size, &offset);
-        if (r == ARCHIVE_EOF) return (ARCHIVE_OK);
-        if (r != ARCHIVE_OK) return (r);
-        r = archive_write_data_block(aw, buff, size, offset);
-        if (r != ARCHIVE_OK) {
-            return (r);
-        }
-    }
-}
-
-bool models_manager::tar_decode(const QString& file_in,
-                                std::map<QString, QString>&& files_out) {
-    qDebug() << "extracting tar archive:" << file_in;
-
-    struct archive* a = archive_read_new();
-    struct archive* ext = archive_write_disk_new();
-    archive_read_support_format_tar(a);
-
-    bool ok = true;
-
-    if (archive_read_open_filename(a, file_in.toStdString().c_str(), 10240)) {
-        qWarning() << "error opening in-file:" << file_in
-                   << archive_error_string(a);
-        ok = false;
-    } else {
-        archive_entry* entry{};
-
-        while (true) {
-            int ret = archive_read_next_header(a, &entry);
-            if (ret == ARCHIVE_EOF) break;
-            if (ret != ARCHIVE_OK) {
-                qWarning() << "error archive_read_next_header:" << file_in
-                           << archive_error_string(a);
-                ok = false;
-                break;
-            }
-
-            QString entry_path{archive_entry_pathname_utf8(entry)};
-
-            qDebug() << "found file in tar archive:" << entry_path;
-
-            if (auto it = files_out.find(entry_path); it != files_out.cend()) {
-                qDebug() << "extracting file:" << entry_path << "to"
-                         << it->second;
-
-                auto std_file_out = it->second.toStdString();
-                archive_entry_set_pathname(entry, std_file_out.c_str());
-
-                ret = archive_write_header(ext, entry);
-                if (ret != ARCHIVE_OK) {
-                    qWarning() << "error archive_write_header:" << file_in
-                               << archive_error_string(ext);
-                    ok = false;
-                    break;
-                }
-
-                copy_data(a, ext);
-                ret = archive_write_finish_entry(ext);
-                if (ret != ARCHIVE_OK) {
-                    qWarning() << "error archive_write_finish_entry:" << file_in
-                               << archive_error_string(ext);
-                    ok = false;
-                    break;
-                }
-
-                files_out.erase(it);
-                if (files_out.empty()) break;
-            }
-        }
-    }
-
-    archive_read_close(a);
-    archive_read_free(a);
-    archive_write_close(ext);
-    archive_write_free(ext);
 
     return ok;
+}
+
+bool models_manager::extract_from_archive(
+    const QString& archive_path, comp_type comp, const QString& out_path,
+    const QString& checksum, const QString& path_in_archive,
+    const QString& out_path_2, const QString& checksum_2,
+    const QString& path_in_archive_2) {
+    bool ok_2 = true;
+
+    auto archive_type = [comp] {
+        switch (comp) {
+            case comp_type::tar:
+                return comp_tools::archive_type::tar;
+            case comp_type::zip:
+                return comp_tools::archive_type::zip;
+            default:
+                throw std::runtime_error("unsupported comp type");
+        }
+    }();
+
+    if (!path_in_archive_2.isEmpty() && !out_path_2.isEmpty()) {
+        comp_tools::archive_decode(
+            archive_path, archive_type,
+            {{},
+             {{path_in_archive, out_path}, {path_in_archive_2, out_path_2}}});
+
+        ok_2 = check_checksum(out_path_2, checksum_2);
+    } else if (!path_in_archive.isEmpty() && !out_path.isEmpty()) {
+        comp_tools::archive_decode(archive_path, archive_type,
+                                   {{}, {{path_in_archive, out_path}}});
+    } else {
+        comp_tools::archive_decode(archive_path, archive_type, {out_path, {}});
+    }
+
+    return ok_2 ? check_checksum(out_path, checksum) : false;
+}
+
+static void remove_file_or_dir(const QString& path) {
+    if (path.isEmpty()) return;
+
+    if (QFileInfo{path}.isDir())
+        QDir{path}.removeRecursively();
+    else
+        QFile::remove(path);
 }
 
 bool models_manager::handle_download(const QString& path,
@@ -634,7 +444,9 @@ bool models_manager::handle_download(const QString& path,
 
     bool ok = false;
 
-    std::thread thread{[&] {
+    if (m_thread.joinable()) m_thread.join();
+
+    m_thread = std::thread{[&] {
         if (parts > 1) {
             qDebug() << "joining parts:" << parts;
             join_part_files(download_filename(path, comp), parts);
@@ -645,60 +457,45 @@ bool models_manager::handle_download(const QString& path,
         auto comp_file = download_filename(path, comp);
         qDebug() << "total downloaded size:" << QFileInfo{comp_file}.size();
 
-        bool ok_2 = true;
-
-        if (comp != comp_type::none) {
+        if (comp == comp_type::none) {
+            ok = check_checksum(path, checksum);
+        } else {
             if (comp == comp_type::gz) {
-                gz_decode(comp_file, path);
+                comp_tools::gz_decode(comp_file, path);
                 QFile::remove(comp_file);
+                ok = check_checksum(path, checksum);
             } else if (comp == comp_type::xz) {
-                xz_decode(comp_file, path);
+                comp_tools::xz_decode(comp_file, path);
                 QFile::remove(comp_file);
+                ok = check_checksum(path, checksum);
             } else if (comp == comp_type::tarxz) {
                 auto tar_file = download_filename(path, comp_type::tar);
-                xz_decode(comp_file, tar_file);
+                comp_tools::xz_decode(comp_file, tar_file);
                 QFile::remove(comp_file);
-                if (!path_in_archive_2.isEmpty() && !path_2.isEmpty()) {
-                    tar_decode(tar_file, {{path_in_archive, path},
-                                          {path_in_archive_2, path_2}});
-
-                    auto real_checksum = make_checksum(path_2);
-                    auto real_quick_checksum = make_quick_checksum(path_2);
-
-                    ok_2 = real_checksum == checksum_2;
-
-                    if (!ok_2) {
-                        qWarning() << "checksum 2 is invalid:" << real_checksum
-                                   << "(expected" << checksum_2 << ")";
-                        qDebug() << "quick checksum 2:" << real_quick_checksum;
-                    }
-                } else {
-                    tar_decode(tar_file, {{path_in_archive, path}});
-                }
+                ok = extract_from_archive(tar_file, comp_type::tar, path,
+                                          checksum, path_in_archive, path_2,
+                                          checksum_2, path_in_archive_2);
                 QFile::remove(tar_file);
+            } else if (comp == comp_type::zip) {
+                ok = extract_from_archive(comp_file, comp_type::zip, path,
+                                          checksum, path_in_archive, path_2,
+                                          checksum_2, path_in_archive_2);
+                QFile::remove(comp_file);
             } else {
                 QFile::remove(comp_file);
             }
         }
 
-        if (ok_2) {
-            auto real_checksum = make_checksum(path);
-            auto real_quick_checksum = make_quick_checksum(path);
-
-            ok = real_checksum == checksum;
-
-            if (!ok) {
-                qWarning() << "checksum 1 is invalid:" << real_checksum
-                           << "(expected" << checksum << ")";
-                qDebug() << "quick checksum 1:" << real_quick_checksum;
-            }
+        if (!ok) {
+            remove_file_or_dir(path);
+            remove_file_or_dir(path_2);
         }
 
         loop.quit();
     }};
 
     loop.exec();
-    thread.join();
+    if (m_thread.joinable()) m_thread.join();
 
     return ok;
 }
@@ -804,61 +601,6 @@ void models_manager::handle_download_finished() {
     model.download_progress = 0.0;
     model.downloaded_part_data = 0;
     emit models_changed();
-}
-
-QString models_manager::make_quick_checksum(const QString& file) {
-    if (std::ifstream input{file.toStdString(), std::ios::in |
-                                                    std::ifstream::binary |
-                                                    std::ios::ate}) {
-        auto chunk = static_cast<std::ifstream::pos_type>(
-            std::numeric_limits<unsigned short>::max());
-        auto end_pos = input.tellg();
-        if (end_pos < 2 * chunk) {
-            qWarning() << "file size too short for quick checksum";
-            return {};
-        }
-
-        auto checksum = crc32(0L, Z_NULL, 0);
-        char buff[std::numeric_limits<unsigned short>::max()];
-
-        input.seekg(end_pos - chunk);
-        input.read(buff, sizeof buff);
-        checksum = crc32(checksum, reinterpret_cast<unsigned char*>(buff),
-                         static_cast<unsigned int>(input.gcount()));
-        input.seekg(0);
-        input.read(buff, sizeof buff);
-        checksum = crc32(checksum, reinterpret_cast<unsigned char*>(buff),
-                         static_cast<unsigned int>(input.gcount()));
-
-        std::stringstream ss;
-        ss << std::hex << checksum;
-        auto hex = QString::fromStdString(ss.str());
-        return hex;
-    }
-
-    qWarning() << "cannot open file:" << file;
-
-    return {};
-}
-
-QString models_manager::make_checksum(const QString& file) {
-    if (std::ifstream input{file.toStdString(),
-                            std::ios::in | std::ifstream::binary}) {
-        auto checksum = crc32(0L, Z_NULL, 0);
-        char buff[std::numeric_limits<unsigned short>::max()];
-        while (input) {
-            input.read(buff, sizeof buff);
-            checksum = crc32(checksum, reinterpret_cast<unsigned char*>(buff),
-                             static_cast<unsigned int>(input.gcount()));
-        }
-        std::stringstream ss;
-        ss << std::hex << checksum;
-        auto hex = QString::fromStdString(ss.str());
-        return hex;
-    }
-    qWarning() << "cannot open file:" << file;
-
-    return {};
 }
 
 void models_manager::handle_download_progress(qint64 received,
@@ -981,6 +723,8 @@ models_manager::comp_type models_manager::str2comp(const QString& str) {
         return comp_type::xz;
     if (!str.compare(QStringLiteral("tarxz"), Qt::CaseInsensitive))
         return comp_type::tarxz;
+    if (!str.compare(QStringLiteral("zip"), Qt::CaseInsensitive))
+        return comp_type::zip;
     return comp_type::none;
 }
 
@@ -1001,7 +745,11 @@ QString models_manager::download_filename(const QString& filename,
         case comp_type::tarxz:
             ret_name += QStringLiteral(".tar.xz");
             break;
-        default:;
+        case comp_type::zip:
+            ret_name += QStringLiteral(".zip");
+            break;
+        case comp_type::none:
+            break;
     }
 
     if (part > -1) {
@@ -1045,10 +793,11 @@ bool models_manager::checksum_ok(const QString& checksum,
 
     if (checksum_quick.isEmpty()) {
         expected_checksum = checksum;
-        real_checksum = make_checksum(model_path(file_name));
+        real_checksum = checksum_tools::make_checksum(model_path(file_name));
     } else {
         expected_checksum = checksum_quick;
-        real_checksum = make_quick_checksum(model_path(file_name));
+        real_checksum =
+            checksum_tools::make_quick_checksum(model_path(file_name));
     }
 
     auto ok = expected_checksum == real_checksum;
@@ -1065,6 +814,7 @@ bool models_manager::checksum_ok(const QString& checksum,
 models_manager::model_engine models_manager::engine_from_name(
     const QString& name) {
     if (name == QStringLiteral("ds")) return model_engine::ds;
+    if (name == QStringLiteral("vosk")) return model_engine::vosk;
     if (name == QStringLiteral("whisper")) return model_engine::whisper;
     return model_engine::ds;  // default
 }
@@ -1177,7 +927,8 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         } else {
             if (model_is_enabled) enabled_models.removeAll(model_id);
             if (is_default_model_for_lang)
-                settings::instance()->set_default_model_for_lang(lang_id, {});
+                settings::instance()->set_default_model_for_lang(model.lang_id,
+                                                                 {});
         }
 
         models.insert({model_id, std::move(model)});
@@ -1274,6 +1025,8 @@ QString models_manager::file_name_from_id(const QString& id,
             return id + ".tflite";
         case model_engine::whisper:
             return id + ".ggml";
+        case model_engine::vosk:
+            return id;
     }
 
     throw std::runtime_error{"unknown model engine"};
@@ -1293,6 +1046,33 @@ double models_manager::model_download_progress(const QString& id) const {
     } catch (const std::out_of_range&) {
     }
     return 0.0;
+}
+
+bool models_manager::join_part_files(const QString& file_out, int parts) {
+    qDebug() << "joining files:" << file_out;
+
+    if (std::ofstream output{file_out.toStdString(),
+                             std::ios::out | std::ifstream::binary}) {
+        for (int i = 0; i < parts; ++i) {
+            auto file_in = download_filename(file_out, comp_type::none, i);
+            if (std::ifstream input{file_in.toStdString(),
+                                    std::ios::in | std::ifstream::binary}) {
+                char buff[std::numeric_limits<unsigned short>::max()];
+                while (input) {
+                    input.read(buff, sizeof buff);
+                    output.write(buff, static_cast<int>(input.gcount()));
+                }
+            } else {
+                qWarning() << "error opening in-file:" << file_in;
+                return false;
+            }
+        }
+    } else {
+        qWarning() << "error opening out-file:" << file_out;
+        return false;
+    }
+
+    return true;
 }
 
 QLatin1String models_manager::download_type_str(download_type type) {
@@ -1321,6 +1101,8 @@ QLatin1String models_manager::comp_type_str(comp_type type) {
             return QLatin1String("tarxz");
         case comp_type::xz:
             return QLatin1String("xz");
+        case comp_type::zip:
+            return QLatin1String("zip");
         case comp_type::none:
             return QLatin1String("none");
     }

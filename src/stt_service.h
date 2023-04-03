@@ -179,7 +179,7 @@ class stt_service : public QObject {
     static QString state_str(state_t state_value);
     inline auto dbus_state() const { return static_cast<int>(state()); };
     void reset_engine_gracefully();
-    void reset_engine(bool soft);
+    void reset_engine();
     QString default_model() const;
     QString default_lang() const;
     QString test_default_model(const QString &lang) const;

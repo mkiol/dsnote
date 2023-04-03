@@ -388,3 +388,20 @@ void engine_wrapper::rtrim(std::string& s) {
                 .base(),
             s.end());
 }
+
+bool engine_wrapper::sentence_timer_timed_out() {
+    if (m_start_time) {
+        if (std::chrono::steady_clock::now() - *m_start_time >= m_timeout) {
+            return true;
+        }
+    } else {
+        restart_sentence_timer();
+    }
+
+    return false;
+}
+
+void engine_wrapper::restart_sentence_timer() {
+    LOGD("staring sentence timer");
+    m_start_time = std::chrono::steady_clock::now();
+}

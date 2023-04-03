@@ -152,6 +152,8 @@ class engine_wrapper {
     static void ltrim(std::string& s);
     static void rtrim(std::string& s);
     void start_engine();
+    bool sentence_timer_timed_out();
+    void restart_sentence_timer();
 };
 
 #endif  // ENGINE_WRAPPER_H

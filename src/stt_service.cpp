@@ -17,6 +17,7 @@
 #include "file_source.h"
 #include "mic_source.h"
 #include "settings.h"
+#include "vosk_wrapper.hpp"
 #include "whisper_wrapper.hpp"
 
 stt_service::stt_service(QObject *parent)
@@ -118,7 +119,7 @@ stt_service::stt_service(QObject *parent)
             emit DefaultLangPropertyChanged(lang);
         });
     connect(this, &stt_service::engine_shutdown, this,
-            [this] { reset_engine(false); });
+            [this] { reset_engine(); });
 
     m_keepalive_timer.setSingleShot(true);
     m_keepalive_timer.setTimerType(Qt::VeryCoarseTimer);
@@ -265,6 +266,9 @@ QString stt_service::restart_engine(speech_mode_t speech_mode,
             if (model_files->engine == models_manager::model_engine::ds &&
                 typeid(m_engine) != typeid(deepspeech_wrapper))
                 return true;
+            if (model_files->engine == models_manager::model_engine::vosk &&
+                typeid(m_engine) != typeid(vosk_wrapper))
+                return true;
             if (model_files->engine == models_manager::model_engine::whisper &&
                 typeid(m_engine) != typeid(whisper_wrapper))
                 return true;
@@ -301,6 +305,10 @@ QString stt_service::restart_engine(speech_mode_t speech_mode,
             switch (model_files->engine) {
                 case models_manager::model_engine::ds:
                     m_engine = std::make_unique<deepspeech_wrapper>(
+                        std::move(config), std::move(call_backs));
+                    break;
+                case models_manager::model_engine::vosk:
+                    m_engine = std::make_unique<vosk_wrapper>(
                         std::move(config), std::move(call_backs));
                     break;
                 case models_manager::model_engine::whisper:
@@ -545,7 +553,7 @@ int stt_service::cancel(int task) {
                 m_pending_task.reset();
                 emit current_task_changed();
             } else {
-                reset_engine(false);
+                reset_engine();
                 m_keepalive_current_task_timer.stop();
             }
         } else {
@@ -555,7 +563,7 @@ int stt_service::cancel(int task) {
     } else if (audio_source_type() == source_t::mic) {
         if (m_current_task && m_current_task->id == task) {
             m_keepalive_current_task_timer.stop();
-            reset_engine(false);
+            reset_engine();
         } else {
             qWarning() << "invalid task id";
             return FAILURE;
@@ -583,11 +591,11 @@ int stt_service::stop_listen(int task) {
             m_keepalive_current_task_timer.stop();
             if (m_current_task->speech_mode == speech_mode_t::single_sentence ||
                 m_current_task->speech_mode == speech_mode_t::automatic) {
-                reset_engine(true);
+                reset_engine();
             } else if (m_engine) {
                 reset_engine_gracefully();
             } else {
-                reset_engine(true);
+                reset_engine();
             }
         } else {
             qWarning() << "invalid task id";
@@ -605,12 +613,12 @@ void stt_service::reset_engine_gracefully() {
         if (m_engine) m_engine->set_speech_started(false);
         m_source->stop();
     } else {
-        reset_engine(false);
+        reset_engine();
     }
 }
 
-void stt_service::reset_engine(bool soft) {
-    qDebug() << "reset engine: soft=" << soft;
+void stt_service::reset_engine() {
+    qDebug() << "reset engine";
 
     m_engine.reset();
     restart_audio_source();
@@ -627,7 +635,7 @@ void stt_service::reset_engine(bool soft) {
 
 void stt_service::stop() {
     qDebug() << "stop";
-    reset_engine(false);
+    reset_engine();
 }
 
 void stt_service::handle_audio_error() {

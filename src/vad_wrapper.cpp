@@ -90,8 +90,12 @@ std::vector<bool> vad_wrapper::vad_process(const buf_t& samples) const {
     return results;
 }
 
-const vad_wrapper::buf_t& vad_wrapper::process(const buf_t::value_type* frame,
-                                               size_t frame_size) {
+bool vad_wrapper::is_speech(const buf_t::value_type* frame, size_t frame_size) {
+    return !vad_wrapper::remove_silence(frame, frame_size).empty();
+}
+
+const vad_wrapper::buf_t& vad_wrapper::remove_silence(
+    const buf_t::value_type* frame, size_t frame_size) {
     m_output_samples.clear();
 
     for (size_t i = 0; i < frame_size; ++i) m_input_samples.push_back(frame[i]);

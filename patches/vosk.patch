@@ -1,0 +1,51 @@
+--- a/CMakeLists.txt	2023-03-28 17:12:16.000000000 +0200
++++ b/CMakeLists.txt	2023-04-03 15:58:36.064170480 +0200
+@@ -2,9 +2,35 @@
+ project(vosk-api CXX)
+ 
+ set(CMAKE_CXX_STANDARD 17)
+-set(CMAKE_CXX_EXTENSIONS OFF)
+ 
+-add_library(vosk
++set(lib_dir "${CMAKE_LIBRARY_PATH}")
++set(include_dir "${CMAKE_INCLUDE_PATH}")
++
++set(static_dep_libs
++  "${lib_dir}/libkaldi-online2.a"
++  "${lib_dir}/libkaldi-decoder.a"
++  "${lib_dir}/libkaldi-ivector.a"
++  "${lib_dir}/libkaldi-gmm.a"
++  "${lib_dir}/libkaldi-tree.a"
++  "${lib_dir}/libkaldi-feat.a"
++  "${lib_dir}/libkaldi-lat.a"
++  "${lib_dir}/libkaldi-lm.a"
++  "${lib_dir}/libkaldi-rnnlm.a"
++  "${lib_dir}/libkaldi-hmm.a"
++  "${lib_dir}/libkaldi-nnet3.a"
++  "${lib_dir}/libkaldi-transform.a"
++  "${lib_dir}/libkaldi-cudamatrix.a"
++  "${lib_dir}/libkaldi-matrix.a"
++  "${lib_dir}/libkaldi-fstext.a"
++  "${lib_dir}/libkaldi-util.a"
++  "${lib_dir}/libkaldi-base.a"
++  "${lib_dir}/libfst.a"
++  "${lib_dir}/libfstngram.a")
++
++find_library(openblas_path NAME openblas REQUIRED)
++set(shared_dep_libs ${openblas_path})
++
++add_library(vosk SHARED
+   src/language_model.cc
+   src/model.cc
+   src/recognizer.cc
+@@ -12,8 +38,8 @@
+   src/vosk_api.cc
+ )
+ 
+-find_package(kaldi REQUIRED)
+-target_link_libraries(vosk PUBLIC kaldi-base kaldi-online2 kaldi-rnnlm fstngram)
++target_link_libraries(vosk PRIVATE ${static_dep_libs} ${shared_dep_libs})
++target_include_directories(vosk PRIVATE ${include_dir} ${include_dir}/kaldi)
+ 
+ include(GNUInstallDirs)
+ install(TARGETS vosk DESTINATION ${CMAKE_INSTALL_LIBDIR})
