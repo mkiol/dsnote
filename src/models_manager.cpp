@@ -27,6 +27,7 @@
 #include <fstream>
 #include <functional>
 #include <iostream>
+#include <set>
 #include <sstream>
 #include <string>
 #include <thread>
@@ -37,6 +38,10 @@
 #include "comp_tools.hpp"
 #include "config.h"
 #include "settings.h"
+
+#ifdef ARCH_ARM_32
+#include "cpu_tools.hpp"
+#endif
 
 models_manager::models_manager(QObject* parent) : QObject{parent} {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 9, 0)
@@ -766,7 +771,7 @@ auto models_manager::extract_langs(const QJsonArray& langs_jarray) {
     for (const auto& ele : langs_jarray) {
         auto obj = ele.toObject();
 
-        const auto lang_id = obj.value(QLatin1String{"id"}).toString();
+        auto lang_id = obj.value(QLatin1String{"id"}).toString();
         if (lang_id.isEmpty()) {
             qWarning() << "empty model id";
             continue;
@@ -777,12 +782,26 @@ auto models_manager::extract_langs(const QJsonArray& langs_jarray) {
             continue;
         }
 
-        langs.insert({lang_id,
-                      {obj.value(QLatin1String{"name"}).toString(),
-                       obj.value(QLatin1String{"name_en"}).toString()}});
+        langs.emplace(
+            lang_id, std::pair{obj.value(QLatin1String{"name"}).toString(),
+                               obj.value(QLatin1String{"name_en"}).toString()});
     }
 
     return langs;
+}
+
+void models_manager::remove_empty_langs(langs_t& langs,
+                                        const models_t& models) {
+    std::set<QString> existing_langs;
+    for (const auto& [_, model] : models) existing_langs.insert(model.lang_id);
+
+    auto it = langs.begin();
+    while (it != langs.end()) {
+        if (existing_langs.count(it->first) == 0)
+            it = langs.erase(it);
+        else
+            ++it;
+    }
 }
 
 bool models_manager::checksum_ok(const QString& checksum,
@@ -826,6 +845,10 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
 
     QDir dir{settings::instance()->models_dir()};
 
+#ifdef ARCH_ARM_32
+    auto has_neon_fp = cpu_tools::neon_supported();
+#endif
+
     for (const auto& ele : models_jarray) {
         auto obj = ele.toObject();
         auto model_id = obj.value(QLatin1String{"model_id"}).toString();
@@ -835,7 +858,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             continue;
         }
 
-        if (models.find(model_id) != models.end()) {
+        if (models.count(model_id) > 0) {
             qWarning() << "duplicate model id in lang models file:" << model_id;
             continue;
         }
@@ -855,6 +878,15 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         auto engine =
             engine_from_name(obj.value(QLatin1String{"engine"}).toString());
 
+#ifdef ARCH_ARM_32
+        if (!has_neon_fp && engine == model_engine::whisper) {
+            qDebug() << "ignoring whisper model because cpu does not support "
+                        "neon fd:"
+                     << model_id;
+            continue;
+        }
+#endif
+
         auto file_name = obj.value(QLatin1String{"file_name"}).toString();
         if (file_name.isEmpty())
             file_name = file_name_from_id(model_id, engine);
@@ -866,6 +898,12 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
 
         bool is_default_model_for_lang =
             settings::instance()->default_model_for_lang(lang_id) == model_id;
+
+        const auto urls = obj.value(QLatin1String{"urls"}).toArray();
+        if (urls.isEmpty()) {
+            qWarning() << "urls should be non empty array";
+            continue;
+        }
 
         priv_model_t model{
             /*engine=*/engine,
@@ -893,11 +931,6 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             /*available=*/false,
             /*downloading=*/false};
 
-        const auto urls = obj.value(QLatin1String{"urls"}).toArray();
-        if (urls.isEmpty()) {
-            qWarning() << "urls should be non empty array";
-            continue;
-        }
         for (const auto& url : urls) model.urls.emplace_back(url.toString());
 
         auto scorer_urls = obj.value(QLatin1String{"scorer_urls"}).toArray();
@@ -931,7 +964,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
                                                                  {});
         }
 
-        models.insert({model_id, std::move(model)});
+        models.emplace(model_id, std::move(model));
     }
 
     settings::instance()->set_enabled_models(enabled_models);
@@ -1011,6 +1044,8 @@ void models_manager::parse_models_file(bool reset, langs_t* langs,
                     json.object().value(QStringLiteral("langs")).toArray());
                 *models = extract_models(
                     json.object().value(QStringLiteral("models")).toArray());
+
+                remove_empty_langs(*langs, *models);
             }
         }
     } else {

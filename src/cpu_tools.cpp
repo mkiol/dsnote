@@ -60,7 +60,7 @@ int cpu_tools::number_of_cores() {
 
 bool cpu_tools::neon_supported() {
     static const bool neon = [] {
-        std::array flags = {"asimd", "neon"};
+        std::array flags = {"asimd"};  // neon-fp-armv8
 
         std::ifstream cpuinfo("/proc/cpuinfo");
         return std::find_first_of(std::istream_iterator<std::string>{cpuinfo},

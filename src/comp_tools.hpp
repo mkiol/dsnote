@@ -14,6 +14,7 @@
 #include <unordered_map>
 
 #ifndef QT_SPECIALIZE_STD_HASH_TO_CALL_QHASH
+#define QT_SPECIALIZE_STD_HASH_TO_CALL_QHASH
 namespace std {
 template <>
 struct hash<QString> {

@@ -14,11 +14,23 @@
 #include <QString>
 #include <QUrl>
 #include <atomic>
-#include <map>
 #include <set>
 #include <thread>
 #include <tuple>
+#include <unordered_map>
 #include <vector>
+
+#ifndef QT_SPECIALIZE_STD_HASH_TO_CALL_QHASH
+#define QT_SPECIALIZE_STD_HASH_TO_CALL_QHASH
+namespace std {
+template <>
+struct hash<QString> {
+    std::size_t operator()(const QString& s) const noexcept {
+        return static_cast<size_t>(qHash(s));
+    }
+};
+}  // namespace std
+#endif
 
 class models_manager : public QObject {
     Q_OBJECT
@@ -103,8 +115,8 @@ class models_manager : public QObject {
     };
 
     inline static const QString models_file{QStringLiteral("models.json")};
-    using langs_t = std::map<QString, std::pair<QString, QString>>;
-    using models_t = std::map<QString, priv_model_t>;
+    using langs_t = std::unordered_map<QString, std::pair<QString, QString>>;
+    using models_t = std::unordered_map<QString, priv_model_t>;
 
     models_t m_models;
     langs_t m_langs;
@@ -155,6 +167,7 @@ class models_manager : public QObject {
                               const QString& checksum_2,
                               const QString& path_in_archive_2);
     static bool check_checksum(const QString& path, const QString& checksum);
+    static void remove_empty_langs(langs_t& langs, const models_t& models);
 };
 
 #endif  // MODELS_MANAGER_H
