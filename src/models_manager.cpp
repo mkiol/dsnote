@@ -886,6 +886,12 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             continue;
         }
 #endif
+#ifdef USE_SFOS
+        if (engine == model_engine::vosk && !model_id.contains("small")) {
+            qDebug() << "ignoring vosk large model:" << model_id;
+            continue;
+        }
+#endif
 
         auto file_name = obj.value(QLatin1String{"file_name"}).toString();
         if (file_name.isEmpty())
