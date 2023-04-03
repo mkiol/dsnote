@@ -43,6 +43,15 @@
 #include "cpu_tools.hpp"
 #endif
 
+static void remove_file_or_dir(const QString& path) {
+    if (path.isEmpty()) return;
+
+    if (QFileInfo{path}.isDir())
+        QDir{path}.removeRecursively();
+    else
+        QFile::remove(path);
+}
+
 models_manager::models_manager(QObject* parent) : QObject{parent} {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 9, 0)
     m_nam.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
@@ -429,15 +438,6 @@ bool models_manager::extract_from_archive(
     return ok_2 ? check_checksum(out_path, checksum) : false;
 }
 
-static void remove_file_or_dir(const QString& path) {
-    if (path.isEmpty()) return;
-
-    if (QFileInfo{path}.isDir())
-        QDir{path}.removeRecursively();
-    else
-        QFile::remove(path);
-}
-
 bool models_manager::handle_download(const QString& path,
                                      const QString& checksum,
                                      const QString& path_in_archive,
@@ -582,7 +582,7 @@ void models_manager::handle_download_finished() {
                 model.available = true;
                 emit download_finished(id);
             } else {
-                QFile::remove(path);
+                remove_file_or_dir(path);
                 emit download_error(id);
             }
         } else {
@@ -640,7 +640,7 @@ void models_manager::delete_model(const QString& id) {
                     return p.second.available && p.first != id &&
                            p.second.file_name == file_name;
                 })) {
-            QFile::remove(model_path(model.file_name));
+            remove_file_or_dir(model_path(model.file_name));
         } else {
             qDebug() << "not removing model file because other model uses it:"
                      << model.file_name;
@@ -651,7 +651,7 @@ void models_manager::delete_model(const QString& id) {
                              return p.second.available && p.first != id &&
                                     p.second.scorer_file_name == file_name;
                          })) {
-            QFile::remove(model_path(model.scorer_file_name));
+            remove_file_or_dir(model_path(model.scorer_file_name));
         } else {
             qDebug() << "not removing scorer file because other model uses it:"
                      << model.scorer_file_name;
@@ -887,7 +887,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         }
 #endif
 #ifdef USE_SFOS
-        if (engine == model_engine::vosk && !model_id.contains("small")) {
+        if (engine == model_engine::vosk && model_id.contains("large")) {
             qDebug() << "ignoring vosk large model:" << model_id;
             continue;
         }
