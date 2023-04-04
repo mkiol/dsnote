@@ -141,18 +141,38 @@ engine_wrapper::engine_wrapper(config_t config, callbacks_t call_backs)
 
 engine_wrapper::~engine_wrapper() { LOGD("engine dtor"); }
 
-void engine_wrapper::start_engine() {
+void engine_wrapper::start() {
+    if (started()) {
+        LOGD("engine already started");
+        return;
+    }
+
+    reset();
+
     LOGD("starting engine");
+
+    if (m_processing_thread.joinable()) m_processing_thread.join();
+
+    m_thread_exit_requested = false;
 
     m_processing_thread = std::thread{&engine_wrapper::start_processing, this};
 }
 
+bool engine_wrapper::started() const {
+    return m_processing_thread.joinable() && !m_thread_exit_requested;
+}
+
 void engine_wrapper::stop_processing_impl() {}
 
-void engine_wrapper::stop_processing() {
+void engine_wrapper::stop() {
+    if (m_thread_exit_requested) {
+        LOGD("engine stop already requested");
+        return;
+    }
+
     m_thread_exit_requested = true;
 
-    LOGD("exit requested");
+    LOGD("stop requested");
 
     stop_processing_impl();
 
@@ -162,7 +182,7 @@ void engine_wrapper::stop_processing() {
     }
 
     m_processing_cv.notify_all();
-    m_processing_thread.join();
+    if (m_processing_thread.joinable()) m_processing_thread.join();
     m_speech_started = false;
     set_speech_detection_status(speech_detection_status_t::no_speech);
 }

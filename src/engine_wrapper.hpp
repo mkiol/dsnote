@@ -72,6 +72,9 @@ class engine_wrapper {
     virtual ~engine_wrapper();
     std::pair<char*, size_t> borrow_buf();
     void return_buf(const char* c_buf, size_t size, bool sof, bool eof);
+    void start();
+    void stop();
+    bool started() const;
     inline void restart() { m_restart_requested = true; }
     inline auto speech_detection_status() const {
         return m_speech_detection_status;
@@ -135,8 +138,6 @@ class engine_wrapper {
     bool m_translate = false;
 
     void flush(flush_t type);
-    void start_processing();
-    void stop_processing();
     virtual samples_process_result_t process_buff();
     bool lock_buf(lock_type_t desired_lock);
     bool lock_buff_for_processing();
@@ -147,11 +148,11 @@ class engine_wrapper {
     static std::string merge_texts(const std::string& old_text,
                                    std::string&& new_text);
     void reset();
+    void start_processing();
     virtual void reset_impl() = 0;
     virtual void stop_processing_impl();
     static void ltrim(std::string& s);
     static void rtrim(std::string& s);
-    void start_engine();
     bool sentence_timer_timed_out();
     void restart_sentence_timer();
 };

@@ -22,13 +22,12 @@ vosk_wrapper::vosk_wrapper(config_t config, callbacks_t call_backs)
     : engine_wrapper{std::move(config), std::move(call_backs)} {
     open_vosk_lib();
     m_speech_buf.reserve(m_speech_max_size);
-    start_engine();
 }
 
 vosk_wrapper::~vosk_wrapper() {
     LOGD("vosk dtor");
 
-    stop_processing();
+    stop();
 
     if (m_vosk_api.ok()) {
         if (m_vosk_recognizer)
@@ -156,14 +155,6 @@ engine_wrapper::samples_process_result_t vosk_wrapper::process_buff() {
             LOGD("sentence timeout");
             m_call_backs.sentence_timeout();
         }
-
-        //        if (m_speech_mode == speech_mode_t::automatic)
-        //            set_speech_detection_status(speech_detection_status_t::no_speech);
-
-        //        if (m_speech_mode == speech_mode_t::single_sentence &&
-        //            m_intermediate_text && !m_intermediate_text->empty()) {
-        //            set_speech_detection_status(speech_detection_status_t::no_speech);
-        //        }
     }
 
     if (m_thread_exit_requested) {
@@ -207,39 +198,6 @@ engine_wrapper::samples_process_result_t vosk_wrapper::process_buff() {
     free_buf();
 
     return samples_process_result_t::wait_for_samples;
-
-    /*auto old_status = m_speech_detection_status;
-
-    if (eof ||
-        (m_speech_detection_status == speech_detection_status_t::no_speech &&
-         m_speech_mode != speech_mode_t::automatic))
-        set_speech_detection_status(speech_detection_status_t::decoding);
-
-    LOGD("speech frame: samples=" << m_speech_buf.size());
-
-    auto final_decode = eof || (m_speech_mode != speech_mode_t::manual &&
-                                m_speech_detection_status ==
-                                    speech_detection_status_t::no_speech);
-
-    decode_speech(m_speech_buf, final_decode);
-
-    m_speech_buf.clear();
-
-    if (m_speech_mode == speech_mode_t::manual && !m_speech_started)
-        set_speech_detection_status(speech_detection_status_t::no_speech);
-    else
-        set_speech_detection_status(old_status);
-
-    if (eof ||
-        m_speech_detection_status == speech_detection_status_t::no_speech) {
-        flush(eof ? flush_t::eof : flush_t::regular);
-    }
-
-    free_buf();
-
-    if (m_speech_mode == speech_mode_t::manual)
-        return samples_process_result_t::no_samples_needed;
-    return samples_process_result_t::wait_for_samples;*/
 }
 
 void vosk_wrapper::decode_speech(const vosk_buf_t& buf, bool eof) {

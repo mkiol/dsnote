@@ -21,13 +21,12 @@ deepspeech_wrapper::deepspeech_wrapper(config_t config, callbacks_t call_backs)
     : engine_wrapper{std::move(config), std::move(call_backs)} {
     open_ds_lib();
     m_speech_buf.reserve(m_speech_max_size);
-    start_engine();
 }
 
 deepspeech_wrapper::~deepspeech_wrapper() {
     LOGD("ds dtor");
 
-    stop_processing();
+    stop();
 
     if (m_ds_api.ok()) {
         if (m_ds_stream) m_ds_api.STT_FreeStream(m_ds_stream);

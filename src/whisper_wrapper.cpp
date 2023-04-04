@@ -18,13 +18,12 @@ whisper_wrapper::whisper_wrapper(config_t config, callbacks_t call_backs)
     : engine_wrapper{std::move(config), std::move(call_backs)},
       m_wparams{make_wparams()} {
     m_speech_buf.reserve(m_speech_max_size);
-    start_engine();
 }
 
 whisper_wrapper::~whisper_wrapper() {
     LOGD("whisper dtor");
 
-    stop_processing();
+    stop();
 
     if (m_whisper_ctx) {
         whisper_free(m_whisper_ctx);

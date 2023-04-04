@@ -119,7 +119,7 @@ stt_service::stt_service(QObject *parent)
             emit DefaultLangPropertyChanged(lang);
         });
     connect(this, &stt_service::engine_shutdown, this,
-            [this] { reset_engine(); });
+            [this] { stop_engine(); });
 
     m_keepalive_timer.setSingleShot(true);
     m_keepalive_timer.setTimerType(Qt::VeryCoarseTimer);
@@ -260,25 +260,29 @@ QString stt_service::restart_engine(speech_mode_t speech_mode,
             static_cast<engine_wrapper::speech_mode_t>(speech_mode);
         config.translate = translate;
 
-        bool restart_required = [&] {
+        bool new_engine_required = [&] {
             if (!m_engine) return true;
             if (translate != m_engine->translate()) return true;
+
+            const auto &type = typeid(*m_engine);
             if (model_files->engine == models_manager::model_engine::ds &&
-                typeid(m_engine) != typeid(deepspeech_wrapper))
+                type != typeid(deepspeech_wrapper))
                 return true;
             if (model_files->engine == models_manager::model_engine::vosk &&
-                typeid(m_engine) != typeid(vosk_wrapper))
+                type != typeid(vosk_wrapper))
                 return true;
             if (model_files->engine == models_manager::model_engine::whisper &&
-                typeid(m_engine) != typeid(whisper_wrapper))
+                type != typeid(whisper_wrapper))
                 return true;
+
             if (m_engine->model_file() != config.model_file) return true;
             if (m_engine->lang() != config.lang) return true;
+
             return false;
         }();
 
-        if (restart_required) {
-            qDebug() << "restart engine required";
+        if (new_engine_required) {
+            qDebug() << "new engine required";
 
             engine_wrapper::callbacks_t call_backs{
                 /*text_decoded=*/std::bind(
@@ -316,11 +320,13 @@ QString stt_service::restart_engine(speech_mode_t speech_mode,
                         std::move(config), std::move(call_backs));
                     break;
             }
+
+            m_engine->start();
         } else {
-            qDebug() << "restart engine not required";
+            qDebug() << "new engine not required, only restart";
+            m_engine->start();
             m_engine->set_speech_mode(
                 static_cast<engine_wrapper::speech_mode_t>(speech_mode));
-            // TO-DO: reset engine
         }
 
         return model_files->model_id;
@@ -432,7 +438,7 @@ void stt_service::delete_model(const QString &id) {
 }
 
 void stt_service::handle_audio_available() {
-    if (m_source && m_engine) {
+    if (m_source && m_engine && m_engine->started()) {
         auto [buf, max_size] = m_engine->borrow_buf();
 
         if (buf) {
@@ -553,7 +559,7 @@ int stt_service::cancel(int task) {
                 m_pending_task.reset();
                 emit current_task_changed();
             } else {
-                reset_engine();
+                stop_engine();
                 m_keepalive_current_task_timer.stop();
             }
         } else {
@@ -563,7 +569,7 @@ int stt_service::cancel(int task) {
     } else if (audio_source_type() == source_t::mic) {
         if (m_current_task && m_current_task->id == task) {
             m_keepalive_current_task_timer.stop();
-            reset_engine();
+            stop_engine();
         } else {
             qWarning() << "invalid task id";
             return FAILURE;
@@ -591,11 +597,11 @@ int stt_service::stop_listen(int task) {
             m_keepalive_current_task_timer.stop();
             if (m_current_task->speech_mode == speech_mode_t::single_sentence ||
                 m_current_task->speech_mode == speech_mode_t::automatic) {
-                reset_engine();
-            } else if (m_engine) {
-                reset_engine_gracefully();
+                stop_engine();
+            } else if (m_engine && m_engine->started()) {
+                stop_engine_gracefully();
             } else {
-                reset_engine();
+                stop_engine();
             }
         } else {
             qWarning() << "invalid task id";
@@ -606,22 +612,24 @@ int stt_service::stop_listen(int task) {
     return SUCCESS;
 }
 
-void stt_service::reset_engine_gracefully() {
-    qDebug() << "reset engine gracefully";
+void stt_service::stop_engine_gracefully() {
+    qDebug() << "stop engine gracefully";
 
     if (m_source) {
         if (m_engine) m_engine->set_speech_started(false);
         m_source->stop();
     } else {
-        reset_engine();
+        stop_engine();
     }
 }
 
-void stt_service::reset_engine() {
-    qDebug() << "reset engine";
+void stt_service::stop_engine() {
+    qDebug() << "stop engine";
 
-    m_engine.reset();
+    if (m_engine) m_engine->stop();
+
     restart_audio_source();
+
     m_pending_task.reset();
 
     if (m_current_task) {
@@ -635,7 +643,7 @@ void stt_service::reset_engine() {
 
 void stt_service::stop() {
     qDebug() << "stop";
-    reset_engine();
+    stop_engine();
 }
 
 void stt_service::handle_audio_error() {
@@ -659,7 +667,7 @@ void stt_service::handle_audio_ended() {
 }
 
 void stt_service::restart_audio_source(const QString &source_file) {
-    if (m_engine) {
+    if (m_engine && m_engine->started()) {
         if (m_source) m_source->disconnect();
 
         if (source_file.isEmpty())
@@ -703,7 +711,7 @@ void stt_service::handle_task_timeout() {
 int stt_service::speech() const {
     // 0 = No Speech, 1 = Speech Detected, 2 = Speech Decoding in progress
 
-    if (m_engine) {
+    if (m_engine && m_engine->started()) {
         switch (m_engine->speech_detection_status()) {
             case engine_wrapper::speech_detection_status_t::no_speech:
                 return 0;
@@ -730,9 +738,10 @@ void stt_service::refresh_status() {
             return;
         }
         if (m_current_task->speech_mode == speech_mode_t::manual) {
-            new_state = m_engine && m_engine->speech_status()
-                            ? state_t::listening_manual
-                            : state_t::idle;
+            new_state =
+                m_engine && m_engine->started() && m_engine->speech_status()
+                    ? state_t::listening_manual
+                    : state_t::idle;
         } else if (m_current_task->speech_mode == speech_mode_t::automatic) {
             new_state = state_t::listening_auto;
         } else if (m_current_task->speech_mode ==
