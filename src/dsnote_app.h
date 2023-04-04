@@ -52,7 +52,8 @@ class dsnote_app : public QObject {
     enum stt_speech_state_type {
         SttNoSpeech = 0,
         SttSpeechDetected = 1,
-        SttSpeechDecoding = 2
+        SttSpeechDecoding = 2,
+        SttSpeechInitializing = 3
     };
     Q_ENUM(stt_speech_state_type)
 

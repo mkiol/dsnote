@@ -11,7 +11,6 @@
 
 #include <algorithm>
 #include <chrono>
-#include <fstream>
 
 #include "RSJparser.hpp"
 #include "logger.hpp"
@@ -83,6 +82,8 @@ void vosk_wrapper::open_vosk_lib() {
     }
 }
 
+void vosk_wrapper::start_processing_impl() { create_vosk_model(); }
+
 void vosk_wrapper::create_vosk_model() {
     if (m_vosk_model) return;
 
@@ -110,6 +111,12 @@ void vosk_wrapper::reset_impl() {
     if (m_vosk_recognizer) m_vosk_api.vosk_recognizer_reset(m_vosk_recognizer);
 }
 
+void vosk_wrapper::push_inbuf_to_samples() {
+    auto end = m_in_buf.buf.cbegin();
+    std::advance(end, m_in_buf.size);
+    m_speech_buf.insert(m_speech_buf.end(), m_in_buf.buf.cbegin(), end);
+}
+
 engine_wrapper::samples_process_result_t vosk_wrapper::process_buff() {
     if (!lock_buff_for_processing())
         return samples_process_result_t::wait_for_samples;
@@ -131,10 +138,9 @@ engine_wrapper::samples_process_result_t vosk_wrapper::process_buff() {
             m_vosk_api.vosk_recognizer_reset(m_vosk_recognizer);
     }
 
-    bool vad_status = m_vad.is_speech(m_in_buf.buf.data(), m_in_buf.buf.size());
+    bool vad_status = m_vad.is_speech(m_in_buf.buf.data(), m_in_buf.size);
 
-    m_speech_buf.insert(m_speech_buf.end(), m_in_buf.buf.cbegin(),
-                        m_in_buf.buf.cend());
+    push_inbuf_to_samples();
 
     m_in_buf.clear();
 
@@ -203,8 +209,6 @@ engine_wrapper::samples_process_result_t vosk_wrapper::process_buff() {
 void vosk_wrapper::decode_speech(const vosk_buf_t& buf, bool eof) {
     LOGD("speech decoding started");
 
-    create_vosk_model();
-
     auto ret = m_vosk_api.vosk_recognizer_accept_waveform_s(
         m_vosk_recognizer, buf.data(), buf.size());
 
@@ -230,7 +234,11 @@ void vosk_wrapper::decode_speech(const vosk_buf_t& buf, bool eof) {
         return RSJresource{str}["partial"].as<std::string>();
     }();
 
+#ifdef DEBUG
+    LOGD("speech decoded: text=" << result);
+#else
     LOGD("speech decoded");
+#endif
 
     if (!m_intermediate_text || m_intermediate_text != result)
         set_intermediate_text(result);

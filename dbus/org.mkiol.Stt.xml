@@ -27,7 +27,8 @@
             Speech:
 
             An indicator of speech detection status.
-            Valid states: 0 = No Speech, 1 = Speech Detected, 2 = Speech Decoding in progress.
+            Valid states: 0 = No Speech, 1 = Speech Detected,
+                          2 = Speech Decoding in progress, 3 - Speech initializing.
             When state is 4 or 7 (Listening Manual, Listening One-sentence) speech detection
             status is never 0.
         -->
@@ -297,7 +298,8 @@
         <!--
             KeepAliveTask:
             @task: id of task returned in StartListen or TranscribeFile call
-            @timer: number of miliseconds to task kill
+            @timer: number of miliseconds to task kill (0 - means invalid task
+                    or task has been already killed)
 
             Resets task kill timer. Should be called periodically to keep task
             active. When timer timeouts, service kills the task.

@@ -36,7 +36,8 @@ class engine_wrapper {
     enum class speech_detection_status_t {
         no_speech = 0,
         speech_detected = 1,
-        decoding = 2
+        decoding = 2,
+        initializing = 3
     };
     friend std::ostream& operator<<(std::ostream& os,
                                     speech_detection_status_t status);
@@ -56,6 +57,7 @@ class engine_wrapper {
             speech_detection_status_changed;
         std::function<void()> sentence_timeout;
         std::function<void()> eof;
+        std::function<void()> stopped;
     };
 
     struct config_t {
@@ -131,6 +133,7 @@ class engine_wrapper {
     vad_wrapper m_vad;
     speech_detection_status_t m_speech_detection_status =
         speech_detection_status_t::no_speech;
+    std::optional<speech_detection_status_t> m_pending_speech_detection_status;
     bool m_speech_started = false;
     speech_mode_t m_speech_mode;
     bool m_restart_requested = false;
@@ -143,7 +146,9 @@ class engine_wrapper {
     bool lock_buff_for_processing();
     void free_buf(lock_type_t lock);
     void free_buf();
-    void set_speech_detection_status(speech_detection_status_t status);
+    void set_speech_detection_status(speech_detection_status_t status,
+                                     bool force = false);
+    void unset_speech_detection_status();
     void set_intermediate_text(const std::string& text);
     static std::string merge_texts(const std::string& old_text,
                                    std::string&& new_text);
@@ -151,6 +156,7 @@ class engine_wrapper {
     void start_processing();
     virtual void reset_impl() = 0;
     virtual void stop_processing_impl();
+    virtual void start_processing_impl();
     static void ltrim(std::string& s);
     static void rtrim(std::string& s);
     bool sentence_timer_timed_out();

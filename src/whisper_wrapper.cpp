@@ -34,6 +34,7 @@ whisper_wrapper::~whisper_wrapper() {
 void whisper_wrapper::push_buf_to_whisper_buf(
     const std::vector<in_buf_t::buf_t::value_type>& buf,
     whisper_buf_t& whisper_buf) {
+    // convert s16 to f32 sample format
     std::transform(buf.cbegin(), buf.cend(), std::back_inserter(whisper_buf),
                    [](auto sample) {
                        return static_cast<whisper_buf_t::value_type>(sample) /
@@ -49,6 +50,8 @@ void whisper_wrapper::stop_processing_impl() {
         whisper_cancel(m_whisper_ctx);
     }
 }
+
+void whisper_wrapper::start_processing_impl() { create_whisper_model(); }
 
 void whisper_wrapper::create_whisper_model() {
     if (m_whisper_ctx) return;
@@ -84,7 +87,7 @@ engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
     }
 
     const auto& vad_buf =
-        m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.buf.size());
+        m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.size);
 
     m_in_buf.clear();
 
@@ -205,15 +208,15 @@ void whisper_wrapper::decode_speech(const whisper_buf_t& buf) {
 
     if (whisper_full(m_whisper_ctx, m_wparams, buf.data(), buf.size()) == 0) {
         auto n = whisper_full_n_segments(m_whisper_ctx);
-        LOGD("wisper segments: " << n);
+        LOGD("decoded segments: " << n);
 
         for (auto i = 0; i < n; ++i) {
             std::string text = whisper_full_get_segment_text(m_whisper_ctx, i);
             rtrim(text);
             ltrim(text);
-
-            LOGT("whisper segment: " << text);
-
+#ifdef DEBUG
+            LOGD("segment " << i << ": " << text);
+#endif
             if (i != 0) os << ' ';
 
             os << text;
@@ -236,6 +239,11 @@ void whisper_wrapper::decode_speech(const whisper_buf_t& buf) {
     auto result =
         merge_texts(m_intermediate_text.value_or(std::string{}), os.str());
 
+#ifdef DEBUG
+    LOGD("speech decoded: text=" << result);
+#else
+    LOGD("speech decoded");
+#endif
     if (!m_intermediate_text || m_intermediate_text != result)
         set_intermediate_text(result);
 }

@@ -62,6 +62,8 @@ class vosk_wrapper : public engine_wrapper {
     samples_process_result_t process_buff() override;
     void decode_speech(const vosk_buf_t& buf, bool eof);
     void reset_impl() override;
+    void start_processing_impl() override;
+    void push_inbuf_to_samples();
 };
 
 #endif  // VOSK_SPEECH_WRAPPER_H

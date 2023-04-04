@@ -11,6 +11,7 @@
 #include <QDebug>
 
 mic_source::mic_source(QObject* parent) : audio_source{parent} {
+    qDebug() << "mic source created";
     init_audio();
     start();
 }
@@ -18,6 +19,7 @@ mic_source::mic_source(QObject* parent) : audio_source{parent} {
 mic_source::~mic_source() {
     qDebug() << "mic source dtor";
     m_audio_input->suspend();
+
     m_stopped = true;
 }
 

@@ -12,7 +12,8 @@ Item {
     id: root
 
     // status values:
-    // 0 - no speech, 1 - speech detected, 2 - speech decoding
+    // 0 - no speech, 1 - speech detected,
+    // 2 - speech decoding, 3 - speech initializing
     property int status: 0
 
     property color color: "black"
@@ -110,7 +111,7 @@ Item {
 
             NumberAnimation {
                 loops: Animation.Infinite
-                running: root.status === 2
+                running: root.status === 2 || root.status === 3
                 target: squareRect
                 properties: "value"
                 from: 0
@@ -122,7 +123,7 @@ Item {
     }
 
     Row {
-        visible: root.status !== 2
+        visible: root.status === 0 || root.status === 1
         x: root.width / 16
         spacing: root.width / 16
         Repeater {
@@ -132,9 +133,8 @@ Item {
     }
 
     Grid {
-        visible: root.status === 2
+        visible: root.status === 2 || root.status === 3
         columns: 2
-        // anchors.centerIn: parent
         x: root.width / 16
         spacing: root.width / 8
         Repeater {

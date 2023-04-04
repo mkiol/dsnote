@@ -28,7 +28,7 @@ class stt_service : public QObject {
 
     // DBus
     Q_PROPERTY(int State READ dbus_state CONSTANT)
-    Q_PROPERTY(bool Speech READ speech CONSTANT)
+    Q_PROPERTY(int Speech READ speech CONSTANT)
     Q_PROPERTY(QVariantMap Langs READ available_langs CONSTANT)
     Q_PROPERTY(QString DefaultLang READ default_lang WRITE set_default_lang)
     Q_PROPERTY(QVariantMap Models READ available_models CONSTANT)

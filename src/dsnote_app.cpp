@@ -109,7 +109,7 @@ void dsnote_app::handle_text_decoded(const QString &text, const QString &lang,
     QTextStream ss{&note, QIODevice::WriteOnly};
 
     if (!note.isEmpty()) {
-        if (auto last_char = note.at(note.length() - 1); !last_char.isSpace()) {
+        if (auto last_char = note.at(note.size() - 1); !last_char.isSpace()) {
             if (last_char.isLetterOrNumber())
                 ss << ". ";
             else
@@ -119,11 +119,13 @@ void dsnote_app::handle_text_decoded(const QString &text, const QString &lang,
 
     auto upper_text{text};
 
-    if (!upper_text.isEmpty()) {
-        upper_text[0] = upper_text[0].toUpper();
-    }
+    if (!upper_text.isEmpty()) upper_text[0] = upper_text[0].toUpper();
 
     ss << upper_text;
+
+    if (!upper_text.isEmpty()) {
+        if (upper_text.at(upper_text.size() - 1).isLetterOrNumber()) ss << '.';
+    }
 
     settings::instance()->set_note(note);
 
@@ -172,6 +174,8 @@ void dsnote_app::connect_dbus_signals() {
                             return stt_speech_state_type::SttSpeechDetected;
                         case 2:
                             return stt_speech_state_type::SttSpeechDecoding;
+                        case 3:
+                            return stt_speech_state_type::SttSpeechInitializing;
                     }
                     return stt_speech_state_type::SttNoSpeech;
                 }();
@@ -384,6 +388,8 @@ void dsnote_app::update_speech() {
                 return stt_speech_state_type::SttSpeechDetected;
             case 2:
                 return stt_speech_state_type::SttSpeechDecoding;
+            case 3:
+                return stt_speech_state_type::SttSpeechInitializing;
         }
         return stt_speech_state_type::SttNoSpeech;
     }();

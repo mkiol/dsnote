@@ -83,6 +83,8 @@ void deepspeech_wrapper::open_ds_lib() {
     }
 }
 
+void deepspeech_wrapper::start_processing_impl() { create_ds_model(); }
+
 void deepspeech_wrapper::create_ds_model() {
     if (m_ds_model) return;
 
@@ -149,7 +151,7 @@ engine_wrapper::samples_process_result_t deepspeech_wrapper::process_buff() {
     }
 
     const auto& vad_buf =
-        m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.buf.size());
+        m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.size);
 
     m_in_buf.clear();
 
@@ -228,7 +230,6 @@ void deepspeech_wrapper::decode_speech(const ds_buf_t& buf, bool eof) {
 
     LOGD("speech decoding started");
 
-    create_ds_model();
     create_ds_stream();
 
     m_ds_api.STT_FeedAudioContent(m_ds_stream, buf.data(), buf.size());
@@ -243,7 +244,11 @@ void deepspeech_wrapper::decode_speech(const ds_buf_t& buf, bool eof) {
     std::string result{cstr};
     m_ds_api.STT_FreeString(cstr);
 
+#ifdef DEBUG
+    LOGD("speech decoded: text=" << result);
+#else
     LOGD("speech decoded");
+#endif
 
     if (!m_intermediate_text || m_intermediate_text != result)
         set_intermediate_text(result);

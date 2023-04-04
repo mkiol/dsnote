@@ -49,6 +49,7 @@ Page {
                     case DsnoteApp.SttNoSpeech: return 0;
                     case DsnoteApp.SttSpeechDetected: return 1;
                     case DsnoteApp.SttSpeechDecoding: return 2;
+                    case DsnoteApp.SttSpeechInitializing: return 3;
                     }
                     return 0;
                 }
@@ -62,6 +63,8 @@ Page {
                 readOnly: true
                 wrapMode: TextEdit.WordWrap
                 placeholderText: {
+                    if (app.speech === DsnoteApp.SttSpeechInitializing)
+                        return qsTr("Getting ready, please wait...")
                     if (app.state === DsnoteApp.SttTranscribingFile)
                         return qsTr("Transcribing audio file...") +
                                 (app.transcribe_progress > 0.0 ? " " +
@@ -104,17 +107,20 @@ Page {
 
             ToolButton {
                 visible: app.speech === DsnoteApp.SttSpeechDecoding ||
+                         app.speech === DsnoteApp.SttSpeechInitializing ||
                          app.state === DsnoteApp.SttTranscribingFile ? true :
                        _settings.speech_mode === Settings.SpeechSingleSentence &&
                                                 (app.state === DsnoteApp.SttListeningSingleSentence ||
                                                  app.state === DsnoteApp.SttIdle)
 
                 text: app.speech === DsnoteApp.SttSpeechDecoding ||
+                      app.speech === DsnoteApp.SttSpeechInitializing ||
                       app.state === DsnoteApp.SttTranscribingFile ||
                       app.state === DsnoteApp.SttListeningSingleSentence ?
                           qsTr("Cancel") : qsTr("Click to start listening")
                 onClicked: {
                     if (app.speech === DsnoteApp.SttSpeechDecoding ||
+                        app.speech === DsnoteApp.SttSpeechInitializing ||
                         app.state === DsnoteApp.SttTranscribingFile ||
                         app.state === DsnoteApp.SttListeningSingleSentence) app.cancel()
                     else app.listen()

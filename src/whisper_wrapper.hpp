@@ -39,6 +39,7 @@ class whisper_wrapper : public engine_wrapper {
     whisper_full_params make_wparams() const;
     void reset_impl() override;
     void stop_processing_impl() override;
+    void start_processing_impl() override;
 };
 
 #endif  // WHISPER_WRAPPER_H

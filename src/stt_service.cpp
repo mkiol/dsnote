@@ -84,11 +84,14 @@ stt_service::stt_service(QObject *parent)
             static_cast<void (stt_service::*)(int)>(
                 &stt_service::handle_engine_eof),
             Qt::QueuedConnection);
-    connect(this, &stt_service::speech_changed, this, [this]() {
-        qDebug() << "[service => dbus] signal SpeechPropertyChanged:"
-                 << speech();
-        emit SpeechPropertyChanged(speech());
-    });
+    connect(
+        this, &stt_service::speech_changed, this,
+        [this]() {
+            qDebug() << "[service => dbus] signal SpeechPropertyChanged:"
+                     << speech();
+            emit SpeechPropertyChanged(speech());
+        },
+        Qt::QueuedConnection);
     connect(this, &stt_service::models_changed, this, [this]() {
         auto models_list = available_models();
         qDebug() << "[service => dbus] signal ModelsPropertyChanged:"
@@ -439,6 +442,13 @@ void stt_service::delete_model(const QString &id) {
 
 void stt_service::handle_audio_available() {
     if (m_source && m_engine && m_engine->started()) {
+        if (m_engine->speech_detection_status() ==
+            engine_wrapper::speech_detection_status_t::initializing) {
+            if (m_source->type() == audio_source::source_type::mic)
+                m_source->clear();
+            return;
+        }
+
         auto [buf, max_size] = m_engine->borrow_buf();
 
         if (buf) {
@@ -668,6 +678,8 @@ void stt_service::handle_audio_ended() {
 
 void stt_service::restart_audio_source(const QString &source_file) {
     if (m_engine && m_engine->started()) {
+        qDebug() << "creating audio source";
+
         if (m_source) m_source->disconnect();
 
         if (source_file.isEmpty())
@@ -709,7 +721,10 @@ void stt_service::handle_task_timeout() {
 }
 
 int stt_service::speech() const {
-    // 0 = No Speech, 1 = Speech Detected, 2 = Speech Decoding in progress
+    // 0 = No Speech
+    // 1 = Speech detected
+    // 2 = Speech decoding in progress
+    // 3 = Speech model initialization
 
     if (m_engine && m_engine->started()) {
         switch (m_engine->speech_detection_status()) {
@@ -719,6 +734,8 @@ int stt_service::speech() const {
                 return 1;
             case engine_wrapper::speech_detection_status_t::decoding:
                 return 2;
+            case engine_wrapper::speech_detection_status_t::initializing:
+                return 3;
         }
     }
     return 0;
@@ -835,6 +852,8 @@ QVariantMap stt_service::translations() const {
                tr("Click and say something..."));
     map.insert(QStringLiteral("busy_stt"), tr("Busy..."));
     map.insert(QStringLiteral("decoding"), tr("Decoding, please wait..."));
+    map.insert(QStringLiteral("initializing"),
+               tr("Getting ready, please wait..."));
 
     return map;
 }
