@@ -207,9 +207,34 @@
             "id": "mk"
         },
         {
+            "name": "Қазақ",
+            "name_en": "Kazakh",
+            "id": "kk"
+        },
+        {
             "name": "Српски",
             "name_en": "Serbian",
             "id": "sr"
+        },
+        {
+            "name": "Esperanto",
+            "name_en": "Esperanto",
+            "id": "eo"
+        },
+        {
+            "name": "हिन्दी",
+            "name_en": "Hindi",
+            "id": "hi"
+        },
+        {
+            "name": "Oʻzbekcha",
+            "name_en": "Uzbek",
+            "id": "uz"
+        },
+        {
+            "name": "한국어",
+            "name_en": "Korean",
+            "id": "ko"
         }
     ],
     "models": [
@@ -2555,7 +2580,6 @@
             "model_id": "en_vosk_large",
             "engine": "vosk",
             "lang_id": "en",
-            "score": 0,
             "checksum": "d28e96b6",
             "checksum_quick": "85a3eee1",
             "comp": "zip",
@@ -2569,7 +2593,6 @@
             "model_id": "en_vosk_indian_large",
             "engine": "vosk",
             "lang_id": "en",
-            "score": 0,
             "checksum": "120760c",
             "checksum_quick": "d8ee9054",
             "comp": "zip",
@@ -2596,7 +2619,6 @@
             "model_id": "zh-CN_vosk_large",
             "engine": "vosk",
             "lang_id": "zh-CN",
-            "score": 0,
             "checksum": "19ed3167",
             "checksum_quick": "28a43f59",
             "comp": "zip",
@@ -2623,7 +2645,6 @@
             "model_id": "ru_vosk_large",
             "engine": "vosk",
             "lang_id": "ru",
-            "score": 0,
             "checksum": "181b1da6",
             "checksum_quick": "8bfc3dd4",
             "comp": "zip",
@@ -2650,7 +2671,6 @@
             "model_id": "fr_vosk_large",
             "engine": "vosk",
             "lang_id": "fr",
-            "score": 0,
             "checksum": "b510c74e",
             "checksum_quick": "ce8ce49f",
             "comp": "zip",
@@ -2677,7 +2697,6 @@
             "model_id": "de_vosk_large",
             "engine": "vosk",
             "lang_id": "de",
-            "score": 0,
             "checksum": "98c39119",
             "checksum_quick": "827d6f00",
             "comp": "zip",
@@ -2704,7 +2723,6 @@
             "model_id": "es_vosk_large",
             "engine": "vosk",
             "lang_id": "es",
-            "score": 0,
             "checksum": "c095d1e0",
             "checksum_quick": "b6752347",
             "comp": "zip",
@@ -2731,7 +2749,6 @@
             "model_id": "pt_vosk_large",
             "engine": "vosk",
             "lang_id": "pt",
-            "score": 0,
             "checksum": "cf072408",
             "checksum_quick": "7a0c8f3",
             "comp": "zip",
@@ -2784,7 +2801,6 @@
             "model_id": "it_vosk_large",
             "engine": "vosk",
             "lang_id": "it",
-            "score": 0,
             "checksum": "9035f7ee",
             "checksum_quick": "b51d6bc9",
             "comp": "zip",
@@ -2811,7 +2827,6 @@
             "model_id": "nl_vosk_large",
             "engine": "vosk",
             "lang_id": "nl",
-            "score": 0,
             "checksum": "8f55db2f",
             "checksum_quick": "ec3aa6d5",
             "comp": "zip",
@@ -2864,7 +2879,6 @@
             "model_id": "fa_vosk_large",
             "engine": "vosk",
             "lang_id": "fa",
-            "score": 0,
             "checksum": "6c9efd66",
             "checksum_quick": "c40d0e85",
             "comp": "zip",
@@ -2950,6 +2964,149 @@
                 "https://alphacephei.com/vosk/models/vosk-model-uk-v3-lgraph.zip"
             ],
             "size": "340762018"
+        },
+        {
+            "name": "Қазақ (Vosk Medium)",
+            "model_id": "kk_vosk_medium",
+            "engine": "vosk",
+            "lang_id": "kk",
+            "checksum": "9bd922a1",
+            "checksum_quick": "b599b698",
+            "comp": "zip",
+            "urls": [
+                "https://alphacephei.com/vosk/models/vosk-model-kz-0.15.zip"
+            ],
+            "size": "387565689"
+        },
+        {
+            "name": "Қазақ (Vosk Small)",
+            "model_id": "kk_vosk_small",
+            "engine": "vosk",
+            "lang_id": "kk",
+            "checksum": "c039338",
+            "checksum_quick": "39a8ba9a",
+            "comp": "zip",
+            "urls": [
+                "https://alphacephei.com/vosk/models/vosk-model-small-kz-0.15.zip"
+            ],
+            "size": "43739114"
+        },
+        {
+            "name": "Swedish (Vosk Small)",
+            "model_id": "sv_vosk_small",
+            "engine": "vosk",
+            "lang_id": "sv",
+            "checksum": "539ca7c3",
+            "checksum_quick": "40720677",
+            "comp": "zip",
+            "urls": [
+                "https://alphacephei.com/vosk/models/vosk-model-small-sv-rhasspy-0.15.zip"
+            ],
+            "size": "303504931"
+        },
+        {
+            "name": "日本語 (Vosk Large)",
+            "model_id": "jp_vosk_large",
+            "engine": "vosk",
+            "lang_id": "jp",
+            "checksum": "8f7818ee",
+            "checksum_quick": "5bf6ab1b",
+            "comp": "zip",
+            "urls": [
+                "https://alphacephei.com/vosk/models/vosk-model-ja-0.22.zip"
+            ],
+            "size": "1045975323"
+        },
+        {
+            "name": "日本語 (Vosk Small)",
+            "model_id": "jp_vosk_small",
+            "engine": "vosk",
+            "lang_id": "jp",
+            "checksum": "5a25273",
+            "checksum_quick": "e1f3efff",
+            "comp": "zip",
+            "urls": [
+                "https://alphacephei.com/vosk/models/vosk-model-small-ja-0.22.zip"
+            ],
+            "size": "49704573"
+        },
+        {
+            "name": "Esperanto (Vosk Small)",
+            "model_id": "eo_vosk_small",
+            "engine": "vosk",
+            "lang_id": "eo",
+            "checksum": "8c530697",
+            "checksum_quick": "82aac4e7",
+            "comp": "zip",
+            "urls": [
+                "https://alphacephei.com/vosk/models/vosk-model-small-eo-0.42.zip"
+            ],
+            "size": "43839401"
+        },
+        {
+            "name": "हिन्दी (Vosk Large)",
+            "model_id": "hi_vosk_large",
+            "engine": "vosk",
+            "lang_id": "hi",
+            "checksum": "b4911cd0",
+            "checksum_quick": "eea42490",
+            "comp": "zip",
+            "urls": [
+                "https://alphacephei.com/vosk/models/vosk-model-hi-0.22.zip"
+            ],
+            "size": "1561909274"
+        },
+        {
+            "name": "हिन्दी (Vosk Small)",
+            "model_id": "hi_vosk_small",
+            "engine": "vosk",
+            "lang_id": "hi",
+            "checksum": "a2731ec4",
+            "checksum_quick": "b5427c4b",
+            "comp": "zip",
+            "urls": [
+                "https://alphacephei.com/vosk/models/vosk-model-small-hi-0.22.zip"
+            ],
+            "size": "44458845"
+        },
+        {
+            "name": "Čeština (Vosk Small)",
+            "model_id": "cs_vosk_small",
+            "engine": "vosk",
+            "lang_id": "cs",
+            "checksum": "5c2c5213",
+            "checksum_quick": "25953705",
+            "comp": "zip",
+            "urls": [
+                "https://alphacephei.com/vosk/models/vosk-model-small-cs-0.4-rhasspy.zip"
+            ],
+            "size": "46088666"
+        },
+        {
+            "name": "Oʻzbekcha (Vosk Small)",
+            "model_id": "uz_vosk_small",
+            "engine": "vosk",
+            "lang_id": "uz",
+            "checksum": "fbf5609c",
+            "checksum_quick": "be9e9cfd",
+            "comp": "zip",
+            "urls": [
+                "https://alphacephei.com/vosk/models/vosk-model-small-uz-0.22.zip"
+            ],
+            "size": "51061189"
+        },
+        {
+            "name": "한국어 (Vosk Small)",
+            "model_id": "ko_vosk_small",
+            "engine": "vosk",
+            "lang_id": "ko",
+            "checksum": "a2b5e9ab",
+            "checksum_quick": "f971af00",
+            "comp": "zip",
+            "urls": [
+                "https://alphacephei.com/vosk/models/vosk-model-small-ko-0.22.zip"
+            ],
+            "size": "86914329"
         },
         {
             "name": "Polski (Vosk Small)",
