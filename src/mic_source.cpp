@@ -80,25 +80,23 @@ void mic_source::handle_read_timeout() {
     if (m_stopped && m_audio_input->state() != QAudio::State::SuspendedState)
         stop();
 
-    bool bytes_available = !m_eof || m_audio_input->bytesReady() > 0;
-
-    /*qDebug() << "mic read timeout: b_avai=" << bytes_available
+    /*bool bytes_available = !m_eof || m_audio_input->bytesReady() > 0;
+    qDebug() << "mic read timeout: b_avai=" << bytes_available
              << "eof=" << m_eof << "ended=" << m_ended << "sof=" << m_sof
              << "b_ready=" << m_audio_input->bytesReady();*/
 
-    if (bytes_available || (m_eof && !m_ended)) {
-        emit audio_available();
-
-        if (m_ended) m_timer.stop();
-
-        if (m_eof && !bytes_available) {
-            emit ended();
-            m_ended = true;
-        }
+    if (m_ended) {
+        emit ended();
+        m_timer.stop();
+        return;
     }
+
+    emit audio_available();
 }
 
 void mic_source::clear() {
+    qDebug() << "mic clear";
+
     char buff[std::numeric_limits<short>::max()];
     while (m_audio_device->read(buff, std::numeric_limits<short>::max()))
         continue;
@@ -117,7 +115,7 @@ audio_source::audio_data mic_source::read_audio(char* buf, size_t max_size) {
 
     if (!bytes_available) {
         data.eof = m_eof;
-        if (m_ended) m_timer.stop();
+        if (data.eof) m_ended = true;
         return data;
     }
 
@@ -126,7 +124,7 @@ audio_source::audio_data mic_source::read_audio(char* buf, size_t max_size) {
 
     m_sof = false;
 
-    if (m_ended) m_timer.stop();
+    if (data.eof) m_ended = true;
 
     return data;
 }

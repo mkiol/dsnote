@@ -84,6 +84,10 @@ stt_service::stt_service(QObject *parent)
             static_cast<void (stt_service::*)(int)>(
                 &stt_service::handle_engine_eof),
             Qt::QueuedConnection);
+    connect(this, &stt_service::engine_stopped, this,
+            static_cast<void (stt_service::*)(int)>(
+                &stt_service::handle_engine_stopped),
+            Qt::QueuedConnection);
     connect(
         this, &stt_service::speech_changed, this,
         [this]() {
@@ -288,26 +292,23 @@ QString stt_service::restart_engine(speech_mode_t speech_mode,
             qDebug() << "new engine required";
 
             engine_wrapper::callbacks_t call_backs{
-                /*text_decoded=*/std::bind(
-                    static_cast<void (stt_service::*)(const std::string &)>(
-                        &stt_service::handle_text_decoded),
-                    this, std::placeholders::_1),
+                /*text_decoded=*/[this](const std::string &text) {
+                    handle_text_decoded(text);
+                },
                 /*intermediate_text_decoded=*/
-                std::bind(
-                    static_cast<void (stt_service::*)(const std::string &)>(
-                        &stt_service::handle_intermediate_text_decoded),
-                    this, std::placeholders::_1),
+                [this](const std::string &text) {
+                    handle_intermediate_text_decoded(text);
+                },
                 /*speech_detection_status_changed=*/
-                std::bind(&stt_service::handle_speech_detection_status_changed,
-                          this, std::placeholders::_1),
+                [this](engine_wrapper::speech_detection_status_t status) {
+                    handle_speech_detection_status_changed(status);
+                },
                 /*sentence_timeout=*/
-                std::bind(static_cast<void (stt_service::*)()>(
-                              &stt_service::handle_sentence_timeout),
-                          this),
+                [this]() { handle_sentence_timeout(); },
                 /*eof=*/
-                std::bind(static_cast<void (stt_service::*)()>(
-                              &stt_service::handle_engine_eof),
-                          this)};
+                [this]() { handle_engine_eof(); },
+                /*stopped=*/
+                [this]() { handle_engine_stopped(); }};
 
             switch (model_files->engine) {
                 case models_manager::model_engine::ds:
@@ -375,6 +376,16 @@ void stt_service::handle_engine_eof(int task_id) {
 
 void stt_service::handle_engine_eof() {
     if (m_current_task) emit engine_eof(m_current_task->id);
+}
+
+void stt_service::handle_engine_stopped(int task_id) {
+    qDebug() << "engine stopped";
+
+    if (current_task_id() == task_id) cancel(task_id);
+}
+
+void stt_service::handle_engine_stopped() {
+    if (m_current_task) emit engine_stopped(m_current_task->id);
 }
 
 void stt_service::handle_text_decoded(const std::string &text) {
@@ -453,6 +464,9 @@ void stt_service::handle_audio_available() {
 
         if (buf) {
             auto audio_data = m_source->read_audio(buf, max_size);
+
+            if (audio_data.eof) qDebug() << "audio eof";
+
             m_engine->return_buf(buf, audio_data.size, audio_data.sof,
                                  audio_data.eof);
             set_progress(m_source->progress());

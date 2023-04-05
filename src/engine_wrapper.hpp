@@ -78,9 +78,7 @@ class engine_wrapper {
     void stop();
     bool started() const;
     inline void restart() { m_restart_requested = true; }
-    inline auto speech_detection_status() const {
-        return m_speech_detection_status;
-    }
+    speech_detection_status_t speech_detection_status() const;
     void set_speech_mode(speech_mode_t mode);
     inline auto speech_mode() const { return m_speech_mode; }
     void set_speech_started(bool value);
@@ -99,6 +97,9 @@ class engine_wrapper {
     enum class samples_process_result_t { wait_for_samples, no_samples_needed };
     friend std::ostream& operator<<(std::ostream& os,
                                     samples_process_result_t result);
+
+    enum class processing_state_t { idle, initializing, decoding };
+    friend std::ostream& operator<<(std::ostream& os, processing_state_t state);
 
     inline static const size_t m_sample_rate = 16000;  // 1s
     inline static const size_t m_in_buf_max_size = 24000;
@@ -133,12 +134,12 @@ class engine_wrapper {
     vad_wrapper m_vad;
     speech_detection_status_t m_speech_detection_status =
         speech_detection_status_t::no_speech;
-    std::optional<speech_detection_status_t> m_pending_speech_detection_status;
     bool m_speech_started = false;
     speech_mode_t m_speech_mode;
     bool m_restart_requested = false;
     std::optional<std::chrono::steady_clock::time_point> m_start_time;
     bool m_translate = false;
+    processing_state_t m_processing_state = processing_state_t::idle;
 
     void flush(flush_t type);
     virtual samples_process_result_t process_buff();
@@ -146,10 +147,9 @@ class engine_wrapper {
     bool lock_buff_for_processing();
     void free_buf(lock_type_t lock);
     void free_buf();
-    void set_speech_detection_status(speech_detection_status_t status,
-                                     bool force = false);
-    void unset_speech_detection_status();
+    void set_speech_detection_status(speech_detection_status_t status);
     void set_intermediate_text(const std::string& text);
+    void set_processing_state(processing_state_t new_state);
     static std::string merge_texts(const std::string& old_text,
                                    std::string&& new_text);
     void reset();

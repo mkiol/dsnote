@@ -106,6 +106,23 @@ std::ostream& operator<<(std::ostream& os,
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os,
+                         engine_wrapper::processing_state_t state) {
+    switch (state) {
+        case engine_wrapper::processing_state_t::idle:
+            os << "idle";
+            break;
+        case engine_wrapper::processing_state_t::initializing:
+            os << "initializing";
+            break;
+        case engine_wrapper::processing_state_t::decoding:
+            os << "decoding";
+            break;
+    }
+
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, engine_wrapper::vad_mode_t mode) {
     switch (mode) {
         case engine_wrapper::vad_mode_t::aggressiveness0:
@@ -189,6 +206,7 @@ void engine_wrapper::stop() {
     if (m_processing_thread.joinable()) m_processing_thread.join();
     m_speech_started = false;
     set_speech_detection_status(speech_detection_status_t::no_speech);
+    set_processing_state(processing_state_t::idle);
 }
 
 void engine_wrapper::start_processing() {
@@ -197,9 +215,9 @@ void engine_wrapper::start_processing() {
     m_thread_exit_requested = false;
 
     try {
-        set_speech_detection_status(speech_detection_status_t::initializing);
+        set_processing_state(processing_state_t::initializing);
         start_processing_impl();
-        unset_speech_detection_status();
+        set_processing_state(processing_state_t::idle);
 
         while (true) {
             LOGT("processing iter");
@@ -224,6 +242,8 @@ void engine_wrapper::start_processing() {
     }
 
     LOGD("processing ended");
+
+    if (m_call_backs.stopped) m_call_backs.stopped();
 }
 
 bool engine_wrapper::lock_buf(lock_type_t desired_lock) {
@@ -278,8 +298,8 @@ bool engine_wrapper::lock_buff_for_processing() {
         return false;
     }
 
-    LOGT("lock buff for processing: eof=" << m_in_buf.eof << ", buf size"
-                                          << m_in_buf.size);
+    LOGT("lock buff for processing: eof=" << m_in_buf.eof
+                                          << ", buf size=" << m_in_buf.size);
 
     if (!m_in_buf.eof && m_in_buf.size < m_in_buf_max_size) {
         free_buf();
@@ -296,7 +316,7 @@ void engine_wrapper::reset() {
     m_start_time.reset();
     m_vad.reset();
     m_intermediate_text.reset();
-    set_speech_detection_status(speech_detection_status_t::no_speech, true);
+    set_speech_detection_status(speech_detection_status_t::no_speech);
 
     reset_impl();
 }
@@ -338,6 +358,43 @@ void engine_wrapper::set_intermediate_text(const std::string& text) {
         if (m_intermediate_text->empty() ||
             m_intermediate_text->size() >= m_min_text_size) {
             m_call_backs.intermediate_text_decoded(m_intermediate_text.value());
+        }
+    }
+}
+
+engine_wrapper::speech_detection_status_t
+engine_wrapper::speech_detection_status() const {
+    switch (m_processing_state) {
+        case processing_state_t::initializing:
+            return speech_detection_status_t::initializing;
+        case processing_state_t::decoding:
+            if (m_speech_detection_status ==
+                speech_detection_status_t::speech_detected)
+                break;
+            else
+                return speech_detection_status_t::decoding;
+        case processing_state_t::idle:
+            break;
+    }
+
+    return m_speech_detection_status;
+}
+
+void engine_wrapper::set_processing_state(processing_state_t new_state) {
+    if (m_processing_state != new_state) {
+        auto old_speech_status = speech_detection_status();
+
+        LOGD("processing state: " << m_processing_state << " => " << new_state);
+
+        m_processing_state = new_state;
+
+        auto new_speech_status = speech_detection_status();
+
+        if (old_speech_status != new_speech_status) {
+            LOGD("speech detection status: "
+                 << old_speech_status << " => " << new_speech_status << " ("
+                 << m_speech_detection_status << ")");
+            m_call_backs.speech_detection_status_changed(new_speech_status);
         }
     }
 }
@@ -397,35 +454,21 @@ void engine_wrapper::set_speech_started(bool value) {
 }
 
 void engine_wrapper::set_speech_detection_status(
-    speech_detection_status_t status, bool force) {
+    speech_detection_status_t status) {
     if (m_speech_detection_status == status) return;
 
-    if (!force &&
-        m_speech_detection_status == speech_detection_status_t::initializing) {
-        LOGD("pending speech detection status: " << m_speech_detection_status
-                                                 << " => " << status);
-        m_pending_speech_detection_status = status;
-        return;
-    }
+    auto old_speech_status = speech_detection_status();
 
-    if (m_speech_detection_status != status) {
-        LOGD("speech detection status: " << m_speech_detection_status << " => "
-                                         << status);
-        m_speech_detection_status = status;
-        m_call_backs.speech_detection_status_changed(status);
-    }
-}
+    m_speech_detection_status = status;
 
-void engine_wrapper::unset_speech_detection_status() {
-    if (m_speech_detection_status != speech_detection_status_t::initializing)
-        return;
+    auto new_speech_status = speech_detection_status();
 
-    if (m_pending_speech_detection_status) {
-        set_speech_detection_status(*m_pending_speech_detection_status, true);
-        m_pending_speech_detection_status.reset();
-    } else {
-        set_speech_detection_status(speech_detection_status_t::no_speech, true);
-    }
+    LOGD("speech detection status: " << old_speech_status << " => "
+                                     << new_speech_status << " ("
+                                     << m_speech_detection_status << ")");
+
+    if (old_speech_status != new_speech_status)
+        m_call_backs.speech_detection_status_changed(new_speech_status);
 }
 
 void engine_wrapper::ltrim(std::string& s) {

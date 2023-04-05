@@ -1,6 +1,6 @@
 diff -ruN a/ggml.c b/ggml.c
 --- a/ggml.c	2023-02-28 21:29:12.000000000 +0100
-+++ b/ggml.c	2023-03-21 18:22:56.350018585 +0100
++++ b/ggml.c	2023-04-05 16:42:39.858597474 +0200
 @@ -1279,6 +1279,7 @@
      size_t mem_size;
      void * mem_buffer;
@@ -17,7 +17,7 @@ diff -ruN a/ggml.c b/ggml.c
          /*.n_objects        =*/ 0,
          /*.objects_begin    =*/ NULL,
          /*.objects_end      =*/ NULL,
-@@ -1564,6 +1566,10 @@
+@@ -1564,6 +1566,14 @@
      return ctx;
  }
  
@@ -25,10 +25,14 @@ diff -ruN a/ggml.c b/ggml.c
 +    ctx->stop = true;
 +}
 +
++void ggml_cancel_clear(struct ggml_context * ctx) {
++    ctx->stop = false;
++}
++
  void ggml_free(struct ggml_context * ctx) {
      // make this function thread safe
      ggml_critical_section_start();
-@@ -7474,7 +7480,7 @@
+@@ -7474,7 +7484,7 @@
      const int64_t perf_start_cycles  = ggml_perf_cycles();
      const int64_t perf_start_time_us = ggml_perf_time_us();
  
@@ -37,7 +41,7 @@ diff -ruN a/ggml.c b/ggml.c
          GGML_PRINT_DEBUG_5("%s: %d/%d\n", __func__, i, cgraph->n_nodes);
  
          struct ggml_tensor * node = cgraph->nodes[i];
-@@ -7504,7 +7510,7 @@
+@@ -7504,7 +7514,7 @@
                  atomic_store(&state_shared.has_work, false);
              }
  
@@ -46,7 +50,7 @@ diff -ruN a/ggml.c b/ggml.c
                  ggml_lock_lock  (&state_shared.spin);
                  ggml_lock_unlock(&state_shared.spin);
              }
-@@ -7523,7 +7529,7 @@
+@@ -7523,7 +7533,7 @@
  
              atomic_fetch_sub(&state_shared.n_ready, 1);
  
@@ -55,7 +59,7 @@ diff -ruN a/ggml.c b/ggml.c
                  ggml_lock_lock  (&state_shared.spin);
                  ggml_lock_unlock(&state_shared.spin);
              }
-@@ -7540,14 +7546,14 @@
+@@ -7540,14 +7550,14 @@
                  atomic_store(&state_shared.has_work, false);
              }
  
@@ -72,7 +76,7 @@ diff -ruN a/ggml.c b/ggml.c
                  ggml_lock_lock  (&state_shared.spin);
                  ggml_lock_unlock(&state_shared.spin);
              }
-@@ -7559,7 +7565,7 @@
+@@ -7559,7 +7569,7 @@
                  atomic_store(&state_shared.has_work, false);
              }
  
@@ -81,7 +85,7 @@ diff -ruN a/ggml.c b/ggml.c
                  ggml_lock_lock  (&state_shared.spin);
                  ggml_lock_unlock(&state_shared.spin);
              }
-@@ -7578,7 +7584,7 @@
+@@ -7578,7 +7588,7 @@
  
              atomic_fetch_sub(&state_shared.n_ready, 1);
  
@@ -90,7 +94,7 @@ diff -ruN a/ggml.c b/ggml.c
                  ggml_lock_lock  (&state_shared.spin);
                  ggml_lock_unlock(&state_shared.spin);
              }
-@@ -7595,14 +7601,14 @@
+@@ -7595,14 +7605,14 @@
                  atomic_store(&state_shared.has_work, false);
              }
  
@@ -109,18 +113,19 @@ diff -ruN a/ggml.c b/ggml.c
              }
 diff -ruN a/ggml.h b/ggml.h
 --- a/ggml.h	2023-02-28 21:29:12.000000000 +0100
-+++ b/ggml.h	2023-03-21 17:51:01.109740644 +0100
-@@ -331,6 +331,7 @@
++++ b/ggml.h	2023-04-05 16:43:40.208418440 +0200
+@@ -331,6 +331,8 @@
  
  struct ggml_context * ggml_init(struct ggml_init_params params);
  void ggml_free(struct ggml_context * ctx);
 +void ggml_cancel(struct ggml_context * ctx);
++void ggml_cancel_clear(struct ggml_context * ctx);
  
  size_t ggml_used_mem(const struct ggml_context * ctx);
  
 diff -ruN a/whisper.cpp b/whisper.cpp
 --- a/whisper.cpp	2023-02-28 21:29:12.000000000 +0100
-+++ b/whisper.cpp	2023-03-21 20:41:41.526666686 +0100
++++ b/whisper.cpp	2023-04-05 16:43:56.901698724 +0200
 @@ -603,6 +603,9 @@
      // [EXPERIMENTAL] speed-up techniques
      int32_t exp_n_audio_ctx = 0; // 0 - use default
@@ -159,7 +164,7 @@ diff -ruN a/whisper.cpp b/whisper.cpp
      ggml_free(ctx0);
  
      wctx.t_encode_us += ggml_time_us() - t_start_us;
-@@ -3488,6 +3494,11 @@
+@@ -3488,6 +3494,15 @@
      }
  }
  
@@ -168,10 +173,14 @@ diff -ruN a/whisper.cpp b/whisper.cpp
 +    if (ctx->gctx) ggml_cancel(ctx->gctx);
 +}
 +
++void whisper_cancel_clear(struct whisper_context * ctx) {
++    ctx->stop = false;
++}
++
  int whisper_full(
          struct whisper_context * ctx,
          struct whisper_full_params params,
-@@ -3681,6 +3692,8 @@
+@@ -3681,6 +3696,8 @@
              return -6;
          }
  
@@ -180,7 +189,7 @@ diff -ruN a/whisper.cpp b/whisper.cpp
          // if there is a very short audio segment left to process, we remove any past prompt since it tends
          // to confuse the decoder and often make it repeat or hallucinate stuff
          if (seek > seek_start && seek + 500 >= seek_end) {
-@@ -3764,6 +3777,8 @@
+@@ -3764,6 +3781,8 @@
                      return -7;
                  }
  
@@ -189,7 +198,7 @@ diff -ruN a/whisper.cpp b/whisper.cpp
                  {
                      const int64_t t_start_sample_us = ggml_time_us();
  
-@@ -4002,6 +4017,8 @@
+@@ -4002,6 +4021,8 @@
                          return -8;
                      }
  
@@ -198,7 +207,7 @@ diff -ruN a/whisper.cpp b/whisper.cpp
                      {
                          const int64_t t_start_sample_us = ggml_time_us();
  
-@@ -4200,6 +4217,8 @@
+@@ -4200,6 +4221,8 @@
              WHISPER_PRINT_DEBUG("seek = %d, seek_delta = %d\n", seek, seek_delta);
          }
      }
@@ -209,13 +218,14 @@ diff -ruN a/whisper.cpp b/whisper.cpp
  }
 diff -ruN a/whisper.h b/whisper.h
 --- a/whisper.h	2023-02-28 21:29:12.000000000 +0100
-+++ b/whisper.h	2023-03-21 17:47:39.818480170 +0100
-@@ -341,6 +341,9 @@
++++ b/whisper.h	2023-04-05 16:40:36.018893423 +0200
+@@ -341,6 +341,10 @@
                             const float * samples,
                                     int   n_samples);
  
 +    // Cancel any ongoing operation.
 +    WHISPER_API void whisper_cancel(struct whisper_context * ctx);
++    WHISPER_API void whisper_cancel_clear(struct whisper_context * ctx);
 +
      // Split the input audio in chunks and process each chunk separately using whisper_full()
      // It seems this approach can offer some speedup in some cases.

@@ -178,23 +178,18 @@ engine_wrapper::samples_process_result_t vosk_wrapper::process_buff() {
         return false;
     }();
 
-    auto old_status = m_speech_detection_status;
-
-    if (final_decode && m_speech_mode != speech_mode_t::automatic)
-        set_speech_detection_status(speech_detection_status_t::decoding);
+    if (m_speech_mode != speech_mode_t::automatic)
+        set_processing_state(processing_state_t::decoding);
 
     LOGD("speech frame: samples=" << m_speech_buf.size()
                                   << ", final=" << final_decode);
 
     decode_speech(m_speech_buf, final_decode);
 
-    m_speech_buf.clear();
+    if (m_speech_mode != speech_mode_t::automatic)
+        set_processing_state(processing_state_t::idle);
 
-    if (final_decode ||
-        (m_speech_mode == speech_mode_t::manual && !m_speech_started))
-        set_speech_detection_status(speech_detection_status_t::no_speech);
-    else
-        set_speech_detection_status(old_status);
+    m_speech_buf.clear();
 
     if (final_decode)
         flush(!eof && m_speech_mode == speech_mode_t::automatic

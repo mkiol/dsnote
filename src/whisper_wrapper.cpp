@@ -155,17 +155,19 @@ engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
         return samples_process_result_t::no_samples_needed;
     }
 
-    auto old_status = m_speech_detection_status;
+    set_processing_state(processing_state_t::decoding);
 
-    set_speech_detection_status(speech_detection_status_t::decoding);
+    if (!vad_status) {
+        set_speech_detection_status(speech_detection_status_t::no_speech);
+    }
 
     LOGD("speech frame: samples=" << m_speech_buf.size());
 
     decode_speech(m_speech_buf);
 
-    m_speech_buf.clear();
+    set_processing_state(processing_state_t::idle);
 
-    set_speech_detection_status(old_status);
+    m_speech_buf.clear();
 
     flush(eof ? flush_t::eof : flush_t::regular);
 
@@ -206,7 +208,11 @@ void whisper_wrapper::decode_speech(const whisper_buf_t& buf) {
 
     std::ostringstream os;
 
-    if (whisper_full(m_whisper_ctx, m_wparams, buf.data(), buf.size()) == 0) {
+    if (!m_thread_exit_requested) whisper_cancel_clear(m_whisper_ctx);
+
+    if (auto ret =
+            whisper_full(m_whisper_ctx, m_wparams, buf.data(), buf.size());
+        ret == 0) {
         auto n = whisper_full_n_segments(m_whisper_ctx);
         LOGD("decoded segments: " << n);
 
@@ -222,7 +228,7 @@ void whisper_wrapper::decode_speech(const whisper_buf_t& buf) {
             os << text;
         }
     } else {
-        LOGE("whisper error");
+        LOGE("whisper error: " << ret);
         return;
     }
 
@@ -241,8 +247,6 @@ void whisper_wrapper::decode_speech(const whisper_buf_t& buf) {
 
 #ifdef DEBUG
     LOGD("speech decoded: text=" << result);
-#else
-    LOGD("speech decoded");
 #endif
     if (!m_intermediate_text || m_intermediate_text != result)
         set_intermediate_text(result);

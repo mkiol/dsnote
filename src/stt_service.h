@@ -81,6 +81,7 @@ class stt_service : public QObject {
     void current_task_changed();
     void sentence_timeout(int task_id);
     void engine_eof(int task_id);
+    void engine_stopped(int task_id);
     void engine_shutdown();
 
     // DBus
@@ -154,6 +155,8 @@ class stt_service : public QObject {
     void handle_sentence_timeout(int task_id);
     void handle_engine_eof();
     void handle_engine_eof(int task_id);
+    void handle_engine_stopped();
+    void handle_engine_stopped(int task_id);
     void handle_text_decoded(const std::string &text);
     void handle_text_decoded(const QString &text, const QString &model_id,
                              int task_id);
