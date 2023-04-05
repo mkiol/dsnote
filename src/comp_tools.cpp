@@ -12,7 +12,10 @@
 #include <lzma.h>
 #include <zlib.h>
 
+#include <chrono>
 #include <fstream>
+
+#include "cpu_tools.hpp"
 
 namespace comp_tools {
 
@@ -42,11 +45,15 @@ bool xz_decode(const QString& file_in, const QString& file_out) {
     qDebug() << "extracting xz archive:" << file_in;
 
     std::ifstream input{file_in.toStdString(),
-                        std::ios::in | std::ifstream::binary};
+                        std::ios::in | std::ifstream::binary | std::ios::ate};
     if (input.bad()) {
         qWarning() << "error opening in-file:" << file_in;
         return false;
     }
+
+    auto file_size = input.tellg();
+
+    input.seekg(0);
 
     std::ofstream output{file_out.toStdString(),
                          std::ios::out | std::ifstream::binary};
@@ -55,9 +62,17 @@ bool xz_decode(const QString& file_in, const QString& file_out) {
         return false;
     }
 
+    auto decoding_start = std::chrono::steady_clock::now();
+
+    lzma_mt opts{};
+    opts.flags = 0;
+    opts.threads = std::max(1, cpu_tools::number_of_cores() - 2);
+    opts.timeout = 300;
+    opts.memlimit_threading = lzma_physmem() / 4;
+    opts.memlimit_stop = lzma_physmem() / 2;
+
     lzma_stream strm = LZMA_STREAM_INIT;
-    if (lzma_ret ret = lzma_stream_decoder(&strm, UINT64_MAX, 0);
-        ret != LZMA_OK) {
+    if (lzma_ret ret = lzma_stream_decoder_mt(&strm, &opts); ret != LZMA_OK) {
         qWarning() << "error initializing the xz decoder:" << ret;
         return false;
     }
@@ -100,6 +115,13 @@ bool xz_decode(const QString& file_in, const QString& file_out) {
     }
 
     lzma_end(&strm);
+
+    auto decoding_dur = std::chrono::duration_cast<std::chrono::milliseconds>(
+                            std::chrono::steady_clock::now() - decoding_start)
+                            .count();
+
+    qDebug() << "xz decoded, stats: size=" << file_size
+             << ", duration=" << decoding_dur << ", threads=" << opts.threads;
 
     return true;
 }

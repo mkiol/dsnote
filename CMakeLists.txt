@@ -24,6 +24,7 @@ option(build_catch2 "download catch2, build and link statically" ON)
 option(build_whispercpp "download whisper.cpp, build and link statically" ON)
 option(build_webrtcvad "download webrtc vad, build and link statically" ON)
 option(build_openblas "download openblas, build and link shared lib" ON)
+option(build_xz "download xz lib, build and link statically lib" ON)
 
 if(${with_desktop} AND ${with_sfos})
     message(FATAL_ERROR "options with_desktop and with_sfos cannot be set together")
@@ -79,6 +80,8 @@ set(kaldi_source_url "https://github.com/alphacep/kaldi/archive/2abed6b15990d943
 set(kaldi_checksum "4923c5b7599184c36db3342579676fbc")
 set(vosk_source_url "https://github.com/alphacep/vosk-api/archive/128c216c6137a36fbf5b0bf64d03501e91a6eeaa.zip")
 set(vosk_checksum "1f716b8132d5678823db0531b2c8285a")
+set(xz_source_url "https://downloads.sourceforge.net/lzmautils/xz-5.4.2.tar.gz")
+set(xz_checksum "4ac4e5da95aa8604a81e32079cb00d42")
 
 project(${info_id} VERSION 2.0.0)
 
@@ -539,6 +542,28 @@ else()
     list(APPEND includes ${openblas_INCLUDE_DIRS})
 endif()
 
+if(build_xz)
+    ExternalProject_Add(xz
+            SOURCE_DIR ${external_dir}/xz
+            BINARY_DIR ${PROJECT_BINARY_DIR}/external/xz
+            INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+            URL "${xz_source_url}"
+            URL_MD5 "${xz_checksum}"
+            CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
+                --disable-encoders --disable-xz --disable-xzdec --disable-lzmadec --disable-lzmainfo
+                --disable-lzma-links --disable-scripts --disable-doc --disable-shared --enable-static
+                --with-pic
+            BUILD_COMMAND ${MAKE}
+            BUILD_ALWAYS False
+            INSTALL_COMMAND make DESTDIR=/ install)
+    list(APPEND deps_libs "${external_lib_dir}/liblzma.a")
+    list(APPEND deps xz)
+else()
+    pkg_search_module(xz REQUIRED liblzma>=5.4.1)
+    list(APPEND deps_libs ${xz_LIBRARIES})
+    list(APPEND includes ${xz_INCLUDE_DIRS})
+endif()
+
 if(with_sfos)
     pkg_search_module(sailfish REQUIRED sailfishapp)
     list(APPEND deps_libs ${sailfish_LIBRARIES})
@@ -548,10 +573,6 @@ if(with_sfos)
     list(APPEND deps_libs ${mlite5_LIBRARIES})
     list(APPEND includes ${mlite5_INCLUDE_DIRS})
 endif()
-
-pkg_search_module(lzma REQUIRED liblzma)
-list(APPEND deps_libs ${lzma_LIBRARIES})
-list(APPEND includes ${lzma_INCLUDE_DIRS})
 
 target_include_directories(${info_binary_id} PRIVATE ${includes})
 target_link_libraries(${info_binary_id} ${deps_libs})
