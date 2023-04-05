@@ -11,8 +11,6 @@
 #include <QTextStream>
 #include <algorithm>
 
-#include "settings.h"
-
 dsnote_app::dsnote_app(QObject *parent)
     : QObject{parent},
       stt{DBUS_SERVICE_NAME, DBUS_SERVICE_PATH, QDBusConnection::sessionBus()} {
@@ -92,6 +90,42 @@ void dsnote_app::set_intermediate_text(const QString &text, const QString &lang,
     }
 }
 
+QString dsnote_app::insert_to_note(QString note, QString new_text,
+                                   settings::insert_mode_type mode) {
+    if (new_text.isEmpty()) return note;
+
+    QTextStream ss{&note, QIODevice::WriteOnly};
+
+    switch (mode) {
+        case settings::insert_mode_type::InsertInLine:
+            if (!note.isEmpty()) {
+                auto last_char = note.at(note.size() - 1);
+                if (last_char.isLetterOrNumber())
+                    ss << ". ";
+                else if (!last_char.isSpace())
+                    ss << ' ';
+            }
+            break;
+        case settings::insert_mode_type::InsertNewLine:
+            if (!note.isEmpty()) {
+                auto last_char = note.at(note.size() - 1);
+                if (last_char.isLetterOrNumber())
+                    ss << ".\n";
+                else
+                    ss << '\n';
+            }
+            break;
+    }
+
+    new_text[0] = new_text[0].toUpper();
+
+    ss << new_text;
+
+    if (new_text.at(new_text.size() - 1).isLetterOrNumber()) ss << '.';
+
+    return note;
+}
+
 void dsnote_app::handle_text_decoded(const QString &text, const QString &lang,
                                      int task) {
 #ifdef DEBUG
@@ -104,30 +138,9 @@ void dsnote_app::handle_text_decoded(const QString &text, const QString &lang,
         return;
     }
 
-    auto note = settings::instance()->note();
-
-    QTextStream ss{&note, QIODevice::WriteOnly};
-
-    if (!note.isEmpty()) {
-        if (auto last_char = note.at(note.size() - 1); !last_char.isSpace()) {
-            if (last_char.isLetterOrNumber())
-                ss << ". ";
-            else
-                ss << ' ';
-        }
-    }
-
-    auto upper_text{text};
-
-    if (!upper_text.isEmpty()) upper_text[0] = upper_text[0].toUpper();
-
-    ss << upper_text;
-
-    if (!upper_text.isEmpty()) {
-        if (upper_text.at(upper_text.size() - 1).isLetterOrNumber()) ss << '.';
-    }
-
-    settings::instance()->set_note(note);
+    settings::instance()->set_note(
+        insert_to_note(settings::instance()->note(), text,
+                       settings::instance()->insert_mode()));
 
     this->intermediate_text_value.clear();
 

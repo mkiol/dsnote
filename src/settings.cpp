@@ -144,6 +144,20 @@ void settings::set_translate(bool value) {
     }
 }
 
+settings::insert_mode_type settings::insert_mode() const {
+    return static_cast<insert_mode_type>(
+        value(QStringLiteral("insert_mode"),
+              static_cast<int>(insert_mode_type::InsertInLine))
+            .toInt());
+}
+
+void settings::set_insert_mode(insert_mode_type value) {
+    if (insert_mode() != value) {
+        setValue(QStringLiteral("insert_mode"), static_cast<int>(value));
+        emit insert_mode_changed();
+    }
+}
+
 QUrl settings::app_icon() const {
     return QUrl::fromLocalFile(
         QStringLiteral("/usr/share/icons/hicolor/172x172/apps/%1.png")

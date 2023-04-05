@@ -62,6 +62,33 @@ Page {
 
             RowLayout {
                 Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Text appending style")
+                }
+                ComboBox {
+                    currentIndex: {
+                        if (_settings.insert_mode === Settings.InsertInLine) return 0
+                        if (_settings.insert_mode === Settings.InsertNewLine) return 1
+                        return 0
+                    }
+                    model: ListModel {
+                        ListElement { text: qsTr("In line") }
+                        ListElement { text: qsTr("After line break") }
+                    }
+                    onActivated: {
+                        if (index === 0) {
+                            _settings.insert_mode = Settings.InsertInLine
+                        } else if (index === 1) {
+                            _settings.insert_mode = Settings.InsertNewLine
+                        } else {
+                            _settings.insert_mode = Settings.InsertInLine
+                        }
+                    }
+                }
+            }
+
+            RowLayout {
+                Label {
                     text: qsTr("Location of language files")
                 }
                 TextField {

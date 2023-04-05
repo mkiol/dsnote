@@ -25,6 +25,8 @@ class settings : public QSettings, public singleton<settings> {
                    set_speech_mode NOTIFY speech_mode_changed)
     Q_PROPERTY(bool translate READ translate WRITE set_translate NOTIFY
                    translate_changed)
+    Q_PROPERTY(insert_mode_type insert_mode READ insert_mode WRITE
+                   set_insert_mode NOTIFY insert_mode_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -44,6 +46,12 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(speech_mode_type)
 
+    enum class insert_mode_type {
+        InsertInLine = 1,
+        InsertNewLine = 0,
+    };
+    Q_ENUM(insert_mode_type)
+
     settings();
 
     // app
@@ -53,6 +61,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_speech_mode(speech_mode_type value);
     bool translate() const;
     void set_translate(bool value);
+    insert_mode_type insert_mode() const;
+    void set_insert_mode(insert_mode_type value);
     Q_INVOKABLE QUrl app_icon() const;
 
     // service
@@ -73,6 +83,7 @@ class settings : public QSettings, public singleton<settings> {
     void speech_mode_changed();
     void note_changed();
     void translate_changed();
+    void insert_mode_changed();
 
     // service
     void models_dir_changed();

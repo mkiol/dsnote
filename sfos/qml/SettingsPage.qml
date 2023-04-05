@@ -106,7 +106,31 @@ Page {
                                   "Always on: Listening is always turn on.")
             }
 
+            ComboBox {
+                label: qsTr("Text appending style")
+                currentIndex: {
+                    if (_settings.insert_mode === Settings.InsertInLine) return 0
+                    if (_settings.insert_mode === Settings.InsertNewLine) return 1
+                    return 0
+                }
+                menu: ContextMenu {
+                    MenuItem { text: qsTr("In line") }
+                    MenuItem { text: qsTr("After line break") }
+                }
+                onCurrentIndexChanged: {
+                    if (currentIndex === 0) {
+                        _settings.insert_mode = Settings.InsertInLine
+                    } else if (currentIndex === 1) {
+                        _settings.insert_mode = Settings.InsertNewLine
+                    } else {
+                        _settings.insert_mode = Settings.InsertInLine
+                    }
+                }
+                description: qsTr("Text is appended to the note in the same line or after line break.")
+            }
+
             TextSwitch {
+                visible: false
                 checked: _settings.translate
                 automaticCheck: false
                 text: qsTr("Translate to English")

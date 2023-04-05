@@ -15,6 +15,7 @@
 #include <QVariantMap>
 
 #include "dbus_stt_inf.h"
+#include "settings.h"
 
 class dsnote_app : public QObject {
     Q_OBJECT
@@ -176,6 +177,8 @@ class dsnote_app : public QObject {
     void start_keepalive();
     void check_transcribe_taks();
     QVariantMap translate() const;
+    static QString insert_to_note(QString note, QString new_text,
+                                  settings::insert_mode_type mode);
 };
 
 #endif  // DSNOTE_APP_H
