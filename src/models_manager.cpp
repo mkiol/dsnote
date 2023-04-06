@@ -891,6 +891,13 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             qDebug() << "ignoring vosk large model:" << model_id;
             continue;
         }
+        if (engine == model_engine::whisper &&
+            (model_id.contains("small") || model_id.contains("medium") ||
+             model_id.contains("large"))) {
+            qDebug() << "ignoring whisper small, medium or large model:"
+                     << model_id;
+            continue;
+        }
 #endif
 
         auto file_name = obj.value(QLatin1String{"file_name"}).toString();
