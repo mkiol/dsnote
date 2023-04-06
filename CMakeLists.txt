@@ -34,6 +34,12 @@ if(NOT ${with_desktop} AND NOT ${with_sfos})
     message(FATAL_ERROR "one of the options should be set (with_desktop or with_sfos)")
 endif()
 
+if(with_sfos)
+    set(download_libstt ON)
+    set(build_vosk ON)
+    set(build_openblas ON)
+endif()
+
 set(info_id "dsnote")
 set(info_binary_id ${info_id})
 set(info_translations_id ${info_id})
