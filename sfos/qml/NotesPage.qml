@@ -151,16 +151,16 @@ Page {
         onPressed: {
             if (app.speech === DsnoteApp.SttSpeechDecoding ||
                     app.speech === DsnoteApp.SttSpeechInitializing ||
-                    app.state === DsnoteApp.SttTranscribingFile) {
+                    app.state === DsnoteApp.SttTranscribingFile ||
+                    app.state === DsnoteApp.SttListeningSingleSentence) {
                 app.cancel()
                 return
             }
 
-            if (app.state === DsnoteApp.SttListeningSingleSentence) app.stop_listen()
-            else app.listen()
+            if (app.speech === DsnoteApp.SttNoSpeech) app.listen()
         }
         onReleased: {
-            if (_settings.speech_mode !== Settings.SpeechSingleSentence) app.stop_listen()
+            if (app.state === DsnoteApp.SttListeningManual) app.stop_listen()
         }
     }
 

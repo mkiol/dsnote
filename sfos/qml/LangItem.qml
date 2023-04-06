@@ -21,6 +21,8 @@ SimpleListItem {
 
     title.text: name
 
+    title.horizontalAlignment: Text.AlignLeft
+
     function showModels() {
         pageStack.push(Qt.resolvedUrl("LangsPage.qml"), {langId: langId, langName: name})
     }

@@ -26,12 +26,13 @@ SimpleListItem {
         return progress > 0.0 ? Math.round(progress * 100) + "%" : ""
     }
 
+    title.horizontalAlignment: Text.AlignLeft
+
     title.text: {
         if (defaultModelForLang) return "⭐ " + name
         if (score === 0) return "🧪 " + name
         return name
     }
-
 
     Component {
         id: menuComp
