@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -26,6 +26,61 @@ Page {
 
             PageHeader {
                 title: qsTr("Changes")
+            }
+
+            SectionHeader {
+                text: qsTr("Version %1").arg("2.0")
+            }
+
+            LogItem {
+                title: "Support for Vosk engine"
+                description: "Vosk is a fast and lightweight speech to text engine. It provides decent " +
+                             "transcription accuracy and supports a wide range of languages. " +
+                             "Vosk high quality models are enabled for the following languages: " +
+                             "Arabic, Catalan, Czech, German, English, Esperanto, Spanish, Persian, " +
+                             "French, Hindi, Italian, Japanese, Kazakh, Korean, Dutch, Polish, Portuguese, " +
+                             "Russian, Swedish, Tagalog, Turkish, Ukrainian, Uzbek, Vietnamese, Chinese."
+            }
+
+            LogItem {
+                title: "Support for Whisper engine"
+                description: "Whisper is a speech to text engine recently released by OpenAI. It provides quite " +
+                             "accurate transcription with capability to decode also punctuation. " +
+                             "New engine comes with two types of models 'Tiny' and 'Base'. " +
+                             "With 'Tiny' model, the decoding is reasonably quick but the accuracy is far from perfection. " +
+                             "On the other hand, 'Base' is much more accurate but also extremely slow. " +
+                             "Whisper models are enabled for the following languages: " +
+                             "Bulgarian, Bosnian, Catalan, Czech, German, Greek, English, Spanish, Finnish, French, " +
+                             "Croatian, Indonesian, Italian, Japanese, Macedonian, Malay, Dutch, Norwegian, Polish, " +
+                             "Portuguese, Romanian, Russian, Slovak, Slovenian, Serbian, Swedish, Thai, Turkish, " +
+                             "Ukrainian, Vietnamese, Chinese."
+            }
+
+            LogItem {
+                title: "New DeepSpeech models and update of existing ones."
+                description: "New models for Persian and Swahili languages are configured for download. " +
+                             "Also Czech (commodoro) and French (Common Voice) models were updated to the latest versions."
+            }
+
+            LogItem {
+                title: "Voice Activity Detection"
+                description: "VAD module (borrowed from WebRTC project) is implemented. " +
+                             "Thanks to VAD, non-speech sounds like background noises, are filtered out before decoding. " +
+                             "This leads to better overall accuracy of transcription."
+            }
+
+            LogItem {
+                title: "Option for Text appending style"
+                description: "With this options you can change the style of how text is appended to the note. " +
+                             "Possible options are 'In line' or 'After line break'."
+            }
+
+            LogItem {
+                title: "Option for setting default model for a certain language"
+                description: "New option in context menu 'Set as default for this language'. " +
+                             "Setting model as a default is especially useful when you enabled many models " +
+                             "for the same language. The default model is used in " +
+                             "companion apps, like Speech Keyboard."
             }
 
             SectionHeader {
