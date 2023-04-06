@@ -84,9 +84,9 @@ stt_service::stt_service(QObject *parent)
             static_cast<void (stt_service::*)(int)>(
                 &stt_service::handle_engine_eof),
             Qt::QueuedConnection);
-    connect(this, &stt_service::engine_stopped, this,
+    connect(this, &stt_service::engine_error, this,
             static_cast<void (stt_service::*)(int)>(
-                &stt_service::handle_engine_stopped),
+                &stt_service::handle_engine_error),
             Qt::QueuedConnection);
     connect(
         this, &stt_service::speech_changed, this,
@@ -308,7 +308,7 @@ QString stt_service::restart_engine(speech_mode_t speech_mode,
                 /*eof=*/
                 [this]() { handle_engine_eof(); },
                 /*stopped=*/
-                [this]() { handle_engine_stopped(); }};
+                [this]() { handle_engine_error(); }};
 
             switch (model_files->engine) {
                 case models_manager::model_engine::ds:
@@ -328,6 +328,7 @@ QString stt_service::restart_engine(speech_mode_t speech_mode,
             m_engine->start();
         } else {
             qDebug() << "new engine not required, only restart";
+            m_engine->stop();
             m_engine->start();
             m_engine->set_speech_mode(
                 static_cast<engine_wrapper::speech_mode_t>(speech_mode));
@@ -378,14 +379,14 @@ void stt_service::handle_engine_eof() {
     if (m_current_task) emit engine_eof(m_current_task->id);
 }
 
-void stt_service::handle_engine_stopped(int task_id) {
-    qDebug() << "engine stopped";
+void stt_service::handle_engine_error(int task_id) {
+    qDebug() << "engine error";
 
     if (current_task_id() == task_id) cancel(task_id);
 }
 
-void stt_service::handle_engine_stopped() {
-    if (m_current_task) emit engine_stopped(m_current_task->id);
+void stt_service::handle_engine_error() {
+    if (m_current_task) emit engine_error(m_current_task->id);
 }
 
 void stt_service::handle_text_decoded(const std::string &text) {
@@ -582,7 +583,7 @@ int stt_service::cancel(int task) {
                 m_keepalive_current_task_timer.start();
                 m_pending_task.reset();
                 emit current_task_changed();
-            } else {
+            } else { 
                 stop_engine();
                 m_keepalive_current_task_timer.stop();
             }
@@ -592,8 +593,15 @@ int stt_service::cancel(int task) {
         }
     } else if (audio_source_type() == source_t::mic) {
         if (m_current_task && m_current_task->id == task) {
-            m_keepalive_current_task_timer.stop();
-            stop_engine();
+            if (m_current_task->speech_mode == speech_mode_t::automatic) {
+                restart_engine(m_current_task->speech_mode,
+                               m_current_task->model_id,
+                               m_current_task->translate);
+                restart_audio_source();
+            } else {
+                m_keepalive_current_task_timer.stop();
+                stop_engine();
+            }
         } else {
             qWarning() << "invalid task id";
             return FAILURE;

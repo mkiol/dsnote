@@ -57,7 +57,7 @@ class engine_wrapper {
             speech_detection_status_changed;
         std::function<void()> sentence_timeout;
         std::function<void()> eof;
-        std::function<void()> stopped;
+        std::function<void()> error;
     };
 
     struct config_t {
@@ -152,7 +152,7 @@ class engine_wrapper {
     void set_processing_state(processing_state_t new_state);
     static std::string merge_texts(const std::string& old_text,
                                    std::string&& new_text);
-    void reset();
+    void reset_in_processing();
     void start_processing();
     virtual void reset_impl() = 0;
     virtual void stop_processing_impl();

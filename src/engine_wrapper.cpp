@@ -163,11 +163,9 @@ engine_wrapper::~engine_wrapper() { LOGD("engine dtor"); }
 
 void engine_wrapper::start() {
     if (started()) {
-        LOGD("engine already started");
+        LOGW("engine already started");
         return;
     }
-
-    reset();
 
     LOGD("starting engine");
 
@@ -176,6 +174,8 @@ void engine_wrapper::start() {
     m_thread_exit_requested = false;
 
     m_processing_thread = std::thread{&engine_wrapper::start_processing, this};
+
+    LOGD("engine started");
 }
 
 bool engine_wrapper::started() const {
@@ -207,6 +207,8 @@ void engine_wrapper::stop() {
     m_speech_started = false;
     set_speech_detection_status(speech_detection_status_t::no_speech);
     set_processing_state(processing_state_t::idle);
+
+    LOGD("stop completed");
 }
 
 void engine_wrapper::start_processing() {
@@ -238,12 +240,14 @@ void engine_wrapper::start_processing() {
 
         flush(flush_t::exit);
     } catch (const std::runtime_error& e) {
-        LOGE("error: " << e.what());
+        LOGE("processing error: " << e.what());
+
+        if (m_call_backs.error) m_call_backs.error();
     }
 
-    LOGD("processing ended");
+    reset_in_processing();
 
-    if (m_call_backs.stopped) m_call_backs.stopped();
+    LOGD("processing ended");
 }
 
 bool engine_wrapper::lock_buf(lock_type_t desired_lock) {
@@ -260,6 +264,10 @@ void engine_wrapper::free_buf() { m_in_buf.lock.store(lock_type_t::free); }
 
 std::pair<char*, size_t> engine_wrapper::borrow_buf() {
     decltype(borrow_buf()) c_buf{nullptr, 0};
+
+    if (m_thread_exit_requested) {
+        return c_buf;
+    }
 
     if (!lock_buf(lock_type_t::borrowed)) {
         return c_buf;
@@ -309,8 +317,8 @@ bool engine_wrapper::lock_buff_for_processing() {
     return true;
 }
 
-void engine_wrapper::reset() {
-    LOGD("reset");
+void engine_wrapper::reset_in_processing() {
+    LOGD("reset in processing");
 
     m_in_buf.clear();
     m_start_time.reset();
