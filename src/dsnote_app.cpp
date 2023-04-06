@@ -61,6 +61,8 @@ dsnote_app::dsnote_app(QObject *parent)
 }
 
 void dsnote_app::update_listen() {
+    qDebug() << "update listen";
+
     if (settings::instance()->speech_mode() ==
         settings::speech_mode_type::SpeechAutomatic) {
         listen();
