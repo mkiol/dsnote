@@ -10,6 +10,7 @@
 #include <dlfcn.h>
 
 #include <algorithm>
+#include <array>
 #include <chrono>
 
 #include "RSJparser.hpp"
@@ -138,9 +139,12 @@ engine_wrapper::samples_process_result_t vosk_wrapper::process_buff() {
             m_vosk_api.vosk_recognizer_reset(m_vosk_recognizer);
     }
 
-    bool vad_status = m_vad.is_speech(m_in_buf.buf.data(), m_in_buf.size);
+    const auto& vad_buf =
+        m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.size);
 
-    push_inbuf_to_samples();
+    m_in_buf.clear();
+
+    bool vad_status = !vad_buf.empty();
 
     m_in_buf.clear();
 
@@ -150,6 +154,9 @@ engine_wrapper::samples_process_result_t vosk_wrapper::process_buff() {
         if (m_speech_mode != speech_mode_t::manual)
             set_speech_detection_status(
                 speech_detection_status_t::speech_detected);
+
+        m_speech_buf.insert(m_speech_buf.end(), vad_buf.cbegin(),
+                            vad_buf.cend());
 
         restart_sentence_timer();
     } else {
@@ -170,31 +177,33 @@ engine_wrapper::samples_process_result_t vosk_wrapper::process_buff() {
 
     auto final_decode = [&] {
         if (eof) return true;
-        if (m_speech_mode == speech_mode_t::single_sentence &&
-            m_intermediate_text && !m_intermediate_text->empty() && !vad_status)
-            return true;
-        if (m_speech_mode == speech_mode_t::automatic && !vad_status)
+        if (m_speech_mode != speech_mode_t::manual && m_intermediate_text &&
+            !m_intermediate_text->empty() && !vad_status)
             return true;
         return false;
     }();
 
-    if (m_speech_mode != speech_mode_t::automatic)
+    if (final_decode || !m_speech_buf.empty()) {
         set_processing_state(processing_state_t::decoding);
 
-    LOGD("speech frame: samples=" << m_speech_buf.size()
-                                  << ", final=" << final_decode);
+        LOGD("speech frame: samples=" << m_speech_buf.size()
+                                      << ", final=" << final_decode);
 
-    decode_speech(m_speech_buf, final_decode);
+        decode_speech(m_speech_buf, final_decode);
 
-    if (m_speech_mode != speech_mode_t::automatic)
         set_processing_state(processing_state_t::idle);
 
-    m_speech_buf.clear();
+        m_speech_buf.clear();
 
-    if (final_decode)
-        flush(!eof && m_speech_mode == speech_mode_t::automatic
-                  ? flush_t::regular
-                  : flush_t::eof);
+        if (final_decode)
+            flush(!eof && m_speech_mode == speech_mode_t::automatic
+                      ? flush_t::regular
+                      : flush_t::eof);
+    }
+
+    if (!vad_status && !final_decode &&
+        m_speech_mode == speech_mode_t::automatic)
+        set_speech_detection_status(speech_detection_status_t::no_speech);
 
     free_buf();
 
@@ -213,8 +222,17 @@ void vosk_wrapper::decode_speech(const vosk_buf_t& buf, bool eof) {
     }
 
     if (ret == 0 && !eof) {
-        LOGD("no speech decoded");
-        return;
+        // append silence to force partial result
+
+        std::array<vosk_buf_t::value_type, m_in_buf_max_size> silence{};
+
+        auto ret = m_vosk_api.vosk_recognizer_accept_waveform_s(
+            m_vosk_recognizer, silence.data(), silence.size());
+
+        if (ret == 0) {
+            LOGD("no speech decoded");
+            return;
+        }
     }
 
     auto result = [&] {

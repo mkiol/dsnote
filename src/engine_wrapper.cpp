@@ -505,6 +505,6 @@ bool engine_wrapper::sentence_timer_timed_out() {
 }
 
 void engine_wrapper::restart_sentence_timer() {
-    LOGD("staring sentence timer");
+    LOGT("staring sentence timer");
     m_start_time = std::chrono::steady_clock::now();
 }

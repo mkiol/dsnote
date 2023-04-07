@@ -175,7 +175,6 @@ engine_wrapper::samples_process_result_t deepspeech_wrapper::process_buff() {
         LOGD("vad: no speech");
 
         if (m_speech_mode == speech_mode_t::single_sentence &&
-            m_speech_buf.empty() &&
             (!m_intermediate_text || m_intermediate_text->empty()) &&
             sentence_timer_timed_out()) {
             LOGD("sentence timeout");
@@ -190,29 +189,33 @@ engine_wrapper::samples_process_result_t deepspeech_wrapper::process_buff() {
 
     auto final_decode = [&] {
         if (eof) return true;
-        if (m_speech_mode == speech_mode_t::single_sentence &&
-            m_intermediate_text && !m_intermediate_text->empty() && !vad_status)
-            return true;
-        if (m_speech_mode == speech_mode_t::automatic && !vad_status)
+        if (m_speech_mode != speech_mode_t::manual && m_intermediate_text &&
+            !m_intermediate_text->empty() && !vad_status)
             return true;
         return false;
     }();
 
-    set_processing_state(processing_state_t::decoding);
+    if (final_decode || !m_speech_buf.empty()) {
+        set_processing_state(processing_state_t::decoding);
 
-    LOGD("speech frame: samples=" << m_speech_buf.size()
-                                  << ", final=" << final_decode);
+        LOGD("speech frame: samples=" << m_speech_buf.size()
+                                      << ", final=" << final_decode);
 
-    decode_speech(m_speech_buf, final_decode);
+        decode_speech(m_speech_buf, final_decode);
 
-    set_processing_state(processing_state_t::idle);
+        set_processing_state(processing_state_t::idle);
 
-    m_speech_buf.clear();
+        m_speech_buf.clear();
 
-    if (final_decode)
-        flush(!eof && m_speech_mode == speech_mode_t::automatic
-                  ? flush_t::regular
-                  : flush_t::eof);
+        if (final_decode)
+            flush(!eof && m_speech_mode == speech_mode_t::automatic
+                      ? flush_t::regular
+                      : flush_t::eof);
+    }
+
+    if (!vad_status && !final_decode &&
+        m_speech_mode == speech_mode_t::automatic)
+        set_speech_detection_status(speech_detection_status_t::no_speech);
 
     free_buf();
 
