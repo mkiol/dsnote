@@ -297,7 +297,7 @@ target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arch_arm64}>:ARC
 
 # translations
 
-set(enabled_translations cs_CZ de en fr nl pl zh_CN)
+set(enabled_translations cs_CZ de en fr nl pl sv zh_CN)
 
 find_package(Qt5 COMPONENTS Core LinguistTools)
 
