@@ -41,11 +41,7 @@
     <message>
         <location filename="../sfos/qml/AboutPage.qml" line="92"/>
         <source>Libraries in use</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="vanished">Bibliotheken</translation>
+        <translation>Gebruikte bibliotheken</translation>
     </message>
 </context>
 <context>
@@ -73,7 +69,7 @@
     <message>
         <location filename="../sfos/qml/DirPage.qml" line="61"/>
         <source>SD Card</source>
-        <translation>SD-kaart</translation>
+        <translation>Sd-kaart</translation>
     </message>
     <message>
         <location filename="../sfos/qml/DirPage.qml" line="66"/>
@@ -123,7 +119,7 @@
     <message>
         <location filename="../sfos/qml/ModelItem.qml" line="42"/>
         <source>Set as default for this language</source>
-        <translation type="unfinished"></translation>
+        <translation>Instellen als standaard in deze taal</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ModelItem.qml" line="49"/>
@@ -174,10 +170,6 @@
         <translation>Wissen</translation>
     </message>
     <message>
-        <source>Cancel file transcription</source>
-        <translation type="vanished">Transcriptie afbreken</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/NotesPage.qml" line="73"/>
         <source>Copy</source>
         <translation>Kopiëren</translation>
@@ -223,14 +215,14 @@
         <location filename="../sfos/qml/NotesPage.qml" line="143"/>
         <location filename="../desktop/qml/NotesPage.qml" line="77"/>
         <source>Decoding, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezig met decoderen…</translation>
     </message>
     <message>
         <location filename="../sfos/qml/NotesPage.qml" line="134"/>
         <location filename="../sfos/qml/NotesPage.qml" line="144"/>
         <location filename="../desktop/qml/NotesPage.qml" line="67"/>
         <source>Getting ready, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezig met voorbereiden…</translation>
     </message>
     <message>
         <location filename="../sfos/qml/NotesPage.qml" line="147"/>
@@ -238,22 +230,22 @@
         <translation>Bezig…</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="189"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="187"/>
         <source>Audio file couldn&apos;t be transcribed.</source>
         <translation>Het audiobestand kan niet worden getranscribeerd.</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="192"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="190"/>
         <source>Microphone was unexpectedly disconnected.</source>
         <translation>De microfoon is onverwachts afgekoppeld.</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="195"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="193"/>
         <source>Unable to start service.</source>
         <translation>De dienst kan niet worden gestart.</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="198"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="196"/>
         <source>Oops! Something went wrong.</source>
         <translation>Oeps, er iets misgegaan!</translation>
     </message>
@@ -339,35 +331,35 @@ Altijd aan: er wordt altijd geluisterd.</translation>
         <location filename="../sfos/qml/SettingsPage.qml" line="110"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="66"/>
         <source>Text appending style</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekstaanvulstijl</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="117"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="75"/>
         <source>In line</source>
-        <translation type="unfinished"></translation>
+        <translation>Op regel</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="118"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="76"/>
         <source>After line break</source>
-        <translation type="unfinished"></translation>
+        <translation>Na regeleinde</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="129"/>
         <source>Text is appended to the note in the same line or after line break.</source>
-        <translation type="unfinished"></translation>
+        <translation>De tekst kan worden toegevoegd op dezelfde regel of na een regeleinde.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="136"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="108"/>
         <source>Translate to English</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertalen naar het Engels</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="137"/>
         <source>Translate decoded text to English. This option works only with Whisper models.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertaal de gedecodeerde tekst naar het Engels. Let op: deze optie werkt alleen i.c.m. Whisper-modellen.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="144"/>
@@ -445,12 +437,12 @@ Altijd aan: er wordt altijd geluisterd.</translation>
     <message>
         <location filename="../src/stt_service.cpp" line="876"/>
         <source>Decoding, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezig met decoderen…</translation>
     </message>
     <message>
         <location filename="../src/stt_service.cpp" line="878"/>
         <source>Getting ready, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezig met voorbereiden…</translation>
     </message>
 </context>
 </TS>
