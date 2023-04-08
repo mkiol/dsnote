@@ -3017,7 +3017,7 @@
             "size": "43739114"
         },
         {
-            "name": "Swedish (Vosk Small)",
+            "name": "Svenska (Vosk Small)",
             "model_id": "sv_vosk_small",
             "engine": "vosk",
             "lang_id": "sv",

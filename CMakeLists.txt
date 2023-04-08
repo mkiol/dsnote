@@ -61,7 +61,7 @@ set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_dbus_service "org.mkiol.Stt")
 set(info_dbus_interface "org.mkiol.Stt")
-set(info_conf_version "9")
+set(info_conf_version "10")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC VAD · libarchive · {fmt}")
 
