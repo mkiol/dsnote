@@ -62,7 +62,7 @@ set(info_license_spdx "MPL-2.0")
 set(info_dbus_service "org.mkiol.Stt")
 set(info_dbus_interface "org.mkiol.Stt")
 set(info_conf_version "10")
-set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry")
+set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · Åke Engelbrektson")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC VAD · libarchive · {fmt}")
 
 set(libstt_x8664_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.Linux.tar.xz")
