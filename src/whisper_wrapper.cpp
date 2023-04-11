@@ -187,7 +187,8 @@ whisper_full_params whisper_wrapper::make_wparams() const {
     wparams.single_segment = false;
     wparams.translate = m_translate;
     wparams.no_context = true;
-    wparams.n_threads = std::min(2, cpu_tools::number_of_cores());
+    wparams.n_threads =
+        std::min(m_threads, std::max(1, cpu_tools::number_of_cores() - 2));
 
     LOGD("cpu info: arch=" << cpu_tools::arch()
                            << ", cores=" << cpu_tools::number_of_cores()

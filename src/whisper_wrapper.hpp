@@ -25,6 +25,7 @@ class whisper_wrapper : public engine_wrapper {
     using whisper_buf_t = std::vector<float>;
 
     inline static const size_t m_speech_max_size = m_sample_rate * 60;  // 60s
+    inline static const int m_threads = 2;
 
     whisper_buf_t m_speech_buf;
     whisper_context* m_whisper_ctx = nullptr;
