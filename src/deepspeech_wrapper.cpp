@@ -151,6 +151,8 @@ engine_wrapper::samples_process_result_t deepspeech_wrapper::process_buff() {
         create_ds_stream();
     }
 
+    m_denoiser.process(m_in_buf.buf.data(), m_in_buf.size);
+
     const auto& vad_buf =
         m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.size);
 

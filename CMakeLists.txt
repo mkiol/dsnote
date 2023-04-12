@@ -24,7 +24,8 @@ option(build_catch2 "download catch2, build and link statically" ON)
 option(build_whispercpp "download whisper.cpp, build and link statically" ON)
 option(build_webrtcvad "download webrtc vad, build and link statically" ON)
 option(build_openblas "download openblas, build and link shared lib" ON)
-option(build_xz "download xz lib, build and link statically lib" ON)
+option(build_xz "download xz lib, build and link statically" ON)
+option(build_rnnoise "download rnnoise lib, build and link statically" ON)
 
 if(${with_desktop} AND ${with_sfos})
     message(FATAL_ERROR "options with_desktop and with_sfos cannot be set together")
@@ -63,7 +64,7 @@ set(info_dbus_service "org.mkiol.Stt")
 set(info_dbus_interface "org.mkiol.Stt")
 set(info_conf_version "10")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · Åke Engelbrektson")
-set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC VAD · libarchive · {fmt}")
+set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC VAD · libarchive · RNNoise-nu · {fmt}")
 
 set(libstt_x8664_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.Linux.tar.xz")
 set(libstt_arm64_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.aarch64.tar.xz")
@@ -88,6 +89,8 @@ set(vosk_source_url "https://github.com/alphacep/vosk-api/archive/128c216c6137a3
 set(vosk_checksum "1f716b8132d5678823db0531b2c8285a")
 set(xz_source_url "https://downloads.sourceforge.net/lzmautils/xz-5.4.2.tar.gz")
 set(xz_checksum "4ac4e5da95aa8604a81e32079cb00d42")
+set(rnnoise_source_url "https://github.com/GregorR/rnnoise-nu/archive/26269304e120499485438cd93acf5127c6908c68.zip")
+set(rnnoise_checksum "fafe9bbf0e2b15df4a628434bea99dd3")
 
 project(${info_id} VERSION 2.0.0)
 
@@ -187,7 +190,9 @@ set(dsnote_lib_sources
     ${sources_dir}/comp_tools.cpp
     ${sources_dir}/comp_tools.hpp
     ${sources_dir}/checksum_tools.cpp
-    ${sources_dir}/checksum_tools.hpp)
+    ${sources_dir}/checksum_tools.hpp
+    ${sources_dir}/denoiser.hpp
+    ${sources_dir}/denoiser.cpp)
 
 configure_file(config.h.in config.h)
 
@@ -337,6 +342,23 @@ list(APPEND deps_libs Qt5::Core Qt5::Network Qt5::Multimedia Qt5::Gui Qt5::Quick
 if(with_desktop)
     find_package(Qt5 COMPONENTS QuickControls2 Widgets REQUIRED)
     list(APPEND deps_libs Qt5::QuickControls2 Qt5::Widgets)
+endif()
+
+if(build_rnnoise)
+    ExternalProject_Add(rnnoise
+            SOURCE_DIR ${external_dir}/rnnoise
+            BINARY_DIR ${PROJECT_BINARY_DIR}/external/rnnoise
+            INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+            URL "${rnnoise_source_url}"
+            URL_MD5 "${rnnoise_checksum}"
+            CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> && <BINARY_DIR>/autogen.sh &&
+                <BINARY_DIR>/configure --prefix=<INSTALL_DIR>
+                --disable-examples --disable-doc --disable-shared --enable-static --with-pic
+            BUILD_COMMAND ${MAKE}
+            BUILD_ALWAYS False
+            INSTALL_COMMAND make DESTDIR=/ install)
+    list(APPEND deps_libs "${external_lib_dir}/librnnoise-nu.a")
+    list(APPEND deps rnnoise)
 endif()
 
 if(build_libarchive)

@@ -86,6 +86,8 @@ engine_wrapper::samples_process_result_t whisper_wrapper::process_buff() {
         m_vad.reset();
     }
 
+    m_denoiser.process(m_in_buf.buf.data(), m_in_buf.size);
+
     const auto& vad_buf =
         m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.size);
 

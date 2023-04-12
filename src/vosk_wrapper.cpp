@@ -118,6 +118,8 @@ void vosk_wrapper::push_inbuf_to_samples() {
     m_speech_buf.insert(m_speech_buf.end(), m_in_buf.buf.cbegin(), end);
 }
 
+#include <fstream>
+
 engine_wrapper::samples_process_result_t vosk_wrapper::process_buff() {
     if (!lock_buff_for_processing())
         return samples_process_result_t::wait_for_samples;
@@ -138,6 +140,8 @@ engine_wrapper::samples_process_result_t vosk_wrapper::process_buff() {
         if (m_vosk_recognizer)
             m_vosk_api.vosk_recognizer_reset(m_vosk_recognizer);
     }
+
+    m_denoiser.process(m_in_buf.buf.data(), m_in_buf.size);
 
     const auto& vad_buf =
         m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.size);
