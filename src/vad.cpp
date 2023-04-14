@@ -5,7 +5,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "vad_wrapper.hpp"
+#include "vad.hpp"
+
+#include <webrtc_vad.h>
 
 #include <algorithm>
 #include <numeric>
@@ -14,9 +16,9 @@
 
 #include "logger.hpp"
 
-vad_wrapper::vad_wrapper() { restart(); }
+vad::vad() { restart(); }
 
-void vad_wrapper::restart() {
+void vad::restart() {
     if (m_handle) WebRtcVad_Free(m_handle);
 
     m_handle = WebRtcVad_Create();
@@ -32,15 +34,15 @@ void vad_wrapper::restart() {
     reset();
 }
 
-void vad_wrapper::reset() {
+void vad::reset() {
     m_output_samples.clear();
     m_input_samples.clear();
     m_dup_size = 0;
 }
 
-vad_wrapper::~vad_wrapper() { WebRtcVad_Free(m_handle); }
+vad::~vad() { WebRtcVad_Free(m_handle); }
 
-void vad_wrapper::shift_left(std::vector<int16_t>& vec, size_t distance) {
+void vad::shift_left(std::vector<int16_t>& vec, size_t distance) {
     if (distance >= vec.size()) {
         vec.clear();
         return;
@@ -71,7 +73,7 @@ static void insert_to_vec(const std::vector<int16_t>& input, size_t start,
     output.insert(output.end(), beg, end);
 }
 
-std::vector<bool> vad_wrapper::vad_process(const buf_t& samples) const {
+std::vector<bool> vad::vad_process(const buf_t& samples) const {
     const auto chunks = samples.size() / m_chunk_size;
 
     std::vector<bool> results;
@@ -90,12 +92,12 @@ std::vector<bool> vad_wrapper::vad_process(const buf_t& samples) const {
     return results;
 }
 
-bool vad_wrapper::is_speech(const buf_t::value_type* frame, size_t frame_size) {
-    return !vad_wrapper::remove_silence(frame, frame_size).empty();
+bool vad::is_speech(const buf_t::value_type* frame, size_t frame_size) {
+    return !vad::remove_silence(frame, frame_size).empty();
 }
 
-const vad_wrapper::buf_t& vad_wrapper::remove_silence(
-    const buf_t::value_type* frame, size_t frame_size) {
+const vad::buf_t& vad::remove_silence(const buf_t::value_type* frame,
+                                      size_t frame_size) {
     m_output_samples.clear();
 
     for (size_t i = 0; i < frame_size; ++i) m_input_samples.push_back(frame[i]);

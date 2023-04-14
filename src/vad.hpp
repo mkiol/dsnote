@@ -5,16 +5,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef VAD_WRAPPER_H
-#define VAD_WRAPPER_H
-
-#include <webrtc_vad.h>
+#ifndef VAD_H
+#define VAD_H
 
 #include <cstddef>
+#include <cstdint>
 #include <optional>
 #include <vector>
 
-class vad_wrapper {
+struct WebRtcVadInst;
+
+class vad {
    public:
     using buf_t = std::vector<int16_t>;
 
@@ -23,8 +24,8 @@ class vad_wrapper {
         std::optional<size_t> stop;
     };
 
-    vad_wrapper();
-    ~vad_wrapper();
+    vad();
+    ~vad();
     void reset();
     void restart();
     const buf_t& remove_silence(const buf_t::value_type* frame, size_t frame_size);
@@ -35,7 +36,7 @@ class vad_wrapper {
     inline static const size_t m_dup_max_size = 10 * m_chunk_size;
     inline static const size_t m_chunks_in_frame = 25;
 
-    VadInst* m_handle = nullptr;
+    WebRtcVadInst* m_handle = nullptr;
     int m_mode = 3;
     int m_fs = 16000;
     buf_t m_input_samples;
@@ -46,4 +47,4 @@ class vad_wrapper {
     static void shift_left(std::vector<int16_t>& vec, size_t distance);
 };
 
-#endif  // VAD_WRAPPER_H
+#endif  // VAD_H

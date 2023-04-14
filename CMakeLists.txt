@@ -183,8 +183,8 @@ set(dsnote_lib_sources
     ${sources_dir}/whisper_wrapper.hpp
     ${sources_dir}/vosk_wrapper.cpp
     ${sources_dir}/vosk_wrapper.hpp
-    ${sources_dir}/vad_wrapper.cpp
-    ${sources_dir}/vad_wrapper.hpp
+    ${sources_dir}/vad.cpp
+    ${sources_dir}/vad.hpp
     ${sources_dir}/cpu_tools.cpp
     ${sources_dir}/cpu_tools.hpp
     ${sources_dir}/comp_tools.cpp

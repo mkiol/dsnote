@@ -23,7 +23,7 @@
 #include <utility>
 
 #include "denoiser.hpp"
-#include "vad_wrapper.hpp"
+#include "vad.hpp"
 
 using namespace std::chrono_literals;
 
@@ -132,7 +132,7 @@ class engine_wrapper {
     bool m_thread_exit_requested = false;
     in_buf_t m_in_buf;
     std::optional<std::string> m_intermediate_text;
-    vad_wrapper m_vad;
+    vad m_vad;
     denoiser m_denoiser;
     speech_detection_status_t m_speech_detection_status =
         speech_detection_status_t::no_speech;
