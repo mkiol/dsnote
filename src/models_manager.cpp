@@ -122,24 +122,23 @@ std::vector<models_manager::model_t> models_manager::models(
 
     QDir dir{settings::instance()->models_dir()};
 
-    std::for_each(
-        m_models.cbegin(), m_models.cend(),
-        [&dir, &list, &lang_id](const auto& pair) {
-            if (lang_id.isEmpty() || lang_id == pair.second.lang_id) {
-                list.push_back(
-                    {pair.first, pair.second.engine, pair.second.lang_id,
-                     pair.second.name,
-                     pair.second.scorer_file_name.isEmpty()
-                         ? ""
-                         : dir.filePath(pair.second.scorer_file_name),
-                     pair.second.scorer_file_name.isEmpty()
-                         ? ""
-                         : dir.filePath(pair.second.scorer_file_name),
-                     pair.second.score, pair.second.default_for_lang,
-                     pair.second.available, pair.second.downloading,
-                     pair.second.download_progress});
-            }
-        });
+    std::for_each(m_models.cbegin(), m_models.cend(),
+                  [&dir, &list, &lang_id](const auto& pair) {
+                      if (lang_id.isEmpty() || lang_id == pair.second.lang_id) {
+                          list.push_back(
+                              {pair.first, pair.second.engine,
+                               pair.second.lang_id, pair.second.name,
+                               pair.second.scorer_file_name.isEmpty()
+                                   ? ""
+                                   : dir.filePath(pair.second.scorer_file_name),
+                               pair.second.scorer_file_name.isEmpty()
+                                   ? ""
+                                   : dir.filePath(pair.second.scorer_file_name),
+                               pair.second.score, pair.second.default_for_lang,
+                               pair.second.available, pair.second.downloading,
+                               pair.second.download_progress});
+                      }
+                  });
 
     std::sort(list.begin(), list.end(), [](const auto& a, const auto& b) {
         if (a.score == b.score)
@@ -869,17 +868,86 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             continue;
         }
 
-        auto checksum = obj.value(QLatin1String{"checksum"}).toString();
-        if (checksum.isEmpty()) {
-            qWarning() << "checksum cannot be empty:" << model_id;
+        model_engine engine = model_engine::stt_ds;
+        comp_type comp = comp_type::none, scorer_comp = comp_type::none;
+        QString file_name, checksum, checksum_quick, scorer_file_name,
+            scorer_checksum, scorer_checksum_quick;
+        std::vector<QUrl> urls, scorer_urls;
+        qint64 size = 0, scorer_size = 0;
+        int score = obj.value(QLatin1String{"score"}).toInt(-1);
+        bool available = false, exists = false;
+
+        auto model_alias_of =
+            obj.value(QLatin1String{"model_alias_of"}).toString();
+        if (model_alias_of.isEmpty()) {
+            engine =
+                engine_from_name(obj.value(QLatin1String{"engine"}).toString());
+
+            if (score == -1) score = default_score;
+
+            file_name = obj.value(QLatin1String{"file_name"}).toString();
+            if (file_name.isEmpty())
+                file_name = file_name_from_id(model_id, engine);
+            checksum = obj.value(QLatin1String{"checksum"}).toString();
+            if (checksum.isEmpty()) {
+                qWarning() << "checksum cannot be empty:" << model_id;
+                continue;
+            }
+            checksum_quick =
+                obj.value(QLatin1String{"checksum_quick"}).toString();
+            size = obj.value(QLatin1String{"size"}).toString().toLongLong();
+            comp = str2comp(obj.value(QLatin1String{"comp"}).toString());
+
+            auto aurls = obj.value(QLatin1String{"urls"}).toArray();
+            if (aurls.isEmpty()) {
+                qWarning() << "urls should be non empty array";
+                continue;
+            }
+            for (const auto& url : aurls) urls.emplace_back(url.toString());
+
+            scorer_file_name =
+                obj.value(QLatin1String{"scorer_file_name"}).toString();
+            if (scorer_file_name.isEmpty())
+                scorer_file_name = scorer_file_name_from_id(model_id);
+            scorer_checksum =
+                obj.value(QLatin1String{"scorer_checksum"}).toString();
+            scorer_checksum_quick =
+                obj.value(QLatin1String{"scorer_checksum_quick"}).toString();
+            scorer_size =
+                obj.value(QLatin1String{"scorer_size"}).toString().toLongLong();
+            scorer_comp =
+                str2comp(obj.value(QLatin1String{"scorer_comp"}).toString());
+
+            auto ascorer_urls =
+                obj.value(QLatin1String{"scorer_urls"}).toArray();
+            for (auto url : ascorer_urls)
+                scorer_urls.emplace_back(url.toString());
+        } else if (models.count(model_alias_of) > 0) {
+            const auto& alias = models.at(model_alias_of);
+
+            engine = alias.engine;
+            if (score == -1) score = alias.score;
+            file_name = alias.file_name;
+            checksum = alias.checksum;
+            checksum_quick = alias.checksum_quick;
+            size = alias.size;
+            comp = alias.comp;
+            urls = alias.urls;
+            scorer_file_name = alias.scorer_file_name;
+            scorer_checksum = alias.scorer_checksum;
+            scorer_checksum_quick = alias.scorer_checksum_quick;
+            scorer_size = alias.scorer_size;
+            scorer_comp = alias.scorer_comp;
+            scorer_urls = alias.scorer_urls;
+            exists = alias.exists;
+            available = alias.available;
+        } else {
+            qWarning() << "invalid model alias:" << model_alias_of;
             continue;
         }
 
-        auto engine =
-            engine_from_name(obj.value(QLatin1String{"engine"}).toString());
-
 #ifdef ARCH_ARM_32
-        if (!has_neon_fp && engine == model_engine::whisper) {
+        if (!has_neon_fp && engine == model_engine::stt_whisper) {
             qDebug() << "ignoring whisper model because cpu does not support "
                         "neon fd:"
                      << model_id;
@@ -887,11 +955,11 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         }
 #endif
 #ifdef USE_SFOS
-        if (engine == model_engine::vosk && model_id.contains("large")) {
+        if (engine == model_engine::stt_vosk && model_id.contains("large")) {
             qDebug() << "ignoring vosk large model:" << model_id;
             continue;
         }
-        if (engine == model_engine::whisper &&
+        if (engine == model_engine::stt_whisper &&
             (model_id.contains("small") || model_id.contains("medium") ||
              model_id.contains("large"))) {
             qDebug() << "ignoring whisper small, medium or large model:"
@@ -900,23 +968,8 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         }
 #endif
 
-        auto file_name = obj.value(QLatin1String{"file_name"}).toString();
-        if (file_name.isEmpty())
-            file_name = file_name_from_id(model_id, engine);
-
-        auto scorer_file_name =
-            obj.value(QLatin1String{"scorer_file_name"}).toString();
-        if (scorer_file_name.isEmpty())
-            scorer_file_name = scorer_file_name_from_id(model_id);
-
         bool is_default_model_for_lang =
             settings::instance()->default_model_for_lang(lang_id) == model_id;
-
-        const auto urls = obj.value(QLatin1String{"urls"}).toArray();
-        if (urls.isEmpty()) {
-            qWarning() << "urls should be non empty array";
-            continue;
-        }
 
         priv_model_t model{
             /*engine=*/engine,
@@ -924,51 +977,47 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             /*name=*/obj.value(QLatin1String{"name"}).toString(),
             /*file_name=*/std::move(file_name),
             /*checksum=*/std::move(checksum),
-            /*checksum_quick=*/
-            obj.value(QLatin1String{"checksum_quick"}).toString(),
-            /*comp=*/str2comp(obj.value(QLatin1String{"comp"}).toString()),
-            /*urls=*/{},
-            /*size=*/obj.value(QLatin1String{"size"}).toString().toLongLong(),
+            /*checksum_quick=*/std::move(checksum_quick),
+            /*comp=*/comp,
+            /*urls=*/std::move(urls),
+            /*size=*/size,
             /*scorer_file_name=*/std::move(scorer_file_name),
-            /*scorer_checksum=*/
-            obj.value(QLatin1String{"scorer_checksum"}).toString(),
-            /*scorer_checksum_quick=*/
-            obj.value(QLatin1String{"scorer_checksum_quick"}).toString(),
-            /*scorer_comp=*/
-            str2comp(obj.value(QLatin1String{"scorer_comp"}).toString()),
-            /*scorer_urls=*/{},
-            /*scorer_size=*/
-            obj.value(QLatin1String{"scorer_size"}).toString().toLongLong(),
-            /*score=*/obj.value(QLatin1String{"score"}).toInt(2),
+            /*scorer_checksum=*/std::move(scorer_checksum),
+            /*scorer_checksum_quick=*/std::move(scorer_checksum_quick),
+            /*scorer_comp=*/scorer_comp,
+            /*scorer_urls=*/std::move(scorer_urls),
+            /*scorer_size=*/scorer_size,
+            /*score=*/score,
             /*default_for_lang=*/is_default_model_for_lang,
-            /*available=*/false,
+            /*exists=*/exists,
+            /*available=*/available,
             /*downloading=*/false};
 
-        for (const auto& url : urls) model.urls.emplace_back(url.toString());
-
-        auto scorer_urls = obj.value(QLatin1String{"scorer_urls"}).toArray();
-        for (auto url : scorer_urls)
-            model.scorer_urls.emplace_back(url.toString());
-
-        if (dir.exists(model.file_name)) {
+        if (!model.exists && dir.exists(model.file_name)) {
             if (checksum_ok(model.checksum, model.checksum_quick,
                             model.file_name)) {
                 if (model.scorer_urls.empty()) {
-                    model.available = true;
+                    model.exists = true;
                 } else if (dir.exists(model.scorer_file_name)) {
                     if (checksum_ok(model.scorer_checksum,
                                     model.scorer_checksum_quick,
                                     model.scorer_file_name)) {
-                        model.available = true;
+                        model.exists = true;
                     }
                 }
             }
         }
 
-        if (model.available) qDebug() << "found model:" << model_id;
+        if (model.exists) {
+            if (model_alias_of.isEmpty())
+                qDebug() << "found model:" << model_id;
+            else
+                qDebug() << "found model:" << model_id << "alias of"
+                         << model_alias_of;
+        }
 
         auto model_is_enabled = enabled_models.contains(model_id);
-        if (model.available) {
+        if (model.exists) {
             model.available = model_is_enabled;
         } else {
             if (model_is_enabled) enabled_models.removeAll(model_id);

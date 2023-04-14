@@ -106,8 +106,9 @@ class models_manager : public QObject {
         comp_type scorer_comp = comp_type::none;
         std::vector<QUrl> scorer_urls;
         qint64 scorer_size = 0;
-        int score = 2; /* 0-3 */
+        int score = -1; /* 0-5 */
         bool default_for_lang = false;
+        bool exists = false;
         bool available = false;
         bool downloading = false;
         double download_progress = 0.0;
@@ -115,6 +116,7 @@ class models_manager : public QObject {
     };
 
     inline static const QString models_file{QStringLiteral("models.json")};
+    inline static const int default_score = 2;
     using langs_t = std::unordered_map<QString, std::pair<QString, QString>>;
     using models_t = std::unordered_map<QString, priv_model_t>;
 
