@@ -17,7 +17,7 @@ Following schema applies:
         {
             "name": "<model name (M)>",
             "model_id": "<unique model id (M)>",
-            "engine": "<engine type: 'ds' or 'whisper' (M)>",
+            "engine": "<engine type: 'stt_ds', 'stt_vosk' or 'stt_whisper' (M)>",
             "lang_id": "<ISO 639-1 language code (M)>",
             "experimental": <'true' if model should be listed as experimental (O)>,
             "urls": "<array of download URL(s) of model file (*.tflite), might be compressd file(s) (M)>",

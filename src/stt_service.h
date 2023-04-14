@@ -103,14 +103,14 @@ class stt_service : public QObject {
     struct model_data_t {
         QString model_id;
         QString lang_id;
-        models_manager::model_engine engine = models_manager::model_engine::ds;
+        models_manager::model_engine engine = models_manager::model_engine::stt_ds;
         QString name;
     };
 
     struct model_files_t {
         QString model_id;
         QString lang_id;
-        models_manager::model_engine engine = models_manager::model_engine::ds;
+        models_manager::model_engine engine = models_manager::model_engine::stt_ds;
         QString model_file;
         QString scorer_file;
     };

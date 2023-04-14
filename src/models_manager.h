@@ -36,7 +36,7 @@ class models_manager : public QObject {
     Q_OBJECT
     Q_PROPERTY(bool busy READ busy NOTIFY busy_changed)
    public:
-    enum class model_engine { ds, vosk, whisper };
+    enum class model_engine { stt_ds, stt_vosk, stt_whisper };
 
     struct lang_t {
         QString id;
@@ -48,7 +48,7 @@ class models_manager : public QObject {
 
     struct model_t {
         QString id;
-        model_engine engine = model_engine::ds;
+        model_engine engine = model_engine::stt_ds;
         QString lang_id;
         QString name;
         QString model_file;
@@ -91,7 +91,7 @@ class models_manager : public QObject {
     enum class comp_type { none, xz, gz, tar, tarxz, zip };
 
     struct priv_model_t {
-        model_engine engine = model_engine::ds;
+        model_engine engine = model_engine::stt_ds;
         QString lang_id;
         QString name;
         QString file_name;

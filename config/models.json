@@ -241,7 +241,7 @@
         {
             "name": "Català (DeepSpeech Ccoreilly)",
             "model_id": "ca",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "ca",
             "score": 3,
             "checksum": "c7e0dc53",
@@ -260,7 +260,7 @@
         {
             "name": "Čeština (DeepSpeech Comodoro)",
             "model_id": "cs",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "cs",
             "score": 3,
             "checksum": "a3d9843f",
@@ -279,7 +279,7 @@
         {
             "name": "English (DeepSpeech Mozilla)",
             "model_id": "en",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "en",
             "checksum": "6d38ae6e",
             "checksum_quick": "674d3682",
@@ -297,7 +297,7 @@
         {
             "name": "English (Coqui Huge)",
             "model_id": "en_hv",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "en",
             "checksum": "822d8ec3",
             "checksum_quick": "40fe6178",
@@ -315,7 +315,7 @@
         {
             "name": "English (Coqui Large)",
             "model_id": "en_lv",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "en",
             "score": 3,
             "checksum": "822d8ec3",
@@ -335,7 +335,7 @@
         {
             "name": "Deutsch (DeepSpeech Jaco)",
             "model_id": "de",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "de",
             "checksum": "a5943fb8",
             "checksum_quick": "984891bb",
@@ -363,7 +363,7 @@
         {
             "name": "Deutsch (DeepSpeech AA)",
             "model_id": "de_aa",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "de",
             "checksum": "4f9b4f32",
             "checksum_quick": "7fc513a",
@@ -381,7 +381,7 @@
         {
             "name": "Deutsch (DeepSpeech Med)",
             "model_id": "de_med",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "de",
             "score": 0,
             "checksum": "4f9b4f32",
@@ -402,7 +402,7 @@
         {
             "name": "Español (DeepSpeech Jaco)",
             "model_id": "es",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "es",
             "checksum": "8b01dece",
             "checksum_quick": "e462a75d",
@@ -431,7 +431,7 @@
         {
             "name": "Français (DeepSpeech Jaco)",
             "model_id": "fr",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "fr",
             "checksum": "59a6bd0a",
             "checksum_quick": "ac448065",
@@ -459,7 +459,7 @@
         {
             "name": "Français (DeepSpeech Common Voice)",
             "model_id": "fr_cv",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "fr",
             "checksum": "3b34ed93",
             "checksum_quick": "109c26f7",
@@ -479,7 +479,7 @@
         {
             "name": "فارسی (DeepSpeech)",
             "model_id": "fa_ds_oct",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "fa",
             "checksum": "69763210",
             "checksum_quick": "bd882bed",
@@ -497,7 +497,7 @@
         {
             "name": "Italiano (DeepSpeech Jaco)",
             "model_id": "it",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "it",
             "checksum": "6811059d",
             "checksum_quick": "a7507c9f",
@@ -517,7 +517,7 @@
         {
             "name": "Italiano (DeepSpeech Mozilla Italia)",
             "model_id": "it_mozz",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "it",
             "score": 3,
             "checksum": "922bbca1",
@@ -538,7 +538,7 @@
         {
             "name": "Polski (DeepSpeech mkiol)",
             "model_id": "pl_mkiol",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "pl",
             "score": 3,
             "checksum": "2ed9292d",
@@ -560,7 +560,7 @@
         {
             "name": "Русский (DeepSpeech Joe Meyer)",
             "model_id": "ru",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "ru",
             "score": 3,
             "checksum": "3bd98e76",
@@ -579,7 +579,7 @@
         {
             "name": "Українська (DeepSpeech Robinhad)",
             "model_id": "uk",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "uk",
             "score": 3,
             "checksum": "d7246303",
@@ -598,7 +598,7 @@
         {
             "name": "中文 简体 (DeepSpeech Mozilla)",
             "model_id": "zh-CN",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "zh-CN",
             "score": 3,
             "checksum": "73eef4d8",
@@ -617,7 +617,7 @@
         {
             "name": "Nederlands (DeepSpeech Acabunoc)",
             "model_id": "nl",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "nl",
             "score": 0,
             "checksum": "c02bf69d",
@@ -634,7 +634,7 @@
         {
             "name": "Kiswahili (Coqui)",
             "model_id": "sw_ds_coqui",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "sw",
             "score": 3,
             "checksum": "2e697767",
@@ -653,7 +653,7 @@
         {
             "name": "Yorùbá (DeepSpeech ITML)",
             "model_id": "yo",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "yo",
             "score": 0,
             "checksum": "2eda09ad",
@@ -665,7 +665,7 @@
         {
             "name": "Amarəñña (DeepSpeech ITML)",
             "model_id": "am",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "am",
             "score": 0,
             "checksum": "8e3392d5",
@@ -677,7 +677,7 @@
         {
             "name": "Euskara (DeepSpeech ITML)",
             "model_id": "eu",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "eu",
             "score": 0,
             "checksum": "fb948406",
@@ -689,7 +689,7 @@
         {
             "name": "Türkçe (DeepSpeech ITML)",
             "model_id": "tr",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "tr",
             "score": 0,
             "checksum": "6ad171a",
@@ -701,7 +701,7 @@
         {
             "name": "ไทย (DeepSpeech ITML)",
             "model_id": "th",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "th",
             "score": 0,
             "checksum": "fc7a544f",
@@ -713,7 +713,7 @@
         {
             "name": "Slovenščina (DeepSpeech ITML)",
             "model_id": "sl",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "sl",
             "score": 0,
             "checksum": "6d6717e2",
@@ -725,7 +725,7 @@
         {
             "name": "Română (DeepSpeech ITML)",
             "model_id": "ro",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "ro",
             "score": 0,
             "checksum": "ba5f9c81",
@@ -737,7 +737,7 @@
         {
             "name": "Português (DeepSpeech ITML)",
             "model_id": "pt",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "pt",
             "score": 0,
             "checksum": "b8618205",
@@ -754,7 +754,7 @@
         {
             "name": "Latviešu (DeepSpeech ITML)",
             "model_id": "lv",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "lv",
             "score": 0,
             "checksum": "1a9ee430",
@@ -766,7 +766,7 @@
         {
             "name": "Bahasa Indonesia (DeepSpeech ITML)",
             "model_id": "id",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "id",
             "score": 0,
             "checksum": "25f71127",
@@ -778,7 +778,7 @@
         {
             "name": "Ελληνικά (DeepSpeech ITML)",
             "model_id": "el",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "el",
             "score": 0,
             "checksum": "b9ff4d3d",
@@ -790,7 +790,7 @@
         {
             "name": "Magyar (DeepSpeech ITML)",
             "model_id": "hu",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "hu",
             "score": 0,
             "checksum": "202f48bc",
@@ -802,7 +802,7 @@
         {
             "name": "Монгол (DeepSpeech ITML)",
             "model_id": "mn",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "mn",
             "score": 0,
             "checksum": "c59d566c",
@@ -815,7 +815,7 @@
         {
             "name": "Suomi (DeepSpeech ITML)",
             "model_id": "fi",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "fi",
             "checksum": "ddc7f585",
             "checksum_quick": "22da1637",
@@ -835,7 +835,7 @@
         {
             "name": "Eesti (DeepSpeech ITML)",
             "model_id": "et",
-            "engine": "ds",
+            "engine": "stt_ds",
             "lang_id": "et",
             "score": 0,
             "checksum": "62cec9ed",
@@ -848,7 +848,7 @@
         {
             "name": "English (Whisper Tiny)",
             "model_id": "en_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "en",
             "checksum": "25fb4676",
             "checksum_quick": "41347da2",
@@ -860,7 +860,7 @@
         {
             "name": "English (Whisper Base)",
             "model_id": "en_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "score": 1,
             "lang_id": "en",
             "checksum": "e55b4adc",
@@ -873,7 +873,7 @@
         {
             "name": "English (Whisper Small)",
             "model_id": "en_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "en",
             "score": 0,
             "checksum": "cee06ee7",
@@ -886,7 +886,7 @@
         {
             "name": "English (Whisper Medium)",
             "model_id": "en_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "en",
             "score": 0,
             "checksum": "9c67c71e",
@@ -899,7 +899,7 @@
         {
             "name": "Español (Whisper Tiny)",
             "model_id": "es_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "es",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -912,7 +912,7 @@
         {
             "name": "Español (Whisper Base)",
             "model_id": "es_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "es",
             "score": 1,
             "checksum": "34e32ec8",
@@ -926,7 +926,7 @@
         {
             "name": "Español (Whisper Small)",
             "model_id": "es_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "es",
             "score": 0,
             "checksum": "5fad3693",
@@ -940,7 +940,7 @@
         {
             "name": "Español (Whisper Medium)",
             "model_id": "es_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "es",
             "score": 0,
             "checksum": "ddea3cce",
@@ -954,7 +954,7 @@
         {
             "name": "Italiano (Whisper Tiny)",
             "model_id": "it_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "it",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -967,7 +967,7 @@
         {
             "name": "Italiano (Whisper Base)",
             "model_id": "it_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "it",
             "score": 1,
             "checksum": "34e32ec8",
@@ -981,7 +981,7 @@
         {
             "name": "Italiano (Whisper Small)",
             "model_id": "it_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "it",
             "score": 0,
             "checksum": "5fad3693",
@@ -995,7 +995,7 @@
         {
             "name": "Italiano (Whisper Medium)",
             "model_id": "it_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "it",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1009,7 +1009,7 @@
         {
             "name": "Português (Whisper Tiny)",
             "model_id": "pt_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "pt",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -1022,7 +1022,7 @@
         {
             "name": "Português (Whisper Base)",
             "model_id": "pt_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "pt",
             "score": 1,
             "checksum": "34e32ec8",
@@ -1036,7 +1036,7 @@
         {
             "name": "Português (Whisper Small)",
             "model_id": "pt_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "pt",
             "score": 0,
             "checksum": "5fad3693",
@@ -1050,7 +1050,7 @@
         {
             "name": "Português (Whisper Medium)",
             "model_id": "pt_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "pt",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1064,7 +1064,7 @@
         {
             "name": "Deutsch (Whisper Tiny)",
             "model_id": "de_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "de",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -1077,7 +1077,7 @@
         {
             "name": "Deutsch (Whisper Base)",
             "model_id": "de_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "de",
             "score": 1,
             "checksum": "34e32ec8",
@@ -1091,7 +1091,7 @@
         {
             "name": "Deutsch (Whisper Small)",
             "model_id": "de_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "de",
             "score": 0,
             "checksum": "5fad3693",
@@ -1105,7 +1105,7 @@
         {
             "name": "Deutsch (Whisper Medium)",
             "model_id": "de_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "de",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1119,7 +1119,7 @@
         {
             "name": "日本語 (Whisper Tiny)",
             "model_id": "jp_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "jp",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -1132,7 +1132,7 @@
         {
             "name": "日本語 (Whisper Base)",
             "model_id": "jp_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "jp",
             "score": 1,
             "checksum": "34e32ec8",
@@ -1146,7 +1146,7 @@
         {
             "name": "日本語 (Whisper Small)",
             "model_id": "jp_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "jp",
             "score": 0,
             "checksum": "5fad3693",
@@ -1160,7 +1160,7 @@
         {
             "name": "日本語 (Whisper Medium)",
             "model_id": "jp_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "jp",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1174,7 +1174,7 @@
         {
             "name": "Русский (Whisper Tiny)",
             "model_id": "ru_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ru",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -1187,7 +1187,7 @@
         {
             "name": "Русский (Whisper Base)",
             "model_id": "ru_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ru",
             "score": 1,
             "checksum": "34e32ec8",
@@ -1201,7 +1201,7 @@
         {
             "name": "Русский (Whisper Small)",
             "model_id": "ru_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ru",
             "score": 0,
             "checksum": "5fad3693",
@@ -1215,7 +1215,7 @@
         {
             "name": "Русский (Whisper Medium)",
             "model_id": "ru_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ru",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1229,7 +1229,7 @@
         {
             "name": "Nederlands (Whisper Tiny)",
             "model_id": "nl_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "nl",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -1242,7 +1242,7 @@
         {
             "name": "Nederlands (Whisper Base)",
             "model_id": "nl_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "nl",
             "score": 1,
             "checksum": "34e32ec8",
@@ -1256,7 +1256,7 @@
         {
             "name": "Nederlands (Whisper Small)",
             "model_id": "nl_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "nl",
             "score": 0,
             "checksum": "5fad3693",
@@ -1270,7 +1270,7 @@
         {
             "name": "Nederlands (Whisper Medium)",
             "model_id": "nl_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "nl",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1284,7 +1284,7 @@
         {
             "name": "Bahasa Indonesia (Whisper Tiny)",
             "model_id": "id_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "id",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -1297,7 +1297,7 @@
         {
             "name": "Bahasa Indonesia (Whisper Base)",
             "model_id": "id_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "id",
             "score": 1,
             "checksum": "34e32ec8",
@@ -1311,7 +1311,7 @@
         {
             "name": "Bahasa Indonesia (Whisper Small)",
             "model_id": "id_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "id",
             "score": 0,
             "checksum": "5fad3693",
@@ -1325,7 +1325,7 @@
         {
             "name": "Bahasa Indonesia (Whisper Medium)",
             "model_id": "id_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "id",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1339,7 +1339,7 @@
         {
             "name": "Català (Whisper Tiny)",
             "model_id": "ca_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ca",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -1352,7 +1352,7 @@
         {
             "name": "Català (Whisper Base)",
             "model_id": "ca_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ca",
             "score": 1,
             "checksum": "34e32ec8",
@@ -1366,7 +1366,7 @@
         {
             "name": "Català (Whisper Small)",
             "model_id": "ca_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ca",
             "score": 0,
             "checksum": "5fad3693",
@@ -1380,7 +1380,7 @@
         {
             "name": "Català (Whisper Medium)",
             "model_id": "ca_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ca",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1394,7 +1394,7 @@
         {
             "name": "Français (Whisper Tiny)",
             "model_id": "fr_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "fr",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -1407,7 +1407,7 @@
         {
             "name": "Français (Whisper Base)",
             "model_id": "fr_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "fr",
             "score": 1,
             "checksum": "34e32ec8",
@@ -1421,7 +1421,7 @@
         {
             "name": "Français (Whisper Small)",
             "model_id": "fr_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "fr",
             "score": 0,
             "checksum": "5fad3693",
@@ -1435,7 +1435,7 @@
         {
             "name": "Français (Whisper Medium)",
             "model_id": "fr_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "fr",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1449,7 +1449,7 @@
         {
             "name": "Türkçe (Whisper Tiny)",
             "model_id": "tr_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "tr",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -1462,7 +1462,7 @@
         {
             "name": "Türkçe (Whisper Base)",
             "model_id": "tr_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "tr",
             "score": 1,
             "checksum": "34e32ec8",
@@ -1476,7 +1476,7 @@
         {
             "name": "Türkçe (Whisper Small)",
             "model_id": "tr_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "tr",
             "score": 0,
             "checksum": "5fad3693",
@@ -1490,7 +1490,7 @@
         {
             "name": "Türkçe (Whisper Medium)",
             "model_id": "tr_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "tr",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1504,7 +1504,7 @@
         {
             "name": "Svenska (Whisper Tiny)",
             "model_id": "sv_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sv",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -1517,7 +1517,7 @@
         {
             "name": "Svenska (Whisper Base)",
             "model_id": "sv_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sv",
             "score": 1,
             "checksum": "34e32ec8",
@@ -1531,7 +1531,7 @@
         {
             "name": "Svenska (Whisper Small)",
             "model_id": "sv_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sv",
             "score": 0,
             "checksum": "5fad3693",
@@ -1545,7 +1545,7 @@
         {
             "name": "Svenska (Whisper Medium)",
             "model_id": "sv_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sv",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1559,7 +1559,7 @@
         {
             "name": "Українська (Whisper Tiny)",
             "model_id": "uk_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "uk",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -1572,7 +1572,7 @@
         {
             "name": "Українська (Whisper Base)",
             "model_id": "uk_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "uk",
             "score": 1,
             "checksum": "34e32ec8",
@@ -1586,7 +1586,7 @@
         {
             "name": "Українська (Whisper Small)",
             "model_id": "uk_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "uk",
             "score": 0,
             "checksum": "5fad3693",
@@ -1600,7 +1600,7 @@
         {
             "name": "Українська (Whisper Medium)",
             "model_id": "uk_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "uk",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1614,7 +1614,7 @@
         {
             "name": "Melayu (Whisper Tiny)",
             "model_id": "ms_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ms",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -1627,7 +1627,7 @@
         {
             "name": "Melayu (Whisper Base)",
             "model_id": "ms_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ms",
             "score": 1,
             "checksum": "34e32ec8",
@@ -1641,7 +1641,7 @@
         {
             "name": "Melayu (Whisper Small)",
             "model_id": "ms_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ms",
             "score": 0,
             "checksum": "5fad3693",
@@ -1655,7 +1655,7 @@
         {
             "name": "Melayu (Whisper Medium)",
             "model_id": "ms_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ms",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1669,7 +1669,7 @@
         {
             "name": "Norsk (Whisper Tiny)",
             "model_id": "no_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "no",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -1682,7 +1682,7 @@
         {
             "name": "Norsk (Whisper Base)",
             "model_id": "no_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "no",
             "score": 1,
             "checksum": "34e32ec8",
@@ -1696,7 +1696,7 @@
         {
             "name": "Norsk (Whisper Small)",
             "model_id": "no_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "no",
             "score": 0,
             "checksum": "5fad3693",
@@ -1710,7 +1710,7 @@
         {
             "name": "Norsk (Whisper Medium)",
             "model_id": "no_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "no",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1724,7 +1724,7 @@
         {
             "name": "Suomi (Whisper Tiny)",
             "model_id": "fi_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "fi",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -1737,7 +1737,7 @@
         {
             "name": "Suomi (Whisper Base)",
             "model_id": "fi_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "fi",
             "score": 1,
             "checksum": "34e32ec8",
@@ -1751,7 +1751,7 @@
         {
             "name": "Suomi (Whisper Small)",
             "model_id": "fi_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "fi",
             "score": 0,
             "checksum": "5fad3693",
@@ -1765,7 +1765,7 @@
         {
             "name": "Suomi (Whisper Medium)",
             "model_id": "fi_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "fi",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1779,7 +1779,7 @@
         {
             "name": "Čeština (Whisper Tiny)",
             "model_id": "cs_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "cs",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -1792,7 +1792,7 @@
         {
             "name": "Čeština (Whisper Base)",
             "model_id": "cs_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "cs",
             "score": 1,
             "checksum": "34e32ec8",
@@ -1806,7 +1806,7 @@
         {
             "name": "Čeština (Whisper Small)",
             "model_id": "cs_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "cs",
             "score": 0,
             "checksum": "5fad3693",
@@ -1820,7 +1820,7 @@
         {
             "name": "Čeština (Whisper Medium)",
             "model_id": "cs_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "cs",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1834,7 +1834,7 @@
         {
             "name": "Slovenčina (Whisper Tiny)",
             "model_id": "sk_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sk",
             "score": 0,
             "checksum": "285b19e9",
@@ -1848,7 +1848,7 @@
         {
             "name": "Slovenčina (Whisper Base)",
             "model_id": "sk_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sk",
             "score": 0,
             "checksum": "34e32ec8",
@@ -1862,7 +1862,7 @@
         {
             "name": "Slovenčina (Whisper Small)",
             "model_id": "sk_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sk",
             "score": 0,
             "checksum": "5fad3693",
@@ -1876,7 +1876,7 @@
         {
             "name": "Slovenčina (Whisper Medium)",
             "model_id": "sk_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sk",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1890,7 +1890,7 @@
         {
             "name": "中文 简体 (Whisper Tiny)",
             "model_id": "zh-CN_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "zh-CN",
             "score": 0,
             "checksum": "285b19e9",
@@ -1904,7 +1904,7 @@
         {
             "name": "中文 简体 (Whisper Base)",
             "model_id": "zh-CN_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "zh-CN",
             "score": 0,
             "checksum": "34e32ec8",
@@ -1918,7 +1918,7 @@
         {
             "name": "中文 简体 (Whisper Small)",
             "model_id": "zh-CN_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "zh-CN",
             "score": 0,
             "checksum": "5fad3693",
@@ -1932,7 +1932,7 @@
         {
             "name": "中文 简体 (Whisper Medium)",
             "model_id": "zh-CN_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "zh-CN",
             "score": 0,
             "checksum": "ddea3cce",
@@ -1946,7 +1946,7 @@
         {
             "name": "Tiếng Việt (Whisper Tiny)",
             "model_id": "vi_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "vi",
             "score": 0,
             "checksum": "285b19e9",
@@ -1960,7 +1960,7 @@
         {
             "name": "Tiếng Việt (Whisper Base)",
             "model_id": "vi_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "vi",
             "score": 0,
             "checksum": "34e32ec8",
@@ -1974,7 +1974,7 @@
         {
             "name": "Tiếng Việt (Whisper Small)",
             "model_id": "vi_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "vi",
             "score": 0,
             "checksum": "5fad3693",
@@ -1988,7 +1988,7 @@
         {
             "name": "Tiếng Việt (Whisper Medium)",
             "model_id": "vi_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "vi",
             "score": 0,
             "checksum": "ddea3cce",
@@ -2002,7 +2002,7 @@
         {
             "name": "ไทย (Whisper Tiny)",
             "model_id": "th_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "th",
             "score": 0,
             "checksum": "285b19e9",
@@ -2016,7 +2016,7 @@
         {
             "name": "ไทย (Whisper Base)",
             "model_id": "th_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "th",
             "score": 0,
             "checksum": "34e32ec8",
@@ -2030,7 +2030,7 @@
         {
             "name": "ไทย (Whisper Small)",
             "model_id": "th_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "th",
             "score": 0,
             "checksum": "5fad3693",
@@ -2044,7 +2044,7 @@
         {
             "name": "ไทย (Whisper Medium)",
             "model_id": "th_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "th",
             "score": 0,
             "checksum": "ddea3cce",
@@ -2058,7 +2058,7 @@
         {
             "name": "Ελληνικά (Whisper Tiny)",
             "model_id": "el_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "el",
             "score": 0,
             "checksum": "285b19e9",
@@ -2072,7 +2072,7 @@
         {
             "name": "Ελληνικά (Whisper Base)",
             "model_id": "el_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "el",
             "score": 0,
             "checksum": "34e32ec8",
@@ -2086,7 +2086,7 @@
         {
             "name": "Ελληνικά (Whisper Small)",
             "model_id": "el_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "el",
             "score": 0,
             "checksum": "5fad3693",
@@ -2100,7 +2100,7 @@
         {
             "name": "Ελληνικά (Whisper Medium)",
             "model_id": "el_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "el",
             "score": 0,
             "checksum": "ddea3cce",
@@ -2114,7 +2114,7 @@
         {
             "name": "Hrvatski (Whisper Tiny)",
             "model_id": "hr_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "hr",
             "score": 0,
             "checksum": "285b19e9",
@@ -2128,7 +2128,7 @@
         {
             "name": "Hrvatski (Whisper Base)",
             "model_id": "hr_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "hr",
             "score": 0,
             "checksum": "34e32ec8",
@@ -2142,7 +2142,7 @@
         {
             "name": "Hrvatski (Whisper Small)",
             "model_id": "hr_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "hr",
             "score": 0,
             "checksum": "5fad3693",
@@ -2156,7 +2156,7 @@
         {
             "name": "Hrvatski (Whisper Medium)",
             "model_id": "hr_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "hr",
             "score": 0,
             "checksum": "ddea3cce",
@@ -2170,7 +2170,7 @@
         {
             "name": "Български (Whisper Tiny)",
             "model_id": "bg_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "bg",
             "score": 0,
             "checksum": "285b19e9",
@@ -2184,7 +2184,7 @@
         {
             "name": "Български (Whisper Base)",
             "model_id": "bg_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "bg",
             "score": 0,
             "checksum": "34e32ec8",
@@ -2198,7 +2198,7 @@
         {
             "name": "Български (Whisper Small)",
             "model_id": "bg_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "bg",
             "score": 0,
             "checksum": "5fad3693",
@@ -2212,7 +2212,7 @@
         {
             "name": "Български (Whisper Medium)",
             "model_id": "bg_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "bg",
             "score": 0,
             "checksum": "ddea3cce",
@@ -2226,7 +2226,7 @@
         {
             "name": "Română (Whisper Tiny)",
             "model_id": "ro_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ro",
             "score": 0,
             "checksum": "285b19e9",
@@ -2240,7 +2240,7 @@
         {
             "name": "Română (Whisper Base)",
             "model_id": "ro_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ro",
             "score": 0,
             "checksum": "34e32ec8",
@@ -2254,7 +2254,7 @@
         {
             "name": "Română (Whisper Small)",
             "model_id": "ro_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ro",
             "score": 0,
             "checksum": "5fad3693",
@@ -2268,7 +2268,7 @@
         {
             "name": "Română (Whisper Medium)",
             "model_id": "ro_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "ro",
             "score": 0,
             "checksum": "ddea3cce",
@@ -2282,7 +2282,7 @@
         {
             "name": "Slovenščina (Whisper Tiny)",
             "model_id": "sl_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sl",
             "score": 0,
             "checksum": "285b19e9",
@@ -2296,7 +2296,7 @@
         {
             "name": "Slovenščina (Whisper Base)",
             "model_id": "sl_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sl",
             "score": 0,
             "checksum": "34e32ec8",
@@ -2310,7 +2310,7 @@
         {
             "name": "Slovenščina (Whisper Small)",
             "model_id": "sl_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sl",
             "score": 0,
             "checksum": "5fad3693",
@@ -2324,7 +2324,7 @@
         {
             "name": "Slovenščina (Whisper Medium)",
             "model_id": "sl_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sl",
             "score": 0,
             "checksum": "ddea3cce",
@@ -2338,7 +2338,7 @@
         {
             "name": "Bosanski (Whisper Tiny)",
             "model_id": "bs_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "bs",
             "score": 0,
             "checksum": "285b19e9",
@@ -2352,7 +2352,7 @@
         {
             "name": "Bosanski (Whisper Base)",
             "model_id": "bs_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "bs",
             "score": 0,
             "checksum": "34e32ec8",
@@ -2366,7 +2366,7 @@
         {
             "name": "Bosanski (Whisper Small)",
             "model_id": "bs_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "bs",
             "score": 0,
             "checksum": "5fad3693",
@@ -2380,7 +2380,7 @@
         {
             "name": "Bosanski (Whisper Medium)",
             "model_id": "bs_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "bs",
             "score": 0,
             "checksum": "ddea3cce",
@@ -2394,7 +2394,7 @@
         {
             "name": "Македонски (Whisper Tiny)",
             "model_id": "mk_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "mk",
             "score": 0,
             "checksum": "285b19e9",
@@ -2408,7 +2408,7 @@
         {
             "name": "Македонски (Whisper Base)",
             "model_id": "mk_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "mk",
             "score": 0,
             "checksum": "34e32ec8",
@@ -2422,7 +2422,7 @@
         {
             "name": "Македонски (Whisper Small)",
             "model_id": "mk_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "mk",
             "score": 0,
             "checksum": "5fad3693",
@@ -2436,7 +2436,7 @@
         {
             "name": "Македонски (Whisper Medium)",
             "model_id": "mk_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "mk",
             "score": 0,
             "checksum": "ddea3cce",
@@ -2450,7 +2450,7 @@
         {
             "name": "Srpski (Whisper Tiny)",
             "model_id": "sr_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sr",
             "score": 0,
             "checksum": "285b19e9",
@@ -2464,7 +2464,7 @@
         {
             "name": "Srpski (Whisper Base)",
             "model_id": "sr_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sr",
             "score": 0,
             "checksum": "34e32ec8",
@@ -2478,7 +2478,7 @@
         {
             "name": "Srpski (Whisper Small)",
             "model_id": "sr_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sr",
             "score": 0,
             "checksum": "5fad3693",
@@ -2492,7 +2492,7 @@
         {
             "name": "Srpski (Whisper Medium)",
             "model_id": "sr_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "sr",
             "score": 0,
             "checksum": "ddea3cce",
@@ -2506,7 +2506,7 @@
         {
             "name": "Polski (Whisper Tiny)",
             "model_id": "pl_whisper_tiny",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "pl",
             "checksum": "285b19e9",
             "checksum_quick": "2e243a59",
@@ -2519,7 +2519,7 @@
         {
             "name": "Polski (Whisper Base)",
             "model_id": "pl_whisper_base",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "pl",
             "score": 1,
             "checksum": "34e32ec8",
@@ -2533,7 +2533,7 @@
         {
             "name": "Polski (Whisper Small)",
             "model_id": "pl_whisper_small",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "pl",
             "score": 0,
             "checksum": "5fad3693",
@@ -2547,7 +2547,7 @@
         {
             "name": "Polski (Whisper Medium)",
             "model_id": "pl_whisper_medium",
-            "engine": "whisper",
+            "engine": "stt_whisper",
             "lang_id": "pl",
             "score": 0,
             "checksum": "ddea3cce",
@@ -2561,7 +2561,7 @@
         {
             "name": "English (Vosk Small)",
             "model_id": "en_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "en",
             "score": 4,
             "checksum": "70369986",
@@ -2575,7 +2575,7 @@
         {
             "name": "English (Vosk Large)",
             "model_id": "en_vosk_large",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "en",
             "score": 5,
             "checksum": "d28e96b6",
@@ -2589,7 +2589,7 @@
         {
             "name": "Indian English (Vosk Large)",
             "model_id": "en_vosk_indian_large",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "en",
             "checksum": "120760c",
             "checksum_quick": "d8ee9054",
@@ -2602,7 +2602,7 @@
         {
             "name": "Indian English (Vosk Small)",
             "model_id": "en_vosk_indian_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "en",
             "checksum": "c0f57d24",
             "checksum_quick": "a52eb202",
@@ -2615,7 +2615,7 @@
         {
             "name": "中文 简体 (Vosk Large)",
             "model_id": "zh-CN_vosk_large",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "zh-CN",
             "score": 5,
             "checksum": "19ed3167",
@@ -2629,7 +2629,7 @@
         {
             "name": "中文 简体 (Vosk Small)",
             "model_id": "zh-CN_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "zh-CN",
             "score": 4,
             "checksum": "e9365882",
@@ -2643,7 +2643,7 @@
         {
             "name": "Русский (Vosk Large)",
             "model_id": "ru_vosk_large",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "ru",
             "score": 5,
             "checksum": "181b1da6",
@@ -2657,7 +2657,7 @@
         {
             "name": "Русский (Vosk Small)",
             "model_id": "ru_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "ru",
             "score": 4,
             "checksum": "d43865e1",
@@ -2671,7 +2671,7 @@
         {
             "name": "Français (Vosk Large)",
             "model_id": "fr_vosk_large",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "fr",
             "score": 5,
             "checksum": "b510c74e",
@@ -2685,7 +2685,7 @@
         {
             "name": "Français (Vosk Small)",
             "model_id": "fr_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "fr",
             "score": 4,
             "checksum": "70680e69",
@@ -2699,7 +2699,7 @@
         {
             "name": "Deutsch (Vosk Large)",
             "model_id": "de_vosk_large",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "de",
             "score": 5,
             "checksum": "98c39119",
@@ -2713,7 +2713,7 @@
         {
             "name": "Deutsch (Vosk Small)",
             "model_id": "de_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "de",
             "score": 4,
             "checksum": "3089fe1f",
@@ -2727,7 +2727,7 @@
         {
             "name": "Español (Vosk Large)",
             "model_id": "es_vosk_large",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "es",
             "score": 5,
             "checksum": "c095d1e0",
@@ -2741,7 +2741,7 @@
         {
             "name": "Español (Vosk Small)",
             "model_id": "es_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "es",
             "score": 4,
             "checksum": "17e0d8bb",
@@ -2755,7 +2755,7 @@
         {
             "name": "Português (Vosk Large)",
             "model_id": "pt_vosk_large",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "pt",
             "score": 5,
             "checksum": "cf072408",
@@ -2769,7 +2769,7 @@
         {
             "name": "Português (Vosk Small)",
             "model_id": "pt_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "pt",
             "score": 4,
             "checksum": "a8a8a927",
@@ -2783,7 +2783,7 @@
         {
             "name": "Türkçe (Vosk Small)",
             "model_id": "tr_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "tr",
             "score": 4,
             "checksum": "c13511b4",
@@ -2797,7 +2797,7 @@
         {
             "name": "Tiếng Việt (Vosk Small)",
             "model_id": "vi_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "vi",
             "score": 4,
             "checksum": "8df7410a",
@@ -2811,7 +2811,7 @@
         {
             "name": "Italiano (Vosk Large)",
             "model_id": "it_vosk_large",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "it",
             "score": 5,
             "checksum": "9035f7ee",
@@ -2825,7 +2825,7 @@
         {
             "name": "Italiano (Vosk Small)",
             "model_id": "it_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "it",
             "score": 4,
             "checksum": "5293bb6e",
@@ -2839,7 +2839,7 @@
         {
             "name": "Nederlands (Vosk Large)",
             "model_id": "nl_vosk_large",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "nl",
             "score": 5,
             "checksum": "8f55db2f",
@@ -2853,7 +2853,7 @@
         {
             "name": "Nederlands (Vosk Small)",
             "model_id": "nl_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "nl",
             "score": 4,
             "checksum": "393570aa",
@@ -2867,7 +2867,7 @@
         {
             "name": "Català (Vosk Small)",
             "model_id": "ca_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "ca",
             "score": 4,
             "checksum": "ff78cad7",
@@ -2881,7 +2881,7 @@
         {
             "name": "عربي (Vosk Medium)",
             "model_id": "ar_vosk_medium",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "ar",
             "score": 4,
             "checksum": "e0ba2768",
@@ -2895,7 +2895,7 @@
         {
             "name": "فارسی (Vosk Large)",
             "model_id": "fa_vosk_large",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "fa",
             "score": 4,
             "checksum": "6c9efd66",
@@ -2909,7 +2909,7 @@
         {
             "name": "فارسی (Vosk Medium)",
             "model_id": "fa_vosk_medium",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "fa",
             "score": 5,
             "checksum": "3a28070c",
@@ -2923,7 +2923,7 @@
         {
             "name": "فارسی (Vosk Small)",
             "model_id": "fa_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "fa",
             "score": 4,
             "checksum": "be536af2",
@@ -2937,7 +2937,7 @@
         {
             "name": "Tagalog (Vosk Medium)",
             "model_id": "tl_vosk_medium",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "tl",
             "checksum": "de29f3cb",
             "checksum_quick": "55b9f2ee",
@@ -2950,7 +2950,7 @@
         {
             "name": "Українська (Vosk Nano)",
             "model_id": "uk_vosk_nano",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "uk",
             "checksum": "1ffa9c03",
             "checksum_quick": "64598802",
@@ -2963,7 +2963,7 @@
         {
             "name": "Українська (Vosk Small)",
             "model_id": "uk_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "uk",
             "score": 4,
             "checksum": "f7f4a94",
@@ -2977,7 +2977,7 @@
         {
             "name": "Українська (Vosk Medium)",
             "model_id": "uk_vosk_medium",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "uk",
             "score": 5,
             "checksum": "6ab87344",
@@ -2991,7 +2991,7 @@
         {
             "name": "Қазақ (Vosk Medium)",
             "model_id": "kk_vosk_medium",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "kk",
             "score": 4,
             "checksum": "9bd922a1",
@@ -3005,7 +3005,7 @@
         {
             "name": "Қазақ (Vosk Small)",
             "model_id": "kk_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "kk",
             "score": 3,
             "checksum": "c039338",
@@ -3019,7 +3019,7 @@
         {
             "name": "Svenska (Vosk Small)",
             "model_id": "sv_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "sv",
             "score": 4,
             "checksum": "539ca7c3",
@@ -3033,7 +3033,7 @@
         {
             "name": "日本語 (Vosk Large)",
             "model_id": "jp_vosk_large",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "jp",
             "score": 5,
             "checksum": "8f7818ee",
@@ -3047,7 +3047,7 @@
         {
             "name": "日本語 (Vosk Small)",
             "model_id": "jp_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "jp",
             "score": 4,
             "checksum": "5a25273",
@@ -3061,7 +3061,7 @@
         {
             "name": "Esperanto (Vosk Small)",
             "model_id": "eo_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "eo",
             "checksum": "8c530697",
             "checksum_quick": "82aac4e7",
@@ -3074,7 +3074,7 @@
         {
             "name": "हिन्दी (Vosk Large)",
             "model_id": "hi_vosk_large",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "hi",
             "score": 5,
             "checksum": "b4911cd0",
@@ -3088,7 +3088,7 @@
         {
             "name": "हिन्दी (Vosk Small)",
             "model_id": "hi_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "hi",
             "score": 4,
             "checksum": "a2731ec4",
@@ -3102,7 +3102,7 @@
         {
             "name": "Čeština (Vosk Small)",
             "model_id": "cs_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "cs",
             "score": 4,
             "checksum": "5c2c5213",
@@ -3116,7 +3116,7 @@
         {
             "name": "Oʻzbekcha (Vosk Small)",
             "model_id": "uz_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "uz",
             "score": 4,
             "checksum": "fbf5609c",
@@ -3130,7 +3130,7 @@
         {
             "name": "한국어 (Vosk Small)",
             "model_id": "ko_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "ko",
             "score": 4,
             "checksum": "a2b5e9ab",
@@ -3144,7 +3144,7 @@
         {
             "name": "Polski (Vosk Small)",
             "model_id": "pl_vosk_small",
-            "engine": "vosk",
+            "engine": "stt_vosk",
             "lang_id": "pl",
             "score": 4,
             "checksum": "edce6b0d",

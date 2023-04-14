@@ -272,13 +272,13 @@ QString stt_service::restart_engine(speech_mode_t speech_mode,
             if (translate != m_engine->translate()) return true;
 
             const auto &type = typeid(*m_engine);
-            if (model_files->engine == models_manager::model_engine::ds &&
+            if (model_files->engine == models_manager::model_engine::stt_ds &&
                 type != typeid(deepspeech_wrapper))
                 return true;
-            if (model_files->engine == models_manager::model_engine::vosk &&
+            if (model_files->engine == models_manager::model_engine::stt_vosk &&
                 type != typeid(vosk_wrapper))
                 return true;
-            if (model_files->engine == models_manager::model_engine::whisper &&
+            if (model_files->engine == models_manager::model_engine::stt_whisper &&
                 type != typeid(whisper_wrapper))
                 return true;
 
@@ -311,15 +311,15 @@ QString stt_service::restart_engine(speech_mode_t speech_mode,
                 [this]() { handle_engine_error(); }};
 
             switch (model_files->engine) {
-                case models_manager::model_engine::ds:
+                case models_manager::model_engine::stt_ds:
                     m_engine = std::make_unique<deepspeech_wrapper>(
                         std::move(config), std::move(call_backs));
                     break;
-                case models_manager::model_engine::vosk:
+                case models_manager::model_engine::stt_vosk:
                     m_engine = std::make_unique<vosk_wrapper>(
                         std::move(config), std::move(call_backs));
                     break;
-                case models_manager::model_engine::whisper:
+                case models_manager::model_engine::stt_whisper:
                     m_engine = std::make_unique<whisper_wrapper>(
                         std::move(config), std::move(call_backs));
                     break;

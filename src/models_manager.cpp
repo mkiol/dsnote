@@ -832,10 +832,10 @@ bool models_manager::checksum_ok(const QString& checksum,
 
 models_manager::model_engine models_manager::engine_from_name(
     const QString& name) {
-    if (name == QStringLiteral("ds")) return model_engine::ds;
-    if (name == QStringLiteral("vosk")) return model_engine::vosk;
-    if (name == QStringLiteral("whisper")) return model_engine::whisper;
-    return model_engine::ds;  // default
+    if (name == QStringLiteral("stt_ds")) return model_engine::stt_ds;
+    if (name == QStringLiteral("stt_vosk")) return model_engine::stt_vosk;
+    if (name == QStringLiteral("stt_whisper")) return model_engine::stt_whisper;
+    return model_engine::stt_ds;  // default
 }
 
 auto models_manager::extract_models(const QJsonArray& models_jarray) {
@@ -1069,11 +1069,11 @@ void models_manager::parse_models_file(bool reset, langs_t* langs,
 QString models_manager::file_name_from_id(const QString& id,
                                           model_engine engine) {
     switch (engine) {
-        case model_engine::ds:
+        case model_engine::stt_ds:
             return id + ".tflite";
-        case model_engine::whisper:
+        case model_engine::stt_whisper:
             return id + ".ggml";
-        case model_engine::vosk:
+        case model_engine::stt_vosk:
             return id;
     }
 
