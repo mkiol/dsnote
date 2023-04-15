@@ -109,6 +109,12 @@ void vosk_wrapper::create_vosk_model() {
 void vosk_wrapper::reset_impl() {
     m_speech_buf.clear();
 
+#ifdef DUMP_AUDIO_TO_FILE
+    m_file_audio_input.reset();
+    m_file_audio_after_denoise.reset();
+    m_file_audio_after_vad.reset();
+#endif
+
     if (m_vosk_recognizer) m_vosk_api.vosk_recognizer_reset(m_vosk_recognizer);
 }
 
@@ -117,8 +123,6 @@ void vosk_wrapper::push_inbuf_to_samples() {
     std::advance(end, m_in_buf.size);
     m_speech_buf.insert(m_speech_buf.end(), m_in_buf.buf.cbegin(), end);
 }
-
-#include <fstream>
 
 engine_wrapper::samples_process_result_t vosk_wrapper::process_buff() {
     if (!lock_buff_for_processing())
@@ -141,10 +145,36 @@ engine_wrapper::samples_process_result_t vosk_wrapper::process_buff() {
             m_vosk_api.vosk_recognizer_reset(m_vosk_recognizer);
     }
 
+#ifdef DUMP_AUDIO_TO_FILE
+    if (!m_file_audio_input)
+        m_file_audio_input = std::make_unique<std::ofstream>("audio_input.pcm");
+    m_file_audio_input->write(
+        reinterpret_cast<char*>(m_in_buf.buf.data()),
+        m_in_buf.size * sizeof(decltype(m_in_buf.buf)::value_type));
+#endif
+
     m_denoiser.process(m_in_buf.buf.data(), m_in_buf.size);
+
+#ifdef DUMP_AUDIO_TO_FILE
+    if (!m_file_audio_after_denoise)
+        m_file_audio_after_denoise =
+            std::make_unique<std::ofstream>("audio_after_denoise.pcm");
+    m_file_audio_after_denoise->write(
+        reinterpret_cast<char*>(m_in_buf.buf.data()),
+        m_in_buf.size * sizeof(decltype(m_in_buf.buf)::value_type));
+#endif
 
     const auto& vad_buf =
         m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.size);
+
+#ifdef DUMP_AUDIO_TO_FILE
+    if (!m_file_audio_after_vad)
+        m_file_audio_after_vad =
+            std::make_unique<std::ofstream>("audio_after_vad.pcm");
+    m_file_audio_after_vad->write(
+        reinterpret_cast<const char*>(vad_buf.data()),
+        vad_buf.size() * sizeof(decltype(m_in_buf.buf)::value_type));
+#endif
 
     m_in_buf.clear();
 

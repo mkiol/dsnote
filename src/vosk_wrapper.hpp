@@ -12,6 +12,11 @@
 #include <string>
 #include <vector>
 
+#ifdef DUMP_AUDIO_TO_FILE
+#include <fstream>
+#include <memory>
+#endif
+
 #include "engine_wrapper.hpp"
 
 struct VoskModel;
@@ -56,6 +61,11 @@ class vosk_wrapper : public engine_wrapper {
     void* m_vosklib_handle = nullptr;
     VoskModel* m_vosk_model = nullptr;
     VoskRecognizer* m_vosk_recognizer = nullptr;
+#ifdef DUMP_AUDIO_TO_FILE
+    std::unique_ptr<std::ofstream> m_file_audio_input;
+    std::unique_ptr<std::ofstream> m_file_audio_after_denoise;
+    std::unique_ptr<std::ofstream> m_file_audio_after_vad;
+#endif
 
     void open_vosk_lib();
     void create_vosk_model();
