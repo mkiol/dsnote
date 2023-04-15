@@ -25,7 +25,7 @@ denoiser::denoiser() {
     if (m_state == nullptr)
         throw std::runtime_error("failed to create rnnoise");
 
-    rnnoise_set_param(m_state, RNNOISE_PARAM_MAX_ATTENUATION, 100.0);
+    rnnoise_set_param(m_state, RNNOISE_PARAM_MAX_ATTENUATION, 10.0);
     rnnoise_set_param(m_state, RNNOISE_PARAM_SAMPLE_RATE, sample_rate);
 }
 
@@ -75,14 +75,27 @@ void denoiser::process(sample_t* buf, size_t size) {
     auto* cur = buf;
     const auto* end = buf + size;
 
-    while (cur < end - frame.size()) {
-        for (size_t i = 0; i < frame.size(); ++i) frame[i] = cur[i];
+    while (cur < end) {
+        size_t samples = end - cur;
 
-        rnnoise_process_frame(m_state, frame.data(), frame.data());
+        if (samples >= frame.size()) {
+            for (size_t i = 0; i < frame.size(); ++i) frame[i] = cur[i];
+            samples = frame.size();
+        } else {
+            for (size_t i = 0; i < samples; ++i) frame[i] = cur[i];
+            for (size_t i = 0; i < frame.size() - samples; ++i) frame[i] = 0.0;
+        }
 
-        for (size_t i = 0; i < frame.size(); ++i) cur[i] = frame[i];
+        auto prob = rnnoise_process_frame(m_state, frame.data(), frame.data());
 
-        cur += frame.size();
+        LOGT("prob: " << prob);
+
+        if (prob < 0.1)
+            for (size_t i = 0; i < samples; ++i) cur[i] = 0;
+        else
+            for (size_t i = 0; i < samples; ++i) cur[i] = frame[i];
+
+        cur += samples;
     }
 
     normalize_audio(buf, size);
