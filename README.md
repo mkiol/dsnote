@@ -118,6 +118,7 @@ sfdk package
 - [whisper.cpp](https://github.com/ggerganov/whisper.cpp)
 - [WebRTC VAD](https://webrtc.org/)
 - [libarchive](https://libarchive.org/)
+- [RNNoise-nu](https://github.com/GregorR/rnnoise-nu)
 - [{fmt}](https://fmt.dev)
 
 ## License
