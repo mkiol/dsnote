@@ -6,7 +6,7 @@ Name:       harbour-dsnote
 # << macros
 
 Summary:        Note taking with speech to text
-Version:        2.0.0
+Version:        2.0.1
 Release:        1
 Group:          Qt/Qt
 License:        LICENSE
@@ -24,6 +24,7 @@ BuildRequires:  cmake
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
+BuildRequires:  m4
 
 %description
 Note taking with speech to text

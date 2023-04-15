@@ -92,7 +92,7 @@ set(xz_checksum "4ac4e5da95aa8604a81e32079cb00d42")
 set(rnnoise_source_url "https://github.com/GregorR/rnnoise-nu/archive/26269304e120499485438cd93acf5127c6908c68.zip")
 set(rnnoise_checksum "fafe9bbf0e2b15df4a628434bea99dd3")
 
-project(${info_id} VERSION 2.0.0)
+project(${info_id} VERSION 2.0.1)
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES ".*arm.*")
     message(STATUS "arm architecture detected")
