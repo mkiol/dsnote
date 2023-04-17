@@ -20,9 +20,9 @@
 
 #include "audio_source.h"
 #include "dbus_stt_adaptor.h"
-#include "engine_wrapper.hpp"
 #include "models_manager.h"
 #include "singleton.h"
+#include "stt_engine.hpp"
 
 class stt_service : public QObject, public singleton<stt_service> {
     Q_OBJECT
@@ -148,7 +148,7 @@ class stt_service : public QObject, public singleton<stt_service> {
     static const int SINGLE_SENTENCE_TIMEOUT = 10000;  // 10s
 
     int m_last_task_id = INVALID_TASK;
-    std::unique_ptr<engine_wrapper> m_engine;
+    std::unique_ptr<stt_engine> m_engine;
     std::unique_ptr<audio_source> m_source;
     std::map<QString, model_data_t> m_available_models_map;
     double m_progress = -1;
@@ -174,7 +174,7 @@ class stt_service : public QObject, public singleton<stt_service> {
     void handle_intermediate_text_decoded(const std::string &text);
     void handle_audio_available();
     void handle_speech_detection_status_changed(
-        engine_wrapper::speech_detection_status_t status);
+        stt_engine::speech_detection_status_t status);
     void handle_processing_changed(bool processing);
     void handle_audio_error();
     void handle_audio_ended();

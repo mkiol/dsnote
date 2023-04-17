@@ -13,12 +13,12 @@
 #include <algorithm>
 #include <functional>
 
-#include "deepspeech_wrapper.hpp"
+#include "ds_engine.hpp"
 #include "file_source.h"
 #include "mic_source.h"
 #include "settings.h"
-#include "vosk_wrapper.hpp"
-#include "whisper_wrapper.hpp"
+#include "vosk_engine.hpp"
+#include "whisper_engine.hpp"
 
 stt_service::stt_service(QObject *parent)
     : QObject{parent}, m_stt_adaptor{this} {
@@ -282,13 +282,13 @@ QString stt_service::lang_from_model_id(const QString &model_id) {
 QString stt_service::restart_engine(speech_mode_t speech_mode,
                                     const QString &model_id, bool translate) {
     if (auto model_files = choose_model_files(model_id)) {
-        engine_wrapper::config_t config;
+        stt_engine::config_t config;
 
         config.model_file = {model_files->model_file.toStdString(),
                              model_files->scorer_file.toStdString()};
         config.lang = model_files->lang_id.toStdString();
         config.speech_mode =
-            static_cast<engine_wrapper::speech_mode_t>(speech_mode);
+            static_cast<stt_engine::speech_mode_t>(speech_mode);
         config.translate = translate;
 
         bool new_engine_required = [&] {
@@ -297,13 +297,14 @@ QString stt_service::restart_engine(speech_mode_t speech_mode,
 
             const auto &type = typeid(*m_engine);
             if (model_files->engine == models_manager::model_engine::stt_ds &&
-                type != typeid(deepspeech_wrapper))
+                type != typeid(ds_engine))
                 return true;
             if (model_files->engine == models_manager::model_engine::stt_vosk &&
-                type != typeid(vosk_wrapper))
+                type != typeid(vosk_engine))
                 return true;
-            if (model_files->engine == models_manager::model_engine::stt_whisper &&
-                type != typeid(whisper_wrapper))
+            if (model_files->engine ==
+                    models_manager::model_engine::stt_whisper &&
+                type != typeid(whisper_engine))
                 return true;
 
             if (m_engine->model_file() != config.model_file) return true;
@@ -315,7 +316,7 @@ QString stt_service::restart_engine(speech_mode_t speech_mode,
         if (new_engine_required) {
             qDebug() << "new engine required";
 
-            engine_wrapper::callbacks_t call_backs{
+            stt_engine::callbacks_t call_backs{
                 /*text_decoded=*/[this](const std::string &text) {
                     handle_text_decoded(text);
                 },
@@ -324,7 +325,7 @@ QString stt_service::restart_engine(speech_mode_t speech_mode,
                     handle_intermediate_text_decoded(text);
                 },
                 /*speech_detection_status_changed=*/
-                [this](engine_wrapper::speech_detection_status_t status) {
+                [this](stt_engine::speech_detection_status_t status) {
                     handle_speech_detection_status_changed(status);
                 },
                 /*sentence_timeout=*/
@@ -336,15 +337,15 @@ QString stt_service::restart_engine(speech_mode_t speech_mode,
 
             switch (model_files->engine) {
                 case models_manager::model_engine::stt_ds:
-                    m_engine = std::make_unique<deepspeech_wrapper>(
+                    m_engine = std::make_unique<ds_engine>(
                         std::move(config), std::move(call_backs));
                     break;
                 case models_manager::model_engine::stt_vosk:
-                    m_engine = std::make_unique<vosk_wrapper>(
+                    m_engine = std::make_unique<vosk_engine>(
                         std::move(config), std::move(call_backs));
                     break;
                 case models_manager::model_engine::stt_whisper:
-                    m_engine = std::make_unique<whisper_wrapper>(
+                    m_engine = std::make_unique<whisper_engine>(
                         std::move(config), std::move(call_backs));
                     break;
             }
@@ -355,7 +356,7 @@ QString stt_service::restart_engine(speech_mode_t speech_mode,
             m_engine->stop();
             m_engine->start();
             m_engine->set_speech_mode(
-                static_cast<engine_wrapper::speech_mode_t>(speech_mode));
+                static_cast<stt_engine::speech_mode_t>(speech_mode));
         }
 
         return model_files->model_id;
@@ -431,7 +432,7 @@ void stt_service::handle_text_decoded(const std::string &text) {
 }
 
 void stt_service::handle_speech_detection_status_changed(
-    [[maybe_unused]] engine_wrapper::speech_detection_status_t status) {
+    [[maybe_unused]] stt_engine::speech_detection_status_t status) {
     emit speech_changed();
 }
 
@@ -479,7 +480,7 @@ void stt_service::delete_model(const QString &id) {
 void stt_service::handle_audio_available() {
     if (m_source && m_engine && m_engine->started()) {
         if (m_engine->speech_detection_status() ==
-            engine_wrapper::speech_detection_status_t::initializing) {
+            stt_engine::speech_detection_status_t::initializing) {
             if (m_source->type() == audio_source::source_type::mic)
                 m_source->clear();
             return;
@@ -774,13 +775,13 @@ int stt_service::speech() const {
 
     if (m_engine && m_engine->started()) {
         switch (m_engine->speech_detection_status()) {
-            case engine_wrapper::speech_detection_status_t::no_speech:
+            case stt_engine::speech_detection_status_t::no_speech:
                 return 0;
-            case engine_wrapper::speech_detection_status_t::speech_detected:
+            case stt_engine::speech_detection_status_t::speech_detected:
                 return 1;
-            case engine_wrapper::speech_detection_status_t::decoding:
+            case stt_engine::speech_detection_status_t::decoding:
                 return 2;
-            case engine_wrapper::speech_detection_status_t::initializing:
+            case stt_engine::speech_detection_status_t::initializing:
                 return 3;
         }
     }

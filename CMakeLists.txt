@@ -175,14 +175,14 @@ set(dsnote_lib_sources
     ${sources_dir}/logger.hpp
     ${sources_dir}/qtlogger.cpp
     ${sources_dir}/qtlogger.hpp
-    ${sources_dir}/engine_wrapper.cpp
-    ${sources_dir}/engine_wrapper.hpp
-    ${sources_dir}/deepspeech_wrapper.cpp
-    ${sources_dir}/deepspeech_wrapper.hpp
-    ${sources_dir}/whisper_wrapper.cpp
-    ${sources_dir}/whisper_wrapper.hpp
-    ${sources_dir}/vosk_wrapper.cpp
-    ${sources_dir}/vosk_wrapper.hpp
+    ${sources_dir}/stt_engine.cpp
+    ${sources_dir}/stt_engine.hpp
+    ${sources_dir}/ds_engine.cpp
+    ${sources_dir}/ds_engine.hpp
+    ${sources_dir}/whisper_engine.cpp
+    ${sources_dir}/whisper_engine.hpp
+    ${sources_dir}/vosk_engine.cpp
+    ${sources_dir}/vosk_engine.hpp
     ${sources_dir}/vad.cpp
     ${sources_dir}/vad.hpp
     ${sources_dir}/cpu_tools.cpp
