@@ -5,6 +5,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <fmt/format.h>
+
+#include <QCommandLineParser>
 #include <QDebug>
 #include <QGuiApplication>
 #include <QLocale>
@@ -32,6 +35,8 @@
 #include <memory>
 #endif
 
+#include <optional>
+
 #include "config.h"
 #include "dsnote_app.h"
 #include "logger.hpp"
@@ -39,6 +44,62 @@
 #include "settings.h"
 #include "stt_config.h"
 #include "stt_service.h"
+
+static std::optional<settings::launch_mode_t> check_options(
+    const QCoreApplication& app) {
+    QCommandLineParser parser;
+
+    QCommandLineOption appstandaloneOpt{
+        QStringLiteral("app-standalone"),
+        QStringLiteral(
+            "Runs in standalone mode. App and STT service are not splitted.")};
+    parser.addOption(appstandaloneOpt);
+
+    QCommandLineOption appOpt{
+        QStringLiteral("app"),
+        QStringLiteral("Starts app is splitted mode. App will need STT service "
+                       "to function properly.")};
+    parser.addOption(appOpt);
+
+    QCommandLineOption sttserviceOpt{
+        QStringLiteral("stt-service"),
+        QStringLiteral("Starts STT service only.")};
+    parser.addOption(sttserviceOpt);
+
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.setApplicationDescription(
+        QStringLiteral("Speech Note. Create notes using your voice."));
+
+    parser.process(app);
+
+    std::optional<settings::launch_mode_t> launch_mode;
+
+    if (parser.isSet(appstandaloneOpt)) {
+        if (!parser.isSet(appOpt) && !parser.isSet(sttserviceOpt)) {
+            launch_mode = settings::launch_mode_t::app_stanalone;
+        }
+    } else if (parser.isSet(appOpt)) {
+        if (!parser.isSet(appstandaloneOpt) && !parser.isSet(sttserviceOpt)) {
+            launch_mode = settings::launch_mode_t::app;
+        }
+    } else if (parser.isSet(sttserviceOpt)) {
+        if (!parser.isSet(appOpt) && !parser.isSet(appstandaloneOpt)) {
+            launch_mode = settings::launch_mode_t::stt_service;
+        }
+    } else {
+        qDebug() << "using default launch mode";
+        launch_mode = settings::launch_mode_t::app_stanalone;
+    }
+
+    if (!launch_mode) {
+        fmt::print(stderr,
+                   "Use one option from the following: --app-stanalone, --app, "
+                   "--stt-service.");
+    }
+
+    return launch_mode;
+}
 
 void register_types() {
 #ifdef USE_SFOS
@@ -84,14 +145,6 @@ static void install_translator() {
     }
 }
 
-bool is_daemon(int argc, char* argv[]) {
-    for (int i = 0; i < argc; i++) {
-        if (!strcmp(argv[i], "--daemon")) return true;
-    }
-
-    return false;
-}
-
 int main(int argc, char* argv[]) {
     Logger::init(Logger::LogType::Trace);
     initQtLogger();
@@ -110,13 +163,29 @@ int main(int argc, char* argv[]) {
 
     install_translator();
 
-    if (is_daemon(argc, argv)) {
-        qDebug() << "starting service";
-        stt_service service;
-        return QGuiApplication::exec();
+    auto launch_mode = check_options(app);
+
+    if (!launch_mode) return 0;
+
+    qDebug() << "launch mode:" << launch_mode.value();
+
+    settings::instance()->set_launch_mode(launch_mode.value());
+
+    switch (settings::instance()->launch_mode()) {
+        case settings::launch_mode_t::stt_service: {
+            qDebug() << "starting stt service";
+            stt_service::instance();
+            return QGuiApplication::exec();
+        }
+        case settings::launch_mode_t::app_stanalone:
+            qDebug() << "starting standalone app";
+            stt_service::instance();
+            break;
+        case settings::launch_mode_t::app:
+            qDebug() << "starting app";
+            break;
     }
 
-    qDebug() << "starting configuration";
 #ifdef USE_SFOS
     auto* view = SailfishApp::createView();
     auto* context = view->rootContext();

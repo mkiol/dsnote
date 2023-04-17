@@ -14,6 +14,7 @@
 #include <QStringList>
 #include <QUrl>
 
+#include "qdebug.h"
 #include "singleton.h"
 
 class settings : public QSettings, public singleton<settings> {
@@ -21,12 +22,12 @@ class settings : public QSettings, public singleton<settings> {
 
     // app
     Q_PROPERTY(QString note READ note WRITE set_note NOTIFY note_changed)
-    Q_PROPERTY(speech_mode_type speech_mode READ speech_mode WRITE
-                   set_speech_mode NOTIFY speech_mode_changed)
+    Q_PROPERTY(speech_mode_t speech_mode READ speech_mode WRITE set_speech_mode
+                   NOTIFY speech_mode_changed)
     Q_PROPERTY(bool translate READ translate WRITE set_translate NOTIFY
                    translate_changed)
-    Q_PROPERTY(insert_mode_type insert_mode READ insert_mode WRITE
-                   set_insert_mode NOTIFY insert_mode_changed)
+    Q_PROPERTY(insert_mode_t insert_mode READ insert_mode WRITE set_insert_mode
+                   NOTIFY insert_mode_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -39,30 +40,37 @@ class settings : public QSettings, public singleton<settings> {
                    NOTIFY default_model_changed)
 
    public:
-    enum class speech_mode_type {
+    enum class launch_mode_t { app_stanalone, app, stt_service };
+    friend QDebug operator<<(QDebug d, launch_mode_t launch_mode);
+
+    enum class speech_mode_t {
         SpeechAutomatic = 0,
         SpeechManual = 1,
         SpeechSingleSentence = 2
     };
-    Q_ENUM(speech_mode_type)
+    Q_ENUM(speech_mode_t)
+    friend QDebug operator<<(QDebug d, speech_mode_t speech_mode);
 
-    enum class insert_mode_type {
+    enum class insert_mode_t {
         InsertInLine = 1,
         InsertNewLine = 0,
     };
-    Q_ENUM(insert_mode_type)
+    Q_ENUM(insert_mode_t)
 
     settings();
+
+    launch_mode_t launch_mode() const;
+    void set_launch_mode(launch_mode_t launch_mode);
 
     // app
     QString note() const;
     void set_note(const QString &value);
-    speech_mode_type speech_mode() const;
-    void set_speech_mode(speech_mode_type value);
+    speech_mode_t speech_mode() const;
+    void set_speech_mode(speech_mode_t value);
     bool translate() const;
     void set_translate(bool value);
-    insert_mode_type insert_mode() const;
-    void set_insert_mode(insert_mode_type value);
+    insert_mode_t insert_mode() const;
+    void set_insert_mode(insert_mode_t value);
     Q_INVOKABLE QUrl app_icon() const;
 
     // service
@@ -94,6 +102,8 @@ class settings : public QSettings, public singleton<settings> {
     inline static const QString settings_filename =
         QStringLiteral("settings.conf");
     static QString settings_filepath();
+
+    launch_mode_t m_launch_mode = launch_mode_t::app_stanalone;
 };
 
 #endif  // SETTINGS_H

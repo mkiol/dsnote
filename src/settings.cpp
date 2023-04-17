@@ -16,6 +16,38 @@
 
 #include "config.h"
 
+QDebug operator<<(QDebug d, settings::launch_mode_t launch_mode) {
+    switch (launch_mode) {
+        case settings::launch_mode_t::stt_service:
+            d << "stt-service";
+            break;
+        case settings::launch_mode_t::app_stanalone:
+            d << "app-standalone";
+            break;
+        case settings::launch_mode_t::app:
+            d << "app";
+            break;
+    }
+
+    return d;
+}
+
+QDebug operator<<(QDebug d, settings::speech_mode_t speech_mode) {
+    switch (speech_mode) {
+        case settings::speech_mode_t::SpeechAutomatic:
+            d << "automatic";
+            break;
+        case settings::speech_mode_t::SpeechManual:
+            d << "manual";
+            break;
+        case settings::speech_mode_t::SpeechSingleSentence:
+            d << "single-sentence";
+            break;
+    }
+
+    return d;
+}
+
 settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     qDebug() << "app:" << APP_ORG << APP_ID;
     qDebug() << "config location:"
@@ -108,14 +140,14 @@ void settings::set_default_model_for_lang(const QString& lang,
     }
 }
 
-settings::speech_mode_type settings::speech_mode() const {
-    return static_cast<speech_mode_type>(
+settings::speech_mode_t settings::speech_mode() const {
+    return static_cast<speech_mode_t>(
         value(QStringLiteral("speech_mode"),
-              static_cast<int>(speech_mode_type::SpeechSingleSentence))
+              static_cast<int>(speech_mode_t::SpeechSingleSentence))
             .toInt());
 }
 
-void settings::set_speech_mode(speech_mode_type value) {
+void settings::set_speech_mode(speech_mode_t value) {
     if (speech_mode() != value) {
         setValue(QStringLiteral("speech_mode"), static_cast<int>(value));
         emit speech_mode_changed();
@@ -144,14 +176,14 @@ void settings::set_translate(bool value) {
     }
 }
 
-settings::insert_mode_type settings::insert_mode() const {
-    return static_cast<insert_mode_type>(
+settings::insert_mode_t settings::insert_mode() const {
+    return static_cast<insert_mode_t>(
         value(QStringLiteral("insert_mode"),
-              static_cast<int>(insert_mode_type::InsertInLine))
+              static_cast<int>(insert_mode_t::InsertInLine))
             .toInt());
 }
 
-void settings::set_insert_mode(insert_mode_type value) {
+void settings::set_insert_mode(insert_mode_t value) {
     if (insert_mode() != value) {
         setValue(QStringLiteral("insert_mode"), static_cast<int>(value));
         emit insert_mode_changed();
@@ -162,4 +194,10 @@ QUrl settings::app_icon() const {
     return QUrl::fromLocalFile(
         QStringLiteral("/usr/share/icons/hicolor/172x172/apps/%1.png")
             .arg(QLatin1String{APP_BINARY_ID}));
+}
+
+settings::launch_mode_t settings::launch_mode() const { return m_launch_mode; }
+
+void settings::set_launch_mode(launch_mode_t launch_mode) {
+    m_launch_mode = launch_mode;
 }

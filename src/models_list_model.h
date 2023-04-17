@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -27,8 +27,7 @@ class ModelsListModel : public SelectableItemModel {
     Q_PROPERTY(bool downloading READ downloading NOTIFY downloadingChanged)
     Q_PROPERTY(QString lang READ lang WRITE setLang NOTIFY langChanged)
    public:
-    explicit ModelsListModel(models_manager &manager,
-                             QObject *parent = nullptr);
+    explicit ModelsListModel(QObject *parent = nullptr);
     ~ModelsListModel() override;
 
    signals:
@@ -37,7 +36,6 @@ class ModelsListModel : public SelectableItemModel {
     void langChanged();
 
    private:
-    models_manager &m_manager;
     int m_changedItem = -1;
     bool m_downloading = false;
     QString m_lang;

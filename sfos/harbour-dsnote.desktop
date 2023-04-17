@@ -2,7 +2,7 @@
 Type=Application
 X-Nemo-Application-Type=silica-qt5
 Icon=harbour-dsnote
-Exec=harbour-dsnote
+Exec=harbour-dsnote --app
 Name=Speech Note
 
 [X-Sailjail]

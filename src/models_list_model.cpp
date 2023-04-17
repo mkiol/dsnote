@@ -11,10 +11,10 @@
 #include <QList>
 #include <algorithm>
 
-ModelsListModel::ModelsListModel(models_manager &manager, QObject *parent)
-    : SelectableItemModel{new ModelsListItem, parent}, m_manager{manager} {
+ModelsListModel::ModelsListModel(QObject *parent)
+    : SelectableItemModel{new ModelsListItem, parent} {
     connect(
-        &m_manager, &models_manager::models_changed, this,
+        models_manager::instance(), &models_manager::models_changed, this,
         [this] { updateModel(); }, Qt::QueuedConnection);
     connect(
         this, &ItemModel::busyChanged, this,
@@ -58,11 +58,11 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
 QList<ListItem *> ModelsListModel::makeItems() {
     QList<ListItem *> items;
 
-    const auto models = m_manager.models(m_lang);
+    auto models = models_manager::instance()->models(m_lang);
 
     updateDownloading(models);
 
-    const auto phase = getFilter();
+    auto phase = getFilter();
 
     if (phase.isEmpty()) {
         std::for_each(models.cbegin(), models.cend(), [&](const auto &model) {

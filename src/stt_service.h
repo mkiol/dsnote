@@ -22,8 +22,9 @@
 #include "dbus_stt_adaptor.h"
 #include "engine_wrapper.hpp"
 #include "models_manager.h"
+#include "singleton.h"
 
-class stt_service : public QObject {
+class stt_service : public QObject, public singleton<stt_service> {
     Q_OBJECT
 
     // DBus
@@ -66,6 +67,17 @@ class stt_service : public QObject {
                                     bool translate);
     Q_INVOKABLE int cancel(int task);
 
+    QString default_model() const;
+    QString default_lang() const;
+    void set_default_model(const QString &model_id) const;
+    void set_default_lang(const QString &lang_id) const;
+    QVariantMap available_models() const;
+    QVariantMap available_langs() const;
+    int speech() const;
+    state_t state() const;
+    int current_task_id() const;
+    double transcribe_file_progress(int task) const;
+
    signals:
     void models_changed();
     void model_download_progress(const QString &id, double progress);
@@ -83,6 +95,8 @@ class stt_service : public QObject {
     void engine_eof(int task_id);
     void engine_error(int task_id);
     void engine_shutdown();
+    void default_model_changed();
+    void default_lang_changed();
 
     // DBus
     void ErrorOccured(int code);
@@ -136,7 +150,6 @@ class stt_service : public QObject {
     int m_last_task_id = INVALID_TASK;
     std::unique_ptr<engine_wrapper> m_engine;
     std::unique_ptr<audio_source> m_source;
-    models_manager m_manager;
     std::map<QString, model_data_t> m_available_models_map;
     double m_progress = -1;
     state_t m_state = state_t::unknown;
@@ -148,8 +161,6 @@ class stt_service : public QObject {
     std::optional<task_t> m_current_task;
     std::optional<task_t> m_pending_task;
 
-    QVariantMap available_models() const;
-    QVariantMap available_langs() const;
     void handle_models_changed();
     void handle_sentence_timeout();
     void handle_sentence_timeout(int task_id);
@@ -171,31 +182,23 @@ class stt_service : public QObject {
                            bool translate);
     void restart_audio_source(const QString &source_file = {});
     void stop();
-    int speech() const;
-    double transcribe_file_progress(int task) const;
     source_t audio_source_type() const;
     void set_progress(double progress);
     std::optional<model_files_t> choose_model_files(QString model_id = {});
     inline auto recording() const { return static_cast<bool>(m_source); };
-    inline auto state() const { return m_state; };
     void refresh_status();
     static QString state_str(state_t state_value);
-    inline auto dbus_state() const { return static_cast<int>(state()); };
     void stop_engine_gracefully();
     void stop_engine();
-    QString default_model() const;
-    QString default_lang() const;
     QString test_default_model(const QString &lang) const;
-    void set_default_model(const QString &model_id) const;
-    void set_default_lang(const QString &lang_id) const;
     int next_task_id();
-    inline auto current_task_id() const {
-        return m_current_task ? m_current_task->id : INVALID_TASK;
-    }
     void handle_keepalive_timeout();
     void handle_task_timeout();
     QVariantMap translations() const;
     static QString lang_from_model_id(const QString &model_id);
+    int dbus_state() const;
+    void start_keepalive_current_task();
+    void stop_keepalive_current_task();
 
     // DBus
     Q_INVOKABLE int StartListen(int mode, const QString &lang, bool translate);

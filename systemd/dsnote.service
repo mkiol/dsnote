@@ -6,4 +6,4 @@ Requires=pulseaudio.service
 [Service]
 Type=dbus
 BusName=org.mkiol.Stt
-ExecStart=@binary_path@ --daemon
+ExecStart=@binary_path@ --stt-service

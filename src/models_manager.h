@@ -20,6 +20,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "singleton.h"
+
 #ifndef QT_SPECIALIZE_STD_HASH_TO_CALL_QHASH
 #define QT_SPECIALIZE_STD_HASH_TO_CALL_QHASH
 namespace std {
@@ -32,7 +34,7 @@ struct hash<QString> {
 }  // namespace std
 #endif
 
-class models_manager : public QObject {
+class models_manager : public QObject, public singleton<models_manager> {
     Q_OBJECT
     Q_PROPERTY(bool busy READ busy NOTIFY busy_changed)
    public:

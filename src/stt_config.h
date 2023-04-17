@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+﻿/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,7 +14,6 @@
 
 #include "langs_list_model.h"
 #include "models_list_model.h"
-#include "models_manager.h"
 
 class stt_config : public QObject {
     Q_OBJECT
@@ -46,7 +45,6 @@ class stt_config : public QObject {
     static const int SUCCESS = 0;
     static const int FAILURE = -1;
 
-    models_manager m_manager;
     LangsListModel m_langs_model;
     ModelsListModel m_models_model;
 
@@ -54,7 +52,7 @@ class stt_config : public QObject {
     LangsListModel *langs_model();
     ModelsListModel *models_model();
     void handle_models_changed();
-    inline bool busy() const { return m_manager.busy(); }
+    bool busy() const;
     void reload() const;
 };
 

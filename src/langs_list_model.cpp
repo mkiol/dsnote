@@ -1,4 +1,4 @@
-/* Copyright (C) 2022 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2022-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -11,10 +11,10 @@
 #include <QList>
 #include <algorithm>
 
-LangsListModel::LangsListModel(models_manager &manager, QObject *parent)
-    : SelectableItemModel{new LangsListItem, parent}, m_manager{manager} {
+LangsListModel::LangsListModel(QObject *parent)
+    : SelectableItemModel{new LangsListItem, parent} {
     connect(
-        &m_manager, &models_manager::models_changed, this,
+        models_manager::instance(), &models_manager::models_changed, this,
         [this] { updateModel(); }, Qt::QueuedConnection);
     connect(
         this, &ItemModel::busyChanged, this,
@@ -53,11 +53,11 @@ ListItem *LangsListModel::makeItem(const models_manager::lang_t &lang) {
 QList<ListItem *> LangsListModel::makeItems() {
     QList<ListItem *> items;
 
-    const auto langs = m_manager.langs();
+    auto langs = models_manager::instance()->langs();
 
     updateDownloading(langs);
 
-    const auto phase = getFilter();
+    auto phase = getFilter();
 
     if (phase.isEmpty()) {
         std::transform(langs.cbegin(), langs.cend(), std::back_inserter(items),
@@ -77,7 +77,7 @@ QList<ListItem *> LangsListModel::makeItems() {
 
 void LangsListModel::updateDownloading(
     const std::vector<models_manager::lang_t> &langs) {
-    const bool new_downloading =
+    bool new_downloading =
         !std::none_of(langs.cbegin(), langs.cend(),
                       [](const auto &lang) { return lang.downloading; });
     if (m_downloading != new_downloading) {

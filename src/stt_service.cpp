@@ -22,54 +22,17 @@
 
 stt_service::stt_service(QObject *parent)
     : QObject{parent}, m_stt_adaptor{this} {
+    qDebug() << "starting service:" << settings::instance()->launch_mode();
+
     connect(this, &stt_service::models_changed, this,
             &stt_service::refresh_status);
-    connect(&m_manager, &models_manager::models_changed, this,
+    connect(models_manager::instance(), &models_manager::models_changed, this,
             &stt_service::handle_models_changed);
-    connect(&m_manager, &models_manager::busy_changed, this,
+    connect(models_manager::instance(), &models_manager::busy_changed, this,
             &stt_service::refresh_status);
-    connect(&m_manager, &models_manager::download_progress, this,
-            [this](const QString &id, double progress) {
+    connect(models_manager::instance(), &models_manager::download_progress,
+            this, [this](const QString &id, double progress) {
                 emit model_download_progress(id, progress);
-            });
-    connect(
-        this, &stt_service::state_changed, this,
-        [this]() {
-            qDebug() << "[service => dbus] signal StatePropertyChanged:"
-                     << dbus_state();
-            emit StatePropertyChanged(dbus_state());
-        },
-        Qt::QueuedConnection);
-    connect(
-        this, &stt_service::current_task_changed, this,
-        [this]() {
-            qDebug() << "[service => dbus] signal CurrentTaskPropertyChanged:"
-                     << current_task_id();
-            emit CurrentTaskPropertyChanged(current_task_id());
-        },
-        Qt::QueuedConnection);
-    connect(this, &stt_service::error, this, [this](error_t type) {
-        qDebug() << "[service => dbus] signal ErrorOccured:"
-                 << static_cast<int>(type);
-        emit ErrorOccured(static_cast<int>(type));
-    });
-    connect(this, &stt_service::file_transcribe_finished, this,
-            [this](int task) {
-                qDebug() << "[service => dbus] signal FileTranscribeFinished:"
-                         << task;
-                emit FileTranscribeFinished(task);
-            });
-    connect(this, &stt_service::intermediate_text_decoded, this,
-            [this](const QString &text, const QString &lang, int task) {
-                qDebug() << "[service => dbus] signal IntermediateTextDecoded:"
-                         << lang << task;
-                emit IntermediateTextDecoded(text, lang, task);
-            });
-    connect(this, &stt_service::text_decoded, this,
-            [this](const QString &text, const QString &lang, int task) {
-                qDebug() << "[service => dbus] signal TextDecoded:" << lang
-                         << task;
-                emit TextDecoded(text, lang, task);
             });
     connect(this, &stt_service::text_decoded, this,
             static_cast<void (stt_service::*)(const QString &, const QString &,
@@ -88,68 +51,129 @@ stt_service::stt_service(QObject *parent)
             static_cast<void (stt_service::*)(int)>(
                 &stt_service::handle_engine_error),
             Qt::QueuedConnection);
-    connect(
-        this, &stt_service::speech_changed, this,
-        [this]() {
-            qDebug() << "[service => dbus] signal SpeechPropertyChanged:"
-                     << speech();
-            emit SpeechPropertyChanged(speech());
-        },
-        Qt::QueuedConnection);
-    connect(this, &stt_service::models_changed, this, [this]() {
-        auto models_list = available_models();
-        qDebug() << "[service => dbus] signal ModelsPropertyChanged:"
-                 << models_list;
-        emit ModelsPropertyChanged(models_list);
-
-        auto langs_list = available_langs();
-        qDebug() << "[service => dbus] signal LangsPropertyChanged:"
-                 << langs_list;
-        emit LangsPropertyChanged(langs_list);
-    });
-    connect(this, &stt_service::transcribe_file_progress_changed, this,
-            [this](double progress, int task) {
-                qDebug() << "[service => dbus] signal FileTranscribeProgress:"
-                         << progress << task;
-                emit FileTranscribeProgress(progress, task);
-            });
-    connect(
-        settings::instance(), &settings::default_model_changed, this, [this]() {
-            auto model = default_model();
-            qDebug() << "[service => dbus] signal DefaultModelPropertyChanged:"
-                     << model;
-            emit DefaultModelPropertyChanged(model);
-
-            auto lang = default_lang();
-            qDebug() << "[service => dbus] signal DefaultLangPropertyChanged:"
-                     << lang;
-            emit DefaultLangPropertyChanged(lang);
-        });
     connect(this, &stt_service::engine_shutdown, this,
             [this] { stop_engine(); });
+    connect(
+        settings::instance(), &settings::default_model_changed, this,
+        [this]() {
+            if (settings::instance()->launch_mode() ==
+                settings::launch_mode_t::app) {
+                auto model = default_model();
+                qDebug()
+                    << "[service => dbus] signal DefaultModelPropertyChanged:"
+                    << model;
+                emit DefaultModelPropertyChanged(model);
+            }
 
-    m_keepalive_timer.setSingleShot(true);
-    m_keepalive_timer.setTimerType(Qt::VeryCoarseTimer);
-    m_keepalive_timer.setInterval(KEEPALIVE_TIME);
-    connect(&m_keepalive_timer, &QTimer::timeout, this,
-            &stt_service::handle_keepalive_timeout);
-    m_keepalive_timer.start();
+            emit default_model_changed();
 
-    m_keepalive_current_task_timer.setSingleShot(true);
-    m_keepalive_current_task_timer.setTimerType(Qt::VeryCoarseTimer);
-    m_keepalive_current_task_timer.setInterval(KEEPALIVE_TASK_TIME);
-    connect(&m_keepalive_current_task_timer, &QTimer::timeout, this,
-            &stt_service::handle_task_timeout);
+            if (settings::instance()->launch_mode() ==
+                settings::launch_mode_t::app) {
+                auto lang = default_lang();
+                qDebug()
+                    << "[service => dbus] signal DefaultLangPropertyChanged:"
+                    << lang;
+                emit DefaultLangPropertyChanged(lang);
+            }
 
-    // DBus
-    auto con = QDBusConnection::sessionBus();
-    if (!con.registerService(DBUS_SERVICE_NAME)) {
-        qWarning() << "dbus service registration failed";
-        throw std::runtime_error("dbus service registration failed");
-    }
-    if (!con.registerObject(DBUS_SERVICE_PATH, this)) {
-        qWarning() << "dbus object registration failed";
-        throw std::runtime_error("dbus object registration failed");
+            emit default_lang_changed();
+        },
+        Qt::QueuedConnection);
+
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::stt_service) {
+        connect(
+            this, &stt_service::state_changed, this,
+            [this]() {
+                qDebug() << "[service => dbus] signal StatePropertyChanged:"
+                         << dbus_state();
+                emit StatePropertyChanged(dbus_state());
+            },
+            Qt::QueuedConnection);
+        connect(
+            this, &stt_service::current_task_changed, this,
+            [this]() {
+                qDebug()
+                    << "[service => dbus] signal CurrentTaskPropertyChanged:"
+                    << current_task_id();
+                emit CurrentTaskPropertyChanged(current_task_id());
+            },
+            Qt::QueuedConnection);
+        connect(this, &stt_service::error, this, [this](error_t type) {
+            qDebug() << "[service => dbus] signal ErrorOccured:"
+                     << static_cast<int>(type);
+            emit ErrorOccured(static_cast<int>(type));
+        });
+        connect(
+            this, &stt_service::file_transcribe_finished, this,
+            [this](int task) {
+                qDebug() << "[service => dbus] signal FileTranscribeFinished:"
+                         << task;
+                emit FileTranscribeFinished(task);
+            });
+        connect(
+            this, &stt_service::intermediate_text_decoded, this,
+            [this](const QString &text, const QString &lang, int task) {
+                qDebug() << "[service => dbus] signal IntermediateTextDecoded:"
+                         << lang << task;
+                emit IntermediateTextDecoded(text, lang, task);
+            });
+        connect(this, &stt_service::text_decoded, this,
+                [this](const QString &text, const QString &lang, int task) {
+                    qDebug() << "[service => dbus] signal TextDecoded:" << lang
+                             << task;
+                    emit TextDecoded(text, lang, task);
+                });
+        connect(
+            this, &stt_service::speech_changed, this,
+            [this]() {
+                qDebug() << "[service => dbus] signal SpeechPropertyChanged:"
+                         << speech();
+                emit SpeechPropertyChanged(speech());
+            },
+            Qt::QueuedConnection);
+        connect(this, &stt_service::models_changed, this, [this]() {
+            auto models_list = available_models();
+            qDebug() << "[service => dbus] signal ModelsPropertyChanged:"
+                     << models_list;
+            emit ModelsPropertyChanged(models_list);
+
+            auto langs_list = available_langs();
+            qDebug() << "[service => dbus] signal LangsPropertyChanged:"
+                     << langs_list;
+            emit LangsPropertyChanged(langs_list);
+        });
+        connect(this, &stt_service::transcribe_file_progress_changed, this,
+                [this](double progress, int task) {
+                    qDebug()
+                        << "[service => dbus] signal FileTranscribeProgress:"
+                        << progress << task;
+                    emit FileTranscribeProgress(progress, task);
+                });
+
+        m_keepalive_timer.setSingleShot(true);
+        m_keepalive_timer.setTimerType(Qt::VeryCoarseTimer);
+        m_keepalive_timer.setInterval(KEEPALIVE_TIME);
+        connect(&m_keepalive_timer, &QTimer::timeout, this,
+                &stt_service::handle_keepalive_timeout);
+        m_keepalive_timer.start();
+
+        m_keepalive_current_task_timer.setSingleShot(true);
+        m_keepalive_current_task_timer.setTimerType(Qt::VeryCoarseTimer);
+        m_keepalive_current_task_timer.setInterval(KEEPALIVE_TASK_TIME);
+        connect(&m_keepalive_current_task_timer, &QTimer::timeout, this,
+                &stt_service::handle_task_timeout);
+
+        // DBus
+        auto con = QDBusConnection::sessionBus();
+        if (!con.registerService(DBUS_SERVICE_NAME)) {
+            qWarning() << "dbus service registration failed";
+            throw std::runtime_error("dbus service registration failed");
+        }
+        if (!con.registerObject(DBUS_SERVICE_PATH, this)) {
+            qWarning() << "dbus object registration failed";
+            throw std::runtime_error("dbus object registration failed");
+        }
     }
 
     handle_models_changed();
@@ -169,7 +193,7 @@ std::optional<stt_service::model_files_t> stt_service::choose_model_files(QStrin
 
     m_available_models_map.clear();
 
-    auto models = m_manager.available_models();
+    auto models = models_manager::instance()->available_models();
     if (models.empty()) return std::nullopt;
 
     model_files_t active_files;
@@ -444,12 +468,12 @@ QVariantMap stt_service::available_langs() const {
 }
 
 void stt_service::download_model(const QString &id) {
-    m_manager.download_model(id);
+    models_manager::instance()->download_model(id);
 }
 
 void stt_service::delete_model(const QString &id) {
     if (m_current_task && m_current_task->model_id == id) stop();
-    m_manager.delete_model(id);
+    models_manager::instance()->delete_model(id);
 }
 
 void stt_service::handle_audio_available() {
@@ -526,7 +550,7 @@ int stt_service::transcribe_file(const QString &file, const QString &lang,
         restart_audio_source(QUrl{file}.toLocalFile());
     }
 
-    m_keepalive_current_task_timer.start();
+    start_keepalive_current_task();
 
     emit current_task_changed();
 
@@ -553,7 +577,7 @@ int stt_service::start_listen(speech_mode_t mode, const QString &lang,
     restart_audio_source();
     if (m_engine) m_engine->set_speech_started(true);
 
-    m_keepalive_current_task_timer.start();
+    start_keepalive_current_task();
 
     emit current_task_changed();
 
@@ -580,12 +604,12 @@ int stt_service::cancel(int task) {
                                m_pending_task->translate);
                 restart_audio_source();
                 m_current_task = m_pending_task;
-                m_keepalive_current_task_timer.start();
+                start_keepalive_current_task();
                 m_pending_task.reset();
                 emit current_task_changed();
             } else { 
                 stop_engine();
-                m_keepalive_current_task_timer.stop();
+                stop_keepalive_current_task();
             }
         } else {
             qWarning() << "invalid task id";
@@ -599,7 +623,7 @@ int stt_service::cancel(int task) {
                                m_current_task->translate);
                 restart_audio_source();
             } else {
-                m_keepalive_current_task_timer.stop();
+                stop_keepalive_current_task();
                 stop_engine();
             }
         } else {
@@ -626,7 +650,7 @@ int stt_service::stop_listen(int task) {
             qWarning() << "invalid task id";
     } else if (audio_source_type() == source_t::mic) {
         if (m_current_task && m_current_task->id == task) {
-            m_keepalive_current_task_timer.stop();
+            stop_keepalive_current_task();
             if (m_current_task->speech_mode == speech_mode_t::single_sentence ||
                 m_current_task->speech_mode == speech_mode_t::automatic) {
                 stop_engine();
@@ -666,7 +690,7 @@ void stt_service::stop_engine() {
 
     if (m_current_task) {
         m_current_task.reset();
-        m_keepalive_current_task_timer.stop();
+        stop_keepalive_current_task();
         emit current_task_changed();
     }
 
@@ -731,7 +755,7 @@ void stt_service::handle_task_timeout() {
     if (m_current_task) {
         qWarning() << "task timeout:" << m_current_task->id;
         if (m_current_task->speech_mode == speech_mode_t::single_sentence)
-            m_keepalive_current_task_timer.stop();
+            stop_keepalive_current_task();
         if (audio_source_type() == source_t::file ||
             audio_source_type() == source_t::mic) {
             cancel(m_current_task->id);
@@ -765,9 +789,9 @@ int stt_service::speech() const {
 
 void stt_service::refresh_status() {
     state_t new_state;
-    if (m_manager.busy()) {
+    if (models_manager::instance()->busy()) {
         new_state = state_t::busy;
-    } else if (m_manager.available_models().empty()) {
+    } else if (models_manager::instance()->available_models().empty()) {
         new_state = state_t::not_configured;
     } else if (audio_source_type() == source_t::file) {
         new_state = state_t::transcribing_file;
@@ -880,6 +904,30 @@ QVariantMap stt_service::translations() const {
     return map;
 }
 
+stt_service::state_t stt_service::state() const { return m_state; };
+
+int stt_service::current_task_id() const {
+    return m_current_task ? m_current_task->id : INVALID_TASK;
+}
+
+int stt_service::dbus_state() const { return static_cast<int>(state()); };
+
+void stt_service::start_keepalive_current_task() {
+    if (settings::instance()->launch_mode() !=
+        settings::launch_mode_t::stt_service)
+        return;
+
+    m_keepalive_current_task_timer.start();
+}
+
+void stt_service::stop_keepalive_current_task() {
+    if (settings::instance()->launch_mode() !=
+        settings::launch_mode_t::stt_service)
+        return;
+
+    m_keepalive_current_task_timer.stop();
+}
+
 // DBus
 
 int stt_service::StartListen(int mode, const QString &lang, bool translate) {
@@ -906,14 +954,14 @@ int stt_service::Cancel(int task) {
 int stt_service::TranscribeFile(const QString &file, const QString &lang,
                                 bool translate) {
     qDebug() << "[dbus => service] called TranscribeFile:" << file << lang;
-    m_keepalive_timer.start();
+    start_keepalive_current_task();
 
     return transcribe_file(file, lang, translate);
 }
 
 double stt_service::GetFileTranscribeProgress(int task) {
     qDebug() << "[dbus => service] called GetFileTranscribeProgress:" << task;
-    m_keepalive_timer.start();
+    start_keepalive_current_task();
 
     return transcribe_file_progress(task);
 }
@@ -947,6 +995,6 @@ int stt_service::Reload() {
     qDebug() << "[dbus => service] called Reload";
     m_keepalive_timer.start();
 
-    m_manager.reload();
+    models_manager::instance()->reload();
     return SUCCESS;
 }
