@@ -36,6 +36,7 @@
 #endif
 
 #include <optional>
+#include <utility>
 
 #include "config.h"
 #include "dsnote_app.h"
@@ -45,26 +46,30 @@
 #include "stt_config.h"
 #include "stt_service.h"
 
-static std::optional<settings::launch_mode_t> check_options(
+static std::pair<std::optional<settings::launch_mode_t>, bool> check_options(
     const QCoreApplication& app) {
     QCommandLineParser parser;
 
-    QCommandLineOption appstandaloneOpt{
+    QCommandLineOption appstandalone_opt{
         QStringLiteral("app-standalone"),
-        QStringLiteral(
-            "Runs in standalone mode. App and STT service are not splitted.")};
-    parser.addOption(appstandaloneOpt);
+        QStringLiteral("Runs in standalone mode (default). App and STT service "
+                       "are not splitted.")};
+    parser.addOption(appstandalone_opt);
 
-    QCommandLineOption appOpt{
+    QCommandLineOption app_opt{
         QStringLiteral("app"),
         QStringLiteral("Starts app is splitted mode. App will need STT service "
                        "to function properly.")};
-    parser.addOption(appOpt);
+    parser.addOption(app_opt);
 
-    QCommandLineOption sttserviceOpt{
+    QCommandLineOption sttservice_opt{
         QStringLiteral("stt-service"),
         QStringLiteral("Starts STT service only.")};
-    parser.addOption(sttserviceOpt);
+    parser.addOption(sttservice_opt);
+
+    QCommandLineOption verbose_opt{QStringLiteral("verbose"),
+                                   QStringLiteral("Enables debug output.")};
+    parser.addOption(verbose_opt);
 
     parser.addHelpOption();
     parser.addVersionOption();
@@ -75,20 +80,19 @@ static std::optional<settings::launch_mode_t> check_options(
 
     std::optional<settings::launch_mode_t> launch_mode;
 
-    if (parser.isSet(appstandaloneOpt)) {
-        if (!parser.isSet(appOpt) && !parser.isSet(sttserviceOpt)) {
+    if (parser.isSet(appstandalone_opt)) {
+        if (!parser.isSet(app_opt) && !parser.isSet(sttservice_opt)) {
             launch_mode = settings::launch_mode_t::app_stanalone;
         }
-    } else if (parser.isSet(appOpt)) {
-        if (!parser.isSet(appstandaloneOpt) && !parser.isSet(sttserviceOpt)) {
+    } else if (parser.isSet(app_opt)) {
+        if (!parser.isSet(appstandalone_opt) && !parser.isSet(sttservice_opt)) {
             launch_mode = settings::launch_mode_t::app;
         }
-    } else if (parser.isSet(sttserviceOpt)) {
-        if (!parser.isSet(appOpt) && !parser.isSet(appstandaloneOpt)) {
+    } else if (parser.isSet(sttservice_opt)) {
+        if (!parser.isSet(app_opt) && !parser.isSet(appstandalone_opt)) {
             launch_mode = settings::launch_mode_t::stt_service;
         }
     } else {
-        qDebug() << "using default launch mode";
         launch_mode = settings::launch_mode_t::app_stanalone;
     }
 
@@ -98,7 +102,7 @@ static std::optional<settings::launch_mode_t> check_options(
                    "--stt-service.");
     }
 
-    return launch_mode;
+    return {launch_mode, parser.isSet(verbose_opt)};
 }
 
 void register_types() {
@@ -146,9 +150,6 @@ static void install_translator() {
 }
 
 int main(int argc, char* argv[]) {
-    Logger::init(Logger::LogType::Trace);
-    initQtLogger();
-
 #ifdef USE_SFOS
     SailfishApp::application(argc, argv);
 #else
@@ -161,11 +162,14 @@ int main(int argc, char* argv[]) {
     QGuiApplication::setApplicationDisplayName(QStringLiteral(APP_NAME));
     QGuiApplication::setApplicationVersion(QStringLiteral(APP_VERSION));
 
-    install_translator();
-
-    auto launch_mode = check_options(app);
+    auto [launch_mode, verbose] = check_options(app);
 
     if (!launch_mode) return 0;
+
+    Logger::init(verbose ? Logger::LogType::Trace : Logger::LogType::Error);
+    initQtLogger();
+
+    install_translator();
 
     qDebug() << "launch mode:" << launch_mode.value();
 
