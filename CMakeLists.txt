@@ -26,6 +26,8 @@ option(build_webrtcvad "download webrtc vad, build and link statically" ON)
 option(build_openblas "download openblas, build and link shared lib" ON)
 option(build_xz "download xz lib, build and link statically" ON)
 option(build_rnnoise "download rnnoise lib, build and link statically" ON)
+option(build_pybind11 "download pybind11, build and link statically" ON)
+option(build_pymodules "make python modules archive" ON)
 
 if(${with_desktop} AND ${with_sfos})
     message(FATAL_ERROR "options with_desktop and with_sfos cannot be set together")
@@ -35,10 +37,8 @@ if(NOT ${with_desktop} AND NOT ${with_sfos})
     message(FATAL_ERROR "one of the options should be set (with_desktop or with_sfos)")
 endif()
 
-if(with_sfos)
-    set(download_libstt ON)
-    set(build_vosk ON)
-    set(build_openblas ON)
+if(with_desktop)
+    set(build_pymodules OFF)
 endif()
 
 set(info_id "dsnote")
@@ -62,9 +62,9 @@ set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_dbus_service "org.mkiol.Stt")
 set(info_dbus_interface "org.mkiol.Stt")
-set(info_conf_version "10")
+set(info_conf_version "11")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · Åke Engelbrektson")
-set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC VAD · libarchive · RNNoise-nu · {fmt}")
+set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · 🤗Transformers")
 
 set(libstt_x8664_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.Linux.tar.xz")
 set(libstt_arm64_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.aarch64.tar.xz")
@@ -91,6 +91,8 @@ set(xz_source_url "https://downloads.sourceforge.net/lzmautils/xz-5.4.2.tar.gz")
 set(xz_checksum "4ac4e5da95aa8604a81e32079cb00d42")
 set(rnnoise_source_url "https://github.com/GregorR/rnnoise-nu/archive/26269304e120499485438cd93acf5127c6908c68.zip")
 set(rnnoise_checksum "fafe9bbf0e2b15df4a628434bea99dd3")
+set(pybind11_source_url "https://github.com/pybind/pybind11/archive/refs/tags/v2.10.4.tar.gz")
+set(pybind11_checksum "812eda11d2a114fc0e841faf9626d2c9")
 
 project(${info_id} VERSION 2.0.1)
 
@@ -192,7 +194,11 @@ set(dsnote_lib_sources
     ${sources_dir}/checksum_tools.cpp
     ${sources_dir}/checksum_tools.hpp
     ${sources_dir}/denoiser.hpp
-    ${sources_dir}/denoiser.cpp)
+    ${sources_dir}/denoiser.cpp
+    ${sources_dir}/punctuator.hpp
+    ${sources_dir}/punctuator.cpp
+    ${sources_dir}/python_modules_initer.hpp
+    ${sources_dir}/python_modules_initer.cpp)
 
 configure_file(config.h.in config.h)
 
@@ -344,6 +350,20 @@ if(with_desktop)
     list(APPEND deps_libs Qt5::QuickControls2 Qt5::Widgets)
 endif()
 
+if(build_pymodules)
+    set(py_ver "")
+    if(with_sfos)
+        set(py_ver "3.8")
+    endif()
+    add_custom_command(
+      OUTPUT python.tar.xz
+      COMMAND sh -c "${tools_dir}/make_pymodules.sh ${CMAKE_BINARY_DIR}/external/pymodules ${py_ver} ${PROJECT_BINARY_DIR}/python.tar.xz"
+      WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+      VERBATIM)
+    add_library(pymodules STATIC "${CMAKE_BINARY_DIR}/python.tar.xz")
+    list(APPEND deps pymodules)
+endif()
+
 if(build_rnnoise)
     ExternalProject_Add(rnnoise
             SOURCE_DIR ${external_dir}/rnnoise
@@ -395,9 +415,9 @@ if(download_libstt)
 
     set(libstt_archive "${PROJECT_BINARY_DIR}/libstt.tar.xz")
 
-    file(DOWNLOAD ${libstt_url} ${libstt_archive} ${external_lib_dir} STATUS libstt_status)
-    file(ARCHIVE_EXTRACT INPUT ${libstt_archive} DESTINATION ${external_lib_dir}
-        PATTERNS *.so VERBOSE)
+#    file(DOWNLOAD ${libstt_url} ${libstt_archive} ${external_lib_dir} STATUS libstt_status)
+#    file(ARCHIVE_EXTRACT INPUT ${libstt_archive} DESTINATION ${external_lib_dir}
+#        PATTERNS *.so VERBOSE)
 
     add_library(stt SHARED IMPORTED)
     set_property(TARGET stt PROPERTY IMPORTED_LOCATION ${external_lib_dir}/libstt.so)
@@ -592,6 +612,29 @@ else()
     list(APPEND includes ${xz_INCLUDE_DIRS})
 endif()
 
+find_package(Python COMPONENTS Development REQUIRED)
+list(APPEND deps_dirs ${Python_LIBRARY_DIRS})
+list(APPEND deps_libs ${Python_LIBRARIES})
+list(APPEND includes ${Python_INCLUDE_DIRS})
+
+if(build_pybind11)
+    ExternalProject_Add(pybind11
+        SOURCE_DIR ${external_dir}/pybind11
+        BINARY_DIR ${PROJECT_BINARY_DIR}/external/pybind11
+        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+        URL "${pybind11_source_url}"
+        URL_MD5 "${pybind11_checksum}"
+        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
+            -DCMAKE_INSTALL_INCLUDEDIR=${external_include_dir} -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF
+            -DPYBIND11_INSTALL=ON -DPYBIND11_TEST=OFF -DPYBIND11_FINDPYTHON=ON
+        BUILD_ALWAYS False)
+    list(APPEND deps pybind11)
+else()
+    pkg_search_module(pybind11 REQUIRED pybind11)
+    list(APPEND deps_libs ${pybind11_LIBRARIES})
+    list(APPEND includes ${pybind11_INCLUDE_DIRS})
+endif()
+
 if(with_sfos)
     pkg_search_module(sailfish REQUIRED sailfishapp)
     list(APPEND deps_libs ${sailfish_LIBRARIES})
@@ -641,6 +684,10 @@ if(with_sfos)
 
     if(build_vosk)
         install(FILES "${external_lib_dir}/libvosk.so" DESTINATION share/${info_binary_id}/lib)
+    endif()
+
+    if(build_pymodules)
+        install(FILES ${PROJECT_BINARY_DIR}/python.tar.xz DESTINATION share/${info_binary_id}/lib)
     endif()
 
     install(FILES "${sfos_dir}/icons/86x86/${info_binary_id}.png" DESTINATION share/icons/hicolor/86x86/apps)

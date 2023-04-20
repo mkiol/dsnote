@@ -10,10 +10,14 @@ import QtQuick.Controls 2.5
 import org.mkiol.dsnote.Dsnote 1.0
 
 ApplicationWindow {
-    id: root
+    id: appWin
     width: 640
     height: 480
     visible: true
+
+    function push(page) {
+        stackView.push(page)
+    }
 
     header: ToolBar {
         contentHeight: toolButton.implicitHeight
@@ -39,20 +43,12 @@ ApplicationWindow {
 
     Drawer {
         id: drawer
-        width: root.width * 0.66
-        height: root.height
+        width: appWin.width * 0.66
+        height: appWin.height
 
         Column {
             anchors.fill: parent
 
-            ItemDelegate {
-                text: qsTr("Languages configuration")
-                width: parent.width
-                onClicked: {
-                    stackView.push("LangsPage.qml")
-                    drawer.close()
-                }
-            }
             ItemDelegate {
                 text: qsTr("Settings")
                 width: parent.width

@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -31,6 +31,27 @@ Page {
             y: 10
             width: parent.width - 20
             spacing: 10
+
+            RowLayout {
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Active language model")
+                }
+                ComboBox {
+                    implicitWidth: parent.width / 2
+                    visible: app.configured
+                    currentIndex: app.active_stt_model_idx
+                    model: app.available_stt_models
+                    onActivated: app.set_active_stt_model_idx(index)
+                }
+            }
+
+            Button {
+                Layout.alignment: Qt.AlignHCenter
+                enabled: !service.busy
+                text: qsTr("Language models")
+                onClicked: appWin.push("LangsPage.qml")
+            }
 
             RowLayout {
                 Label {

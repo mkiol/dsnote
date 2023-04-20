@@ -39,29 +39,29 @@ Page {
 
             ComboBox {
                 id: langCombo
-                label: qsTr("Active language")
+                label: qsTr("Active language model")
                 visible: app.configured && !service.busy && !app.busy
-                currentIndex: app.active_lang_idx
+                currentIndex: app.active_stt_model_idx
                 menu: ContextMenu {
                     Repeater {
-                        model: app.available_langs
+                        model: app.available_stt_models
                         MenuItem { text: modelData }
                     }
                 }
 
                 onCurrentIndexChanged: {
-                    app.set_active_lang_idx(currentIndex)
+                    app.set_active_stt_model_idx(currentIndex)
                 }
 
                 function update() {
                     if (!app.busy && !service.busy && app.configured) {
-                        langCombo.currentIndex = app.active_lang_idx
+                        langCombo.currentIndex = app.active_stt_model_idx
                     }
                 }
 
                 Connections {
                     target: app
-                    onAvailable_langs_changed: langCombo.update()
+                    onAvailable_stt_models_changed: langCombo.update()
                     onBusyChanged: langCombo.update()
                     onConfiguredChanged: langCombo.update()
                 }
@@ -73,7 +73,7 @@ Page {
 
             Button {
                 enabled: !service.busy
-                text: qsTr("Languages")
+                text: qsTr("Language models")
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: pageStack.push(Qt.resolvedUrl("LangsPage.qml"))
             }

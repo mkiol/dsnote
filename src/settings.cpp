@@ -105,16 +105,16 @@ QString settings::models_dir_name() const {
     return models_dir_url().fileName();
 }
 
-QString settings::default_model() const {
+QString settings::default_stt_model() const {
     return value(QStringLiteral("service/default_model"),
                  value(QStringLiteral("lang"), QStringLiteral("en")))
         .toString();  // english is a default;
 }
 
-void settings::set_default_model(const QString& value) {
-    if (default_model() != value) {
+void settings::set_default_stt_model(const QString& value) {
+    if (default_stt_model() != value) {
         setValue(QStringLiteral("service/default_model"), value);
-        emit default_model_changed();
+        emit default_stt_model_changed();
     }
 }
 
@@ -128,14 +128,14 @@ void settings::set_enabled_models(const QStringList& value) {
     }
 }
 
-QString settings::default_model_for_lang(const QString& lang) {
+QString settings::default_stt_model_for_lang(const QString& lang) {
     return value(QStringLiteral("service/default_model_%1").arg(lang), {})
         .toString();
 }
 
-void settings::set_default_model_for_lang(const QString& lang,
-                                          const QString& value) {
-    if (default_model_for_lang(lang) != value) {
+void settings::set_default_stt_model_for_lang(const QString& lang,
+                                              const QString& value) {
+    if (default_stt_model_for_lang(lang) != value) {
         setValue(QStringLiteral("service/default_model_%1").arg(lang), value);
     }
 }
@@ -200,4 +200,14 @@ settings::launch_mode_t settings::launch_mode() const { return m_launch_mode; }
 
 void settings::set_launch_mode(launch_mode_t launch_mode) {
     m_launch_mode = launch_mode;
+}
+
+QString settings::python_modules_checksum() const {
+    return value("service/python_modules_checksum").toString();
+}
+
+void settings::set_python_modules_checksum(const QString& value) {
+    if (value != python_modules_checksum()) {
+        setValue("service/python_modules_checksum", value);
+    }
 }

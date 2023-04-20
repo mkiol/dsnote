@@ -12,6 +12,7 @@
 #include <QCryptographicHash>
 #include <QDebug>
 #include <QDir>
+#include <QDirIterator>
 #include <QEventLoop>
 #include <QFile>
 #include <QFileInfo>
@@ -43,6 +44,88 @@
 #include "cpu_tools.hpp"
 #endif
 
+QDebug operator<<(QDebug d, models_manager::comp_type comp_type) {
+    switch (comp_type) {
+        case models_manager::comp_type::gz:
+            d << "gz";
+            break;
+        case models_manager::comp_type::tar:
+            d << "tar";
+            break;
+        case models_manager::comp_type::tarxz:
+            d << "tarxz";
+            break;
+        case models_manager::comp_type::xz:
+            d << "xz";
+            break;
+        case models_manager::comp_type::zip:
+            d << "zip";
+            break;
+        case models_manager::comp_type::dir:
+            d << "dir";
+            break;
+        case models_manager::comp_type::none:
+            d << "none";
+            break;
+    }
+
+    return d;
+}
+
+QDebug operator<<(QDebug d, models_manager::download_type download_type) {
+    switch (download_type) {
+        case models_manager::download_type::all:
+            d << "all";
+            break;
+        case models_manager::download_type::model:
+            d << "model";
+            break;
+        case models_manager::download_type::model_scorer:
+            d << "model_scorer";
+            break;
+        case models_manager::download_type::scorer:
+            d << "scorer";
+            break;
+        case models_manager::download_type::none:
+            d << "none";
+            break;
+    }
+
+    return d;
+}
+
+QDebug operator<<(QDebug d, models_manager::model_role role) {
+    switch (role) {
+        case models_manager::model_role::stt:
+            d << "stt";
+            break;
+        case models_manager::model_role::ttt:
+            d << "ttt";
+            break;
+    }
+
+    return d;
+}
+
+QDebug operator<<(QDebug d, models_manager::model_engine engine) {
+    switch (engine) {
+        case models_manager::model_engine::stt_ds:
+            d << "stt-ds";
+            break;
+        case models_manager::model_engine::stt_vosk:
+            d << "stt-vosk";
+            break;
+        case models_manager::model_engine::stt_whisper:
+            d << "stt-whisper";
+            break;
+        case models_manager::model_engine::ttt_hftc:
+            d << "ttt-hftc";
+            break;
+    }
+
+    return d;
+}
+
 static void remove_file_or_dir(const QString& path) {
     if (path.isEmpty()) return;
 
@@ -70,7 +153,8 @@ models_manager::~models_manager() {
 
 bool models_manager::ok() const { return !m_models.empty(); }
 
-void models_manager::set_default_model_for_lang(const QString& model_id) {
+void models_manager::set_default_stt_model_for_lang_new(
+    const QString& model_id) {
     if (m_models.count(model_id) == 0) return;
 
     auto& model = m_models.at(model_id);
@@ -85,12 +169,13 @@ void models_manager::set_default_model_for_lang(const QString& model_id) {
     model.default_for_lang = true;
 
     if (auto old_default_model_id =
-            settings::instance()->default_model_for_lang(model.lang_id);
+            settings::instance()->default_stt_model_for_lang(model.lang_id);
         m_models.count(old_default_model_id) > 0) {
         m_models.at(old_default_model_id).default_for_lang = false;
     }
 
-    settings::instance()->set_default_model_for_lang(model.lang_id, model_id);
+    settings::instance()->set_default_stt_model_for_lang(model.lang_id,
+                                                         model_id);
 
     emit models_changed();
 }
@@ -141,12 +226,26 @@ std::vector<models_manager::model_t> models_manager::models(
                   });
 
     std::sort(list.begin(), list.end(), [](const auto& a, const auto& b) {
-        if (a.score == b.score)
-            return QString::compare(a.id, b.id, Qt::CaseInsensitive) < 0;
-        return a.score > b.score;
+        auto ra = static_cast<int>(role_of_engine(a.engine));
+        auto rb = static_cast<int>(role_of_engine(b.engine));
+
+        if (ra != rb) return ra < rb;
+        if (a.score != b.score) return a.score > b.score;
+        return QString::compare(a.id, b.id, Qt::CaseInsensitive) < 0;
     });
 
     return list;
+}
+
+bool models_manager::has_model_of_role(model_role role) const {
+    QDir dir{settings::instance()->models_dir()};
+
+    return std::find_if(m_models.cbegin(), m_models.cend(), [&](const auto& p) {
+               return p.second.available &&
+                      models_manager::role_of_engine(p.second.engine) == role &&
+                      QFile::exists(
+                          dir.filePath(dir.filePath(p.second.file_name)));
+           }) != m_models.cend();
 }
 
 std::vector<models_manager::model_t> models_manager::available_models() const {
@@ -220,7 +319,7 @@ bool models_manager::model_scorer_same_url(const priv_model_t& model) {
 
 void models_manager::download(const QString& id, download_type type, int part) {
     if (type != download_type::all && type != download_type::scorer) {
-        qWarning() << "incorrect dl type requested:" << download_type_str(type);
+        qWarning() << "incorrect dl type requested:" << type;
         return;
     }
 
@@ -332,13 +431,25 @@ void models_manager::download(const QString& id, download_type type, int part) {
         }
     }
 
-    auto* out_file = new std::ofstream{
-        download_filename(path, comp, part).toStdString(), std::ofstream::out};
+    auto out_file_path = [&] {
+        auto p = download_filename(path, comp, part, url);
+        if (!p.isEmpty())
+            QDir::root().mkpath(QFileInfo{p}.dir().absolutePath());
+        return p;
+    }();
+
+    if (out_file_path.isEmpty()) {
+        qWarning() << "out file path is empty";
+        return;
+    }
+
+    auto* out_file =
+        new std::ofstream{out_file_path.toStdString(), std::ofstream::out};
 
     QNetworkReply* reply = m_nam.get(request);
-    qDebug() << "downloading:" << url << ", type:" << download_type_str(type)
-             << ", comp:" << comp_type_str(comp);
-    qDebug() << "out path:" << path << path_2;
+    qDebug() << "downloading: url=" << url << ", type=" << type
+             << ", comp=" << comp << ", out path=" << path
+             << ", out path2=" << path_2 << ", out file path=" << out_file_path;
 
     reply->setProperty("out_file",
                        QVariant::fromValue(static_cast<void*>(out_file)));
@@ -365,7 +476,11 @@ void models_manager::download(const QString& id, download_type type, int part) {
     connect(reply, &QNetworkReply::sslErrors, this,
             &models_manager::handle_ssl_errors);
 
-    model.downloading = true;
+    if (!model.downloading) {
+        model.downloading = true;
+        emit download_started(id);
+    }
+
     if (part < 0) emit models_changed();
 }
 
@@ -424,17 +539,34 @@ bool models_manager::extract_from_archive(
         comp_tools::archive_decode(
             archive_path, archive_type,
             {{},
-             {{path_in_archive, out_path}, {path_in_archive_2, out_path_2}}});
+             {{path_in_archive, out_path}, {path_in_archive_2, out_path_2}}},
+            true);
 
         ok_2 = check_checksum(out_path_2, checksum_2);
     } else if (!path_in_archive.isEmpty() && !out_path.isEmpty()) {
         comp_tools::archive_decode(archive_path, archive_type,
-                                   {{}, {{path_in_archive, out_path}}});
+                                   {{}, {{path_in_archive, out_path}}}, true);
     } else {
-        comp_tools::archive_decode(archive_path, archive_type, {out_path, {}});
+        comp_tools::archive_decode(archive_path, archive_type, {out_path, {}},
+                                   true);
     }
 
     return ok_2 ? check_checksum(out_path, checksum) : false;
+}
+
+qint64 models_manager::total_size(const QString& path) {
+    QFileInfo fi{path};
+
+    qint64 total = 0;
+
+    if (fi.isDir()) {
+        QDirIterator it{path, QDirIterator::NoIteratorFlags};
+        while (it.hasNext()) total += QFileInfo{it.next()}.size();
+    } else {
+        total = fi.size();
+    }
+
+    return total;
 }
 
 bool models_manager::handle_download(const QString& path,
@@ -451,7 +583,7 @@ bool models_manager::handle_download(const QString& path,
     if (m_thread.joinable()) m_thread.join();
 
     m_thread = std::thread{[&] {
-        if (parts > 1) {
+        if (comp != comp_type::dir && parts > 1) {
             qDebug() << "joining parts:" << parts;
             join_part_files(download_filename(path, comp), parts);
             for (int i = 0; i < parts; ++i)
@@ -459,9 +591,9 @@ bool models_manager::handle_download(const QString& path,
         }
 
         auto comp_file = download_filename(path, comp);
-        qDebug() << "total downloaded size:" << QFileInfo{comp_file}.size();
+        qDebug() << "total downloaded size:" << total_size(comp_file);
 
-        if (comp == comp_type::none) {
+        if (comp == comp_type::none || comp == comp_type::dir) {
             ok = check_checksum(path, checksum);
         } else {
             if (comp == comp_type::gz) {
@@ -513,6 +645,22 @@ bool models_manager::check_model_download_cancel(QNetworkReply* reply) {
     return true;
 }
 
+void models_manager::remove_downloaded_files_on_error(
+    const QString& path, models_manager::comp_type comp, int part) {
+    QFileInfo fi{path};
+
+    if (fi.isDir()) {
+        fi.absoluteDir().removeRecursively();
+    } else {
+        QFile::remove(download_filename(path, comp, part));
+        if (part > 0) {
+            for (int i = 0; i < part; ++i) {
+                QFile::remove(download_filename(path, comp, i));
+            }
+        }
+    }
+}
+
 void models_manager::handle_download_finished() {
     auto reply = qobject_cast<QNetworkReply*>(sender());
 
@@ -531,12 +679,8 @@ void models_manager::handle_download_finished() {
     if (auto cancel = check_model_download_cancel(reply);
         cancel || reply->error() != QNetworkReply::NoError) {
         qWarning() << "download error:" << reply->error();
-        QFile::remove(download_filename(path, comp, part));
-        if (part > 0) {
-            for (int i = 0; i < part; ++i) {
-                QFile::remove(download_filename(path, comp, i));
-            }
-        }
+
+        remove_downloaded_files_on_error(path, comp, part);
 
         if (!cancel &&
             reply->error() != QNetworkReply::OperationCanceledError) {
@@ -564,8 +708,7 @@ void models_manager::handle_download_finished() {
                 auto next_type = static_cast<download_type>(
                     reply->property("download_next_type").toInt());
                 qDebug() << "successfully downloaded:" << id
-                         << ", type:" << download_type_str(type)
-                         << ", next_type:" << download_type_str(next_type);
+                         << ", type:" << type << ", next_type:" << next_type;
 
                 if (next_type == download_type::scorer) {
                     model.downloaded_part_data += downloaded_part_data;
@@ -585,8 +728,7 @@ void models_manager::handle_download_finished() {
                 emit download_error(id);
             }
         } else {
-            qDebug() << "successfully downloaded:" << id
-                     << ", type:" << download_type_str(type)
+            qDebug() << "successfully downloaded:" << id << ", type:" << type
                      << ", part:" << part;
             model.downloaded_part_data +=
                 QFileInfo{download_filename(path, comp, part)}.size();
@@ -729,39 +871,43 @@ models_manager::comp_type models_manager::str2comp(const QString& str) {
         return comp_type::tarxz;
     if (!str.compare(QStringLiteral("zip"), Qt::CaseInsensitive))
         return comp_type::zip;
+    if (!str.compare(QStringLiteral("dir"), Qt::CaseInsensitive))
+        return comp_type::dir;
     return comp_type::none;
 }
 
-QString models_manager::download_filename(const QString& filename,
-                                          comp_type comp, int part) {
-    QString ret_name = filename;
-
+QString models_manager::download_filename(QString filename, comp_type comp,
+                                          int part, const QUrl& url) {
     switch (comp) {
         case comp_type::gz:
-            ret_name += QStringLiteral(".gz");
+            filename += QStringLiteral(".gz");
             break;
         case comp_type::xz:
-            ret_name += QStringLiteral(".xz");
+            filename += QStringLiteral(".xz");
             break;
         case comp_type::tar:
-            ret_name += QStringLiteral(".tar");
+            filename += QStringLiteral(".tar");
             break;
         case comp_type::tarxz:
-            ret_name += QStringLiteral(".tar.xz");
+            filename += QStringLiteral(".tar.xz");
             break;
         case comp_type::zip:
-            ret_name += QStringLiteral(".zip");
+            filename += QStringLiteral(".zip");
+            break;
+        case comp_type::dir:
+            if (auto f = url.fileName(); !f.isEmpty())
+                filename = QDir{filename}.absoluteFilePath(f);
             break;
         case comp_type::none:
             break;
     }
 
-    if (part > -1) {
-        ret_name +=
+    if (comp != comp_type::dir && part > -1) {
+        filename +=
             QStringLiteral(".part-%1").arg(part, 2, 10, QLatin1Char{'0'});
     }
 
-    return ret_name;
+    return filename;
 }
 
 auto models_manager::extract_langs(const QJsonArray& langs_jarray) {
@@ -829,12 +975,27 @@ bool models_manager::checksum_ok(const QString& checksum,
     return ok;
 }
 
+models_manager::model_role models_manager::role_of_engine(model_engine engine) {
+    switch (engine) {
+        case model_engine::stt_ds:
+        case model_engine::stt_vosk:
+        case model_engine::stt_whisper:
+            return model_role::stt;
+        case model_engine::ttt_hftc:
+            return model_role::ttt;
+    }
+
+    throw std::runtime_error("unknown engine");
+}
+
 models_manager::model_engine models_manager::engine_from_name(
     const QString& name) {
     if (name == QStringLiteral("stt_ds")) return model_engine::stt_ds;
     if (name == QStringLiteral("stt_vosk")) return model_engine::stt_vosk;
     if (name == QStringLiteral("stt_whisper")) return model_engine::stt_whisper;
-    return model_engine::stt_ds;  // default
+    if (name == QStringLiteral("ttt_hftc")) return model_engine::ttt_hftc;
+
+    throw std::runtime_error("unknown engine: " + name.toStdString());
 }
 
 auto models_manager::extract_models(const QJsonArray& models_jarray) {
@@ -969,7 +1130,8 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
 #endif
 
         bool is_default_model_for_lang =
-            settings::instance()->default_model_for_lang(lang_id) == model_id;
+            settings::instance()->default_stt_model_for_lang(lang_id) ==
+            model_id;
 
         priv_model_t model{
             /*engine=*/engine,
@@ -1022,8 +1184,8 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         } else {
             if (model_is_enabled) enabled_models.removeAll(model_id);
             if (is_default_model_for_lang)
-                settings::instance()->set_default_model_for_lang(model.lang_id,
-                                                                 {});
+                settings::instance()->set_default_stt_model_for_lang(
+                    model.lang_id, {});
         }
 
         models.emplace(model_id, std::move(model));
@@ -1054,6 +1216,7 @@ bool models_manager::parse_models_file_might_reset() {
             parse_models_file(false, &m_langs, &m_models);
         } while (m_pending_reload);
 
+        qDebug() << "models changed";
         emit models_changed();
         m_busy_value.store(false);
         emit busy_changed();
@@ -1123,6 +1286,7 @@ QString models_manager::file_name_from_id(const QString& id,
         case model_engine::stt_whisper:
             return id + ".ggml";
         case model_engine::stt_vosk:
+        case model_engine::ttt_hftc:
             return id;
     }
 
@@ -1170,38 +1334,4 @@ bool models_manager::join_part_files(const QString& file_out, int parts) {
     }
 
     return true;
-}
-
-QLatin1String models_manager::download_type_str(download_type type) {
-    switch (type) {
-        case download_type::all:
-            return QLatin1String("all");
-        case download_type::model:
-            return QLatin1String("model");
-        case download_type::model_scorer:
-            return QLatin1String("model_scorer");
-        case download_type::scorer:
-            return QLatin1String("scorer");
-        case download_type::none:
-            return QLatin1String("none");
-    }
-    return QLatin1String("unknown");
-}
-
-QLatin1String models_manager::comp_type_str(comp_type type) {
-    switch (type) {
-        case comp_type::gz:
-            return QLatin1String("gz");
-        case comp_type::tar:
-            return QLatin1String("tar");
-        case comp_type::tarxz:
-            return QLatin1String("tarxz");
-        case comp_type::xz:
-            return QLatin1String("xz");
-        case comp_type::zip:
-            return QLatin1String("zip");
-        case comp_type::none:
-            return QLatin1String("none");
-    }
-    return QLatin1String("unknown");
 }

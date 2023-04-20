@@ -58,7 +58,7 @@ void whisper_engine::create_whisper_model() {
 
     LOGD("creating whisper model");
 
-    m_whisper_ctx = whisper_init_from_file(m_model_file.first.c_str());
+    m_whisper_ctx = whisper_init_from_file(m_model_files.model_file.c_str());
 
     if (m_whisper_ctx == nullptr) {
         LOGE("failed to create whisper ctx");

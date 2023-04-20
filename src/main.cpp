@@ -41,6 +41,7 @@
 #include "config.h"
 #include "dsnote_app.h"
 #include "logger.hpp"
+#include "models_list_model.h"
 #include "qtlogger.hpp"
 #include "settings.h"
 #include "stt_config.h"
@@ -113,12 +114,16 @@ void register_types() {
     qmlRegisterType<dsnote_app>("harbour.dsnote.Dsnote", 1, 0, "DsnoteApp");
     qmlRegisterType<stt_config>("harbour.dsnote.Dsnote", 1, 0, "SttConfig");
     qmlRegisterType<DirModel>("harbour.dsnote.DirModel", 1, 0, "DirModel");
+    qmlRegisterType<ModelsListModel>("harbour.dsnote.Dsnote", 1, 0,
+                                     "ModelsListModel");
 #else
     qmlRegisterUncreatableType<settings>("org.mkiol.dsnote.Settings", 1, 0,
                                          "Settings",
                                          QStringLiteral("Singleton"));
     qmlRegisterType<dsnote_app>("org.mkiol.dsnote.Dsnote", 1, 0, "DsnoteApp");
     qmlRegisterType<stt_config>("org.mkiol.dsnote.Dsnote", 1, 0, "SttConfig");
+    qmlRegisterType<ModelsListModel>("org.mkiol.dsnote.Dsnote", 1, 0,
+                                     "ModelsListModel");
 #endif
 }
 
@@ -151,7 +156,7 @@ static void install_translator() {
 
 int main(int argc, char* argv[]) {
 #ifdef USE_SFOS
-    SailfishApp::application(argc, argv);
+    const auto& app = *SailfishApp::application(argc, argv);
 #else
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);

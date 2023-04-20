@@ -18,7 +18,7 @@
 stt_config::stt_config(QObject *parent) : QObject{parent} {
     connect(settings::instance(), &settings::models_dir_changed, this,
             &stt_config::reload, Qt::QueuedConnection);
-    connect(settings::instance(), &settings::default_model_changed, this,
+    connect(settings::instance(), &settings::default_stt_model_changed, this,
             [this] { emit default_model_changed(); });
     connect(models_manager::instance(), &models_manager::models_changed, this,
             &stt_config::handle_models_changed, Qt::QueuedConnection);
@@ -29,6 +29,9 @@ stt_config::stt_config(QObject *parent) : QObject{parent} {
                 qDebug() << "download_progress:" << id << progress;
                 emit model_download_progress_changed(id, progress);
             });
+
+    m_langs_model.updateModel();
+    m_models_model.updateModel();
 }
 
 void stt_config::handle_models_changed() {
@@ -71,8 +74,8 @@ double stt_config::model_download_progress(const QString &id) const {
     return models_manager::instance()->model_download_progress(id);
 }
 
-void stt_config::set_default_model_for_lang(const QString &model_id) {
-    models_manager::instance()->set_default_model_for_lang(model_id);
+void stt_config::set_default_stt_model_for_lang(const QString &model_id) {
+    models_manager::instance()->set_default_stt_model_for_lang_new(model_id);
 }
 
 void stt_config::reload() const {

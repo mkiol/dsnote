@@ -29,8 +29,6 @@ using namespace std::chrono_literals;
 
 class stt_engine {
    public:
-    using model_file_t = std::pair<std::string, std::string>;
-
     enum class speech_mode_t { automatic = 0, manual = 1, single_sentence = 2 };
     friend std::ostream& operator<<(std::ostream& os, speech_mode_t mode);
 
@@ -51,6 +49,23 @@ class stt_engine {
     };
     friend std::ostream& operator<<(std::ostream& os, vad_mode_t mode);
 
+    struct model_files_t {
+        std::string model_file;
+        std::string scorer_file;
+        std::string ttt_model_file;
+
+        inline bool operator==(const model_files_t& rhs) const {
+            return model_file == rhs.model_file &&
+                   scorer_file == rhs.scorer_file &&
+                   ttt_model_file == rhs.ttt_model_file;
+        };
+        inline bool operator!=(const model_files_t& rhs) const {
+            return !(*this == rhs);
+        };
+    };
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const model_files_t& model_files);
+
     struct callbacks_t {
         std::function<void(const std::string& text)> text_decoded;
         std::function<void(const std::string& text)> intermediate_text_decoded;
@@ -63,7 +78,7 @@ class stt_engine {
 
     struct config_t {
         std::string lang;
-        model_file_t model_file;
+        model_files_t model_files;
         speech_mode_t speech_mode = speech_mode_t::automatic;
         vad_mode_t vad_mode = vad_mode_t::aggressiveness3;
         bool translate = false; /*extra whisper feature*/
@@ -84,7 +99,7 @@ class stt_engine {
     inline auto speech_mode() const { return m_speech_mode; }
     void set_speech_started(bool value);
     inline auto speech_status() const { return m_speech_started; }
-    inline const model_file_t& model_file() const { return m_model_file; }
+    inline const model_files_t& model_files() const { return m_model_files; }
     inline const std::string& lang() const { return m_lang; }
     inline auto translate() const { return m_translate; }
 
@@ -123,7 +138,7 @@ class stt_engine {
         }
     };
 
-    model_file_t m_model_file;
+    model_files_t m_model_files;
     std::string m_lang;
     callbacks_t m_call_backs;
     std::thread m_processing_thread;

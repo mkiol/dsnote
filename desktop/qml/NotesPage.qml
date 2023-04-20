@@ -157,14 +157,6 @@ Page {
                 visible: !app.configured
                 text: qsTr("No language is configured")
             }
-
-            ComboBox {
-                implicitWidth: parent.width / 3
-                visible: app.configured
-                currentIndex: app.active_lang_idx
-                model: app.available_langs
-                onActivated: app.set_active_lang_idx(index)
-            }
         }
     }
 

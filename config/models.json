@@ -2311,6 +2311,27 @@
                 "https://alphacephei.com/vosk/models/vosk-model-small-pl-0.22.zip"
             ],
             "size": "52979372"
+        },
+        {
+            "name": "Punctuation correction (Kredor)",
+            "model_id": "multilang_hftc_kredor",
+            "engine": "ttt_hftc",
+            "lang_id": "multilang",
+            "checksum": "5294921e",
+            "checksum_quick": "b8b03e8a",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/kredor/punctuate-16/resolve/0915fb7e29e76dbe40ccbc251fa19abb94f3f5aa/config.json",
+                "https://huggingface.co/kredor/punctuate-16/resolve/0915fb7e29e76dbe40ccbc251fa19abb94f3f5aa/pytorch_model.bin",
+                "https://huggingface.co/kredor/punctuate-16/resolve/0915fb7e29e76dbe40ccbc251fa19abb94f3f5aa/tokenizer.json"
+            ],
+            "size": "1126993609"
+        },
+        {
+            "name": "Korekcja interpunkcji (Kredor)",
+            "model_id": "pl_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "pl"
         }
     ]
 }

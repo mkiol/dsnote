@@ -38,7 +38,11 @@ class models_manager : public QObject, public singleton<models_manager> {
     Q_OBJECT
     Q_PROPERTY(bool busy READ busy NOTIFY busy_changed)
    public:
-    enum class model_engine { stt_ds, stt_vosk, stt_whisper };
+    enum class model_role { stt = 0, ttt = 1 };
+    friend QDebug operator<<(QDebug d, model_role role);
+
+    enum class model_engine { stt_ds, stt_vosk, stt_whisper, ttt_hftc };
+    friend QDebug operator<<(QDebug d, model_engine engine);
 
     struct lang_t {
         QString id;
@@ -62,6 +66,8 @@ class models_manager : public QObject, public singleton<models_manager> {
         double download_progress = 0.0;
     };
 
+    static model_role role_of_engine(model_engine engine);
+
     explicit models_manager(QObject* parent = nullptr);
     models_manager(const models_manager&) = delete;
     models_manager& operator=(const models_manager&) = delete;
@@ -73,24 +79,29 @@ class models_manager : public QObject, public singleton<models_manager> {
     std::vector<model_t> models(const QString& lang_id = {}) const;
     std::vector<lang_t> langs() const;
     [[nodiscard]] bool model_exists(const QString& id) const;
+    [[nodiscard]] bool has_model_of_role(model_role role) const;
     void download_model(const QString& id);
     void cancel_model_download(const QString& id);
     void delete_model(const QString& id);
     [[nodiscard]] inline bool busy() const { return m_busy_value; }
     void reload();
     double model_download_progress(const QString& id) const;
-    void set_default_model_for_lang(const QString& model_id);
+    void set_default_stt_model_for_lang_new(const QString& model_id);
 
    signals:
     void download_progress(const QString& id, double progress);
     void download_finished(const QString& id);
+    void download_started(const QString& id);
     void download_error(const QString& id);
     void models_changed();
     void busy_changed();
 
    private:
     enum class download_type { none, all, model, scorer, model_scorer };
-    enum class comp_type { none, xz, gz, tar, tarxz, zip };
+    friend QDebug operator<<(QDebug d, download_type download_type);
+
+    enum class comp_type { none, xz, gz, tar, tarxz, zip, dir };
+    friend QDebug operator<<(QDebug d, comp_type comp_type);
 
     struct priv_model_t {
         model_engine engine = model_engine::stt_ds;
@@ -153,8 +164,8 @@ class models_manager : public QObject, public singleton<models_manager> {
     static auto extract_models(const QJsonArray& models_jarray);
     static auto extract_langs(const QJsonArray& langs_jarray);
     static comp_type str2comp(const QString& str);
-    static QString download_filename(const QString& filename, comp_type comp,
-                                     int part = -1);
+    static QString download_filename(QString filename, comp_type comp,
+                                     int part = -1, const QUrl& url = {});
     static bool model_scorer_same_url(const priv_model_t& id);
     [[nodiscard]] bool lang_available(const QString& id) const;
     [[nodiscard]] bool lang_downloading(const QString& id) const;
@@ -172,6 +183,10 @@ class models_manager : public QObject, public singleton<models_manager> {
                               const QString& path_in_archive_2);
     static bool check_checksum(const QString& path, const QString& checksum);
     static void remove_empty_langs(langs_t& langs, const models_t& models);
+    static void remove_downloaded_files_on_error(const QString& path,
+                                                 models_manager::comp_type comp,
+                                                 int part);
+    static qint64 total_size(const QString& path);
 };
 
 #endif  // MODELS_MANAGER_H

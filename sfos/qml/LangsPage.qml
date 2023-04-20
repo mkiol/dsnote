@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2022 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -7,6 +7,8 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+
+import harbour.dsnote.Dsnote 1.0
 
 Page {
     id: root
@@ -43,7 +45,15 @@ Page {
         }
 
         Component {
-            id: modelItem
+            id: modelSectionDelegate
+            SectionHeader {
+                height: section == ModelsListModel.Stt ? 0 : implicitHeight
+                text: section == ModelsListModel.Stt ? "" : qsTr("Complementary models")
+            }
+        }
+
+        Component {
+            id: modelItemDelegate
             ModelItem {
                 name: model.name
                 modelId: model.id
@@ -51,12 +61,13 @@ Page {
                 downloading: model.downloading
                 progress: model.progress
                 score: model.score
+                defaultModelForLangAllowed: model.role === ModelsListModel.Stt
                 defaultModelForLang: model.default_for_lang
             }
         }
 
         Component {
-            id: langItem
+            id: langItemDelegate
             LangItem {
                 name: model.name
                 langId: model.id
@@ -65,7 +76,10 @@ Page {
             }
         }
 
-        delegate: langsView ? langItem : modelItem
+        delegate: langsView ? langItemDelegate : modelItemDelegate
+
+        section.property: "role"
+        section.delegate: langsView ? null : modelSectionDelegate
     }
 
     BusyIndicator {

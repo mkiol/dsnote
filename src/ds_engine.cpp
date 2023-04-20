@@ -84,7 +84,10 @@ void ds_engine::open_ds_lib() {
     }
 }
 
-void ds_engine::start_processing_impl() { create_ds_model(); }
+void ds_engine::start_processing_impl() {
+    create_ds_model();
+    create_punctuator();
+}
 
 void ds_engine::create_ds_model() {
     if (m_ds_model) return;
@@ -92,16 +95,16 @@ void ds_engine::create_ds_model() {
     LOGD("creating ds model");
 
     auto status =
-        m_ds_api.STT_CreateModel(m_model_file.first.c_str(), &m_ds_model);
+        m_ds_api.STT_CreateModel(m_model_files.model_file.c_str(), &m_ds_model);
 
     if (status != 0 || !m_ds_model) {
         LOGE("failed to create ds model");
         throw std::runtime_error("failed to create ds model");
     }
 
-    if (!m_model_file.second.empty()) {
+    if (!m_model_files.scorer_file.empty()) {
         m_ds_api.STT_EnableExternalScorer(m_ds_model,
-                                          m_model_file.second.c_str());
+                                          m_model_files.scorer_file.c_str());
     }
 
     LOGD("ds model created");
@@ -111,6 +114,19 @@ void ds_engine::free_ds_stream() {
     if (m_ds_stream) {
         m_ds_api.STT_FreeStream(m_ds_stream);
         m_ds_stream = nullptr;
+    }
+}
+
+void ds_engine::create_punctuator() {
+    if (m_punctuator || m_model_files.ttt_model_file.empty()) return;
+
+    LOGD("creating punctuator");
+    try {
+        m_punctuator.emplace(m_model_files.ttt_model_file);
+
+        LOGD("punctuator created");
+    } catch (const std::runtime_error& error) {
+        LOGE("failed to create punctuator");
     }
 }
 
@@ -248,6 +264,8 @@ void ds_engine::decode_speech(const ds_buf_t& buf, bool eof) {
 #else
     LOGD("speech decoded");
 #endif
+
+    if (m_punctuator) result = m_punctuator->process(result);
 
     if (!m_intermediate_text || m_intermediate_text != result)
         set_intermediate_text(result);

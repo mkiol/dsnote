@@ -14,6 +14,7 @@ SimpleListItem {
     property string name
     property string modelId
     property int score: 2
+    property bool defaultModelForLangAllowed: false
     property bool defaultModelForLang: false
     property bool available: true
     property bool downloading: false
@@ -38,11 +39,11 @@ SimpleListItem {
         id: menuComp
         ContextMenu {
             MenuItem {
-                visible: root.available && !root.defaultModelForLang
+                visible: root.available && root.defaultModelForLangAllowed && !root.defaultModelForLang
                 text: qsTr("Set as default for this language")
                 onClicked: {
                     if (root.default_model_for_lang) return
-                    service.set_default_model_for_lang(modelId)
+                    service.set_default_stt_model_for_lang(modelId)
                 }
             }
             MenuItem {

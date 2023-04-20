@@ -17,6 +17,10 @@ ModelsListModel::ModelsListModel(QObject *parent)
         models_manager::instance(), &models_manager::models_changed, this,
         [this] { updateModel(); }, Qt::QueuedConnection);
     connect(
+        models_manager::instance(), &models_manager::download_started, this,
+        [this]([[maybe_unused]] const QString &id) { updateModel(); },
+        Qt::QueuedConnection);
+    connect(
         this, &ItemModel::busyChanged, this,
         [this] {
             if (!isBusy() && m_changedItem > -1) {
@@ -44,10 +48,21 @@ void ModelsListModel::beforeUpdate(const QList<ListItem *> &oldItems,
 }
 
 ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
+    auto role = [&] {
+        switch (models_manager::role_of_engine(model.engine)) {
+            case models_manager::model_role::stt:
+                return ModelRole::Stt;
+            case models_manager::model_role::ttt:
+                return ModelRole::Ttt;
+        }
+        throw std::runtime_error{"unsupported model engine"};
+    }();
+
     return new ModelsListItem{
         /*id=*/model.id,
         /*name=*/QStringLiteral("%1 / %2").arg(model.name, model.lang_id),
         /*langId=*/model.lang_id,
+        /*role=*/role,
         /*available=*/model.available,
         /*score=*/model.score,
         /*default_for_lang=*/model.default_for_lang,
@@ -77,15 +92,6 @@ QList<ListItem *> ModelsListModel::makeItems() {
         });
     }
 
-    std::sort(
-        items.begin(), items.end(), [](const ListItem *a, const ListItem *b) {
-            const auto *aa = qobject_cast<const ModelsListItem *>(a);
-            const auto *bb = qobject_cast<const ModelsListItem *>(b);
-            if (aa->score() == bb->score()) {
-                return aa->id().compare(bb->id(), Qt::CaseInsensitive) < 0;
-            }
-            return aa->score() > bb->score();
-        });
     return items;
 }
 
@@ -109,12 +115,20 @@ void ModelsListModel::updateDownloading(
 }
 
 ModelsListItem::ModelsListItem(const QString &id, const QString &name,
-                               const QString &langId, bool available, int score,
-                               bool default_for_lang, bool downloading,
-                               double progress, QObject *parent)
-    : SelectableItem{parent}, m_id{id}, m_name{name}, m_langId{langId},
-      m_available{available}, m_score{score},
-      m_default_for_lang{default_for_lang}, m_downloading{downloading},
+                               const QString &langId,
+                               ModelsListModel::ModelRole role, bool available,
+                               int score, bool default_for_lang,
+                               bool downloading, double progress,
+                               QObject *parent)
+    : SelectableItem{parent},
+      m_id{id},
+      m_name{name},
+      m_langId{langId},
+      m_role{role},
+      m_available{available},
+      m_score{score},
+      m_default_for_lang{default_for_lang},
+      m_downloading{downloading},
       m_progress{progress} {
     m_selectable = false;
 }
@@ -124,6 +138,7 @@ QHash<int, QByteArray> ModelsListItem::roleNames() const {
     names[IdRole] = QByteArrayLiteral("id");
     names[NameRole] = QByteArrayLiteral("name");
     names[LangIdRole] = QByteArrayLiteral("lang_id");
+    names[ModelRole] = QByteArrayLiteral("role");
     names[AvailableRole] = QByteArrayLiteral("available");
     names[ScoreRole] = QByteArrayLiteral("score");
     names[DefaultRole] = QByteArrayLiteral("default_for_lang");
@@ -140,6 +155,8 @@ QVariant ModelsListItem::data(int role) const {
             return name();
         case LangIdRole:
             return langId();
+        case ModelRole:
+            return modelRole();
         case AvailableRole:
             return available();
         case ScoreRole:

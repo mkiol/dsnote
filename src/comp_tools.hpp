@@ -36,7 +36,7 @@ struct files_to_extract {
 bool xz_decode(const QString& file_in, const QString& file_out);
 bool gz_decode(const QString& file_in, const QString& file_out);
 bool archive_decode(const QString& file_in, archive_type type,
-                    files_to_extract&& files_out);
+                    files_to_extract&& files_out, bool ignore_first_dir);
 }  // namespace comp_tools
 
 #endif // COMP_TOOLS_HPP

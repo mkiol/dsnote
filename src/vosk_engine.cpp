@@ -83,14 +83,30 @@ void vosk_engine::open_vosk_lib() {
     }
 }
 
-void vosk_engine::start_processing_impl() { create_vosk_model(); }
+void vosk_engine::start_processing_impl() {
+    create_vosk_model();
+    create_punctuator();
+}
+
+void vosk_engine::create_punctuator() {
+    if (m_punctuator || m_model_files.ttt_model_file.empty()) return;
+
+    LOGD("creating punctuator");
+    try {
+        m_punctuator.emplace(m_model_files.ttt_model_file);
+
+        LOGD("punctuator created");
+    } catch (const std::runtime_error& error) {
+        LOGE("failed to create punctuator");
+    }
+}
 
 void vosk_engine::create_vosk_model() {
     if (m_vosk_model) return;
 
     LOGD("creating vosk model");
 
-    m_vosk_model = m_vosk_api.vosk_model_new(m_model_file.first.c_str());
+    m_vosk_model = m_vosk_api.vosk_model_new(m_model_files.model_file.c_str());
     if (m_vosk_model == nullptr) {
         LOGE("failed to create vosk model");
         throw std::runtime_error("failed to create vosk model");
@@ -286,6 +302,8 @@ void vosk_engine::decode_speech(const vosk_buf_t& buf, bool eof) {
 #else
     LOGD("speech decoded");
 #endif
+
+    if (m_punctuator) result = m_punctuator->process(result);
 
     if (!m_intermediate_text || m_intermediate_text != result)
         set_intermediate_text(result);

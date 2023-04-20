@@ -21,19 +21,22 @@
 #include "audio_source.h"
 #include "dbus_stt_adaptor.h"
 #include "models_manager.h"
+#include "python_modules_initer.hpp"
 #include "singleton.h"
 #include "stt_engine.hpp"
 
 class stt_service : public QObject, public singleton<stt_service> {
     Q_OBJECT
 
-    // DBus
+    // STT DBus API
     Q_PROPERTY(int State READ dbus_state CONSTANT)
     Q_PROPERTY(int Speech READ speech CONSTANT)
-    Q_PROPERTY(QVariantMap Langs READ available_langs CONSTANT)
-    Q_PROPERTY(QString DefaultLang READ default_lang WRITE set_default_lang)
-    Q_PROPERTY(QVariantMap Models READ available_models CONSTANT)
-    Q_PROPERTY(QString DefaultModel READ default_model WRITE set_default_model)
+    Q_PROPERTY(QVariantMap Langs READ available_stt_langs CONSTANT)
+    Q_PROPERTY(
+        QString DefaultLang READ default_stt_lang WRITE set_default_stt_lang)
+    Q_PROPERTY(QVariantMap Models READ available_stt_models CONSTANT)
+    Q_PROPERTY(
+        QString DefaultModel READ default_stt_model WRITE set_default_stt_model)
     Q_PROPERTY(int CurrentTask READ current_task_id CONSTANT)
     Q_PROPERTY(QVariantMap Translations READ translations CONSTANT)
 
@@ -67,12 +70,18 @@ class stt_service : public QObject, public singleton<stt_service> {
                                     bool translate);
     Q_INVOKABLE int cancel(int task);
 
-    QString default_model() const;
-    QString default_lang() const;
-    void set_default_model(const QString &model_id) const;
-    void set_default_lang(const QString &lang_id) const;
-    QVariantMap available_models() const;
-    QVariantMap available_langs() const;
+    QString default_stt_model() const;
+    QString default_stt_lang() const;
+    void set_default_stt_model(const QString &model_id) const;
+    void set_default_stt_lang(const QString &lang_id) const;
+    QVariantMap available_stt_models() const;
+    QVariantMap available_stt_langs() const;
+
+    QString default_ttt_model() const;
+    QString default_ttt_lang() const;
+    QVariantMap available_ttt_models() const;
+    QVariantMap available_ttt_langs() const;
+
     int speech() const;
     state_t state() const;
     int current_task_id() const;
@@ -95,8 +104,8 @@ class stt_service : public QObject, public singleton<stt_service> {
     void engine_eof(int task_id);
     void engine_error(int task_id);
     void engine_shutdown();
-    void default_model_changed();
-    void default_lang_changed();
+    void default_stt_model_changed();
+    void default_stt_lang_changed();
 
     // DBus
     void ErrorOccured(int code);
@@ -122,11 +131,16 @@ class stt_service : public QObject, public singleton<stt_service> {
     };
 
     struct model_files_t {
-        QString model_id;
         QString lang_id;
-        models_manager::model_engine engine = models_manager::model_engine::stt_ds;
-        QString model_file;
-        QString scorer_file;
+        QString stt_model_id;
+        models_manager::model_engine stt_engine =
+            models_manager::model_engine::stt_ds;
+        QString stt_model_file;
+        QString stt_scorer_file;
+        QString ttt_model_id;
+        models_manager::model_engine ttt_engine =
+            models_manager::model_engine::ttt_hftc;
+        QString ttt_model_file;
     };
 
     struct task_t {
@@ -148,9 +162,11 @@ class stt_service : public QObject, public singleton<stt_service> {
     static const int SINGLE_SENTENCE_TIMEOUT = 10000;  // 10s
 
     int m_last_task_id = INVALID_TASK;
+    python_modules_initer m_initer;
     std::unique_ptr<stt_engine> m_engine;
     std::unique_ptr<audio_source> m_source;
-    std::map<QString, model_data_t> m_available_models_map;
+    std::map<QString, model_data_t> m_available_stt_models_map;
+    std::map<QString, model_data_t> m_available_ttt_models_map;
     double m_progress = -1;
     state_t m_state = state_t::unknown;
     SttAdaptor m_stt_adaptor;
@@ -190,7 +206,8 @@ class stt_service : public QObject, public singleton<stt_service> {
     static QString state_str(state_t state_value);
     void stop_engine_gracefully();
     void stop_engine();
-    QString test_default_model(const QString &lang) const;
+    QString test_default_stt_model(const QString &lang) const;
+    QString test_default_ttt_model(const QString &lang) const;
     int next_task_id();
     void handle_keepalive_timeout();
     void handle_task_timeout();
@@ -199,6 +216,13 @@ class stt_service : public QObject, public singleton<stt_service> {
     int dbus_state() const;
     void start_keepalive_current_task();
     void stop_keepalive_current_task();
+    QVariantMap available_models(
+        const std::map<QString, model_data_t> &available_models_map) const;
+    QVariantMap available_langs(
+        const std::map<QString, model_data_t> &available_models_map) const;
+    QString test_default_model(
+        const QString &lang,
+        const std::map<QString, model_data_t> &available_models_map) const;
 
     // DBus
     Q_INVOKABLE int StartListen(int mode, const QString &lang, bool translate);

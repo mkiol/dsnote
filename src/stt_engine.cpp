@@ -140,10 +140,18 @@ std::ostream& operator<<(std::ostream& os, stt_engine::vad_mode_t mode) {
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os,
+                         const stt_engine::model_files_t& model_files) {
+    os << "model-file=" << model_files.model_file
+       << ", scorer-file=" << model_files.scorer_file
+       << ", ttt-model-file=" << model_files.ttt_model_file;
+
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const stt_engine::config_t& config) {
-    os << "lang=" << config.lang << ", model-file-1=" << config.model_file.first
-       << ", model-file-2=" << config.model_file.second
-       << ", speech-mode=" << config.speech_mode
+    os << "lang=" << config.lang << ", model-files=[" << config.model_files
+       << "], speech-mode=" << config.speech_mode
        << ", vad-mode=" << config.vad_mode
        << ", speech-started=" << config.speech_started;
 
@@ -151,7 +159,7 @@ std::ostream& operator<<(std::ostream& os, const stt_engine::config_t& config) {
 }
 
 stt_engine::stt_engine(config_t config, callbacks_t call_backs)
-    : m_model_file{std::move(config.model_file)},
+    : m_model_files{std::move(config.model_files)},
       m_lang{std::move(config.lang)},
       m_call_backs{std::move(call_backs)},
       m_speech_started{config.speech_started},

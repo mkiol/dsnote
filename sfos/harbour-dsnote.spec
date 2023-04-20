@@ -13,6 +13,7 @@ License:        LICENSE
 URL:            https://github.com/mkiol/dsnote
 Source0:        %{name}-%{version}.tar.bz2
 Requires:       sailfishsilica-qt5 >= 0.10.9, qt5-qtmultimedia-plugin-mediaservice-gstaudiodecoder
+Requires:       python3-gobject
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
@@ -25,6 +26,8 @@ BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
 BuildRequires:  m4
+BuildRequires:  patch
+BuildRequires:  python3-pip
 
 %description
 Note taking with speech to text

@@ -98,8 +98,8 @@ dsnote_app::dsnote_app(QObject *parent)
             }
         };
         if (stt_state() != SttUnknown && stt_state() != SttBusy) {
-            update_available_langs();
-            update_active_lang();
+            update_available_stt_models();
+            update_active_stt_model();
             update_current_task();
             update_speech();
             if (stt_state() == SttTranscribingFile) {
@@ -114,9 +114,9 @@ dsnote_app::dsnote_app(QObject *parent)
             reset_progress();
         }
     });
-    connect(this, &dsnote_app::active_lang_changed, this,
+    connect(this, &dsnote_app::active_stt_model_changed, this,
             &dsnote_app::update_listen);
-    connect(this, &dsnote_app::available_langs_changed, this,
+    connect(this, &dsnote_app::available_stt_models_changed, this,
             &dsnote_app::update_listen);
 
     if (settings::instance()->launch_mode() ==
@@ -255,7 +255,7 @@ void dsnote_app::connect_dbus_signals() {
             stt_service::instance(), &stt_service::models_changed, this,
             [this] {
                 handle_stt_models_changed(
-                    stt_service::instance()->available_models());
+                    stt_service::instance()->available_stt_models());
             },
             Qt::QueuedConnection);
         connect(
@@ -280,10 +280,10 @@ void dsnote_app::connect_dbus_signals() {
             },
             Qt::QueuedConnection);
         connect(
-            stt_service::instance(), &stt_service::default_model_changed, this,
+            stt_service::instance(), &stt_service::default_stt_model_changed, this,
             [this] {
                 handle_stt_default_model_changed(
-                    stt_service::instance()->default_model());
+                    stt_service::instance()->default_stt_model());
             },
             Qt::QueuedConnection);
         connect(stt_service::instance(),
@@ -336,10 +336,10 @@ void dsnote_app::handle_stt_models_changed(const QVariantMap &models) {
         qDebug() << "[dbus => app] signal ModelsPropertyChanged";
     }
 
-    m_available_langs_map = models;
-    emit available_langs_changed();
+    m_available_stt_models_map = models;
+    emit available_stt_models_changed();
 
-    update_active_lang();
+    update_active_stt_model();
 }
 
 void dsnote_app::handle_stt_state_changed(int status) {
@@ -446,11 +446,12 @@ void dsnote_app::handle_stt_default_model_changed(const QString &model) {
         qDebug() << "[dbus => app] signal DefaultModelPropertyChanged:"
                  << model;
     }
-
-    if (m_active_lang_value != model) {
-        qDebug() << "app active lang:" << m_active_lang_value << "=>" << model;
-        m_active_lang_value = model;
-        emit active_lang_changed();
+    
+    if (m_active_stt_model != model) {
+        qDebug() << "app active stt model:" << m_active_stt_model << "=>"
+                 << model;
+        m_active_stt_model = model;
+        emit active_stt_model_changed();
     }
 }
 
@@ -590,39 +591,42 @@ void dsnote_app::update_stt_state() {
 }
 
 void dsnote_app::update_active_lang_idx() {
-    auto it = m_available_langs_map.find(active_lang());
+    auto it = m_available_stt_models_map.find(active_stt_model());
 
-    if (it == m_available_langs_map.end()) {
-        set_active_lang_idx(-1);
+    if (it == m_available_stt_models_map.end()) {
+        set_active_stt_model_idx(-1);
     } else {
-        set_active_lang_idx(std::distance(m_available_langs_map.begin(), it));
+        set_active_stt_model_idx(
+            std::distance(m_available_stt_models_map.begin(), it));
     }
 }
 
-void dsnote_app::update_available_langs() {
-    QVariantMap new_available_langs_map{};
+void dsnote_app::update_available_stt_models() {
+    QVariantMap new_available_stt_models_map{};
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
-        new_available_langs_map = stt_service::instance()->available_models();
+        new_available_stt_models_map =
+            stt_service::instance()->available_stt_models();
     } else {
         qDebug() << "[app => dbus] get Models";
-        new_available_langs_map = m_stt.models();
+        new_available_stt_models_map = m_stt.models();
     }
 
-    if (m_available_langs_map != new_available_langs_map) {
-        qDebug() << "app stt available langs:" << m_available_langs_map.size()
-                 << "=>" << new_available_langs_map.size();
-        m_available_langs_map = std::move(new_available_langs_map);
-        emit available_langs_changed();
+    if (m_available_stt_models_map != new_available_stt_models_map) {
+        qDebug() << "app stt available models:"
+                 << m_available_stt_models_map.size() << "=>"
+                 << new_available_stt_models_map.size();
+        m_available_stt_models_map = std::move(new_available_stt_models_map);
+        emit available_stt_models_changed();
     }
 }
 
-QVariantList dsnote_app::available_langs() const {
+QVariantList dsnote_app::available_stt_models() const {
     QVariantList list;
 
-    for (auto it = m_available_langs_map.constBegin();
-         it != m_available_langs_map.constEnd(); ++it) {
+    for (auto it = m_available_stt_models_map.constBegin();
+         it != m_available_stt_models_map.constEnd(); ++it) {
         const auto v = it.value().toStringList();
         if (v.size() > 1) list.push_back(v.at(1));
     }
@@ -630,14 +634,14 @@ QVariantList dsnote_app::available_langs() const {
     return list;
 }
 
-void dsnote_app::set_active_lang_idx(int idx) {
-    if (active_lang_idx() != idx && idx > -1 &&
-        idx < m_available_langs_map.size()) {
-        const auto &id = std::next(m_available_langs_map.cbegin(), idx).key();
+void dsnote_app::set_active_stt_model_idx(int idx) {
+    if (active_stt_model_idx() != idx && idx > -1 &&
+        idx < m_available_stt_models_map.size()) {
+        const auto &id = std::next(m_available_stt_models_map.cbegin(), idx).key();
 
         if (settings::instance()->launch_mode() ==
             settings::launch_mode_t::app_stanalone) {
-            stt_service::instance()->set_default_model(id);
+            stt_service::instance()->set_default_stt_model(id);
         } else {
             qDebug() << "[app => dbus] set DefaultModel:" << idx << id;
             m_stt.setDefaultModel(id);
@@ -764,30 +768,30 @@ void dsnote_app::update_speech() {
     set_speech(new_value);
 }
 
-int dsnote_app::active_lang_idx() const {
-    auto it = m_available_langs_map.find(m_active_lang_value);
-    if (it == m_available_langs_map.end()) {
+int dsnote_app::active_stt_model_idx() const {
+    auto it = m_available_stt_models_map.find(m_active_stt_model);
+    if (it == m_available_stt_models_map.end()) {
         return -1;
     }
-    return std::distance(m_available_langs_map.begin(), it);
+    return std::distance(m_available_stt_models_map.begin(), it);
 }
 
-void dsnote_app::update_active_lang() {
-    QString new_lang;
+void dsnote_app::update_active_stt_model() {
+    QString new_stt_model;
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
-        new_lang = stt_service::instance()->default_model();
+        new_stt_model = stt_service::instance()->default_stt_model();
     } else {
         qDebug() << "[app => dbus] get DefaultModel";
-        new_lang = m_stt.defaultModel();
+        new_stt_model = m_stt.defaultModel();
     }
 
-    if (m_active_lang_value != new_lang) {
-        qDebug() << "app active lang:" << m_active_lang_value << "=>"
-                 << new_lang;
-        m_active_lang_value = std::move(new_lang);
-        emit active_lang_changed();
+    if (m_active_stt_model != new_stt_model) {
+        qDebug() << "app active stt model:" << m_active_stt_model << "=>"
+                 << new_stt_model;
+        m_active_stt_model = std::move(new_stt_model);
+        emit active_stt_model_changed();
     }
 }
 

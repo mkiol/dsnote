@@ -36,8 +36,8 @@ class settings : public QSettings, public singleton<settings> {
                    NOTIFY models_dir_changed)
     Q_PROPERTY(
         QString models_dir_name READ models_dir_name NOTIFY models_dir_changed)
-    Q_PROPERTY(QString default_model READ default_model WRITE set_default_model
-                   NOTIFY default_model_changed)
+    Q_PROPERTY(QString default_stt_model READ default_stt_model WRITE
+                   set_default_stt_model NOTIFY default_stt_model_changed)
 
    public:
     enum class launch_mode_t { app_stanalone, app, stt_service };
@@ -61,6 +61,8 @@ class settings : public QSettings, public singleton<settings> {
 
     launch_mode_t launch_mode() const;
     void set_launch_mode(launch_mode_t launch_mode);
+    QString python_modules_checksum() const;
+    void set_python_modules_checksum(const QString &value);
 
     // app
     QString note() const;
@@ -79,12 +81,15 @@ class settings : public QSettings, public singleton<settings> {
     QUrl models_dir_url() const;
     void set_models_dir_url(const QUrl &value);
     QString models_dir_name() const;
-    QString default_model() const;
-    void set_default_model(const QString &value);
+
+    // stt
+    QString default_stt_model() const;
+    void set_default_stt_model(const QString &value);
     QStringList enabled_models();
     void set_enabled_models(const QStringList &value);
-    QString default_model_for_lang(const QString &lang);
-    void set_default_model_for_lang(const QString &lang, const QString &value);
+    QString default_stt_model_for_lang(const QString &lang);
+    void set_default_stt_model_for_lang(const QString &lang,
+                                        const QString &value);
 
    signals:
     // app
@@ -95,8 +100,8 @@ class settings : public QSettings, public singleton<settings> {
 
     // service
     void models_dir_changed();
-    void default_model_changed();
-    void default_models_changed(const QString &lang);
+    void default_stt_model_changed();
+    void default_stt_models_changed(const QString &lang);
 
    private:
     inline static const QString settings_filename =

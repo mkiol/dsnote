@@ -21,11 +21,14 @@ class dsnote_app : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString intermediate_text READ intermediate_text NOTIFY
                    intermediate_text_changed)
-    Q_PROPERTY(
-        int active_lang_idx READ active_lang_idx NOTIFY active_lang_changed)
-    Q_PROPERTY(QString active_lang READ active_lang NOTIFY active_lang_changed)
-    Q_PROPERTY(QVariantList available_langs READ available_langs NOTIFY
-                   available_langs_changed)
+
+    Q_PROPERTY(int active_stt_model_idx READ active_stt_model_idx NOTIFY
+                   active_stt_model_changed)
+    Q_PROPERTY(QString active_stt_model READ active_stt_model NOTIFY
+                   active_stt_model_changed)
+    Q_PROPERTY(QVariantList available_stt_models READ available_stt_models
+                   NOTIFY available_stt_models_changed)
+
     Q_PROPERTY(stt_speech_state_t speech READ speech NOTIFY speech_changed)
     Q_PROPERTY(bool busy READ busy NOTIFY busy_changed)
     Q_PROPERTY(bool configured READ configured NOTIFY configured_changed)
@@ -70,7 +73,7 @@ class dsnote_app : public QObject {
     friend QDebug operator<<(QDebug d, error_t type);
 
     dsnote_app(QObject *parent = nullptr);
-    Q_INVOKABLE void set_active_lang_idx(int idx);
+    Q_INVOKABLE void set_active_stt_model_idx(int idx);
     Q_INVOKABLE void transcribe_file(const QString &source_file);
     Q_INVOKABLE void transcribe_file(const QUrl &source_file);
     Q_INVOKABLE void cancel();
@@ -78,8 +81,8 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void stop_listen();
 
    signals:
-    void active_lang_changed();
-    void available_langs_changed();
+    void active_stt_model_changed();
+    void available_stt_models_changed();
     void intermediate_text_changed();
     void text_changed();
     void speech_changed();
@@ -117,8 +120,8 @@ class dsnote_app : public QObject {
         inline void reset() { this->set(INVALID_TASK); }
     };
 
-    QString m_active_lang_value;
-    QVariantMap m_available_langs_map;
+    QString m_active_stt_model;
+    QVariantMap m_available_stt_models_map;
     QString m_intermediate_text;
     double m_transcribe_progress = -1.0;
     OrgMkiolSttInterface m_stt;
@@ -131,7 +134,7 @@ class dsnote_app : public QObject {
     QTimer m_keepalive_timer;
     QTimer m_keepalive_current_task_timer;
 
-    [[nodiscard]] QVariantList available_langs() const;
+    [[nodiscard]] QVariantList available_stt_models() const;
     void handle_models_changed();
     void handle_text_decoded(const QString &text, const QString &lang,
                              int task);
@@ -154,15 +157,15 @@ class dsnote_app : public QObject {
     void update_progress();
     void update_stt_state();
     void update_speech();
-    void update_active_lang();
-    void update_available_langs();
+    void update_active_stt_model();
+    void update_available_stt_models();
     void update_listen();
     void update_current_task();
     void set_speech(stt_speech_state_t speech);
     void set_intermediate_text(const QString &text, const QString &lang,
                                int task);
-    [[nodiscard]] int active_lang_idx() const;
-    inline QString active_lang() { return m_active_lang_value; }
+    [[nodiscard]] int active_stt_model_idx() const;
+    inline QString active_stt_model() { return m_active_stt_model; }
     inline QString intermediate_text() const { return m_intermediate_text; }
     void update_active_lang_idx();
     inline stt_state_t stt_state() const { return m_stt_state; }

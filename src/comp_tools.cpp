@@ -198,7 +198,7 @@ bool gz_decode(const QString& file_in, const QString& file_out) {
 }
 
 bool archive_decode(const QString& file_in, archive_type type,
-                    files_to_extract&& files_out) {
+                    files_to_extract&& files_out, bool ignore_first_dir) {
     qDebug() << "extracting archive:" << file_in;
 
     struct archive* a = archive_read_new();
@@ -243,7 +243,10 @@ bool archive_decode(const QString& file_in, archive_type type,
                     if (entry_path.endsWith('/')) return {};
                     auto split = entry_path.split('/');
                     if (split.size() < 2) return {};
-                    split.first() = files_out.out_dir;
+                    if (ignore_first_dir)
+                        split.first() = files_out.out_dir;
+                    else
+                        split.push_front(files_out.out_dir);
                     return split.join('/');
                 }
 

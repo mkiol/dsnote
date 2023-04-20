@@ -30,7 +30,7 @@ class stt_config : public QObject {
     Q_INVOKABLE void cancel_model_download(const QString &id);
     Q_INVOKABLE void delete_model(const QString &id);
     Q_INVOKABLE double model_download_progress(const QString &id) const;
-    Q_INVOKABLE void set_default_model_for_lang(const QString &model_id);
+    Q_INVOKABLE void set_default_stt_model_for_lang(const QString &model_id);
 
    signals:
     void models_changed();

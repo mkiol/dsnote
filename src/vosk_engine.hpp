@@ -9,6 +9,7 @@
 #define VOSK_ENGINE_H
 
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -17,6 +18,7 @@
 #include <memory>
 #endif
 
+#include "punctuator.hpp"
 #include "stt_engine.hpp"
 
 struct VoskModel;
@@ -61,6 +63,8 @@ class vosk_engine : public stt_engine {
     void* m_vosklib_handle = nullptr;
     VoskModel* m_vosk_model = nullptr;
     VoskRecognizer* m_vosk_recognizer = nullptr;
+    std::optional<punctuator> m_punctuator;
+
 #ifdef DUMP_AUDIO_TO_FILE
     std::unique_ptr<std::ofstream> m_file_audio_input;
     std::unique_ptr<std::ofstream> m_file_audio_after_denoise;
@@ -69,6 +73,7 @@ class vosk_engine : public stt_engine {
 
     void open_vosk_lib();
     void create_vosk_model();
+    void create_punctuator();
     samples_process_result_t process_buff() override;
     void decode_speech(const vosk_buf_t& buf, bool eof);
     void reset_impl() override;

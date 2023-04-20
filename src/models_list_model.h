@@ -27,6 +27,9 @@ class ModelsListModel : public SelectableItemModel {
     Q_PROPERTY(bool downloading READ downloading NOTIFY downloadingChanged)
     Q_PROPERTY(QString lang READ lang WRITE setLang NOTIFY langChanged)
    public:
+    enum ModelRole { Stt = 0, Ttt = 1 };
+    Q_ENUM(ModelRole)
+
     explicit ModelsListModel(QObject *parent = nullptr);
     ~ModelsListModel() override;
 
@@ -61,20 +64,22 @@ class ModelsListItem : public SelectableItem {
         ScoreRole,
         DefaultRole,
         DownloadingRole,
-        ProgressRole
+        ProgressRole,
+        ModelRole
     };
 
     ModelsListItem(QObject *parent = nullptr) : SelectableItem{parent} {}
     ModelsListItem(const QString &id, const QString &name,
-                   const QString &langId = {}, bool available = true,
-                   int score = 2, bool default_for_lang = false,
-                   bool downloading = false, double progress = 0.0,
-                   QObject *parent = nullptr);
+                   const QString &langId, ModelsListModel::ModelRole role,
+                   bool available = true, int score = 2,
+                   bool default_for_lang = false, bool downloading = false,
+                   double progress = 0.0, QObject *parent = nullptr);
     QVariant data(int role) const override;
     QHash<int, QByteArray> roleNames() const override;
     inline QString id() const override { return m_id; }
     inline QString name() const { return m_name; }
     inline QString langId() const { return m_langId; }
+    inline ModelsListModel::ModelRole modelRole() const { return m_role; }
     inline bool available() const { return m_available; }
     inline int score() const { return m_score; }
     inline bool default_for_lang() const { return m_default_for_lang; }
@@ -85,6 +90,7 @@ class ModelsListItem : public SelectableItem {
     QString m_id;
     QString m_name;
     QString m_langId;
+    ModelsListModel::ModelRole m_role = ModelsListModel::ModelRole::Stt;
     bool m_available = false;
     int m_score = 2;
     bool m_default_for_lang = false;
