@@ -415,9 +415,9 @@ if(download_libstt)
 
     set(libstt_archive "${PROJECT_BINARY_DIR}/libstt.tar.xz")
 
-#    file(DOWNLOAD ${libstt_url} ${libstt_archive} ${external_lib_dir} STATUS libstt_status)
-#    file(ARCHIVE_EXTRACT INPUT ${libstt_archive} DESTINATION ${external_lib_dir}
-#        PATTERNS *.so VERBOSE)
+    file(DOWNLOAD ${libstt_url} ${libstt_archive} ${external_lib_dir} STATUS libstt_status)
+    file(ARCHIVE_EXTRACT INPUT ${libstt_archive} DESTINATION ${external_lib_dir}
+        PATTERNS *.so VERBOSE)
 
     add_library(stt SHARED IMPORTED)
     set_property(TARGET stt PROPERTY IMPORTED_LOCATION ${external_lib_dir}/libstt.so)
