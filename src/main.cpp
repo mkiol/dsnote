@@ -6,6 +6,7 @@
  */
 
 #include <fmt/format.h>
+#include <signal.h>
 
 #include <QCommandLineParser>
 #include <QDebug>
@@ -17,6 +18,8 @@
 #include <QTextCodec>
 #include <QTranslator>
 #include <QUrl>
+#include <optional>
+#include <utility>
 
 #ifdef USE_SFOS
 #ifdef QT_QML_DEBUG
@@ -34,9 +37,6 @@
 #include <QQmlApplicationEngine>
 #include <memory>
 #endif
-
-#include <optional>
-#include <utility>
 
 #include "config.h"
 #include "dsnote_app.h"
@@ -154,6 +154,12 @@ static void install_translator() {
     }
 }
 
+static void signal_handler(int sig) {
+    qDebug() << "received signal:" << sig;
+
+    QGuiApplication::quit();
+}
+
 int main(int argc, char* argv[]) {
 #ifdef USE_SFOS
     const auto& app = *SailfishApp::application(argc, argv);
@@ -176,6 +182,8 @@ int main(int argc, char* argv[]) {
 
     install_translator();
 
+    signal(SIGINT, signal_handler);
+
     qDebug() << "launch mode:" << launch_mode.value();
 
     settings::instance()->set_launch_mode(launch_mode.value());
@@ -184,7 +192,10 @@ int main(int argc, char* argv[]) {
         case settings::launch_mode_t::stt_service: {
             qDebug() << "starting stt service";
             stt_service::instance();
-            return QGuiApplication::exec();
+
+            auto ret = QGuiApplication::exec();
+            qDebug() << "exiting";
+            return ret;
         }
         case settings::launch_mode_t::app_stanalone:
             qDebug() << "starting standalone app";
@@ -240,5 +251,7 @@ int main(int argc, char* argv[]) {
         Qt::QueuedConnection);
     engine->load(url);
 #endif
-    return QGuiApplication::exec();
+    auto ret = QGuiApplication::exec();
+    qDebug() << "exiting";
+    return ret;
 }
