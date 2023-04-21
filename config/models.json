@@ -2313,7 +2313,7 @@
             "size": "52979372"
         },
         {
-            "name": "Punctuation correction (Kredor)",
+            "name": "Punctuation (Kredor)",
             "model_id": "multilang_hftc_kredor",
             "engine": "ttt_hftc",
             "lang_id": "multilang",
@@ -2328,10 +2328,88 @@
             "size": "1126993609"
         },
         {
-            "name": "Korekcja interpunkcji (Kredor)",
+            "name": "Punctuation (Kredor)",
+            "model_id": "en_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "en"
+        },
+        {
+            "name": "Zeichensetzung (Kredor)",
+            "model_id": "de_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "de"
+        },
+        {
+            "name": "Ponctuation (Kredor)",
+            "model_id": "fr_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "fr"
+        },
+        {
+            "name": "Puntuación (Kredor)",
+            "model_id": "es_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "es"
+        },
+        {
+            "name": "Punteggiatura (Kredor)",
+            "model_id": "it_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "it"
+        },
+        {
+            "name": "Interpunkcja (Kredor)",
             "model_id": "pl_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "pl"
+        },
+        {
+            "name": "Leestekens (Kredor)",
+            "model_id": "nl_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "nl"
+        },
+        {
+            "name": "Interpunkce (Kredor)",
+            "model_id": "cs_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "cs"
+        },
+        {
+            "name": "Pontuação (Kredor)",
+            "model_id": "pt_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "pt"
+        },
+        {
+            "name": "Interpunkcija (Kredor)",
+            "model_id": "sl_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "sl"
+        },
+        {
+            "name": "Στίξη (Kredor)",
+            "model_id": "el_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "el"
+        },
+        {
+            "name": "Interpunktion (Kredor)",
+            "model_id": "sv_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "sv"
+        },
+        {
+            "name": "Szótagolás (Kredor)",
+            "model_id": "hu_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "hu"
+        },
+        {
+            "name": "Punctuație (Kredor)",
+            "model_id": "ro_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "ro"
         }
     ]
 }
