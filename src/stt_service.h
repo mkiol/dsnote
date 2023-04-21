@@ -21,7 +21,7 @@
 #include "audio_source.h"
 #include "dbus_stt_adaptor.h"
 #include "models_manager.h"
-#include "python_modules_initer.hpp"
+#include "py_initer.hpp"
 #include "singleton.h"
 #include "stt_engine.hpp"
 
@@ -51,6 +51,7 @@ class stt_service : public QObject, public singleton<stt_service> {
         transcribing_file = 6,
         listening_single_sentence = 7
     };
+    friend QDebug operator<<(QDebug d, state_t state_value);
 
     enum class speech_mode_t { automatic = 0, manual = 1, single_sentence = 2 };
 
@@ -162,7 +163,7 @@ class stt_service : public QObject, public singleton<stt_service> {
     static const int SINGLE_SENTENCE_TIMEOUT = 10000;  // 10s
 
     int m_last_task_id = INVALID_TASK;
-    python_modules_initer m_initer;
+    std::optional<py_initer> m_py_initer;
     std::unique_ptr<stt_engine> m_engine;
     std::unique_ptr<audio_source> m_source;
     std::map<QString, model_data_t> m_available_stt_models_map;
@@ -203,7 +204,6 @@ class stt_service : public QObject, public singleton<stt_service> {
     std::optional<model_files_t> choose_model_files(QString model_id = {});
     inline auto recording() const { return static_cast<bool>(m_source); };
     void refresh_status();
-    static QString state_str(state_t state_value);
     void stop_engine_gracefully();
     void stop_engine();
     QString test_default_stt_model(const QString &lang) const;
@@ -223,6 +223,8 @@ class stt_service : public QObject, public singleton<stt_service> {
     QString test_default_model(
         const QString &lang,
         const std::map<QString, model_data_t> &available_models_map) const;
+    void async_init_py_modules();
+    void set_state(state_t new_state);
 
     // DBus
     Q_INVOKABLE int StartListen(int mode, const QString &lang, bool translate);

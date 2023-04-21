@@ -10,6 +10,7 @@
 #include <QCoreApplication>
 #include <QDBusConnection>
 #include <QDebug>
+#include <QEventLoop>
 #include <algorithm>
 #include <functional>
 
@@ -19,6 +20,37 @@
 #include "settings.h"
 #include "vosk_engine.hpp"
 #include "whisper_engine.hpp"
+
+QDebug operator<<(QDebug d, stt_service::state_t state_value) {
+    switch (state_value) {
+        case stt_service::state_t::busy:
+            d << "busy";
+            break;
+        case stt_service::state_t::idle:
+            d << "idle";
+            break;
+        case stt_service::state_t::listening_manual:
+            d << "listening-manual";
+            break;
+        case stt_service::state_t::listening_auto:
+            d << "listening-auto";
+            break;
+        case stt_service::state_t::not_configured:
+            d << "not-configured";
+            break;
+        case stt_service::state_t::transcribing_file:
+            d << "transcribing-file";
+            break;
+        case stt_service::state_t::listening_single_sentence:
+            d << "listening-single-sentence";
+            break;
+        case stt_service::state_t::unknown:
+            d << "unknown";
+            break;
+    }
+
+    return d;
+}
 
 stt_service::stt_service(QObject *parent)
     : QObject{parent}, m_stt_adaptor{this} {
@@ -156,7 +188,6 @@ stt_service::stt_service(QObject *parent)
         m_keepalive_timer.setInterval(KEEPALIVE_TIME);
         connect(&m_keepalive_timer, &QTimer::timeout, this,
                 &stt_service::handle_keepalive_timeout);
-        m_keepalive_timer.start();
 
         m_keepalive_current_task_timer.setSingleShot(true);
         m_keepalive_current_task_timer.setTimerType(Qt::VeryCoarseTimer);
@@ -174,6 +205,13 @@ stt_service::stt_service(QObject *parent)
             qWarning() << "dbus object registration failed";
             throw std::runtime_error("dbus object registration failed");
         }
+    }
+
+    async_init_py_modules();
+
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::stt_service) {
+        m_keepalive_timer.start();
     }
 
     handle_models_changed();
@@ -326,6 +364,30 @@ QString stt_service::lang_from_model_id(const QString &model_id) {
     }
 
     return l.first();
+}
+
+void stt_service::async_init_py_modules() {
+    if (m_py_initer) return;
+
+#ifdef USE_SFOS
+    QEventLoop loop;
+
+    auto job = std::thread([&] {
+        refresh_status();
+
+        py_initer::init_modules();
+        qDebug() << "py modules inited";
+        loop.quit();
+    });
+
+    loop.exec();
+
+    job.join();
+#endif
+
+    m_py_initer.emplace();
+
+    refresh_status();
 }
 
 QString stt_service::restart_engine(speech_mode_t speech_mode,
@@ -875,9 +937,17 @@ int stt_service::speech() const {
     return 0;
 }
 
+void stt_service::set_state(state_t new_state) {
+    if (new_state != m_state) {
+        qDebug() << "state changed:" << m_state << "=>" << new_state;
+        m_state = new_state;
+        emit state_changed();
+    }
+}
+
 void stt_service::refresh_status() {
     state_t new_state;
-    if (models_manager::instance()->busy()) {
+    if (!m_py_initer || models_manager::instance()->busy()) {
         new_state = state_t::busy;
     } else if (!models_manager::instance()->has_model_of_role(
                    models_manager::model_role::stt)) {
@@ -907,33 +977,7 @@ void stt_service::refresh_status() {
         new_state = state_t::idle;
     }
 
-    if (new_state != m_state) {
-        qDebug() << "state changed:" << state_str(m_state) << "=>"
-                 << state_str(new_state);
-        m_state = new_state;
-        emit state_changed();
-    }
-}
-
-QString stt_service::state_str(state_t state_value) {
-    switch (state_value) {
-        case state_t::busy:
-            return QStringLiteral("busy");
-        case state_t::idle:
-            return QStringLiteral("idle");
-        case state_t::listening_manual:
-            return QStringLiteral("listening_manual");
-        case state_t::listening_auto:
-            return QStringLiteral("listening_auto");
-        case state_t::not_configured:
-            return QStringLiteral("not_configured");
-        case state_t::transcribing_file:
-            return QStringLiteral("transcribing_file");
-        case state_t::listening_single_sentence:
-            return QStringLiteral("listening_single_sentence");
-        default:
-            return QStringLiteral("unknown");
-    }
+    set_state(new_state);
 }
 
 QString stt_service::default_stt_model() const {

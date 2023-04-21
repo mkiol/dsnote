@@ -197,8 +197,8 @@ set(dsnote_lib_sources
     ${sources_dir}/denoiser.cpp
     ${sources_dir}/punctuator.hpp
     ${sources_dir}/punctuator.cpp
-    ${sources_dir}/python_modules_initer.hpp
-    ${sources_dir}/python_modules_initer.cpp)
+    ${sources_dir}/py_initer.hpp
+    ${sources_dir}/py_initer.cpp)
 
 configure_file(config.h.in config.h)
 

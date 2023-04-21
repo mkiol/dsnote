@@ -5,8 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef PYTHON_MODULES_INITER_HPP
-#define PYTHON_MODULES_INITER_HPP
+#ifndef PY_INITER_HPP
+#define PY_INITER_HPP
 
 #ifdef USE_SFOS
 #include <QStandardPaths>
@@ -22,9 +22,12 @@
 
 namespace py = pybind11;
 
-class python_modules_initer {
+class py_initer {
    public:
-    python_modules_initer();
+    py_initer() = default;
+#ifdef USE_SFOS
+    static bool init_modules();
+#endif
 
    private:
 #ifdef USE_SFOS
@@ -32,14 +35,13 @@ class python_modules_initer {
         QStringLiteral("/usr/share/%1/lib/python.tar.xz").arg(APP_BINARY_ID);
     inline static const auto python_site_path = "python3.8/site-packages";
 #endif
-    std::optional<py::scoped_interpreter> m_py_interpreter;
-    std::optional<py::gil_scoped_release> m_py_gil_release{};
+    py::scoped_interpreter m_py_interpreter{};
+    py::gil_scoped_release m_py_gil_release{};
 
 #ifdef USE_SFOS
-    static bool init();
     static bool unpack_modules();
     static bool modules_installed();
 #endif
 };
 
-#endif  // PYTHON_MODULES_INITER_HPP
+#endif  // PY_INITER_HPP

@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "python_modules_initer.hpp"
+#include "py_initer.hpp"
 
 #ifdef USE_SFOS
 #include <QDebug>
@@ -17,16 +17,8 @@
 #include "settings.h"
 #endif
 
-python_modules_initer::python_modules_initer() {
 #ifdef USE_SFOS
-    if (!init()) return;
-#endif
-    if (!m_py_interpreter) m_py_interpreter.emplace();
-    if (!m_py_gil_release) m_py_gil_release.emplace();
-}
-
-#ifdef USE_SFOS
-bool python_modules_initer::init() {
+bool py_initer::init_modules() {
     if (!modules_installed()) {
         unpack_modules();
         if (!modules_installed()) {
@@ -41,16 +33,16 @@ bool python_modules_initer::init() {
 
     qDebug() << "setting env PYTHONPATH=" << py_path;
 
-    ::setenv("PYTHONPATH", py_path.toStdString().c_str(), true);
+    setenv("PYTHONPATH", py_path.toStdString().c_str(), true);
 
     return true;
 }
 
-bool python_modules_initer::unpack_modules() {
+bool py_initer::unpack_modules() {
     qDebug() << "unpacking py modules";
 
     if (!QFileInfo::exists(python_archive_path)) {
-        qWarning() << "python archive does not exist";
+        qWarning() << "py archive does not exist";
         return false;
     }
 
@@ -61,14 +53,14 @@ bool python_modules_initer::unpack_modules() {
     if (QFileInfo::exists(unpack_path)) QFile::remove(unpack_path);
 
     if (!comp_tools::xz_decode(python_archive_path, unpack_path)) {
-        qWarning() << "failed to extract python archive";
+        qWarning() << "failed to extract py archive";
         settings::instance()->set_python_modules_checksum({});
         return false;
     }
 
     if (!comp_tools::archive_decode(unpack_path, comp_tools::archive_type::tar,
                                     {python_unpack_path, {}}, false)) {
-        qWarning() << "failed to extract python tar archive";
+        qWarning() << "failed to extract py tar archive";
         QFile::remove(unpack_path);
         settings::instance()->set_python_modules_checksum({});
         return false;
@@ -84,15 +76,15 @@ bool python_modules_initer::unpack_modules() {
     return true;
 }
 
-bool python_modules_initer::modules_installed() {
+bool py_initer::modules_installed() {
     auto old_checksum = settings::instance()->python_modules_checksum();
     if (old_checksum.isEmpty()) {
-        qDebug() << "py modules checksum missing => need to unpack";
+        qDebug() << "py modules checksum missing, need to unpack";
         return false;
     }
 
     if (old_checksum != checksum_tools::make_checksum(python_archive_path)) {
-        qDebug() << "py modules checksum is invalid => need to unpack";
+        qDebug() << "py modules checksum is invalid, need to unpack";
         return false;
     }
 
@@ -101,7 +93,7 @@ bool python_modules_initer::modules_installed() {
         python_site_path;
 
     if (!QFile::exists(py_path)) {
-        qDebug() << "no python site dir";
+        qDebug() << "no py site dir";
         return false;
     }
 
