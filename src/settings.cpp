@@ -140,6 +140,17 @@ void settings::set_default_stt_model_for_lang(const QString& lang,
     }
 }
 
+bool settings::restore_punctuation() const {
+    return value(QStringLiteral("service/restore_punctuation"), true).toBool();
+}
+
+void settings::set_restore_punctuation(bool value) {
+    if (restore_punctuation() != value) {
+        setValue(QStringLiteral("service/restore_punctuation"), value);
+        emit restore_punctuation_changed();
+    }
+}
+
 settings::speech_mode_t settings::speech_mode() const {
     return static_cast<speech_mode_t>(
         value(QStringLiteral("speech_mode"),

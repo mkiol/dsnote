@@ -38,6 +38,8 @@ class settings : public QSettings, public singleton<settings> {
         QString models_dir_name READ models_dir_name NOTIFY models_dir_changed)
     Q_PROPERTY(QString default_stt_model READ default_stt_model WRITE
                    set_default_stt_model NOTIFY default_stt_model_changed)
+    Q_PROPERTY(bool restore_punctuation READ restore_punctuation WRITE
+                   set_restore_punctuation NOTIFY restore_punctuation_changed)
 
    public:
     enum class launch_mode_t { app_stanalone, app, stt_service };
@@ -82,7 +84,7 @@ class settings : public QSettings, public singleton<settings> {
     void set_models_dir_url(const QUrl &value);
     QString models_dir_name() const;
 
-    // stt
+    // service - stt
     QString default_stt_model() const;
     void set_default_stt_model(const QString &value);
     QStringList enabled_models();
@@ -90,6 +92,8 @@ class settings : public QSettings, public singleton<settings> {
     QString default_stt_model_for_lang(const QString &lang);
     void set_default_stt_model_for_lang(const QString &lang,
                                         const QString &value);
+    bool restore_punctuation() const;
+    void set_restore_punctuation(bool value);
 
    signals:
     // app
@@ -102,6 +106,7 @@ class settings : public QSettings, public singleton<settings> {
     void models_dir_changed();
     void default_stt_model_changed();
     void default_stt_models_changed(const QString &lang);
+    void restore_punctuation_changed();
 
    private:
     inline static const QString settings_filename =

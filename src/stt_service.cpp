@@ -322,7 +322,8 @@ std::optional<stt_service::model_files_t> stt_service::choose_model_files(
     }
 
     // search for ttt model for stt lang
-    if (active_files) {
+    // only when restore punctuation is enabled
+    if (active_files && settings::instance()->restore_punctuation()) {
         auto it = std::find_if(
             models.cbegin(), models.cend(), [&](const auto &model) {
                 if (models_manager::role_of_engine(model.engine) !=

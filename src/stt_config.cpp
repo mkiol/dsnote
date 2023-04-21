@@ -16,8 +16,13 @@
 #include "settings.h"
 
 stt_config::stt_config(QObject *parent) : QObject{parent} {
-    connect(settings::instance(), &settings::models_dir_changed, this,
-            &stt_config::reload, Qt::QueuedConnection);
+    if (settings::instance()->launch_mode() == settings::launch_mode_t::app) {
+        connect(settings::instance(), &settings::models_dir_changed, this,
+                &stt_config::reload, Qt::QueuedConnection);
+        connect(settings::instance(), &settings::restore_punctuation_changed,
+                this, &stt_config::reload, Qt::QueuedConnection);
+    }
+
     connect(settings::instance(), &settings::default_stt_model_changed, this,
             [this] { emit default_model_changed(); });
     connect(models_manager::instance(), &models_manager::models_changed, this,

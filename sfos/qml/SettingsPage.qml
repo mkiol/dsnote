@@ -40,7 +40,8 @@ Page {
             ComboBox {
                 id: langCombo
                 label: qsTr("Active language model")
-                visible: app.configured && !service.busy && !app.busy
+                enabled: app.configured && !service.busy && !app.busy
+                opacity: enabled ? 1.0 : Theme.opacityOverlay
                 currentIndex: app.active_stt_model_idx
                 menu: ContextMenu {
                     Repeater {
@@ -137,6 +138,20 @@ Page {
                 description: qsTr("Translate decoded text to English. This option works only with Whisper models.")
                 onClicked: {
                     _settings.translate = !_settings.translate
+                }
+            }
+
+            TextSwitch {
+                checked: _settings.restore_punctuation
+                automaticCheck: false
+                text: qsTr("Restore punctuation")
+                description: qsTr("For speech to text models that don't support punctuation (.,:?!) " +
+                                  "use advanced punctuation restoration after decoding. To make it work, " +
+                                  "make sure you have downloaded 'Punctuation' model " +
+                                  "for your language. When this option is enabled model initialization takes " +
+                                  "a little longer.")
+                onClicked: {
+                    _settings.restore_punctuation = !_settings.restore_punctuation
                 }
             }
 

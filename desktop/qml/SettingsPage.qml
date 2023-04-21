@@ -132,6 +132,14 @@ Page {
                 }
             }
 
+            CheckBox {
+                checked: _settings.restore_punctuation
+                text: qsTr("Restore punctuation")
+                onCheckedChanged: {
+                    _settings.restore_punctuation = checked
+                }
+            }
+
             FileDialog {
                 id: fileDialog
                 title: qsTr("Please choose a directory")
