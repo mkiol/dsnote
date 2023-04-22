@@ -6,48 +6,48 @@
 
 cmake_minimum_required(VERSION 3.5)
 
-option(with_desktop "enable desktop ui" OFF)
-option(with_sfos "enable sfos ui" OFF)
+option(WITH_DESKTOP "enable desktop ui" OFF)
+option(WITH_SFOS "enable sfos ui" OFF)
 
-option(with_flatpak "enable flatpak build" OFF)
-option(with_tests "enable tests" OFF)
+option(WITH_FLATPAK "enable flatpak build" OFF)
+option(WITH_TESTS "enable tests" OFF)
 
-option(with_trace_logs "enable trace logging" OFF)
-option(with_sanitizers "enable asan and ubsan in debug build" ON)
-option(with_static_sanitizers "link asan and ubsan statically in debug build" OFF)
+option(WITH_TRACE_LOGS "enable trace logging" OFF)
+option(WITH_SANITIZERS "enable asan and ubsan in debug build" ON)
+option(WITH_STATIC_SANITIZERS "link asan and ubsan statically in debug build" OFF)
 
-option(download_libstt "download and install libstt shared lib" ON)
-option(build_vosk "download vosk, build and install shared lib" ON)
-option(build_libarchive "download libarchive, build and link statically" ON)
-option(build_fmt "download fmt, build and link statically" ON)
-option(build_catch2 "download catch2, build and link statically" ON)
-option(build_whispercpp "download whisper.cpp, build and link statically" ON)
-option(build_webrtcvad "download webrtc vad, build and link statically" ON)
-option(build_openblas "download openblas, build and link shared lib" ON)
-option(build_xz "download xz lib, build and link statically" ON)
-option(build_rnnoise "download rnnoise lib, build and link statically" ON)
-option(build_pybind11 "download pybind11, build and link statically" ON)
-option(build_pymodules "make python modules archive" ON)
+option(DOWNLOAD_LIBSTT "download and install libstt shared lib" ON)
+option(BUILD_VOSK "download vosk, build and install shared lib" ON)
+option(BUILD_LIBARCHIVE "download libarchive, build and link statically" ON)
+option(BUILD_FMT "download fmt, build and link statically" ON)
+option(BUILD_CATCH2 "download catch2, build and link statically" ON)
+option(BUILD_WHISPERCPP "download whisper.cpp, build and link statically" ON)
+option(BUILD_WEBRTCVAD "download webrtc vad, build and link statically" ON)
+option(BUILD_OPENBLAS "download openblas, build and link shared lib" ON)
+option(BUILD_XZ "download xz lib, build and link statically" ON)
+option(BUILD_RNNOISE "download rnnoise lib, build and link statically" ON)
+option(BUILD_PYBIND11 "download pybind11, build and link statically" ON)
+option(BUILD_PYMODULES "make python modules archive" ON)
 
-if(${with_desktop} AND ${with_sfos})
-    message(FATAL_ERROR "options with_desktop and with_sfos cannot be set together")
+if(${WITH_DESKTOP} AND ${WITH_SFOS})
+    message(FATAL_ERROR "options WITH_DESKTOP and WITH_SFOS cannot be set together")
 endif()
 
-if(NOT ${with_desktop} AND NOT ${with_sfos})
-    message(FATAL_ERROR "one of the options should be set (with_desktop or with_sfos)")
+if(NOT ${WITH_DESKTOP} AND NOT ${WITH_SFOS})
+    message(FATAL_ERROR "one of the options should be set (WITH_DESKTOP or WITH_SFOS)")
 endif()
 
-if(with_desktop)
-    set(build_pymodules OFF)
+if(WITH_DESKTOP)
+    set(BUILD_PYMODULES OFF)
 endif()
 
 set(info_id "dsnote")
 set(info_binary_id ${info_id})
 set(info_translations_id ${info_id})
-if(with_flatpak)
+if(WITH_FLATPAK)
     set(info_id "org.mkiol.Dsnote")
 endif()
-if(with_sfos)
+if(WITH_SFOS)
     set(info_binary_id "harbour-dsnote")
 endif()
 set(info_name "Speech Note")
@@ -65,34 +65,6 @@ set(info_dbus_interface "org.mkiol.Stt")
 set(info_conf_version "11")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · Åke Engelbrektson")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · 🤗Transformers")
-
-set(libstt_x8664_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.Linux.tar.xz")
-set(libstt_arm64_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.aarch64.tar.xz")
-set(libstt_arm32_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.armv7.tar.xz")
-set(fmt_source_url "https://github.com/fmtlib/fmt/releases/download/9.1.0/fmt-9.1.0.zip")
-set(fmt_checksum "6133244fe8ef6f75c5601e8069b37b04")
-set(libarchive_source_url "https://libarchive.org/downloads/libarchive-3.6.2.tar.gz")
-set(libarchive_checksum "b5b8efa8cba29396816d0dd5f61f3de3")
-set(catch2_source_url "https://github.com/catchorg/Catch2/archive/refs/tags/v3.3.2.tar.gz")
-set(catch2_checksum "6a15aa49dbdee13f279b73cab16ae203")
-set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/ea1f8a50d4f70b54d9dd03205207a80019e243f9.zip")
-set(whispercpp_checksum "8bf8086d3c43966f8adc8e2d1596de42")
-set(webrtcvad_source_url "https://github.com/webrtc-mirror/webrtc/archive/ac87c8df2780cb12c74942ec8a473718c76cb5b7.zip")
-set(webrtcvad_checksum "f1489c137b354594632d260978b283a4")
-set(openblas_source_url "https://github.com/xianyi/OpenBLAS/releases/download/v0.3.21/OpenBLAS-0.3.21.tar.gz")
-set(openblas_checksum "ffb6120e2309a2280471716301824805")
-set(openfst_source_url "https://github.com/alphacep/openfst/archive/7dfd808194105162f20084bb4d8e4ee4b65266d5.zip")
-set(openfst_checksum "734084e424d42f16424bd5279e4f0786")
-set(kaldi_source_url "https://github.com/alphacep/kaldi/archive/2abed6b15990d9438f70863f2b58bd8af8432043.zip")
-set(kaldi_checksum "4923c5b7599184c36db3342579676fbc")
-set(vosk_source_url "https://github.com/alphacep/vosk-api/archive/128c216c6137a36fbf5b0bf64d03501e91a6eeaa.zip")
-set(vosk_checksum "1f716b8132d5678823db0531b2c8285a")
-set(xz_source_url "https://downloads.sourceforge.net/lzmautils/xz-5.4.2.tar.gz")
-set(xz_checksum "4ac4e5da95aa8604a81e32079cb00d42")
-set(rnnoise_source_url "https://github.com/GregorR/rnnoise-nu/archive/26269304e120499485438cd93acf5127c6908c68.zip")
-set(rnnoise_checksum "fafe9bbf0e2b15df4a628434bea99dd3")
-set(pybind11_source_url "https://github.com/pybind/pybind11/archive/refs/tags/v2.10.4.tar.gz")
-set(pybind11_checksum "812eda11d2a114fc0e841faf9626d2c9")
 
 project(${info_id} VERSION 2.0.1)
 
@@ -127,6 +99,7 @@ set(systemd_dir "${PROJECT_SOURCE_DIR}/systemd")
 set(dbus_dir "${PROJECT_SOURCE_DIR}/dbus")
 set(rpath "${CMAKE_INSTALL_PREFIX}/share/${info_binary_id}/lib")
 set(binary_path "${CMAKE_INSTALL_PREFIX}/bin/${info_binary_id}")
+set(cmake_path "${PROJECT_SOURCE_DIR}/cmake")
 
 # global config
 
@@ -208,13 +181,13 @@ add_library(dsnote_lib STATIC ${dsnote_lib_sources})
 
 set(resources "")
 
-if(with_desktop)
+if(WITH_DESKTOP)
     list(APPEND resources
         "${desktop_dir}/resources.qrc"
         "${CMAKE_BINARY_DIR}/translations.qrc")
 endif()
 
-if(with_sfos)
+if(WITH_SFOS)
     list(APPEND resources
         "${sfos_dir}/resources.qrc")
 endif()
@@ -231,38 +204,8 @@ add_custom_command(TARGET ${info_binary_id} POST_BUILD
 
 # tests
 
-if(with_tests)
-    if(build_catch2)
-        include(FetchContent)
-
-        FetchContent_Declare(
-          Catch2
-          URL ${catch2_source_url}
-          URL_HASH MD5=${catch2_checksum}
-          SOURCE_DIR "${external_dir}/catch2"
-          BINARY_DIR "${PROJECT_BINARY_DIR}/external/catch2"
-          INSTALL_DIR "${PROJECT_BINARY_DIR}/external"
-        )
-        FetchContent_MakeAvailable(Catch2)
-    else()
-        find_package(Catch2 3 REQUIRED)
-    endif()
-
-    file(GLOB tests_src
-        "${tests_dir}/*.hpp"
-        "${tests_dir}/*.cpp"
-    )
-
-    add_executable(tests ${tests_src})
-    target_link_libraries(tests Catch2::Catch2WithMain)
-    target_link_libraries(tests dsnote_lib)
-
-    list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
-
-    include(CTest)
-    include(Catch)
-
-    catch_discover_tests(tests)
+if(WITH_TESTS)
+    include(${cmake_path}/tests.cmake)
 endif()
 
 # flags and definitions
@@ -276,10 +219,10 @@ add_library(compiler_flags INTERFACE)
 target_compile_features(compiler_flags INTERFACE cxx_std_17)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    if(with_sanitizers)
+    if(WITH_SANITIZERS)
         target_compile_options(compiler_flags INTERFACE
             "-pie;-Wall;-Wextra;-Wpedantic;-O1;-g3;-fsanitize=address,undefined")
-        if(with_static_sanitizers)
+        if(WITH_STATIC_SANITIZERS)
             target_link_options(compiler_flags INTERFACE
               "-pie;-static-libasan;-static-libubsan;-fsanitize=address,undefined")
         else()
@@ -297,9 +240,9 @@ endif()
 
 target_link_options(compiler_flags INTERFACE "-Wl,-rpath,${rpath}")
 
-target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${with_trace_logs}>:USE_TRACE_LOGS>")
-target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${with_sfos}>:USE_SFOS>")
-target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${with_desktop}>:USE_DESKTOP>")
+target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_TRACE_LOGS}>:USE_TRACE_LOGS>")
+target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_SFOS}>:USE_SFOS>")
+target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_DESKTOP}>:USE_DESKTOP>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<CONFIG:Debug>:DEBUG>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arch_x8664}>:ARCH_X86_64>")
@@ -308,26 +251,7 @@ target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arch_arm64}>:ARC
 
 # translations
 
-set(enabled_translations cs_CZ de en fr nl pl sv zh_CN)
-
-find_package(Qt5 COMPONENTS Core LinguistTools)
-
-set(ts_files "")
-foreach(lang ${enabled_translations})
-    list(APPEND ts_files "${translations_dir}/dsnote-${lang}.ts")
-endforeach()
-
-qt5_create_translation(qm_files ${CMAKE_SOURCE_DIR}/src ${desktop_dir}/qml ${sfos_dir}/qml ${ts_files})
-
-string(REPLACE ";" " " enabled_translations_str "${enabled_translations}")
-add_custom_command(
-  OUTPUT translations.qrc
-  COMMAND sh -c "${tools_dir}/make_translations_qrc.sh ${info_translations_id} /translations ${CMAKE_BINARY_DIR}/translations.qrc ${enabled_translations_str}"
-  DEPENDS ${qm_files}
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-  VERBATIM)
-add_library(translations STATIC "${CMAKE_BINARY_DIR}/translations.qrc")
-target_link_libraries(${info_binary_id} translations)
+include(${cmake_path}/translations.cmake)
 
 # dependencies
 
@@ -345,267 +269,67 @@ list(APPEND includes ${zlib_INCLUDE_DIRS})
 find_package(Qt5 COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick DBus LinguistTools REQUIRED)
 list(APPEND deps_libs Qt5::Core Qt5::Network Qt5::Multimedia Qt5::Gui Qt5::Quick Qt5::DBus)
 
-if(with_desktop)
+if(WITH_DESKTOP)
     find_package(Qt5 COMPONENTS QuickControls2 Widgets REQUIRED)
     list(APPEND deps_libs Qt5::QuickControls2 Qt5::Widgets)
 endif()
 
-if(build_pymodules)
-    set(py_ver "")
-    if(with_sfos)
-        set(py_ver "3.8")
-    endif()
-    add_custom_command(
-      OUTPUT python.tar.xz
-      COMMAND sh -c "${tools_dir}/make_pymodules.sh ${CMAKE_BINARY_DIR}/external/pymodules ${py_ver} ${PROJECT_BINARY_DIR}/python.tar.xz"
-      WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-      VERBATIM)
-    add_library(pymodules STATIC "${CMAKE_BINARY_DIR}/python.tar.xz")
-    list(APPEND deps pymodules)
+if(BUILD_PYMODULES)
+    include(${cmake_path}/pymodules.cmake)
 endif()
 
-if(build_rnnoise)
-    ExternalProject_Add(rnnoise
-            SOURCE_DIR ${external_dir}/rnnoise
-            BINARY_DIR ${PROJECT_BINARY_DIR}/external/rnnoise
-            INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-            URL "${rnnoise_source_url}"
-            URL_MD5 "${rnnoise_checksum}"
-            CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> && <BINARY_DIR>/autogen.sh &&
-                <BINARY_DIR>/configure --prefix=<INSTALL_DIR>
-                --disable-examples --disable-doc --disable-shared --enable-static --with-pic
-            BUILD_COMMAND ${MAKE}
-            BUILD_ALWAYS False
-            INSTALL_COMMAND make DESTDIR=/ install)
-    list(APPEND deps_libs "${external_lib_dir}/librnnoise-nu.a")
-    list(APPEND deps rnnoise)
+if(BUILD_RNNOISE)
+    include(${cmake_path}/rnnoise.cmake)
 endif()
 
-if(build_libarchive)
-    ExternalProject_Add(libarchive
-        SOURCE_DIR ${external_dir}/libarchive
-        BINARY_DIR ${PROJECT_BINARY_DIR}/external/libarchive
-        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-        URL "${libarchive_source_url}"
-        URL_MD5 "${libarchive_checksum}"
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --bindir=<INSTALL_DIR>/bin
-            --enable-shared=no --enable-static=yes --disable-acl --disable-xattr --disable-largefile
-            --without-zstd --without-lz4 --without-libiconv-prefix --without-iconv --without-libb2
-            --without-bz2lib --with-zlib --without-cng --without-openssl --without-xml2 --without-expat
-            --without-lzma --with-pic=yes
-        BUILD_COMMAND ${MAKE}
-        BUILD_ALWAYS False
-        INSTALL_COMMAND make DESTDIR=/ install)
-    list(APPEND deps libarchive)
-    list(APPEND deps_libs ${external_lib_dir}/libarchive.a)
+if(BUILD_LIBARCHIVE)
+    include(${cmake_path}/libarchive.cmake)
 else()
     pkg_search_module(libarchive REQUIRED libarchive)
     list(APPEND deps_libs ${libarchive_LIBRARIES})
     list(APPEND includes ${libarchive_INCLUDE_DIRS})
 endif()
 
-if(download_libstt)
-    if(arch_x8664)
-        set(libstt_url ${libstt_x8664_url})
-    elseif(arch_arm32)
-        set(libstt_url ${libstt_arm32_url})
-    elseif(arch_arm64)
-        set(libstt_url ${libstt_arm64_url})
-    endif()
-
-    set(libstt_archive "${PROJECT_BINARY_DIR}/libstt.tar.xz")
-
-    file(DOWNLOAD ${libstt_url} ${libstt_archive} ${external_lib_dir} STATUS libstt_status)
-    file(ARCHIVE_EXTRACT INPUT ${libstt_archive} DESTINATION ${external_lib_dir}
-        PATTERNS *.so VERBOSE)
-
-    add_library(stt SHARED IMPORTED)
-    set_property(TARGET stt PROPERTY IMPORTED_LOCATION ${external_lib_dir}/libstt.so)
-    list(APPEND deps stt)
-
-    add_library(kenlm SHARED IMPORTED)
-    set_property(TARGET kenlm PROPERTY IMPORTED_LOCATION ${external_lib_dir}/libkenlm.so)
-    list(APPEND deps kenlm)
+if(DOWNLOAD_LIBSTT)
+    include(${cmake_path}/libstt.cmake)
 endif()
 
-if(build_vosk)
-    ExternalProject_Add(openfst
-            SOURCE_DIR ${external_dir}/openfst
-            BINARY_DIR ${PROJECT_BINARY_DIR}/external/openfst
-            INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-            URL "${openfst_source_url}"
-            URL_MD5 "${openfst_checksum}"
-            CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> && autoreconf -fi &&
-                <BINARY_DIR>/configure --prefix=<INSTALL_DIR>
-                --disable-bin --disable-dependency-tracking --enable-compact-fsts --enable-compress
-                --enable-const-fsts --enable-far --enable-linear-fsts --enable-lookahead-fsts
-                --enable-mpdt --enable-ngram-fsts --enable-pdt --disable-shared --enable-static
-                --with-pic
-            BUILD_COMMAND ${MAKE}
-            BUILD_ALWAYS False
-            INSTALL_COMMAND make DESTDIR=/ install)
-
-    set(kaldi_flags "-O3 -I${external_include_dir}")
-    ExternalProject_Add(kaldi
-        SOURCE_DIR ${external_dir}/kaldi
-        BINARY_DIR ${PROJECT_BINARY_DIR}/external/kaldi
-        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-        URL "${kaldi_source_url}"
-        URL_MD5 "${kaldi_checksum}"
-        PATCH_COMMAND patch --forward --unified <SOURCE_DIR>/CMakeLists.txt
-            -i ${patches_dir}/kaldi.patch ||
-                echo "patch cmd failed, likely already patched"
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
-            -DCMAKE_INSTALL_INCLUDEDIR=${external_include_dir} -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-            -DBUILD_SHARED_LIBS=OFF -DKALDI_BUILD_EXE=OFF -DKALDI_BUILD_TEST=OFF -DKALDI_VERSION=1
-            -DCMAKE_CXX_FLAGS=${kaldi_flags} -DENABLE_CUDA=OFF
-        BUILD_ALWAYS False)
-    ExternalProject_Add_StepDependencies(kaldi configure openfst)
-
-    ExternalProject_Add(vosk
-        SOURCE_DIR ${external_dir}/vosk
-        BINARY_DIR ${PROJECT_BINARY_DIR}/external/vosk
-        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-        URL "${vosk_source_url}"
-        URL_MD5 "${vosk_checksum}"
-        PATCH_COMMAND patch --forward --unified <SOURCE_DIR>/CMakeLists.txt
-            -i ${patches_dir}/vosk.patch ||
-                echo "patch cmd failed, likely already patched"
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
-            -DCMAKE_INSTALL_INCLUDEDIR=${external_include_dir} -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-            -DCMAKE_LIBRARY_PATH=${external_lib_dir} -DCMAKE_INCLUDE_PATH=${external_include_dir}
-            -DCMAKE_CXX_FLAGS=-O3
-        BUILD_ALWAYS False)
-    ExternalProject_Add_StepDependencies(vosk configure kaldi)
-    ExternalProject_Add_StepDependencies(vosk configure openblas)
-
-    list(APPEND deps vosk)
+if(BUILD_VOSK)
+    include(${cmake_path}/vosk.cmake)
 endif()
 
-if(build_fmt)
-    ExternalProject_Add(fmt
-        SOURCE_DIR ${external_dir}/fmt
-        BINARY_DIR ${PROJECT_BINARY_DIR}/external/fmt
-        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-        URL "${fmt_source_url}"
-        URL_MD5 "${fmt_checksum}"
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
-            -DCMAKE_INSTALL_INCLUDEDIR=${external_include_dir} -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DFMT_DOC=OFF -DFMT_TEST=OFF -DFMT_FUZZ=OFF
-        BUILD_ALWAYS False)
-    list(APPEND deps_libs ${external_lib_dir}/libfmt.a)
-    list(APPEND deps fmt)
+if(BUILD_FMT)
+    include(${cmake_path}/fmt.cmake)
 else()
     pkg_search_module(fmt REQUIRED fmt)
     list(APPEND deps_libs ${fmt_LIBRARIES})
     list(APPEND includes ${fmt_INCLUDE_DIRS})
 endif()
 
-if(build_whispercpp)
-    set(whispercpp_flags -O3 -ffast-math -I${external_include_dir}/openblas)
-    if(arch_arm32)
-        list(APPEND whispercpp_flags -mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access)
-    endif()
-    list(JOIN whispercpp_flags " " whispercpp_flags)
-
-    ExternalProject_Add(whispercpp
-        SOURCE_DIR ${external_dir}/whispercpp
-        BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercpp
-        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-        URL "${whispercpp_source_url}"
-        URL_MD5 "${whispercpp_checksum}"
-        PATCH_COMMAND patch --unified -p1 --directory=<SOURCE_DIR>
-                    -i ${patches_dir}/whispercpp.patch ||
-                        echo "patch cmd failed, likely already patched"
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
-            -DCMAKE_LIBRARY_PATH=${external_lib_dir}
-            -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF
-            -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF -DWHISPER_SUPPORT_OPENBLAS=ON
-            -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
-        BUILD_ALWAYS False)
-    ExternalProject_Add_StepDependencies(whispercpp configure openblas)
-
-    list(APPEND deps_libs ${external_lib_dir}/static/libwhisper.a)
-    list(APPEND deps whispercpp)
+if(BUILD_WHISPERCPP)
+    include(${cmake_path}/whispercpp.cmake)
 else()
     find_library(whispercpp_path whisper REQUIRED)
     list(APPEND deps_libs ${whispercpp_path})
 endif()
 
-if(build_webrtcvad)
-    ExternalProject_Add(webrtcvad
-        SOURCE_DIR ${external_dir}/webrtcvad
-        BINARY_DIR ${PROJECT_BINARY_DIR}/external/webrtcvad
-        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-        URL "${webrtcvad_source_url}"
-        URL_MD5 "${webrtcvad_checksum}"
-        PATCH_COMMAND patch --forward --unified -p0 <SOURCE_DIR>/CMakeLists.txt
-                    -i ${patches_dir}/webrtcvad.patch ||
-                        echo "patch cmd failed, likely already patched"
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
-            -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        BUILD_ALWAYS False)
-    list(APPEND deps_libs ${external_lib_dir}/libvad.a)
-    list(APPEND deps webrtcvad)
+if(BUILD_WEBRTCVAD)
+    include(${cmake_path}/webrtcvad.cmake)
 else()
     find_library(webrtcvad_path vad REQUIRED)
     list(APPEND deps_libs ${webrtcvad_path})
 endif()
 
-if(build_openblas)
-    set(openblas_opts
-        -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/external
-        -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
-        -DCMAKE_INSTALL_INCLUDEDIR=${external_include_dir}
-        -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        -DBUILD_TESTING=OFF
-        -DBUILD_WITHOUT_LAPACK=OFF
-        -DC_LAPACK=ON
-        -DDYNAMIC_ARCH=ON
-        -DBUILD_STATIC_LIBS=OFF
-        -DBUILD_SHARED_LIBS=ON
-    )
-    if(arch_arm32)
-        list(APPEND openblas_opts
-            "-DCMAKE_C_FLAGS=-mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access"
-            -DTARGET=ARMV7)
-    elseif(arch_arm64)
-        list(APPEND openblas_opts -DTARGET=ARMV8)
-    endif()
-
-    ExternalProject_Add(openblas
-        SOURCE_DIR ${external_dir}/openblas
-        BINARY_DIR ${PROJECT_BINARY_DIR}/external/openblas
-        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-        URL "${openblas_source_url}"
-        URL_MD5 "${openblas_checksum}"
-        CMAKE_ARGS ${openblas_opts}
-        BUILD_ALWAYS False)
-
-    list(APPEND deps_libs "${external_lib_dir}/libopenblas.so")
-    list(APPEND deps openblas)
+if(BUILD_OPENBLAS)
+    include(${cmake_path}/openblas.cmake)
 else()
     pkg_search_module(openblas REQUIRED openblas)
     list(APPEND deps_libs ${openblas_LIBRARIES})
     list(APPEND includes ${openblas_INCLUDE_DIRS})
 endif()
 
-if(build_xz)
-    ExternalProject_Add(xz
-            SOURCE_DIR ${external_dir}/xz
-            BINARY_DIR ${PROJECT_BINARY_DIR}/external/xz
-            INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-            URL "${xz_source_url}"
-            URL_MD5 "${xz_checksum}"
-            CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
-                --disable-encoders --disable-xz --disable-xzdec --disable-lzmadec --disable-lzmainfo
-                --disable-lzma-links --disable-scripts --disable-doc --disable-shared --enable-static
-                --with-pic
-            BUILD_COMMAND ${MAKE}
-            BUILD_ALWAYS False
-            INSTALL_COMMAND make DESTDIR=/ install)
-    list(APPEND deps_libs "${external_lib_dir}/liblzma.a")
-    list(APPEND deps xz)
+if(BUILD_XZ)
+    include(${cmake_path}/xz.cmake)
 else()
     pkg_search_module(xz REQUIRED liblzma>=5.4.1)
     list(APPEND deps_libs ${xz_LIBRARIES})
@@ -617,25 +341,15 @@ list(APPEND deps_dirs ${Python_LIBRARY_DIRS})
 list(APPEND deps_libs ${Python_LIBRARIES})
 list(APPEND includes ${Python_INCLUDE_DIRS})
 
-if(build_pybind11)
-    ExternalProject_Add(pybind11
-        SOURCE_DIR ${external_dir}/pybind11
-        BINARY_DIR ${PROJECT_BINARY_DIR}/external/pybind11
-        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-        URL "${pybind11_source_url}"
-        URL_MD5 "${pybind11_checksum}"
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
-            -DCMAKE_INSTALL_INCLUDEDIR=${external_include_dir} -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF
-            -DPYBIND11_INSTALL=ON -DPYBIND11_TEST=OFF -DPYBIND11_FINDPYTHON=ON
-        BUILD_ALWAYS False)
-    list(APPEND deps pybind11)
+if(BUILD_PYBIND11)
+    include(${cmake_path}/pybind11.cmake)
 else()
     pkg_search_module(pybind11 REQUIRED pybind11)
     list(APPEND deps_libs ${pybind11_LIBRARIES})
     list(APPEND includes ${pybind11_INCLUDE_DIRS})
 endif()
 
-if(with_sfos)
+if(WITH_SFOS)
     pkg_search_module(sailfish REQUIRED sailfishapp)
     list(APPEND deps_libs ${sailfish_LIBRARIES})
     list(APPEND includes ${sailfish_INCLUDE_DIRS})
@@ -658,7 +372,7 @@ if(deps)
     add_dependencies(dsnote_lib ${deps})
 endif()
 
-if(with_tests)
+if(WITH_TESTS)
     target_include_directories(tests PRIVATE ${includes})
     target_link_libraries(tests ${deps_libs})
     if(deps)
@@ -668,71 +382,17 @@ endif()
 
 # install
 
-install(TARGETS ${info_binary_id} RUNTIME DESTINATION bin)
-
-if(with_sfos)
-    install(FILES "${sfos_dir}/${info_binary_id}.desktop" DESTINATION share/applications)
-
-    if(download_libstt)
-        install(FILES "${external_lib_dir}/libstt.so" DESTINATION share/${info_binary_id}/lib)
-        install(FILES "${external_lib_dir}/libkenlm.so" DESTINATION share/${info_binary_id}/lib)
-    endif()
-
-    if(build_openblas)
-        install(FILES "${external_lib_dir}/libopenblas.so.0.3" DESTINATION share/${info_binary_id}/lib RENAME libopenblas.so.0)
-    endif()
-
-    if(build_vosk)
-        install(FILES "${external_lib_dir}/libvosk.so" DESTINATION share/${info_binary_id}/lib)
-    endif()
-
-    if(build_pymodules)
-        install(FILES ${PROJECT_BINARY_DIR}/python.tar.xz DESTINATION share/${info_binary_id}/lib)
-    endif()
-
-    install(FILES "${sfos_dir}/icons/86x86/${info_binary_id}.png" DESTINATION share/icons/hicolor/86x86/apps)
-    install(FILES "${sfos_dir}/icons/108x108/${info_binary_id}.png" DESTINATION share/icons/hicolor/108x108/apps)
-    install(FILES "${sfos_dir}/icons/128x128/${info_binary_id}.png" DESTINATION share/icons/hicolor/128x128/apps)
-    install(FILES "${sfos_dir}/icons/172x172/${info_binary_id}.png" DESTINATION share/icons/hicolor/172x172/apps)
-
-    install(FILES ${qm_files} DESTINATION "share/${info_binary_id}/translations")
-
-    install(DIRECTORY "${sfos_dir}/qml" DESTINATION share/${info_binary_id})
-
-    configure_file("${systemd_dir}/${info_id}.service" "${PROJECT_BINARY_DIR}/${info_binary_id}.service")
-    install(FILES "${PROJECT_BINARY_DIR}/${info_binary_id}.service" DESTINATION lib/systemd/user)
-
-    configure_file("${dbus_dir}/${info_dbus_service}.service" "${PROJECT_BINARY_DIR}/${info_dbus_service}.service")
-    install(FILES "${PROJECT_BINARY_DIR}/${info_dbus_service}.service" DESTINATION "share/dbus-1/services")
+if(WITH_SFOS)
+    include(${cmake_path}/install_sfos.cmake)
 endif()
 
-if(with_desktop)
-    install(FILES "${desktop_dir}/${info_binary_id}.desktop" DESTINATION share/applications)
-    install(FILES "${desktop_dir}/${info_binary_id}.svg" DESTINATION share/icons/hicolor/scalable/apps)
-
-    if(download_libstt)
-        install(FILES "${external_lib_dir}/libstt.so" DESTINATION lib)
-        install(FILES "${external_lib_dir}/libkenlm.so" DESTINATION lib)
-    endif()
-
-    if(build_openblas)
-        install(FILES "${external_lib_dir}/libopenblas.so.0.3" DESTINATION lib RENAME libopenblas.so.0)
-    endif()
-
-    if(build_vosk)
-        install(FILES "${external_lib_dir}/libvosk.so" DESTINATION lib)
-    endif()
-
-    configure_file("${systemd_dir}/${info_id}.service" "${PROJECT_BINARY_DIR}/${info_binary_id}.service")
-    install(FILES "${PROJECT_BINARY_DIR}/${info_binary_id}.service" DESTINATION lib/systemd/user)
-
-    configure_file("${dbus_dir}/${info_dbus_service}.service" "${PROJECT_BINARY_DIR}/${info_dbus_service}.service")
-    install(FILES "${PROJECT_BINARY_DIR}/${info_dbus_service}.service" DESTINATION lib/systemd/user)
+if(WITH_DESKTOP)
+    include(${cmake_path}/install_desktop.cmake)
 endif()
 
 # misc
 
-if(with_sfos)
+if(WITH_SFOS)
     file(WRITE "${CMAKE_BINARY_DIR}/QtCreatorDeployment.txt"
         "${CMAKE_INSTALL_PREFIX}\n${CMAKE_BINARY_DIR}/${info_binary_id}:bin\n")
 endif()
