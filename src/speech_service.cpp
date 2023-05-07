@@ -102,7 +102,7 @@ speech_service::speech_service(QObject *parent)
         settings::instance(), &settings::default_stt_model_changed, this,
         [this]() {
             if (settings::instance()->launch_mode() ==
-                settings::launch_mode_t::app) {
+                settings::launch_mode_t::service) {
                 auto model = default_stt_model();
                 qDebug() << "[service => dbus] signal "
                             "DefaultSttModelPropertyChanged:"
@@ -113,7 +113,7 @@ speech_service::speech_service(QObject *parent)
             emit default_stt_model_changed();
 
             if (settings::instance()->launch_mode() ==
-                settings::launch_mode_t::app) {
+                settings::launch_mode_t::service) {
                 auto lang = default_stt_lang();
                 qDebug()
                     << "[service => dbus] signal DefaultSttLangPropertyChanged:"
@@ -128,7 +128,7 @@ speech_service::speech_service(QObject *parent)
         settings::instance(), &settings::default_tts_model_changed, this,
         [this]() {
             if (settings::instance()->launch_mode() ==
-                settings::launch_mode_t::app) {
+                settings::launch_mode_t::service) {
                 auto model = default_tts_model();
                 qDebug() << "[service => dbus] signal "
                             "DefaultTtsModelPropertyChanged:"
@@ -139,7 +139,7 @@ speech_service::speech_service(QObject *parent)
             emit default_tts_model_changed();
 
             if (settings::instance()->launch_mode() ==
-                settings::launch_mode_t::app) {
+                settings::launch_mode_t::service) {
                 auto lang = default_tts_lang();
                 qDebug()
                     << "[service => dbus] signal DefaultTtsLangPropertyChanged:"

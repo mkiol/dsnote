@@ -30,7 +30,7 @@
 class speech_service : public QObject, public singleton<speech_service> {
     Q_OBJECT
 
-    // STT DBus API
+    // Speech DBus API
     Q_PROPERTY(int State READ dbus_state CONSTANT)
     Q_PROPERTY(int Speech READ speech CONSTANT)
     Q_PROPERTY(QVariantMap SttLangs READ available_stt_langs CONSTANT)
