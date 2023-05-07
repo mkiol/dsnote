@@ -49,7 +49,12 @@ CoverBackground {
             }
             return 0;
         }
-        off: (!app.stt_configured && !app.tts_configured) || !app.connected
+        off: {
+            if (!app.connected) return true
+            if (_settings.mode === Settings.Stt && !app.stt_configured) return true
+            if (_settings.mode === Settings.Tts && !app.tts_configured) return true
+            return false
+        }
         Behavior on y { NumberAnimation { duration: 300; easing {type: Easing.OutBack} } }
     }
 
@@ -73,7 +78,7 @@ CoverBackground {
                   app.state === DsnoteApp.StatePlayingSpeech ||
                   (app.state === DsnoteApp.StateIdle && _settings.mode === Settings.Stt && _settings.speech_mode === Settings.SpeechSingleSentence) ||
                   (app.state === DsnoteApp.StateIdle && _settings.mode === Settings.Tts && _settings.note.length > 0)) &&
-                 !app.busy && !service.busy && app.connected
+                 !app.busy && !service.busy && !indicator.off
 
         CoverAction {
             iconSource: {
@@ -84,7 +89,7 @@ CoverBackground {
                     return "image://theme/icon-cover-cancel"
                 }
                 if (_settings.mode === Settings.Stt)
-                    return "image://theme/icon-cover-record"
+                    return "image://theme/icon-cover-unmute"
                 return "image://theme/icon-cover-play"
             }
 

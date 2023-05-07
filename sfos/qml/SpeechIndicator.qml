@@ -126,7 +126,6 @@ Item {
         visible: root.status === 2 || root.status === 3
         columns: 2
         anchors.centerIn: parent
-        //x: root.width / 8
         spacing: root.width / 8
         Repeater {
             delegate: squareIndicator
@@ -138,7 +137,7 @@ Item {
         visible: root.off
         anchors.centerIn: parent
         width: root.width
-        height: root.width / 12
+        height: 2
         radius: height
         rotation: 45
         color: root.color

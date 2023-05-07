@@ -112,7 +112,7 @@ Page {
                     if (!app.connected) return qsTr("Starting...")
                     if ((_settings.mode === Settings.Stt && !app.stt_configured) ||
                         (_settings.mode === Settings.Tts && !app.tts_configured)) {
-                        return qsTr("Language model is not configured")
+                        return qsTr("Language model is not set")
                     }
                     if (app.speech === DsnoteApp.SpeechStateSpeechInitializing)
                         return qsTr("Getting ready, please wait...")

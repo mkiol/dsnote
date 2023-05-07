@@ -115,7 +115,7 @@ Page {
         ViewPlaceholder {
             enabled: textArea.text.length === 0 && !app.stt_configured &&
                      !app.tts_configured && !app.busy && !service.busy
-            text: qsTr("Language model is not configured")
+            text: qsTr("Language model is not set")
             hintText: qsTr("Pull down and select Settings to download language models")
         }
     }
@@ -151,6 +151,8 @@ Page {
             if (_settings.mode === Settings.Tts && !app.tts_configured) return true
             return false
         }
+        icon: _settings.mode === Settings.Stt ? "image://theme/icon-m-mic" :
+                                                "image://theme/icon-m-speaker"
         busy: app.speech !== DsnoteApp.SpeechStateSpeechDecodingEncoding &&
               app.speech !== DsnoteApp.SpeechStateSpeechInitializing &&
               (app.busy || service.busy || !app.connected ||
@@ -175,7 +177,7 @@ Page {
             if (!app.connected) return qsTr("Starting...")
             if ((_settings.mode === Settings.Stt && !app.stt_configured) ||
                 (_settings.mode === Settings.Tts && !app.tts_configured)) {
-                return qsTr("Language model is not configured")
+                return qsTr("Language model is not set")
             }
             if (app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding) return qsTr("Decoding, please wait...")
             if (app.speech === DsnoteApp.SpeechStateSpeechInitializing) return qsTr("Getting ready, please wait...")

@@ -20,6 +20,7 @@ SilicaItem {
     property alias busy: busyIndicator.running
     readonly property alias down: mouse.pressed
     property alias progress: busyIndicator.progress
+    property alias icon: modeIcon.source
     signal pressed()
     signal released()
     signal clicked()
@@ -67,6 +68,18 @@ SilicaItem {
         anchors.centerIn: indicator
         running: false
         _forceAnimation: true
+    }
+
+    Icon {
+        id: modeIcon
+        width: 0.8 * Theme.iconSizeMedium
+        height: 0.8 * Theme.iconSizeMedium
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: parent.right
+        anchors.rightMargin: Theme.paddingLarge
+        highlighted: root._active
+        opacity: Theme.opacityLow
+        visible: root.text.length === 0
     }
 
     Label {

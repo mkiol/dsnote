@@ -1393,7 +1393,7 @@ QVariantMap speech_service::translations() const {
     QVariantMap map;
 
     map.insert(QStringLiteral("lang_not_conf"),
-               tr("Language is not configured"));
+               tr("Language model is not set"));
     map.insert(QStringLiteral("say_smth"), tr("Say something..."));
     map.insert(QStringLiteral("press_say_smth"),
                tr("Press and say something..."));
