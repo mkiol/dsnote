@@ -43,7 +43,7 @@ SimpleListItem {
                 text: qsTr("Set as default for this language")
                 onClicked: {
                     if (root.default_model_for_lang) return
-                    service.set_default_stt_model_for_lang(modelId)
+                    service.set_default_model_for_lang(modelId)
                 }
             }
             MenuItem {

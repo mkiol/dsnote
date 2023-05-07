@@ -79,8 +79,8 @@ double speech_config::model_download_progress(const QString &id) const {
     return models_manager::instance()->model_download_progress(id);
 }
 
-void speech_config::set_default_stt_model_for_lang(const QString &model_id) {
-    models_manager::instance()->set_default_stt_model_for_lang_new(model_id);
+void speech_config::set_default_model_for_lang(const QString &model_id) {
+    models_manager::instance()->set_default_model_for_lang(model_id);
 }
 
 void speech_config::reload() const {

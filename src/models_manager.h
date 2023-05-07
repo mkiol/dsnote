@@ -94,7 +94,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     [[nodiscard]] inline bool busy() const { return m_busy_value; }
     void reload();
     double model_download_progress(const QString& id) const;
-    void set_default_stt_model_for_lang_new(const QString& model_id);
+    void set_default_model_for_lang(const QString& model_id);
 
    signals:
     void download_progress(const QString& id, double progress);

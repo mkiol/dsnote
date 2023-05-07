@@ -165,13 +165,10 @@ models_manager::~models_manager() {
 
 bool models_manager::ok() const { return !m_models.empty(); }
 
-void models_manager::set_default_stt_model_for_lang_new(
-    const QString& model_id) {
+void models_manager::set_default_model_for_lang(const QString& model_id) {
     if (m_models.count(model_id) == 0) return;
 
     auto& model = m_models.at(model_id);
-
-    qDebug() << "set_default_model_for_lang:" << model_id << model.lang_id;
 
     if (model.default_for_lang) {
         qWarning() << "model is already default for lang";
@@ -180,14 +177,32 @@ void models_manager::set_default_stt_model_for_lang_new(
 
     model.default_for_lang = true;
 
-    if (auto old_default_model_id =
-            settings::instance()->default_stt_model_for_lang(model.lang_id);
-        m_models.count(old_default_model_id) > 0) {
-        m_models.at(old_default_model_id).default_for_lang = false;
-    }
+    switch (role_of_engine(model.engine)) {
+        case model_role::stt:
+            if (auto old_default_model_id =
+                    settings::instance()->default_stt_model_for_lang(
+                        model.lang_id);
+                m_models.count(old_default_model_id) > 0) {
+                m_models.at(old_default_model_id).default_for_lang = false;
+            }
 
-    settings::instance()->set_default_stt_model_for_lang(model.lang_id,
-                                                         model_id);
+            settings::instance()->set_default_stt_model_for_lang(model.lang_id,
+                                                                 model_id);
+            break;
+        case model_role::tts:
+            if (auto old_default_model_id =
+                    settings::instance()->default_tts_model_for_lang(
+                        model.lang_id);
+                m_models.count(old_default_model_id) > 0) {
+                m_models.at(old_default_model_id).default_for_lang = false;
+            }
+
+            settings::instance()->set_default_tts_model_for_lang(model.lang_id,
+                                                                 model_id);
+            break;
+        case model_role::ttt:
+            throw std::runtime_error("invalid model role");
+    }
 
     emit models_changed();
 }
@@ -1179,10 +1194,18 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             continue;
         }
 #endif
-
-        bool is_default_model_for_lang =
-            settings::instance()->default_stt_model_for_lang(lang_id) ==
-            model_id;
+        bool is_default_model_for_lang = [&] {
+            switch (role_of_engine(engine)) {
+                case model_role::stt:
+                    return settings::instance()->default_stt_model_for_lang(
+                               lang_id) == model_id;
+                case model_role::tts:
+                    return settings::instance()->default_tts_model_for_lang(
+                               lang_id) == model_id;
+                case model_role::ttt:
+                    return false;
+            }
+        }();
 
         priv_model_t model{
             /*engine=*/engine,
@@ -1236,9 +1259,20 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             model.available = model_is_enabled;
         } else {
             if (model_is_enabled) enabled_models.removeAll(model_id);
-            if (is_default_model_for_lang)
-                settings::instance()->set_default_stt_model_for_lang(
-                    model.lang_id, {});
+            if (is_default_model_for_lang) {
+                switch (role_of_engine(engine)) {
+                    case model_role::stt:
+                        settings::instance()->set_default_stt_model_for_lang(
+                            model.lang_id, {});
+                        break;
+                    case model_role::tts:
+                        settings::instance()->set_default_tts_model_for_lang(
+                            model.lang_id, {});
+                        break;
+                    case model_role::ttt:
+                        break;
+                }
+            }
         }
 
         models.emplace(model_id, std::move(model));
