@@ -28,6 +28,7 @@ class settings : public QSettings, public singleton<settings> {
                    translate_changed)
     Q_PROPERTY(insert_mode_t insert_mode READ insert_mode WRITE set_insert_mode
                    NOTIFY insert_mode_changed)
+    Q_PROPERTY(mode_t mode READ mode WRITE set_mode NOTIFY mode_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -36,13 +37,23 @@ class settings : public QSettings, public singleton<settings> {
                    NOTIFY models_dir_changed)
     Q_PROPERTY(
         QString models_dir_name READ models_dir_name NOTIFY models_dir_changed)
-    Q_PROPERTY(QString default_stt_model READ default_stt_model WRITE
-                   set_default_stt_model NOTIFY default_stt_model_changed)
+    Q_PROPERTY(QString cache_dir READ cache_dir WRITE set_cache_dir NOTIFY
+                   cache_dir_changed)
+    Q_PROPERTY(QUrl cache_dir_url READ cache_dir_url WRITE set_cache_dir_url
+                   NOTIFY cache_dir_changed)
     Q_PROPERTY(bool restore_punctuation READ restore_punctuation WRITE
                    set_restore_punctuation NOTIFY restore_punctuation_changed)
+    Q_PROPERTY(QString default_stt_model READ default_stt_model WRITE
+                   set_default_stt_model NOTIFY default_stt_model_changed)
+    Q_PROPERTY(QString default_tts_model READ default_tts_model WRITE
+                   set_default_tts_model NOTIFY default_tts_model_changed)
 
    public:
-    enum class launch_mode_t { app_stanalone, app, stt_service };
+    enum class mode_t { Stt = 0, Tts = 1 };
+    Q_ENUM(mode_t)
+    friend QDebug operator<<(QDebug d, mode_t mode);
+
+    enum class launch_mode_t { app_stanalone, app, service };
     friend QDebug operator<<(QDebug d, launch_mode_t launch_mode);
 
     enum class speech_mode_t {
@@ -75,7 +86,10 @@ class settings : public QSettings, public singleton<settings> {
     void set_translate(bool value);
     insert_mode_t insert_mode() const;
     void set_insert_mode(insert_mode_t value);
+    mode_t mode() const;
+    void set_mode(mode_t value);
     Q_INVOKABLE QUrl app_icon() const;
+    Q_INVOKABLE bool py_supported() const;
 
     // service
     QString models_dir() const;
@@ -83,17 +97,30 @@ class settings : public QSettings, public singleton<settings> {
     QUrl models_dir_url() const;
     void set_models_dir_url(const QUrl &value);
     QString models_dir_name() const;
+    QString cache_dir() const;
+    void set_cache_dir(const QString &value);
+    QUrl cache_dir_url() const;
+    void set_cache_dir_url(const QUrl &value);
 
-    // service - stt
-    QString default_stt_model() const;
-    void set_default_stt_model(const QString &value);
+    // service
+    bool restore_punctuation() const;
+    void set_restore_punctuation(bool value);
     QStringList enabled_models();
     void set_enabled_models(const QStringList &value);
+
+    // stt
+    QString default_stt_model() const;
+    void set_default_stt_model(const QString &value);
     QString default_stt_model_for_lang(const QString &lang);
     void set_default_stt_model_for_lang(const QString &lang,
                                         const QString &value);
-    bool restore_punctuation() const;
-    void set_restore_punctuation(bool value);
+
+    // tts
+    QString default_tts_model() const;
+    void set_default_tts_model(const QString &value);
+    QString default_tts_model_for_lang(const QString &lang);
+    void set_default_tts_model_for_lang(const QString &lang,
+                                        const QString &value);
 
    signals:
     // app
@@ -101,12 +128,16 @@ class settings : public QSettings, public singleton<settings> {
     void note_changed();
     void translate_changed();
     void insert_mode_changed();
+    void mode_changed();
 
     // service
     void models_dir_changed();
+    void cache_dir_changed();
+    void restore_punctuation_changed();
     void default_stt_model_changed();
     void default_stt_models_changed(const QString &lang);
-    void restore_punctuation_changed();
+    void default_tts_model_changed();
+    void default_tts_models_changed(const QString &lang);
 
    private:
     inline static const QString settings_filename =

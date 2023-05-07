@@ -27,7 +27,7 @@ class ModelsListModel : public SelectableItemModel {
     Q_PROPERTY(bool downloading READ downloading NOTIFY downloadingChanged)
     Q_PROPERTY(QString lang READ lang WRITE setLang NOTIFY langChanged)
    public:
-    enum ModelRole { Stt = 0, Ttt = 1 };
+    enum ModelRole { Stt = 0, Tts = 1, Ttt = 2 };
     Q_ENUM(ModelRole)
 
     explicit ModelsListModel(QObject *parent = nullptr);

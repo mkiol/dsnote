@@ -35,7 +35,7 @@ Page {
             spacing: Theme.paddingLarge
 
             PullDownMenu {
-                busy: app.busy || service.busy || app.state === DsnoteApp.SttTranscribingFile
+                busy: app.busy || service.busy || app.state === DsnoteApp.StateTranscribingFile
 
                 MenuItem {
                     text: qsTr("About %1").arg(APP_NAME)
@@ -48,14 +48,17 @@ Page {
                 }
 
                 MenuItem {
-                    enabled: app.configured && !app.busy && !service.busy
-                    text: app.state === DsnoteApp.SttTranscribingFile ||
-                          app.speech === DsnoteApp.SttSpeechDecoding ||
-                          app.speech === DsnoteApp.SttSpeechInitializing ? qsTr("Cancel") : qsTr("Transcribe audio file")
+                    enabled: (app.stt_configured || app.tts_configured) && !app.busy && !service.busy
+                    text: app.state === DsnoteApp.StateTranscribingFile ||
+                          app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding ||
+                          app.speech === DsnoteApp.SpeechStateSpeechInitializing ||
+                          app.speech === DsnoteApp.StatePlayingSpeech ?
+                              qsTr("Cancel") : qsTr("Transcribe audio file")
                     onClicked: {
-                        if (app.state === DsnoteApp.SttTranscribingFile ||
-                                app.speech === DsnoteApp.SttSpeechInitializing ||
-                                app.speech == DsnoteApp.SttSpeechDecoding)
+                        if (app.state === DsnoteApp.StateTranscribingFile ||
+                            app.speech === DsnoteApp.SpeechStateSpeechInitializing ||
+                            app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding ||
+                            app.speech === DsnoteApp.StatePlayingSpeech)
                             app.cancel()
                         else
                             pageStack.push(fileDialog)
@@ -73,6 +76,21 @@ Page {
                     text: qsTr("Copy")
                     onClicked: Clipboard.text = textArea.text
                 }
+
+                MenuItem {
+                    text: qsTr("Mode: %1").arg(_settings.mode === Settings.Stt ? qsTr("Speech to Text") : qsTr("Text to Speech"))
+                    onClicked: _settings.mode = _settings.mode === Settings.Stt ? Settings.Tts : Settings.Stt
+                }
+
+                /*MenuLabel {
+                    visible: _settings.mode === Settings.Stt
+                    text: qsTr("Active model: %1").arg(app.stt_configured ? app.active_stt_model_name : qsTr("None"))
+                }
+
+                MenuLabel {
+                    visible: _settings.mode === Settings.Tts
+                    text: qsTr("Active model: %1").arg(app.tts_configured ? app.active_tts_model_name : qsTr("None"))
+                }*/
             }
         }
 
@@ -95,9 +113,10 @@ Page {
         }
 
         ViewPlaceholder {
-            enabled: textArea.text.length === 0 && !app.configured && !app.busy && !service.busy
-            text: qsTr("Language is not configured")
-            hintText: qsTr("Pull down and select Settings to download language")
+            enabled: textArea.text.length === 0 && !app.stt_configured &&
+                     !app.tts_configured && !app.busy && !service.busy
+            text: qsTr("Language model is not configured")
+            hintText: qsTr("Pull down and select Settings to download language models")
         }
     }
 
@@ -105,62 +124,104 @@ Page {
         flickable: flick
     }
 
-    SttPanel {
+    SpeechPanel {
         id: panel
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        clickable: (app.speech === DsnoteApp.SttSpeechDecoding ||
-                    app.speech === DsnoteApp.SttSpeechInitializing ||
-                   app.state !== DsnoteApp.SttListeningAuto) &&
-                   !app.busy && !service.busy && app.connected
+        clickable: (app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding ||
+                    app.speech === DsnoteApp.SpeechStateSpeechInitializing ||
+                   app.state !== DsnoteApp.StateListeningAuto) &&
+                   !app.busy && !service.busy && app.connected &&
+                   (_settings.mode !== Settings.Tts || textArea.text.length > 0)
         status: {
             switch (app.speech) {
-            case DsnoteApp.SttNoSpeech: return 0;
-            case DsnoteApp.SttSpeechDetected: return 1;
-            case DsnoteApp.SttSpeechDecoding: return 2;
-            case DsnoteApp.SttSpeechInitializing: return 3;
+            case DsnoteApp.SpeechStateNoSpeech: return 0;
+            case DsnoteApp.SpeechStateSpeechDetected: return 1;
+            case DsnoteApp.SpeechStateSpeechDecodingEncoding: return 2;
+            case DsnoteApp.SpeechStateSpeechInitializing: return 3;
+            case DsnoteApp.SpeechStateSpeechPlaying: return 4;
             }
             return 0;
         }
-        off: !app.configured || !app.connected
-        busy: app.speech !== DsnoteApp.SttSpeechDecoding && app.speech !== DsnoteApp.SttSpeechInitializing &&
+        off: {
+            if (!app.connected) return true
+            if (_settings.mode === Settings.Stt && !app.stt_configured) return true
+            if (_settings.mode === Settings.Tts && !app.tts_configured) return true
+            return false
+        }
+        busy: app.speech !== DsnoteApp.SpeechStateSpeechDecodingEncoding &&
+              app.speech !== DsnoteApp.SpeechStateSpeechInitializing &&
               (app.busy || service.busy || !app.connected ||
-              app.state === DsnoteApp.SttTranscribingFile)
+              app.state === DsnoteApp.StateTranscribingFile)
         text: app.intermediate_text
         textPlaceholder: {
-            if (app.speech === DsnoteApp.SttSpeechDecoding) return qsTr("Decoding, please wait...")
-            if (app.speech === DsnoteApp.SttSpeechInitializing) return qsTr("Getting ready, please wait...")
-            if (app.state === DsnoteApp.SttListeningSingleSentence) return qsTr("Say something...")
-            if (app.state === DsnoteApp.SttTranscribingFile) return qsTr("Transcribing audio file...")
-            if (_settings.speech_mode === Settings.SpeechSingleSentence) return qsTr("Click and say something...")
-            return qsTr("Press and say something...")
+            if (app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding) return qsTr("Decoding, please wait...")
+            if (app.speech === DsnoteApp.SpeechStateSpeechInitializing) return qsTr("Getting ready, please wait...")
+            if (app.state === DsnoteApp.StateTranscribingFile) return qsTr("Transcribing audio file...")
+            if (_settings.mode === Settings.Stt) {
+                if (app.state === DsnoteApp.StateListeningSingleSentence) return qsTr("Say something...")
+                if (_settings.speech_mode === Settings.SpeechSingleSentence) return qsTr("Click and say something...")
+                return qsTr("Press and say something...")
+            } else {
+                if (app.state === DsnoteApp.StatePlayingSpeech) return qsTr("Reading a note...")
+                if (textArea.text.length > 0)
+                    return qsTr("Press to read a note...")
+                else return qsTr("Make a note and press to read...")
+            }
         }
         textPlaceholderActive: {
             if (!app.connected) return qsTr("Starting...")
-            if (!app.configured) return qsTr("Language is not configured")
-            if (app.speech === DsnoteApp.SttSpeechDecoding) return qsTr("Decoding, please wait...")
-            if (app.speech === DsnoteApp.SttSpeechInitializing) return qsTr("Getting ready, please wait...")
-            if (!busy) return qsTr("Say something...")
-            if (app.state === DsnoteApp.SttTranscribingFile) return qsTr("Transcribing audio file...")
+            if ((_settings.mode === Settings.Stt && !app.stt_configured) ||
+                (_settings.mode === Settings.Tts && !app.tts_configured)) {
+                return qsTr("Language model is not configured")
+            }
+            if (app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding) return qsTr("Decoding, please wait...")
+            if (app.speech === DsnoteApp.SpeechStateSpeechInitializing) return qsTr("Getting ready, please wait...")
+            if (app.state === DsnoteApp.StatePlayingSpeech && app.speech === DsnoteApp.SpeechStateSpeechPlaying)
+                return qsTr("Reading a note...")
+            if (app.state === DsnoteApp.StatePlayingSpeech && app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding)
+                return qsTr("Synthesizing speech, please wait...")
+            if (!busy) {
+                if (_settings.mode === Settings.Stt)
+                    return qsTr("Say something...")
+                else if (textArea.text.length > 0)
+                    return qsTr("Press to read a note...")
+                else
+                    return qsTr("Make a note and press to read...")
+            }
+            if (app.state === DsnoteApp.StateTranscribingFile) return qsTr("Transcribing audio file...")
             return qsTr("Busy...")
         }
 
         progress: app.transcribe_progress
         onPressed: {
-            if (app.speech === DsnoteApp.SttSpeechDecoding ||
-                    app.speech === DsnoteApp.SttSpeechInitializing ||
-                    app.state === DsnoteApp.SttTranscribingFile ||
-                    app.state === DsnoteApp.SttListeningSingleSentence) {
+            if (_settings.mode === Settings.Stt &&
+                    _settings.speech_mode === Settings.SpeechManual &&
+                    app.state === DsnoteApp.StateIdle &&
+                    app.speech === DsnoteApp.SpeechStateNoSpeech) {
+                app.listen()
+            }
+        }
+        onReleased: {
+            if (app.state === DsnoteApp.StateListeningManual) app.stop_listen()
+        }
+        onClicked: {
+            if (app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding ||
+                    app.speech === DsnoteApp.SpeechStateSpeechInitializing ||
+                    app.state === DsnoteApp.StateTranscribingFile ||
+                    app.state === DsnoteApp.StateListeningSingleSentence ||
+                    app.state === DsnoteApp.StatePlayingSpeech) {
                 app.cancel()
                 return
             }
 
-            if (app.speech === DsnoteApp.SttNoSpeech) app.listen()
-        }
-        onReleased: {
-            if (app.state === DsnoteApp.SttListeningManual) app.stop_listen()
+            if (_settings.mode === Settings.Stt) {
+                if (app.speech === DsnoteApp.SpeechStateNoSpeech) app.listen()
+            } else {
+                app.play_speech()
+            }
         }
     }
 
@@ -189,7 +250,7 @@ Page {
             case DsnoteApp.ErrorMicSource:
                 notification.show(qsTr("Microphone was unexpectedly disconnected."))
                 break;
-            case DsnoteApp.ErrorNoSttService:
+            case DsnoteApp.ErrorNoService:
                 notification.show(qsTr("Unable to start service."))
                 break;
             default:

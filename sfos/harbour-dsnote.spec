@@ -2,7 +2,7 @@ Name:       harbour-dsnote
 
 # >> macros
 %define __provides_exclude_from ^%{_datadir}/.*$
-%define __requires_exclude ^libstt.*|libkenlm.*|libopenblas.*|libvosk.*$
+%define __requires_exclude ^libstt.*|libkenlm.*|libopenblas.*|libvosk.*|libonnxruntime.*$
 # << macros
 
 Summary:        Note taking with speech to text
@@ -60,9 +60,11 @@ desktop-file-install --delete-original       \
 
 %post
 systemctl-user stop %{name}.service >/dev/null 2>&1 || :
+systemctl-user daemon-reload >/dev/null 2>&1 || :
 
 %preun
 systemctl-user stop %{name}.service >/dev/null 2>&1 || :
+systemctl-user daemon-reload >/dev/null 2>&1 || :
 
 %files
 %defattr(-,root,root,-)
@@ -70,7 +72,7 @@ systemctl-user stop %{name}.service >/dev/null 2>&1 || :
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
-%{_datadir}/dbus-1/services/org.mkiol.Stt.service
+%{_datadir}/dbus-1/services/org.mkiol.Speech.service
 %{_userunitdir}/%{name}.service
 # >> files
 # << files

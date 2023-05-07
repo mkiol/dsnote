@@ -15,6 +15,7 @@ option(WITH_TESTS "enable tests" OFF)
 option(WITH_TRACE_LOGS "enable trace logging" OFF)
 option(WITH_SANITIZERS "enable asan and ubsan in debug build" ON)
 option(WITH_STATIC_SANITIZERS "link asan and ubsan statically in debug build" OFF)
+option(WITH_PY "enable python libraries" ${WITH_DESKTOP})
 
 option(DOWNLOAD_LIBSTT "download and install libstt shared lib" ON)
 option(BUILD_VOSK "download vosk, build and install shared lib" ON)
@@ -27,7 +28,8 @@ option(BUILD_OPENBLAS "download openblas, build and link shared lib" ON)
 option(BUILD_XZ "download xz lib, build and link statically" ON)
 option(BUILD_RNNOISE "download rnnoise lib, build and link statically" ON)
 option(BUILD_PYBIND11 "download pybind11, build and link statically" ON)
-option(BUILD_PYMODULES "make python modules archive" ON)
+option(BUILD_PYMODULES "make python modules archive" OFF)
+option(BUILD_PIPER "download piper lib, build and link statically" ON)
 
 if(${WITH_DESKTOP} AND ${WITH_SFOS})
     message(FATAL_ERROR "options WITH_DESKTOP and WITH_SFOS cannot be set together")
@@ -39,6 +41,11 @@ endif()
 
 if(WITH_DESKTOP)
     set(BUILD_PYMODULES OFF)
+endif()
+if(WITH_SFOS)
+    if (WITH_PY)
+        set(BUILD_PYMODULES ON)
+    endif()
 endif()
 
 set(info_id "dsnote")
@@ -60,8 +67,8 @@ set(info_webpage "https://github.com/mkiol/dsnote")
 set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
-set(info_dbus_service "org.mkiol.Stt")
-set(info_dbus_interface "org.mkiol.Stt")
+set(info_dbus_service "org.mkiol.Speech")
+set(info_dbus_interface "org.mkiol.Speech")
 set(info_conf_version "11")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · Åke Engelbrektson")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · 🤗Transformers")
@@ -83,9 +90,13 @@ endif()
 
 # dirs
 
+include(GNUInstallDirs)
+
 set(external_dir "${PROJECT_SOURCE_DIR}/external")
 set(external_include_dir "${PROJECT_BINARY_DIR}/external/include")
 set(external_lib_dir "${PROJECT_BINARY_DIR}/external/lib")
+set(external_share_dir "${PROJECT_BINARY_DIR}/external/share")
+set(external_bin_dir "${PROJECT_BINARY_DIR}/external/bin")
 set(desktop_dir "${PROJECT_SOURCE_DIR}/desktop")
 set(sfos_dir "${PROJECT_SOURCE_DIR}/sfos")
 set(resources_dir "${PROJECT_SOURCE_DIR}/resources")
@@ -142,10 +153,10 @@ set(dsnote_lib_sources
     ${sources_dir}/settings.cpp
     ${sources_dir}/settings.h
     ${sources_dir}/singleton.h
-    ${sources_dir}/stt_config.cpp
-    ${sources_dir}/stt_config.h
-    ${sources_dir}/stt_service.cpp
-    ${sources_dir}/stt_service.h
+    ${sources_dir}/speech_config.cpp
+    ${sources_dir}/speech_config.h
+    ${sources_dir}/speech_service.cpp
+    ${sources_dir}/speech_service.h
     ${sources_dir}/logger.cpp
     ${sources_dir}/logger.hpp
     ${sources_dir}/qtlogger.cpp
@@ -170,8 +181,19 @@ set(dsnote_lib_sources
     ${sources_dir}/denoiser.cpp
     ${sources_dir}/punctuator.hpp
     ${sources_dir}/punctuator.cpp
-    ${sources_dir}/py_initer.hpp
-    ${sources_dir}/py_initer.cpp)
+    ${sources_dir}/py_tools.hpp
+    ${sources_dir}/py_tools.cpp
+    ${sources_dir}/tts_engine.hpp
+    ${sources_dir}/tts_engine.cpp
+    ${sources_dir}/piper_engine.hpp
+    ${sources_dir}/piper_engine.cpp
+    ${sources_dir}/coqui_engine.hpp
+    ${sources_dir}/coqui_engine.cpp
+    ${sources_dir}/simdjson.h
+    ${sources_dir}/simdjson.cpp
+    ${sources_dir}/py_executor.hpp
+    ${sources_dir}/py_executor.cpp
+)
 
 configure_file(config.h.in config.h)
 
@@ -243,6 +265,7 @@ target_link_options(compiler_flags INTERFACE "-Wl,-rpath,${rpath}")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_TRACE_LOGS}>:USE_TRACE_LOGS>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_SFOS}>:USE_SFOS>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_DESKTOP}>:USE_DESKTOP>")
+target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_PY}>:USE_PY>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<CONFIG:Debug>:DEBUG>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arch_x8664}>:ARCH_X86_64>")
@@ -334,6 +357,13 @@ else()
     pkg_search_module(xz REQUIRED liblzma>=5.4.1)
     list(APPEND deps_libs ${xz_LIBRARIES})
     list(APPEND includes ${xz_INCLUDE_DIRS})
+endif()
+
+if(BUILD_PIPER)
+    include(${cmake_path}/piper.cmake)
+else()
+    find_library(piper_path piper_api REQUIRED)
+    list(APPEND deps_libs ${piper_path})
 endif()
 
 find_package(Python COMPONENTS Development REQUIRED)

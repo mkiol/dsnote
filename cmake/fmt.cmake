@@ -10,6 +10,7 @@ ExternalProject_Add(fmt
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
         -DCMAKE_INSTALL_INCLUDEDIR=${external_include_dir} -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DFMT_DOC=OFF -DFMT_TEST=OFF -DFMT_FUZZ=OFF
     BUILD_ALWAYS False
+    INSTALL_COMMAND make DESTDIR=${PROJECT_BINARY_DIR}/external install
 )
 
 list(APPEND deps_libs ${external_lib_dir}/libfmt.a)

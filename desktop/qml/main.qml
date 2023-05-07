@@ -72,7 +72,7 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
-    SttConfig {
+    SpeechConfig {
         id: service
     }
 

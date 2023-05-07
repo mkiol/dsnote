@@ -38,10 +38,17 @@ class models_manager : public QObject, public singleton<models_manager> {
     Q_OBJECT
     Q_PROPERTY(bool busy READ busy NOTIFY busy_changed)
    public:
-    enum class model_role { stt = 0, ttt = 1 };
+    enum class model_role { stt = 0, tts = 1, ttt = 2 };
     friend QDebug operator<<(QDebug d, model_role role);
 
-    enum class model_engine { stt_ds, stt_vosk, stt_whisper, ttt_hftc };
+    enum class model_engine {
+        stt_ds,
+        stt_vosk,
+        stt_whisper,
+        ttt_hftc,
+        tts_coqui,
+        tts_piper
+    };
     friend QDebug operator<<(QDebug d, model_engine engine);
 
     struct lang_t {
@@ -59,6 +66,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         QString name;
         QString model_file;
         QString scorer_file;
+        QString speaker;
         int score = 2; /* 0-3 */
         bool default_for_lang = false;
         bool available = false;
@@ -100,7 +108,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     enum class download_type { none, all, model, scorer, model_scorer };
     friend QDebug operator<<(QDebug d, download_type download_type);
 
-    enum class comp_type { none, xz, gz, tar, tarxz, zip, dir };
+    enum class comp_type { none, xz, gz, tar, tarxz, targz, zip, dir };
     friend QDebug operator<<(QDebug d, comp_type comp_type);
 
     struct priv_model_t {
@@ -119,7 +127,9 @@ class models_manager : public QObject, public singleton<models_manager> {
         comp_type scorer_comp = comp_type::none;
         std::vector<QUrl> scorer_urls;
         qint64 scorer_size = 0;
+        QString speaker;
         int score = -1; /* 0-5 */
+        bool hidden = false;
         bool default_for_lang = false;
         bool exists = false;
         bool available = false;

@@ -8,7 +8,7 @@ ExternalProject_Add(xz
     URL "${xz_source_url}"
     URL_MD5 "${xz_checksum}"
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
-        --disable-encoders --disable-xz --disable-xzdec --disable-lzmadec --disable-lzmainfo
+        --enable-xz --disable-xzdec --disable-lzmadec --disable-lzmainfo
         --disable-lzma-links --disable-scripts --disable-doc --disable-shared --enable-static
         --with-pic
     BUILD_COMMAND ${MAKE}

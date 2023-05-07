@@ -6,7 +6,7 @@ endif()
 
 add_custom_command(
   OUTPUT python.tar.xz
-  COMMAND sh -c "${tools_dir}/make_pymodules.sh ${CMAKE_BINARY_DIR}/external/pymodules ${py_ver} ${PROJECT_BINARY_DIR}/python.tar.xz"
+  COMMAND sh -c "${tools_dir}/make_pymodules.sh ${CMAKE_BINARY_DIR}/external/pymodules ${py_ver} ${PROJECT_BINARY_DIR}/python.tar.xz ${external_bin_dir}/xz"
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
   VERBATIM
 )

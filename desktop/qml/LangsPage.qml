@@ -56,11 +56,17 @@ Page {
             width: listView.width
 
             Label {
-                visible: parent.section != ModelsListModel.Stt
                 Layout.margins: 10
                 width: listView.width
                 font.bold: true
-                text:  qsTr("Complementary models")
+                text: {
+                    if (parent.section == ModelsListModel.Stt)
+                        return qsTr("Speech to Text")
+                    if (parent.section == ModelsListModel.Tts)
+                        return qsTr("Text to Speech")
+                    if (parent.section == ModelsListModel.Ttt)
+                        return qsTr("Text to Text")
+                }
             }
         }
     }

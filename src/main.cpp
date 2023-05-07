@@ -6,7 +6,6 @@
  */
 
 #include <fmt/format.h>
-#include <signal.h>
 
 #include <QCommandLineParser>
 #include <QDebug>
@@ -18,6 +17,8 @@
 #include <QTextCodec>
 #include <QTranslator>
 #include <QUrl>
+#include <csignal>
+#include <memory>
 #include <optional>
 #include <utility>
 
@@ -42,10 +43,11 @@
 #include "dsnote_app.h"
 #include "logger.hpp"
 #include "models_list_model.h"
+#include "py_executor.hpp"
 #include "qtlogger.hpp"
 #include "settings.h"
-#include "stt_config.h"
-#include "stt_service.h"
+#include "speech_config.h"
+#include "speech_service.h"
 
 static std::pair<std::optional<settings::launch_mode_t>, bool> check_options(
     const QCoreApplication& app) {
@@ -53,19 +55,18 @@ static std::pair<std::optional<settings::launch_mode_t>, bool> check_options(
 
     QCommandLineOption appstandalone_opt{
         QStringLiteral("app-standalone"),
-        QStringLiteral("Runs in standalone mode (default). App and STT service "
+        QStringLiteral("Runs in standalone mode (default). App and service "
                        "are not splitted.")};
     parser.addOption(appstandalone_opt);
 
     QCommandLineOption app_opt{
         QStringLiteral("app"),
-        QStringLiteral("Starts app is splitted mode. App will need STT service "
+        QStringLiteral("Starts app is splitted mode. App will need service "
                        "to function properly.")};
     parser.addOption(app_opt);
 
-    QCommandLineOption sttservice_opt{
-        QStringLiteral("stt-service"),
-        QStringLiteral("Starts STT service only.")};
+    QCommandLineOption sttservice_opt{QStringLiteral("service"),
+                                      QStringLiteral("Starts service only.")};
     parser.addOption(sttservice_opt);
 
     QCommandLineOption verbose_opt{QStringLiteral("verbose"),
@@ -91,7 +92,7 @@ static std::pair<std::optional<settings::launch_mode_t>, bool> check_options(
         }
     } else if (parser.isSet(sttservice_opt)) {
         if (!parser.isSet(app_opt) && !parser.isSet(appstandalone_opt)) {
-            launch_mode = settings::launch_mode_t::stt_service;
+            launch_mode = settings::launch_mode_t::service;
         }
     } else {
         launch_mode = settings::launch_mode_t::app_stanalone;
@@ -100,7 +101,7 @@ static std::pair<std::optional<settings::launch_mode_t>, bool> check_options(
     if (!launch_mode) {
         fmt::print(stderr,
                    "Use one option from the following: --app-stanalone, --app, "
-                   "--stt-service.");
+                   "--service.");
     }
 
     return {launch_mode, parser.isSet(verbose_opt)};
@@ -112,7 +113,8 @@ void register_types() {
                                          "Settings",
                                          QStringLiteral("Singleton"));
     qmlRegisterType<dsnote_app>("harbour.dsnote.Dsnote", 1, 0, "DsnoteApp");
-    qmlRegisterType<stt_config>("harbour.dsnote.Dsnote", 1, 0, "SttConfig");
+    qmlRegisterType<speech_config>("harbour.dsnote.Dsnote", 1, 0,
+                                   "SpeechConfig");
     qmlRegisterType<DirModel>("harbour.dsnote.DirModel", 1, 0, "DirModel");
     qmlRegisterType<ModelsListModel>("harbour.dsnote.Dsnote", 1, 0,
                                      "ModelsListModel");
@@ -121,7 +123,8 @@ void register_types() {
                                          "Settings",
                                          QStringLiteral("Singleton"));
     qmlRegisterType<dsnote_app>("org.mkiol.dsnote.Dsnote", 1, 0, "DsnoteApp");
-    qmlRegisterType<stt_config>("org.mkiol.dsnote.Dsnote", 1, 0, "SttConfig");
+    qmlRegisterType<speech_config>("org.mkiol.dsnote.Dsnote", 1, 0,
+                                   "SpeechConfig");
     qmlRegisterType<ModelsListModel>("org.mkiol.dsnote.Dsnote", 1, 0,
                                      "ModelsListModel");
 #endif
@@ -156,8 +159,7 @@ static void install_translator() {
 
 static void signal_handler(int sig) {
     qDebug() << "received signal:" << sig;
-
-    QGuiApplication::quit();
+    std::terminate();
 }
 
 int main(int argc, char* argv[]) {
@@ -189,17 +191,21 @@ int main(int argc, char* argv[]) {
     settings::instance()->set_launch_mode(launch_mode.value());
 
     switch (settings::instance()->launch_mode()) {
-        case settings::launch_mode_t::stt_service: {
-            qDebug() << "starting stt service";
-            stt_service::instance();
+        case settings::launch_mode_t::service: {
+            qDebug() << "starting service";
+            py_executor::instance()->start();
 
-            auto ret = QGuiApplication::exec();
+            speech_service::instance();
+
+            QGuiApplication::exec();
             qDebug() << "exiting";
-            return ret;
+            std::terminate();
         }
         case settings::launch_mode_t::app_stanalone:
             qDebug() << "starting standalone app";
-            stt_service::instance();
+            py_executor::instance()->start();
+
+            speech_service::instance();
             break;
         case settings::launch_mode_t::app:
             qDebug() << "starting app";
@@ -251,7 +257,8 @@ int main(int argc, char* argv[]) {
         Qt::QueuedConnection);
     engine->load(url);
 #endif
-    auto ret = QGuiApplication::exec();
+    QGuiApplication::exec();
+
     qDebug() << "exiting";
-    return ret;
+    std::terminate();
 }

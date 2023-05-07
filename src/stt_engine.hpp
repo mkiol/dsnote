@@ -158,8 +158,15 @@ class stt_engine {
     bool m_translate = false;
     processing_state_t m_processing_state = processing_state_t::idle;
 
-    void flush(flush_t type);
+    static void ltrim(std::string& s);
+    static void rtrim(std::string& s);
+    static std::string merge_texts(const std::string& old_text,
+                                   std::string&& new_text);
     virtual samples_process_result_t process_buff();
+    virtual void reset_impl() = 0;
+    virtual void stop_processing_impl();
+    virtual void start_processing_impl();
+    void flush(flush_t type);
     bool lock_buf(lock_type_t desired_lock);
     bool lock_buff_for_processing();
     void free_buf(lock_type_t lock);
@@ -167,15 +174,8 @@ class stt_engine {
     void set_speech_detection_status(speech_detection_status_t status);
     void set_intermediate_text(const std::string& text);
     void set_processing_state(processing_state_t new_state);
-    static std::string merge_texts(const std::string& old_text,
-                                   std::string&& new_text);
     void reset_in_processing();
     void start_processing();
-    virtual void reset_impl() = 0;
-    virtual void stop_processing_impl();
-    virtual void start_processing_impl();
-    static void ltrim(std::string& s);
-    static void rtrim(std::string& s);
     bool sentence_timer_timed_out();
     void restart_sentence_timer();
 };

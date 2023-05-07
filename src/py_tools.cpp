@@ -5,20 +5,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "py_initer.hpp"
+#include "py_tools.hpp"
 
-#ifdef USE_SFOS
 #include <QDebug>
 #include <QFileInfo>
+#include <QStandardPaths>
 #include <cstdlib>
 
 #include "checksum_tools.hpp"
 #include "comp_tools.hpp"
 #include "settings.h"
-#endif
 
-#ifdef USE_SFOS
-bool py_initer::init_modules() {
+namespace py_tools {
+bool init_modules() {
     if (!modules_installed()) {
         unpack_modules();
         if (!modules_installed()) {
@@ -38,7 +37,7 @@ bool py_initer::init_modules() {
     return true;
 }
 
-bool py_initer::unpack_modules() {
+bool unpack_modules() {
     qDebug() << "unpacking py modules";
 
     if (!QFileInfo::exists(python_archive_path)) {
@@ -54,6 +53,7 @@ bool py_initer::unpack_modules() {
 
     if (!comp_tools::xz_decode(python_archive_path, unpack_path)) {
         qWarning() << "failed to extract py archive";
+        QFile::remove(unpack_path);
         settings::instance()->set_python_modules_checksum({});
         return false;
     }
@@ -76,7 +76,7 @@ bool py_initer::unpack_modules() {
     return true;
 }
 
-bool py_initer::modules_installed() {
+bool modules_installed() {
     auto old_checksum = settings::instance()->python_modules_checksum();
     if (old_checksum.isEmpty()) {
         qDebug() << "py modules checksum missing, need to unpack";
@@ -101,4 +101,4 @@ bool py_initer::modules_installed() {
 
     return true;
 }
-#endif
+}  // namespace py_tools

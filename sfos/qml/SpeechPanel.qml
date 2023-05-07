@@ -22,6 +22,7 @@ SilicaItem {
     property alias progress: busyIndicator.progress
     signal pressed()
     signal released()
+    signal clicked()
 
     readonly property bool _active: highlighted
     readonly property color _pColor: _active ? Theme.highlightColor : Theme.primaryColor
@@ -47,7 +48,10 @@ SilicaItem {
         anchors.left: parent.left
         width: Theme.itemSizeSmall
         color: root._pColor
-        // 0 - no speech, 1 - speech detected, 2 - speech decoding
+        // status values:
+        // 0 - no speech, 1 - speech detected,
+        // 2 - speech decoding, 3 - speech initializing,
+        // 4 - speech playing
         status: 0
         off: false
         visible: opacity > 0.0
@@ -93,5 +97,6 @@ SilicaItem {
             if (pressed) root.pressed()
             else root.released()
         }
+        onClicked: root.clicked()
     }
 }

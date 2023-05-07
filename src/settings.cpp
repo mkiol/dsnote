@@ -16,10 +16,23 @@
 
 #include "config.h"
 
+QDebug operator<<(QDebug d, settings::mode_t mode) {
+    switch (mode) {
+        case settings::mode_t::Stt:
+            d << "stt";
+            break;
+        case settings::mode_t::Tts:
+            d << "tts";
+            break;
+    }
+
+    return d;
+}
+
 QDebug operator<<(QDebug d, settings::launch_mode_t launch_mode) {
     switch (launch_mode) {
-        case settings::launch_mode_t::stt_service:
-            d << "stt-service";
+        case settings::launch_mode_t::service:
+            d << "service";
             break;
         case settings::launch_mode_t::app_stanalone:
             d << "app-standalone";
@@ -105,9 +118,36 @@ QString settings::models_dir_name() const {
     return models_dir_url().fileName();
 }
 
+QString settings::cache_dir() const {
+    auto dir = value(QStringLiteral("service/cache_dir"),
+                     value(QStringLiteral("cache_dir")))
+                   .toString();
+    if (dir.isEmpty()) {
+        dir = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+        QDir{}.mkpath(dir);
+    }
+
+    return dir;
+}
+
+QUrl settings::cache_dir_url() const {
+    return QUrl::fromLocalFile(cache_dir());
+}
+
+void settings::set_cache_dir(const QString& value) {
+    if (cache_dir() != value) {
+        setValue(QStringLiteral("service/cache_dir"), value);
+        emit cache_dir_changed();
+    }
+}
+
+void settings::set_cache_dir_url(const QUrl& value) {
+    set_cache_dir(value.toLocalFile());
+}
+
 QString settings::default_stt_model() const {
     return value(QStringLiteral("service/default_model"),
-                 value(QStringLiteral("lang"), QStringLiteral("en")))
+                 QStringLiteral("en"))
         .toString();  // english is a default;
 }
 
@@ -115,6 +155,19 @@ void settings::set_default_stt_model(const QString& value) {
     if (default_stt_model() != value) {
         setValue(QStringLiteral("service/default_model"), value);
         emit default_stt_model_changed();
+    }
+}
+
+QString settings::default_tts_model() const {
+    return value(QStringLiteral("service/default_tts_model"),
+                 QStringLiteral("en"))
+        .toString();  // english is a default;
+}
+
+void settings::set_default_tts_model(const QString& value) {
+    if (default_tts_model() != value) {
+        setValue(QStringLiteral("service/default_tts_model"), value);
+        emit default_tts_model_changed();
     }
 }
 
@@ -140,6 +193,19 @@ void settings::set_default_stt_model_for_lang(const QString& lang,
     }
 }
 
+QString settings::default_tts_model_for_lang(const QString& lang) {
+    return value(QStringLiteral("service/default_tts_model_%1").arg(lang), {})
+        .toString();
+}
+
+void settings::set_default_tts_model_for_lang(const QString& lang,
+                                              const QString& value) {
+    if (default_tts_model_for_lang(lang) != value) {
+        setValue(QStringLiteral("service/default_tts_model_%1").arg(lang),
+                 value);
+    }
+}
+
 bool settings::restore_punctuation() const {
     return value(QStringLiteral("service/restore_punctuation"), true).toBool();
 }
@@ -148,6 +214,18 @@ void settings::set_restore_punctuation(bool value) {
     if (restore_punctuation() != value) {
         setValue(QStringLiteral("service/restore_punctuation"), value);
         emit restore_punctuation_changed();
+    }
+}
+
+settings::mode_t settings::mode() const {
+    return static_cast<mode_t>(
+        value(QStringLiteral("mode"), static_cast<int>(mode_t::Stt)).toInt());
+}
+
+void settings::set_mode(mode_t value) {
+    if (mode() != value) {
+        setValue(QStringLiteral("mode"), static_cast<int>(value));
+        emit mode_changed();
     }
 }
 
@@ -207,6 +285,14 @@ QUrl settings::app_icon() const {
             .arg(QLatin1String{APP_BINARY_ID}));
 }
 
+bool settings::py_supported() const {
+#ifdef USE_PY
+    return true;
+#else
+    return false;
+#endif
+}
+
 settings::launch_mode_t settings::launch_mode() const { return m_launch_mode; }
 
 void settings::set_launch_mode(launch_mode_t launch_mode) {
@@ -214,11 +300,11 @@ void settings::set_launch_mode(launch_mode_t launch_mode) {
 }
 
 QString settings::python_modules_checksum() const {
-    return value("service/python_modules_checksum").toString();
+    return value(QStringLiteral("service/python_modules_checksum")).toString();
 }
 
 void settings::set_python_modules_checksum(const QString& value) {
     if (value != python_modules_checksum()) {
-        setValue("service/python_modules_checksum", value);
+        setValue(QStringLiteral("service/python_modules_checksum"), value);
     }
 }

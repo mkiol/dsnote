@@ -32,20 +32,6 @@ Page {
             width: parent.width - 20
             spacing: 10
 
-            RowLayout {
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Active language model")
-                }
-                ComboBox {
-                    implicitWidth: parent.width / 2
-                    visible: app.configured
-                    currentIndex: app.active_stt_model_idx
-                    model: app.available_stt_models
-                    onActivated: app.set_active_stt_model_idx(index)
-                }
-            }
-
             Button {
                 Layout.alignment: Qt.AlignHCenter
                 enabled: !service.busy

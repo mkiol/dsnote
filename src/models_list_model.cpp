@@ -54,6 +54,8 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
                 return ModelRole::Stt;
             case models_manager::model_role::ttt:
                 return ModelRole::Ttt;
+            case models_manager::model_role::tts:
+                return ModelRole::Tts;
         }
         throw std::runtime_error{"unsupported model engine"};
     }();

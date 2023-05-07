@@ -12,7 +12,8 @@ Item {
 
     // status values:
     // 0 - no speech, 1 - speech detected,
-    // 2 - speech decoding, 3 - speech initializing
+    // 2 - speech decoding, 3 - speech initializing,
+    // 4 - speech playing
     property int status: 0
 
     property color color: "black"
@@ -44,7 +45,7 @@ Item {
             SequentialAnimation {
                 id: animation
 
-                running: root.status === 1
+                running: root.status === 1 || root.status === 4
                 loops: Animation.Infinite
                 alwaysRunToEnd: true
 
@@ -111,7 +112,7 @@ Item {
     }
 
     Row {
-        visible: root.status === 0 || root.status === 1
+        visible: root.status === 0 || root.status === 1 || root.status === 4
         x: root.width / 8
         spacing: root.width / 8
         Repeater {

@@ -19,6 +19,7 @@
 #endif
 
 #include "punctuator.hpp"
+#include "simdjson.h"
 #include "stt_engine.hpp"
 
 struct VoskModel;
@@ -64,6 +65,7 @@ class vosk_engine : public stt_engine {
     VoskModel* m_vosk_model = nullptr;
     VoskRecognizer* m_vosk_recognizer = nullptr;
     std::optional<punctuator> m_punctuator;
+    simdjson::ondemand::parser m_parser;
 
 #ifdef DUMP_AUDIO_TO_FILE
     std::unique_ptr<std::ofstream> m_file_audio_input;
@@ -79,6 +81,7 @@ class vosk_engine : public stt_engine {
     void reset_impl() override;
     void start_processing_impl() override;
     void push_inbuf_to_samples();
+    std::string get_from_json(const char* name, const char* str);
 };
 
 #endif  // VOSK_ENGINE_H

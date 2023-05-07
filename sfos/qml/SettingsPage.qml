@@ -38,9 +38,9 @@ Page {
             }
 
             ComboBox {
-                id: langCombo
-                label: qsTr("Active language model")
-                enabled: app.configured && !service.busy && !app.busy
+                id: sttLangCombo
+                label: qsTr("Active Speech to Text model") + (enabled ? "" : (": " + qsTr("None")))
+                enabled: app.stt_configured && !service.busy && !app.busy
                 opacity: enabled ? 1.0 : Theme.opacityOverlay
                 currentIndex: app.active_stt_model_idx
                 menu: ContextMenu {
@@ -55,20 +55,55 @@ Page {
                 }
 
                 function update() {
-                    if (!app.busy && !service.busy && app.configured) {
-                        langCombo.currentIndex = app.active_stt_model_idx
+                    if (!app.busy && !service.busy && app.stt_configured) {
+                        sttLangCombo.currentIndex = app.active_stt_model_idx
                     }
                 }
 
                 Connections {
                     target: app
-                    onAvailable_stt_models_changed: langCombo.update()
-                    onBusyChanged: langCombo.update()
-                    onConfiguredChanged: langCombo.update()
+                    onAvailable_stt_models_changed: sttLangCombo.update()
+                    onBusyChanged: sttLangCombo.update()
+                    onStt_configuredChanged: sttLangCombo.update()
                 }
                 Connections {
                     target: service
-                    onBusyChanged: langCombo.update()
+                    onBusyChanged: sttLangCombo.update()
+                }
+            }
+
+            ComboBox {
+                id: ttsLangCombo
+                label: qsTr("Active Text to Speech model") + (enabled ? "" : (": " + qsTr("None")))
+                enabled: app.tts_configured && !service.busy && !app.busy
+                opacity: enabled ? 1.0 : Theme.opacityOverlay
+                currentIndex: app.active_tts_model_idx
+                menu: ContextMenu {
+                    Repeater {
+                        model: app.available_tts_models
+                        MenuItem { text: modelData }
+                    }
+                }
+
+                onCurrentIndexChanged: {
+                    app.set_active_tts_model_idx(currentIndex)
+                }
+
+                function update() {
+                    if (!app.busy && !service.busy && app.tts_configured) {
+                        ttsLangCombo.currentIndex = app.active_tts_model_idx
+                    }
+                }
+
+                Connections {
+                    target: app
+                    onAvailable_tts_models_changed: ttsLangCombo.update()
+                    onBusyChanged: ttsLangCombo.update()
+                    onTts_configuredChanged: ttsLangCombo.update()
+                }
+                Connections {
+                    target: service
+                    onBusyChanged: ttsLangCombo.update()
                 }
             }
 
@@ -142,11 +177,12 @@ Page {
             }
 
             TextSwitch {
+                visible: _settings.py_supported()
                 checked: _settings.restore_punctuation
                 automaticCheck: false
                 text: qsTr("Restore punctuation")
-                description: qsTr("For speech to text models that don't support punctuation (.,:?!) " +
-                                  "use advanced punctuation restoration after decoding. To make it work, " +
+                description: qsTr("When speech to text model without support for punctuation (.,:?!) is used, " +
+                                  "enable advanced punctuation restoration after decoding. To make it work, " +
                                   "make sure you have downloaded 'Punctuation' model " +
                                   "for your language. When this option is enabled model initialization takes " +
                                   "a little longer.")

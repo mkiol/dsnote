@@ -242,8 +242,8 @@ bool archive_decode(const QString& file_in, archive_type type,
                 if (files_out.files.empty()) {
                     if (entry_path.endsWith('/')) return {};
                     auto split = entry_path.split('/');
-                    if (split.size() < 2) return {};
-                    if (ignore_first_dir)
+                    if (split.empty()) return {};
+                    if (split.size() > 1 && ignore_first_dir)
                         split.first() = files_out.out_dir;
                     else
                         split.push_front(files_out.out_dir);

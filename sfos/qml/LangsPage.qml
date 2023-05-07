@@ -47,8 +47,14 @@ Page {
         Component {
             id: modelSectionDelegate
             SectionHeader {
-                height: section == ModelsListModel.Stt ? 0 : implicitHeight
-                text: section == ModelsListModel.Stt ? "" : qsTr("Complementary models")
+                text: {
+                    if (section == ModelsListModel.Stt)
+                        return qsTr("Speech to Text")
+                    if (section == ModelsListModel.Tts)
+                        return qsTr("Text to Speech")
+                    if (section == ModelsListModel.Ttt)
+                        return qsTr("Text to Text")
+                }
             }
         }
 
@@ -61,7 +67,7 @@ Page {
                 downloading: model.downloading
                 progress: model.progress
                 score: model.score
-                defaultModelForLangAllowed: model.role === ModelsListModel.Stt
+                defaultModelForLangAllowed: model.role === ModelsListModel.Stt || model.role === ModelsListModel.Tts
                 defaultModelForLang: model.default_for_lang
             }
         }

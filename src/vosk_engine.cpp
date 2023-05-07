@@ -13,7 +13,6 @@
 #include <array>
 #include <chrono>
 
-#include "RSJparser.hpp"
 #include "logger.hpp"
 
 using namespace std::chrono_literals;
@@ -260,6 +259,22 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
     return samples_process_result_t::wait_for_samples;
 }
 
+std::string vosk_engine::get_from_json(const char* name, const char* str) {
+    auto json = simdjson::padded_string{str, strlen(str)};
+
+    auto doc = m_parser.iterate(json);
+    if (doc.error() != simdjson::SUCCESS) {
+        LOGE("failed to simdjson iterate");
+        return {};
+    }
+
+    std::string_view sv;
+
+    if (!doc[name].get(sv)) return std::string{sv};
+
+    return {};
+}
+
 void vosk_engine::decode_speech(const vosk_buf_t& buf, bool eof) {
     LOGD("speech decoding started");
 
@@ -286,15 +301,14 @@ void vosk_engine::decode_speech(const vosk_buf_t& buf, bool eof) {
     }
 
     auto result = [&] {
-        if (eof) {
-            const auto* str =
-                m_vosk_api.vosk_recognizer_final_result(m_vosk_recognizer);
-            return RSJresource{str}["text"].as<std::string>();
-        }
+        if (eof)
+            return get_from_json(
+                "text",
+                m_vosk_api.vosk_recognizer_final_result(m_vosk_recognizer));
 
-        const auto* str =
-            m_vosk_api.vosk_recognizer_partial_result(m_vosk_recognizer);
-        return RSJresource{str}["partial"].as<std::string>();
+        return get_from_json(
+            "partial",
+            m_vosk_api.vosk_recognizer_partial_result(m_vosk_recognizer));
     }();
 
 #ifdef DEBUG

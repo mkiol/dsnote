@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,7 +13,7 @@ import harbour.dsnote.Dsnote 1.0
 ApplicationWindow {
     id: root
 
-    SttConfig {
+    SpeechConfig {
         id: service
     }
 

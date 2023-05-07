@@ -5,17 +5,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef STT_CONFIG_H
-#define STT_CONFIG_H
+#ifndef SPEECH_CONFIG_H
+#define SPEECH_CONFIG_H
 
 #include <QObject>
 #include <QString>
 #include <QVariantList>
 
+#include "config.h"
 #include "langs_list_model.h"
 #include "models_list_model.h"
 
-class stt_config : public QObject {
+class speech_config : public QObject {
     Q_OBJECT
 
     Q_PROPERTY(QVariantList available_models READ available_models NOTIFY
@@ -24,7 +25,7 @@ class stt_config : public QObject {
     Q_PROPERTY(ModelsListModel *models_model READ models_model CONSTANT)
     Q_PROPERTY(bool busy READ busy NOTIFY busy_changed)
    public:
-    explicit stt_config(QObject *parent = nullptr);
+    explicit speech_config(QObject *parent = nullptr);
 
     Q_INVOKABLE void download_model(const QString &id);
     Q_INVOKABLE void cancel_model_download(const QString &id);
@@ -40,7 +41,7 @@ class stt_config : public QObject {
 
    private:
     inline static const QString DBUS_SERVICE_NAME{
-        QStringLiteral("org.mkiol.Stt")};
+        QStringLiteral(APP_DBUS_SERVICE)};
     inline static const QString DBUS_SERVICE_PATH{QStringLiteral("/")};
     static const int SUCCESS = 0;
     static const int FAILURE = -1;
@@ -56,4 +57,4 @@ class stt_config : public QObject {
     void reload() const;
 };
 
-#endif  // STT_CONFIG_H
+#endif  // SPEECH_CONFIG_H

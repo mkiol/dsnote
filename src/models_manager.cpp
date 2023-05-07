@@ -55,6 +55,9 @@ QDebug operator<<(QDebug d, models_manager::comp_type comp_type) {
         case models_manager::comp_type::tarxz:
             d << "tarxz";
             break;
+        case models_manager::comp_type::targz:
+            d << "targz";
+            break;
         case models_manager::comp_type::xz:
             d << "xz";
             break;
@@ -102,6 +105,9 @@ QDebug operator<<(QDebug d, models_manager::model_role role) {
         case models_manager::model_role::ttt:
             d << "ttt";
             break;
+        case models_manager::model_role::tts:
+            d << "tts";
+            break;
     }
 
     return d;
@@ -120,6 +126,12 @@ QDebug operator<<(QDebug d, models_manager::model_engine engine) {
             break;
         case models_manager::model_engine::ttt_hftc:
             d << "ttt-hftc";
+            break;
+        case models_manager::model_engine::tts_coqui:
+            d << "tts-coqui";
+            break;
+        case models_manager::model_engine::tts_piper:
+            d << "tts-piper";
             break;
     }
 
@@ -207,23 +219,25 @@ std::vector<models_manager::model_t> models_manager::models(
 
     QDir dir{settings::instance()->models_dir()};
 
-    std::for_each(m_models.cbegin(), m_models.cend(),
-                  [&dir, &list, &lang_id](const auto& pair) {
-                      if (lang_id.isEmpty() || lang_id == pair.second.lang_id) {
-                          list.push_back(
-                              {pair.first, pair.second.engine,
-                               pair.second.lang_id, pair.second.name,
-                               pair.second.scorer_file_name.isEmpty()
-                                   ? ""
-                                   : dir.filePath(pair.second.scorer_file_name),
-                               pair.second.scorer_file_name.isEmpty()
-                                   ? ""
-                                   : dir.filePath(pair.second.scorer_file_name),
-                               pair.second.score, pair.second.default_for_lang,
-                               pair.second.available, pair.second.downloading,
-                               pair.second.download_progress});
-                      }
-                  });
+    std::for_each(
+        m_models.cbegin(), m_models.cend(),
+        [&dir, &list, &lang_id](const auto& pair) {
+            if (!pair.second.hidden &&
+                (lang_id.isEmpty() || lang_id == pair.second.lang_id)) {
+                list.push_back(
+                    {pair.first, pair.second.engine, pair.second.lang_id,
+                     pair.second.name,
+                     pair.second.scorer_file_name.isEmpty()
+                         ? ""
+                         : dir.filePath(pair.second.scorer_file_name),
+                     pair.second.scorer_file_name.isEmpty()
+                         ? ""
+                         : dir.filePath(pair.second.scorer_file_name),
+                     pair.second.speaker, pair.second.score,
+                     pair.second.default_for_lang, pair.second.available,
+                     pair.second.downloading, pair.second.download_progress});
+            }
+        });
 
     std::sort(list.begin(), list.end(), [](const auto& a, const auto& b) {
         auto ra = static_cast<int>(role_of_engine(a.engine));
@@ -241,7 +255,7 @@ bool models_manager::has_model_of_role(model_role role) const {
     QDir dir{settings::instance()->models_dir()};
 
     return std::find_if(m_models.cbegin(), m_models.cend(), [&](const auto& p) {
-               return p.second.available &&
+               return !p.second.hidden && p.second.available &&
                       models_manager::role_of_engine(p.second.engine) == role &&
                       QFile::exists(
                           dir.filePath(dir.filePath(p.second.file_name)));
@@ -255,14 +269,14 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
 
     for (const auto& [id, model] : m_models) {
         auto model_file = dir.filePath(model.file_name);
-        if (model.available && QFile::exists(model_file)) {
+        if (!model.hidden && model.available && QFile::exists(model_file)) {
             list.push_back(
                 {id, model.engine, model.lang_id, model.name, model_file,
                  model.scorer_file_name.isEmpty()
                      ? QString{}
                      : dir.filePath(model.scorer_file_name),
-                 model.score, model.default_for_lang, model.available,
-                 model.downloading, model.download_progress});
+                 model.speaker, model.score, model.default_for_lang,
+                 model.available, model.downloading, model.download_progress});
         }
     }
 
@@ -612,6 +626,14 @@ bool models_manager::handle_download(const QString& path,
                                           checksum, path_in_archive, path_2,
                                           checksum_2, path_in_archive_2);
                 QFile::remove(tar_file);
+            } else if (comp == comp_type::targz) {
+                auto tar_file = download_filename(path, comp_type::tar);
+                comp_tools::gz_decode(comp_file, tar_file);
+                QFile::remove(comp_file);
+                ok = extract_from_archive(tar_file, comp_type::tar, path,
+                                          checksum, path_in_archive, path_2,
+                                          checksum_2, path_in_archive_2);
+                QFile::remove(tar_file);
             } else if (comp == comp_type::zip) {
                 ok = extract_from_archive(comp_file, comp_type::zip, path,
                                           checksum, path_in_archive, path_2,
@@ -869,6 +891,8 @@ models_manager::comp_type models_manager::str2comp(const QString& str) {
         return comp_type::xz;
     if (!str.compare(QStringLiteral("tarxz"), Qt::CaseInsensitive))
         return comp_type::tarxz;
+    if (!str.compare(QStringLiteral("targz"), Qt::CaseInsensitive))
+        return comp_type::targz;
     if (!str.compare(QStringLiteral("zip"), Qt::CaseInsensitive))
         return comp_type::zip;
     if (!str.compare(QStringLiteral("dir"), Qt::CaseInsensitive))
@@ -890,6 +914,9 @@ QString models_manager::download_filename(QString filename, comp_type comp,
             break;
         case comp_type::tarxz:
             filename += QStringLiteral(".tar.xz");
+            break;
+        case comp_type::targz:
+            filename += QStringLiteral(".tar.gz");
             break;
         case comp_type::zip:
             filename += QStringLiteral(".zip");
@@ -938,7 +965,9 @@ auto models_manager::extract_langs(const QJsonArray& langs_jarray) {
 void models_manager::remove_empty_langs(langs_t& langs,
                                         const models_t& models) {
     std::set<QString> existing_langs;
-    for (const auto& [_, model] : models) existing_langs.insert(model.lang_id);
+    for (const auto& [_, model] : models) {
+        if (!model.hidden) existing_langs.insert(model.lang_id);
+    }
 
     auto it = langs.begin();
     while (it != langs.end()) {
@@ -983,6 +1012,9 @@ models_manager::model_role models_manager::role_of_engine(model_engine engine) {
             return model_role::stt;
         case model_engine::ttt_hftc:
             return model_role::ttt;
+        case model_engine::tts_coqui:
+        case model_engine::tts_piper:
+            return model_role::tts;
     }
 
     throw std::runtime_error("unknown engine");
@@ -994,6 +1026,8 @@ models_manager::model_engine models_manager::engine_from_name(
     if (name == QStringLiteral("stt_vosk")) return model_engine::stt_vosk;
     if (name == QStringLiteral("stt_whisper")) return model_engine::stt_whisper;
     if (name == QStringLiteral("ttt_hftc")) return model_engine::ttt_hftc;
+    if (name == QStringLiteral("tts_coqui")) return model_engine::tts_coqui;
+    if (name == QStringLiteral("tts_piper")) return model_engine::tts_piper;
 
     throw std::runtime_error("unknown engine: " + name.toStdString());
 }
@@ -1037,6 +1071,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         qint64 size = 0, scorer_size = 0;
         int score = obj.value(QLatin1String{"score"}).toInt(-1);
         bool available = false, exists = false;
+        QString speaker = obj.value(QLatin1String{"speaker"}).toString();
 
         auto model_alias_of =
             obj.value(QLatin1String{"model_alias_of"}).toString();
@@ -1083,6 +1118,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
                 obj.value(QLatin1String{"scorer_urls"}).toArray();
             for (auto url : ascorer_urls)
                 scorer_urls.emplace_back(url.toString());
+
         } else if (models.count(model_alias_of) > 0) {
             const auto& alias = models.at(model_alias_of);
 
@@ -1100,6 +1136,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             scorer_size = alias.scorer_size;
             scorer_comp = alias.scorer_comp;
             scorer_urls = alias.scorer_urls;
+            if (speaker.isEmpty()) speaker = alias.speaker;
             exists = alias.exists;
             available = alias.available;
         } else {
@@ -1127,6 +1164,20 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
                      << model_id;
             continue;
         }
+        if (engine == model_engine::stt_vosk && model_id.contains("large")) {
+            qDebug() << "ignoring vosk large model:" << model_id;
+            continue;
+        }
+        if (engine == model_engine::tts_coqui) {
+            qDebug() << "ignoring coqui model:" << model_id;
+            continue;
+        }
+#endif
+#ifndef USE_PY
+        if (engine == model_engine::ttt_hftc) {
+            qDebug() << "ignoring hftc model:" << model_id;
+            continue;
+        }
 #endif
 
         bool is_default_model_for_lang =
@@ -1149,7 +1200,9 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             /*scorer_comp=*/scorer_comp,
             /*scorer_urls=*/std::move(scorer_urls),
             /*scorer_size=*/scorer_size,
+            /*speaker=*/speaker,
             /*score=*/score,
+            /*hidden=*/obj.value(QLatin1String{"hidden"}).toBool(false),
             /*default_for_lang=*/is_default_model_for_lang,
             /*exists=*/exists,
             /*available=*/available,
@@ -1287,6 +1340,8 @@ QString models_manager::file_name_from_id(const QString& id,
             return id + ".ggml";
         case model_engine::stt_vosk:
         case model_engine::ttt_hftc:
+        case model_engine::tts_coqui:
+        case model_engine::tts_piper:
             return id;
     }
 

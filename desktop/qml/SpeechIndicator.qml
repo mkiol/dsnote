@@ -13,7 +13,8 @@ Item {
 
     // status values:
     // 0 - no speech, 1 - speech detected,
-    // 2 - speech decoding, 3 - speech initializing
+    // 2 - speech decoding, 3 - speech initializing,
+    // 4 - speech playing
     property int status: 0
 
     property color color: "black"
@@ -35,7 +36,7 @@ Item {
             Connections {
                 target: root
                 function onStatusChanged() {
-                    if (status !== 1)
+                    if (status !== 1 && status !== 4)
                         waveRect.value = waveRect.initValue
                 }
             }
@@ -48,7 +49,7 @@ Item {
             height: root.height * value
 
             SequentialAnimation {
-                running: root.status === 1
+                running: root.status === 1 || root.status === 4
                 loops: Animation.Infinite
 
                 NumberAnimation {
@@ -93,7 +94,7 @@ Item {
             Connections {
                 target: root
                 function onStatusChanged() {
-                    if (status !== 2)
+                    if (status !== 2 && status !== 3)
                         squareRect.value = 0
                 }
             }
@@ -123,7 +124,7 @@ Item {
     }
 
     Row {
-        visible: root.status === 0 || root.status === 1
+        visible: root.status === 0 || root.status === 1 || root.status === 4
         x: root.width / 16
         spacing: root.width / 16
         Repeater {
