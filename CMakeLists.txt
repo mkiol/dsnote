@@ -69,9 +69,9 @@ set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_dbus_service "org.mkiol.Speech")
 set(info_dbus_interface "org.mkiol.Speech")
-set(info_conf_version "11")
+set(info_conf_version "12")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · Åke Engelbrektson")
-set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · 🤗Transformers")
+set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · 🤗Transformers · Piper")
 
 project(${info_id} VERSION 2.0.1)
 

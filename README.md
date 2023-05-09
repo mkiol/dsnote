@@ -1,12 +1,12 @@
 # Speech Note
 
-Sailfish OS app for note taking with speech to text
+Sailfish OS app for note taking and reading with speech to text or text to speech.
 
 ## Description
 
 **Speech Note** converts speech to text using [Coqui STT](https://github.com/coqui-ai/STT),
-[Vosk](https://alphacephei.com/vosk) and [whisper.cpp](https://github.com/ggerganov/whisper.cpp)
-engines and language models.
+[Vosk](https://alphacephei.com/vosk), [whisper.cpp](https://github.com/ggerganov/whisper.cpp) and also
+text to speech with [Piper](https://github.com/rhasspy/piper) engines and language models.
 All voice processing is entirely done locally on the device. Internet connection is only
 required for model download during app initial configuration. **Speech Note** respects your
 privacy and does not send any data to the Internet.
@@ -15,55 +15,59 @@ privacy and does not send any data to the Internet.
 
 Following languages are supported:
 
-| **Lang ID** | **Name**             | **DeepSpeech** | **Whisper** | **Vosk** |
-| ----------- | -------------------- | -------------- | ----------- | -------- |
-| am          | Amharic              | ● (e)          |             |          |
-| ar          | Arabic               |                |             | ●        |
-| bg          | Bulgarian            |                | ● (e)       |          |
-| bs          | Bosnian              |                | ● (e)       |          |
-| ca          | Catalan              | ●              | ●           | ●        |
-| cs          | Czech                | ●              | ●           | ●        |
-| de          | German               | ●              | ●           | ●        |
-| el          | Greek                | ● (e)          | ● (e)       |          |
-| en          | English              | ●              | ●           | ●        |
-| eo          | Esperanto            |                |             | ●        |
-| es          | Spanish              | ●              | ●           | ●        |
-| et          | Estonian             | ● (e)          |             |          |
-| eu          | Basque               | ● (e)          |             |          |
-| fa          | Persian              | ●              |             | ●        |
-| fi          | Finnish              | ●              | ●           |          |
-| fr          | French               | ●              | ●           | ●        |
-| hi          | Hindi                |                |             | ●        |
-| hr          | Croatian             |                | ● (e)       |          |
-| hu          | Hungarian            | ● (e)          |             |          |
-| id          | Indonesian           | ● (e)          | ●           |          |
-| it          | Italian              | ●              | ●           | ●        |
-| jp          | Japanese             |                | ●           | ●        |
-| kk          | Kazakh               |                |             | ●        |
-| ko          | Korean               |                |             | ●        |
-| lv          | Latvian              | ● (e)          |             |          |
-| mk          | Macedonian           |                | ● (e)       |          |
-| mn          | Mongolian            | ● (e)          |             |          |
-| ms          | Malay                |                | ●           |          |
-| nl          | Dutch                | ● (e)          | ●           | ●        |
-| no          | Norwegian            |                | ●           |          |
-| pl          | Polish               | ●              | ●           | ●        |
-| pt          | Portuguese           | ● (e)          | ●           | ●        |
-| ro          | Romanian             | ● (e)          | ● (e)       |          |
-| ru          | Russian              | ●              | ●           | ●        |
-| sk          | Slovak               |                | ● (e)       |          |
-| sl          | Slovenian            | ● (e)          | ● (e)       |          |
-| sr          | Serbian              |                | ● (e)       |          |
-| sv          | Swedish              |                | ●           | ●        |
-| sw          | Swahili              | ●              |             |          |
-| th          | Thai                 | ● (e)          | ● (e)       |          |
-| tl          | Tagalog              |                |             | ●        |
-| tr          | Turkish              | ● (e)          | ●           | ●        |
-| uk          | Ukrainian            | ●              | ●           | ●        |
-| uz          | Uzbek                |                |             | ●        |
-| vi          | Vietnamese           |                | ● (e)       | ●        |
-| yo          | Yoruba               | ● (e)          |             |          |
-| zh-CN       | Chinese (Simplified) | ●              | ● (e)       | ●        |
+| **Lang ID** | **Name**             | **DeepSpeech** | **Whisper** | **Vosk** | **Piper** |
+| ----------- | -------------------- | -------------- | ----------- | -------- | --------- |
+| am          | Amharic              | ● (e)          |             |          |           |
+| ar          | Arabic               |                |             | ●        |           |
+| bg          | Bulgarian            |                | ● (e)       |          |           |
+| bs          | Bosnian              |                | ● (e)       |          |           |
+| ca          | Catalan              | ●              | ●           | ●        | ●         |
+| cs          | Czech                | ●              | ●           | ●        |           |
+| da          | Danish               |                |             |          | ●         |
+| de          | German               | ●              | ●           | ●        | ●         |
+| el          | Greek                | ● (e)          | ● (e)       |          | ●         |
+| en          | English              | ●              | ●           | ●        | ●         |
+| eo          | Esperanto            |                |             | ●        |           |
+| es          | Spanish              | ●              | ●           | ●        | ●         |
+| et          | Estonian             | ● (e)          |             |          |           |
+| eu          | Basque               | ● (e)          |             |          |           |
+| fa          | Persian              | ●              |             | ●        |           |
+| fi          | Finnish              | ●              | ●           |          | ●         |
+| fr          | French               | ●              | ●           | ●        | ●         |
+| hi          | Hindi                |                |             | ●        |           |
+| hr          | Croatian             |                | ● (e)       |          |           |
+| hu          | Hungarian            | ● (e)          |             |          |           |
+| id          | Indonesian           | ● (e)          | ●           |          |           |
+| it          | Italian              | ●              | ●           | ●        | ●         |
+| jp          | Japanese             |                | ●           | ●        |           |
+| kk          | Kazakh               |                |             | ●        | ●         |
+| ko          | Korean               |                |             | ●        |           |
+| lv          | Latvian              | ● (e)          |             |          |           |
+| mk          | Macedonian           |                | ● (e)       |          |           |
+| mn          | Mongolian            | ● (e)          |             |          |           |
+| ms          | Malay                |                | ●           |          |           |
+| ne          | Nepali               |                |             |          | ●         |
+| nl          | Dutch                | ● (e)          | ●           | ●        | ●         |
+| no          | Norwegian            |                | ●           |          | ●         |
+| pl          | Polish               | ●              | ●           | ●        | ● (e)     |
+| pt          | Portuguese           | ● (e)          | ●           | ●        | ●         |
+| ro          | Romanian             | ● (e)          | ● (e)       |          |           |
+| ru          | Russian              | ●              | ●           | ●        |           |
+| sk          | Slovak               |                | ● (e)       |          |           |
+| sl          | Slovenian            | ● (e)          | ● (e)       |          |           |
+| sr          | Serbian              |                | ● (e)       |          |           |
+| sv          | Swedish              |                | ●           | ●        |           |
+| sw          | Swahili              | ●              |             |          |           |
+| th          | Thai                 | ● (e)          | ● (e)       |          |           |
+| tl          | Tagalog              |                |             | ●        |           |
+| tr          | Turkish              | ● (e)          | ●           | ●        |           |
+| uk          | Ukrainian            | ●              | ●           | ●        | ●         |
+| uz          | Uzbek                |                |             | ●        |           |
+| vi          | Vietnamese           |                | ● (e)       | ●        | ●         |
+| yo          | Yoruba               | ● (e)          |             |          |           |
+| zh-CN       | Chinese (Simplified) | ●              | ● (e)       | ●        | ●         |
+
+<sup>(e) experimental, most likely doesn't work well</sup>
 
 Language models can be downloaded directly from the app.
 
@@ -74,9 +78,9 @@ The quality of speech recognition strongly depends on a model.
 
 ## Systemd service and D-Bus API
 
-**Speech Note** provides systemd service (`harbour-dsnote`) for speech-to-text conversion.
+**Speech Note** provides systemd service (`harbour-dsnote`) for speech-to-text/text-to-speech conversion.
 This service is accessible via D-Bus interface. The detailed API description is in
-[org.mkiol.Stt.xml](https://github.com/mkiol/dsnote/blob/main/dbus/org.mkiol.Stt.xml) document.
+[org.mkiol.Speech.xml](https://github.com/mkiol/dsnote/blob/main/dbus/org.mkiol.Speech.xml) document.
 
 An example of QML-only and easy to re-use component that encapsulate complexity of D-Bus
 interface is [SttService.qml](https://github.com/mkiol/dskeyboard/blob/main/qml/SttService.qml)
@@ -120,6 +124,8 @@ sfdk package
 - [libarchive](https://libarchive.org/)
 - [RNNoise-nu](https://github.com/GregorR/rnnoise-nu)
 - [{fmt}](https://fmt.dev)
+- [🤗 Transformers](https://github.com/huggingface/transformers)
+- [Piper](https://github.com/rhasspy/piper)
 
 ## License
 
