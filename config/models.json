@@ -235,6 +235,16 @@
             "name": "한국어",
             "name_en": "Korean",
             "id": "ko"
+        },
+        {
+            "name": "नेपाली",
+            "name_en": "Nepali",
+            "id": "ne"
+        },
+        {
+            "name": "Dansk",
+            "name_en": "Danish",
+            "id": "da"
         }
     ],
     "models": [
@@ -906,7 +916,8 @@
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
             ],
-            "size": "77691713"
+            "size": "77691713",
+            "hidden": true
         },
         {
             "name": "Multilingual (Whisper Base)",
@@ -919,7 +930,8 @@
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
             ],
-            "size": "147951465"
+            "size": "147951465",
+            "hidden": true
         },
         {
             "name": "Multilingual (Whisper Small)",
@@ -932,7 +944,8 @@
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
             ],
-            "size": "487601967"
+            "size": "487601967",
+            "hidden": true
         },
         {
             "name": "Multilingual (Whisper Medium)",
@@ -945,7 +958,8 @@
             "urls": [
                 "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
             ],
-            "size": "1533763059"
+            "size": "1533763059",
+            "hidden": true
         },
         {
             "name": "Español (Whisper Tiny)",
@@ -2325,7 +2339,8 @@
                 "https://huggingface.co/kredor/punctuate-16/resolve/0915fb7e29e76dbe40ccbc251fa19abb94f3f5aa/pytorch_model.bin",
                 "https://huggingface.co/kredor/punctuate-16/resolve/0915fb7e29e76dbe40ccbc251fa19abb94f3f5aa/tokenizer.json"
             ],
-            "size": "1126993609"
+            "size": "1126993609",
+            "hidden": true
         },
         {
             "name": "Punctuation (Kredor)",
@@ -2410,6 +2425,520 @@
             "model_id": "ro_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "ro"
+        },
+        {
+            "name": "English (Piper Danny Low)",
+            "model_id": "en_piper_danny_low",
+            "engine": "tts_piper",
+            "lang_id": "en",
+            "checksum": "78e3002e",
+            "checksum_quick": "84c9991d",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-en-us-danny-low.tar.gz"
+            ],
+            "size": "58259303"
+        },
+        {
+            "name": "English (Piper Kathleen Low)",
+            "model_id": "en_piper_kathleen_low",
+            "engine": "tts_piper",
+            "lang_id": "en",
+            "checksum": "b31c6b81",
+            "checksum_quick": "aaaf3d5a",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-en-us-kathleen-low.tar.gz"
+            ],
+            "size": "58260821"
+        },
+        {
+            "name": "English (Piper Lessac Medium)",
+            "model_id": "en_piper_lessac_medium",
+            "engine": "tts_piper",
+            "lang_id": "en",
+            "score": 4,
+            "checksum": "50b36629",
+            "checksum_quick": "fbb59995",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-en-us-lessac-medium.tar.gz"
+            ],
+            "size": "58197843"
+        },
+        {
+            "name": "English (Piper LibriTTS High)",
+            "model_id": "en_piper_libritts_high",
+            "engine": "tts_piper",
+            "lang_id": "en",
+            "score": 5,
+            "checksum": "85a09a4e",
+            "checksum_quick": "9c035a2d",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-en-us-libritts-high.tar.gz"
+            ],
+            "size": "120620366"
+        },
+        {
+            "name": "English (Piper Ryan Medium)",
+            "model_id": "en_piper_ryan_medium",
+            "engine": "tts_piper",
+            "lang_id": "en",
+            "checksum": "57ab7c52",
+            "checksum_quick": "edf73e60",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-en-us-ryan-medium.tar.gz"
+            ],
+            "size": "58389017"
+        },
+        {
+            "name": "English (Piper Alan Low)",
+            "model_id": "en_piper_alan_low",
+            "engine": "tts_piper",
+            "lang_id": "en",
+            "checksum": "c4d4c274",
+            "checksum_quick": "df1aca",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-en-gb-alan-low.tar.gz"
+            ],
+            "size": "58251456"
+        },
+        {
+            "name": "Català (Piper Upc Ona Low)",
+            "model_id": "ca_piper_upc_ona_low",
+            "engine": "tts_piper",
+            "lang_id": "ca",
+            "checksum": "29fa5b80",
+            "checksum_quick": "5fba3675",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-ca-upc_ona-x-low.tar.gz"
+            ],
+            "size": "18716208"
+        },
+        {
+            "name": "Català (Piper Upc Pau Low)",
+            "model_id": "ca_piper_upc_pau_low",
+            "engine": "tts_piper",
+            "lang_id": "ca",
+            "checksum": "5fd47f1b",
+            "checksum_quick": "a1087e41",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-ca-upc_pau-x-low.tar.gz"
+            ],
+            "size": "18825995"
+        },
+        {
+            "name": "Dansk (Piper Talesyntese Medium)",
+            "model_id": "da_piper_talesyntese_medium",
+            "engine": "tts_piper",
+            "lang_id": "da",
+            "checksum": "b30d70c2",
+            "checksum_quick": "afcf77ed",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-da-nst_talesyntese-medium.tar.gz"
+            ],
+            "size": "58261532"
+        },
+        {
+            "name": "Deutsch (Piper Eva Low)",
+            "model_id": "de_piper_eva_low",
+            "engine": "tts_piper",
+            "lang_id": "de",
+            "checksum": "6e01736f",
+            "checksum_quick": "86b52e4e",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-de-eva_k-x-low.tar.gz"
+            ],
+            "size": "18716986"
+        },
+        {
+            "name": "Deutsch (Piper Karlsson Low)",
+            "model_id": "de_piper_karlsson_low",
+            "engine": "tts_piper",
+            "lang_id": "de",
+            "checksum": "3228b5f",
+            "checksum_quick": "c915e670",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-de-karlsson-low.tar.gz"
+            ],
+            "size": "58261792"
+        },
+        {
+            "name": "Deutsch (Piper Kerstin Low)",
+            "model_id": "de_piper_kerstin_low",
+            "engine": "tts_piper",
+            "lang_id": "de",
+            "checksum": "36c92c17",
+            "checksum_quick": "d691f169",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-de-kerstin-low.tar.gz"
+            ],
+            "size": "58259462"
+        },
+        {
+            "name": "Deutsch (Piper Pavoque Low)",
+            "model_id": "de_piper_pavoque_low",
+            "engine": "tts_piper",
+            "lang_id": "de",
+            "checksum": "424a0269",
+            "checksum_quick": "37c723ad",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-de-pavoque-low.tar.gz"
+            ],
+            "size": "58262855"
+        },
+        {
+            "name": "Deutsch (Piper Ramona Low)",
+            "model_id": "de_piper_ramona_low",
+            "engine": "tts_piper",
+            "lang_id": "de",
+            "checksum": "d6c64193",
+            "checksum_quick": "b2cbd846",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-de-ramona-low.tar.gz"
+            ],
+            "size": "58248670"
+        },
+        {
+            "name": "Deutsch (Piper Thorsten Low)",
+            "model_id": "de_piper_thorsten_low",
+            "engine": "tts_piper",
+            "lang_id": "de",
+            "checksum": "5c1a8ef8",
+            "checksum_quick": "2cbefa16",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-de-thorsten-low.tar.gz"
+            ],
+            "size": "58260329"
+        },
+        {
+            "name": "Ελληνικά (Piper Rapunzelina Low)",
+            "model_id": "el_piper_rapunzelina_low",
+            "engine": "tts_piper",
+            "lang_id": "el",
+            "checksum": "f58d34a0",
+            "checksum_quick": "7ab99ce2",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-el-gr-rapunzelina-low.tar.gz"
+            ],
+            "size": "58261670"
+        },
+        {
+            "name": "Español (Piper Carlfm Low)",
+            "model_id": "es_piper_carlfm_low",
+            "engine": "tts_piper",
+            "lang_id": "es",
+            "score": 4,
+            "checksum": "a7869b08",
+            "checksum_quick": "777ffe2",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-es-carlfm-x-low.tar.gz"
+            ],
+            "size": "18825198"
+        },
+        {
+            "name": "Español (Piper MLS 10246 Low)",
+            "model_id": "es_piper_mls10246_low",
+            "engine": "tts_piper",
+            "lang_id": "es",
+            "checksum": "4be881f4",
+            "checksum_quick": "74620971",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-es-mls_10246-low.tar.gz"
+            ],
+            "size": "58252390"
+        },
+        {
+            "name": "Español (Piper MLS 9972 Low)",
+            "model_id": "es_piper_mls9972_low",
+            "engine": "tts_piper",
+            "lang_id": "es",
+            "checksum": "bbb232e8",
+            "checksum_quick": "edfcc829",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-es-mls_9972-low.tar.gz"
+            ],
+            "size": "58265629"
+        },
+        {
+            "name": "Suomi (Piper Harri Low)",
+            "model_id": "fi_piper_harri_low",
+            "engine": "tts_piper",
+            "lang_id": "fi",
+            "checksum": "554ee94",
+            "checksum_quick": "cf8260be",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-fi-harri-low.tar.gz"
+            ],
+            "size": "58356444"
+        },
+        {
+            "name": "Français (Piper Gilles Low)",
+            "model_id": "fr_piper_gilles_low",
+            "engine": "tts_piper",
+            "lang_id": "fr",
+            "checksum": "4e3fcada",
+            "checksum_quick": "f87cdb",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-fr-gilles-low.tar.gz"
+            ],
+            "size": "58254824"
+        },
+        {
+            "name": "Français (Piper MLS 1840 Low)",
+            "model_id": "fr_piper_mls1840_low",
+            "engine": "tts_piper",
+            "lang_id": "fr",
+            "checksum": "1ad67dbc",
+            "checksum_quick": "2a3043ba",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-fr-mls_1840-low.tar.gz"
+            ],
+            "size": "58259597"
+        },
+        {
+            "name": "Français (Piper Siwis Medium)",
+            "model_id": "fr_piper_siwis_medium",
+            "engine": "tts_piper",
+            "lang_id": "fr",
+            "score": 4,
+            "checksum": "3a7a964c",
+            "checksum_quick": "ce906b33",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-fr-siwis-medium.tar.gz"
+            ],
+            "size": "58374904"
+        },
+        {
+            "name": "Italiano (Piper Riccardo Low)",
+            "model_id": "it_piper_riccardo_low",
+            "engine": "tts_piper",
+            "lang_id": "it",
+            "checksum": "47535c98",
+            "checksum_quick": "edbb00b2",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-it-riccardo_fasol-x-low.tar.gz"
+            ],
+            "size": "18826864"
+        },
+        {
+            "name": "Қазақ (Piper Iseke Low)",
+            "model_id": "kk_piper_iseke_low",
+            "engine": "tts_piper",
+            "lang_id": "kk",
+            "checksum": "c8904b70",
+            "checksum_quick": "a111b5bd",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-kk-iseke-x-low.tar.gz"
+            ],
+            "size": "18826684"
+        },
+        {
+            "name": "Қазақ (Piper Issai High)",
+            "model_id": "kk_piper_issai_high",
+            "engine": "tts_piper",
+            "lang_id": "kk",
+            "score": 4,
+            "checksum": "23ab4811",
+            "checksum_quick": "135ea94d",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-kk-issai-high.tar.gz"
+            ],
+            "size": "118823512"
+        },
+        {
+            "name": "Қазақ (Piper Raya Low)",
+            "model_id": "kk_piper_raya_low",
+            "engine": "tts_piper",
+            "lang_id": "kk",
+            "checksum": "8b9f09bd",
+            "checksum_quick": "34f5906c",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-kk-raya-x-low.tar.gz"
+            ],
+            "size": "18828679"
+        },
+        {
+            "name": "Nederlands (Piper MLS 5809 Low)",
+            "model_id": "nl_piper_mls5809_low",
+            "engine": "tts_piper",
+            "lang_id": "nl",
+            "checksum": "66ab6316",
+            "checksum_quick": "918430ff",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-nl-mls_5809-low.tar.gz"
+            ],
+            "size": "58252731"
+        },
+        {
+            "name": "Nederlands (Piper MLS 7432 Low)",
+            "model_id": "nl_piper_mls7432_low",
+            "engine": "tts_piper",
+            "lang_id": "nl",
+            "checksum": "1a97a9",
+            "checksum_quick": "88705aa9",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-nl-mls_7432-low.tar.gz"
+            ],
+            "size": "58247411"
+        },
+        {
+            "name": "Nederlands (Piper Nathalie Low)",
+            "model_id": "nl_piper_nathalie_low",
+            "engine": "tts_piper",
+            "lang_id": "nl",
+            "checksum": "d0c89eeb",
+            "checksum_quick": "aef5d2a0",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-nl-nathalie-x-low.tar.gz"
+            ],
+            "size": "18713496"
+        },
+        {
+            "name": "Nederlands (Piper Rdh Medium)",
+            "model_id": "nl_piper_rdh_medium",
+            "engine": "tts_piper",
+            "lang_id": "nl",
+            "score": 4,
+            "checksum": "909f133f",
+            "checksum_quick": "ab9c0f21",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-nl-rdh-medium.tar.gz"
+            ],
+            "size": "58274935"
+        },
+        {
+            "name": "Norsk (Piper Talesyntese Medium)",
+            "model_id": "no_piper_talesyntese_medium",
+            "engine": "tts_piper",
+            "lang_id": "no",
+            "checksum": "9365c368",
+            "checksum_quick": "352fd557",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-no-talesyntese-medium.tar.gz"
+            ],
+            "size": "58191359"
+        },
+        {
+            "name": "नेपाली (Piper Google Medium)",
+            "model_id": "ne_piper_google_medium",
+            "engine": "tts_piper",
+            "lang_id": "ne",
+            "checksum": "f382f6d7",
+            "checksum_quick": "509072a8",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-ne-google-medium.tar.gz"
+            ],
+            "size": "70691256"
+        },
+        {
+            "name": "Português brasileiro (Piper Edresson Low)",
+            "model_id": "pt_piper_br_edresson_low",
+            "engine": "tts_piper",
+            "lang_id": "pt",
+            "checksum": "15c7d194",
+            "checksum_quick": "d3510d87",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-pt-br-edresson-low.tar.gz"
+            ],
+            "size": "58258517"
+        },
+        {
+            "name": "Українська (Piper Lada Low)",
+            "model_id": "uk_piper_lada_low",
+            "engine": "tts_piper",
+            "lang_id": "uk",
+            "checksum": "272ec076",
+            "checksum_quick": "670ffdcd",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-uk-lada-x-low.tar.gz"
+            ],
+            "size": "18716596"
+        },
+        {
+            "name": "Tiếng Việt (Piper 25 Low)",
+            "model_id": "vi_piper_25_low",
+            "engine": "tts_piper",
+            "lang_id": "vi",
+            "checksum": "915e9fc2",
+            "checksum_quick": "5562f22b",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-vi-25hours-single-low.tar.gz"
+            ],
+            "size": "58252825"
+        },
+        {
+            "name": "Tiếng Việt (Piper Vivos Low)",
+            "model_id": "vi_piper_vivos_low",
+            "engine": "tts_piper",
+            "lang_id": "vi",
+            "score": 4,
+            "checksum": "9979145d",
+            "checksum_quick": "657be947",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-vi-vivos-x-low.tar.gz"
+            ],
+            "size": "25406468"
+        },
+        {
+            "name": "中文 简体 (Piper Huayan Low)",
+            "model_id": "zh-CN_piper_huayan_low",
+            "engine": "tts_piper",
+            "lang_id": "zh-CN",
+            "checksum": "eb96041a",
+            "checksum_quick": "ec43a7fc",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-zh-cn-huayan-x-low.tar.gz"
+            ],
+            "size": "18716220"
+        },
+        {
+            "name": "Polski (Piper MLS 6892 Low)",
+            "model_id": "pl_piper_mls6892_low",
+            "engine": "tts_piper",
+            "lang_id": "pl",
+            "checksum": "795b9164",
+            "checksum_quick": "6577a9bf",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-pl-mls_6892-low.tar.gz"
+            ],
+            "size": "58251456"
         }
     ]
 }
