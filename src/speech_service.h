@@ -269,6 +269,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         const std::map<QString, model_data_t> &available_models_map);
     void set_state(state_t new_state);
     void update_speech_state();
+    static void remove_cached_wavs();
 
     // DBus
     Q_INVOKABLE int Cancel(int task);

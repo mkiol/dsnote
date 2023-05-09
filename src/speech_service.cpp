@@ -283,6 +283,8 @@ speech_service::speech_service(QObject *parent)
         m_keepalive_timer.start();
     }
 
+    remove_cached_wavs();
+
     handle_models_changed();
 }
 
@@ -1429,6 +1431,15 @@ void speech_service::stop_keepalive_current_task() {
         return;
 
     m_keepalive_current_task_timer.stop();
+}
+
+void speech_service::remove_cached_wavs() {
+    QDir dir{settings::instance()->cache_dir()};
+
+    dir.setNameFilters(QStringList{} << "*.wav");
+    dir.setFilter(QDir::Files);
+
+    for (const auto &file : dir.entryList()) dir.remove(file);
 }
 
 // DBus
