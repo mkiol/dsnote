@@ -1,4 +1,4 @@
-set(py_ver "")
+set(py_ver "3.10")
 
 if(WITH_SFOS)
     set(py_ver "3.8")

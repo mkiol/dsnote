@@ -28,6 +28,7 @@ BuildRequires:  libtool
 BuildRequires:  m4
 BuildRequires:  patch
 BuildRequires:  python3-pip
+BuildRequires:  python3-devel
 
 %description
 Note taking with speech to text
