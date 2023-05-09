@@ -1,0 +1,5 @@
+[D-BUS Service]
+Name=@info_dbus_service@
+Interface=@info_dbus_interface@
+Exec=/bin/false
+SystemdService=@info_binary_id@.service
