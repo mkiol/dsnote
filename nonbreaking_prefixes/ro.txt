@@ -1,0 +1,204 @@
+#
+# This is a non-breaking prefix list for the Romanian language.
+# The file is used for sentence tokenization (text -> sentence splitting).
+#
+# The file is home-made by a programmer (not a linguist) who doesn't even speak Romanian so it surely can be improved.
+#
+
+# Anything in this file, followed by a period (and an upper-case word), does NOT
+# indicate an end-of-sentence marker.
+# Special cases are included for prefixes that ONLY appear before 0-9 numbers.
+
+# Any single upper case letter followed by a period is not a sentence ender
+# (excluding I occasionally, but we leave it in).
+# Usually upper case letters are initials in a name.
+A
+B
+C
+D
+E
+F
+G
+H
+I
+J
+K
+L
+M
+N
+O
+P
+Q
+R
+S
+T
+U
+V
+W
+X
+Y
+Z
+
+# Usually upper case letters are initials in a name (Romanian alphabet)
+Ă
+Â
+Î
+Ș
+Ț
+
+# Roman Numerals
+I
+II
+III
+IV
+V
+VI
+VII
+VIII
+IX
+X
+XI
+XII
+XIII
+XIV
+XV
+XVI
+XVII
+XVIII
+XIX
+XX
+
+# English -- but these work globally for all languages
+Mr
+Mrs
+No
+pp
+St
+no
+Sr
+Jr
+Bros
+etc
+vs
+esp
+Fig
+fig
+Jan
+Feb
+Mar
+Apr
+Jun
+Jul
+Aug
+Sep
+Sept
+Oct
+Okt
+Nov
+Dec
+Ph.D
+PhD
+# in "et al."
+al
+cf
+Inc
+Ms
+Gen
+Sen
+Prof
+Dr
+Corp
+Co
+
+# Church titles
+Sf
+Mc
+Cuv
+
+# http://en.wiktionary.org/wiki/Category:Romanian_abbreviations
+dvs
+pt
+sil
+vb
+
+# http://www.wordreference.com/english/abbreviationsWRD.aspx?dict=enro
+abr
+adj
+adv
+art
+vb.aux
+vb. aux
+conj
+f.p
+f. p
+excl
+ger
+imper
+inf
+interj
+s.m
+s. m
+s.f
+s. f
+s.pl
+s. pl
+part
+pron
+vb.tranz
+vb. tranz
+vb.intranz
+vb. intranz
+vb.refl
+vb. refl
+refl.unipers
+refl. unipers
+refl.impers
+refl. impers
+refl.pas
+refl. pas
+art.hot
+art. hot
+art.nehot
+art. nehot
+art.pos
+art. pos
+art.adj
+art. adj
+s.n
+s. n
+loc.adv
+loc. adv
+loc.vb
+loc. vb
+Voc
+
+# http://en.bab.la/phrases/business/abbreviations/english-romanian/
+a.m
+aprox
+pt
+ex
+p.a
+p.m
+
+# http://en.bab.la/phrases/academic/abbreviations/english-romanian/
+app
+aprox
+cap
+col
+n.t
+ex
+N.B
+p
+pg
+pp
+pref
+ed
+red
+reed
+trad
+vol
+
+# Number indicators
+# add #NUMERIC_ONLY# after the word if it should ONLY be non-breaking when a
+# 0-9 digit follows it.
+nr

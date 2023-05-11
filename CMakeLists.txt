@@ -30,6 +30,7 @@ option(BUILD_RNNOISE "download rnnoise lib, build and link statically" ON)
 option(BUILD_PYBIND11 "download pybind11, build and link statically" ON)
 option(BUILD_PYMODULES "make python modules archive" OFF)
 option(BUILD_PIPER "download piper lib, build and link statically" ON)
+option(BUILD_SSPLITCPP "download ssplitcpp lib, build and link statically" ON)
 
 if(${WITH_DESKTOP} AND ${WITH_SFOS})
     message(FATAL_ERROR "options WITH_DESKTOP and WITH_SFOS cannot be set together")
@@ -128,10 +129,10 @@ set(includes ${sources_dir} ${PROJECT_BINARY_DIR} ${external_include_dir})
 
 set(dsnote_lib_sources
     ${sources_dir}/audio_source.h
-    ${sources_dir}/dbus_stt_adaptor.cpp
-    ${sources_dir}/dbus_stt_adaptor.h
-    ${sources_dir}/dbus_stt_inf.cpp
-    ${sources_dir}/dbus_stt_inf.h
+    ${sources_dir}/dbus_speech_adaptor.cpp
+    ${sources_dir}/dbus_speech_adaptor.h
+    ${sources_dir}/dbus_speech_inf.cpp
+    ${sources_dir}/dbus_speech_inf.h
     ${sources_dir}/dirmodel.cpp
     ${sources_dir}/dirmodel.h
     ${sources_dir}/dsnote_app.cpp
@@ -364,6 +365,13 @@ if(BUILD_PIPER)
 else()
     find_library(piper_path piper_api REQUIRED)
     list(APPEND deps_libs ${piper_path})
+endif()
+
+if(BUILD_SSPLITCPP)
+    include(${cmake_path}/ssplitcpp.cmake)
+else()
+    find_library(ssplitcpp_path ssplit REQUIRED)
+    list(APPEND deps_libs ${ssplitcpp_path})
 endif()
 
 find_package(Python COMPONENTS Development REQUIRED)

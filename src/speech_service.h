@@ -16,12 +16,13 @@
 #include <map>
 #include <memory>
 #include <optional>
+#include <queue>
 #include <string>
 #include <utility>
 
 #include "audio_source.h"
 #include "config.h"
-#include "dbus_stt_adaptor.h"
+#include "dbus_speech_adaptor.h"
 #include "models_manager.h"
 #include "singleton.h"
 #include "stt_engine.hpp"
@@ -35,12 +36,14 @@ class speech_service : public QObject, public singleton<speech_service> {
     Q_PROPERTY(int Speech READ speech CONSTANT)
     Q_PROPERTY(QVariantMap SttLangs READ available_stt_langs CONSTANT)
     Q_PROPERTY(QVariantMap TtsLangs READ available_tts_langs CONSTANT)
+    Q_PROPERTY(QVariantMap TttLangs READ available_ttt_langs CONSTANT)
     Q_PROPERTY(
         QString DefaultSttLang READ default_stt_lang WRITE set_default_stt_lang)
     Q_PROPERTY(
         QString DefaultTtsLang READ default_tts_lang WRITE set_default_tts_lang)
     Q_PROPERTY(QVariantMap SttModels READ available_stt_models CONSTANT)
     Q_PROPERTY(QVariantMap TtsModels READ available_tts_models CONSTANT)
+    Q_PROPERTY(QVariantMap TttModels READ available_ttt_models CONSTANT)
     Q_PROPERTY(QString DefaultSttModel READ default_stt_model WRITE
                    set_default_stt_model)
     Q_PROPERTY(QString DefaultTtsModel READ default_tts_model WRITE
@@ -67,6 +70,13 @@ class speech_service : public QObject, public singleton<speech_service> {
     enum class source_t { none = 0, mic = 1, file = 2 };
 
     enum class error_t { generic = 0, mic_source = 1, file_source = 2 };
+
+    struct tts_partial_result_t {
+        QString text;
+        QString wav_file_path;
+        bool last = false;
+        int task_id = INVALID_TASK;
+    };
 
     explicit speech_service(QObject *parent = nullptr);
     ~speech_service() override;
@@ -117,7 +127,9 @@ class speech_service : public QObject, public singleton<speech_service> {
                                        int task);
     void stt_text_decoded(const QString &text, const QString &lang, int task);
     void tts_play_speech_finished(int task);
-    void tts_speech_encoded(const QString &wav_file_path, int task);
+    void tts_speech_encoded(const tts_partial_result_t &result);
+    void tts_partial_speech_playing(const QString &text, int task);
+    void requet_update_speech_state();
     void current_task_changed();
     void sentence_timeout(int task_id);
     void stt_engine_eof(int task_id);
@@ -140,6 +152,7 @@ class speech_service : public QObject, public singleton<speech_service> {
                                     int task);
     void SttTextDecoded(const QString &text, const QString &lang, int task);
     void TtsPlaySpeechFinished(int task);
+    void TtsPartialSpeechPlaying(const QString &text, int task);
     void SttLangsPropertyChanged(const QVariantMap &langs);
     void DefaultSttLangPropertyChanged(const QString &lang);
     void SttModelsPropertyChanged(const QVariantMap &models);
@@ -148,6 +161,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     void DefaultTtsLangPropertyChanged(const QString &lang);
     void TtsModelsPropertyChanged(const QVariantMap &models);
     void DefaultTtsModelPropertyChanged(const QString &model);
+    void TttLangsPropertyChanged(const QVariantMap &langs);
+    void TttModelsPropertyChanged(const QVariantMap &models);
 
    private:
     enum class engine_t { stt, tts };
@@ -211,6 +226,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     std::optional<task_t> m_pending_task;
     QMediaPlayer m_player;
     int m_speech_state = 0;
+    std::queue<tts_partial_result_t> m_tts_queue;
 
     void handle_models_changed();
     void handle_tts_models_changed();
@@ -227,8 +243,10 @@ class speech_service : public QObject, public singleton<speech_service> {
     void handle_stt_text_decoded(const QString &text, const QString &model_id,
                                  int task_id);
     void handle_stt_intermediate_text_decoded(const std::string &text);
-    void handle_tts_speech_encoded(const std::string &wav_file_path);
-    void handle_tts_speech_encoded(const QString &wav_file_path, int task_id);
+    void handle_tts_speech_encoded(const std::string &text,
+                                   const std::string &wav_file_path, bool last);
+    void handle_tts_speech_encoded(const tts_partial_result_t &result);
+    void handle_player_state_changed(QMediaPlayer::State new_state);
     void handle_audio_available();
     void handle_stt_speech_detection_status_changed(
         stt_engine::speech_detection_status_t status);
@@ -270,6 +288,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void set_state(state_t new_state);
     void update_speech_state();
     static void remove_cached_wavs();
+    void handle_tts_queue();
 
     // DBus
     Q_INVOKABLE int Cancel(int task);
@@ -285,5 +304,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     Q_INVOKABLE int TtsPlaySpeech(const QString &text, const QString &lang);
     Q_INVOKABLE int TtsStopSpeech(int task);
 };
+
+Q_DECLARE_METATYPE(speech_service::tts_partial_result_t)
 
 #endif  // SPEECH_SERVICE_H

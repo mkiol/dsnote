@@ -265,6 +265,34 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
     emit intermediate_text_changed();
 }
 
+void dsnote_app::handle_tts_partial_speech(const QString &text,
+                                         int task) {
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+#ifdef DEBUG
+        qDebug() << "tts partial speech:" << text << task;
+#else
+        qDebug() << "tts partial speech: ***" << task;
+#endif
+    } else {
+#ifdef DEBUG
+        qDebug() << "[dbus => app] signal TtsPartialSpeechPlaying:" << text
+                 << task;
+#else
+        qDebug() << "[dbus => app] signal TtsPartialSpeechPlaying: ***" << task;
+#endif
+    }
+
+    if (m_primary_task != task) {
+        qWarning() << "invalid task id";
+        return;
+    }
+
+    this->m_intermediate_text = text;
+
+    emit intermediate_text_changed();
+}
+
 void dsnote_app::connect_service_signals() {
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
@@ -340,6 +368,9 @@ void dsnote_app::connect_service_signals() {
         connect(speech_service::instance(), &speech_service::stt_text_decoded,
                 this, &dsnote_app::handle_stt_text_decoded,
                 Qt::QueuedConnection);
+        connect(speech_service::instance(), &speech_service::tts_partial_speech_playing,
+                this, &dsnote_app::handle_tts_partial_speech,
+                Qt::QueuedConnection);
     } else {
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::SttModelsPropertyChanged, this,
@@ -377,6 +408,8 @@ void dsnote_app::connect_service_signals() {
                 &dsnote_app::handle_stt_intermediate_text);
         connect(&m_dbus_service, &OrgMkiolSpeechInterface::SttTextDecoded, this,
                 &dsnote_app::handle_stt_text_decoded);
+        connect(&m_dbus_service, &OrgMkiolSpeechInterface::TtsPartialSpeechPlaying, this,
+                &dsnote_app::handle_tts_partial_speech);
     }
 }
 
@@ -514,6 +547,9 @@ void dsnote_app::handle_tts_play_speech_finished(int task) {
     } else {
         qDebug() << "[dbus => app] signal TtsPlaySpeechFinished:" << task;
     }
+
+    this->m_intermediate_text.clear();
+    emit intermediate_text_changed();
 }
 
 void dsnote_app::handle_stt_default_model_changed(const QString &model) {
@@ -830,6 +866,9 @@ void dsnote_app::cancel() {
             m_dbus_service.Cancel(m_primary_task.previous);
         }
     }
+
+    this->m_intermediate_text.clear();
+    emit intermediate_text_changed();
 }
 
 void dsnote_app::transcribe_file(const QString &source_file) {
@@ -869,6 +908,9 @@ void dsnote_app::listen() {
     }
 
     m_primary_task.set(new_task);
+
+    this->m_intermediate_text.clear();
+    emit intermediate_text_changed();
 }
 
 void dsnote_app::stop_listen() {
@@ -901,20 +943,13 @@ void dsnote_app::play_speech() {
     }
 
     m_primary_task.set(new_task);
+
+    this->m_intermediate_text.clear();
+    emit intermediate_text_changed();
 }
 
 void dsnote_app::stop_play_speech() {
-    //    if (m_listen_task) {
-    //        if (settings::instance()->launch_mode() ==
-    //            settings::launch_mode_t::app_stanalone) {
-    //            stt_service::instance()->stt_stop_listen(m_listen_task.current);
-    //        } else {
-    //            qDebug() << "[app => dbus] call SttStopListen";
-    //            m_stt.SttStopListen(m_listen_task.current);
-    //        }
 
-    //        m_listen_task.reset();
-    //    }
 }
 
 void dsnote_app::set_speech(service_speech_state_t new_state) {

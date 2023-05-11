@@ -11,7 +11,7 @@
 #include <QDebug>
 #include <algorithm>
 
-#include "dbus_stt_inf.h"
+#include "dbus_speech_inf.h"
 #include "models_manager.h"
 #include "settings.h"
 

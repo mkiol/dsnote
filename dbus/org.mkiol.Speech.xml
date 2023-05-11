@@ -274,6 +274,20 @@
         </signal>
 
         <!--
+            TtsPartialSpeechPlaying:
+            @text: portion of requested text which is being played at the moment
+            @task: id of task returned in TtsPlaySpeech call
+
+            Emitted whenever new portion of text is being played. Argument @text might
+            be empty when speech synthesis is not finished.
+
+        -->
+        <signal name="TtsPartialSpeechPlaying">
+            <arg name="text" type="s" direction="out" />
+            <arg name="task" type="i" direction="out" />
+        </signal>
+
+        <!--
             SttFileTranscribeProgress:
             @progress: progress of file transcription (0.0 - 1.0)
             @task: id of task returned in SttTranscribeFile call
@@ -441,5 +455,19 @@
         <property name="Translations" type="a{sv}" access="read">
             <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantMap"/>
         </property>
+        <property name="TttLangs" type="a{sv}" access="read">
+            <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantMap"/>
+        </property>
+        <signal name="TttLangsPropertyChanged">
+          <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
+          <arg name="langs" type="a{sv}" direction="out" />
+        </signal>
+        <property name="TttModels" type="a{sv}" access="read">
+            <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantMap"/>
+        </property>
+        <signal name="TttModelsPropertyChanged">
+          <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
+          <arg name="models" type="a{sv}" direction="out" />
+        </signal>
     </interface>
 </node>

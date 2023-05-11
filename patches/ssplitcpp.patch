@@ -1,0 +1,158 @@
+diff -ruN ssplitcpp-org/CMakeLists.txt ssplitcpp-pached/CMakeLists.txt
+--- ssplitcpp-org/CMakeLists.txt	2022-04-12 16:24:55.000000000 +0200
++++ ssplitcpp-pached/CMakeLists.txt	2023-05-10 11:42:39.552991684 +0200
+@@ -51,3 +51,7 @@
+ if(SSPLIT_USE_INTERNAL_PCRE2)
+   add_dependencies(ssplit pcre2) # this needs to happen after adding src
+ endif(SSPLIT_USE_INTERNAL_PCRE2)
++
++install(TARGETS ssplit
++  ARCHIVE DESTINATION lib
++  PUBLIC_HEADER DESTINATION include)
+\ No newline at end of file
+diff -ruN ssplitcpp-org/src/CMakeLists.txt ssplitcpp-pached/src/CMakeLists.txt
+--- ssplitcpp-org/src/CMakeLists.txt	2022-04-12 16:24:55.000000000 +0200
++++ ssplitcpp-pached/src/CMakeLists.txt	2023-05-11 10:37:30.402320427 +0200
+@@ -4,9 +4,10 @@
+ 
+ set_target_properties(ssplit PROPERTIES
+   LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+-  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
++  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
++  PUBLIC_HEADER "src/ssplit/ssplit.h;src/ssplit/ssplit_typedefs.h")
+ 
+-if (NOT COMPILE_LIBRARY_ONLY)
++if (NOT SSPLIT_COMPILE_LIBRARY_ONLY)
+   include_directories(3rd-party/CLI11)
+   if (NOT WIN32)
+     # ssplit-main has some mmap() code, and include "sys/mman.h"
+@@ -23,4 +24,4 @@
+   set_target_properties(ssplit_test_executable PROPERTIES
+     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+     OUTPUT_NAME test_ssplit)
+-endif(NOT COMPILE_LIBRARY_ONLY)
++endif(NOT SSPLIT_COMPILE_LIBRARY_ONLY)
+diff -ruN ssplitcpp-org/src/ssplit/regex.h ssplitcpp-pached/src/ssplit/regex.h
+--- ssplitcpp-org/src/ssplit/regex.h	2022-04-12 16:24:55.000000000 +0200
++++ ssplitcpp-pached/src/ssplit/regex.h	2023-05-10 11:39:55.980704295 +0200
+@@ -4,7 +4,7 @@
+ 
+ #define PCRE2_CODE_UNIT_WIDTH 8
+ #include <pcre2.h>
+-#include "typedefs.h"
++#include "ssplit_typedefs.h"
+ 
+ // inspired by https://github.com/luvit/pcre2/blob/master/src/pcre2demo.c
+ 
+diff -ruN ssplitcpp-org/src/ssplit/ssplit.h ssplitcpp-pached/src/ssplit/ssplit.h
+--- ssplitcpp-org/src/ssplit/ssplit.h	2022-04-12 16:24:55.000000000 +0200
++++ ssplitcpp-pached/src/ssplit/ssplit.h	2023-05-10 11:39:15.427580531 +0200
+@@ -4,7 +4,7 @@
+ #include<unordered_map>
+ // @TODO: check which C++ version we are using ...
+ //        ... maybe use C17 standard types for C17 and upwards?
+-#include "typedefs.h"
++#include "ssplit_typedefs.h"
+ 
+ namespace ug{
+ namespace ssplit{
+diff -ruN ssplitcpp-org/src/ssplit/ssplit_typedefs.h ssplitcpp-pached/src/ssplit/ssplit_typedefs.h
+--- ssplitcpp-org/src/ssplit/ssplit_typedefs.h	1970-01-01 01:00:00.000000000 +0100
++++ ssplitcpp-pached/src/ssplit/ssplit_typedefs.h	2022-04-12 16:24:55.000000000 +0200
+@@ -0,0 +1,46 @@
++#pragma once
++#include <map>
++#include <string>
++
++// We need the extra level of macro redirection below to make the
++// preprocessor to expand the macro CONVERT_TO_STRING as intended.
++// Uncomment the code block below if you need to debug C++ version
++// settings.
++//
++// #define CONVERT_TO_STRING_(x) #x
++// #define CONVERT_TO_STRING(x) CONVERT_TO_STRING_(x)
++// #pragma message(CONVERT_TO_STRING(__cplusplus))
++
++
++#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 6
++// On gcc version 5.x , string_view is provided as
++// std::experimental::string_view
++// Newer versions of clang apparently export GNUC v 4.2, so we need
++// the extra check to exclude the __clang__ scenario.
++#include <experimental/string_view>
++#elif defined(__clang__) && __cplusplus < 201703L
++// Older versions of cmake (e.g. 3.8 on Ubuntu 16.04) don't support
++// CMAKE_CXX_STANDARD 17. On Ubuntu 16.04, clang version also
++// finds string_view here:
++#  include <experimental/string_view>
++#else
++#  include <string_view>
++#endif
++
++namespace ug {
++namespace ssplit {
++#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 6
++typedef std::experimental::string_view string_view;
++#elif defined(__clang__) && __cplusplus < 201703L
++typedef std::experimental::string_view string_view;
++#else
++typedef std::string_view string_view;
++#endif
++
++// Before Jerin Philip asks again "What sort of mess is this?"
++// This is C++14 or greater, which allows you to use specify the comparison
++// function (class) for maps explicitly and thus allows you to use string_view
++// directly as keys instead of converting them to std::string first.
++typedef std::map<std::string, int, std::less<>> prefix_map_t;
++}  // namespace ssplit
++}  // namespace ug
+diff -ruN ssplitcpp-org/src/ssplit/typedefs.h ssplitcpp-pached/src/ssplit/typedefs.h
+--- ssplitcpp-org/src/ssplit/typedefs.h	2022-04-12 16:24:55.000000000 +0200
++++ ssplitcpp-pached/src/ssplit/typedefs.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,46 +0,0 @@
+-#pragma once
+-#include <map>
+-#include <string>
+-
+-// We need the extra level of macro redirection below to make the
+-// preprocessor to expand the macro CONVERT_TO_STRING as intended.
+-// Uncomment the code block below if you need to debug C++ version
+-// settings.
+-//
+-// #define CONVERT_TO_STRING_(x) #x
+-// #define CONVERT_TO_STRING(x) CONVERT_TO_STRING_(x)
+-// #pragma message(CONVERT_TO_STRING(__cplusplus))
+-
+-
+-#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 6
+-// On gcc version 5.x , string_view is provided as
+-// std::experimental::string_view
+-// Newer versions of clang apparently export GNUC v 4.2, so we need
+-// the extra check to exclude the __clang__ scenario.
+-#include <experimental/string_view>
+-#elif defined(__clang__) && __cplusplus < 201703L
+-// Older versions of cmake (e.g. 3.8 on Ubuntu 16.04) don't support
+-// CMAKE_CXX_STANDARD 17. On Ubuntu 16.04, clang version also
+-// finds string_view here:
+-#  include <experimental/string_view>
+-#else
+-#  include <string_view>
+-#endif
+-
+-namespace ug {
+-namespace ssplit {
+-#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 6
+-typedef std::experimental::string_view string_view;
+-#elif defined(__clang__) && __cplusplus < 201703L
+-typedef std::experimental::string_view string_view;
+-#else
+-typedef std::string_view string_view;
+-#endif
+-
+-// Before Jerin Philip asks again "What sort of mess is this?"
+-// This is C++14 or greater, which allows you to use specify the comparison
+-// function (class) for maps explicitly and thus allows you to use string_view
+-// directly as keys instead of converting them to std::string first.
+-typedef std::map<std::string, int, std::less<>> prefix_map_t;
+-}  // namespace ssplit
+-}  // namespace ug

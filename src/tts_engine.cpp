@@ -8,6 +8,7 @@
 #include "tts_engine.hpp"
 
 #include <dirent.h>
+#include <ssplit.h>
 #include <sys/stat.h>
 
 #include <algorithm>
@@ -50,21 +51,46 @@ std::ostream& operator<<(std::ostream& os, tts_engine::state_t state) {
 
 tts_engine::tts_engine(config_t config, callbacks_t call_backs)
     : m_config{std::move(config)},
-      m_call_backs{std::move(call_backs)},
-      m_processing_thread{&tts_engine::process, this} {}
+      m_call_backs{std::move(call_backs)} {}
 
 tts_engine::~tts_engine() {
     LOGD("tts dtor");
+}
+
+void tts_engine::start() {
+    LOGD("tts start");
+
+    m_shutting_down = true;
+    m_cv.notify_one();
+    if (m_processing_thread.joinable()) m_processing_thread.join();
+
+    m_queue = std::queue<task_t>{};
+    m_state = state_t::idle;
+    m_shutting_down = false;
+    m_processing_thread = std::thread{&tts_engine::process, this};
+
+    LOGD("tts start completed");
 }
 
 void tts_engine::stop() {
     LOGD("tts stop started");
 
     m_shutting_down = true;
+
+    set_state(state_t::idle);
+
     m_cv.notify_one();
     if (m_processing_thread.joinable()) m_processing_thread.join();
 
     LOGD("tts stop completed");
+}
+
+void tts_engine::request_stop() {
+    LOGD("tts stop requested");
+
+    m_shutting_down = true;
+
+    set_state(state_t::idle);
 }
 
 std::string tts_engine::first_file_with_ext(std::string dir_path,
@@ -106,9 +132,14 @@ std::string tts_engine::find_file_with_name_prefix(std::string dir_path,
 void tts_engine::encode_speech(std::string text) {
     if (m_shutting_down) return;
 
+    auto tasks = make_tasks(text);
+
     {
         std::lock_guard lock{m_mutex};
-        m_queue.push(std::move(text));
+        for (auto& task : tasks) {
+            LOGD("task: " << task.text);
+            m_queue.push(std::move(task));
+        }
     }
 
     LOGD("task pushed");
@@ -117,6 +148,8 @@ void tts_engine::encode_speech(std::string text) {
 }
 
 void tts_engine::set_state(state_t new_state) {
+    if (m_shutting_down) new_state = state_t::idle;
+
     if (m_state != new_state) {
         LOGD("state: " << m_state << " => " << new_state);
         m_state = new_state;
@@ -134,6 +167,27 @@ std::string tts_engine::path_to_output_file(const std::string& text) const {
 static bool file_exists(const std::string& file_path) {
     struct stat buffer {};
     return stat(file_path.c_str(), &buffer) == 0;
+}
+
+std::vector<tts_engine::task_t> tts_engine::make_tasks(
+    const std::string& text) const {
+    std::vector<tts_engine::task_t> tasks;
+
+    ug::ssplit::SentenceSplitter ssplit{};
+
+    if (!m_config.nb_data.empty()) ssplit.loadFromSerialized(m_config.nb_data);
+
+    ug::ssplit::SentenceStream sentence_stream{
+        text, ssplit,
+        ug::ssplit::SentenceStream::splitmode::one_paragraph_per_line};
+    std::string_view snt;
+
+    while (sentence_stream >> snt)
+        if (!snt.empty()) tasks.push_back(task_t{std::string{snt}, false});
+
+    if (!tasks.empty()) tasks.back().last = true;
+
+    return tasks;
 }
 
 void tts_engine::process() {
@@ -168,21 +222,21 @@ void tts_engine::process() {
         set_state(state_t::encoding);
 
         while (!m_shutting_down && !queue.empty()) {
-            auto text = std::move(queue.front());
+            auto task = std::move(queue.front());
             queue.pop();
 
-            auto output_file = path_to_output_file(text);
+            auto output_file = path_to_output_file(task.text);
 
             LOGD("tts out file: " << output_file);
 
             if (!file_exists(output_file) &&
-                !encode_speech_impl(text, output_file)) {
+                !encode_speech_impl(task.text, output_file)) {
                 if (m_call_backs.error) m_call_backs.error();
                 break;
             }
 
             if (m_call_backs.speech_encoded) {
-                m_call_backs.speech_encoded(output_file);
+                m_call_backs.speech_encoded(task.text, output_file, task.last);
             }
         }
 

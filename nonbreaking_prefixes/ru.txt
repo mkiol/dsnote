@@ -1,0 +1,331 @@
+#
+# This is a non-breaking prefix list for the Russian language.
+# The file is used for sentence tokenization (text -> sentence splitting).
+#
+# The file is home-made by a programmer (not a linguist) who doesn't even speak Russian so it surely can be improved.
+#
+#
+# There could be quite a lot of Russian abbreviations, see http://www.sokr.ru/.
+#
+
+# Anything in this file, followed by a period (and an upper-case word), does NOT
+# indicate an end-of-sentence marker.
+# Special cases are included for prefixes that ONLY appear before 0-9 numbers.
+
+# Any single upper case letter followed by a period is not a sentence ender
+# (excluding I occasionally, but we leave it in).
+# Usually upper case letters are initials in a name.
+A
+B
+C
+D
+E
+F
+G
+H
+I
+J
+K
+L
+M
+N
+O
+P
+Q
+R
+S
+T
+U
+V
+W
+X
+Y
+Z
+
+# Usually upper case letters are initials in a name (Cyrillic alphabet)
+А
+Б
+В
+Г
+Д
+Е
+Ё
+Ж
+З
+И
+Й
+К
+Л
+М
+Н
+О
+П
+Р
+С
+Т
+У
+Ф
+Х
+Ц
+Ч
+Ш
+Щ
+Ъ
+Ы
+Ь
+Э
+Ю
+Я
+
+# Roman Numerals
+I
+II
+III
+IV
+V
+VI
+VII
+VIII
+IX
+X
+XI
+XII
+XIII
+XIV
+XV
+XVI
+XVII
+XVIII
+XIX
+XX
+
+# English -- but these work globally for all languages:
+Mr
+Mrs
+No
+pp
+St
+no
+Sr
+Jr
+Bros
+etc
+vs
+esp
+Fig
+fig
+Jan
+Feb
+Mar
+Apr
+Jun
+Jul
+Aug
+Sep
+Sept
+Oct
+Okt
+Nov
+Dec
+Ph.D
+PhD
+# in "et al."
+al
+cf
+Inc
+Ms
+Gen
+Sen
+Prof
+Dr
+Corp
+Co
+
+#List of English titles. These are often followed by upper-case names, but do not indicate sentence breaks
+Adj
+Adm
+Adv
+Asst
+Bart
+Bldg
+Brig
+Bros
+Capt
+Cmdr
+Col
+Comdr
+Con
+Corp
+Cpl
+DR
+Dr
+Drs
+Ens
+Gen
+Gov
+Hon
+Hr
+Hosp
+Insp
+Lt
+MM
+MR
+MRS
+MS
+Maj
+Messrs
+Mlle
+Mme
+Mr
+Mrs
+Ms
+Msgr
+Op
+Ord
+Pfc
+Ph
+Prof
+Pvt
+Rep
+Reps
+Res
+Rev
+Rt
+Sen
+Sens
+Sfc
+Sgt
+Sr
+St
+Supt
+Surg
+
+# English misc - odd period-ending items that NEVER indicate breaks (p.m. does NOT fall into this category - it sometimes ends a sentence)
+v
+vs
+i.e
+rev
+e.g
+
+# http://en.wiktionary.org/wiki/Category:Russian_abbreviations,_acronyms_and_initialisms
+газ
+мин
+нпр
+у. е
+
+# http://en.wiktionary.org/wiki/Category:Russian_abbreviations
+англ
+Б-то
+б
+б.г
+б.м
+б.у
+Бр
+Бтто
+в т. ч
+в
+В
+в.ч
+вкл
+вм
+г
+газ
+гл
+дореф
+род
+гл. обр
+д
+до н. э
+до н.э
+до Р. Хр
+ж
+ж. д
+зав
+зам
+и др
+и пр
+и т. д
+и т. п
+и т.д
+и т.п
+и.о
+И.О
+им
+к
+кв
+коп
+Л
+л
+л. с
+л.с
+м
+м. б
+м. г
+м. пр
+м.б
+м.г
+мин
+Н-то
+н. э
+н.э
+наб
+напр
+нпр
+Нтто
+о
+обл
+ок
+п. г. т
+п. м
+п.г
+п.т.ч
+п/пр
+пер
+пл
+по дов
+после Р. Хр
+приб
+р
+ред
+руб
+с
+с. г
+с. м
+с.г
+с.ч
+с.ш
+сл. обр
+см
+ср
+ст
+стр
+т
+т. г
+т. е
+т. к
+т. наз
+т. о
+т. обр
+т.г
+т.е
+т.к
+т.м
+т.н
+тов
+у. е
+ул
+уст
+ч. п
+Ч. П
+ч. т. д
+шт.
+
+#Numbers only. These should only induce breaks when followed by a numeric sequence
+# add NUMERIC_ONLY after the word for this function
+#This case is mostly for the english "No." which can either be a sentence of its own, or
+#if followed by a number, a non-breaking prefix
+No #NUMERIC_ONLY# 
+Nos
+Art #NUMERIC_ONLY#
+Nr
+pp #NUMERIC_ONLY#

@@ -17,7 +17,7 @@
 #include <memory>
 
 #include "config.h"
-#include "dbus_stt_inf.h"
+#include "dbus_speech_inf.h"
 #include "settings.h"
 
 class dsnote_app : public QObject {
@@ -170,6 +170,7 @@ class dsnote_app : public QObject {
     void handle_models_changed();
     void handle_stt_text_decoded(const QString &text, const QString &lang,
                                  int task);
+    void handle_tts_partial_speech(const QString &text, int task);
     bool busy() const;
     void update_configured_state();
     bool stt_configured() const;

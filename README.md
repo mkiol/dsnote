@@ -1,6 +1,6 @@
 # Speech Note
 
-Sailfish OS app for note taking and reading with speech to text or text to speech.
+Sailfish OS app for note taking and reading with speech to text or text to speech
 
 ## Description
 
@@ -50,7 +50,7 @@ Following languages are supported:
 | nl          | Dutch                | ● (e)          | ●           | ●        | ●         |
 | no          | Norwegian            |                | ●           |          | ●         |
 | pl          | Polish               | ●              | ●           | ●        | ● (e)     |
-| pt          | Portuguese           | ● (e)          | ●           | ●        | ●         |
+| pt          | Portuguese           | ● (e)          | ●           | ●        | ● (pt-br) |
 | ro          | Romanian             | ● (e)          | ● (e)       |          |           |
 | ru          | Russian              | ●              | ●           | ●        |           |
 | sk          | Slovak               |                | ● (e)       |          |           |

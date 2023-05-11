@@ -16,6 +16,7 @@
 #include <queue>
 #include <string>
 #include <thread>
+#include <vector>
 
 class tts_engine {
    public:
@@ -38,7 +39,9 @@ class tts_engine {
                                     const model_files_t& model_files);
 
     struct callbacks_t {
-        std::function<void(const std::string& wav_file_path)> speech_encoded;
+        std::function<void(const std::string& text,
+                           const std::string& wav_file_path, bool last)>
+            speech_encoded;
         std::function<void(state_t state)> state_changed;
         std::function<void()> error;
     };
@@ -48,11 +51,15 @@ class tts_engine {
         model_files_t model_files;
         std::string speaker;
         std::string cache_dir;
+        std::string nb_data;
     };
-    friend std::ostream& operator<<(std::ostream& os, const config_t& config);
+    friend std::ostream& operator<<(std::ostream& os, const config_t& config); 
 
     tts_engine(config_t config, callbacks_t call_backs);
     virtual ~tts_engine();
+    void start();
+    void stop();
+    void request_stop();
     inline auto lang() const { return m_config.lang; }
     inline auto model_files() const { return m_config.model_files; }
     inline auto state() const { return m_state; }
@@ -60,11 +67,16 @@ class tts_engine {
     void encode_speech(std::string text);
 
    protected:
+    struct task_t {
+        std::string text;
+        bool last = false;
+    };
+
     config_t m_config;
     callbacks_t m_call_backs;
     std::thread m_processing_thread;
     bool m_shutting_down = false;
-    std::queue<std::string> m_queue;
+    std::queue<task_t> m_queue;
     std::mutex m_mutex;
     std::condition_variable m_cv;
     state_t m_state = state_t::idle;
@@ -77,10 +89,10 @@ class tts_engine {
     virtual void create_model() = 0;
     virtual bool encode_speech_impl(const std::string& text,
                                     const std::string& out_file) = 0;
-    void stop();
     void set_state(state_t new_state);
     std::string path_to_output_file(const std::string& text) const;
     void process();
+    std::vector<task_t> make_tasks(const std::string& text) const;
 };
 
 #endif // TTS_ENGINE_HPP

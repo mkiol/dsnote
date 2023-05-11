@@ -1,5 +1,31 @@
 <RCC>
     <qresource prefix="/">
         <file alias="config/models.json">../config/models.json</file>
+        <file alias="nonbreaking_prefixes/ca.txt">../nonbreaking_prefixes/ca.txt</file>
+        <file alias="nonbreaking_prefixes/cs.txt">../nonbreaking_prefixes/cs.txt</file>
+        <file alias="nonbreaking_prefixes/da.txt">../nonbreaking_prefixes/da.txt</file>
+        <file alias="nonbreaking_prefixes/de.txt">../nonbreaking_prefixes/de.txt</file>
+        <file alias="nonbreaking_prefixes/el.txt">../nonbreaking_prefixes/el.txt</file>
+        <file alias="nonbreaking_prefixes/en.txt">../nonbreaking_prefixes/en.txt</file>
+        <file alias="nonbreaking_prefixes/es.txt">../nonbreaking_prefixes/es.txt</file>
+        <file alias="nonbreaking_prefixes/fi.txt">../nonbreaking_prefixes/fi.txt</file>
+        <file alias="nonbreaking_prefixes/fr.txt">../nonbreaking_prefixes/fr.txt</file>
+        <file alias="nonbreaking_prefixes/ga.txt">../nonbreaking_prefixes/ga.txt</file>
+        <file alias="nonbreaking_prefixes/hu.txt">../nonbreaking_prefixes/hu.txt</file>
+        <file alias="nonbreaking_prefixes/is.txt">../nonbreaking_prefixes/is.txt</file>
+        <file alias="nonbreaking_prefixes/it.txt">../nonbreaking_prefixes/it.txt</file>
+        <file alias="nonbreaking_prefixes/lt.txt">../nonbreaking_prefixes/lt.txt</file>
+        <file alias="nonbreaking_prefixes/lv.txt">../nonbreaking_prefixes/lv.txt</file>
+        <file alias="nonbreaking_prefixes/nl.txt">../nonbreaking_prefixes/nl.txt</file>
+        <file alias="nonbreaking_prefixes/no.txt">../nonbreaking_prefixes/no.txt</file>
+        <file alias="nonbreaking_prefixes/pl.txt">../nonbreaking_prefixes/pl.txt</file>
+        <file alias="nonbreaking_prefixes/pt.txt">../nonbreaking_prefixes/pt.txt</file>
+        <file alias="nonbreaking_prefixes/ro.txt">../nonbreaking_prefixes/ro.txt</file>
+        <file alias="nonbreaking_prefixes/ru.txt">../nonbreaking_prefixes/ru.txt</file>
+        <file alias="nonbreaking_prefixes/sk.txt">../nonbreaking_prefixes/sk.txt</file>
+        <file alias="nonbreaking_prefixes/sl.txt">../nonbreaking_prefixes/sl.txt</file>
+        <file alias="nonbreaking_prefixes/sv.txt">../nonbreaking_prefixes/sv.txt</file>
+        <file alias="nonbreaking_prefixes/ta.txt">../nonbreaking_prefixes/ta.txt</file>
+        <file alias="nonbreaking_prefixes/tr.txt">../nonbreaking_prefixes/tr.txt</file>
     </qresource>
 </RCC>
