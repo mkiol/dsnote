@@ -56,7 +56,7 @@ Page {
                 Layout.rowSpan: 2
                 Layout.fillWidth: true
                 currentIndex: _settings.mode === Settings.Stt ? 0 : 1
-                model: [qsTr("Speech to Text"), qsTr("Text to Speech")]
+                model: [qsTr("Making a note"), qsTr("Reading a note")]
                 onActivated: {
                     _settings.mode = _settings.mode === Settings.Stt ? Settings.Tts : Settings.Stt
                 }
@@ -131,8 +131,8 @@ Page {
                         if (app.state === DsnoteApp.StatePlayingSpeech)
                             return qsTr("Reading a note...")
                         if (textArea.text.length > 0)
-                            return qsTr("Press to read a note...")
-                        else return qsTr("Make a note and press to read...")
+                            return qsTr("Click to read a note...")
+                        else return qsTr("Make a note and click to read it...")
                     }
                 }
 

@@ -78,20 +78,15 @@ Page {
                 }
 
                 MenuItem {
-                    text: qsTr("Mode: %1").arg(_settings.mode === Settings.Stt ? qsTr("Speech to Text") : qsTr("Text to Speech"))
+                    text: qsTr("Mode: %1").arg(_settings.mode === Settings.Stt ? qsTr("Making a note") : qsTr("Reading a note"))
                     onClicked: _settings.mode = _settings.mode === Settings.Stt ? Settings.Tts : Settings.Stt
                 }
-
-                /*MenuLabel {
-                    visible: _settings.mode === Settings.Stt
-                    text: qsTr("Active model: %1").arg(app.stt_configured ? app.active_stt_model_name : qsTr("None"))
-                }
-
-                MenuLabel {
-                    visible: _settings.mode === Settings.Tts
-                    text: qsTr("Active model: %1").arg(app.tts_configured ? app.active_tts_model_name : qsTr("None"))
-                }*/
             }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: textArea.forceActiveFocus()
         }
 
         TextArea {
@@ -169,8 +164,8 @@ Page {
             } else {
                 if (app.state === DsnoteApp.StatePlayingSpeech) return qsTr("Reading a note...")
                 if (textArea.text.length > 0)
-                    return qsTr("Press to read a note...")
-                else return qsTr("Make a note and press to read...")
+                    return qsTr("Click to read a note...")
+                else return qsTr("Make a note and click to read it...")
             }
         }
         textPlaceholderActive: {
@@ -189,9 +184,9 @@ Page {
                 if (_settings.mode === Settings.Stt)
                     return qsTr("Say something...")
                 else if (textArea.text.length > 0)
-                    return qsTr("Press to read a note...")
+                    return qsTr("Click to read a note...")
                 else
-                    return qsTr("Make a note and press to read...")
+                    return qsTr("Make a note and click to read it...")
             }
             if (app.state === DsnoteApp.StateTranscribingFile) return qsTr("Transcribing audio file...")
             return qsTr("Busy...")
