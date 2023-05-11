@@ -303,6 +303,8 @@ void dsnote_app::connect_service_signals() {
                     speech_service::instance()->available_stt_models());
                 handle_tts_models_changed(
                     speech_service::instance()->available_tts_models());
+                handle_ttt_models_changed(
+                    speech_service::instance()->available_ttt_models());
             },
             Qt::QueuedConnection);
         connect(
@@ -378,6 +380,9 @@ void dsnote_app::connect_service_signals() {
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::TtsModelsPropertyChanged, this,
                 &dsnote_app::handle_tts_models_changed);
+        connect(&m_dbus_service,
+                &OrgMkiolSpeechInterface::TttModelsPropertyChanged, this,
+                &dsnote_app::handle_ttt_models_changed);
         connect(&m_dbus_service, &OrgMkiolSpeechInterface::StatePropertyChanged,
                 this, &dsnote_app::handle_state_changed);
         connect(&m_dbus_service,
@@ -441,6 +446,20 @@ void dsnote_app::handle_tts_models_changed(const QVariantMap &models) {
 
     update_configured_state();
     update_active_tts_model();
+}
+
+void dsnote_app::handle_ttt_models_changed(const QVariantMap &models) {
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+        qDebug() << "ttt models changed";
+    } else {
+        qDebug() << "[dbus => app] signal TttModelsPropertyChanged";
+    }
+
+    m_available_ttt_models_map = models;
+    emit available_ttt_models_changed();
+
+    update_configured_state();
 }
 
 void dsnote_app::handle_state_changed(int status) {
@@ -1176,6 +1195,14 @@ void dsnote_app::update_configured_state() {
         return true;
     }();
 
+    auto new_ttt_configured = [this] {
+        if (m_service_state == service_state_t::StateUnknown ||
+            m_service_state == service_state_t::StateNotConfigured ||
+            m_available_ttt_models_map.empty())
+            return false;
+        return true;
+    }();
+
     if (m_stt_configured != new_stt_configured) {
         qDebug() << "app stt configured:" << m_stt_configured << "=>"
                  << new_stt_configured;
@@ -1189,6 +1216,13 @@ void dsnote_app::update_configured_state() {
         m_tts_configured = new_tts_configured;
         emit tts_configured_changed();
     }
+
+    if (m_ttt_configured != new_ttt_configured) {
+        qDebug() << "app ttt configured:" << m_ttt_configured << "=>"
+                 << new_ttt_configured;
+        m_ttt_configured = new_ttt_configured;
+        emit ttt_configured_changed();
+    }
 }
 
 bool dsnote_app::busy() const {
@@ -1199,6 +1233,8 @@ bool dsnote_app::busy() const {
 bool dsnote_app::stt_configured() const { return m_stt_configured; }
 
 bool dsnote_app::tts_configured() const { return m_tts_configured; }
+
+bool dsnote_app::ttt_configured() const { return m_ttt_configured; }
 
 bool dsnote_app::connected() const {
     return m_service_state != service_state_t::StateUnknown;

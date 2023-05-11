@@ -119,11 +119,18 @@ Page {
             }
 
             CheckBox {
+                visible: _settings.py_supported()
                 checked: _settings.restore_punctuation
                 text: qsTr("Restore punctuation")
                 onCheckedChanged: {
                     _settings.restore_punctuation = checked
                 }
+            }
+
+            Label {
+                visible: _settings.py_supported() && _settings.restore_punctuation && !app.ttt_configured
+                color: "red"
+                text: qsTr("To make 'Restore punctuation' work, download 'Punctuation' model.")
             }
 
             FileDialog {

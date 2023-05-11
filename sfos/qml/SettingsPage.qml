@@ -181,14 +181,19 @@ Page {
                 checked: _settings.restore_punctuation
                 automaticCheck: false
                 text: qsTr("Restore punctuation")
-                description: qsTr("When speech to text model without support for punctuation (.,:?!) is used, " +
-                                  "enable advanced punctuation restoration after decoding. To make it work, " +
+                description: qsTr("Enable advanced punctuation restoration for speech to text decoding. To make it work, " +
                                   "make sure you have downloaded 'Punctuation' model " +
                                   "for your language. When this option is enabled model initialization takes " +
-                                  "a little longer.")
+                                  "much longer.")
                 onClicked: {
                     _settings.restore_punctuation = !_settings.restore_punctuation
                 }
+            }
+
+            PaddedLabel {
+                visible: _settings.py_supported() && _settings.restore_punctuation && !app.ttt_configured
+                color: Theme.errorColor
+                text: qsTr("To make 'Restore punctuation' work, download 'Punctuation' model.")
             }
 
             ItemBox {

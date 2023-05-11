@@ -170,7 +170,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     struct model_data_t {
         QString model_id;
         QString lang_id;
-        models_manager::model_engine engine = models_manager::model_engine::stt_ds;
+        models_manager::model_engine engine =
+            models_manager::model_engine::stt_ds;
         QString name;
     };
 

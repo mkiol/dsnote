@@ -49,6 +49,8 @@ class dsnote_app : public QObject {
         bool stt_configured READ stt_configured NOTIFY stt_configured_changed)
     Q_PROPERTY(
         bool tts_configured READ tts_configured NOTIFY tts_configured_changed)
+    Q_PROPERTY(
+        bool ttt_configured READ ttt_configured NOTIFY ttt_configured_changed)
     Q_PROPERTY(bool connected READ connected NOTIFY connected_changed)
     Q_PROPERTY(bool another_app_connected READ another_app_connected NOTIFY
                    another_app_connected_changed)
@@ -108,12 +110,14 @@ class dsnote_app : public QObject {
     void available_stt_models_changed();
     void active_tts_model_changed();
     void available_tts_models_changed();
+    void available_ttt_models_changed();
     void intermediate_text_changed();
     void text_changed();
     void speech_changed();
     void busy_changed();
     void stt_configured_changed();
     void tts_configured_changed();
+    void ttt_configured_changed();
     void connected_changed();
     void another_app_connected_changed();
     void transcribe_progress_changed();
@@ -150,6 +154,7 @@ class dsnote_app : public QObject {
     QVariantMap m_available_stt_models_map;
     QString m_active_tts_model;
     QVariantMap m_available_tts_models_map;
+    QVariantMap m_available_ttt_models_map;
     QString m_intermediate_text;
     double m_transcribe_progress = -1.0;
     OrgMkiolSpeechInterface m_dbus_service;
@@ -164,6 +169,7 @@ class dsnote_app : public QObject {
     QTimer m_keepalive_current_task_timer;
     bool m_stt_configured = false;
     bool m_tts_configured = false;
+    bool m_ttt_configured = false;
 
     [[nodiscard]] QVariantList available_stt_models() const;
     [[nodiscard]] QVariantList available_tts_models() const;
@@ -175,6 +181,7 @@ class dsnote_app : public QObject {
     void update_configured_state();
     bool stt_configured() const;
     bool tts_configured() const;
+    bool ttt_configured() const;
     bool connected() const;
     double transcribe_progress() const;
     bool another_app_connected() const;
@@ -214,6 +221,7 @@ class dsnote_app : public QObject {
     void handle_state_changed(int status);
     void handle_stt_models_changed(const QVariantMap &models);
     void handle_tts_models_changed(const QVariantMap &models);
+    void handle_ttt_models_changed(const QVariantMap &models);
     void connect_service_signals();
     void start_keepalive();
     void check_transcribe_taks();
