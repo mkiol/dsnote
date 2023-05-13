@@ -207,7 +207,7 @@ void settings::set_default_tts_model_for_lang(const QString& lang,
 }
 
 bool settings::restore_punctuation() const {
-    return value(QStringLiteral("service/restore_punctuation"), true).toBool();
+    return value(QStringLiteral("service/restore_punctuation"), false).toBool();
 }
 
 void settings::set_restore_punctuation(bool value) {
@@ -299,12 +299,13 @@ void settings::set_launch_mode(launch_mode_t launch_mode) {
     m_launch_mode = launch_mode;
 }
 
-QString settings::python_modules_checksum() const {
-    return value(QStringLiteral("service/python_modules_checksum")).toString();
+QString settings::module_checksum(const QString& name) const {
+    return value(QStringLiteral("service/module_%1_checksum").arg(name))
+        .toString();
 }
 
-void settings::set_python_modules_checksum(const QString& value) {
-    if (value != python_modules_checksum()) {
-        setValue(QStringLiteral("service/python_modules_checksum"), value);
+void settings::set_module_checksum(const QString& name, const QString& value) {
+    if (value != module_checksum(name)) {
+        setValue(QStringLiteral("service/module_%1_checksum").arg(name), value);
     }
 }

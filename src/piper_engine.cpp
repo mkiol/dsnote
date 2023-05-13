@@ -35,13 +35,8 @@ void piper_engine::create_model() {
     }
 
     try {
-#ifdef USE_SFOS
-        m_piper.emplace(
-            std::move(model_file), std::move(config_file),
-            fmt::format("/usr/share/{}/espeak-ng-data", APP_BINARY_ID));
-#else
-        m_piper.emplace(std::move(model_file), std::move(config_file));
-#endif
+        m_piper.emplace(std::move(model_file), std::move(config_file),
+                        m_config.espeak_data_dir);
     } catch (const std::exception& err) {
         LOGE("error: " << err.what());
     }

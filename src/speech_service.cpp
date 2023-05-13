@@ -7,17 +7,22 @@
 
 #include "speech_service.h"
 
+#include <fmt/format.h>
+
 #include <QCoreApplication>
 #include <QDBusConnection>
 #include <QDebug>
 #include <QEventLoop>
 #include <algorithm>
+#include <cstdlib>
 #include <functional>
 
 #include "coqui_engine.hpp"
 #include "ds_engine.hpp"
+#include "espeak_engine.hpp"
 #include "file_source.h"
 #include "mic_source.h"
+#include "module_tools.hpp"
 #include "piper_engine.hpp"
 #include "settings.h"
 #include "vosk_engine.hpp"
@@ -294,6 +299,8 @@ speech_service::speech_service(QObject *parent)
         m_keepalive_timer.start();
     }
 
+    setup_espeak();
+
     remove_cached_wavs();
 
     handle_models_changed();
@@ -565,6 +572,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                 case models_manager::model_engine::ttt_hftc:
                 case models_manager::model_engine::tts_coqui:
                 case models_manager::model_engine::tts_piper:
+                case models_manager::model_engine::tts_espeak:
                     throw std::runtime_error{
                         "invalid model engine, expected stt"};
             }
@@ -601,6 +609,9 @@ QString speech_service::restart_tts_engine(const QString &model_id) {
             nb_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             config.nb_data = nb_file.readAll().toStdString();
         }
+
+        config.espeak_data_dir =
+            module_tools::unpacked_dir("espeakdata").toStdString();
 
         bool new_engine_required = [&] {
             if (!m_tts_engine) return true;
@@ -650,6 +661,10 @@ QString speech_service::restart_tts_engine(const QString &model_id) {
                     break;
                 case models_manager::model_engine::tts_piper:
                     m_tts_engine = std::make_unique<piper_engine>(
+                        std::move(config), std::move(call_backs));
+                    break;
+                case models_manager::model_engine::tts_espeak:
+                    m_tts_engine = std::make_unique<espeak_engine>(
                         std::move(config), std::move(call_backs));
                     break;
                 case models_manager::model_engine::ttt_hftc:
@@ -1508,7 +1523,34 @@ void speech_service::remove_cached_wavs() {
     dir.setNameFilters(QStringList{} << "*.wav");
     dir.setFilter(QDir::Files);
 
-    for (const auto &file : dir.entryList()) dir.remove(file);
+    for (const auto &file : std::as_const(dir).entryList()) dir.remove(file);
+}
+
+void speech_service::setup_espeak() {
+    if (!module_tools::init_module(QStringLiteral("espeakdata"))) return;
+
+#ifdef USE_SFOS
+    // add mbrola bin to PATH
+
+    auto bin_dir = QStringLiteral("/usr/share/%1/bin").arg(APP_BINARY_ID);
+    if (!QFileInfo::exists(bin_dir)) {
+        qWarning() << "no bin dir:" << bin_dir;
+        return;
+    }
+
+    try {
+        auto *old_path = getenv("PATH");
+        if (old_path)
+            setenv(
+                "PATH",
+                fmt::format("{}:{}", bin_dir.toStdString(), old_path).c_str(),
+                true);
+        else
+            setenv("PATH", bin_dir.toStdString().c_str(), false);
+    } catch (const std::runtime_error &err) {
+        qWarning() << "error:" << err.what();
+    }
+#endif
 }
 
 // DBus

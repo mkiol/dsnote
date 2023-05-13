@@ -133,6 +133,9 @@ QDebug operator<<(QDebug d, models_manager::model_engine engine) {
         case models_manager::model_engine::tts_piper:
             d << "tts-piper";
             break;
+        case models_manager::model_engine::tts_espeak:
+            d << "tts-espeak";
+            break;
     }
 
     return d;
@@ -362,6 +365,8 @@ void models_manager::download(const QString& id, download_type type, int part) {
 
     if (part < 0) {
         bool m_cs =
+            (model.engine == model_engine::tts_espeak &&
+             (model.checksum.isEmpty() || model.file_name.isEmpty())) ||
             checksum_ok(model.checksum, model.checksum_quick, model.file_name);
         bool s_cs =
             model.scorer_checksum.isEmpty() ||
@@ -1029,6 +1034,7 @@ models_manager::model_role models_manager::role_of_engine(model_engine engine) {
             return model_role::ttt;
         case model_engine::tts_coqui:
         case model_engine::tts_piper:
+        case model_engine::tts_espeak:
             return model_role::tts;
     }
 
@@ -1043,6 +1049,7 @@ models_manager::model_engine models_manager::engine_from_name(
     if (name == QStringLiteral("ttt_hftc")) return model_engine::ttt_hftc;
     if (name == QStringLiteral("tts_coqui")) return model_engine::tts_coqui;
     if (name == QStringLiteral("tts_piper")) return model_engine::tts_piper;
+    if (name == QStringLiteral("tts_espeak")) return model_engine::tts_espeak;
 
     throw std::runtime_error("unknown engine: " + name.toStdString());
 }
@@ -1094,13 +1101,16 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             engine =
                 engine_from_name(obj.value(QLatin1String{"engine"}).toString());
 
+            if (speaker.isEmpty() && engine == model_engine::tts_espeak)
+                speaker = lang_id;
+
             if (score == -1) score = default_score;
 
             file_name = obj.value(QLatin1String{"file_name"}).toString();
             if (file_name.isEmpty())
                 file_name = file_name_from_id(model_id, engine);
             checksum = obj.value(QLatin1String{"checksum"}).toString();
-            if (checksum.isEmpty()) {
+            if (engine != model_engine::tts_espeak && checksum.isEmpty()) {
                 qWarning() << "checksum cannot be empty:" << model_id;
                 continue;
             }
@@ -1111,8 +1121,12 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
 
             auto aurls = obj.value(QLatin1String{"urls"}).toArray();
             if (aurls.isEmpty()) {
-                qWarning() << "urls should be non empty array";
-                continue;
+                if (engine == model_engine::tts_espeak) {
+                    file_name.clear();
+                } else {
+                    qWarning() << "urls should be non empty array";
+                    continue;
+                }
             }
             for (const auto& url : aurls) urls.emplace_back(url.toString());
 
@@ -1205,6 +1219,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
                 case model_role::ttt:
                     return false;
             }
+            return false;
         }();
 
         priv_model_t model{
@@ -1244,6 +1259,12 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
                     }
                 }
             }
+        }
+
+        if (!model.exists && engine == model_engine::tts_espeak &&
+            model.file_name.isEmpty() && model.checksum.isEmpty()) {
+            // espeak without model
+            model.exists = true;
         }
 
         if (model.exists) {
@@ -1376,6 +1397,7 @@ QString models_manager::file_name_from_id(const QString& id,
         case model_engine::ttt_hftc:
         case model_engine::tts_coqui:
         case model_engine::tts_piper:
+        case model_engine::tts_espeak:
             return id;
     }
 

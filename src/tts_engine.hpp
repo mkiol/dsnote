@@ -51,6 +51,7 @@ class tts_engine {
         model_files_t model_files;
         std::string speaker;
         std::string cache_dir;
+        std::string espeak_data_dir;
         std::string nb_data;
     };
     friend std::ostream& operator<<(std::ostream& os, const config_t& config); 

@@ -47,7 +47,8 @@ class models_manager : public QObject, public singleton<models_manager> {
         stt_whisper,
         ttt_hftc,
         tts_coqui,
-        tts_piper
+        tts_piper,
+        tts_espeak
     };
     friend QDebug operator<<(QDebug d, model_engine engine);
 

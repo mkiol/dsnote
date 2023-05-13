@@ -160,7 +160,7 @@ void tts_engine::set_state(state_t new_state) {
 std::string tts_engine::path_to_output_file(const std::string& text) const {
     auto hash = std::hash<std::string>{}(
         text + m_config.model_files.model_path +
-        m_config.model_files.vocoder_path + m_config.speaker);
+        m_config.model_files.vocoder_path + m_config.speaker + m_config.lang);
     return m_config.cache_dir + "/" + std::to_string(hash) + ".wav";
 }
 

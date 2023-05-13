@@ -28,7 +28,8 @@ option(BUILD_OPENBLAS "download openblas, build and link shared lib" ON)
 option(BUILD_XZ "download xz lib, build and link statically" ON)
 option(BUILD_RNNOISE "download rnnoise lib, build and link statically" ON)
 option(BUILD_PYBIND11 "download pybind11, build and link statically" ON)
-option(BUILD_PYMODULES "make python modules archive" OFF)
+option(BUILD_PYTHON_MODULE "make python module archive" OFF)
+option(BUILD_ESPEAK "download espeak-ng lib, build and link statically" ON)
 option(BUILD_PIPER "download piper lib, build and link statically" ON)
 option(BUILD_SSPLITCPP "download ssplitcpp lib, build and link statically" ON)
 
@@ -41,11 +42,11 @@ if(NOT ${WITH_DESKTOP} AND NOT ${WITH_SFOS})
 endif()
 
 if(WITH_DESKTOP)
-    set(BUILD_PYMODULES OFF)
+    set(BUILD_PYTHON_MODULE OFF)
 endif()
 if(WITH_SFOS)
     if (WITH_PY)
-        set(BUILD_PYMODULES ON)
+        set(BUILD_PYTHON_MODULE ON)
     endif()
 endif()
 
@@ -184,12 +185,16 @@ set(dsnote_lib_sources
     ${sources_dir}/punctuator.cpp
     ${sources_dir}/py_tools.hpp
     ${sources_dir}/py_tools.cpp
+    ${sources_dir}/module_tools.hpp
+    ${sources_dir}/module_tools.cpp
     ${sources_dir}/tts_engine.hpp
     ${sources_dir}/tts_engine.cpp
     ${sources_dir}/piper_engine.hpp
     ${sources_dir}/piper_engine.cpp
     ${sources_dir}/coqui_engine.hpp
     ${sources_dir}/coqui_engine.cpp
+    ${sources_dir}/espeak_engine.hpp
+    ${sources_dir}/espeak_engine.cpp
     ${sources_dir}/simdjson.h
     ${sources_dir}/simdjson.cpp
     ${sources_dir}/py_executor.hpp
@@ -298,8 +303,8 @@ if(WITH_DESKTOP)
     list(APPEND deps_libs Qt5::QuickControls2 Qt5::Widgets)
 endif()
 
-if(BUILD_PYMODULES)
-    include(${cmake_path}/pymodules.cmake)
+if(BUILD_PYTHON_MODULE)
+    include(${cmake_path}/python_module.cmake)
 endif()
 
 if(BUILD_RNNOISE)
@@ -358,6 +363,14 @@ else()
     pkg_search_module(xz REQUIRED liblzma>=5.4.1)
     list(APPEND deps_libs ${xz_LIBRARIES})
     list(APPEND includes ${xz_INCLUDE_DIRS})
+endif()
+
+if(BUILD_PIPER OR BUILD_ESPEAK)
+    include(${cmake_path}/espeak.cmake)
+else()
+    pkg_search_module(espeak REQUIRED espeak-ng)
+    list(APPEND deps_libs ${espeak_LIBRARIES})
+    list(APPEND includes ${espeak_INCLUDE_DIRS})
 endif()
 
 if(BUILD_PIPER)

@@ -74,8 +74,8 @@ class settings : public QSettings, public singleton<settings> {
 
     launch_mode_t launch_mode() const;
     void set_launch_mode(launch_mode_t launch_mode);
-    QString python_modules_checksum() const;
-    void set_python_modules_checksum(const QString &value);
+    QString module_checksum(const QString &name) const;
+    void set_module_checksum(const QString &name, const QString &value);
 
     // app
     QString note() const;

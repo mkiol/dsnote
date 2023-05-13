@@ -19,19 +19,6 @@ elseif(arch_arm64)
     set(onnx_checksum ${onnx_arm64_checksum})
 endif()
 
-ExternalProject_Add(espeakng
-    SOURCE_DIR ${external_dir}/espeak-ng
-    BINARY_DIR ${PROJECT_BINARY_DIR}/external/espeak-ng
-    INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-    URL "${piper_source_url}"
-    URL_MD5 "${piper_checksum}"
-    CONFIGURE_COMMAND tar -x -C <INSTALL_DIR> -f <SOURCE_DIR>/lib/espeak-ng-1.52-patched.tar.gz && ./autogen.sh &&
-        ./configure --prefix=<INSTALL_DIR> --with-pic --with-pcaudiolib=no --enable-static --disable-shared --disable-rpath
-    BUILD_COMMAND ${MAKE}
-    BUILD_ALWAYS False
-    INSTALL_COMMAND make DESTDIR=/ install
-)
-
 ExternalProject_Add(onnx
     SOURCE_DIR ${external_dir}/onnx
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/onnx
@@ -67,11 +54,8 @@ ExternalProject_Add(piper
 add_library(onnxruntime SHARED IMPORTED)
 set_property(TARGET onnxruntime PROPERTY IMPORTED_LOCATION ${external_lib_dir}/libonnxruntime.so)
 
-ExternalProject_Add_StepDependencies(piper configure espeakng)
-ExternalProject_Add_StepDependencies(piper configure piper)
+ExternalProject_Add_StepDependencies(piper configure espeak)
 ExternalProject_Add_StepDependencies(piper configure onnx)
 
-list(APPEND deps_libs "${external_lib_dir}/libpiper_api.a")
-list(APPEND deps_libs "${external_lib_dir}/libespeak-ng.a" onnxruntime)
-
+list(APPEND deps_libs "${external_lib_dir}/libpiper_api.a" onnxruntime)
 list(APPEND deps piper onnxruntime)

@@ -57,7 +57,7 @@ void py_executor::loop() {
     LOGD("py executor loop started");
 
 #ifdef USE_SFOS
-    py_tools::init_modules();
+    py_tools::init_module();
 #endif
 
     try {

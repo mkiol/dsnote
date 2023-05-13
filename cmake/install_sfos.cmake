@@ -11,9 +11,13 @@ if(BUILD_OPENBLAS)
     install(FILES "${external_lib_dir}/libopenblas.so.0.3" DESTINATION share/${info_binary_id}/lib RENAME libopenblas.so.0)
 endif()
 
+if(BUILD_PIPER OR BUILD_ESPEAK)
+    install(PROGRAMS "${external_bin_dir}/mbrola" DESTINATION share/${info_binary_id}/bin)
+    install(FILES "${PROJECT_BINARY_DIR}/espeakdata.tar.xz" DESTINATION share/${info_binary_id})
+endif()
+
 if(BUILD_PIPER)
     install(FILES "${external_lib_dir}/libonnxruntime.so.1.14.1" DESTINATION share/${info_binary_id}/lib RENAME libonnxruntime.so.1.14.1)
-    install(DIRECTORY "${external_share_dir}/espeak-ng-data" DESTINATION share/${info_binary_id}/)
 endif()
 
 if(BUILD_VOSK)

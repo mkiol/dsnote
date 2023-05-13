@@ -8,18 +8,9 @@
 #ifndef PY_TOOLS_HPP
 #define PY_TOOLS_HPP
 
-#include <QString>
-
-#include "config.h"
-
 namespace py_tools {
-inline static const auto python_archive_path =
-    QStringLiteral("/usr/share/%1/lib/python.tar.xz").arg(APP_BINARY_ID);
-inline static const auto python_site_path = "python3.8/site-packages";
-
-bool unpack_modules();
-bool modules_installed();
-bool init_modules();
-};      // namespace py_tools
+inline static const auto python_site_path = "python/site-packages";
+bool init_module();
+}  // namespace py_tools
 
 #endif  // PY_TOOLS_HPP
