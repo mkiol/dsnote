@@ -2932,6 +2932,7 @@
             "model_id": "pl_piper_mls6892_low",
             "engine": "tts_piper",
             "lang_id": "pl",
+            "score": 0,
             "checksum": "795b9164",
             "checksum_quick": "6577a9bf",
             "comp": "targz",
@@ -2939,6 +2940,318 @@
                 "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-pl-mls_6892-low.tar.gz"
             ],
             "size": "58251456"
+        },
+        {
+            "name": "Amarəñña (Espeak Robot)",
+            "model_id": "am_espeak_am",
+            "engine": "tts_espeak",
+            "lang_id": "am"
+        },
+        {
+            "name": "عربي (Espeak Robot)",
+            "model_id": "ar_espeak_ar",
+            "engine": "tts_espeak",
+            "lang_id": "ar"
+        },
+        {
+            "name": "Български (Espeak Robot)",
+            "model_id": "bg_espeak_bg",
+            "engine": "tts_espeak",
+            "lang_id": "bg"
+        },
+        {
+            "name": "Bosanski (Espeak Robot)",
+            "model_id": "bs_espeak_bs",
+            "engine": "tts_espeak",
+            "lang_id": "bs"
+        },
+        {
+            "name": "Polski (Espeak Robot)",
+            "model_id": "ca_espeak_ca",
+            "engine": "tts_espeak",
+            "lang_id": "ca"
+        },
+        {
+            "name": "Català (Espeak Robot)",
+            "model_id": "cs_espeak_cs",
+            "engine": "tts_espeak",
+            "lang_id": "cs"
+        },
+        {
+            "name": "Dansk (Espeak Robot)",
+            "model_id": "da_espeak_da",
+            "engine": "tts_espeak",
+            "lang_id": "da"
+        },
+        {
+            "name": "Deutsch (Espeak Robot)",
+            "model_id": "de_espeak_de",
+            "engine": "tts_espeak",
+            "lang_id": "de"
+        },
+        {
+            "name": "Ελληνικά (Espeak Robot)",
+            "model_id": "el_espeak_el",
+            "engine": "tts_espeak",
+            "lang_id": "el"
+        },
+        {
+            "name": "English (Espeak Robot)",
+            "model_id": "en_espeak_en",
+            "engine": "tts_espeak",
+            "lang_id": "en"
+        },
+        {
+            "name": "Esperanto (Espeak Robot)",
+            "model_id": "eo_espeak_eo",
+            "engine": "tts_espeak",
+            "lang_id": "eo"
+        },
+        {
+            "name": "Español (Espeak Robot)",
+            "model_id": "es_espeak_es",
+            "engine": "tts_espeak",
+            "lang_id": "es"
+        },
+        {
+            "name": "Eesti (Espeak Robot)",
+            "model_id": "et_espeak_et",
+            "engine": "tts_espeak",
+            "lang_id": "et"
+        },
+        {
+            "name": "Euskara (Espeak Robot)",
+            "model_id": "eu_espeak_eu",
+            "engine": "tts_espeak",
+            "lang_id": "eu"
+        },
+        {
+            "name": "فارسی (Espeak Robot)",
+            "model_id": "fa_espeak_fa",
+            "engine": "tts_espeak",
+            "lang_id": "fa"
+        },
+        {
+            "name": "Suomi (Espeak Robot)",
+            "model_id": "fi_espeak_fi",
+            "engine": "tts_espeak",
+            "lang_id": "fi"
+        },
+        {
+            "name": "Français (Espeak Robot)",
+            "model_id": "fr_espeak_fr",
+            "engine": "tts_espeak",
+            "lang_id": "fr"
+        },
+        {
+            "name": "हिन्दी (Espeak Robot)",
+            "model_id": "hi_espeak_hi",
+            "engine": "tts_espeak",
+            "lang_id": "hi"
+        },
+        {
+            "name": "Hrvatski (Espeak Robot)",
+            "model_id": "hr_espeak_hr",
+            "engine": "tts_espeak",
+            "lang_id": "hr"
+        },
+        {
+            "name": "Magyar (Espeak Robot)",
+            "model_id": "hu_espeak_hu",
+            "engine": "tts_espeak",
+            "lang_id": "hu"
+        },
+        {
+            "name": "Bahasa Indonesia (Espeak Robot)",
+            "model_id": "id_espeak_id",
+            "engine": "tts_espeak",
+            "lang_id": "id"
+        },
+        {
+            "name": "Italiano (Espeak Robot)",
+            "model_id": "it_espeak_it",
+            "engine": "tts_espeak",
+            "lang_id": "it"
+        },
+        {
+            "name": "日本語 (Espeak Robot)",
+            "model_id": "jp_espeak_jp",
+            "engine": "tts_espeak",
+            "lang_id": "jp",
+            "speaker": "ja"
+        },
+        {
+            "name": "Қазақ (Espeak Robot)",
+            "model_id": "kk_espeak_kk",
+            "engine": "tts_espeak",
+            "lang_id": "kk"
+        },
+        {
+            "name": "한국어 (Espeak Robot)",
+            "model_id": "ko_espeak_ko",
+            "engine": "tts_espeak",
+            "lang_id": "ko"
+        },
+        {
+            "name": "Latviešu (Espeak Robot)",
+            "model_id": "lv_espeak_lv",
+            "engine": "tts_espeak",
+            "lang_id": "lv"
+        },
+        {
+            "name": "Македонски (Espeak Robot)",
+            "model_id": "mk_espeak_mk",
+            "engine": "tts_espeak",
+            "lang_id": "mk"
+        },
+        {
+            "name": "Melayu (Espeak Robot)",
+            "model_id": "ms_espeak_ms",
+            "engine": "tts_espeak",
+            "lang_id": "ms"
+        },
+        {
+            "name": "नेपाली (Espeak Robot)",
+            "model_id": "ne_espeak_ne",
+            "engine": "tts_espeak",
+            "lang_id": "ne"
+        },
+        {
+            "name": "Nederlands (Espeak Robot)",
+            "model_id": "nl_espeak_nl",
+            "engine": "tts_espeak",
+            "lang_id": "nl"
+        },
+        {
+            "name": "Norsk (Espeak Robot)",
+            "model_id": "no_espeak_no",
+            "engine": "tts_espeak",
+            "lang_id": "no"
+        },
+        {
+            "name": "Português (Espeak Robot)",
+            "model_id": "pt_espeak_pt",
+            "engine": "tts_espeak",
+            "lang_id": "pt"
+        },
+        {
+            "name": "Português brasileiro (Espeak Robot)",
+            "model_id": "pt_espeak_pt_br",
+            "engine": "tts_espeak",
+            "lang_id": "pt",
+            "speaker": "pt-br"
+        },
+        {
+            "name": "Română (Espeak Robot)",
+            "model_id": "ro_espeak_ro",
+            "engine": "tts_espeak",
+            "lang_id": "ro"
+        },
+        {
+            "name": "Русский (Espeak Robot)",
+            "model_id": "ru_espeak_ru",
+            "engine": "tts_espeak",
+            "lang_id": "ru"
+        },
+        {
+            "name": "Slovenčina (Espeak Robot)",
+            "model_id": "sk_espeak_sk",
+            "engine": "tts_espeak",
+            "lang_id": "sk"
+        },
+        {
+            "name": "Slovenščina (Espeak Robot)",
+            "model_id": "sl_espeak_sl",
+            "engine": "tts_espeak",
+            "lang_id": "sl"
+        },
+        {
+            "name": "Srpski (Espeak Robot)",
+            "model_id": "sr_espeak_sr",
+            "engine": "tts_espeak",
+            "lang_id": "sr"
+        },
+        {
+            "name": "Svenska (Espeak Robot)",
+            "model_id": "sv_espeak_sv",
+            "engine": "tts_espeak",
+            "lang_id": "sv"
+        },
+        {
+            "name": "Kiswahili (Espeak Robot)",
+            "model_id": "sw_espeak_sw",
+            "engine": "tts_espeak",
+            "lang_id": "sw"
+        },
+        {
+            "name": "ไทย (Espeak Robot)",
+            "model_id": "th_espeak_th",
+            "engine": "tts_espeak",
+            "lang_id": "th"
+        },
+        {
+            "name": "Türkçe (Espeak Robot)",
+            "model_id": "tr_espeak_tr",
+            "engine": "tts_espeak",
+            "lang_id": "tr"
+        },
+        {
+            "name": "Українська (Espeak Robot)",
+            "model_id": "uk_espeak_uk",
+            "engine": "tts_espeak",
+            "lang_id": "uk"
+        },
+        {
+            "name": "Oʻzbekcha (Espeak Robot)",
+            "model_id": "uz_espeak_uz",
+            "engine": "tts_espeak",
+            "lang_id": "uz"
+        },
+        {
+            "name": "Tiếng Việt (Espeak Robot)",
+            "model_id": "vi_espeak_vi",
+            "engine": "tts_espeak",
+            "lang_id": "vi"
+        },
+        {
+            "name": "广东话 (Espeak Robot)",
+            "model_id": "zh_CN_espeak_yue",
+            "engine": "tts_espeak",
+            "lang_id": "zh-CN",
+            "speaker": "yue"
+        },
+        {
+            "name": "客家話 (Espeak Robot)",
+            "model_id": "zh_CN_espeak_hak",
+            "engine": "tts_espeak",
+            "lang_id": "zh-CN",
+            "speaker": "hak"
+        },
+        {
+            "name": "官話 (Espeak Robot)",
+            "model_id": "zh_CN_espeak_cmn",
+            "engine": "tts_espeak",
+            "lang_id": "zh-CN",
+            "speaker": "cmn"
+        },
+        {
+            "name": "Polski (Espeak Robot)",
+            "model_id": "pl_espeak_pl",
+            "engine": "tts_espeak",
+            "lang_id": "pl"
+        },
+        {
+            "name": "Polski (Espeak MBROLA)",
+            "model_id": "pl_espeak_mb_pl1",
+            "engine": "tts_espeak",
+            "lang_id": "pl",
+            "speaker": "mb-pl1",
+            "checksum": "5b8c77b",
+            "checksum_quick": "169cab63",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/pl1/pl1"
+            ],
+            "size": "4745551"
         }
     ]
 }
