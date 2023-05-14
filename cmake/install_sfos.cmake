@@ -24,8 +24,8 @@ if(BUILD_VOSK)
     install(FILES "${external_lib_dir}/libvosk.so" DESTINATION share/${info_binary_id}/lib)
 endif()
 
-if(BUILD_PYMODULES)
-    install(FILES ${PROJECT_BINARY_DIR}/python.tar.xz DESTINATION share/${info_binary_id}/lib)
+if(BUILD_PYTHON_MODULE)
+    install(FILES ${PROJECT_BINARY_DIR}/python.tar.xz DESTINATION share/${info_binary_id})
 endif()
 
 install(FILES "${sfos_dir}/icons/86x86/${info_binary_id}.png" DESTINATION share/icons/hicolor/86x86/apps)
