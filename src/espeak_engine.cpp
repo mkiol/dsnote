@@ -127,8 +127,8 @@ bool espeak_engine::encode_speech_impl(const std::string& text,
 
     cb_data.wav_file.seekp(sizeof(wav_header));
 
-    if (espeak_Synth(text.c_str(), text.size(), 0, POS_CHARACTER, 0, 0, nullptr,
-                     &cb_data) != EE_OK) {
+    if (espeak_Synth(text.c_str(), text.size(), 0, POS_CHARACTER,
+                     espeakCHARS_AUTO, 0, nullptr, &cb_data) != EE_OK) {
         LOGE("error in espeak synth");
         cb_data.wav_file.close();
         unlink(out_file.c_str());
@@ -143,6 +143,14 @@ bool espeak_engine::encode_speech_impl(const std::string& text,
     }
 
     auto data_size = cb_data.wav_file.tellp();
+
+    if (data_size == sizeof(wav_header)) {
+        LOGE("no audio data");
+        cb_data.wav_file.close();
+        unlink(out_file.c_str());
+        return false;
+    }
+
     cb_data.wav_file.seekp(0);
 
     write_wav_header(m_sample_rate, sizeof(short), 1, data_size / sizeof(short),

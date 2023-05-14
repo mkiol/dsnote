@@ -24,7 +24,8 @@ ExternalProject_Add(espeak
     URL_MD5 "${piper_checksum}"
     CONFIGURE_COMMAND tar -x -C <BINARY_DIR> --strip=1 -f <SOURCE_DIR>/lib/espeak-ng-1.52-patched.tar.gz &&
         ./autogen.sh &&
-        ./configure --prefix=<INSTALL_DIR> --with-pic --with-pcaudiolib=no --enable-static --disable-shared --disable-rpath
+        ./configure --prefix=<INSTALL_DIR> --with-pic --with-pcaudiolib=no --enable-static
+            --disable-shared --disable-rpath --with-extdict-ru --with-extdict-zh --with-extdict-zhy
     BUILD_COMMAND ${MAKE}
     BUILD_ALWAYS True
     INSTALL_COMMAND make DESTDIR=/ install
