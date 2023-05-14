@@ -19,57 +19,58 @@ privacy and does not send any data to the Internet.
 
 Following languages are supported:
 
-| **Lang ID** | **Name**             | **DeepSpeech** | **Whisper** | **Vosk** | **Piper** |
-| ----------- | -------------------- | -------------- | ----------- | -------- | --------- |
-| am          | Amharic              | ● (e)          |             |          |           |
-| ar          | Arabic               |                |             | ●        |           |
-| bg          | Bulgarian            |                | ● (e)       |          |           |
-| bs          | Bosnian              |                | ● (e)       |          |           |
-| ca          | Catalan              | ●              | ●           | ●        | ●         |
-| cs          | Czech                | ●              | ●           | ●        |           |
-| da          | Danish               |                |             |          | ●         |
-| de          | German               | ●              | ●           | ●        | ●         |
-| el          | Greek                | ● (e)          | ● (e)       |          | ●         |
-| en          | English              | ●              | ●           | ●        | ●         |
-| eo          | Esperanto            |                |             | ●        |           |
-| es          | Spanish              | ●              | ●           | ●        | ●         |
-| et          | Estonian             | ● (e)          |             |          |           |
-| eu          | Basque               | ● (e)          |             |          |           |
-| fa          | Persian              | ●              |             | ●        |           |
-| fi          | Finnish              | ●              | ●           |          | ●         |
-| fr          | French               | ●              | ●           | ●        | ●         |
-| hi          | Hindi                |                |             | ●        |           |
-| hr          | Croatian             |                | ● (e)       |          |           |
-| hu          | Hungarian            | ● (e)          |             |          |           |
-| id          | Indonesian           | ● (e)          | ●           |          |           |
-| it          | Italian              | ●              | ●           | ●        | ●         |
-| jp          | Japanese             |                | ●           | ●        |           |
-| kk          | Kazakh               |                |             | ●        | ●         |
-| ko          | Korean               |                |             | ●        |           |
-| lv          | Latvian              | ● (e)          |             |          |           |
-| mk          | Macedonian           |                | ● (e)       |          |           |
-| mn          | Mongolian            | ● (e)          |             |          |           |
-| ms          | Malay                |                | ●           |          |           |
-| ne          | Nepali               |                |             |          | ●         |
-| nl          | Dutch                | ● (e)          | ●           | ●        | ●         |
-| no          | Norwegian            |                | ●           |          | ●         |
-| pl          | Polish               | ●              | ●           | ●        | ● (e)     |
-| pt          | Portuguese           | ● (e)          | ●           | ●        | ● (pt-br) |
-| ro          | Romanian             | ● (e)          | ● (e)       |          |           |
-| ru          | Russian              | ●              | ●           | ●        |           |
-| sk          | Slovak               |                | ● (e)       |          |           |
-| sl          | Slovenian            | ● (e)          | ● (e)       |          |           |
-| sr          | Serbian              |                | ● (e)       |          |           |
-| sv          | Swedish              |                | ●           | ●        |           |
-| sw          | Swahili              | ●              |             |          |           |
-| th          | Thai                 | ● (e)          | ● (e)       |          |           |
-| tl          | Tagalog              |                |             | ●        |           |
-| tr          | Turkish              | ● (e)          | ●           | ●        |           |
-| uk          | Ukrainian            | ●              | ●           | ●        | ●         |
-| uz          | Uzbek                |                |             | ●        |           |
-| vi          | Vietnamese           |                | ● (e)       | ●        | ●         |
-| yo          | Yoruba               | ● (e)          |             |          |           |
-| zh-CN       | Chinese (Simplified) | ●              | ● (e)       | ●        | ●         |
+| **Lang ID** | **Name**             | **DeepSpeech** | **Whisper** | **Vosk** | **Piper** | **espeak** | **MBROLA** |
+| ----------- | -------------------- | -------------- | ----------- | -------- | --------- | ---------- | ---------- |
+| am          | Amharic              | ● (e)          |             |          |           | ●          |            |
+| ar          | Arabic               |                |             | ●        |           | ●          | ●          |
+| bg          | Bulgarian            |                | ● (e)       |          |           | ●          |            |
+| bs          | Bosnian              |                | ● (e)       |          |           | ●          |            |
+| ca          | Catalan              | ●              | ●           | ●        | ●         | ●          |            |
+| cs          | Czech                | ●              | ●           | ●        |           | ●          | ●          |
+| da          | Danish               |                |             |          | ●         | ●          |            |
+| de          | German               | ●              | ●           | ●        | ●         | ●          |            |
+| el          | Greek                | ● (e)          | ● (e)       |          | ●         | ●          |            |
+| en          | English              | ●              | ●           | ●        | ●         | ●          |            |
+| eo          | Esperanto            |                |             | ●        |           | ●          |            |
+| es          | Spanish              | ●              | ●           | ●        | ●         | ●          |            |
+| et          | Estonian             | ● (e)          |             |          |           | ●          | ●          |
+| eu          | Basque               | ● (e)          |             |          |           | ●          |            |
+| fa          | Persian              | ●              |             | ●        |           | ●          | ●          |
+| fi          | Finnish              | ●              | ●           |          | ●         | ●          |            |
+| fr          | French               | ●              | ●           | ●        | ●         | ●          |            |
+| hi          | Hindi                |                |             | ●        |           | ●          |            |
+| hr          | Croatian             |                | ● (e)       |          |           | ●          | ●          |
+| hu          | Hungarian            | ● (e)          |             |          |           | ●          | ●          |
+| id          | Indonesian           | ● (e)          | ●           |          |           | ●          | ●          |
+| it          | Italian              | ●              | ●           | ●        | ●         | ●          |            |
+| jp          | Japanese             |                | ●           | ●        |           | ●          |            |
+| kk          | Kazakh               |                |             | ●        | ●         | ●          |            |
+| ko          | Korean               |                |             | ●        |           | ●          |            |
+| lv          | Latvian              | ● (e)          |             |          |           | ●          |            |
+| lt          | Lithuanian           |                |             |          |           | ●          | ●          |
+| mk          | Macedonian           |                | ● (e)       |          |           | ●          |            |
+| mn          | Mongolian            | ● (e)          |             |          |           |            |            |
+| ms          | Malay                |                | ●           |          |           | ●          | ●          |
+| ne          | Nepali               |                |             |          | ●         | ●          |            |
+| nl          | Dutch                | ● (e)          | ●           | ●        | ●         | ●          |            |
+| no          | Norwegian            |                | ●           |          | ●         | ●          |            |
+| pl          | Polish               | ●              | ●           | ●        | ● (e)     | ●          | ●          |
+| pt          | Portuguese           | ● (e)          | ●           | ●        | ● (pt-br) | ●          | ●          |
+| ro          | Romanian             | ● (e)          | ● (e)       |          |           | ●          | ●          |
+| ru          | Russian              | ●              | ●           | ●        |           | ●          |            |
+| sk          | Slovak               |                | ● (e)       |          |           | ●          |            |
+| sl          | Slovenian            | ● (e)          | ● (e)       |          |           | ●          |            |
+| sr          | Serbian              |                | ● (e)       |          |           | ●          |            |
+| sv          | Swedish              |                | ●           | ●        |           | ●          | ●          |
+| sw          | Swahili              | ●              |             |          |           | ●          |            |
+| th          | Thai                 | ● (e)          | ● (e)       |          |           | ●          |            |
+| tl          | Tagalog              |                |             | ●        |           |            |            |
+| tr          | Turkish              | ● (e)          | ●           | ●        |           | ●          | ●          |
+| uk          | Ukrainian            | ●              | ●           | ●        | ●         | ●          |            |
+| uz          | Uzbek                |                |             | ●        |           | ●          |            |
+| vi          | Vietnamese           |                | ● (e)       | ●        | ●         | ●          |            |
+| yo          | Yoruba               | ● (e)          |             |          |           |            |            |
+| zh-CN       | Chinese (Simplified) | ●              | ● (e)       | ●        | ●         | ●          |            |
 
 <sup>(e) experimental, most likely doesn't work well</sup>
 

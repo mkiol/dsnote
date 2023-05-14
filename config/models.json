@@ -245,6 +245,11 @@
             "name": "Dansk",
             "name_en": "Danish",
             "id": "da"
+        },
+        {
+            "name": "Lietuvių",
+            "name_en": "Lithuanian",
+            "id": "lt"
         }
     ],
     "models": [
@@ -2954,6 +2959,19 @@
             "lang_id": "ar"
         },
         {
+            "name": "عربي (Espeak MBROLA Male 1)",
+            "model_id": "ar_espeak_mb_ar1",
+            "engine": "tts_espeak",
+            "lang_id": "ar",
+            "speaker": "mb-ar1",
+            "checksum": "de75c98d",
+            "checksum_quick": "2867add6",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/ar1/ar1"
+            ],
+            "size": "6508002"
+        },
+        {
             "name": "Български (Espeak Robot)",
             "model_id": "bg_espeak_bg",
             "engine": "tts_espeak",
@@ -2966,16 +2984,42 @@
             "lang_id": "bs"
         },
         {
-            "name": "Polski (Espeak Robot)",
+            "name": "Català (Espeak Robot)",
             "model_id": "ca_espeak_ca",
             "engine": "tts_espeak",
             "lang_id": "ca"
         },
         {
-            "name": "Català (Espeak Robot)",
+            "name": "Čeština (Espeak Robot)",
             "model_id": "cs_espeak_cs",
             "engine": "tts_espeak",
             "lang_id": "cs"
+        },
+        {
+            "name": "Čeština (Espeak MBROLA Female)",
+            "model_id": "cs_espeak_mb_cz1",
+            "engine": "tts_espeak",
+            "lang_id": "cs",
+            "speaker": "mb-cz1",
+            "checksum": "3a2a41dc",
+            "checksum_quick": "22954b9b",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/cz1/cz1"
+            ],
+            "size": "2792374"
+        },
+        {
+            "name": "Čeština (Espeak MBROLA Male)",
+            "model_id": "cs_espeak_mb_cz2",
+            "engine": "tts_espeak",
+            "lang_id": "cs",
+            "speaker": "mb-cz2",
+            "checksum": "a1a205ca",
+            "checksum_quick": "a8aeaabd",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/cz2/cz2"
+            ],
+            "size": "9812385"
         },
         {
             "name": "Dansk (Espeak Robot)",
@@ -3020,6 +3064,19 @@
             "lang_id": "et"
         },
         {
+            "name": "Eesti (Espeak MBROLA Male)",
+            "model_id": "et_espeak_mb_ee1",
+            "engine": "tts_espeak",
+            "lang_id": "et",
+            "speaker": "mb-ee1",
+            "checksum": "73af5812",
+            "checksum_quick": "396b5308",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/ee1/ee1"
+            ],
+            "size": "12129415"
+        },
+        {
             "name": "Euskara (Espeak Robot)",
             "model_id": "eu_espeak_eu",
             "engine": "tts_espeak",
@@ -3030,6 +3087,19 @@
             "model_id": "fa_espeak_fa",
             "engine": "tts_espeak",
             "lang_id": "fa"
+        },
+        {
+            "name": "فارسی (Espeak MBROLA Male)",
+            "model_id": "fa_espeak_mb_ir1",
+            "engine": "tts_espeak",
+            "lang_id": "fa",
+            "speaker": "mb-ir1",
+            "checksum": "15eb458a",
+            "checksum_quick": "2ba0e71d",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/ir1/ir1"
+            ],
+            "size": "5948960"
         },
         {
             "name": "Suomi (Espeak Robot)",
@@ -3056,16 +3126,55 @@
             "lang_id": "hr"
         },
         {
+            "name": "Hrvatski (Espeak MBROLA Male)",
+            "model_id": "hr_espeak_mb_cr1",
+            "engine": "tts_espeak",
+            "lang_id": "hr",
+            "speaker": "mb-cr1",
+            "checksum": "858a208d",
+            "checksum_quick": "dc7a76ef",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/cr1/cr1"
+            ],
+            "size": "3515376"
+        },
+        {
             "name": "Magyar (Espeak Robot)",
             "model_id": "hu_espeak_hu",
             "engine": "tts_espeak",
             "lang_id": "hu"
         },
         {
+            "name": "Magyar (Espeak MBROLA Female)",
+            "model_id": "hu_espeak_mb_hu1",
+            "engine": "tts_espeak",
+            "lang_id": "hu",
+            "speaker": "mb-hu1",
+            "checksum": "10fbf82",
+            "checksum_quick": "47d387b8",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/hu1/hu1"
+            ],
+            "size": "8925695"
+        },
+        {
             "name": "Bahasa Indonesia (Espeak Robot)",
             "model_id": "id_espeak_id",
             "engine": "tts_espeak",
             "lang_id": "id"
+        },
+        {
+            "name": "Bahasa Indonesia (Espeak MBROLA Male)",
+            "model_id": "id_espeak_mb_id1",
+            "engine": "tts_espeak",
+            "lang_id": "id",
+            "speaker": "mb-id1",
+            "checksum": "6734d9b7",
+            "checksum_quick": "ad106849",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/id1/id1"
+            ],
+            "size": "5544972"
         },
         {
             "name": "Italiano (Espeak Robot)",
@@ -3099,6 +3208,25 @@
             "lang_id": "lv"
         },
         {
+            "name": "Lietuvių (Espeak Robot)",
+            "model_id": "lt_espeak_lt",
+            "engine": "tts_espeak",
+            "lang_id": "lt"
+        },
+        {
+            "name": "Lietuvių (Espeak MBROLA Male)",
+            "model_id": "lt_espeak_mb_lt1",
+            "engine": "tts_espeak",
+            "lang_id": "lt",
+            "speaker": "mb-lt1",
+            "checksum": "23429296",
+            "checksum_quick": "efcd488f",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/lt1/lt1"
+            ],
+            "size": "26488565"
+        },
+        {
             "name": "Македонски (Espeak Robot)",
             "model_id": "mk_espeak_mk",
             "engine": "tts_espeak",
@@ -3109,6 +3237,19 @@
             "model_id": "ms_espeak_ms",
             "engine": "tts_espeak",
             "lang_id": "ms"
+        },
+        {
+            "name": "Melayu (Espeak MBROLA Female)",
+            "model_id": "ms_espeak_mb_ma1",
+            "engine": "tts_espeak",
+            "lang_id": "ms",
+            "speaker": "mb-ma1",
+            "checksum": "4e9eddf4",
+            "checksum_quick": "ee5fdff8",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/ma1/ma1"
+            ],
+            "size": "3244834"
         },
         {
             "name": "नेपाली (Espeak Robot)",
@@ -3148,6 +3289,19 @@
             "lang_id": "ro"
         },
         {
+            "name": "Română (Espeak MBROLA Male)",
+            "model_id": "ro_espeak_mb_ro1",
+            "engine": "tts_espeak",
+            "lang_id": "ro",
+            "speaker": "mb-ro1",
+            "checksum": "f910d940",
+            "checksum_quick": "3247b28c",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/ro1/ro1"
+            ],
+            "size": "3822298"
+        },
+        {
             "name": "Русский (Espeak Robot)",
             "model_id": "ru_espeak_ru",
             "engine": "tts_espeak",
@@ -3166,7 +3320,7 @@
             "lang_id": "sl"
         },
         {
-            "name": "Srpski (Espeak Robot)",
+            "name": "Српски (Espeak Robot)",
             "model_id": "sr_espeak_sr",
             "engine": "tts_espeak",
             "lang_id": "sr"
@@ -3176,6 +3330,32 @@
             "model_id": "sv_espeak_sv",
             "engine": "tts_espeak",
             "lang_id": "sv"
+        },
+        {
+            "name": "Svenska (Espeak MBROLA Male)",
+            "model_id": "sv_espeak_mb_sw1",
+            "engine": "tts_espeak",
+            "lang_id": "sv",
+            "speaker": "mb-sw1",
+            "checksum": "4142452d",
+            "checksum_quick": "e6444749",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/sw1/sw1"
+            ],
+            "size": "11545528"
+        },
+        {
+            "name": "Svenska (Espeak MBROLA Female)",
+            "model_id": "sv_espeak_mb_sw2",
+            "engine": "tts_espeak",
+            "lang_id": "sv",
+            "speaker": "mb-sw2",
+            "checksum": "59e9fe8e",
+            "checksum_quick": "1e560647",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/sw2/sw2"
+            ],
+            "size": "6574729"
         },
         {
             "name": "Kiswahili (Espeak Robot)",
@@ -3194,6 +3374,32 @@
             "model_id": "tr_espeak_tr",
             "engine": "tts_espeak",
             "lang_id": "tr"
+        },
+        {
+            "name": "Türkçe (Espeak MBROLA Male)",
+            "model_id": "tr_espeak_mb_tr1",
+            "engine": "tts_espeak",
+            "lang_id": "tr",
+            "speaker": "mb-tr1",
+            "checksum": "3432901d",
+            "checksum_quick": "84771070",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/tr1/tr1"
+            ],
+            "size": "4694632"
+        },
+        {
+            "name": "Türkçe (Espeak MBROLA Female)",
+            "model_id": "tr_espeak_mb_tr2",
+            "engine": "tts_espeak",
+            "lang_id": "tr",
+            "speaker": "mb-tr2",
+            "checksum": "8d4bab42",
+            "checksum_quick": "e6a5c81b",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/tr2/tr2"
+            ],
+            "size": "5766552"
         },
         {
             "name": "Українська (Espeak Robot)",
@@ -3241,7 +3447,7 @@
             "lang_id": "pl"
         },
         {
-            "name": "Polski (Espeak MBROLA)",
+            "name": "Polski (Espeak MBROLA Female)",
             "model_id": "pl_espeak_mb_pl1",
             "engine": "tts_espeak",
             "lang_id": "pl",
