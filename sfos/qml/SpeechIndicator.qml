@@ -89,7 +89,6 @@ Item {
             }
 
             radius: root.width / 8
-            //y: (root.height - height) / 2
             color: root.color
             opacity: value == vid ? 1.0 : 0.0
             Behavior on opacity {

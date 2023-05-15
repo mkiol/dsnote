@@ -29,7 +29,7 @@
 
             An indicator of speech detection status.
             Valid states: 0 = No Speech, 1 = Speech Detected,
-                          2 = Speech Decoding/Encoding in progress, 3 = Speech initializing,
+                          2 = Speech Decoding/Encoding in progress, 3 = Speech Initializing,
                           4 = Playing Speech.
             When state is 4 or 7 (Listening Manual, Listening One-sentence) speech detection
             status is never 0.
