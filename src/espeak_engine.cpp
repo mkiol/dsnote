@@ -70,10 +70,10 @@ void espeak_engine::create_model() {
     if (mb_voice && !m_config.model_files.model_path.empty()) {
         mkdir(fmt::format("{}/mbrola", m_config.espeak_data_dir).c_str(), 0777);
 
-        symlink(m_config.model_files.model_path.c_str(),
-                fmt::format("{}/mbrola/{}", m_config.espeak_data_dir,
-                            &m_config.speaker[3])
-                    .c_str());
+        (void)symlink(m_config.model_files.model_path.c_str(),
+                      fmt::format("{}/mbrola/{}", m_config.espeak_data_dir,
+                                  &m_config.speaker[3])
+                          .c_str());
     }
 
     m_sample_rate = espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS, 0,
@@ -137,6 +137,12 @@ bool espeak_engine::encode_speech_impl(const std::string& text,
 
     if (espeak_Synchronize() != EE_OK) {
         LOGE("error in espeak synchronize");
+        cb_data.wav_file.close();
+        unlink(out_file.c_str());
+        return false;
+    }
+
+    if (m_shutting_down) {
         cb_data.wav_file.close();
         unlink(out_file.c_str());
         return false;
