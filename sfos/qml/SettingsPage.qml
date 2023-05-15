@@ -176,26 +176,6 @@ Page {
                 }
             }
 
-            TextSwitch {
-                visible: _settings.py_supported()
-                checked: _settings.restore_punctuation
-                automaticCheck: false
-                text: qsTr("Restore punctuation")
-                description: qsTr("Enable advanced punctuation restoration for speech to text decoding. To make it work, " +
-                                  "make sure you have downloaded 'Punctuation' model " +
-                                  "for your language. When this option is enabled model initialization takes " +
-                                  "much longer.")
-                onClicked: {
-                    _settings.restore_punctuation = !_settings.restore_punctuation
-                }
-            }
-
-            PaddedLabel {
-                visible: _settings.py_supported() && _settings.restore_punctuation && !app.ttt_configured
-                color: Theme.errorColor
-                text: qsTr("To make 'Restore punctuation' work, download 'Punctuation' model.")
-            }
-
             ItemBox {
                 title: qsTr("Location of language files")
                 value: _settings.models_dir_name
@@ -215,6 +195,33 @@ Page {
                         text: qsTr("Set default")
                         onClicked: {
                             _settings.models_dir = ""
+                        }
+                    }
+                }
+            }
+
+            ExpandingSectionGroup {
+                ExpandingSection {
+                    title: qsTr("Experiments")
+
+                    content.sourceComponent: Column {
+                        TextSwitch {
+                            visible: _settings.py_supported()
+                            checked: _settings.restore_punctuation
+                            automaticCheck: false
+                            text: qsTr("Restore punctuation")
+                            description: qsTr("Enable advanced punctuation restoration after speech recognition. To make it work, " +
+                                              "make sure you have enabled 'Punctuation' model for your language.") + " " +
+                                         qsTr("When this option is enabled model initialization takes much longer and memory usage is much higher.")
+                            onClicked: {
+                                _settings.restore_punctuation = !_settings.restore_punctuation
+                            }
+                        }
+
+                        PaddedLabel {
+                            visible: _settings.py_supported() && _settings.restore_punctuation && !app.ttt_configured
+                            color: Theme.errorColor
+                            text: qsTr("To make 'Restore punctuation' work, download 'Punctuation' model.")
                         }
                     }
                 }

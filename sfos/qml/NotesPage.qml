@@ -78,7 +78,7 @@ Page {
                 }
 
                 MenuItem {
-                    text: qsTr("Mode: %1").arg(_settings.mode === Settings.Stt ? qsTr("Making a note") : qsTr("Reading a note"))
+                    text: qsTr("Mode: %1").arg(_settings.mode === Settings.Stt ? qsTr("Note making") : qsTr("Note reading"))
                     onClicked: _settings.mode = _settings.mode === Settings.Stt ? Settings.Tts : Settings.Stt
                 }
             }
@@ -129,7 +129,8 @@ Page {
                     app.speech === DsnoteApp.SpeechStateSpeechInitializing ||
                    app.state !== DsnoteApp.StateListeningAuto) &&
                    !app.busy && !service.busy && app.connected &&
-                   (_settings.mode !== Settings.Tts || textArea.text.length > 0)
+                   (_settings.mode !== Settings.Tts ||
+                    app.state === DsnoteApp.StatePlayingSpeech || textArea.text.length > 0)
         status: {
             switch (app.speech) {
             case DsnoteApp.SpeechStateNoSpeech: return 0;
@@ -154,7 +155,7 @@ Page {
               app.state === DsnoteApp.StateTranscribingFile)
         text: app.intermediate_text
         textPlaceholder: {
-            if (app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding) return qsTr("Decoding, please wait...")
+            if (app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding) return qsTr("Processing, please wait...")
             if (app.speech === DsnoteApp.SpeechStateSpeechInitializing) return qsTr("Getting ready, please wait...")
             if (app.state === DsnoteApp.StateTranscribingFile) return qsTr("Transcribing audio file...")
             if (_settings.mode === Settings.Stt) {
@@ -174,12 +175,12 @@ Page {
                 (_settings.mode === Settings.Tts && !app.tts_configured)) {
                 return qsTr("Language model is not set")
             }
-            if (app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding) return qsTr("Decoding, please wait...")
+            if (app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding) return qsTr("Processing, please wait...")
             if (app.speech === DsnoteApp.SpeechStateSpeechInitializing) return qsTr("Getting ready, please wait...")
             if (app.state === DsnoteApp.StatePlayingSpeech && app.speech === DsnoteApp.SpeechStateSpeechPlaying)
                 return qsTr("Reading a note...")
             if (app.state === DsnoteApp.StatePlayingSpeech && app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding)
-                return qsTr("Synthesizing speech, please wait...")
+                return qsTr("Processing, please wait...")
             if (!busy) {
                 if (_settings.mode === Settings.Stt)
                     return qsTr("Say something...")

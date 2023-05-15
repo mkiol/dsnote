@@ -1488,7 +1488,7 @@ QVariantMap speech_service::translations() const {
     map.insert(QStringLiteral("click_say_smth"),
                tr("Click and say something..."));
     map.insert(QStringLiteral("busy_stt"), tr("Busy..."));
-    map.insert(QStringLiteral("decoding"), tr("Decoding, please wait..."));
+    map.insert(QStringLiteral("decoding"), tr("Processing, please wait..."));
     map.insert(QStringLiteral("initializing"),
                tr("Getting ready, please wait..."));
 

@@ -56,7 +56,7 @@ Page {
                 Layout.rowSpan: 2
                 Layout.fillWidth: true
                 currentIndex: _settings.mode === Settings.Stt ? 0 : 1
-                model: [qsTr("Making a note"), qsTr("Reading a note")]
+                model: [qsTr("Note making"), qsTr("Note reading")]
                 onActivated: {
                     _settings.mode = _settings.mode === Settings.Stt ? Settings.Tts : Settings.Stt
                 }
@@ -117,7 +117,7 @@ Page {
                     if (app.speech === DsnoteApp.SpeechStateSpeechInitializing)
                         return qsTr("Getting ready, please wait...")
                     if (app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding)
-                        return qsTr("Decoding, please wait...")
+                        return qsTr("Processing, please wait...")
                     if (app.state === DsnoteApp.StateTranscribingFile)
                         return qsTr("Transcribing audio file...") +
                                 (app.transcribe_progress > 0.0 ? " " +
