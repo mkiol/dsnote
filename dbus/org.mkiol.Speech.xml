@@ -143,6 +143,26 @@
         </signal>
 
         <!--
+            SttLangList:
+
+            A list of available STT languages (lang id, name).
+        -->
+        <property name="SttLangList" type="av" access="read">
+            <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantList"/>
+        </property>
+
+        <!--
+            SttLangListChanged:
+            @langs: new value of SttLangList property
+
+            Emitted whenever SttLangList property changes.
+        -->
+        <signal name="SttLangListChanged">
+          <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantList"/>
+          <arg name="langs" type="av" direction="out" />
+        </signal>
+
+        <!--
             TtsLangs:
 
             A dict of available TTS languages (lang id => array of properties).
@@ -160,6 +180,46 @@
         <signal name="TtsLangsPropertyChanged">
           <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
           <arg name="langs" type="a{sv}" direction="out" />
+        </signal>
+
+        <!--
+            TtsLangList:
+
+            A list of available TTS languages (lang id, name).
+        -->
+        <property name="TtsLangList" type="av" access="read">
+            <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantList"/>
+        </property>
+
+        <!--
+            TtsLangListChanged:
+            @langs: new value of TtsLangList property
+
+            Emitted whenever TtsLangList property changes.
+        -->
+        <signal name="TtsLangListChanged">
+          <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantList"/>
+          <arg name="langs" type="av" direction="out" />
+        </signal>
+
+        <!--
+            SttTtsLangList:
+
+            A list of available languages both for STT and TTS (lang id, name).
+        -->
+        <property name="SttTtsLangList" type="av" access="read">
+            <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantList"/>
+        </property>
+
+        <!--
+            SttTtsLangListChanged:
+            @langs: new value of SttTtsLangList property
+
+            Emitted whenever SttTtsLangList property changes.
+        -->
+        <signal name="SttTtsLangListChanged">
+          <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantList"/>
+          <arg name="langs" type="av" direction="out" />
         </signal>
 
         <!--

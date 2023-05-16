@@ -71,6 +71,10 @@ public:
     inline int state() const
     { return qvariant_cast< int >(property("State")); }
 
+    Q_PROPERTY(QVariantList SttLangList READ sttLangList)
+    inline QVariantList sttLangList() const
+    { return qvariant_cast< QVariantList >(property("SttLangList")); }
+
     Q_PROPERTY(QVariantMap SttLangs READ sttLangs)
     inline QVariantMap sttLangs() const
     { return qvariant_cast< QVariantMap >(property("SttLangs")); }
@@ -79,9 +83,17 @@ public:
     inline QVariantMap sttModels() const
     { return qvariant_cast< QVariantMap >(property("SttModels")); }
 
+    Q_PROPERTY(QVariantList SttTtsLangList READ sttTtsLangList)
+    inline QVariantList sttTtsLangList() const
+    { return qvariant_cast< QVariantList >(property("SttTtsLangList")); }
+
     Q_PROPERTY(QVariantMap Translations READ translations)
     inline QVariantMap translations() const
     { return qvariant_cast< QVariantMap >(property("Translations")); }
+
+    Q_PROPERTY(QVariantList TtsLangList READ ttsLangList)
+    inline QVariantList ttsLangList() const
+    { return qvariant_cast< QVariantList >(property("TtsLangList")); }
 
     Q_PROPERTY(QVariantMap TtsLangs READ ttsLangs)
     inline QVariantMap ttsLangs() const
@@ -180,9 +192,12 @@ Q_SIGNALS: // SIGNALS
     void SttFileTranscribeFinished(int task);
     void SttFileTranscribeProgress(double progress, int task);
     void SttIntermediateTextDecoded(const QString &text, const QString &lang, int task);
+    void SttLangListChanged(const QVariantList &langs);
     void SttLangsPropertyChanged(const QVariantMap &langs);
     void SttModelsPropertyChanged(const QVariantMap &models);
     void SttTextDecoded(const QString &text, const QString &lang, int task);
+    void SttTtsLangListChanged(const QVariantList &langs);
+    void TtsLangListChanged(const QVariantList &langs);
     void TtsLangsPropertyChanged(const QVariantMap &langs);
     void TtsModelsPropertyChanged(const QVariantMap &models);
     void TtsPartialSpeechPlaying(const QString &text, int task);

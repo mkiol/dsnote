@@ -17,6 +17,7 @@
 #include <memory>
 #include <optional>
 #include <queue>
+#include <set>
 #include <string>
 #include <utility>
 
@@ -35,8 +36,12 @@ class speech_service : public QObject, public singleton<speech_service> {
     Q_PROPERTY(int State READ dbus_state CONSTANT)
     Q_PROPERTY(int Speech READ speech CONSTANT)
     Q_PROPERTY(QVariantMap SttLangs READ available_stt_langs CONSTANT)
+    Q_PROPERTY(QVariantList SttLangList READ available_stt_lang_list CONSTANT)
     Q_PROPERTY(QVariantMap TtsLangs READ available_tts_langs CONSTANT)
+    Q_PROPERTY(QVariantList TtsLangList READ available_tts_lang_list CONSTANT)
     Q_PROPERTY(QVariantMap TttLangs READ available_ttt_langs CONSTANT)
+    Q_PROPERTY(
+        QVariantList SttTtsLangList READ available_stt_tts_lang_list CONSTANT)
     Q_PROPERTY(
         QString DefaultSttLang READ default_stt_lang WRITE set_default_stt_lang)
     Q_PROPERTY(
@@ -99,6 +104,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void set_default_stt_lang(const QString &lang_id) const;
     QVariantMap available_stt_models() const;
     QVariantMap available_stt_langs() const;
+    QVariantList available_stt_lang_list() const;
     QString default_ttt_model() const;
     QString default_ttt_lang() const;
     QVariantMap available_ttt_models() const;
@@ -109,6 +115,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     void set_default_tts_lang(const QString &lang_id) const;
     QVariantMap available_tts_models() const;
     QVariantMap available_tts_langs() const;
+    QVariantList available_tts_lang_list() const;
+    QVariantList available_stt_tts_lang_list() const;
     inline auto speech() const { return m_speech_state; }
     state_t state() const;
     int current_task_id() const;
@@ -154,10 +162,13 @@ class speech_service : public QObject, public singleton<speech_service> {
     void TtsPlaySpeechFinished(int task);
     void TtsPartialSpeechPlaying(const QString &text, int task);
     void SttLangsPropertyChanged(const QVariantMap &langs);
+    void SttLangListPropertyChanged(const QVariantList &langs);
     void DefaultSttLangPropertyChanged(const QString &lang);
     void SttModelsPropertyChanged(const QVariantMap &models);
     void DefaultSttModelPropertyChanged(const QString &model);
     void TtsLangsPropertyChanged(const QVariantMap &langs);
+    void TtsLangListPropertyChanged(const QVariantList &langs);
+    void SttTtsLangListPropertyChanged(const QVariantList &langs);
     void DefaultTtsLangPropertyChanged(const QString &lang);
     void TtsModelsPropertyChanged(const QVariantMap &models);
     void DefaultTtsModelPropertyChanged(const QString &model);
@@ -282,6 +293,10 @@ class speech_service : public QObject, public singleton<speech_service> {
     QVariantMap available_models(
         const std::map<QString, model_data_t> &available_models_map) const;
     QVariantMap available_langs(
+        const std::map<QString, model_data_t> &available_models_map) const;
+    QVariantList available_lang_list(
+        const std::map<QString, model_data_t> &available_models_map) const;
+    std::set<QString> available_lang_set(
         const std::map<QString, model_data_t> &available_models_map) const;
     static QString test_default_model(
         const QString &lang,

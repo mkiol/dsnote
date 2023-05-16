@@ -99,6 +99,12 @@ int SpeechAdaptor::state() const
     return qvariant_cast< int >(parent()->property("State"));
 }
 
+QVariantList SpeechAdaptor::sttLangList() const
+{
+    // get the value of property SttLangList
+    return qvariant_cast< QVariantList >(parent()->property("SttLangList"));
+}
+
 QVariantMap SpeechAdaptor::sttLangs() const
 {
     // get the value of property SttLangs
@@ -111,10 +117,22 @@ QVariantMap SpeechAdaptor::sttModels() const
     return qvariant_cast< QVariantMap >(parent()->property("SttModels"));
 }
 
+QVariantList SpeechAdaptor::sttTtsLangList() const
+{
+    // get the value of property SttTtsLangList
+    return qvariant_cast< QVariantList >(parent()->property("SttTtsLangList"));
+}
+
 QVariantMap SpeechAdaptor::translations() const
 {
     // get the value of property Translations
     return qvariant_cast< QVariantMap >(parent()->property("Translations"));
+}
+
+QVariantList SpeechAdaptor::ttsLangList() const
+{
+    // get the value of property TtsLangList
+    return qvariant_cast< QVariantList >(parent()->property("TtsLangList"));
 }
 
 QVariantMap SpeechAdaptor::ttsLangs() const
