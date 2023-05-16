@@ -58,17 +58,6 @@ CoverBackground {
         Behavior on y { NumberAnimation { duration: 300; easing {type: Easing.OutBack} } }
     }
 
-    BusyIndicatorWithProgress {
-        id: busyIndicator
-        size: BusyIndicatorSize.Large
-        anchors.centerIn: indicator
-        running: app.speech !== DsnoteApp.SpeechStateSpeechDecodingEncoding &&
-                 app.speech !== DsnoteApp.SpeechStateSpeechInitializing &&
-                 (app.busy || service.busy || !app.connected ||
-                 app.state === DsnoteApp.StateTranscribingFile)
-        progress: app.transcribe_progress
-    }
-
     CoverActionList {
         id: actions
         iconBackground: true

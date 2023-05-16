@@ -27,7 +27,7 @@ ExternalProject_Add(espeak
         ./configure --prefix=<INSTALL_DIR> --with-pic --with-pcaudiolib=no --enable-static
             --disable-shared --disable-rpath --with-extdict-ru --with-extdict-zh --with-extdict-zhy
     BUILD_COMMAND ${MAKE}
-    BUILD_ALWAYS True
+    BUILD_ALWAYS False
     INSTALL_COMMAND make DESTDIR=/ install
 )
 

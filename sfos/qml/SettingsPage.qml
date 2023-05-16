@@ -201,12 +201,12 @@ Page {
             }
 
             ExpandingSectionGroup {
+                visible: _settings.py_supported()
                 ExpandingSection {
                     title: qsTr("Experiments")
 
                     content.sourceComponent: Column {
                         TextSwitch {
-                            visible: _settings.py_supported()
                             checked: _settings.restore_punctuation
                             automaticCheck: false
                             text: qsTr("Restore punctuation")

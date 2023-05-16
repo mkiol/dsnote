@@ -7,6 +7,5 @@ Name=Speech Note
 
 [X-Sailjail]
 Sandboxing=Disabled
-#Permissions=Internet;Audio;Microphone;RemovableMedia;UserDirs
 OrganizationName=org.mkiol
 ApplicationName=dsnote
