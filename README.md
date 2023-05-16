@@ -8,7 +8,7 @@ Sailfish OS app for note taking and reading with speech to text or text to speec
 
 - speech to text using [Coqui STT](https://github.com/coqui-ai/STT),
 [Vosk](https://alphacephei.com/vosk) and [whisper.cpp](https://github.com/ggerganov/whisper.cpp) engines and language models, also
-- text to speech with [espeak-ng](https://github.com/espeak-ng/espeak-ng) and 
+- text to speech with [espeak-ng](https://github.com/espeak-ng/espeak-ng), [MBROLA](https://github.com/numediart/MBROLA) and 
 [Piper](https://github.com/rhasspy/piper) engines.
 
 All voice processing is entirely done locally on the device. Internet connection is only
@@ -88,8 +88,8 @@ This service is accessible via D-Bus interface. The detailed API description is 
 [org.mkiol.Speech.xml](https://github.com/mkiol/dsnote/blob/main/dbus/org.mkiol.Speech.xml) document.
 
 An example of QML-only and easy to re-use component that encapsulate complexity of D-Bus
-interface is [SttService.qml](https://github.com/mkiol/dskeyboard/blob/main/qml/SttService.qml)
-(from [Speech Keyboard](https://github.com/mkiol/dskeyboard) project).
+interface is [SpeechService.qml](https://github.com/mkiol/dskeyboard/blob/main/qml/SpeechService.qml)
+(from [Speech Keyboard](https://github.com/mkiol/dskeyboard) or [Papago](https://github.com/mkiol/papago) apps).
 
 ## Translations
 
