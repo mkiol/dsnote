@@ -57,13 +57,14 @@
     </message>
     <message>
         <location filename="../sfos/qml/ChangelogPage.qml" line="32"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="87"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="125"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="158"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="55"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="110"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="148"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="181"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="195"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="209"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="219"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="204"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="218"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="232"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="242"/>
         <source>Version %1</source>
         <translation>Version %1</translation>
     </message>
@@ -97,46 +98,57 @@
 <context>
     <name>LangsPage</name>
     <message>
-        <location filename="../sfos/qml/LangsPage.qml" line="41"/>
-        <location filename="../desktop/qml/LangsPage.qml" line="19"/>
+        <location filename="../sfos/qml/LangsPage.qml" line="43"/>
         <source>Languages</source>
         <translation>Sprachen</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="99"/>
+        <location filename="../sfos/qml/LangsPage.qml" line="52"/>
+        <source>Speech to Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/LangsPage.qml" line="54"/>
+        <source>Text to Speech</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/LangsPage.qml" line="56"/>
+        <source>Text to Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Delete</source>
-        <translation>Löschen</translation>
+        <translation type="vanished">Löschen</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="99"/>
         <source>Download</source>
-        <translation>Herunterladen</translation>
+        <translation type="vanished">Herunterladen</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="99"/>
         <source>Cancel</source>
-        <translation>Abbruch</translation>
+        <translation type="vanished">Abbruch</translation>
     </message>
 </context>
 <context>
     <name>ModelItem</name>
     <message>
-        <location filename="../sfos/qml/ModelItem.qml" line="42"/>
+        <location filename="../sfos/qml/ModelItem.qml" line="43"/>
         <source>Set as default for this language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sfos/qml/ModelItem.qml" line="49"/>
+        <location filename="../sfos/qml/ModelItem.qml" line="50"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/ModelItem.qml" line="49"/>
+        <location filename="../sfos/qml/ModelItem.qml" line="50"/>
         <source>Download</source>
         <translation>Herunterladen‎</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/ModelItem.qml" line="49"/>
+        <location filename="../sfos/qml/ModelItem.qml" line="50"/>
         <source>Cancel</source>
         <translation>Abbruch</translation>
     </message>
@@ -158,16 +170,16 @@
         <translation type="vanished">Audiodatei transkribieren</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="136"/>
-        <location filename="../sfos/qml/NotesPage.qml" line="146"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="69"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="143"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="160"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="192"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="122"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="212"/>
         <source>Transcribing audio file...</source>
         <translation>Audiodatei transkribieren...</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="67"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="132"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="70"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="194"/>
         <source>Clear</source>
         <translation>Leeren</translation>
     </message>
@@ -176,88 +188,136 @@
         <translation type="vanished">Transkription abbrechen</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="73"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="76"/>
         <source>Copy</source>
         <translation>Kopieren</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="99"/>
-        <location filename="../sfos/qml/NotesPage.qml" line="142"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="81"/>
+        <source>Mode: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Language is not configured</source>
-        <translation>Sprache ist nicht konfiguriert</translation>
+        <translation type="vanished">Sprache ist nicht konfiguriert</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="100"/>
         <source>Pull down and select Settings to download language</source>
-        <translation>Nutze das Pull-Down Menu und gehe zu den Einstellungen, um eine Sprache herunterzuladen</translation>
+        <translation type="vanished">Nutze das Pull-Down Menu und gehe zu den Einstellungen, um eine Sprache herunterzuladen</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="141"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="173"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="112"/>
         <source>Starting...</source>
         <translation>Starte...</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="135"/>
-        <location filename="../sfos/qml/NotesPage.qml" line="145"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="73"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="75"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="162"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="186"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="127"/>
         <source>Say something...</source>
         <translation>Sag etwas...</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="138"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="80"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="158"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="178"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="183"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="120"/>
+        <source>Processing, please wait...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/NotesPage.qml" line="164"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="129"/>
         <source>Press and say something...</source>
         <translation>Drücke und sag etwas...</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="137"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="79"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="163"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="128"/>
         <source>Click and say something...</source>
         <translation>Klick und sag etwas...</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="54"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="144"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="56"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="213"/>
         <source>Transcribe audio file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="133"/>
-        <location filename="../sfos/qml/NotesPage.qml" line="143"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="77"/>
-        <source>Decoding, please wait...</source>
+        <location filename="../sfos/qml/NotesPage.qml" line="81"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="59"/>
+        <source>Note making</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="134"/>
-        <location filename="../sfos/qml/NotesPage.qml" line="144"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="67"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="81"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="59"/>
+        <source>Note reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/NotesPage.qml" line="114"/>
+        <source>Pull down and select Settings to download language models</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/NotesPage.qml" line="159"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="179"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="118"/>
         <source>Getting ready, please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="147"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="166"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="181"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="132"/>
+        <source>Reading a note...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/NotesPage.qml" line="113"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="176"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="115"/>
+        <source>Language model is not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/NotesPage.qml" line="168"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="188"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="134"/>
+        <source>Click to read a note...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/NotesPage.qml" line="169"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="190"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="135"/>
+        <source>Make a note and click to read it...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/NotesPage.qml" line="193"/>
         <source>Busy...</source>
         <translation>Beschäftigt...</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="189"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="246"/>
         <source>Audio file couldn&apos;t be transcribed.</source>
         <translation>Audiodatei kann nicht transkribiert werden</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="192"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="249"/>
         <source>Microphone was unexpectedly disconnected.</source>
         <translation>Das Mikrofon wurde unerwartet getrennt</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="195"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="252"/>
         <source>Unable to start service.</source>
         <translation>Service kann nicht gestartet werden</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="198"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="255"/>
         <source>Oops! Something went wrong.</source>
         <translation>Oops! Da ging was schief.</translation>
     </message>
@@ -267,25 +327,39 @@
         <translation>Notiz</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/NotesPage.qml" line="103"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="28"/>
+        <source>Active Speech to Text model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/NotesPage.qml" line="34"/>
+        <source>Active Text to Speech model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/NotesPage.qml" line="175"/>
+        <source>Click to read a note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/NotesPage.qml" line="165"/>
         <source>Press and hold to start listening</source>
         <translation>Drücken und halten, um den Hörvorgang zu starten</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/NotesPage.qml" line="120"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="166"/>
         <source>Click to start listening</source>
         <translation>Klicken um den Hörvorgang zu starten</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="54"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="120"/>
+        <location filename="../sfos/qml/NotesPage.qml" line="56"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="187"/>
         <source>Cancel</source>
         <translation>Abbruch</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/NotesPage.qml" line="158"/>
         <source>No language is configured</source>
-        <translation>Keine Sprache konfiguriert</translation>
+        <translation type="vanished">Keine Sprache konfiguriert</translation>
     </message>
 </context>
 <context>
@@ -297,41 +371,39 @@
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="42"/>
         <source>Active language</source>
-        <translation>Aktive Sprache</translation>
+        <translation type="vanished">Aktive Sprache</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="76"/>
         <source>Languages</source>
-        <translation>Sprachen</translation>
+        <translation type="vanished">Sprachen</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="84"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="38"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="120"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="45"/>
         <source>Listening mode</source>
         <translation>Hörmodus</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="91"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="47"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="127"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="54"/>
         <source>One sentence</source>
         <translation>Ein Satz</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="92"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="48"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="128"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="55"/>
         <source>Press and hold</source>
         <translation>Drücke und halte</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="93"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="49"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="129"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="56"/>
         <source>Always on</source>
         <translation>Immer an</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="104"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="140"/>
         <source>One sentence: Clicking on the bottom panel starts listening, which ends when the first sentence is recognized.
 Press and hold: Pressing and holding on the bottom panel enables listening. When you stop holding, listening will turn off.
 Always on: Listening is always turn on.</source>
@@ -340,63 +412,112 @@ Drücken und halten: Wenn Sie auf das untere Feld drücken und gedrückt halten,
 Immer an: Das Zuhören ist immer eingeschaltet.</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="110"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="66"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="146"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="73"/>
         <source>Text appending style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="117"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="75"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="153"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="82"/>
         <source>In line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="118"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="76"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="154"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="83"/>
         <source>After line break</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="129"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="165"/>
         <source>Text is appended to the note in the same line or after line break.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="136"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="108"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="172"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="115"/>
         <source>Translate to English</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="137"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="173"/>
         <source>Translate decoded text to English. This option works only with Whisper models.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="144"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="92"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="206"/>
+        <source>Experiments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="213"/>
+        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled &apos;Punctuation&apos; model for your language.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="215"/>
+        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="224"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="133"/>
+        <source>To make &apos;Restore punctuation&apos; work, download &apos;Punctuation&apos; model.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="180"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="99"/>
         <source>Location of language files</source>
         <translation>Speicherort der Sprachdateien</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="146"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="182"/>
         <source>Directory where language files are downloaded to and stored.</source>
         <translation>Verzeichnis, in das die Sprachdateien heruntergeladen und gespeichert werden.</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="150"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="101"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="186"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="108"/>
         <source>Change</source>
         <translation>Ändern</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="159"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="195"/>
         <source>Set default</source>
         <translation>Als Standard setzen</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="116"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="112"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="38"/>
+        <source>Language models</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="42"/>
+        <source>Active Speech to Text model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="42"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="77"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="77"/>
+        <source>Active Text to Speech model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="212"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="124"/>
+        <source>Restore punctuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="138"/>
         <source>Please choose a directory</source>
         <translation>Bitte wähle ein Verzeichnis</translation>
     </message>
@@ -404,57 +525,83 @@ Immer an: Das Zuhören ist immer eingeschaltet.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../desktop/qml/main.qml" line="49"/>
         <source>Languages configuration</source>
-        <translation>Sprachkonfiguration</translation>
+        <translation type="vanished">Sprachkonfiguration</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="57"/>
+        <location filename="../desktop/qml/main.qml" line="53"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="66"/>
+        <location filename="../desktop/qml/main.qml" line="62"/>
         <source>Quit</source>
         <translation>Beenden</translation>
     </message>
 </context>
 <context>
-    <name>stt_service</name>
+    <name>speech_service</name>
     <message>
-        <location filename="../src/stt_service.cpp" line="869"/>
         <source>Language is not configured</source>
-        <translation>Sprache ist nicht konfiguriert</translation>
+        <translation type="obsolete">Sprache ist nicht konfiguriert</translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="870"/>
-        <source>Say something...</source>
-        <translation>Sag etwas...</translation>
-    </message>
-    <message>
-        <location filename="../src/stt_service.cpp" line="872"/>
-        <source>Press and say something...</source>
-        <translation>Drücke und sag etwas...</translation>
-    </message>
-    <message>
-        <location filename="../src/stt_service.cpp" line="874"/>
-        <source>Click and say something...</source>
-        <translation>Klick und sag etwas...</translation>
-    </message>
-    <message>
-        <location filename="../src/stt_service.cpp" line="875"/>
-        <source>Busy...</source>
-        <translation>Beschäftigt...</translation>
-    </message>
-    <message>
-        <location filename="../src/stt_service.cpp" line="876"/>
-        <source>Decoding, please wait...</source>
+        <location filename="../src/speech_service.cpp" line="1584"/>
+        <source>Language model is not set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/stt_service.cpp" line="878"/>
+        <location filename="../src/speech_service.cpp" line="1585"/>
+        <source>Say something...</source>
+        <translation type="unfinished">Sag etwas...</translation>
+    </message>
+    <message>
+        <location filename="../src/speech_service.cpp" line="1587"/>
+        <source>Press and say something...</source>
+        <translation type="unfinished">Drücke und sag etwas...</translation>
+    </message>
+    <message>
+        <location filename="../src/speech_service.cpp" line="1589"/>
+        <source>Click and say something...</source>
+        <translation type="unfinished">Klick und sag etwas...</translation>
+    </message>
+    <message>
+        <location filename="../src/speech_service.cpp" line="1590"/>
+        <source>Busy...</source>
+        <translation type="unfinished">Beschäftigt...</translation>
+    </message>
+    <message>
+        <location filename="../src/speech_service.cpp" line="1591"/>
+        <source>Processing, please wait...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/speech_service.cpp" line="1593"/>
         <source>Getting ready, please wait...</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>stt_service</name>
+    <message>
+        <source>Language is not configured</source>
+        <translation type="vanished">Sprache ist nicht konfiguriert</translation>
+    </message>
+    <message>
+        <source>Say something...</source>
+        <translation type="vanished">Sag etwas...</translation>
+    </message>
+    <message>
+        <source>Press and say something...</source>
+        <translation type="vanished">Drücke und sag etwas...</translation>
+    </message>
+    <message>
+        <source>Click and say something...</source>
+        <translation type="vanished">Klick und sag etwas...</translation>
+    </message>
+    <message>
+        <source>Busy...</source>
+        <translation type="vanished">Beschäftigt...</translation>
     </message>
 </context>
 </TS>
