@@ -29,6 +29,29 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Version %1").arg("3.0")
+            }
+
+            LogItem {
+                title: "Text to Speech"
+                description: "Now not only you can convert speech to text, but now also read your notes with speech synthesizer. " +
+                             "To switch between 'Note making' and 'Note reading' modes use pull-down menu option. " +
+                             "Following TTS engines are supported: Piper, Espeak and MBROLA. " +
+                             "Piper provides excellent speech synthesizer quality but it is not availabled for all languages. " +
+                             "For others, unfortunately a much worse Espeak and MBROLA can be used."
+            }
+
+            LogItem {
+                title: "Punctuation restoration (Experiment)"
+                description: "DeepSpeech and Vosk speech to text models produce text without punctuation. " +
+                             "To overcome this problem, in 'Experiment' section you can enable 'Restore punctuation' option. " +
+                             "When it's enabled, text after speech recognition is processed via Text to Text model which restores punctuation. " +
+                             "To make it work, make sure you have enabled 'Punctuation' model for your language in 'Language models'. " +
+                             "When this option is turn on model initialization takes much longer and memory usage is much higher. " +
+                             "Punctuation restoration is only available for ARM64."
+            }
+
+            SectionHeader {
                 text: qsTr("Version %1").arg("2.0")
             }
 
