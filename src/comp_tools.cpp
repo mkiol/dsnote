@@ -236,7 +236,8 @@ bool archive_decode(const QString& file_in, archive_type type,
 
             QString entry_path{archive_entry_pathname_utf8(entry)};
 
-            // qDebug() << "found file in archive:" << entry_path;
+            //            qDebug() << "found file in archive:" << entry_path
+            //                     << ignore_first_dir;
 
             auto file_out = [&]() -> QString {
                 if (files_out.files.empty()) {
@@ -258,7 +259,8 @@ bool archive_decode(const QString& file_in, archive_type type,
 
             if (file_out.isEmpty()) continue;
 
-            // qDebug() << "extracting file:" << entry_path << "to" << file_out;
+            //            qDebug() << "extracting file:" << entry_path << "to"
+            //            << file_out;
 
             auto file_out_std = file_out.toStdString();
 

@@ -9,7 +9,6 @@
 
 #include <fmt/format.h>
 
-#include "config.h"
 #include "logger.hpp"
 
 piper_engine::piper_engine(config_t config, callbacks_t call_backs)
@@ -36,7 +35,7 @@ void piper_engine::create_model() {
 
     try {
         m_piper.emplace(std::move(model_file), std::move(config_file),
-                        m_config.espeak_data_dir);
+                        m_config.data_dir);
     } catch (const std::exception& err) {
         LOGE("error: " << err.what());
     }

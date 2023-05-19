@@ -250,6 +250,26 @@
             "name": "Lietuvių",
             "name_en": "Lithuanian",
             "id": "lt"
+        },
+        {
+            "name": "татарча",
+            "name_en": "Tatar",
+            "id": "tt"
+        },
+        {
+            "name": "Shqip",
+            "name_en": "Albanian",
+            "id": "sq"
+        },
+        {
+            "name": "Кыргыз",
+            "name_en": "Kyrgyz",
+            "id": "ky"
+        },
+        {
+            "name": "ქართული",
+            "name_en": "Georgian",
+            "id": "ka"
         }
     ],
     "models": [
@@ -3458,6 +3478,399 @@
                 "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/pl1/pl1"
             ],
             "size": "4745551"
+        },
+        {
+            "name": "Esperanto (RHVoice Spomenka)",
+            "model_id": "eo_rhvoice_spomenka",
+            "engine": "tts_rhvoice",
+            "lang_id": "eo",
+            "speaker": "spomenka",
+            "checksum": "30d81d46",
+            "checksum_quick": "a5fb1c7a",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/spomenka-epo/releases/download/4.2/RHVoice-voice-Esperanto-Spomenka-v4.2.zip"
+            ],
+            "size": "7278697"
+        },
+        {
+            "name": "Русский (RHVoice Vsevolod)",
+            "model_id": "ru_rhvoice_vsevolod",
+            "engine": "tts_rhvoice",
+            "lang_id": "ru",
+            "speaker": "vsevolod",
+            "checksum": "bbcdc0d3",
+            "checksum_quick": "59d5ee19",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/vsevolod-rus/releases/download/v4.0/data.zip"
+            ],
+            "size": "7167623"
+        },
+        {
+            "name": "Русский (RHVoice Timofey)",
+            "model_id": "ru_rhvoice_timofey",
+            "engine": "tts_rhvoice",
+            "lang_id": "ru",
+            "speaker": "timofey",
+            "checksum": "f14236b8",
+            "checksum_quick": "24fd3a68",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/timofey-rus/releases/download/4.0/data.zip"
+            ],
+            "size": "13835920"
+        },
+        {
+            "name": "Русский (RHVoice Elena)",
+            "model_id": "ru_rhvoice_elena",
+            "engine": "tts_rhvoice",
+            "lang_id": "ru",
+            "speaker": "elena",
+            "checksum": "a94baa6e",
+            "checksum_quick": "ed216f1e",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/elena-rus/releases/download/v4.3/data.zip"
+            ],
+            "size": "4803052"
+        },
+        {
+            "name": "Русский (RHVoice Umka)",
+            "model_id": "ru_rhvoice_umka",
+            "engine": "tts_rhvoice",
+            "lang_id": "ru",
+            "speaker": "umka",
+            "checksum": "1db80c9d",
+            "checksum_quick": "1a92ffd9",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/umka-rus/releases/download/4.0/data.zip"
+            ],
+            "size": "14627938"
+        },
+        {
+            "name": "Русский (RHVoice Vitaliy)",
+            "model_id": "ru_rhvoice_vitaliy_ng",
+            "engine": "tts_rhvoice",
+            "lang_id": "ru",
+            "speaker": "vitaliy-ng",
+            "checksum": "b81fa3aa",
+            "checksum_quick": "6fdb18",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/vitaliy-ng-rus/releases/download/4.0/data.zip"
+            ],
+            "size": "6160942"
+        },
+        {
+            "name": "Русский (RHVoice Aleksandr)",
+            "model_id": "ru_rhvoice_aleksandr_hq",
+            "engine": "tts_rhvoice",
+            "lang_id": "ru",
+            "speaker": "aleksandr-hq",
+            "checksum": "7063e09a",
+            "checksum_quick": "7b05d22a",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/aleksandr-hq-rus/releases/download/4.1/data.zip"
+            ],
+            "size": "7359634"
+        },
+        {
+            "name": "Русский (RHVoice Tatiana)",
+            "model_id": "ru_rhvoice_tatiana",
+            "engine": "tts_rhvoice",
+            "lang_id": "ru",
+            "speaker": "tatiana",
+            "checksum": "96b84f3a",
+            "checksum_quick": "b6a1dee8",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/tatiana-rus/releases/download/4.0/data.zip"
+            ],
+            "size": "11130815"
+        },
+        {
+            "name": "Українська (RHVoice Marianna)",
+            "model_id": "uk_rhvoice_marianna",
+            "engine": "tts_rhvoice",
+            "lang_id": "uk",
+            "speaker": "marianna",
+            "checksum": "8a0f4018",
+            "checksum_quick": "bf9ed8e7",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/marianna-ukr/releases/download/4.1/data.zip"
+            ],
+            "size": "10113404"
+        },
+        {
+            "name": "Українська (RHVoice Natalia)",
+            "model_id": "uk_rhvoice_natalia",
+            "engine": "tts_rhvoice",
+            "lang_id": "uk",
+            "speaker": "natalia",
+            "checksum": "39f236e7",
+            "checksum_quick": "f56aa3dc",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/natalia-ukr/releases/download/4.2/data.zip"
+            ],
+            "size": "7511246"
+        },
+        {
+            "name": "Українська (RHVoice Volodymyr)",
+            "model_id": "uk_rhvoice_volodymyr",
+            "engine": "tts_rhvoice",
+            "lang_id": "uk",
+            "speaker": "volodymyr",
+            "checksum": "28c0709c",
+            "checksum_quick": "b7d0df38",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/volodymyr-ukr/releases/download/4.1/data.zip"
+            ],
+            "size": "11107059"
+        },
+        {
+            "name": "Українська (RHVoice Anatol)",
+            "model_id": "uk_rhvoice_anatol",
+            "engine": "tts_rhvoice",
+            "lang_id": "uk",
+            "speaker": "anatol",
+            "checksum": "12331631",
+            "checksum_quick": "257b5724",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/anatol-ukr/releases/download/4.1/RHVoice-voice-Ukrainian-Anatol-v4.2.zip"
+            ],
+            "size": "10360397"
+        },
+        {
+            "name": "Čeština (RHVoice Zdenek)",
+            "model_id": "cs_rhvoice_zdenek",
+            "engine": "tts_rhvoice",
+            "lang_id": "cs",
+            "speaker": "zdenek",
+            "checksum": "2aebbde8",
+            "checksum_quick": "2a0ed96b",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/zdenek-cze/releases/download/v4.3/RHVoice-voice-Czech-Zdenek-v4.3.zip"
+            ],
+            "size": "10374454"
+        },
+        {
+            "name": "English (RHVoice Slt)",
+            "model_id": "en_rhvoice_slt",
+            "engine": "tts_rhvoice",
+            "lang_id": "en",
+            "speaker": "slt",
+            "checksum": "10bb769f",
+            "checksum_quick": "a97a711f",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/slt-eng/releases/download/4.1/data.zip"
+            ],
+            "size": "4857163"
+        },
+        {
+            "name": "English (RHVoice Alan)",
+            "model_id": "en_rhvoice_alan",
+            "engine": "tts_rhvoice",
+            "lang_id": "en",
+            "speaker": "alan",
+            "checksum": "7e1fd0ce",
+            "checksum_quick": "5fce07ba",
+            "comp": "zip",
+            "urls": [
+                "https://github.com/RHVoice/alan-eng/archive/bb3fdb15b9c64109f396f56f6155965bfcf89977.zip"
+            ],
+            "size": "4976930"
+        },
+        {
+            "name": "Македонски (RHVoice Kiko)",
+            "model_id": "mk_rhvoice_kiko",
+            "engine": "tts_rhvoice",
+            "lang_id": "mk",
+            "speaker": "kiko",
+            "checksum": "4451f8e6",
+            "checksum_quick": "c582642a",
+            "comp": "zip",
+            "urls": [
+                "https://github.com/RHVoice/kiko-mkd/archive/ac016403aafca26c2e0d83dd2f13caa0e9b7c3d2.zip"
+            ],
+            "size": "4410485"
+        },
+        {
+            "name": "Македонски (RHVoice Suze)",
+            "model_id": "mk_rhvoice_suze",
+            "engine": "tts_rhvoice",
+            "lang_id": "mk",
+            "speaker": "suze",
+            "checksum": "ccd531df",
+            "checksum_quick": "f0c7d1ed",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/suze-mkd/releases/download/v4.1/RHVoice-voice-Macedonian-Suze-v4.1.zip"
+            ],
+            "size": "14896090"
+        },
+        {
+            "name": "Shqip (RHVoice Hana)",
+            "model_id": "sq_rhvoice_hana",
+            "engine": "tts_rhvoice",
+            "lang_id": "sq",
+            "speaker": "hana",
+            "checksum": "26aed256",
+            "checksum_quick": "8fc9f9ea",
+            "comp": "zip",
+            "urls": [
+                "https://github.com/RHVoice/hana-sqi/archive/fbc3f3e330f2b184c0606cb5e7f32bb4b36ee280.zip"
+            ],
+            "size": "8731979"
+        },
+        {
+            "name": "татарча (RHVoice Talgat)",
+            "model_id": "tt_rhvoice_talgat",
+            "engine": "tts_rhvoice",
+            "lang_id": "tt",
+            "speaker": "talgat",
+            "checksum": "2cc19bc",
+            "checksum_quick": "b48be384",
+            "comp": "zip",
+            "urls": [
+                "https://github.com/RHVoice/talgat-tat/archive/9c4df6b00828b369392d35476f942bfd1229a794.zip"
+            ],
+            "size": "14824573"
+        },
+        {
+            "name": "Кыргыз (RHVoice Nazgul)",
+            "model_id": "ky_rhvoice_nazgul",
+            "engine": "tts_rhvoice",
+            "lang_id": "ky",
+            "speaker": "nazgul",
+            "checksum": "e87d808e",
+            "checksum_quick": "ce48bea1",
+            "comp": "zip",
+            "urls": [
+                "https://github.com/RHVoice/nazgul-kir/archive/36eea599181fce1e70dd68327dea7e71f4c0e064.zip"
+            ],
+            "size": "10050931"
+        },
+        {
+            "name": "Кыргыз (RHVoice Azamat)",
+            "model_id": "ky_rhvoice_azamat",
+            "engine": "tts_rhvoice",
+            "lang_id": "ky",
+            "speaker": "azamat",
+            "checksum": "179eefd5",
+            "checksum_quick": "71e8eb7f",
+            "comp": "zip",
+            "urls": [
+                "https://github.com/RHVoice/azamat-kir/archive/d2b1f5a7f42de0045b3ddbddba7b9f42bfa6f131.zip"
+            ],
+            "size": "17545133"
+        },
+        {
+            "name": "ქართული (RHVoice Natia)",
+            "model_id": "ka_rhvoice_natia",
+            "engine": "tts_rhvoice",
+            "lang_id": "ka",
+            "speaker": "natia",
+            "checksum": "639f4836",
+            "checksum_quick": "34cec567",
+            "comp": "zip",
+            "urls": [
+                "https://github.com/RHVoice/natia-kat/archive/e7504db85830547765551d9065edad539e0f012f.zip"
+            ],
+            "size": "10481008"
+        },
+        {
+            "name": "Português brasileiro (RHVoice Letícia)",
+            "model_id": "pt_rhvoice_br_leticia_f123",
+            "engine": "tts_rhvoice",
+            "lang_id": "pt",
+            "speaker": "Leticia-F123",
+            "checksum": "dfd1dfc4",
+            "checksum_quick": "44e48b3c",
+            "comp": "zip",
+            "urls": [
+                "https://github.com/RHVoice/leticia-f123-pt-br/archive/9b66982f206f0400248940afd1ac8c18518e1703.zip"
+            ],
+            "size": "21370483"
+        },
+        {
+            "name": "Polski (RHVoice Magda)",
+            "model_id": "pl_rhvoice_magda",
+            "engine": "tts_rhvoice",
+            "lang_id": "pl",
+            "speaker": "magda",
+            "checksum": "91e4a859",
+            "checksum_quick": "6cd41c4d",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/magda-pol/releases/download/rev46/RHVoice-voice-Polish-Magda-v4.46.zip"
+            ],
+            "size": "9798974"
+        },
+        {
+            "name": "Polski (RHVoice Natan)",
+            "model_id": "pl_rhvoice_natan",
+            "engine": "tts_rhvoice",
+            "lang_id": "pl",
+            "speaker": "natan",
+            "checksum": "e097a91d",
+            "checksum_quick": "529578b",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/natan-pol/releases/download/4.12/RHVoice-voice-Polish-Natan-v4.12.zip"
+            ],
+            "size": "7456757"
+        },
+        {
+            "name": "Polski (RHVoice Michał)",
+            "model_id": "pl_rhvoice_michal",
+            "engine": "tts_rhvoice",
+            "lang_id": "pl",
+            "speaker": "michal",
+            "checksum": "963ea39c",
+            "checksum_quick": "6d38b778",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/michal-pol/releases/download/4.2/RHVoice-voice-Polish-Michal-v4.2.zip"
+            ],
+            "size": "5750556"
+        },
+        {
+            "name": "Polski (RHVoice Cezary)",
+            "model_id": "pl_rhvoice_cezary",
+            "engine": "tts_rhvoice",
+            "lang_id": "pl",
+            "speaker": "cezary",
+            "score": 4,
+            "checksum": "ebb69a2d",
+            "checksum_quick": "ee679222",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/cezary-pol/releases/download/4.1/RHVoice-voice-Polish-Cezary-v4.1.zip"
+            ],
+            "size": "10842873"
+        },
+        {
+            "name": "Polski (RHVoice Alicja)",
+            "model_id": "pl_rhvoice_alicja",
+            "engine": "tts_rhvoice",
+            "lang_id": "pl",
+            "speaker": "alicja",
+            "checksum": "e688ea90",
+            "checksum_quick": "f7fc2a6d",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/alicja-pol/releases/download/v4.1/data-alicja.zip"
+            ],
+            "size": "7618694"
         }
     ]
 }

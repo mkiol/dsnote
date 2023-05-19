@@ -247,3 +247,18 @@ void tts_engine::process() {
 
     LOGD("tts processing done");
 }
+
+// borrowed from:
+// https://github.com/rhasspy/piper/blob/master/src/cpp/wavfile.hpp
+void tts_engine::write_wav_header(int sample_rate, int sample_width,
+                                  int channels, uint32_t num_samples,
+                                  std::ostream& wav_file) {
+    wav_header header;
+    header.data_size = num_samples * sample_width * channels;
+    header.chunk_size = header.data_size + sizeof(wav_header) - 8;
+    header.sample_rate = sample_rate;
+    header.num_channels = channels;
+    header.bytes_per_sec = sample_rate * sample_width * channels;
+    header.block_align = sample_width * channels;
+    wav_file.write(reinterpret_cast<const char*>(&header), sizeof(wav_header));
+}

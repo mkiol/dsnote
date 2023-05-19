@@ -6,7 +6,7 @@ Following schema applies:
 (O) - optional
 
 engine types: 'stt_ds', 'stt_vosk', 'stt_whisper', 'ttt_hftc', 'tts_coqui', 'tts_piper', 'tts_espeak'
-compression types: 'none', 'xz', 'gz', 'tar', 'targz', 'tarxz', 'dir'
+compression types: 'none', 'xz', 'gz', 'tar', 'targz', 'tarxz', 'zip', 'zipall', 'dir'
 
 { 
     "version": <config_version>,

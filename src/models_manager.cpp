@@ -64,6 +64,9 @@ QDebug operator<<(QDebug d, models_manager::comp_type comp_type) {
         case models_manager::comp_type::zip:
             d << "zip";
             break;
+        case models_manager::comp_type::zipall:
+            d << "zipall";
+            break;
         case models_manager::comp_type::dir:
             d << "dir";
             break;
@@ -135,6 +138,9 @@ QDebug operator<<(QDebug d, models_manager::model_engine engine) {
             break;
         case models_manager::model_engine::tts_espeak:
             d << "tts-espeak";
+            break;
+        case models_manager::model_engine::tts_rhvoice:
+            d << "tts-rhvoice";
             break;
     }
 
@@ -451,7 +457,8 @@ void models_manager::download(const QString& id, download_type type, int part) {
         next_type = next_part > 0 ? download_type::scorer : download_type::none;
     }
 
-    if ((comp == comp_type::tarxz || comp == comp_type::zip) &&
+    if ((comp == comp_type::tarxz || comp == comp_type::zip ||
+         comp == comp_type::zipall) &&
         url.hasQuery()) {
         if (QUrlQuery query{url}; query.hasQueryItem(QStringLiteral("file"))) {
             path_in_archive = query.queryItemValue(QStringLiteral("file"));
@@ -563,6 +570,7 @@ bool models_manager::extract_from_archive(
             case comp_type::tar:
                 return comp_tools::archive_type::tar;
             case comp_type::zip:
+            case comp_type::zipall:
                 return comp_tools::archive_type::zip;
             default:
                 throw std::runtime_error("unsupported comp type");
@@ -579,10 +587,11 @@ bool models_manager::extract_from_archive(
         ok_2 = check_checksum(out_path_2, checksum_2);
     } else if (!path_in_archive.isEmpty() && !out_path.isEmpty()) {
         comp_tools::archive_decode(archive_path, archive_type,
-                                   {{}, {{path_in_archive, out_path}}}, true);
+                                   {{}, {{path_in_archive, out_path}}},
+                                   comp != comp_type::zipall);
     } else {
         comp_tools::archive_decode(archive_path, archive_type, {out_path, {}},
-                                   true);
+                                   comp != comp_type::zipall);
     }
 
     return ok_2 ? check_checksum(out_path, checksum) : false;
@@ -654,10 +663,10 @@ bool models_manager::handle_download(const QString& path,
                                           checksum, path_in_archive, path_2,
                                           checksum_2, path_in_archive_2);
                 QFile::remove(tar_file);
-            } else if (comp == comp_type::zip) {
-                ok = extract_from_archive(comp_file, comp_type::zip, path,
-                                          checksum, path_in_archive, path_2,
-                                          checksum_2, path_in_archive_2);
+            } else if (comp == comp_type::zip || comp == comp_type::zipall) {
+                ok = extract_from_archive(comp_file, comp, path, checksum,
+                                          path_in_archive, path_2, checksum_2,
+                                          path_in_archive_2);
                 QFile::remove(comp_file);
             } else {
                 QFile::remove(comp_file);
@@ -915,6 +924,8 @@ models_manager::comp_type models_manager::str2comp(const QString& str) {
         return comp_type::targz;
     if (!str.compare(QStringLiteral("zip"), Qt::CaseInsensitive))
         return comp_type::zip;
+    if (!str.compare(QStringLiteral("zipall"), Qt::CaseInsensitive))
+        return comp_type::zipall;
     if (!str.compare(QStringLiteral("dir"), Qt::CaseInsensitive))
         return comp_type::dir;
     return comp_type::none;
@@ -939,6 +950,7 @@ QString models_manager::download_filename(QString filename, comp_type comp,
             filename += QStringLiteral(".tar.gz");
             break;
         case comp_type::zip:
+        case comp_type::zipall:
             filename += QStringLiteral(".zip");
             break;
         case comp_type::dir:
@@ -1035,6 +1047,7 @@ models_manager::model_role models_manager::role_of_engine(model_engine engine) {
         case model_engine::tts_coqui:
         case model_engine::tts_piper:
         case model_engine::tts_espeak:
+        case model_engine::tts_rhvoice:
             return model_role::tts;
     }
 
@@ -1050,6 +1063,7 @@ models_manager::model_engine models_manager::engine_from_name(
     if (name == QStringLiteral("tts_coqui")) return model_engine::tts_coqui;
     if (name == QStringLiteral("tts_piper")) return model_engine::tts_piper;
     if (name == QStringLiteral("tts_espeak")) return model_engine::tts_espeak;
+    if (name == QStringLiteral("tts_rhvoice")) return model_engine::tts_rhvoice;
 
     throw std::runtime_error("unknown engine: " + name.toStdString());
 }
@@ -1398,6 +1412,7 @@ QString models_manager::file_name_from_id(const QString& id,
         case model_engine::tts_coqui:
         case model_engine::tts_piper:
         case model_engine::tts_espeak:
+        case model_engine::tts_rhvoice:
             return id;
     }
 

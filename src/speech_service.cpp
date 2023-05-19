@@ -25,6 +25,7 @@
 #include "mic_source.h"
 #include "module_tools.hpp"
 #include "piper_engine.hpp"
+#include "rhvoice_engine.hpp"
 #include "settings.h"
 #include "vosk_engine.hpp"
 #include "whisper_engine.hpp"
@@ -326,7 +327,7 @@ speech_service::speech_service(QObject *parent)
         m_keepalive_timer.start();
     }
 
-    setup_espeak();
+    setup_modules();
 
     remove_cached_wavs();
 
@@ -600,6 +601,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                 case models_manager::model_engine::tts_coqui:
                 case models_manager::model_engine::tts_piper:
                 case models_manager::model_engine::tts_espeak:
+                case models_manager::model_engine::tts_rhvoice:
                     throw std::runtime_error{
                         "invalid model engine, expected stt"};
             }
@@ -636,9 +638,6 @@ QString speech_service::restart_tts_engine(const QString &model_id) {
             nb_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             config.nb_data = nb_file.readAll().toStdString();
         }
-
-        config.espeak_data_dir =
-            module_tools::unpacked_dir("espeakdata").toStdString();
 
         bool new_engine_required = [&] {
             if (!m_tts_engine) return true;
@@ -687,11 +686,24 @@ QString speech_service::restart_tts_engine(const QString &model_id) {
                         std::move(config), std::move(call_backs));
                     break;
                 case models_manager::model_engine::tts_piper:
+                    config.data_dir =
+                        module_tools::unpacked_dir("espeakdata").toStdString();
                     m_tts_engine = std::make_unique<piper_engine>(
                         std::move(config), std::move(call_backs));
                     break;
                 case models_manager::model_engine::tts_espeak:
+                    config.data_dir =
+                        module_tools::unpacked_dir("espeakdata").toStdString();
                     m_tts_engine = std::make_unique<espeak_engine>(
+                        std::move(config), std::move(call_backs));
+                    break;
+                case models_manager::model_engine::tts_rhvoice:
+                    config.data_dir =
+                        module_tools::unpacked_dir("rhvoicedata").toStdString();
+                    config.config_dir =
+                        module_tools::unpacked_dir("rhvoiceconfig")
+                            .toStdString();
+                    m_tts_engine = std::make_unique<rhvoice_engine>(
                         std::move(config), std::move(call_backs));
                     break;
                 case models_manager::model_engine::ttt_hftc:
@@ -1626,8 +1638,10 @@ void speech_service::remove_cached_wavs() {
     for (const auto &file : std::as_const(dir).entryList()) dir.remove(file);
 }
 
-void speech_service::setup_espeak() {
-    if (!module_tools::init_module(QStringLiteral("espeakdata"))) return;
+void speech_service::setup_modules() {
+    module_tools::init_module(QStringLiteral("rhvoicedata"));
+    module_tools::init_module(QStringLiteral("rhvoiceconfig"));
+    module_tools::init_module(QStringLiteral("espeakdata"));
 
 #ifdef USE_SFOS
     // add mbrola bin to PATH

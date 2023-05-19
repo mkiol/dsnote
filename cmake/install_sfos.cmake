@@ -16,8 +16,15 @@ if(BUILD_PIPER OR BUILD_ESPEAK)
     install(FILES "${PROJECT_BINARY_DIR}/espeakdata.tar.xz" DESTINATION share/${info_binary_id})
 endif()
 
+if(BUILD_RHVOICE)
+    install(FILES "${external_lib_dir}/libRHVoice_core.so.1.2.2" DESTINATION share/${info_binary_id}/lib RENAME libRHVoice_core.so.1)
+    install(FILES "${external_lib_dir}/libRHVoice.so.1.2.2" DESTINATION share/${info_binary_id}/lib RENAME libRHVoice.so.1)
+    install(FILES "${PROJECT_BINARY_DIR}/rhvoicedata.tar.xz" DESTINATION share/${info_binary_id})
+    install(FILES "${PROJECT_BINARY_DIR}/rhvoiceconfig.tar.xz" DESTINATION share/${info_binary_id})
+endif()
+
 if(BUILD_PIPER)
-    install(FILES "${external_lib_dir}/libonnxruntime.so.1.14.1" DESTINATION share/${info_binary_id}/lib RENAME libonnxruntime.so.1.14.1)
+    install(FILES "${external_lib_dir}/libonnxruntime.so.1.14.1" DESTINATION share/${info_binary_id}/lib)
 endif()
 
 if(BUILD_VOSK)

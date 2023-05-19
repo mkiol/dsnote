@@ -305,7 +305,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void update_speech_state();
     static void remove_cached_wavs();
     void handle_tts_queue();
-    static void setup_espeak();
+    static void setup_modules();
 
     // DBus
     Q_INVOKABLE int Cancel(int task);

@@ -32,6 +32,7 @@ option(BUILD_PYTHON_MODULE "make python module archive" OFF)
 option(BUILD_ESPEAK "download espeak-ng lib, build and link statically" ON)
 option(BUILD_PIPER "download piper lib, build and link statically" ON)
 option(BUILD_SSPLITCPP "download ssplitcpp lib, build and link statically" ON)
+option(BUILD_RHVOICE "download rhvoice lib, build and link statically" ON)
 
 if(${WITH_DESKTOP} AND ${WITH_SFOS})
     message(FATAL_ERROR "options WITH_DESKTOP and WITH_SFOS cannot be set together")
@@ -73,7 +74,7 @@ set(info_dbus_service "org.mkiol.Speech")
 set(info_dbus_interface "org.mkiol.Speech")
 set(info_conf_version "12")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · Åke Engelbrektson")
-set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · 🤗Transformers · Piper")
+set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · 🤗Transformers · Piper · RHVoice")
 
 project(${info_id} VERSION 2.0.1)
 
@@ -195,6 +196,8 @@ set(dsnote_lib_sources
     ${sources_dir}/coqui_engine.cpp
     ${sources_dir}/espeak_engine.hpp
     ${sources_dir}/espeak_engine.cpp
+    ${sources_dir}/rhvoice_engine.hpp
+    ${sources_dir}/rhvoice_engine.cpp
     ${sources_dir}/simdjson.h
     ${sources_dir}/simdjson.cpp
     ${sources_dir}/py_executor.hpp
@@ -223,6 +226,7 @@ endif()
 # executable
 
 add_executable(${info_binary_id} ${resources} "${sources_dir}/main.cpp")
+set_property(TARGET ${info_binary_id} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
 target_link_libraries(${info_binary_id} dsnote_lib)
 
 add_custom_command(TARGET ${info_binary_id} POST_BUILD
@@ -266,7 +270,7 @@ else()
     target_link_options(compiler_flags INTERFACE "-pie")
 endif()
 
-target_link_options(compiler_flags INTERFACE "-Wl,-rpath,${rpath}")
+target_link_options(compiler_flags INTERFACE "-flto=auto;-fno-fat-lto-objects;-Wl,-rpath,${rpath};-Wl,-pie")
 
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_TRACE_LOGS}>:USE_TRACE_LOGS>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_SFOS}>:USE_SFOS>")
@@ -363,6 +367,13 @@ else()
     pkg_search_module(xz REQUIRED liblzma>=5.4.1)
     list(APPEND deps_libs ${xz_LIBRARIES})
     list(APPEND includes ${xz_INCLUDE_DIRS})
+endif()
+
+if(BUILD_RHVOICE)
+    include(${cmake_path}/rhvoice.cmake)
+else()
+    find_library(rhvoice_path rhvoice REQUIRED)
+    list(APPEND deps_libs ${rhvoice_path})
 endif()
 
 if(BUILD_PIPER OR BUILD_ESPEAK)

@@ -11,39 +11,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include <cstdlib>
 #include <fstream>
 
 #include "logger.hpp"
-
-struct wav_header {
-    uint8_t RIFF[4] = {'R', 'I', 'F', 'F'};
-    uint32_t chunk_size = 0;
-    uint8_t WAVE[4] = {'W', 'A', 'V', 'E'};
-    uint8_t fmt[4] = {'f', 'm', 't', ' '};
-    uint32_t fmt_size = 16;
-    uint16_t audio_format = 1;
-    uint16_t num_channels = 0;
-    uint32_t sample_rate = 0;
-    uint32_t bytes_per_sec = 0;
-    uint16_t block_align = 2;
-    uint16_t bits_per_sample = 16;
-    uint8_t data[4] = {'d', 'a', 't', 'a'};
-    uint32_t data_size = 0;
-};
-
-// borrowed from:
-// https://github.com/rhasspy/piper/blob/master/src/cpp/wavfile.hpp
-static void write_wav_header(int sample_rate, int sample_width, int channels,
-                             uint32_t num_samples, std::ostream& wav_file) {
-    wav_header header;
-    header.data_size = num_samples * sample_width * channels;
-    header.chunk_size = header.data_size + sizeof(wav_header) - 8;
-    header.sample_rate = sample_rate;
-    header.num_channels = channels;
-    header.bytes_per_sec = sample_rate * sample_width * channels;
-    header.block_align = sample_width * channels;
-    wav_file.write(reinterpret_cast<const char*>(&header), sizeof(wav_header));
-}
 
 espeak_engine::espeak_engine(config_t config, callbacks_t call_backs)
     : tts_engine{std::move(config), std::move(call_backs)} {}
@@ -68,16 +39,18 @@ void espeak_engine::create_model() {
                     m_config.speaker[1] == 'b' && m_config.speaker[2] == '-';
 
     if (mb_voice && !m_config.model_files.model_path.empty()) {
-        mkdir(fmt::format("{}/mbrola", m_config.espeak_data_dir).c_str(), 0777);
+        mkdir(fmt::format("{}/mbrola", m_config.data_dir).c_str(), 0777);
+
+        auto link_target = fmt::format("{}/mbrola/{}", m_config.data_dir,
+                                       &m_config.speaker[3]);
+        remove(link_target.c_str());
 
         (void)symlink(m_config.model_files.model_path.c_str(),
-                      fmt::format("{}/mbrola/{}", m_config.espeak_data_dir,
-                                  &m_config.speaker[3])
-                          .c_str());
+                      link_target.c_str());
     }
 
     m_sample_rate = espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS, 0,
-                                      m_config.espeak_data_dir.c_str(), 0);
+                                      m_config.data_dir.c_str(), 0);
 
     if (m_sample_rate == EE_INTERNAL_ERROR) {
         LOGE("failed to init espeak");

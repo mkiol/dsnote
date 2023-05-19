@@ -9,6 +9,7 @@
 #define TTS_ENGINE_HPP
 
 #include <condition_variable>
+#include <fstream>
 #include <functional>
 #include <iostream>
 #include <mutex>
@@ -51,7 +52,8 @@ class tts_engine {
         model_files_t model_files;
         std::string speaker;
         std::string cache_dir;
-        std::string espeak_data_dir;
+        std::string data_dir;
+        std::string config_dir;
         std::string nb_data;
     };
     friend std::ostream& operator<<(std::ostream& os, const config_t& config); 
@@ -68,6 +70,22 @@ class tts_engine {
     void encode_speech(std::string text);
 
    protected:
+    struct wav_header {
+        uint8_t RIFF[4] = {'R', 'I', 'F', 'F'};
+        uint32_t chunk_size = 0;
+        uint8_t WAVE[4] = {'W', 'A', 'V', 'E'};
+        uint8_t fmt[4] = {'f', 'm', 't', ' '};
+        uint32_t fmt_size = 16;
+        uint16_t audio_format = 1;
+        uint16_t num_channels = 0;
+        uint32_t sample_rate = 0;
+        uint32_t bytes_per_sec = 0;
+        uint16_t block_align = 2;
+        uint16_t bits_per_sample = 16;
+        uint8_t data[4] = {'d', 'a', 't', 'a'};
+        uint32_t data_size = 0;
+    };
+
     struct task_t {
         std::string text;
         bool last = false;
@@ -86,6 +104,9 @@ class tts_engine {
                                            std::string&& ext);
     static std::string find_file_with_name_prefix(std::string dir_path,
                                                   std::string&& prefix);
+    static void write_wav_header(int sample_rate, int sample_width,
+                                 int channels, uint32_t num_samples,
+                                 std::ostream& wav_file);
     virtual bool model_created() const = 0;
     virtual void create_model() = 0;
     virtual bool encode_speech_impl(const std::string& text,

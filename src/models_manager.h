@@ -48,7 +48,8 @@ class models_manager : public QObject, public singleton<models_manager> {
         ttt_hftc,
         tts_coqui,
         tts_piper,
-        tts_espeak
+        tts_espeak,
+        tts_rhvoice
     };
     friend QDebug operator<<(QDebug d, model_engine engine);
 
@@ -109,7 +110,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     enum class download_type { none, all, model, scorer, model_scorer };
     friend QDebug operator<<(QDebug d, download_type download_type);
 
-    enum class comp_type { none, xz, gz, tar, tarxz, targz, zip, dir };
+    enum class comp_type { none, xz, gz, tar, tarxz, targz, zip, zipall, dir };
     friend QDebug operator<<(QDebug d, comp_type comp_type);
 
     struct priv_model_t {
