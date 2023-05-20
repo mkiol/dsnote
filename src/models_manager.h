@@ -142,6 +142,7 @@ class models_manager : public QObject, public singleton<models_manager> {
 
     inline static const QString models_file{QStringLiteral("models.json")};
     inline static const int default_score = 2;
+    inline static const int default_score_espeak = 1;
     using langs_t = std::unordered_map<QString, std::pair<QString, QString>>;
     using models_t = std::unordered_map<QString, priv_model_t>;
 

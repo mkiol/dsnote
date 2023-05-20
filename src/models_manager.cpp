@@ -1118,7 +1118,10 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             if (speaker.isEmpty() && engine == model_engine::tts_espeak)
                 speaker = lang_id;
 
-            if (score == -1) score = default_score;
+            if (score == -1)
+                score = engine == model_engine::tts_espeak
+                            ? default_score_espeak
+                            : default_score;
 
             file_name = obj.value(QLatin1String{"file_name"}).toString();
             if (file_name.isEmpty())
