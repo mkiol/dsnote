@@ -3428,6 +3428,30 @@
             "lang_id": "uk"
         },
         {
+            "name": "ქართული (Espeak Robot)",
+            "model_id": "ka_espeak_ka",
+            "engine": "tts_espeak",
+            "lang_id": "ka"
+        },
+        {
+            "name": "Кыргыз (Espeak Robot)",
+            "model_id": "ky_espeak_ky",
+            "engine": "tts_espeak",
+            "lang_id": "ky"
+        },
+        {
+            "name": "татарча (Espeak Robot)",
+            "model_id": "tt_espeak_tt",
+            "engine": "tts_espeak",
+            "lang_id": "tt"
+        },
+        {
+            "name": "Shqip (Espeak Robot)",
+            "model_id": "sq_espeak_sq",
+            "engine": "tts_espeak",
+            "lang_id": "sq"
+        },
+        {
             "name": "Oʻzbekcha (Espeak Robot)",
             "model_id": "uz_espeak_uz",
             "engine": "tts_espeak",

@@ -44,10 +44,10 @@ Following languages are supported:
 | id          | Indonesian           | ● (e)                | ●                 |                |                 |                   | ●                | ●                |
 | it          | Italian              | ●                    | ●                 | ●              | ●               |                   | ●                |                  |
 | jp          | Japanese             |                      | ●                 | ●              |                 |                   | ●                |                  |
-| ka          | Georgian             |                      |                   |                |                 | ●                 |                  |                  |
+| ka          | Georgian             |                      |                   |                |                 | ●                 | ●                |                  |
 | kk          | Kazakh               |                      |                   | ●              | ●               |                   | ●                |                  |
 | ko          | Korean               |                      |                   | ●              |                 |                   | ●                |                  |
-| ky          | Kyrgyz               |                      |                   |                |                 | ●                 |                  |                  |
+| ky          | Kyrgyz               |                      |                   |                |                 | ●                 | ●                |                  |
 | lt          | Lithuanian           |                      |                   |                |                 |                   | ●                | ●                |
 | lv          | Latvian              | ● (e)                |                   |                |                 |                   | ●                |                  |
 | mk          | Macedonian           |                      | ● (e)             |                |                 | ●                 | ●                |                  |
@@ -62,14 +62,14 @@ Following languages are supported:
 | ru          | Russian              | ●                    | ●                 | ●              |                 | ●                 | ●                |                  |
 | sk          | Slovak               |                      | ● (e)             |                |                 |                   | ●                |                  |
 | sl          | Slovenian            | ● (e)                | ● (e)             |                |                 |                   | ●                |                  |
-| sq          | Albanian             |                      |                   |                |                 | ●                 |                  |                  |
+| sq          | Albanian             |                      |                   |                |                 | ●                 | ●                |                  |
 | sr          | Serbian              |                      | ● (e)             |                |                 |                   | ●                |                  |
 | sv          | Swedish              |                      | ●                 | ●              |                 |                   | ●                | ●                |
 | sw          | Swahili              | ●                    |                   |                |                 |                   | ●                |                  |
 | th          | Thai                 | ● (e)                | ● (e)             |                |                 |                   | ●                |                  |
 | tl          | Tagalog              |                      |                   | ●              |                 |                   |                  |                  |
 | tr          | Turkish              | ● (e)                | ●                 | ●              |                 |                   | ●                | ●                |
-| tt          | Tatar                |                      |                   |                |                 | ●                 |                  |                  |
+| tt          | Tatar                |                      |                   |                |                 | ●                 | ●                |                  |
 | uk          | Ukrainian            | ●                    | ●                 | ●              | ●               | ●                 | ●                |                  |
 | uz          | Uzbek                |                      |                   | ●              |                 |                   | ●                |                  |
 | vi          | Vietnamese           |                      | ● (e)             | ●              | ●               |                   | ●                |                  |
