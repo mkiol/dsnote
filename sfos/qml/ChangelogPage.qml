@@ -34,11 +34,11 @@ Page {
 
             LogItem {
                 title: "Text to Speech"
-                description: "Now not only you can convert speech to text, but now also read your notes with speech synthesizer. " +
+                description: "Not only you can convert speech to text, but now also read your notes with speech synthesizer. " +
                              "To switch between 'Note making' and 'Note reading' modes use pull-down menu option. " +
-                             "Following TTS engines are supported: Piper, Espeak and MBROLA. " +
-                             "Piper provides excellent speech synthesizer quality but it is not availabled for all languages. " +
-                             "For others, unfortunately a much worse Espeak and MBROLA can be used."
+                             "Following TTS engines are supported: Piper, RHVoice, Espeak and MBROLA. " +
+                             "Piper and RHVoice provide excellent speech synthesizer quality but they are not availabled for all languages. " +
+                             "For others, legacy engines Espeak and MBROLA can be used."
             }
 
             LogItem {

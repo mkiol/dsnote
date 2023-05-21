@@ -8,7 +8,7 @@ Sailfish OS app for note taking and reading with speech to text and text to spee
 
 - speech to text using [Coqui STT](https://github.com/coqui-ai/STT),
 [Vosk](https://alphacephei.com/vosk) and [whisper.cpp](https://github.com/ggerganov/whisper.cpp) engines and
-- text to speech with [espeak-ng](https://github.com/espeak-ng/espeak-ng), [MBROLA](https://github.com/numediart/MBROLA) and 
+- text to speech with [espeak-ng](https://github.com/espeak-ng/espeak-ng), [MBROLA](https://github.com/numediart/MBROLA), 
 [Piper](https://github.com/rhasspy/piper) and [RHVoice](https://github.com/RHVoice/RHVoice) engines.
 
 All voice processing is entirely done locally on the device. Internet connection is only
