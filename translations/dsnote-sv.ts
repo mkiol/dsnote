@@ -129,22 +129,22 @@
 <context>
     <name>ModelItem</name>
     <message>
-        <location filename="../sfos/qml/ModelItem.qml" line="43"/>
+        <location filename="../sfos/qml/ModelItem.qml" line="42"/>
         <source>Set as default for this language</source>
         <translation>Ange som standard för detta språk</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/ModelItem.qml" line="50"/>
+        <location filename="../sfos/qml/ModelItem.qml" line="49"/>
         <source>Delete</source>
         <translation>Ta bort</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/ModelItem.qml" line="50"/>
+        <location filename="../sfos/qml/ModelItem.qml" line="49"/>
         <source>Download</source>
         <translation>Ladda ner</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/ModelItem.qml" line="50"/>
+        <location filename="../sfos/qml/ModelItem.qml" line="49"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
@@ -481,12 +481,6 @@ Alltid på: Lyssning alltid påslagen.</translation>
         <translation>Ange standard</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="112"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="38"/>
-        <source>Language models</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="42"/>
         <source>Active Speech to Text model</source>
         <translation type="unfinished"></translation>
@@ -500,6 +494,12 @@ Alltid på: Lyssning alltid påslagen.</translation>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="77"/>
         <source>Active Text to Speech model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="112"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="38"/>
+        <source>Language models</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -538,32 +538,32 @@ Alltid på: Lyssning alltid påslagen.</translation>
         <translation type="obsolete">Språket är inte konfigurerat</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1584"/>
+        <location filename="../src/speech_service.cpp" line="1602"/>
         <source>Language model is not set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1585"/>
+        <location filename="../src/speech_service.cpp" line="1603"/>
         <source>Say something...</source>
         <translation type="unfinished">Säg något...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1587"/>
+        <location filename="../src/speech_service.cpp" line="1605"/>
         <source>Press and say something...</source>
         <translation type="unfinished">Håll ner och säg något...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1589"/>
+        <location filename="../src/speech_service.cpp" line="1607"/>
         <source>Click and say something...</source>
         <translation type="unfinished">Snabbtryck och säg något...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1590"/>
+        <location filename="../src/speech_service.cpp" line="1608"/>
         <source>Busy...</source>
         <translation type="unfinished">Upptagen...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1591"/>
+        <location filename="../src/speech_service.cpp" line="1609"/>
         <source>Processing, please wait...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -572,7 +572,7 @@ Alltid på: Lyssning alltid påslagen.</translation>
         <translation type="obsolete">Avkodar, vänta...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1593"/>
+        <location filename="../src/speech_service.cpp" line="1611"/>
         <source>Getting ready, please wait...</source>
         <translation type="unfinished">Förbereder, vänta...</translation>
     </message>

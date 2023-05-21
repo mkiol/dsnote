@@ -110,7 +110,7 @@
     <message>
         <location filename="../sfos/qml/LangsPage.qml" line="54"/>
         <source>Text to Speech</source>
-        <translation>Tekst na Mowe</translation>
+        <translation>Tekst na Mowę</translation>
     </message>
     <message>
         <location filename="../sfos/qml/LangsPage.qml" line="56"/>
@@ -133,22 +133,22 @@
 <context>
     <name>ModelItem</name>
     <message>
-        <location filename="../sfos/qml/ModelItem.qml" line="43"/>
+        <location filename="../sfos/qml/ModelItem.qml" line="42"/>
         <source>Set as default for this language</source>
         <translation>Ustaw jako domyśly dla tego języka</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/ModelItem.qml" line="50"/>
+        <location filename="../sfos/qml/ModelItem.qml" line="49"/>
         <source>Delete</source>
         <translation>Usuń</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/ModelItem.qml" line="50"/>
+        <location filename="../sfos/qml/ModelItem.qml" line="49"/>
         <source>Download</source>
         <translation>Pobierz</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/ModelItem.qml" line="50"/>
+        <location filename="../sfos/qml/ModelItem.qml" line="49"/>
         <source>Cancel</source>
         <translation>Anuluj</translation>
     </message>
@@ -294,7 +294,7 @@
         <location filename="../sfos/qml/NotesPage.qml" line="190"/>
         <location filename="../desktop/qml/NotesPage.qml" line="135"/>
         <source>Make a note and click to read it...</source>
-        <translation>Stwórz notatkę, i kliknij aby ją przeczytać...</translation>
+        <translation>Stwórz notatkę i kliknij...</translation>
     </message>
     <message>
         <location filename="../sfos/qml/NotesPage.qml" line="193"/>
@@ -453,7 +453,7 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="213"/>
         <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled &apos;Punctuation&apos; model for your language.</source>
-        <translation>Włącz zaawansowane naprawianie interpunkcji. Aby ta funkcja mogła działać, upewnij się, że model &apos;Interpunkcja&apos; jest pobrany dla twojego języka.</translation>
+        <translation>Włącz zaawansowane naprawianie interpunkcji. Aby ta funkcja mogła działać upewnij się, że model &apos;Interpunkcja&apos; jest pobrany dla twojego języka.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="215"/>
@@ -471,6 +471,10 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <location filename="../desktop/qml/SettingsPage.qml" line="99"/>
         <source>Location of language files</source>
         <translation>Położenie plików z językami</translation>
+    </message>
+    <message>
+        <source>Language files</source>
+        <translation type="vanished">Pliki językowe</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="182"/>
@@ -546,32 +550,32 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <translation type="obsolete">Język nie jest skonfigurowany</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1584"/>
+        <location filename="../src/speech_service.cpp" line="1602"/>
         <source>Language model is not set</source>
         <translation>Model językowy nie jest ustawiony</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1585"/>
+        <location filename="../src/speech_service.cpp" line="1603"/>
         <source>Say something...</source>
         <translation>Powiedz coś...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1587"/>
+        <location filename="../src/speech_service.cpp" line="1605"/>
         <source>Press and say something...</source>
         <translation>Naciśnij i powiedz coś...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1589"/>
+        <location filename="../src/speech_service.cpp" line="1607"/>
         <source>Click and say something...</source>
         <translation>Kliknij i powiedz coś...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1590"/>
+        <location filename="../src/speech_service.cpp" line="1608"/>
         <source>Busy...</source>
         <translation>Zajęty...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1591"/>
+        <location filename="../src/speech_service.cpp" line="1609"/>
         <source>Processing, please wait...</source>
         <translation>Przetwarzanie, czekaj...</translation>
     </message>
@@ -580,7 +584,7 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <translation type="obsolete">Dekodowanie, czekaj...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1593"/>
+        <location filename="../src/speech_service.cpp" line="1611"/>
         <source>Getting ready, please wait...</source>
         <translation>Przygotowanie, czekaj...</translation>
     </message>
