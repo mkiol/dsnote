@@ -31,6 +31,7 @@ BuildRequires:  patch
 BuildRequires:  python3-pip
 BuildRequires:  python3-devel
 BuildRequires:  git
+BuildRequires:  boost-devel
 
 %description
 Note taking with speech to text
