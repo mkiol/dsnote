@@ -30,8 +30,7 @@ SimpleListItem {
     title.horizontalAlignment: Text.AlignLeft
 
     title.text: {
-        if (defaultModelForLang) return "⭐ " + name
-        if (score === 0) return "🧪 " + name
+        if (available && defaultModelForLang) return "⭐ " + name
         return name
     }
 
