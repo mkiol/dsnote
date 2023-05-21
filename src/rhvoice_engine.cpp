@@ -44,9 +44,14 @@ void rhvoice_engine::create_model() {
 
     auto link_target =
         fmt::format("{}/voices/{}", m_config.data_dir, m_config.speaker);
+
     remove(link_target.c_str());
 
-    (void)symlink(m_config.model_files.model_path.c_str(), link_target.c_str());
+    if (symlink(m_config.model_files.model_path.c_str(), link_target.c_str()) !=
+        0) {
+        LOGE("symlink error: " << m_config.model_files.model_path << " => "
+                               << link_target);
+    }
 
     RHVoice_callbacks callbacks{/*set_sample_rate=*/&set_sample_rate_callback,
                                 /*play_speech=*/&play_speech_callback,
