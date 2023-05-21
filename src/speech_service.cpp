@@ -633,10 +633,15 @@ QString speech_service::restart_tts_engine(const QString &model_id) {
         config.cache_dir = settings::instance()->cache_dir().toStdString();
         config.speaker = model_config->speaker.toStdString();
 
-        if (QFile nb_file{QStringLiteral(":/nonbreaking_prefixes/%1.txt")
-                              .arg(model_config->lang_id.split('_').first())};
-            nb_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QFile nb_file{QStringLiteral(":/nonbreaking_prefixes/%1.txt")
+                          .arg(model_config->lang_id.split('-').first())};
+        if (nb_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             config.nb_data = nb_file.readAll().toStdString();
+        } else {  // fallback to en
+            QFile nb_file_en{QStringLiteral(":/nonbreaking_prefixes/en.txt")};
+            if (nb_file_en.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                config.nb_data = nb_file_en.readAll().toStdString();
+            }
         }
 
         bool new_engine_required = [&] {
@@ -759,7 +764,8 @@ void speech_service::handle_stt_sentence_timeout() {
 
 void speech_service::handle_stt_engine_eof(int task_id) {
     qDebug() << "engine eof";
-    emit stt_file_transcribe_finished(task_id);
+    if (audio_source_type() == source_t::file)
+        emit stt_file_transcribe_finished(task_id);
     cancel(task_id);
 }
 
@@ -1213,7 +1219,7 @@ int speech_service::cancel(int task) {
     }
 
     m_player.pause();
-    stop_tts_engine();
+    if (m_current_task->engine == engine_t::tts) stop_tts_engine();
     m_tts_queue = decltype(m_tts_queue){};
     m_player.stop();
 
