@@ -1210,7 +1210,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
                      << model_id;
             continue;
         }
-        if (engine == model_engine::stt_vosk && model_id.contains("large")) {
+        if (engine == model_engine::stt_vosk && size > 200000000) {
             qDebug() << "ignoring vosk large model:" << model_id;
             continue;
         }
