@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="nl" sourcelanguage="en_US">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="nl" sourcelanguage="en_US">
 <context>
     <name>AboutPage</name>
     <message>
@@ -101,29 +99,17 @@
     <message>
         <location filename="../sfos/qml/LangsPage.qml" line="52"/>
         <source>Speech to Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Spraak-naar-tekst</translation>
     </message>
     <message>
         <location filename="../sfos/qml/LangsPage.qml" line="54"/>
         <source>Text to Speech</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst-naar-spraak</translation>
     </message>
     <message>
         <location filename="../sfos/qml/LangsPage.qml" line="56"/>
         <source>Text to Text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="vanished">Verwijderen</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Downloaden</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Annuleren</translation>
+        <translation>Tekst-naar-tekst</translation>
     </message>
 </context>
 <context>
@@ -170,19 +156,19 @@
     <message>
         <location filename="../sfos/qml/NotesPage.qml" line="81"/>
         <source>Mode: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Modus: %1</translation>
     </message>
     <message>
         <location filename="../sfos/qml/NotesPage.qml" line="81"/>
         <location filename="../desktop/qml/NotesPage.qml" line="59"/>
         <source>Note making</source>
-        <translation type="unfinished"></translation>
+        <translation>Notitie maken</translation>
     </message>
     <message>
         <location filename="../sfos/qml/NotesPage.qml" line="81"/>
         <location filename="../desktop/qml/NotesPage.qml" line="59"/>
         <source>Note reading</source>
-        <translation type="unfinished"></translation>
+        <translation>Notitie lezen</translation>
     </message>
     <message>
         <location filename="../sfos/qml/NotesPage.qml" line="158"/>
@@ -190,7 +176,7 @@
         <location filename="../sfos/qml/NotesPage.qml" line="183"/>
         <location filename="../desktop/qml/NotesPage.qml" line="120"/>
         <source>Processing, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezig met verwerken…</translation>
     </message>
     <message>
         <location filename="../sfos/qml/NotesPage.qml" line="160"/>
@@ -210,14 +196,6 @@
         <location filename="../sfos/qml/NotesPage.qml" line="76"/>
         <source>Copy</source>
         <translation>Kopiëren</translation>
-    </message>
-    <message>
-        <source>Language is not configured</source>
-        <translation type="vanished">Er is geen taal ingesteld</translation>
-    </message>
-    <message>
-        <source>Pull down and select Settings to download language</source>
-        <translation type="vanished">Open het menu, ga naar de instellingen en download een taal</translation>
     </message>
     <message>
         <location filename="../sfos/qml/NotesPage.qml" line="173"/>
@@ -249,16 +227,12 @@
         <location filename="../sfos/qml/NotesPage.qml" line="176"/>
         <location filename="../desktop/qml/NotesPage.qml" line="115"/>
         <source>Language model is not set</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is geen taalmodel ingesteld</translation>
     </message>
     <message>
         <location filename="../sfos/qml/NotesPage.qml" line="114"/>
         <source>Pull down and select Settings to download language models</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Decoding, please wait...</source>
-        <translation type="vanished">Bezig met decoderen…</translation>
+        <translation>Open het menu, ga naar de instellingen en download een taalmodel</translation>
     </message>
     <message>
         <location filename="../sfos/qml/NotesPage.qml" line="159"/>
@@ -272,21 +246,21 @@
         <location filename="../sfos/qml/NotesPage.qml" line="181"/>
         <location filename="../desktop/qml/NotesPage.qml" line="132"/>
         <source>Reading a note...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezig met lezen…</translation>
     </message>
     <message>
         <location filename="../sfos/qml/NotesPage.qml" line="168"/>
         <location filename="../sfos/qml/NotesPage.qml" line="188"/>
         <location filename="../desktop/qml/NotesPage.qml" line="134"/>
         <source>Click to read a note...</source>
-        <translation type="unfinished"></translation>
+        <translation>Druk om te lezen…</translation>
     </message>
     <message>
         <location filename="../sfos/qml/NotesPage.qml" line="169"/>
         <location filename="../sfos/qml/NotesPage.qml" line="190"/>
         <location filename="../desktop/qml/NotesPage.qml" line="135"/>
         <source>Make a note and click to read it...</source>
-        <translation type="unfinished"></translation>
+        <translation>Maak een notitie en druk om te lezen…</translation>
     </message>
     <message>
         <location filename="../sfos/qml/NotesPage.qml" line="193"/>
@@ -314,6 +288,12 @@
         <translation>Oeps, er iets misgegaan!</translation>
     </message>
     <message>
+        <location filename="../sfos/qml/NotesPage.qml" line="56"/>
+        <location filename="../desktop/qml/NotesPage.qml" line="187"/>
+        <source>Cancel</source>
+        <translation>Annuleren</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/NotesPage.qml" line="19"/>
         <source>Note</source>
         <translation>Aantekening</translation>
@@ -321,17 +301,17 @@
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="28"/>
         <source>Active Speech to Text model</source>
-        <translation type="unfinished"></translation>
+        <translation>Actief: spraak-naar-tekst</translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="34"/>
         <source>Active Text to Speech model</source>
-        <translation type="unfinished"></translation>
+        <translation>Actief: tekst-naar-spraak</translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="175"/>
         <source>Click to read a note</source>
-        <translation type="unfinished"></translation>
+        <translation>Druk om te lezen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/NotesPage.qml" line="165"/>
@@ -343,16 +323,6 @@
         <source>Click to start listening</source>
         <translation>Klik om te beluisteren</translation>
     </message>
-    <message>
-        <location filename="../sfos/qml/NotesPage.qml" line="56"/>
-        <location filename="../desktop/qml/NotesPage.qml" line="187"/>
-        <source>Cancel</source>
-        <translation>Annuleren</translation>
-    </message>
-    <message>
-        <source>No language is configured</source>
-        <translation type="vanished">Er is geen taal ingesteld</translation>
-    </message>
 </context>
 <context>
     <name>SettingsPage</name>
@@ -363,12 +333,10 @@
         <translation>Instellingen</translation>
     </message>
     <message>
-        <source>Active language</source>
-        <translation type="vanished">Huidige taal</translation>
-    </message>
-    <message>
-        <source>Languages</source>
-        <translation type="vanished">Talen</translation>
+        <location filename="../sfos/qml/SettingsPage.qml" line="42"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="77"/>
+        <source>None</source>
+        <translation>Geen</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="120"/>
@@ -440,29 +408,35 @@ Altijd aan: er wordt altijd geluisterd.</translation>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="206"/>
         <source>Experiments</source>
-        <translation type="unfinished"></translation>
+        <translation>Experimenten</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="213"/>
         <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled &apos;Punctuation&apos; model for your language.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schakel uitgebreid punctuatieherstel na spraakherkenning in. Zorg dat je het punctuatiemodel van je taal hebt ingeschakeld.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="215"/>
         <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation type="unfinished"></translation>
+        <translation>Let op: indien ingeschakeld duurt het initialiseren langer en is het geheugengebruik hoger.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="224"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="133"/>
         <source>To make &apos;Restore punctuation&apos; work, download &apos;Punctuation&apos; model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Download een punctuatiemodel om deze functie te kunnen gebruiken.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="180"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="99"/>
         <source>Location of language files</source>
         <translation>Locatie van taalbestanden</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="112"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="38"/>
+        <source>Language models</source>
+        <translation>Taalmodellen</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="182"/>
@@ -483,30 +457,18 @@ Altijd aan: er wordt altijd geluisterd.</translation>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="42"/>
         <source>Active Speech to Text model</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="42"/>
-        <location filename="../sfos/qml/SettingsPage.qml" line="77"/>
-        <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Actief: spraak-naar-tekst</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="77"/>
         <source>Active Text to Speech model</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="112"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="38"/>
-        <source>Language models</source>
-        <translation type="unfinished"></translation>
+        <translation>Actief: tekst-naar-spraak</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="212"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="124"/>
         <source>Restore punctuation</source>
-        <translation type="unfinished"></translation>
+        <translation>Punctuatie herstellen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="138"/>
@@ -516,10 +478,6 @@ Altijd aan: er wordt altijd geluisterd.</translation>
 </context>
 <context>
     <name>main</name>
-    <message>
-        <source>Languages configuration</source>
-        <translation type="vanished">Taalinstellingen</translation>
-    </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="53"/>
         <source>Settings</source>
@@ -534,78 +492,39 @@ Altijd aan: er wordt altijd geluisterd.</translation>
 <context>
     <name>speech_service</name>
     <message>
-        <source>Language is not configured</source>
-        <translation type="obsolete">Er is geen taal ingesteld</translation>
-    </message>
-    <message>
         <location filename="../src/speech_service.cpp" line="1602"/>
         <source>Language model is not set</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is geen taalmodel ingesteld</translation>
     </message>
     <message>
         <location filename="../src/speech_service.cpp" line="1603"/>
         <source>Say something...</source>
-        <translation type="unfinished">Zeg iets…</translation>
+        <translation>Zeg iets…</translation>
     </message>
     <message>
         <location filename="../src/speech_service.cpp" line="1605"/>
         <source>Press and say something...</source>
-        <translation type="unfinished">Druk en zeg iets…</translation>
+        <translation>Druk en zeg iets…</translation>
     </message>
     <message>
         <location filename="../src/speech_service.cpp" line="1607"/>
         <source>Click and say something...</source>
-        <translation type="unfinished">Klik en zeg iets…</translation>
+        <translation>Klik en zeg iets…</translation>
     </message>
     <message>
         <location filename="../src/speech_service.cpp" line="1608"/>
         <source>Busy...</source>
-        <translation type="unfinished">Bezig…</translation>
+        <translation>Bezig…</translation>
     </message>
     <message>
         <location filename="../src/speech_service.cpp" line="1609"/>
         <source>Processing, please wait...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Decoding, please wait...</source>
-        <translation type="obsolete">Bezig met decoderen…</translation>
+        <translation>Bezig met verwerken…</translation>
     </message>
     <message>
         <location filename="../src/speech_service.cpp" line="1611"/>
         <source>Getting ready, please wait...</source>
-        <translation type="unfinished">Bezig met voorbereiden…</translation>
-    </message>
-</context>
-<context>
-    <name>stt_service</name>
-    <message>
-        <source>Language is not configured</source>
-        <translation type="vanished">Er is geen taal ingesteld</translation>
-    </message>
-    <message>
-        <source>Say something...</source>
-        <translation type="vanished">Zeg iets…</translation>
-    </message>
-    <message>
-        <source>Press and say something...</source>
-        <translation type="vanished">Druk en zeg iets…</translation>
-    </message>
-    <message>
-        <source>Click and say something...</source>
-        <translation type="vanished">Klik en zeg iets…</translation>
-    </message>
-    <message>
-        <source>Busy...</source>
-        <translation type="vanished">Bezig…</translation>
-    </message>
-    <message>
-        <source>Decoding, please wait...</source>
-        <translation type="vanished">Bezig met decoderen…</translation>
-    </message>
-    <message>
-        <source>Getting ready, please wait...</source>
-        <translation type="vanished">Bezig met voorbereiden…</translation>
+        <translation>Bezig met voorbereiden…</translation>
     </message>
 </context>
 </TS>
