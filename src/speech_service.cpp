@@ -1219,7 +1219,8 @@ int speech_service::cancel(int task) {
     }
 
     m_player.pause();
-    if (m_current_task->engine == engine_t::tts) stop_tts_engine();
+    if (m_current_task && m_current_task->engine == engine_t::tts)
+        stop_tts_engine();
     m_tts_queue = decltype(m_tts_queue){};
     m_player.stop();
 
