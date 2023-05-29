@@ -1,6 +1,6 @@
-diff -ruN CMakeLists.txt CMakeLists.txt
---- CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ CMakeLists.txt	2023-03-13 16:41:27.366712887 +0100
+diff -ruN webrtcvad-org/CMakeLists.txt webrtcvad-patched/CMakeLists.txt
+--- webrtcvad-org/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ webrtcvad-patched/CMakeLists.txt	2023-05-18 16:57:28.807751967 +0200
 @@ -0,0 +1,25 @@
 +cmake_minimum_required(VERSION 3.5)
 +

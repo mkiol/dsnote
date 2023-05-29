@@ -56,7 +56,7 @@ std::future<std::string> py_executor::execute(task_t task) {
 void py_executor::loop() {
     LOGD("py executor loop started");
 
-#ifdef USE_SFOS
+#ifdef USE_PYTHON_MODULE
     py_tools::init_module();
 #endif
 

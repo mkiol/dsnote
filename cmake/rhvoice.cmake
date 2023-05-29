@@ -23,28 +23,8 @@ ExternalProject_Add(rhvoice
         -DCMAKE_INSTALL_INCLUDEDIR=${external_include_dir} -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         -DCMAKE_PREFIX_PATH=<INSTALL_DIR> -DWITH_DATA=OFF -DENABLE_MAGE=OFF -DBUILD_CLIENT=OFF
         -DBUILD_UTILS=OFF -DBUILD_TESTS=OFF -DBUILD_SERVICE=OFF -DBUILD_SPEECHDISPATCHER_MODULE=OFF
-    BUILD_ALWAYS True
+    BUILD_ALWAYS False
 )
-
-add_custom_command(
-  OUTPUT rhvoicedata.tar.xz
-  COMMAND sh -c "${tools_dir}/make_rhvoicedata_module.sh ${external_dir}/rhvoice/data ${CMAKE_BINARY_DIR}/external/rhvoicedata_module ${PROJECT_BINARY_DIR}/rhvoicedata.tar.xz ${external_bin_dir}/xz"
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-  VERBATIM
-)
-
-add_library(rhvoicedata_module STATIC "${CMAKE_BINARY_DIR}/rhvoicedata.tar.xz")
-add_dependencies(rhvoicedata_module rhvoice)
-
-add_custom_command(
-  OUTPUT rhvoiceconfig.tar.xz
-  COMMAND sh -c "${tools_dir}/make_rhvoiceconfig_module.sh ${external_dir}/rhvoice/config ${CMAKE_BINARY_DIR}/external/rhvoiceconfig_module ${PROJECT_BINARY_DIR}/rhvoiceconfig.tar.xz ${external_bin_dir}/xz"
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-  VERBATIM
-)
-
-add_library(rhvoiceconfig_module STATIC "${CMAKE_BINARY_DIR}/rhvoiceconfig.tar.xz")
-add_dependencies(rhvoiceconfig_module rhvoice)
 
 list(APPEND deps_libs "${external_lib_dir}/libRHVoice_core.so.1" "${external_lib_dir}/libRHVoice.so.1")
-list(APPEND deps rhvoice rhvoicedata_module rhvoiceconfig_module)
+list(APPEND deps rhvoice)

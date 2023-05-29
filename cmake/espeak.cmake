@@ -33,15 +33,5 @@ ExternalProject_Add(espeak
 
 ExternalProject_Add_StepDependencies(espeak configure mbrola)
 
-add_custom_command(
-  OUTPUT espeakdata.tar.xz
-  COMMAND sh -c "${tools_dir}/make_espeakdata_module.sh ${external_share_dir}/espeak-ng-data ${CMAKE_BINARY_DIR}/external/espeakdata_module ${PROJECT_BINARY_DIR}/espeakdata.tar.xz ${external_bin_dir}/xz"
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-  VERBATIM
-)
-
-add_library(espeakdata_module STATIC "${CMAKE_BINARY_DIR}/espeakdata.tar.xz")
-add_dependencies(espeakdata_module espeak)
-
 list(APPEND deps_libs "${external_lib_dir}/libespeak-ng.a")
-list(APPEND deps espeak mbrola espeakdata_module)
+list(APPEND deps espeak mbrola)

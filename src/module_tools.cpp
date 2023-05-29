@@ -45,6 +45,9 @@ QString module_file(const QString& name) {
                .arg(APP_BINARY_ID, name);
     if (QFileInfo::exists(file)) return file;
 
+    file = QStringLiteral("/app/share/%1/%2.tar.xz").arg(APP_BINARY_ID, name);
+    if (QFileInfo::exists(file)) return file;
+
     return QString{};
 }
 
