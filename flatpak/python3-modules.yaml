@@ -1,4 +1,4 @@
-# Generated with flatpak-pip-generator --yaml --arch-dependent-allow --arch-dependent-force torch==2.0.0 transformers==4.28.1 accelerate==0.18.0 TTS==0.14.0
+# Generated with flatpak-pip-generator --yaml --arch-dependent-allow --arch-dependent-force torch==2.0.0+cpu transformers==4.28.1 accelerate==0.18.0 TTS==0.14.0
 name: python3-modules-x86-64
 build-commands: []
 buildsystem: simple
@@ -9,7 +9,9 @@ modules:
     buildsystem: simple
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} "torch==2.0.0" --no-build-isolation
+        --prefix=${FLATPAK_DEST} "torch==2.0.0+cpu" --no-build-isolation
+    cleanup:
+      - '/bin'
     sources:
       - &id003
         type: file
@@ -39,58 +41,14 @@ modules:
         type: file
         url: https://files.pythonhosted.org/packages/42/31/d2f89f1ae42718f8c8a9e440ebe38d7d5fe1e0d9eb9178ce779e365b3ab0/networkx-2.8.8-py3-none-any.whl
         sha256: e435dfa75b1d7195c7b8378c3859f0445cd88c6b0375c181ed66823a9ceb7524
-      - &id011
-        type: file
-        url: https://files.pythonhosted.org/packages/ce/41/fdeb62b5437996e841d83d7d2714ca75b886547ee8017ee2fe6ea409d983/nvidia_cublas_cu11-11.10.3.66-py3-none-manylinux1_x86_64.whl
-        sha256: d32e4d75f94ddfb93ea0a5dda08389bcc65d8916a25cb9f37ac89edaeed3bded
-      - &id012
-        type: file
-        url: https://files.pythonhosted.org/packages/e6/9d/dd0cdcd800e642e3c82ee3b5987c751afd4f3fb9cc2752517f42c3bc6e49/nvidia_cuda_cupti_cu11-11.7.101-py3-none-manylinux1_x86_64.whl
-        sha256: e0cfd9854e1f2edaa36ca20d21cd0bdd5dcfca4e3b9e130a082e05b33b6c5895
-      - &id013
-        type: file
-        url: https://files.pythonhosted.org/packages/ef/25/922c5996aada6611b79b53985af7999fc629aee1d5d001b6a22431e18fec/nvidia_cuda_nvrtc_cu11-11.7.99-2-py3-none-manylinux1_x86_64.whl
-        sha256: 9f1562822ea264b7e34ed5930567e89242d266448e936b85bc97a3370feabb03
-      - &id014
-        type: file
-        url: https://files.pythonhosted.org/packages/36/92/89cf558b514125d2ebd8344dd2f0533404b416486ff681d5434a5832a019/nvidia_cuda_runtime_cu11-11.7.99-py3-none-manylinux1_x86_64.whl
-        sha256: cc768314ae58d2641f07eac350f40f99dcb35719c4faff4bc458a7cd2b119e31
-      - &id015
-        type: file
-        url: https://files.pythonhosted.org/packages/dc/30/66d4347d6e864334da5bb1c7571305e501dcb11b9155971421bb7bb5315f/nvidia_cudnn_cu11-8.5.0.96-2-py3-none-manylinux1_x86_64.whl
-        sha256: 402f40adfc6f418f9dae9ab402e773cfed9beae52333f6d86ae3107a1b9527e7
-      - &id016
-        type: file
-        url: https://files.pythonhosted.org/packages/74/79/b912a77e38e41f15a0581a59f5c3548d1ddfdda3225936fb67c342719e7a/nvidia_cufft_cu11-10.9.0.58-py3-none-manylinux1_x86_64.whl
-        sha256: 222f9da70c80384632fd6035e4c3f16762d64ea7a843829cb278f98b3cb7dd81
-      - &id017
-        type: file
-        url: https://files.pythonhosted.org/packages/8f/11/af78d54b2420e64a4dd19e704f5bb69dcb5a6a3138b4465d6a48cdf59a21/nvidia_curand_cu11-10.2.10.91-py3-none-manylinux1_x86_64.whl
-        sha256: eecb269c970fa599a2660c9232fa46aaccbf90d9170b96c462e13bcb4d129e2c
-      - &id018
-        type: file
-        url: https://files.pythonhosted.org/packages/3e/77/66149e3153b19312fb782ea367f3f950123b93916a45538b573fe373570a/nvidia_cusolver_cu11-11.4.0.1-2-py3-none-manylinux1_x86_64.whl
-        sha256: 72fa7261d755ed55c0074960df5904b65e2326f7adce364cbe4945063c1be412
-      - &id019
-        type: file
-        url: https://files.pythonhosted.org/packages/ea/6f/6d032cc1bb7db88a989ddce3f4968419a7edeafda362847f42f614b1f845/nvidia_cusparse_cu11-11.7.4.91-py3-none-manylinux1_x86_64.whl
-        sha256: a3389de714db63321aa11fbec3919271f415ef19fda58aed7f2ede488c32733d
-      - &id020
-        type: file
-        url: https://files.pythonhosted.org/packages/55/92/914cdb650b6a5d1478f83148597a25e90ea37d739bd563c5096b0e8a5f43/nvidia_nccl_cu11-2.14.3-py3-none-manylinux1_x86_64.whl
-        sha256: 5e5534257d1284b8e825bc3a182c6f06acd6eb405e9f89d49340e98cd8f136eb
-      - &id021
-        type: file
-        url: https://files.pythonhosted.org/packages/23/d5/09493ff0e64fd77523afbbb075108f27a13790479efe86b9ffb4587671b5/nvidia_nvtx_cu11-11.7.91-py3-none-manylinux1_x86_64.whl
-        sha256: b22c64eee426a62fc00952b507d6d29cf62b4c9df7a480fcc417e540e05fd5ac
       - &id023
         type: file
         url: https://files.pythonhosted.org/packages/d2/05/e6600db80270777c4a64238a98d442f0fd07cc8915be2a1c16da7f2b9e74/sympy-1.12-py3-none-any.whl
         sha256: c3588cd4295d0c0f603d0f2ae780587e64e2efeedb3521e46b9bb1d08d184fa5
       - &id024
         type: file
-        url: https://files.pythonhosted.org/packages/b6/b1/f562cb533751c272d23f605858cd17d6a6c50fa8cd3c1f99539e2acd359f/torch-2.0.0-cp310-cp310-manylinux1_x86_64.whl
-        sha256: 7a9319a67294ef02459a19738bbfa8727bb5307b822dadd708bc2ccf6c901aca
+        url: https://download.pytorch.org/whl/cpu/torch-2.0.0%2Bcpu-cp310-cp310-linux_x86_64.whl
+        sha256: 7c9e668462cd0813fc4baaeaa137efce2516e73cf381120846edf45d4ec21174
       - &id025
         type: file
         url: https://files.pythonhosted.org/packages/ca/31/ff6be541195daf77aa5c72303b2354661a69e717967d44d91eb4f3fdce32/triton-2.0.0-1-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
@@ -106,6 +64,8 @@ modules:
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "transformers==4.28.1" --no-build-isolation
+    cleanup:
+      - '/bin'
     sources:
       - &id005
         type: file
@@ -172,6 +132,8 @@ modules:
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "accelerate==0.18.0" --no-build-isolation
+    cleanup:
+      - '/bin'
     sources:
       - *id003
       - *id004
@@ -186,17 +148,6 @@ modules:
       - *id008
       - *id009
       - *id010
-      - *id011
-      - *id012
-      - *id013
-      - *id014
-      - *id015
-      - *id016
-      - *id017
-      - *id018
-      - *id019
-      - *id020
-      - *id021
       - *id022
       - &id032
         type: file
@@ -213,6 +164,8 @@ modules:
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "TTS==0.14.0" --no-build-isolation
+    cleanup:
+      - '/bin'
     sources:
       - type: file
         url: https://files.pythonhosted.org/packages/df/c4/1088865e0246d7ecf56d819a233ab2b72f7d6ab043965ef327d0731b5434/Babel-2.12.1-py3-none-any.whl
@@ -424,17 +377,6 @@ modules:
         url: https://files.pythonhosted.org/packages/58/a4/859605be01d9979fecde5e94ed6662d9a85853f9849f396d9a84455f4846/numba-0.56.4-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
         sha256: 4e08e203b163ace08bad500b0c16f6092b1eb34fd1fce4feaf31a67a3a5ecf3b
       - *id010
-      - *id011
-      - *id012
-      - *id013
-      - *id014
-      - *id015
-      - *id016
-      - *id017
-      - *id018
-      - *id019
-      - *id020
-      - *id021
       - *id022
       - type: file
         url: https://files.pythonhosted.org/packages/a3/40/eca46f6af07a83ea3b8706586b2d8a28c01bdccee789d24f2ccc5e148b28/pandas-2.0.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
@@ -518,8 +460,8 @@ modules:
       - *id035
       - *id024
       - type: file
-        url: https://files.pythonhosted.org/packages/21/35/8880a198c46e7aa8c9a83a5059ad595d472e10998989176395d98cce88e7/torchaudio-2.0.1-cp310-cp310-manylinux1_x86_64.whl
-        sha256: 5fdaba10ff06d098d603d9eb8d2ff541c3f3fe28ba178a78787190cec0d5187f
+        url: https://download.pytorch.org/whl/cpu/torchaudio-2.0.0%2Bcpu-cp310-cp310-linux_x86_64.whl
+        sha256: 383e9749e2942179bbb2e9d237ee2aaf8a42dc74aecd7cd02074ac8ef45e1cac
       - type: file
         url: https://files.pythonhosted.org/packages/2c/9b/b9c3e17f261e30f630511390e0dd33fc529073f1f2db222a1f09dc49a1ae/torchdiffeq-0.2.3-py3-none-any.whl
         sha256: b5b01ec1294a2d8d5f77e567bf17c5de1237c0573cb94deefa88326f0e18c338
@@ -527,8 +469,8 @@ modules:
         url: https://files.pythonhosted.org/packages/73/8d/efd3e7b31ea854d0bd6886aa3cf44914adce113a6d460850af41ac1dd4dd/torchsde-0.2.5-py3-none-any.whl
         sha256: 4c34373a94a357bdf60bbfee00c850f3563d634491555820b900c9a4f7eff300
       - type: file
-        url: https://files.pythonhosted.org/packages/34/8d/43f36b6ff585de3ebd5df10ef07c4377b2cce9155f9810c7382427c1430e/torchvision-0.15.1-cp310-cp310-manylinux1_x86_64.whl
-        sha256: d4de10c837f1493c1c54344388e300a06c96914c6cc55fcb2527c21f2f010bbd
+        url: https://download.pytorch.org/whl/cpu/torchvision-0.15.1%2Bcpu-cp310-cp310-linux_x86_64.whl
+        sha256: 1b35721088ad03bc6cb425321788d9ed2bbf0ef1af0b2ee9bd3b2c9341aa89f2
       - *id036
       - type: file
         url: https://files.pythonhosted.org/packages/e0/d2/45ded799916c9fa3eed92d7559fc14e76708c75ea95b4f62808e9ee737a7/trainer-0.0.20-py3-none-any.whl

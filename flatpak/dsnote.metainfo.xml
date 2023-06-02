@@ -3,7 +3,7 @@
   <id>net.mkiol.SpeechNote</id>
   <metadata_license>FSFAP</metadata_license>
   <name>Speech Note</name>
-  <summary>Note taking and reading with your voice</summary>
+  <summary>Note taking and reading with Speech to Text and Text to Speech</summary>
   <description>
     <p>Speech Note enables you to take and read notes with your voice.
       It uses Speech to Text and Text to Speech conversions.

@@ -17,8 +17,7 @@ finish-args:
     - --filesystem=xdg-download
     - --filesystem=xdg-music
     - --filesystem=xdg-documents
-    - --filesystem=xdg-pictures
-    - --filesystem=xdg-desktop
+    - --env=QT_QUICK_CONTROLS_STYLE=org.kde.desktop
 cleanup:
     - '/cmake'
     - '/etc'
@@ -28,6 +27,7 @@ cleanup:
     - '/lib/fst'
     - '/lib/cmake'
     - '/lib/pkgconfig'
+    - '/lib/python3.10/site-packages/cmake*'
     - '/share/cmake'
     - '/share/doc'
     - '/share/locale'
@@ -51,13 +51,6 @@ modules:
         - -DFMT_DOC=OFF
         - -DFMT_TEST=OFF
         - -DFMT_FUZZ=OFF
-      cleanup:
-        - '/bin'
-        - '/share'
-        - '/lib/debug'
-        - '*.so'
-        - '*.so.*'
-        - '*.la'
       sources:
         - type: archive
           url: https://github.com/fmtlib/fmt/releases/download/9.1.0/fmt-9.1.0.zip

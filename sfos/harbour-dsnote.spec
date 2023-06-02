@@ -6,7 +6,7 @@ Name:       harbour-dsnote
 %define _unpackaged_files_terminate_build 0
 # << macros
 
-Summary:        Note taking and reading with speech
+Summary:        Note taking and reading with Speech to Text and Text to Speech
 Version:        3.0.0
 Release:        1
 Group:          Qt/Qt
