@@ -33,18 +33,24 @@ ModelsListModel::ModelsListModel(QObject *parent)
 
 ModelsListModel::~ModelsListModel() { m_worker.reset(); }
 
-void ModelsListModel::beforeUpdate(const QList<ListItem *> &oldItems,
-                                   const QList<ListItem *> &newItems) {
+size_t ModelsListModel::firstChangedItemIdx(const QList<ListItem *> &oldItems,
+                                            const QList<ListItem *> &newItems) {
     const auto &[it, _] = std::mismatch(
         oldItems.cbegin(), oldItems.cend(), newItems.cbegin(), newItems.cend(),
         [](const ListItem *a, const ListItem *b) {
             const auto *aa = qobject_cast<const ModelsListItem *>(a);
             const auto *bb = qobject_cast<const ModelsListItem *>(b);
-            return aa->available() == bb->available() &&
+
+            return aa->id() == bb->id() && aa->available() == bb->available() &&
                    aa->downloading() == bb->downloading() &&
                    aa->progress() == bb->progress();
         });
-    m_changedItem = std::distance(oldItems.cbegin(), it);
+
+    auto idx = std::distance(oldItems.cbegin(), it);
+
+    m_changedItem = static_cast<int>(idx);
+
+    return idx;
 }
 
 ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
@@ -72,6 +78,21 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
         /*progress=*/model.download_progress};
 }
 
+bool ModelsListModel::roleFilterPass(const models_manager::model_t &model) {
+    if (m_roleFilter == ModelRoleFilter::AllModels) return true;
+
+    switch (models_manager::role_of_engine(model.engine)) {
+        case models_manager::model_role::stt:
+            return m_roleFilter == ModelRoleFilter::SttModels;
+        case models_manager::model_role::tts:
+            return m_roleFilter == ModelRoleFilter::TtsModels;
+        case models_manager::model_role::ttt:
+            break;
+    }
+
+    return false;
+}
+
 QList<ListItem *> ModelsListModel::makeItems() {
     QList<ListItem *> items;
 
@@ -83,12 +104,13 @@ QList<ListItem *> ModelsListModel::makeItems() {
 
     if (phase.isEmpty()) {
         std::for_each(models.cbegin(), models.cend(), [&](const auto &model) {
-            items.push_back(makeItem(model));
+            if (roleFilterPass(model)) items.push_back(makeItem(model));
         });
     } else {
         std::for_each(models.cbegin(), models.cend(), [&](const auto &model) {
-            if (model.name.contains(phase, Qt::CaseInsensitive) ||
-                model.lang_id.contains(phase, Qt::CaseInsensitive)) {
+            if (roleFilterPass(model) &&
+                (model.name.contains(phase, Qt::CaseInsensitive) ||
+                 model.lang_id.contains(phase, Qt::CaseInsensitive))) {
                 items.push_back(makeItem(model));
             }
         });
@@ -102,6 +124,14 @@ void ModelsListModel::setLang(const QString &lang) {
         m_lang = lang;
         updateModel();
         emit langChanged();
+    }
+}
+
+void ModelsListModel::setRoleFilter(ModelRoleFilter roleFilter) {
+    if (roleFilter != m_roleFilter) {
+        m_roleFilter = roleFilter;
+        updateModel();
+        emit roleFilterChanged();
     }
 }
 

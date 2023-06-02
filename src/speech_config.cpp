@@ -34,6 +34,14 @@ speech_config::speech_config(QObject *parent) : QObject{parent} {
                 qDebug() << "download_progress:" << id << progress;
                 emit model_download_progress_changed(id, progress);
             });
+    connect(models_manager::instance(), &models_manager::download_finished,
+            this, [this]([[maybe_unused]] const QString &id) {
+                emit model_download_finished();
+            });
+    connect(models_manager::instance(), &models_manager::download_error, this,
+            [this]([[maybe_unused]] const QString &id) {
+                emit model_download_error();
+            });
 
     m_langs_model.updateModel();
     m_models_model.updateModel();

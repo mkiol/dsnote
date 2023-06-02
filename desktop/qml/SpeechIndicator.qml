@@ -19,6 +19,8 @@ Item {
 
     property color color: "black"
 
+    readonly property double _spacing: root.width / 7
+
     Component {
         id: waveIndicator
         Rectangle {
@@ -45,7 +47,7 @@ Item {
             y: (root.height - height) / 2
             color: root.color
             opacity: root.status !== 0 ? 1.0 : 0.5
-            width: root.width / 4
+            width: (root.width - 2 * root._spacing) / 3
             height: root.height * value
 
             SequentialAnimation {
@@ -100,15 +102,14 @@ Item {
             }
 
             radius: 10
-            y: (root.height - height) / 2
             color: root.color
             opacity: value == vid ? 1.0 : 0.0
             Behavior on opacity {
                  NumberAnimation { duration: 100 }
             }
 
-            width: root.width / 3
-            height: root.height / 3
+            width: (root.width - root._spacing) / 2
+            height: (root.height - root._spacing) / 2
 
             NumberAnimation {
                 loops: Animation.Infinite
@@ -125,8 +126,7 @@ Item {
 
     Row {
         visible: root.status === 0 || root.status === 1 || root.status === 4
-        x: root.width / 16
-        spacing: root.width / 16
+        spacing: root._spacing
         Repeater {
             delegate: waveIndicator
             model: 3
@@ -136,8 +136,7 @@ Item {
     Grid {
         visible: root.status === 2 || root.status === 3
         columns: 2
-        x: root.width / 16
-        spacing: root.width / 8
+        spacing: root._spacing
         Repeater {
             delegate: squareIndicator
             model: 4

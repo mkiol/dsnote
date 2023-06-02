@@ -29,17 +29,22 @@ LangsListModel::LangsListModel(QObject *parent)
 
 LangsListModel::~LangsListModel() { m_worker.reset(); }
 
-void LangsListModel::beforeUpdate(const QList<ListItem *> &oldItems,
-                                  const QList<ListItem *> &newItems) {
+size_t LangsListModel::firstChangedItemIdx(const QList<ListItem *> &oldItems,
+                                           const QList<ListItem *> &newItems) {
     const auto &[it, _] = std::mismatch(
         oldItems.cbegin(), oldItems.cend(), newItems.cbegin(), newItems.cend(),
         [](const ListItem *a, const ListItem *b) {
-            const auto aa = static_cast<const LangsListItem *>(a);
-            const auto bb = static_cast<const LangsListItem *>(b);
-            return aa->available() == bb->available() &&
+            const auto *aa = qobject_cast<const LangsListItem *>(a);
+            const auto *bb = qobject_cast<const LangsListItem *>(b);
+            return aa->id() == bb->id() && aa->available() == bb->available() &&
                    aa->downloading() == bb->downloading();
         });
-    m_changedItem = static_cast<int>(std::distance(oldItems.cbegin(), it));
+
+    auto idx = std::distance(oldItems.cbegin(), it);
+
+    m_changedItem = static_cast<int>(idx);
+
+    return idx;
 }
 
 ListItem *LangsListModel::makeItem(const models_manager::lang_t &lang) {

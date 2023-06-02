@@ -5,23 +5,118 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.12
-import QtQuick.Controls 2.5
+import QtQuick 2.0
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import org.mkiol.dsnote.Dsnote 1.0
 
-Page {
+Dialog {
     id: root
 
     property string langId
     property string langName
-    readonly property bool langsView: langId.length == 0
+    readonly property bool langsView: langId.length === 0
 
+    readonly property real _rightMargin: scrollBar.visible ? 3 * appWin.padding : appWin.padding
+
+    width: parent.width - 4 * appWin.padding
+    height: parent.height - 4 * appWin.padding
+    anchors.centerIn: parent
+    verticalPadding: 1
+    horizontalPadding: 1
     title: langsView ? qsTr("Languages") : langName
+    modal: true
+
+    function reset(lang_id) {
+        service.models_model.lang = lang_id
+        service.models_model.filter = ""
+        service.models_model.roleFilter = ModelsListModel.AllModels
+    }
+
+    function switchToModels(modelId, modelName) {
+        root.reset(modelId)
+        root.langName = modelName
+        root.langId = modelId
+    }
+
+    function switchToLangs() {
+        root.reset("")
+        root.langName = ""
+        root.langId = ""
+    }
 
     Component.onCompleted: {
-        service.models_model.lang = root.langId
+        service.langs_model.filter = ""
+        reset(root.langId)
+    }
+
+    header: Item {
+        height: Math.max(titleLabel.height, searchTextField.height, searchCombo.height) + 2 * appWin.padding
+        RowLayout {
+            anchors.fill: parent
+            Label {
+                id: titleLabel
+                text: root.title
+                font.pixelSize: Qt.application.font.pixelSize * 1.2
+                elide: Label.ElideRight
+                horizontalAlignment: Qt.AlignLeft
+                verticalAlignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+                Layout.leftMargin: appWin.padding
+            }
+            ComboBox {
+                id: searchCombo
+                visible: !langsView
+                currentIndex: {
+                    switch (service.models_model.roleFilter) {
+                    case ModelsListModel.AllModels:
+                        return 0
+                    case ModelsListModel.SttModels:
+                        return 1
+                    case ModelsListModel.TtsModels:
+                        return 2
+                    }
+                    return 0
+                }
+                model: [
+                    qsTr("All models"),
+                    qsTr("Only Speech to Text"),
+                    qsTr("Only Text to Speech")
+                ]
+                onActivated: {
+                    if (index === 1) service.models_model.roleFilter = ModelsListModel.SttModels
+                    else if (index === 2) service.models_model.roleFilter = ModelsListModel.TtsModels
+                    else service.models_model.roleFilter = ModelsListModel.AllModels
+                }
+            }
+            TextField {
+                id: searchTextField
+                text: listView.model.filter
+                placeholderText: qsTr("Type to search")
+                verticalAlignment: Qt.AlignVCenter
+                Layout.rightMargin: appWin.padding
+                Layout.preferredWidth: parent.width / 4
+                onTextChanged: {
+                    listView.model.filter = text.toLowerCase().trim()
+                }
+            }
+        }
+    }
+
+    footer: DialogButtonBox {
+        Button {
+            text: qsTr("Close")
+            icon.name: "window-close-symbolic"
+            DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
+        }
+        Button {
+            visible: !root.langsView
+            icon.name: "go-previous-symbolic"
+            DialogButtonBox.buttonRole: DialogButtonBox.ResetRole
+        }
+
+        onReset: root.switchToLangs()
     }
 
     Component {
@@ -29,44 +124,44 @@ Page {
         ItemDelegate {
             width: ListView.view.width
             text: model.name
-            onClicked: {
-                stackView.push("LangsPage.qml", {langId: model.id, langName: model.name})
-            }
+            onClicked: root.switchToModels(model.id, model.name)
+
             BusyIndicator {
                 visible: !model.available
                 height: parent.height
                 anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: root._rightMargin
                 running: model.downloading
             }
+
             Label {
                 visible: model.available
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.rightMargin: 10
+                anchors.rightMargin: root._rightMargin
+                font.pixelSize: Qt.application.font.pixelSize * 1.5
                 text: "\u2714"
+                font.bold: true
             }
         }
     }
 
     Component {
         id: modelSectionDelegate
-        RowLayout {
+
+        SectionLabel {
             required property var section
 
-            width: listView.width
-
-            Label {
-                Layout.margins: 10
-                width: listView.width
-                font.bold: true
-                text: {
-                    if (parent.section == ModelsListModel.Stt)
-                        return qsTr("Speech to Text")
-                    if (parent.section == ModelsListModel.Tts)
-                        return qsTr("Text to Speech")
-                    if (parent.section == ModelsListModel.Ttt)
-                        return qsTr("Text to Text")
-                }
+            x: appWin.padding
+            width: listView.width - appWin.padding - root._rightMargin
+            text: {
+                if (section == ModelsListModel.Stt)
+                    return qsTr("Speech to Text")
+                if (section == ModelsListModel.Tts)
+                    return qsTr("Text to Speech")
+                if (section == ModelsListModel.Ttt)
+                    return qsTr("Text to Text")
             }
         }
     }
@@ -77,47 +172,75 @@ Page {
             width: listView.width
 
             Label {
-                Layout.margins: 10
-                text: (model.score === 0 ? "(e) " : "") + model.name
+                Layout.margins: appWin.padding
+                text: model.name
             }
 
-            ProgressBar {
-                id: bar
+            Label {
                 Layout.fillWidth: true
-                value: model.available ? 1 : model.progress
-
-                Connections {
-                    target: service
-                    function onModel_download_progress_changed(id, progress) {
-                        if (model.id === id) bar.value = progress
-                    }
-                }
-                Component.onCompleted: {
-                    if (model.downloading) {
-                        bar.value = service.model_download_progress(model.id)
-                    }
-                }
+                horizontalAlignment: Text.AlignRight
+                Layout.rightMargin: appWin.padding
+                Layout.alignment: Qt.AlignVCenter
+                text: model.available ? "\u2714" : ""
+                font.bold: true
+                font.pixelSize: Qt.application.font.pixelSize * 1.5
             }
 
-            Button {
-                Layout.rightMargin: 10
-                text: model.downloading ? qsTr("Cancel") : model.available ? qsTr("Delete") : qsTr("Download")
-                onClicked: {
-                    if (model.downloading) service.cancel_model_download(model.id)
-                    else if (model.available) service.delete_model(model.id)
-                    else service.download_model(model.id)
+            ColumnLayout {
+                spacing: 0
+
+                Button {
+                    id: downloadButton
+                    Layout.rightMargin: root._rightMargin
+                    text: model.downloading ? qsTr("Cancel") : model.available ? qsTr("Delete") : qsTr("Download")
+                    onClicked: {
+                        if (model.downloading) service.cancel_model_download(model.id)
+                        else if (model.available) service.delete_model(model.id)
+                        else service.download_model(model.id)
+                    }
+                }
+
+                ProgressBar {
+                    id: bar
+                    Layout.preferredWidth: downloadButton.width
+                    value: root.langsView ? 0 : model.available ? 1 : model.progress
+                    visible: model.downloading
+
+                    Connections {
+                        target: service
+                        function onModel_download_progress_changed(id, progress) {
+                            if (model.id === id) bar.value = progress
+                        }
+                    }
+                    Component.onCompleted: {
+                        if (model.downloading) {
+                            bar.value = service.model_download_progress(model.id)
+                        }
+                    }
                 }
             }
         }
     }
 
+    PlaceholderLabel {
+        text: langsView ? qsTr("There are no languages that match your search criteria.") :
+                          qsTr("There are no models that match your search criteria.")
+        visible: listView.model.count === 0
+    }
+
     ListView {
         id: listView
         anchors.fill: parent
-        spacing: 5
+        clip: true
+        spacing: appWin.padding
         model: langsView ? service.langs_model : service.models_model
         delegate: langsView ? langItemDelegate : modelItemDelegate
         section.property: "role"
         section.delegate: langsView ? null : modelSectionDelegate
+
+        Keys.onUpPressed: scrollBar.decrease()
+        Keys.onDownPressed: scrollBar.increase()
+
+        ScrollBar.vertical: ScrollBar { id: scrollBar }
     }
 }

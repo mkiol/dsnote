@@ -280,9 +280,13 @@ void settings::set_insert_mode(insert_mode_t value) {
 }
 
 QUrl settings::app_icon() const {
+#ifdef USE_SFOS
     return QUrl::fromLocalFile(
         QStringLiteral("/usr/share/icons/hicolor/172x172/apps/%1.png")
             .arg(QLatin1String{APP_BINARY_ID}));
+#else
+    return QUrl{QStringLiteral("qrc:/app_icon.svg")};
+#endif
 }
 
 bool settings::py_supported() const {

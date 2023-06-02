@@ -5,144 +5,158 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.12
-import QtQuick.Controls 2.5
+import QtQuick 2.0
+import QtQuick.Controls 2.15
+import QtQuick.Dialogs 1.2 as Dialogs
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.3
 
 import org.mkiol.dsnote.Settings 1.0
 
-Page {
+DialogPage {
     id: root
 
-    title: qsTr("Settings")
+    RowLayout {
+        spacing: appWin.padding
 
-    Flickable {
-        anchors.fill: parent
-        contentWidth: width
-        contentHeight: column.height + 20
-        clip: true
-
-        ScrollIndicator.vertical: ScrollIndicator {}
-
-        ColumnLayout {
-            id: column
-            x: 10
-            y: 10
-            width: parent.width - 20
-            spacing: 10
-
-            Button {
-                Layout.alignment: Qt.AlignHCenter
-                enabled: !service.busy
-                text: qsTr("Language models")
-                onClicked: appWin.push("LangsPage.qml")
+        Label {
+            Layout.fillWidth: true
+            text: qsTr("Listening mode")
+        }
+        ComboBox {
+            Layout.preferredWidth: root.width / 2
+            currentIndex: {
+                if (_settings.speech_mode === Settings.SpeechSingleSentence) return 0
+                if (_settings.speech_mode === Settings.SpeechAutomatic) return 2
+                return 1
             }
-
-            RowLayout {
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Listening mode")
-                }
-                ComboBox {
-                    currentIndex: {
-                        if (_settings.speech_mode === Settings.SpeechSingleSentence) return 0
-                        if (_settings.speech_mode === Settings.SpeechAutomatic) return 2
-                        return 1
-                    }
-                    model: ListModel {
-                        ListElement { text: qsTr("One sentence") }
-                        ListElement { text: qsTr("Press and hold") }
-                        ListElement { text: qsTr("Always on") }
-                    }
-                    onActivated: {
-                        if (index === 0) {
-                            _settings.speech_mode = Settings.SpeechSingleSentence
-                        } else if (index === 2) {
-                            _settings.speech_mode = Settings.SpeechAutomatic
-                        } else {
-                            _settings.speech_mode = Settings.SpeechManual
-                        }
-                    }
+            model: [
+                qsTr("One sentence"),
+                qsTr("Press and hold"),
+                qsTr("Always on")
+            ]
+            onActivated: {
+                if (index === 0) {
+                    _settings.speech_mode = Settings.SpeechSingleSentence
+                } else if (index === 2) {
+                    _settings.speech_mode = Settings.SpeechAutomatic
+                } else {
+                    _settings.speech_mode = Settings.SpeechManual
                 }
             }
 
-            RowLayout {
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Text appending style")
-                }
-                ComboBox {
-                    currentIndex: {
-                        if (_settings.insert_mode === Settings.InsertInLine) return 0
-                        if (_settings.insert_mode === Settings.InsertNewLine) return 1
-                        return 0
-                    }
-                    model: ListModel {
-                        ListElement { text: qsTr("In line") }
-                        ListElement { text: qsTr("After line break") }
-                    }
-                    onActivated: {
-                        if (index === 0) {
-                            _settings.insert_mode = Settings.InsertInLine
-                        } else if (index === 1) {
-                            _settings.insert_mode = Settings.InsertNewLine
-                        } else {
-                            _settings.insert_mode = Settings.InsertInLine
-                        }
-                    }
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("One sentence: Clicking on the 'Listen' button starts listening, which ends when the first sentence is recognized.\n" +
+                               "Press and hold: Pressing and holding the 'Listen' button enables listening. When you stop holding, listening will turn off.\n" +
+                               "Always on: Listening is always turn on.")
+        }
+    }
+
+    RowLayout {
+        spacing: appWin.padding
+
+        Label {
+            Layout.fillWidth: true
+            text: qsTr("Text appending style")
+        }
+        ComboBox {
+            Layout.preferredWidth: root.width / 2
+            currentIndex: {
+                if (_settings.insert_mode === Settings.InsertInLine) return 0
+                if (_settings.insert_mode === Settings.InsertNewLine) return 1
+                return 0
+            }
+            model: [
+                qsTr("In line"),
+                qsTr("After line break")
+            ]
+            onActivated: {
+                if (index === 0) {
+                    _settings.insert_mode = Settings.InsertInLine
+                } else if (index === 1) {
+                    _settings.insert_mode = Settings.InsertNewLine
+                } else {
+                    _settings.insert_mode = Settings.InsertInLine
                 }
             }
 
-            RowLayout {
-                Label {
-                    text: qsTr("Location of language files")
-                }
-                TextField {
-                    Layout.fillWidth: true
-                    text: _settings.models_dir
-                    enabled: false
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Text is appended to the note in the same line or after line break.")
+        }
+    }
 
-                }
-                Button {
-                    text: qsTr("Change")
-                    onClicked: fileDialog.open()
-                }
-            }
+    RowLayout {
+        spacing: appWin.padding
 
-            CheckBox {
-                checked: _settings.translate
-                text: qsTr("Translate to English")
-                onCheckedChanged: {
-                    _settings.translate = checked
-                }
-            }
+        Label {
+            text: qsTr("Location of language files")
+        }
+        TextField {
+            Layout.fillWidth: true
+            text: _settings.models_dir
+            enabled: false
 
-            CheckBox {
-                visible: _settings.py_supported()
-                checked: _settings.restore_punctuation
-                text: qsTr("Restore punctuation")
-                onCheckedChanged: {
-                    _settings.restore_punctuation = checked
-                }
-            }
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: _settings.models_dir
+        }
+        Button {
+            text: qsTr("Change")
+            onClicked: directoryDialog.open()
 
-            Label {
-                visible: _settings.py_supported() && _settings.restore_punctuation && !app.ttt_configured
-                color: "red"
-                text: qsTr("To make 'Restore punctuation' work, download 'Punctuation' model.")
-            }
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
+        }
+    }
 
-            FileDialog {
-                id: fileDialog
-                title: qsTr("Please choose a directory")
-                selectFolder: true
-                selectExisting: true
-                folder:  _settings.models_dir_url
-                onAccepted: {
-                    _settings.models_dir_url = fileUrl
-                }
-            }
+    SectionLabel {
+        text: qsTr("Experiments")
+    }
+
+    CheckBox {
+        checked: _settings.translate
+        text: qsTr("Translate to English")
+        onCheckedChanged: {
+            _settings.translate = checked
+        }
+
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: hovered
+        ToolTip.text: qsTr("Translate decoded text to English. This option works only with Whisper models.")
+    }
+
+    CheckBox {
+        visible: _settings.py_supported()
+        checked: _settings.restore_punctuation
+        text: qsTr("Restore punctuation")
+        onCheckedChanged: {
+            _settings.restore_punctuation = checked
+        }
+
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: hovered
+        ToolTip.text: qsTr("Enable advanced punctuation restoration after speech recognition. To make it work, " +
+                           "make sure you have enabled 'Punctuation' model for your language.") + " " +
+                      qsTr("When this option is enabled model initialization takes much longer and memory usage is much higher.")
+    }
+
+    Label {
+        wrapMode: Text.WordWrap
+        visible: _settings.py_supported() && _settings.restore_punctuation && !app.ttt_configured
+        color: "red"
+        text: qsTr("To make 'Restore punctuation' work, download 'Punctuation' model.")
+    }
+
+    Dialogs.FileDialog {
+        id: directoryDialog
+        title: qsTr("Please choose a directory")
+        selectFolder: true
+        selectExisting: true
+        folder:  _settings.models_dir_url
+        onAccepted: {
+            _settings.models_dir_url = fileUrl
         }
     }
 }

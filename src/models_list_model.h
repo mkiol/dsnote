@@ -26,9 +26,13 @@ class ModelsListModel : public SelectableItemModel {
     Q_OBJECT
     Q_PROPERTY(bool downloading READ downloading NOTIFY downloadingChanged)
     Q_PROPERTY(QString lang READ lang WRITE setLang NOTIFY langChanged)
+    Q_PROPERTY(ModelRoleFilter roleFilter READ roleFilter WRITE setRoleFilter
+                   NOTIFY roleFilterChanged)
    public:
     enum ModelRole { Stt = 0, Tts = 1, Ttt = 2 };
     Q_ENUM(ModelRole)
+    enum ModelRoleFilter { AllModels = 0, SttModels = 1, TtsModels = 2 };
+    Q_ENUM(ModelRoleFilter)
 
     explicit ModelsListModel(QObject *parent = nullptr);
     ~ModelsListModel() override;
@@ -37,20 +41,25 @@ class ModelsListModel : public SelectableItemModel {
     void itemChanged(int idx);
     void downloadingChanged();
     void langChanged();
+    void roleFilterChanged();
 
    private:
     int m_changedItem = -1;
     bool m_downloading = false;
     QString m_lang;
+    ModelRoleFilter m_roleFilter = ModelRoleFilter::AllModels;
 
     QList<ListItem *> makeItems() override;
     static ListItem *makeItem(const models_manager::model_t &model);
-    void beforeUpdate(const QList<ListItem *> &oldItems,
-                      const QList<ListItem *> &newItems) override;
+    size_t firstChangedItemIdx(const QList<ListItem *> &oldItems,
+                               const QList<ListItem *> &newItems) override;
     inline bool downloading() const { return m_downloading; }
     inline QString lang() const { return m_lang; }
+    inline ModelRoleFilter roleFilter() const { return m_roleFilter; }
     void setLang(const QString &lang);
+    void setRoleFilter(ModelRoleFilter roleFilter);
     void updateDownloading(const std::vector<models_manager::model_t> &models);
+    bool roleFilterPass(const models_manager::model_t &model);
 };
 
 class ModelsListItem : public SelectableItem {

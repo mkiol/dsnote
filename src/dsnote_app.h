@@ -104,6 +104,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void stop_listen();
     Q_INVOKABLE void play_speech();
     Q_INVOKABLE void stop_play_speech();
+    Q_INVOKABLE void copy_to_clipboard();
 
    signals:
     void active_stt_model_changed();
@@ -124,6 +125,7 @@ class dsnote_app : public QObject {
     void error(dsnote_app::error_t type);
     void transcribe_done();
     void service_state_changed();
+    void note_copied();
 
    private:
     inline static const QString DBUS_SERVICE_NAME{

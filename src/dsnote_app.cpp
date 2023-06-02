@@ -7,7 +7,9 @@
 
 #include "dsnote_app.h"
 
+#include <QClipboard>
 #include <QDBusConnection>
+#include <QGuiApplication>
 #include <QTextStream>
 #include <algorithm>
 
@@ -1245,4 +1247,12 @@ double dsnote_app::transcribe_progress() const { return m_transcribe_progress; }
 bool dsnote_app::another_app_connected() const {
     return m_current_task != INVALID_TASK && m_primary_task != m_current_task &&
            m_side_task != m_current_task;
+}
+
+void dsnote_app::copy_to_clipboard() {
+    auto *clip = QGuiApplication::clipboard();
+    if (!settings::instance()->note().isEmpty()) {
+        clip->setText(settings::instance()->note());
+        emit note_copied();
+    }
 }

@@ -39,8 +39,8 @@ class LangsListModel : public SelectableItemModel {
 
     QList<ListItem *> makeItems() override;
     static ListItem *makeItem(const models_manager::lang_t &lang);
-    void beforeUpdate(const QList<ListItem *> &oldItems,
-                      const QList<ListItem *> &newItems) override;
+    size_t firstChangedItemIdx(const QList<ListItem *> &oldItems,
+                               const QList<ListItem *> &newItems) override;
     inline bool downloading() const { return m_downloading; }
     void updateDownloading(const std::vector<models_manager::lang_t> &langs);
 };

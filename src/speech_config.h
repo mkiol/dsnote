@@ -38,6 +38,8 @@ class speech_config : public QObject {
     void model_download_progress_changed(const QString &id, double progress);
     void busy_changed();
     void default_model_changed();
+    void model_download_finished();
+    void model_download_error();
 
    private:
     inline static const QString DBUS_SERVICE_NAME{

@@ -1,10 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/main.qml</file>
-        <file>qml/NotesPage.qml</file>
         <file>qml/SettingsPage.qml</file>
         <file>qml/LangsPage.qml</file>
         <file>qml/SpeechIndicator.qml</file>
+        <file>qml/PlaceholderLabel.qml</file>
         <file alias="config/models.json">../config/models.json</file>
         <file alias="nonbreaking_prefixes/ca.txt">../nonbreaking_prefixes/ca.txt</file>
         <file alias="nonbreaking_prefixes/cs.txt">../nonbreaking_prefixes/cs.txt</file>
@@ -32,5 +32,12 @@
         <file alias="nonbreaking_prefixes/sv.txt">../nonbreaking_prefixes/sv.txt</file>
         <file alias="nonbreaking_prefixes/ta.txt">../nonbreaking_prefixes/ta.txt</file>
         <file alias="nonbreaking_prefixes/tr.txt">../nonbreaking_prefixes/tr.txt</file>
+        <file alias="app_icon.svg">dsnote.svg</file>
+        <file>qml/MainToolBar.qml</file>
+        <file>qml/ToastNotification.qml</file>
+        <file>qml/SectionLabel.qml</file>
+        <file>qml/DialogPage.qml</file>
+        <file>qml/AboutPage.qml</file>
+        <file>qml/InfoItem.qml</file>
     </qresource>
 </RCC>

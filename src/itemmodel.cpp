@@ -8,6 +8,7 @@
 #include "itemmodel.h"
 
 #include <QDebug>
+#include <algorithm>
 
 ItemWorker::ItemWorker(ItemModel *model, const QString &data)
     : QThread{model}, data{data}, model{model} {}
@@ -45,22 +46,27 @@ void ItemModel::clear() {
     emit countChanged();
 }
 
-void ItemModel::beforeUpdate(const QList<ListItem *> &,
-                             const QList<ListItem *> &) {}
+size_t ItemModel::firstChangedItemIdx(
+    [[maybe_unused]] const QList<ListItem *> &oldItems,
+    [[maybe_unused]] const QList<ListItem *> &newItems) {
+    return 0;
+}
 
 void ItemModel::workerDone() {
     auto worker = qobject_cast<ItemWorker *>(sender());
     if (worker) {
         const int old_l = m_list.length();
 
-        beforeUpdate(m_list, worker->items);
+        auto idx = firstChangedItemIdx(m_list, worker->items);
 
-        if (m_list.length() != 0) removeRows(0, rowCount());
+        if (m_list.length() != 0) removeRows(idx, rowCount() - idx);
 
-        if (!worker->items.isEmpty())
-            appendRows(worker->items);
-        else
-            qWarning() << "No items";
+        if (!worker->items.isEmpty() && idx <= worker->items.size()) {
+            appendRows(worker->items.mid(idx));
+            for (auto *item : worker->items.mid(0, idx)) {
+                delete item;
+            }
+        }
 
         if (old_l != m_list.length()) emit countChanged();
 

@@ -53,14 +53,13 @@ class ItemModel : public ListModel {
    public slots:
     virtual void updateModel(const QString &data = {});
 
-    virtual void beforeUpdate(const QList<ListItem *> &oldItems,
-                              const QList<ListItem *> &newItems);
-
    protected:
     std::unique_ptr<ItemWorker> m_worker;
     virtual QList<ListItem *> makeItems() = 0;
     virtual void postMakeItems(const QList<ListItem *> &items);
     virtual void clear();
+    virtual size_t firstChangedItemIdx(const QList<ListItem *> &oldItems,
+                                       const QList<ListItem *> &newItems);
     void setBusy(bool busy);
 
    protected slots:

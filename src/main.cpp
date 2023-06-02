@@ -10,6 +10,7 @@
 #include <QCommandLineParser>
 #include <QDebug>
 #include <QGuiApplication>
+#include <QIcon>
 #include <QLocale>
 #include <QObject>
 #include <QQmlContext>
@@ -168,6 +169,7 @@ int main(int argc, char* argv[]) {
 #else
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
+    QGuiApplication::setWindowIcon(QIcon{QStringLiteral(":/app_icon.svg")});
 #endif
 
     QGuiApplication::setApplicationName(QStringLiteral(APP_ID));
