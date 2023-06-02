@@ -78,7 +78,7 @@ set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_conf_version "12")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · Åke Engelbrektson")
-set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · 🤗Transformers · Piper · RHVoice")
+set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · Hugging Face Transformers · Piper · RHVoice · ssplit-cpp · eSpeak NG")
 
 project(${id} VERSION 3.0.0)
 
