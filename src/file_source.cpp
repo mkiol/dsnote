@@ -44,7 +44,7 @@ void file_source::stop() {
 void file_source::start() {
     m_decoder.start();
 
-    m_timer.setInterval(10);  // 10 ms
+    m_timer.setInterval(100);  // 100 ms
     connect(&m_timer, &QTimer::timeout, this,
             &file_source::handle_read_timeout);
     m_timer.start();
