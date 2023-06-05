@@ -348,26 +348,36 @@ speech_service::source_t speech_service::audio_source_type() const {
 std::optional<speech_service::model_config_t>
 speech_service::choose_model_config(engine_t engine_type,
                                     QString model_or_lang_id) {
+    auto default_stt_model = settings::instance()->default_stt_model();
+    bool found_stt = false;
+
+    auto default_tts_model = settings::instance()->default_tts_model();
+    bool found_tts = false;
+
     if (model_or_lang_id.isEmpty()) {
         switch (engine_type) {
             case engine_t::stt:
-                model_or_lang_id = settings::instance()->default_stt_model();
+                model_or_lang_id = default_stt_model;
                 break;
             case engine_t::tts:
-                model_or_lang_id = settings::instance()->default_tts_model();
+                model_or_lang_id = default_tts_model;
                 break;
         }
     }
+
+    qDebug() << "model or lang id:" << model_or_lang_id;
 
     m_available_stt_models_map.clear();
     m_available_tts_models_map.clear();
     m_available_ttt_models_map.clear();
 
     auto models = models_manager::instance()->available_models();
-    if (models.empty()) return std::nullopt;
 
     std::optional<model_config_t> active_config;
     std::optional<model_config_t> first_config;
+
+    std::unordered_map<QString, QString> stt_lang_model_map;
+    std::unordered_map<QString, QString> tts_lang_model_map;
 
     // search by model id + filling m_available_*_models map
     for (const auto &model : models) {
@@ -378,6 +388,8 @@ speech_service::choose_model_config(engine_t engine_type,
                 m_available_stt_models_map.emplace(
                     model.id, model_data_t{model.id, model.lang_id,
                                            model.engine, model.name});
+                stt_lang_model_map.emplace(model.lang_id, model.id);
+                if (model.id == default_stt_model) found_stt = true;
                 break;
             case models_manager::model_role::ttt:
                 m_available_ttt_models_map.emplace(
@@ -388,6 +400,8 @@ speech_service::choose_model_config(engine_t engine_type,
                 m_available_tts_models_map.emplace(
                     model.id, model_data_t{model.id, model.lang_id,
                                            model.engine, model.name});
+                tts_lang_model_map.emplace(model.lang_id, model.id);
+                if (model.id == default_tts_model) found_tts = true;
                 break;
         }
 
@@ -415,6 +429,57 @@ speech_service::choose_model_config(engine_t engine_type,
             else if (!first_config)
                 first_config.emplace(std::move(config));
         }
+    }
+
+    if (!found_stt) {
+        qDebug() << "default stt model not found:" << default_stt_model;
+        QString lang;
+
+        if (!default_stt_model.contains('_'))
+            lang = default_stt_model.split('_').first();
+
+        if (auto it = stt_lang_model_map.find(lang);
+            it != stt_lang_model_map.end()) {
+            default_stt_model = it->second;
+            qDebug() << "new default stt model by lang:" << default_stt_model;
+        } else if (auto it = stt_lang_model_map.find("en");
+                   it != stt_lang_model_map.end()) {
+            default_stt_model = it->second;
+            qDebug() << "new default stt model by en:" << default_stt_model;
+        } else if (!stt_lang_model_map.empty()) {
+            default_stt_model = stt_lang_model_map.cbegin()->second;
+            qDebug() << "new default stt model by first:" << default_stt_model;
+        }
+
+        settings::instance()->set_default_stt_model(default_stt_model);
+    }
+
+    if (!found_tts) {
+        qDebug() << "default tts model not found:" << default_tts_model;
+        QString lang;
+
+        if (!default_tts_model.contains('_'))
+            lang = default_tts_model.split('_').first();
+
+        if (auto it = tts_lang_model_map.find(lang);
+            it != tts_lang_model_map.end()) {
+            default_tts_model = it->second;
+            qDebug() << "new default tts model by lang:" << default_tts_model;
+        } else if (auto it = tts_lang_model_map.find(QStringLiteral("en"));
+                   it != tts_lang_model_map.end()) {
+            default_tts_model = it->second;
+            qDebug() << "new default tts model by en:" << default_tts_model;
+        } else if (!tts_lang_model_map.empty()) {
+            default_tts_model = tts_lang_model_map.cbegin()->second;
+            qDebug() << "new default tts model by first:" << default_tts_model;
+        }
+
+        settings::instance()->set_default_tts_model(default_tts_model);
+    }
+
+    if (models.empty()) {
+        qDebug() << "no models available";
+        return std::nullopt;
     }
 
     // search by lang id
@@ -557,6 +622,10 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             return false;
         }();
 
+        qDebug() << "restart stt engine config:"
+                 << QString::fromStdString(
+                        (std::stringstream{} << config).str());
+
         if (new_engine_required) {
             qDebug() << "new stt engine required";
 
@@ -663,6 +732,10 @@ QString speech_service::restart_tts_engine(const QString &model_id) {
 
             return false;
         }();
+
+        qDebug() << "restart tts engine config:"
+                 << QString::fromStdString(
+                        (std::stringstream{} << config).str());
 
         if (new_engine_required) {
             qDebug() << "new tts engine required";
