@@ -111,7 +111,7 @@ std::string tts_engine::first_file_with_ext(std::string dir_path,
 }
 
 std::string tts_engine::find_file_with_name_prefix(std::string dir_path,
-                                                   std::string&& prefix) {
+                                                   std::string prefix) {
     auto* dirp = opendir(dir_path.c_str());
     if (!dirp) return {};
 

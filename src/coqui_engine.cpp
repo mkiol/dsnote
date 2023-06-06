@@ -80,6 +80,8 @@ std::string coqui_engine::fix_config_file(const std::string& config_file,
 
             if (!doc["model_args"]["speakers_file"].get(sv))
                 return std::string{sv};
+
+            if (!doc["audio"]["stats_path"].get(sv)) return std::string{sv};
         } catch (const simdjson::simdjson_error& err) {
             LOGD("error: " << err.what());
         }
@@ -88,16 +90,43 @@ std::string coqui_engine::fix_config_file(const std::string& config_file,
 
     if (path_to_replace.empty()) return config_file;
 
+    std::ifstream ifs{config_file, std::ios::in};
+    auto config_data = std::string{std::istreambuf_iterator<char>(ifs),
+                                   std::istreambuf_iterator<char>()};
+
+    auto speaker_file_in_config =
+        path_to_replace.substr(path_to_replace.find_last_of('/'));
+
+    // rename speaker file in config if needed
+    if (const auto* prefix{"speaker"};
+        speaker_file_in_config.size() > strlen(prefix) + 1 &&
+        speaker_file_in_config.substr(1, strlen(prefix)) == prefix) {
+        speaker_file_in_config = speaker_file_in_config.substr(1);
+
+        if (find_file_with_name_prefix(dir, speaker_file_in_config).empty()) {
+            LOGD("speaker file in config missing");
+
+            auto speaker_file = find_file_with_name_prefix(dir, prefix);
+            speaker_file =
+                speaker_file.substr(speaker_file.find_last_of('/') + 1);
+
+            if (speaker_file.empty()) {
+                LOGD("speaker file missing");
+            } else {
+                LOGD("speaker file replace: " << speaker_file_in_config
+                                              << " => " << speaker_file);
+                config_data = replace_all(config_data, speaker_file_in_config,
+                                          speaker_file);
+            }
+        }
+    }
+
     path_to_replace =
         path_to_replace.substr(0, path_to_replace.find_last_of('/'));
 
-    LOGD("path to replace: " << path_to_replace);
+    LOGD("path replace: " << path_to_replace << " => " << dir);
 
-    std::ifstream ifs{config_file, std::ios::in};
-
-    auto config_data = replace_all(
-        {std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>()},
-        path_to_replace, dir);
+    config_data = replace_all(config_data, path_to_replace, dir);
 
     std::ofstream out_file{config_temp_file, std::ios::out};
     out_file << config_data;
@@ -110,11 +139,15 @@ void coqui_engine::create_model() {
 
     try {
         pe->execute([&]() {
-              auto model_file =
-                  first_file_with_ext(m_config.model_files.model_path, "pth");
+              auto model_file = find_file_with_name_prefix(
+                  m_config.model_files.model_path, "model_file");
+              if (model_file.empty())
+                  model_file = first_file_with_ext(
+                      m_config.model_files.model_path, "pth");
               if (model_file.empty())
                   model_file = first_file_with_ext(
                       m_config.model_files.model_path, "tar");
+
               auto config_file = find_file_with_name_prefix(
                   m_config.model_files.model_path, "config.json");
 

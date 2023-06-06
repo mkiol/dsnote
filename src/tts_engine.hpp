@@ -103,7 +103,7 @@ class tts_engine {
     static std::string first_file_with_ext(std::string dir_path,
                                            std::string&& ext);
     static std::string find_file_with_name_prefix(std::string dir_path,
-                                                  std::string&& prefix);
+                                                  std::string prefix);
     static void write_wav_header(int sample_rate, int sample_width,
                                  int channels, uint32_t num_samples,
                                  std::ostream& wav_file);
