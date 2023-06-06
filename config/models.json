@@ -270,6 +270,21 @@
             "name": "ქართული",
             "name_en": "Georgian",
             "id": "ka"
+        },
+        {
+            "name": "Gaeilge",
+            "name_en": "Irish",
+            "id": "ga"
+        },
+        {
+            "name": "Malti",
+            "name_en": "Maltese",
+            "id": "mt"
+        },
+        {
+            "name": "বাংলা",
+            "name_en": "Bengali",
+            "id": "bn"
         }
     ],
     "models": [
@@ -3485,6 +3500,24 @@
             "speaker": "cmn"
         },
         {
+            "name": "Gaeilge (Espeak Robot)",
+            "model_id": "ga_espeak_ga",
+            "engine": "tts_espeak",
+            "lang_id": "ga"
+        },
+        {
+            "name": "Malti (Espeak Robot)",
+            "model_id": "mt_espeak_mt",
+            "engine": "tts_espeak",
+            "lang_id": "mt"
+        },
+        {
+            "name": "বাংলা (Espeak Robot)",
+            "model_id": "bn_espeak_bn",
+            "engine": "tts_espeak",
+            "lang_id": "bn"
+        },
+        {
             "name": "Polski (Espeak Robot)",
             "model_id": "pl_espeak_pl",
             "engine": "tts_espeak",
@@ -3895,6 +3928,590 @@
                 "https://github.com/RHVoice/alicja-pol/releases/download/v4.1/data-alicja.zip"
             ],
             "size": "7618694"
+        },
+        {
+            "name": "English (Coqui LJSpeech VITS Female)",
+            "model_id": "en_coqui_ljspeech_vits",
+            "engine": "tts_coqui",
+            "lang_id": "en",
+            "checksum": "50986c3",
+            "checksum_quick": "263ea606",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--en--ljspeech--vits.zip"
+            ],
+            "size": "145594973"
+        },
+        {
+            "name": "English (Coqui VCTK VITS)",
+            "model_id": "en_coqui_vctk_vits",
+            "engine": "tts_coqui",
+            "lang_id": "en",
+            "checksum": "ee85397b",
+            "checksum_quick": "9cdb9401",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--en--vctk--vits.zip"
+            ],
+            "size": "147691678",
+            "hidden": true
+        },
+        {
+            "name": "English (Coqui VCTK VITS ED Female)",
+            "model_id": "en_coqui_vctk_vits_ed",
+            "model_alias_of": "en_coqui_vctk_vits",
+            "lang_id": "en",
+            "speaker": "ED\n"
+        },
+        {
+            "name": "English (Coqui VCTK VITS P225 Female)",
+            "model_id": "en_coqui_vctk_vits_p225",
+            "model_alias_of": "en_coqui_vctk_vits",
+            "lang_id": "en",
+            "speaker": "p225"
+        },
+        {
+            "name": "English (Coqui VCTK VITS P226 Male)",
+            "model_id": "en_coqui_vctk_vits_p226",
+            "model_alias_of": "en_coqui_vctk_vits",
+            "lang_id": "en",
+            "speaker": "p226"
+        },
+        {
+            "name": "English (Coqui VCTK VITS P227 Female)",
+            "model_id": "en_coqui_vctk_vits_p227",
+            "model_alias_of": "en_coqui_vctk_vits",
+            "lang_id": "en",
+            "speaker": "p227"
+        },
+        {
+            "name": "English (Coqui VCTK VITS P228 Male)",
+            "model_id": "en_coqui_vctk_vits_p228",
+            "model_alias_of": "en_coqui_vctk_vits",
+            "lang_id": "en",
+            "speaker": "p228"
+        },
+        {
+            "name": "English (Coqui VCTK VITS P229 Male)",
+            "model_id": "en_coqui_vctk_vits_p229",
+            "model_alias_of": "en_coqui_vctk_vits",
+            "lang_id": "en",
+            "speaker": "p229"
+        },
+        {
+            "name": "English (Coqui VCTK VITS P230 Male)",
+            "model_id": "en_coqui_vctk_vits_p230",
+            "model_alias_of": "en_coqui_vctk_vits",
+            "lang_id": "en",
+            "speaker": "p230"
+        },
+        {
+            "name": "English (Coqui VCTK VITS P300 Female)",
+            "model_id": "en_coqui_vctk_vits_p300",
+            "model_alias_of": "en_coqui_vctk_vits",
+            "lang_id": "en",
+            "speaker": "p300"
+        },
+        {
+            "name": "English (Coqui VCTK VITS P301 Male)",
+            "model_id": "en_coqui_vctk_vits_p301",
+            "model_alias_of": "en_coqui_vctk_vits",
+            "lang_id": "en",
+            "speaker": "p301"
+        },
+        {
+            "name": "English (Coqui VCTK VITS P302 Male)",
+            "model_id": "en_coqui_vctk_vits_p302",
+            "model_alias_of": "en_coqui_vctk_vits",
+            "lang_id": "en",
+            "speaker": "p302"
+        },
+        {
+            "name": "English (Coqui VCTK VITS P376 Male)",
+            "model_id": "en_coqui_vctk_vits_p376",
+            "model_alias_of": "en_coqui_vctk_vits",
+            "lang_id": "en",
+            "speaker": "p376"
+        },
+        {
+            "name": "Български (Coqui CV VITS Female)",
+            "model_id": "bg_coqui_cv_vits",
+            "engine": "tts_coqui",
+            "lang_id": "bg",
+            "checksum": "3b49e6ef",
+            "checksum_quick": "d403b67a",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--bg--cv--vits.zip"
+            ],
+            "size": "100836154"
+        },
+        {
+            "name": "Čeština (Coqui CV VITS Female)",
+            "model_id": "cs_coqui_cv_vits",
+            "engine": "tts_coqui",
+            "lang_id": "cs",
+            "checksum": "a2723e5d",
+            "checksum_quick": "4e7aaaba",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--cs--cv--vits.zip"
+            ],
+            "size": "100854456"
+        },
+        {
+            "name": "Dansk (Coqui CV VITS Female)",
+            "model_id": "da_coqui_cv_vits",
+            "engine": "tts_coqui",
+            "lang_id": "da",
+            "checksum": "43a7ca1d",
+            "checksum_quick": "10d924ff",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--da--cv--vits.zip"
+            ],
+            "size": "100854642"
+        },
+        {
+            "name": "Eesti (Coqui CV VITS Female)",
+            "model_id": "et_coqui_cv_vits",
+            "engine": "tts_coqui",
+            "lang_id": "et",
+            "checksum": "ad12da5f",
+            "checksum_quick": "a8172f06",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--et--cv--vits.zip"
+            ],
+            "size": "100861236"
+        },
+        {
+            "name": "Gaeilge (Coqui CV VITS Female)",
+            "model_id": "ga_coqui_cv_vits",
+            "engine": "tts_coqui",
+            "lang_id": "ga",
+            "checksum": "8bc7e85b",
+            "checksum_quick": "50984d2b",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--ga--cv--vits.zip"
+            ],
+            "size": "100827994"
+        },
+        {
+            "name": "Español (Coqui CSS100 VITS Male)",
+            "model_id": "es_coqui_css100_vits",
+            "engine": "tts_coqui",
+            "lang_id": "es",
+            "checksum": "e69c1a68",
+            "checksum_quick": "91829f26",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--es--css10--vits.zip"
+            ],
+            "size": "100893027"
+        },
+        {
+            "name": "Français (Coqui CSS100 VITS Male)",
+            "model_id": "fr_coqui_css100_vits",
+            "engine": "tts_coqui",
+            "lang_id": "fr",
+            "checksum": "a7671b81",
+            "checksum_quick": "7d7531cf",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--fr--css10--vits.zip"
+            ],
+            "size": "100821187"
+        },
+        {
+            "name": "Українська (Coqui Mai VITS Female)",
+            "model_id": "uk_coqui_mai_vits",
+            "engine": "tts_coqui",
+            "lang_id": "uk",
+            "checksum": "dd4e6689",
+            "checksum_quick": "913c80b8",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--uk--mai--vits.zip"
+            ],
+            "size": "100773001"
+        },
+        {
+            "name": "中文 简体 (Coqui Baker Tacotron Female)",
+            "model_id": "zh-CN_coqui_baker_tacotron",
+            "engine": "tts_coqui",
+            "lang_id": "zh-CN",
+            "checksum": "625b3989",
+            "checksum_quick": "e50a019a",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--zh-CN--baker--tacotron2-DDC-GST.zip"
+            ],
+            "size": "685905630"
+        },
+        {
+            "name": "Nederlands (Coqui CSS100 VITS Male)",
+            "model_id": "nl_coqui_css100_vits",
+            "engine": "tts_coqui",
+            "lang_id": "nl",
+            "checksum": "6db4afb0",
+            "checksum_quick": "7cb4d94c",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--nl--css10--vits.zip"
+            ],
+            "size": "100941903"
+        },
+        {
+            "name": "Deutsch (Coqui Thorsten VITS Male)",
+            "model_id": "de_coqui_thorsten_vits",
+            "engine": "tts_coqui",
+            "lang_id": "de",
+            "checksum": "ccd7a040",
+            "checksum_quick": "e9e70a38",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.7.0_models/tts_models--de--thorsten--vits.zip"
+            ],
+            "size": "309016018"
+        },
+        {
+            "name": "Deutsch (Coqui CSS100 VITS Female)",
+            "model_id": "de_coqui_css100_vits",
+            "engine": "tts_coqui",
+            "lang_id": "de",
+            "checksum": "27300e2f",
+            "checksum_quick": "9127387d",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--de--css10--vits.zip"
+            ],
+            "size": "100932296"
+        },
+        {
+            "name": "Italiano (Coqui Mai Glow Female)",
+            "model_id": "it_coqui_mai_female_glow",
+            "engine": "tts_coqui",
+            "lang_id": "it",
+            "checksum": "3cd75cf",
+            "checksum_quick": "566e499a",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--it--mai_female--glow-tts.zip"
+            ],
+            "size": "343670420"
+        },
+        {
+            "name": "Italiano (Coqui Mai VITS Female)",
+            "model_id": "it_coqui_mai_female_vits",
+            "engine": "tts_coqui",
+            "lang_id": "it",
+            "checksum": "e592dd4d",
+            "checksum_quick": "48378f5e",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--it--mai_female--vits.zip"
+            ],
+            "size": "145532590"
+        },
+        {
+            "name": "Italiano (Coqui Mai Glow Male)",
+            "model_id": "it_coqui_mai_male_glow",
+            "engine": "tts_coqui",
+            "lang_id": "it",
+            "checksum": "b7d0c00b",
+            "checksum_quick": "f91185c0",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--it--mai_male--glow-tts.zip"
+            ],
+            "size": "343671403"
+        },
+        {
+            "name": "Italiano (Coqui Mai VITS Male)",
+            "model_id": "it_coqui_mai_male_vits",
+            "engine": "tts_coqui",
+            "lang_id": "it",
+            "checksum": "3511d195",
+            "checksum_quick": "89ecf0f7",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--it--mai_male--vits.zip"
+            ],
+            "size": "145532461"
+        },
+        {
+            "name": "Magyar (Coqui CSS10 VITS Female)",
+            "model_id": "hu_coqui_css100_vits",
+            "engine": "tts_coqui",
+            "lang_id": "hu",
+            "checksum": "d538d9a7",
+            "checksum_quick": "f37b2f9",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--hu--css10--vits.zip"
+            ],
+            "size": "100920014"
+        },
+        {
+            "name": "Ελληνικά (Coqui CV VITS Female)",
+            "model_id": "el_coqui_cv_vits",
+            "engine": "tts_coqui",
+            "lang_id": "el",
+            "checksum": "a9763cb",
+            "checksum_quick": "49393349",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--el--cv--vits.zip"
+            ],
+            "size": "100857273"
+        },
+        {
+            "name": "Hrvatski (Coqui CV VITS Female)",
+            "model_id": "hr_coqui_cv_vits",
+            "engine": "tts_coqui",
+            "lang_id": "hr",
+            "checksum": "e78eaf0b",
+            "checksum_quick": "b8999500",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--hr--cv--vits.zip"
+            ],
+            "size": "100863115"
+        },
+        {
+            "name": "Lietuvių (Coqui CV VITS Female)",
+            "model_id": "lt_coqui_cv_vits",
+            "engine": "tts_coqui",
+            "lang_id": "lt",
+            "checksum": "e45f038c",
+            "checksum_quick": "e9955f0",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--lt--cv--vits.zip"
+            ],
+            "size": "100842955"
+        },
+        {
+            "name": "Latviešu (Coqui CV VITS Female)",
+            "model_id": "lv_coqui_cv_vits",
+            "engine": "tts_coqui",
+            "lang_id": "lv",
+            "checksum": "44d81f6e",
+            "checksum_quick": "89b26b47",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--lv--cv--vits.zip"
+            ],
+            "size": "100833830"
+        },
+        {
+            "name": "Malti (Coqui CV VITS Female)",
+            "model_id": "mt_coqui_cv_vits",
+            "engine": "tts_coqui",
+            "lang_id": "mt",
+            "checksum": "336c7b8b",
+            "checksum_quick": "ecbb8599",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--mt--cv--vits.zip"
+            ],
+            "size": "100856937"
+        },
+        {
+            "name": "Suomi (Coqui CSS10 VITS Male)",
+            "model_id": "fi_coqui_css100_vits",
+            "engine": "tts_coqui",
+            "lang_id": "fi",
+            "checksum": "ffcb43e2",
+            "checksum_quick": "315e909f",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--fi--css10--vits.zip"
+            ],
+            "size": "100912464"
+        },
+        {
+            "name": "Português (Coqui CV VITS Male)",
+            "model_id": "pt_coqui_cv_vits",
+            "engine": "tts_coqui",
+            "lang_id": "pt",
+            "checksum": "103c014e",
+            "checksum_quick": "27cb0a10",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--pt--cv--vits.zip"
+            ],
+            "size": "100828501"
+        },
+        {
+            "name": "Română (Coqui CV VITS Female)",
+            "model_id": "ro_coqui_cv_vits",
+            "engine": "tts_coqui",
+            "lang_id": "ro",
+            "checksum": "a7b4d546",
+            "checksum_quick": "cba45b70",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--ro--cv--vits.zip"
+            ],
+            "size": "100852078"
+        },
+        {
+            "name": "Slovenčina (Coqui CV VITS Female)",
+            "model_id": "sk_coqui_cv_vits",
+            "engine": "tts_coqui",
+            "lang_id": "sk",
+            "checksum": "bedcbf49",
+            "checksum_quick": "891f37af",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--sk--cv--vits.zip"
+            ],
+            "size": "100845710"
+        },
+        {
+            "name": "Svenska (Coqui CV VITS Female)",
+            "model_id": "sv_coqui_cv_vits",
+            "engine": "tts_coqui",
+            "lang_id": "sv",
+            "checksum": "899d7be0",
+            "checksum_quick": "a3915881",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--sv--cv--vits.zip"
+            ],
+            "size": "100855231"
+        },
+        {
+            "name": "Català (Coqui VITS)",
+            "model_id": "ca_coqui_custom_vits",
+            "engine": "tts_coqui",
+            "lang_id": "ca",
+            "checksum": "ce7ed275",
+            "checksum_quick": "cec89427",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.10.1_models/tts_models--ca--custom--vits.zip"
+            ],
+            "size": "944438622",
+            "hidden": true
+        },
+        {
+            "name": "Català (Coqui VITS Jan)",
+            "model_id": "ca_coqui_custom_vits_jan",
+            "model_alias_of": "ca_coqui_custom_vits",
+            "lang_id": "ca",
+            "speaker": "jan"
+        },
+        {
+            "name": "Català (Coqui VITS Mar)",
+            "model_id": "ca_coqui_custom_vits_mar",
+            "model_alias_of": "ca_coqui_custom_vits",
+            "lang_id": "ca",
+            "speaker": "mar"
+        },
+        {
+            "name": "Català (Coqui VITS Ona)",
+            "model_id": "ca_coqui_custom_vits_ona",
+            "model_alias_of": "ca_coqui_custom_vits",
+            "lang_id": "ca",
+            "speaker": "ona"
+        },
+        {
+            "name": "Català (Coqui VITS Pau)",
+            "model_id": "ca_coqui_custom_vits_pau",
+            "model_alias_of": "ca_coqui_custom_vits",
+            "lang_id": "ca",
+            "speaker": "pau"
+        },
+        {
+            "name": "Català (Coqui VITS Pep)",
+            "model_id": "ca_coqui_custom_vits_pep",
+            "model_alias_of": "ca_coqui_custom_vits",
+            "lang_id": "ca",
+            "speaker": "pep"
+        },
+        {
+            "name": "Català (Coqui VITS Pol)",
+            "model_id": "ca_coqui_custom_vits_pol",
+            "model_alias_of": "ca_coqui_custom_vits",
+            "lang_id": "ca",
+            "speaker": "pol"
+        },
+        {
+            "name": "Català (Coqui VITS Teo)",
+            "model_id": "ca_coqui_custom_vits_teo",
+            "model_alias_of": "ca_coqui_custom_vits",
+            "lang_id": "ca",
+            "speaker": "teo"
+        },
+        {
+            "name": "فارسی (Coqui Glow Female)",
+            "model_id": "fa_coqui_custom_vits",
+            "engine": "tts_coqui",
+            "lang_id": "fa",
+            "checksum": "c246f2d",
+            "checksum_quick": "2f862df4",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.10.1_models/tts_models--fa--custom--glow-tts.zip"
+            ],
+            "size": "316082601"
+        },
+        {
+            "name": "Slovenščina (Coqui CV VITS Female)",
+            "model_id": "sl_coqui_cv_vits",
+            "engine": "tts_coqui",
+            "lang_id": "sl",
+            "checksum": "9708dd4",
+            "checksum_quick": "90aeef6d",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--sl--cv--vits.zip"
+            ],
+            "size": "100831738"
+        },
+        {
+            "name": "বাংলা (Coqui VITS Female)",
+            "model_id": "bn_coqui_custom_vits_female",
+            "engine": "tts_coqui",
+            "lang_id": "bn",
+            "checksum": "fd5e75d0",
+            "checksum_quick": "602cf81b",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.13.3_models/tts_models--bn--custom--vits_female.zip"
+            ],
+            "size": "918141611"
+        },
+        {
+            "name": "বাংলা (Coqui VITS Male)",
+            "model_id": "bn_coqui_custom_vits_male",
+            "engine": "tts_coqui",
+            "lang_id": "bn",
+            "checksum": "f08909f1",
+            "checksum_quick": "3200a2bc",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.13.3_models/tts_models--bn--custom--vits_male.zip"
+            ],
+            "size": "916904237"
+        },
+        {
+            "name": "Polski (Coqui Mai VITS Female)",
+            "model_id": "pl_coqui_mai_female",
+            "engine": "tts_coqui",
+            "lang_id": "pl",
+            "score": 0,
+            "checksum": "43b0d8a1",
+            "checksum_quick": "2d67f053",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--pl--mai_female--vits.zip"
+            ],
+            "size": "100860046"
         }
     ]
 }
