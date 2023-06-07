@@ -56,6 +56,8 @@ class dsnote_app : public QObject {
                    another_app_connected_changed)
     Q_PROPERTY(double transcribe_progress READ transcribe_progress NOTIFY
                    transcribe_progress_changed)
+    Q_PROPERTY(double speech_to_file_progress READ speech_to_file_progress
+                   NOTIFY speech_to_file_progress_changed)
     Q_PROPERTY(
         service_state_t state READ service_state NOTIFY service_state_changed)
     Q_PROPERTY(QVariantMap translate READ translate NOTIFY connected_changed)
@@ -70,7 +72,8 @@ class dsnote_app : public QObject {
         StateListeningAuto = 5,
         StateTranscribingFile = 6,
         StateListeningSingleSentence = 7,
-        StatePlayingSpeech = 8
+        StatePlayingSpeech = 8,
+        StateWritingSpeechToFile = 9
     };
     Q_ENUM(service_state_t)
     friend QDebug operator<<(QDebug d, service_state_t state);
@@ -103,8 +106,12 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void listen();
     Q_INVOKABLE void stop_listen();
     Q_INVOKABLE void play_speech();
+    Q_INVOKABLE void speech_to_file(const QString &dest_file);
+    Q_INVOKABLE void speech_to_file(const QUrl &dest_file);
     Q_INVOKABLE void stop_play_speech();
     Q_INVOKABLE void copy_to_clipboard();
+    Q_INVOKABLE bool file_exists(const QString &file) const;
+    Q_INVOKABLE bool file_exists(const QUrl &file) const;
 
    signals:
     void active_stt_model_changed();
@@ -122,8 +129,10 @@ class dsnote_app : public QObject {
     void connected_changed();
     void another_app_connected_changed();
     void transcribe_progress_changed();
+    void speech_to_file_progress_changed();
     void error(dsnote_app::error_t type);
     void transcribe_done();
+    void speech_to_file_done();
     void service_state_changed();
     void note_copied();
 
@@ -158,6 +167,7 @@ class dsnote_app : public QObject {
     QVariantMap m_available_tts_models_map;
     QVariantMap m_available_ttt_models_map;
     QString m_intermediate_text;
+    double m_speech_to_file_progress = -1.0;
     double m_transcribe_progress = -1.0;
     OrgMkiolSpeechInterface m_dbus_service;
     service_state_t m_service_state = service_state_t::StateUnknown;
@@ -172,6 +182,7 @@ class dsnote_app : public QObject {
     bool m_stt_configured = false;
     bool m_tts_configured = false;
     bool m_ttt_configured = false;
+    QString m_dest_file;
 
     [[nodiscard]] QVariantList available_stt_models() const;
     [[nodiscard]] QVariantList available_tts_models() const;
@@ -186,6 +197,7 @@ class dsnote_app : public QObject {
     bool ttt_configured() const;
     bool connected() const;
     double transcribe_progress() const;
+    double speech_to_file_progress() const;
     bool another_app_connected() const;
     void update_progress();
     void update_service_state();
@@ -216,6 +228,8 @@ class dsnote_app : public QObject {
     void handle_stt_file_transcribe_finished(int task);
     void handle_stt_file_transcribe_progress(double new_progress, int task);
     void handle_tts_play_speech_finished(int task);
+    void handle_tts_speech_to_file_finished(const QString &file, int task);
+    void handle_tts_speech_to_file_progress(double new_progress, int task);
     void handle_stt_default_model_changed(const QString &model);
     void handle_tts_default_model_changed(const QString &model);
     void handle_current_task_changed(int task);

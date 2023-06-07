@@ -125,8 +125,16 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "    <signal name=\"TtsPlaySpeechFinished\">\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </signal>\n"
+"    <signal name=\"TtsSpeechToFileFinished\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"file\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
+"    </signal>\n"
 "    <signal name=\"TtsPartialSpeechPlaying\">\n"
 "      <arg direction=\"out\" type=\"s\" name=\"text\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
+"    </signal>\n"
+"    <signal name=\"TtsSpeechToFileProgress\">\n"
+"      <arg direction=\"out\" type=\"d\" name=\"progress\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </signal>\n"
 "    <signal name=\"SttFileTranscribeProgress\">\n"
@@ -134,6 +142,10 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </signal>\n"
 "    <method name=\"SttGetFileTranscribeProgress\">\n"
+"      <arg direction=\"in\" type=\"i\" name=\"task\"/>\n"
+"      <arg direction=\"out\" type=\"d\" name=\"progress\"/>\n"
+"    </method>\n"
+"    <method name=\"TtsGetSpeechToFileProgress\">\n"
 "      <arg direction=\"in\" type=\"i\" name=\"task\"/>\n"
 "      <arg direction=\"out\" type=\"d\" name=\"progress\"/>\n"
 "    </method>\n"
@@ -164,6 +176,11 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"TtsStopSpeech\">\n"
 "      <arg direction=\"in\" type=\"i\" name=\"task\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
+"    </method>\n"
+"    <method name=\"TtsSpeechToFile\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"text\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"lang\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </method>\n"
 "    <method name=\"Cancel\">\n"
 "      <arg direction=\"in\" type=\"i\" name=\"task\"/>\n"
@@ -267,7 +284,9 @@ public Q_SLOTS: // METHODS
     int SttStartListen(int mode, const QString &lang, bool translate);
     int SttStopListen(int task);
     int SttTranscribeFile(const QString &file, const QString &lang, bool translate);
+    double TtsGetSpeechToFileProgress(int task);
     int TtsPlaySpeech(const QString &text, const QString &lang);
+    int TtsSpeechToFile(const QString &text, const QString &lang);
     int TtsStopSpeech(int task);
 Q_SIGNALS: // SIGNALS
     void CurrentTaskPropertyChanged(int task);
@@ -291,6 +310,8 @@ Q_SIGNALS: // SIGNALS
     void TtsModelsPropertyChanged(const QVariantMap &models);
     void TtsPartialSpeechPlaying(const QString &text, int task);
     void TtsPlaySpeechFinished(int task);
+    void TtsSpeechToFileFinished(const QString &file, int task);
+    void TtsSpeechToFileProgress(double progress, int task);
     void TttLangsPropertyChanged(const QVariantMap &langs);
     void TttModelsPropertyChanged(const QVariantMap &models);
 };

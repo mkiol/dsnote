@@ -223,11 +223,27 @@ int SpeechAdaptor::SttTranscribeFile(const QString &file, const QString &lang, b
     return task;
 }
 
+double SpeechAdaptor::TtsGetSpeechToFileProgress(int task)
+{
+    // handle method call org.mkiol.Speech.TtsGetSpeechToFileProgress
+    double progress;
+    QMetaObject::invokeMethod(parent(), "TtsGetSpeechToFileProgress", Q_RETURN_ARG(double, progress), Q_ARG(int, task));
+    return progress;
+}
+
 int SpeechAdaptor::TtsPlaySpeech(const QString &text, const QString &lang)
 {
     // handle method call org.mkiol.Speech.TtsPlaySpeech
     int task;
     QMetaObject::invokeMethod(parent(), "TtsPlaySpeech", Q_RETURN_ARG(int, task), Q_ARG(QString, text), Q_ARG(QString, lang));
+    return task;
+}
+
+int SpeechAdaptor::TtsSpeechToFile(const QString &text, const QString &lang)
+{
+    // handle method call org.mkiol.Speech.TtsSpeechToFile
+    int task;
+    QMetaObject::invokeMethod(parent(), "TtsSpeechToFile", Q_RETURN_ARG(int, task), Q_ARG(QString, text), Q_ARG(QString, lang));
     return task;
 }
 

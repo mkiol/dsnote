@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 
 #include <algorithm>
+#include <array>
 
 #include "logger.hpp"
 

@@ -9,7 +9,7 @@
             Valid states: 0 = Unknown, 1 = Not Configured, 2 = Busy,
                           3 = Idle, 4 = Listening Manual, 5 = Listening Auto,
                           6 = Transcribing File, 7 = Listening One-sentence,
-                          8 = Playing speech
+                          8 = Playing speech, 9 = Writing speech synthesis to file
             Unrecognized states should be considered equal to Unknown.
         -->
         <property name="State" type="i" access="read" />
@@ -334,6 +334,18 @@
         </signal>
 
         <!--
+            TtsSpeechToFileFinished:
+            @file: path to wav file with speech audio
+            @task: id of task returned in TtsSpeechToFile call
+
+            Emitted whenever speech synthesis is completely finished.
+        -->
+        <signal name="TtsSpeechToFileFinished">
+            <arg name="file" type="s" direction="out" />
+            <arg name="task" type="i" direction="out" />
+        </signal>
+
+        <!--
             TtsPartialSpeechPlaying:
             @text: portion of requested text which is being played at the moment
             @task: id of task returned in TtsPlaySpeech call
@@ -344,6 +356,18 @@
         -->
         <signal name="TtsPartialSpeechPlaying">
             <arg name="text" type="s" direction="out" />
+            <arg name="task" type="i" direction="out" />
+        </signal>
+
+        <!--
+            TtsPartialSpeechPlaying:
+            @progress: progress of speech synthesis (0.0 - 1.0)
+            @task: id of task returned in TtsSpeechToFile call
+
+            Emitted whenever speech to file progress changed.
+        -->
+        <signal name="TtsSpeechToFileProgress">
+            <arg name="progress" type="d" direction="out" />
             <arg name="task" type="i" direction="out" />
         </signal>
 
@@ -365,6 +389,16 @@
             @progress: progress of file transcription (0.0 - 1.0)
         -->
         <method name="SttGetFileTranscribeProgress">
+            <arg name="task" type="i" direction="in" />
+            <arg name="progress" type="d" direction="out" />
+        </method>
+
+        <!--
+            TtsGetSpeechToFileProgress:
+            @task: id of task returned in SttTranscribeFile call
+            @progress: progress of speech synthesis (0.0 - 1.0)
+        -->
+        <method name="TtsGetSpeechToFileProgress">
             <arg name="task" type="i" direction="in" />
             <arg name="progress" type="d" direction="out" />
         </method>
@@ -442,6 +476,8 @@
             @lang: language code (ISO 639-1) or model id
             @task: returned id of task which will be included in TtsPlaySpeechFinished signals,
                    @task less than 0 idicates an error
+
+            Synthesizes speech from given text and plays it.
         -->
         <method name="TtsPlaySpeech">
             <arg name="text" type="s" direction="in" />
@@ -459,6 +495,22 @@
         <method name="TtsStopSpeech">
             <arg name="task" type="i" direction="in" />
             <arg name="result" type="i" direction="out" />
+        </method>
+
+        <!--
+            TtsSpeechToFile:
+            @text: text that should be encoded to speech
+            @lang: language code (ISO 639-1) or model id
+            @task: returned id of task which will be included in TtsPlaySpeechFinished signals,
+                   @task less than 0 idicates an error
+
+            Synthesizes speech from given text. Speech audio is saved to wav file.
+            A file path will be returned in TtsSpeechToFileFinished signal.
+        -->
+        <method name="TtsSpeechToFile">
+            <arg name="text" type="s" direction="in" />
+            <arg name="lang" type="s" direction="in" />
+            <arg name="task" type="i" direction="out" />
         </method>
 
         <!--

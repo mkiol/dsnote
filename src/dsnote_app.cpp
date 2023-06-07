@@ -41,6 +41,9 @@ QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
         case dsnote_app::service_state_t::StatePlayingSpeech:
             d << "playing-speech";
             break;
+        case dsnote_app::service_state_t::StateWritingSpeechToFile:
+            d << "writing-speech-to-file";
+            break;
         case dsnote_app::service_state_t::StateUnknown:
             d << "unknown";
             break;
@@ -107,6 +110,10 @@ dsnote_app::dsnote_app(QObject *parent)
                 m_transcribe_progress = -1.0;
                 emit transcribe_progress_changed();
             }
+            if (m_speech_to_file_progress != -1.0) {
+                m_speech_to_file_progress = -1.0;
+                emit speech_to_file_progress_changed();
+            }
         };
         if (service_state() != StateUnknown && service_state() != StateBusy) {
             update_available_stt_models();
@@ -115,7 +122,8 @@ dsnote_app::dsnote_app(QObject *parent)
             update_active_tts_model();
             update_current_task();
             update_speech();
-            if (service_state() == StateTranscribingFile) {
+            if (service_state() == StateTranscribingFile ||
+                service_state() == StateWritingSpeechToFile) {
                 update_progress();
             } else {
                 reset_progress();
@@ -359,6 +367,14 @@ void dsnote_app::connect_service_signals() {
                 &speech_service::tts_play_speech_finished, this,
                 &dsnote_app::handle_tts_play_speech_finished,
                 Qt::QueuedConnection);
+        connect(speech_service::instance(),
+                &speech_service::tts_speech_to_file_finished, this,
+                &dsnote_app::handle_tts_speech_to_file_finished,
+                Qt::QueuedConnection);
+        connect(speech_service::instance(),
+                &speech_service::tts_speech_to_file_progress_changed, this,
+                &dsnote_app::handle_tts_speech_to_file_progress,
+                Qt::QueuedConnection);
         connect(
             speech_service::instance(), &speech_service::error, this,
             [this](speech_service::error_t code) {
@@ -408,6 +424,9 @@ void dsnote_app::connect_service_signals() {
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::TtsPlaySpeechFinished, this,
                 &dsnote_app::handle_tts_play_speech_finished);
+        connect(&m_dbus_service,
+                &OrgMkiolSpeechInterface::TtsSpeechToFileFinished, this,
+                &dsnote_app::handle_tts_speech_to_file_finished);
         connect(&m_dbus_service, &OrgMkiolSpeechInterface::ErrorOccured, this,
                 &dsnote_app::handle_service_error);
         connect(&m_dbus_service,
@@ -417,6 +436,9 @@ void dsnote_app::connect_service_signals() {
                 &dsnote_app::handle_stt_text_decoded);
         connect(&m_dbus_service, &OrgMkiolSpeechInterface::TtsPartialSpeechPlaying, this,
                 &dsnote_app::handle_tts_partial_speech);
+        connect(&m_dbus_service,
+                &OrgMkiolSpeechInterface::TtsSpeechToFileProgress, this,
+                &dsnote_app::handle_tts_speech_to_file_progress);
     }
 }
 
@@ -573,6 +595,40 @@ void dsnote_app::handle_tts_play_speech_finished(int task) {
     emit intermediate_text_changed();
 }
 
+void dsnote_app::handle_tts_speech_to_file_finished(const QString &file,
+                                                    int task) {
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+    } else {
+        qDebug() << "[dbus => app] signal TtsSpeechToFileFinished:" << file
+                 << task;
+    }
+
+    if (m_dest_file.isEmpty()) return;
+
+    if (QFile::exists(m_dest_file)) QFile::remove(m_dest_file);
+
+    if (QFile::copy(file, m_dest_file)) emit speech_to_file_done();
+}
+
+void dsnote_app::handle_tts_speech_to_file_progress(double new_progress,
+                                                    int task) {
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+    } else {
+        qDebug() << "[dbus => app] signal TtsSpeechToFileProgress:"
+                 << new_progress << task;
+    }
+
+    if (m_side_task != task) {
+        qWarning() << "invalid task id";
+        return;
+    }
+
+    m_speech_to_file_progress = new_progress;
+    emit speech_to_file_progress_changed();
+}
+
 void dsnote_app::handle_stt_default_model_changed(const QString &model) {
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
@@ -669,22 +725,34 @@ void dsnote_app::check_transcribe_taks() {
 }
 
 void dsnote_app::update_progress() {
-    double new_progress = 0.0;
+    double new_stt_progress = 0.0;
+    double new_tts_progress = 0.0;
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
-        new_progress = m_current_task =
+        new_stt_progress = m_current_task =
             speech_service::instance()->stt_transcribe_file_progress(
+                m_side_task.current);
+        new_tts_progress = m_current_task =
+            speech_service::instance()->tts_speech_to_file_progress(
                 m_side_task.current);
     } else {
         qDebug() << "[app => dbus] call SttGetFileTranscribeProgress";
-        new_progress =
+        new_stt_progress =
             m_dbus_service.SttGetFileTranscribeProgress(m_side_task.current);
+        qDebug() << "[app => dbus] call TtsGetSpeechToFileProgress";
+        new_tts_progress =
+            m_dbus_service.TtsGetSpeechToFileProgress(m_side_task.current);
     }
 
-    if (m_transcribe_progress != new_progress) {
-        m_transcribe_progress = new_progress;
+    if (m_transcribe_progress != new_stt_progress) {
+        m_transcribe_progress = new_stt_progress;
         emit transcribe_progress_changed();
+    }
+
+    if (m_speech_to_file_progress != new_tts_progress) {
+        m_speech_to_file_progress = new_tts_progress;
+        emit speech_to_file_progress_changed();
     }
 }
 
@@ -902,6 +970,7 @@ void dsnote_app::transcribe_file(const QString &source_file) {
             source_file, {}, s->translate());
     } else {
         qDebug() << "[app => dbus] call SttTranscribeFile";
+
         new_task =
             m_dbus_service.SttTranscribeFile(source_file, {}, s->translate());
     }
@@ -967,6 +1036,29 @@ void dsnote_app::play_speech() {
 
     this->m_intermediate_text.clear();
     emit intermediate_text_changed();
+}
+
+void dsnote_app::speech_to_file(const QUrl &dest_file) {
+    speech_to_file(dest_file.toLocalFile());
+}
+
+void dsnote_app::speech_to_file(const QString &dest_file) {
+    auto *s = settings::instance();
+
+    int new_task = 0;
+    m_dest_file = dest_file;
+
+    if (s->launch_mode() == settings::launch_mode_t::app_stanalone) {
+        new_task = speech_service::instance()->tts_speech_to_file(
+            settings::instance()->note(), {});
+    } else {
+        qDebug() << "[app => dbus] call TtsSpeechToFile";
+
+        new_task =
+            m_dbus_service.TtsSpeechToFile(settings::instance()->note(), {});
+    }
+
+    m_side_task.set(new_task);
 }
 
 void dsnote_app::stop_play_speech() {
@@ -1244,6 +1336,10 @@ bool dsnote_app::connected() const {
 
 double dsnote_app::transcribe_progress() const { return m_transcribe_progress; }
 
+double dsnote_app::speech_to_file_progress() const {
+    return m_speech_to_file_progress;
+}
+
 bool dsnote_app::another_app_connected() const {
     return m_current_task != INVALID_TASK && m_primary_task != m_current_task &&
            m_side_task != m_current_task;
@@ -1255,4 +1351,12 @@ void dsnote_app::copy_to_clipboard() {
         clip->setText(settings::instance()->note());
         emit note_copied();
     }
+}
+
+bool dsnote_app::file_exists(const QString &file) const {
+    return QFileInfo::exists(file);
+}
+
+bool dsnote_app::file_exists(const QUrl &file) const {
+    return file_exists(file.toLocalFile());
 }

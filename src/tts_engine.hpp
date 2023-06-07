@@ -21,6 +21,22 @@
 
 class tts_engine {
    public:
+    struct wav_header {
+        uint8_t RIFF[4] = {'R', 'I', 'F', 'F'};
+        uint32_t chunk_size = 0;
+        uint8_t WAVE[4] = {'W', 'A', 'V', 'E'};
+        uint8_t fmt[4] = {'f', 'm', 't', ' '};
+        uint32_t fmt_size = 16;
+        uint16_t audio_format = 1;
+        uint16_t num_channels = 0;
+        uint32_t sample_rate = 0;
+        uint32_t bytes_per_sec = 0;
+        uint16_t block_align = 2;
+        uint16_t bits_per_sample = 16;
+        uint8_t data[4] = {'d', 'a', 't', 'a'};
+        uint32_t data_size = 0;
+    };
+
     enum class state_t { idle, initializing, encoding, error };
     friend std::ostream& operator<<(std::ostream& os, state_t state);
 
@@ -68,24 +84,9 @@ class tts_engine {
     inline auto state() const { return m_state; }
     inline auto speaker() const { return m_config.speaker; }
     void encode_speech(std::string text);
+    static std::string merge_wav_files(std::vector<std::string>&& files);
 
    protected:
-    struct wav_header {
-        uint8_t RIFF[4] = {'R', 'I', 'F', 'F'};
-        uint32_t chunk_size = 0;
-        uint8_t WAVE[4] = {'W', 'A', 'V', 'E'};
-        uint8_t fmt[4] = {'f', 'm', 't', ' '};
-        uint32_t fmt_size = 16;
-        uint16_t audio_format = 1;
-        uint16_t num_channels = 0;
-        uint32_t sample_rate = 0;
-        uint32_t bytes_per_sec = 0;
-        uint16_t block_align = 2;
-        uint16_t bits_per_sample = 16;
-        uint8_t data[4] = {'d', 'a', 't', 'a'};
-        uint32_t data_size = 0;
-    };
-
     struct task_t {
         std::string text;
         bool last = false;

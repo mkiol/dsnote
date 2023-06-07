@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <functional>
+#include <numeric>
 #include <set>
 
 #include "coqui_engine.hpp"
@@ -55,6 +56,9 @@ QDebug operator<<(QDebug d, speech_service::state_t state_value) {
             break;
         case speech_service::state_t::playing_speech:
             d << "playing-speech";
+            break;
+        case speech_service::state_t::writing_speech_to_file:
+            d << "writing-speech-to-file";
             break;
         case speech_service::state_t::unknown:
             d << "unknown";
@@ -215,6 +219,20 @@ speech_service::speech_service(QObject *parent)
                         << "[service => dbus] signal TtsPartialSpeechPlaying:"
                         << task;
                     emit TtsPartialSpeechPlaying(text, task);
+                });
+        connect(this, &speech_service::tts_speech_to_file_finished, this,
+                [this](const QString &file, int task) {
+                    qDebug()
+                        << "[service => dbus] signal TtsSpeechToFileFinished:"
+                        << task;
+                    emit TtsSpeechToFileFinished(file, task);
+                });
+        connect(this, &speech_service::tts_speech_to_file_progress_changed,
+                this, [this](double progress, int task) {
+                    qDebug()
+                        << "[service => dbus] signal TtsSpeechToFileProgress:"
+                        << progress << task;
+                    emit TtsSpeechToFileProgress(progress, task);
                 });
         connect(
             this, &speech_service::speech_changed, this,
@@ -883,17 +901,54 @@ void speech_service::handle_tts_engine_state_changed(
 void speech_service::handle_tts_speech_encoded(const std::string &text,
                                                const std::string &wav_file_path,
                                                bool last) {
-    if (m_current_task)
+    if (m_current_task) {
         emit tts_speech_encoded({QString::fromStdString(text),
                                  QString::fromStdString(wav_file_path), last,
                                  m_current_task->id});
+    }
+}
+
+void speech_service::handle_speech_to_file(const tts_partial_result_t &result) {
+    if (m_current_task->id != result.task_id) {
+        qWarning() << "invalid task:" << result.task_id;
+        return;
+    }
+
+    m_current_task->counter.value += result.text.size();
+    m_current_task->files.push_back(result.wav_file_path);
+
+    qDebug() << "partial speech to file progress:"
+             << m_current_task->counter.progress();
+
+    emit tts_speech_to_file_progress_changed(m_current_task->counter.progress(),
+                                             result.task_id);
+
+    if (result.last) {
+        qDebug() << "speech to file finished";
+
+        auto merged_file = merge_wav_files(m_current_task->files);
+
+        if (merged_file.isEmpty()) return;
+
+        qDebug() << "wav file:" << merged_file;
+
+        emit tts_speech_to_file_finished(merged_file, result.task_id);
+        cancel(result.task_id);
+    }
 }
 
 void speech_service::handle_tts_speech_encoded(
     const tts_partial_result_t &result) {
-    m_tts_queue.push(result);
-
-    handle_tts_queue();
+    if (m_current_task && m_current_task->id == result.task_id) {
+        if (m_current_task->speech_mode == speech_mode_t::play_speech) {
+            m_tts_queue.push(result);
+            handle_tts_queue();
+        } else {
+            handle_speech_to_file(result);
+        }
+    } else {
+        qWarning() << "unknown task in tts speech encoded";
+    }
 }
 
 void speech_service::handle_tts_queue() {
@@ -1166,6 +1221,17 @@ double speech_service::stt_transcribe_file_progress(int task) const {
     return -1.0;
 }
 
+double speech_service::tts_speech_to_file_progress(int task) const {
+    if (m_current_task && m_current_task->id == task &&
+        m_current_task->speech_mode == speech_mode_t::speech_to_file) {
+        return m_progress;
+    }
+
+    qWarning() << "invalid task id";
+
+    return -1.0;
+}
+
 int speech_service::next_task_id() {
     m_last_task_id = (m_last_task_id + 1) % std::numeric_limits<int>::max();
     return m_last_task_id;
@@ -1186,9 +1252,13 @@ int speech_service::stt_transcribe_file(const QString &file,
     }
 
     m_current_task = {
-        next_task_id(), engine_t::stt,
+        next_task_id(),
+        engine_t::stt,
         restart_stt_engine(speech_mode_t::automatic, lang, translate),
-        speech_mode_t::automatic, translate};
+        speech_mode_t::automatic,
+        translate,
+        {},
+        {}};
 
     if (QFileInfo::exists(file)) {
         restart_audio_source(file);
@@ -1215,14 +1285,27 @@ int speech_service::stt_start_listen(speech_mode_t mode, const QString &lang,
 
     qDebug() << "stt start listen";
 
-    if (audio_source_type() == source_t::file) {
-        m_pending_task = {next_task_id(), engine_t::stt, lang, mode};
+    bool set_pending_stt_task =
+        m_current_task &&
+        ((m_current_task->engine == engine_t::stt &&
+          audio_source_type() == source_t::file) ||
+         (m_current_task->engine == engine_t::tts &&
+          m_current_task->speech_mode == speech_mode_t::speech_to_file));
+
+    if (set_pending_stt_task) {
+        qDebug() << "setting pending stt task";
+        m_pending_task = {
+            next_task_id(), engine_t::stt, lang, mode, translate, {}, {}};
         return m_pending_task->id;
     }
 
-    m_current_task = {next_task_id(), engine_t::stt,
-                      restart_stt_engine(mode, lang, translate), mode,
-                      translate};
+    m_current_task = {next_task_id(),
+                      engine_t::stt,
+                      restart_stt_engine(mode, lang, translate),
+                      mode,
+                      translate,
+                      {},
+                      {}};
     restart_audio_source();
     if (m_stt_engine) m_stt_engine->set_speech_started(true);
 
@@ -1242,10 +1325,72 @@ int speech_service::tts_play_speech(const QString &text, const QString &lang) {
         return INVALID_TASK;
     }
 
+    if (m_current_task) {
+        if (m_current_task->engine == engine_t::stt) {
+            if (m_current_task->speech_mode != speech_mode_t::single_sentence) {
+                qDebug() << "moving current task to pending";
+                auto pending_task = *m_current_task;
+                stt_stop_listen(m_current_task->id);
+                m_pending_task.emplace(pending_task);
+            } else {
+                stt_stop_listen(m_current_task->id);
+            }
+        } else if (m_current_task->engine == engine_t::tts)
+            tts_stop_speech(m_current_task->id);
+    }
+
     qDebug() << "tts play speech";
 
-    m_current_task = {next_task_id(), engine_t::tts, restart_tts_engine(lang),
-                      speech_mode_t::single_sentence, false};
+    m_current_task = {next_task_id(),
+                      engine_t::tts,
+                      restart_tts_engine(lang),
+                      speech_mode_t::play_speech,
+                      false,
+                      {},
+                      {}};
+
+    if (m_tts_engine) m_tts_engine->encode_speech(text.toStdString());
+
+    start_keepalive_current_task();
+
+    emit current_task_changed();
+
+    refresh_status();
+
+    return m_current_task->id;
+}
+
+int speech_service::tts_speech_to_file(const QString &text,
+                                       const QString &lang) {
+    if (state() == state_t::unknown || state() == state_t::not_configured ||
+        state() == state_t::busy) {
+        qWarning() << "cannot tts speech to file, invalid state";
+        return INVALID_TASK;
+    }
+
+    if (m_current_task) {
+        if (m_current_task->engine == engine_t::stt) {
+            if (m_current_task->speech_mode != speech_mode_t::single_sentence) {
+                qDebug() << "moving current task to pending";
+                auto pending_task = *m_current_task;
+                stt_stop_listen(m_current_task->id);
+                m_pending_task.emplace(pending_task);
+            } else {
+                stt_stop_listen(m_current_task->id);
+            }
+        } else if (m_current_task->engine == engine_t::tts)
+            tts_stop_speech(m_current_task->id);
+    }
+
+    qDebug() << "tts speech to file";
+
+    m_current_task = {next_task_id(),
+                      engine_t::tts,
+                      restart_tts_engine(lang),
+                      speech_mode_t::speech_to_file,
+                      false,
+                      {0, static_cast<size_t>(text.size())},
+                      {}};
 
     if (m_tts_engine) m_tts_engine->encode_speech(text.toStdString());
 
@@ -1273,27 +1418,37 @@ int speech_service::cancel(int task) {
 
     stop_keepalive_current_task();
 
-    if (audio_source_type() == source_t::file) {
-        if (m_pending_task) {
-            m_previous_task = m_current_task;
-            restart_stt_engine(m_pending_task->speech_mode,
-                               m_pending_task->model_id,
-                               m_pending_task->translate);
-            restart_audio_source();
-            m_current_task = m_pending_task;
-            start_keepalive_current_task();
-            m_pending_task.reset();
-            emit current_task_changed();
-        } else {
-            stop_stt_engine();
+    m_player.pause();
+
+    if (m_pending_task) {
+        qDebug() << "retriving pending task:" << m_pending_task->id;
+
+        m_previous_task = m_current_task;
+
+        auto next_task = *m_pending_task;
+
+        if (m_pending_task->engine == engine_t::stt) {
+            if (m_current_task->engine == engine_t::tts) stop_tts_engine();
+            restart_stt_engine(next_task.speech_mode, next_task.model_id,
+                               next_task.translate);
+        } else if (next_task.engine == engine_t::tts) {
+            if (m_current_task->engine == engine_t::stt) stop_stt_engine();
+            restart_tts_engine(m_pending_task->model_id);
         }
-    } else if (audio_source_type() == source_t::mic) {
-        stop_stt_engine();
+
+        restart_audio_source();
+        m_current_task.emplace(next_task);
+        start_keepalive_current_task();
+        m_pending_task.reset();
+
+        emit current_task_changed();
+    } else {
+        if (m_current_task->engine == engine_t::tts)
+            stop_tts_engine();
+        else if (m_current_task->engine == engine_t::stt)
+            stop_stt_engine();
     }
 
-    m_player.pause();
-    if (m_current_task && m_current_task->engine == engine_t::tts)
-        stop_tts_engine();
     m_tts_queue = decltype(m_tts_queue){};
     m_player.stop();
 
@@ -1576,7 +1731,10 @@ void speech_service::refresh_status() {
             new_state = state_t::unknown;
         }
     } else if (m_current_task && m_current_task->engine == engine_t::tts) {
-        new_state = state_t::playing_speech;
+        if (m_current_task->speech_mode == speech_mode_t::play_speech)
+            new_state = state_t::playing_speech;
+        else
+            new_state = state_t::writing_speech_to_file;
     } else {
         new_state = state_t::idle;
     }
@@ -1747,6 +1905,55 @@ void speech_service::setup_modules() {
 #endif
 }
 
+QString speech_service::merge_wav_files(const std::vector<QString> &files) {
+    QString out_file_path =
+        QStringLiteral("%1/merged-%2.wav")
+            .arg(settings::instance()->cache_dir(),
+                 QString::number(qHash(std::transform_reduce(
+                     files.cbegin(), files.cend(), QString{}, std::plus<>(),
+                     [](const auto &file) {
+                         return QFileInfo{file}.baseName();
+                     }))));
+
+    QFile out_file{out_file_path};
+    if (!out_file.open(QIODevice::WriteOnly)) {
+        qWarning() << "failed to write to file:" << out_file_path;
+        return {};
+    }
+
+    const auto header_size = sizeof(tts_engine::wav_header);
+
+    out_file.seek(header_size);
+
+    tts_engine::wav_header header;
+
+    for (const auto &file_path : files) {
+        QFile in_file{file_path};
+        if (!in_file.open(QIODevice::ReadOnly)) {
+            qWarning() << "failed to read file:" << file_path;
+            continue;
+        }
+
+        if (in_file.read(reinterpret_cast<char *>(&header), header_size) <
+            header_size) {
+            qWarning() << "invalid wav header:" << file_path;
+            continue;
+        }
+
+        out_file.write(in_file.readAll());
+    }
+
+    if (out_file.pos() == header_size) return {};
+
+    header.data_size = out_file.pos() - header_size;
+
+    out_file.seek(0);
+
+    out_file.write(reinterpret_cast<char *>(&header), header_size);
+
+    return out_file_path;
+}
+
 // DBus
 
 int speech_service::SttStartListen(int mode, const QString &lang,
@@ -1829,6 +2036,13 @@ int speech_service::TtsPlaySpeech(const QString &text, const QString &lang) {
     start_keepalive_current_task();
 
     return tts_play_speech(text, lang);
+}
+
+int speech_service::TtsSpeechToFile(const QString &text, const QString &lang) {
+    qDebug() << "[dbus => service] called TtsSpeechToFile:" << lang;
+    start_keepalive_current_task();
+
+    return tts_speech_to_file(text, lang);
 }
 
 int speech_service::TtsStopSpeech(int task) {

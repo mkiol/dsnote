@@ -277,12 +277,14 @@ std::pair<char*, size_t> stt_engine::borrow_buf() {
     }
 
     if (!lock_buf(lock_type_t::borrowed)) {
+        LOGT("failed to lock for borrowing");
         return c_buf;
     }
 
     if (m_in_buf.full()) {
         LOGD("in-buf is full");
         free_buf();
+        m_processing_cv.notify_one();
         return c_buf;
     }
 
@@ -297,6 +299,9 @@ void stt_engine::return_buf(const char* c_buf, size_t size, bool sof,
                             bool eof) {
     if (m_in_buf.lock != lock_type_t::borrowed) return;
 
+    LOGT("lock buff returned: sof=" << sof << ", eof=" << eof
+                                    << ", buf size=" << size);
+
     m_in_buf.size =
         (c_buf - reinterpret_cast<char*>(m_in_buf.buf.data()) + size) /
         sizeof(in_buf_t::buf_t::value_type);
@@ -309,11 +314,12 @@ void stt_engine::return_buf(const char* c_buf, size_t size, bool sof,
 
 bool stt_engine::lock_buff_for_processing() {
     if (!lock_buf(lock_type_t::processed)) {
-        LOGW("failed to lock for processing, buf is not free");
+        LOGT("failed to lock for processing");
         return false;
     }
 
-    LOGT("lock buff for processing: eof=" << m_in_buf.eof
+    LOGT("lock buff for processing: sof=" << m_in_buf.sof
+                                          << ", eof=" << m_in_buf.eof
                                           << ", buf size=" << m_in_buf.size);
 
     if (!m_in_buf.eof && m_in_buf.size < m_in_buf_max_size) {

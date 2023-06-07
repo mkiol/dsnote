@@ -166,11 +166,25 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("SttTranscribeFile"), argumentList);
     }
 
+    inline QDBusPendingReply<double> TtsGetSpeechToFileProgress(int task)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(task);
+        return asyncCallWithArgumentList(QStringLiteral("TtsGetSpeechToFileProgress"), argumentList);
+    }
+
     inline QDBusPendingReply<int> TtsPlaySpeech(const QString &text, const QString &lang)
     {
         QList<QVariant> argumentList;
         argumentList << QVariant::fromValue(text) << QVariant::fromValue(lang);
         return asyncCallWithArgumentList(QStringLiteral("TtsPlaySpeech"), argumentList);
+    }
+
+    inline QDBusPendingReply<int> TtsSpeechToFile(const QString &text, const QString &lang)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(text) << QVariant::fromValue(lang);
+        return asyncCallWithArgumentList(QStringLiteral("TtsSpeechToFile"), argumentList);
     }
 
     inline QDBusPendingReply<int> TtsStopSpeech(int task)
@@ -202,6 +216,8 @@ Q_SIGNALS: // SIGNALS
     void TtsModelsPropertyChanged(const QVariantMap &models);
     void TtsPartialSpeechPlaying(const QString &text, int task);
     void TtsPlaySpeechFinished(int task);
+    void TtsSpeechToFileFinished(const QString &file, int task);
+    void TtsSpeechToFileProgress(double progress, int task);
     void TttLangsPropertyChanged(const QVariantMap &langs);
     void TttModelsPropertyChanged(const QVariantMap &models);
 };
