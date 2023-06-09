@@ -39,5 +39,6 @@
         <file>qml/DialogPage.qml</file>
         <file>qml/AboutPage.qml</file>
         <file>qml/InfoItem.qml</file>
+        <file>qml/RichLabel.qml</file>
     </qresource>
 </RCC>

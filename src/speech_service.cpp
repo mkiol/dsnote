@@ -31,6 +31,24 @@
 #include "vosk_engine.hpp"
 #include "whisper_engine.hpp"
 
+QDebug operator<<(QDebug d, const stt_engine::config_t &config) {
+    std::stringstream ss;
+    ss << config;
+
+    d << QString::fromStdString(ss.str());
+
+    return d;
+}
+
+QDebug operator<<(QDebug d, const tts_engine::config_t &config) {
+    std::stringstream ss;
+    ss << config;
+
+    d << QString::fromStdString(ss.str());
+
+    return d;
+}
+
 QDebug operator<<(QDebug d, speech_service::state_t state_value) {
     switch (state_value) {
         case speech_service::state_t::busy:
@@ -640,9 +658,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             return false;
         }();
 
-        qDebug() << "restart stt engine config:"
-                 << QString::fromStdString(
-                        (std::stringstream{} << config).str());
+        qDebug() << "restart stt engine config:" << config;
 
         if (new_engine_required) {
             qDebug() << "new stt engine required";
@@ -751,9 +767,7 @@ QString speech_service::restart_tts_engine(const QString &model_id) {
             return false;
         }();
 
-        qDebug() << "restart tts engine config:"
-                 << QString::fromStdString(
-                        (std::stringstream{} << config).str());
+        qDebug() << "restart tts engine config:" << config;
 
         if (new_engine_required) {
             qDebug() << "new tts engine required";
@@ -867,6 +881,8 @@ void speech_service::handle_stt_engine_eof() {
 void speech_service::handle_stt_engine_error(int task_id) {
     qDebug() << "stt engine error";
 
+    emit error(error_t::stt_engine);
+
     if (current_task_id() == task_id) {
         cancel(task_id);
         if (m_stt_engine) {
@@ -882,6 +898,8 @@ void speech_service::handle_stt_engine_error() {
 
 void speech_service::handle_tts_engine_error(int task_id) {
     qDebug() << "tts engine error";
+
+    emit error(error_t::tts_engine);
 
     if (current_task_id() == task_id) {
         cancel(task_id);
@@ -1909,11 +1927,12 @@ QString speech_service::merge_wav_files(const std::vector<QString> &files) {
     QString out_file_path =
         QStringLiteral("%1/merged-%2.wav")
             .arg(settings::instance()->cache_dir(),
-                 QString::number(qHash(std::transform_reduce(
-                     files.cbegin(), files.cend(), QString{}, std::plus<>(),
-                     [](const auto &file) {
-                         return QFileInfo{file}.baseName();
-                     }))));
+                 QString::number(qHash(
+                     std::accumulate(files.cbegin(), files.cend(), QString{},
+                                     [](auto new_name, const auto &file) {
+                                         return std::move(new_name) +
+                                                QFileInfo{file}.baseName();
+                                     }))));
 
     QFile out_file{out_file_path};
     if (!out_file.open(QIODevice::WriteOnly)) {

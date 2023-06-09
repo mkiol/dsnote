@@ -29,14 +29,14 @@ ToolBar {
 
         RowLayout {
             ToolButton {
-                id: fileButton
+                id: menuButton
                 icon.name: "open-menu-symbolic"
                 Layout.alignment: Qt.AlignLeft
-                onClicked: fileMenu.open()
+                onClicked: menuMenu.open()
 
                 Menu {
-                    id: fileMenu
-                    y: fileButton.height
+                    id: menuMenu
+                    y: menuButton.height
 
                     MenuItem {
                         text: qsTr("&Settings")
@@ -54,6 +54,52 @@ ToolBar {
                         icon.name: "application-exit-symbolic"
                         text: qsTr("&Quit")
                         onClicked: Qt.quit()
+                    }
+                }
+            }
+
+            ToolButton {
+                id: fileButton
+                enabled: app.stt_configured || app.tts_configured
+                opacity: enabled ? 1.0 : 0.6
+                Layout.alignment: Qt.AlignLeft
+                text:  qsTr("&File")
+                onClicked: fileMenu.open()
+
+                Menu {
+                    id: fileMenu
+                    y: fileButton.height
+
+                    MenuItem {
+                        text: qsTr("Transcribe audio file")
+                        icon.name: "document-open-symbolic"
+                        enabled: app.stt_configured &&
+                                 (app.state === DsnoteApp.StateListeningManual ||
+                                  app.state === DsnoteApp.StateListeningAuto ||
+                                  app.state === DsnoteApp.StateListeningSingleSentence ||
+                                  app.state === DsnoteApp.StateIdle ||
+                                  app.state === DsnoteApp.StatePlayingSpeech)
+                        onClicked: fileReadDialog.open()
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Convert audio file to text.")
+                    }
+
+                    MenuItem {
+                        text: qsTr("Save speech to audio file")
+                        icon.name: "document-save-symbolic"
+                        enabled: app.tts_configured &&
+                                 (app.state === DsnoteApp.StateListeningManual ||
+                                  app.state === DsnoteApp.StateListeningAuto ||
+                                  app.state === DsnoteApp.StateListeningSingleSentence ||
+                                  app.state === DsnoteApp.StateIdle ||
+                                  app.state === DsnoteApp.StatePlayingSpeech)
+                        onClicked: fileWriteDialog.open()
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Convert text to audio and save as WAV file.")
                     }
                 }
             }
@@ -113,21 +159,12 @@ ToolBar {
 
             ToolButton {
                 Layout.alignment: Qt.AlignLeft
-                text: qsTr("Transcribe audio file")
-                enabled: app.stt_configured &&
-                         (app.state === DsnoteApp.StateListeningManual ||
-                          app.state === DsnoteApp.StateListeningAuto ||
-                          app.state === DsnoteApp.StateListeningSingleSentence ||
-                          app.state === DsnoteApp.StateIdle ||
-                          app.state === DsnoteApp.StatePlayingSpeech)
-                opacity: enabled ? 1.0 : 0.6
-                onClicked: fileDialog.open()
-            }
-
-            ToolButton {
-                Layout.alignment: Qt.AlignLeft
                 text: qsTr("&Languages")
                 onClicked: root.openDialog("LangsPage.qml")
+
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTr("Set languages and download models.")
             }
         }
 
@@ -140,19 +177,25 @@ ToolBar {
 
                 RowLayout {
                     anchors.fill: parent
+                    enabled: app.stt_configured
 
                     ToolButton {
-                        enabled: false
                         icon.name: "audio-input-microphone-symbolic"
+                        hoverEnabled: false
+                        down: false
                     }
 
                     ComboBox {
                         id: sttCombo
                         Layout.fillWidth: true
-                        enabled: app.stt_configured
+
                         currentIndex: app.active_stt_model_idx
                         model: app.available_stt_models
                         onActivated: app.set_active_stt_model_idx(index)
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Speech to Text model")
                     }
                 }
             }
@@ -163,19 +206,25 @@ ToolBar {
 
                 RowLayout {
                     anchors.fill: parent
+                    enabled: app.tts_configured
 
                     ToolButton {
-                        enabled: false
                         icon.name: "audio-speakers-symbolic"
+                        hoverEnabled: false
+                        down: false
                     }
 
                     ComboBox {
                         id: ttsCombo
                         Layout.fillWidth: true
-                        enabled: app.tts_configured
+
                         currentIndex: app.active_tts_model_idx
                         model: app.available_tts_models
                         onActivated: app.set_active_tts_model_idx(index)
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Text to Speech model")
                     }
                 }
             }
@@ -183,16 +232,42 @@ ToolBar {
     }
 
     Dialogs.FileDialog {
-        id: fileDialog
-        title: qsTr("Please choose a file")
+        id: fileReadDialog
+        title: qsTr("Open File")
         folder: shortcuts.home
+        selectExisting: true
         selectMultiple: false
-        onAccepted: app.transcribe_file(fileDialog.fileUrl)
+        onAccepted: app.transcribe_file(fileReadDialog.fileUrl)
+    }
+
+    Dialogs.FileDialog {
+        id: fileWriteDialog
+        title: qsTr("Save File")
+        nameFilters: [ qsTr("MS Wave") + " (*.wav)", qsTr("All files") + " (*)" ]
+        folder: shortcuts.home
+        selectExisting: false
+        selectMultiple: false
+        onAccepted: {
+            if (app.file_exists(fileWriteDialog.fileUrl)) {
+                fileOverwriteDialog.fileUrl = fileWriteDialog.fileUrl
+                fileOverwriteDialog.open()
+            } else {
+                app.speech_to_file(fileWriteDialog.fileUrl)
+            }
+        }
+    }
+
+    Dialogs.MessageDialog {
+        id: fileOverwriteDialog
+        property url fileUrl: ""
+        title: qsTr("Overwrite File?")
+        text: qsTr("The file already exists. Do you wish to overwrite it?")
+        standardButtons: Dialogs.StandardButton.Ok | Dialogs.StandardButton.Cancel
+        onAccepted: app.speech_to_file(fileUrl)
     }
 
     function update() {
         if (app.busy || service.busy) return;
-
         if (app.stt_configured)
             sttCombo.currentIndex = app.active_stt_model_idx
         if (app.tts_configured)
@@ -206,6 +281,8 @@ ToolBar {
         onBusyChanged: root.update()
         onStt_configuredChanged: root.update()
         onTts_configuredChanged: root.update()
+        onActive_stt_model_idxChanged: root.update()
+        onActive_tts_model_idxChanged: root.update()
     }
     Connections {
         target: service

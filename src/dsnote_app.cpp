@@ -86,6 +86,12 @@ QDebug operator<<(QDebug d, dsnote_app::error_t type) {
         case dsnote_app::error_t::ErrorMicSource:
             d << "mic-source-error";
             break;
+        case dsnote_app::error_t::ErrorSttEngine:
+            d << "stt-engine-error";
+            break;
+        case dsnote_app::error_t::ErrorTtsEngine:
+            d << "tts-engine-error";
+            break;
         case dsnote_app::error_t::ErrorNoService:
             d << "no-service-error";
             break;
@@ -166,7 +172,7 @@ dsnote_app::dsnote_app(QObject *parent)
 
 void dsnote_app::update_listen() {
     qDebug() << "update listen";
-
+#ifdef USE_SFOS
     if (settings::instance()->mode() == settings::mode_t::Stt &&
         settings::instance()->speech_mode() ==
             settings::speech_mode_t::SpeechAutomatic) {
@@ -174,6 +180,9 @@ void dsnote_app::update_listen() {
     } else {
         cancel();
     }
+#else
+    cancel();
+#endif
 }
 
 void dsnote_app::handle_stt_intermediate_text(const QString &text,

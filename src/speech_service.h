@@ -29,6 +29,9 @@
 #include "stt_engine.hpp"
 #include "tts_engine.hpp"
 
+QDebug operator<<(QDebug d, const stt_engine::config_t &config);
+QDebug operator<<(QDebug d, const tts_engine::config_t &config);
+
 class speech_service : public QObject, public singleton<speech_service> {
     Q_OBJECT
 
@@ -81,7 +84,13 @@ class speech_service : public QObject, public singleton<speech_service> {
 
     enum class source_t { none = 0, mic = 1, file = 2 };
 
-    enum class error_t { generic = 0, mic_source = 1, file_source = 2 };
+    enum class error_t {
+        generic = 0,
+        mic_source = 1,
+        file_source = 2,
+        stt_engine = 3,
+        tts_engine = 4
+    };
 
     struct tts_partial_result_t {
         QString text;
@@ -354,5 +363,6 @@ class speech_service : public QObject, public singleton<speech_service> {
 };
 
 Q_DECLARE_METATYPE(speech_service::tts_partial_result_t)
+Q_DECLARE_METATYPE(speech_service::error_t)
 
 #endif  // SPEECH_SERVICE_H

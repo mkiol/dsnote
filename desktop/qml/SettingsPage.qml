@@ -151,7 +151,7 @@ DialogPage {
 
     Dialogs.FileDialog {
         id: directoryDialog
-        title: qsTr("Please choose a directory")
+        title: qsTr("Select Directory")
         selectFolder: true
         selectExisting: true
         folder:  _settings.models_dir_url

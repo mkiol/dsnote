@@ -92,7 +92,9 @@ class dsnote_app : public QObject {
         ErrorGeneric = 0,
         ErrorMicSource = 1,
         ErrorFileSource = 2,
-        ErrorNoService = 3
+        ErrorSttEngine = 3,
+        ErrorTtsEngine = 4,
+        ErrorNoService = 100
     };
     Q_ENUM(error_t)
     friend QDebug operator<<(QDebug d, error_t type);

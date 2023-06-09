@@ -196,9 +196,7 @@ int main(int argc, char* argv[]) {
         case settings::launch_mode_t::service: {
             qDebug() << "starting service";
             py_executor::instance()->start();
-
             speech_service::instance();
-
             QGuiApplication::exec();
             qDebug() << "exiting";
             std::terminate();
@@ -206,7 +204,6 @@ int main(int argc, char* argv[]) {
         case settings::launch_mode_t::app_stanalone:
             qDebug() << "starting standalone app";
             py_executor::instance()->start();
-
             speech_service::instance();
             break;
         case settings::launch_mode_t::app:
