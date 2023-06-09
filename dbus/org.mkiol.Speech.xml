@@ -405,7 +405,8 @@
 
         <!--
             ErrorOccured:
-            @code: 0 - Generic, 1 - Microphone error, 2 - File source error
+            @code: 0 = Generic, 1 = Microphone error, 2 = File source error
+                   3 = STT engine, 4 = TTS engine
 
             Emitted whenever error occurs.
         -->
