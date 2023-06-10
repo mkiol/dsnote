@@ -109,7 +109,7 @@ Page {
 
             Button {
                 enabled: !service.busy
-                text: qsTr("Language models")
+                text: qsTr("Languages")
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: pageStack.push(Qt.resolvedUrl("LangsPage.qml"))
             }
@@ -185,7 +185,7 @@ Page {
                     MenuItem {
                         text: qsTr("Change")
                         onClicked: {
-                            var obj = pageStack.push(Qt.resolvedUrl("DirPage.qml"));
+                            var obj = pageStack.push(Qt.resolvedUrl("DirPage.qml"), {path: _settings.models_dir});
                             obj.accepted.connect(function() {
                                 _settings.models_dir = obj.selectedPath
                             })

@@ -234,37 +234,43 @@ ToolBar {
     Dialogs.FileDialog {
         id: fileReadDialog
         title: qsTr("Open File")
-        folder: shortcuts.home
+        nameFilters: [ '*.wav', '*.mp3', '*.ogg', '*.flac', '*.m4a', '*.aac', '*.opus' ]
+        folder: _settings.file_open_dir_url
         selectExisting: true
         selectMultiple: false
-        onAccepted: app.transcribe_file(fileReadDialog.fileUrl)
+        onAccepted: {
+            app.transcribe_file(fileReadDialog.fileUrl)
+            _settings.file_open_dir_url = fileReadDialog.fileUrl
+        }
     }
 
     Dialogs.FileDialog {
         id: fileWriteDialog
+        defaultSuffix: "wav"
         title: qsTr("Save File")
         nameFilters: [ qsTr("MS Wave") + " (*.wav)", qsTr("All files") + " (*)" ]
-        folder: shortcuts.home
+        folder: _settings.file_save_dir_url
         selectExisting: false
         selectMultiple: false
         onAccepted: {
-            if (app.file_exists(fileWriteDialog.fileUrl)) {
-                fileOverwriteDialog.fileUrl = fileWriteDialog.fileUrl
-                fileOverwriteDialog.open()
-            } else {
+//            if (app.file_exists(fileWriteDialog.fileUrl)) {
+//                fileOverwriteDialog.fileUrl = fileWriteDialog.fileUrl
+//                fileOverwriteDialog.open()
+//            } else {
                 app.speech_to_file(fileWriteDialog.fileUrl)
-            }
+                _settings.file_save_dir_url = fileWriteDialog.fileUrl
+//            }
         }
     }
 
-    Dialogs.MessageDialog {
-        id: fileOverwriteDialog
-        property url fileUrl: ""
-        title: qsTr("Overwrite File?")
-        text: qsTr("The file already exists. Do you wish to overwrite it?")
-        standardButtons: Dialogs.StandardButton.Ok | Dialogs.StandardButton.Cancel
-        onAccepted: app.speech_to_file(fileUrl)
-    }
+//    Dialogs.MessageDialog {
+//        id: fileOverwriteDialog
+//        property url fileUrl: ""
+//        title: qsTr("Overwrite File?")
+//        text: qsTr("The file already exists. Do you wish to overwrite it?")
+//        standardButtons: Dialogs.StandardButton.Ok | Dialogs.StandardButton.Cancel
+//        onAccepted: app.speech_to_file(fileUrl)
+//    }
 
     function update() {
         if (app.busy || service.busy) return;

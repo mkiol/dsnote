@@ -1429,9 +1429,13 @@ int speech_service::cancel(int task) {
 
     qDebug() << "cancel";
 
-    if (!m_current_task || m_current_task->id != task) {
-        qWarning() << "invalid task id";
+    if (!m_current_task) {
+        qWarning() << "no current task";
         return FAILURE;
+    }
+
+    if (m_current_task->id != task) {
+        qWarning() << "invalid task id";
     }
 
     stop_keepalive_current_task();
@@ -1849,7 +1853,7 @@ QVariantMap speech_service::translations() const {
     QVariantMap map;
 
     map.insert(QStringLiteral("lang_not_conf"),
-               tr("Language model is not set"));
+               tr("No language has been set."));
     map.insert(QStringLiteral("say_smth"), tr("Say something..."));
     map.insert(QStringLiteral("press_say_smth"),
                tr("Press and say something..."));

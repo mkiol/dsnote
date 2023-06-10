@@ -10,6 +10,7 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QDir>
+#include <QFileInfo>
 #include <QStandardPaths>
 #include <fstream>
 #include <iostream>
@@ -215,6 +216,75 @@ void settings::set_restore_punctuation(bool value) {
         setValue(QStringLiteral("service/restore_punctuation"), value);
         emit restore_punctuation_changed();
     }
+}
+
+QString settings::file_save_dir() const {
+    auto dir = value(QStringLiteral("file_save_dir")).toString();
+    if (dir.isEmpty() || !QFileInfo::exists(dir)) {
+        dir = QStandardPaths::writableLocation(QStandardPaths::MusicLocation);
+    }
+
+    return dir;
+}
+
+QUrl settings::file_save_dir_url() const {
+    return QUrl::fromLocalFile(file_save_dir());
+}
+
+void settings::set_file_save_dir(const QString& value) {
+    if (file_save_dir() != value) {
+        setValue(QStringLiteral("file_save_dir"), value);
+        emit file_save_dir_changed();
+    }
+}
+
+void settings::set_file_save_dir_url(const QUrl& value) {
+    set_file_save_dir(value.toLocalFile());
+}
+
+QString settings::file_save_dir_name() const {
+    return file_save_dir_url().fileName();
+}
+
+QString settings::file_save_filename() const {
+    auto dir = QDir{file_save_dir()};
+
+    auto filename = QStringLiteral("speech-note-%1.wav");
+
+    for (int i = 1; i <= 1000; ++i) {
+        auto fn = filename.arg(i);
+        if (!QFileInfo::exists(dir.filePath(fn))) return fn;
+    }
+
+    return filename.arg(1);
+}
+
+QString settings::file_open_dir() const {
+    auto dir = value(QStringLiteral("file_open_dir")).toString();
+    if (dir.isEmpty() || !QFileInfo::exists(dir)) {
+        dir = QStandardPaths::writableLocation(QStandardPaths::MusicLocation);
+    }
+
+    return dir;
+}
+
+QUrl settings::file_open_dir_url() const {
+    return QUrl::fromLocalFile(file_open_dir());
+}
+
+void settings::set_file_open_dir(const QString& value) {
+    if (file_open_dir() != value) {
+        setValue(QStringLiteral("file_open_dir"), value);
+        emit file_open_dir_changed();
+    }
+}
+
+void settings::set_file_open_dir_url(const QUrl& value) {
+    set_file_open_dir(value.toLocalFile());
+}
+
+QString settings::file_open_dir_name() const {
+    return file_open_dir_url().fileName();
 }
 
 settings::mode_t settings::mode() const {

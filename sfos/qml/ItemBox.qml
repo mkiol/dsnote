@@ -45,6 +45,7 @@ ListItem {
 
         Label {
             id: descriptionLabel
+            visible: text.length > 0
             x: Theme.horizontalPageMargin
             width: parent.width - 2*x
             wrapMode: Text.Wrap

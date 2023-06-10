@@ -13,6 +13,8 @@ import harbour.dsnote.DirModel 1.0
 Dialog {
     id: root
 
+    property alias path: itemModel.currentPath
+
     allowedOrientations: Orientation.All
 
     property real preferredItemHeight: root && root.isLandscape ?
@@ -40,7 +42,6 @@ Dialog {
 
     DirModel {
         id: itemModel
-        currentPath: _settings.lang_models_dir
     }
 
     SilicaListView {

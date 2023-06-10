@@ -29,6 +29,14 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(insert_mode_t insert_mode READ insert_mode WRITE set_insert_mode
                    NOTIFY insert_mode_changed)
     Q_PROPERTY(mode_t mode READ mode WRITE set_mode NOTIFY mode_changed)
+    Q_PROPERTY(QString file_save_dir READ file_save_dir WRITE set_file_save_dir
+                   NOTIFY file_save_dir_changed)
+    Q_PROPERTY(QUrl file_save_dir_url READ file_save_dir_url WRITE
+                   set_file_save_dir_url NOTIFY file_save_dir_changed)
+    Q_PROPERTY(QString file_save_dir_name READ file_save_dir_name NOTIFY
+                   file_save_dir_changed)
+    Q_PROPERTY(QString file_save_filename READ file_save_filename NOTIFY
+                   file_save_dir_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -88,6 +96,18 @@ class settings : public QSettings, public singleton<settings> {
     void set_insert_mode(insert_mode_t value);
     mode_t mode() const;
     void set_mode(mode_t value);
+    QString file_save_dir() const;
+    void set_file_save_dir(const QString &value);
+    QUrl file_save_dir_url() const;
+    void set_file_save_dir_url(const QUrl &value);
+    QString file_save_dir_name() const;
+    QString file_save_filename() const;
+    QString file_open_dir() const;
+    void set_file_open_dir(const QString &value);
+    QUrl file_open_dir_url() const;
+    void set_file_open_dir_url(const QUrl &value);
+    QString file_open_dir_name() const;
+
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
 
@@ -129,6 +149,8 @@ class settings : public QSettings, public singleton<settings> {
     void translate_changed();
     void insert_mode_changed();
     void mode_changed();
+    void file_save_dir_changed();
+    void file_open_dir_changed();
 
     // service
     void models_dir_changed();

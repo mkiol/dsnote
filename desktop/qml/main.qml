@@ -35,8 +35,6 @@ ApplicationWindow {
             Layout.fillWidth: true
             clip: true
 
-            ScrollBar.vertical: ScrollBar { id: scrollBar }
-
             TextArea {
                 id: textArea
 
@@ -47,6 +45,8 @@ ApplicationWindow {
 
                 Keys.onUpPressed: scrollBar.decrease()
                 Keys.onDownPressed: scrollBar.increase()
+
+                ScrollBar.vertical: ScrollBar { id: scrollBar }
             }
         }
 
@@ -136,7 +136,6 @@ ApplicationWindow {
 
             Button {
                 id: listenButton
-                // visible: _settings.speech_mode !== Settings.SpeechAutomatic
                 icon.name: "audio-input-microphone-symbolic"
                 Layout.alignment: Qt.AlignBottom
                 enabled: app.stt_configured &&
@@ -162,7 +161,6 @@ ApplicationWindow {
             }
 
             Button {
-                //visible: _settings.speech_mode !== Settings.SpeechAutomatic
                 icon.name: "audio-speakers-symbolic"
                 Layout.alignment: Qt.AlignBottom
                 enabled: app.tts_configured && textArea.text.length > 0 && app.state === DsnoteApp.StateIdle
@@ -190,7 +188,7 @@ ApplicationWindow {
     PlaceholderLabel {
         visible: !app.stt_configured && !app.tts_configured
         text: qsTr("No language has been set.") + " " +
-              qsTr("Go to 'Languages' to download more language models.")
+              qsTr("Go to 'Languages' to download language models.")
     }
 
     ToastNotification {

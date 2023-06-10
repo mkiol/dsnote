@@ -50,31 +50,39 @@ Page {
                 MenuItem {
                     enabled: (app.stt_configured || app.tts_configured) && !app.busy && !service.busy
                     text: app.state === DsnoteApp.StateTranscribingFile ||
+                          app.state === DsnoteApp.StateWritingSpeechToFile ||
                           app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding ||
                           app.speech === DsnoteApp.SpeechStateSpeechInitializing ||
                           app.speech === DsnoteApp.StatePlayingSpeech ?
-                              qsTr("Cancel") : qsTr("Transcribe audio file")
+                              qsTr("Cancel") :
+                              _settings.mode === Settings.Stt ?
+                                  qsTr("Transcribe audio file") : qsTr("Save speech to audio file")
                     onClicked: {
                         if (app.state === DsnoteApp.StateTranscribingFile ||
+                            app.state === DsnoteApp.StateWritingSpeechToFile ||
                             app.speech === DsnoteApp.SpeechStateSpeechInitializing ||
                             app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding ||
                             app.speech === DsnoteApp.StatePlayingSpeech)
                             app.cancel()
-                        else
-                            pageStack.push(fileDialog)
+                        else {
+                            if (_settings.mode === Settings.Stt)
+                                pageStack.push(fileReadDialog)
+                            else
+                                pageStack.push(Qt.resolvedUrl("FileWritePage.qml"))
+                        }
                     }
+                }
+
+                MenuItem {
+                    visible: textArea.text.length > 0
+                    text: qsTr("Copy All")
+                    onClicked: Clipboard.text = textArea.text
                 }
 
                 MenuItem {
                     enabled: textArea.text.length > 0
                     text: qsTr("Clear")
                     onClicked: _settings.note = ""
-                }
-
-                MenuItem {
-                    visible: textArea.text.length > 0
-                    text: qsTr("Copy")
-                    onClicked: Clipboard.text = textArea.text
                 }
 
                 MenuItem {
@@ -110,7 +118,7 @@ Page {
         ViewPlaceholder {
             enabled: textArea.text.length === 0 && !app.stt_configured &&
                      !app.tts_configured && !app.busy && !service.busy
-            text: qsTr("Language model is not set")
+            text: qsTr("No language has been set.")
             hintText: qsTr("Pull down and select Settings to download language models")
         }
     }
@@ -130,7 +138,9 @@ Page {
                    app.state !== DsnoteApp.StateListeningAuto) &&
                    !app.busy && !service.busy && app.connected &&
                    (_settings.mode !== Settings.Tts ||
-                    app.state === DsnoteApp.StatePlayingSpeech || textArea.text.length > 0)
+                    app.state === DsnoteApp.StatePlayingSpeech ||
+                    app.state === DsnoteApp.StateWritingSpeechToFile ||
+                    textArea.text.length > 0)
         status: {
             switch (app.speech) {
             case DsnoteApp.SpeechStateNoSpeech: return 0;
@@ -152,11 +162,13 @@ Page {
         busy: app.speech !== DsnoteApp.SpeechStateSpeechDecodingEncoding &&
               app.speech !== DsnoteApp.SpeechStateSpeechInitializing &&
               (app.busy || service.busy || !app.connected ||
-              app.state === DsnoteApp.StateTranscribingFile)
+              app.state === DsnoteApp.StateTranscribingFile ||
+              app.state === DsnoteApp.StateWritingSpeechToFile)
         text: app.intermediate_text
         textPlaceholder: {
-            if (app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding) return qsTr("Processing, please wait...")
             if (app.speech === DsnoteApp.SpeechStateSpeechInitializing) return qsTr("Getting ready, please wait...")
+            if (app.state === DsnoteApp.StateWritingSpeechToFile) return qsTr("Writing speech to file...")
+            if (app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding) return qsTr("Processing, please wait...")
             if (app.state === DsnoteApp.StateTranscribingFile) return qsTr("Transcribing audio file...")
             if (_settings.mode === Settings.Stt) {
                 if (app.state === DsnoteApp.StateListeningSingleSentence) return qsTr("Say something...")
@@ -173,10 +185,12 @@ Page {
             if (!app.connected) return qsTr("Starting...")
             if ((_settings.mode === Settings.Stt && !app.stt_configured) ||
                 (_settings.mode === Settings.Tts && !app.tts_configured)) {
-                return qsTr("Language model is not set")
+                return qsTr("No language has been set.")
             }
-            if (app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding) return qsTr("Processing, please wait...")
             if (app.speech === DsnoteApp.SpeechStateSpeechInitializing) return qsTr("Getting ready, please wait...")
+            if (app.state === DsnoteApp.StateWritingSpeechToFile) return qsTr("Writing speech to file...")
+            if (app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding) return qsTr("Processing, please wait...")
+            if (app.state === DsnoteApp.StateTranscribingFile) return qsTr("Transcribing audio file...")
             if (app.state === DsnoteApp.StatePlayingSpeech && app.speech === DsnoteApp.SpeechStateSpeechPlaying)
                 return qsTr("Reading a note...")
             if (app.state === DsnoteApp.StatePlayingSpeech && app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding)
@@ -189,11 +203,11 @@ Page {
                 else
                     return qsTr("Make a note and click to read it...")
             }
-            if (app.state === DsnoteApp.StateTranscribingFile) return qsTr("Transcribing audio file...")
             return qsTr("Busy...")
         }
 
-        progress: app.transcribe_progress
+        progress: app.state === DsnoteApp.StateTranscribingFile ? app.transcribe_progress :
+                  app.state === DsnoteApp.StateWritingSpeechToFile ? app.speech_to_file_progress : -1.0
         onPressed: {
             if (_settings.mode === Settings.Stt &&
                     _settings.speech_mode === Settings.SpeechManual &&
@@ -210,7 +224,8 @@ Page {
                     app.speech === DsnoteApp.SpeechStateSpeechInitializing ||
                     app.state === DsnoteApp.StateTranscribingFile ||
                     app.state === DsnoteApp.StateListeningSingleSentence ||
-                    app.state === DsnoteApp.StatePlayingSpeech) {
+                    app.state === DsnoteApp.StatePlayingSpeech ||
+                    app.state === DsnoteApp.StateWritingSpeechToFile) {
                 app.cancel()
                 return
             }
@@ -224,7 +239,7 @@ Page {
     }
 
     Component {
-        id: fileDialog
+        id: fileReadDialog
         FilePickerPage {
             nameFilters: [ '*.wav', '*.mp3', '*.ogg', '*.flac', '*.m4a', '*.aac', '*.opus' ]
             onSelectedContentPropertiesChanged: {
@@ -234,25 +249,38 @@ Page {
     }
 
     Toast {
-        id: notification
+        id: toast
+    }
+
+    Connections {
+        target: service
+
+        onModel_download_finished: toast.show(qsTr("The model download is complete!"))
+        onModel_download_error: toast.show(qsTr("Error: Couldn't download the model file."))
     }
 
     Connections {
         target: app
 
+        onNote_copied: toast.show(qsTr("Copied!"))
+        onTranscribe_done: toast.show(qsTr("File transcription is complete!"))
+        onSpeech_to_file_done: toast.show(qsTr("Speech saved to audio file!"))
         onError: {
             switch (type) {
             case DsnoteApp.ErrorFileSource:
-                notification.show(qsTr("Audio file couldn't be transcribed."))
+                toast.show(qsTr("Error: Audio file processing has failed."))
                 break;
             case DsnoteApp.ErrorMicSource:
-                notification.show(qsTr("Microphone was unexpectedly disconnected."))
+                toast.show(qsTr("Error: Couldn't access Microphone."))
                 break;
-            case DsnoteApp.ErrorNoService:
-                notification.show(qsTr("Unable to start service."))
+            case DsnoteApp.ErrorSttEngine:
+                toast.show(qsTr("Error: Speech to Text engine initialization has failed."))
+                break;
+            case DsnoteApp.ErrorTtsEngine:
+                toast.show(qsTr("Error: Text to Speech engine initialization has failed."))
                 break;
             default:
-                notification.show(qsTr("Oops! Something went wrong."))
+                toast.show(qsTr("Error: An unknown problem has occurred."))
             }
         }
     }
