@@ -28,8 +28,11 @@ bool init_module(const QString& name) {
     if (!module_unpacked(name)) {
         unpack_module(name);
         if (!module_unpacked(name)) {
-            qWarning() << "failed to unpack module:" << name;
-            return false;
+            unpack_module(name);
+            if (!module_unpacked(name)) {
+                qWarning() << "failed to unpack module:" << name;
+                return false;
+            }
         }
     }
 
