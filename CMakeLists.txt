@@ -78,11 +78,7 @@ set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_conf_version "13")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · Åke Engelbrektson")
-if(WITH_SFOS)
-    set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · Hugging Face Transformers · Piper · RHVoice · ssplit-cpp · eSpeak NG")
-else()
-    set(info_libs_str "Qt · Coqui STT · Coqui TTS · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · Hugging Face Transformers · Piper · RHVoice · ssplit-cpp · eSpeak NG")
-endif()
+set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · Piper · RHVoice · ssplit-cpp · eSpeak NG")
 
 project(${id} VERSION 3.0.0)
 
@@ -97,6 +93,15 @@ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES ".*86_64.*")
     set(arch_x8664 1)
 else()
     message(FATAL_ERROR "unsupported architecture: ${CMAKE_SYSTEM_PROCESSOR}")
+endif()
+
+if (WITH_PY)
+    if (arch_x8664)
+        set(info_libs_str "${info_libs_str} · Hugging Face Transformers · Coqui TTS")
+    endif()
+    if (arch_arm64)
+        set(info_libs_str "${info_libs_str} · Hugging Face Transformers")
+    endif()
 endif()
 
 # dirs
