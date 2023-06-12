@@ -37,6 +37,12 @@ class settings : public QSettings, public singleton<settings> {
                    file_save_dir_changed)
     Q_PROPERTY(QString file_save_filename READ file_save_filename NOTIFY
                    file_save_dir_changed)
+    Q_PROPERTY(QString file_open_dir READ file_open_dir WRITE set_file_open_dir
+                   NOTIFY file_open_dir_changed)
+    Q_PROPERTY(QUrl file_open_dir_url READ file_open_dir_url WRITE
+                   set_file_open_dir_url NOTIFY file_open_dir_changed)
+    Q_PROPERTY(QString file_open_dir_name READ file_open_dir_name NOTIFY
+                   file_open_dir_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
