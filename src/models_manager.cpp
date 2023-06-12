@@ -1228,6 +1228,10 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             qDebug() << "ignoring hftc model:" << model_id;
             continue;
         }
+        if (engine == model_engine::tts_coqui) {
+            qDebug() << "ignoring coqui model:" << model_id;
+            continue;
+        }
 #endif
         bool is_default_model_for_lang = [&] {
             switch (role_of_engine(engine)) {
