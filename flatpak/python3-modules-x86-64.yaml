@@ -1,11 +1,11 @@
 # Generated with flatpak-pip-generator --yaml --arch-dependent-allow --arch-dependent-force torch==2.0.0+cpu transformers==4.28.1 accelerate==0.18.0 TTS==0.14.0
 name: python3-modules-x86-64
+only-arches:
+    - x86_64
 build-commands: []
 buildsystem: simple
 modules:
   - name: python3-torch
-    only-arches:
-      - x86_64
     buildsystem: simple
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
@@ -58,8 +58,6 @@ modules:
         url: https://files.pythonhosted.org/packages/38/60/300ad6f93adca578bf05d5f6cd1d854b7d140bebe2f9829561aa9977d9f3/typing_extensions-4.6.2-py3-none-any.whl
         sha256: 3a8b36f13dd5fdc5d1b16fe317f5668545de77fa0b8e02006381fd49d731ab98
   - name: python3-transformers
-    only-arches:
-      - x86_64
     buildsystem: simple
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
@@ -126,8 +124,6 @@ modules:
         url: https://files.pythonhosted.org/packages/c5/05/c214b32d21c0b465506f95c4f28ccbcba15022e000b043b72b3df7728471/urllib3-1.26.16-py2.py3-none-any.whl
         sha256: 8d36afa7616d8ab714608411b4a3b13e58f463aee519024578e062e141dce20f
   - name: python3-accelerate
-    only-arches:
-      - x86_64
     buildsystem: simple
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
@@ -158,8 +154,6 @@ modules:
       - *id025
       - *id002
   - name: python3-TTS
-    only-arches:
-      - x86_64
     buildsystem: simple
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
@@ -190,7 +184,7 @@ modules:
         sha256: 59ad6eca15b18e7256c3caaf47d4f36cfc2be4829a3f51a5f2137b6d483155cd
       - type: patch
         use-git: true
-        path: ../patches/tts.patch
+        path: ../patches/tts-x86_64.patch
       - type: file
         url: https://files.pythonhosted.org/packages/c2/2f/f0dc628295bd23571c962d5a349307d9c8796a05bfca6571659eaded38e2/Werkzeug-2.3.4-py3-none-any.whl
         sha256: 48e5e61472fee0ddee27ebad085614ebedb7af41e88f687aaf881afb723a162f
