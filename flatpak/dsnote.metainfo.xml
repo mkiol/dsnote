@@ -1,25 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component type="desktop">
+<!-- Copyright 2023 Michal Kosciesza -->
+<component type="desktop-application">
   <id>net.mkiol.SpeechNote</id>
   <metadata_license>FSFAP</metadata_license>
+  <project_license>MPL-2.0</project_license>
+  <developer_name>Michal Kosciesza</developer_name>
   <name>Speech Note</name>
   <summary>Note taking and reading with Speech to Text and Text to Speech</summary>
   <description>
     <p>Speech Note enables you to take and read notes with your voice.
-      It uses Speech to Text and Text to Speech conversions.
-      All voice processing is entirely done offline, locally on your machine without the use of network connection.
-      Speech Note respects your privacy and does not send any data to the Internet.</p>
+      It uses Speech to Text and Text to Speech conversions to do so.
+      All voice processing is entirely done off-line, locally on your
+      computer without the use of network connection. Your privacy is
+      always respected. No data is send to the Internet.</p>
   </description>
   <categories>
     <category>AudioVideo</category>
   </categories>
+  <keywords>
+    <keyword>speech</keyword>
+    <keyword>voice</keyword>
+    <keyword>stt</keyword>
+    <keyword>asr</keyword>
+    <keyword>tts</keyword>
+    <keyword>deepspeech</keyword>
+    <keyword>vosk</keyword>
+    <keyword>whisper</keyword>
+    <keyword>rhvoice</keyword>
+    <keyword>piper</keyword>
+    <keyword>espeak</keyword>
+    <keyword>mbrola</keyword>
+    <keyword>coqui</keyword>
+  </keywords>
   <url type="homepage">https://github.com/mkiol/dsnote</url>
   <url type="bugtracker">https://github.com/mkiol/dsnote/issues</url>
+  <url type="translate">https://app.transifex.com/mkiol/dsnote</url>
+  <update_contact>dsnote_AT_mkiol.net</update_contact>
   <launchable type="desktop-id">net.mkiol.SpeechNote.desktop</launchable>
-  <provides>
-    <binary>dsnote</binary>
-  </provides>
-  <content_rating type="oars-1.0" />
+  <content_rating type="oars-1.1" />
   <releases>
     <release version="3.0.0" date="2023-05-29" />
   </releases>
