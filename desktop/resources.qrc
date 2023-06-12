@@ -5,6 +5,14 @@
         <file>qml/LangsPage.qml</file>
         <file>qml/SpeechIndicator.qml</file>
         <file>qml/PlaceholderLabel.qml</file>
+        <file>qml/MainToolBar.qml</file>
+        <file>qml/ToastNotification.qml</file>
+        <file>qml/SectionLabel.qml</file>
+        <file>qml/DialogPage.qml</file>
+        <file>qml/AboutPage.qml</file>
+        <file>qml/InfoItem.qml</file>
+        <file>qml/RichLabel.qml</file>
+        <file>qml/HelloPage.qml</file>
         <file alias="config/models.json">../config/models.json</file>
         <file alias="nonbreaking_prefixes/ca.txt">../nonbreaking_prefixes/ca.txt</file>
         <file alias="nonbreaking_prefixes/cs.txt">../nonbreaking_prefixes/cs.txt</file>
@@ -33,12 +41,5 @@
         <file alias="nonbreaking_prefixes/ta.txt">../nonbreaking_prefixes/ta.txt</file>
         <file alias="nonbreaking_prefixes/tr.txt">../nonbreaking_prefixes/tr.txt</file>
         <file alias="app_icon.svg">dsnote.svg</file>
-        <file>qml/MainToolBar.qml</file>
-        <file>qml/ToastNotification.qml</file>
-        <file>qml/SectionLabel.qml</file>
-        <file>qml/DialogPage.qml</file>
-        <file>qml/AboutPage.qml</file>
-        <file>qml/InfoItem.qml</file>
-        <file>qml/RichLabel.qml</file>
     </qresource>
 </RCC>

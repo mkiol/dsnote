@@ -16,14 +16,6 @@ import org.mkiol.dsnote.Settings 1.0
 ToolBar {
     id: root
 
-    function openDialog(file) {
-        var cmp = Qt.createComponent(file)
-        if (cmp.status === Component.Ready) {
-            var dialog = cmp.createObject(appWin);
-            dialog.open()
-        }
-    }
-
     ColumnLayout {
         anchors.fill: parent
 
@@ -41,13 +33,13 @@ ToolBar {
                     MenuItem {
                         text: qsTr("&Settings")
                         icon.name: "document-properties-symbolic"
-                        onClicked: root.openDialog("SettingsPage.qml")
+                        onClicked: appWin.openDialog("SettingsPage.qml")
                     }
 
                     MenuItem {
                         text: qsTr("&About %1").arg(APP_NAME)
                         icon.source: _settings.app_icon()
-                        onClicked: root.openDialog("AboutPage.qml")
+                        onClicked: appWin.openDialog("AboutPage.qml")
                     }
 
                     MenuItem {
@@ -160,7 +152,7 @@ ToolBar {
             ToolButton {
                 Layout.alignment: Qt.AlignLeft
                 text: qsTr("&Languages")
-                onClicked: root.openDialog("LangsPage.qml")
+                onClicked: appWin.openDialog("LangsPage.qml")
 
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval

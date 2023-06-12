@@ -15,6 +15,20 @@ import org.mkiol.dsnote.Settings 1.0
 ApplicationWindow {
     id: appWin
 
+    property var _dialogPage
+
+    function openDialog(file) {
+        if (_dialogPage) _dialogPage.close()
+        _dialogPage = undefined
+
+        var cmp = Qt.createComponent(file)
+        if (cmp.status === Component.Ready) {
+            var dialog = cmp.createObject(appWin);
+            dialog.open()
+            _dialogPage = dialog
+        }
+    }
+
     property int padding: 8
 
     width: 640
@@ -202,8 +216,17 @@ ApplicationWindow {
         onModel_download_error: toast.show(qsTr("Error: Couldn't download the model file."))
     }
 
+    function showWelcome() {
+        if (!app.busy && !app.stt_configured && !app.tts_configured)
+            appWin.openDialog("HelloPage.qml")
+    }
+
     DsnoteApp {
         id: app
+
+        onBusyChanged: showWelcome()
+        onStt_configuredChanged: showWelcome()
+        onTts_configuredChanged: showWelcome()
 
         onNote_copied: toast.show(qsTr("Copied!"))
         onTranscribe_done: toast.show(qsTr("File transcription is complete!"))
