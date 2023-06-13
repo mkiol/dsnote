@@ -42,6 +42,7 @@ DialogPage {
 
             Label {
                 Layout.fillWidth: true
+                wrapMode: Text.WordWrap
                 text: qsTr("Note taking and reading with Speech to Text and Text to Speech")
                 font.pixelSize: Qt.application.font.pixelSize * 1.1
             }

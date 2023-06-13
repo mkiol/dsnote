@@ -233,7 +233,9 @@ class dsnote_app : public QObject {
     void handle_tts_speech_to_file_finished(const QString &file, int task);
     void handle_tts_speech_to_file_progress(double new_progress, int task);
     void handle_stt_default_model_changed(const QString &model);
+    void set_active_stt_model(const QString &model);
     void handle_tts_default_model_changed(const QString &model);
+    void set_active_tts_model(const QString &model);
     void handle_current_task_changed(int task);
     void handle_speech_changed(int speech);
     void handle_state_changed(int status);

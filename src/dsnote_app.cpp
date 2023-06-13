@@ -645,7 +645,11 @@ void dsnote_app::handle_stt_default_model_changed(const QString &model) {
         qDebug() << "[dbus => app] signal SttDefaultModelPropertyChanged:"
                  << model;
     }
-    
+
+    set_active_stt_model(model);
+}
+
+void dsnote_app::set_active_stt_model(const QString &model) {
     if (m_active_stt_model != model) {
         qDebug() << "app active stt model:" << m_active_stt_model << "=>"
                  << model;
@@ -662,6 +666,10 @@ void dsnote_app::handle_tts_default_model_changed(const QString &model) {
                  << model;
     }
 
+    set_active_tts_model(model);
+}
+
+void dsnote_app::set_active_tts_model(const QString &model) {
     if (m_active_tts_model != model) {
         qDebug() << "app active tts model:" << m_active_tts_model << "=>"
                  << model;
@@ -1159,12 +1167,7 @@ void dsnote_app::update_active_stt_model() {
         new_stt_model = m_dbus_service.defaultSttModel();
     }
 
-    if (m_active_stt_model != new_stt_model) {
-        qDebug() << "app active stt model:" << m_active_stt_model << "=>"
-                 << new_stt_model;
-        m_active_stt_model = std::move(new_stt_model);
-        emit active_stt_model_changed();
-    }
+    set_active_stt_model(new_stt_model);
 }
 
 int dsnote_app::active_tts_model_idx() const {
@@ -1186,12 +1189,7 @@ void dsnote_app::update_active_tts_model() {
         new_tts_model = m_dbus_service.defaultTtsModel();
     }
 
-    if (m_active_tts_model != new_tts_model) {
-        qDebug() << "app active tts model:" << m_active_tts_model << "=>"
-                 << new_tts_model;
-        m_active_tts_model = std::move(new_tts_model);
-        emit active_tts_model_changed();
-    }
+    set_active_tts_model(new_tts_model);
 }
 
 void dsnote_app::do_keepalive() {

@@ -11,6 +11,8 @@ import QtQuick.Controls 2.15
 DialogPage {
     id: root
 
+    objectName: "hello"
+
     SectionLabel {
         text: qsTr("Welcome!")
     }

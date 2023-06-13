@@ -18,8 +18,7 @@ ApplicationWindow {
     property var _dialogPage
 
     function openDialog(file) {
-        if (_dialogPage) _dialogPage.close()
-        _dialogPage = undefined
+        closeDialog()
 
         var cmp = Qt.createComponent(file)
         if (cmp.status === Component.Ready) {
@@ -27,6 +26,18 @@ ApplicationWindow {
             dialog.open()
             _dialogPage = dialog
         }
+    }
+
+    function closeDialog() {
+        if (_dialogPage) {
+            _dialogPage.close()
+            _dialogPage = undefined
+        }
+    }
+
+    function closeHelloDialog() {
+        if (_dialogPage && _dialogPage.objectName === "hello")
+            closeDialog()
     }
 
     property int padding: 8
@@ -217,8 +228,11 @@ ApplicationWindow {
     }
 
     function showWelcome() {
-        if (!app.busy && !app.stt_configured && !app.tts_configured)
+        if (!app.busy && !app.stt_configured && !app.tts_configured) {
             appWin.openDialog("HelloPage.qml")
+        } else {
+            appWin.closeHelloDialog()
+        }
     }
 
     DsnoteApp {
@@ -227,6 +241,7 @@ ApplicationWindow {
         onBusyChanged: showWelcome()
         onStt_configuredChanged: showWelcome()
         onTts_configuredChanged: showWelcome()
+        Component.onCompleted: showWelcome()
 
         onNote_copied: toast.show(qsTr("Copied!"))
         onTranscribe_done: toast.show(qsTr("File transcription is complete!"))
