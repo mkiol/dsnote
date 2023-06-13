@@ -19,6 +19,7 @@
 #include <QTranslator>
 #include <QUrl>
 #include <csignal>
+#include <cstdlib>
 #include <memory>
 #include <optional>
 #include <utility>
@@ -49,6 +50,18 @@
 #include "settings.h"
 #include "speech_config.h"
 #include "speech_service.h"
+
+static void exit_program() {
+    qDebug() << "exiting";
+
+    std::quick_exit(0);
+}
+
+static void signal_handler(int sig) {
+    qDebug() << "received signal:" << sig;
+
+    exit_program();
+}
 
 static std::pair<std::optional<settings::launch_mode_t>, bool> check_options(
     const QCoreApplication& app) {
@@ -158,11 +171,6 @@ static void install_translator() {
     }
 }
 
-static void signal_handler(int sig) {
-    qDebug() << "received signal:" << sig;
-    std::terminate();
-}
-
 int main(int argc, char* argv[]) {
 #ifdef USE_SFOS
     const auto& app = *SailfishApp::application(argc, argv);
@@ -198,8 +206,8 @@ int main(int argc, char* argv[]) {
             py_executor::instance()->start();
             speech_service::instance();
             QGuiApplication::exec();
-            qDebug() << "exiting";
-            std::terminate();
+
+            exit_program();
         }
         case settings::launch_mode_t::app_stanalone:
             qDebug() << "starting standalone app";
@@ -251,13 +259,15 @@ int main(int argc, char* argv[]) {
         engine.get(), &QQmlApplicationEngine::objectCreated,
         QCoreApplication::instance(),
         [url](const QObject* obj, const QUrl& objUrl) {
-            if (!obj && url == objUrl) QCoreApplication::exit(-1);
+            if (!obj && url == objUrl) {
+                qCritical() << "failed to create qml object";
+                QCoreApplication::exit(-1);
+            }
         },
         Qt::QueuedConnection);
     engine->load(url);
 #endif
     QGuiApplication::exec();
 
-    qDebug() << "exiting";
-    std::terminate();
+    exit_program();
 }
