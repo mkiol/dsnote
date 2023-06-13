@@ -7,7 +7,7 @@ Name:       harbour-dsnote
 # << macros
 
 Summary:        Note taking and reading with Speech to Text and Text to Speech
-Version:        3.0.0
+Version:        3.1.0
 Release:        1
 Group:          Qt/Qt
 License:        LICENSE

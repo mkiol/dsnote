@@ -32,6 +32,17 @@
     <keyword>mbrola</keyword>
     <keyword>coqui</keyword>
   </keywords>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshot_1.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshot_2.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshot_3.png</image>
+    </screenshot>
+  </screenshots>
   <url type="homepage">https://github.com/mkiol/dsnote</url>
   <url type="bugtracker">https://github.com/mkiol/dsnote/issues</url>
   <url type="translate">https://app.transifex.com/mkiol/dsnote</url>
@@ -39,6 +50,6 @@
   <launchable type="desktop-id">net.mkiol.SpeechNote.desktop</launchable>
   <content_rating type="oars-1.1" />
   <releases>
-    <release version="3.0.0" date="2023-05-29" />
+    <release version="3.1.0" date="2023-06-13" />
   </releases>
 </component>
