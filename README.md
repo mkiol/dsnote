@@ -1,6 +1,6 @@
 # Speech Note
 
-Sailfish OS app for note taking and reading with Speech to Text and Text to Speech
+Linux desktop and Sailfish OS app for note taking and reading with Speech to Text and Text to Speech
 
 ## Description
 
@@ -11,7 +11,7 @@ Sailfish OS app for note taking and reading with Speech to Text and Text to Spee
 - Text to Speech with [espeak-ng](https://github.com/espeak-ng/espeak-ng), [MBROLA](https://github.com/numediart/MBROLA), 
 [Piper](https://github.com/rhasspy/piper), [RHVoice](https://github.com/RHVoice/RHVoice), [Coqui TTS](https://github.com/coqui-ai/TTS) engines.
 
-All voice processing is entirely done locally on the device. Internet connection is only
+All voice processing is entirely done locally on your phone or computer. Internet connection is only
 required for model download during app initial configuration. **Speech Note** respects your
 privacy and does not send any data to the Internet.
 
@@ -19,7 +19,7 @@ privacy and does not send any data to the Internet.
 
 Following languages are supported:
 
-| **Lang ID** | **Name**             | **DeepSpeech (STT)** | **Whisper (STT)** | **Vosk (STT)** | **Piper (TTS)** | **RHVoice (TTS)** | **espeak (TTS)** | **MBROLA (TTS)** | **Coqui (TTS)** |
+| **Lang ID** | **Name**             | **DeepSpeech (STT)** | **Whisper (STT)** | **Vosk (STT)** | **Piper (TTS)** | **RHVoice (TTS)** | **espeak (TTS)** | **MBROLA (TTS)** | **Coqui (TTS)*** |
 | ----------- | -------------------- | -------------------- | ----------------- | -------------- | --------------- | ----------------- | ---------------- | ---------------- | --------------- |
 | am          | Amharic              | ● (e)                |                   |                |                 |                   | ●                |                  |                 |
 | ar          | Arabic               |                      |                   | ●              |                 |                   | ●                | ●                |                 |
@@ -79,7 +79,8 @@ Following languages are supported:
 | yo          | Yoruba               | ● (e)                |                   |                |                 |                   |                  |                  |                 |
 | zh-CN       | Chinese (Simplified) | ●                    | ● (e)             | ●              | ●               |                   | ●                |                  | ●               |
 
-<sup>(e) experimental, most likely doesn't work well</sup>
+<sup>(e) experimental, most likely doesn't work well</sup><br/>
+<sup>(*) Coqui TTS models are only available on x86-64</sub>
 
 Language models can be downloaded directly from the app.
 
@@ -106,6 +107,17 @@ Any new translation contribution is very welcome.
 Packages for Sailfish OS are available on [OpenRepos](https://openrepos.net/content/mkiol/speech-note).
 
 ## Building from sources
+
+### Linux Flatpak
+
+```
+git clone https://github.com/mkiol/dsnote.git
+
+cd dsnote/flatpak
+
+flatpak-builder --user --install-deps-from=flathub --repo="/path/to/local/flatpak/repo" "/path/to/output/dir" net.mkiol.SpeechNote.yaml
+
+```
 
 ### Sailfish OS
 
