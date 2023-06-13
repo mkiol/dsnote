@@ -156,6 +156,11 @@ modules:
   - name: python3-TTS
     buildsystem: simple
     build-commands:
+      - unzip "${PWD}/TTS-0.14.0-cp310-cp310-manylinux1_x86_64.whl" -d "${PWD}/tmp"
+      - "sed -i -e 's/Requires-Dist: cython (==0.29.28)/Requires-Dist: cython/g' ${PWD}/tmp/TTS-0.14.0.dist-info/METADATA"
+      - rm "${PWD}/TTS-0.14.0-cp310-cp310-manylinux1_x86_64.whl"
+      - cd "${PWD}/tmp" && zip -r "${PWD}/TTS-0.14.0-cp310-cp310-manylinux1_x86_64.whl" ./
+      - mv "${PWD}/tmp/TTS-0.14.0-cp310-cp310-manylinux1_x86_64.whl" "${PWD}"
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "TTS==0.14.0" --no-build-isolation
     cleanup:
@@ -182,9 +187,6 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/36/a1/a7e64c2d9a985b8851aa42d1e4718be144e2f4594768344a081de613a42a/TTS-0.14.0-cp310-cp310-manylinux1_x86_64.whl
         sha256: 59ad6eca15b18e7256c3caaf47d4f36cfc2be4829a3f51a5f2137b6d483155cd
-      - type: patch
-        use-git: true
-        path: ../patches/tts-x86_64.patch
       - type: file
         url: https://files.pythonhosted.org/packages/c2/2f/f0dc628295bd23571c962d5a349307d9c8796a05bfca6571659eaded38e2/Werkzeug-2.3.4-py3-none-any.whl
         sha256: 48e5e61472fee0ddee27ebad085614ebedb7af41e88f687aaf881afb723a162f

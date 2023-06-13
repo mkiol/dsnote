@@ -2,7 +2,7 @@
 <!-- Copyright 2023 Michal Kosciesza -->
 <component type="desktop-application">
   <id>net.mkiol.SpeechNote</id>
-  <metadata_license>FSFAP</metadata_license>
+  <metadata_license>CC0-1.0</metadata_license>
   <project_license>MPL-2.0</project_license>
   <developer_name>Michal Kosciesza</developer_name>
   <name>Speech Note</name>
