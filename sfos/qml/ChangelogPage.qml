@@ -29,6 +29,15 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Version %1").arg("3.1")
+            }
+
+            LogItem {
+                title: "Save speech to audio file"
+                description: "New option 'Save speech to audio file' which let you save synthesized speech to WAV file."
+            }
+
+            SectionHeader {
                 text: qsTr("Version %1").arg("3.0")
             }
 
