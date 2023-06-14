@@ -2,6 +2,7 @@ install(TARGETS ${info_binary_id} RUNTIME DESTINATION bin)
 
 install(FILES "${desktop_dir}/${info_binary_id}.desktop" DESTINATION share/applications)
 install(FILES "${desktop_dir}/${info_binary_id}.svg" DESTINATION share/icons/hicolor/scalable/apps)
+install(FILES "${desktop_dir}/${info_binary_id}.metainfo.xml" DESTINATION share/metainfo)
 
 if(DOWNLOAD_LIBSTT)
     install(FILES "${external_lib_dir}/libstt.so" DESTINATION lib)
