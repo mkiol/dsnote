@@ -92,7 +92,7 @@ QString settings::models_dir() const {
                    .toString();
     if (dir.isEmpty()) {
         dir = QDir{QStandardPaths::writableLocation(
-                       QStandardPaths::DownloadLocation)}
+                       QStandardPaths::CacheLocation)}
                   .filePath(QStringLiteral("speech-models"));
         QDir{}.mkpath(dir);
     }
