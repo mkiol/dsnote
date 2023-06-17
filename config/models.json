@@ -814,6 +814,24 @@
             "size": "47346520"
         },
         {
+            "name": "Latviešu (DeepSpeech Raivis Dejus)",
+            "model_id": "lv_ds_raivisdejus",
+            "engine": "stt_ds",
+            "lang_id": "lv",
+            "checksum": "24b9cb0d",
+            "checksum_quick": "e05ada1a",
+            "urls": [
+                "https://huggingface.co/RaivisDejus/latvian-deepspeech/resolve/main/output_graph.tflite"
+            ],
+            "size": "47344464",
+            "scorer_checksum": "dbea726",
+            "scorer_checksum_quick": "f0bf0f87",
+            "scorer_urls": [
+                "https://huggingface.co/RaivisDejus/latvian-deepspeech/resolve/main/kenlm-lv.scorer"
+            ],
+            "scorer_size": "134796416"
+        },
+        {
             "name": "Bahasa Indonesia (DeepSpeech ITML)",
             "model_id": "id",
             "engine": "stt_ds",
