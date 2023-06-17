@@ -2,6 +2,8 @@
 
 Linux desktop and Sailfish OS app for note taking and reading with Speech to Text and Text to Speech
 
+<a href='https://flathub.org/apps/net.mkiol.SpeechNote'><img width='240' alt='Download on Flathub' src='https://dl.flathub.org/assets/badges/flathub-badge-en.png'/></a>
+
 ## Description
 
 **Speech Note** converts:
@@ -104,7 +106,8 @@ Any new translation contribution is very welcome.
 
 ## Download
 
-Packages for Sailfish OS are available on [OpenRepos](https://openrepos.net/content/mkiol/speech-note).
+- Linux Desktop: [Flatpak](https://flathub.org/apps/net.mkiol.SpeechNote)
+- Sailfish OS: [OpenRepos](https://openrepos.net/content/mkiol/speech-note)
 
 ## Building from sources
 
