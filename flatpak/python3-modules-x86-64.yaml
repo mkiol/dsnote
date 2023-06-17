@@ -1,7 +1,7 @@
 # Generated with flatpak-pip-generator --yaml --arch-dependent-allow --arch-dependent-force torch==2.0.0+cpu transformers==4.28.1 accelerate==0.18.0 TTS==0.14.0
 name: python3-modules-x86-64
 only-arches:
-    - x86_64
+  - x86_64
 build-commands: []
 buildsystem: simple
 modules:
@@ -11,7 +11,7 @@ modules:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "torch==2.0.0+cpu" --no-build-isolation
     cleanup:
-      - '/bin'
+      - "/bin"
     sources:
       - &id003
         type: file
@@ -63,7 +63,7 @@ modules:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "transformers==4.28.1" --no-build-isolation
     cleanup:
-      - '/bin'
+      - "/bin"
     sources:
       - &id005
         type: file
@@ -129,7 +129,7 @@ modules:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "accelerate==0.18.0" --no-build-isolation
     cleanup:
-      - '/bin'
+      - "/bin"
     sources:
       - *id003
       - *id004
@@ -164,7 +164,7 @@ modules:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "TTS==0.14.0" --no-build-isolation
     cleanup:
-      - '/bin'
+      - "/bin"
     sources:
       - type: file
         url: https://files.pythonhosted.org/packages/df/c4/1088865e0246d7ecf56d819a233ab2b72f7d6ab043965ef327d0731b5434/Babel-2.12.1-py3-none-any.whl

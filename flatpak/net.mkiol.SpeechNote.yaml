@@ -1,450 +1,373 @@
 app-id: net.mkiol.SpeechNote
-default-branch: stable
 runtime: org.kde.Platform
-runtime-version: '5.15-22.08'
+runtime-version: "5.15-22.08"
 sdk: org.kde.Sdk
 rename-desktop-file: dsnote.desktop
 rename-icon: dsnote
 rename-appdata-file: dsnote.metainfo.xml
 command: dsnote
 finish-args:
-    - --share=ipc
-    - --share=network
-    - --socket=x11
-    - --socket=fallback-x11
-    - --socket=wayland
-    - --socket=pulseaudio
-    - --device=dri
-    - --filesystem=home
-    - --filesystem=xdg-download
-    - --filesystem=xdg-music
-    - --filesystem=xdg-documents
-    - --env=QT_QUICK_CONTROLS_STYLE=org.kde.desktop
+  - --share=ipc
+  - --share=network
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --socket=pulseaudio
+  - --device=dri
+  - --filesystem=xdg-desktop
+  - --filesystem=xdg-download
+  - --filesystem=xdg-music
+  - --filesystem=xdg-documents
+  - --env=QT_QUICK_CONTROLS_STYLE=org.kde.desktop
 cleanup:
-    - '/cmake'
-    - '/etc'
-    - '/man'
-    - '/include'
-    - '/lib/debug'
-    - '/lib/fst'
-    - '/lib/cmake'
-    - '/lib/pkgconfig'
-    - '/lib/python3.10/site-packages/cmake*'
-    - '/share/cmake'
-    - '/share/doc'
-    - '/share/locale'
-    - '/share/man'
-    - '/share/pkgconfig'
-    - '/share/rhvoice'
-    - '/share/runtime'
-    - '/share/vim'
-    - 'libboost*'
-    - 'libRHVoice_audio*'
-    - 'pcre2*'
-    - 'xz*'
-    - 'unxz*'
-    - '*.a'
-    - '*.la'
+  - "/cmake"
+  - "/etc"
+  - "/man"
+  - "/include"
+  - "/lib/fst"
+  - "/lib/cmake"
+  - "/lib/pkgconfig"
+  - "/lib/python3.10/site-packages/cmake*"
+  - "/share/cmake"
+  - "/share/doc"
+  - "/share/locale"
+  - "/share/man"
+  - "/share/pkgconfig"
+  - "/share/rhvoice"
+  - "/share/runtime"
+  - "/share/vim"
+  - "libboost*"
+  - "libRHVoice_audio*"
+  - "pcre2*"
+  - "xz*"
+  - "unxz*"
+  - "*.a"
+  - "*.la"
 modules:
-    - name: fmt
-      buildsystem: cmake
-      config-opts:
-        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        - -DFMT_DOC=OFF
-        - -DFMT_TEST=OFF
-        - -DFMT_FUZZ=OFF
-      sources:
-        - type: archive
-          url: https://github.com/fmtlib/fmt/releases/download/9.1.0/fmt-9.1.0.zip
-          md5: 6133244fe8ef6f75c5601e8069b37b04
+  - name: fmt
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DFMT_DOC=OFF
+      - -DFMT_TEST=OFF
+      - -DFMT_FUZZ=OFF
+    sources:
+      - type: archive
+        url: https://github.com/fmtlib/fmt/releases/download/9.1.0/fmt-9.1.0.zip
+        sha256: cceb4cb9366e18a5742128cb3524ce5f50e88b476f1e54737a47ffdf4df4c996
 
-    - name: openblas
-      only-arches:
-        - x86_64
-      buildsystem: cmake
-      config-opts:
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        - -DBUILD_TESTING=OFF
-        - -DBUILD_WITHOUT_LAPACK=OFF
-        - -DC_LAPACK=ON
-        - -DDYNAMIC_ARCH=ON
-        - -DBUILD_STATIC_LIBS=OFF
-        - -DBUILD_SHARED_LIBS=ON
-      sources:
-        - type: archive
-          url: https://github.com/xianyi/OpenBLAS/releases/download/v0.3.21/OpenBLAS-0.3.21.tar.gz
-          md5: ffb6120e2309a2280471716301824805
+  - name: openblas
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_TESTING=OFF
+      - -DBUILD_WITHOUT_LAPACK=OFF
+      - -DC_LAPACK=ON
+      - -DDYNAMIC_ARCH=ON
+      - -DBUILD_STATIC_LIBS=OFF
+      - -DBUILD_SHARED_LIBS=ON
+    build-options:
+      arch:
+        aarch64:
+          config-opts:
+            - -DTARGET=ARMV8
+    sources:
+      - type: archive
+        url: https://github.com/xianyi/OpenBLAS/releases/download/v0.3.21/OpenBLAS-0.3.21.tar.gz
+        sha256: f36ba3d7a60e7c8bcc54cd9aaa9b1223dd42eaf02c811791c37e8ca707c241ca
 
-    - name: openblas
-      only-arches:
-        - aarch64
-      buildsystem: cmake
-      config-opts:
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        - -DBUILD_TESTING=OFF
-        - -DBUILD_WITHOUT_LAPACK=OFF
-        - -DC_LAPACK=ON
-        - -DDYNAMIC_ARCH=ON
-        - -DBUILD_STATIC_LIBS=OFF
-        - -DBUILD_SHARED_LIBS=ON
-        - -DTARGET=ARMV8
-      sources:
-        - type: archive
-          url: https://github.com/xianyi/OpenBLAS/releases/download/v0.3.21/OpenBLAS-0.3.21.tar.gz
-          md5: ffb6120e2309a2280471716301824805
+  - name: whispercpp
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=OFF
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+      - -DWHISPER_SUPPORT_OPENBLAS=ON
+      - -DCMAKE_C_FLAGS='-O3 -I$$C_INCLUDE_PATH/openblas'
+      - -DCMAKE_CXX_FLAGS='-O3 -I$$CPLUS_INCLUDE_PATH/openblas'
+    sources:
+      - type: archive
+        url: https://github.com/ggerganov/whisper.cpp/archive/ea1f8a50d4f70b54d9dd03205207a80019e243f9.zip
+        sha256: 957235739ca90dad17c5e5b8ca607ea9226bfee54a8654687e87cd25959299b6
+      - type: patch
+        path: ../patches/whispercpp.patch
 
-    - name: whispercpp
-      buildsystem: cmake
-      config-opts:
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        - -DBUILD_SHARED_LIBS=OFF
-        - -DWHISPER_BUILD_TESTS=OFF
-        - -DWHISPER_BUILD_EXAMPLES=OFF
-        - -DWHISPER_SUPPORT_OPENBLAS=ON
-        - -DCMAKE_C_FLAGS='-O3 -ffast-math -I$$C_INCLUDE_PATH/openblas'
-        - -DCMAKE_CXX_FLAGS='-O3 -ffast-math -I$$CPLUS_INCLUDE_PATH/openblas'
-      sources:
-        - type: archive
-          url: https://github.com/ggerganov/whisper.cpp/archive/ea1f8a50d4f70b54d9dd03205207a80019e243f9.zip
-          md5: 8bf8086d3c43966f8adc8e2d1596de42
-        - type: patch
-          path: ../patches/whispercpp.patch
+  - name: xz
+    buildsystem: autotools
+    config-opts:
+      - --enable-xz
+      - --disable-xzdec
+      - --disable-lzmadec
+      - --disable-lzmainfo
+      - --disable-lzma-links
+      - --disable-scripts
+      - --disable-doc
+      - --disable-shared
+      - --enable-static
+      - --with-pic
+    sources:
+      - type: archive
+        url: https://downloads.sourceforge.net/lzmautils/xz-5.4.2.tar.gz
+        sha256: 87947679abcf77cc509d8d1b474218fd16b72281e2797360e909deaee1ac9d05
 
-    - name: webrtcvad
-      buildsystem: cmake
-      config-opts:
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      sources:
-        - type: archive
-          url: https://github.com/webrtc-mirror/webrtc/archive/ac87c8df2780cb12c74942ec8a473718c76cb5b7.zip
-          md5: f1489c137b354594632d260978b283a4
-        - type: patch
-          path: ../patches/webrtcvad.patch
+  - name: mbrola
+    buildsystem: simple
+    build-commands:
+      - make
+      - "cp Bin/mbrola /app/bin"
+    sources:
+      - type: archive
+        url: https://github.com/numediart/MBROLA/archive/refs/tags/3.3.tar.gz
+        sha256: c01ded2c0a05667e6df2439c1c02b011a5df2bfdf49e24a524630686aea2b558
 
-    - name: xz
-      buildsystem: autotools
-      config-opts:
-        - --enable-xz
-        - --disable-xzdec
-        - --disable-lzmadec
-        - --disable-lzmainfo
-        - --disable-lzma-links
-        - --disable-scripts
-        - --disable-doc
-        - --disable-shared
-        - --enable-static
-        - --with-pic
-      sources:
-        - type: archive
-          url: https://downloads.sourceforge.net/lzmautils/xz-5.4.2.tar.gz
-          md5: 4ac4e5da95aa8604a81e32079cb00d42
+  - name: espeak
+    buildsystem: simple
+    build-commands:
+      - "mkdir espeak"
+      - "tar -x -C espeak --strip=1 -f lib/espeak-ng-1.52-patched.tar.gz"
+      - "cd espeak && ./autogen.sh"
+      - "cd espeak && ./configure --prefix=/app --with-pic --with-pcaudiolib=no --enable-static --disable-shared --disable-rpath --with-extdict-ru --with-extdict-zh --with-extdict-zhy"
+      - "cd espeak && make install"
+    sources:
+      - type: archive
+        url: https://github.com/rhasspy/piper/archive/e967bdc1a838023fe3644f8ed7cf6e1e958b42ef.zip
+        sha256: e8860ae278d4ea3154c94d8d9585200a19a25ec75dc3063d81896c5367d77c7b
 
-    - name: mbrola
-      buildsystem: simple
-      build-commands:
-        - make
-        - 'cp Bin/mbrola /app/bin'
-      sources:
-        - type: archive
-          url: https://github.com/numediart/MBROLA/archive/refs/tags/3.3.tar.gz
-          md5: 06993903c7b8d3a8d21cc66cd5a28219
+  - name: boost
+    buildsystem: simple
+    build-commands:
+      - "./bootstrap.sh --prefix=/app --with-libraries=system"
+      - "./b2 -j ${FLATPAK_BUILDER_N_JOBS} install"
+    sources:
+      - type: archive
+        url: https://boostorg.jfrog.io/artifactory/main/release/1.82.0/source/boost_1_82_0.tar.bz2
+        sha256: a6e1ab9b0860e6a2881dd7b21fe9f737a095e5f33a3a874afc6a345228597ee6
 
-    - name: espeak
-      buildsystem: simple
-      build-commands:
-        - 'mkdir espeak'
-        - 'tar -x -C espeak --strip=1 -f lib/espeak-ng-1.52-patched.tar.gz'
-        - 'cd espeak && ./autogen.sh'
-        - 'cd espeak && ./configure --prefix=/app --with-pic --with-pcaudiolib=no --enable-static --disable-shared --disable-rpath --with-extdict-ru --with-extdict-zh --with-extdict-zhy'
-        - 'cd espeak && make install'
-      sources:
-        - type: archive
-          url: https://github.com/rhasspy/piper/archive/e967bdc1a838023fe3644f8ed7cf6e1e958b42ef.zip
-          md5: c9924cdb6305f6982171d486d5d633e1
+  - name: webrtcvad
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    sources:
+      - type: archive
+        url: https://github.com/webrtc-mirror/webrtc/archive/ac87c8df2780cb12c74942ec8a473718c76cb5b7.zip
+        sha256: 9ceb1dbd7da99ec2efd6bc18ac1004d446f51e79969203b086b4dcf0ca534c68
+      - type: patch
+        path: ../patches/webrtcvad.patch
 
-    - name: boost
-      buildsystem: simple
-      build-commands:
-        - './bootstrap.sh --prefix=/app --with-libraries=system'
-        - './b2 -j `nproc` install'
-      sources:
-        - type: archive
-          url: https://boostorg.jfrog.io/artifactory/main/release/1.82.0/source/boost_1_82_0.tar.bz2
-          sha256: a6e1ab9b0860e6a2881dd7b21fe9f737a095e5f33a3a874afc6a345228597ee6
+  - name: libstt
+    buildsystem: simple
+    build-commands:
+      - "chmod --recursive u+w ."
+      - "cp ./libstt.so /app/lib"
+      - "cp ./libkenlm.so /app/lib"
+      - "cp ./coqui-stt.h /app/include"
+    sources:
+      - type: archive
+        only-arches:
+          - x86_64
+        strip-components: 0
+        url: https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.Linux.tar.xz
+        sha256: 45561ceb8a4b62e990a155041597717d451a04ca336aa803d21ff288c69637dd
+      - type: archive
+        only-arches:
+          - aarch64
+        strip-components: 0
+        url: https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.aarch64.tar.xz
+        sha256: 554e8b3d404324b658332f57a574b2653fce1944d5ad906e563fb235649a2d05
 
-    - name: webrtcvad
-      buildsystem: cmake
-      config-opts:
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      sources:
-        - type: archive
-          url: https://github.com/webrtc-mirror/webrtc/archive/ac87c8df2780cb12c74942ec8a473718c76cb5b7.zip
-          md5: f1489c137b354594632d260978b283a4
-        - type: patch
-          path: ../patches/webrtcvad.patch
+  - name: openfst
+    buildsystem: autotools
+    config-opts:
+      - --disable-bin
+      - --disable-dependency-tracking
+      - --enable-compact-fsts
+      - --enable-compress
+      - --enable-const-fsts
+      - --enable-far
+      - --enable-linear-fsts
+      - --enable-lookahead-fsts
+      - --enable-mpdt
+      - --enable-ngram-fsts
+      - --enable-pdt
+      - --disable-shared
+      - --enable-static
+      - --with-pic
+    sources:
+      - type: archive
+        url: https://github.com/alphacep/openfst/archive/7dfd808194105162f20084bb4d8e4ee4b65266d5.zip
+        sha256: f485ccd89bdaee328c862f786af9676a9e1dff5076aa35d8b096b6498e344f0d
+      - type: shell
+        commands:
+          - "autoreconf -fi"
 
-    - name: libstt
-      buildsystem: simple
-      build-commands:
-        - 'chmod --recursive u+w .'
-        - 'cp ./libstt.so /app/lib'
-        - 'cp ./libkenlm.so /app/lib'
-        - 'cp ./coqui-stt.h /app/include'
-      sources:
-        - type: archive
-          only-arches:
-            - x86_64
-          strip-components: 0
-          url: https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.Linux.tar.xz
-          md5: c160279b0d53ab144d8d83cbbe4dff39
-        - type: archive
-          only-arches:
-            - aarch64
-          strip-components: 0
-          url: https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.aarch64.tar.xz
-          md5: 4dbb4b639255038d4f2a9fbdc2bd26d9
-        - type: archive
-          only-arches:
-            - arm
-          strip-components: 0
-          url: https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.armv7.tar.xz
-          md5: 85921321355ec26649d8cd9e1091a0ce
+  - name: kaldi
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=OFF
+      - -DKALDI_BUILD_EXE=OFF
+      - -DKALDI_BUILD_TEST=OFF
+      - -DKALDI_VERSION=1
+      - -DENABLE_CUDA=OFF
+      - -DCMAKE_CXX_FLAGS='-O3'
+    sources:
+      - type: archive
+        url: https://github.com/alphacep/kaldi/archive/2abed6b15990d9438f70863f2b58bd8af8432043.zip
+        sha256: 24021fcfa542499e203e21fcba8486832ca79821ad7ea514836e9f3e917495fe
+      - type: patch
+        path: ../patches/kaldi.patch
 
-    - name: openfst
-      buildsystem: simple
-      build-commands:
-        - 'autoreconf -fi'
-        - './configure --prefix=/app --disable-bin --disable-dependency-tracking --enable-compact-fsts --enable-compress --enable-const-fsts --enable-far --enable-linear-fsts --enable-lookahead-fsts --enable-mpdt --enable-ngram-fsts --enable-pdt --disable-shared --enable-static --with-pic'
-        - make
-        - 'make install'
-      sources:
-        - type: archive
-          url: https://github.com/alphacep/openfst/archive/7dfd808194105162f20084bb4d8e4ee4b65266d5.zip
-          md5: 734084e424d42f16424bd5279e4f0786
+  - name: vosk
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DCMAKE_CXX_FLAGS='-O3 -I$$CPLUS_INCLUDE_PATH/kaldi'
+      - -DCMAKE_LIBRARY_PATH=/app/lib
+    sources:
+      - type: archive
+        url: https://github.com/alphacep/vosk-api/archive/128c216c6137a36fbf5b0bf64d03501e91a6eeaa.zip
+        sha256: d189af92ae53af1e3f0604fc39542a13da0add2f821f21aa33e9fb8bb4b0a46e
+      - type: patch
+        path: ../patches/vosk.patch
 
-    - name: kaldi
-      buildsystem: cmake
-      config-opts:
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        - -DBUILD_SHARED_LIBS=OFF
-        - -DKALDI_BUILD_EXE=OFF
-        - -DKALDI_BUILD_TEST=OFF
-        - -DKALDI_VERSION=1
-        - -DENABLE_CUDA=OFF
-        - -DCMAKE_CXX_FLAGS='-O3'
-      sources:
-        - type: archive
-          url: https://github.com/alphacep/kaldi/archive/2abed6b15990d9438f70863f2b58bd8af8432043.zip
-          md5: 4923c5b7599184c36db3342579676fbc
-        - type: patch
-          path: ../patches/kaldi.patch
+  - name: onnx
+    buildsystem: simple
+    build-commands:
+      - "cp -r --no-target-directory ./include /app/include"
+      - "cp -r --no-target-directory ./lib /app/lib"
+    sources:
+      - type: archive
+        only-arches:
+          - x86_64
+        url: https://github.com/microsoft/onnxruntime/releases/download/v1.14.1/onnxruntime-linux-x64-1.14.1.tgz
+        sha256: 010585f534d822bf02d54c7cfc53b57aa3eb0cf34f8fb7503ee519ed18e25d29
+      - type: archive
+        only-arches:
+          - aarch64
+        url: https://github.com/microsoft/onnxruntime/releases/download/v1.14.1/onnxruntime-linux-aarch64-1.14.1.tgz
+        sha256: 20965e05d2da6a0e6acedda8aca1a8f75c3f4cb1d7932403a9977b753b1b2120
 
-    - name: vosk
-      buildsystem: cmake
-      config-opts:
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        - -DCMAKE_CXX_FLAGS='-O3 -I$$CPLUS_INCLUDE_PATH/kaldi'
-        - -DCMAKE_LIBRARY_PATH=/app/lib
-      sources:
-        - type: archive
-          url: https://github.com/alphacep/vosk-api/archive/128c216c6137a36fbf5b0bf64d03501e91a6eeaa.zip
-          md5: 1f716b8132d5678823db0531b2c8285a
-        - type: patch
-          path: ../patches/vosk.patch
+  - name: piper
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DCMAKE_CXX_FLAGS='-O3'
+      - -DCMAKE_LIBRARY_PATH=/app/lib
+      - -DCMAKE_INCLUDE_PATH=/app/include
+    sources:
+      - type: archive
+        url: https://github.com/rhasspy/piper/archive/e967bdc1a838023fe3644f8ed7cf6e1e958b42ef.zip
+        sha256: e8860ae278d4ea3154c94d8d9585200a19a25ec75dc3063d81896c5367d77c7b
+      - type: patch
+        path: ../patches/piper.patch
 
-    - name: onnx
-      buildsystem: simple
-      build-commands:
-        - 'cp -r --no-target-directory ./include /app/include'
-        - 'cp -r --no-target-directory ./lib /app/lib'
-      sources:
-        - type: archive
-          only-arches:
-            - x86_64
-          url: https://github.com/microsoft/onnxruntime/releases/download/v1.14.1/onnxruntime-linux-x64-1.14.1.tgz
-          md5: 9a3b855e2b22ace4ab110cec10b38b74
-        - type: archive
-          only-arches:
-            - aarch64
-          url: https://github.com/microsoft/onnxruntime/releases/download/v1.14.1/onnxruntime-linux-aarch64-1.14.1.tgz
-          md5: 17556490ce7d111205c5c829acf509bf
-        - type: archive
-          only-arches:
-            - arm
-          url: https://github.com/mkiol/dsnote/releases/download/v2.0.1/onnxruntime-linux-arm32-1.14.tgz
-          md5: 5055ce0867a5c7c7a1920d2d76b8aace
+  - name: ssplitcpp
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DSSPLIT_COMPILE_LIBRARY_ONLY=ON
+      - -DSSPLIT_PREFER_STATIC_COMPILE=ON
+      - -DBUILD_SHARED_LIBS=OFF
+    sources:
+      - type: archive
+        url: https://github.com/ugermann/ssplit-cpp/archive/49a8e12f11945fac82581cf056560965dcb641e6.zip
+        sha256: 31b9556e539bbd35b79d9075e1a0593233b2050c277c4058fbd290985930a39b
+      - type: patch
+        path: ../patches/ssplitcpp.patch
 
-    - name: piper
-      buildsystem: cmake
-      config-opts:
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        - -DCMAKE_CXX_FLAGS='-O3'
-        - -DCMAKE_LIBRARY_PATH=/app/lib
-        - -DCMAKE_INCLUDE_PATH=/app/include
-      sources:
-        - type: archive
-          url: https://github.com/rhasspy/piper/archive/e967bdc1a838023fe3644f8ed7cf6e1e958b42ef.zip
-          md5: c9924cdb6305f6982171d486d5d633e1
-        - type: patch
-          path: ../patches/piper.patch
+  - name: pybind11
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=OFF
+      - -DPYBIND11_INSTALL=ON
+      - -DPYBIND11_TEST=OFF
+      - -DPYBIND11_FINDPYTHON=ON
+    sources:
+      - type: archive
+        url: https://github.com/pybind/pybind11/archive/refs/tags/v2.10.4.tar.gz
+        sha256: 832e2f309c57da9c1e6d4542dedd34b24e4192ecb4d62f6f4866a737454c9970
 
-    - name: pcre2
-      buildsystem: cmake
-      config-opts:
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        - -DPCRE2_STATIC_PIC=ON
-        - -DBUILD_STATIC_LIBS=ON
-        - -DBUILD_SHARED_LIBS=OFF
-        - -DPCRE2_SUPPORT_LIBBZ2=OFF
-        - -DPCRE2_SUPPORT_LIBZ=OFF
-        - -DPCRE2_SUPPORT_JIT=ON
-      sources:
-        - type: archive
-          url: https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.42/pcre2-10.42.tar.bz2
-          md5: a8e9ab2935d428a4807461f183034abe
+  - name: rnnoise
+    buildsystem: autotools
+    config-opts:
+      - --disable-examples
+      - --disable-doc
+      - --disable-shared
+      - --enable-static
+      - --with-pic
+    sources:
+      - type: archive
+        url: https://github.com/GregorR/rnnoise-nu/archive/26269304e120499485438cd93acf5127c6908c68.zip
+        sha256: 93a994a3d59cb89c005f0f861fd522fe268780dc0e2e2acea56945305ed0cbf1
 
-    - name: ssplitcpp
-      buildsystem: cmake
-      config-opts:
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        - -DSSPLIT_COMPILE_LIBRARY_ONLY=ON
-        - -DSSPLIT_PREFER_STATIC_COMPILE=ON
-        - -DBUILD_SHARED_LIBS=OFF
-      sources:
-        - type: archive
-          url: https://github.com/ugermann/ssplit-cpp/archive/49a8e12f11945fac82581cf056560965dcb641e6.zip
-          md5: 8255bd212ad639592b4e212b0353509a
-        - type: patch
-          path: ../patches/ssplitcpp.patch
+  - name: rhvoice
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DWITH_DATA=OFF
+      - -DENABLE_MAGE=OFF
+      - -DBUILD_CLIENT=OFF
+      - -DBUILD_UTILS=OFF
+      - -DBUILD_TESTS=OFF
+      - -DBUILD_SERVICE=OFF
+      - -DBUILD_SPEECHDISPATCHER_MODULE=OFF
+      - -DCMAKE_INSTALL_LIBDIR=/app/lib
+    post-install:
+      - "mkdir -p /app/share/rhvoice"
+      - "cp -R data /app/share/rhvoice"
+      - "cp -R config /app/share/rhvoice"
+    sources:
+      - type: git
+        url: https://github.com/RHVoice/RHVoice.git
+        commit: c1e897d90c663613086398cd019882e907d02314
+      - type: patch
+        path: ../patches/rhvoice.patch
 
-    - name: pybind11
-      buildsystem: cmake
-      config-opts:
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        - -DBUILD_SHARED_LIBS=OFF
-        - -DPYBIND11_INSTALL=ON
-        - -DPYBIND11_TEST=OFF
-        - -DPYBIND11_FINDPYTHON=ON
-      sources:
-        - type: archive
-          url: https://github.com/pybind/pybind11/archive/refs/tags/v2.10.4.tar.gz
-          md5: 812eda11d2a114fc0e841faf9626d2c9
+  - python3-modules-x86-64.yaml
 
-    - name: rnnoise
-      buildsystem: autotools
-      config-opts:
-        - --disable-examples
-        - --disable-doc
-        - --disable-shared
-        - --enable-static
-        - --with-pic
-      sources:
-        - type: archive
-          url: https://github.com/GregorR/rnnoise-nu/archive/26269304e120499485438cd93acf5127c6908c68.zip
-          md5: fafe9bbf0e2b15df4a628434bea99dd3
-
-    - name: rhvoice
-      buildsystem: cmake
-      config-opts:
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        - -DWITH_DATA=OFF
-        - -DENABLE_MAGE=OFF
-        - -DBUILD_CLIENT=OFF
-        - -DBUILD_UTILS=OFF
-        - -DBUILD_TESTS=OFF
-        - -DBUILD_SERVICE=OFF
-        - -DBUILD_SPEECHDISPATCHER_MODULE=OFF
-        - -DCMAKE_INSTALL_LIBDIR=/app/lib
-      post-install:
-        - 'mkdir -p /app/share/rhvoice'
-        - 'cp -R data /app/share/rhvoice'
-        - 'cp -R config /app/share/rhvoice'
-      sources:
-        - type: git
-          url: https://github.com/RHVoice/RHVoice.git
-          commit: c1e897d90c663613086398cd019882e907d02314
-        - type: patch
-          path: ../patches/rhvoice.patch
-
-    - python3-modules-x86-64.yaml
-
-    - name: dsnote-x86_64
-      only-arches:
-        - x86_64
-      buildsystem: cmake
-      config-opts:
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DWITH_FLATPAK=ON
-        - -DWITH_DESKTOP=ON
-        - -DDOWNLOAD_LIBSTT=OFF
-        - -DBUILD_VOSK=OFF
-        - -DBUILD_LIBARCHIVE=OFF
-        - -DBUILD_FMT=OFF
-        - -DBUILD_WHISPERCPP=OFF
-        - -DBUILD_WEBRTCVAD=OFF
-        - -DBUILD_OPENBLAS=OFF
-        - -DBUILD_XZ=OFF
-        - -DBUILD_RNNOISE=OFF
-        - -DBUILD_PYBIND11=OFF
-        - -DBUILD_PYTHON_MODULE=OFF
-        - -DBUILD_ESPEAK=OFF
-        - -DBUILD_PIPER=OFF
-        - -DBUILD_SSPLITCPP=OFF
-        - -DBUILD_RHVOICE=OFF
-      sources:
-        - type: dir
-          path: ../
-          skip:
-            - flatpak
-            - external
-            - build
-            - misc
-            - '.git'
-            - '*.user.*'
-
-    - name: dsnote-aarch64
-      only-arches:
-        - aarch64
-      buildsystem: cmake
-      config-opts:
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DWITH_FLATPAK=ON
-        - -DWITH_DESKTOP=ON
-        - -DWITH_PY=OFF
-        - -DDOWNLOAD_LIBSTT=OFF
-        - -DBUILD_VOSK=OFF
-        - -DBUILD_LIBARCHIVE=OFF
-        - -DBUILD_FMT=OFF
-        - -DBUILD_WHISPERCPP=OFF
-        - -DBUILD_WEBRTCVAD=OFF
-        - -DBUILD_OPENBLAS=OFF
-        - -DBUILD_XZ=OFF
-        - -DBUILD_RNNOISE=OFF
-        - -DBUILD_PYBIND11=OFF
-        - -DBUILD_PYTHON_MODULE=OFF
-        - -DBUILD_ESPEAK=OFF
-        - -DBUILD_PIPER=OFF
-        - -DBUILD_SSPLITCPP=OFF
-        - -DBUILD_RHVOICE=OFF
-      sources:
-        - type: dir
-          path: ../
-          skip:
-            - flatpak
-            - external
-            - build
-            - misc
-            - '.git'
-            - '*.user.*'
+  - name: dsnote
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DWITH_FLATPAK=ON
+      - -DWITH_DESKTOP=ON
+      - -DDOWNLOAD_LIBSTT=OFF
+      - -DBUILD_VOSK=OFF
+      - -DBUILD_LIBARCHIVE=OFF
+      - -DBUILD_FMT=OFF
+      - -DBUILD_WHISPERCPP=OFF
+      - -DBUILD_WEBRTCVAD=OFF
+      - -DBUILD_OPENBLAS=OFF
+      - -DBUILD_XZ=OFF
+      - -DBUILD_RNNOISE=OFF
+      - -DBUILD_PYBIND11=OFF
+      - -DBUILD_PYTHON_MODULE=OFF
+      - -DBUILD_ESPEAK=OFF
+      - -DBUILD_PIPER=OFF
+      - -DBUILD_SSPLITCPP=OFF
+      - -DBUILD_RHVOICE=OFF
+    build-options:
+      arch:
+        aarch64:
+          config-opts:
+            - -DWITH_PY=OFF
+    sources:
+      - type: dir
+        path: ../
+        skip:
+          - flatpak
+          - external
+          - build
+          - misc
+          - '.git'
+          - '*.user.*'
