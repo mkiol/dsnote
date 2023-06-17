@@ -18,6 +18,7 @@ finish-args:
   - --filesystem=xdg-music
   - --filesystem=xdg-documents
   - --env=QT_QUICK_CONTROLS_STYLE=org.kde.desktop
+  - --env=PYTORCH_TENSOREXPR=0
 cleanup:
   - "/cmake"
   - "/etc"
