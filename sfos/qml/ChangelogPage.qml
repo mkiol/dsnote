@@ -37,6 +37,11 @@ Page {
                 description: "New option 'Save speech to audio file' which let you save synthesized speech to WAV file."
             }
 
+            LogItem {
+                title: "New Speech to Text model for Latvian language"
+                description: "New DeepSpeech model for Latvian language is configured for download."
+            }
+
             SectionHeader {
                 text: qsTr("Version %1").arg("3.0")
             }
