@@ -54,7 +54,7 @@
     <release version="3.1.1" date="2023-06-17">
       <description>
         <ul>New DeepSpeech STT model for Latvain language</ul>
-        <ul>Minor UI impovements</ul>
+        <ul>Minor UI improvements</ul>
         <ul>Fix: Crash during TTS on some systems</ul>
         <ul>Fix: Downloaded models disappeared after app restart when Downloads directory was not set in the system</ul>
       </description>
