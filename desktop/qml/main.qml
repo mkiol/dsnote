@@ -8,6 +8,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import QtQuick.Window 2.2
 
 import org.mkiol.dsnote.Dsnote 1.0
 import org.mkiol.dsnote.Settings 1.0
@@ -42,8 +43,8 @@ ApplicationWindow {
 
     property int padding: 8
 
-    width: 640
-    height: 480
+    width: Screen.width / 2
+    height: Screen.height / 2
 
     visible: true
 
