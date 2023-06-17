@@ -8,7 +8,7 @@
   <name>Speech Note</name>
   <summary>Note taking and reading with Speech to Text and Text to Speech</summary>
   <description>
-    <p>Speech Note enables you to take and read notes with your voice.
+    <p>Speech Note enables you to take and read notes with your voice with multiple languages.
       It uses Speech to Text and Text to Speech conversions to do so.
       All voice processing is entirely done off-line, locally on your
       computer without the use of network connection. Your privacy is
@@ -31,6 +31,7 @@
     <keyword>espeak</keyword>
     <keyword>mbrola</keyword>
     <keyword>coqui</keyword>
+    <keyword>offline</keyword>
   </keywords>
   <screenshots>
     <screenshot type="default">
@@ -50,6 +51,14 @@
   <launchable type="desktop-id">net.mkiol.SpeechNote.desktop</launchable>
   <content_rating type="oars-1.1" />
   <releases>
+    <release version="3.1.1" date="2023-06-17">
+      <description>
+        <ul>New DeepSpeech STT model for Latvain language</ul>
+        <ul>Minor UI impovements</ul>
+        <ul>Fix: Crash during TTS on some systems</ul>
+        <ul>Fix: Downloaded models disappeared after app restart when Downloads directory was not set in the system</ul>
+      </description>
+    </release>
     <release version="3.1.0" date="2023-06-13" />
   </releases>
 </component>
