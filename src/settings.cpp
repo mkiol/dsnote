@@ -91,9 +91,15 @@ QString settings::models_dir() const {
                      value(QStringLiteral("lang_models_dir")))
                    .toString();
     if (dir.isEmpty()) {
+#ifdef USE_SFOS
+        dir = QDir{QStandardPaths::writableLocation(
+                       QStandardPaths::DownloadLocation)}
+                  .filePath(QStringLiteral("speech-models"));
+#else
         dir = QDir{QStandardPaths::writableLocation(
                        QStandardPaths::CacheLocation)}
                   .filePath(QStringLiteral("speech-models"));
+#endif
         QDir{}.mkpath(dir);
     }
 
