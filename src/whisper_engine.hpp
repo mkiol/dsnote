@@ -37,7 +37,7 @@ class whisper_engine : public stt_engine {
     static void push_buf_to_whisper_buf(
         const std::vector<in_buf_t::buf_t::value_type>& buf,
         whisper_buf_t& whisper_buf);
-    whisper_full_params make_wparams() const;
+    whisper_full_params make_wparams();
     void reset_impl() override;
     void stop_processing_impl() override;
     void start_processing_impl() override;

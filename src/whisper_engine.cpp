@@ -178,9 +178,14 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
     return samples_process_result_t::wait_for_samples;
 }
 
-whisper_full_params whisper_engine::make_wparams() const {
+whisper_full_params whisper_engine::make_wparams() {
     whisper_full_params wparams =
         whisper_full_default_params(WHISPER_SAMPLING_GREEDY);
+
+    if (auto pos = m_lang.find('-'); pos != std::string::npos) {
+        m_lang = m_lang.substr(0, pos);
+    }
+
     wparams.language = m_lang.c_str();
     wparams.speed_up = true;
     wparams.temperature_inc = 0.0F;
@@ -251,6 +256,7 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 #ifdef DEBUG
     LOGD("speech decoded: text=" << result);
 #endif
+
     if (!m_intermediate_text || m_intermediate_text != result)
         set_intermediate_text(result);
 }
