@@ -72,9 +72,9 @@
             "id": "uk"
         },
         {
-            "name": "中文 (简体)",
-            "name_en": "Chinese (Simplified)",
-            "id": "zh-CN"
+            "name": "中文",
+            "name_en": "Chinese",
+            "id": "zh"
         },
         {
             "name": "Nederlands",
@@ -647,9 +647,9 @@
         },
         {
             "name": "中文 简体 (DeepSpeech Mozilla)",
-            "model_id": "zh-CN",
+            "model_id": "zh_ds_mozilla",
             "engine": "stt_ds",
-            "lang_id": "zh-CN",
+            "lang_id": "zh",
             "score": 3,
             "checksum": "73eef4d8",
             "checksum_quick": "1ba80466",
@@ -1456,31 +1456,31 @@
             "score": 0
         },
         {
-            "name": "中文 简体 (Whisper Tiny)",
-            "model_id": "zh-CN_whisper_tiny",
+            "name": "中文 (Whisper Tiny)",
+            "model_id": "zh_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "zh-CN",
+            "lang_id": "zh",
             "score": 0
         },
         {
-            "name": "中文 简体 (Whisper Base)",
-            "model_id": "zh-CN_whisper_base",
+            "name": "中文 (Whisper Base)",
+            "model_id": "zh_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "zh-CN",
+            "lang_id": "zh",
             "score": 0
         },
         {
-            "name": "中文 简体 (Whisper Small)",
-            "model_id": "zh-CN_whisper_small",
+            "name": "中文 (Whisper Small)",
+            "model_id": "zh_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "zh-CN",
+            "lang_id": "zh",
             "score": 0
         },
         {
-            "name": "中文 简体 (Whisper Medium)",
-            "model_id": "zh-CN_whisper_medium",
+            "name": "中文 (Whisper Medium)",
+            "model_id": "zh_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "zh-CN",
+            "lang_id": "zh",
             "score": 0
         },
         {
@@ -1843,9 +1843,9 @@
         },
         {
             "name": "中文 简体 (Vosk Large)",
-            "model_id": "zh-CN_vosk_large",
+            "model_id": "zh_vosk_large",
             "engine": "stt_vosk",
-            "lang_id": "zh-CN",
+            "lang_id": "zh",
             "score": 5,
             "checksum": "19ed3167",
             "checksum_quick": "28a43f59",
@@ -1857,9 +1857,9 @@
         },
         {
             "name": "中文 简体 (Vosk Small)",
-            "model_id": "zh-CN_vosk_small",
+            "model_id": "zh_vosk_small",
             "engine": "stt_vosk",
-            "lang_id": "zh-CN",
+            "lang_id": "zh",
             "score": 4,
             "checksum": "e9365882",
             "checksum_quick": "cc0a6274",
@@ -2973,10 +2973,10 @@
             "size": "25406468"
         },
         {
-            "name": "中文 简体 (Piper Huayan Low)",
-            "model_id": "zh-CN_piper_huayan_low",
+            "name": "中文 (Piper Huayan Low)",
+            "model_id": "zh_piper_huayan_low",
             "engine": "tts_piper",
-            "lang_id": "zh-CN",
+            "lang_id": "zh",
             "checksum": "eb96041a",
             "checksum_quick": "ec43a7fc",
             "comp": "targz",
@@ -4156,10 +4156,10 @@
             "size": "100773001"
         },
         {
-            "name": "中文 简体 (Coqui Baker Tacotron Female)",
-            "model_id": "zh-CN_coqui_baker_tacotron",
+            "name": "中文 (Coqui Baker Tacotron Female)",
+            "model_id": "zh_coqui_baker_tacotron",
             "engine": "tts_coqui",
-            "lang_id": "zh-CN",
+            "lang_id": "zh",
             "checksum": "625b3989",
             "checksum_quick": "e50a019a",
             "comp": "zip",

@@ -106,14 +106,13 @@ class speech_service : public QObject, public singleton<speech_service> {
     Q_INVOKABLE void delete_model(const QString &id);
 
     Q_INVOKABLE int stt_start_listen(speech_service::speech_mode_t mode,
-                                     const QString &lang, bool translate);
+                                     QString lang, bool translate);
     Q_INVOKABLE int stt_stop_listen(int task);
-    Q_INVOKABLE int stt_transcribe_file(const QString &file,
-                                        const QString &lang, bool translate);
-    Q_INVOKABLE int tts_play_speech(const QString &text, const QString &lang);
+    Q_INVOKABLE int stt_transcribe_file(const QString &file, QString lang,
+                                        bool translate);
+    Q_INVOKABLE int tts_play_speech(const QString &text, QString lang);
     Q_INVOKABLE int tts_stop_speech(int task);
-    Q_INVOKABLE int tts_speech_to_file(const QString &text,
-                                       const QString &lang);
+    Q_INVOKABLE int tts_speech_to_file(const QString &text, QString lang);
 
     Q_INVOKABLE int cancel(int task);
 

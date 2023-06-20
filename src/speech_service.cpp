@@ -1255,13 +1255,15 @@ int speech_service::next_task_id() {
     return m_last_task_id;
 }
 
-int speech_service::stt_transcribe_file(const QString &file,
-                                        const QString &lang, bool translate) {
+int speech_service::stt_transcribe_file(const QString &file, QString lang,
+                                        bool translate) {
     if (state() == state_t::unknown || state() == state_t::not_configured ||
         state() == state_t::busy) {
         qWarning() << "cannot transcribe_file, invalid state";
         return INVALID_TASK;
     }
+
+    if (lang.contains('-')) lang = lang.split('-').first();
 
     if (m_current_task &&
         m_current_task->speech_mode != speech_mode_t::single_sentence &&
@@ -1293,13 +1295,15 @@ int speech_service::stt_transcribe_file(const QString &file,
     return m_current_task->id;
 }
 
-int speech_service::stt_start_listen(speech_mode_t mode, const QString &lang,
+int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
                                      bool translate) {
     if (state() == state_t::unknown || state() == state_t::not_configured ||
         state() == state_t::busy) {
         qWarning() << "cannot stt start listen, invalid state";
         return INVALID_TASK;
     }
+
+    if (lang.contains('-')) lang = lang.split('-').first();
 
     qDebug() << "stt start listen";
 
@@ -1336,12 +1340,14 @@ int speech_service::stt_start_listen(speech_mode_t mode, const QString &lang,
     return m_current_task->id;
 }
 
-int speech_service::tts_play_speech(const QString &text, const QString &lang) {
+int speech_service::tts_play_speech(const QString &text, QString lang) {
     if (state() == state_t::unknown || state() == state_t::not_configured ||
         state() == state_t::busy) {
         qWarning() << "cannot tts play speech, invalid state";
         return INVALID_TASK;
     }
+
+    if (lang.contains('-')) lang = lang.split('-').first();
 
     if (m_current_task) {
         if (m_current_task->engine == engine_t::stt) {
@@ -1378,13 +1384,14 @@ int speech_service::tts_play_speech(const QString &text, const QString &lang) {
     return m_current_task->id;
 }
 
-int speech_service::tts_speech_to_file(const QString &text,
-                                       const QString &lang) {
+int speech_service::tts_speech_to_file(const QString &text, QString lang) {
     if (state() == state_t::unknown || state() == state_t::not_configured ||
         state() == state_t::busy) {
         qWarning() << "cannot tts speech to file, invalid state";
         return INVALID_TASK;
     }
+
+    if (lang.contains('-')) lang = lang.split('-').first();
 
     if (m_current_task) {
         if (m_current_task->engine == engine_t::stt) {
