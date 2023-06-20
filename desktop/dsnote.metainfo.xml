@@ -51,6 +51,9 @@
   <launchable type="desktop-id">net.mkiol.SpeechNote.desktop</launchable>
   <content_rating type="oars-1.1" />
   <releases>
+    <release version="3.1.2" date="2023-06-20">
+      <description>Fix: Whisper Speech to Text didn't work for Chinese language</description>
+    </release>
     <release version="3.1.1" date="2023-06-17">
       <description>
         <ul>New DeepSpeech STT model for Latvain language</ul>
