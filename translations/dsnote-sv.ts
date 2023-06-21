@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sv" sourcelanguage="en_US">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="sv" sourcelanguage="en_US">
 <context>
     <name>AboutPage</name>
     <message>
@@ -149,8 +151,12 @@
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="21"/>
-        <source>&lt;p&gt;&lt;i&gt;Speech Note&lt;/i&gt; let you take and read notes with your voice. It uses Speech to Text and Text to Speech conversions to do so.&lt;/p&gt;&lt;p&gt;All voice processing is entirely done off-line, locally on your computer without the use of network connection. Your privacy is always respected. No data is send to the Internet.&lt;/p&gt;&lt;p&gt;To get started, you must first configure languages you&apos;d like to use.&lt;/p&gt;&lt;p&gt;&amp;rarr; Click the &lt;b&gt;Languages&lt;/b&gt; button, select a language and then download model files of your choice.&lt;/p&gt;&lt;p&gt;Have fun with &lt;i&gt;Speech Note&lt;/i&gt;!&lt;/p&gt;</source>
+        <source>&lt;p&gt;&lt;i&gt;Speech Note&lt;/i&gt; let you take and read notes with your voice. It uses Speech to Text and Text to Speech conversions to do so.&lt;/p&gt;&lt;p&gt;All voice processing is entirely done off-line, locally on your computer without the use of a network connection. Your privacy is always respected. No data is sent to the Internet.&lt;/p&gt;&lt;p&gt;To get started, you must first configure languages you&apos;d like to use.&lt;/p&gt;&lt;p&gt;&amp;rarr; Click the &lt;b&gt;Languages&lt;/b&gt; button, select a language and then download model files of your choice.&lt;/p&gt;&lt;p&gt;Have fun with &lt;i&gt;Speech Note&lt;/i&gt;!&lt;/p&gt;</source>
         <translation>&lt;p&gt;&lt;i&gt;Speech Note&lt;/i&gt; låter dig anteckna och läsa upp anteckningar med rösten. Den använder tal-till-text- och text-till-tal-konverteringar för att göra det.&lt;/p&gt;&lt;p&gt;All röstbehandling sker helt offline, lokalt på din dator utan användning av nätverksanslutning. Din integritet respekteras alltid. Ingen data skickas till Internet.&lt;/p&gt;&lt;p&gt;För att komma igång måste du först ställa in de språk du vill använda.&lt;/p&gt;&lt;p&gt;&amp;rarr; Tryck på &lt;b&gt;Språk&lt;/b&gt;-knappen, välj ett språk och ladda sedan ner de språkfiler du föredrar.&lt;/p&gt;&lt;p&gt; Ha roligt med &lt;i&gt;Speech Note&lt;/i&gt;!&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;&lt;i&gt;Speech Note&lt;/i&gt; let you take and read notes with your voice. It uses Speech to Text and Text to Speech conversions to do so.&lt;/p&gt;&lt;p&gt;All voice processing is entirely done off-line, locally on your computer without the use of network connection. Your privacy is always respected. No data is send to the Internet.&lt;/p&gt;&lt;p&gt;To get started, you must first configure languages you&apos;d like to use.&lt;/p&gt;&lt;p&gt;&amp;rarr; Click the &lt;b&gt;Languages&lt;/b&gt; button, select a language and then download model files of your choice.&lt;/p&gt;&lt;p&gt;Have fun with &lt;i&gt;Speech Note&lt;/i&gt;!&lt;/p&gt;</source>
+        <translation type="vanished">&lt;p&gt;&lt;i&gt;Speech Note&lt;/i&gt; låter dig anteckna och läsa upp anteckningar med rösten. Den använder tal-till-text- och text-till-tal-konverteringar för att göra det.&lt;/p&gt;&lt;p&gt;All röstbehandling sker helt offline, lokalt på din dator utan användning av nätverksanslutning. Din integritet respekteras alltid. Ingen data skickas till Internet.&lt;/p&gt;&lt;p&gt;För att komma igång måste du först ställa in de språk du vill använda.&lt;/p&gt;&lt;p&gt;&amp;rarr; Tryck på &lt;b&gt;Språk&lt;/b&gt;-knappen, välj ett språk och ladda sedan ner de språkfiler du föredrar.&lt;/p&gt;&lt;p&gt; Ha roligt med &lt;i&gt;Speech Note&lt;/i&gt;!&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -190,6 +196,18 @@
         <location filename="../sfos/qml/LangsPage.qml" line="56"/>
         <source>Text to Text</source>
         <translation>Text till text</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">Avbryt</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="obsolete">Ta bort</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="obsolete">Ladda ner</translation>
     </message>
 </context>
 <context>
@@ -663,8 +681,8 @@ Alltid på: Lyssning alltid påslagen.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="49"/>
-        <source>One sentence: Clicking on the 'Listen' button starts listening, which ends when the first sentence is recognized.
-Press and hold: Pressing and holding the 'Listen' button enables listening. When you stop holding, listening will turn off.
+        <source>One sentence: Clicking on the &apos;Listen&apos; button starts listening, which ends when the first sentence is recognized.
+Press and hold: Pressing and holding the &apos;Listen&apos; button enables listening. When you stop holding, listening will turn off.
 Always on: Listening is always turn on.</source>
         <translation>En mening: Tryck på knappen &quot;Lyssna&quot; påbörjar lyssning, vilket avslutas när första meningen identifierats.
 Tryck och håll kvar: Tryck och håll kvar knappen &quot;Lyssna&quot; påbörjar lyssning, vilket avslutas när knappen släpps.
@@ -787,37 +805,37 @@ Alltid på: Lyssning alltid påslagen.</translation>
 <context>
     <name>speech_service</name>
     <message>
-        <location filename="../src/speech_service.cpp" line="1856"/>
+        <location filename="../src/speech_service.cpp" line="1863"/>
         <source>No language has been set.</source>
         <translation>Inget språk har angetts.</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1857"/>
+        <location filename="../src/speech_service.cpp" line="1864"/>
         <source>Say something...</source>
         <translation>Säg något...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1859"/>
+        <location filename="../src/speech_service.cpp" line="1866"/>
         <source>Press and say something...</source>
         <translation>Håll ner och säg något...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1861"/>
+        <location filename="../src/speech_service.cpp" line="1868"/>
         <source>Click and say something...</source>
         <translation>Snabbtryck och säg något...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1862"/>
+        <location filename="../src/speech_service.cpp" line="1869"/>
         <source>Busy...</source>
         <translation>Upptagen...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1863"/>
+        <location filename="../src/speech_service.cpp" line="1870"/>
         <source>Processing, please wait...</source>
         <translation>Bearbetar, vänta...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="1865"/>
+        <location filename="../src/speech_service.cpp" line="1872"/>
         <source>Getting ready, please wait...</source>
         <translation>Förbereder, vänta...</translation>
     </message>

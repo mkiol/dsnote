@@ -21,8 +21,8 @@ DialogPage {
         text: qsTr("<p><i>Speech Note</i> let you take and read notes with your voice. " +
                    "It uses Speech to Text and Text to Speech conversions to do so.</p>" +
                    "<p>All voice processing is entirely done off-line, locally on your " +
-                   "computer without the use of network connection. Your privacy is always " +
-                   "respected. No data is send to the Internet.</p>" +
+                   "computer without the use of a network connection. Your privacy is always " +
+                   "respected. No data is sent to the Internet.</p>" +
                    "<p>To get started, you must first configure languages you'd like to use.</p>" +
                    "<p>&rarr; Click the <b>Languages</b> button, select a language and then download model files of your choice.</p>" +
                    "<p>Have fun with <i>Speech Note</i>!</p>")

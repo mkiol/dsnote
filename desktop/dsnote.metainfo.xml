@@ -11,8 +11,8 @@
     <p>Speech Note enables you to take and read notes with your voice with multiple languages.
       It uses Speech to Text and Text to Speech conversions to do so.
       All voice processing is entirely done off-line, locally on your
-      computer without the use of network connection. Your privacy is
-      always respected. No data is send to the Internet.</p>
+      computer without the use of a network connection. Your privacy is
+      always respected. No data is sent to the Internet.</p>
   </description>
   <categories>
     <category>AudioVideo</category>
