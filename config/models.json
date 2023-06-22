@@ -285,6 +285,11 @@
             "name": "বাংলা",
             "name_en": "Bengali",
             "id": "bn"
+        },
+        {
+            "name": "íslenska",
+            "name_en": "Icelandic",
+            "id": "is"
         }
     ],
     "models": [
@@ -2986,6 +2991,58 @@
             "size": "18716220"
         },
         {
+            "name": "íslenska (Piper Bui Medium)",
+            "model_id": "is_piper_bui_medium",
+            "engine": "tts_piper",
+            "lang_id": "is",
+            "checksum": "fc38ae0e",
+            "checksum_quick": "f8741f06",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-is-bui-medium.tar.gz"
+            ],
+            "size": "58610382"
+        },
+        {
+            "name": "íslenska (Piper Salka Medium)",
+            "model_id": "is_piper_salka_medium",
+            "engine": "tts_piper",
+            "lang_id": "is",
+            "checksum": "452e04a3",
+            "checksum_quick": "3647989a",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-is-salka-medium.tar.gz"
+            ],
+            "size": "58669595"
+        },
+        {
+            "name": "íslenska (Piper Steinn Medium)",
+            "model_id": "is_piper_steinn_medium",
+            "engine": "tts_piper",
+            "lang_id": "is",
+            "checksum": "7b527ba4",
+            "checksum_quick": "99f99fb1",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-is-steinn-medium.tar.gz"
+            ],
+            "size": "58680806"
+        },
+        {
+            "name": "íslenska (Piper Ugla Medium)",
+            "model_id": "is_piper_ugla_medium",
+            "engine": "tts_piper",
+            "lang_id": "is",
+            "checksum": "35597986",
+            "checksum_quick": "c09e6e",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-is-ugla-medium.tar.gz"
+            ],
+            "size": "58681988"
+        },
+        {
             "name": "Polski (Piper MLS 6892 Low)",
             "model_id": "pl_piper_mls6892_low",
             "engine": "tts_piper",
@@ -3134,6 +3191,12 @@
             "model_id": "eu_espeak_eu",
             "engine": "tts_espeak",
             "lang_id": "eu"
+        },
+        {
+            "name": "íslenska (Espeak Robot)",
+            "model_id": "is_espeak_is",
+            "engine": "tts_espeak",
+            "lang_id": "is"
         },
         {
             "name": "فارسی (Espeak Robot)",

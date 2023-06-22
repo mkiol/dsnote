@@ -46,6 +46,7 @@ Following languages are supported:
 | hr          | Croatian             |                      | ● (e)             |                |                 |                   | ●                | ●                | ●               |
 | hu          | Hungarian            | ● (e)                |                   |                |                 |                   | ●                | ●                | ●               |
 | id          | Indonesian           | ● (e)                | ●                 |                |                 |                   | ●                | ●                |                 |
+| is          | Icelandic            |                      |                   |                | ●               |                   | ●                |                  |                 |
 | it          | Italian              | ●                    | ●                 | ●              | ●               |                   | ●                |                  | ●               |
 | jp          | Japanese             |                      | ●                 | ●              |                 |                   | ●                |                  |                 |
 | ka          | Georgian             |                      |                   |                |                 | ●                 | ●                |                  |                 |
@@ -53,7 +54,7 @@ Following languages are supported:
 | ko          | Korean               |                      |                   | ●              |                 |                   | ●                |                  |                 |
 | ky          | Kyrgyz               |                      |                   |                |                 | ●                 | ●                |                  |                 |
 | lt          | Lithuanian           |                      |                   |                |                 |                   | ●                | ●                | ●               |
-| lv          | Latvian              | ● (e)                |                   |                |                 |                   | ●                |                  | ●               |
+| lv          | Latvian              | ●                    |                   |                |                 |                   | ●                |                  | ●               |
 | mk          | Macedonian           |                      | ● (e)             |                |                 | ●                 | ●                |                  |                 |
 | mn          | Mongolian            | ● (e)                |                   |                |                 |                   |                  |                  |                 |
 | ms          | Malay                |                      | ●                 |                |                 |                   | ●                | ●                |                 |
@@ -79,7 +80,7 @@ Following languages are supported:
 | uz          | Uzbek                |                      |                   | ●              |                 |                   | ●                |                  |                 |
 | vi          | Vietnamese           |                      | ● (e)             | ●              | ●               |                   | ●                |                  |                 |
 | yo          | Yoruba               | ● (e)                |                   |                |                 |                   |                  |                  |                 |
-| zh-CN       | Chinese (Simplified) | ●                    | ● (e)             | ●              | ●               |                   | ●                |                  | ●               |
+| zh       | Chinese | ●                    | ● (e)             | ●              | ●               |                   | ●                |                  | ●               |
 
 <sup>(e) experimental, most likely doesn't work well</sup><br/>
 <sup>(*) Coqui TTS models are only available on x86-64</sub>
@@ -131,7 +132,7 @@ make
 
 In a runtime app requires following Qt QML modules (example of packages for Ubuntu 22.04): `qml-module-qtquick-controls` `qml-module-qtquick-dialogs` `qml-module-qtquick-controls2` `qml-module-qtquick-layouts`.
 
-Also to make Python components work (i.e.: 'Coqui TTS models', 'Restore punctuation'), following Python libriaries have to be installed (pip packages names): `torch` `torchaudio` `transformers` `accelerate` `TTS`.
+Also to make Python components work (i.e.: 'Coqui TTS models', 'Restore punctuation' feature), following Python libriaries have to be installed (pip packages names): `torch` `torchaudio` `transformers` `accelerate` `TTS`.
 
 To make build without support for Python components, add `-DWITH_PY=OFF` in cmake step.
 
