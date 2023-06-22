@@ -3043,6 +3043,32 @@
             "size": "58681988"
         },
         {
+            "name": "Svenska (Piper NST Medium)",
+            "model_id": "sv_piper_nst_medium",
+            "engine": "tts_piper",
+            "lang_id": "sv",
+            "checksum": "e0f2772c",
+            "checksum_quick": "d9a3aad9",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-sv-se-nst-medium.tar.gz"
+            ],
+            "size": "58295473"
+        },
+        {
+            "name": "Русский (Piper Irinia Medium)",
+            "model_id": "ru_piper_irinia_medium",
+            "engine": "tts_piper",
+            "lang_id": "ru",
+            "checksum": "dd1f5fa7",
+            "checksum_quick": "92e6c51d",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-ru-irinia-medium.tar.gz"
+            ],
+            "size": "58340190"
+        },
+        {
             "name": "Polski (Piper MLS 6892 Low)",
             "model_id": "pl_piper_mls6892_low",
             "engine": "tts_piper",
