@@ -111,7 +111,31 @@ Any new translation contribution is very welcome.
 
 ## Building from sources
 
-### Linux Flatpak
+### Linux
+
+Following tools/libraries are required for building (example of packages for Ubuntu 22.04):
+`build-essential` `cmake` `git` `autoconf` `qtbase5-dev` `qtdeclarative5-dev` 
+`qtmultimedia5-dev` `qtquickcontrols2-5-dev` `python3-dev` `zlib1g-dev` `libtool` 
+`libboost-all-dev`.
+
+```
+git clone https://github.com/mkiol/dsnote.git
+
+cd dsnote
+mkdir build
+cd build
+
+cmake ../ -DCMAKE_BUILD_TYPE=Release -DWITH_DESKTOP=ON
+make
+```
+
+In a runtime app requires following Qt QML modules (example of packages for Ubuntu 22.04): `qml-module-qtquick-controls` `qml-module-qtquick-dialogs` `qml-module-qtquick-controls2` `qml-module-qtquick-layouts`.
+
+Also to make Python components work (i.e.: 'Coqui TTS models', 'Restore punctuation'), following Python libriaries have to be installed (pip packages names): `torch` `torchaudio` `transformers` `accelerate` `TTS`.
+
+To make build without support for Python components, add `-DWITH_PY=OFF` in cmake step.
+
+### Flatpak
 
 ```
 git clone https://github.com/mkiol/dsnote.git
