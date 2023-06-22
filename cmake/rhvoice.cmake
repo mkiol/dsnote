@@ -7,7 +7,7 @@ ExternalProject_Add(rhvoice
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     GIT_REPOSITORY "${rhvoice_source_url}"
     GIT_TAG ${rhvoice_tag}
-    GIT_SHALLOW ON
+    GIT_SHALLOW OFF
     GIT_SUBMODULES "cmake/thirdParty/sanitizers" "cmake/thirdParty/CCache"
         "data/languages/Polish" "data/languages/Albanian" "data/languages/Brazilian-Portuguese"
         "data/languages/English" "data/languages/Esperanto" "data/languages/Georgian"
@@ -15,7 +15,7 @@ ExternalProject_Add(rhvoice
         "data/languages/Tatar" "data/languages/Ukrainian" "data/languages/Czech"
     URL "${rhvoice_source_url}"
     URL_MD5 "${rhvoice_checksum}"
-    PATCH_COMMAND patch --unified -p1 --directory=<SOURCE_DIR>
+    PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/rhvoice.patch ||
                     echo "patch cmd failed, likely already patched"
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release

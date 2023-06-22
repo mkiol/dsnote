@@ -30,7 +30,7 @@ ExternalProject_Add(kaldi
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${kaldi_source_url}"
     URL_MD5 "${kaldi_checksum}"
-    PATCH_COMMAND patch --forward --unified <SOURCE_DIR>/CMakeLists.txt
+    PATCH_COMMAND patch --batch --forward --unified <SOURCE_DIR>/CMakeLists.txt
         -i ${patches_dir}/kaldi.patch ||
             echo "patch cmd failed, likely already patched"
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
@@ -48,7 +48,7 @@ ExternalProject_Add(vosk
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${vosk_source_url}"
     URL_MD5 "${vosk_checksum}"
-    PATCH_COMMAND patch --forward --unified <SOURCE_DIR>/CMakeLists.txt
+    PATCH_COMMAND patch --batch --forward --unified <SOURCE_DIR>/CMakeLists.txt
         -i ${patches_dir}/vosk.patch ||
             echo "patch cmd failed, likely already patched"
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}

@@ -24,7 +24,7 @@ ExternalProject_Add(ssplitcpp
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${ssplitcpp_source_url}"
     URL_MD5 "${ssplitcpp_checksum}"
-    PATCH_COMMAND patch --unified -p1 --directory=<SOURCE_DIR>
+    PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/ssplitcpp.patch ||
                     echo "patch cmd failed, likely already patched"
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
