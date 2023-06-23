@@ -1169,6 +1169,18 @@
             "lang_id": "ru"
         },
         {
+            "name": "Русский (Whisper Base Fine-Tuned)",
+            "model_id": "ru_whisper_base_ft",
+            "engine": "stt_whisper",
+            "lang_id": "ru",
+            "checksum": "34cc44cc",
+            "checksum_quick": "eb108273",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/ru/ggml-base-ru-artyomboyko.bin"
+            ],
+            "size": "147951482"
+        },
+        {
             "name": "Nederlands (Whisper Tiny)",
             "model_id": "nl_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1433,6 +1445,30 @@
             "lang_id": "cs"
         },
         {
+            "name": "Čeština (Whisper Small Fine-Tuned)",
+            "model_id": "cs_whisper_small_ft",
+            "engine": "stt_whisper",
+            "lang_id": "cs",
+            "checksum": "2a71b3f1",
+            "checksum_quick": "11841031",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/cs/ggml-small-cs-mikr.bin"
+            ],
+            "size": "487601967"
+        },
+        {
+            "name": "Čeština (Whisper Medium Fine-Tuned)",
+            "model_id": "cs_whisper_medium_ft",
+            "engine": "stt_whisper",
+            "lang_id": "cs",
+            "checksum": "e46a36d0",
+            "checksum_quick": "c6404ae3",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/cs/ggml-medium-cs-mikr.bin"
+            ],
+            "size": "1533763059"
+        },
+        {
             "name": "Slovenčina (Whisper Tiny)",
             "model_id": "sk_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1459,6 +1495,30 @@
             "model_alias_of": "multilang_whisper_medium",
             "lang_id": "sk",
             "score": 0
+        },
+        {
+            "name": "Slovenčina (Whisper Small Fine-Tuned)",
+            "model_id": "sk_whisper_small_ft",
+            "engine": "stt_whisper",
+            "lang_id": "sk",
+            "checksum": "e5c5cd6d",
+            "checksum_quick": "94d6eb11",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/sk/ggml-small-sk-mikr.bin"
+            ],
+            "size": "487601967"
+        },
+        {
+            "name": "Slovenčina (Whisper Medium Fine-Tuned)",
+            "model_id": "sk_whisper_medium_ft",
+            "engine": "stt_whisper",
+            "lang_id": "sk",
+            "checksum": "2c8a74a0",
+            "checksum_quick": "53d9d667",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/sk/ggml-medium-sk-mikr.bin"
+            ],
+            "size": "1533763059"
         },
         {
             "name": "中文 (Whisper Tiny)",
@@ -1601,6 +1661,18 @@
             "score": 0
         },
         {
+            "name": "Hrvatski (Whisper Small Fine-Tuned)",
+            "model_id": "hr_whisper_small_ft",
+            "engine": "stt_whisper",
+            "lang_id": "hr",
+            "checksum": "be80c1a0",
+            "checksum_quick": "a282f7ec",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/hr/ggml-small-hr-mikr.bin"
+            ],
+            "size": "487601967"
+        },
+        {
             "name": "Български (Whisper Tiny)",
             "model_id": "bg_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1657,6 +1729,18 @@
             "score": 0
         },
         {
+            "name": "Română (Whisper Small Fine-Tuned)",
+            "model_id": "ro_whisper_small_ft",
+            "engine": "stt_whisper",
+            "lang_id": "ro",
+            "checksum": "913c4399",
+            "checksum_quick": "7619a012",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/ro/ggml-small-ro-mikr.bin"
+            ],
+            "size": "487601967"
+        },
+        {
             "name": "Slovenščina (Whisper Tiny)",
             "model_id": "sl_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1683,6 +1767,18 @@
             "model_alias_of": "multilang_whisper_medium",
             "lang_id": "sl",
             "score": 0
+        },
+        {
+            "name": "Slovenščina (Whisper Medium Fine-Tuned)",
+            "model_id": "sl_whisper_medium_ft",
+            "engine": "stt_whisper",
+            "lang_id": "sl",
+            "checksum": "3ef8406c",
+            "checksum_quick": "8a5be15d",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/sl/ggml-medium-sl-mikr.bin"
+            ],
+            "size": "1533763059"
         },
         {
             "name": "Bosanski (Whisper Tiny)",
@@ -1795,6 +1891,18 @@
             "model_alias_of": "multilang_whisper_medium",
             "lang_id": "hu",
             "score": 0
+        },
+        {
+            "name": "Magyar (Whisper Small Fine-Tuned)",
+            "model_id": "hu_whisper_small_ft",
+            "engine": "stt_whisper",
+            "lang_id": "hu",
+            "checksum": "a17666c1",
+            "checksum_quick": "b48dded2",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/hu/ggml-small-hu-mikr.bin"
+            ],
+            "size": "487601967"
         },
         {
             "name": "हिन्दी (Whisper Tiny)",
@@ -2463,6 +2571,30 @@
             "model_id": "pl_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
             "lang_id": "pl"
+        },
+        {
+            "name": "Polski (Whisper Tiny Fine-Tuned)",
+            "model_id": "pl_whisper_tiny_ft",
+            "engine": "stt_whisper",
+            "lang_id": "pl",
+            "checksum": "3417bbb6",
+            "checksum_quick": "8d048ce6",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/pl/ggml-tiny-pl-aspik101.bin"
+            ],
+            "size": "77691713"
+        },
+        {
+            "name": "Polski (Whisper Medium Fine-Tuned)",
+            "model_id": "pl_whisper_medium_ft",
+            "engine": "stt_whisper",
+            "lang_id": "pl",
+            "checksum": "edf24287",
+            "checksum_quick": "b62a396b",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/pl/ggml-medium-pl-aspik101.bin"
+            ],
+            "size": "1533763059"
         },
         {
             "name": "English (Vosk Small)",

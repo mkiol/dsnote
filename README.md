@@ -21,7 +21,7 @@ privacy and does not send any data to the Internet.
 
 Following languages are supported:
 
-| **Lang ID** | **Name**   | **DeepSpeech (STT)** | **Whisper (STT)** | **Vosk (STT)** | **Piper (TTS)** | **RHVoice (TTS)** | **espeak (TTS)** | **MBROLA (TTS)** | **Coqui (TTS)** |
+| **Lang ID** | **Name**   | **DeepSpeech (STT)** | **Whisper (STT)** | **Vosk (STT)** | **Piper (TTS)** | **RHVoice (TTS)** | **espeak (TTS)** | **MBROLA (TTS)** | **Coqui (TTS)*** |
 | ----------- | ---------- | -------------------- | ----------------- | -------------- | --------------- | ----------------- | ---------------- | ---------------- | --------------- |
 | am          | Amharic    | ● (e)                | ● (e)             |                |                 |                   | ●                |                  |                 |
 | ar          | Arabic     |                      | ● (e)             | ●              |                 |                   | ●                | ●                |                 |
@@ -82,7 +82,8 @@ Following languages are supported:
 | yo          | Yoruba     | ● (e)                | ● (e)             |                |                 |                   |                  |                  |                 |
 | zh          | Chinese    | ●                    | ● (e)             | ●              | ●               |                   | ●                |                  | ●               |
 
-<sup>(e) experimental, most likely doesn't work well</sup><br/>
+<sup>(e) experimental, most likely doesn't work well</sup>
+<br/>
 <sup>(*) Coqui TTS models are only available on x86-64</sub>
 
 Language models can be downloaded directly from the app.
