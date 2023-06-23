@@ -1769,6 +1769,678 @@
             "score": 0
         },
         {
+            "name": "Magyar (Whisper Tiny)",
+            "model_id": "hu_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "hu",
+            "score": 0
+        },
+        {
+            "name": "Magyar (Whisper Base)",
+            "model_id": "hu_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "hu",
+            "score": 0
+        },
+        {
+            "name": "Magyar (Whisper Small)",
+            "model_id": "hu_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "hu",
+            "score": 0
+        },
+        {
+            "name": "Magyar (Whisper Medium)",
+            "model_id": "hu_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "hu",
+            "score": 0
+        },
+        {
+            "name": "हिन्दी (Whisper Tiny)",
+            "model_id": "hi_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "hi",
+            "score": 0
+        },
+        {
+            "name": "हिन्दी (Whisper Base)",
+            "model_id": "hi_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "hi",
+            "score": 0
+        },
+        {
+            "name": "हिन्दी (Whisper Small)",
+            "model_id": "hi_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "hi",
+            "score": 0
+        },
+        {
+            "name": "हिन्दी (Whisper Medium)",
+            "model_id": "hi_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "hi",
+            "score": 0
+        },
+        {
+            "name": "فارسی (Whisper Tiny)",
+            "model_id": "fa_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "fa",
+            "score": 0
+        },
+        {
+            "name": "فارسی (Whisper Base)",
+            "model_id": "fa_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "fa",
+            "score": 0
+        },
+        {
+            "name": "فارسی (Whisper Small)",
+            "model_id": "fa_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "fa",
+            "score": 0
+        },
+        {
+            "name": "فارسی (Whisper Medium)",
+            "model_id": "fa_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "fa",
+            "score": 0
+        },
+        {
+            "name": "Dansk (Whisper Tiny)",
+            "model_id": "da_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "da",
+            "score": 0
+        },
+        {
+            "name": "Dansk (Whisper Base)",
+            "model_id": "da_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "da",
+            "score": 0
+        },
+        {
+            "name": "Dansk (Whisper Small)",
+            "model_id": "da_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "da",
+            "score": 0
+        },
+        {
+            "name": "Dansk (Whisper Medium)",
+            "model_id": "da_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "da",
+            "score": 0
+        },
+        {
+            "name": "Eesti (Whisper Tiny)",
+            "model_id": "et_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "et",
+            "score": 0
+        },
+        {
+            "name": "Eesti (Whisper Base)",
+            "model_id": "et_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "et",
+            "score": 0
+        },
+        {
+            "name": "Eesti (Whisper Small)",
+            "model_id": "et_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "et",
+            "score": 0
+        },
+        {
+            "name": "Eesti (Whisper Medium)",
+            "model_id": "et_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "et",
+            "score": 0
+        },
+        {
+            "name": "Euskara (Whisper Tiny)",
+            "model_id": "eu_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "eu",
+            "score": 0
+        },
+        {
+            "name": "Euskara (Whisper Base)",
+            "model_id": "eu_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "eu",
+            "score": 0
+        },
+        {
+            "name": "Euskara (Whisper Small)",
+            "model_id": "eu_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "eu",
+            "score": 0
+        },
+        {
+            "name": "Euskara (Whisper Medium)",
+            "model_id": "eu_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "eu",
+            "score": 0
+        },
+        {
+            "name": "íslenska (Whisper Tiny)",
+            "model_id": "is_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "is",
+            "score": 0
+        },
+        {
+            "name": "íslenska (Whisper Base)",
+            "model_id": "is_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "is",
+            "score": 0
+        },
+        {
+            "name": "íslenska (Whisper Small)",
+            "model_id": "is_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "is",
+            "score": 0
+        },
+        {
+            "name": "íslenska (Whisper Medium)",
+            "model_id": "is_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "is",
+            "score": 0
+        },
+        {
+            "name": "ქართული (Whisper Tiny)",
+            "model_id": "ka_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "ka",
+            "score": 0
+        },
+        {
+            "name": "ქართული (Whisper Base)",
+            "model_id": "ka_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "ka",
+            "score": 0
+        },
+        {
+            "name": "ქართული (Whisper Small)",
+            "model_id": "ka_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "ka",
+            "score": 0
+        },
+        {
+            "name": "ქართული (Whisper Medium)",
+            "model_id": "ka_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "ka",
+            "score": 0
+        },
+        {
+            "name": "Қазақ (Whisper Tiny)",
+            "model_id": "kk_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "kk",
+            "score": 0
+        },
+        {
+            "name": "Қазақ (Whisper Base)",
+            "model_id": "kk_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "kk",
+            "score": 0
+        },
+        {
+            "name": "Қазақ (Whisper Small)",
+            "model_id": "kk_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "kk",
+            "score": 0
+        },
+        {
+            "name": "Қазақ (Whisper Medium)",
+            "model_id": "kk_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "kk",
+            "score": 0
+        },
+        {
+            "name": "한국어 (Whisper Tiny)",
+            "model_id": "ko_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "ko",
+            "score": 0
+        },
+        {
+            "name": "한국어 (Whisper Base)",
+            "model_id": "ko_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "ko",
+            "score": 0
+        },
+        {
+            "name": "한국어 (Whisper Small)",
+            "model_id": "ko_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "ko",
+            "score": 0
+        },
+        {
+            "name": "한국어 (Whisper Medium)",
+            "model_id": "ko_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "ko",
+            "score": 0
+        },
+        {
+            "name": "Lietuvių (Whisper Tiny)",
+            "model_id": "lt_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "lt",
+            "score": 0
+        },
+        {
+            "name": "Lietuvių (Whisper Base)",
+            "model_id": "lt_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "lt",
+            "score": 0
+        },
+        {
+            "name": "Lietuvių (Whisper Small)",
+            "model_id": "lt_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "lt",
+            "score": 0
+        },
+        {
+            "name": "Lietuvių (Whisper Medium)",
+            "model_id": "lt_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "lt",
+            "score": 0
+        },
+        {
+            "name": "Latviešu (Whisper Tiny)",
+            "model_id": "lv_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "lv",
+            "score": 0
+        },
+        {
+            "name": "Latviešu (Whisper Base)",
+            "model_id": "lv_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "lv",
+            "score": 0
+        },
+        {
+            "name": "Latviešu (Whisper Small)",
+            "model_id": "lv_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "lv",
+            "score": 0
+        },
+        {
+            "name": "Latviešu (Whisper Medium)",
+            "model_id": "lv_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "lv",
+            "score": 0
+        },
+        {
+            "name": "Монгол (Whisper Tiny)",
+            "model_id": "mn_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "mn",
+            "score": 0
+        },
+        {
+            "name": "Монгол (Whisper Base)",
+            "model_id": "mn_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "mn",
+            "score": 0
+        },
+        {
+            "name": "Монгол (Whisper Small)",
+            "model_id": "mn_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "mn",
+            "score": 0
+        },
+        {
+            "name": "Монгол (Whisper Medium)",
+            "model_id": "mn_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "mn",
+            "score": 0
+        },
+        {
+            "name": "Malti (Whisper Tiny)",
+            "model_id": "mt_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "mt",
+            "score": 0
+        },
+        {
+            "name": "Malti (Whisper Base)",
+            "model_id": "mt_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "mt",
+            "score": 0
+        },
+        {
+            "name": "Malti (Whisper Small)",
+            "model_id": "mt_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "mt",
+            "score": 0
+        },
+        {
+            "name": "Malti (Whisper Medium)",
+            "model_id": "mt_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "mt",
+            "score": 0
+        },
+        {
+            "name": "नेपाली (Whisper Tiny)",
+            "model_id": "ne_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "ne",
+            "score": 0
+        },
+        {
+            "name": "नेपाली (Whisper Base)",
+            "model_id": "ne_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "ne",
+            "score": 0
+        },
+        {
+            "name": "नेपाली (Whisper Small)",
+            "model_id": "ne_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "ne",
+            "score": 0
+        },
+        {
+            "name": "नेपाली (Whisper Medium)",
+            "model_id": "ne_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "ne",
+            "score": 0
+        },
+        {
+            "name": "Shqip (Whisper Tiny)",
+            "model_id": "sq_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "sq",
+            "score": 0
+        },
+        {
+            "name": "Shqip (Whisper Base)",
+            "model_id": "sq_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "sq",
+            "score": 0
+        },
+        {
+            "name": "Shqip (Whisper Small)",
+            "model_id": "sq_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "sq",
+            "score": 0
+        },
+        {
+            "name": "Shqip (Whisper Medium)",
+            "model_id": "sq_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "sq",
+            "score": 0
+        },
+        {
+            "name": "Kiswahili (Whisper Tiny)",
+            "model_id": "sw_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "sw",
+            "score": 0
+        },
+        {
+            "name": "Kiswahili (Whisper Base)",
+            "model_id": "sw_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "sw",
+            "score": 0
+        },
+        {
+            "name": "Kiswahili (Whisper Small)",
+            "model_id": "sw_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "sw",
+            "score": 0
+        },
+        {
+            "name": "Kiswahili (Whisper Medium)",
+            "model_id": "sw_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "sw",
+            "score": 0
+        },
+        {
+            "name": "Tagalog (Whisper Tiny)",
+            "model_id": "tl_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "tl",
+            "score": 0
+        },
+        {
+            "name": "Tagalog (Whisper Base)",
+            "model_id": "tl_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "tl",
+            "score": 0
+        },
+        {
+            "name": "Tagalog (Whisper Small)",
+            "model_id": "tl_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "tl",
+            "score": 0
+        },
+        {
+            "name": "Tagalog (Whisper Medium)",
+            "model_id": "tl_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "tl",
+            "score": 0
+        },
+        {
+            "name": "татарча (Whisper Tiny)",
+            "model_id": "tt_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "tt",
+            "score": 0
+        },
+        {
+            "name": "татарча (Whisper Base)",
+            "model_id": "tt_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "tt",
+            "score": 0
+        },
+        {
+            "name": "татарча (Whisper Small)",
+            "model_id": "tt_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "tt",
+            "score": 0
+        },
+        {
+            "name": "татарча (Whisper Medium)",
+            "model_id": "tt_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "tt",
+            "score": 0
+        },
+        {
+            "name": "Oʻzbekcha (Whisper Tiny)",
+            "model_id": "uz_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "uz",
+            "score": 0
+        },
+        {
+            "name": "Oʻzbekcha (Whisper Base)",
+            "model_id": "uz_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "uz",
+            "score": 0
+        },
+        {
+            "name": "Oʻzbekcha (Whisper Small)",
+            "model_id": "uz_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "uz",
+            "score": 0
+        },
+        {
+            "name": "Oʻzbekcha (Whisper Medium)",
+            "model_id": "uz_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "uz",
+            "score": 0
+        },
+        {
+            "name": "Yorùbá (Whisper Tiny)",
+            "model_id": "yo_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "yo",
+            "score": 0
+        },
+        {
+            "name": "Yorùbá (Whisper Base)",
+            "model_id": "yo_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "yo",
+            "score": 0
+        },
+        {
+            "name": "Yorùbá (Whisper Small)",
+            "model_id": "yo_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "yo",
+            "score": 0
+        },
+        {
+            "name": "Yorùbá (Whisper Medium)",
+            "model_id": "yo_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "yo",
+            "score": 0
+        },
+        {
+            "name": "Amarəñña (Whisper Tiny)",
+            "model_id": "am_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "am",
+            "score": 0
+        },
+        {
+            "name": "Amarəñña (Whisper Base)",
+            "model_id": "am_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "am",
+            "score": 0
+        },
+        {
+            "name": "Amarəñña (Whisper Small)",
+            "model_id": "am_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "am",
+            "score": 0
+        },
+        {
+            "name": "Amarəñña (Whisper Medium)",
+            "model_id": "am_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "am",
+            "score": 0
+        },
+        {
+            "name": "عربي (Whisper Tiny)",
+            "model_id": "ar_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "ar",
+            "score": 0
+        },
+        {
+            "name": "عربي (Whisper Base)",
+            "model_id": "ar_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "ar",
+            "score": 0
+        },
+        {
+            "name": "عربي (Whisper Small)",
+            "model_id": "ar_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "ar",
+            "score": 0
+        },
+        {
+            "name": "عربي (Whisper Medium)",
+            "model_id": "ar_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "ar",
+            "score": 0
+        },
+        {
+            "name": "বাংলা (Whisper Tiny)",
+            "model_id": "bn_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "bn",
+            "score": 0
+        },
+        {
+            "name": "বাংলা (Whisper Base)",
+            "model_id": "bn_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "bn",
+            "score": 0
+        },
+        {
+            "name": "বাংলা (Whisper Small)",
+            "model_id": "bn_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "bn",
+            "score": 0
+        },
+        {
+            "name": "বাংলা (Whisper Medium)",
+            "model_id": "bn_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "bn",
+            "score": 0
+        },
+        {
             "name": "Polski (Whisper Tiny)",
             "model_id": "pl_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
