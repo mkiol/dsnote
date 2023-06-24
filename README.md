@@ -84,7 +84,7 @@ Following languages are supported:
 
 <sup>(e) experimental, most likely doesn't work well</sup>
 <br/>
-<sup>(*) Coqui TTS models are only available on x86-64</sub>
+<sup>(*) Coqui TTS models are only available on x86-64</sup>
 
 Language models can be downloaded directly from the app.
 

@@ -38,6 +38,9 @@
       <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshot_1.png</image>
     </screenshot>
     <screenshot>
+      <video codec="vp9" width="1920" height="1080">https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/demo.webm</video>
+    </screenshot>
+    <screenshot>
       <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshot_2.png</image>
     </screenshot>
     <screenshot>
@@ -51,15 +54,35 @@
   <launchable type="desktop-id">net.mkiol.SpeechNote.desktop</launchable>
   <content_rating type="oars-1.1" />
   <releases>
+    <release version="3.1.3" date="2023-06-24">
+      <description>
+        <ul>
+        <li>Whisper STT models enabled also for:
+            Amharic, Arabic, Bengali, Danish, Estonian, Basque, Persian, Hindi,
+            Croatian, Hungarian, Icelandic, Georgian,
+            Kazakh, Korean, Lithuanian, Latvian, Mongolian,
+            Maltese, Nepali, Romanian, Slovak, Slovenian, Albanian,
+            Swahili, Tagalog, Tatar, Uzbek and Yoruba</li>
+        <li>Whisper fine-tuned STT models for: Czech, Slovak, Slovenian, Romanian, Russian, Hungarian and Polish</li>
+        <li>New Piper TTS models for: Icelandic, Swedish and Russian</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.1.2" date="2023-06-20">
-      <description>Fix: Whisper Speech to Text didn't work for Chinese language</description>
+      <description>
+        <ul>
+        <li>Fix: Whisper STT didn't work for Chinese language</li>
+        </ul>
+      </description>
     </release>
     <release version="3.1.1" date="2023-06-17">
       <description>
-        <ul>New DeepSpeech STT model for Latvain language</ul>
-        <ul>Minor UI improvements</ul>
-        <ul>Fix: Crash during TTS on some systems</ul>
-        <ul>Fix: Downloaded models disappeared after app restart when Downloads directory was not set in the system</ul>
+        <ul>
+        <li>New DeepSpeech STT model for Latvain language</li>
+        <li>Minor UI improvements</li>
+        <li>Fix: Crash during TTS on some systems</li>
+        <li>Fix: Downloaded models disappeared after app restart when Downloads directory was not set in the system</li>
+        </ul>
       </description>
     </release>
     <release version="3.1.0" date="2023-06-13" />

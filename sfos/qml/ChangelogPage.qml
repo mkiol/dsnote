@@ -38,8 +38,29 @@ Page {
             }
 
             LogItem {
+                title: "New Text to Speech model for Icelandic, Swedish and Russian languages"
+                description: "New Piper models for Icelandic, Swedish and Russian are configured for download."
+            }
+
+            LogItem {
                 title: "New Speech to Text model for Latvian language"
-                description: "New DeepSpeech model for Latvian language is configured for download."
+                description: "New DeepSpeech model for Latvian is configured for download."
+            }
+
+            LogItem {
+                title: "Whisper models for more languages"
+                description: "Whisper Speech to Text models have been enabled also for: " +
+                             "Amharic, Arabic, Bengali, Danish, Estonian, Basque, Persian, Hindi, " +
+                             "Croatian, Hungarian, Icelandic, Georgian, " +
+                             "Kazakh, Korean, Lithuanian, Latvian, Mongolian, " +
+                             "Maltese, Nepali, Romanian, Slovak, Slovenian, Albanian, " +
+                             "Swahili, Tagalog, Tatar, Uzbek, Yoruba."
+            }
+
+            LogItem {
+                title: "Whisper fine-tuned models for Polish and Russian"
+                description: "Whisper 'fine-tuned' models for Polish (Tiny) and Russian (Base) are configured for download. " +
+                             "They should provide better accuracy comparing to standard Whisper models."
             }
 
             SectionHeader {
