@@ -3294,6 +3294,18 @@
             "lang_id": "ro"
         },
         {
+            "name": "Interpunkcia (Kredor)",
+            "model_id": "sk_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "sk"
+        },
+        {
+            "name": "Tegnsætning (Kredor)",
+            "model_id": "da_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "da"
+        },
+        {
             "name": "English (Piper Danny Low)",
             "model_id": "en_piper_danny_low",
             "engine": "tts_piper",
