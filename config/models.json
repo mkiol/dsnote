@@ -3807,6 +3807,19 @@
             "size": "18716220"
         },
         {
+            "name": "中文 (Piper Huayan Medium)",
+            "model_id": "zh_piper_huayan_medium",
+            "engine": "tts_piper",
+            "lang_id": "zh",
+            "checksum": "3a9a0896",
+            "checksum_quick": "35dcc9c9",
+            "comp": "targz",
+            "urls": [
+                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-zh_CN-huayan-medium.tar.gz"
+            ],
+            "size": "58395655"
+        },
+        {
             "name": "íslenska (Piper Bui Medium)",
             "model_id": "is_piper_bui_medium",
             "engine": "tts_piper",
