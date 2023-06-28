@@ -1,7 +1,7 @@
 diff -ruN piper-org/CMakeLists.txt piper-patched/CMakeLists.txt
 --- piper-org/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ piper-patched/CMakeLists.txt	2023-04-24 17:03:07.889934993 +0200
-@@ -0,0 +1,31 @@
++++ piper-patched/CMakeLists.txt	2023-06-28 11:19:02.452202472 +0200
+@@ -0,0 +1,36 @@
 +cmake_minimum_required(VERSION 3.5)
 +
 +project(piper_api C CXX)
@@ -9,13 +9,15 @@ diff -ruN piper-org/CMakeLists.txt piper-patched/CMakeLists.txt
 +set(CMAKE_CXX_STANDARD 17)
 +set(CMAKE_CXX_STANDARD_REQUIRED ON)
 +
-+add_library(piper_api STATIC piper_api.cpp)
++add_library(piper_api STATIC piper_api.cpp src/cpp/piper.cpp)
 +
 +find_package(PkgConfig)
 +pkg_check_modules(ESPEAK_NG REQUIRED espeak-ng<2)
 +
++find_library(onnxruntime_path onnxruntime REQUIRED)
++
 +target_link_libraries(piper_api
-+  onnxruntime
++  ${onnxruntime_path}
 +  pthread
 +  ${ESPEAK_NG_LIBRARIES})
 +
@@ -30,15 +32,17 @@ diff -ruN piper-org/CMakeLists.txt piper-patched/CMakeLists.txt
 +target_compile_options(piper_api PUBLIC
 +  ${ESPEAK_NG_CFLAGS_OTHER})
 +
-+include(GNUInstallDirs)
-+install(TARGETS piper_api DESTINATION ${CMAKE_INSTALL_LIBDIR})
-+install(FILES piper_api.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++set_target_properties(piper_api PROPERTIES PUBLIC_HEADER "piper_api.h")
++
++install(TARGETS piper_api
++    LIBRARY DESTINATION lib
++    ARCHIVE DESTINATION lib
++    PUBLIC_HEADER DESTINATION include)
 diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
 --- piper-org/piper_api.cpp	1970-01-01 01:00:00.000000000 +0100
-+++ piper-patched/piper_api.cpp	2023-04-24 19:54:30.346518860 +0200
-@@ -0,0 +1,49 @@
++++ piper-patched/piper_api.cpp	2023-06-27 19:18:21.610102443 +0200
+@@ -0,0 +1,51 @@
 +#include "piper_api.h"
-+#include "src/cpp/config.hpp"
 +#include "src/cpp/piper.hpp"
 +
 +#include <algorithm>
@@ -47,30 +51,33 @@ diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
 +#include <stdexcept>
 +
 +struct piper_api::ctx {
++    piper::PiperConfig config;
 +    piper::Voice voice;
 +};
 +
 +piper_api::piper_api(std::string model_path, std::string model_config_path, std::string espeak_ng_data_path) {
-+    piper::initialize(std::move(espeak_ng_data_path));
-+
 +    m_ctx = std::make_unique<ctx>();
++
++    m_ctx->config.eSpeakDataPath = std::move(espeak_ng_data_path);
++
++    piper::initialize(m_ctx->config);
 +
 +    std::optional<piper::SpeakerId> speaker_id;
 +
-+    piper::loadVoice(std::move(model_path), std::move(model_config_path), m_ctx->voice, speaker_id);
++    piper::loadVoice(m_ctx->config, std::move(model_path), std::move(model_config_path), m_ctx->voice, speaker_id);
 +}
 +
 +piper_api::~piper_api() {
-+    piper::terminate();
++    piper::terminate(m_ctx->config);
 +}
 +
 +std::vector<int16_t> piper_api::text_to_audio(std::string text) {
-+    vector<int16_t> out_buf;
-+    vector<int16_t> tmp_buf;
++    std::vector<int16_t> out_buf;
++    std::vector<int16_t> tmp_buf;
 +
 +    piper::SynthesisResult result;
 +
-+    piper::textToAudio(m_ctx->voice, std::move(text), tmp_buf, result, [&]{
++    piper::textToAudio(m_ctx->config, m_ctx->voice, std::move(text), tmp_buf, result, [&]{
 +        out_buf.insert(out_buf.cend(), tmp_buf.cbegin(), tmp_buf.cend());
 +    });
 +
@@ -84,11 +91,11 @@ diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
 +
 +    piper::SynthesisResult result;
 +
-+    piper::textToWavFile(m_ctx->voice, std::move(text), out_file, result);
++    piper::textToWavFile(m_ctx->config, m_ctx->voice, std::move(text), out_file, result);
 +}
 diff -ruN piper-org/piper_api.h piper-patched/piper_api.h
 --- piper-org/piper_api.h	1970-01-01 01:00:00.000000000 +0100
-+++ piper-patched/piper_api.h	2023-04-24 19:23:14.435570005 +0200
++++ piper-patched/piper_api.h	2023-06-24 18:18:24.151028699 +0200
 @@ -0,0 +1,23 @@
 +#ifndef PIPER_API_H
 +#define PIPER_API_H
@@ -114,61 +121,3 @@ diff -ruN piper-org/piper_api.h piper-patched/piper_api.h
 +
 +#endif  // DSNOTE_APP_H
 \ No newline at end of file
-diff -ruN piper-org/src/cpp/phonemize.hpp piper-patched/src/cpp/phonemize.hpp
---- piper-org/src/cpp/phonemize.hpp	2023-04-19 16:35:36.000000000 +0200
-+++ piper-patched/src/cpp/phonemize.hpp	2023-04-22 17:08:07.620909318 +0200
-@@ -52,7 +52,7 @@
-   // This will unfortunately do the wrong thing with abbreviations, etc.
-   while (textIter != textIterEnd) {
-     auto codepoint = *textIter;
--    if (phonemizeConfig.eSpeak->clauseBreakers.contains(codepoint)) {
-+    if (phonemizeConfig.eSpeak->clauseBreakers.count(codepoint) > 0) {
-       textClauseBreakers.push_back(codepoint);
-     }
- 
-@@ -118,7 +118,7 @@
-   }
- 
-   for (auto phoneme = phonemes.begin(); phoneme != phonemes.end(); phoneme++) {
--    if (phonemizeConfig.phonemeIdMap.contains(*phoneme)) {
-+    if (phonemizeConfig.phonemeIdMap.count(*phoneme) > 0) {
-       for (auto id : phonemizeConfig.phonemeIdMap[*phoneme]) {
-         phonemeIds.push_back(id);
- 
-diff -ruN piper-org/src/cpp/piper.hpp piper-patched/src/cpp/piper.hpp
---- piper-org/src/cpp/piper.hpp	2023-04-19 16:35:36.000000000 +0200
-+++ piper-patched/src/cpp/piper.hpp	2023-04-24 14:25:32.694962498 +0200
-@@ -1,10 +1,11 @@
- #ifndef PIPER_H_
- #define PIPER_H_
- 
--#include <filesystem>
- #include <iostream>
- #include <string>
- #include <vector>
-+#include <fstream>
-+#include <optional>
- 
- #include "json.hpp"
- #include <espeak-ng/speak_lib.h>
-@@ -27,18 +28,11 @@
-   ModelSession session;
- };
- 
--void initialize(std::filesystem::path cwd) {
--  const char *dataPath = NULL;
--
--  auto cwdDataPath = std::filesystem::absolute(cwd.append("espeak-ng-data"));
--  if (std::filesystem::is_directory(cwdDataPath)) {
--    dataPath = cwdDataPath.c_str();
--  }
--
-+void initialize(std::string espeak_ng_data_path) {
-   // Set up espeak-ng for calling espeak_TextToPhonemes
-   int result = espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS,
-                                  /*buflength*/ 0,
--                                 /*path*/ dataPath,
-+                                 /*path*/ espeak_ng_data_path.c_str(),
-                                  /*options*/ 0);
-   if (result < 0) {
-     throw runtime_error("Failed to initialize eSpeak-ng");

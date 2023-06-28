@@ -1,8 +1,8 @@
 set(mbrola_source_url "https://github.com/numediart/MBROLA/archive/refs/tags/3.3.tar.gz")
 set(mbrola_checksum "06993903c7b8d3a8d21cc66cd5a28219")
 
-set(piper_source_url "https://github.com/rhasspy/piper/archive/e967bdc1a838023fe3644f8ed7cf6e1e958b42ef.zip")
-set(piper_checksum "c9924cdb6305f6982171d486d5d633e1")
+set(espeak_source_url "https://github.com/rhasspy/espeak-ng/archive/61504f6b76bf9ebbb39b07d21cff2a02b87c99ff.zip")
+set(espeak_checksum "56e002023d76dc166f1843d066b8b1d6")
 
 ExternalProject_Add(mbrola
     SOURCE_DIR ${external_dir}/mbrola
@@ -20,12 +20,12 @@ ExternalProject_Add(espeak
     SOURCE_DIR ${external_dir}/espeak
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/espeak
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-    URL "${piper_source_url}"
-    URL_MD5 "${piper_checksum}"
-    CONFIGURE_COMMAND tar -x -C <BINARY_DIR> --strip=1 -f <SOURCE_DIR>/lib/espeak-ng-1.52-patched.tar.gz &&
-        ./autogen.sh &&
-        ./configure --prefix=<INSTALL_DIR> --with-pic --with-pcaudiolib=no --enable-static
-            --disable-shared --disable-rpath --with-extdict-ru --with-extdict-zh --with-extdict-zhy
+    URL "${espeak_source_url}"
+    URL_MD5 "${espeak_checksum}"
+    CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> &&
+        <BINARY_DIR>/autogen.sh &&
+        <BINARY_DIR>/configure --prefix=<INSTALL_DIR> --with-pic --with-pcaudiolib=no --enable-static
+        --disable-shared --disable-rpath --with-extdict-ru
     BUILD_COMMAND ${MAKE}
     BUILD_ALWAYS False
     INSTALL_COMMAND make DESTDIR=/ install
