@@ -188,14 +188,13 @@ whisper_full_params whisper_engine::make_wparams() {
 
     wparams.language = m_lang.c_str();
     wparams.speed_up = true;
-    wparams.temperature_inc = 0.0F;
     wparams.suppress_blank = true;
     wparams.suppress_non_speech_tokens = true;
     wparams.single_segment = false;
     wparams.translate = m_translate;
     wparams.no_context = true;
     wparams.n_threads =
-        std::min(m_threads, std::max(1, cpu_tools::number_of_cores() - 2));
+        std::min(m_threads, std::max(m_threads, cpu_tools::number_of_cores() - 1));
 
     LOGD("cpu info: arch=" << cpu_tools::arch()
                            << ", cores=" << cpu_tools::number_of_cores()

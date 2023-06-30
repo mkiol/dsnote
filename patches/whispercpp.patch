@@ -1,7 +1,32 @@
-diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
---- whispercpp-org/CMakeLists.txt	2023-04-15 13:21:58.000000000 +0200
-+++ whispercpp-patched/CMakeLists.txt	2023-05-25 15:51:18.164431043 +0200
-@@ -286,7 +286,7 @@
+diff -ruN whispercpp-new-org/CMakeLists.txt whispercpp-new-patched/CMakeLists.txt
+--- whispercpp-new-org/CMakeLists.txt	2023-06-28 21:34:50.000000000 +0200
++++ whispercpp-new-patched/CMakeLists.txt	2023-06-30 18:08:06.458428940 +0200
+@@ -134,22 +134,8 @@
+ endif()
+ 
+ if (WHISPER_BLAS)
+-    set(BLA_STATIC 1)
+-    set(BLA_VENDOR ${WHISPER_BLAS_VENDOR})
+-#    set(BLA_PREFER_PKGCONFIG 1)
+-    set(BLA_SIZEOF_INTEGER 8)
+-    find_package(BLAS)
+-
+-    if(BLAS_FOUND)
+-        message(STATUS "BLAS compatible library found")
+-        message(STATUS "Libraries ${BLAS_LIBRARIES}")
+-        set(WHISPER_EXTRA_FLAGS ${WHISPER_EXTRA_FLAGS} -DGGML_USE_OPENBLAS)
+-
+-        include_directories(${BLAS_INCLUDE_DIRS})
+-        set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} ${BLAS_LIBRARIES})
+-    else()
+-        message(WARNING "BLAS library was not found")
+-    endif()
++    set(WHISPER_EXTRA_FLAGS ${WHISPER_EXTRA_FLAGS} -DGGML_USE_OPENBLAS)
++    set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} openblas)
+ endif ()
+ 
+ if (WHISPER_CUBLAS)
+@@ -364,7 +350,7 @@
  
  install(TARGETS ${TARGET}
      LIBRARY DESTINATION lib
@@ -10,18 +35,18 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
      RUNTIME DESTINATION bin
      PUBLIC_HEADER DESTINATION include
      )
-diff -ruN whispercpp-org/ggml.c whispercpp-patched/ggml.c
---- whispercpp-org/ggml.c	2023-04-15 13:21:58.000000000 +0200
-+++ whispercpp-patched/ggml.c	2023-05-25 15:46:32.332520354 +0200
-@@ -2788,6 +2788,7 @@
-     void * mem_buffer;
+diff -ruN whispercpp-new-org/ggml.c whispercpp-new-patched/ggml.c
+--- whispercpp-new-org/ggml.c	2023-06-28 21:34:50.000000000 +0200
++++ whispercpp-new-patched/ggml.c	2023-06-30 16:59:43.031593572 +0200
+@@ -3826,6 +3826,7 @@
      bool   mem_buffer_owned;
      bool   no_alloc;
+     bool   no_alloc_save; // this is used to save the no_alloc state when using scratch buffers
 +    bool   stop;
  
      int    n_objects;
  
-@@ -3094,6 +3095,14 @@
+@@ -4195,6 +4196,14 @@
      return ctx;
  }
  
@@ -36,7 +61,7 @@ diff -ruN whispercpp-org/ggml.c whispercpp-patched/ggml.c
  void ggml_free(struct ggml_context * ctx) {
      // make this function thread safe
      ggml_critical_section_start();
-@@ -10027,7 +10036,7 @@
+@@ -16958,7 +16967,7 @@
      const int64_t perf_start_cycles  = ggml_perf_cycles();
      const int64_t perf_start_time_us = ggml_perf_time_us();
  
@@ -45,7 +70,7 @@ diff -ruN whispercpp-org/ggml.c whispercpp-patched/ggml.c
          GGML_PRINT_DEBUG_5("%s: %d/%d\n", __func__, i, cgraph->n_nodes);
  
          struct ggml_tensor * node = cgraph->nodes[i];
-@@ -10057,7 +10066,7 @@
+@@ -16988,7 +16997,7 @@
                  atomic_store(&state_shared.has_work, false);
              }
  
@@ -54,7 +79,7 @@ diff -ruN whispercpp-org/ggml.c whispercpp-patched/ggml.c
                  ggml_lock_lock  (&state_shared.spin);
                  ggml_lock_unlock(&state_shared.spin);
              }
-@@ -10076,7 +10085,7 @@
+@@ -17007,7 +17016,7 @@
  
              atomic_fetch_sub(&state_shared.n_ready, 1);
  
@@ -63,7 +88,7 @@ diff -ruN whispercpp-org/ggml.c whispercpp-patched/ggml.c
                  ggml_lock_lock  (&state_shared.spin);
                  ggml_lock_unlock(&state_shared.spin);
              }
-@@ -10093,14 +10102,14 @@
+@@ -17024,14 +17033,14 @@
                  atomic_store(&state_shared.has_work, false);
              }
  
@@ -80,7 +105,7 @@ diff -ruN whispercpp-org/ggml.c whispercpp-patched/ggml.c
                  ggml_lock_lock  (&state_shared.spin);
                  ggml_lock_unlock(&state_shared.spin);
              }
-@@ -10112,7 +10121,7 @@
+@@ -17043,7 +17052,7 @@
                  atomic_store(&state_shared.has_work, false);
              }
  
@@ -89,7 +114,7 @@ diff -ruN whispercpp-org/ggml.c whispercpp-patched/ggml.c
                  ggml_lock_lock  (&state_shared.spin);
                  ggml_lock_unlock(&state_shared.spin);
              }
-@@ -10131,7 +10140,7 @@
+@@ -17062,7 +17071,7 @@
  
              atomic_fetch_sub(&state_shared.n_ready, 1);
  
@@ -98,7 +123,7 @@ diff -ruN whispercpp-org/ggml.c whispercpp-patched/ggml.c
                  ggml_lock_lock  (&state_shared.spin);
                  ggml_lock_unlock(&state_shared.spin);
              }
-@@ -10148,14 +10157,14 @@
+@@ -17079,14 +17088,14 @@
                  atomic_store(&state_shared.has_work, false);
              }
  
@@ -115,22 +140,23 @@ diff -ruN whispercpp-org/ggml.c whispercpp-patched/ggml.c
                  ggml_lock_lock  (&state_shared.spin);
                  ggml_lock_unlock(&state_shared.spin);
              }
-diff -ruN whispercpp-org/ggml.h whispercpp-patched/ggml.h
---- whispercpp-org/ggml.h	2023-04-15 13:21:58.000000000 +0200
-+++ whispercpp-patched/ggml.h	2023-05-25 15:46:32.332520354 +0200
-@@ -358,6 +358,8 @@
+diff -ruN whispercpp-new-org/ggml.h whispercpp-new-patched/ggml.h
+--- whispercpp-new-org/ggml.h	2023-06-28 21:34:50.000000000 +0200
++++ whispercpp-new-patched/ggml.h	2023-06-30 16:48:11.388231793 +0200
+@@ -503,6 +503,9 @@
+     GGML_API struct ggml_context * ggml_init(struct ggml_init_params params);
+     GGML_API void                  ggml_free(struct ggml_context * ctx);
  
- struct ggml_context * ggml_init(struct ggml_init_params params);
- void ggml_free(struct ggml_context * ctx);
-+void ggml_cancel(struct ggml_context * ctx);
-+void ggml_cancel_clear(struct ggml_context * ctx);
++    GGML_API void    ggml_cancel(struct ggml_context * ctx);
++    GGML_API void    ggml_cancel_clear(struct ggml_context * ctx);
++
+     GGML_API size_t  ggml_used_mem(const struct ggml_context * ctx);
  
- size_t ggml_used_mem(const struct ggml_context * ctx);
- 
-diff -ruN whispercpp-org/whisper.cpp whispercpp-patched/whisper.cpp
---- whispercpp-org/whisper.cpp	2023-04-15 13:21:58.000000000 +0200
-+++ whispercpp-patched/whisper.cpp	2023-05-25 15:46:32.332520354 +0200
-@@ -603,6 +603,9 @@
+     GGML_API size_t  ggml_set_scratch (struct ggml_context * ctx, struct ggml_scratch scratch);
+diff -ruN whispercpp-new-org/whisper.cpp whispercpp-new-patched/whisper.cpp
+--- whispercpp-new-org/whisper.cpp	2023-06-28 21:34:50.000000000 +0200
++++ whispercpp-new-patched/whisper.cpp	2023-06-30 17:02:11.271599681 +0200
+@@ -665,6 +665,9 @@
      // [EXPERIMENTAL] speed-up techniques
      int32_t exp_n_audio_ctx = 0; // 0 - use default
  
@@ -140,7 +166,7 @@ diff -ruN whispercpp-org/whisper.cpp whispercpp-patched/whisper.cpp
      void use_buf(struct ggml_context * ctx, int i) {
  #if defined(WHISPER_USE_SCRATCH)
          size_t last_size = 0;
-@@ -1365,6 +1368,8 @@
+@@ -1440,6 +1443,8 @@
      };
  
      struct ggml_context * ctx0 = ggml_init(params);
@@ -149,32 +175,15 @@ diff -ruN whispercpp-org/whisper.cpp whispercpp-patched/whisper.cpp
  
      wstate.use_buf(ctx0, 0);
  
-@@ -1763,16 +1768,17 @@
-         ggml_graph_compute(ctx0, &gf);
-         //ggml_graph_print(&gf);
-     }
--
-+    
-     ////////////////////////////////////////////////////////////////////////////
- 
--    //printf("%s: used_mem = %f MB, %f MB, %f MB %f MB %f MB\n", __func__,
--    //        ggml_used_mem(ctx0)/1024.0/1024.0,
--    //        wstate.get_buf_max_mem(0)/1024.0/1024.0,
--    //        wstate.get_buf_max_mem(1)/1024.0/1024.0,
--    //        wstate.get_buf_max_mem(2)/1024.0/1024.0,
--    //        wstate.get_buf_max_mem(3)/1024.0/1024.0);
-+    // printf("%s: used_mem = %f MB, %f MB, %f MB %f MB %f MB\n", __func__,
-+    //         ggml_used_mem(ctx0)/1024.0/1024.0,
-+    //         wstate.get_buf_max_mem(0)/1024.0/1024.0,
-+    //         wstate.get_buf_max_mem(1)/1024.0/1024.0,
-+    //         wstate.get_buf_max_mem(2)/1024.0/1024.0,
-+    //         wstate.get_buf_max_mem(3)/1024.0/1024.0);
+@@ -1849,6 +1854,7 @@
+     //        wstate.get_buf_max_mem(2)/1024.0/1024.0,
+     //        wstate.get_buf_max_mem(3)/1024.0/1024.0);
  
 +    wctx.state->gctx = nullptr;
      ggml_free(ctx0);
  
      wstate.t_encode_us += ggml_time_us() - t_start_us;
-@@ -3984,6 +3990,8 @@
+@@ -4083,6 +4089,8 @@
              return -6;
          }
  
@@ -183,7 +192,7 @@ diff -ruN whispercpp-org/whisper.cpp whispercpp-patched/whisper.cpp
          // if there is a very short audio segment left to process, we remove any past prompt since it tends
          // to confuse the decoder and often make it repeat or hallucinate stuff
          if (seek > seek_start && seek + 500 >= seek_end) {
-@@ -4067,6 +4075,8 @@
+@@ -4166,6 +4174,8 @@
                      return -7;
                  }
  
@@ -192,7 +201,7 @@ diff -ruN whispercpp-org/whisper.cpp whispercpp-patched/whisper.cpp
                  {
                      const int64_t t_start_sample_us = ggml_time_us();
  
-@@ -4305,6 +4315,8 @@
+@@ -4404,6 +4414,8 @@
                          return -8;
                      }
  
@@ -201,7 +210,7 @@ diff -ruN whispercpp-org/whisper.cpp whispercpp-patched/whisper.cpp
                      {
                          const int64_t t_start_sample_us = ggml_time_us();
  
-@@ -4504,9 +4516,19 @@
+@@ -4607,9 +4619,19 @@
          }
      }
  
@@ -221,21 +230,12 @@ diff -ruN whispercpp-org/whisper.cpp whispercpp-patched/whisper.cpp
  
  int whisper_full(
          struct whisper_context * ctx,
-@@ -5138,7 +5160,7 @@
-             }
-         }
-     }
--
-+    
-     // fixed token expand (optional)
-     //{
-     //    const int t_expand = 0;
-diff -ruN whispercpp-org/whisper.h whispercpp-patched/whisper.h
---- whispercpp-org/whisper.h	2023-04-15 13:21:58.000000000 +0200
-+++ whispercpp-patched/whisper.h	2023-05-25 15:46:32.332520354 +0200
-@@ -114,6 +114,10 @@
-     WHISPER_API void whisper_free      (struct whisper_context * ctx);
+diff -ruN whispercpp-new-org/whisper.h whispercpp-new-patched/whisper.h
+--- whispercpp-new-org/whisper.h	2023-06-28 21:34:50.000000000 +0200
++++ whispercpp-new-patched/whisper.h	2023-06-30 16:41:06.091547614 +0200
+@@ -115,6 +115,10 @@
      WHISPER_API void whisper_free_state(struct whisper_state * state);
+     WHISPER_API void whisper_free_params(struct whisper_full_params * params);
  
 +    // Cancel any ongoing operation
 +    WHISPER_API void whisper_cancel(struct whisper_context * ctx);
