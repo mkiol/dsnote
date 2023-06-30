@@ -4655,7 +4655,7 @@
             "size": "10374454"
         },
         {
-            "name": "English (RHVoice Slt)",
+            "name": "English (RHVoice Slt Female)",
             "model_id": "en_rhvoice_slt",
             "engine": "tts_rhvoice",
             "lang_id": "en",
@@ -4669,7 +4669,21 @@
             "size": "4857163"
         },
         {
-            "name": "English (RHVoice Alan)",
+            "name": "English (RHVoice Lyubov Female)",
+            "model_id": "en_rhvoice_lyubov",
+            "engine": "tts_rhvoice",
+            "lang_id": "en",
+            "speaker": "lyubov",
+            "checksum": "43e804d5",
+            "checksum_quick": "732b4fef",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/lyubov-eng/releases/download/4.1/data.zip"
+            ],
+            "size": "6754678"
+        },
+        {
+            "name": "English (RHVoice Alan Male)",
             "model_id": "en_rhvoice_alan",
             "engine": "tts_rhvoice",
             "lang_id": "en",
