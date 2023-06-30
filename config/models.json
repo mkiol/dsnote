@@ -4590,13 +4590,13 @@
             "engine": "tts_rhvoice",
             "lang_id": "uk",
             "speaker": "marianna",
-            "checksum": "8a0f4018",
-            "checksum_quick": "bf9ed8e7",
+            "checksum": "f7c958f0",
+            "checksum_quick": "5448646a",
             "comp": "zipall",
             "urls": [
-                "https://github.com/RHVoice/marianna-ukr/releases/download/4.1/data.zip"
+                "https://github.com/RHVoice/marianna-ukr/releases/download/4.2/RHVoice-voice-Ukrainian-Marianna-v4.2.zip"
             ],
-            "size": "10113404"
+            "size": "10094388"
         },
         {
             "name": "Українська (RHVoice Natalia)",
@@ -4604,13 +4604,13 @@
             "engine": "tts_rhvoice",
             "lang_id": "uk",
             "speaker": "natalia",
-            "checksum": "39f236e7",
-            "checksum_quick": "f56aa3dc",
+            "checksum": "758b30eb",
+            "checksum_quick": "c0ff6fa8",
             "comp": "zipall",
             "urls": [
-                "https://github.com/RHVoice/natalia-ukr/releases/download/4.2/data.zip"
+                "https://github.com/RHVoice/natalia-ukr/releases/download/4.3/RHVoice-voice-Ukrainian-Natalia-v4.3.zip"
             ],
-            "size": "7511246"
+            "size": "7522652"
         },
         {
             "name": "Українська (RHVoice Volodymyr)",
@@ -4618,13 +4618,13 @@
             "engine": "tts_rhvoice",
             "lang_id": "uk",
             "speaker": "volodymyr",
-            "checksum": "28c0709c",
-            "checksum_quick": "b7d0df38",
+            "checksum": "3a5eab22",
+            "checksum_quick": "8a073cac",
             "comp": "zipall",
             "urls": [
-                "https://github.com/RHVoice/volodymyr-ukr/releases/download/4.1/data.zip"
+                "https://github.com/RHVoice/volodymyr-ukr/releases/download/4.2/RHVoice-voice-Ukrainian-Volodymyr-v4.2.zip"
             ],
-            "size": "11107059"
+            "size": "11044796"
         },
         {
             "name": "Українська (RHVoice Anatol)",
@@ -4632,13 +4632,13 @@
             "engine": "tts_rhvoice",
             "lang_id": "uk",
             "speaker": "anatol",
-            "checksum": "12331631",
-            "checksum_quick": "257b5724",
+            "checksum": "9f01c96a",
+            "checksum_quick": "b8df577e",
             "comp": "zipall",
             "urls": [
-                "https://github.com/RHVoice/anatol-ukr/releases/download/4.1/RHVoice-voice-Ukrainian-Anatol-v4.2.zip"
+                "https://github.com/RHVoice/anatol-ukr/releases/download/4.3/RHVoice-voice-Ukrainian-Anatol-v4.3.zip"
             ],
-            "size": "10360397"
+            "size": "10271326"
         },
         {
             "name": "Čeština (RHVoice Zdenek)",
