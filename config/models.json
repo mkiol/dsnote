@@ -4697,6 +4697,20 @@
             "size": "4976930"
         },
         {
+            "name": "Oʻzbekcha (RHVoice Sevinch Female)",
+            "model_id": "uz_rhvoice_alan",
+            "engine": "tts_rhvoice",
+            "lang_id": "uz",
+            "speaker": "sevinch",
+            "checksum": "e9457b18",
+            "checksum_quick": "11f00656",
+            "comp": "zip",
+            "urls": [
+                "https://github.com/RHVoice/Sevinch-uzb/archive/cff7d22fe16add69fd6c1969190f619725c01cb5.zip"
+            ],
+            "size": "3694284"
+        },
+        {
             "name": "Македонски (RHVoice Kiko)",
             "model_id": "mk_rhvoice_kiko",
             "engine": "tts_rhvoice",
