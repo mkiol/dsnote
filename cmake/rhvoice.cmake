@@ -1,5 +1,5 @@
 set(rhvoice_source_url "https://github.com/RHVoice/RHVoice.git")
-set(rhvoice_tag "c1e897d90c663613086398cd019882e907d02314")
+set(rhvoice_tag "60292dfbf064b89c58a3f73aa5319648c5163aff")
 
 pkg_search_module(ao REQUIRED ao)
 
