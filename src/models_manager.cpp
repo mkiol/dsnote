@@ -1208,9 +1208,8 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             continue;
         }
         if (engine == model_engine::stt_whisper &&
-            (model_id.contains("small") || model_id.contains("medium") ||
-             model_id.contains("large"))) {
-            qDebug() << "ignoring whisper small, medium or large model:"
+            (model_id.contains("medium") || model_id.contains("large"))) {
+            qDebug() << "ignoring whisper medium or large model:"
                      << model_id;
             continue;
         }
