@@ -1,8 +1,6 @@
 set(rhvoice_source_url "https://github.com/RHVoice/RHVoice.git")
 set(rhvoice_tag "60292dfbf064b89c58a3f73aa5319648c5163aff")
 
-pkg_search_module(ao REQUIRED ao)
-
 ExternalProject_Add(rhvoice
     SOURCE_DIR ${external_dir}/rhvoice
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/rhvoice

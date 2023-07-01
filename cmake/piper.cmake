@@ -64,6 +64,9 @@ ExternalProject_Add(spdlog
     URL_HASH SHA256=${spdlog_checksum}
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+        -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
+        -DCMAKE_INSTALL_BINDIR=${external_bin_dir}
+        -DCMAKE_INSTALL_INCLUDEDIR=${external_include_dir}
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON
     BUILD_ALWAYS False
 )
