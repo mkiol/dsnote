@@ -919,67 +919,16 @@
             "size": "47344464"
         },
         {
-            "name": "English (Whisper Tiny)",
-            "model_id": "en_whisper_tiny",
-            "engine": "stt_whisper",
-            "lang_id": "en",
-            "checksum": "25fb4676",
-            "checksum_quick": "41347da2",
-            "urls": [
-                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.en.bin"
-            ],
-            "size": "77704715"
-        },
-        {
-            "name": "English (Whisper Base)",
-            "model_id": "en_whisper_base",
-            "engine": "stt_whisper",
-            "score": 1,
-            "lang_id": "en",
-            "checksum": "e55b4adc",
-            "checksum_quick": "22add7f4",
-            "urls": [
-                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.en.bin"
-            ],
-            "size": "147964211"
-        },
-        {
-            "name": "English (Whisper Small)",
-            "model_id": "en_whisper_small",
-            "engine": "stt_whisper",
-            "lang_id": "en",
-            "score": 0,
-            "checksum": "cee06ee7",
-            "checksum_quick": "f9325d92",
-            "urls": [
-                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.en.bin"
-            ],
-            "size": "487614201"
-        },
-        {
-            "name": "English (Whisper Medium)",
-            "model_id": "en_whisper_medium",
-            "engine": "stt_whisper",
-            "lang_id": "en",
-            "score": 0,
-            "checksum": "9c67c71e",
-            "checksum_quick": "d7d93df5",
-            "urls": [
-                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.en.bin"
-            ],
-            "size": "1533774781"
-        },
-        {
             "name": "Multilingual (Whisper Tiny)",
             "model_id": "multilang_whisper_tiny",
             "engine": "stt_whisper",
             "lang_id": "multilang",
-            "checksum": "285b19e9",
-            "checksum_quick": "2e243a59",
+            "checksum": "79e4b65d",
+            "checksum_quick": "a52e4625",
             "urls": [
-                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/multilang/ggml-tiny-q5_0.bin"
             ],
-            "size": "77691713",
+            "size": "32152673",
             "hidden": true
         },
         {
@@ -988,12 +937,12 @@
             "engine": "stt_whisper",
             "lang_id": "multilang",
             "score": 1,
-            "checksum": "34e32ec8",
-            "checksum_quick": "5dc0e88e",
+            "checksum": "7606ea47",
+            "checksum_quick": "f1d12eab",
             "urls": [
-                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/multilang/ggml-base-q5_0.bin"
             ],
-            "size": "147951465",
+            "size": "59707625",
             "hidden": true
         },
         {
@@ -1001,13 +950,12 @@
             "model_id": "multilang_whisper_small",
             "engine": "stt_whisper",
             "lang_id": "multilang",
-            "score": 0,
-            "checksum": "5fad3693",
-            "checksum_quick": "e8768ff0",
+            "checksum": "4c3813dc",
+            "checksum_quick": "2491cb50",
             "urls": [
-                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/multilang/ggml-small-q5_0.bin"
             ],
-            "size": "487601967",
+            "size": "190085487",
             "hidden": true
         },
         {
@@ -1015,14 +963,80 @@
             "model_id": "multilang_whisper_medium",
             "engine": "stt_whisper",
             "lang_id": "multilang",
-            "score": 0,
-            "checksum": "ddea3cce",
-            "checksum_quick": "c41ff6f4",
+            "checksum": "eb732524",
+            "checksum_quick": "f3e2fa1",
             "urls": [
-                "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/multilang/ggml-medium-q5_0.bin"
             ],
-            "size": "1533763059",
+            "size": "586572019",
             "hidden": true
+        },
+        {
+            "name": "Multilingual (Whisper Large)",
+            "model_id": "multilang_whisper_large",
+            "engine": "stt_whisper",
+            "lang_id": "multilang",
+            "checksum": "d0d0e6d9",
+            "checksum_quick": "dfa47af8",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/multilang/ggml-large-q5_0.bin"
+            ],
+            "size": "1080732091",
+            "hidden": true
+        },
+        {
+            "name": "English (Whisper Tiny)",
+            "model_id": "en_whisper_tiny",
+            "engine": "stt_whisper",
+            "lang_id": "en",
+            "checksum": "17cf9b74",
+            "checksum_quick": "c6730a9",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/en/ggml-tiny-en-q5_0.bin"
+            ],
+            "size": "32166155"
+        },
+        {
+            "name": "English (Whisper Base)",
+            "model_id": "en_whisper_base",
+            "engine": "stt_whisper",
+            "lang_id": "en",
+            "checksum": "e02a7aa5",
+            "checksum_quick": "6571cb18",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/en/ggml-base-en-q5_0.bin"
+            ],
+            "size": "59721011"
+        },
+        {
+            "name": "English (Whisper Small)",
+            "model_id": "en_whisper_small",
+            "engine": "stt_whisper",
+            "lang_id": "en",
+            "checksum": "dd024c90",
+            "checksum_quick": "633a9f5b",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/en/ggml-small-en-q5_0.bin"
+            ],
+            "size": "190098681"
+        },
+        {
+            "name": "English (Whisper Medium)",
+            "model_id": "en_whisper_medium",
+            "engine": "stt_whisper",
+            "lang_id": "en",
+            "checksum": "3443396b",
+            "checksum_quick": "ba822381",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/en/ggml-medium-en-q5_0.bin"
+            ],
+            "size": "586585021"
+        },
+        {
+            "name": "English (Whisper Large)",
+            "model_id": "en_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "en"
         },
         {
             "name": "Español (Whisper Tiny)",
@@ -1046,6 +1060,12 @@
             "name": "Español (Whisper Medium)",
             "model_id": "es_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "es"
+        },
+        {
+            "name": "Español (Whisper Large)",
+            "model_id": "es_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "es"
         },
         {
@@ -1073,6 +1093,12 @@
             "lang_id": "it"
         },
         {
+            "name": "Italiano (Whisper Large)",
+            "model_id": "it_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "it"
+        },
+        {
             "name": "Português (Whisper Tiny)",
             "model_id": "pt_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1094,6 +1120,12 @@
             "name": "Português (Whisper Medium)",
             "model_id": "pt_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "pt"
+        },
+        {
+            "name": "Português (Whisper Large)",
+            "model_id": "pt_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "pt"
         },
         {
@@ -1121,6 +1153,12 @@
             "lang_id": "de"
         },
         {
+            "name": "Deutsch (Whisper Large)",
+            "model_id": "de_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "de"
+        },
+        {
             "name": "日本語 (Whisper Tiny)",
             "model_id": "jp_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1145,6 +1183,12 @@
             "lang_id": "jp"
         },
         {
+            "name": "日本語 (Whisper Large)",
+            "model_id": "jp_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "jp"
+        },
+        {
             "name": "Русский (Whisper Tiny)",
             "model_id": "ru_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1155,6 +1199,18 @@
             "model_id": "ru_whisper_base",
             "model_alias_of": "multilang_whisper_base",
             "lang_id": "ru"
+        },
+        {
+            "name": "Русский (Whisper Base Fine-Tuned)",
+            "model_id": "ru_whisper_base_ft",
+            "engine": "stt_whisper",
+            "lang_id": "ru",
+            "checksum": "170392cd",
+            "checksum_quick": "88f4a477",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/ru/ggml-base-ru-artyomboyko-q5_0.bin"
+            ],
+            "size": "59707642"
         },
         {
             "name": "Русский (Whisper Small)",
@@ -1169,16 +1225,10 @@
             "lang_id": "ru"
         },
         {
-            "name": "Русский (Whisper Base Fine-Tuned)",
-            "model_id": "ru_whisper_base_ft",
-            "engine": "stt_whisper",
-            "lang_id": "ru",
-            "checksum": "34cc44cc",
-            "checksum_quick": "eb108273",
-            "urls": [
-                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/ru/ggml-base-ru-artyomboyko.bin"
-            ],
-            "size": "147951482"
+            "name": "Русский (Whisper Large)",
+            "model_id": "ru_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "ru"
         },
         {
             "name": "Nederlands (Whisper Tiny)",
@@ -1202,6 +1252,12 @@
             "name": "Nederlands (Whisper Medium)",
             "model_id": "nl_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "nl"
+        },
+        {
+            "name": "Nederlands (Whisper Large)",
+            "model_id": "nl_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "nl"
         },
         {
@@ -1229,6 +1285,12 @@
             "lang_id": "id"
         },
         {
+            "name": "Bahasa Indonesia (Whisper Large)",
+            "model_id": "id_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "id"
+        },
+        {
             "name": "Català (Whisper Tiny)",
             "model_id": "ca_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1250,6 +1312,12 @@
             "name": "Català (Whisper Medium)",
             "model_id": "ca_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "ca"
+        },
+        {
+            "name": "Català (Whisper Large)",
+            "model_id": "ca_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "ca"
         },
         {
@@ -1277,6 +1345,12 @@
             "lang_id": "fr"
         },
         {
+            "name": "Français (Whisper Large)",
+            "model_id": "fr_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "fr"
+        },
+        {
             "name": "Türkçe (Whisper Tiny)",
             "model_id": "tr_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1298,6 +1372,12 @@
             "name": "Türkçe (Whisper Medium)",
             "model_id": "tr_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "tr"
+        },
+        {
+            "name": "Türkçe (Whisper Large)",
+            "model_id": "tr_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "tr"
         },
         {
@@ -1325,6 +1405,12 @@
             "lang_id": "sv"
         },
         {
+            "name": "Svenska (Whisper Large)",
+            "model_id": "sv_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "sv"
+        },
+        {
             "name": "Українська (Whisper Tiny)",
             "model_id": "uk_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1346,6 +1432,12 @@
             "name": "Українська (Whisper Medium)",
             "model_id": "uk_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "uk"
+        },
+        {
+            "name": "Українська (Whisper Large)",
+            "model_id": "uk_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "uk"
         },
         {
@@ -1373,6 +1465,12 @@
             "lang_id": "ms"
         },
         {
+            "name": "Melayu (Whisper Large)",
+            "model_id": "ms_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "ms"
+        },
+        {
             "name": "Norsk (Whisper Tiny)",
             "model_id": "no_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1394,6 +1492,12 @@
             "name": "Norsk (Whisper Medium)",
             "model_id": "no_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "no"
+        },
+        {
+            "name": "Norsk (Whisper Large)",
+            "model_id": "no_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "no"
         },
         {
@@ -1421,6 +1525,12 @@
             "lang_id": "fi"
         },
         {
+            "name": "Suomi (Whisper Large)",
+            "model_id": "fi_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "fi"
+        },
+        {
             "name": "Čeština (Whisper Tiny)",
             "model_id": "cs_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1439,34 +1549,40 @@
             "lang_id": "cs"
         },
         {
+            "name": "Čeština (Whisper Small Fine-Tuned)",
+            "model_id": "cs_whisper_small_ft",
+            "engine": "stt_whisper",
+            "lang_id": "cs",
+            "checksum": "aa6d3be6",
+            "checksum_quick": "f39f36e5",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/cs/ggml-small-cs-mikr-q5_0.bin"
+            ],
+            "size": "190085487"
+        },
+        {
             "name": "Čeština (Whisper Medium)",
             "model_id": "cs_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
             "lang_id": "cs"
         },
         {
-            "name": "Čeština (Whisper Small Fine-Tuned)",
-            "model_id": "cs_whisper_small_ft",
-            "engine": "stt_whisper",
-            "lang_id": "cs",
-            "checksum": "2a71b3f1",
-            "checksum_quick": "11841031",
-            "urls": [
-                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/cs/ggml-small-cs-mikr.bin"
-            ],
-            "size": "487601967"
-        },
-        {
             "name": "Čeština (Whisper Medium Fine-Tuned)",
             "model_id": "cs_whisper_medium_ft",
             "engine": "stt_whisper",
             "lang_id": "cs",
-            "checksum": "e46a36d0",
-            "checksum_quick": "c6404ae3",
+            "checksum": "cae61825",
+            "checksum_quick": "9e7f7d4d",
             "urls": [
-                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/cs/ggml-medium-cs-mikr.bin"
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/cs/ggml-medium-cs-mikr-q5_0.bin"
             ],
-            "size": "1533763059"
+            "size": "586572019"
+        },
+        {
+            "name": "Čeština (Whisper Large)",
+            "model_id": "cs_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "cs"
         },
         {
             "name": "Slovenčina (Whisper Tiny)",
@@ -1490,6 +1606,18 @@
             "score": 0
         },
         {
+            "name": "Slovenčina (Whisper Small Fine-Tuned)",
+            "model_id": "sk_whisper_small_ft",
+            "engine": "stt_whisper",
+            "lang_id": "sk",
+            "checksum": "2ff9b5bc",
+            "checksum_quick": "42f6cbc7",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/sk/ggml-small-sk-mikr-q5_0.bin"
+            ],
+            "size": "190085487"
+        },
+        {
             "name": "Slovenčina (Whisper Medium)",
             "model_id": "sk_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
@@ -1497,28 +1625,23 @@
             "score": 0
         },
         {
-            "name": "Slovenčina (Whisper Small Fine-Tuned)",
-            "model_id": "sk_whisper_small_ft",
-            "engine": "stt_whisper",
-            "lang_id": "sk",
-            "checksum": "e5c5cd6d",
-            "checksum_quick": "94d6eb11",
-            "urls": [
-                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/sk/ggml-small-sk-mikr.bin"
-            ],
-            "size": "487601967"
-        },
-        {
             "name": "Slovenčina (Whisper Medium Fine-Tuned)",
             "model_id": "sk_whisper_medium_ft",
             "engine": "stt_whisper",
             "lang_id": "sk",
-            "checksum": "2c8a74a0",
-            "checksum_quick": "53d9d667",
+            "checksum": "aaf50a70",
+            "checksum_quick": "1797d9d4",
             "urls": [
-                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/sk/ggml-medium-sk-mikr.bin"
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/sk/ggml-medium-sk-mikr-q5_0.bin"
             ],
-            "size": "1533763059"
+            "size": "586572019"
+        },
+        {
+            "name": "Slovenčina (Whisper Large)",
+            "model_id": "sk_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "sk",
+            "score": 0
         },
         {
             "name": "中文 (Whisper Tiny)",
@@ -1545,6 +1668,13 @@
             "name": "中文 (Whisper Medium)",
             "model_id": "zh_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "zh",
+            "score": 0
+        },
+        {
+            "name": "中文 (Whisper Large)",
+            "model_id": "zh_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "zh",
             "score": 0
         },
@@ -1577,6 +1707,13 @@
             "score": 0
         },
         {
+            "name": "Tiếng Việt (Whisper Large)",
+            "model_id": "vi_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "vi",
+            "score": 0
+        },
+        {
             "name": "ไทย (Whisper Tiny)",
             "model_id": "th_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1605,6 +1742,13 @@
             "score": 0
         },
         {
+            "name": "ไทย (Whisper Large)",
+            "model_id": "th_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "th",
+            "score": 0
+        },
+        {
             "name": "Ελληνικά (Whisper Tiny)",
             "model_id": "el_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1629,6 +1773,13 @@
             "name": "Ελληνικά (Whisper Medium)",
             "model_id": "el_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "el",
+            "score": 0
+        },
+        {
+            "name": "Ελληνικά (Whisper Large)",
+            "model_id": "el_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "el",
             "score": 0
         },
@@ -1665,12 +1816,19 @@
             "model_id": "hr_whisper_small_ft",
             "engine": "stt_whisper",
             "lang_id": "hr",
-            "checksum": "be80c1a0",
-            "checksum_quick": "a282f7ec",
+            "checksum": "76a93d00",
+            "checksum_quick": "a7168e93",
             "urls": [
-                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/hr/ggml-small-hr-mikr.bin"
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/hr/ggml-small-hr-mikr-q5_0.bin"
             ],
-            "size": "487601967"
+            "size": "190085487"
+        },
+        {
+            "name": "Hrvatski (Whisper Large)",
+            "model_id": "hr_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "hr",
+            "score": 0
         },
         {
             "name": "Български (Whisper Tiny)",
@@ -1701,6 +1859,13 @@
             "score": 0
         },
         {
+            "name": "Български (Whisper Large)",
+            "model_id": "bg_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "bg",
+            "score": 0
+        },
+        {
             "name": "Română (Whisper Tiny)",
             "model_id": "ro_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1722,6 +1887,18 @@
             "score": 0
         },
         {
+            "name": "Română (Whisper Small Fine-Tuned)",
+            "model_id": "ro_whisper_small_ft",
+            "engine": "stt_whisper",
+            "lang_id": "ro",
+            "checksum": "2b6eacb2",
+            "checksum_quick": "5f35c97c",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/ro/ggml-small-ro-mikr-q5_0.bin"
+            ],
+            "size": "190085487"
+        },
+        {
             "name": "Română (Whisper Medium)",
             "model_id": "ro_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
@@ -1729,16 +1906,11 @@
             "score": 0
         },
         {
-            "name": "Română (Whisper Small Fine-Tuned)",
-            "model_id": "ro_whisper_small_ft",
-            "engine": "stt_whisper",
+            "name": "Română (Whisper Large)",
+            "model_id": "ro_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "ro",
-            "checksum": "913c4399",
-            "checksum_quick": "7619a012",
-            "urls": [
-                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/ro/ggml-small-ro-mikr.bin"
-            ],
-            "size": "487601967"
+            "score": 0
         },
         {
             "name": "Slovenščina (Whisper Tiny)",
@@ -1773,12 +1945,19 @@
             "model_id": "sl_whisper_medium_ft",
             "engine": "stt_whisper",
             "lang_id": "sl",
-            "checksum": "3ef8406c",
-            "checksum_quick": "8a5be15d",
+            "checksum": "b87518f4",
+            "checksum_quick": "83952059",
             "urls": [
-                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/sl/ggml-medium-sl-mikr.bin"
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/sl/ggml-medium-sl-mikr-q5_0.bin"
             ],
-            "size": "1533763059"
+            "size": "586572019"
+        },
+        {
+            "name": "Slovenščina (Whisper Large)",
+            "model_id": "sl_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "sl",
+            "score": 0
         },
         {
             "name": "Bosanski (Whisper Tiny)",
@@ -1805,6 +1984,13 @@
             "name": "Bosanski (Whisper Medium)",
             "model_id": "bs_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "bs",
+            "score": 0
+        },
+        {
+            "name": "Bosanski (Whisper Large)",
+            "model_id": "bs_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "bs",
             "score": 0
         },
@@ -1837,6 +2023,13 @@
             "score": 0
         },
         {
+            "name": "Македонски (Whisper Large)",
+            "model_id": "mk_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "mk",
+            "score": 0
+        },
+        {
             "name": "Srpski (Whisper Tiny)",
             "model_id": "sr_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1865,6 +2058,13 @@
             "score": 0
         },
         {
+            "name": "Srpski (Whisper Large)",
+            "model_id": "sr_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "sr",
+            "score": 0
+        },
+        {
             "name": "Magyar (Whisper Tiny)",
             "model_id": "hu_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1886,6 +2086,18 @@
             "score": 0
         },
         {
+            "name": "Magyar (Whisper Small Fine-Tuned)",
+            "model_id": "hu_whisper_small_ft",
+            "engine": "stt_whisper",
+            "lang_id": "hu",
+            "checksum": "daeb88f8",
+            "checksum_quick": "9c61977f",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/hu/ggml-small-hu-mikr-q5_0.bin"
+            ],
+            "size": "190085487"
+        },
+        {
             "name": "Magyar (Whisper Medium)",
             "model_id": "hu_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
@@ -1893,16 +2105,11 @@
             "score": 0
         },
         {
-            "name": "Magyar (Whisper Small Fine-Tuned)",
-            "model_id": "hu_whisper_small_ft",
-            "engine": "stt_whisper",
+            "name": "Magyar (Whisper Large)",
+            "model_id": "hu_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "hu",
-            "checksum": "a17666c1",
-            "checksum_quick": "b48dded2",
-            "urls": [
-                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/hu/ggml-small-hu-mikr.bin"
-            ],
-            "size": "487601967"
+            "score": 0
         },
         {
             "name": "हिन्दी (Whisper Tiny)",
@@ -1929,6 +2136,13 @@
             "name": "हिन्दी (Whisper Medium)",
             "model_id": "hi_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "hi",
+            "score": 0
+        },
+        {
+            "name": "हिन्दी (Whisper Large)",
+            "model_id": "hi_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "hi",
             "score": 0
         },
@@ -1961,6 +2175,13 @@
             "score": 0
         },
         {
+            "name": "فارسی (Whisper Large)",
+            "model_id": "fa_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "fa",
+            "score": 0
+        },
+        {
             "name": "Dansk (Whisper Tiny)",
             "model_id": "da_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -1985,6 +2206,13 @@
             "name": "Dansk (Whisper Medium)",
             "model_id": "da_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "da",
+            "score": 0
+        },
+        {
+            "name": "Dansk (Whisper Large)",
+            "model_id": "da_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "da",
             "score": 0
         },
@@ -2017,6 +2245,13 @@
             "score": 0
         },
         {
+            "name": "Eesti (Whisper Large)",
+            "model_id": "et_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "et",
+            "score": 0
+        },
+        {
             "name": "Euskara (Whisper Tiny)",
             "model_id": "eu_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -2041,6 +2276,13 @@
             "name": "Euskara (Whisper Medium)",
             "model_id": "eu_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "eu",
+            "score": 0
+        },
+        {
+            "name": "Euskara (Whisper Large)",
+            "model_id": "eu_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "eu",
             "score": 0
         },
@@ -2073,6 +2315,13 @@
             "score": 0
         },
         {
+            "name": "íslenska (Whisper Large)",
+            "model_id": "is_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "is",
+            "score": 0
+        },
+        {
             "name": "ქართული (Whisper Tiny)",
             "model_id": "ka_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -2097,6 +2346,13 @@
             "name": "ქართული (Whisper Medium)",
             "model_id": "ka_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "ka",
+            "score": 0
+        },
+        {
+            "name": "ქართული (Whisper Large)",
+            "model_id": "ka_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "ka",
             "score": 0
         },
@@ -2129,6 +2385,13 @@
             "score": 0
         },
         {
+            "name": "Қазақ (Whisper Large)",
+            "model_id": "kk_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "kk",
+            "score": 0
+        },
+        {
             "name": "한국어 (Whisper Tiny)",
             "model_id": "ko_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -2153,6 +2416,13 @@
             "name": "한국어 (Whisper Medium)",
             "model_id": "ko_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "ko",
+            "score": 0
+        },
+        {
+            "name": "한국어 (Whisper Large)",
+            "model_id": "ko_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "ko",
             "score": 0
         },
@@ -2185,6 +2455,13 @@
             "score": 0
         },
         {
+            "name": "Lietuvių (Whisper Large)",
+            "model_id": "lt_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "lt",
+            "score": 0
+        },
+        {
             "name": "Latviešu (Whisper Tiny)",
             "model_id": "lv_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -2209,6 +2486,13 @@
             "name": "Latviešu (Whisper Medium)",
             "model_id": "lv_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "lv",
+            "score": 0
+        },
+        {
+            "name": "Latviešu (Whisper Large)",
+            "model_id": "lv_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "lv",
             "score": 0
         },
@@ -2241,6 +2525,13 @@
             "score": 0
         },
         {
+            "name": "Монгол (Whisper Large)",
+            "model_id": "mn_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "mn",
+            "score": 0
+        },
+        {
             "name": "Malti (Whisper Tiny)",
             "model_id": "mt_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -2265,6 +2556,13 @@
             "name": "Malti (Whisper Medium)",
             "model_id": "mt_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "mt",
+            "score": 0
+        },
+        {
+            "name": "Malti (Whisper Large)",
+            "model_id": "mt_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "mt",
             "score": 0
         },
@@ -2297,6 +2595,13 @@
             "score": 0
         },
         {
+            "name": "नेपाली (Whisper Large)",
+            "model_id": "ne_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "ne",
+            "score": 0
+        },
+        {
             "name": "Shqip (Whisper Tiny)",
             "model_id": "sq_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -2321,6 +2626,13 @@
             "name": "Shqip (Whisper Medium)",
             "model_id": "sq_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "sq",
+            "score": 0
+        },
+        {
+            "name": "Shqip (Whisper Large)",
+            "model_id": "sq_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "sq",
             "score": 0
         },
@@ -2353,6 +2665,13 @@
             "score": 0
         },
         {
+            "name": "Kiswahili (Whisper Large)",
+            "model_id": "sw_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "sw",
+            "score": 0
+        },
+        {
             "name": "Tagalog (Whisper Tiny)",
             "model_id": "tl_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -2377,6 +2696,13 @@
             "name": "Tagalog (Whisper Medium)",
             "model_id": "tl_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "tl",
+            "score": 0
+        },
+        {
+            "name": "Tagalog (Whisper Large)",
+            "model_id": "tl_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "tl",
             "score": 0
         },
@@ -2409,6 +2735,13 @@
             "score": 0
         },
         {
+            "name": "татарча (Whisper Large)",
+            "model_id": "tt_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "tt",
+            "score": 0
+        },
+        {
             "name": "Oʻzbekcha (Whisper Tiny)",
             "model_id": "uz_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -2433,6 +2766,13 @@
             "name": "Oʻzbekcha (Whisper Medium)",
             "model_id": "uz_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "uz",
+            "score": 0
+        },
+        {
+            "name": "Oʻzbekcha (Whisper Large)",
+            "model_id": "uz_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "uz",
             "score": 0
         },
@@ -2465,6 +2805,13 @@
             "score": 0
         },
         {
+            "name": "Yorùbá (Whisper Large)",
+            "model_id": "yo_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "yo",
+            "score": 0
+        },
+        {
             "name": "Amarəñña (Whisper Tiny)",
             "model_id": "am_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -2489,6 +2836,13 @@
             "name": "Amarəñña (Whisper Medium)",
             "model_id": "am_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "am",
+            "score": 0
+        },
+        {
+            "name": "Amarəñña (Whisper Large)",
+            "model_id": "am_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
             "lang_id": "am",
             "score": 0
         },
@@ -2521,6 +2875,13 @@
             "score": 0
         },
         {
+            "name": "عربي (Whisper Large)",
+            "model_id": "ar_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "ar",
+            "score": 0
+        },
+        {
             "name": "বাংলা (Whisper Tiny)",
             "model_id": "bn_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -2549,10 +2910,29 @@
             "score": 0
         },
         {
+            "name": "বাংলা (Whisper Large)",
+            "model_id": "bn_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "bn",
+            "score": 0
+        },
+        {
             "name": "Polski (Whisper Tiny)",
             "model_id": "pl_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
             "lang_id": "pl"
+        },
+        {
+            "name": "Polski (Whisper Tiny Fine-Tuned)",
+            "model_id": "pl_whisper_tiny_ft",
+            "engine": "stt_whisper",
+            "lang_id": "pl",
+            "checksum": "b74975ae",
+            "checksum_quick": "69d91d83",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/pl/ggml-tiny-pl-aspik101-q5_0.bin"
+            ],
+            "size": "32152673"
         },
         {
             "name": "Polski (Whisper Base)",
@@ -2573,28 +2953,22 @@
             "lang_id": "pl"
         },
         {
-            "name": "Polski (Whisper Tiny Fine-Tuned)",
-            "model_id": "pl_whisper_tiny_ft",
-            "engine": "stt_whisper",
-            "lang_id": "pl",
-            "checksum": "3417bbb6",
-            "checksum_quick": "8d048ce6",
-            "urls": [
-                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/pl/ggml-tiny-pl-aspik101.bin"
-            ],
-            "size": "77691713"
-        },
-        {
             "name": "Polski (Whisper Medium Fine-Tuned)",
             "model_id": "pl_whisper_medium_ft",
             "engine": "stt_whisper",
             "lang_id": "pl",
-            "checksum": "edf24287",
-            "checksum_quick": "b62a396b",
+            "checksum": "a6e05864",
+            "checksum_quick": "4920f89e",
             "urls": [
-                "https://huggingface.co/mukowaty/ggml-whisper/resolve/fd6bceca2a1011762e3be7e49f1de43c82b91b2c/pl/ggml-medium-pl-aspik101.bin"
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/pl/ggml-medium-pl-aspik101-q5_0.bin"
             ],
-            "size": "1533763059"
+            "size": "586572019"
+        },
+        {
+            "name": "Polski (Whisper Large)",
+            "model_id": "pl_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "pl"
         },
         {
             "name": "English (Vosk Small)",
