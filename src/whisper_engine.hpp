@@ -27,10 +27,36 @@ class whisper_engine : public stt_engine {
     inline static const size_t m_speech_max_size = m_sample_rate * 60;  // 60s
     inline static const int m_threads = 5;
 
+    struct whisper_api {
+        whisper_context* (*whisper_init_from_file)(const char* path_model) =
+            nullptr;
+        void (*whisper_cancel)(whisper_context* ctx) = nullptr;
+        void (*whisper_cancel_clear)(whisper_context* ctx) = nullptr;
+        const char* (*whisper_print_system_info)() = nullptr;
+        int (*whisper_full)(whisper_context* ctx, whisper_full_params params,
+                            const float* samples, int n_samples) = nullptr;
+        int (*whisper_full_n_segments)(whisper_context* ctx) = nullptr;
+        const char* (*whisper_full_get_segment_text)(whisper_context* ctx,
+                                                     int i_segment) = nullptr;
+        void (*whisper_free)(whisper_context* ctx) = nullptr;
+        whisper_full_params (*whisper_full_default_params)(
+            whisper_sampling_strategy strategy) = nullptr;
+        inline auto ok() const {
+            return whisper_init_from_file && whisper_cancel &&
+                   whisper_cancel_clear && whisper_print_system_info &&
+                   whisper_full && whisper_full_n_segments &&
+                   whisper_full_get_segment_text && whisper_free &&
+                   whisper_full_default_params;
+        }
+    };
+
     whisper_buf_t m_speech_buf;
+    whisper_api m_whisper_api;
+    void* m_whisperlib_handle = nullptr;
     whisper_context* m_whisper_ctx = nullptr;
     whisper_full_params m_wparams{};
 
+    void open_whisper_lib();
     void create_whisper_model();
     samples_process_result_t process_buff() override;
     void decode_speech(const whisper_buf_t& buf);

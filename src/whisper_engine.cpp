@@ -7,6 +7,8 @@
 
 #include "whisper_engine.hpp"
 
+#include <dlfcn.h>
+
 #include <algorithm>
 #include <chrono>
 #include <sstream>
@@ -15,8 +17,9 @@
 #include "logger.hpp"
 
 whisper_engine::whisper_engine(config_t config, callbacks_t call_backs)
-    : stt_engine{std::move(config), std::move(call_backs)},
-      m_wparams{make_wparams()} {
+    : stt_engine{std::move(config), std::move(call_backs)} {
+    open_whisper_lib();
+    m_wparams = make_wparams();
     m_speech_buf.reserve(m_speech_max_size);
 }
 
@@ -25,9 +28,59 @@ whisper_engine::~whisper_engine() {
 
     stop();
 
-    if (m_whisper_ctx) {
-        whisper_free(m_whisper_ctx);
-        m_whisper_ctx = nullptr;
+    if (m_whisper_api.ok()) {
+        if (m_whisper_ctx) {
+            m_whisper_api.whisper_free(m_whisper_ctx);
+            m_whisper_ctx = nullptr;
+        }
+    }
+
+    m_whisper_api = {};
+
+    if (m_whisperlib_handle) {
+        dlclose(m_whisperlib_handle);
+        m_whisperlib_handle = nullptr;
+    }
+}
+
+void whisper_engine::open_whisper_lib() {
+    m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
+    if (m_whisperlib_handle == nullptr) {
+        LOGE("failed to open whisper lib: " << dlerror());
+        throw std::runtime_error("failed to open whisper lib");
+    }
+
+    m_whisper_api.whisper_init_from_file =
+        reinterpret_cast<decltype(m_whisper_api.whisper_init_from_file)>(
+            dlsym(m_whisperlib_handle, "whisper_init_from_file"));
+    m_whisper_api.whisper_cancel =
+        reinterpret_cast<decltype(m_whisper_api.whisper_cancel)>(
+            dlsym(m_whisperlib_handle, "whisper_cancel"));
+    m_whisper_api.whisper_cancel_clear =
+        reinterpret_cast<decltype(m_whisper_api.whisper_cancel_clear)>(
+            dlsym(m_whisperlib_handle, "whisper_cancel_clear"));
+    m_whisper_api.whisper_print_system_info =
+        reinterpret_cast<decltype(m_whisper_api.whisper_print_system_info)>(
+            dlsym(m_whisperlib_handle, "whisper_print_system_info"));
+    m_whisper_api.whisper_full =
+        reinterpret_cast<decltype(m_whisper_api.whisper_full)>(
+            dlsym(m_whisperlib_handle, "whisper_full"));
+    m_whisper_api.whisper_full_n_segments =
+        reinterpret_cast<decltype(m_whisper_api.whisper_full_n_segments)>(
+            dlsym(m_whisperlib_handle, "whisper_full_n_segments"));
+    m_whisper_api.whisper_full_get_segment_text =
+        reinterpret_cast<decltype(m_whisper_api.whisper_full_get_segment_text)>(
+            dlsym(m_whisperlib_handle, "whisper_full_get_segment_text"));
+    m_whisper_api.whisper_free =
+        reinterpret_cast<decltype(m_whisper_api.whisper_free)>(
+            dlsym(m_whisperlib_handle, "whisper_free"));
+    m_whisper_api.whisper_full_default_params =
+        reinterpret_cast<decltype(m_whisper_api.whisper_full_default_params)>(
+            dlsym(m_whisperlib_handle, "whisper_full_default_params"));
+
+    if (!m_whisper_api.ok()) {
+        LOGE("failed to register whisper api");
+        throw std::runtime_error("failed to register whisper api");
     }
 }
 
@@ -47,7 +100,7 @@ void whisper_engine::reset_impl() { m_speech_buf.clear(); }
 void whisper_engine::stop_processing_impl() {
     if (m_whisper_ctx) {
         LOGD("whisper cancel");
-        whisper_cancel(m_whisper_ctx);
+        m_whisper_api.whisper_cancel(m_whisper_ctx);
     }
 }
 
@@ -58,7 +111,8 @@ void whisper_engine::create_whisper_model() {
 
     LOGD("creating whisper model");
 
-    m_whisper_ctx = whisper_init_from_file(m_model_files.model_file.c_str());
+    m_whisper_ctx =
+        m_whisper_api.whisper_init_from_file(m_model_files.model_file.c_str());
 
     if (m_whisper_ctx == nullptr) {
         LOGE("failed to create whisper ctx");
@@ -180,7 +234,7 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
 
 whisper_full_params whisper_engine::make_wparams() {
     whisper_full_params wparams =
-        whisper_full_default_params(WHISPER_SAMPLING_GREEDY);
+        m_whisper_api.whisper_full_default_params(WHISPER_SAMPLING_GREEDY);
 
     if (auto pos = m_lang.find('-'); pos != std::string::npos) {
         m_lang = m_lang.substr(0, pos);
@@ -201,7 +255,7 @@ whisper_full_params whisper_engine::make_wparams() {
                            << ", neon=" << cpu_tools::neon_supported());
     LOGD("using threads: " << wparams.n_threads << "/"
                            << cpu_tools::number_of_cores());
-    LOGD("system info: " << whisper_print_system_info());
+    LOGD("system info: " << m_whisper_api.whisper_print_system_info());
 
     return wparams;
 }
@@ -215,16 +269,18 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 
     std::ostringstream os;
 
-    if (!m_thread_exit_requested) whisper_cancel_clear(m_whisper_ctx);
+    if (!m_thread_exit_requested)
+        m_whisper_api.whisper_cancel_clear(m_whisper_ctx);
 
-    if (auto ret =
-            whisper_full(m_whisper_ctx, m_wparams, buf.data(), buf.size());
+    if (auto ret = m_whisper_api.whisper_full(m_whisper_ctx, m_wparams,
+                                              buf.data(), buf.size());
         ret == 0) {
-        auto n = whisper_full_n_segments(m_whisper_ctx);
+        auto n = m_whisper_api.whisper_full_n_segments(m_whisper_ctx);
         LOGD("decoded segments: " << n);
 
         for (auto i = 0; i < n; ++i) {
-            std::string text = whisper_full_get_segment_text(m_whisper_ctx, i);
+            std::string text =
+                m_whisper_api.whisper_full_get_segment_text(m_whisper_ctx, i);
             rtrim(text);
             ltrim(text);
 #ifdef DEBUG

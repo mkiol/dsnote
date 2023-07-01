@@ -28,5 +28,4 @@ ExternalProject_Add(whispercpp
 
 ExternalProject_Add_StepDependencies(whispercpp configure openblas)
 
-list(APPEND deps_libs ${external_lib_dir}/libwhisper.so)
 list(APPEND deps whispercpp)
