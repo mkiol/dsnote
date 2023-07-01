@@ -1,6 +1,6 @@
 diff -ruN whispercpp-new-org/CMakeLists.txt whispercpp-new-patched/CMakeLists.txt
 --- whispercpp-new-org/CMakeLists.txt	2023-06-28 21:34:50.000000000 +0200
-+++ whispercpp-new-patched/CMakeLists.txt	2023-06-30 18:08:06.458428940 +0200
++++ whispercpp-new-patched/CMakeLists.txt	2023-07-01 19:32:05.906957211 +0200
 @@ -134,22 +134,8 @@
  endif()
  
@@ -22,7 +22,7 @@ diff -ruN whispercpp-new-org/CMakeLists.txt whispercpp-new-patched/CMakeLists.tx
 -        message(WARNING "BLAS library was not found")
 -    endif()
 +    set(WHISPER_EXTRA_FLAGS ${WHISPER_EXTRA_FLAGS} -DGGML_USE_OPENBLAS)
-+    set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} openblas)
++    set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} ${BLAS_LIB_PATH})
  endif ()
  
  if (WHISPER_CUBLAS)

@@ -4,6 +4,10 @@ install(FILES "${desktop_dir}/${info_binary_id}.desktop" DESTINATION share/appli
 install(FILES "${desktop_dir}/${info_binary_id}.svg" DESTINATION share/icons/hicolor/scalable/apps)
 install(FILES "${desktop_dir}/${info_binary_id}.metainfo.xml" DESTINATION share/metainfo)
 
+if(BUILD_WHISPERCPP)
+    install(FILES "${external_lib_dir}/libwhisper.so" DESTINATION lib)
+endif()
+
 if(DOWNLOAD_LIBSTT)
     install(FILES "${external_lib_dir}/libstt.so" DESTINATION lib)
     install(FILES "${external_lib_dir}/libkenlm.so" DESTINATION lib)
