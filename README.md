@@ -10,7 +10,7 @@ Linux desktop and Sailfish OS app for note taking and reading with Speech to Tex
 
 - Speech to Text using [Coqui STT](https://github.com/coqui-ai/STT),
 [Vosk](https://alphacephei.com/vosk) and [whisper.cpp](https://github.com/ggerganov/whisper.cpp) engines and
-- Text to Speech with [espeak-ng](https://github.com/espeak-ng/espeak-ng), [MBROLA](https://github.com/numediart/MBROLA), 
+- Text to Speech with [espeak-ng](https://github.com/espeak-ng/espeak-ng), [MBROLA](https://github.com/numediart/MBROLA),
 [Piper](https://github.com/rhasspy/piper), [RHVoice](https://github.com/RHVoice/RHVoice), [Coqui TTS](https://github.com/coqui-ai/TTS) engines.
 
 All voice processing is entirely done locally on your phone or computer. Internet connection is only
@@ -77,7 +77,7 @@ Following languages are supported:
 | tr          | Turkish    | ● (e)                | ●                 | ●              |                 |                   | ●                | ●                |                 |
 | tt          | Tatar      |                      | ● (e)             |                |                 | ●                 | ●                |                  |                 |
 | uk          | Ukrainian  | ●                    | ●                 | ●              | ●               | ●                 | ●                |                  | ●               |
-| uz          | Uzbek      |                      | ● (e)             | ●              |                 |                   | ●                |                  |                 |
+| uz          | Uzbek      |                      | ● (e)             | ●              |                 | ● (e)             | ●                |                  |                 |
 | vi          | Vietnamese |                      | ● (e)             | ●              | ●               |                   | ●                |                  |                 |
 | yo          | Yoruba     | ● (e)                | ● (e)             |                |                 |                   |                  |                  |                 |
 | zh          | Chinese    | ●                    | ● (e)             | ●              | ●               |                   | ●                |                  | ●               |
@@ -116,8 +116,8 @@ Any new translation contribution is very welcome.
 ### Linux
 
 Following tools/libraries are required for building (example of packages for Ubuntu 22.04):
-`build-essential` `cmake` `git` `autoconf` `qtbase5-dev` `qtdeclarative5-dev` 
-`qtmultimedia5-dev` `qtquickcontrols2-5-dev` `python3-dev` `zlib1g-dev` `libtool` 
+`build-essential` `cmake` `git` `autoconf` `qtbase5-dev` `qtdeclarative5-dev`
+`qtmultimedia5-dev` `qtquickcontrols2-5-dev` `python3-dev` `zlib1g-dev` `libtool`
 `libboost-all-dev`.
 
 ```
