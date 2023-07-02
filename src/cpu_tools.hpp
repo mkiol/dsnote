@@ -16,6 +16,7 @@ enum class arch_t { unknown, x86_64, arm32, arm64 };
 arch_t arch();
 int number_of_cores();
 bool neon_supported();
+bool avx_avx2_fma_f16c_supported();
 }  // namespace cpu_tools
 
 std::ostream& operator<<(std::ostream& os, cpu_tools::arch_t arch);

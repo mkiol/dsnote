@@ -44,7 +44,24 @@ whisper_engine::~whisper_engine() {
 }
 
 void whisper_engine::open_whisper_lib() {
+#ifdef ARCH_ARM_32
+    if (cpu_tools::neon_supported()) {
+        m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
+    } else {
+        LOGW("using whisper-fallback");
+        m_whisperlib_handle = dlopen("libwhisper-fallback.so", RTLD_LAZY);
+    }
+#elif ARCH_ARM_64
     m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
+#else
+    if (cpu_tools::avx_avx2_fma_f16c_supported()) {
+        m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
+    } else {
+        LOGW("using whisper-fallback");
+        m_whisperlib_handle = dlopen("libwhisper-fallback.so", RTLD_LAZY);
+    }
+#endif
+
     if (m_whisperlib_handle == nullptr) {
         LOGE("failed to open whisper lib: " << dlerror());
         throw std::runtime_error("failed to open whisper lib");
@@ -251,8 +268,7 @@ whisper_full_params whisper_engine::make_wparams() {
         std::min(m_threads, std::max(m_threads, cpu_tools::number_of_cores() - 1));
 
     LOGD("cpu info: arch=" << cpu_tools::arch()
-                           << ", cores=" << cpu_tools::number_of_cores()
-                           << ", neon=" << cpu_tools::neon_supported());
+                           << ", cores=" << cpu_tools::number_of_cores());
     LOGD("using threads: " << wparams.n_threads << "/"
                            << cpu_tools::number_of_cores());
     LOGD("system info: " << m_whisper_api.whisper_print_system_info());

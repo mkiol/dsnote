@@ -59,7 +59,7 @@ int cpu_tools::number_of_cores() {
 }
 
 bool cpu_tools::neon_supported() {
-    static const bool neon = [] {
+    static const bool supported = [] {
         std::array flags = {"asimd"};  // neon-fp-armv8
 
         std::ifstream cpuinfo("/proc/cpuinfo");
@@ -69,5 +69,25 @@ bool cpu_tools::neon_supported() {
                std::istream_iterator<std::string>{};
     }();
 
-    return neon;
+    return supported;
+}
+
+bool cpu_tools::avx_avx2_fma_f16c_supported() {
+    static const bool supported = [] {
+        std::array flags = {"avx", "avx2", "fma", "f16c"};
+
+        std::ifstream cpuinfo("/proc/cpuinfo");
+
+        for (const auto& flag : flags) {
+            if (std::find(std::istream_iterator<std::string>{cpuinfo},
+                          std::istream_iterator<std::string>{},
+                          flag) == std::istream_iterator<std::string>{}) {
+                return false;
+            }
+        }
+
+        return true;
+    }();
+
+    return supported;
 }

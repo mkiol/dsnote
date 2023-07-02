@@ -687,26 +687,31 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                 /*stopped=*/
                 [this]() { handle_stt_engine_error(); }};
 
-            switch (model_files->engine) {
-                case models_manager::model_engine::stt_ds:
-                    m_stt_engine = std::make_unique<ds_engine>(
-                        std::move(config), std::move(call_backs));
-                    break;
-                case models_manager::model_engine::stt_vosk:
-                    m_stt_engine = std::make_unique<vosk_engine>(
-                        std::move(config), std::move(call_backs));
-                    break;
-                case models_manager::model_engine::stt_whisper:
-                    m_stt_engine = std::make_unique<whisper_engine>(
-                        std::move(config), std::move(call_backs));
-                    break;
-                case models_manager::model_engine::ttt_hftc:
-                case models_manager::model_engine::tts_coqui:
-                case models_manager::model_engine::tts_piper:
-                case models_manager::model_engine::tts_espeak:
-                case models_manager::model_engine::tts_rhvoice:
-                    throw std::runtime_error{
-                        "invalid model engine, expected stt"};
+            try {
+                switch (model_files->engine) {
+                    case models_manager::model_engine::stt_ds:
+                        m_stt_engine = std::make_unique<ds_engine>(
+                            std::move(config), std::move(call_backs));
+                        break;
+                    case models_manager::model_engine::stt_vosk:
+                        m_stt_engine = std::make_unique<vosk_engine>(
+                            std::move(config), std::move(call_backs));
+                        break;
+                    case models_manager::model_engine::stt_whisper:
+                        m_stt_engine = std::make_unique<whisper_engine>(
+                            std::move(config), std::move(call_backs));
+                        break;
+                    case models_manager::model_engine::ttt_hftc:
+                    case models_manager::model_engine::tts_coqui:
+                    case models_manager::model_engine::tts_piper:
+                    case models_manager::model_engine::tts_espeak:
+                    case models_manager::model_engine::tts_rhvoice:
+                        throw std::runtime_error{
+                            "invalid model engine, expected stt"};
+                }
+            } catch (const std::runtime_error &error) {
+                qWarning() << "failed to create stt engine:" << error.what();
+                return {};
             }
 
             m_stt_engine->start();
@@ -790,38 +795,46 @@ QString speech_service::restart_tts_engine(const QString &model_id) {
                 /*error=*/
                 [this]() { handle_tts_engine_error(); }};
 
-            switch (model_config->engine) {
-                case models_manager::model_engine::tts_coqui:
-                    m_tts_engine = std::make_unique<coqui_engine>(
-                        std::move(config), std::move(call_backs));
-                    break;
-                case models_manager::model_engine::tts_piper:
-                    config.data_dir =
-                        module_tools::unpacked_dir("espeakdata").toStdString();
-                    m_tts_engine = std::make_unique<piper_engine>(
-                        std::move(config), std::move(call_backs));
-                    break;
-                case models_manager::model_engine::tts_espeak:
-                    config.data_dir =
-                        module_tools::unpacked_dir("espeakdata").toStdString();
-                    m_tts_engine = std::make_unique<espeak_engine>(
-                        std::move(config), std::move(call_backs));
-                    break;
-                case models_manager::model_engine::tts_rhvoice:
-                    config.data_dir =
-                        module_tools::unpacked_dir("rhvoicedata").toStdString();
-                    config.config_dir =
-                        module_tools::unpacked_dir("rhvoiceconfig")
-                            .toStdString();
-                    m_tts_engine = std::make_unique<rhvoice_engine>(
-                        std::move(config), std::move(call_backs));
-                    break;
-                case models_manager::model_engine::ttt_hftc:
-                case models_manager::model_engine::stt_ds:
-                case models_manager::model_engine::stt_vosk:
-                case models_manager::model_engine::stt_whisper:
-                    throw std::runtime_error{
-                        "invalid model engine, expected tts"};
+            try {
+                switch (model_config->engine) {
+                    case models_manager::model_engine::tts_coqui:
+                        m_tts_engine = std::make_unique<coqui_engine>(
+                            std::move(config), std::move(call_backs));
+                        break;
+                    case models_manager::model_engine::tts_piper:
+                        config.data_dir =
+                            module_tools::unpacked_dir("espeakdata")
+                                .toStdString();
+                        m_tts_engine = std::make_unique<piper_engine>(
+                            std::move(config), std::move(call_backs));
+                        break;
+                    case models_manager::model_engine::tts_espeak:
+                        config.data_dir =
+                            module_tools::unpacked_dir("espeakdata")
+                                .toStdString();
+                        m_tts_engine = std::make_unique<espeak_engine>(
+                            std::move(config), std::move(call_backs));
+                        break;
+                    case models_manager::model_engine::tts_rhvoice:
+                        config.data_dir =
+                            module_tools::unpacked_dir("rhvoicedata")
+                                .toStdString();
+                        config.config_dir =
+                            module_tools::unpacked_dir("rhvoiceconfig")
+                                .toStdString();
+                        m_tts_engine = std::make_unique<rhvoice_engine>(
+                            std::move(config), std::move(call_backs));
+                        break;
+                    case models_manager::model_engine::ttt_hftc:
+                    case models_manager::model_engine::stt_ds:
+                    case models_manager::model_engine::stt_vosk:
+                    case models_manager::model_engine::stt_whisper:
+                        throw std::runtime_error{
+                            "invalid model engine, expected tts"};
+                }
+            } catch (const std::runtime_error &error) {
+                qWarning() << "failed to create tts engine:" << error.what();
+                return {};
             }
         } else {
             qDebug() << "new tts engine not required";
@@ -1280,6 +1293,18 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
         {},
         {}};
 
+    if (m_current_task->model_id.isEmpty()) {
+        m_current_task.reset();
+
+        qWarning() << "failed to restart engine";
+
+        emit current_task_changed();
+
+        refresh_status();
+
+        return INVALID_TASK;
+    }
+
     if (QFileInfo::exists(file)) {
         restart_audio_source(file);
     } else {
@@ -1328,6 +1353,19 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
                       translate,
                       {},
                       {}};
+
+    if (m_current_task->model_id.isEmpty()) {
+        m_current_task.reset();
+
+        qWarning() << "failed to restart engine";
+
+        emit current_task_changed();
+
+        refresh_status();
+
+        return INVALID_TASK;
+    }
+
     restart_audio_source();
     if (m_stt_engine) m_stt_engine->set_speech_started(true);
 
@@ -1373,6 +1411,18 @@ int speech_service::tts_play_speech(const QString &text, QString lang) {
                       {},
                       {}};
 
+    if (m_current_task->model_id.isEmpty()) {
+        m_current_task.reset();
+
+        qWarning() << "failed to restart engine";
+
+        emit current_task_changed();
+
+        refresh_status();
+
+        return INVALID_TASK;
+    }
+
     if (m_tts_engine) m_tts_engine->encode_speech(text.toStdString());
 
     start_keepalive_current_task();
@@ -1416,6 +1466,18 @@ int speech_service::tts_speech_to_file(const QString &text, QString lang) {
                       false,
                       {0, static_cast<size_t>(text.size())},
                       {}};
+
+    if (m_current_task->model_id.isEmpty()) {
+        m_current_task.reset();
+
+        qWarning() << "failed to restart engine";
+
+        emit current_task_changed();
+
+        refresh_status();
+
+        return INVALID_TASK;
+    }
 
     if (m_tts_engine) m_tts_engine->encode_speech(text.toStdString());
 

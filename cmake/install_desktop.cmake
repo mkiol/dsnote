@@ -6,6 +6,7 @@ install(FILES "${desktop_dir}/${info_binary_id}.metainfo.xml" DESTINATION share/
 
 if(BUILD_WHISPERCPP)
     install(FILES "${external_lib_dir}/libwhisper.so" DESTINATION lib)
+    install(FILES "${external_lib_dir}/libwhisper-fallback.so" DESTINATION lib)
 endif()
 
 if(DOWNLOAD_LIBSTT)

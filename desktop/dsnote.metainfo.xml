@@ -54,25 +54,38 @@
   <launchable type="desktop-id">net.mkiol.SpeechNote.desktop</launchable>
   <content_rating type="oars-1.1" />
   <releases>
-    <release version="3.1.4" date="2023-06-28">
+    <release version="3.1.4" date="2023-07-02">
       <description>
+        <p>Text to Speech:</p>
         <ul>
-        <li>Piper engine update</li>
-        <li>New Piper TTS models for Chinese</li>
+        <li>Piper and RHVoice engines update</li>
+        <li>New Piper model for Chinese</li>
+        <li>New RHVoice model for Uzbek</li>
+        <li>Updated RHVoice models for Ukrainian</li>
+        </ul>
+        <p>Speech to Text:</p>
+        <ul>
+        <li>Whisper engine update (20% performance improvement, 50% less memory)</li>
+        <li>Whisper 'Large' models enabled for all languages</li>
+        <li>Whisper supported on older CPUs (i.e. without AVX/AVX2)</li>
         </ul>
       </description>
     </release>
     <release version="3.1.3" date="2023-06-24">
       <description>
+        <p>Text to Speech:</p>
         <ul>
-        <li>Whisper STT models enabled also for:
+        <li>New Piper models for: Icelandic, Swedish and Russian</li>
+        </ul>
+        <p>Speech to Text:</p>
+        <ul>
+        <li>Whisper fine-tuned models for: Czech, Slovak, Slovenian, Romanian, Russian, Hungarian and Polish</li>
+        <li>Standard Whisper models enabled also for:
             Amharic, Arabic, Bengali, Danish, Estonian, Basque, Persian, Hindi,
             Croatian, Hungarian, Icelandic, Georgian,
             Kazakh, Korean, Lithuanian, Latvian, Mongolian,
             Maltese, Nepali, Romanian, Slovak, Slovenian, Albanian,
             Swahili, Tagalog, Tatar, Uzbek and Yoruba</li>
-        <li>Whisper fine-tuned STT models for: Czech, Slovak, Slovenian, Romanian, Russian, Hungarian and Polish</li>
-        <li>New Piper TTS models for: Icelandic, Swedish and Russian</li>
         </ul>
       </description>
     </release>
@@ -86,9 +99,9 @@
     <release version="3.1.1" date="2023-06-17">
       <description>
         <ul>
-        <li>New DeepSpeech STT model for Latvain language</li>
+        <li>Text to Speech: New DeepSpeech model for Latvain</li>
         <li>Minor UI improvements</li>
-        <li>Fix: Crash during TTS on some systems</li>
+        <li>Fix: Crash during Text to Speech on some systems</li>
         <li>Fix: Downloaded models disappeared after app restart when Downloads directory was not set in the system</li>
         </ul>
       </description>

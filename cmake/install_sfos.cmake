@@ -4,6 +4,7 @@ install(FILES "${sfos_dir}/${info_binary_id}.desktop" DESTINATION share/applicat
 
 if(BUILD_WHISPERCPP)
     install(FILES "${external_lib_dir}/libwhisper.so" DESTINATION share/${info_binary_id}/lib)
+    install(FILES "${external_lib_dir}/libwhisper-fallback.so" DESTINATION DESTINATION share/${info_binary_id}/lib)
 endif()
 
 if(DOWNLOAD_LIBSTT)

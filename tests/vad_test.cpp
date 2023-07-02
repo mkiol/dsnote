@@ -7,28 +7,28 @@
 
 #define private public
 
-#include "vad_wrapper.hpp"
-
 #include <catch2/catch_test_macros.hpp>
 #include <string>
 
-TEST_CASE("vad_wrapper", "[shift_left]") {
+#include "vad.hpp"
+
+TEST_CASE("vad", "[shift_left]") {
     std::vector<int16_t> buf{1, 2, 3, 4, 5};
 
     SECTION("shift 0") {
-        vad_wrapper::shift_left(buf, 0);
+        vad::shift_left(buf, 0);
 
         REQUIRE(buf == std::vector<int16_t>{1, 2, 3, 4, 5});
     }
 
     SECTION("shift 3") {
-        vad_wrapper::shift_left(buf, 3);
+        vad::shift_left(buf, 3);
 
         REQUIRE(buf == std::vector<int16_t>{4, 5});
     }
 
     SECTION("shift more than buf size") {
-        vad_wrapper::shift_left(buf, buf.size() + 1);
+        vad::shift_left(buf, buf.size() + 1);
 
         REQUIRE(buf.empty());
     }

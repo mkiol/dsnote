@@ -77,15 +77,41 @@ modules:
         url: https://github.com/xianyi/OpenBLAS/releases/download/v0.3.21/OpenBLAS-0.3.21.tar.gz
         sha256: f36ba3d7a60e7c8bcc54cd9aaa9b1223dd42eaf02c811791c37e8ca707c241ca
 
+  - name: whispercpp-fallback
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=ON
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+      - -DWHISPER_OPENBLAS=ON
+      - -DWHISPER_NO_AVX=ON
+      - -DWHISPER_NO_AVX2=ON
+      - -DWHISPER_NO_FMA=ON
+      - -DWHISPER_NO_F16C=ON
+      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
+      - -DCMAKE_C_FLAGS='-O3 -I$$C_INCLUDE_PATH/openblas'
+      - -DCMAKE_CXX_FLAGS='-O3 -I$$CPLUS_INCLUDE_PATH/openblas'
+    post-install:
+      - "mv /app/lib/libwhisper.so /app/lib/libwhisper-fallback.so"
+    sources:
+      - type: archive
+        url: https://github.com/ggerganov/whisper.cpp/archive/85ed71aaec8e0612a84c0b67804bde75aa75a273.zip
+        sha256: cd505a7012f4d5be7c3d61fca9b46722b37eea226035c66f3a20d77d78dd6366
+      - type: patch
+        path: ../patches/whispercpp.patch
+
   - name: whispercpp
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DBUILD_SHARED_LIBS=OFF
+      - -DBUILD_SHARED_LIBS=ON
       - -DWHISPER_BUILD_TESTS=OFF
       - -DWHISPER_BUILD_EXAMPLES=OFF
       - -DWHISPER_OPENBLAS=ON
+      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
       - -DCMAKE_C_FLAGS='-O3 -I$$C_INCLUDE_PATH/openblas'
       - -DCMAKE_CXX_FLAGS='-O3 -I$$CPLUS_INCLUDE_PATH/openblas'
     sources:

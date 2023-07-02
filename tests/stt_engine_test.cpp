@@ -7,36 +7,36 @@
 
 #define protected public
 
-#include "engine_wrapper.hpp"
-
 #include <catch2/catch_test_macros.hpp>
 #include <string>
 
-TEST_CASE("engine_wrapper", "[merge_texts]") {
+#include "stt_engine.hpp"
+
+TEST_CASE("stt_engine", "[merge_texts]") {
     std::string text1{"Hello, How are you"};
     std::string text2{"you today?"};
     std::string text3{"today?"};
 
     SECTION("merge not overlaped texts") {
-        auto result = engine_wrapper::merge_texts(text1, std::move(text3));
+        auto result = stt_engine::merge_texts(text1, std::move(text3));
 
         REQUIRE(result == "Hello, How are you today?");
     }
 
     SECTION("merge overlaped texts") {
-        auto result = engine_wrapper::merge_texts(text1, std::move(text2));
+        auto result = stt_engine::merge_texts(text1, std::move(text2));
 
         REQUIRE(result == "Hello, How are you today?");
     }
 
     SECTION("merge fully overlaped texts") {
-        auto result = engine_wrapper::merge_texts(text1, "you");
+        auto result = stt_engine::merge_texts(text1, "you");
 
         REQUIRE(result == "Hello, How are you");
     }
 
     SECTION("merge repeated text") {
-        auto result = engine_wrapper::merge_texts(text1, "How are you");
+        auto result = stt_engine::merge_texts(text1, "How are you");
 
         REQUIRE(result == "Hello, How are you");
     }
