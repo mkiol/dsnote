@@ -49,6 +49,11 @@ DialogPage {
         }
     }
 
+    Button {
+        text: qsTr("Changes")
+        onClicked: appWin.openDialog("ChangelogPage.qml")
+    }
+
     SectionLabel {
         text: qsTr("About")
     }

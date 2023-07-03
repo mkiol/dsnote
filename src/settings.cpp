@@ -389,3 +389,14 @@ void settings::set_module_checksum(const QString& name, const QString& value) {
         setValue(QStringLiteral("service/module_%1_checksum").arg(name), value);
     }
 }
+
+QString settings::prev_app_ver() const {
+    return value(QStringLiteral("prev_app_ver")).toString();
+}
+
+void settings::set_prev_app_ver(const QString& value) {
+    if (prev_app_ver() != value) {
+        setValue(QStringLiteral("prev_app_ver"), value);
+        emit prev_app_ver_changed();
+    }
+}

@@ -43,6 +43,8 @@ class settings : public QSettings, public singleton<settings> {
                    set_file_open_dir_url NOTIFY file_open_dir_changed)
     Q_PROPERTY(QString file_open_dir_name READ file_open_dir_name NOTIFY
                    file_open_dir_changed)
+    Q_PROPERTY(QString prev_app_ver READ prev_app_ver WRITE set_prev_app_ver
+                   NOTIFY prev_app_ver_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -113,6 +115,8 @@ class settings : public QSettings, public singleton<settings> {
     QUrl file_open_dir_url() const;
     void set_file_open_dir_url(const QUrl &value);
     QString file_open_dir_name() const;
+    QString prev_app_ver() const;
+    void set_prev_app_ver(const QString &value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -157,6 +161,7 @@ class settings : public QSettings, public singleton<settings> {
     void mode_changed();
     void file_save_dir_changed();
     void file_open_dir_changed();
+    void prev_app_ver_changed();
 
     // service
     void models_dir_changed();

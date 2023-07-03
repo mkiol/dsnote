@@ -38,8 +38,8 @@ Page {
             }
 
             LogItem {
-                title: "New Text to Speech model for Icelandic, Swedish and Russian languages"
-                description: "New Piper models for Icelandic, Swedish and Russian are configured for download."
+                title: "New Text to Speech model for Icelandic, Swedish, Russian and Uzbek"
+                description: "New Piper and RHVoice models for Icelandic, Swedish, Russian and Uzbek are configured for download."
             }
 
             LogItem {
@@ -48,19 +48,26 @@ Page {
             }
 
             LogItem {
-                title: "Whisper models for more languages"
-                description: "Whisper Speech to Text models have been enabled also for: " +
-                             "Amharic, Arabic, Bengali, Danish, Estonian, Basque, Persian, Hindi, " +
+                title: "Whisper 'Small' models for all languages"
+                description: "Whisper Speech to Text 'Small' models have been enabled for all languages. " +
+                             "Moreover, Whisper is now also available for: Amharic, Arabic, Bengali, Danish, " +
+                             "Estonian, Basque, Persian, Hindi, " +
                              "Croatian, Hungarian, Icelandic, Georgian, " +
                              "Kazakh, Korean, Lithuanian, Latvian, Mongolian, " +
                              "Maltese, Nepali, Romanian, Slovak, Slovenian, Albanian, " +
-                             "Swahili, Tagalog, Tatar, Uzbek, Yoruba."
+                             "Swahili, Tagalog, Tatar, Uzbek and Yoruba."
             }
 
             LogItem {
-                title: "Whisper fine-tuned models for Polish and Russian"
-                description: "Whisper 'fine-tuned' models for Polish (Tiny) and Russian (Base) are configured for download. " +
+                title: "Whisper fine-tuned models for Croatian, Czech, Hungarian, Slovak, Polish, Romanian and Russian"
+                description: "Whisper 'fine-tuned' models are configured for download. " +
                              "They should provide better accuracy comparing to standard Whisper models."
+            }
+
+            LogItem {
+                title: "Whisper engine update"
+                description: "Whisper engine has been updated to most recent version. " +
+                             "Thanks to this update performance and memory usage are much improved."
             }
 
             SectionHeader {

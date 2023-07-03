@@ -231,6 +231,9 @@ ApplicationWindow {
     function showWelcome() {
         if (!app.busy && !app.stt_configured && !app.tts_configured) {
             appWin.openDialog("HelloPage.qml")
+        } else if (APP_VERSION !== _settings.prev_app_ver){
+            appWin.openDialog("ChangelogPage.qml")
+            _settings.prev_app_ver = APP_VERSION
         } else {
             appWin.closeHelloDialog()
         }

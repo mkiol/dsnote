@@ -54,20 +54,25 @@
   <launchable type="desktop-id">net.mkiol.SpeechNote.desktop</launchable>
   <content_rating type="oars-1.1" />
   <releases>
-    <release version="3.1.4" date="2023-07-02">
+    <release version="3.1.4" date="2023-07-03">
       <description>
+        <p>Interface:</p>
+        <ul>
+        <li>Option to show recent changes in the app (About -> Changes)</li>
+        <li>French translation update (Many thanks to L'Africain)</li>
+        </ul>
         <p>Text to Speech:</p>
         <ul>
-        <li>Piper and RHVoice engines update</li>
         <li>New Piper model for Chinese</li>
         <li>New RHVoice model for Uzbek</li>
         <li>Updated RHVoice models for Ukrainian</li>
+        <li>Piper and RHVoice engines updated to most recent versions</li>
         </ul>
         <p>Speech to Text:</p>
         <ul>
-        <li>Whisper engine update (20% performance improvement, 50% less memory)</li>
         <li>Whisper 'Large' models enabled for all languages</li>
-        <li>Whisper supported on older CPUs (i.e. without AVX/AVX2)</li>
+        <li>Whisper supported on older CPUs (i.e. without AVX/AVX2 extensions)</li>
+        <li>Whisper engine update (20% performance improvement, 50% less memory)</li>
         </ul>
       </description>
     </release>

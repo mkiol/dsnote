@@ -31,20 +31,20 @@ ToolBar {
                     y: menuButton.height
 
                     MenuItem {
-                        text: "&" + qsTr("Settings")
+                        text: qsTr("Settings")
                         icon.name: "document-properties-symbolic"
                         onClicked: appWin.openDialog("SettingsPage.qml")
                     }
 
                     MenuItem {
-                        text: "&" + qsTr("About %1").arg(APP_NAME)
+                        text: qsTr("About %1").arg(APP_NAME)
                         icon.source: _settings.app_icon()
                         onClicked: appWin.openDialog("AboutPage.qml")
                     }
 
                     MenuItem {
                         icon.name: "application-exit-symbolic"
-                        text: "&" + qsTr("Quit")
+                        text: qsTr("Quit")
                         onClicked: {
                             appWin.close()
                             Qt.quit()
@@ -58,7 +58,7 @@ ToolBar {
                 enabled: app.stt_configured || app.tts_configured
                 opacity: enabled ? 1.0 : 0.6
                 Layout.alignment: Qt.AlignLeft
-                text: "&" + qsTr("File")
+                text: qsTr("File")
                 onClicked: fileMenu.open()
 
                 Menu {
@@ -104,7 +104,7 @@ ToolBar {
                 enabled: app.stt_configured || app.tts_configured
                 opacity: enabled ? 1.0 : 0.6
                 Layout.alignment: Qt.AlignLeft
-                text: "&" + qsTr("Edit")
+                text: qsTr("Edit")
                 onClicked: editMenu.open()
 
                 Menu {
@@ -112,14 +112,14 @@ ToolBar {
                     y: editButton.height
 
                     MenuItem {
-                        text: "&" + qsTr("Undo")
+                        text: qsTr("Undo")
                         icon.name: "edit-undo-symbolic"
                         enabled: textArea.canUndo
                         onClicked: textArea.undo()
                     }
 
                     MenuItem {
-                        text: "&" + qsTr("Redo")
+                        text: qsTr("Redo")
                         icon.name: "edit-redo-symbolic"
                         enabled: textArea.canRedo
                         onClicked: textArea.redo()
@@ -154,7 +154,7 @@ ToolBar {
 
             ToolButton {
                 Layout.alignment: Qt.AlignLeft
-                text: "&" + qsTr("Languages")
+                text: qsTr("Languages")
                 onClicked: appWin.openDialog("LangsPage.qml")
 
                 ToolTip.visible: hovered

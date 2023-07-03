@@ -17,6 +17,13 @@ Page {
 
     allowedOrientations: Orientation.All
 
+    Component.onCompleted: {
+        if (APP_VERSION !== _settings.prev_app_ver) {
+            console.log("new version detected")
+            _settings.prev_app_ver = APP_VERSION
+        }
+    }
+
     SilicaFlickable {
         id: flick
         anchors.left: parent.left
