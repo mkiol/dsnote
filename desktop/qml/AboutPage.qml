@@ -20,9 +20,6 @@ DialogPage {
 
         Image {
             Layout.alignment: Qt.AlignLeft
-            Layout.preferredHeight: info.height
-            Layout.preferredWidth: height
-
             source: _settings.app_icon()
         }
 

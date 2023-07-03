@@ -163,66 +163,14 @@ ToolBar {
             }
         }
 
-        RowLayout {
-            Layout.fillWidth: true
+        ModelsSwitcher {
+            enabled: !appWin.compactMode
+            visible: enabled
+        }
 
-            Frame {
-                Layout.fillWidth: true
-                background: Item {}
-
-                RowLayout {
-                    anchors.fill: parent
-                    enabled: app.stt_configured
-
-                    ToolButton {
-                        icon.name: "audio-input-microphone-symbolic"
-                        hoverEnabled: false
-                        down: false
-                    }
-
-                    ComboBox {
-                        id: sttCombo
-                        Layout.fillWidth: true
-
-                        currentIndex: app.active_stt_model_idx
-                        model: app.available_stt_models
-                        onActivated: app.set_active_stt_model_idx(index)
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Speech to Text model")
-                    }
-                }
-            }
-
-            Frame {
-                Layout.fillWidth: true
-                background: Item {}
-
-                RowLayout {
-                    anchors.fill: parent
-                    enabled: app.tts_configured
-
-                    ToolButton {
-                        icon.name: "audio-speakers-symbolic"
-                        hoverEnabled: false
-                        down: false
-                    }
-
-                    ComboBox {
-                        id: ttsCombo
-                        Layout.fillWidth: true
-
-                        currentIndex: app.active_tts_model_idx
-                        model: app.available_tts_models
-                        onActivated: app.set_active_tts_model_idx(index)
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Text to Speech model")
-                    }
-                }
-            }
+        ModelsSwitcherCompact {
+            enabled: appWin.compactMode
+            visible: enabled
         }
     }
 
