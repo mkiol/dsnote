@@ -30,6 +30,11 @@ ApplicationWindow {
         }
     }
 
+    function openDialogIfNotOpen(file) {
+        if (_dialogPage) return
+        openDialog(file)
+    }
+
     function closeDialog() {
         if (_dialogPage) {
             _dialogPage.close()
@@ -109,8 +114,8 @@ ApplicationWindow {
         if (!app.busy && !app.stt_configured && !app.tts_configured) {
             appWin.openDialog("HelloPage.qml")
         } else if (APP_VERSION !== _settings.prev_app_ver) {
-            appWin.openDialog("ChangelogPage.qml")
             _settings.prev_app_ver = APP_VERSION
+            appWin.openDialogIfNotOpen("ChangelogPage.qml")
         } else {
             appWin.closeHelloDialog()
         }
