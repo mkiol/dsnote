@@ -164,11 +164,13 @@ ToolBar {
         }
 
         ModelsSwitcher {
+            id: modelsSwitcher
             enabled: !appWin.compactMode
             visible: enabled
         }
 
         ModelsSwitcherCompact {
+            id: modelsSwitcherCompact
             enabled: appWin.compactMode
             visible: enabled
         }
@@ -217,10 +219,14 @@ ToolBar {
 
     function update() {
         if (app.busy || service.busy) return;
-        if (app.stt_configured)
-            sttCombo.currentIndex = app.active_stt_model_idx
-        if (app.tts_configured)
-            ttsCombo.currentIndex = app.active_tts_model_idx
+        if (app.stt_configured) {
+            modelsSwitcher.sttIndex = app.active_stt_model_idx
+            modelsSwitcherCompact.sttIndex = app.active_stt_model_idx
+        }
+        if (app.tts_configured) {
+            modelsSwitcher.ttsIndex = app.active_tts_model_idx
+            modelsSwitcherCompact.ttsIndex = app.active_tts_model_idx
+        }
     }
 
     Connections {

@@ -10,6 +10,11 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 ColumnLayout {
+    id: root
+
+    property alias sttIndex: sttCombo.currentIndex
+    property alias ttsIndex: ttsCombo.currentIndex
+
     Layout.fillWidth: true
     spacing: 0
 
