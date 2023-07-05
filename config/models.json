@@ -5187,7 +5187,7 @@
             "model_id": "pt_rhvoice_br_leticia_f123",
             "engine": "tts_rhvoice",
             "lang_id": "pt",
-            "speaker": "Leticia-F123",
+            "speaker": "Letícia-F123",
             "checksum": "dfd1dfc4",
             "checksum_quick": "44e48b3c",
             "comp": "zip",
