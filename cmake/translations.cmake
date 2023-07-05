@@ -1,4 +1,6 @@
-set(enabled_translations cs_CZ de en fr nl pl sv zh_CN)
+# only finished translations
+set(enabled_translations en fr pl sv)
+#set(enabled_translations cs_CZ de en fr nl pl sv zh_CN)
 
 find_package(Qt5 COMPONENTS Core LinguistTools)
 
