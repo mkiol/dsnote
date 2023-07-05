@@ -3680,7 +3680,7 @@
             "lang_id": "da"
         },
         {
-            "name": "English (Piper Danny Low)",
+            "name": "English (Piper Danny Low Male)",
             "model_id": "en_piper_danny_low",
             "engine": "tts_piper",
             "lang_id": "en",
@@ -3693,7 +3693,7 @@
             "size": "58259303"
         },
         {
-            "name": "English (Piper Kathleen Low)",
+            "name": "English (Piper Kathleen Low Female)",
             "model_id": "en_piper_kathleen_low",
             "engine": "tts_piper",
             "lang_id": "en",
@@ -3706,7 +3706,7 @@
             "size": "58260821"
         },
         {
-            "name": "English (Piper Lessac Medium)",
+            "name": "English (Piper Lessac Medium Female)",
             "model_id": "en_piper_lessac_medium",
             "engine": "tts_piper",
             "lang_id": "en",
@@ -3720,7 +3720,7 @@
             "size": "58197843"
         },
         {
-            "name": "English (Piper LibriTTS High)",
+            "name": "English (Piper LibriTTS High Female)",
             "model_id": "en_piper_libritts_high",
             "engine": "tts_piper",
             "lang_id": "en",
@@ -3734,7 +3734,7 @@
             "size": "120620366"
         },
         {
-            "name": "English (Piper Ryan Medium)",
+            "name": "English (Piper Ryan Medium Male)",
             "model_id": "en_piper_ryan_medium",
             "engine": "tts_piper",
             "lang_id": "en",
@@ -3747,7 +3747,7 @@
             "size": "58389017"
         },
         {
-            "name": "English (Piper Alan Low)",
+            "name": "English (Piper Alan Low Male)",
             "model_id": "en_piper_alan_low",
             "engine": "tts_piper",
             "lang_id": "en",
@@ -3760,7 +3760,7 @@
             "size": "58251456"
         },
         {
-            "name": "Català (Piper Upc Ona Low)",
+            "name": "Català (Piper Upc Ona Low Female)",
             "model_id": "ca_piper_upc_ona_low",
             "engine": "tts_piper",
             "lang_id": "ca",
@@ -3773,7 +3773,7 @@
             "size": "18716208"
         },
         {
-            "name": "Català (Piper Upc Pau Low)",
+            "name": "Català (Piper Upc Pau Low Male)",
             "model_id": "ca_piper_upc_pau_low",
             "engine": "tts_piper",
             "lang_id": "ca",
@@ -3786,7 +3786,7 @@
             "size": "18825995"
         },
         {
-            "name": "Dansk (Piper Talesyntese Medium)",
+            "name": "Dansk (Piper Talesyntese Medium Male)",
             "model_id": "da_piper_talesyntese_medium",
             "engine": "tts_piper",
             "lang_id": "da",
@@ -3799,7 +3799,7 @@
             "size": "58261532"
         },
         {
-            "name": "Deutsch (Piper Eva Low)",
+            "name": "Deutsch (Piper Eva Low Female)",
             "model_id": "de_piper_eva_low",
             "engine": "tts_piper",
             "lang_id": "de",
@@ -3812,7 +3812,7 @@
             "size": "18716986"
         },
         {
-            "name": "Deutsch (Piper Karlsson Low)",
+            "name": "Deutsch (Piper Karlsson Low Male)",
             "model_id": "de_piper_karlsson_low",
             "engine": "tts_piper",
             "lang_id": "de",
@@ -3825,7 +3825,7 @@
             "size": "58261792"
         },
         {
-            "name": "Deutsch (Piper Kerstin Low)",
+            "name": "Deutsch (Piper Kerstin Low Female)",
             "model_id": "de_piper_kerstin_low",
             "engine": "tts_piper",
             "lang_id": "de",
@@ -3838,7 +3838,7 @@
             "size": "58259462"
         },
         {
-            "name": "Deutsch (Piper Pavoque Low)",
+            "name": "Deutsch (Piper Pavoque Low Male)",
             "model_id": "de_piper_pavoque_low",
             "engine": "tts_piper",
             "lang_id": "de",
@@ -3851,7 +3851,7 @@
             "size": "58262855"
         },
         {
-            "name": "Deutsch (Piper Ramona Low)",
+            "name": "Deutsch (Piper Ramona Low Female)",
             "model_id": "de_piper_ramona_low",
             "engine": "tts_piper",
             "lang_id": "de",
@@ -3864,7 +3864,7 @@
             "size": "58248670"
         },
         {
-            "name": "Deutsch (Piper Thorsten Low)",
+            "name": "Deutsch (Piper Thorsten Low Male)",
             "model_id": "de_piper_thorsten_low",
             "engine": "tts_piper",
             "lang_id": "de",
@@ -3877,7 +3877,7 @@
             "size": "58260329"
         },
         {
-            "name": "Ελληνικά (Piper Rapunzelina Low)",
+            "name": "Ελληνικά (Piper Rapunzelina Low Female)",
             "model_id": "el_piper_rapunzelina_low",
             "engine": "tts_piper",
             "lang_id": "el",
@@ -3890,7 +3890,7 @@
             "size": "58261670"
         },
         {
-            "name": "Español (Piper Carlfm Low)",
+            "name": "Español (Piper Carlfm Low Male)",
             "model_id": "es_piper_carlfm_low",
             "engine": "tts_piper",
             "lang_id": "es",
@@ -3904,7 +3904,7 @@
             "size": "18825198"
         },
         {
-            "name": "Español (Piper MLS 10246 Low)",
+            "name": "Español (Piper MLS 10246 Low Female)",
             "model_id": "es_piper_mls10246_low",
             "engine": "tts_piper",
             "lang_id": "es",
@@ -3917,7 +3917,7 @@
             "size": "58252390"
         },
         {
-            "name": "Español (Piper MLS 9972 Low)",
+            "name": "Español (Piper MLS 9972 Low Female)",
             "model_id": "es_piper_mls9972_low",
             "engine": "tts_piper",
             "lang_id": "es",
@@ -3930,7 +3930,7 @@
             "size": "58265629"
         },
         {
-            "name": "Suomi (Piper Harri Low)",
+            "name": "Suomi (Piper Harri Low Male)",
             "model_id": "fi_piper_harri_low",
             "engine": "tts_piper",
             "lang_id": "fi",
@@ -3943,7 +3943,7 @@
             "size": "58356444"
         },
         {
-            "name": "Français (Piper Gilles Low)",
+            "name": "Français (Piper Gilles Low Male)",
             "model_id": "fr_piper_gilles_low",
             "engine": "tts_piper",
             "lang_id": "fr",
@@ -3956,7 +3956,7 @@
             "size": "58254824"
         },
         {
-            "name": "Français (Piper MLS 1840 Low)",
+            "name": "Français (Piper MLS 1840 Low Male)",
             "model_id": "fr_piper_mls1840_low",
             "engine": "tts_piper",
             "lang_id": "fr",
@@ -3969,7 +3969,7 @@
             "size": "58259597"
         },
         {
-            "name": "Français (Piper Siwis Medium)",
+            "name": "Français (Piper Siwis Medium Female)",
             "model_id": "fr_piper_siwis_medium",
             "engine": "tts_piper",
             "lang_id": "fr",
@@ -3983,7 +3983,7 @@
             "size": "58374904"
         },
         {
-            "name": "Italiano (Piper Riccardo Low)",
+            "name": "Italiano (Piper Riccardo Low Male)",
             "model_id": "it_piper_riccardo_low",
             "engine": "tts_piper",
             "lang_id": "it",
@@ -3996,7 +3996,7 @@
             "size": "18826864"
         },
         {
-            "name": "Қазақ (Piper Iseke Low)",
+            "name": "Қазақ (Piper Iseke Low Male)",
             "model_id": "kk_piper_iseke_low",
             "engine": "tts_piper",
             "lang_id": "kk",
@@ -4009,7 +4009,7 @@
             "size": "18826684"
         },
         {
-            "name": "Қазақ (Piper Issai High)",
+            "name": "Қазақ (Piper Issai High Male)",
             "model_id": "kk_piper_issai_high",
             "engine": "tts_piper",
             "lang_id": "kk",
@@ -4023,7 +4023,7 @@
             "size": "118823512"
         },
         {
-            "name": "Қазақ (Piper Raya Low)",
+            "name": "Қазақ (Piper Raya Low Female)",
             "model_id": "kk_piper_raya_low",
             "engine": "tts_piper",
             "lang_id": "kk",
@@ -4036,7 +4036,7 @@
             "size": "18828679"
         },
         {
-            "name": "Nederlands (Piper MLS 5809 Low)",
+            "name": "Nederlands (Piper MLS 5809 Low Female)",
             "model_id": "nl_piper_mls5809_low",
             "engine": "tts_piper",
             "lang_id": "nl",
@@ -4049,7 +4049,7 @@
             "size": "58252731"
         },
         {
-            "name": "Nederlands (Piper MLS 7432 Low)",
+            "name": "Nederlands (Piper MLS 7432 Low Neutral)",
             "model_id": "nl_piper_mls7432_low",
             "engine": "tts_piper",
             "lang_id": "nl",
@@ -4062,7 +4062,7 @@
             "size": "58247411"
         },
         {
-            "name": "Nederlands (Piper Nathalie Low)",
+            "name": "Nederlands (Piper Nathalie Low Female)",
             "model_id": "nl_piper_nathalie_low",
             "engine": "tts_piper",
             "lang_id": "nl",
@@ -4075,7 +4075,7 @@
             "size": "18713496"
         },
         {
-            "name": "Nederlands (Piper Rdh Medium)",
+            "name": "Nederlands (Piper Rdh Medium Male)",
             "model_id": "nl_piper_rdh_medium",
             "engine": "tts_piper",
             "lang_id": "nl",
@@ -4089,7 +4089,7 @@
             "size": "58274935"
         },
         {
-            "name": "Norsk (Piper Talesyntese Medium)",
+            "name": "Norsk (Piper Talesyntese Medium Male)",
             "model_id": "no_piper_talesyntese_medium",
             "engine": "tts_piper",
             "lang_id": "no",
@@ -4102,7 +4102,7 @@
             "size": "58191359"
         },
         {
-            "name": "नेपाली (Piper Google Medium)",
+            "name": "नेपाली (Piper Google Medium Female)",
             "model_id": "ne_piper_google_medium",
             "engine": "tts_piper",
             "lang_id": "ne",
@@ -4115,7 +4115,7 @@
             "size": "70691256"
         },
         {
-            "name": "Português brasileiro (Piper Edresson Low)",
+            "name": "Português brasileiro (Piper Edresson Low Male)",
             "model_id": "pt_piper_br_edresson_low",
             "engine": "tts_piper",
             "lang_id": "pt",
@@ -4128,7 +4128,7 @@
             "size": "58258517"
         },
         {
-            "name": "Українська (Piper Lada Low)",
+            "name": "Українська (Piper Lada Low Female)",
             "model_id": "uk_piper_lada_low",
             "engine": "tts_piper",
             "lang_id": "uk",
@@ -4141,7 +4141,7 @@
             "size": "18716596"
         },
         {
-            "name": "Tiếng Việt (Piper 25 Low)",
+            "name": "Tiếng Việt (Piper 25 Low Female)",
             "model_id": "vi_piper_25_low",
             "engine": "tts_piper",
             "lang_id": "vi",
@@ -4154,7 +4154,7 @@
             "size": "58252825"
         },
         {
-            "name": "Tiếng Việt (Piper Vivos Low)",
+            "name": "Tiếng Việt (Piper Vivos Low Female)",
             "model_id": "vi_piper_vivos_low",
             "engine": "tts_piper",
             "lang_id": "vi",
@@ -4168,7 +4168,7 @@
             "size": "25406468"
         },
         {
-            "name": "中文 (Piper Huayan Low)",
+            "name": "中文 (Piper Huayan Low Female)",
             "model_id": "zh_piper_huayan_low",
             "engine": "tts_piper",
             "lang_id": "zh",
@@ -4181,7 +4181,7 @@
             "size": "18716220"
         },
         {
-            "name": "中文 (Piper Huayan Medium)",
+            "name": "中文 (Piper Huayan Medium Female)",
             "model_id": "zh_piper_huayan_medium",
             "engine": "tts_piper",
             "lang_id": "zh",
@@ -4194,7 +4194,7 @@
             "size": "58395655"
         },
         {
-            "name": "íslenska (Piper Bui Medium)",
+            "name": "íslenska (Piper Bui Medium Male)",
             "model_id": "is_piper_bui_medium",
             "engine": "tts_piper",
             "lang_id": "is",
@@ -4207,7 +4207,7 @@
             "size": "58610382"
         },
         {
-            "name": "íslenska (Piper Salka Medium)",
+            "name": "íslenska (Piper Salka Medium Female)",
             "model_id": "is_piper_salka_medium",
             "engine": "tts_piper",
             "lang_id": "is",
@@ -4220,7 +4220,7 @@
             "size": "58669595"
         },
         {
-            "name": "íslenska (Piper Steinn Medium)",
+            "name": "íslenska (Piper Steinn Medium Male)",
             "model_id": "is_piper_steinn_medium",
             "engine": "tts_piper",
             "lang_id": "is",
@@ -4233,7 +4233,7 @@
             "size": "58680806"
         },
         {
-            "name": "íslenska (Piper Ugla Medium)",
+            "name": "íslenska (Piper Ugla Medium Female)",
             "model_id": "is_piper_ugla_medium",
             "engine": "tts_piper",
             "lang_id": "is",
@@ -4246,7 +4246,7 @@
             "size": "58681988"
         },
         {
-            "name": "Svenska (Piper NST Medium)",
+            "name": "Svenska (Piper NST Medium Male)",
             "model_id": "sv_piper_nst_medium",
             "engine": "tts_piper",
             "lang_id": "sv",
@@ -4259,7 +4259,7 @@
             "size": "58295473"
         },
         {
-            "name": "Русский (Piper Irinia Medium)",
+            "name": "Русский (Piper Irinia Medium Female)",
             "model_id": "ru_piper_irinia_medium",
             "engine": "tts_piper",
             "lang_id": "ru",
@@ -4272,7 +4272,7 @@
             "size": "58340190"
         },
         {
-            "name": "Polski (Piper MLS 6892 Low)",
+            "name": "Polski (Piper MLS 6892 Low Male)",
             "model_id": "pl_piper_mls6892_low",
             "engine": "tts_piper",
             "lang_id": "pl",
@@ -4847,7 +4847,7 @@
             "size": "4745551"
         },
         {
-            "name": "Esperanto (RHVoice Spomenka)",
+            "name": "Esperanto (RHVoice Spomenka Female)",
             "model_id": "eo_rhvoice_spomenka",
             "engine": "tts_rhvoice",
             "lang_id": "eo",
@@ -4861,7 +4861,7 @@
             "size": "7278697"
         },
         {
-            "name": "Русский (RHVoice Vsevolod)",
+            "name": "Русский (RHVoice Vsevolod Male)",
             "model_id": "ru_rhvoice_vsevolod",
             "engine": "tts_rhvoice",
             "lang_id": "ru",
@@ -4875,7 +4875,7 @@
             "size": "7167623"
         },
         {
-            "name": "Русский (RHVoice Timofey)",
+            "name": "Русский (RHVoice Timofey Male)",
             "model_id": "ru_rhvoice_timofey",
             "engine": "tts_rhvoice",
             "lang_id": "ru",
@@ -4889,7 +4889,7 @@
             "size": "13835920"
         },
         {
-            "name": "Русский (RHVoice Elena)",
+            "name": "Русский (RHVoice Elena Female)",
             "model_id": "ru_rhvoice_elena",
             "engine": "tts_rhvoice",
             "lang_id": "ru",
@@ -4903,7 +4903,7 @@
             "size": "4803052"
         },
         {
-            "name": "Русский (RHVoice Umka)",
+            "name": "Русский (RHVoice Umka Female)",
             "model_id": "ru_rhvoice_umka",
             "engine": "tts_rhvoice",
             "lang_id": "ru",
@@ -4917,7 +4917,7 @@
             "size": "14627938"
         },
         {
-            "name": "Русский (RHVoice Vitaliy)",
+            "name": "Русский (RHVoice Vitaliy Male)",
             "model_id": "ru_rhvoice_vitaliy_ng",
             "engine": "tts_rhvoice",
             "lang_id": "ru",
@@ -4931,7 +4931,7 @@
             "size": "6160942"
         },
         {
-            "name": "Русский (RHVoice Aleksandr)",
+            "name": "Русский (RHVoice Aleksandr Male)",
             "model_id": "ru_rhvoice_aleksandr_hq",
             "engine": "tts_rhvoice",
             "lang_id": "ru",
@@ -4945,7 +4945,7 @@
             "size": "7359634"
         },
         {
-            "name": "Русский (RHVoice Tatiana)",
+            "name": "Русский (RHVoice Tatiana Female)",
             "model_id": "ru_rhvoice_tatiana",
             "engine": "tts_rhvoice",
             "lang_id": "ru",
@@ -4959,7 +4959,7 @@
             "size": "11130815"
         },
         {
-            "name": "Українська (RHVoice Marianna)",
+            "name": "Українська (RHVoice Marianna Female)",
             "model_id": "uk_rhvoice_marianna",
             "engine": "tts_rhvoice",
             "lang_id": "uk",
@@ -4973,7 +4973,7 @@
             "size": "10094388"
         },
         {
-            "name": "Українська (RHVoice Natalia)",
+            "name": "Українська (RHVoice Natalia Female)",
             "model_id": "uk_rhvoice_natalia",
             "engine": "tts_rhvoice",
             "lang_id": "uk",
@@ -4987,7 +4987,7 @@
             "size": "7522652"
         },
         {
-            "name": "Українська (RHVoice Volodymyr)",
+            "name": "Українська (RHVoice Volodymyr Male)",
             "model_id": "uk_rhvoice_volodymyr",
             "engine": "tts_rhvoice",
             "lang_id": "uk",
@@ -5001,7 +5001,7 @@
             "size": "11044796"
         },
         {
-            "name": "Українська (RHVoice Anatol)",
+            "name": "Українська (RHVoice Anatol Male)",
             "model_id": "uk_rhvoice_anatol",
             "engine": "tts_rhvoice",
             "lang_id": "uk",
@@ -5015,7 +5015,7 @@
             "size": "10271326"
         },
         {
-            "name": "Čeština (RHVoice Zdenek)",
+            "name": "Čeština (RHVoice Zdenek Male)",
             "model_id": "cs_rhvoice_zdenek",
             "engine": "tts_rhvoice",
             "lang_id": "cs",
@@ -5085,7 +5085,7 @@
             "size": "3694284"
         },
         {
-            "name": "Македонски (RHVoice Kiko)",
+            "name": "Македонски (RHVoice Kiko Female)",
             "model_id": "mk_rhvoice_kiko",
             "engine": "tts_rhvoice",
             "lang_id": "mk",
@@ -5099,7 +5099,7 @@
             "size": "4410485"
         },
         {
-            "name": "Македонски (RHVoice Suze)",
+            "name": "Македонски (RHVoice Suze Female)",
             "model_id": "mk_rhvoice_suze",
             "engine": "tts_rhvoice",
             "lang_id": "mk",
@@ -5113,7 +5113,7 @@
             "size": "14896090"
         },
         {
-            "name": "Shqip (RHVoice Hana)",
+            "name": "Shqip (RHVoice Hana Female)",
             "model_id": "sq_rhvoice_hana",
             "engine": "tts_rhvoice",
             "lang_id": "sq",
@@ -5127,7 +5127,7 @@
             "size": "8731979"
         },
         {
-            "name": "татарча (RHVoice Talgat)",
+            "name": "татарча (RHVoice Talgat Male)",
             "model_id": "tt_rhvoice_talgat",
             "engine": "tts_rhvoice",
             "lang_id": "tt",
@@ -5141,7 +5141,7 @@
             "size": "14824573"
         },
         {
-            "name": "Кыргыз (RHVoice Nazgul)",
+            "name": "Кыргыз (RHVoice Nazgul Female)",
             "model_id": "ky_rhvoice_nazgul",
             "engine": "tts_rhvoice",
             "lang_id": "ky",
@@ -5155,7 +5155,7 @@
             "size": "10050931"
         },
         {
-            "name": "Кыргыз (RHVoice Azamat)",
+            "name": "Кыргыз (RHVoice Azamat Male)",
             "model_id": "ky_rhvoice_azamat",
             "engine": "tts_rhvoice",
             "lang_id": "ky",
@@ -5169,7 +5169,7 @@
             "size": "17545133"
         },
         {
-            "name": "ქართული (RHVoice Natia)",
+            "name": "ქართული (RHVoice Natia Female)",
             "model_id": "ka_rhvoice_natia",
             "engine": "tts_rhvoice",
             "lang_id": "ka",
@@ -5197,7 +5197,7 @@
             "size": "21370483"
         },
         {
-            "name": "Polski (RHVoice Magda)",
+            "name": "Polski (RHVoice Magda Female)",
             "model_id": "pl_rhvoice_magda",
             "engine": "tts_rhvoice",
             "lang_id": "pl",
@@ -5211,7 +5211,7 @@
             "size": "9798974"
         },
         {
-            "name": "Polski (RHVoice Natan)",
+            "name": "Polski (RHVoice Natan Male)",
             "model_id": "pl_rhvoice_natan",
             "engine": "tts_rhvoice",
             "lang_id": "pl",
@@ -5225,7 +5225,7 @@
             "size": "7456757"
         },
         {
-            "name": "Polski (RHVoice Michał)",
+            "name": "Polski (RHVoice Michał Male)",
             "model_id": "pl_rhvoice_michal",
             "engine": "tts_rhvoice",
             "lang_id": "pl",
@@ -5239,7 +5239,7 @@
             "size": "5750556"
         },
         {
-            "name": "Polski (RHVoice Cezary)",
+            "name": "Polski (RHVoice Cezary Male)",
             "model_id": "pl_rhvoice_cezary",
             "engine": "tts_rhvoice",
             "lang_id": "pl",
@@ -5254,7 +5254,7 @@
             "size": "10842873"
         },
         {
-            "name": "Polski (RHVoice Alicja)",
+            "name": "Polski (RHVoice Alicja Female)",
             "model_id": "pl_rhvoice_alicja",
             "engine": "tts_rhvoice",
             "lang_id": "pl",
@@ -5750,49 +5750,49 @@
             "hidden": true
         },
         {
-            "name": "Català (Coqui VITS Jan)",
+            "name": "Català (Coqui VITS Jan Male)",
             "model_id": "ca_coqui_custom_vits_jan",
             "model_alias_of": "ca_coqui_custom_vits",
             "lang_id": "ca",
             "speaker": "jan"
         },
         {
-            "name": "Català (Coqui VITS Mar)",
+            "name": "Català (Coqui VITS Mar Female)",
             "model_id": "ca_coqui_custom_vits_mar",
             "model_alias_of": "ca_coqui_custom_vits",
             "lang_id": "ca",
             "speaker": "mar"
         },
         {
-            "name": "Català (Coqui VITS Ona)",
+            "name": "Català (Coqui VITS Ona Female)",
             "model_id": "ca_coqui_custom_vits_ona",
             "model_alias_of": "ca_coqui_custom_vits",
             "lang_id": "ca",
             "speaker": "ona"
         },
         {
-            "name": "Català (Coqui VITS Pau)",
+            "name": "Català (Coqui VITS Pau Male)",
             "model_id": "ca_coqui_custom_vits_pau",
             "model_alias_of": "ca_coqui_custom_vits",
             "lang_id": "ca",
             "speaker": "pau"
         },
         {
-            "name": "Català (Coqui VITS Pep)",
+            "name": "Català (Coqui VITS Pep Male)",
             "model_id": "ca_coqui_custom_vits_pep",
             "model_alias_of": "ca_coqui_custom_vits",
             "lang_id": "ca",
             "speaker": "pep"
         },
         {
-            "name": "Català (Coqui VITS Pol)",
+            "name": "Català (Coqui VITS Pol Male)",
             "model_id": "ca_coqui_custom_vits_pol",
             "model_alias_of": "ca_coqui_custom_vits",
             "lang_id": "ca",
             "speaker": "pol"
         },
         {
-            "name": "Català (Coqui VITS Teo)",
+            "name": "Català (Coqui VITS Teo Male)",
             "model_id": "ca_coqui_custom_vits_teo",
             "model_alias_of": "ca_coqui_custom_vits",
             "lang_id": "ca",
