@@ -5281,6 +5281,19 @@
             "size": "145594973"
         },
         {
+            "name": "English (Coqui Jenny Female)",
+            "model_id": "en_coqui_jenny_jenny",
+            "engine": "tts_coqui",
+            "lang_id": "en",
+            "checksum": "2c57eacb",
+            "checksum_quick": "da48862b",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.14.0_models/tts_models--en--jenny--jenny.zip"
+            ],
+            "size": "1608527805"
+        },
+        {
             "name": "English (Coqui VCTK VITS)",
             "model_id": "en_coqui_vctk_vits",
             "engine": "tts_coqui",
