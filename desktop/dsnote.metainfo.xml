@@ -54,6 +54,19 @@
   <launchable type="desktop-id">net.mkiol.SpeechNote.desktop</launchable>
   <content_rating type="oars-1.1" />
   <releases>
+    <release version="3.1.5" date="2023-07-06">
+      <description>
+        <p>Text to Speech:</p>
+        <ul>
+        <li>New Coqui voice for English: Jenny</li>
+        </ul>
+        <p>Speech to Text:</p>
+        <ul>
+        <li>Quicker decoding when using DeepSpeech/Coqui models (especially on ARM CPU)</li>
+        </ul>
+      </description>
+    </release>
+  <releases>
     <release version="3.1.4" date="2023-07-03">
       <description>
         <p>Interface:</p>

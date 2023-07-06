@@ -70,6 +70,12 @@ Page {
                              "Thanks to this update performance and memory usage are much improved."
             }
 
+            LogItem {
+                title: "Quicker decoding when using DeepSpeech/Coqui models"
+                description: "This is a reggression bug fix. From version 2.0, decoding with DeepSpeech/Coqui models were significantly slower. " +
+                             "Especially this affected ARM32 devices."
+            }
+
             SectionHeader {
                 text: qsTr("Version %1").arg("3.0")
             }

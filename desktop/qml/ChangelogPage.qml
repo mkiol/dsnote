@@ -16,6 +16,21 @@ DialogPage {
     }
 
     SectionLabel {
+        text: qsTr("Version %1").arg("3.1.5")
+    }
+
+    RichLabel {
+        text: "<p>Text to Speech:</p>
+        <ul>
+        <li>New Coqui voice for English: Jenny</li>
+        </ul>
+        <p>Speech to Text:</p>
+        <ul>
+        <li>Quicker decoding when using DeepSpeech/Coqui models (especially on ARM CPU)</li>
+        </ul>"
+    }
+
+    SectionLabel {
         text: qsTr("Version %1").arg("3.1.4")
     }
 
