@@ -15,6 +15,7 @@ ListItem {
     property alias icon: _icon
     property alias defaultIcon: _dicon
     property bool active: false
+    property alias textRightMargin: _title.rightMargin
 
     readonly property bool _iconDisabled: _icon.status !== Image.Ready &&
                                          _dicon.status !== Image.Ready
@@ -50,13 +51,15 @@ ListItem {
     Label {
         id: _title
 
+        property int rightMargin: Theme.horizontalPageMargin
+
         truncationMode: TruncationMode.Fade
 
         anchors {
             left: _iconDisabled ? parent.left : _icon.right
             right: parent.right
             leftMargin: _iconDisabled ? Theme.horizontalPageMargin : Theme.paddingMedium
-            rightMargin: Theme.horizontalPageMargin
+            rightMargin: _title.rightMargin
             verticalCenter: parent.verticalCenter
         }
 

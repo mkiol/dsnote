@@ -74,6 +74,9 @@ SimpleListItem {
 
     menu: menuComp
 
+    textRightMargin: root.available || root.downloading ?
+                         Theme.horizontalPageMargin + Theme.iconSizeMedium : Theme.horizontalPageMargin
+
     Image {
         visible: root.available
         source: "image://theme/icon-m-certificates?" + root.itemColor
