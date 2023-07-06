@@ -151,8 +151,6 @@ Dialog {
         id: modelSectionDelegate
 
         SectionLabel {
-            required property var section
-
             x: appWin.padding
             width: listView.width - appWin.padding - root._rightMargin
             text: {
@@ -168,55 +166,64 @@ Dialog {
 
     Component {
         id: modelItemDelegate
-        RowLayout {
+        Item {
             width: listView.width
+            height: downloadButton.height
 
             Label {
-                Layout.margins: appWin.padding
                 text: model.name
+                elide: Text.ElideRight
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: appWin.padding
+                anchors.right: availableLabel.left
+                anchors.rightMargin: appWin.padding
             }
 
             Label {
-                Layout.fillWidth: true
+                id: availableLabel
                 horizontalAlignment: Text.AlignRight
-                Layout.rightMargin: appWin.padding
-                Layout.alignment: Qt.AlignVCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: bar.visible ? bar.left : downloadButton.left
+                anchors.rightMargin: appWin.padding
                 text: model.available ? "\u2714" : ""
                 font.bold: true
                 font.pixelSize: Qt.application.font.pixelSize * 1.5
             }
 
-            ColumnLayout {
-                spacing: 0
+            ProgressBar {
+                id: bar
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: downloadButton.left
+                anchors.rightMargin: appWin.padding
+                width: visible ? downloadButton.width : 0
+                value: root.langsView ? 0 : model.available ? 1 : model.progress
+                visible: model.downloading
 
-                Button {
-                    id: downloadButton
-                    Layout.rightMargin: root._rightMargin
-                    text: model.downloading ? qsTr("Cancel") : model.available ? qsTr("Delete") : qsTr("Download")
-                    onClicked: {
-                        if (model.downloading) service.cancel_model_download(model.id)
-                        else if (model.available) service.delete_model(model.id)
-                        else service.download_model(model.id)
+                Connections {
+                    target: service
+                    function onModel_download_progress_changed(id, progress) {
+                        if (model.id === id) bar.value = progress
                     }
                 }
-
-                ProgressBar {
-                    id: bar
-                    Layout.preferredWidth: downloadButton.width
-                    value: root.langsView ? 0 : model.available ? 1 : model.progress
-                    visible: model.downloading
-
-                    Connections {
-                        target: service
-                        function onModel_download_progress_changed(id, progress) {
-                            if (model.id === id) bar.value = progress
-                        }
+                Component.onCompleted: {
+                    if (model.downloading) {
+                        bar.value = service.model_download_progress(model.id)
                     }
-                    Component.onCompleted: {
-                        if (model.downloading) {
-                            bar.value = service.model_download_progress(model.id)
-                        }
-                    }
+                }
+            }
+
+            Button {
+                id: downloadButton
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                anchors.rightMargin: root._rightMargin
+                width: implicitWidth
+                text: model.downloading ? qsTr("Cancel") : model.available ? qsTr("Delete") : qsTr("Download")
+                onClicked: {
+                    if (model.downloading) service.cancel_model_download(model.id)
+                    else if (model.available) service.delete_model(model.id)
+                    else service.download_model(model.id)
                 }
             }
         }
