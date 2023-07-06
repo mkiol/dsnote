@@ -46,6 +46,9 @@
     <screenshot>
       <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshot_3.png</image>
     </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshot_5.png</image>
+    </screenshot>
   </screenshots>
   <url type="homepage">https://github.com/mkiol/dsnote</url>
   <url type="bugtracker">https://github.com/mkiol/dsnote/issues</url>
