@@ -123,5 +123,6 @@ Logger::Message::~Message() {
         }
     } catch (const std::runtime_error &e) {
         fmt::print(stderr, "logger error: {}\n", e.what());
+        fmt::print(stderr, "{}\n", str);
     }
 }
