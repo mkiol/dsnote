@@ -60,6 +60,8 @@ class ds_engine : public stt_engine {
     ModelState* m_ds_model = nullptr;
     StreamingState* m_ds_stream = nullptr;
     std::optional<punctuator> m_punctuator;
+    size_t m_decoded_samples = 0;
+    size_t m_decoding_duration = 0;
 
     void open_ds_lib();
     void create_ds_model();

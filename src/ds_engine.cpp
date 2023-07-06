@@ -165,6 +165,9 @@ stt_engine::samples_process_result_t ds_engine::process_buff() {
 
         free_ds_stream();
         create_ds_stream();
+
+        m_decoding_duration = 0;
+        m_decoded_samples = 0;
     }
 
     m_denoiser.process(m_in_buf.buf.data(), m_in_buf.size);
@@ -225,10 +228,11 @@ stt_engine::samples_process_result_t ds_engine::process_buff() {
 
         m_speech_buf.clear();
 
-        if (final_decode)
+        if (final_decode) {
             flush(!eof && m_speech_mode == speech_mode_t::automatic
                       ? flush_t::regular
                       : flush_t::eof);
+        }
     }
 
     if (!vad_status && !final_decode &&
@@ -247,6 +251,8 @@ void ds_engine::decode_speech(const ds_buf_t& buf, bool eof) {
 
     create_ds_stream();
 
+    auto decoding_start = std::chrono::steady_clock::now();
+
     m_ds_api.STT_FeedAudioContent(m_ds_stream, buf.data(), buf.size());
 
     auto* cstr = [=] {
@@ -258,6 +264,24 @@ void ds_engine::decode_speech(const ds_buf_t& buf, bool eof) {
 
     std::string result{cstr};
     m_ds_api.STT_FreeString(cstr);
+
+    if (!buf.empty()) {
+        auto decoding_dur =
+            std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::steady_clock::now() - decoding_start)
+                .count();
+
+        m_decoding_duration += decoding_dur;
+        m_decoded_samples += buf.size();
+
+        LOGD("speech decoded, stats: samples="
+             << m_decoded_samples << ", duration=" << m_decoding_duration
+             << "ms ("
+             << static_cast<double>(m_decoding_duration) /
+                    ((1000 * m_decoded_samples) /
+                     static_cast<double>(m_sample_rate))
+             << ")");
+    }
 
 #ifdef DEBUG
     LOGD("speech decoded: text=" << result);
