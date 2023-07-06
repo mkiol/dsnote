@@ -12,6 +12,8 @@ endif()
 if(DOWNLOAD_LIBSTT)
     install(FILES "${external_lib_dir}/libstt.so" DESTINATION lib)
     install(FILES "${external_lib_dir}/libkenlm.so" DESTINATION lib)
+    install(FILES "${external_lib_dir}/libtensorflowlite.so" DESTINATION lib)
+    install(FILES "${external_lib_dir}/libtflitedelegates.so" DESTINATION lib)
 endif()
 
 if(BUILD_OPENBLAS)

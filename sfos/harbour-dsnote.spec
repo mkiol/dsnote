@@ -2,7 +2,7 @@ Name:       harbour-dsnote
 
 # >> macros
 %define __provides_exclude_from ^%{_datadir}/.*$
-%define __requires_exclude ^libstt.*|libkenlm.*|libopenblas.*|libvosk.*|libonnxruntime.*|libRHVoice_core.*|libRHVoice.*$
+%define __requires_exclude ^libstt.*|libkenlm.*|libtensorflowlite.*|libtflitedelegates.*|libopenblas.*|libvosk.*|libonnxruntime.*|libRHVoice_core.*|libRHVoice.*$
 %define _unpackaged_files_terminate_build 0
 # << macros
 

@@ -10,6 +10,8 @@ endif()
 if(DOWNLOAD_LIBSTT)
     install(FILES "${external_lib_dir}/libstt.so" DESTINATION share/${info_binary_id}/lib)
     install(FILES "${external_lib_dir}/libkenlm.so" DESTINATION share/${info_binary_id}/lib)
+    install(FILES "${external_lib_dir}/libtensorflowlite.so" DESTINATION share/${info_binary_id}/lib)
+    install(FILES "${external_lib_dir}/libtflitedelegates.so" DESTINATION share/${info_binary_id}/lib)
 endif()
 
 if(BUILD_OPENBLAS)

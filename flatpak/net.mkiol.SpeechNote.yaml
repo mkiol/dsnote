@@ -188,20 +188,22 @@ modules:
       - "chmod --recursive u+w ."
       - "cp ./libstt.so /app/lib"
       - "cp ./libkenlm.so /app/lib"
+      - "cp ./libtensorflowlite.so /app/lib"
+      - "cp ./libtflitedelegates.so /app/lib"
       - "cp ./coqui-stt.h /app/include"
     sources:
       - type: archive
         only-arches:
           - x86_64
         strip-components: 0
-        url: https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.Linux.tar.xz
-        sha256: 45561ceb8a4b62e990a155041597717d451a04ca336aa803d21ff288c69637dd
+        url: https://github.com/coqui-ai/STT/releases/download/v1.1.0/native_client.tflite.Linux.tar.xz
+        sha256: a6965f80cbfc92e403b2e4ab92e13650c76f131cbefb951b314df046c9e11799
       - type: archive
         only-arches:
           - aarch64
         strip-components: 0
-        url: https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.aarch64.tar.xz
-        sha256: 554e8b3d404324b658332f57a574b2653fce1944d5ad906e563fb235649a2d05
+        url: https://github.com/coqui-ai/STT/releases/download/v1.1.0/native_client.tflite.linux.aarch64.tar.xz
+        sha256: 5c8ce5e4bb2d8fa55f5a6ac58103d9aee6a080369bc99cd5910d2615783e1ba3
 
   - name: openfst
     buildsystem: autotools

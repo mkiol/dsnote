@@ -1,6 +1,6 @@
-set(libstt_x8664_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.Linux.tar.xz")
-set(libstt_arm64_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.aarch64.tar.xz")
-set(libstt_arm32_url "https://github.com/coqui-ai/STT/releases/download/v1.4.0/native_client.tflite.linux.armv7.tar.xz")
+set(libstt_x8664_url "https://github.com/coqui-ai/STT/releases/download/v1.1.0/native_client.tflite.Linux.tar.xz")
+set(libstt_arm64_url "https://github.com/coqui-ai/STT/releases/download/v1.1.0/native_client.tflite.linux.aarch64.tar.xz")
+set(libstt_arm32_url "https://github.com/coqui-ai/STT/releases/download/v1.1.0/native_client.tflite.linux.armv7.tar.xz")
 
 if(arch_x8664)
     set(libstt_url ${libstt_x8664_url})
@@ -23,3 +23,11 @@ list(APPEND deps stt)
 add_library(kenlm SHARED IMPORTED)
 set_property(TARGET kenlm PROPERTY IMPORTED_LOCATION ${external_lib_dir}/libkenlm.so)
 list(APPEND deps kenlm)
+
+add_library(tensorflowlite SHARED IMPORTED)
+set_property(TARGET tensorflowlite PROPERTY IMPORTED_LOCATION ${external_lib_dir}/libtensorflowlite.so)
+list(APPEND deps tensorflowlite)
+
+add_library(tflitedelegates SHARED IMPORTED)
+set_property(TARGET tflitedelegates PROPERTY IMPORTED_LOCATION ${external_lib_dir}/libtflitedelegates.so)
+list(APPEND deps tflitedelegates)
