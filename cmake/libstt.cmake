@@ -1,6 +1,6 @@
 set(libstt_x8664_url "https://github.com/coqui-ai/STT/releases/download/v1.1.0/native_client.tflite.Linux.tar.xz")
 set(libstt_arm64_url "https://github.com/coqui-ai/STT/releases/download/v1.1.0/native_client.tflite.linux.aarch64.tar.xz")
-set(libstt_arm32_url "https://github.com/coqui-ai/STT/releases/download/v1.1.0/native_client.tflite.linux.armv7.tar.xz")
+set(libstt_arm32_url "https://github.com/mkiol/dsnote/releases/download/v3.1.4.1/native_client.tflite.linux.armv7.tar.xz")
 
 if(arch_x8664)
     set(libstt_url ${libstt_x8664_url})
