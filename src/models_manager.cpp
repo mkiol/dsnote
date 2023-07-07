@@ -1203,18 +1203,14 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         }
 #endif
 #ifdef USE_SFOS
-        if (engine == model_engine::stt_vosk && model_id.contains("large")) {
+        if (engine == model_engine::stt_vosk &&
+            (model_id.contains("large") || model_id.contains("medium"))) {
             qDebug() << "ignoring vosk large model:" << model_id;
             continue;
         }
         if (engine == model_engine::stt_whisper &&
             (model_id.contains("medium") || model_id.contains("large"))) {
-            qDebug() << "ignoring whisper medium or large model:"
-                     << model_id;
-            continue;
-        }
-        if (engine == model_engine::stt_vosk && size > 200000000) {
-            qDebug() << "ignoring vosk large model:" << model_id;
+            qDebug() << "ignoring whisper medium or large model:" << model_id;
             continue;
         }
         if (engine == model_engine::tts_coqui) {

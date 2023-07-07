@@ -7,7 +7,12 @@
 
 #include "vosk_engine.hpp"
 
+#include <dirent.h>
 #include <dlfcn.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include <algorithm>
 #include <array>
@@ -16,6 +21,54 @@
 #include "logger.hpp"
 
 using namespace std::chrono_literals;
+
+static size_t model_max_size() {
+#ifdef USE_SFOS
+    return 1000000000;
+#else
+    static auto size = (sysconf(_SC_PHYS_PAGES) * sysconf(_SC_PAGE_SIZE));
+    return size;
+#endif
+}
+
+size_t du(const std::string& path) {
+    struct stat stats {};
+
+    if (lstat(path.c_str(), &stats) == 0) {
+        if (S_ISREG(stats.st_mode)) {
+            return stats.st_size;
+        }
+    } else {
+        LOGE("lstat error");
+        return 0;
+    }
+
+    auto* dir = opendir(path.c_str());
+    if (dir == nullptr) {
+        LOGE("opendir error");
+        return 0;
+    }
+
+    struct dirent* entry;
+    size_t total_size = 0;
+
+    for (entry = readdir(dir); entry != nullptr; entry = readdir(dir)) {
+        auto new_path = path + "/" + entry->d_name;
+
+        if (entry->d_type == DT_DIR) {
+            if (strcmp(entry->d_name, ".") != 0 &&
+                strcmp(entry->d_name, "..") != 0) {
+                total_size += du(new_path);
+            }
+        } else if (lstat(new_path.c_str(), &stats) == 0) {
+            total_size += stats.st_size;
+        }
+    }
+
+    closedir(dir);
+
+    return total_size;
+}
 
 vosk_engine::vosk_engine(config_t config, callbacks_t call_backs)
     : stt_engine{std::move(config), std::move(call_backs)} {
@@ -66,8 +119,8 @@ void vosk_engine::open_vosk_lib() {
     m_vosk_api.vosk_recognizer_free =
         reinterpret_cast<decltype(m_vosk_api.vosk_recognizer_free)>(
             dlsym(m_vosklib_handle, "vosk_recognizer_free"));
-    m_vosk_api.vosk_recognizer_accept_waveform_s = reinterpret_cast<
-        decltype(m_vosk_api.vosk_recognizer_accept_waveform_s)>(
+    m_vosk_api.vosk_recognizer_accept_waveform_s = reinterpret_cast<decltype(
+        m_vosk_api.vosk_recognizer_accept_waveform_s)>(
         dlsym(m_vosklib_handle, "vosk_recognizer_accept_waveform_s"));
     m_vosk_api.vosk_recognizer_partial_result =
         reinterpret_cast<decltype(m_vosk_api.vosk_recognizer_partial_result)>(
@@ -104,6 +157,15 @@ void vosk_engine::create_vosk_model() {
     if (m_vosk_model) return;
 
     LOGD("creating vosk model");
+
+    auto size = du(m_model_files.model_file);
+    LOGD("model size: " << size << " (max: " << model_max_size() << ")");
+
+    if (size > model_max_size()) {
+        LOGE("model is too large");
+        throw std::runtime_error(
+            "failed to create vosk model because it is too large");
+    }
 
     m_vosk_model = m_vosk_api.vosk_model_new(m_model_files.model_file.c_str());
     if (m_vosk_model == nullptr) {
