@@ -175,7 +175,10 @@ models_manager::~models_manager() {
 bool models_manager::ok() const { return !m_models.empty(); }
 
 void models_manager::set_default_model_for_lang(const QString& model_id) {
-    if (m_models.count(model_id) == 0) return;
+    if (m_models.count(model_id) == 0) {
+        qWarning() << "no model with id:" << model_id;
+        return;
+    }
 
     auto& model = m_models.at(model_id);
 

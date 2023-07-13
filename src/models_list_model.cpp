@@ -43,7 +43,8 @@ size_t ModelsListModel::firstChangedItemIdx(const QList<ListItem *> &oldItems,
 
             return aa->id() == bb->id() && aa->available() == bb->available() &&
                    aa->downloading() == bb->downloading() &&
-                   aa->progress() == bb->progress();
+                   aa->progress() == bb->progress() &&
+                   aa->default_for_lang() == bb->default_for_lang();
         });
 
     auto idx = std::distance(oldItems.cbegin(), it);
