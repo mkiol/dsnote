@@ -13,8 +13,8 @@ ExternalProject_Add(rhvoice
         "data/languages/English" "data/languages/Esperanto" "data/languages/Georgian"
         "data/languages/Kyrgyz" "data/languages/Macedonian" "data/languages/Russian"
         "data/languages/Tatar" "data/languages/Ukrainian" "data/languages/Czech"
-    URL "${rhvoice_source_url}"
-    URL_MD5 "${rhvoice_checksum}"
+        "data/languages/Uzbek"
+    UPDATE_COMMAND ""
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/rhvoice.patch ||
                     echo "patch cmd failed, likely already patched"
