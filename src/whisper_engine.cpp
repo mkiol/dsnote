@@ -264,13 +264,14 @@ whisper_full_params whisper_engine::make_wparams() {
     wparams.single_segment = false;
     wparams.translate = m_translate;
     wparams.no_context = true;
-    wparams.n_threads =
-        std::min(m_threads, std::max(m_threads, cpu_tools::number_of_cores() - 1));
+    wparams.n_threads = std::min(
+        m_threads,
+        std::max(1, static_cast<int>(std::thread::hardware_concurrency())));
 
-    LOGD("cpu info: arch=" << cpu_tools::arch()
-                           << ", cores=" << cpu_tools::number_of_cores());
+    LOGD("cpu info: arch=" << cpu_tools::arch() << ", cores="
+                           << std::thread::hardware_concurrency());
     LOGD("using threads: " << wparams.n_threads << "/"
-                           << cpu_tools::number_of_cores());
+                           << std::thread::hardware_concurrency());
     LOGD("system info: " << m_whisper_api.whisper_print_system_info());
 
     return wparams;

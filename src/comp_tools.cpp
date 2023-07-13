@@ -14,6 +14,7 @@
 
 #include <chrono>
 #include <fstream>
+#include <thread>
 
 #include "cpu_tools.hpp"
 
@@ -66,7 +67,7 @@ bool xz_decode(const QString& file_in, const QString& file_out) {
 
     lzma_mt opts{};
     opts.flags = 0;
-    opts.threads = std::max(1, cpu_tools::number_of_cores() - 2);
+    opts.threads = std::min(6u, std::thread::hardware_concurrency());
     opts.timeout = 300;
     opts.memlimit_threading = lzma_physmem() / 4;
     opts.memlimit_stop = lzma_physmem() / 2;
