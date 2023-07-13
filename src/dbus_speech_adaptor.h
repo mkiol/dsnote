@@ -36,9 +36,9 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "    <signal name=\"StatePropertyChanged\">\n"
 "      <arg direction=\"out\" type=\"i\" name=\"state\"/>\n"
 "    </signal>\n"
-"    <property access=\"read\" type=\"i\" name=\"Speech\"/>\n"
-"    <signal name=\"SpeechPropertyChanged\">\n"
-"      <arg direction=\"out\" type=\"i\" name=\"speech\"/>\n"
+"    <property access=\"read\" type=\"i\" name=\"TaskState\"/>\n"
+"    <signal name=\"TaskStatePropertyChanged\">\n"
+"      <arg direction=\"out\" type=\"i\" name=\"taskState\"/>\n"
 "    </signal>\n"
 "    <property access=\"readwrite\" type=\"s\" name=\"DefaultSttLang\"/>\n"
 "    <signal name=\"DefaultSttLangPropertyChanged\">\n"
@@ -55,6 +55,14 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "    <property access=\"readwrite\" type=\"s\" name=\"DefaultTtsModel\"/>\n"
 "    <signal name=\"DefaultTtsModelPropertyChanged\">\n"
 "      <arg direction=\"out\" type=\"s\" name=\"model\"/>\n"
+"    </signal>\n"
+"    <property access=\"readwrite\" type=\"s\" name=\"DefaultMntLang\"/>\n"
+"    <signal name=\"DefaultMntLangPropertyChanged\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"lang\"/>\n"
+"    </signal>\n"
+"    <property access=\"readwrite\" type=\"s\" name=\"DefaultMntOutLang\"/>\n"
+"    <signal name=\"DefaultMntOutLangPropertyChanged\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"lang\"/>\n"
 "    </signal>\n"
 "    <property access=\"read\" type=\"a{sv}\" name=\"SttLangs\">\n"
 "      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName\"/>\n"
@@ -77,6 +85,13 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
 "      <arg direction=\"out\" type=\"a{sv}\" name=\"langs\"/>\n"
 "    </signal>\n"
+"    <property access=\"read\" type=\"a{sv}\" name=\"MntLangs\">\n"
+"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName\"/>\n"
+"    </property>\n"
+"    <signal name=\"MntLangsPropertyChanged\">\n"
+"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
+"      <arg direction=\"out\" type=\"a{sv}\" name=\"langs\"/>\n"
+"    </signal>\n"
 "    <property access=\"read\" type=\"av\" name=\"TtsLangList\">\n"
 "      <annotation value=\"QVariantList\" name=\"org.qtproject.QtDBus.QtTypeName\"/>\n"
 "    </property>\n"
@@ -88,6 +103,13 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "      <annotation value=\"QVariantList\" name=\"org.qtproject.QtDBus.QtTypeName\"/>\n"
 "    </property>\n"
 "    <signal name=\"SttTtsLangListChanged\">\n"
+"      <annotation value=\"QVariantList\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
+"      <arg direction=\"out\" type=\"av\" name=\"langs\"/>\n"
+"    </signal>\n"
+"    <property access=\"read\" type=\"av\" name=\"MntLangList\">\n"
+"      <annotation value=\"QVariantList\" name=\"org.qtproject.QtDBus.QtTypeName\"/>\n"
+"    </property>\n"
+"    <signal name=\"MntLangListChanged\">\n"
 "      <annotation value=\"QVariantList\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
 "      <arg direction=\"out\" type=\"av\" name=\"langs\"/>\n"
 "    </signal>\n"
@@ -141,6 +163,13 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"out\" type=\"d\" name=\"progress\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </signal>\n"
+"    <signal name=\"MntTranslateFinished\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"in_text\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"in_lang\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"out_text\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"out_lang\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
+"    </signal>\n"
 "    <method name=\"SttGetFileTranscribeProgress\">\n"
 "      <arg direction=\"in\" type=\"i\" name=\"task\"/>\n"
 "      <arg direction=\"out\" type=\"d\" name=\"progress\"/>\n"
@@ -148,6 +177,17 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"TtsGetSpeechToFileProgress\">\n"
 "      <arg direction=\"in\" type=\"i\" name=\"task\"/>\n"
 "      <arg direction=\"out\" type=\"d\" name=\"progress\"/>\n"
+"    </method>\n"
+"    <method name=\"MntTranslate\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"text\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"lang\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"out_lang\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
+"    </method>\n"
+"    <method name=\"MntGetOutLangs\">\n"
+"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"lang\"/>\n"
+"      <arg direction=\"out\" type=\"a{sv}\" name=\"out_langs\"/>\n"
 "    </method>\n"
 "    <signal name=\"ErrorOccured\">\n"
 "      <arg direction=\"out\" type=\"i\" name=\"code\"/>\n"
@@ -223,6 +263,14 @@ public: // PROPERTIES
     Q_PROPERTY(int CurrentTask READ currentTask)
     int currentTask() const;
 
+    Q_PROPERTY(QString DefaultMntLang READ defaultMntLang WRITE setDefaultMntLang)
+    QString defaultMntLang() const;
+    void setDefaultMntLang(const QString &value);
+
+    Q_PROPERTY(QString DefaultMntOutLang READ defaultMntOutLang WRITE setDefaultMntOutLang)
+    QString defaultMntOutLang() const;
+    void setDefaultMntOutLang(const QString &value);
+
     Q_PROPERTY(QString DefaultSttLang READ defaultSttLang WRITE setDefaultSttLang)
     QString defaultSttLang() const;
     void setDefaultSttLang(const QString &value);
@@ -239,8 +287,11 @@ public: // PROPERTIES
     QString defaultTtsModel() const;
     void setDefaultTtsModel(const QString &value);
 
-    Q_PROPERTY(int Speech READ speech)
-    int speech() const;
+    Q_PROPERTY(QVariantList MntLangList READ mntLangList)
+    QVariantList mntLangList() const;
+
+    Q_PROPERTY(QVariantMap MntLangs READ mntLangs)
+    QVariantMap mntLangs() const;
 
     Q_PROPERTY(int State READ state)
     int state() const;
@@ -256,6 +307,9 @@ public: // PROPERTIES
 
     Q_PROPERTY(QVariantList SttTtsLangList READ sttTtsLangList)
     QVariantList sttTtsLangList() const;
+
+    Q_PROPERTY(int TaskState READ taskState)
+    int taskState() const;
 
     Q_PROPERTY(QVariantMap Translations READ translations)
     QVariantMap translations() const;
@@ -279,6 +333,8 @@ public Q_SLOTS: // METHODS
     int Cancel(int task);
     int KeepAliveService();
     int KeepAliveTask(int task);
+    QVariantMap MntGetOutLangs(const QString &lang);
+    int MntTranslate(const QString &text, const QString &lang, const QString &out_lang);
     int Reload();
     double SttGetFileTranscribeProgress(int task);
     int SttStartListen(int mode, const QString &lang, bool translate);
@@ -290,12 +346,16 @@ public Q_SLOTS: // METHODS
     int TtsStopSpeech(int task);
 Q_SIGNALS: // SIGNALS
     void CurrentTaskPropertyChanged(int task);
+    void DefaultMntLangPropertyChanged(const QString &lang);
+    void DefaultMntOutLangPropertyChanged(const QString &lang);
     void DefaultSttLangPropertyChanged(const QString &lang);
     void DefaultSttModelPropertyChanged(const QString &model);
     void DefaultTtsLangPropertyChanged(const QString &lang);
     void DefaultTtsModelPropertyChanged(const QString &model);
     void ErrorOccured(int code);
-    void SpeechPropertyChanged(int speech);
+    void MntLangListChanged(const QVariantList &langs);
+    void MntLangsPropertyChanged(const QVariantMap &langs);
+    void MntTranslateFinished(const QString &in_text, const QString &in_lang, const QString &out_text, const QString &out_lang, int task);
     void StatePropertyChanged(int state);
     void SttFileTranscribeFinished(int task);
     void SttFileTranscribeProgress(double progress, int task);
@@ -305,6 +365,7 @@ Q_SIGNALS: // SIGNALS
     void SttModelsPropertyChanged(const QVariantMap &models);
     void SttTextDecoded(const QString &text, const QString &lang, int task);
     void SttTtsLangListChanged(const QVariantList &langs);
+    void TaskStatePropertyChanged(int taskState);
     void TtsLangListChanged(const QVariantList &langs);
     void TtsLangsPropertyChanged(const QVariantMap &langs);
     void TtsModelsPropertyChanged(const QVariantMap &models);

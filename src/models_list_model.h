@@ -29,9 +29,15 @@ class ModelsListModel : public SelectableItemModel {
     Q_PROPERTY(ModelRoleFilter roleFilter READ roleFilter WRITE setRoleFilter
                    NOTIFY roleFilterChanged)
    public:
-    enum ModelRole { Stt = 0, Tts = 1, Ttt = 2 };
+    enum ModelRole { Stt = 0, Tts = 1, Mnt = 2, Ttt = 3 };
     Q_ENUM(ModelRole)
-    enum ModelRoleFilter { AllModels = 0, SttModels = 1, TtsModels = 2 };
+    enum ModelRoleFilter {
+        AllModels = 0,
+        SttModels = 1,
+        TtsModels = 2,
+        MntModels = 3,
+        OtherModels = 4
+    };
     Q_ENUM(ModelRoleFilter)
 
     explicit ModelsListModel(QObject *parent = nullptr);
@@ -78,11 +84,11 @@ class ModelsListItem : public SelectableItem {
     };
 
     ModelsListItem(QObject *parent = nullptr) : SelectableItem{parent} {}
-    ModelsListItem(const QString &id, const QString &name,
-                   const QString &langId, ModelsListModel::ModelRole role,
-                   bool available = true, int score = 2,
-                   bool default_for_lang = false, bool downloading = false,
-                   double progress = 0.0, QObject *parent = nullptr);
+    ModelsListItem(const QString &id, QString name, QString langId,
+                   ModelsListModel::ModelRole role, bool available = true,
+                   int score = 2, bool default_for_lang = false,
+                   bool downloading = false, double progress = 0.0,
+                   QObject *parent = nullptr);
     QVariant data(int role) const override;
     QHash<int, QByteArray> roleNames() const override;
     inline QString id() const override { return m_id; }

@@ -15,9 +15,12 @@
         <file>qml/HelloPage.qml</file>
         <file>qml/ChangelogPage.qml</file>
         <file>qml/SpeechWidget.qml</file>
-        <file>qml/SpeechWidgetCompact.qml</file>
-        <file>qml/ModelsSwitcher.qml</file>
-        <file>qml/ModelsSwitcherCompact.qml</file>
+        <file>qml/ComboButton.qml</file>
+        <file>qml/DuoComboButton.qml</file>
+        <file>qml/ScrollTextArea.qml</file>
+        <file>qml/BlinkToolButton.qml</file>
+        <file>qml/Translator.qml</file>
+        <file>qml/Notepad.qml</file>
         <file alias="config/models.json">../config/models.json</file>
         <file alias="nonbreaking_prefixes/ca.txt">../nonbreaking_prefixes/ca.txt</file>
         <file alias="nonbreaking_prefixes/cs.txt">../nonbreaking_prefixes/cs.txt</file>

@@ -44,6 +44,9 @@ QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
         case dsnote_app::service_state_t::StateWritingSpeechToFile:
             d << "writing-speech-to-file";
             break;
+        case dsnote_app::service_state_t::StateTranslating:
+            d << "translating";
+            break;
         case dsnote_app::service_state_t::StateUnknown:
             d << "unknown";
             break;
@@ -52,22 +55,21 @@ QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
     return d;
 }
 
-QDebug operator<<(QDebug d, dsnote_app::service_speech_state_t type) {
+QDebug operator<<(QDebug d, dsnote_app::service_task_state_t type) {
     switch (type) {
-        case dsnote_app::service_speech_state_t::SpeechStateNoSpeech:
-            d << "no-speech";
+        case dsnote_app::service_task_state_t::TaskStateIdle:
+            d << "idle";
             break;
-        case dsnote_app::service_speech_state_t::
-            SpeechStateSpeechDecodingEncoding:
-            d << "decoding-encoding";
+        case dsnote_app::service_task_state_t::TaskStateProcessing:
+            d << "processing";
             break;
-        case dsnote_app::service_speech_state_t::SpeechStateSpeechInitializing:
+        case dsnote_app::service_task_state_t::TaskStateInitializing:
             d << "initializing";
             break;
-        case dsnote_app::service_speech_state_t::SpeechStateSpeechDetected:
+        case dsnote_app::service_task_state_t::TaskStateSpeechDetected:
             d << "speech-detected";
             break;
-        case dsnote_app::service_speech_state_t::SpeechStateSpeechPlaying:
+        case dsnote_app::service_task_state_t::TaskStateSpeechPlaying:
             d << "speech-playing";
             break;
     }
@@ -92,6 +94,9 @@ QDebug operator<<(QDebug d, dsnote_app::error_t type) {
         case dsnote_app::error_t::ErrorTtsEngine:
             d << "tts-engine-error";
             break;
+        case dsnote_app::error_t::ErrorMntEngine:
+            d << "mnt-engine-error";
+            break;
         case dsnote_app::error_t::ErrorNoService:
             d << "no-service-error";
             break;
@@ -106,10 +111,18 @@ dsnote_app::dsnote_app(QObject *parent)
                      QDBusConnection::sessionBus()} {
     qDebug() << "starting app:" << settings::instance()->launch_mode();
 
+    connect(settings::instance(), &settings::note_changed, this,
+            &dsnote_app::handle_note_changed);
     connect(settings::instance(), &settings::speech_mode_changed, this,
             &dsnote_app::update_listen);
     connect(settings::instance(), &settings::mode_changed, this,
             &dsnote_app::update_listen);
+    connect(settings::instance(), &settings::translator_mode_changed, this,
+            &dsnote_app::handle_translator_settings_changed,
+            Qt::QueuedConnection);
+    connect(settings::instance(), &settings::translate_when_typing_changed,
+            this, &dsnote_app::handle_translator_settings_changed,
+            Qt::QueuedConnection);
     connect(this, &dsnote_app::service_state_changed, this, [this] {
         auto reset_progress = [this]() {
             if (m_transcribe_progress != -1.0) {
@@ -126,8 +139,16 @@ dsnote_app::dsnote_app(QObject *parent)
             update_active_stt_model();
             update_available_tts_models();
             update_active_tts_model();
+            update_available_mnt_langs();
+            update_active_mnt_lang();
+            update_available_mnt_out_langs();
+            update_active_mnt_out_lang();
+            update_available_tts_models_for_in_mnt();
+            update_available_tts_models_for_out_mnt();
+            update_active_tts_model_for_in_mnt();
+            update_active_tts_model_for_out_mnt();
             update_current_task();
-            update_speech();
+            update_task_state();
             if (service_state() == StateTranscribingFile ||
                 service_state() == StateWritingSpeechToFile) {
                 update_progress();
@@ -149,6 +170,18 @@ dsnote_app::dsnote_app(QObject *parent)
             &dsnote_app::update_listen);
     connect(this, &dsnote_app::available_tts_models_changed, this,
             &dsnote_app::update_listen);
+    connect(this, &dsnote_app::available_mnt_langs_changed, this,
+            &dsnote_app::update_listen);
+    connect(this, &dsnote_app::active_mnt_lang_changed, this,
+            &dsnote_app::handle_translator_settings_changed);
+    connect(this, &dsnote_app::active_mnt_out_lang_changed, this,
+            &dsnote_app::handle_translator_settings_changed);
+
+    m_translator_delay_timer.setSingleShot(true);
+    m_translator_delay_timer.setTimerType(Qt::VeryCoarseTimer);
+    m_translator_delay_timer.setInterval(500);
+    connect(&m_translator_delay_timer, &QTimer::timeout, this,
+            &dsnote_app::handle_translate_delayed, Qt::QueuedConnection);
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
@@ -172,17 +205,7 @@ dsnote_app::dsnote_app(QObject *parent)
 
 void dsnote_app::update_listen() {
     qDebug() << "update listen";
-#ifdef USE_SFOS
-    if (settings::instance()->mode() == settings::mode_t::Stt &&
-        settings::instance()->speech_mode() ==
-            settings::speech_mode_t::SpeechAutomatic) {
-        listen();
-    } else {
-        cancel();
-    }
-#else
     cancel();
-#endif
 }
 
 void dsnote_app::handle_stt_intermediate_text(const QString &text,
@@ -274,9 +297,10 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
         return;
     }
 
-    settings::instance()->set_note(
-        insert_to_note(settings::instance()->note(), text,
-                       settings::instance()->insert_mode()));
+    make_undo();
+
+    set_note(insert_to_note(settings::instance()->note(), text,
+                            settings::instance()->insert_mode()));
 
     this->m_intermediate_text.clear();
 
@@ -324,6 +348,8 @@ void dsnote_app::connect_service_signals() {
                     speech_service::instance()->available_tts_models());
                 handle_ttt_models_changed(
                     speech_service::instance()->available_ttt_models());
+                handle_mnt_langs_changed(
+                    speech_service::instance()->available_mnt_langs());
             },
             Qt::QueuedConnection);
         connect(
@@ -334,10 +360,11 @@ void dsnote_app::connect_service_signals() {
             },
             Qt::QueuedConnection);
         connect(
-            speech_service::instance(), &speech_service::speech_changed, this,
+            speech_service::instance(), &speech_service::task_state_changed,
+            this,
             [this] {
-                handle_speech_changed(
-                    static_cast<int>(speech_service::instance()->speech()));
+                handle_task_state_changed(
+                    static_cast<int>(speech_service::instance()->task_state()));
             },
             Qt::QueuedConnection);
         connect(
@@ -362,6 +389,22 @@ void dsnote_app::connect_service_signals() {
             [this] {
                 handle_tts_default_model_changed(
                     speech_service::instance()->default_tts_model());
+            },
+            Qt::QueuedConnection);
+        connect(
+            speech_service::instance(),
+            &speech_service::default_mnt_lang_changed, this,
+            [this] {
+                handle_mnt_default_lang_changed(
+                    speech_service::instance()->default_mnt_lang());
+            },
+            Qt::QueuedConnection);
+        connect(
+            speech_service::instance(),
+            &speech_service::default_mnt_out_lang_changed, this,
+            [this] {
+                handle_mnt_default_out_lang_changed(
+                    speech_service::instance()->default_mnt_out_lang());
             },
             Qt::QueuedConnection);
         connect(speech_service::instance(),
@@ -400,6 +443,10 @@ void dsnote_app::connect_service_signals() {
         connect(speech_service::instance(), &speech_service::tts_partial_speech_playing,
                 this, &dsnote_app::handle_tts_partial_speech,
                 Qt::QueuedConnection);
+        connect(speech_service::instance(),
+                &speech_service::mnt_translate_finished, this,
+                &dsnote_app::handle_mnt_translate_finished,
+                Qt::QueuedConnection);
     } else {
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::SttModelsPropertyChanged, this,
@@ -410,11 +457,14 @@ void dsnote_app::connect_service_signals() {
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::TttModelsPropertyChanged, this,
                 &dsnote_app::handle_ttt_models_changed);
+        connect(&m_dbus_service,
+                &OrgMkiolSpeechInterface::MntLangsPropertyChanged, this,
+                &dsnote_app::handle_mnt_langs_changed);
         connect(&m_dbus_service, &OrgMkiolSpeechInterface::StatePropertyChanged,
                 this, &dsnote_app::handle_state_changed);
         connect(&m_dbus_service,
-                &OrgMkiolSpeechInterface::SpeechPropertyChanged, this,
-                &dsnote_app::handle_speech_changed);
+                &OrgMkiolSpeechInterface::TaskStatePropertyChanged, this,
+                &dsnote_app::handle_task_state_changed);
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::CurrentTaskPropertyChanged, this,
                 &dsnote_app::handle_current_task_changed);
@@ -424,6 +474,12 @@ void dsnote_app::connect_service_signals() {
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::DefaultTtsModelPropertyChanged, this,
                 &dsnote_app::handle_tts_default_model_changed);
+        connect(&m_dbus_service,
+                &OrgMkiolSpeechInterface::DefaultMntLangPropertyChanged, this,
+                &dsnote_app::handle_mnt_default_lang_changed);
+        connect(&m_dbus_service,
+                &OrgMkiolSpeechInterface::DefaultMntOutLangPropertyChanged,
+                this, &dsnote_app::handle_mnt_default_out_lang_changed);
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::SttFileTranscribeProgress, this,
                 &dsnote_app::handle_stt_file_transcribe_progress);
@@ -448,6 +504,8 @@ void dsnote_app::connect_service_signals() {
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::TtsSpeechToFileProgress, this,
                 &dsnote_app::handle_tts_speech_to_file_progress);
+        connect(&m_dbus_service, &OrgMkiolSpeechInterface::MntTranslateFinished,
+                this, &dsnote_app::handle_mnt_translate_finished);
     }
 }
 
@@ -479,6 +537,27 @@ void dsnote_app::handle_tts_models_changed(const QVariantMap &models) {
 
     update_configured_state();
     update_active_tts_model();
+    update_available_tts_models_for_in_mnt();
+    update_available_tts_models_for_out_mnt();
+    update_active_tts_model_for_in_mnt();
+    update_active_tts_model_for_out_mnt();
+}
+
+void dsnote_app::handle_mnt_langs_changed(const QVariantMap &langs) {
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+        qDebug() << "mnt langs changed";
+    } else {
+        qDebug() << "[dbus => app] signal MntLangsPropertyChanged";
+    }
+
+    m_available_mnt_langs_map = langs;
+    emit available_mnt_langs_changed();
+
+    update_available_mnt_out_langs();
+    update_configured_state();
+    update_active_mnt_lang();
+    update_active_mnt_out_lang();
 }
 
 void dsnote_app::handle_ttt_models_changed(const QVariantMap &models) {
@@ -506,6 +585,7 @@ void dsnote_app::handle_state_changed(int status) {
     auto old_connected = connected();
 
     auto new_service_state = static_cast<service_state_t>(status);
+
     if (m_service_state != new_service_state) {
         qDebug() << "app service state:" << m_service_state << "=>"
                  << new_service_state;
@@ -526,39 +606,38 @@ void dsnote_app::handle_state_changed(int status) {
     }
 }
 
-void dsnote_app::handle_speech_changed(int speech) {
+void dsnote_app::handle_task_state_changed(int state) {
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
     } else {
-        qDebug() << "[dbus => app] signal SpeechPropertyChanged:" << speech;
+        qDebug() << "[dbus => app] signal TaskStatePropertyChanged:" << state;
     }
 
     if (m_primary_task != m_current_task && m_side_task != m_current_task) {
-        qWarning() << "ignore SpeechPropertyChanged signal";
+        qWarning() << "ignore TaskStatePropertyChanged signal";
         return;
     }
 
-    auto new_speech_state = [speech] {
-        switch (speech) {
+    auto new_task_state = [state] {
+        switch (state) {
             case 0:
                 break;
             case 1:
-                return service_speech_state_t::SpeechStateSpeechDetected;
+                return service_task_state_t::TaskStateSpeechDetected;
             case 2:
-                return service_speech_state_t::
-                    SpeechStateSpeechDecodingEncoding;
+                return service_task_state_t::TaskStateProcessing;
             case 3:
-                return service_speech_state_t::SpeechStateSpeechInitializing;
+                return service_task_state_t::TaskStateInitializing;
             case 4:
-                return service_speech_state_t::SpeechStateSpeechPlaying;
+                return service_task_state_t::TaskStateSpeechPlaying;
         }
-        return service_speech_state_t::SpeechStateNoSpeech;
+        return service_task_state_t::TaskStateIdle;
     }();
 
-    if (m_speech_state != new_speech_state) {
-        qDebug() << "app speech:" << m_speech_state << "=>" << new_speech_state;
-        m_speech_state = new_speech_state;
-        emit speech_changed();
+    if (m_task_state != new_task_state) {
+        qDebug() << "app task state:" << m_task_state << "=>" << new_task_state;
+        m_task_state = new_task_state;
+        emit task_state_changed();
     }
 }
 
@@ -590,7 +669,7 @@ void dsnote_app::handle_current_task_changed(int task) {
 
     check_transcribe_taks();
     start_keepalive();
-    update_speech();
+    update_task_state();
 }
 
 void dsnote_app::handle_tts_play_speech_finished(int task) {
@@ -638,6 +717,21 @@ void dsnote_app::handle_tts_speech_to_file_progress(double new_progress,
     emit speech_to_file_progress_changed();
 }
 
+void dsnote_app::handle_mnt_translate_finished(
+    [[maybe_unused]] const QString &in_text,
+    [[maybe_unused]] const QString &in_lang, const QString &out_text,
+    [[maybe_unused]] const QString &out_lang, int task) {
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+    } else {
+        qDebug() << "[dbus => app] signal MntTranslateFinished:" << task;
+    }
+
+    qDebug() << "translated text:" << out_text;
+
+    set_translated_text(out_text);
+}
+
 void dsnote_app::handle_stt_default_model_changed(const QString &model) {
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
@@ -658,6 +752,32 @@ void dsnote_app::set_active_stt_model(const QString &model) {
     }
 }
 
+void dsnote_app::set_active_mnt_lang(const QString &lang) {
+    if (m_active_mnt_lang != lang) {
+        qDebug() << "app active mnt lang:" << m_active_mnt_lang << "=>" << lang;
+        m_active_mnt_lang = lang;
+
+        update_available_mnt_out_langs();
+        update_available_tts_models_for_in_mnt();
+        update_active_tts_model_for_in_mnt();
+
+        emit active_mnt_lang_changed();
+    }
+}
+
+void dsnote_app::set_active_mnt_out_lang(const QString &lang) {
+    if (m_active_mnt_out_lang != lang) {
+        qDebug() << "app active mnt out lang:" << m_active_mnt_out_lang << "=>"
+                 << lang;
+        m_active_mnt_out_lang = lang;
+
+        update_available_tts_models_for_out_mnt();
+        update_active_tts_model_for_out_mnt();
+
+        emit active_mnt_out_lang_changed();
+    }
+}
+
 void dsnote_app::handle_tts_default_model_changed(const QString &model) {
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
@@ -669,12 +789,52 @@ void dsnote_app::handle_tts_default_model_changed(const QString &model) {
     set_active_tts_model(model);
 }
 
+void dsnote_app::handle_mnt_default_lang_changed(const QString &lang) {
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+    } else {
+        qDebug() << "[dbus => app] signal MntDefaultLangPropertyChanged:"
+                 << lang;
+    }
+
+    set_active_mnt_lang(lang);
+}
+
+void dsnote_app::handle_mnt_default_out_lang_changed(const QString &lang) {
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+    } else {
+        qDebug() << "[dbus => app] signal MntDefaultOutLangPropertyChanged:"
+                 << lang;
+    }
+
+    set_active_mnt_out_lang(lang);
+}
+
 void dsnote_app::set_active_tts_model(const QString &model) {
     if (m_active_tts_model != model) {
         qDebug() << "app active tts model:" << m_active_tts_model << "=>"
                  << model;
         m_active_tts_model = model;
         emit active_tts_model_changed();
+    }
+}
+
+void dsnote_app::set_active_tts_model_for_in_mnt(const QString &model) {
+    if (m_active_tts_model_for_in_mnt != model) {
+        qDebug() << "app active tts model for in mnt:"
+                 << m_active_tts_model_for_in_mnt << "=>" << model;
+        m_active_tts_model_for_in_mnt = model;
+        emit active_tts_model_for_in_mnt_changed();
+    }
+}
+
+void dsnote_app::set_active_tts_model_for_out_mnt(const QString &model) {
+    if (m_active_tts_model_for_out_mnt != model) {
+        qDebug() << "app active tts model for out mnt:"
+                 << m_active_tts_model_for_out_mnt << "=>" << model;
+        m_active_tts_model_for_out_mnt = model;
+        emit active_tts_model_for_out_mnt_changed();
     }
 }
 
@@ -850,6 +1010,28 @@ void dsnote_app::update_active_tts_lang_idx() {
     }
 }
 
+void dsnote_app::update_active_mnt_lang_idx() {
+    auto it = m_available_mnt_langs_map.find(active_mnt_lang());
+
+    if (it == m_available_mnt_langs_map.end()) {
+        set_active_mnt_lang_idx(-1);
+    } else {
+        set_active_mnt_lang_idx(
+            std::distance(m_available_mnt_langs_map.begin(), it));
+    }
+}
+
+void dsnote_app::update_active_mnt_out_lang_idx() {
+    auto it = m_available_mnt_out_langs_map.find(active_mnt_out_lang());
+
+    if (it == m_available_mnt_out_langs_map.end()) {
+        set_active_mnt_out_lang_idx(-1);
+    } else {
+        set_active_mnt_out_lang_idx(
+            std::distance(m_available_mnt_out_langs_map.begin(), it));
+    }
+}
+
 void dsnote_app::update_available_stt_models() {
     QVariantMap new_available_stt_models_map{};
 
@@ -892,6 +1074,95 @@ void dsnote_app::update_available_tts_models() {
     }
 }
 
+void dsnote_app::update_available_tts_models_for_in_mnt() {
+    QVariantMap new_available_tts_models_for_in_mnt_map{};
+
+    auto lpp = m_active_mnt_lang + "_";
+    for (auto it = m_available_tts_models_map.cbegin();
+         it != m_available_tts_models_map.cend(); ++it) {
+        if (it.key().startsWith(lpp))
+            new_available_tts_models_for_in_mnt_map.insert(it.key(),
+                                                           it.value());
+    }
+
+    if (m_available_tts_models_for_in_mnt_map !=
+        new_available_tts_models_for_in_mnt_map) {
+        qDebug() << "app tts available models for in mnt:"
+                 << m_available_tts_models_for_in_mnt_map.size() << "=>"
+                 << new_available_tts_models_for_in_mnt_map.size();
+        m_available_tts_models_for_in_mnt_map =
+            std::move(new_available_tts_models_for_in_mnt_map);
+        emit available_tts_models_for_in_mnt_changed();
+    }
+}
+
+void dsnote_app::update_available_tts_models_for_out_mnt() {
+    QVariantMap new_available_tts_models_for_out_mnt_map{};
+
+    auto lpp = m_active_mnt_out_lang + "_";
+    for (auto it = m_available_tts_models_map.cbegin();
+         it != m_available_tts_models_map.cend(); ++it) {
+        if (it.key().startsWith(lpp))
+            new_available_tts_models_for_out_mnt_map.insert(it.key(),
+                                                            it.value());
+    }
+
+    if (m_available_tts_models_for_out_mnt_map !=
+        new_available_tts_models_for_out_mnt_map) {
+        qDebug() << "app tts available models for out mnt:"
+                 << m_available_tts_models_for_out_mnt_map.size() << "=>"
+                 << new_available_tts_models_for_out_mnt_map.size();
+        m_available_tts_models_for_out_mnt_map =
+            std::move(new_available_tts_models_for_out_mnt_map);
+        emit available_tts_models_for_out_mnt_changed();
+    }
+}
+
+void dsnote_app::update_available_mnt_langs() {
+    QVariantMap new_available_mnt_langs_map{};
+
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+        new_available_mnt_langs_map =
+            speech_service::instance()->available_mnt_langs();
+    } else {
+        qDebug() << "[app => dbus] get MntLangs";
+        new_available_mnt_langs_map = m_dbus_service.mntLangs();
+    }
+
+    if (m_available_mnt_langs_map != new_available_mnt_langs_map) {
+        qDebug() << "app mnt available langs:"
+                 << m_available_mnt_langs_map.size() << "=>"
+                 << new_available_mnt_langs_map.size();
+        m_available_mnt_langs_map = std::move(new_available_mnt_langs_map);
+        emit available_mnt_langs_changed();
+        update_available_mnt_out_langs();
+    }
+}
+
+void dsnote_app::update_available_mnt_out_langs() {
+    QVariantMap new_available_mnt_out_langs_map{};
+
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+        new_available_mnt_out_langs_map =
+            speech_service::instance()->mnt_out_langs(m_active_mnt_lang);
+    } else {
+        qDebug() << "[app => dbus] call MntGetOutLangs";
+        new_available_mnt_out_langs_map =
+            m_dbus_service.MntGetOutLangs(m_active_mnt_lang);
+    }
+
+    if (m_available_mnt_out_langs_map != new_available_mnt_out_langs_map) {
+        qDebug() << "app mnt available out langs:"
+                 << m_available_mnt_out_langs_map.size() << "=>"
+                 << new_available_mnt_out_langs_map.size();
+        m_available_mnt_out_langs_map =
+            std::move(new_available_mnt_out_langs_map);
+        emit available_mnt_out_langs_changed();
+    }
+}
+
 QVariantList dsnote_app::available_stt_models() const {
     QVariantList list;
 
@@ -909,6 +1180,54 @@ QVariantList dsnote_app::available_tts_models() const {
 
     for (auto it = m_available_tts_models_map.constBegin();
          it != m_available_tts_models_map.constEnd(); ++it) {
+        const auto v = it.value().toStringList();
+        if (v.size() > 1) list.push_back(v.at(1));
+    }
+
+    return list;
+}
+
+QVariantList dsnote_app::available_tts_models_for_in_mnt() const {
+    QVariantList list;
+
+    for (auto it = m_available_tts_models_for_in_mnt_map.constBegin();
+         it != m_available_tts_models_for_in_mnt_map.constEnd(); ++it) {
+        const auto v = it.value().toStringList();
+        if (v.size() > 1) list.push_back(v.at(1));
+    }
+
+    return list;
+}
+
+QVariantList dsnote_app::available_tts_models_for_out_mnt() const {
+    QVariantList list;
+
+    for (auto it = m_available_tts_models_for_out_mnt_map.constBegin();
+         it != m_available_tts_models_for_out_mnt_map.constEnd(); ++it) {
+        const auto v = it.value().toStringList();
+        if (v.size() > 1) list.push_back(v.at(1));
+    }
+
+    return list;
+}
+
+QVariantList dsnote_app::available_mnt_langs() const {
+    QVariantList list;
+
+    for (auto it = m_available_mnt_langs_map.constBegin();
+         it != m_available_mnt_langs_map.constEnd(); ++it) {
+        const auto v = it.value().toStringList();
+        if (v.size() > 1) list.push_back(v.at(1));
+    }
+
+    return list;
+}
+
+QVariantList dsnote_app::available_mnt_out_langs() const {
+    QVariantList list;
+
+    for (auto it = m_available_mnt_out_langs_map.constBegin();
+         it != m_available_mnt_out_langs_map.constEnd(); ++it) {
         const auto v = it.value().toStringList();
         if (v.size() > 1) list.push_back(v.at(1));
     }
@@ -943,6 +1262,80 @@ void dsnote_app::set_active_tts_model_idx(int idx) {
         } else {
             qDebug() << "[app => dbus] set DefaultTtsModel:" << idx << id;
             m_dbus_service.setDefaultTtsModel(id);
+        }
+    }
+}
+
+void dsnote_app::set_active_tts_model_for_in_mnt_idx(int idx) {
+    if (m_active_mnt_lang.isEmpty()) {
+        qWarning() << "invalid active mnt lang";
+        return;
+    }
+
+    if (active_tts_model_for_in_mnt_idx() != idx && idx > -1 &&
+        idx < m_available_tts_models_for_in_mnt_map.size()) {
+        const auto &id =
+            std::next(m_available_tts_models_for_in_mnt_map.cbegin(), idx)
+                .key();
+
+        qDebug() << "new active tts model for in mnt:" << id;
+
+        settings::instance()->set_default_tts_model_for_mnt_lang(
+            m_active_mnt_lang, id);
+
+        update_active_tts_model_for_in_mnt();
+    }
+}
+
+void dsnote_app::set_active_tts_model_for_out_mnt_idx(int idx) {
+    if (m_active_mnt_out_lang.isEmpty()) {
+        qWarning() << "invalid active mnt out lang";
+        return;
+    }
+
+    if (active_tts_model_for_out_mnt_idx() != idx && idx > -1 &&
+        idx < m_available_tts_models_for_out_mnt_map.size()) {
+        const auto &id =
+            std::next(m_available_tts_models_for_out_mnt_map.cbegin(), idx)
+                .key();
+
+        qDebug() << "new active tts model for out mnt:" << id;
+
+        settings::instance()->set_default_tts_model_for_mnt_lang(
+            m_active_mnt_out_lang, id);
+
+        update_active_tts_model_for_out_mnt();
+    }
+}
+
+void dsnote_app::set_active_mnt_lang_idx(int idx) {
+    if (active_mnt_lang_idx() != idx && idx > -1 &&
+        idx < m_available_mnt_langs_map.size()) {
+        const auto &id =
+            std::next(m_available_mnt_langs_map.cbegin(), idx).key();
+
+        if (settings::instance()->launch_mode() ==
+            settings::launch_mode_t::app_stanalone) {
+            speech_service::instance()->set_default_mnt_lang(id);
+        } else {
+            qDebug() << "[app => dbus] set DefaultMntLang:" << idx << id;
+            m_dbus_service.setDefaultMntLang(id);
+        }
+    }
+}
+
+void dsnote_app::set_active_mnt_out_lang_idx(int idx) {
+    if (active_mnt_out_lang_idx() != idx && idx > -1 &&
+        idx < m_available_mnt_out_langs_map.size()) {
+        const auto &id =
+            std::next(m_available_mnt_out_langs_map.cbegin(), idx).key();
+
+        if (settings::instance()->launch_mode() ==
+            settings::launch_mode_t::app_stanalone) {
+            speech_service::instance()->set_default_mnt_out_lang(id);
+        } else {
+            qDebug() << "[app => dbus] set DefaultMntOutLang:" << idx << id;
+            m_dbus_service.setDefaultMntOutLang(id);
         }
     }
 }
@@ -1034,22 +1427,84 @@ void dsnote_app::stop_listen() {
     }
 }
 
-void dsnote_app::play_speech() {
-    auto *s = settings::instance();
+void dsnote_app::play_speech_internal(const QString &text,
+                                      const QString &model_id) {
+    if (text.isEmpty()) {
+        qWarning() << "text is empty";
+        return;
+    }
 
     int new_task = 0;
 
-    if (s->launch_mode() == settings::launch_mode_t::app_stanalone) {
-        new_task = speech_service::instance()->tts_play_speech(
-            settings::instance()->note(), {});
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+        new_task = speech_service::instance()->tts_play_speech(text, model_id);
     } else {
         qDebug() << "[app => dbus] call TtsPlaySpeech";
 
-        new_task =
-            m_dbus_service.TtsPlaySpeech(settings::instance()->note(), {});
+        new_task = m_dbus_service.TtsPlaySpeech(text, model_id);
     }
 
     m_primary_task.set(new_task);
+
+    this->m_intermediate_text.clear();
+    emit intermediate_text_changed();
+}
+
+void dsnote_app::play_speech() { play_speech_internal(note(), {}); }
+
+void dsnote_app::play_speech_translator(bool transtalated) {
+    if (!transtalated && m_active_tts_model_for_in_mnt.isEmpty()) {
+        qWarning() << "no active tts model for in mnt";
+        return;
+    }
+
+    if (transtalated && m_active_tts_model_for_out_mnt.isEmpty()) {
+        qWarning() << "no active tts model for out mnt";
+        return;
+    }
+
+    play_speech_internal(transtalated ? m_translated_text : note(),
+                         transtalated ? m_active_tts_model_for_out_mnt
+                                      : m_active_tts_model_for_in_mnt);
+}
+
+void dsnote_app::translate_delayed() {
+    if (settings::instance()->translator_mode())
+        m_translator_delay_timer.start();
+}
+
+void dsnote_app::handle_translate_delayed() {
+    if (service_state() == service_state_t::StateIdle)
+        translate();
+    else
+        translate_delayed();
+}
+
+void dsnote_app::translate() {
+    if (m_active_mnt_lang.isEmpty() || m_active_mnt_out_lang.isEmpty()) {
+        qWarning() << "invalid active mnt lang";
+        return;
+    }
+
+    if (note().isEmpty()) {
+        set_translated_text({});
+    } else {
+        int new_task = 0;
+
+        if (settings::instance()->launch_mode() ==
+            settings::launch_mode_t::app_stanalone) {
+            new_task = speech_service::instance()->mnt_translate(
+                note(), m_active_mnt_lang, m_active_mnt_out_lang);
+        } else {
+            qDebug() << "[app => dbus] call MntTranslate";
+
+            new_task = m_dbus_service.MntTranslate(note(), m_active_mnt_lang,
+                                                   m_active_mnt_out_lang);
+        }
+
+        m_primary_task.set(new_task);
+    }
 
     this->m_intermediate_text.clear();
     emit intermediate_text_changed();
@@ -1060,70 +1515,104 @@ void dsnote_app::speech_to_file(const QUrl &dest_file) {
 }
 
 void dsnote_app::speech_to_file(const QString &dest_file) {
-    auto *s = settings::instance();
+    speech_to_file_internal(note(), {}, dest_file);
+}
+
+void dsnote_app::speech_to_file_translator(bool transtalated,
+                                           const QUrl &dest_file) {
+    speech_to_file_translator(transtalated, dest_file.toLocalFile());
+}
+
+void dsnote_app::speech_to_file_translator(bool transtalated,
+                                           const QString &dest_file) {
+    if (!transtalated && m_active_tts_model_for_in_mnt.isEmpty()) {
+        qWarning() << "no active tts model for in mnt";
+        return;
+    }
+
+    if (transtalated && m_active_tts_model_for_out_mnt.isEmpty()) {
+        qWarning() << "no active tts model for out mnt";
+        return;
+    }
+
+    speech_to_file_internal(transtalated ? m_translated_text : note(),
+                            transtalated ? m_active_tts_model_for_out_mnt
+                                         : m_active_tts_model_for_in_mnt,
+                            dest_file);
+}
+
+void dsnote_app::speech_to_file_internal(const QString &text,
+                                         const QString &model_id,
+                                         const QString &dest_file) {
+    if (text.isEmpty()) {
+        qWarning() << "text is empty";
+        return;
+    }
+
+    if (dest_file.isEmpty()) {
+        qWarning() << "dest file is empty";
+        return;
+    }
 
     int new_task = 0;
     m_dest_file = dest_file;
 
-    if (s->launch_mode() == settings::launch_mode_t::app_stanalone) {
-        new_task = speech_service::instance()->tts_speech_to_file(
-            settings::instance()->note(), {});
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+        new_task =
+            speech_service::instance()->tts_speech_to_file(text, model_id);
     } else {
         qDebug() << "[app => dbus] call TtsSpeechToFile";
 
-        new_task =
-            m_dbus_service.TtsSpeechToFile(settings::instance()->note(), {});
+        new_task = m_dbus_service.TtsSpeechToFile(text, model_id);
     }
 
     m_side_task.set(new_task);
 }
 
-void dsnote_app::stop_play_speech() {
+void dsnote_app::stop_play_speech() {}
 
-}
-
-void dsnote_app::set_speech(service_speech_state_t new_state) {
-    if (m_speech_state != new_state) {
-        qDebug() << "app speech state:" << m_speech_state << "=>" << new_state;
-        m_speech_state = new_state;
-        emit speech_changed();
+void dsnote_app::set_task_state(service_task_state_t new_state) {
+    if (m_task_state != new_state) {
+        qDebug() << "app speech state:" << m_task_state << "=>" << new_state;
+        m_task_state = new_state;
+        emit task_state_changed();
     }
 }
 
-void dsnote_app::update_speech() {
+void dsnote_app::update_task_state() {
     if (m_primary_task != m_current_task) {
-        qWarning() << "invalid task, reseting speech state";
-        set_speech(service_speech_state_t::SpeechStateNoSpeech);
+        qWarning() << "invalid task, reseting task state";
+        set_task_state(service_task_state_t::TaskStateIdle);
         return;
     }
 
     auto new_value = [&] {
-        int speech = 0;
+        int task_state = 0;
         if (settings::instance()->launch_mode() ==
             settings::launch_mode_t::app_stanalone) {
-            speech = speech_service::instance()->speech();
+            task_state = speech_service::instance()->task_state();
         } else {
-            qDebug() << "[app => dbus] get Speech";
-            speech = m_dbus_service.speech();
+            qDebug() << "[app => dbus] get TaskState";
+            task_state = m_dbus_service.taskState();
         }
 
-        switch (speech) {
+        switch (task_state) {
             case 0:
-                return service_speech_state_t::SpeechStateNoSpeech;
+                return service_task_state_t::TaskStateIdle;
             case 1:
-                return service_speech_state_t::SpeechStateSpeechDetected;
+                return service_task_state_t::TaskStateSpeechDetected;
             case 2:
-                return service_speech_state_t::
-                    SpeechStateSpeechDecodingEncoding;
+                return service_task_state_t::TaskStateProcessing;
             case 3:
-                return service_speech_state_t::SpeechStateSpeechInitializing;
+                return service_task_state_t::TaskStateInitializing;
             case 4:
-                return service_speech_state_t::SpeechStateSpeechPlaying;
+                return service_task_state_t::TaskStateSpeechPlaying;
         }
-        return service_speech_state_t::SpeechStateNoSpeech;
+        return service_task_state_t::TaskStateIdle;
     }();
 
-    set_speech(new_value);
+    set_task_state(new_value);
 }
 
 int dsnote_app::active_stt_model_idx() const {
@@ -1156,6 +1645,52 @@ QString dsnote_app::active_tts_model_name() const {
     return l.size() > 1 ? l.at(1) : QString{};
 }
 
+QString dsnote_app::active_tts_model_for_in_mnt_name() const {
+    auto it = m_available_tts_models_for_in_mnt_map.find(
+        m_active_tts_model_for_in_mnt);
+    if (it == m_available_tts_models_for_in_mnt_map.end()) {
+        return {};
+    }
+
+    auto l = it.value().toStringList();
+
+    return l.size() > 1 ? l.at(1) : QString{};
+}
+
+QString dsnote_app::active_tts_model_for_out_mnt_name() const {
+    auto it = m_available_tts_models_for_out_mnt_map.find(
+        m_active_tts_model_for_out_mnt);
+    if (it == m_available_tts_models_for_out_mnt_map.end()) {
+        return {};
+    }
+
+    auto l = it.value().toStringList();
+
+    return l.size() > 1 ? l.at(1) : QString{};
+}
+
+QString dsnote_app::active_mnt_lang_name() const {
+    auto it = m_available_mnt_langs_map.find(m_active_mnt_lang);
+    if (it == m_available_mnt_langs_map.end()) {
+        return {};
+    }
+
+    auto l = it.value().toStringList();
+
+    return l.size() > 1 ? l.at(1) : QString{};
+}
+
+QString dsnote_app::active_mnt_out_lang_name() const {
+    auto it = m_available_mnt_out_langs_map.find(m_active_mnt_out_lang);
+    if (it == m_available_mnt_out_langs_map.end()) {
+        return {};
+    }
+
+    auto l = it.value().toStringList();
+
+    return l.size() > 1 ? l.at(1) : QString{};
+}
+
 void dsnote_app::update_active_stt_model() {
     QString new_stt_model;
 
@@ -1178,6 +1713,40 @@ int dsnote_app::active_tts_model_idx() const {
     return std::distance(m_available_tts_models_map.begin(), it);
 }
 
+int dsnote_app::active_tts_model_for_in_mnt_idx() const {
+    auto it = m_available_tts_models_for_in_mnt_map.find(
+        m_active_tts_model_for_in_mnt);
+    if (it == m_available_tts_models_for_in_mnt_map.end()) {
+        return -1;
+    }
+    return std::distance(m_available_tts_models_for_in_mnt_map.begin(), it);
+}
+
+int dsnote_app::active_tts_model_for_out_mnt_idx() const {
+    auto it = m_available_tts_models_for_out_mnt_map.find(
+        m_active_tts_model_for_out_mnt);
+    if (it == m_available_tts_models_for_out_mnt_map.end()) {
+        return -1;
+    }
+    return std::distance(m_available_tts_models_for_out_mnt_map.begin(), it);
+}
+
+int dsnote_app::active_mnt_lang_idx() const {
+    auto it = m_available_mnt_langs_map.find(m_active_mnt_lang);
+    if (it == m_available_mnt_langs_map.end()) {
+        return -1;
+    }
+    return std::distance(m_available_mnt_langs_map.begin(), it);
+}
+
+int dsnote_app::active_mnt_out_lang_idx() const {
+    auto it = m_available_mnt_out_langs_map.find(m_active_mnt_out_lang);
+    if (it == m_available_mnt_out_langs_map.end()) {
+        return -1;
+    }
+    return std::distance(m_available_mnt_out_langs_map.begin(), it);
+}
+
 void dsnote_app::update_active_tts_model() {
     QString new_tts_model;
 
@@ -1190,6 +1759,90 @@ void dsnote_app::update_active_tts_model() {
     }
 
     set_active_tts_model(new_tts_model);
+}
+
+void dsnote_app::update_active_tts_model_for_in_mnt() {
+    if (m_available_tts_models_for_in_mnt_map.empty()) {
+        qWarning() << "no available tts models for in mnt";
+        return;
+    }
+
+    auto default_model =
+        settings::instance()->default_tts_model_for_mnt_lang(m_active_mnt_lang);
+
+    if (default_model.isEmpty() ||
+        !m_available_tts_models_for_in_mnt_map.contains(default_model)) {
+        set_active_tts_model_for_in_mnt(
+            m_available_tts_models_for_in_mnt_map.firstKey());
+    } else {
+        set_active_tts_model_for_in_mnt(default_model);
+    }
+}
+
+void dsnote_app::update_active_tts_model_for_out_mnt() {
+    if (m_available_tts_models_for_out_mnt_map.empty()) {
+        qWarning() << "no available tts models for out mnt";
+        return;
+    }
+
+    auto default_model = settings::instance()->default_tts_model_for_mnt_lang(
+        m_active_mnt_out_lang);
+
+    if (default_model.isEmpty() ||
+        !m_available_tts_models_for_out_mnt_map.contains(default_model)) {
+        set_active_tts_model_for_out_mnt(
+            m_available_tts_models_for_out_mnt_map.firstKey());
+    } else {
+        set_active_tts_model_for_out_mnt(default_model);
+    }
+}
+
+void dsnote_app::update_active_mnt_lang() {
+    if (m_available_mnt_langs_map.empty()) {
+        qWarning() << "no available mnt langs";
+        return;
+    }
+
+    QString new_mnt_lang;
+
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+        new_mnt_lang = speech_service::instance()->default_mnt_lang();
+    } else {
+        qDebug() << "[app => dbus] get DefaultMntLang";
+        new_mnt_lang = m_dbus_service.defaultMntLang();
+    }
+
+    if (new_mnt_lang.isEmpty() ||
+        !m_available_mnt_langs_map.contains(new_mnt_lang)) {
+        new_mnt_lang = m_available_mnt_langs_map.firstKey();
+    }
+
+    set_active_mnt_lang(new_mnt_lang);
+}
+
+void dsnote_app::update_active_mnt_out_lang() {
+    if (m_available_mnt_out_langs_map.empty()) {
+        qWarning() << "no available mnt out langs";
+        return;
+    }
+
+    QString new_mnt_out_lang;
+
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+        new_mnt_out_lang = speech_service::instance()->default_mnt_out_lang();
+    } else {
+        qDebug() << "[app => dbus] get DefaultMntOutLang";
+        new_mnt_out_lang = m_dbus_service.defaultMntOutLang();
+    }
+
+    if (new_mnt_out_lang.isEmpty() ||
+        !m_available_mnt_out_langs_map.contains(new_mnt_out_lang)) {
+        new_mnt_out_lang = m_available_mnt_out_langs_map.firstKey();
+    }
+
+    set_active_mnt_out_lang(new_mnt_out_lang);
 }
 
 void dsnote_app::do_keepalive() {
@@ -1255,7 +1908,7 @@ void dsnote_app::handle_keepalive_task_timeout() {
             update_current_task();
             update_service_state();
 
-            set_speech(service_speech_state_t::SpeechStateNoSpeech);
+            set_task_state(service_task_state_t::TaskStateIdle);
         }
     };
 
@@ -1270,9 +1923,9 @@ void dsnote_app::handle_keepalive_task_timeout() {
     }
 }
 
-QVariantMap dsnote_app::translate() const {
+QVariantMap dsnote_app::translations() const {
     if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::service &&
+            settings::launch_mode_t::service &&
         connected())
         return m_dbus_service.translations();
 
@@ -1304,6 +1957,14 @@ void dsnote_app::update_configured_state() {
         return true;
     }();
 
+    auto new_mnt_configured = [this] {
+        if (m_service_state == service_state_t::StateUnknown ||
+            m_service_state == service_state_t::StateNotConfigured ||
+            m_available_mnt_langs_map.empty())
+            return false;
+        return true;
+    }();
+
     if (m_stt_configured != new_stt_configured) {
         qDebug() << "app stt configured:" << m_stt_configured << "=>"
                  << new_stt_configured;
@@ -1324,6 +1985,13 @@ void dsnote_app::update_configured_state() {
         m_ttt_configured = new_ttt_configured;
         emit ttt_configured_changed();
     }
+
+    if (m_mnt_configured != new_mnt_configured) {
+        qDebug() << "app mnt configured:" << m_mnt_configured << "=>"
+                 << new_mnt_configured;
+        m_mnt_configured = new_mnt_configured;
+        emit mnt_configured_changed();
+    }
 }
 
 bool dsnote_app::busy() const {
@@ -1336,6 +2004,8 @@ bool dsnote_app::stt_configured() const { return m_stt_configured; }
 bool dsnote_app::tts_configured() const { return m_tts_configured; }
 
 bool dsnote_app::ttt_configured() const { return m_ttt_configured; }
+
+bool dsnote_app::mnt_configured() const { return m_mnt_configured; }
 
 bool dsnote_app::connected() const {
     return m_service_state != service_state_t::StateUnknown;
@@ -1352,12 +2022,18 @@ bool dsnote_app::another_app_connected() const {
            m_side_task != m_current_task;
 }
 
-void dsnote_app::copy_to_clipboard() {
+void dsnote_app::copy_to_clipboard_internal(const QString &text) {
     auto *clip = QGuiApplication::clipboard();
-    if (!settings::instance()->note().isEmpty()) {
-        clip->setText(settings::instance()->note());
+    if (!text.isEmpty()) {
+        clip->setText(text);
         emit note_copied();
     }
+}
+
+void dsnote_app::copy_to_clipboard() { copy_to_clipboard_internal(note()); }
+
+void dsnote_app::copy_translation_to_clipboard() {
+    copy_to_clipboard_internal(m_translated_text);
 }
 
 bool dsnote_app::file_exists(const QString &file) const {
@@ -1366,4 +2042,69 @@ bool dsnote_app::file_exists(const QString &file) const {
 
 bool dsnote_app::file_exists(const QUrl &file) const {
     return file_exists(file.toLocalFile());
+}
+
+QString dsnote_app::translated_text() const { return m_translated_text; }
+
+void dsnote_app::set_translated_text(const QString text) {
+    if (text != m_translated_text) {
+        m_translated_text = text;
+        emit translated_text_changed();
+    }
+}
+
+QString dsnote_app::note() const { return settings::instance()->note(); }
+
+void dsnote_app::set_note(const QString text) {
+    auto old = can_undo_or_redu_note();
+    settings::instance()->set_note(text);
+    if (old != can_undo_or_redu_note()) emit can_undo_or_redu_note_changed();
+    if (text.isEmpty()) set_translated_text({});
+}
+
+void dsnote_app::make_undo() {
+    auto old = can_undo_or_redu_note();
+    m_prev_text = note();
+    m_undo_flag = true;
+    if (old != can_undo_or_redu_note()) emit can_undo_or_redu_note_changed();
+}
+
+bool dsnote_app::can_undo_note() const {
+    return can_undo_or_redu_note() && m_undo_flag;
+}
+
+bool dsnote_app::can_redo_note() const {
+    return can_undo_or_redu_note() && !m_undo_flag;
+}
+
+bool dsnote_app::can_undo_or_redu_note() const {
+    return !m_prev_text.isEmpty() && m_prev_text != note();
+}
+
+void dsnote_app::undo_or_redu_note() {
+    if (!can_undo_or_redu_note()) return;
+
+    auto prev_text{m_prev_text};
+    m_prev_text = note();
+    set_note(prev_text);
+
+    m_undo_flag = !m_undo_flag;
+
+    emit can_undo_or_redu_note_changed();
+}
+
+void dsnote_app::handle_translator_settings_changed() {
+    if (settings::instance()->translator_mode()) {
+        if (settings::instance()->translate_when_typing()) translate_delayed();
+    } else {
+        cancel();
+    }
+}
+
+void dsnote_app::handle_note_changed() {
+    emit note_changed();
+
+    if (settings::instance()->translator_mode() &&
+        settings::instance()->translate_when_typing())
+        translate_delayed();
 }

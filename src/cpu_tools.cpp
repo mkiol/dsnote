@@ -91,3 +91,31 @@ bool cpu_tools::avx_avx2_fma_f16c_supported() {
 
     return supported;
 }
+
+bool cpu_tools::avx_supported() {
+    static const bool supported = [] {
+        std::array flags = {"avx"};
+
+        std::ifstream cpuinfo("/proc/cpuinfo");
+        return std::find_first_of(std::istream_iterator<std::string>{cpuinfo},
+                                  std::istream_iterator<std::string>{},
+                                  flags.cbegin(), flags.cend()) !=
+               std::istream_iterator<std::string>{};
+    }();
+
+    return supported;
+}
+
+bool cpu_tools::avx_avx2_supported() {
+    static const bool supported = [] {
+        std::array flags = {"avx", "avx2"};
+
+        std::ifstream cpuinfo("/proc/cpuinfo");
+        return std::find_first_of(std::istream_iterator<std::string>{cpuinfo},
+                                  std::istream_iterator<std::string>{},
+                                  flags.cbegin(), flags.cend()) !=
+               std::istream_iterator<std::string>{};
+    }();
+
+    return supported;
+}

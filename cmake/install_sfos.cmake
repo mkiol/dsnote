@@ -38,6 +38,10 @@ if(BUILD_VOSK)
     install(FILES "${external_lib_dir}/libvosk.so" DESTINATION share/${info_binary_id}/lib)
 endif()
 
+if(BUILD_BERGAMOT)
+    install(FILES "${external_lib_dir}/libbergamot_api.so" DESTINATION share/${info_binary_id}/lib)
+endif()
+
 if(BUILD_PYTHON_MODULE)
     install(FILES ${PROJECT_BINARY_DIR}/python.tar.xz DESTINATION share/${info_binary_id})
 endif()

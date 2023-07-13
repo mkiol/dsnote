@@ -39,9 +39,41 @@ Page {
         }
 
         header: SearchPageHeader {
-            implicitWidth: root.width
+            id: searchPageHeader
+
+            width: root.width
             title: langsView ? qsTr("Languages") : root.langName
             view: listView
+            comboModel: [
+                qsTr("All"),
+                qsTr("Speech to Text"),
+                qsTr("Text to Speech"),
+                qsTr("Translator"),
+                qsTr("Other")
+            ]
+            combo {
+                visible: !root.langsView
+                label: qsTr("Model type")
+                currentIndex: {
+                    switch (service.models_model.roleFilter) {
+                    case ModelsListModel.AllModels:
+                        return 0
+                    case ModelsListModel.SttModels:
+                        return 1
+                    case ModelsListModel.TtsModels:
+                        return 2
+                    }
+                    return 0
+                }
+                onCurrentIndexChanged: {
+                    var index = searchPageHeader.combo.currentIndex
+                    if (index === 1) service.models_model.roleFilter = ModelsListModel.SttModels
+                    else if (index === 2) service.models_model.roleFilter = ModelsListModel.TtsModels
+                    else if (index === 3) service.models_model.roleFilter = ModelsListModel.MntModels
+                    else if (index === 4) service.models_model.roleFilter = ModelsListModel.OtherModels
+                    else service.models_model.roleFilter = ModelsListModel.AllModels
+                }
+            }
         }
 
         Component {
@@ -52,8 +84,10 @@ Page {
                         return qsTr("Speech to Text")
                     if (section == ModelsListModel.Tts)
                         return qsTr("Text to Speech")
+                    if (section == ModelsListModel.Mnt)
+                        return qsTr("Translator")
                     if (section == ModelsListModel.Ttt)
-                        return qsTr("Text to Text")
+                        return qsTr("Other")
                 }
             }
         }

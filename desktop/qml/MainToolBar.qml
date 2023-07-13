@@ -20,6 +20,7 @@ ToolBar {
         anchors.fill: parent
 
         RowLayout {
+            Layout.fillWidth: true
             ToolButton {
                 id: menuButton
                 icon.name: "open-menu-symbolic"
@@ -68,7 +69,7 @@ ToolBar {
                     MenuItem {
                         text: qsTr("Transcribe audio file")
                         icon.name: "document-open-symbolic"
-                        enabled: app.stt_configured &&
+                        enabled: !_settings.translator_mode && app.stt_configured &&
                                  (app.state === DsnoteApp.StateListeningManual ||
                                   app.state === DsnoteApp.StateListeningAuto ||
                                   app.state === DsnoteApp.StateListeningSingleSentence ||
@@ -82,72 +83,43 @@ ToolBar {
                     }
 
                     MenuItem {
-                        text: qsTr("Save speech to audio file")
+                        text: qsTr("Save to audio file")
                         icon.name: "document-save-symbolic"
-                        enabled: app.tts_configured &&
+                        enabled: app.note.length !== 0 && app.tts_configured &&
                                  (app.state === DsnoteApp.StateListeningManual ||
                                   app.state === DsnoteApp.StateListeningAuto ||
                                   app.state === DsnoteApp.StateListeningSingleSentence ||
                                   app.state === DsnoteApp.StateIdle ||
                                   app.state === DsnoteApp.StatePlayingSpeech)
-                        onClicked: fileWriteDialog.open()
+                        onClicked: {
+                            fileWriteDialog.translated = false
+                            fileWriteDialog.open()
+                        }
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: qsTr("Convert text to audio and save as WAV file.")
                     }
-                }
-            }
-
-            ToolButton {
-                id: editButton
-                enabled: app.stt_configured || app.tts_configured
-                opacity: enabled ? 1.0 : 0.6
-                Layout.alignment: Qt.AlignLeft
-                text: qsTr("Edit")
-                onClicked: editMenu.open()
-
-                Menu {
-                    id: editMenu
-                    y: editButton.height
 
                     MenuItem {
-                        text: qsTr("Undo")
-                        icon.name: "edit-undo-symbolic"
-                        enabled: textArea.canUndo
-                        onClicked: textArea.undo()
-                    }
+                        text: qsTr("Save the translation to audio file")
+                        icon.name: "document-save-symbolic"
+                        visible: _settings.translator_mode
+                        enabled: app.translated_text.length !== 0 && _settings.translator_mode &&
+                                 app.tts_configured && app.active_tts_model_for_out_mnt.length !== 0 &&
+                                 (app.state === DsnoteApp.StateListeningManual ||
+                                  app.state === DsnoteApp.StateListeningAuto ||
+                                  app.state === DsnoteApp.StateListeningSingleSentence ||
+                                  app.state === DsnoteApp.StateIdle ||
+                                  app.state === DsnoteApp.StatePlayingSpeech)
+                        onClicked: {
+                            fileWriteDialog.translated = true
+                            fileWriteDialog.open()
+                        }
 
-                    MenuItem {
-                        text: qsTr("Redo")
-                        icon.name: "edit-redo-symbolic"
-                        enabled: textArea.canRedo
-                        onClicked: textArea.redo()
-                    }
-
-                    MenuSeparator {}
-
-                    MenuItem {
-                        text: qsTr("Copy All")
-                        icon.name: "edit-copy-symbolic"
-                        enabled: textArea.text.length > 0
-                        onClicked: app.copy_to_clipboard()
-                    }
-
-                    MenuItem {
-                        text: qsTr("Paste")
-                        icon.name: "edit-paste-symbolic"
-                        enabled: textArea.canPaste
-                        onClicked: textArea.paste()
-                    }
-
-                    MenuSeparator {}
-
-                    MenuItem {
-                        text: qsTr("Clear")
-                        icon.name: "edit-clear-all-symbolic"
-                        enabled: textArea.text.length > 0
-                        onClicked: textArea.clear()
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Convert translated text to audio and save as WAV file.")
                     }
                 }
             }
@@ -161,18 +133,47 @@ ToolBar {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTr("Set languages and download models.")
             }
-        }
 
-        ModelsSwitcher {
-            id: modelsSwitcher
-            enabled: !appWin.compactMode
-            visible: enabled
-        }
+            Item {
+                Layout.fillWidth: true
+                height: 1
+            }
 
-        ModelsSwitcherCompact {
-            id: modelsSwitcherCompact
-            enabled: appWin.compactMode
-            visible: enabled
+            ToolButton {
+                id: notepadButton
+
+                enabled: _settings.translator_mode
+                Layout.alignment: Qt.AlignRight
+                text: qsTr("Notepad")
+                checkable: true
+                checked: !_settings.translator_mode
+                onClicked: {
+                    if (_settings.translator_mode) {
+                        _settings.translator_mode = false
+                    }
+                }
+
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTr("Switch to Notepad")
+            }
+            BlinkToolButton {
+                id: translatorButton
+
+                enabled: !_settings.translator_mode
+                blink: !_settings.translator_mode && _settings.hint_translator
+                Layout.alignment: Qt.AlignRight
+                text: qsTr("Translator")
+                checkable: true
+                origChecked: _settings.translator_mode
+                onClicked: {
+                    if (!_settings.translator_mode) {
+                        _settings.translator_mode = true
+                        _settings.hint_translator = false
+                    }
+                }
+                toolTip.text: qsTr("Switch to Translator")
+            }
         }
     }
 
@@ -191,6 +192,8 @@ ToolBar {
 
     Dialogs.FileDialog {
         id: fileWriteDialog
+        property bool translated: false
+
         defaultSuffix: "wav"
         title: qsTr("Save File")
         nameFilters: [ qsTr("MS Wave") + " (*.wav)", qsTr("All files") + " (*)" ]
@@ -198,49 +201,13 @@ ToolBar {
         selectExisting: false
         selectMultiple: false
         onAccepted: {
-//            if (app.file_exists(fileWriteDialog.fileUrl)) {
-//                fileOverwriteDialog.fileUrl = fileWriteDialog.fileUrl
-//                fileOverwriteDialog.open()
-//            } else {
+            if (_settings.translator_mode) {
+                app.speech_to_file_translator(translated, fileWriteDialog.fileUrl)
+                _settings.file_save_dir_url = fileWriteDialog.fileUrl
+            } else {
                 app.speech_to_file(fileWriteDialog.fileUrl)
                 _settings.file_save_dir_url = fileWriteDialog.fileUrl
-//            }
+            }
         }
-    }
-
-//    Dialogs.MessageDialog {
-//        id: fileOverwriteDialog
-//        property url fileUrl: ""
-//        title: qsTr("Overwrite File?")
-//        text: qsTr("The file already exists. Do you wish to overwrite it?")
-//        standardButtons: Dialogs.StandardButton.Ok | Dialogs.StandardButton.Cancel
-//        onAccepted: app.speech_to_file(fileUrl)
-//    }
-
-    function update() {
-        if (app.busy || service.busy) return;
-        if (app.stt_configured) {
-            modelsSwitcher.sttIndex = app.active_stt_model_idx
-            modelsSwitcherCompact.sttIndex = app.active_stt_model_idx
-        }
-        if (app.tts_configured) {
-            modelsSwitcher.ttsIndex = app.active_tts_model_idx
-            modelsSwitcherCompact.ttsIndex = app.active_tts_model_idx
-        }
-    }
-
-    Connections {
-        target: app
-        onAvailable_stt_models_changed: root.update()
-        onAvailable_tts_models_changed: root.update()
-        onBusyChanged: root.update()
-        onStt_configuredChanged: root.update()
-        onTts_configuredChanged: root.update()
-        onActive_stt_model_idxChanged: root.update()
-        onActive_tts_model_idxChanged: root.update()
-    }
-    Connections {
-        target: service
-        onBusyChanged: root.update()
     }
 }

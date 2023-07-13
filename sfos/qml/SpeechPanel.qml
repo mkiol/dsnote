@@ -8,108 +8,87 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-SilicaItem {
+Item {
     id: root
 
     property string text: ""
     property string textPlaceholder: ""
-    property string textPlaceholderActive: ""
     property alias status: indicator.status
-    property bool clickable: true
-    property alias off: indicator.off
     property alias busy: busyIndicator.running
-    readonly property alias down: mouse.pressed
     property alias progress: busyIndicator.progress
-    property alias icon: modeIcon.source
-    signal pressed()
-    signal released()
-    signal clicked()
+    property alias canCancel: cancelButton.visible
 
-    readonly property bool _active: highlighted
-    readonly property color _pColor: _active ? Theme.highlightColor : Theme.primaryColor
-    readonly property color _sColor: _active ? Theme.secondaryHighlightColor : Theme.secondaryColor
+    signal cancelClicked()
+
     readonly property bool _empty: text.length === 0
 
     height: intermediateLabel.height + 2 * Theme.paddingLarge
-    highlighted: mouse.pressed || !mouse.enabled
 
     Rectangle {
         anchors.fill: parent
         gradient: Gradient {
-            GradientStop { position: 1.0; color: Theme.rgba(root.palette.highlightBackgroundColor, 0.05) }
-            GradientStop { position: 0.0; color: Theme.rgba(root.palette.highlightBackgroundColor, 0.10) }
+            GradientStop { position: 1.0; color: Theme.rgba(Theme.highlightBackgroundColor, 0.05) }
+            GradientStop { position: 0.0; color: Theme.rgba(Theme.highlightBackgroundColor, 0.10) }
         }
     }
 
     SpeechIndicator {
         id: indicator
+
         anchors.topMargin: Theme.paddingLarge
         anchors.top: parent.top
         anchors.leftMargin: Theme.paddingSmall
         anchors.left: parent.left
         width: Theme.itemSizeSmall
-        color: root._pColor
+        color: Theme.highlightColor
+
         // status values:
-        // 0 - no speech, 1 - speech detected,
-        // 2 - speech decoding, 3 - speech initializing,
+        // 0 - idle
+        // 1 - speech detected,
+        // 2 - processing
+        // 3 - initializing,
         // 4 - speech playing
         status: 0
+
         off: false
         visible: opacity > 0.0
         opacity: busyIndicator.running ? 0.0 : 1.0
-        Behavior on opacity { NumberAnimation { duration: 150 } }
-
+        Behavior on opacity { FadeAnimator { duration: 150 } }
     }
 
     BusyIndicatorWithProgress {
         id: busyIndicator
-        color: root._pColor
+
+        color: Theme.highlightColor
         size: BusyIndicatorSize.Medium
         anchors.centerIn: indicator
         running: false
         _forceAnimation: true
     }
 
-    Icon {
-        id: modeIcon
-        width: 0.8 * Theme.iconSizeMedium
-        height: 0.8 * Theme.iconSizeMedium
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.right: parent.right
-        anchors.rightMargin: Theme.paddingLarge
-        highlighted: root._active
-        opacity: Theme.opacityLow
-        visible: root.text.length === 0
-    }
-
     Label {
         id: intermediateLabel
+
         anchors.topMargin: Theme.paddingLarge
         anchors.top: parent.top
         anchors.left: indicator.right
         anchors.right: parent.right
-        anchors.rightMargin: Theme.horizontalPageMargin
+        anchors.rightMargin: Theme.horizontalPageMargin + (root.canCancel ? cancelButton.width : 0)
         anchors.leftMargin: Theme.paddingMedium * 0.7
-        text: {
-            if (root._empty) return root._active ?
-                                 root.textPlaceholderActive :
-                                 root.textPlaceholder
-            return root.text
-        }
+        text: root._empty ? root.textPlaceholder : root.text
         wrapMode: root._empty ? Text.NoWrap : Text.WordWrap
         truncationMode: _empty ? TruncationMode.Fade : TruncationMode.None
-        color: root._empty ? root._sColor : root._pColor
+        color: root._empty ? Theme.secondaryHighlightColor : Theme.highlightColor
         font.italic: root._empty
     }
 
-    MouseArea {
-        id: mouse
-        enabled: root.clickable && !root.off
-        anchors.fill: parent
-        onPressedChanged: {
-            if (pressed) root.pressed()
-            else root.released()
-        }
-        onClicked: root.clicked()
+    IconButton {
+        id: cancelButton
+
+        anchors.right: parent.right
+        anchors.rightMargin: Theme.paddingSmall
+        anchors.top: parent.top
+        icon.source: "image://theme/icon-m-cancel?" + (pressed ? Theme.highlightColor : Theme.primaryColor)
+        onClicked: root.cancelClicked()
     }
 }

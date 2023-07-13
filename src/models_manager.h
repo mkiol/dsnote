@@ -38,7 +38,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     Q_OBJECT
     Q_PROPERTY(bool busy READ busy NOTIFY busy_changed)
    public:
-    enum class model_role { stt = 0, tts = 1, ttt = 2 };
+    enum class model_role { stt = 0, tts = 1, mnt = 2, ttt = 3 };
     friend QDebug operator<<(QDebug d, model_role role);
 
     enum class model_engine {
@@ -49,7 +49,8 @@ class models_manager : public QObject, public singleton<models_manager> {
         tts_coqui,
         tts_piper,
         tts_espeak,
-        tts_rhvoice
+        tts_rhvoice,
+        mnt_bergamot
     };
     friend QDebug operator<<(QDebug d, model_engine engine);
 
@@ -61,6 +62,12 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool downloading = false;
     };
 
+    struct lang_basic_t {
+        QString id;
+        QString name;
+        QString name_en;
+    };
+
     struct model_t {
         QString id;
         model_engine engine = model_engine::stt_ds;
@@ -69,6 +76,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         QString model_file;
         QString scorer_file;
         QString speaker;
+        QString trg_lang_id;
         int score = 2; /* 0-3 */
         bool default_for_lang = false;
         bool available = false;
@@ -88,6 +96,10 @@ class models_manager : public QObject, public singleton<models_manager> {
     std::vector<model_t> available_models() const;
     std::vector<model_t> models(const QString& lang_id = {}) const;
     std::vector<lang_t> langs() const;
+    std::unordered_map<QString, lang_basic_t> langs_map() const;
+    std::unordered_map<QString, lang_basic_t> available_langs_map() const;
+    std::unordered_map<QString, lang_basic_t> available_langs_of_role_map(
+        model_role role) const;
     [[nodiscard]] bool model_exists(const QString& id) const;
     [[nodiscard]] bool has_model_of_role(model_role role) const;
     void download_model(const QString& id);
@@ -130,6 +142,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         std::vector<QUrl> scorer_urls;
         qint64 scorer_size = 0;
         QString speaker;
+        QString trg_lang_id;
         int score = -1; /* 0-5 */
         bool hidden = false;
         bool default_for_lang = false;
@@ -146,9 +159,11 @@ class models_manager : public QObject, public singleton<models_manager> {
     inline static const int default_score_tts_coqui = 3;
     using langs_t = std::unordered_map<QString, std::pair<QString, QString>>;
     using models_t = std::unordered_map<QString, priv_model_t>;
+    using langs_of_role_t = std::unordered_map<model_role, std::set<QString>>;
 
     models_t m_models;
     langs_t m_langs;
+    langs_of_role_t m_langs_of_role;
     QNetworkAccessManager m_nam;
     std::atomic_bool m_busy_value = false;
     std::thread m_thread;
@@ -197,6 +212,7 @@ class models_manager : public QObject, public singleton<models_manager> {
                               const QString& path_in_archive_2);
     static bool check_checksum(const QString& path, const QString& checksum);
     static void remove_empty_langs(langs_t& langs, const models_t& models);
+    static langs_of_role_t make_langs_of_role(const models_t& models);
     static void remove_downloaded_files_on_error(const QString& path,
                                                  models_manager::comp_type comp,
                                                  int part);

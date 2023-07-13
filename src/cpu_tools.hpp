@@ -17,6 +17,8 @@ arch_t arch();
 int number_of_cores();
 bool neon_supported();
 bool avx_avx2_fma_f16c_supported();
+bool avx_supported();
+bool avx_avx2_supported();
 }  // namespace cpu_tools
 
 std::ostream& operator<<(std::ostream& os, cpu_tools::arch_t arch);

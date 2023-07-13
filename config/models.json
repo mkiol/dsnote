@@ -5863,6 +5863,38 @@
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--pl--mai_female--vits.zip"
             ],
             "size": "100860046"
+        },
+        {
+            "name": "Polski na Angielski",
+            "model_id": "pl_bergamot_plen",
+            "engine": "mnt_bergamot",
+            "lang_id": "pl",
+            "trg_lang_id": "en",
+            "checksum": "7ee46677",
+            "checksum_quick": "90872360",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/plen/model.plen.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/plen/lex.50.50.plen.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/plen/vocab.plen.spm"
+            ],
+            "size": "22869702"
+        },
+        {
+            "name": "English to Polish",
+            "model_id": "en_bergamot_enpl",
+            "engine": "mnt_bergamot",
+            "lang_id": "en",
+            "trg_lang_id": "pl",
+            "checksum": "9de6d6aa",
+            "checksum_quick": "8c15008d",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enpl/model.enpl.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enpl/lex.50.50.enpl.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enpl/vocab.enpl.spm"
+            ],
+            "size": "21613790"
         }
     ]
 }

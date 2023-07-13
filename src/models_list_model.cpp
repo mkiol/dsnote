@@ -63,13 +63,18 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
                 return ModelRole::Ttt;
             case models_manager::model_role::tts:
                 return ModelRole::Tts;
+            case models_manager::model_role::mnt:
+                return ModelRole::Mnt;
         }
         throw std::runtime_error{"unsupported model engine"};
     }();
 
     return new ModelsListItem{
         /*id=*/model.id,
-        /*name=*/QStringLiteral("%1 / %2").arg(model.name, model.lang_id),
+        /*name=*/role == ModelRole::Mnt
+            ? QStringLiteral("%1 / %2-%3")
+                  .arg(model.name, model.lang_id, model.trg_lang_id)
+            : QStringLiteral("%1 / %2").arg(model.name, model.lang_id),
         /*langId=*/model.lang_id,
         /*role=*/role,
         /*available=*/model.available,
@@ -87,8 +92,10 @@ bool ModelsListModel::roleFilterPass(const models_manager::model_t &model) {
             return m_roleFilter == ModelRoleFilter::SttModels;
         case models_manager::model_role::tts:
             return m_roleFilter == ModelRoleFilter::TtsModels;
+        case models_manager::model_role::mnt:
+            return m_roleFilter == ModelRoleFilter::MntModels;
         case models_manager::model_role::ttt:
-            break;
+            return m_roleFilter == ModelRoleFilter::OtherModels;
     }
 
     return false;
@@ -111,7 +118,11 @@ QList<ListItem *> ModelsListModel::makeItems() {
         std::for_each(models.cbegin(), models.cend(), [&](const auto &model) {
             if (roleFilterPass(model) &&
                 (model.name.contains(phase, Qt::CaseInsensitive) ||
-                 model.lang_id.contains(phase, Qt::CaseInsensitive))) {
+                 model.lang_id.contains(phase, Qt::CaseInsensitive) ||
+                 model.trg_lang_id.contains(phase, Qt::CaseInsensitive) ||
+                 QStringLiteral("%1-%2")
+                     .arg(model.lang_id, model.trg_lang_id)
+                     .contains(phase, Qt::CaseInsensitive))) {
                 items.push_back(makeItem(model));
             }
         });
@@ -147,16 +158,15 @@ void ModelsListModel::updateDownloading(
     }
 }
 
-ModelsListItem::ModelsListItem(const QString &id, const QString &name,
-                               const QString &langId,
+ModelsListItem::ModelsListItem(const QString &id, QString name, QString langId,
                                ModelsListModel::ModelRole role, bool available,
                                int score, bool default_for_lang,
                                bool downloading, double progress,
                                QObject *parent)
     : SelectableItem{parent},
       m_id{id},
-      m_name{name},
-      m_langId{langId},
+      m_name{std::move(name)},
+      m_langId{std::move(langId)},
       m_role{role},
       m_available{available},
       m_score{score},

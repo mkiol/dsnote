@@ -9,7 +9,8 @@
             Valid states: 0 = Unknown, 1 = Not Configured, 2 = Busy,
                           3 = Idle, 4 = Listening Manual, 5 = Listening Auto,
                           6 = Transcribing File, 7 = Listening One-sentence,
-                          8 = Playing speech, 9 = Writing speech synthesis to file
+                          8 = Playing speech, 9 = Writing speech synthesis to file,
+                          10 = Translating
             Unrecognized states should be considered equal to Unknown.
         -->
         <property name="State" type="i" access="read" />
@@ -25,25 +26,25 @@
         </signal>
 
         <!--
-            Speech:
+            TaskState:
 
-            An indicator of speech detection status.
-            Valid states: 0 = No Speech, 1 = Speech Detected,
-                          2 = Speech Decoding/Encoding in progress, 3 = Speech Initializing,
+            An indicator of state of current task.
+            Valid states: 0 = Idle, 1 = Speech Detected,
+                          2 = Processing, 3 = Initializing,
                           4 = Playing Speech.
-            When state is 4 or 7 (Listening Manual, Listening One-sentence) speech detection
-            status is never 0.
+            When state is 4 or 7 (Listening Manual, Listening One-sentence) task state
+            is never 0.
         -->
-        <property name="Speech" type="i" access="read" />
+        <property name="TaskState" type="i" access="read" />
 
         <!--
-            SpeechPropertyChanged:
-            @speech: new value of Speech property
+            TaskStatePropertyChanged:
+            @taskState: new value of TaskState property
 
-            Emitted whenever Speech property changes.
+            Emitted whenever TaskState property changes.
         -->
-        <signal name="SpeechPropertyChanged">
-          <arg name="speech" type="i" direction="out" />
+        <signal name="TaskStatePropertyChanged">
+          <arg name="taskState" type="i" direction="out" />
         </signal>
 
         <!--
@@ -123,6 +124,42 @@
         </signal>
 
         <!--
+            DefaultMntLang:
+
+            An language code (ISO 639-1) which is a default for input in translation.
+            The default language is used when @lang is empty in Translate method.
+        -->
+        <property name="DefaultMntLang" type="s" access="readwrite" />
+
+        <!--
+            DefaultMntLangPropertyChanged:
+            @lang: new value of DefaultMntLang property
+
+            Emitted whenever DefaultMntLang property changes.
+        -->
+        <signal name="DefaultMntLangPropertyChanged">
+          <arg name="lang" type="s" direction="out" />
+        </signal>
+
+        <!--
+            DefaultMntOutLang:
+
+            An language code (ISO 639-1) which is a default for output in translation.
+            The default language is used when @out_lang is empty in Translate method.
+        -->
+        <property name="DefaultMntOutLang" type="s" access="readwrite" />
+
+        <!--
+            DefaultMntOutLangPropertyChanged:
+            @lang: new value of DefaultMntOutLang property
+
+            Emitted whenever DefaultMntOutLang property changes.
+        -->
+        <signal name="DefaultMntOutLangPropertyChanged">
+          <arg name="lang" type="s" direction="out" />
+        </signal>
+
+        <!--
             SttLangs:
 
             A dict of available STT languages (lang id => array of properties).
@@ -183,6 +220,26 @@
         </signal>
 
         <!--
+            MntLangs:
+
+            A dict of available MNT languages (lang id => array of properties).
+        -->
+        <property name="MntLangs" type="a{sv}" access="read">
+            <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantMap"/>
+        </property>
+
+        <!--
+            MntLangsChanged:
+            @langs: new value of MntLangs property
+
+            Emitted whenever MntLangs property changes.
+        -->
+        <signal name="MntLangsPropertyChanged">
+          <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
+          <arg name="langs" type="a{sv}" direction="out" />
+        </signal>
+
+        <!--
             TtsLangList:
 
             A list of available TTS languages (lang id, name).
@@ -218,6 +275,26 @@
             Emitted whenever SttTtsLangList property changes.
         -->
         <signal name="SttTtsLangListChanged">
+          <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantList"/>
+          <arg name="langs" type="av" direction="out" />
+        </signal>
+
+        <!--
+            MntLangList:
+
+            A list of available MNT languages (lang id, name).
+        -->
+        <property name="MntLangList" type="av" access="read">
+            <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantList"/>
+        </property>
+
+        <!--
+            MntLangListChanged:
+            @langs: new value of MntLangList property
+
+            Emitted whenever MntLangList property changes.
+        -->
+        <signal name="MntLangListChanged">
           <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantList"/>
           <arg name="langs" type="av" direction="out" />
         </signal>
@@ -384,6 +461,24 @@
         </signal>
 
         <!--
+            MntTranslateFinished:
+            @in_text: text that should be translated
+            @in_lang: language code (ISO 639-1) of @in_text
+            @out_text: translated text
+            @out_lang: language code (ISO 639-1) of @out_text
+            @task: id of task returned in MntTranslate call
+
+            Emitted whenever translation is completely finished.
+        -->
+        <signal name="MntTranslateFinished">
+            <arg name="in_text" type="s" direction="out" />
+            <arg name="in_lang" type="s" direction="out" />
+            <arg name="out_text" type="s" direction="out" />
+            <arg name="out_lang" type="s" direction="out" />
+            <arg name="task" type="i" direction="out" />
+        </signal>
+
+        <!--
             SttGetFileTranscribeProgress:
             @task: id of task returned in SttTranscribeFile call
             @progress: progress of file transcription (0.0 - 1.0)
@@ -401,6 +496,34 @@
         <method name="TtsGetSpeechToFileProgress">
             <arg name="task" type="i" direction="in" />
             <arg name="progress" type="d" direction="out" />
+        </method>
+
+        <!--
+            MntTranslate:
+            @text: text that should be translated
+            @lang: language code (ISO 639-1) of @text
+            @out_lang: language code (ISO 639-1) @text should be translated to
+            @task: returned id of task which will be included in
+                   MntTranslateFinished signal,
+                   @task less than 0 idicates an error
+        -->
+        <method name="MntTranslate">
+            <arg name="text" type="s" direction="in" />
+            <arg name="lang" type="s" direction="in" />
+            <arg name="out_lang" type="s" direction="in" />
+            <arg name="task" type="i" direction="out" />
+        </method>
+
+        <!--
+            MntGetOutLangs:
+            @lang: language code (ISO 639-1) of input language
+            @out_langs: returned a dict of languages (lang id => array of properties)
+                        for translation output
+        -->
+        <method name="MntGetOutLangs">
+            <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
+            <arg name="lang" type="s" direction="in" />
+            <arg name="out_langs" type="a{sv}" direction="out" />
         </method>
 
         <!--
@@ -517,7 +640,7 @@
         <!--
             Cancel:
             @task: id of task returned in SttStartListen, SttTranscribeFile
-                   or TtsPlaySpeech call
+                   TtsPlaySpeech or MntTranslate call
             @result: 0 - success, any other value - error
 
             Cancels speech decoding and file transcription.

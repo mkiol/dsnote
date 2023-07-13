@@ -178,6 +178,32 @@ void settings::set_default_tts_model(const QString& value) {
     }
 }
 
+QString settings::default_mnt_lang() const {
+    return value(QStringLiteral("service/default_mnt_lang"),
+                 QStringLiteral("en"))
+        .toString();  // english is a default;
+}
+
+void settings::set_default_mnt_lang(const QString& value) {
+    if (default_mnt_lang() != value) {
+        setValue(QStringLiteral("service/default_mnt_lang"), value);
+        emit default_mnt_lang_changed();
+    }
+}
+
+QString settings::default_mnt_out_lang() const {
+    return value(QStringLiteral("service/default_mnt_out_lang"),
+                 QStringLiteral("en"))
+        .toString();  // english is a default;
+}
+
+void settings::set_default_mnt_out_lang(const QString& value) {
+    if (default_mnt_out_lang() != value) {
+        setValue(QStringLiteral("service/default_mnt_out_lang"), value);
+        emit default_mnt_out_lang_changed();
+    }
+}
+
 QStringList settings::enabled_models() {
     return value(QStringLiteral("service/enabled_models"), {}).toStringList();
 }
@@ -197,6 +223,7 @@ void settings::set_default_stt_model_for_lang(const QString& lang,
                                               const QString& value) {
     if (default_stt_model_for_lang(lang) != value) {
         setValue(QStringLiteral("service/default_model_%1").arg(lang), value);
+        emit default_stt_models_changed(lang);
     }
 }
 
@@ -210,6 +237,7 @@ void settings::set_default_tts_model_for_lang(const QString& lang,
     if (default_tts_model_for_lang(lang) != value) {
         setValue(QStringLiteral("service/default_tts_model_%1").arg(lang),
                  value);
+        emit default_tts_models_changed(lang);
     }
 }
 
@@ -221,6 +249,20 @@ void settings::set_restore_punctuation(bool value) {
     if (restore_punctuation() != value) {
         setValue(QStringLiteral("service/restore_punctuation"), value);
         emit restore_punctuation_changed();
+    }
+}
+
+QString settings::default_tts_model_for_mnt_lang(const QString& lang) {
+    return value(QStringLiteral("default_tts_model_for_mnt_%1").arg(lang), {})
+        .toString();
+}
+
+void settings::set_default_tts_model_for_mnt_lang(const QString& lang,
+                                                  const QString& value) {
+    if (default_tts_model_for_mnt_lang(lang) != value) {
+        setValue(QStringLiteral("default_tts_model_for_mnt_%1").arg(lang),
+                 value);
+        emit default_tts_models_for_mnt_changed(lang);
     }
 }
 
@@ -338,6 +380,39 @@ void settings::set_translate(bool value) {
     if (translate() != value) {
         setValue(QStringLiteral("translate"), value);
         emit translate_changed();
+    }
+}
+
+bool settings::translator_mode() const {
+    return value(QStringLiteral("translator_mode"), false).toBool();
+}
+
+void settings::set_translator_mode(bool value) {
+    if (translator_mode() != value) {
+        setValue(QStringLiteral("translator_mode"), value);
+        emit translator_mode_changed();
+    }
+}
+
+bool settings::translate_when_typing() const {
+    return value(QStringLiteral("translate_when_typing"), false).toBool();
+}
+
+void settings::set_translate_when_typing(bool value) {
+    if (translate_when_typing() != value) {
+        setValue(QStringLiteral("translate_when_typing"), value);
+        emit translate_when_typing_changed();
+    }
+}
+
+bool settings::hint_translator() const {
+    return value(QStringLiteral("hint_translator"), true).toBool();
+}
+
+void settings::set_hint_translator(bool value) {
+    if (hint_translator() != value) {
+        setValue(QStringLiteral("hint_translator"), value);
+        emit hint_translator_changed();
     }
 }
 

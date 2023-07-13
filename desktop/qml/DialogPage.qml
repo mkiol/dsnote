@@ -13,23 +13,38 @@ Dialog {
     id: root
 
     default property alias content: column.data
-
-    readonly property real _rightMargin: scrollBar.visible ? 3 * appWin.padding : appWin.padding
+    readonly property real _rightMargin: scrollBar.visible ? appWin.padding + scrollBar.width : appWin.padding
     readonly property real _leftMargin: appWin.padding
 
     standardButtons: Dialog.Close
-
     implicitHeight: Math.min(
-                        flick.contentHeight + footer.height + 2 * verticalPadding,
+                        header.height + flick.contentHeight + footer.height + 2 * verticalPadding,
                         parent.height - 4 * appWin.padding)
     implicitWidth: parent.width - 4 * appWin.padding
     anchors.centerIn: parent
     verticalPadding: appWin.padding
     horizontalPadding: 1
     modal: true
+    header: Item {
+        visible: root.title.length !== 0
+        height: titleLabel.height + appWin.padding
+
+        Label {
+            id: titleLabel
+            x: appWin.padding
+            y: appWin.padding
+
+            text: root.title
+            font.pixelSize: Qt.application.font.pixelSize * 1.2
+            elide: Label.ElideRight
+            horizontalAlignment: Qt.AlignLeft
+            verticalAlignment: Qt.AlignVCenter
+        }
+    }
 
     Flickable {
         id: flick
+
         anchors.fill: parent
         contentWidth: width
         contentHeight: column.height + 2 * appWin.padding
@@ -43,7 +58,7 @@ Dialog {
         ColumnLayout {
             id: column
             x: root._leftMargin
-            width: parent.width - x - root._rightMargin
+            width: flick.width - x - root._rightMargin
             spacing: appWin.padding
         }
     }

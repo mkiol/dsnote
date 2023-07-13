@@ -17,8 +17,7 @@ Dialog {
     property string langId
     property string langName
     readonly property bool langsView: langId.length === 0
-
-    readonly property real _rightMargin: scrollBar.visible ? 3 * appWin.padding : appWin.padding
+    readonly property real _rightMargin: scrollBar.visible ? appWin.padding + scrollBar.width : appWin.padding
 
     width: parent.width - 4 * appWin.padding
     height: parent.height - 4 * appWin.padding
@@ -80,13 +79,17 @@ Dialog {
                     return 0
                 }
                 model: [
-                    qsTr("All models"),
-                    qsTr("Only Speech to Text"),
-                    qsTr("Only Text to Speech")
+                    qsTr("All"),
+                    qsTr("Speech to Text"),
+                    qsTr("Text to Speech"),
+                    qsTr("Translator"),
+                    qsTr("Other")
                 ]
                 onActivated: {
                     if (index === 1) service.models_model.roleFilter = ModelsListModel.SttModels
                     else if (index === 2) service.models_model.roleFilter = ModelsListModel.TtsModels
+                    else if (index === 3) service.models_model.roleFilter = ModelsListModel.MntModels
+                    else if (index === 4) service.models_model.roleFilter = ModelsListModel.OtherModels
                     else service.models_model.roleFilter = ModelsListModel.AllModels
                 }
             }
@@ -158,8 +161,10 @@ Dialog {
                     return qsTr("Speech to Text")
                 if (section == ModelsListModel.Tts)
                     return qsTr("Text to Speech")
+                if (section == ModelsListModel.Mnt)
+                    return qsTr("Translator")
                 if (section == ModelsListModel.Ttt)
-                    return qsTr("Text to Text")
+                    return qsTr("Other")
             }
         }
     }

@@ -39,6 +39,18 @@ public:
     inline int currentTask() const
     { return qvariant_cast< int >(property("CurrentTask")); }
 
+    Q_PROPERTY(QString DefaultMntLang READ defaultMntLang WRITE setDefaultMntLang)
+    inline QString defaultMntLang() const
+    { return qvariant_cast< QString >(property("DefaultMntLang")); }
+    inline void setDefaultMntLang(const QString &value)
+    { setProperty("DefaultMntLang", QVariant::fromValue(value)); }
+
+    Q_PROPERTY(QString DefaultMntOutLang READ defaultMntOutLang WRITE setDefaultMntOutLang)
+    inline QString defaultMntOutLang() const
+    { return qvariant_cast< QString >(property("DefaultMntOutLang")); }
+    inline void setDefaultMntOutLang(const QString &value)
+    { setProperty("DefaultMntOutLang", QVariant::fromValue(value)); }
+
     Q_PROPERTY(QString DefaultSttLang READ defaultSttLang WRITE setDefaultSttLang)
     inline QString defaultSttLang() const
     { return qvariant_cast< QString >(property("DefaultSttLang")); }
@@ -63,9 +75,13 @@ public:
     inline void setDefaultTtsModel(const QString &value)
     { setProperty("DefaultTtsModel", QVariant::fromValue(value)); }
 
-    Q_PROPERTY(int Speech READ speech)
-    inline int speech() const
-    { return qvariant_cast< int >(property("Speech")); }
+    Q_PROPERTY(QVariantList MntLangList READ mntLangList)
+    inline QVariantList mntLangList() const
+    { return qvariant_cast< QVariantList >(property("MntLangList")); }
+
+    Q_PROPERTY(QVariantMap MntLangs READ mntLangs)
+    inline QVariantMap mntLangs() const
+    { return qvariant_cast< QVariantMap >(property("MntLangs")); }
 
     Q_PROPERTY(int State READ state)
     inline int state() const
@@ -86,6 +102,10 @@ public:
     Q_PROPERTY(QVariantList SttTtsLangList READ sttTtsLangList)
     inline QVariantList sttTtsLangList() const
     { return qvariant_cast< QVariantList >(property("SttTtsLangList")); }
+
+    Q_PROPERTY(int TaskState READ taskState)
+    inline int taskState() const
+    { return qvariant_cast< int >(property("TaskState")); }
 
     Q_PROPERTY(QVariantMap Translations READ translations)
     inline QVariantMap translations() const
@@ -130,6 +150,20 @@ public Q_SLOTS: // METHODS
         QList<QVariant> argumentList;
         argumentList << QVariant::fromValue(task);
         return asyncCallWithArgumentList(QStringLiteral("KeepAliveTask"), argumentList);
+    }
+
+    inline QDBusPendingReply<QVariantMap> MntGetOutLangs(const QString &lang)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(lang);
+        return asyncCallWithArgumentList(QStringLiteral("MntGetOutLangs"), argumentList);
+    }
+
+    inline QDBusPendingReply<int> MntTranslate(const QString &text, const QString &lang, const QString &out_lang)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(text) << QVariant::fromValue(lang) << QVariant::fromValue(out_lang);
+        return asyncCallWithArgumentList(QStringLiteral("MntTranslate"), argumentList);
     }
 
     inline QDBusPendingReply<int> Reload()
@@ -196,12 +230,16 @@ public Q_SLOTS: // METHODS
 
 Q_SIGNALS: // SIGNALS
     void CurrentTaskPropertyChanged(int task);
+    void DefaultMntLangPropertyChanged(const QString &lang);
+    void DefaultMntOutLangPropertyChanged(const QString &lang);
     void DefaultSttLangPropertyChanged(const QString &lang);
     void DefaultSttModelPropertyChanged(const QString &model);
     void DefaultTtsLangPropertyChanged(const QString &lang);
     void DefaultTtsModelPropertyChanged(const QString &model);
     void ErrorOccured(int code);
-    void SpeechPropertyChanged(int speech);
+    void MntLangListChanged(const QVariantList &langs);
+    void MntLangsPropertyChanged(const QVariantMap &langs);
+    void MntTranslateFinished(const QString &in_text, const QString &in_lang, const QString &out_text, const QString &out_lang, int task);
     void StatePropertyChanged(int state);
     void SttFileTranscribeFinished(int task);
     void SttFileTranscribeProgress(double progress, int task);
@@ -211,6 +249,7 @@ Q_SIGNALS: // SIGNALS
     void SttModelsPropertyChanged(const QVariantMap &models);
     void SttTextDecoded(const QString &text, const QString &lang, int task);
     void SttTtsLangListChanged(const QVariantList &langs);
+    void TaskStatePropertyChanged(int taskState);
     void TtsLangListChanged(const QVariantList &langs);
     void TtsLangsPropertyChanged(const QVariantMap &langs);
     void TtsModelsPropertyChanged(const QVariantMap &models);

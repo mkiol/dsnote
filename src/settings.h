@@ -45,6 +45,13 @@ class settings : public QSettings, public singleton<settings> {
                    file_open_dir_changed)
     Q_PROPERTY(QString prev_app_ver READ prev_app_ver WRITE set_prev_app_ver
                    NOTIFY prev_app_ver_changed)
+    Q_PROPERTY(bool translator_mode READ translator_mode WRITE
+                   set_translator_mode NOTIFY translator_mode_changed)
+    Q_PROPERTY(
+        bool translate_when_typing READ translate_when_typing WRITE
+            set_translate_when_typing NOTIFY translate_when_typing_changed)
+    Q_PROPERTY(bool hint_translator READ hint_translator WRITE
+                   set_hint_translator NOTIFY hint_translator_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -63,6 +70,10 @@ class settings : public QSettings, public singleton<settings> {
                    set_default_stt_model NOTIFY default_stt_model_changed)
     Q_PROPERTY(QString default_tts_model READ default_tts_model WRITE
                    set_default_tts_model NOTIFY default_tts_model_changed)
+    Q_PROPERTY(QString default_mnt_lang READ default_mnt_lang WRITE
+                   set_default_mnt_lang NOTIFY default_mnt_lang_changed)
+    Q_PROPERTY(QString default_mnt_out_lang READ default_mnt_out_lang WRITE
+                   set_default_mnt_out_lang NOTIFY default_mnt_out_lang_changed)
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -117,6 +128,15 @@ class settings : public QSettings, public singleton<settings> {
     QString file_open_dir_name() const;
     QString prev_app_ver() const;
     void set_prev_app_ver(const QString &value);
+    bool translator_mode() const;
+    void set_translator_mode(bool value);
+    bool translate_when_typing() const;
+    void set_translate_when_typing(bool value);
+    QString default_tts_model_for_mnt_lang(const QString &lang);
+    void set_default_tts_model_for_mnt_lang(const QString &lang,
+                                            const QString &value);
+    bool hint_translator() const;
+    void set_hint_translator(bool value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -131,8 +151,6 @@ class settings : public QSettings, public singleton<settings> {
     void set_cache_dir(const QString &value);
     QUrl cache_dir_url() const;
     void set_cache_dir_url(const QUrl &value);
-
-    // service
     bool restore_punctuation() const;
     void set_restore_punctuation(bool value);
     QStringList enabled_models();
@@ -152,6 +170,12 @@ class settings : public QSettings, public singleton<settings> {
     void set_default_tts_model_for_lang(const QString &lang,
                                         const QString &value);
 
+    // mnt
+    QString default_mnt_lang() const;
+    void set_default_mnt_lang(const QString &value);
+    QString default_mnt_out_lang() const;
+    void set_default_mnt_out_lang(const QString &value);
+
    signals:
     // app
     void speech_mode_changed();
@@ -162,6 +186,10 @@ class settings : public QSettings, public singleton<settings> {
     void file_save_dir_changed();
     void file_open_dir_changed();
     void prev_app_ver_changed();
+    void translator_mode_changed();
+    void translate_when_typing_changed();
+    void default_tts_models_for_mnt_changed(const QString &lang);
+    void hint_translator_changed();
 
     // service
     void models_dir_changed();
@@ -171,6 +199,8 @@ class settings : public QSettings, public singleton<settings> {
     void default_stt_models_changed(const QString &lang);
     void default_tts_model_changed();
     void default_tts_models_changed(const QString &lang);
+    void default_mnt_lang_changed();
+    void default_mnt_out_lang_changed();
 
    private:
     inline static const QString settings_filename =

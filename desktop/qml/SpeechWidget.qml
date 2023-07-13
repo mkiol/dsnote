@@ -14,135 +14,130 @@ import org.mkiol.dsnote.Dsnote 1.0
 import org.mkiol.dsnote.Settings 1.0
 
 RowLayout {
-    spacing: appWin.padding
-    Layout.fillWidth: true
-    Layout.rightMargin: appWin.padding
-    Layout.leftMargin: appWin.padding
-    Layout.bottomMargin: appWin.padding
-
-    BusyIndicator {
-        Layout.preferredHeight: listenButton.height
-        Layout.preferredWidth: listenButton.height
-        Layout.alignment: frame.height > listenButton.height ? Qt.AlignBottom : Qt.AlignVCenter
-        running: app.state === DsnoteApp.StateTranscribingFile ||
-                 app.state === DsnoteApp.StateWritingSpeechToFile
-        visible: running
-    }
-
-    SpeechIndicator {
-        id: indicator
-        Layout.preferredHeight: listenButton.height * 0.7
-        Layout.preferredWidth: listenButton.height
-        visible: app.state !== DsnoteApp.StateTranscribingFile &&
-                 app.state !== DsnoteApp.StateWritingSpeechToFile
-        status: {
-            switch (app.speech) {
-            case DsnoteApp.SpeechStateNoSpeech: return 0;
-            case DsnoteApp.SpeechStateSpeechDetected: return 1;
-            case DsnoteApp.SpeechStateSpeechDecodingEncoding: return 2;
-            case DsnoteApp.SpeechStateSpeechInitializing: return 3;
-            case DsnoteApp.SpeechStateSpeechPlaying: return 4;
-            }
-            return 0;
-        }
-        Layout.alignment: frame.height > listenButton.height ? Qt.AlignBottom : Qt.AlignVCenter
-        color: palette.text
-    }
+    id: root
 
     Frame {
-        id: frame
-        topPadding: 2
-        bottomPadding: 2
         Layout.fillWidth: true
-        Layout.preferredHeight: Math.max(listenButton.height,
-                                         speechText.implicitHeight + topPadding + bottomPadding)
-        background: Rectangle {
-            color: palette.button
-            border.color: palette.buttonText
-            opacity: 0.3
-            radius: 3
-        }
 
-        Label {
-            id: speechText
+        background: Item {}
+
+        RowLayout {
+            id: row
+
             anchors.fill: parent
-            wrapMode: TextEdit.WordWrap
-            verticalAlignment: Text.AlignVCenter
 
-            property string placeholderText: {
-                if (app.speech === DsnoteApp.SpeechStateSpeechInitializing)
-                    return qsTr("Getting ready, please wait...")
-                if (app.state === DsnoteApp.StateWritingSpeechToFile)
-                    return qsTr("Writing speech to file...") +
-                            (app.speech_to_file_progress > 0.0 ? " " +
-                                                             Math.round(app.speech_to_file_progress * 100) + "%" : "")
-                if (app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding)
-                    return qsTr("Processing, please wait...")
-                if (app.state === DsnoteApp.StateTranscribingFile)
-                    return qsTr("Transcribing audio file...") +
-                            (app.transcribe_progress > 0.0 ? " " +
-                                                             Math.round(app.transcribe_progress * 100) + "%" : "")
-                if (app.state === DsnoteApp.StateListeningSingleSentence ||
-                        app.state === DsnoteApp.StateListeningAuto ||
-                        app.state === DsnoteApp.StateListeningManual) return qsTr("Say something...")
-
-                if (app.state === DsnoteApp.StatePlayingSpeech) return qsTr("Reading a note...")
-
-                return ""
+            ToolButton {
+                id: _icon
+                enabled: false
+                visible: false
+                Layout.alignment: Qt.AlignVCenter
+                icon.name: "audio-speakers-symbolic"
             }
 
-            font.italic: true
-            text: app.intermediate_text.length === 0 ? placeholderText : app.intermediate_text
-            opacity: app.intermediate_text.length === 0 ? 0.6 : 1.0
-        }
-    }
+            ComboBox {
+                id: _combo
+                enabled: false
+                visible: false
+            }
 
-    Button {
-        id: listenButton
-        icon.name: "audio-input-microphone-symbolic"
-        Layout.alignment: Qt.AlignBottom
-        enabled: app.stt_configured &&
-                 (app.state === DsnoteApp.StateIdle || app.state === DsnoteApp.StateListeningManual)
-        text: qsTr("Listen")
-        onPressed: {
-            if (_settings.speech_mode === Settings.SpeechManual &&
-                    app.state === DsnoteApp.StateIdle &&
-                    app.speech === DsnoteApp.SpeechStateNoSpeech) {
-                app.listen()
+            Item {
+                width: _icon.width
+                height: _icon.height
+                Layout.alignment: Qt.AlignBottom
+
+                SpeechIndicator {
+                    id: indicator
+                    anchors.centerIn: parent
+                    width: 27
+                    height: 24
+                    visible: app.state !== DsnoteApp.StateTranscribingFile &&
+                             app.state !== DsnoteApp.StateWritingSpeechToFile
+                    status: {
+                        switch (app.task_state) {
+                        case DsnoteApp.TaskStateIdle: return 0;
+                        case DsnoteApp.TaskStateSpeechDetected: return 1;
+                        case DsnoteApp.TaskStateProcessing: return 2;
+                        case DsnoteApp.TaskStateInitializing: return 3;
+                        case DsnoteApp.TaskStateSpeechPlaying: return 4;
+                        }
+                        return 0;
+                    }
+                    color: palette.text
+                }
+
+                BusyIndicator {
+                    anchors.centerIn: parent
+                    width: 24
+                    height: 24
+                    running: app.state === DsnoteApp.StateTranscribingFile ||
+                             app.state === DsnoteApp.StateWritingSpeechToFile
+                    visible: running
+                }
+            }
+
+            Frame {
+                id: frame
+                topPadding: 2
+                bottomPadding: 2
+                Layout.fillWidth: true
+                Layout.preferredHeight: Math.max(_combo.height,
+                                                 speechText.implicitHeight + topPadding + bottomPadding)
+                background: Rectangle {
+                    color: palette.button
+                    border.color: palette.buttonText
+                    opacity: 0.3
+                    radius: 3
+                }
+
+                Label {
+                    id: speechText
+                    anchors.fill: parent
+                    wrapMode: TextEdit.WordWrap
+                    verticalAlignment: Text.AlignVCenter
+
+                    property string placeholderText: {
+                        if (app.speech === DsnoteApp.TaskStateInitializing)
+                            return qsTr("Getting ready, please wait...")
+                        if (app.state === DsnoteApp.StateWritingSpeechToFile)
+                            return qsTr("Writing speech to file...") +
+                                    (app.speech_to_file_progress > 0.0 ? " " +
+                                                                         Math.round(app.speech_to_file_progress * 100) + "%" : "")
+                        if (app.task_state === DsnoteApp.TaskStateProcessing)
+                            return qsTr("Processing, please wait...")
+                        if (app.state === DsnoteApp.StateTranscribingFile)
+                            return qsTr("Transcribing audio file...") +
+                                    (app.transcribe_progress > 0.0 ? " " +
+                                                                     Math.round(app.transcribe_progress * 100) + "%" : "")
+                        if (app.state === DsnoteApp.StateListeningSingleSentence ||
+                                app.state === DsnoteApp.StateListeningAuto ||
+                                app.state === DsnoteApp.StateListeningManual) return qsTr("Say something...")
+
+                        if (app.state === DsnoteApp.StatePlayingSpeech) return qsTr("Reading a note...")
+
+                        return ""
+                    }
+
+                    font.italic: true
+                    text: app.intermediate_text.length === 0 ? placeholderText : app.intermediate_text
+                    opacity: app.intermediate_text.length === 0 ? 0.6 : 1.0
+                }
+            }
+
+            Button {
+                id: cancelButton
+                Layout.alignment: Qt.AlignBottom
+                icon.name: "action-unavailable-symbolic"
+                enabled: app.task_state === DsnoteApp.TaskStateProcessing ||
+                         app.task_state === DsnoteApp.TaskStateInitializing ||
+                         app.state === DsnoteApp.StateTranscribingFile ||
+                         app.state === DsnoteApp.StateListeningSingleSentence ||
+                         app.state === DsnoteApp.StateListeningAuto ||
+                         app.state === DsnoteApp.StatePlayingSpeech ||
+                         app.state === DsnoteApp.StateWritingSpeechToFile ||
+                         app.state === DsnoteApp.StateTranslating
+                text: qsTr("Cancel")
+                onClicked: app.cancel()
             }
         }
-        onClicked: {
-            if (_settings.speech_mode !== Settings.SpeechManual &&
-                    app.state === DsnoteApp.StateIdle &&
-                    app.speech === DsnoteApp.SpeechStateNoSpeech)
-                app.listen()
-        }
-        onReleased: {
-            if (app.state === DsnoteApp.StateListeningManual)
-                app.stop_listen()
-        }
-    }
-
-    Button {
-        icon.name: "audio-speakers-symbolic"
-        Layout.alignment: Qt.AlignBottom
-        enabled: app.tts_configured && textArea.text.length > 0 && app.state === DsnoteApp.StateIdle
-        text: qsTr("Read")
-        onClicked: app.play_speech()
-    }
-
-    Button {
-        id: cancelButton
-        Layout.alignment: Qt.AlignBottom
-        icon.name: "action-unavailable-symbolic"
-        enabled: app.speech === DsnoteApp.SpeechStateSpeechDecodingEncoding ||
-                 app.speech === DsnoteApp.SpeechStateSpeechInitializing ||
-                 app.state === DsnoteApp.StateTranscribingFile ||
-                 app.state === DsnoteApp.StateListeningSingleSentence ||
-                 app.state === DsnoteApp.StateListeningAuto ||
-                 app.state === DsnoteApp.StatePlayingSpeech ||
-                 app.state === DsnoteApp.StateWritingSpeechToFile
-        text: qsTr("Cancel")
-        onClicked: app.cancel()
     }
 }

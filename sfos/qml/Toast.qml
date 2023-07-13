@@ -18,7 +18,7 @@ Rectangle {
 
     visible: opacity > 0.0
     opacity: timer.running ? 1.0 : 0.0
-    Behavior on opacity { NumberAnimation { duration: 150 } }
+    Behavior on opacity { FadeAnimator { duration: 150 } }
 
     Timer {
         id: timer

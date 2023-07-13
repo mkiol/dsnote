@@ -11,7 +11,9 @@ import Sailfish.Silica 1.0
 Dialog {
     id: root
 
-    canAccept: nameField.text.trim().length > 0
+    property bool translated: false
+
+    canAccept: nameField.text.trim().length !== 0
 
     Column {
         width: parent.width
@@ -67,6 +69,10 @@ Dialog {
 
         var file_path = _settings.file_save_dir + "/" + file_name
 
-        app.speech_to_file(file_path)
+        if (_settings.translator_mode) {
+            app.speech_to_file_translator(root.translated, file_path)
+        } else {
+            app.speech_to_file(file_path)
+        }
     }
 }

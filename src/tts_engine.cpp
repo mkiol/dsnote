@@ -8,13 +8,13 @@
 #include "tts_engine.hpp"
 
 #include <dirent.h>
-#include <ssplit.h>
 #include <sys/stat.h>
 
 #include <algorithm>
 #include <array>
 
 #include "logger.hpp"
+#include "text_tools.hpp"
 
 std::ostream& operator<<(std::ostream& os,
                          const tts_engine::model_files_t& model_files) {
@@ -152,7 +152,7 @@ void tts_engine::set_state(state_t new_state) {
     if (m_shutting_down) new_state = state_t::idle;
 
     if (m_state != new_state) {
-        LOGD("state: " << m_state << " => " << new_state);
+        LOGD("tts engine state: " << m_state << " => " << new_state);
         m_state = new_state;
         m_call_backs.state_changed(m_state);
     }
@@ -174,19 +174,15 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(
     const std::string& text) const {
     std::vector<tts_engine::task_t> tasks;
 
-    ug::ssplit::SentenceSplitter ssplit{};
+    auto [parts, _] = text_tools::split(text, m_config.nb_data);
+    if (!parts.empty()) {
+        tasks.reserve(parts.size());
 
-    if (!m_config.nb_data.empty()) ssplit.loadFromSerialized(m_config.nb_data);
+        for (auto& part : parts)
+            tasks.push_back(task_t{std::move(part), false});
 
-    ug::ssplit::SentenceStream sentence_stream{
-        text, ssplit,
-        ug::ssplit::SentenceStream::splitmode::one_paragraph_per_line};
-    std::string_view snt;
-
-    while (sentence_stream >> snt)
-        if (!snt.empty()) tasks.push_back(task_t{std::string{snt}, false});
-
-    if (!tasks.empty()) tasks.back().last = true;
+        tasks.back().last = true;
+    }
 
     return tasks;
 }

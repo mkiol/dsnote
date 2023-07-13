@@ -11,9 +11,7 @@ import QtQuick.Controls 2.15
 DialogPage {
     id: root
 
-    SectionLabel {
-        text: qsTr("Changes")
-    }
+    title: qsTr("Changes")
 
     SectionLabel {
         text: qsTr("Version %1").arg("3.1.5")

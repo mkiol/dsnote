@@ -41,6 +41,13 @@ if(BUILD_VOSK)
     install(FILES "${external_lib_dir}/libvosk.so" DESTINATION lib)
 endif()
 
+if(BUILD_BERGAMOT)
+    install(FILES "${external_lib_dir}/libbergamot_api.so" DESTINATION lib)
+    if(arch_x8664)
+        install(FILES "${external_lib_dir}/libbergamot_api-fallback.so" DESTINATION lib)
+    endif()
+endif()
+
 if(WITH_SYSTEMD_SERVICE)
     configure_file("${systemd_dir}/${id}.service" "${PROJECT_BINARY_DIR}/${info_binary_id}.service")
     install(FILES "${PROJECT_BINARY_DIR}/${info_binary_id}.service" DESTINATION lib/systemd/user)

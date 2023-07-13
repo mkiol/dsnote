@@ -208,6 +208,8 @@ int main(int argc, char* argv[]) {
             QGuiApplication::exec();
 
             exit_program();
+
+            [[fallthrough]];
         }
         case settings::launch_mode_t::app_stanalone:
             qDebug() << "starting standalone app";

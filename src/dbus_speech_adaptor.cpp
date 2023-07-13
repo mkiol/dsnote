@@ -39,6 +39,30 @@ int SpeechAdaptor::currentTask() const
     return qvariant_cast< int >(parent()->property("CurrentTask"));
 }
 
+QString SpeechAdaptor::defaultMntLang() const
+{
+    // get the value of property DefaultMntLang
+    return qvariant_cast< QString >(parent()->property("DefaultMntLang"));
+}
+
+void SpeechAdaptor::setDefaultMntLang(const QString &value)
+{
+    // set the value of property DefaultMntLang
+    parent()->setProperty("DefaultMntLang", QVariant::fromValue(value));
+}
+
+QString SpeechAdaptor::defaultMntOutLang() const
+{
+    // get the value of property DefaultMntOutLang
+    return qvariant_cast< QString >(parent()->property("DefaultMntOutLang"));
+}
+
+void SpeechAdaptor::setDefaultMntOutLang(const QString &value)
+{
+    // set the value of property DefaultMntOutLang
+    parent()->setProperty("DefaultMntOutLang", QVariant::fromValue(value));
+}
+
 QString SpeechAdaptor::defaultSttLang() const
 {
     // get the value of property DefaultSttLang
@@ -87,10 +111,16 @@ void SpeechAdaptor::setDefaultTtsModel(const QString &value)
     parent()->setProperty("DefaultTtsModel", QVariant::fromValue(value));
 }
 
-int SpeechAdaptor::speech() const
+QVariantList SpeechAdaptor::mntLangList() const
 {
-    // get the value of property Speech
-    return qvariant_cast< int >(parent()->property("Speech"));
+    // get the value of property MntLangList
+    return qvariant_cast< QVariantList >(parent()->property("MntLangList"));
+}
+
+QVariantMap SpeechAdaptor::mntLangs() const
+{
+    // get the value of property MntLangs
+    return qvariant_cast< QVariantMap >(parent()->property("MntLangs"));
 }
 
 int SpeechAdaptor::state() const
@@ -121,6 +151,12 @@ QVariantList SpeechAdaptor::sttTtsLangList() const
 {
     // get the value of property SttTtsLangList
     return qvariant_cast< QVariantList >(parent()->property("SttTtsLangList"));
+}
+
+int SpeechAdaptor::taskState() const
+{
+    // get the value of property TaskState
+    return qvariant_cast< int >(parent()->property("TaskState"));
 }
 
 QVariantMap SpeechAdaptor::translations() const
@@ -181,6 +217,22 @@ int SpeechAdaptor::KeepAliveTask(int task)
     int timer;
     QMetaObject::invokeMethod(parent(), "KeepAliveTask", Q_RETURN_ARG(int, timer), Q_ARG(int, task));
     return timer;
+}
+
+QVariantMap SpeechAdaptor::MntGetOutLangs(const QString &lang)
+{
+    // handle method call org.mkiol.Speech.MntGetOutLangs
+    QVariantMap out_langs;
+    QMetaObject::invokeMethod(parent(), "MntGetOutLangs", Q_RETURN_ARG(QVariantMap, out_langs), Q_ARG(QString, lang));
+    return out_langs;
+}
+
+int SpeechAdaptor::MntTranslate(const QString &text, const QString &lang, const QString &out_lang)
+{
+    // handle method call org.mkiol.Speech.MntTranslate
+    int task;
+    QMetaObject::invokeMethod(parent(), "MntTranslate", Q_RETURN_ARG(int, task), Q_ARG(QString, text), Q_ARG(QString, lang), Q_ARG(QString, out_lang));
+    return task;
 }
 
 int SpeechAdaptor::Reload()

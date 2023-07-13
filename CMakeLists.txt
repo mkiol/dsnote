@@ -23,9 +23,9 @@ option(BUILD_VOSK "download vosk, build and install shared lib" ON)
 option(BUILD_LIBARCHIVE "download libarchive, build and link statically" ON)
 option(BUILD_FMT "download fmt, build and link statically" ON)
 option(BUILD_CATCH2 "download catch2, build and link statically" ON)
-option(BUILD_WHISPERCPP "download whisper.cpp, build and link statically" ON)
+option(BUILD_WHISPERCPP "download whisper.cpp, build and install shared lib" ON)
 option(BUILD_WEBRTCVAD "download webrtc vad, build and link statically" ON)
-option(BUILD_OPENBLAS "download openblas, build and link shared lib" ON)
+option(BUILD_OPENBLAS "download openblas, build and install shared lib" ON)
 option(BUILD_XZ "download xz lib, build and link statically" ON)
 option(BUILD_RNNOISE "download rnnoise lib, build and link statically" ON)
 option(BUILD_PYBIND11 "download pybind11, build and link statically" ON)
@@ -33,7 +33,8 @@ option(BUILD_PYTHON_MODULE "make python module archive" OFF)
 option(BUILD_ESPEAK "download espeak-ng lib, build and link statically" ON)
 option(BUILD_PIPER "download piper lib, build and link statically" ON)
 option(BUILD_SSPLITCPP "download ssplitcpp lib, build and link statically" ON)
-option(BUILD_RHVOICE "download rhvoice lib, build and link statically" ON)
+option(BUILD_RHVOICE "download rhvoice lib, build and install shared lib" ON)
+option(BUILD_BERGAMOT "download bergamot-translator lib, build and install shared lib" ON)
 
 if(${WITH_DESKTOP} AND ${WITH_SFOS})
     message(FATAL_ERROR "options WITH_DESKTOP and WITH_SFOS cannot be set together")
@@ -76,9 +77,9 @@ set(info_webpage "https://github.com/mkiol/${id}")
 set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
-set(info_conf_version "19")
+set(info_conf_version "20")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · Åke Engelbrektson · L'Africain")
-set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · Piper · RHVoice · ssplit-cpp · eSpeak NG")
+set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · Piper · RHVoice · ssplit-cpp · eSpeak NG · Bergamot Translator")
 
 project(${id} VERSION 3.1.6)
 
@@ -226,6 +227,10 @@ set(dsnote_lib_sources
     ${sources_dir}/simdjson.cpp
     ${sources_dir}/py_executor.hpp
     ${sources_dir}/py_executor.cpp
+    ${sources_dir}/text_tools.hpp
+    ${sources_dir}/text_tools.cpp
+    ${sources_dir}/mnt_engine.hpp
+    ${sources_dir}/mnt_engine.cpp
 )
 
 configure_file(config.h.in config.h)
@@ -389,14 +394,6 @@ else()
     list(APPEND deps_libs ${webrtcvad_path})
 endif()
 
-if(BUILD_OPENBLAS)
-    include(${cmake_path}/openblas.cmake)
-else()
-    pkg_search_module(openblas REQUIRED openblas)
-    list(APPEND deps_libs ${openblas_LIBRARIES})
-    list(APPEND includes ${openblas_INCLUDE_DIRS})
-endif()
-
 if(BUILD_XZ)
     include(${cmake_path}/xz.cmake)
 else()
@@ -458,6 +455,25 @@ else()
     pkg_search_module(pybind11 REQUIRED pybind11)
     list(APPEND deps_libs ${pybind11_LIBRARIES})
     list(APPEND includes ${pybind11_INCLUDE_DIRS})
+endif()
+
+if(BUILD_BERGAMOT)
+    include(${cmake_path}/bergamot.cmake)
+else()
+    find_library(bergamot_path bergamot_api REQUIRED)
+    list(APPEND deps_libs ${bergamot_path})
+    if(arch_x8664)
+        find_library(bergamotfallback_path bergamot_api-fallback REQUIRED)
+        list(APPEND deps_libs ${bergamotfallback_path})
+    endif()
+endif()
+
+if(BUILD_OPENBLAS)
+    include(${cmake_path}/openblas.cmake)
+else()
+    pkg_search_module(openblas REQUIRED openblas)
+    list(APPEND deps_libs ${openblas_LIBRARIES})
+    list(APPEND includes ${openblas_INCLUDE_DIRS})
 endif()
 
 if(WITH_SFOS)

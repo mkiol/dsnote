@@ -6,13 +6,16 @@
  */
 
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 
 Item {
     id: root
 
     // status values:
-    // 0 - no speech, 1 - speech detected,
-    // 2 - speech decoding, 3 - speech initializing,
+    // 0 - idle
+    // 1 - speech detected,
+    // 2 - processing
+    // 3 - initializing,
     // 4 - speech playing
     property int status: 0
 
@@ -40,7 +43,7 @@ Item {
             width: root.width / 6
             height: root.height * value
             opacity: root.status !== 0 ? 1.0 : 0.5
-            Behavior on opacity { NumberAnimation { duration: 150 } }
+            Behavior on opacity { FadeAnimator { duration: 150 } }
 
             SequentialAnimation {
                 id: animation
@@ -91,9 +94,7 @@ Item {
             radius: root.width / 8
             color: root.color
             opacity: value == vid ? 1.0 : 0.0
-            Behavior on opacity {
-                 NumberAnimation { duration: 100 }
-            }
+            Behavior on opacity { FadeAnimator {} }
 
             width: root.width / 4
             height: root.height / 4

@@ -30,91 +30,9 @@ Page {
                 title: qsTr("Settings")
             }
 
-
-            PullDownMenu {
-                enabled: false
-                visible: busy
-                busy: service.busy || app.busy
+            SectionHeader {
+                text: qsTr("Speech to Text")
             }
-
-            ComboBox {
-                id: sttLangCombo
-                label: qsTr("Active Speech to Text model") + (enabled ? "" : (": " + qsTr("None")))
-                enabled: app.stt_configured && !service.busy && !app.busy
-                opacity: enabled ? 1.0 : Theme.opacityOverlay
-                currentIndex: app.active_stt_model_idx
-                menu: ContextMenu {
-                    Repeater {
-                        model: app.available_stt_models
-                        MenuItem { text: modelData }
-                    }
-                }
-
-                onCurrentIndexChanged: {
-                    app.set_active_stt_model_idx(currentIndex)
-                }
-
-                function update() {
-                    if (!app.busy && !service.busy && app.stt_configured) {
-                        sttLangCombo.currentIndex = app.active_stt_model_idx
-                    }
-                }
-
-                Connections {
-                    target: app
-                    onAvailable_stt_models_changed: sttLangCombo.update()
-                    onBusyChanged: sttLangCombo.update()
-                    onStt_configuredChanged: sttLangCombo.update()
-                }
-                Connections {
-                    target: service
-                    onBusyChanged: sttLangCombo.update()
-                }
-            }
-
-            ComboBox {
-                id: ttsLangCombo
-                label: qsTr("Active Text to Speech model") + (enabled ? "" : (": " + qsTr("None")))
-                enabled: app.tts_configured && !service.busy && !app.busy
-                opacity: enabled ? 1.0 : Theme.opacityOverlay
-                currentIndex: app.active_tts_model_idx
-                menu: ContextMenu {
-                    Repeater {
-                        model: app.available_tts_models
-                        MenuItem { text: modelData }
-                    }
-                }
-
-                onCurrentIndexChanged: {
-                    app.set_active_tts_model_idx(currentIndex)
-                }
-
-                function update() {
-                    if (!app.busy && !service.busy && app.tts_configured) {
-                        ttsLangCombo.currentIndex = app.active_tts_model_idx
-                    }
-                }
-
-                Connections {
-                    target: app
-                    onAvailable_tts_models_changed: ttsLangCombo.update()
-                    onBusyChanged: ttsLangCombo.update()
-                    onTts_configuredChanged: ttsLangCombo.update()
-                }
-                Connections {
-                    target: service
-                    onBusyChanged: ttsLangCombo.update()
-                }
-            }
-
-            Button {
-                enabled: !service.busy
-                text: qsTr("Languages")
-                anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: pageStack.push(Qt.resolvedUrl("LangsPage.qml"))
-            }
-
-            Spacer {}
 
             ComboBox {
                 label: qsTr("Listening mode")
@@ -137,9 +55,9 @@ Page {
                         _settings.speech_mode = Settings.SpeechManual
                     }
                 }
-                description: qsTr("One sentence: Clicking on the bottom panel starts listening, which ends when the first sentence is recognized.\n" +
-                                  "Press and hold: Pressing and holding on the bottom panel enables listening. When you stop holding, listening will turn off.\n" +
-                                  "Always on: Listening is always turn on.")
+                description: qsTr("One sentence: Clicking on the 'Listen' button starts listening, which ends when the first sentence is recognized.\n" +
+                                  "Press and hold: Pressing and holding the 'Listen' button enables listening. When you stop holding, listening will turn off.\n" +
+                                  "Always on: After clicking on the 'Listen' button, listening is always turn on.")
             }
 
             ComboBox {
@@ -166,6 +84,25 @@ Page {
             }
 
             TextSwitch {
+                visible: _settings.py_supported()
+                checked: _settings.restore_punctuation
+                automaticCheck: false
+                text: qsTr("Restore punctuation")
+                description: qsTr("Enable advanced punctuation restoration after speech recognition. To make it work, " +
+                                  "make sure you have enabled 'Punctuation' model for your language.") + " " +
+                             qsTr("When this option is enabled model initialization takes much longer and memory usage is much higher.")
+                onClicked: {
+                    _settings.restore_punctuation = !_settings.restore_punctuation
+                }
+            }
+
+            PaddedLabel {
+                visible: _settings.py_supported() && _settings.restore_punctuation && !app.ttt_configured
+                color: Theme.errorColor
+                text: qsTr("To make 'Restore punctuation' work, download 'Punctuation' model.")
+            }
+
+            TextSwitch {
                 visible: false
                 checked: _settings.translate
                 automaticCheck: false
@@ -174,6 +111,10 @@ Page {
                 onClicked: {
                     _settings.translate = !_settings.translate
                 }
+            }
+
+            SectionHeader {
+                text: qsTr("Other")
             }
 
             ItemBox {
@@ -195,33 +136,6 @@ Page {
                         text: qsTr("Set default")
                         onClicked: {
                             _settings.models_dir = ""
-                        }
-                    }
-                }
-            }
-
-            ExpandingSectionGroup {
-                visible: _settings.py_supported()
-                ExpandingSection {
-                    title: qsTr("Experiments")
-
-                    content.sourceComponent: Column {
-                        TextSwitch {
-                            checked: _settings.restore_punctuation
-                            automaticCheck: false
-                            text: qsTr("Restore punctuation")
-                            description: qsTr("Enable advanced punctuation restoration after speech recognition. To make it work, " +
-                                              "make sure you have enabled 'Punctuation' model for your language.") + " " +
-                                         qsTr("When this option is enabled model initialization takes much longer and memory usage is much higher.")
-                            onClicked: {
-                                _settings.restore_punctuation = !_settings.restore_punctuation
-                            }
-                        }
-
-                        PaddedLabel {
-                            visible: _settings.py_supported() && _settings.restore_punctuation && !app.ttt_configured
-                            color: Theme.errorColor
-                            text: qsTr("To make 'Restore punctuation' work, download 'Punctuation' model.")
                         }
                     }
                 }

@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.0
+import QtQuick 2.6
 import Sailfish.Silica 1.0
 
 FocusScope {
@@ -15,10 +15,11 @@ FocusScope {
     property alias searchPlaceholderText: search.placeholderText
     property int noSearchCount: 10
     property var view
+    property alias combo: _combo
+    property alias comboModel: _comboRepeater.model
 
-    implicitHeight: column.height
-
-    onHeightChanged: view.scrollToTop()
+    height: column.height
+    onHeightChanged: view.positionViewAtBeginning()
 
     Column {
         id: column
@@ -32,7 +33,7 @@ FocusScope {
             id: search
             visible: root.view.model.filter.length !== 0 ||
                      root.view.model.count > root.noSearchCount
-            width: root.width
+            width: parent.width
 
             onActiveFocusChanged: {
                 if (activeFocus) root.view.currentIndex = -1
@@ -40,6 +41,20 @@ FocusScope {
 
             onTextChanged: {
                 root.view.model.filter = text.toLowerCase().trim()
+            }
+        }
+
+        ComboBox {
+            id: _combo
+
+            width: parent.width
+            opacity: enabled ? 1.0 : Theme.opacityOverlay
+            valueColor: enabled ? Theme.highlightColor : Theme.secondaryHighlightColor
+            menu: ContextMenu {
+                Repeater {
+                    id: _comboRepeater
+                    MenuItem { text: modelData }
+                }
             }
         }
     }

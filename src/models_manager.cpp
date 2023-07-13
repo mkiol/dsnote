@@ -111,6 +111,9 @@ QDebug operator<<(QDebug d, models_manager::model_role role) {
         case models_manager::model_role::tts:
             d << "tts";
             break;
+        case models_manager::model_role::mnt:
+            d << "mnt";
+            break;
     }
 
     return d;
@@ -141,6 +144,9 @@ QDebug operator<<(QDebug d, models_manager::model_engine engine) {
             break;
         case models_manager::model_engine::tts_rhvoice:
             d << "tts-rhvoice";
+            break;
+        case models_manager::model_engine::mnt_bergamot:
+            d << "mnt-bergamot";
             break;
     }
 
@@ -212,11 +218,63 @@ void models_manager::set_default_model_for_lang(const QString& model_id) {
             settings::instance()->set_default_tts_model_for_lang(model.lang_id,
                                                                  model_id);
             break;
+        case model_role::mnt:
         case model_role::ttt:
             throw std::runtime_error("invalid model role");
     }
 
     emit models_changed();
+}
+
+std::unordered_map<QString, models_manager::lang_basic_t>
+models_manager::available_langs_of_role_map(model_role role) const {
+    std::unordered_map<QString, lang_basic_t> map;
+
+    if (m_langs_of_role.count(role) == 0) return map;
+
+    const auto& lang_ids = m_langs_of_role.at(role);
+
+    std::for_each(lang_ids.cbegin(), lang_ids.cend(), [&](const auto& lang_id) {
+        if (m_langs.count(lang_id) != 0 && lang_available(lang_id)) {
+            const auto& lang = m_langs.at(lang_id);
+            map.emplace(lang_id,
+                        lang_basic_t{lang_id, lang.first, lang.second});
+        }
+    });
+
+    return map;
+}
+
+std::unordered_map<QString, models_manager::lang_basic_t>
+models_manager::available_langs_map() const {
+    std::unordered_map<QString, lang_basic_t> map;
+
+    std::for_each(m_langs.cbegin(), m_langs.cend(), [&](const auto& pair) {
+        if (lang_available(pair.first)) {
+            map.emplace(pair.first, lang_basic_t{
+                                        pair.first,
+                                        pair.second.first,
+                                        pair.second.second,
+                                    });
+        }
+    });
+
+    return map;
+}
+
+std::unordered_map<QString, models_manager::lang_basic_t>
+models_manager::langs_map() const {
+    std::unordered_map<QString, lang_basic_t> map;
+
+    std::for_each(m_langs.cbegin(), m_langs.cend(), [&](const auto& pair) {
+        map.emplace(pair.first, lang_basic_t{
+                                    pair.first,
+                                    pair.second.first,
+                                    pair.second.second,
+                                });
+    });
+
+    return map;
 }
 
 std::vector<models_manager::lang_t> models_manager::langs() const {
@@ -260,9 +318,10 @@ std::vector<models_manager::model_t> models_manager::models(
                      pair.second.scorer_file_name.isEmpty()
                          ? ""
                          : dir.filePath(pair.second.scorer_file_name),
-                     pair.second.speaker, pair.second.score,
-                     pair.second.default_for_lang, pair.second.available,
-                     pair.second.downloading, pair.second.download_progress});
+                     pair.second.speaker, pair.second.trg_lang_id,
+                     pair.second.score, pair.second.default_for_lang,
+                     pair.second.available, pair.second.downloading,
+                     pair.second.download_progress});
             }
         });
 
@@ -297,13 +356,14 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
     for (const auto& [id, model] : m_models) {
         auto model_file = dir.filePath(model.file_name);
         if (!model.hidden && model.available && QFile::exists(model_file)) {
-            list.push_back(
-                {id, model.engine, model.lang_id, model.name, model_file,
-                 model.scorer_file_name.isEmpty()
-                     ? QString{}
-                     : dir.filePath(model.scorer_file_name),
-                 model.speaker, model.score, model.default_for_lang,
-                 model.available, model.downloading, model.download_progress});
+            list.push_back({id, model.engine, model.lang_id, model.name,
+                            model_file,
+                            model.scorer_file_name.isEmpty()
+                                ? QString{}
+                                : dir.filePath(model.scorer_file_name),
+                            model.speaker, model.trg_lang_id, model.score,
+                            model.default_for_lang, model.available,
+                            model.downloading, model.download_progress});
         }
     }
 
@@ -1013,6 +1073,21 @@ void models_manager::remove_empty_langs(langs_t& langs,
     }
 }
 
+models_manager::langs_of_role_t models_manager::make_langs_of_role(
+    const models_t& models) {
+    langs_of_role_t langs_of_role;
+
+    for (const auto& [_, model] : models) {
+        if (!model.hidden) {
+            auto [it, _] = langs_of_role.emplace(role_of_engine(model.engine),
+                                                 std::set<QString>{});
+            it->second.emplace(model.lang_id);
+        }
+    }
+
+    return langs_of_role;
+}
+
 bool models_manager::checksum_ok(const QString& checksum,
                                  const QString& checksum_quick,
                                  const QString& file_name) {
@@ -1052,6 +1127,8 @@ models_manager::model_role models_manager::role_of_engine(model_engine engine) {
         case model_engine::tts_espeak:
         case model_engine::tts_rhvoice:
             return model_role::tts;
+        case model_engine::mnt_bergamot:
+            return model_role::mnt;
     }
 
     throw std::runtime_error("unknown engine");
@@ -1067,6 +1144,8 @@ models_manager::model_engine models_manager::engine_from_name(
     if (name == QStringLiteral("tts_piper")) return model_engine::tts_piper;
     if (name == QStringLiteral("tts_espeak")) return model_engine::tts_espeak;
     if (name == QStringLiteral("tts_rhvoice")) return model_engine::tts_rhvoice;
+    if (name == QStringLiteral("mnt_bergamot"))
+        return model_engine::mnt_bergamot;
 
     throw std::runtime_error("unknown engine: " + name.toStdString());
 }
@@ -1077,7 +1156,6 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
     auto enabled_models = settings::instance()->enabled_models();
 
     QDir dir{settings::instance()->models_dir()};
-
 #ifdef ARCH_ARM_32
     auto has_neon_fp = cpu_tools::neon_supported();
 #endif
@@ -1108,6 +1186,8 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             scorer_checksum, scorer_checksum_quick;
         std::vector<QUrl> urls, scorer_urls;
         qint64 size = 0, scorer_size = 0;
+        QString trg_lang_id =
+            obj.value(QLatin1String{"trg_lang_id"}).toString();
         int score = obj.value(QLatin1String{"score"}).toInt(-1);
         bool available = false, exists = false;
         QString speaker = obj.value(QLatin1String{"speaker"}).toString();
@@ -1171,7 +1251,6 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
                 obj.value(QLatin1String{"scorer_urls"}).toArray();
             for (auto url : ascorer_urls)
                 scorer_urls.emplace_back(url.toString());
-
         } else if (models.count(model_alias_of) > 0) {
             const auto& alias = models.at(model_alias_of);
 
@@ -1192,6 +1271,12 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             if (speaker.isEmpty()) speaker = alias.speaker;
             exists = alias.exists;
             available = alias.available;
+            if (trg_lang_id.isEmpty()) trg_lang_id = alias.trg_lang_id;
+
+            if (engine == model_engine::mnt_bergamot && trg_lang_id.isEmpty()) {
+                qWarning() << "no target lang for mnt model:" << model_id;
+                continue;
+            }
         } else {
             qWarning() << "invalid model alias:" << model_alias_of;
             continue;
@@ -1239,6 +1324,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
                 case model_role::tts:
                     return settings::instance()->default_tts_model_for_lang(
                                lang_id) == model_id;
+                case model_role::mnt:
                 case model_role::ttt:
                     return false;
             }
@@ -1262,6 +1348,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             /*scorer_urls=*/std::move(scorer_urls),
             /*scorer_size=*/scorer_size,
             /*speaker=*/speaker,
+            /*trg_lang_id=*/std::move(trg_lang_id),
             /*score=*/score,
             /*hidden=*/obj.value(QLatin1String{"hidden"}).toBool(false),
             /*default_for_lang=*/is_default_model_for_lang,
@@ -1313,6 +1400,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
                         settings::instance()->set_default_tts_model_for_lang(
                             model.lang_id, {});
                         break;
+                    case model_role::mnt:
                     case model_role::ttt:
                         break;
                 }
@@ -1345,6 +1433,7 @@ bool models_manager::parse_models_file_might_reset() {
         do {
             m_pending_reload = false;
             parse_models_file(false, &m_langs, &m_models);
+            m_langs_of_role = make_langs_of_role(m_models);
         } while (m_pending_reload);
 
         qDebug() << "models changed";
@@ -1422,6 +1511,7 @@ QString models_manager::file_name_from_id(const QString& id,
         case model_engine::tts_piper:
         case model_engine::tts_espeak:
         case model_engine::tts_rhvoice:
+        case model_engine::mnt_bergamot:
             return id;
     }
 
