@@ -89,22 +89,23 @@ Following languages are supported:
 Language models can be downloaded directly from the app.
 
 Details of models which are currently configured for download are described in
-[models.json](https://github.com/mkiol/dsnote/blob/main/config/models.json).
+[models.json (GitHub)](https://github.com/mkiol/dsnote/blob/main/config/models.json) or
+[models.json (GitLab)](https://gitlab.com/mkiol/dsnote/-/blob/main/config/models.json).
 
-## Systemd service and D-Bus API (Sailfish OS only)
+## Contributions
 
-**Speech Note** provides systemd service (`harbour-dsnote`) for speech-to-text/text-to-speech conversion.
-This service is accessible via D-Bus interface. The detailed API description is in
-[org.mkiol.Speech.xml](https://github.com/mkiol/dsnote/blob/main/dbus/org.mkiol.Speech.xml) document.
+Any contribution is very welcome!
 
-An example of QML-only and easy to re-use component that encapsulate complexity of D-Bus
-interface is [SpeechService.qml](https://github.com/mkiol/dskeyboard/blob/main/qml/SpeechService.qml)
-(from [Speech Keyboard](https://github.com/mkiol/dskeyboard) or [Papago](https://github.com/mkiol/papago) apps).
+Project is hosted both on [GitHub](https://github.com/mkiol/dsnote) and [GitLab](https://gitlab.com/mkiol/dsnote).
+Feel free to make a PR/MR, report an issue or reqest for new feature on the platform you prefer the most.
 
-## Translations
+### Translation
 
-Translation files in Qt format are in [translations dir](https://github.com/mkiol/dsnote/tree/main/translations).
-Any new translation contribution is very welcome.
+Translation files in Qt format are in [translations dir (GitHub)](https://github.com/mkiol/dsnote/tree/main/translations) or
+[translations dir (GitLab)](https://gitlab.com/mkiol/dsnote/-/tree/main/translations).
+
+Preferred way to contribute translation is via [Transifex service](https://explore.transifex.com/mkiol/dsnote/),
+but if you would like to make a direct PR/MR, please do it.
 
 ## Download
 
@@ -121,7 +122,7 @@ Following tools/libraries are required for building (example of packages for Ubu
 `libboost-all-dev`.
 
 ```
-git clone https://github.com/mkiol/dsnote.git
+git clone <git repository url>
 
 cd dsnote
 mkdir build
@@ -140,7 +141,7 @@ To make build without support for Python components, add `-DWITH_PY=OFF` in cmak
 ### Flatpak
 
 ```
-git clone https://github.com/mkiol/dsnote.git
+git clone <git repository url>
 
 cd dsnote/flatpak
 
@@ -151,7 +152,7 @@ flatpak-builder --user --install-deps-from=flathub --repo="/path/to/local/flatpa
 ### Sailfish OS
 
 ```
-git clone https://github.com/mkiol/dsnote.git
+git clone <git repository url>
 
 cd dsnote
 mkdir build
