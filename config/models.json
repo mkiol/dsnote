@@ -5865,20 +5865,116 @@
             "size": "100860046"
         },
         {
-            "name": "Polski na Angielski",
-            "model_id": "pl_bergamot_plen",
+            "name": "English to German",
+            "model_id": "en_bergamot_ende",
             "engine": "mnt_bergamot",
-            "lang_id": "pl",
-            "trg_lang_id": "en",
-            "checksum": "7ee46677",
-            "checksum_quick": "90872360",
+            "lang_id": "en",
+            "trg_lang_id": "de",
+            "checksum": "f47a474",
+            "checksum_quick": "84562c91",
             "comp": "dir",
             "urls": [
-                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/plen/model.plen.intgemm.alphas.bin",
-                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/plen/lex.50.50.plen.s2t.bin",
-                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/plen/vocab.plen.spm"
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/ende/model.ende.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/ende/lex.50.50.ende.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/ende/vocab.deen.spm"
             ],
-            "size": "22869702"
+            "size": "21876940"
+        },
+        {
+            "name": "English to Bulgarian",
+            "model_id": "en_bergamot_enbg",
+            "engine": "mnt_bergamot",
+            "lang_id": "en",
+            "trg_lang_id": "bg",
+            "checksum": "664b1e89",
+            "checksum_quick": "82dbba96",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enbg/model.enbg.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enbg/lex.50.50.enbg.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enbg/vocab.bgen.spm"
+            ],
+            "size": "23676444"
+        },
+        {
+            "name": "English to Czech",
+            "model_id": "en_bergamot_encs",
+            "engine": "mnt_bergamot",
+            "lang_id": "en",
+            "trg_lang_id": "cs",
+            "checksum": "5c253100",
+            "checksum_quick": "d08e1f02",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/encs/model.encs.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/encs/lex.50.50.encs.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/encs/vocab.csen.spm"
+            ],
+            "size": "2147483"
+        },
+        {
+            "name": "English to Spanish",
+            "model_id": "en_bergamot_enes",
+            "engine": "mnt_bergamot",
+            "lang_id": "en",
+            "trg_lang_id": "es",
+            "checksum": "c6c24321",
+            "checksum_quick": "41a87da6",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enes/model.enes.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enes/lex.50.50.enes.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enes/vocab.esen.spm"
+            ],
+            "size": "21321514"
+        },
+        {
+            "name": "English to Estonian",
+            "model_id": "en_bergamot_enet",
+            "engine": "mnt_bergamot",
+            "lang_id": "en",
+            "trg_lang_id": "et",
+            "checksum": "3e63731",
+            "checksum_quick": "27cc7eb4",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enet/model.enet.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enet/lex.50.50.enet.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enet/vocab.eten.spm"
+            ],
+            "size": "20678152"
+        },
+        {
+            "name": "English to French",
+            "model_id": "en_bergamot_enfr",
+            "engine": "mnt_bergamot",
+            "lang_id": "en",
+            "trg_lang_id": "fr",
+            "checksum": "21ac5f46",
+            "checksum_quick": "b2068a71",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enfr/model.enfr.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enfr/lex.50.50.enfr.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enfr/vocab.fren.spm"
+            ],
+            "size": "25867035"
+        },
+        {
+            "name": "English to Italian",
+            "model_id": "en_bergamot_enit",
+            "engine": "mnt_bergamot",
+            "lang_id": "en",
+            "trg_lang_id": "it",
+            "checksum": "5168f02",
+            "checksum_quick": "d527491b",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enit/model.enit.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enit/lex.50.50.enit.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enit/vocab.enit.spm"
+            ],
+            "size": "22456876"
         },
         {
             "name": "English to Polish",
@@ -5895,6 +5991,355 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enpl/vocab.enpl.spm"
             ],
             "size": "21613790"
+        },
+        {
+            "name": "English to Portuguese",
+            "model_id": "en_bergamot_enpt",
+            "engine": "mnt_bergamot",
+            "lang_id": "en",
+            "trg_lang_id": "pt",
+            "checksum": "8358aa27",
+            "checksum_quick": "9effbe81",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enpt/model.enpt.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enpt/lex.50.50.enpt.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enpt/vocab.enpt.spm"
+            ],
+            "size": "22311945"
+        },
+        {
+            "name": "English to Persian",
+            "model_id": "en_bergamot_enfa",
+            "engine": "mnt_bergamot",
+            "lang_id": "en",
+            "trg_lang_id": "fa",
+            "score": 0,
+            "checksum": "f5ee19ba",
+            "checksum_quick": "231b52fd",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enfa/model.enfa.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enfa/lex.50.50.enfa.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enfa/vocab.enfa.spm"
+            ],
+            "size": "23040864"
+        },
+        {
+            "name": "English to Dutch",
+            "model_id": "en_bergamot_ennl",
+            "engine": "mnt_bergamot",
+            "lang_id": "en",
+            "trg_lang_id": "nl",
+            "score": 0,
+            "checksum": "85dd38ce",
+            "checksum_quick": "2453b8a1",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/ennl/model.ennl.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/ennl/lex.50.50.ennl.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/ennl/vocab.ennl.spm"
+            ],
+            "size": "22451524"
+        },
+        {
+            "name": "English to Russian",
+            "model_id": "en_bergamot_enru",
+            "engine": "mnt_bergamot",
+            "lang_id": "en",
+            "trg_lang_id": "ru",
+            "score": 0,
+            "checksum": "9f1e053e",
+            "checksum_quick": "cb9a85c6",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enru/model.enru.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enru/lex.50.50.enru.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enru/vocab.enru.spm"
+            ],
+            "size": "21135281"
+        },
+        {
+            "name": "English to Ukrainian",
+            "model_id": "en_bergamot_enuk",
+            "engine": "mnt_bergamot",
+            "lang_id": "en",
+            "trg_lang_id": "uk",
+            "score": 0,
+            "checksum": "14b87616",
+            "checksum_quick": "970ea013",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enuk/model.enuk.intgemm8.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enuk/lex.enuk.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enuk/trgvocab.enuk.spm",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enuk/srcvocab.enuk.spm"
+            ],
+            "size": "37411199"
+        },
+        {
+            "name": "Català a anglès (Catalan to English)",
+            "model_id": "ca_bergamot_caen",
+            "engine": "mnt_bergamot",
+            "lang_id": "ca",
+            "trg_lang_id": "en",
+            "score": 0,
+            "checksum": "85b3c9d5",
+            "checksum_quick": "35a2d6fb",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/caen/model.caen.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/caen/lex.50.50.caen.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/caen/vocab.caen.spm"
+            ],
+            "size": "23205178"
+        },
+        {
+            "name": "Български към английски (Bulgarian to English)",
+            "model_id": "bg_bergamot_bgen",
+            "engine": "mnt_bergamot",
+            "lang_id": "bg",
+            "trg_lang_id": "en",
+            "checksum": "b9a743a0",
+            "checksum_quick": "a2005eb4",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/bgen/model.bgen.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/bgen/lex.50.50.bgen.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/bgen/vocab.bgen.spm"
+            ],
+            "size": "24252224"
+        },
+        {
+            "name": "Česky do angličtiny (Czech to English)",
+            "model_id": "cs_bergamot_csen",
+            "engine": "mnt_bergamot",
+            "lang_id": "cs",
+            "trg_lang_id": "en",
+            "checksum": "1b69825a",
+            "checksum_quick": "55bffb9e",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/csen/model.csen.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/csen/lex.50.50.csen.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/csen/vocab.csen.spm"
+            ],
+            "size": "22454499"
+        },
+        {
+            "name": "Deutsch in Englisch (German to English)",
+            "model_id": "de_bergamot_deen",
+            "engine": "mnt_bergamot",
+            "lang_id": "de",
+            "trg_lang_id": "en",
+            "checksum": "b40c4b71",
+            "checksum_quick": "d87f409f",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/deen/model.deen.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/deen/lex.50.50.deen.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/deen/vocab.deen.spm"
+            ],
+            "size": "22980866"
+        },
+        {
+            "name": "Español a ingles (Spanish to English)",
+            "model_id": "es_bergamot_esen",
+            "engine": "mnt_bergamot",
+            "lang_id": "es",
+            "trg_lang_id": "en",
+            "checksum": "f1692982",
+            "checksum_quick": "a2aa44cf",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/esen/model.esen.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/esen/lex.50.50.esen.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/esen/vocab.esen.spm"
+            ],
+            "size": "21835298"
+        },
+        {
+            "name": "Eesti keelest inglise (Estonian to English)",
+            "model_id": "et_bergamot_eten",
+            "engine": "mnt_bergamot",
+            "lang_id": "et",
+            "trg_lang_id": "en",
+            "checksum": "3b5520df",
+            "checksum_quick": "b0c470e4",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/eten/model.eten.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/eten/lex.50.50.eten.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/eten/vocab.eten.spm"
+            ],
+            "size": "21952316"
+        },
+        {
+            "name": "Français vers l'anglais (French to English)",
+            "model_id": "fr_bergamot_fren",
+            "engine": "mnt_bergamot",
+            "lang_id": "fr",
+            "trg_lang_id": "en",
+            "checksum": "6f83fb5a",
+            "checksum_quick": "efefd51",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/fren/model.fren.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/fren/lex.50.50.fren.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/fren/vocab.fren.spm"
+            ],
+            "size": "26799303"
+        },
+        {
+            "name": "Dall'italiano all'inglese (Italian to English)",
+            "model_id": "it_bergamot_iten",
+            "engine": "mnt_bergamot",
+            "lang_id": "it",
+            "trg_lang_id": "en",
+            "checksum": "b450332",
+            "checksum_quick": "3a3d6564",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/iten/model.iten.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/iten/lex.50.50.iten.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/iten/vocab.iten.spm"
+            ],
+            "size": "22939372"
+        },
+        {
+            "name": "Norsk til engelsk (Norwegian to English)",
+            "model_id": "no_bergamot_nben",
+            "engine": "mnt_bergamot",
+            "lang_id": "no",
+            "trg_lang_id": "en",
+            "score": 0,
+            "checksum": "94cab889",
+            "checksum_quick": "d4ce5b9b",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/nben/model.nben.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/nben/lex.50.50.nben.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/nben/vocab.nben.spm"
+            ],
+            "size": "14988104"
+        },
+        {
+            "name": "Polski na angielski (Polish to English)",
+            "model_id": "pl_bergamot_plen",
+            "engine": "mnt_bergamot",
+            "lang_id": "pl",
+            "trg_lang_id": "en",
+            "checksum": "7ee46677",
+            "checksum_quick": "90872360",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/plen/model.plen.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/plen/lex.50.50.plen.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/plen/vocab.plen.spm"
+            ],
+            "size": "22869702"
+        },
+        {
+            "name": "Português para inglês (Portuguese to English)",
+            "model_id": "pt_bergamot_pten",
+            "engine": "mnt_bergamot",
+            "lang_id": "pt",
+            "trg_lang_id": "en",
+            "checksum": "7452e817",
+            "checksum_quick": "55e85931",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/pten/model.pten.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/pten/lex.50.50.pten.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/pten/vocab.pten.spm"
+            ],
+            "size": "22768065"
+        },
+        {
+            "name": "فارسی به انگلیسی (Persian to English)",
+            "model_id": "fa_bergamot_faen",
+            "engine": "mnt_bergamot",
+            "lang_id": "fa",
+            "trg_lang_id": "en",
+            "score": 0,
+            "checksum": "39f48e0c",
+            "checksum_quick": "78a3747d",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/faen/model.faen.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/faen/lex.50.50.faen.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/faen/vocab.faen.spm"
+            ],
+            "size": "24191369"
+        },
+        {
+            "name": "Íslensku yfir á ensku (Icelandic to English)",
+            "model_id": "is_bergamot_isen",
+            "engine": "mnt_bergamot",
+            "lang_id": "is",
+            "trg_lang_id": "en",
+            "score": 0,
+            "checksum": "af7d1714",
+            "checksum_quick": "3ba2c665",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/isen/model.isen.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/isen/lex.50.50.isen.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/isen/vocab.isen.spm"
+            ],
+            "size": "20895807"
+        },
+        {
+            "name": "Nederlands naar Engels (Dutch to English)",
+            "model_id": "nl_bergamot_nlen",
+            "engine": "mnt_bergamot",
+            "lang_id": "nl",
+            "trg_lang_id": "en",
+            "score": 0,
+            "checksum": "ce1f8b0e",
+            "checksum_quick": "cc8845c5",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/nlen/model.nlen.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/nlen/lex.50.50.nlen.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/nlen/vocab.nlen.spm"
+            ],
+            "size": "22897125"
+        },
+        {
+            "name": "Русский на английский (Russian to English)",
+            "model_id": "ru_bergamot_ruen",
+            "engine": "mnt_bergamot",
+            "lang_id": "ru",
+            "trg_lang_id": "en",
+            "score": 0,
+            "checksum": "89827935",
+            "checksum_quick": "e41dee41",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/ruen/model.ruen.intgemm.alphas.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/ruen/lex.50.50.ruen.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/ruen/vocab.ruen.spm"
+            ],
+            "size": "23176440"
+        },
+        {
+            "name": "Українська на англійську (Ukrainian to English)",
+            "model_id": "uk_bergamot_uken",
+            "engine": "mnt_bergamot",
+            "lang_id": "uk",
+            "trg_lang_id": "en",
+            "score": 0,
+            "checksum": "ff7bb654",
+            "checksum_quick": "e0df9034",
+            "comp": "dir",
+            "urls": [
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/uken/model.uken.intgemm8.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/uken/lex.uken.s2t.bin",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/uken/srcvocab.uken.spm",
+                "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/uken/trgvocab.uken.spm"
+            ],
+            "size": "36872677"
         }
     ]
 }
