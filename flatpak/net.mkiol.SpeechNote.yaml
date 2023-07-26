@@ -388,7 +388,7 @@ modules:
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DBLAS_LIB_PATH=/app/lib
+      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
       - -DBLAS_INC_DIR=/app/include/openblas
       - -DUSE_INTRINSICS_SSE2=ON
       - -DUSE_INTRINSICS_SSE3=OFF
@@ -419,7 +419,7 @@ modules:
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DBLAS_LIB_PATH=/app/lib
+      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
       - -DBLAS_INC_DIR=/app/include/openblas
       - -DUSE_INTRINSICS_AVX512=OFF
     build-options:
