@@ -49,7 +49,7 @@ ToolButton {
 
     ToolTip {
         id: toolTip
-        visible: text.length !== 0 && (blink || hovered)
-        delay: blink ? 0 : Qt.styleHints.mousePressAndHoldInterval
+        visible: text.length !== 0 && (root.blink || hovered)
+        delay: root.blink ? 0 : Qt.styleHints.mousePressAndHoldInterval
     }
 }

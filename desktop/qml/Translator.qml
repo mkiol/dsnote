@@ -128,7 +128,7 @@ ColumnLayout {
                 second {
                     icon.name: "audio-speakers-symbolic"
                     enabled: app.mnt_configured && app.tts_configured && app.state === DsnoteApp.StateIdle
-                    comboToolTip: qsTr("Text to Speech model for language to translate from...")
+                    comboToolTip: qsTr("Text to Speech model for language to translate from.")
                     comboPlaceholderText: qsTr("No Text to Speech model")
                     comboFillWidth: true
                     combo {

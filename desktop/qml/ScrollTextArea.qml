@@ -13,6 +13,7 @@ Item {
     id: root
 
     property alias textArea: _textArea
+    property color textColor: palette.text
     property bool canUndo: true
     property bool canUndoFallback: false
     property bool canRedo: true
@@ -42,11 +43,19 @@ Item {
         enabled: root.enabled
         clip: true
 
-        opacity: enabled ? root._contextActive && !root._fitContent ? 0.4 : 1.0 : 0.0
+        opacity: enabled ? 1.0 : 0.0
         Behavior on opacity { OpacityAnimator { duration: 100 } }
 
         TextArea {
             id: _textArea
+
+            color: {
+                if (root._contextActive && !root._fitContent) {
+                    var c = root.textColor
+                    return Qt.rgba(c.r, c.g, c.b, 0.4)
+                }
+                return root.textColor
+            }
 
             wrapMode: TextEdit.WordWrap
             verticalAlignment: TextEdit.AlignTop
