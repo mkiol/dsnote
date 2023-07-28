@@ -5,6 +5,7 @@
         <file>qml/LangsPage.qml</file>
         <file>qml/SpeechIndicator.qml</file>
         <file>qml/PlaceholderLabel.qml</file>
+        <file>qml/PlaceholderLabelForLayout.qml</file>
         <file>qml/MainToolBar.qml</file>
         <file>qml/ToastNotification.qml</file>
         <file>qml/SectionLabel.qml</file>
@@ -18,7 +19,6 @@
         <file>qml/ComboButton.qml</file>
         <file>qml/DuoComboButton.qml</file>
         <file>qml/ScrollTextArea.qml</file>
-        <file>qml/BlinkToolButton.qml</file>
         <file>qml/Translator.qml</file>
         <file>qml/Notepad.qml</file>
         <file alias="config/models.json">../config/models.json</file>

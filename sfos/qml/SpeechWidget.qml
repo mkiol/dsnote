@@ -14,6 +14,10 @@ import harbour.dsnote.Dsnote 1.0
 SpeechPanel {
     id: root
 
+    visible: opacity > 0.0
+    opacity: enabled ? 1.0 : 0.0
+    Behavior on opacity { FadeAnimator { duration: 150 } }
+
     status: {
         switch (app.task_state) {
         case DsnoteApp.TaskStateIdle: return 0;

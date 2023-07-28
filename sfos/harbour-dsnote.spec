@@ -6,7 +6,7 @@ Name:       harbour-dsnote
 %define _unpackaged_files_terminate_build 0
 # << macros
 
-Summary:        Note taking and reading with Speech to Text and Text to Speech
+Summary:        Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation
 Version:        3.1.6
 Release:        1
 Group:          Qt/Qt
@@ -34,8 +34,11 @@ BuildRequires:  git
 BuildRequires:  boost-devel
 
 %description
-Note taking and reading with speech
-
+Speech Note let you take, read and translate notes in multiple languages.
+It uses Speech to Text, Text to Speech and Machine Translation to do so.
+Text and voice processing take place entirely offline, locally on your computer,
+without using a network connection. Your privacy is always respected.
+No data is sent to the Internet.
 
 %prep
 %setup -q -n %{name}-%{version}

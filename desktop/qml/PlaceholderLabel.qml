@@ -14,8 +14,10 @@ Label {
     anchors.verticalCenter: parent.verticalCenter
     anchors.margins: 3 * appWin.padding
     horizontalAlignment: Qt.AlignHCenter
-    wrapMode: Text.WordWrap
+    wrapMode: Text.Wrap
+    textFormat: Text.StyledText
     font.pixelSize: Qt.application.font.pixelSize * 1.2
-    opacity: 0.6
-    visible: listView.model.count === 0
+    visible: opacity > 0.0
+    opacity: enabled ? 0.6 : 0.0
+    Behavior on opacity { OpacityAnimator { duration: 150 } }
 }

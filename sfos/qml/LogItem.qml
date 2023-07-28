@@ -26,14 +26,14 @@ Row {
         Label {
             id: label1
             width: parent.width
-            wrapMode: Text.WordWrap
+            wrapMode: Text.Wrap
             color: Theme.highlightColor
         }
 
         Label {
             id: label2
             width: parent.width
-            wrapMode: Text.WordWrap
+            wrapMode: Text.Wrap
             font.pixelSize: Theme.fontSizeSmall
             color: Theme.highlightColor
             linkColor: Theme.primaryColor

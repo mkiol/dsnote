@@ -18,7 +18,7 @@ ToolTip {
         text: root.text
         font: root.font
         color: palette.buttonText
-        wrapMode: Text.WordWrap
+        wrapMode: Text.Wrap
         horizontalAlignment: Text.AlignHCenter
     }
 

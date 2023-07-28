@@ -12,6 +12,6 @@ import QtQuick.Layouts 1.3
 Label {
     Layout.fillWidth: true
     textFormat: Text.RichText
-    wrapMode: Text.WordWrap
+    wrapMode: Text.Wrap
     onLinkActivated: Qt.openUrlExternally(link)
 }

@@ -55,9 +55,12 @@ Page {
                         _settings.speech_mode = Settings.SpeechManual
                     }
                 }
-                description: qsTr("One sentence: Clicking on the 'Listen' button starts listening, which ends when the first sentence is recognized.\n" +
-                                  "Press and hold: Pressing and holding the 'Listen' button enables listening. When you stop holding, listening will turn off.\n" +
-                                  "Always on: After clicking on the 'Listen' button, listening is always turn on.")
+                description: "<i>" + qsTr("One sentence") + "</i>" + " — " + qsTr("Clicking on the %1 button starts listening, which ends when the first sentence is recognized.")
+                                .arg("<i>" + qsTr("Listen") + "</i>") + "<br/>" +
+                             "<i>" + qsTr("Press and hold") + "</i>" + " — " + qsTr("Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.")
+                                .arg("<i>" + qsTr("Listen") + "</i>") + "<br/>" +
+                             "<i>" + qsTr("Always on") + "</i>" + " — " + qsTr("After clicking on the %1 button, listening is always turn on.")
+                                .arg("<i>" + qsTr("Listen") + "</i>")
             }
 
             ComboBox {
@@ -87,9 +90,10 @@ Page {
                 visible: _settings.py_supported()
                 checked: _settings.restore_punctuation
                 automaticCheck: false
-                text: qsTr("Restore punctuation")
+                text: qsTr("Restore punctuation") + " 🧪"
                 description: qsTr("Enable advanced punctuation restoration after speech recognition. To make it work, " +
-                                  "make sure you have enabled 'Punctuation' model for your language.") + " " +
+                                  "make sure you have enabled %1 model for your language.")
+                             .arg("<i>" + qsTr("Punctuation") + "</i>") + " " +
                              qsTr("When this option is enabled model initialization takes much longer and memory usage is much higher.")
                 onClicked: {
                     _settings.restore_punctuation = !_settings.restore_punctuation
@@ -99,7 +103,8 @@ Page {
             PaddedLabel {
                 visible: _settings.py_supported() && _settings.restore_punctuation && !app.ttt_configured
                 color: Theme.errorColor
-                text: qsTr("To make 'Restore punctuation' work, download 'Punctuation' model.")
+                text: qsTr("To make %1 work, download %2 model.")
+                        .arg("<i>" + qsTr("Restore punctuation") + "</i>").arg("<i>" + qsTr("Punctuation") + "</i>")
             }
 
             TextSwitch {

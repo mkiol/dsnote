@@ -56,6 +56,7 @@ Dialog {
             anchors.fill: parent
             Label {
                 id: titleLabel
+
                 text: root.title
                 font.pixelSize: Qt.application.font.pixelSize * 1.2
                 elide: Label.ElideRight
@@ -66,7 +67,8 @@ Dialog {
             }
             ComboBox {
                 id: searchCombo
-                visible: !langsView
+
+                visible: !root.langsView
                 currentIndex: {
                     switch (service.models_model.roleFilter) {
                     case ModelsListModel.AllModels:
@@ -75,6 +77,10 @@ Dialog {
                         return 1
                     case ModelsListModel.TtsModels:
                         return 2
+                    case ModelsListModel.MntModels:
+                        return 3
+                    case ModelsListModel.OtherModels:
+                        return 4
                     }
                     return 0
                 }
@@ -92,9 +98,14 @@ Dialog {
                     else if (index === 4) service.models_model.roleFilter = ModelsListModel.OtherModels
                     else service.models_model.roleFilter = ModelsListModel.AllModels
                 }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Model type")
             }
             TextField {
                 id: searchTextField
+
                 text: listView.model.filter
                 placeholderText: qsTr("Type to search")
                 verticalAlignment: Qt.AlignVCenter
@@ -124,6 +135,7 @@ Dialog {
 
     Component {
         id: langItemDelegate
+
         ItemDelegate {
             width: ListView.view.width
             text: model.name
@@ -171,6 +183,7 @@ Dialog {
 
     Component {
         id: modelItemDelegate
+
         Item {
             width: listView.width
             height: downloadButton.height
@@ -187,6 +200,7 @@ Dialog {
 
             Label {
                 id: availableLabel
+
                 horizontalAlignment: Text.AlignRight
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: bar.visible ? bar.left : downloadButton.left
@@ -198,6 +212,7 @@ Dialog {
 
             ProgressBar {
                 id: bar
+
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: downloadButton.left
                 anchors.rightMargin: appWin.padding
@@ -220,6 +235,7 @@ Dialog {
 
             Button {
                 id: downloadButton
+
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: root._rightMargin
@@ -237,11 +253,12 @@ Dialog {
     PlaceholderLabel {
         text: langsView ? qsTr("There are no languages that match your search criteria.") :
                           qsTr("There are no models that match your search criteria.")
-        visible: listView.model.count === 0
+        enabled: listView.model.count === 0
     }
 
     ListView {
         id: listView
+
         anchors.fill: parent
         clip: true
         spacing: appWin.padding

@@ -39,8 +39,8 @@ DialogPage {
 
             Label {
                 Layout.fillWidth: true
-                wrapMode: Text.WordWrap
-                text: qsTr("Note taking and reading with Speech to Text and Text to Speech")
+                wrapMode: Text.Wrap
+                text: qsTr("Note taking, reading and translating with Speech to Text, Text to Speech and Machine Translation")
                 font.pixelSize: Qt.application.font.pixelSize * 1.1
             }
         }
@@ -77,7 +77,7 @@ DialogPage {
         .arg(APP_NAME)
         .arg("<a href='" + APP_LICENSE_URL + "'>" + APP_LICENSE + "</a>")
         onLinkActivated: Qt.openUrlExternally(link)
-        wrapMode: Text.WordWrap
+        wrapMode: Text.Wrap
     }
 
     SectionLabel {
@@ -90,7 +90,7 @@ DialogPage {
         text: ("Copyright &copy; %1 %2")
         .arg(APP_COPYRIGHT_YEAR)
         .arg(APP_AUTHOR)
-        wrapMode: Text.WordWrap
+        wrapMode: Text.Wrap
     }
 
     SectionLabel {
@@ -100,7 +100,7 @@ DialogPage {
     Label {
         Layout.fillWidth: true
         text: APP_TRANSLATORS_STR
-        wrapMode: Text.WordWrap
+        wrapMode: Text.Wrap
     }
 
     SectionLabel {
@@ -110,7 +110,7 @@ DialogPage {
     Label {
         Layout.fillWidth: true
         textFormat: Text.RichText
-        wrapMode: Text.WordWrap
+        wrapMode: Text.Wrap
         text: APP_LIBS_STR
     }
 }

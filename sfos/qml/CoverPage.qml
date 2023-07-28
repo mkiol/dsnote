@@ -20,7 +20,7 @@ CoverBackground {
         anchors.bottomMargin: Theme.itemSizeExtraSmall
         anchors.fill: parent
         clip: true
-        wrapMode: Text.WordWrap
+        wrapMode: Text.Wrap
         text: app.intermediate_text
         font.pixelSize: Theme.fontSizeSmall
         verticalAlignment: Text.AlignBottom

@@ -33,8 +33,8 @@ PullDownMenu {
     }
 
     MenuItem {
-        visible: !_settings.translator_mode
-        enabled: !_settings.translator_mode && app.stt_configured &&
+        visible: !_settings.translator_mode && app.stt_configured
+        enabled: !_settings.translator_mode &&
                  (app.state === DsnoteApp.StateListeningManual ||
                   app.state === DsnoteApp.StateListeningAuto ||
                   app.state === DsnoteApp.StateListeningSingleSentence ||
@@ -47,7 +47,8 @@ PullDownMenu {
     }
 
     MenuItem {
-        enabled: app.note.length !== 0 && app.tts_configured &&
+        visible: app.tts_configured && (!_settings.translator_mode || app.mnt_configured)
+        enabled: app.note.length !== 0 &&
                  (app.state === DsnoteApp.StateListeningManual ||
                   app.state === DsnoteApp.StateListeningAuto ||
                   app.state === DsnoteApp.StateListeningSingleSentence ||
@@ -60,7 +61,7 @@ PullDownMenu {
     }
 
     MenuItem {
-        visible: _settings.translator_mode
+        visible: _settings.translator_mode && app.mnt_configured && app.tts_configured
         enabled: _settings.translator_mode && app.translated_text.length !== 0 &&
                  app.tts_configured && app.active_tts_model_for_out_mnt.length !== 0 &&
                  (app.state === DsnoteApp.StateListeningManual ||
@@ -77,6 +78,10 @@ PullDownMenu {
     MenuItem {
         text: qsTr("Mode: %1").arg(_settings.translator_mode ? qsTr("Translator") :
                                                                qsTr("Notepad"))
-        onClicked: _settings.translator_mode = !_settings.translator_mode
+        onClicked: {
+            if (!_settings.translator_mode)
+                _settings.hint_translator = false
+            _settings.translator_mode = !_settings.translator_mode
+        }
     }
 }

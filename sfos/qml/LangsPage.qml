@@ -62,6 +62,10 @@ Page {
                         return 1
                     case ModelsListModel.TtsModels:
                         return 2
+                    case ModelsListModel.MntModels:
+                        return 3
+                    case ModelsListModel.OtherModels:
+                        return 4
                     }
                     return 0
                 }

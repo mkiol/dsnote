@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
@@ -47,6 +47,10 @@ ColumnLayout {
         }
     }
 
+    visible: opacity > 0.0
+    opacity: enabled ? 1.0 : 0.0
+    Behavior on opacity { OpacityAnimator { duration: 100 } }
+
     Frame {
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -60,7 +64,9 @@ ColumnLayout {
             enabled: root.enabled
             canUndoFallback: app.can_undo_note
             textArea {
-                placeholderText: qsTr("Type here or press 'Listen' to make a note...")
+                placeholderText: app.stt_configured || app.tts_configured ?
+                                     qsTr("Type here or press %1 to make a note...")
+                                        .arg("<i>" + qsTr("Listen") + "</i>") : ""
                 readOnly: root.readOnly
                 onTextChanged: {
                     app.note = root.noteTextArea.textArea.text
@@ -72,6 +78,13 @@ ColumnLayout {
                 root.noteTextArea.textArea.text = ""
             }
             onUndoFallbackClicked: app.undo_or_redu_note()
+        }
+
+        PlaceholderLabel {
+            enabled: app.note.length === 0 && !app.stt_configured && !app.tts_configured
+            text: qsTr("Neither Speech to Text nor Text to Speech model has been set up yet.") + " " +
+                  qsTr("Go to the %1 to download models for the languages you intend to use.")
+                    .arg("<i>" + qsTr("Languages") + "</i>")
         }
     }
 

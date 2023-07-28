@@ -40,7 +40,7 @@ ApplicationWindow {
                                         app.state === DsnoteApp.StateListeningManual
             readonly property bool canCancelTts: app.state === DsnoteApp.StatePlayingSpeech ||
                                         app.state === DsnoteApp.StateWritingSpeechToFile
-            readonly property bool panelAlwaysOpen: notepad.enabled
+            readonly property bool panelAlwaysOpen: notepad.enabled && (app.stt_configured || app.tts_configured)
 
             allowedOrientations: Orientation.All
 
@@ -85,13 +85,12 @@ ApplicationWindow {
 
                     enabled: _settings.translator_mode
                     visible: opacity > 0.0
-                    opacity: enabled ? panel.open && (root.canCancelStt || root.canCancelTts) ? 0.8 : 1.0 : 0.0
+                    opacity: enabled ? root.canCancelStt || root.canCancelTts ? 0.8 : 1.0 : 0.0
                     Behavior on opacity { FadeAnimator { duration: 100 } }
-
                     maxHeight: root.height - (panel.open ? panel.height : 0)
                     verticalMode: root.verticalMode
                     width: parent.width
-                    readOnly: panel.open && (root.canCancelStt || root.canCancelTts)
+                    readOnly: root.canCancelStt || root.canCancelTts
                 }
 
                 Notepad {
@@ -99,42 +98,25 @@ ApplicationWindow {
 
                     enabled: !_settings.translator_mode
                     visible: opacity > 0.0
-                    opacity: enabled ? panel.open && (root.canCancelStt || root.canCancelTts) ? 0.8 : 1.0 : 0.0
+                    opacity: enabled ? root.canCancelStt || root.canCancelTts ? 0.8 : 1.0 : 0.0
                     Behavior on opacity { FadeAnimator { duration: 100 } }
-
                     maxHeight: root.height - (panel.open ? panel.height : 0)
                     verticalMode: root.verticalMode
                     width: parent.width
-                    readOnly: panel.open && (root.canCancelStt || root.canCancelTts)
+                    readOnly: root.canCancelStt || root.canCancelTts
                 }
 
                 SpeechWidget {
                     id: panel
 
-                    property bool open: (!app.stt_configured && !app.tts_configured) ||
-                                        !app.connected ||
+                    property bool open: !app.connected ||
                                         (app.state !== DsnoteApp.StateIdle && app.state !== DsnoteApp.StateTranslating) ||
                                         root.panelAlwaysOpen
                     width: parent.width
-                    visible: opacity > 0.0
-                    opacity: open ? 1.0 : 0.0
-                    Behavior on opacity { FadeAnimator { duration: 100 } }
-
+                    enabled: open
                     y: open ? parent.height - height : parent.height
-                    Behavior on y { NumberAnimation { duration: 100 } }
-
                     canCancel: app.connected && !app.busy && (root.canCancelStt || root.canCancelTts)
                     onCancelClicked: app.cancel()
-                }
-
-                ViewPlaceholder {
-                    enabled: !_settings.translator_mode &&
-                             !app.connected &&
-                             !app.stt_configured &&
-                             !app.tts_configured &&
-                             !app.busy && !service.busy
-                    text: qsTr("No language has been set.")
-                    hintText: qsTr("Pull down and select 'Languages' to download models for langauges you going to use.")
                 }
 
                 BusyIndicator {
@@ -146,6 +128,13 @@ ApplicationWindow {
                 VerticalScrollDecorator {
                     flickable: flick
                 }
+            }
+
+            HintLabel {
+                enabled: _settings.hint_translator
+                text: qsTr("To switch between %1 and %2 modes use option in pull-down menu.")
+                        .arg("<i>" + qsTr("Notepad") + "</i>").arg("<i>" + qsTr("Translator") + "</i>")
+                onClicked: _settings.hint_translator = false
             }
 
             Component {

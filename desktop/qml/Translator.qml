@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
@@ -60,11 +60,23 @@ ColumnLayout {
         }
     }
 
+    visible: opacity > 0.0
+    opacity: enabled ? 1.0 : 0.0
+    Behavior on opacity { OpacityAnimator { duration: 100 } }
+
+    PlaceholderLabelForLayout {
+        enabled: !app.mnt_configured
+        text: qsTr("Translator model has not been set up yet.") + " " +
+              qsTr("Go to the %1 to download models for the languages you intend to use.")
+        .arg("<i>" + qsTr("Languages") + "</i>")
+    }
+
     GridLayout {
         id: grid
 
         property bool verticalMode: width < appWin.verticalWidthThreshold
 
+        visible: app.mnt_configured
         columns: verticalMode ? 1 : 2
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -85,12 +97,11 @@ ColumnLayout {
                 ScrollTextArea {
                     id: _noteTextArea
 
+                    enabled: !root.readOnly
                     anchors.fill: parent
-                    enabled: root.enabled
                     canUndoFallback: app.can_undo_note
                     textArea {
                         placeholderText: qsTr("Type here text to translate from...")
-                        readOnly: root.readOnly
                         onTextChanged: {
                             app.note = root.noteTextArea.textArea.text
                         }
@@ -169,16 +180,18 @@ ColumnLayout {
                 ScrollTextArea {
                     id: _translatedNoteTextArea
 
+                    enabled: !root.readOnly && app.mnt_configured && app.translated_text.length !== 0
                     anchors.fill: parent
-                    enabled: root.enabled
-                    opacity: enabled ? 0.8 : 0.0
+                    textColor: {
+                        var c = palette.text
+                        return Qt.rgba(c.r, c.g, c.b, 0.8)
+                    }
                     canClear: false
                     canUndo: false
                     canRedo: false
                     canPaste: false
                     textArea {
                         //placeholderText: qsTr("Translation")
-                        readOnly: root.readOnly || app.translated_text.length === 0
                         onTextChanged: {
                             app.translated_text = root.translatedNoteTextArea.textArea.text
                         }
@@ -240,8 +253,11 @@ ColumnLayout {
     }
 
     Frame {
+        visible: app.mnt_configured
         Layout.alignment: Qt.AlignHCenter
         background: Item {}
+        bottomPadding: 0
+        topPadding: 0
 
         RowLayout {
             Button {

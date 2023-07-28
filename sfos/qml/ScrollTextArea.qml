@@ -24,7 +24,7 @@ SilicaItem {
     signal undoClicked()
 
     function scrollToBottom() {
-        if (!flick.atYEnd) {
+        if (!flick.atYEnd && flick.contentHeight > 0) {
             flick.contentY = flick.contentHeight - flick.height
             flick.returnToBounds()
         }
@@ -69,11 +69,10 @@ SilicaItem {
 
     Row {
         opacity: root.textArea.focus ? 0.0 :
-                 flick.moving || copyButton.pressed || clearButton.pressed || undoButton.pressed ||
-                 flick.contentHeight <= (root.height - Theme.itemSizeSmall) ? 1.0 : 0.4
+                 root.enabled && (flick.moving || copyButton.pressed || clearButton.pressed || undoButton.pressed ||
+                 flick.contentHeight <= (root.height - Theme.itemSizeSmall)) ? 1.0 : 0.4
         Behavior on opacity { FadeAnimator { duration: 150 } }
-        visible: opacity > 0.0 && root.textArea.enabled
-
+        visible: opacity > 0.0
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         height: Theme.itemSizeSmall + Theme.paddingMedium

@@ -6,13 +6,13 @@
   <project_license>MPL-2.0</project_license>
   <developer_name>Michal Kosciesza</developer_name>
   <name>Speech Note</name>
-  <summary>Note taking and reading with Speech to Text and Text to Speech</summary>
+  <summary>Note taking, reading and translating with Speech to Text, Text to Speech and Machine Translation</summary>
   <description>
-    <p>Speech Note enables you to take and read notes with your voice with multiple languages.
-      It uses Speech to Text and Text to Speech conversions to do so.
-      All voice processing is entirely done off-line, locally on your
-      computer without the use of a network connection. Your privacy is
-      always respected. No data is sent to the Internet.</p>
+    <p>Speech Note let you take, read and translate notes in multiple languages.
+      It uses Speech to Text, Text to Speech and Machine Translation to do so.
+      Text and voice processing take place entirely offline, locally on your
+      computer, without using a network connection. Your privacy is always
+      respected. No data is sent to the Internet.</p>
   </description>
   <categories>
     <category>AudioVideo</category>
@@ -23,6 +23,8 @@
     <keyword>stt</keyword>
     <keyword>asr</keyword>
     <keyword>tts</keyword>
+    <keyword>nmt</keyword>
+    <keyword>translator</keyword>
     <keyword>deepspeech</keyword>
     <keyword>vosk</keyword>
     <keyword>whisper</keyword>
@@ -32,6 +34,7 @@
     <keyword>mbrola</keyword>
     <keyword>coqui</keyword>
     <keyword>offline</keyword>
+    <keyword>bergamot</keyword>
   </keywords>
   <screenshots>
     <screenshot type="default">

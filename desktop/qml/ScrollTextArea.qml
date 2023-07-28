@@ -43,12 +43,13 @@ Item {
         enabled: root.enabled
         clip: true
 
-        opacity: enabled ? 1.0 : 0.0
+        opacity: enabled ? 1.0 : 0.8
         Behavior on opacity { OpacityAnimator { duration: 100 } }
 
         TextArea {
             id: _textArea
 
+            enabled: root.enabled
             color: {
                 if (root._contextActive && !root._fitContent) {
                     var c = root.textColor
@@ -56,7 +57,6 @@ Item {
                 }
                 return root.textColor
             }
-
             wrapMode: TextEdit.WordWrap
             verticalAlignment: TextEdit.AlignTop
 
@@ -66,9 +66,9 @@ Item {
     }
 
     RowLayout {
-        opacity: root._contextActive ? 1.0 : 0.4
-        Behavior on opacity { OpacityAnimator { duration: 100 } }
-        visible: opacity > 0.0 && root.textArea.enabled
+        opacity: root.enabled && root._contextActive ? 1.0 : 0.4
+        Behavior on opacity { OpacityAnimator { duration: 150 } }
+        visible: opacity > 0.0
 
         anchors {
             bottom: parent.bottom
@@ -80,9 +80,9 @@ Item {
         ToolButton {
             id: copyButton
 
-            visible: root.textArea.text.length !== 0
             icon.name: "edit-copy-symbolic"
             onClicked: root.copyClicked()
+            visible: root.textArea.text.length !== 0
 
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -91,9 +91,9 @@ Item {
         ToolButton {
             id: pasteButton
 
-            visible: root.canPaste && root.textArea.canPaste
             icon.name: "edit-paste-symbolic"
             onClicked: root.textArea.paste()
+            visible: root.canPaste && root.textArea.canPaste
 
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -102,9 +102,9 @@ Item {
         ToolButton {
             id: clearButton
 
-            visible: root.canClear && !root.textArea.readOnly && root.textArea.text.length !== 0
             icon.name: "edit-clear-all-symbolic"
             onClicked: root.clearClicked()
+            visible: root.canClear && !root.textArea.readOnly && root.textArea.text.length !== 0
 
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -113,7 +113,6 @@ Item {
         ToolButton {
             id: undoButton
 
-            visible: !root.textArea.readOnly && root.canUndo && (root.textArea.canUndo || root.canUndoFallback)
             icon.name: "edit-undo-symbolic"
             onClicked: {
                 if (root.textArea.canUndo)
@@ -121,6 +120,7 @@ Item {
                 else
                     root.undoFallbackClicked()
             }
+            visible: !root.textArea.readOnly && root.canUndo && (root.textArea.canUndo || root.canUndoFallback)
 
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -129,9 +129,9 @@ Item {
         ToolButton {
             id: redoButton
 
-            visible: !root.textArea.readOnly && root.canRedo && root.textArea.canRedo
             icon.name: "edit-redo-symbolic"
             onClicked: root.textArea.redo()
+            visible: !root.textArea.readOnly && root.canRedo && root.textArea.canRedo
 
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval

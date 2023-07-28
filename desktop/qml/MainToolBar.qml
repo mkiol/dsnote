@@ -157,22 +157,25 @@ ToolBar {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTr("Switch to Notepad")
             }
-            BlinkToolButton {
+
+            ToolButton {
                 id: translatorButton
 
                 enabled: !_settings.translator_mode
-                blink: !_settings.translator_mode && _settings.hint_translator
                 Layout.alignment: Qt.AlignRight
                 text: qsTr("Translator")
                 checkable: true
-                origChecked: _settings.translator_mode
+                checked: _settings.translator_mode
                 onClicked: {
                     if (!_settings.translator_mode) {
                         _settings.translator_mode = true
                         _settings.hint_translator = false
                     }
                 }
-                toolTip.text: qsTr("Switch to Translator")
+
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTr("Switch to Translator")
             }
         }
     }

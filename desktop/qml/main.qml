@@ -84,9 +84,7 @@ ApplicationWindow {
 
             Layout.fillWidth: true
             enabled: _settings.translator_mode
-            visible: opacity > 0.0
-            opacity: enabled ? 1.0 : 0.0
-            Behavior on opacity { OpacityAnimator { duration: 100 } }
+            readOnly: appWin.canCancelStt || appWin.canCancelTts
         }
 
         Notepad {
@@ -94,22 +92,15 @@ ApplicationWindow {
 
             Layout.fillWidth: true
             enabled: !_settings.translator_mode
-            visible: opacity > 0.0
-            opacity: enabled ? 1.0 : 0.0
-            Behavior on opacity { OpacityAnimator { duration: 100 } }
+            readOnly: appWin.canCancelStt || appWin.canCancelTts
         }
 
         SpeechWidget {
             id: panel
 
             Layout.fillWidth: true
+            Layout.alignment: Qt.AlignBottom
         }
-    }
-
-    PlaceholderLabel {
-        visible: !_settings.translator_mode && !app.stt_configured && !app.tts_configured && !app.mnt_configured
-        text: qsTr("No language has been set.") + " " +
-              qsTr("Go to 'Languages' to download models for langauges you going to use.")
     }
 
     ToastNotification {

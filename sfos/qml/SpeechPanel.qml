@@ -76,7 +76,7 @@ Item {
         anchors.rightMargin: Theme.horizontalPageMargin + (root.canCancel ? cancelButton.width : 0)
         anchors.leftMargin: Theme.paddingMedium * 0.7
         text: root._empty ? root.textPlaceholder : root.text
-        wrapMode: root._empty ? Text.NoWrap : Text.WordWrap
+        wrapMode: root._empty ? Text.NoWrap : Text.Wrap
         truncationMode: _empty ? TruncationMode.Fade : TruncationMode.None
         color: root._empty ? Theme.secondaryHighlightColor : Theme.highlightColor
         font.italic: root._empty

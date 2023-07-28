@@ -54,16 +54,16 @@ Column {
     ScrollTextArea {
         id: _noteTextArea
 
-        enabled: root.enabled
+        enabled: !root.readOnly
         width: parent.width
         height: root.textAreaHeight
         canUndo: app.can_undo_note
         canRedo: app.can_redo_note
         canClear: true
-
         textArea {
-            placeholderText: qsTr("Type here or press 'Listen' to make a note...")
-            readOnly: root.readOnly
+            placeholderText: app.stt_configured || app.tts_configured ?
+                                 qsTr("Type here or press %1 to make a note...")
+                                    .arg("<i>" + qsTr("Listen") + "</i>") : ""
             onTextChanged: {
                 app.note = root.noteTextArea.textArea.text
             }
@@ -74,6 +74,15 @@ Column {
         }
         onCopyClicked: app.copy_to_clipboard()
         onUndoClicked: app.undo_or_redu_note()
+
+        PlaceholderLabel {
+            enabled: !app.busy && !service.busy && app.connected &&
+                     app.note.length === 0 && !app.stt_configured && !app.tts_configured &&
+                     !_noteTextArea.textArea.focus
+            text: qsTr("Neither Speech to Text nor Text to Speech model has been set up yet.") + " " +
+                  qsTr("Go to the %1 to download models for the languages you intend to use.")
+                    .arg("<i>" + qsTr("Languages") + "</i>")
+        }
     }
 
     DuoComboButton {
