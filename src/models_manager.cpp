@@ -889,27 +889,34 @@ void models_manager::delete_model(const QString& id) {
     if (auto it = m_models.find(id); it != std::cend(m_models)) {
         auto& model = it->second;
 
-        if (!std::any_of(
-                m_models.cbegin(), m_models.cend(),
-                [id = it->first, file_name = model.file_name](const auto& p) {
-                    return p.second.available && p.first != id &&
-                           p.second.file_name == file_name;
-                })) {
-            remove_file_or_dir(model_path(model.file_name));
-        } else {
-            qDebug() << "not removing model file because other model uses it:"
-                     << model.file_name;
+        if (!model.file_name.isEmpty()) {
+            if (!std::any_of(m_models.cbegin(), m_models.cend(),
+                             [id = it->first,
+                              file_name = model.file_name](const auto& p) {
+                                 return p.second.available && p.first != id &&
+                                        p.second.file_name == file_name;
+                             })) {
+                remove_file_or_dir(model_path(model.file_name));
+            } else {
+                qDebug()
+                    << "not removing model file because other model uses it:"
+                    << model.file_name;
+            }
         }
-        if (!std::any_of(m_models.cbegin(), m_models.cend(),
-                         [id = it->first,
-                          file_name = model.scorer_file_name](const auto& p) {
-                             return p.second.available && p.first != id &&
-                                    p.second.scorer_file_name == file_name;
-                         })) {
-            remove_file_or_dir(model_path(model.scorer_file_name));
-        } else {
-            qDebug() << "not removing scorer file because other model uses it:"
-                     << model.scorer_file_name;
+        if (!model.scorer_file_name.isEmpty()) {
+            if (!std::any_of(
+                    m_models.cbegin(), m_models.cend(),
+                    [id = it->first,
+                     file_name = model.scorer_file_name](const auto& p) {
+                        return p.second.available && p.first != id &&
+                               p.second.scorer_file_name == file_name;
+                    })) {
+                remove_file_or_dir(model_path(model.scorer_file_name));
+            } else {
+                qDebug()
+                    << "not removing scorer file because other model uses it:"
+                    << model.scorer_file_name;
+            }
         }
 
         auto models = settings::instance()->enabled_models();
