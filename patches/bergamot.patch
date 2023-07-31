@@ -1,7 +1,7 @@
 diff -ruN bergamot-org/3rd_party/marian-dev/CMakeLists.txt bergamot-patched/3rd_party/marian-dev/CMakeLists.txt
 --- bergamot-org/3rd_party/marian-dev/CMakeLists.txt	2023-07-08 17:36:56.190113017 +0200
-+++ bergamot-patched/3rd_party/marian-dev/CMakeLists.txt	2023-07-24 15:14:02.986873118 +0200
-@@ -57,6 +57,14 @@
++++ bergamot-patched/3rd_party/marian-dev/CMakeLists.txt	2023-07-31 13:21:39.673559083 +0200
+@@ -57,6 +57,17 @@
  option(USE_SIMD_UTILS "Enable simde to target instruction sets" OFF)
  option(COMPILE_WITHOUT_EXCEPTIONS "Compile without exceptions" OFF)
  
@@ -12,11 +12,14 @@ diff -ruN bergamot-org/3rd_party/marian-dev/CMakeLists.txt bergamot-patched/3rd_
 +option(USE_INTRINSICS_AVX "Compile with AVX" ON)
 +option(USE_INTRINSICS_AVX2 "Compile with AVX2" ON)
 +option(USE_INTRINSICS_AVX512 "Compile with AVX512" ON)
++option(USE_INTRINSICS_FMA "Compile with FMA" ON)
++option(USE_INTRINSICS_ARMV7_NEON "Compile with NEON" OFF)
++option(USE_INTRINSICS_ARMV7_NEONVFPV4 "Compile with NEON vfpv4" OFF)
 +
  # cmake options that are dependent on USE_WASM_COMPATIBLE_SOURCE cmake option
  CMAKE_DEPENDENT_OPTION(USE_THREADS "Compile with multi-threading support" OFF
                         "USE_WASM_COMPATIBLE_SOURCE" ON)
-@@ -82,7 +90,6 @@
+@@ -82,7 +93,6 @@
  
    # Define that we are using ARM
    add_compile_definitions(ARM)
@@ -24,7 +27,20 @@ diff -ruN bergamot-org/3rd_party/marian-dev/CMakeLists.txt bergamot-patched/3rd_
  else()
    set(USE_INTGEMM ON)
  endif()
-@@ -254,58 +261,52 @@
+@@ -93,7 +103,11 @@
+ 
+ if(USE_SIMD_UTILS)
+   if(${CMAKE_TARGET_ARCHITECTURE_CODE} MATCHES "arm")
+-    add_compile_definitions(ARM FMA SSE) #added for ARM
++    if(USE_INTRINSICS_FMA)
++      add_compile_definitions(ARM FMA SSE)
++    else()
++      add_compile_definitions(ARM SSE)
++    endif(USE_INTRINSICS_FMA)
+   endif()
+   if(MSVC)
+     add_compile_options(/flax-vector-conversions)
+@@ -254,58 +268,62 @@
      message(FATAL_ERROR "FATAL ERROR: Compiling Marian requires at least g++ 5.0, your version is ${CMAKE_CXX_COMPILER_VERSION}")
    endif()
  
@@ -40,6 +56,8 @@ diff -ruN bergamot-org/3rd_party/marian-dev/CMakeLists.txt bergamot-patched/3rd_
 -    include(FindSSE)
 -    if(SSE2_FOUND)
 -      message(STATUS "SSE2 support found")
++  message(STATUS CMAKE_SYSTEM_PROCESSOR=${CMAKE_SYSTEM_PROCESSOR} CMAKE_TARGET_ARCHITECTURE_CODE=${CMAKE_TARGET_ARCHITECTURE_CODE})
++
 +  if(CMAKE_SYSTEM_PROCESSOR STREQUAL x86_64 OR CMAKE_SYSTEM_PROCESSOR STREQUAL amd64)
 +    if(USE_INTRINSICS_SSE2)
 +      message(STATUS "SSE2 support enabled")
@@ -96,6 +114,14 @@ diff -ruN bergamot-org/3rd_party/marian-dev/CMakeLists.txt bergamot-patched/3rd_
 -    endif(AVX512_FOUND)
 -  elseif(COMPILE_WASM)
 +    endif(USE_INTRINSICS_AVX512)
++  elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL armv7l)
++    if(USE_INTRINSICS_ARMV7_NEON)
++      message(STATUS "NEON support enabled")
++      set(INTRINSICS "${INTRINSICS} -mfpu=neon -mfloat-abi=hard")
++    elseif(USE_INTRINSICS_ARMV7_NEONVFPV4)
++      message(STATUS "NEON vfpv4 support enabled")
++      set(INTRINSICS "${INTRINSICS} -mfpu=neon-vfpv4 -mfloat-abi=hard")
++    endif()
 +  endif()
 +
 +  if(COMPILE_WASM)
@@ -109,7 +135,7 @@ diff -ruN bergamot-org/3rd_party/marian-dev/CMakeLists.txt bergamot-patched/3rd_
    endif()
  
    if(USE_FBGEMM)
-@@ -322,7 +323,7 @@
+@@ -322,7 +340,7 @@
    set(DISABLE_GLOBALLY "-Wno-unused-result ${CLANG_IGNORE_UNKNOWN_CUDA} ${CLANG_IGNORE_UNUSED_VALUES} ${ARM_WARNINGS}") # This needs to appear here as well to appease clang11+ on linux
  
    # These are used in src/CMakeLists.txt on a per-target basis
@@ -118,7 +144,16 @@ diff -ruN bergamot-org/3rd_party/marian-dev/CMakeLists.txt bergamot-patched/3rd_
      -Wno-pragmas; -Wno-unused-parameter; -Wno-unused-function;
      -Wno-unused-value; -Wno-unknown-pragmas; -Wno-sign-compare;
      -Wno-missing-field-initializers; -Wno-use-after-free; -Wno-restrict; ${CLANG_IGNORE_UNUSED_PRIVATE_FIELD})
-@@ -606,7 +607,7 @@
+@@ -334,7 +352,7 @@
+ 
+   if(CMAKE_COMPILER_IS_GNUCC)
+     # these flags are not known to clang
+-    set(CMAKE_GCC_FLAGS "-Wl,--no-as-needed")
++    set(CMAKE_GCC_FLAGS "-Wl,--no-as-needed -D_FILE_OFFSET_BITS=64")
+     set(CMAKE_RDYNAMIC_FLAG "-rdynamic")
+   endif(CMAKE_COMPILER_IS_GNUCC)
+ 
+@@ -606,7 +624,7 @@
    endif(USE_INTGEMM)
  
    if(USE_RUY OR USE_RUY_SGEMM)
@@ -127,7 +162,7 @@ diff -ruN bergamot-org/3rd_party/marian-dev/CMakeLists.txt bergamot-patched/3rd_
    endif(USE_RUY OR USE_RUY_SGEMM)
  
    add_definitions(-DCOMPILE_CPU=1)        # Move the compile CPU definition on top since we want to compile intgemm when we set compile CPU
-@@ -626,6 +627,8 @@
+@@ -626,6 +644,8 @@
      add_definitions(-DBLAS_FOUND=1)
    elseif(USE_RUY_SGEMM)
      add_compile_definitions(USE_RUY_SGEMM=1)
@@ -136,7 +171,7 @@ diff -ruN bergamot-org/3rd_party/marian-dev/CMakeLists.txt bergamot-patched/3rd_
    else(USE_ONNX_SGEMM)
      if(USE_MKL)
        find_package(MKL)
-@@ -636,16 +639,9 @@
+@@ -636,16 +656,9 @@
        set(BLAS_FOUND TRUE)
        add_definitions(-DBLAS_FOUND=1 -DMKL_FOUND=1)
      else(MKL_FOUND)
@@ -168,6 +203,86 @@ diff -ruN bergamot-org/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt
    if (COMPILE_WASM)
      # Disabling Pthreads + memory growth warning to be an error for WASM
      # Pthreads + memory growth causes JS accessing the wasm memory to be slow
+diff -ruN bergamot-org/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h bergamot-patched/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h
+--- bergamot-org/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h	2023-07-08 17:37:23.063447169 +0200
++++ bergamot-patched/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h	2023-07-30 18:56:02.133335033 +0200
+@@ -257,6 +257,12 @@
+ 
+ #else /* FMA */
+ 
++#ifdef __arm__
++static inline float32x4_t vfmaq_n_f32(float32x4_t a, float32x4_t b, float32_t n) {
++    return vmlaq_f32(a, b, vdupq_n_f32(n));
++}
++#endif
++
+ // FMA version
+ static inline v4sf log_ps(v4sf x)
+ {
+diff -ruN bergamot-org/3rd_party/marian-dev/src/common/binary.cpp bergamot-patched/3rd_party/marian-dev/src/common/binary.cpp
+--- bergamot-org/3rd_party/marian-dev/src/common/binary.cpp	2023-07-08 17:36:56.233446352 +0200
++++ bergamot-patched/3rd_party/marian-dev/src/common/binary.cpp	2023-07-29 19:12:08.582096263 +0200
+@@ -19,7 +19,7 @@
+   uint64_t dataLength;
+ };
+ 
+-// cast current void pointer to T pointer and move forward by num elements 
++// cast current void pointer to T pointer and move forward by num elements
+ template <typename T>
+ const T* get(const void*& current, uint64_t num = 1) {
+   const T* ptr = (const T*)current;
+@@ -27,14 +27,21 @@
+   return ptr;
+ }
+ 
++template <typename T>
++T getValue(const void*& current, uint64_t num = 1) {
++  T value;
++  memcpy(&value, get<T>(current, num), sizeof(value));
++  return value;
++}
++
+ void loadItems(const void* current, std::vector<io::Item>& items, bool mapped) {
+-  uint64_t binaryFileVersion = *get<uint64_t>(current);
++  uint64_t binaryFileVersion = getValue<uint64_t>(current);
+   ABORT_IF(binaryFileVersion != BINARY_FILE_VERSION,
+            "Binary file versions do not match: {} (file) != {} (expected)",
+            binaryFileVersion,
+            BINARY_FILE_VERSION);
+ 
+-  uint64_t numHeaders = *get<uint64_t>(current); // number of item headers that follow
++  uint64_t numHeaders = getValue<uint64_t>(current); // number of item headers that follow
+   const Header* headers = get<Header>(current, numHeaders); // read that many headers
+ 
+   // prepopulate items with meta data from headers
+@@ -48,13 +55,13 @@
+   // read in actual shape and data
+   for(int i = 0; i < numHeaders; ++i) {
+     uint64_t len = headers[i].shapeLength;
+-    items[i].shape.resize(len); 
++    items[i].shape.resize(len);
+     const int* arr = get<int>(current, len); // read shape
+-    std::copy(arr, arr + len, items[i].shape.begin()); // copy to Item::shape 
++    std::copy(arr, arr + len, items[i].shape.begin()); // copy to Item::shape
+   }
+ 
+   // move by offset bytes, aligned to 256-bytes boundary
+-  uint64_t offset = *get<uint64_t>(current);
++  uint64_t offset = getValue<uint64_t>(current);
+   get<char>(current, offset);
+ 
+   for(int i = 0; i < numHeaders; ++i) {
+@@ -173,8 +180,8 @@
+ 
+   // Write out all values
+   for(const auto& item : items)
+-    pos += out.write(item.data(), item.bytes.size()); // writes out data with padding, keeps 256-byte boundary. 
+-                                                      // Amazingly this is binary-compatible with V1 and aligned and 
++    pos += out.write(item.data(), item.bytes.size()); // writes out data with padding, keeps 256-byte boundary.
++                                                      // Amazingly this is binary-compatible with V1 and aligned and
+                                                       // non-aligned models can be read with the same procedure.
+                                                       // No version-bump required. Gets 5-8% of speed back when mmapped.
+ }
 diff -ruN bergamot-org/3rd_party/marian-dev/src/layers/lsh.cpp bergamot-patched/3rd_party/marian-dev/src/layers/lsh.cpp
 --- bergamot-org/3rd_party/marian-dev/src/layers/lsh.cpp	2023-07-08 17:36:56.240113019 +0200
 +++ bergamot-patched/3rd_party/marian-dev/src/layers/lsh.cpp	2023-07-22 12:16:53.558584438 +0200
@@ -283,6 +398,135 @@ diff -ruN bergamot-org/3rd_party/marian-dev/src/layers/lsh.h bergamot-patched/3r
  
    Expr apply(Expr query, Expr values, Expr bias);
  
+diff -ruN bergamot-org/3rd_party/marian-dev/src/tensors/cpu/integer_common.h bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/integer_common.h
+--- bergamot-org/3rd_party/marian-dev/src/tensors/cpu/integer_common.h	2023-07-08 17:36:56.243446352 +0200
++++ bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/integer_common.h	2023-07-31 11:43:04.106649054 +0200
+@@ -27,6 +27,13 @@
+ namespace cpu {
+ namespace integer {
+ 
++template<typename T>
++T safe_dereference(const T* ptr) {
++   T value;
++   memcpy(&value, ptr, sizeof(value));
++   return value;
++}
++
+ // Making sure we have access to common functions for RUY and INTGEMM
+ class fetchAlphaFromModelNodeOp : public UnaryNodeOp {
+ public:
+@@ -124,13 +131,13 @@
+         ABORT_IF(intgemm_<vtype>::intgemmType == Type::intgemm16,
+                 "Int16::PrepareBQuantizedTransposed is not implemented for wasm.");
+         int8PrepareBFromQuantizedTransposed(reinterpret_cast<const int8_t *>(input),
+-                                        (Index)rows(item.shape),  //Since we only transposed, but didn't update the shape when constructing the binary 
++                                        (Index)rows(item.shape),  //Since we only transposed, but didn't update the shape when constructing the binary
+                                         (Index)cols(item.shape), //rows here returns the columns of the transposed input matrix, and cols -> the rows
+                                         (int8_t *)output_tensor);
+     #elif defined(USE_INTGEMM)
+         intgemm_<vtype>::width::PrepareBQuantizedTransposed(reinterpret_cast<const Integer *>(input),
+                                                    output_tensor,
+-                                                   rows(item.shape),  //Since we only transposed, but didn't update the shape when constructing the binary, 
++                                                   rows(item.shape),  //Since we only transposed, but didn't update the shape when constructing the binary,
+                                                    cols(item.shape)); //rows here returns the columns of the transposed input matrix, and cols -> the rows
+     #endif
+     } else {
+@@ -141,13 +148,13 @@
+         ABORT_IF(intgemm_<vtype>::intgemmType == Type::intgemm16,
+                 "Int16::PrepareBQuantizedTransposed is not implemented for wasm.");
+         int8PrepareBFromQuantizedTransposed(reinterpret_cast<const int8_t *>(aligned_input),
+-                                        (Index)rows(item.shape),  //Since we only transposed, but didn't update the shape when constructing the binary, 
++                                        (Index)rows(item.shape),  //Since we only transposed, but didn't update the shape when constructing the binary,
+                                         (Index)cols(item.shape), //rows here returns the columns of the transposed input matrix, and cols -> the rows
+                                         reinterpret_cast<int8_t *>(aligned_output));
+     #elif defined(USE_INTGEMM)
+         intgemm_<vtype>::width::PrepareBQuantizedTransposed(reinterpret_cast<const Integer *>(aligned_input),
+                                                    reinterpret_cast<Integer *>(aligned_output),
+-                                                   rows(item.shape),  //Since we only transposed, but didn't update the shape when constructing the binary, 
++                                                   rows(item.shape),  //Since we only transposed, but didn't update the shape when constructing the binary,
+                                                    cols(item.shape)); //rows here returns the columns of the transposed input matrix, and cols -> the rows
+     #endif
+         // Copy to output tensor
+@@ -157,7 +164,7 @@
+     }
+ #endif
+     //Copy the quantMult
+-    float quantMult = *(reinterpret_cast<const float *>(reinterpret_cast<const Integer *>(input) + item.shape.elements()));
++    float quantMult = safe_dereference<float>(reinterpret_cast<const float *>(reinterpret_cast<const Integer *>(input) + item.shape.elements()));
+     *(reinterpret_cast<float *>(&(*(output_tensor + item.shape.elements())))) = quantMult;
+ #else // COMPILE_CPU
+     ABORT("Using intgemm models is supported only with -DCOMPILE_CPU=on");
+@@ -167,7 +174,7 @@
+ template<Type vtype>
+ void unquantizeWemb(io::Item& item, const char * input) {
+     typedef typename intgemm_<vtype>::type Integer;
+-    float quantMult = *(reinterpret_cast<const float *>(reinterpret_cast<const Integer *>(input) + item.shape.elements()));
++    float quantMult = safe_dereference<float>(reinterpret_cast<const float *>(reinterpret_cast<const Integer *>(input) + item.shape.elements()));
+     float * output_tensor = reinterpret_cast<float *>(&(*item.bytes.begin()));
+     // Explicitly calculate n once beforehand because the compiler does not pick up on its
+     // static nature, and will end up calling marian::Shape::dim() a lot.
+diff -ruN bergamot-org/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h
+--- bergamot-org/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h	2023-07-08 17:36:56.243446352 +0200
++++ bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h	2023-07-30 17:45:57.254653804 +0200
+@@ -28,6 +28,36 @@
+ 
+ #if RUY_PLATFORM_NEON
+ 
++#ifdef RUY_PLATFORM_NEON_32
++// inline static int32x4_t vcvtnq_s32_f32(float32x4_t v) {
++//   return vcvtq_s32_f32(vaddq_f32(v, vdupq_n_f32(0.5f)));
++// }
++// inline static int32x4_t vcvtnq_s32_f32(float32x4_t v) {
++//   return vcvtq_s32_f32(vrndnq_f32(v));
++// }
++inline static int32x4_t vcvtnq_s32_f32(float32x4_t v) {
++    int32x4_t result;
++    float32_t temp[4];
++
++    vst1q_f32(temp, v);
++
++    for (int i = 0; i < 4; i++) {
++        if (temp[i] == -0.5f) {
++            result[i] = 0;
++        } else {
++            int32_t truncated = (int32_t)(temp[i] + (temp[i] < 0 ? -0.5f : 0.5f));
++            if (temp[i] + (temp[i] < 0 ? -0.5f : 0.5f) == truncated + 0.5f && truncated % 2 != 0) {
++                result[i] = truncated - 1 + (temp[i] < 0 ? 1 : 0);
++            } else {
++                result[i] = truncated;
++            }
++        }
++    }
++
++    return result;
++}
++#endif
++
+ /*
+  * Optimized path using ARM NEON SIMD intrinsics. Currently only supports int8_t.
+  */
+@@ -93,7 +123,7 @@
+   // permute n simd_width/2-bit rows
+ 
+   // clang-format off
+-    
++
+     // Permute 8 8-bit rows.
+     // Load int8x16x2 from memory into SIMD registers, transpose as 2x2 matrices.
+ 
+@@ -132,10 +162,10 @@
+     int32x4x2_t x6 = vtrnq_s32(vreinterpretq_s32_s16(t2.val[1]), vreinterpretq_s32_s16(t3.val[1]));
+     int32x4x2_t x7 = vtrnq_s32(vreinterpretq_s32_s16(t6.val[1]), vreinterpretq_s32_s16(t7.val[1]));
+ 
+-    // There is no permute 8 64-bit rows available. 
++    // There is no permute 8 64-bit rows available.
+     // Instead we follow extracting low and high and placing them into the right places.
+     Index dstRowBegin = j*rows + i;
+-    vst1q_s8(&dst[ 0*rows + dstRowBegin], vreinterpretq_s8_s32(vcombine_s32( vget_low_s32(x0.val[0]),  vget_low_s32(x4.val[0])))); 
++    vst1q_s8(&dst[ 0*rows + dstRowBegin], vreinterpretq_s8_s32(vcombine_s32( vget_low_s32(x0.val[0]),  vget_low_s32(x4.val[0]))));
+     vst1q_s8(&dst[ 1*rows + dstRowBegin], vreinterpretq_s8_s32(vcombine_s32( vget_low_s32(x1.val[0]),  vget_low_s32(x5.val[0]))));
+     vst1q_s8(&dst[ 2*rows + dstRowBegin], vreinterpretq_s8_s32(vcombine_s32( vget_low_s32(x2.val[0]),  vget_low_s32(x6.val[0]))));
+     vst1q_s8(&dst[ 3*rows + dstRowBegin], vreinterpretq_s8_s32(vcombine_s32( vget_low_s32(x3.val[0]),  vget_low_s32(x7.val[0]))));
 diff -ruN bergamot-org/bergamot_api.cpp bergamot-patched/bergamot_api.cpp
 --- bergamot-org/bergamot_api.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ bergamot-patched/bergamot_api.cpp	2023-07-20 11:43:29.004900100 +0200

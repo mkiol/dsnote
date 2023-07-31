@@ -16,9 +16,7 @@ set(openblas_opts
 )
 
 if(arch_arm32)
-    list(APPEND openblas_opts
-        "-DCMAKE_C_FLAGS=-mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access"
-        -DTARGET=ARMV7)
+    list(APPEND openblas_opts -DTARGET=ARMV7)
 elseif(arch_arm64)
     list(APPEND openblas_opts -DTARGET=ARMV8)
 endif()

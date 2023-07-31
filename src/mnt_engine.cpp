@@ -89,16 +89,7 @@ mnt_engine::~mnt_engine() {
 }
 
 void mnt_engine::open_bergamot_lib() {
-#ifdef ARCH_ARM_32
-    if (cpu_tools::neon_supported()) {
-        m_bergamotlib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
-    } else {
-        LOGW("using bergamot-fallback");
-        m_bergamotlib_handle = dlopen("libbergamot_api-fallback.so", RTLD_LAZY);
-    }
-#elif ARCH_ARM_64
-    m_bergamotlib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
-#else
+#ifdef ARCH_X86_64
     if (cpu_tools::avx_avx2_supported()) {
         m_bergamotlib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
     } else if (cpu_tools::avx_supported()) {
@@ -109,6 +100,8 @@ void mnt_engine::open_bergamot_lib() {
         throw std::runtime_error(
             "failed to open bergamot lib: avx not supported");
     }
+#else
+    m_bergamotlib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
 #endif
 
     if (m_bergamotlib_handle == nullptr) {
