@@ -14,12 +14,26 @@ DialogPage {
     title: qsTr("Changes")
 
     SectionLabel {
-        text: qsTr("Version %1").arg("3.1.5")
+        text: qsTr("Version %1").arg("4.0.0")
     }
 
-    Label {
-        visible: false
-        text: qsTr("Translator")
+    RichLabel {
+        text: "<p>" + qsTr("Translator") + ":</p>
+              <ul>
+              <li>New feature for offline translations between following languages: Catalan, Bulgarian, Czech, Danish,
+                  English, Spanish, German, Estonian, French, Italian, Polish, Portuguese, Norwegian, Iranian, Dutch,
+                  Russian, Ukrainian, Icelandic.</li>
+              <li><i>Translator</i> uses models that were created as part of <a href='https://browser.mt/'>Bergamot project</a>.</li>
+              <li>To switch between <i>Notepad</i> and <i>Translator</i> modes, use the toggle buttons in the upper right corner.</li>
+              </ul>
+              <p>" + qsTr("Interface") + ":</p>
+              <ul>
+              <li>Settings option to force specific <i>Interface style</i>. It is useful to overcome UI glitches when app is running under GNOME desktop environment.</li>
+              </ul>"
+    }
+
+    SectionLabel {
+        text: qsTr("Version %1").arg("3.1.5")
     }
 
     RichLabel {

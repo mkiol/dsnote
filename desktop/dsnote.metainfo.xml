@@ -60,6 +60,22 @@
   <launchable type="desktop-id">net.mkiol.SpeechNote.desktop</launchable>
   <content_rating type="oars-1.1" />
   <releases>
+    <release version="4.0.0" date="2023-07-31">
+      <description>
+      <p>Translator:</p>
+      <ul>
+      <li>New feature for offline translations between following languages: Catalan, Bulgarian, Czech, Danish
+      English, Spanish, German, Estonian, French, Italian, Polish, Portuguese, Norwegian, Iranian, Dutch,
+      Russian, Ukrainian, Icelandic.</li>
+      <li>Translator uses models that were created as part of Bergamot project.</li>
+      <li>To switch between Notepad and Translator modes, use the toggle buttons in the upper right corner.</li>
+      </ul>
+      <p>Interface:</p>
+      <ul>
+      <li>Settings option to force specific interface style. It is useful to overcome UI glitches when app is running under GNOME desktop environment.</li>
+      </ul>
+      </description>
+    </release>
     <release version="3.1.5" date="2023-07-06">
       <description>
         <p>Text to Speech:</p>

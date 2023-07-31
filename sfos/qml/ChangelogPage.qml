@@ -29,6 +29,20 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Version %1").arg("4.0")
+            }
+
+            LogItem {
+                title: "Translator"
+                description: "New feature for offline translations between following languages: " +
+                             "Catalan, Bulgarian, Czech, Danish, English, Spanish, German, Estonian, " +
+                             "French, Italian, Polish, Portuguese, Norwegian, Iranian, Dutch, Russian, " +
+                             "Ukrainian, Icelandic. " +
+                             "Translator uses models that were created as part of <a href='https://browser.mt/'>Bergamot project</a>. " +
+                             "To switch between Notepad and Translator modes, use option in pull-down menu."
+            }
+
+            SectionHeader {
                 text: qsTr("Version %1").arg("3.1")
             }
 

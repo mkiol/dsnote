@@ -7,7 +7,7 @@ Name:       harbour-dsnote
 # << macros
 
 Summary:        Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation
-Version:        3.1.6
+Version:        4.0.0
 Release:        1
 Group:          Qt/Qt
 License:        LICENSE
