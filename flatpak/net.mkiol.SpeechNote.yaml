@@ -17,7 +17,6 @@ finish-args:
   - --filesystem=xdg-download
   - --filesystem=xdg-music
   - --filesystem=xdg-documents
-  - --env=QT_QUICK_CONTROLS_STYLE=org.kde.desktop
   - --env=PYTORCH_TENSOREXPR=0
 cleanup:
   - "/cmake"
@@ -384,6 +383,8 @@ modules:
         path: ../patches/rhvoice.patch
 
   - name: bergamot-fallback
+    only-arches:
+      - x86_64
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
@@ -397,14 +398,7 @@ modules:
       - -DUSE_INTRINSICS_AVX=ON
       - -DUSE_INTRINSICS_AVX2=OFF
       - -DUSE_INTRINSICS_AVX512=OFF
-    build-options:
-      arch:
-        x86-64:
-          config-opts:
-            - -DBUILD_ARCH=x86-64
-        aarch64:
-          config-opts:
-            - -DBUILD_ARCH=armv8-a
+      - -DBUILD_ARCH=x86-64
     post-install:
       - "mv /app/lib/libbergamot_api.so /app/lib/libbergamot_api-fallback.so"
     sources:
@@ -422,6 +416,7 @@ modules:
       - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
       - -DBLAS_INC_DIR=/app/include/openblas
       - -DUSE_INTRINSICS_AVX512=OFF
+      - -DUSE_INTRINSICS_ARMV7_NEONVFPV4=ON
     build-options:
       arch:
         x86-64:
