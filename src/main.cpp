@@ -179,7 +179,6 @@ int main(int argc, char* argv[]) {
     QGuiApplication app(argc, argv);
     QGuiApplication::setWindowIcon(QIcon{QStringLiteral(":/app_icon.svg")});
 #endif
-
     QGuiApplication::setApplicationName(QStringLiteral(APP_ID));
     QGuiApplication::setOrganizationName(QStringLiteral(APP_ORG));
     QGuiApplication::setApplicationDisplayName(QStringLiteral(APP_NAME));

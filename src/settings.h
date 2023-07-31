@@ -52,6 +52,10 @@ class settings : public QSettings, public singleton<settings> {
             set_translate_when_typing NOTIFY translate_when_typing_changed)
     Q_PROPERTY(bool hint_translator READ hint_translator WRITE
                    set_hint_translator NOTIFY hint_translator_changed)
+    Q_PROPERTY(int qt_style_idx READ qt_style_idx WRITE set_qt_style_idx NOTIFY
+                   qt_style_idx_changed)
+    Q_PROPERTY(bool restart_required READ restart_required NOTIFY
+                   restart_required_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -137,6 +141,10 @@ class settings : public QSettings, public singleton<settings> {
                                             const QString &value);
     bool hint_translator() const;
     void set_hint_translator(bool value);
+    int qt_style_idx() const;
+    void set_qt_style_idx(int value);
+    bool restart_required() const;
+    void set_restart_required();
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -190,6 +198,8 @@ class settings : public QSettings, public singleton<settings> {
     void translate_when_typing_changed();
     void default_tts_models_for_mnt_changed(const QString &lang);
     void hint_translator_changed();
+    void qt_style_idx_changed();
+    void restart_required_changed();
 
     // service
     void models_dir_changed();
@@ -205,7 +215,10 @@ class settings : public QSettings, public singleton<settings> {
    private:
     inline static const QString settings_filename =
         QStringLiteral("settings.conf");
+    bool m_restart_required = false;
+
     static QString settings_filepath();
+    void update_qt_style() const;
 
     launch_mode_t m_launch_mode = launch_mode_t::app_stanalone;
 };

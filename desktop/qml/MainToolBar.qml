@@ -39,7 +39,7 @@ ToolBar {
 
                     MenuItem {
                         text: qsTr("About %1").arg(APP_NAME)
-                        icon.source: _settings.app_icon()
+                        icon.name: "starred-symbolic"
                         onClicked: appWin.openDialog("AboutPage.qml")
                     }
 

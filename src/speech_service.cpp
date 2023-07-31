@@ -2588,6 +2588,8 @@ QVariantMap speech_service::translations() const {
 
     map.insert(QStringLiteral("lang_not_conf"),
                tr("No language has been set."));
+    map.insert(QStringLiteral("translation_not_conf"),
+               tr("No translator model has been set."));
     map.insert(QStringLiteral("say_smth"), tr("Say something..."));
     map.insert(QStringLiteral("press_say_smth"),
                tr("Press and say something..."));
@@ -2597,6 +2599,7 @@ QVariantMap speech_service::translations() const {
     map.insert(QStringLiteral("decoding"), tr("Processing, please wait..."));
     map.insert(QStringLiteral("initializing"),
                tr("Getting ready, please wait..."));
+    map.insert(QStringLiteral("translating"), tr("Translating..."));
 
     return map;
 }

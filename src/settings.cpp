@@ -7,6 +7,9 @@
 
 #include "settings.h"
 
+#ifdef USE_DESKTOP
+#include <QQuickStyle>
+#endif
 #include <QCoreApplication>
 #include <QDebug>
 #include <QDir>
@@ -73,6 +76,8 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     qDebug() << "cache location:"
              << QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
     qDebug() << "settings file:" << fileName();
+
+    update_qt_style();
 }
 
 QString settings::settings_filepath() {
@@ -430,6 +435,18 @@ void settings::set_insert_mode(insert_mode_t value) {
     }
 }
 
+int settings::qt_style_idx() const {
+    return value(QStringLiteral("qt_style_idx"), 0).toInt();
+}
+
+void settings::set_qt_style_idx(int value) {
+    if (qt_style_idx() != value) {
+        setValue(QStringLiteral("qt_style_idx"), value);
+        emit qt_style_idx_changed();
+        set_restart_required();
+    }
+}
+
 QUrl settings::app_icon() const {
 #ifdef USE_SFOS
     return QUrl::fromLocalFile(
@@ -474,4 +491,36 @@ void settings::set_prev_app_ver(const QString& value) {
         setValue(QStringLiteral("prev_app_ver"), value);
         emit prev_app_ver_changed();
     }
+}
+
+bool settings::restart_required() const { return m_restart_required; }
+
+void settings::set_restart_required() {
+    if (!restart_required()) {
+        m_restart_required = true;
+        emit restart_required_changed();
+    }
+}
+
+void settings::update_qt_style() const {
+    QString style;
+
+    switch (qt_style_idx()) {
+        case 0:
+            style = QStringLiteral("org.kde.desktop");  // default
+            break;
+        case 1:
+            style = QStringLiteral("Basic");
+            break;
+        case 2:
+            style = QStringLiteral("Default");
+            break;
+        case 3:
+            style = QStringLiteral("Plasma");
+            break;
+    }
+
+    qDebug() << "swithing to style:" << style;
+
+    QQuickStyle::setStyle(style);
 }

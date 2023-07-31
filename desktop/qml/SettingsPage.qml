@@ -176,6 +176,42 @@ DialogPage {
         }
     }
 
+    GridLayout {
+        columns: root.verticalMode ? 1 : 2
+        columnSpacing: appWin.padding
+        rowSpacing: appWin.padding
+
+        Label {
+            Layout.fillWidth: true
+            text: qsTr("Interface style")
+        }
+        ComboBox {
+            Layout.fillWidth: verticalMode
+            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            currentIndex: _settings.qt_style_idx
+            model: [
+                qsTr("Desktop"),
+                qsTr("Basic"),
+                qsTr("Basic Light"),
+                qsTr("Plasma"),
+            ]
+            onActivated: _settings.qt_style_idx = index
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Application graphical interface style.") + " " +
+                          qsTr("Change if you observe problems with incorrect colors under a dark theme.")
+        }
+    }
+
+    Label {
+        wrapMode: Text.Wrap
+        Layout.fillWidth: true
+        visible: _settings.restart_required
+        color: "red"
+        text: qsTr("Restart an application to apply changes.")
+    }
+
     Dialogs.FileDialog {
         id: directoryDialog
         title: qsTr("Select Directory")
