@@ -503,6 +503,7 @@ void settings::set_restart_required() {
 }
 
 void settings::update_qt_style() const {
+#ifdef USE_DESKTOP
     QString style;
 
     switch (qt_style_idx()) {
@@ -523,4 +524,5 @@ void settings::update_qt_style() const {
     qDebug() << "swithing to style:" << style;
 
     QQuickStyle::setStyle(style);
+#endif
 }
