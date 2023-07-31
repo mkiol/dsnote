@@ -43,7 +43,7 @@ Item {
             width: root.width / 6
             height: root.height * value
             opacity: root.status !== 0 ? 1.0 : 0.5
-            Behavior on opacity { FadeAnimator { duration: 150 } }
+            Behavior on opacity { FadeAnimator { duration: 100 } }
 
             SequentialAnimation {
                 id: animation

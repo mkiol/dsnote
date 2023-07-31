@@ -16,7 +16,7 @@ Item {
 
     anchors.fill: parent
     opacity: enabled ? 1.0 : 0.0
-    Behavior on opacity { FadeAnimator { duration: 150 } }
+    Behavior on opacity { FadeAnimator { duration: 100 } }
 
     Rectangle {
         anchors.bottom: parent.bottom
@@ -25,7 +25,7 @@ Item {
         width: parent.width
         gradient: Gradient {
             GradientStop { position: root.invert ? 1.0 : 0.0; color: "transparent" }
-            GradientStop { position: root.invert ? 0.0 : 1.0; color: root.backgroundColor }
+            GradientStop { position: root.invert ? 0.0 : 0.6; color: root.backgroundColor }
         }
 
         InfoLabel {

@@ -13,7 +13,7 @@ Label {
 
     opacity: enabled ? 1.0 : 0.0
     visible: opacity > 0.0
-    Behavior on opacity { FadeAnimator { duration: 150 } }
+    Behavior on opacity { FadeAnimator { duration: 100 } }
     font.pixelSize: Theme.fontSizeLarge
     color: Theme.secondaryHighlightColor
     wrapMode: Text.Wrap

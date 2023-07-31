@@ -21,5 +21,5 @@ Label {
     font.pixelSize: Qt.application.font.pixelSize * 1.2
     visible: opacity > 0.0
     opacity: enabled ? 0.6 : 0.0
-    Behavior on opacity { OpacityAnimator { duration: 150 } }
+    Behavior on opacity { OpacityAnimator { duration: 100 } }
 }

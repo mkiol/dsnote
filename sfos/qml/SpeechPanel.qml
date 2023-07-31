@@ -35,10 +35,15 @@ Item {
     SpeechIndicator {
         id: indicator
 
-        anchors.topMargin: Theme.paddingLarge
-        anchors.top: parent.top
-        anchors.leftMargin: Theme.paddingSmall
-        anchors.left: parent.left
+        anchors {
+            topMargin: Theme.paddingLarge
+            top: parent.top
+        }
+
+        x: !root._empty || textPlaceholder.length !== 0  ?
+               Theme.paddingSmall : (parent.width - width) / 2
+        Behavior on x { NumberAnimation { duration: 100; easing: Easing.InOutQuad } }
+
         width: Theme.itemSizeSmall
         color: Theme.highlightColor
 
@@ -53,7 +58,7 @@ Item {
         off: false
         visible: opacity > 0.0
         opacity: busyIndicator.running ? 0.0 : 1.0
-        Behavior on opacity { FadeAnimator { duration: 150 } }
+        Behavior on opacity { FadeAnimator { duration: 100 } }
     }
 
     BusyIndicatorWithProgress {

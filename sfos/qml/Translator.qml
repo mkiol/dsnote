@@ -27,6 +27,7 @@ Item {
                                         root.maxHeight -
                                         Math.max(mntInCombo.itemHeight, mntOutCombo.itemHeight) -
                                         translatorButton.height
+
     width: parent.width
     height: app.mnt_configured ? column.height : appWin.height
 
@@ -117,8 +118,7 @@ Item {
                 DuoComboButton {
                     id: mntInCombo
 
-                    visible: root.verticalMode ||
-                             (!root.noteTextArea.textArea.focus && !root.translatedNoteTextArea.textArea.focus)
+                    visible: !root.noteTextArea.textArea.focus && !root.translatedNoteTextArea.textArea.focus
                     verticalMode: true
                     width: parent.width
                     first {
@@ -179,6 +179,7 @@ Item {
                     id: _translatedNoteTextArea
 
                     enabled: !root.readOnly && app.mnt_configured && app.translated_text.length !== 0
+                             && app.state !== DsnoteApp.StateTranslating
                     width: parent.width
                     height: root.textAreaHeight
                     highlighted: true
@@ -202,8 +203,7 @@ Item {
                 DuoComboButton {
                     id: mntOutCombo
 
-                    visible: root.verticalMode ||
-                              (!root.noteTextArea.textArea.focus && !root.translatedNoteTextArea.textArea.focus)
+                    visible: !root.noteTextArea.textArea.focus && !root.translatedNoteTextArea.textArea.focus
                     verticalMode: true
                     width: parent.width
 

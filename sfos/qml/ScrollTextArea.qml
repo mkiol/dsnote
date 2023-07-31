@@ -59,6 +59,8 @@ SilicaItem {
             width: parent.width
             background: null
             labelComponent: null
+            opacity: root.enabled ? 1.0 : 0.8
+            Behavior on opacity { FadeAnimator { duration: 100 } }
         }
 
         VerticalScrollDecorator {
@@ -71,7 +73,7 @@ SilicaItem {
         opacity: root.textArea.focus ? 0.0 :
                  root.enabled && (flick.moving || copyButton.pressed || clearButton.pressed || undoButton.pressed ||
                  flick.contentHeight <= (root.height - Theme.itemSizeSmall)) ? 1.0 : 0.4
-        Behavior on opacity { FadeAnimator { duration: 150 } }
+        Behavior on opacity { FadeAnimator { duration: 100 } }
         visible: opacity > 0.0
         anchors.bottom: parent.bottom
         anchors.right: parent.right

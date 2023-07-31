@@ -18,9 +18,13 @@ Page {
     readonly property bool langsView: langId.length == 0
     readonly property var model: langsView ? service.langs_model : service.models_model
 
-    Component.onCompleted: {
-        service.models_model.lang = root.langId
+    function reset(lang_id) {
+        service.models_model.lang = lang_id
+        service.models_model.filter = ""
+        service.models_model.roleFilter = ModelsListModel.AllModels
     }
+
+    Component.onCompleted: reset(root.langId)
 
     allowedOrientations: Orientation.All
 
@@ -55,6 +59,7 @@ Page {
                 visible: !root.langsView
                 label: qsTr("Model type")
                 currentIndex: {
+                    if (root.langsView) return
                     switch (service.models_model.roleFilter) {
                     case ModelsListModel.AllModels:
                         return 0
@@ -70,6 +75,7 @@ Page {
                     return 0
                 }
                 onCurrentIndexChanged: {
+                    if (root.langsView) return
                     var index = searchPageHeader.combo.currentIndex
                     if (index === 1) service.models_model.roleFilter = ModelsListModel.SttModels
                     else if (index === 2) service.models_model.roleFilter = ModelsListModel.TtsModels
@@ -124,6 +130,12 @@ Page {
 
         section.property: "role"
         section.delegate: langsView ? null : modelSectionDelegate
+
+        ViewPlaceholder {
+            text: langsView ? qsTr("There are no languages that match your search criteria.") :
+                              qsTr("There are no models that match your search criteria.")
+            enabled: listView.model.count === 0
+        }
     }
 
     BusyIndicator {

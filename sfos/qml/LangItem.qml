@@ -8,6 +8,8 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
+import harbour.dsnote.Dsnote 1.0
+
 SimpleListItem {
     id: listItem
 
@@ -23,7 +25,14 @@ SimpleListItem {
 
     title.horizontalAlignment: Text.AlignLeft
 
+    function reset(lang_id) {
+        service.models_model.lang = lang_id
+        service.models_model.filter = ""
+        service.models_model.roleFilter = ModelsListModel.AllModels
+    }
+
     function showModels() {
+        reset(langId)
         pageStack.push(Qt.resolvedUrl("LangsPage.qml"), {langId: langId, langName: name})
     }
 

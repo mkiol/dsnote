@@ -113,6 +113,7 @@ RowLayout {
                                 app.state === DsnoteApp.StateListeningManual) return qsTr("Say something...")
 
                         if (app.state === DsnoteApp.StatePlayingSpeech) return qsTr("Reading a note...")
+                        if (app.state === DsnoteApp.StateTranslating) return qsTr("Translating...")
 
                         return ""
                     }

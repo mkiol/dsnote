@@ -88,7 +88,7 @@ Column {
     DuoComboButton {
         id: listenReadCombos
 
-        visible: root.verticalMode || !root.noteTextArea.textArea.focus
+        visible: !root.noteTextArea.textArea.focus
         verticalMode: root.verticalMode
         width: parent.width
         first {

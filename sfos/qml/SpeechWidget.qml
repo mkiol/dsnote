@@ -16,7 +16,7 @@ SpeechPanel {
 
     visible: opacity > 0.0
     opacity: enabled ? 1.0 : 0.0
-    Behavior on opacity { FadeAnimator { duration: 150 } }
+    Behavior on opacity { FadeAnimator { duration: 100 } }
 
     status: {
         switch (app.task_state) {
@@ -46,6 +46,7 @@ SpeechPanel {
                 app.state === DsnoteApp.StateListeningManual ||
                 app.state === DsnoteApp.StateListeningAuto) return qsTr("Say something...")
         if (app.state === DsnoteApp.StatePlayingSpeech) return qsTr("Reading a note...")
+        if (app.state === DsnoteApp.StateTranslating) return qsTr("Translating...")
         if (app.busy || service.busy) return qsTr("Busy...")
         return ""
     }

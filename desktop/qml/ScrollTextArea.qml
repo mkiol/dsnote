@@ -67,7 +67,7 @@ Item {
 
     RowLayout {
         opacity: root.enabled && root._contextActive ? 1.0 : 0.4
-        Behavior on opacity { OpacityAnimator { duration: 150 } }
+        Behavior on opacity { OpacityAnimator { duration: 100 } }
         visible: opacity > 0.0
 
         anchors {
