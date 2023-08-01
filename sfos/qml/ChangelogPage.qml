@@ -42,6 +42,16 @@ Page {
                              "To switch between Notepad and Translator modes, use option in pull-down menu."
             }
 
+            LogItem {
+                title: "New Speech to Text models"
+                description: "Many new Piper models for English are configured for download."
+            }
+
+            LogItem {
+                title: "UI redesign"
+                description: "The user interface has been completely redesigned."
+            }
+
             SectionHeader {
                 text: qsTr("Version %1").arg("3.1")
             }

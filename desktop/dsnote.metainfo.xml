@@ -72,7 +72,12 @@
       </ul>
       <p>Interface:</p>
       <ul>
+      <li>User interface redesign</li>
       <li>Settings option to force specific interface style. It is useful to overcome UI glitches when app is running under GNOME desktop environment.</li>
+      </ul>
+      <p>Text to Speech:</p>
+      <ul>
+      <li>Many new Piper models for English</li>
       </ul>
       </description>
     </release>

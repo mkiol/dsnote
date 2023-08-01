@@ -28,7 +28,12 @@ DialogPage {
               </ul>
               <p>" + qsTr("Interface") + ":</p>
               <ul>
+              <li>User interface redesign</li>
               <li>Settings option to force specific <i>Interface style</i>. It is useful to overcome UI glitches when app is running under GNOME desktop environment.</li>
+              </ul>
+              <p>" + qsTr("Text to Speech") + ":</p>
+              <ul>
+              <li>Many new Piper models for English</li>
               </ul>"
     }
 
