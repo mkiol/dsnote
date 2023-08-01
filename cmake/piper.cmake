@@ -1,8 +1,8 @@
-set(piper_source_url "https://github.com/rhasspy/piper/archive/a0a051a57fca1839f40c9c7475db889999d702ba.zip")
-set(piper_checksum "57d9b3a4d85948a6d8472a2b3bf10f6b")
+set(piper_source_url "https://github.com/rhasspy/piper/archive/e268564deb779af984ac8f632c98727447632124.zip")
+set(piper_checksum "213a31c23c862cbcd9de4231c07d32de35f4ee0b5b5dec52e9ae6dd3aa70ac12")
 
-set(piperphonemize_source_url "https://github.com/rhasspy/piper-phonemize/archive/244657abc6a9eb2f18a8d002a1d722c72cb720a2.zip")
-set(piperphonemize_checksum "d32f864ccacb51f6b68177d464bb6f70")
+set(piperphonemize_source_url "https://github.com/rhasspy/piper-phonemize/archive/7f7b5bd4de22f7fe24341c5bedda0dc1e33f3666.zip")
+set(piperphonemize_checksum "6bdcb21f6c5ae0deff7c9ae26bf07b994791dc800c1962fd216727e66a409929")
 
 set(onnx_x8664_url "https://github.com/microsoft/onnxruntime/releases/download/v1.14.1/onnxruntime-linux-x64-1.14.1.tgz")
 set(onnx_x8664_checksum "9a3b855e2b22ace4ab110cec10b38b74")
@@ -44,7 +44,7 @@ ExternalProject_Add(piperphonemize
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/piperphonemize
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${piperphonemize_source_url}"
-    URL_MD5 "${piperphonemize_checksum}"
+    URL_HASH SHA256=${piperphonemize_checksum}
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/piperphonemize.patch ||
                     echo "patch cmd failed, likely already patched"
@@ -76,7 +76,7 @@ ExternalProject_Add(piper
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/piper
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${piper_source_url}"
-    URL_MD5 "${piper_checksum}"
+    URL_HASH SHA256=${piper_checksum}
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/piper.patch ||
                     echo "patch cmd failed, likely already patched"

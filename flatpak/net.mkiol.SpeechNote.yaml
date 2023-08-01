@@ -287,8 +287,8 @@ modules:
       - -DCMAKE_CXX_FLAGS='-O3'
     sources:
       - type: archive
-        url: https://github.com/rhasspy/piper-phonemize/archive/244657abc6a9eb2f18a8d002a1d722c72cb720a2.zip
-        sha256: 845e79301f627011a73bb6466c4c5cbcbe2c2077973db12e33256678af9d30b1
+        url: https://github.com/rhasspy/piper-phonemize/archive/7f7b5bd4de22f7fe24341c5bedda0dc1e33f3666.zip
+        sha256: 6bdcb21f6c5ae0deff7c9ae26bf07b994791dc800c1962fd216727e66a409929
       - type: patch
         path: ../patches/piperphonemize.patch
 
@@ -311,8 +311,8 @@ modules:
       - -DCMAKE_CXX_FLAGS='-O3'
     sources:
       - type: archive
-        url: https://github.com/rhasspy/piper/archive/a0a051a57fca1839f40c9c7475db889999d702ba.zip
-        sha256: 061fd6d0a71035e535a6e21e899a9fbc48107cdf5c137c67c1fad0257a15a0f8
+        url: https://github.com/rhasspy/piper/archive/e268564deb779af984ac8f632c98727447632124.zip
+        sha256: 213a31c23c862cbcd9de4231c07d32de35f4ee0b5b5dec52e9ae6dd3aa70ac12
       - type: patch
         path: ../patches/piper.patch
 

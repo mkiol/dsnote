@@ -1,6 +1,6 @@
 diff -ruN piperphonemize-org/CMakeLists.txt piperphonemize-patched/CMakeLists.txt
---- piperphonemize-org/CMakeLists.txt	2023-06-15 20:57:27.000000000 +0200
-+++ piperphonemize-patched/CMakeLists.txt	2023-06-28 12:07:07.258883448 +0200
+--- piperphonemize-org/CMakeLists.txt	2023-08-01 00:06:57.000000000 +0200
++++ piperphonemize-patched/CMakeLists.txt	2023-08-01 10:12:16.409075260 +0200
 @@ -13,19 +13,19 @@
  string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -Wl,-rpath,'$ORIGIN'")
  string(APPEND CMAKE_C_FLAGS " -Wall -Wextra")
@@ -26,7 +26,7 @@ diff -ruN piperphonemize-org/CMakeLists.txt piperphonemize-patched/CMakeLists.tx
      src/phonemize.cpp
      src/phoneme_ids.cpp
      src/tashkeel.cpp
-@@ -35,19 +35,18 @@
+@@ -39,19 +39,18 @@
      piper_phonemize PUBLIC
      "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>"
      ${ESPEAK_NG_INCLUDE_DIRS}
@@ -48,7 +48,7 @@ diff -ruN piperphonemize-org/CMakeLists.txt piperphonemize-patched/CMakeLists.tx
  )
  
  target_compile_options(
-@@ -57,29 +56,10 @@
+@@ -61,38 +60,10 @@
  
  target_compile_features(piper_phonemize PUBLIC cxx_std_17)
  
@@ -73,14 +73,27 @@ diff -ruN piperphonemize-org/CMakeLists.txt piperphonemize-patched/CMakeLists.tx
 -target_link_libraries(piper_phonemize_exe PUBLIC
 -                      piper_phonemize
 -                      ${ESPEAK_NG_LIBRARIES})
-+install(TARGETS piper_phonemize
-+    LIBRARY DESTINATION lib
-+    ARCHIVE DESTINATION lib
-+    PUBLIC_HEADER DESTINATION include)
- 
+-
 -target_compile_options(
 -    piper_phonemize_exe PUBLIC
 -    ${ESPEAK_NG_CFLAGS_OTHER}
 -)
-+set(include_files src/phonemize.hpp src/phoneme_ids.hpp src/tashkeel.hpp)
-+install(FILES ${include_files} DESTINATION include)
+-
+-# ---- Declare install targets ----
+-
+ install(
+     TARGETS piper_phonemize
+-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
++    LIBRARY DESTINATION lib
++    ARCHIVE DESTINATION lib)
+ 
+ install(
+     DIRECTORY ${CMAKE_SOURCE_DIR}/src/
+@@ -100,7 +71,3 @@
+     FILES_MATCHING
+     PATTERN "*.h"
+     PATTERN "*.hpp")
+-
+-install(
+-    TARGETS piper_phonemize_exe
+-    ARCHIVE DESTINATION ${CMAKE_INSTALL_BINDIR})
