@@ -331,7 +331,7 @@ std::vector<models_manager::model_t> models_manager::models(
 
         if (ra != rb) return ra < rb;
         if (a.score != b.score) return a.score > b.score;
-        return QString::compare(a.id, b.id, Qt::CaseInsensitive) < 0;
+        return QString::compare(a.name, b.name, Qt::CaseInsensitive) < 0;
     });
 
     return list;
@@ -1209,9 +1209,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
                 speaker = lang_id;
 
             if (score == -1) {
-                if (engine == model_engine::tts_coqui)
-                    score = default_score_tts_coqui;
-                else if (engine == model_engine::tts_espeak)
+                if (engine == model_engine::tts_espeak)
                     score = default_score_tts_espeak;
                 else
                     score = default_score;
