@@ -377,17 +377,6 @@ void settings::set_note(const QString& value) {
     }
 }
 
-bool settings::translate() const {
-    return value(QStringLiteral("translate"), false).toBool();
-}
-
-void settings::set_translate(bool value) {
-    if (translate() != value) {
-        setValue(QStringLiteral("translate"), value);
-        emit translate_changed();
-    }
-}
-
 bool settings::translator_mode() const {
     return value(QStringLiteral("translator_mode"), false).toBool();
 }

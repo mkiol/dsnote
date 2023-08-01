@@ -872,9 +872,9 @@ QString speech_service::lang_from_model_id(const QString &model_id) {
     return l.first();
 }
 
-QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
-                                           const QString &model_id,
-                                           bool translate) {
+QString speech_service::restart_stt_engine(
+    speech_mode_t speech_mode, const QString &model_id,
+    [[maybe_unused]] const QString &out_lang_id) {
     auto model_files = choose_model_config(engine_t::stt, model_id);
     if (model_files && model_files->stt) {
         stt_engine::config_t config;
@@ -889,11 +889,11 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         config.lang = model_files->stt->lang_id.toStdString();
         config.speech_mode =
             static_cast<stt_engine::speech_mode_t>(speech_mode);
-        config.translate = translate;
+        config.translate = false;
 
         bool new_engine_required = [&] {
             if (!m_stt_engine) return true;
-            if (translate != m_stt_engine->translate()) return true;
+            if (out_lang_id != m_stt_engine->translate()) return true;
 
             const auto &type = typeid(*m_stt_engine);
             if (model_files->stt->engine ==
@@ -1753,7 +1753,7 @@ int speech_service::next_task_id() {
 }
 
 int speech_service::stt_transcribe_file(const QString &file, QString lang,
-                                        bool translate) {
+                                        QString out_lang) {
     if (state() == state_t::unknown || state() == state_t::not_configured ||
         state() == state_t::busy) {
         qWarning() << "cannot transcribe_file, invalid state";
@@ -1761,6 +1761,7 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
     }
 
     if (lang.contains('-')) lang = lang.split('-').first();
+    if (out_lang.contains('-')) out_lang = out_lang.split('-').first();
 
     if (m_current_task &&
         m_current_task->speech_mode != speech_mode_t::single_sentence &&
@@ -1771,9 +1772,9 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
     m_current_task = {
         next_task_id(),
         engine_t::stt,
-        restart_stt_engine(speech_mode_t::automatic, lang, translate),
+        restart_stt_engine(speech_mode_t::automatic, lang, out_lang),
         speech_mode_t::automatic,
-        translate,
+        out_lang,
         {},
         {}};
 
@@ -1828,7 +1829,7 @@ int speech_service::mnt_translate(const QString &text, QString lang,
                       engine_t::mnt,
                       restart_mnt_engine(lang, out_lang),
                       speech_mode_t::translate,
-                      false,
+                      out_lang,
                       {},
                       {}};
 
@@ -1856,7 +1857,7 @@ int speech_service::mnt_translate(const QString &text, QString lang,
 }
 
 int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
-                                     bool translate) {
+                                     QString out_lang) {
     if (state() == state_t::unknown || state() == state_t::not_configured ||
         state() == state_t::busy) {
         qWarning() << "cannot stt start listen, invalid state";
@@ -1864,6 +1865,7 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
     }
 
     if (lang.contains('-')) lang = lang.split('-').first();
+    if (out_lang.contains('-')) out_lang = out_lang.split('-').first();
 
     qDebug() << "stt start listen";
 
@@ -1877,15 +1879,15 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
     if (set_pending_stt_task) {
         qDebug() << "setting pending stt task";
         m_pending_task = {
-            next_task_id(), engine_t::stt, lang, mode, translate, {}, {}};
+            next_task_id(), engine_t::stt, lang, mode, out_lang, {}, {}};
         return m_pending_task->id;
     }
 
     m_current_task = {next_task_id(),
                       engine_t::stt,
-                      restart_stt_engine(mode, lang, translate),
+                      restart_stt_engine(mode, lang, out_lang),
                       mode,
-                      translate,
+                      out_lang,
                       {},
                       {}};
 
@@ -1942,7 +1944,7 @@ int speech_service::tts_play_speech(const QString &text, QString lang) {
                       engine_t::tts,
                       restart_tts_engine(lang),
                       speech_mode_t::play_speech,
-                      false,
+                      lang,
                       {},
                       {}};
 
@@ -1998,7 +2000,7 @@ int speech_service::tts_speech_to_file(const QString &text, QString lang) {
                       engine_t::tts,
                       restart_tts_engine(lang),
                       speech_mode_t::speech_to_file,
-                      false,
+                      lang,
                       {0, static_cast<size_t>(text.size())},
                       {}};
 
@@ -2056,7 +2058,7 @@ int speech_service::cancel(int task) {
         if (m_pending_task->engine == engine_t::stt) {
             if (m_current_task->engine == engine_t::tts) stop_tts_engine();
             restart_stt_engine(next_task.speech_mode, next_task.model_id,
-                               next_task.translate);
+                               next_task.out_lang);
         } else if (next_task.engine == engine_t::tts) {
             if (m_current_task->engine == engine_t::stt) stop_stt_engine();
             restart_tts_engine(m_pending_task->model_id);
@@ -2718,8 +2720,9 @@ QString speech_service::merge_wav_files(const std::vector<QString> &files) {
 // DBus
 
 int speech_service::SttStartListen(int mode, const QString &lang,
-                                   bool translate) {
-    qDebug() << "[dbus => service] called StartListen:" << lang << mode;
+                                   const QString &out_lang) {
+    qDebug() << "[dbus => service] called StartListen:" << lang << mode
+             << out_lang;
     m_keepalive_timer.start();
 
     speech_mode_t speech_mode;
@@ -2735,7 +2738,7 @@ int speech_service::SttStartListen(int mode, const QString &lang,
         return INVALID_TASK;
     }
 
-    return stt_start_listen(speech_mode, lang, translate);
+    return stt_start_listen(speech_mode, lang, out_lang);
 }
 
 int speech_service::SttStopListen(int task) {
@@ -2753,11 +2756,12 @@ int speech_service::Cancel(int task) {
 }
 
 int speech_service::SttTranscribeFile(const QString &file, const QString &lang,
-                                      bool translate) {
-    qDebug() << "[dbus => service] called TranscribeFile:" << file << lang;
+                                      const QString &out_lang) {
+    qDebug() << "[dbus => service] called TranscribeFile:" << file << lang
+             << out_lang;
     start_keepalive_current_task();
 
-    return stt_transcribe_file(file, lang, translate);
+    return stt_transcribe_file(file, lang, out_lang);
 }
 
 double speech_service::SttGetFileTranscribeProgress(int task) {

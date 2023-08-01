@@ -179,10 +179,10 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("SttGetFileTranscribeProgress"), argumentList);
     }
 
-    inline QDBusPendingReply<int> SttStartListen(int mode, const QString &lang, bool translate)
+    inline QDBusPendingReply<int> SttStartListen(int mode, const QString &lang, const QString &out_lang)
     {
         QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(mode) << QVariant::fromValue(lang) << QVariant::fromValue(translate);
+        argumentList << QVariant::fromValue(mode) << QVariant::fromValue(lang) << QVariant::fromValue(out_lang);
         return asyncCallWithArgumentList(QStringLiteral("SttStartListen"), argumentList);
     }
 
@@ -193,10 +193,10 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("SttStopListen"), argumentList);
     }
 
-    inline QDBusPendingReply<int> SttTranscribeFile(const QString &file, const QString &lang, bool translate)
+    inline QDBusPendingReply<int> SttTranscribeFile(const QString &file, const QString &lang, const QString &out_lang)
     {
         QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(file) << QVariant::fromValue(lang) << QVariant::fromValue(translate);
+        argumentList << QVariant::fromValue(file) << QVariant::fromValue(lang) << QVariant::fromValue(out_lang);
         return asyncCallWithArgumentList(QStringLiteral("SttTranscribeFile"), argumentList);
     }
 

@@ -107,17 +107,6 @@ Page {
                         .arg("<i>" + qsTr("Restore punctuation") + "</i>").arg("<i>" + qsTr("Punctuation") + "</i>")
             }
 
-            TextSwitch {
-                visible: false
-                checked: _settings.translate
-                automaticCheck: false
-                text: qsTr("Translate to English")
-                description: qsTr("Translate decoded text to English. This option works only with Whisper models.")
-                onClicked: {
-                    _settings.translate = !_settings.translate
-                }
-            }
-
             SectionHeader {
                 text: qsTr("Other")
             }

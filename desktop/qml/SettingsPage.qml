@@ -133,18 +133,6 @@ DialogPage {
                 .arg("<i>" + qsTr("Restore punctuation") + "</i>").arg("<i>" + qsTr("Punctuation") + "</i>")
     }
 
-    CheckBox {
-        checked: _settings.translate
-        text: qsTr("Translate to English")
-        onCheckedChanged: {
-            _settings.translate = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTr("Translate decoded text to English. This option works only with Whisper models.")
-    }
-
     SectionLabel {
         text: qsTr("Other")
     }

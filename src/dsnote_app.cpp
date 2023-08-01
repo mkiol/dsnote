@@ -1376,13 +1376,12 @@ void dsnote_app::transcribe_file(const QString &source_file) {
     int new_task = 0;
 
     if (s->launch_mode() == settings::launch_mode_t::app_stanalone) {
-        new_task = speech_service::instance()->stt_transcribe_file(
-            source_file, {}, s->translate());
+        new_task = speech_service::instance()->stt_transcribe_file(source_file,
+                                                                   {}, {});
     } else {
         qDebug() << "[app => dbus] call SttTranscribeFile";
 
-        new_task =
-            m_dbus_service.SttTranscribeFile(source_file, {}, s->translate());
+        new_task = m_dbus_service.SttTranscribeFile(source_file, {}, {});
     }
 
     m_side_task.set(new_task);
@@ -1400,11 +1399,11 @@ void dsnote_app::listen() {
     if (s->launch_mode() == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->stt_start_listen(
             static_cast<speech_service::speech_mode_t>(s->speech_mode()), {},
-            s->translate());
+            {});
     } else {
         qDebug() << "[app => dbus] call SttStartListen:" << s->speech_mode();
         new_task = m_dbus_service.SttStartListen(
-            static_cast<int>(s->speech_mode()), {}, s->translate());
+            static_cast<int>(s->speech_mode()), {}, {});
     }
 
     m_primary_task.set(new_task);

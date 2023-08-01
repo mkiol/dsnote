@@ -195,7 +195,7 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"SttStartListen\">\n"
 "      <arg direction=\"in\" type=\"i\" name=\"mode\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"lang\"/>\n"
-"      <arg direction=\"in\" type=\"b\" name=\"translate\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"out_lang\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </method>\n"
 "    <method name=\"SttStopListen\">\n"
@@ -205,7 +205,7 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"SttTranscribeFile\">\n"
 "      <arg direction=\"in\" type=\"s\" name=\"file\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"lang\"/>\n"
-"      <arg direction=\"in\" type=\"b\" name=\"translate\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"out_lang\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </method>\n"
 "    <method name=\"TtsPlaySpeech\">\n"
@@ -337,9 +337,9 @@ public Q_SLOTS: // METHODS
     int MntTranslate(const QString &text, const QString &lang, const QString &out_lang);
     int Reload();
     double SttGetFileTranscribeProgress(int task);
-    int SttStartListen(int mode, const QString &lang, bool translate);
+    int SttStartListen(int mode, const QString &lang, const QString &out_lang);
     int SttStopListen(int task);
-    int SttTranscribeFile(const QString &file, const QString &lang, bool translate);
+    int SttTranscribeFile(const QString &file, const QString &lang, const QString &out_lang);
     double TtsGetSpeechToFileProgress(int task);
     int TtsPlaySpeech(const QString &text, const QString &lang);
     int TtsSpeechToFile(const QString &text, const QString &lang);

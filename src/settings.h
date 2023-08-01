@@ -24,8 +24,6 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(QString note READ note WRITE set_note NOTIFY note_changed)
     Q_PROPERTY(speech_mode_t speech_mode READ speech_mode WRITE set_speech_mode
                    NOTIFY speech_mode_changed)
-    Q_PROPERTY(bool translate READ translate WRITE set_translate NOTIFY
-                   translate_changed)
     Q_PROPERTY(insert_mode_t insert_mode READ insert_mode WRITE set_insert_mode
                    NOTIFY insert_mode_changed)
     Q_PROPERTY(mode_t mode READ mode WRITE set_mode NOTIFY mode_changed)
@@ -113,8 +111,6 @@ class settings : public QSettings, public singleton<settings> {
     void set_note(const QString &value);
     speech_mode_t speech_mode() const;
     void set_speech_mode(speech_mode_t value);
-    bool translate() const;
-    void set_translate(bool value);
     insert_mode_t insert_mode() const;
     void set_insert_mode(insert_mode_t value);
     mode_t mode() const;
@@ -188,7 +184,6 @@ class settings : public QSettings, public singleton<settings> {
     // app
     void speech_mode_changed();
     void note_changed();
-    void translate_changed();
     void insert_mode_changed();
     void mode_changed();
     void file_save_dir_changed();

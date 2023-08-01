@@ -541,8 +541,8 @@
             SttStartListen:
             @mode: 0 - Automatic, 1 - Manual, 2 - One Sentence
             @lang: language code (ISO 639-1) or model id
-            @translate: when 1 decoded text will be translated to english
-                   (only supported with Whisper models)
+            @out_lang: Language code (ISO 639-1) language the decoded text
+                       will be translated into. When empty text won't be translated.
             @task: returned id of task which will be included in
                    SttIntermediateTextDecoded and SttTextDecoded signals,
                    @task less than 0 idicates an error
@@ -554,7 +554,7 @@
         <method name="SttStartListen">
             <arg name="mode" type="i" direction="in" />
             <arg name="lang" type="s" direction="in" />
-            <arg name="translate" type="b" direction="in" />
+            <arg name="out_lang" type="s" direction="in" />
             <arg name="task" type="i" direction="out" />
         </method>
 
@@ -575,8 +575,8 @@
             SttTranscribeFile:
             @file: path or URL to audio file
             @lang: language code (ISO 639-1) or model id
-            @translate: when 1 decoded text will be translated to english
-                   (only supported with Whisper models)
+            @out_lang: Language code (ISO 639-1) language the decoded text
+                       will be translated into. When empty text won't be translated.
             @task: returned id of task which will be included in
                    SttIntermediateTextDecoded and SttTextDecoded signals,
                    @task less than 0 idicates an error
@@ -590,7 +590,7 @@
         <method name="SttTranscribeFile">
             <arg name="file" type="s" direction="in" />
             <arg name="lang" type="s" direction="in" />
-            <arg name="translate" type="b" direction="in" />
+            <arg name="out_lang" type="s" direction="in" />
             <arg name="task" type="i" direction="out" />
         </method>
 
