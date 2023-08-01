@@ -21,6 +21,10 @@ ColumnLayout {
     readonly property bool canCancelMnt: app.state === DsnoteApp.StateTranslating
     readonly property int _mntComboSize: Math.max(mntInCombo.first.combo.implicitWidth,
                                                   mntOutCombo.first.combo.implicitWidth)
+    readonly property string placeholderText: qsTr("Translator model has not been set up yet.") + " " +
+                                              qsTr("Go to the %1 to download models for the languages you intend to use.")
+                                                .arg("<i>" + qsTr("Languages") + "</i>")
+    readonly property alias verticalMode: grid.verticalMode
 
     Connections {
         target: app
@@ -64,19 +68,11 @@ ColumnLayout {
     opacity: enabled ? 1.0 : 0.0
     Behavior on opacity { OpacityAnimator { duration: 100 } }
 
-    PlaceholderLabelForLayout {
-        enabled: !app.mnt_configured
-        text: qsTr("Translator model has not been set up yet.") + " " +
-              qsTr("Go to the %1 to download models for the languages you intend to use.")
-        .arg("<i>" + qsTr("Languages") + "</i>")
-    }
-
     GridLayout {
         id: grid
 
         property bool verticalMode: width < appWin.verticalWidthThreshold
 
-        visible: app.mnt_configured
         columns: verticalMode ? 1 : 2
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -93,15 +89,16 @@ ColumnLayout {
                 background: Item {}
                 bottomPadding: 0
                 rightPadding: grid.verticalMode ? horizontalPadding : 0
+                enabled: app.mnt_configured
 
                 ScrollTextArea {
                     id: _noteTextArea
 
-                    enabled: !root.readOnly
+                    enabled: !root.readOnly && app.mnt_configured
                     anchors.fill: parent
                     canUndoFallback: app.can_undo_note
                     textArea {
-                        placeholderText: qsTr("Type here text to translate from...")
+                        placeholderText: app.mnt_configured ? qsTr("Type here text to translate from...") : ""
                         onTextChanged: {
                             app.note = root.noteTextArea.textArea.text
                         }
@@ -176,6 +173,7 @@ ColumnLayout {
                 background: Item {}
                 bottomPadding: 0
                 leftPadding: grid.verticalMode ? horizontalPadding : 0
+                enabled: app.mnt_configured
 
                 ScrollTextArea {
                     id: _translatedNoteTextArea

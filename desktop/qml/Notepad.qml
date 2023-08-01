@@ -17,6 +17,9 @@ ColumnLayout {
 
     property alias noteTextArea: _noteTextArea
     property bool readOnly: false
+    readonly property string placeholderText: qsTr("Neither Speech to Text nor Text to Speech model has been set up yet.") + " " +
+                                              qsTr("Go to the %1 to download models for the languages you intend to use.")
+                                                .arg("<i>" + qsTr("Languages") + "</i>")
 
     Connections {
         target: app
@@ -78,13 +81,6 @@ ColumnLayout {
                 root.noteTextArea.textArea.text = ""
             }
             onUndoFallbackClicked: app.undo_or_redu_note()
-        }
-
-        PlaceholderLabel {
-            enabled: app.note.length === 0 && !app.stt_configured && !app.tts_configured
-            text: qsTr("Neither Speech to Text nor Text to Speech model has been set up yet.") + " " +
-                  qsTr("Go to the %1 to download models for the languages you intend to use.")
-                    .arg("<i>" + qsTr("Languages") + "</i>")
         }
     }
 

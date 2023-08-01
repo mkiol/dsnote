@@ -9,10 +9,11 @@ import QtQuick 2.12
 import QtQuick.Controls 2.15
 
 Label {
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.margins: 3 * appWin.padding
+    property double offset: 0.0
+
+    x: 3 * appWin.padding
+    width: parent.width - 2*x
+    y: ((parent.height - height) / 2) + offset
     horizontalAlignment: Qt.AlignHCenter
     wrapMode: Text.Wrap
     textFormat: Text.StyledText
