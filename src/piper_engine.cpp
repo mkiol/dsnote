@@ -34,8 +34,14 @@ void piper_engine::create_model() {
     }
 
     try {
+        int64_t speaker_id = -1;
+        try {
+            speaker_id = std::stoll(m_config.speaker);
+        } catch ([[maybe_unused]] const std::invalid_argument& err) {
+        }
+
         m_piper.emplace(std::move(model_file), std::move(config_file),
-                        m_config.data_dir);
+                        m_config.data_dir, speaker_id);
     } catch (const std::exception& err) {
         LOGE("error: " << err.what());
     }

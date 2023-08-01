@@ -1,6 +1,6 @@
 diff -ruN piper-org/CMakeLists.txt piper-patched/CMakeLists.txt
 --- piper-org/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ piper-patched/CMakeLists.txt	2023-06-28 11:19:02.452202472 +0200
++++ piper-patched/CMakeLists.txt	2023-08-01 10:19:04.829066867 +0200
 @@ -0,0 +1,36 @@
 +cmake_minimum_required(VERSION 3.5)
 +
@@ -40,8 +40,8 @@ diff -ruN piper-org/CMakeLists.txt piper-patched/CMakeLists.txt
 +    PUBLIC_HEADER DESTINATION include)
 diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
 --- piper-org/piper_api.cpp	1970-01-01 01:00:00.000000000 +0100
-+++ piper-patched/piper_api.cpp	2023-06-27 19:18:21.610102443 +0200
-@@ -0,0 +1,51 @@
++++ piper-patched/piper_api.cpp	2023-08-01 12:13:26.178927014 +0200
+@@ -0,0 +1,52 @@
 +#include "piper_api.h"
 +#include "src/cpp/piper.hpp"
 +
@@ -55,16 +55,17 @@ diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
 +    piper::Voice voice;
 +};
 +
-+piper_api::piper_api(std::string model_path, std::string model_config_path, std::string espeak_ng_data_path) {
++piper_api::piper_api(std::string model_path, std::string model_config_path, std::string espeak_ng_data_path, int64_t speaker_id) {
 +    m_ctx = std::make_unique<ctx>();
 +
 +    m_ctx->config.eSpeakDataPath = std::move(espeak_ng_data_path);
 +
 +    piper::initialize(m_ctx->config);
 +
-+    std::optional<piper::SpeakerId> speaker_id;
++    std::optional<piper::SpeakerId> speaker;
++    if (speaker_id > -1) speaker.emplace(speaker_id);
 +
-+    piper::loadVoice(m_ctx->config, std::move(model_path), std::move(model_config_path), m_ctx->voice, speaker_id);
++    piper::loadVoice(m_ctx->config, std::move(model_path), std::move(model_config_path), m_ctx->voice, speaker);
 +}
 +
 +piper_api::~piper_api() {
@@ -95,21 +96,20 @@ diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
 +}
 diff -ruN piper-org/piper_api.h piper-patched/piper_api.h
 --- piper-org/piper_api.h	1970-01-01 01:00:00.000000000 +0100
-+++ piper-patched/piper_api.h	2023-06-24 18:18:24.151028699 +0200
-@@ -0,0 +1,23 @@
++++ piper-patched/piper_api.h	2023-08-01 12:05:47.565603026 +0200
+@@ -0,0 +1,22 @@
 +#ifndef PIPER_API_H
 +#define PIPER_API_H
 +
 +#define PIPER_API_EXPORT __attribute__((visibility("default")))
 +
 +#include <string>
-+#include <optional>
 +#include <vector>
 +#include <memory>
 +
 +class PIPER_API_EXPORT piper_api {
 +public:
-+    piper_api(std::string model_path, std::string model_config_path, std::string espeak_ng_data_path = {});
++    piper_api(std::string model_path, std::string model_config_path, std::string espeak_ng_data_path = {}, int64_t speaker_id = -1);
 +    ~piper_api();
 +    std::vector<int16_t> text_to_audio(std::string text);
 +    void text_to_wav_file(std::string text, const std::string& wav_file_path);
@@ -120,4 +120,3 @@ diff -ruN piper-org/piper_api.h piper-patched/piper_api.h
 +};
 +
 +#endif  // DSNOTE_APP_H
-\ No newline at end of file
