@@ -240,6 +240,8 @@ int main(int argc, char* argv[]) {
     context->setContextProperty(QStringLiteral("APP_SUPPORT_EMAIL"),
                                 APP_SUPPORT_EMAIL);
     context->setContextProperty(QStringLiteral("APP_WEBPAGE"), APP_WEBPAGE);
+    context->setContextProperty(QStringLiteral("APP_WEBPAGE_ADDITIONAL"),
+                                APP_WEBPAGE_ADDITIONAL);
     context->setContextProperty(QStringLiteral("APP_LICENSE"), APP_LICENSE);
     context->setContextProperty(QStringLiteral("APP_LICENSE_URL"),
                                 APP_LICENSE_URL);

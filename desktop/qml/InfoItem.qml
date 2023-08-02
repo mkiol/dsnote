@@ -18,14 +18,17 @@ RowLayout {
     spacing: appWin.padding
 
     Label {
+        Layout.alignment: Qt.AlignTop
         id: _label
         text: qsTr("Project website")
     }
     Label {
         id: _value
+        Layout.alignment: Qt.AlignTop
         Layout.fillWidth: true
         horizontalAlignment: Text.AlignLeft
         textFormat: Text.StyledText
         onLinkActivated: Qt.openUrlExternally(link)
+        wrapMode: Text.Wrap
     }
 }

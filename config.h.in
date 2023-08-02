@@ -18,6 +18,7 @@
 #define APP_COPYRIGHT_YEAR "@info_copyright_year@"
 #define APP_SUPPORT_EMAIL "@info_support_email@"
 #define APP_WEBPAGE "@info_webpage@"
+#define APP_WEBPAGE_ADDITIONAL "@info_webpage_additional@"
 #define APP_LICENSE "@info_license@"
 #define APP_LICENSE_URL "@info_license_url@"
 #define APP_LICENSE_SPDX "@info_license_spdx@"
