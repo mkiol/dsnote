@@ -3681,7 +3681,7 @@
         },
         {
             "name": "English (Piper Amy Low Female)",
-            "model_id": "en_piper_amy_low",
+            "model_id": "en_piper_us_amy_low",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "eb54877c",
@@ -3695,7 +3695,7 @@
         },
         {
             "name": "English (Piper Amy Medium Female)",
-            "model_id": "en_piper_amy_medium",
+            "model_id": "en_piper_us_amy_medium",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "fe8a07fb",
@@ -3709,7 +3709,7 @@
         },
         {
             "name": "English (Piper Arctic Medium Male)",
-            "model_id": "en_piper_arctit_medium",
+            "model_id": "en_piper_us_arctit_medium",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "bdfb11f6",
@@ -3723,7 +3723,7 @@
         },
         {
             "name": "English (Piper Danny Low Male)",
-            "model_id": "en_piper_danny_low",
+            "model_id": "en_piper_us_danny_low",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "5c51fa53",
@@ -3737,7 +3737,7 @@
         },
         {
             "name": "English (Piper Joe Medium Male)",
-            "model_id": "en_piper_joe_medium",
+            "model_id": "en_piper_us_joe_medium",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "a77dab52",
@@ -3751,7 +3751,7 @@
         },
         {
             "name": "English (Piper Kathleen Low Female)",
-            "model_id": "en_piper_kathleen_low",
+            "model_id": "en_piper_us_kathleen_low",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "5100d497",
@@ -3765,7 +3765,7 @@
         },
         {
             "name": "English (Piper Kusal Medium Male)",
-            "model_id": "en_piper_kusal_medium",
+            "model_id": "en_piper_us_kusal_medium",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "a8932287",
@@ -3779,7 +3779,7 @@
         },
         {
             "name": "English (Piper L2Arctic Medium Male)",
-            "model_id": "en_piper_l2arctit_medium",
+            "model_id": "en_piper_us_l2arctit_medium",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "473d78fb",
@@ -3793,7 +3793,7 @@
         },
         {
             "name": "English (Piper Lessac High Female)",
-            "model_id": "en_piper_lessac_high",
+            "model_id": "en_piper_us_lessac_high",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "6245ec2f",
@@ -3807,7 +3807,7 @@
         },
         {
             "name": "English (Piper Lessac Medium Female)",
-            "model_id": "en_piper_lessac_medium",
+            "model_id": "en_piper_us_lessac_medium",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "6575a0c4",
@@ -3821,7 +3821,7 @@
         },
         {
             "name": "English (Piper LibriTTS High Female)",
-            "model_id": "en_piper_libritts_high",
+            "model_id": "en_piper_us_libritts_high",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "8ece090",
@@ -3835,7 +3835,7 @@
         },
         {
             "name": "English (Piper Ryan High Male)",
-            "model_id": "en_piper_ryan_high",
+            "model_id": "en_piper_us_ryan_high",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "11f8734",
@@ -3849,7 +3849,7 @@
         },
         {
             "name": "English (Piper Ryan Medium Male)",
-            "model_id": "en_piper_ryan_medium",
+            "model_id": "en_piper_us_ryan_medium",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "18c818f6",
@@ -3862,8 +3862,8 @@
             "size": "63216494"
         },
         {
-            "name": "British English (Piper Alan Low Male)",
-            "model_id": "en_piper_alan_low",
+            "name": "English British (Piper Alan Low Male)",
+            "model_id": "en_piper_gb_alan_low",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "ede002f6",
@@ -3876,8 +3876,8 @@
             "size": "63118675"
         },
         {
-            "name": "British English (Piper Alan Medium Male)",
-            "model_id": "en_piper_alan_medium",
+            "name": "English British (Piper Alan Medium Male)",
+            "model_id": "en_piper_gb_alan_medium",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "d0d3dddd",
@@ -3890,8 +3890,8 @@
             "size": "63216499"
         },
         {
-            "name": "British English (Piper Alba Medium Female)",
-            "model_id": "en_piper_alba_medium",
+            "name": "English British (Piper Alba Medium Female)",
+            "model_id": "en_piper_gb_alba_medium",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "50d499bb",
@@ -3904,8 +3904,8 @@
             "size": "63216499"
         },
         {
-            "name": "British English (Piper Aru Medium Male)",
-            "model_id": "en_piper_aru_medium",
+            "name": "English British (Piper Aru Medium Male)",
+            "model_id": "en_piper_gb_aru_medium",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "77778ad",
@@ -3918,8 +3918,8 @@
             "size": "76769512"
         },
         {
-            "name": "British English (Piper Jenny Medium Female)",
-            "model_id": "en_piper_jenny_medium",
+            "name": "English British (Piper Jenny Medium Female)",
+            "model_id": "en_piper_gb_jenny_medium",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "c93e2feb",
@@ -3932,8 +3932,8 @@
             "size": "63216506"
         },
         {
-            "name": "British English (Northern Medium Male)",
-            "model_id": "en_piper_northern_medium",
+            "name": "English British (Northern Medium Male)",
+            "model_id": "en_piper_gb_northern_medium",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "4df23653",
@@ -3946,8 +3946,8 @@
             "size": "63216430"
         },
         {
-            "name": "British English (Southern Low Female)",
-            "model_id": "en_piper_southern_low",
+            "name": "English British (Southern Low Female)",
+            "model_id": "en_piper_gb_southern_low",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "45cf4971",
@@ -3960,8 +3960,8 @@
             "size": "63118694"
         },
         {
-            "name": "British English (VCTK Medium Female)",
-            "model_id": "en_piper_vctk_medium",
+            "name": "English British (VCTK Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium",
             "engine": "tts_piper",
             "lang_id": "en",
             "checksum": "edcfab53",
@@ -3975,141 +3975,141 @@
             "hidden": true
         },
         {
-            "name": "British English (VCTK 0 Medium Female)",
-            "model_id": "en_piper_vctk_medium_0",
+            "name": "English British (VCTK 0 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_0",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "0"
         },
         {
-            "name": "British English (VCTK 1 Medium Female)",
-            "model_id": "en_piper_vctk_medium_1",
+            "name": "English British (VCTK 1 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_1",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "1"
         },
         {
-            "name": "British English (VCTK 2 Medium Female)",
-            "model_id": "en_piper_vctk_medium_2",
+            "name": "English British (VCTK 2 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_2",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "2"
         },
         {
-            "name": "British English (VCTK 3 Medium Female)",
-            "model_id": "en_piper_vctk_medium_3",
+            "name": "English British (VCTK 3 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_3",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "3"
         },
         {
-            "name": "British English (VCTK 4 Medium Female)",
-            "model_id": "en_piper_vctk_medium_4",
+            "name": "English British (VCTK 4 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_4",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "4"
         },
         {
-            "name": "British English (VCTK 5 Medium Male)",
-            "model_id": "en_piper_vctk_medium_5",
+            "name": "English British (VCTK 5 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_5",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "5"
         },
         {
-            "name": "British English (VCTK 6 Medium Female)",
-            "model_id": "en_piper_vctk_medium_6",
+            "name": "English British (VCTK 6 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_6",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "6"
         },
         {
-            "name": "British English (VCTK 7 Medium Male)",
-            "model_id": "en_piper_vctk_medium_7",
+            "name": "English British (VCTK 7 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_7",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "7"
         },
         {
-            "name": "British English (VCTK 8 Medium Female)",
-            "model_id": "en_piper_vctk_medium_8",
+            "name": "English British (VCTK 8 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_8",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "8"
         },
         {
-            "name": "British English (VCTK 10 Medium Male)",
-            "model_id": "en_piper_vctk_medium_10",
+            "name": "English British (VCTK 10 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_10",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "10"
         },
         {
-            "name": "British English (VCTK 11 Medium Female)",
-            "model_id": "en_piper_vctk_medium_11",
+            "name": "English British (VCTK 11 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_11",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "11"
         },
         {
-            "name": "British English (VCTK 12 Medium Male)",
-            "model_id": "en_piper_vctk_medium_12",
+            "name": "English British (VCTK 12 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_12",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "12"
         },
         {
-            "name": "British English (VCTK 13 Medium Male)",
-            "model_id": "en_piper_vctk_medium_13",
+            "name": "English British (VCTK 13 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_13",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "13"
         },
         {
-            "name": "British English (VCTK 14 Medium Female)",
-            "model_id": "en_piper_vctk_medium_14",
+            "name": "English British (VCTK 14 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_14",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "14"
         },
         {
-            "name": "British English (VCTK 15 Medium Female)",
-            "model_id": "en_piper_vctk_medium_15",
+            "name": "English British (VCTK 15 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_15",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "15"
         },
         {
-            "name": "British English (VCTK 16 Medium Male)",
-            "model_id": "en_piper_vctk_medium_16",
+            "name": "English British (VCTK 16 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_16",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "16"
         },
         {
-            "name": "British English (VCTK 17 Medium Female)",
-            "model_id": "en_piper_vctk_medium_17",
+            "name": "English British (VCTK 17 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_17",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "17"
         },
         {
-            "name": "British English (VCTK 18 Medium Female)",
-            "model_id": "en_piper_vctk_medium_18",
+            "name": "English British (VCTK 18 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_18",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "18"
         },
         {
-            "name": "British English (VCTK 19 Medium Male)",
-            "model_id": "en_piper_vctk_medium_19",
+            "name": "English British (VCTK 19 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_19",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "19"
         },
         {
-            "name": "British English (VCTK 20 Medium Male)",
-            "model_id": "en_piper_vctk_medium_20",
+            "name": "English British (VCTK 20 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_20",
             "model_alias_of": "en_piper_vctk_medium",
             "lang_id": "en",
             "speaker": "20"
@@ -4119,26 +4119,42 @@
             "model_id": "ca_piper_upc_ona_low",
             "engine": "tts_piper",
             "lang_id": "ca",
-            "checksum": "29fa5b80",
-            "checksum_quick": "5fba3675",
-            "comp": "targz",
+            "checksum": "47605409",
+            "checksum_quick": "7d202efe",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-ca-upc_ona-x-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/ca/ca_ES/upc_ona/x_low/ca_ES-upc_ona-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/ca/ca_ES/upc_ona/x_low/ca_ES-upc_ona-x_low.onnx.json"
             ],
-            "size": "18716208"
+            "size": "20642959"
+        },
+        {
+            "name": "Català (Piper Upc Ona Medium Female)",
+            "model_id": "ca_piper_upc_ona_medium",
+            "engine": "tts_piper",
+            "lang_id": "ca",
+            "checksum": "8b7e3671",
+            "checksum_quick": "492339d3",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/ca/ca_ES/upc_ona/medium/ca_ES-upc_ona-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/ca/ca_ES/upc_ona/medium/ca_ES-upc_ona-medium.onnx.json"
+            ],
+            "size": "63216494"
         },
         {
             "name": "Català (Piper Upc Pau Low Male)",
             "model_id": "ca_piper_upc_pau_low",
             "engine": "tts_piper",
             "lang_id": "ca",
-            "checksum": "5fd47f1b",
-            "checksum_quick": "a1087e41",
-            "comp": "targz",
+            "checksum": "b556cca0",
+            "checksum_quick": "f68acbc6",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-ca-upc_pau-x-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/ca/ca_ES/upc_pau/x_low/ca_ES-upc_pau-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/ca/ca_ES/upc_pau/x_low/ca_ES-upc_pau-x_low.onnx.json"
             ],
-            "size": "18825995"
+            "size": "28144937"
         },
         {
             "name": "Dansk (Piper Talesyntese Medium Male)",
@@ -4147,9 +4163,10 @@
             "lang_id": "da",
             "checksum": "b30d70c2",
             "checksum_quick": "afcf77ed",
-            "comp": "targz",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-da-nst_talesyntese-medium.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/da/da_DK/talesyntese/medium/da_DK-talesyntese-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/da/da_DK/talesyntese/medium/da_DK-talesyntese-medium.onnx.json"
             ],
             "size": "58261532"
         },
@@ -4158,184 +4175,308 @@
             "model_id": "de_piper_eva_low",
             "engine": "tts_piper",
             "lang_id": "de",
-            "checksum": "6e01736f",
-            "checksum_quick": "86b52e4e",
-            "comp": "targz",
+            "checksum": "f55984a1",
+            "checksum_quick": "e0d3f80",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-de-eva_k-x-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/eva_k/x_low/de_DE-eva_k-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/eva_k/x_low/de_DE-eva_k-x_low.onnx.json"
             ],
-            "size": "18716986"
+            "size": "20642957"
         },
         {
             "name": "Deutsch (Piper Karlsson Low Male)",
             "model_id": "de_piper_karlsson_low",
             "engine": "tts_piper",
             "lang_id": "de",
-            "checksum": "3228b5f",
-            "checksum_quick": "c915e670",
-            "comp": "targz",
+            "checksum": "f5858e13",
+            "checksum_quick": "bb78e924",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-de-karlsson-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/karlsson/low/de_DE-karlsson-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/karlsson/low/de_DE-karlsson-low.onnx.json"
             ],
-            "size": "58261792"
+            "size": "63118671"
         },
         {
             "name": "Deutsch (Piper Kerstin Low Female)",
             "model_id": "de_piper_kerstin_low",
             "engine": "tts_piper",
             "lang_id": "de",
-            "checksum": "36c92c17",
-            "checksum_quick": "d691f169",
-            "comp": "targz",
+            "checksum": "8da78096",
+            "checksum_quick": "2d7045e8",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-de-kerstin-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/kerstin/low/de_DE-kerstin-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/kerstin/low/de_DE-kerstin-low.onnx.json"
             ],
-            "size": "58259462"
+            "size": "63118670"
         },
         {
             "name": "Deutsch (Piper Pavoque Low Male)",
             "model_id": "de_piper_pavoque_low",
             "engine": "tts_piper",
             "lang_id": "de",
-            "checksum": "424a0269",
-            "checksum_quick": "37c723ad",
-            "comp": "targz",
+            "checksum": "b43d7402",
+            "checksum_quick": "a9ba9546",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-de-pavoque-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/pavoque/low/de_DE-pavoque-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/pavoque/low/de_DE-pavoque-low.onnx.json"
             ],
-            "size": "58262855"
+            "size": "63118670"
         },
         {
             "name": "Deutsch (Piper Ramona Low Female)",
             "model_id": "de_piper_ramona_low",
             "engine": "tts_piper",
             "lang_id": "de",
-            "checksum": "d6c64193",
-            "checksum_quick": "b2cbd846",
-            "comp": "targz",
+            "checksum": "167ff379",
+            "checksum_quick": "f2858a2c",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-de-ramona-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/ramona/low/de_DE-ramona-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/ramona/low/de_DE-ramona-low.onnx.json"
             ],
-            "size": "58248670"
+            "size": "63118669"
         },
         {
             "name": "Deutsch (Piper Thorsten Low Male)",
             "model_id": "de_piper_thorsten_low",
             "engine": "tts_piper",
             "lang_id": "de",
-            "checksum": "5c1a8ef8",
-            "checksum_quick": "2cbefa16",
-            "comp": "targz",
+            "checksum": "88e51067",
+            "checksum_quick": "59897b85",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-de-thorsten-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/thorsten/low/de_DE-thorsten-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/thorsten/low/de_DE-thorsten-low.onnx.json"
             ],
             "size": "58260329"
+        },
+        {
+            "name": "Deutsch (Piper Thorsten Medium Male)",
+            "model_id": "de_piper_thorsten_medium",
+            "engine": "tts_piper",
+            "lang_id": "de",
+            "checksum": "fe284c3e",
+            "checksum_quick": "af8f3cd9",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/thorsten/medium/de_DE-thorsten-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/thorsten/medium/de_DE-thorsten-medium.onnx.json"
+            ],
+            "size": "63216409"
+        },
+        {
+            "name": "Deutsch (Piper Emotional Medium Male)",
+            "model_id": "de_piper_thorsten_emotional_medium",
+            "engine": "tts_piper",
+            "lang_id": "de",
+            "checksum": "186e6c90",
+            "checksum_quick": "e07611a8",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/thorsten_emotional/medium/de_DE-thorsten_emotional-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/de/de_DE/thorsten_emotional/medium/de_DE-thorsten_emotional-medium.onnx.json"
+            ],
+            "size": "76759128"
         },
         {
             "name": "Ελληνικά (Piper Rapunzelina Low Female)",
             "model_id": "el_piper_rapunzelina_low",
             "engine": "tts_piper",
             "lang_id": "el",
-            "checksum": "f58d34a0",
-            "checksum_quick": "7ab99ce2",
-            "comp": "targz",
+            "checksum": "7aaf29e6",
+            "checksum_quick": "ffdb9228",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-el-gr-rapunzelina-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/el/el_GR/rapunzelina/low/el_GR-rapunzelina-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/el/el_GR/rapunzelina/low/el_GR-rapunzelina-low.onnx.json"
             ],
-            "size": "58261670"
+            "size": "63118674"
         },
         {
             "name": "Español (Piper Carlfm Low Male)",
-            "model_id": "es_piper_carlfm_low",
+            "model_id": "es_piper_es_carlfm_low",
             "engine": "tts_piper",
             "lang_id": "es",
-            "score": 4,
-            "checksum": "a7869b08",
-            "checksum_quick": "777ffe2",
-            "comp": "targz",
+            "checksum": "c36e7283",
+            "checksum_quick": "235fd75d",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-es-carlfm-x-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/carlfm/x_low/es_ES-carlfm-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/carlfm/x_low/es_ES-carlfm-x_low.onnx.json"
             ],
-            "size": "18825198"
+            "size": "28144936"
         },
         {
             "name": "Español (Piper MLS 10246 Low Female)",
-            "model_id": "es_piper_mls10246_low",
+            "model_id": "es_piper_es_mls10246_low",
             "engine": "tts_piper",
             "lang_id": "es",
-            "checksum": "4be881f4",
-            "checksum_quick": "74620971",
-            "comp": "targz",
+            "checksum": "5ed4f42",
+            "checksum_quick": "2e66d6bf",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-es-mls_10246-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/mls_10246/low/es_ES-mls_10246-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/mls_10246/low/es_ES-mls_10246-low.onnx.json"
             ],
-            "size": "58252390"
+            "size": "63118672"
         },
         {
             "name": "Español (Piper MLS 9972 Low Female)",
-            "model_id": "es_piper_mls9972_low",
+            "model_id": "es_piper_es_mls9972_low",
             "engine": "tts_piper",
             "lang_id": "es",
-            "checksum": "bbb232e8",
-            "checksum_quick": "edfcc829",
-            "comp": "targz",
+            "checksum": "4632c099",
+            "checksum_quick": "787d55da",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-es-mls_9972-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/mls_9972/low/es_ES-mls_9972-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/mls_9972/low/es_ES-mls_9972-low.onnx.json"
             ],
-            "size": "58265629"
+            "size": "63118671"
+        },
+        {
+            "name": "Español (Piper Davefx Medium Male)",
+            "model_id": "es_piper_es_davefx_medium",
+            "engine": "tts_piper",
+            "lang_id": "es",
+            "checksum": "9ab3d1a6",
+            "checksum_quick": "3bcecf51",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/davefx/medium/es_ES-davefx-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/davefx/medium/es_ES-davefx-medium.onnx.json"
+            ],
+            "size": "63216407"
+        },
+        {
+            "name": "Español (Piper Sharvard Medium Male)",
+            "model_id": "es_piper_es_sharvard_medium",
+            "engine": "tts_piper",
+            "lang_id": "es",
+            "checksum": "e3b841e4",
+            "checksum_quick": "229e890b",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/sharvard/medium/es_ES-sharvard-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/sharvard/medium/es_ES-sharvard-medium.onnx.json"
+            ],
+            "size": "76748852"
+        },
+        {
+            "name": "Español mexicano (Piper Ald Medium Male)",
+            "model_id": "es_piper_mx_ald_medium",
+            "engine": "tts_piper",
+            "lang_id": "es",
+            "checksum": "20d9d2b6",
+            "checksum_quick": "3d5e7ce0",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_MX/ald/medium/es_MX-ald-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_MX/ald/medium/es_MX-ald-medium.onnx.json"
+            ],
+            "size": "63216506"
         },
         {
             "name": "Suomi (Piper Harri Low Male)",
             "model_id": "fi_piper_harri_low",
             "engine": "tts_piper",
             "lang_id": "fi",
-            "checksum": "554ee94",
-            "checksum_quick": "cf8260be",
-            "comp": "targz",
+            "checksum": "7745b1c5",
+            "checksum_quick": "417323ef",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-fi-harri-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fi/fi_FI/harri/low/fi_FI-harri-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fi/fi_FI/harri/low/fi_FI-harri-low.onnx.json"
             ],
-            "size": "58356444"
+            "size": "69809333"
+        },
+        {
+            "name": "Suomi (Piper Harri Medium Male)",
+            "model_id": "fi_piper_harri_medium",
+            "engine": "tts_piper",
+            "lang_id": "fi",
+            "checksum": "916f298c",
+            "checksum_quick": "a3e1b232",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fi/fi_FI/harri/medium/fi_FI-harri-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fi/fi_FI/harri/medium/fi_FI-harri-medium.onnx.json"
+            ],
+            "size": "63216492"
         },
         {
             "name": "Français (Piper Gilles Low Male)",
             "model_id": "fr_piper_gilles_low",
             "engine": "tts_piper",
             "lang_id": "fr",
-            "checksum": "4e3fcada",
-            "checksum_quick": "f87cdb",
-            "comp": "targz",
+            "checksum": "44bea8fa",
+            "checksum_quick": "f7775afb",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-fr-gilles-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/gilles/low/fr_FR-gilles-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/gilles/low/fr_FR-gilles-low.onnx.json"
             ],
-            "size": "58254824"
+            "size": "63118669"
         },
         {
             "name": "Français (Piper MLS 1840 Low Male)",
             "model_id": "fr_piper_mls1840_low",
             "engine": "tts_piper",
             "lang_id": "fr",
-            "checksum": "1ad67dbc",
-            "checksum_quick": "2a3043ba",
-            "comp": "targz",
+            "checksum": "250ae94a",
+            "checksum_quick": "3464af48",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-fr-mls_1840-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/mls_1840/low/fr_FR-mls_1840-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/mls_1840/low/fr_FR-mls_1840-low.onnx.json"
             ],
-            "size": "58259597"
+            "size": "63118671"
+        },
+        {
+            "name": "Français (Piper Siwis Low Female)",
+            "model_id": "fr_piper_siwis_low",
+            "engine": "tts_piper",
+            "lang_id": "fr",
+            "checksum": "47d07a6b",
+            "checksum_quick": "b8664108",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/low/fr_FR-siwis-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/low/fr_FR-siwis-low.onnx.json"
+            ],
+            "size": "28144933"
         },
         {
             "name": "Français (Piper Siwis Medium Female)",
             "model_id": "fr_piper_siwis_medium",
             "engine": "tts_piper",
             "lang_id": "fr",
-            "score": 4,
-            "checksum": "3a7a964c",
-            "checksum_quick": "ce906b33",
-            "comp": "targz",
+            "checksum": "26151c85",
+            "checksum_quick": "4003f210",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-fr-siwis-medium.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx.json"
             ],
-            "size": "58374904"
+            "size": "63216492"
+        },
+        {
+            "name": "Français (Piper Upmc Medium Female)",
+            "model_id": "fr_piper_upmc_medium",
+            "engine": "tts_piper",
+            "lang_id": "fr",
+            "checksum": "1f85c544",
+            "checksum_quick": "7de6ab24",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/upmc/medium/fr_FR-upmc-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/upmc/medium/fr_FR-upmc-medium.onnx.json"
+            ],
+            "size": "76746803"
         },
         {
             "name": "Italiano (Piper Riccardo Low Male)",
@@ -4632,13 +4773,42 @@
             "engine": "tts_piper",
             "lang_id": "pl",
             "score": 0,
-            "checksum": "795b9164",
-            "checksum_quick": "6577a9bf",
-            "comp": "targz",
+            "checksum": "9eae9439",
+            "checksum_quick": "8acaac94",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-pl-mls_6892-low.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/pl/pl_PL/mls_6892/low/pl_PL-mls_6892-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/pl/pl_PL/mls_6892/low/pl_PL-mls_6892-low.onnx.json"
             ],
-            "size": "58251456"
+            "size": "63118671"
+        },
+        {
+            "name": "Polski (Piper Darkman Medium Male)",
+            "model_id": "pl_piper_darkman_medium",
+            "engine": "tts_piper",
+            "lang_id": "pl",
+            "checksum": "3ac06794",
+            "checksum_quick": "a1b55a1",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/pl/pl_PL/darkman/medium/pl_PL-darkman-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/pl/pl_PL/darkman/medium/pl_PL-darkman-medium.onnx.json"
+            ],
+            "size": "63216408"
+        },
+        {
+            "name": "Polski (Piper Gosia Medium Female)",
+            "model_id": "pl_piper_gosia_medium",
+            "engine": "tts_piper",
+            "lang_id": "pl",
+            "checksum": "95efba7",
+            "checksum_quick": "ba087dd2",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/pl/pl_PL/gosia/medium/pl_PL-gosia-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/pl/pl_PL/gosia/medium/pl_PL-gosia-medium.onnx.json"
+            ],
+            "size": "63216406"
         },
         {
             "name": "Amarəñña (Espeak Robot)",
@@ -5599,7 +5769,6 @@
             "engine": "tts_rhvoice",
             "lang_id": "pl",
             "speaker": "cezary",
-            "score": 4,
             "checksum": "ebb69a2d",
             "checksum_quick": "ee679222",
             "comp": "zipall",
