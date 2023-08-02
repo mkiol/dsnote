@@ -1,13 +1,15 @@
 diff -ruN piper-org/CMakeLists.txt piper-patched/CMakeLists.txt
 --- piper-org/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ piper-patched/CMakeLists.txt	2023-08-01 10:19:04.829066867 +0200
-@@ -0,0 +1,36 @@
++++ piper-patched/CMakeLists.txt	2023-08-02 19:38:00.335761422 +0200
+@@ -0,0 +1,38 @@
 +cmake_minimum_required(VERSION 3.5)
 +
 +project(piper_api C CXX)
 +
 +set(CMAKE_CXX_STANDARD 17)
 +set(CMAKE_CXX_STANDARD_REQUIRED ON)
++
++set(PIPER_PHONEMIZE_INCLUDE ${CMAKE_INCLUDE_PATH}/piper-phonemize CACHE STRING "")
 +
 +add_library(piper_api STATIC piper_api.cpp src/cpp/piper.cpp)
 +
@@ -27,7 +29,7 @@ diff -ruN piper-org/CMakeLists.txt piper-patched/CMakeLists.txt
 +
 +target_include_directories(piper_api PUBLIC
 +  ${ESPEAK_NG_INCLUDE_DIRS}
-+  ${CMAKE_INCLUDE_PATH})
++  ${PIPER_PHONEMIZE_INCLUDE})
 +
 +target_compile_options(piper_api PUBLIC
 +  ${ESPEAK_NG_CFLAGS_OTHER})

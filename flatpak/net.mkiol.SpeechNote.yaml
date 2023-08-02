@@ -284,7 +284,6 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DPKG_CONFIG_USE_CMAKE_PREFIX_PATH=ON
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DCMAKE_CXX_FLAGS='-O3'
     sources:
       - type: archive
         url: https://github.com/rhasspy/piper-phonemize/archive/7f7b5bd4de22f7fe24341c5bedda0dc1e33f3666.zip
@@ -308,7 +307,7 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DPKG_CONFIG_USE_CMAKE_PREFIX_PATH=ON
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DCMAKE_CXX_FLAGS='-O3'
+      - -DPIPER_PHONEMIZE_INCLUDE=/app/include/piper-phonemize
     sources:
       - type: archive
         url: https://github.com/rhasspy/piper/archive/e268564deb779af984ac8f632c98727447632124.zip
