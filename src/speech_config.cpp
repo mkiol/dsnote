@@ -57,11 +57,11 @@ ModelsListModel *speech_config::models_model() { return &m_models_model; }
 LangsListModel *speech_config::langs_model() { return &m_langs_model; }
 
 QVariantList speech_config::available_models() const {
-    const auto available_models_map =
+    const auto available_models_list =
         models_manager::instance()->available_models();
 
     QVariantList list;
-    std::transform(available_models_map.cbegin(), available_models_map.cend(),
+    std::transform(available_models_list.cbegin(), available_models_list.cend(),
                    std::back_inserter(list), [](const auto &model) {
                        return QStringList{model.id,
                                           QStringLiteral("%1 / %2").arg(

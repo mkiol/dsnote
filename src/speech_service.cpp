@@ -893,7 +893,6 @@ QString speech_service::restart_stt_engine(
 
         bool new_engine_required = [&] {
             if (!m_stt_engine) return true;
-            if (out_lang_id != m_stt_engine->translate()) return true;
 
             const auto &type = typeid(*m_stt_engine);
             if (model_files->stt->engine ==
