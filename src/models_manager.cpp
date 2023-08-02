@@ -331,7 +331,7 @@ std::vector<models_manager::model_t> models_manager::models(
 
         if (ra != rb) return ra < rb;
         if (a.score != b.score) return a.score > b.score;
-        return QString::compare(a.name, b.name, Qt::CaseInsensitive) < 0;
+        return QString::compare(a.id, b.id, Qt::CaseInsensitive) < 0;
     });
 
     return list;
