@@ -9,6 +9,7 @@
 
 #include <dirent.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 #include <algorithm>
 #include <array>
@@ -226,10 +227,12 @@ void tts_engine::process() {
 
             LOGD("tts out file: " << output_file);
 
-            if (!file_exists(output_file) &&
-                !encode_speech_impl(task.text, output_file)) {
-                if (m_call_backs.error) m_call_backs.error();
-                break;
+            if (!file_exists(output_file)) {
+                if (!encode_speech_impl(task.text, output_file)) {
+                    unlink(output_file.c_str());
+                    if (m_call_backs.error) m_call_backs.error();
+                    break;
+                }
             }
 
             if (m_call_backs.speech_encoded) {
