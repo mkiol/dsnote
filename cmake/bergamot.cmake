@@ -57,7 +57,7 @@ ExternalProject_Add(bergamot
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/bergamot.patch ||
                     echo "patch cmd failed, likely already patched"
-    CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+    CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_VERBOSE_MAKEFILE=ON
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         -DBLAS_LIB_PATH=${external_lib_dir}/libopenblas.so
