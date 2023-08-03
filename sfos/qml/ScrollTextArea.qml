@@ -18,6 +18,7 @@ SilicaItem {
     property bool canUndo: false
     property bool canRedo: false
     property bool canClear: true
+    property alias placeholderLabel: _placeholderLabel.text
 
     signal clearClicked()
     signal copyClicked()
@@ -60,7 +61,7 @@ SilicaItem {
             background: null
             labelComponent: null
             opacity: root.enabled ? 1.0 : 0.8
-            Behavior on opacity { FadeAnimator { duration: 100 } }
+            Behavior on opacity { FadeAnimator {} }
         }
 
         VerticalScrollDecorator {
@@ -69,19 +70,36 @@ SilicaItem {
         }
     }
 
+    Label {
+        id: _placeholderLabel
+
+        y: _flick.y + _textArea.textTopPadding + Theme.paddingSmall
+        x: Theme.horizontalPageMargin
+        visible: opacity > 0.0
+        opacity: _textArea.text.length === 0 && text.length !== 0 ? 1.0 : 0.0
+        Behavior on opacity { FadeAnimator {} }
+        width: parent.width - 2 * Theme.horizontalPageMargin
+        wrapMode: Text.Wrap
+        color: _textArea.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+    }
+
     Row {
         opacity: root.textArea.focus ? 0.0 :
                  root.enabled && (flick.moving || copyButton.pressed || clearButton.pressed || undoButton.pressed ||
-                 flick.contentHeight <= (root.height - Theme.itemSizeSmall)) ? 1.0 : 0.4
-        Behavior on opacity { FadeAnimator { duration: 100 } }
+                 flick.contentHeight <= (root.height - Theme.itemSizeSmall * 0.6)) ? 1.0 : 0.4
+        Behavior on opacity { FadeAnimator {} }
         visible: opacity > 0.0
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        height: Theme.itemSizeSmall + Theme.paddingMedium
+        anchors.rightMargin: Theme.horizontalPageMargin
+        spacing: Theme.paddingLarge
+        height: Theme.itemSizeSmall * 0.6 + Theme.paddingLarge
 
         IconButton {
             id: copyButton
 
+            width: Theme.itemSizeSmall * 0.6
+            height: Theme.itemSizeSmall * 0.6
             visible: root.textArea.text.length !== 0
             icon.source: "image://theme/icon-m-clipboard?" + (pressed ? Theme.highlightColor : Theme.primaryColor)
             onClicked: root.copyClicked()
@@ -89,6 +107,8 @@ SilicaItem {
         IconButton {
             id: clearButton
 
+            width: Theme.itemSizeSmall * 0.6
+            height: Theme.itemSizeSmall * 0.6
             visible: root.canClear && !textArea.readOnly && textArea.text.length !== 0
             icon.source: "image://theme/icon-m-clear?" + (pressed ? Theme.highlightColor : Theme.primaryColor)
             onClicked: root.clearClicked()
@@ -96,6 +116,8 @@ SilicaItem {
         IconButton {
             id: undoButton
 
+            width: Theme.itemSizeSmall * 0.6
+            height: Theme.itemSizeSmall * 0.6
             visible: !root.textArea.readOnly && (root.canUndo || root.canRedo)
             icon.source: (root.canUndo ? "image://theme/icon-m-rotate-left?" : "image://theme/icon-m-rotate-right?") +
                          (pressed ? Theme.highlightColor : Theme.primaryColor)

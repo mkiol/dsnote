@@ -22,9 +22,12 @@ Page {
         service.models_model.lang = lang_id
         service.models_model.filter = ""
         service.models_model.roleFilter = ModelsListModel.AllModels
+        if (langsView) service.langs_model.filter = ""
     }
 
-    Component.onCompleted: reset(root.langId)
+    Component.onCompleted: {
+        reset(root.langId)
+    }
 
     allowedOrientations: Orientation.All
 

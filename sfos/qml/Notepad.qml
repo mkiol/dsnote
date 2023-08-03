@@ -60,10 +60,10 @@ Column {
         canUndo: app.can_undo_note
         canRedo: app.can_redo_note
         canClear: true
+        placeholderLabel: app.stt_configured || app.tts_configured ?
+                             qsTr("Type here or press %1 to make a note...")
+                                .arg("<i>" + qsTr("Listen") + "</i>") : ""
         textArea {
-            placeholderText: app.stt_configured || app.tts_configured ?
-                                 qsTr("Type here or press %1 to make a note...")
-                                    .arg("<i>" + qsTr("Listen") + "</i>") : ""
             onTextChanged: {
                 app.note = root.noteTextArea.textArea.text
             }

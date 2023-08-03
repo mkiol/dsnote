@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -10,34 +10,37 @@ import Sailfish.Silica 1.0
 
 Rectangle {
     id: root
-    color: Theme.overlayBackgroundColor
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.top: parent.top
-    height: label.height + 2 * Theme.paddingSmall
 
+    property double maxWidth: parent.width - 2 * Theme.horizontalPageMargin
+
+    width: label.width + 2 * Theme.paddingLarge
+    color: Theme.highlightDimmerColor
+    height: label.height + 2 * Theme.paddingLarge
+    radius: 10
     visible: opacity > 0.0
     opacity: timer.running ? 1.0 : 0.0
-    Behavior on opacity { FadeAnimator { duration: 100 } }
+    Behavior on opacity { FadeAnimator {} }
 
     Timer {
         id: timer
+
         interval: 5000
     }
 
     Label {
         id: label
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.leftMargin: Theme.paddingLarge
-        anchors.rightMargin: Theme.paddingLarge
-        anchors.verticalCenter: parent.verticalCenter
-        font.pixelSize: Theme.fontSizeExtraSmall
-        color: Theme.primaryColor
+
+        x: Theme.paddingLarge
+        y: Theme.paddingLarge
+        width: Math.min(implicitWidth, root.maxWidth - 2 * Theme.paddingLarge)
+        font.pixelSize: Theme.fontSizeSmall
+        color: mouse.pressed ? Theme.highlightColor : Theme.primaryColor
         wrapMode: Text.Wrap
     }
 
     MouseArea {
+        id: mouse
+
         anchors.fill: parent
         onClicked: timer.stop()
     }

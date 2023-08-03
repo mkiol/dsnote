@@ -101,8 +101,8 @@ Item {
                     canUndo: app.can_undo_note
                     canRedo: app.can_redo_note
                     canClear: true
+                    placeholderLabel: qsTr("Type here text to translate from...")
                     textArea {
-                        placeholderText: qsTr("Type here text to translate from...")
                         onTextChanged: {
                             app.note = root.noteTextArea.textArea.text
                         }

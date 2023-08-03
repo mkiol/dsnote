@@ -331,7 +331,7 @@ void dsnote_app::handle_tts_partial_speech(const QString &text,
         return;
     }
 
-    this->m_intermediate_text = text;
+    m_intermediate_text = text;
 
     emit intermediate_text_changed();
 }

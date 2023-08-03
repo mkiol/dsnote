@@ -118,7 +118,6 @@ RowLayout {
                         return ""
                     }
 
-                    font.italic: true
                     text: app.intermediate_text.length === 0 ? placeholderText : app.intermediate_text
                     opacity: app.intermediate_text.length === 0 ? 0.6 : 1.0
                 }

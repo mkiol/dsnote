@@ -150,6 +150,8 @@ ApplicationWindow {
 
             Toast {
                 id: toast
+
+                anchors.centerIn: parent
             }
 
             Connections {

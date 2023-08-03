@@ -42,7 +42,7 @@ Item {
 
         x: !root._empty || textPlaceholder.length !== 0  ?
                Theme.paddingSmall : (parent.width - width) / 2
-        Behavior on x { NumberAnimation { duration: 100; easing: Easing.InOutQuad } }
+        Behavior on x { NumberAnimation { duration: 100; easing.type: Easing.InOutQuad } }
 
         width: Theme.itemSizeSmall
         color: Theme.highlightColor
