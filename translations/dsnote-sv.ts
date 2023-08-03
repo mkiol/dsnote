@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sv" sourcelanguage="en_US">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sv" sourcelanguage="en_US">
 <context>
     <name>AboutPage</name>
     <message>
@@ -49,13 +47,9 @@
         <translation>Bibliotek som används</translation>
     </message>
     <message>
-        <source>Note taking and reading with Speech to Text and Text to Speech</source>
-        <translation type="vanished">Anteckning och uppläsning med tal-till-text och text-till-tal</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/AboutPage.qml" line="43"/>
         <source>Note taking, reading and translating with Speech to Text, Text to Speech and Machine Translation</source>
-        <translation type="unfinished"></translation>
+        <translation>Anteckna, läs och översätt med tal-till-text, text-till-tal och maskinöversättning</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutPage.qml" line="55"/>
@@ -88,44 +82,47 @@
     </message>
     <message>
         <location filename="../sfos/qml/ChangelogPage.qml" line="32"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="80"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="103"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="158"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="196"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="229"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="252"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="46"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="94"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="117"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="172"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="210"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="243"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="266"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="280"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="290"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="294"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="304"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="17"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="37"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="62"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="36"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="51"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="76"/>
         <source>Version %1</source>
         <translation>Version %1</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="22"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="21"/>
         <source>Translator</source>
-        <translation type="unfinished"></translation>
+        <translation>Översättare</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="26"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="46"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="66"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="40"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="60"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="80"/>
         <source>Text to Speech</source>
-        <translation type="unfinished">Text till tal</translation>
+        <translation>Text-till-tal</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="30"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="53"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="70"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="44"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="67"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="84"/>
         <source>Speech to Text</source>
-        <translation type="unfinished">Tal till text</translation>
+        <translation>Tal-till-text</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="41"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="29"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="55"/>
         <source>Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Gränssnitt</translation>
     </message>
 </context>
 <context>
@@ -185,57 +182,53 @@
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="21"/>
         <source>%1 let you take, read and translate notes in multiple languages. It uses Speech to Text, Text to Speech and Machine Translation to do so.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 låter dig anteckna, läsa och översätta anteckningar på flera språk. Den använder tal-till-text, text-till-tal och maskinöversättning för att göra så.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="23"/>
         <location filename="../desktop/qml/HelloPage.qml" line="34"/>
         <source>Speech Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Speech Note</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="24"/>
         <source>Text and voice processing take place entirely offline, locally on your computer, without using a network connection. Your privacy is always respected. No data is sent to the Internet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Text- och röstbearbetning sker helt offline, lokalt på din dator, utan att använda nätverksanslutningen. Din integritet respekteras alltid. Ingen data skickas till Internet.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="27"/>
         <source>To get started, you first need to set up the languages you want to use.</source>
-        <translation type="unfinished"></translation>
+        <translation>För att komma igång måste du först ställa in de språk du vill använda.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="29"/>
         <source>Click the %1 button, select a language, and then download the model files you intend to use.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tryck på knappen %1, välj ett språk och ladda sedan ned de modellfiler du tänker använda.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="30"/>
         <source>Languages</source>
-        <translation type="unfinished">Språk</translation>
+        <translation>Språk</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="32"/>
         <source>To switch between %1 and %2 modes, use the toggle buttons in the upper right corner.</source>
-        <translation type="unfinished"></translation>
+        <translation>Om du vill växla mellan lägena %1 och %2 använder du växlingsknapparna i det övre högra hörnet.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="33"/>
         <source>Notepad</source>
-        <translation type="unfinished"></translation>
+        <translation>Anteckningar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="33"/>
         <source>Translator</source>
-        <translation type="unfinished"></translation>
+        <translation>Översättare</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="34"/>
         <source>Have fun with %1!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;&lt;i&gt;Speech Note&lt;/i&gt; let you take and read notes with your voice. It uses Speech to Text and Text to Speech conversions to do so.&lt;/p&gt;&lt;p&gt;All voice processing is entirely done off-line, locally on your computer without the use of a network connection. Your privacy is always respected. No data is sent to the Internet.&lt;/p&gt;&lt;p&gt;To get started, you must first configure languages you&apos;d like to use.&lt;/p&gt;&lt;p&gt;&amp;rarr; Click the &lt;b&gt;Languages&lt;/b&gt; button, select a language and then download model files of your choice.&lt;/p&gt;&lt;p&gt;Have fun with &lt;i&gt;Speech Note&lt;/i&gt;!&lt;/p&gt;</source>
-        <translation type="vanished">&lt;p&gt;&lt;i&gt;Speech Note&lt;/i&gt; låter dig anteckna och läsa upp anteckningar med rösten. Den använder tal-till-text- och text-till-tal-konverteringar för att göra det.&lt;/p&gt;&lt;p&gt;All röstbehandling sker helt offline, lokalt på din dator utan användning av nätverksanslutning. Din integritet respekteras alltid. Ingen data skickas till Internet.&lt;/p&gt;&lt;p&gt;För att komma igång måste du först ställa in de språk du vill använda.&lt;/p&gt;&lt;p&gt;&amp;rarr; Tryck på &lt;b&gt;Språk&lt;/b&gt;-knappen, välj ett språk och ladda sedan ner de språkfiler du föredrar.&lt;/p&gt;&lt;p&gt; Ha roligt med &lt;i&gt;Speech Note&lt;/i&gt;!&lt;/p&gt;</translation>
+        <translation>Ha kul med %1!</translation>
     </message>
 </context>
 <context>
@@ -266,7 +259,7 @@
         <location filename="../sfos/qml/LangsPage.qml" line="52"/>
         <location filename="../desktop/qml/LangsPage.qml" line="88"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alla</translation>
     </message>
     <message>
         <location filename="../sfos/qml/LangsPage.qml" line="53"/>
@@ -290,7 +283,7 @@
         <location filename="../desktop/qml/LangsPage.qml" line="91"/>
         <location filename="../desktop/qml/LangsPage.qml" line="177"/>
         <source>Translator</source>
-        <translation type="unfinished"></translation>
+        <translation>Översättare</translation>
     </message>
     <message>
         <location filename="../sfos/qml/LangsPage.qml" line="56"/>
@@ -298,29 +291,13 @@
         <location filename="../desktop/qml/LangsPage.qml" line="92"/>
         <location filename="../desktop/qml/LangsPage.qml" line="179"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Annat</translation>
     </message>
     <message>
         <location filename="../sfos/qml/LangsPage.qml" line="60"/>
         <location filename="../desktop/qml/LangsPage.qml" line="104"/>
         <source>Model type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Text to Text</source>
-        <translation type="vanished">Text till text</translation>
-    </message>
-    <message>
-        <source>All models</source>
-        <translation type="vanished">Alla modeller</translation>
-    </message>
-    <message>
-        <source>Only Speech to Text</source>
-        <translation type="vanished">Endast tal till text</translation>
-    </message>
-    <message>
-        <source>Only Text to Speech</source>
-        <translation type="vanished">Endast text till tal</translation>
+        <translation>Modelltyp</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="110"/>
@@ -372,30 +349,30 @@
         <location filename="../sfos/qml/MainToolBar.qml" line="57"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="86"/>
         <source>Save to audio file</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara som ljudfil</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="72"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="105"/>
         <source>Save the translation to audio file</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara översättningen som ljudfil</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="79"/>
         <source>Mode: %1</source>
-        <translation type="unfinished">Läge: %1</translation>
+        <translation>Läge: %1</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="79"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="166"/>
         <source>Translator</source>
-        <translation type="unfinished"></translation>
+        <translation>Översättare</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="80"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="147"/>
         <source>Notepad</source>
-        <translation type="unfinished"></translation>
+        <translation>Anteckningar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="82"/>
@@ -403,25 +380,9 @@
         <translation>Konvertera ljudfil till text.</translation>
     </message>
     <message>
-        <source>Save speech to audio file</source>
-        <translation type="vanished">Spara tal som ljudfil</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="101"/>
         <source>Convert text to audio and save as WAV file.</source>
         <translation>Konvertera text till ljud och spara som WAV-fil.</translation>
-    </message>
-    <message>
-        <source>Copy All</source>
-        <translation type="vanished">Kopiera allt</translation>
-    </message>
-    <message>
-        <source>Paste</source>
-        <translation type="vanished">Klistra in</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="vanished">Rensa</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="26"/>
@@ -446,18 +407,6 @@
         <translation>Fil</translation>
     </message>
     <message>
-        <source>Edit</source>
-        <translation type="vanished">Redigera</translation>
-    </message>
-    <message>
-        <source>Undo</source>
-        <translation type="vanished">Ångra</translation>
-    </message>
-    <message>
-        <source>Redo</source>
-        <translation type="vanished">Upprepa</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="31"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="129"/>
         <source>Languages</source>
@@ -466,7 +415,7 @@
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="122"/>
         <source>Convert translated text to audio and save as WAV file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Konvertera översatt text till ljud och spara som WAV-fil.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="134"/>
@@ -476,12 +425,12 @@
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="158"/>
         <source>Switch to Notepad</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt till anteckningar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="178"/>
         <source>Switch to Translator</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt till översättare</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="185"/>
@@ -528,34 +477,12 @@
     </message>
 </context>
 <context>
-    <name>ModelsSwitcher</name>
-    <message>
-        <source>Speech to Text model</source>
-        <translation type="vanished">Tal-till-text-modell</translation>
-    </message>
-    <message>
-        <source>Text to Speech model</source>
-        <translation type="vanished">Text-till-tal-modell</translation>
-    </message>
-</context>
-<context>
-    <name>ModelsSwitcherCompact</name>
-    <message>
-        <source>Speech to Text model</source>
-        <translation type="vanished">Tal-till-text-modell</translation>
-    </message>
-    <message>
-        <source>Text to Speech model</source>
-        <translation type="vanished">Text-till-tal-modell</translation>
-    </message>
-</context>
-<context>
     <name>Notepad</name>
     <message>
         <location filename="../sfos/qml/Notepad.qml" line="65"/>
         <location filename="../desktop/qml/Notepad.qml" line="68"/>
         <source>Type here or press %1 to make a note...</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriv här eller tryck %1 för att anteckna...</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Notepad.qml" line="66"/>
@@ -563,202 +490,63 @@
         <location filename="../desktop/qml/Notepad.qml" line="69"/>
         <location filename="../desktop/qml/Notepad.qml" line="108"/>
         <source>Listen</source>
-        <translation type="unfinished">Lyssna</translation>
+        <translation>Lyssna</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Notepad.qml" line="82"/>
         <location filename="../desktop/qml/Notepad.qml" line="85"/>
         <source>Neither Speech to Text nor Text to Speech model has been set up yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Varken tal-till-text- eller text-till-talmodell har konfigurerats ännu.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Notepad.qml" line="83"/>
         <location filename="../desktop/qml/Notepad.qml" line="86"/>
         <source>Go to the %1 to download models for the languages you intend to use.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gå till %1 för att ladda ner de språkmodeller du tänker använda.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Notepad.qml" line="84"/>
         <location filename="../desktop/qml/Notepad.qml" line="87"/>
         <source>Languages</source>
-        <translation type="unfinished">Språk</translation>
+        <translation>Språk</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Notepad.qml" line="98"/>
         <location filename="../desktop/qml/Notepad.qml" line="101"/>
         <source>No Speech to Text model</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen tal-till-textmodell</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Notepad.qml" line="100"/>
         <source>Speech to Text</source>
-        <translation type="unfinished">Tal till text</translation>
+        <translation>Tal-till-text</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Notepad.qml" line="134"/>
         <location filename="../desktop/qml/Notepad.qml" line="133"/>
         <source>No Text to Speech model</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen text-till-talmodell</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Notepad.qml" line="136"/>
         <source>Text to Speech</source>
-        <translation type="unfinished">Text till tal</translation>
+        <translation>Text-till-tal</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Notepad.qml" line="150"/>
         <location filename="../desktop/qml/Notepad.qml" line="146"/>
         <source>Read</source>
-        <translation type="unfinished">Läs</translation>
+        <translation>Läs</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="100"/>
         <source>Speech to Text model</source>
-        <translation type="unfinished">Tal-till-text-modell</translation>
+        <translation>Tal-till-textmodell</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="132"/>
         <source>Text to Speech model</source>
-        <translation type="unfinished">Text-till-tal-modell</translation>
-    </message>
-</context>
-<context>
-    <name>NotesPage</name>
-    <message>
-        <source>About %1</source>
-        <translation type="vanished">Om %1</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Inställningar</translation>
-    </message>
-    <message>
-        <source>Transcribe audio file</source>
-        <translation type="vanished">Transkribera ljudfil</translation>
-    </message>
-    <message>
-        <source>Save speech to audio file</source>
-        <translation type="vanished">Spara tal som ljudfil</translation>
-    </message>
-    <message>
-        <source>Copy All</source>
-        <translation type="vanished">Kopiera allt</translation>
-    </message>
-    <message>
-        <source>Mode: %1</source>
-        <translation type="vanished">Läge: %1</translation>
-    </message>
-    <message>
-        <source>Note making</source>
-        <translation type="vanished">Anteckning</translation>
-    </message>
-    <message>
-        <source>Note reading</source>
-        <translation type="vanished">Anteckningsläsning</translation>
-    </message>
-    <message>
-        <source>No language has been set.</source>
-        <translation type="vanished">Inget språk har angetts.</translation>
-    </message>
-    <message>
-        <source>Writing speech to file...</source>
-        <translation type="vanished">Skriver tal till fil...</translation>
-    </message>
-    <message>
-        <source>Processing, please wait...</source>
-        <translation type="vanished">Bearbetar, vänta...</translation>
-    </message>
-    <message>
-        <source>Transcribing audio file...</source>
-        <translation type="vanished">Transkriberar ljudfil...</translation>
-    </message>
-    <message>
-        <source>The model download is complete!</source>
-        <translation type="vanished">Modellnerladdningen är slutförd!</translation>
-    </message>
-    <message>
-        <source>Error: Couldn&apos;t download the model file.</source>
-        <translation type="vanished">Fel: Kunde inte ladda ner modellfilen.</translation>
-    </message>
-    <message>
-        <source>Copied!</source>
-        <translation type="vanished">Kopierat!</translation>
-    </message>
-    <message>
-        <source>File transcription is complete!</source>
-        <translation type="vanished">Transkriberingen är slutförd!</translation>
-    </message>
-    <message>
-        <source>Speech saved to audio file!</source>
-        <translation type="vanished">Tal sparat som ljudfil!</translation>
-    </message>
-    <message>
-        <source>Error: Audio file processing has failed.</source>
-        <translation type="vanished">Fel: Ljudfilsbearbetningen har misslyckats.</translation>
-    </message>
-    <message>
-        <source>Error: Couldn&apos;t access Microphone.</source>
-        <translation type="vanished">Fel: Kan inte komma åt mikrofonen.</translation>
-    </message>
-    <message>
-        <source>Error: Speech to Text engine initialization has failed.</source>
-        <translation type="vanished">Fel: Tal-till-textmotorn kunde inte startas.</translation>
-    </message>
-    <message>
-        <source>Error: Text to Speech engine initialization has failed.</source>
-        <translation type="vanished">Fel: Textal-till-talmotorn kunde inte startas.</translation>
-    </message>
-    <message>
-        <source>Error: An unknown problem has occurred.</source>
-        <translation type="vanished">Fel: Ett okänt fel inträffade.</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="vanished">Rensa</translation>
-    </message>
-    <message>
-        <source>Starting...</source>
-        <translation type="vanished">Startar...</translation>
-    </message>
-    <message>
-        <source>Say something...</source>
-        <translation type="vanished">Säg något...</translation>
-    </message>
-    <message>
-        <source>Press and say something...</source>
-        <translation type="vanished">Håll ner och säg något...</translation>
-    </message>
-    <message>
-        <source>Click and say something...</source>
-        <translation type="vanished">Snabbtryck och säg något...</translation>
-    </message>
-    <message>
-        <source>Pull down and select Settings to download language models</source>
-        <translation type="vanished">Dra neråt och välj Inställningar för att ladda ner språkmodeller</translation>
-    </message>
-    <message>
-        <source>Getting ready, please wait...</source>
-        <translation type="vanished">Förbereder, vänta...</translation>
-    </message>
-    <message>
-        <source>Reading a note...</source>
-        <translation type="vanished">Läser en anteckning...</translation>
-    </message>
-    <message>
-        <source>Click to read a note...</source>
-        <translation type="vanished">Snabbtryck för att läsa en anteckning...</translation>
-    </message>
-    <message>
-        <source>Make a note and click to read it...</source>
-        <translation type="vanished">Anteckna något och tryck för att läsa det...</translation>
-    </message>
-    <message>
-        <source>Busy...</source>
-        <translation type="vanished">Upptagen...</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Avbryt</translation>
+        <translation>Text-till-talmodell</translation>
     </message>
 </context>
 <context>
@@ -766,27 +554,27 @@
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="89"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="100"/>
         <source>Paste</source>
-        <translation type="unfinished">Klistra in</translation>
+        <translation>Klistra in</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="111"/>
         <source>Clear</source>
-        <translation type="unfinished">Rensa</translation>
+        <translation>Rensa</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="127"/>
         <source>Undo</source>
-        <translation type="unfinished">Ångra</translation>
+        <translation>Ångra</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="138"/>
         <source>Redo</source>
-        <translation type="unfinished">Upprepa</translation>
+        <translation>Upprepa</translation>
     </message>
 </context>
 <context>
@@ -796,14 +584,6 @@
         <location filename="../desktop/qml/SettingsPage.qml" line="20"/>
         <source>Settings</source>
         <translation>Inställningar</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="vanished">Ingen</translation>
-    </message>
-    <message>
-        <source>Languages</source>
-        <translation type="vanished">Språk</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="38"/>
@@ -836,24 +616,16 @@
         <translation>Alltid på</translation>
     </message>
     <message>
-        <source>One sentence: Clicking on the bottom panel starts listening, which ends when the first sentence is recognized.
-Press and hold: Pressing and holding on the bottom panel enables listening. When you stop holding, listening will turn off.
-Always on: Listening is always turn on.</source>
-        <translation type="vanished">En mening: Börjar lyssna vid snabbtryck på den nedre panelen och slutar när första meningen identifierats.
-Tryck och håll kvar: Börjar lyssna när du trycker ner och håller kvar på nedre panelen, slutar lyssna när du släpper.
-Alltid på: Lyssning alltid påslagen.</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="34"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="23"/>
         <source>Speech to Text</source>
-        <translation type="unfinished">Tal till text</translation>
+        <translation>Tal-till-text</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="58"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="63"/>
         <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tryck på knappen %1 startar avlyssning, vilket avslutas när den första meningen identifierats.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="59"/>
@@ -863,19 +635,19 @@ Alltid på: Lyssning alltid påslagen.</translation>
         <location filename="../desktop/qml/SettingsPage.qml" line="66"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="68"/>
         <source>Listen</source>
-        <translation type="unfinished">Lyssna</translation>
+        <translation>Lyssna</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="60"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="65"/>
         <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation type="unfinished"></translation>
+        <translation>Genom att trycka och hålla ned knappen %1 aktiveras avlyssning. När du släpper, stängs avlyssningen av.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="62"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="67"/>
         <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation type="unfinished"></translation>
+        <translation>Efter att ha klickat på knappen %1, är avlyssningen alltid påslagen.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="67"/>
@@ -905,7 +677,7 @@ Alltid på: Lyssning alltid påslagen.</translation>
         <location filename="../sfos/qml/SettingsPage.qml" line="94"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="121"/>
         <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera avancerad återställning av skiljetecken efter talidentifiering. För att det skall fungera, måste du ha aktiverat %1-modellen för ditt språk.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="96"/>
@@ -913,13 +685,13 @@ Alltid på: Lyssning alltid påslagen.</translation>
         <location filename="../desktop/qml/SettingsPage.qml" line="123"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="133"/>
         <source>Punctuation</source>
-        <translation type="unfinished"></translation>
+        <translation>Interpunktion</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="106"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="132"/>
         <source>To make %1 work, download %2 model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ladda ner %2, för att %1 skall fungera.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="114"/>
@@ -937,25 +709,13 @@ Alltid på: Lyssning alltid påslagen.</translation>
         <location filename="../sfos/qml/SettingsPage.qml" line="122"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="149"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Experiments</source>
-        <translation type="vanished">Experiment</translation>
-    </message>
-    <message>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled &apos;Punctuation&apos; model for your language.</source>
-        <translation type="vanished">Aktivera avancerad återställning av skiljetecken efter taligenkänning. För att få det att fungera behöver du se till att du har aktiverat &quot;skiljeteckenmodellen&quot; för ditt språk.</translation>
+        <translation>Annat</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="97"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="124"/>
         <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
         <translation>När det här alternativet är aktiverat tar modellinitieringen mycket längre tid och minnesanvändningen är mycket högre.</translation>
-    </message>
-    <message>
-        <source>To make &apos;Restore punctuation&apos; work, download &apos;Punctuation&apos; model.</source>
-        <translation type="vanished">För att få &quot;Återställ skiljetecken&quot; att fungera måste du ladda ner &quot;Skiljeteckenmodellen&quot;.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="126"/>
@@ -981,14 +741,6 @@ Alltid på: Lyssning alltid påslagen.</translation>
         <translation>Ange standard</translation>
     </message>
     <message>
-        <source>Active Speech to Text model</source>
-        <translation type="vanished">Aktiv tal-till-textmodell</translation>
-    </message>
-    <message>
-        <source>Active Text to Speech model</source>
-        <translation type="vanished">Aktiv text-till-talmodell</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="93"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="107"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="114"/>
@@ -997,52 +749,44 @@ Alltid på: Lyssning alltid påslagen.</translation>
         <translation>Återställ skiljetecken</translation>
     </message>
     <message>
-        <source>One sentence: Clicking on the &apos;Listen&apos; button starts listening, which ends when the first sentence is recognized.
-Press and hold: Pressing and holding the &apos;Listen&apos; button enables listening. When you stop holding, listening will turn off.
-Always on: Listening is always turn on.</source>
-        <translation type="vanished">En mening: Tryck på knappen &quot;Lyssna&quot; påbörjar lyssning, vilket avslutas när första meningen identifierats.
-Tryck och håll kvar: Tryck och håll kvar knappen &quot;Lyssna&quot; påbörjar lyssning, vilket avslutas när knappen släpps.
-Alltid på: Lyssning alltid påslagen.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="186"/>
         <source>Interface style</source>
-        <translation type="unfinished"></translation>
+        <translation>Gränssnittsstil</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="193"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivbord</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="194"/>
         <source>Basic</source>
-        <translation type="unfinished"></translation>
+        <translation>Grundläggande</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="195"/>
         <source>Basic Light</source>
-        <translation type="unfinished"></translation>
+        <translation>Lätt</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="196"/>
         <source>Plasma</source>
-        <translation type="unfinished"></translation>
+        <translation>Plasma</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="202"/>
         <source>Application graphical interface style.</source>
-        <translation type="unfinished"></translation>
+        <translation>Programmets grafiska gränssnittsstil.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="203"/>
         <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändra om du observerar problem med felaktiga färger under ett mörkt tema.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="212"/>
         <source>Restart an application to apply changes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta om programmet för tillämpa ändringar.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="217"/>
@@ -1055,12 +799,12 @@ Alltid på: Lyssning alltid påslagen.</translation>
     <message>
         <location filename="../sfos/qml/SpeechWidget.qml" line="39"/>
         <source>Starting...</source>
-        <translation type="unfinished">Startar...</translation>
+        <translation>Startar...</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SpeechWidget.qml" line="40"/>
         <source>No language has been set.</source>
-        <translation type="unfinished">Inget språk har angetts.</translation>
+        <translation>Ånget språk har angetts.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SpeechWidget.qml" line="41"/>
@@ -1102,20 +846,12 @@ Alltid på: Lyssning alltid påslagen.</translation>
         <location filename="../sfos/qml/SpeechWidget.qml" line="49"/>
         <location filename="../desktop/qml/SpeechWidget.qml" line="116"/>
         <source>Translating...</source>
-        <translation type="unfinished"></translation>
+        <translation>Översätter...</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SpeechWidget.qml" line="50"/>
         <source>Busy...</source>
-        <translation type="unfinished">Upptagen...</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="vanished">Lyssna</translation>
-    </message>
-    <message>
-        <source>Read</source>
-        <translation type="vanished">Läs</translation>
+        <translation>Upptagen...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SpeechWidget.qml" line="139"/>
@@ -1124,69 +860,30 @@ Alltid på: Lyssning alltid påslagen.</translation>
     </message>
 </context>
 <context>
-    <name>SpeechWidgetCompact</name>
-    <message>
-        <source>Getting ready, please wait...</source>
-        <translation type="vanished">Förbereder, vänta...</translation>
-    </message>
-    <message>
-        <source>Writing speech to file...</source>
-        <translation type="vanished">Skriver tal till fil...</translation>
-    </message>
-    <message>
-        <source>Processing, please wait...</source>
-        <translation type="vanished">Bearbetar, vänta...</translation>
-    </message>
-    <message>
-        <source>Transcribing audio file...</source>
-        <translation type="vanished">Transkriberar ljudfil...</translation>
-    </message>
-    <message>
-        <source>Say something...</source>
-        <translation type="vanished">Säg något...</translation>
-    </message>
-    <message>
-        <source>Reading a note...</source>
-        <translation type="vanished">Läser en anteckning...</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="vanished">Lyssna</translation>
-    </message>
-    <message>
-        <source>Read</source>
-        <translation type="vanished">Läs</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Avbryt</translation>
-    </message>
-</context>
-<context>
     <name>Translator</name>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="74"/>
         <location filename="../desktop/qml/Translator.qml" line="69"/>
         <source>Translator model has not been set up yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Översättarmodell har ännu inte angetts.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="75"/>
         <location filename="../desktop/qml/Translator.qml" line="70"/>
         <source>Go to the %1 to download models for the languages you intend to use.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gå till %1 för att ladda ned modeller för de språk du tänker använda.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="76"/>
         <location filename="../desktop/qml/Translator.qml" line="71"/>
         <source>Languages</source>
-        <translation type="unfinished">Språk</translation>
+        <translation>Språk</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="105"/>
         <location filename="../desktop/qml/Translator.qml" line="104"/>
         <source>Type here text to translate from...</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriv text att översätta från...</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="127"/>
@@ -1194,12 +891,12 @@ Alltid på: Lyssning alltid påslagen.</translation>
         <location filename="../desktop/qml/Translator.qml" line="126"/>
         <location filename="../desktop/qml/Translator.qml" line="211"/>
         <source>No Translator model</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen översättningsmodell</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="129"/>
         <source>Translate from</source>
-        <translation type="unfinished"></translation>
+        <translation>Översätt från</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="144"/>
@@ -1207,13 +904,13 @@ Alltid på: Lyssning alltid påslagen.</translation>
         <location filename="../desktop/qml/Translator.qml" line="143"/>
         <location filename="../desktop/qml/Translator.qml" line="228"/>
         <source>No Text to Speech model</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen text-till-talmodell</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="146"/>
         <location filename="../sfos/qml/Translator.qml" line="233"/>
         <source>Text to Speech</source>
-        <translation type="unfinished">Text till tal</translation>
+        <translation>Text-till-tal</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="164"/>
@@ -1221,76 +918,68 @@ Alltid på: Lyssning alltid påslagen.</translation>
         <location filename="../desktop/qml/Translator.qml" line="157"/>
         <location filename="../desktop/qml/Translator.qml" line="243"/>
         <source>Read</source>
-        <translation type="unfinished">Läs</translation>
+        <translation>Läs</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="215"/>
         <source>Translate to</source>
-        <translation type="unfinished"></translation>
+        <translation>Översätt till</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="275"/>
         <location filename="../desktop/qml/Translator.qml" line="267"/>
         <source>Cancel</source>
-        <translation type="unfinished">Avbryt</translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="275"/>
         <location filename="../desktop/qml/Translator.qml" line="267"/>
         <source>Translate</source>
-        <translation type="unfinished"></translation>
+        <translation>Översätt</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="297"/>
         <location filename="../desktop/qml/Translator.qml" line="276"/>
         <source>Translate as you type</source>
-        <translation type="unfinished"></translation>
+        <translation>Översätt medan du skriver</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="125"/>
         <source>Pick the language to translate from.</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj språk att översätta från.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="142"/>
         <source>Text to Speech model for language to translate from.</source>
-        <translation type="unfinished"></translation>
+        <translation>Text-till-talmodell för språk att översätta från.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="210"/>
         <source>Pick the language to translate into.</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj språk att översätta till.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="227"/>
         <source>Text to Speech model for language to translate into.</source>
-        <translation type="unfinished"></translation>
+        <translation>Text-till-talmodell för språk att översätta till.</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <source>No language has been set.</source>
-        <translation type="vanished">Inget språk har angetts.</translation>
-    </message>
-    <message>
-        <source>Go to &apos;Languages&apos; to download language models.</source>
-        <translation type="vanished">Gå till &quot;Språk&quot; för att ladda ner språkmodeller</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/main.qml" line="135"/>
         <source>To switch between %1 and %2 modes use option in pull-down menu.</source>
-        <translation type="unfinished"></translation>
+        <translation>Om du vill växla mellan lägena %1 och %2 använder du alternativet i toppmenyn.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="136"/>
         <source>Notepad</source>
-        <translation type="unfinished"></translation>
+        <translation>Anteckning</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="136"/>
         <source>Translator</source>
-        <translation type="unfinished"></translation>
+        <translation>Översättare</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="162"/>
@@ -1350,7 +1039,7 @@ Alltid på: Lyssning alltid påslagen.</translation>
         <location filename="../sfos/qml/main.qml" line="186"/>
         <location filename="../desktop/qml/main.qml" line="147"/>
         <source>Error: Translation engine initialization has failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Start översättningsmotor misslyckades.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="189"/>
@@ -1369,7 +1058,7 @@ Alltid på: Lyssning alltid påslagen.</translation>
     <message>
         <location filename="../src/speech_service.cpp" line="2592"/>
         <source>No translator model has been set.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen översättningsmodell har ännu angetts.</translation>
     </message>
     <message>
         <location filename="../src/speech_service.cpp" line="2593"/>
@@ -1404,7 +1093,7 @@ Alltid på: Lyssning alltid påslagen.</translation>
     <message>
         <location filename="../src/speech_service.cpp" line="2602"/>
         <source>Translating...</source>
-        <translation type="unfinished"></translation>
+        <translation>Översätter...</translation>
     </message>
 </context>
 </TS>
