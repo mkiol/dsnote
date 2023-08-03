@@ -290,6 +290,11 @@
             "name": "íslenska",
             "name_en": "Icelandic",
             "id": "is"
+        },
+        {
+            "name": "Lëtzebuergesch",
+            "name_en": "Luxembourgish",
+            "id": "lb"
         }
     ],
     "models": [
@@ -4161,14 +4166,14 @@
             "model_id": "da_piper_talesyntese_medium",
             "engine": "tts_piper",
             "lang_id": "da",
-            "checksum": "b30d70c2",
-            "checksum_quick": "afcf77ed",
+            "checksum": "a6d36307",
+            "checksum_quick": "9d7e2d62",
             "comp": "dir",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/da/da_DK/talesyntese/medium/da_DK-talesyntese-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/da/da_DK/talesyntese/medium/da_DK-talesyntese-medium.onnx.json"
             ],
-            "size": "58261532"
+            "size": "63216498"
         },
         {
             "name": "Deutsch (Piper Eva Low Female)",
@@ -4479,293 +4484,508 @@
             "size": "76746803"
         },
         {
-            "name": "Italiano (Piper Riccardo Low Male)",
-            "model_id": "it_piper_riccardo_low",
-            "engine": "tts_piper",
-            "lang_id": "it",
-            "checksum": "47535c98",
-            "checksum_quick": "edbb00b2",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-it-riccardo_fasol-x-low.tar.gz"
-            ],
-            "size": "18826864"
-        },
-        {
-            "name": "Қазақ (Piper Iseke Low Male)",
-            "model_id": "kk_piper_iseke_low",
-            "engine": "tts_piper",
-            "lang_id": "kk",
-            "checksum": "c8904b70",
-            "checksum_quick": "a111b5bd",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-kk-iseke-x-low.tar.gz"
-            ],
-            "size": "18826684"
-        },
-        {
-            "name": "Қазақ (Piper Issai High Male)",
-            "model_id": "kk_piper_issai_high",
-            "engine": "tts_piper",
-            "lang_id": "kk",
-            "score": 4,
-            "checksum": "23ab4811",
-            "checksum_quick": "135ea94d",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-kk-issai-high.tar.gz"
-            ],
-            "size": "118823512"
-        },
-        {
-            "name": "Қазақ (Piper Raya Low Female)",
-            "model_id": "kk_piper_raya_low",
-            "engine": "tts_piper",
-            "lang_id": "kk",
-            "checksum": "8b9f09bd",
-            "checksum_quick": "34f5906c",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-kk-raya-x-low.tar.gz"
-            ],
-            "size": "18828679"
-        },
-        {
-            "name": "Nederlands (Piper MLS 5809 Low Female)",
-            "model_id": "nl_piper_mls5809_low",
-            "engine": "tts_piper",
-            "lang_id": "nl",
-            "checksum": "66ab6316",
-            "checksum_quick": "918430ff",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-nl-mls_5809-low.tar.gz"
-            ],
-            "size": "58252731"
-        },
-        {
-            "name": "Nederlands (Piper MLS 7432 Low Neutral)",
-            "model_id": "nl_piper_mls7432_low",
-            "engine": "tts_piper",
-            "lang_id": "nl",
-            "checksum": "1a97a9",
-            "checksum_quick": "88705aa9",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-nl-mls_7432-low.tar.gz"
-            ],
-            "size": "58247411"
-        },
-        {
-            "name": "Nederlands (Piper Nathalie Low Female)",
-            "model_id": "nl_piper_nathalie_low",
-            "engine": "tts_piper",
-            "lang_id": "nl",
-            "checksum": "d0c89eeb",
-            "checksum_quick": "aef5d2a0",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-nl-nathalie-x-low.tar.gz"
-            ],
-            "size": "18713496"
-        },
-        {
-            "name": "Nederlands (Piper Rdh Medium Male)",
-            "model_id": "nl_piper_rdh_medium",
-            "engine": "tts_piper",
-            "lang_id": "nl",
-            "score": 4,
-            "checksum": "909f133f",
-            "checksum_quick": "ab9c0f21",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-nl-rdh-medium.tar.gz"
-            ],
-            "size": "58274935"
-        },
-        {
-            "name": "Norsk (Piper Talesyntese Medium Male)",
-            "model_id": "no_piper_talesyntese_medium",
-            "engine": "tts_piper",
-            "lang_id": "no",
-            "checksum": "9365c368",
-            "checksum_quick": "352fd557",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-no-talesyntese-medium.tar.gz"
-            ],
-            "size": "58191359"
-        },
-        {
-            "name": "नेपाली (Piper Google Medium Female)",
-            "model_id": "ne_piper_google_medium",
-            "engine": "tts_piper",
-            "lang_id": "ne",
-            "checksum": "f382f6d7",
-            "checksum_quick": "509072a8",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-ne-google-medium.tar.gz"
-            ],
-            "size": "70691256"
-        },
-        {
-            "name": "Português brasileiro (Piper Edresson Low Male)",
-            "model_id": "pt_piper_br_edresson_low",
-            "engine": "tts_piper",
-            "lang_id": "pt",
-            "checksum": "15c7d194",
-            "checksum_quick": "d3510d87",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-pt-br-edresson-low.tar.gz"
-            ],
-            "size": "58258517"
-        },
-        {
-            "name": "Українська (Piper Lada Low Female)",
-            "model_id": "uk_piper_lada_low",
-            "engine": "tts_piper",
-            "lang_id": "uk",
-            "checksum": "272ec076",
-            "checksum_quick": "670ffdcd",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-uk-lada-x-low.tar.gz"
-            ],
-            "size": "18716596"
-        },
-        {
-            "name": "Tiếng Việt (Piper 25 Low Female)",
-            "model_id": "vi_piper_25_low",
-            "engine": "tts_piper",
-            "lang_id": "vi",
-            "checksum": "915e9fc2",
-            "checksum_quick": "5562f22b",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-vi-25hours-single-low.tar.gz"
-            ],
-            "size": "58252825"
-        },
-        {
-            "name": "Tiếng Việt (Piper Vivos Low Female)",
-            "model_id": "vi_piper_vivos_low",
-            "engine": "tts_piper",
-            "lang_id": "vi",
-            "score": 4,
-            "checksum": "9979145d",
-            "checksum_quick": "657be947",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-vi-vivos-x-low.tar.gz"
-            ],
-            "size": "25406468"
-        },
-        {
-            "name": "中文 (Piper Huayan Low Female)",
-            "model_id": "zh_piper_huayan_low",
-            "engine": "tts_piper",
-            "lang_id": "zh",
-            "checksum": "eb96041a",
-            "checksum_quick": "ec43a7fc",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-zh-cn-huayan-x-low.tar.gz"
-            ],
-            "size": "18716220"
-        },
-        {
-            "name": "中文 (Piper Huayan Medium Female)",
-            "model_id": "zh_piper_huayan_medium",
-            "engine": "tts_piper",
-            "lang_id": "zh",
-            "checksum": "3a9a0896",
-            "checksum_quick": "35dcc9c9",
-            "comp": "targz",
-            "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-zh_CN-huayan-medium.tar.gz"
-            ],
-            "size": "58395655"
-        },
-        {
             "name": "íslenska (Piper Bui Medium Male)",
             "model_id": "is_piper_bui_medium",
             "engine": "tts_piper",
             "lang_id": "is",
-            "checksum": "fc38ae0e",
-            "checksum_quick": "f8741f06",
-            "comp": "targz",
+            "checksum": "29f7eabc",
+            "checksum_quick": "26335bb4",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-is-bui-medium.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/bui/medium/is_IS-bui-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/bui/medium/is_IS-bui-medium.onnx.json"
             ],
-            "size": "58610382"
+            "size": "76509608"
         },
         {
             "name": "íslenska (Piper Salka Medium Female)",
             "model_id": "is_piper_salka_medium",
             "engine": "tts_piper",
             "lang_id": "is",
-            "checksum": "452e04a3",
-            "checksum_quick": "3647989a",
-            "comp": "targz",
+            "checksum": "8af69849",
+            "checksum_quick": "7c102c40",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-is-salka-medium.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/salka/medium/is_IS-salka-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/salka/medium/is_IS-salka-medium.onnx.json"
             ],
-            "size": "58669595"
+            "size": "76509610"
         },
         {
             "name": "íslenska (Piper Steinn Medium Male)",
             "model_id": "is_piper_steinn_medium",
             "engine": "tts_piper",
             "lang_id": "is",
-            "checksum": "7b527ba4",
-            "checksum_quick": "99f99fb1",
-            "comp": "targz",
+            "checksum": "8eab5a2c",
+            "checksum_quick": "ad527e39",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-is-steinn-medium.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/steinn/medium/is_IS-steinn-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/steinn/medium/is_IS-steinn-medium.onnx.json"
             ],
-            "size": "58680806"
+            "size": "76509611"
         },
         {
             "name": "íslenska (Piper Ugla Medium Female)",
             "model_id": "is_piper_ugla_medium",
             "engine": "tts_piper",
             "lang_id": "is",
-            "checksum": "35597986",
-            "checksum_quick": "c09e6e",
-            "comp": "targz",
+            "checksum": "2c262ff0",
+            "checksum_quick": "f78d54d8",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-is-ugla-medium.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/ugla/medium/is_IS-ugla-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/ugla/medium/is_IS-ugla-medium.onnx.json"
             ],
-            "size": "58681988"
+            "size": "76509609"
         },
         {
-            "name": "Svenska (Piper NST Medium Male)",
-            "model_id": "sv_piper_nst_medium",
+            "name": "Italiano (Piper Riccardo Low Male)",
+            "model_id": "it_piper_riccardo_low",
             "engine": "tts_piper",
-            "lang_id": "sv",
-            "checksum": "e0f2772c",
-            "checksum_quick": "d9a3aad9",
-            "comp": "targz",
+            "lang_id": "it",
+            "checksum": "164754c8",
+            "checksum_quick": "bcaef8e2",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-sv-se-nst-medium.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/it/it_IT/riccardo/x_low/it_IT-riccardo-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/it/it_IT/riccardo/x_low/it_IT-riccardo-x_low.onnx.json"
             ],
-            "size": "58295473"
+            "size": "28144938"
+        },
+        {
+            "name": "ქართული (Piper Natia Medium Female)",
+            "model_id": "ka_piper_natia_medium",
+            "engine": "tts_piper",
+            "lang_id": "ka",
+            "checksum": "2c0471b7",
+            "checksum_quick": "e9de6e2a",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ka/ka_GE/natia/medium/ka_GE-natia-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ka/ka_GE/natia/medium/ka_GE-natia-medium.onnx.json"
+            ],
+            "size": "63216406"
+        },
+        {
+            "name": "Қазақ (Piper Iseke Low Male)",
+            "model_id": "kk_piper_iseke_low",
+            "engine": "tts_piper",
+            "lang_id": "kk",
+            "checksum": "3c4d5eee",
+            "checksum_quick": "14cec93b",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/kk/kk_KZ/iseke/x_low/kk_KZ-iseke-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/kk/kk_KZ/iseke/x_low/kk_KZ-iseke-x_low.onnx.json"
+            ],
+            "size": "28144935"
+        },
+        {
+            "name": "Қазақ (Piper Issai High Male)",
+            "model_id": "kk_piper_issai_high",
+            "engine": "tts_piper",
+            "lang_id": "kk",
+            "checksum": "fc02c182",
+            "checksum_quick": "ebb622be",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/kk/kk_KZ/issai/high/kk_KZ-issai-high.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/kk/kk_KZ/issai/high/kk_KZ-issai-high.onnx.json"
+            ],
+            "size": "127878618"
+        },
+        {
+            "name": "Қазақ (Piper Raya Low Female)",
+            "model_id": "kk_piper_raya_low",
+            "engine": "tts_piper",
+            "lang_id": "kk",
+            "checksum": "55f10cc6",
+            "checksum_quick": "ff479375",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/kk/kk_KZ/raya/x_low/kk_KZ-raya-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/kk/kk_KZ/raya/x_low/kk_KZ-raya-x_low.onnx.json"
+            ],
+            "size": "28144934"
+        },
+        {
+            "name": "Lëtzebuergesch (Piper Marylux Medium Female)",
+            "model_id": "lb_piper_marylux_medium",
+            "engine": "tts_piper",
+            "lang_id": "lb",
+            "checksum": "81c437f3",
+            "checksum_quick": "b06cff60",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/lb/lb_LU/marylux/medium/lb_LU-marylux-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/lb/lb_LU/marylux/medium/lb_LU-marylux-medium.onnx.json"
+            ],
+            "size": "63214465"
+        },
+        {
+            "name": "नेपाली (Piper Google Medium Female)",
+            "model_id": "ne_piper_google_medium",
+            "engine": "tts_piper",
+            "lang_id": "ne",
+            "checksum": "ccd22d43",
+            "checksum_quick": "b03e422f",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ne/ne_NP/google/medium/ne_NP-google-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ne/ne_NP/google/medium/ne_NP-google-medium.onnx.json"
+            ],
+            "size": "76781939"
+        },
+        {
+            "name": "Nederlands (Piper MLS 5809 Low Female)",
+            "model_id": "nl_piper_nl_mls5809_low",
+            "engine": "tts_piper",
+            "lang_id": "nl",
+            "checksum": "e0020ef3",
+            "checksum_quick": "adadcdc",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_NL/mls_5809/low/nl_NL-mls_5809-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_NL/mls_5809/low/nl_NL-mls_5809-low.onnx.json"
+            ],
+            "size": "63118671"
+        },
+        {
+            "name": "Nederlands (Piper MLS 7432 Low Neutral)",
+            "model_id": "nl_piper_nl_mls7432_low",
+            "engine": "tts_piper",
+            "lang_id": "nl",
+            "checksum": "33692d5b",
+            "checksum_quick": "bbbef05b",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_NL/mls_7432/low/nl_NL-mls_7432-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_NL/mls_7432/low/nl_NL-mls_7432-low.onnx.json"
+            ],
+            "size": "63118671"
+        },
+        {
+            "name": "Nederlands Belgisch (Piper Nathalie Low Female)",
+            "model_id": "nl_piper_be_nathalie_low",
+            "engine": "tts_piper",
+            "lang_id": "nl",
+            "checksum": "ad3b26fd",
+            "checksum_quick": "8b685ab2",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/nathalie/x_low/nl_BE-nathalie-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/nathalie/x_low/nl_BE-nathalie-x_low.onnx.json"
+            ],
+            "size": "20642960"
+        },
+        {
+            "name": "Nederlands Belgisch (Piper Nathalie Medium Female)",
+            "model_id": "nl_piper_be_nathalie_medium",
+            "engine": "tts_piper",
+            "lang_id": "nl",
+            "checksum": "d2ced63b",
+            "checksum_quick": "e3d3c75e",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/nathalie/medium/nl_BE-nathalie-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/nathalie/medium/nl_BE-nathalie-medium.onnx.json"
+            ],
+            "size": "63216495"
+        },
+        {
+            "name": "Nederlands Belgisch (Piper Rdh Low Male)",
+            "model_id": "nl_piper_be_rdh_low",
+            "engine": "tts_piper",
+            "lang_id": "nl",
+            "checksum": "354d6da8",
+            "checksum_quick": "28a8aeab",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/rdh/x_low/nl_BE-rdh-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/rdh/x_low/nl_BE-rdh-x_low.onnx.json"
+            ],
+            "size": "20642955"
+        },
+        {
+            "name": "Nederlands Belgisch (Piper Rdh Medium Male)",
+            "model_id": "nl_piper_be_rdh_medium",
+            "engine": "tts_piper",
+            "lang_id": "nl",
+            "checksum": "7936689",
+            "checksum_quick": "2290626b",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/rdh/medium/nl_BE-rdh-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/rdh/medium/nl_BE-rdh-medium.onnx.json"
+            ],
+            "size": "63118669"
+        },
+        {
+            "name": "Norsk (Piper Talesyntese Medium Male)",
+            "model_id": "no_piper_talesyntese_medium",
+            "engine": "tts_piper",
+            "lang_id": "no",
+            "checksum": "9af22969",
+            "checksum_quick": "67219000",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/no/no_NO/talesyntese/medium/no_NO-talesyntese-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/no/no_NO/talesyntese/medium/no_NO-talesyntese-medium.onnx.json"
+            ],
+            "size": "63216498"
+        },
+        {
+            "name": "Português brasileiro (Piper Edresson Low Male)",
+            "model_id": "pt_piper_br_edresson_low",
+            "engine": "tts_piper",
+            "lang_id": "pt",
+            "checksum": "8a6aa7b9",
+            "checksum_quick": "47f3e3ac",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/pt/pt_BR/edresson/low/pt_BR-edresson-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/pt/pt_BR/edresson/low/pt_BR-edresson-low.onnx.json"
+            ],
+            "size": "63118674"
+        },
+        {
+            "name": "Português brasileiro (Piper Faber Medium Male)",
+            "model_id": "pt_piper_br_faber_medium",
+            "engine": "tts_piper",
+            "lang_id": "pt",
+            "checksum": "aabc5466",
+            "checksum_quick": "e244bd9f",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/pt/pt_BR/faber/medium/pt_BR-faber-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/pt/pt_BR/faber/medium/pt_BR-faber-medium.onnx.json"
+            ],
+            "size": "63216455"
+        },
+        {
+            "name": "Română (Piper Mihai Medium Male)",
+            "model_id": "ro_piper_mihai_medium",
+            "engine": "tts_piper",
+            "lang_id": "ro",
+            "checksum": "338f02fb",
+            "checksum_quick": "67884351",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ro/ro_RO/mihai/medium/ro_RO-mihai-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ro/ro_RO/mihai/medium/ro_RO-mihai-medium.onnx.json"
+            ],
+            "size": "63214363"
+        },
+        {
+            "name": "Русский (Piper Denis Medium Male)",
+            "model_id": "ru_piper_denis_medium",
+            "engine": "tts_piper",
+            "lang_id": "ru",
+            "checksum": "5c075ec1",
+            "checksum_quick": "321b9a12",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/denis/medium/ru_RU-denis-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/denis/medium/ru_RU-denis-medium.onnx.json"
+            ],
+            "size": "63216406"
+        },
+        {
+            "name": "Русский (Piper Dimitri Medium Male)",
+            "model_id": "ru_piper_dimitri_medium",
+            "engine": "tts_piper",
+            "lang_id": "ru",
+            "checksum": "896d1e08",
+            "checksum_quick": "a84cdba",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx.json"
+            ],
+            "size": "63216407"
         },
         {
             "name": "Русский (Piper Irinia Medium Female)",
             "model_id": "ru_piper_irinia_medium",
             "engine": "tts_piper",
             "lang_id": "ru",
-            "checksum": "dd1f5fa7",
-            "checksum_quick": "92e6c51d",
-            "comp": "targz",
+            "checksum": "eef9d3a8",
+            "checksum_quick": "a4c1391e",
+            "comp": "dir",
             "urls": [
-                "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-ru-irinia-medium.tar.gz"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx.json"
             ],
-            "size": "58340190"
+            "size": "63216332"
+        },
+        {
+            "name": "Русский (Piper Ruslan Medium Male)",
+            "model_id": "ru_piper_ruslan_medium",
+            "engine": "tts_piper",
+            "lang_id": "ru",
+            "checksum": "4aa8bfc0",
+            "checksum_quick": "1c992e63",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/ruslan/medium/ru_RU-ruslan-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/ruslan/medium/ru_RU-ruslan-medium.onnx.json"
+            ],
+            "size": "63216493"
+        },
+        {
+            "name": "Српски (Piper SI Medium Male)",
+            "model_id": "sr_piper_si_medium",
+            "engine": "tts_piper",
+            "lang_id": "sr",
+            "checksum": "ff2f3b05",
+            "checksum_quick": "389d7a88",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/sr/sr_RS/serbski_institut/medium/sr_RS-serbski_institut-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/sr/sr_RS/serbski_institut/medium/sr_RS-serbski_institut-medium.onnx.json"
+            ],
+            "size": "76746806"
+        },
+        {
+            "name": "Svenska (Piper NST Medium Male)",
+            "model_id": "sv_piper_nst_medium",
+            "engine": "tts_piper",
+            "lang_id": "sv",
+            "checksum": "9da573f6",
+            "checksum_quick": "9656a7a3",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/sv/sv_SE/nst/medium/sv_SE-nst-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/sv/sv_SE/nst/medium/sv_SE-nst-medium.onnx.json"
+            ],
+            "size": "63118669"
+        },
+        {
+            "name": "Kiswahili (Piper Lanfrica Medium Male)",
+            "model_id": "sw_piper_cd_lanfrica_medium",
+            "engine": "tts_piper",
+            "lang_id": "sw",
+            "checksum": "63d5e996",
+            "checksum_quick": "d54b05c3",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/sw/sw_CD/lanfrica/medium/sw_CD-lanfrica-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/sw/sw_CD/lanfrica/medium/sw_CD-lanfrica-medium.onnx.json"
+            ],
+            "size": "63216495"
+        },
+        {
+            "name": "Türkçe (Piper Dfki Medium Male)",
+            "model_id": "tr_piper_dfki_medium",
+            "engine": "tts_piper",
+            "lang_id": "tr",
+            "checksum": "f5a75bd4",
+            "checksum_quick": "80883d69",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/dfki/medium/tr_TR-dfki-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/dfki/medium/tr_TR-dfki-medium.onnx.json"
+            ],
+            "size": "63214446"
+        },
+        {
+            "name": "Українська (Piper Lada Low Female)",
+            "model_id": "uk_piper_lada_low",
+            "engine": "tts_piper",
+            "lang_id": "uk",
+            "checksum": "a4ef37ce",
+            "checksum_quick": "e4d07525",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/uk/uk_UA/lada/x_low/uk_UA-lada-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/uk/uk_UA/lada/x_low/uk_UA-lada-x_low.onnx.json"
+            ],
+            "size": "20642957"
+        },
+        {
+            "name": "Українська (Piper Ukrainian TTS Medium Female)",
+            "model_id": "uk_piper_ukrainiantts_medium",
+            "engine": "tts_piper",
+            "lang_id": "uk",
+            "checksum": "6c25aa1e",
+            "checksum_quick": "1e48c9c1",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/uk/uk_UA/ukrainian_tts/medium/uk_UA-ukrainian_tts-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/uk/uk_UA/ukrainian_tts/medium/uk_UA-ukrainian_tts-medium.onnx.json"
+            ],
+            "size": "76746505"
+        },
+        {
+            "name": "Tiếng Việt (Piper 25 Low Female)",
+            "model_id": "vi_piper_25_low",
+            "engine": "tts_piper",
+            "lang_id": "vi",
+            "checksum": "16b7ebfb",
+            "checksum_quick": "dabc3e64",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/vi/vi_VN/25hours_single/low/vi_VN-25hours_single-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/vi/vi_VN/25hours_single/low/vi_VN-25hours_single-low.onnx.json"
+            ],
+            "size": "63118677"
+        },
+        {
+            "name": "Tiếng Việt (Piper Vais1000 Medium Female)",
+            "model_id": "vi_piper_vais1000_medium",
+            "engine": "tts_piper",
+            "lang_id": "vi",
+            "checksum": "60421058",
+            "checksum_quick": "8a893ae5",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/vi/vi_VN/vais1000/medium/vi_VN-vais1000-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/vi/vi_VN/vais1000/medium/vi_VN-vais1000-medium.onnx.json"
+            ],
+            "size": "63216465"
+        },
+        {
+            "name": "Tiếng Việt (Piper Vivos Low Female)",
+            "model_id": "vi_piper_vivos_low",
+            "engine": "tts_piper",
+            "lang_id": "vi",
+            "checksum": "45ffe42f",
+            "checksum_quick": "1202b919",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/vi/vi_VN/vivos/x_low/vi_VN-vivos-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/vi/vi_VN/vivos/x_low/vi_VN-vivos-x_low.onnx.json"
+            ],
+            "size": "27805242"
+        },
+        {
+            "name": "中文 (Piper Huayan Low Female)",
+            "model_id": "zh_piper_huayan_low",
+            "engine": "tts_piper",
+            "lang_id": "zh",
+            "checksum": "e830c9d4",
+            "checksum_quick": "e8de6db6",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/zh/zh_CN/huayan/x_low/zh_CN-huayan-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/zh/zh_CN/huayan/x_low/zh_CN-huayan-x_low.onnx.json"
+            ],
+            "size": "20642959"
+        },
+        {
+            "name": "中文 (Piper Huayan Medium Female)",
+            "model_id": "zh_piper_huayan_medium",
+            "engine": "tts_piper",
+            "lang_id": "zh",
+            "checksum": "6ac9fe75",
+            "checksum_quick": "660cbfa8",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/main/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx.json"
+            ],
+            "size": "63216408"
         },
         {
             "name": "Polski (Piper MLS 6892 Low Male)",
