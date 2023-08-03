@@ -43,8 +43,9 @@ Page {
             }
 
             LogItem {
-                title: "New Speech to Text models"
-                description: "Many new Piper models for English are configured for download."
+                title: "New Text to Speech models"
+                description: "New voices for: English, Swedish, Turkish, Polish, German, Spanish, Finnish, French, Ukrainian, Russian, " +
+                             "Swahili, Serbian, Romanian, Luxembourgish, Georgian and Slovak."
             }
 
             LogItem {

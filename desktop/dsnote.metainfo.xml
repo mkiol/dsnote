@@ -77,7 +77,10 @@
       </ul>
       <p>Text to Speech:</p>
       <ul>
-      <li>Many new Piper models for English</li>
+      <li>All existing Piper models were updated.</li>
+      <li>New Piper voices for: English, Swedish, Turkish, Polish, German, Spanish, Finnish, French, Ukrainian, Russian,
+            Swahili, Serbian, Romanian, Luxembourgish and Georgian.</li>
+      <li>New RHVoice model for Slovak</li>
       </ul>
       </description>
     </release>
