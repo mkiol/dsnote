@@ -74,11 +74,11 @@ Following languages are supported:
 | ne          | Nepali        |                      | ● (e)             |                | ●               |                   | ●                |                  |                 |                   |
 | nl          | Dutch         | ● (e)                | ●                 | ●              | ●               |                   | ●                |                  | ●               | ●                 |
 | no          | Norwegian     |                      | ●                 |                | ●               |                   | ●                |                  |                 | ●                 |
-| pl          | Polish        | ●                    | ●                 | ●              | ● (e)           | ●                 | ●                | ●                | ●               | ●                 |
-| pt          | Portuguese    | ● (e)                | ●                 | ●              | ●       |                   | ●                | ●                | ●               | ●                 |
+| pl          | Polish        | ●                    | ●                 | ●              | ●               | ●                 | ●                | ●                | ●               | ●                 |
+| pt          | Portuguese    | ● (e)                | ●                 | ●              | ●               |                   | ●                | ●                | ●               | ●                 |
 | ro          | Romanian      | ● (e)                | ●                 |                | ●               |                   | ●                | ●                | ●               |                   |
 | ru          | Russian       | ●                    | ●                 | ●              | ●               | ●                 | ●                |                  |                 | ●                 |
-| sk          | Slovak        |                      | ●                 |                |                 |                   | ●                |                  | ●               |                   |
+| sk          | Slovak        |                      | ●                 |                |                 | ●                 | ●                |                  | ●               |                   |
 | sl          | Slovenian     | ● (e)                | ●                 |                |                 |                   | ●                |                  | ●               |                   |
 | sq          | Albanian      |                      | ● (e)             |                |                 | ●                 | ●                |                  |                 |                   |
 | sr          | Serbian       |                      | ● (e)             |                | ●               |                   | ●                |                  |                 |                   |
