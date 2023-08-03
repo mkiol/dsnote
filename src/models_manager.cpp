@@ -761,10 +761,12 @@ bool models_manager::check_model_download_cancel(QNetworkReply* reply) {
 
 void models_manager::remove_downloaded_files_on_error(
     const QString& path, models_manager::comp_type comp, int part) {
+    qDebug() << "path to remove:" << path;
+
     QFileInfo fi{path};
 
     if (fi.isDir()) {
-        fi.absoluteDir().removeRecursively();
+        QDir{fi.absoluteFilePath()}.removeRecursively();
     } else {
         QFile::remove(download_filename(path, comp, part));
         if (part > 0) {
