@@ -5063,7 +5063,6 @@
         },
         {
             "name": "Bosanski (Espeak Robot)",
-            "model_id": "bs_espeak_bs",
             "engine": "tts_espeak",
             "lang_id": "bs"
         },
@@ -5940,6 +5939,20 @@
                 "https://github.com/RHVoice/leticia-f123-pt-br/archive/9b66982f206f0400248940afd1ac8c18518e1703.zip"
             ],
             "size": "21370483"
+        },
+        {
+            "name": "Slovenčina (RHVoice Ondro Male)",
+            "model_id": "sk_rhvoice_ondro",
+            "engine": "tts_rhvoice",
+            "lang_id": "sk",
+            "speaker": "ondro",
+            "checksum": "61696c03",
+            "checksum_quick": "1762422d",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/ondro-slk/releases/download/v4.0/RHVoice-voice-Slovak-Ondro-v4.0.zip"
+            ],
+            "size": "11171981"
         },
         {
             "name": "Polski (RHVoice Magda Female)",
