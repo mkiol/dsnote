@@ -19,6 +19,9 @@ SpeechPanel {
     Behavior on opacity { FadeAnimator { duration: 100 } }
 
     status: {
+        if (app.busy || service.busy || !app.connected)
+            return DsnoteApp.TaskStateIdle
+
         switch (app.task_state) {
         case DsnoteApp.TaskStateIdle: return 0;
         case DsnoteApp.TaskStateSpeechDetected: return 1;
@@ -31,12 +34,12 @@ SpeechPanel {
 
     busy: app.task_state !== DsnoteApp.TaskStateProcessing &&
           app.task_state !== DsnoteApp.TaskStateInitializing &&
-          (app.busy || service.busy || !app.connected ||
-          app.state === DsnoteApp.StateTranscribingFile ||
+          (app.state === DsnoteApp.StateTranscribingFile ||
           app.state === DsnoteApp.StateWritingSpeechToFile)
     text: app.intermediate_text
     textPlaceholder: {
         if (!app.connected) return qsTr("Starting...")
+        if (app.busy || service.busy) return qsTr("Busy...")
         if (!app.stt_configured && !app.tts_configured) return qsTr("No language has been set.")
         if (app.task_state === DsnoteApp.TaskStateInitializing) return qsTr("Getting ready, please wait...")
         if (app.state === DsnoteApp.StateWritingSpeechToFile) return qsTr("Writing speech to file...")
@@ -47,7 +50,6 @@ SpeechPanel {
                 app.state === DsnoteApp.StateListeningAuto) return qsTr("Say something...")
         if (app.state === DsnoteApp.StatePlayingSpeech) return qsTr("Reading a note...")
         if (app.state === DsnoteApp.StateTranslating) return qsTr("Translating...")
-        if (app.busy || service.busy) return qsTr("Busy...")
         return ""
     }
 

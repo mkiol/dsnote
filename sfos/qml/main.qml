@@ -90,7 +90,8 @@ ApplicationWindow {
                     maxHeight: root.height - (panel.open ? panel.height : 0)
                     verticalMode: root.verticalMode
                     width: parent.width
-                    readOnly: root.canCancelStt || root.canCancelTts
+                    readOnly: app.busy || service.busy || !app.connected ||
+                              root.canCancelStt || root.canCancelTts
                 }
 
                 Notepad {
@@ -103,7 +104,8 @@ ApplicationWindow {
                     maxHeight: root.height - (panel.open ? panel.height : 0)
                     verticalMode: root.verticalMode
                     width: parent.width
-                    readOnly: root.canCancelStt || root.canCancelTts
+                    readOnly: app.busy || service.busy || !app.connected ||
+                              root.canCancelStt || root.canCancelTts
                 }
 
                 SpeechWidget {
