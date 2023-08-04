@@ -206,6 +206,12 @@ void mnt_engine::set_state(state_t new_state) {
     }
 }
 
+static std::string fix_text(std::string text) {
+    if (text.size() > 1 && text[0] == '-' && text[1] == ' ')
+        return text.substr(2);
+    return text;
+}
+
 std::string mnt_engine::translate_internal(const std::string& text) {
     std::vector<std::string> out_parts;
     auto in_parts = text_tools::split(text, m_config.nb_data);
@@ -234,8 +240,9 @@ std::string mnt_engine::translate_internal(const std::string& text) {
 
     return std::accumulate(
         out_parts.cbegin(), out_parts.cend(), std::string{},
-        [&break_lines, i = static_cast<size_t>(0)](
-            std::string a, const std::string& b) mutable {
+        [&break_lines, i = static_cast<size_t>(0)](std::string a,
+                                                   std::string b) mutable {
+            b = fix_text(std::move(b));
             if (a.empty()) {
                 return b;
             } else {
@@ -297,7 +304,7 @@ void mnt_engine::process() {
             if (m_shutting_down) break;
 
             m_call_backs.text_translated(task.text, m_config.lang,
-                                         std::move(text), m_config.lang);
+                                         std::move(text), m_config.out_lang);
         }
 
         set_state(state_t::idle);
