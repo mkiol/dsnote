@@ -58,13 +58,13 @@ DialogPage {
     InfoItem {
         label: qsTr("Project website:")
         value: "<a href='" + APP_WEBPAGE + "'>" + APP_WEBPAGE +
-               "</a> or <a href='" + APP_WEBPAGE_ADDITIONAL + "'>" + APP_WEBPAGE_ADDITIONAL + "</a>"
+               "</a>, <a href='" + APP_WEBPAGE_ADDITIONAL + "'>" + APP_WEBPAGE_ADDITIONAL + "</a>"
     }
 
     InfoItem {
         label: qsTr("Report bugs at:")
         value: "<a href='" + APP_WEBPAGE + "/issues'>" + APP_WEBPAGE +
-               "/issues</a> or <a href='" + APP_WEBPAGE_ADDITIONAL + "/-/issues'>" + APP_WEBPAGE_ADDITIONAL + "/-/issues</a>"
+               "/issues</a>, <a href='" + APP_WEBPAGE_ADDITIONAL + "/-/issues'>" + APP_WEBPAGE_ADDITIONAL + "/-/issues</a>"
     }
 
     InfoItem {
