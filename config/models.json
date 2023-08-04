@@ -3909,7 +3909,7 @@
             "size": "63216499"
         },
         {
-            "name": "English British (Piper Aru Medium Male)",
+            "name": "English British (Piper Aru Medium Female)",
             "model_id": "en_piper_gb_aru_medium",
             "engine": "tts_piper",
             "lang_id": "en",
@@ -4327,7 +4327,8 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/mls_10246/low/es_ES-mls_10246-low.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/mls_10246/low/es_ES-mls_10246-low.onnx.json"
             ],
-            "size": "63118672"
+            "size": "63118672",
+            "hidden": true
         },
         {
             "name": "Español (Piper MLS 9972 Low Female)",
@@ -4341,7 +4342,8 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/mls_9972/low/es_ES-mls_9972-low.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/mls_9972/low/es_ES-mls_9972-low.onnx.json"
             ],
-            "size": "63118671"
+            "size": "63118671",
+            "hidden": true
         },
         {
             "name": "Español (Piper Davefx Medium Male)",
@@ -4439,7 +4441,8 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/mls_1840/low/fr_FR-mls_1840-low.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/mls_1840/low/fr_FR-mls_1840-low.onnx.json"
             ],
-            "size": "63118671"
+            "size": "63118671",
+            "hidden": true
         },
         {
             "name": "Français (Piper Siwis Low Female)",
@@ -4649,7 +4652,8 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_NL/mls_5809/low/nl_NL-mls_5809-low.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_NL/mls_5809/low/nl_NL-mls_5809-low.onnx.json"
             ],
-            "size": "63118671"
+            "size": "63118671",
+            "hidden": true
         },
         {
             "name": "Nederlands (Piper MLS 7432 Low Neutral)",
@@ -5000,7 +5004,8 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/pl/pl_PL/mls_6892/low/pl_PL-mls_6892-low.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/pl/pl_PL/mls_6892/low/pl_PL-mls_6892-low.onnx.json"
             ],
-            "size": "63118671"
+            "size": "63118671",
+            "hidden": true
         },
         {
             "name": "Polski (Piper Darkman Medium Male)",
