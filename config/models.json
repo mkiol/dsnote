@@ -3004,7 +3004,7 @@
             "size": "1913365522"
         },
         {
-            "name": "Indian English (Vosk Large)",
+            "name": "English Indian (Vosk Large)",
             "model_id": "en_vosk_indian_large",
             "engine": "stt_vosk",
             "lang_id": "en",
@@ -3017,7 +3017,7 @@
             "size": "971186187"
         },
         {
-            "name": "Indian English (Vosk Small)",
+            "name": "English Indian (Vosk Small)",
             "model_id": "en_vosk_indian_small",
             "engine": "stt_vosk",
             "lang_id": "en",
