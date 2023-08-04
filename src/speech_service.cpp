@@ -428,10 +428,6 @@ speech_service::speech_service(QObject *parent)
             qWarning() << "dbus object registration failed";
             throw std::runtime_error("dbus object registration failed");
         }
-
-        emit current_task_changed();
-        emit task_state_changed();
-        emit state_changed();
     }
 
     if (settings::instance()->launch_mode() ==
@@ -617,9 +613,12 @@ speech_service::choose_model_config_by_id(
                                        /*vocoder_file=*/{}, model.speaker};
                 break;
             case engine_t::mnt:
-                config->mnt = mnt_model_config_t{
-                    model.lang_id, model.id, model.model_file,
-                    /*model_id_second=*/{}, /*model_file_second=*/{}};
+                config->mnt = mnt_model_config_t{model.lang_id,
+                                                 out_lang_id,
+                                                 model.id,
+                                                 model.model_file,
+                                                 /*model_id_second=*/{},
+                                                 /*model_file_second=*/{}};
                 break;
         }
     }
@@ -652,8 +651,9 @@ speech_service::choose_model_config_by_id(
                 const auto model_second = *it_model_from_en;
                 config.emplace();
                 config->mnt = mnt_model_config_t{
-                    model_first.lang_id, model_first.id, model_first.model_file,
-                    model_second.id, model_second.model_file};
+                    model_first.lang_id, out_lang_id,
+                    model_first.id,      model_first.model_file,
+                    model_second.id,     model_second.model_file};
                 qDebug() << "mnt both models found";
             }
         }
@@ -1121,6 +1121,7 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
         config.model_files.model_path_second =
             model_config->mnt->model_file_second.toStdString();
         config.lang = model_config->mnt->lang_id.toStdString();
+        config.out_lang = model_config->mnt->out_lang_id.toStdString();
 
         QFile nb_file{QStringLiteral(":/nonbreaking_prefixes/%1.txt")
                           .arg(model_config->mnt->lang_id.split('-').first())};
@@ -1533,17 +1534,15 @@ QVariantList speech_service::available_lang_list(
 
                 if (it == all_langs.cend()) return;
 
-                if (models_manager::role_of_engine(p.second.engine) ==
-                    models_manager::model_role::mnt) {
+                if (p.second.lang_id == "en")
+                    list.push_back(QStringList{
+                        p.second.lang_id,
+                        QStringLiteral("%1 / %2").arg(it->name, it->id)});
+                else
                     list.push_back(
                         QStringList{p.second.lang_id,
                                     QStringLiteral("%1 (%2) / %3")
                                         .arg(it->name, it->name_en, it->id)});
-                } else {
-                    list.push_back(QStringList{
-                        p.second.lang_id,
-                        QStringLiteral("%1 / %2").arg(it->name, it->id)});
-                }
             }
         });
 

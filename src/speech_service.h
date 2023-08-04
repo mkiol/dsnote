@@ -255,6 +255,7 @@ class speech_service : public QObject, public singleton<speech_service> {
 
     struct mnt_model_config_t {
         QString lang_id;
+        QString out_lang_id;
         QString model_id_first;
         QString model_file_first;
         QString model_id_second;
