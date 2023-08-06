@@ -84,31 +84,34 @@ SilicaItem {
     }
 
     Row {
-        opacity: root.textArea.focus ? 0.0 :
+        property double size: Theme.itemSizeSmall * 0.6
+        opacity: root.textArea.highlighted ? 0.0 :
                  root.enabled && (flick.moving || copyButton.pressed || clearButton.pressed || undoButton.pressed ||
-                 flick.contentHeight <= (root.height - Theme.itemSizeSmall * 0.6)) ? 1.0 : 0.4
+                 flick.contentHeight <= (root.height - size)) ? 1.0 : 0.4
         Behavior on opacity { FadeAnimator {} }
         visible: opacity > 0.0
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.rightMargin: Theme.horizontalPageMargin
-        spacing: Theme.paddingLarge
-        height: Theme.itemSizeSmall * 0.6 + Theme.paddingLarge
+        spacing: Theme.paddingSmall
+        height: size + Theme.paddingLarge
 
         IconButton {
             id: copyButton
 
-            width: Theme.itemSizeSmall * 0.6
-            height: Theme.itemSizeSmall * 0.6
+            width: parent.size
+            height: parent.size
             visible: root.textArea.text.length !== 0
+            icon.width: width; icon.height: height
             icon.source: "image://theme/icon-m-clipboard?" + (pressed ? Theme.highlightColor : Theme.primaryColor)
             onClicked: root.copyClicked()
         }
         IconButton {
             id: clearButton
 
-            width: Theme.itemSizeSmall * 0.6
-            height: Theme.itemSizeSmall * 0.6
+            width: parent.size
+            height: parent.size
+            icon.width: width; icon.height: height
             visible: root.canClear && !textArea.readOnly && textArea.text.length !== 0
             icon.source: "image://theme/icon-m-clear?" + (pressed ? Theme.highlightColor : Theme.primaryColor)
             onClicked: root.clearClicked()
@@ -116,8 +119,9 @@ SilicaItem {
         IconButton {
             id: undoButton
 
-            width: Theme.itemSizeSmall * 0.6
-            height: Theme.itemSizeSmall * 0.6
+            width: parent.size
+            height: parent.size
+            icon.width: width; icon.height: height
             visible: !root.textArea.readOnly && (root.canUndo || root.canRedo)
             icon.source: (root.canUndo ? "image://theme/icon-m-rotate-left?" : "image://theme/icon-m-rotate-right?") +
                          (pressed ? Theme.highlightColor : Theme.primaryColor)

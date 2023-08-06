@@ -34,12 +34,14 @@ ApplicationWindow {
             id: root
 
             readonly property bool verticalMode: isPortrait
-            readonly property bool canCancelStt: app.state === DsnoteApp.StateTranscribingFile ||
+            readonly property bool canCancelStt: !app.another_app_connected &&
+                                       (app.state === DsnoteApp.StateTranscribingFile ||
                                         app.state === DsnoteApp.StateListeningSingleSentence ||
                                         app.state === DsnoteApp.StateListeningAuto ||
-                                        app.state === DsnoteApp.StateListeningManual
-            readonly property bool canCancelTts: app.state === DsnoteApp.StatePlayingSpeech ||
-                                        app.state === DsnoteApp.StateWritingSpeechToFile
+                                        app.state === DsnoteApp.StateListeningManual)
+            readonly property bool canCancelTts: !app.another_app_connected &&
+                                        (app.state === DsnoteApp.StatePlayingSpeech ||
+                                        app.state === DsnoteApp.StateWritingSpeechToFile)
             readonly property bool panelAlwaysOpen: notepad.enabled && (app.stt_configured || app.tts_configured)
 
             allowedOrientations: Orientation.All
@@ -90,8 +92,8 @@ ApplicationWindow {
                     maxHeight: root.height - (panel.open ? panel.height : 0)
                     verticalMode: root.verticalMode
                     width: parent.width
-                    readOnly: app.busy || service.busy || !app.connected ||
-                              root.canCancelStt || root.canCancelTts
+                    readOnly: !app.another_app_connected &&
+                              (app.busy || service.busy || !app.connected)
                 }
 
                 Notepad {
@@ -104,8 +106,8 @@ ApplicationWindow {
                     maxHeight: root.height - (panel.open ? panel.height : 0)
                     verticalMode: root.verticalMode
                     width: parent.width
-                    readOnly: app.busy || service.busy || !app.connected ||
-                              root.canCancelStt || root.canCancelTts
+                    readOnly: !app.another_app_connected &&
+                              (app.busy || service.busy || !app.connected)
                 }
 
                 SpeechWidget {

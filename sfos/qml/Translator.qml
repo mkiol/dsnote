@@ -118,7 +118,7 @@ Item {
                 DuoComboButton {
                     id: mntInCombo
 
-                    visible: !root.noteTextArea.textArea.focus && !root.translatedNoteTextArea.textArea.focus
+                    visible: !root.noteTextArea.textArea.highlighted && !root.translatedNoteTextArea.textArea.highlighted
                     verticalMode: true
                     width: parent.width
                     first {
@@ -203,7 +203,7 @@ Item {
                 DuoComboButton {
                     id: mntOutCombo
 
-                    visible: !root.noteTextArea.textArea.focus && !root.translatedNoteTextArea.textArea.focus
+                    visible: !root.noteTextArea.textArea.highlighted && !root.translatedNoteTextArea.textArea.highlighted
                     verticalMode: true
                     width: parent.width
 

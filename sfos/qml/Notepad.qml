@@ -78,7 +78,7 @@ Column {
         PlaceholderLabel {
             enabled: !app.busy && !service.busy && app.connected &&
                      app.note.length === 0 && !app.stt_configured && !app.tts_configured &&
-                     !_noteTextArea.textArea.focus
+                     !_noteTextArea.textArea.highlighted
             text: qsTr("Neither Speech to Text nor Text to Speech model has been set up yet.") + " " +
                   qsTr("Go to the %1 to download models for the languages you intend to use.")
                     .arg("<i>" + qsTr("Languages") + "</i>")
@@ -88,7 +88,7 @@ Column {
     DuoComboButton {
         id: listenReadCombos
 
-        visible: !root.noteTextArea.textArea.focus
+        visible: !root.noteTextArea.textArea.highlighted
         verticalMode: root.verticalMode
         width: parent.width
         first {
