@@ -91,6 +91,7 @@ add_library(onnxruntime SHARED IMPORTED)
 set_property(TARGET onnxruntime PROPERTY IMPORTED_LOCATION ${external_lib_dir}/libonnxruntime.so)
 
 ExternalProject_Add_StepDependencies(piperphonemize configure onnx)
+ExternalProject_Add_StepDependencies(piperphonemize configure espeak)
 ExternalProject_Add_StepDependencies(piper configure espeak)
 ExternalProject_Add_StepDependencies(piper configure onnx)
 ExternalProject_Add_StepDependencies(piper configure piperphonemize)
