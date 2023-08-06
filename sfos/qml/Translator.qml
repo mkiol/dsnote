@@ -277,15 +277,15 @@ Item {
                         if (root.canCancelMnt) app.cancel()
                         else app.translate()
                     }
-                    preferredWidth: Theme.buttonWidthSmall
+                    preferredWidth: translatorTextSwitch._label.implicitWidth > root.width - (Theme.buttonWidthSmall + 2 * Theme.horizontalPageMargin) ?
+                                        Theme.buttonWidthExtraSmall : Theme.buttonWidthSmall
                 }
 
                 TextSwitch {
                     id: translatorTextSwitch
 
                     _label {
-                        wrapMode: Text.NoWrap
-                        width: translatorTextSwitch._label.implicitWidth
+                        width: Math.min(root.width - _translatorButton.implicitWidthh - 2 * Theme.horizontalPageMargin, translatorTextSwitch._label.implicitWidth)
                         font.pixelSize: verticalMode ? Theme.fontSizeExtraSmall : Theme.fontSizeSmall
                     }
 
