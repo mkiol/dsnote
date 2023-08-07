@@ -20,7 +20,7 @@ DialogPage {
     RichLabel {
         text: "<p>" + qsTr("Translator") + ":</p>
               <ul>
-              <li>New feature for offline translations between following languages: Catalan, Bulgarian, Czech, Danish,
+              <li>Support for offline translations between following languages: Catalan, Bulgarian, Czech, Danish,
                   English, Spanish, German, Estonian, French, Italian, Polish, Portuguese, Norwegian, Iranian, Dutch,
                   Russian, Ukrainian, Icelandic.</li>
               <li><i>Translator</i> uses models that were created as part of <a href='https://browser.mt/'>Bergamot project</a>.</li>
@@ -28,15 +28,16 @@ DialogPage {
               </ul>
               <p>" + qsTr("Interface") + ":</p>
               <ul>
-              <li>User interface redesign</li>
-              <li>Settings option to force specific <i>Interface style</i>. It is useful to overcome UI glitches when app is running under GNOME desktop environment.</li>
+              <li>User interface has been redesign. It is more handy and better supports portrait view for mobile.</li>
+              <li>Settings option to force specific <i>Interface style</i> has been added. It is useful to overcome UI glitches when app is running under GNOME desktop environment.</li>
+              <li>Application has been translated to new languages: Dutch and Italian.</li>
               </ul>
               <p>" + qsTr("Text to Speech") + ":</p>
               <ul>
-              <li>All existing Piper models were updated.</li>
+              <li>All existing Piper models have been updated.</li>
               <li>New Piper voices for: English, Swedish, Turkish, Polish, German, Spanish, Finnish, French, Ukrainian, Russian,
                     Swahili, Serbian, Romanian, Luxembourgish and Georgian</li>
-              <li>New RHVoice model for Slovak</li>
+              <li>New RHVoice model for Slovak language</li>
               </ul>"
     }
 

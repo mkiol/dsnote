@@ -34,7 +34,7 @@ Page {
 
             LogItem {
                 title: "Translator"
-                description: "New feature for offline translations between following languages: " +
+                description: "Support for offline translations between following languages: " +
                              "Catalan, Bulgarian, Czech, Danish, English, Spanish, German, Estonian, " +
                              "French, Italian, Polish, Portuguese, Norwegian, Iranian, Dutch, Russian, " +
                              "Ukrainian, Icelandic. " +
@@ -50,7 +50,12 @@ Page {
 
             LogItem {
                 title: "UI redesign"
-                description: "The user interface has been completely redesigned."
+                description: "The user interface has been completely redesigned. It is more handy and better supports landscape view."
+            }
+
+            LogItem {
+                title: "New translations"
+                description: "Application has been translated to new languages: Dutch and Italian. Many thanks to all tranaslators for your work!"
             }
 
             SectionHeader {
