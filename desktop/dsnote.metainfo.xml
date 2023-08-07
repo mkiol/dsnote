@@ -38,19 +38,20 @@
   </keywords>
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshot_1.png</image>
+      <caption>Speech Note main window</caption>
+      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshots/speechnote-screenshot-fullscreen.png</image>
     </screenshot>
     <screenshot>
-      <video codec="vp9" width="1920" height="1080">https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/demo.webm</video>
+      <caption>Notepad mode</caption>
+      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshots/speechnote-screenshot-light-notepad.png</image>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshot_2.png</image>
+      <caption>Translator mode (dark theme)</caption>
+      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshots/speechnote-screenshot-dark-translator.png</image>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshot_3.png</image>
-    </screenshot>
-    <screenshot>
-      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshot_5.png</image>
+      <caption>Translator mode on Plasma Mobile</caption>
+      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/desktop/screenshots/speechnote-screenshot-mobile-translator.png</image>
     </screenshot>
   </screenshots>
   <url type="homepage">https://github.com/mkiol/dsnote</url>
