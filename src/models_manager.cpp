@@ -1297,19 +1297,26 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             continue;
         }
 #endif
+#if defined ARCH_ARM_32 || defined ARCH_ARM_64
+        if (engine == model_engine::stt_vosk && model_id == "en_vosk_small") {
+            qDebug() << "ignoring vosk en small model on arm:" << model_id;
+            continue;
+        }
+#endif
 #ifdef USE_SFOS
         if (engine == model_engine::stt_vosk &&
             (model_id.contains("large") || model_id.contains("medium"))) {
-            qDebug() << "ignoring vosk large model:" << model_id;
+            qDebug() << "ignoring vosk large model on sfos:" << model_id;
             continue;
         }
         if (engine == model_engine::stt_whisper &&
             (model_id.contains("medium") || model_id.contains("large"))) {
-            qDebug() << "ignoring whisper medium or large model:" << model_id;
+            qDebug() << "ignoring whisper medium or large model os sfos:"
+                     << model_id;
             continue;
         }
         if (engine == model_engine::tts_coqui) {
-            qDebug() << "ignoring coqui model:" << model_id;
+            qDebug() << "ignoring coqui model on sfos:" << model_id;
             continue;
         }
 #endif
