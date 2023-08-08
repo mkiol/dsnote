@@ -1,10 +1,15 @@
 diff -ruN whispercpp-new-org/CMakeLists.txt whispercpp-new-patched/CMakeLists.txt
 --- whispercpp-new-org/CMakeLists.txt	2023-06-28 21:34:50.000000000 +0200
-+++ whispercpp-new-patched/CMakeLists.txt	2023-07-01 19:32:05.906957211 +0200
-@@ -134,22 +134,8 @@
++++ whispercpp-new-patched/CMakeLists.txt	2023-08-08 16:01:23.703449243 +0200
+@@ -131,27 +131,10 @@
+ if (WHISPER_OPENBLAS)
+     set(WHISPER_BLAS_VENDOR "OpenBLAS")
+     set(WHISPER_BLAS ON)
++    set(WHISPER_EXTRA_FLAGS ${WHISPER_EXTRA_FLAGS} -DGGML_USE_OPENBLAS)
++    set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} ${BLAS_LIB_PATH})
  endif()
  
- if (WHISPER_BLAS)
+-if (WHISPER_BLAS)
 -    set(BLA_STATIC 1)
 -    set(BLA_VENDOR ${WHISPER_BLAS_VENDOR})
 -#    set(BLA_PREFER_PKGCONFIG 1)
@@ -21,12 +26,12 @@ diff -ruN whispercpp-new-org/CMakeLists.txt whispercpp-new-patched/CMakeLists.tx
 -    else()
 -        message(WARNING "BLAS library was not found")
 -    endif()
-+    set(WHISPER_EXTRA_FLAGS ${WHISPER_EXTRA_FLAGS} -DGGML_USE_OPENBLAS)
-+    set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} ${BLAS_LIB_PATH})
- endif ()
- 
+-endif ()
+-
  if (WHISPER_CUBLAS)
-@@ -364,7 +350,7 @@
+     cmake_minimum_required(VERSION 3.17)
+ 
+@@ -364,7 +347,7 @@
  
  install(TARGETS ${TARGET}
      LIBRARY DESTINATION lib

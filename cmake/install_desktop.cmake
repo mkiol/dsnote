@@ -7,6 +7,10 @@ install(FILES "${desktop_dir}/${info_binary_id}.metainfo.xml" DESTINATION share/
 if(BUILD_WHISPERCPP)
     install(FILES "${external_lib_dir}/libwhisper.so" DESTINATION lib)
     install(FILES "${external_lib_dir}/libwhisper-fallback.so" DESTINATION lib)
+    if(arch_x8664)
+        install(FILES "${external_lib_dir}/libclblast.so.1.6.1" DESTINATION lib RENAME libclblast.so.1.6.1)
+        install(FILES "${external_lib_dir}/libwhisper-clblast.so" DESTINATION lib)
+    endif()
 endif()
 
 if(DOWNLOAD_LIBSTT)

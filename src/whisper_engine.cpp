@@ -43,6 +43,32 @@ whisper_engine::~whisper_engine() {
     }
 }
 
+bool whisper_engine::opencl_ok() {
+    auto opencl_handle = dlopen("libOpenCL.so.1", RTLD_LAZY);
+    if (!opencl_handle) {
+        LOGD("failed to open libOpenCL.so.1");
+        return false;
+    }
+
+    auto* clGetPlatformIDs =
+        reinterpret_cast<uint32_t (*)(uint32_t, void*, uint32_t*)>(
+            dlsym(opencl_handle, "clGetPlatformIDs"));
+    if (!clGetPlatformIDs) {
+        LOGD("failed to sym clGetPlatformIDs");
+        return false;
+    }
+
+    uint32_t num_dev = 0;
+    if (auto ret = clGetPlatformIDs(0, nullptr, &num_dev); ret != 0) {
+        LOGD("clGetPlatformIDs returned: " << ret);
+        return false;
+    }
+
+    LOGD("opencl devices found: " << num_dev);
+
+    return num_dev > 0;
+}
+
 void whisper_engine::open_whisper_lib() {
 #ifdef ARCH_ARM_32
     if (cpu_tools::neon_supported()) {
@@ -55,7 +81,12 @@ void whisper_engine::open_whisper_lib() {
     m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
 #else
     if (cpu_tools::avx_avx2_fma_f16c_supported()) {
-        m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
+        if (opencl_ok()) {
+            LOGD("using whisper-clblast");
+            m_whisperlib_handle = dlopen("libwhisper-clblast.so", RTLD_LAZY);
+        } else {
+            m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
+        }
     } else {
         LOGW("using whisper-fallback");
         m_whisperlib_handle = dlopen("libwhisper-fallback.so", RTLD_LAZY);
