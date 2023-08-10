@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <cstdlib>
 #include <sstream>
 
 #include "cpu_tools.hpp"
@@ -43,32 +44,6 @@ whisper_engine::~whisper_engine() {
     }
 }
 
-bool whisper_engine::opencl_ok() {
-    auto opencl_handle = dlopen("libOpenCL.so.1", RTLD_LAZY);
-    if (!opencl_handle) {
-        LOGD("failed to open libOpenCL.so.1");
-        return false;
-    }
-
-    auto* clGetPlatformIDs =
-        reinterpret_cast<uint32_t (*)(uint32_t, void*, uint32_t*)>(
-            dlsym(opencl_handle, "clGetPlatformIDs"));
-    if (!clGetPlatformIDs) {
-        LOGD("failed to sym clGetPlatformIDs");
-        return false;
-    }
-
-    uint32_t num_dev = 0;
-    if (auto ret = clGetPlatformIDs(0, nullptr, &num_dev); ret != 0) {
-        LOGD("clGetPlatformIDs returned: " << ret);
-        return false;
-    }
-
-    LOGD("opencl devices found: " << num_dev);
-
-    return num_dev > 0;
-}
-
 void whisper_engine::open_whisper_lib() {
 #ifdef ARCH_ARM_32
     if (cpu_tools::neon_supported()) {
@@ -81,12 +56,25 @@ void whisper_engine::open_whisper_lib() {
     m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
 #else
     if (cpu_tools::avx_avx2_fma_f16c_supported()) {
-        if (opencl_ok()) {
+        if (m_config.use_gpu) {
             LOGD("using whisper-clblast");
+
+            if (!m_config.gpu_device.platform_name.empty() &&
+                !m_config.gpu_device.device_name.empty()) {
+                setenv("GGML_OPENCL_PLATFORM",
+                       m_config.gpu_device.platform_name.c_str(), 1);
+                setenv("GGML_OPENCL_DEVICE",
+                       m_config.gpu_device.device_name.c_str(), 1);
+            } else {
+                unsetenv("GGML_OPENCL_PLATFORM");
+                unsetenv("GGML_OPENCL_DEVICE");
+            }
+
             m_whisperlib_handle = dlopen("libwhisper-clblast.so", RTLD_LAZY);
-        } else {
-            m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
         }
+
+        if (m_whisperlib_handle == nullptr)
+            m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
     } else {
         LOGW("using whisper-fallback");
         m_whisperlib_handle = dlopen("libwhisper-fallback.so", RTLD_LAZY);
@@ -159,8 +147,8 @@ void whisper_engine::create_whisper_model() {
 
     LOGD("creating whisper model");
 
-    m_whisper_ctx =
-        m_whisper_api.whisper_init_from_file(m_model_files.model_file.c_str());
+    m_whisper_ctx = m_whisper_api.whisper_init_from_file(
+        m_config.model_files.model_file.c_str());
 
     if (m_whisper_ctx == nullptr) {
         LOGE("failed to create whisper ctx");
@@ -178,7 +166,7 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
     auto sof = m_in_buf.sof;
 
     LOGD("process samples buf: mode="
-         << m_speech_mode << ", in-buf size=" << m_in_buf.size
+         << m_config.speech_mode << ", in-buf size=" << m_in_buf.size
          << ", speech-buf size=" << m_speech_buf.size() << ", sof=" << sof
          << ", eof=" << eof);
 
@@ -200,7 +188,7 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
     if (vad_status) {
         LOGD("vad: speech detected");
 
-        if (m_speech_mode != speech_mode_t::manual)
+        if (m_config.speech_mode != speech_mode_t::manual)
             set_speech_detection_status(
                 speech_detection_status_t::speech_detected);
 
@@ -210,13 +198,13 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
     } else {
         LOGD("vad: no speech");
 
-        if (m_speech_mode == speech_mode_t::single_sentence &&
+        if (m_config.speech_mode == speech_mode_t::single_sentence &&
             m_speech_buf.empty() && sentence_timer_timed_out()) {
             LOGD("sentence timeout");
             m_call_backs.sentence_timeout();
         }
 
-        if (m_speech_mode == speech_mode_t::automatic)
+        if (m_config.speech_mode == speech_mode_t::automatic)
             set_speech_detection_status(speech_detection_status_t::no_speech);
     }
 
@@ -228,13 +216,13 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
 
         if (m_speech_buf.empty()) return false;
 
-        if ((m_speech_mode != speech_mode_t::manual ||
+        if ((m_config.speech_mode != speech_mode_t::manual ||
              m_speech_detection_status ==
                  speech_detection_status_t::speech_detected) &&
             vad_status && !eof)
             return false;
 
-        if (m_speech_mode == speech_mode_t::manual &&
+        if (m_config.speech_mode == speech_mode_t::manual &&
             m_speech_detection_status == speech_detection_status_t::no_speech &&
             !eof)
             return false;
@@ -243,7 +231,7 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
     }();
 
     if (!decode_samples) {
-        if (m_speech_mode == speech_mode_t::manual &&
+        if (m_config.speech_mode == speech_mode_t::manual &&
             m_speech_detection_status == speech_detection_status_t::no_speech) {
             flush(eof ? flush_t::eof : flush_t::regular);
             free_buf();
@@ -284,16 +272,16 @@ whisper_full_params whisper_engine::make_wparams() {
     whisper_full_params wparams =
         m_whisper_api.whisper_full_default_params(WHISPER_SAMPLING_GREEDY);
 
-    if (auto pos = m_lang.find('-'); pos != std::string::npos) {
-        m_lang = m_lang.substr(0, pos);
+    if (auto pos = m_config.lang.find('-'); pos != std::string::npos) {
+        m_config.lang = m_config.lang.substr(0, pos);
     }
 
-    wparams.language = m_lang.c_str();
+    wparams.language = m_config.lang.c_str();
     wparams.speed_up = true;
     wparams.suppress_blank = true;
     wparams.suppress_non_speech_tokens = true;
     wparams.single_segment = false;
-    wparams.translate = m_translate;
+    wparams.translate = m_config.translate;
     wparams.no_context = true;
     wparams.n_threads = std::min(
         m_threads,

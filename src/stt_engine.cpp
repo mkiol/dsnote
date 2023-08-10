@@ -149,22 +149,27 @@ std::ostream& operator<<(std::ostream& os,
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os,
+                         const stt_engine::gpu_device_t& gpu_device) {
+    os << "platform-name=" << gpu_device.platform_name
+       << ", device-name=" << gpu_device.device_name;
+
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const stt_engine::config_t& config) {
     os << "lang=" << config.lang << ", model-files=[" << config.model_files
        << "], speech-mode=" << config.speech_mode
        << ", vad-mode=" << config.vad_mode
-       << ", speech-started=" << config.speech_started;
+       << ", speech-started=" << config.speech_started
+       << ", use-gpu=" << config.use_gpu << ", gpu-device=["
+       << config.gpu_device << "]";
 
     return os;
 }
 
 stt_engine::stt_engine(config_t config, callbacks_t call_backs)
-    : m_model_files{std::move(config.model_files)},
-      m_lang{std::move(config.lang)},
-      m_call_backs{std::move(call_backs)},
-      m_speech_started{config.speech_started},
-      m_speech_mode{config.speech_mode},
-      m_translate{config.translate} {}
+    : m_config{std::move(config)}, m_call_backs{std::move(call_backs)} {}
 
 stt_engine::~stt_engine() { LOGD("engine dtor"); }
 
@@ -211,7 +216,7 @@ void stt_engine::stop() {
 
     m_processing_cv.notify_all();
     if (m_processing_thread.joinable()) m_processing_thread.join();
-    m_speech_started = false;
+    m_config.speech_started = false;
     set_speech_detection_status(speech_detection_status_t::no_speech);
     set_processing_state(processing_state_t::idle);
 
@@ -423,20 +428,20 @@ void stt_engine::set_processing_state(processing_state_t new_state) {
 void stt_engine::flush(flush_t type) {
     LOGD("flush: " << type);
 
-    if (m_speech_mode == speech_mode_t::automatic) {
+    if (m_config.speech_mode == speech_mode_t::automatic) {
         set_speech_detection_status(speech_detection_status_t::no_speech);
     } else if (type != flush_t::restart &&
-               m_speech_mode == speech_mode_t::manual) {
+               m_config.speech_mode == speech_mode_t::manual) {
         set_speech_started(false);
     }
 
     if (m_intermediate_text && !m_intermediate_text->empty()) {
         if ((type == flush_t::regular || type == flush_t::eof ||
-             m_speech_mode != speech_mode_t::single_sentence) &&
+             m_config.speech_mode != speech_mode_t::single_sentence) &&
             m_intermediate_text->size() >= m_min_text_size) {
             m_call_backs.text_decoded(m_intermediate_text.value());
 
-            if (m_speech_mode == speech_mode_t::single_sentence) {
+            if (m_config.speech_mode == speech_mode_t::single_sentence) {
                 set_speech_started(false);
             }
         }
@@ -451,22 +456,22 @@ void stt_engine::flush(flush_t type) {
 }
 
 void stt_engine::set_speech_mode(speech_mode_t mode) {
-    if (m_speech_mode != mode) {
-        LOGD("speech mode: " << m_speech_mode << " => " << mode);
+    if (m_config.speech_mode != mode) {
+        LOGD("speech mode: " << m_config.speech_mode << " => " << mode);
 
-        m_speech_mode = mode;
+        m_config.speech_mode = mode;
         set_speech_started(false);
     }
 }
 
 void stt_engine::set_speech_started(bool value) {
-    if (m_speech_started != value) {
-        LOGD("speech started: " << m_speech_started << " => " << value);
+    if (m_config.speech_started != value) {
+        LOGD("speech started: " << m_config.speech_started << " => " << value);
 
-        m_speech_started = value;
+        m_config.speech_started = value;
         m_start_time.reset();
-        if (m_speech_mode == speech_mode_t::manual ||
-            m_speech_mode == speech_mode_t::single_sentence) {
+        if (m_config.speech_mode == speech_mode_t::manual ||
+            m_config.speech_mode == speech_mode_t::single_sentence) {
             set_speech_detection_status(
                 value ? speech_detection_status_t::speech_detected
                       : speech_detection_status_t::no_speech);

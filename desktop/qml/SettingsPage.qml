@@ -69,6 +69,8 @@ DialogPage {
         }
     }
 
+
+
     GridLayout {
         columns: root.verticalMode ? 1 : 2
         columnSpacing: appWin.padding
@@ -131,6 +133,54 @@ DialogPage {
         color: "red"
         text: qsTr("To make %1 work, download %2 model.")
                 .arg("<i>" + qsTr("Restore punctuation") + "</i>").arg("<i>" + qsTr("Punctuation") + "</i>")
+    }
+
+    CheckBox {
+        visible: _settings.gpu_supported()
+        checked: _settings.whisper_use_gpu
+        text: qsTr("Use GPU acceleration for Whisper")
+        onCheckedChanged: {
+            _settings.whisper_use_gpu = checked
+        }
+
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: hovered
+        ToolTip.text: qsTr("If a suitable GPU device is found in the system, it will be used to accelerate processing.") + " " +
+                      qsTr("GPU hardware acceleration significantly reduces the time of decoding.") + " " +
+                      qsTr("Disable this option if you observe problems when using Speech to Text with Whisper models.")
+    }
+
+    Label {
+        wrapMode: Text.Wrap
+        Layout.fillWidth: true
+        visible: _settings.gpu_supported() && _settings.whisper_use_gpu && _settings.gpu_devices.length <= 1
+        color: "red"
+        text: qsTr("A suitable GPU device could not be found.")
+    }
+
+    GridLayout {
+        visible: _settings.gpu_supported() && _settings.whisper_use_gpu && _settings.gpu_devices.length > 1
+        columns: root.verticalMode ? 1 : 2
+        columnSpacing: appWin.padding
+        rowSpacing: appWin.padding
+
+        Label {
+            Layout.fillWidth: true
+            text: qsTr("GPU device")
+        }
+        ComboBox {
+            Layout.fillWidth: verticalMode
+            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            currentIndex: _settings.gpu_device_idx
+            model: _settings.gpu_devices
+            onActivated: {
+                _settings.gpu_device_idx = index
+            }
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Select preferred GPU device for hardware acceleration.")
+        }
     }
 
     SectionLabel {

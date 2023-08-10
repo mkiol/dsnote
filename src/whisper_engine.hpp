@@ -67,7 +67,6 @@ class whisper_engine : public stt_engine {
     void reset_impl() override;
     void stop_processing_impl() override;
     void start_processing_impl() override;
-    static bool opencl_ok();
 };
 
 #endif  // WHISPER_ENGINE_H

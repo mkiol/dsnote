@@ -15,10 +15,16 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QVariant>
+#include <QVariantList>
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 
 #include "config.h"
+#ifdef ARCH_X86_64
+#include "opencl_tools.hpp"
+#endif
 
 QDebug operator<<(QDebug d, settings::mode_t mode) {
     switch (mode) {
@@ -78,6 +84,7 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     qDebug() << "settings file:" << fileName();
 
     update_qt_style();
+    update_gpu_devices();
 }
 
 QString settings::settings_filepath() {
@@ -254,6 +261,17 @@ void settings::set_restore_punctuation(bool value) {
     if (restore_punctuation() != value) {
         setValue(QStringLiteral("service/restore_punctuation"), value);
         emit restore_punctuation_changed();
+    }
+}
+
+bool settings::whisper_use_gpu() const {
+    return value(QStringLiteral("service/whisper_use_gpu"), false).toBool();
+}
+
+void settings::set_whisper_use_gpu(bool value) {
+    if (whisper_use_gpu() != value) {
+        setValue(QStringLiteral("service/whisper_use_gpu"), value);
+        emit whisper_use_gpu_changed();
     }
 }
 
@@ -454,6 +472,14 @@ bool settings::py_supported() const {
 #endif
 }
 
+bool settings::gpu_supported() const {
+#ifdef ARCH_X86_64
+    return true;
+#else
+    return false;
+#endif
+}
+
 settings::launch_mode_t settings::launch_mode() const { return m_launch_mode; }
 
 void settings::set_launch_mode(launch_mode_t launch_mode) {
@@ -514,4 +540,56 @@ void settings::update_qt_style() const {
 
     QQuickStyle::setStyle(style);
 #endif
+}
+
+QStringList settings::gpu_devices() const { return m_gpu_devices; }
+
+bool settings::has_gpu_device() const { return m_gpu_devices.size() > 1; }
+
+void settings::update_gpu_devices() {
+#ifdef ARCH_X86_64
+    auto devices = opencl_tools::available_devices();
+
+    m_gpu_devices.clear();
+    m_gpu_devices.push_back(tr("Auto"));
+
+    std::transform(devices.cbegin(), devices.cend(),
+                   std::back_inserter(m_gpu_devices), [](const auto& device) {
+                       return QStringLiteral("%1, %2").arg(
+                           QString::fromStdString(device.platform_name),
+                           QString::fromStdString(device.device_name));
+                   });
+
+    emit gpu_devices_changed();
+#endif
+}
+
+QString settings::gpu_device() const {
+    return value(QStringLiteral("service/gpu_device")).toString();
+}
+
+void settings::set_gpu_device(QString value) {
+    if (value == tr("Auto")) value.clear();
+
+    if (value != gpu_device()) {
+        setValue(QStringLiteral("service/gpu_device"), value);
+        emit gpu_device_changed();
+    }
+}
+
+int settings::gpu_device_idx() const {
+    auto current_device = gpu_device();
+
+    if (current_device.isEmpty()) return 0;
+
+    auto it =
+        std::find(m_gpu_devices.cbegin(), m_gpu_devices.cend(), current_device);
+    if (it == m_gpu_devices.cend()) return 0;
+
+    return std::distance(m_gpu_devices.cbegin(), it);
+}
+
+void settings::set_gpu_device_idx(int value) {
+    if (value < 0 || value >= m_gpu_devices.size()) return;
+    set_gpu_device(value == 0 ? "" : m_gpu_devices.at(value));
 }

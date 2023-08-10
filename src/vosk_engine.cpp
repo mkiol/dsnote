@@ -141,11 +141,11 @@ void vosk_engine::start_processing_impl() {
 }
 
 void vosk_engine::create_punctuator() {
-    if (m_punctuator || m_model_files.ttt_model_file.empty()) return;
+    if (m_punctuator || m_config.model_files.ttt_model_file.empty()) return;
 
     LOGD("creating punctuator");
     try {
-        m_punctuator.emplace(m_model_files.ttt_model_file);
+        m_punctuator.emplace(m_config.model_files.ttt_model_file);
 
         LOGD("punctuator created");
     } catch (const std::runtime_error& error) {
@@ -158,7 +158,7 @@ void vosk_engine::create_vosk_model() {
 
     LOGD("creating vosk model");
 
-    auto size = du(m_model_files.model_file);
+    auto size = du(m_config.model_files.model_file);
     LOGD("model size: " << size << " (max: " << model_max_size() << ")");
 
     if (size > model_max_size()) {
@@ -167,7 +167,8 @@ void vosk_engine::create_vosk_model() {
             "failed to create vosk model because it is too large");
     }
 
-    m_vosk_model = m_vosk_api.vosk_model_new(m_model_files.model_file.c_str());
+    m_vosk_model =
+        m_vosk_api.vosk_model_new(m_config.model_files.model_file.c_str());
     if (m_vosk_model == nullptr) {
         LOGE("failed to create vosk model");
         throw std::runtime_error("failed to create vosk model");
@@ -209,7 +210,7 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
     auto sof = m_in_buf.sof;
 
     LOGD("process samples buf: mode="
-         << m_speech_mode << ", in-buf size=" << m_in_buf.size
+         << m_config.speech_mode << ", in-buf size=" << m_in_buf.size
          << ", speech-buf size=" << m_speech_buf.size() << ", sof=" << sof
          << ", eof=" << eof);
 
@@ -262,7 +263,7 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
     if (vad_status) {
         LOGD("vad: speech detected");
 
-        if (m_speech_mode != speech_mode_t::manual)
+        if (m_config.speech_mode != speech_mode_t::manual)
             set_speech_detection_status(
                 speech_detection_status_t::speech_detected);
 
@@ -273,7 +274,7 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
     } else {
         LOGD("vad: no speech");
 
-        if (m_speech_mode == speech_mode_t::single_sentence &&
+        if (m_config.speech_mode == speech_mode_t::single_sentence &&
             (!m_intermediate_text || m_intermediate_text->empty()) &&
             sentence_timer_timed_out()) {
             LOGD("sentence timeout");
@@ -288,8 +289,8 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
 
     auto final_decode = [&] {
         if (eof) return true;
-        if (m_speech_mode != speech_mode_t::manual && m_intermediate_text &&
-            !m_intermediate_text->empty() && !vad_status)
+        if (m_config.speech_mode != speech_mode_t::manual &&
+            m_intermediate_text && !m_intermediate_text->empty() && !vad_status)
             return true;
         return false;
     }();
@@ -307,13 +308,13 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
         m_speech_buf.clear();
 
         if (final_decode)
-            flush(!eof && m_speech_mode == speech_mode_t::automatic
+            flush(!eof && m_config.speech_mode == speech_mode_t::automatic
                       ? flush_t::regular
                       : flush_t::eof);
     }
 
     if (!vad_status && !final_decode &&
-        m_speech_mode == speech_mode_t::automatic)
+        m_config.speech_mode == speech_mode_t::automatic)
         set_speech_detection_status(speech_detection_status_t::no_speech);
 
     free_buf();

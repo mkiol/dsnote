@@ -890,6 +890,21 @@ QString speech_service::restart_stt_engine(
         config.speech_mode =
             static_cast<stt_engine::speech_mode_t>(speech_mode);
         config.translate = false;
+        config.use_gpu = model_files->stt->engine ==
+                             models_manager::model_engine::stt_whisper &&
+                         settings::instance()->whisper_use_gpu() &&
+                         settings::instance()->has_gpu_device();
+
+        if (config.use_gpu) {
+            auto gpu_str = settings::instance()->gpu_device();
+            if (!gpu_str.isEmpty()) {
+                auto l = gpu_str.split(',');
+                if (l.size() > 1) {
+                    config.gpu_device = {l.at(0).trimmed().toStdString(),
+                                         l.at(1).trimmed().toStdString()};
+                }
+            }
+        }
 
         bool new_engine_required = [&] {
             if (!m_stt_engine) return true;
@@ -910,7 +925,11 @@ QString speech_service::restart_stt_engine(
 
             if (m_stt_engine->model_files() != config.model_files) return true;
             if (m_stt_engine->lang() != config.lang) return true;
-
+            if (model_files->stt->engine ==
+                    models_manager::model_engine::stt_whisper &&
+                (config.use_gpu != m_stt_engine->use_gpu() ||
+                 config.gpu_device != m_stt_engine->gpu_device()))
+                return true;
             return false;
         }();
 

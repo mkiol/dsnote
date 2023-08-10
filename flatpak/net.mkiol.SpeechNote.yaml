@@ -92,12 +92,15 @@ modules:
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DTUNERS=OFF
     sources:
       - type: git
         url: https://github.com/CNugteren/CLBlast.git
         commit: e3ce21bb937f07b8282dccf4823e2acbdf286d17 
 
   - name: whispercpp-clblast
+    only-arches:
+      - x86_64
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release

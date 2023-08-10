@@ -232,6 +232,8 @@ set(dsnote_lib_sources
     ${sources_dir}/text_tools.cpp
     ${sources_dir}/mnt_engine.hpp
     ${sources_dir}/mnt_engine.cpp
+    ${sources_dir}/opencl_tools.hpp
+    ${sources_dir}/opencl_tools.cpp
 )
 
 configure_file(config.h.in config.h)

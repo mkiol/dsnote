@@ -30,7 +30,7 @@ class denoiser {
 
     DenoiseState* m_state = nullptr;
 
-    void normalize_audio(sample_t* audio, size_t size);
+    static void normalize_audio(sample_t* audio, size_t size);
 };
 
 #endif // DENOISER_HPP

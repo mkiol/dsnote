@@ -76,6 +76,20 @@ class stt_engine {
         std::function<void()> error;
     };
 
+    struct gpu_device_t {
+        std::string platform_name;
+        std::string device_name;
+        inline bool operator==(const gpu_device_t& rhs) const {
+            return platform_name == rhs.platform_name &&
+                   device_name == rhs.device_name;
+        }
+        inline bool operator!=(const gpu_device_t& rhs) const {
+            return !(*this == rhs);
+        }
+    };
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const gpu_device_t& gpu_device);
+
     struct config_t {
         std::string lang;
         model_files_t model_files;
@@ -83,6 +97,8 @@ class stt_engine {
         vad_mode_t vad_mode = vad_mode_t::aggressiveness3;
         bool translate = false; /*extra whisper feature*/
         bool speech_started = false;
+        bool use_gpu = false;
+        gpu_device_t gpu_device;
     };
     friend std::ostream& operator<<(std::ostream& os, const config_t& config);
 
@@ -96,12 +112,16 @@ class stt_engine {
     inline void restart() { m_restart_requested = true; }
     speech_detection_status_t speech_detection_status() const;
     void set_speech_mode(speech_mode_t mode);
-    inline auto speech_mode() const { return m_speech_mode; }
+    inline auto speech_mode() const { return m_config.speech_mode; }
     void set_speech_started(bool value);
-    inline auto speech_status() const { return m_speech_started; }
-    inline const model_files_t& model_files() const { return m_model_files; }
-    inline const std::string& lang() const { return m_lang; }
-    inline auto translate() const { return m_translate; }
+    inline auto speech_status() const { return m_config.speech_started; }
+    inline const model_files_t& model_files() const {
+        return m_config.model_files;
+    }
+    inline const std::string& lang() const { return m_config.lang; }
+    inline auto translate() const { return m_config.translate; }
+    inline auto use_gpu() const { return m_config.use_gpu; }
+    inline auto gpu_device() const { return m_config.gpu_device; }
 
    protected:
     enum class lock_type_t { free, processed, borrowed };
@@ -138,8 +158,7 @@ class stt_engine {
         }
     };
 
-    model_files_t m_model_files;
-    std::string m_lang;
+    config_t m_config;
     callbacks_t m_call_backs;
     std::thread m_processing_thread;
     std::mutex m_processing_mtx;
@@ -151,11 +170,8 @@ class stt_engine {
     denoiser m_denoiser;
     speech_detection_status_t m_speech_detection_status =
         speech_detection_status_t::no_speech;
-    bool m_speech_started = false;
-    speech_mode_t m_speech_mode;
     bool m_restart_requested = false;
     std::optional<std::chrono::steady_clock::time_point> m_start_time;
-    bool m_translate = false;
     processing_state_t m_processing_state = processing_state_t::idle;
 
     static void ltrim(std::string& s);

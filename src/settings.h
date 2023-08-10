@@ -76,6 +76,14 @@ class settings : public QSettings, public singleton<settings> {
                    set_default_mnt_lang NOTIFY default_mnt_lang_changed)
     Q_PROPERTY(QString default_mnt_out_lang READ default_mnt_out_lang WRITE
                    set_default_mnt_out_lang NOTIFY default_mnt_out_lang_changed)
+    Q_PROPERTY(bool whisper_use_gpu READ whisper_use_gpu WRITE
+                   set_whisper_use_gpu NOTIFY whisper_use_gpu_changed)
+    Q_PROPERTY(
+        QStringList gpu_devices READ gpu_devices NOTIFY gpu_devices_changed)
+    Q_PROPERTY(int gpu_device_idx READ gpu_device_idx WRITE set_gpu_device_idx
+                   NOTIFY gpu_device_changed)
+    Q_PROPERTY(QString gpu_device READ gpu_device WRITE set_gpu_device NOTIFY
+                   gpu_device_changed)
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -144,6 +152,8 @@ class settings : public QSettings, public singleton<settings> {
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
+    Q_INVOKABLE bool gpu_supported() const;
+    Q_INVOKABLE bool has_gpu_device() const;
 
     // service
     QString models_dir() const;
@@ -159,6 +169,13 @@ class settings : public QSettings, public singleton<settings> {
     void set_restore_punctuation(bool value);
     QStringList enabled_models();
     void set_enabled_models(const QStringList &value);
+    bool whisper_use_gpu() const;
+    void set_whisper_use_gpu(bool value);
+    QStringList gpu_devices() const;
+    QString gpu_device() const;
+    void set_gpu_device(QString value);
+    int gpu_device_idx() const;
+    void set_gpu_device_idx(int value);
 
     // stt
     QString default_stt_model() const;
@@ -206,14 +223,19 @@ class settings : public QSettings, public singleton<settings> {
     void default_tts_models_changed(const QString &lang);
     void default_mnt_lang_changed();
     void default_mnt_out_lang_changed();
+    void whisper_use_gpu_changed();
+    void gpu_devices_changed();
+    void gpu_device_changed();
 
    private:
     inline static const QString settings_filename =
         QStringLiteral("settings.conf");
     bool m_restart_required = false;
+    QStringList m_gpu_devices;
 
     static QString settings_filepath();
     void update_qt_style() const;
+    void update_gpu_devices();
 
     launch_mode_t m_launch_mode = launch_mode_t::app_stanalone;
 };
