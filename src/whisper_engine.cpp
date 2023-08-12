@@ -283,7 +283,7 @@ whisper_full_params whisper_engine::make_wparams() {
     }
 
     wparams.language = m_config.lang.c_str();
-    wparams.speed_up = true;
+    wparams.speed_up = false;
     wparams.suppress_blank = true;
     wparams.suppress_non_speech_tokens = true;
     wparams.single_segment = false;
