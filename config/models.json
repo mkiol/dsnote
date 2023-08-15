@@ -5769,13 +5769,13 @@
             "engine": "tts_rhvoice",
             "lang_id": "cs",
             "speaker": "zdenek",
-            "checksum": "2aebbde8",
-            "checksum_quick": "2a0ed96b",
+            "checksum": "f99a3003",
+            "checksum_quick": "e8c2e285",
             "comp": "zipall",
             "urls": [
-                "https://github.com/RHVoice/zdenek-cze/releases/download/v4.3/RHVoice-voice-Czech-Zdenek-v4.3.zip"
+                "https://github.com/RHVoice/zdenek-cze/releases/download/v4.4/RHVoice-voice-Czech-Zdenek-v4.4.zip"
             ],
-            "size": "10374454"
+            "size": "10647609"
         },
         {
             "name": "English (RHVoice Slt Female)",
@@ -5951,13 +5951,13 @@
             "engine": "tts_rhvoice",
             "lang_id": "sk",
             "speaker": "ondro",
-            "checksum": "61696c03",
-            "checksum_quick": "1762422d",
+            "checksum": "7047f3d",
+            "checksum_quick": "cfc8b1e8",
             "comp": "zipall",
             "urls": [
-                "https://github.com/RHVoice/ondro-slk/releases/download/v4.0/RHVoice-voice-Slovak-Ondro-v4.0.zip"
+                "https://github.com/RHVoice/ondro-slk/releases/download/v4.3/RHVoice-voice-Slovak-Ondro-v4.3.zip"
             ],
-            "size": "11171981"
+            "size": "11570722"
         },
         {
             "name": "Polski (RHVoice Magda Female)",
