@@ -1,0 +1,66 @@
+diff -ruN tmp/TTS/api.py tmp-patched/TTS/api.py
+--- tmp/TTS/api.py	2023-08-13 10:22:58.000000000 +0200
++++ tmp-patched/TTS/api.py	2023-08-15 14:56:22.675787268 +0200
+@@ -1,4 +1,5 @@
+ import tempfile
++import os.path
+ from pathlib import Path
+ from typing import Union
+ 
+@@ -199,17 +200,33 @@
+             gpu (bool, optional): Enable/disable GPU. Some models might be too slow on CPU. Defaults to False.
+         """
+ 
+-        self.synthesizer = Synthesizer(
+-            tts_checkpoint=model_path,
+-            tts_config_path=config_path,
+-            tts_speakers_file=None,
+-            tts_languages_file=None,
+-            vocoder_checkpoint=vocoder_path,
+-            vocoder_config=vocoder_config,
+-            encoder_checkpoint=None,
+-            encoder_config=None,
+-            use_cuda=gpu,
+-        )
++        if "fairseq" in model_path:
++            model_dir = os.path.dirname(model_path)
++
++            self.synthesizer = Synthesizer(
++                tts_checkpoint=None,
++                tts_config_path=None,
++                tts_speakers_file=None,
++                tts_languages_file=None,
++                vocoder_checkpoint=None,
++                vocoder_config=None,
++                encoder_checkpoint=None,
++                encoder_config=None,
++                model_dir=model_dir,
++                use_cuda=gpu,
++            )
++        else:
++            self.synthesizer = Synthesizer(
++                tts_checkpoint=model_path,
++                tts_config_path=config_path,
++                tts_speakers_file=None,
++                tts_languages_file=None,
++                vocoder_checkpoint=vocoder_path,
++                vocoder_config=vocoder_config,
++                encoder_checkpoint=None,
++                encoder_config=None,
++                use_cuda=gpu,
++            )
+ 
+     def _check_arguments(
+         self,
+diff -ruN tmp/TTS-0.16.3.dist-info/METADATA tmp-patched/TTS-0.16.3.dist-info/METADATA
+--- tmp/TTS-0.16.3.dist-info/METADATA	2023-08-13 10:26:28.000000000 +0200
++++ tmp-patched/TTS-0.16.3.dist-info/METADATA	2023-08-15 14:30:15.075722860 +0200
+@@ -29,7 +29,7 @@
+ Requires-Python: >=3.9.0, <3.12
+ Description-Content-Type: text/markdown
+ License-File: LICENSE.txt
+-Requires-Dist: cython ==0.29.30
++Requires-Dist: cython
+ Requires-Dist: scipy >=1.4.0
+ Requires-Dist: torch >=1.7
+ Requires-Dist: torchaudio

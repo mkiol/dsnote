@@ -92,8 +92,8 @@ modules:
         sha256: 90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2
       - &id010
         type: file
-        url: https://files.pythonhosted.org/packages/e4/f3/679b3a042a127de0d7c84874913c3e23bb84646eb3bc6ecab3f8c872edc9/numpy-1.23.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: 5e05b1c973a9f858c74367553e236f287e749465f773328c8ef31abe18f691e1
+        url: https://files.pythonhosted.org/packages/5b/9a/cce6992d25096371412f1a58e5c50f144299261d01dfc4c00fd563a589e7/numpy-1.22.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: a97e82c39d9856fe7d4f9b86d8a1e66eff99cf3a8b7ba48202f659703d27c46f
       - &id022
         type: file
         url: https://files.pythonhosted.org/packages/ab/c3/57f0601a2d4fe15de7a553c00adbc901425661bf048f2a22dfc500caf121/packaging-23.1-py3-none-any.whl
@@ -156,13 +156,8 @@ modules:
   - name: python3-TTS
     buildsystem: simple
     build-commands:
-      - unzip "${PWD}/TTS-0.14.0-cp310-cp310-manylinux1_x86_64.whl" -d "${PWD}/tmp"
-      - "sed -i -e 's/Requires-Dist: cython (==0.29.28)/Requires-Dist: cython/g' ${PWD}/tmp/TTS-0.14.0.dist-info/METADATA"
-      - rm "${PWD}/TTS-0.14.0-cp310-cp310-manylinux1_x86_64.whl"
-      - cd "${PWD}/tmp" && zip -r "${PWD}/TTS-0.14.0-cp310-cp310-manylinux1_x86_64.whl" ./
-      - mv "${PWD}/tmp/TTS-0.14.0-cp310-cp310-manylinux1_x86_64.whl" "${PWD}"
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} "TTS==0.14.0" --no-build-isolation
+        --prefix=${FLATPAK_DEST} "TTS==0.16.3" --no-build-isolation
     cleanup:
       - "/bin"
     sources:
@@ -185,8 +180,19 @@ modules:
         sha256: da7b9c006171be1f9ddb12cc6e0d3d703b95f7f43cb5e2c6f5f15d3233fcf202
       - *id005
       - type: file
-        url: https://files.pythonhosted.org/packages/36/a1/a7e64c2d9a985b8851aa42d1e4718be144e2f4594768344a081de613a42a/TTS-0.14.0-cp310-cp310-manylinux1_x86_64.whl
-        sha256: 59ad6eca15b18e7256c3caaf47d4f36cfc2be4829a3f51a5f2137b6d483155cd
+        url: https://files.pythonhosted.org/packages/cf/1c/5d0cdc2ffe3c48f3a1b0bf1abb3f4075105b5515c901435bbec1c56a5cbc/TTS-0.16.3-cp310-cp310-manylinux1_x86_64.whl
+        sha256: 69b99d351fb6c04cafefa3d8b980d100e9fc90d588be27aa2905133f4c463c1b
+      - type: shell
+        commands:
+          - unzip "${PWD}/TTS-0.16.3-cp310-cp310-manylinux1_x86_64.whl" -d "${PWD}/tmp"
+      - type: patch
+        strip-components: 0
+        path: ../patches/tts.patch
+      - type: shell
+        commands:
+          - rm "${PWD}/TTS-0.16.3-cp310-cp310-manylinux1_x86_64.whl"
+          - cd "${PWD}/tmp" && zip -r "${PWD}/TTS-0.16.3-cp310-cp310-manylinux1_x86_64.whl" ./
+          - mv "${PWD}/tmp/TTS-0.16.3-cp310-cp310-manylinux1_x86_64.whl" "${PWD}"
       - type: file
         url: https://files.pythonhosted.org/packages/c2/2f/f0dc628295bd23571c962d5a349307d9c8796a05bfca6571659eaded38e2/Werkzeug-2.3.4-py3-none-any.whl
         sha256: 48e5e61472fee0ddee27ebad085614ebedb7af41e88f687aaf881afb723a162f
@@ -343,8 +349,8 @@ modules:
         url: https://files.pythonhosted.org/packages/a1/a8/c41f46b47a381bd60a40c0ef00d2fd1722b743b178f9c1cec0da949043de/lazy_loader-0.2-py3-none-any.whl
         sha256: c35875f815c340f823ce3271ed645045397213f961b40ad0c0d395c3f5218eeb
       - type: file
-        url: https://files.pythonhosted.org/packages/5c/26/e1127810de8b60a58bfa682f858fd7ba36667d29c0b9ad3b6ff10d6cb944/librosa-0.10.0.post2-py3-none-any.whl
-        sha256: 0f3b56118cb01ea89df4b04e924c7f48c5c13d42cc55a12540eb04ae87ab5848
+        url: https://files.pythonhosted.org/packages/bc/2e/80370da514096c6190f8913668198380ea09c2d252cfa4e85a9c096d3b40/librosa-0.10.0-py3-none-any.whl
+        sha256: 6db29c1467168da21313203dcef405a73a678d3aad0fbc67607250b2f08a3f5a
       - *id007
       - type: file
         url: https://files.pythonhosted.org/packages/91/38/6b50b0a8ef737083dc2f4a359d42282b2fb104dae97674dcfc85a48c693b/llvmlite-0.39.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
@@ -370,8 +376,8 @@ modules:
         url: https://files.pythonhosted.org/packages/eb/09/b14d798bc02411b1e5a9896d680f8f417cadc53232bbf7ae9d30263dcf45/num2words-0.5.12-py3-none-any.whl
         sha256: 9eeef488658226ab36818c06d7aeb956d19b530fb62030596b6802fb4659f30e
       - type: file
-        url: https://files.pythonhosted.org/packages/58/a4/859605be01d9979fecde5e94ed6662d9a85853f9849f396d9a84455f4846/numba-0.56.4-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
-        sha256: 4e08e203b163ace08bad500b0c16f6092b1eb34fd1fce4feaf31a67a3a5ecf3b
+        url: https://files.pythonhosted.org/packages/32/ea/e839410833fe25207a1d2a0e88fa39eccfd8f61fdc4b790a58ca34189b38/numba-0.57.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+        sha256: d92a17ee849574665c5d94e9c9b862e469e1231d3dbb9e58e58b30b4bb0cbce9
       - *id010
       - *id022
       - type: file
@@ -499,3 +505,10 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/c9/d4/a5280faa1b8e9ad3a52ddc4c9aea94dd718f9c55f1e10cfb14580f5ebb45/yarl-1.9.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
         sha256: 891c0e3ec5ec881541f6c5113d8df0315ce5440e244a716b95f2525b7b9f3608
+      - type: file
+        url: https://files.pythonhosted.org/packages/62/59/e47bbd0542d0e6f4ce9983d5eb458a01d4b42c81e5c410cb9e159b1061ae/encodec-0.1.1.tar.gz
+        sha256: 36dde98ccfe6c51a15576476cadfcb3b35a63507b8b8555abd69889a6fba6772
+      - type: file
+        url: https://files.pythonhosted.org/packages/14/73/424ef49a4bb7bbc9c16f3fc66926cb3018699c69146cd130642c76ff2d97/llvmlite-0.40.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: bbd5e82cc990e5a3e343a3bf855c26fdfe3bfae55225f00efd01c05bbda79918
+
