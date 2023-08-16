@@ -5041,7 +5041,7 @@
             "size": "63216406"
         },
         {
-            "name": "Amarəñña (Espeak Robot)",
+            "name": "አማርኛ (Espeak Robot)",
             "model_id": "am_espeak_am",
             "engine": "tts_espeak",
             "lang_id": "am"
@@ -5517,6 +5517,12 @@
             "model_id": "ky_espeak_ky",
             "engine": "tts_espeak",
             "lang_id": "ky"
+        },
+        {
+            "name": "Latīnum (Espeak Robot)",
+            "model_id": "la_espeak_la",
+            "engine": "tts_espeak",
+            "lang_id": "la"
         },
         {
             "name": "татарча (Espeak Robot)",
