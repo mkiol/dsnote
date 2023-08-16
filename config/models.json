@@ -54,7 +54,7 @@
         {
             "name": "日本語",
             "name_en": "Japanese",
-            "id": "jp"
+            "id": "ja"
         },
         {
             "name": "Polski",
@@ -1170,33 +1170,33 @@
         },
         {
             "name": "日本語 (Whisper Tiny)",
-            "model_id": "jp_whisper_tiny",
+            "model_id": "ja_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "jp"
+            "lang_id": "ja"
         },
         {
             "name": "日本語 (Whisper Base)",
-            "model_id": "jp_whisper_base",
+            "model_id": "ja_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "jp"
+            "lang_id": "ja"
         },
         {
             "name": "日本語 (Whisper Small)",
-            "model_id": "jp_whisper_small",
+            "model_id": "ja_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "jp"
+            "lang_id": "ja"
         },
         {
             "name": "日本語 (Whisper Medium)",
-            "model_id": "jp_whisper_medium",
+            "model_id": "ja_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "jp"
+            "lang_id": "ja"
         },
         {
             "name": "日本語 (Whisper Large)",
-            "model_id": "jp_whisper_large",
+            "model_id": "ja_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "jp"
+            "lang_id": "ja"
         },
         {
             "name": "Русский (Whisper Tiny)",
@@ -3454,9 +3454,9 @@
         },
         {
             "name": "日本語 (Vosk Large)",
-            "model_id": "jp_vosk_large",
+            "model_id": "ja_vosk_large",
             "engine": "stt_vosk",
-            "lang_id": "jp",
+            "lang_id": "ja",
             "score": 5,
             "checksum": "8f7818ee",
             "checksum_quick": "5bf6ab1b",
@@ -3468,9 +3468,9 @@
         },
         {
             "name": "日本語 (Vosk Small)",
-            "model_id": "jp_vosk_small",
+            "model_id": "ja_vosk_small",
             "engine": "stt_vosk",
-            "lang_id": "jp",
+            "lang_id": "ja",
             "score": 4,
             "checksum": "5a25273",
             "checksum_quick": "e1f3efff",
@@ -5283,9 +5283,9 @@
         },
         {
             "name": "日本語 (Espeak Robot)",
-            "model_id": "jp_espeak_jp",
+            "model_id": "ja_espeak_ja",
             "engine": "tts_espeak",
-            "lang_id": "jp",
+            "lang_id": "ja",
             "speaker": "ja"
         },
         {
