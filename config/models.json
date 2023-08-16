@@ -87,7 +87,7 @@
             "id": "yo"
         },
         {
-            "name": "Amarəñña",
+            "name": "አማርኛ",
             "name_en": "Amharic",
             "id": "am"
         },
@@ -135,6 +135,11 @@
             "name": "Português",
             "name_en": "Portuguese",
             "id": "pt"
+        },
+        {
+            "name": "Latīnum",
+            "name_en": "Latin",
+            "id": "la"
         },
         {
             "name": "Latviešu",
@@ -6147,7 +6152,7 @@
             "speaker": "p376"
         },
         {
-            "name": "Amarəñña (Coqui MMS Latin Male)",
+            "name": "አማርኛ (Coqui MMS Latin Male)",
             "model_id": "am_coqui_fairseq_amh",
             "engine": "tts_coqui",
             "lang_id": "am",
@@ -6511,6 +6516,45 @@
             "size": "100863115"
         },
         {
+            "name": "Қазақ (Coqui MMS Male)",
+            "model_id": "kk_coqui_fairseq_kaz",
+            "engine": "tts_coqui",
+            "lang_id": "kk",
+            "checksum": "9d17ff0d",
+            "checksum_quick": "e9357f71",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/kaz.tar.gz"
+            ],
+            "size": "134866072"
+        },
+        {
+            "name": "한국어 (Coqui MMS Male)",
+            "model_id": "ko_coqui_fairseq_kor",
+            "engine": "tts_coqui",
+            "lang_id": "ko",
+            "checksum": "8a01d151",
+            "checksum_quick": "19a6025",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/kor.tar.gz"
+            ],
+            "size": "134854730"
+        },
+        {
+            "name": "Latīnum (Coqui MMS Male)",
+            "model_id": "la_coqui_fairseq_lat",
+            "engine": "tts_coqui",
+            "lang_id": "la",
+            "checksum": "c2aae8b7",
+            "checksum_quick": "b7407ec6",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/lat.tar.gz"
+            ],
+            "size": "134858503"
+        },
+        {
             "name": "Lietuvių (Coqui CV VITS Female)",
             "model_id": "lt_coqui_cv_vits",
             "engine": "tts_coqui",
@@ -6535,6 +6579,19 @@
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--lv--cv--vits.zip"
             ],
             "size": "100833830"
+        },
+        {
+            "name": "Latviešu (Coqui MMS Male)",
+            "model_id": "lv_coqui_fairseq_lav",
+            "engine": "tts_coqui",
+            "lang_id": "lv",
+            "checksum": "1554013c",
+            "checksum_quick": "6da02460",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/lav.tar.gz"
+            ],
+            "size": "134868094"
         },
         {
             "name": "Монгол (Coqui MMS Male)",
@@ -6602,6 +6659,19 @@
             "size": "100828501"
         },
         {
+            "name": "Português (Coqui MMS Male)",
+            "model_id": "pt_coqui_fairseq_por",
+            "engine": "tts_coqui",
+            "lang_id": "pt",
+            "checksum": "669c15bb",
+            "checksum_quick": "80dcfc8",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/por.tar.gz"
+            ],
+            "size": "134853594"
+        },
+        {
             "name": "Română (Coqui CV VITS Female)",
             "model_id": "ro_coqui_cv_vits",
             "engine": "tts_coqui",
@@ -6654,6 +6724,19 @@
             "size": "100855231"
         },
         {
+            "name": "Kiswahili (Coqui MMS Male)",
+            "model_id": "sw_coqui_fairseq_por",
+            "engine": "tts_coqui",
+            "lang_id": "sw",
+            "checksum": "bc896cf2",
+            "checksum_quick": "9c239d05",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/swh.tar.gz"
+            ],
+            "size": "134866127"
+        },
+        {
             "name": "ไทย (Coqui MMS Male)",
             "model_id": "th_coqui_fairseq_tha",
             "engine": "tts_coqui",
@@ -6665,6 +6748,19 @@
                 "https://dl.fbaipublicfiles.com/mms/tts/tha.tar.gz"
             ],
             "size": "134895489"
+        },
+        {
+            "name": "Tagalog (Coqui MMS Male)",
+            "model_id": "tl_coqui_fairseq_tgl",
+            "engine": "tts_coqui",
+            "lang_id": "tl",
+            "checksum": "d717c2bb",
+            "checksum_quick": "93e6c8ce",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/tgl.tar.gz"
+            ],
+            "size": "134878211"
         },
         {
             "name": "Ўзбекча (Coqui MMS Male)",
@@ -6680,17 +6776,43 @@
             "size": "134879575"
         },
         {
-            "name": "Türkçe (Coqui MMS Male)",
-            "model_id": "tr_coqui_fairseq_tur",
+            "name": "বাংলা (Coqui VITS Male)",
+            "model_id": "bn_coqui_custom_vits_male",
             "engine": "tts_coqui",
-            "lang_id": "tr",
-            "checksum": "38f45b64",
-            "checksum_quick": "1f409983",
+            "lang_id": "bn",
+            "checksum": "f08909f1",
+            "checksum_quick": "3200a2bc",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.13.3_models/tts_models--bn--custom--vits_male.zip"
+            ],
+            "size": "916904237"
+        },
+        {
+            "name": "Tiếng Việt (Coqui MMS Male)",
+            "model_id": "vi_coqui_fairseq_vie",
+            "engine": "tts_coqui",
+            "lang_id": "vi",
+            "checksum": "5b7ad611",
+            "checksum_quick": "229d9d21",
             "comp": "targz",
             "urls": [
-                "https://dl.fbaipublicfiles.com/mms/tts/tur.tar.gz"
+                "https://dl.fbaipublicfiles.com/mms/tts/vie.tar.gz"
             ],
-            "size": "134861899"
+            "size": "134900282"
+        },
+        {
+            "name": "татарча (Coqui MMS Male)",
+            "model_id": "tt_coqui_fairseq_tat",
+            "engine": "tts_coqui",
+            "lang_id": "tt",
+            "checksum": "88f8426d",
+            "checksum_quick": "1cf26ca8",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/tat.tar.gz"
+            ],
+            "size": "134870686"
         },
         {
             "name": "Català (Coqui VITS)",
@@ -6806,6 +6928,19 @@
                 "https://coqui.gateway.scarf.sh/v0.13.3_models/tts_models--bn--custom--vits_male.zip"
             ],
             "size": "916904237"
+        },
+        {
+            "name": "বাংলা (Coqui MMS Male)",
+            "model_id": "bn_coqui_fairseq_ben",
+            "engine": "tts_coqui",
+            "lang_id": "bn",
+            "checksum": "4396e718",
+            "checksum_quick": "a2b9ac00",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/ben.tar.gz"
+            ],
+            "size": "134892405"
         },
         {
             "name": "Yorùbá (Coqui MMS Male)",
