@@ -52,6 +52,10 @@ if(BUILD_BERGAMOT)
     endif()
 endif()
 
+if(BUILD_UROMAN)
+    install(DIRECTORY "${external_share_dir}/uroman" DESTINATION share)
+endif()
+
 if(WITH_SYSTEMD_SERVICE)
     configure_file("${systemd_dir}/${id}.service" "${PROJECT_BINARY_DIR}/${info_binary_id}.service")
     install(FILES "${PROJECT_BINARY_DIR}/${info_binary_id}.service" DESTINATION lib/systemd/user)

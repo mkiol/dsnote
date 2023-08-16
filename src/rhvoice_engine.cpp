@@ -110,7 +110,7 @@ int rhvoice_engine::play_speech_callback(const short* samples,
 }
 
 bool rhvoice_engine::encode_speech_impl(const std::string& text,
-                                       const std::string& out_file) {
+                                        const std::string& out_file) {
     callback_data cb_data{this, std::ofstream{out_file, std::ios::binary}};
 
     if (cb_data.wav_file.bad()) {

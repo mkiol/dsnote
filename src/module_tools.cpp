@@ -39,19 +39,22 @@ bool init_module(const QString& name) {
     return true;
 }
 
-QString module_file(const QString& name) {
-    auto file =
-        QStringLiteral("/usr/share/%1/%2.tar.xz").arg(APP_BINARY_ID, name);
-    if (QFileInfo::exists(file)) return file;
+QString path_in_share_dir(const QString& path) {
+    auto path_full = QStringLiteral("/usr/share/%1").arg(path);
+    if (QFileInfo::exists(path_full)) return path_full;
 
-    file = QStringLiteral("/usr/local/share/%1/%2.tar.xz")
-               .arg(APP_BINARY_ID, name);
-    if (QFileInfo::exists(file)) return file;
+    path_full = QStringLiteral("/usr/local/share/%1").arg(path);
+    if (QFileInfo::exists(path_full)) return path_full;
 
-    file = QStringLiteral("/app/share/%1/%2.tar.xz").arg(APP_BINARY_ID, name);
-    if (QFileInfo::exists(file)) return file;
+    path_full = QStringLiteral("/app/share/%1").arg(path);
+    if (QFileInfo::exists(path_full)) return path_full;
 
     return QString{};
+}
+
+QString module_file(const QString& name) {
+    return path_in_share_dir(
+        QStringLiteral("%1/%2.tar.xz").arg(APP_BINARY_ID, name));
 }
 
 bool unpack_module(const QString& name) {

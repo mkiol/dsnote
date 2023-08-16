@@ -477,6 +477,34 @@ modules:
 
   - python3-modules-x86-64.yaml
 
+  - name: perl
+    buildsystem: autotools
+    no-autogen: true
+    config-opts:
+      - -des
+    post-install:
+      - "chmod -R 755 /app/lib/perl5/5.38.0/x86_64-linux"
+    sources:
+      - type: archive
+        url: https://www.cpan.org/src/5.0/perl-5.38.0.tar.gz
+        sha256: 213ef58089d2f2c972ea353517dc60ec3656f050dcc027666e118b508423e517
+      - type: script
+        dest-filename: configure
+        commands:
+          - exec ./configure.gnu $@
+
+  - name: uroman
+    buildsystem: simple
+    build-commands:
+      - "mkdir -p /app/share/uroman"
+      - "cp -r ./bin /app/share/uroman"
+      - "cp -r ./data /app/share/uroman"
+      - "cp -r ./lib /app/share/uroman"
+    sources:
+      - type: archive
+        url: https://github.com/isi-nlp/uroman/archive/refs/tags/v1.2.8.tar.gz
+        sha256: 08e5058341428f3f4ca2401d409df1f4341c386853c4de836e7ab2c2a750cb88
+
   - name: dsnote
     buildsystem: cmake-ninja
     config-opts:
@@ -499,6 +527,7 @@ modules:
       - -DBUILD_SSPLITCPP=OFF
       - -DBUILD_RHVOICE=OFF
       - -DBUILD_BERGAMOT=OFF
+      - -DBUILD_UROMAN=OFF
     build-options:
       arch:
         aarch64:

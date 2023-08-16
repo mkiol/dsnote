@@ -71,6 +71,8 @@ class tts_engine {
         std::string data_dir;
         std::string config_dir;
         std::string nb_data;
+        std::string lang_code;
+        std::string uromanpl_path;
     };
     friend std::ostream& operator<<(std::ostream& os, const config_t& config); 
 
@@ -115,7 +117,8 @@ class tts_engine {
     void set_state(state_t new_state);
     std::string path_to_output_file(const std::string& text) const;
     void process();
-    std::vector<task_t> make_tasks(const std::string& text) const;
+    std::vector<task_t> make_tasks(const std::string& text,
+                                   bool split = true) const;
 };
 
 #endif // TTS_ENGINE_HPP

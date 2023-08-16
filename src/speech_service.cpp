@@ -1019,6 +1019,16 @@ QString speech_service::restart_tts_engine(const QString &model_id) {
         config.cache_dir = settings::instance()->cache_dir().toStdString();
         config.speaker = model_config->tts->speaker.toStdString();
 
+        if (model_config->tts->model_id.contains("fairseq")) {
+            auto l = model_config->tts->model_id.split('_');
+            if (!l.isEmpty()) {
+                config.lang_code = l.last().toStdString();
+                config.uromanpl_path =
+                    module_tools::path_in_share_dir("uroman").toStdString() +
+                    "/bin/uroman.pl";
+            }
+        }
+
         QFile nb_file{QStringLiteral(":/nonbreaking_prefixes/%1.txt")
                           .arg(model_config->tts->lang_id.split('-').first())};
         if (nb_file.open(QIODevice::ReadOnly | QIODevice::Text)) {

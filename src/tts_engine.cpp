@@ -171,18 +171,22 @@ static bool file_exists(const std::string& file_path) {
     return stat(file_path.c_str(), &buffer) == 0;
 }
 
-std::vector<tts_engine::task_t> tts_engine::make_tasks(
-    const std::string& text) const {
+std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
+                                                       bool split) const {
     std::vector<tts_engine::task_t> tasks;
 
-    auto [parts, _] = text_tools::split(text, m_config.nb_data);
-    if (!parts.empty()) {
-        tasks.reserve(parts.size());
+    if (split) {
+        auto [parts, _] = text_tools::split(text, m_config.nb_data);
+        if (!parts.empty()) {
+            tasks.reserve(parts.size());
 
-        for (auto& part : parts)
-            tasks.push_back(task_t{std::move(part), false});
+            for (auto& part : parts)
+                tasks.push_back(task_t{std::move(part), false});
 
-        tasks.back().last = true;
+            tasks.back().last = true;
+        }
+    } else {
+        tasks.push_back(task_t{text, true});
     }
 
     return tasks;

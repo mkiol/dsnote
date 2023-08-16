@@ -38,6 +38,7 @@ class coqui_engine : public tts_engine {
     void stop();
     static std::string fix_config_file(const std::string& config_file,
                                        const std::string& dir);
+    std::string uroman(const std::string& text) const;
 };
 
 #endif  // COQUI_ENGINE_HPP

@@ -35,6 +35,7 @@ option(BUILD_PIPER "download piper lib, build and link statically" ON)
 option(BUILD_SSPLITCPP "download ssplitcpp lib, build and link statically" ON)
 option(BUILD_RHVOICE "download rhvoice lib, build and install shared lib" ON)
 option(BUILD_BERGAMOT "download bergamot-translator lib, build and install shared lib" ON)
+option(BUILD_UROMAN "download and install uroman lib" ON)
 
 if(${WITH_DESKTOP} AND ${WITH_SFOS})
     message(FATAL_ERROR "options WITH_DESKTOP and WITH_SFOS cannot be set together")
@@ -477,6 +478,10 @@ else()
     pkg_search_module(openblas REQUIRED openblas)
     list(APPEND deps_libs ${openblas_LIBRARIES})
     list(APPEND includes ${openblas_INCLUDE_DIRS})
+endif()
+
+if(BUILD_UROMAN)
+    include(${cmake_path}/uroman.cmake)
 endif()
 
 if(WITH_SFOS)

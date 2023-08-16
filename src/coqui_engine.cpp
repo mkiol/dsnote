@@ -7,8 +7,10 @@
 
 #include "coqui_engine.hpp"
 
+#include <fmt/format.h>
 #include <unistd.h>
 
+#include <cstdio>
 #include <fstream>
 #include <string_view>
 
@@ -199,13 +201,15 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
     try {
         return pe->execute([&]() {
                      try {
-                         if (m_config.speaker.empty())
+                         if (m_config.speaker.empty()) {
                              m_tts->attr("tts_to_file")(
-                                 "text"_a = text, "file_path"_a = out_file);
-                         else
+                                 "text"_a = uroman(text),
+                                 "file_path"_a = out_file);
+                         } else {
                              m_tts->attr("tts_to_file")(
-                                 "text"_a = text, "file_path"_a = out_file,
+                                 uroman(text), "file_path"_a = out_file,
                                  "speaker"_a = m_config.speaker);
+                         }
                      } catch (const std::exception& err) {
                          LOGE("py error: " << err.what());
                          return std::string{"false"};
@@ -218,4 +222,28 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
         LOGE("error: " << err.what());
         return false;
     }
+}
+
+std::string coqui_engine::uroman(const std::string& text) const {
+    if (m_config.uromanpl_path.empty() || m_config.lang_code.empty() ||
+        (m_config.lang_code != "amh" && m_config.lang_code != "kor")) {
+        // uroman not needed
+        return text;
+    }
+
+    auto* fp = popen(fmt::format("echo \"{}\" | perl {} -l {}", text,
+                                 m_config.uromanpl_path, m_config.lang_code)
+                         .c_str(),
+                     "r");
+
+    std::string result;
+
+    if (fp == nullptr) {
+        LOGE("failed to popen");
+    } else {
+        char buf[1024];
+        while (fgets(buf, 1024, fp)) result.append(buf);
+    }
+
+    return result;
 }
