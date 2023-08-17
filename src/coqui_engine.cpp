@@ -11,8 +11,11 @@
 #include <unistd.h>
 
 #include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <fstream>
 #include <string_view>
+#include <utility>
 
 #include "logger.hpp"
 #include "py_executor.hpp"
@@ -224,6 +227,33 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
     }
 }
 
+// source: https://stackoverflow.com/a/64359731/7767358
+static std::pair<FILE*, FILE*> popen2(const char* __command) {
+    int pipes[2][2];
+
+    pipe(pipes[0]);
+    pipe(pipes[1]);
+
+    if (fork() > 0) {
+        // parent
+        close(pipes[0][0]);
+        close(pipes[1][1]);
+
+        return {fdopen(pipes[0][1], "w"), fdopen(pipes[1][0], "r")};
+    } else {
+        // child
+        close(pipes[0][1]);
+        close(pipes[1][0]);
+
+        dup2(pipes[0][0], STDIN_FILENO);
+        dup2(pipes[1][1], STDOUT_FILENO);
+
+        execl("/bin/sh", "/bin/sh", "-c", __command, NULL);
+
+        exit(1);
+    }
+}
+
 std::string coqui_engine::uroman(const std::string& text) const {
     if (m_config.uromanpl_path.empty() || m_config.lang_code.empty() ||
         (m_config.lang_code != "amh" && m_config.lang_code != "kor")) {
@@ -231,19 +261,22 @@ std::string coqui_engine::uroman(const std::string& text) const {
         return text;
     }
 
-    auto* fp = popen(fmt::format("echo \"{}\" | perl {} -l {}", text,
-                                 m_config.uromanpl_path, m_config.lang_code)
-                         .c_str(),
-                     "r");
+    auto [p_stdin, p_stdout] = popen2(
+        fmt::format("perl {} -l {}", m_config.uromanpl_path, m_config.lang_code)
+            .c_str());
 
     std::string result;
 
-    if (fp == nullptr) {
-        LOGE("failed to popen");
-    } else {
-        char buf[1024];
-        while (fgets(buf, 1024, fp)) result.append(buf);
+    if (p_stdin == nullptr || p_stdout == nullptr) {
+        LOGE("popen error");
+        return result;
     }
+
+    fwrite(text.c_str(), 1, text.size(), p_stdin);
+    fclose(p_stdin);
+
+    char buf[1024];
+    while (fgets(buf, 1024, p_stdout)) result.append(buf);
 
     return result;
 }
