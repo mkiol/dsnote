@@ -6412,6 +6412,32 @@
             "size": "685905630"
         },
         {
+            "name": "客家話 (Coqui MMS Hakka Male)",
+            "model_id": "zh_coqui_fairseq_hak",
+            "engine": "tts_coqui",
+            "lang_id": "zh",
+            "checksum": "2012ade6",
+            "checksum_quick": "d872b3d7",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/hak.tar.gz"
+            ],
+            "size": "134881386"
+        },
+        {
+            "name": "閩南語 (Coqui MMS Min Nan Male)",
+            "model_id": "zh_coqui_fairseq_nan",
+            "engine": "tts_coqui",
+            "lang_id": "zh",
+            "checksum": "d9a50615",
+            "checksum_quick": "c0af74c1",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/nan.tar.gz"
+            ],
+            "size": "134880972"
+        },
+        {
             "name": "Nederlands (Coqui CSS100 VITS Male)",
             "model_id": "nl_coqui_css100_vits",
             "engine": "tts_coqui",
