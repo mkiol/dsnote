@@ -478,6 +478,8 @@ modules:
   - python3-modules-x86-64.yaml
 
   - name: perl
+    only-arches:
+      - x86_64
     buildsystem: autotools
     no-autogen: true
     config-opts:
@@ -494,6 +496,8 @@ modules:
           - exec ./configure.gnu $@
 
   - name: uroman
+    only-arches:
+      - x86_64
     buildsystem: simple
     build-commands:
       - "mkdir -p /app/share/uroman"
@@ -506,6 +510,8 @@ modules:
         sha256: 08e5058341428f3f4ca2401d409df1f4341c386853c4de836e7ab2c2a750cb88
 
   - name: samplerate
+    only-arches:
+      - x86_64
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
@@ -517,6 +523,8 @@ modules:
         sha256: 3258da280511d24b49d6b08615bbe824d0cacc9842b0e4caf11c52cf2b043893
 
   - name: sleef
+    only-arches:
+      - x86_64
     buildsystem: cmake-ninja
     builddir: true
     config-opts:
@@ -535,6 +543,8 @@ modules:
         sha256: 9760b476af68182c8ffa40fd1809ce3f2a044a5f3057ff4dfa8d71737d8ffe16
 
   - name: rubberband
+    only-arches:
+      - x86_64
     buildsystem: meson
     config-opts:
       - --buildtype=release

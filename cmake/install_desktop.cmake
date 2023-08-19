@@ -53,7 +53,9 @@ if(BUILD_BERGAMOT)
 endif()
 
 if(BUILD_UROMAN)
-    install(DIRECTORY "${external_share_dir}/uroman" DESTINATION share)
+    if(arch_x8664)
+        install(DIRECTORY "${external_share_dir}/uroman" DESTINATION share)
+    endif()
 endif()
 
 if(WITH_SYSTEMD_SERVICE)

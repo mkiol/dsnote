@@ -133,10 +133,12 @@ class tts_engine {
     void process();
     std::vector<task_t> make_tasks(const std::string& text,
                                    bool split = true) const;
+    void apply_speed(const std::string& file) const;
+#ifdef ARCH_X86_64
     static bool stretch(const std::string& input_file,
                         const std::string& output_file, double time_ration,
                         double pitch_ratio);
-    void apply_speed(const std::string& file) const;
+#endif
 };
 
 #endif // TTS_ENGINE_HPP

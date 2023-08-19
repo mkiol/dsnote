@@ -8,7 +8,6 @@
 #include "tts_engine.hpp"
 
 #include <dirent.h>
-#include <rubberband/RubberBandStretcher.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
@@ -16,6 +15,10 @@
 #include <array>
 #include <cstdio>
 #include <fstream>
+
+#ifdef ARCH_X86_64
+#include <rubberband/RubberBandStretcher.h>
+#endif
 
 #include "logger.hpp"
 #include "text_tools.hpp"
@@ -228,6 +231,7 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
     return tasks;
 }
 
+#ifdef ARCH_X86_64
 static void sample_buf_s16_to_f32(const int16_t* input, float* output,
                                   size_t size) {
     for (size_t i = 0; i < size; ++i)
@@ -344,8 +348,10 @@ bool tts_engine::stretch(const std::string& input_file,
 
     return true;
 }
+#endif  // ARCH_X86_64
 
-void tts_engine::apply_speed(const std::string& file) const {
+void tts_engine::apply_speed([[maybe_unused]] const std::string& file) const {
+#ifdef ARCH_X86_64
     auto tmp_file = file + "_tmp";
 
     if (m_config.speech_speed != speech_speed_t::normal) {
@@ -372,6 +378,7 @@ void tts_engine::apply_speed(const std::string& file) const {
             rename(tmp_file.c_str(), file.c_str());
         }
     }
+#endif  // ARCH_X86_64
 }
 
 void tts_engine::process() {
@@ -450,8 +457,6 @@ void tts_engine::write_wav_header(int sample_rate, int sample_width,
 
 tts_engine::wav_header tts_engine::read_wav_header(std::ifstream& wav_file) {
     wav_header header;
-    // wav_file.read(reinterpret_cast<char*>(&header), sizeof(wav_header));
-
     if (!wav_file.read(reinterpret_cast<char*>(&header), sizeof(wav_header)))
         throw std::runtime_error("failed to read file");
 
