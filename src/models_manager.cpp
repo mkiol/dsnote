@@ -1058,9 +1058,23 @@ auto models_manager::extract_langs(const QJsonArray& langs_jarray) {
             continue;
         }
 
+#ifdef USE_SFOS
+        if (lang_id == "am") {  // fidel script is not available on sfos
+            langs.emplace(
+                lang_id,
+                std::pair{obj.value(QLatin1String{"name_en"}).toString(),
+                          obj.value(QLatin1String{"name_en"}).toString()});
+        } else {
+            langs.emplace(
+                lang_id,
+                std::pair{obj.value(QLatin1String{"name"}).toString(),
+                          obj.value(QLatin1String{"name_en"}).toString()});
+        }
+#else
         langs.emplace(
             lang_id, std::pair{obj.value(QLatin1String{"name"}).toString(),
                                obj.value(QLatin1String{"name_en"}).toString()});
+#endif
     }
 
     return langs;
