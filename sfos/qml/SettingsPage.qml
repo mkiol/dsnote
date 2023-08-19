@@ -108,6 +108,62 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Text to Speech")
+            }
+
+            Slider {
+                id: speechSpeedSlider
+
+                opacity: enabled ? 1.0 : Theme.opacityLow
+                width: parent.width
+                minimumValue: -2
+                maximumValue: 2
+                stepSize: 1
+                handleVisible: true
+                label: qsTr("Speech speed")
+                value: {
+                    switch(_settings.speech_speed) {
+                    case Settings.SpeechSpeedVerySlow: return -2
+                    case Settings.SpeechSpeedSlow: return -1
+                    case Settings.SpeechSpeedNormal: return 0
+                    case Settings.SpeechSpeedFast: return 1
+                    case Settings.SpeechSpeedVeryFast: return 2
+                    }
+                }
+                valueText: {
+                    switch(value) {
+                    case -2: return qsTr("Very slow");
+                    case -1: return qsTr("Slow");
+                    case 0: return qsTr("Normal");
+                    case 1: return qsTr("Fast");
+                    case 2: return qsTr("Very fast");
+                    }
+                }
+                onValueChanged: {
+                    switch(value) {
+                    case -2: _settings.speech_speed = Settings.SpeechSpeedVerySlow; break;
+                    case -1: _settings.speech_speed = Settings.SpeechSpeedSlow; break;
+                    case 0: _settings.speech_speed = Settings.SpeechSpeedNormal; break;
+                    case 1: _settings.speech_speed = Settings.SpeechSpeedFast; break;
+                    case 2: _settings.speech_speed = Settings.SpeechSpeedVeryFast; break;
+                    }
+                }
+
+                Connections {
+                    target: _settings
+                    onSpeech_speedChanged: {
+                        switch(_settings.speech_speed) {
+                        case Settings.SpeechSpeedVerySlow: speechSpeedSlider.value = -2; break
+                        case Settings.SpeechSpeedSlow: speechSpeedSlider.value = -1; break
+                        case Settings.SpeechSpeedNormal: speechSpeedSlider.value = 0; break
+                        case Settings.SpeechSpeedFast: speechSpeedSlider.value = 1; break
+                        case Settings.SpeechSpeedVeryFast: speechSpeedSlider.value = 2; break
+                        }
+                    }
+                }
+            }
+
+            SectionHeader {
                 text: qsTr("Other")
             }
 
