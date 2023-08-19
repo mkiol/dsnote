@@ -215,19 +215,19 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
         if (m_initial_length_scale) {
             switch (m_config.speech_speed) {
                 case speech_speed_t::very_slow:
-                    return m_initial_length_scale.value() * 1.8f;
+                    return m_initial_length_scale.value() * 1.8F;
                 case speech_speed_t::slow:
-                    return m_initial_length_scale.value() * 1.4f;
+                    return m_initial_length_scale.value() * 1.4F;
                 case speech_speed_t::fast:
-                    return m_initial_length_scale.value() * 0.8f;
+                    return m_initial_length_scale.value() * 0.8F;
                 case speech_speed_t::very_fast:
-                    return m_initial_length_scale.value() * 0.6f;
+                    return m_initial_length_scale.value() * 0.6F;
                 case speech_speed_t::normal:
                     break;
             }
             return m_initial_length_scale.value();
         }
-        return 1.0f;
+        return 1.0F;
     }();
 
     try {

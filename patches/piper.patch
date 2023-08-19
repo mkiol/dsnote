@@ -42,8 +42,8 @@ diff -ruN piper-org/CMakeLists.txt piper-patched/CMakeLists.txt
 +    PUBLIC_HEADER DESTINATION include)
 diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
 --- piper-org/piper_api.cpp	1970-01-01 01:00:00.000000000 +0100
-+++ piper-patched/piper_api.cpp	2023-08-18 16:20:32.952538239 +0200
-@@ -0,0 +1,57 @@
++++ piper-patched/piper_api.cpp	2023-08-19 17:04:37.381886898 +0200
+@@ -0,0 +1,61 @@
 +#include "piper_api.h"
 +#include "src/cpp/piper.hpp"
 +
@@ -75,6 +75,10 @@ diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
 +    piper::terminate(m_ctx->config);
 +}
 +
++float piper_api::length_scale() const {
++    return m_ctx->voice.synthesisConfig.lengthScale;
++}
++
 +std::vector<int16_t> piper_api::text_to_audio(std::string text, float length_scale) {
 +    std::vector<int16_t> out_buf;
 +    std::vector<int16_t> tmp_buf;
@@ -103,8 +107,8 @@ diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
 +}
 diff -ruN piper-org/piper_api.h piper-patched/piper_api.h
 --- piper-org/piper_api.h	1970-01-01 01:00:00.000000000 +0100
-+++ piper-patched/piper_api.h	2023-08-18 16:16:32.332528337 +0200
-@@ -0,0 +1,23 @@
++++ piper-patched/piper_api.h	2023-08-19 17:04:26.521886454 +0200
+@@ -0,0 +1,24 @@
 +#ifndef PIPER_API_H
 +#define PIPER_API_H
 +
@@ -119,6 +123,7 @@ diff -ruN piper-org/piper_api.h piper-patched/piper_api.h
 +    piper_api(std::string model_path, std::string model_config_path,
 +              std::string espeak_ng_data_path = {}, int64_t speaker_id = -1);
 +    ~piper_api();
++    float length_scale() const;
 +    std::vector<int16_t> text_to_audio(std::string text, float length_scale = 1.0f);
 +    void text_to_wav_file(std::string text, const std::string& wav_file_path, float length_scale = 1.0f);
 +

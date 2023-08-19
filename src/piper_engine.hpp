@@ -22,6 +22,7 @@ class piper_engine : public tts_engine {
 
    private:
     std::optional<piper_api> m_piper;
+    float m_initial_length_scale = 1.0F;
 
     bool model_created() const final;
     bool model_supports_speed() const final;
