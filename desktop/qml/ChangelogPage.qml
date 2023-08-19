@@ -14,6 +14,36 @@ DialogPage {
     title: qsTr("Changes")
 
     SectionLabel {
+        text: qsTr("Version %1").arg("4.1.0")
+    }
+
+    RichLabel {
+        text: "<p>" + qsTr("Speech to Text") + ":</p>
+        <ul>
+        <li>Support for GPU acceleration for Whisper models.
+            If a suitable GPU device is found in the system, it will be used to accelerate processing.
+            This significantly reduces the time of decoding (usually 2 times or more).
+            GPU hardware acceleration is not enabled by dafault. Use the option in <i>Settings</i> to turn it on.
+            Disable, if you observe any problems when using Speech to Text with Whisper models.
+        </li>
+        <li>Fix: Whisper model wasn't able to decode short speech sentences.</li>
+        </ul>
+        <p>" + qsTr("Text to Speech") + ":</p>
+        <ul>
+        <li>Option <i>Speech speed</i> in <i>Settings</i> to make synthesized speech slower of faster.</li>
+        <li>New models from <a href='https://ai.meta.com/blog/multilingual-model-speech-recognition'>Massively Multilingual Speech (MMS)</a> project.
+            MMS project released models for <a href='https://dl.fbaipublicfiles.com/mms/tts/all-tts-languages.html'>1100 languages</a>,
+            but only the following have been enabled:
+            Albanian, Amharic, Arabic, Basque, Bengali, Bulgarian, Chinese, Greek, Hindi, Icelandic, Indonesian,
+            Kazakh, Korean, Latin, Latvian, Malay, Mongolian, Polish, Portuguese, Swahili, Tagalog, Tatar, Thai,
+            Turkish, Uzbek, Vietnamese and Yoruba.
+            If you would like any other MMS model to be included, please let us know.</li>
+        <li>New Piper voices for: Czech, German, Hungarian, Portuguese and Slovak.</li>
+        <li>Update of RHVoice voices for Slovak and Czech.</li>
+        </ul>"
+    }
+
+    SectionLabel {
         text: qsTr("Version %1").arg("4.0.0")
     }
 

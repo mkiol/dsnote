@@ -29,6 +29,26 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Version %1").arg("4.1")
+            }
+
+            LogItem {
+                title: "Speech speed option"
+                description: "New option in Settings to make synthesized speech slower of faster."
+            }
+
+            LogItem {
+                title: "New Text to Speech voices"
+                description: "New Piper voices for: Czech, German, Hungarian, Portuguese and Slovak. " +
+                             "Update of RHVoice voices for Slovak and Czech."
+            }
+
+            LogItem {
+                title: "Fixes for Speech to Text with Whisper"
+                description: "Fix for problem with decoding short speech sentences with Whisper models."
+            }
+
+            SectionHeader {
                 text: qsTr("Version %1").arg("4.0")
             }
 

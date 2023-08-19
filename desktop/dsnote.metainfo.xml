@@ -61,6 +61,32 @@
   <launchable type="desktop-id">net.mkiol.SpeechNote.desktop</launchable>
   <content_rating type="oars-1.1" />
   <releases>
+    <release version="4.1.0" date="2023-08-19">
+      <description>
+      <p>Speech to Text:</p>
+      <ul>
+      <li>Support for GPU acceleration for Whisper models.
+          If a suitable GPU device is found in the system, it will be used to accelerate processing.
+          This significantly reduces the time of decoding (usually 2 times or more).
+          GPU hardware acceleration is not enabled by dafault. Use the option in <i>Settings</i> to turn it on.
+          Disable, if you observe any problems when using Speech to Text with Whisper models.
+      </li>
+      <li>Fix: Whisper model wasn't able to decode short speech sentences.</li>
+      </ul>
+      <p>Text to Speech:</p>
+      <ul>
+      <li>Option <i>Speech speed</i> in <i>Settings</i> to make synthesized speech slower of faster.</li>
+      <li>New models from Massively Multilingual Speech (MMS) project.
+          MMS project released models for 1100 languages, but only the following have been enabled:
+          Albanian, Amharic, Arabic, Basque, Bengali, Bulgarian, Chinese, Greek, Hindi, Icelandic, Indonesian,
+          Kazakh, Korean, Latin, Latvian, Malay, Mongolian, Polish, Portuguese, Swahili, Tagalog, Tatar, Thai,
+          Turkish, Uzbek, Vietnamese and Yoruba.
+          If you would like any other MMS model to be included, please let us know.</li>
+      <li>New Piper voices for: Czech, German, Hungarian, Portuguese and Slovak.</li>
+      <li>Update of RHVoice voices for Slovak and Czech.</li>
+      </ul>
+      </description>
+    </release>
     <release version="4.0.0" date="2023-08-07">
       <description>
       <p>Translator:</p>

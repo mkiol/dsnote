@@ -84,7 +84,7 @@ set(info_conf_version "25")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · Åke Engelbrektson · L'Africain · Albano Battistella")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · Piper · RHVoice · ssplit-cpp · eSpeak NG · Bergamot Translator")
 
-project(${id} VERSION 4.0.0)
+project(${id} VERSION 4.1.0)
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES ".*arm.*")
     message(STATUS "arm architecture detected")
