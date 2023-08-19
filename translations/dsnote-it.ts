@@ -799,11 +799,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="205"/>
-        <source>Change to make synthesized speech slower of faster.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="135"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="251"/>
         <source>Very slow</source>
@@ -831,6 +826,11 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="139"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="255"/>
         <source>Very fast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="205"/>
+        <source>Change to make synthesized speech slower or faster.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

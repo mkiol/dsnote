@@ -34,7 +34,7 @@ Page {
 
             LogItem {
                 title: "Speech speed option"
-                description: "New option in Settings to make synthesized speech slower of faster."
+                description: "New option in Settings to make synthesized speech slower or faster."
             }
 
             LogItem {

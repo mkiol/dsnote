@@ -75,7 +75,7 @@
       </ul>
       <p>Text to Speech:</p>
       <ul>
-      <li>Option <i>Speech speed</i> in <i>Settings</i> to make synthesized speech slower of faster.</li>
+      <li>Option <i>Speech speed</i> in <i>Settings</i> to make synthesized speech slower or faster.</li>
       <li>New models from Massively Multilingual Speech (MMS) project.
           MMS project released models for 1100 languages, but only the following have been enabled:
           Albanian, Amharic, Arabic, Basque, Bengali, Bulgarian, Chinese, Greek, Hindi, Icelandic, Indonesian,

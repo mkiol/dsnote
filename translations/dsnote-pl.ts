@@ -1208,9 +1208,8 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <translation>Szybkość mowy</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="205"/>
         <source>Change to make synthesized speech slower of faster.</source>
-        <translation>Zmień aby sprawić, że sytezowana mowa będzie wolniejsza lub szybsza.</translation>
+        <translation type="vanished">Zmień aby sprawić, że sytezowana mowa będzie wolniejsza lub szybsza.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="135"/>
@@ -1241,6 +1240,11 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <location filename="../desktop/qml/SettingsPage.qml" line="255"/>
         <source>Very fast</source>
         <translation>Bardzo szybko</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="205"/>
+        <source>Change to make synthesized speech slower or faster.</source>
+        <translation>Zmień aby sprawić, że sytezowana mowa będzie wolniejsza lub szybsza.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="300"/>

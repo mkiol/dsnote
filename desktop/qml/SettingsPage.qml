@@ -202,7 +202,7 @@ DialogPage {
 
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.visible: hovered && !pressed
-            ToolTip.text: qsTr("Change to make synthesized speech slower of faster.")
+            ToolTip.text: qsTr("Change to make synthesized speech slower or faster.")
 
             Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
             snapMode: Slider.SnapAlways

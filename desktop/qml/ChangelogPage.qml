@@ -30,7 +30,7 @@ DialogPage {
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
-        <li>Option <i>Speech speed</i> in <i>Settings</i> to make synthesized speech slower of faster.</li>
+        <li>Option <i>Speech speed</i> in <i>Settings</i> to make synthesized speech slower or faster.</li>
         <li>New models from <a href='https://ai.meta.com/blog/multilingual-model-speech-recognition'>Massively Multilingual Speech (MMS)</a> project.
             MMS project released models for <a href='https://dl.fbaipublicfiles.com/mms/tts/all-tts-languages.html'>1100 languages</a>,
             but only the following have been enabled:
