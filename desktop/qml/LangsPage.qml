@@ -26,11 +26,13 @@ Dialog {
     horizontalPadding: 1
     title: langsView ? qsTr("Languages") : langName
     modal: true
+    focus: true
 
     function reset(lang_id) {
         service.models_model.lang = lang_id
         service.models_model.filter = ""
         service.models_model.roleFilter = ModelsListModel.AllModels
+
     }
 
     function switchToModels(modelId, modelName) {
@@ -123,11 +125,13 @@ Dialog {
             text: qsTr("Close")
             icon.name: "window-close-symbolic"
             DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
+            Keys.onReturnPressed: root.reject()
         }
         Button {
             visible: !root.langsView
             icon.name: "go-previous-symbolic"
             DialogButtonBox.buttonRole: DialogButtonBox.ResetRole
+            Keys.onReturnPressed: root.switchToLangs()
         }
 
         onReset: root.switchToLangs()
@@ -260,6 +264,7 @@ Dialog {
         id: listView
 
         anchors.fill: parent
+        focus: true
         clip: true
         spacing: appWin.padding
         model: langsView ? service.langs_model : service.models_model
@@ -269,7 +274,13 @@ Dialog {
 
         Keys.onUpPressed: scrollBar.decrease()
         Keys.onDownPressed: scrollBar.increase()
+        Keys.onPressed: {
+            searchTextField.forceActiveFocus()
+            event.accepted = true
+        }
 
-        ScrollBar.vertical: ScrollBar { id: scrollBar }
+        ScrollBar.vertical: ScrollBar {
+            id: scrollBar
+        }
     }
 }
