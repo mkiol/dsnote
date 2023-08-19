@@ -384,6 +384,20 @@ void settings::set_speech_mode(speech_mode_t value) {
     }
 }
 
+settings::speech_speed_t settings::speech_speed() const {
+    return static_cast<speech_speed_t>(
+        value(QStringLiteral("speech_speed"),
+              static_cast<int>(speech_speed_t::SpeechSpeedNormal))
+            .toInt());
+}
+
+void settings::set_speech_speed(speech_speed_t value) {
+    if (speech_speed() != value) {
+        setValue(QStringLiteral("speech_speed"), static_cast<int>(value));
+        emit speech_speed_changed();
+    }
+}
+
 QString settings::note() const {
     return value(QStringLiteral("note"), {}).toString();
 }

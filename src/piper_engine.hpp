@@ -24,6 +24,7 @@ class piper_engine : public tts_engine {
     std::optional<piper_api> m_piper;
 
     bool model_created() const final;
+    bool model_supports_speed() const final;
     void create_model() final;
     bool encode_speech_impl(const std::string& text,
                             const std::string& out_file) final;

@@ -207,17 +207,17 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("TtsGetSpeechToFileProgress"), argumentList);
     }
 
-    inline QDBusPendingReply<int> TtsPlaySpeech(const QString &text, const QString &lang)
+    inline QDBusPendingReply<int> TtsPlaySpeech(const QString &text, const QString &lang, const QVariantMap &options)
     {
         QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(text) << QVariant::fromValue(lang);
+        argumentList << QVariant::fromValue(text) << QVariant::fromValue(lang) << QVariant::fromValue(options);
         return asyncCallWithArgumentList(QStringLiteral("TtsPlaySpeech"), argumentList);
     }
 
-    inline QDBusPendingReply<int> TtsSpeechToFile(const QString &text, const QString &lang)
+    inline QDBusPendingReply<int> TtsSpeechToFile(const QString &text, const QString &lang, const QVariantMap &options)
     {
         QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(text) << QVariant::fromValue(lang);
+        argumentList << QVariant::fromValue(text) << QVariant::fromValue(lang) << QVariant::fromValue(options);
         return asyncCallWithArgumentList(QStringLiteral("TtsSpeechToFile"), argumentList);
     }
 

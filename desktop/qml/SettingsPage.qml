@@ -184,6 +184,82 @@ DialogPage {
     }
 
     SectionLabel {
+        text: qsTr("Text to Speech")
+    }
+
+    GridLayout {
+        columns: root.verticalMode ? 1 : 2
+        columnSpacing: appWin.padding
+        rowSpacing: appWin.padding
+
+        Label {
+            Layout.fillWidth: true
+            text: qsTr("Speech speed")
+        }
+
+        Slider {
+            id: speechSpeedSlider
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered && !pressed
+            ToolTip.text: qsTr("Change to make synthesized speech slower of faster.")
+
+            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            snapMode: Slider.SnapAlways
+            stepSize: 1
+            from: -2
+            to: 2
+            value: {
+                switch(_settings.speech_speed) {
+                case Settings.SpeechSpeedVerySlow: return -2
+                case Settings.SpeechSpeedSlow: return -1
+                case Settings.SpeechSpeedNormal: return 0
+                case Settings.SpeechSpeedFast: return 1
+                case Settings.SpeechSpeedVeryFast: return 2
+                }
+            }
+
+            onValueChanged: {
+                switch(value) {
+                case -2: _settings.speech_speed = Settings.SpeechSpeedVerySlow; break;
+                case -1: _settings.speech_speed = Settings.SpeechSpeedSlow; break;
+                case 0: _settings.speech_speed = Settings.SpeechSpeedNormal; break;
+                case 1: _settings.speech_speed = Settings.SpeechSpeedFast; break;
+                case 2: _settings.speech_speed = Settings.SpeechSpeedVeryFast; break;
+                }
+            }
+
+            Connections {
+                target: _settings
+                onSpeech_speedChanged: {
+                    switch(_settings.speech_speed) {
+                    case Settings.SpeechSpeedVerySlow: speechSpeedSlider.value = -2; break
+                    case Settings.SpeechSpeedSlow: speechSpeedSlider.value = -1; break
+                    case Settings.SpeechSpeedNormal: speechSpeedSlider.value = 0; break
+                    case Settings.SpeechSpeedFast: speechSpeedSlider.value = 1; break
+                    case Settings.SpeechSpeedVeryFast: speechSpeedSlider.value = 2; break
+                    }
+                }
+            }
+
+            Label {
+                anchors.bottom: parent.handle.top
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottomMargin: appWin.padding
+                text: {
+                    switch(parent.value) {
+                    case -2: return qsTr("Very slow");
+                    case -1: return qsTr("Slow");
+                    case 0: return qsTr("Normal");
+                    case 1: return qsTr("Fast");
+                    case 2: return qsTr("Very fast");
+                    }
+                }
+            }
+        }
+    }
+
+    SectionLabel {
         text: qsTr("Other")
     }
 

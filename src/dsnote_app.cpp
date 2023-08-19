@@ -1435,13 +1435,18 @@ void dsnote_app::play_speech_internal(const QString &text,
 
     int new_task = 0;
 
+    QVariantMap options;
+    options.insert("speech_speed",
+                   static_cast<int>(settings::instance()->speech_speed()));
+
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
-        new_task = speech_service::instance()->tts_play_speech(text, model_id);
+        new_task = speech_service::instance()->tts_play_speech(text, model_id,
+                                                               options);
     } else {
         qDebug() << "[app => dbus] call TtsPlaySpeech";
 
-        new_task = m_dbus_service.TtsPlaySpeech(text, model_id);
+        new_task = m_dbus_service.TtsPlaySpeech(text, model_id, options);
     }
 
     m_primary_task.set(new_task);
@@ -1556,14 +1561,18 @@ void dsnote_app::speech_to_file_internal(const QString &text,
     int new_task = 0;
     m_dest_file = dest_file;
 
+    QVariantMap options;
+    options.insert("speech_speed",
+                   static_cast<int>(settings::instance()->speech_speed()));
+
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
-        new_task =
-            speech_service::instance()->tts_speech_to_file(text, model_id);
+        new_task = speech_service::instance()->tts_speech_to_file(
+            text, model_id, options);
     } else {
         qDebug() << "[app => dbus] call TtsSpeechToFile";
 
-        new_task = m_dbus_service.TtsSpeechToFile(text, model_id);
+        new_task = m_dbus_service.TtsSpeechToFile(text, model_id, options);
     }
 
     m_side_task.set(new_task);

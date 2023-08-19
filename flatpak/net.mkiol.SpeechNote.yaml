@@ -505,6 +505,48 @@ modules:
         url: https://github.com/isi-nlp/uroman/archive/refs/tags/v1.2.8.tar.gz
         sha256: 08e5058341428f3f4ca2401d409df1f4341c386853c4de836e7ab2c2a750cb88
 
+  - name: samplerate
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=OFF
+    sources:
+      - type: archive
+        url: https://github.com/libsndfile/libsamplerate/releases/download/0.2.2/libsamplerate-0.2.2.tar.xz
+        sha256: 3258da280511d24b49d6b08615bbe824d0cacc9842b0e4caf11c52cf2b043893
+
+  - name: sleef
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=OFF
+      - -DDISABLE_FFTW=ON
+      - -DDISABLE_MPFR=ON
+      - -DDISABLE_SSL=ON
+      - -DBUILD_TESTS=OFF
+      - -DBUILD_GNUABI_LIBS=OFF
+      - -DBUILD_DFT=ON
+    sources:
+      - type: archive
+        url: https://github.com/shibatch/sleef/archive/85440a5e87dae36ca1b891de14bc83b441ae7c43.zip
+        sha256: 9760b476af68182c8ffa40fd1809ce3f2a044a5f3057ff4dfa8d71737d8ffe16
+
+  - name: rubberband
+    buildsystem: meson
+    config-opts:
+      - --buildtype=release
+      - -Dauto_features=disabled
+      - -Ddefault_library=static
+      - -Dresampler=libsamplerate
+      - -Dfft=sleef
+    sources:
+      - type: archive
+        url: https://breakfastquay.com/files/releases/rubberband-3.3.0.tar.bz2
+        sha256: d9ef89e2b8ef9f85b13ac3c2faec30e20acf2c9f3a9c8c45ce637f2bc95e576c
+
   - name: dsnote
     buildsystem: cmake-ninja
     config-opts:
@@ -528,6 +570,7 @@ modules:
       - -DBUILD_RHVOICE=OFF
       - -DBUILD_BERGAMOT=OFF
       - -DBUILD_UROMAN=OFF
+      - -DBUILD_RUBBERBAND=OFF
     build-options:
       arch:
         aarch64:

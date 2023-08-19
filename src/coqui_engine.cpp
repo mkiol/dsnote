@@ -185,6 +185,16 @@ void coqui_engine::create_model() {
                           "vocoder_path"_a = vocoder_model_file,
                           "vocoder_config_path"_a = vocoder_config_file);
                   }();
+
+                  if (m_tts) {
+                      auto model = m_tts->attr("synthesizer").attr("tts_model");
+                      if (py::hasattr(model, "length_scale")) {
+                          m_initial_length_scale =
+                              model.attr("length_scale").cast<float>();
+                          LOGD("initial length scale: "
+                               << *m_initial_length_scale);
+                      }
+                  }
               } catch (const std::exception& err) {
                   LOGE("py error: " << err.what());
               }
@@ -201,9 +211,34 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
                                       const std::string& out_file) {
     auto* pe = py_executor::instance();
 
+    auto length_scale = [this]() {
+        if (m_initial_length_scale) {
+            switch (m_config.speech_speed) {
+                case speech_speed_t::very_slow:
+                    return m_initial_length_scale.value() * 1.8f;
+                case speech_speed_t::slow:
+                    return m_initial_length_scale.value() * 1.4f;
+                case speech_speed_t::fast:
+                    return m_initial_length_scale.value() * 0.8f;
+                case speech_speed_t::very_fast:
+                    return m_initial_length_scale.value() * 0.6f;
+                case speech_speed_t::normal:
+                    break;
+            }
+            return m_initial_length_scale.value();
+        }
+        return 1.0f;
+    }();
+
     try {
         return pe->execute([&]() {
                      try {
+                         auto model =
+                             m_tts->attr("synthesizer").attr("tts_model");
+                         if (py::hasattr(model, "length_scale")) {
+                             model.attr("length_scale") = length_scale;
+                         }
+
                          if (m_config.speaker.empty()) {
                              m_tts->attr("tts_to_file")(
                                  "text"_a = uroman(text),
@@ -211,7 +246,8 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
                          } else {
                              m_tts->attr("tts_to_file")(
                                  uroman(text), "file_path"_a = out_file,
-                                 "speaker"_a = m_config.speaker);
+                                 "speaker"_a = m_config.speaker,
+                                 "length_scale"_a = length_scale);
                          }
                      } catch (const std::exception& err) {
                          LOGE("py error: " << err.what());
@@ -254,9 +290,14 @@ static std::pair<FILE*, FILE*> popen2(const char* __command) {
     }
 }
 
+bool coqui_engine::model_supports_speed() const {
+    return static_cast<bool>(m_initial_length_scale);
+}
+
 std::string coqui_engine::uroman(const std::string& text) const {
     if (m_config.uromanpl_path.empty() || m_config.lang_code.empty() ||
-        (m_config.lang_code != "amh" && m_config.lang_code != "kor")) {
+        (m_config.lang_code != "amh" && m_config.lang_code != "kor" &&
+         m_config.lang_code != "hak" && m_config.lang_code != "nan")) {
         // uroman not needed
         return text;
     }

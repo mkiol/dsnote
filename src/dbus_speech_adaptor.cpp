@@ -283,19 +283,19 @@ double SpeechAdaptor::TtsGetSpeechToFileProgress(int task)
     return progress;
 }
 
-int SpeechAdaptor::TtsPlaySpeech(const QString &text, const QString &lang)
+int SpeechAdaptor::TtsPlaySpeech(const QString &text, const QString &lang, const QVariantMap &options)
 {
     // handle method call org.mkiol.Speech.TtsPlaySpeech
     int task;
-    QMetaObject::invokeMethod(parent(), "TtsPlaySpeech", Q_RETURN_ARG(int, task), Q_ARG(QString, text), Q_ARG(QString, lang));
+    QMetaObject::invokeMethod(parent(), "TtsPlaySpeech", Q_RETURN_ARG(int, task), Q_ARG(QString, text), Q_ARG(QString, lang), Q_ARG(QVariantMap, options));
     return task;
 }
 
-int SpeechAdaptor::TtsSpeechToFile(const QString &text, const QString &lang)
+int SpeechAdaptor::TtsSpeechToFile(const QString &text, const QString &lang, const QVariantMap &options)
 {
     // handle method call org.mkiol.Speech.TtsSpeechToFile
     int task;
-    QMetaObject::invokeMethod(parent(), "TtsSpeechToFile", Q_RETURN_ARG(int, task), Q_ARG(QString, text), Q_ARG(QString, lang));
+    QMetaObject::invokeMethod(parent(), "TtsSpeechToFile", Q_RETURN_ARG(int, task), Q_ARG(QString, text), Q_ARG(QString, lang), Q_ARG(QVariantMap, options));
     return task;
 }
 

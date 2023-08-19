@@ -25,6 +25,7 @@ class espeak_engine : public tts_engine {
     int m_sample_rate = 0;
 
     bool model_created() const final;
+    bool model_supports_speed() const final;
     void create_model() final;
     bool encode_speech_impl(const std::string& text,
                             const std::string& out_file) final;

@@ -34,6 +34,8 @@ bool rhvoice_engine::model_created() const {
     return m_rhvoice_engine != nullptr;
 }
 
+bool rhvoice_engine::model_supports_speed() const { return true; }
+
 void rhvoice_engine::create_model() {
     if (m_config.speaker.empty()) {
         LOGE("voice name missing");
@@ -120,9 +122,25 @@ bool rhvoice_engine::encode_speech_impl(const std::string& text,
 
     cb_data.wav_file.seekp(sizeof(wav_header));
 
+    double rate = [this]() {
+        switch (m_config.speech_speed) {
+            case speech_speed_t::very_slow:
+                return -0.5;
+            case speech_speed_t::slow:
+                return -0.3;
+            case speech_speed_t::fast:
+                return 0.2;
+            case speech_speed_t::very_fast:
+                return 0.5;
+            case speech_speed_t::normal:
+                break;
+        }
+        return 0.0;
+    }();
+
     RHVoice_synth_params synth_params{
         /*voice_profile=*/m_config.speaker.c_str(),
-        /*absolute_rate=*/0.0,
+        /*absolute_rate=*/rate,
         /*absolute_pitch=*/0.0,
         /*absolute_volume=*/0.0,
         /*relative_rate=*/1.0,

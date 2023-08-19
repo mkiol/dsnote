@@ -18,7 +18,7 @@ class denoiser {
    public:
     using sample_t = int16_t;
 
-    denoiser();
+    denoiser(int sample_rate);
     ~denoiser();
     void process(sample_t* buf, size_t size);
 
@@ -26,7 +26,6 @@ class denoiser {
     using frame_t = std::array<float, 480>;
 
     inline static const size_t max_frame_size = 72000;
-    inline static const int sample_rate = 16000;
 
     DenoiseState* m_state = nullptr;
 

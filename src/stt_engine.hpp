@@ -167,7 +167,7 @@ class stt_engine {
     in_buf_t m_in_buf;
     std::optional<std::string> m_intermediate_text;
     vad m_vad;
-    denoiser m_denoiser;
+    denoiser m_denoiser{16000};
     speech_detection_status_t m_speech_detection_status =
         speech_detection_status_t::no_speech;
     bool m_restart_requested = false;

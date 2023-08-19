@@ -1006,7 +1006,8 @@ QString speech_service::restart_stt_engine(
     return {};
 }
 
-QString speech_service::restart_tts_engine(const QString &model_id) {
+QString speech_service::restart_tts_engine(
+    const QString &model_id, tts_engine::speech_speed_t speech_speed) {
     auto model_config = choose_model_config(engine_t::tts, model_id);
     if (model_config && model_config->tts) {
         tts_engine::config_t config;
@@ -1018,6 +1019,7 @@ QString speech_service::restart_tts_engine(const QString &model_id) {
         config.lang = model_config->tts->lang_id.toStdString();
         config.cache_dir = settings::instance()->cache_dir().toStdString();
         config.speaker = model_config->tts->speaker.toStdString();
+        config.speech_speed = speech_speed;
 
         if (model_config->tts->model_id.contains("fairseq")) {
             auto l = model_config->tts->model_id.split('_');
@@ -1127,6 +1129,7 @@ QString speech_service::restart_tts_engine(const QString &model_id) {
             }
         } else {
             qDebug() << "new tts engine not required";
+            m_tts_engine->set_speech_speed(config.speech_speed);
         }
 
         m_tts_engine->start();
@@ -1942,7 +1945,35 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
     return m_current_task->id;
 }
 
-int speech_service::tts_play_speech(const QString &text, QString lang) {
+tts_engine::speech_speed_t speech_service::tts_speech_speed_from_options(
+    const QVariantMap &options) {
+    qDebug() << "options:" << options;
+    if (options.contains(QStringLiteral("speech_speed"))) {
+        bool ok = false;
+        auto speed = options.value(QStringLiteral("speech_speed")).toInt(&ok);
+        if (ok) {
+            switch (speed) {
+                case -2:
+                    return tts_engine::speech_speed_t::very_slow;
+                case -1:
+                    return tts_engine::speech_speed_t::slow;
+                case 0:
+                    return tts_engine::speech_speed_t::normal;
+                case 1:
+                    return tts_engine::speech_speed_t::fast;
+                case 2:
+                    return tts_engine::speech_speed_t::very_fast;
+                default:
+                    return tts_engine::speech_speed_t::normal;
+            }
+        }
+    }
+
+    return tts_engine::speech_speed_t::normal;
+}
+
+int speech_service::tts_play_speech(const QString &text, QString lang,
+                                    const QVariantMap &options) {
     if (state() == state_t::unknown || state() == state_t::not_configured ||
         state() == state_t::busy) {
         qWarning() << "cannot tts play speech, invalid state";
@@ -1967,13 +1998,14 @@ int speech_service::tts_play_speech(const QString &text, QString lang) {
 
     qDebug() << "tts play speech";
 
-    m_current_task = {next_task_id(),
-                      engine_t::tts,
-                      restart_tts_engine(lang),
-                      speech_mode_t::play_speech,
-                      lang,
-                      {},
-                      {}};
+    m_current_task = {
+        next_task_id(),
+        engine_t::tts,
+        restart_tts_engine(lang, tts_speech_speed_from_options(options)),
+        speech_mode_t::play_speech,
+        lang,
+        {},
+        {}};
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -1998,7 +2030,8 @@ int speech_service::tts_play_speech(const QString &text, QString lang) {
     return m_current_task->id;
 }
 
-int speech_service::tts_speech_to_file(const QString &text, QString lang) {
+int speech_service::tts_speech_to_file(const QString &text, QString lang,
+                                       const QVariantMap &options) {
     if (state() == state_t::unknown || state() == state_t::not_configured ||
         state() == state_t::busy) {
         qWarning() << "cannot tts speech to file, invalid state";
@@ -2023,13 +2056,14 @@ int speech_service::tts_speech_to_file(const QString &text, QString lang) {
 
     qDebug() << "tts speech to file";
 
-    m_current_task = {next_task_id(),
-                      engine_t::tts,
-                      restart_tts_engine(lang),
-                      speech_mode_t::speech_to_file,
-                      lang,
-                      {0, static_cast<size_t>(text.size())},
-                      {}};
+    m_current_task = {
+        next_task_id(),
+        engine_t::tts,
+        restart_tts_engine(lang, tts_speech_speed_from_options(options)),
+        speech_mode_t::speech_to_file,
+        lang,
+        {0, static_cast<size_t>(text.size())},
+        {}};
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -2088,7 +2122,8 @@ int speech_service::cancel(int task) {
                                next_task.out_lang);
         } else if (next_task.engine == engine_t::tts) {
             if (m_current_task->engine == engine_t::stt) stop_stt_engine();
-            restart_tts_engine(m_pending_task->model_id);
+            restart_tts_engine(m_pending_task->model_id,
+                               tts_engine::speech_speed_t::normal);
         }
 
         restart_audio_source();
@@ -2823,18 +2858,20 @@ int speech_service::KeepAliveTask(int task) {
     return 0;
 }
 
-int speech_service::TtsPlaySpeech(const QString &text, const QString &lang) {
+int speech_service::TtsPlaySpeech(const QString &text, const QString &lang,
+                                  const QVariantMap &options) {
     qDebug() << "[dbus => service] called TtsPlaySpeech:" << lang;
     start_keepalive_current_task();
 
-    return tts_play_speech(text, lang);
+    return tts_play_speech(text, lang, options);
 }
 
-int speech_service::TtsSpeechToFile(const QString &text, const QString &lang) {
+int speech_service::TtsSpeechToFile(const QString &text, const QString &lang,
+                                    const QVariantMap &options) {
     qDebug() << "[dbus => service] called TtsSpeechToFile:" << lang;
     start_keepalive_current_task();
 
-    return tts_speech_to_file(text, lang);
+    return tts_speech_to_file(text, lang, options);
 }
 
 int speech_service::TtsStopSpeech(int task) {

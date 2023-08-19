@@ -17,7 +17,7 @@ extern "C" {
 
 #include "logger.hpp"
 
-denoiser::denoiser() {
+denoiser::denoiser(int sample_rate) {
     auto* model = rnnoise_get_model("orig");
     if (model == nullptr) LOGE("rnnoise model not found");
 

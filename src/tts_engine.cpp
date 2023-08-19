@@ -8,11 +8,14 @@
 #include "tts_engine.hpp"
 
 #include <dirent.h>
+#include <rubberband/RubberBandStretcher.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
 #include <algorithm>
 #include <array>
+#include <cstdio>
+#include <fstream>
 
 #include "logger.hpp"
 #include "text_tools.hpp"
@@ -27,7 +30,10 @@ std::ostream& operator<<(std::ostream& os,
 
 std::ostream& operator<<(std::ostream& os, const tts_engine::config_t& config) {
     os << "lang=" << config.lang << ", speaker=" << config.speaker
-       << ", model-files=[" << config.model_files << "]";
+       << ", model-files=[" << config.model_files << "]"
+       << ", lang_code=" << config.lang_code
+       << ", uroman-path=" << config.uromanpl_path
+       << ", speech-speed=" << config.speech_speed;
 
     return os;
 }
@@ -45,6 +51,29 @@ std::ostream& operator<<(std::ostream& os, tts_engine::state_t state) {
             break;
         case tts_engine::state_t::error:
             os << "error";
+            break;
+    }
+
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os,
+                         tts_engine::speech_speed_t speech_speed) {
+    switch (speech_speed) {
+        case tts_engine::speech_speed_t::very_slow:
+            os << "very-slow";
+            break;
+        case tts_engine::speech_speed_t::slow:
+            os << "slow";
+            break;
+        case tts_engine::speech_speed_t::normal:
+            os << "normal";
+            break;
+        case tts_engine::speech_speed_t::fast:
+            os << "fast";
+            break;
+        case tts_engine::speech_speed_t::very_fast:
+            os << "very-fast";
             break;
     }
 
@@ -149,6 +178,10 @@ void tts_engine::encode_speech(std::string text) {
     m_cv.notify_one();
 }
 
+void tts_engine::set_speech_speed(speech_speed_t speech_speed) {
+    m_config.speech_speed = speech_speed;
+}
+
 void tts_engine::set_state(state_t new_state) {
     if (m_shutting_down) new_state = state_t::idle;
 
@@ -162,7 +195,10 @@ void tts_engine::set_state(state_t new_state) {
 std::string tts_engine::path_to_output_file(const std::string& text) const {
     auto hash = std::hash<std::string>{}(
         text + m_config.model_files.model_path +
-        m_config.model_files.vocoder_path + m_config.speaker + m_config.lang);
+        m_config.model_files.vocoder_path + m_config.speaker + m_config.lang +
+        (m_config.speech_speed == speech_speed_t::normal
+             ? ""
+             : std::to_string(static_cast<int>(m_config.speech_speed))));
     return m_config.cache_dir + "/" + std::to_string(hash) + ".wav";
 }
 
@@ -190,6 +226,152 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
     }
 
     return tasks;
+}
+
+static void sample_buf_s16_to_f32(const int16_t* input, float* output,
+                                  size_t size) {
+    for (size_t i = 0; i < size; ++i)
+        output[i] = static_cast<float>(input[i]) / 32768.0F;
+}
+
+static void sample_buf_f32_to_s16(const float* input, int16_t* output,
+                                  size_t size) {
+    for (size_t i = 0; i < size; ++i)
+        output[i] = static_cast<int16_t>(input[i] * 32768.0F);
+}
+
+bool tts_engine::stretch(const std::string& input_file,
+                         const std::string& output_file, double time_ration,
+                         double pitch_ratio) {
+    std::ifstream is{input_file, std::ios::binary | std::ios::ate};
+    if (!is) {
+        LOGE("failed to open input file for stretch: " << input_file);
+        return false;
+    }
+
+    std::ofstream os{output_file, std::ios::binary};
+    if (!os) {
+        LOGE("failed to open output file for stretch: " << output_file);
+        return false;
+    }
+
+    size_t size = is.tellg();
+    if (size < sizeof(wav_header)) {
+        LOGE("file header is too short");
+        os.close();
+        unlink(output_file.c_str());
+        return false;
+    }
+
+    is.seekg(0, std::ios::beg);
+    auto header = read_wav_header(is);
+
+    if (header.num_channels != 1) {
+        LOGE("stretching is supported only for mono");
+        os.close();
+        unlink(output_file.c_str());
+        return false;
+    }
+
+    size -= is.tellg();
+
+    LOGD("stretcher sample rate: " << header.sample_rate);
+
+    RubberBand::RubberBandStretcher rb{
+        header.sample_rate, /*mono*/ 1,
+        RubberBand::RubberBandStretcher::DefaultOptions |
+            RubberBand::RubberBandStretcher::OptionProcessOffline |
+            RubberBand::RubberBandStretcher::OptionEngineFiner |
+            RubberBand::RubberBandStretcher::OptionSmoothingOn |
+            RubberBand::RubberBandStretcher::OptionTransientsSmooth |
+            RubberBand::RubberBandStretcher::OptionWindowLong,
+        time_ration, pitch_ratio};
+
+    static const size_t buf_c_size = 8192;
+    static const size_t buf_f_size = 4096;
+
+    char buf_c[buf_c_size];
+    float buf_f[buf_f_size];
+    float* buf_f_ptr[2] = {buf_f, nullptr};  // mono
+
+    while (is) {
+        const auto size_to_read = std::min<size_t>(size, buf_c_size);
+        const auto size_to_write = size_to_read / sizeof(int16_t);
+        is.read(buf_c, size_to_read);
+        sample_buf_s16_to_f32(reinterpret_cast<int16_t*>(buf_c), buf_f,
+                              size_to_write);
+        float* buf_f_c[2] = {buf_f, nullptr};
+        rb.study(buf_f_c, size_to_write, !static_cast<bool>(is));
+    }
+
+    is.clear();
+    is.seekg(sizeof(wav_header), std::ios::beg);
+    os.seekp(sizeof(wav_header));
+
+    while (is) {
+        const auto size_to_read = std::min<size_t>(size, buf_c_size);
+        const auto size_to_write = size_to_read / sizeof(int16_t);
+        is.read(buf_c, size_to_read);
+        sample_buf_s16_to_f32(reinterpret_cast<int16_t*>(buf_c), buf_f,
+                              size_to_write);
+        rb.process(buf_f_ptr, size_to_write, !is);
+
+        while (true) {
+            auto size_rb = rb.available();
+            if (size_rb <= 0) break;
+
+            auto size_r =
+                rb.retrieve(buf_f_ptr, std::min<size_t>(size_rb, buf_f_size));
+            if (size_r == 0) break;
+
+            sample_buf_f32_to_s16(buf_f, reinterpret_cast<int16_t*>(buf_c),
+                                  size_r);
+            os.write(buf_c, size_r * sizeof(int16_t));
+        }
+    }
+
+    auto data_size = static_cast<size_t>(os.tellp()) - sizeof(wav_header);
+
+    if (data_size == 0) {
+        os.close();
+        unlink(output_file.c_str());
+        return false;
+    }
+
+    os.seekp(0);
+    write_wav_header(header.sample_rate, sizeof(int16_t), 1,
+                     data_size / sizeof(int16_t), os);
+
+    return true;
+}
+
+void tts_engine::apply_speed(const std::string& file) const {
+    auto tmp_file = file + "_tmp";
+
+    if (m_config.speech_speed != speech_speed_t::normal) {
+        double time_ratio = 1.0;
+        switch (m_config.speech_speed) {
+            case speech_speed_t::very_slow:
+                time_ratio = 1.5;
+                break;
+            case speech_speed_t::slow:
+                time_ratio = 1.2;
+                break;
+            case speech_speed_t::fast:
+                time_ratio = 0.8;
+                break;
+            case speech_speed_t::very_fast:
+                time_ratio = 0.5;
+                break;
+            case speech_speed_t::normal:
+                break;
+        }
+
+        if (stretch(file, tmp_file, time_ratio, 1.0)) {
+            unlink(file.c_str());
+            rename(tmp_file.c_str(), file.c_str());
+        }
+    }
 }
 
 void tts_engine::process() {
@@ -229,14 +411,13 @@ void tts_engine::process() {
 
             auto output_file = path_to_output_file(task.text);
 
-            LOGD("tts out file: " << output_file);
-
             if (!file_exists(output_file)) {
                 if (!encode_speech_impl(task.text, output_file)) {
                     unlink(output_file.c_str());
                     if (m_call_backs.error) m_call_backs.error();
                     break;
                 }
+                if (!model_supports_speed()) apply_speed(output_file);
             }
 
             if (m_call_backs.speech_encoded) {
@@ -256,7 +437,7 @@ void tts_engine::process() {
 // https://github.com/rhasspy/piper/blob/master/src/cpp/wavfile.hpp
 void tts_engine::write_wav_header(int sample_rate, int sample_width,
                                   int channels, uint32_t num_samples,
-                                  std::ostream& wav_file) {
+                                  std::ofstream& wav_file) {
     wav_header header;
     header.data_size = num_samples * sample_width * channels;
     header.chunk_size = header.data_size + sizeof(wav_header) - 8;
@@ -265,4 +446,14 @@ void tts_engine::write_wav_header(int sample_rate, int sample_width,
     header.bytes_per_sec = sample_rate * sample_width * channels;
     header.block_align = sample_width * channels;
     wav_file.write(reinterpret_cast<const char*>(&header), sizeof(wav_header));
+}
+
+tts_engine::wav_header tts_engine::read_wav_header(std::ifstream& wav_file) {
+    wav_header header;
+    // wav_file.read(reinterpret_cast<char*>(&header), sizeof(wav_header));
+
+    if (!wav_file.read(reinterpret_cast<char*>(&header), sizeof(wav_header)))
+        throw std::runtime_error("failed to read file");
+
+    return header;
 }

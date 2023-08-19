@@ -120,9 +120,11 @@ class speech_service : public QObject, public singleton<speech_service> {
     Q_INVOKABLE int stt_stop_listen(int task);
     Q_INVOKABLE int stt_transcribe_file(const QString &file, QString lang,
                                         QString out_lang);
-    Q_INVOKABLE int tts_play_speech(const QString &text, QString lang);
+    Q_INVOKABLE int tts_play_speech(const QString &text, QString lang,
+                                    const QVariantMap &options);
     Q_INVOKABLE int tts_stop_speech(int task);
-    Q_INVOKABLE int tts_speech_to_file(const QString &text, QString lang);
+    Q_INVOKABLE int tts_speech_to_file(const QString &text, QString lang,
+                                       const QVariantMap &options);
 
     Q_INVOKABLE int mnt_translate(const QString &text, QString lang,
                                   QString out_lang);
@@ -390,7 +392,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     QString restart_stt_engine(speech_mode_t speech_mode,
                                const QString &model_id,
                                const QString &out_lang_id);
-    QString restart_tts_engine(const QString &model_id);
+    QString restart_tts_engine(const QString &model_id,
+                               tts_engine::speech_speed_t speech_speed);
     QString restart_mnt_engine(const QString &model_or_lang_id,
                                const QString &out_lang_id);
     void restart_audio_source(const QString &source_file = {});
@@ -459,6 +462,8 @@ class speech_service : public QObject, public singleton<speech_service> {
         const std::vector<models_manager::model_t> &models);
     static bool matched_engine_type(engine_t engine_type,
                                     models_manager::model_engine engine);
+    static tts_engine::speech_speed_t tts_speech_speed_from_options(
+        const QVariantMap &options);
 
     // DBus
     Q_INVOKABLE int Cancel(int task);
@@ -471,9 +476,11 @@ class speech_service : public QObject, public singleton<speech_service> {
     Q_INVOKABLE int SttTranscribeFile(const QString &file, const QString &lang,
                                       const QString &out_lang);
     Q_INVOKABLE double SttGetFileTranscribeProgress(int task);
-    Q_INVOKABLE int TtsPlaySpeech(const QString &text, const QString &lang);
+    Q_INVOKABLE int TtsPlaySpeech(const QString &text, const QString &lang,
+                                  const QVariantMap &options);
     Q_INVOKABLE int TtsStopSpeech(int task);
-    Q_INVOKABLE int TtsSpeechToFile(const QString &text, const QString &lang);
+    Q_INVOKABLE int TtsSpeechToFile(const QString &text, const QString &lang,
+                                    const QVariantMap &options);
     Q_INVOKABLE int MntTranslate(const QString &text, const QString &lang,
                                  const QString &out_lang);
     Q_INVOKABLE QVariantMap MntGetOutLangs(const QString &lang);

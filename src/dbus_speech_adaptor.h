@@ -209,8 +209,10 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </method>\n"
 "    <method name=\"TtsPlaySpeech\">\n"
+"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.In2\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"text\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"lang\"/>\n"
+"      <arg direction=\"in\" type=\"a{sv}\" name=\"options\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </method>\n"
 "    <method name=\"TtsStopSpeech\">\n"
@@ -218,8 +220,10 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
 "    </method>\n"
 "    <method name=\"TtsSpeechToFile\">\n"
+"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.In2\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"text\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"lang\"/>\n"
+"      <arg direction=\"in\" type=\"a{sv}\" name=\"options\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </method>\n"
 "    <method name=\"Cancel\">\n"
@@ -341,8 +345,8 @@ public Q_SLOTS: // METHODS
     int SttStopListen(int task);
     int SttTranscribeFile(const QString &file, const QString &lang, const QString &out_lang);
     double TtsGetSpeechToFileProgress(int task);
-    int TtsPlaySpeech(const QString &text, const QString &lang);
-    int TtsSpeechToFile(const QString &text, const QString &lang);
+    int TtsPlaySpeech(const QString &text, const QString &lang, const QVariantMap &options);
+    int TtsSpeechToFile(const QString &text, const QString &lang, const QVariantMap &options);
     int TtsStopSpeech(int task);
 Q_SIGNALS: // SIGNALS
     void CurrentTaskPropertyChanged(int task);

@@ -63,6 +63,16 @@ class tts_engine {
         std::function<void()> error;
     };
 
+    enum class speech_speed_t {
+        very_slow = -2,
+        slow = -1,
+        normal = 0,
+        fast = 1,
+        very_fast = 2
+    };
+    friend std::ostream& operator<<(std::ostream& os,
+                                    speech_speed_t speech_speed);
+
     struct config_t {
         std::string lang;
         model_files_t model_files;
@@ -73,6 +83,7 @@ class tts_engine {
         std::string nb_data;
         std::string lang_code;
         std::string uromanpl_path;
+        speech_speed_t speech_speed = speech_speed_t::normal;
     };
     friend std::ostream& operator<<(std::ostream& os, const config_t& config); 
 
@@ -87,6 +98,7 @@ class tts_engine {
     inline auto speaker() const { return m_config.speaker; }
     void encode_speech(std::string text);
     static std::string merge_wav_files(std::vector<std::string>&& files);
+    void set_speech_speed(speech_speed_t speech_speed);
 
    protected:
     struct task_t {
@@ -109,8 +121,10 @@ class tts_engine {
                                                   std::string prefix);
     static void write_wav_header(int sample_rate, int sample_width,
                                  int channels, uint32_t num_samples,
-                                 std::ostream& wav_file);
+                                 std::ofstream& wav_file);
+    static wav_header read_wav_header(std::ifstream& wav_file);
     virtual bool model_created() const = 0;
+    virtual bool model_supports_speed() const = 0;
     virtual void create_model() = 0;
     virtual bool encode_speech_impl(const std::string& text,
                                     const std::string& out_file) = 0;
@@ -119,6 +133,10 @@ class tts_engine {
     void process();
     std::vector<task_t> make_tasks(const std::string& text,
                                    bool split = true) const;
+    static bool stretch(const std::string& input_file,
+                        const std::string& output_file, double time_ration,
+                        double pitch_ratio);
+    void apply_speed(const std::string& file) const;
 };
 
 #endif // TTS_ENGINE_HPP

@@ -87,11 +87,37 @@ int espeak_engine::synth_callback(short* wav, int size, espeak_EVENT* event) {
     return 0;
 }
 
+bool espeak_engine::model_supports_speed() const { return true; }
+
 bool espeak_engine::encode_speech_impl(const std::string& text,
                                        const std::string& out_file) {
-    espeak_SetSynthCallback(&synth_callback);
+    auto rate = [this]() {
+        auto default_rate = espeak_GetParameter(espeakRATE, 0);
+
+        switch (m_config.speech_speed) {
+            case speech_speed_t::very_slow:
+                return std::max<int>(static_cast<float>(default_rate) * 0.6f,
+                                     80);
+            case speech_speed_t::slow:
+                return std::max<int>(static_cast<float>(default_rate) * 0.8f,
+                                     80);
+            case speech_speed_t::fast:
+                return std::min<int>(static_cast<float>(default_rate) * 1.4f,
+                                     450);
+            case speech_speed_t::very_fast:
+                return std::min<int>(static_cast<float>(default_rate) * 1.8f,
+                                     450);
+            case speech_speed_t::normal:
+                break;
+        }
+        return default_rate;
+    }();
+
+    espeak_SetParameter(espeakRATE, rate, 0);
 
     callback_data cb_data{this, std::ofstream{out_file, std::ios::binary}};
+
+    espeak_SetSynthCallback(&synth_callback);
 
     if (cb_data.wav_file.bad()) {
         LOGE("failed to open file for writting: " << out_file);

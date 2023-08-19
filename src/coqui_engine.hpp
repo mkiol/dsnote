@@ -30,8 +30,10 @@ class coqui_engine : public tts_engine {
         "/tmp/tmp_coqui_config.json";
 
     std::optional<py::object> m_tts;
+    std::optional<float> m_initial_length_scale;
 
     bool model_created() const final;
+    bool model_supports_speed() const final;
     void create_model() final;
     bool encode_speech_impl(const std::string& text,
                             const std::string& out_file) final;

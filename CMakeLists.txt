@@ -36,6 +36,7 @@ option(BUILD_SSPLITCPP "download ssplitcpp lib, build and link statically" ON)
 option(BUILD_RHVOICE "download rhvoice lib, build and install shared lib" ON)
 option(BUILD_BERGAMOT "download bergamot-translator lib, build and install shared lib" ON)
 option(BUILD_UROMAN "download and install uroman lib" ON)
+option(BUILD_RUBBERBAND "download rubberband lib, build and link statically" ON)
 
 if(${WITH_DESKTOP} AND ${WITH_SFOS})
     message(FATAL_ERROR "options WITH_DESKTOP and WITH_SFOS cannot be set together")
@@ -330,6 +331,11 @@ set(deps_dirs "")
 include(FindPkgConfig)
 include(ExternalProject)
 
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    list(APPEND deps_libs OpenMP::OpenMP_CXX)
+endif()
+
 pkg_search_module(zlib REQUIRED zlib)
 list(APPEND deps_libs ${zlib_LIBRARIES})
 list(APPEND includes ${zlib_INCLUDE_DIRS})
@@ -482,6 +488,26 @@ endif()
 
 if(BUILD_UROMAN)
     include(${cmake_path}/uroman.cmake)
+endif()
+
+if(BUILD_RUBBERBAND)
+    include(${cmake_path}/rubberband.cmake)
+else()
+    pkg_search_module(samplerate REQUIRED samplerate)
+    list(APPEND deps_libs ${samplerate_LIBRARIES})
+    list(APPEND includes ${samplerate_INCLUDE_DIRS})
+
+    find_library(sleefdft_path sleefdft REQUIRED)
+    list(APPEND deps_libs ${sleefdft_path})
+
+    pkg_search_module(sleef REQUIRED sleef)
+    list(APPEND deps_libs ${sleef_LIBRARIES})
+    list(APPEND includes ${sleef_INCLUDE_DIRS})
+
+    pkg_search_module(rubberband REQUIRED rubberband)
+    list(APPEND deps_libs ${rubberband_LIBRARIES})
+    list(APPEND includes ${rubberband_INCLUDE_DIRS})
+    list(APPEND deps_libs ${sleefdft_path} ${sleef_LIBRARIES})
 endif()
 
 if(WITH_SFOS)

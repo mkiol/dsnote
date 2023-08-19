@@ -47,10 +47,28 @@ void piper_engine::create_model() {
     }
 }
 
+bool piper_engine::model_supports_speed() const { return true; }
+
 bool piper_engine::encode_speech_impl(const std::string& text,
                                       const std::string& out_file) {
+    auto length_scale = [this]() {
+        switch (m_config.speech_speed) {
+            case speech_speed_t::very_slow:
+                return 1.8f;
+            case speech_speed_t::slow:
+                return 1.4f;
+            case speech_speed_t::fast:
+                return 0.8f;
+            case speech_speed_t::very_fast:
+                return 0.6f;
+            case speech_speed_t::normal:
+                break;
+        }
+        return 1.0f;
+    }();
+
     try {
-        m_piper->text_to_wav_file(text, out_file);
+        m_piper->text_to_wav_file(text, out_file, length_scale);
     } catch (const std::exception& err) {
         LOGE("error: " << err.what());
         return false;

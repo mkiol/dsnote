@@ -42,8 +42,8 @@ diff -ruN piper-org/CMakeLists.txt piper-patched/CMakeLists.txt
 +    PUBLIC_HEADER DESTINATION include)
 diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
 --- piper-org/piper_api.cpp	1970-01-01 01:00:00.000000000 +0100
-+++ piper-patched/piper_api.cpp	2023-08-01 12:13:26.178927014 +0200
-@@ -0,0 +1,52 @@
++++ piper-patched/piper_api.cpp	2023-08-18 16:20:32.952538239 +0200
+@@ -0,0 +1,57 @@
 +#include "piper_api.h"
 +#include "src/cpp/piper.hpp"
 +
@@ -57,7 +57,8 @@ diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
 +    piper::Voice voice;
 +};
 +
-+piper_api::piper_api(std::string model_path, std::string model_config_path, std::string espeak_ng_data_path, int64_t speaker_id) {
++piper_api::piper_api(std::string model_path, std::string model_config_path,
++                     std::string espeak_ng_data_path, int64_t speaker_id) {
 +    m_ctx = std::make_unique<ctx>();
 +
 +    m_ctx->config.eSpeakDataPath = std::move(espeak_ng_data_path);
@@ -74,11 +75,13 @@ diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
 +    piper::terminate(m_ctx->config);
 +}
 +
-+std::vector<int16_t> piper_api::text_to_audio(std::string text) {
++std::vector<int16_t> piper_api::text_to_audio(std::string text, float length_scale) {
 +    std::vector<int16_t> out_buf;
 +    std::vector<int16_t> tmp_buf;
 +
 +    piper::SynthesisResult result;
++
++    m_ctx->voice.synthesisConfig.lengthScale = length_scale;
 +
 +    piper::textToAudio(m_ctx->config, m_ctx->voice, std::move(text), tmp_buf, result, [&]{
 +        out_buf.insert(out_buf.cend(), tmp_buf.cbegin(), tmp_buf.cend());
@@ -87,19 +90,21 @@ diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
 +    return out_buf;
 +}
 +
-+void piper_api::text_to_wav_file(std::string text, const std::string& wav_file_path) {
++void piper_api::text_to_wav_file(std::string text, const std::string& wav_file_path, float length_scale) {
 +    std::ofstream out_file{wav_file_path, std::ios::out};
 +
 +    if (!out_file) throw std::runtime_error("failed to open file");
 +
 +    piper::SynthesisResult result;
 +
++    m_ctx->voice.synthesisConfig.lengthScale = length_scale;
++
 +    piper::textToWavFile(m_ctx->config, m_ctx->voice, std::move(text), out_file, result);
 +}
 diff -ruN piper-org/piper_api.h piper-patched/piper_api.h
 --- piper-org/piper_api.h	1970-01-01 01:00:00.000000000 +0100
-+++ piper-patched/piper_api.h	2023-08-01 12:05:47.565603026 +0200
-@@ -0,0 +1,22 @@
++++ piper-patched/piper_api.h	2023-08-18 16:16:32.332528337 +0200
+@@ -0,0 +1,23 @@
 +#ifndef PIPER_API_H
 +#define PIPER_API_H
 +
@@ -111,10 +116,11 @@ diff -ruN piper-org/piper_api.h piper-patched/piper_api.h
 +
 +class PIPER_API_EXPORT piper_api {
 +public:
-+    piper_api(std::string model_path, std::string model_config_path, std::string espeak_ng_data_path = {}, int64_t speaker_id = -1);
++    piper_api(std::string model_path, std::string model_config_path,
++              std::string espeak_ng_data_path = {}, int64_t speaker_id = -1);
 +    ~piper_api();
-+    std::vector<int16_t> text_to_audio(std::string text);
-+    void text_to_wav_file(std::string text, const std::string& wav_file_path);
++    std::vector<int16_t> text_to_audio(std::string text, float length_scale = 1.0f);
++    void text_to_wav_file(std::string text, const std::string& wav_file_path, float length_scale = 1.0f);
 +
 +private:
 +    struct ctx;
