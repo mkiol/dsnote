@@ -41,6 +41,10 @@ DialogPage {
         <li>New Coqui voices for: Japanese, Turkish and Spanish.</li>
         <li>New Piper voices for: Czech, German, Hungarian, Portuguese and Slovak.</li>
         <li>Update of RHVoice voices for Slovak and Czech.</li>
+        </ul>
+        <p>" + qsTr("Interface") + ":</p>
+        <ul>
+        <li>Option to change font size in text editor</li>
         </ul>"
     }
 

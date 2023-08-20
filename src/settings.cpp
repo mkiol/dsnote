@@ -409,6 +409,17 @@ void settings::set_note(const QString& value) {
     }
 }
 
+int settings::font_size() const {
+    return value(QStringLiteral("font_size"), 13).toInt();
+}
+
+void settings::set_font_size(int value) {
+    if (font_size() != value) {
+        setValue(QStringLiteral("font_size"), value);
+        emit font_size_changed();
+    }
+}
+
 bool settings::translator_mode() const {
     return value(QStringLiteral("translator_mode"), false).toBool();
 }
