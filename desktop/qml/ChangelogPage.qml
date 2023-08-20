@@ -23,7 +23,7 @@ DialogPage {
         <li>Support for GPU acceleration for Whisper models.
             If a suitable GPU device is found in the system, it will be used to accelerate processing.
             This significantly reduces the time of decoding (usually 2 times or more).
-            GPU hardware acceleration is not enabled by dafault. Use the option in <i>Settings</i> to turn it on.
+            GPU hardware acceleration is not enabled by default. Use the option in <i>Settings</i> to turn it on.
             Disable, if you observe any problems when using Speech to Text with Whisper models.
         </li>
         <li>Fix: Whisper model wasn't able to decode short speech sentences.</li>
