@@ -754,84 +754,84 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="148"/>
         <source>If a suitable GPU device is found in the system, it will be used to accelerate processing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se nel sistema viene trovato un dispositivo GPU adatto, verrà utilizzato per accelerare l'elaborazione.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="141"/>
         <source>Use GPU acceleration for Whisper</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa l'accelerazione GPU per Whisper</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="149"/>
         <source>GPU hardware acceleration significantly reduces the time of decoding.</source>
-        <translation type="unfinished"></translation>
+        <translation>L'accelerazione hardware della GPU riduce significativamente il tempo di decodifica.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="150"/>
         <source>Disable this option if you observe problems when using Speech to Text with Whisper models.</source>
-        <translation type="unfinished"></translation>
+        <translation>Disabilita questa opzione se riscontri problemi durante l'utilizzo di Speech to Text con modelli Whisper.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="158"/>
         <source>A suitable GPU device could not be found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile trovare un dispositivo GPU adatto.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="169"/>
         <source>GPU device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo GPU</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="182"/>
         <source>Select preferred GPU device for hardware acceleration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona il dispositivo GPU preferito per l'accelerazione hardware.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="111"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="187"/>
         <source>Text to Speech</source>
-        <translation type="unfinished"></translation>
+        <translation>Text to Speech</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="123"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="197"/>
         <source>Speech speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Velocità del parlato</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="135"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="251"/>
         <source>Very slow</source>
-        <translation type="unfinished"></translation>
+        <translation>Molto lento</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="136"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="252"/>
         <source>Slow</source>
-        <translation type="unfinished"></translation>
+        <translation>Lento</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="137"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="253"/>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normale</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="138"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="254"/>
         <source>Fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Veloce</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="139"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="255"/>
         <source>Very fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Molto veloce</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="205"/>
         <source>Change to make synthesized speech slower or faster.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambia per rendere il parlato sintetizzato più lento o più veloce.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="300"/>
@@ -1139,7 +1139,7 @@
         <location filename="../src/settings.cpp" line="568"/>
         <location filename="../src/settings.cpp" line="586"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatico</translation>
     </message>
 </context>
 <context>
