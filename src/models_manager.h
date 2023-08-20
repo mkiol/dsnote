@@ -74,7 +74,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         QString lang_id;
         QString name;
         QString model_file;
-        QString scorer_file;
+        QString sup_file;
         QString speaker;
         QString trg_lang_id;
         int score = 2; /* 0-3 */
@@ -119,7 +119,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     void busy_changed();
 
    private:
-    enum class download_type { none, all, model, scorer, model_scorer };
+    enum class download_type { none, all, model, sup, model_sup };
     friend QDebug operator<<(QDebug d, download_type download_type);
 
     enum class comp_type { none, xz, gz, tar, tarxz, targz, zip, zipall, dir };
@@ -135,12 +135,12 @@ class models_manager : public QObject, public singleton<models_manager> {
         comp_type comp = comp_type::none;
         std::vector<QUrl> urls;
         qint64 size = 0;
-        QString scorer_file_name;
-        QString scorer_checksum;
-        QString scorer_checksum_quick;
-        comp_type scorer_comp = comp_type::none;
-        std::vector<QUrl> scorer_urls;
-        qint64 scorer_size = 0;
+        QString sup_file_name;
+        QString sup_checksum;
+        QString sup_checksum_quick;
+        comp_type sup_comp = comp_type::none;
+        std::vector<QUrl> sup_urls;
+        qint64 sup_size = 0;
         QString speaker;
         QString trg_lang_id;
         int score = -1; /* 0-5 */
@@ -175,6 +175,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     static void parse_models_file(bool reset, langs_t* langs, models_t* models);
     static QString file_name_from_id(const QString& id, model_engine engine);
     static QString scorer_file_name_from_id(const QString& id);
+    static QString vocoder_file_name_from_id(const QString& id);
     void download(const QString& id, download_type type, int part = -1);
     void handle_download_progress(qint64 received, qint64 real_total);
     void handle_download_finished();
@@ -194,7 +195,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     static comp_type str2comp(const QString& str);
     static QString download_filename(QString filename, comp_type comp,
                                      int part = -1, const QUrl& url = {});
-    static bool model_scorer_same_url(const priv_model_t& id);
+    static bool model_sup_same_url(const priv_model_t& id);
     [[nodiscard]] bool lang_available(const QString& id) const;
     [[nodiscard]] bool lang_downloading(const QString& id) const;
     bool check_model_download_cancel(QNetworkReply* reply);

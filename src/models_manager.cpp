@@ -86,11 +86,11 @@ QDebug operator<<(QDebug d, models_manager::download_type download_type) {
         case models_manager::download_type::model:
             d << "model";
             break;
-        case models_manager::download_type::model_scorer:
-            d << "model_scorer";
+        case models_manager::download_type::model_sup:
+            d << "model-sup";
             break;
-        case models_manager::download_type::scorer:
-            d << "scorer";
+        case models_manager::download_type::sup:
+            d << "sup";
             break;
         case models_manager::download_type::none:
             d << "none";
@@ -309,19 +309,18 @@ std::vector<models_manager::model_t> models_manager::models(
         [&dir, &list, &lang_id](const auto& pair) {
             if (!pair.second.hidden &&
                 (lang_id.isEmpty() || lang_id == pair.second.lang_id)) {
-                list.push_back(
-                    {pair.first, pair.second.engine, pair.second.lang_id,
-                     pair.second.name,
-                     pair.second.scorer_file_name.isEmpty()
-                         ? ""
-                         : dir.filePath(pair.second.scorer_file_name),
-                     pair.second.scorer_file_name.isEmpty()
-                         ? ""
-                         : dir.filePath(pair.second.scorer_file_name),
-                     pair.second.speaker, pair.second.trg_lang_id,
-                     pair.second.score, pair.second.default_for_lang,
-                     pair.second.available, pair.second.downloading,
-                     pair.second.download_progress});
+                list.push_back({pair.first, pair.second.engine,
+                                pair.second.lang_id, pair.second.name,
+                                pair.second.sup_file_name.isEmpty()
+                                    ? ""
+                                    : dir.filePath(pair.second.sup_file_name),
+                                pair.second.sup_file_name.isEmpty()
+                                    ? ""
+                                    : dir.filePath(pair.second.sup_file_name),
+                                pair.second.speaker, pair.second.trg_lang_id,
+                                pair.second.score, pair.second.default_for_lang,
+                                pair.second.available, pair.second.downloading,
+                                pair.second.download_progress});
             }
         });
 
@@ -358,9 +357,9 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
         if (!model.hidden && model.available && QFile::exists(model_file)) {
             list.push_back({id, model.engine, model.lang_id, model.name,
                             model_file,
-                            model.scorer_file_name.isEmpty()
+                            model.sup_file_name.isEmpty()
                                 ? QString{}
-                                : dir.filePath(model.scorer_file_name),
+                                : dir.filePath(model.sup_file_name),
                             model.speaker, model.trg_lang_id, model.score,
                             model.default_for_lang, model.available,
                             model.downloading, model.download_progress});
@@ -399,19 +398,19 @@ void models_manager::cancel_model_download(const QString& id) {
     models_to_cancel.insert(id);
 }
 
-bool models_manager::model_scorer_same_url(const priv_model_t& model) {
-    if (model.comp == comp_type::tarxz && model.comp == model.scorer_comp &&
-        model.urls.size() == 1 && model.scorer_urls.size() == 1) {
+bool models_manager::model_sup_same_url(const priv_model_t& model) {
+    if (model.comp == comp_type::tarxz && model.comp == model.sup_comp &&
+        model.urls.size() == 1 && model.sup_urls.size() == 1) {
         QUrl model_url{model.urls.front()};
-        QUrl scorer_url{model.urls.front()};
+        QUrl sup_url{model.urls.front()};
 
         if (model_url.hasQuery() &&
             QUrlQuery{model_url}.hasQueryItem(QStringLiteral("file")) &&
-            scorer_url.hasQuery() &&
-            QUrlQuery{scorer_url}.hasQueryItem(QStringLiteral("file"))) {
+            sup_url.hasQuery() &&
+            QUrlQuery{sup_url}.hasQueryItem(QStringLiteral("file"))) {
             model_url.setQuery(QUrlQuery{});
-            scorer_url.setQuery(QUrlQuery{});
-            return model_url == scorer_url;
+            sup_url.setQuery(QUrlQuery{});
+            return model_url == sup_url;
         }
     }
 
@@ -419,7 +418,7 @@ bool models_manager::model_scorer_same_url(const priv_model_t& model) {
 }
 
 void models_manager::download(const QString& id, download_type type, int part) {
-    if (type != download_type::all && type != download_type::scorer) {
+    if (type != download_type::all && type != download_type::sup) {
         qWarning() << "incorrect dl type requested:" << type;
         return;
     }
@@ -437,14 +436,13 @@ void models_manager::download(const QString& id, download_type type, int part) {
             (model.engine == model_engine::tts_espeak &&
              (model.checksum.isEmpty() || model.file_name.isEmpty())) ||
             checksum_ok(model.checksum, model.checksum_quick, model.file_name);
-        bool s_cs =
-            model.scorer_checksum.isEmpty() ||
-            model.scorer_file_name.isEmpty() || model.scorer_urls.empty() ||
-            checksum_ok(model.scorer_checksum, model.scorer_checksum_quick,
-                        model.scorer_file_name);
+        bool s_cs = model.sup_checksum.isEmpty() ||
+                    model.sup_file_name.isEmpty() || model.sup_urls.empty() ||
+                    checksum_ok(model.sup_checksum, model.sup_checksum_quick,
+                                model.sup_file_name);
         if ((type == download_type::all && m_cs && s_cs) ||
-            (type == download_type::scorer && s_cs)) {
-            qWarning() << "both model and scorer exist, download not needed";
+            (type == download_type::sup && s_cs)) {
+            qWarning() << "both model and sup exist, download not needed";
 
             auto models = settings::instance()->enabled_models();
             models.push_back(id);
@@ -459,22 +457,20 @@ void models_manager::download(const QString& id, download_type type, int part) {
             return;
         }
         if (type == download_type::all && m_cs) {
-            qDebug() << "model already exists, downloading only scorer";
+            qDebug() << "model already exists, downloading only sup";
             model.downloaded_part_data = model.size;
-            type = download_type::scorer;
+            type = download_type::sup;
         }
     }
 
-    if (type == download_type::all && part < 0 &&
-        model_scorer_same_url(model)) {
-        type = download_type::model_scorer;
+    if (type == download_type::all && part < 0 && model_sup_same_url(model)) {
+        type = download_type::model_sup;
     }
 
-    const auto& urls =
-        type == download_type::scorer ? model.scorer_urls : model.urls;
+    const auto& urls = type == download_type::sup ? model.sup_urls : model.urls;
 
     if (part < 0) {
-        if (type != download_type::scorer) model.downloaded_part_data = 0;
+        if (type != download_type::sup) model.downloaded_part_data = 0;
         if (urls.size() > 1) part = 0;
     }
 
@@ -486,17 +482,16 @@ void models_manager::download(const QString& id, download_type type, int part) {
     auto next_type = download_type::none;
     const auto next_part =
         part < 0 || part >= static_cast<int>(urls.size()) - 1 ? -1 : part + 1;
-    const bool scorer_exists = !model.scorer_file_name.isEmpty() &&
-                               !model.scorer_checksum.isEmpty() &&
-                               !url.isEmpty();
-    const qint64 size = type != download_type::model_scorer && scorer_exists
-                            ? model.size + model.scorer_size
+    const bool sup_exists = !model.sup_file_name.isEmpty() &&
+                            !model.sup_checksum.isEmpty() && !url.isEmpty();
+    const qint64 size = type != download_type::model_sup && sup_exists
+                            ? model.size + model.sup_size
                             : model.size;
 
     QNetworkRequest request{url};
     request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
 
-    if (type == download_type::all || type == download_type::model_scorer) {
+    if (type == download_type::all || type == download_type::model_sup) {
         path = model_path(model.file_name);
         checksum = model.checksum;
         comp = model.comp;
@@ -505,19 +500,19 @@ void models_manager::download(const QString& id, download_type type, int part) {
             type = download_type::model;
             if (next_part > 0) {
                 next_type = download_type::all;
-            } else if (scorer_exists) {
-                next_type = download_type::scorer;
+            } else if (sup_exists) {
+                next_type = download_type::sup;
             }
-        } else {  // model_scorer
-            path_2 = model_path(model.scorer_file_name);
-            checksum_2 = model.scorer_checksum;
+        } else {  // model-sup
+            path_2 = model_path(model.sup_file_name);
+            checksum_2 = model.sup_checksum;
             next_type = download_type::none;
         }
-    } else {  // scorer
-        path = model_path(model.scorer_file_name);
-        checksum = model.scorer_checksum;
-        comp = model.scorer_comp;
-        next_type = next_part > 0 ? download_type::scorer : download_type::none;
+    } else {  // sup
+        path = model_path(model.sup_file_name);
+        checksum = model.sup_checksum;
+        comp = model.sup_comp;
+        next_type = next_part > 0 ? download_type::sup : download_type::none;
     }
 
     if ((comp == comp_type::tarxz || comp == comp_type::zip ||
@@ -525,9 +520,9 @@ void models_manager::download(const QString& id, download_type type, int part) {
         url.hasQuery()) {
         if (QUrlQuery query{url}; query.hasQueryItem(QStringLiteral("file"))) {
             path_in_archive = query.queryItemValue(QStringLiteral("file"));
-            if (type == download_type::model_scorer) {
+            if (type == download_type::model_sup) {
                 path_in_archive_2 =
-                    QUrlQuery{model.scorer_urls.front()}.queryItemValue(
+                    QUrlQuery{model.sup_urls.front()}.queryItemValue(
                         QStringLiteral("file"));
             }
             query.removeQueryItem(QStringLiteral("file"));
@@ -806,9 +801,8 @@ void models_manager::handle_download_finished() {
         auto next_part = reply->property("next_part").toInt();
 
         if (next_part < 0) {
-            auto parts = type == download_type::scorer
-                             ? model.scorer_urls.size()
-                             : model.urls.size();
+            auto parts = type == download_type::sup ? model.sup_urls.size()
+                                                    : model.urls.size();
             auto downloaded_part_data =
                 QFileInfo{download_filename(path, comp, part)}.size();
             auto path_2 = reply->property("out_path_2").toString();
@@ -826,9 +820,9 @@ void models_manager::handle_download_finished() {
                 qDebug() << "successfully downloaded:" << id
                          << ", type:" << type << ", next_type:" << next_type;
 
-                if (next_type == download_type::scorer) {
+                if (next_type == download_type::sup) {
                     model.downloaded_part_data += downloaded_part_data;
-                    download(id, download_type::scorer);
+                    download(id, download_type::sup);
                     reply->deleteLater();
                     return;
                 }
@@ -905,19 +899,17 @@ void models_manager::delete_model(const QString& id) {
                     << model.file_name;
             }
         }
-        if (!model.scorer_file_name.isEmpty()) {
-            if (!std::any_of(
-                    m_models.cbegin(), m_models.cend(),
-                    [id = it->first,
-                     file_name = model.scorer_file_name](const auto& p) {
-                        return p.second.available && p.first != id &&
-                               p.second.scorer_file_name == file_name;
-                    })) {
-                remove_file_or_dir(model_path(model.scorer_file_name));
+        if (!model.sup_file_name.isEmpty()) {
+            if (!std::any_of(m_models.cbegin(), m_models.cend(),
+                             [id = it->first,
+                              file_name = model.sup_file_name](const auto& p) {
+                                 return p.second.available && p.first != id &&
+                                        p.second.sup_file_name == file_name;
+                             })) {
+                remove_file_or_dir(model_path(model.sup_file_name));
             } else {
-                qDebug()
-                    << "not removing scorer file because other model uses it:"
-                    << model.scorer_file_name;
+                qDebug() << "not removing sup file because other model uses it:"
+                         << model.sup_file_name;
             }
         }
 
@@ -1204,11 +1196,11 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         }
 
         model_engine engine = model_engine::stt_ds;
-        comp_type comp = comp_type::none, scorer_comp = comp_type::none;
-        QString file_name, checksum, checksum_quick, scorer_file_name,
-            scorer_checksum, scorer_checksum_quick;
-        std::vector<QUrl> urls, scorer_urls;
-        qint64 size = 0, scorer_size = 0;
+        comp_type comp = comp_type::none, sup_comp = comp_type::none;
+        QString file_name, checksum, checksum_quick, sup_file_name,
+            sup_checksum, sup_checksum_quick;
+        std::vector<QUrl> urls, sup_urls;
+        qint64 size = 0, sup_size = 0;
         QString trg_lang_id =
             obj.value(QLatin1String{"trg_lang_id"}).toString();
         int score = obj.value(QLatin1String{"score"}).toInt(-1);
@@ -1255,23 +1247,47 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             }
             for (const auto& url : aurls) urls.emplace_back(url.toString());
 
-            scorer_file_name =
-                obj.value(QLatin1String{"scorer_file_name"}).toString();
-            if (scorer_file_name.isEmpty())
-                scorer_file_name = scorer_file_name_from_id(model_id);
-            scorer_checksum =
-                obj.value(QLatin1String{"scorer_checksum"}).toString();
-            scorer_checksum_quick =
-                obj.value(QLatin1String{"scorer_checksum_quick"}).toString();
-            scorer_size =
-                obj.value(QLatin1String{"scorer_size"}).toString().toLongLong();
-            scorer_comp =
-                str2comp(obj.value(QLatin1String{"scorer_comp"}).toString());
+            if (engine == model_engine::stt_ds) {
+                sup_file_name =
+                    obj.value(QLatin1String{"scorer_file_name"}).toString();
+                if (sup_file_name.isEmpty())
+                    sup_file_name = scorer_file_name_from_id(model_id);
+                sup_checksum =
+                    obj.value(QLatin1String{"scorer_checksum"}).toString();
+                sup_checksum_quick =
+                    obj.value(QLatin1String{"scorer_checksum_quick"})
+                        .toString();
+                sup_size = obj.value(QLatin1String{"scorer_size"})
+                               .toString()
+                               .toLongLong();
+                sup_comp = str2comp(
+                    obj.value(QLatin1String{"scorer_comp"}).toString());
 
-            auto ascorer_urls =
-                obj.value(QLatin1String{"scorer_urls"}).toArray();
-            for (auto url : ascorer_urls)
-                scorer_urls.emplace_back(url.toString());
+                auto ascorer_urls =
+                    obj.value(QLatin1String{"scorer_urls"}).toArray();
+                for (auto url : ascorer_urls)
+                    sup_urls.emplace_back(url.toString());
+            } else if (engine == model_engine::tts_coqui) {
+                sup_file_name =
+                    obj.value(QLatin1String{"vocoder_file_name"}).toString();
+                if (sup_file_name.isEmpty())
+                    sup_file_name = vocoder_file_name_from_id(model_id);
+                sup_checksum =
+                    obj.value(QLatin1String{"vocoder_checksum"}).toString();
+                sup_checksum_quick =
+                    obj.value(QLatin1String{"vocoder_checksum_quick"})
+                        .toString();
+                sup_size = obj.value(QLatin1String{"vocoder_size"})
+                               .toString()
+                               .toLongLong();
+                sup_comp = str2comp(
+                    obj.value(QLatin1String{"vocoder_comp"}).toString());
+
+                auto ascorer_urls =
+                    obj.value(QLatin1String{"vocoder_urls"}).toArray();
+                for (auto url : ascorer_urls)
+                    sup_urls.emplace_back(url.toString());
+            }
         } else if (models.count(model_alias_of) > 0) {
             const auto& alias = models.at(model_alias_of);
 
@@ -1283,12 +1299,12 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             size = alias.size;
             comp = alias.comp;
             urls = alias.urls;
-            scorer_file_name = alias.scorer_file_name;
-            scorer_checksum = alias.scorer_checksum;
-            scorer_checksum_quick = alias.scorer_checksum_quick;
-            scorer_size = alias.scorer_size;
-            scorer_comp = alias.scorer_comp;
-            scorer_urls = alias.scorer_urls;
+            sup_file_name = alias.sup_file_name;
+            sup_checksum = alias.sup_checksum;
+            sup_checksum_quick = alias.sup_checksum_quick;
+            sup_size = alias.sup_size;
+            sup_comp = alias.sup_comp;
+            sup_urls = alias.sup_urls;
             if (speaker.isEmpty()) speaker = alias.speaker;
             exists = alias.exists;
             available = alias.available;
@@ -1369,12 +1385,12 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             /*comp=*/comp,
             /*urls=*/std::move(urls),
             /*size=*/size,
-            /*scorer_file_name=*/std::move(scorer_file_name),
-            /*scorer_checksum=*/std::move(scorer_checksum),
-            /*scorer_checksum_quick=*/std::move(scorer_checksum_quick),
-            /*scorer_comp=*/scorer_comp,
-            /*scorer_urls=*/std::move(scorer_urls),
-            /*scorer_size=*/scorer_size,
+            /*sup_file_name=*/std::move(sup_file_name),
+            /*sup_checksum=*/std::move(sup_checksum),
+            /*sup_checksum_quick=*/std::move(sup_checksum_quick),
+            /*sup_comp=*/sup_comp,
+            /*sup_urls=*/std::move(sup_urls),
+            /*sup_size=*/sup_size,
             /*speaker=*/speaker,
             /*trg_lang_id=*/std::move(trg_lang_id),
             /*score=*/score,
@@ -1387,12 +1403,12 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         if (!model.exists && dir.exists(model.file_name)) {
             if (checksum_ok(model.checksum, model.checksum_quick,
                             model.file_name)) {
-                if (model.scorer_urls.empty()) {
+                if (model.sup_urls.empty()) {
                     model.exists = true;
-                } else if (dir.exists(model.scorer_file_name)) {
-                    if (checksum_ok(model.scorer_checksum,
-                                    model.scorer_checksum_quick,
-                                    model.scorer_file_name)) {
+                } else if (dir.exists(model.sup_file_name)) {
+                    if (checksum_ok(model.sup_checksum,
+                                    model.sup_checksum_quick,
+                                    model.sup_file_name)) {
                         model.exists = true;
                     }
                 }
@@ -1548,6 +1564,10 @@ QString models_manager::file_name_from_id(const QString& id,
 
 QString models_manager::scorer_file_name_from_id(const QString& id) {
     return id + ".scorer";
+}
+
+QString models_manager::vocoder_file_name_from_id(const QString& id) {
+    return id + "_vocoder";
 }
 
 QString models_manager::model_path(const QString& file_name) {

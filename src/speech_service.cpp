@@ -604,13 +604,12 @@ speech_service::choose_model_config_by_id(
             case engine_t::stt:
                 config->stt = stt_model_config_t{
                     model.lang_id,    model.id,          model.engine,
-                    model.model_file, model.scorer_file, /*ttt=*/{}};
+                    model.model_file, model.sup_file, /*ttt=*/{}};
                 break;
             case engine_t::tts:
-                config->tts =
-                    tts_model_config_t{model.lang_id,       model.id,
-                                       model.engine,        model.model_file,
-                                       /*vocoder_file=*/{}, model.speaker};
+                config->tts = tts_model_config_t{
+                    model.lang_id,    model.id,          model.engine,
+                    model.model_file, model.sup_file, model.speaker};
                 break;
             case engine_t::mnt:
                 config->mnt = mnt_model_config_t{model.lang_id,
@@ -698,13 +697,13 @@ speech_service::choose_model_config_by_lang(
                 config->stt = stt_model_config_t{
                     best_model->lang_id,     best_model->id,
                     best_model->engine,      best_model->model_file,
-                    best_model->scorer_file, /*ttt=*/{}};
+                    best_model->sup_file, /*ttt=*/{}};
                 break;
             case engine_t::tts:
                 config->tts = tts_model_config_t{
-                    best_model->lang_id, best_model->id,
-                    best_model->engine,  best_model->model_file,
-                    /*vocoder_file=*/{}, best_model->speaker};
+                    best_model->lang_id,     best_model->id,
+                    best_model->engine,      best_model->model_file,
+                    best_model->sup_file, best_model->speaker};
                 break;
             case engine_t::mnt:
                 break;
@@ -734,13 +733,12 @@ speech_service::choose_model_config_by_first(
             case engine_t::stt:
                 config->stt = stt_model_config_t{
                     model.lang_id,    model.id,          model.engine,
-                    model.model_file, model.scorer_file, /*ttt=*/{}};
+                    model.model_file, model.sup_file, /*ttt=*/{}};
                 break;
             case engine_t::tts:
-                config->tts =
-                    tts_model_config_t{model.lang_id,       model.id,
-                                       model.engine,        model.model_file,
-                                       /*vocoder_file=*/{}, model.speaker};
+                config->tts = tts_model_config_t{
+                    model.lang_id,    model.id,          model.engine,
+                    model.model_file, model.sup_file, model.speaker};
                 break;
             case engine_t::mnt:
                 break;

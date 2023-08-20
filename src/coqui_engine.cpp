@@ -62,7 +62,8 @@ static std::string replace_all(std::string str, const std::string& from,
 }
 
 std::string coqui_engine::fix_config_file(const std::string& config_file,
-                                          const std::string& dir) {
+                                          const std::string& dir,
+                                          bool vocoder) {
     std::string path_to_replace = [&] {
         try {
             auto json = simdjson::padded_string::load(config_file);
@@ -133,10 +134,11 @@ std::string coqui_engine::fix_config_file(const std::string& config_file,
 
     config_data = replace_all(config_data, path_to_replace, dir);
 
-    std::ofstream out_file{config_temp_file, std::ios::out};
+    std::ofstream out_file{
+        vocoder ? vocoder_config_temp_file : config_temp_file, std::ios::out};
     out_file << config_data;
 
-    return config_temp_file;
+    return vocoder ? vocoder_config_temp_file : config_temp_file;
 }
 
 void coqui_engine::create_model() {
@@ -163,13 +165,18 @@ void coqui_engine::create_model() {
 
               LOGD("model files: " << model_file << " " << config_file);
 
-              config_file =
-                  fix_config_file(config_file, m_config.model_files.model_path);
+              config_file = fix_config_file(
+                  config_file, m_config.model_files.model_path, false);
 
               auto vocoder_model_file =
                   first_file_with_ext(m_config.model_files.vocoder_path, "pth");
               auto vocoder_config_file = first_file_with_ext(
                   m_config.model_files.vocoder_path, "json");
+
+              if (!vocoder_config_file.empty())
+                  vocoder_config_file =
+                      fix_config_file(vocoder_config_file,
+                                      m_config.model_files.vocoder_path, true);
 
               try {
                   auto api = py::module_::import("TTS.api");
