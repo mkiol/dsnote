@@ -59,7 +59,7 @@ Following languages are supported:
 | id          | Indonesian    | ● (e)                | ●                 |                |                 |                   | ●                | ●                | ●               |                   |
 | is          | Icelandic     |                      | ● (e)             |                | ●               |                   | ●                |                  | ●               | ●                 |
 | it          | Italian       | ●                    | ●                 | ●              | ●               |                   | ●                |                  | ●               | ●                 |
-| ja          | Japanese      |                      | ●                 | ●              |                 |                   | ●                |                  |                 |                   |
+| ja          | Japanese      |                      | ●                 | ●              |                 |                   | ●                |                  | ●               |                   |
 | ka          | Georgian      |                      | ● (e)             |                | ●               | ●                 | ●                |                  |                 |                   |
 | kk          | Kazakh        |                      | ● (e)             | ●              | ●               |                   | ●                |                  | ●               |                   |
 | ko          | Korean        |                      | ● (e)             | ●              |                 |                   | ●                |                  | ●               |                   |
