@@ -104,11 +104,9 @@ ApplicationWindow {
     }
 
     PlaceholderLabel {
-        enabled: (_settings.translator_mode && !app.mnt_configured) ||
-                 (!_settings.translator_mode && !app.stt_configured && !app.tts_configured && app.note.length === 0)
-        offset: _settings.translator_mode ? translator.verticalMode ? -(panel.height+translator.translatedNoteTextArea.height-2*appWin.padding):
-                                                                      -panel.height : -panel.height
-        text: _settings.translator_mode ? translator.placeholderText : notepad.placeholderText
+        enabled: !_settings.translator_mode && !app.stt_configured && !app.tts_configured && app.note.length === 0
+        offset: -panel.height
+        text: notepad.placeholderText
     }
 
     ToastNotification {
