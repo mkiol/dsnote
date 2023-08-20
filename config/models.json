@@ -6373,6 +6373,27 @@
             "size": "100893027"
         },
         {
+            "name": "Español (Coqui Mai Female)",
+            "model_id": "es_coqui_tacotron_mai",
+            "engine": "tts_coqui",
+            "lang_id": "es",
+            "checksum": "44b44288",
+            "checksum_quick": "2ce047c0",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--es--mai--tacotron2-DDC.zip"
+            ],
+            "size": "575073503",
+            "vocoder_file_name": "universal_libri-tts_fullband-melgan_vocoder",
+            "vocoder_checksum": "36e4d6eb",
+            "vocoder_checksum_quick": "2918b685",
+            "vocoder_comp": "zip",
+            "vocoder_urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/vocoder_models--universal--libri-tts--fullband-melgan.zip"
+            ],
+            "vocoder_size": "108861870"
+        },
+        {
             "name": "Français (Coqui CSS100 VITS Male)",
             "model_id": "fr_coqui_css100_vits",
             "engine": "tts_coqui",
@@ -6399,8 +6420,8 @@
             "size": "100773001"
         },
         {
-            "name": "中文 (Coqui Baker Tacotron Female)",
-            "model_id": "zh_coqui_baker_tacotron",
+            "name": "中文 (Coqui Baker Female)",
+            "model_id": "zh_coqui_tacotron_baker",
             "engine": "tts_coqui",
             "lang_id": "zh",
             "checksum": "625b3989",
@@ -6436,6 +6457,26 @@
                 "https://dl.fbaipublicfiles.com/mms/tts/nan.tar.gz"
             ],
             "size": "134880972"
+        },
+        {
+            "name": "日本語 (Coqui Kokoro Male)",
+            "model_id": "ja_coqui_tacotron_kokoro",
+            "engine": "tts_coqui",
+            "lang_id": "ja",
+            "checksum": "99032eb4",
+            "checksum_quick": "4f01ec4d",
+            "comp": "zip",
+            "urls": [
+                "https://github.com/coqui-ai/TTS/releases/download/v0.6.1_models/tts_models--ja--kokoro--tacotron2-DDC.zip"
+            ],
+            "size": "575427975",
+            "vocoder_checksum": "47db2e01",
+            "vocoder_checksum_quick": "c20707fb",
+            "vocoder_comp": "zip",
+            "vocoder_urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/vocoder_models--ja--kokoro--hifigan_v1.zip"
+            ],
+            "vocoder_size": "860303819"
         },
         {
             "name": "Nederlands (Coqui CSS100 VITS Male)",
@@ -6794,7 +6835,7 @@
             "engine": "tts_coqui",
             "lang_id": "pt",
             "checksum": "669c15bb",
-            "checksum_quick": "80dcfc8",
+            "checksum_quick": "380dcfc8",
             "comp": "targz",
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/por.tar.gz"
@@ -6906,19 +6947,6 @@
             "size": "134879575"
         },
         {
-            "name": "বাংলা (Coqui VITS Male)",
-            "model_id": "bn_coqui_custom_vits_male",
-            "engine": "tts_coqui",
-            "lang_id": "bn",
-            "checksum": "f08909f1",
-            "checksum_quick": "3200a2bc",
-            "comp": "zip",
-            "urls": [
-                "https://coqui.gateway.scarf.sh/v0.13.3_models/tts_models--bn--custom--vits_male.zip"
-            ],
-            "size": "916904237"
-        },
-        {
             "name": "Tiếng Việt (Coqui MMS Male)",
             "model_id": "vi_coqui_fairseq_vie",
             "engine": "tts_coqui",
@@ -6943,6 +6971,39 @@
                 "https://dl.fbaipublicfiles.com/mms/tts/tat.tar.gz"
             ],
             "size": "134870686"
+        },
+        {
+            "name": "Türkçe (Coqui Glow Male)",
+            "model_id": "tr_coqui_glow_cv",
+            "engine": "tts_coqui",
+            "lang_id": "tr",
+            "checksum": "ce7bce5e",
+            "checksum_quick": "16404d53",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--tr--common-voice--glow-tts.zip"
+            ],
+            "size": "343617301",
+            "vocoder_checksum": "da0648b3",
+            "vocoder_checksum_quick": "bdcdef58",
+            "vocoder_comp": "zip",
+            "vocoder_urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/vocoder_models--tr--common-voice--hifigan.zip"
+            ],
+            "vocoder_size": "1016387791"
+        },
+        {
+            "name": "Türkçe (Coqui MMS Male)",
+            "model_id": "tr_coqui_fairseq_tur",
+            "engine": "tts_coqui",
+            "lang_id": "tr",
+            "checksum": "38f45b64",
+            "checksum_quick": "1f409983",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/tur.tar.gz"
+            ],
+            "size": "134861899"
         },
         {
             "name": "Català (Coqui VITS)",
