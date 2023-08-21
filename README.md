@@ -190,14 +190,44 @@ sfdk package
 - [libarchive](https://libarchive.org/)
 - [RNNoise-nu](https://github.com/GregorR/rnnoise-nu)
 - [{fmt}](https://fmt.dev)
-- [🤗 Transformers](https://github.com/huggingface/transformers)
+- [Hugging Face Transformers](https://github.com/huggingface/transformers)
 - [Piper](https://github.com/rhasspy/piper)
 - [RHVoice](https://github.com/RHVoice/RHVoice)
 - [ssplit-cpp](https://github.com/ugermann/ssplit-cpp)
 - [espeak-ng](https://github.com/espeak-ng/espeak-ng)
 - [bergamot-translator](https://github.com/browsermt/bergamot-translator)
+- [Rubber Band Library](https://breakfastquay.com/rubberband)
+- [simdjson](https://simdjson.org/)
+- [uroman](https://github.com/isi-nlp/uroman)
 
 ## License
 
-**Speech Note** is developed as an open source project under
+**Speech Note** is an open source project. Source code is released under the
 [Mozilla Public License Version 2.0](https://www.mozilla.org/MPL/2.0/).
+
+3rd party libriaries:
+
+- **Coqui STT**, released under the
+[Mozilla Public License Version 2.0](https://raw.githubusercontent.com/coqui-ai/STT/main/LICENSE)
+- **Coqui TTS**, released under the
+[Mozilla Public License Version 2.0](https://raw.githubusercontent.com/coqui-ai/TTS/dev/LICENSE.txt)
+- **Vosk API**, released uder the [Apache License 2.0](https://raw.githubusercontent.com/alphacep/vosk-api/master/COPYING)
+- **whisper.cpp**, released under the [MIT License](https://raw.githubusercontent.com/ggerganov/whisper.cpp/master/LICENSE)
+- **WebRTC**, released under [this license](https://webrtc.googlesource.com/src/+/refs/heads/main/LICENSE)
+- **libarchive**, released under the [BSD License](https://raw.githubusercontent.com/libarchive/libarchive/master/COPYING)
+- **RNNoise-nu**, released under the [BSD 3-Clause License](https://raw.githubusercontent.com/GregorR/rnnoise-nu/master/COPYING)
+- **{fmt}**, released uder [this license](https://raw.githubusercontent.com/fmtlib/fmt/master/LICENSE.rst)
+- **Hugging Face Transformers**, released under the [Apache License 2.0](https://raw.githubusercontent.com/huggingface/transformers/main/LICENSE)
+- **Piper**, released under the [MIT License](https://raw.githubusercontent.com/rhasspy/piper/master/LICENSE.md)
+- **RHVoice**, released under the [GNU General Public License v2.0](https://raw.githubusercontent.com/RHVoice/RHVoice/master/LICENSE.md)
+- **ssplit-cpp**, released under the [Apache License 2.0](https://github.com/ugermann/ssplit-cpp/raw/master/LICENSE.md)
+- **espeak-ng**, released under the [GNU General Public License v3.0](https://raw.githubusercontent.com/espeak-ng/espeak-ng/master/COPYING)
+- **bergamot-translator**, released under the [Mozilla Public License 2.0](https://raw.githubusercontent.com/browsermt/bergamot-translator/main/LICENSE)
+- **Rubber Band Library**, released under the [GNU General Public License (version 2 or later)](https://breakfastquay.com/rubberband/license.html)
+- **simdjson**, released under the [Apache License 2.0](https://github.com/simdjson/simdjson/raw/master/LICENSE)
+- **uroman**, released under the [this license](https://github.com/isi-nlp/uroman/raw/master/LICENSE.txt)
+
+The files in the directory `nonbreaking_prefixes` were copied from 
+[mosesdecoder](https://github.com/moses-smt/mosesdecoder) project and distributed under the
+[GNU Lesser General Public License v2.1](https://github.com/moses-smt/mosesdecoder/raw/master/COPYING).
+

@@ -81,8 +81,11 @@ set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_conf_version "26")
-set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · Åke Engelbrektson · L'Africain · Albano Battistella")
-set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · {fmt} · Piper · RHVoice · ssplit-cpp · eSpeak NG · Bergamot Translator")
+set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
+Åke Engelbrektson · L'Africain · Albano Battistella")
+set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
+{fmt} · Piper · RHVoice · ssplit-cpp · eSpeak NG · Bergamot Translator · \
+Rubber Band Library · simdjson · uroman")
 
 project(${id} VERSION 4.1.0)
 
@@ -102,9 +105,6 @@ endif()
 if (WITH_PY)
     if (arch_x8664)
         set(info_libs_str "${info_libs_str} · Hugging Face Transformers · Coqui TTS")
-    endif()
-    if (arch_arm64)
-        set(info_libs_str "${info_libs_str} · Hugging Face Transformers")
     endif()
 endif()
 
