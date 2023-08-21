@@ -3970,7 +3970,7 @@
             "size": "63118694"
         },
         {
-            "name": "English British (VCTK Medium Female)",
+            "name": "English British (VCTK Medium)",
             "model_id": "en_piper_gb_vctk_medium",
             "engine": "tts_piper",
             "lang_id": "en",
@@ -3987,140 +3987,140 @@
         {
             "name": "English British (VCTK 0 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_0",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "0"
         },
         {
             "name": "English British (VCTK 1 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_1",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "1"
         },
         {
             "name": "English British (VCTK 2 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_2",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "2"
         },
         {
             "name": "English British (VCTK 3 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_3",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "3"
         },
         {
             "name": "English British (VCTK 4 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_4",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "4"
         },
         {
             "name": "English British (VCTK 5 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_5",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "5"
         },
         {
             "name": "English British (VCTK 6 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_6",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "6"
         },
         {
             "name": "English British (VCTK 7 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_7",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "7"
         },
         {
             "name": "English British (VCTK 8 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_8",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "8"
         },
         {
             "name": "English British (VCTK 10 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_10",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "10"
         },
         {
             "name": "English British (VCTK 11 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_11",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "11"
         },
         {
             "name": "English British (VCTK 12 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_12",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "12"
         },
         {
             "name": "English British (VCTK 13 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_13",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "13"
         },
         {
             "name": "English British (VCTK 14 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_14",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "14"
         },
         {
             "name": "English British (VCTK 15 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_15",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "15"
         },
         {
             "name": "English British (VCTK 16 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_16",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "16"
         },
         {
             "name": "English British (VCTK 17 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_17",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "17"
         },
         {
             "name": "English British (VCTK 18 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_18",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "18"
         },
         {
             "name": "English British (VCTK 19 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_19",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "19"
         },
         {
             "name": "English British (VCTK 20 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_20",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "20"
         },
