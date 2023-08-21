@@ -476,8 +476,9 @@ class speech_service : public QObject, public singleton<speech_service> {
     Q_INVOKABLE int SttTranscribeFile(const QString &file, const QString &lang,
                                       const QString &out_lang);
     Q_INVOKABLE double SttGetFileTranscribeProgress(int task);
-    Q_INVOKABLE int TtsPlaySpeech(const QString &text, const QString &lang,
-                                  const QVariantMap &options);
+    Q_INVOKABLE int TtsPlaySpeech(const QString &text, const QString &lang);
+    Q_INVOKABLE int TtsPlaySpeech2(const QString &text, const QString &lang,
+                                   const QVariantMap &options);
     Q_INVOKABLE int TtsStopSpeech(int task);
     Q_INVOKABLE int TtsSpeechToFile(const QString &text, const QString &lang,
                                     const QVariantMap &options);

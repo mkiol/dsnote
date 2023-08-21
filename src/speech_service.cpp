@@ -2856,9 +2856,16 @@ int speech_service::KeepAliveTask(int task) {
     return 0;
 }
 
-int speech_service::TtsPlaySpeech(const QString &text, const QString &lang,
-                                  const QVariantMap &options) {
+int speech_service::TtsPlaySpeech(const QString &text, const QString &lang) {
     qDebug() << "[dbus => service] called TtsPlaySpeech:" << lang;
+    start_keepalive_current_task();
+
+    return tts_play_speech(text, lang, QVariantMap{});
+}
+
+int speech_service::TtsPlaySpeech2(const QString &text, const QString &lang,
+                                   const QVariantMap &options) {
+    qDebug() << "[dbus => service] called TtsPlaySpeech2:" << lang;
     start_keepalive_current_task();
 
     return tts_play_speech(text, lang, options);
