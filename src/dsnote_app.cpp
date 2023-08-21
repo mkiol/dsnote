@@ -727,7 +727,9 @@ void dsnote_app::handle_mnt_translate_finished(
         qDebug() << "[dbus => app] signal MntTranslateFinished:" << task;
     }
 
+#ifdef DEBUG
     qDebug() << "translated text:" << out_text;
+#endif
 
     set_translated_text(out_text);
 }

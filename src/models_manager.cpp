@@ -1400,12 +1400,14 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             /*available=*/available,
             /*downloading=*/false};
 
-        if (!model.exists && dir.exists(model.file_name)) {
+        if (!model.exists && !model.file_name.isEmpty() &&
+            dir.exists(model.file_name)) {
             if (checksum_ok(model.checksum, model.checksum_quick,
                             model.file_name)) {
                 if (model.sup_urls.empty()) {
                     model.exists = true;
-                } else if (dir.exists(model.sup_file_name)) {
+                } else if (!model.sup_file_name.isEmpty() &&
+                           dir.exists(model.sup_file_name)) {
                     if (checksum_ok(model.sup_checksum,
                                     model.sup_checksum_quick,
                                     model.sup_file_name)) {
