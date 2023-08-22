@@ -4125,6 +4125,76 @@
             "speaker": "20"
         },
         {
+            "name": "English British (VCTK P329 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_21",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "21"
+        },
+        {
+            "name": "English British (VCTK P361 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_22",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "22"
+        },
+        {
+            "name": "English British (VCTK P287 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_23",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "23"
+        },
+        {
+            "name": "English British (VCTK P360 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_24",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "24"
+        },
+        {
+            "name": "English British (VCTK P374 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_25",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "25"
+        },
+        {
+            "name": "English British (VCTK P376 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_26",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "26"
+        },
+        {
+            "name": "English British (VCTK P310 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_27",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "27"
+        },
+        {
+            "name": "English British (VCTK P304 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_28",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "28"
+        },
+        {
+            "name": "English British (VCTK P334 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_29",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "29"
+        },
+        {
+            "name": "English British (VCTK P340 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_30",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "30"
+        },
+        {
             "name": "Català (Piper Upc Ona Low Female)",
             "model_id": "ca_piper_upc_ona_low",
             "engine": "tts_piper",
