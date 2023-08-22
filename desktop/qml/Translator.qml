@@ -173,7 +173,6 @@ ColumnLayout {
                 background: Item {}
                 bottomPadding: 0
                 leftPadding: grid.verticalMode ? horizontalPadding : 0
-                enabled: app.mnt_configured
 
                 ScrollTextArea {
                     id: _translatedNoteTextArea
@@ -189,12 +188,16 @@ ColumnLayout {
                     canRedo: false
                     canPaste: false
                     textArea {
-                        //placeholderText: qsTr("Translation")
                         onTextChanged: {
                             app.translated_text = root.translatedNoteTextArea.textArea.text
                         }
                     }
                     onCopyClicked: app.copy_translation_to_clipboard()
+                }
+
+                PlaceholderLabel {
+                    enabled: !app.mnt_configured
+                    text: root.placeholderText
                 }
             }
 

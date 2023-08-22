@@ -204,6 +204,7 @@ DialogPage {
             ToolTip.visible: hovered && !pressed
             ToolTip.text: qsTr("Change to make synthesized speech slower or faster.")
 
+            Layout.fillWidth: verticalMode
             Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
             snapMode: Slider.SnapAlways
             stepSize: 1
@@ -260,33 +261,34 @@ DialogPage {
     }
 
     SectionLabel {
-        text: qsTr("Other")
+        text: qsTr("Interface")
     }
 
     GridLayout {
-        columns: root.verticalMode ? 1 : 3
+        columns: root.verticalMode ? 1 : 2
         columnSpacing: appWin.padding
         rowSpacing: appWin.padding
 
         Label {
-            text: qsTr("Location of language files")
-        }
-        TextField {
             Layout.fillWidth: true
-            text: _settings.models_dir
-            enabled: false
-
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered
-            ToolTip.text: _settings.models_dir
+            text: qsTr("Font size in text editor")
         }
-        Button {
-            text: qsTr("Change")
-            onClicked: directoryDialog.open()
-
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
+        SpinBox {
+            Layout.fillWidth: verticalMode
+            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            from: 5
+            to: 25
+            stepSize: 1
+            value: _settings.font_size
+            textFromValue: function(value) {
+                return value.toString() + " px"
+            }
+            valueFromText: function(text) {
+                return parseInt(text);
+            }
+            onValueChanged: {
+                _settings.font_size = value;
+            }
         }
     }
 
@@ -324,6 +326,37 @@ DialogPage {
         visible: _settings.restart_required
         color: "red"
         text: qsTr("Restart an application to apply changes.")
+    }
+
+    SectionLabel {
+        text: qsTr("Other")
+    }
+
+    GridLayout {
+        columns: root.verticalMode ? 1 : 3
+        columnSpacing: appWin.padding
+        rowSpacing: appWin.padding
+
+        Label {
+            text: qsTr("Location of language files")
+        }
+        TextField {
+            Layout.fillWidth: true
+            text: _settings.models_dir
+            enabled: false
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: _settings.models_dir
+        }
+        Button {
+            text: qsTr("Change")
+            onClicked: directoryDialog.open()
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
+        }
     }
 
     Dialogs.FileDialog {

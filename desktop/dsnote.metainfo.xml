@@ -6,7 +6,7 @@
   <project_license>MPL-2.0</project_license>
   <developer_name>Michal Kosciesza</developer_name>
   <name>Speech Note</name>
-  <summary>Note taking, reading and translating with Speech to Text, Text to Speech and Machine Translation</summary>
+  <summary>Note taking, reading and translating with ofline Speech to Text, Text to Speech and Machine Translation</summary>
   <description>
     <p>Speech Note let you take, read and translate notes in multiple languages.
       It uses Speech to Text, Text to Speech and Machine Translation to do so.
@@ -61,14 +61,14 @@
   <launchable type="desktop-id">net.mkiol.SpeechNote.desktop</launchable>
   <content_rating type="oars-1.1" />
   <releases>
-    <release version="4.1.0" date="2023-08-19">
+    <release version="4.1.0" date="2023-08-22">
       <description>
       <p>Speech to Text:</p>
       <ul>
       <li>Support for GPU acceleration for Whisper models.
           If a suitable GPU device is found in the system, it will be used to accelerate processing.
           This significantly reduces the time of decoding (usually 2 times or more).
-          GPU hardware acceleration is not enabled by dafault. Use the option in <i>Settings</i> to turn it on.
+          GPU hardware acceleration is not enabled by default. Use the option in <i>Settings</i> to turn it on.
           Disable, if you observe any problems when using Speech to Text with Whisper models.
       </li>
       <li>Fix: Whisper model wasn't able to decode short speech sentences.</li>
@@ -82,8 +82,14 @@
           Kazakh, Korean, Latin, Latvian, Malay, Mongolian, Polish, Portuguese, Swahili, Tagalog, Tatar, Thai,
           Turkish, Uzbek, Vietnamese and Yoruba.
           If you would like any other MMS model to be included, please let us know.</li>
-      <li>New Piper voices for: Czech, German, Hungarian, Portuguese and Slovak.</li>
+      <li>New Coqui voices for: Japanese, Turkish and Spanish.</li>
+      <li>New Piper voices for: Czech, German, Hungarian, Portuguese, Slovak and English.</li>
       <li>Update of RHVoice voices for Slovak and Czech.</li>
+      <li>Fix: Splitting text into sentences was incorrect for: Georgian, Japanese, Bengali, Nepali and Hindi.</li>
+      </ul>
+      <p>Interface:</p>
+      <ul>
+      <li>Option to change font size in text editor</li>
       </ul>
       </description>
     </release>

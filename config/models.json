@@ -3578,7 +3578,7 @@
             "size": "52979372"
         },
         {
-            "name": "Punctuation (Kredor)",
+            "name": "Punctuation",
             "model_id": "multilang_hftc_kredor",
             "engine": "ttt_hftc",
             "lang_id": "multilang",
@@ -3594,97 +3594,97 @@
             "hidden": true
         },
         {
-            "name": "Punctuation (Kredor)",
+            "name": "Punctuation",
             "model_id": "en_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "en"
         },
         {
-            "name": "Zeichensetzung (Kredor)",
+            "name": "Zeichensetzung",
             "model_id": "de_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "de"
         },
         {
-            "name": "Ponctuation (Kredor)",
+            "name": "Ponctuation",
             "model_id": "fr_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "fr"
         },
         {
-            "name": "Puntuación (Kredor)",
+            "name": "Puntuación",
             "model_id": "es_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "es"
         },
         {
-            "name": "Punteggiatura (Kredor)",
+            "name": "Punteggiatura",
             "model_id": "it_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "it"
         },
         {
-            "name": "Interpunkcja (Kredor)",
+            "name": "Interpunkcja",
             "model_id": "pl_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "pl"
         },
         {
-            "name": "Leestekens (Kredor)",
+            "name": "Leestekens",
             "model_id": "nl_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "nl"
         },
         {
-            "name": "Interpunkce (Kredor)",
+            "name": "Interpunkce",
             "model_id": "cs_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "cs"
         },
         {
-            "name": "Pontuação (Kredor)",
+            "name": "Pontuação",
             "model_id": "pt_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "pt"
         },
         {
-            "name": "Interpunkcija (Kredor)",
+            "name": "Interpunkcija",
             "model_id": "sl_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "sl"
         },
         {
-            "name": "Στίξη (Kredor)",
+            "name": "Στίξη",
             "model_id": "el_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "el"
         },
         {
-            "name": "Interpunktion (Kredor)",
+            "name": "Interpunktion",
             "model_id": "sv_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "sv"
         },
         {
-            "name": "Szótagolás (Kredor)",
+            "name": "Szótagolás",
             "model_id": "hu_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "hu"
         },
         {
-            "name": "Punctuație (Kredor)",
+            "name": "Punctuație",
             "model_id": "ro_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "ro"
         },
         {
-            "name": "Interpunkcia (Kredor)",
+            "name": "Interpunkcia",
             "model_id": "sk_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "sk"
         },
         {
-            "name": "Tegnsætning (Kredor)",
+            "name": "Tegnsætning",
             "model_id": "da_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "da"
@@ -3883,7 +3883,8 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alan/low/en_GB-alan-low.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alan/low/en_GB-alan-low.onnx.json"
             ],
-            "size": "63118675"
+            "size": "63118675",
+            "hidden": true
         },
         {
             "name": "English British (Piper Alan Medium Male)",
@@ -3897,7 +3898,8 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alan/medium/en_GB-alan-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alan/medium/en_GB-alan-medium.onnx.json"
             ],
-            "size": "63216499"
+            "size": "63216499",
+            "hidden": true
         },
         {
             "name": "English British (Piper Alba Medium Female)",
@@ -3970,7 +3972,7 @@
             "size": "63118694"
         },
         {
-            "name": "English British (VCTK Medium Female)",
+            "name": "English British (VCTK Medium)",
             "model_id": "en_piper_gb_vctk_medium",
             "engine": "tts_piper",
             "lang_id": "en",
@@ -3985,144 +3987,214 @@
             "hidden": true
         },
         {
-            "name": "English British (VCTK 0 Medium Female)",
+            "name": "English British (VCTK P239 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_0",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "0"
         },
         {
-            "name": "English British (VCTK 1 Medium Female)",
+            "name": "English British (VCTK P236 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_1",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "1"
         },
         {
-            "name": "English British (VCTK 2 Medium Female)",
+            "name": "English British (VCTK P264 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_2",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "2"
         },
         {
-            "name": "English British (VCTK 3 Medium Female)",
+            "name": "English British (VCTK P250 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_3",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "3"
         },
         {
-            "name": "English British (VCTK 4 Medium Female)",
+            "name": "English British (VCTK P256 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_4",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "4"
         },
         {
-            "name": "English British (VCTK 5 Medium Male)",
+            "name": "English British (VCTK P247 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_5",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "5"
         },
         {
-            "name": "English British (VCTK 6 Medium Female)",
+            "name": "English British (VCTK P261 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_6",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "6"
         },
         {
-            "name": "English British (VCTK 7 Medium Male)",
+            "name": "English British (VCTK P263 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_7",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "7"
         },
         {
-            "name": "English British (VCTK 8 Medium Female)",
+            "name": "English British (VCTK P283 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_8",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "8"
         },
         {
-            "name": "English British (VCTK 10 Medium Male)",
+            "name": "English British (VCTK P274 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_10",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "10"
         },
         {
-            "name": "English British (VCTK 11 Medium Female)",
+            "name": "English British (VCTK P276 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_11",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "11"
         },
         {
-            "name": "English British (VCTK 12 Medium Male)",
+            "name": "English British (VCTK P270 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_12",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "12"
         },
         {
-            "name": "English British (VCTK 13 Medium Male)",
+            "name": "English British (VCTK P281 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_13",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "13"
         },
         {
-            "name": "English British (VCTK 14 Medium Female)",
+            "name": "English British (VCTK P277 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_14",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "14"
         },
         {
-            "name": "English British (VCTK 15 Medium Female)",
+            "name": "English British (VCTK P231 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_15",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "15"
         },
         {
-            "name": "English British (VCTK 16 Medium Male)",
+            "name": "English British (VCTK P271 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_16",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "16"
         },
         {
-            "name": "English British (VCTK 17 Medium Female)",
+            "name": "English British (VCTK P238 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_17",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "17"
         },
         {
-            "name": "English British (VCTK 18 Medium Female)",
+            "name": "English British (VCTK P257 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_18",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "18"
         },
         {
-            "name": "English British (VCTK 19 Medium Male)",
+            "name": "English British (VCTK P273 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_19",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "19"
         },
         {
-            "name": "English British (VCTK 20 Medium Male)",
+            "name": "English British (VCTK P284 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_20",
-            "model_alias_of": "en_piper_vctk_medium",
+            "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "20"
+        },
+        {
+            "name": "English British (VCTK P329 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_21",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "21"
+        },
+        {
+            "name": "English British (VCTK P361 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_22",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "22"
+        },
+        {
+            "name": "English British (VCTK P287 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_23",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "23"
+        },
+        {
+            "name": "English British (VCTK P360 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_24",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "24"
+        },
+        {
+            "name": "English British (VCTK P374 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_25",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "25"
+        },
+        {
+            "name": "English British (VCTK P376 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_26",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "26"
+        },
+        {
+            "name": "English British (VCTK P310 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_27",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "27"
+        },
+        {
+            "name": "English British (VCTK P304 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_28",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "28"
+        },
+        {
+            "name": "English British (VCTK P334 Medium Male)",
+            "model_id": "en_piper_gb_vctk_medium_29",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "29"
+        },
+        {
+            "name": "English British (VCTK P340 Medium Female)",
+            "model_id": "en_piper_gb_vctk_medium_30",
+            "model_alias_of": "en_piper_gb_vctk_medium",
+            "lang_id": "en",
+            "speaker": "30"
         },
         {
             "name": "Català (Piper Upc Ona Low Female)",
@@ -4622,6 +4694,7 @@
             "model_id": "ka_piper_natia_medium",
             "engine": "tts_piper",
             "lang_id": "ka",
+            "options": "a",
             "checksum": "2c0471b7",
             "checksum_quick": "e9de6e2a",
             "comp": "dir",
@@ -4692,6 +4765,7 @@
             "model_id": "ne_piper_google_medium",
             "engine": "tts_piper",
             "lang_id": "ne",
+            "options": "a",
             "checksum": "ccd22d43",
             "checksum_quick": "b03e422f",
             "comp": "dir",
@@ -5071,6 +5145,7 @@
             "model_id": "zh_piper_huayan_low",
             "engine": "tts_piper",
             "lang_id": "zh",
+            "options": "a",
             "checksum": "e830c9d4",
             "checksum_quick": "e8de6db6",
             "comp": "dir",
@@ -5085,6 +5160,7 @@
             "model_id": "zh_piper_huayan_medium",
             "engine": "tts_piper",
             "lang_id": "zh",
+            "options": "a",
             "checksum": "6ac9fe75",
             "checksum_quick": "660cbfa8",
             "comp": "dir",
@@ -5314,7 +5390,8 @@
             "name": "हिन्दी (Espeak Robot)",
             "model_id": "hi_espeak_hi",
             "engine": "tts_espeak",
-            "lang_id": "hi"
+            "lang_id": "hi",
+            "options": "a"
         },
         {
             "name": "Hrvatski (Espeak Robot)",
@@ -5384,6 +5461,7 @@
             "model_id": "ja_espeak_ja",
             "engine": "tts_espeak",
             "lang_id": "ja",
+            "options": "a",
             "speaker": "ja"
         },
         {
@@ -5452,7 +5530,8 @@
             "name": "नेपाली (Espeak Robot)",
             "model_id": "ne_espeak_ne",
             "engine": "tts_espeak",
-            "lang_id": "ne"
+            "lang_id": "ne",
+            "options": "a"
         },
         {
             "name": "Nederlands (Espeak Robot)",
@@ -5564,7 +5643,8 @@
             "name": "ไทย (Espeak Robot)",
             "model_id": "th_espeak_th",
             "engine": "tts_espeak",
-            "lang_id": "th"
+            "lang_id": "th",
+            "options": "a"
         },
         {
             "name": "Türkçe (Espeak Robot)",
@@ -5608,7 +5688,8 @@
             "name": "ქართული (Espeak Robot)",
             "model_id": "ka_espeak_ka",
             "engine": "tts_espeak",
-            "lang_id": "ka"
+            "lang_id": "ka",
+            "options": "a"
         },
         {
             "name": "Кыргыз (Espeak Robot)",
@@ -5648,24 +5729,27 @@
         },
         {
             "name": "广东话 (Espeak Robot)",
-            "model_id": "zh_CN_espeak_yue",
+            "model_id": "zh_espeak_yue",
             "engine": "tts_espeak",
-            "lang_id": "zh-CN",
-            "speaker": "yue"
+            "lang_id": "zh",
+            "speaker": "yue",
+            "options": "a"
         },
         {
             "name": "客家話 (Espeak Robot)",
-            "model_id": "zh_CN_espeak_hak",
+            "model_id": "zh_espeak_hak",
             "engine": "tts_espeak",
-            "lang_id": "zh-CN",
-            "speaker": "hak"
+            "lang_id": "zh",
+            "speaker": "hak",
+            "options": "a"
         },
         {
             "name": "官話 (Espeak Robot)",
-            "model_id": "zh_CN_espeak_cmn",
+            "model_id": "zh_espeak_cmn",
             "engine": "tts_espeak",
-            "lang_id": "zh-CN",
-            "speaker": "cmn"
+            "lang_id": "zh",
+            "speaker": "cmn",
+            "options": "a"
         },
         {
             "name": "Gaeilge (Espeak Robot)",
@@ -6031,6 +6115,7 @@
             "model_id": "ka_rhvoice_natia",
             "engine": "tts_rhvoice",
             "lang_id": "ka",
+            "options": "a",
             "speaker": "natia",
             "checksum": "639f4836",
             "checksum_quick": "34cec567",
@@ -6260,6 +6345,7 @@
             "model_id": "am_coqui_fairseq_amh",
             "engine": "tts_coqui",
             "lang_id": "am",
+            "options": "r",
             "checksum": "e75d9ae2",
             "checksum_quick": "fa0ee4e8",
             "comp": "targz",
@@ -6373,6 +6459,27 @@
             "size": "100893027"
         },
         {
+            "name": "Español (Coqui Mai Female)",
+            "model_id": "es_coqui_tacotron_mai",
+            "engine": "tts_coqui",
+            "lang_id": "es",
+            "checksum": "44b44288",
+            "checksum_quick": "2ce047c0",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--es--mai--tacotron2-DDC.zip"
+            ],
+            "size": "575073503",
+            "vocoder_file_name": "universal_libri-tts_fullband-melgan_vocoder",
+            "vocoder_checksum": "36e4d6eb",
+            "vocoder_checksum_quick": "2918b685",
+            "vocoder_comp": "zip",
+            "vocoder_urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/vocoder_models--universal--libri-tts--fullband-melgan.zip"
+            ],
+            "vocoder_size": "108861870"
+        },
+        {
             "name": "Français (Coqui CSS100 VITS Male)",
             "model_id": "fr_coqui_css100_vits",
             "engine": "tts_coqui",
@@ -6399,10 +6506,11 @@
             "size": "100773001"
         },
         {
-            "name": "中文 (Coqui Baker Tacotron Female)",
-            "model_id": "zh_coqui_baker_tacotron",
+            "name": "中文 (Coqui Baker Female)",
+            "model_id": "zh_coqui_tacotron_baker",
             "engine": "tts_coqui",
             "lang_id": "zh",
+            "options": "a",
             "checksum": "625b3989",
             "checksum_quick": "e50a019a",
             "comp": "zip",
@@ -6416,6 +6524,7 @@
             "model_id": "zh_coqui_fairseq_hak",
             "engine": "tts_coqui",
             "lang_id": "zh",
+            "options": "a",
             "checksum": "2012ade6",
             "checksum_quick": "d872b3d7",
             "comp": "targz",
@@ -6429,6 +6538,7 @@
             "model_id": "zh_coqui_fairseq_nan",
             "engine": "tts_coqui",
             "lang_id": "zh",
+            "options": "a",
             "checksum": "d9a50615",
             "checksum_quick": "c0af74c1",
             "comp": "targz",
@@ -6436,6 +6546,27 @@
                 "https://dl.fbaipublicfiles.com/mms/tts/nan.tar.gz"
             ],
             "size": "134880972"
+        },
+        {
+            "name": "日本語 (Coqui Kokoro Male)",
+            "model_id": "ja_coqui_tacotron_kokoro",
+            "engine": "tts_coqui",
+            "lang_id": "ja",
+            "options": "a",
+            "checksum": "99032eb4",
+            "checksum_quick": "4f01ec4d",
+            "comp": "zip",
+            "urls": [
+                "https://github.com/coqui-ai/TTS/releases/download/v0.6.1_models/tts_models--ja--kokoro--tacotron2-DDC.zip"
+            ],
+            "size": "575427975",
+            "vocoder_checksum": "47db2e01",
+            "vocoder_checksum_quick": "c20707fb",
+            "vocoder_comp": "zip",
+            "vocoder_urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/vocoder_models--ja--kokoro--hifigan_v1.zip"
+            ],
+            "vocoder_size": "860303819"
         },
         {
             "name": "Nederlands (Coqui CSS100 VITS Male)",
@@ -6533,6 +6664,7 @@
             "model_id": "hi_coqui_fairseq_hin",
             "engine": "tts_coqui",
             "lang_id": "hi",
+            "options": "a",
             "checksum": "42ec4372",
             "checksum_quick": "337af12d",
             "comp": "targz",
@@ -6663,6 +6795,7 @@
             "model_id": "ko_coqui_fairseq_kor",
             "engine": "tts_coqui",
             "lang_id": "ko",
+            "options": "r",
             "checksum": "8a01d151",
             "checksum_quick": "19a6025",
             "comp": "targz",
@@ -6794,7 +6927,7 @@
             "engine": "tts_coqui",
             "lang_id": "pt",
             "checksum": "669c15bb",
-            "checksum_quick": "80dcfc8",
+            "checksum_quick": "380dcfc8",
             "comp": "targz",
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/por.tar.gz"
@@ -6871,6 +7004,7 @@
             "model_id": "th_coqui_fairseq_tha",
             "engine": "tts_coqui",
             "lang_id": "th",
+            "options": "a",
             "checksum": "6881d7f6",
             "checksum_quick": "3f323a47",
             "comp": "targz",
@@ -6906,19 +7040,6 @@
             "size": "134879575"
         },
         {
-            "name": "বাংলা (Coqui VITS Male)",
-            "model_id": "bn_coqui_custom_vits_male",
-            "engine": "tts_coqui",
-            "lang_id": "bn",
-            "checksum": "f08909f1",
-            "checksum_quick": "3200a2bc",
-            "comp": "zip",
-            "urls": [
-                "https://coqui.gateway.scarf.sh/v0.13.3_models/tts_models--bn--custom--vits_male.zip"
-            ],
-            "size": "916904237"
-        },
-        {
             "name": "Tiếng Việt (Coqui MMS Male)",
             "model_id": "vi_coqui_fairseq_vie",
             "engine": "tts_coqui",
@@ -6943,6 +7064,40 @@
                 "https://dl.fbaipublicfiles.com/mms/tts/tat.tar.gz"
             ],
             "size": "134870686"
+        },
+        {
+            "name": "Türkçe (Coqui Glow Male)",
+            "model_id": "tr_coqui_glow_cv",
+            "engine": "tts_coqui",
+            "lang_id": "tr",
+            "options": "l",
+            "checksum": "ce7bce5e",
+            "checksum_quick": "16404d53",
+            "comp": "zip",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--tr--common-voice--glow-tts.zip"
+            ],
+            "size": "343617301",
+            "vocoder_checksum": "da0648b3",
+            "vocoder_checksum_quick": "bdcdef58",
+            "vocoder_comp": "zip",
+            "vocoder_urls": [
+                "https://coqui.gateway.scarf.sh/v0.6.1_models/vocoder_models--tr--common-voice--hifigan.zip"
+            ],
+            "vocoder_size": "1016387791"
+        },
+        {
+            "name": "Türkçe (Coqui MMS Male)",
+            "model_id": "tr_coqui_fairseq_tur",
+            "engine": "tts_coqui",
+            "lang_id": "tr",
+            "checksum": "38f45b64",
+            "checksum_quick": "1f409983",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/tur.tar.gz"
+            ],
+            "size": "134861899"
         },
         {
             "name": "Català (Coqui VITS)",
@@ -7038,6 +7193,7 @@
             "model_id": "bn_coqui_custom_vits_female",
             "engine": "tts_coqui",
             "lang_id": "bn",
+            "options": "a",
             "checksum": "fd5e75d0",
             "checksum_quick": "602cf81b",
             "comp": "zip",
@@ -7051,6 +7207,7 @@
             "model_id": "bn_coqui_custom_vits_male",
             "engine": "tts_coqui",
             "lang_id": "bn",
+            "options": "a",
             "checksum": "f08909f1",
             "checksum_quick": "3200a2bc",
             "comp": "zip",
@@ -7064,6 +7221,7 @@
             "model_id": "bn_coqui_fairseq_ben",
             "engine": "tts_coqui",
             "lang_id": "bn",
+            "options": "a",
             "checksum": "4396e718",
             "checksum_quick": "a2b9ac00",
             "comp": "targz",

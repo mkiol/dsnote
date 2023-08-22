@@ -7,6 +7,7 @@
 
 #include "py_executor.hpp"
 
+#include <cstdlib>
 #include <stdexcept>
 
 #include "logger.hpp"
@@ -55,6 +56,8 @@ std::future<std::string> py_executor::execute(task_t task) {
 
 void py_executor::loop() {
     LOGD("py executor loop started");
+
+    setenv("PYTHONIOENCODING", "utf-8", true);
 
 #ifdef USE_PYTHON_MODULE
     py_tools::init_module();

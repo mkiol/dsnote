@@ -23,7 +23,7 @@ DialogPage {
         <li>Support for GPU acceleration for Whisper models.
             If a suitable GPU device is found in the system, it will be used to accelerate processing.
             This significantly reduces the time of decoding (usually 2 times or more).
-            GPU hardware acceleration is not enabled by dafault. Use the option in <i>Settings</i> to turn it on.
+            GPU hardware acceleration is not enabled by default. Use the option in <i>Settings</i> to turn it on.
             Disable, if you observe any problems when using Speech to Text with Whisper models.
         </li>
         <li>Fix: Whisper model wasn't able to decode short speech sentences.</li>
@@ -38,8 +38,14 @@ DialogPage {
             Kazakh, Korean, Latin, Latvian, Malay, Mongolian, Polish, Portuguese, Swahili, Tagalog, Tatar, Thai,
             Turkish, Uzbek, Vietnamese and Yoruba.
             If you would like any other MMS model to be included, please let us know.</li>
-        <li>New Piper voices for: Czech, German, Hungarian, Portuguese and Slovak.</li>
+        <li>New Coqui voices for: Japanese, Turkish and Spanish.</li>
+        <li>New Piper voices for: Czech, German, Hungarian, Portuguese, Slovak and English.</li>
         <li>Update of RHVoice voices for Slovak and Czech.</li>
+        <li>Fix: Splitting text into sentences was incorrect for: Georgian, Japanese, Bengali, Nepali and Hindi.</li>
+        </ul>
+        <p>" + qsTr("Interface") + ":</p>
+        <ul>
+        <li>Option to change font size in text editor</li>
         </ul>"
     }
 

@@ -22,6 +22,7 @@ cleanup:
   - "/cmake"
   - "/etc"
   - "/man"
+  - "/dummy"
   - "/include"
   - "/lib/fst"
   - "/lib/cmake"
@@ -421,7 +422,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RHVoice/RHVoice.git
-        commit: f2c0c49f9c8c812aa766ec911e69b8a2cf0e505d
+        commit: 51759044ff1871310fc222e21c5655f960ebfca3
       - type: patch
         path: ../patches/rhvoice.patch
 

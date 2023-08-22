@@ -28,6 +28,8 @@ class coqui_engine : public tts_engine {
    private:
     inline static const auto* const config_temp_file =
         "/tmp/tmp_coqui_config.json";
+    inline static const auto* const vocoder_config_temp_file =
+        "/tmp/tmp_coqui_vocoder_config.json";
 
     std::optional<py::object> m_tts;
     std::optional<float> m_initial_length_scale;
@@ -39,7 +41,7 @@ class coqui_engine : public tts_engine {
                             const std::string& out_file) final;
     void stop();
     static std::string fix_config_file(const std::string& config_file,
-                                       const std::string& dir);
+                                       const std::string& dir, bool vocoder);
     std::string uroman(const std::string& text) const;
 };
 

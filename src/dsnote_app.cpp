@@ -727,7 +727,9 @@ void dsnote_app::handle_mnt_translate_finished(
         qDebug() << "[dbus => app] signal MntTranslateFinished:" << task;
     }
 
+#ifdef DEBUG
     qDebug() << "translated text:" << out_text;
+#endif
 
     set_translated_text(out_text);
 }
@@ -1446,7 +1448,7 @@ void dsnote_app::play_speech_internal(const QString &text,
     } else {
         qDebug() << "[app => dbus] call TtsPlaySpeech";
 
-        new_task = m_dbus_service.TtsPlaySpeech(text, model_id, options);
+        new_task = m_dbus_service.TtsPlaySpeech2(text, model_id, options);
     }
 
     m_primary_task.set(new_task);

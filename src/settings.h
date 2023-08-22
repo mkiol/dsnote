@@ -56,6 +56,8 @@ class settings : public QSettings, public singleton<settings> {
                    restart_required_changed)
     Q_PROPERTY(speech_speed_t speech_speed READ speech_speed WRITE
                    set_speech_speed NOTIFY speech_speed_changed)
+    Q_PROPERTY(int font_size READ font_size WRITE set_font_size NOTIFY
+                   font_size_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -162,6 +164,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_qt_style_idx(int value);
     bool restart_required() const;
     void set_restart_required();
+    void set_font_size(int value);
+    int font_size() const;
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -226,6 +230,7 @@ class settings : public QSettings, public singleton<settings> {
     void qt_style_idx_changed();
     void restart_required_changed();
     void speech_speed_changed();
+    void font_size_changed();
 
     // service
     void models_dir_changed();

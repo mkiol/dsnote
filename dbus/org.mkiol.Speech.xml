@@ -598,13 +598,28 @@
             TtsPlaySpeech:
             @text: text that should be encoded to speech
             @lang: language code (ISO 639-1) or model id
-            @options: A dict of options (option-name => option-value).
             @task: returned id of task which will be included in TtsPlaySpeechFinished signals,
                    @task less than 0 idicates an error
 
             Synthesizes speech from given text and plays it.
         -->
         <method name="TtsPlaySpeech">
+            <arg name="text" type="s" direction="in" />
+            <arg name="lang" type="s" direction="in" />
+            <arg name="task" type="i" direction="out" />
+        </method>
+
+        <!--
+            TtsPlaySpeech2:
+            @text: text that should be encoded to speech
+            @lang: language code (ISO 639-1) or model id
+            @options: A dict of options (option-name => option-value).
+            @task: returned id of task which will be included in TtsPlaySpeechFinished signals,
+                   @task less than 0 idicates an error
+
+            Synthesizes speech from given text and plays it.
+        -->
+        <method name="TtsPlaySpeech2">
             <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="QVariantMap"/>
             <arg name="text" type="s" direction="in" />
             <arg name="lang" type="s" direction="in" />

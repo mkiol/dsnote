@@ -1,5 +1,5 @@
 set(rhvoice_source_url "https://github.com/RHVoice/RHVoice.git")
-set(rhvoice_tag "f2c0c49f9c8c812aa766ec911e69b8a2cf0e505d")
+set(rhvoice_tag "51759044ff1871310fc222e21c5655f960ebfca3")
 
 ExternalProject_Add(rhvoice
     SOURCE_DIR ${external_dir}/rhvoice
