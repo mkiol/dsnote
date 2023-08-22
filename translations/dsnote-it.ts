@@ -745,22 +745,22 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="148"/>
         <source>If a suitable GPU device is found in the system, it will be used to accelerate processing.</source>
-        <translation>Se nel sistema viene trovato un dispositivo GPU adatto, verrà utilizzato per accelerare l&apos;elaborazione.</translation>
+        <translation>Se nel sistema viene trovato un dispositivo GPU adatto, verrà utilizzato per accelerare l'elaborazione.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="141"/>
         <source>Use GPU acceleration for Whisper</source>
-        <translation>Usa l&apos;accelerazione GPU per Whisper</translation>
+        <translation>Usa l'accelerazione GPU per Whisper</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="149"/>
         <source>GPU hardware acceleration significantly reduces the time of decoding.</source>
-        <translation>L&apos;accelerazione hardware della GPU riduce significativamente il tempo di decodifica.</translation>
+        <translation>L'accelerazione hardware della GPU riduce significativamente il tempo di decodifica.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="150"/>
         <source>Disable this option if you observe problems when using Speech to Text with Whisper models.</source>
-        <translation>L&apos;accelerazione hardware della GPU riduce significativamente il tempo di decodifica.</translation>
+        <translation>Disabilita questa opzione se riscontri problemi durante l'utilizzo di Speech to Text con modelli Whisper.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="158"/>
@@ -775,7 +775,7 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="182"/>
         <source>Select preferred GPU device for hardware acceleration.</source>
-        <translation>Seleziona il dispositivo GPU preferito per l&apos;accelerazione hardware.</translation>
+        <translation>Seleziona il dispositivo GPU preferito per l'accelerazione hardware.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="111"/>
