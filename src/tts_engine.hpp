@@ -80,6 +80,7 @@ class tts_engine {
         std::string cache_dir;
         std::string data_dir;
         std::string config_dir;
+        std::string options;
         std::string nb_data;
         std::string lang_code;
         std::string uromanpl_path;

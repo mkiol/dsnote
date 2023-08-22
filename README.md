@@ -199,6 +199,7 @@ sfdk package
 - [Rubber Band Library](https://breakfastquay.com/rubberband)
 - [simdjson](https://simdjson.org/)
 - [uroman](https://github.com/isi-nlp/uroman)
+- [astrunc](https://github.com/Joke-Shi/astrunc)
 
 ## License
 
@@ -226,6 +227,7 @@ sfdk package
 - **Rubber Band Library**, released under the [GNU General Public License (version 2 or later)](https://breakfastquay.com/rubberband/license.html)
 - **simdjson**, released under the [Apache License 2.0](https://github.com/simdjson/simdjson/raw/master/LICENSE)
 - **uroman**, released under the [this license](https://github.com/isi-nlp/uroman/raw/master/LICENSE.txt)
+- **astrunc**, released uunder the [MIT License](https://raw.githubusercontent.com/Joke-Shi/astrunc/master/LICENSE)
 
 The files in the directory `nonbreaking_prefixes` were copied from 
 [mosesdecoder](https://github.com/moses-smt/mosesdecoder) project and distributed under the

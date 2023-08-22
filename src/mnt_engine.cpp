@@ -214,7 +214,14 @@ static std::string fix_text(std::string text) {
 
 std::string mnt_engine::translate_internal(const std::string& text) {
     std::vector<std::string> out_parts;
-    auto in_parts = text_tools::split(text, m_config.nb_data);
+
+    auto engine = m_config.options.find('a') != std::string::npos
+                      ? text_tools::engine_t::astrunc
+                      : text_tools::engine_t::ssplit;
+
+    auto in_parts =
+        text_tools::split(text, engine, m_config.lang, m_config.nb_data);
+
     out_parts.reserve(in_parts.first.size());
 
     auto start = std::chrono::steady_clock::now();

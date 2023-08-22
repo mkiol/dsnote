@@ -318,7 +318,8 @@ std::vector<models_manager::model_t> models_manager::models(
                                     ? ""
                                     : dir.filePath(pair.second.sup_file_name),
                                 pair.second.speaker, pair.second.trg_lang_id,
-                                pair.second.score, pair.second.default_for_lang,
+                                pair.second.score, pair.second.options,
+                                pair.second.default_for_lang,
                                 pair.second.available, pair.second.downloading,
                                 pair.second.download_progress});
             }
@@ -355,14 +356,14 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
     for (const auto& [id, model] : m_models) {
         auto model_file = dir.filePath(model.file_name);
         if (!model.hidden && model.available && QFile::exists(model_file)) {
-            list.push_back({id, model.engine, model.lang_id, model.name,
-                            model_file,
-                            model.sup_file_name.isEmpty()
-                                ? QString{}
-                                : dir.filePath(model.sup_file_name),
-                            model.speaker, model.trg_lang_id, model.score,
-                            model.default_for_lang, model.available,
-                            model.downloading, model.download_progress});
+            list.push_back(
+                {id, model.engine, model.lang_id, model.name, model_file,
+                 model.sup_file_name.isEmpty()
+                     ? QString{}
+                     : dir.filePath(model.sup_file_name),
+                 model.speaker, model.trg_lang_id, model.score, model.options,
+                 model.default_for_lang, model.available, model.downloading,
+                 model.download_progress});
         }
     }
 
@@ -1206,6 +1207,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         int score = obj.value(QLatin1String{"score"}).toInt(-1);
         bool available = false, exists = false;
         QString speaker = obj.value(QLatin1String{"speaker"}).toString();
+        QString options = obj.value(QLatin1String{"options"}).toString();
 
         auto model_alias_of =
             obj.value(QLatin1String{"model_alias_of"}).toString();
@@ -1309,6 +1311,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             exists = alias.exists;
             available = alias.available;
             if (trg_lang_id.isEmpty()) trg_lang_id = alias.trg_lang_id;
+            if (options.isEmpty()) options = alias.options;
 
             if (engine == model_engine::mnt_bergamot && trg_lang_id.isEmpty()) {
                 qWarning() << "no target lang for mnt model:" << model_id;
@@ -1394,6 +1397,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             /*speaker=*/speaker,
             /*trg_lang_id=*/std::move(trg_lang_id),
             /*score=*/score,
+            /*options=*/std::move(options),
             /*hidden=*/obj.value(QLatin1String{"hidden"}).toBool(false),
             /*default_for_lang=*/is_default_model_for_lang,
             /*exists=*/exists,

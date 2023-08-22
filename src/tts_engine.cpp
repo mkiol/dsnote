@@ -34,10 +34,10 @@ std::ostream& operator<<(std::ostream& os,
 std::ostream& operator<<(std::ostream& os, const tts_engine::config_t& config) {
     os << "lang=" << config.lang << ", speaker=" << config.speaker
        << ", model-files=[" << config.model_files << "]"
+       << ", speaker=" << config.speaker << ", options=" << config.options
        << ", lang_code=" << config.lang_code
        << ", uroman-path=" << config.uromanpl_path
        << ", speech-speed=" << config.speech_speed;
-
     return os;
 }
 
@@ -215,7 +215,11 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
     std::vector<tts_engine::task_t> tasks;
 
     if (split) {
-        auto [parts, _] = text_tools::split(text, m_config.nb_data);
+        auto engine = m_config.options.find('a') != std::string::npos
+                          ? text_tools::engine_t::astrunc
+                          : text_tools::engine_t::ssplit;
+        auto [parts, _] =
+            text_tools::split(text, engine, m_config.lang, m_config.nb_data);
         if (!parts.empty()) {
             tasks.reserve(parts.size());
 
@@ -419,10 +423,25 @@ void tts_engine::process() {
             auto output_file = path_to_output_file(task.text);
 
             if (!file_exists(output_file)) {
-                if (!encode_speech_impl(task.text, output_file)) {
-                    unlink(output_file.c_str());
-                    if (m_call_backs.error) m_call_backs.error();
-                    break;
+                auto lower_needed =
+                    m_config.options.find('l') != std::string::npos;
+                if (lower_needed) {
+                    std::string lower_text;
+                    std::transform(
+                        task.text.cbegin(), task.text.cend(),
+                        std::back_inserter(lower_text),
+                        [](unsigned char c) { return std::tolower(c); });
+                    if (!encode_speech_impl(lower_text, output_file)) {
+                        unlink(output_file.c_str());
+                        if (m_call_backs.error) m_call_backs.error();
+                        break;
+                    }
+                } else {
+                    if (!encode_speech_impl(task.text, output_file)) {
+                        unlink(output_file.c_str());
+                        if (m_call_backs.error) m_call_backs.error();
+                        break;
+                    }
                 }
                 if (!model_supports_speed()) apply_speed(output_file);
             }

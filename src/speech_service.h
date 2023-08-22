@@ -293,6 +293,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         std::optional<stt_model_config_t> stt;
         std::optional<tts_model_config_t> tts;
         std::optional<mnt_model_config_t> mnt;
+        QString options;
     };
 
     struct counter_t {

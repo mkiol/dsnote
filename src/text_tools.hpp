@@ -12,13 +12,16 @@
 #include <vector>
 
 namespace text_tools {
+enum class engine_t { ssplit, astrunc };
+
 struct break_line_info {
     bool break_line = false;
     size_t count = 0;
 };
 
 std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
-    const std::string& text, const std::string& nb_data = {});
+    const std::string& text, engine_t engine, const std::string& lang,
+    const std::string& nb_data = {});
 }  // namespace text_tools
 
 #endif  // TEXT_TOOLS_H

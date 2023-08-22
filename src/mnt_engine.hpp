@@ -55,6 +55,7 @@ class mnt_engine {
         model_files_t model_files;
         std::string nb_data;
         std::string out_lang;
+        std::string options;
     };
     friend std::ostream& operator<<(std::ostream& os, const config_t& config);
 

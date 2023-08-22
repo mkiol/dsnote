@@ -77,7 +77,8 @@ class models_manager : public QObject, public singleton<models_manager> {
         QString sup_file;
         QString speaker;
         QString trg_lang_id;
-        int score = 2; /* 0-3 */
+        int score = 2;
+        QString options;
         bool default_for_lang = false;
         bool available = false;
         bool downloading = false;
@@ -144,6 +145,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         QString speaker;
         QString trg_lang_id;
         int score = -1; /* 0-5 */
+        QString options;
         bool hidden = false;
         bool default_for_lang = false;
         bool exists = false;

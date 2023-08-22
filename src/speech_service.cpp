@@ -620,6 +620,7 @@ speech_service::choose_model_config_by_id(
                                                  /*model_file_second=*/{}};
                 break;
         }
+        config->options = model.options;
     }
 
     if (!config && engine_type == engine_t::mnt && model_or_lang_id != "en" &&
@@ -653,6 +654,7 @@ speech_service::choose_model_config_by_id(
                     model_first.lang_id, out_lang_id,
                     model_first.id,      model_first.model_file,
                     model_second.id,     model_second.model_file};
+                config->options = model_first.options;
                 qDebug() << "mnt both models found";
             }
         }
@@ -708,6 +710,7 @@ speech_service::choose_model_config_by_lang(
             case engine_t::mnt:
                 break;
         }
+        config->options = best_model->options;
     }
 
     return config;
@@ -743,6 +746,7 @@ speech_service::choose_model_config_by_first(
             case engine_t::mnt:
                 break;
         }
+        config->options = model.options;
     }
 
     return config;
@@ -1018,6 +1022,7 @@ QString speech_service::restart_tts_engine(
         config.cache_dir = settings::instance()->cache_dir().toStdString();
         config.speaker = model_config->tts->speaker.toStdString();
         config.speech_speed = speech_speed;
+        config.options = model_config->options.toStdString();
 
         if (model_config->tts->model_id.contains("fairseq")) {
             auto l = model_config->tts->model_id.split('_');
@@ -1152,6 +1157,7 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
             model_config->mnt->model_file_second.toStdString();
         config.lang = model_config->mnt->lang_id.toStdString();
         config.out_lang = model_config->mnt->out_lang_id.toStdString();
+        config.options = model_config->options.toStdString();
 
         QFile nb_file{QStringLiteral(":/nonbreaking_prefixes/%1.txt")
                           .arg(model_config->mnt->lang_id.split('-').first())};

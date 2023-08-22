@@ -302,9 +302,8 @@ bool coqui_engine::model_supports_speed() const {
 }
 
 std::string coqui_engine::uroman(const std::string& text) const {
-    if (m_config.uromanpl_path.empty() || m_config.lang_code.empty() ||
-        (m_config.lang_code != "amh" && m_config.lang_code != "kor" &&
-         m_config.lang_code != "hak" && m_config.lang_code != "nan")) {
+    auto uroman_needed = m_config.options.find('r') != std::string::npos;
+    if (!uroman_needed) {
         // uroman not needed
         return text;
     }
