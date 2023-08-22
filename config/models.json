@@ -3578,7 +3578,7 @@
             "size": "52979372"
         },
         {
-            "name": "Punctuation (Kredor)",
+            "name": "Punctuation",
             "model_id": "multilang_hftc_kredor",
             "engine": "ttt_hftc",
             "lang_id": "multilang",
@@ -3594,97 +3594,97 @@
             "hidden": true
         },
         {
-            "name": "Punctuation (Kredor)",
+            "name": "Punctuation",
             "model_id": "en_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "en"
         },
         {
-            "name": "Zeichensetzung (Kredor)",
+            "name": "Zeichensetzung",
             "model_id": "de_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "de"
         },
         {
-            "name": "Ponctuation (Kredor)",
+            "name": "Ponctuation",
             "model_id": "fr_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "fr"
         },
         {
-            "name": "Puntuación (Kredor)",
+            "name": "Puntuación",
             "model_id": "es_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "es"
         },
         {
-            "name": "Punteggiatura (Kredor)",
+            "name": "Punteggiatura",
             "model_id": "it_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "it"
         },
         {
-            "name": "Interpunkcja (Kredor)",
+            "name": "Interpunkcja",
             "model_id": "pl_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "pl"
         },
         {
-            "name": "Leestekens (Kredor)",
+            "name": "Leestekens",
             "model_id": "nl_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "nl"
         },
         {
-            "name": "Interpunkce (Kredor)",
+            "name": "Interpunkce",
             "model_id": "cs_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "cs"
         },
         {
-            "name": "Pontuação (Kredor)",
+            "name": "Pontuação",
             "model_id": "pt_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "pt"
         },
         {
-            "name": "Interpunkcija (Kredor)",
+            "name": "Interpunkcija",
             "model_id": "sl_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "sl"
         },
         {
-            "name": "Στίξη (Kredor)",
+            "name": "Στίξη",
             "model_id": "el_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "el"
         },
         {
-            "name": "Interpunktion (Kredor)",
+            "name": "Interpunktion",
             "model_id": "sv_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "sv"
         },
         {
-            "name": "Szótagolás (Kredor)",
+            "name": "Szótagolás",
             "model_id": "hu_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "hu"
         },
         {
-            "name": "Punctuație (Kredor)",
+            "name": "Punctuație",
             "model_id": "ro_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "ro"
         },
         {
-            "name": "Interpunkcia (Kredor)",
+            "name": "Interpunkcia",
             "model_id": "sk_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "sk"
         },
         {
-            "name": "Tegnsætning (Kredor)",
+            "name": "Tegnsætning",
             "model_id": "da_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "da"
@@ -3985,140 +3985,140 @@
             "hidden": true
         },
         {
-            "name": "English British (VCTK 0 Medium Female)",
+            "name": "English British (VCTK P239 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_0",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "0"
         },
         {
-            "name": "English British (VCTK 1 Medium Female)",
+            "name": "English British (VCTK P236 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_1",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "1"
         },
         {
-            "name": "English British (VCTK 2 Medium Female)",
+            "name": "English British (VCTK P264 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_2",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "2"
         },
         {
-            "name": "English British (VCTK 3 Medium Female)",
+            "name": "English British (VCTK P250 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_3",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "3"
         },
         {
-            "name": "English British (VCTK 4 Medium Female)",
+            "name": "English British (VCTK P256 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_4",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "4"
         },
         {
-            "name": "English British (VCTK 5 Medium Male)",
+            "name": "English British (VCTK P247 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_5",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "5"
         },
         {
-            "name": "English British (VCTK 6 Medium Female)",
+            "name": "English British (VCTK P261 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_6",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "6"
         },
         {
-            "name": "English British (VCTK 7 Medium Male)",
+            "name": "English British (VCTK P263 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_7",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "7"
         },
         {
-            "name": "English British (VCTK 8 Medium Female)",
+            "name": "English British (VCTK P283 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_8",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "8"
         },
         {
-            "name": "English British (VCTK 10 Medium Male)",
+            "name": "English British (VCTK P274 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_10",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "10"
         },
         {
-            "name": "English British (VCTK 11 Medium Female)",
+            "name": "English British (VCTK P276 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_11",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "11"
         },
         {
-            "name": "English British (VCTK 12 Medium Male)",
+            "name": "English British (VCTK P270 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_12",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "12"
         },
         {
-            "name": "English British (VCTK 13 Medium Male)",
+            "name": "English British (VCTK P281 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_13",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "13"
         },
         {
-            "name": "English British (VCTK 14 Medium Female)",
+            "name": "English British (VCTK P277 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_14",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "14"
         },
         {
-            "name": "English British (VCTK 15 Medium Female)",
+            "name": "English British (VCTK P231 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_15",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "15"
         },
         {
-            "name": "English British (VCTK 16 Medium Male)",
+            "name": "English British (VCTK P271 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_16",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "16"
         },
         {
-            "name": "English British (VCTK 17 Medium Female)",
+            "name": "English British (VCTK P238 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_17",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "17"
         },
         {
-            "name": "English British (VCTK 18 Medium Female)",
+            "name": "English British (VCTK P257 Medium Female)",
             "model_id": "en_piper_gb_vctk_medium_18",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "18"
         },
         {
-            "name": "English British (VCTK 19 Medium Male)",
+            "name": "English British (VCTK P273 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_19",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
             "speaker": "19"
         },
         {
-            "name": "English British (VCTK 20 Medium Male)",
+            "name": "English British (VCTK P284 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_20",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
