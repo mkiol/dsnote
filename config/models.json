@@ -3883,7 +3883,8 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alan/low/en_GB-alan-low.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alan/low/en_GB-alan-low.onnx.json"
             ],
-            "size": "63118675"
+            "size": "63118675",
+            "hidden": true
         },
         {
             "name": "English British (Piper Alan Medium Male)",
@@ -3897,7 +3898,8 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alan/medium/en_GB-alan-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alan/medium/en_GB-alan-medium.onnx.json"
             ],
-            "size": "63216499"
+            "size": "63216499",
+            "hidden": true
         },
         {
             "name": "English British (Piper Alba Medium Female)",
