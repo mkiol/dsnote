@@ -1778,42 +1778,42 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <translation type="vanished">Model językowy nie jest ustawiony</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2652"/>
+        <location filename="../src/speech_service.cpp" line="2658"/>
         <source>No language has been set.</source>
         <translation>Żaden język nie jest ustawiony.</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2654"/>
+        <location filename="../src/speech_service.cpp" line="2660"/>
         <source>No translator model has been set.</source>
         <translation>Żaden model do tłumaczeń nie jest ustawiony.</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2655"/>
+        <location filename="../src/speech_service.cpp" line="2661"/>
         <source>Say something...</source>
         <translation>Powiedz coś...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2657"/>
+        <location filename="../src/speech_service.cpp" line="2663"/>
         <source>Press and say something...</source>
         <translation>Naciśnij i powiedz coś...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2659"/>
+        <location filename="../src/speech_service.cpp" line="2665"/>
         <source>Click and say something...</source>
         <translation>Kliknij i powiedz coś...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2660"/>
+        <location filename="../src/speech_service.cpp" line="2666"/>
         <source>Busy...</source>
         <translation>Zajęty...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2661"/>
+        <location filename="../src/speech_service.cpp" line="2667"/>
         <source>Processing, please wait...</source>
         <translation>Przetwarzanie, czekaj...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2664"/>
+        <location filename="../src/speech_service.cpp" line="2670"/>
         <source>Translating...</source>
         <translation>Tłumaczenie...</translation>
     </message>
@@ -1822,7 +1822,7 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <translation type="obsolete">Dekodowanie, czekaj...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2663"/>
+        <location filename="../src/speech_service.cpp" line="2669"/>
         <source>Getting ready, please wait...</source>
         <translation>Przygotowanie, czekaj...</translation>
     </message>

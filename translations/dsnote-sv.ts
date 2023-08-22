@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sv" sourcelanguage="en_US">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sv" sourcelanguage="en_US">
 <context>
     <name>AboutPage</name>
     <message>
@@ -702,14 +700,6 @@
         <translation>Ladda ner %2, för att %1 skall fungera.</translation>
     </message>
     <message>
-        <source>Translate to English</source>
-        <translation type="vanished">Översätt till Engelska</translation>
-    </message>
-    <message>
-        <source>Translate decoded text to English. This option works only with Whisper models.</source>
-        <translation type="vanished">Översätter avkodad text till Engelska. Detta alternativ fungerar endast med Whisper-modeller.</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="167"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="332"/>
         <source>Other</source>
@@ -755,94 +745,94 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="148"/>
         <source>If a suitable GPU device is found in the system, it will be used to accelerate processing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Om en lämplig GPU-enhet hittas i systemet, kommer den att användas för att påskynda bearbetningen.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="141"/>
         <source>Use GPU acceleration for Whisper</source>
-        <translation type="unfinished"></translation>
+        <translation>Använda GPU-acceleration för Whisper</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="149"/>
         <source>GPU hardware acceleration significantly reduces the time of decoding.</source>
-        <translation type="unfinished"></translation>
+        <translation>GPU-hårdvaruacceleration minskar avkodningstiden avsevärt.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="150"/>
         <source>Disable this option if you observe problems when using Speech to Text with Whisper models.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktivera det här alternativet om du får problem när du använder tal-till-text med Whisper-modeller.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="158"/>
         <source>A suitable GPU device could not be found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen passande GPU-enhet kunde identifieras.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="169"/>
         <source>GPU device</source>
-        <translation type="unfinished"></translation>
+        <translation>GPU-enhet</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="182"/>
         <source>Select preferred GPU device for hardware acceleration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj föredragen GPU-enhet för hårdvaruacceleration</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="111"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="187"/>
         <source>Text to Speech</source>
-        <translation type="unfinished"></translation>
+        <translation>Text-till-tal</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="123"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="197"/>
         <source>Speech speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Talhastighet</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="135"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="252"/>
         <source>Very slow</source>
-        <translation type="unfinished"></translation>
+        <translation>Mycket långsam</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="136"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="253"/>
         <source>Slow</source>
-        <translation type="unfinished"></translation>
+        <translation>Långsam</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="137"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="254"/>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="138"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="255"/>
         <source>Fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Snabb</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="139"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="256"/>
         <source>Very fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Mycket snabb</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="205"/>
         <source>Change to make synthesized speech slower or faster.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändra för att göra syntetiserat tal långsammare eller snabbare.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="264"/>
         <source>Interface</source>
-        <translation type="unfinished">Gränssnitt</translation>
+        <translation>Gränssnitt</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="274"/>
         <source>Font size in text editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Teckenstorlek i textredigerare</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="302"/>
@@ -1150,7 +1140,7 @@
         <location filename="../src/settings.cpp" line="579"/>
         <location filename="../src/settings.cpp" line="597"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Auto</translation>
     </message>
 </context>
 <context>
