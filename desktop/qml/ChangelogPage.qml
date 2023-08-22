@@ -39,8 +39,9 @@ DialogPage {
             Turkish, Uzbek, Vietnamese and Yoruba.
             If you would like any other MMS model to be included, please let us know.</li>
         <li>New Coqui voices for: Japanese, Turkish and Spanish.</li>
-        <li>New Piper voices for: Czech, German, Hungarian, Portuguese and Slovak.</li>
+        <li>New Piper voices for: Czech, German, Hungarian, Portuguese, Slovak and English.</li>
         <li>Update of RHVoice voices for Slovak and Czech.</li>
+        <li>Fix: Splitting text into sentences was incorrect for: Georgian, Japanese, Bengali, Nepali and Hindi.</li>
         </ul>
         <p>" + qsTr("Interface") + ":</p>
         <ul>

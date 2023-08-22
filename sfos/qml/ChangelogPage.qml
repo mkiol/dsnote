@@ -39,13 +39,19 @@ Page {
 
             LogItem {
                 title: "New Text to Speech voices"
-                description: "New Piper voices for: Czech, German, Hungarian, Portuguese and Slovak. " +
+                description: "New Piper voices for: Czech, German, Hungarian, Portuguese, Slovak and English. " +
                              "Update of RHVoice voices for Slovak and Czech."
             }
 
             LogItem {
                 title: "Fixes for Speech to Text with Whisper"
                 description: "Fix for problem with decoding short speech sentences with Whisper models."
+            }
+
+            LogItem {
+                title: "Fixes for splitting text into sentences"
+                description: "Splitting text into sentences was incorrect for: Georgian, Japanese, Bengali, Nepali and Hindi. " +
+                             "This issue has been resolved."
             }
 
             SectionHeader {
