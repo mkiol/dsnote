@@ -238,12 +238,27 @@ Dialog {
             }
 
             Button {
+                id: _dummyButton
+                visible: false
+                width: implicitWidth
+                text: {
+                    var can = qsTr("Cancel").length
+                    var del = qsTr("Delete").length
+                    var dow = qsTr("Download").lenth
+                    if (can > del && can > dow) return qsTr("Cancel")
+                    if (del > can && del > dow) return qsTr("Delete")
+                    return qsTr("Download")
+                }
+            }
+
+            Button {
                 id: downloadButton
 
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: root._rightMargin
-                width: implicitWidth
+                //width: implicitWidth
+                width: _dummyButton.width
                 text: model.downloading ? qsTr("Cancel") : model.available ? qsTr("Delete") : qsTr("Download")
                 onClicked: {
                     if (model.downloading) service.cancel_model_download(model.id)
