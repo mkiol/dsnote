@@ -6,7 +6,7 @@
   <project_license>MPL-2.0</project_license>
   <developer_name>Michal Kosciesza</developer_name>
   <name>Speech Note</name>
-  <summary>Note taking, reading and translating with ofline Speech to Text, Text to Speech and Machine Translation</summary>
+  <summary>Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation</summary>
   <description>
     <p>Speech Note let you take, read and translate notes in multiple languages.
       It uses Speech to Text, Text to Speech and Machine Translation to do so.
