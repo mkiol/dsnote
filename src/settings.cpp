@@ -410,7 +410,7 @@ void settings::set_note(const QString& value) {
 }
 
 int settings::font_size() const {
-    return value(QStringLiteral("font_size"), 13).toInt();
+    return value(QStringLiteral("font_size"), 0).toInt();
 }
 
 void settings::set_font_size(int value) {

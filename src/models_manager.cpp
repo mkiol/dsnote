@@ -1331,8 +1331,8 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         }
 #endif
 #if defined ARCH_ARM_32 || defined ARCH_ARM_64
-        if (engine == model_engine::stt_vosk && model_id == "en_vosk_small") {
-            qDebug() << "ignoring vosk en small model on arm:" << model_id;
+        if (engine == model_engine::stt_vosk && model_id.contains("large")) {
+            qDebug() << "ignoring vosk large model on arm:" << model_id;
             continue;
         }
 #endif

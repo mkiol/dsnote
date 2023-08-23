@@ -276,14 +276,15 @@ DialogPage {
         SpinBox {
             Layout.fillWidth: verticalMode
             Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            from: 5
+            from: 4
             to: 25
             stepSize: 1
-            value: _settings.font_size
+            value: _settings.font_size < 5 ? 4 : _settings.font_size
             textFromValue: function(value) {
-                return value.toString() + " px"
+                return value < 5 ? qsTr("Auto") : value.toString() + " px"
             }
             valueFromText: function(text) {
+                if (text === qsTr("Auto")) return 4
                 return parseInt(text);
             }
             onValueChanged: {

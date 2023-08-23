@@ -59,7 +59,7 @@ Item {
             }
             wrapMode: TextEdit.WordWrap
             verticalAlignment: TextEdit.AlignTop
-            font.pixelSize: _settings.font_size
+            font.pixelSize: _settings.font_size < 5 ? appWin.textFontSize : _settings.font_size
 
             Keys.onUpPressed: _bar.decrease()
             Keys.onDownPressed: _bar.increase()

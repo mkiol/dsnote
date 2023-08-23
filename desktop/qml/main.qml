@@ -24,6 +24,8 @@ ApplicationWindow {
                                 app.state === DsnoteApp.StateListeningManual
     readonly property bool canCancelTts: app.state === DsnoteApp.StatePlayingSpeech ||
                                 app.state === DsnoteApp.StateWritingSpeechToFile
+    readonly property alias textFontSize: _dummyTextField.font.pixelSize
+
     property var _dialogPage
 
     function openDialog(file) {
@@ -74,6 +76,12 @@ ApplicationWindow {
     height: Screen.height / 2
     visible: true
     header: MainToolBar {}
+
+    TextField {
+        id: _dummyTextField
+        visible: false
+        Component.onCompleted: console.log("default font pixel size:", font.pixelSize)
+    }
 
     ColumnLayout {
         anchors.fill: parent
