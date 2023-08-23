@@ -5767,7 +5767,8 @@
             "name": "বাংলা (Espeak Robot)",
             "model_id": "bn_espeak_bn",
             "engine": "tts_espeak",
-            "lang_id": "bn"
+            "lang_id": "bn",
+            "options": "a"
         },
         {
             "name": "Polski (Espeak Robot)",
