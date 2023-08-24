@@ -1,6 +1,6 @@
 # Speech Note
 
-Linux desktop and Sailfish OS app for note taking, reading and translating with Speech to Text, Text to Speech and Machine Translation
+Linux desktop and Sailfish OS app for note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation
 
 <a href='https://flathub.org/apps/net.mkiol.SpeechNote'><img width='240' alt='Download on Flathub' src='https://dl.flathub.org/assets/badges/flathub-badge-en.png'/></a>
 
@@ -127,9 +127,14 @@ but if you would like to make a direct PR/MR, please do it.
 
 ## Building from sources
 
-### Linux
+### Linux, a direct build (not recommended)
 
-Following tools/libraries are required for building (example of packages for Ubuntu 22.04):
+Speech Note has many build-time and run-time dependencies. This includes shared and static libraries, 
+3rd-party executables, Python and Perl scripts. Because of these complexity, the recommended way to build 
+is to use Flatpak tool-chain (Flatpak manifest file and `flatpak-builder`). If you want to make a
+direct build (i.e. without flatpak) it is also possible but definitly more complicated.
+
+Following tools/libraries are required for building (example of packages for Ubuntu 22.04, not likely a complete list):
 `build-essential` `cmake` `git` `autoconf` `qtbase5-dev` `qtdeclarative5-dev`
 `qtmultimedia5-dev` `qtquickcontrols2-5-dev` `python3-dev` `zlib1g-dev` `libtool`
 `libboost-all-dev`.
@@ -145,13 +150,13 @@ cmake ../ -DCMAKE_BUILD_TYPE=Release -DWITH_DESKTOP=ON
 make
 ```
 
-In a runtime app requires following Qt QML modules (example of packages for Ubuntu 22.04): `qml-module-qtquick-controls` `qml-module-qtquick-dialogs` `qml-module-qtquick-controls2` `qml-module-qtquick-layouts`.
+In a run-time app requires following Qt QML modules (example of packages for Ubuntu 22.04): `qml-module-qtquick-controls` `qml-module-qtquick-dialogs` `qml-module-qtquick-controls2` `qml-module-qtquick-layouts`.
 
 Also to make Python components work (i.e.: 'Coqui TTS models', 'Restore punctuation' feature), following Python libriaries have to be installed (pip packages names): `torch` `torchaudio` `transformers` `accelerate` `TTS`.
 
 To make build without support for Python components, add `-DWITH_PY=OFF` in cmake step.
 
-### Flatpak
+### Flatpak (recommended)
 
 ```
 git clone <git repository url>
@@ -173,7 +178,7 @@ cd build
 
 sfdk config --session specfile=../sfos/harbour-dsnote.spec
 sfdk config --session target=SailfishOS-4.4.0.58-aarch64
-sfdk cmake ../ -DCMAKE_BUILD_TYPE=Release -DWITH_SFOS=ON
+sfdk cmake ../ -DCMAKE_BUILD_TYPE=Release -DWITH_SFOS=ON -DWITH_PY=OFF
 sfdk package
 ```
 
@@ -206,7 +211,7 @@ sfdk package
 **Speech Note** is an open source project. Source code is released under the
 [Mozilla Public License Version 2.0](https://www.mozilla.org/MPL/2.0/).
 
-3rd party libriaries:
+3rd party libraries:
 
 - **Coqui STT**, released under the
 [Mozilla Public License Version 2.0](https://raw.githubusercontent.com/coqui-ai/STT/main/LICENSE)
