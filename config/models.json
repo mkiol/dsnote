@@ -6766,6 +6766,19 @@
             "size": "100920014"
         },
         {
+            "name": "Magyar (Coqui MMS Mixed)",
+            "model_id": "hu_coqui_fairseq_hun",
+            "engine": "tts_coqui",
+            "lang_id": "hu",
+            "checksum": "f74902fd",
+            "checksum_quick": "1d8f5771",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/hun.tar.gz"
+            ],
+            "size": "134839047"
+        },
+        {
             "name": "Hrvatski (Coqui CV VITS Female)",
             "model_id": "hr_coqui_cv_vits",
             "engine": "tts_coqui",
