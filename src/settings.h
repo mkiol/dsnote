@@ -171,6 +171,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE bool py_supported() const;
     Q_INVOKABLE bool gpu_supported() const;
     Q_INVOKABLE bool has_gpu_device() const;
+    Q_INVOKABLE QStringList qt_styles() const;
 
     // service
     QString models_dir() const;
@@ -249,6 +250,8 @@ class settings : public QSettings, public singleton<settings> {
    private:
     inline static const QString settings_filename =
         QStringLiteral("settings.conf");
+    inline static const QString default_qt_style =
+        QStringLiteral("org.kde.desktop");
     bool m_restart_required = false;
     QStringList m_gpu_devices;
 

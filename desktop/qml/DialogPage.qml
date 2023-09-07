@@ -13,28 +13,37 @@ Dialog {
     id: root
 
     default property alias content: column.data
+    property alias listViewItem: listView
+    property alias flickItem: flick
+    property alias placeholderLabel: _placeholderLabel
     readonly property real _rightMargin: scrollBar.visible ? appWin.padding + scrollBar.width : appWin.padding
     readonly property real _leftMargin: appWin.padding
 
-    standardButtons: Dialog.Close
     implicitHeight: Math.min(
-                        header.height + flick.contentHeight + footer.height + 2 * verticalPadding,
+                        header.height + flick.contentHeight + (listView.model ? root.parent.height : 0) + footer.height + 2 * verticalPadding,
                         parent.height - 4 * appWin.padding)
     implicitWidth: parent.width - 4 * appWin.padding
     anchors.centerIn: parent
     verticalPadding: appWin.padding
     horizontalPadding: 1
     modal: true
+
     header: Item {
         visible: root.title.length !== 0
-        height: titleLabel.height + appWin.padding
+        height: visible ? titleLabel.height + appWin.padding : 0
 
         Label {
             id: titleLabel
-            x: appWin.padding
-            y: appWin.padding
+
+            anchors {
+                left: parent.left
+                leftMargin: root.leftPadding + appWin.padding
+                top: parent.top
+                topMargin: root.topPadding
+            }
 
             text: root.title
+            wrapMode: Text.Wrap
             font.pixelSize: Qt.application.font.pixelSize * 1.2
             elide: Label.ElideRight
             horizontalAlignment: Qt.AlignLeft
@@ -42,24 +51,94 @@ Dialog {
         }
     }
 
-    Flickable {
-        id: flick
+//    Component.onCompleted: {
+//        console.log("leftInset", root.leftInset)
+//        console.log("rightInset", root.rightInset)
+//        console.log("leftPadding", root.leftPadding)
+//        console.log("rightPadding", root.rightPadding)
+//        console.log("leftMargin", root.leftMargin)
+//        console.log("rightMargin", root.rightMargin)
+//        console.log("availableWidth", root.availableWidth)
+//        console.log("availableHeight", root.availableHeight)
+//    }
+
+    footer: Item {
+        height: closeButton.height + appWin.padding
+        Button {
+            id: closeButton
+
+            anchors {
+                right: parent.right
+                rightMargin: root.rightPadding + appWin.padding
+                bottom: parent.bottom
+                bottomMargin: root.bottomPadding
+            }
+            text: qsTr("Close")
+            icon.name: "window-close-symbolic"
+            onClicked: root.reject()
+            Keys.onReturnPressed: root.reject()
+        }
+    }
+
+    Frame {
+        id: frame
 
         anchors.fill: parent
-        contentWidth: width
-        contentHeight: column.height + 2 * appWin.padding
+        topPadding: 1
+        bottomPadding: 1
+        leftPadding: 0
+        rightPadding: 0
+        leftInset: -1
+        rightInset: -1
         clip: true
 
-        Keys.onUpPressed: scrollBar.decrease()
-        Keys.onDownPressed: scrollBar.increase()
+        PlaceholderLabel {
+            id: _placeholderLabel
 
-        ScrollBar.vertical: ScrollBar { id: scrollBar }
+            enabled: false
+        }
 
-        ColumnLayout {
-            id: column
-            x: root._leftMargin
-            width: flick.width - x - root._rightMargin
+        ListView {
+            id: listView
+
+            anchors.fill: parent
+            topMargin: appWin.padding
+            bottomMargin: appWin.padding
+
+            focus: true
+            clip: true
             spacing: appWin.padding
+
+            Keys.onUpPressed: listViewScrollBar.decrease()
+            Keys.onDownPressed: listViewScrollBar.increase()
+
+            ScrollBar.vertical: ScrollBar {
+                id: listViewScrollBar
+            }
+        }
+
+        Flickable {
+            id: flick
+
+            anchors.fill: listView.model ? null : parent
+            visible: !listView.model
+            contentWidth: width
+            contentHeight: column.height + 2 * appWin.padding
+            topMargin: appWin.padding
+            bottomMargin: appWin.padding
+            clip: true
+
+            Keys.onUpPressed: scrollBar.decrease()
+            Keys.onDownPressed: scrollBar.increase()
+
+            ScrollBar.vertical: ScrollBar { id: scrollBar }
+
+            ColumnLayout {
+                id: column
+                x: root._leftMargin
+                width: flick.width - x - root._rightMargin
+                spacing: appWin.padding
+            }
         }
     }
 }

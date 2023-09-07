@@ -25,6 +25,7 @@ ApplicationWindow {
     readonly property bool canCancelTts: app.state === DsnoteApp.StatePlayingSpeech ||
                                 app.state === DsnoteApp.StateWritingSpeechToFile
     readonly property alias textFontSize: _dummyTextField.font.pixelSize
+    readonly property alias buttonSize: _dummyButton.width
 
     property var _dialogPage
 
@@ -80,7 +81,40 @@ ApplicationWindow {
     TextField {
         id: _dummyTextField
         visible: false
+        height: 0
         Component.onCompleted: console.log("default font pixel size:", font.pixelSize)
+    }
+
+    FontMetrics {
+        id: fontMetrics
+    }
+
+    Button {
+        id: _dummyButton
+        visible: false
+        width: implicitWidth
+        height: 0
+        text: {
+            var list = [
+                qsTr("Cancel"),
+                qsTr("Delete"),
+                qsTr("Download"),
+                qsTr("Read"),
+                qsTr("Listen")
+            ]
+
+            list.sort(function (a, b) {
+                var aw = fontMetrics.boundingRect(a).width
+                var bw = fontMetrics.boundingRect(b).width
+                if (aw > bw) return -1
+                if (aw < bw) return 1
+                return 0
+            })
+
+            console.log("_dummyButton:",list[0])
+
+            return list[0]
+        }
     }
 
     ColumnLayout {
@@ -115,6 +149,7 @@ ApplicationWindow {
         enabled: !_settings.translator_mode && !app.stt_configured && !app.tts_configured && app.note.length === 0
         offset: -panel.height
         text: notepad.placeholderText
+        color: notepad.noteTextArea.textArea.color
     }
 
     ToastNotification {

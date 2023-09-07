@@ -75,6 +75,7 @@ RowLayout {
                 ToolTip.text: root.buttonToolTip
 
                 Layout.alignment: Qt.AlignVCenter
+                Layout.preferredWidth: appWin.buttonSize
             }
         }
     }

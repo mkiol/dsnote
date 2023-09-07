@@ -43,7 +43,7 @@ DialogPage {
         <li>Update of RHVoice voices for Slovak and Czech.</li>
         <li>Fix: Splitting text into sentences was incorrect for: Georgian, Japanese, Bengali, Nepali and Hindi.</li>
         </ul>
-        <p>" + qsTr("Interface") + ":</p>
+        <p>" + qsTr("User Interface") + ":</p>
         <ul>
         <li>Option to change font size in text editor</li>
         </ul>"
@@ -62,7 +62,7 @@ DialogPage {
               <li><i>Translator</i> uses models that were created as part of <a href='https://browser.mt/'>Bergamot project</a>.</li>
               <li>To switch between <i>Notepad</i> and <i>Translator</i> modes, use the toggle buttons in the upper right corner.</li>
               </ul>
-              <p>" + qsTr("Interface") + ":</p>
+              <p>" + qsTr("User Interface") + ":</p>
               <ul>
               <li>User interface has been redesign. It is more handy and better supports portrait view for mobile.</li>
               <li>Settings option to force specific <i>Interface style</i> has been added. It is useful to overcome UI glitches when app is running under GNOME desktop environment.</li>
@@ -97,7 +97,7 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Interface") + ":</p>
+        text: "<p>" + qsTr("User Interface") + ":</p>
         <ul>
         <li>Option to show recent changes in the app (About -> Changes)</li>
         <li>French translation update (Many thanks to L'Africain)</li>

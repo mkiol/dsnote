@@ -468,12 +468,20 @@ void settings::set_insert_mode(insert_mode_t value) {
 }
 
 int settings::qt_style_idx() const {
-    return value(QStringLiteral("qt_style_idx"), 0).toInt();
+    auto idx = value(QStringLiteral("qt_style_idx2"), 1000).toInt();
+
+    if (idx < 0)
+        idx = QQuickStyle::availableStyles().size();
+    else if (idx >= 1000)
+        idx = QQuickStyle::availableStyles().lastIndexOf(default_qt_style);
+
+    return idx;
 }
 
 void settings::set_qt_style_idx(int value) {
+    if (value >= QQuickStyle::availableStyles().size()) value = -1;
     if (qt_style_idx() != value) {
-        setValue(QStringLiteral("qt_style_idx"), value);
+        setValue(QStringLiteral("qt_style_idx2"), value);
         emit qt_style_idx_changed();
         set_restart_required();
     }
@@ -485,7 +493,7 @@ QUrl settings::app_icon() const {
         QStringLiteral("/usr/share/icons/hicolor/172x172/apps/%1.png")
             .arg(QLatin1String{APP_BINARY_ID}));
 #else
-    return QUrl{QStringLiteral("qrc:/app_icon.svg")};
+    return QUrl{QStringLiteral("qrc:/app_icon.png")};
 #endif
 }
 
@@ -542,26 +550,31 @@ void settings::set_restart_required() {
     }
 }
 
+QStringList settings::qt_styles() const {
+    auto styles = QQuickStyle::availableStyles();
+    styles.append(tr("Don't force"));
+    return styles;
+}
+
 void settings::update_qt_style() const {
 #ifdef USE_DESKTOP
+    auto styles = QQuickStyle::availableStyles();
+
+    qDebug() << "available styles:" << styles;
+    qDebug() << "style paths:" << QQuickStyle::stylePathList();
+
+    if (qt_style_idx() < 0) return;
+
     QString style;
 
-    switch (qt_style_idx()) {
-        case 0:
-            style = QStringLiteral("org.kde.desktop");  // default
-            break;
-        case 1:
-            style = QStringLiteral("Basic");
-            break;
-        case 2:
-            style = QStringLiteral("Default");
-            break;
-        case 3:
-            style = QStringLiteral("Plasma");
-            break;
+    if (qt_style_idx() >= styles.size()) {
+        qWarning() << "forcing default style";
+        style = default_qt_style;
+    } else {
+        style = styles.at(qt_style_idx());
     }
 
-    qDebug() << "swithing to style:" << style;
+    qDebug() << "switching to style:" << style;
 
     QQuickStyle::setStyle(style);
 #endif

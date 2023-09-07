@@ -14,11 +14,19 @@ import org.mkiol.dsnote.Settings 1.0
 DialogPage {
     id: root
 
+    title: qsTr("About")
+
+    Item {
+        height: 1
+    }
+
     RowLayout {
         spacing: 2 * appWin.padding
         Layout.fillWidth: true
 
         Image {
+            Layout.preferredHeight: 100
+            fillMode: Image.PreserveAspectFit
             Layout.alignment: Qt.AlignLeft
             source: _settings.app_icon()
         }

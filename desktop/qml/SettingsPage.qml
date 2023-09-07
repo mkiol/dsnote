@@ -165,6 +165,7 @@ DialogPage {
         rowSpacing: appWin.padding
 
         Label {
+            wrapMode: Text.Wrap
             Layout.fillWidth: true
             text: qsTr("GPU device")
         }
@@ -193,6 +194,7 @@ DialogPage {
         rowSpacing: appWin.padding
 
         Label {
+            wrapMode: Text.Wrap
             Layout.fillWidth: true
             text: qsTr("Speech speed")
         }
@@ -261,7 +263,7 @@ DialogPage {
     }
 
     SectionLabel {
-        text: qsTr("Interface")
+        text: qsTr("User Interface")
     }
 
     GridLayout {
@@ -272,6 +274,7 @@ DialogPage {
         Label {
             Layout.fillWidth: true
             text: qsTr("Font size in text editor")
+            wrapMode: Text.Wrap
         }
         SpinBox {
             Layout.fillWidth: verticalMode
@@ -290,6 +293,9 @@ DialogPage {
             onValueChanged: {
                 _settings.font_size = value;
             }
+            Component.onCompleted: {
+                contentItem.color = palette.text
+            }
         }
     }
 
@@ -300,18 +306,14 @@ DialogPage {
 
         Label {
             Layout.fillWidth: true
-            text: qsTr("Interface style")
+            text: qsTr("Graphical style") + " (" + qsTr("advanced option") + ")"
+            wrapMode: Text.Wrap
         }
         ComboBox {
             Layout.fillWidth: verticalMode
             Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
             currentIndex: _settings.qt_style_idx
-            model: [
-                qsTr("Desktop"),
-                qsTr("Basic"),
-                qsTr("Basic Light"),
-                qsTr("Plasma"),
-            ]
+            model: _settings.qt_styles()
             onActivated: _settings.qt_style_idx = index
 
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval

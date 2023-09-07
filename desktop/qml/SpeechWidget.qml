@@ -126,6 +126,7 @@ RowLayout {
             Button {
                 id: cancelButton
                 Layout.alignment: Qt.AlignBottom
+                Layout.preferredHeight: _icon.implicitHeight
                 icon.name: "action-unavailable-symbolic"
                 enabled: app.task_state === DsnoteApp.TaskStateProcessing ||
                          app.task_state === DsnoteApp.TaskStateInitializing ||

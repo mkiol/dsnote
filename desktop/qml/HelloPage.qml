@@ -13,9 +13,7 @@ DialogPage {
 
     objectName: "hello"
 
-    SectionLabel {
-        text: qsTr("Welcome!")
-    }
+    title: qsTr("Welcome!")
 
     RichLabel {
         text: "<p>" + qsTr("%1 let you take, read and translate notes in multiple languages. " +

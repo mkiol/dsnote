@@ -104,7 +104,6 @@ ToolBar {
                     MenuItem {
                         text: qsTr("Save the translation to audio file")
                         icon.name: "document-save-symbolic"
-                        visible: _settings.translator_mode
                         enabled: app.translated_text.length !== 0 && _settings.translator_mode &&
                                  app.tts_configured && app.active_tts_model_for_out_mnt.length !== 0 &&
                                  (app.state === DsnoteApp.StateListeningManual ||

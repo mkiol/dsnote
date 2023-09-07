@@ -198,6 +198,7 @@ ColumnLayout {
                 PlaceholderLabel {
                     enabled: !app.mnt_configured
                     text: root.placeholderText
+                    color: _translatedNoteTextArea.textArea.color
                 }
             }
 

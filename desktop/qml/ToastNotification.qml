@@ -17,7 +17,7 @@ ToolTip {
     contentItem: Label {
         text: root.text
         font: root.font
-        color: palette.buttonText
+        //color: root.palette.text
         wrapMode: Text.Wrap
         horizontalAlignment: Text.AlignHCenter
     }

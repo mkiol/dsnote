@@ -49,5 +49,6 @@
         <file alias="nonbreaking_prefixes/ta.txt">../nonbreaking_prefixes/ta.txt</file>
         <file alias="nonbreaking_prefixes/tr.txt">../nonbreaking_prefixes/tr.txt</file>
         <file alias="app_icon.svg">dsnote.svg</file>
+        <file alias="app_icon.png">dsnote.png</file>
     </qresource>
 </RCC>

@@ -30,14 +30,12 @@ Item {
 
     function scrollToBottom() {
         var position = (scrollView.contentHeight - scrollView.availableHeight) / scrollView.contentHeight
-        if (position > 0)
-            scrollView._bar.position = position
+        if (position && position > 0)
+            scrollView.ScrollBar.vertical.position = position
     }
 
     ScrollView {
         id: scrollView
-
-        property ScrollBar _bar: ScrollBar.vertical
 
         anchors.fill: parent
         enabled: root.enabled
@@ -45,6 +43,8 @@ Item {
 
         opacity: enabled ? 1.0 : 0.8
         Behavior on opacity { OpacityAnimator { duration: 100 } }
+
+        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
         TextArea {
             id: _textArea
@@ -61,8 +61,8 @@ Item {
             verticalAlignment: TextEdit.AlignTop
             font.pixelSize: _settings.font_size < 5 ? appWin.textFontSize : _settings.font_size
 
-            Keys.onUpPressed: _bar.decrease()
-            Keys.onDownPressed: _bar.increase()
+            Keys.onUpPressed: scrollView.ScrollBar.vertical.decrease()
+            Keys.onDownPressed: scrollView.ScrollBar.vertical.increase()
         }
     }
 
@@ -75,7 +75,8 @@ Item {
             bottom: parent.bottom
             bottomMargin: appWin.padding
             right: parent.right
-            rightMargin: appWin.padding + (scrollView._bar.visible ? scrollView._bar.width : 0)
+            rightMargin: appWin.padding + (scrollView.ScrollBar.vertical.visible ?
+                                               scrollView.ScrollBar.vertical.width : 0)
         }
 
         ToolButton {
