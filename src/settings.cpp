@@ -22,6 +22,7 @@
 #include <iostream>
 
 #include "config.h"
+#include "mic_source.h"
 #ifdef ARCH_X86_64
 #include "opencl_tools.hpp"
 #endif
@@ -85,6 +86,7 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
 
     update_qt_style();
     update_gpu_devices();
+    update_audio_inputs();
 }
 
 QString settings::settings_filepath() {
@@ -630,4 +632,51 @@ int settings::gpu_device_idx() const {
 void settings::set_gpu_device_idx(int value) {
     if (value < 0 || value >= m_gpu_devices.size()) return;
     set_gpu_device(value == 0 ? "" : m_gpu_devices.at(value));
+}
+
+QStringList settings::audio_inputs() const { return m_audio_inputs; }
+
+bool settings::has_audio_input() const { return m_audio_inputs.size() > 1; }
+
+void settings::update_audio_inputs() {
+    auto inputs = mic_source::audio_inputs();
+
+    m_audio_inputs.clear();
+    m_audio_inputs.push_back(tr("Auto"));
+
+    std::transform(
+        inputs.cbegin(), inputs.cend(), std::back_inserter(m_audio_inputs),
+        [](const auto& input) { return QStringLiteral("%1").arg(input); });
+
+    emit audio_inputs_changed();
+}
+
+QString settings::audio_input() const {
+    return value(QStringLiteral("service/audio_input")).toString();
+}
+
+void settings::set_audio_input(QString value) {
+    if (value == tr("Auto")) value.clear();
+
+    if (value != audio_input()) {
+        setValue(QStringLiteral("service/audio_input"), value);
+        emit audio_input_changed();
+    }
+}
+
+int settings::audio_input_idx() const {
+    auto current_input = audio_input();
+
+    if (current_input.isEmpty()) return 0;
+
+    auto it = std::find(m_audio_inputs.cbegin(), m_audio_inputs.cend(),
+                        current_input);
+    if (it == m_audio_inputs.cend()) return 0;
+
+    return std::distance(m_audio_inputs.cbegin(), it);
+}
+
+void settings::set_audio_input_idx(int value) {
+    if (value < 0 || value >= m_audio_inputs.size()) return;
+    set_audio_input(value == 0 ? "" : m_audio_inputs.at(value));
 }

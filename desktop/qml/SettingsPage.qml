@@ -24,6 +24,40 @@ DialogPage {
     }
 
     GridLayout {
+        visible: _settings.audio_inputs.length > 1
+        columns: root.verticalMode ? 1 : 2
+        columnSpacing: appWin.padding
+        rowSpacing: appWin.padding
+
+        Label {
+            wrapMode: Text.Wrap
+            Layout.fillWidth: true
+            text: qsTr("Audio source")
+        }
+        ComboBox {
+            Layout.fillWidth: verticalMode
+            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            currentIndex: _settings.audio_input_idx
+            model: _settings.audio_inputs
+            onActivated: {
+                _settings.audio_input_idx = index
+            }
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Select preferred audio source.")
+        }
+    }
+
+    Label {
+        wrapMode: Text.Wrap
+        Layout.fillWidth: true
+        visible: _settings.audio_inputs.length <= 1
+        color: "red"
+        text: qsTr("No audio source could be found.") + " " + qsTr("Make sure the microphone is properly connected.")
+    }
+
+    GridLayout {
         id: grid
 
         Layout.fillWidth: true
@@ -68,8 +102,6 @@ DialogPage {
                             .arg("<i>" + qsTr("Listen") + "</i>")
         }
     }
-
-
 
     GridLayout {
         columns: root.verticalMode ? 1 : 2

@@ -11,6 +11,7 @@
 #include <QAudioInput>
 #include <QIODevice>
 #include <QObject>
+#include <QStringList>
 #include <QTimer>
 #include <memory>
 
@@ -26,6 +27,7 @@ class mic_source : public audio_source {
     void clear() override;
     inline source_type type() const override { return source_type::mic; }
     void stop() override;
+    static QStringList audio_inputs();
 
    private:
     std::unique_ptr<QAudioInput> m_audio_input;

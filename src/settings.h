@@ -88,6 +88,12 @@ class settings : public QSettings, public singleton<settings> {
                    NOTIFY gpu_device_changed)
     Q_PROPERTY(QString gpu_device READ gpu_device WRITE set_gpu_device NOTIFY
                    gpu_device_changed)
+    Q_PROPERTY(
+        QStringList audio_inputs READ audio_inputs NOTIFY audio_inputs_changed)
+    Q_PROPERTY(int audio_input_idx READ audio_input_idx WRITE
+                   set_audio_input_idx NOTIFY audio_input_changed)
+    Q_PROPERTY(QString audio_input READ audio_input WRITE set_audio_input NOTIFY
+                   audio_input_changed)
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -171,6 +177,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE bool py_supported() const;
     Q_INVOKABLE bool gpu_supported() const;
     Q_INVOKABLE bool has_gpu_device() const;
+    Q_INVOKABLE bool has_audio_input() const;
     Q_INVOKABLE QStringList qt_styles() const;
 
     // service
@@ -194,6 +201,11 @@ class settings : public QSettings, public singleton<settings> {
     void set_gpu_device(QString value);
     int gpu_device_idx() const;
     void set_gpu_device_idx(int value);
+    QStringList audio_inputs() const;
+    QString audio_input() const;
+    void set_audio_input(QString value);
+    int audio_input_idx() const;
+    void set_audio_input_idx(int value);
 
     // stt
     QString default_stt_model() const;
@@ -246,6 +258,8 @@ class settings : public QSettings, public singleton<settings> {
     void whisper_use_gpu_changed();
     void gpu_devices_changed();
     void gpu_device_changed();
+    void audio_inputs_changed();
+    void audio_input_changed();
 
    private:
     inline static const QString settings_filename =
@@ -254,10 +268,12 @@ class settings : public QSettings, public singleton<settings> {
         QStringLiteral("org.kde.desktop");
     bool m_restart_required = false;
     QStringList m_gpu_devices;
+    QStringList m_audio_inputs;
 
     static QString settings_filepath();
     void update_qt_style() const;
     void update_gpu_devices();
+    void update_audio_inputs();
 
     launch_mode_t m_launch_mode = launch_mode_t::app_stanalone;
 };
