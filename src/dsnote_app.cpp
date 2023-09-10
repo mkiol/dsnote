@@ -1547,6 +1547,44 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
                             dest_file);
 }
 
+static QString filename_to_audio_format(const QString &filename) {
+    if (filename.endsWith(QLatin1String(".wav"), Qt::CaseInsensitive))
+        return QStringLiteral("wav");
+    if (filename.endsWith(QLatin1String(".mp3"), Qt::CaseInsensitive))
+        return QStringLiteral("mp3");
+    if (filename.endsWith(QLatin1String(".ogg"), Qt::CaseInsensitive))
+        return QStringLiteral("ogg");
+    return QStringLiteral("wav");
+}
+
+static QString audio_format_to_str(settings::audio_format_t format) {
+    switch (format) {
+        case settings::audio_format_t::AudioFormatWav:
+            return QStringLiteral("wav");
+        case settings::audio_format_t::AudioFormatMp3:
+            return QStringLiteral("mp3");
+        case settings::audio_format_t::AudioFormatOgg:
+            return QStringLiteral("ogg");
+        case settings::audio_format_t::AudioFormatAuto:
+            break;
+    }
+
+    return QStringLiteral("wav");
+}
+
+static QString audio_quality_to_str(settings::audio_quality_t quality) {
+    switch (quality) {
+        case settings::audio_quality_t::AudioQualityVbrHigh:
+            return QStringLiteral("vbr_high");
+        case settings::audio_quality_t::AudioQualityVbrMedium:
+            return QStringLiteral("vbr_medium");
+        case settings::audio_quality_t::AudioQualityVbrLow:
+            return QStringLiteral("vbr_low");
+    }
+
+    return QStringLiteral("vbr_medium");
+}
+
 void dsnote_app::speech_to_file_internal(const QString &text,
                                          const QString &model_id,
                                          const QString &dest_file) {
@@ -1561,11 +1599,33 @@ void dsnote_app::speech_to_file_internal(const QString &text,
     }
 
     int new_task = 0;
-    m_dest_file = dest_file;
 
     QVariantMap options;
     options.insert("speech_speed",
                    static_cast<int>(settings::instance()->speech_speed()));
+
+    auto audio_format_str = [&dest_file]() {
+        if (settings::instance()->audio_format() ==
+            settings::audio_format_t::AudioFormatAuto) {
+            return filename_to_audio_format(dest_file);
+        } else {
+            return audio_format_to_str(settings::instance()->audio_format());
+        }
+    }();
+
+    options.insert("audio_format", audio_format_str);
+    options.insert("audio_quality",
+                   audio_quality_to_str(settings::instance()->audio_quality()));
+
+    if (QFileInfo{dest_file}.suffix().toLower() != audio_format_str) {
+        qDebug() << "file name doesn't have proper extension for audio format";
+        if (dest_file.endsWith('.'))
+            m_dest_file = dest_file + audio_format_str;
+        else
+            m_dest_file = dest_file + '.' + audio_format_str;
+    } else {
+        m_dest_file = dest_file;
+    }
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {

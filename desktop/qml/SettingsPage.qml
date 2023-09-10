@@ -294,6 +294,92 @@ DialogPage {
         }
     }
 
+    GridLayout {
+        columns: root.verticalMode ? 1 : 2
+        columnSpacing: appWin.padding
+        rowSpacing: appWin.padding
+
+        Label {
+            Layout.fillWidth: true
+            text: qsTr("Audio format")
+        }
+        ComboBox {
+            Layout.fillWidth: verticalMode
+            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            currentIndex: {
+                switch (_settings.audio_format) {
+                case Settings.AudioFormatWav: return 1;
+                case Settings.AudioFormatMp3: return 2;
+                case Settings.AudioFormatOgg: return 3;
+                case Settings.AudioFormatAuto: break;
+                }
+                return 0;
+            }
+            model: [
+                qsTr("Auto"),
+                "Wave",
+                "MP3",
+                "Ogg Vorbis"
+            ]
+            onActivated: {
+                switch (index) {
+                case 1: _settings.audio_format = Settings.AudioFormatWav; break;
+                case 2: _settings.audio_format = Settings.AudioFormatMp3; break;
+                case 3: _settings.audio_format = Settings.AudioFormatOgg; break;
+                case 0:
+                default: _settings.audio_format = Settings.AudioFormatAuto;
+                }
+            }
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("The audio format used when saving to a file.") + " " +
+                          qsTr("%1 means that format will be set according to the file extension.").arg("<i>" +  qsTr("Auto") + "</i>")
+        }
+    }
+
+    GridLayout {
+        columns: root.verticalMode ? 1 : 2
+        columnSpacing: appWin.padding
+        rowSpacing: appWin.padding
+
+        Label {
+            Layout.fillWidth: true
+            text: qsTr("Compression quality")
+        }
+        ComboBox {
+            enabled: _settings.audio_format !== Settings.AudioFormatWav
+            Layout.fillWidth: verticalMode
+            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            currentIndex: {
+                switch (_settings.audio_quality) {
+                case Settings.AudioQualityVbrHigh: return 0;
+                case Settings.AudioQualityVbrMedium: return 1;
+                case Settings.AudioQualityVbrLow: return 2;
+                }
+                return 1;
+            }
+            model: [
+                qsTr("High"),
+                qsTr("Medium"),
+                qsTr("Low")
+            ]
+            onActivated: {
+                switch (index) {
+                case 0: _settings.audio_quality = Settings.AudioQualityVbrHigh; break;
+                case 1: _settings.audio_quality = Settings.AudioQualityVbrMedium; break;
+                case 2: _settings.audio_quality = Settings.AudioQualityVbrLow; break;
+                default: _settings.audio_quality = Settings.AudioQualityVbrMedium;
+                }
+            }
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("The compression quality used when saving to a file.") + " " +
+                          qsTr("%1 results in a larger file size.").arg("<i>" + qsTr("High") + "</i>")
+        }
+    }
+
     SectionLabel {
         text: qsTr("User Interface")
     }

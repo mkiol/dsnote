@@ -37,6 +37,7 @@ option(BUILD_RHVOICE "download rhvoice lib, build and install shared lib" ON)
 option(BUILD_BERGAMOT "download bergamot-translator lib, build and install shared lib" ON)
 option(BUILD_UROMAN "download and install uroman lib" ON) # only for x86_64
 option(BUILD_RUBBERBAND "download rubberband lib, build and link statically" ON) # only for x86_64
+option(BUILD_FFMPEG "download ffmpeg libs, build and link statically" ON)
 
 if(${WITH_DESKTOP} AND ${WITH_SFOS})
     message(FATAL_ERROR "options WITH_DESKTOP and WITH_SFOS cannot be set together")
@@ -237,6 +238,8 @@ set(dsnote_lib_sources
     ${sources_dir}/opencl_tools.hpp
     ${sources_dir}/opencl_tools.cpp
     ${sources_dir}/astrunc/astrunc.h
+    ${sources_dir}/media_compressor.hpp
+    ${sources_dir}/media_compressor.cpp
 )
 
 configure_file(config.h.in config.h)
@@ -512,6 +515,49 @@ if(arch_x8664)
         list(APPEND deps_libs ${sleefdft_path} ${sleef_LIBRARIES})
     endif()
 endif(arch_x8664)
+
+if(BUILD_FFMPEG)
+    include(${cmake_path}/ffmpeg.cmake)
+else()
+    find_library(lame_path mp3lame)
+    list(APPEND deps_libs ${lame_path})
+
+    pkg_search_module(ogg REQUIRED ogg)
+    list(APPEND deps_libs ${ogg_LIBRARIES})
+    list(APPEND includes ${ogg_INCLUDE_DIRS})
+
+    pkg_search_module(vorbis REQUIRED vorbis)
+    list(APPEND deps_libs ${vorbis_LIBRARIES})
+    list(APPEND includes ${vorbis_INCLUDE_DIRS})
+
+    pkg_search_module(vorbisenc REQUIRED vorbisenc)
+    list(APPEND deps_libs ${vorbisenc_LIBRARIES})
+    list(APPEND includes ${vorbisenc_INCLUDE_DIRS})
+
+    pkg_search_module(ffmpeg_avutil REQUIRED libavutil>=57.17.100)
+    pkg_search_module(ffmpeg_avcodec REQUIRED libavcodec>=59.18.100)
+    pkg_search_module(ffmpeg_avformat REQUIRED libavformat>=59.16.100)
+    pkg_search_module(ffmpeg_avdevice REQUIRED libavdevice>=59.7.100)
+    pkg_search_module(ffmpeg_avfilter REQUIRED libavfilter>=8.44.100)
+    pkg_search_module(ffmpeg_swresample REQUIRED libswresample>=4.3.100)
+    pkg_search_module(ffmpeg_swscale REQUIRED libswscale>=6.7.100)
+    list(APPEND deps_libs
+        ${ffmpeg_avdevice_LIBRARIES}
+        ${ffmpeg_avfilter_LIBRARIES}
+        ${ffmpeg_avformat_LIBRARIES}
+        ${ffmpeg_avcoodec_LIBRARIES}
+        ${ffmpeg_swresample_LIBRARIES}
+        ${ffmpeg_swscale_LIBRARIES}
+        ${ffmpeg_avutil_LIBRARIES})
+    list(APPEND includes
+        ${ffmpeg_avutil_INCLUDE_DIRS}
+        ${ffmpeg_avcoodec_INCLUDE_DIRS}
+        ${ffmpeg_avformat_INCLUDE_DIRS}
+        ${ffmpeg_avdevice_INCLUDE_DIRS}
+        ${ffmpeg_avfilter_INCLUDE_DIRS}
+        ${ffmpeg_swresample_INCLUDE_DIRS}
+        ${ffmpeg_swscale_INCLUDE_DIRS})
+endif()
 
 if(WITH_SFOS)
     pkg_search_module(sailfish REQUIRED sailfishapp)

@@ -24,6 +24,7 @@
 #include "ds_engine.hpp"
 #include "espeak_engine.hpp"
 #include "file_source.h"
+#include "media_compressor.hpp"
 #include "mic_source.h"
 #include "module_tools.hpp"
 #include "piper_engine.hpp"
@@ -97,6 +98,34 @@ QDebug operator<<(QDebug d, speech_service::state_t state_value) {
     }
 
     return d;
+}
+
+static settings::audio_format_t tts_audio_format_from_options(
+    const QVariantMap &options) {
+    if (options.contains(QStringLiteral("audio_format"))) {
+        auto format = options.value(QStringLiteral("audio_format")).toString();
+        if (format == "wav") return settings::audio_format_t::AudioFormatWav;
+        if (format == "mp3") return settings::audio_format_t::AudioFormatMp3;
+        if (format == "ogg") return settings::audio_format_t::AudioFormatOgg;
+    }
+
+    return settings::audio_format_t::AudioFormatAuto;
+}
+
+static settings::audio_quality_t tts_audio_quality_from_options(
+    const QVariantMap &options) {
+    if (options.contains(QStringLiteral("audio_quality"))) {
+        auto quality =
+            options.value(QStringLiteral("audio_quality")).toString();
+        if (quality == "vbr_high")
+            return settings::audio_quality_t::AudioQualityVbrHigh;
+        if (quality == "vbr_medium")
+            return settings::audio_quality_t::AudioQualityVbrMedium;
+        if (quality == "vbr_low")
+            return settings::audio_quality_t::AudioQualityVbrLow;
+    }
+
+    return settings::audio_quality_t::AudioQualityVbrMedium;
 }
 
 speech_service::speech_service(QObject *parent)
@@ -437,7 +466,7 @@ speech_service::speech_service(QObject *parent)
 
     setup_modules();
 
-    remove_cached_wavs();
+    remove_cached_media_files();
 
     handle_models_changed();
 }
@@ -1341,6 +1370,74 @@ void speech_service::handle_tts_speech_encoded(const std::string &text,
     }
 }
 
+static QString file_ext_from_format(settings::audio_format_t format) {
+    switch (format) {
+        case settings::audio_format_t::AudioFormatWav:
+            return "wav";
+        case settings::audio_format_t::AudioFormatMp3:
+            return "mp3";
+        case settings::audio_format_t::AudioFormatOgg:
+            return "ogg";
+        case settings::audio_format_t::AudioFormatAuto:
+            break;
+    }
+
+    return "";
+}
+
+static QString audio_quality_to_str(settings::audio_quality_t quality) {
+    switch (quality) {
+        case settings::audio_quality_t::AudioQualityVbrHigh:
+            return QStringLiteral("vbr_high");
+        case settings::audio_quality_t::AudioQualityVbrMedium:
+            return QStringLiteral("vbr_medium");
+        case settings::audio_quality_t::AudioQualityVbrLow:
+            return QStringLiteral("vbr_low");
+    }
+
+    return QStringLiteral("vbr_medium");
+}
+
+static media_compressor::format_t media_format_from_audio_format(
+    settings::audio_format_t format) {
+    switch (format) {
+        case settings::audio_format_t::AudioFormatWav:
+            return media_compressor::format_t::wav;
+        case settings::audio_format_t::AudioFormatMp3:
+            return media_compressor::format_t::mp3;
+        case settings::audio_format_t::AudioFormatOgg:
+            return media_compressor::format_t::ogg;
+        case settings::audio_format_t::AudioFormatAuto:
+            break;
+    }
+
+    return media_compressor::format_t::unknown;
+}
+
+static media_compressor::quality_t media_quality_from_audio_quality(
+    settings::audio_quality_t quality) {
+    switch (quality) {
+        case settings::audio_quality_t::AudioQualityVbrHigh:
+            return media_compressor::quality_t::vbr_high;
+        case settings::audio_quality_t::AudioQualityVbrMedium:
+            return media_compressor::quality_t::vbr_medium;
+        case settings::audio_quality_t::AudioQualityVbrLow:
+            return media_compressor::quality_t::vbr_low;
+    }
+
+    return media_compressor::quality_t::vbr_medium;
+}
+
+static QString merged_file_path(const std::vector<QString> &files) {
+    return QStringLiteral("%1/merged-%2")
+        .arg(settings::instance()->cache_dir(),
+             QString::number(qHash(std::accumulate(
+                 files.cbegin(), files.cend(), QString{},
+                 [](auto new_name, const auto &file) {
+                     return std::move(new_name) + QFileInfo{file}.baseName();
+                 }))));
+}
+
 void speech_service::handle_speech_to_file(const tts_partial_result_t &result) {
     if (m_current_task->id != result.task_id) {
         qWarning() << "invalid task:" << result.task_id;
@@ -1359,13 +1456,39 @@ void speech_service::handle_speech_to_file(const tts_partial_result_t &result) {
     if (result.last) {
         qDebug() << "speech to file finished";
 
-        auto merged_file = merge_wav_files(m_current_task->files);
+        auto format = tts_audio_format_from_options(m_current_task->options);
+        auto quality = tts_audio_quality_from_options(m_current_task->options);
+        auto out_file = QStringLiteral("%1-%2.%3")
+                            .arg(merged_file_path(m_current_task->files),
+                                 audio_quality_to_str(quality),
+                                 file_ext_from_format(format));
 
-        if (merged_file.isEmpty()) return;
+        qDebug() << "out file:" << out_file;
 
-        qDebug() << "wav file:" << merged_file;
+        if (!QFileInfo::exists(out_file)) {
+            std::vector<std::string> input_files;
+            std::transform(m_current_task->files.cbegin(),
+                           m_current_task->files.cend(),
+                           std::back_inserter(input_files),
+                           [](const auto &file) { return file.toStdString(); });
 
-        emit tts_speech_to_file_finished(merged_file, result.task_id);
+            try {
+                media_compressor{input_files, out_file.toStdString(),
+                                 media_format_from_audio_format(format),
+                                 media_quality_from_audio_quality(quality)}
+                    .compress();
+            } catch (const std::runtime_error &err) {
+                qWarning() << "compressor error:" << err.what();
+
+                QFile::remove(out_file);
+                emit tts_engine_error(result.task_id);
+                cancel(result.task_id);
+                return;
+            }
+
+            emit tts_speech_to_file_finished(out_file, result.task_id);
+        }
+
         cancel(result.task_id);
     }
 }
@@ -1810,6 +1933,7 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
         speech_mode_t::automatic,
         out_lang,
         {},
+        {},
         {}};
 
     if (m_current_task->model_id.isEmpty()) {
@@ -1865,6 +1989,7 @@ int speech_service::mnt_translate(const QString &text, QString lang,
                       speech_mode_t::translate,
                       out_lang,
                       {},
+                      {},
                       {}};
 
     if (m_current_task->model_id.isEmpty()) {
@@ -1913,7 +2038,7 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
     if (set_pending_stt_task) {
         qDebug() << "setting pending stt task";
         m_pending_task = {
-            next_task_id(), engine_t::stt, lang, mode, out_lang, {}, {}};
+            next_task_id(), engine_t::stt, lang, mode, out_lang, {}, {}, {}};
         return m_pending_task->id;
     }
 
@@ -1922,6 +2047,7 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
                       restart_stt_engine(mode, lang, out_lang),
                       mode,
                       out_lang,
+                      {},
                       {},
                       {}};
 
@@ -2009,7 +2135,8 @@ int speech_service::tts_play_speech(const QString &text, QString lang,
         speech_mode_t::play_speech,
         lang,
         {},
-        {}};
+        {},
+        options};
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -2067,7 +2194,8 @@ int speech_service::tts_speech_to_file(const QString &text, QString lang,
         speech_mode_t::speech_to_file,
         lang,
         {0, static_cast<size_t>(text.size())},
-        {}};
+        {},
+        options};
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -2694,10 +2822,12 @@ void speech_service::stop_keepalive_current_task() {
     m_keepalive_current_task_timer.stop();
 }
 
-void speech_service::remove_cached_wavs() {
+void speech_service::remove_cached_media_files() {
     QDir dir{settings::instance()->cache_dir()};
 
-    dir.setNameFilters(QStringList{} << "*.wav");
+    dir.setNameFilters(QStringList{} << "*.wav"
+                                     << "*.mp3"
+                                     << "*.ogg");
     dir.setFilter(QDir::Files);
 
     for (const auto &file : std::as_const(dir).entryList()) dir.remove(file);
@@ -2733,15 +2863,7 @@ void speech_service::setup_modules() {
 }
 
 QString speech_service::merge_wav_files(const std::vector<QString> &files) {
-    QString out_file_path =
-        QStringLiteral("%1/merged-%2.wav")
-            .arg(settings::instance()->cache_dir(),
-                 QString::number(qHash(
-                     std::accumulate(files.cbegin(), files.cend(), QString{},
-                                     [](auto new_name, const auto &file) {
-                                         return std::move(new_name) +
-                                                QFileInfo{file}.baseName();
-                                     }))));
+    QString out_file_path = merged_file_path(files);
 
     QFile out_file{out_file_path};
     if (!out_file.open(QIODevice::WriteOnly)) {

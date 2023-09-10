@@ -36,6 +36,10 @@ cleanup:
   - "/share/rhvoice"
   - "/share/runtime"
   - "/share/vim"
+  - "/share/ffmpeg"
+  - "/share/aclocal"
+  - "/bin/nasm"
+  - "/bin/ndisasm"
   - "libboost*"
   - "libRHVoice_audio*"
   - "pcre2*"
@@ -558,6 +562,123 @@ modules:
         url: https://breakfastquay.com/files/releases/rubberband-3.3.0.tar.bz2
         sha256: d9ef89e2b8ef9f85b13ac3c2faec30e20acf2c9f3a9c8c45ce637f2bc95e576c
 
+  - name: ogg
+    buildsystem: autotools
+    config-opts:
+      - --enable-static=true
+      - --enable-shared=false
+      - --with-pic=yes
+    sources:
+      - type: archive
+        url: https://downloads.xiph.org/releases/ogg/libogg-1.3.5.tar.xz
+        sha256: c4d91be36fc8e54deae7575241e03f4211eb102afb3fc0775fbbc1b740016705
+
+  - name: vorbis
+    buildsystem: autotools
+    config-opts:
+      - --enable-static=true
+      - --enable-shared=false
+      - --disable-oggtest
+      - --with-pic=yes
+    sources:
+      - type: archive
+        url: https://ftp.osuosl.org/pub/xiph/releases/vorbis/libvorbis-1.3.7.tar.xz
+        sha256: b33cc4934322bcbf6efcbacf49e3ca01aadbea4114ec9589d1b1e9d20f72954b
+
+  - name: nasm
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/nasm-2.15.05.tar.gz
+        sha256: 9182a118244b058651c576baa9d0366ee05983c4d4ae1d9ddd3236a9f2304997
+
+  - name: lame
+    buildsystem: autotools
+    config-opts:
+      - --enable-static=true
+      - --enable-shared=false
+      - --enable-nasm
+      - --disable-decoder
+      - --disable-analyzer-hooks
+      - --disable-frontend
+      - --with-pic=yes
+    sources:
+      - type: archive
+        url: https://altushost-swe.dl.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz
+        sha256: ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
+
+  - name: ffmpeg
+    buildsystem: autotools
+    config-opts:
+      - --disable-autodetect
+      - --disable-doc
+      - --disable-programs
+      - --disable-everything
+      - --enable-static
+      - --disable-shared
+      - --enable-nonfree
+      - --enable-gpl
+      - --enable-pic
+      - --enable-protocol=file
+      - --enable-filter=aresample
+      - --enable-filter=aformat
+      - --enable-filter=anull
+      - --enable-encoder=libmp3lame
+      - --enable-encoder=libvorbis
+      - --enable-decoder=pcm_u8
+      - --enable-decoder=pcm_u32le
+      - --enable-decoder=pcm_u32be
+      - --enable-decoder=pcm_u24le
+      - --enable-decoder=pcm_u24be
+      - --enable-decoder=pcm_u16le
+      - --enable-decoder=pcm_u16be
+      - --enable-decoder=pcm_s8
+      - --enable-decoder=pcm_s32le
+      - --enable-decoder=pcm_s32be
+      - --enable-decoder=pcm_s24le
+      - --enable-decoder=pcm_s24be
+      - --enable-decoder=pcm_s16le
+      - --enable-decoder=pcm_s16be
+      - --enable-decoder=pcm_f64le
+      - --enable-decoder=pcm_f64be
+      - --enable-decoder=pcm_f32le
+      - --enable-decoder=pcm_f32be
+      - --enable-decoder=aac
+      - --enable-decoder=aac_fixed
+      - --enable-decoder=aac_latm
+      - --enable-decoder=mp3
+      - --enable-decoder=mp3adu
+      - --enable-decoder=mp3adufloat
+      - --enable-decoder=mp3float
+      - --enable-decoder=mp3on4
+      - --enable-decoder=mp3on4float
+      - --enable-decoder=libvorbis
+      - --enable-muxer=mp3
+      - --enable-muxer=ogg
+      - --enable-muxer=wav
+      - --enable-demuxer=mpegts
+      - --enable-demuxer=aac
+      - --enable-demuxer=mp3
+      - --enable-demuxer=mov
+      - --enable-demuxer=ogg
+      - --enable-demuxer=matroska
+      - --enable-demuxer=flac
+      - --enable-demuxer=wav
+      - --enable-demuxer=mpegvideo
+      - --enable-parser=h264
+      - --enable-parser=aac
+      - --enable-parser=aac_latm
+      - --enable-parser=ac3
+      - --enable-libmp3lame
+      - --enable-libvorbis
+      - --extra-libs=-lvorbis -logg -lm
+    sources:
+      - type: archive
+        url: https://ffmpeg.org/releases/ffmpeg-6.0.tar.xz
+        sha256: 57be87c22d9b49c112b6d24bc67d42508660e6b718b3db89c44e47e289137082
+      - type: patch
+        path: ../patches/ffmpeg.patch
+
   - name: dsnote
     buildsystem: cmake-ninja
     config-opts:
@@ -582,6 +703,7 @@ modules:
       - -DBUILD_BERGAMOT=OFF
       - -DBUILD_UROMAN=OFF
       - -DBUILD_RUBBERBAND=OFF
+      - -DBUILD_FFMPEG=OFF
     build-options:
       arch:
         aarch64:

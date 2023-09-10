@@ -196,9 +196,9 @@ ToolBar {
         id: fileWriteDialog
         property bool translated: false
 
-        defaultSuffix: "wav"
+        //defaultSuffix: "wav"
         title: qsTr("Save File")
-        nameFilters: [ qsTr("MS Wave") + " (*.wav)", qsTr("All files") + " (*)" ]
+        nameFilters: [ "Wave (*.wav)", "MP3 (*.mp3)", "Ogg Vorbis (*.ogg)", qsTr("All files") + " (*)" ]
         folder: _settings.file_save_dir_url
         selectExisting: false
         selectMultiple: false

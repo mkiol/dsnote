@@ -422,6 +422,34 @@ void settings::set_font_size(int value) {
     }
 }
 
+void settings::set_audio_format(audio_format_t value) {
+    if (audio_format() != value) {
+        setValue(QStringLiteral("audio_format"), static_cast<int>(value));
+        emit audio_format_changed();
+    }
+}
+
+settings::audio_format_t settings::audio_format() const {
+    return static_cast<audio_format_t>(
+        value(QStringLiteral("audio_format"),
+              static_cast<int>(audio_format_t::AudioFormatAuto))
+            .toInt());
+}
+
+void settings::set_audio_quality(audio_quality_t value) {
+    if (audio_quality() != value) {
+        setValue(QStringLiteral("audio_quality"), static_cast<int>(value));
+        emit audio_quality_changed();
+    }
+}
+
+settings::audio_quality_t settings::audio_quality() const {
+    return static_cast<audio_quality_t>(
+        value(QStringLiteral("audio_quality"),
+              static_cast<int>(audio_quality_t::AudioQualityVbrMedium))
+            .toInt());
+}
+
 bool settings::translator_mode() const {
     return value(QStringLiteral("translator_mode"), false).toBool();
 }

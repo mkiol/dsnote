@@ -58,6 +58,10 @@ class settings : public QSettings, public singleton<settings> {
                    set_speech_speed NOTIFY speech_speed_changed)
     Q_PROPERTY(int font_size READ font_size WRITE set_font_size NOTIFY
                    font_size_changed)
+    Q_PROPERTY(audio_format_t audio_format READ audio_format WRITE
+                   set_audio_format NOTIFY audio_format_changed)
+    Q_PROPERTY(audio_quality_t audio_quality READ audio_quality WRITE
+                   set_audio_quality NOTIFY audio_quality_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -126,6 +130,21 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(speech_speed_t)
 
+    enum class audio_format_t {
+        AudioFormatAuto = 0,
+        AudioFormatWav = 1,
+        AudioFormatMp3 = 2,
+        AudioFormatOgg = 3
+    };
+    Q_ENUM(audio_format_t)
+
+    enum class audio_quality_t {
+        AudioQualityVbrHigh = 10,
+        AudioQualityVbrMedium = 11,
+        AudioQualityVbrLow = 12,
+    };
+    Q_ENUM(audio_quality_t)
+
     settings();
 
     launch_mode_t launch_mode() const;
@@ -172,6 +191,10 @@ class settings : public QSettings, public singleton<settings> {
     void set_restart_required();
     void set_font_size(int value);
     int font_size() const;
+    void set_audio_format(audio_format_t value);
+    audio_format_t audio_format() const;
+    void set_audio_quality(audio_quality_t value);
+    audio_quality_t audio_quality() const;
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -244,6 +267,8 @@ class settings : public QSettings, public singleton<settings> {
     void restart_required_changed();
     void speech_speed_changed();
     void font_size_changed();
+    void audio_format_changed();
+    void audio_quality_changed();
 
     // service
     void models_dir_changed();

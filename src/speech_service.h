@@ -315,6 +315,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         QString out_lang;
         counter_t counter;
         std::vector<QString> files;
+        QVariantMap options;
     };
 
     inline static const QString DBUS_SERVICE_NAME{
@@ -451,7 +452,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         const std::map<QString, model_data_t> &available_models_map);
     void set_state(state_t new_state);
     void update_task_state();
-    static void remove_cached_wavs();
+    static void remove_cached_media_files();
     void handle_tts_queue();
     static void setup_modules();
     static QString merge_wav_files(const std::vector<QString> &files);
