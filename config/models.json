@@ -4015,7 +4015,7 @@
             "speaker": "3"
         },
         {
-            "name": "English British (Piper VCTK P256 Medium Female)",
+            "name": "English British (Piper VCTK P256 Medium Male)",
             "model_id": "en_piper_gb_vctk_medium_4",
             "model_alias_of": "en_piper_gb_vctk_medium",
             "lang_id": "en",
