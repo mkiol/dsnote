@@ -446,7 +446,7 @@ DialogPage {
         Layout.fillWidth: true
         visible: _settings.restart_required
         color: "red"
-        text: qsTr("Restart an application to apply changes.")
+        text: qsTr("Restart the application to apply changes.")
     }
 
     SectionLabel {
