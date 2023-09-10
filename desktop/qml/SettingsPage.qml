@@ -317,7 +317,7 @@ DialogPage {
             }
             model: [
                 qsTr("Auto"),
-                "Wave",
+                "Wav",
                 "MP3",
                 "Ogg Vorbis"
             ]

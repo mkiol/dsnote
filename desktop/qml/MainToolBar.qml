@@ -98,7 +98,7 @@ ToolBar {
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Convert text to audio and save as WAV file.")
+                        ToolTip.text: qsTr("Convert text to audio file.")
                     }
 
                     MenuItem {
@@ -118,7 +118,7 @@ ToolBar {
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Convert translated text to audio and save as WAV file.")
+                        ToolTip.text: qsTr("Convert translated text to audio file.")
                     }
                 }
             }
@@ -196,7 +196,6 @@ ToolBar {
         id: fileWriteDialog
         property bool translated: false
 
-        //defaultSuffix: "wav"
         title: qsTr("Save File")
         nameFilters: [ "Wave (*.wav)", "MP3 (*.mp3)", "Ogg Vorbis (*.ogg)", qsTr("All files") + " (*)" ]
         folder: _settings.file_save_dir_url
