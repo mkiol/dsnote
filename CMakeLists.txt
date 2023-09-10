@@ -81,12 +81,12 @@ set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
 set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
-set(info_conf_version "30")
+set(info_conf_version "31")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · eSpeak NG · Bergamot Translator · \
-Rubber Band Library · simdjson · uroman · astrunc")
+Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis")
 
 project(${id} VERSION 4.1.0)
 
