@@ -72,6 +72,31 @@ QDebug operator<<(QDebug d, settings::speech_mode_t speech_mode) {
     return d;
 }
 
+static QString filename_to_audio_format(const QString& filename) {
+    if (filename.endsWith(QLatin1String(".wav"), Qt::CaseInsensitive))
+        return QStringLiteral("wav");
+    if (filename.endsWith(QLatin1String(".mp3"), Qt::CaseInsensitive))
+        return QStringLiteral("mp3");
+    if (filename.endsWith(QLatin1String(".ogg"), Qt::CaseInsensitive))
+        return QStringLiteral("ogg");
+    return QStringLiteral("wav");
+}
+
+static QString audio_format_to_str(settings::audio_format_t format) {
+    switch (format) {
+        case settings::audio_format_t::AudioFormatWav:
+            return QStringLiteral("wav");
+        case settings::audio_format_t::AudioFormatMp3:
+            return QStringLiteral("mp3");
+        case settings::audio_format_t::AudioFormatOgg:
+            return QStringLiteral("ogg");
+        case settings::audio_format_t::AudioFormatAuto:
+            break;
+    }
+
+    return QStringLiteral("wav");
+}
+
 settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     qDebug() << "app:" << APP_ORG << APP_ID;
     qDebug() << "config location:"
@@ -322,7 +347,9 @@ QString settings::file_save_dir_name() const {
 QString settings::file_save_filename() const {
     auto dir = QDir{file_save_dir()};
 
-    auto filename = QStringLiteral("speech-note-%1.wav");
+    auto ext = audio_format_to_str(audio_format());
+
+    auto filename = QStringLiteral("speech-note-%1.") + ext;
 
     for (int i = 1; i <= 1000; ++i) {
         auto fn = filename.arg(i);
@@ -440,6 +467,7 @@ void settings::set_audio_quality(audio_quality_t value) {
     if (audio_quality() != value) {
         setValue(QStringLiteral("audio_quality"), static_cast<int>(value));
         emit audio_quality_changed();
+        emit file_save_dir_changed();
     }
 }
 
@@ -498,6 +526,7 @@ void settings::set_insert_mode(insert_mode_t value) {
 }
 
 int settings::qt_style_idx() const {
+#ifdef USE_DESKTOP
     auto idx = value(QStringLiteral("qt_style_idx2"), 1000).toInt();
 
     if (idx < 0)
@@ -506,15 +535,20 @@ int settings::qt_style_idx() const {
         idx = QQuickStyle::availableStyles().lastIndexOf(default_qt_style);
 
     return idx;
+#else
+    return 0;
+#endif
 }
 
-void settings::set_qt_style_idx(int value) {
+void settings::set_qt_style_idx([[maybe_unused]] int value) {
+#ifdef USE_DESKTOP
     if (value >= QQuickStyle::availableStyles().size()) value = -1;
     if (qt_style_idx() != value) {
         setValue(QStringLiteral("qt_style_idx2"), value);
         emit qt_style_idx_changed();
         set_restart_required();
     }
+#endif
 }
 
 QUrl settings::app_icon() const {
@@ -580,10 +614,50 @@ void settings::set_restart_required() {
     }
 }
 
+QString settings::audio_format_str_from_filename(const QString& filename) {
+    if (settings::instance()->audio_format() ==
+        settings::audio_format_t::AudioFormatAuto) {
+        return filename_to_audio_format(filename);
+    } else {
+        return audio_format_to_str(settings::instance()->audio_format());
+    }
+}
+
+bool settings::file_exists(const QString& file_path) const {
+    return QFileInfo::exists(file_path);
+}
+
+QString settings::add_ext_to_audio_filename(const QString& filename) const {
+    auto audio_format_str = settings::audio_format_str_from_filename(filename);
+
+    QString new_filename;
+
+    auto sf = filename.split('.');
+
+    if (sf.last().toLower() != audio_format_str) {
+        if (sf.size() > 1) {
+            if (sf.last().isEmpty())
+                sf.last() = audio_format_str;
+            else
+                sf.last() = std::move(audio_format_str);
+        } else {
+            sf.push_back(std::move(audio_format_str));
+        }
+    }
+
+    new_filename = sf.join('.');
+
+    return new_filename;
+}
+
 QStringList settings::qt_styles() const {
+#ifdef USE_DESKTOP
     auto styles = QQuickStyle::availableStyles();
     styles.append(tr("Don't force"));
     return styles;
+#else
+    return {};
+#endif
 }
 
 void settings::update_qt_style() const {

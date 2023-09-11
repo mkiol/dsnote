@@ -301,7 +301,7 @@ DialogPage {
 
         Label {
             Layout.fillWidth: true
-            text: qsTr("Audio format")
+            text: qsTr("Audio file format")
         }
         ComboBox {
             Layout.fillWidth: verticalMode

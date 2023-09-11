@@ -202,6 +202,10 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE bool has_gpu_device() const;
     Q_INVOKABLE bool has_audio_input() const;
     Q_INVOKABLE QStringList qt_styles() const;
+    Q_INVOKABLE bool file_exists(const QString &file_path) const;
+    Q_INVOKABLE QString
+    add_ext_to_audio_filename(const QString &filename) const;
+    static QString audio_format_str_from_filename(const QString &filename);
 
     // service
     QString models_dir() const;

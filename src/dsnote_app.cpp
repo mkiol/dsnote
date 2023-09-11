@@ -696,7 +696,10 @@ void dsnote_app::handle_tts_speech_to_file_finished(const QString &file,
 
     if (QFile::exists(m_dest_file)) QFile::remove(m_dest_file);
 
-    if (QFile::copy(file, m_dest_file)) emit speech_to_file_done();
+    if (QFile::copy(file, m_dest_file)) {
+        QFile::remove(file);
+        emit speech_to_file_done();
+    }
 }
 
 void dsnote_app::handle_tts_speech_to_file_progress(double new_progress,
@@ -1547,31 +1550,6 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
                             dest_file);
 }
 
-static QString filename_to_audio_format(const QString &filename) {
-    if (filename.endsWith(QLatin1String(".wav"), Qt::CaseInsensitive))
-        return QStringLiteral("wav");
-    if (filename.endsWith(QLatin1String(".mp3"), Qt::CaseInsensitive))
-        return QStringLiteral("mp3");
-    if (filename.endsWith(QLatin1String(".ogg"), Qt::CaseInsensitive))
-        return QStringLiteral("ogg");
-    return QStringLiteral("wav");
-}
-
-static QString audio_format_to_str(settings::audio_format_t format) {
-    switch (format) {
-        case settings::audio_format_t::AudioFormatWav:
-            return QStringLiteral("wav");
-        case settings::audio_format_t::AudioFormatMp3:
-            return QStringLiteral("mp3");
-        case settings::audio_format_t::AudioFormatOgg:
-            return QStringLiteral("ogg");
-        case settings::audio_format_t::AudioFormatAuto:
-            break;
-    }
-
-    return QStringLiteral("wav");
-}
-
 static QString audio_quality_to_str(settings::audio_quality_t quality) {
     switch (quality) {
         case settings::audio_quality_t::AudioQualityVbrHigh:
@@ -1604,14 +1582,7 @@ void dsnote_app::speech_to_file_internal(const QString &text,
     options.insert("speech_speed",
                    static_cast<int>(settings::instance()->speech_speed()));
 
-    auto audio_format_str = [&dest_file]() {
-        if (settings::instance()->audio_format() ==
-            settings::audio_format_t::AudioFormatAuto) {
-            return filename_to_audio_format(dest_file);
-        } else {
-            return audio_format_to_str(settings::instance()->audio_format());
-        }
-    }();
+    auto audio_format_str = settings::audio_format_str_from_filename(dest_file);
 
     options.insert("audio_format", audio_format_str);
     options.insert("audio_quality",

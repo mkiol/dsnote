@@ -163,6 +163,64 @@ Page {
                 }
             }
 
+            ComboBox {
+                label: qsTr("Audio file format")
+                currentIndex: {
+                    switch (_settings.audio_format) {
+                    case Settings.AudioFormatWav: return 1;
+                    case Settings.AudioFormatMp3: return 2;
+                    case Settings.AudioFormatOgg: return 3;
+                    case Settings.AudioFormatAuto: break;
+                    }
+                    return 0;
+                }
+                menu: ContextMenu {
+                    MenuItem { text: qsTr("Auto") }
+                    MenuItem { text: "Wav" }
+                    MenuItem { text: "MP3" }
+                    MenuItem { text: "Ogg Vorbis" }
+                }
+                onCurrentIndexChanged: {
+                    switch (currentIndex) {
+                    case 1: _settings.audio_format = Settings.AudioFormatWav; break;
+                    case 2: _settings.audio_format = Settings.AudioFormatMp3; break;
+                    case 3: _settings.audio_format = Settings.AudioFormatOgg; break;
+                    case 0:
+                    default: _settings.audio_format = Settings.AudioFormatAuto;
+                    }
+                }
+                description: qsTr("The audio format used when saving to a file.") + " " +
+                             qsTr("%1 means that format will be set according to the file extension.").arg("<i>" +  qsTr("Auto") + "</i>")
+            }
+
+            ComboBox {
+                enabled: _settings.audio_format !== Settings.AudioFormatWav
+                label: qsTr("Compression quality")
+                currentIndex: {
+                    switch (_settings.audio_quality) {
+                    case Settings.AudioQualityVbrHigh: return 0;
+                    case Settings.AudioQualityVbrMedium: return 1;
+                    case Settings.AudioQualityVbrLow: return 2;
+                    }
+                    return 1;
+                }
+                menu: ContextMenu {
+                    MenuItem { text: qsTr("High") }
+                    MenuItem { text: qsTr("Medium") }
+                    MenuItem { text: qsTr("Low") }
+                }
+                onCurrentIndexChanged: {
+                    switch (currentIndex) {
+                    case 0: _settings.audio_quality = Settings.AudioQualityVbrHigh; break;
+                    case 1: _settings.audio_quality = Settings.AudioQualityVbrMedium; break;
+                    case 2: _settings.audio_quality = Settings.AudioQualityVbrLow; break;
+                    default: _settings.audio_quality = Settings.AudioQualityVbrMedium;
+                    }
+                }
+                description: qsTr("The compression quality used when saving to a file.") + " " +
+                             qsTr("%1 results in a larger file size.").arg("<i>" + qsTr("High") + "</i>")
+            }
+
             SectionHeader {
                 text: qsTr("Other")
             }

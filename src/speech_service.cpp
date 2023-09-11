@@ -1484,10 +1484,10 @@ void speech_service::handle_speech_to_file(const tts_partial_result_t &result) {
                 emit tts_engine_error(result.task_id);
                 cancel(result.task_id);
                 return;
-            }
-
-            emit tts_speech_to_file_finished(out_file, result.task_id);
+            } 
         }
+
+        emit tts_speech_to_file_finished(out_file, result.task_id);
 
         cancel(result.task_id);
     }
