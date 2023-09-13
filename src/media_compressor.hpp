@@ -8,8 +8,11 @@
 #ifndef MEDIA_COMPRESSOR_HPP
 #define MEDIA_COMPRESSOR_HPP
 
+#include <condition_variable>
+#include <cstdint>
 #include <queue>
 #include <string>
+#include <thread>
 #include <vector>
 
 extern "C" {
@@ -33,13 +36,27 @@ class media_compressor {
     enum class quality_t { vbr_high, vbr_medium, vbr_low };
     friend std::ostream& operator<<(std::ostream& os, quality_t quality);
 
-    media_compressor(std::vector<std::string> input_files,
-                     std::string output_file, format_t format,
-                     quality_t quality);
+    struct data_info {
+        size_t size = 0;
+        uint64_t bytes_read = 0;
+        uint64_t total = 0;
+        bool eof = false;
+    };
+
+    media_compressor() = default;
     ~media_compressor();
-    void compress();
+    void compress(std::vector<std::string> input_files, std::string output_file,
+                  format_t format, quality_t quality);
+    void decompress(std::vector<std::string> input_files,
+                    std::string output_file);
+    void decompress_async(std::vector<std::string> input_files);
+    data_info get_data(char* data, size_t max_size);
+    void cancel();
+    inline bool error() const { return m_error; }
 
    private:
+    enum class task_t { compress, decompress, decompress_async };
+
     struct filter_ctx {
         AVFilterInOut* out = nullptr;
         AVFilterInOut* in = nullptr;
@@ -48,25 +65,33 @@ class media_compressor {
         AVFilterGraph* graph = nullptr;
     };
 
+    static const int BUF_MAX_SIZE = 8192;
+
     std::queue<std::string> m_input_files;
     std::string m_output_file;
     format_t m_format = format_t::unknown;
     quality_t m_quality = quality_t::vbr_medium;
-
     AVFormatContext* m_in_av_format_ctx = nullptr;
     AVFormatContext* m_out_av_format_ctx = nullptr;
     AVCodecContext* m_in_av_audio_ctx = nullptr;
     AVCodecContext* m_out_av_audio_ctx = nullptr;
     filter_ctx m_av_filter_ctx;
     AVAudioFifo* m_av_fifo = nullptr;
-
     int m_in_audio_stream_idx = 0;
+    bool m_shutdown = false;
+    std::thread m_async_thread;
+    std::condition_variable m_cv;
+    std::mutex m_mtx;
+    bool m_error = false;
+    std::vector<char> m_buff;
+    data_info m_data_info;
 
-    void init_av();
+    void init_av(task_t task);
     void init_av_filter(const char* arg);
     void init_av_in_format(const std::string& input_file);
     void clean_av();
     void clean_av_in_format();
+    void process();
     bool read_frame(AVPacket* pkt);
     bool decode_frame(AVPacket* pkt, AVFrame* frame);
     bool encode_frame(AVFrame* frame, AVPacket* pkt);

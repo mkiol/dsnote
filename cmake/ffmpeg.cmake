@@ -83,6 +83,7 @@ set(ffmpeg_opts
     --enable-filter=anull
     --enable-encoder=libmp3lame
     --enable-encoder=libvorbis
+    --enable-encoder=pcm_s16le
     --enable-decoder=pcm_u8
     --enable-decoder=pcm_u32le
     --enable-decoder=pcm_u32be
@@ -111,10 +112,10 @@ set(ffmpeg_opts
     --enable-decoder=mp3on4
     --enable-decoder=mp3on4float
     --enable-decoder=libvorbis
+    --enable-decoder=flac
     --enable-muxer=mp3
     --enable-muxer=ogg
     --enable-muxer=wav
-    --enable-demuxer=mpegts
     --enable-demuxer=aac
     --enable-demuxer=mp3
     --enable-demuxer=mov
@@ -123,7 +124,6 @@ set(ffmpeg_opts
     --enable-demuxer=flac
     --enable-demuxer=wav
     --enable-demuxer=mpegvideo
-    --enable-parser=h264
     --enable-parser=aac
     --enable-parser=aac_latm
     --enable-parser=ac3

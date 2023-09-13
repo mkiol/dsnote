@@ -1473,10 +1473,10 @@ void speech_service::handle_speech_to_file(const tts_partial_result_t &result) {
                            [](const auto &file) { return file.toStdString(); });
 
             try {
-                media_compressor{input_files, out_file.toStdString(),
-                                 media_format_from_audio_format(format),
-                                 media_quality_from_audio_quality(quality)}
-                    .compress();
+                media_compressor{}.compress(
+                    std::move(input_files), out_file.toStdString(),
+                    media_format_from_audio_format(format),
+                    media_quality_from_audio_quality(quality));
             } catch (const std::runtime_error &err) {
                 qWarning() << "compressor error:" << err.what();
 
@@ -1816,6 +1816,8 @@ void speech_service::handle_audio_available() {
             stt_engine::speech_detection_status_t::initializing) {
             if (m_source->type() == audio_source::source_type::mic)
                 m_source->clear();
+            else
+                m_source->slowdown();
             return;
         }
 
@@ -1824,11 +1826,16 @@ void speech_service::handle_audio_available() {
         if (buf) {
             auto audio_data = m_source->read_audio(buf, max_size);
 
-            if (audio_data.eof) qDebug() << "audio eof";
-
             m_stt_engine->return_buf(buf, audio_data.size, audio_data.sof,
                                      audio_data.eof);
             set_progress(m_source->progress());
+
+            if (audio_data.eof)
+                m_source->slowdown();
+            else
+                m_source->speedup();
+        } else {
+            m_source->slowdown();
         }
     }
 }
@@ -1836,7 +1843,7 @@ void speech_service::handle_audio_available() {
 void speech_service::set_progress(double p) {
     if (audio_source_type() == source_t::file && m_current_task) {
         const auto delta = p - m_progress;
-        if (delta > 0.01 || p < 0.0 || p >= 1) {
+        if (delta < 0.0 || delta > 0.01 || p < 0.0 || p >= 1.0) {
             m_progress = p;
             emit stt_transcribe_file_progress_changed(m_progress,
                                                       m_current_task->id);

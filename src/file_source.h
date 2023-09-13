@@ -8,14 +8,13 @@
 #ifndef FILE_SOURCE_H
 #define FILE_SOURCE_H
 
-#include <QAudioDecoder>
+#include <QByteArray>
 #include <QObject>
 #include <QString>
 #include <QTimer>
-#include <cstdint>
-#include <vector>
 
 #include "audio_source.h"
+#include "media_compressor.hpp"
 
 class file_source : public audio_source {
     Q_OBJECT
@@ -26,22 +25,26 @@ class file_source : public audio_source {
     double progress() const override;
     void clear() override;
     void stop() override;
+    void slowdown() override;
+    void speedup() override;
     inline source_type type() const override { return source_type::file; }
     inline QString audio_file() const { return m_file; }
 
    private:
-    QAudioDecoder m_decoder;
+    static const int m_timer_quick = 5;
+    static const int m_timer_slow = 500;
+
     QTimer m_timer;
-    std::vector<char> m_buf;
+    QByteArray m_buf;
     QString m_file;
     bool m_eof = false;
     bool m_sof = true;
     bool m_ended = false;
+    bool m_error = false;
+    media_compressor m_mc;
+    double m_progress = 0.0;
 
-    void init_audio();
     void start();
-    void decode_available_buffer();
-    void handle_state_changed(QAudioDecoder::State new_state);
     void handle_read_timeout();
 };
 

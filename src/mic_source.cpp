@@ -33,6 +33,14 @@ void mic_source::stop() {
     m_stopped = true;
 }
 
+void mic_source::slowdown() {
+    // do notning
+}
+
+void mic_source::speedup() {
+    // do notning
+}
+
 static QAudioFormat audio_format() {
     QAudioFormat format;
     format.setSampleRate(16000);

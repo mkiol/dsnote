@@ -145,7 +145,7 @@ ApplicationWindow {
                 id: fileReadDialog
 
                 FilePickerPage {
-                    nameFilters: [ '*.wav', '*.mp3', '*.ogg', '*.flac', '*.m4a', '*.aac', '*.opus' ]
+                    nameFilters: [ '*.wav', '*.mp3', '*.ogg', '*.oga', '*.flac', '*.m4a', '*.aac', '*.mp4', '*.mkv', '*.ogv', '*.webm' ]
                     onSelectedContentPropertiesChanged: {
                         app.transcribe_file(selectedContentProperties.filePath)
                     }

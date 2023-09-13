@@ -27,6 +27,8 @@ class mic_source : public audio_source {
     void clear() override;
     inline source_type type() const override { return source_type::mic; }
     void stop() override;
+    void slowdown() override;
+    void speedup() override;
     static QStringList audio_inputs();
 
    private:

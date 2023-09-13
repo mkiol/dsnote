@@ -231,8 +231,9 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
     }();
 
     if (!decode_samples) {
-        if (m_config.speech_mode == speech_mode_t::manual &&
-            m_speech_detection_status == speech_detection_status_t::no_speech) {
+        if (eof || (m_config.speech_mode == speech_mode_t::manual &&
+                    m_speech_detection_status ==
+                        speech_detection_status_t::no_speech)) {
             flush(eof ? flush_t::eof : flush_t::regular);
             free_buf();
             return samples_process_result_t::no_samples_needed;

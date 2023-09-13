@@ -182,7 +182,10 @@ ToolBar {
     Dialogs.FileDialog {
         id: fileReadDialog
         title: qsTr("Open File")
-        nameFilters: [ '*.wav', '*.mp3', '*.ogg', '*.flac', '*.m4a', '*.aac', '*.opus' ]
+        nameFilters: [
+            qsTr("Audio files") + " (*.wav *.mp3 *.ogg *.oga *.flac *.m4a *.aac)",
+            qsTr("Video files") + " (*.mp4 *.mkv *.ogv *.webm)",
+            qsTr("All files") + " (*)"]
         folder: _settings.file_open_dir_url
         selectExisting: true
         selectMultiple: false
@@ -197,7 +200,7 @@ ToolBar {
         property bool translated: false
 
         title: qsTr("Save File")
-        nameFilters: [ "Wave (*.wav)", "MP3 (*.mp3)", "Ogg Vorbis (*.ogg)", qsTr("All files") + " (*)" ]
+        nameFilters: [ "Wave (*.wav)", "MP3 (*.mp3)", "Ogg Vorbis (*.ogg)" ]
         folder: _settings.file_save_dir_url
         selectExisting: false
         selectMultiple: false
