@@ -38,6 +38,7 @@ option(BUILD_BERGAMOT "download bergamot-translator lib, build and install share
 option(BUILD_UROMAN "download and install uroman lib" ON) # only for x86_64
 option(BUILD_RUBBERBAND "download rubberband lib, build and link statically" ON) # only for x86_64
 option(BUILD_FFMPEG "download ffmpeg libs, build and link statically" ON)
+option(BUILD_TAGLIB "download taglib, build and link statically" ON)
 
 if(${WITH_DESKTOP} AND ${WITH_SFOS})
     message(FATAL_ERROR "options WITH_DESKTOP and WITH_SFOS cannot be set together")
@@ -86,7 +87,7 @@ set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashin
 Åke Engelbrektson · L'Africain · Albano Battistella · locness3")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · eSpeak NG · Bergamot Translator · \
-Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis")
+Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis · TagLib")
 
 project(${id} VERSION 4.1.0)
 
@@ -240,6 +241,8 @@ set(dsnote_lib_sources
     ${sources_dir}/astrunc/astrunc.h
     ${sources_dir}/media_compressor.hpp
     ${sources_dir}/media_compressor.cpp
+    ${sources_dir}/mtag_tools.hpp
+    ${sources_dir}/mtag_tools.cpp
 )
 
 configure_file(config.h.in config.h)
@@ -557,6 +560,14 @@ else()
         ${ffmpeg_avfilter_INCLUDE_DIRS}
         ${ffmpeg_swresample_INCLUDE_DIRS}
         ${ffmpeg_swscale_INCLUDE_DIRS})
+endif()
+
+if(BUILD_TAGLIB)
+    include(${cmake_path}/taglib.cmake)
+else()
+    pkg_search_module(taglib REQUIRED taglib)
+    list(APPEND deps_libs ${taglib_LIBRARIES})
+    list(APPEND includes ${taglib_INCLUDE_DIRS})
 endif()
 
 if(WITH_SFOS)

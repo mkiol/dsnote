@@ -62,6 +62,11 @@ class settings : public QSettings, public singleton<settings> {
                    set_audio_format NOTIFY audio_format_changed)
     Q_PROPERTY(audio_quality_t audio_quality READ audio_quality WRITE
                    set_audio_quality NOTIFY audio_quality_changed)
+    Q_PROPERTY(QString mtag_album_name READ mtag_album_name WRITE
+                   set_mtag_album_name NOTIFY mtag_album_name_changed)
+    Q_PROPERTY(QString mtag_artist_name READ mtag_artist_name WRITE
+                   set_mtag_artist_name NOTIFY mtag_artist_name_changed)
+    Q_PROPERTY(bool mtag READ mtag WRITE set_mtag NOTIFY mtag_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -195,6 +200,12 @@ class settings : public QSettings, public singleton<settings> {
     audio_format_t audio_format() const;
     void set_audio_quality(audio_quality_t value);
     audio_quality_t audio_quality() const;
+    QString mtag_album_name() const;
+    void set_mtag_album_name(const QString &value);
+    QString mtag_artist_name() const;
+    void set_mtag_artist_name(const QString &value);
+    void set_mtag(bool value);
+    bool mtag() const;
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -273,6 +284,9 @@ class settings : public QSettings, public singleton<settings> {
     void font_size_changed();
     void audio_format_changed();
     void audio_quality_changed();
+    void mtag_album_name_changed();
+    void mtag_artist_name_changed();
+    void mtag_changed();
 
     // service
     void models_dir_changed();

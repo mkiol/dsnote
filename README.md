@@ -208,6 +208,7 @@ sfdk package
 - [FFmpeg](https://ffmpeg.org/)
 - [LAME](https://lame.sourceforge.io/)
 - [Vorbis](https://xiph.org/vorbis/)
+- [TagLib](https://taglib.org/)
 
 ## License
 
@@ -234,11 +235,13 @@ sfdk package
 - **bergamot-translator**, released under the [Mozilla Public License 2.0](https://raw.githubusercontent.com/browsermt/bergamot-translator/main/LICENSE)
 - **Rubber Band Library**, released under the [GNU General Public License (version 2 or later)](https://breakfastquay.com/rubberband/license.html)
 - **simdjson**, released under the [Apache License 2.0](https://github.com/simdjson/simdjson/raw/master/LICENSE)
-- **uroman**, released under the [this license](https://github.com/isi-nlp/uroman/raw/master/LICENSE.txt)
+- **uroman**, released under [this license](https://github.com/isi-nlp/uroman/raw/master/LICENSE.txt)
 - **astrunc**, released under the [MIT License](https://raw.githubusercontent.com/Joke-Shi/astrunc/master/LICENSE)
 - **FFmpeg**, released under the [GNU Lesser General Public License version 2.1 or later](https://git.ffmpeg.org/gitweb/ffmpeg.git/blob_plain/HEAD:/LICENSE.md)
 - **LAME**, released under the LGPL
-- **Vorbis**, released under the [this license](https://gitlab.xiph.org/xiph/vorbis/-/raw/master/COPYING?ref_type=heads)
+- **Vorbis**, released under [this license](https://gitlab.xiph.org/xiph/vorbis/-/raw/master/COPYING?ref_type=heads)
+- **TagLib**, released under the [GNU Lesser General Public License (LGPL)](https://raw.githubusercontent.com/taglib/taglib/master/COPYING.LGPL) 
+              and [Mozilla Public License (MPL)](https://raw.githubusercontent.com/taglib/taglib/master/COPYING.MPL)
 
 The files in the directory `nonbreaking_prefixes` were copied from 
 [mosesdecoder](https://github.com/moses-smt/mosesdecoder) project and distributed under the

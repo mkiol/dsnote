@@ -221,6 +221,47 @@ Page {
                              qsTr("%1 results in a larger file size.").arg("<i>" + qsTr("High") + "</i>")
             }
 
+            TextSwitch {
+                id: mtagCheckBox
+
+                enabled: _settings.audio_format !== Settings.AudioFormatWav
+                checked: _settings.mtag
+                automaticCheck: false
+                text: qsTr("Write meta-data tags to audio file")
+                description: qsTr("Write title, artist and album tags to audio file.") + " " +
+                             qsTr("Writing tags only works if the file format is %1 or %2.")
+                               .arg("<i>MP3</i>").arg("<i>Ogg Vorbis</i>")
+                onClicked: {
+                    _settings.mtag = !_settings.mtag
+                }
+            }
+
+            TextField {
+                visible: _settings.mtag
+                enabled: mtagCheckBox.enabled
+                placeholderText: qsTr("Album tag")
+                label: qsTr("Album tag")
+                text: _settings.mtag_album_name
+                onTextChanged: _settings.mtag_album_name = text
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                }
+            }
+
+            TextField {
+                visible: _settings.mtag
+                enabled: mtagCheckBox.enabled
+                placeholderText: qsTr("Artist tag")
+                label: qsTr("Artist tag")
+                text: _settings.mtag_artist_name
+                onTextChanged: _settings.mtag_artist_name = text
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                }
+            }
+
             SectionHeader {
                 text: qsTr("Other")
             }

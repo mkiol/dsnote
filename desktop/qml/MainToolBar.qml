@@ -205,12 +205,19 @@ ToolBar {
         selectExisting: false
         selectMultiple: false
         onAccepted: {
+            var file_url = fileWriteDialog.fileUrl
+            var file_name = file_url.toString().split('/').pop()
+            var ext_pos = file_name.lastIndexOf('.');
+            var title_tag = ext_pos >= 0 ?
+                        file_name.substring(0, ext_pos) :
+                        file_name
+
             if (_settings.translator_mode) {
-                app.speech_to_file_translator(translated, fileWriteDialog.fileUrl)
-                _settings.file_save_dir_url = fileWriteDialog.fileUrl
+                app.speech_to_file_translator(translated, file_url, title_tag)
+                _settings.file_save_dir_url = file_url
             } else {
-                app.speech_to_file(fileWriteDialog.fileUrl)
-                _settings.file_save_dir_url = fileWriteDialog.fileUrl
+                app.speech_to_file(file_url, title_tag)
+                _settings.file_save_dir_url = file_url
             }
         }
     }

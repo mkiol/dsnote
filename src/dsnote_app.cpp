@@ -13,6 +13,7 @@
 #include <QTextStream>
 #include <algorithm>
 
+#include "mtag_tools.hpp"
 #include "speech_service.h"
 
 QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
@@ -697,6 +698,16 @@ void dsnote_app::handle_tts_speech_to_file_finished(const QString &file,
     if (QFile::exists(m_dest_file)) QFile::remove(m_dest_file);
 
     if (QFile::copy(file, m_dest_file)) {
+        if (settings::instance()->mtag()) {
+            mtag_tools::write(
+                /*path=*/m_dest_file.toStdString(),
+                /*title=*/m_dest_file_title_tag.toStdString(),
+                /*artist=*/
+                settings::instance()->mtag_artist_name().toStdString(),
+                /*album=*/
+                settings::instance()->mtag_album_name().toStdString());
+        }
+
         QFile::remove(file);
         emit speech_to_file_done();
     }
@@ -1519,21 +1530,25 @@ void dsnote_app::translate() {
     emit intermediate_text_changed();
 }
 
-void dsnote_app::speech_to_file(const QUrl &dest_file) {
-    speech_to_file(dest_file.toLocalFile());
+void dsnote_app::speech_to_file(const QUrl &dest_file,
+                                const QString &title_tag) {
+    speech_to_file(dest_file.toLocalFile(), title_tag);
 }
 
-void dsnote_app::speech_to_file(const QString &dest_file) {
-    speech_to_file_internal(note(), {}, dest_file);
-}
-
-void dsnote_app::speech_to_file_translator(bool transtalated,
-                                           const QUrl &dest_file) {
-    speech_to_file_translator(transtalated, dest_file.toLocalFile());
+void dsnote_app::speech_to_file(const QString &dest_file,
+                                const QString &title_tag) {
+    speech_to_file_internal(note(), {}, dest_file, title_tag);
 }
 
 void dsnote_app::speech_to_file_translator(bool transtalated,
-                                           const QString &dest_file) {
+                                           const QUrl &dest_file,
+                                           const QString &title_tag) {
+    speech_to_file_translator(transtalated, dest_file.toLocalFile(), title_tag);
+}
+
+void dsnote_app::speech_to_file_translator(bool transtalated,
+                                           const QString &dest_file,
+                                           const QString &title_tag) {
     if (!transtalated && m_active_tts_model_for_in_mnt.isEmpty()) {
         qWarning() << "no active tts model for in mnt";
         return;
@@ -1547,7 +1562,7 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
     speech_to_file_internal(transtalated ? m_translated_text : note(),
                             transtalated ? m_active_tts_model_for_out_mnt
                                          : m_active_tts_model_for_in_mnt,
-                            dest_file);
+                            dest_file, title_tag);
 }
 
 static QString audio_quality_to_str(settings::audio_quality_t quality) {
@@ -1565,7 +1580,8 @@ static QString audio_quality_to_str(settings::audio_quality_t quality) {
 
 void dsnote_app::speech_to_file_internal(const QString &text,
                                          const QString &model_id,
-                                         const QString &dest_file) {
+                                         const QString &dest_file,
+                                         const QString &title_tag) {
     if (text.isEmpty()) {
         qWarning() << "text is empty";
         return;
@@ -1597,6 +1613,8 @@ void dsnote_app::speech_to_file_internal(const QString &text,
     } else {
         m_dest_file = dest_file;
     }
+
+    m_dest_file_title_tag = title_tag;
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {

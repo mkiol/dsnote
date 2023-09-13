@@ -17,10 +17,29 @@ Dialog {
 
     canAccept: nameField.text.trim().length !== 0
 
-    function check_overwrite() {
-        var file_path = _settings.file_save_dir + "/" +
-                nameField.text.trim()
+    function check_filename() {
+        var file_name = nameField.text.trim()
+        var file_path = _settings.file_save_dir + "/" + file_name
         overwriteLabel.visible = _settings.file_exists(file_path)
+
+        updateTitleTagTimer.restart()
+    }
+
+    function update_title_tag() {
+        var file_name = nameField.text.trim()
+        var ext_pos = file_name.lastIndexOf('.');
+        var title_tag = ext_pos >= 0 ?
+                    file_name.substring(0, ext_pos) :
+                    file_name
+
+        mtagTitleTextField.text = title_tag
+    }
+
+    Timer {
+        id: updateTitleTagTimer
+
+        interval: 100
+        onTriggered: update_title_tag()
     }
 
     Connections {
@@ -29,7 +48,7 @@ Dialog {
             var filename = _settings.add_ext_to_audio_filename(nameField.text.trim())
             nameField.text = filename
         }
-        onFile_save_dir_changed: check_overwrite()
+        onFile_save_dir_changed: check_filename()
     }
 
     Column {
@@ -74,7 +93,7 @@ Dialog {
                 text = _settings.file_save_filename
             }
 
-            onTextChanged: check_overwrite()
+            onTextChanged: check_filename()
         }
 
         PaddedLabel {
@@ -142,17 +161,72 @@ Dialog {
             description: qsTr("The compression quality used when saving to a file.") + " " +
                          qsTr("%1 results in a larger file size.").arg("<i>" + qsTr("High") + "</i>")
         }
+
+        TextSwitch {
+            id: mtagCheckBox
+
+            enabled: _settings.audio_format !== Settings.AudioFormatWav
+            checked: _settings.mtag
+            automaticCheck: false
+            text: qsTr("Write meta-data tags to audio file")
+            description: qsTr("Write title, artist and album tags to audio file.") + " " +
+                         qsTr("Writing tags only works if the file format is %1 or %2.")
+                           .arg("<i>MP3</i>").arg("<i>Ogg Vorbis</i>")
+            onClicked: {
+                _settings.mtag = !_settings.mtag
+            }
+        }
+
+        TextField {
+            id: mtagTitleTextField
+
+            visible: _settings.mtag
+            enabled: mtagCheckBox.enabled
+            placeholderText: qsTr("Title tag")
+            label: qsTr("Title tag")
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+        }
+
+        TextField {
+            visible: _settings.mtag
+            enabled: mtagCheckBox.enabled
+            placeholderText: qsTr("Album tag")
+            label: qsTr("Album tag")
+            text: _settings.mtag_album_name
+            onTextChanged: _settings.mtag_album_name = text
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+        }
+
+        TextField {
+            visible: _settings.mtag
+            enabled: mtagCheckBox.enabled
+            placeholderText: qsTr("Artist tag")
+            label: qsTr("Artist tag")
+            text: _settings.mtag_artist_name
+            onTextChanged: _settings.mtag_artist_name = text
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+        }
     }
 
     onDone: {
         if (result !== DialogResult.Accepted) return
         var file_path = _settings.file_save_dir + "/" +
                 _settings.add_ext_to_audio_filename(nameField.text.trim())
+        var title_tag = mtagTitleTextField.text.trim();
 
         if (_settings.translator_mode) {
-            app.speech_to_file_translator(root.translated, file_path)
+            app.speech_to_file_translator(root.translated, file_path, title_tag)
         } else {
-            app.speech_to_file(file_path)
+            app.speech_to_file(file_path, title_tag)
         }
     }
 }

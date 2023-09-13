@@ -478,6 +478,40 @@ settings::audio_quality_t settings::audio_quality() const {
             .toInt());
 }
 
+void settings::set_mtag_album_name(const QString& value) {
+    if (mtag_album_name() != value) {
+        setValue(QStringLiteral("mtag_album_name"), value);
+        emit mtag_album_name_changed();
+    }
+}
+
+QString settings::mtag_album_name() const {
+    return value(QStringLiteral("mtag_album_name"), tr("Speech notes"))
+        .toString();
+}
+
+void settings::set_mtag_artist_name(const QString& value) {
+    if (mtag_artist_name() != value) {
+        setValue(QStringLiteral("mtag_artist_name"), value);
+        emit mtag_artist_name_changed();
+    }
+}
+
+QString settings::mtag_artist_name() const {
+    return value(QStringLiteral("mtag_artist_name"), "Speech Note").toString();
+}
+
+bool settings::mtag() const {
+    return value(QStringLiteral("mtag"), true).toBool();
+}
+
+void settings::set_mtag(bool value) {
+    if (mtag() != value) {
+        setValue(QStringLiteral("mtag"), value);
+        emit mtag_changed();
+    }
+}
+
 bool settings::translator_mode() const {
     return value(QStringLiteral("translator_mode"), false).toBool();
 }

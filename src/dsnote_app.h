@@ -174,12 +174,16 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void play_speech_translator(bool transtalated);
     Q_INVOKABLE void translate();
     Q_INVOKABLE void translate_delayed();
-    Q_INVOKABLE void speech_to_file(const QString &dest_file);
-    Q_INVOKABLE void speech_to_file(const QUrl &dest_file);
+    Q_INVOKABLE void speech_to_file(const QString &dest_file,
+                                    const QString &title_tag = {});
+    Q_INVOKABLE void speech_to_file(const QUrl &dest_file,
+                                    const QString &title_tag = {});
     Q_INVOKABLE void speech_to_file_translator(bool transtalated,
-                                               const QString &dest_file);
+                                               const QString &dest_file,
+                                               const QString &title_tag = {});
     Q_INVOKABLE void speech_to_file_translator(bool transtalated,
-                                               const QUrl &dest_file);
+                                               const QUrl &dest_file,
+                                               const QString &title_tag = {});
     Q_INVOKABLE void stop_play_speech();
     Q_INVOKABLE void copy_to_clipboard();
     Q_INVOKABLE void copy_translation_to_clipboard();
@@ -279,6 +283,7 @@ class dsnote_app : public QObject {
     bool m_ttt_configured = false;
     bool m_mnt_configured = false;
     QString m_dest_file;
+    QString m_dest_file_title_tag;
     QString m_translated_text;
     QString m_prev_text;
     bool m_undo_flag = false;  // true => undo, false => redu
@@ -397,7 +402,8 @@ class dsnote_app : public QObject {
     QString translated_text() const;
     void set_translated_text(const QString text);
     void speech_to_file_internal(const QString &text, const QString &model_id,
-                                 const QString &dest_file);
+                                 const QString &dest_file,
+                                 const QString &title_tag);
     void play_speech_internal(const QString &text, const QString &model_id);
     void copy_to_clipboard_internal(const QString &text);
     void handle_translate_delayed();

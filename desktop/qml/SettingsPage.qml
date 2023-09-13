@@ -160,6 +160,7 @@ DialogPage {
 
     Label {
         wrapMode: Text.Wrap
+        Layout.leftMargin: verticalMode ? 0 : appWin.padding
         Layout.fillWidth: true
         visible: _settings.py_supported() && _settings.restore_punctuation && !app.ttt_configured
         color: "red"
@@ -184,6 +185,7 @@ DialogPage {
 
     Label {
         wrapMode: Text.Wrap
+        Layout.leftMargin: verticalMode ? 0 : appWin.padding
         Layout.fillWidth: true
         visible: _settings.gpu_supported() && _settings.whisper_use_gpu && _settings.gpu_devices.length <= 1
         color: "red"
@@ -198,6 +200,7 @@ DialogPage {
 
         Label {
             wrapMode: Text.Wrap
+            Layout.leftMargin: verticalMode ? 0 : appWin.padding
             Layout.fillWidth: true
             text: qsTr("GPU device")
         }
@@ -342,13 +345,13 @@ DialogPage {
         columns: root.verticalMode ? 1 : 2
         columnSpacing: appWin.padding
         rowSpacing: appWin.padding
+        enabled: _settings.audio_format !== Settings.AudioFormatWav
 
         Label {
             Layout.fillWidth: true
             text: qsTr("Compression quality")
         }
         ComboBox {
-            enabled: _settings.audio_format !== Settings.AudioFormatWav
             Layout.fillWidth: verticalMode
             Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
             currentIndex: {
@@ -377,6 +380,71 @@ DialogPage {
             ToolTip.visible: hovered
             ToolTip.text: qsTr("The compression quality used when saving to a file.") + " " +
                           qsTr("%1 results in a larger file size.").arg("<i>" + qsTr("High") + "</i>")
+        }
+    }
+
+    CheckBox {
+        id: mtagCheckBox
+
+        enabled: _settings.audio_format !== Settings.AudioFormatWav
+        checked: _settings.mtag
+        text: qsTr("Write meta-data tags to audio file")
+        onCheckedChanged: {
+            _settings.mtag = checked
+        }
+
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: hovered
+        ToolTip.text: qsTr("Write title, artist and album tags to audio file.") + " " +
+                      qsTr("Writing tags only works if the file format is %1 or %2.")
+                        .arg("<i>MP3</i>").arg("<i>Ogg Vorbis</i>")
+    }
+
+    GridLayout {
+        columns: root.verticalMode ? 1 : 2
+        columnSpacing: appWin.padding
+        rowSpacing: appWin.padding
+        visible: _settings.mtag
+        enabled: mtagCheckBox.enabled
+
+        Label {
+            Layout.fillWidth: true
+            Layout.leftMargin: verticalMode ? 0 : appWin.padding
+            text: qsTr("Album tag")
+        }
+        TextField {
+            Layout.fillWidth: verticalMode
+            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            text: _settings.mtag_album_name
+            onTextChanged: _settings.mtag_album_name = text
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("The name of the album that will be written to the meta-data of the file.")
+        }
+    }
+
+    GridLayout {
+        columns: root.verticalMode ? 1 : 2
+        columnSpacing: appWin.padding
+        rowSpacing: appWin.padding
+        visible: _settings.mtag
+        enabled: mtagCheckBox.enabled
+
+        Label {
+            Layout.fillWidth: true
+            Layout.leftMargin: verticalMode ? 0 : appWin.padding
+            text: qsTr("Artist tag")
+        }
+        TextField {
+            Layout.fillWidth: verticalMode
+            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            text: _settings.mtag_artist_name
+            onTextChanged: _settings.mtag_artist_name = text
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("The name of the artist that will be written to the meta-data of the file.")
         }
     }
 

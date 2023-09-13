@@ -625,6 +625,7 @@ modules:
       - --enable-filter=anull
       - --enable-encoder=libmp3lame
       - --enable-encoder=libvorbis
+      - --enable-encoder=pcm_s16le
       - --enable-decoder=pcm_u8
       - --enable-decoder=pcm_u32le
       - --enable-decoder=pcm_u32be
@@ -653,10 +654,10 @@ modules:
       - --enable-decoder=mp3on4
       - --enable-decoder=mp3on4float
       - --enable-decoder=libvorbis
+      - --enable-decoder=flac
       - --enable-muxer=mp3
       - --enable-muxer=ogg
       - --enable-muxer=wav
-      - --enable-demuxer=mpegts
       - --enable-demuxer=aac
       - --enable-demuxer=mp3
       - --enable-demuxer=mov
@@ -665,7 +666,6 @@ modules:
       - --enable-demuxer=flac
       - --enable-demuxer=wav
       - --enable-demuxer=mpegvideo
-      - --enable-parser=h264
       - --enable-parser=aac
       - --enable-parser=aac_latm
       - --enable-parser=ac3
@@ -678,6 +678,20 @@ modules:
         sha256: 57be87c22d9b49c112b6d24bc67d42508660e6b718b3db89c44e47e289137082
       - type: patch
         path: ../patches/ffmpeg.patch
+
+  - name: taglib
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=OFF
+      - -DBUILD_TESTING=OFF
+      - -DBUILD_BINDINGS=OFF
+      - -DENABLE_STATIC_RUNTIME=OFF
+    sources:
+      - type: archive
+        url: https://taglib.org/releases/taglib-1.13.1.tar.gz
+        sha256: c8da2b10f1bfec2cd7dbfcd33f4a2338db0765d851a50583d410bacf055cfd0b
 
   - name: dsnote
     buildsystem: cmake-ninja
@@ -704,6 +718,7 @@ modules:
       - -DBUILD_UROMAN=OFF
       - -DBUILD_RUBBERBAND=OFF
       - -DBUILD_FFMPEG=OFF
+      - -DBUILD_TAGLIB=OFF
     build-options:
       arch:
         aarch64:
