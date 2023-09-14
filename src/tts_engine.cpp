@@ -223,8 +223,10 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
         if (!parts.empty()) {
             tasks.reserve(parts.size());
 
-            for (auto& part : parts)
-                tasks.push_back(task_t{std::move(part), false});
+            for (auto& part : parts) {
+                if (!part.empty())
+                    tasks.push_back(task_t{std::move(part), false});
+            }
 
             tasks.back().last = true;
         }
