@@ -203,8 +203,8 @@ Dialog {
 
             visible: _settings.mtag
             enabled: mtagCheckBox.enabled
-            placeholderText: qsTr("Title tag")
-            label: qsTr("Title tag")
+            placeholderText: qsTr("Title")
+            label: qsTr("Title")
             anchors {
                 left: parent.left
                 right: parent.right
@@ -214,8 +214,8 @@ Dialog {
         TextField {
             visible: _settings.mtag
             enabled: mtagCheckBox.enabled
-            placeholderText: qsTr("Album tag")
-            label: qsTr("Album tag")
+            placeholderText: qsTr("Album")
+            label: qsTr("Album")
             text: _settings.mtag_album_name
             onTextChanged: _settings.mtag_album_name = text
             anchors {
@@ -227,8 +227,8 @@ Dialog {
         TextField {
             visible: _settings.mtag
             enabled: mtagCheckBox.enabled
-            placeholderText: qsTr("Artist tag")
-            label: qsTr("Artist tag")
+            placeholderText: qsTr("Artist")
+            label: qsTr("Artist")
             text: _settings.mtag_artist_name
             onTextChanged: _settings.mtag_artist_name = text
             anchors {

@@ -254,7 +254,7 @@ DialogPage {
         Label {
             Layout.fillWidth: true
             Layout.leftMargin: verticalMode ? 0 : appWin.padding
-            text: qsTr("Title tag")
+            text: qsTr("Title")
         }
         TextField {
             id: mtagTitleTextField
@@ -274,7 +274,7 @@ DialogPage {
         Label {
             Layout.fillWidth: true
             Layout.leftMargin: verticalMode ? 0 : appWin.padding
-            text: qsTr("Album tag")
+            text: qsTr("Album")
         }
         TextField {
             Layout.fillWidth: verticalMode
@@ -294,7 +294,7 @@ DialogPage {
         Label {
             Layout.fillWidth: true
             Layout.leftMargin: verticalMode ? 0 : appWin.padding
-            text: qsTr("Artist tag")
+            text: qsTr("Artist")
         }
         TextField {
             Layout.fillWidth: verticalMode
