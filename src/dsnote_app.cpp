@@ -73,6 +73,9 @@ QDebug operator<<(QDebug d, dsnote_app::service_task_state_t type) {
         case dsnote_app::service_task_state_t::TaskStateSpeechPlaying:
             d << "speech-playing";
             break;
+        case dsnote_app::service_task_state_t::TaskStateSpeechPaused:
+            d << "speech-paused";
+            break;
     }
 
     return d;
@@ -631,6 +634,8 @@ void dsnote_app::handle_task_state_changed(int state) {
                 return service_task_state_t::TaskStateInitializing;
             case 4:
                 return service_task_state_t::TaskStateSpeechPlaying;
+            case 5:
+                return service_task_state_t::TaskStateSpeechPaused;
         }
         return service_task_state_t::TaskStateIdle;
     }();
@@ -1363,10 +1368,12 @@ void dsnote_app::cancel() {
             speech_service::instance()->cancel(m_side_task.current);
             m_side_task.reset();
         } else if (m_primary_task) {
-            speech_service::instance()->cancel(m_primary_task.current);
-            m_primary_task.reset();
-        } else {
-            speech_service::instance()->cancel(m_primary_task.previous);
+            if (m_primary_task.current != INVALID_TASK) {
+                speech_service::instance()->cancel(m_primary_task.current);
+                m_primary_task.reset();
+            } else {
+                speech_service::instance()->cancel(m_primary_task.previous);
+            }
         }
     } else {
         qDebug() << "[app => dbus] call Cancel";
@@ -1375,10 +1382,12 @@ void dsnote_app::cancel() {
             m_dbus_service.Cancel(m_side_task.current);
             m_side_task.reset();
         } else if (m_primary_task) {
-            m_dbus_service.Cancel(m_primary_task.current);
-            m_primary_task.reset();
-        } else {
-            m_dbus_service.Cancel(m_primary_task.previous);
+            if (m_primary_task.current != INVALID_TASK) {
+                m_dbus_service.Cancel(m_primary_task.current);
+                m_primary_task.reset();
+            } else {
+                m_dbus_service.Cancel(m_primary_task.previous);
+            }
         }
     }
 
@@ -1439,6 +1448,52 @@ void dsnote_app::stop_listen() {
         }
 
         m_primary_task.reset();
+    }
+}
+
+void dsnote_app::pause_speech() {
+    if (!m_primary_task) return;
+
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+        if (m_primary_task.current != INVALID_TASK) {
+            speech_service::instance()->tts_pause_speech(
+                m_primary_task.current);
+        } else {
+            speech_service::instance()->tts_pause_speech(
+                m_primary_task.previous);
+        }
+    } else {
+        qDebug() << "[app => dbus] call TtsPauseSpeech";
+
+        if (m_primary_task.current != INVALID_TASK) {
+            m_dbus_service.TtsPauseSpeech(m_primary_task.current);
+        } else {
+            m_dbus_service.TtsPauseSpeech(m_primary_task.previous);
+        }
+    }
+}
+
+void dsnote_app::resume_speech() {
+    if (!m_primary_task) return;
+
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+        if (m_primary_task.current != INVALID_TASK) {
+            speech_service::instance()->tts_resume_speech(
+                m_primary_task.current);
+        } else {
+            speech_service::instance()->tts_resume_speech(
+                m_primary_task.previous);
+        }
+    } else {
+        qDebug() << "[app => dbus] call TtsResumeSpeech";
+
+        if (m_primary_task.current != INVALID_TASK) {
+            m_dbus_service.TtsResumeSpeech(m_primary_task.current);
+        } else {
+            m_dbus_service.TtsResumeSpeech(m_primary_task.previous);
+        }
     }
 }
 

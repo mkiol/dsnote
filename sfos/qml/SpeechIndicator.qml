@@ -17,6 +17,7 @@ Item {
     // 2 - processing
     // 3 - initializing,
     // 4 - speech playing
+    // 5 - speech paused
     property int status: 0
 
     property color color: "black"
@@ -112,7 +113,8 @@ Item {
     }
 
     Row {
-        visible: root.status === 0 || root.status === 1 || root.status === 4
+        visible: root.status === 0 || root.status === 1 ||
+                 root.status === 4 || root.status === 5
         x: root.width / 8
         spacing: root.width / 8
         Repeater {

@@ -31,7 +31,7 @@
             An indicator of state of current task.
             Valid states: 0 = Idle, 1 = Speech Detected,
                           2 = Processing, 3 = Initializing,
-                          4 = Playing Speech.
+                          4 = Playing Speech, 5 = Speech Paused.
             When state is 4 or 7 (Listening Manual, Listening One-sentence) task state
             is never 0.
         -->
@@ -656,6 +656,30 @@
             <arg name="lang" type="s" direction="in" />
             <arg name="options" type="a{sv}" direction="in" />
             <arg name="task" type="i" direction="out" />
+        </method>
+
+        <!--
+            TtsPauseSpeech:
+            @task: id of task returned in TtsPlaySpeech call
+            @result: 0 - success, any other value - error
+
+            Pauses speech playing.
+        -->
+        <method name="TtsPauseSpeech">
+            <arg name="task" type="i" direction="in" />
+            <arg name="result" type="i" direction="out" />
+        </method>
+
+        <!--
+            TtsResumeSpeech:
+            @task: id of task returned in TtsPlaySpeech call
+            @result: 0 - success, any other value - error
+
+            Resumes speech playing.
+        -->
+        <method name="TtsResumeSpeech">
+            <arg name="task" type="i" direction="in" />
+            <arg name="result" type="i" direction="out" />
         </method>
 
         <!--

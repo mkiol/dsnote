@@ -23,11 +23,12 @@ SpeechPanel {
             return DsnoteApp.TaskStateIdle
 
         switch (app.task_state) {
-        case DsnoteApp.TaskStateIdle: return 0;
-        case DsnoteApp.TaskStateSpeechDetected: return 1;
-        case DsnoteApp.TaskStateProcessing: return 2;
-        case DsnoteApp.TaskStateInitializing: return 3;
-        case DsnoteApp.TaskStateSpeechPlaying: return 4;
+        case DsnoteApp.TaskStateIdle: return 0
+        case DsnoteApp.TaskStateSpeechDetected: return 1
+        case DsnoteApp.TaskStateProcessing: return 2
+        case DsnoteApp.TaskStateInitializing: return 3
+        case DsnoteApp.TaskStateSpeechPlaying: return 4
+        case DsnoteApp.TaskStateSpeechPaused: return 5
         }
         return 0;
     }
@@ -48,6 +49,7 @@ SpeechPanel {
         if (app.state === DsnoteApp.StateListeningSingleSentence ||
                 app.state === DsnoteApp.StateListeningManual ||
                 app.state === DsnoteApp.StateListeningAuto) return qsTr("Say something...")
+        if (app.task_state === DsnoteApp.TaskStateSpeechPaused) return qsTr("Reading is paused.")
         if (app.state === DsnoteApp.StatePlayingSpeech) return qsTr("Reading a note...")
         if (app.state === DsnoteApp.StateTranslating) return qsTr("Translating...")
         return ""

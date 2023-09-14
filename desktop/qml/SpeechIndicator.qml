@@ -12,9 +12,12 @@ Item {
     id: root
 
     // status values:
-    // 0 - no speech, 1 - speech detected,
-    // 2 - speech decoding, 3 - speech initializing,
+    // 0 - no speech
+    // 1 - speech detected
+    // 2 - speech decoding
+    // 3 - speech initializing
     // 4 - speech playing
+    // 5 - speech paused
     property int status: 0
 
     property color color: "black"
@@ -23,8 +26,10 @@ Item {
 
     Component {
         id: waveIndicator
+
         Rectangle {
             id: waveRect
+
             property double initValue: {
                 if (model.modelData === 0)
                     return 0.5
@@ -78,8 +83,10 @@ Item {
 
     Component {
         id: squareIndicator
+
         Rectangle {
             id: squareRect
+
             property int value: 0
             property int vid: {
                 switch(model.modelData) {
@@ -124,8 +131,10 @@ Item {
         }
     }
 
+
     Row {
-        visible: root.status === 0 || root.status === 1 || root.status === 4
+        visible: root.status === 0 || root.status === 1 ||
+                 root.status === 4 || root.status === 5
         spacing: root._spacing
         Repeater {
             delegate: waveIndicator

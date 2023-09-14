@@ -122,6 +122,8 @@ class speech_service : public QObject, public singleton<speech_service> {
                                         QString out_lang);
     Q_INVOKABLE int tts_play_speech(const QString &text, QString lang,
                                     const QVariantMap &options);
+    Q_INVOKABLE int tts_pause_speech(int task);
+    Q_INVOKABLE int tts_resume_speech(int task);
     Q_INVOKABLE int tts_stop_speech(int task);
     Q_INVOKABLE int tts_speech_to_file(const QString &text, QString lang,
                                        const QVariantMap &options);
@@ -316,6 +318,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         counter_t counter;
         std::vector<QString> files;
         QVariantMap options;
+        bool paused = false;
     };
 
     inline static const QString DBUS_SERVICE_NAME{
@@ -481,6 +484,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     Q_INVOKABLE int TtsPlaySpeech(const QString &text, const QString &lang);
     Q_INVOKABLE int TtsPlaySpeech2(const QString &text, const QString &lang,
                                    const QVariantMap &options);
+    Q_INVOKABLE int TtsPauseSpeech(int task);
+    Q_INVOKABLE int TtsResumeSpeech(int task);
     Q_INVOKABLE int TtsStopSpeech(int task);
     Q_INVOKABLE int TtsSpeechToFile(const QString &text, const QString &lang,
                                     const QVariantMap &options);

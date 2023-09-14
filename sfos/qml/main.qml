@@ -120,7 +120,13 @@ ApplicationWindow {
                     enabled: open
                     y: open ? parent.height - height : parent.height
                     canCancel: app.connected && !app.busy && (root.canCancelStt || root.canCancelTts)
+                    canPause: app.state === DsnoteApp.StatePlayingSpeech &&
+                              (app.task_state === DsnoteApp.TaskStateProcessing ||
+                               app.task_state === DsnoteApp.TaskStateSpeechPlaying ||
+                               app.task_state === DsnoteApp.TaskStateSpeechPaused)
                     onCancelClicked: app.cancel()
+                    onPauseClicked: app.pause_speech()
+                    onResumeClicked: app.resume_speech()
                 }
 
                 BusyIndicator {

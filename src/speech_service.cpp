@@ -1510,7 +1510,11 @@ void speech_service::handle_tts_speech_encoded(
 void speech_service::handle_tts_queue() {
     if (m_tts_queue.empty()) return;
 
-    if (m_player.state() == QMediaPlayer::State::PlayingState) return;
+    if (m_player.state() == QMediaPlayer::State::PlayingState ||
+        m_player.state() == QMediaPlayer::State::PausedState)
+        return;
+
+    if (m_current_task && m_current_task->paused) return;
 
     auto &result = m_tts_queue.front();
 
@@ -1573,7 +1577,8 @@ void speech_service::handle_player_state_changed(
     update_task_state();
 
     if (new_state == QMediaPlayer::State::StoppedState && m_current_task &&
-        m_current_task->engine == engine_t::tts && !m_tts_queue.empty()) {
+        m_current_task->engine == engine_t::tts && !m_current_task->paused &&
+        !m_tts_queue.empty()) {
         const auto &result = m_tts_queue.front();
 
         auto task = result.task_id;
@@ -1941,7 +1946,8 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
         out_lang,
         {},
         {},
-        {}};
+        {},
+        false};
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -1997,7 +2003,8 @@ int speech_service::mnt_translate(const QString &text, QString lang,
                       out_lang,
                       {},
                       {},
-                      {}};
+                      {},
+                      false};
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -2056,7 +2063,8 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
                       out_lang,
                       {},
                       {},
-                      {}};
+                      {},
+                      false};
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -2143,7 +2151,8 @@ int speech_service::tts_play_speech(const QString &text, QString lang,
         lang,
         {},
         {},
-        options};
+        options,
+        false};
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -2202,7 +2211,8 @@ int speech_service::tts_speech_to_file(const QString &text, QString lang,
         lang,
         {0, static_cast<size_t>(text.size())},
         {},
-        options};
+        options,
+        false};
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -2331,10 +2341,73 @@ int speech_service::stt_stop_listen(int task) {
     return SUCCESS;
 }
 
+int speech_service::tts_pause_speech(int task) {
+    if (state() == state_t::unknown || state() == state_t::not_configured ||
+        state() == state_t::busy) {
+        qWarning() << "cannot pause speech invalid state";
+        return FAILURE;
+    }
+
+    if (!m_current_task || m_current_task->id != task) {
+        qWarning() << "invalid task id";
+        return FAILURE;
+    }
+
+    if (m_current_task->engine != engine_t::tts) {
+        qWarning() << "valid task id but invalid engine";
+        return FAILURE;
+    }
+
+    qDebug() << "pausing speech";
+
+    m_current_task->paused = true;
+
+    if (m_player.state() == QMediaPlayer::PlayingState) m_player.pause();
+
+    update_task_state();
+
+    return SUCCESS;
+}
+
+int speech_service::tts_resume_speech(int task) {
+    if (state() == state_t::unknown || state() == state_t::not_configured ||
+        state() == state_t::busy) {
+        qWarning() << "cannot resume speech invalid state";
+        return FAILURE;
+    }
+
+    if (!m_current_task || m_current_task->id != task) {
+        qWarning() << "invalid task id";
+        return FAILURE;
+    }
+
+    if (m_current_task->engine != engine_t::tts) {
+        qWarning() << "valid task id but invalid engine";
+        return FAILURE;
+    }
+
+    if (!m_current_task->paused) {
+        qWarning() << "player not in paused state";
+        return FAILURE;
+    }
+
+    qDebug() << "reasuming speech";
+
+    m_current_task->paused = false;
+
+    if (m_player.state() == QMediaPlayer::PausedState) m_player.play();
+
+    handle_tts_queue();
+
+    update_task_state();
+
+    return SUCCESS;
+}
+
 int speech_service::tts_stop_speech(int task) {
     if (state() == state_t::unknown || state() == state_t::not_configured ||
         state() == state_t::busy) {
-        qWarning() << "cannot stop_listen, invalid state";
+        qWarning() << "cannot stop speech, invalid state";
         return FAILURE;
     }
 
@@ -2496,6 +2569,7 @@ void speech_service::update_task_state() {
     // 2 = Processing
     // 3 = Model initialization
     // 4 = Playing Speech
+    // 5 = Speech Paused
 
     auto new_task_state = [&] {
         if (m_stt_engine && m_stt_engine->started()) {
@@ -2509,10 +2583,14 @@ void speech_service::update_task_state() {
                 case stt_engine::speech_detection_status_t::no_speech:
                     break;
             }
-        } else if (m_player.state() == QMediaPlayer::State::PlayingState) {
+        } else if (m_player.state() == QMediaPlayer::State::PlayingState &&
+                   m_state == state_t::playing_speech) {
             return 4;
-        } else if (m_player.state() == QMediaPlayer::State::PausedState) {
-            return 0;
+        } else if (m_player.state() == QMediaPlayer::State::PausedState ||
+                   (m_player.state() == QMediaPlayer::State::StoppedState &&
+                    m_state == state_t::playing_speech && m_current_task &&
+                    m_current_task->paused)) {
+            return 5;
         } else if (m_tts_engine &&
                    m_tts_engine->state() != tts_engine::state_t::idle) {
             switch (m_tts_engine->state()) {
@@ -3012,6 +3090,20 @@ int speech_service::TtsSpeechToFile(const QString &text, const QString &lang,
     start_keepalive_current_task();
 
     return tts_speech_to_file(text, lang, options);
+}
+
+int speech_service::TtsPauseSpeech(int task) {
+    qDebug() << "[dbus => service] called TtsPauseSpeech";
+    start_keepalive_current_task();
+
+    return tts_pause_speech(task);
+}
+
+int speech_service::TtsResumeSpeech(int task) {
+    qDebug() << "[dbus => service] called TtsResumeSpeech";
+    start_keepalive_current_task();
+
+    return tts_resume_speech(task);
 }
 
 int speech_service::TtsStopSpeech(int task) {

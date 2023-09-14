@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.2
@@ -59,6 +59,7 @@ RowLayout {
                         case DsnoteApp.TaskStateProcessing: return 2;
                         case DsnoteApp.TaskStateInitializing: return 3;
                         case DsnoteApp.TaskStateSpeechPlaying: return 4;
+                        case DsnoteApp.TaskStateSpeechPaused: return 5;
                         }
                         return 0;
                     }
@@ -96,7 +97,7 @@ RowLayout {
                     verticalAlignment: Text.AlignVCenter
 
                     property string placeholderText: {
-                        if (app.speech === DsnoteApp.TaskStateInitializing)
+                        if (app.task_state === DsnoteApp.TaskStateInitializing)
                             return qsTr("Getting ready, please wait...")
                         if (app.state === DsnoteApp.StateWritingSpeechToFile)
                             return qsTr("Writing speech to file...") +
@@ -112,6 +113,7 @@ RowLayout {
                                 app.state === DsnoteApp.StateListeningAuto ||
                                 app.state === DsnoteApp.StateListeningManual) return qsTr("Say something...")
 
+                        if (app.task_state === DsnoteApp.TaskStateSpeechPaused) return qsTr("Reading is paused.")
                         if (app.state === DsnoteApp.StatePlayingSpeech) return qsTr("Reading a note...")
                         if (app.state === DsnoteApp.StateTranslating) return qsTr("Translating...")
 
@@ -123,11 +125,55 @@ RowLayout {
                 }
             }
 
+            SequentialAnimation {
+                running: app.task_state === DsnoteApp.TaskStateSpeechPaused
+                loops: Animation.Infinite
+                alwaysRunToEnd: true
+
+                OpacityAnimator {
+                    target: pauseButton
+                    from: 1.0
+                    to: 0.0
+                    duration: 500
+                }
+                OpacityAnimator {
+                    target: pauseButton
+                    from: 0.0
+                    to: 1.0
+                    duration: 500
+                }
+            }
+
             Button {
-                id: cancelButton
+                id: pauseButton
+
                 Layout.alignment: Qt.AlignBottom
                 Layout.preferredHeight: _icon.implicitHeight
-                icon.name: "action-unavailable-symbolic"
+                icon.name: app.task_state === DsnoteApp.TaskStateSpeechPaused ?
+                               "media-playback-start-symbolic" : "media-playback-pause-symbolic"
+                enabled: app.state === DsnoteApp.StatePlayingSpeech &&
+                         (app.task_state === DsnoteApp.TaskStateProcessing ||
+                          app.task_state === DsnoteApp.TaskStateSpeechPlaying ||
+                          app.task_state === DsnoteApp.TaskStateSpeechPaused)
+                onClicked: {
+                    if (app.task_state === DsnoteApp.TaskStateSpeechPaused)
+                        app.resume_speech()
+                    else
+                        app.pause_speech()
+                }
+
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: app.task_state === DsnoteApp.TaskStateSpeechPaused ?
+                                  qsTr("Resume reading") : qsTr("Pause reading")
+            }
+
+            Button {
+                id: cancelButton
+
+                Layout.alignment: Qt.AlignBottom
+                Layout.preferredHeight: _icon.implicitHeight
+                icon.name: app.state === DsnoteApp.StatePlayingSpeech ? "media-playback-stop-symbolic" : "action-unavailable-symbolic"
                 enabled: app.task_state === DsnoteApp.TaskStateProcessing ||
                          app.task_state === DsnoteApp.TaskStateInitializing ||
                          app.state === DsnoteApp.StateTranscribingFile ||
@@ -136,7 +182,7 @@ RowLayout {
                          app.state === DsnoteApp.StatePlayingSpeech ||
                          app.state === DsnoteApp.StateWritingSpeechToFile ||
                          app.state === DsnoteApp.StateTranslating
-                text: qsTr("Cancel")
+                text: app.state === DsnoteApp.StatePlayingSpeech ? qsTr("Stop") : qsTr("Cancel")
                 onClicked: app.cancel()
             }
         }

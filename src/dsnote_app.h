@@ -141,7 +141,8 @@ class dsnote_app : public QObject {
         TaskStateSpeechDetected = 1,
         TaskStateProcessing = 2,
         TaskStateInitializing = 3,
-        TaskStateSpeechPlaying = 4
+        TaskStateSpeechPlaying = 4,
+        TaskStateSpeechPaused = 5
     };
     Q_ENUM(service_task_state_t)
     friend QDebug operator<<(QDebug d, service_task_state_t type);
@@ -172,6 +173,8 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void stop_listen();
     Q_INVOKABLE void play_speech();
     Q_INVOKABLE void play_speech_translator(bool transtalated);
+    Q_INVOKABLE void pause_speech();
+    Q_INVOKABLE void resume_speech();
     Q_INVOKABLE void translate();
     Q_INVOKABLE void translate_delayed();
     Q_INVOKABLE void speech_to_file(const QString &dest_file,

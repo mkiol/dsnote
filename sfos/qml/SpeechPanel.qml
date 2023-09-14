@@ -17,12 +17,16 @@ Item {
     property alias busy: busyIndicator.running
     property alias progress: busyIndicator.progress
     property alias canCancel: cancelButton.visible
+    property alias canPause: pauseButton.visible
 
     signal cancelClicked()
+    signal pauseClicked()
+    signal resumeClicked()
 
     readonly property bool _empty: text.length === 0
 
-    height: intermediateLabel.height + 2 * Theme.paddingLarge
+    height: Math.max(intermediateLabel.height + 2 * Theme.paddingLarge,
+                     (canPause ? pauseButton.height : 0) + (canCancel ? cancelButton.height : 0))
 
     Rectangle {
         anchors.fill: parent
@@ -53,12 +57,11 @@ Item {
         // 2 - processing
         // 3 - initializing,
         // 4 - speech playing
+        // 5 - speech paused
         status: 0
 
         off: false
-        visible: opacity > 0.0
-        opacity: busyIndicator.running ? 0.0 : 1.0
-        Behavior on opacity { FadeAnimator { duration: 100 } }
+        visible: !busyIndicator.running
     }
 
     BusyIndicatorWithProgress {
@@ -87,12 +90,53 @@ Item {
         font.italic: root._empty
     }
 
+    onStatusChanged: {
+        if (root.status === 5) blinkAnimation.start()
+        else {
+            blinkAnimation.stop()
+            pauseButton.opacity = 1.0
+        }
+    }
+
+    SequentialAnimation {
+        id: blinkAnimation
+
+        loops: Animation.Infinite
+
+        FadeAnimator {
+            target: pauseButton
+            from: 1.0
+            to: 0.0
+            duration: 500
+        }
+        FadeAnimator {
+            target: pauseButton
+            from: 0.0
+            to: 1.0
+            duration: 500
+        }
+    }
+
+    IconButton {
+        id: pauseButton
+
+        anchors.right: parent.right
+        anchors.rightMargin: Theme.paddingSmall
+        anchors.top: parent.top
+        icon.source: (root.status == 5 ? "image://theme/icon-m-play?" : "image://theme/icon-m-pause?") +
+                     (pressed ? Theme.highlightColor : Theme.primaryColor)
+        onClicked: {
+            if (root.status == 5) root.resumeClicked()
+            else root.pauseClicked()
+        }
+    }
+
     IconButton {
         id: cancelButton
 
         anchors.right: parent.right
         anchors.rightMargin: Theme.paddingSmall
-        anchors.top: parent.top
+        anchors.top: pauseButton.visible ? pauseButton.bottom : parent.top
         icon.source: "image://theme/icon-m-cancel?" + (pressed ? Theme.highlightColor : Theme.primaryColor)
         onClicked: root.cancelClicked()
     }

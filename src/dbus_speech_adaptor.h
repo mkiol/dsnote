@@ -231,6 +231,14 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"in\" type=\"a{sv}\" name=\"options\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </method>\n"
+"    <method name=\"TtsPauseSpeech\">\n"
+"      <arg direction=\"in\" type=\"i\" name=\"task\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
+"    </method>\n"
+"    <method name=\"TtsResumeSpeech\">\n"
+"      <arg direction=\"in\" type=\"i\" name=\"task\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
+"    </method>\n"
 "    <method name=\"Cancel\">\n"
 "      <arg direction=\"in\" type=\"i\" name=\"task\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
@@ -350,8 +358,10 @@ public Q_SLOTS: // METHODS
     int SttStopListen(int task);
     int SttTranscribeFile(const QString &file, const QString &lang, const QString &out_lang);
     double TtsGetSpeechToFileProgress(int task);
+    int TtsPauseSpeech(int task);
     int TtsPlaySpeech(const QString &text, const QString &lang);
     int TtsPlaySpeech2(const QString &text, const QString &lang, const QVariantMap &options);
+    int TtsResumeSpeech(int task);
     int TtsSpeechToFile(const QString &text, const QString &lang, const QVariantMap &options);
     int TtsStopSpeech(int task);
 Q_SIGNALS: // SIGNALS
