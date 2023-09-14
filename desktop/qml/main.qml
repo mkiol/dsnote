@@ -29,12 +29,12 @@ ApplicationWindow {
 
     property var _dialogPage
 
-    function openDialog(file) {
+    function openDialog(file, props) {
         closeDialog()
 
         var cmp = Qt.createComponent(file)
         if (cmp.status === Component.Ready) {
-            var dialog = cmp.createObject(appWin);
+            var dialog = props ? cmp.createObject(appWin, props) : cmp.createObject(appWin);
             dialog.open()
             _dialogPage = dialog
         }

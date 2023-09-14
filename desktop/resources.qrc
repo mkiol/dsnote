@@ -21,6 +21,7 @@
         <file>qml/ScrollTextArea.qml</file>
         <file>qml/Translator.qml</file>
         <file>qml/Notepad.qml</file>
+        <file>qml/FileWritePage.qml</file>
         <file alias="config/models.json">../config/models.json</file>
         <file alias="nonbreaking_prefixes/ca.txt">../nonbreaking_prefixes/ca.txt</file>
         <file alias="nonbreaking_prefixes/cs.txt">../nonbreaking_prefixes/cs.txt</file>

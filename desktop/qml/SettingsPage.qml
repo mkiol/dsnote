@@ -24,6 +24,8 @@ DialogPage {
     }
 
     GridLayout {
+        id: grid
+
         visible: _settings.audio_inputs.length > 1
         columns: root.verticalMode ? 1 : 2
         columnSpacing: appWin.padding
@@ -58,8 +60,6 @@ DialogPage {
     }
 
     GridLayout {
-        id: grid
-
         Layout.fillWidth: true
         columns: root.verticalMode ? 1 : 2
         columnSpacing: appWin.padding
@@ -294,157 +294,6 @@ DialogPage {
                     }
                 }
             }
-        }
-    }
-
-    GridLayout {
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
-
-        Label {
-            Layout.fillWidth: true
-            text: qsTr("Audio file format")
-        }
-        ComboBox {
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            currentIndex: {
-                switch (_settings.audio_format) {
-                case Settings.AudioFormatWav: return 1;
-                case Settings.AudioFormatMp3: return 2;
-                case Settings.AudioFormatOgg: return 3;
-                case Settings.AudioFormatAuto: break;
-                }
-                return 0;
-            }
-            model: [
-                qsTr("Auto"),
-                "Wav",
-                "MP3",
-                "Ogg Vorbis"
-            ]
-            onActivated: {
-                switch (index) {
-                case 1: _settings.audio_format = Settings.AudioFormatWav; break;
-                case 2: _settings.audio_format = Settings.AudioFormatMp3; break;
-                case 3: _settings.audio_format = Settings.AudioFormatOgg; break;
-                case 0:
-                default: _settings.audio_format = Settings.AudioFormatAuto;
-                }
-            }
-
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("The audio format used when saving to a file.") + " " +
-                          qsTr("%1 means that format will be set according to the file extension.").arg("<i>" +  qsTr("Auto") + "</i>")
-        }
-    }
-
-    GridLayout {
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
-        enabled: _settings.audio_format !== Settings.AudioFormatWav
-
-        Label {
-            Layout.fillWidth: true
-            text: qsTr("Compression quality")
-        }
-        ComboBox {
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            currentIndex: {
-                switch (_settings.audio_quality) {
-                case Settings.AudioQualityVbrHigh: return 0;
-                case Settings.AudioQualityVbrMedium: return 1;
-                case Settings.AudioQualityVbrLow: return 2;
-                }
-                return 1;
-            }
-            model: [
-                qsTr("High"),
-                qsTr("Medium"),
-                qsTr("Low")
-            ]
-            onActivated: {
-                switch (index) {
-                case 0: _settings.audio_quality = Settings.AudioQualityVbrHigh; break;
-                case 1: _settings.audio_quality = Settings.AudioQualityVbrMedium; break;
-                case 2: _settings.audio_quality = Settings.AudioQualityVbrLow; break;
-                default: _settings.audio_quality = Settings.AudioQualityVbrMedium;
-                }
-            }
-
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("The compression quality used when saving to a file.") + " " +
-                          qsTr("%1 results in a larger file size.").arg("<i>" + qsTr("High") + "</i>")
-        }
-    }
-
-    CheckBox {
-        id: mtagCheckBox
-
-        enabled: _settings.audio_format !== Settings.AudioFormatWav
-        checked: _settings.mtag
-        text: qsTr("Write meta-data tags to audio file")
-        onCheckedChanged: {
-            _settings.mtag = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTr("Write title, artist and album tags to audio file.") + " " +
-                      qsTr("Writing tags only works if the file format is %1 or %2.")
-                        .arg("<i>MP3</i>").arg("<i>Ogg Vorbis</i>")
-    }
-
-    GridLayout {
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
-        visible: _settings.mtag
-        enabled: mtagCheckBox.enabled
-
-        Label {
-            Layout.fillWidth: true
-            Layout.leftMargin: verticalMode ? 0 : appWin.padding
-            text: qsTr("Album tag")
-        }
-        TextField {
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            text: _settings.mtag_album_name
-            onTextChanged: _settings.mtag_album_name = text
-
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("The name of the album that will be written to the meta-data of the file.")
-        }
-    }
-
-    GridLayout {
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
-        visible: _settings.mtag
-        enabled: mtagCheckBox.enabled
-
-        Label {
-            Layout.fillWidth: true
-            Layout.leftMargin: verticalMode ? 0 : appWin.padding
-            text: qsTr("Artist tag")
-        }
-        TextField {
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            text: _settings.mtag_artist_name
-            onTextChanged: _settings.mtag_artist_name = text
-
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("The name of the artist that will be written to the meta-data of the file.")
         }
     }
 

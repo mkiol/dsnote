@@ -60,6 +60,8 @@ class settings : public QSettings, public singleton<settings> {
                    font_size_changed)
     Q_PROPERTY(audio_format_t audio_format READ audio_format WRITE
                    set_audio_format NOTIFY audio_format_changed)
+    Q_PROPERTY(QString audio_format_str READ audio_format_str NOTIFY
+                   audio_format_changed)
     Q_PROPERTY(audio_quality_t audio_quality READ audio_quality WRITE
                    set_audio_quality NOTIFY audio_quality_changed)
     Q_PROPERTY(QString mtag_album_name READ mtag_album_name WRITE
@@ -206,6 +208,7 @@ class settings : public QSettings, public singleton<settings> {
     void set_mtag_artist_name(const QString &value);
     void set_mtag(bool value);
     bool mtag() const;
+    QString audio_format_str() const;
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -216,7 +219,17 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE bool file_exists(const QString &file_path) const;
     Q_INVOKABLE QString
     add_ext_to_audio_filename(const QString &filename) const;
+    Q_INVOKABLE QString
+    add_ext_to_audio_file_path(const QString &file_path) const;
+    Q_INVOKABLE QString
+    base_name_from_file_path(const QString &file_path) const;
+    Q_INVOKABLE QString file_path_from_url(const QUrl &file_url) const;
+    Q_INVOKABLE QString dir_of_file(const QString &file_path) const;
+    Q_INVOKABLE audio_format_t
+    filename_to_audio_format(const QString &filename) const;
     static QString audio_format_str_from_filename(const QString &filename);
+    static audio_format_t filename_to_audio_format_static(
+        const QString &filename);
 
     // service
     QString models_dir() const;

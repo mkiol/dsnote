@@ -14,25 +14,45 @@ Dialog {
     id: root
 
     property bool translated: false
+    readonly property var autoFileFormat: _settings.filename_to_audio_format(nameField.text)
+    readonly property string autoFileFormatStr: {
+        switch (autoFileFormat) {
+        case Settings.AudioFormatWav: return "Wav";
+        case Settings.AudioFormatMp3: return "MP3";
+        case Settings.AudioFormatOgg: return "Ogg Vorbis";
+        case Settings.AudioFormatAuto: break;
+        }
+        return "MP3";
+    }
+    readonly property bool compressedFormat: _settings.audio_format !== Settings.AudioFormatWav
+                                    && (_settings.audio_format !== Settings.AudioFormatAuto ||
+                                        root.autoFileFormat !== Settings.AudioFormatWav)
 
     canAccept: nameField.text.trim().length !== 0
 
     function check_filename() {
         var file_name = nameField.text.trim()
         var file_path = _settings.file_save_dir + "/" + file_name
-        overwriteLabel.visible = _settings.file_exists(file_path)
 
+        overwriteLabel.visible = _settings.file_exists(file_path)
         updateTitleTagTimer.restart()
     }
 
     function update_title_tag() {
-        var file_name = nameField.text.trim()
-        var ext_pos = file_name.lastIndexOf('.');
-        var title_tag = ext_pos >= 0 ?
-                    file_name.substring(0, ext_pos) :
-                    file_name
+        mtagTitleTextField.text =
+                _settings.base_name_from_file_path(nameField.text)
+    }
 
-        mtagTitleTextField.text = title_tag
+    function save_file() {
+        var file_path = _settings.file_save_dir + "/" +
+                _settings.add_ext_to_audio_filename(nameField.text)
+        var title_tag = mtagTitleTextField.text.trim()
+
+        if (_settings.translator_mode) {
+            app.speech_to_file_translator(root.translated, file_path, title_tag)
+        } else {
+            app.speech_to_file(file_path, title_tag)
+        }
     }
 
     Timer {
@@ -45,8 +65,8 @@ Dialog {
     Connections {
         target: _settings
         onAudio_format_changed: {
-            var filename = _settings.add_ext_to_audio_filename(nameField.text.trim())
-            nameField.text = filename
+            nameField.text =
+                    _settings.add_ext_to_audio_filename(nameField.text)
         }
         onFile_save_dir_changed: check_filename()
     }
@@ -84,6 +104,7 @@ Dialog {
 
         TextField {
             id: nameField
+
             anchors.left: parent.left
             anchors.right: parent.right
             width: parent.width
@@ -116,7 +137,7 @@ Dialog {
                 return 0;
             }
             menu: ContextMenu {
-                MenuItem { text: qsTr("Auto") }
+                MenuItem { text: qsTr("Auto") + " (" + root.autoFileFormatStr + ")" }
                 MenuItem { text: "Wav" }
                 MenuItem { text: "MP3" }
                 MenuItem { text: "Ogg Vorbis" }
@@ -131,11 +152,11 @@ Dialog {
                 }
             }
             description: qsTr("The audio format used when saving to a file.") + " " +
-                         qsTr("%1 means that format will be set according to the file extension.").arg("<i>" +  qsTr("Auto") + "</i>")
+                         qsTr("%1 means that the format will be determined by the file extension.").arg("<i>" +  qsTr("Auto") + "</i>")
         }
 
         ComboBox {
-            enabled: _settings.audio_format !== Settings.AudioFormatWav
+            enabled: root.compressedFormat
             label: qsTr("Compression quality")
             currentIndex: {
                 switch (_settings.audio_quality) {
@@ -165,7 +186,7 @@ Dialog {
         TextSwitch {
             id: mtagCheckBox
 
-            enabled: _settings.audio_format !== Settings.AudioFormatWav
+            enabled: root.compressedFormat
             checked: _settings.mtag
             automaticCheck: false
             text: qsTr("Write meta-data tags to audio file")
@@ -219,14 +240,7 @@ Dialog {
 
     onDone: {
         if (result !== DialogResult.Accepted) return
-        var file_path = _settings.file_save_dir + "/" +
-                _settings.add_ext_to_audio_filename(nameField.text.trim())
-        var title_tag = mtagTitleTextField.text.trim();
 
-        if (_settings.translator_mode) {
-            app.speech_to_file_translator(root.translated, file_path, title_tag)
-        } else {
-            app.speech_to_file(file_path, title_tag)
-        }
+        root.save_file()
     }
 }

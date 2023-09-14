@@ -92,8 +92,7 @@ ToolBar {
                                   app.state === DsnoteApp.StateIdle ||
                                   app.state === DsnoteApp.StatePlayingSpeech)
                         onClicked: {
-                            fileWriteDialog.translated = false
-                            fileWriteDialog.open()
+                            appWin.openDialog("FileWritePage.qml", {"translated": false})
                         }
 
                         ToolTip.visible: hovered
@@ -112,8 +111,7 @@ ToolBar {
                                   app.state === DsnoteApp.StateIdle ||
                                   app.state === DsnoteApp.StatePlayingSpeech)
                         onClicked: {
-                            fileWriteDialog.translated = true
-                            fileWriteDialog.open()
+                            appWin.openDialog("FileWritePage.qml", {"translated": true})
                         }
 
                         ToolTip.visible: hovered
@@ -192,33 +190,6 @@ ToolBar {
         onAccepted: {
             app.transcribe_file(fileReadDialog.fileUrl)
             _settings.file_open_dir_url = fileReadDialog.fileUrl
-        }
-    }
-
-    Dialogs.FileDialog {
-        id: fileWriteDialog
-        property bool translated: false
-
-        title: qsTr("Save File")
-        nameFilters: [ "Wave (*.wav)", "MP3 (*.mp3)", "Ogg Vorbis (*.ogg)" ]
-        folder: _settings.file_save_dir_url
-        selectExisting: false
-        selectMultiple: false
-        onAccepted: {
-            var file_url = fileWriteDialog.fileUrl
-            var file_name = file_url.toString().split('/').pop()
-            var ext_pos = file_name.lastIndexOf('.');
-            var title_tag = ext_pos >= 0 ?
-                        file_name.substring(0, ext_pos) :
-                        file_name
-
-            if (_settings.translator_mode) {
-                app.speech_to_file_translator(translated, file_url, title_tag)
-                _settings.file_save_dir_url = file_url
-            } else {
-                app.speech_to_file(file_url, title_tag)
-                _settings.file_save_dir_url = file_url
-            }
         }
     }
 }

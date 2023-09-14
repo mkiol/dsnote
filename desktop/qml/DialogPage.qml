@@ -20,7 +20,7 @@ Dialog {
     readonly property real _leftMargin: appWin.padding
 
     implicitHeight: Math.min(
-                        header.height + flick.contentHeight + (listView.model ? root.parent.height : 0) + footer.height + 2 * verticalPadding,
+                        header.height + flick.contentHeight + (listView.model ? root.parent.height : 0) + footer.height + 8 * verticalPadding,
                         parent.height - 4 * appWin.padding)
     implicitWidth: parent.width - 4 * appWin.padding
     anchors.centerIn: parent
@@ -50,17 +50,6 @@ Dialog {
             verticalAlignment: Qt.AlignVCenter
         }
     }
-
-//    Component.onCompleted: {
-//        console.log("leftInset", root.leftInset)
-//        console.log("rightInset", root.rightInset)
-//        console.log("leftPadding", root.leftPadding)
-//        console.log("rightPadding", root.rightPadding)
-//        console.log("leftMargin", root.leftMargin)
-//        console.log("rightMargin", root.rightMargin)
-//        console.log("availableWidth", root.availableWidth)
-//        console.log("availableHeight", root.availableHeight)
-//    }
 
     footer: Item {
         height: closeButton.height + appWin.padding
