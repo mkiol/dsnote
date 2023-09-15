@@ -14,7 +14,7 @@
 
 namespace mtag_tools {
 bool write(const std::string &path, const std::string &title,
-           const std::string &artist, const std::string &album) {
+           const std::string &artist, const std::string &album, int track) {
     TagLib::FileRef file{path.c_str(), false};
     if (file.isNull()) {
         LOGE("taglib cannot open file: " << path);
@@ -30,6 +30,7 @@ bool write(const std::string &path, const std::string &title,
     if (!title.empty()) tag->setTitle({title, TagLib::String::UTF8});
     if (!artist.empty()) tag->setArtist({artist, TagLib::String::UTF8});
     if (!album.empty()) tag->setAlbum({album, TagLib::String::UTF8});
+    if (track > 0) tag->setTrack(track);
 
     file.save();
 

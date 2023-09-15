@@ -30,6 +30,7 @@ DialogPage {
     readonly property bool compressedFormat: _settings.audio_format !== Settings.AudioFormatWav
                                     && (_settings.audio_format !== Settings.AudioFormatAuto ||
                                         root.autoFileFormat !== Settings.AudioFormatWav)
+    property bool _autoTitleTag: true
 
     title: qsTr("Save File")
 
@@ -39,24 +40,29 @@ DialogPage {
     }
 
     function update_title_tag() {
-        mtagTitleTextField.text =
-                _settings.base_name_from_file_path(pathField.text)
+        if (_autoTitleTag)
+            mtagTitleTextField.text =
+                    _settings.base_name_from_file_path(pathField.text)
     }
 
     function save_file() {
         var file_path = _settings.add_ext_to_audio_file_path(pathField.text)
         var title_tag = mtagTitleTextField.text.trim()
-
+        var track_tag = mtagTrackTextField.text.trim()
 
         if (_settings.translator_mode) {
-            app.speech_to_file_translator(root.translated, file_path, title_tag)
+            app.speech_to_file_translator(root.translated, file_path, title_tag, track_tag)
         } else {
-            app.speech_to_file(file_path, title_tag)
+            app.speech_to_file(file_path, title_tag, track_tag)
         }
 
         _settings.file_save_dir = _settings.dir_of_file(file_path)
 
         root.accept()
+    }
+
+    onAutoFileFormatStrChanged: {
+        formatComboBox.model.setProperty(0, "text", qsTr("Auto") + " (" + root.autoFileFormatStr + ")")
     }
 
     Timer {
@@ -151,37 +157,39 @@ DialogPage {
             text: qsTr("Audio file format")
         }
         ComboBox {
+            id: formatComboBox
+
             Layout.fillWidth: verticalMode
             Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
             currentIndex: {
                 switch (_settings.audio_format) {
-                case Settings.AudioFormatWav: return 1;
-                case Settings.AudioFormatMp3: return 2;
-                case Settings.AudioFormatOgg: return 3;
-                case Settings.AudioFormatAuto: break;
+                case Settings.AudioFormatWav: return 1
+                case Settings.AudioFormatMp3: return 2
+                case Settings.AudioFormatOgg: return 3
+                case Settings.AudioFormatAuto: break
                 }
-                return 0;
+                return 0
             }
-            model: [
-                qsTr("Auto") + " (" + root.autoFileFormatStr + ")",
-                "Wav",
-                "MP3",
-                "Ogg Vorbis"
-            ]
+            textRole: "text"
+            model: ListModel {
+                ListElement { text: qsTr("Auto") }
+                ListElement { text: "Wav"}
+                ListElement { text: "MP3"}
+                ListElement { text: "Ogg Vorbis" }
+            }
             onActivated: {
                 switch (index) {
-                case 1: _settings.audio_format = Settings.AudioFormatWav; break;
-                case 2: _settings.audio_format = Settings.AudioFormatMp3; break;
-                case 3: _settings.audio_format = Settings.AudioFormatOgg; break;
-                case 0:
-                default: _settings.audio_format = Settings.AudioFormatAuto;
+                case 1: _settings.audio_format = Settings.AudioFormatWav; break
+                case 2: _settings.audio_format = Settings.AudioFormatMp3; break
+                case 3: _settings.audio_format = Settings.AudioFormatOgg; break
+                default: _settings.audio_format = Settings.AudioFormatAuto
                 }
             }
 
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.visible: hovered
-            ToolTip.text: qsTr("The audio format used when saving to a file.") + " " +
-                          qsTr("%1 means that the format will be determined by the file extension.").arg("<i>" +  qsTr("Auto") + "</i>")
+            ToolTip.text: qsTr("When %1 is selected, the format is chosen based on the file extension.")
+                                .arg("<i>" +  qsTr("Auto") + "</i>")
         }
     }
 
@@ -222,8 +230,7 @@ DialogPage {
 
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.visible: hovered
-            ToolTip.text: qsTr("The compression quality used when saving to a file.") + " " +
-                          qsTr("%1 results in a larger file size.").arg("<i>" + qsTr("High") + "</i>")
+            ToolTip.text: qsTr("%1 results in a larger file size.").arg("<i>" + qsTr("High") + "</i>")
         }
     }
 
@@ -232,16 +239,34 @@ DialogPage {
 
         enabled: root.compressedFormat
         checked: _settings.mtag
-        text: qsTr("Write meta-data tags to audio file")
+        text: qsTr("Write metadata to audio file")
         onCheckedChanged: {
             _settings.mtag = checked
         }
 
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
         ToolTip.visible: hovered
-        ToolTip.text: qsTr("Write title, artist and album tags to audio file.") + " " +
-                      qsTr("Writing tags only works if the file format is %1 or %2.")
-                        .arg("<i>MP3</i>").arg("<i>Ogg Vorbis</i>")
+        ToolTip.text: qsTr("Write track number, title, artist and album tags to audio file.")
+    }
+
+    GridLayout {
+        columns: root.verticalMode ? 1 : 2
+        columnSpacing: appWin.padding
+        rowSpacing: appWin.padding
+        visible: _settings.mtag
+        enabled: mtagCheckBox.enabled
+
+        Label {
+            Layout.fillWidth: true
+            Layout.leftMargin: verticalMode ? 0 : appWin.padding
+            text: qsTr("Track number")
+        }
+        TextField {
+            id: mtagTrackTextField
+
+            Layout.fillWidth: verticalMode
+            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+        }
     }
 
     GridLayout {
@@ -261,6 +286,7 @@ DialogPage {
 
             Layout.fillWidth: verticalMode
             Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            onTextEdited: root._autoTitleTag = false
         }
     }
 

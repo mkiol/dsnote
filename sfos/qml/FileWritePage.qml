@@ -47,11 +47,12 @@ Dialog {
         var file_path = _settings.file_save_dir + "/" +
                 _settings.add_ext_to_audio_filename(nameField.text)
         var title_tag = mtagTitleTextField.text.trim()
+        var track_tag = mtagTrackTextField.text.trim()
 
         if (_settings.translator_mode) {
-            app.speech_to_file_translator(root.translated, file_path, title_tag)
+            app.speech_to_file_translator(root.translated, file_path, title_tag, track_tag)
         } else {
-            app.speech_to_file(file_path, title_tag)
+            app.speech_to_file(file_path, title_tag, track_tag)
         }
     }
 
@@ -151,8 +152,7 @@ Dialog {
                 default: _settings.audio_format = Settings.AudioFormatAuto;
                 }
             }
-            description: qsTr("The audio format used when saving to a file.") + " " +
-                         qsTr("%1 means that the format will be determined by the file extension.").arg("<i>" +  qsTr("Auto") + "</i>")
+            description: qsTr("When %1 is selected, the format is chosen based on the file extension.").arg("<i>" +  qsTr("Auto") + "</i>")
         }
 
         ComboBox {
@@ -179,8 +179,7 @@ Dialog {
                 default: _settings.audio_quality = Settings.AudioQualityVbrMedium;
                 }
             }
-            description: qsTr("The compression quality used when saving to a file.") + " " +
-                         qsTr("%1 results in a larger file size.").arg("<i>" + qsTr("High") + "</i>")
+            description: qsTr("%1 results in a larger file size.").arg("<i>" + qsTr("High") + "</i>")
         }
 
         TextSwitch {
@@ -189,12 +188,23 @@ Dialog {
             enabled: root.compressedFormat
             checked: _settings.mtag
             automaticCheck: false
-            text: qsTr("Write meta-data tags to audio file")
-            description: qsTr("Write title, artist and album tags to audio file.") + " " +
-                         qsTr("Writing tags only works if the file format is %1 or %2.")
-                           .arg("<i>MP3</i>").arg("<i>Ogg Vorbis</i>")
+            text: qsTr("Write metadata to audio file")
+            description: qsTr("Write track number, title, artist and album tags to audio file.")
             onClicked: {
                 _settings.mtag = !_settings.mtag
+            }
+        }
+
+        TextField {
+            id: mtagTrackTextField
+
+            visible: _settings.mtag
+            enabled: mtagCheckBox.enabled
+            placeholderText: qsTr("Track number")
+            label: qsTr("Track numbere")
+            anchors {
+                left: parent.left
+                right: parent.right
             }
         }
 

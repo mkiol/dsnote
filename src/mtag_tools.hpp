@@ -9,5 +9,5 @@
 
 namespace mtag_tools {
 bool write(const std::string &path, const std::string &title,
-           const std::string &artist, const std::string &album);
+           const std::string &artist, const std::string &album, int track);
 }
