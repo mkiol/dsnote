@@ -89,12 +89,6 @@ void whisper_engine::open_whisper_lib() {
     m_whisper_api.whisper_init_from_file =
         reinterpret_cast<decltype(m_whisper_api.whisper_init_from_file)>(
             dlsym(m_whisperlib_handle, "whisper_init_from_file"));
-    m_whisper_api.whisper_cancel =
-        reinterpret_cast<decltype(m_whisper_api.whisper_cancel)>(
-            dlsym(m_whisperlib_handle, "whisper_cancel"));
-    m_whisper_api.whisper_cancel_clear =
-        reinterpret_cast<decltype(m_whisper_api.whisper_cancel_clear)>(
-            dlsym(m_whisperlib_handle, "whisper_cancel_clear"));
     m_whisper_api.whisper_print_system_info =
         reinterpret_cast<decltype(m_whisper_api.whisper_print_system_info)>(
             dlsym(m_whisperlib_handle, "whisper_print_system_info"));
@@ -136,7 +130,6 @@ void whisper_engine::reset_impl() { m_speech_buf.clear(); }
 void whisper_engine::stop_processing_impl() {
     if (m_whisper_ctx) {
         LOGD("whisper cancel");
-        m_whisper_api.whisper_cancel(m_whisper_ctx);
     }
 }
 
@@ -293,6 +286,13 @@ whisper_full_params whisper_engine::make_wparams() {
     wparams.n_threads = std::min(
         m_threads,
         std::max(1, static_cast<int>(std::thread::hardware_concurrency())));
+    wparams.encoder_begin_callback = []([[maybe_unused]] whisper_context* ctx,
+                                        [[maybe_unused]] whisper_state* state,
+                                        void* user_data) {
+        bool is_aborted = *static_cast<bool*>(user_data);
+        return !is_aborted;
+    };
+    wparams.encoder_begin_callback_user_data = &m_thread_exit_requested;
 
     LOGD("cpu info: arch=" << cpu_tools::arch() << ", cores="
                            << std::thread::hardware_concurrency());
@@ -311,9 +311,6 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
     auto decoding_start = std::chrono::steady_clock::now();
 
     std::ostringstream os;
-
-    if (!m_thread_exit_requested)
-        m_whisper_api.whisper_cancel_clear(m_whisper_ctx);
 
     if (auto ret = m_whisper_api.whisper_full(m_whisper_ctx, m_wparams,
                                               buf.data(), buf.size());

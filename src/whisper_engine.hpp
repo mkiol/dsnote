@@ -30,8 +30,6 @@ class whisper_engine : public stt_engine {
     struct whisper_api {
         whisper_context* (*whisper_init_from_file)(const char* path_model) =
             nullptr;
-        void (*whisper_cancel)(whisper_context* ctx) = nullptr;
-        void (*whisper_cancel_clear)(whisper_context* ctx) = nullptr;
         const char* (*whisper_print_system_info)() = nullptr;
         int (*whisper_full)(whisper_context* ctx, whisper_full_params params,
                             const float* samples, int n_samples) = nullptr;
@@ -42,8 +40,7 @@ class whisper_engine : public stt_engine {
         whisper_full_params (*whisper_full_default_params)(
             whisper_sampling_strategy strategy) = nullptr;
         inline auto ok() const {
-            return whisper_init_from_file && whisper_cancel &&
-                   whisper_cancel_clear && whisper_print_system_info &&
+            return whisper_init_from_file && whisper_print_system_info &&
                    whisper_full && whisper_full_n_segments &&
                    whisper_full_get_segment_text && whisper_free &&
                    whisper_full_default_params;

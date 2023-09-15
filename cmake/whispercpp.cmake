@@ -1,5 +1,5 @@
-set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/85ed71aaec8e0612a84c0b67804bde75aa75a273.zip")
-set(whispercpp_checksum "cd505a7012f4d5be7c3d61fca9b46722b37eea226035c66f3a20d77d78dd6366")
+set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/93935980f8bcc3d230d313174ff59635c3c80d1b.zip")
+set(whispercpp_checksum "db961ae4b48e79e2e7fe4003ba1c427897840c8bb461e06cdbeacf5a6cebcdf2")
 
 set(whispercpp_flags -O3 -ffast-math -I${external_include_dir}/openblas)
 set(whispercppfallback_flags ${whispercpp_flags})
