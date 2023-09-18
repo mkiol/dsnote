@@ -9,6 +9,8 @@
 
 #include <QClipboard>
 #include <QDBusConnection>
+#include <QDebug>
+#include <QFile>
 #include <QGuiApplication>
 #include <QTextStream>
 #include <algorithm>
@@ -2228,4 +2230,47 @@ void dsnote_app::handle_note_changed() {
     if (settings::instance()->translator_mode() &&
         settings::instance()->translate_when_typing())
         translate_delayed();
+}
+
+void dsnote_app::save_note_to_file(const QString &dest_file) {
+    save_note_to_file_internal(note(), dest_file);
+}
+
+void dsnote_app::save_note_to_file_translator(const QString &dest_file) {
+    save_note_to_file_internal(translated_text(), dest_file);
+}
+
+void dsnote_app::save_note_to_file_internal(const QString &text,
+                                            const QString &dest_file) {
+    QFile file{dest_file};
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qWarning() << "failed to open file for write:" << dest_file;
+        emit error(error_t::ErrorSaveNoteToFile);
+        return;
+    }
+
+    QTextStream out{&file};
+    out << text;
+
+    file.close();
+
+    emit save_note_to_file_done();
+}
+
+void dsnote_app::load_note_from_file(const QString &input_file, bool replace) {
+    QFile file{input_file};
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "failed to open file for read:" << input_file;
+        emit error(error_t::ErrorLoadNoteFromFile);
+        return;
+    }
+
+    make_undo();
+
+    if (replace) {
+        set_note(file.readAll());
+    } else {
+        set_note(insert_to_note(settings::instance()->note(), file.readAll(),
+                                settings::instance()->insert_mode()));
+    }
 }

@@ -154,6 +154,8 @@ class dsnote_app : public QObject {
         ErrorSttEngine = 3,
         ErrorTtsEngine = 4,
         ErrorMntEngine = 5,
+        ErrorSaveNoteToFile = 6,
+        ErrorLoadNoteFromFile = 7,
         ErrorNoService = 100
     };
     Q_ENUM(error_t)
@@ -191,6 +193,10 @@ class dsnote_app : public QObject {
                                                const QUrl &dest_file,
                                                const QString &title_tag = {},
                                                const QString &track_tag = {});
+    Q_INVOKABLE void save_note_to_file(const QString &dest_file);
+    Q_INVOKABLE void save_note_to_file_translator(const QString &dest_file);
+    Q_INVOKABLE void load_note_from_file(const QString &input_file,
+                                         bool replace);
     Q_INVOKABLE void stop_play_speech();
     Q_INVOKABLE void copy_to_clipboard();
     Q_INVOKABLE void copy_translation_to_clipboard();
@@ -228,6 +234,7 @@ class dsnote_app : public QObject {
     void error(dsnote_app::error_t type);
     void transcribe_done();
     void speech_to_file_done();
+    void save_note_to_file_done();
     void service_state_changed();
     void note_copied();
     void translated_text_changed();
@@ -414,6 +421,8 @@ class dsnote_app : public QObject {
                                  const QString &title_tag,
                                  const QString &track);
     void play_speech_internal(const QString &text, const QString &model_id);
+    void save_note_to_file_internal(const QString &text,
+                                    const QString &dest_file);
     void copy_to_clipboard_internal(const QString &text);
     void handle_translate_delayed();
 };

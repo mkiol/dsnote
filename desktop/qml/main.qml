@@ -178,6 +178,7 @@ ApplicationWindow {
         onNote_copied: toast.show(qsTr("Copied!"))
         onTranscribe_done: toast.show(qsTr("File transcription is complete!"))
         onSpeech_to_file_done: toast.show(qsTr("Speech saved to audio file!"))
+        onSave_note_to_file_done: toast.show(qsTr("Note saved to text file!"))
         onError: {
             switch (type) {
             case DsnoteApp.ErrorFileSource:
@@ -194,6 +195,12 @@ ApplicationWindow {
                 break;
             case DsnoteApp.ErrorMntEngine:
                 toast.show(qsTr("Error: Translation engine initialization has failed."))
+                break;
+            case DsnoteApp.ErrorSaveNoteToFile:
+                toast.show(qsTr("Error: Couldn't save to the file."))
+                break;
+            case DsnoteApp.ErrorLoadNoteFromFile:
+                toast.show(qsTr("Error: Couldn't open the file."))
                 break;
             default:
                 toast.show(qsTr("Error: An unknown problem has occurred."))

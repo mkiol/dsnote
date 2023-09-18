@@ -64,7 +64,20 @@ ToolBar {
 
                 Menu {
                     id: fileMenu
+
                     y: fileButton.height
+
+                    MenuItem {
+                        text: qsTr("Open text file")
+                        icon.name: "document-open-symbolic"
+                        onClicked: {
+                            textFileReadDialog.open()
+                        }
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Replace the note with text loaded from a file.")
+                    }
 
                     MenuItem {
                         text: qsTr("Transcribe audio file")
@@ -79,8 +92,40 @@ ToolBar {
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Convert audio file to text.")
+                        ToolTip.text: qsTr("Convert audio file to text. The text will be appended to the note.")
                     }
+
+                    MenuSeparator {}
+
+                    MenuItem {
+                        text: qsTr("Save to text file")
+                        icon.name: "document-save-symbolic"
+                        enabled: app.note.length !== 0
+                        onClicked: {
+                            fileWriteDialog.translation = false
+                            fileWriteDialog.open()
+                        }
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Save the note to text file.")
+                    }
+
+                    MenuItem {
+                        text: qsTr("Save the translation to text file")
+                        icon.name: "document-save-symbolic"
+                        enabled: app.translated_text.length !== 0 && _settings.translator_mode
+                        onClicked: {
+                            fileWriteDialog.translation = true
+                            fileWriteDialog.open()
+                        }
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Save translated text to text file.")
+                    }
+
+                    MenuSeparator {}
 
                     MenuItem {
                         text: qsTr("Save to audio file")
@@ -97,7 +142,7 @@ ToolBar {
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Convert text to audio file.")
+                        ToolTip.text: qsTr("Convert text from the note to audio file.")
                     }
 
                     MenuItem {
@@ -174,6 +219,43 @@ ToolBar {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTr("Switch to Translator")
             }
+        }
+    }
+
+    Dialogs.FileDialog {
+        id: fileWriteDialog
+
+        property bool translation: false
+
+        title: qsTr("Save File")
+        nameFilters: [ qsTr("Text") + " (*.txt)" ]
+        folder: _settings.file_save_dir_url
+        selectExisting: false
+        selectMultiple: false
+        onAccepted: {
+            var file_path =
+                _settings.file_path_from_url(fileWriteDialog.fileUrl)
+
+            if (translation)
+                app.save_note_to_file_translator(file_path)
+            else
+                app.save_note_to_file(file_path)
+        }
+    }
+
+    Dialogs.FileDialog {
+        id: textFileReadDialog
+        title: qsTr("Open File")
+        nameFilters: [
+            qsTr("Text") + " (*.txt)",
+            qsTr("All files") + " (*)"]
+        folder: _settings.file_open_dir_url
+        selectExisting: true
+        selectMultiple: false
+        onAccepted: {
+            var file_path =
+                _settings.file_path_from_url(textFileReadDialog.fileUrl)
+            app.load_note_from_file(file_path, true)
         }
     }
 
