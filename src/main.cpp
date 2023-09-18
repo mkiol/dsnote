@@ -15,6 +15,7 @@
 #include <QObject>
 #include <QQmlContext>
 #include <QString>
+#include <QStringList>
 #include <QTextCodec>
 #include <QTranslator>
 #include <QUrl>
@@ -63,9 +64,18 @@ static void signal_handler(int sig) {
     exit_program();
 }
 
-static std::pair<std::optional<settings::launch_mode_t>, bool> check_options(
-    const QCoreApplication& app) {
+struct cmd_options {
+    std::optional<settings::launch_mode_t> launch_mode;
+    bool verbose = false;
+    QStringList files;
+};
+
+static cmd_options check_options(const QCoreApplication& app) {
     QCommandLineParser parser;
+
+    parser.addPositionalArgument(
+        "files", "Text, Audio or Video files to open, optionally.",
+        "[files...]");
 
     QCommandLineOption appstandalone_opt{
         QStringLiteral("app-standalone"),
@@ -89,8 +99,6 @@ static std::pair<std::optional<settings::launch_mode_t>, bool> check_options(
 
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.setApplicationDescription(
-        QStringLiteral("Speech Note. Create notes using your voice."));
 
     parser.process(app);
 
@@ -118,7 +126,8 @@ static std::pair<std::optional<settings::launch_mode_t>, bool> check_options(
                    "--service.");
     }
 
-    return {launch_mode, parser.isSet(verbose_opt)};
+    return {launch_mode, parser.isSet(verbose_opt),
+            parser.positionalArguments()};
 }
 
 void register_types() {
@@ -184,20 +193,21 @@ int main(int argc, char* argv[]) {
     QGuiApplication::setApplicationDisplayName(QStringLiteral(APP_NAME));
     QGuiApplication::setApplicationVersion(QStringLiteral(APP_VERSION));
 
-    auto [launch_mode, verbose] = check_options(app);
+    auto cmd_opts = check_options(app);
 
-    if (!launch_mode) return 0;
+    if (!cmd_opts.launch_mode) return 0;
 
-    Logger::init(verbose ? Logger::LogType::Trace : Logger::LogType::Error);
+    Logger::init(cmd_opts.verbose ? Logger::LogType::Trace
+                                  : Logger::LogType::Error);
     initQtLogger();
 
     install_translator();
 
     signal(SIGINT, signal_handler);
 
-    qDebug() << "launch mode:" << launch_mode.value();
+    qDebug() << "launch mode:" << cmd_opts.launch_mode.value();
 
-    settings::instance()->set_launch_mode(launch_mode.value());
+    settings::instance()->set_launch_mode(cmd_opts.launch_mode.value());
 
     switch (settings::instance()->launch_mode()) {
         case settings::launch_mode_t::service: {
@@ -252,6 +262,8 @@ int main(int argc, char* argv[]) {
     context->setContextProperty(QStringLiteral("APP_LIBS_STR"), APP_LIBS_STR);
     context->setContextProperty(QStringLiteral("_settings"),
                                 settings::instance());
+    context->setContextProperty(QStringLiteral("_files_to_open"),
+                                cmd_opts.files);
 
 #ifdef USE_SFOS
     view->setSource(SailfishApp::pathTo("qml/main.qml"));

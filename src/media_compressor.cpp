@@ -544,6 +544,16 @@ void media_compressor::init_av(task_t task) {
     }
 }
 
+bool media_compressor::is_media_file(const std::string& input_file) {
+    try {
+        init_av_in_format(input_file);
+    } catch (const std::runtime_error& err) {
+        return false;
+    }
+
+    return true;
+}
+
 void media_compressor::decompress(std::vector<std::string> input_files,
                                   std::string output_file) {
     LOGD("task decompress");

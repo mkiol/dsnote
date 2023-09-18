@@ -45,6 +45,7 @@ class media_compressor {
 
     media_compressor() = default;
     ~media_compressor();
+    bool is_media_file(const std::string& input_file);
     void compress(std::vector<std::string> input_files, std::string output_file,
                   format_t format, quality_t quality);
     void decompress(std::vector<std::string> input_files,

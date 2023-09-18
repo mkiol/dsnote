@@ -174,7 +174,10 @@ ApplicationWindow {
         onBusyChanged: showWelcome()
         onStt_configuredChanged: showWelcome()
         onTts_configuredChanged: showWelcome()
-        Component.onCompleted: showWelcome()
+        Component.onCompleted: {
+            app.open_files(_files_to_open)
+            showWelcome()
+        }
         onNote_copied: toast.show(qsTr("Copied!"))
         onTranscribe_done: toast.show(qsTr("File transcription is complete!"))
         onSpeech_to_file_done: toast.show(qsTr("Speech saved to audio file!"))

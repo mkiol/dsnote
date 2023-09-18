@@ -60,6 +60,21 @@
   <update_contact>dsnote_AT_mkiol.net</update_contact>
   <launchable type="desktop-id">net.mkiol.SpeechNote.desktop</launchable>
   <content_rating type="oars-1.1" />
+  <provides>
+      <mediatype>audio/aac</mediatype>
+      <mediatype>audio/mpeg</mediatype>
+      <mediatype>audio/ogg</mediatype>
+      <mediatype>audio/wav</mediatype>
+      <mediatype>audio/flac</mediatype>
+      <mediatype>audio/mp4</mediatype>
+      <mediatype>audio/x-matroska</mediatype>
+      <mediatype>video/mpeg</mediatype>
+      <mediatype>video/mpeg</mediatype>
+      <mediatype>video/mp4</mediatype>
+      <mediatype>video/ogg</mediatype>
+      <mediatype>video/x-matroska</mediatype>
+      <mediatype>text/plain</mediatype>
+   </provides>
   <releases>
     <release version="4.1.0" date="2023-08-22">
       <description>

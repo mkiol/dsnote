@@ -15,6 +15,7 @@
 #include <QVariantList>
 #include <QVariantMap>
 #include <memory>
+#include <queue>
 
 #include "config.h"
 #include "dbus_speech_inf.h"
@@ -195,8 +196,9 @@ class dsnote_app : public QObject {
                                                const QString &track_tag = {});
     Q_INVOKABLE void save_note_to_file(const QString &dest_file);
     Q_INVOKABLE void save_note_to_file_translator(const QString &dest_file);
-    Q_INVOKABLE void load_note_from_file(const QString &input_file,
+    Q_INVOKABLE bool load_note_from_file(const QString &input_file,
                                          bool replace);
+    Q_INVOKABLE void open_files(const QStringList &input_files);
     Q_INVOKABLE void stop_play_speech();
     Q_INVOKABLE void copy_to_clipboard();
     Q_INVOKABLE void copy_translation_to_clipboard();
@@ -240,6 +242,7 @@ class dsnote_app : public QObject {
     void translated_text_changed();
     void note_changed();
     void can_undo_or_redu_note_changed();
+    void can_open_next_file();
 
    private:
     inline static const QString DBUS_SERVICE_NAME{
@@ -292,6 +295,7 @@ class dsnote_app : public QObject {
     QTimer m_keepalive_timer;
     QTimer m_keepalive_current_task_timer;
     QTimer m_translator_delay_timer;
+    QTimer m_open_files_delay_timer;
     bool m_stt_configured = false;
     bool m_tts_configured = false;
     bool m_ttt_configured = false;
@@ -302,6 +306,7 @@ class dsnote_app : public QObject {
     QString m_translated_text;
     QString m_prev_text;
     bool m_undo_flag = false;  // true => undo, false => redu
+    std::queue<QString> m_files_to_open;
 
     [[nodiscard]] QVariantList available_stt_models() const;
     [[nodiscard]] QVariantList available_tts_models() const;
@@ -425,6 +430,8 @@ class dsnote_app : public QObject {
                                     const QString &dest_file);
     void copy_to_clipboard_internal(const QString &text);
     void handle_translate_delayed();
+    void open_next_file();
+    void reset_files_queue();
 };
 
 #endif  // DSNOTE_APP_H

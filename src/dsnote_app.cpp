@@ -15,6 +15,7 @@
 #include <QTextStream>
 #include <algorithm>
 
+#include "media_compressor.hpp"
 #include "mtag_tools.hpp"
 #include "speech_service.h"
 
@@ -106,6 +107,12 @@ QDebug operator<<(QDebug d, dsnote_app::error_t type) {
         case dsnote_app::error_t::ErrorNoService:
             d << "no-service-error";
             break;
+        case dsnote_app::error_t::ErrorSaveNoteToFile:
+            d << "save-note-to-file-error";
+            break;
+        case dsnote_app::error_t::ErrorLoadNoteFromFile:
+            d << "load-note-from-file-error";
+            break;
     }
 
     return d;
@@ -182,12 +189,27 @@ dsnote_app::dsnote_app(QObject *parent)
             &dsnote_app::handle_translator_settings_changed);
     connect(this, &dsnote_app::active_mnt_out_lang_changed, this,
             &dsnote_app::handle_translator_settings_changed);
+    connect(this, &dsnote_app::can_open_next_file, this,
+            &dsnote_app::open_next_file, Qt::QueuedConnection);
+    connect(
+        this, &dsnote_app::busy_changed, this,
+        [this] {
+            if (!m_files_to_open.empty() && !busy())
+                m_open_files_delay_timer.start();
+        },
+        Qt::QueuedConnection);
 
     m_translator_delay_timer.setSingleShot(true);
     m_translator_delay_timer.setTimerType(Qt::VeryCoarseTimer);
     m_translator_delay_timer.setInterval(500);
     connect(&m_translator_delay_timer, &QTimer::timeout, this,
             &dsnote_app::handle_translate_delayed, Qt::QueuedConnection);
+
+    m_open_files_delay_timer.setSingleShot(true);
+    m_open_files_delay_timer.setTimerType(Qt::VeryCoarseTimer);
+    m_open_files_delay_timer.setInterval(500);
+    connect(&m_open_files_delay_timer, &QTimer::timeout, this,
+            &dsnote_app::open_next_file, Qt::QueuedConnection);
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
@@ -211,7 +233,7 @@ dsnote_app::dsnote_app(QObject *parent)
 
 void dsnote_app::update_listen() {
     qDebug() << "update listen";
-    cancel();
+    if (m_files_to_open.empty()) cancel();
 }
 
 void dsnote_app::handle_stt_intermediate_text(const QString &text,
@@ -893,6 +915,8 @@ void dsnote_app::handle_stt_file_transcribe_finished(int task) {
     }
 
     emit transcribe_done();
+
+    emit can_open_next_file();
 }
 
 void dsnote_app::handle_service_error(int code) {
@@ -916,6 +940,8 @@ void dsnote_app::handle_service_error(int code) {
     this->m_intermediate_text.clear();
     emit intermediate_text_changed();
     emit error(error_code);
+
+    reset_files_queue();
 }
 
 void dsnote_app::check_transcribe_taks() {
@@ -1005,10 +1031,10 @@ void dsnote_app::update_service_state() {
         m_service_state = new_state;
         emit service_state_changed();
 
+        update_configured_state();
+
         if (old_busy != busy()) emit busy_changed();
         if (old_connected != connected()) emit connected_changed();
-
-        update_configured_state();
     }
 }
 
@@ -1365,6 +1391,8 @@ void dsnote_app::set_active_mnt_out_lang_idx(int idx) {
 }
 
 void dsnote_app::cancel() {
+    if (!m_open_files_delay_timer.isActive()) reset_files_queue();
+
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
         if (m_side_task) {
@@ -2257,12 +2285,12 @@ void dsnote_app::save_note_to_file_internal(const QString &text,
     emit save_note_to_file_done();
 }
 
-void dsnote_app::load_note_from_file(const QString &input_file, bool replace) {
+bool dsnote_app::load_note_from_file(const QString &input_file, bool replace) {
     QFile file{input_file};
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning() << "failed to open file for read:" << input_file;
         emit error(error_t::ErrorLoadNoteFromFile);
-        return;
+        return false;
     }
 
     make_undo();
@@ -2273,4 +2301,50 @@ void dsnote_app::load_note_from_file(const QString &input_file, bool replace) {
         set_note(insert_to_note(settings::instance()->note(), file.readAll(),
                                 settings::instance()->insert_mode()));
     }
+
+    return true;
+}
+
+void dsnote_app::open_next_file() {
+    if (m_files_to_open.empty() || busy()) return;
+
+    qDebug() << "opening file:" << m_files_to_open.front();
+
+    if (media_compressor{}.is_media_file(
+            m_files_to_open.front().toStdString())) {
+        if (stt_configured())
+            transcribe_file(m_files_to_open.front());
+        else {
+            qWarning() << "can't transcribe because stt is not configured";
+            reset_files_queue();
+            return;
+        }
+        m_files_to_open.pop();
+    } else {
+        if (!load_note_from_file(m_files_to_open.front(), false)) {
+            reset_files_queue();
+            return;
+        }
+
+        m_files_to_open.pop();
+
+        emit can_open_next_file();
+    }
+}
+
+void dsnote_app::open_files(const QStringList &input_files) {
+    reset_files_queue();
+
+    for (auto &file : input_files) m_files_to_open.push(file);
+
+    if (!m_files_to_open.empty()) {
+        if (!note().isEmpty()) make_undo();
+        set_note("");
+        qDebug() << "opening files:" << input_files;
+        m_open_files_delay_timer.start();
+    }
+}
+
+void dsnote_app::reset_files_queue() {
+    if (!m_files_to_open.empty()) m_files_to_open = std::queue<QString>{};
 }
