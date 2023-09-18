@@ -1,5 +1,5 @@
-set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/93935980f8bcc3d230d313174ff59635c3c80d1b.zip")
-set(whispercpp_checksum "db961ae4b48e79e2e7fe4003ba1c427897840c8bb461e06cdbeacf5a6cebcdf2")
+set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/951a1199265ff4424f938182542cf6bac9b36154.zip")
+set(whispercpp_checksum "cdbbaa45c50e6b12df933d7a5e914477edb918622d73d159dbec0867f5da2f63")
 
 set(whispercpp_flags -O3 -ffast-math -I${external_include_dir}/openblas)
 set(whispercppfallback_flags ${whispercpp_flags})
@@ -61,11 +61,51 @@ if(arch_x8664)
         BUILD_ALWAYS False
     )
 
+    ExternalProject_Add(whispercppcublas
+        SOURCE_DIR ${external_dir}/whispercppcublas
+        BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercppcublas
+        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+        URL "${whispercpp_source_url}"
+        URL_HASH SHA256=${whispercpp_checksum}
+        PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
+                    -i ${patches_dir}/whispercpp.patch ||
+                        echo "patch cmd failed, likely already patched"
+        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+            -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
+            -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
+            -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
+            -DWHISPER_CUBLAS=ON
+            -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
+            -DCMAKE_CUDA_ARCHITECTURES=60\\\\\\\\\\\\;61\\\\\\\\\\\\;62\\\\\\\\\\\\;70\\\\\\\\\\\\;72\\\\\\\\\\\\;75\\\\\\\\\\\\;80\\\\\\\\\\\\;86\\\\\\\\\\\\;87\\\\\\\\\\\\;89\\\\\\\\\\\\;90
+        INSTALL_COMMAND cp libwhisper.so ${external_lib_dir}/libwhisper-cublas.so
+        BUILD_ALWAYS False
+    )
+
+    ExternalProject_Add(whispercpphipblas
+        SOURCE_DIR ${external_dir}/whispercpphipblas
+        BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercpphipblas
+        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+        URL "${whispercpp_source_url}"
+        URL_HASH SHA256=${whispercpp_checksum}
+        PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
+                    -i ${patches_dir}/whispercpp.patch ||
+                        echo "patch cmd failed, likely already patched"
+
+        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+            -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
+            -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
+            -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
+            -DWHISPER_HIPBLAS=ON
+            -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
+        INSTALL_COMMAND cp libwhisper.so ${external_lib_dir}/libwhisper-hipblas.so
+        BUILD_ALWAYS False
+    )
+
     ExternalProject_Add_StepDependencies(clblast configure opencl)
     ExternalProject_Add_StepDependencies(whispercppclblast configure opencl)
     ExternalProject_Add_StepDependencies(whispercppclblast configure clblast)
 
-    list(APPEND deps whispercppclblast)
+    list(APPEND deps whispercppclblast whispercppcublas whispercpphipblas)
 endif()
 
 ExternalProject_Add(whispercppfallback
@@ -89,9 +129,9 @@ ExternalProject_Add(whispercppfallback
     BUILD_ALWAYS False
 )
 
-ExternalProject_Add(whispercpp
-    SOURCE_DIR ${external_dir}/whispercpp
-    BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercpp
+ExternalProject_Add(whispercppopenblas
+    SOURCE_DIR ${external_dir}/whispercppopenblas
+    BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercppopenblas
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${whispercpp_source_url}"
     URL_HASH SHA256=${whispercpp_checksum}
@@ -105,10 +145,11 @@ ExternalProject_Add(whispercpp
         -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
         -DWHISPER_OPENBLAS=ON
         -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
+    INSTALL_COMMAND cp libwhisper.so ${external_lib_dir}/libwhisper-openblas.so
     BUILD_ALWAYS False
 )
 
 ExternalProject_Add_StepDependencies(whispercppfallback configure openblas)
-ExternalProject_Add_StepDependencies(whispercpp configure openblas)
+ExternalProject_Add_StepDependencies(whispercppopenblas configure openblas)
 
-list(APPEND deps whispercpp whispercppfallback)
+list(APPEND deps whispercppopenblas whispercppfallback)

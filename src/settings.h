@@ -100,6 +100,8 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(QString gpu_device READ gpu_device WRITE set_gpu_device NOTIFY
                    gpu_device_changed)
     Q_PROPERTY(
+        QString auto_gpu_device READ auto_gpu_device NOTIFY gpu_device_changed)
+    Q_PROPERTY(
         QStringList audio_inputs READ audio_inputs NOTIFY audio_inputs_changed)
     Q_PROPERTY(int audio_input_idx READ audio_input_idx WRITE
                    set_audio_input_idx NOTIFY audio_input_changed)
@@ -249,6 +251,7 @@ class settings : public QSettings, public singleton<settings> {
     void set_whisper_use_gpu(bool value);
     QStringList gpu_devices() const;
     QString gpu_device() const;
+    QString auto_gpu_device() const;
     void set_gpu_device(QString value);
     int gpu_device_idx() const;
     void set_gpu_device_idx(int value);

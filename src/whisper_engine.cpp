@@ -47,34 +47,68 @@ whisper_engine::~whisper_engine() {
 void whisper_engine::open_whisper_lib() {
 #ifdef ARCH_ARM_32
     if (cpu_tools::neon_supported()) {
-        m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
+        LOGD("using whisper-openblas");
+        m_whisperlib_handle = dlopen("libwhisper-openblas.so", RTLD_LAZY);
     } else {
         LOGW("using whisper-fallback");
         m_whisperlib_handle = dlopen("libwhisper-fallback.so", RTLD_LAZY);
     }
 #elif ARCH_ARM_64
-    m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
+    LOGD("using whisper-openblas");
+    m_whisperlib_handle = dlopen("libwhisper-openblas.so", RTLD_LAZY);
 #else
     if (cpu_tools::avx_avx2_fma_f16c_supported()) {
         if (m_config.use_gpu) {
-            LOGD("using whisper-clblast");
+            if (m_config.gpu_device.api == gpu_api_t::cuda) {
+                LOGD("using whisper-cublas");
 
-            if (!m_config.gpu_device.platform_name.empty() &&
-                !m_config.gpu_device.device_name.empty()) {
-                setenv("GGML_OPENCL_PLATFORM",
-                       m_config.gpu_device.platform_name.c_str(), 1);
-                setenv("GGML_OPENCL_DEVICE",
-                       m_config.gpu_device.device_name.c_str(), 1);
-            } else {
-                unsetenv("GGML_OPENCL_PLATFORM");
-                unsetenv("GGML_OPENCL_DEVICE");
+                if (m_config.gpu_device.id >= 0)
+                    setenv("CUDA_VISIBLE_DEVICES",
+                           std::to_string(m_config.gpu_device.id).c_str(), 1);
+                else
+                    unsetenv("CUDA_VISIBLE_DEVICES");
+
+                m_whisperlib_handle = dlopen("libwhisper-cublas.so", RTLD_LAZY);
+                if (m_whisperlib_handle == nullptr)
+                    LOGE("failed to open libwhisper-cublas.so: " << dlerror());
+            } else if (m_config.gpu_device.api == gpu_api_t::rocm) {
+                LOGD("using whisper-hipblas");
+
+                if (m_config.gpu_device.id >= 0)
+                    setenv("HIP_VISIBLE_DEVICES",
+                           std::to_string(m_config.gpu_device.id).c_str(), 1);
+                else
+                    unsetenv("HIP_VISIBLE_DEVICES");
+
+                m_whisperlib_handle =
+                    dlopen("libwhisper-hipblas.so", RTLD_LAZY);
+                if (m_whisperlib_handle == nullptr)
+                    LOGE("failed to open libwhisper-hipblas.so: " << dlerror());
+            } else if (m_config.gpu_device.api == gpu_api_t::opencl) {
+                LOGD("using whisper-clblast");
+
+                if (!m_config.gpu_device.platform_name.empty() &&
+                    !m_config.gpu_device.name.empty()) {
+                    setenv("GGML_OPENCL_PLATFORM",
+                           m_config.gpu_device.platform_name.c_str(), 1);
+                    setenv("GGML_OPENCL_DEVICE",
+                           m_config.gpu_device.name.c_str(), 1);
+                } else {
+                    unsetenv("GGML_OPENCL_PLATFORM");
+                    unsetenv("GGML_OPENCL_DEVICE");
+                }
+
+                m_whisperlib_handle =
+                    dlopen("libwhisper-clblast.so", RTLD_LAZY);
+                if (m_whisperlib_handle == nullptr)
+                    LOGE("failed to open libwhisper-clblast.so: " << dlerror());
             }
-
-            m_whisperlib_handle = dlopen("libwhisper-clblast.so", RTLD_LAZY);
         }
 
-        if (m_whisperlib_handle == nullptr)
-            m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
+        if (m_whisperlib_handle == nullptr) {
+            LOGD("using whisper-openblas");
+            m_whisperlib_handle = dlopen("libwhisper-openblas.so", RTLD_LAZY);
+        }
     } else {
         LOGW("using whisper-fallback");
         m_whisperlib_handle = dlopen("libwhisper-fallback.so", RTLD_LAZY);

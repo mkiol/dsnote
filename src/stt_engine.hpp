@@ -49,6 +49,9 @@ class stt_engine {
     };
     friend std::ostream& operator<<(std::ostream& os, vad_mode_t mode);
 
+    enum class gpu_api_t { opencl, cuda, rocm };
+    friend std::ostream& operator<<(std::ostream& os, gpu_api_t api);
+
     struct model_files_t {
         std::string model_file;
         std::string scorer_file;
@@ -77,11 +80,14 @@ class stt_engine {
     };
 
     struct gpu_device_t {
+        int id = -1;
+        gpu_api_t api = gpu_api_t::opencl;
+        std::string name;
         std::string platform_name;
-        std::string device_name;
+
         inline bool operator==(const gpu_device_t& rhs) const {
-            return platform_name == rhs.platform_name &&
-                   device_name == rhs.device_name;
+            return platform_name == rhs.platform_name && name == rhs.name &&
+                   id == rhs.id;
         }
         inline bool operator!=(const gpu_device_t& rhs) const {
             return !(*this == rhs);

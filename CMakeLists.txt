@@ -236,8 +236,8 @@ set(dsnote_lib_sources
     ${sources_dir}/text_tools.cpp
     ${sources_dir}/mnt_engine.hpp
     ${sources_dir}/mnt_engine.cpp
-    ${sources_dir}/opencl_tools.hpp
-    ${sources_dir}/opencl_tools.cpp
+    ${sources_dir}/gpu_tools.hpp
+    ${sources_dir}/gpu_tools.cpp
     ${sources_dir}/astrunc/astrunc.h
     ${sources_dir}/media_compressor.hpp
     ${sources_dir}/media_compressor.cpp
@@ -308,10 +308,10 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     endif()
 else()
     target_compile_options(compiler_flags INTERFACE "-pie;-Wall;-Wextra;-Wpedantic;-O3;-g")
-    target_link_options(compiler_flags INTERFACE "-pie")
+    target_link_options(compiler_flags INTERFACE "-pie;-fno-stack-protector")
 endif()
 
-target_link_options(compiler_flags INTERFACE "-flto=auto;-fno-fat-lto-objects;-Wl,-rpath,${rpath};-Wl,--disable-new-dtags;-Wl,-pie")
+target_link_options(compiler_flags INTERFACE "-Wl,-rpath,${rpath};-Wl,--disable-new-dtags;-Wl,-pie")
 
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_TRACE_LOGS}>:USE_TRACE_LOGS>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_SFOS}>:USE_SFOS>")
@@ -371,17 +371,10 @@ endif()
 
 if(DOWNLOAD_LIBSTT)
     include(${cmake_path}/libstt.cmake)
-else()
-    find_library(libstt_path stt REQUIRED)
-    find_library(kenlm_path kenlm REQUIRED)
-    list(APPEND deps_libs ${libstt_path} ${kenlm_path_path})
 endif()
 
 if(BUILD_VOSK)
     include(${cmake_path}/vosk.cmake)
-else()
-    find_library(vosk_path vosk REQUIRED)
-    list(APPEND deps_libs ${vosk_path})
 endif()
 
 if(BUILD_FMT)
@@ -394,9 +387,6 @@ endif()
 
 if(BUILD_WHISPERCPP)
     include(${cmake_path}/whispercpp.cmake)
-else()
-    find_library(whispercpp_path whisper REQUIRED)
-    list(APPEND deps_libs ${whispercpp_path})
 endif()
 
 if(BUILD_WEBRTCVAD)

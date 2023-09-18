@@ -140,6 +140,22 @@ std::ostream& operator<<(std::ostream& os, stt_engine::vad_mode_t mode) {
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, stt_engine::gpu_api_t api) {
+    switch (api) {
+        case stt_engine::gpu_api_t::opencl:
+            os << "opencl";
+            break;
+        case stt_engine::gpu_api_t::cuda:
+            os << "cuda";
+            break;
+        case stt_engine::gpu_api_t::rocm:
+            os << "rocm";
+            break;
+    }
+
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os,
                          const stt_engine::model_files_t& model_files) {
     os << "model-file=" << model_files.model_file
@@ -151,8 +167,9 @@ std::ostream& operator<<(std::ostream& os,
 
 std::ostream& operator<<(std::ostream& os,
                          const stt_engine::gpu_device_t& gpu_device) {
-    os << "platform-name=" << gpu_device.platform_name
-       << ", device-name=" << gpu_device.device_name;
+    os << "id=" << gpu_device.id << ", api=" << gpu_device.api
+       << ", name=" << gpu_device.name
+       << ", platform-name=" << gpu_device.platform_name;
 
     return os;
 }

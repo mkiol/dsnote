@@ -18,6 +18,7 @@ finish-args:
   - --filesystem=xdg-music
   - --filesystem=xdg-documents
   - --env=PYTORCH_TENSOREXPR=0
+  - --env=LD_LIBRARY_PATH=/app/cuda/lib64
 cleanup:
   - "/cmake"
   - "/etc"
@@ -40,6 +41,19 @@ cleanup:
   - "/share/aclocal"
   - "/bin/nasm"
   - "/bin/ndisasm"
+  - "/cuda/bin"
+  - "/cuda/extras"
+  - "/cuda/extras"
+  - "/cuda/gds*"
+  - "/cuda/include"
+  - "/cuda/libnvvp"
+  - "/cuda/nsight*"
+  - "/cuda/nv*"
+  - "/cuda/pkg-config"
+  - "/cuda/src"
+  - "/cuda/usr"
+  - "/cuda/targets/x86_64-linux/lib/cmake"
+  - "/cuda/targets/x86_64-linux/lib/libOpenCL.so*"
   - "libboost*"
   - "libRHVoice_audio*"
   - "pcre2*"
@@ -80,94 +94,6 @@ modules:
       - type: archive
         url: https://github.com/xianyi/OpenBLAS/releases/download/v0.3.21/OpenBLAS-0.3.21.tar.gz
         sha256: f36ba3d7a60e7c8bcc54cd9aaa9b1223dd42eaf02c811791c37e8ca707c241ca
-
-  - name: opencl-headers
-    only-arches:
-      - x86_64
-    buildsystem: cmake-ninja
-    sources:
-      - type: git
-        url: https://github.com/KhronosGroup/OpenCL-Headers.git
-        commit: 4fdcfb0ae675f2f63a9add9552e0af62c2b4ed30
-
-  - name: clblast
-    only-arches:
-      - x86_64
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DTUNERS=OFF
-    sources:
-      - type: git
-        url: https://github.com/CNugteren/CLBlast.git
-        commit: e3ce21bb937f07b8282dccf4823e2acbdf286d17 
-
-  - name: whispercpp-clblast
-    only-arches:
-      - x86_64
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DBUILD_SHARED_LIBS=ON
-      - -DWHISPER_BUILD_TESTS=OFF
-      - -DWHISPER_BUILD_EXAMPLES=OFF
-      - -DWHISPER_CLBLAST=ON
-      - -DCMAKE_C_FLAGS='-O3'
-      - -DCMAKE_CXX_FLAGS='-O3'
-    post-install:
-      - "mv /app/lib/libwhisper.so /app/lib/libwhisper-clblast.so"
-    sources:
-      - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/93935980f8bcc3d230d313174ff59635c3c80d1b.zip
-        sha256: db961ae4b48e79e2e7fe4003ba1c427897840c8bb461e06cdbeacf5a6cebcdf2
-      - type: patch
-        path: ../patches/whispercpp.patch
-
-  - name: whispercpp-fallback
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DBUILD_SHARED_LIBS=ON
-      - -DWHISPER_BUILD_TESTS=OFF
-      - -DWHISPER_BUILD_EXAMPLES=OFF
-      - -DWHISPER_OPENBLAS=ON
-      - -DWHISPER_NO_AVX=ON
-      - -DWHISPER_NO_AVX2=ON
-      - -DWHISPER_NO_FMA=ON
-      - -DWHISPER_NO_F16C=ON
-      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
-      - -DCMAKE_C_FLAGS='-O3 -I$$C_INCLUDE_PATH/openblas'
-      - -DCMAKE_CXX_FLAGS='-O3 -I$$CPLUS_INCLUDE_PATH/openblas'
-    post-install:
-      - "mv /app/lib/libwhisper.so /app/lib/libwhisper-fallback.so"
-    sources:
-      - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/93935980f8bcc3d230d313174ff59635c3c80d1b.zip
-        sha256: db961ae4b48e79e2e7fe4003ba1c427897840c8bb461e06cdbeacf5a6cebcdf2
-      - type: patch
-        path: ../patches/whispercpp.patch
-
-  - name: whispercpp
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DBUILD_SHARED_LIBS=ON
-      - -DWHISPER_BUILD_TESTS=OFF
-      - -DWHISPER_BUILD_EXAMPLES=OFF
-      - -DWHISPER_OPENBLAS=ON
-      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
-      - -DCMAKE_C_FLAGS='-O3 -I$$C_INCLUDE_PATH/openblas'
-      - -DCMAKE_CXX_FLAGS='-O3 -I$$CPLUS_INCLUDE_PATH/openblas'
-    sources:
-      - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/93935980f8bcc3d230d313174ff59635c3c80d1b.zip
-        sha256: db961ae4b48e79e2e7fe4003ba1c427897840c8bb461e06cdbeacf5a6cebcdf2
-      - type: patch
-        path: ../patches/whispercpp.patch
 
   - name: xz
     buildsystem: autotools
@@ -692,6 +618,136 @@ modules:
       - type: archive
         url: https://taglib.org/releases/taglib-1.13.1.tar.gz
         sha256: c8da2b10f1bfec2cd7dbfcd33f4a2338db0765d851a50583d410bacf055cfd0b
+
+  - name: whispercpp-openblas
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=ON
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+      - -DWHISPER_OPENBLAS=ON
+      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
+      - -DCMAKE_C_FLAGS='-O3 -I$$C_INCLUDE_PATH/openblas'
+      - -DCMAKE_CXX_FLAGS='-O3 -I$$CPLUS_INCLUDE_PATH/openblas'
+    post-install:
+        - "mv /app/lib/libwhisper.so /app/lib/libwhisper-openblas.so"
+    sources:
+      - type: archive
+        url: https://github.com/ggerganov/whisper.cpp/archive/951a1199265ff4424f938182542cf6bac9b36154.zip
+        sha256: cdbbaa45c50e6b12df933d7a5e914477edb918622d73d159dbec0867f5da2f63
+      - type: patch
+        path: ../patches/whispercpp.patch
+
+  - name: whispercpp-fallback
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=ON
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+      - -DWHISPER_OPENBLAS=ON
+      - -DWHISPER_NO_AVX=ON
+      - -DWHISPER_NO_AVX2=ON
+      - -DWHISPER_NO_FMA=ON
+      - -DWHISPER_NO_F16C=ON
+      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
+      - -DCMAKE_C_FLAGS='-O3 -I$$C_INCLUDE_PATH/openblas'
+      - -DCMAKE_CXX_FLAGS='-O3 -I$$CPLUS_INCLUDE_PATH/openblas'
+    post-install:
+      - "mv /app/lib/libwhisper.so /app/lib/libwhisper-fallback.so"
+    sources:
+      - type: archive
+        url: https://github.com/ggerganov/whisper.cpp/archive/951a1199265ff4424f938182542cf6bac9b36154.zip
+        sha256: cdbbaa45c50e6b12df933d7a5e914477edb918622d73d159dbec0867f5da2f63
+      - type: patch
+        path: ../patches/whispercpp.patch
+
+  - name: opencl-headers
+    only-arches:
+      - x86_64
+    buildsystem: cmake-ninja
+    sources:
+      - type: git
+        url: https://github.com/KhronosGroup/OpenCL-Headers.git
+        commit: 4fdcfb0ae675f2f63a9add9552e0af62c2b4ed30
+
+  - name: clblast
+    only-arches:
+      - x86_64
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DTUNERS=OFF
+    sources:
+      - type: git
+        url: https://github.com/CNugteren/CLBlast.git
+        commit: e3ce21bb937f07b8282dccf4823e2acbdf286d17 
+
+  - name: whispercpp-clblast
+    only-arches:
+      - x86_64
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=ON
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+      - -DWHISPER_CLBLAST=ON
+      - -DCMAKE_C_FLAGS='-O3'
+      - -DCMAKE_CXX_FLAGS='-O3'
+    post-install:
+      - "mv /app/lib/libwhisper.so /app/lib/libwhisper-clblast.so"
+    sources:
+      - type: archive
+        url: https://github.com/ggerganov/whisper.cpp/archive/951a1199265ff4424f938182542cf6bac9b36154.zip
+        sha256: cdbbaa45c50e6b12df933d7a5e914477edb918622d73d159dbec0867f5da2f63
+      - type: patch
+        path: ../patches/whispercpp.patch
+
+  - name: cuda
+    only-arches:
+      - x86_64
+    buildsystem: simple
+    build-commands:
+      - mkdir cuda_src
+      - sh cuda_12.2.2_535.104.05_linux.run --target cuda_src --noexec
+      - cd cuda_src/builds && rm -rf NVIDIA*.run bin EULA.txt version.json cuda_sanitizer_api integration nsight_compute nsight_systems cuda_gdb cuda_documentation
+      - mkdir -p /app/cuda
+      - cd cuda_src/builds && for lib in *; do echo "copying $lib/* => /app/cuda/" && if [ -d $lib ]; then cp -r $lib/* /app/cuda/; else cp $lib /app/cuda/; fi; done
+    sources:
+      - type: file
+        url: https://developer.download.nvidia.com/compute/cuda/12.2.2/local_installers/cuda_12.2.2_535.104.05_linux.run
+        sha256: 2b39aae3e7618d9f59a3c8fa1f1bc61f29c0b0e0df75fb05076badb352952ef2
+
+  - name: whispercpp-cublas
+    only-arches:
+      - x86_64
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=ON
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+      - -DWHISPER_CUBLAS=ON
+      - -DCMAKE_C_FLAGS='-O3'
+      - -DCMAKE_CXX_FLAGS='-O3'
+      - -DCUDAToolkit_ROOT=/app/cuda
+      - -DCMAKE_CUDA_COMPILER=/app/cuda/bin/nvcc
+      - -DCMAKE_CUDA_ARCHITECTURES=60;61;62;70;72;75;80;86;87;89;90
+    post-install:
+      - "mv /app/lib/libwhisper.so /app/lib/libwhisper-cublas.so"
+    sources:
+      - type: archive
+        url: https://github.com/ggerganov/whisper.cpp/archive/951a1199265ff4424f938182542cf6bac9b36154.zip
+        sha256: cdbbaa45c50e6b12df933d7a5e914477edb918622d73d159dbec0867f5da2f63
+      - type: patch
+        path: ../patches/whispercpp.patch
 
   - name: dsnote
     buildsystem: cmake-ninja

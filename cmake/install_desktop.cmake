@@ -5,11 +5,13 @@ install(FILES "${desktop_dir}/${info_binary_id}.svg" DESTINATION share/icons/hic
 install(FILES "${desktop_dir}/${info_binary_id}.metainfo.xml" DESTINATION share/metainfo)
 
 if(BUILD_WHISPERCPP)
-    install(FILES "${external_lib_dir}/libwhisper.so" DESTINATION lib)
+    install(FILES "${external_lib_dir}/libwhisper-openblas.so" DESTINATION lib)
     install(FILES "${external_lib_dir}/libwhisper-fallback.so" DESTINATION lib)
     if(arch_x8664)
         install(FILES "${external_lib_dir}/libclblast.so.1.6.1" DESTINATION lib)
         install(FILES "${external_lib_dir}/libwhisper-clblast.so" DESTINATION lib)
+        install(FILES "${external_lib_dir}/libwhisper-cublas.so" DESTINATION lib)
+        install(FILES "${external_lib_dir}/libwhisper-hipblas.so" DESTINATION lib)
     endif()
 endif()
 

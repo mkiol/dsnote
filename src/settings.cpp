@@ -24,7 +24,7 @@
 #include "config.h"
 #include "mic_source.h"
 #ifdef ARCH_X86_64
-#include "opencl_tools.hpp"
+#include "gpu_tools.hpp"
 #endif
 
 QDebug operator<<(QDebug d, settings::mode_t mode) {
@@ -754,28 +754,58 @@ bool settings::has_gpu_device() const { return m_gpu_devices.size() > 1; }
 
 void settings::update_gpu_devices() {
 #ifdef ARCH_X86_64
-    auto devices = opencl_tools::available_devices();
-
     m_gpu_devices.clear();
     m_gpu_devices.push_back(tr("Auto"));
 
-    std::transform(devices.cbegin(), devices.cend(),
-                   std::back_inserter(m_gpu_devices), [](const auto& device) {
-                       return QStringLiteral("%1, %2").arg(
-                           QString::fromStdString(device.platform_name),
-                           QString::fromStdString(device.device_name));
-                   });
+    auto devices = gpu_tools::available_devices();
+    std::transform(
+        devices.cbegin(), devices.cend(), std::back_inserter(m_gpu_devices),
+        [](const auto& device) {
+            return [&] {
+                switch (device.api) {
+                    case gpu_tools::api_t::opencl:
+                        return QStringLiteral("%1, %2, %3")
+                            .arg("OpenCL",
+                                 QString::fromStdString(device.platform_name),
+                                 QString::fromStdString(device.name));
+                    case gpu_tools::api_t::cuda:
+                        return QStringLiteral("%1, %2, %3")
+                            .arg("CUDA", QString::number(device.id),
+                                 QString::fromStdString(device.name));
+                    case gpu_tools::api_t::rocm:
+                        return QStringLiteral("%1, %2, %3")
+                            .arg("ROCm", QString::number(device.id),
+                                 QString::fromStdString(device.name));
+                }
+                throw std::runtime_error("invalid gpu api");
+            }();
+        });
+
+    if (!auto_gpu_device().isEmpty())
+        m_gpu_devices.front().append(" (" + auto_gpu_device() + ")");
 
     emit gpu_devices_changed();
 #endif
 }
 
+QString settings::auto_gpu_device() const {
+    return m_gpu_devices.size() <= 1 ? QString{} : m_gpu_devices.at(1);
+}
+
 QString settings::gpu_device() const {
-    return value(QStringLiteral("service/gpu_device")).toString();
+    auto device_str = value(QStringLiteral("service/gpu_device")).toString();
+    if (std::find(std::next(m_gpu_devices.cbegin()), m_gpu_devices.cend(),
+                  device_str) == m_gpu_devices.cend()) {
+        return {};
+    }
+
+    return device_str;
 }
 
 void settings::set_gpu_device(QString value) {
-    if (value == tr("Auto")) value.clear();
+    if (std::find(std::next(m_gpu_devices.cbegin()), m_gpu_devices.cend(),
+                  value) == m_gpu_devices.cend())
+        value.clear();
 
     if (value != gpu_device()) {
         setValue(QStringLiteral("service/gpu_device"), value);

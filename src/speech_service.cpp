@@ -903,6 +903,34 @@ QString speech_service::lang_from_model_id(const QString &model_id) {
     return l.first();
 }
 
+static stt_engine::gpu_device_t make_stt_gpu_device(const QString &gpu_str) {
+    stt_engine::gpu_device_t device;
+
+    auto l = gpu_str.split(',');
+    if (l.size() <= 2) l = settings::instance()->auto_gpu_device().split(',');
+
+    if (l.size() > 2) {
+        if (l.at(0).trimmed() == "OpenCL") {
+            device.api = stt_engine::gpu_api_t::opencl;
+            device.name = l.at(2).trimmed().toStdString();
+            device.platform_name = l.at(1).trimmed().toStdString();
+        } else if (l.at(0).trimmed() == "CUDA") {
+            device.api = stt_engine::gpu_api_t::cuda;
+            device.id = l.at(1).trimmed().toInt();
+            device.name = l.at(2).trimmed().toStdString();
+        } else if (l.at(0).trimmed() == "ROCm") {
+            device.api = stt_engine::gpu_api_t::rocm;
+            device.id = l.at(1).trimmed().toInt();
+            device.name = l.at(2).trimmed().toStdString();
+        }
+    } else {
+        qWarning() << "invalid gpu device str:" << gpu_str
+                   << settings::instance()->auto_gpu_device();
+    }
+
+    return device;
+}
+
 QString speech_service::restart_stt_engine(
     speech_mode_t speech_mode, const QString &model_id,
     [[maybe_unused]] const QString &out_lang_id) {
@@ -927,14 +955,9 @@ QString speech_service::restart_stt_engine(
                          settings::instance()->has_gpu_device();
 
         if (config.use_gpu) {
-            auto gpu_str = settings::instance()->gpu_device();
-            if (!gpu_str.isEmpty()) {
-                auto l = gpu_str.split(',');
-                if (l.size() > 1) {
-                    config.gpu_device = {l.at(0).trimmed().toStdString(),
-                                         l.at(1).trimmed().toStdString()};
-                }
-            }
+            config.gpu_device =
+                make_stt_gpu_device(settings::instance()->gpu_device());
+            if (config.gpu_device.id < 0) config.use_gpu = false;
         }
 
         bool new_engine_required = [&] {
