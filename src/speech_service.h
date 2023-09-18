@@ -458,7 +458,6 @@ class speech_service : public QObject, public singleton<speech_service> {
     static void remove_cached_media_files();
     void handle_tts_queue();
     static void setup_modules();
-    static QString merge_wav_files(const std::vector<QString> &files);
     static std::vector<std::reference_wrapper<const model_data_t>>
     model_data_for_lang(
         const QString &lang_id,

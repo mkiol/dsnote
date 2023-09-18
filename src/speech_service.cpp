@@ -2970,49 +2970,6 @@ void speech_service::setup_modules() {
 #endif
 }
 
-QString speech_service::merge_wav_files(const std::vector<QString> &files) {
-    QString out_file_path = merged_file_path(files);
-
-    QFile out_file{out_file_path};
-    if (!out_file.open(QIODevice::WriteOnly)) {
-        qWarning() << "failed to write to file:" << out_file_path;
-        return {};
-    }
-
-    const auto header_size = sizeof(tts_engine::wav_header);
-
-    out_file.seek(header_size);
-
-    tts_engine::wav_header header;
-
-    for (const auto &file_path : files) {
-        QFile in_file{file_path};
-        if (!in_file.open(QIODevice::ReadOnly)) {
-            qWarning() << "failed to read file:" << file_path;
-            continue;
-        }
-
-        if (auto size =
-                in_file.read(reinterpret_cast<char *>(&header), header_size);
-            size < 0 || size < static_cast<decltype(size)>(header_size)) {
-            qWarning() << "invalid wav header:" << file_path;
-            continue;
-        }
-
-        out_file.write(in_file.readAll());
-    }
-
-    if (out_file.pos() == header_size) return {};
-
-    header.data_size = out_file.pos() - header_size;
-
-    out_file.seek(0);
-
-    out_file.write(reinterpret_cast<char *>(&header), header_size);
-
-    return out_file_path;
-}
-
 // DBus
 
 int speech_service::SttStartListen(int mode, const QString &lang,
