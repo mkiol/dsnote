@@ -2,18 +2,18 @@ Name:       harbour-dsnote
 
 # >> macros
 %define __provides_exclude_from ^%{_datadir}/.*$
-%define __requires_exclude ^libstt.*|libkenlm.*|libtensorflowlite.*|libtflitedelegates.*|libopenblas.*|libwhisper.*|libwhisper-fallback.*|libbergamot_api.*|libbergamot_api-fallback.*|libvosk.*|libonnxruntime.*|libRHVoice_core.*|libRHVoice.*$
+%define __requires_exclude ^libstt.*|libkenlm.*|libtensorflowlite.*|libtflitedelegates.*|libopenblas.*|libwhisper-openblas.*|libwhisper-fallback.*|libbergamot_api.*|libbergamot_api-fallback.*|libvosk.*|libonnxruntime.*|libRHVoice_core.*|libRHVoice.*$
 %define _unpackaged_files_terminate_build 0
 # << macros
 
 Summary:        Speech Note
-Version:        4.1.0
+Version:        4.2.0
 Release:        1
 Group:          Qt/Qt
 License:        LICENSE
 URL:            https://github.com/mkiol/dsnote
 Source0:        %{name}-%{version}.tar.bz2
-Requires:       sailfishsilica-qt5 >= 0.10.9, qt5-qtmultimedia-plugin-mediaservice-gstaudiodecoder
+Requires:       sailfishsilica-qt5 >= 0.10.9
 Requires:       python3-gobject
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)

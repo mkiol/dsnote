@@ -14,6 +14,49 @@ DialogPage {
     title: qsTr("Changes")
 
     SectionLabel {
+        text: qsTr("Version %1").arg("4.2.0")
+    }
+
+    RichLabel {
+        text: "<p>" + qsTr("Speech to Text") + ":</p>
+        <ul>
+        <li>Support for video files transcription. With <i>Transcribe a file</i> menu option you can convert
+            audio file or audio from video file to text.
+            Following video formats are supported: MP4, MKV, Ogg.
+        </li>
+        <li>Option <i>Audio source</i> in <i>Settings</i> to select preferred audio source. New option let you choose
+            microphone (or other audio source) which is used in Speech to Text.</li>
+        <li>Whisper engine update. Library behind Whisper engine (whisper.cpp) has been updated resulting in
+            an increase in performance. Processing time on CPU has been cut in half on average.</li>
+        <li>Improved Nvidia GPU acceleration support for Whisper models.
+            Following Whisper accelerators are currently enabled:
+            OpenCL (for most Nvidia cards, few AMD cards and Intel GPUs),
+            CUDA (for most Nvidia cards).
+            Support for AMD ROCm is implemented as well but does not work right now due to Flatpak sandboxing isolation.
+            GPU hardware acceleration is not enabled by default. Use the option in <i>Settings</i> to turn it on.
+            Disable, if you observe any problems when using Speech to Text with Whisper models.</li>
+        </ul>
+        <p>" + qsTr("Text to Speech") + ":</p>
+        <ul>
+        <li>Save audio in compressed formats (MP3 or Ogg Vorbis). You can also save metadata tags to the audio file,
+            such as track number, title, artist or album.</li>
+        <li>New models from Massively Multilingual Speech (MMS) project: Hungarian.
+            If you would like any other MMS model to be included, please let us know.</li>
+        <li>Update of RHVoice voice for Uzbek.</li>
+        </ul>
+        <p>" + qsTr("User Interface") + ":</p>
+        <ul>
+        <li>Menu options: <i>Open a text file</i> and <i>Save to a text file</i></li>
+        <li>Command line option to open files. If you want to associate text, audio or video files
+            with Speech Note, now it is possible.</li>
+        <li>Improved UI colors when app is running under GNOME dark theme.</li>
+        <li>Advanced settings option <i>Graphical style</i>. This option let you select any
+            Qt interface style installed in your system. Changing the style might make app
+            look better under GNOME.</li>
+        </ul>"
+    }
+
+    SectionLabel {
         text: qsTr("Version %1").arg("4.1.0")
     }
 

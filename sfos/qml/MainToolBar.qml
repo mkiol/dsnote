@@ -40,7 +40,7 @@ PullDownMenu {
                   app.state === DsnoteApp.StateListeningSingleSentence ||
                   app.state === DsnoteApp.StateIdle ||
                   app.state === DsnoteApp.StatePlayingSpeech)
-        text: qsTr("Transcribe audio file")
+        text: qsTr("Transcribe a file")
         onClicked: {
             pageStack.push(fileReadDialog)
         }

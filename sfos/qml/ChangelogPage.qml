@@ -29,6 +29,39 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Version %1").arg("4.2")
+            }
+
+            LogItem {
+                title: "Support for video files transcription."
+                description: "With 'Transcribe a file' menu option you can convert audio file or audio from video file to text. " +
+                             "Following video formats are supported: MP4, MKV, OGV."
+            }
+
+            LogItem {
+                title: "Whisper engine update"
+                description: "Library behind Whisper engine (whisper.cpp) has been updated resulting in " +
+                             "an increase in performance. Processing time on the CPU has been reduced " +
+                             "by an average of 15%."
+            }
+
+            LogItem {
+                title: "Save audio in compressed formats (MP3 or Ogg Vorbis)"
+                description: "When saving in compressed format you can also save metadata tags to the audio file, " +
+                             "such as track number, title, artist or album."
+            }
+
+            LogItem {
+                title: "Pause option"
+                description: "Note reading can be paused and resumed."
+            }
+
+            LogItem {
+                title: "Update of RHVoice voice for Uzbek."
+                description: "Uzbek language has been updated to most recent one."
+            }
+
+            SectionHeader {
                 text: qsTr("Version %1").arg("4.1")
             }
 

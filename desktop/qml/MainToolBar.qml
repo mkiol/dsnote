@@ -68,7 +68,7 @@ ToolBar {
                     y: fileButton.height
 
                     MenuItem {
-                        text: qsTr("Open text file")
+                        text: qsTr("Open a text file")
                         icon.name: "document-open-symbolic"
                         onClicked: {
                             textFileReadDialog.open()
@@ -76,11 +76,11 @@ ToolBar {
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Replace the note with text loaded from a file.")
+                        ToolTip.text: qsTr("Replace the current note with text from a text file.")
                     }
 
                     MenuItem {
-                        text: qsTr("Transcribe audio file")
+                        text: qsTr("Transcribe a file")
                         icon.name: "document-open-symbolic"
                         enabled: !_settings.translator_mode && app.stt_configured &&
                                  (app.state === DsnoteApp.StateListeningManual ||
@@ -92,13 +92,13 @@ ToolBar {
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Convert audio file to text. The text will be appended to the note.")
+                        ToolTip.text: qsTr("Convert audio from an existing audio or video file into text. The text will be appended to the current note.")
                     }
 
                     MenuSeparator {}
 
                     MenuItem {
-                        text: qsTr("Save to text file")
+                        text: qsTr("Save to a text file")
                         icon.name: "document-save-symbolic"
                         enabled: app.note.length !== 0
                         onClicked: {
@@ -108,11 +108,11 @@ ToolBar {
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Save the note to text file.")
+                        ToolTip.text: qsTr("Save the current note to a text file.")
                     }
 
                     MenuItem {
-                        text: qsTr("Save the translation to text file")
+                        text: qsTr("Save the translation to a text file")
                         icon.name: "document-save-symbolic"
                         enabled: app.translated_text.length !== 0 && _settings.translator_mode
                         onClicked: {
@@ -122,7 +122,7 @@ ToolBar {
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Save translated text to text file.")
+                        ToolTip.text: qsTr("Save the translated note to a text file.")
                     }
 
                     MenuSeparator {}
@@ -142,7 +142,7 @@ ToolBar {
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Convert text from the note to audio file.")
+                        ToolTip.text: qsTr("Convert text from the current note into speech and save in an audio file.")
                     }
 
                     MenuItem {
@@ -161,7 +161,7 @@ ToolBar {
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Convert translated text to audio file.")
+                        ToolTip.text: qsTr("Convert translated text into speech and save in an audio file.")
                     }
                 }
             }
