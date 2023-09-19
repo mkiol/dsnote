@@ -13,8 +13,10 @@
 
 #include <algorithm>
 #include <array>
+#include <cctype>
 #include <cstdio>
 #include <fstream>
+#include <locale>
 
 #ifdef ARCH_X86_64
 #include <rubberband/RubberBandStretcher.h>
@@ -210,6 +212,26 @@ static bool file_exists(const std::string& file_path) {
     return stat(file_path.c_str(), &buffer) == 0;
 }
 
+// source: https://stackoverflow.com/a/217605
+// trim from start (in place)
+static inline void ltrim(std::string& s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+                return !std::isspace(ch);
+            }));
+}
+// trim from end (in place)
+static inline void rtrim(std::string& s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(),
+                         [](unsigned char ch) { return !std::isspace(ch); })
+                .base(),
+            s.end());
+}
+// trim from both ends (in place)
+static inline void trim(std::string& s) {
+    rtrim(s);
+    ltrim(s);
+}
+
 std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
                                                        bool split) const {
     std::vector<tts_engine::task_t> tasks;
@@ -224,6 +246,7 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
             tasks.reserve(parts.size());
 
             for (auto& part : parts) {
+                trim(part);
                 if (!part.empty())
                     tasks.push_back(task_t{std::move(part), false});
             }
