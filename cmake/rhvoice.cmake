@@ -1,5 +1,5 @@
 set(rhvoice_source_url "https://github.com/RHVoice/RHVoice.git")
-set(rhvoice_tag "51759044ff1871310fc222e21c5655f960ebfca3")
+set(rhvoice_tag "408db88bd1dd68fe23aef3ffac30f92018398d8b")
 
 ExternalProject_Add(rhvoice
     SOURCE_DIR ${external_dir}/rhvoice
@@ -13,7 +13,7 @@ ExternalProject_Add(rhvoice
         "data/languages/English" "data/languages/Esperanto" "data/languages/Georgian"
         "data/languages/Kyrgyz" "data/languages/Macedonian" "data/languages/Russian"
         "data/languages/Tatar" "data/languages/Ukrainian" "data/languages/Czech"
-        "data/languages/Uzbek" "data/languages/Uzbek" "data/languages/Slovak"
+        "data/languages/Uzbek" "data/languages/Slovak"
     UPDATE_COMMAND ""
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/rhvoice.patch ||
