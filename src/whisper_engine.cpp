@@ -302,6 +302,13 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
     return samples_process_result_t::wait_for_samples;
 }
 
+static bool encoder_begin_callback([[maybe_unused]] whisper_context* ctx,
+                                   [[maybe_unused]] whisper_state* state,
+                                   void* user_data) {
+    bool is_aborted = *static_cast<bool*>(user_data);
+    return !is_aborted;
+}
+
 whisper_full_params whisper_engine::make_wparams() {
     whisper_full_params wparams =
         m_whisper_api.whisper_full_default_params(WHISPER_SAMPLING_GREEDY);
@@ -320,12 +327,7 @@ whisper_full_params whisper_engine::make_wparams() {
     wparams.n_threads = std::min(
         m_threads,
         std::max(1, static_cast<int>(std::thread::hardware_concurrency())));
-    wparams.encoder_begin_callback = []([[maybe_unused]] whisper_context* ctx,
-                                        [[maybe_unused]] whisper_state* state,
-                                        void* user_data) {
-        bool is_aborted = *static_cast<bool*>(user_data);
-        return !is_aborted;
-    };
+    wparams.encoder_begin_callback = encoder_begin_callback;
     wparams.encoder_begin_callback_user_data = &m_thread_exit_requested;
 
     LOGD("cpu info: arch=" << cpu_tools::arch() << ", cores="

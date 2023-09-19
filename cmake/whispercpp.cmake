@@ -145,7 +145,7 @@ ExternalProject_Add(whispercppopenblas
         -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
         -DWHISPER_OPENBLAS=ON
         -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
-    INSTALL_COMMAND cp libwhisper.so ${external_lib_dir}/libwhisper-openblas.so
+    INSTALL_COMMAND make install && cp libwhisper.so ${external_lib_dir}/libwhisper-openblas.so
     BUILD_ALWAYS False
 )
 
