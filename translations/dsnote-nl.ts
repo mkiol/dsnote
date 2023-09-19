@@ -85,44 +85,50 @@
     </message>
     <message>
         <location filename="../sfos/qml/ChangelogPage.qml" line="32"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="65"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="95"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="143"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="166"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="70"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="103"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="133"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="181"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="204"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="17"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="53"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="81"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="96"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="121"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="65"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="101"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="129"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="144"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="169"/>
         <source>Version %1</source>
         <translation>Versie %1</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="57"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="21"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="105"/>
         <source>Translator</source>
         <translation>Vertaling</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="31"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="71"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="85"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="105"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="125"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="43"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="79"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="119"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="133"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="153"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="173"/>
         <source>Text to Speech</source>
         <translation>Tekst-naar-spraak</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="21"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="89"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="112"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="129"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="25"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="69"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="137"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="160"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="177"/>
         <source>Speech to Text</source>
         <translation>Spraak-naar-tekst</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="46"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="65"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="100"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="52"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="94"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="113"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="148"/>
         <source>User Interface</source>
         <translation type="unfinished"></translation>
     </message>
@@ -134,7 +140,7 @@
 <context>
     <name>DialogPage</name>
     <message>
-        <location filename="../desktop/qml/DialogPage.qml" line="76"/>
+        <location filename="../desktop/qml/DialogPage.qml" line="65"/>
         <source>Close</source>
         <translation type="unfinished">Sluiten</translation>
     </message>
@@ -160,28 +166,141 @@
 <context>
     <name>FileWritePage</name>
     <message>
-        <location filename="../sfos/qml/FileWritePage.qml" line="22"/>
+        <location filename="../sfos/qml/FileWritePage.qml" line="79"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="35"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="104"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="336"/>
         <source>Save File</source>
         <translation>Bestand opslaan</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/FileWritePage.qml" line="26"/>
+        <location filename="../sfos/qml/FileWritePage.qml" line="141"/>
+        <location filename="../sfos/qml/FileWritePage.qml" line="155"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="65"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="175"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="192"/>
+        <source>Auto</source>
+        <translation type="unfinished">Automatisch</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/FileWritePage.qml" line="98"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuleren</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/FileWritePage.qml" line="122"/>
+        <source>File path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/FileWritePage.qml" line="126"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="147"/>
+        <source>The file exists and will be overwritten.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/FileWritePage.qml" line="130"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="157"/>
+        <source>Audio file format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/FileWritePage.qml" line="155"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="191"/>
+        <source>When %1 is selected, the format is chosen based on the file extension.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/FileWritePage.qml" line="160"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="204"/>
+        <source>Compression quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/FileWritePage.qml" line="170"/>
+        <location filename="../sfos/qml/FileWritePage.qml" line="182"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="218"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="233"/>
+        <source>High</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/FileWritePage.qml" line="171"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="219"/>
+        <source>Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/FileWritePage.qml" line="172"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="220"/>
+        <source>Low</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/FileWritePage.qml" line="182"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="233"/>
+        <source>%1 results in a larger file size.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/FileWritePage.qml" line="191"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="242"/>
+        <source>Write metadata to audio file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/FileWritePage.qml" line="192"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="249"/>
+        <source>Write track number, title, artist and album tags to audio file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/FileWritePage.qml" line="203"/>
+        <location filename="../sfos/qml/FileWritePage.qml" line="204"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="262"/>
+        <source>Track number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/FileWritePage.qml" line="216"/>
+        <location filename="../sfos/qml/FileWritePage.qml" line="217"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="282"/>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/FileWritePage.qml" line="227"/>
+        <location filename="../sfos/qml/FileWritePage.qml" line="228"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="303"/>
+        <source>Album</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/FileWritePage.qml" line="240"/>
+        <location filename="../sfos/qml/FileWritePage.qml" line="241"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="323"/>
+        <source>Artist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/FileWritePage.qml" line="83"/>
         <source>Folder</source>
         <translation>Map</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/FileWritePage.qml" line="31"/>
+        <location filename="../sfos/qml/FileWritePage.qml" line="88"/>
+        <location filename="../desktop/qml/FileWritePage.qml" line="135"/>
         <source>Change</source>
         <translation>Wĳzigen</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/FileWritePage.qml" line="41"/>
+        <location filename="../sfos/qml/FileWritePage.qml" line="98"/>
         <source>Set default</source>
         <translation>Instellen als standaard</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/FileWritePage.qml" line="54"/>
-        <location filename="../sfos/qml/FileWritePage.qml" line="55"/>
+        <location filename="../sfos/qml/FileWritePage.qml" line="112"/>
+        <location filename="../sfos/qml/FileWritePage.qml" line="113"/>
         <source>File name</source>
         <translation>Bestandsnaam</translation>
     </message>
@@ -354,20 +473,18 @@
 <context>
     <name>MainToolBar</name>
     <message>
-        <location filename="../sfos/qml/MainToolBar.qml" line="43"/>
-        <location filename="../desktop/qml/MainToolBar.qml" line="70"/>
         <source>Transcribe audio file</source>
-        <translation>Audiobestand transcriberen</translation>
+        <translation type="vanished">Audiobestand transcriberen</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="57"/>
-        <location filename="../desktop/qml/MainToolBar.qml" line="86"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="131"/>
         <source>Save to audio file</source>
         <translation>Opslaan in audiobestand</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="72"/>
-        <location filename="../desktop/qml/MainToolBar.qml" line="105"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="149"/>
         <source>Save the translation to audio file</source>
         <translation>Bewaar de vertaling in een audiobestand</translation>
     </message>
@@ -378,25 +495,23 @@
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="79"/>
-        <location filename="../desktop/qml/MainToolBar.qml" line="165"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="208"/>
         <source>Translator</source>
         <translation>Vertaling</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="80"/>
-        <location filename="../desktop/qml/MainToolBar.qml" line="146"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="189"/>
         <source>Notepad</source>
         <translation>Notitieboek</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="82"/>
         <source>Convert audio file to text.</source>
-        <translation>Zet audiobestanden om naar tekst.</translation>
+        <translation type="vanished">Zet audiobestanden om naar tekst.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="101"/>
         <source>Convert text to audio and save as WAV file.</source>
-        <translation>Zet tekst om naar audio en sla op als wav-bestand.</translation>
+        <translation type="vanished">Zet tekst om naar audio en sla op als wav-bestand.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="26"/>
@@ -421,38 +536,105 @@
         <translation>Bestand</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/MainToolBar.qml" line="71"/>
+        <source>Open a text file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/MainToolBar.qml" line="79"/>
+        <source>Replace the current note with text from a text file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/MainToolBar.qml" line="43"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="83"/>
+        <source>Transcribe a file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/MainToolBar.qml" line="95"/>
+        <source>Convert audio from an existing audio or video file into text. The text will be appended to the current note.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/MainToolBar.qml" line="101"/>
+        <source>Save to a text file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/MainToolBar.qml" line="111"/>
+        <source>Save the current note to a text file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/MainToolBar.qml" line="115"/>
+        <source>Save the translation to a text file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/MainToolBar.qml" line="125"/>
+        <source>Save the translated note to a text file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/MainToolBar.qml" line="145"/>
+        <source>Convert text from the current note into speech and save in an audio file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/MainToolBar.qml" line="164"/>
+        <source>Convert translated text into speech and save in an audio file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="31"/>
-        <location filename="../desktop/qml/MainToolBar.qml" line="128"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="171"/>
         <source>Languages</source>
         <translation>Talen</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="121"/>
-        <source>Convert translated text to audio and save as WAV file.</source>
-        <translation>Zet vertaalde tekst om naar audio en sla op als wav-bestand.</translation>
+        <location filename="../desktop/qml/MainToolBar.qml" line="266"/>
+        <source>Audio files</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="133"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="267"/>
+        <source>Video files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Convert translated text to audio and save as WAV file.</source>
+        <translation type="vanished">Zet vertaalde tekst om naar audio en sla op als wav-bestand.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/MainToolBar.qml" line="176"/>
         <source>Set languages and download models.</source>
         <translation>Stel talen in en download modellen.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="157"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="200"/>
         <source>Switch to Notepad</source>
         <translation>Ga naar notitieboek</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="177"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="220"/>
         <source>Switch to Translator</source>
         <translation>Ga naar vertaling</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="184"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="231"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="250"/>
+        <source>Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/MainToolBar.qml" line="248"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="264"/>
         <source>Open File</source>
         <translation>Bestand opene</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="200"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="230"/>
         <source>Save File</source>
         <translation>Bestand opslaan</translation>
     </message>
@@ -461,7 +643,8 @@
         <translation type="vanished">MS Wave</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="201"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="251"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="268"/>
         <source>All files</source>
         <translation>Alle bestanden</translation>
     </message>
@@ -696,19 +879,24 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="96"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="107"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="157"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="167"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="168"/>
         <source>Punctuation</source>
         <translation>Punctuatie</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="106"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="166"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="167"/>
         <source>To make %1 work, download %2 model.</source>
         <translation>Download het %2-model om met %1 aan de slag te gaan.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="366"/>
+        <source>Restart the application to apply changes.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="167"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="453"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="370"/>
         <source>Other</source>
         <translation>Overig</translation>
     </message>
@@ -720,19 +908,19 @@
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="171"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="462"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="379"/>
         <source>Location of language files</source>
         <translation>Locatie van taalbestanden</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="173"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="479"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="396"/>
         <source>Directory where language files are downloaded to and stored.</source>
         <translation>De map waarin taalbestanden worden opgeslagen.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="177"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="474"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="391"/>
         <source>Change</source>
         <translation>Wĳzigen</translation>
     </message>
@@ -745,178 +933,130 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="93"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="107"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="148"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="167"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="168"/>
         <source>Restore punctuation</source>
         <translation>Punctuatie herstellen</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="180"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="181"/>
         <source>If a suitable GPU device is found in the system, it will be used to accelerate processing.</source>
         <translation>Als er een geschikte videokaart wordt aangetroffen, dan wordt deze gebruikt om het verwerken te versnellen.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="173"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="174"/>
         <source>Use GPU acceleration for Whisper</source>
         <translation>Gpu-versnelling gebruiken</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="35"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="37"/>
         <source>Audio source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="48"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="50"/>
         <source>Select preferred audio source.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="57"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="59"/>
         <source>No audio source could be found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="57"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="59"/>
         <source>Make sure the microphone is properly connected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="181"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="182"/>
         <source>GPU hardware acceleration significantly reduces the time of decoding.</source>
         <translation>Gpu-versnelling verkort de decodeertĳd aanzienlĳk.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="182"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="183"/>
         <source>Disable this option if you observe problems when using Speech to Text with Whisper models.</source>
         <translation>Schakel deze optie uit als je problemen ervaart in combinatie met Whisper-modellen.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="190"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="192"/>
         <source>A suitable GPU device could not be found.</source>
         <translation>Er is geen geschikte videokaart aangetroffen.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="202"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="205"/>
         <source>GPU device</source>
         <translation>Videokaart</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="215"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="218"/>
         <source>Select preferred GPU device for hardware acceleration.</source>
         <translation>Kies de voorkeursvideokaart voor gebruik met hardwareversnelling.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="304"/>
-        <source>Audio format</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="336"/>
-        <source>The audio format used when saving to a file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="348"/>
-        <source>Compression quality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="378"/>
-        <source>The compression quality used when saving to a file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="384"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="301"/>
         <source>User Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="319"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="337"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="405"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="408"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="322"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="325"/>
         <source>Auto</source>
         <translation type="unfinished">Automatisch</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="337"/>
-        <source>%1 means that format will be set according to the file extension.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="363"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="379"/>
-        <source>High</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="364"/>
-        <source>Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="365"/>
-        <source>Low</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="379"/>
-        <source>%1 results in a larger file size.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="427"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="344"/>
         <source>Graphical style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="427"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="344"/>
         <source>advanced option</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="111"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="220"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="223"/>
         <source>Text to Speech</source>
         <translation>Tekst-naar-spraak</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="123"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="231"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="234"/>
         <source>Speech speed</source>
         <translation>Voorleessnelheid</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="135"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="286"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="289"/>
         <source>Very slow</source>
         <translation>Erg langzaam</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="136"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="287"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="290"/>
         <source>Slow</source>
         <translation>Langzaam</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="137"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="288"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="291"/>
         <source>Normal</source>
         <translation>Normaal</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="138"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="289"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="292"/>
         <source>Fast</source>
         <translation>Snel</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="139"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="290"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="293"/>
         <source>Very fast</source>
         <translation>Erg snel</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="239"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="242"/>
         <source>Change to make synthesized speech slower or faster.</source>
         <translation>Pas aan om het voorlezen langzamer of sneller te maken.</translation>
     </message>
@@ -925,7 +1065,7 @@
         <translation type="vanished">Vormgeving</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="394"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="311"/>
         <source>Font size in text editor</source>
         <translation>Tekstgrootte van teksbewerker</translation>
     </message>
@@ -950,22 +1090,21 @@
         <translation type="vanished">Plasma</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="439"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="356"/>
         <source>Application graphical interface style.</source>
         <translation>De grafische vormgeving van het programma.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="440"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="357"/>
         <source>Change if you observe problems with incorrect colors under a dark theme.</source>
         <translation>Pas aan als je problemen ervaart met kleuren van donkere thema&apos;s.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="449"/>
         <source>Restart an application to apply changes.</source>
-        <translation>Herstart om de wĳzigingen toe te passen.</translation>
+        <translation type="vanished">Herstart om de wĳzigingen toe te passen.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="485"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="402"/>
         <source>Select Directory</source>
         <translation>Kies een map</translation>
     </message>
@@ -973,64 +1112,85 @@
 <context>
     <name>SpeechWidget</name>
     <message>
-        <location filename="../sfos/qml/SpeechWidget.qml" line="41"/>
+        <location filename="../sfos/qml/SpeechWidget.qml" line="42"/>
         <source>Starting...</source>
         <translation>Bezig met starten…</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SpeechWidget.qml" line="43"/>
+        <location filename="../sfos/qml/SpeechWidget.qml" line="44"/>
         <source>No language has been set.</source>
         <translation>Er is geen taal ingesteld.</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SpeechWidget.qml" line="44"/>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="100"/>
+        <location filename="../sfos/qml/SpeechWidget.qml" line="45"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="101"/>
         <source>Getting ready, please wait...</source>
         <translation>Bezig met voorbereiden…</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SpeechWidget.qml" line="45"/>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="102"/>
+        <location filename="../sfos/qml/SpeechWidget.qml" line="46"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="103"/>
         <source>Writing speech to file...</source>
         <translation>Bezig met wegschrĳven…</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SpeechWidget.qml" line="46"/>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="106"/>
+        <location filename="../sfos/qml/SpeechWidget.qml" line="47"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="107"/>
         <source>Processing, please wait...</source>
         <translation>Bezig met verwerken…</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SpeechWidget.qml" line="47"/>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="108"/>
+        <location filename="../sfos/qml/SpeechWidget.qml" line="48"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="109"/>
         <source>Transcribing audio file...</source>
         <translation>Bezig met transcriberen…</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SpeechWidget.qml" line="50"/>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="113"/>
+        <location filename="../sfos/qml/SpeechWidget.qml" line="51"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="114"/>
         <source>Say something...</source>
         <translation>Zeg iets…</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SpeechWidget.qml" line="51"/>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="115"/>
+        <location filename="../sfos/qml/SpeechWidget.qml" line="52"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="116"/>
+        <source>Reading is paused.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SpeechWidget.qml" line="53"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="117"/>
         <source>Reading a note...</source>
         <translation>Bezig met lezen…</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SpeechWidget.qml" line="52"/>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="116"/>
+        <location filename="../sfos/qml/SpeechWidget.qml" line="54"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="118"/>
         <source>Translating...</source>
         <translation>Bezig met vertalen…</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SpeechWidget.qml" line="42"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="168"/>
+        <source>Resume reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="168"/>
+        <source>Pause reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="185"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SpeechWidget.qml" line="43"/>
         <source>Busy...</source>
         <translation>Bezig…</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="139"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="185"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
@@ -1143,83 +1303,98 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../sfos/qml/main.qml" line="139"/>
+        <location filename="../sfos/qml/main.qml" line="145"/>
         <source>To switch between %1 and %2 modes use option in pull-down menu.</source>
         <translation>Schakel tussen de %1- en %2-modi met behulp van het trekmenu.</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/main.qml" line="140"/>
+        <location filename="../sfos/qml/main.qml" line="146"/>
         <source>Notepad</source>
         <translation>Notitieboek</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/main.qml" line="140"/>
+        <location filename="../sfos/qml/main.qml" line="146"/>
         <source>Translator</source>
         <translation>Vertaling</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/main.qml" line="168"/>
+        <location filename="../sfos/qml/main.qml" line="176"/>
         <location filename="../desktop/qml/main.qml" line="167"/>
         <source>The model download is complete!</source>
         <translation>Het model is geïnstalleerd!</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/main.qml" line="169"/>
+        <location filename="../sfos/qml/main.qml" line="177"/>
         <location filename="../desktop/qml/main.qml" line="168"/>
         <source>Error: Couldn&apos;t download the model file.</source>
         <translation>Foutmelding: het model kan niet worden geïnstalleerd.</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/main.qml" line="174"/>
-        <location filename="../desktop/qml/main.qml" line="178"/>
+        <location filename="../sfos/qml/main.qml" line="182"/>
+        <location filename="../desktop/qml/main.qml" line="181"/>
         <source>Copied!</source>
         <translation>Gekopieerd!</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/main.qml" line="175"/>
-        <location filename="../desktop/qml/main.qml" line="179"/>
+        <location filename="../sfos/qml/main.qml" line="183"/>
+        <location filename="../desktop/qml/main.qml" line="182"/>
         <source>File transcription is complete!</source>
         <translation>De transcriptie is voltooid!</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/main.qml" line="176"/>
-        <location filename="../desktop/qml/main.qml" line="180"/>
+        <location filename="../sfos/qml/main.qml" line="184"/>
+        <location filename="../desktop/qml/main.qml" line="183"/>
         <source>Speech saved to audio file!</source>
         <translation>De spraak is opgeslagen in een audiobestand!</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/main.qml" line="180"/>
         <location filename="../desktop/qml/main.qml" line="184"/>
+        <source>Note saved to text file!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="188"/>
+        <location filename="../desktop/qml/main.qml" line="188"/>
         <source>Error: Audio file processing has failed.</source>
         <translation>Foutmelding: het audiobestand kan niet worden verwerkt.</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/main.qml" line="183"/>
-        <location filename="../desktop/qml/main.qml" line="187"/>
+        <location filename="../sfos/qml/main.qml" line="191"/>
+        <location filename="../desktop/qml/main.qml" line="191"/>
         <source>Error: Couldn&apos;t access Microphone.</source>
         <translation>Foutmelding: geen toegang tot de microfoon.</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/main.qml" line="186"/>
-        <location filename="../desktop/qml/main.qml" line="190"/>
+        <location filename="../sfos/qml/main.qml" line="194"/>
+        <location filename="../desktop/qml/main.qml" line="194"/>
         <source>Error: Speech to Text engine initialization has failed.</source>
         <translation>Foutmelding: de spraak-naar-tekstaandrĳving kan niet worden gestart.</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/main.qml" line="189"/>
-        <location filename="../desktop/qml/main.qml" line="193"/>
+        <location filename="../sfos/qml/main.qml" line="197"/>
+        <location filename="../desktop/qml/main.qml" line="197"/>
         <source>Error: Text to Speech engine initialization has failed.</source>
         <translation>Foutmelding: de tekst-naar-spraakaandrĳving kan niet worden gestart.</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/main.qml" line="192"/>
-        <location filename="../desktop/qml/main.qml" line="196"/>
+        <location filename="../sfos/qml/main.qml" line="200"/>
+        <location filename="../desktop/qml/main.qml" line="200"/>
         <source>Error: Translation engine initialization has failed.</source>
         <translation>Foutmelding: de vertaalaandrĳving kan niet worden gestart.</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/main.qml" line="195"/>
-        <location filename="../desktop/qml/main.qml" line="199"/>
+        <location filename="../desktop/qml/main.qml" line="203"/>
+        <source>Error: Couldn&apos;t save to the file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/main.qml" line="206"/>
+        <source>Error: Couldn&apos;t open the file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="203"/>
+        <location filename="../desktop/qml/main.qml" line="209"/>
         <source>Error: An unknown problem has occurred.</source>
         <translation>Foutmelding: er is een onbekend probleem opgetreden.</translation>
     </message>
@@ -1252,15 +1427,19 @@
 <context>
     <name>settings</name>
     <message>
-        <location filename="../src/settings.cpp" line="585"/>
+        <location filename="../src/settings.cpp" line="479"/>
+        <source>Speech notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="720"/>
         <source>Don&apos;t force</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="622"/>
-        <location filename="../src/settings.cpp" line="640"/>
-        <location filename="../src/settings.cpp" line="673"/>
-        <location filename="../src/settings.cpp" line="687"/>
+        <location filename="../src/settings.cpp" line="758"/>
+        <location filename="../src/settings.cpp" line="841"/>
+        <location filename="../src/settings.cpp" line="855"/>
         <source>Auto</source>
         <translation>Automatisch</translation>
     </message>
@@ -1268,47 +1447,47 @@
 <context>
     <name>speech_service</name>
     <message>
-        <location filename="../src/speech_service.cpp" line="2786"/>
+        <location filename="../src/speech_service.cpp" line="2894"/>
         <source>No language has been set.</source>
         <translation>Er is geen taal ingesteld.</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2788"/>
+        <location filename="../src/speech_service.cpp" line="2896"/>
         <source>No translator model has been set.</source>
         <translation>Er is geen vertaalmodel ingesteld.</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2789"/>
+        <location filename="../src/speech_service.cpp" line="2897"/>
         <source>Say something...</source>
         <translation>Zeg iets…</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2791"/>
+        <location filename="../src/speech_service.cpp" line="2899"/>
         <source>Press and say something...</source>
         <translation>Druk en zeg iets…</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2793"/>
+        <location filename="../src/speech_service.cpp" line="2901"/>
         <source>Click and say something...</source>
         <translation>Klik en zeg iets…</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2794"/>
+        <location filename="../src/speech_service.cpp" line="2902"/>
         <source>Busy...</source>
         <translation>Bezig…</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2795"/>
+        <location filename="../src/speech_service.cpp" line="2903"/>
         <source>Processing, please wait...</source>
         <translation>Bezig met verwerken…</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2797"/>
+        <location filename="../src/speech_service.cpp" line="2905"/>
         <source>Getting ready, please wait...</source>
         <translation>Bezig met voorbereiden…</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2798"/>
+        <location filename="../src/speech_service.cpp" line="2906"/>
         <source>Translating...</source>
         <translation>Bezig met vertalen…</translation>
     </message>

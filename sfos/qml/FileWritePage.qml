@@ -201,7 +201,7 @@ Dialog {
             visible: _settings.mtag
             enabled: mtagCheckBox.enabled
             placeholderText: qsTr("Track number")
-            label: qsTr("Track numbere")
+            label: qsTr("Track number")
             anchors {
                 left: parent.left
                 right: parent.right

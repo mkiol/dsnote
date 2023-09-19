@@ -44,6 +44,7 @@ DialogPage {
         <ul>
         <li>Save audio in compressed formats (MP3 or Ogg Vorbis). You can also save metadata tags to the audio file,
             such as track number, title, artist or album.</li>
+        <li>Pause option. Note reading can be paused and resumed.</li>
         <li>New models from Massively Multilingual Speech (MMS) project: Hungarian, Catalan, German, Spanish, Romanian, Russian and Swedish.
             If you would like any other MMS model to be included, please let us know.</li>
         <li>Update of RHVoice voice for Uzbek.</li>
