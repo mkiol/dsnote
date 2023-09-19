@@ -123,7 +123,18 @@ class models_manager : public QObject, public singleton<models_manager> {
     enum class download_type { none, all, model, sup, model_sup };
     friend QDebug operator<<(QDebug d, download_type download_type);
 
-    enum class comp_type { none, xz, gz, tar, tarxz, targz, zip, zipall, dir };
+    enum class comp_type {
+        none,
+        xz,
+        gz,
+        tar,
+        tarxz,
+        targz,
+        zip,
+        zipall,
+        dir,
+        dirgz
+    };
     friend QDebug operator<<(QDebug d, comp_type comp_type);
 
     struct priv_model_t {

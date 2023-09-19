@@ -70,6 +70,9 @@ QDebug operator<<(QDebug d, models_manager::comp_type comp_type) {
         case models_manager::comp_type::dir:
             d << "dir";
             break;
+        case models_manager::comp_type::dirgz:
+            d << "dirgz";
+            break;
         case models_manager::comp_type::none:
             d << "none";
             break;
@@ -685,7 +688,7 @@ bool models_manager::handle_download(const QString& path,
     if (m_thread.joinable()) m_thread.join();
 
     m_thread = std::thread{[&] {
-        if (comp != comp_type::dir && parts > 1) {
+        if (comp != comp_type::dir && comp != comp_type::dirgz && parts > 1) {
             qDebug() << "joining parts:" << parts;
             join_part_files(download_filename(path, comp), parts);
             for (int i = 0; i < parts; ++i)
@@ -696,6 +699,17 @@ bool models_manager::handle_download(const QString& path,
         qDebug() << "total downloaded size:" << total_size(comp_file);
 
         if (comp == comp_type::none || comp == comp_type::dir) {
+            ok = check_checksum(path, checksum);
+        } else if (comp == comp_type::dirgz) {
+            QDirIterator it{path, {"*.gz"}, QDir::Files};
+            while (it.hasNext()) {
+                auto gz_file = it.next();
+                if (gz_file.size() <= 3) continue;
+                auto file = gz_file.left(gz_file.size() - 3);
+                comp_tools::gz_decode(gz_file, file);
+                QFile::remove(gz_file);
+            }
+
             ok = check_checksum(path, checksum);
         } else {
             if (comp == comp_type::gz) {
@@ -993,6 +1007,8 @@ models_manager::comp_type models_manager::str2comp(const QString& str) {
         return comp_type::zipall;
     if (!str.compare(QStringLiteral("dir"), Qt::CaseInsensitive))
         return comp_type::dir;
+    if (!str.compare(QStringLiteral("dirgz"), Qt::CaseInsensitive))
+        return comp_type::dirgz;
     return comp_type::none;
 }
 
@@ -1019,6 +1035,7 @@ QString models_manager::download_filename(QString filename, comp_type comp,
             filename += QStringLiteral(".zip");
             break;
         case comp_type::dir:
+        case comp_type::dirgz:
             if (auto f = url.fileName(); !f.isEmpty())
                 filename = QDir{filename}.absoluteFilePath(f);
             break;
@@ -1026,7 +1043,7 @@ QString models_manager::download_filename(QString filename, comp_type comp,
             break;
     }
 
-    if (comp != comp_type::dir && part > -1) {
+    if (comp != comp_type::dir && comp != comp_type::dirgz && part > -1) {
         filename +=
             QStringLiteral(".part-%1").arg(part, 2, 10, QLatin1Char{'0'});
     }
