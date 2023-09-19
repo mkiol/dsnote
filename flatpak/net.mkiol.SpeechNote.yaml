@@ -17,6 +17,7 @@ finish-args:
   - --filesystem=xdg-download
   - --filesystem=xdg-music
   - --filesystem=xdg-documents
+  - --filesystem=xdg-videos
   - --env=PYTORCH_TENSOREXPR=0
   - --env=LD_LIBRARY_PATH=/app/cuda/lib64
 cleanup:
@@ -685,7 +686,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/CNugteren/CLBlast.git
-        commit: e3ce21bb937f07b8282dccf4823e2acbdf286d17 
+        commit: e3ce21bb937f07b8282dccf4823e2acbdf286d17
 
   - name: whispercpp-clblast
     only-arches:
