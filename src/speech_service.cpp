@@ -3072,6 +3072,13 @@ int speech_service::TtsSpeechToFile(const QString &text, const QString &lang,
     return tts_speech_to_file(text, lang, options);
 }
 
+double speech_service::TtsGetSpeechToFileProgress(int task) {
+    qDebug() << "[dbus => service] called TtsGetSpeechToFileProgress:" << task;
+    start_keepalive_current_task();
+
+    return tts_speech_to_file_progress(task);
+}
+
 int speech_service::TtsPauseSpeech(int task) {
     qDebug() << "[dbus => service] called TtsPauseSpeech";
     start_keepalive_current_task();
