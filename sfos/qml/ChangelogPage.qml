@@ -33,7 +33,12 @@ Page {
             }
 
             LogItem {
-                title: "Support for video files transcription."
+                title: "New translator models for Hungarian and Finnish"
+                description: "New models 'Hungarian to English' and 'Finnish to English' have been added."
+            }
+
+            LogItem {
+                title: "Support for video files transcription"
                 description: "With 'Transcribe a file' menu option you can convert audio file or audio from video file to text. " +
                              "Following video formats are supported: MP4, MKV, OGV."
             }

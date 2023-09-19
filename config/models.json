@@ -7864,6 +7864,40 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/uken/trgvocab.uken.spm"
             ],
             "size": "36872677"
+        },
+        {
+            "name": "magyarról angolra (Hungarian to English)",
+            "model_id": "hu_bergamot_huen",
+            "engine": "mnt_bergamot",
+            "lang_id": "hu",
+            "trg_lang_id": "en",
+            "score": 0,
+            "checksum": "c05770f0",
+            "checksum_quick": "50b6c621",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/58222938742c5f60480d6508775437f08c8aacaf/models/dev/huen/model.huen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/58222938742c5f60480d6508775437f08c8aacaf/models/dev/huen/lex.50.50.huen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/58222938742c5f60480d6508775437f08c8aacaf/models/dev/huen/vocab.huen.spm.gz"
+            ],
+            "size": "16387915"
+        },
+        {
+            "name": "suomesta englanniksi (Finnish to English)",
+            "model_id": "fi_bergamot_fien",
+            "engine": "mnt_bergamot",
+            "lang_id": "fi",
+            "trg_lang_id": "en",
+            "score": 0,
+            "checksum": "cc4f2e6a",
+            "checksum_quick": "2610018f",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/58222938742c5f60480d6508775437f08c8aacaf/models/dev/fien/model.fien.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/58222938742c5f60480d6508775437f08c8aacaf/models/dev/fien/lex.50.50.fien.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/58222938742c5f60480d6508775437f08c8aacaf/models/dev/fien/vocab.fien.spm.gz"
+            ],
+            "size": "16368261"
         }
     ]
 }

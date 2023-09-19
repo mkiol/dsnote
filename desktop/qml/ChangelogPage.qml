@@ -18,7 +18,11 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Speech to Text") + ":</p>
+        text: "<p>" + qsTr("Translator") + ":</p>
+        <ul>
+        <li>New models: Hungarian to English, Finnish to English</li>
+        </ul>
+        <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
         <li>Support for video files transcription. With <i>Transcribe a file</i> menu option you can convert
             audio file or audio from video file to text.
