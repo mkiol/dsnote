@@ -288,7 +288,7 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
     set_processing_state(processing_state_t::idle);
 
     if (m_config.speech_mode == speech_mode_t::single_sentence &&
-        m_intermediate_text->empty()) {
+        (!m_intermediate_text || m_intermediate_text->empty())) {
         LOGD("no speech decoded, forcing sentence timeout");
         m_call_backs.sentence_timeout();
     }
@@ -377,6 +377,8 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
         LOGE("whisper error: " << ret);
         return;
     }
+
+    if (m_thread_exit_requested) return;
 
     auto decoding_dur = std::chrono::duration_cast<std::chrono::milliseconds>(
                             std::chrono::steady_clock::now() - decoding_start)
