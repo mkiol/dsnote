@@ -102,6 +102,11 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     update_qt_style();
     update_gpu_devices();
     update_audio_inputs();
+
+    // remove qml cache
+    QDir{QStandardPaths::writableLocation(QStandardPaths::CacheLocation) +
+         "/qmlcache"}
+        .removeRecursively();
 }
 
 QString settings::settings_filepath() {
