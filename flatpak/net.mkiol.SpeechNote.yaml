@@ -55,6 +55,7 @@ cleanup:
   - "/cuda/usr"
   - "/cuda/targets/x86_64-linux/lib/cmake"
   - "/cuda/targets/x86_64-linux/lib/libOpenCL.so*"
+  - "*/cmake/*"
   - "libboost*"
   - "libRHVoice_audio*"
   - "pcre2*"
