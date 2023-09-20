@@ -18,6 +18,10 @@
 
 #include "logger.hpp"
 
+extern "C" {
+#include <libavutil/error.h>
+}
+
 [[maybe_unused]] static std::ostream& operator<<(
     std::ostream& os, const AVChannelLayout* layout) {
     if (layout == nullptr) {
@@ -56,6 +60,12 @@
                                                  AVCodecID codec) {
     os << codec_name(codec);
     return os;
+}
+
+static const char* str_from_av_error(int av_err) {
+    static std::array<char, 1024> buf;
+
+    return av_make_error_string(buf.data(), buf.size(), av_err);
 }
 
 static std::string str_for_av_opts(const AVDictionary* opts) {
@@ -774,7 +784,9 @@ bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame) {
             if (auto ret = avcodec_send_packet(m_in_av_audio_ctx, pkt);
                 ret != 0 && ret != AVERROR(EAGAIN)) {
                 av_packet_unref(pkt);
-                throw std::runtime_error("audio decoding error");
+                LOGW("audio decoding error: " << ret << " "
+                                              << str_from_av_error(ret));
+                continue;
             }
 
             av_packet_unref(pkt);
@@ -838,7 +850,9 @@ bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame) {
             if (auto ret = avcodec_send_packet(m_in_av_audio_ctx, pkt);
                 ret != 0 && ret != AVERROR(EAGAIN)) {
                 av_packet_unref(pkt);
-                throw std::runtime_error("audio decoding error");
+                LOGW("audio decoding error: " << ret << " "
+                                              << str_from_av_error(ret));
+                continue;
             }
 
             av_packet_unref(pkt);

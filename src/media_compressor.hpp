@@ -25,7 +25,6 @@ extern "C" {
 #include <libavutil/audio_fifo.h>
 #include <libavutil/dict.h>
 #include <libavutil/opt.h>
-#include <libavutil/time.h>
 }
 
 class media_compressor {
