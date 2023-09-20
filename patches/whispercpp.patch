@@ -85,3 +85,185 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
      RUNTIME  DESTINATION bin
      RESOURCE DESTINATION bin
      PUBLIC_HEADER DESTINATION include
+diff -ruN whispercpp-org/whisper.cpp whispercpp-patched/whisper.cpp
+--- whispercpp-org/whisper.cpp	2023-09-15 20:11:43.000000000 +0200
++++ whispercpp-patched/whisper.cpp	2023-09-20 10:15:38.675418697 +0200
+@@ -125,9 +125,15 @@
+ // ggml helpers
+ //
+ 
+-static void ggml_graph_compute_helper(std::vector<uint8_t> & buf, ggml_cgraph * graph, int n_threads) {
++static void ggml_graph_compute_helper(
++    std::vector<uint8_t> &buf, ggml_cgraph *graph, int n_threads,
++    whisper_abort_callback abort_callback = nullptr,
++    void *abort_callback_data = nullptr) {
+     struct ggml_cplan plan = ggml_graph_plan(graph, n_threads);
+ 
++    plan.abort_callback = abort_callback;
++    plan.abort_callback_data = abort_callback_data;
++
+     if (plan.work_size > 0) {
+         buf.resize(plan.work_size);
+         plan.work_data = buf.data();
+@@ -1919,10 +1925,9 @@
+ //   - mel_offset: offset in the mel spectrogram (i.e. audio offset)
+ //
+ static bool whisper_encode_internal(
+-        whisper_context & wctx,
+-          whisper_state & wstate,
+-              const int   mel_offset,
+-              const int   n_threads) {
++    whisper_context &wctx, whisper_state &wstate, const int mel_offset,
++    const int n_threads, whisper_abort_callback abort_callback = nullptr,
++    void *abort_callback_data = nullptr) {
+     const int64_t t_start_us = ggml_time_us();
+ 
+     // conv
+@@ -1936,7 +1941,8 @@
+         ggml_allocr_alloc_graph(alloc, gf);
+ 
+         if (!whisper_encode_external(wstate)) {
+-            ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads);
++            ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads,
++                                      abort_callback, abort_callback_data);
+         }
+     }
+ 
+@@ -1958,7 +1964,8 @@
+             ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads);
+         }
+ #else
+-        ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads);
++        ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads,
++                                  abort_callback, abort_callback_data);
+ #endif
+     }
+ 
+@@ -1980,7 +1987,8 @@
+             ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads);
+         }
+ #else
+-        ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads);
++        ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads,
++                                  abort_callback, abort_callback_data);
+ #endif
+     }
+ 
+@@ -2340,13 +2348,15 @@
+ //   - n_past:     number of past tokens to prefix the prompt with
+ //
+ static bool whisper_decode_internal(
+-        whisper_context & wctx,
+-          whisper_state & wstate,
+-        whisper_decoder & decoder,
+-    const whisper_token * tokens,
+-              const int   n_tokens,
+-              const int   n_past,
+-              const int   n_threads) {
++            whisper_context & wctx,
++            whisper_state   & wstate,
++            whisper_decoder & decoder,
++        const whisper_token * tokens,
++                  const int   n_tokens,
++                  const int   n_past,
++                  const int   n_threads,
++     whisper_abort_callback   abort_callback = nullptr,
++                       void * abort_callback_data = nullptr) {
+     const int64_t t_start_us = ggml_time_us();
+ 
+     const auto & model   = wctx.model;
+@@ -2378,7 +2388,8 @@
+             ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads);
+         }
+ #else
+-        ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads);
++        ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads,
++                                  abort_callback, abort_callback_data);
+ #endif
+     }
+ 
+@@ -2410,7 +2421,6 @@
+     return true;
+ }
+ 
+-
+ //  500 -> 00:05.000
+ // 6000 -> 01:00.000
+ static std::string to_timestamp(int64_t t, bool comma = false) {
+@@ -3761,6 +3771,9 @@
+         /*.encoder_begin_callback           =*/ nullptr,
+         /*.encoder_begin_callback_user_data =*/ nullptr,
+ 
++        /*.abort_callback           =*/ nullptr,
++        /*.abort_callback_user_data =*/ nullptr,
++
+         /*.logits_filter_callback           =*/ nullptr,
+         /*.logits_filter_callback_user_data =*/ nullptr,
+     };
+@@ -4594,7 +4607,9 @@
+         }
+ 
+         // encode audio features starting at offset seek
+-        if (!whisper_encode_internal(*ctx, *state, seek, params.n_threads)) {
++        if (!whisper_encode_internal(*ctx, *state, seek, params.n_threads,
++                                     params.abort_callback,
++                                     params.abort_callback_user_data)) {
+             log("%s: failed to encode\n", __func__);
+             return -6;
+         }
+@@ -4677,7 +4692,11 @@
+                 }
+                 WHISPER_PRINT_DEBUG("\n\n");
+ 
+-                if (!whisper_decode_internal(*ctx, *state, state->decoders[0], prompt.data(), prompt.size(), 0, params.n_threads)) {
++                if (!whisper_decode_internal(*ctx, *state, state->decoders[0],
++                                             prompt.data(), prompt.size(), 0,
++                                             params.n_threads,
++                                             params.abort_callback,
++                                             params.abort_callback_user_data)) {
+                     log("%s: failed to decode\n", __func__);
+                     return -7;
+                 }
+@@ -4901,7 +4920,11 @@
+ 
+                     //WHISPER_PRINT_DEBUG("%s: decoder %d: token %d, kv_self.n %d, seek_delta %d\n", __func__, j, decoder.tokens_tmp[0], decoder.kv_self.n, decoder.seek_delta);
+ 
+-                    if (!whisper_decode_internal(*ctx, *state, decoder, decoder.tokens_tmp.data(), decoder.tokens_tmp.size(), decoder.kv_self.n, params.n_threads)) {
++                    if (!whisper_decode_internal(
++                            *ctx, *state, decoder, decoder.tokens_tmp.data(),
++                            decoder.tokens_tmp.size(), decoder.kv_self.n,
++                            params.n_threads, params.abort_callback,
++                            params.abort_callback_user_data)) {
+                         log("%s: failed to decode\n", __func__);
+                         return -8;
+                     }
+diff -ruN whispercpp-org/whisper.h whispercpp-patched/whisper.h
+--- whispercpp-org/whisper.h	2023-09-15 20:11:43.000000000 +0200
++++ whispercpp-patched/whisper.h	2023-09-20 09:39:53.992020188 +0200
+@@ -332,7 +332,13 @@
+     // Encoder begin callback
+     // If not NULL, called before the encoder starts
+     // If it returns false, the computation is aborted
+-    typedef bool (*whisper_encoder_begin_callback)(struct whisper_context * ctx, struct whisper_state * state, void * user_data);
++    typedef bool (*whisper_encoder_begin_callback)(struct whisper_context* ctx,
++                                                   struct whisper_state* state,
++                                                   void* user_data);
++
++    // Abort callback
++    // If it returns true, the computation is aborted
++    typedef bool (*whisper_abort_callback)(void* user_data);
+ 
+     // Logits filter callback
+     // Can be used to modify the logits before sampling
+@@ -426,7 +432,10 @@
+ 
+         // called each time before the encoder starts
+         whisper_encoder_begin_callback encoder_begin_callback;
+-        void * encoder_begin_callback_user_data;
++        void* encoder_begin_callback_user_data;
++
++        whisper_abort_callback abort_callback;
++        void* abort_callback_user_data;
+ 
+         // called by each decoder to filter obtained logits
+         whisper_logits_filter_callback logits_filter_callback;
