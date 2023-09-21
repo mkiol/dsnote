@@ -48,12 +48,13 @@ ApplicationWindow {
             "audio/x-flac",
             "audio/x-matroska",
             "audio/webm",
+            "audio/mp4",
             "video/mpeg",
             "video/mp4",
             "video/ogg",
             "video/x-matroska",
             "video/webm",
-            "text/*"
+            "text/plain"
         ]
 
         onTriggered: {

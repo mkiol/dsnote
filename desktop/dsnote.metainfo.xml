@@ -63,9 +63,14 @@
   <provides>
       <mediatype>audio/aac</mediatype>
       <mediatype>audio/mpeg</mediatype>
+      <mediatype>audio/x-mp3</mediatype>
       <mediatype>audio/ogg</mediatype>
+      <mediatype>audio/vorbis</mediatype>
+      <mediatype>audio/x-vorbis</mediatype>
       <mediatype>audio/wav</mediatype>
+      <mediatype>audio/x-wav</mediatype>
       <mediatype>audio/flac</mediatype>
+      <mediatype>audio/x-flac</mediatype>
       <mediatype>audio/mp4</mediatype>
       <mediatype>audio/x-matroska</mediatype>
       <mediatype>video/mpeg</mediatype>
@@ -73,6 +78,7 @@
       <mediatype>video/mp4</mediatype>
       <mediatype>video/ogg</mediatype>
       <mediatype>video/x-matroska</mediatype>
+      <mediatype>video/webm</mediatype>
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
