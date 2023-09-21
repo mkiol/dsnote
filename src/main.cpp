@@ -42,6 +42,7 @@
 #include <memory>
 #endif
 
+#include "app_server.hpp"
 #include "config.h"
 #include "dsnote_app.h"
 #include "logger.hpp"
@@ -264,8 +265,11 @@ int main(int argc, char* argv[]) {
                                 settings::instance());
     context->setContextProperty(QStringLiteral("_files_to_open"),
                                 cmd_opts.files);
-
 #ifdef USE_SFOS
+    app_server dbus_app_server;
+    context->setContextProperty(QStringLiteral("_app_server"),
+                                &dbus_app_server);
+
     view->setSource(SailfishApp::pathTo("qml/main.qml"));
     view->show();
 #else

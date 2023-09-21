@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=@info_dbus_app_service@
+Interface=@info_dbus_app_interface@
+Exec=@binary_path@ --app

@@ -43,7 +43,7 @@ class speech_config : public QObject {
 
    private:
     inline static const QString DBUS_SERVICE_NAME{
-        QStringLiteral(APP_DBUS_SERVICE)};
+        QStringLiteral(APP_DBUS_SPEECH_SERVICE)};
     inline static const QString DBUS_SERVICE_PATH{QStringLiteral("/")};
     static const int SUCCESS = 0;
     static const int FAILURE = -1;

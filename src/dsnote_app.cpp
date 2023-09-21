@@ -2213,6 +2213,17 @@ void dsnote_app::set_note(const QString text) {
     if (text.isEmpty()) set_translated_text({});
 }
 
+void dsnote_app::update_note(const QString &text, bool replace) {
+    make_undo();
+
+    if (replace) {
+        set_note(text);
+    } else {
+        set_note(insert_to_note(settings::instance()->note(), text,
+                                settings::instance()->insert_mode()));
+    }
+}
+
 void dsnote_app::make_undo() {
     auto old = can_undo_or_redu_note();
     m_prev_text = note();

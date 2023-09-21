@@ -1,11 +1,22 @@
 [Desktop Entry]
 Type=Application
-X-Nemo-Application-Type=silica-qt5
 Icon=harbour-dsnote
-Exec=harbour-dsnote --app
+Exec=harbour-dsnote --app %F
 Name=Speech Note
+MimeType=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/vorbis;audio/x-vorbis;audio/wav;audio/x-wav;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;text/*
+X-Nemo-Application-Type=silica-qt5
+X-Share-Methods=files;
+X-DBusActivatable=true
+X-Maemo-Service=org.mkiol.dsnote
+X-Maemo-Method=org.freedesktop.Application.Open
 
 [X-Sailjail]
 Sandboxing=Disabled
 OrganizationName=org.mkiol
 ApplicationName=dsnote
+ExecDBus=harbour-dsnote --app
+
+[X-Share Method files]
+Capabilities=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/vorbis;audio/x-vorbis;audio/wav;audio/x-wav;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;text/*
+SupportsMultipleFiles=yes
+

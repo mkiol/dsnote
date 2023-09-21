@@ -3,4 +3,4 @@ Type=Application
 Icon=dsnote
 Exec=dsnote %F
 Name=Speech Note
-MimeType=audio/aac;audio/mpeg;audio/ogg;audio/wav;audio/flac;audio/x-matroska;video/mpeg;video/mp4;video/ogg;video/x-matroska;text/*
+MimeType=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/vorbis;audio/x-vorbis;audio/wav;audio/x-wav;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;text/*

@@ -62,15 +62,19 @@ endif()
 set(id "dsnote")
 set(info_name "Speech Note")
 set(info_org "net.mkiol")
-set(info_dbus_service "net.mkiol.Speech")
-set(info_dbus_interface "net.mkiol.Speech")
+set(info_dbus_speech_service "net.mkiol.Speech")
+set(info_dbus_speech_interface "net.mkiol.Speech")
+set(info_dbus_app_interface "org.freedesktop.Application")
+set(info_dbus_app_path "/net/mkiol/dsnote")
 set(info_id ${id})
 set(info_binary_id ${id})
 set(info_translations_id ${id})
 if(WITH_SFOS)
     set(info_org "org.mkiol")
-    set(info_dbus_service "org.mkiol.Speech")
-    set(info_dbus_interface "org.mkiol.Speech")
+    set(info_dbus_speech_service "org.mkiol.Speech")
+    set(info_dbus_speech_interface "org.mkiol.Speech")
+    set(info_dbus_app_service "org.mkiol.dsnote")
+    set(info_dbus_app_path "/org/mkiol/dsnote")
     set(info_binary_id "harbour-dsnote")
 endif()
 set(info_author "Michal Kosciesza")
@@ -165,6 +169,8 @@ set(dsnote_lib_sources
     ${sources_dir}/dbus_speech_adaptor.h
     ${sources_dir}/dbus_speech_inf.cpp
     ${sources_dir}/dbus_speech_inf.h
+    ${sources_dir}/dbus_application_adaptor.cpp
+    ${sources_dir}/dbus_application_adaptor.h
     ${sources_dir}/dirmodel.cpp
     ${sources_dir}/dirmodel.h
     ${sources_dir}/dsnote_app.cpp
@@ -243,6 +249,8 @@ set(dsnote_lib_sources
     ${sources_dir}/media_compressor.cpp
     ${sources_dir}/mtag_tools.hpp
     ${sources_dir}/mtag_tools.cpp
+    ${sources_dir}/app_server.hpp
+    ${sources_dir}/app_server.cpp
 )
 
 configure_file(config.h.in config.h)

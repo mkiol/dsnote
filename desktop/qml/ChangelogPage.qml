@@ -36,8 +36,9 @@ DialogPage {
             Following Whisper accelerators are currently enabled:
             OpenCL (for most Nvidia cards, few AMD cards and Intel GPUs),
             CUDA (for most Nvidia cards).
-            Support for AMD ROCm is implemented as well but does not work right now due to Flatpak sandboxing isolation.
-            GPU hardware acceleration is not enabled by default. Use the option in <i>Settings</i> to turn it on.
+            Support for AMD ROCm is implemented as well but right now it doesn't work due to Flatpak sandboxing isolation.
+            GPU hardware acceleration might not work well on your system, therefore is not enabled by default.
+            Use the option in <i>Settings</i> to turn it on.
             Disable, if you observe any problems when using Speech to Text with Whisper models.</li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
@@ -53,7 +54,8 @@ DialogPage {
         <ul>
         <li>Menu options: <i>Open a text file</i> and <i>Save to a text file</i></li>
         <li>Command line option to open files. If you want to associate text, audio or video files
-            with Speech Note, now it is possible.</li>
+            with Speech Note, now it is possible. Your system may detect this new capability and
+            show Speech Note under <i>Open With</i> menu in the file manager.</li>
         <li>Improved UI colors when app is running under GNOME dark theme.</li>
         <li>Advanced settings option <i>Graphical style</i>. This option let you select any
             Qt interface style installed in your system. Changing the style might make app

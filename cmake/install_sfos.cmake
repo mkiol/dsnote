@@ -59,6 +59,9 @@ if(WITH_SYSTEMD_SERVICE)
     configure_file("${systemd_dir}/${id}.service" "${PROJECT_BINARY_DIR}/${info_binary_id}.service")
     install(FILES "${PROJECT_BINARY_DIR}/${info_binary_id}.service" DESTINATION lib/systemd/user)
 
-    configure_file("${dbus_dir}/${info_dbus_service}.service" "${PROJECT_BINARY_DIR}/${info_dbus_service}.service")
-    install(FILES "${PROJECT_BINARY_DIR}/${info_dbus_service}.service" DESTINATION "share/dbus-1/services")
+    configure_file("${dbus_dir}/${info_dbus_speech_service}.service" "${PROJECT_BINARY_DIR}/${info_dbus_speech_service}.service")
+    install(FILES "${PROJECT_BINARY_DIR}/${info_dbus_speech_service}.service" DESTINATION "share/dbus-1/services")
+
+    configure_file("${dbus_dir}/${info_dbus_app_service}.service" "${PROJECT_BINARY_DIR}/${info_dbus_app_service}.service")
+    install(FILES "${PROJECT_BINARY_DIR}/${info_dbus_app_service}.service" DESTINATION "share/dbus-1/services")
 endif()

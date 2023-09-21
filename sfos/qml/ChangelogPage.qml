@@ -40,13 +40,13 @@ Page {
             LogItem {
                 title: "Support for video files transcription"
                 description: "With 'Transcribe a file' menu option you can convert audio file or audio from video file to text. " +
-                             "Following video formats are supported: MP4, MKV, OGV."
+                             "Following video formats are supported: MP4, MKV, Ogg."
             }
 
             LogItem {
                 title: "Whisper engine update"
                 description: "Library behind Whisper engine (whisper.cpp) has been updated resulting in " +
-                             "an increase in performance. Processing time on the CPU has been reduced " +
+                             "an increase in performance. Processing time has been reduced " +
                              "by an average of 15%."
             }
 
@@ -62,8 +62,14 @@ Page {
             }
 
             LogItem {
-                title: "Update of RHVoice voice for Uzbek."
+                title: "Update of RHVoice voice for Uzbek"
                 description: "Uzbek language has been updated to most recent one."
+            }
+
+            LogItem {
+                title: "Share to Speech Note"
+                description: "You can push text, audio or video content to Speech Note using " +
+                             "share button in other apps (e.g. Notes, Gallery)."
             }
 
             SectionHeader {

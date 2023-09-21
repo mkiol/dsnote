@@ -8,6 +8,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
+import Sailfish.Share 1.0
 
 import harbour.dsnote.Settings 1.0
 import harbour.dsnote.Dsnote 1.0
@@ -18,6 +19,54 @@ ApplicationWindow {
     allowedOrientations: Orientation.All
     initialPage: mainPage
     cover: Qt.resolvedUrl("CoverPage.qml")
+
+    function handleResource(resource) {
+        console.log("share request received");
+        if (resource.type === ShareResource.FilePathType) {
+            app.open_files(resource.filePath)
+            appWin.activate()
+        } else if (resource.type === ShareResource.StringDataType) {
+            app.update_note(resource.data, false)
+            appWin.activate()
+        } else {
+            console.warn("unknown resource type:", resource.type)
+        }
+    }
+
+    ShareProvider {
+        method: "files"
+        capabilities: [
+            "audio/aac",
+            "audio/mpeg",
+            "audio/x-mp3",
+            "audio/ogg",
+            "audio/vorbis",
+            "audio/x-vorbis",
+            "audio/wav",
+            "audio/x-wav",
+            "audio/flac",
+            "audio/x-flac",
+            "audio/x-matroska",
+            "audio/webm",
+            "video/mpeg",
+            "video/mp4",
+            "video/ogg",
+            "video/x-matroska",
+            "video/webm",
+            "text/*"
+        ]
+
+        onTriggered: {
+            for(var i = 0; i < resources.length; i++)
+                handleResource(resources[i])
+        }
+    }
+
+    Connections {
+        target: _app_server
+        onActivate_requested: appWin.activate()
+        onFiles_to_open_requested: app.open_files(_files_to_open)
+    }
 
     SpeechConfig {
         id: service
@@ -35,13 +84,13 @@ ApplicationWindow {
 
             readonly property bool verticalMode: isPortrait
             readonly property bool canCancelStt: !app.another_app_connected &&
-                                       (app.state === DsnoteApp.StateTranscribingFile ||
-                                        app.state === DsnoteApp.StateListeningSingleSentence ||
-                                        app.state === DsnoteApp.StateListeningAuto ||
-                                        app.state === DsnoteApp.StateListeningManual)
+                                                 (app.state === DsnoteApp.StateTranscribingFile ||
+                                                  app.state === DsnoteApp.StateListeningSingleSentence ||
+                                                  app.state === DsnoteApp.StateListeningAuto ||
+                                                  app.state === DsnoteApp.StateListeningManual)
             readonly property bool canCancelTts: !app.another_app_connected &&
-                                        (app.state === DsnoteApp.StatePlayingSpeech ||
-                                        app.state === DsnoteApp.StateWritingSpeechToFile)
+                                                 (app.state === DsnoteApp.StatePlayingSpeech ||
+                                                  app.state === DsnoteApp.StateWritingSpeechToFile)
             readonly property bool panelAlwaysOpen: notepad.enabled && (app.stt_configured || app.tts_configured)
 
             allowedOrientations: Orientation.All
@@ -143,7 +192,7 @@ ApplicationWindow {
             HintLabel {
                 enabled: _settings.hint_translator
                 text: qsTr("To switch between %1 and %2 modes use option in pull-down menu.")
-                        .arg("<i>" + qsTr("Notepad") + "</i>").arg("<i>" + qsTr("Translator") + "</i>")
+                .arg("<i>" + qsTr("Notepad") + "</i>").arg("<i>" + qsTr("Translator") + "</i>")
                 onClicked: _settings.hint_translator = false
             }
 
@@ -180,6 +229,7 @@ ApplicationWindow {
                 onNote_copied: toast.show(qsTr("Copied!"))
                 onTranscribe_done: toast.show(qsTr("File transcription is complete!"))
                 onSpeech_to_file_done: toast.show(qsTr("Speech saved to audio file!"))
+                Component.onCompleted: app.open_files(_files_to_open)
                 onError: {
                     switch (type) {
                     case DsnoteApp.ErrorFileSource:
@@ -196,6 +246,12 @@ ApplicationWindow {
                         break;
                     case DsnoteApp.ErrorMntEngine:
                         toast.show(qsTr("Error: Translation engine initialization has failed."))
+                        break;
+                    case DsnoteApp.ErrorSaveNoteToFile:
+                        toast.show(qsTr("Error: Couldn't save to the file."))
+                        break;
+                    case DsnoteApp.ErrorLoadNoteFromFile:
+                        toast.show(qsTr("Error: Couldn't open the file."))
                         break;
                     default:
                         toast.show(qsTr("Error: An unknown problem has occurred."))

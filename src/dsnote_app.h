@@ -206,6 +206,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE bool file_exists(const QUrl &file) const;
     Q_INVOKABLE void undo_or_redu_note();
     Q_INVOKABLE void make_undo();
+    Q_INVOKABLE void update_note(const QString &text, bool replace);
 
    signals:
     void active_stt_model_changed();
@@ -246,7 +247,7 @@ class dsnote_app : public QObject {
 
    private:
     inline static const QString DBUS_SERVICE_NAME{
-        QStringLiteral(APP_DBUS_SERVICE)};
+        QStringLiteral(APP_DBUS_SPEECH_SERVICE)};
     inline static const QString DBUS_SERVICE_PATH{QStringLiteral("/")};
     static const int SUCCESS = 0;
     static const int FAILURE = -1;

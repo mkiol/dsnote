@@ -80,6 +80,7 @@ systemctl-user daemon-reload >/dev/null 2>&1 || :
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_datadir}/dbus-1/services/org.mkiol.Speech.service
+%{_datadir}/dbus-1/services/org.mkiol.dsnote.service
 %{_userunitdir}/%{name}.service
 # >> files
 # << files
