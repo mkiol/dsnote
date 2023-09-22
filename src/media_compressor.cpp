@@ -17,6 +17,7 @@
 #include <stdexcept>
 
 #include "logger.hpp"
+#include "text_tools.hpp"
 
 extern "C" {
 #include <libavutil/error.h>
@@ -156,12 +157,10 @@ media_compressor::format_t media_compressor::format_from_filename(
         return format_t::unknown;
 
     auto ext = filename.substr(idx + 1);
-    std::string lext;
-    std::transform(ext.cbegin(), ext.cend(), std::back_inserter(lext),
-                   [](unsigned char c) { return std::tolower(c); });
+    text_tools::to_lower_case(ext);
 
-    if (lext == "mp3") return format_t::mp3;
-    if (lext == "ogg" || lext == "oga") return format_t::ogg;
+    if (ext == "mp3") return format_t::mp3;
+    if (ext == "ogg" || ext == "oga") return format_t::ogg;
 
     return format_t::unknown;
 }

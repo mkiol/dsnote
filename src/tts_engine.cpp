@@ -237,9 +237,8 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
     std::vector<tts_engine::task_t> tasks;
 
     if (split) {
-        auto engine = m_config.options.find('a') != std::string::npos
-                          ? text_tools::engine_t::astrunc
-                          : text_tools::engine_t::ssplit;
+        auto engine = m_config.has_option('a') ? text_tools::engine_t::astrunc
+                                               : text_tools::engine_t::ssplit;
         auto [parts, _] =
             text_tools::split(text, engine, m_config.lang, m_config.nb_data);
         if (!parts.empty()) {
@@ -448,26 +447,16 @@ void tts_engine::process() {
             auto output_file = path_to_output_file(task.text);
 
             if (!file_exists(output_file)) {
-                auto lower_needed =
-                    m_config.options.find('l') != std::string::npos;
-                if (lower_needed) {
-                    std::string lower_text;
-                    std::transform(
-                        task.text.cbegin(), task.text.cend(),
-                        std::back_inserter(lower_text),
-                        [](unsigned char c) { return std::tolower(c); });
-                    if (!encode_speech_impl(lower_text, output_file)) {
-                        unlink(output_file.c_str());
-                        if (m_call_backs.error) m_call_backs.error();
-                        break;
-                    }
-                } else {
-                    if (!encode_speech_impl(task.text, output_file)) {
-                        unlink(output_file.c_str());
-                        if (m_call_backs.error) m_call_backs.error();
-                        break;
-                    }
+                auto new_text = text_tools::preprocess(
+                    task.text, m_config.options, m_config.lang_code,
+                    m_config.uromanpl_path);
+
+                if (!encode_speech_impl(new_text, output_file)) {
+                    unlink(output_file.c_str());
+                    if (m_call_backs.error) m_call_backs.error();
+                    break;
                 }
+
                 if (!model_supports_speed()) apply_speed(output_file);
             }
 

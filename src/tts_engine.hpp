@@ -85,6 +85,9 @@ class tts_engine {
         std::string lang_code;
         std::string uromanpl_path;
         speech_speed_t speech_speed = speech_speed_t::normal;
+        inline bool has_option(char c) const {
+            return options.find(c) != std::string::npos;
+        }
     };
     friend std::ostream& operator<<(std::ostream& os, const config_t& config); 
 

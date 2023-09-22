@@ -22,6 +22,10 @@ struct break_line_info {
 std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
     const std::string& text, engine_t engine, const std::string& lang,
     const std::string& nb_data = {});
+void to_lower_case(std::string& text);
+std::string preprocess(const std::string& text, const std::string& options,
+                       const std::string& lang_code,
+                       const std::string& uromanpl_path);
 }  // namespace text_tools
 
 #endif  // TEXT_TOOLS_H
