@@ -69,7 +69,7 @@ Page {
             LogItem {
                 title: "Share to Speech Note"
                 description: "You can push text, audio or video content to Speech Note using " +
-                             "share button in other apps (e.g. Notes, Gallery)."
+                             "share button in other apps (e.g. Notes, Gallery, Audio recorder, Browser)."
             }
 
             SectionHeader {
