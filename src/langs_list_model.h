@@ -41,6 +41,7 @@ class LangsListModel : public SelectableItemModel {
     static ListItem *makeItem(const models_manager::lang_t &lang);
     size_t firstChangedItemIdx(const QList<ListItem *> &oldItems,
                                const QList<ListItem *> &newItems) override;
+    void updateItem(ListItem *oldItem, const ListItem *newItem) override;
     inline bool downloading() const { return m_downloading; }
     void updateDownloading(const std::vector<models_manager::lang_t> &langs);
 };
@@ -67,6 +68,7 @@ class LangsListItem : public SelectableItem {
     inline QString name_en() const { return m_name_en; }
     inline bool available() const { return m_available; }
     inline bool downloading() const { return m_downloading; }
+    void update(const LangsListItem *item);
 
    private:
     QString m_id;

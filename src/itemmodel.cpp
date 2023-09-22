@@ -52,23 +52,31 @@ size_t ItemModel::firstChangedItemIdx(
     return 0;
 }
 
+void ItemModel::updateItem([[maybe_unused]] ListItem *oldItem,
+                           [[maybe_unused]] const ListItem *newItem) {}
+
 void ItemModel::workerDone() {
-    auto worker = qobject_cast<ItemWorker *>(sender());
+    auto *worker = qobject_cast<ItemWorker *>(sender());
+
     if (worker) {
-        const int old_l = m_list.length();
+        auto min_size = std::min(m_list.size(), worker->items.size());
 
-        auto idx = firstChangedItemIdx(m_list, worker->items);
+        int updated_count = 0;
+        for (; updated_count < min_size; ++updated_count) {
+            auto *old_item = readRow(updated_count);
+            auto *new_item = worker->items.at(updated_count);
 
-        if (m_list.length() != 0) removeRows(idx, rowCount() - idx);
+            if (old_item->id() != new_item->id()) break;
 
-        if (!worker->items.isEmpty() && idx <= worker->items.size()) {
-            appendRows(worker->items.mid(idx));
-            for (auto *item : worker->items.mid(0, idx)) {
-                delete item;
-            }
+            updateItem(old_item, new_item);
+            delete new_item;
         }
 
-        if (old_l != m_list.length()) emit countChanged();
+        if (updated_count < m_list.size())
+            removeRows(updated_count, m_list.size() - updated_count);
+
+        if (updated_count < worker->items.size())
+            appendRows(worker->items.mid(updated_count));
 
         m_worker.reset(nullptr);
     }
@@ -90,7 +98,7 @@ void ItemModel::setBusy(bool busy) {
 void SelectableItem::setSelected(bool value) {
     if (m_selected != value) {
         m_selected = value;
-        emit dataChanged();
+        emit itemDataChanged();
     }
 }
 
@@ -141,10 +149,7 @@ void SelectableItemModel::setFilterNoUpdate(const QString &filter) {
 const QString &SelectableItemModel::getFilter() const { return m_filter; }
 
 void SelectableItemModel::setSelected(int index, bool value) {
-    if (index >= m_list.length()) {
-        qWarning() << "Index is invalid";
-        return;
-    }
+    if (index >= m_list.length()) return;
 
     auto item = qobject_cast<SelectableItem *>(m_list.at(index));
 

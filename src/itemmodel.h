@@ -60,6 +60,7 @@ class ItemModel : public ListModel {
     virtual void clear();
     virtual size_t firstChangedItemIdx(const QList<ListItem *> &oldItems,
                                        const QList<ListItem *> &newItems);
+    virtual void updateItem(ListItem *oldItem, const ListItem *newItem);
     void setBusy(bool busy);
 
    protected slots:

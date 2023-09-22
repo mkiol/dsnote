@@ -54,6 +54,13 @@ size_t ModelsListModel::firstChangedItemIdx(const QList<ListItem *> &oldItems,
     return idx;
 }
 
+void ModelsListModel::updateItem(ListItem *oldItem, const ListItem *newItem) {
+    auto *oi = qobject_cast<ModelsListItem *>(oldItem);
+    const auto *ni = qobject_cast<const ModelsListItem *>(newItem);
+
+    oi->update(ni);
+}
+
 ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
     auto role = [&] {
         switch (models_manager::role_of_engine(model.engine)) {
@@ -210,7 +217,17 @@ QVariant ModelsListItem::data(int role) const {
             return downloading();
         case ProgressRole:
             return progress();
-        default:
-            return {};
+    }
+
+    return {};
+}
+
+void ModelsListItem::update(const ModelsListItem *item) {
+    if (m_downloading != item->downloading() ||
+        m_available != item->available() || m_progress != item->progress()) {
+        m_downloading = item->downloading();
+        m_available = item->available();
+        m_progress = item->progress();
+        emit itemDataChanged();
     }
 }

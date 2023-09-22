@@ -59,6 +59,7 @@ class ModelsListModel : public SelectableItemModel {
     static ListItem *makeItem(const models_manager::model_t &model);
     size_t firstChangedItemIdx(const QList<ListItem *> &oldItems,
                                const QList<ListItem *> &newItems) override;
+    void updateItem(ListItem *oldItem, const ListItem *newItem) override;
     inline bool downloading() const { return m_downloading; }
     inline QString lang() const { return m_lang; }
     inline ModelRoleFilter roleFilter() const { return m_roleFilter; }
@@ -100,6 +101,7 @@ class ModelsListItem : public SelectableItem {
     inline bool default_for_lang() const { return m_default_for_lang; }
     inline bool downloading() const { return m_downloading; }
     inline double progress() const { return m_progress; }
+    void update(const ModelsListItem *item);
 
    private:
     QString m_id;

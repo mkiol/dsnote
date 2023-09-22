@@ -47,11 +47,19 @@ size_t LangsListModel::firstChangedItemIdx(const QList<ListItem *> &oldItems,
     return idx;
 }
 
+void LangsListModel::updateItem(ListItem *oldItem, const ListItem *newItem) {
+    auto *oi = qobject_cast<LangsListItem *>(oldItem);
+    const auto *ni = qobject_cast<const LangsListItem *>(newItem);
+
+    oi->update(ni);
+}
+
 ListItem *LangsListModel::makeItem(const models_manager::lang_t &lang) {
     return new LangsListItem{
         /*id=*/lang.id,
         /*name=*/QStringLiteral("%1 / %2").arg(lang.name, lang.id),
-        /*name_en=*/lang.name_en, /*available=*/lang.available,
+        /*name_en=*/lang.name_en,
+        /*available=*/lang.available,
         /*downloading=*/lang.downloading};
 }
 
@@ -125,7 +133,16 @@ QVariant LangsListItem::data(int role) const {
             return available();
         case DownloadingRole:
             return downloading();
-        default:
-            return {};
+    }
+
+    return {};
+}
+
+void LangsListItem::update(const LangsListItem *item) {
+    if (m_downloading != item->downloading() ||
+        m_available != item->available()) {
+        m_downloading = item->downloading();
+        m_available = item->available();
+        emit itemDataChanged();
     }
 }
