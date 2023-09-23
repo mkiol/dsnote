@@ -209,6 +209,7 @@ sfdk package
 - [LAME](https://lame.sourceforge.io/)
 - [Vorbis](https://xiph.org/vorbis/)
 - [TagLib](https://taglib.org/)
+- [libnumbertext](https://github.com/Numbertext/libnumbertext)
 
 ## License
 
@@ -242,6 +243,7 @@ sfdk package
 - **Vorbis**, released under [this license](https://gitlab.xiph.org/xiph/vorbis/-/raw/master/COPYING?ref_type=heads)
 - **TagLib**, released under the [GNU Lesser General Public License (LGPL)](https://raw.githubusercontent.com/taglib/taglib/master/COPYING.LGPL) 
               and [Mozilla Public License (MPL)](https://raw.githubusercontent.com/taglib/taglib/master/COPYING.MPL)
+- **libnumbertext**, released under the [BSD License](https://raw.githubusercontent.com/Numbertext/libnumbertext/master/COPYING)
 
 The files in the directory `nonbreaking_prefixes` were copied from 
 [mosesdecoder](https://github.com/moses-smt/mosesdecoder) project and distributed under the

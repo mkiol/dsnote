@@ -92,7 +92,7 @@ set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashin
 Åke Engelbrektson · L'Africain · Albano Battistella · locness3")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · eSpeak NG · Bergamot Translator · \
-Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis · TagLib")
+Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis · TagLib · libnumbertext")
 
 project(${id} VERSION 4.2.0)
 
