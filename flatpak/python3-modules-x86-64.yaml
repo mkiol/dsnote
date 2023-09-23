@@ -511,4 +511,23 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/14/73/424ef49a4bb7bbc9c16f3fc66926cb3018699c69146cd130642c76ff2d97/llvmlite-0.40.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
         sha256: bbd5e82cc990e5a3e343a3bf855c26fdfe3bfae55225f00efd01c05bbda79918
-
+  - name: mecab
+    buildsystem: simple
+    cleanup:
+      - "/bin"
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+        --prefix=${FLATPAK_DEST} "mecab-python3==1.0.6" --no-build-isolation
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/94/1a/86a50a8b295d50d26567269fdc5c368c76d62e8363bc23ace0aa64aac5d2/mecab_python3-1.0.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: 30177272efa6ba26909b540e3816659c9f93ee49a5cc2b8ea47c17eff05c686b
+  - name: unidic
+    buildsystem: simple
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+        --prefix=${FLATPAK_DEST} "unidic-lite==1.0.8" --no-build-isolation
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/55/2b/8cf7514cb57d028abcef625afa847d60ff1ffbf0049c36b78faa7c35046f/unidic-lite-1.0.8.tar.gz
+        sha256: db9d4572d9fdd4d00a97949d4b0741ec480ee05a7e7e2e32f547500dae27b245

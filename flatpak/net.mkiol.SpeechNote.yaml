@@ -411,8 +411,6 @@ modules:
       - type: patch
         path: ../patches/bergamot.patch
 
-  - python3-modules-x86-64.yaml
-
   - name: perl
     only-arches:
       - x86_64
@@ -767,6 +765,8 @@ modules:
       - type: shell
         commands:
           - "autoreconf -fi"
+
+  - python3-modules-x86-64.yaml
 
   - name: dsnote
     buildsystem: cmake-ninja
