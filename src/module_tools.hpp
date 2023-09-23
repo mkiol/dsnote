@@ -12,6 +12,7 @@
 
 namespace module_tools {
 QString path_in_share_dir(const QString& path);
+QString path_to_share_dir_for_path(const QString& path);
 bool unpack_module(const QString& name);
 [[nodiscard]] bool module_unpacked(const QString& name);
 bool init_module(const QString& name);

@@ -1091,10 +1091,14 @@ QString speech_service::restart_tts_engine(
             auto l = model_config->tts->model_id.split('_');
             if (!l.isEmpty()) {
                 config.lang_code = l.last().toStdString();
-                config.uromanpl_path =
-                    module_tools::path_in_share_dir("uroman").toStdString() +
-                    "/bin/uroman.pl";
+                config.share_dir = module_tools::path_to_share_dir_for_path(
+                                       "uroman/bin/uroman.pl")
+                                       .toStdString();
             }
+        } else {
+            config.share_dir =
+                module_tools::path_to_share_dir_for_path("/libnumbertext")
+                    .toStdString();
         }
 
         QFile nb_file{QStringLiteral(":/nonbreaking_prefixes/%1.txt")

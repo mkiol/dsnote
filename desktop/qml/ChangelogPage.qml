@@ -49,6 +49,7 @@ DialogPage {
         <li>New models from Massively Multilingual Speech (MMS) project: Hungarian, Catalan, German, Spanish, Romanian, Russian and Swedish.
             If you would like any other MMS model to be included, please let us know.</li>
         <li>Update of RHVoice voice for Uzbek.</li>
+        <li>Fix: Many Coqui models couldn't read the numbers or the reading wasn't correct.</li>
         </ul>
         <p>" + qsTr("User Interface") + ":</p>
         <ul>

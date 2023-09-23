@@ -38,7 +38,8 @@ std::ostream& operator<<(std::ostream& os, const tts_engine::config_t& config) {
        << ", model-files=[" << config.model_files << "]"
        << ", speaker=" << config.speaker << ", options=" << config.options
        << ", lang_code=" << config.lang_code
-       << ", uroman-path=" << config.uromanpl_path
+       << ", share-dir=" << config.share_dir
+       << ", cache-dir=" << config.cache_dir << ", data-dir=" << config.data_dir
        << ", speech-speed=" << config.speech_speed;
     return os;
 }
@@ -448,8 +449,8 @@ void tts_engine::process() {
 
             if (!file_exists(output_file)) {
                 auto new_text = text_tools::preprocess(
-                    task.text, m_config.options, m_config.lang_code,
-                    m_config.uromanpl_path);
+                    task.text, m_config.options, m_config.lang,
+                    m_config.lang_code, m_config.share_dir);
 
                 if (!encode_speech_impl(new_text, output_file)) {
                     unlink(output_file.c_str());

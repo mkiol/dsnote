@@ -39,6 +39,7 @@ option(BUILD_UROMAN "download and install uroman lib" ON) # only for x86_64
 option(BUILD_RUBBERBAND "download rubberband lib, build and link statically" ON) # only for x86_64
 option(BUILD_FFMPEG "download ffmpeg libs, build and link statically" ON)
 option(BUILD_TAGLIB "download taglib, build and link statically" ON)
+option(BUILD_LIBNUMBERTEXT "download libnumbertext, build and link statically" ON)
 
 if(${WITH_DESKTOP} AND ${WITH_SFOS})
     message(FATAL_ERROR "options WITH_DESKTOP and WITH_SFOS cannot be set together")
@@ -86,7 +87,7 @@ set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
 set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
-set(info_conf_version "32")
+set(info_conf_version "33")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · locness3")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
@@ -566,6 +567,14 @@ else()
     pkg_search_module(taglib REQUIRED taglib)
     list(APPEND deps_libs ${taglib_LIBRARIES})
     list(APPEND includes ${taglib_INCLUDE_DIRS})
+endif()
+
+if(BUILD_LIBNUMBERTEXT)
+    include(${cmake_path}/libnumbertext.cmake)
+else()
+    pkg_search_module(libnumbertext REQUIRED libnumbertext)
+    list(APPEND deps_libs ${libnumbertext_LIBRARIES})
+    list(APPEND includes ${libnumbertext_INCLUDE_DIRS})
 endif()
 
 if(WITH_SFOS)

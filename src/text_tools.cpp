@@ -12,6 +12,8 @@
 #include <unistd.h>
 
 #include <algorithm>
+#include <cwctype>
+#include <libnumbertext/Numbertext.hxx>
 #include <string_view>
 
 #include "astrunc/astrunc.h"
@@ -211,9 +213,82 @@ std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
     return parts;
 }
 
+// source: https://stackoverflow.com/a/148766
+static std::string wchar_to_UTF8(const wchar_t* in) {
+    std::string out;
+    unsigned int codepoint = 0;
+    for (; *in != 0; ++in) {
+        if (*in >= 0xd800 && *in <= 0xdbff)
+            codepoint = ((*in - 0xd800) << 10) + 0x10000;
+        else {
+            if (*in >= 0xdc00 && *in <= 0xdfff)
+                codepoint |= *in - 0xdc00;
+            else
+                codepoint = *in;
+
+            if (codepoint <= 0x7f)
+                out.append(1, static_cast<char>(codepoint));
+            else if (codepoint <= 0x7ff) {
+                out.append(1,
+                           static_cast<char>(0xc0 | ((codepoint >> 6) & 0x1f)));
+                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
+            } else if (codepoint <= 0xffff) {
+                out.append(
+                    1, static_cast<char>(0xe0 | ((codepoint >> 12) & 0x0f)));
+                out.append(1,
+                           static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
+                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
+            } else {
+                out.append(
+                    1, static_cast<char>(0xf0 | ((codepoint >> 18) & 0x07)));
+                out.append(
+                    1, static_cast<char>(0x80 | ((codepoint >> 12) & 0x3f)));
+                out.append(1,
+                           static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
+                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
+            }
+            codepoint = 0;
+        }
+    }
+    return out;
+}
+
+// source: https://stackoverflow.com/a/148766
+static std::wstring UTF8_to_wchar(const char* in) {
+    std::wstring out;
+    unsigned int codepoint;
+    while (*in != 0) {
+        unsigned char ch = static_cast<unsigned char>(*in);
+        if (ch <= 0x7f)
+            codepoint = ch;
+        else if (ch <= 0xbf)
+            codepoint = (codepoint << 6) | (ch & 0x3f);
+        else if (ch <= 0xdf)
+            codepoint = ch & 0x1f;
+        else if (ch <= 0xef)
+            codepoint = ch & 0x0f;
+        else
+            codepoint = ch & 0x07;
+        ++in;
+        if (((*in & 0xc0) != 0x80) && (codepoint <= 0x10ffff)) {
+            if (sizeof(wchar_t) > 2)
+                out.append(1, static_cast<wchar_t>(codepoint));
+            else if (codepoint > 0xffff) {
+                codepoint -= 0x10000;
+                out.append(1, static_cast<wchar_t>(0xd800 + (codepoint >> 10)));
+                out.append(1,
+                           static_cast<wchar_t>(0xdc00 + (codepoint & 0x03ff)));
+            } else if (codepoint < 0xd800 || codepoint >= 0xe000)
+                out.append(1, static_cast<wchar_t>(codepoint));
+        }
+    }
+    return out;
+}
+
 void to_lower_case(std::string& text) {
-    std::transform(text.cbegin(), text.cend(), text.begin(),
-                   [](unsigned char c) { return std::tolower(c); });
+    auto wtext = UTF8_to_wchar(text.c_str());
+    std::transform(wtext.cbegin(), wtext.cend(), wtext.begin(), std::towlower);
+    text.assign(wchar_to_UTF8(wtext.c_str()));
 }
 
 // source: https://stackoverflow.com/a/64359731/7767358
@@ -243,16 +318,17 @@ static std::pair<FILE*, FILE*> popen2(const char* __command) {
     }
 }
 
-std::string uroman(const std::string& text, const std::string& lang_code,
-                   const std::string& uromanpl_path) {
+void uroman(std::string& text, const std::string& lang_code,
+            const std::string& prefix_path) {
     auto [p_stdin, p_stdout] =
-        popen2(fmt::format("perl {} -l {}", uromanpl_path, lang_code).c_str());
+        popen2(fmt::format("perl {}/uroman/bin/uroman.pl -l {}", prefix_path,
+                           lang_code)
+                   .c_str());
 
     std::string result;
 
     if (p_stdin == nullptr || p_stdout == nullptr) {
-        LOGE("popen error");
-        return result;
+        LOGE("uroman popen error");
     }
 
     fwrite(text.c_str(), 1, text.size(), p_stdin);
@@ -261,7 +337,54 @@ std::string uroman(const std::string& text, const std::string& lang_code,
     char buf[1024];
     while (fgets(buf, 1024, p_stdout)) result.append(buf);
 
-    return result;
+    if (result.empty()) {
+        LOGW("uroman result is empty");
+    } else {
+        text.assign(result);
+    }
+}
+
+void numbers_to_words(std::string& text, const std::string& lang,
+                      const std::string& prefix_path) {
+    Numbertext nt{};
+    nt.set_prefix(prefix_path + "/libnumbertext/");
+
+    auto to_words = [&](std::string&& word) {
+        auto trailer_idx = word.find_last_not_of(".,");
+        if (trailer_idx == std::string::npos) return word;
+
+        auto trailer =
+            trailer_idx < word.size() - 1 ? word.substr(trailer_idx + 1) : "";
+        if (!trailer.empty()) word.resize(trailer_idx + 1);
+
+        if (nt.numbertext(word, lang)) {
+            word.append(trailer + ' ');
+        } else {
+            LOGW("can't convert number to words: " << word);
+            word.append(trailer);
+        }
+        return word;
+    };
+
+    std::size_t start = 0, end = 0;
+    const char digits[] = "0123456789.,";
+    while (true) {
+        start = text.find_first_of(digits, end);
+
+        if (start == std::string::npos) break;
+
+        end = text.find_first_not_of(digits, start);
+
+        if (end == std::string::npos) {
+            auto words = to_words(text.substr(start));
+            text.replace(start, text.size() - start, words);
+            break;
+        } else {
+            auto words = to_words(text.substr(start, end - start));
+            text.replace(start, end - start, words);
+            end += words.size() - (end - start);
+        }
+    }
 }
 
 static bool has_option(char c, const std::string& options) {
@@ -269,21 +392,28 @@ static bool has_option(char c, const std::string& options) {
 }
 
 std::string preprocess(const std::string& text, const std::string& options,
-                       const std::string& lang_code,
-                       const std::string& uromanpl_path) {
-    std::string new_text;
+                       const std::string& lang, const std::string& lang_code,
+                       const std::string& prefix_path) {
+    std::string new_text{text};
 
-    if (has_option('u', options)) {
+    if (has_option('n', options)) {
+        LOGD("numbers-to-words pre-processing needed");
+        numbers_to_words(new_text, lang, prefix_path);
+    }
+
+    if (has_option('r', options)) {
         LOGD("uroman pre-processing needed");
-        new_text = uroman(text, lang_code, uromanpl_path);
-    } else {
-        new_text.assign(text);
+        uroman(new_text, lang_code, prefix_path);
     }
 
     if (has_option('l', options)) {
         LOGD("to-lower pre-processing needed");
         to_lower_case(new_text);
     }
+
+#ifdef DEBUG
+    LOGD("text after pre-processing: " << new_text);
+#endif
 
     return new_text;
 }

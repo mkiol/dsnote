@@ -6353,6 +6353,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/eng.tar.gz"
             ],
+            "options": "n",
             "size": "134859962"
         },
         {
@@ -6366,6 +6367,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/jam.tar.gz"
             ],
+            "options": "n",
             "size": "134875189"
         },
         {
@@ -6373,13 +6375,13 @@
             "model_id": "am_coqui_fairseq_amh",
             "engine": "tts_coqui",
             "lang_id": "am",
-            "options": "r",
             "checksum": "e75d9ae2",
             "checksum_quick": "fa0ee4e8",
             "comp": "targz",
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/amh.tar.gz"
             ],
+            "options": "rn",
             "size": "134816378"
         },
         {
@@ -6393,6 +6395,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/ara.tar.gz"
             ],
+            "options": "n",
             "size": "134871646"
         },
         {
@@ -6406,6 +6409,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--bg--cv--vits.zip"
             ],
+            "options": "n",
             "size": "100836154"
         },
         {
@@ -6419,6 +6423,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/bul.tar.gz"
             ],
+            "options": "n",
             "size": "134838761"
         },
         {
@@ -6432,6 +6437,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--cs--cv--vits.zip"
             ],
+            "options": "n",
             "size": "100854456"
         },
         {
@@ -6445,6 +6451,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--da--cv--vits.zip"
             ],
+            "options": "n",
             "size": "100854642"
         },
         {
@@ -6458,6 +6465,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--et--cv--vits.zip"
             ],
+            "options": "n",
             "size": "100861236"
         },
         {
@@ -6471,6 +6479,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--ga--cv--vits.zip"
             ],
+            "options": "n",
             "size": "100827994"
         },
         {
@@ -6484,6 +6493,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--es--css10--vits.zip"
             ],
+            "options": "n",
             "size": "100893027"
         },
         {
@@ -6518,6 +6528,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/spa.tar.gz"
             ],
+            "options": "n",
             "size": "134860496"
         },
         {
@@ -6531,6 +6542,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--fr--css10--vits.zip"
             ],
+            "options": "n",
             "size": "100821187"
         },
         {
@@ -6544,6 +6556,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--uk--mai--vits.zip"
             ],
+            "options": "n",
             "size": "100773001"
         },
         {
@@ -6565,13 +6578,13 @@
             "model_id": "zh_coqui_fairseq_hak",
             "engine": "tts_coqui",
             "lang_id": "zh",
-            "options": "a",
             "checksum": "2012ade6",
             "checksum_quick": "d872b3d7",
             "comp": "targz",
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/hak.tar.gz"
             ],
+            "options": "an",
             "size": "134881386"
         },
         {
@@ -6579,13 +6592,13 @@
             "model_id": "zh_coqui_fairseq_nan",
             "engine": "tts_coqui",
             "lang_id": "zh",
-            "options": "a",
             "checksum": "d9a50615",
             "checksum_quick": "c0af74c1",
             "comp": "targz",
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/nan.tar.gz"
             ],
+            "options": "an",
             "size": "134880972"
         },
         {
@@ -6620,6 +6633,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--nl--css10--vits.zip"
             ],
+            "options": "n",
             "size": "100941903"
         },
         {
@@ -6646,6 +6660,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--de--css10--vits.zip"
             ],
+            "options": "n",
             "size": "100932296"
         },
         {
@@ -6659,6 +6674,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/deu.tar.gz"
             ],
+            "options": "n",
             "size": "134859841"
         },
         {
@@ -6672,6 +6688,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--el--cv--vits.zip"
             ],
+            "options": "n",
             "size": "100857273"
         },
         {
@@ -6685,6 +6702,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/ell.tar.gz"
             ],
+            "options": "n",
             "size": "134888550"
         },
         {
@@ -6698,6 +6716,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/grc.tar.gz"
             ],
+            "options": "n",
             "size": "134897188"
         },
         {
@@ -6711,6 +6730,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/eus.tar.gz"
             ],
+            "options": "n",
             "size": "134841288"
         },
         {
@@ -6718,13 +6738,13 @@
             "model_id": "hi_coqui_fairseq_hin",
             "engine": "tts_coqui",
             "lang_id": "hi",
-            "options": "a",
             "checksum": "42ec4372",
             "checksum_quick": "337af12d",
             "comp": "targz",
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/hin.tar.gz"
             ],
+            "options": "an",
             "size": "134894586"
         },
         {
@@ -6738,6 +6758,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/ind.tar.gz"
             ],
+            "options": "n",
             "size": "134876610"
         },
         {
@@ -6751,6 +6772,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/isl.tar.gz"
             ],
+            "options": "n",
             "size": "134839016"
         },
         {
@@ -6816,6 +6838,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--hu--css10--vits.zip"
             ],
+            "options": "n",
             "size": "100920014"
         },
         {
@@ -6829,6 +6852,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/hun.tar.gz"
             ],
+            "options": "n",
             "size": "134839047"
         },
         {
@@ -6842,6 +6866,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--hr--cv--vits.zip"
             ],
+            "options": "n",
             "size": "100863115"
         },
         {
@@ -6855,6 +6880,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/kaz.tar.gz"
             ],
+            "options": "n",
             "size": "134866072"
         },
         {
@@ -6862,13 +6888,13 @@
             "model_id": "ko_coqui_fairseq_kor",
             "engine": "tts_coqui",
             "lang_id": "ko",
-            "options": "r",
             "checksum": "8a01d151",
             "checksum_quick": "19a6025",
             "comp": "targz",
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/kor.tar.gz"
             ],
+            "options": "rn",
             "size": "134854730"
         },
         {
@@ -6882,6 +6908,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/lat.tar.gz"
             ],
+            "options": "n",
             "size": "134858503"
         },
         {
@@ -6895,6 +6922,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--lt--cv--vits.zip"
             ],
+            "options": "n",
             "size": "100842955"
         },
         {
@@ -6908,6 +6936,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--lv--cv--vits.zip"
             ],
+            "options": "n",
             "size": "100833830"
         },
         {
@@ -6921,6 +6950,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/lav.tar.gz"
             ],
+            "options": "n",
             "size": "134868094"
         },
         {
@@ -6934,6 +6964,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/mon.tar.gz"
             ],
+            "options": "n",
             "size": "134873326"
         },
         {
@@ -6947,6 +6978,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/zlm.tar.gz"
             ],
+            "options": "n",
             "size": "134865938"
         },
         {
@@ -6960,6 +6992,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--mt--cv--vits.zip"
             ],
+            "options": "n",
             "size": "100856937"
         },
         {
@@ -6973,6 +7006,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--fi--css10--vits.zip"
             ],
+            "options": "n",
             "size": "100912464"
         },
         {
@@ -6986,6 +7020,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--pt--cv--vits.zip"
             ],
+            "options": "n",
             "size": "100828501"
         },
         {
@@ -6999,6 +7034,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/por.tar.gz"
             ],
+            "options": "n",
             "size": "134853594"
         },
         {
@@ -7012,6 +7048,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--ro--cv--vits.zip"
             ],
+            "options": "n",
             "size": "100852078"
         },
         {
@@ -7025,6 +7062,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/ron.tar.gz"
             ],
+            "options": "n",
             "size": "134866051"
         },
         {
@@ -7038,6 +7076,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/rus.tar.gz"
             ],
+            "options": "n",
             "size": "134877023"
         },
         {
@@ -7051,6 +7090,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--sk--cv--vits.zip"
             ],
+            "options": "n",
             "size": "100845710"
         },
         {
@@ -7064,6 +7104,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/sqi.tar.gz"
             ],
+            "options": "n",
             "size": "134865248"
         },
         {
@@ -7077,6 +7118,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--sv--cv--vits.zip"
             ],
+            "options": "n",
             "size": "100855231"
         },
         {
@@ -7090,6 +7132,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/swe.tar.gz"
             ],
+            "options": "n",
             "size": "134861242"
         },
         {
@@ -7103,6 +7146,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/swh.tar.gz"
             ],
+            "options": "n",
             "size": "134866127"
         },
         {
@@ -7110,13 +7154,13 @@
             "model_id": "th_coqui_fairseq_tha",
             "engine": "tts_coqui",
             "lang_id": "th",
-            "options": "a",
             "checksum": "6881d7f6",
             "checksum_quick": "3f323a47",
             "comp": "targz",
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/tha.tar.gz"
             ],
+            "options": "an",
             "size": "134895489"
         },
         {
@@ -7130,6 +7174,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/tgl.tar.gz"
             ],
+            "options": "n",
             "size": "134878211"
         },
         {
@@ -7143,6 +7188,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/uzb-script_cyrillic.tar.gz"
             ],
+            "options": "n",
             "size": "134879575"
         },
         {
@@ -7156,6 +7202,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/vie.tar.gz"
             ],
+            "options": "n",
             "size": "134900282"
         },
         {
@@ -7169,6 +7216,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/tat.tar.gz"
             ],
+            "options": "n",
             "size": "134870686"
         },
         {
@@ -7176,7 +7224,6 @@
             "model_id": "tr_coqui_glow_cv",
             "engine": "tts_coqui",
             "lang_id": "tr",
-            "options": "l",
             "checksum": "ce7bce5e",
             "checksum_quick": "16404d53",
             "comp": "zip",
@@ -7190,7 +7237,8 @@
             "vocoder_urls": [
                 "https://coqui.gateway.scarf.sh/v0.6.1_models/vocoder_models--tr--common-voice--hifigan.zip"
             ],
-            "vocoder_size": "1016387791"
+            "vocoder_size": "1016387791",
+            "options": "ln"
         },
         {
             "name": "Türkçe (Coqui MMS)",
@@ -7203,6 +7251,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/tur.tar.gz"
             ],
+            "options": "n",
             "size": "134861899"
         },
         {
@@ -7279,6 +7328,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/cat.tar.gz"
             ],
+            "options": "n",
             "size": "134841474"
         },
         {
@@ -7305,6 +7355,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--sl--cv--vits.zip"
             ],
+            "options": "n",
             "size": "100831738"
         },
         {
@@ -7340,13 +7391,13 @@
             "model_id": "bn_coqui_fairseq_ben",
             "engine": "tts_coqui",
             "lang_id": "bn",
-            "options": "a",
             "checksum": "4396e718",
             "checksum_quick": "a2b9ac00",
             "comp": "targz",
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/ben.tar.gz"
             ],
+            "options": "an",
             "size": "134892405"
         },
         {
@@ -7360,6 +7411,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/yor.tar.gz"
             ],
+            "options": "n",
             "size": "134869027"
         },
         {
@@ -7373,6 +7425,7 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.8.0_models/tts_models--pl--mai_female--vits.zip"
             ],
+            "options": "n",
             "size": "100860046"
         },
         {
@@ -7386,6 +7439,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/pol.tar.gz"
             ],
+            "options": "n",
             "size": "134856548"
         },
         {

@@ -42,6 +42,8 @@ cleanup:
   - "/share/aclocal"
   - "/bin/nasm"
   - "/bin/ndisasm"
+  - "/bin/taglib*"
+  - "/bin/spellout"
   - "/cuda/bin"
   - "/cuda/extras"
   - "/cuda/extras"
@@ -55,6 +57,7 @@ cleanup:
   - "/cuda/usr"
   - "/cuda/targets/x86_64-linux/lib/cmake"
   - "/cuda/targets/x86_64-linux/lib/libOpenCL.so*"
+  - "/cuda/targets/x86_64-linux/include"
   - "*/cmake/*"
   - "libboost*"
   - "libRHVoice_audio*"
@@ -751,6 +754,20 @@ modules:
       - type: patch
         path: ../patches/whispercpp.patch
 
+  - name: libnumbertext
+    buildsystem: autotools
+    config-opts:
+      - --enable-static=true
+      - --enable-shared=false
+      - --with-pic=yes
+    sources:
+      - type: archive
+        url: https://github.com/Numbertext/libnumbertext/archive/a4b0225813b015a0f796754bc6718be20dd9943c.zip
+        sha256: eb4f91e4c97bb47f8cb7a31d80fdd500024bd9160c9045cdd8dff28beeac4b7a
+      - type: shell
+        commands:
+          - "autoreconf -fi"
+
   - name: dsnote
     buildsystem: cmake-ninja
     config-opts:
@@ -777,6 +794,7 @@ modules:
       - -DBUILD_RUBBERBAND=OFF
       - -DBUILD_FFMPEG=OFF
       - -DBUILD_TAGLIB=OFF
+      - -DBUILD_LIBNUMBERTEXT=OFF
     build-options:
       arch:
         aarch64:
