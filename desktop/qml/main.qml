@@ -111,8 +111,6 @@ ApplicationWindow {
                 return 0
             })
 
-            console.log("_dummyButton:",list[0])
-
             return list[0]
         }
     }
@@ -159,6 +157,17 @@ ApplicationWindow {
     Connections {
         target: _settings
         onTranslator_modeChanged: appWin.update()
+    }
+
+    Connections {
+        target: _app_server
+        onActivate_requested: {
+            appWin.raise()
+        }
+        onFiles_to_open_requested: {
+            app.open_files(files)
+            appWin.raise()
+        }
     }
 
     SpeechConfig {

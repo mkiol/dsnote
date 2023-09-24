@@ -181,54 +181,18 @@ static void install_translator() {
     }
 }
 
-int main(int argc, char* argv[]) {
-#ifdef USE_SFOS
-    const auto& app = *SailfishApp::application(argc, argv);
-#else
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication app(argc, argv);
-    QGuiApplication::setWindowIcon(QIcon{QStringLiteral(":/app_icon.svg")});
-#endif
-    QGuiApplication::setApplicationName(QStringLiteral(APP_ID));
-    QGuiApplication::setOrganizationName(QStringLiteral(APP_ORG));
-    QGuiApplication::setApplicationDisplayName(QStringLiteral(APP_NAME));
-    QGuiApplication::setApplicationVersion(QStringLiteral(APP_VERSION));
+static void start_service() {
+    py_executor::instance()->start();
+    speech_service::instance();
+    QGuiApplication::exec();
+}
 
-    auto cmd_opts = check_options(app);
-
-    if (!cmd_opts.launch_mode) return 0;
-
-    Logger::init(cmd_opts.verbose ? Logger::LogType::Trace
-                                  : Logger::LogType::Error);
-    initQtLogger();
-
-    install_translator();
-
-    signal(SIGINT, signal_handler);
-
-    qDebug() << "launch mode:" << cmd_opts.launch_mode.value();
-
-    settings::instance()->set_launch_mode(cmd_opts.launch_mode.value());
-
-    switch (settings::instance()->launch_mode()) {
-        case settings::launch_mode_t::service: {
-            qDebug() << "starting service";
-            py_executor::instance()->start();
-            speech_service::instance();
-            QGuiApplication::exec();
-
-            exit_program();
-
-            [[fallthrough]];
-        }
-        case settings::launch_mode_t::app_stanalone:
-            qDebug() << "starting standalone app";
-            py_executor::instance()->start();
-            speech_service::instance();
-            break;
-        case settings::launch_mode_t::app:
-            qDebug() << "starting app";
-            break;
+static void start_app(const QStringList& files_to_open,
+                      app_server& dbus_app_server) {
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+        py_executor::instance()->start();
+        speech_service::instance();
     }
 
 #ifdef USE_SFOS
@@ -264,12 +228,11 @@ int main(int argc, char* argv[]) {
     context->setContextProperty(QStringLiteral("_settings"),
                                 settings::instance());
     context->setContextProperty(QStringLiteral("_files_to_open"),
-                                cmd_opts.files);
-#ifdef USE_SFOS
-    app_server dbus_app_server;
+                                files_to_open);
     context->setContextProperty(QStringLiteral("_app_server"),
                                 &dbus_app_server);
 
+#ifdef USE_SFOS
     view->setSource(SailfishApp::pathTo("qml/main.qml"));
     view->show();
 #else
@@ -287,6 +250,58 @@ int main(int argc, char* argv[]) {
     engine->load(url);
 #endif
     QGuiApplication::exec();
+
+    exit_program();
+}
+
+int main(int argc, char* argv[]) {
+#ifdef USE_SFOS
+    const auto& app = *SailfishApp::application(argc, argv);
+#else
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QGuiApplication app(argc, argv);
+    QGuiApplication::setWindowIcon(QIcon{QStringLiteral(":/app_icon.svg")});
+#endif
+    QGuiApplication::setApplicationName(QStringLiteral(APP_ID));
+    QGuiApplication::setOrganizationName(QStringLiteral(APP_ORG));
+    QGuiApplication::setOrganizationDomain(QStringLiteral(APP_DOMAIN));
+    QGuiApplication::setApplicationDisplayName(QStringLiteral(APP_NAME));
+    QGuiApplication::setApplicationVersion(QStringLiteral(APP_VERSION));
+
+    auto cmd_opts = check_options(app);
+
+    if (!cmd_opts.launch_mode) return 0;
+
+    Logger::init(cmd_opts.verbose ? Logger::LogType::Trace
+                                  : Logger::LogType::Error);
+    initQtLogger();
+
+    install_translator();
+
+    signal(SIGINT, signal_handler);
+
+    switch (cmd_opts.launch_mode.value()) {
+        case settings::launch_mode_t::service:
+            qDebug() << "starting service";
+            settings::instance()->set_launch_mode(cmd_opts.launch_mode.value());
+            start_service();
+            exit_program();
+            break;
+        case settings::launch_mode_t::app_stanalone:
+            qDebug() << "starting standalone app";
+            break;
+        case settings::launch_mode_t::app:
+            qDebug() << "starting app";
+            break;
+    }
+
+    QGuiApplication::setApplicationName(QStringLiteral(APP_DBUS_APP_ID));
+    app_server dbus_app_server;
+    QGuiApplication::setApplicationName(QStringLiteral(APP_ID));
+
+    settings::instance()->set_launch_mode(cmd_opts.launch_mode.value());
+
+    start_app(cmd_opts.files, dbus_app_server);
 
     exit_program();
 }

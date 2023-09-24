@@ -46,7 +46,8 @@ DialogPage {
         <li>Save audio in compressed formats (MP3 or Ogg Vorbis). You can also save metadata tags to the audio file,
             such as track number, title, artist or album.</li>
         <li>Pause option. Note reading can be paused and resumed.</li>
-        <li>New models from Massively Multilingual Speech (MMS) project: Hungarian, Catalan, German, Spanish, Romanian, Russian and Swedish.
+        <li>New models from Massively Multilingual Speech (MMS) project: Hungarian, Catalan, German, Spanish,
+            Romanian, Russian and Swedish.
             If you would like any other MMS model to be included, please let us know.</li>
         <li>Update of RHVoice voice for Uzbek.</li>
         <li>Fix: Many Coqui models couldn't read the numbers or the reading wasn't correct.</li>
@@ -56,7 +57,9 @@ DialogPage {
         <li>Menu options: <i>Open a text file</i> and <i>Save to a text file</i></li>
         <li>Command line option to open files. If you want to associate text, audio or video files
             with Speech Note, now it is possible. Your system may detect this new capability and
-            show Speech Note under <i>Open With</i> menu in the file manager.</li>
+            show Speech Note under <i>Open With</i> menu in the file manager.
+            Please note that Flatpak app only has permission to access files in the following folders:
+            Desktop, Documents, Downloads, Music and Videos.</li>
         <li>Improved UI colors when app is running under GNOME dark theme.</li>
         <li>Advanced settings option <i>Graphical style</i>. This option let you select any
             Qt interface style installed in your system. Changing the style might make app

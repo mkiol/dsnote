@@ -220,6 +220,17 @@ ApplicationWindow {
             }
 
             Connections {
+                target: _app_server
+                onActivate_requested: {
+                    appWin.raise()
+                }
+                onFiles_to_open_requested: {
+                    app.open_files(files)
+                    appWin.raise()
+                }
+            }
+
+            Connections {
                 target: service
                 onModel_download_finished: toast.show(qsTr("The model download is complete!"))
                 onModel_download_error: toast.show(qsTr("Error: Couldn't download the model file."))

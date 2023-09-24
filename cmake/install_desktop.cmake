@@ -12,6 +12,13 @@ install(FILES "${desktop_dir}/icons/128x128/${info_binary_id}.png" DESTINATION s
 install(FILES "${desktop_dir}/icons/256x256/${info_binary_id}.png" DESTINATION share/icons/hicolor/256x256/apps)
 install(FILES "${desktop_dir}/icons/512x512/${info_binary_id}.png" DESTINATION share/icons/hicolor/512x512/apps)
 
+configure_file("${desktop_dir}/dbus_app.service.in" "${PROJECT_BINARY_DIR}/dbus_app.service")
+if(WITH_FLATPAK)
+    install(FILES "${PROJECT_BINARY_DIR}/dbus_app.service" DESTINATION share/dbus-1/services RENAME ${info_dbus_app_service}.service)
+else()
+    install(FILES "${PROJECT_BINARY_DIR}/dbus_app.service" DESTINATION share/dbus-1/services RENAME ${info_binary_id}.service)
+endif()
+
 if(BUILD_WHISPERCPP)
     install(FILES "${external_lib_dir}/libwhisper-openblas.so" DESTINATION lib)
     install(FILES "${external_lib_dir}/libwhisper-fallback.so" DESTINATION lib)
@@ -69,9 +76,9 @@ if(BUILD_UROMAN)
 endif()
 
 if(WITH_SYSTEMD_SERVICE)
-    configure_file("${systemd_dir}/${id}.service" "${PROJECT_BINARY_DIR}/${info_binary_id}.service")
-    install(FILES "${PROJECT_BINARY_DIR}/${info_binary_id}.service" DESTINATION lib/systemd/user)
+    configure_file("${systemd_dir}/speech.service.in" "${PROJECT_BINARY_DIR}/speech.service")
+    install(FILES "${PROJECT_BINARY_DIR}/speech.service" DESTINATION lib/systemd/user RENAME ${info_binary_id}.service)
 
-    configure_file("${dbus_dir}/${info_dbus_service}.service" "${PROJECT_BINARY_DIR}/${info_dbus_service}.service")
-    install(FILES "${PROJECT_BINARY_DIR}/${info_dbus_service}.service" DESTINATION lib/systemd/user)
+    configure_file("${dbus_dir}/dbus_speech.service.in" "${PROJECT_BINARY_DIR}/dbus_speech.service")
+    install(FILES "${PROJECT_BINARY_DIR}/dbus_speech.service" DESTINATION share/dbus-1/services RENAME ${info_dbus_service}.service)
 endif()

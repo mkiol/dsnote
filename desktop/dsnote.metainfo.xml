@@ -19,11 +19,18 @@
   </categories>
   <keywords>
     <keyword>speech</keyword>
+    <keyword>offline</keyword>
     <keyword>voice</keyword>
     <keyword>stt</keyword>
     <keyword>asr</keyword>
+    <keyword>speech-to-text</keyword>
+    <keyword>speech-recognition</keyword>
     <keyword>tts</keyword>
+    <keyword>text-to-speech</keyword>
+    <keyword>speech-synthesis</keyword>
     <keyword>nmt</keyword>
+    <keyword>neural-machine-translation</keyword>
+    <keyword>machine-translation</keyword>
     <keyword>translator</keyword>
     <keyword>deepspeech</keyword>
     <keyword>vosk</keyword>
@@ -33,7 +40,6 @@
     <keyword>espeak</keyword>
     <keyword>mbrola</keyword>
     <keyword>coqui</keyword>
-    <keyword>offline</keyword>
     <keyword>bergamot</keyword>
   </keywords>
   <screenshots>
@@ -82,7 +88,7 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
-    <release version="4.2.0" date="2023-09-20">
+    <release version="4.2.0" date="2023-09-24">
       <description>
       <p>Translator:</p>
       <ul>
@@ -101,7 +107,6 @@
           Following Whisper accelerators are currently enabled:
           OpenCL (for most Nvidia cards, few AMD cards and Intel GPUs),
           CUDA (for most Nvidia cards).
-          Support for AMD ROCm is implemented as well but right now it doesn't work due to Flatpak sandboxing isolation.
           GPU hardware acceleration might not work well on your system, therefore is not enabled by default.
           Use the option in 'Settings' to turn it on.
           Disable, if you observe any problems when using Speech to Text with Whisper models.
@@ -109,10 +114,11 @@
       </ul>
       <p>Text to Speech:</p>
       <ul>
-      <li>Save audio in compressed formats (MP3 or Ogg Vorbis). You can also save metadata tags to the audio file,
-          such as track number, title, artist or album.</li>
+      <li>Save audio in compressed formats (MP3 or Ogg Vorbis). You can also save metadata tags
+          to the audio file, such as track number, title, artist or album.</li>
       <li>Pause option. Note reading can be paused and resumed.</li>
-      <li>New models from Massively Multilingual Speech (MMS) project: Hungarian, Catalan, German, Spanish, Romanian, Russian and Swedish.
+      <li>New models from Massively Multilingual Speech (MMS) project: Hungarian, Catalan, German,
+          Spanish, Romanian, Russian and Swedish.
           If you would like any other MMS model to be included, please let us know.</li>
       <li>Update of RHVoice voice for Uzbek.</li>
       <li>Fix: Many Coqui models couldn't read the numbers or the reading wasn't correct.</li>
@@ -121,11 +127,14 @@
       <ul>
       <li>Menu options: 'Open a text file' and 'Save to a text file'</li>
       <li>Command line option to open files. If you want to associate text, audio or video files
-          with Speech Note app, now it is possible. Your system may detect this new capability and
-          show Speech Note under 'Open With' menu in the file manager.</li>
+          with Speech Note, now it is possible. Your system may detect this new capability and
+          show Speech Note under 'Open With' menu in the file manager.
+          Please note that Flatpak app only has permission to access files in the following folders:
+          Desktop, Documents, Downloads, Music and Videos.</li>
       <li>Improved UI colors when app is running under GNOME dark theme.</li>
       <li>Advanced settings option 'Graphical style'. This option let you select any
-          Qt interface style installed in your system. Changing the style might make app look better under GNOME.</li>
+          Qt interface style installed in your system. Changing the style might make
+          app look better under GNOME.</li>
       </ul>
       </description>
     </release>

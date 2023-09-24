@@ -207,7 +207,7 @@ dsnote_app::dsnote_app(QObject *parent)
 
     m_open_files_delay_timer.setSingleShot(true);
     m_open_files_delay_timer.setTimerType(Qt::VeryCoarseTimer);
-    m_open_files_delay_timer.setInterval(500);
+    m_open_files_delay_timer.setInterval(250);
     connect(&m_open_files_delay_timer, &QTimer::timeout, this,
             &dsnote_app::open_next_file, Qt::QueuedConnection);
 
@@ -2350,7 +2350,6 @@ void dsnote_app::open_files(const QStringList &input_files) {
 
     if (!m_files_to_open.empty()) {
         if (!note().isEmpty()) make_undo();
-        set_note("");
         qDebug() << "opening files:" << input_files;
         m_open_files_delay_timer.start();
     }
