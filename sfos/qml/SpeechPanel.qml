@@ -8,6 +8,8 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
+import harbour.dsnote.Dsnote 1.0
+
 Item {
     id: root
 
@@ -137,7 +139,9 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: Theme.paddingSmall
         anchors.top: pauseButton.visible ? pauseButton.bottom : parent.top
-        icon.source: "image://theme/icon-m-cancel?" + (pressed ? Theme.highlightColor : Theme.primaryColor)
+        icon.source: (app.state === DsnoteApp.StatePlayingSpeech ?
+                          "image://theme/icon-m-stop?" : "image://theme/icon-m-cancel?")
+                          + (pressed ? Theme.highlightColor : Theme.primaryColor)
         onClicked: root.cancelClicked()
     }
 }
