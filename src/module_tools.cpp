@@ -79,7 +79,8 @@ QString path_in_share_dir(const QString& path) {
 }
 
 QString module_file(const QString& name) {
-    return path_in_share_dir(QStringLiteral("%2.tar.xz").arg(name));
+    return path_in_share_dir(QStringLiteral("%1/%2.tar.xz")
+                                 .arg(QStringLiteral(APP_BINARY_ID), name));
 }
 
 bool unpack_module(const QString& name) {
