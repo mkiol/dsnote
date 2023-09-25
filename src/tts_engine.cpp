@@ -454,8 +454,12 @@ void tts_engine::process() {
 
                 if (!encode_speech_impl(new_text, output_file)) {
                     unlink(output_file.c_str());
-                    if (m_call_backs.error) m_call_backs.error();
-                    break;
+                    LOGE("speech encoding error");
+                    if (m_call_backs.speech_encoded) {
+                        m_call_backs.speech_encoded("", "", task.last);
+                    }
+
+                    continue;
                 }
 
                 if (!model_supports_speed()) apply_speed(output_file);

@@ -1483,7 +1483,8 @@ void speech_service::handle_speech_to_file(const tts_partial_result_t &result) {
     }
 
     m_current_task->counter.value += result.text.size();
-    m_current_task->files.push_back(result.wav_file_path);
+    if (!result.wav_file_path.isEmpty())
+        m_current_task->files.push_back(result.wav_file_path);
 
     qDebug() << "partial speech to file progress:"
              << m_current_task->counter.progress();
@@ -1556,11 +1557,27 @@ void speech_service::handle_tts_queue() {
 
     auto &result = m_tts_queue.front();
 
-    m_player.setMedia(QMediaContent{QUrl::fromLocalFile(result.wav_file_path)});
+    if (!result.wav_file_path.isEmpty()) {
+        m_player.setMedia(
+            QMediaContent{QUrl::fromLocalFile(result.wav_file_path)});
 
-    m_player.play();
+        m_player.play();
 
-    emit tts_partial_speech_playing(result.text, result.task_id);
+        emit tts_partial_speech_playing(result.text, result.task_id);
+    } else if (result.last) {
+        auto task = result.task_id;
+
+        tts_stop_speech(task);
+        if (m_tts_queue.empty()) {
+            emit tts_partial_speech_playing("", task);
+        } else {
+            m_tts_queue.pop();
+        }
+        emit tts_play_speech_finished(task);
+    } else {
+        if (!m_tts_queue.empty()) m_tts_queue.pop();
+        handle_tts_queue();
+    }
 }
 
 void speech_service::handle_tts_engine_error() {
