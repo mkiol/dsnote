@@ -101,6 +101,9 @@ set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashin
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · eSpeak NG · Bergamot Translator · \
 Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis · TagLib · libnumbertext")
+if (WITH_DESKTOP)
+    set(info_libs_str "${info_libs_str} · Hugging Face Transformers · KDBusAddons")
+endif()
 
 project(${id} VERSION 4.2.0)
 
