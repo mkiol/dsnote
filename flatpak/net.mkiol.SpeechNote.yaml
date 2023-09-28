@@ -19,7 +19,8 @@ finish-args:
   - --filesystem=xdg-documents
   - --filesystem=xdg-videos
   - --env=PYTORCH_TENSOREXPR=0
-  - --env=LD_LIBRARY_PATH=/app/cuda/lib64
+  - --env=LD_LIBRARY_PATH=/app/opt/cuda/lib64
+  - --env=OPENCL_VENDOR_PATH=/app/opt/opencl/vendors
 cleanup:
   - "/cmake"
   - "/etc"
@@ -44,20 +45,6 @@ cleanup:
   - "/bin/ndisasm"
   - "/bin/taglib*"
   - "/bin/spellout"
-  - "/cuda/bin"
-  - "/cuda/extras"
-  - "/cuda/extras"
-  - "/cuda/gds*"
-  - "/cuda/include"
-  - "/cuda/libnvvp"
-  - "/cuda/nsight*"
-  - "/cuda/nv*"
-  - "/cuda/pkg-config"
-  - "/cuda/src"
-  - "/cuda/usr"
-  - "/cuda/targets/x86_64-linux/lib/cmake"
-  - "/cuda/targets/x86_64-linux/lib/libOpenCL.so*"
-  - "/cuda/targets/x86_64-linux/include"
   - "*/cmake/*"
   - "libboost*"
   - "libRHVoice_audio*"
@@ -420,6 +407,26 @@ modules:
       - -des
     post-install:
       - "chmod -R 755 /app/lib/perl5/5.38.0/x86_64-linux"
+    cleanup:
+      - /bin/c*
+      - /bin/e*
+      - /bin/h*
+      - /bin/i*
+      - /bin/j*
+      - /bin/l*
+      - /bin/perl5*
+      - /bin/perlb*
+      - /bin/perld*
+      - /bin/perli*
+      - /bin/perlt*
+      - /bin/pi*
+      - /bin/pl*
+      - /bin/po*
+      - /bin/pr*
+      - /bin/pt*
+      - /bin/s*
+      - /bin/x*
+      - /bin/z*
     sources:
       - type: archive
         url: https://www.cpan.org/src/5.0/perl-5.38.0.tar.gz
@@ -720,8 +727,37 @@ modules:
       - mkdir cuda_src
       - sh cuda_12.2.2_535.104.05_linux.run --target cuda_src --noexec
       - cd cuda_src/builds && rm -rf NVIDIA*.run bin EULA.txt version.json cuda_sanitizer_api integration nsight_compute nsight_systems cuda_gdb cuda_documentation
-      - mkdir -p /app/cuda
-      - cd cuda_src/builds && for lib in *; do echo "copying $lib/* => /app/cuda/" && if [ -d $lib ]; then cp -r $lib/* /app/cuda/; else cp $lib /app/cuda/; fi; done
+      - mkdir -p /app/opt/cuda
+      - cd cuda_src/builds && for lib in *; do echo "copying $lib/* => /app/opt/cuda/" && if [ -d $lib ]; then cp -r $lib/* /app/opt/cuda/; else cp $lib /app/opt/cuda/; fi; done
+    cleanup:
+      - "/opt/cuda/bin"
+      - "/opt/cuda/extras"
+      - "/opt/cuda/extras"
+      - "/opt/cuda/gds*"
+      - "/opt/cuda/include"
+      - "/opt/cuda/libnvvp"
+      - "/opt/cuda/nsight*"
+      - "/opt/cuda/nv*"
+      - "/opt/cuda/pkg-config"
+      - "/opt/cuda/src"
+      - "/opt/cuda/usr"
+      - "/opt/cuda/cublas_version.txt"
+      - "/opt/cuda/LICENSE"
+      - "/opt/cuda/targets/x86_64-linux/lib/cmake"
+      - "/opt/cuda/targets/x86_64-linux/lib/lib64"
+      - "/opt/cuda/targets/x86_64-linux/lib/libOpenCL.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libcusparse.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libcufft*.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libcusolver.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libcurand.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libnppif.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libcusolverMg.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libn*.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libcufile*.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libcuinj64.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libaccinj64.so*"
+      - "/opt/cuda/targets/x86_64-linux/include"
+      - "/opt/cuda/targets/x86_64-linux/res"
     sources:
       - type: file
         url: https://developer.download.nvidia.com/compute/cuda/12.2.2/local_installers/cuda_12.2.2_535.104.05_linux.run
@@ -740,8 +776,8 @@ modules:
       - -DWHISPER_CUBLAS=ON
       - -DCMAKE_C_FLAGS='-O3'
       - -DCMAKE_CXX_FLAGS='-O3'
-      - -DCUDAToolkit_ROOT=/app/cuda
-      - -DCMAKE_CUDA_COMPILER=/app/cuda/bin/nvcc
+      - -DCUDAToolkit_ROOT=/app/opt/cuda
+      - -DCMAKE_CUDA_COMPILER=/app/opt/cuda/bin/nvcc
       - -DCMAKE_CUDA_ARCHITECTURES=60;61;62;70;72;75;80;86;87;89;90
     post-install:
       - "mv /app/lib/libwhisper.so /app/lib/libwhisper-cublas.so"
@@ -767,6 +803,72 @@ modules:
           - "autoreconf -fi"
 
   - python3-modules-x86-64.yaml
+
+  - name: rocm-opencl
+    only-arches:
+      - x86_64
+    buildsystem: simple
+    build-commands:
+      - mkdir rocm_src
+      - for file in *.deb; do [ -f "$file" ] || break; mv "$file" rocm_src && cd rocm_src && ar x "$file" && rm control.tar.* && rm debian-binary && tar -xf data.tar.* && rm data.tar.* && cd ..; done
+      - mkdir -p /app/opt
+      - mv rocm_src/opt/rocm-5.4.3 /app/opt/rocm
+    cleanup:
+      - /opt/rocm/bin
+      - /opt/rocm/hsa
+      - /opt/rocm/share
+      - /opt/rocm/.info
+      - /opt/rocm/include
+      - /opt/rocm/opencl
+      - /opt/rocm/lib/libOpenCL.so*
+      - /opt/rocm/lib/cmake
+      - /opt/rocm/lib/rocmmod
+      - /opt/rocm/lib/CMakeFiles
+    sources:
+      - type: file
+        url: https://repo.radeon.com/rocm/apt/5.4.3/pool/main/r/rocm-opencl/rocm-opencl_2.0.0.50403-121~22.04_amd64.deb
+        sha256: c77907c7ac874a86e20b32d5d86c649ce84abfec88679263892c5ff508722580
+      - type: file
+        url: https://repo.radeon.com/rocm/apt/5.4.3/pool/main/c/comgr/comgr_2.4.0.50403-121~22.04_amd64.deb
+        sha256: b966685a075d15b50d9d68f053e72b23cfcb627802fb507fdd24357a84fa48dc
+      - type: file
+        url: https://repo.radeon.com/rocm/apt/5.4.3/pool/main/h/hsa-rocr/hsa-rocr_1.7.0.50403-121~22.04_amd64.deb
+        sha256: c3e340563e7f2a8789652f2e7ddb52d47a5bf267f85d930208be3d71da970102
+      - type: file
+        url: https://repo.radeon.com/rocm/apt/5.4.3/pool/main/r/rocm-core/rocm-core_5.4.3.50403-121~22.04_amd64.deb
+        sha256: f16677575d146e5b7b5194deaf6be7fb0ab57bb5b92065e5d3b2533bc32c473b
+      - type: file
+        url: https://repo.radeon.com/rocm/apt/5.4.3/pool/main/r/rocm-ocl-icd/rocm-ocl-icd_2.0.0.50403-121~22.04_amd64.deb
+        sha256: 1457c69a3b11eba803f340fcc958394c03860cbed788cc936d7e017f61e11c8a
+      - type: file
+        url: https://repo.radeon.com/rocm/apt/5.4.3/pool/main/r/rocm-language-runtime/rocm-language-runtime_5.4.3.50403-121~22.04_amd64.deb
+        sha256: cb8d8025b1dd40fc00678d600080174ada0c11ff5845b3aefb41248b3d52a9cf
+      - type: file
+        url: https://repo.radeon.com/rocm/apt/5.4.3/pool/main/r/rocm-device-libs/rocm-device-libs_1.0.0.50403-121~22.04_amd64.deb
+        sha256: 4007016d604907c83ae999b82f012913f068b35e89cbdb81ae55461d0c6a11bd
+
+  - name: opencl-vendors
+    only-arches:
+      - x86_64
+    buildsystem: simple
+    build-commands:
+      - mkdir vendors
+      - echo "libnvidia-opencl.so" > vendors/nvidia.icd
+      - echo "libMesaOpenCL.so.1" > vendors/mesa.icd
+      - echo "/app/opt/rocm/lib/libamdocl64.so" > vendors/amdocl64.icd
+      - mkdir -p /app/opt/opencl
+      - cp -r vendors /app/opt/opencl/
+
+  - name: numa
+    buildsystem: autotools
+    config-opts:
+      - --with-pic
+    cleanup:
+      - /bin
+    sources:
+      - type: archive
+        url: https://github.com/numactl/numactl/releases/download/v2.0.16/numactl-2.0.16.tar.gz
+        sha256: 1b242f893af977a1d31af6ce9d6b8dafdd2d8ec3dc9207f7c2dc0d3446e7c7c8
 
   - name: dsnote
     buildsystem: cmake-ninja

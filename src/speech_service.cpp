@@ -908,6 +908,8 @@ static std::optional<stt_engine::gpu_device_t> make_stt_gpu_device(
     auto l = gpu_str.split(',');
     if (l.size() <= 2) l = settings::instance()->auto_gpu_device().split(',');
 
+    qDebug() << "gpu device str:" << l;
+
     if (l.size() > 2) {
         if (l.at(0).trimmed() == "OpenCL") {
             stt_engine::gpu_device_t device;

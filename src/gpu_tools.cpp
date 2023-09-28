@@ -10,9 +10,11 @@
 #include <dlfcn.h>
 #include <fmt/format.h>
 
+#include <algorithm>
 #include <cstdlib>
 #include <cstring>
 #include <stdexcept>
+#include <utility>
 
 #include "logger.hpp"
 
@@ -49,12 +51,8 @@ struct opencl_api {
                                size_t*) = nullptr;
 
     opencl_api() {
-        handle = dlopen("libOpenCL.so", RTLD_LAZY);
-        if (!handle) {
-            LOGD("failed to open libOpenCL.so, so trying libOpenCL.so.1: "
-                 << dlerror());
-            handle = dlopen("libOpenCL.so.1", RTLD_LAZY);
-        }
+        handle = dlmopen(LM_ID_NEWLM, "libOpenCL.so", RTLD_LAZY);
+        if (!handle) handle = dlopen("libOpenCL.so.1", RTLD_LAZY);
         if (!handle) {
             LOGD("failed to open opencl lib: " << dlerror());
             throw std::runtime_error("failed to open opencl lib");
@@ -98,7 +96,9 @@ struct opencl_api {
     }
 
     ~opencl_api() {
-        if (handle) dlclose(handle);
+        if (handle) {
+            dlclose(handle);
+        }
     }
 };
 
@@ -216,7 +216,7 @@ std::vector<gpu_tools::device> available_devices() {
     std::vector<gpu_tools::device> devices;
 
     add_cuda_devices(devices);
-    add_rocm_devices(devices);
+    add_hip_devices(devices);
     add_opencl_devices(devices);
 
     return devices;
@@ -259,8 +259,8 @@ void add_cuda_devices(std::vector<device>& devices) {
     }
 }
 
-void add_rocm_devices(std::vector<device>& devices) {
-    LOGD("scanning for rocm devices");
+void add_hip_devices(std::vector<device>& devices) {
+    LOGD("scanning for hip devices");
 
     try {
         hip_api api;
@@ -303,6 +303,7 @@ void add_opencl_devices(std::vector<device>& devices) {
         opencl_api api;
 
         static constexpr uint32_t max_items = 16;
+        static constexpr size_t max_name_size = 512;
 
         uint32_t n_platforms = 0;
         void* platform_ids[max_items];
@@ -315,20 +316,24 @@ void add_opencl_devices(std::vector<device>& devices) {
 
         LOGD("opencl number of platforms: " << n_platforms);
 
+        std::vector<std::pair<std::string, std::vector<device>>>
+            platforms_with_devices;
+        platforms_with_devices.reserve(n_platforms);
+
         for (uint32_t i = 0; i < n_platforms; ++i) {
-            char pname[128];
+            char pname[max_name_size];
             if (auto ret =
                     api.clGetPlatformInfo(platform_ids[i], CL_PLATFORM_NAME,
-                                          sizeof(pname), &pname, nullptr);
+                                          max_name_size, &pname, nullptr);
                 ret != CL_SUCCESS) {
                 LOGD("clGetPlatformInfo for name returned: " << ret);
                 continue;
             }
 
-            char vendor[128];
+            char vendor[max_name_size];
             if (auto ret =
                     api.clGetPlatformInfo(platform_ids[i], CL_PLATFORM_VENDOR,
-                                          sizeof(vendor), &vendor, nullptr);
+                                          max_name_size, &vendor, nullptr);
                 ret != CL_SUCCESS) {
                 LOGD("clGetPlatformInfo for vendor returned: " << ret);
                 continue;
@@ -350,11 +355,14 @@ void add_opencl_devices(std::vector<device>& devices) {
 
             LOGD("opencl number of devices: " << n_devices);
 
+            std::pair<std::string, std::vector<device>> devices_in_platform;
+            devices_in_platform.first = pname;
+
             for (uint32_t j = 0; j < n_devices; ++j) {
-                char dname[128];
+                char dname[max_name_size];
                 if (auto ret =
                         api.clGetDeviceInfo(device_ids[j], CL_DEVICE_NAME,
-                                            sizeof(dname), &dname, nullptr);
+                                            max_name_size, &dname, nullptr);
                     ret != CL_SUCCESS) {
                     LOGD("clGetDeviceInfo for name returned: " << ret);
                     continue;
@@ -381,11 +389,27 @@ void add_opencl_devices(std::vector<device>& devices) {
                      << "]");
 
                 if (type & CL_DEVICE_TYPE_GPU) {
-                    devices.push_back({/*id=*/i, api_t::opencl, /*name=*/dname,
-                                       /*platform_name=*/pname});
+                    devices_in_platform.second.push_back(
+                        {/*id=*/i, api_t::opencl, /*name=*/dname,
+                         /*platform_name=*/pname});
                 }
             }
+
+            platforms_with_devices.push_back(std::move(devices_in_platform));
         }
+
+        std::sort(
+            platforms_with_devices.begin(), platforms_with_devices.end(),
+            [](const auto& p1, const auto& p2) { return p1.first < p2.first; });
+
+        std::for_each(platforms_with_devices.begin(),
+                      platforms_with_devices.end(), [&devices](auto& platform) {
+                          std::for_each(
+                              platform.second.begin(), platform.second.end(),
+                              [&devices](auto& device) {
+                                  devices.push_back(std::move(device));
+                              });
+                      });
     } catch ([[maybe_unused]] const std::runtime_error& err) {
     }
 }

@@ -19,6 +19,14 @@ DialogPage {
 
     title: qsTr("Settings")
 
+    Label {
+        wrapMode: Text.Wrap
+        Layout.fillWidth: true
+        visible: _settings.restart_required
+        color: "red"
+        text: qsTr("Restart the application to apply changes.")
+    }
+
     SectionLabel {
         text: qsTr("Speech to Text")
     }
@@ -356,14 +364,6 @@ DialogPage {
             ToolTip.text: qsTr("Application graphical interface style.") + " " +
                           qsTr("Change if you observe problems with incorrect colors under a dark theme.")
         }
-    }
-
-    Label {
-        wrapMode: Text.Wrap
-        Layout.fillWidth: true
-        visible: _settings.restart_required
-        color: "red"
-        text: qsTr("Restart the application to apply changes.")
     }
 
     SectionLabel {

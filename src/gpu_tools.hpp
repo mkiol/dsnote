@@ -25,7 +25,7 @@ struct device {
 std::vector<device> available_devices();
 void add_opencl_devices(std::vector<device>& devices);
 void add_cuda_devices(std::vector<device>& devices);
-void add_rocm_devices(std::vector<device>& devices);
+void add_hip_devices(std::vector<device>& devices);
 
 }  // namespace gpu_tools
 

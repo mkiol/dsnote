@@ -56,6 +56,7 @@
 static void exit_program() {
     qDebug() << "exiting";
 
+    // workaround for python thread locking
     std::quick_exit(0);
 }
 

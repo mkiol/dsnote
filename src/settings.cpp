@@ -100,8 +100,8 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     qDebug() << "settings file:" << fileName();
 
     update_qt_style();
-    update_gpu_devices();
     update_audio_inputs();
+    update_gpu_devices();
 
     // remove qml cache
     QDir{QStandardPaths::writableLocation(QStandardPaths::CacheLocation) +
@@ -815,6 +815,7 @@ void settings::set_gpu_device(QString value) {
     if (value != gpu_device()) {
         setValue(QStringLiteral("service/gpu_device"), value);
         emit gpu_device_changed();
+        set_restart_required();
     }
 }
 

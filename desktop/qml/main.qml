@@ -124,7 +124,7 @@ ApplicationWindow {
 
             Layout.fillWidth: true
             enabled: _settings.translator_mode
-            readOnly: appWin.canCancelStt || appWin.canCancelTts
+            readOnly: appWin.canCancelStt
         }
 
         Notepad {
@@ -132,7 +132,6 @@ ApplicationWindow {
 
             Layout.fillWidth: true
             enabled: !_settings.translator_mode
-            readOnly: appWin.canCancelStt || appWin.canCancelTts
         }
 
         SpeechWidget {
@@ -157,6 +156,10 @@ ApplicationWindow {
     Connections {
         target: _settings
         onTranslator_modeChanged: appWin.update()
+        onRestart_required_changed: {
+            if (_settings.restart_required)
+                toast.show(qsTr("Restart the application to apply changes."))
+        }
     }
 
     Connections {
@@ -187,6 +190,7 @@ ApplicationWindow {
             app.open_files(_files_to_open)
             showWelcome()
         }
+
         onNote_copied: toast.show(qsTr("Copied!"))
         onTranscribe_done: toast.show(qsTr("File transcription is complete!"))
         onSpeech_to_file_done: toast.show(qsTr("Speech saved to audio file!"))

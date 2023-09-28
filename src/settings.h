@@ -331,8 +331,8 @@ class settings : public QSettings, public singleton<settings> {
 
     static QString settings_filepath();
     void update_qt_style() const;
-    void update_gpu_devices();
     void update_audio_inputs();
+    void update_gpu_devices();
 
     launch_mode_t m_launch_mode = launch_mode_t::app_stanalone;
 };
