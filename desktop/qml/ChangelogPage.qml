@@ -14,6 +14,24 @@ DialogPage {
     title: qsTr("Changes")
 
     SectionLabel {
+        text: qsTr("Version %1").arg("4.2.1")
+    }
+
+    RichLabel {
+        text: "<p>" + qsTr("Speech to Text") + ":</p>
+        <ul>
+        <li>Improved AMD GPU acceleration support for Whisper models.
+            Whisper GPU accelerator for AMD cards uses OpenCL interface.
+            OpenCL implementation shiped in Flatpak runtime (Clover) does not support new AMD cards.
+            To overcome this problem, Speech Note package provides another implementation of OpenCL (ROCm-OpenCL)
+            which supports new hardware. Due to Flatpak isolation it doesn't work out of the box.
+            To turn it on, you have to override Flatpak device permissions for Speech Note.
+            You can do it with following command: 'flatpak override --device=all net.mkiol.SpeechNote'.
+        </li>
+        </ul>"
+    }
+
+    SectionLabel {
         text: qsTr("Version %1").arg("4.2.0")
     }
 

@@ -88,6 +88,14 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
+    <release version="4.2.1" date="2023-09-28">
+      <description>
+      <p>Speech to Text:</p>
+      <ul>
+      <li>Improved AMD GPU acceleration support for Whisper models</li>
+      </ul>
+      </description>
+    </release>
     <release version="4.2.0" date="2023-09-24">
       <description>
       <p>Translator:</p>
