@@ -88,6 +88,15 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
+    <release version="4.3.0" date="2023-09-29">
+      <description>
+      <p>Speech to Text:</p>
+      <ul>
+      <li>Global keyboard shortcuts</li>
+      <li>Sending text into window that is currently in focus</li>
+      </ul>
+      </description>
+    </release>
     <release version="4.2.1" date="2023-09-29">
       <description>
       <p>Speech to Text:</p>

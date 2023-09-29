@@ -106,7 +106,7 @@ if (WITH_DESKTOP)
     set(info_libs_str "${info_libs_str} · Hugging Face Transformers · KDBusAddons · QHotkey")
 endif()
 
-project(${id} VERSION 4.2.1)
+project(${id} VERSION 4.3.0)
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES ".*arm.*")
     message(STATUS "arm architecture detected")

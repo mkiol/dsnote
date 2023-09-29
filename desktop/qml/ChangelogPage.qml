@@ -14,6 +14,18 @@ DialogPage {
     title: qsTr("Changes")
 
     SectionLabel {
+        text: qsTr("Version %1").arg("4.3.0 beta")
+    }
+
+    RichLabel {
+        text: "<p>" + qsTr("Speech to Text") + ":</p>
+        <ul>
+        <li>Global keyboard shortcuts</li>
+        <li>Sending text into window that is currently in focus</li>
+        </ul>"
+    }
+
+    SectionLabel {
         text: qsTr("Version %1").arg("4.2.1")
     }
 
