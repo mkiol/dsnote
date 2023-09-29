@@ -22,6 +22,7 @@
 #endif
 
 #include "config.h"
+#include "dbus_notifications_inf.h"
 #include "dbus_speech_inf.h"
 #include "settings.h"
 
@@ -212,6 +213,10 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void undo_or_redu_note();
     Q_INVOKABLE void make_undo();
     Q_INVOKABLE void update_note(const QString &text, bool replace);
+    Q_INVOKABLE void close_desktop_notification();
+    Q_INVOKABLE void show_desktop_notification(const QString &summary,
+                                               const QString &body,
+                                               bool permanent = false);
 
    signals:
     void active_stt_model_changed();
@@ -292,6 +297,7 @@ class dsnote_app : public QObject {
     double m_speech_to_file_progress = -1.0;
     double m_transcribe_progress = -1.0;
     OrgMkiolSpeechInterface m_dbus_service;
+    OrgFreedesktopNotificationsInterface m_dbus_notifications;
     service_state_t m_service_state = service_state_t::StateUnknown;
     service_task_state_t m_task_state = service_task_state_t::TaskStateIdle;
     task_t m_primary_task;
@@ -314,6 +320,7 @@ class dsnote_app : public QObject {
     bool m_undo_flag = false;  // true => undo, false => redu
     std::queue<QString> m_files_to_open;
     bool m_stt_result_to_keyboard = false;
+    unsigned int m_desktop_notification_id = 0;
 #ifdef USE_DESKTOP
     struct hotkeys_t {
         QHotkey start_listen;

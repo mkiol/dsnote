@@ -127,7 +127,10 @@ QDebug operator<<(QDebug d, dsnote_app::error_t type) {
 dsnote_app::dsnote_app(QObject *parent)
     : QObject{parent},
       m_dbus_service{DBUS_SERVICE_NAME, DBUS_SERVICE_PATH,
-                     QDBusConnection::sessionBus()} {
+                     QDBusConnection::sessionBus()},
+      m_dbus_notifications{"org.freedesktop.Notifications",
+                           "/org/freedesktop/Notifications",
+                           QDBusConnection::sessionBus()} {
     qDebug() << "starting app:" << settings::instance()->launch_mode();
 
     connect(settings::instance(), &settings::note_changed, this,
@@ -2389,6 +2392,28 @@ void dsnote_app::open_files(const QStringList &input_files) {
 
 void dsnote_app::reset_files_queue() {
     if (!m_files_to_open.empty()) m_files_to_open = std::queue<QString>{};
+}
+
+void dsnote_app::close_desktop_notification() {
+    if (!m_dbus_notifications.isValid() || m_desktop_notification_id == 0)
+        return;
+
+    m_dbus_notifications.CloseNotification(m_desktop_notification_id);
+    m_desktop_notification_id = 0;
+}
+
+void dsnote_app::show_desktop_notification(const QString &summary,
+                                           const QString &body,
+                                           bool permanent) {
+    if (!m_dbus_notifications.isValid()) return;
+
+    auto reply =
+        m_dbus_notifications.Notify("", m_desktop_notification_id, APP_ICON_ID,
+                                    summary, body, {}, {}, permanent ? 0 : -1);
+    reply.waitForFinished();
+    if (reply.isValid()) {
+        m_desktop_notification_id = reply.argumentAt<0>();
+    }
 }
 
 void dsnote_app::register_hotkeys() {

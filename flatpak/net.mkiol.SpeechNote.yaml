@@ -21,6 +21,7 @@ finish-args:
   - --env=PYTORCH_TENSOREXPR=0
   - --env=LD_LIBRARY_PATH=/app/opt/cuda/lib64
   - --env=OPENCL_VENDOR_PATH=/app/opt/opencl/vendors
+  - --talk-name=org.freedesktop.Notifications
 cleanup:
   - "/cmake"
   - "/etc"

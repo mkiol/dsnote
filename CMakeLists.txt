@@ -73,6 +73,7 @@ set(info_dbus_app_id ${id})
 set(info_id ${id})
 set(info_binary_id ${id})
 set(info_translations_id ${id})
+set(info_app_icon_id ${id})
 if(WITH_SFOS)
     set(info_org "org.mkiol")
     set(info_domain "mkiol.org")
@@ -81,11 +82,13 @@ if(WITH_SFOS)
     set(info_dbus_app_service "org.mkiol.dsnote")
     set(info_dbus_app_path "/org/mkiol/dsnote")
     set(info_binary_id "harbour-dsnote")
+    set(info_app_icon_id "harbour-dsnote")
 endif()
 if(WITH_FLATPAK)
     set(info_dbus_app_service "net.mkiol.SpeechNote")
     set(info_dbus_app_path "/net/mkiol/SpeechNote")
     set(info_dbus_app_id "SpeechNote")
+    set(info_app_icon_id "net.mkiol.SpeechNote")
 endif()
 set(info_author "Michal Kosciesza")
 set(info_author_email "michal@mkiol.net")
@@ -184,6 +187,8 @@ set(dsnote_lib_sources
     ${sources_dir}/dbus_speech_inf.h
     ${sources_dir}/dbus_application_adaptor.cpp
     ${sources_dir}/dbus_application_adaptor.h
+    ${sources_dir}/dbus_notifications_inf.cpp
+    ${sources_dir}/dbus_notifications_inf.h
     ${sources_dir}/dirmodel.cpp
     ${sources_dir}/dirmodel.h
     ${sources_dir}/dsnote_app.cpp

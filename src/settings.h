@@ -77,6 +77,10 @@ class settings : public QSettings, public singleton<settings> {
                    WRITE set_hotkey_listen_to_keyboard NOTIFY hotkeys_changed)
     Q_PROPERTY(QString hotkey_cancel READ hotkey_cancel WRITE set_hotkey_cancel
                    NOTIFY hotkeys_changed)
+    Q_PROPERTY(
+        desktop_notification_policy_t desktop_notification_policy READ
+            desktop_notification_policy WRITE set_desktop_notification_policy
+                NOTIFY desktop_notification_policy_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -162,6 +166,13 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(audio_quality_t)
 
+    enum class desktop_notification_policy_t {
+        DesktopNotificationNever = 0,
+        DesktopNotificationWhenInacvtive = 1,
+        DesktopNotificationAlways = 2
+    };
+    Q_ENUM(desktop_notification_policy_t)
+
     settings();
 
     launch_mode_t launch_mode() const;
@@ -227,6 +238,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_hotkey_listen_to_keyboard(const QString &value);
     QString hotkey_cancel() const;
     void set_hotkey_cancel(const QString &value);
+    desktop_notification_policy_t desktop_notification_policy() const;
+    void set_desktop_notification_policy(desktop_notification_policy_t value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -321,6 +334,7 @@ class settings : public QSettings, public singleton<settings> {
     void mtag_changed();
     void hotkeys_enabled_changed();
     void hotkeys_changed();
+    void desktop_notification_policy_changed();
 
     // service
     void models_dir_changed();

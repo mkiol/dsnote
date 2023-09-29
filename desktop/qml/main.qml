@@ -73,10 +73,39 @@ ApplicationWindow {
         translator.update()
     }
 
+    function update_dektop_notification() {
+        var policy = false
+        switch(_settings.desktop_notification_policy) {
+        case Settings.DesktopNotificationNever: policy = false; break
+        case Settings.DesktopNotificationWhenInacvtive: policy = !active; break
+        case Settings.DesktopNotificationAlways: policy = true; break
+        }
+
+        if (policy && (
+            app.state === DsnoteApp.StateListeningSingleSentence ||
+            app.state === DsnoteApp.StateListeningAuto ||
+            app.state === DsnoteApp.StateListeningManual)) {
+            var text
+            if (app.intermediate_text.length !== 0)
+                text = app.intermediate_text
+            else if (app.task_state === DsnoteApp.TaskStateInitializing)
+                text = qsTr("Getting ready, please wait...")
+            else if (app.task_state === DsnoteApp.TaskStateProcessing)
+                return qsTr("Processing, please wait...")
+            else
+                text = qsTr("Say something...")
+
+            app.show_desktop_notification(text, "", true)
+        } else {
+            app.close_desktop_notification()
+        }
+    }
+
     width: Screen.width / 2
     height: Screen.height / 2
     visible: true
     header: MainToolBar {}
+    onActiveChanged: update_dektop_notification()
 
     TextField {
         id: _dummyTextField
@@ -222,5 +251,8 @@ ApplicationWindow {
                 toast.show(qsTr("Error: An unknown problem has occurred."))
             }
         }
+        onStateChanged: update_dektop_notification()
+        onTask_state_changed: update_dektop_notification()
+        onIntermediate_text_changed: update_dektop_notification()
     }
 }

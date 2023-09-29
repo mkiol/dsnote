@@ -932,3 +932,21 @@ void settings::set_hotkey_cancel(const QString& value) {
         emit hotkeys_changed();
     }
 }
+
+settings::desktop_notification_policy_t settings::desktop_notification_policy()
+    const {
+    return static_cast<desktop_notification_policy_t>(
+        value(QStringLiteral("desktop_notification_policy"),
+              static_cast<int>(desktop_notification_policy_t::
+                                   DesktopNotificationWhenInacvtive))
+            .toInt());
+}
+
+void settings::set_desktop_notification_policy(
+    desktop_notification_policy_t value) {
+    if (value != desktop_notification_policy()) {
+        setValue(QStringLiteral("desktop_notification_policy"),
+                 static_cast<int>(value));
+        emit desktop_notification_policy_changed();
+    }
+}

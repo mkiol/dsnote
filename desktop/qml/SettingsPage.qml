@@ -305,6 +305,47 @@ DialogPage {
         }
     }
 
+    GridLayout {
+        columns: root.verticalMode ? 1 : 2
+        columnSpacing: appWin.padding
+        rowSpacing: appWin.padding
+
+        Label {
+            Layout.fillWidth: true
+            text: qsTr("Show desktop notification")
+        }
+        ComboBox {
+            Layout.fillWidth: verticalMode
+            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            currentIndex: {
+                switch(_settings.desktop_notification_policy) {
+                case Settings.DesktopNotificationNever: return 0
+                case Settings.DesktopNotificationWhenInacvtive: return 1
+                case Settings.DesktopNotificationAlways: return 2
+                }
+                return 0
+            }
+            model: [
+                qsTr("Never"),
+                qsTr("When in background"),
+                qsTr("Always")
+            ]
+            onActivated: {
+                if (index === 0) {
+                    _settings.desktop_notification_policy = Settings.DesktopNotificationNever
+                } else if (index === 1) {
+                    _settings.desktop_notification_policy = Settings.DesktopNotificationWhenInacvtive
+                } else if (index === 2) {
+                    _settings.desktop_notification_policy = Settings.DesktopNotificationAlways
+                }
+            }
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Show desktop notification while listening.")
+        }
+    }
+
     SectionLabel {
         text: qsTr("Text to Speech")
     }

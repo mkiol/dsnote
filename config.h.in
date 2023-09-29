@@ -31,5 +31,6 @@
 #define APP_TRANSLATORS_STR "@info_translators_str@"
 #define APP_LIBS_STR "@info_libs_str@"
 #define APP_CONF_VERSION "@info_conf_version@"
+#define APP_ICON_ID "@info_app_icon_id@"
 
 #endif // CONFIG_H
