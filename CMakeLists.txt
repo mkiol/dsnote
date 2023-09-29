@@ -40,6 +40,7 @@ option(BUILD_RUBBERBAND "download rubberband lib, build and link statically" ON)
 option(BUILD_FFMPEG "download ffmpeg libs, build and link statically" ON)
 option(BUILD_TAGLIB "download taglib, build and link statically" ON)
 option(BUILD_LIBNUMBERTEXT "download libnumbertext, build and link statically" ON)
+option(BUILD_QHOTKEY "download qhotkey lib, build and link statically" ON)
 
 if(${WITH_DESKTOP} AND ${WITH_SFOS})
     message(FATAL_ERROR "options WITH_DESKTOP and WITH_SFOS cannot be set together")
@@ -102,7 +103,7 @@ set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libar
 {fmt} · Piper · RHVoice · ssplit-cpp · eSpeak NG · Bergamot Translator · \
 Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis · TagLib · libnumbertext")
 if (WITH_DESKTOP)
-    set(info_libs_str "${info_libs_str} · Hugging Face Transformers · KDBusAddons")
+    set(info_libs_str "${info_libs_str} · Hugging Face Transformers · KDBusAddons · QHotkey")
 endif()
 
 project(${id} VERSION 4.2.1)
@@ -265,6 +266,12 @@ set(dsnote_lib_sources
     ${sources_dir}/app_server.cpp
 )
 
+if(WITH_DESKTOP)
+    list(APPEND dsnote_lib_sources
+        ${sources_dir}/keyboard_tools.hpp
+        ${sources_dir}/keyboard_tools.cpp)
+endif()
+
 configure_file(config.h.in config.h)
 
 add_library(dsnote_lib STATIC ${dsnote_lib_sources})
@@ -368,6 +375,19 @@ list(APPEND deps_libs Qt5::Core Qt5::Network Qt5::Multimedia Qt5::Gui Qt5::Quick
 if(WITH_DESKTOP)
     find_package(Qt5 COMPONENTS QuickControls2 Widgets REQUIRED)
     list(APPEND deps_libs Qt5::QuickControls2 Qt5::Widgets)
+
+    find_package(X11 REQUIRED)
+    list(APPEND deps_libs X11)
+
+    find_package(Qt5 COMPONENTS X11Extras REQUIRED)
+    list(APPEND deps_libs Qt5::X11Extras)
+
+    if(BUILD_QHOTKEY)
+        include(${cmake_path}/qhotkey.cmake)
+    else()
+        find_library(qhotkey_path qhotkey REQUIRED)
+        list(APPEND deps_libs ${qhotkey_path})
+    endif()
 
     include(${cmake_path}/kdbusservice.cmake)
 endif()

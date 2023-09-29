@@ -211,6 +211,7 @@ sfdk package
 - [TagLib](https://taglib.org/)
 - [libnumbertext](https://github.com/Numbertext/libnumbertext)
 - [KDBusAddons](https://invent.kde.org/frameworks/kdbusaddons)
+- [QHotkey](https://github.com/Skycoder42/QHotkey)
 
 ## License
 
@@ -246,7 +247,7 @@ sfdk package
               and [Mozilla Public License (MPL)](https://raw.githubusercontent.com/taglib/taglib/master/COPYING.MPL)
 - **libnumbertext**, released under the [BSD License](https://raw.githubusercontent.com/Numbertext/libnumbertext/master/COPYING)
 - **KDBusAddons**, released under the [LGPL licenses](https://invent.kde.org/frameworks/kdbusaddons/-/tree/master/LICENSES?ref_type=heads)
-
+- **QHotkey**, released under the [BSD-3-Clause License](https://raw.githubusercontent.com/Skycoder42/QHotkey/master/LICENSE)
 
 The files in the directory `nonbreaking_prefixes` were copied from 
 [mosesdecoder](https://github.com/moses-smt/mosesdecoder) project and distributed under the

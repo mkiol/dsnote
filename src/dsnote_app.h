@@ -17,6 +17,10 @@
 #include <memory>
 #include <queue>
 
+#ifdef USE_DESKTOP
+#include <qhotkey.h>
+#endif
+
 #include "config.h"
 #include "dbus_speech_inf.h"
 #include "settings.h"
@@ -173,6 +177,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void transcribe_file(const QUrl &source_file);
     Q_INVOKABLE void cancel();
     Q_INVOKABLE void listen();
+    Q_INVOKABLE void listen_to_keyboard();
     Q_INVOKABLE void stop_listen();
     Q_INVOKABLE void play_speech();
     Q_INVOKABLE void play_speech_translator(bool transtalated);
@@ -308,6 +313,16 @@ class dsnote_app : public QObject {
     QString m_prev_text;
     bool m_undo_flag = false;  // true => undo, false => redu
     std::queue<QString> m_files_to_open;
+    bool m_stt_result_to_keyboard = false;
+#ifdef USE_DESKTOP
+    struct hotkeys_t {
+        QHotkey start_listen;
+        QHotkey start_listen_to_keyboard;
+        QHotkey cancel;
+    };
+
+    hotkeys_t m_hotkeys;
+#endif
 
     [[nodiscard]] QVariantList available_stt_models() const;
     [[nodiscard]] QVariantList available_tts_models() const;
@@ -422,6 +437,7 @@ class dsnote_app : public QObject {
     bool can_undo_or_redu_note() const;
     QString translated_text() const;
     void set_translated_text(const QString text);
+    void listen_internal();
     void speech_to_file_internal(const QString &text, const QString &model_id,
                                  const QString &dest_file,
                                  const QString &title_tag,
@@ -433,6 +449,7 @@ class dsnote_app : public QObject {
     void handle_translate_delayed();
     void open_next_file();
     void reset_files_queue();
+    void register_hotkeys();
 };
 
 #endif  // DSNOTE_APP_H

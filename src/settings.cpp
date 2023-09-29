@@ -882,3 +882,53 @@ void settings::set_audio_input_idx(int value) {
     if (value < 0 || value >= m_audio_inputs.size()) return;
     set_audio_input(value == 0 ? "" : m_audio_inputs.at(value));
 }
+
+bool settings::hotkeys_enabled() const {
+    return value(QStringLiteral("hotkeys_enabled"), false).toBool();
+}
+
+void settings::set_hotkeys_enabled(bool value) {
+    if (value != hotkeys_enabled()) {
+        setValue(QStringLiteral("hotkeys_enabled"), value);
+        emit hotkeys_enabled_changed();
+    }
+}
+
+QString settings::hotkey_listen() const {
+    return value(QStringLiteral("hotkey_listen"),
+                 QStringLiteral("Ctrl+Alt+Shift+L"))
+        .toString();
+}
+
+void settings::set_hotkey_listen(const QString& value) {
+    if (value != hotkey_listen()) {
+        setValue(QStringLiteral("hotkey_listen"), value);
+        emit hotkeys_changed();
+    }
+}
+
+QString settings::hotkey_listen_to_keyboard() const {
+    return value(QStringLiteral("hotkey_listen_to_keyboard"),
+                 QStringLiteral("Ctrl+Alt+Shift+K"))
+        .toString();
+}
+
+void settings::set_hotkey_listen_to_keyboard(const QString& value) {
+    if (value != hotkey_listen_to_keyboard()) {
+        setValue(QStringLiteral("hotkey_listen_to_keyboard"), value);
+        emit hotkeys_changed();
+    }
+}
+
+QString settings::hotkey_cancel() const {
+    return value(QStringLiteral("hotkey_cancel"),
+                 QStringLiteral("Ctrl+Alt+Shift+C"))
+        .toString();
+}
+
+void settings::set_hotkey_cancel(const QString& value) {
+    if (value != hotkey_cancel()) {
+        setValue(QStringLiteral("hotkey_cancel"), value);
+        emit hotkeys_changed();
+    }
+}

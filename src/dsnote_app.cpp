@@ -19,6 +19,12 @@
 #include "mtag_tools.hpp"
 #include "speech_service.h"
 
+#ifdef USE_DESKTOP
+#include <qhotkey.h>
+
+#include "keyboard_tools.hpp"
+#endif
+
 QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
     switch (state) {
         case dsnote_app::service_state_t::StateBusy:
@@ -136,6 +142,10 @@ dsnote_app::dsnote_app(QObject *parent)
     connect(settings::instance(), &settings::translate_when_typing_changed,
             this, &dsnote_app::handle_translator_settings_changed,
             Qt::QueuedConnection);
+    connect(settings::instance(), &settings::hotkeys_enabled_changed, this,
+            &dsnote_app::register_hotkeys);
+    connect(settings::instance(), &settings::hotkeys_changed, this,
+            &dsnote_app::register_hotkeys);
     connect(this, &dsnote_app::service_state_changed, this, [this] {
         auto reset_progress = [this]() {
             if (m_transcribe_progress != -1.0) {
@@ -229,6 +239,8 @@ dsnote_app::dsnote_app(QObject *parent)
         connect_service_signals();
         do_keepalive();
     }
+
+    register_hotkeys();
 }
 
 void dsnote_app::update_listen() {
@@ -325,15 +337,23 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
         return;
     }
 
-    make_undo();
+    if (m_stt_result_to_keyboard) {
+#ifdef USE_DESKTOP
+        keyboard_tools::send_text(text);
+#else
+        qWarning() << "send to keyboard is not implemented";
+#endif
+    } else {
+        make_undo();
 
-    set_note(insert_to_note(settings::instance()->note(), text,
-                            settings::instance()->insert_mode()));
+        set_note(insert_to_note(settings::instance()->note(), text,
+                                settings::instance()->insert_mode()));
 
-    this->m_intermediate_text.clear();
+        this->m_intermediate_text.clear();
 
-    emit text_changed();
-    emit intermediate_text_changed();
+        emit text_changed();
+        emit intermediate_text_changed();
+    }
 }
 
 void dsnote_app::handle_tts_partial_speech(const QString &text,
@@ -1427,6 +1447,8 @@ void dsnote_app::cancel() {
 }
 
 void dsnote_app::transcribe_file(const QString &source_file) {
+    m_stt_result_to_keyboard = false;
+
     auto *s = settings::instance();
 
     int new_task = 0;
@@ -1448,6 +1470,16 @@ void dsnote_app::transcribe_file(const QUrl &source_file) {
 }
 
 void dsnote_app::listen() {
+    m_stt_result_to_keyboard = false;
+    listen_internal();
+}
+
+void dsnote_app::listen_to_keyboard() {
+    m_stt_result_to_keyboard = true;
+    listen_internal();
+}
+
+void dsnote_app::listen_internal() {
     auto *s = settings::instance();
 
     int new_task = 0;
@@ -2357,4 +2389,50 @@ void dsnote_app::open_files(const QStringList &input_files) {
 
 void dsnote_app::reset_files_queue() {
     if (!m_files_to_open.empty()) m_files_to_open = std::queue<QString>{};
+}
+
+void dsnote_app::register_hotkeys() {
+#ifdef USE_DESKTOP
+    QObject::disconnect(&m_hotkeys.start_listen);
+    QObject::disconnect(&m_hotkeys.start_listen_to_keyboard);
+    QObject::disconnect(&m_hotkeys.cancel);
+    m_hotkeys.start_listen.setRegistered(false);
+    m_hotkeys.start_listen_to_keyboard.setRegistered(false);
+    m_hotkeys.cancel.setRegistered(false);
+
+    auto *s = settings::instance();
+
+    if (s->hotkeys_enabled()) {
+        if (!s->hotkey_listen().isEmpty()) {
+            m_hotkeys.start_listen.setShortcut(QKeySequence{s->hotkey_listen()},
+                                               true);
+            QObject::connect(&m_hotkeys.start_listen, &QHotkey::activated, this,
+                             [&]() {
+                                 qDebug() << "hot key activated: start listen";
+                                 listen();
+                             });
+        }
+
+        if (!s->hotkey_listen_to_keyboard().isEmpty()) {
+            m_hotkeys.start_listen_to_keyboard.setShortcut(
+                QKeySequence{s->hotkey_listen_to_keyboard()}, true);
+            QObject::connect(
+                &m_hotkeys.start_listen_to_keyboard, &QHotkey::activated, this,
+                [&]() {
+                    qDebug() << "hot key activated: start listen to keyboard";
+                    listen_to_keyboard();
+                });
+        }
+
+        if (!s->hotkey_cancel().isEmpty()) {
+            m_hotkeys.cancel.setShortcut(QKeySequence{s->hotkey_cancel()},
+                                         true);
+            QObject::connect(&m_hotkeys.cancel, &QHotkey::activated, this,
+                             [&]() {
+                                 qDebug() << "hot key activated: cancel";
+                                 cancel();
+                             });
+        }
+    }
+#endif
 }

@@ -69,6 +69,14 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(QString mtag_artist_name READ mtag_artist_name WRITE
                    set_mtag_artist_name NOTIFY mtag_artist_name_changed)
     Q_PROPERTY(bool mtag READ mtag WRITE set_mtag NOTIFY mtag_changed)
+    Q_PROPERTY(bool hotkeys_enabled READ hotkeys_enabled WRITE
+                   set_hotkeys_enabled NOTIFY hotkeys_enabled_changed)
+    Q_PROPERTY(QString hotkey_listen READ hotkey_listen WRITE set_hotkey_listen
+                   NOTIFY hotkeys_changed)
+    Q_PROPERTY(QString hotkey_listen_to_keyboard READ hotkey_listen_to_keyboard
+                   WRITE set_hotkey_listen_to_keyboard NOTIFY hotkeys_changed)
+    Q_PROPERTY(QString hotkey_cancel READ hotkey_cancel WRITE set_hotkey_cancel
+                   NOTIFY hotkeys_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -211,6 +219,14 @@ class settings : public QSettings, public singleton<settings> {
     void set_mtag(bool value);
     bool mtag() const;
     QString audio_format_str() const;
+    bool hotkeys_enabled() const;
+    void set_hotkeys_enabled(bool value);
+    QString hotkey_listen() const;
+    void set_hotkey_listen(const QString &value);
+    QString hotkey_listen_to_keyboard() const;
+    void set_hotkey_listen_to_keyboard(const QString &value);
+    QString hotkey_cancel() const;
+    void set_hotkey_cancel(const QString &value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -303,6 +319,8 @@ class settings : public QSettings, public singleton<settings> {
     void mtag_album_name_changed();
     void mtag_artist_name_changed();
     void mtag_changed();
+    void hotkeys_enabled_changed();
+    void hotkeys_changed();
 
     // service
     void models_dir_changed();

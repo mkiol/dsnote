@@ -870,6 +870,16 @@ modules:
         url: https://github.com/numactl/numactl/releases/download/v2.0.16/numactl-2.0.16.tar.gz
         sha256: 1b242f893af977a1d31af6ce9d6b8dafdd2d8ec3dc9207f7c2dc0d3446e7c7c8
 
+  - name: qhotkey
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    sources:
+      - type: archive
+        url: https://github.com/Skycoder42/QHotkey/archive/cd72a013275803fce33e028fc8b05ae32248da1f.zip
+        sha256: 55995114e8b5947cb6a59a19a53840eaf81fddc420fd3d180dcb0db9d8d33e13
+
   - name: dsnote
     buildsystem: cmake-ninja
     config-opts:
@@ -897,6 +907,7 @@ modules:
       - -DBUILD_FFMPEG=OFF
       - -DBUILD_TAGLIB=OFF
       - -DBUILD_LIBNUMBERTEXT=OFF
+      - -DBUILD_QHOTKEY=OFF
     build-options:
       arch:
         aarch64:

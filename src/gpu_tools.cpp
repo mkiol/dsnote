@@ -54,7 +54,7 @@ struct opencl_api {
         handle = dlmopen(LM_ID_NEWLM, "libOpenCL.so", RTLD_LAZY);
         if (!handle) handle = dlopen("libOpenCL.so.1", RTLD_LAZY);
         if (!handle) {
-            LOGD("failed to open opencl lib: " << dlerror());
+            LOGW("failed to open opencl lib: " << dlerror());
             throw std::runtime_error("failed to open opencl lib");
         }
 
@@ -62,7 +62,7 @@ struct opencl_api {
             reinterpret_cast<int32_t (*)(uint32_t, void*, uint32_t*)>(
                 dlsym(handle, "clGetPlatformIDs"));
         if (!clGetPlatformIDs) {
-            LOGD("failed to sym clGetPlatformIDs");
+            LOGW("failed to sym clGetPlatformIDs");
             dlclose(handle);
             throw std::runtime_error("failed to sym clGetPlatformIDs");
         }
@@ -71,7 +71,7 @@ struct opencl_api {
             void*, uint32_t, size_t, void*, size_t*)>(
             dlsym(handle, "clGetPlatformInfo"));
         if (!clGetPlatformInfo) {
-            LOGD("failed to sym clGetPlatformInfo");
+            LOGW("failed to sym clGetPlatformInfo");
             dlclose(handle);
             throw std::runtime_error("failed to sym clGetPlatformInfo");
         }
@@ -80,7 +80,7 @@ struct opencl_api {
                                                       void*, uint32_t*)>(
             dlsym(handle, "clGetDeviceIDs"));
         if (!clGetDeviceIDs) {
-            LOGD("failed to sym clGetDeviceIDs");
+            LOGW("failed to sym clGetDeviceIDs");
             dlclose(handle);
             throw std::runtime_error("failed to sym clGetDeviceIDs");
         }
@@ -89,7 +89,7 @@ struct opencl_api {
                                                        void*, size_t*)>(
             dlsym(handle, "clGetDeviceInfo"));
         if (!clGetDeviceInfo) {
-            LOGD("failed to sym clGetDeviceInfo");
+            LOGW("failed to sym clGetDeviceInfo");
             dlclose(handle);
             throw std::runtime_error("failed to sym clGetDeviceInfo");
         }
@@ -112,14 +112,14 @@ struct cuda_api {
     cuda_api() {
         handle = dlopen("libcudart.so", RTLD_LAZY);
         if (!handle) {
-            LOGD("failed to open cudart lib: " << dlerror());
+            LOGW("failed to open cudart lib: " << dlerror());
             throw std::runtime_error("failed to open cudart lib");
         }
 
         cudaGetDeviceCount = reinterpret_cast<int (*)(int*)>(
             dlsym(handle, "cudaGetDeviceCount"));
         if (!cudaGetDeviceCount) {
-            LOGD("failed to sym cudaGetDeviceCount");
+            LOGW("failed to sym cudaGetDeviceCount");
             dlclose(handle);
             throw std::runtime_error("failed to sym cudaGetDeviceCount");
         }
@@ -128,7 +128,7 @@ struct cuda_api {
             reinterpret_cast<int (*)(cudaHipDeviceProp*, int)>(
                 dlsym(handle, "cudaGetDeviceProperties"));
         if (!cudaGetDeviceProperties) {
-            LOGD("failed to sym cudaGetDeviceProperties");
+            LOGW("failed to sym cudaGetDeviceProperties");
             dlclose(handle);
             throw std::runtime_error("failed to sym cudaGetDeviceProperties");
         }
@@ -136,7 +136,7 @@ struct cuda_api {
         cudaRuntimeGetVersion = reinterpret_cast<int (*)(int*)>(
             dlsym(handle, "cudaRuntimeGetVersion"));
         if (!cudaRuntimeGetVersion) {
-            LOGD("failed to sym cudaRuntimeGetVersion");
+            LOGW("failed to sym cudaRuntimeGetVersion");
             dlclose(handle);
             throw std::runtime_error("failed to sym cudaRuntimeGetVersion");
         }
@@ -144,7 +144,7 @@ struct cuda_api {
         cudaDriverGetVersion = reinterpret_cast<int (*)(int*)>(
             dlsym(handle, "cudaDriverGetVersion"));
         if (!cudaRuntimeGetVersion) {
-            LOGD("failed to sym cudaDriverGetVersion");
+            LOGW("failed to sym cudaDriverGetVersion");
             dlclose(handle);
             throw std::runtime_error("failed to sym cudaDriverGetVersion");
         }
@@ -167,14 +167,14 @@ struct hip_api {
     hip_api() {
         handle = dlopen("libamdhip64.so", RTLD_LAZY);
         if (!handle) {
-            LOGD("failed to open hip lib: " << dlerror());
+            LOGW("failed to open hip lib: " << dlerror());
             throw std::runtime_error("failed to open hip lib");
         }
 
         hipGetDeviceCount =
             reinterpret_cast<int (*)(int*)>(dlsym(handle, "hipGetDeviceCount"));
         if (!hipGetDeviceCount) {
-            LOGD("failed to sym hipGetDeviceCount");
+            LOGW("failed to sym hipGetDeviceCount");
             dlclose(handle);
             throw std::runtime_error("failed to sym hipGetDeviceCount");
         }
@@ -183,7 +183,7 @@ struct hip_api {
             reinterpret_cast<int (*)(cudaHipDeviceProp*, int)>(
                 dlsym(handle, "hipGetDeviceProperties"));
         if (!hipGetDeviceProperties) {
-            LOGD("failed to sym hipGetDeviceProperties");
+            LOGW("failed to sym hipGetDeviceProperties");
             dlclose(handle);
             throw std::runtime_error("failed to sym hipGetDeviceProperties");
         }
@@ -191,7 +191,7 @@ struct hip_api {
         hipRuntimeGetVersion = reinterpret_cast<int (*)(int*)>(
             dlsym(handle, "hipRuntimeGetVersion"));
         if (!hipRuntimeGetVersion) {
-            LOGD("failed to sym hipRuntimeGetVersion");
+            LOGW("failed to sym hipRuntimeGetVersion");
             dlclose(handle);
             throw std::runtime_error("failed to sym hipRuntimeGetVersion");
         }
@@ -199,7 +199,7 @@ struct hip_api {
         hipDriverGetVersion = reinterpret_cast<int (*)(int*)>(
             dlsym(handle, "hipDriverGetVersion"));
         if (!hipRuntimeGetVersion) {
-            LOGD("failed to sym hipDriverGetVersion");
+            LOGW("failed to sym hipDriverGetVersion");
             dlclose(handle);
             throw std::runtime_error("failed to sym hipDriverGetVersion");
         }
@@ -217,7 +217,7 @@ std::vector<gpu_tools::device> available_devices() {
 
     add_cuda_devices(devices);
     add_hip_devices(devices);
-    add_opencl_devices(devices);
+    // add_opencl_devices(devices);
 
     return devices;
 }
@@ -237,7 +237,7 @@ void add_cuda_devices(std::vector<device>& devices) {
         int device_count = 0;
         if (auto ret = api.cudaGetDeviceCount(&device_count);
             ret != cudaHipSuccess) {
-            LOGD("cudaGetDeviceCount returned: " << ret);
+            LOGW("cudaGetDeviceCount returned: " << ret);
             return;
         }
 
@@ -274,7 +274,7 @@ void add_hip_devices(std::vector<device>& devices) {
         int device_count = 0;
         if (auto ret = api.hipGetDeviceCount(&device_count);
             ret != cudaHipSuccess) {
-            LOGD("hipGetDeviceCount returned: " << ret);
+            LOGW("hipGetDeviceCount returned: " << ret);
             return;
         }
 
@@ -310,7 +310,7 @@ void add_opencl_devices(std::vector<device>& devices) {
         if (auto ret =
                 api.clGetPlatformIDs(max_items, platform_ids, &n_platforms);
             ret != CL_SUCCESS) {
-            LOGD("clGetPlatformIDs returned: " << ret);
+            LOGW("clGetPlatformIDs returned: " << ret);
             return;
         }
 
@@ -326,7 +326,7 @@ void add_opencl_devices(std::vector<device>& devices) {
                     api.clGetPlatformInfo(platform_ids[i], CL_PLATFORM_NAME,
                                           max_name_size, &pname, nullptr);
                 ret != CL_SUCCESS) {
-                LOGD("clGetPlatformInfo for name returned: " << ret);
+                LOGW("clGetPlatformInfo for name returned: " << ret);
                 continue;
             }
 
@@ -335,7 +335,7 @@ void add_opencl_devices(std::vector<device>& devices) {
                     api.clGetPlatformInfo(platform_ids[i], CL_PLATFORM_VENDOR,
                                           max_name_size, &vendor, nullptr);
                 ret != CL_SUCCESS) {
-                LOGD("clGetPlatformInfo for vendor returned: " << ret);
+                LOGW("clGetPlatformInfo for vendor returned: " << ret);
                 continue;
             }
 
@@ -349,7 +349,7 @@ void add_opencl_devices(std::vector<device>& devices) {
             if (ret == CL_DEVICE_NOT_FOUND) {
                 n_devices = 0;
             } else if (ret != CL_SUCCESS) {
-                LOGD("clGetDeviceIDs returned: " << ret);
+                LOGW("clGetDeviceIDs returned: " << ret);
                 continue;
             }
 
@@ -364,7 +364,7 @@ void add_opencl_devices(std::vector<device>& devices) {
                         api.clGetDeviceInfo(device_ids[j], CL_DEVICE_NAME,
                                             max_name_size, &dname, nullptr);
                     ret != CL_SUCCESS) {
-                    LOGD("clGetDeviceInfo for name returned: " << ret);
+                    LOGW("clGetDeviceInfo for name returned: " << ret);
                     continue;
                 }
 
@@ -373,7 +373,7 @@ void add_opencl_devices(std::vector<device>& devices) {
                         api.clGetDeviceInfo(device_ids[j], CL_DEVICE_TYPE,
                                             sizeof(type), &type, nullptr);
                     ret != CL_SUCCESS) {
-                    LOGD("clGetDeviceInfo for type returned: " << ret);
+                    LOGW("clGetDeviceInfo for type returned: " << ret);
                     continue;
                 }
 

@@ -227,6 +227,84 @@ DialogPage {
         }
     }
 
+    CheckBox {
+        checked: _settings.hotkeys_enabled
+        text: qsTr("Use global keyboard shortcuts")
+        onCheckedChanged: {
+            _settings.hotkeys_enabled = checked
+        }
+
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: hovered
+        ToolTip.text: qsTr("Shortcuts allow you to start or stop listening using keyboard.") + " " +
+                      qsTr("Speech to Text result can be inserted into the current note or into any active window (currently in focus).") + " " +
+                      qsTr("Keyboard shortcuts work even when the application is not active (e.g. minimized or in the background).") + " " +
+                      qsTr("This feature only works under X11.")
+    }
+
+    GridLayout {
+        columns: root.verticalMode ? 1 : 2
+        columnSpacing: appWin.padding
+        rowSpacing: appWin.padding
+        visible: _settings.hotkeys_enabled
+
+        Label {
+            Layout.fillWidth: true
+            Layout.leftMargin: verticalMode ? 0 : appWin.padding
+            text: qsTr("Listen")
+        }
+        TextField {
+            id: hotkeyListenField
+
+            Layout.fillWidth: verticalMode
+            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            text: _settings.hotkey_listen
+            onTextChanged: _settings.hotkey_listen = text
+        }
+    }
+
+    GridLayout {
+        columns: root.verticalMode ? 1 : 2
+        columnSpacing: appWin.padding
+        rowSpacing: appWin.padding
+        visible: _settings.hotkeys_enabled
+
+        Label {
+            Layout.fillWidth: true
+            Layout.leftMargin: verticalMode ? 0 : appWin.padding
+            text: qsTr("Listen, text to active window")
+        }
+        TextField {
+            id: hotkeyListenToKeyboardField
+
+            Layout.fillWidth: verticalMode
+            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            text: _settings.hotkey_listen_to_keyboard
+            onTextChanged: _settings.hotkey_listen_to_keyboard = text
+        }
+    }
+
+    GridLayout {
+        columns: root.verticalMode ? 1 : 2
+        columnSpacing: appWin.padding
+        rowSpacing: appWin.padding
+        visible: _settings.hotkeys_enabled
+
+        Label {
+            Layout.fillWidth: true
+            Layout.leftMargin: verticalMode ? 0 : appWin.padding
+            text: qsTr("Cancel")
+        }
+        TextField {
+            id: hotkeyCancelField
+
+            Layout.fillWidth: verticalMode
+            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            text: _settings.hotkey_cancel
+            onTextChanged: _settings.hotkey_cancel = text
+        }
+    }
+
     SectionLabel {
         text: qsTr("Text to Speech")
     }
