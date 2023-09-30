@@ -91,7 +91,7 @@ ApplicationWindow {
             else if (app.task_state === DsnoteApp.TaskStateInitializing)
                 text = qsTr("Getting ready, please wait...")
             else if (app.task_state === DsnoteApp.TaskStateProcessing)
-                return qsTr("Processing, please wait...")
+                text = qsTr("Processing, please wait...")
             else
                 text = qsTr("Say something...")
 
