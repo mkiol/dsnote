@@ -263,7 +263,8 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
     if (vad_status) {
         LOGD("vad: speech detected");
 
-        if (m_config.speech_mode != speech_mode_t::manual)
+        if (m_config.speech_mode != speech_mode_t::manual &&
+            m_config.speech_mode != speech_mode_t::single_sentence)
             set_speech_detection_status(
                 speech_detection_status_t::speech_detected);
 

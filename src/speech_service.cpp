@@ -2362,6 +2362,8 @@ int speech_service::stt_stop_listen(int task) {
         return FAILURE;
     }
 
+    qDebug() << "stt stop listen";
+
     if (audio_source_type() == source_t::file) {
         if (m_pending_task && m_pending_task->id == task)
             m_pending_task.reset();
@@ -2375,14 +2377,13 @@ int speech_service::stt_stop_listen(int task) {
             }
 
             stop_keepalive_current_task();
-            if (m_current_task->speech_mode == speech_mode_t::single_sentence ||
-                m_current_task->speech_mode == speech_mode_t::automatic) {
-                stop_stt_engine();
-            } else if (m_stt_engine && m_stt_engine->started()) {
+
+            if (m_stt_engine && m_stt_engine->started()) {
                 stop_stt_engine_gracefully();
             } else {
                 stop_stt_engine();
             }
+
         } else {
             qWarning() << "invalid task id";
             return FAILURE;
