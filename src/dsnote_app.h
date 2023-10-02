@@ -15,6 +15,7 @@
 #include <QVariantList>
 #include <QVariantMap>
 #include <memory>
+#include <optional>
 #include <queue>
 
 #ifdef USE_DESKTOP
@@ -178,7 +179,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void transcribe_file(const QUrl &source_file);
     Q_INVOKABLE void cancel();
     Q_INVOKABLE void listen();
-    Q_INVOKABLE void listen_to_keyboard();
+    Q_INVOKABLE void listen_to_active_window();
     Q_INVOKABLE void stop_listen();
     Q_INVOKABLE void play_speech();
     Q_INVOKABLE void play_speech_translator(bool transtalated);
@@ -217,6 +218,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void show_desktop_notification(const QString &summary,
                                                const QString &body,
                                                bool permanent = false);
+    Q_INVOKABLE void execute_action_name(const QString &action_name);
 
    signals:
     void active_stt_model_changed();
@@ -256,6 +258,14 @@ class dsnote_app : public QObject {
     void can_open_next_file();
 
    private:
+    enum class action_t {
+        start_listening,
+        start_listening_active_window,
+        stop_listening,
+        cancel
+    };
+    friend QDebug operator<<(QDebug d, action_t type);
+
     inline static const QString DBUS_SERVICE_NAME{
         QStringLiteral(APP_DBUS_SPEECH_SERVICE)};
     inline static const QString DBUS_SERVICE_PATH{QStringLiteral("/")};
@@ -308,6 +318,7 @@ class dsnote_app : public QObject {
     QTimer m_keepalive_current_task_timer;
     QTimer m_translator_delay_timer;
     QTimer m_open_files_delay_timer;
+    QTimer m_action_delay_timer;
     bool m_stt_configured = false;
     bool m_tts_configured = false;
     bool m_ttt_configured = false;
@@ -319,12 +330,14 @@ class dsnote_app : public QObject {
     QString m_prev_text;
     bool m_undo_flag = false;  // true => undo, false => redu
     std::queue<QString> m_files_to_open;
-    bool m_stt_result_to_keyboard = false;
+    std::optional<action_t> m_pending_action;
+    bool m_stt_result_to_active_window = false;
     unsigned int m_desktop_notification_id = 0;
 #ifdef USE_DESKTOP
     struct hotkeys_t {
-        QHotkey start_listen;
-        QHotkey start_listen_to_keyboard;
+        QHotkey start_listening;
+        QHotkey start_listening_active_window;
+        QHotkey stop_listening;
         QHotkey cancel;
     };
 
@@ -457,6 +470,8 @@ class dsnote_app : public QObject {
     void open_next_file();
     void reset_files_queue();
     void register_hotkeys();
+    void execute_action(action_t action);
+    void execute_pending_action();
 };
 
 #endif  // DSNOTE_APP_H

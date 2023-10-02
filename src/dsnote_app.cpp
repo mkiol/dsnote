@@ -124,6 +124,25 @@ QDebug operator<<(QDebug d, dsnote_app::error_t type) {
     return d;
 }
 
+QDebug operator<<(QDebug d, dsnote_app::action_t action) {
+    switch (action) {
+        case dsnote_app::action_t::start_listening:
+            d << "start-listening";
+            break;
+        case dsnote_app::action_t::start_listening_active_window:
+            d << "start-listening-active-window";
+            break;
+        case dsnote_app::action_t::stop_listening:
+            d << "stop-listening";
+            break;
+        case dsnote_app::action_t::cancel:
+            d << "cancel";
+            break;
+    }
+
+    return d;
+}
+
 dsnote_app::dsnote_app(QObject *parent)
     : QObject{parent},
       m_dbus_service{DBUS_SERVICE_NAME, DBUS_SERVICE_PATH,
@@ -223,6 +242,12 @@ dsnote_app::dsnote_app(QObject *parent)
     m_open_files_delay_timer.setInterval(250);
     connect(&m_open_files_delay_timer, &QTimer::timeout, this,
             &dsnote_app::open_next_file, Qt::QueuedConnection);
+
+    m_action_delay_timer.setSingleShot(true);
+    m_action_delay_timer.setTimerType(Qt::VeryCoarseTimer);
+    m_action_delay_timer.setInterval(250);
+    connect(&m_action_delay_timer, &QTimer::timeout, this,
+            &dsnote_app::execute_pending_action, Qt::QueuedConnection);
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
@@ -340,7 +365,7 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
         return;
     }
 
-    if (m_stt_result_to_keyboard) {
+    if (m_stt_result_to_active_window) {
 #ifdef USE_DESKTOP
         keyboard_tools::send_text(text);
 #else
@@ -1450,7 +1475,7 @@ void dsnote_app::cancel() {
 }
 
 void dsnote_app::transcribe_file(const QString &source_file) {
-    m_stt_result_to_keyboard = false;
+    m_stt_result_to_active_window = false;
 
     auto *s = settings::instance();
 
@@ -1473,12 +1498,12 @@ void dsnote_app::transcribe_file(const QUrl &source_file) {
 }
 
 void dsnote_app::listen() {
-    m_stt_result_to_keyboard = false;
+    m_stt_result_to_active_window = false;
     listen_internal();
 }
 
-void dsnote_app::listen_to_keyboard() {
-    m_stt_result_to_keyboard = true;
+void dsnote_app::listen_to_active_window() {
+    m_stt_result_to_active_window = true;
     listen_internal();
 }
 
@@ -2416,36 +2441,111 @@ void dsnote_app::show_desktop_notification(const QString &summary,
     }
 }
 
+void dsnote_app::execute_pending_action() {
+    if (!m_pending_action) return;
+
+    if (busy()) {
+        m_action_delay_timer.start();
+        return;
+    }
+
+    execute_action(m_pending_action.value());
+
+    m_pending_action.reset();
+}
+
+void dsnote_app::execute_action_name(const QString &action_name) {
+    if (action_name.isEmpty()) return;
+
+    if (!settings::instance()->actions_api_enabled()) {
+        qWarning() << "actions api is not enabled in the settings";
+        return;
+    }
+
+    if (action_name.compare("start-listening", Qt::CaseInsensitive) == 0) {
+        execute_action(action_t::start_listening);
+    } else if (action_name.compare("start-listening-active-window",
+                                   Qt::CaseInsensitive) == 0) {
+        execute_action(action_t::start_listening_active_window);
+    } else if (action_name.compare("stop-listening", Qt::CaseInsensitive) ==
+               0) {
+        execute_action(action_t::stop_listening);
+    } else if (action_name.compare("cancel", Qt::CaseInsensitive) == 0) {
+        execute_action(action_t::cancel);
+    } else {
+        qWarning() << "invalid action:" << action_name;
+    }
+}
+
+void dsnote_app::execute_action(action_t action) {
+    if (busy()) {
+        m_pending_action = action;
+        m_action_delay_timer.start();
+        qDebug() << "delaying action:" << action;
+        return;
+    }
+
+    qDebug() << "executing action:" << action;
+
+    switch (action) {
+        case dsnote_app::action_t::start_listening:
+            listen();
+            break;
+        case dsnote_app::action_t::start_listening_active_window:
+            listen_to_active_window();
+            break;
+        case dsnote_app::action_t::stop_listening:
+            stop_listen();
+            break;
+        case dsnote_app::action_t::cancel:
+            cancel();
+            break;
+    }
+}
+
 void dsnote_app::register_hotkeys() {
 #ifdef USE_DESKTOP
-    QObject::disconnect(&m_hotkeys.start_listen);
-    QObject::disconnect(&m_hotkeys.start_listen_to_keyboard);
+    QObject::disconnect(&m_hotkeys.start_listening);
+    QObject::disconnect(&m_hotkeys.start_listening_active_window);
+    QObject::disconnect(&m_hotkeys.stop_listening);
     QObject::disconnect(&m_hotkeys.cancel);
-    m_hotkeys.start_listen.setRegistered(false);
-    m_hotkeys.start_listen_to_keyboard.setRegistered(false);
+    m_hotkeys.start_listening.setRegistered(false);
+    m_hotkeys.start_listening_active_window.setRegistered(false);
+    m_hotkeys.stop_listening.setRegistered(false);
     m_hotkeys.cancel.setRegistered(false);
 
     auto *s = settings::instance();
 
     if (s->hotkeys_enabled()) {
-        if (!s->hotkey_listen().isEmpty()) {
-            m_hotkeys.start_listen.setShortcut(QKeySequence{s->hotkey_listen()},
-                                               true);
-            QObject::connect(&m_hotkeys.start_listen, &QHotkey::activated, this,
-                             [&]() {
-                                 qDebug() << "hot key activated: start listen";
-                                 listen();
-                             });
+        if (!s->hotkey_start_listening().isEmpty()) {
+            m_hotkeys.start_listening.setShortcut(
+                QKeySequence{s->hotkey_start_listening()}, true);
+            QObject::connect(
+                &m_hotkeys.start_listening, &QHotkey::activated, this, [&]() {
+                    qDebug() << "hot key activated: start-listening";
+                    execute_action(action_t::start_listening);
+                });
         }
 
-        if (!s->hotkey_listen_to_keyboard().isEmpty()) {
-            m_hotkeys.start_listen_to_keyboard.setShortcut(
-                QKeySequence{s->hotkey_listen_to_keyboard()}, true);
+        if (!s->hotkey_start_listening_active_window().isEmpty()) {
+            m_hotkeys.start_listening_active_window.setShortcut(
+                QKeySequence{s->hotkey_start_listening_active_window()}, true);
             QObject::connect(
-                &m_hotkeys.start_listen_to_keyboard, &QHotkey::activated, this,
-                [&]() {
-                    qDebug() << "hot key activated: start listen to keyboard";
-                    listen_to_keyboard();
+                &m_hotkeys.start_listening_active_window, &QHotkey::activated,
+                this, [&]() {
+                    qDebug()
+                        << "hot key activated: start-listening-active-window";
+                    execute_action(action_t::start_listening_active_window);
+                });
+        }
+
+        if (!s->hotkey_stop_listening().isEmpty()) {
+            m_hotkeys.stop_listening.setShortcut(
+                QKeySequence{s->hotkey_stop_listening()}, true);
+            QObject::connect(
+                &m_hotkeys.stop_listening, &QHotkey::activated, this, [&]() {
+                    qDebug() << "hot key activated: stop-listening";
+                    execute_action(action_t::stop_listening);
                 });
         }
 
@@ -2455,7 +2555,7 @@ void dsnote_app::register_hotkeys() {
             QObject::connect(&m_hotkeys.cancel, &QHotkey::activated, this,
                              [&]() {
                                  qDebug() << "hot key activated: cancel";
-                                 cancel();
+                                 execute_action(action_t::cancel);
                              });
         }
     }

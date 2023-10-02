@@ -67,8 +67,11 @@ static void signal_handler(int sig) {
 }
 
 struct cmd_options {
-    std::optional<settings::launch_mode_t> launch_mode;
+    bool valid = true;
+    settings::launch_mode_t launch_mode =
+        settings::launch_mode_t::app_stanalone;
     bool verbose = false;
+    QString action;
     QStringList files;
 };
 
@@ -99,37 +102,71 @@ static cmd_options check_options(const QCoreApplication& app) {
                                    QStringLiteral("Enables debug output.")};
     parser.addOption(verbose_opt);
 
+    QCommandLineOption action_opt{
+        QStringLiteral("action"),
+        QStringLiteral("Invokes an <action>. Supported actions are: "
+                       "start-listening, start-listening-active-window, "
+                       "stop-listening, cancel."),
+        QStringLiteral("action")};
+    parser.addOption(action_opt);
+
     parser.addHelpOption();
     parser.addVersionOption();
 
     parser.process(app);
 
-    std::optional<settings::launch_mode_t> launch_mode;
+    cmd_options options;
 
     if (parser.isSet(appstandalone_opt)) {
         if (!parser.isSet(app_opt) && !parser.isSet(sttservice_opt)) {
-            launch_mode = settings::launch_mode_t::app_stanalone;
+            options.launch_mode = settings::launch_mode_t::app_stanalone;
+        } else {
+            options.valid = false;
         }
     } else if (parser.isSet(app_opt)) {
         if (!parser.isSet(appstandalone_opt) && !parser.isSet(sttservice_opt)) {
-            launch_mode = settings::launch_mode_t::app;
+            options.launch_mode = settings::launch_mode_t::app;
+        } else {
+            options.valid = false;
         }
     } else if (parser.isSet(sttservice_opt)) {
         if (!parser.isSet(app_opt) && !parser.isSet(appstandalone_opt)) {
-            launch_mode = settings::launch_mode_t::service;
+            options.launch_mode = settings::launch_mode_t::service;
+        } else {
+            options.valid = false;
         }
     } else {
-        launch_mode = settings::launch_mode_t::app_stanalone;
+        options.launch_mode = settings::launch_mode_t::app_stanalone;
     }
 
-    if (!launch_mode) {
+    if (!options.valid) {
         fmt::print(stderr,
                    "Use one option from the following: --app-stanalone, --app, "
                    "--service.");
     }
 
-    return {launch_mode, parser.isSet(verbose_opt),
-            parser.positionalArguments()};
+    auto action = parser.value(action_opt);
+    if (!action.isEmpty()) {
+        if (action.compare("start-listening", Qt::CaseInsensitive) != 0 &&
+            action.compare("start-listening-active-window",
+                           Qt::CaseInsensitive) != 0 &&
+            action.compare("stop-listening", Qt::CaseInsensitive) != 0 &&
+            action.compare("cancel", Qt::CaseInsensitive) != 0) {
+            fmt::print(stderr,
+                       "Invalid action. Use one option from the following: "
+                       "start-listening, start-listening-active-window, "
+                       "stop-listening, "
+                       "cancel.");
+            options.valid = false;
+        } else {
+            options.action = std::move(action);
+        }
+    }
+
+    options.verbose = parser.isSet(verbose_opt);
+    options.files = parser.positionalArguments();
+
+    return options;
 }
 
 void register_types() {
@@ -188,7 +225,8 @@ static void start_service() {
     QGuiApplication::exec();
 }
 
-static void start_app(const QStringList& files_to_open,
+static void start_app(const QString& requested_action,
+                      const QStringList& files_to_open,
                       app_server& dbus_app_server) {
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
@@ -230,6 +268,8 @@ static void start_app(const QStringList& files_to_open,
                                 settings::instance());
     context->setContextProperty(QStringLiteral("_files_to_open"),
                                 files_to_open);
+    context->setContextProperty(QStringLiteral("_requested_action"),
+                                requested_action);
     context->setContextProperty(QStringLiteral("_app_server"),
                                 &dbus_app_server);
 
@@ -271,7 +311,7 @@ int main(int argc, char* argv[]) {
 
     auto cmd_opts = check_options(app);
 
-    if (!cmd_opts.launch_mode) return 0;
+    if (!cmd_opts.valid) return 0;
 
     Logger::init(cmd_opts.verbose ? Logger::LogType::Trace
                                   : Logger::LogType::Error);
@@ -281,10 +321,10 @@ int main(int argc, char* argv[]) {
 
     signal(SIGINT, signal_handler);
 
-    switch (cmd_opts.launch_mode.value()) {
+    switch (cmd_opts.launch_mode) {
         case settings::launch_mode_t::service:
             qDebug() << "starting service";
-            settings::instance()->set_launch_mode(cmd_opts.launch_mode.value());
+            settings::instance()->set_launch_mode(cmd_opts.launch_mode);
             start_service();
             exit_program();
             break;
@@ -300,9 +340,9 @@ int main(int argc, char* argv[]) {
     app_server dbus_app_server;
     QGuiApplication::setApplicationName(QStringLiteral(APP_ID));
 
-    settings::instance()->set_launch_mode(cmd_opts.launch_mode.value());
+    settings::instance()->set_launch_mode(cmd_opts.launch_mode);
 
-    start_app(cmd_opts.files, dbus_app_server);
+    start_app(cmd_opts.action, cmd_opts.files, dbus_app_server);
 
     exit_program();
 }

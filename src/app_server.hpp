@@ -32,6 +32,7 @@ class app_server : public QObject {
 
    signals:
     void activate_requested();
+    void action_requested(QString action_name);
     void files_to_open_requested(const QStringList &files);
 
    private:

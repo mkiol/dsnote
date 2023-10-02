@@ -193,9 +193,8 @@ ApplicationWindow {
 
     Connections {
         target: _app_server
-        onActivate_requested: {
-            appWin.raise()
-        }
+        onActivate_requested: appWin.raise()
+        onAction_requested: app.execute_action_name(action_name)
         onFiles_to_open_requested: {
             app.open_files(files)
             appWin.raise()
@@ -217,6 +216,7 @@ ApplicationWindow {
         onTts_configuredChanged: showWelcome()
         Component.onCompleted: {
             app.open_files(_files_to_open)
+            app.execute_action_name(_requested_action)
             showWelcome()
         }
 

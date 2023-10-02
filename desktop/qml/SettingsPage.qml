@@ -228,6 +228,26 @@ DialogPage {
     }
 
     CheckBox {
+        checked: _settings.actions_api_enabled
+        text: qsTr("Allow external applications to invoke actions")
+        onCheckedChanged: {
+            _settings.actions_api_enabled = checked
+        }
+
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: hovered
+        ToolTip.text: qsTr("Actions allow external application to invoke certain operations when %1 is running.").arg("<i>Speech Note</i>") + " " +
+                      qsTr("An action can be triggered via DBus call or with command-line option.") + " " +
+                      qsTr("The following actions are currently supported: %1.")
+                          .arg(
+                            " <i>start-listening</i> (" + qsTr("starts listening") + ")," +
+                            " <i>start-listening-active-window</i> (" + qsTr("starts listening, the decoded text will be inserted into the active window") + ")," +
+                            " <i>stop-listening</i> (" + qsTr("stops listening, already recorded voice will be decoded to text") + ")," +
+                            " <i>cancel</i> (" + qsTr("cancels any ongoing operation") + ")");
+    }
+
+    CheckBox {
+        visible: _settings.is_xcb()
         checked: _settings.hotkeys_enabled
         text: qsTr("Use global keyboard shortcuts")
         onCheckedChanged: {
@@ -236,9 +256,9 @@ DialogPage {
 
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
         ToolTip.visible: hovered
-        ToolTip.text: qsTr("Shortcuts allow you to start or stop listening using keyboard.") + " " +
-                      qsTr("Speech to Text result can be inserted into the current note or into any active window (currently in focus).") + " " +
-                      qsTr("Keyboard shortcuts work even when the application is not active (e.g. minimized or in the background).") + " " +
+        ToolTip.text: qsTr("Shortcuts allow you to start, stop or cancel listening using keyboard.") + " " +
+                      qsTr("Speech to Text result can be appended to the current note or inserted into any active window (currently in focus).") + " " +
+                      qsTr("Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).") + " " +
                       qsTr("This feature only works under X11.")
     }
 
@@ -251,15 +271,13 @@ DialogPage {
         Label {
             Layout.fillWidth: true
             Layout.leftMargin: verticalMode ? 0 : appWin.padding
-            text: qsTr("Listen")
+            text: qsTr("Start listening")
         }
         TextField {
-            id: hotkeyListenField
-
             Layout.fillWidth: verticalMode
             Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            text: _settings.hotkey_listen
-            onTextChanged: _settings.hotkey_listen = text
+            text: _settings.hotkey_start_listening
+            onTextChanged: _settings.hotkey_start_listening = text
         }
     }
 
@@ -272,15 +290,32 @@ DialogPage {
         Label {
             Layout.fillWidth: true
             Layout.leftMargin: verticalMode ? 0 : appWin.padding
-            text: qsTr("Listen, text to active window")
+            text: qsTr("Start listening, text to active window")
         }
         TextField {
-            id: hotkeyListenToKeyboardField
-
             Layout.fillWidth: verticalMode
             Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            text: _settings.hotkey_listen_to_keyboard
-            onTextChanged: _settings.hotkey_listen_to_keyboard = text
+            text: _settings.hotkey_start_listening_active_window
+            onTextChanged: _settings.hotkey_start_listening_active_window = text
+        }
+    }
+
+    GridLayout {
+        columns: root.verticalMode ? 1 : 2
+        columnSpacing: appWin.padding
+        rowSpacing: appWin.padding
+        visible: _settings.hotkeys_enabled
+
+        Label {
+            Layout.fillWidth: true
+            Layout.leftMargin: verticalMode ? 0 : appWin.padding
+            text: qsTr("Stop listening")
+        }
+        TextField {
+            Layout.fillWidth: verticalMode
+            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            text: _settings.hotkey_stop_listening
+            onTextChanged: _settings.hotkey_stop_listening = text
         }
     }
 
@@ -296,8 +331,6 @@ DialogPage {
             text: qsTr("Cancel")
         }
         TextField {
-            id: hotkeyCancelField
-
             Layout.fillWidth: verticalMode
             Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
             text: _settings.hotkey_cancel

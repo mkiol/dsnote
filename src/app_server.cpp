@@ -64,7 +64,7 @@ void app_server::ActivateAction(
     [[maybe_unused]] const QVariantMap &platform_data) {
     qDebug() << "[dbus app] ActivateAction called:" << action_name;
 
-    emit activate_requested();
+    emit action_requested(action_name);
 }
 
 void app_server::Open(const QStringList &uris,
@@ -85,31 +85,51 @@ void app_server::activateRequested(const QStringList& arguments,
 
     if (arguments.isEmpty()) return;
 
+    QString action_name;
     QStringList files;
+
+    bool action_option = false;
     std::for_each(
         std::next(arguments.cbegin()), arguments.cend(),
         [&](const QString& argument) {
-            if (argument.startsWith('-')) return;
-            auto scheme = QUrl{argument}.scheme();
-            if (scheme.isEmpty()) {
-                files.push_back(
-                    QDir{workingDirectory}.absoluteFilePath(argument));
-            } else if (scheme == "file") {
-                files.push_back(QUrl{argument}.toLocalFile());
+            if (argument == "--action") {
+                action_option = true;
+                return;
+            } else if (argument.startsWith('-')) {
+                action_option = false;
+                return;
+            }
+
+            if (action_option) {
+                action_name = argument;
+                action_option = false;
             } else {
-                qWarning() << "ignoring file argument:" << argument;
+                auto scheme = QUrl{argument}.scheme();
+                if (scheme.isEmpty()) {
+                    files.push_back(
+                        QDir{workingDirectory}.absoluteFilePath(argument));
+                } else if (scheme == "file") {
+                    files.push_back(QUrl{argument}.toLocalFile());
+                } else {
+                    qWarning() << "ignoring file argument:" << argument;
+                }
             }
         });
 
-    files_to_open(files);
+    if (action_name.isEmpty())
+        files_to_open(files);
+    else
+        emit action_requested(action_name);
 }
+
 void app_server::activateActionRequested(const QString& actionName,
                                          const QVariant& parameter) {
     qDebug() << "[dbus app] activateActionRequested:" << actionName
              << parameter;
 
-    emit activate_requested();
+    emit action_requested(actionName);
 }
+
 void app_server::openRequested(const QList<QUrl>& uris) {
     qDebug() << "[dbus app] openRequested:" << uris;
 

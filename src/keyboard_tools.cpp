@@ -43,18 +43,11 @@ static XKeyEvent create_key_event(Display *display, Window &win,
     return event;
 }
 
-static void log_layouts(xkb_keymap *keymap) {
-    auto num_layouts = xkb_keymap_num_layouts(keymap);
-    qDebug() << "keyboard layouts:";
-    for (unsigned int i = 0; i < num_layouts; ++i) {
-        qDebug() << i << ":" << xkb_keymap_layout_get_name(keymap, i);
-    }
-}
-
 static key_t key_from_character(Display *display, xkb_keymap *keymap,
-                                xkb_layout_index_t layout, QChar character) {
+                                xkb_layout_index_t layout,
+                                /*UTF-32*/ uint32_t character) {
     key_t key;
-    key.sym = xkb_utf32_to_keysym(character.unicode());
+    key.sym = xkb_utf32_to_keysym(character);
     key.code = XKeysymToKeycode(display, key.sym);
 
     auto num_levels_for_key =
@@ -118,10 +111,11 @@ void send_text(const QString &text) {
         xkb_context_unref(ctx);
         return;
     }
-    /*qDebug() << "keyboard layouts:";
+
+    qDebug() << "keyboard layouts:";
     for (unsigned int i = 0; i < num_layouts; ++i) {
         qDebug() << i << ":" << xkb_keymap_layout_get_name(keymap, i);
-    }*/
+    }
 
     auto win_root = XDefaultRootWindow(display);
     Window win_focus;
@@ -129,9 +123,9 @@ void send_text(const QString &text) {
     XGetInputFocus(display, &win_focus, &revert);
 
     std::for_each(text.cbegin(), text.cend(), [&](QChar c) {
-        auto event =
-            create_key_event(display, win_focus, win_root,
-                             key_from_character(display, keymap, 0, c));
+        auto event = create_key_event(
+            display, win_focus, win_root,
+            key_from_character(display, keymap, /*layout=*/0, c.unicode()));
 
         event.type = KeyPress;
         XSendEvent(event.display, event.window, True, KeyPressMask,

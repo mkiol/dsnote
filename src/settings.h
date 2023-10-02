@@ -71,16 +71,22 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(bool mtag READ mtag WRITE set_mtag NOTIFY mtag_changed)
     Q_PROPERTY(bool hotkeys_enabled READ hotkeys_enabled WRITE
                    set_hotkeys_enabled NOTIFY hotkeys_enabled_changed)
-    Q_PROPERTY(QString hotkey_listen READ hotkey_listen WRITE set_hotkey_listen
-                   NOTIFY hotkeys_changed)
-    Q_PROPERTY(QString hotkey_listen_to_keyboard READ hotkey_listen_to_keyboard
-                   WRITE set_hotkey_listen_to_keyboard NOTIFY hotkeys_changed)
+    Q_PROPERTY(QString hotkey_start_listening READ hotkey_start_listening WRITE
+                   set_hotkey_start_listening NOTIFY hotkeys_changed)
+    Q_PROPERTY(
+        QString hotkey_start_listening_active_window READ
+            hotkey_start_listening_active_window WRITE
+                set_hotkey_start_listening_active_window NOTIFY hotkeys_changed)
+    Q_PROPERTY(QString hotkey_stop_listening READ hotkey_stop_listening WRITE
+                   set_hotkey_stop_listening NOTIFY hotkeys_changed)
     Q_PROPERTY(QString hotkey_cancel READ hotkey_cancel WRITE set_hotkey_cancel
                    NOTIFY hotkeys_changed)
     Q_PROPERTY(
         desktop_notification_policy_t desktop_notification_policy READ
             desktop_notification_policy WRITE set_desktop_notification_policy
                 NOTIFY desktop_notification_policy_changed)
+    Q_PROPERTY(bool actions_api_enabled READ actions_api_enabled WRITE
+                   set_actions_api_enabled NOTIFY actions_api_enabled_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -232,20 +238,26 @@ class settings : public QSettings, public singleton<settings> {
     QString audio_format_str() const;
     bool hotkeys_enabled() const;
     void set_hotkeys_enabled(bool value);
-    QString hotkey_listen() const;
-    void set_hotkey_listen(const QString &value);
-    QString hotkey_listen_to_keyboard() const;
-    void set_hotkey_listen_to_keyboard(const QString &value);
+    QString hotkey_start_listening() const;
+    void set_hotkey_start_listening(const QString &value);
+    QString hotkey_start_listening_active_window() const;
+    void set_hotkey_start_listening_active_window(const QString &value);
+    QString hotkey_stop_listening() const;
+    void set_hotkey_stop_listening(const QString &value);
     QString hotkey_cancel() const;
     void set_hotkey_cancel(const QString &value);
     desktop_notification_policy_t desktop_notification_policy() const;
     void set_desktop_notification_policy(desktop_notification_policy_t value);
+    bool actions_api_enabled() const;
+    void set_actions_api_enabled(bool value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
     Q_INVOKABLE bool gpu_supported() const;
     Q_INVOKABLE bool has_gpu_device() const;
     Q_INVOKABLE bool has_audio_input() const;
+    Q_INVOKABLE bool is_wayland() const;
+    Q_INVOKABLE bool is_xcb() const;
     Q_INVOKABLE QStringList qt_styles() const;
     Q_INVOKABLE bool file_exists(const QString &file_path) const;
     Q_INVOKABLE QString
@@ -335,6 +347,7 @@ class settings : public QSettings, public singleton<settings> {
     void hotkeys_enabled_changed();
     void hotkeys_changed();
     void desktop_notification_policy_changed();
+    void actions_api_enabled_changed();
 
     // service
     void models_dir_changed();

@@ -14,6 +14,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
+#include <QGuiApplication>
 #include <QStandardPaths>
 #include <QVariant>
 #include <QVariantList>
@@ -98,6 +99,7 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     qDebug() << "cache location:"
              << QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
     qDebug() << "settings file:" << fileName();
+    qDebug() << "platform:" << QGuiApplication::platformName();
 
     update_qt_style();
     update_audio_inputs();
@@ -884,6 +886,7 @@ void settings::set_audio_input_idx(int value) {
 }
 
 bool settings::hotkeys_enabled() const {
+    if (!is_xcb()) return false;  // hotkeys are x11 feature
     return value(QStringLiteral("hotkeys_enabled"), false).toBool();
 }
 
@@ -894,28 +897,52 @@ void settings::set_hotkeys_enabled(bool value) {
     }
 }
 
-QString settings::hotkey_listen() const {
-    return value(QStringLiteral("hotkey_listen"),
+bool settings::actions_api_enabled() const {
+    return value(QStringLiteral("actions_api_enabled"), false).toBool();
+}
+
+void settings::set_actions_api_enabled(bool value) {
+    if (value != actions_api_enabled()) {
+        setValue(QStringLiteral("actions_api_enabled"), value);
+        emit actions_api_enabled_changed();
+    }
+}
+
+QString settings::hotkey_start_listening() const {
+    return value(QStringLiteral("hotkey_start_listening"),
                  QStringLiteral("Ctrl+Alt+Shift+L"))
         .toString();
 }
 
-void settings::set_hotkey_listen(const QString& value) {
-    if (value != hotkey_listen()) {
-        setValue(QStringLiteral("hotkey_listen"), value);
+void settings::set_hotkey_start_listening(const QString& value) {
+    if (value != hotkey_start_listening()) {
+        setValue(QStringLiteral("hotkey_start_listening"), value);
         emit hotkeys_changed();
     }
 }
 
-QString settings::hotkey_listen_to_keyboard() const {
-    return value(QStringLiteral("hotkey_listen_to_keyboard"),
+QString settings::hotkey_start_listening_active_window() const {
+    return value(QStringLiteral("hotkey_start_listening_active_window"),
                  QStringLiteral("Ctrl+Alt+Shift+K"))
         .toString();
 }
 
-void settings::set_hotkey_listen_to_keyboard(const QString& value) {
-    if (value != hotkey_listen_to_keyboard()) {
-        setValue(QStringLiteral("hotkey_listen_to_keyboard"), value);
+void settings::set_hotkey_start_listening_active_window(const QString& value) {
+    if (value != hotkey_start_listening_active_window()) {
+        setValue(QStringLiteral("hotkey_start_listening_active_window"), value);
+        emit hotkeys_changed();
+    }
+}
+
+QString settings::hotkey_stop_listening() const {
+    return value(QStringLiteral("hotkey_stop_listening"),
+                 QStringLiteral("Ctrl+Alt+Shift+S"))
+        .toString();
+}
+
+void settings::set_hotkey_stop_listening(const QString& value) {
+    if (value != hotkey_stop_listening()) {
+        setValue(QStringLiteral("hotkey_stop_listening"), value);
         emit hotkeys_changed();
     }
 }
@@ -949,4 +976,12 @@ void settings::set_desktop_notification_policy(
                  static_cast<int>(value));
         emit desktop_notification_policy_changed();
     }
+}
+
+bool settings::is_wayland() const {
+    return QGuiApplication::platformName() == "wayland";
+}
+
+bool settings::is_xcb() const {
+    return QGuiApplication::platformName() == "xcb";
 }
