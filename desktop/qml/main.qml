@@ -85,17 +85,21 @@ ApplicationWindow {
             app.state === DsnoteApp.StateListeningSingleSentence ||
             app.state === DsnoteApp.StateListeningAuto ||
             app.state === DsnoteApp.StateListeningManual)) {
-            var text
-            if (app.intermediate_text.length !== 0)
-                text = app.intermediate_text
-            else if (app.task_state === DsnoteApp.TaskStateInitializing)
-                text = qsTr("Getting ready, please wait...")
+            var text_summary
+            if (app.task_state === DsnoteApp.TaskStateInitializing)
+                text_summary = qsTr("Getting ready, please wait...")
             else if (app.task_state === DsnoteApp.TaskStateProcessing)
-                text = qsTr("Processing, please wait...")
+                text_summary = qsTr("Processing, please wait...")
             else
-                text = qsTr("Say something...")
+                text_summary = qsTr("Say something...")
 
-            app.show_desktop_notification(text, "", true)
+            var text_body
+            if (app.intermediate_text.length !== 0)
+                text_body = app.intermediate_text
+            else
+                text_body = ""
+
+            app.show_desktop_notification(text_summary, text_body, true)
         } else {
             app.close_desktop_notification()
         }

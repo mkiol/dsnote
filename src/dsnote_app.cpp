@@ -249,6 +249,13 @@ dsnote_app::dsnote_app(QObject *parent)
     connect(&m_action_delay_timer, &QTimer::timeout, this,
             &dsnote_app::execute_pending_action, Qt::QueuedConnection);
 
+    m_desktop_notification_delay_timer.setSingleShot(true);
+    m_desktop_notification_delay_timer.setTimerType(Qt::VeryCoarseTimer);
+    m_desktop_notification_delay_timer.setInterval(250);
+    connect(&m_desktop_notification_delay_timer, &QTimer::timeout, this,
+            &dsnote_app::process_pending_desktop_notification,
+            Qt::QueuedConnection);
+
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
         connect_service_signals();
@@ -2420,11 +2427,30 @@ void dsnote_app::reset_files_queue() {
 }
 
 void dsnote_app::close_desktop_notification() {
-    if (!m_dbus_notifications.isValid() || m_desktop_notification_id == 0)
-        return;
+    if (!m_desktop_notification) return;
 
-    m_dbus_notifications.CloseNotification(m_desktop_notification_id);
-    m_desktop_notification_id = 0;
+    m_desktop_notification->close_request = true;
+
+    m_desktop_notification_delay_timer.start();
+}
+
+void dsnote_app::process_pending_desktop_notification() {
+    if (!m_desktop_notification) return;
+
+    if (m_desktop_notification->close_request) {
+        m_dbus_notifications.CloseNotification(m_desktop_notification->id);
+        m_desktop_notification.reset();
+    } else {
+        auto reply = m_dbus_notifications.Notify(
+            "", m_desktop_notification->id, APP_ICON_ID,
+            m_desktop_notification->summary, m_desktop_notification->body, {},
+            {}, m_desktop_notification->permanent ? 0 : -1);
+
+        reply.waitForFinished();
+        if (reply.isValid()) {
+            m_desktop_notification->id = reply.argumentAt<0>();
+        }
+    }
 }
 
 void dsnote_app::show_desktop_notification(const QString &summary,
@@ -2432,13 +2458,23 @@ void dsnote_app::show_desktop_notification(const QString &summary,
                                            bool permanent) {
     if (!m_dbus_notifications.isValid()) return;
 
-    auto reply =
-        m_dbus_notifications.Notify("", m_desktop_notification_id, APP_ICON_ID,
-                                    summary, body, {}, {}, permanent ? 0 : -1);
-    reply.waitForFinished();
-    if (reply.isValid()) {
-        m_desktop_notification_id = reply.argumentAt<0>();
+    if (m_desktop_notification) {
+        if (!m_desktop_notification->close_request &&
+            summary == m_desktop_notification->summary &&
+            body == m_desktop_notification->body) {
+            return;
+        }
+
+        m_desktop_notification->summary = summary;
+        m_desktop_notification->body = body;
+        m_desktop_notification->permanent = permanent;
+        m_desktop_notification->close_request = false;
+    } else {
+        m_desktop_notification =
+            desktop_notification_t{0, summary, body, permanent, false};
     }
+
+    m_desktop_notification_delay_timer.start();
 }
 
 void dsnote_app::execute_pending_action() {

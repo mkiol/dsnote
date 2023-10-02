@@ -290,6 +290,14 @@ class dsnote_app : public QObject {
         inline void reset() { this->set(INVALID_TASK); }
     };
 
+    struct desktop_notification_t {
+        unsigned int id = 0;
+        QString summary;
+        QString body;
+        bool permanent = false;
+        bool close_request = false;
+    };
+
     QString m_active_stt_model;
     QVariantMap m_available_stt_models_map;
     QString m_active_tts_model;
@@ -319,6 +327,7 @@ class dsnote_app : public QObject {
     QTimer m_translator_delay_timer;
     QTimer m_open_files_delay_timer;
     QTimer m_action_delay_timer;
+    QTimer m_desktop_notification_delay_timer;
     bool m_stt_configured = false;
     bool m_tts_configured = false;
     bool m_ttt_configured = false;
@@ -332,7 +341,8 @@ class dsnote_app : public QObject {
     std::queue<QString> m_files_to_open;
     std::optional<action_t> m_pending_action;
     bool m_stt_result_to_active_window = false;
-    unsigned int m_desktop_notification_id = 0;
+    std::optional<desktop_notification_t> m_desktop_notification;
+
 #ifdef USE_DESKTOP
     struct hotkeys_t {
         QHotkey start_listening;
@@ -472,6 +482,7 @@ class dsnote_app : public QObject {
     void register_hotkeys();
     void execute_action(action_t action);
     void execute_pending_action();
+    void process_pending_desktop_notification();
 };
 
 #endif  // DSNOTE_APP_H
