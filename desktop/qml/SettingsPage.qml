@@ -19,533 +19,572 @@ DialogPage {
 
     title: qsTr("Settings")
 
-    Label {
-        wrapMode: Text.Wrap
-        Layout.fillWidth: true
+    footerLabel {
         visible: _settings.restart_required
-        color: "red"
         text: qsTr("Restart the application to apply changes.")
-    }
-
-    SectionLabel {
-        text: qsTr("Speech to Text")
-    }
-
-    GridLayout {
-        id: grid
-
-        visible: _settings.audio_inputs.length > 1
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
-
-        Label {
-            wrapMode: Text.Wrap
-            Layout.fillWidth: true
-            text: qsTr("Audio source")
-        }
-        ComboBox {
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            currentIndex: _settings.audio_input_idx
-            model: _settings.audio_inputs
-            onActivated: {
-                _settings.audio_input_idx = index
-            }
-
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Select preferred audio source.")
-        }
-    }
-
-    Label {
-        wrapMode: Text.Wrap
-        Layout.fillWidth: true
-        visible: _settings.audio_inputs.length <= 1
         color: "red"
-        text: qsTr("No audio source could be found.") + " " + qsTr("Make sure the microphone is properly connected.")
     }
 
-    GridLayout {
-        Layout.fillWidth: true
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
+    TabBar {
+        id: bar
 
-        Label {
-            Layout.fillWidth: true
-            text: qsTr("Listening mode")
+        width: parent.width
+
+        TabButton {
+            text: qsTr("Speech to Text")
+            width: implicitWidth
         }
-        ComboBox {
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            currentIndex: {
-                if (_settings.speech_mode === Settings.SpeechSingleSentence) return 0
-                if (_settings.speech_mode === Settings.SpeechAutomatic) return 2
-                return 1
-            }
-            model: [
-                qsTr("One sentence"),
-                qsTr("Press and hold"),
-                qsTr("Always on")
-            ]
-            onActivated: {
-                if (index === 0) {
-                    _settings.speech_mode = Settings.SpeechSingleSentence
-                } else if (index === 2) {
-                    _settings.speech_mode = Settings.SpeechAutomatic
-                } else {
-                    _settings.speech_mode = Settings.SpeechManual
+
+        TabButton {
+            text: qsTr("Text to Speech")
+            width: implicitWidth
+        }
+
+        TabButton {
+            text: qsTr("User Interface")
+            width: implicitWidth
+        }
+
+        TabButton {
+            text: qsTr("Other")
+            width: implicitWidth
+        }
+    }
+
+    StackLayout {
+        width: root.width
+        Layout.topMargin: appWin.padding
+
+        currentIndex: bar.currentIndex
+
+        ColumnLayout {
+            id: speechToTextTab
+
+            width: root.width
+
+            GridLayout {
+                id: grid
+
+                visible: _settings.audio_inputs.length > 1
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    wrapMode: Text.Wrap
+                    Layout.fillWidth: true
+                    text: qsTr("Audio source")
                 }
-            }
-
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered
-            ToolTip.text: "<i>" + qsTr("One sentence") + "</i>" + " — " + qsTr("Clicking on the %1 button starts listening, which ends when the first sentence is recognized.")
-                            .arg("<i>" + qsTr("Listen") + "</i>") + "<br/>" +
-                          "<i>" + qsTr("Press and hold") + "</i>" + " — " + qsTr("Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.")
-                            .arg("<i>" + qsTr("Listen") + "</i>") + "<br/>" +
-                          "<i>" + qsTr("Always on") + "</i>" + " — " + qsTr("After clicking on the %1 button, listening is always turn on.")
-                            .arg("<i>" + qsTr("Listen") + "</i>")
-        }
-    }
-
-    GridLayout {
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
-
-        Label {
-            Layout.fillWidth: true
-            text: qsTr("Text appending style")
-        }
-        ComboBox {
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            currentIndex: {
-                if (_settings.insert_mode === Settings.InsertInLine) return 0
-                if (_settings.insert_mode === Settings.InsertNewLine) return 1
-                return 0
-            }
-            model: [
-                qsTr("In line"),
-                qsTr("After line break")
-            ]
-            onActivated: {
-                if (index === 0) {
-                    _settings.insert_mode = Settings.InsertInLine
-                } else if (index === 1) {
-                    _settings.insert_mode = Settings.InsertNewLine
-                } else {
-                    _settings.insert_mode = Settings.InsertInLine
-                }
-            }
-
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Text is appended to the note in the same line or after line break.")
-        }
-    }
-
-    CheckBox {
-        id: puncCheckBox
-
-        visible: _settings.py_supported()
-        checked: _settings.restore_punctuation
-        text: qsTr("Restore punctuation")
-        onCheckedChanged: {
-            _settings.restore_punctuation = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTr("Enable advanced punctuation restoration after speech recognition. To make it work, " +
-                           "make sure you have enabled %1 model for your language.")
-                      .arg("<i>" + qsTr("Punctuation") + "</i>") + " " +
-                      qsTr("When this option is enabled model initialization takes much longer and memory usage is much higher.")
-    }
-
-    Label {
-        wrapMode: Text.Wrap
-        Layout.leftMargin: verticalMode ? 0 : appWin.padding
-        Layout.fillWidth: true
-        visible: _settings.py_supported() && _settings.restore_punctuation && !app.ttt_configured
-        color: "red"
-        text: qsTr("To make %1 work, download %2 model.")
-                .arg("<i>" + qsTr("Restore punctuation") + "</i>").arg("<i>" + qsTr("Punctuation") + "</i>")
-    }
-
-    CheckBox {
-        visible: _settings.gpu_supported()
-        checked: _settings.whisper_use_gpu
-        text: qsTr("Use GPU acceleration for Whisper")
-        onCheckedChanged: {
-            _settings.whisper_use_gpu = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTr("If a suitable GPU device is found in the system, it will be used to accelerate processing.") + " " +
-                      qsTr("GPU hardware acceleration significantly reduces the time of decoding.") + " " +
-                      qsTr("Disable this option if you observe problems when using Speech to Text with Whisper models.")
-    }
-
-    Label {
-        wrapMode: Text.Wrap
-        Layout.leftMargin: verticalMode ? 0 : appWin.padding
-        Layout.fillWidth: true
-        visible: _settings.gpu_supported() && _settings.whisper_use_gpu && _settings.gpu_devices.length <= 1
-        color: "red"
-        text: qsTr("A suitable GPU device could not be found.")
-    }
-
-    GridLayout {
-        visible: _settings.gpu_supported() && _settings.whisper_use_gpu && _settings.gpu_devices.length > 1
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
-
-        Label {
-            wrapMode: Text.Wrap
-            Layout.leftMargin: verticalMode ? 0 : appWin.padding
-            Layout.fillWidth: true
-            text: qsTr("GPU device")
-        }
-        ComboBox {
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            currentIndex: _settings.gpu_device_idx
-            model: _settings.gpu_devices
-            onActivated: {
-                _settings.gpu_device_idx = index
-            }
-
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Select preferred GPU device for hardware acceleration.")
-        }
-    }
-
-    CheckBox {
-        checked: _settings.actions_api_enabled
-        text: qsTr("Allow external applications to invoke actions")
-        onCheckedChanged: {
-            _settings.actions_api_enabled = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTr("Actions allow external application to invoke certain operations when %1 is running.").arg("<i>Speech Note</i>") + " " +
-                      qsTr("An action can be triggered via DBus call or with command-line option.") + " " +
-                      qsTr("The following actions are currently supported: %1.")
-                          .arg(
-                            " <i>start-listening</i> (" + qsTr("starts listening") + ")," +
-                            " <i>start-listening-active-window</i> (" + qsTr("starts listening, the decoded text will be inserted into the active window") + ")," +
-                            " <i>stop-listening</i> (" + qsTr("stops listening, already recorded voice will be decoded to text") + ")," +
-                            " <i>cancel</i> (" + qsTr("cancels any ongoing operation") + ")");
-    }
-
-    CheckBox {
-        visible: _settings.is_xcb()
-        checked: _settings.hotkeys_enabled
-        text: qsTr("Use global keyboard shortcuts")
-        onCheckedChanged: {
-            _settings.hotkeys_enabled = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTr("Shortcuts allow you to start, stop or cancel listening using keyboard.") + " " +
-                      qsTr("Speech to Text result can be appended to the current note or inserted into any active window (currently in focus).") + " " +
-                      qsTr("Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).") + " " +
-                      qsTr("This feature only works under X11.")
-    }
-
-    GridLayout {
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
-        visible: _settings.hotkeys_enabled
-
-        Label {
-            Layout.fillWidth: true
-            Layout.leftMargin: verticalMode ? 0 : appWin.padding
-            text: qsTr("Start listening")
-        }
-        TextField {
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            text: _settings.hotkey_start_listening
-            onTextChanged: _settings.hotkey_start_listening = text
-        }
-    }
-
-    GridLayout {
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
-        visible: _settings.hotkeys_enabled
-
-        Label {
-            Layout.fillWidth: true
-            Layout.leftMargin: verticalMode ? 0 : appWin.padding
-            text: qsTr("Start listening, text to active window")
-        }
-        TextField {
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            text: _settings.hotkey_start_listening_active_window
-            onTextChanged: _settings.hotkey_start_listening_active_window = text
-        }
-    }
-
-    GridLayout {
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
-        visible: _settings.hotkeys_enabled
-
-        Label {
-            Layout.fillWidth: true
-            Layout.leftMargin: verticalMode ? 0 : appWin.padding
-            text: qsTr("Stop listening")
-        }
-        TextField {
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            text: _settings.hotkey_stop_listening
-            onTextChanged: _settings.hotkey_stop_listening = text
-        }
-    }
-
-    GridLayout {
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
-        visible: _settings.hotkeys_enabled
-
-        Label {
-            Layout.fillWidth: true
-            Layout.leftMargin: verticalMode ? 0 : appWin.padding
-            text: qsTr("Cancel")
-        }
-        TextField {
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            text: _settings.hotkey_cancel
-            onTextChanged: _settings.hotkey_cancel = text
-        }
-    }
-
-    GridLayout {
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
-
-        Label {
-            Layout.fillWidth: true
-            text: qsTr("Show desktop notification")
-        }
-        ComboBox {
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            currentIndex: {
-                switch(_settings.desktop_notification_policy) {
-                case Settings.DesktopNotificationNever: return 0
-                case Settings.DesktopNotificationWhenInacvtive: return 1
-                case Settings.DesktopNotificationAlways: return 2
-                }
-                return 0
-            }
-            model: [
-                qsTr("Never"),
-                qsTr("When in background"),
-                qsTr("Always")
-            ]
-            onActivated: {
-                if (index === 0) {
-                    _settings.desktop_notification_policy = Settings.DesktopNotificationNever
-                } else if (index === 1) {
-                    _settings.desktop_notification_policy = Settings.DesktopNotificationWhenInacvtive
-                } else if (index === 2) {
-                    _settings.desktop_notification_policy = Settings.DesktopNotificationAlways
-                }
-            }
-
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Show desktop notification while listening.")
-        }
-    }
-
-    SectionLabel {
-        text: qsTr("Text to Speech")
-    }
-
-    GridLayout {
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
-
-        Label {
-            wrapMode: Text.Wrap
-            Layout.fillWidth: true
-            text: qsTr("Speech speed")
-        }
-
-        Slider {
-            id: speechSpeedSlider
-
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered && !pressed
-            ToolTip.text: qsTr("Change to make synthesized speech slower or faster.")
-
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            snapMode: Slider.SnapAlways
-            stepSize: 1
-            from: -2
-            to: 2
-            value: {
-                switch(_settings.speech_speed) {
-                case Settings.SpeechSpeedVerySlow: return -2
-                case Settings.SpeechSpeedSlow: return -1
-                case Settings.SpeechSpeedNormal: return 0
-                case Settings.SpeechSpeedFast: return 1
-                case Settings.SpeechSpeedVeryFast: return 2
-                }
-            }
-
-            onValueChanged: {
-                switch(value) {
-                case -2: _settings.speech_speed = Settings.SpeechSpeedVerySlow; break;
-                case -1: _settings.speech_speed = Settings.SpeechSpeedSlow; break;
-                case 0: _settings.speech_speed = Settings.SpeechSpeedNormal; break;
-                case 1: _settings.speech_speed = Settings.SpeechSpeedFast; break;
-                case 2: _settings.speech_speed = Settings.SpeechSpeedVeryFast; break;
-                }
-            }
-
-            Connections {
-                target: _settings
-                onSpeech_speedChanged: {
-                    switch(_settings.speech_speed) {
-                    case Settings.SpeechSpeedVerySlow: speechSpeedSlider.value = -2; break
-                    case Settings.SpeechSpeedSlow: speechSpeedSlider.value = -1; break
-                    case Settings.SpeechSpeedNormal: speechSpeedSlider.value = 0; break
-                    case Settings.SpeechSpeedFast: speechSpeedSlider.value = 1; break
-                    case Settings.SpeechSpeedVeryFast: speechSpeedSlider.value = 2; break
+                ComboBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    currentIndex: _settings.audio_input_idx
+                    model: _settings.audio_inputs
+                    onActivated: {
+                        _settings.audio_input_idx = index
                     }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Select preferred audio source.")
                 }
             }
 
             Label {
-                anchors.bottom: parent.handle.top
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottomMargin: appWin.padding
-                text: {
-                    switch(parent.value) {
-                    case -2: return qsTr("Very slow");
-                    case -1: return qsTr("Slow");
-                    case 0: return qsTr("Normal");
-                    case 1: return qsTr("Fast");
-                    case 2: return qsTr("Very fast");
+                wrapMode: Text.Wrap
+                Layout.fillWidth: true
+                visible: _settings.audio_inputs.length <= 1
+                color: "red"
+                text: qsTr("No audio source could be found.") + " " + qsTr("Make sure the microphone is properly connected.")
+            }
+
+            GridLayout {
+                Layout.fillWidth: true
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Listening mode")
+                }
+                ComboBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    currentIndex: {
+                        if (_settings.speech_mode === Settings.SpeechSingleSentence) return 0
+                        if (_settings.speech_mode === Settings.SpeechAutomatic) return 2
+                        return 1
+                    }
+                    model: [
+                        qsTr("One sentence"),
+                        qsTr("Press and hold"),
+                        qsTr("Always on")
+                    ]
+                    onActivated: {
+                        if (index === 0) {
+                            _settings.speech_mode = Settings.SpeechSingleSentence
+                        } else if (index === 2) {
+                            _settings.speech_mode = Settings.SpeechAutomatic
+                        } else {
+                            _settings.speech_mode = Settings.SpeechManual
+                        }
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: "<i>" + qsTr("One sentence") + "</i>" + " — " + qsTr("Clicking on the %1 button starts listening, which ends when the first sentence is recognized.")
+                                    .arg("<i>" + qsTr("Listen") + "</i>") + "<br/>" +
+                                  "<i>" + qsTr("Press and hold") + "</i>" + " — " + qsTr("Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.")
+                                    .arg("<i>" + qsTr("Listen") + "</i>") + "<br/>" +
+                                  "<i>" + qsTr("Always on") + "</i>" + " — " + qsTr("After clicking on the %1 button, listening is always turn on.")
+                                    .arg("<i>" + qsTr("Listen") + "</i>")
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Text appending style")
+                }
+                ComboBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    currentIndex: {
+                        if (_settings.insert_mode === Settings.InsertInLine) return 0
+                        if (_settings.insert_mode === Settings.InsertNewLine) return 1
+                        return 0
+                    }
+                    model: [
+                        qsTr("In line"),
+                        qsTr("After line break")
+                    ]
+                    onActivated: {
+                        if (index === 0) {
+                            _settings.insert_mode = Settings.InsertInLine
+                        } else if (index === 1) {
+                            _settings.insert_mode = Settings.InsertNewLine
+                        } else {
+                            _settings.insert_mode = Settings.InsertInLine
+                        }
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Text is appended to the note in the same line or after line break.")
+                }
+            }
+
+            CheckBox {
+                id: puncCheckBox
+
+                visible: _settings.py_supported()
+                checked: _settings.restore_punctuation
+                text: qsTr("Restore punctuation")
+                onCheckedChanged: {
+                    _settings.restore_punctuation = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Enable advanced punctuation restoration after speech recognition. To make it work, " +
+                                   "make sure you have enabled %1 model for your language.")
+                              .arg("<i>" + qsTr("Punctuation") + "</i>") + " " +
+                              qsTr("When this option is enabled model initialization takes much longer and memory usage is much higher.")
+            }
+
+            Label {
+                wrapMode: Text.Wrap
+                Layout.leftMargin: verticalMode ? 0 : appWin.padding
+                Layout.fillWidth: true
+                visible: _settings.py_supported() && _settings.restore_punctuation && !app.ttt_configured
+                color: "red"
+                text: qsTr("To make %1 work, download %2 model.")
+                        .arg("<i>" + qsTr("Restore punctuation") + "</i>").arg("<i>" + qsTr("Punctuation") + "</i>")
+            }
+
+            CheckBox {
+                visible: _settings.gpu_supported()
+                checked: _settings.whisper_use_gpu
+                text: qsTr("Use GPU acceleration for Whisper")
+                onCheckedChanged: {
+                    _settings.whisper_use_gpu = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("If a suitable GPU device is found in the system, it will be used to accelerate processing.") + " " +
+                              qsTr("GPU hardware acceleration significantly reduces the time of decoding.") + " " +
+                              qsTr("Disable this option if you observe problems when using Speech to Text with Whisper models.")
+            }
+
+            Label {
+                wrapMode: Text.Wrap
+                Layout.leftMargin: verticalMode ? 0 : 2 * appWin.padding
+                Layout.fillWidth: true
+                visible: _settings.gpu_supported() && _settings.whisper_use_gpu && _settings.gpu_devices.length <= 1
+                color: "red"
+                text: qsTr("A suitable GPU device could not be found.")
+            }
+
+            GridLayout {
+                visible: _settings.gpu_supported() && _settings.whisper_use_gpu && _settings.gpu_devices.length > 1
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    wrapMode: Text.Wrap
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.fillWidth: true
+                    text: qsTr("GPU device")
+                }
+                ComboBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    currentIndex: _settings.gpu_device_idx
+                    model: _settings.gpu_devices
+                    onActivated: {
+                        _settings.gpu_device_idx = index
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Select preferred GPU device for hardware acceleration.")
+                }
+            }
+
+            CheckBox {
+                checked: _settings.actions_api_enabled
+                text: qsTr("Allow external applications to invoke actions")
+                onCheckedChanged: {
+                    _settings.actions_api_enabled = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Actions allow external application to invoke certain operations when %1 is running.").arg("<i>Speech Note</i>") + " " +
+                              qsTr("An action can be triggered via DBus call or with command-line option.") + " " +
+                              qsTr("The following actions are currently supported: %1.")
+                                  .arg(
+                                    " <i>start-listening</i> (" + qsTr("starts listening") + ")," +
+                                    " <i>start-listening-active-window</i> (" + qsTr("starts listening, the decoded text will be inserted into the active window") + ")," +
+                                    " <i>stop-listening</i> (" + qsTr("stops listening, already recorded voice will be decoded to text") + ")," +
+                                    " <i>cancel</i> (" + qsTr("cancels any ongoing operation") + ")");
+            }
+
+            CheckBox {
+                visible: _settings.is_xcb()
+                checked: _settings.hotkeys_enabled
+                text: qsTr("Use global keyboard shortcuts")
+                onCheckedChanged: {
+                    _settings.hotkeys_enabled = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Shortcuts allow you to start, stop or cancel listening using keyboard.") + " " +
+                              qsTr("Speech to Text result can be appended to the current note or inserted into any active window (currently in focus).") + " " +
+                              qsTr("Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).") + " " +
+                              qsTr("This feature only works under X11.")
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+                visible: _settings.hotkeys_enabled
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    text: qsTr("Start listening")
+                }
+                TextField {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    text: _settings.hotkey_start_listening
+                    onTextChanged: _settings.hotkey_start_listening = text
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+                visible: _settings.hotkeys_enabled
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    text: qsTr("Start listening, text to active window")
+                }
+                TextField {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    text: _settings.hotkey_start_listening_active_window
+                    onTextChanged: _settings.hotkey_start_listening_active_window = text
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+                visible: _settings.hotkeys_enabled
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    text: qsTr("Stop listening")
+                }
+                TextField {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    text: _settings.hotkey_stop_listening
+                    onTextChanged: _settings.hotkey_stop_listening = text
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+                visible: _settings.hotkeys_enabled
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    text: qsTr("Cancel")
+                }
+                TextField {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    text: _settings.hotkey_cancel
+                    onTextChanged: _settings.hotkey_cancel = text
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Show desktop notification")
+                }
+                ComboBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    currentIndex: {
+                        switch(_settings.desktop_notification_policy) {
+                        case Settings.DesktopNotificationNever: return 0
+                        case Settings.DesktopNotificationWhenInacvtive: return 1
+                        case Settings.DesktopNotificationAlways: return 2
+                        }
+                        return 0
+                    }
+                    model: [
+                        qsTr("Never"),
+                        qsTr("When in background"),
+                        qsTr("Always")
+                    ]
+                    onActivated: {
+                        if (index === 0) {
+                            _settings.desktop_notification_policy = Settings.DesktopNotificationNever
+                        } else if (index === 1) {
+                            _settings.desktop_notification_policy = Settings.DesktopNotificationWhenInacvtive
+                        } else if (index === 2) {
+                            _settings.desktop_notification_policy = Settings.DesktopNotificationAlways
+                        }
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Show desktop notification while listening.")
+                }
+            }
+        }
+
+        ColumnLayout {
+            id: textToSpeechTab
+
+            width: root.width
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    wrapMode: Text.Wrap
+                    Layout.fillWidth: true
+                    text: qsTr("Speech speed")
+                }
+
+                Slider {
+                    id: speechSpeedSlider
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered && !pressed
+                    ToolTip.text: qsTr("Change to make synthesized speech slower or faster.")
+
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    snapMode: Slider.SnapAlways
+                    stepSize: 1
+                    from: -2
+                    to: 2
+                    value: {
+                        switch(_settings.speech_speed) {
+                        case Settings.SpeechSpeedVerySlow: return -2
+                        case Settings.SpeechSpeedSlow: return -1
+                        case Settings.SpeechSpeedNormal: return 0
+                        case Settings.SpeechSpeedFast: return 1
+                        case Settings.SpeechSpeedVeryFast: return 2
+                        }
+                    }
+
+                    onValueChanged: {
+                        switch(value) {
+                        case -2: _settings.speech_speed = Settings.SpeechSpeedVerySlow; break;
+                        case -1: _settings.speech_speed = Settings.SpeechSpeedSlow; break;
+                        case 0: _settings.speech_speed = Settings.SpeechSpeedNormal; break;
+                        case 1: _settings.speech_speed = Settings.SpeechSpeedFast; break;
+                        case 2: _settings.speech_speed = Settings.SpeechSpeedVeryFast; break;
+                        }
+                    }
+
+                    Connections {
+                        target: _settings
+                        onSpeech_speedChanged: {
+                            switch(_settings.speech_speed) {
+                            case Settings.SpeechSpeedVerySlow: speechSpeedSlider.value = -2; break
+                            case Settings.SpeechSpeedSlow: speechSpeedSlider.value = -1; break
+                            case Settings.SpeechSpeedNormal: speechSpeedSlider.value = 0; break
+                            case Settings.SpeechSpeedFast: speechSpeedSlider.value = 1; break
+                            case Settings.SpeechSpeedVeryFast: speechSpeedSlider.value = 2; break
+                            }
+                        }
+                    }
+
+                    Label {
+                        anchors.bottom: parent.handle.top
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.bottomMargin: appWin.padding
+                        text: {
+                            switch(parent.value) {
+                            case -2: return qsTr("Very slow");
+                            case -1: return qsTr("Slow");
+                            case 0: return qsTr("Normal");
+                            case 1: return qsTr("Fast");
+                            case 2: return qsTr("Very fast");
+                            }
+                        }
                     }
                 }
             }
         }
-    }
 
-    SectionLabel {
-        text: qsTr("User Interface")
-    }
+        ColumnLayout {
+            id: userInterfaceTab
 
-    GridLayout {
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
+            width: root.width
 
-        Label {
-            Layout.fillWidth: true
-            text: qsTr("Font size in text editor")
-            wrapMode: Text.Wrap
-        }
-        SpinBox {
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            from: 4
-            to: 25
-            stepSize: 1
-            value: _settings.font_size < 5 ? 4 : _settings.font_size
-            textFromValue: function(value) {
-                return value < 5 ? qsTr("Auto") : value.toString() + " px"
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Font size in text editor")
+                    wrapMode: Text.Wrap
+                }
+                SpinBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    from: 4
+                    to: 25
+                    stepSize: 1
+                    value: _settings.font_size < 5 ? 4 : _settings.font_size
+                    textFromValue: function(value) {
+                        return value < 5 ? qsTr("Auto") : value.toString() + " px"
+                    }
+                    valueFromText: function(text) {
+                        if (text === qsTr("Auto")) return 4
+                        return parseInt(text);
+                    }
+                    onValueChanged: {
+                        _settings.font_size = value;
+                    }
+                    Component.onCompleted: {
+                        contentItem.color = palette.text
+                    }
+                }
             }
-            valueFromText: function(text) {
-                if (text === qsTr("Auto")) return 4
-                return parseInt(text);
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Graphical style") + " (" + qsTr("advanced option") + ")"
+                    wrapMode: Text.Wrap
+                }
+                ComboBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    currentIndex: _settings.qt_style_idx
+                    model: _settings.qt_styles()
+                    onActivated: _settings.qt_style_idx = index
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Application graphical interface style.") + " " +
+                                  qsTr("Change if you observe problems with incorrect colors under a dark theme.")
+                }
             }
-            onValueChanged: {
-                _settings.font_size = value;
+        }
+
+        ColumnLayout {
+            id: otherTab
+
+            width: root.width
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 3
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    text: qsTr("Location of language files")
+                }
+                TextField {
+                    Layout.fillWidth: true
+                    text: _settings.models_dir
+                    enabled: false
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: _settings.models_dir
+                }
+                Button {
+                    text: qsTr("Change")
+                    onClicked: directoryDialog.open()
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
+                }
             }
-            Component.onCompleted: {
-                contentItem.color = palette.text
-            }
-        }
-    }
-
-    GridLayout {
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
-
-        Label {
-            Layout.fillWidth: true
-            text: qsTr("Graphical style") + " (" + qsTr("advanced option") + ")"
-            wrapMode: Text.Wrap
-        }
-        ComboBox {
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-            currentIndex: _settings.qt_style_idx
-            model: _settings.qt_styles()
-            onActivated: _settings.qt_style_idx = index
-
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Application graphical interface style.") + " " +
-                          qsTr("Change if you observe problems with incorrect colors under a dark theme.")
-        }
-    }
-
-    SectionLabel {
-        text: qsTr("Other")
-    }
-
-    GridLayout {
-        columns: root.verticalMode ? 1 : 3
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
-
-        Label {
-            text: qsTr("Location of language files")
-        }
-        TextField {
-            Layout.fillWidth: true
-            text: _settings.models_dir
-            enabled: false
-
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered
-            ToolTip.text: _settings.models_dir
-        }
-        Button {
-            text: qsTr("Change")
-            onClicked: directoryDialog.open()
-
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
         }
     }
 

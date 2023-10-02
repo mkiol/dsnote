@@ -258,7 +258,7 @@ DialogPage {
 
         Label {
             Layout.fillWidth: true
-            Layout.leftMargin: verticalMode ? 0 : appWin.padding
+            Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
             text: qsTr("Track number")
         }
         TextField {
@@ -278,7 +278,7 @@ DialogPage {
 
         Label {
             Layout.fillWidth: true
-            Layout.leftMargin: verticalMode ? 0 : appWin.padding
+            Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
             text: qsTr("Title")
         }
         TextField {
@@ -299,7 +299,7 @@ DialogPage {
 
         Label {
             Layout.fillWidth: true
-            Layout.leftMargin: verticalMode ? 0 : appWin.padding
+            Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
             text: qsTr("Album")
         }
         TextField {
@@ -319,7 +319,7 @@ DialogPage {
 
         Label {
             Layout.fillWidth: true
-            Layout.leftMargin: verticalMode ? 0 : appWin.padding
+            Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
             text: qsTr("Artist")
         }
         TextField {

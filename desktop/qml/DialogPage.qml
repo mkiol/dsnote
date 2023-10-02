@@ -16,6 +16,7 @@ Dialog {
     property alias listViewItem: listView
     property alias flickItem: flick
     property alias placeholderLabel: _placeholderLabel
+    property alias footerLabel: _footerLabel
     readonly property real _rightMargin: scrollBar.visible ? appWin.padding + scrollBar.width : appWin.padding
     readonly property real _leftMargin: appWin.padding
 
@@ -53,6 +54,19 @@ Dialog {
 
     footer: Item {
         height: closeButton.height + appWin.padding
+
+        Label {
+            id: _footerLabel
+
+            wrapMode: Text.Wrap
+            anchors {
+                left: parent.left
+                leftMargin: root.leftPadding + appWin.padding
+                bottom: parent.bottom
+                bottomMargin: root.bottomPadding + appWin.padding
+            }
+        }
+
         Button {
             id: closeButton
 
