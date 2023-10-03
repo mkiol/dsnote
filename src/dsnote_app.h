@@ -20,6 +20,8 @@
 
 #ifdef USE_DESKTOP
 #include <qhotkey.h>
+
+#include "fake_keyboard.hpp"
 #endif
 
 #include "config.h"
@@ -342,7 +344,6 @@ class dsnote_app : public QObject {
     std::optional<action_t> m_pending_action;
     bool m_stt_result_to_active_window = false;
     std::optional<desktop_notification_t> m_desktop_notification;
-
 #ifdef USE_DESKTOP
     struct hotkeys_t {
         QHotkey start_listening;
@@ -352,6 +353,7 @@ class dsnote_app : public QObject {
     };
 
     hotkeys_t m_hotkeys;
+    std::optional<fake_keyboard> m_fake_keyboard;
 #endif
 
     [[nodiscard]] QVariantList available_stt_models() const;

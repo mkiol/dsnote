@@ -273,8 +273,8 @@ set(dsnote_lib_sources
 
 if(WITH_DESKTOP)
     list(APPEND dsnote_lib_sources
-        ${sources_dir}/keyboard_tools.hpp
-        ${sources_dir}/keyboard_tools.cpp)
+        ${sources_dir}/fake_keyboard.hpp
+        ${sources_dir}/fake_keyboard.cpp)
 endif()
 
 configure_file(config.h.in config.h)

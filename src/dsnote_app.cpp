@@ -19,12 +19,6 @@
 #include "mtag_tools.hpp"
 #include "speech_service.h"
 
-#ifdef USE_DESKTOP
-#include <qhotkey.h>
-
-#include "keyboard_tools.hpp"
-#endif
-
 QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
     switch (state) {
         case dsnote_app::service_state_t::StateBusy:
@@ -374,7 +368,8 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
 
     if (m_stt_result_to_active_window) {
 #ifdef USE_DESKTOP
-        keyboard_tools::send_text(text);
+        m_fake_keyboard.emplace();
+        m_fake_keyboard->send_text(text);
 #else
         qWarning() << "send to keyboard is not implemented";
 #endif
