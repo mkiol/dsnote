@@ -182,6 +182,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void cancel();
     Q_INVOKABLE void listen();
     Q_INVOKABLE void listen_to_active_window();
+    Q_INVOKABLE void listen_to_clipboard();
     Q_INVOKABLE void stop_listen();
     Q_INVOKABLE void play_speech();
     Q_INVOKABLE void play_speech_translator(bool transtalated);
@@ -238,6 +239,8 @@ class dsnote_app : public QObject {
     void available_tts_models_for_out_mnt_changed();
     void intermediate_text_changed();
     void text_changed();
+    void text_decoded_to_clipboard();
+    void text_decoded_to_active_window();
     void task_state_changed();
     void busy_changed();
     void stt_configured_changed();
@@ -263,6 +266,7 @@ class dsnote_app : public QObject {
     enum class action_t {
         start_listening,
         start_listening_active_window,
+        start_listening_clipboard,
         stop_listening,
         cancel
     };
@@ -299,6 +303,8 @@ class dsnote_app : public QObject {
         bool permanent = false;
         bool close_request = false;
     };
+
+    enum class stt_text_destination_t { note, active_window, clipboard };
 
     QString m_active_stt_model;
     QVariantMap m_available_stt_models_map;
@@ -342,12 +348,14 @@ class dsnote_app : public QObject {
     bool m_undo_flag = false;  // true => undo, false => redu
     std::queue<QString> m_files_to_open;
     std::optional<action_t> m_pending_action;
-    bool m_stt_result_to_active_window = false;
+    stt_text_destination_t m_stt_text_destination =
+        stt_text_destination_t::note;
     std::optional<desktop_notification_t> m_desktop_notification;
 #ifdef USE_DESKTOP
     struct hotkeys_t {
         QHotkey start_listening;
         QHotkey start_listening_active_window;
+        QHotkey start_listening_clipboard;
         QHotkey stop_listening;
         QHotkey cancel;
     };
@@ -485,6 +493,7 @@ class dsnote_app : public QObject {
     void execute_action(action_t action);
     void execute_pending_action();
     void process_pending_desktop_notification();
+    void handle_desktop_notification_closed(uint id, uint reason);
 };
 
 #endif  // DSNOTE_APP_H

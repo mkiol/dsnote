@@ -18,10 +18,32 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Speech to Text") + ":</p>
+
+        text: "<p>" + qsTr("User Interface") + ":</p>
         <ul>
-        <li>Global keyboard shortcuts</li>
-        <li>Sending text into window that is currently in focus</li>
+        <li>Global keyboard shortcuts. Shortcuts allow you to start, stop or cancel listening using keyboard.
+            Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).
+            You can enable and modify shortcuts in the settings (<i>User Interface</i> &rarr; <i>Use global keyboard shortcuts</i>).
+            This feature only works under X11.</li>
+        <li>Support for <i>Actions</i>. This feature allows external application to invoke certain operation
+            when <i>Speech Note</i> is running. An action can be triggered via DBus call or with command-line
+            option. You can enable <i>Actions</i> in the settings
+            (<i>User Interface</i> &rarr; <i>Allow external applications to invoke actions</i>).</li>
+        <li>Desktop notifications. By default, when <i>Speech Note</i> is in the background, desktop notifications
+            are shown to inform about starting or ending of listening. Desktop notifications are especially useful
+            when you use <i>Actions</i> or global keyboard shortcuts.
+            You can disable desktop notifications in the settings
+            (<i>User Interface</i> &rarr; <i>Show desktop notification</i>).</li>
+        </ul>" +
+        "<p>" + qsTr("Speech to Text") + ":</p>
+        <ul>
+        <li>Inserting text to any active window. Using global keyboard shotcut or
+            <i>start-listening-active-window</i> action you can
+            directly insert the decoded text into any window which is currently in focus.
+            This feature only works under X11 and not for all applications.</li>
+        <li>Copy text to the clipboard. Using global keyboard shotcut or
+            <i>start-listening-clipboard</i> action, the decoded text can be copied to the clipboard
+            instead of being inserted into the current note.</li>
         </ul>"
     }
 

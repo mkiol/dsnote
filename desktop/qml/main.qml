@@ -228,6 +228,18 @@ ApplicationWindow {
         onTranscribe_done: toast.show(qsTr("File transcription is complete!"))
         onSpeech_to_file_done: toast.show(qsTr("Speech saved to audio file!"))
         onSave_note_to_file_done: toast.show(qsTr("Note saved to text file!"))
+        onText_decoded_to_clipboard: {
+            var policy = false
+            switch(_settings.desktop_notification_policy) {
+            case Settings.DesktopNotificationNever: policy = false; break
+            case Settings.DesktopNotificationWhenInacvtive: policy = !active; break
+            case Settings.DesktopNotificationAlways: policy = true; break
+            }
+
+            if (policy)
+                app.show_desktop_notification(qsTr("Text copied to clipboard!"), "", false)
+        }
+
         onError: {
             switch (type) {
             case DsnoteApp.ErrorFileSource:

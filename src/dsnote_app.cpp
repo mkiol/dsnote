@@ -126,6 +126,9 @@ QDebug operator<<(QDebug d, dsnote_app::action_t action) {
         case dsnote_app::action_t::start_listening_active_window:
             d << "start-listening-active-window";
             break;
+        case dsnote_app::action_t::start_listening_clipboard:
+            d << "start-listening-clipboard";
+            break;
         case dsnote_app::action_t::stop_listening:
             d << "stop-listening";
             break;
@@ -249,6 +252,9 @@ dsnote_app::dsnote_app(QObject *parent)
     connect(&m_desktop_notification_delay_timer, &QTimer::timeout, this,
             &dsnote_app::process_pending_desktop_notification,
             Qt::QueuedConnection);
+    connect(&m_dbus_notifications,
+            &OrgFreedesktopNotificationsInterface::NotificationClosed, this,
+            &dsnote_app::handle_desktop_notification_closed);
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
@@ -366,23 +372,28 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
         return;
     }
 
-    if (m_stt_result_to_active_window) {
+    switch (m_stt_text_destination) {
+        case stt_text_destination_t::note:
+            make_undo();
+            set_note(insert_to_note(settings::instance()->note(), text,
+                                    settings::instance()->insert_mode()));
+            this->m_intermediate_text.clear();
+            emit text_changed();
+            emit intermediate_text_changed();
+            break;
+        case stt_text_destination_t::active_window:
 #ifdef USE_DESKTOP
-        m_fake_keyboard.emplace();
-        m_fake_keyboard->send_text(text);
+            m_fake_keyboard.emplace();
+            m_fake_keyboard->send_text(text);
+            emit text_decoded_to_active_window();
 #else
-        qWarning() << "send to keyboard is not implemented";
+            qWarning() << "send to keyboard is not implemented";
 #endif
-    } else {
-        make_undo();
-
-        set_note(insert_to_note(settings::instance()->note(), text,
-                                settings::instance()->insert_mode()));
-
-        this->m_intermediate_text.clear();
-
-        emit text_changed();
-        emit intermediate_text_changed();
+            break;
+        case stt_text_destination_t::clipboard:
+            QGuiApplication::clipboard()->setText(text);
+            emit text_decoded_to_clipboard();
+            break;
     }
 }
 
@@ -1477,7 +1488,7 @@ void dsnote_app::cancel() {
 }
 
 void dsnote_app::transcribe_file(const QString &source_file) {
-    m_stt_result_to_active_window = false;
+    m_stt_text_destination = stt_text_destination_t::note;
 
     auto *s = settings::instance();
 
@@ -1500,12 +1511,17 @@ void dsnote_app::transcribe_file(const QUrl &source_file) {
 }
 
 void dsnote_app::listen() {
-    m_stt_result_to_active_window = false;
+    m_stt_text_destination = stt_text_destination_t::note;
     listen_internal();
 }
 
 void dsnote_app::listen_to_active_window() {
-    m_stt_result_to_active_window = true;
+    m_stt_text_destination = stt_text_destination_t::active_window;
+    listen_internal();
+}
+
+void dsnote_app::listen_to_clipboard() {
+    m_stt_text_destination = stt_text_destination_t::clipboard;
     listen_internal();
 }
 
@@ -2424,6 +2440,8 @@ void dsnote_app::reset_files_queue() {
 void dsnote_app::close_desktop_notification() {
     if (!m_desktop_notification) return;
 
+    if (!m_desktop_notification->permanent) return;
+
     m_desktop_notification->close_request = true;
 
     m_desktop_notification_delay_timer.start();
@@ -2454,6 +2472,8 @@ void dsnote_app::show_desktop_notification(const QString &summary,
     if (!m_dbus_notifications.isValid()) return;
 
     if (m_desktop_notification) {
+        if (permanent && !m_desktop_notification->permanent) return;
+
         if (!m_desktop_notification->close_request &&
             summary == m_desktop_notification->summary &&
             body == m_desktop_notification->body) {
@@ -2470,6 +2490,11 @@ void dsnote_app::show_desktop_notification(const QString &summary,
     }
 
     m_desktop_notification_delay_timer.start();
+}
+
+void dsnote_app::handle_desktop_notification_closed(
+    [[maybe_unused]] uint id, [[maybe_unused]] uint reason) {
+    m_desktop_notification.reset();
 }
 
 void dsnote_app::execute_pending_action() {
@@ -2498,6 +2523,9 @@ void dsnote_app::execute_action_name(const QString &action_name) {
     } else if (action_name.compare("start-listening-active-window",
                                    Qt::CaseInsensitive) == 0) {
         execute_action(action_t::start_listening_active_window);
+    } else if (action_name.compare("start-listening-clipboard",
+                                   Qt::CaseInsensitive) == 0) {
+        execute_action(action_t::start_listening_clipboard);
     } else if (action_name.compare("stop-listening", Qt::CaseInsensitive) ==
                0) {
         execute_action(action_t::stop_listening);
@@ -2525,6 +2553,9 @@ void dsnote_app::execute_action(action_t action) {
         case dsnote_app::action_t::start_listening_active_window:
             listen_to_active_window();
             break;
+        case dsnote_app::action_t::start_listening_clipboard:
+            listen_to_clipboard();
+            break;
         case dsnote_app::action_t::stop_listening:
             stop_listen();
             break;
@@ -2536,16 +2567,23 @@ void dsnote_app::execute_action(action_t action) {
 
 void dsnote_app::register_hotkeys() {
 #ifdef USE_DESKTOP
+    auto *s = settings::instance();
+
+    if (!s->is_xcb()) {
+        qWarning() << "hot keys are supported only under x11";
+        return;
+    }
+
     QObject::disconnect(&m_hotkeys.start_listening);
     QObject::disconnect(&m_hotkeys.start_listening_active_window);
+    QObject::disconnect(&m_hotkeys.start_listening_clipboard);
     QObject::disconnect(&m_hotkeys.stop_listening);
     QObject::disconnect(&m_hotkeys.cancel);
     m_hotkeys.start_listening.setRegistered(false);
     m_hotkeys.start_listening_active_window.setRegistered(false);
+    m_hotkeys.start_listening_clipboard.setRegistered(false);
     m_hotkeys.stop_listening.setRegistered(false);
     m_hotkeys.cancel.setRegistered(false);
-
-    auto *s = settings::instance();
 
     if (s->hotkeys_enabled()) {
         if (!s->hotkey_start_listening().isEmpty()) {
@@ -2567,6 +2605,17 @@ void dsnote_app::register_hotkeys() {
                     qDebug()
                         << "hot key activated: start-listening-active-window";
                     execute_action(action_t::start_listening_active_window);
+                });
+        }
+
+        if (!s->hotkey_start_listening_clipboard().isEmpty()) {
+            m_hotkeys.start_listening_clipboard.setShortcut(
+                QKeySequence{s->hotkey_start_listening_clipboard()}, true);
+            QObject::connect(
+                &m_hotkeys.start_listening_clipboard, &QHotkey::activated, this,
+                [&]() {
+                    qDebug() << "hot key activated: start-listening-clipboard";
+                    execute_action(action_t::start_listening_clipboard);
                 });
         }
 

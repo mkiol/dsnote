@@ -934,6 +934,19 @@ void settings::set_hotkey_start_listening_active_window(const QString& value) {
     }
 }
 
+QString settings::hotkey_start_listening_clipboard() const {
+    return value(QStringLiteral("hotkey_start_listening_clipboard"),
+                 QStringLiteral("Ctrl+Alt+Shift+J"))
+        .toString();
+}
+
+void settings::set_hotkey_start_listening_clipboard(const QString& value) {
+    if (value != hotkey_start_listening_clipboard()) {
+        setValue(QStringLiteral("hotkey_start_listening_clipboard"), value);
+        emit hotkeys_changed();
+    }
+}
+
 QString settings::hotkey_stop_listening() const {
     return value(QStringLiteral("hotkey_stop_listening"),
                  QStringLiteral("Ctrl+Alt+Shift+S"))

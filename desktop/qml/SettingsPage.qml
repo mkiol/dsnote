@@ -199,7 +199,7 @@ DialogPage {
 
             Label {
                 wrapMode: Text.Wrap
-                Layout.leftMargin: verticalMode ? 0 : appWin.padding
+                Layout.leftMargin: verticalMode ? appWin.padding : appWin.padding
                 Layout.fillWidth: true
                 visible: _settings.py_supported() && _settings.restore_punctuation && !app.ttt_configured
                 color: "red"
@@ -224,7 +224,7 @@ DialogPage {
 
             Label {
                 wrapMode: Text.Wrap
-                Layout.leftMargin: verticalMode ? 0 : 2 * appWin.padding
+                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                 Layout.fillWidth: true
                 visible: _settings.gpu_supported() && _settings.whisper_use_gpu && _settings.gpu_devices.length <= 1
                 color: "red"
@@ -258,157 +258,7 @@ DialogPage {
                 }
             }
 
-            CheckBox {
-                checked: _settings.actions_api_enabled
-                text: qsTr("Allow external applications to invoke actions")
-                onCheckedChanged: {
-                    _settings.actions_api_enabled = checked
-                }
 
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Actions allow external application to invoke certain operations when %1 is running.").arg("<i>Speech Note</i>") + " " +
-                              qsTr("An action can be triggered via DBus call or with command-line option.") + " " +
-                              qsTr("The following actions are currently supported: %1.")
-                                  .arg(
-                                    " <i>start-listening</i> (" + qsTr("starts listening") + ")," +
-                                    " <i>start-listening-active-window</i> (" + qsTr("starts listening, the decoded text will be inserted into the active window") + ")," +
-                                    " <i>stop-listening</i> (" + qsTr("stops listening, already recorded voice will be decoded to text") + ")," +
-                                    " <i>cancel</i> (" + qsTr("cancels any ongoing operation") + ")");
-            }
-
-            CheckBox {
-                visible: _settings.is_xcb()
-                checked: _settings.hotkeys_enabled
-                text: qsTr("Use global keyboard shortcuts")
-                onCheckedChanged: {
-                    _settings.hotkeys_enabled = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Shortcuts allow you to start, stop or cancel listening using keyboard.") + " " +
-                              qsTr("Speech to Text result can be appended to the current note or inserted into any active window (currently in focus).") + " " +
-                              qsTr("Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).") + " " +
-                              qsTr("This feature only works under X11.")
-            }
-
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-                visible: _settings.hotkeys_enabled
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
-                    text: qsTr("Start listening")
-                }
-                TextField {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    text: _settings.hotkey_start_listening
-                    onTextChanged: _settings.hotkey_start_listening = text
-                }
-            }
-
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-                visible: _settings.hotkeys_enabled
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
-                    text: qsTr("Start listening, text to active window")
-                }
-                TextField {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    text: _settings.hotkey_start_listening_active_window
-                    onTextChanged: _settings.hotkey_start_listening_active_window = text
-                }
-            }
-
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-                visible: _settings.hotkeys_enabled
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
-                    text: qsTr("Stop listening")
-                }
-                TextField {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    text: _settings.hotkey_stop_listening
-                    onTextChanged: _settings.hotkey_stop_listening = text
-                }
-            }
-
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-                visible: _settings.hotkeys_enabled
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
-                    text: qsTr("Cancel")
-                }
-                TextField {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    text: _settings.hotkey_cancel
-                    onTextChanged: _settings.hotkey_cancel = text
-                }
-            }
-
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Show desktop notification")
-                }
-                ComboBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    currentIndex: {
-                        switch(_settings.desktop_notification_policy) {
-                        case Settings.DesktopNotificationNever: return 0
-                        case Settings.DesktopNotificationWhenInacvtive: return 1
-                        case Settings.DesktopNotificationAlways: return 2
-                        }
-                        return 0
-                    }
-                    model: [
-                        qsTr("Never"),
-                        qsTr("When in background"),
-                        qsTr("Always")
-                    ]
-                    onActivated: {
-                        if (index === 0) {
-                            _settings.desktop_notification_policy = Settings.DesktopNotificationNever
-                        } else if (index === 1) {
-                            _settings.desktop_notification_policy = Settings.DesktopNotificationWhenInacvtive
-                        } else if (index === 2) {
-                            _settings.desktop_notification_policy = Settings.DesktopNotificationAlways
-                        }
-                    }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Show desktop notification while listening.")
-                }
-            }
         }
 
         ColumnLayout {
@@ -551,6 +401,190 @@ DialogPage {
                     ToolTip.text: qsTr("Application graphical interface style.") + " " +
                                   qsTr("Change if you observe problems with incorrect colors under a dark theme.")
                 }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Show desktop notification")
+                }
+                ComboBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    currentIndex: {
+                        switch(_settings.desktop_notification_policy) {
+                        case Settings.DesktopNotificationNever: return 0
+                        case Settings.DesktopNotificationWhenInacvtive: return 1
+                        case Settings.DesktopNotificationAlways: return 2
+                        }
+                        return 0
+                    }
+                    model: [
+                        qsTr("Never"),
+                        qsTr("When in background"),
+                        qsTr("Always")
+                    ]
+                    onActivated: {
+                        if (index === 0) {
+                            _settings.desktop_notification_policy = Settings.DesktopNotificationNever
+                        } else if (index === 1) {
+                            _settings.desktop_notification_policy = Settings.DesktopNotificationWhenInacvtive
+                        } else if (index === 2) {
+                            _settings.desktop_notification_policy = Settings.DesktopNotificationAlways
+                        }
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Show desktop notification while reading or listening.")
+                }
+            }
+
+            CheckBox {
+                visible: _settings.is_xcb()
+                checked: _settings.hotkeys_enabled
+                text: qsTr("Use global keyboard shortcuts")
+                onCheckedChanged: {
+                    _settings.hotkeys_enabled = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Shortcuts allow you to start, stop or cancel listening using keyboard.") + " " +
+                              qsTr("Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.") + " " +
+                              qsTr("Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).") + " " +
+                              qsTr("This feature only works under X11.")
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+                visible: _settings.hotkeys_enabled
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    text: qsTr("Start listening")
+                }
+                TextField {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    text: _settings.hotkey_start_listening
+                    onTextChanged: _settings.hotkey_start_listening = text
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+                visible: _settings.hotkeys_enabled
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    text: qsTr("Start listening, text to active window")
+                }
+                TextField {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    text: _settings.hotkey_start_listening_active_window
+                    onTextChanged: _settings.hotkey_start_listening_active_window = text
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+                visible: _settings.hotkeys_enabled
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    text: qsTr("Start listening, text to clipboard")
+                }
+                TextField {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    text: _settings.hotkey_start_listening_clipboard
+                    onTextChanged: _settings.hotkey_start_listening_clipboard = text
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+                visible: _settings.hotkeys_enabled
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    text: qsTr("Stop listening")
+                }
+                TextField {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    text: _settings.hotkey_stop_listening
+                    onTextChanged: _settings.hotkey_stop_listening = text
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+                visible: _settings.hotkeys_enabled
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    text: qsTr("Cancel")
+                }
+                TextField {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    text: _settings.hotkey_cancel
+                    onTextChanged: _settings.hotkey_cancel = text
+                }
+            }
+
+            CheckBox {
+                checked: _settings.actions_api_enabled
+                text: qsTr("Allow external applications to invoke actions")
+                onCheckedChanged: {
+                    _settings.actions_api_enabled = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Action allow external application to invoke certain operation when %1 is running.").arg("<i>Speech Note</i>");
+            }
+
+            Label {
+                visible: _settings.actions_api_enabled
+                Layout.leftMargin: verticalMode ? 1 * appWin.padding : 2 * appWin.padding
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                text: "<p>" + qsTr("Action allows external application to invoke certain operation when %1 is running.").arg("<i>Speech Note</i>") + " " +
+                      qsTr("An action can be triggered via DBus call or with command-line option.") + " " +
+                      qsTr("The following actions are currently supported:") +
+                      "</p><ul>" +
+                      "<li><i>start-listening</i> - " + qsTr("Starts listening.") + "</li>" +
+                      "<li><i>start-listening-active-window</i> (X11) - " + qsTr("Starts listening. The decoded text is inserted into the active window.") + "</li>" +
+                      "<li><i>start-listening-clipboard</i> - " + qsTr("Starts listening. The decoded text is copied to the clipboard.") + "</li>" +
+                      "<li><i>stop-listening</i> - " + qsTr("Stops listening. The already captured voice is decoded into text.") + "</li>" +
+                      "<li><i>cancel</i> - " + qsTr("Cancels any of the above operations.") + "</li>" +
+                      "</ul>" +
+                      qsTr("For example, to trigger %1 action, execute the following command: %2.")
+                              .arg("<i>start-listening</i>")
+                              .arg("<i>flatpak run net.mkiol.SpeechNote --action start-listening</i>")
             }
         }
 

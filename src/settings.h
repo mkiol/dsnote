@@ -77,6 +77,10 @@ class settings : public QSettings, public singleton<settings> {
         QString hotkey_start_listening_active_window READ
             hotkey_start_listening_active_window WRITE
                 set_hotkey_start_listening_active_window NOTIFY hotkeys_changed)
+    Q_PROPERTY(
+        QString hotkey_start_listening_clipboard READ
+            hotkey_start_listening_clipboard WRITE
+                set_hotkey_start_listening_clipboard NOTIFY hotkeys_changed)
     Q_PROPERTY(QString hotkey_stop_listening READ hotkey_stop_listening WRITE
                    set_hotkey_stop_listening NOTIFY hotkeys_changed)
     Q_PROPERTY(QString hotkey_cancel READ hotkey_cancel WRITE set_hotkey_cancel
@@ -242,6 +246,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_hotkey_start_listening(const QString &value);
     QString hotkey_start_listening_active_window() const;
     void set_hotkey_start_listening_active_window(const QString &value);
+    QString hotkey_start_listening_clipboard() const;
+    void set_hotkey_start_listening_clipboard(const QString &value);
     QString hotkey_stop_listening() const;
     void set_hotkey_stop_listening(const QString &value);
     QString hotkey_cancel() const;
