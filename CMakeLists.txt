@@ -126,7 +126,7 @@ endif()
 
 if (WITH_PY)
     if (arch_x8664)
-        set(info_libs_str "${info_libs_str} · Hugging Face Transformers · Coqui TTS")
+        set(info_libs_str "${info_libs_str} · Hugging Face Transformers · Coqui TTS · faster-whisper")
     endif()
 endif()
 

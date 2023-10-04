@@ -19,6 +19,7 @@ Currently these are used:
     - [Coqui STT](https://github.com/coqui-ai/STT)
     - [Vosk](https://alphacephei.com/vosk)
     - [whisper.cpp](https://github.com/ggerganov/whisper.cpp)
+    - [faster-whisper](https://github.com/guillaumekln/faster-whisper)
 - Text to Speech (TTS)
     - [espeak-ng](https://github.com/espeak-ng/espeak-ng)
     - [MBROLA](https://github.com/numediart/MBROLA)
@@ -212,6 +213,7 @@ sfdk package
 - [libnumbertext](https://github.com/Numbertext/libnumbertext)
 - [KDBusAddons](https://invent.kde.org/frameworks/kdbusaddons)
 - [QHotkey](https://github.com/Skycoder42/QHotkey)
+- [faster-whisper](https://github.com/guillaumekln/faster-whisper)
 
 ## License
 
@@ -248,6 +250,7 @@ sfdk package
 - **libnumbertext**, released under the [BSD License](https://raw.githubusercontent.com/Numbertext/libnumbertext/master/COPYING)
 - **KDBusAddons**, released under the [LGPL licenses](https://invent.kde.org/frameworks/kdbusaddons/-/tree/master/LICENSES?ref_type=heads)
 - **QHotkey**, released under the [BSD-3-Clause License](https://raw.githubusercontent.com/Skycoder42/QHotkey/master/LICENSE)
+- **faster-whisper**, released under the [MIT License](https://github.com/guillaumekln/faster-whisper/raw/master/LICENSE)
 
 The files in the directory `nonbreaking_prefixes` were copied from 
 [mosesdecoder](https://github.com/moses-smt/mosesdecoder) project and distributed under the
