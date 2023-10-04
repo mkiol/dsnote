@@ -106,8 +106,7 @@ static cmd_options check_options(const QCoreApplication& app) {
         QStringLiteral("action"),
         QStringLiteral("Invokes an <action>. Supported actions are: "
                        "start-listening, start-listening-active-window, "
-                       "start-listening-clipboard"
-                       "stop-listening, cancel."),
+                       "start-listening-clipboard, stop-listening, cancel."),
         QStringLiteral("action")};
     parser.addOption(action_opt);
 
