@@ -35,7 +35,7 @@ Following languages are supported:
 | **Lang ID** | **Name**      | **DeepSpeech (STT)** | **Whisper (STT)** | **Vosk (STT)** | **Piper (TTS)** | **RHVoice (TTS)** | **espeak (TTS)** | **MBROLA (TTS)** | **Coqui (TTS)** | **Bergamot (MT)** |
 | ----------- | ------------- | -------------------- | ----------------- | -------------- | --------------- | ----------------- | ---------------- | ---------------- | --------------- | ----------------- |
 | am          | Amharic       | ● (e)                | ● (e)             |                |                 |                   | ●                |                  | ●               |                   |
-| ar          | Arabic        |                      | ● (e)             | ●              |                 |                   | ●                | ●                | ●               | ●                 |
+| ar          | Arabic        |                      | ● (e)             | ●              |  ●              |                   | ●                | ●                | ●               | ●                 |
 | bg          | Bulgarian     |                      | ● (e)             |                |                 |                   | ●                |                  | ●               |                   |
 | bn          | Bengali       |                      | ● (e)             |                |                 |                   | ●                |                  | ●               |                   |
 | bs          | Bosnian       |                      | ● (e)             |                |                 |                   | ●                |                  |                 |                   |

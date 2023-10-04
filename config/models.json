@@ -5645,6 +5645,20 @@
             "lang_id": "da"
         },
         {
+            "name": "English (Piper Hfc Medium Male)",
+            "model_id": "en_piper_us_hfc_male_medium",
+            "engine": "tts_piper",
+            "lang_id": "en",
+            "checksum": "53b6681a",
+            "checksum_quick": "4fc1bbc7",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/en/en_US/hfc_male/medium/en_US-hfc_male-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/en/en_US/hfc_male/medium/en_US-hfc_male-medium.onnx.json"
+            ],
+            "size": "63214519"
+        },
+        {
             "name": "English (Piper Amy Low Female)",
             "model_id": "en_piper_us_amy_low",
             "engine": "tts_piper",
@@ -5797,6 +5811,20 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/en/en_US/libritts/high/en_US-libritts-high.onnx.json"
             ],
             "size": "136707572"
+        },
+        {
+            "name": "English (Piper LibriTTS R Medium Female)",
+            "model_id": "en_piper_us_libritts_r_medium",
+            "engine": "tts_piper",
+            "lang_id": "en",
+            "checksum": "29e842d2",
+            "checksum_quick": "3257f1c5",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/en/en_US/libritts_r/medium/en_US-libritts_r-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/en/en_US/libritts_r/medium/en_US-libritts_r-medium.onnx.json"
+            ],
+            "size": "78609229"
         },
         {
             "name": "English (Piper Ryan High Male)",
@@ -6152,6 +6180,20 @@
             "speaker": "30"
         },
         {
+            "name": "اللهجة الأردنية (Piper Kareem Medium Male)",
+            "model_id": "ar_piper_jo_kareem_medium",
+            "engine": "tts_piper",
+            "lang_id": "ar",
+            "checksum": "2c4f0546",
+            "checksum_quick": "27d896ca",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/ar/ar_JO/kareem/medium/ar_JO-kareem-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/ar/ar_JO/kareem/medium/ar_JO-kareem-medium.onnx.json"
+            ],
+            "size": "63214510"
+        },
+        {
             "name": "Català (Piper Upc Ona Low Female)",
             "model_id": "ca_piper_upc_ona_low",
             "engine": "tts_piper",
@@ -6206,6 +6248,20 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/cs/cs_CZ/jirka/medium/cs_CZ-jirka-medium.onnx.json"
             ],
             "size": "63214511"
+        },
+        {
+            "name": "Čeština (Piper Jirka Low Male)",
+            "model_id": "cs_piper_jirka_low",
+            "engine": "tts_piper",
+            "lang_id": "cs",
+            "checksum": "8d83c5aa",
+            "checksum_quick": "84f35887",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/cs/cs_CZ/jirka/low/cs_CZ-jirka-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/cs/cs_CZ/jirka/low/cs_CZ-jirka-low.onnx.json"
+            ],
+            "size": "63214508"
         },
         {
             "name": "Dansk (Piper Talesyntese Medium Male)",
@@ -6573,6 +6629,20 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/hu/hu_HU/berta/medium/hu_HU-berta-medium.onnx.json"
             ],
             "size": "63214447"
+        },
+        {
+            "name": "Magyar (Piper Imre Medium Male)",
+            "model_id": "hu_piper_imre_medium",
+            "engine": "tts_piper",
+            "lang_id": "hu",
+            "checksum": "58eb5acb",
+            "checksum_quick": "8f12901b",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/hu/hu_HU/imre/medium/hu_HU-imre-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/hu/hu_HU/imre/medium/hu_HU-imre-medium.onnx.json"
+            ],
+            "size": "63214505"
         },
         {
             "name": "íslenska (Piper Bui Medium Male)",
@@ -7140,6 +7210,20 @@
             ],
             "size": "63118671",
             "hidden": true
+        },
+        {
+            "name": "Polski (Piper MC Speech Medium Male)",
+            "model_id": "pl_piper_mc_speech_medium",
+            "engine": "tts_piper",
+            "lang_id": "pl",
+            "checksum": "1828366f",
+            "checksum_quick": "9e6f9884",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/pl/pl_PL/mc_speech/medium/pl_PL-mc_speech-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/pl/pl_PL/mc_speech/medium/pl_PL-mc_speech-medium.onnx.json"
+            ],
+            "size": "63214447"
         },
         {
             "name": "Polski (Piper Darkman Medium Male)",
