@@ -11,8 +11,8 @@ set(onnx_arm64_checksum "17556490ce7d111205c5c829acf509bf")
 set(onnx_arm32_url "https://github.com/mkiol/dsnote/releases/download/v2.0.1/onnxruntime-linux-arm32-1.14.tgz")
 set(onnx_arm32_checksum "5055ce0867a5c7c7a1920d2d76b8aace")
 
-set(spdlog_source_url "https://github.com/gabime/spdlog/archive/refs/tags/v1.11.0.tar.gz")
-set(spdlog_checksum "ca5cae8d6cac15dae0ec63b21d6ad3530070650f68076f3a4a862ca293a858bb")
+set(spdlog_source_url "https://github.com/gabime/spdlog/archive/76fb40d95455f249bd70824ecfcae7a8f0930fa3.zip")
+set(spdlog_checksum "9a00dd50318b9467148adc5e822e55221c65d8d8794c6890ba034eed222dcf64")
 
 if(arch_x8664)
     set(onnx_url ${onnx_x8664_url})

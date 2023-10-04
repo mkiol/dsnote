@@ -99,7 +99,7 @@ set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
 set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
-set(info_conf_version "34")
+set(info_conf_version "35")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · locness3")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
@@ -269,6 +269,8 @@ set(dsnote_lib_sources
     ${sources_dir}/mtag_tools.cpp
     ${sources_dir}/app_server.hpp
     ${sources_dir}/app_server.cpp
+    ${sources_dir}/fasterwhisper_engine.hpp
+    ${sources_dir}/fasterwhisper_engine.cpp
 )
 
 if(WITH_DESKTOP)
@@ -516,13 +518,6 @@ endif()
 
 if(BUILD_BERGAMOT)
     include(${cmake_path}/bergamot.cmake)
-else()
-    find_library(bergamot_path bergamot_api REQUIRED)
-    list(APPEND deps_libs ${bergamot_path})
-    if(arch_x8664)
-        find_library(bergamotfallback_path bergamot_api-fallback REQUIRED)
-        list(APPEND deps_libs ${bergamotfallback_path})
-    endif()
 endif()
 
 if(BUILD_OPENBLAS)

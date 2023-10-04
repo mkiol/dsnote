@@ -42,7 +42,6 @@ if(arch_x8664)
 
     ExternalProject_Add_StepDependencies(bergamotfallback configure openblas)
 
-    list(APPEND deps_libs "${external_lib_dir}/libbergamot_api-fallback.so")
     list(APPEND deps bergamotfallback)
 endif(arch_x8664)
 
@@ -78,5 +77,4 @@ ExternalProject_Add(bergamot
 
 ExternalProject_Add_StepDependencies(bergamot configure openblas)
 
-list(APPEND deps_libs "${external_lib_dir}/libbergamot_api.so")
 list(APPEND deps bergamot)

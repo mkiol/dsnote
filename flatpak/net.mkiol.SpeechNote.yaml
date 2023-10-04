@@ -720,75 +720,6 @@ modules:
       - type: patch
         path: ../patches/whispercpp.patch
 
-  - name: cuda
-    only-arches:
-      - x86_64
-    buildsystem: simple
-    build-commands:
-      - mkdir cuda_src
-      - sh cuda_12.2.2_535.104.05_linux.run --target cuda_src --noexec
-      - cd cuda_src/builds && rm -rf NVIDIA*.run bin EULA.txt version.json cuda_sanitizer_api integration nsight_compute nsight_systems cuda_gdb cuda_documentation
-      - mkdir -p /app/opt/cuda
-      - cd cuda_src/builds && for lib in *; do echo "copying $lib/* => /app/opt/cuda/" && if [ -d $lib ]; then cp -r $lib/* /app/opt/cuda/; else cp $lib /app/opt/cuda/; fi; done
-    cleanup:
-      - "/opt/cuda/bin"
-      - "/opt/cuda/extras"
-      - "/opt/cuda/extras"
-      - "/opt/cuda/gds*"
-      - "/opt/cuda/include"
-      - "/opt/cuda/libnvvp"
-      - "/opt/cuda/nsight*"
-      - "/opt/cuda/nv*"
-      - "/opt/cuda/pkg-config"
-      - "/opt/cuda/src"
-      - "/opt/cuda/usr"
-      - "/opt/cuda/cublas_version.txt"
-      - "/opt/cuda/LICENSE"
-      - "/opt/cuda/targets/x86_64-linux/lib/cmake"
-      - "/opt/cuda/targets/x86_64-linux/lib/lib64"
-      - "/opt/cuda/targets/x86_64-linux/lib/libOpenCL.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libcusparse.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libcufft*.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libcusolver.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libcurand.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libnppif.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libcusolverMg.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libn*.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libcufile*.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libcuinj64.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libaccinj64.so*"
-      - "/opt/cuda/targets/x86_64-linux/include"
-      - "/opt/cuda/targets/x86_64-linux/res"
-    sources:
-      - type: file
-        url: https://developer.download.nvidia.com/compute/cuda/12.2.2/local_installers/cuda_12.2.2_535.104.05_linux.run
-        sha256: 2b39aae3e7618d9f59a3c8fa1f1bc61f29c0b0e0df75fb05076badb352952ef2
-
-  - name: whispercpp-cublas
-    only-arches:
-      - x86_64
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DBUILD_SHARED_LIBS=ON
-      - -DWHISPER_BUILD_TESTS=OFF
-      - -DWHISPER_BUILD_EXAMPLES=OFF
-      - -DWHISPER_CUBLAS=ON
-      - -DCMAKE_C_FLAGS='-O3'
-      - -DCMAKE_CXX_FLAGS='-O3'
-      - -DCUDAToolkit_ROOT=/app/opt/cuda
-      - -DCMAKE_CUDA_COMPILER=/app/opt/cuda/bin/nvcc
-      - -DCMAKE_CUDA_ARCHITECTURES=60;61;62;70;72;75;80;86;87;89;90
-    post-install:
-      - "mv /app/lib/libwhisper.so /app/lib/libwhisper-cublas.so"
-    sources:
-      - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/951a1199265ff4424f938182542cf6bac9b36154.zip
-        sha256: cdbbaa45c50e6b12df933d7a5e914477edb918622d73d159dbec0867f5da2f63
-      - type: patch
-        path: ../patches/whispercpp.patch
-
   - name: libnumbertext
     buildsystem: autotools
     config-opts:
@@ -802,9 +733,7 @@ modules:
       - type: shell
         commands:
           - "autoreconf -fi"
-
-  - python3-modules-x86-64.yaml
-
+  
   - name: rocm-opencl
     only-arches:
       - x86_64
@@ -880,6 +809,79 @@ modules:
       - type: archive
         url: https://github.com/Skycoder42/QHotkey/archive/cd72a013275803fce33e028fc8b05ae32248da1f.zip
         sha256: 55995114e8b5947cb6a59a19a53840eaf81fddc420fd3d180dcb0db9d8d33e13
+
+  - name: cuda
+    only-arches:
+      - x86_64
+    buildsystem: simple
+    build-commands:
+      - mkdir cuda_src
+      - sh cuda_11.8.0_520.61.05_linux.run --target cuda_src --noexec
+      - cd cuda_src/builds && rm -rf NVIDIA*.run bin EULA.txt version.json cuda_sanitizer_api integration nsight_compute nsight_systems cuda_gdb cuda_documentation
+      - mkdir -p /app/opt/cuda
+      - cd cuda_src/builds && for lib in *; do echo "copying $lib/* => /app/opt/cuda/" && if [ -d $lib ]; then cp -r $lib/* /app/opt/cuda/; else cp $lib /app/opt/cuda/; fi; done
+    cleanup:
+      - "/opt/cuda/bin"
+      - "/opt/cuda/extras"
+      - "/opt/cuda/extras"
+      - "/opt/cuda/gds*"
+      - "/opt/cuda/include"
+      - "/opt/cuda/libnvvp"
+      - "/opt/cuda/nsight*"
+      - "/opt/cuda/nv*"
+      - "/opt/cuda/pkg-config"
+      - "/opt/cuda/src"
+      - "/opt/cuda/usr"
+      - "/opt/cuda/cublas_version.txt"
+      - "/opt/cuda/LICENSE"
+      - "/opt/cuda/targets/x86_64-linux/lib/cmake"
+      - "/opt/cuda/targets/x86_64-linux/lib/lib64"
+      - "/opt/cuda/targets/x86_64-linux/lib/libOpenCL.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libcusparse.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libcufft*.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libcusolver.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libcurand.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libnppif.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libcusolverMg.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libn*.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libcufile*.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libcuinj64.so*"
+      - "/opt/cuda/targets/x86_64-linux/lib/libaccinj64.so*"
+      - "/opt/cuda/targets/x86_64-linux/include"
+      - "/opt/cuda/targets/x86_64-linux/res"
+    sources:
+      - type: file
+        url: https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_520.61.05_linux.run
+        sha256: 9223c4af3aebe4a7bbed9abd9b163b03a1b34b855fbc2b4a0d1b706ac09a5a16
+
+  - name: whispercpp-cublas
+    only-arches:
+      - x86_64
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=ON
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+      - -DWHISPER_CUBLAS=ON
+      - -DCMAKE_C_FLAGS='-O3'
+      - -DCMAKE_CXX_FLAGS='-O3'
+      - -DCMAKE_CUDA_FLAGS=' -allow-unsupported-compiler'
+      - -DCUDAToolkit_ROOT=/app/opt/cuda
+      - -DCMAKE_CUDA_COMPILER=/app/opt/cuda/bin/nvcc
+      - -DCMAKE_CUDA_ARCHITECTURES=60;61;62;70;72;75;80;86;87;89;90
+    post-install:
+      - "mv /app/lib/libwhisper.so /app/lib/libwhisper-cublas.so"
+    sources:
+      - type: archive
+        url: https://github.com/ggerganov/whisper.cpp/archive/951a1199265ff4424f938182542cf6bac9b36154.zip
+        sha256: cdbbaa45c50e6b12df933d7a5e914477edb918622d73d159dbec0867f5da2f63
+      - type: patch
+        path: ../patches/whispercpp.patch
+
+  - python3-modules-x86-64.yaml
+  - python3-faster-whisper.yaml
 
   - name: dsnote
     buildsystem: cmake-ninja

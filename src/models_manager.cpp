@@ -133,6 +133,9 @@ QDebug operator<<(QDebug d, models_manager::model_engine engine) {
         case models_manager::model_engine::stt_whisper:
             d << "stt-whisper";
             break;
+        case models_manager::model_engine::stt_fasterwhisper:
+            d << "stt-faster-whisper";
+            break;
         case models_manager::model_engine::ttt_hftc:
             d << "ttt-hftc";
             break;
@@ -1152,6 +1155,7 @@ models_manager::model_role models_manager::role_of_engine(model_engine engine) {
         case model_engine::stt_ds:
         case model_engine::stt_vosk:
         case model_engine::stt_whisper:
+        case model_engine::stt_fasterwhisper:
             return model_role::stt;
         case model_engine::ttt_hftc:
             return model_role::ttt;
@@ -1172,6 +1176,8 @@ models_manager::model_engine models_manager::engine_from_name(
     if (name == QStringLiteral("stt_ds")) return model_engine::stt_ds;
     if (name == QStringLiteral("stt_vosk")) return model_engine::stt_vosk;
     if (name == QStringLiteral("stt_whisper")) return model_engine::stt_whisper;
+    if (name == QStringLiteral("stt_fasterwhisper"))
+        return model_engine::stt_fasterwhisper;
     if (name == QStringLiteral("ttt_hftc")) return model_engine::ttt_hftc;
     if (name == QStringLiteral("tts_coqui")) return model_engine::tts_coqui;
     if (name == QStringLiteral("tts_piper")) return model_engine::tts_piper;
@@ -1379,6 +1385,10 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             qDebug() << "ignoring coqui model:" << model_id;
             continue;
         }
+        if (engine == model_engine::stt_fasterwhisper) {
+            qDebug() << "ignoring fasterwhisper model:" << model_id;
+            continue;
+        }
 #endif
         bool is_default_model_for_lang = [&] {
             switch (role_of_engine(engine)) {
@@ -1572,6 +1582,7 @@ QString models_manager::file_name_from_id(const QString& id,
             return id + ".tflite";
         case model_engine::stt_whisper:
             return id + ".ggml";
+        case model_engine::stt_fasterwhisper:
         case model_engine::stt_vosk:
         case model_engine::ttt_hftc:
         case model_engine::tts_coqui:
