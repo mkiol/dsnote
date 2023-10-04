@@ -6202,8 +6202,8 @@
             "checksum_quick": "e61cb6a6",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/cs/cs_CZ/jirka/medium/cs_CZ-jirka-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/cs/cs_CZ/jirka/medium/cs_CZ-jirka-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/cs/cs_CZ/jirka/medium/cs_CZ-jirka-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/cs/cs_CZ/jirka/medium/cs_CZ-jirka-medium.onnx.json"
             ],
             "size": "63214511"
         },
@@ -6328,8 +6328,8 @@
             "checksum_quick": "9d3e9401",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/de/de_DE/thorsten/high/de_DE-thorsten-high.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/de/de_DE/thorsten/high/de_DE-thorsten-high.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/de/de_DE/thorsten/high/de_DE-thorsten-high.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/de/de_DE/thorsten/high/de_DE-thorsten-high.onnx.json"
             ],
             "size": "113908268"
         },
@@ -6456,8 +6456,8 @@
             "checksum_quick": "417323ef",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fi/fi_FI/harri/low/fi_FI-harri-low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fi/fi_FI/harri/low/fi_FI-harri-low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fi/fi_FI/harri/low/fi_FI-harri-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fi/fi_FI/harri/low/fi_FI-harri-low.onnx.json"
             ],
             "size": "69809333"
         },
@@ -6470,8 +6470,8 @@
             "checksum_quick": "a3e1b232",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fi/fi_FI/harri/medium/fi_FI-harri-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fi/fi_FI/harri/medium/fi_FI-harri-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fi/fi_FI/harri/medium/fi_FI-harri-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fi/fi_FI/harri/medium/fi_FI-harri-medium.onnx.json"
             ],
             "size": "63216492"
         },
@@ -6484,8 +6484,8 @@
             "checksum_quick": "f7775afb",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/gilles/low/fr_FR-gilles-low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/gilles/low/fr_FR-gilles-low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fr/fr_FR/gilles/low/fr_FR-gilles-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fr/fr_FR/gilles/low/fr_FR-gilles-low.onnx.json"
             ],
             "size": "63118669"
         },
@@ -6498,8 +6498,8 @@
             "checksum_quick": "3464af48",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/mls_1840/low/fr_FR-mls_1840-low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/mls_1840/low/fr_FR-mls_1840-low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fr/fr_FR/mls_1840/low/fr_FR-mls_1840-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fr/fr_FR/mls_1840/low/fr_FR-mls_1840-low.onnx.json"
             ],
             "size": "63118671",
             "hidden": true
@@ -6513,8 +6513,8 @@
             "checksum_quick": "b8664108",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/low/fr_FR-siwis-low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/low/fr_FR-siwis-low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fr/fr_FR/siwis/low/fr_FR-siwis-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fr/fr_FR/siwis/low/fr_FR-siwis-low.onnx.json"
             ],
             "size": "28144933"
         },
@@ -6527,8 +6527,8 @@
             "checksum_quick": "4003f210",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx.json"
             ],
             "size": "63216492"
         },
@@ -6541,8 +6541,8 @@
             "checksum_quick": "7de6ab24",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/upmc/medium/fr_FR-upmc-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/upmc/medium/fr_FR-upmc-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fr/fr_FR/upmc/medium/fr_FR-upmc-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fr/fr_FR/upmc/medium/fr_FR-upmc-medium.onnx.json"
             ],
             "size": "76746803"
         },
@@ -6555,8 +6555,8 @@
             "checksum_quick": "7e7c8260",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/hu/hu_HU/anna/medium/hu_HU-anna-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/hu/hu_HU/anna/medium/hu_HU-anna-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/hu/hu_HU/anna/medium/hu_HU-anna-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/hu/hu_HU/anna/medium/hu_HU-anna-medium.onnx.json"
             ],
             "size": "63214504"
         },
@@ -6569,8 +6569,8 @@
             "checksum_quick": "a40ef46b",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/hu/hu_HU/berta/medium/hu_HU-berta-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/hu/hu_HU/berta/medium/hu_HU-berta-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/hu/hu_HU/berta/medium/hu_HU-berta-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/hu/hu_HU/berta/medium/hu_HU-berta-medium.onnx.json"
             ],
             "size": "63214447"
         },
@@ -6583,8 +6583,8 @@
             "checksum_quick": "26335bb4",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/bui/medium/is_IS-bui-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/bui/medium/is_IS-bui-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/is/is_IS/bui/medium/is_IS-bui-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/is/is_IS/bui/medium/is_IS-bui-medium.onnx.json"
             ],
             "size": "76509608"
         },
@@ -6597,8 +6597,8 @@
             "checksum_quick": "7c102c40",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/salka/medium/is_IS-salka-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/salka/medium/is_IS-salka-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/is/is_IS/salka/medium/is_IS-salka-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/is/is_IS/salka/medium/is_IS-salka-medium.onnx.json"
             ],
             "size": "76509610"
         },
@@ -6611,8 +6611,8 @@
             "checksum_quick": "ad527e39",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/steinn/medium/is_IS-steinn-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/steinn/medium/is_IS-steinn-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/is/is_IS/steinn/medium/is_IS-steinn-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/is/is_IS/steinn/medium/is_IS-steinn-medium.onnx.json"
             ],
             "size": "76509611"
         },
@@ -6625,8 +6625,8 @@
             "checksum_quick": "f78d54d8",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/ugla/medium/is_IS-ugla-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/is/is_IS/ugla/medium/is_IS-ugla-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/is/is_IS/ugla/medium/is_IS-ugla-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/is/is_IS/ugla/medium/is_IS-ugla-medium.onnx.json"
             ],
             "size": "76509609"
         },
@@ -6639,8 +6639,8 @@
             "checksum_quick": "bcaef8e2",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/it/it_IT/riccardo/x_low/it_IT-riccardo-x_low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/it/it_IT/riccardo/x_low/it_IT-riccardo-x_low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/it/it_IT/riccardo/x_low/it_IT-riccardo-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/it/it_IT/riccardo/x_low/it_IT-riccardo-x_low.onnx.json"
             ],
             "size": "28144938"
         },
@@ -6654,8 +6654,8 @@
             "checksum_quick": "e9de6e2a",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ka/ka_GE/natia/medium/ka_GE-natia-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ka/ka_GE/natia/medium/ka_GE-natia-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/ka/ka_GE/natia/medium/ka_GE-natia-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/ka/ka_GE/natia/medium/ka_GE-natia-medium.onnx.json"
             ],
             "size": "63216406"
         },
@@ -6668,8 +6668,8 @@
             "checksum_quick": "14cec93b",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/kk/kk_KZ/iseke/x_low/kk_KZ-iseke-x_low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/kk/kk_KZ/iseke/x_low/kk_KZ-iseke-x_low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/kk/kk_KZ/iseke/x_low/kk_KZ-iseke-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/kk/kk_KZ/iseke/x_low/kk_KZ-iseke-x_low.onnx.json"
             ],
             "size": "28144935"
         },
@@ -6682,8 +6682,8 @@
             "checksum_quick": "ebb622be",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/kk/kk_KZ/issai/high/kk_KZ-issai-high.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/kk/kk_KZ/issai/high/kk_KZ-issai-high.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/kk/kk_KZ/issai/high/kk_KZ-issai-high.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/kk/kk_KZ/issai/high/kk_KZ-issai-high.onnx.json"
             ],
             "size": "127878618"
         },
@@ -6696,8 +6696,8 @@
             "checksum_quick": "ff479375",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/kk/kk_KZ/raya/x_low/kk_KZ-raya-x_low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/kk/kk_KZ/raya/x_low/kk_KZ-raya-x_low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/kk/kk_KZ/raya/x_low/kk_KZ-raya-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/kk/kk_KZ/raya/x_low/kk_KZ-raya-x_low.onnx.json"
             ],
             "size": "28144934"
         },
@@ -6710,8 +6710,8 @@
             "checksum_quick": "b06cff60",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/lb/lb_LU/marylux/medium/lb_LU-marylux-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/lb/lb_LU/marylux/medium/lb_LU-marylux-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/lb/lb_LU/marylux/medium/lb_LU-marylux-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/lb/lb_LU/marylux/medium/lb_LU-marylux-medium.onnx.json"
             ],
             "size": "63214465"
         },
@@ -6725,8 +6725,8 @@
             "checksum_quick": "b03e422f",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ne/ne_NP/google/medium/ne_NP-google-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ne/ne_NP/google/medium/ne_NP-google-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/ne/ne_NP/google/medium/ne_NP-google-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/ne/ne_NP/google/medium/ne_NP-google-medium.onnx.json"
             ],
             "size": "76781939"
         },
@@ -6739,8 +6739,8 @@
             "checksum_quick": "adadcdc",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_NL/mls_5809/low/nl_NL-mls_5809-low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_NL/mls_5809/low/nl_NL-mls_5809-low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/nl/nl_NL/mls_5809/low/nl_NL-mls_5809-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/nl/nl_NL/mls_5809/low/nl_NL-mls_5809-low.onnx.json"
             ],
             "size": "63118671",
             "hidden": true
@@ -6754,8 +6754,8 @@
             "checksum_quick": "bbbef05b",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_NL/mls_7432/low/nl_NL-mls_7432-low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_NL/mls_7432/low/nl_NL-mls_7432-low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/nl/nl_NL/mls_7432/low/nl_NL-mls_7432-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/nl/nl_NL/mls_7432/low/nl_NL-mls_7432-low.onnx.json"
             ],
             "size": "63118671"
         },
@@ -6768,8 +6768,8 @@
             "checksum_quick": "8b685ab2",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/nathalie/x_low/nl_BE-nathalie-x_low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/nathalie/x_low/nl_BE-nathalie-x_low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/nl/nl_BE/nathalie/x_low/nl_BE-nathalie-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/nl/nl_BE/nathalie/x_low/nl_BE-nathalie-x_low.onnx.json"
             ],
             "size": "20642960"
         },
@@ -6782,8 +6782,8 @@
             "checksum_quick": "e3d3c75e",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/nathalie/medium/nl_BE-nathalie-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/nathalie/medium/nl_BE-nathalie-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/nl/nl_BE/nathalie/medium/nl_BE-nathalie-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/nl/nl_BE/nathalie/medium/nl_BE-nathalie-medium.onnx.json"
             ],
             "size": "63216495"
         },
@@ -6796,8 +6796,8 @@
             "checksum_quick": "28a8aeab",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/rdh/x_low/nl_BE-rdh-x_low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/rdh/x_low/nl_BE-rdh-x_low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/nl/nl_BE/rdh/x_low/nl_BE-rdh-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/nl/nl_BE/rdh/x_low/nl_BE-rdh-x_low.onnx.json"
             ],
             "size": "20642955"
         },
@@ -6810,8 +6810,8 @@
             "checksum_quick": "2290626b",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/rdh/medium/nl_BE-rdh-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/nl/nl_BE/rdh/medium/nl_BE-rdh-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/nl/nl_BE/rdh/medium/nl_BE-rdh-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/nl/nl_BE/rdh/medium/nl_BE-rdh-medium.onnx.json"
             ],
             "size": "63118669"
         },
@@ -6824,8 +6824,8 @@
             "checksum_quick": "67219000",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/no/no_NO/talesyntese/medium/no_NO-talesyntese-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/no/no_NO/talesyntese/medium/no_NO-talesyntese-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/no/no_NO/talesyntese/medium/no_NO-talesyntese-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/no/no_NO/talesyntese/medium/no_NO-talesyntese-medium.onnx.json"
             ],
             "size": "63216498"
         },
@@ -6838,8 +6838,8 @@
             "checksum_quick": "47f3e3ac",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/pt/pt_BR/edresson/low/pt_BR-edresson-low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/pt/pt_BR/edresson/low/pt_BR-edresson-low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pt/pt_BR/edresson/low/pt_BR-edresson-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pt/pt_BR/edresson/low/pt_BR-edresson-low.onnx.json"
             ],
             "size": "63118674"
         },
@@ -6852,8 +6852,8 @@
             "checksum_quick": "e244bd9f",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/pt/pt_BR/faber/medium/pt_BR-faber-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/pt/pt_BR/faber/medium/pt_BR-faber-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pt/pt_BR/faber/medium/pt_BR-faber-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pt/pt_BR/faber/medium/pt_BR-faber-medium.onnx.json"
             ],
             "size": "63216455"
         },
@@ -6866,8 +6866,8 @@
             "checksum_quick": "5ccafdcf",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/pt/pt_PT/tug%C3%A3o/medium/pt_PT-tug%C3%A3o-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/pt/pt_PT/tug%C3%A3o/medium/pt_PT-tug%C3%A3o-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pt/pt_PT/tug%C3%A3o/medium/pt_PT-tug%C3%A3o-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pt/pt_PT/tug%C3%A3o/medium/pt_PT-tug%C3%A3o-medium.onnx.json"
             ],
             "size": "63214512"
         },
@@ -6880,8 +6880,8 @@
             "checksum_quick": "67884351",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ro/ro_RO/mihai/medium/ro_RO-mihai-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ro/ro_RO/mihai/medium/ro_RO-mihai-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/ro/ro_RO/mihai/medium/ro_RO-mihai-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/ro/ro_RO/mihai/medium/ro_RO-mihai-medium.onnx.json"
             ],
             "size": "63214363"
         },
@@ -6894,8 +6894,8 @@
             "checksum_quick": "321b9a12",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/denis/medium/ru_RU-denis-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/denis/medium/ru_RU-denis-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/ru/ru_RU/denis/medium/ru_RU-denis-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/ru/ru_RU/denis/medium/ru_RU-denis-medium.onnx.json"
             ],
             "size": "63216406"
         },
@@ -6908,8 +6908,8 @@
             "checksum_quick": "a84cdba",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx.json"
             ],
             "size": "63216407"
         },
@@ -6922,8 +6922,8 @@
             "checksum_quick": "a4c1391e",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx.json"
             ],
             "size": "63216332"
         },
@@ -6936,8 +6936,8 @@
             "checksum_quick": "1c992e63",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/ruslan/medium/ru_RU-ruslan-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/ruslan/medium/ru_RU-ruslan-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/ru/ru_RU/ruslan/medium/ru_RU-ruslan-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/ru/ru_RU/ruslan/medium/ru_RU-ruslan-medium.onnx.json"
             ],
             "size": "63216493"
         },
@@ -6950,8 +6950,8 @@
             "checksum_quick": "389d7a88",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/sr/sr_RS/serbski_institut/medium/sr_RS-serbski_institut-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/sr/sr_RS/serbski_institut/medium/sr_RS-serbski_institut-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/sr/sr_RS/serbski_institut/medium/sr_RS-serbski_institut-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/sr/sr_RS/serbski_institut/medium/sr_RS-serbski_institut-medium.onnx.json"
             ],
             "size": "76746806"
         },
@@ -6964,8 +6964,8 @@
             "checksum_quick": "9656a7a3",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/sv/sv_SE/nst/medium/sv_SE-nst-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/sv/sv_SE/nst/medium/sv_SE-nst-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/sv/sv_SE/nst/medium/sv_SE-nst-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/sv/sv_SE/nst/medium/sv_SE-nst-medium.onnx.json"
             ],
             "size": "63118669"
         },
@@ -6978,8 +6978,8 @@
             "checksum_quick": "89f7b480",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/sk/sk_SK/lili/medium/sk_SK-lili-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/sk/sk_SK/lili/medium/sk_SK-lili-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/sk/sk_SK/lili/medium/sk_SK-lili-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/sk/sk_SK/lili/medium/sk_SK-lili-medium.onnx.json"
             ],
             "size": "63214449"
         },
@@ -6992,8 +6992,8 @@
             "checksum_quick": "d54b05c3",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/sw/sw_CD/lanfrica/medium/sw_CD-lanfrica-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/sw/sw_CD/lanfrica/medium/sw_CD-lanfrica-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/sw/sw_CD/lanfrica/medium/sw_CD-lanfrica-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/sw/sw_CD/lanfrica/medium/sw_CD-lanfrica-medium.onnx.json"
             ],
             "size": "63216495"
         },
@@ -7006,8 +7006,8 @@
             "checksum_quick": "80883d69",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/dfki/medium/tr_TR-dfki-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/dfki/medium/tr_TR-dfki-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/tr/tr_TR/dfki/medium/tr_TR-dfki-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/tr/tr_TR/dfki/medium/tr_TR-dfki-medium.onnx.json"
             ],
             "size": "63214446"
         },
@@ -7020,8 +7020,8 @@
             "checksum_quick": "a061e1c",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/fahrettin/medium/tr_TR-fahrettin-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/fahrettin/medium/tr_TR-fahrettin-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/tr/tr_TR/fahrettin/medium/tr_TR-fahrettin-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/tr/tr_TR/fahrettin/medium/tr_TR-fahrettin-medium.onnx.json"
             ],
             "size": "63214508"
         },
@@ -7034,8 +7034,8 @@
             "checksum_quick": "e4d07525",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/uk/uk_UA/lada/x_low/uk_UA-lada-x_low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/uk/uk_UA/lada/x_low/uk_UA-lada-x_low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/uk/uk_UA/lada/x_low/uk_UA-lada-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/uk/uk_UA/lada/x_low/uk_UA-lada-x_low.onnx.json"
             ],
             "size": "20642957"
         },
@@ -7048,8 +7048,8 @@
             "checksum_quick": "1e48c9c1",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/uk/uk_UA/ukrainian_tts/medium/uk_UA-ukrainian_tts-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/uk/uk_UA/ukrainian_tts/medium/uk_UA-ukrainian_tts-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/uk/uk_UA/ukrainian_tts/medium/uk_UA-ukrainian_tts-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/uk/uk_UA/ukrainian_tts/medium/uk_UA-ukrainian_tts-medium.onnx.json"
             ],
             "size": "76746505"
         },
@@ -7062,8 +7062,8 @@
             "checksum_quick": "dabc3e64",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/vi/vi_VN/25hours_single/low/vi_VN-25hours_single-low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/vi/vi_VN/25hours_single/low/vi_VN-25hours_single-low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/vi/vi_VN/25hours_single/low/vi_VN-25hours_single-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/vi/vi_VN/25hours_single/low/vi_VN-25hours_single-low.onnx.json"
             ],
             "size": "63118677"
         },
@@ -7076,8 +7076,8 @@
             "checksum_quick": "8a893ae5",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/vi/vi_VN/vais1000/medium/vi_VN-vais1000-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/vi/vi_VN/vais1000/medium/vi_VN-vais1000-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/vi/vi_VN/vais1000/medium/vi_VN-vais1000-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/vi/vi_VN/vais1000/medium/vi_VN-vais1000-medium.onnx.json"
             ],
             "size": "63216465"
         },
@@ -7090,8 +7090,8 @@
             "checksum_quick": "1202b919",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/vi/vi_VN/vivos/x_low/vi_VN-vivos-x_low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/vi/vi_VN/vivos/x_low/vi_VN-vivos-x_low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/vi/vi_VN/vivos/x_low/vi_VN-vivos-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/vi/vi_VN/vivos/x_low/vi_VN-vivos-x_low.onnx.json"
             ],
             "size": "27805242"
         },
@@ -7105,8 +7105,8 @@
             "checksum_quick": "e8de6db6",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/zh/zh_CN/huayan/x_low/zh_CN-huayan-x_low.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/zh/zh_CN/huayan/x_low/zh_CN-huayan-x_low.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/zh/zh_CN/huayan/x_low/zh_CN-huayan-x_low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/zh/zh_CN/huayan/x_low/zh_CN-huayan-x_low.onnx.json"
             ],
             "size": "20642959"
         },
@@ -7120,8 +7120,8 @@
             "checksum_quick": "660cbfa8",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/main/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx.json"
             ],
             "size": "63216408"
         },
