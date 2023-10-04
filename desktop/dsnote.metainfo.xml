@@ -88,12 +88,38 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
-    <release version="4.3.0" date="2023-09-29">
+    <release version="4.3.0" date="2023-10-04">
       <description>
+      <p>User Interface:</p>
+      <ul>
+      <li>Global keyboard shortcuts.
+          Shortcuts allow you to start, stop or cancel listening using keyboard.
+          Keyboard shortcuts function even when the application is not active
+          (e.g. minimized or in the background)</li>
+      <li>Support for 'Actions'. This feature allows external application to
+          invoke certain operation when Speech Note is running. An action can
+          be triggered via DBus call or with command-line option.</li>
+      <li>Desktop notifications. By default, when Speech Note is in the background,
+          desktop notifications are shown to indicate about starting or ending
+          of listening.</li>
+      </ul>
       <p>Speech to Text:</p>
       <ul>
-      <li>Global keyboard shortcuts</li>
-      <li>Sending text into window that is currently in focus</li>
+      <li>New engine: 'Faster Whisper'. It provides slightly better performance comparing
+          to the existing engine for Whisper models, especially on larger models like Medium or Large.
+          Right now 'Faster Whisper' does not use GPU acceleration.</li>
+      <li>Inserting text to any active window. Using global keyboard shotcut or
+          'action' you can directly insert the decoded text into any window
+          which is currently in focus. This feature only works under X11
+          and not for all applications.</li>
+      <li>Copy text to the clipboard. Using global keyboard shotcut or
+          'action', the decoded text can be copied to the clipboard
+          instead of being inserted into the current note.</li>
+      </ul>
+      <p>Text to Speech:</p>
+      <ul>
+      <li>New Piper voices: Arabic (Kareem), English (LibriTTS R, Hfc), Hungarian (Imre),
+          Polish (MC Speech), Czech (Jirka Low).</li>
       </ul>
       </description>
     </release>

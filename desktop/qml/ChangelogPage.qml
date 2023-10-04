@@ -18,7 +18,6 @@ DialogPage {
     }
 
     RichLabel {
-
         text: "<p>" + qsTr("User Interface") + ":</p>
         <ul>
         <li>Global keyboard shortcuts. Shortcuts allow you to start, stop or cancel listening using keyboard.
@@ -30,13 +29,16 @@ DialogPage {
             option. You can enable <i>Actions</i> in the settings
             (<i>User Interface</i> &rarr; <i>Allow external applications to invoke actions</i>).</li>
         <li>Desktop notifications. By default, when <i>Speech Note</i> is in the background, desktop notifications
-            are shown to inform about starting or ending of listening. Desktop notifications are especially useful
+            are shown to indicate about starting or ending of listening. Desktop notifications are especially useful
             when you use <i>Actions</i> or global keyboard shortcuts.
             You can disable desktop notifications in the settings
             (<i>User Interface</i> &rarr; <i>Show desktop notification</i>).</li>
         </ul>" +
         "<p>" + qsTr("Speech to Text") + ":</p>
         <ul>
+        <li>New engine: <i>Faster Whisper</i>. It provides slightly better performance comparing to the existing engine
+            for Whisper models, especially on larger models like Medium or Large. Right now Faster Whisper does not,
+            use GPU acceleration.</li>
         <li>Inserting text to any active window. Using global keyboard shotcut or
             <i>start-listening-active-window</i> action you can
             directly insert the decoded text into any window which is currently in focus.
@@ -44,6 +46,11 @@ DialogPage {
         <li>Copy text to the clipboard. Using global keyboard shotcut or
             <i>start-listening-clipboard</i> action, the decoded text can be copied to the clipboard
             instead of being inserted into the current note.</li>
+        </ul>" +
+        "<p>" + qsTr("Text to Speech") + ":</p>
+        <ul>
+        <li>New Piper voices: Arabic (Kareem), English (LibriTTS R, Hfc), Hungarian (Imre),
+           Polish (MC Speech), Czech (Jirka Low).</li>
         </ul>"
     }
 
