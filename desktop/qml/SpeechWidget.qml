@@ -78,6 +78,7 @@ RowLayout {
 
             Frame {
                 id: frame
+
                 topPadding: 2
                 bottomPadding: 2
                 Layout.fillWidth: true
@@ -92,9 +93,11 @@ RowLayout {
 
                 Label {
                     id: speechText
+
                     anchors.fill: parent
                     wrapMode: TextEdit.WordWrap
                     verticalAlignment: Text.AlignVCenter
+                    font.pixelSize: _settings.font_size < 5 ? appWin.textFontSize : _settings.font_size
 
                     property string placeholderText: {
                         if (app.task_state === DsnoteApp.TaskStateInitializing)
