@@ -32,6 +32,12 @@ cleanup:
   - "/lib/cmake"
   - "/lib/pkgconfig"
   - "/lib/python3.10/site-packages/cmake*"
+  - "/lib/python3.10/site-packages/git*"
+  - "/lib/python3.10/site-packages/Git*"
+  - "/lib/python3.10/site-packages/torch/test"
+  - "/lib/python3.10/site-packages/torch/include"
+  - "/lib/python3.10/site-packages/pypinyin/__pycache__"
+  - "/lib/python3.10/site-packages/pandas/tests"
   - "/share/cmake"
   - "/share/doc"
   - "/share/locale"
@@ -881,7 +887,7 @@ modules:
         path: ../patches/whispercpp.patch
 
   - python3-modules-x86-64.yaml
-  - python3-faster-whisper.yaml
+  - python3-faster-whisper-x86-64.yaml
 
   - name: dsnote
     buildsystem: cmake-ninja

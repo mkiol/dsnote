@@ -1,5 +1,7 @@
 # Generated with flatpak-pip-generator --yaml --arch-dependent-allow --arch-dependent-force faster-whisper
 name: python3-faster-whisper
+only-arches:
+  - x86_64
 buildsystem: simple
 build-commands:
   - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
@@ -8,9 +10,6 @@ sources:
   - type: file
     url: https://files.pythonhosted.org/packages/29/61/bf33c6c85c55bc45a29eee3195848ff2d518d84735eb0e2d8cb42e0d285e/PyYAML-6.0.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
     sha256: ba336e390cd8e4d1739f42dfe9bb83a3cc2e80f567d8805e11b46f4a943f5515
-  - type: file
-    url: https://files.pythonhosted.org/packages/85/d7/0c0b99b302f8973481fe08b9ec5043bcf0708e56f21512ae0fb697fa02d8/av-10.0.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-    sha256: 0577a38664e453b4ffb63d616a0d23c295827b16ae96a090e89527a753de8718
   - type: file
     url: https://files.pythonhosted.org/packages/4c/dd/2234eab22353ffc7d94e8d13177aaa050113286e93e7b40eae01fbf7c3d9/certifi-2023.7.22-py3-none-any.whl
     sha256: 92d6037539857d8206b8f6ae472e8b77db8058fec5937a1ef3f54304089edbb9
@@ -26,6 +25,17 @@ sources:
   - type: file
     url: https://files.pythonhosted.org/packages/ff/11/401db7f4bfdcec3c4bd685297c2fb11a3caa0a0fa3288bd209f973b877bb/faster_whisper-0.9.0-py3-none-any.whl
     sha256: ba7fa0d4166548d611177350fe3d639ded222f8c159a6aebedfb2d4f186da222
+  - type: shell
+    commands:
+      - unzip "${PWD}/faster_whisper-0.9.0-py3-none-any.whl" -d "${PWD}/tmp"
+  - type: patch
+    strip-components: 0
+    path: ../patches/faster-whisper.patch
+  - type: shell
+    commands:
+      - rm "${PWD}/faster_whisper-0.9.0-py3-none-any.whl"
+      - cd "${PWD}/tmp" && zip -r "${PWD}/faster_whisper-0.9.0-py3-none-any.whl" ./
+      - mv "${PWD}/tmp/faster_whisper-0.9.0-py3-none-any.whl" "${PWD}"
   - type: file
     url: https://files.pythonhosted.org/packages/5e/5d/97afbafd9d584ff1b45fcb354a479a3609bd97f912f8f1f6c563cb1fae21/filelock-3.12.4-py3-none-any.whl
     sha256: 08c21d87ded6e2b9da6728c3dff51baf1dcecf973b768ef35bcbc3447edb9ad4
