@@ -358,67 +358,56 @@ speech_service::speech_service(QObject *parent)
             // stt
 
             auto models_list = available_stt_models();
-            qDebug() << "[service => dbus] signal SttModelsPropertyChanged:"
-                     << models_list;
+            qDebug() << "[service => dbus] signal SttModelsPropertyChanged";
             emit SttModelsPropertyChanged(models_list);
 
             auto langs_list = available_stt_langs();
-            qDebug() << "[service => dbus] signal SttLangsPropertyChanged:"
-                     << langs_list;
+            qDebug() << "[service => dbus] signal SttLangsPropertyChanged";
             emit SttLangsPropertyChanged(langs_list);
 
             auto lang_list = available_stt_lang_list();
-            qDebug() << "[service => dbus] signal SttLangListPropertyChanged:"
-                     << lang_list;
+            qDebug() << "[service => dbus] signal SttLangListPropertyChanged";
             emit SttLangListPropertyChanged(lang_list);
 
             // tts
 
             models_list = available_tts_models();
-            qDebug() << "[service => dbus] signal TtsModelsPropertyChanged:"
-                     << models_list;
+            qDebug() << "[service => dbus] signal TtsModelsPropertyChanged";
             emit TtsModelsPropertyChanged(models_list);
 
             langs_list = available_tts_langs();
-            qDebug() << "[service => dbus] signal TtsLangsPropertyChanged:"
-                     << langs_list;
+            qDebug() << "[service => dbus] signal TtsLangsPropertyChanged";
             emit TtsLangsPropertyChanged(langs_list);
 
             lang_list = available_tts_lang_list();
-            qDebug() << "[service => dbus] signal TtsLangListPropertyChanged:"
-                     << lang_list;
+            qDebug() << "[service => dbus] signal TtsLangListPropertyChanged";
             emit TtsLangListPropertyChanged(lang_list);
 
             // stt + tts
 
             lang_list = available_stt_tts_lang_list();
             qDebug()
-                << "[service => dbus] signal SttTtsLangListPropertyChanged:"
-                << lang_list;
+                << "[service => dbus] signal SttTtsLangListPropertyChanged";
             emit SttTtsLangListPropertyChanged(lang_list);
 
             // ttt
 
             models_list = available_ttt_models();
-            qDebug() << "[service => dbus] signal TttModelsPropertyChanged:"
-                     << models_list;
+            qDebug() << "[service => dbus] signal TttModelsPropertyChanged";
             emit TttModelsPropertyChanged(models_list);
 
             langs_list = available_ttt_langs();
-            qDebug() << "[service => dbus] signal TttLangsPropertyChanged:"
-                     << langs_list;
+            qDebug() << "[service => dbus] signal TttLangsPropertyChanged";
             emit TttLangsPropertyChanged(langs_list);
 
             // mnt
             
             langs_list = available_mnt_langs();
-            qDebug() << "[service => dbus] signal MntLangsPropertyChanged:"
-                     << langs_list;
+            qDebug() << "[service => dbus] signal MntLangsPropertyChanged";
             emit MntLangsPropertyChanged(langs_list);
 
             lang_list = available_mnt_lang_list();
-            qDebug() << "[service => dbus] signal MntLangListPropertyChanged:"
-                     << lang_list;
+            qDebug() << "[service => dbus] signal MntLangListPropertyChanged";
             emit MntLangListPropertyChanged(lang_list);
         });
         connect(this, &speech_service::stt_transcribe_file_progress_changed,
