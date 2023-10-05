@@ -7212,7 +7212,7 @@
             "hidden": true
         },
         {
-            "name": "Polski (Piper MC Speech Medium Male)",
+            "name": "Polski (Piper Mc Speech Medium Male)",
             "model_id": "pl_piper_mc_speech_medium",
             "engine": "tts_piper",
             "lang_id": "pl",
