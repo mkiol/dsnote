@@ -31,6 +31,11 @@ DialogPage {
         width: parent.width
 
         TabButton {
+            text: qsTr("User Interface")
+            width: implicitWidth
+        }
+
+        TabButton {
             text: qsTr("Speech to Text")
             width: implicitWidth
         }
@@ -41,7 +46,7 @@ DialogPage {
         }
 
         TabButton {
-            text: qsTr("User Interface")
+            text: qsTr("Accessibility")
             width: implicitWidth
         }
 
@@ -56,6 +61,110 @@ DialogPage {
         Layout.topMargin: appWin.padding
 
         currentIndex: bar.currentIndex
+
+        ColumnLayout {
+            id: userInterfaceTab
+
+            width: root.width
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Font size in text editor")
+                    wrapMode: Text.Wrap
+                }
+                SpinBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    from: 4
+                    to: 25
+                    stepSize: 1
+                    value: _settings.font_size < 5 ? 4 : _settings.font_size
+                    textFromValue: function(value) {
+                        return value < 5 ? qsTr("Auto") : value.toString() + " px"
+                    }
+                    valueFromText: function(text) {
+                        if (text === qsTr("Auto")) return 4
+                        return parseInt(text);
+                    }
+                    onValueChanged: {
+                        _settings.font_size = value;
+                    }
+                    Component.onCompleted: {
+                        contentItem.color = palette.text
+                    }
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Graphical style") + " (" + qsTr("advanced option") + ")"
+                    wrapMode: Text.Wrap
+                }
+                ComboBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    currentIndex: _settings.qt_style_idx
+                    model: _settings.qt_styles()
+                    onActivated: _settings.qt_style_idx = index
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Application graphical interface style.") + " " +
+                                  qsTr("Change if you observe problems with incorrect colors under a dark theme.")
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Show desktop notification")
+                }
+                ComboBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    currentIndex: {
+                        switch(_settings.desktop_notification_policy) {
+                        case Settings.DesktopNotificationNever: return 0
+                        case Settings.DesktopNotificationWhenInacvtive: return 1
+                        case Settings.DesktopNotificationAlways: return 2
+                        }
+                        return 0
+                    }
+                    model: [
+                        qsTr("Never"),
+                        qsTr("When in background"),
+                        qsTr("Always")
+                    ]
+                    onActivated: {
+                        if (index === 0) {
+                            _settings.desktop_notification_policy = Settings.DesktopNotificationNever
+                        } else if (index === 1) {
+                            _settings.desktop_notification_policy = Settings.DesktopNotificationWhenInacvtive
+                        } else if (index === 2) {
+                            _settings.desktop_notification_policy = Settings.DesktopNotificationAlways
+                        }
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Show desktop notification while reading or listening.")
+                }
+            }
+        }
 
         ColumnLayout {
             id: speechToTextTab
@@ -342,107 +451,9 @@ DialogPage {
         }
 
         ColumnLayout {
-            id: userInterfaceTab
+            id: accessibilityTab
 
             width: root.width
-
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Font size in text editor")
-                    wrapMode: Text.Wrap
-                }
-                SpinBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    from: 4
-                    to: 25
-                    stepSize: 1
-                    value: _settings.font_size < 5 ? 4 : _settings.font_size
-                    textFromValue: function(value) {
-                        return value < 5 ? qsTr("Auto") : value.toString() + " px"
-                    }
-                    valueFromText: function(text) {
-                        if (text === qsTr("Auto")) return 4
-                        return parseInt(text);
-                    }
-                    onValueChanged: {
-                        _settings.font_size = value;
-                    }
-                    Component.onCompleted: {
-                        contentItem.color = palette.text
-                    }
-                }
-            }
-
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Graphical style") + " (" + qsTr("advanced option") + ")"
-                    wrapMode: Text.Wrap
-                }
-                ComboBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    currentIndex: _settings.qt_style_idx
-                    model: _settings.qt_styles()
-                    onActivated: _settings.qt_style_idx = index
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Application graphical interface style.") + " " +
-                                  qsTr("Change if you observe problems with incorrect colors under a dark theme.")
-                }
-            }
-
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Show desktop notification")
-                }
-                ComboBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    currentIndex: {
-                        switch(_settings.desktop_notification_policy) {
-                        case Settings.DesktopNotificationNever: return 0
-                        case Settings.DesktopNotificationWhenInacvtive: return 1
-                        case Settings.DesktopNotificationAlways: return 2
-                        }
-                        return 0
-                    }
-                    model: [
-                        qsTr("Never"),
-                        qsTr("When in background"),
-                        qsTr("Always")
-                    ]
-                    onActivated: {
-                        if (index === 0) {
-                            _settings.desktop_notification_policy = Settings.DesktopNotificationNever
-                        } else if (index === 1) {
-                            _settings.desktop_notification_policy = Settings.DesktopNotificationWhenInacvtive
-                        } else if (index === 2) {
-                            _settings.desktop_notification_policy = Settings.DesktopNotificationAlways
-                        }
-                    }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Show desktop notification while reading or listening.")
-                }
-            }
 
             CheckBox {
                 visible: _settings.is_xcb()
@@ -454,8 +465,9 @@ DialogPage {
 
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Shortcuts allow you to start, stop or cancel listening using keyboard.") + " " +
+                ToolTip.text: qsTr("Shortcuts allow you to start or stop listening and reading using keyboard.") + " " +
                               qsTr("Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.") + " " +
+                              qsTr("Text to Speech reading can be from current note or from text in the clipboard.") + " " +
                               qsTr("Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).") + " " +
                               qsTr("This feature only works under X11.")
             }
@@ -545,6 +557,63 @@ DialogPage {
                 Label {
                     Layout.fillWidth: true
                     Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    text: qsTr("Start reading")
+                }
+                TextField {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    text: _settings.hotkey_start_reading
+                    onTextChanged: _settings.hotkey_start_reading = text
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+                visible: _settings.hotkeys_enabled
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    text: qsTr("Start reading text from clipboard")
+                }
+                TextField {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    text: _settings.hotkey_start_reading_clipboard
+                    onTextChanged: _settings.hotkey_start_reading_clipboard = text
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+                visible: _settings.hotkeys_enabled
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    text: qsTr("Pause/Resume reading")
+                }
+                TextField {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    text: _settings.hotkey_pause_resume_reading
+                    onTextChanged: _settings.hotkey_pause_resume_reading = text
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+                visible: _settings.hotkeys_enabled
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                     text: qsTr("Cancel")
                 }
                 TextField {
@@ -580,6 +649,9 @@ DialogPage {
                       "<li><i>start-listening-active-window</i> (X11) - " + qsTr("Starts listening. The decoded text is inserted into the active window.") + "</li>" +
                       "<li><i>start-listening-clipboard</i> - " + qsTr("Starts listening. The decoded text is copied to the clipboard.") + "</li>" +
                       "<li><i>stop-listening</i> - " + qsTr("Stops listening. The already captured voice is decoded into text.") + "</li>" +
+                      "<li><i>start-reading</i> - " + qsTr("Starts reading.") + "</li>" +
+                      "<li><i>start-reading-clipboard</i> - " + qsTr("Starts reading text from the clipboard.") + "</li>" +
+                      "<li><i>pause-resume-reading</i> - " + qsTr("Pauses or resumes reading.") + "</li>" +
                       "<li><i>cancel</i> - " + qsTr("Cancels any of the above operations.") + "</li>" +
                       "</ul>" +
                       qsTr("For example, to trigger %1 action, execute the following command: %2.")

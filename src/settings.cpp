@@ -960,6 +960,45 @@ void settings::set_hotkey_stop_listening(const QString& value) {
     }
 }
 
+QString settings::hotkey_start_reading() const {
+    return value(QStringLiteral("hotkey_start_reading"),
+                 QStringLiteral("Ctrl+Alt+Shift+R"))
+        .toString();
+}
+
+void settings::set_hotkey_start_reading(const QString& value) {
+    if (value != hotkey_start_reading()) {
+        setValue(QStringLiteral("hotkey_start_reading"), value);
+        emit hotkeys_changed();
+    }
+}
+
+QString settings::hotkey_start_reading_clipboard() const {
+    return value(QStringLiteral("hotkey_start_reading_clipboard"),
+                 QStringLiteral("Ctrl+Alt+Shift+E"))
+        .toString();
+}
+
+void settings::set_hotkey_start_reading_clipboard(const QString& value) {
+    if (value != hotkey_start_reading_clipboard()) {
+        setValue(QStringLiteral("hotkey_start_reading_clipboard"), value);
+        emit hotkeys_changed();
+    }
+}
+
+QString settings::hotkey_pause_resume_reading() const {
+    return value(QStringLiteral("hotkey_pause_resume_reading"),
+                 QStringLiteral("Ctrl+Alt+Shift+P"))
+        .toString();
+}
+
+void settings::set_hotkey_pause_resume_reading(const QString& value) {
+    if (value != hotkey_pause_resume_reading()) {
+        setValue(QStringLiteral("hotkey_pause_resume_reading"), value);
+        emit hotkeys_changed();
+    }
+}
+
 QString settings::hotkey_cancel() const {
     return value(QStringLiteral("hotkey_cancel"),
                  QStringLiteral("Ctrl+Alt+Shift+C"))

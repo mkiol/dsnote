@@ -185,6 +185,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void listen_to_clipboard();
     Q_INVOKABLE void stop_listen();
     Q_INVOKABLE void play_speech();
+    Q_INVOKABLE void play_speech_from_clipboard();
     Q_INVOKABLE void play_speech_translator(bool transtalated);
     Q_INVOKABLE void pause_speech();
     Q_INVOKABLE void resume_speech();
@@ -268,6 +269,9 @@ class dsnote_app : public QObject {
         start_listening_active_window,
         start_listening_clipboard,
         stop_listening,
+        start_reading,
+        start_reading_clipboard,
+        pause_resume_reading,
         cancel
     };
     friend QDebug operator<<(QDebug d, action_t type);
@@ -357,6 +361,9 @@ class dsnote_app : public QObject {
         QHotkey start_listening_active_window;
         QHotkey start_listening_clipboard;
         QHotkey stop_listening;
+        QHotkey start_reading;
+        QHotkey start_reading_clipboard;
+        QHotkey pause_resume_reading;
         QHotkey cancel;
     };
 

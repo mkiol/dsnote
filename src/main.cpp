@@ -104,9 +104,12 @@ static cmd_options check_options(const QCoreApplication& app) {
 
     QCommandLineOption action_opt{
         QStringLiteral("action"),
-        QStringLiteral("Invokes an <action>. Supported actions are: "
-                       "start-listening, start-listening-active-window, "
-                       "start-listening-clipboard, stop-listening, cancel."),
+        QStringLiteral(
+            "Invokes an <action>. Supported actions are: "
+            "start-listening, start-listening-active-window, "
+            "start-listening-clipboard, stop-listening, "
+            "start-reading, start-reading-clipboard, pause-resume-reading, "
+            "cancel."),
         QStringLiteral("action")};
     parser.addOption(action_opt);
 
@@ -154,12 +157,13 @@ static cmd_options check_options(const QCoreApplication& app) {
                 0 &&
             action.compare("stop-listening", Qt::CaseInsensitive) != 0 &&
             action.compare("cancel", Qt::CaseInsensitive) != 0) {
-            fmt::print(stderr,
-                       "Invalid action. Use one option from the following: "
-                       "start-listening, start-listening-active-window, "
-                       "start-listening-clipboard, "
-                       "stop-listening, "
-                       "cancel.");
+            fmt::print(
+                stderr,
+                "Invalid action. Use one option from the following: "
+                "start-listening, start-listening-active-window, "
+                "start-listening-clipboard, stop-listening, "
+                "start-reading, start-reading-clipboard, pause-resume-reading, "
+                "cancel.");
             options.valid = false;
         } else {
             options.action = std::move(action);

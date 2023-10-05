@@ -132,6 +132,15 @@ QDebug operator<<(QDebug d, dsnote_app::action_t action) {
         case dsnote_app::action_t::stop_listening:
             d << "stop-listening";
             break;
+        case dsnote_app::action_t::start_reading:
+            d << "start-reading";
+            break;
+        case dsnote_app::action_t::start_reading_clipboard:
+            d << "start-reading-clipboard";
+            break;
+        case dsnote_app::action_t::pause_resume_reading:
+            d << "pause-resume-reading";
+            break;
         case dsnote_app::action_t::cancel:
             d << "cancel";
             break;
@@ -1637,6 +1646,10 @@ void dsnote_app::play_speech_internal(const QString &text,
 
 void dsnote_app::play_speech() { play_speech_internal(note(), {}); }
 
+void dsnote_app::play_speech_from_clipboard() {
+    play_speech_internal(QGuiApplication::clipboard()->text(), {});
+}
+
 void dsnote_app::play_speech_translator(bool transtalated) {
     if (!transtalated && m_active_tts_model_for_in_mnt.isEmpty()) {
         qWarning() << "no active tts model for in mnt";
@@ -2529,6 +2542,14 @@ void dsnote_app::execute_action_name(const QString &action_name) {
     } else if (action_name.compare("stop-listening", Qt::CaseInsensitive) ==
                0) {
         execute_action(action_t::stop_listening);
+    } else if (action_name.compare("start-reading", Qt::CaseInsensitive) == 0) {
+        execute_action(action_t::start_reading);
+    } else if (action_name.compare("start-reading-clipboard",
+                                   Qt::CaseInsensitive) == 0) {
+        execute_action(action_t::start_reading_clipboard);
+    } else if (action_name.compare("pause-resume-reading",
+                                   Qt::CaseInsensitive) == 0) {
+        execute_action(action_t::pause_resume_reading);
     } else if (action_name.compare("cancel", Qt::CaseInsensitive) == 0) {
         execute_action(action_t::cancel);
     } else {
@@ -2559,6 +2580,18 @@ void dsnote_app::execute_action(action_t action) {
         case dsnote_app::action_t::stop_listening:
             stop_listen();
             break;
+        case dsnote_app::action_t::start_reading:
+            play_speech();
+            break;
+        case dsnote_app::action_t::start_reading_clipboard:
+            play_speech_from_clipboard();
+            break;
+        case dsnote_app::action_t::pause_resume_reading:
+            if (task_state() == service_task_state_t::TaskStateSpeechPaused)
+                resume_speech();
+            else
+                pause_speech();
+            break;
         case dsnote_app::action_t::cancel:
             cancel();
             break;
@@ -2578,11 +2611,17 @@ void dsnote_app::register_hotkeys() {
     QObject::disconnect(&m_hotkeys.start_listening_active_window);
     QObject::disconnect(&m_hotkeys.start_listening_clipboard);
     QObject::disconnect(&m_hotkeys.stop_listening);
+    QObject::disconnect(&m_hotkeys.start_reading);
+    QObject::disconnect(&m_hotkeys.start_reading_clipboard);
+    QObject::disconnect(&m_hotkeys.pause_resume_reading);
     QObject::disconnect(&m_hotkeys.cancel);
     m_hotkeys.start_listening.setRegistered(false);
     m_hotkeys.start_listening_active_window.setRegistered(false);
     m_hotkeys.start_listening_clipboard.setRegistered(false);
     m_hotkeys.stop_listening.setRegistered(false);
+    m_hotkeys.start_reading.setRegistered(false);
+    m_hotkeys.start_reading_clipboard.setRegistered(false);
+    m_hotkeys.pause_resume_reading.setRegistered(false);
     m_hotkeys.cancel.setRegistered(false);
 
     if (s->hotkeys_enabled()) {
@@ -2626,6 +2665,38 @@ void dsnote_app::register_hotkeys() {
                 &m_hotkeys.stop_listening, &QHotkey::activated, this, [&]() {
                     qDebug() << "hot key activated: stop-listening";
                     execute_action(action_t::stop_listening);
+                });
+        }
+
+        if (!s->hotkey_start_reading().isEmpty()) {
+            m_hotkeys.start_reading.setShortcut(
+                QKeySequence{s->hotkey_start_reading()}, true);
+            QObject::connect(&m_hotkeys.start_reading, &QHotkey::activated,
+                             this, [&]() {
+                                 qDebug() << "hot key activated: start-reading";
+                                 execute_action(action_t::start_reading);
+                             });
+        }
+
+        if (!s->hotkey_start_reading_clipboard().isEmpty()) {
+            m_hotkeys.start_reading_clipboard.setShortcut(
+                QKeySequence{s->hotkey_start_reading_clipboard()}, true);
+            QObject::connect(
+                &m_hotkeys.start_reading_clipboard, &QHotkey::activated, this,
+                [&]() {
+                    qDebug() << "hot key activated: start-reading-clipboard";
+                    execute_action(action_t::start_reading_clipboard);
+                });
+        }
+
+        if (!s->hotkey_pause_resume_reading().isEmpty()) {
+            m_hotkeys.pause_resume_reading.setShortcut(
+                QKeySequence{s->hotkey_pause_resume_reading()}, true);
+            QObject::connect(
+                &m_hotkeys.pause_resume_reading, &QHotkey::activated, this,
+                [&]() {
+                    qDebug() << "hot key activated: pause-resume-reading";
+                    execute_action(action_t::pause_resume_reading);
                 });
         }
 

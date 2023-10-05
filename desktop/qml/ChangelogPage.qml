@@ -18,9 +18,9 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("User Interface") + ":</p>
+        text: "<p>" + qsTr("Accessibility") + ":</p>
         <ul>
-        <li>Global keyboard shortcuts. Shortcuts allow you to start, stop or cancel listening using keyboard.
+        <li>Global keyboard shortcuts. Shortcuts allow you to start or stop listening and reading using keyboard.
             Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).
             You can enable and modify shortcuts in the settings (<i>User Interface</i> &rarr; <i>Use global keyboard shortcuts</i>).
             This feature only works under X11.</li>
@@ -28,16 +28,19 @@ DialogPage {
             when <i>Speech Note</i> is running. An action can be triggered via DBus call or with command-line
             option. You can enable <i>Actions</i> in the settings
             (<i>User Interface</i> &rarr; <i>Allow external applications to invoke actions</i>).</li>
+        </ul>
+        <p>" + qsTr("User Interface") + ":</p>
+        <ul>
         <li>Desktop notifications. By default, when <i>Speech Note</i> is in the background, desktop notifications
-            are shown to indicate about starting or ending of listening. Desktop notifications are especially useful
+            are shown to indicate about starting or ending of listening and reading. Desktop notifications are especially useful
             when you use <i>Actions</i> or global keyboard shortcuts.
             You can disable desktop notifications in the settings
             (<i>User Interface</i> &rarr; <i>Show desktop notification</i>).</li>
-        </ul>" +
-        "<p>" + qsTr("Speech to Text") + ":</p>
+        </ul>
+        <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
         <li>New engine: <i>Faster Whisper</i>. It provides slightly better performance comparing to the existing engine
-            for Whisper models, especially on larger models like Medium or Large. Right now Faster Whisper does not,
+            for Whisper models, especially on larger models like Medium or Large. Right now <i>Faster Whisper</i> does not,
             use GPU acceleration.</li>
         <li>Inserting text to any active window. Using global keyboard shotcut or
             <i>start-listening-active-window</i> action you can
@@ -46,9 +49,11 @@ DialogPage {
         <li>Copy text to the clipboard. Using global keyboard shotcut or
             <i>start-listening-clipboard</i> action, the decoded text can be copied to the clipboard
             instead of being inserted into the current note.</li>
-        </ul>" +
-        "<p>" + qsTr("Text to Speech") + ":</p>
+        </ul>
+        <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
+        <li>Reading text from the clipboard. Using global keyboard shotcut or
+            <i>start-reading-clipboard</i> action you can directly read text which is in the clipboard.</li>
         <li>New Piper voices: Arabic (Kareem), English (LibriTTS R, Hfc), Hungarian (Imre),
            Polish (MC Speech), Czech (Jirka Low).</li>
         </ul>"

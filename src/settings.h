@@ -83,6 +83,15 @@ class settings : public QSettings, public singleton<settings> {
                 set_hotkey_start_listening_clipboard NOTIFY hotkeys_changed)
     Q_PROPERTY(QString hotkey_stop_listening READ hotkey_stop_listening WRITE
                    set_hotkey_stop_listening NOTIFY hotkeys_changed)
+    Q_PROPERTY(QString hotkey_start_reading READ hotkey_start_reading WRITE
+                   set_hotkey_start_reading NOTIFY hotkeys_changed)
+    Q_PROPERTY(
+        QString hotkey_start_reading_clipboard READ
+            hotkey_start_reading_clipboard WRITE
+                set_hotkey_start_reading_clipboard NOTIFY hotkeys_changed)
+    Q_PROPERTY(
+        QString hotkey_pause_resume_reading READ hotkey_pause_resume_reading
+            WRITE set_hotkey_pause_resume_reading NOTIFY hotkeys_changed)
     Q_PROPERTY(QString hotkey_cancel READ hotkey_cancel WRITE set_hotkey_cancel
                    NOTIFY hotkeys_changed)
     Q_PROPERTY(
@@ -250,6 +259,12 @@ class settings : public QSettings, public singleton<settings> {
     void set_hotkey_start_listening_clipboard(const QString &value);
     QString hotkey_stop_listening() const;
     void set_hotkey_stop_listening(const QString &value);
+    QString hotkey_start_reading() const;
+    void set_hotkey_start_reading(const QString &value);
+    QString hotkey_start_reading_clipboard() const;
+    void set_hotkey_start_reading_clipboard(const QString &value);
+    QString hotkey_pause_resume_reading() const;
+    void set_hotkey_pause_resume_reading(const QString &value);
     QString hotkey_cancel() const;
     void set_hotkey_cancel(const QString &value);
     desktop_notification_policy_t desktop_notification_policy() const;
