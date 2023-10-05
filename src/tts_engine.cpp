@@ -449,8 +449,10 @@ void tts_engine::process() {
 
             if (!file_exists(output_file)) {
                 auto new_text = text_tools::preprocess(
-                    task.text, m_config.options, m_config.lang,
-                    m_config.lang_code, m_config.share_dir);
+                    /*text=*/task.text, /*options=*/m_config.options,
+                    /*lang=*/m_config.lang,
+                    /*lang_code=*/m_config.lang_code,
+                    /*prefix_path=*/m_config.share_dir);
 
                 if (!encode_speech_impl(new_text, output_file)) {
                     unlink(output_file.c_str());

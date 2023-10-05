@@ -1484,6 +1484,12 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             }
         }
 
+        // add char replacement option for all coqui tts models
+        if (model.engine == model_engine::tts_coqui &&
+            !model.options.contains('c')) {
+            model.options.push_back('c');
+        }
+
         models.emplace(model_id, std::move(model));
     }
 

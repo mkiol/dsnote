@@ -387,6 +387,27 @@ void numbers_to_words(std::string& text, const std::string& lang,
     }
 }
 
+static void replace_characters(std::string& text, const std::string& from,
+                               const std::string& to) {
+    auto w_text = UTF8_to_wchar(text.c_str());
+    auto w_from = UTF8_to_wchar(from.c_str());
+    auto w_to = UTF8_to_wchar(to.c_str());
+
+    if (w_from.size() != w_to.size()) {
+        LOGE("cannot replace characters, from and to sizes are not the same");
+        return;
+    }
+
+    std::transform(w_text.begin(), w_text.end(), w_text.begin(),
+                   [&](const auto c) {
+                       auto pos = w_from.find(c);
+                       if (pos == std::string::npos) return c;
+                       return w_to[pos];
+                   });
+
+    text.assign(wchar_to_UTF8(w_text.c_str()));
+}
+
 static bool has_option(char c, const std::string& options) {
     return options.find(c) != std::string::npos;
 }
@@ -411,6 +432,10 @@ std::string preprocess(const std::string& text, const std::string& options,
         to_lower_case(new_text);
     }
 
+    if (has_option('c', options)) {
+        LOGD("char replace pre-processing needed");
+        replace_characters(new_text, "“”‘’", "\"\"''");
+    }
 #ifdef DEBUG
     LOGD("text after pre-processing: " << new_text);
 #endif
