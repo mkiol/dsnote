@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QObject>
 #include <QString>
+#include <QStringList>
 #include <QTimer>
 #include <QX11Info>
 
@@ -39,6 +40,7 @@ class fake_keyboard : public QObject {
     QString m_text;
     int m_text_cursor = 0;
     QTimer m_delay_timer;
+    unsigned int m_num_layouts = 0;
 
     void send_keyevent();
 };

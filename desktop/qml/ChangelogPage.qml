@@ -32,7 +32,7 @@ DialogPage {
         <p>" + qsTr("User Interface") + ":</p>
         <ul>
         <li>Desktop notifications. By default, when <i>Speech Note</i> is in the background, desktop notifications
-            are shown to indicate about starting or ending of listening and reading. Desktop notifications are especially useful
+            are shown to indicate starting or ending of listening and reading. Desktop notifications are especially useful
             when you use <i>Actions</i> or global keyboard shortcuts.
             You can disable desktop notifications in the settings
             (<i>User Interface</i> &rarr; <i>Show desktop notification</i>).</li>

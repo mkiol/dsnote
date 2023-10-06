@@ -89,8 +89,8 @@ ApplicationWindow {
         if (app.state === DsnoteApp.StateListeningSingleSentence ||
             app.state === DsnoteApp.StateListeningAuto ||
             app.state === DsnoteApp.StateListeningManual ||
-            app.state === StatePlayingSpeech) {
-            var text_summary
+            app.state === DsnoteApp.StatePlayingSpeech) {
+            var text_summary = ""
             if (app.task_state === DsnoteApp.TaskStateInitializing)
                 text_summary = qsTr("Getting ready, please wait...")
             else if (app.task_state === DsnoteApp.TaskStateProcessing)
@@ -100,7 +100,7 @@ ApplicationWindow {
             else if (app.task_state === DsnoteApp.TaskStateSpeechPaused)
                 text_summary = qsTr("Reading is paused.")
             else if (app.state === DsnoteApp.StateListeningSingleSentence || app.state === DsnoteApp.StateListeningManual)
-                    if (app.task_state === TaskStateSpeechDetected)
+                    if (app.task_state === DsnoteApp.TaskStateSpeechDetected)
                         text_summary = qsTr("Say something...")
             else if (app.state === DsnoteApp.StateListeningAuto)
                 text_summary = qsTr("Say something...")
@@ -110,11 +110,9 @@ ApplicationWindow {
                 return
             }
 
-            var text_body
+            var text_body = ""
             if (app.intermediate_text.length !== 0)
                 text_body = app.intermediate_text
-            else
-                text_body = ""
 
             app.show_desktop_notification(text_summary, text_body, true)
         }

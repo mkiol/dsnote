@@ -22,6 +22,7 @@ struct key_code_t {
     unsigned int sym = 0;
     unsigned int code = 0;
     unsigned int mask = 0;
+    unsigned int layout = 0;
 };
 
 static XKeyEvent create_key_event(Display *display, Window &win,
@@ -39,38 +40,55 @@ static XKeyEvent create_key_event(Display *display, Window &win,
     event.y_root = 1;
     event.same_screen = True;
     event.keycode = key.code;
-    event.state = key.mask;
+    event.state = key.mask | key.layout << 13;
+
+    // layout index is in 'Group index'
+    // https://www.x.org/releases/X11R7.6/doc/libX11/specs/
+    // XKB/xkblib.html#xkb_state_to_core_protocol_state_transformation
 
     return event;
 }
 
 static key_code_t key_from_character(Display *display, xkb_keymap *keymap,
-                                     xkb_layout_index_t layout,
+                                     unsigned int num_layouts,
                                      /*UTF-32*/ uint32_t character) {
     key_code_t key;
     key.sym = xkb_utf32_to_keysym(character);
     key.code = XKeysymToKeycode(display, key.sym);
 
-    auto num_levels_for_key =
-        xkb_keymap_num_levels_for_key(keymap, key.code, layout);
+    for (unsigned int l = 0; l < num_layouts; ++l) {
+        auto num_levels_for_key =
+            xkb_keymap_num_levels_for_key(keymap, key.code, l);
 
-    for (unsigned int i = 0; i < num_levels_for_key; ++i) {
-        const xkb_keysym_t *syms_out;
-        auto sym_size =
-            xkb_keymap_key_get_syms_by_level(keymap, key.code, 0, i, &syms_out);
-        for (int ii = 0; ii < sym_size; ++ii) {
-            if (syms_out[ii] == key.sym) {
-                if (i == 1)
-                    key.mask = ShiftMask;
-                else if (i == 2)
-                    key.mask =
-                        XkbKeysymToModifiers(display, XK_ISO_Level3_Shift);
-                else if (i == 3)
-                    key.mask =
-                        XkbKeysymToModifiers(display, XK_ISO_Level3_Shift) |
-                        ShiftMask;
-                break;
+        bool found = false;
+
+        for (unsigned int i = 0; i < num_levels_for_key; ++i) {
+            const xkb_keysym_t *syms_out;
+            auto sym_size = xkb_keymap_key_get_syms_by_level(keymap, key.code,
+                                                             l, i, &syms_out);
+            for (int ii = 0; ii < sym_size; ++ii) {
+                if (syms_out[ii] == key.sym) {
+                    if (i == 1)
+                        key.mask = ShiftMask;
+                    else if (i == 2)
+                        key.mask =
+                            XkbKeysymToModifiers(display, XK_ISO_Level3_Shift);
+                    else if (i == 3)
+                        key.mask =
+                            XkbKeysymToModifiers(display, XK_ISO_Level3_Shift) |
+                            ShiftMask;
+
+                    found = true;
+                    break;
+                }
             }
+
+            if (found) break;
+        }
+
+        if (found) {
+            key.layout = l;
+            break;
         }
     }
 
@@ -99,16 +117,19 @@ fake_keyboard::fake_keyboard(QObject *parent)
         throw std::runtime_error{"no xkb keymap"};
     }
 
-    auto num_layouts = xkb_keymap_num_layouts(m_xkb_keymap);
-    if (num_layouts < 1) {
+    m_num_layouts = xkb_keymap_num_layouts(m_xkb_keymap);
+    if (m_num_layouts == 0) {
         xkb_context_unref(m_xkb_ctx);
         m_xkb_ctx = nullptr;
         throw std::runtime_error{"no xkb layouts"};
     }
+    if (m_num_layouts > XkbGroup4Index + 1) m_num_layouts = XkbGroup4Index + 1;
 
     qDebug() << "keyboard layouts:";
-    for (unsigned int i = 0; i < num_layouts; ++i)
-        qDebug() << i << ":" << xkb_keymap_layout_get_name(m_xkb_keymap, i);
+    for (unsigned int i = 0; i < m_num_layouts; ++i) {
+        const auto *name = xkb_keymap_layout_get_name(m_xkb_keymap, i);
+        qDebug() << i << ":" << name;
+    }
 
     m_root_window = XDefaultRootWindow(m_x11_display);
     int revert;
@@ -129,6 +150,12 @@ fake_keyboard::~fake_keyboard() {
 }
 
 void fake_keyboard::send_text(const QString &text) {
+    auto num_layouts = xkb_keymap_num_layouts(m_xkb_keymap);
+    if (num_layouts < 1) {
+        qWarning() << "no xkb layouts";
+        return;
+    }
+
     m_text = text;
     m_text_cursor = 0;
 
@@ -145,8 +172,8 @@ void fake_keyboard::send_keyevent() {
 
     auto event = create_key_event(
         m_x11_display, m_focus_window, m_root_window,
-        key_from_character(m_x11_display, m_xkb_keymap,
-                           /*layout=*/0, m_text.at(m_text_cursor).unicode()));
+        key_from_character(m_x11_display, m_xkb_keymap, m_num_layouts,
+                           m_text.at(m_text_cursor).unicode()));
     event.type = KeyPress;
     XSendEvent(event.display, event.window, True, KeyPressMask,
                reinterpret_cast<XEvent *>(&event));

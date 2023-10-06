@@ -366,8 +366,6 @@ DialogPage {
                     ToolTip.text: qsTr("Select preferred GPU device for hardware acceleration.")
                 }
             }
-
-
         }
 
         ColumnLayout {
