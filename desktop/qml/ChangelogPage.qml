@@ -36,6 +36,7 @@ DialogPage {
             when you use <i>Actions</i> or global keyboard shortcuts.
             You can disable desktop notifications in the settings
             (<i>User Interface</i> &rarr; <i>Show desktop notification</i>).</li>
+        <li>Speech speed control option has been moved to the main application window.</li>
         </ul>
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
@@ -55,7 +56,8 @@ DialogPage {
         <li>Reading text from the clipboard. Using global keyboard shotcut or
             <i>start-reading-clipboard</i> action you can directly read text which is in the clipboard.</li>
         <li>New Piper voices: Arabic (Kareem), English (LibriTTS R, Hfc), Hungarian (Imre),
-           Polish (MC Speech), Czech (Jirka Low).</li>
+           Polish (Mc Speech), Czech (Jirka Low).</li>
+        <li>More steps in speech speed option. You can set speed from x0.1 to x2.0 values.</li>
         <li>Fix: Coqui Chinese MMS Hakka and Min Nan voices were broken.</li>
         </ul>"
     }

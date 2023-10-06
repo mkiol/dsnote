@@ -126,6 +126,7 @@ ColumnLayout {
             icon.name: "audio-speakers-symbolic"
             enabled: app.tts_configured && app.state === DsnoteApp.StateIdle
             comboToolTip: qsTr("Text to Speech model")
+            combo2ToolTip: qsTr("Speed")
             comboPlaceholderText: qsTr("No Text to Speech model")
             combo {
                 enabled: listenReadCombos.second.enabled &&
@@ -135,6 +136,39 @@ ColumnLayout {
                 onActivated: app.set_active_tts_model_idx(index)
                 currentIndex: app.active_tts_model_idx
             }
+            combo2 {
+                visible: true
+                enabled: listenReadCombos.second.enabled &&
+                         !listenReadCombos.second.off &&
+                         app.state === DsnoteApp.StateIdle
+                textRole: "text"
+                valueRole: "value"
+                currentIndex: _settings.speech_speed - 1;
+                model: ListModel {
+                    ListElement { text: "x 0.1"; value: 1 }
+                    ListElement { text: "x 0.2"; value: 2 }
+                    ListElement { text: "x 0.3"; value: 3 }
+                    ListElement { text: "x 0.4"; value: 4 }
+                    ListElement { text: "x 0.5"; value: 5 }
+                    ListElement { text: "x 0.6"; value: 6 }
+                    ListElement { text: "x 0.7"; value: 7 }
+                    ListElement { text: "x 0.8"; value: 8 }
+                    ListElement { text: "x 0.9"; value: 9 }
+                    ListElement { text: "x 1.0"; value: 10 }
+                    ListElement { text: "x 1.1"; value: 11 }
+                    ListElement { text: "x 1.2"; value: 12 }
+                    ListElement { text: "x 1.3"; value: 13 }
+                    ListElement { text: "x 1.4"; value: 14 }
+                    ListElement { text: "x 1.5"; value: 15 }
+                    ListElement { text: "x 1.6"; value: 16 }
+                    ListElement { text: "x 1.7"; value: 17 }
+                    ListElement { text: "x 1.8"; value: 18 }
+                    ListElement { text: "x 1.9"; value: 19 }
+                    ListElement { text: "x 2.0"; value: 20 }
+                }
+                onActivated: _settings.speech_speed = index + 1
+            }
+
             button {
                 enabled: listenReadCombos.second.enabled &&
                          !listenReadCombos.second.off &&

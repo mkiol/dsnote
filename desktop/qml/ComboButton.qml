@@ -16,8 +16,10 @@ RowLayout {
     property alias icon: _icon.icon
     property alias controlEnabled: row.enabled
     property alias combo: _combo
+    property alias combo2: _combo2
     property alias frame: _frame
     property string comboToolTip: ""
+    property string combo2ToolTip: ""
     property string buttonToolTip: ""
     readonly property bool off: combo.model.length === 0
     property string comboPlaceholderText: ""
@@ -62,6 +64,18 @@ RowLayout {
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: root.comboToolTip
+            }
+
+            ComboBox {
+                id: _combo2
+
+                visible: false
+                Layout.preferredWidth: appWin.buttonSize * 0.75
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                enabled: !root.off
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: root.combo2ToolTip
             }
 
             Button {

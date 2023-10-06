@@ -414,7 +414,7 @@ DialogPage {
                         anchors.bottom: parent.handle.top
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.bottomMargin: appWin.padding
-                        text: "x" + parent.value / 10
+                        text: "x " + (parent.value / 10).toFixed(1)
                     }
                 }
             }
