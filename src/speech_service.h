@@ -398,7 +398,7 @@ class speech_service : public QObject, public singleton<speech_service> {
                                const QString &model_id,
                                const QString &out_lang_id);
     QString restart_tts_engine(const QString &model_id,
-                               tts_engine::speech_speed_t speech_speed);
+                               unsigned int speech_speed);
     QString restart_mnt_engine(const QString &model_or_lang_id,
                                const QString &out_lang_id);
     void restart_audio_source(const QString &source_file = {});
@@ -466,7 +466,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         const std::vector<models_manager::model_t> &models);
     static bool matched_engine_type(engine_t engine_type,
                                     models_manager::model_engine engine);
-    static tts_engine::speech_speed_t tts_speech_speed_from_options(
+    static unsigned int tts_speech_speed_from_options(
         const QVariantMap &options);
 
     // DBus

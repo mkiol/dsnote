@@ -123,19 +123,12 @@ bool rhvoice_engine::encode_speech_impl(const std::string& text,
     cb_data.wav_file.seekp(sizeof(wav_header));
 
     double rate = [this]() {
-        switch (m_config.speech_speed) {
-            case speech_speed_t::very_slow:
-                return -0.5;
-            case speech_speed_t::slow:
-                return -0.3;
-            case speech_speed_t::fast:
-                return 0.2;
-            case speech_speed_t::very_fast:
-                return 0.5;
-            case speech_speed_t::normal:
-                break;
+        if (m_config.speech_speed < 1 || m_config.speech_speed > 20 ||
+            m_config.speech_speed == 10) {
+            return 0.0;
         }
-        return 0.0;
+
+        return (static_cast<double>(m_config.speech_speed) / 10.0) - 1.0;
     }();
 
     RHVoice_synth_params synth_params{

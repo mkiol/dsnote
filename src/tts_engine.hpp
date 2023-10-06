@@ -63,16 +63,6 @@ class tts_engine {
         std::function<void()> error;
     };
 
-    enum class speech_speed_t {
-        very_slow = -2,
-        slow = -1,
-        normal = 0,
-        fast = 1,
-        very_fast = 2
-    };
-    friend std::ostream& operator<<(std::ostream& os,
-                                    speech_speed_t speech_speed);
-
     struct config_t {
         std::string lang;
         model_files_t model_files;
@@ -84,7 +74,7 @@ class tts_engine {
         std::string options;
         std::string nb_data;
         std::string lang_code;
-        speech_speed_t speech_speed = speech_speed_t::normal;
+        unsigned int speech_speed = 10;
         inline bool has_option(char c) const {
             return options.find(c) != std::string::npos;
         }
@@ -102,7 +92,7 @@ class tts_engine {
     inline auto speaker() const { return m_config.speaker; }
     void encode_speech(std::string text);
     static std::string merge_wav_files(std::vector<std::string>&& files);
-    void set_speech_speed(speech_speed_t speech_speed);
+    void set_speech_speed(unsigned int speech_speed);
 
    protected:
     struct task_t {

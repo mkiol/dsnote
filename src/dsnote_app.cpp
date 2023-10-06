@@ -1637,8 +1637,7 @@ void dsnote_app::play_speech_internal(const QString &text,
     int new_task = 0;
 
     QVariantMap options;
-    options.insert("speech_speed",
-                   static_cast<int>(settings::instance()->speech_speed()));
+    options.insert("speech_speed", settings::instance()->speech_speed());
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
@@ -1789,8 +1788,7 @@ void dsnote_app::speech_to_file_internal(const QString &text,
     int new_task = 0;
 
     QVariantMap options;
-    options.insert("speech_speed",
-                   static_cast<int>(settings::instance()->speech_speed()));
+    options.insert("speech_speed", settings::instance()->speech_speed());
 
     auto audio_format_str = settings::audio_format_str_from_filename(dest_file);
 

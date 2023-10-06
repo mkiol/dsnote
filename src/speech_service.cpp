@@ -1071,8 +1071,8 @@ QString speech_service::restart_stt_engine(
     return {};
 }
 
-QString speech_service::restart_tts_engine(
-    const QString &model_id, tts_engine::speech_speed_t speech_speed) {
+QString speech_service::restart_tts_engine(const QString &model_id,
+                                           unsigned int speech_speed) {
     auto model_config = choose_model_config(engine_t::tts, model_id);
     if (model_config && model_config->tts) {
         tts_engine::config_t config;
@@ -2146,31 +2146,16 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
     return m_current_task->id;
 }
 
-tts_engine::speech_speed_t speech_service::tts_speech_speed_from_options(
+unsigned int speech_service::tts_speech_speed_from_options(
     const QVariantMap &options) {
     qDebug() << "options:" << options;
     if (options.contains(QStringLiteral("speech_speed"))) {
         bool ok = false;
         auto speed = options.value(QStringLiteral("speech_speed")).toInt(&ok);
-        if (ok) {
-            switch (speed) {
-                case -2:
-                    return tts_engine::speech_speed_t::very_slow;
-                case -1:
-                    return tts_engine::speech_speed_t::slow;
-                case 0:
-                    return tts_engine::speech_speed_t::normal;
-                case 1:
-                    return tts_engine::speech_speed_t::fast;
-                case 2:
-                    return tts_engine::speech_speed_t::very_fast;
-                default:
-                    return tts_engine::speech_speed_t::normal;
-            }
-        }
+        if (ok) return std::clamp(speed, 1, 20);
     }
 
-    return tts_engine::speech_speed_t::normal;
+    return 10;
 }
 
 int speech_service::tts_play_speech(const QString &text, QString lang,
@@ -2327,8 +2312,7 @@ int speech_service::cancel(int task) {
                                next_task.out_lang);
         } else if (next_task.engine == engine_t::tts) {
             if (m_current_task->engine == engine_t::stt) stop_stt_engine();
-            restart_tts_engine(m_pending_task->model_id,
-                               tts_engine::speech_speed_t::normal);
+            restart_tts_engine(m_pending_task->model_id, 10);
         }
 
         restart_audio_source();

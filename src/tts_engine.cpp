@@ -63,29 +63,6 @@ std::ostream& operator<<(std::ostream& os, tts_engine::state_t state) {
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os,
-                         tts_engine::speech_speed_t speech_speed) {
-    switch (speech_speed) {
-        case tts_engine::speech_speed_t::very_slow:
-            os << "very-slow";
-            break;
-        case tts_engine::speech_speed_t::slow:
-            os << "slow";
-            break;
-        case tts_engine::speech_speed_t::normal:
-            os << "normal";
-            break;
-        case tts_engine::speech_speed_t::fast:
-            os << "fast";
-            break;
-        case tts_engine::speech_speed_t::very_fast:
-            os << "very-fast";
-            break;
-    }
-
-    return os;
-}
-
 tts_engine::tts_engine(config_t config, callbacks_t call_backs)
     : m_config{std::move(config)},
       m_call_backs{std::move(call_backs)} {}
@@ -184,7 +161,9 @@ void tts_engine::encode_speech(std::string text) {
     m_cv.notify_one();
 }
 
-void tts_engine::set_speech_speed(speech_speed_t speech_speed) {
+void tts_engine::set_speech_speed(unsigned int speech_speed) {
+    if (m_config.speech_speed < 1 || m_config.speech_speed > 20)
+        speech_speed = 10;
     m_config.speech_speed = speech_speed;
 }
 
@@ -202,9 +181,8 @@ std::string tts_engine::path_to_output_file(const std::string& text) const {
     auto hash = std::hash<std::string>{}(
         text + m_config.model_files.model_path +
         m_config.model_files.vocoder_path + m_config.speaker + m_config.lang +
-        (m_config.speech_speed == speech_speed_t::normal
-             ? ""
-             : std::to_string(static_cast<int>(m_config.speech_speed))));
+        (m_config.speech_speed == 10 ? ""
+                                     : std::to_string(m_config.speech_speed)));
     return m_config.cache_dir + "/" + std::to_string(hash) + ".wav";
 }
 
@@ -383,26 +361,9 @@ void tts_engine::apply_speed([[maybe_unused]] const std::string& file) const {
 #ifdef ARCH_X86_64
     auto tmp_file = file + "_tmp";
 
-    if (m_config.speech_speed != speech_speed_t::normal) {
-        double time_ratio = 1.0;
-        switch (m_config.speech_speed) {
-            case speech_speed_t::very_slow:
-                time_ratio = 1.5;
-                break;
-            case speech_speed_t::slow:
-                time_ratio = 1.2;
-                break;
-            case speech_speed_t::fast:
-                time_ratio = 0.8;
-                break;
-            case speech_speed_t::very_fast:
-                time_ratio = 0.5;
-                break;
-            case speech_speed_t::normal:
-                break;
-        }
-
-        if (stretch(file, tmp_file, time_ratio, 1.0)) {
+    if (m_config.speech_speed > 0 && m_config.speech_speed <= 20 &&
+        m_config.speech_speed != 10) {
+        if (stretch(file, tmp_file, m_config.speech_speed / 10, 1.0)) {
             unlink(file.c_str());
             rename(tmp_file.c_str(), file.c_str());
         }

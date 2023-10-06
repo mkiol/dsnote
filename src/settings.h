@@ -54,7 +54,7 @@ class settings : public QSettings, public singleton<settings> {
                    qt_style_idx_changed)
     Q_PROPERTY(bool restart_required READ restart_required NOTIFY
                    restart_required_changed)
-    Q_PROPERTY(speech_speed_t speech_speed READ speech_speed WRITE
+    Q_PROPERTY(unsigned int speech_speed READ speech_speed WRITE
                    set_speech_speed NOTIFY speech_speed_changed)
     Q_PROPERTY(int font_size READ font_size WRITE set_font_size NOTIFY
                    font_size_changed)
@@ -161,15 +161,6 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(insert_mode_t)
 
-    enum class speech_speed_t {
-        SpeechSpeedVerySlow = -2,
-        SpeechSpeedSlow = -1,
-        SpeechSpeedNormal = 0,
-        SpeechSpeedFast = 1,
-        SpeechSpeedVeryFast = 2
-    };
-    Q_ENUM(speech_speed_t)
-
     enum class audio_format_t {
         AudioFormatAuto = 0,
         AudioFormatWav = 1,
@@ -204,8 +195,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_note(const QString &value);
     speech_mode_t speech_mode() const;
     void set_speech_mode(speech_mode_t value);
-    speech_speed_t speech_speed() const;
-    void set_speech_speed(speech_speed_t value);
+    unsigned int speech_speed() const;
+    void set_speech_speed(unsigned int value);
     insert_mode_t insert_mode() const;
     void set_insert_mode(insert_mode_t value);
     mode_t mode() const;

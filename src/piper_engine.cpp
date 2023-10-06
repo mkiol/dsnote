@@ -55,19 +55,15 @@ bool piper_engine::model_supports_speed() const { return true; }
 bool piper_engine::encode_speech_impl(const std::string& text,
                                       const std::string& out_file) {
     auto length_scale = [this]() {
-        switch (m_config.speech_speed) {
-            case speech_speed_t::very_slow:
-                return m_initial_length_scale * 1.8F;
-            case speech_speed_t::slow:
-                return m_initial_length_scale * 1.4F;
-            case speech_speed_t::fast:
-                return m_initial_length_scale * 0.8F;
-            case speech_speed_t::very_fast:
-                return m_initial_length_scale * 0.6F;
-            case speech_speed_t::normal:
-                break;
+        if (m_config.speech_speed < 1 || m_config.speech_speed > 20 ||
+            m_config.speech_speed == 10) {
+            return m_initial_length_scale;
         }
-        return m_initial_length_scale;
+
+        auto speech_speed = 20 - (m_config.speech_speed - 1);
+
+        return m_initial_length_scale * static_cast<float>(speech_speed) /
+               10.0f;
     }();
 
     try {

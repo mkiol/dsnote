@@ -410,16 +410,16 @@ void settings::set_speech_mode(speech_mode_t value) {
     }
 }
 
-settings::speech_speed_t settings::speech_speed() const {
-    return static_cast<speech_speed_t>(
-        value(QStringLiteral("speech_speed"),
-              static_cast<int>(speech_speed_t::SpeechSpeedNormal))
-            .toInt());
+unsigned int settings::speech_speed() const {
+    return std::clamp(value(QStringLiteral("speech_speed2"), 10u).toUInt(), 1u,
+                      20u);
 }
 
-void settings::set_speech_speed(speech_speed_t value) {
+void settings::set_speech_speed(unsigned int value) {
+    value = std::clamp(value, 1u, 20u);
+
     if (speech_speed() != value) {
-        setValue(QStringLiteral("speech_speed"), static_cast<int>(value));
+        setValue(QStringLiteral("speech_speed2"), static_cast<int>(value));
         emit speech_speed_changed();
     }
 }

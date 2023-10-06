@@ -94,23 +94,15 @@ bool espeak_engine::encode_speech_impl(const std::string& text,
     auto rate = [this]() {
         auto default_rate = espeak_GetParameter(espeakRATE, 0);
 
-        switch (m_config.speech_speed) {
-            case speech_speed_t::very_slow:
-                return std::max<int>(static_cast<float>(default_rate) * 0.6f,
-                                     80);
-            case speech_speed_t::slow:
-                return std::max<int>(static_cast<float>(default_rate) * 0.8f,
-                                     80);
-            case speech_speed_t::fast:
-                return std::min<int>(static_cast<float>(default_rate) * 1.4f,
-                                     450);
-            case speech_speed_t::very_fast:
-                return std::min<int>(static_cast<float>(default_rate) * 1.8f,
-                                     450);
-            case speech_speed_t::normal:
-                break;
+        if (m_config.speech_speed < 1 || m_config.speech_speed > 20 ||
+            m_config.speech_speed == 10) {
+            return default_rate;
         }
-        return default_rate;
+
+        return std::clamp<int>(
+            static_cast<float>(default_rate) *
+                (static_cast<float>(m_config.speech_speed) / 10.0f),
+            80, 450);
     }();
 
     espeak_SetParameter(espeakRATE, rate, 0);
