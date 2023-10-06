@@ -7768,7 +7768,7 @@
             "lang_id": "vi"
         },
         {
-            "name": "广东话 (Espeak Robot)",
+            "name": "广东话 (Espeak Cantonese Robot)",
             "model_id": "zh_espeak_yue",
             "engine": "tts_espeak",
             "lang_id": "zh",
@@ -7776,7 +7776,7 @@
             "options": "a"
         },
         {
-            "name": "客家話 (Espeak Robot)",
+            "name": "客家話 (Espeak Hakka Robot)",
             "model_id": "zh_espeak_hak",
             "engine": "tts_espeak",
             "lang_id": "zh",
@@ -7784,7 +7784,7 @@
             "options": "a"
         },
         {
-            "name": "官話 (Espeak Robot)",
+            "name": "官話 (Espeak Mandarin Robot)",
             "model_id": "zh_espeak_cmn",
             "engine": "tts_espeak",
             "lang_id": "zh",
@@ -8613,7 +8613,7 @@
             "size": "685905630"
         },
         {
-            "name": "客家話 (Coqui MMS Hakka Male)",
+            "name": "客家話 (Coqui MMS Hakka)",
             "model_id": "zh_coqui_fairseq_hak",
             "engine": "tts_coqui",
             "lang_id": "zh",
@@ -8623,11 +8623,11 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/hak.tar.gz"
             ],
-            "options": "an",
+            "options": "anr",
             "size": "134881386"
         },
         {
-            "name": "閩南語 (Coqui MMS Min Nan Male)",
+            "name": "閩南語 (Coqui MMS Min Nan)",
             "model_id": "zh_coqui_fairseq_nan",
             "engine": "tts_coqui",
             "lang_id": "zh",
@@ -8637,7 +8637,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/nan.tar.gz"
             ],
-            "options": "an",
+            "options": "anr",
             "size": "134880972"
         },
         {

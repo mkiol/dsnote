@@ -56,6 +56,7 @@ DialogPage {
             <i>start-reading-clipboard</i> action you can directly read text which is in the clipboard.</li>
         <li>New Piper voices: Arabic (Kareem), English (LibriTTS R, Hfc), Hungarian (Imre),
            Polish (MC Speech), Czech (Jirka Low).</li>
+        <li>Fix: Coqui Chinese MMS Hakka and Min Nan voices were broken.</li>
         </ul>"
     }
 

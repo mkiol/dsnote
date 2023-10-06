@@ -14,6 +14,7 @@
 #include <QGuiApplication>
 #include <QTextStream>
 #include <algorithm>
+#include <utility>
 
 #include "media_compressor.hpp"
 #include "mtag_tools.hpp"
@@ -322,18 +323,29 @@ void dsnote_app::handle_stt_intermediate_text(const QString &text,
     }
 }
 
+static std::pair<QChar, QString> full_stop(const QString &lang) {
+    if (lang.startsWith("zh") || lang.startsWith("ja"))
+        return {u'\U00003002', ""};
+    return {'.', " "};
+}
+
 QString dsnote_app::insert_to_note(QString note, QString new_text,
+                                   const QString &lang,
                                    settings::insert_mode_t mode) {
     if (new_text.isEmpty()) return note;
 
     QTextStream ss{&note, QIODevice::WriteOnly};
+
+    auto [dot, space] = full_stop(lang);
 
     switch (mode) {
         case settings::insert_mode_t::InsertInLine:
             if (!note.isEmpty()) {
                 auto last_char = note.at(note.size() - 1);
                 if (last_char.isLetterOrNumber())
-                    ss << ". ";
+                    ss << dot << space;
+                else if (last_char == dot)
+                    ss << space;
                 else if (!last_char.isSpace())
                     ss << ' ';
             }
@@ -342,7 +354,7 @@ QString dsnote_app::insert_to_note(QString note, QString new_text,
             if (!note.isEmpty()) {
                 auto last_char = note.at(note.size() - 1);
                 if (last_char.isLetterOrNumber())
-                    ss << ".\n";
+                    ss << dot << '\n';
                 else
                     ss << '\n';
             }
@@ -353,7 +365,7 @@ QString dsnote_app::insert_to_note(QString note, QString new_text,
 
     ss << new_text;
 
-    if (new_text.at(new_text.size() - 1).isLetterOrNumber()) ss << '.';
+    if (new_text.at(new_text.size() - 1).isLetterOrNumber()) ss << dot;
 
     return note;
 }
@@ -384,7 +396,7 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
     switch (m_stt_text_destination) {
         case stt_text_destination_t::note:
             make_undo();
-            set_note(insert_to_note(settings::instance()->note(), text,
+            set_note(insert_to_note(settings::instance()->note(), text, lang,
                                     settings::instance()->insert_mode()));
             this->m_intermediate_text.clear();
             emit text_changed();
@@ -2310,7 +2322,7 @@ void dsnote_app::update_note(const QString &text, bool replace) {
     if (replace) {
         set_note(text);
     } else {
-        set_note(insert_to_note(settings::instance()->note(), text,
+        set_note(insert_to_note(settings::instance()->note(), text, "",
                                 settings::instance()->insert_mode()));
     }
 }
@@ -2401,7 +2413,7 @@ bool dsnote_app::load_note_from_file(const QString &input_file, bool replace) {
         set_note(file.readAll());
     } else {
         set_note(insert_to_note(settings::instance()->note(), file.readAll(),
-                                settings::instance()->insert_mode()));
+                                "", settings::instance()->insert_mode()));
     }
 
     return true;

@@ -476,6 +476,7 @@ class dsnote_app : public QObject {
     void check_transcribe_taks();
     QVariantMap translations() const;
     static QString insert_to_note(QString note, QString new_text,
+                                  const QString &lang,
                                   settings::insert_mode_t mode);
     QString note() const;
     void set_note(const QString text);
