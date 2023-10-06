@@ -104,7 +104,7 @@
       <ul>
       <li>Desktop notifications. By default, when Speech Note is in the background,
           desktop notifications are shown to indicate starting or ending of listening and reading.</li>
-      <li>Speech speech control option has been moved to the main application window.</li>
+      <li>Speech speed control option has been moved to the main application window.</li>
       </ul>
       <p>Speech to Text:</p>
       <ul>
@@ -124,8 +124,8 @@
       <li>Reading text from the clipboard. Using global keyboard shotcut or
           'action' you can directly read text which is in the clipboard.</li>
       <li>New Piper voices: Arabic (Kareem), English (LibriTTS R, Hfc), Hungarian (Imre),
-          Polish (MC Speech), Czech (Jirka Low).</li>
-      <li>More steps in speech speed option. You can set speed from x0.1 to x2.0 value.</li>
+          Polish (Mc Speech), Czech (Jirka Low).</li>
+      <li>More steps in speech speed option. You can set speed from x0.1 to x2.0 values.</li>
       <li>Fix: Coqui Chinese MMS Hakka and Min Nan voices were broken.</li>
       </ul>
       </description>

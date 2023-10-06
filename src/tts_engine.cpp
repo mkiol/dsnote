@@ -162,9 +162,7 @@ void tts_engine::encode_speech(std::string text) {
 }
 
 void tts_engine::set_speech_speed(unsigned int speech_speed) {
-    if (m_config.speech_speed < 1 || m_config.speech_speed > 20)
-        speech_speed = 10;
-    m_config.speech_speed = speech_speed;
+    m_config.speech_speed = std::clamp(speech_speed, 1u, 20u);
 }
 
 void tts_engine::set_state(state_t new_state) {
@@ -363,7 +361,10 @@ void tts_engine::apply_speed([[maybe_unused]] const std::string& file) const {
 
     if (m_config.speech_speed > 0 && m_config.speech_speed <= 20 &&
         m_config.speech_speed != 10) {
-        if (stretch(file, tmp_file, m_config.speech_speed / 10, 1.0)) {
+        auto speech_speed = 20 - (m_config.speech_speed - 1);
+
+        if (stretch(file, tmp_file, static_cast<double>(speech_speed) / 10.0,
+                    1.0)) {
             unlink(file.c_str());
             rename(tmp_file.c_str(), file.c_str());
         }
