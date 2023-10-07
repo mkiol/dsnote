@@ -7254,6 +7254,118 @@
             "size": "63216406"
         },
         {
+            "name": "English (Mimic3 Hi-Fi Low)",
+            "model_id": "en_mimi3_us_hifitts_low",
+            "engine": "tts_mimic3",
+            "lang_id": "en",
+            "checksum": "36330",
+            "checksum_quick": "ef63dd9a",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/speaker_map.csv"
+            ],
+            "size": "76341280",
+            "hidden": true
+        },
+        {
+            "name": "English (Mimic3 Hi-Fi 9017 Low Male)",
+            "model_id": "en_mimi3_us_hifitts_low_9017",
+            "model_alias_of": "en_mimi3_us_hifitts_low",
+            "lang_id": "en",
+            "speaker": "9017"
+        },
+        {
+            "name": "English (Mimic3 Hi-Fi 6097 Low Male)",
+            "model_id": "en_mimi3_us_hifitts_low_6097",
+            "model_alias_of": "en_mimi3_us_hifitts_low",
+            "lang_id": "en",
+            "speaker": "6097"
+        },
+        {
+            "name": "English (Mimic3 Hi-Fi 92 Low Female)",
+            "model_id": "en_mimi3_us_hifitts_low_92",
+            "model_alias_of": "en_mimi3_us_hifitts_low",
+            "lang_id": "en",
+            "speaker": "92"
+        },
+        {
+            "name": "English (Mimic3 M-AILABS Low)",
+            "model_id": "en_mimi3_us_mailabs_low",
+            "engine": "tts_mimic3",
+            "lang_id": "en",
+            "checksum": "f5804e6b",
+            "checksum_quick": "d3b1df0f",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/speaker_map.csv"
+            ],
+            "size": "76341334",
+            "hidden": true
+        },
+        {
+            "name": "English (Mimic3 Elliot Miller Low Male)",
+            "model_id": "en_mimi3_us_mailabs_low_elliot_miller",
+            "model_alias_of": "en_mimi3_us_mailabs_low",
+            "lang_id": "en",
+            "speaker": "elliot_miller"
+        },
+        {
+            "name": "English (Mimic3 Judy Bieber Low Female)",
+            "model_id": "en_mimi3_us_mailabs_low_judy_bieber",
+            "model_alias_of": "en_mimi3_us_mailabs_low",
+            "lang_id": "en",
+            "speaker": "judy_bieber"
+        },
+        {
+            "name": "English (Mimic3 Mary Ann Low Female)",
+            "model_id": "en_mimi3_us_mailabs_low_mary_ann",
+            "model_alias_of": "en_mimi3_us_mailabs_low",
+            "lang_id": "en",
+            "speaker": "mary_ann"
+        },
+        {
+            "name": "Polski (Mimic3 M-AILABS Low)",
+            "model_id": "pl_mimi3_mailabs_low",
+            "engine": "tts_mimic3",
+            "lang_id": "pl",
+            "checksum": "768f7397",
+            "checksum_quick": "cbde8fb8",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/speaker_map.csv"
+            ],
+            "size": "76338413",
+            "hidded": true
+        },
+        {
+            "name": "Polski (Mimic3 Nina Brown Low Female)",
+            "model_id": "pl_mimi3_mailabs_low_nina_brown",
+            "model_alias_of": "pl_mimi3_mailabs_low",
+            "lang_id": "pl",
+            "speaker": "nina_brown"
+        },
+        {
+            "name": "Polski (Mimic3 Piotr Nater Low Male)",
+            "model_id": "pl_mimi3_mailabs_low_piotr_nater",
+            "model_alias_of": "pl_mimi3_mailabs_low",
+            "lang_id": "pl",
+            "speaker": "piotr_nater"
+        },
+        {
             "name": "አማርኛ (Espeak Robot)",
             "model_id": "am_espeak_am",
             "engine": "tts_espeak",
