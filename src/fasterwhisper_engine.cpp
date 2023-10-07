@@ -86,6 +86,7 @@ void fasterwhisper_engine::create_model() {
                            "cpu_threads"_a = n_threads));
                    } catch (const std::exception& err) {
                        LOGE("py error: " << err.what());
+                       m_model.reset();
                        return std::string{"false"};
                    }
                    return std::string{"true"};

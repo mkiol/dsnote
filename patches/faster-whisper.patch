@@ -1,0 +1,37 @@
+diff -ruN tmp/faster_whisper/__init__.py tmp-patched/faster_whisper/__init__.py
+--- tmp/faster_whisper/__init__.py	2023-09-18 14:23:30.000000000 +0200
++++ tmp-patched/faster_whisper/__init__.py	2023-10-04 19:53:07.520311690 +0200
+@@ -1,11 +1,9 @@
+-from faster_whisper.audio import decode_audio
+ from faster_whisper.transcribe import WhisperModel
+ from faster_whisper.utils import available_models, download_model, format_timestamp
+ from faster_whisper.version import __version__
+ 
+ __all__ = [
+     "available_models",
+-    "decode_audio",
+     "WhisperModel",
+     "download_model",
+     "format_timestamp",
+diff -ruN tmp/faster_whisper/transcribe.py tmp-patched/faster_whisper/transcribe.py
+--- tmp/faster_whisper/transcribe.py	2023-09-18 14:23:30.000000000 +0200
++++ tmp-patched/faster_whisper/transcribe.py	2023-10-04 19:53:32.680312724 +0200
+@@ -9,7 +9,6 @@
+ import numpy as np
+ import tokenizers
+ 
+-from faster_whisper.audio import decode_audio
+ from faster_whisper.feature_extractor import FeatureExtractor
+ from faster_whisper.tokenizer import _LANGUAGE_CODES, Tokenizer
+ from faster_whisper.utils import download_model, format_timestamp, get_logger
+diff -ruN tmp/faster_whisper-0.9.0.dist-info/METADATA tmp-patched/faster_whisper-0.9.0.dist-info/METADATA
+--- tmp/faster_whisper-0.9.0.dist-info/METADATA	2023-09-18 14:23:40.000000000 +0200
++++ tmp-patched/faster_whisper-0.9.0.dist-info/METADATA	2023-10-04 19:41:44.643616865 +0200
+@@ -20,7 +20,6 @@
+ Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+ Requires-Python: >=3.8
+ Description-Content-Type: text/markdown
+-Requires-Dist: av ==10.*
+ Requires-Dist: ctranslate2 <4,>=3.17
+ Requires-Dist: huggingface-hub >=0.13
+ Requires-Dist: tokenizers <0.15,>=0.13
