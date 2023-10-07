@@ -218,21 +218,12 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
                                       const std::string& out_file) {
     auto* pe = py_executor::instance();
 
-    auto length_scale = [this]() {
-        if (m_initial_length_scale) {
-            if (m_config.speech_speed < 1 || m_config.speech_speed > 20 ||
-                m_config.speech_speed == 10) {
-                return m_initial_length_scale.value();
-            }
+    auto length_scale =
+        m_initial_length_scale
+            ? vits_length_scale(m_config.speech_speed, *m_initial_length_scale)
+            : 1.0f;
 
-            auto speech_speed = 20 - (m_config.speech_speed - 1);
-
-            return m_initial_length_scale.value() *
-                   static_cast<float>(speech_speed) / 10.0f;
-        }
-
-        return 1.0f;
-    }();
+    LOGD("length_scale: " << length_scale);
 
     try {
         return pe->execute([&]() {

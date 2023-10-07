@@ -54,17 +54,10 @@ bool piper_engine::model_supports_speed() const { return true; }
 
 bool piper_engine::encode_speech_impl(const std::string& text,
                                       const std::string& out_file) {
-    auto length_scale = [this]() {
-        if (m_config.speech_speed < 1 || m_config.speech_speed > 20 ||
-            m_config.speech_speed == 10) {
-            return m_initial_length_scale;
-        }
+    auto length_scale =
+        vits_length_scale(m_config.speech_speed, m_initial_length_scale);
 
-        auto speech_speed = 20 - (m_config.speech_speed - 1);
-
-        return m_initial_length_scale * static_cast<float>(speech_speed) /
-               10.0f;
-    }();
+    LOGD("length_scale: " << length_scale);
 
     try {
         m_piper->text_to_wav_file(text, out_file, length_scale);
