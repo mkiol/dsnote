@@ -117,6 +117,8 @@ class tts_engine {
                                  int channels, uint32_t num_samples,
                                  std::ofstream& wav_file);
     static wav_header read_wav_header(std::ifstream& wav_file);
+    static float vits_length_scale(unsigned int speech_speed,
+                                   float initial_length_scale);
     virtual bool model_created() const = 0;
     virtual bool model_supports_speed() const = 0;
     virtual void create_model() = 0;

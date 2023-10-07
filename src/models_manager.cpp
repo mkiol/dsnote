@@ -151,6 +151,9 @@ QDebug operator<<(QDebug d, models_manager::model_engine engine) {
         case models_manager::model_engine::tts_rhvoice:
             d << "tts-rhvoice";
             break;
+        case models_manager::model_engine::tts_mimic3:
+            d << "tts-mimic3";
+            break;
         case models_manager::model_engine::mnt_bergamot:
             d << "mnt-bergamot";
             break;
@@ -1163,6 +1166,7 @@ models_manager::model_role models_manager::role_of_engine(model_engine engine) {
         case model_engine::tts_piper:
         case model_engine::tts_espeak:
         case model_engine::tts_rhvoice:
+        case model_engine::tts_mimic3:
             return model_role::tts;
         case model_engine::mnt_bergamot:
             return model_role::mnt;
@@ -1183,6 +1187,7 @@ models_manager::model_engine models_manager::engine_from_name(
     if (name == QStringLiteral("tts_piper")) return model_engine::tts_piper;
     if (name == QStringLiteral("tts_espeak")) return model_engine::tts_espeak;
     if (name == QStringLiteral("tts_rhvoice")) return model_engine::tts_rhvoice;
+    if (name == QStringLiteral("tts_mimic3")) return model_engine::tts_mimic3;
     if (name == QStringLiteral("mnt_bergamot"))
         return model_engine::mnt_bergamot;
 
@@ -1387,6 +1392,10 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         }
         if (engine == model_engine::stt_fasterwhisper) {
             qDebug() << "ignoring fasterwhisper model:" << model_id;
+            continue;
+        }
+        if (engine == model_engine::tts_mimic3) {
+            qDebug() << "ignoring mimic3 model:" << model_id;
             continue;
         }
 #endif
@@ -1595,6 +1604,7 @@ QString models_manager::file_name_from_id(const QString& id,
         case model_engine::tts_piper:
         case model_engine::tts_espeak:
         case model_engine::tts_rhvoice:
+        case model_engine::tts_mimic3:
         case model_engine::mnt_bergamot:
             return id;
     }

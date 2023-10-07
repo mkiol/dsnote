@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <array>
 #include <cctype>
+#include <cmath>
 #include <cstdio>
 #include <fstream>
 #include <locale>
@@ -463,4 +464,11 @@ tts_engine::wav_header tts_engine::read_wav_header(std::ifstream& wav_file) {
         throw std::runtime_error("failed to read file");
 
     return header;
+}
+
+float tts_engine::vits_length_scale(unsigned int speech_speed,
+                                    float initial_length_scale) {
+    return initial_length_scale *
+           std::pow<float>(
+               (-0.9f * std::clamp(speech_speed, 1u, 20u) + 19) / 10.0f, 3);
 }

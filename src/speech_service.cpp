@@ -27,6 +27,7 @@
 #include "file_source.h"
 #include "media_compressor.hpp"
 #include "mic_source.h"
+#include "mimic3_engine.hpp"
 #include "module_tools.hpp"
 #include "piper_engine.hpp"
 #include "rhvoice_engine.hpp"
@@ -1046,6 +1047,7 @@ QString speech_service::restart_stt_engine(
                     case models_manager::model_engine::tts_piper:
                     case models_manager::model_engine::tts_espeak:
                     case models_manager::model_engine::tts_rhvoice:
+                    case models_manager::model_engine::tts_mimic3:
                     case models_manager::model_engine::mnt_bergamot:
                         throw std::runtime_error{
                             "invalid model engine, expected stt"};
@@ -1124,6 +1126,14 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                     models_manager::model_engine::tts_piper &&
                 type != typeid(piper_engine))
                 return true;
+            if (model_config->tts->engine ==
+                    models_manager::model_engine::tts_rhvoice &&
+                type != typeid(rhvoice_engine))
+                return true;
+            if (model_config->tts->engine ==
+                    models_manager::model_engine::tts_mimic3 &&
+                type != typeid(mimic3_engine))
+                return true;
 
             if (m_tts_engine->model_files() != config.model_files) return true;
             if (m_tts_engine->lang() != config.lang) return true;
@@ -1183,6 +1193,12 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                             module_tools::unpacked_dir("rhvoiceconfig")
                                 .toStdString();
                         m_tts_engine = std::make_unique<rhvoice_engine>(
+                            std::move(config), std::move(call_backs));
+                        break;
+                    case models_manager::model_engine::tts_mimic3:
+                        config.data_dir =
+                            module_tools::unpacked_dir("mimic3").toStdString();
+                        m_tts_engine = std::make_unique<mimic3_engine>(
                             std::move(config), std::move(call_backs));
                         break;
                     case models_manager::model_engine::ttt_hftc:

@@ -51,6 +51,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         tts_piper,
         tts_espeak,
         tts_rhvoice,
+        tts_mimic3,
         mnt_bergamot
     };
     friend QDebug operator<<(QDebug d, model_engine engine);

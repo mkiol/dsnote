@@ -888,6 +888,7 @@ modules:
 
   - python3-modules-x86-64.yaml
   - python3-faster-whisper-x86-64.yaml
+  - python3-mycroft_mimic3_tts.yaml
 
   - name: dsnote
     buildsystem: cmake-ninja
