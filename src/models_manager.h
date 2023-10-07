@@ -112,6 +112,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     void reload();
     double model_download_progress(const QString& id) const;
     void set_default_model_for_lang(const QString& model_id);
+    void generate_checksums();
 
    signals:
     void download_progress(const QString& id, double progress);
@@ -120,6 +121,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     void download_error(const QString& id);
     void models_changed();
     void busy_changed();
+    void generate_next_checksum_request();
 
    private:
     enum class download_type { none, all, model, sup, model_sup };
@@ -138,6 +140,13 @@ class models_manager : public QObject, public singleton<models_manager> {
         dirgz
     };
     friend QDebug operator<<(QDebug d, comp_type comp_type);
+
+    struct checksum_check_t {
+        bool ok = false;
+        QString real_checksum;
+        QString real_checksum_quick;
+        qint64 size = 0;
+    };
 
     struct priv_model_t {
         model_engine engine = model_engine::stt_ds;
@@ -164,6 +173,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool exists = false;
         bool available = false;
         bool downloading = false;
+        bool gen_checksum = false;
         double download_progress = 0.0;
         qint64 downloaded_part_data = 0;
     };
@@ -183,6 +193,9 @@ class models_manager : public QObject, public singleton<models_manager> {
     std::thread m_thread;
     std::set<QString> models_to_cancel;
     bool m_pending_reload = false;
+    models_t m_models_for_gen_checksum;
+    models_t::iterator m_it_for_gen_checksum;
+    bool m_delayed_gen_checksum = false;
 
     static QLatin1String download_type_str(download_type type);
     static QLatin1String comp_type_str(comp_type type);
@@ -219,19 +232,21 @@ class models_manager : public QObject, public singleton<models_manager> {
                             const QString& file_name);
     static model_engine engine_from_name(const QString& name);
     void update_default_model_for_lang(const QString& lang_id);
-    bool extract_from_archive(const QString& archive_path, comp_type comp,
-                              const QString& out_path, const QString& checksum,
-                              const QString& path_in_archive,
-                              const QString& out_path_2,
-                              const QString& checksum_2,
-                              const QString& path_in_archive_2);
-    static bool check_checksum(const QString& path, const QString& checksum);
+    checksum_check_t extract_from_archive(
+        const QString& archive_path, comp_type comp, const QString& out_path,
+        const QString& checksum, const QString& path_in_archive,
+        const QString& out_path_2, const QString& checksum_2,
+        const QString& path_in_archive_2);
+    static checksum_check_t check_checksum(const QString& path,
+                                           const QString& checksum);
     static void remove_empty_langs(langs_t& langs, const models_t& models);
     static langs_of_role_t make_langs_of_role(const models_t& models);
     static void remove_downloaded_files_on_error(const QString& path,
                                                  models_manager::comp_type comp,
                                                  int part);
     static qint64 total_size(const QString& path);
+    void generate_next_checksum();
+    void handle_generate_checksum(const checksum_check_t& check);
 };
 
 #endif  // MODELS_MANAGER_H

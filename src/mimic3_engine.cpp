@@ -140,7 +140,7 @@ bool mimic3_engine::encode_speech_impl(const std::string& text,
                        m_tts->attr("settings").attr("length_scale") =
                            length_scale;
 
-                       m_tts->attr("begin_utterance");
+                       m_tts->attr("begin_utterance")();
                        m_tts->attr("speak_text")(text);
                        auto results = m_tts->attr("end_utterance")();
 

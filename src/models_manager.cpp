@@ -7,6 +7,8 @@
 
 #include "models_manager.h"
 
+#include <fmt/format.h>
+
 #include <QByteArray>
 #include <QCoreApplication>
 #include <QCryptographicHash>
@@ -179,6 +181,16 @@ models_manager::models_manager(QObject* parent) : QObject{parent} {
     connect(settings::instance(), &settings::models_dir_changed, this,
             static_cast<bool (models_manager::*)()>(
                 &models_manager::parse_models_file_might_reset));
+
+    connect(this, &models_manager::generate_next_checksum_request, this,
+            &models_manager::generate_next_checksum, Qt::QueuedConnection);
+
+    connect(
+        this, &models_manager::busy_changed, this,
+        [&] {
+            if (!busy() && m_delayed_gen_checksum) generate_checksums();
+        },
+        Qt::QueuedConnection);
 
     parse_models_file_might_reset();
 }
@@ -610,8 +622,8 @@ void models_manager::handle_download_ready_read() {
     }
 }
 
-bool models_manager::check_checksum(const QString& path,
-                                    const QString& checksum) {
+models_manager::checksum_check_t models_manager::check_checksum(
+    const QString& path, const QString& checksum) {
     auto real_checksum = checksum_tools::make_checksum(path);
     auto real_quick_checksum = checksum_tools::make_quick_checksum(path);
 
@@ -623,15 +635,15 @@ bool models_manager::check_checksum(const QString& path,
         qDebug() << "quick checksum 1:" << real_quick_checksum;
     }
 
-    return ok;
+    return {ok, std::move(real_checksum), std::move(real_quick_checksum)};
 }
 
-bool models_manager::extract_from_archive(
+models_manager::checksum_check_t models_manager::extract_from_archive(
     const QString& archive_path, comp_type comp, const QString& out_path,
     const QString& checksum, const QString& path_in_archive,
     const QString& out_path_2, const QString& checksum_2,
     const QString& path_in_archive_2) {
-    bool ok_2 = true;
+    checksum_check_t check_2;
 
     auto archive_type = [comp] {
         switch (comp) {
@@ -652,7 +664,7 @@ bool models_manager::extract_from_archive(
              {{path_in_archive, out_path}, {path_in_archive_2, out_path_2}}},
             true);
 
-        ok_2 = check_checksum(out_path_2, checksum_2);
+        check_2 = check_checksum(out_path_2, checksum_2);
     } else if (!path_in_archive.isEmpty() && !out_path.isEmpty()) {
         comp_tools::archive_decode(archive_path, archive_type,
                                    {{}, {{path_in_archive, out_path}}},
@@ -662,7 +674,7 @@ bool models_manager::extract_from_archive(
                                    comp != comp_type::zipall);
     }
 
-    return ok_2 ? check_checksum(out_path, checksum) : false;
+    return check_2.ok ? check_checksum(out_path, checksum) : check_2;
 }
 
 qint64 models_manager::total_size(const QString& path) {
@@ -689,7 +701,8 @@ bool models_manager::handle_download(const QString& path,
                                      comp_type comp, int parts) {
     QEventLoop loop;
 
-    bool ok = false;
+    checksum_check_t check;
+    qint64 size = 0;
 
     if (m_thread.joinable()) m_thread.join();
 
@@ -702,10 +715,12 @@ bool models_manager::handle_download(const QString& path,
         }
 
         auto comp_file = download_filename(path, comp);
-        qDebug() << "total downloaded size:" << total_size(comp_file);
+
+        size = total_size(comp_file);
+        qDebug() << "total downloaded size:" << size;
 
         if (comp == comp_type::none || comp == comp_type::dir) {
-            ok = check_checksum(path, checksum);
+            check = check_checksum(path, checksum);
         } else if (comp == comp_type::dirgz) {
             QDirIterator it{path, {"*.gz"}, QDir::Files};
             while (it.hasNext()) {
@@ -716,43 +731,43 @@ bool models_manager::handle_download(const QString& path,
                 QFile::remove(gz_file);
             }
 
-            ok = check_checksum(path, checksum);
+            check = check_checksum(path, checksum);
         } else {
             if (comp == comp_type::gz) {
                 comp_tools::gz_decode(comp_file, path);
                 QFile::remove(comp_file);
-                ok = check_checksum(path, checksum);
+                check = check_checksum(path, checksum);
             } else if (comp == comp_type::xz) {
                 comp_tools::xz_decode(comp_file, path);
                 QFile::remove(comp_file);
-                ok = check_checksum(path, checksum);
+                check = check_checksum(path, checksum);
             } else if (comp == comp_type::tarxz) {
                 auto tar_file = download_filename(path, comp_type::tar);
                 comp_tools::xz_decode(comp_file, tar_file);
                 QFile::remove(comp_file);
-                ok = extract_from_archive(tar_file, comp_type::tar, path,
-                                          checksum, path_in_archive, path_2,
-                                          checksum_2, path_in_archive_2);
+                check = extract_from_archive(tar_file, comp_type::tar, path,
+                                             checksum, path_in_archive, path_2,
+                                             checksum_2, path_in_archive_2);
                 QFile::remove(tar_file);
             } else if (comp == comp_type::targz) {
                 auto tar_file = download_filename(path, comp_type::tar);
                 comp_tools::gz_decode(comp_file, tar_file);
                 QFile::remove(comp_file);
-                ok = extract_from_archive(tar_file, comp_type::tar, path,
-                                          checksum, path_in_archive, path_2,
-                                          checksum_2, path_in_archive_2);
+                check = extract_from_archive(tar_file, comp_type::tar, path,
+                                             checksum, path_in_archive, path_2,
+                                             checksum_2, path_in_archive_2);
                 QFile::remove(tar_file);
             } else if (comp == comp_type::zip || comp == comp_type::zipall) {
-                ok = extract_from_archive(comp_file, comp, path, checksum,
-                                          path_in_archive, path_2, checksum_2,
-                                          path_in_archive_2);
+                check = extract_from_archive(comp_file, comp, path, checksum,
+                                             path_in_archive, path_2,
+                                             checksum_2, path_in_archive_2);
                 QFile::remove(comp_file);
             } else {
                 QFile::remove(comp_file);
             }
         }
 
-        if (!ok) {
+        if (!check.ok) {
             remove_file_or_dir(path);
             remove_file_or_dir(path_2);
         }
@@ -763,7 +778,10 @@ bool models_manager::handle_download(const QString& path,
     loop.exec();
     if (m_thread.joinable()) m_thread.join();
 
-    return ok;
+    check.size = size;
+    handle_generate_checksum(check);
+
+    return check.ok;
 }
 
 bool models_manager::check_model_download_cancel(QNetworkReply* reply) {
@@ -1438,7 +1456,9 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             /*default_for_lang=*/is_default_model_for_lang,
             /*exists=*/exists,
             /*available=*/available,
-            /*downloading=*/false};
+            /*downloading=*/false,
+            /*gen_checksum=*/
+            obj.value(QLatin1String{"gen_checksum"}).toBool(false)};
 
         if (!model.exists && !model.file_name.isEmpty() &&
             dir.exists(model.file_name)) {
@@ -1657,4 +1677,65 @@ bool models_manager::join_part_files(const QString& file_out, int parts) {
     }
 
     return true;
+}
+
+void models_manager::generate_next_checksum() {
+    if (m_it_for_gen_checksum == m_models_for_gen_checksum.end()) {
+        return;
+    }
+
+    download_model(m_it_for_gen_checksum->first);
+}
+
+void models_manager::generate_checksums() {
+    if (busy()) {
+        m_delayed_gen_checksum = true;
+        return;
+    }
+
+    m_delayed_gen_checksum = false;
+    m_models_for_gen_checksum.clear();
+
+    qDebug() << "generating checksums for:";
+    std::for_each(m_models.cbegin(), m_models.cend(), [&](const auto& pair) {
+        if (pair.second.gen_checksum) {
+            qDebug() << pair.first;
+            m_models_for_gen_checksum.insert(pair);
+        }
+    });
+
+    m_it_for_gen_checksum = m_models_for_gen_checksum.begin();
+
+    emit generate_next_checksum_request();
+}
+
+void models_manager::handle_generate_checksum(const checksum_check_t& check) {
+    if (m_models_for_gen_checksum.empty()) return;
+
+    auto& model = m_it_for_gen_checksum->second;
+    model.checksum = check.real_checksum;
+    model.checksum_quick = check.real_checksum_quick;
+    model.size = check.size;
+
+    std::advance(m_it_for_gen_checksum, 1);
+
+    if (m_it_for_gen_checksum == m_models_for_gen_checksum.end()) {
+        qDebug() << "all checksums were generated";
+
+        fmt::print("models checksums:\n\n");
+        std::for_each(m_models_for_gen_checksum.cbegin(),
+                      m_models_for_gen_checksum.cend(), [&](const auto& pair) {
+                          fmt::print(
+                              "\"model_id\": \"{}\",\n\"checksum\": "
+                              "\"{}\",\n\"checksum_quick\": \"{}\",\n\"size\": "
+                              "\"{}\"\n\n",
+                              pair.first.toStdString(),
+                              pair.second.checksum.toStdString(),
+                              pair.second.checksum_quick.toStdString(),
+                              pair.second.size);
+                      });
+        m_models_for_gen_checksum.clear();
+    } else {
+        emit generate_next_checksum_request();
+    }
 }

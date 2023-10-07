@@ -71,6 +71,7 @@ struct cmd_options {
     settings::launch_mode_t launch_mode =
         settings::launch_mode_t::app_stanalone;
     bool verbose = false;
+    bool gen_cheksums = false;
     QString action;
     QStringList files;
 };
@@ -112,6 +113,12 @@ static cmd_options check_options(const QCoreApplication& app) {
             "cancel."),
         QStringLiteral("action")};
     parser.addOption(action_opt);
+
+    QCommandLineOption gen_checksum_opt{
+        QStringLiteral("gen_checksums"),
+        QStringLiteral(
+            "Generate checksums for models with 'gen_checksum' tag.")};
+    parser.addOption(gen_checksum_opt);
 
     parser.addHelpOption();
     parser.addVersionOption();
@@ -171,6 +178,7 @@ static cmd_options check_options(const QCoreApplication& app) {
     }
 
     options.verbose = parser.isSet(verbose_opt);
+    options.gen_cheksums = parser.isSet(gen_checksum_opt);
     options.files = parser.positionalArguments();
 
     return options;
@@ -226,19 +234,23 @@ static void install_translator() {
     }
 }
 
-static void start_service() {
+static void start_service(const cmd_options& options) {
     py_executor::instance()->start();
     speech_service::instance();
+
+    if (options.gen_cheksums) models_manager::instance()->generate_checksums();
+
     QGuiApplication::exec();
 }
 
-static void start_app(const QString& requested_action,
-                      const QStringList& files_to_open,
-                      app_server& dbus_app_server) {
+static void start_app(const cmd_options& options, app_server& dbus_app_server) {
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
         py_executor::instance()->start();
         speech_service::instance();
+
+        if (options.gen_cheksums)
+            models_manager::instance()->generate_checksums();
     }
 
 #ifdef USE_SFOS
@@ -274,9 +286,9 @@ static void start_app(const QString& requested_action,
     context->setContextProperty(QStringLiteral("_settings"),
                                 settings::instance());
     context->setContextProperty(QStringLiteral("_files_to_open"),
-                                files_to_open);
+                                options.files);
     context->setContextProperty(QStringLiteral("_requested_action"),
-                                requested_action);
+                                options.action);
     context->setContextProperty(QStringLiteral("_app_server"),
                                 &dbus_app_server);
 
@@ -332,7 +344,7 @@ int main(int argc, char* argv[]) {
         case settings::launch_mode_t::service:
             qDebug() << "starting service";
             settings::instance()->set_launch_mode(cmd_opts.launch_mode);
-            start_service();
+            start_service(cmd_opts);
             exit_program();
             break;
         case settings::launch_mode_t::app_stanalone:
@@ -349,7 +361,7 @@ int main(int argc, char* argv[]) {
 
     settings::instance()->set_launch_mode(cmd_opts.launch_mode);
 
-    start_app(cmd_opts.action, cmd_opts.files, dbus_app_server);
+    start_app(cmd_opts, dbus_app_server);
 
     exit_program();
 }
