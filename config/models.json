@@ -1627,1261 +1627,1081 @@
             "name": "Slovenčina (FasterWhisper Tiny)",
             "model_id": "sk_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "sk",
-            "score": 0
+            "lang_id": "sk"
         },
         {
             "name": "Slovenčina (FasterWhisper Base)",
             "model_id": "sk_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "sk",
-            "score": 0
+            "lang_id": "sk"
         },
         {
             "name": "Slovenčina (FasterWhisper Small)",
             "model_id": "sk_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "sk",
-            "score": 0
+            "lang_id": "sk"
         },
         {
             "name": "Slovenčina (FasterWhisper Medium)",
             "model_id": "sk_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "sk",
-            "score": 0
+            "lang_id": "sk"
         },
         {
             "name": "Slovenčina (FasterWhisper Large-v2)",
             "model_id": "sk_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "sk",
-            "score": 0
+            "lang_id": "sk"
         },
         {
             "name": "中文 (FasterWhisper Tiny)",
             "model_id": "zh_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "zh",
-            "score": 0
+            "lang_id": "zh"
         },
         {
             "name": "中文 (FasterWhisper Base)",
             "model_id": "zh_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "zh",
-            "score": 0
+            "lang_id": "zh"
         },
         {
             "name": "中文 (FasterWhisper Small)",
             "model_id": "zh_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "zh",
-            "score": 0
+            "lang_id": "zh"
         },
         {
             "name": "中文 (FasterWhisper Medium)",
             "model_id": "zh_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "zh",
-            "score": 0
+            "lang_id": "zh"
         },
         {
             "name": "中文 (FasterWhisper Large-v2)",
             "model_id": "zh_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "zh",
-            "score": 0
+            "lang_id": "zh"
         },
         {
             "name": "Tiếng Việt (FasterWhisper Tiny)",
             "model_id": "vi_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "vi",
-            "score": 0
+            "lang_id": "vi"
         },
         {
             "name": "Tiếng Việt (FasterWhisper Base)",
             "model_id": "vi_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "vi",
-            "score": 0
+            "lang_id": "vi"
         },
         {
             "name": "Tiếng Việt (FasterWhisper Small)",
             "model_id": "vi_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "vi",
-            "score": 0
+            "lang_id": "vi"
         },
         {
             "name": "Tiếng Việt (FasterWhisper Medium)",
             "model_id": "vi_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "vi",
-            "score": 0
+            "lang_id": "vi"
         },
         {
             "name": "Tiếng Việt (FasterWhisper Large-v2)",
             "model_id": "vi_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "vi",
-            "score": 0
+            "lang_id": "vi"
         },
         {
             "name": "ไทย (FasterWhisper Tiny)",
             "model_id": "th_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "th",
-            "score": 0
+            "lang_id": "th"
         },
         {
             "name": "ไทย (FasterWhisper Base)",
             "model_id": "th_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "th",
-            "score": 0
+            "lang_id": "th"
         },
         {
             "name": "ไทย (FasterWhisper Small)",
             "model_id": "th_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "th",
-            "score": 0
+            "lang_id": "th"
         },
         {
             "name": "ไทย (FasterWhisper Medium)",
             "model_id": "th_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "th",
-            "score": 0
+            "lang_id": "th"
         },
         {
             "name": "ไทย (FasterWhisper Large-v2)",
             "model_id": "th_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "th",
-            "score": 0
+            "lang_id": "th"
         },
         {
             "name": "Ελληνικά (FasterWhisper Tiny)",
             "model_id": "el_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "el",
-            "score": 0
+            "lang_id": "el"
         },
         {
             "name": "Ελληνικά (FasterWhisper Base)",
             "model_id": "el_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "el",
-            "score": 0
+            "lang_id": "el"
         },
         {
             "name": "Ελληνικά (FasterWhisper Small)",
             "model_id": "el_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "el",
-            "score": 0
+            "lang_id": "el"
         },
         {
             "name": "Ελληνικά (FasterWhisper Medium)",
             "model_id": "el_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "el",
-            "score": 0
+            "lang_id": "el"
         },
         {
             "name": "Ελληνικά (FasterWhisper Large-v2)",
             "model_id": "el_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "el",
-            "score": 0
+            "lang_id": "el"
         },
         {
             "name": "Hrvatski (FasterWhisper Tiny)",
             "model_id": "hr_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "hr",
-            "score": 0
+            "lang_id": "hr"
         },
         {
             "name": "Hrvatski (FasterWhisper Base)",
             "model_id": "hr_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "hr",
-            "score": 0
+            "lang_id": "hr"
         },
         {
             "name": "Hrvatski (FasterWhisper Small)",
             "model_id": "hr_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "hr",
-            "score": 0
+            "lang_id": "hr"
         },
         {
             "name": "Hrvatski (FasterWhisper Medium)",
             "model_id": "hr_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "hr",
-            "score": 0
+            "lang_id": "hr"
         },
         {
             "name": "Hrvatski (FasterWhisper Large-v2)",
             "model_id": "hr_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "hr",
-            "score": 0
+            "lang_id": "hr"
         },
         {
             "name": "Български (FasterWhisper Tiny)",
             "model_id": "bg_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "bg",
-            "score": 0
+            "lang_id": "bg"
         },
         {
             "name": "Български (FasterWhisper Base)",
             "model_id": "bg_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "bg",
-            "score": 0
+            "lang_id": "bg"
         },
         {
             "name": "Български (FasterWhisper Small)",
             "model_id": "bg_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "bg",
-            "score": 0
+            "lang_id": "bg"
         },
         {
             "name": "Български (FasterWhisper Medium)",
             "model_id": "bg_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "bg",
-            "score": 0
+            "lang_id": "bg"
         },
         {
             "name": "Български (FasterWhisper Large-v2)",
             "model_id": "bg_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "bg",
-            "score": 0
+            "lang_id": "bg"
         },
         {
             "name": "Română (FasterWhisper Tiny)",
             "model_id": "ro_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "ro",
-            "score": 0
+            "lang_id": "ro"
         },
         {
             "name": "Română (FasterWhisper Base)",
             "model_id": "ro_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "ro",
-            "score": 0
+            "lang_id": "ro"
         },
         {
             "name": "Română (FasterWhisper Small)",
             "model_id": "ro_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "ro",
-            "score": 0
+            "lang_id": "ro"
         },
         {
             "name": "Română (FasterWhisper Medium)",
             "model_id": "ro_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "ro",
-            "score": 0
+            "lang_id": "ro"
         },
         {
             "name": "Română (FasterWhisper Large-v2)",
             "model_id": "ro_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "ro",
-            "score": 0
+            "lang_id": "ro"
         },
         {
             "name": "Slovenščina (FasterWhisper Tiny)",
             "model_id": "sl_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "sl",
-            "score": 0
+            "lang_id": "sl"
         },
         {
             "name": "Slovenščina (FasterWhisper Base)",
             "model_id": "sl_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "sl",
-            "score": 0
+            "lang_id": "sl"
         },
         {
             "name": "Slovenščina (FasterWhisper Small)",
             "model_id": "sl_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "sl",
-            "score": 0
+            "lang_id": "sl"
         },
         {
             "name": "Slovenščina (FasterWhisper Medium)",
             "model_id": "sl_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "sl",
-            "score": 0
+            "lang_id": "sl"
         },
         {
             "name": "Slovenščina (FasterWhisper Large-v2)",
             "model_id": "sl_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "sl",
-            "score": 0
+            "lang_id": "sl"
         },
         {
             "name": "Bosanski (FasterWhisper Tiny)",
             "model_id": "bs_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "bs",
-            "score": 0
+            "lang_id": "bs"
         },
         {
             "name": "Bosanski (FasterWhisper Base)",
             "model_id": "bs_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "bs",
-            "score": 0
+            "lang_id": "bs"
         },
         {
             "name": "Bosanski (FasterWhisper Small)",
             "model_id": "bs_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "bs",
-            "score": 0
+            "lang_id": "bs"
         },
         {
             "name": "Bosanski (FasterWhisper Medium)",
             "model_id": "bs_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "bs",
-            "score": 0
+            "lang_id": "bs"
         },
         {
             "name": "Bosanski (FasterWhisper Large-v2)",
             "model_id": "bs_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "bs",
-            "score": 0
+            "lang_id": "bs"
         },
         {
             "name": "Македонски (FasterWhisper Tiny)",
             "model_id": "mk_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "mk",
-            "score": 0
+            "lang_id": "mk"
         },
         {
             "name": "Македонски (FasterWhisper Base)",
             "model_id": "mk_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "mk",
-            "score": 0
+            "lang_id": "mk"
         },
         {
             "name": "Македонски (FasterWhisper Small)",
             "model_id": "mk_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "mk",
-            "score": 0
+            "lang_id": "mk"
         },
         {
             "name": "Македонски (FasterWhisper Medium)",
             "model_id": "mk_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "mk",
-            "score": 0
+            "lang_id": "mk"
         },
         {
             "name": "Македонски (FasterWhisper Large-v2)",
             "model_id": "mk_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "mk",
-            "score": 0
+            "lang_id": "mk"
         },
         {
             "name": "Srpski (FasterWhisper Tiny)",
             "model_id": "sr_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "sr",
-            "score": 0
+            "lang_id": "sr"
         },
         {
             "name": "Srpski (FasterWhisper Base)",
             "model_id": "sr_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "sr",
-            "score": 0
+            "lang_id": "sr"
         },
         {
             "name": "Srpski (FasterWhisper Small)",
             "model_id": "sr_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "sr",
-            "score": 0
+            "lang_id": "sr"
         },
         {
             "name": "Srpski (FasterWhisper Medium)",
             "model_id": "sr_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "sr",
-            "score": 0
+            "lang_id": "sr"
         },
         {
             "name": "Srpski (FasterWhisper Large-v2)",
             "model_id": "sr_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "sr",
-            "score": 0
+            "lang_id": "sr"
         },
         {
             "name": "Magyar (FasterWhisper Tiny)",
             "model_id": "hu_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "hu",
-            "score": 0
+            "lang_id": "hu"
         },
         {
             "name": "Magyar (FasterWhisper Base)",
             "model_id": "hu_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "hu",
-            "score": 0
+            "lang_id": "hu"
         },
         {
             "name": "Magyar (FasterWhisper Small)",
             "model_id": "hu_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "hu",
-            "score": 0
+            "lang_id": "hu"
         },
         {
             "name": "Magyar (FasterWhisper Medium)",
             "model_id": "hu_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "hu",
-            "score": 0
+            "lang_id": "hu"
         },
         {
             "name": "Magyar (FasterWhisper Large-v2)",
             "model_id": "hu_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "hu",
-            "score": 0
+            "lang_id": "hu"
         },
         {
             "name": "हिन्दी (FasterWhisper Tiny)",
             "model_id": "hi_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "hi",
-            "score": 0
+            "lang_id": "hi"
         },
         {
             "name": "हिन्दी (FasterWhisper Base)",
             "model_id": "hi_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "hi",
-            "score": 0
+            "lang_id": "hi"
         },
         {
             "name": "हिन्दी (FasterWhisper Small)",
             "model_id": "hi_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "hi",
-            "score": 0
+            "lang_id": "hi"
         },
         {
             "name": "हिन्दी (FasterWhisper Medium)",
             "model_id": "hi_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "hi",
-            "score": 0
+            "lang_id": "hi"
         },
         {
             "name": "हिन्दी (FasterWhisper Large-v2)",
             "model_id": "hi_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "hi",
-            "score": 0
+            "lang_id": "hi"
         },
         {
             "name": "فارسی (FasterWhisper Tiny)",
             "model_id": "fa_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "fa",
-            "score": 0
+            "lang_id": "fa"
         },
         {
             "name": "فارسی (FasterWhisper Base)",
             "model_id": "fa_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "fa",
-            "score": 0
+            "lang_id": "fa"
         },
         {
             "name": "فارسی (FasterWhisper Small)",
             "model_id": "fa_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "fa",
-            "score": 0
+            "lang_id": "fa"
         },
         {
             "name": "فارسی (FasterWhisper Medium)",
             "model_id": "fa_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "fa",
-            "score": 0
+            "lang_id": "fa"
         },
         {
             "name": "فارسی (FasterWhisper Large-v2)",
             "model_id": "fa_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "fa",
-            "score": 0
+            "lang_id": "fa"
         },
         {
             "name": "Dansk (FasterWhisper Tiny)",
             "model_id": "da_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "da",
-            "score": 0
+            "lang_id": "da"
         },
         {
             "name": "Dansk (FasterWhisper Base)",
             "model_id": "da_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "da",
-            "score": 0
+            "lang_id": "da"
         },
         {
             "name": "Dansk (FasterWhisper Small)",
             "model_id": "da_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "da",
-            "score": 0
+            "lang_id": "da"
         },
         {
             "name": "Dansk (FasterWhisper Medium)",
             "model_id": "da_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "da",
-            "score": 0
+            "lang_id": "da"
         },
         {
             "name": "Dansk (FasterWhisper Large-v2)",
             "model_id": "da_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "da",
-            "score": 0
+            "lang_id": "da"
         },
         {
             "name": "Eesti (FasterWhisper Tiny)",
             "model_id": "et_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "et",
-            "score": 0
+            "lang_id": "et"
         },
         {
             "name": "Eesti (FasterWhisper Base)",
             "model_id": "et_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "et",
-            "score": 0
+            "lang_id": "et"
         },
         {
             "name": "Eesti (FasterWhisper Small)",
             "model_id": "et_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "et",
-            "score": 0
+            "lang_id": "et"
         },
         {
             "name": "Eesti (FasterWhisper Medium)",
             "model_id": "et_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "et",
-            "score": 0
+            "lang_id": "et"
         },
         {
             "name": "Eesti (FasterWhisper Large-v2)",
             "model_id": "et_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "et",
-            "score": 0
+            "lang_id": "et"
         },
         {
             "name": "Euskara (FasterWhisper Tiny)",
             "model_id": "eu_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "eu",
-            "score": 0
+            "lang_id": "eu"
         },
         {
             "name": "Euskara (FasterWhisper Base)",
             "model_id": "eu_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "eu",
-            "score": 0
+            "lang_id": "eu"
         },
         {
             "name": "Euskara (FasterWhisper Small)",
             "model_id": "eu_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "eu",
-            "score": 0
+            "lang_id": "eu"
         },
         {
             "name": "Euskara (FasterWhisper Medium)",
             "model_id": "eu_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "eu",
-            "score": 0
+            "lang_id": "eu"
         },
         {
             "name": "Euskara (FasterWhisper Large-v2)",
             "model_id": "eu_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "eu",
-            "score": 0
+            "lang_id": "eu"
         },
         {
             "name": "íslenska (FasterWhisper Tiny)",
             "model_id": "is_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "is",
-            "score": 0
+            "lang_id": "is"
         },
         {
             "name": "íslenska (FasterWhisper Base)",
             "model_id": "is_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "is",
-            "score": 0
+            "lang_id": "is"
         },
         {
             "name": "íslenska (FasterWhisper Small)",
             "model_id": "is_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "is",
-            "score": 0
+            "lang_id": "is"
         },
         {
             "name": "íslenska (FasterWhisper Medium)",
             "model_id": "is_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "is",
-            "score": 0
+            "lang_id": "is"
         },
         {
             "name": "íslenska (FasterWhisper Large-v2)",
             "model_id": "is_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "is",
-            "score": 0
+            "lang_id": "is"
         },
         {
             "name": "ქართული (FasterWhisper Tiny)",
             "model_id": "ka_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "ka",
-            "score": 0
+            "lang_id": "ka"
         },
         {
             "name": "ქართული (FasterWhisper Base)",
             "model_id": "ka_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "ka",
-            "score": 0
+            "lang_id": "ka"
         },
         {
             "name": "ქართული (FasterWhisper Small)",
             "model_id": "ka_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "ka",
-            "score": 0
+            "lang_id": "ka"
         },
         {
             "name": "ქართული (FasterWhisper Medium)",
             "model_id": "ka_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "ka",
-            "score": 0
+            "lang_id": "ka"
         },
         {
             "name": "ქართული (FasterWhisper Large-v2)",
             "model_id": "ka_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "ka",
-            "score": 0
+            "lang_id": "ka"
         },
         {
             "name": "Қазақ (FasterWhisper Tiny)",
             "model_id": "kk_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "kk",
-            "score": 0
+            "lang_id": "kk"
         },
         {
             "name": "Қазақ (FasterWhisper Base)",
             "model_id": "kk_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "kk",
-            "score": 0
+            "lang_id": "kk"
         },
         {
             "name": "Қазақ (FasterWhisper Small)",
             "model_id": "kk_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "kk",
-            "score": 0
+            "lang_id": "kk"
         },
         {
             "name": "Қазақ (FasterWhisper Medium)",
             "model_id": "kk_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "kk",
-            "score": 0
+            "lang_id": "kk"
         },
         {
             "name": "Қазақ (FasterWhisper Large-v2)",
             "model_id": "kk_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "kk",
-            "score": 0
+            "lang_id": "kk"
         },
         {
             "name": "한국어 (FasterWhisper Tiny)",
             "model_id": "ko_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "ko",
-            "score": 0
+            "lang_id": "ko"
         },
         {
             "name": "한국어 (FasterWhisper Base)",
             "model_id": "ko_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "ko",
-            "score": 0
+            "lang_id": "ko"
         },
         {
             "name": "한국어 (FasterWhisper Small)",
             "model_id": "ko_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "ko",
-            "score": 0
+            "lang_id": "ko"
         },
         {
             "name": "한국어 (FasterWhisper Medium)",
             "model_id": "ko_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "ko",
-            "score": 0
+            "lang_id": "ko"
         },
         {
             "name": "한국어 (FasterWhisper Large-v2)",
             "model_id": "ko_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "ko",
-            "score": 0
+            "lang_id": "ko"
         },
         {
             "name": "Lietuvių (FasterWhisper Tiny)",
             "model_id": "lt_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "lt",
-            "score": 0
+            "lang_id": "lt"
         },
         {
             "name": "Lietuvių (FasterWhisper Base)",
             "model_id": "lt_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "lt",
-            "score": 0
+            "lang_id": "lt"
         },
         {
             "name": "Lietuvių (FasterWhisper Small)",
             "model_id": "lt_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "lt",
-            "score": 0
+            "lang_id": "lt"
         },
         {
             "name": "Lietuvių (FasterWhisper Medium)",
             "model_id": "lt_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "lt",
-            "score": 0
+            "lang_id": "lt"
         },
         {
             "name": "Lietuvių (FasterWhisper Large-v2)",
             "model_id": "lt_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "lt",
-            "score": 0
+            "lang_id": "lt"
         },
         {
             "name": "Latviešu (FasterWhisper Tiny)",
             "model_id": "lv_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "lv",
-            "score": 0
+            "lang_id": "lv"
         },
         {
             "name": "Latviešu (FasterWhisper Base)",
             "model_id": "lv_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "lv",
-            "score": 0
+            "lang_id": "lv"
         },
         {
             "name": "Latviešu (FasterWhisper Small)",
             "model_id": "lv_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "lv",
-            "score": 0
+            "lang_id": "lv"
         },
         {
             "name": "Latviešu (FasterWhisper Medium)",
             "model_id": "lv_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "lv",
-            "score": 0
+            "lang_id": "lv"
         },
         {
             "name": "Latviešu (FasterWhisper Large-v2)",
             "model_id": "lv_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "lv",
-            "score": 0
+            "lang_id": "lv"
         },
         {
             "name": "Монгол (FasterWhisper Tiny)",
             "model_id": "mn_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "mn",
-            "score": 0
+            "lang_id": "mn"
         },
         {
             "name": "Монгол (FasterWhisper Base)",
             "model_id": "mn_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "mn",
-            "score": 0
+            "lang_id": "mn"
         },
         {
             "name": "Монгол (FasterWhisper Small)",
             "model_id": "mn_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "mn",
-            "score": 0
+            "lang_id": "mn"
         },
         {
             "name": "Монгол (FasterWhisper Medium)",
             "model_id": "mn_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "mn",
-            "score": 0
+            "lang_id": "mn"
         },
         {
             "name": "Монгол (FasterWhisper Large-v2)",
             "model_id": "mn_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "mn",
-            "score": 0
+            "lang_id": "mn"
         },
         {
             "name": "Malti (FasterWhisper Tiny)",
             "model_id": "mt_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "mt",
-            "score": 0
+            "lang_id": "mt"
         },
         {
             "name": "Malti (FasterWhisper Base)",
             "model_id": "mt_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "mt",
-            "score": 0
+            "lang_id": "mt"
         },
         {
             "name": "Malti (FasterWhisper Small)",
             "model_id": "mt_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "mt",
-            "score": 0
+            "lang_id": "mt"
         },
         {
             "name": "Malti (FasterWhisper Medium)",
             "model_id": "mt_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "mt",
-            "score": 0
+            "lang_id": "mt"
         },
         {
             "name": "Malti (FasterWhisper Large-v2)",
             "model_id": "mt_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "mt",
-            "score": 0
+            "lang_id": "mt"
         },
         {
             "name": "नेपाली (FasterWhisper Tiny)",
             "model_id": "ne_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "ne",
-            "score": 0
+            "lang_id": "ne"
         },
         {
             "name": "नेपाली (FasterWhisper Base)",
             "model_id": "ne_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "ne",
-            "score": 0
+            "lang_id": "ne"
         },
         {
             "name": "नेपाली (FasterWhisper Small)",
             "model_id": "ne_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "ne",
-            "score": 0
+            "lang_id": "ne"
         },
         {
             "name": "नेपाली (FasterWhisper Medium)",
             "model_id": "ne_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "ne",
-            "score": 0
+            "lang_id": "ne"
         },
         {
             "name": "नेपाली (FasterWhisper Large-v2)",
             "model_id": "ne_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "ne",
-            "score": 0
+            "lang_id": "ne"
         },
         {
             "name": "Shqip (FasterWhisper Tiny)",
             "model_id": "sq_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "sq",
-            "score": 0
+            "lang_id": "sq"
         },
         {
             "name": "Shqip (FasterWhisper Base)",
             "model_id": "sq_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "sq",
-            "score": 0
+            "lang_id": "sq"
         },
         {
             "name": "Shqip (FasterWhisper Small)",
             "model_id": "sq_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "sq",
-            "score": 0
+            "lang_id": "sq"
         },
         {
             "name": "Shqip (FasterWhisper Medium)",
             "model_id": "sq_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "sq",
-            "score": 0
+            "lang_id": "sq"
         },
         {
             "name": "Shqip (FasterWhisper Large-v2)",
             "model_id": "sq_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "sq",
-            "score": 0
+            "lang_id": "sq"
         },
         {
             "name": "Kiswahili (FasterWhisper Tiny)",
             "model_id": "sw_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "sw",
-            "score": 0
+            "lang_id": "sw"
         },
         {
             "name": "Kiswahili (FasterWhisper Base)",
             "model_id": "sw_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "sw",
-            "score": 0
+            "lang_id": "sw"
         },
         {
             "name": "Kiswahili (FasterWhisper Small)",
             "model_id": "sw_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "sw",
-            "score": 0
+            "lang_id": "sw"
         },
         {
             "name": "Kiswahili (FasterWhisper Medium)",
             "model_id": "sw_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "sw",
-            "score": 0
+            "lang_id": "sw"
         },
         {
             "name": "Kiswahili (FasterWhisper Large-v2)",
             "model_id": "sw_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "sw",
-            "score": 0
+            "lang_id": "sw"
         },
         {
             "name": "Tagalog (FasterWhisper Tiny)",
             "model_id": "tl_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "tl",
-            "score": 0
+            "lang_id": "tl"
         },
         {
             "name": "Tagalog (FasterWhisper Base)",
             "model_id": "tl_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "tl",
-            "score": 0
+            "lang_id": "tl"
         },
         {
             "name": "Tagalog (FasterWhisper Small)",
             "model_id": "tl_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "tl",
-            "score": 0
+            "lang_id": "tl"
         },
         {
             "name": "Tagalog (FasterWhisper Medium)",
             "model_id": "tl_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "tl",
-            "score": 0
+            "lang_id": "tl"
         },
         {
             "name": "Tagalog (FasterWhisper Large-v2)",
             "model_id": "tl_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "tl",
-            "score": 0
+            "lang_id": "tl"
         },
         {
             "name": "татарча (FasterWhisper Tiny)",
             "model_id": "tt_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "tt",
-            "score": 0
+            "lang_id": "tt"
         },
         {
             "name": "татарча (FasterWhisper Base)",
             "model_id": "tt_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "tt",
-            "score": 0
+            "lang_id": "tt"
         },
         {
             "name": "татарча (FasterWhisper Small)",
             "model_id": "tt_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "tt",
-            "score": 0
+            "lang_id": "tt"
         },
         {
             "name": "татарча (FasterWhisper Medium)",
             "model_id": "tt_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "tt",
-            "score": 0
+            "lang_id": "tt"
         },
         {
             "name": "татарча (FasterWhisper Large-v2)",
             "model_id": "tt_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "tt",
-            "score": 0
+            "lang_id": "tt"
         },
         {
             "name": "Oʻzbekcha (FasterWhisper Tiny)",
             "model_id": "uz_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "uz",
-            "score": 0
+            "lang_id": "uz"
         },
         {
             "name": "Oʻzbekcha (FasterWhisper Base)",
             "model_id": "uz_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "uz",
-            "score": 0
+            "lang_id": "uz"
         },
         {
             "name": "Oʻzbekcha (FasterWhisper Small)",
             "model_id": "uz_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "uz",
-            "score": 0
+            "lang_id": "uz"
         },
         {
             "name": "Oʻzbekcha (FasterWhisper Medium)",
             "model_id": "uz_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "uz",
-            "score": 0
+            "lang_id": "uz"
         },
         {
             "name": "Oʻzbekcha (FasterWhisper Large-v2)",
             "model_id": "uz_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "uz",
-            "score": 0
+            "lang_id": "uz"
         },
         {
             "name": "Yorùbá (FasterWhisper Tiny)",
             "model_id": "yo_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "yo",
-            "score": 0
+            "lang_id": "yo"
         },
         {
             "name": "Yorùbá (FasterWhisper Base)",
             "model_id": "yo_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "yo",
-            "score": 0
+            "lang_id": "yo"
         },
         {
             "name": "Yorùbá (FasterWhisper Small)",
             "model_id": "yo_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "yo",
-            "score": 0
+            "lang_id": "yo"
         },
         {
             "name": "Yorùbá (FasterWhisper Medium)",
             "model_id": "yo_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "yo",
-            "score": 0
+            "lang_id": "yo"
         },
         {
             "name": "Yorùbá (FasterWhisper Large-v2)",
             "model_id": "yo_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "yo",
-            "score": 0
+            "lang_id": "yo"
         },
         {
             "name": "Amarəñña (FasterWhisper Tiny)",
             "model_id": "am_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "am",
-            "score": 0
+            "lang_id": "am"
         },
         {
             "name": "Amarəñña (FasterWhisper Base)",
             "model_id": "am_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "am",
-            "score": 0
+            "lang_id": "am"
         },
         {
             "name": "Amarəñña (FasterWhisper Small)",
             "model_id": "am_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "am",
-            "score": 0
+            "lang_id": "am"
         },
         {
             "name": "Amarəñña (FasterWhisper Medium)",
             "model_id": "am_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "am",
-            "score": 0
+            "lang_id": "am"
         },
         {
             "name": "Amarəñña (FasterWhisper Large-v2)",
             "model_id": "am_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "am",
-            "score": 0
+            "lang_id": "am"
         },
         {
             "name": "عربي (FasterWhisper Tiny)",
             "model_id": "ar_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "ar",
-            "score": 0
+            "lang_id": "ar"
         },
         {
             "name": "عربي (FasterWhisper Base)",
             "model_id": "ar_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "ar",
-            "score": 0
+            "lang_id": "ar"
         },
         {
             "name": "عربي (FasterWhisper Small)",
             "model_id": "ar_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "ar",
-            "score": 0
+            "lang_id": "ar"
         },
         {
             "name": "عربي (FasterWhisper Medium)",
             "model_id": "ar_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "ar",
-            "score": 0
+            "lang_id": "ar"
         },
         {
             "name": "عربي (FasterWhisper Large-v2)",
             "model_id": "ar_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "ar",
-            "score": 0
+            "lang_id": "ar"
         },
         {
             "name": "বাংলা (FasterWhisper Tiny)",
             "model_id": "bn_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
-            "lang_id": "bn",
-            "score": 0
+            "lang_id": "bn"
         },
         {
             "name": "বাংলা (FasterWhisper Base)",
             "model_id": "bn_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
-            "lang_id": "bn",
-            "score": 0
+            "lang_id": "bn"
         },
         {
             "name": "বাংলা (FasterWhisper Small)",
             "model_id": "bn_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
-            "lang_id": "bn",
-            "score": 0
+            "lang_id": "bn"
         },
         {
             "name": "বাংলা (FasterWhisper Medium)",
             "model_id": "bn_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
-            "lang_id": "bn",
-            "score": 0
+            "lang_id": "bn"
         },
         {
             "name": "বাংলা (FasterWhisper Large-v2)",
             "model_id": "bn_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
-            "lang_id": "bn",
-            "score": 0
+            "lang_id": "bn"
         },
         {
             "name": "Polski (FasterWhisper Tiny)",
@@ -3763,22 +3583,19 @@
             "name": "Slovenčina (Whisper Tiny)",
             "model_id": "sk_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "sk",
-            "score": 0
+            "lang_id": "sk"
         },
         {
             "name": "Slovenčina (Whisper Base)",
             "model_id": "sk_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "sk",
-            "score": 0
+            "lang_id": "sk"
         },
         {
             "name": "Slovenčina (Whisper Small)",
             "model_id": "sk_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "sk",
-            "score": 0
+            "lang_id": "sk"
         },
         {
             "name": "Slovenčina (Whisper Small Fine-Tuned)",
@@ -3796,8 +3613,7 @@
             "name": "Slovenčina (Whisper Medium)",
             "model_id": "sk_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "sk",
-            "score": 0
+            "lang_id": "sk"
         },
         {
             "name": "Slovenčina (Whisper Medium Fine-Tuned)",
@@ -3815,176 +3631,151 @@
             "name": "Slovenčina (Whisper Large)",
             "model_id": "sk_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "sk",
-            "score": 0
+            "lang_id": "sk"
         },
         {
             "name": "中文 (Whisper Tiny)",
             "model_id": "zh_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "zh",
-            "score": 0
+            "lang_id": "zh"
         },
         {
             "name": "中文 (Whisper Base)",
             "model_id": "zh_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "zh",
-            "score": 0
+            "lang_id": "zh"
         },
         {
             "name": "中文 (Whisper Small)",
             "model_id": "zh_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "zh",
-            "score": 0
+            "lang_id": "zh"
         },
         {
             "name": "中文 (Whisper Medium)",
             "model_id": "zh_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "zh",
-            "score": 0
+            "lang_id": "zh"
         },
         {
             "name": "中文 (Whisper Large)",
             "model_id": "zh_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "zh",
-            "score": 0
+            "lang_id": "zh"
         },
         {
             "name": "Tiếng Việt (Whisper Tiny)",
             "model_id": "vi_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "vi",
-            "score": 0
+            "lang_id": "vi"
         },
         {
             "name": "Tiếng Việt (Whisper Base)",
             "model_id": "vi_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "vi",
-            "score": 0
+            "lang_id": "vi"
         },
         {
             "name": "Tiếng Việt (Whisper Small)",
             "model_id": "vi_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "vi",
-            "score": 0
+            "lang_id": "vi"
         },
         {
             "name": "Tiếng Việt (Whisper Medium)",
             "model_id": "vi_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "vi",
-            "score": 0
+            "lang_id": "vi"
         },
         {
             "name": "Tiếng Việt (Whisper Large)",
             "model_id": "vi_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "vi",
-            "score": 0
+            "lang_id": "vi"
         },
         {
             "name": "ไทย (Whisper Tiny)",
             "model_id": "th_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "th",
-            "score": 0
+            "lang_id": "th"
         },
         {
             "name": "ไทย (Whisper Base)",
             "model_id": "th_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "th",
-            "score": 0
+            "lang_id": "th"
         },
         {
             "name": "ไทย (Whisper Small)",
             "model_id": "th_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "th",
-            "score": 0
+            "lang_id": "th"
         },
         {
             "name": "ไทย (Whisper Medium)",
             "model_id": "th_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "th",
-            "score": 0
+            "lang_id": "th"
         },
         {
             "name": "ไทย (Whisper Large)",
             "model_id": "th_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "th",
-            "score": 0
+            "lang_id": "th"
         },
         {
             "name": "Ελληνικά (Whisper Tiny)",
             "model_id": "el_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "el",
-            "score": 0
+            "lang_id": "el"
         },
         {
             "name": "Ελληνικά (Whisper Base)",
             "model_id": "el_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "el",
-            "score": 0
+            "lang_id": "el"
         },
         {
             "name": "Ελληνικά (Whisper Small)",
             "model_id": "el_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "el",
-            "score": 0
+            "lang_id": "el"
         },
         {
             "name": "Ελληνικά (Whisper Medium)",
             "model_id": "el_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "el",
-            "score": 0
+            "lang_id": "el"
         },
         {
             "name": "Ελληνικά (Whisper Large)",
             "model_id": "el_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "el",
-            "score": 0
+            "lang_id": "el"
         },
         {
             "name": "Hrvatski (Whisper Tiny)",
             "model_id": "hr_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "hr",
-            "score": 0
+            "lang_id": "hr"
         },
         {
             "name": "Hrvatski (Whisper Base)",
             "model_id": "hr_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "hr",
-            "score": 0
+            "lang_id": "hr"
         },
         {
             "name": "Hrvatski (Whisper Small)",
             "model_id": "hr_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "hr",
-            "score": 0
+            "lang_id": "hr"
         },
         {
             "name": "Hrvatski (Whisper Medium)",
             "model_id": "hr_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "hr",
-            "score": 0
+            "lang_id": "hr"
         },
         {
             "name": "Hrvatski (Whisper Small Fine-Tuned)",
@@ -4002,64 +3793,55 @@
             "name": "Hrvatski (Whisper Large)",
             "model_id": "hr_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "hr",
-            "score": 0
+            "lang_id": "hr"
         },
         {
             "name": "Български (Whisper Tiny)",
             "model_id": "bg_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "bg",
-            "score": 0
+            "lang_id": "bg"
         },
         {
             "name": "Български (Whisper Base)",
             "model_id": "bg_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "bg",
-            "score": 0
+            "lang_id": "bg"
         },
         {
             "name": "Български (Whisper Small)",
             "model_id": "bg_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "bg",
-            "score": 0
+            "lang_id": "bg"
         },
         {
             "name": "Български (Whisper Medium)",
             "model_id": "bg_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "bg",
-            "score": 0
+            "lang_id": "bg"
         },
         {
             "name": "Български (Whisper Large)",
             "model_id": "bg_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "bg",
-            "score": 0
+            "lang_id": "bg"
         },
         {
             "name": "Română (Whisper Tiny)",
             "model_id": "ro_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "ro",
-            "score": 0
+            "lang_id": "ro"
         },
         {
             "name": "Română (Whisper Base)",
             "model_id": "ro_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "ro",
-            "score": 0
+            "lang_id": "ro"
         },
         {
             "name": "Română (Whisper Small)",
             "model_id": "ro_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "ro",
-            "score": 0
+            "lang_id": "ro"
         },
         {
             "name": "Română (Whisper Small Fine-Tuned)",
@@ -4077,43 +3859,37 @@
             "name": "Română (Whisper Medium)",
             "model_id": "ro_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "ro",
-            "score": 0
+            "lang_id": "ro"
         },
         {
             "name": "Română (Whisper Large)",
             "model_id": "ro_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "ro",
-            "score": 0
+            "lang_id": "ro"
         },
         {
             "name": "Slovenščina (Whisper Tiny)",
             "model_id": "sl_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "sl",
-            "score": 0
+            "lang_id": "sl"
         },
         {
             "name": "Slovenščina (Whisper Base)",
             "model_id": "sl_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "sl",
-            "score": 0
+            "lang_id": "sl"
         },
         {
             "name": "Slovenščina (Whisper Small)",
             "model_id": "sl_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "sl",
-            "score": 0
+            "lang_id": "sl"
         },
         {
             "name": "Slovenščina (Whisper Medium)",
             "model_id": "sl_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "sl",
-            "score": 0
+            "lang_id": "sl"
         },
         {
             "name": "Slovenščina (Whisper Medium Fine-Tuned)",
@@ -4131,134 +3907,115 @@
             "name": "Slovenščina (Whisper Large)",
             "model_id": "sl_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "sl",
-            "score": 0
+            "lang_id": "sl"
         },
         {
             "name": "Bosanski (Whisper Tiny)",
             "model_id": "bs_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "bs",
-            "score": 0
+            "lang_id": "bs"
         },
         {
             "name": "Bosanski (Whisper Base)",
             "model_id": "bs_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "bs",
-            "score": 0
+            "lang_id": "bs"
         },
         {
             "name": "Bosanski (Whisper Small)",
             "model_id": "bs_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "bs",
-            "score": 0
+            "lang_id": "bs"
         },
         {
             "name": "Bosanski (Whisper Medium)",
             "model_id": "bs_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "bs",
-            "score": 0
+            "lang_id": "bs"
         },
         {
             "name": "Bosanski (Whisper Large)",
             "model_id": "bs_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "bs",
-            "score": 0
+            "lang_id": "bs"
         },
         {
             "name": "Македонски (Whisper Tiny)",
             "model_id": "mk_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "mk",
-            "score": 0
+            "lang_id": "mk"
         },
         {
             "name": "Македонски (Whisper Base)",
             "model_id": "mk_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "mk",
-            "score": 0
+            "lang_id": "mk"
         },
         {
             "name": "Македонски (Whisper Small)",
             "model_id": "mk_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "mk",
-            "score": 0
+            "lang_id": "mk"
         },
         {
             "name": "Македонски (Whisper Medium)",
             "model_id": "mk_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "mk",
-            "score": 0
+            "lang_id": "mk"
         },
         {
             "name": "Македонски (Whisper Large)",
             "model_id": "mk_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "mk",
-            "score": 0
+            "lang_id": "mk"
         },
         {
             "name": "Srpski (Whisper Tiny)",
             "model_id": "sr_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "sr",
-            "score": 0
+            "lang_id": "sr"
         },
         {
             "name": "Srpski (Whisper Base)",
             "model_id": "sr_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "sr",
-            "score": 0
+            "lang_id": "sr"
         },
         {
             "name": "Srpski (Whisper Small)",
             "model_id": "sr_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "sr",
-            "score": 0
+            "lang_id": "sr"
         },
         {
             "name": "Srpski (Whisper Medium)",
             "model_id": "sr_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "sr",
-            "score": 0
+            "lang_id": "sr"
         },
         {
             "name": "Srpski (Whisper Large)",
             "model_id": "sr_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "sr",
-            "score": 0
+            "lang_id": "sr"
         },
         {
             "name": "Magyar (Whisper Tiny)",
             "model_id": "hu_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "hu",
-            "score": 0
+            "lang_id": "hu"
         },
         {
             "name": "Magyar (Whisper Base)",
             "model_id": "hu_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "hu",
-            "score": 0
+            "lang_id": "hu"
         },
         {
             "name": "Magyar (Whisper Small)",
             "model_id": "hu_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "hu",
-            "score": 0
+            "lang_id": "hu"
         },
         {
             "name": "Magyar (Whisper Small Fine-Tuned)",
@@ -4276,820 +4033,703 @@
             "name": "Magyar (Whisper Medium)",
             "model_id": "hu_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "hu",
-            "score": 0
+            "lang_id": "hu"
         },
         {
             "name": "Magyar (Whisper Large)",
             "model_id": "hu_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "hu",
-            "score": 0
+            "lang_id": "hu"
         },
         {
             "name": "हिन्दी (Whisper Tiny)",
             "model_id": "hi_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "hi",
-            "score": 0
+            "lang_id": "hi"
         },
         {
             "name": "हिन्दी (Whisper Base)",
             "model_id": "hi_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "hi",
-            "score": 0
+            "lang_id": "hi"
         },
         {
             "name": "हिन्दी (Whisper Small)",
             "model_id": "hi_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "hi",
-            "score": 0
+            "lang_id": "hi"
         },
         {
             "name": "हिन्दी (Whisper Medium)",
             "model_id": "hi_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "hi",
-            "score": 0
+            "lang_id": "hi"
         },
         {
             "name": "हिन्दी (Whisper Large)",
             "model_id": "hi_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "hi",
-            "score": 0
+            "lang_id": "hi"
         },
         {
             "name": "فارسی (Whisper Tiny)",
             "model_id": "fa_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "fa",
-            "score": 0
+            "lang_id": "fa"
         },
         {
             "name": "فارسی (Whisper Base)",
             "model_id": "fa_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "fa",
-            "score": 0
+            "lang_id": "fa"
         },
         {
             "name": "فارسی (Whisper Small)",
             "model_id": "fa_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "fa",
-            "score": 0
+            "lang_id": "fa"
         },
         {
             "name": "فارسی (Whisper Medium)",
             "model_id": "fa_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "fa",
-            "score": 0
+            "lang_id": "fa"
         },
         {
             "name": "فارسی (Whisper Large)",
             "model_id": "fa_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "fa",
-            "score": 0
+            "lang_id": "fa"
         },
         {
             "name": "Dansk (Whisper Tiny)",
             "model_id": "da_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "da",
-            "score": 0
+            "lang_id": "da"
         },
         {
             "name": "Dansk (Whisper Base)",
             "model_id": "da_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "da",
-            "score": 0
+            "lang_id": "da"
         },
         {
             "name": "Dansk (Whisper Small)",
             "model_id": "da_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "da",
-            "score": 0
+            "lang_id": "da"
         },
         {
             "name": "Dansk (Whisper Medium)",
             "model_id": "da_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "da",
-            "score": 0
+            "lang_id": "da"
         },
         {
             "name": "Dansk (Whisper Large)",
             "model_id": "da_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "da",
-            "score": 0
+            "lang_id": "da"
         },
         {
             "name": "Eesti (Whisper Tiny)",
             "model_id": "et_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "et",
-            "score": 0
+            "lang_id": "et"
         },
         {
             "name": "Eesti (Whisper Base)",
             "model_id": "et_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "et",
-            "score": 0
+            "lang_id": "et"
         },
         {
             "name": "Eesti (Whisper Small)",
             "model_id": "et_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "et",
-            "score": 0
+            "lang_id": "et"
         },
         {
             "name": "Eesti (Whisper Medium)",
             "model_id": "et_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "et",
-            "score": 0
+            "lang_id": "et"
         },
         {
             "name": "Eesti (Whisper Large)",
             "model_id": "et_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "et",
-            "score": 0
+            "lang_id": "et"
         },
         {
             "name": "Euskara (Whisper Tiny)",
             "model_id": "eu_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "eu",
-            "score": 0
+            "lang_id": "eu"
         },
         {
             "name": "Euskara (Whisper Base)",
             "model_id": "eu_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "eu",
-            "score": 0
+            "lang_id": "eu"
         },
         {
             "name": "Euskara (Whisper Small)",
             "model_id": "eu_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "eu",
-            "score": 0
+            "lang_id": "eu"
         },
         {
             "name": "Euskara (Whisper Medium)",
             "model_id": "eu_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "eu",
-            "score": 0
+            "lang_id": "eu"
         },
         {
             "name": "Euskara (Whisper Large)",
             "model_id": "eu_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "eu",
-            "score": 0
+            "lang_id": "eu"
         },
         {
             "name": "íslenska (Whisper Tiny)",
             "model_id": "is_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "is",
-            "score": 0
+            "lang_id": "is"
         },
         {
             "name": "íslenska (Whisper Base)",
             "model_id": "is_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "is",
-            "score": 0
+            "lang_id": "is"
         },
         {
             "name": "íslenska (Whisper Small)",
             "model_id": "is_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "is",
-            "score": 0
+            "lang_id": "is"
         },
         {
             "name": "íslenska (Whisper Medium)",
             "model_id": "is_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "is",
-            "score": 0
+            "lang_id": "is"
         },
         {
             "name": "íslenska (Whisper Large)",
             "model_id": "is_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "is",
-            "score": 0
+            "lang_id": "is"
         },
         {
             "name": "ქართული (Whisper Tiny)",
             "model_id": "ka_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "ka",
-            "score": 0
+            "lang_id": "ka"
         },
         {
             "name": "ქართული (Whisper Base)",
             "model_id": "ka_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "ka",
-            "score": 0
+            "lang_id": "ka"
         },
         {
             "name": "ქართული (Whisper Small)",
             "model_id": "ka_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "ka",
-            "score": 0
+            "lang_id": "ka"
         },
         {
             "name": "ქართული (Whisper Medium)",
             "model_id": "ka_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "ka",
-            "score": 0
+            "lang_id": "ka"
         },
         {
             "name": "ქართული (Whisper Large)",
             "model_id": "ka_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "ka",
-            "score": 0
+            "lang_id": "ka"
         },
         {
             "name": "Қазақ (Whisper Tiny)",
             "model_id": "kk_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "kk",
-            "score": 0
+            "lang_id": "kk"
         },
         {
             "name": "Қазақ (Whisper Base)",
             "model_id": "kk_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "kk",
-            "score": 0
+            "lang_id": "kk"
         },
         {
             "name": "Қазақ (Whisper Small)",
             "model_id": "kk_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "kk",
-            "score": 0
+            "lang_id": "kk"
         },
         {
             "name": "Қазақ (Whisper Medium)",
             "model_id": "kk_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "kk",
-            "score": 0
+            "lang_id": "kk"
         },
         {
             "name": "Қазақ (Whisper Large)",
             "model_id": "kk_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "kk",
-            "score": 0
+            "lang_id": "kk"
         },
         {
             "name": "한국어 (Whisper Tiny)",
             "model_id": "ko_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "ko",
-            "score": 0
+            "lang_id": "ko"
         },
         {
             "name": "한국어 (Whisper Base)",
             "model_id": "ko_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "ko",
-            "score": 0
+            "lang_id": "ko"
         },
         {
             "name": "한국어 (Whisper Small)",
             "model_id": "ko_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "ko",
-            "score": 0
+            "lang_id": "ko"
         },
         {
             "name": "한국어 (Whisper Medium)",
             "model_id": "ko_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "ko",
-            "score": 0
+            "lang_id": "ko"
         },
         {
             "name": "한국어 (Whisper Large)",
             "model_id": "ko_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "ko",
-            "score": 0
+            "lang_id": "ko"
         },
         {
             "name": "Lietuvių (Whisper Tiny)",
             "model_id": "lt_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "lt",
-            "score": 0
+            "lang_id": "lt"
         },
         {
             "name": "Lietuvių (Whisper Base)",
             "model_id": "lt_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "lt",
-            "score": 0
+            "lang_id": "lt"
         },
         {
             "name": "Lietuvių (Whisper Small)",
             "model_id": "lt_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "lt",
-            "score": 0
+            "lang_id": "lt"
         },
         {
             "name": "Lietuvių (Whisper Medium)",
             "model_id": "lt_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "lt",
-            "score": 0
+            "lang_id": "lt"
         },
         {
             "name": "Lietuvių (Whisper Large)",
             "model_id": "lt_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "lt",
-            "score": 0
+            "lang_id": "lt"
         },
         {
             "name": "Latviešu (Whisper Tiny)",
             "model_id": "lv_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "lv",
-            "score": 0
+            "lang_id": "lv"
         },
         {
             "name": "Latviešu (Whisper Base)",
             "model_id": "lv_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "lv",
-            "score": 0
+            "lang_id": "lv"
         },
         {
             "name": "Latviešu (Whisper Small)",
             "model_id": "lv_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "lv",
-            "score": 0
+            "lang_id": "lv"
         },
         {
             "name": "Latviešu (Whisper Medium)",
             "model_id": "lv_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "lv",
-            "score": 0
+            "lang_id": "lv"
         },
         {
             "name": "Latviešu (Whisper Large)",
             "model_id": "lv_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "lv",
-            "score": 0
+            "lang_id": "lv"
         },
         {
             "name": "Монгол (Whisper Tiny)",
             "model_id": "mn_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "mn",
-            "score": 0
+            "lang_id": "mn"
         },
         {
             "name": "Монгол (Whisper Base)",
             "model_id": "mn_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "mn",
-            "score": 0
+            "lang_id": "mn"
         },
         {
             "name": "Монгол (Whisper Small)",
             "model_id": "mn_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "mn",
-            "score": 0
+            "lang_id": "mn"
         },
         {
             "name": "Монгол (Whisper Medium)",
             "model_id": "mn_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "mn",
-            "score": 0
+            "lang_id": "mn"
         },
         {
             "name": "Монгол (Whisper Large)",
             "model_id": "mn_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "mn",
-            "score": 0
+            "lang_id": "mn"
         },
         {
             "name": "Malti (Whisper Tiny)",
             "model_id": "mt_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "mt",
-            "score": 0
+            "lang_id": "mt"
         },
         {
             "name": "Malti (Whisper Base)",
             "model_id": "mt_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "mt",
-            "score": 0
+            "lang_id": "mt"
         },
         {
             "name": "Malti (Whisper Small)",
             "model_id": "mt_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "mt",
-            "score": 0
+            "lang_id": "mt"
         },
         {
             "name": "Malti (Whisper Medium)",
             "model_id": "mt_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "mt",
-            "score": 0
+            "lang_id": "mt"
         },
         {
             "name": "Malti (Whisper Large)",
             "model_id": "mt_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "mt",
-            "score": 0
+            "lang_id": "mt"
         },
         {
             "name": "नेपाली (Whisper Tiny)",
             "model_id": "ne_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "ne",
-            "score": 0
+            "lang_id": "ne"
         },
         {
             "name": "नेपाली (Whisper Base)",
             "model_id": "ne_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "ne",
-            "score": 0
+            "lang_id": "ne"
         },
         {
             "name": "नेपाली (Whisper Small)",
             "model_id": "ne_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "ne",
-            "score": 0
+            "lang_id": "ne"
         },
         {
             "name": "नेपाली (Whisper Medium)",
             "model_id": "ne_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "ne",
-            "score": 0
+            "lang_id": "ne"
         },
         {
             "name": "नेपाली (Whisper Large)",
             "model_id": "ne_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "ne",
-            "score": 0
+            "lang_id": "ne"
         },
         {
             "name": "Shqip (Whisper Tiny)",
             "model_id": "sq_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "sq",
-            "score": 0
+            "lang_id": "sq"
         },
         {
             "name": "Shqip (Whisper Base)",
             "model_id": "sq_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "sq",
-            "score": 0
+            "lang_id": "sq"
         },
         {
             "name": "Shqip (Whisper Small)",
             "model_id": "sq_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "sq",
-            "score": 0
+            "lang_id": "sq"
         },
         {
             "name": "Shqip (Whisper Medium)",
             "model_id": "sq_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "sq",
-            "score": 0
+            "lang_id": "sq"
         },
         {
             "name": "Shqip (Whisper Large)",
             "model_id": "sq_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "sq",
-            "score": 0
+            "lang_id": "sq"
         },
         {
             "name": "Kiswahili (Whisper Tiny)",
             "model_id": "sw_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "sw",
-            "score": 0
+            "lang_id": "sw"
         },
         {
             "name": "Kiswahili (Whisper Base)",
             "model_id": "sw_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "sw",
-            "score": 0
+            "lang_id": "sw"
         },
         {
             "name": "Kiswahili (Whisper Small)",
             "model_id": "sw_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "sw",
-            "score": 0
+            "lang_id": "sw"
         },
         {
             "name": "Kiswahili (Whisper Medium)",
             "model_id": "sw_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "sw",
-            "score": 0
+            "lang_id": "sw"
         },
         {
             "name": "Kiswahili (Whisper Large)",
             "model_id": "sw_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "sw",
-            "score": 0
+            "lang_id": "sw"
         },
         {
             "name": "Tagalog (Whisper Tiny)",
             "model_id": "tl_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "tl",
-            "score": 0
+            "lang_id": "tl"
         },
         {
             "name": "Tagalog (Whisper Base)",
             "model_id": "tl_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "tl",
-            "score": 0
+            "lang_id": "tl"
         },
         {
             "name": "Tagalog (Whisper Small)",
             "model_id": "tl_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "tl",
-            "score": 0
+            "lang_id": "tl"
         },
         {
             "name": "Tagalog (Whisper Medium)",
             "model_id": "tl_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "tl",
-            "score": 0
+            "lang_id": "tl"
         },
         {
             "name": "Tagalog (Whisper Large)",
             "model_id": "tl_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "tl",
-            "score": 0
+            "lang_id": "tl"
         },
         {
             "name": "татарча (Whisper Tiny)",
             "model_id": "tt_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "tt",
-            "score": 0
+            "lang_id": "tt"
         },
         {
             "name": "татарча (Whisper Base)",
             "model_id": "tt_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "tt",
-            "score": 0
+            "lang_id": "tt"
         },
         {
             "name": "татарча (Whisper Small)",
             "model_id": "tt_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "tt",
-            "score": 0
+            "lang_id": "tt"
         },
         {
             "name": "татарча (Whisper Medium)",
             "model_id": "tt_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "tt",
-            "score": 0
+            "lang_id": "tt"
         },
         {
             "name": "татарча (Whisper Large)",
             "model_id": "tt_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "tt",
-            "score": 0
+            "lang_id": "tt"
         },
         {
             "name": "Oʻzbekcha (Whisper Tiny)",
             "model_id": "uz_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "uz",
-            "score": 0
+            "lang_id": "uz"
         },
         {
             "name": "Oʻzbekcha (Whisper Base)",
             "model_id": "uz_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "uz",
-            "score": 0
+            "lang_id": "uz"
         },
         {
             "name": "Oʻzbekcha (Whisper Small)",
             "model_id": "uz_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "uz",
-            "score": 0
+            "lang_id": "uz"
         },
         {
             "name": "Oʻzbekcha (Whisper Medium)",
             "model_id": "uz_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "uz",
-            "score": 0
+            "lang_id": "uz"
         },
         {
             "name": "Oʻzbekcha (Whisper Large)",
             "model_id": "uz_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "uz",
-            "score": 0
+            "lang_id": "uz"
         },
         {
             "name": "Yorùbá (Whisper Tiny)",
             "model_id": "yo_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "yo",
-            "score": 0
+            "lang_id": "yo"
         },
         {
             "name": "Yorùbá (Whisper Base)",
             "model_id": "yo_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "yo",
-            "score": 0
+            "lang_id": "yo"
         },
         {
             "name": "Yorùbá (Whisper Small)",
             "model_id": "yo_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "yo",
-            "score": 0
+            "lang_id": "yo"
         },
         {
             "name": "Yorùbá (Whisper Medium)",
             "model_id": "yo_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "yo",
-            "score": 0
+            "lang_id": "yo"
         },
         {
             "name": "Yorùbá (Whisper Large)",
             "model_id": "yo_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "yo",
-            "score": 0
+            "lang_id": "yo"
         },
         {
             "name": "Amarəñña (Whisper Tiny)",
             "model_id": "am_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "am",
-            "score": 0
+            "lang_id": "am"
         },
         {
             "name": "Amarəñña (Whisper Base)",
             "model_id": "am_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "am",
-            "score": 0
+            "lang_id": "am"
         },
         {
             "name": "Amarəñña (Whisper Small)",
             "model_id": "am_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "am",
-            "score": 0
+            "lang_id": "am"
         },
         {
             "name": "Amarəñña (Whisper Medium)",
             "model_id": "am_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "am",
-            "score": 0
+            "lang_id": "am"
         },
         {
             "name": "Amarəñña (Whisper Large)",
             "model_id": "am_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "am",
-            "score": 0
+            "lang_id": "am"
         },
         {
             "name": "عربي (Whisper Tiny)",
             "model_id": "ar_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "ar",
-            "score": 0
+            "lang_id": "ar"
         },
         {
             "name": "عربي (Whisper Base)",
             "model_id": "ar_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "ar",
-            "score": 0
+            "lang_id": "ar"
         },
         {
             "name": "عربي (Whisper Small)",
             "model_id": "ar_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "ar",
-            "score": 0
+            "lang_id": "ar"
         },
         {
             "name": "عربي (Whisper Medium)",
             "model_id": "ar_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "ar",
-            "score": 0
+            "lang_id": "ar"
         },
         {
             "name": "عربي (Whisper Large)",
             "model_id": "ar_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "ar",
-            "score": 0
+            "lang_id": "ar"
         },
         {
             "name": "বাংলা (Whisper Tiny)",
             "model_id": "bn_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "bn",
-            "score": 0
+            "lang_id": "bn"
         },
         {
             "name": "বাংলা (Whisper Base)",
             "model_id": "bn_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "bn",
-            "score": 0
+            "lang_id": "bn"
         },
         {
             "name": "বাংলা (Whisper Small)",
             "model_id": "bn_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "bn",
-            "score": 0
+            "lang_id": "bn"
         },
         {
             "name": "বাংলা (Whisper Medium)",
             "model_id": "bn_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "bn",
-            "score": 0
+            "lang_id": "bn"
         },
         {
             "name": "বাংলা (Whisper Large)",
             "model_id": "bn_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "bn",
-            "score": 0
+            "lang_id": "bn"
         },
         {
             "name": "Polski (Whisper Tiny)",
