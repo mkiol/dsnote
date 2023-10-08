@@ -317,7 +317,7 @@
             "id": "ha"
         },
         {
-            "name": "ꦧꦱꦗꦮ",
+            "name": "Basa Jawa",
             "name_en": "Javanese",
             "id": "jv"
         },
@@ -2914,6 +2914,186 @@
             "lang_id": "pl"
         },
         {
+            "name": "Afrikaans (FasterWhisper Tiny)",
+            "model_id": "af_fasterwhisper_tiny",
+            "model_alias_of": "multilang_fasterwhisper_tiny",
+            "lang_id": "af"
+        },
+        {
+            "name": "Afrikaans (FasterWhisper Base)",
+            "model_id": "af_fasterwhisper_base",
+            "model_alias_of": "multilang_fasterwhisper_base",
+            "lang_id": "af"
+        },
+        {
+            "name": "Afrikaans (FasterWhisper Small)",
+            "model_id": "af_fasterwhisper_small",
+            "model_alias_of": "multilang_fasterwhisper_small",
+            "lang_id": "af"
+        },
+        {
+            "name": "Afrikaans (FasterWhisper Medium)",
+            "model_id": "af_fasterwhisper_medium",
+            "model_alias_of": "multilang_fasterwhisper_medium",
+            "lang_id": "af"
+        },
+        {
+            "name": "Afrikaans (FasterWhisper Large-v2)",
+            "model_id": "af_fasterwhisper_large2",
+            "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "af"
+        },
+        {
+            "name": "ગુજરાતી (FasterWhisper Tiny)",
+            "model_id": "gu_fasterwhisper_tiny",
+            "model_alias_of": "multilang_fasterwhisper_tiny",
+            "lang_id": "gu"
+        },
+        {
+            "name": "ગુજરાતી (FasterWhisper Base)",
+            "model_id": "gu_fasterwhisper_base",
+            "model_alias_of": "multilang_fasterwhisper_base",
+            "lang_id": "gu"
+        },
+        {
+            "name": "ગુજરાતી (FasterWhisper Small)",
+            "model_id": "gu_fasterwhisper_small",
+            "model_alias_of": "multilang_fasterwhisper_small",
+            "lang_id": "gu"
+        },
+        {
+            "name": "ગુજરાતી (FasterWhisper Medium)",
+            "model_id": "gu_fasterwhisper_medium",
+            "model_alias_of": "multilang_fasterwhisper_medium",
+            "lang_id": "gu"
+        },
+        {
+            "name": "ગુજરાતી (FasterWhisper Large-v2)",
+            "model_id": "gu_fasterwhisper_large2",
+            "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "gu"
+        },
+        {
+            "name": "هَرْشٜن هَوْسَ (FasterWhisper Tiny)",
+            "model_id": "ha_fasterwhisper_tiny",
+            "model_alias_of": "multilang_fasterwhisper_tiny",
+            "lang_id": "ha"
+        },
+        {
+            "name": "هَرْشٜن هَوْسَ (FasterWhisper Base)",
+            "model_id": "ha_fasterwhisper_base",
+            "model_alias_of": "multilang_fasterwhisper_base",
+            "lang_id": "ha"
+        },
+        {
+            "name": "هَرْشٜن هَوْسَ (FasterWhisper Small)",
+            "model_id": "ha_fasterwhisper_small",
+            "model_alias_of": "multilang_fasterwhisper_small",
+            "lang_id": "ha"
+        },
+        {
+            "name": "هَرْشٜن هَوْسَ (FasterWhisper Medium)",
+            "model_id": "ha_fasterwhisper_medium",
+            "model_alias_of": "multilang_fasterwhisper_medium",
+            "lang_id": "ha"
+        },
+        {
+            "name": "هَرْشٜن هَوْسَ (FasterWhisper Large-v2)",
+            "model_id": "ha_fasterwhisper_large2",
+            "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "ha"
+        },
+        {
+            "name": "Basa Jawa (FasterWhisper Tiny)",
+            "model_id": "jv_fasterwhisper_tiny",
+            "model_alias_of": "multilang_fasterwhisper_tiny",
+            "lang_id": "jv"
+        },
+        {
+            "name": "Basa Jawa (FasterWhisper Base)",
+            "model_id": "jv_fasterwhisper_base",
+            "model_alias_of": "multilang_fasterwhisper_base",
+            "lang_id": "jv"
+        },
+        {
+            "name": "Basa Jawa (FasterWhisper Small)",
+            "model_id": "jv_fasterwhisper_small",
+            "model_alias_of": "multilang_fasterwhisper_small",
+            "lang_id": "jv"
+        },
+        {
+            "name": "Basa Jawa (FasterWhisper Medium)",
+            "model_id": "jv_fasterwhisper_medium",
+            "model_alias_of": "multilang_fasterwhisper_medium",
+            "lang_id": "jv"
+        },
+        {
+            "name": "Basa Jawa (FasterWhisper Large-v2)",
+            "model_id": "jv_fasterwhisper_large2",
+            "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "jv"
+        },
+        {
+            "name": "తెలుగు (FasterWhisper Tiny)",
+            "model_id": "te_fasterwhisper_tiny",
+            "model_alias_of": "multilang_fasterwhisper_tiny",
+            "lang_id": "te"
+        },
+        {
+            "name": "తెలుగు (FasterWhisper Base)",
+            "model_id": "te_fasterwhisper_base",
+            "model_alias_of": "multilang_fasterwhisper_base",
+            "lang_id": "te"
+        },
+        {
+            "name": "తెలుగు (FasterWhisper Small)",
+            "model_id": "te_fasterwhisper_small",
+            "model_alias_of": "multilang_fasterwhisper_small",
+            "lang_id": "te"
+        },
+        {
+            "name": "తెలుగు (FasterWhisper Medium)",
+            "model_id": "te_fasterwhisper_medium",
+            "model_alias_of": "multilang_fasterwhisper_medium",
+            "lang_id": "te"
+        },
+        {
+            "name": "తెలుగు (FasterWhisper Large-v2)",
+            "model_id": "te_fasterwhisper_large2",
+            "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "te"
+        },
+        {
+            "name": "Setswana (FasterWhisper Tiny)",
+            "model_id": "tn_fasterwhisper_tiny",
+            "model_alias_of": "multilang_fasterwhisper_tiny",
+            "lang_id": "tn"
+        },
+        {
+            "name": "Setswana (FasterWhisper Base)",
+            "model_id": "tn_fasterwhisper_base",
+            "model_alias_of": "multilang_fasterwhisper_base",
+            "lang_id": "tn"
+        },
+        {
+            "name": "Setswana (FasterWhisper Small)",
+            "model_id": "tn_fasterwhisper_small",
+            "model_alias_of": "multilang_fasterwhisper_small",
+            "lang_id": "tn"
+        },
+        {
+            "name": "Setswana (FasterWhisper Medium)",
+            "model_id": "tn_fasterwhisper_medium",
+            "model_alias_of": "multilang_fasterwhisper_medium",
+            "lang_id": "tn"
+        },
+        {
+            "name": "Setswana (FasterWhisper Large-v2)",
+            "model_id": "tn_fasterwhisper_large2",
+            "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "tn"
+        },
+        {
             "name": "Multilingual (Whisper Tiny)",
             "model_id": "multilang_whisper_tiny",
             "engine": "stt_whisper",
@@ -4964,6 +5144,186 @@
             "model_id": "pl_whisper_large",
             "model_alias_of": "multilang_whisper_large",
             "lang_id": "pl"
+        },
+        {
+            "name": "Afrikaans (Whisper Tiny)",
+            "model_id": "af_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "af"
+        },
+        {
+            "name": "Afrikaans (Whisper Base)",
+            "model_id": "af_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "af"
+        },
+        {
+            "name": "Afrikaans (Whisper Small)",
+            "model_id": "af_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "af"
+        },
+        {
+            "name": "Afrikaans (Whisper Medium)",
+            "model_id": "af_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "af"
+        },
+        {
+            "name": "Afrikaans (Whisper Large)",
+            "model_id": "af_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "af"
+        },
+        {
+            "name": "ગુજરાતી (Whisper Tiny)",
+            "model_id": "gu_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "gu"
+        },
+        {
+            "name": "ગુજરાતી (Whisper Base)",
+            "model_id": "gu_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "gu"
+        },
+        {
+            "name": "ગુજરાતી (Whisper Small)",
+            "model_id": "gu_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "gu"
+        },
+        {
+            "name": "ગુજરાતી (Whisper Medium)",
+            "model_id": "gu_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "gu"
+        },
+        {
+            "name": "ગુજરાતી (Whisper Large)",
+            "model_id": "gu_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "gu"
+        },
+        {
+            "name": "هَرْشٜن هَوْسَ (Whisper Tiny)",
+            "model_id": "ha_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "ha"
+        },
+        {
+            "name": "هَرْشٜن هَوْسَ (Whisper Base)",
+            "model_id": "ha_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "ha"
+        },
+        {
+            "name": "هَرْشٜن هَوْسَ (Whisper Small)",
+            "model_id": "ha_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "ha"
+        },
+        {
+            "name": "هَرْشٜن هَوْسَ (Whisper Medium)",
+            "model_id": "ha_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "ha"
+        },
+        {
+            "name": "هَرْشٜن هَوْسَ (Whisper Large)",
+            "model_id": "ha_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "ha"
+        },
+        {
+            "name": "Basa Jawa (Whisper Tiny)",
+            "model_id": "jv_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "jv"
+        },
+        {
+            "name": "Basa Jawa (Whisper Base)",
+            "model_id": "jv_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "jv"
+        },
+        {
+            "name": "Basa Jawa (Whisper Small)",
+            "model_id": "jv_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "jv"
+        },
+        {
+            "name": "Basa Jawa (Whisper Medium)",
+            "model_id": "jv_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "jv"
+        },
+        {
+            "name": "Basa Jawa (Whisper Large)",
+            "model_id": "jv_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "jv"
+        },
+        {
+            "name": "తెలుగు (Whisper Tiny)",
+            "model_id": "te_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "te"
+        },
+        {
+            "name": "తెలుగు (Whisper Base)",
+            "model_id": "te_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "te"
+        },
+        {
+            "name": "తెలుగు (Whisper Small)",
+            "model_id": "te_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "te"
+        },
+        {
+            "name": "తెలుగు (Whisper Medium)",
+            "model_id": "te_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "te"
+        },
+        {
+            "name": "తెలుగు (Whisper Large)",
+            "model_id": "te_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "te"
+        },
+        {
+            "name": "Setswana (Whisper Tiny)",
+            "model_id": "tn_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "tn"
+        },
+        {
+            "name": "Setswana (Whisper Base)",
+            "model_id": "tn_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "tn"
+        },
+        {
+            "name": "Setswana (Whisper Small)",
+            "model_id": "tn_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "tn"
+        },
+        {
+            "name": "Setswana (Whisper Medium)",
+            "model_id": "tn_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "tn"
+        },
+        {
+            "name": "Setswana (Whisper Large)",
+            "model_id": "tn_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "tn"
         },
         {
             "name": "English (Vosk Small)",
@@ -11981,7 +12341,7 @@
             "size": "62797196"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU Low)",
             "model_id": "jv_mimic3_id_google_gmu_low",
             "engine": "tts_mimic3",
             "lang_id": "jv",
@@ -11999,273 +12359,273 @@
             "hidden": true
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 07875 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 07875 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_07875",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "07875"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 05522 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 05522 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_05522",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "05522"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 03424 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 03424 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_03424",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "03424"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 06510 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 06510 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_06510",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "06510"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 03314 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 03314 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_03314",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "03314"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 03187 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 03187 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_03187",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "03187"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 07638 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 07638 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_07638",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "07638"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 06207 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 06207 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_06207",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "06207"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 08736 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 08736 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_08736",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "08736"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 04679 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 04679 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_04679",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "04679"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 01392 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 01392 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_01392",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "01392"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 05540 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 05540 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_05540",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "05540"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 05219 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 05219 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_05219",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "05219"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 00027 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 00027 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_00027",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "00027"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 00264 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 00264 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_00264",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "00264"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 09724 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 09724 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_09724",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "09724"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 04588 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 04588 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_04588",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "04588"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 09039 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 09039 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_09039",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "09039"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 04285 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 04285 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_04285",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "04285"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 05970 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 05970 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_05970",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "05970"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 08305 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 08305 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_08305",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "08305"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 04982 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 04982 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_04982",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "04982"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 08002 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 08002 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_08002",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "08002"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 06080 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 06080 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_06080",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "06080"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 07765 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 07765 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_07765",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "07765"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 02326 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 02326 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_02326",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "02326"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 03727 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 03727 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_03727",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "03727"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 04175 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 04175 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_04175",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "04175"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 06383 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 06383 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_06383",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "06383"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 02884 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 02884 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_02884",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "02884"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 06941 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 06941 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_06941",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "06941"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 08178 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 08178 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_08178",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "08178"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 00658 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 00658 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_00658",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "00658"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 04715 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 04715 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_04715",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "04715"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 05667 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 05667 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_05667",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "05667"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 01519 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 01519 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_01519",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "01519"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 07335 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 07335 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_07335",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "07335"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 02059 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 02059 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_02059",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
             "speaker": "02059"
         },
         {
-            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 01932 Low)",
+            "name": "Basa Jawa (Mimic3 Google GMU 01932 Low)",
             "model_id": "jv_mimic3_id_google_gmu_low_01932",
             "model_alias_of": "jv_mimic3_id_google_gmu_low",
             "lang_id": "jv",
