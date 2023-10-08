@@ -2,6 +2,11 @@
     "version": "@VERSION@",
     "langs": [
         {
+            "name": "Afrikaans",
+            "name_en": "Afrikaans",
+            "id": "af"
+        },
+        {
             "name": "عربي",
             "name_en": "Arabic",
             "id": "ar"
@@ -232,6 +237,11 @@
             "id": "hi"
         },
         {
+            "name": "ગુજરાતી",
+            "name_en": "Gujarati",
+            "id": "gu"
+        },
+        {
             "name": "Oʻzbekcha",
             "name_en": "Uzbek",
             "id": "uz"
@@ -300,6 +310,26 @@
             "name": "Lëtzebuergesch",
             "name_en": "Luxembourgish",
             "id": "lb"
+        },
+        {
+            "name": "هَرْشٜن هَوْسَ",
+            "name_en": "Hausa",
+            "id": "ha"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ",
+            "name_en": "Javanese",
+            "id": "jv"
+        },
+        {
+            "name": "తెలుగు",
+            "name_en": "Telugu",
+            "id": "te"
+        },
+        {
+            "name": "Setswana",
+            "name_en": "Tswana",
+            "id": "tn"
         }
     ],
     "models": [
@@ -7254,118 +7284,6 @@
             "size": "63216406"
         },
         {
-            "name": "English (Mimic3 Hi-Fi Low)",
-            "model_id": "en_mimi3_us_hifitts_low",
-            "engine": "tts_mimic3",
-            "lang_id": "en",
-            "checksum": "36330",
-            "checksum_quick": "ef63dd9a",
-            "comp": "dir",
-            "urls": [
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/config.json",
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/generator.onnx",
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/phoneme_map.txt",
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/phonemes.txt",
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/speakers.txt",
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/speaker_map.csv"
-            ],
-            "size": "76341280",
-            "hidden": true
-        },
-        {
-            "name": "English (Mimic3 Hi-Fi 9017 Low Male)",
-            "model_id": "en_mimi3_us_hifitts_low_9017",
-            "model_alias_of": "en_mimi3_us_hifitts_low",
-            "lang_id": "en",
-            "speaker": "9017"
-        },
-        {
-            "name": "English (Mimic3 Hi-Fi 6097 Low Male)",
-            "model_id": "en_mimi3_us_hifitts_low_6097",
-            "model_alias_of": "en_mimi3_us_hifitts_low",
-            "lang_id": "en",
-            "speaker": "6097"
-        },
-        {
-            "name": "English (Mimic3 Hi-Fi 92 Low Female)",
-            "model_id": "en_mimi3_us_hifitts_low_92",
-            "model_alias_of": "en_mimi3_us_hifitts_low",
-            "lang_id": "en",
-            "speaker": "92"
-        },
-        {
-            "name": "English (Mimic3 M-AILABS Low)",
-            "model_id": "en_mimi3_us_mailabs_low",
-            "engine": "tts_mimic3",
-            "lang_id": "en",
-            "checksum": "f5804e6b",
-            "checksum_quick": "d3b1df0f",
-            "comp": "dir",
-            "urls": [
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/config.json",
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/generator.onnx",
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/phoneme_map.txt",
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/phonemes.txt",
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/speakers.txt",
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/speaker_map.csv"
-            ],
-            "size": "76341334",
-            "hidden": true
-        },
-        {
-            "name": "English (Mimic3 Elliot Miller Low Male)",
-            "model_id": "en_mimi3_us_mailabs_low_elliot_miller",
-            "model_alias_of": "en_mimi3_us_mailabs_low",
-            "lang_id": "en",
-            "speaker": "elliot_miller"
-        },
-        {
-            "name": "English (Mimic3 Judy Bieber Low Female)",
-            "model_id": "en_mimi3_us_mailabs_low_judy_bieber",
-            "model_alias_of": "en_mimi3_us_mailabs_low",
-            "lang_id": "en",
-            "speaker": "judy_bieber"
-        },
-        {
-            "name": "English (Mimic3 Mary Ann Low Female)",
-            "model_id": "en_mimi3_us_mailabs_low_mary_ann",
-            "model_alias_of": "en_mimi3_us_mailabs_low",
-            "lang_id": "en",
-            "speaker": "mary_ann"
-        },
-        {
-            "name": "Polski (Mimic3 M-AILABS Low)",
-            "model_id": "pl_mimi3_mailabs_low",
-            "engine": "tts_mimic3",
-            "lang_id": "pl",
-            "checksum": "768f7397",
-            "checksum_quick": "cbde8fb8",
-            "comp": "dir",
-            "urls": [
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/config.json",
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/generator.onnx",
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/phonemes.txt",
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/speakers.txt",
-                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/speaker_map.csv"
-            ],
-            "size": "76338413",
-            "hidded": true
-        },
-        {
-            "name": "Polski (Mimic3 Nina Brown Low Female)",
-            "model_id": "pl_mimi3_mailabs_low_nina_brown",
-            "model_alias_of": "pl_mimi3_mailabs_low",
-            "lang_id": "pl",
-            "speaker": "nina_brown"
-        },
-        {
-            "name": "Polski (Mimic3 Piotr Nater Low Male)",
-            "model_id": "pl_mimi3_mailabs_low_piotr_nater",
-            "model_alias_of": "pl_mimi3_mailabs_low",
-            "lang_id": "pl",
-            "speaker": "piotr_nater"
-        },
-        {
             "name": "አማርኛ (Espeak Robot)",
             "model_id": "am_espeak_am",
             "engine": "tts_espeak",
@@ -10103,6 +10021,2911 @@
                 "https://github.com/mozilla/firefox-translations-models/raw/58222938742c5f60480d6508775437f08c8aacaf/models/dev/fien/vocab.fien.spm.gz"
             ],
             "size": "16368261"
+        },
+        {
+            "name": "Afrikaans (Mimic3 Google NWU Low)",
+            "model_id": "af_mimic3_za_google_nwu_low",
+            "engine": "tts_mimic3",
+            "lang_id": "af",
+            "checksum": "3599ae2c",
+            "checksum_quick": "64f5d4cc",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/af_ZA/google-nwu_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/af_ZA/google-nwu_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/af_ZA/google-nwu_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/af_ZA/google-nwu_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/af_ZA/google-nwu_low/speaker_map.csv"
+            ],
+            "size": "76364025",
+            "hidden": true
+        },
+        {
+            "name": "Afrikaans (Mimic3 Google NWU 7214 Low)",
+            "model_id": "af_mimic3_za_google_nwu_low_7214",
+            "model_alias_of": "af_mimic3_za_google_nwu_low",
+            "lang_id": "af",
+            "speaker": "7214"
+        },
+        {
+            "name": "Afrikaans (Mimic3 Google NWU 8963 Low)",
+            "model_id": "af_mimic3_za_google_nwu_low_8963",
+            "model_alias_of": "af_mimic3_za_google_nwu_low",
+            "lang_id": "af",
+            "speaker": "8963"
+        },
+        {
+            "name": "Afrikaans (Mimic3 Google NWU 7130 Low)",
+            "model_id": "af_mimic3_za_google_nwu_low_7130",
+            "model_alias_of": "af_mimic3_za_google_nwu_low",
+            "lang_id": "af",
+            "speaker": "7130"
+        },
+        {
+            "name": "Afrikaans (Mimic3 Google NWU 8924 Low)",
+            "model_id": "af_mimic3_za_google_nwu_low_8924",
+            "model_alias_of": "af_mimic3_za_google_nwu_low",
+            "lang_id": "af",
+            "speaker": "8924"
+        },
+        {
+            "name": "Afrikaans (Mimic3 Google NWU 8148 Low)",
+            "model_id": "af_mimic3_za_google_nwu_low_8148",
+            "model_alias_of": "af_mimic3_za_google_nwu_low",
+            "lang_id": "af",
+            "speaker": "8148"
+        },
+        {
+            "name": "Afrikaans (Mimic3 Google NWU 1919 Low)",
+            "model_id": "af_mimic3_za_google_nwu_low_1919",
+            "model_alias_of": "af_mimic3_za_google_nwu_low",
+            "lang_id": "af",
+            "speaker": "1919"
+        },
+        {
+            "name": "Afrikaans (Mimic3 Google NWU 2418 Low)",
+            "model_id": "af_mimic3_za_google_nwu_low_2418",
+            "model_alias_of": "af_mimic3_za_google_nwu_low",
+            "lang_id": "af",
+            "speaker": "2418"
+        },
+        {
+            "name": "Afrikaans (Mimic3 Google NWU 6590 Low)",
+            "model_id": "af_mimic3_za_google_nwu_low_6590",
+            "model_alias_of": "af_mimic3_za_google_nwu_low",
+            "lang_id": "af",
+            "speaker": "6590"
+        },
+        {
+            "name": "Afrikaans (Mimic3 Google NWU 0184 Low)",
+            "model_id": "af_mimic3_za_google_nwu_low_0184",
+            "model_alias_of": "af_mimic3_za_google_nwu_low",
+            "lang_id": "af",
+            "speaker": "0184"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi Low)",
+            "model_id": "bn_mimic3_multi_low",
+            "engine": "tts_mimic3",
+            "lang_id": "bn",
+            "checksum": "3b64ebf8",
+            "checksum_quick": "61075584",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/bn/multi_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/bn/multi_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/bn/multi_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/bn/multi_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/bn/multi_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/bn/multi_low/speaker_map.csv"
+            ],
+            "size": "76375956",
+            "hidden": true
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi Rm Low)",
+            "model_id": "bn_mimic3_multi_low_rm",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "rm"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi 03042 Low)",
+            "model_id": "bn_mimic3_multi_low_03042",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "03042"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi 00737 Low)",
+            "model_id": "bn_mimic3_multi_low_00737",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "00737"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi 01232 Low)",
+            "model_id": "bn_mimic3_multi_low_01232",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "01232"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi 02194 Low)",
+            "model_id": "bn_mimic3_multi_low_02194",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "02194"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi 3108 Low)",
+            "model_id": "bn_mimic3_multi_low_3108",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "3108"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi 3713 Low)",
+            "model_id": "bn_mimic3_multi_low_3713",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "3713"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi 1010 Low)",
+            "model_id": "bn_mimic3_multi_low_1010",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "1010"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi 00779 Low)",
+            "model_id": "bn_mimic3_multi_low_00779",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "00779"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi 9169 Low)",
+            "model_id": "bn_mimic3_multi_low_9169",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "9169"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi 4046 Low)",
+            "model_id": "bn_mimic3_multi_low_4046",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "4046"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi 5958 Low)",
+            "model_id": "bn_mimic3_multi_low_5958",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "5958"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi 01701 Low",
+            "model_id": "bn_mimic3_multi_low_01701",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "01701"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi 4811 Low)",
+            "model_id": "bn_mimic3_multi_low_4811",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "4811"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi 0834 Low)",
+            "model_id": "bn_mimic3_multi_low_0834",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "0834"
+        },
+        {
+            "name": "বাংলা (Mimic3 Multi 3958 Low)",
+            "model_id": "bn_mimic3_multi_low_3958",
+            "model_alias_of": "bn_mimic3_multi_low",
+            "lang_id": "bn",
+            "speaker": "3958"
+        },
+        {
+            "name": "Deutsch (Mimic3 M-AILABS Low)",
+            "model_id": "de_mimic3_de_m_ailabs_low",
+            "engine": "tts_mimic3",
+            "lang_id": "de",
+            "checksum": "762d2c91",
+            "checksum_quick": "8e9d7616",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/de_DE/m-ailabs_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/de_DE/m-ailabs_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/de_DE/m-ailabs_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/de_DE/m-ailabs_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/de_DE/m-ailabs_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/de_DE/m-ailabs_low/speaker_map.csv"
+            ],
+            "size": "76353240",
+            "hidden": true
+        },
+        {
+            "name": "Deutsch (Mimic3 M-AILABS Ramona Low Female)",
+            "model_id": "de_mimic3_de_m_ailabs_low_ramona_deininger",
+            "model_alias_of": "de_mimic3_de_m_ailabs_low",
+            "lang_id": "de",
+            "speaker": "ramona_deininger"
+        },
+        {
+            "name": "Deutsch (Mimic3 M-AILABS Karlsson Low Male)",
+            "model_id": "de_mimic3_de_m_ailabs_low_karlsson",
+            "model_alias_of": "de_mimic3_de_m_ailabs_low",
+            "lang_id": "de",
+            "speaker": "karlsson"
+        },
+        {
+            "name": "Deutsch (Mimic3 M-AILABS Rebecca Low Female)",
+            "model_id": "de_mimic3_de_m_ailabs_low_rebecca_braunert_plunkett",
+            "model_alias_of": "de_mimic3_de_m_ailabs_low",
+            "lang_id": "de",
+            "speaker": "rebecca_braunert_plunkett"
+        },
+        {
+            "name": "Deutsch (Mimic3 M-AILABS Eva Low Female)",
+            "model_id": "de_mimic3_de_m_ailabs_low_eva_k",
+            "model_alias_of": "de_mimic3_de_m_ailabs_low",
+            "lang_id": "de",
+            "speaker": "eva_k"
+        },
+        {
+            "name": "Deutsch (Mimic3 M-AILABS Angela Low Female)",
+            "model_id": "de_mimic3_de_m_ailabs_low_angela_merkel",
+            "model_alias_of": "de_mimic3_de_m_ailabs_low",
+            "lang_id": "de",
+            "speaker": "angela_merkel"
+        },
+        {
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Low)",
+            "model_id": "de_mimic3_de_thorsten_emotion_low",
+            "engine": "tts_mimic3",
+            "lang_id": "de",
+            "checksum": "24b113ac",
+            "checksum_quick": "aaf53370",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/de_DE/thorsten-emotion_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/de_DE/thorsten-emotion_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/de_DE/thorsten-emotion_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/de_DE/thorsten-emotion_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/de_DE/thorsten-emotion_low/speaker_map.csv"
+            ],
+            "size": "76358813",
+            "hidden": true
+        },
+        {
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Amused Low)",
+            "model_id": "de_mimic3_de_thorsten_emotion_low_amused",
+            "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
+            "lang_id": "de",
+            "speaker": "amused"
+        },
+        {
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Angry Low)",
+            "model_id": "de_mimic3_de_thorsten_emotion_low_angry",
+            "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
+            "lang_id": "de",
+            "speaker": "angry"
+        },
+        {
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Disgusted Low)",
+            "model_id": "de_mimic3_de_thorsten_emotion_low_disgusted",
+            "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
+            "lang_id": "de",
+            "speaker": "disgusted"
+        },
+        {
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Drunk Low)",
+            "model_id": "de_mimic3_de_thorsten_emotion_low_drunk",
+            "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
+            "lang_id": "de",
+            "speaker": "drunk"
+        },
+        {
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Neutral Low)",
+            "model_id": "de_mimic3_de_thorsten_emotion_low_neutral",
+            "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
+            "lang_id": "de",
+            "speaker": "neutral"
+        },
+        {
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Sleepy Low)",
+            "model_id": "de_mimic3_de_thorsten_emotion_low_sleepy",
+            "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
+            "lang_id": "de",
+            "speaker": "sleepy"
+        },
+        {
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Surprised Low)",
+            "model_id": "de_mimic3_de_thorsten_emotion_low_surprised",
+            "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
+            "lang_id": "de",
+            "speaker": "surprised"
+        },
+        {
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Whisper Low)",
+            "model_id": "de_mimic3_de_thorsten_emotion_low_whisper",
+            "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
+            "lang_id": "de",
+            "speaker": "whisper"
+        },
+        {
+            "name": "Deutsch (Mimic3 Thorsten Low)",
+            "model_id": "de_mimic3_de_thorsten_low",
+            "engine": "tts_mimic3",
+            "lang_id": "de",
+            "checksum": "82ce497a",
+            "checksum_quick": "ae9ae793",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/de_DE/thorsten_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/de_DE/thorsten_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/de_DE/thorsten_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/de_DE/thorsten_low/phonemes.txt"
+            ],
+            "size": "62810701"
+        },
+        {
+            "name": "Ελληνικά (Mimic3 Rapunzelina Low Female)",
+            "model_id": "el_mimic3_gr_rapunzelina_low",
+            "engine": "tts_mimic3",
+            "lang_id": "el",
+            "checksum": "31a04c41",
+            "checksum_quick": "dbca64da",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/el_GR/rapunzelina_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/el_GR/rapunzelina_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/el_GR/rapunzelina_low/phonemes.txt"
+            ],
+            "size": "62799470"
+        },
+        {
+            "name": "English British (Mimic3 Alan Low Male)",
+            "model_id": "en_mimic3_uk_apope_low",
+            "engine": "tts_mimic3",
+            "lang_id": "en",
+            "checksum": "d879d001",
+            "checksum_quick": "e08a6919",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_UK/apope_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_UK/apope_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_UK/apope_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_UK/apope_low/phonemes.txt"
+            ],
+            "size": "62804182"
+        },
+        {
+            "name": "English (Mimic3 Arctic Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low",
+            "engine": "tts_mimic3",
+            "lang_id": "en",
+            "checksum": "d580ce6",
+            "checksum_quick": "82225151",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/cmu-arctic_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/cmu-arctic_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/cmu-arctic_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/cmu-arctic_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/cmu-arctic_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/cmu-arctic_low/speaker_map.csv"
+            ],
+            "size": "76372252",
+            "hidden": true
+        },
+        {
+            "name": "English (Mimic3 Arctic Awb Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_awb",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "awb"
+        },
+        {
+            "name": "English (Mimic3 Arctic Rms Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_rms",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "rms"
+        },
+        {
+            "name": "English (Mimic3 Arctic Slt Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_slt",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "slt"
+        },
+        {
+            "name": "English (Mimic3 Arctic Ksp Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_ksp",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "ksp"
+        },
+        {
+            "name": "English (Mimic3 Arctic Clb Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_clb",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "clb"
+        },
+        {
+            "name": "English (Mimic3 Arctic Aew Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_aew",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "aew"
+        },
+        {
+            "name": "English (Mimic3 Arctic Bdl Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_bdl",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "bdl"
+        },
+        {
+            "name": "English (Mimic3 Arctic Lnh Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_lnh",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "lnh"
+        },
+        {
+            "name": "English (Mimic3 Arctic Jmk Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_jmk",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "jmk"
+        },
+        {
+            "name": "English (Mimic3 Arctic Rxr Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_rxr",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "rxr"
+        },
+        {
+            "name": "English (Mimic3 Arctic Fem Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_fem",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "fem"
+        },
+        {
+            "name": "English (Mimic3 Arctic Ljm Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_ljm",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "ljm"
+        },
+        {
+            "name": "English (Mimic3 Arctic Slp Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_slp",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "slp"
+        },
+        {
+            "name": "English (Mimic3 Arctic Ahw Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_ahw",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "ahw"
+        },
+        {
+            "name": "English (Mimic3 Arctic Axb Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_axb",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "axb"
+        },
+        {
+            "name": "English (Mimic3 Arctic Aup Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_aup",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "aup"
+        },
+        {
+            "name": "English (Mimic3 Arctic Eey Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_eey",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "eey"
+        },
+        {
+            "name": "English (Mimic3 Arctic Gka Low)",
+            "model_id": "en_mimic3_us_cmu_arctic_low_gka",
+            "model_alias_of": "en_mimic3_us_cmu_arctic_low",
+            "lang_id": "en",
+            "speaker": "gka"
+        },
+        {
+            "name": "English (Mimic3 HiFi Low)",
+            "model_id": "en_mimic3_us_hifi_tts_low",
+            "engine": "tts_mimic3",
+            "lang_id": "en",
+            "checksum": "36330",
+            "checksum_quick": "ef63dd9a",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/hifi-tts_low/speaker_map.csv"
+            ],
+            "size": "76341280",
+            "hidden": true
+        },
+        {
+            "name": "English (Mimic3 HiFi 9017 Low)",
+            "model_id": "en_mimic3_us_hifi_tts_low_9017",
+            "model_alias_of": "en_mimic3_us_hifi_tts_low",
+            "lang_id": "en",
+            "speaker": "9017"
+        },
+        {
+            "name": "English (Mimic3 HiFi 6097 Low)",
+            "model_id": "en_mimic3_us_hifi_tts_low_6097",
+            "model_alias_of": "en_mimic3_us_hifi_tts_low",
+            "lang_id": "en",
+            "speaker": "6097"
+        },
+        {
+            "name": "English (Mimic3 HiFi 92 Low)",
+            "model_id": "en_mimic3_us_hifi_tts_low_92",
+            "model_alias_of": "en_mimic3_us_hifi_tts_low",
+            "lang_id": "en",
+            "speaker": "92"
+        },
+        {
+            "name": "English (Mimic3 LJ Speech Low)",
+            "model_id": "en_mimic3_us_ljspeech_low",
+            "engine": "tts_mimic3",
+            "lang_id": "en",
+            "checksum": "e2ddacdc",
+            "checksum_quick": "d3154c40",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/ljspeech_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/ljspeech_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/ljspeech_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/ljspeech_low/phonemes.txt"
+            ],
+            "size": "62804243"
+        },
+        {
+            "name": "English (Mimic3 M-AILABS Low)",
+            "model_id": "en_mimic3_us_m_ailabs_low",
+            "engine": "tts_mimic3",
+            "lang_id": "en",
+            "checksum": "f5804e6b",
+            "checksum_quick": "d3b1df0f",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/m-ailabs_low/speaker_map.csv"
+            ],
+            "size": "76341334",
+            "hidden": true
+        },
+        {
+            "name": "English (Mimic3 M-AILABS Elliot Male Low)",
+            "model_id": "en_mimic3_us_m_ailabs_low_elliot_miller",
+            "model_alias_of": "en_mimic3_us_m_ailabs_low",
+            "lang_id": "en",
+            "speaker": "elliot_miller"
+        },
+        {
+            "name": "English (Mimic3 M-AILABS Judy Female Low)",
+            "model_id": "en_mimic3_us_m_ailabs_low_judy_bieber",
+            "model_alias_of": "en_mimic3_us_m_ailabs_low",
+            "lang_id": "en",
+            "speaker": "judy_bieber"
+        },
+        {
+            "name": "English (Mimic3 M-AILABS Mary Female Low)",
+            "model_id": "en_mimic3_us_m_ailabs_low_mary_ann",
+            "model_alias_of": "en_mimic3_us_m_ailabs_low",
+            "lang_id": "en",
+            "speaker": "mary_ann"
+        },
+        {
+            "name": "English (Mimic3 VCTK Low)",
+            "model_id": "en_mimic3_us_vctk_low",
+            "engine": "tts_mimic3",
+            "lang_id": "en",
+            "checksum": "92e1798",
+            "checksum_quick": "230dee4c",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/vctk_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/vctk_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/vctk_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/vctk_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/vctk_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/en_US/vctk_low/speaker_map.csv"
+            ],
+            "size": "76560378",
+            "hidden": true
+        },
+        {
+            "name": "English (Mimic3 VCTK P239 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p239",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p239"
+        },
+        {
+            "name": "English (Mimic3 VCTK P236 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p236",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p236"
+        },
+        {
+            "name": "English (Mimic3 VCTK P264 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p264",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p264"
+        },
+        {
+            "name": "English (Mimic3 VCTK P250 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p250",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p250"
+        },
+        {
+            "name": "English (Mimic3 VCTK P259 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p259",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p259"
+        },
+        {
+            "name": "English (Mimic3 VCTK P247 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p247",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p247"
+        },
+        {
+            "name": "English (Mimic3 VCTK P261 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p261",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p261"
+        },
+        {
+            "name": "English (Mimic3 VCTK P263 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p263",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p263"
+        },
+        {
+            "name": "English (Mimic3 VCTK P283 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p283",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p283"
+        },
+        {
+            "name": "English (Mimic3 VCTK P274 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p274",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p274"
+        },
+        {
+            "name": "English (Mimic3 VCTK P286 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p286",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p286"
+        },
+        {
+            "name": "English (Mimic3 VCTK P276 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p276",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p276"
+        },
+        {
+            "name": "English (Mimic3 VCTK P270 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p270",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p270"
+        },
+        {
+            "name": "English (Mimic3 VCTK P281 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p281",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p281"
+        },
+        {
+            "name": "English (Mimic3 VCTK P277 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p277",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p277"
+        },
+        {
+            "name": "English (Mimic3 VCTK P231 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p231",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p231"
+        },
+        {
+            "name": "English (Mimic3 VCTK P238 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p238",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p238"
+        },
+        {
+            "name": "English (Mimic3 VCTK P271 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p271",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p271"
+        },
+        {
+            "name": "English (Mimic3 VCTK P257 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p257",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p257"
+        },
+        {
+            "name": "English (Mimic3 VCTK P273 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p273",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p273"
+        },
+        {
+            "name": "English (Mimic3 VCTK P284 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p284",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p284"
+        },
+        {
+            "name": "English (Mimic3 VCTK P329 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p329",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p329"
+        },
+        {
+            "name": "English (Mimic3 VCTK P361 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p361",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p361"
+        },
+        {
+            "name": "English (Mimic3 VCTK P287 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p287",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p287"
+        },
+        {
+            "name": "English (Mimic3 VCTK P360 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p360",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p360"
+        },
+        {
+            "name": "English (Mimic3 VCTK P374 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p374",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p374"
+        },
+        {
+            "name": "English (Mimic3 VCTK P376 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p376",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p376"
+        },
+        {
+            "name": "English (Mimic3 VCTK P310 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p310",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p310"
+        },
+        {
+            "name": "English (Mimic3 VCTK P304 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p304",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p304"
+        },
+        {
+            "name": "English (Mimic3 VCTK P340 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p340",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p340"
+        },
+        {
+            "name": "English (Mimic3 VCTK P347 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p347",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p347"
+        },
+        {
+            "name": "English (Mimic3 VCTK P330 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p330",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p330"
+        },
+        {
+            "name": "English (Mimic3 VCTK P308 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p308",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p308"
+        },
+        {
+            "name": "English (Mimic3 VCTK P314 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p314",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p314"
+        },
+        {
+            "name": "English (Mimic3 VCTK P317 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p317",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p317"
+        },
+        {
+            "name": "English (Mimic3 VCTK P339 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p339",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p339"
+        },
+        {
+            "name": "English (Mimic3 VCTK P311 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p311",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p311"
+        },
+        {
+            "name": "English (Mimic3 VCTK P294 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p294",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p294"
+        },
+        {
+            "name": "English (Mimic3 VCTK P305 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p305",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p305"
+        },
+        {
+            "name": "English (Mimic3 VCTK P266 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p266",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p266"
+        },
+        {
+            "name": "English (Mimic3 VCTK P335 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p335",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p335"
+        },
+        {
+            "name": "English (Mimic3 VCTK P334 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p334",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p334"
+        },
+        {
+            "name": "English (Mimic3 VCTK P318 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p318",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p318"
+        },
+        {
+            "name": "English (Mimic3 VCTK P323 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p323",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p323"
+        },
+        {
+            "name": "English (Mimic3 VCTK P351 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p351",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p351"
+        },
+        {
+            "name": "English (Mimic3 VCTK P333 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p333",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p333"
+        },
+        {
+            "name": "English (Mimic3 VCTK P313 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p313",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p313"
+        },
+        {
+            "name": "English (Mimic3 VCTK P316 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p316",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p316"
+        },
+        {
+            "name": "English (Mimic3 VCTK P244 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p244",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p244"
+        },
+        {
+            "name": "English (Mimic3 VCTK P307 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p307",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p307"
+        },
+        {
+            "name": "English (Mimic3 VCTK P363 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p363",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p363"
+        },
+        {
+            "name": "English (Mimic3 VCTK P336 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p336",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p336"
+        },
+        {
+            "name": "English (Mimic3 VCTK P312 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p312",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p312"
+        },
+        {
+            "name": "English (Mimic3 VCTK P267 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p267",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p267"
+        },
+        {
+            "name": "English (Mimic3 VCTK P297 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p297",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p297"
+        },
+        {
+            "name": "English (Mimic3 VCTK P275 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p275",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p275"
+        },
+        {
+            "name": "English (Mimic3 VCTK P295 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p295",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p295"
+        },
+        {
+            "name": "English (Mimic3 VCTK P288 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p288",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p288"
+        },
+        {
+            "name": "English (Mimic3 VCTK P258 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p258",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p258"
+        },
+        {
+            "name": "English (Mimic3 VCTK P301 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p301",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p301"
+        },
+        {
+            "name": "English (Mimic3 VCTK P232 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p232",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p232"
+        },
+        {
+            "name": "English (Mimic3 VCTK P292 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p292",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p292"
+        },
+        {
+            "name": "English (Mimic3 VCTK P272 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p272",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p272"
+        },
+        {
+            "name": "English (Mimic3 VCTK P278 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p278",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p278"
+        },
+        {
+            "name": "English (Mimic3 VCTK P280 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p280",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p280"
+        },
+        {
+            "name": "English (Mimic3 VCTK P341 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p341",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p341"
+        },
+        {
+            "name": "English (Mimic3 VCTK P268 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p268",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p268"
+        },
+        {
+            "name": "English (Mimic3 VCTK P298 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p298",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p298"
+        },
+        {
+            "name": "English (Mimic3 VCTK P299 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p299",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p299"
+        },
+        {
+            "name": "English (Mimic3 VCTK P279 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p279",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p279"
+        },
+        {
+            "name": "English (Mimic3 VCTK P285 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p285",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p285"
+        },
+        {
+            "name": "English (Mimic3 VCTK P326 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p326",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p326"
+        },
+        {
+            "name": "English (Mimic3 VCTK P300 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p300",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p300"
+        },
+        {
+            "name": "English (Mimic3 VCTK s5 Low)",
+            "model_id": "en_mimic3_us_vctk_low_s5",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "s5"
+        },
+        {
+            "name": "English (Mimic3 VCTK P230 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p230",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p230"
+        },
+        {
+            "name": "English (Mimic3 VCTK P254 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p254",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p254"
+        },
+        {
+            "name": "English (Mimic3 VCTK P269 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p269",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p269"
+        },
+        {
+            "name": "English (Mimic3 VCTK P293 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p293",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p293"
+        },
+        {
+            "name": "English (Mimic3 VCTK P252 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p252",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p252"
+        },
+        {
+            "name": "English (Mimic3 VCTK P345 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p345",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p345"
+        },
+        {
+            "name": "English (Mimic3 VCTK P262 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p262",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p262"
+        },
+        {
+            "name": "English (Mimic3 VCTK P243 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p243",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p243"
+        },
+        {
+            "name": "English (Mimic3 VCTK P227 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p227",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p227"
+        },
+        {
+            "name": "English (Mimic3 VCTK P343 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p343",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p343"
+        },
+        {
+            "name": "English (Mimic3 VCTK P255 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p255",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p255"
+        },
+        {
+            "name": "English (Mimic3 VCTK P229 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p229",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p229"
+        },
+        {
+            "name": "English (Mimic3 VCTK P240 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p240",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p240"
+        },
+        {
+            "name": "English (Mimic3 VCTK P248 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p248",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p248"
+        },
+        {
+            "name": "English (Mimic3 VCTK P253 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p253",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p253"
+        },
+        {
+            "name": "English (Mimic3 VCTK P233 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p233",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p233"
+        },
+        {
+            "name": "English (Mimic3 VCTK P228 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p228",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p228"
+        },
+        {
+            "name": "English (Mimic3 VCTK P251 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p251",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p251"
+        },
+        {
+            "name": "English (Mimic3 VCTK P282 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p282",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p282"
+        },
+        {
+            "name": "English (Mimic3 VCTK P246 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p246",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p246"
+        },
+        {
+            "name": "English (Mimic3 VCTK P234 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p234",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p234"
+        },
+        {
+            "name": "English (Mimic3 VCTK P226 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p226",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p226"
+        },
+        {
+            "name": "English (Mimic3 VCTK P260 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p260",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p260"
+        },
+        {
+            "name": "English (Mimic3 VCTK P245 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p245",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p245"
+        },
+        {
+            "name": "English (Mimic3 VCTK P241 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p241",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p241"
+        },
+        {
+            "name": "English (Mimic3 VCTK P303 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p303",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p303"
+        },
+        {
+            "name": "English (Mimic3 VCTK P265 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p265",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p265"
+        },
+        {
+            "name": "English (Mimic3 VCTK P306 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p306",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p306"
+        },
+        {
+            "name": "English (Mimic3 VCTK P237 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p237",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p237"
+        },
+        {
+            "name": "English (Mimic3 VCTK P249 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p249",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p249"
+        },
+        {
+            "name": "English (Mimic3 VCTK P256 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p256",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p256"
+        },
+        {
+            "name": "English (Mimic3 VCTK P302 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p302",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p302"
+        },
+        {
+            "name": "English (Mimic3 VCTK P364 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p364",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p364"
+        },
+        {
+            "name": "English (Mimic3 VCTK P225 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p225",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p225"
+        },
+        {
+            "name": "English (Mimic3 VCTK P362 Low)",
+            "model_id": "en_mimic3_us_vctk_low_p362",
+            "model_alias_of": "en_mimic3_us_vctk_low",
+            "lang_id": "en",
+            "speaker": "p362"
+        },
+        {
+            "name": "Español (Mimic3 Carlfm Low Male)",
+            "model_id": "es_mimic3_es_carlfm_low",
+            "engine": "tts_mimic3",
+            "lang_id": "es",
+            "checksum": "544cdd02",
+            "checksum_quick": "b3702a4e",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/es_ES/carlfm_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/es_ES/carlfm_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/es_ES/carlfm_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/es_ES/carlfm_low/phonemes.txt"
+            ],
+            "size": "62798723"
+        },
+        {
+            "name": "Español (Mimic3 M-AILABS Low)",
+            "model_id": "es_mimic3_es_m_ailabs_low",
+            "engine": "tts_mimic3",
+            "lang_id": "es",
+            "checksum": "eaa421d0",
+            "checksum_quick": "715b5082",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/es_ES/m-ailabs_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/es_ES/m-ailabs_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/es_ES/m-ailabs_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/es_ES/m-ailabs_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/es_ES/m-ailabs_low/speaker_map.csv"
+            ],
+            "size": "76343558",
+            "hidden": true
+        },
+        {
+            "name": "Español (Mimic3 M-AILABS Tux Low)",
+            "model_id": "es_mimic3_es_m_ailabs_low_tux",
+            "model_alias_of": "es_mimic3_es_m_ailabs_low",
+            "lang_id": "es",
+            "speaker": "tux"
+        },
+        {
+            "name": "Español (Mimic3 M-AILABS Victor Male Low)",
+            "model_id": "es_mimic3_es_m_ailabs_low_victor_villarraza",
+            "model_alias_of": "es_mimic3_es_m_ailabs_low",
+            "lang_id": "es",
+            "speaker": "victor_villarraza"
+        },
+        {
+            "name": "Español (Mimic3 M-AILABS Karen Low)",
+            "model_id": "es_mimic3_es_m_ailabs_low_karen_savage",
+            "model_alias_of": "es_mimic3_es_m_ailabs_low",
+            "lang_id": "es",
+            "speaker": "karen_savage"
+        },
+        {
+            "name": "فارسی (Mimic3 Haaniye Male Low)",
+            "model_id": "fa_mimic3_haaniye_low",
+            "engine": "tts_mimic3",
+            "lang_id": "fa",
+            "checksum": "f8dc21d0",
+            "checksum_quick": "760a0d35",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fa/haaniye_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fa/haaniye_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fa/haaniye_low/phonemes.txt"
+            ],
+            "size": "62795842"
+        },
+        {
+            "name": "Suomi (Mimic3 Harri Low)",
+            "model_id": "fi_mimic3_fi_harri_tapani_ylilammi_low",
+            "engine": "tts_mimic3",
+            "lang_id": "fi",
+            "checksum": "744b8cc8",
+            "checksum_quick": "32472681",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fi_FI/harri-tapani-ylilammi_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fi_FI/harri-tapani-ylilammi_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fi_FI/harri-tapani-ylilammi_low/phonemes.txt"
+            ],
+            "size": "62794828"
+        },
+        {
+            "name": "Français (Mimic3 M-AILABS Low)",
+            "model_id": "fr_mimic3_fr_m_ailabs_low",
+            "engine": "tts_mimic3",
+            "lang_id": "fr",
+            "checksum": "95c381af",
+            "checksum_quick": "2e685e11",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fr_FR/m-ailabs_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fr_FR/m-ailabs_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fr_FR/m-ailabs_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fr_FR/m-ailabs_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fr_FR/m-ailabs_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fr_FR/m-ailabs_low/speaker_map.csv"
+            ],
+            "size": "76342351",
+            "hidden": true
+        },
+        {
+            "name": "Français (Mimic3 M-AILABS Ezwa Low)",
+            "model_id": "fr_mimic3_fr_m_ailabs_low_ezwa",
+            "model_alias_of": "fr_mimic3_fr_m_ailabs_low",
+            "lang_id": "fr",
+            "speaker": "ezwa"
+        },
+        {
+            "name": "Français (Mimic3 M-AILABS Nadine Female Low)",
+            "model_id": "fr_mimic3_fr_m_ailabs_low_nadine_eckert_boulet",
+            "model_alias_of": "fr_mimic3_fr_m_ailabs_low",
+            "lang_id": "fr",
+            "speaker": "nadine_eckert_boulet"
+        },
+        {
+            "name": "Français (Mimic3 M-AILABS Bernard Male Low)",
+            "model_id": "fr_mimic3_fr_m_ailabs_low_bernard",
+            "model_alias_of": "fr_mimic3_fr_m_ailabs_low",
+            "lang_id": "fr",
+            "speaker": "bernard"
+        },
+        {
+            "name": "Français (Mimic3 M-AILABS Zeckou Male Low)",
+            "model_id": "fr_mimic3_fr_m_ailabs_low_zeckou",
+            "model_alias_of": "fr_mimic3_fr_m_ailabs_low",
+            "lang_id": "fr",
+            "speaker": "zeckou"
+        },
+        {
+            "name": "Français (Mimic3 M-AILABS Gilles Male Low)",
+            "model_id": "fr_mimic3_fr_m_ailabs_low_gilles_g_le_blanc",
+            "model_alias_of": "fr_mimic3_fr_m_ailabs_low",
+            "lang_id": "fr",
+            "speaker": "gilles_g_le_blanc"
+        },
+        {
+            "name": "Français (Mimic3 Siwis Low)",
+            "model_id": "fr_mimic3_fr_siwis_low",
+            "engine": "tts_mimic3",
+            "lang_id": "fr",
+            "checksum": "75615125",
+            "checksum_quick": "d66b620d",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fr_FR/siwis_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fr_FR/siwis_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fr_FR/siwis_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fr_FR/siwis_low/phonemes.txt"
+            ],
+            "size": "62800263"
+        },
+        {
+            "name": "Français (Mimic3 Tom Low)",
+            "model_id": "fr_mimic3_fr_tom_low",
+            "engine": "tts_mimic3",
+            "lang_id": "fr",
+            "checksum": "3c5496df",
+            "checksum_quick": "1e91866",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fr_FR/tom_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fr_FR/tom_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fr_FR/tom_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/fr_FR/tom_low/phonemes.txt"
+            ],
+            "size": "62800507"
+        },
+        {
+            "name": "ગુજરાતી (Mimic3 Indic Low)",
+            "model_id": "gu_mimic3_in_cmu_indic_low",
+            "engine": "tts_mimic3",
+            "lang_id": "gu",
+            "checksum": "8a001773",
+            "checksum_quick": "39bf5a5c",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/gu_IN/cmu-indic_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/gu_IN/cmu-indic_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/gu_IN/cmu-indic_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/gu_IN/cmu-indic_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/gu_IN/cmu-indic_low/speaker_map.csv"
+            ],
+            "size": "76346787",
+            "hidden": true
+        },
+        {
+            "name": "ગુજરાતી (Mimic3 Indic Dp Low)",
+            "model_id": "gu_mimic3_in_cmu_indic_low_cmu_indic_guj_dp",
+            "model_alias_of": "gu_mimic3_in_cmu_indic_low",
+            "lang_id": "gu",
+            "speaker": "cmu_indic_guj_dp"
+        },
+        {
+            "name": "ગુજરાતી (Mimic3 Indic Ad Low)",
+            "model_id": "gu_mimic3_in_cmu_indic_low_cmu_indic_guj_ad",
+            "model_alias_of": "gu_mimic3_in_cmu_indic_low",
+            "lang_id": "gu",
+            "speaker": "cmu_indic_guj_ad"
+        },
+        {
+            "name": "ગુજરાતી (Mimic3 Indic Kt Low)",
+            "model_id": "gu_mimic3_in_cmu_indic_low_cmu_indic_guj_kt",
+            "model_alias_of": "gu_mimic3_in_cmu_indic_low",
+            "lang_id": "gu",
+            "speaker": "cmu_indic_guj_kt"
+        },
+        {
+            "name": "هَرْشٜن هَوْسَ (Mimic3 Open Bible Low)",
+            "model_id": "ha_mimic3_ne_openbible_low",
+            "engine": "tts_mimic3",
+            "lang_id": "ha",
+            "checksum": "90ff5472",
+            "checksum_quick": "77f11348",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ha_NE/openbible_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ha_NE/openbible_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ha_NE/openbible_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ha_NE/openbible_low/phonemes.txt"
+            ],
+            "size": "62796754"
+        },
+        {
+            "name": "hu_HU (Mimic3 Diana Low Female)",
+            "model_id": "hu_mimic3_hu_diana_majlinger_low",
+            "engine": "tts_mimic3",
+            "lang_id": "hu",
+            "checksum": "2f7f14c0",
+            "checksum_quick": "6502c077",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/hu_HU/diana-majlinger_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/hu_HU/diana-majlinger_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/hu_HU/diana-majlinger_low/phonemes.txt"
+            ],
+            "size": "62797920"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS Low)",
+            "model_id": "it_mimic3_it_mls_low",
+            "engine": "tts_mimic3",
+            "lang_id": "it",
+            "checksum": "ee76409c",
+            "checksum_quick": "b06c47b1",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/it_IT/mls_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/it_IT/mls_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/it_IT/mls_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/it_IT/mls_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/it_IT/mls_low/speaker_map.csv"
+            ],
+            "size": "76409437",
+            "hidden": true
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 1595 Low)",
+            "model_id": "it_mimic3_it_mls_low_1595",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "1595"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 4974 Low)",
+            "model_id": "it_mimic3_it_mls_low_4974",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "4974"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 4998 Low)",
+            "model_id": "it_mimic3_it_mls_low_4998",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "4998"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 6807 Low)",
+            "model_id": "it_mimic3_it_mls_low_6807",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "6807"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 1989 Low)",
+            "model_id": "it_mimic3_it_mls_low_1989",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "1989"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 2033 Low)",
+            "model_id": "it_mimic3_it_mls_low_2033",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "2033"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 2019 Low)",
+            "model_id": "it_mimic3_it_mls_low_2019",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "2019"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 659 Low)",
+            "model_id": "it_mimic3_it_mls_low_659",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "659"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 4649 Low)",
+            "model_id": "it_mimic3_it_mls_low_4649",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "4649"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 9772 Low)",
+            "model_id": "it_mimic3_it_mls_low_9772",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "9772"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 1725 Low)",
+            "model_id": "it_mimic3_it_mls_low_1725",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "1725"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 10446 Low)",
+            "model_id": "it_mimic3_it_mls_low_10446",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "10446"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 6348 Low)",
+            "model_id": "it_mimic3_it_mls_low_6348",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "6348"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 6001 Low)",
+            "model_id": "it_mimic3_it_mls_low_6001",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "6001"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 9185 Low)",
+            "model_id": "it_mimic3_it_mls_low_9185",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "9185"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 8842 Low)",
+            "model_id": "it_mimic3_it_mls_low_8842",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "8842"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 8828 Low)",
+            "model_id": "it_mimic3_it_mls_low_8828",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "8828"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 12428 Low)",
+            "model_id": "it_mimic3_it_mls_low_12428",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "12428"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 8181 Low)",
+            "model_id": "it_mimic3_it_mls_low_8181",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "8181"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 7440 Low)",
+            "model_id": "it_mimic3_it_mls_low_7440",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "7440"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 8207 Low)",
+            "model_id": "it_mimic3_it_mls_low_8207",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "8207"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 277 Low)",
+            "model_id": "it_mimic3_it_mls_low_277",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "277"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 5421 Low)",
+            "model_id": "it_mimic3_it_mls_low_5421",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "5421"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 12804 Low)",
+            "model_id": "it_mimic3_it_mls_low_12804",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "12804"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 4705 Low)",
+            "model_id": "it_mimic3_it_mls_low_4705",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "4705"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 7936 Low)",
+            "model_id": "it_mimic3_it_mls_low_7936",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "7936"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 844 Low)",
+            "model_id": "it_mimic3_it_mls_low_844",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "844"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 6299 Low)",
+            "model_id": "it_mimic3_it_mls_low_6299",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "6299"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 644 Low)",
+            "model_id": "it_mimic3_it_mls_low_644",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "644"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 8384 Low)",
+            "model_id": "it_mimic3_it_mls_low_8384",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "8384"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 1157 Low)",
+            "model_id": "it_mimic3_it_mls_low_1157",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "1157"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 7444 Low)",
+            "model_id": "it_mimic3_it_mls_low_7444",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "7444"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 643 Low)",
+            "model_id": "it_mimic3_it_mls_low_643",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "643"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 4971 Low)",
+            "model_id": "it_mimic3_it_mls_low_4971",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "4971"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 4975 Low)",
+            "model_id": "it_mimic3_it_mls_low_4975",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "4975"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 6744 Low)",
+            "model_id": "it_mimic3_it_mls_low_6744",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "6744"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 8461 Low)",
+            "model_id": "it_mimic3_it_mls_low_8461",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "8461"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 7405 Low)",
+            "model_id": "it_mimic3_it_mls_low_7405",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "7405"
+        },
+        {
+            "name": "Italiano (Mimic3 MLS 5010 Low)",
+            "model_id": "it_mimic3_it_mls_low_5010",
+            "model_alias_of": "it_mimic3_it_mls_low",
+            "lang_id": "it",
+            "speaker": "5010"
+        },
+        {
+            "name": "Italiano (Mimic3 Riccardo Male Low)",
+            "model_id": "it_mimic3_it_riccardo_fasol_low",
+            "engine": "tts_mimic3",
+            "lang_id": "it",
+            "checksum": "ae038b5d",
+            "checksum_quick": "a67cafa9",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/it_IT/riccardo-fasol_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/it_IT/riccardo-fasol_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/it_IT/riccardo-fasol_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/it_IT/riccardo-fasol_low/phonemes.txt"
+            ],
+            "size": "62797196"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low",
+            "engine": "tts_mimic3",
+            "lang_id": "jv",
+            "checksum": "e4a3c720",
+            "checksum_quick": "fdfd2dcd",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/jv_ID/google-gmu_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/jv_ID/google-gmu_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/jv_ID/google-gmu_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/jv_ID/google-gmu_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/jv_ID/google-gmu_low/speaker_map.csv"
+            ],
+            "size": "76413916",
+            "hidden": true
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 07875 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_07875",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "07875"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 05522 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_05522",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "05522"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 03424 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_03424",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "03424"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 06510 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_06510",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "06510"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 03314 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_03314",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "03314"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 03187 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_03187",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "03187"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 07638 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_07638",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "07638"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 06207 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_06207",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "06207"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 08736 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_08736",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "08736"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 04679 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_04679",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "04679"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 01392 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_01392",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "01392"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 05540 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_05540",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "05540"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 05219 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_05219",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "05219"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 00027 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_00027",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "00027"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 00264 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_00264",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "00264"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 09724 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_09724",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "09724"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 04588 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_04588",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "04588"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 09039 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_09039",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "09039"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 04285 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_04285",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "04285"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 05970 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_05970",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "05970"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 08305 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_08305",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "08305"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 04982 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_04982",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "04982"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 08002 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_08002",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "08002"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 06080 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_06080",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "06080"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 07765 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_07765",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "07765"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 02326 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_02326",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "02326"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 03727 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_03727",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "03727"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 04175 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_04175",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "04175"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 06383 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_06383",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "06383"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 02884 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_02884",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "02884"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 06941 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_06941",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "06941"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 08178 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_08178",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "08178"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 00658 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_00658",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "00658"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 04715 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_04715",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "04715"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 05667 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_05667",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "05667"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 01519 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_01519",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "01519"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 07335 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_07335",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "07335"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 02059 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_02059",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "02059"
+        },
+        {
+            "name": "ꦧꦱꦗꦮ (Mimic3 Google GMU 01932 Low)",
+            "model_id": "jv_mimic3_id_google_gmu_low_01932",
+            "model_alias_of": "jv_mimic3_id_google_gmu_low",
+            "lang_id": "jv",
+            "speaker": "01932"
+        },
+        {
+            "name": "한국어 (Mimic3 Kss Low)",
+            "model_id": "ko_mimic3_ko_kss_low",
+            "engine": "tts_mimic3",
+            "lang_id": "ko",
+            "checksum": "18b548b9",
+            "checksum_quick": "127f51aa",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ko_KO/kss_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ko_KO/kss_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ko_KO/kss_low/phonemes.txt"
+            ],
+            "size": "62804842"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google Low)",
+            "model_id": "ne_mimic3_np_ne_google_low",
+            "engine": "tts_mimic3",
+            "lang_id": "ne",
+            "checksum": "bb19cf1a",
+            "checksum_quick": "df2db187",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ne_NP/ne-google_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ne_NP/ne-google_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ne_NP/ne-google_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ne_NP/ne-google_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ne_NP/ne-google_low/speaker_map.csv"
+            ],
+            "size": "76378663",
+            "hidden": true
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 0546 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_0546",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "0546"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 3614 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_3614",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "3614"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 2099 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_2099",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "2099"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 3960 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_3960",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "3960"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 6834 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_6834",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "6834"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 7957 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_7957",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "7957"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 6329 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_6329",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "6329"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 9407 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_9407",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "9407"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 6587 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_6587",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "6587"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 0258 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_0258",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "0258"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 2139 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_2139",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "2139"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 5687 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_5687",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "5687"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 0283 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_0283",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "0283"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 3997 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_3997",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "3997"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 3154 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_3154",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "3154"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 0883 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_0883",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "0883"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 2027 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_2027",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "2027"
+        },
+        {
+            "name": "नेपाली (Mimic3 Google 0649 Low)",
+            "model_id": "ne_mimic3_np_ne_google_low_0649",
+            "model_alias_of": "ne_mimic3_np_ne_google_low",
+            "lang_id": "ne",
+            "speaker": "0649"
+        },
+        {
+            "name": "Nederlands (Mimic3 Bart Low Male)",
+            "model_id": "nl_mimic3_bart_de_leeuw_low",
+            "engine": "tts_mimic3",
+            "lang_id": "nl",
+            "checksum": "29346724",
+            "checksum_quick": "2ca14339",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/bart-de-leeuw_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/bart-de-leeuw_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/bart-de-leeuw_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/bart-de-leeuw_low/phonemes.txt"
+            ],
+            "size": "62812874"
+        },
+        {
+            "name": "Nederlands (Mimic3 Flemishguy Low Male)",
+            "model_id": "nl_mimic3_flemishguy_low",
+            "engine": "tts_mimic3",
+            "lang_id": "nl",
+            "checksum": "29cf6a1b",
+            "checksum_quick": "4f42466b",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/flemishguy_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/flemishguy_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/flemishguy_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/flemishguy_low/phonemes.txt"
+            ],
+            "size": "62812860"
+        },
+        {
+            "name": "Nederlands (Mimic3 Nathalie Low Female)",
+            "model_id": "nl_mimic3_nathalie_low",
+            "engine": "tts_mimic3",
+            "lang_id": "nl",
+            "checksum": "8987805d",
+            "checksum_quick": "68cc551e",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/nathalie_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/nathalie_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/nathalie_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/nathalie_low/phonemes.txt"
+            ],
+            "size": "62812850"
+        },
+        {
+            "name": "Nederlands (Mimic3 Pmk Low)",
+            "model_id": "nl_mimic3_pmk_low",
+            "engine": "tts_mimic3",
+            "lang_id": "nl",
+            "checksum": "52ac17e5",
+            "checksum_quick": "705a30b9",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/pmk_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/pmk_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/pmk_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/pmk_low/phonemes.txt"
+            ],
+            "size": "62812878"
+        },
+        {
+            "name": "Nederlands (Mimic3 Rdh Low)",
+            "model_id": "nl_mimic3_rdh_low",
+            "engine": "tts_mimic3",
+            "lang_id": "nl",
+            "checksum": "e64754d5",
+            "checksum_quick": "cf83f5ee",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/rdh_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/rdh_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/rdh_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/nl/rdh_low/phonemes.txt"
+            ],
+            "size": "62812643"
+        },
+        {
+            "name": "Polski (Mimic3 M-AILABS Low)",
+            "model_id": "pl_mimic3_pl_m_ailabs_low",
+            "engine": "tts_mimic3",
+            "lang_id": "pl",
+            "checksum": "768f7397",
+            "checksum_quick": "cbde8fb8",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/speaker_map.csv"
+            ],
+            "size": "76338413",
+            "hidden": true
+        },
+        {
+            "name": "Polski (Mimic3 M-AILABS Piotr Low Male)",
+            "model_id": "pl_mimic3_pl_m_ailabs_low_piotr_nater",
+            "model_alias_of": "pl_mimic3_pl_m_ailabs_low",
+            "lang_id": "pl",
+            "speaker": "piotr_nater"
+        },
+        {
+            "name": "Polski (Mimic3 M-AILABS Nina Low Female)",
+            "model_id": "pl_mimic3_pl_m_ailabs_low_nina_brown",
+            "model_alias_of": "pl_mimic3_pl_m_ailabs_low",
+            "lang_id": "pl",
+            "speaker": "nina_brown"
+        },
+        {
+            "name": "Русский (Mimic3 Multi Low)",
+            "model_id": "ru_mimic3_ru_multi_low",
+            "engine": "tts_mimic3",
+            "lang_id": "ru",
+            "checksum": "1471274a",
+            "checksum_quick": "9f16211e",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ru_RU/multi_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ru_RU/multi_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ru_RU/multi_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ru_RU/multi_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ru_RU/multi_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ru_RU/multi_low/speaker_map.csv"
+            ],
+            "size": "76347804",
+            "hidden": true
+        },
+        {
+            "name": "Русский (Mimic3 Multi Hajdurova Low Female)",
+            "model_id": "ru_mimic3_ru_multi_low_hajdurova",
+            "model_alias_of": "ru_mimic3_ru_multi_low",
+            "lang_id": "ru",
+            "speaker": "hajdurova"
+        },
+        {
+            "name": "Русский (Mimic3 Multi Minaev Low Male)",
+            "model_id": "ru_mimic3_ru_multi_low_minaev",
+            "model_alias_of": "ru_mimic3_ru_multi_low",
+            "lang_id": "ru",
+            "speaker": "minaev"
+        },
+        {
+            "name": "Русский (Mimic3 Multi Nikolaev Low Male)",
+            "model_id": "ru_mimic3_ru_multi_low_nikolaev",
+            "model_alias_of": "ru_mimic3_ru_multi_low",
+            "lang_id": "ru",
+            "speaker": "nikolaev"
+        },
+        {
+            "name": "Svenska (Mimic3 Lanfrica Low)",
+            "model_id": "sw_mimic3_lanfrica_low",
+            "engine": "tts_mimic3",
+            "lang_id": "sw",
+            "checksum": "9183efcc",
+            "checksum_quick": "130a1129",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/sw/lanfrica_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/sw/lanfrica_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/sw/lanfrica_low/phonemes.txt"
+            ],
+            "size": "62799519"
+        },
+        {
+            "name": "తెలుగు (Mimic3 Indic Low)",
+            "model_id": "te_mimic3_in_cmu_indic_low",
+            "engine": "tts_mimic3",
+            "lang_id": "te",
+            "checksum": "55390dae",
+            "checksum_quick": "d424afae",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/te_IN/cmu-indic_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/te_IN/cmu-indic_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/te_IN/cmu-indic_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/te_IN/cmu-indic_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/te_IN/cmu-indic_low/speaker_map.csv"
+            ],
+            "size": "76343575",
+            "hidden": true
+        },
+        {
+            "name": "తెలుగు (Mimic3 Indic Ss Low)",
+            "model_id": "te_mimic3_in_cmu_indic_low_ss",
+            "model_alias_of": "te_mimic3_in_cmu_indic_low",
+            "lang_id": "te",
+            "speaker": "ss"
+        },
+        {
+            "name": "తెలుగు (Mimic3 Indic Sk Low)",
+            "model_id": "te_mimic3_in_cmu_indic_low_sk",
+            "model_alias_of": "te_mimic3_in_cmu_indic_low",
+            "lang_id": "te",
+            "speaker": "sk"
+        },
+        {
+            "name": "తెలుగు (Mimic3 Indic Kpn Low)",
+            "model_id": "te_mimic3_in_cmu_indic_low_kpn",
+            "model_alias_of": "te_mimic3_in_cmu_indic_low",
+            "lang_id": "te",
+            "speaker": "kpn"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low",
+            "engine": "tts_mimic3",
+            "lang_id": "tn",
+            "checksum": "399c5fd0",
+            "checksum_quick": "4d37acc3",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/tn_ZA/google-nwu_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/tn_ZA/google-nwu_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/tn_ZA/google-nwu_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/tn_ZA/google-nwu_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/tn_ZA/google-nwu_low/speaker_map.csv"
+            ],
+            "size": "76389983",
+            "hidden": true
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 1932 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_1932",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "1932"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 0045 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_0045",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "0045"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 3342 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_3342",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "3342"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 4850 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_4850",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "4850"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 6206 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_6206",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "6206"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 3629 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_3629",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "3629"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 9061 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_9061",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "9061"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 6116 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_6116",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "6116"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 7674 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_7674",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "7674"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 0378 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_0378",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "0378"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 5628 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_5628",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "5628"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 8333 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_8333",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "8333"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 8512 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_8512",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "8512"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 0441 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_0441",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "0441"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 6459 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_6459",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "6459"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 4506 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_4506",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "4506"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 7866 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_7866",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "7866"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 8532 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_8532",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "8532"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 2839 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_2839",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "2839"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 7896 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_7896",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "7896"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 1498 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_1498",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "1498"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 1483 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_1483",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "1483"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 8914 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_8914",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "8914"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 6234 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_6234",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "6234"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 9365 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_9365",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "9365"
+        },
+        {
+            "name": "Setswana (Mimic3 Google NWU 7693 Low)",
+            "model_id": "tn_mimic3_za_google_nwu_low_7693",
+            "model_alias_of": "tn_mimic3_za_google_nwu_low",
+            "lang_id": "tn",
+            "speaker": "7693"
+        },
+        {
+            "name": "Українська (Mimic3 M-AILABS Low)",
+            "model_id": "uk_mimic3_m_ailabs_low",
+            "engine": "tts_mimic3",
+            "lang_id": "uk",
+            "checksum": "21c0c91a",
+            "checksum_quick": "1c056e9d",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/uk_UK/m-ailabs_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/uk_UK/m-ailabs_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/uk_UK/m-ailabs_low/phonemes.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/uk_UK/m-ailabs_low/speakers.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/uk_UK/m-ailabs_low/speaker_map.csv"
+            ],
+            "size": "76369954",
+            "hidden": true
+        },
+        {
+            "name": "Українська (Mimic3 M-AILABS Obruchov Low)",
+            "model_id": "uk_mimic3_m_ailabs_low_obruchov",
+            "model_alias_of": "uk_mimic3_m_ailabs_low",
+            "lang_id": "uk",
+            "speaker": "obruchov"
+        },
+        {
+            "name": "Українська (Mimic3 M-AILABS Shepel Low)",
+            "model_id": "uk_mimic3_m_ailabs_low_shepel",
+            "model_alias_of": "uk_mimic3_m_ailabs_low",
+            "lang_id": "uk",
+            "speaker": "shepel"
+        },
+        {
+            "name": "Українська (Mimic3 M-AILABS Loboda Low)",
+            "model_id": "uk_mimic3_m_ailabs_low_loboda",
+            "model_alias_of": "uk_mimic3_m_ailabs_low",
+            "lang_id": "uk",
+            "speaker": "loboda"
+        },
+        {
+            "name": "Українська (Mimic3 M-AILABS Miskun Low)",
+            "model_id": "uk_mimic3_m_ailabs_low_miskun",
+            "model_alias_of": "uk_mimic3_m_ailabs_low",
+            "lang_id": "uk",
+            "speaker": "miskun"
+        },
+        {
+            "name": "Українська (Mimic3 M-AILABS Sumska Low)",
+            "model_id": "uk_mimic3_m_ailabs_low_sumska",
+            "model_alias_of": "uk_mimic3_m_ailabs_low",
+            "lang_id": "uk",
+            "speaker": "sumska"
+        },
+        {
+            "name": "Українська (Mimic3 M-AILABS Pysariev Low)",
+            "model_id": "uk_mimic3_m_ailabs_low_pysariev",
+            "model_alias_of": "uk_mimic3_m_ailabs_low",
+            "lang_id": "uk",
+            "speaker": "pysariev"
+        },
+        {
+            "name": "Tiếng Việt (Mimic3 1000 Low Female)",
+            "model_id": "vi_mimic3_vn_vais1000_low",
+            "engine": "tts_mimic3",
+            "lang_id": "vi",
+            "checksum": "17f30f6e",
+            "checksum_quick": "8b5aa480",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/vi_VN/vais1000_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/vi_VN/vais1000_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/vi_VN/vais1000_low/phonemes.txt"
+            ],
+            "size": "62808970"
+        },
+        {
+            "name": "Yorùbá (Mimic3 Open Bible Low)",
+            "model_id": "yo_mimic3_openbible_low",
+            "engine": "tts_mimic3",
+            "lang_id": "yo",
+            "checksum": "c4b35146",
+            "checksum_quick": "abcd18f7",
+            "comp": "dir",
+            "urls": [
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/yo/openbible_low/config.json",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/yo/openbible_low/generator.onnx",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/yo/openbible_low/phoneme_map.txt",
+                "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/yo/openbible_low/phonemes.txt"
+            ],
+            "size": "62802884"
         }
     ]
 }
