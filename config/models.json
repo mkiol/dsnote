@@ -8220,6 +8220,30 @@
             "size": "4745551"
         },
         {
+            "name": "Afrikaans (Espeak Robot)",
+            "model_id": "af_espeak_af",
+            "engine": "tts_espeak",
+            "lang_id": "af"
+        },
+        {
+            "name": "ગુજરાતી (Espeak Robot)",
+            "model_id": "gu_espeak_gu",
+            "engine": "tts_espeak",
+            "lang_id": "gu"
+        },
+        {
+            "name": "తెలుగు (Espeak Robot)",
+            "model_id": "te_espeak_te",
+            "engine": "tts_espeak",
+            "lang_id": "te"
+        },
+        {
+            "name": "Setswana (Espeak Robot)",
+            "model_id": "tn_espeak_tn",
+            "engine": "tts_espeak",
+            "lang_id": "tn"
+        },
+        {
             "name": "Esperanto (RHVoice Spomenka Female)",
             "model_id": "eo_rhvoice_spomenka",
             "engine": "tts_rhvoice",
