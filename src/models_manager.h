@@ -166,6 +166,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         qint64 sup_size = 0;
         QString speaker;
         QString trg_lang_id;
+        QString alias_of;
         int score = -1; /* 0-5 */
         QString options;
         bool hidden = false;
@@ -173,7 +174,6 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool exists = false;
         bool available = false;
         bool downloading = false;
-        bool gen_checksum = false;
         double download_progress = 0.0;
         qint64 downloaded_part_data = 0;
     };
@@ -247,6 +247,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     static qint64 total_size(const QString& path);
     void generate_next_checksum();
     void handle_generate_checksum(const checksum_check_t& check);
+    static void print_priv_model(const QString& id, const priv_model_t& model);
 };
 
 #endif  // MODELS_MANAGER_H

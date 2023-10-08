@@ -115,9 +115,10 @@ static cmd_options check_options(const QCoreApplication& app) {
     parser.addOption(action_opt);
 
     QCommandLineOption gen_checksum_opt{
-        QStringLiteral("gen_checksums"),
+        QStringLiteral("gen-checksums"),
         QStringLiteral(
-            "Generate checksums for models with 'gen_checksum' tag.")};
+            "Generates checksums for models without checksum. Useful "
+            "when adding new models to config file manually.")};
     parser.addOption(gen_checksum_opt);
 
     parser.addHelpOption();

@@ -1275,10 +1275,10 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             if (file_name.isEmpty())
                 file_name = file_name_from_id(model_id, engine);
             checksum = obj.value(QLatin1String{"checksum"}).toString();
-            if (engine != model_engine::tts_espeak && checksum.isEmpty()) {
+            /*if (engine != model_engine::tts_espeak && checksum.isEmpty()) {
                 qWarning() << "checksum cannot be empty:" << model_id;
                 continue;
-            }
+            }*/
             checksum_quick =
                 obj.value(QLatin1String{"checksum_quick"}).toString();
             size = obj.value(QLatin1String{"size"}).toString().toLongLong();
@@ -1450,15 +1450,14 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             /*sup_size=*/sup_size,
             /*speaker=*/speaker,
             /*trg_lang_id=*/std::move(trg_lang_id),
+            /*alias_of=*/std::move(model_alias_of),
             /*score=*/score,
             /*options=*/std::move(options),
             /*hidden=*/obj.value(QLatin1String{"hidden"}).toBool(false),
             /*default_for_lang=*/is_default_model_for_lang,
             /*exists=*/exists,
             /*available=*/available,
-            /*downloading=*/false,
-            /*gen_checksum=*/
-            obj.value(QLatin1String{"gen_checksum"}).toBool(false)};
+            /*downloading=*/false};
 
         if (!model.exists && !model.file_name.isEmpty() &&
             dir.exists(model.file_name)) {
@@ -1684,6 +1683,8 @@ void models_manager::generate_next_checksum() {
         return;
     }
 
+    fmt::print("downloading model: {}\n",
+               m_it_for_gen_checksum->first.toStdString());
     download_model(m_it_for_gen_checksum->first);
 }
 
@@ -1698,7 +1699,9 @@ void models_manager::generate_checksums() {
 
     qDebug() << "generating checksums for:";
     std::for_each(m_models.cbegin(), m_models.cend(), [&](const auto& pair) {
-        if (pair.second.gen_checksum) {
+        if (pair.second.engine == model_engine::tts_espeak) return;
+        if (!pair.second.alias_of.isEmpty()) return;
+        if (pair.second.checksum.isEmpty()) {
             qDebug() << pair.first;
             m_models_for_gen_checksum.insert(pair);
         }
@@ -1707,6 +1710,16 @@ void models_manager::generate_checksums() {
     m_it_for_gen_checksum = m_models_for_gen_checksum.begin();
 
     emit generate_next_checksum_request();
+}
+
+void models_manager::print_priv_model(const QString& id,
+                                      const priv_model_t& model) {
+    fmt::print(
+        "\"model_id\": \"{}\",\n\"checksum\": "
+        "\"{}\",\n\"checksum_quick\": \"{}\",\n\"size\": "
+        "\"{}\"\n\n",
+        id.toStdString(), model.checksum.toStdString(),
+        model.checksum_quick.toStdString(), model.size);
 }
 
 void models_manager::handle_generate_checksum(const checksum_check_t& check) {
@@ -1725,14 +1738,7 @@ void models_manager::handle_generate_checksum(const checksum_check_t& check) {
         fmt::print("models checksums:\n\n");
         std::for_each(m_models_for_gen_checksum.cbegin(),
                       m_models_for_gen_checksum.cend(), [&](const auto& pair) {
-                          fmt::print(
-                              "\"model_id\": \"{}\",\n\"checksum\": "
-                              "\"{}\",\n\"checksum_quick\": \"{}\",\n\"size\": "
-                              "\"{}\"\n\n",
-                              pair.first.toStdString(),
-                              pair.second.checksum.toStdString(),
-                              pair.second.checksum_quick.toStdString(),
-                              pair.second.size);
+                          print_priv_model(pair.first, pair.second);
                       });
         m_models_for_gen_checksum.clear();
     } else {
