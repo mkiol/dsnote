@@ -312,7 +312,7 @@
             "id": "lb"
         },
         {
-            "name": "هَرْشٜن هَوْسَ",
+            "name": "Hausa",
             "name_en": "Hausa",
             "id": "ha"
         },
@@ -2794,31 +2794,31 @@
             "lang_id": "gu"
         },
         {
-            "name": "هَرْشٜن هَوْسَ (FasterWhisper Tiny)",
+            "name": "Hausa (FasterWhisper Tiny)",
             "model_id": "ha_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
             "lang_id": "ha"
         },
         {
-            "name": "هَرْشٜن هَوْسَ (FasterWhisper Base)",
+            "name": "Hausa (FasterWhisper Base)",
             "model_id": "ha_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
             "lang_id": "ha"
         },
         {
-            "name": "هَرْشٜن هَوْسَ (FasterWhisper Small)",
+            "name": "Hausa (FasterWhisper Small)",
             "model_id": "ha_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
             "lang_id": "ha"
         },
         {
-            "name": "هَرْشٜن هَوْسَ (FasterWhisper Medium)",
+            "name": "Hausa (FasterWhisper Medium)",
             "model_id": "ha_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
             "lang_id": "ha"
         },
         {
-            "name": "هَرْشٜن هَوْسَ (FasterWhisper Large-v2)",
+            "name": "Hausa (FasterWhisper Large-v2)",
             "model_id": "ha_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
             "lang_id": "ha"
@@ -4846,31 +4846,31 @@
             "lang_id": "gu"
         },
         {
-            "name": "هَرْشٜن هَوْسَ (Whisper Tiny)",
+            "name": "Hausa (Whisper Tiny)",
             "model_id": "ha_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
             "lang_id": "ha"
         },
         {
-            "name": "هَرْشٜن هَوْسَ (Whisper Base)",
+            "name": "Hausa (Whisper Base)",
             "model_id": "ha_whisper_base",
             "model_alias_of": "multilang_whisper_base",
             "lang_id": "ha"
         },
         {
-            "name": "هَرْشٜن هَوْسَ (Whisper Small)",
+            "name": "Hausa (Whisper Small)",
             "model_id": "ha_whisper_small",
             "model_alias_of": "multilang_whisper_small",
             "lang_id": "ha"
         },
         {
-            "name": "هَرْشٜن هَوْسَ (Whisper Medium)",
+            "name": "Hausa (Whisper Medium)",
             "model_id": "ha_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
             "lang_id": "ha"
         },
         {
-            "name": "هَرْشٜن هَوْسَ (Whisper Large)",
+            "name": "Hausa (Whisper Large)",
             "model_id": "ha_whisper_large",
             "model_alias_of": "multilang_whisper_large",
             "lang_id": "ha"
@@ -20070,56 +20070,56 @@
             "hidden": true
         },
         {
-            "name": "Deutsch (Piper Thorsten-Emotion Amused Medium)",
+            "name": "Deutsch (Piper Thorsten-Emotion Amused Medium Male)",
             "model_id": "de_piper_thorsten_emotional_medium_0",
             "model_alias_of": "de_piper_thorsten_emotional_medium",
             "lang_id": "de",
             "speaker": "0"
         },
         {
-            "name": "Deutsch (Piper Thorsten-Emotion Angry Medium)",
+            "name": "Deutsch (Piper Thorsten-Emotion Angry Medium Male)",
             "model_id": "de_piper_thorsten_emotional_medium_1",
             "model_alias_of": "de_piper_thorsten_emotional_medium",
             "lang_id": "de",
             "speaker": "1"
         },
         {
-            "name": "Deutsch (Piper Thorsten-Emotion Disgusted Medium)",
+            "name": "Deutsch (Piper Thorsten-Emotion Disgusted Medium Male)",
             "model_id": "de_piper_thorsten_emotional_medium_2",
             "model_alias_of": "de_piper_thorsten_emotional_medium",
             "lang_id": "de",
             "speaker": "2"
         },
         {
-            "name": "Deutsch (Piper Thorsten-Emotion Drunk Medium)",
+            "name": "Deutsch (Piper Thorsten-Emotion Drunk Medium Male)",
             "model_id": "de_piper_thorsten_emotional_medium_3",
             "model_alias_of": "de_piper_thorsten_emotional_medium",
             "lang_id": "de",
             "speaker": "3"
         },
         {
-            "name": "Deutsch (Piper Thorsten-Emotion Neutral Medium)",
+            "name": "Deutsch (Piper Thorsten-Emotion Neutral Medium Male)",
             "model_id": "de_piper_thorsten_emotional_medium_4",
             "model_alias_of": "de_piper_thorsten_emotional_medium",
             "lang_id": "de",
             "speaker": "4"
         },
         {
-            "name": "Deutsch (Piper Thorsten-Emotion Sleepy Medium)",
+            "name": "Deutsch (Piper Thorsten-Emotion Sleepy Medium Male)",
             "model_id": "de_piper_thorsten_emotional_medium_5",
             "model_alias_of": "de_piper_thorsten_emotional_medium",
             "lang_id": "de",
             "speaker": "5"
         },
         {
-            "name": "Deutsch (Piper Thorsten-Emotion Surprised Medium)",
+            "name": "Deutsch (Piper Thorsten-Emotion Surprised Medium Male)",
             "model_id": "de_piper_thorsten_emotional_medium_6",
             "model_alias_of": "de_piper_thorsten_emotional_medium",
             "lang_id": "de",
             "speaker": "6"
         },
         {
-            "name": "Deutsch (Piper Thorsten-Emotion Whisper Medium)",
+            "name": "Deutsch (Piper Thorsten-Emotion Whisper Medium Male)",
             "model_id": "de_piper_thorsten_emotional_medium_7",
             "model_alias_of": "de_piper_thorsten_emotional_medium",
             "lang_id": "de",
@@ -24409,63 +24409,63 @@
             "hidden": true
         },
         {
-            "name": "Afrikaans (Mimic3 Google NWU 7214 Low)",
+            "name": "Afrikaans (Mimic3 Google NWU 7214 Low Female)",
             "model_id": "af_mimic3_za_google_nwu_low_7214",
             "model_alias_of": "af_mimic3_za_google_nwu_low",
             "lang_id": "af",
             "speaker": "7214"
         },
         {
-            "name": "Afrikaans (Mimic3 Google NWU 8963 Low)",
+            "name": "Afrikaans (Mimic3 Google NWU 8963 Low Female)",
             "model_id": "af_mimic3_za_google_nwu_low_8963",
             "model_alias_of": "af_mimic3_za_google_nwu_low",
             "lang_id": "af",
             "speaker": "8963"
         },
         {
-            "name": "Afrikaans (Mimic3 Google NWU 7130 Low)",
+            "name": "Afrikaans (Mimic3 Google NWU 7130 Low Female)",
             "model_id": "af_mimic3_za_google_nwu_low_7130",
             "model_alias_of": "af_mimic3_za_google_nwu_low",
             "lang_id": "af",
             "speaker": "7130"
         },
         {
-            "name": "Afrikaans (Mimic3 Google NWU 8924 Low)",
+            "name": "Afrikaans (Mimic3 Google NWU 8924 Low Female)",
             "model_id": "af_mimic3_za_google_nwu_low_8924",
             "model_alias_of": "af_mimic3_za_google_nwu_low",
             "lang_id": "af",
             "speaker": "8924"
         },
         {
-            "name": "Afrikaans (Mimic3 Google NWU 8148 Low)",
+            "name": "Afrikaans (Mimic3 Google NWU 8148 Low Female)",
             "model_id": "af_mimic3_za_google_nwu_low_8148",
             "model_alias_of": "af_mimic3_za_google_nwu_low",
             "lang_id": "af",
             "speaker": "8148"
         },
         {
-            "name": "Afrikaans (Mimic3 Google NWU 1919 Low)",
+            "name": "Afrikaans (Mimic3 Google NWU 1919 Low Female)",
             "model_id": "af_mimic3_za_google_nwu_low_1919",
             "model_alias_of": "af_mimic3_za_google_nwu_low",
             "lang_id": "af",
             "speaker": "1919"
         },
         {
-            "name": "Afrikaans (Mimic3 Google NWU 2418 Low)",
+            "name": "Afrikaans (Mimic3 Google NWU 2418 Low Female)",
             "model_id": "af_mimic3_za_google_nwu_low_2418",
             "model_alias_of": "af_mimic3_za_google_nwu_low",
             "lang_id": "af",
             "speaker": "2418"
         },
         {
-            "name": "Afrikaans (Mimic3 Google NWU 6590 Low)",
+            "name": "Afrikaans (Mimic3 Google NWU 6590 Low Female)",
             "model_id": "af_mimic3_za_google_nwu_low_6590",
             "model_alias_of": "af_mimic3_za_google_nwu_low",
             "lang_id": "af",
             "speaker": "6590"
         },
         {
-            "name": "Afrikaans (Mimic3 Google NWU 0184 Low)",
+            "name": "Afrikaans (Mimic3 Google NWU 0184 Low Female)",
             "model_id": "af_mimic3_za_google_nwu_low_0184",
             "model_alias_of": "af_mimic3_za_google_nwu_low",
             "lang_id": "af",
@@ -24675,63 +24675,63 @@
             "hidden": true
         },
         {
-            "name": "Deutsch (Mimic3 Thorsten-Emotion Amused Low)",
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Amused Low Male)",
             "model_id": "de_mimic3_de_thorsten_emotion_low_amused",
             "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
             "lang_id": "de",
             "speaker": "amused"
         },
         {
-            "name": "Deutsch (Mimic3 Thorsten-Emotion Angry Low)",
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Angry Low Male)",
             "model_id": "de_mimic3_de_thorsten_emotion_low_angry",
             "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
             "lang_id": "de",
             "speaker": "angry"
         },
         {
-            "name": "Deutsch (Mimic3 Thorsten-Emotion Disgusted Low)",
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Disgusted Low Male)",
             "model_id": "de_mimic3_de_thorsten_emotion_low_disgusted",
             "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
             "lang_id": "de",
             "speaker": "disgusted"
         },
         {
-            "name": "Deutsch (Mimic3 Thorsten-Emotion Drunk Low)",
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Drunk Low Male)",
             "model_id": "de_mimic3_de_thorsten_emotion_low_drunk",
             "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
             "lang_id": "de",
             "speaker": "drunk"
         },
         {
-            "name": "Deutsch (Mimic3 Thorsten-Emotion Neutral Low)",
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Neutral Low Male)",
             "model_id": "de_mimic3_de_thorsten_emotion_low_neutral",
             "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
             "lang_id": "de",
             "speaker": "neutral"
         },
         {
-            "name": "Deutsch (Mimic3 Thorsten-Emotion Sleepy Low)",
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Sleepy Low Male)",
             "model_id": "de_mimic3_de_thorsten_emotion_low_sleepy",
             "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
             "lang_id": "de",
             "speaker": "sleepy"
         },
         {
-            "name": "Deutsch (Mimic3 Thorsten-Emotion Surprised Low)",
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Surprised Low Male)",
             "model_id": "de_mimic3_de_thorsten_emotion_low_surprised",
             "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
             "lang_id": "de",
             "speaker": "surprised"
         },
         {
-            "name": "Deutsch (Mimic3 Thorsten-Emotion Whisper Low)",
+            "name": "Deutsch (Mimic3 Thorsten-Emotion Whisper Low Male)",
             "model_id": "de_mimic3_de_thorsten_emotion_low_whisper",
             "model_alias_of": "de_mimic3_de_thorsten_emotion_low",
             "lang_id": "de",
             "speaker": "whisper"
         },
         {
-            "name": "Deutsch (Mimic3 Thorsten Low)",
+            "name": "Deutsch (Mimic3 Thorsten Low Male)",
             "model_id": "de_mimic3_de_thorsten_low",
             "engine": "tts_mimic3",
             "lang_id": "de",
@@ -25835,28 +25835,28 @@
             "hidden": true
         },
         {
-            "name": "Español (Mimic3 M-AILABS Tux Low)",
+            "name": "Español (Mimic3 M-AILABS Tux Low Male)",
             "model_id": "es_mimic3_es_m_ailabs_low_tux",
             "model_alias_of": "es_mimic3_es_m_ailabs_low",
             "lang_id": "es",
             "speaker": "tux"
         },
         {
-            "name": "Español (Mimic3 M-AILABS Victor Male Low)",
+            "name": "Español (Mimic3 M-AILABS Victor Low Male)",
             "model_id": "es_mimic3_es_m_ailabs_low_victor_villarraza",
             "model_alias_of": "es_mimic3_es_m_ailabs_low",
             "lang_id": "es",
             "speaker": "victor_villarraza"
         },
         {
-            "name": "Español (Mimic3 M-AILABS Karen Low)",
+            "name": "Español (Mimic3 M-AILABS Karen Low Female)",
             "model_id": "es_mimic3_es_m_ailabs_low_karen_savage",
             "model_alias_of": "es_mimic3_es_m_ailabs_low",
             "lang_id": "es",
             "speaker": "karen_savage"
         },
         {
-            "name": "فارسی (Mimic3 Haaniye Male Low)",
+            "name": "فارسی (Mimic3 Haaniye Low Male)",
             "model_id": "fa_mimic3_haaniye_low",
             "engine": "tts_mimic3",
             "lang_id": "fa",
@@ -25905,35 +25905,35 @@
             "hidden": true
         },
         {
-            "name": "Français (Mimic3 M-AILABS Ezwa Low)",
+            "name": "Français (Mimic3 M-AILABS Ezwa Low Female)",
             "model_id": "fr_mimic3_fr_m_ailabs_low_ezwa",
             "model_alias_of": "fr_mimic3_fr_m_ailabs_low",
             "lang_id": "fr",
             "speaker": "ezwa"
         },
         {
-            "name": "Français (Mimic3 M-AILABS Nadine Female Low)",
+            "name": "Français (Mimic3 M-AILABS Nadine Low Female)",
             "model_id": "fr_mimic3_fr_m_ailabs_low_nadine_eckert_boulet",
             "model_alias_of": "fr_mimic3_fr_m_ailabs_low",
             "lang_id": "fr",
             "speaker": "nadine_eckert_boulet"
         },
         {
-            "name": "Français (Mimic3 M-AILABS Bernard Male Low)",
+            "name": "Français (Mimic3 M-AILABS Bernard Low Male)",
             "model_id": "fr_mimic3_fr_m_ailabs_low_bernard",
             "model_alias_of": "fr_mimic3_fr_m_ailabs_low",
             "lang_id": "fr",
             "speaker": "bernard"
         },
         {
-            "name": "Français (Mimic3 M-AILABS Zeckou Male Low)",
+            "name": "Français (Mimic3 M-AILABS Zeckou Low Male)",
             "model_id": "fr_mimic3_fr_m_ailabs_low_zeckou",
             "model_alias_of": "fr_mimic3_fr_m_ailabs_low",
             "lang_id": "fr",
             "speaker": "zeckou"
         },
         {
-            "name": "Français (Mimic3 M-AILABS Gilles Male Low)",
+            "name": "Français (Mimic3 M-AILABS Gilles Low Male)",
             "model_id": "fr_mimic3_fr_m_ailabs_low_gilles_g_le_blanc",
             "model_alias_of": "fr_mimic3_fr_m_ailabs_low",
             "lang_id": "fr",
@@ -25990,28 +25990,28 @@
             "hidden": true
         },
         {
-            "name": "ગુજરાતી (Mimic3 Indic Dp Low)",
+            "name": "ગુજરાતી (Mimic3 Indic Dp Low Female)",
             "model_id": "gu_mimic3_in_cmu_indic_low_cmu_indic_guj_dp",
             "model_alias_of": "gu_mimic3_in_cmu_indic_low",
             "lang_id": "gu",
             "speaker": "cmu_indic_guj_dp"
         },
         {
-            "name": "ગુજરાતી (Mimic3 Indic Ad Low)",
+            "name": "ગુજરાતી (Mimic3 Indic Ad Low Male)",
             "model_id": "gu_mimic3_in_cmu_indic_low_cmu_indic_guj_ad",
             "model_alias_of": "gu_mimic3_in_cmu_indic_low",
             "lang_id": "gu",
             "speaker": "cmu_indic_guj_ad"
         },
         {
-            "name": "ગુજરાતી (Mimic3 Indic Kt Low)",
+            "name": "ગુજરાતી (Mimic3 Indic Kt Low Female)",
             "model_id": "gu_mimic3_in_cmu_indic_low_cmu_indic_guj_kt",
             "model_alias_of": "gu_mimic3_in_cmu_indic_low",
             "lang_id": "gu",
             "speaker": "cmu_indic_guj_kt"
         },
         {
-            "name": "هَرْشٜن هَوْسَ (Mimic3 Open Bible Low)",
+            "name": "Hausa (Mimic3 Open Bible Low Male)",
             "model_id": "ha_mimic3_ne_openbible_low",
             "engine": "tts_mimic3",
             "lang_id": "ha",
@@ -26640,7 +26640,7 @@
             "speaker": "01932"
         },
         {
-            "name": "한국어 (Mimic3 Kss Low)",
+            "name": "한국어 (Mimic3 Kss Low Female)",
             "model_id": "ko_mimic3_ko_kss_low",
             "engine": "tts_mimic3",
             "lang_id": "ko",
@@ -26984,21 +26984,21 @@
             "hidden": true
         },
         {
-            "name": "తెలుగు (Mimic3 Indic Ss Low)",
+            "name": "తెలుగు (Mimic3 Indic Ss Low Female)",
             "model_id": "te_mimic3_in_cmu_indic_low_ss",
             "model_alias_of": "te_mimic3_in_cmu_indic_low",
             "lang_id": "te",
             "speaker": "ss"
         },
         {
-            "name": "తెలుగు (Mimic3 Indic Sk Low)",
+            "name": "తెలుగు (Mimic3 Indic Sk Low Male)",
             "model_id": "te_mimic3_in_cmu_indic_low_sk",
             "model_alias_of": "te_mimic3_in_cmu_indic_low",
             "lang_id": "te",
             "speaker": "sk"
         },
         {
-            "name": "తెలుగు (Mimic3 Indic Kpn Low)",
+            "name": "తెలుగు (Mimic3 Indic Kpn Low Female)",
             "model_id": "te_mimic3_in_cmu_indic_low_kpn",
             "model_alias_of": "te_mimic3_in_cmu_indic_low",
             "lang_id": "te",
@@ -27223,42 +27223,42 @@
             "hidden": true
         },
         {
-            "name": "Українська (Mimic3 M-AILABS Obruchov Low)",
+            "name": "Українська (Mimic3 M-AILABS Obruchov Low Male)",
             "model_id": "uk_mimic3_m_ailabs_low_obruchov",
             "model_alias_of": "uk_mimic3_m_ailabs_low",
             "lang_id": "uk",
             "speaker": "obruchov"
         },
         {
-            "name": "Українська (Mimic3 M-AILABS Shepel Low)",
+            "name": "Українська (Mimic3 M-AILABS Shepel Low Male)",
             "model_id": "uk_mimic3_m_ailabs_low_shepel",
             "model_alias_of": "uk_mimic3_m_ailabs_low",
             "lang_id": "uk",
             "speaker": "shepel"
         },
         {
-            "name": "Українська (Mimic3 M-AILABS Loboda Low)",
+            "name": "Українська (Mimic3 M-AILABS Loboda Low Male)",
             "model_id": "uk_mimic3_m_ailabs_low_loboda",
             "model_alias_of": "uk_mimic3_m_ailabs_low",
             "lang_id": "uk",
             "speaker": "loboda"
         },
         {
-            "name": "Українська (Mimic3 M-AILABS Miskun Low)",
+            "name": "Українська (Mimic3 M-AILABS Miskun Low Male)",
             "model_id": "uk_mimic3_m_ailabs_low_miskun",
             "model_alias_of": "uk_mimic3_m_ailabs_low",
             "lang_id": "uk",
             "speaker": "miskun"
         },
         {
-            "name": "Українська (Mimic3 M-AILABS Sumska Low)",
+            "name": "Українська (Mimic3 M-AILABS Sumska Low Female)",
             "model_id": "uk_mimic3_m_ailabs_low_sumska",
             "model_alias_of": "uk_mimic3_m_ailabs_low",
             "lang_id": "uk",
             "speaker": "sumska"
         },
         {
-            "name": "Українська (Mimic3 M-AILABS Pysariev Low)",
+            "name": "Українська (Mimic3 M-AILABS Pysariev Low Male)",
             "model_id": "uk_mimic3_m_ailabs_low_pysariev",
             "model_alias_of": "uk_mimic3_m_ailabs_low",
             "lang_id": "uk",
@@ -27280,7 +27280,7 @@
             "size": "62808970"
         },
         {
-            "name": "Yorùbá (Mimic3 Open Bible Low)",
+            "name": "Yorùbá (Mimic3 Open Bible Low Male)",
             "model_id": "yo_mimic3_openbible_low",
             "engine": "tts_mimic3",
             "lang_id": "yo",
