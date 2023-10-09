@@ -470,5 +470,5 @@ float tts_engine::vits_length_scale(unsigned int speech_speed,
                                     float initial_length_scale) {
     return initial_length_scale *
            std::pow<float>(
-               (-0.9f * std::clamp(speech_speed, 1u, 20u) + 19) / 10.0f, 3);
+               (-0.9f * std::clamp(speech_speed, 1u, 20u) + 19) / 10.0f, 2);
 }
