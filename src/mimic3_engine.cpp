@@ -40,6 +40,9 @@ void mimic3_engine::stop() {
     try {
         pe->execute([&]() {
               try {
+                  m_tts->attr("_loaded_voices")["lang/model"]
+                      .attr("_SHARED_MODELS")
+                      .attr("clear")();
                   m_tts.reset();
               } catch (const std::exception& err) {
                   LOGE("py error: " << err.what());
@@ -49,6 +52,8 @@ void mimic3_engine::stop() {
     } catch (const std::exception& err) {
         LOGE("error: " << err.what());
     }
+
+    LOGD("mimic3 stoped");
 }
 
 void mimic3_engine::create_model() {
@@ -80,7 +85,9 @@ void mimic3_engine::create_model() {
                       "Mimic3Settings")("voices_directories"_a = voices_dir,
                                         "no_download"_a = true));
                   m_tts->attr("voice") = "lang/model";
-                  m_tts->attr("speaker") = m_config.speaker;
+
+                  if (!m_config.speaker.empty())
+                      m_tts->attr("speaker") = m_config.speaker;
 
                   m_tts->attr("preload_voice")("lang/model");
 
