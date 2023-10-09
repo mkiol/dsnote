@@ -53,10 +53,15 @@ DialogPage {
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
+        <li>New engine: <i>Mimic 3</i> with voices for the following languages:
+            Afrikaans, Bengali, German, Greek, English, Spanish, Persian, Finnish,
+            French, Gujarati, Hausa, Hungarian, Italian, Javanese, Nepali, Dutch,
+            Polish, Russian, Swedish, Telugu, Tswana, Ukrainian, Yoruba.
+        </li>
         <li>Reading text from the clipboard. Using global keyboard shotcut or
             <i>start-reading-clipboard</i> action you can directly read text which is in the clipboard.</li>
-        <li>New Piper voices: Arabic (Kareem), English (LibriTTS R, Hfc), Hungarian (Imre),
-           Polish (Mc Speech), Czech (Jirka Low).</li>
+        <li>New Piper voices for the following languages: Arabic, English, Hungarian, Polish, Czech, German,
+            Ukrainian, Vietnamese, Serbian, French, Spanish, Nepali.</li>
         <li>More steps in speech speed option. You can set speed from x0.1 to x2.0 values.</li>
         <li>Fix: Coqui Chinese MMS Hakka and Min Nan voices were broken.</li>
         </ul>"
