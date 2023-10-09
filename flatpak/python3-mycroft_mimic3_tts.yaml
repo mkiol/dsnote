@@ -1,11 +1,9 @@
-# Generated with flatpak-pip-generator --yaml --arch-dependent-allow --arch-dependent-force mycroft_mimic3_tts==0.2.4
+# Generated with flatpak-pip-generator --yaml --arch-dependent-allow --arch-dependent-force mycroft_mimic3_tts[all]==0.2.4
 name: python3-mycroft_mimic3_tts
 buildsystem: simple
 build-commands:
   - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-    --prefix=${FLATPAK_DEST} "mycroft_mimic3_tts==0.2.4" --no-build-isolation
-cleanup:
-    - "/bin"
+    --prefix=${FLATPAK_DEST} "mycroft_mimic3_tts[all]==0.2.4" --no-build-isolation
 sources:
   - type: file
     url: https://files.pythonhosted.org/packages/ff/37/b0241795c3a320a3def948cd0d06daf70310e7fea1d8fda312629bc22ea9/Babel-2.13.0-py3-none-any.whl
@@ -23,8 +21,8 @@ sources:
     url: https://files.pythonhosted.org/packages/c5/19/5af6804c4cc0fed83f47bff6e413a98a36618e7d40185cd36e69737f3b0e/aiofiles-23.2.1-py3-none-any.whl
     sha256: 19297512c647d4b27a2cf7c34caa7e405c0d60b5560618a29a9fe027b18b0107
   - type: file
-    url: https://files.pythonhosted.org/packages/0d/f1/5f39e771cd730d347539bb74c6d496737b9d5f0a53bc9fdbf3e170f1ee48/blinker-1.6.2-py3-none-any.whl
-    sha256: c3d739772abb7bc2860abf5f2ec284223d9ad5c76da018234f6f50d6f31ab1f0
+    url: https://files.pythonhosted.org/packages/bf/2b/11bcedb7dee4923253a4a21bae3be854bcc4f06295bd827756352016d97c/blinker-1.6.3-py3-none-any.whl
+    sha256: 296320d6c28b006eb5e32d4712202dbcdcbf5dc482da298c2f44881c43884aaa
   - type: file
     url: https://files.pythonhosted.org/packages/4c/dd/2234eab22353ffc7d94e8d13177aaa050113286e93e7b40eae01fbf7c3d9/certifi-2023.7.22-py3-none-any.whl
     sha256: 92d6037539857d8206b8f6ae472e8b77db8058fec5937a1ef3f54304089edbb9
@@ -68,14 +66,41 @@ sources:
     url: https://files.pythonhosted.org/packages/51/9f/7eff478e38913cc9930527ff40c9ebcb04744dfcd0ddd43bd5a1eb9565b7/gruut-ipa-0.13.0.tar.gz
     sha256: 71776eb99f46e119ab14d3d4e536f54317133607cc2f6bad9711ab51f1bec66e
   - type: file
+    url: https://files.pythonhosted.org/packages/24/93/0f17d7cf7d8f13fe5780ef231c0cb18eaa211d7d2a3845ef177051937df5/gruut_lang_de-2.0.0.tar.gz
+    sha256: e8cffbcda577ee0881d67917190ed204d56b34d36a93f9a02d73f4aa8af38142
+  - type: file
     url: https://files.pythonhosted.org/packages/76/c5/9dcb07bb44c7c66f89bdfb554d433c071ef7fed38d39d164716901db12b1/gruut_lang_en-2.0.0.tar.gz
     sha256: 890ff3b6ddebe8a87ea040683974785c0eafa81fedcb24c4abb2a1e4cd171e52
+  - type: file
+    url: https://files.pythonhosted.org/packages/c2/f8/14cf22799508b0abc85ce2a93366b29610a0f50c8401010ebfb038075065/gruut_lang_es-2.0.0.tar.gz
+    sha256: 0808880fb6d5df5d24936d64be9aa02eca6437ab1251d0486d3920d5b8098f8e
+  - type: file
+    url: https://files.pythonhosted.org/packages/11/72/a2d0dd967f86d7687ab32e1e7ed7bedd51aad926bd140d8109d9b39f44b1/gruut_lang_fa-2.0.0.tar.gz
+    sha256: c58327ecc32b22d1d48fab539c0b0ad5848b6936bd652c33047b280e3baa31d4
+  - type: file
+    url: https://files.pythonhosted.org/packages/79/c0/57aaaff7db6db61d1fac5d2fc0955ba03bea812c8de002233a2a8752d64f/gruut_lang_fr-2.0.2.tar.gz
+    sha256: d2de9fc2f92ede277cb6dfe72afdba1b902d329b3cc1f1c706e66b31f0d436bd
+  - type: file
+    url: https://files.pythonhosted.org/packages/d8/db/503d7547d7e9bcc767abef30f50b509e313690e0e38e77928f66e10f0f11/gruut_lang_it-2.0.0.tar.gz
+    sha256: dbfc9c0c077aabcbaf054417b421c587d7ec1bcba39f8690f18963084c0e84f7
+  - type: file
+    url: https://files.pythonhosted.org/packages/9b/b6/5016cdcf3ee459edd9b89624de8c197083aec5b8438c7b36ee2faa3427a1/gruut_lang_nl-2.0.2.tar.gz
+    sha256: e39a9880c98dc9dfbaa554e9c116e0eb71bfe3b281d32e6123526d3bbb3b7d65
+  - type: file
+    url: https://files.pythonhosted.org/packages/22/f2/5229e659ae42b17ddd1b48db39bc039aeabef0c2655d350582dc2b2e5fa4/gruut_lang_ru-2.0.0.tar.gz
+    sha256: 9bfe5cd89844d95b17741a2786371df87a3c4e732cd516d0fca3ad7cafbf0b0e
+  - type: file
+    url: https://files.pythonhosted.org/packages/ee/b8/34d507c1975d56801c42752de84d995812ee7173d6d30d8c73958f82f961/gruut_lang_sw-2.0.0.tar.gz
+    sha256: 8a5b51446eb12c8c5d6448f17d94e0d735e698fc3935fb8d56b332675fa7032a
   - type: file
     url: https://files.pythonhosted.org/packages/95/04/ff642e65ad6b90db43e668d70ffb6736436c7ce41fcc549f4e9472234127/h11-0.14.0-py3-none-any.whl
     sha256: e3fe4ac4b851c468cc8363d500db52c2ead036020723024a109d37346efaa761
   - type: file
     url: https://files.pythonhosted.org/packages/2a/e5/db6d438da759efbb488c4f3fbdab7764492ff3c3f953132efa6b9f0e9e53/h2-4.1.0-py3-none-any.whl
     sha256: 03a46bcf682256c95b5fd9e9a99c1323584c3eec6440d379b9903d709476bc6d
+  - type: file
+    url: https://files.pythonhosted.org/packages/22/13/5a7074bc11d20dbbb46239349ac3f85f7edc148b4cf68e9b8c2f8263830c/hazm-0.7.0-py3-none-any.whl
+    sha256: cef734a07d9dcc676ab1626806e89a6bb2f9ebac8c5af72916e105e94f5f364f
   - type: file
     url: https://files.pythonhosted.org/packages/d5/34/e8b383f35b77c402d28563d2b8f83159319b509bc5f760b15d60b0abf165/hpack-4.0.0-py3-none-any.whl
     sha256: 84a076fad3dc9a9f8063ccb8041ef100867b1878b25ef0ee63847a5d53818a6c
@@ -97,6 +122,9 @@ sources:
   - type: file
     url: https://files.pythonhosted.org/packages/4f/9a/ab96291470e305504aa4b7a2e0ec132e930da89eb3ca7a82fbe03167c131/jsonlines-1.2.0-py2.py3-none-any.whl
     sha256: 0ebd5b0c3efe0d4b5018b320fb0ee1a7b680ab39f6eb853715859f818d386cc8
+  - type: file
+    url: https://files.pythonhosted.org/packages/bc/0f/1c9b49bb49821b5856a64ea6fac8d96a619b9f291d1f06999ea98a32c89c/libwapiti-0.2.1.tar.gz
+    sha256: 1ee047ada85f7abf076b70aa7d5793b28bb1327274f403d2c6923e27bb01097e
   - type: file
     url: https://files.pythonhosted.org/packages/fc/98/283c7264a851d02a1c32ed66f7e63f283a8a1b84c8ee69f234237c3ddadb/marisa_trie-1.1.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
     sha256: ab8ec133daabb288e832d448fdff2e71756e7ba5ea7ff1b7b7645b010b2c23ac
@@ -129,6 +157,9 @@ sources:
   - type: file
     url: https://files.pythonhosted.org/packages/42/31/d2f89f1ae42718f8c8a9e440ebe38d7d5fe1e0d9eb9178ce779e365b3ab0/networkx-2.8.8-py3-none-any.whl
     sha256: e435dfa75b1d7195c7b8378c3859f0445cd88c6b0375c181ed66823a9ceb7524
+  - type: file
+    url: https://files.pythonhosted.org/packages/50/09/3b1755d528ad9156ee7243d52aa5cd2b809ef053a0f31b53d92853dd653a/nltk-3.3.0.zip
+    sha256: fe0eda251be65843be86d7de9abfbf7161732256f742e623b21243ec47bdb718
   - type: file
     url: https://files.pythonhosted.org/packages/eb/09/b14d798bc02411b1e5a9896d680f8f417cadc53232bbf7ae9d30263dcf45/num2words-0.5.12-py3-none-any.whl
     sha256: 9eeef488658226ab36818c06d7aeb956d19b530fb62030596b6802fb4659f30e
