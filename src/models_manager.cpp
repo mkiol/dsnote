@@ -643,8 +643,6 @@ models_manager::checksum_check_t models_manager::extract_from_archive(
     const QString& checksum, const QString& path_in_archive,
     const QString& out_path_2, const QString& checksum_2,
     const QString& path_in_archive_2) {
-    checksum_check_t check_2;
-
     auto archive_type = [comp] {
         switch (comp) {
             case comp_type::tar:
@@ -656,6 +654,9 @@ models_manager::checksum_check_t models_manager::extract_from_archive(
                 throw std::runtime_error("unsupported comp type");
         }
     }();
+
+    checksum_check_t check_2;
+    check_2.ok = true;
 
     if (!path_in_archive_2.isEmpty() && !out_path_2.isEmpty()) {
         comp_tools::archive_decode(
@@ -1059,10 +1060,16 @@ QString models_manager::download_filename(QString filename, comp_type comp,
             filename += QStringLiteral(".zip");
             break;
         case comp_type::dir:
-        case comp_type::dirgz:
-            if (auto f = url.fileName(); !f.isEmpty())
+        case comp_type::dirgz: {
+            QUrlQuery q{url};
+            if (q.hasQueryItem(QStringLiteral("file"))) {
+                filename = QDir{filename}.absoluteFilePath(
+                    q.queryItemValue(QStringLiteral("file")));
+            } else if (auto f = url.fileName(); !f.isEmpty()) {
                 filename = QDir{filename}.absoluteFilePath(f);
+            }
             break;
+        }
         case comp_type::none:
             break;
     }
