@@ -1,5 +1,7 @@
 # Generated with flatpak-pip-generator --yaml --arch-dependent-allow --arch-dependent-force mycroft_mimic3_tts[all]==0.2.4
 name: python3-mycroft_mimic3_tts
+only-arches:
+  - x86_64
 buildsystem: simple
 build-commands:
   - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
