@@ -332,7 +332,7 @@
             "id": "tn"
         },
         {
-            "name": "עִבְֿרִיתּ",
+            "name": "עברית",
             "name_en": "Hebrew",
             "id": "he"
         }
@@ -2769,6 +2769,36 @@
             "lang_id": "af"
         },
         {
+            "name": "עברית (FasterWhisper Tiny)",
+            "model_id": "he_fasterwhisper_tiny",
+            "model_alias_of": "multilang_fasterwhisper_tiny",
+            "lang_id": "he"
+        },
+        {
+            "name": "עברית (FasterWhisper Base)",
+            "model_id": "he_fasterwhisper_base",
+            "model_alias_of": "multilang_fasterwhisper_base",
+            "lang_id": "he"
+        },
+        {
+            "name": "עברית (FasterWhisper Small)",
+            "model_id": "he_fasterwhisper_small",
+            "model_alias_of": "multilang_fasterwhisper_small",
+            "lang_id": "he"
+        },
+        {
+            "name": "עברית (FasterWhisper Medium)",
+            "model_id": "he_fasterwhisper_medium",
+            "model_alias_of": "multilang_fasterwhisper_medium",
+            "lang_id": "he"
+        },
+        {
+            "name": "עברית (FasterWhisper Large-v2)",
+            "model_id": "he_fasterwhisper_large2",
+            "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "he"
+        },
+        {
             "name": "ગુજરાતી (FasterWhisper Tiny)",
             "model_id": "gu_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -4819,6 +4849,36 @@
             "model_id": "af_whisper_large",
             "model_alias_of": "multilang_whisper_large",
             "lang_id": "af"
+        },
+        {
+            "name": "עברית (Whisper Tiny)",
+            "model_id": "he_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "he"
+        },
+        {
+            "name": "עברית (Whisper Base)",
+            "model_id": "he_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "he"
+        },
+        {
+            "name": "עברית (Whisper Small)",
+            "model_id": "he_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "he"
+        },
+        {
+            "name": "עברית (Whisper Medium)",
+            "model_id": "he_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "he"
+        },
+        {
+            "name": "עברית (Whisper Large)",
+            "model_id": "he_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "he"
         },
         {
             "name": "ગુજરાતી (Whisper Tiny)",
@@ -22813,7 +22873,7 @@
             "size": "134875189"
         },
         {
-            "name": "עִבְֿרִיתּ (Coqui Robo-Shaul Male)",
+            "name": "עברית (Coqui Robo-Shaul Male)",
             "model_id": "he_coqui_roboshaul",
             "engine": "tts_coqui",
             "lang_id": "he",
