@@ -330,6 +330,11 @@
             "name": "Setswana",
             "name_en": "Tswana",
             "id": "tn"
+        },
+        {
+            "name": "עִבְֿרִיתּ",
+            "name_en": "Hebrew",
+            "id": "he"
         }
     ],
     "models": [
@@ -22806,6 +22811,29 @@
             ],
             "options": "n",
             "size": "134875189"
+        },
+        {
+            "name": "עִבְֿרִיתּ (Coqui Robo-Shaul Male)",
+            "model_id": "he_coqui_roboshaul",
+            "engine": "tts_coqui",
+            "lang_id": "he",
+            "checksum": "db2e0561",
+            "checksum_quick": "96981f57",
+            "comp": "dir",
+            "urls": [
+                "https://drive.usercontent.google.com/download?id=1dExa0AZqmyjz8rSZz1noyQY9aF7dR8ew&export=download&confirm=t&file=model.pth",
+                "https://drive.usercontent.google.com/download?id=1eK1XR_ZwuUy4yWh80nui-q5PBifJsYfy&export=download&confirm=t&file=config.json"
+            ],
+            "size": "341794923",
+            "vocoder_file_name": "he_coqui_roboshaul_vocoder",
+            "vocoder_checksum": "333ec442",
+            "vocoder_checksum_quick": "4ccef490",
+            "vocoder_comp": "dir",
+            "vocoder_urls": [
+                "https://drive.usercontent.google.com/download?id=1XdmRRHjZ_eZOFKoAQgQ8wivrLDJnNDkh&export=download&confirm=t&file=model.pth",
+                "https://drive.usercontent.google.com/download?id=1An6cTCYkxXWhagIJe3NGkoP8n2CQWQ-3&export=download&confirm=t&file=config.json"
+            ],
+            "vocoder_size": "860397830"
         },
         {
             "name": "አማርኛ (Coqui MMS)",
