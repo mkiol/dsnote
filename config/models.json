@@ -22269,10 +22269,58 @@
             "size": "4745551"
         },
         {
+            "name": "Afrikaans (Espeak MBROLA Male)",
+            "model_id": "af_espeak_mb_af1",
+            "engine": "tts_espeak",
+            "lang_id": "af",
+            "speaker": "mb-af1",
+            "checksum": "afb3f5d0",
+            "checksum_quick": "924de70",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/af1/af1"
+            ],
+            "size": "8057988"
+        },
+        {
             "name": "Afrikaans (Espeak Robot)",
             "model_id": "af_espeak_af",
             "engine": "tts_espeak",
             "lang_id": "af"
+        },
+        {
+            "name": "עברית (Espeak MBROLA Male)",
+            "model_id": "he_espeak_mb_hb1",
+            "engine": "tts_espeak",
+            "lang_id": "he",
+            "speaker": "mb-hb1",
+            "checksum": "ab69c8e7",
+            "checksum_quick": "a0035dfa",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/hb1/hb1"
+            ],
+            "size": "4489570",
+            "hidden": true
+        },
+        {
+            "name": "עברית (Espeak MBROLA Female)",
+            "model_id": "he_espeak_mb_hb2",
+            "engine": "tts_espeak",
+            "lang_id": "he",
+            "speaker": "mb-hb2",
+            "checksum": "d020805b",
+            "checksum_quick": "c5997824",
+            "urls": [
+                "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/hb2/hb2"
+            ],
+            "size": "6823814",
+            "hidden": true
+        },
+        {
+            "name": "עברית (Espeak Robot)",
+            "model_id": "he_espeak_he",
+            "engine": "tts_espeak",
+            "lang_id": "he",
+            "hidden": true
         },
         {
             "name": "ગુજરાતી (Espeak Robot)",
@@ -22893,7 +22941,8 @@
                 "https://drive.usercontent.google.com/download?id=1XdmRRHjZ_eZOFKoAQgQ8wivrLDJnNDkh&export=download&confirm=t&file=model.pth",
                 "https://drive.usercontent.google.com/download?id=1An6cTCYkxXWhagIJe3NGkoP8n2CQWQ-3&export=download&confirm=t&file=config.json"
             ],
-            "vocoder_size": "860397830"
+            "vocoder_size": "860397830",
+            "hidden": true
         },
         {
             "name": "አማርኛ (Coqui MMS)",
