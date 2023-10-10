@@ -76,7 +76,7 @@ if(arch_x8664)
             -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
             -DWHISPER_CUBLAS=ON
             -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
-            -DCMAKE_CUDA_ARCHITECTURES=60\\\\\\\\\\\\;61\\\\\\\\\\\\;62\\\\\\\\\\\\;70\\\\\\\\\\\\;72\\\\\\\\\\\\;75\\\\\\\\\\\\;80\\\\\\\\\\\\;86\\\\\\\\\\\\;87\\\\\\\\\\\\;89\\\\\\\\\\\\;90
+            -DCMAKE_CUDA_ARCHITECTURES=50\\\\\\\\\\\\;52\\\\\\\\\\\\;53\\\\\\\\\\\\;60\\\\\\\\\\\\;61\\\\\\\\\\\\;62\\\\\\\\\\\\;70\\\\\\\\\\\\;72\\\\\\\\\\\\;75\\\\\\\\\\\\;80\\\\\\\\\\\\;86\\\\\\\\\\\\;87\\\\\\\\\\\\;89\\\\\\\\\\\\;90
         INSTALL_COMMAND cp libwhisper.so ${external_lib_dir}/libwhisper-cublas.so
         BUILD_ALWAYS False
     )
