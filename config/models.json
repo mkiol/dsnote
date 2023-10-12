@@ -23084,6 +23084,7 @@
             "checksum": "db2e0561",
             "checksum_quick": "96981f57",
             "comp": "dir",
+            "info": "source of model: https://github.com/Sharonio/roboshaul",
             "urls": [
                 "https://drive.usercontent.google.com/download?id=1dExa0AZqmyjz8rSZz1noyQY9aF7dR8ew&export=download&confirm=t&file=model.pth",
                 "https://drive.usercontent.google.com/download?id=1eK1XR_ZwuUy4yWh80nui-q5PBifJsYfy&export=download&confirm=t&file=config.json"
