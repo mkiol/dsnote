@@ -908,6 +908,17 @@ void settings::set_actions_api_enabled(bool value) {
     }
 }
 
+bool settings::diacritizer_enabled() const {
+    return value(QStringLiteral("diacritizer_enabled"), true).toBool();
+}
+
+void settings::set_diacritizer_enabled(bool value) {
+    if (value != diacritizer_enabled()) {
+        setValue(QStringLiteral("diacritizer_enabled"), value);
+        emit diacritizer_enabled_changed();
+    }
+}
+
 QString settings::hotkey_start_listening() const {
     return value(QStringLiteral("hotkey_start_listening"),
                  QStringLiteral("Ctrl+Alt+Shift+L"))

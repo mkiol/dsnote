@@ -418,6 +418,19 @@ DialogPage {
                     }
                 }
             }
+
+            CheckBox {
+                checked: _settings.diacritizer_enabled
+                text: qsTr("Restore diacritics before speech synthesis")
+                onCheckedChanged: {
+                    _settings.diacritizer_enabled = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Restore diacritical marks in the text before speech synthesis.") + " " +
+                              qsTr("It works only for Arabic and Hebrew languages.")
+            }
         }
 
         ColumnLayout {

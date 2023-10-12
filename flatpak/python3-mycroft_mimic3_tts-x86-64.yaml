@@ -6,6 +6,8 @@ buildsystem: simple
 build-commands:
   - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
     --prefix=${FLATPAK_DEST} "mycroft_mimic3_tts[all]==0.2.4" --no-build-isolation
+cleanup:
+  - "/bin"
 sources:
   - type: file
     url: https://files.pythonhosted.org/packages/ff/37/b0241795c3a320a3def948cd0d06daf70310e7fea1d8fda312629bc22ea9/Babel-2.13.0-py3-none-any.whl

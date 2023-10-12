@@ -350,12 +350,17 @@
                 "https://github.com/ccoreilly/deepspeech-catala/releases/download/0.14.0/output_graph.tflite"
             ],
             "size": "47356808",
-            "scorer_checksum": "b0c380f1",
-            "scorer_checksum_quick": "79912e2d",
-            "scorer_urls": [
-                "https://github.com/ccoreilly/deepspeech-catala/releases/download/0.14.0/kenlm-aina-3-p10.scorer"
-            ],
-            "scorer_size": "304365616"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "b0c380f1",
+                    "checksum_quick": "79912e2d",
+                    "size": "304365616",
+                    "urls": [
+                        "https://github.com/ccoreilly/deepspeech-catala/releases/download/0.14.0/kenlm-aina-3-p10.scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "Čeština (DeepSpeech Comodoro)",
@@ -369,12 +374,17 @@
                 "https://github.com/comodoro/deepspeech-cs/releases/download/2022-05-31/stt-comodoro-czech-2022-05-31_quantized.tflite"
             ],
             "size": "47360928",
-            "scorer_checksum": "f89142b6",
-            "scorer_checksum_quick": "7f93bbf7",
-            "scorer_urls": [
-                "https://github.com/comodoro/deepspeech-cs/releases/download/2022-05-31/czech-large-vocab.scorer"
-            ],
-            "scorer_size": "484210096"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "f89142b6",
+                    "checksum_quick": "7f93bbf7",
+                    "size": "484210096",
+                    "urls": [
+                        "https://github.com/comodoro/deepspeech-cs/releases/download/2022-05-31/czech-large-vocab.scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "English (DeepSpeech Mozilla)",
@@ -387,12 +397,17 @@
                 "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.tflite"
             ],
             "size": "47331784",
-            "scorer_checksum": "969d9b57",
-            "scorer_checksum_quick": "8faf1a6a",
-            "scorer_urls": [
-                "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer"
-            ],
-            "scorer_size": "953363776"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "969d9b57",
+                    "checksum_quick": "8faf1a6a",
+                    "size": "953363776",
+                    "urls": [
+                        "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "English (Coqui Huge)",
@@ -405,12 +420,17 @@
                 "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv1.0.0-huge-vocab/model.tflite"
             ],
             "size": "47332120",
-            "scorer_checksum": "19314759",
-            "scorer_checksum_quick": "1be094b6",
-            "scorer_urls": [
-                "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv1.0.0-huge-vocab/huge-vocabulary.scorer"
-            ],
-            "scorer_size": "978407904"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "19314759",
+                    "checksum_quick": "1be094b6",
+                    "size": "978407904",
+                    "urls": [
+                        "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv1.0.0-huge-vocab/huge-vocabulary.scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "English (Coqui Large)",
@@ -425,12 +445,17 @@
                 "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv1.0.0-large-vocab/model.tflite"
             ],
             "size": "47332120",
-            "scorer_checksum": "74b0d450",
-            "scorer_checksum_quick": "4270aac7",
-            "scorer_urls": [
-                "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv1.0.0-large-vocab/large_vocabulary.scorer"
-            ],
-            "scorer_size": "132644544"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "74b0d450",
+                    "checksum_quick": "4270aac7",
+                    "size": "132644544",
+                    "urls": [
+                        "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv1.0.0-large-vocab/large_vocabulary.scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "Deutsch (DeepSpeech Jaco)",
@@ -444,21 +469,26 @@
                 "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/output_graph.tflite.gz"
             ],
             "size": "20296313",
-            "scorer_checksum": "66f887a9",
-            "scorer_checksum_quick": "e402d9c4",
-            "scorer_comp": "gz",
-            "scorer_urls": [
-                "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00",
-                "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-01",
-                "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-02",
-                "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-03",
-                "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-04",
-                "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-05",
-                "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-06",
-                "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-07",
-                "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-08"
-            ],
-            "scorer_size": "229904847"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "66f887a9",
+                    "checksum_quick": "e402d9c4",
+                    "comp": "gz",
+                    "size": "229904847",
+                    "urls": [
+                        "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00",
+                        "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-01",
+                        "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-02",
+                        "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-03",
+                        "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-04",
+                        "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-05",
+                        "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-06",
+                        "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-07",
+                        "https://github.com/rhasspy/de_deepspeech-jaco/raw/master/model/base.scorer.gz.part-08"
+                    ]
+                }
+            ]
         },
         {
             "name": "Deutsch (DeepSpeech AA)",
@@ -471,12 +501,17 @@
                 "https://github.com/coqui-ai/STT-models/releases/download/german/AASHISHAG/v0.9.0/model.tflite"
             ],
             "size": "47338296",
-            "scorer_checksum": "7819e04d",
-            "scorer_checksum_quick": "787a9327",
-            "scorer_urls": [
-                "https://github.com/coqui-ai/STT-models/releases/download/german/AASHISHAG/v0.9.0/de-aashishag-1-prune-kenlm.scorer"
-            ],
-            "scorer_size": "564845728"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "7819e04d",
+                    "checksum_quick": "787a9327",
+                    "size": "564845728",
+                    "urls": [
+                        "https://github.com/coqui-ai/STT-models/releases/download/german/AASHISHAG/v0.9.0/de-aashishag-1-prune-kenlm.scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "Deutsch (DeepSpeech Med)",
@@ -491,13 +526,18 @@
                 "https://github.com/coqui-ai/STT-models/releases/download/german/AASHISHAG/v0.9.0/model.tflite"
             ],
             "size": "47338296",
-            "scorer_checksum": "64477fc3",
-            "scorer_checksum_quick": "fe42c620",
-            "scorer_comp": "xz",
-            "scorer_urls": [
-                "https://github.com/mkiol/dsnote/releases/download/v1.7.0/de-med.scorer.xz"
-            ],
-            "scorer_size": "190963304"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "64477fc3",
+                    "checksum_quick": "fe42c620",
+                    "comp": "xz",
+                    "size": "190963304",
+                    "urls": [
+                        "https://github.com/mkiol/dsnote/releases/download/v1.7.0/de-med.scorer.xz"
+                    ]
+                }
+            ]
         },
         {
             "name": "Español (DeepSpeech Jaco)",
@@ -511,22 +551,27 @@
                 "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/output_graph.tflite.gz"
             ],
             "size": "20430228",
-            "scorer_checksum": "4497fc72",
-            "scorer_checksum_quick": "c7a000bb",
-            "scorer_comp": "gz",
-            "scorer_urls": [
-                "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00",
-                "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-01",
-                "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-02",
-                "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-03",
-                "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-04",
-                "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-05",
-                "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-06",
-                "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-07",
-                "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-08",
-                "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-09"
-            ],
-            "scorer_size": "247688532"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "4497fc72",
+                    "checksum_quick": "c7a000bb",
+                    "comp": "gz",
+                    "size": "247688532",
+                    "urls": [
+                        "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00",
+                        "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-01",
+                        "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-02",
+                        "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-03",
+                        "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-04",
+                        "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-05",
+                        "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-06",
+                        "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-07",
+                        "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-08",
+                        "https://github.com/rhasspy/es_deepspeech-jaco/raw/master/model/base.scorer.gz.part-09"
+                    ]
+                }
+            ]
         },
         {
             "name": "Français (DeepSpeech Jaco)",
@@ -540,21 +585,26 @@
                 "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/output_graph.tflite.gz"
             ],
             "size": "20519594",
-            "scorer_checksum": "68afdb05",
-            "scorer_checksum_quick": "99850ac8",
-            "scorer_comp": "gz",
-            "scorer_urls": [
-                "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00",
-                "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-01",
-                "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-02",
-                "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-03",
-                "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-04",
-                "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-05",
-                "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-06",
-                "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-07",
-                "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-08"
-            ],
-            "scorer_size": "225945743"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "68afdb05",
+                    "checksum_quick": "99850ac8",
+                    "comp": "gz",
+                    "size": "225945743",
+                    "urls": [
+                        "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-00",
+                        "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-01",
+                        "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-02",
+                        "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-03",
+                        "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-04",
+                        "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-05",
+                        "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-06",
+                        "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-07",
+                        "https://github.com/rhasspy/fr_deepspeech-jaco/raw/master/model/base.scorer.gz.part-08"
+                    ]
+                }
+            ]
         },
         {
             "name": "Français (DeepSpeech Common Voice)",
@@ -568,13 +618,18 @@
                 "https://github.com/wasertech/commonvoice-fr/releases/download/v0.9.0-fr-0.1/model_tflite_fr.tar.xz?file=output_graph.tflite"
             ],
             "size": "622173540",
-            "scorer_checksum": "5a12ace5",
-            "scorer_checksum_quick": "241ba42b",
-            "scorer_comp": "tarxz",
-            "scorer_urls": [
-                "https://github.com/wasertech/commonvoice-fr/releases/download/v0.9.0-fr-0.1/model_tflite_fr.tar.xz?file=kenlm.scorer"
-            ],
-            "scorer_size": "622173540"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "5a12ace5",
+                    "checksum_quick": "241ba42b",
+                    "comp": "tarxz",
+                    "size": "622173540",
+                    "urls": [
+                        "https://github.com/wasertech/commonvoice-fr/releases/download/v0.9.0-fr-0.1/model_tflite_fr.tar.xz?file=kenlm.scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "فارسی (DeepSpeech)",
@@ -587,12 +642,17 @@
                 "https://github.com/Oct4Pie/persian-stt/releases/download/v0.1.0/persian_stt.tflite"
             ],
             "size": "47455328",
-            "scorer_checksum": "66c6e5d3",
-            "scorer_checksum_quick": "1734913b",
-            "scorer_urls": [
-                "https://github.com/Oct4Pie/persian-stt/releases/download/v0.1.0/kenlm-persian.scorer"
-            ],
-            "scorer_size": "1753625792"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "66c6e5d3",
+                    "checksum_quick": "1734913b",
+                    "size": "1753625792",
+                    "urls": [
+                        "https://github.com/Oct4Pie/persian-stt/releases/download/v0.1.0/kenlm-persian.scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "Italiano (DeepSpeech Jaco)",
@@ -606,13 +666,18 @@
                 "https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/output_graph.tflite.gz"
             ],
             "size": "20542809",
-            "scorer_checksum": "6ef01083",
-            "scorer_checksum_quick": "1f5fd790",
-            "scorer_comp": "gz",
-            "scorer_urls": [
-                "https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/base.scorer.gz"
-            ],
-            "scorer_size": "5350776"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "6ef01083",
+                    "checksum_quick": "1f5fd790",
+                    "comp": "gz",
+                    "size": "5350776",
+                    "urls": [
+                        "https://github.com/rhasspy/it_deepspeech-jaco/raw/master/model/base.scorer.gz"
+                    ]
+                }
+            ]
         },
         {
             "name": "Italiano (DeepSpeech Mozilla Italia)",
@@ -627,13 +692,18 @@
                 "https://github.com/MozillaItalia/DeepSpeech-Italian-Model/releases/download/2020.08.07/model_tflite_it.tar.xz?file=output_graph.tflite"
             ],
             "size": "172342504",
-            "scorer_checksum": "1c806059",
-            "scorer_checksum_quick": "23dc903",
-            "scorer_comp": "tarxz",
-            "scorer_urls": [
-                "https://github.com/MozillaItalia/DeepSpeech-Italian-Model/releases/download/2020.08.07/model_tflite_it.tar.xz?file=scorer"
-            ],
-            "scorer_size": "172342504"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "1c806059",
+                    "checksum_quick": "23dc903",
+                    "comp": "tarxz",
+                    "size": "172342504",
+                    "urls": [
+                        "https://github.com/MozillaItalia/DeepSpeech-Italian-Model/releases/download/2020.08.07/model_tflite_it.tar.xz?file=scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "Polski (DeepSpeech mkiol)",
@@ -649,13 +719,18 @@
                 "https://github.com/rhasspy/pl_deepspeech-jaco/raw/master/model/output_graph.tflite.gz"
             ],
             "size": "20752162",
-            "scorer_checksum": "fcab9943",
-            "scorer_checksum_quick": "db235d9d",
-            "scorer_comp": "xz",
-            "scorer_urls": [
-                "https://github.com/mkiol/dsnote/releases/download/v1.8.0/pl_mkiol.scorer.xz"
-            ],
-            "scorer_size": "493554424"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "fcab9943",
+                    "checksum_quick": "db235d9d",
+                    "comp": "xz",
+                    "size": "493554424",
+                    "urls": [
+                        "https://github.com/mkiol/dsnote/releases/download/v1.8.0/pl_mkiol.scorer.xz"
+                    ]
+                }
+            ]
         },
         {
             "name": "Русский (DeepSpeech Joe Meyer)",
@@ -669,12 +744,17 @@
                 "https://github.com/coqui-ai/STT-models/releases/download/russian/jemeyer/v0.1.0/model.tflite"
             ],
             "size": "47344496",
-            "scorer_checksum": "e5e298a0",
-            "scorer_checksum_quick": "358d6565",
-            "scorer_urls": [
-                "https://github.com/coqui-ai/STT-models/releases/download/russian/jemeyer/v0.1.0/wiki-ru-6gram.scorer"
-            ],
-            "scorer_size": "719764672"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "e5e298a0",
+                    "checksum_quick": "358d6565",
+                    "size": "719764672",
+                    "urls": [
+                        "https://github.com/coqui-ai/STT-models/releases/download/russian/jemeyer/v0.1.0/wiki-ru-6gram.scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "Українська (DeepSpeech Robinhad)",
@@ -688,12 +768,17 @@
                 "https://github.com/robinhad/voice-recognition-ua/releases/download/v0.4/uk.tflite"
             ],
             "size": "47346544",
-            "scorer_checksum": "33ad40f3",
-            "scorer_checksum_quick": "327a5f77",
-            "scorer_urls": [
-                "https://github.com/robinhad/voice-recognition-ua/releases/download/v0.4/kenlm.scorer"
-            ],
-            "scorer_size": "420827024"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "33ad40f3",
+                    "checksum_quick": "327a5f77",
+                    "size": "420827024",
+                    "urls": [
+                        "https://github.com/robinhad/voice-recognition-ua/releases/download/v0.4/kenlm.scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "中文 简体 (DeepSpeech Mozilla)",
@@ -707,12 +792,17 @@
                 "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.tflite"
             ],
             "size": "47798728",
-            "scorer_checksum": "f101bc46",
-            "scorer_checksum_quick": "cce01d3c",
-            "scorer_urls": [
-                "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer"
-            ],
-            "scorer_size": "67141744"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "f101bc46",
+                    "checksum_quick": "cce01d3c",
+                    "size": "67141744",
+                    "urls": [
+                        "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "Nederlands (DeepSpeech Acabunoc)",
@@ -725,11 +815,16 @@
                 "https://github.com/coqui-ai/STT-models/releases/download/dutch%2Facabunoc%2Fv0.0.1/model.tflite"
             ],
             "size": "225512",
-            "scorer_checksum": "e0330cd0",
-            "scorer_urls": [
-                "https://github.com/coqui-ai/STT-models/releases/download/dutch%2Facabunoc%2Fv0.0.1/nl-acabunoc-1-prune-kenlm.scorer"
-            ],
-            "scorer_size": "323345856"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "e0330cd0",
+                    "size": "323345856",
+                    "urls": [
+                        "https://github.com/coqui-ai/STT-models/releases/download/dutch%2Facabunoc%2Fv0.0.1/nl-acabunoc-1-prune-kenlm.scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "Kiswahili (Coqui)",
@@ -743,12 +838,17 @@
                 "https://github.com/coqui-ai/STT-models/releases/download/swahili%2Fcoqui%2Fv8.0/model.tflite"
             ],
             "size": "47332120",
-            "scorer_checksum": "1118586",
-            "scorer_checksum_quick": "5f008c46",
-            "scorer_urls": [
-                "https://github.com/coqui-ai/STT-models/releases/download/swahili%2Fcoqui%2Fv8.0/large-vocabulary.scorer"
-            ],
-            "scorer_size": "336411664"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "1118586",
+                    "checksum_quick": "5f008c46",
+                    "size": "336411664",
+                    "urls": [
+                        "https://github.com/coqui-ai/STT-models/releases/download/swahili%2Fcoqui%2Fv8.0/large-vocabulary.scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "Yorùbá (DeepSpeech ITML)",
@@ -845,11 +945,16 @@
                 "https://github.com/coqui-ai/STT-models/releases/download/portuguese%2Fitml%2Fv0.1.1/model.tflite"
             ],
             "size": "47360928",
-            "scorer_checksum": "47a7be4",
-            "scorer_urls": [
-                "https://github.com/coqui-ai/STT-models/releases/download/portuguese%2Fitml%2Fv0.1.1/pt-itml-0-prune-kenlm.scorer"
-            ],
-            "scorer_size": "242241040"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "47a7be4",
+                    "size": "242241040",
+                    "urls": [
+                        "https://github.com/coqui-ai/STT-models/releases/download/portuguese%2Fitml%2Fv0.1.1/pt-itml-0-prune-kenlm.scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "Latviešu (DeepSpeech ITML)",
@@ -874,12 +979,17 @@
                 "https://huggingface.co/RaivisDejus/latvian-deepspeech/resolve/main/output_graph.tflite"
             ],
             "size": "47344464",
-            "scorer_checksum": "dbea726",
-            "scorer_checksum_quick": "f0bf0f87",
-            "scorer_urls": [
-                "https://huggingface.co/RaivisDejus/latvian-deepspeech/resolve/main/kenlm-lv.scorer"
-            ],
-            "scorer_size": "134796416"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "dbea726",
+                    "checksum_quick": "f0bf0f87",
+                    "size": "134796416",
+                    "urls": [
+                        "https://huggingface.co/RaivisDejus/latvian-deepspeech/resolve/main/kenlm-lv.scorer"
+                    ]
+                }
+            ]
         },
         {
             "name": "Bahasa Indonesia (DeepSpeech ITML)",
@@ -941,14 +1051,19 @@
                 "https://github.com/coqui-ai/STT-models/releases/download/finnish%2Fitml%2Fv0.1.1/model.tflite"
             ],
             "size": "47332112",
-            "scorer_checksum": "3541e721",
-            "scorer_checksum_quick": "343c35b2",
-            "scorer_file_name": "fi_mkiol.scorer",
-            "scorer_comp": "xz",
-            "scorer_urls": [
-                "https://github.com/mkiol/dsnote/releases/download/v1.8.0/fi_mkiol.scorer.xz"
-            ],
-            "scorer_size": "51100092"
+            "sups": [
+                {
+                    "role": "scorer",
+                    "checksum": "3541e721",
+                    "checksum_quick": "343c35b2",
+                    "file_name": "fi_mkiol.scorer",
+                    "comp": "xz",
+                    "size": "51100092",
+                    "urls": [
+                        "https://github.com/mkiol/dsnote/releases/download/v1.8.0/fi_mkiol.scorer.xz"
+                    ]
+                }
+            ]
         },
         {
             "name": "Eesti (DeepSpeech ITML)",
@@ -19921,7 +20036,20 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/ar/ar_JO/kareem/medium/ar_JO-kareem-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/ar/ar_JO/kareem/medium/ar_JO-kareem-medium.onnx.json"
             ],
-            "size": "63214510"
+            "options": "d",
+            "size": "63214510",
+            "sups": [
+                {
+                    "role": "diacritizer",
+                    "file_name": "ar_tashkeel_diacritizer.ort",
+                    "checksum": "32ad5edd",
+                    "checksum_quick": "eb5f7f7d",
+                    "size": "10261536",
+                    "urls": [
+                        "https://github.com/rhasspy/piper-phonemize/raw/8e5aa981d9628533e612652dccb93d26c66c5b21/etc/libtashkeel_model.ort"
+                    ]
+                }
+            ]
         },
         {
             "name": "Català (Piper Upc Ona Low Female)",
@@ -21087,22 +21215,22 @@
         },
         {
             "name": "Українська (Piper Lada Medium Female)",
-            "model_id": "uk_piper_ukrainiantts_medium",
-            "model_alias_of": "uk_piper_ukrainiantts_medium_0",
+            "model_id": "uk_piper_ukrainiantts_medium_0",
+            "model_alias_of": "uk_piper_ukrainiantts_medium",
             "lang_id": "uk",
             "speaker": "0"
         },
         {
             "name": "Українська (Piper Mykyta Medium Male)",
-            "model_id": "uk_piper_ukrainiantts_medium",
-            "model_alias_of": "uk_piper_ukrainiantts_medium_1",
+            "model_id": "uk_piper_ukrainiantts_medium_1",
+            "model_alias_of": "uk_piper_ukrainiantts_medium",
             "lang_id": "uk",
             "speaker": "1"
         },
         {
             "name": "Українська (Piper Tetiana Medium Female)",
-            "model_id": "uk_piper_ukrainiantts_medium",
-            "model_alias_of": "uk_piper_ukrainiantts_medium_2",
+            "model_id": "uk_piper_ukrainiantts_medium_2",
+            "model_alias_of": "uk_piper_ukrainiantts_medium",
             "lang_id": "uk",
             "speaker": "2"
         },
@@ -21702,7 +21830,20 @@
             "name": "عربي (Espeak Robot)",
             "model_id": "ar_espeak_ar",
             "engine": "tts_espeak",
-            "lang_id": "ar"
+            "lang_id": "ar",
+            "options": "d",
+            "sups": [
+                {
+                    "role": "diacritizer",
+                    "file_name": "ar_tashkeel_diacritizer.ort",
+                    "checksum": "32ad5edd",
+                    "checksum_quick": "eb5f7f7d",
+                    "size": "10261536",
+                    "urls": [
+                        "https://github.com/rhasspy/piper-phonemize/raw/8e5aa981d9628533e612652dccb93d26c66c5b21/etc/libtashkeel_model.ort"
+                    ]
+                }
+            ]
         },
         {
             "name": "عربي (Espeak MBROLA Male 1)",
@@ -21715,7 +21856,20 @@
             "urls": [
                 "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/ar1/ar1"
             ],
-            "size": "6508002"
+            "size": "6508002",
+            "options": "d",
+            "sups": [
+                {
+                    "role": "diacritizer",
+                    "file_name": "ar_tashkeel_diacritizer.ort",
+                    "checksum": "32ad5edd",
+                    "checksum_quick": "eb5f7f7d",
+                    "size": "10261536",
+                    "urls": [
+                        "https://github.com/rhasspy/piper-phonemize/raw/8e5aa981d9628533e612652dccb93d26c66c5b21/etc/libtashkeel_model.ort"
+                    ]
+                }
+            ]
         },
         {
             "name": "Български (Espeak Robot)",
@@ -22299,6 +22453,7 @@
                 "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/hb1/hb1"
             ],
             "size": "4489570",
+            "options": "d",
             "hidden": true
         },
         {
@@ -22313,6 +22468,7 @@
                 "https://github.com/numediart/MBROLA-voices/raw/fe05a0ccef6a941207fd6aaad0b31294a1f93a51/data/hb2/hb2"
             ],
             "size": "6823814",
+            "options": "d",
             "hidden": true
         },
         {
@@ -22933,16 +23089,34 @@
                 "https://drive.usercontent.google.com/download?id=1eK1XR_ZwuUy4yWh80nui-q5PBifJsYfy&export=download&confirm=t&file=config.json"
             ],
             "size": "341794923",
-            "vocoder_file_name": "he_coqui_roboshaul_vocoder",
-            "vocoder_checksum": "333ec442",
-            "vocoder_checksum_quick": "4ccef490",
-            "vocoder_comp": "dir",
-            "vocoder_urls": [
-                "https://drive.usercontent.google.com/download?id=1XdmRRHjZ_eZOFKoAQgQ8wivrLDJnNDkh&export=download&confirm=t&file=model.pth",
-                "https://drive.usercontent.google.com/download?id=1An6cTCYkxXWhagIJe3NGkoP8n2CQWQ-3&export=download&confirm=t&file=config.json"
-            ],
-            "vocoder_size": "860397830",
-            "hidden": true
+            "options": "d",
+            "sups": [
+                {
+                    "role": "vocoder",
+                    "checksum": "333ec442",
+                    "checksum_quick": "4ccef490",
+                    "comp": "dir",
+                    "size": "860397830",
+                    "urls": [
+                        "https://drive.usercontent.google.com/download?id=1XdmRRHjZ_eZOFKoAQgQ8wivrLDJnNDkh&export=download&confirm=t&file=model.pth",
+                        "https://drive.usercontent.google.com/download?id=1An6cTCYkxXWhagIJe3NGkoP8n2CQWQ-3&export=download&confirm=t&file=config.json"
+                    ]
+                },
+                {
+                    "role": "diacritizer",
+                    "file_name": "he_unikud_diacritizer",
+                    "checksum": "aa71afdc",
+                    "checksum_quick": "895a39a2",
+                    "size": "528617731",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/malper/unikud/resolve/73fdb7a158634826a73b66846d1b743fd700e990/pytorch_model.bin",
+                        "https://huggingface.co/malper/unikud/resolve/73fdb7a158634826a73b66846d1b743fd700e990/config.json",
+                        "https://huggingface.co/malper/unikud/resolve/73fdb7a158634826a73b66846d1b743fd700e990/special_tokens_map.json",
+                        "https://huggingface.co/malper/unikud/resolve/73fdb7a158634826a73b66846d1b743fd700e990/tokenizer_config.json"
+                    ]
+                }
+            ]
         },
         {
             "name": "አማርኛ (Coqui MMS)",
@@ -22969,8 +23143,20 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/ara.tar.gz"
             ],
-            "options": "n",
-            "size": "134871646"
+            "options": "dn",
+            "size": "134871646",
+            "sups": [
+                {
+                    "role": "diacritizer",
+                    "file_name": "ar_tashkeel_diacritizer.ort",
+                    "checksum": "32ad5edd",
+                    "checksum_quick": "eb5f7f7d",
+                    "size": "10261536",
+                    "urls": [
+                        "https://github.com/rhasspy/piper-phonemize/raw/8e5aa981d9628533e612652dccb93d26c66c5b21/etc/libtashkeel_model.ort"
+                    ]
+                }
+            ]
         },
         {
             "name": "Български (Coqui CV VITS Female)",
@@ -23082,14 +23268,19 @@
                 "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--es--mai--tacotron2-DDC.zip"
             ],
             "size": "575073503",
-            "vocoder_file_name": "universal_libri-tts_fullband-melgan_vocoder",
-            "vocoder_checksum": "36e4d6eb",
-            "vocoder_checksum_quick": "2918b685",
-            "vocoder_comp": "zip",
-            "vocoder_urls": [
-                "https://coqui.gateway.scarf.sh/v0.6.1_models/vocoder_models--universal--libri-tts--fullband-melgan.zip"
-            ],
-            "vocoder_size": "108861870"
+            "sups": [
+                {
+                    "role": "vocoder",
+                    "file_name": "universal_libri-tts_fullband-melgan_vocoder",
+                    "checksum": "36e4d6eb",
+                    "checksum_quick": "2918b685",
+                    "comp": "zip",
+                    "size": "108861870",
+                    "urls": [
+                        "https://coqui.gateway.scarf.sh/v0.6.1_models/vocoder_models--universal--libri-tts--fullband-melgan.zip"
+                    ]
+                }
+            ]
         },
         {
             "name": "Español (Coqui MMS)",
@@ -23188,13 +23379,18 @@
                 "https://github.com/coqui-ai/TTS/releases/download/v0.6.1_models/tts_models--ja--kokoro--tacotron2-DDC.zip"
             ],
             "size": "575427975",
-            "vocoder_checksum": "47db2e01",
-            "vocoder_checksum_quick": "c20707fb",
-            "vocoder_comp": "zip",
-            "vocoder_urls": [
-                "https://coqui.gateway.scarf.sh/v0.6.1_models/vocoder_models--ja--kokoro--hifigan_v1.zip"
-            ],
-            "vocoder_size": "860303819"
+            "sups": [
+                {
+                    "role": "vocoder",
+                    "checksum": "47db2e01",
+                    "checksum_quick": "c20707fb",
+                    "comp": "zip",
+                    "size": "860303819",
+                    "urls": [
+                        "https://coqui.gateway.scarf.sh/v0.6.1_models/vocoder_models--ja--kokoro--hifigan_v1.zip"
+                    ]
+                }
+            ]
         },
         {
             "name": "Nederlands (Coqui CSS100 VITS Male)",
@@ -23805,14 +24001,19 @@
                 "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--tr--common-voice--glow-tts.zip"
             ],
             "size": "343617301",
-            "vocoder_checksum": "da0648b3",
-            "vocoder_checksum_quick": "bdcdef58",
-            "vocoder_comp": "zip",
-            "vocoder_urls": [
-                "https://coqui.gateway.scarf.sh/v0.6.1_models/vocoder_models--tr--common-voice--hifigan.zip"
-            ],
-            "vocoder_size": "1016387791",
-            "options": "ln"
+            "options": "ln",
+            "sups": [
+                {
+                    "role": "vocoder",
+                    "checksum": "da0648b3",
+                    "checksum_quick": "bdcdef58",
+                    "comp": "zip",
+                    "size": "1016387791",
+                    "urls": [
+                        "https://coqui.gateway.scarf.sh/v0.6.1_models/vocoder_models--tr--common-voice--hifigan.zip"
+                    ]
+                }
+            ]
         },
         {
             "name": "Türkçe (Coqui MMS)",

@@ -1,0 +1,17 @@
+name: python3-unikud-x86-64
+build-commands: []
+buildsystem: simple
+only-arches:
+  - x86_64
+modules:
+  - name: python3-unikud
+    buildsystem: simple
+    build-commands:
+      - pip3 install --verbose --no-deps --exists-action=i --no-index --find-links="file://${PWD}"
+        --prefix=${FLATPAK_DEST} "unikud==0.1.0" --no-build-isolation
+    cleanup:
+      - "/bin"
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/3c/ba/d77a3086771ecd0ae0bfeb577df75e18aa7171f7175052e0c985fb29cc14/unikud-0.1.0-py3-none-any.whl
+        sha256: e8d8bf88f00804ae05df87ac3e15453af092e34a63d530f255e7bb014ce43afe

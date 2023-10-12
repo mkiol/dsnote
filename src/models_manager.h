@@ -9,11 +9,14 @@
 #define MODELS_MANAGER_H
 
 #include <QJsonArray>
+#include <QJsonObject>
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QString>
 #include <QUrl>
 #include <atomic>
+#include <functional>
+#include <optional>
 #include <set>
 #include <thread>
 #include <tuple>
@@ -38,10 +41,10 @@ class models_manager : public QObject, public singleton<models_manager> {
     Q_OBJECT
     Q_PROPERTY(bool busy READ busy NOTIFY busy_changed)
    public:
-    enum class model_role { stt = 0, tts = 1, mnt = 2, ttt = 3 };
-    friend QDebug operator<<(QDebug d, model_role role);
+    enum class model_role_t { stt = 0, tts = 1, mnt = 2, ttt = 3 };
+    friend QDebug operator<<(QDebug d, model_role_t role);
 
-    enum class model_engine {
+    enum class model_engine_t {
         stt_ds,
         stt_vosk,
         stt_whisper,
@@ -54,7 +57,10 @@ class models_manager : public QObject, public singleton<models_manager> {
         tts_mimic3,
         mnt_bergamot
     };
-    friend QDebug operator<<(QDebug d, model_engine engine);
+    friend QDebug operator<<(QDebug d, model_engine_t engine);
+
+    enum class sup_model_role_t { scorer, vocoder, diacritizer };
+    friend QDebug operator<<(QDebug d, sup_model_role_t role);
 
     struct lang_t {
         QString id;
@@ -70,13 +76,18 @@ class models_manager : public QObject, public singleton<models_manager> {
         QString name_en;
     };
 
+    struct sup_model_file_t {
+        sup_model_role_t role = sup_model_role_t::scorer;
+        QString file;
+    };
+
     struct model_t {
         QString id;
-        model_engine engine = model_engine::stt_ds;
+        model_engine_t engine = model_engine_t::stt_ds;
         QString lang_id;
         QString name;
         QString model_file;
-        QString sup_file;
+        std::vector<sup_model_file_t> sup_files;
         QString speaker;
         QString trg_lang_id;
         int score = 2;
@@ -87,7 +98,10 @@ class models_manager : public QObject, public singleton<models_manager> {
         double download_progress = 0.0;
     };
 
-    static model_role role_of_engine(model_engine engine);
+    static model_role_t role_of_engine(model_engine_t engine);
+    static std::optional<std::reference_wrapper<const sup_model_file_t>>
+    sup_model_file_of_role(sup_model_role_t role,
+                           const std::vector<sup_model_file_t>& sub_models);
 
     explicit models_manager(QObject* parent = nullptr);
     models_manager(const models_manager&) = delete;
@@ -102,9 +116,9 @@ class models_manager : public QObject, public singleton<models_manager> {
     std::unordered_map<QString, lang_basic_t> langs_map() const;
     std::unordered_map<QString, lang_basic_t> available_langs_map() const;
     std::unordered_map<QString, lang_basic_t> available_langs_of_role_map(
-        model_role role) const;
+        model_role_t role) const;
     [[nodiscard]] bool model_exists(const QString& id) const;
-    [[nodiscard]] bool has_model_of_role(model_role role) const;
+    [[nodiscard]] bool has_model_of_role(model_role_t role) const;
     void download_model(const QString& id);
     void cancel_model_download(const QString& id);
     void delete_model(const QString& id);
@@ -145,11 +159,21 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool ok = false;
         QString real_checksum;
         QString real_checksum_quick;
-        qint64 size = 0;
+        long long size = 0;
+    };
+
+    struct sup_model_t {
+        sup_model_role_t role = sup_model_role_t::scorer;
+        QString file_name;
+        QString checksum;
+        QString checksum_quick;
+        comp_type comp = comp_type::none;
+        std::vector<QUrl> urls;
+        long long size = 0;
     };
 
     struct priv_model_t {
-        model_engine engine = model_engine::stt_ds;
+        model_engine_t engine = model_engine_t::stt_ds;
         QString lang_id;
         QString name;
         QString file_name;
@@ -157,13 +181,8 @@ class models_manager : public QObject, public singleton<models_manager> {
         QString checksum_quick;
         comp_type comp = comp_type::none;
         std::vector<QUrl> urls;
-        qint64 size = 0;
-        QString sup_file_name;
-        QString sup_checksum;
-        QString sup_checksum_quick;
-        comp_type sup_comp = comp_type::none;
-        std::vector<QUrl> sup_urls;
-        qint64 sup_size = 0;
+        long long size = 0;
+        std::vector<sup_model_t> sup_models;
         QString speaker;
         QString trg_lang_id;
         QString alias_of;
@@ -183,7 +202,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     inline static const int default_score_tts_espeak = 1;
     using langs_t = std::unordered_map<QString, std::pair<QString, QString>>;
     using models_t = std::unordered_map<QString, priv_model_t>;
-    using langs_of_role_t = std::unordered_map<model_role, std::set<QString>>;
+    using langs_of_role_t = std::unordered_map<model_role_t, std::set<QString>>;
 
     models_t m_models;
     langs_t m_langs;
@@ -201,10 +220,11 @@ class models_manager : public QObject, public singleton<models_manager> {
     static QLatin1String comp_type_str(comp_type type);
     bool parse_models_file_might_reset();
     static void parse_models_file(bool reset, langs_t* langs, models_t* models);
-    static QString file_name_from_id(const QString& id, model_engine engine);
-    static QString scorer_file_name_from_id(const QString& id);
-    static QString vocoder_file_name_from_id(const QString& id);
-    void download(const QString& id, download_type type, int part = -1);
+    static QString file_name_from_id(const QString& id, model_engine_t engine);
+    static QString sup_file_name_from_id(const QString& id,
+                                         sup_model_role_t role);
+    void download(const QString& id, download_type type, int part,
+                  size_t sup_idx);
     void handle_download_progress(qint64 received, qint64 real_total);
     void handle_download_finished();
     void handle_download_ready_read();
@@ -223,14 +243,20 @@ class models_manager : public QObject, public singleton<models_manager> {
     static comp_type str2comp(const QString& str);
     static QString download_filename(QString filename, comp_type comp,
                                      int part = -1, const QUrl& url = {});
-    static bool model_sup_same_url(const priv_model_t& id);
+    static bool model_sup_same_url(const priv_model_t& id, size_t sup_idx);
     [[nodiscard]] bool lang_available(const QString& id) const;
     [[nodiscard]] bool lang_downloading(const QString& id) const;
     bool check_model_download_cancel(QNetworkReply* reply);
     static bool checksum_ok(const QString& checksum,
                             const QString& checksum_quick,
                             const QString& file_name);
-    static model_engine engine_from_name(const QString& name);
+    static bool model_checksum_ok(const priv_model_t& model);
+    static bool sup_model_checksum_ok(const sup_model_t& model);
+    static std::optional<size_t> sup_models_checksum_last_nok(
+        const std::vector<sup_model_t>& models, size_t idx);
+    static bool sup_models_exist(const std::vector<sup_model_t>& models);
+    static model_engine_t engine_from_name(const QString& name);
+    static sup_model_role_t sup_model_role_from_name(const QString& name);
     void update_default_model_for_lang(const QString& lang_id);
     checksum_check_t extract_from_archive(
         const QString& archive_path, comp_type comp, const QString& out_path,
@@ -248,6 +274,13 @@ class models_manager : public QObject, public singleton<models_manager> {
     void generate_next_checksum();
     void handle_generate_checksum(const checksum_check_t& check);
     static void print_priv_model(const QString& id, const priv_model_t& model);
+    static std::vector<sup_model_file_t> sup_model_files(
+        const std::vector<sup_model_t>& sub_models);
+    static long long sup_models_total_size(
+        const std::vector<sup_model_t>& sub_models);
+    static void extract_sup_models(const QString& model_id,
+                                   const QJsonObject& model_obj,
+                                   std::vector<sup_model_t>& sup_models);
 };
 
 #endif  // MODELS_MANAGER_H

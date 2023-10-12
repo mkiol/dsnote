@@ -43,10 +43,12 @@ class tts_engine {
     struct model_files_t {
         std::string model_path;
         std::string vocoder_path;
+        std::string diacritizer_path;
 
         inline bool operator==(const model_files_t& rhs) const {
             return model_path == rhs.model_path &&
-                   vocoder_path == rhs.vocoder_path;
+                   vocoder_path == rhs.vocoder_path &&
+                   diacritizer_path == rhs.diacritizer_path;
         };
         inline bool operator!=(const model_files_t& rhs) const {
             return !(*this == rhs);
@@ -119,6 +121,8 @@ class tts_engine {
     static wav_header read_wav_header(std::ifstream& wav_file);
     static float vits_length_scale(unsigned int speech_speed,
                                    float initial_length_scale);
+    static float overflow_duration_threshold(unsigned int speech_speed,
+                                             float initial_duration_threshold);
     virtual bool model_created() const = 0;
     virtual bool model_supports_speed() const = 0;
     virtual void create_model() = 0;

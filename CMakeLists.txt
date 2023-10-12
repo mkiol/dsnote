@@ -99,7 +99,7 @@ set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
 set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
-set(info_conf_version "38")
+set(info_conf_version "40")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · locness3")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
@@ -126,7 +126,7 @@ endif()
 
 if (WITH_PY)
     if (arch_x8664)
-        set(info_libs_str "${info_libs_str} · Hugging Face Transformers · Coqui TTS · faster-whisper · Mimic 3")
+        set(info_libs_str "${info_libs_str} · Hugging Face Transformers · Coqui TTS · faster-whisper · Mimic 3 · Unikud")
     endif()
 endif()
 

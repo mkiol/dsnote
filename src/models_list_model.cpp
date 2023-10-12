@@ -64,13 +64,13 @@ void ModelsListModel::updateItem(ListItem *oldItem, const ListItem *newItem) {
 ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
     auto role = [&] {
         switch (models_manager::role_of_engine(model.engine)) {
-            case models_manager::model_role::stt:
+            case models_manager::model_role_t::stt:
                 return ModelRole::Stt;
-            case models_manager::model_role::ttt:
+            case models_manager::model_role_t::ttt:
                 return ModelRole::Ttt;
-            case models_manager::model_role::tts:
+            case models_manager::model_role_t::tts:
                 return ModelRole::Tts;
-            case models_manager::model_role::mnt:
+            case models_manager::model_role_t::mnt:
                 return ModelRole::Mnt;
         }
         throw std::runtime_error{"unsupported model engine"};
@@ -95,13 +95,13 @@ bool ModelsListModel::roleFilterPass(const models_manager::model_t &model) {
     if (m_roleFilter == ModelRoleFilter::AllModels) return true;
 
     switch (models_manager::role_of_engine(model.engine)) {
-        case models_manager::model_role::stt:
+        case models_manager::model_role_t::stt:
             return m_roleFilter == ModelRoleFilter::SttModels;
-        case models_manager::model_role::tts:
+        case models_manager::model_role_t::tts:
             return m_roleFilter == ModelRoleFilter::TtsModels;
-        case models_manager::model_role::mnt:
+        case models_manager::model_role_t::mnt:
             return m_roleFilter == ModelRoleFilter::MntModels;
-        case models_manager::model_role::ttt:
+        case models_manager::model_role_t::ttt:
             return m_roleFilter == ModelRoleFilter::OtherModels;
     }
 

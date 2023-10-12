@@ -88,7 +88,7 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
-    <release version="4.3.0" date="2023-10-09">
+    <release version="4.3.0" date="2023-10-12">
       <description>
       <p>Accessibility:</p>
       <ul>
@@ -108,6 +108,7 @@
       </ul>
       <p>Speech to Text:</p>
       <ul>
+      <li>New languages: Afrikaans, Gujarati, Hausa, Telugu, Tswana, Javanese, Hebrew</li>
       <li>New engine: 'Faster Whisper'. It provides slightly better performance comparing
           to the existing engine for Whisper models, especially on larger models like Medium or Large.
           Right now 'Faster Whisper' does not use GPU acceleration.</li>
@@ -116,21 +117,24 @@
           which is currently in focus. This feature only works under X11
           and not for all applications.</li>
       <li>Copy text to the clipboard. Using global keyboard shotcut or
-          'action', the decoded text can be copied to the clipboard
+          'action' the decoded text can be copied to the clipboard
           instead of being inserted into the current note.</li>
+      <li>Fix: CUDA acceleration for Whisper models did not work on NVIDIA video cards with Maxwell architecture.</li>
       </ul>
       <p>Text to Speech:</p>
       <ul>
+      <li>New languages: Afrikaans, Gujarati, Hausa, Telugu, Tswana, Javanese, Hebrew</li>
       <li>New engine: 'Mimic 3' with voices for the following languages:
           Afrikaans, Bengali, German, Greek, English, Spanish, Persian, Finnish,
           French, Gujarati, Hausa, Hungarian, Italian, Javanese, Nepali, Dutch,
           Polish, Russian, Swedish, Telugu, Tswana, Ukrainian, Yoruba.
       </li>
       <li>Reading text from the clipboard. Using global keyboard shotcut or
-          'action' you can directly read text which is in the clipboard.</li>
+          'action' you can directly read text that is in the clipboard.</li>
       <li>New Piper voices for the following languages: Arabic, English, Hungarian,
           Polish, Czech, German, Ukrainian, Vietnamese, Serbian, French, Spanish, Nepali.</li>
-      <li>More steps in speech speed option. You can set speed from x0.1 to x2.0 values.</li>
+      <li>More steps in speech speed option. You can set speed from 0.1 to 2.0 values.</li>
+      <li>Diacritical marks restoration before speech synthesis for Arabic and Hebrew.</li>
       <li>Fix: Coqui Chinese MMS Hakka and Min Nan voices were broken.</li>
       </ul>
       </description>

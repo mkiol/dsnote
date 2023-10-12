@@ -100,6 +100,8 @@ class settings : public QSettings, public singleton<settings> {
                 NOTIFY desktop_notification_policy_changed)
     Q_PROPERTY(bool actions_api_enabled READ actions_api_enabled WRITE
                    set_actions_api_enabled NOTIFY actions_api_enabled_changed)
+    Q_PROPERTY(bool diacritizer_enabled READ diacritizer_enabled WRITE
+                   set_diacritizer_enabled NOTIFY diacritizer_enabled_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -262,6 +264,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_desktop_notification_policy(desktop_notification_policy_t value);
     bool actions_api_enabled() const;
     void set_actions_api_enabled(bool value);
+    bool diacritizer_enabled() const;
+    void set_diacritizer_enabled(bool value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -360,6 +364,7 @@ class settings : public QSettings, public singleton<settings> {
     void hotkeys_changed();
     void desktop_notification_policy_changed();
     void actions_api_enabled_changed();
+    void diacritizer_enabled_changed();
 
     // service
     void models_dir_changed();

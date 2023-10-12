@@ -34,7 +34,7 @@ Currently these are used:
 
 Following languages are supported:
 
-| **Lang ID** | **Name**      | **DeepSpeech (STT)** | **Whisper (STT)** | **Vosk (STT)** | **Piper (TTS)** | **RHVoice (TTS)** | **espeak (TTS)** | **MBROLA (TTS)** | **Coqui (TTS)** | **Mimic 3 (TTS)** | **Bergamot (MT)** |
+| **Lang ID** | **Name**      | **DeepSpeech (STT)** | **Whisper (STT)** | **Vosk (STT)** | **Piper (TTS)** | **RHVoice (TTS)** | **espeak (TTS)** | **MBROLA (TTS)** | **Coqui (TTS)** | **Mimic3 (TTS)** | **Bergamot (MT)** |
 | ----------- | ------------- | -------------------- | ----------------- | -------------- | --------------- | ----------------- | ---------------- | ---------------- | --------------- | ---------------- | ----------------- |
 | af          | Afrikaans     |                      | ●                 |                |                 |                   | ●                |                  |                 | ●                |                   |
 | am          | Amharic       | ● (e)                | ●                 |                |                 |                   | ●                |                  | ●               |                  |                   |
@@ -58,6 +58,7 @@ Following languages are supported:
 | ga          | Irish         |                      |                   |                |                 |                   | ●                |                  | ●               |                  |                   |
 | gu          | Gujarati      |                      | ●                 |                |                 |                   | ●                |                  |                 | ●                |                   |
 | ha          | Hausa         |                      | ●                 |                |                 |                   |                  |                  |                 | ●                |                   |
+| he          | Hebrew        |                      | ●                 |                |                 |                   |                  |                  | ●               |                  |                   |
 | hi          | Hindi         |                      | ●                 | ●              |                 |                   | ●                |                  |                 |                  |                   |
 | hr          | Croatian      |                      | ●                 |                |                 |                   | ●                | ●                | ●               |                  |                   |
 | hu          | Hungarian     | ● (e)                | ●                 |                | ●               |                   | ●                | ●                | ●               | ●                |                   |
@@ -222,6 +223,7 @@ sfdk package
 - [QHotkey](https://github.com/Skycoder42/QHotkey)
 - [faster-whisper](https://github.com/guillaumekln/faster-whisper)
 - [Mimic 3](https://mycroft.ai/mimic-3)
+- [Unikud](https://github.com/morrisalp/unikud)
 
 ## License
 
@@ -260,6 +262,7 @@ sfdk package
 - **QHotkey**, released under the [BSD-3-Clause License](https://raw.githubusercontent.com/Skycoder42/QHotkey/master/LICENSE)
 - **faster-whisper**, released under the [MIT License](https://github.com/guillaumekln/faster-whisper/raw/master/LICENSE)
 - **Mimic 3**, released under the [AGPL-3.0 license](https://github.com/MycroftAI/mimic3/raw/master/LICENSE)
+- **Unikud**, released under the [MIT License](https://github.com/morrisalp/unikud/raw/main/LICENSE)
 
 The files in the directory `nonbreaking_prefixes` were copied from 
 [mosesdecoder](https://github.com/moses-smt/mosesdecoder) project and distributed under the

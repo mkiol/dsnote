@@ -29,7 +29,8 @@
 std::ostream& operator<<(std::ostream& os,
                          const tts_engine::model_files_t& model_files) {
     os << "model-path=" << model_files.model_path
-       << ", vocoder-path=" << model_files.vocoder_path;
+       << ", vocoder-path=" << model_files.vocoder_path
+       << ", diacritizer=" << model_files.diacritizer_path;
 
     return os;
 }
@@ -179,7 +180,9 @@ void tts_engine::set_state(state_t new_state) {
 std::string tts_engine::path_to_output_file(const std::string& text) const {
     auto hash = std::hash<std::string>{}(
         text + m_config.model_files.model_path +
-        m_config.model_files.vocoder_path + m_config.speaker + m_config.lang +
+        m_config.model_files.vocoder_path +
+        m_config.model_files.diacritizer_path + m_config.speaker +
+        m_config.lang +
         (m_config.speech_speed == 10 ? ""
                                      : std::to_string(m_config.speech_speed)));
     return m_config.cache_dir + "/" + std::to_string(hash) + ".wav";
@@ -415,7 +418,8 @@ void tts_engine::process() {
                     /*text=*/task.text, /*options=*/m_config.options,
                     /*lang=*/m_config.lang,
                     /*lang_code=*/m_config.lang_code,
-                    /*prefix_path=*/m_config.share_dir);
+                    /*prefix_path=*/m_config.share_dir,
+                    /*diacritizer_path=*/m_config.model_files.diacritizer_path);
 
                 if (!encode_speech_impl(new_text, output_file)) {
                     unlink(output_file.c_str());
@@ -471,4 +475,10 @@ float tts_engine::vits_length_scale(unsigned int speech_speed,
     return initial_length_scale *
            std::pow<float>(
                (-0.9f * std::clamp(speech_speed, 1u, 20u) + 19) / 10.0f, 2);
+}
+
+float tts_engine::overflow_duration_threshold(
+    unsigned int speech_speed, float initial_duration_threshold) {
+    return initial_duration_threshold *
+           (static_cast<float>(std::clamp(speech_speed, 1u, 20u)) / 10.0f);
 }

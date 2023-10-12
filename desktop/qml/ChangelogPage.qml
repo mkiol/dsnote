@@ -40,6 +40,7 @@ DialogPage {
         </ul>
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
+        <li>New languages: Afrikaans, Gujarati, Hausa, Telugu, Tswana, Javanese, Hebrew</li>
         <li>New engine: <i>Faster Whisper</i>. It provides slightly better performance comparing to the existing engine
             for Whisper models, especially on larger models like Medium or Large. Right now <i>Faster Whisper</i> does not,
             use GPU acceleration.</li>
@@ -50,19 +51,24 @@ DialogPage {
         <li>Copy text to the clipboard. Using global keyboard shotcut or
             <i>start-listening-clipboard</i> action, the decoded text can be copied to the clipboard
             instead of being inserted into the current note.</li>
+        <li>Fix: CUDA acceleration for Whisper models did not work on NVIDIA video cards with Maxwell architecture.</li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
+        <li>New languages: Afrikaans, Gujarati, Hausa, Telugu, Tswana, Javanese, Hebrew</li>
         <li>New engine: <i>Mimic 3</i> with voices for the following languages:
             Afrikaans, Bengali, German, Greek, English, Spanish, Persian, Finnish,
             French, Gujarati, Hausa, Hungarian, Italian, Javanese, Nepali, Dutch,
             Polish, Russian, Swedish, Telugu, Tswana, Ukrainian, Yoruba.
         </li>
         <li>Reading text from the clipboard. Using global keyboard shotcut or
-            <i>start-reading-clipboard</i> action you can directly read text which is in the clipboard.</li>
+            <i>start-reading-clipboard</i> action you can directly read text that is in the clipboard.</li>
         <li>New Piper voices for the following languages: Arabic, English, Hungarian, Polish, Czech, German,
             Ukrainian, Vietnamese, Serbian, French, Spanish, Nepali.</li>
-        <li>More steps in speech speed option. You can set speed from x0.1 to x2.0 values.</li>
+        <li>More steps in speech speed option. You can set speed from 0.1 to 2.0 values.</li>
+        <li>Diacritical marks restoration before speech synthesis for Arabic and Hebrew.
+            It is enabled by default,
+            but if you don't need this option, it can be disabled in the settings.</li>
         <li>Fix: Coqui Chinese MMS Hakka and Min Nan voices were broken.</li>
         </ul>"
     }

@@ -14,10 +14,12 @@
 #include <algorithm>
 #include <cwctype>
 #include <libnumbertext/Numbertext.hxx>
+#include <piper-phonemize/tashkeel.hpp>
 #include <string_view>
 
 #include "astrunc/astrunc.h"
 #include "logger.hpp"
+#include "py_executor.hpp"
 
 namespace text_tools {
 static astrunc::access::lang_t lang_str_to_astrunc_lang(
@@ -408,13 +410,48 @@ static void replace_characters(std::string& text, const std::string& from,
     text.assign(wchar_to_UTF8(w_text.c_str()));
 }
 
+void hebrew_diacritize(std::string& text, const std::string& model_path) {
+    using namespace pybind11::literals;
+
+    auto* pe = py_executor::instance();
+
+    try {
+        text =
+            pe->execute([&]() {
+                  try {
+                      auto framework = py::module_::import("unikud.framework");
+                      auto unikud =
+                          framework.attr("Unikud")("hub_name"_a = model_path);
+
+                      return unikud(text).cast<std::string>();
+                  } catch (const std::exception& err) {
+                      LOGE("py error: " << err.what());
+                  }
+
+                  return text;
+              }).get();
+    } catch (const std::exception& err) {
+        LOGE("error: " << err.what());
+    }
+}
+
+void arabic_diacritize(std::string& text, const std::string& model_path) {
+    tashkeel::State state{};
+
+    LOGD("model_path: " << model_path);
+    tashkeel::tashkeel_load(model_path, state);
+
+    text.assign(tashkeel::tashkeel_run(text, state));
+}
+
 static bool has_option(char c, const std::string& options) {
     return options.find(c) != std::string::npos;
 }
 
 std::string preprocess(const std::string& text, const std::string& options,
                        const std::string& lang, const std::string& lang_code,
-                       const std::string& prefix_path) {
+                       const std::string& prefix_path,
+                       const std::string& diacritizer_path) {
     std::string new_text{text};
 
     if (has_option('n', options)) {
@@ -435,6 +472,14 @@ std::string preprocess(const std::string& text, const std::string& options,
     if (has_option('c', options)) {
         LOGD("char replace pre-processing needed");
         replace_characters(new_text, "“”‘’", "\"\"''");
+    }
+
+    if (has_option('d', options) && !diacritizer_path.empty()) {
+        LOGD("diacritize pre-processing needed");
+        if (lang == "ar")
+            arabic_diacritize(new_text, diacritizer_path);
+        else if (lang == "he")
+            hebrew_diacritize(new_text, diacritizer_path);
     }
 #ifdef DEBUG
     LOGD("text after pre-processing: " << new_text);

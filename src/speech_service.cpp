@@ -490,7 +490,7 @@ void speech_service::fill_available_models_map(
         auto role = models_manager::role_of_engine(model.engine);
 
         switch (role) {
-            case models_manager::model_role::stt:
+            case models_manager::model_role_t::stt:
                 m_available_stt_models_map.emplace(
                     model.id,
                     model_data_t{model.id, model.lang_id, model.trg_lang_id,
@@ -499,13 +499,13 @@ void speech_service::fill_available_models_map(
                 if (model.id == default_stt_model)
                     lang_to_model_map.found_default_stt = true;
                 break;
-            case models_manager::model_role::ttt:
+            case models_manager::model_role_t::ttt:
                 m_available_ttt_models_map.emplace(
                     model.id,
                     model_data_t{model.id, model.lang_id, model.trg_lang_id,
                                  model.engine, model.name});
                 break;
-            case models_manager::model_role::tts:
+            case models_manager::model_role_t::tts:
                 m_available_tts_models_map.emplace(
                     model.id,
                     model_data_t{model.id, model.lang_id, model.trg_lang_id,
@@ -514,7 +514,7 @@ void speech_service::fill_available_models_map(
                 if (model.id == default_tts_model)
                     lang_to_model_map.found_default_tts = true;
                 break;
-            case models_manager::model_role::mnt:
+            case models_manager::model_role_t::mnt:
                 m_available_mnt_models_map.emplace(
                     model.id,
                     model_data_t{model.id, model.lang_id, model.trg_lang_id,
@@ -591,13 +591,13 @@ void speech_service::fill_available_models_map(
 }
 
 bool speech_service::matched_engine_type(engine_t engine_type,
-                                         models_manager::model_engine engine) {
+                                         models_manager::model_engine_t engine) {
     auto role = models_manager::role_of_engine(engine);
-    if (engine_type == engine_t::stt && role == models_manager::model_role::stt)
+    if (engine_type == engine_t::stt && role == models_manager::model_role_t::stt)
         return true;
-    if (engine_type == engine_t::tts && role == models_manager::model_role::tts)
+    if (engine_type == engine_t::tts && role == models_manager::model_role_t::tts)
         return true;
-    if (engine_type == engine_t::mnt && role == models_manager::model_role::mnt)
+    if (engine_type == engine_t::mnt && role == models_manager::model_role_t::mnt)
         return true;
     return false;
 }
@@ -621,23 +621,37 @@ speech_service::choose_model_config_by_id(
         const auto model = *it;
         config.emplace();
         switch (engine_type) {
-            case engine_t::stt:
+            case engine_t::stt: {
+                auto scorer_file = models_manager::sup_model_file_of_role(
+                    models_manager::sup_model_role_t::scorer, model.sup_files);
                 config->stt = stt_model_config_t{
-                    model.lang_id,    model.id,          model.engine,
-                    model.model_file, model.sup_file, /*ttt=*/{}};
+                    model.lang_id, model.id, model.engine, model.model_file,
+                    /*scorer_file=*/
+                    scorer_file ? scorer_file->get().file : QString{},
+                    /*ttt=*/{}};
                 break;
-            case engine_t::tts:
+            }
+            case engine_t::tts: {
+                auto vocoder_file = models_manager::sup_model_file_of_role(
+                    models_manager::sup_model_role_t::vocoder, model.sup_files);
+                auto diacritizer_file = models_manager::sup_model_file_of_role(
+                    models_manager::sup_model_role_t::diacritizer,
+                    model.sup_files);
                 config->tts = tts_model_config_t{
-                    model.lang_id,    model.id,          model.engine,
-                    model.model_file, model.sup_file, model.speaker};
+                    model.lang_id, model.id, model.engine, model.model_file,
+                    /*vocoder_file=*/
+                    vocoder_file ? vocoder_file->get().file : QString{},
+                    /*diacritizer_file=*/
+                    diacritizer_file ? diacritizer_file->get().file : QString{},
+                    model.speaker};
                 break;
+            }
             case engine_t::mnt:
-                config->mnt = mnt_model_config_t{model.lang_id,
-                                                 out_lang_id,
-                                                 model.id,
-                                                 model.model_file,
-                                                 /*model_id_second=*/{},
-                                                 /*model_file_second=*/{}};
+                config->mnt = mnt_model_config_t{
+                    model.lang_id,           out_lang_id, model.id,
+                    model.model_file,
+                    /*model_id_second=*/{},
+                    /*model_file_second=*/{}};
                 break;
         }
         config->options = model.options;
@@ -650,7 +664,7 @@ speech_service::choose_model_config_by_id(
         auto it_model_to_en = std::find_if(
             models.cbegin(), models.cend(), [&](const auto &model) {
                 if (models_manager::role_of_engine(model.engine) !=
-                    models_manager::model_role::mnt)
+                    models_manager::model_role_t::mnt)
                     return false;
                 return model_or_lang_id == model.lang_id &&
                        model.trg_lang_id == "en";
@@ -660,7 +674,7 @@ speech_service::choose_model_config_by_id(
             auto it_model_from_en = std::find_if(
                 models.cbegin(), models.cend(), [&](const auto &model) {
                     if (models_manager::role_of_engine(model.engine) !=
-                        models_manager::model_role::mnt)
+                        models_manager::model_role_t::mnt)
                         return false;
                     return model.lang_id == "en" &&
                            model.trg_lang_id == out_lang_id;
@@ -715,18 +729,35 @@ speech_service::choose_model_config_by_lang(
     if (best_model) {
         config.emplace();
         switch (engine_type) {
-            case engine_t::stt:
+            case engine_t::stt: {
+                auto scorer_file = models_manager::sup_model_file_of_role(
+                    models_manager::sup_model_role_t::scorer,
+                    best_model->sup_files);
                 config->stt = stt_model_config_t{
-                    best_model->lang_id,     best_model->id,
-                    best_model->engine,      best_model->model_file,
-                    best_model->sup_file, /*ttt=*/{}};
+                    best_model->lang_id, best_model->id, best_model->engine,
+                    best_model->model_file,
+                    /*scorer_file=*/
+                    scorer_file ? scorer_file->get().file : QString{},
+                    /*ttt=*/{}};
                 break;
-            case engine_t::tts:
+            }
+            case engine_t::tts: {
+                auto vocoder_file = models_manager::sup_model_file_of_role(
+                    models_manager::sup_model_role_t::vocoder,
+                    best_model->sup_files);
+                auto diacritizer_file = models_manager::sup_model_file_of_role(
+                    models_manager::sup_model_role_t::diacritizer,
+                    best_model->sup_files);
                 config->tts = tts_model_config_t{
-                    best_model->lang_id,     best_model->id,
-                    best_model->engine,      best_model->model_file,
-                    best_model->sup_file, best_model->speaker};
+                    best_model->lang_id, best_model->id, best_model->engine,
+                    best_model->model_file,
+                    /*vocoder_file=*/
+                    vocoder_file ? vocoder_file->get().file : QString{},
+                    /*diacritizer_file=*/
+                    diacritizer_file ? diacritizer_file->get().file : QString{},
+                    best_model->speaker};
                 break;
+            }
             case engine_t::mnt:
                 break;
         }
@@ -753,16 +784,31 @@ speech_service::choose_model_config_by_first(
         const auto model = *it;
         config.emplace();
         switch (engine_type) {
-            case engine_t::stt:
+            case engine_t::stt: {
+                auto scorer_file = models_manager::sup_model_file_of_role(
+                    models_manager::sup_model_role_t::scorer, model.sup_files);
                 config->stt = stt_model_config_t{
-                    model.lang_id,    model.id,          model.engine,
-                    model.model_file, model.sup_file, /*ttt=*/{}};
+                    model.lang_id, model.id, model.engine, model.model_file,
+                    /*scorer_file=*/
+                    scorer_file ? scorer_file->get().file : QString{},
+                    /*ttt=*/{}};
                 break;
-            case engine_t::tts:
+            }
+            case engine_t::tts: {
+                auto vocoder_file = models_manager::sup_model_file_of_role(
+                    models_manager::sup_model_role_t::vocoder, model.sup_files);
+                auto diacritizer_file = models_manager::sup_model_file_of_role(
+                    models_manager::sup_model_role_t::diacritizer,
+                    model.sup_files);
                 config->tts = tts_model_config_t{
-                    model.lang_id,    model.id,          model.engine,
-                    model.model_file, model.sup_file, model.speaker};
+                    model.lang_id, model.id, model.engine, model.model_file,
+                    /*vocoder_file=*/
+                    vocoder_file ? vocoder_file->get().file : QString{},
+                    /*diacritizer_file=*/
+                    diacritizer_file ? diacritizer_file->get().file : QString{},
+                    model.speaker};
                 break;
+            }
             case engine_t::mnt:
                 break;
         }
@@ -851,7 +897,7 @@ speech_service::choose_model_config(engine_t engine_type,
         auto it = std::find_if(
             models.cbegin(), models.cend(), [&](const auto &model) {
                 if (models_manager::role_of_engine(model.engine) !=
-                    models_manager::model_role::ttt)
+                    models_manager::model_role_t::ttt)
                     return false;
                 return model.lang_id == active_config->stt->lang_id;
             });
@@ -951,7 +997,7 @@ QString speech_service::restart_stt_engine(
             static_cast<stt_engine::speech_mode_t>(speech_mode);
         config.translate = false;
         config.use_gpu = model_files->stt->engine ==
-                             models_manager::model_engine::stt_whisper &&
+                             models_manager::model_engine_t::stt_whisper &&
                          settings::instance()->whisper_use_gpu() &&
                          settings::instance()->has_gpu_device();
 
@@ -969,26 +1015,26 @@ QString speech_service::restart_stt_engine(
 
             const auto &type = typeid(*m_stt_engine);
             if (model_files->stt->engine ==
-                    models_manager::model_engine::stt_ds &&
+                models_manager::model_engine_t::stt_ds &&
                 type != typeid(ds_engine))
                 return true;
             if (model_files->stt->engine ==
-                    models_manager::model_engine::stt_vosk &&
+                models_manager::model_engine_t::stt_vosk &&
                 type != typeid(vosk_engine))
                 return true;
             if (model_files->stt->engine ==
-                    models_manager::model_engine::stt_whisper &&
+                models_manager::model_engine_t::stt_whisper &&
                 type != typeid(whisper_engine))
                 return true;
             if (model_files->stt->engine ==
-                    models_manager::model_engine::stt_fasterwhisper &&
+                models_manager::model_engine_t::stt_fasterwhisper &&
                 type != typeid(fasterwhisper_engine))
                 return true;
 
             if (m_stt_engine->model_files() != config.model_files) return true;
             if (m_stt_engine->lang() != config.lang) return true;
             if (model_files->stt->engine ==
-                    models_manager::model_engine::stt_whisper &&
+                models_manager::model_engine_t::stt_whisper &&
                 (config.use_gpu != m_stt_engine->use_gpu() ||
                  config.gpu_device != m_stt_engine->gpu_device()))
                 return true;
@@ -1026,29 +1072,29 @@ QString speech_service::restart_stt_engine(
 
             try {
                 switch (model_files->stt->engine) {
-                    case models_manager::model_engine::stt_ds:
+                    case models_manager::model_engine_t::stt_ds:
                         m_stt_engine = std::make_unique<ds_engine>(
                             std::move(config), std::move(call_backs));
                         break;
-                    case models_manager::model_engine::stt_vosk:
+                    case models_manager::model_engine_t::stt_vosk:
                         m_stt_engine = std::make_unique<vosk_engine>(
                             std::move(config), std::move(call_backs));
                         break;
-                    case models_manager::model_engine::stt_whisper:
+                    case models_manager::model_engine_t::stt_whisper:
                         m_stt_engine = std::make_unique<whisper_engine>(
                             std::move(config), std::move(call_backs));
                         break;
-                    case models_manager::model_engine::stt_fasterwhisper:
+                    case models_manager::model_engine_t::stt_fasterwhisper:
                         m_stt_engine = std::make_unique<fasterwhisper_engine>(
                             std::move(config), std::move(call_backs));
                         break;
-                    case models_manager::model_engine::ttt_hftc:
-                    case models_manager::model_engine::tts_coqui:
-                    case models_manager::model_engine::tts_piper:
-                    case models_manager::model_engine::tts_espeak:
-                    case models_manager::model_engine::tts_rhvoice:
-                    case models_manager::model_engine::tts_mimic3:
-                    case models_manager::model_engine::mnt_bergamot:
+                    case models_manager::model_engine_t::ttt_hftc:
+                    case models_manager::model_engine_t::tts_coqui:
+                    case models_manager::model_engine_t::tts_piper:
+                    case models_manager::model_engine_t::tts_espeak:
+                    case models_manager::model_engine_t::tts_rhvoice:
+                    case models_manager::model_engine_t::tts_mimic3:
+                    case models_manager::model_engine_t::mnt_bergamot:
                         throw std::runtime_error{
                             "invalid model engine, expected stt"};
                 }
@@ -1083,6 +1129,9 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             model_config->tts->model_file.toStdString();
         config.model_files.vocoder_path =
             model_config->tts->vocoder_file.toStdString();
+        if (settings::instance()->diacritizer_enabled())
+            config.model_files.diacritizer_path =
+                model_config->tts->diacritizer_file.toStdString();
         config.lang = model_config->tts->lang_id.toStdString();
         config.cache_dir = settings::instance()->cache_dir().toStdString();
         config.speaker = model_config->tts->speaker.toStdString();
@@ -1119,19 +1168,19 @@ QString speech_service::restart_tts_engine(const QString &model_id,
 
             const auto &type = typeid(*m_tts_engine);
             if (model_config->tts->engine ==
-                    models_manager::model_engine::tts_coqui &&
+                models_manager::model_engine_t::tts_coqui &&
                 type != typeid(coqui_engine))
                 return true;
             if (model_config->tts->engine ==
-                    models_manager::model_engine::tts_piper &&
+                models_manager::model_engine_t::tts_piper &&
                 type != typeid(piper_engine))
                 return true;
             if (model_config->tts->engine ==
-                    models_manager::model_engine::tts_rhvoice &&
+                models_manager::model_engine_t::tts_rhvoice &&
                 type != typeid(rhvoice_engine))
                 return true;
             if (model_config->tts->engine ==
-                    models_manager::model_engine::tts_mimic3 &&
+                models_manager::model_engine_t::tts_mimic3 &&
                 type != typeid(mimic3_engine))
                 return true;
 
@@ -1167,25 +1216,25 @@ QString speech_service::restart_tts_engine(const QString &model_id,
 
             try {
                 switch (model_config->tts->engine) {
-                    case models_manager::model_engine::tts_coqui:
+                    case models_manager::model_engine_t::tts_coqui:
                         m_tts_engine = std::make_unique<coqui_engine>(
                             std::move(config), std::move(call_backs));
                         break;
-                    case models_manager::model_engine::tts_piper:
+                    case models_manager::model_engine_t::tts_piper:
                         config.data_dir =
                             module_tools::unpacked_dir("espeakdata")
                                 .toStdString();
                         m_tts_engine = std::make_unique<piper_engine>(
                             std::move(config), std::move(call_backs));
                         break;
-                    case models_manager::model_engine::tts_espeak:
+                    case models_manager::model_engine_t::tts_espeak:
                         config.data_dir =
                             module_tools::unpacked_dir("espeakdata")
                                 .toStdString();
                         m_tts_engine = std::make_unique<espeak_engine>(
                             std::move(config), std::move(call_backs));
                         break;
-                    case models_manager::model_engine::tts_rhvoice:
+                    case models_manager::model_engine_t::tts_rhvoice:
                         config.data_dir =
                             module_tools::unpacked_dir("rhvoicedata")
                                 .toStdString();
@@ -1195,18 +1244,18 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                         m_tts_engine = std::make_unique<rhvoice_engine>(
                             std::move(config), std::move(call_backs));
                         break;
-                    case models_manager::model_engine::tts_mimic3:
+                    case models_manager::model_engine_t::tts_mimic3:
                         config.data_dir =
                             module_tools::unpacked_dir("mimic3").toStdString();
                         m_tts_engine = std::make_unique<mimic3_engine>(
                             std::move(config), std::move(call_backs));
                         break;
-                    case models_manager::model_engine::ttt_hftc:
-                    case models_manager::model_engine::stt_ds:
-                    case models_manager::model_engine::stt_vosk:
-                    case models_manager::model_engine::stt_whisper:
-                    case models_manager::model_engine::stt_fasterwhisper:
-                    case models_manager::model_engine::mnt_bergamot:
+                    case models_manager::model_engine_t::ttt_hftc:
+                    case models_manager::model_engine_t::stt_ds:
+                    case models_manager::model_engine_t::stt_vosk:
+                    case models_manager::model_engine_t::stt_whisper:
+                    case models_manager::model_engine_t::stt_fasterwhisper:
+                    case models_manager::model_engine_t::mnt_bergamot:
                         throw std::runtime_error{
                             "invalid model engine, expected tts"};
                 }
@@ -2697,11 +2746,11 @@ void speech_service::refresh_status() {
     if (models_manager::instance()->busy()) {
         new_state = state_t::busy;
     } else if (!models_manager::instance()->has_model_of_role(
-                   models_manager::model_role::stt) &&
+                   models_manager::model_role_t::stt) &&
                !models_manager::instance()->has_model_of_role(
-                   models_manager::model_role::tts) &&
+                   models_manager::model_role_t::tts) &&
                !models_manager::instance()->has_model_of_role(
-                   models_manager::model_role::mnt)) {
+                   models_manager::model_role_t::mnt)) {
         new_state = state_t::not_configured;
     } else if (audio_source_type() == source_t::file) {
         new_state = state_t::transcribing_file;

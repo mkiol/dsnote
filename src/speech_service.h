@@ -252,8 +252,8 @@ class speech_service : public QObject, public singleton<speech_service> {
         QString model_id;
         QString lang_id;
         QString trg_lang_id;
-        models_manager::model_engine engine =
-            models_manager::model_engine::stt_ds;
+        models_manager::model_engine_t engine =
+            models_manager::model_engine_t::stt_ds;
         QString name;
     };
 
@@ -269,10 +269,11 @@ class speech_service : public QObject, public singleton<speech_service> {
     struct tts_model_config_t {
         QString lang_id;
         QString model_id;
-        models_manager::model_engine engine =
-            models_manager::model_engine::stt_ds;
+        models_manager::model_engine_t engine =
+            models_manager::model_engine_t::tts_piper;
         QString model_file;
         QString vocoder_file;
+        QString diacritizer_file;
         QString speaker;
     };
 
@@ -284,8 +285,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     struct stt_model_config_t {
         QString lang_id;
         QString model_id;
-        models_manager::model_engine engine =
-            models_manager::model_engine::stt_ds;
+        models_manager::model_engine_t engine =
+            models_manager::model_engine_t::stt_ds;
         QString model_file;
         QString scorer_file;
         std::optional<ttt_model_config_t> ttt;
@@ -465,7 +466,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void fill_available_models_map(
         const std::vector<models_manager::model_t> &models);
     static bool matched_engine_type(engine_t engine_type,
-                                    models_manager::model_engine engine);
+                                    models_manager::model_engine_t engine);
     static unsigned int tts_speech_speed_from_options(
         const QVariantMap &options);
 

@@ -200,6 +200,11 @@ void coqui_engine::create_model() {
                               model.attr("length_scale").cast<float>();
                           LOGD("initial length scale: "
                                << *m_initial_length_scale);
+                      } else if (py::hasattr(model, "duration_threshold")) {
+                          m_initial_duration_threshold =
+                              model.attr("duration_threshold").cast<float>();
+                          LOGD("initial duration threshold: "
+                               << *m_initial_duration_threshold);
                       }
                   }
               } catch (const std::exception& err) {
@@ -223,7 +228,14 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
             ? vits_length_scale(m_config.speech_speed, *m_initial_length_scale)
             : 1.0f;
 
-    LOGD("length_scale: " << length_scale);
+    auto duration_threshold =
+        m_initial_duration_threshold
+            ? overflow_duration_threshold(m_config.speech_speed,
+                                          *m_initial_duration_threshold)
+            : 0.55f;
+
+    LOGD("speed: length_scale=" << length_scale << ", duration_threshold:"
+                                << duration_threshold);
 
     try {
         return pe->execute([&]() {
@@ -232,6 +244,9 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
                              m_tts->attr("synthesizer").attr("tts_model");
                          if (py::hasattr(model, "length_scale")) {
                              model.attr("length_scale") = length_scale;
+                         } else if (py::hasattr(model, "duration_threshold")) {
+                             model.attr("duration_threshold") =
+                                 duration_threshold;
                          }
 
                          if (m_config.speaker.empty()) {
@@ -258,5 +273,5 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
 }
 
 bool coqui_engine::model_supports_speed() const {
-    return static_cast<bool>(m_initial_length_scale);
+    return m_initial_length_scale || m_initial_duration_threshold;
 }
