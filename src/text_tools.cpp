@@ -14,7 +14,6 @@
 #include <algorithm>
 #include <cwctype>
 #include <libnumbertext/Numbertext.hxx>
-#include <piper-phonemize/tashkeel.hpp>
 #include <string_view>
 
 #include "astrunc/astrunc.h"
@@ -410,48 +409,54 @@ static void replace_characters(std::string& text, const std::string& from,
     text.assign(wchar_to_UTF8(w_text.c_str()));
 }
 
-void hebrew_diacritize(std::string& text, const std::string& model_path) {
+void processor::hebrew_diacritize(std::string& text,
+                                  const std::string& model_path) {
     using namespace pybind11::literals;
 
     auto* pe = py_executor::instance();
 
     try {
-        text =
-            pe->execute([&]() {
-                  try {
-                      auto framework = py::module_::import("unikud.framework");
-                      auto unikud =
-                          framework.attr("Unikud")("hub_name"_a = model_path);
+        text = pe->execute([&]() {
+                     try {
+                         if (!m_unikud) {
+                             auto framework =
+                                 py::module_::import("unikud.framework");
+                             m_unikud = framework.attr("Unikud")(
+                                 "hub_name"_a = model_path);
+                         }
 
-                      return unikud(text).cast<std::string>();
-                  } catch (const std::exception& err) {
-                      LOGE("py error: " << err.what());
-                  }
+                         return m_unikud.value()(text).cast<std::string>();
+                     } catch (const std::exception& err) {
+                         LOGE("py error: " << err.what());
+                     }
 
-                  return text;
-              }).get();
+                     return text;
+                 }).get();
     } catch (const std::exception& err) {
         LOGE("error: " << err.what());
     }
 }
 
-void arabic_diacritize(std::string& text, const std::string& model_path) {
-    tashkeel::State state{};
+void processor::arabic_diacritize(std::string& text,
+                                  const std::string& model_path) {
+    if (!m_tashkeel_state) {
+        m_tashkeel_state.emplace();
+        tashkeel::tashkeel_load(model_path, *m_tashkeel_state);
+    }
 
-    LOGD("model_path: " << model_path);
-    tashkeel::tashkeel_load(model_path, state);
-
-    text.assign(tashkeel::tashkeel_run(text, state));
+    text.assign(tashkeel::tashkeel_run(text, *m_tashkeel_state));
 }
 
 static bool has_option(char c, const std::string& options) {
     return options.find(c) != std::string::npos;
 }
 
-std::string preprocess(const std::string& text, const std::string& options,
-                       const std::string& lang, const std::string& lang_code,
-                       const std::string& prefix_path,
-                       const std::string& diacritizer_path) {
+std::string processor::preprocess(const std::string& text,
+                                  const std::string& options,
+                                  const std::string& lang,
+                                  const std::string& lang_code,
+                                  const std::string& prefix_path,
+                                  const std::string& diacritizer_path) {
     std::string new_text{text};
 
     if (has_option('n', options)) {
@@ -487,4 +492,22 @@ std::string preprocess(const std::string& text, const std::string& options,
 
     return new_text;
 }
+
+processor::~processor() {
+    auto* pe = py_executor::instance();
+
+    try {
+        pe->execute([&]() {
+              try {
+                  m_unikud.reset();
+              } catch (const std::exception& err) {
+                  LOGE("py error: " << err.what());
+              }
+              return std::string{};
+          }).get();
+    } catch (const std::exception& err) {
+        LOGE("error: " << err.what());
+    }
+}
+
 }  // namespace text_tools

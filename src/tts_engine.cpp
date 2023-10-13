@@ -24,7 +24,6 @@
 #endif
 
 #include "logger.hpp"
-#include "text_tools.hpp"
 
 std::ostream& operator<<(std::ostream& os,
                          const tts_engine::model_files_t& model_files) {
@@ -414,7 +413,7 @@ void tts_engine::process() {
             auto output_file = path_to_output_file(task.text);
 
             if (!file_exists(output_file)) {
-                auto new_text = text_tools::preprocess(
+                auto new_text = m_text_processor.preprocess(
                     /*text=*/task.text, /*options=*/m_config.options,
                     /*lang=*/m_config.lang,
                     /*lang_code=*/m_config.lang_code,

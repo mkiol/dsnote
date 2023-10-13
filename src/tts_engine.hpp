@@ -19,6 +19,8 @@
 #include <thread>
 #include <vector>
 
+#include "text_tools.hpp"
+
 class tts_engine {
    public:
     struct wav_header {
@@ -110,6 +112,7 @@ class tts_engine {
     std::mutex m_mutex;
     std::condition_variable m_cv;
     state_t m_state = state_t::idle;
+    text_tools::processor m_text_processor;
 
     static std::string first_file_with_ext(std::string dir_path,
                                            std::string&& ext);
