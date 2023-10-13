@@ -104,6 +104,7 @@
       <ul>
       <li>Desktop notifications. By default, when Speech Note is in the background,
           desktop notifications are shown to indicate starting or ending of listening and reading.</li>
+      <li>Opening files with Drag and Drop gesture.</li>
       <li>Speech speed control option has been moved to the main application window.</li>
       </ul>
       <p>Speech to Text:</p>

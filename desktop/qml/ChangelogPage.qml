@@ -36,6 +36,7 @@ DialogPage {
             when you use <i>Actions</i> or global keyboard shortcuts.
             You can disable desktop notifications in the settings
             (<i>User Interface</i> &rarr; <i>Show desktop notification</i>).</li>
+        <li>Opening files with Drag and Drop gesture.</li>
         <li>Speech speed control option has been moved to the main application window.</li>
         </ul>
         <p>" + qsTr("Speech to Text") + ":</p>
