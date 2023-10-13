@@ -31,8 +31,8 @@ ApplicationWindow {
 
     function openTextFile(path) {
         if (app.note.length > 0) {
-            addTextDialog.text = true
-            addTextDialog.textFilePath = path
+            addTextDialog.addHandler = function(){app.load_note_from_file(path, false)}
+            addTextDialog.replaceHandler = function(){app.load_note_from_file(path, true)}
             addTextDialog.open()
         } else {
             app.load_note_from_file(path, true)
@@ -41,8 +41,8 @@ ApplicationWindow {
 
     function transcribeFile(url) {
         if (app.note.length > 0) {
-            addTextDialog.text = false
-            addTextDialog.audioFileUrl = url
+            addTextDialog.addHandler = function(){app.transcribe_file(url, false)}
+            addTextDialog.replaceHandler = function(){app.transcribe_file(url, true)}
             addTextDialog.open()
         } else {
             app.transcribe_file(url, true)
@@ -220,24 +220,34 @@ ApplicationWindow {
     AddTextDialog {
         id: addTextDialog
 
+        property var addHandler
+        property var replaceHandler
+
         property bool text: true
+
         property string textFilePath
         property url audioFileUrl
 
         anchors.centerIn: parent
 
-        onAddClicked: {
-            if (text)
-                app.load_note_from_file(textFilePath, false)
-            else
-                app.transcribe_file(audioFileUrl, false)
-        }
+        onAddClicked: addHandler()
+        onReplaceClicked: replaceHandler()
+    }
 
-        onReplaceClicked: {
-            if (text)
-                app.load_note_from_file(textFilePath, true)
-            else
-                app.transcribe_file(audioFileUrl, true)
+    DropArea {
+        anchors.fill: parent
+
+        onDropped: {
+            if (!drop.hasUrls) return
+
+            if (app.note.length > 0) {
+                var urls = drop.urls
+                addTextDialog.addHandler = function(){app.open_files(urls, false)}
+                addTextDialog.replaceHandler = function(){app.open_files(urls, true)}
+                addTextDialog.open()
+            } else {
+                app.open_files(drop.urls, true)
+            }
         }
     }
 
@@ -278,7 +288,7 @@ ApplicationWindow {
         onStt_configuredChanged: showWelcome()
         onTts_configuredChanged: showWelcome()
         Component.onCompleted: {
-            app.open_files(_files_to_open)
+            app.open_files(_files_to_open, false)
             app.execute_action_name(_requested_action)
             showWelcome()
         }

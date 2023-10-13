@@ -2434,7 +2434,11 @@ void dsnote_app::open_next_file() {
     if (media_compressor{}.is_media_file(
             m_files_to_open.front().toStdString())) {
         if (stt_configured())
-            transcribe_file(m_files_to_open.front(), false);
+            transcribe_file(
+                m_files_to_open.front(),
+                m_stt_text_destination == stt_text_destination_t::note_replace
+                    ? true
+                    : false);
         else {
             qWarning() << "can't transcribe because stt is not configured";
             reset_files_queue();
@@ -2442,7 +2446,11 @@ void dsnote_app::open_next_file() {
         }
         m_files_to_open.pop();
     } else {
-        if (!load_note_from_file(m_files_to_open.front(), false)) {
+        if (!load_note_from_file(
+                m_files_to_open.front(),
+                m_stt_text_destination == stt_text_destination_t::note_replace
+                    ? true
+                    : false)) {
             reset_files_queue();
             return;
         }
@@ -2453,7 +2461,7 @@ void dsnote_app::open_next_file() {
     }
 }
 
-void dsnote_app::open_files(const QStringList &input_files) {
+void dsnote_app::open_files(const QStringList &input_files, bool replace) {
     reset_files_queue();
 
     for (auto &file : input_files) m_files_to_open.push(file);
@@ -2461,8 +2469,20 @@ void dsnote_app::open_files(const QStringList &input_files) {
     if (!m_files_to_open.empty()) {
         if (!note().isEmpty()) make_undo();
         qDebug() << "opening files:" << input_files;
+        m_stt_text_destination = replace ? stt_text_destination_t::note_replace
+                                         : stt_text_destination_t::note_add;
         m_open_files_delay_timer.start();
     }
+}
+
+void dsnote_app::open_files(const QList<QUrl> &input_urls, bool replace) {
+    QStringList input_files;
+
+    std::transform(input_urls.cbegin(), input_urls.cend(),
+                   std::back_inserter(input_files),
+                   [](const auto &url) { return url.toLocalFile(); });
+
+    open_files(input_files, replace);
 }
 
 void dsnote_app::reset_files_queue() {
