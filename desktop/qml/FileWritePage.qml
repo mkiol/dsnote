@@ -32,7 +32,7 @@ DialogPage {
                                         root.autoFileFormat !== Settings.AudioFormatWav)
     property bool _autoTitleTag: true
 
-    title: qsTr("Save File")
+    title: qsTr("Export to audio file")
 
     function check_filename() {
         overwriteLabel.visible = _settings.file_exists(pathField.text)
@@ -101,7 +101,7 @@ DialogPage {
                 Keys.onReturnPressed: root.reject()
             }
             Button {
-                text: qsTr("Save File")
+                text: qsTr("Export")
 
                 icon.name: "document-save-symbolic"
                 Keys.onReturnPressed: root.save_file()

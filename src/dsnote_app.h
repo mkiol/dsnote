@@ -177,8 +177,8 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void set_active_mnt_out_lang_idx(int idx);
     Q_INVOKABLE void set_active_tts_model_for_in_mnt_idx(int idx);
     Q_INVOKABLE void set_active_tts_model_for_out_mnt_idx(int idx);
-    Q_INVOKABLE void transcribe_file(const QString &source_file);
-    Q_INVOKABLE void transcribe_file(const QUrl &source_file);
+    Q_INVOKABLE void transcribe_file(const QString &source_file, bool replace);
+    Q_INVOKABLE void transcribe_file(const QUrl &source_file, bool replace);
     Q_INVOKABLE void cancel();
     Q_INVOKABLE void listen();
     Q_INVOKABLE void listen_to_active_window();
@@ -308,7 +308,12 @@ class dsnote_app : public QObject {
         bool close_request = false;
     };
 
-    enum class stt_text_destination_t { note, active_window, clipboard };
+    enum class stt_text_destination_t {
+        note_add,
+        note_replace,
+        active_window,
+        clipboard
+    };
 
     QString m_active_stt_model;
     QVariantMap m_available_stt_models_map;
@@ -353,7 +358,7 @@ class dsnote_app : public QObject {
     std::queue<QString> m_files_to_open;
     std::optional<action_t> m_pending_action;
     stt_text_destination_t m_stt_text_destination =
-        stt_text_destination_t::note;
+        stt_text_destination_t::note_add;
     std::optional<desktop_notification_t> m_desktop_notification;
 #ifdef USE_DESKTOP
     struct hotkeys_t {

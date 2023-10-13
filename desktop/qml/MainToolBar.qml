@@ -128,7 +128,7 @@ ToolBar {
                     MenuSeparator {}
 
                     MenuItem {
-                        text: qsTr("Save to audio file")
+                        text: qsTr("Export to audio file")
                         icon.name: "document-save-symbolic"
                         enabled: app.note.length !== 0 && app.tts_configured &&
                                  (app.state === DsnoteApp.StateListeningManual ||
@@ -146,7 +146,7 @@ ToolBar {
                     }
 
                     MenuItem {
-                        text: qsTr("Save the translation to audio file")
+                        text: qsTr("Export the translation to audio file")
                         icon.name: "document-save-symbolic"
                         enabled: app.translated_text.length !== 0 && _settings.translator_mode &&
                                  app.tts_configured && app.active_tts_model_for_out_mnt.length !== 0 &&
@@ -255,7 +255,7 @@ ToolBar {
         onAccepted: {
             var file_path =
                 _settings.file_path_from_url(textFileReadDialog.fileUrl)
-            app.load_note_from_file(file_path, true)
+            appWin.openTextFile(file_path)
         }
     }
 
@@ -270,8 +270,7 @@ ToolBar {
         selectExisting: true
         selectMultiple: false
         onAccepted: {
-            app.transcribe_file(fileReadDialog.fileUrl)
-            _settings.file_open_dir_url = fileReadDialog.fileUrl
+            appWin.transcribeFile(fileReadDialog.fileUrl)
         }
     }
 }

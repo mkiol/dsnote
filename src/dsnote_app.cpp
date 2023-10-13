@@ -394,10 +394,18 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
     }
 
     switch (m_stt_text_destination) {
-        case stt_text_destination_t::note:
+        case stt_text_destination_t::note_add:
             make_undo();
             set_note(insert_to_note(settings::instance()->note(), text, lang,
                                     settings::instance()->insert_mode()));
+            this->m_intermediate_text.clear();
+            emit text_changed();
+            emit intermediate_text_changed();
+            break;
+        case stt_text_destination_t::note_replace:
+            make_undo();
+            set_note(text);
+            m_stt_text_destination = stt_text_destination_t::note_add;
             this->m_intermediate_text.clear();
             emit text_changed();
             emit intermediate_text_changed();
@@ -1508,8 +1516,9 @@ void dsnote_app::cancel() {
     emit intermediate_text_changed();
 }
 
-void dsnote_app::transcribe_file(const QString &source_file) {
-    m_stt_text_destination = stt_text_destination_t::note;
+void dsnote_app::transcribe_file(const QString &source_file, bool replace) {
+    m_stt_text_destination = replace ? stt_text_destination_t::note_replace
+                                     : stt_text_destination_t::note_add;
 
     auto *s = settings::instance();
 
@@ -1527,12 +1536,12 @@ void dsnote_app::transcribe_file(const QString &source_file) {
     m_side_task.set(new_task);
 }
 
-void dsnote_app::transcribe_file(const QUrl &source_file) {
-    transcribe_file(source_file.toLocalFile());
+void dsnote_app::transcribe_file(const QUrl &source_file, bool replace) {
+    transcribe_file(source_file.toLocalFile(), replace);
 }
 
 void dsnote_app::listen() {
-    m_stt_text_destination = stt_text_destination_t::note;
+    m_stt_text_destination = stt_text_destination_t::note_add;
     listen_internal();
 }
 
@@ -2425,7 +2434,7 @@ void dsnote_app::open_next_file() {
     if (media_compressor{}.is_media_file(
             m_files_to_open.front().toStdString())) {
         if (stt_configured())
-            transcribe_file(m_files_to_open.front());
+            transcribe_file(m_files_to_open.front(), false);
         else {
             qWarning() << "can't transcribe because stt is not configured";
             reset_files_queue();

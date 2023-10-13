@@ -29,6 +29,28 @@ ApplicationWindow {
 
     property var _dialogPage
 
+    function openTextFile(path) {
+        if (app.note.length > 0) {
+            addTextDialog.text = true
+            addTextDialog.textFilePath = path
+            addTextDialog.open()
+        } else {
+            app.load_note_from_file(path, true)
+        }
+    }
+
+    function transcribeFile(url) {
+        if (app.note.length > 0) {
+            addTextDialog.text = false
+            addTextDialog.audioFileUrl = url
+            addTextDialog.open()
+        } else {
+            app.transcribe_file(url, true)
+        }
+
+        _settings.file_open_dir_url = url
+    }
+
     function openDialog(file, props) {
         closeDialog()
 
@@ -193,6 +215,30 @@ ApplicationWindow {
         offset: -panel.height
         text: notepad.placeholderText
         color: notepad.noteTextArea.textArea.color
+    }
+
+    AddTextDialog {
+        id: addTextDialog
+
+        property bool text: true
+        property string textFilePath
+        property url audioFileUrl
+
+        anchors.centerIn: parent
+
+        onAddClicked: {
+            if (text)
+                app.load_note_from_file(textFilePath, false)
+            else
+                app.transcribe_file(audioFileUrl, false)
+        }
+
+        onReplaceClicked: {
+            if (text)
+                app.load_note_from_file(textFilePath, true)
+            else
+                app.transcribe_file(audioFileUrl, true)
+        }
     }
 
     ToastNotification {
