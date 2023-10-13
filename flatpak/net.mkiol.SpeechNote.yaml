@@ -127,6 +127,9 @@ modules:
     config-opts:
       - --with-pic
       - --with-pcaudiolib=no
+      - --with-sonic=no
+      - --with-speechplayer=no
+      - --with-mbrola=yes
       - --enable-static
     sources:
       - type: archive

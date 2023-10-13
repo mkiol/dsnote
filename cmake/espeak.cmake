@@ -24,7 +24,9 @@ ExternalProject_Add(espeak
     URL_MD5 "${espeak_checksum}"
     CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> &&
         <BINARY_DIR>/autogen.sh &&
-        <BINARY_DIR>/configure --prefix=<INSTALL_DIR> --with-pic --with-pcaudiolib=no --enable-static
+        <BINARY_DIR>/configure --prefix=<INSTALL_DIR> --with-pic
+        --with-pcaudiolib=no --with-sonic=no --with-speechplayer=no
+        --with-mbrola=yes --enable-static
         --disable-shared --disable-rpath --with-extdict-ru
     BUILD_COMMAND ${MAKE}
     BUILD_ALWAYS False
