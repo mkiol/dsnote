@@ -217,7 +217,10 @@ std::vector<gpu_tools::device> available_devices() {
 
     add_cuda_devices(devices);
     add_hip_devices(devices);
-    add_opencl_devices(devices);
+
+    // scanning for opencl only if no cuda or hip devices found
+    // opencl causes SIGSEGV on latest nvidia driver
+    if (devices.empty()) add_opencl_devices(devices);
 
     return devices;
 }
