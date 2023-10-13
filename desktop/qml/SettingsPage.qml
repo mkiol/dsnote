@@ -74,6 +74,43 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
+                    text: qsTr("Text appending style")
+                }
+                ComboBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    currentIndex: {
+                        if (_settings.insert_mode === Settings.InsertInLine) return 0
+                        if (_settings.insert_mode === Settings.InsertNewLine) return 1
+                        return 0
+                    }
+                    model: [
+                        qsTr("In line"),
+                        qsTr("After line break")
+                    ]
+                    onActivated: {
+                        if (index === 0) {
+                            _settings.insert_mode = Settings.InsertInLine
+                        } else if (index === 1) {
+                            _settings.insert_mode = Settings.InsertNewLine
+                        } else {
+                            _settings.insert_mode = Settings.InsertInLine
+                        }
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Text is appended to the note in the same line or after line break.")
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
                     text: qsTr("Font size in text editor")
                     wrapMode: Text.Wrap
                 }
@@ -248,43 +285,6 @@ DialogPage {
                                     .arg("<i>" + qsTr("Listen") + "</i>") + "<br/>" +
                                   "<i>" + qsTr("Always on") + "</i>" + " — " + qsTr("After clicking on the %1 button, listening is always turn on.")
                                     .arg("<i>" + qsTr("Listen") + "</i>")
-                }
-            }
-
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Text appending style")
-                }
-                ComboBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    currentIndex: {
-                        if (_settings.insert_mode === Settings.InsertInLine) return 0
-                        if (_settings.insert_mode === Settings.InsertNewLine) return 1
-                        return 0
-                    }
-                    model: [
-                        qsTr("In line"),
-                        qsTr("After line break")
-                    ]
-                    onActivated: {
-                        if (index === 0) {
-                            _settings.insert_mode = Settings.InsertInLine
-                        } else if (index === 1) {
-                            _settings.insert_mode = Settings.InsertNewLine
-                        } else {
-                            _settings.insert_mode = Settings.InsertInLine
-                        }
-                    }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Text is appended to the note in the same line or after line break.")
                 }
             }
 
