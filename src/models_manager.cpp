@@ -914,7 +914,7 @@ void models_manager::handle_download_finished() {
         auto next_part = reply->property("next_part").toInt();
 
         auto sup_idx = reply->property("sup_idx").toUInt();
-        if (sup_idx >= model.sup_models.size())
+        if (type == download_type::sup && sup_idx >= model.sup_models.size())
             throw std::runtime_error("sup_idx too big: " +
                                      std::to_string(sup_idx));
 
