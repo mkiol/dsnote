@@ -849,8 +849,8 @@ bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame) {
             if (auto ret = avcodec_send_packet(m_in_av_audio_ctx, pkt);
                 ret != 0 && ret != AVERROR(EAGAIN)) {
                 av_packet_unref(pkt);
-                LOGW("audio decoding error: " << ret << " "
-                                              << str_from_av_error(ret));
+                LOGW("audio frame decoding error: " << ret << " "
+                                                    << str_from_av_error(ret));
                 continue;
             }
 
@@ -893,7 +893,9 @@ bool media_compressor::encode_frame(AVFrame* frame, AVPacket* pkt) {
     if (auto ret = avcodec_send_frame(m_out_av_audio_ctx, frame);
         ret != 0 && ret != AVERROR(EAGAIN) && ret != AVERROR_EOF) {
         av_frame_unref(frame);
-        throw std::runtime_error("avcodec_send_frame error");
+        LOGW("avcodec_send_frame error: " << ret << " "
+                                          << str_from_av_error(ret));
+        return false;
     }
 
     av_frame_unref(frame);
