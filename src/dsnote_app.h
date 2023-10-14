@@ -210,7 +210,8 @@ class dsnote_app : public QObject {
     Q_INVOKABLE bool load_note_from_file(const QString &input_file,
                                          bool replace);
     Q_INVOKABLE void open_files(const QStringList &input_files, bool replace);
-    Q_INVOKABLE void open_files(const QList<QUrl> &input_urls, bool replace);
+    Q_INVOKABLE void open_files_url(const QList<QUrl> &input_urls,
+                                    bool replace);
     Q_INVOKABLE void stop_play_speech();
     Q_INVOKABLE void copy_to_clipboard();
     Q_INVOKABLE void copy_translation_to_clipboard();

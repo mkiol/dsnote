@@ -242,11 +242,11 @@ ApplicationWindow {
 
             if (app.note.length > 0) {
                 var urls = drop.urls
-                addTextDialog.addHandler = function(){app.open_files(urls, false)}
-                addTextDialog.replaceHandler = function(){app.open_files(urls, true)}
+                addTextDialog.addHandler = function(){app.open_files_url(urls, false)}
+                addTextDialog.replaceHandler = function(){app.open_files_url(urls, true)}
                 addTextDialog.open()
             } else {
-                app.open_files(drop.urls, true)
+                app.open_files_url(drop.urls, true)
             }
         }
     }
@@ -269,7 +269,15 @@ ApplicationWindow {
         onActivate_requested: appWin.raise()
         onAction_requested: app.execute_action_name(action_name)
         onFiles_to_open_requested: {
-            app.open_files(files)
+            if (app.note.length > 0) {
+                var list_of_files = files
+                addTextDialog.addHandler = function(){app.open_files(list_of_files, false)}
+                addTextDialog.replaceHandler = function(){app.open_files(list_of_files, true)}
+                addTextDialog.open()
+            } else {
+                app.open_files(files, true)
+            }
+
             appWin.raise()
         }
     }

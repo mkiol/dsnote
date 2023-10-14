@@ -2475,7 +2475,7 @@ void dsnote_app::open_files(const QStringList &input_files, bool replace) {
     }
 }
 
-void dsnote_app::open_files(const QList<QUrl> &input_urls, bool replace) {
+void dsnote_app::open_files_url(const QList<QUrl> &input_urls, bool replace) {
     QStringList input_files;
 
     std::transform(input_urls.cbegin(), input_urls.cend(),
