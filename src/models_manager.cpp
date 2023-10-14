@@ -1498,7 +1498,7 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         }
 
 #ifdef ARCH_ARM_32
-        if (!has_neon_fp && engine == model_engine::stt_whisper) {
+        if (!has_neon_fp && engine == model_engine_t::stt_whisper) {
             qDebug() << "ignoring whisper model because cpu does not support "
                         "neon fd:"
                      << model_id;
@@ -1506,42 +1506,42 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
         }
 #endif
 #if defined ARCH_ARM_32 || defined ARCH_ARM_64
-        if (engine == model_engine::stt_vosk && model_id.contains("large")) {
+        if (engine == model_engine_t::stt_vosk && model_id.contains("large")) {
             qDebug() << "ignoring vosk large model on arm:" << model_id;
             continue;
         }
 #endif
 #ifdef USE_SFOS
-        if (engine == model_engine::stt_vosk &&
+        if (engine == model_engine_t::stt_vosk &&
             (model_id.contains("large") || model_id.contains("medium"))) {
             qDebug() << "ignoring vosk large model on sfos:" << model_id;
             continue;
         }
-        if (engine == model_engine::stt_whisper &&
+        if (engine == model_engine_t::stt_whisper &&
             (model_id.contains("medium") || model_id.contains("large"))) {
             qDebug() << "ignoring whisper medium or large model os sfos:"
                      << model_id;
             continue;
         }
-        if (engine == model_engine::tts_coqui) {
+        if (engine == model_engine_t::tts_coqui) {
             qDebug() << "ignoring coqui model on sfos:" << model_id;
             continue;
         }
 #endif
 #ifndef USE_PY
-        if (engine == model_engine::ttt_hftc) {
+        if (engine == model_engine_t::ttt_hftc) {
             qDebug() << "ignoring hftc model:" << model_id;
             continue;
         }
-        if (engine == model_engine::tts_coqui) {
+        if (engine == model_engine_t::tts_coqui) {
             qDebug() << "ignoring coqui model:" << model_id;
             continue;
         }
-        if (engine == model_engine::stt_fasterwhisper) {
+        if (engine == model_engine_t::stt_fasterwhisper) {
             qDebug() << "ignoring fasterwhisper model:" << model_id;
             continue;
         }
-        if (engine == model_engine::tts_mimic3) {
+        if (engine == model_engine_t::tts_mimic3) {
             qDebug() << "ignoring mimic3 model:" << model_id;
             continue;
         }
