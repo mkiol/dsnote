@@ -360,6 +360,7 @@ target_compile_definitions(compiler_flags INTERFACE "$<$<OR:$<CONFIG:Debug>,$<CO
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arch_x8664}>:ARCH_X86_64>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arch_arm32}>:ARCH_ARM_32>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arch_arm64}>:ARCH_ARM_64>")
+target_compile_definitions(compiler_flags INTERFACE "INSTALL_PREFIX=\"${CMAKE_INSTALL_PREFIX}\"")
 
 # translations
 
