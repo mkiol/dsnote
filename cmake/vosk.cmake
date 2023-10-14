@@ -59,6 +59,9 @@ ExternalProject_Add(vosk
 )
 
 ExternalProject_Add_StepDependencies(vosk configure kaldi)
-ExternalProject_Add_StepDependencies(vosk configure openblas)
+
+if(BUILD_OPENBLAS)
+    ExternalProject_Add_StepDependencies(vosk configure openblas)
+endif()
 
 list(APPEND deps vosk)

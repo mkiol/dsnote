@@ -9,6 +9,22 @@ elseif(arch_arm32)
     set(bergamot_build_arch armv7-a)
 endif()
 
+if(BUILD_OPENBLAS)
+    set(blas_lib_path ${external_lib_dir}/libopenblas.so)
+    set(blas_include_dir ${external_include_dir}/openblas)
+else()
+    set(BLA_STATIC 0)
+    set(BLA_VENDOR "OpenBLAS")
+    set(BLA_SIZEOF_INTEGER 8)
+    set(BLA_PREFER_PKGCONFIG 1)
+    find_package(BLAS REQUIRED)
+
+    find_path(BLAS_INCLUDE_DIRS cblas.h ${CMAKE_PREFIX_PATH}/include/openblas $ENV{BLAS_HOME}/include)
+
+    set(blas_lib_path ${BLAS_LIBRARIES})
+    set(blas_include_dir ${BLAS_INCLUDE_DIRS})
+endif()
+
 if(arch_x8664)
     ExternalProject_Add(bergamotfallback
         SOURCE_DIR ${external_dir}/bergamotfallback
@@ -23,8 +39,8 @@ if(arch_x8664)
                         echo "patch cmd failed, likely already patched"
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-            -DBLAS_LIB_PATH=${external_lib_dir}/libopenblas.so
-            -DBLAS_INC_DIR=${external_include_dir}/openblas
+            -DBLAS_LIB_PATH=${blas_lib_path}
+            -DBLAS_INC_DIR=${blas_include_dir}
             -DUSE_INTRINSICS_SSE2=ON
             -DUSE_INTRINSICS_SSE3=OFF
             -DUSE_INTRINSICS_SSE41=OFF
@@ -40,7 +56,9 @@ if(arch_x8664)
         BUILD_ALWAYS False
     )
 
-    ExternalProject_Add_StepDependencies(bergamotfallback configure openblas)
+    if(BUILD_OPENBLAS)
+        ExternalProject_Add_StepDependencies(bergamotfallback configure openblas)
+    endif()
 
     list(APPEND deps bergamotfallback)
 endif(arch_x8664)
@@ -59,8 +77,8 @@ ExternalProject_Add(bergamot
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_VERBOSE_MAKEFILE=ON
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        -DBLAS_LIB_PATH=${external_lib_dir}/libopenblas.so
-        -DBLAS_INC_DIR=${external_include_dir}/openblas
+        -DBLAS_LIB_PATH=${blas_lib_path}
+        -DBLAS_INC_DIR=${blas_include_dir}
         -DUSE_INTRINSICS_SSE2=ON
         -DUSE_INTRINSICS_SSE3=ON
         -DUSE_INTRINSICS_SSE41=ON
@@ -75,6 +93,8 @@ ExternalProject_Add(bergamot
     BUILD_ALWAYS False
 )
 
-ExternalProject_Add_StepDependencies(bergamot configure openblas)
+if(BUILD_OPENBLAS)
+    ExternalProject_Add_StepDependencies(bergamot configure openblas)
+endif()
 
 list(APPEND deps bergamot)
