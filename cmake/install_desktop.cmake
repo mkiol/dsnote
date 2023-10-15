@@ -58,7 +58,7 @@ if(BUILD_PIPER)
     install(FILES "${external_lib_dir}/libonnxruntime.so.1.14.1" DESTINATION lib)
 endif()
 
-if(BUILD_VOSK)
+if(${BUILD_VOSK} OR ${DOWNLOAD_VOSK})
     install(FILES "${external_lib_dir}/libvosk.so" DESTINATION lib)
 endif()
 
