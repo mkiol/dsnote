@@ -37,13 +37,7 @@ void file_source::start() {
     m_timer.setInterval(m_timer_quick);
     m_timer.start();
 
-    try {
-        m_mc.decompress_async({m_file.toStdString()});
-    } catch (const std::runtime_error &err) {
-        qWarning() << err.what();
-        m_error = true;
-        emit error();
-    }
+    m_mc.decompress_async({m_file.toStdString()});
 }
 
 void file_source::handle_read_timeout() {

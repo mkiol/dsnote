@@ -2082,10 +2082,24 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
         return INVALID_TASK;
     }
 
-    if (QFileInfo::exists(file)) {
-        restart_audio_source(file);
-    } else {
-        restart_audio_source(QUrl{file}.toLocalFile());
+    try {
+        if (QFileInfo::exists(file))
+            restart_audio_source(file);
+        else
+            restart_audio_source(QUrl{file}.toLocalFile());
+    } catch (const std::runtime_error &err) {
+        m_current_task.reset();
+
+        qCritical() << "audio source error:" << err.what();
+
+        emit current_task_changed();
+
+        refresh_status();
+
+        emit error(QFileInfo::exists(file) ? error_t::file_source
+                                           : error_t::mic_source);
+
+        return INVALID_TASK;
     }
 
     start_keepalive_current_task();
