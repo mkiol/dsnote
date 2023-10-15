@@ -552,21 +552,9 @@ if(arch_x8664)
     if(BUILD_RUBBERBAND)
         include(${cmake_path}/rubberband.cmake)
     else()
-        pkg_search_module(samplerate REQUIRED samplerate)
-        list(APPEND deps_libs ${samplerate_LIBRARIES})
-        list(APPEND includes ${samplerate_INCLUDE_DIRS})
-
-        find_library(sleefdft_path sleefdft REQUIRED)
-        list(APPEND deps_libs ${sleefdft_path})
-
-        pkg_search_module(sleef REQUIRED sleef)
-        list(APPEND deps_libs ${sleef_LIBRARIES})
-        list(APPEND includes ${sleef_INCLUDE_DIRS})
-
         pkg_search_module(rubberband REQUIRED rubberband)
         list(APPEND deps_libs ${rubberband_LIBRARIES})
         list(APPEND includes ${rubberband_INCLUDE_DIRS})
-        list(APPEND deps_libs ${sleefdft_path} ${sleef_LIBRARIES})
     endif()
 endif(arch_x8664)
 
