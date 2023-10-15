@@ -568,6 +568,7 @@ modules:
       - --enable-decoder=mp3on4float
       - --enable-decoder=libvorbis
       - --enable-decoder=flac
+      - --enable-decoder=opus
       - --enable-muxer=mp3
       - --enable-muxer=ogg
       - --enable-muxer=wav
@@ -709,7 +710,7 @@ modules:
       - type: shell
         commands:
           - "autoreconf -fi"
-  
+
   - name: rocm-opencl
     only-arches:
       - x86_64
