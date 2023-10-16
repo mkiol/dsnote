@@ -297,7 +297,9 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
 
     m_speech_buf.clear();
 
-    flush(eof ? flush_t::eof : flush_t::regular);
+    flush(eof || m_config.speech_mode == speech_mode_t::single_sentence
+              ? flush_t::eof
+              : flush_t::regular);
 
     free_buf();
 
