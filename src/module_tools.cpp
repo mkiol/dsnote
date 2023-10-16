@@ -39,39 +39,67 @@ bool init_module(const QString& name) {
     return true;
 }
 
-QString path_to_share_dir_for_path(const QString& path) {
-    auto path_full = QStringLiteral(INSTALL_PREFIX "/share/%1").arg(path);
+static QString path_to_dir_for_path(const QString& dir, const QString& path) {
+    auto path_full = QStringLiteral(INSTALL_PREFIX "/%1/%2").arg(dir, path);
     if (QFileInfo::exists(path_full))
-        return QStringLiteral(INSTALL_PREFIX "/share");
+        return QStringLiteral(INSTALL_PREFIX "/%1").arg(dir);
+
+    path_full = QStringLiteral(INSTALL_PREFIX "/share/%1/%2/%3")
+                    .arg(APP_BINARY_ID, dir, path);
+    if (QFileInfo::exists(path_full))
+        return QStringLiteral(INSTALL_PREFIX "/share/%1/%2")
+            .arg(APP_BINARY_ID, dir);
 
     path_full =
         QStringLiteral(INSTALL_PREFIX "/share/%1/%2").arg(APP_BINARY_ID, path);
     if (QFileInfo::exists(path_full))
         return QStringLiteral(INSTALL_PREFIX "/share/%1").arg(APP_BINARY_ID);
 
-    path_full = QStringLiteral("/usr/share/%1").arg(path);
-    if (QFileInfo::exists(path_full)) return QStringLiteral("/usr/share");
+    path_full = QStringLiteral("/usr/%1/%2").arg(dir, path);
+    if (QFileInfo::exists(path_full)) return QStringLiteral("/usr/%1").arg(dir);
+
+    path_full =
+        QStringLiteral("/usr/share/%1/%2/%3").arg(APP_BINARY_ID, dir, path);
+    if (QFileInfo::exists(path_full))
+        return QStringLiteral("/usr/share/%1/%2").arg(APP_BINARY_ID, dir);
 
     path_full = QStringLiteral("/usr/share/%1/%2").arg(APP_BINARY_ID, path);
     if (QFileInfo::exists(path_full))
         return QStringLiteral("/usr/share/%1").arg(APP_BINARY_ID);
 
-    path_full = QStringLiteral("/usr/local/share/%1").arg(path);
-    if (QFileInfo::exists(path_full)) return QStringLiteral("/usr/local/share");
+    path_full = QStringLiteral("/usr/local/%1/%2").arg(dir, path);
+    if (QFileInfo::exists(path_full))
+        return QStringLiteral("/usr/local/%1").arg(dir);
+
+    path_full = QStringLiteral("/usr/local/share/%1/%2/%3")
+                    .arg(APP_BINARY_ID, dir, path);
+    if (QFileInfo::exists(path_full))
+        return QStringLiteral("/usr/local/share/%1/%2").arg(APP_BINARY_ID, dir);
 
     path_full =
         QStringLiteral("/usr/local/share/%1/%2").arg(APP_BINARY_ID, path);
     if (QFileInfo::exists(path_full))
         return QStringLiteral("/usr/local/share/%1").arg(APP_BINARY_ID);
 
-    path_full = QStringLiteral("external/share/%1").arg(path);
-    if (QFileInfo::exists(path_full)) return QStringLiteral("/app/share");
+    qWarning() << "can't find dir for path:" << dir << path;
 
     return QString{};
 }
 
+QString path_to_share_dir_for_path(const QString& path) {
+    return path_to_dir_for_path(QStringLiteral("share"), path);
+}
+
+QString path_to_bin_dir_for_path(const QString& path) {
+    return path_to_dir_for_path(QStringLiteral("bin"), path);
+}
+
 QString path_in_share_dir(const QString& path) {
     auto path_full = QStringLiteral(INSTALL_PREFIX "/share/%1").arg(path);
+    if (QFileInfo::exists(path_full)) return path_full;
+
+    path_full = QStringLiteral(INSTALL_PREFIX "/share/%1/share/%2")
+                    .arg(APP_BINARY_ID, path);
     if (QFileInfo::exists(path_full)) return path_full;
 
     path_full =
@@ -81,14 +109,25 @@ QString path_in_share_dir(const QString& path) {
     path_full = QStringLiteral("/usr/share/%1").arg(path);
     if (QFileInfo::exists(path_full)) return path_full;
 
+    path_full =
+        QStringLiteral("/usr/share/%1/share/%2").arg(APP_BINARY_ID, path);
+    if (QFileInfo::exists(path_full)) return path_full;
+
     path_full = QStringLiteral("/usr/share/%1/%2").arg(APP_BINARY_ID, path);
     if (QFileInfo::exists(path_full)) return path_full;
 
     path_full = QStringLiteral("/usr/local/share/%1").arg(path);
     if (QFileInfo::exists(path_full)) return path_full;
 
-    path_full = QStringLiteral("external/share/%1").arg(path);
+    path_full =
+        QStringLiteral("/usr/local/share/%1/share/%2").arg(APP_BINARY_ID, path);
     if (QFileInfo::exists(path_full)) return path_full;
+
+    path_full =
+        QStringLiteral("/usr/local/share/%1/%2").arg(APP_BINARY_ID, path);
+    if (QFileInfo::exists(path_full)) return path_full;
+
+    qWarning() << "can't find path in share dir:" << path;
 
     return QString{};
 }

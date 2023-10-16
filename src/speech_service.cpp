@@ -3038,33 +3038,33 @@ void speech_service::remove_cached_media_files() {
     for (const auto &file : std::as_const(dir).entryList()) dir.remove(file);
 }
 
+static void add_to_env_path(const QString &dir) {
+    try {
+        auto *old_path = getenv("PATH");
+        if (old_path)
+            setenv("PATH",
+                   fmt::format("{}:{}", dir.toStdString(), old_path).c_str(),
+                   true);
+        else
+            setenv("PATH", dir.toStdString().c_str(), false);
+    } catch (const std::runtime_error &err) {
+        qWarning() << "error:" << err.what();
+    }
+}
+
 void speech_service::setup_modules() {
     module_tools::init_module(QStringLiteral("rhvoicedata"));
     module_tools::init_module(QStringLiteral("rhvoiceconfig"));
     module_tools::init_module(QStringLiteral("espeakdata"));
 
-#ifdef USE_SFOS
-    // add mbrola bin to PATH
+    auto mbrola_bin_dir = module_tools::path_to_bin_dir_for_path("mbrola");
+    qDebug() << "mbrola dir:" << mbrola_bin_dir;
+    if (!mbrola_bin_dir.isEmpty()) add_to_env_path(mbrola_bin_dir);
 
-    auto bin_dir = QStringLiteral("/usr/share/%1/bin").arg(APP_BINARY_ID);
-    if (!QFileInfo::exists(bin_dir)) {
-        qWarning() << "no bin dir:" << bin_dir;
-        return;
-    }
-
-    try {
-        auto *old_path = getenv("PATH");
-        if (old_path)
-            setenv(
-                "PATH",
-                fmt::format("{}:{}", bin_dir.toStdString(), old_path).c_str(),
-                true);
-        else
-            setenv("PATH", bin_dir.toStdString().c_str(), false);
-    } catch (const std::runtime_error &err) {
-        qWarning() << "error:" << err.what();
-    }
-#endif
+    auto espeak_bin_dir = module_tools::path_to_bin_dir_for_path("espeak");
+    qDebug() << "espeak dir:" << espeak_bin_dir;
+    if (!espeak_bin_dir.isEmpty() && espeak_bin_dir != mbrola_bin_dir)
+        add_to_env_path(espeak_bin_dir);
 }
 
 // DBus
