@@ -31,7 +31,7 @@ class coqui_engine : public tts_engine {
     inline static const auto* const vocoder_config_temp_file =
         "/tmp/tmp_coqui_vocoder_config.json";
 
-    std::optional<py::object> m_tts;
+    std::optional<py::object> m_model;
     std::optional<float> m_initial_length_scale;
     std::optional<float> m_initial_duration_threshold;
 

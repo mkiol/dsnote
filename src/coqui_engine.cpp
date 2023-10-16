@@ -35,13 +35,13 @@ coqui_engine::~coqui_engine() {
 void coqui_engine::stop() {
     tts_engine::stop();
 
-    if (m_tts) {
+    if (m_model) {
         auto* pe = py_executor::instance();
 
         try {
             pe->execute([&]() {
                   try {
-                      m_tts.reset();
+                      m_model.reset();
                   } catch (const std::exception& err) {
                       LOGE("py error: " << err.what());
                   }
@@ -180,23 +180,42 @@ void coqui_engine::create_model() {
                       fix_config_file(vocoder_config_file,
                                       m_config.model_files.vocoder_path, true);
 
+              bool mms_model = model_file.find("fairseq") != std::string::npos;
+
               try {
-                  auto api = py::module_::import("TTS.api");
+                  auto api = py::module_::import("TTS.utils.synthesizer");
 
-                  m_tts = [&] {
-                      if (vocoder_model_file.empty() ||
-                          vocoder_config_file.empty())
-                          return api.attr("TTS")("model_path"_a = model_file,
-                                                 "config_path"_a = config_file);
-                      return api.attr("TTS")(
-                          "model_path"_a = model_file,
-                          "config_path"_a = config_file,
-                          "vocoder_path"_a = vocoder_model_file,
-                          "vocoder_config_path"_a = vocoder_config_file);
-                  }();
+                  m_model = api.attr("Synthesizer")(
+                      "tts_checkpoint"_a =
+                          mms_model
+                              ? static_cast<py::object>(py::none())
+                              : static_cast<py::object>(py::str(model_file)),
+                      "tts_config_path"_a =
+                          mms_model
+                              ? static_cast<py::object>(py::str(py::none()))
+                              : static_cast<py::object>(py::str(config_file)),
+                      "tts_speakers_file"_a = py::none(),
+                      "tts_languages_file"_a = py::none(),
+                      "vocoder_checkpoint"_a =
+                          mms_model || vocoder_model_file.empty()
+                              ? static_cast<py::object>(py::none())
+                              : static_cast<py::object>(
+                                    py::str(vocoder_model_file)),
+                      "vocoder_config"_a =
+                          mms_model || vocoder_config_file.empty()
+                              ? static_cast<py::object>(py::none())
+                              : static_cast<py::object>(
+                                    py::str(vocoder_config_file)),
+                      "encoder_checkpoint"_a = py::none(),
+                      "encoder_config"_a = py::none(),
+                      "model_dir"_a =
+                          mms_model ? static_cast<py::object>(py::str(
+                                          m_config.model_files.model_path))
+                                    : static_cast<py::object>(py::none()),
+                      "use_cuda"_a = false);
 
-                  if (m_tts) {
-                      auto model = m_tts->attr("synthesizer").attr("tts_model");
+                  if (m_model) {
+                      auto model = m_model->attr("tts_model");
                       if (py::hasattr(model, "length_scale")) {
                           m_initial_length_scale =
                               model.attr("length_scale").cast<float>();
@@ -219,7 +238,7 @@ void coqui_engine::create_model() {
     }
 }
 
-bool coqui_engine::model_created() const { return static_cast<bool>(m_tts); }
+bool coqui_engine::model_created() const { return static_cast<bool>(m_model); }
 
 bool coqui_engine::encode_speech_impl(const std::string& text,
                                       const std::string& out_file) {
@@ -242,8 +261,7 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
     try {
         return pe->execute([&]() {
                      try {
-                         auto model =
-                             m_tts->attr("synthesizer").attr("tts_model");
+                         auto model = m_model->attr("tts_model");
                          if (py::hasattr(model, "length_scale")) {
                              model.attr("length_scale") = length_scale;
                          } else if (py::hasattr(model, "duration_threshold")) {
@@ -251,15 +269,22 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
                                  duration_threshold;
                          }
 
-                         if (m_config.speaker.empty()) {
-                             m_tts->attr("tts_to_file")(
-                                 "text"_a = text, "file_path"_a = out_file);
-                         } else {
-                             m_tts->attr("tts_to_file")(
-                                 text, "file_path"_a = out_file,
-                                 "speaker"_a = m_config.speaker,
-                                 "length_scale"_a = length_scale);
-                         }
+                         auto wav = m_model->attr("tts")(
+                             "text"_a = text,
+                             "speaker_name"_a =
+                                 m_config.speaker.empty()
+                                     ? static_cast<py::object>(py::none())
+                                     : static_cast<py::object>(
+                                           py::str(m_config.speaker)),
+                             "language_name"_a = m_config.lang,
+                             "speaker_wav"_a = py::none(),
+                             "reference_wav"_a = py::none(),
+                             "style_wav"_a = py::none(),
+                             "style_text"_a = py::none(),
+                             "reference_speaker_name"_a = py::none());
+
+                         m_model->attr("save_wav")("wav"_a = wav,
+                                                   "path"_a = out_file);
                      } catch (const std::exception& err) {
                          LOGE("py error: " << err.what());
                          return std::string{"false"};
