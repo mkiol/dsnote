@@ -172,11 +172,27 @@ RowLayout {
             }
 
             Button {
+                id: stopButton
+
+                Layout.alignment: Qt.AlignBottom
+                Layout.preferredHeight: _icon.implicitHeight
+                icon.name: "media-playback-stop-symbolic"
+                enabled: app.task_state !== DsnoteApp.TaskStateProcessing &
+                         app.task_state !== DsnoteApp.TaskStateInitializing &
+                         app.state === DsnoteApp.StateListeningSingleSentence
+                onClicked: app.stop_listen()
+
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTr("Stops listening. The already captured voice is decoded into text.")
+            }
+
+            Button {
                 id: cancelButton
 
                 Layout.alignment: Qt.AlignBottom
                 Layout.preferredHeight: _icon.implicitHeight
-                icon.name: app.state === DsnoteApp.StatePlayingSpeech ? "media-playback-stop-symbolic" : "action-unavailable-symbolic"
+                icon.name: "action-unavailable-symbolic"
                 enabled: app.task_state === DsnoteApp.TaskStateProcessing ||
                          app.task_state === DsnoteApp.TaskStateInitializing ||
                          app.state === DsnoteApp.StateTranscribingFile ||
@@ -185,7 +201,7 @@ RowLayout {
                          app.state === DsnoteApp.StatePlayingSpeech ||
                          app.state === DsnoteApp.StateWritingSpeechToFile ||
                          app.state === DsnoteApp.StateTranslating
-                text: app.state === DsnoteApp.StatePlayingSpeech ? qsTr("Stop") : qsTr("Cancel")
+                text: qsTr("Cancel")
                 onClicked: app.cancel()
             }
         }
