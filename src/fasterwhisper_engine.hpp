@@ -46,6 +46,7 @@ class fasterwhisper_engine : public stt_engine {
     void reset_impl() override;
     void stop_processing_impl() override;
     void start_processing_impl() override;
+    void stop();
 };
 
 #endif  // FASTERWHISPER_ENGINE_H

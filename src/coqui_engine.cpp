@@ -35,19 +35,21 @@ coqui_engine::~coqui_engine() {
 void coqui_engine::stop() {
     tts_engine::stop();
 
-    auto* pe = py_executor::instance();
+    if (m_tts) {
+        auto* pe = py_executor::instance();
 
-    try {
-        pe->execute([&]() {
-              try {
-                  m_tts.reset();
-              } catch (const std::exception& err) {
-                  LOGE("py error: " << err.what());
-              }
-              return std::string{};
-          }).get();
-    } catch (const std::exception& err) {
-        LOGE("error: " << err.what());
+        try {
+            pe->execute([&]() {
+                  try {
+                      m_tts.reset();
+                  } catch (const std::exception& err) {
+                      LOGE("py error: " << err.what());
+                  }
+                  return std::string{};
+              }).get();
+        } catch (const std::exception& err) {
+            LOGE("error: " << err.what());
+        }
     }
 }
 

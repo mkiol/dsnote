@@ -35,22 +35,24 @@ mimic3_engine::~mimic3_engine() {
 void mimic3_engine::stop() {
     tts_engine::stop();
 
-    auto* pe = py_executor::instance();
+    if (m_tts) {
+        auto* pe = py_executor::instance();
 
-    try {
-        pe->execute([&]() {
-              try {
-                  m_tts->attr("_loaded_voices")["lang/model"]
-                      .attr("_SHARED_MODELS")
-                      .attr("clear")();
-                  m_tts.reset();
-              } catch (const std::exception& err) {
-                  LOGE("py error: " << err.what());
-              }
-              return std::string{};
-          }).get();
-    } catch (const std::exception& err) {
-        LOGE("error: " << err.what());
+        try {
+            pe->execute([&]() {
+                  try {
+                      m_tts->attr("_loaded_voices")["lang/model"]
+                          .attr("_SHARED_MODELS")
+                          .attr("clear")();
+                      m_tts.reset();
+                  } catch (const std::exception& err) {
+                      LOGE("py error: " << err.what());
+                  }
+                  return std::string{};
+              }).get();
+        } catch (const std::exception& err) {
+            LOGE("error: " << err.what());
+        }
     }
 
     LOGD("mimic3 stoped");

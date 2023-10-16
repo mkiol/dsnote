@@ -30,7 +30,28 @@ fasterwhisper_engine::fasterwhisper_engine(config_t config,
 fasterwhisper_engine::~fasterwhisper_engine() {
     LOGD("fasterwhisper dtor");
 
-    stop();
+    stop();  
+}
+
+void fasterwhisper_engine::stop() {
+    stt_engine::stop();
+
+    if (m_model) {
+        auto* pe = py_executor::instance();
+
+        try {
+            pe->execute([&]() {
+                  try {
+                      m_model.reset();
+                  } catch (const std::exception& err) {
+                      LOGE("py error: " << err.what());
+                  }
+                  return std::string{};
+              }).get();
+        } catch (const std::exception& err) {
+            LOGE("error: " << err.what());
+        }
+    }
 }
 
 void fasterwhisper_engine::push_buf_to_whisper_buf(
