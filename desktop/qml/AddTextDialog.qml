@@ -18,6 +18,7 @@ Dialog {
     modal: true
     width: Math.min(implicitWidth, parent.width)
     height: column.implicitHeight + 2 * verticalPadding
+    closePolicy: Popup.CloseOnEscape
 
     ColumnLayout {
         id: column

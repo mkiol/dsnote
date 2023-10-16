@@ -73,10 +73,6 @@ ToolBar {
                         onClicked: {
                             textFileReadDialog.open()
                         }
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Replace the current note with text from a text file.")
                     }
 
                     MenuItem {
@@ -92,7 +88,7 @@ ToolBar {
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Convert audio from an existing audio or video file into text. The text will be appended to the current note.")
+                        ToolTip.text: qsTr("Convert audio from an existing audio or video file into text.")
                     }
 
                     MenuSeparator {}

@@ -1048,3 +1048,10 @@ bool settings::is_wayland() const {
 bool settings::is_xcb() const {
     return QGuiApplication::platformName() == "xcb";
 }
+
+bool settings::is_flatpak() const {
+#ifdef USE_FLATPAK
+    return true;
+#endif
+    return false;
+}

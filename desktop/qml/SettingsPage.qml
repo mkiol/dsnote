@@ -68,6 +68,8 @@ DialogPage {
             width: root.width
 
             GridLayout {
+                id: grid
+
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
@@ -78,7 +80,7 @@ DialogPage {
                 }
                 ComboBox {
                     Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.preferredWidth: verticalMode ? parent.width : parent.width / 2
                     currentIndex: {
                         if (_settings.insert_mode === Settings.InsertInLine) return 0
                         if (_settings.insert_mode === Settings.InsertNewLine) return 1
@@ -209,8 +211,6 @@ DialogPage {
             width: root.width
 
             GridLayout {
-                id: grid
-
                 visible: _settings.audio_inputs.length > 1
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
@@ -639,7 +639,9 @@ DialogPage {
                       "</ul>" +
                       qsTr("For example, to trigger %1 action, execute the following command: %2.")
                               .arg("<i>start-listening</i>")
-                              .arg("<i>flatpak run net.mkiol.SpeechNote --action start-listening</i>")
+                              .arg(_settings.is_flatpak() ?
+                                "<i>flatpak run net.mkiol.SpeechNote --action start-listening</i>" :
+                                "<i>dsnote --action start-listening</i>")
             }
         }
 

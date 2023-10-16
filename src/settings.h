@@ -274,6 +274,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE bool has_audio_input() const;
     Q_INVOKABLE bool is_wayland() const;
     Q_INVOKABLE bool is_xcb() const;
+    Q_INVOKABLE bool is_flatpak() const;
     Q_INVOKABLE QStringList qt_styles() const;
     Q_INVOKABLE bool file_exists(const QString &file_path) const;
     Q_INVOKABLE QString
