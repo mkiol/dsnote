@@ -45,6 +45,7 @@ option(BUILD_FFMPEG "download sources of ffmpeg libs, build and link statically"
 option(BUILD_TAGLIB "download sources of taglib, build and link statically" ON)
 option(BUILD_LIBNUMBERTEXT "download sources of libnumbertext, build and link statically" ON)
 option(BUILD_QHOTKEY "download sources of qhotkey lib, build and link statically" ON)
+option(BUILD_APRILASR "download sources of april-asr lib, build and link statically" ON)
 
 if(${WITH_DESKTOP} AND ${WITH_SFOS})
     message(FATAL_ERROR "options WITH_DESKTOP and WITH_SFOS cannot be set together")
@@ -107,12 +108,12 @@ set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
 set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
-set(info_conf_version "40")
+set(info_conf_version "41")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · locness3")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · eSpeak NG · Bergamot Translator · \
-Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis · TagLib · libnumbertext")
+Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis · TagLib · libnumbertext · april-asr")
 if (WITH_DESKTOP)
     set(info_libs_str "${info_libs_str} · Hugging Face Transformers · KDBusAddons · QHotkey")
 endif()
@@ -276,6 +277,8 @@ set(dsnote_lib_sources
     ${sources_dir}/fasterwhisper_engine.cpp
     ${sources_dir}/mimic3_engine.hpp
     ${sources_dir}/mimic3_engine.cpp
+    ${sources_dir}/april_engine.hpp
+    ${sources_dir}/april_engine.cpp
 )
 
 if(WITH_DESKTOP)
@@ -538,14 +541,17 @@ else()
     list(APPEND includes ${openblas_INCLUDE_DIRS})
 endif()
 
+if(BUILD_APRILASR)
+    include(${cmake_path}/aprilasr.cmake)
+else()
+    pkg_search_module(aprilasr REQUIRED april-asr)
+    list(APPEND deps_libs ${aprilasr_LIBRARIES})
+    list(APPEND includes ${aprilasr_INCLUDE_DIRS})
+endif()
+
 if(arch_x8664)
     if(BUILD_UROMAN)
         include(${cmake_path}/uroman.cmake)
-    endif()
-
-    find_package(OpenMP)
-    if(OpenMP_CXX_FOUND)
-        list(APPEND deps_libs OpenMP::OpenMP_CXX) # needed by sleef
     endif()
 
     if(BUILD_RUBBERBAND)

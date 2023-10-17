@@ -88,7 +88,7 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
-    <release version="4.3.0" date="2023-10-12">
+    <release version="4.3.0" date="2023-10-17">
       <description>
       <p>Accessibility:</p>
       <ul>
@@ -113,6 +113,8 @@
       <li>New engine: 'Faster Whisper'. It provides slightly better performance comparing
           to the existing engine for Whisper models, especially on larger models like Medium or Large.
           Right now 'Faster Whisper' does not use GPU acceleration.</li>
+      <li>New engine: 'april-asr'. It is super fast and supports intermediate results.
+          New engine comes with models for the following languages: English, Polish.</li>
       <li>Inserting text to any active window. Using global keyboard shotcut or
           'action' you can directly insert the decoded text into any window
           which is currently in focus. This feature only works under X11

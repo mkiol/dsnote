@@ -862,6 +862,15 @@ modules:
   - python3-mycroft_mimic3_tts-x86-64.yaml
   - python3-unikud-x86-64.yaml
 
+  - name: april-asr
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    sources:
+      - type: archive
+        url: https://github.com/abb128/april-asr/archive/3308e68442664552de593957cad0fa443ea183dd.zip
+        sha256: 0640fc16a43018afb1db9f17e93f545d7ac1f07e4bc47ba318d2c7311bef2df5
+
   - name: dsnote
     buildsystem: cmake-ninja
     config-opts:
@@ -890,6 +899,7 @@ modules:
       - -DBUILD_TAGLIB=OFF
       - -DBUILD_LIBNUMBERTEXT=OFF
       - -DBUILD_QHOTKEY=OFF
+      - -DBUILD_APRILASR=OFF
     build-options:
       arch:
         aarch64:

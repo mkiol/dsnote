@@ -404,7 +404,8 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
             break;
         case stt_text_destination_t::note_replace:
             make_undo();
-            set_note(text);
+            set_note(insert_to_note(QString{}, text, lang,
+                                    settings::instance()->insert_mode()));
             m_stt_text_destination = stt_text_destination_t::note_add;
             this->m_intermediate_text.clear();
             emit text_changed();

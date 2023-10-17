@@ -49,6 +49,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         stt_vosk,
         stt_whisper,
         stt_fasterwhisper,
+        stt_april,
         ttt_hftc,
         tts_coqui,
         tts_piper,

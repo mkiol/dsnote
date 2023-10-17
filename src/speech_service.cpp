@@ -20,6 +20,7 @@
 #include <optional>
 #include <set>
 
+#include "april_engine.hpp"
 #include "coqui_engine.hpp"
 #include "ds_engine.hpp"
 #include "espeak_engine.hpp"
@@ -1030,6 +1031,10 @@ QString speech_service::restart_stt_engine(
                 models_manager::model_engine_t::stt_fasterwhisper &&
                 type != typeid(fasterwhisper_engine))
                 return true;
+            if (model_files->stt->engine ==
+                    models_manager::model_engine_t::stt_april &&
+                type != typeid(april_engine))
+                return true;
 
             if (m_stt_engine->model_files() != config.model_files) return true;
             if (m_stt_engine->lang() != config.lang) return true;
@@ -1086,6 +1091,10 @@ QString speech_service::restart_stt_engine(
                         break;
                     case models_manager::model_engine_t::stt_fasterwhisper:
                         m_stt_engine = std::make_unique<fasterwhisper_engine>(
+                            std::move(config), std::move(call_backs));
+                        break;
+                    case models_manager::model_engine_t::stt_april:
+                        m_stt_engine = std::make_unique<april_engine>(
                             std::move(config), std::move(call_backs));
                         break;
                     case models_manager::model_engine_t::ttt_hftc:
@@ -1255,6 +1264,7 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                     case models_manager::model_engine_t::stt_vosk:
                     case models_manager::model_engine_t::stt_whisper:
                     case models_manager::model_engine_t::stt_fasterwhisper:
+                    case models_manager::model_engine_t::stt_april:
                     case models_manager::model_engine_t::mnt_bergamot:
                         throw std::runtime_error{
                             "invalid model engine, expected tts"};

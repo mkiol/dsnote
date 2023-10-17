@@ -5743,6 +5743,30 @@
             "size": "52979372"
         },
         {
+            "name": "English (April-ASR)",
+            "model_id": "en_april_us_april",
+            "engine": "stt_april",
+            "lang_id": "en",
+            "checksum": "51effde",
+            "checksum_quick": "36eb8c3b",
+            "urls": [
+                "https://april.sapples.net/aprilv0_en-us.april"
+            ],
+            "size": "336581852"
+        },
+        {
+            "name": "Polski (April-ASR)",
+            "model_id": "pl_april_april",
+            "engine": "stt_april",
+            "lang_id": "pl",
+            "checksum": "7e73a2dc",
+            "checksum_quick": "e44f76f6",
+            "urls": [
+                "https://april.sapples.net/april-polish-dev-2_pl.april"
+            ],
+            "size": "336679676"
+        },
+        {
             "name": "Punctuation",
             "model_id": "multilang_hftc_kredor",
             "engine": "ttt_hftc",

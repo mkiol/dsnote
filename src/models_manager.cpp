@@ -138,6 +138,9 @@ QDebug operator<<(QDebug d, models_manager::model_engine_t engine) {
         case models_manager::model_engine_t::stt_fasterwhisper:
             d << "stt-faster-whisper";
             break;
+        case models_manager::model_engine_t::stt_april:
+            d << "stt-april";
+            break;
         case models_manager::model_engine_t::ttt_hftc:
             d << "ttt-hftc";
             break;
@@ -1311,6 +1314,7 @@ models_manager::model_role_t models_manager::role_of_engine(
         case model_engine_t::stt_vosk:
         case model_engine_t::stt_whisper:
         case model_engine_t::stt_fasterwhisper:
+        case model_engine_t::stt_april:
             return model_role_t::stt;
         case model_engine_t::ttt_hftc:
             return model_role_t::ttt;
@@ -1335,6 +1339,7 @@ models_manager::model_engine_t models_manager::engine_from_name(
         return model_engine_t::stt_whisper;
     if (name == QStringLiteral("stt_fasterwhisper"))
         return model_engine_t::stt_fasterwhisper;
+    if (name == QStringLiteral("stt_april")) return model_engine_t::stt_april;
     if (name == QStringLiteral("ttt_hftc")) return model_engine_t::ttt_hftc;
     if (name == QStringLiteral("tts_coqui")) return model_engine_t::tts_coqui;
     if (name == QStringLiteral("tts_piper")) return model_engine_t::tts_piper;
@@ -1736,6 +1741,8 @@ QString models_manager::file_name_from_id(const QString& id,
             return id + ".tflite";
         case model_engine_t::stt_whisper:
             return id + ".ggml";
+        case model_engine_t::stt_april:
+            return id + ".april";
         case model_engine_t::stt_fasterwhisper:
         case model_engine_t::stt_vosk:
         case model_engine_t::ttt_hftc:
