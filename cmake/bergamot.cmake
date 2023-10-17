@@ -13,13 +13,13 @@ if(BUILD_OPENBLAS)
     set(blas_lib_path ${external_lib_dir}/libopenblas.so)
     set(blas_include_dir ${external_include_dir}/openblas)
 else()
-    set(BLA_STATIC 0)
+    set(BLA_STATIC OFF)
     set(BLA_VENDOR "OpenBLAS")
-    set(BLA_SIZEOF_INTEGER 8)
-    set(BLA_PREFER_PKGCONFIG 1)
     find_package(BLAS REQUIRED)
 
-    find_path(BLAS_INCLUDE_DIRS cblas.h ${CMAKE_PREFIX_PATH}/include/openblas $ENV{BLAS_HOME}/include)
+    find_path(BLAS_INCLUDE_DIRS NAMES cblas.h
+        PATHS ${CMAKE_PREFIX_PATH}/include/openblas /usr/include/openblas /usr/local/include/openblas $ENV{BLAS_HOME}/include
+        REQUIRED NO_DEFAULT_PATH)
 
     set(blas_lib_path ${BLAS_LIBRARIES})
     set(blas_include_dir ${BLAS_INCLUDE_DIRS})
