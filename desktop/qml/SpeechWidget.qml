@@ -158,6 +158,7 @@ RowLayout {
                          (app.task_state === DsnoteApp.TaskStateProcessing ||
                           app.task_state === DsnoteApp.TaskStateSpeechPlaying ||
                           app.task_state === DsnoteApp.TaskStateSpeechPaused)
+                visible: !stopButton.visible
                 onClicked: {
                     if (app.task_state === DsnoteApp.TaskStateSpeechPaused)
                         app.resume_speech()
@@ -180,6 +181,7 @@ RowLayout {
                 enabled: app.task_state !== DsnoteApp.TaskStateProcessing &
                          app.task_state !== DsnoteApp.TaskStateInitializing &
                          app.state === DsnoteApp.StateListeningSingleSentence
+                visible: app.state === DsnoteApp.StateListeningSingleSentence
                 onClicked: app.stop_listen()
 
                 ToolTip.visible: hovered
