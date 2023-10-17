@@ -54,6 +54,9 @@ DialogPage {
         <li>Copy text to the clipboard. Using global keyboard shotcut or
             <i>start-listening-clipboard</i> action, the decoded text can be copied to the clipboard
             instead of being inserted into the current note.</li>
+        <li>Stop listening button. Unlike Cancel, with this button you can stop listening but
+            the already recorded voice will be decoded into text.</li>
+        <li>Support for Opus audio codec in <i>Transcribe a file</i></li>
         <li>Fix: CUDA acceleration for Whisper models did not work on NVIDIA video cards with Maxwell architecture.</li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
