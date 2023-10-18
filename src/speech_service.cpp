@@ -997,10 +997,13 @@ QString speech_service::restart_stt_engine(
         config.speech_mode =
             static_cast<stt_engine::speech_mode_t>(speech_mode);
         config.translate = false;
-        config.use_gpu = model_files->stt->engine ==
-                             models_manager::model_engine_t::stt_whisper &&
-                         settings::instance()->whisper_use_gpu() &&
-                         settings::instance()->has_gpu_device();
+        config.use_gpu =
+            (model_files->stt->engine ==
+                 models_manager::model_engine_t::stt_whisper ||
+             model_files->stt->engine ==
+                 models_manager::model_engine_t::stt_fasterwhisper) &&
+            settings::instance()->whisper_use_gpu() &&
+            settings::instance()->has_gpu_device();
 
         if (config.use_gpu) {
             if (auto device =
@@ -1038,8 +1041,10 @@ QString speech_service::restart_stt_engine(
 
             if (m_stt_engine->model_files() != config.model_files) return true;
             if (m_stt_engine->lang() != config.lang) return true;
-            if (model_files->stt->engine ==
-                models_manager::model_engine_t::stt_whisper &&
+            if ((model_files->stt->engine ==
+                     models_manager::model_engine_t::stt_whisper ||
+                 model_files->stt->engine ==
+                     models_manager::model_engine_t::stt_fasterwhisper) &&
                 (config.use_gpu != m_stt_engine->use_gpu() ||
                  config.gpu_device != m_stt_engine->gpu_device()))
                 return true;

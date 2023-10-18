@@ -42,6 +42,11 @@ whisper_engine::~whisper_engine() {
         dlclose(m_whisperlib_handle);
         m_whisperlib_handle = nullptr;
     }
+
+    unsetenv("GGML_OPENCL_PLATFORM");
+    unsetenv("GGML_OPENCL_DEVICE");
+    unsetenv("HIP_VISIBLE_DEVICES");
+    unsetenv("CUDA_VISIBLE_DEVICES");
 }
 
 void whisper_engine::open_whisper_lib() {

@@ -414,4 +414,28 @@ void add_opencl_devices(std::vector<device>& devices) {
     } catch ([[maybe_unused]] const std::runtime_error& err) {
     }
 }
+
+bool has_cuda() {
+    auto handle = dlopen("libcudart.so", RTLD_LAZY);
+    if (!handle) {
+        LOGW("failed to open cudart lib: " << dlerror());
+        return false;
+    }
+
+    dlclose(handle);
+
+    return true;
+}
+
+bool has_cudnn() {
+    auto handle = dlopen("libcudnn.so", RTLD_LAZY);
+    if (!handle) {
+        LOGW("failed to open cudnn lib: " << dlerror());
+        return false;
+    }
+
+    dlclose(handle);
+
+    return true;
+}
 }  // namespace gpu_tools

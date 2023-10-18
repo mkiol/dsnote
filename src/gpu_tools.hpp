@@ -26,6 +26,8 @@ std::vector<device> available_devices(bool cuda, bool hip, bool opencl);
 void add_opencl_devices(std::vector<device>& devices);
 void add_cuda_devices(std::vector<device>& devices);
 void add_hip_devices(std::vector<device>& devices);
+bool has_cuda();
+bool has_cudnn();
 
 }  // namespace gpu_tools
 

@@ -16,6 +16,7 @@
 #include <sstream>
 
 #include "cpu_tools.hpp"
+#include "gpu_tools.hpp"
 #include "logger.hpp"
 #include "py_executor.hpp"
 
@@ -89,6 +90,9 @@ void fasterwhisper_engine::create_model() {
                        m_threads,
                        std::max(1, static_cast<int>(
                                        std::thread::hardware_concurrency())));
+                   auto use_cuda = m_config.use_gpu &&
+                                   m_config.gpu_device.api == gpu_api_t::cuda &&
+                                   gpu_tools::has_cudnn();
 
                    LOGD("cpu info: arch="
                         << cpu_tools::arch()
@@ -96,6 +100,8 @@ void fasterwhisper_engine::create_model() {
                    LOGD("using threads: "
                         << n_threads << "/"
                         << std::thread::hardware_concurrency());
+                   LOGD("using device: " << (use_cuda ? "cuda" : "cpu") << " "
+                                         << m_config.gpu_device.id);
 
                    try {
                        auto fw = py::module_::import("faster_whisper");
@@ -103,7 +109,10 @@ void fasterwhisper_engine::create_model() {
                        m_model.emplace(fw.attr("WhisperModel")(
                            "model_size_or_path"_a =
                                m_config.model_files.model_file,
-                           "device"_a = "cpu", "local_files_only"_a = true,
+                           "device"_a = use_cuda ? "cuda" : "cpu",
+                           "device_index"_a =
+                               use_cuda ? m_config.gpu_device.id : 0,
+                           "local_files_only"_a = true,
                            "cpu_threads"_a = n_threads));
                    } catch (const std::exception& err) {
                        LOGE("py error: " << err.what());
