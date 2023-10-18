@@ -818,7 +818,9 @@ void dsnote_app::handle_tts_speech_to_file_finished(const QString &file,
     if (QFile::exists(m_dest_file)) QFile::remove(m_dest_file);
 
     if (QFile::copy(file, m_dest_file)) {
-        if (settings::instance()->mtag()) {
+        if (settings::instance()->mtag() &&
+            settings::audio_format_from_filename(m_dest_file) !=
+                settings::audio_format_t::AudioFormatWav) {
             mtag_tools::write(
                 /*path=*/m_dest_file.toStdString(),
                 /*title=*/m_dest_file_title_tag.toStdString(),

@@ -288,6 +288,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE audio_format_t
     filename_to_audio_format(const QString &filename) const;
     static QString audio_format_str_from_filename(const QString &filename);
+    static audio_format_t audio_format_from_filename(const QString &filename);
     static audio_format_t filename_to_audio_format_static(
         const QString &filename);
 

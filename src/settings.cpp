@@ -645,6 +645,16 @@ void settings::set_restart_required() {
     }
 }
 
+settings::audio_format_t settings::audio_format_from_filename(
+    const QString& filename) {
+    if (settings::instance()->audio_format() ==
+        settings::audio_format_t::AudioFormatAuto) {
+        return filename_to_audio_format_static(filename);
+    } else {
+        return settings::instance()->audio_format();
+    }
+}
+
 QString settings::audio_format_str_from_filename(const QString& filename) {
     if (settings::instance()->audio_format() ==
         settings::audio_format_t::AudioFormatAuto) {
