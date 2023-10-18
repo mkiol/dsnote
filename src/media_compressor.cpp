@@ -610,12 +610,33 @@ void media_compressor::decompress_async(std::vector<std::string> input_files) {
     });
 }
 
+void media_compressor::compress_async(
+    std::vector<std::string> input_files, std::string output_file,
+    format_t format, quality_t quality,
+    task_finished_callback_t task_finished_callback) {
+    if (!task_finished_callback)
+        throw std::runtime_error{"callback not provided"};
+
+    compress_internal(std::move(input_files), std::move(output_file), format,
+                      quality, std::move(task_finished_callback));
+}
+
 void media_compressor::compress(std::vector<std::string> input_files,
                                 std::string output_file, format_t format,
                                 quality_t quality) {
-    LOGD("task compress: format=" << format << ", quality=" << quality);
+    compress_internal(std::move(input_files), std::move(output_file), format,
+                      quality, task_finished_callback_t{});
+}
 
-    if (input_files.empty()) throw std::runtime_error("empty input file list");
+void media_compressor::compress_internal(
+    std::vector<std::string> input_files, std::string output_file,
+    format_t format, quality_t quality,
+    task_finished_callback_t task_finished_callback) {
+    LOGD("task compress: format=" << format << ", quality=" << quality
+                                  << ", async="
+                                  << static_cast<bool>(task_finished_callback));
+
+    if (input_files.empty()) throw std::runtime_error{"empty input file list"};
 
     std::for_each(input_files.begin(), input_files.end(),
                   [&](auto& file) { m_input_files.push(std::move(file)); });
@@ -631,11 +652,33 @@ void media_compressor::compress(std::vector<std::string> input_files,
 
     init_av(task_t::compress);
 
-    m_error = false;
+    if (task_finished_callback) {
+        if (m_async_thread.joinable()) m_async_thread.join();
 
-    process();
+        m_async_thread =
+            std::thread([this, callback = std::move(task_finished_callback)]() {
+                try {
+                    m_error = false;
 
-    LOGD("task compress finished");
+                    LOGD("process started");
+                    process();
+                    LOGD("process finished");
+                } catch (const std::runtime_error& err) {
+                    LOGE("exception in process: " << err.what());
+                    m_error = true;
+                }
+
+                callback();
+            });
+
+        LOGD("task compress started");
+    } else {
+        m_error = false;
+
+        process();
+
+        LOGD("task compress finished");
+    }
 }
 
 void media_compressor::process() {

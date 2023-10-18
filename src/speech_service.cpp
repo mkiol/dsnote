@@ -1587,19 +1587,40 @@ void speech_service::handle_speech_to_file(const tts_partial_result_t &result) {
                            std::back_inserter(input_files),
                            [](const auto &file) { return file.toStdString(); });
 
+            bool error = false;
+
             try {
-                media_compressor{}.compress(
+                QEventLoop loop;
+                media_compressor compressor;
+
+                connect(this, &speech_service::state_changed, &loop,
+                        [this, &compressor]() {
+                            if (state() !=
+                                speech_service::state_t::writing_speech_to_file)
+                                compressor.cancel();
+                        });
+
+                compressor.compress_async(
                     std::move(input_files), out_file.toStdString(),
                     media_format_from_audio_format(format),
-                    media_quality_from_audio_quality(quality));
+                    media_quality_from_audio_quality(quality),
+                    [&loop]() { loop.quit(); });
+
+                loop.exec();
+
+                error = compressor.error();
+
             } catch (const std::runtime_error &err) {
                 qWarning() << "compressor error:" << err.what();
+                error = true;
+            }
 
+            if (error) {
                 QFile::remove(out_file);
                 emit tts_engine_error(result.task_id);
                 cancel(result.task_id);
                 return;
-            } 
+            }
         }
 
         emit tts_speech_to_file_finished(out_file, result.task_id);

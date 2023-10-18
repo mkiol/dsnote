@@ -10,6 +10,7 @@
 
 #include <condition_variable>
 #include <cstdint>
+#include <functional>
 #include <queue>
 #include <string>
 #include <thread>
@@ -35,6 +36,8 @@ class media_compressor {
     enum class quality_t { vbr_high, vbr_medium, vbr_low };
     friend std::ostream& operator<<(std::ostream& os, quality_t quality);
 
+    using task_finished_callback_t = std::function<void()>;
+
     struct data_info {
         size_t size = 0;
         uint64_t bytes_read = 0;
@@ -47,6 +50,10 @@ class media_compressor {
     bool is_media_file(const std::string& input_file);
     void compress(std::vector<std::string> input_files, std::string output_file,
                   format_t format, quality_t quality);
+    void compress_async(std::vector<std::string> input_files,
+                        std::string output_file, format_t format,
+                        quality_t quality,
+                        task_finished_callback_t task_finished_callback);
     void decompress(std::vector<std::string> input_files,
                     std::string output_file);
     void decompress_async(std::vector<std::string> input_files);
@@ -97,6 +104,10 @@ class media_compressor {
     bool encode_frame(AVFrame* frame, AVPacket* pkt);
     bool filter_frame(AVFrame* frame_in, AVFrame* frame_out);
     static format_t format_from_filename(const std::string& filename);
+    void compress_internal(std::vector<std::string> input_files,
+                           std::string output_file, format_t format,
+                           quality_t quality,
+                           task_finished_callback_t task_finished_callback);
 };
 
 #endif // MEDIA_COMPRESSOR_HPP
