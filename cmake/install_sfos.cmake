@@ -61,6 +61,10 @@ if(BUILD_LIBNUMBERTEXT)
     install(DIRECTORY "${external_share_dir}/libnumbertext" DESTINATION ${share_install_dir})
 endif()
 
+if(BUILD_APRILASR)
+    install(FILES "${external_lib_dir}/libaprilasr.so.2023.5.12" DESTINATION ${lib_install_dir} RENAME libaprilasr.so.2023)
+endif()
+
 if(BUILD_PYTHON_MODULE)
     install(FILES ${PROJECT_BINARY_DIR}/python.tar.xz DESTINATION share/${info_binary_id})
 endif()

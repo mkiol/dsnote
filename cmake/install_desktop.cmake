@@ -88,6 +88,10 @@ if(BUILD_UROMAN)
     endif()
 endif()
 
+if(BUILD_APRILASR)
+    install(FILES "${external_lib_dir}/libaprilasr.so.2023.5.12" DESTINATION ${lib_install_dir} RENAME libaprilasr.so.2023)
+endif()
+
 if(WITH_SYSTEMD_SERVICE)
     configure_file("${systemd_dir}/speech.service.in" "${PROJECT_BINARY_DIR}/speech.service")
     install(FILES "${PROJECT_BINARY_DIR}/speech.service" DESTINATION lib/systemd/user RENAME ${info_binary_id}.service)
