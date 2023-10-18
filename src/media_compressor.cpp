@@ -174,10 +174,7 @@ void media_compressor::cancel() {
 }
 
 void media_compressor::clean_av_in_format() {
-    if (m_in_av_format_ctx) {
-        avformat_free_context(m_in_av_format_ctx);
-        m_in_av_format_ctx = nullptr;
-    }
+    if (m_in_av_format_ctx) avformat_close_input(&m_in_av_format_ctx);
 }
 
 void media_compressor::clean_av() {
@@ -300,9 +297,12 @@ void media_compressor::init_av_in_format(const std::string& input_file) {
 
     LOGD("opening file: " << input_file);
 
-    if (avformat_open_input(&m_in_av_format_ctx, input_file.c_str(), nullptr,
-                            nullptr) < 0)
+    if (auto ret = avformat_open_input(&m_in_av_format_ctx, input_file.c_str(),
+                                       nullptr, nullptr);
+        ret < 0) {
+        LOGE("avformat_open_input error: " << str_from_av_error(ret));
         throw std::runtime_error("avformat_open_input error");
+    }
 
     if (!m_in_av_format_ctx) {
         throw std::runtime_error("in_av_format_ctx is null");
@@ -634,6 +634,8 @@ void media_compressor::compress(std::vector<std::string> input_files,
     m_error = false;
 
     process();
+
+    LOGD("task compress finished");
 }
 
 void media_compressor::process() {

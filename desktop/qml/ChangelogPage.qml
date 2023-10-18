@@ -76,6 +76,7 @@ DialogPage {
             It is enabled by default,
             but if you don't need this option, it can be disabled in the settings.</li>
         <li>Fix: Coqui Chinese MMS Hakka and Min Nan voices were broken.</li>
+        <li>Fix: Exporting to audio file was not possible when text was very long.</li>
         </ul>"
     }
 

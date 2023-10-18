@@ -142,6 +142,7 @@
       <li>More steps in speech speed option. You can set speed from 0.1 to 2.0 values.</li>
       <li>Diacritical marks restoration before speech synthesis for Arabic and Hebrew.</li>
       <li>Fix: Coqui Chinese MMS Hakka and Min Nan voices were broken.</li>
+      <li>Fix: Exporting to audio file was not possible when text was very long.</li>
       </ul>
       </description>
     </release>
