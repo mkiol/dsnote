@@ -51,7 +51,7 @@ struct opencl_api {
                                size_t*) = nullptr;
 
     opencl_api() {
-        handle = dlmopen(LM_ID_NEWLM, "libOpenCL.so", RTLD_LAZY);
+        handle = dlopen("libOpenCL.so", RTLD_LAZY);
         if (!handle) handle = dlopen("libOpenCL.so.1", RTLD_LAZY);
         if (!handle) {
             LOGW("failed to open opencl lib: " << dlerror());
@@ -212,15 +212,13 @@ struct hip_api {
     }
 };
 
-std::vector<gpu_tools::device> available_devices() {
+std::vector<gpu_tools::device> available_devices(bool cuda, bool hip,
+                                                 bool opencl) {
     std::vector<gpu_tools::device> devices;
 
-    add_cuda_devices(devices);
-    add_hip_devices(devices);
-
-    // scanning for opencl only if no cuda or hip devices found
-    // opencl causes SIGSEGV on latest nvidia driver
-    if (devices.empty()) add_opencl_devices(devices);
+    if (cuda) add_cuda_devices(devices);
+    if (hip) add_hip_devices(devices);
+    if (opencl) add_opencl_devices(devices);
 
     return devices;
 }

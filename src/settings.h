@@ -102,6 +102,12 @@ class settings : public QSettings, public singleton<settings> {
                    set_actions_api_enabled NOTIFY actions_api_enabled_changed)
     Q_PROPERTY(bool diacritizer_enabled READ diacritizer_enabled WRITE
                    set_diacritizer_enabled NOTIFY diacritizer_enabled_changed)
+    Q_PROPERTY(bool gpu_scan_cuda READ gpu_scan_cuda WRITE set_gpu_scan_cuda
+                   NOTIFY gpu_scan_cuda_changed)
+    Q_PROPERTY(bool gpu_scan_hip READ gpu_scan_hip WRITE set_gpu_scan_hip NOTIFY
+                   gpu_scan_hip_changed)
+    Q_PROPERTY(bool gpu_scan_opencl READ gpu_scan_opencl WRITE
+                   set_gpu_scan_opencl NOTIFY gpu_scan_opencl_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -191,6 +197,7 @@ class settings : public QSettings, public singleton<settings> {
     void set_launch_mode(launch_mode_t launch_mode);
     QString module_checksum(const QString &name) const;
     void set_module_checksum(const QString &name, const QString &value);
+    void scan_gpu_devices();
 
     // app
     QString note() const;
@@ -266,6 +273,12 @@ class settings : public QSettings, public singleton<settings> {
     void set_actions_api_enabled(bool value);
     bool diacritizer_enabled() const;
     void set_diacritizer_enabled(bool value);
+    bool gpu_scan_cuda() const;
+    void set_gpu_scan_cuda(bool value);
+    bool gpu_scan_hip() const;
+    void set_gpu_scan_hip(bool value);
+    bool gpu_scan_opencl() const;
+    void set_gpu_scan_opencl(bool value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -367,6 +380,9 @@ class settings : public QSettings, public singleton<settings> {
     void desktop_notification_policy_changed();
     void actions_api_enabled_changed();
     void diacritizer_enabled_changed();
+    void gpu_scan_cuda_changed();
+    void gpu_scan_hip_changed();
+    void gpu_scan_opencl_changed();
 
     // service
     void models_dir_changed();
@@ -396,7 +412,6 @@ class settings : public QSettings, public singleton<settings> {
     static QString settings_filepath();
     void update_qt_style() const;
     void update_audio_inputs();
-    void update_gpu_devices();
 
     launch_mode_t m_launch_mode = launch_mode_t::app_stanalone;
 };

@@ -72,6 +72,7 @@ struct cmd_options {
         settings::launch_mode_t::app_stanalone;
     bool verbose = false;
     bool gen_cheksums = false;
+    bool gpu_scan_off = false;
     QString action;
     QStringList files;
 };
@@ -120,6 +121,13 @@ static cmd_options check_options(const QCoreApplication& app) {
             "Generates checksums for models without checksum. Useful "
             "when adding new models to config file manually.")};
     parser.addOption(gen_checksum_opt);
+
+    QCommandLineOption gpuscanoff_opt{
+        QStringLiteral("gpu-scan-off"),
+        QStringLiteral("Disables scanning for CUDA, ROCm and OpenCL devices. "
+                       "Use this option when you observing problems in "
+                       "starting the app.")};
+    parser.addOption(gpuscanoff_opt);
 
     parser.addHelpOption();
     parser.addVersionOption();
@@ -180,6 +188,7 @@ static cmd_options check_options(const QCoreApplication& app) {
 
     options.verbose = parser.isSet(verbose_opt);
     options.gen_cheksums = parser.isSet(gen_checksum_opt);
+    options.gpu_scan_off = parser.isSet(gpuscanoff_opt);
     options.files = parser.positionalArguments();
 
     return options;
@@ -235,7 +244,19 @@ static void install_translator() {
     }
 }
 
+static void disable_gpu_scan() {
+    auto* s = settings::instance();
+    s->set_gpu_scan_cuda(false);
+    s->set_gpu_scan_hip(false);
+    s->set_gpu_scan_opencl(false);
+}
+
 static void start_service(const cmd_options& options) {
+    if (options.gpu_scan_off)
+        disable_gpu_scan();
+    else
+        settings::instance()->scan_gpu_devices();
+
     py_executor::instance()->start();
     speech_service::instance();
 
@@ -245,6 +266,11 @@ static void start_service(const cmd_options& options) {
 }
 
 static void start_app(const cmd_options& options, app_server& dbus_app_server) {
+    if (options.gpu_scan_off)
+        disable_gpu_scan();
+    else
+        settings::instance()->scan_gpu_devices();
+
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
         py_executor::instance()->start();

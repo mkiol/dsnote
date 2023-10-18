@@ -676,6 +676,45 @@ DialogPage {
                     ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
                 }
             }
+
+            CheckBox {
+                checked: _settings.gpu_scan_cuda
+                text: qsTr("Search for CUDA devices")
+                onCheckedChanged: {
+                    _settings.gpu_scan_cuda = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Try to find NVIDIA CUDA devices in the system.") + " " +
+                              qsTr("Disable this option if you observe problems.")
+            }
+
+            CheckBox {
+                checked: _settings.gpu_scan_hip
+                text: qsTr("Search for ROCm devices")
+                onCheckedChanged: {
+                    _settings.gpu_scan_hip = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Try to find AMD ROCm devices in the system.") + " " +
+                              qsTr("Disable this option if you observe problems.")
+            }
+
+            CheckBox {
+                checked: _settings.gpu_scan_opencl
+                text: qsTr("Search for OpenCL devices")
+                onCheckedChanged: {
+                    _settings.gpu_scan_opencl = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Try to find OpenCL devices in the system.") + " " +
+                              qsTr("Disable this option if you observe problems.")
+            }
         }
     }
 

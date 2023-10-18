@@ -103,7 +103,6 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
 
     update_qt_style();
     update_audio_inputs();
-    update_gpu_devices();
 
     // remove qml cache
     QDir{QStandardPaths::writableLocation(QStandardPaths::CacheLocation) +
@@ -769,12 +768,14 @@ QStringList settings::gpu_devices() const { return m_gpu_devices; }
 
 bool settings::has_gpu_device() const { return m_gpu_devices.size() > 1; }
 
-void settings::update_gpu_devices() {
+void settings::scan_gpu_devices() {
 #ifdef ARCH_X86_64
     m_gpu_devices.clear();
     m_gpu_devices.push_back(tr("Auto"));
 
-    auto devices = gpu_tools::available_devices();
+    auto devices = gpu_tools::available_devices(/*cuda=*/gpu_scan_cuda(),
+                                                /*hip=*/gpu_scan_hip(),
+                                                /*opencl=*/gpu_scan_opencl());
     std::transform(
         devices.cbegin(), devices.cend(), std::back_inserter(m_gpu_devices),
         [](const auto& device) {
@@ -1048,6 +1049,45 @@ void settings::set_desktop_notification_policy(
         setValue(QStringLiteral("desktop_notification_policy"),
                  static_cast<int>(value));
         emit desktop_notification_policy_changed();
+    }
+}
+
+bool settings::gpu_scan_cuda() const {
+    return value(QStringLiteral("gpu_scan_cuda"), true).toBool();
+}
+
+void settings::set_gpu_scan_cuda(bool value) {
+    if (value != gpu_scan_cuda()) {
+        setValue(QStringLiteral("gpu_scan_cuda"), value);
+        emit gpu_scan_cuda_changed();
+
+        set_restart_required();
+    }
+}
+
+bool settings::gpu_scan_hip() const {
+    return value(QStringLiteral("gpu_scan_hip"), true).toBool();
+}
+
+void settings::set_gpu_scan_hip(bool value) {
+    if (value != gpu_scan_hip()) {
+        setValue(QStringLiteral("gpu_scan_hip"), value);
+        emit gpu_scan_hip_changed();
+
+        set_restart_required();
+    }
+}
+
+bool settings::gpu_scan_opencl() const {
+    return value(QStringLiteral("gpu_scan_opencl"), true).toBool();
+}
+
+void settings::set_gpu_scan_opencl(bool value) {
+    if (value != gpu_scan_opencl()) {
+        setValue(QStringLiteral("gpu_scan_opencl"), value);
+        emit gpu_scan_opencl_changed();
+
+        set_restart_required();
     }
 }
 
