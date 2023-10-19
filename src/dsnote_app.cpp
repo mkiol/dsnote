@@ -566,6 +566,12 @@ void dsnote_app::connect_service_signals() {
                 &speech_service::mnt_translate_finished, this,
                 &dsnote_app::handle_mnt_translate_finished,
                 Qt::QueuedConnection);
+        connect(
+            speech_service::instance(),
+            &speech_service::features_availability_updated, this,
+            [this] { emit features_availability_updated(); },
+            Qt::QueuedConnection);
+
     } else {
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::SttModelsPropertyChanged, this,
@@ -625,6 +631,9 @@ void dsnote_app::connect_service_signals() {
                 &dsnote_app::handle_tts_speech_to_file_progress);
         connect(&m_dbus_service, &OrgMkiolSpeechInterface::MntTranslateFinished,
                 this, &dsnote_app::handle_mnt_translate_finished);
+        connect(&m_dbus_service,
+                &OrgMkiolSpeechInterface::FeaturesAvailabilityUpdated, this,
+                [this] { emit features_availability_updated(); });
     }
 }
 
@@ -2550,6 +2559,30 @@ void dsnote_app::show_desktop_notification(const QString &summary,
 void dsnote_app::handle_desktop_notification_closed(
     [[maybe_unused]] uint id, [[maybe_unused]] uint reason) {
     m_desktop_notification.reset();
+}
+
+QVariantList dsnote_app::features_availability() {
+    QVariantList list;
+
+    QVariantMap map;
+
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+        map = speech_service::instance()->features_availability();
+    } else {
+        qDebug() << "[app => dbus] call FeaturesAvailability";
+        map = m_dbus_service.FeaturesAvailability();
+    }
+
+    auto it = map.constBegin();
+    while (it != map.constEnd()) {
+        auto val = it.value().toList();
+        list.push_back(
+            QVariantList{it.key(), std::move(val.at(0)), std::move(val.at(1))});
+        ++it;
+    }
+
+    return list;
 }
 
 void dsnote_app::execute_pending_action() {

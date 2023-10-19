@@ -164,6 +164,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     double stt_transcribe_file_progress(int task) const;
     double tts_speech_to_file_progress(int task) const;
     QVariantMap mnt_out_langs(QString in_lang) const;
+    QVariantMap features_availability();
 
    signals:
     void models_changed();
@@ -200,6 +201,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void default_tts_lang_changed();
     void default_mnt_lang_changed();
     void default_mnt_out_lang_changed();
+    void features_availability_updated();
 
     // DBus
     void StatePropertyChanged(int state);
@@ -235,6 +237,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void MntTranslateFinished(const QString &in_text, const QString &in_lang,
                               const QString &out_text, const QString &out_lang,
                               int task);
+    void FeaturesAvailabilityUpdated();
 
    private:
     enum class engine_t { stt, tts, mnt };
@@ -353,6 +356,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     SpeechAdaptor m_dbus_service_adaptor;
     QTimer m_keepalive_timer;
     QTimer m_keepalive_current_task_timer;
+    QTimer m_features_availability_timer;
     int m_last_intermediate_text_task = INVALID_TASK;
     std::optional<task_t> m_previous_task;
     std::optional<task_t> m_current_task;
@@ -493,6 +497,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     Q_INVOKABLE int MntTranslate(const QString &text, const QString &lang,
                                  const QString &out_lang);
     Q_INVOKABLE QVariantMap MntGetOutLangs(const QString &lang);
+    Q_INVOKABLE QVariantMap FeaturesAvailability();
 };
 
 Q_DECLARE_METATYPE(speech_service::tts_partial_result_t)

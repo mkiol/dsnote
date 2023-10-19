@@ -288,13 +288,35 @@ void settings::set_restore_punctuation(bool value) {
 }
 
 bool settings::whisper_use_gpu() const {
-    return value(QStringLiteral("service/whisper_use_gpu"), false).toBool();
+    return value(QStringLiteral("whisper_use_gpu"), false).toBool();
 }
 
 void settings::set_whisper_use_gpu(bool value) {
     if (whisper_use_gpu() != value) {
-        setValue(QStringLiteral("service/whisper_use_gpu"), value);
+        setValue(QStringLiteral("whisper_use_gpu"), value);
         emit whisper_use_gpu_changed();
+    }
+}
+
+bool settings::fasterwhisper_use_gpu() const {
+    return value(QStringLiteral("fasterwhisper_use_gpu"), false).toBool();
+}
+
+void settings::set_fasterwhisper_use_gpu(bool value) {
+    if (fasterwhisper_use_gpu() != value) {
+        setValue(QStringLiteral("fasterwhisper_use_gpu"), value);
+        emit fasterwhisper_use_gpu_changed();
+    }
+}
+
+bool settings::coqui_use_gpu() const {
+    return value(QStringLiteral("coqui_use_gpu"), false).toBool();
+}
+
+void settings::set_coqui_use_gpu(bool value) {
+    if (coqui_use_gpu() != value) {
+        setValue(QStringLiteral("coqui_use_gpu"), value);
+        emit coqui_use_gpu_changed();
     }
 }
 
@@ -764,89 +786,222 @@ void settings::update_qt_style() const {
 #endif
 }
 
-QStringList settings::gpu_devices() const { return m_gpu_devices; }
+QStringList settings::gpu_devices_whisper() const {
+    return m_gpu_devices_whisper;
+}
 
-bool settings::has_gpu_device() const { return m_gpu_devices.size() > 1; }
+QStringList settings::gpu_devices_fasterwhisper() const {
+    return m_gpu_devices_fasterwhisper;
+}
+QStringList settings::gpu_devices_coqui() const { return m_gpu_devices_coqui; }
+
+bool settings::has_gpu_device_whisper() const {
+    return m_gpu_devices_whisper.size() > 1;
+}
+
+bool settings::has_gpu_device_fasterwhisper() const {
+    return m_gpu_devices_fasterwhisper.size() > 1;
+}
+
+bool settings::has_gpu_device_coqui() const {
+    return m_gpu_devices_coqui.size() > 1;
+}
 
 void settings::scan_gpu_devices() {
 #ifdef ARCH_X86_64
-    m_gpu_devices.clear();
-    m_gpu_devices.push_back(tr("Auto"));
+    m_gpu_devices_whisper.clear();
+    m_gpu_devices_fasterwhisper.clear();
+    m_gpu_devices_coqui.clear();
+    m_gpu_devices_whisper.push_back(tr("Auto"));
+    m_gpu_devices_fasterwhisper.push_back(tr("Auto"));
+    m_gpu_devices_coqui.push_back(tr("Auto"));
 
     auto devices = gpu_tools::available_devices(/*cuda=*/gpu_scan_cuda(),
                                                 /*hip=*/gpu_scan_hip(),
                                                 /*opencl=*/gpu_scan_opencl());
-    std::transform(
-        devices.cbegin(), devices.cend(), std::back_inserter(m_gpu_devices),
-        [](const auto& device) {
-            return [&] {
-                switch (device.api) {
-                    case gpu_tools::api_t::opencl:
-                        return QStringLiteral("%1, %2, %3")
-                            .arg("OpenCL",
-                                 QString::fromStdString(device.platform_name),
-                                 QString::fromStdString(device.name));
-                    case gpu_tools::api_t::cuda:
-                        return QStringLiteral("%1, %2, %3")
-                            .arg("CUDA", QString::number(device.id),
-                                 QString::fromStdString(device.name));
-                    case gpu_tools::api_t::rocm:
-                        return QStringLiteral("%1, %2, %3")
-                            .arg("ROCm", QString::number(device.id),
-                                 QString::fromStdString(device.name));
-                }
-                throw std::runtime_error("invalid gpu api");
-            }();
-        });
 
-    if (!auto_gpu_device().isEmpty())
-        m_gpu_devices.front().append(" (" + auto_gpu_device() + ")");
+    std::for_each(devices.cbegin(), devices.cend(), [&](const auto& device) {
+        switch (device.api) {
+            case gpu_tools::api_t::opencl:
+                m_gpu_devices_whisper.push_back(
+                    QStringLiteral("%1, %2, %3")
+                        .arg("OpenCL",
+                             QString::fromStdString(device.platform_name),
+                             QString::fromStdString(device.name)));
+                break;
+            case gpu_tools::api_t::cuda: {
+                auto item = QStringLiteral("%1, %2, %3")
+                                .arg("CUDA", QString::number(device.id),
+                                     QString::fromStdString(device.name));
+                m_gpu_devices_whisper.push_back(item);
+                m_gpu_devices_fasterwhisper.push_back(item);
+                m_gpu_devices_coqui.push_back(std::move(item));
+                break;
+            }
+            case gpu_tools::api_t::rocm:
+                m_gpu_devices_whisper.push_back(
+                    QStringLiteral("%1, %2, %3")
+                        .arg("ROCm", QString::number(device.id),
+                             QString::fromStdString(device.name)));
+                break;
+        }
+    });
+
+    if (!auto_gpu_device_whisper().isEmpty())
+        m_gpu_devices_whisper.front().append(" (" + auto_gpu_device_whisper() +
+                                             ")");
+    if (!auto_gpu_device_fasterwhisper().isEmpty())
+        m_gpu_devices_fasterwhisper.front().append(
+            " (" + auto_gpu_device_fasterwhisper() + ")");
+    if (!auto_gpu_device_coqui().isEmpty())
+        m_gpu_devices_coqui.front().append(" (" + auto_gpu_device_coqui() +
+                                           ")");
 
     emit gpu_devices_changed();
 #endif
 }
 
-QString settings::auto_gpu_device() const {
-    return m_gpu_devices.size() <= 1 ? QString{} : m_gpu_devices.at(1);
+QString settings::auto_gpu_device_whisper() const {
+    return m_gpu_devices_whisper.size() <= 1 ? QString{}
+                                             : m_gpu_devices_whisper.at(1);
 }
 
-QString settings::gpu_device() const {
-    auto device_str = value(QStringLiteral("service/gpu_device")).toString();
-    if (std::find(std::next(m_gpu_devices.cbegin()), m_gpu_devices.cend(),
-                  device_str) == m_gpu_devices.cend()) {
+QString settings::auto_gpu_device_fasterwhisper() const {
+    return m_gpu_devices_fasterwhisper.size() <= 1
+               ? QString{}
+               : m_gpu_devices_fasterwhisper.at(1);
+}
+
+QString settings::auto_gpu_device_coqui() const {
+    return m_gpu_devices_coqui.size() <= 1 ? QString{}
+                                           : m_gpu_devices_coqui.at(1);
+}
+
+QString settings::gpu_device_whisper() const {
+    auto device_str =
+        value(QStringLiteral("service/gpu_device_whisper")).toString();
+    if (std::find(std::next(m_gpu_devices_whisper.cbegin()),
+                  m_gpu_devices_whisper.cend(),
+                  device_str) == m_gpu_devices_whisper.cend()) {
         return {};
     }
 
     return device_str;
 }
 
-void settings::set_gpu_device(QString value) {
-    if (std::find(std::next(m_gpu_devices.cbegin()), m_gpu_devices.cend(),
-                  value) == m_gpu_devices.cend())
+void settings::set_gpu_device_whisper(QString value) {
+    if (std::find(std::next(m_gpu_devices_whisper.cbegin()),
+                  m_gpu_devices_whisper.cend(),
+                  value) == m_gpu_devices_whisper.cend())
         value.clear();
 
-    if (value != gpu_device()) {
-        setValue(QStringLiteral("service/gpu_device"), value);
-        emit gpu_device_changed();
+    if (value != gpu_device_whisper()) {
+        setValue(QStringLiteral("service/gpu_device_whisper"), value);
+        emit gpu_device_whisper_changed();
         set_restart_required();
     }
 }
 
-int settings::gpu_device_idx() const {
-    auto current_device = gpu_device();
+int settings::gpu_device_idx_whisper() const {
+    auto current_device = gpu_device_whisper();
 
     if (current_device.isEmpty()) return 0;
 
-    auto it =
-        std::find(m_gpu_devices.cbegin(), m_gpu_devices.cend(), current_device);
-    if (it == m_gpu_devices.cend()) return 0;
+    auto it = std::find(m_gpu_devices_whisper.cbegin(),
+                        m_gpu_devices_whisper.cend(), current_device);
+    if (it == m_gpu_devices_whisper.cend()) return 0;
 
-    return std::distance(m_gpu_devices.cbegin(), it);
+    return std::distance(m_gpu_devices_whisper.cbegin(), it);
 }
 
-void settings::set_gpu_device_idx(int value) {
-    if (value < 0 || value >= m_gpu_devices.size()) return;
-    set_gpu_device(value == 0 ? "" : m_gpu_devices.at(value));
+void settings::set_gpu_device_idx_whisper(int value) {
+    if (value < 0 || value >= m_gpu_devices_whisper.size()) return;
+    set_gpu_device_whisper(value == 0 ? "" : m_gpu_devices_whisper.at(value));
+}
+
+void settings::set_gpu_device_fasterwhisper(QString value) {
+    if (std::find(std::next(m_gpu_devices_fasterwhisper.cbegin()),
+                  m_gpu_devices_fasterwhisper.cend(),
+                  value) == m_gpu_devices_fasterwhisper.cend())
+        value.clear();
+
+    if (value != gpu_device_fasterwhisper()) {
+        setValue(QStringLiteral("service/gpu_device_fasterwhisper"), value);
+        emit gpu_device_fasterwhisper_changed();
+        set_restart_required();
+    }
+}
+
+QString settings::gpu_device_fasterwhisper() const {
+    auto device_str =
+        value(QStringLiteral("service/gpu_device_fasterwhisper")).toString();
+    if (std::find(std::next(m_gpu_devices_fasterwhisper.cbegin()),
+                  m_gpu_devices_fasterwhisper.cend(),
+                  device_str) == m_gpu_devices_fasterwhisper.cend()) {
+        return {};
+    }
+
+    return device_str;
+}
+
+int settings::gpu_device_idx_fasterwhisper() const {
+    auto current_device = gpu_device_fasterwhisper();
+
+    if (current_device.isEmpty()) return 0;
+
+    auto it = std::find(m_gpu_devices_fasterwhisper.cbegin(),
+                        m_gpu_devices_fasterwhisper.cend(), current_device);
+    if (it == m_gpu_devices_fasterwhisper.cend()) return 0;
+
+    return std::distance(m_gpu_devices_fasterwhisper.cbegin(), it);
+}
+
+void settings::set_gpu_device_idx_fasterwhisper(int value) {
+    if (value < 0 || value >= m_gpu_devices_fasterwhisper.size()) return;
+    set_gpu_device_fasterwhisper(
+        value == 0 ? "" : m_gpu_devices_fasterwhisper.at(value));
+}
+
+QString settings::gpu_device_coqui() const {
+    auto device_str =
+        value(QStringLiteral("service/gpu_device_coqui")).toString();
+    if (std::find(std::next(m_gpu_devices_coqui.cbegin()),
+                  m_gpu_devices_coqui.cend(),
+                  device_str) == m_gpu_devices_coqui.cend()) {
+        return {};
+    }
+
+    return device_str;
+}
+
+void settings::set_gpu_device_coqui(QString value) {
+    if (std::find(std::next(m_gpu_devices_coqui.cbegin()),
+                  m_gpu_devices_coqui.cend(),
+                  value) == m_gpu_devices_coqui.cend())
+        value.clear();
+
+    if (value != gpu_device_coqui()) {
+        setValue(QStringLiteral("service/gpu_device_coqui"), value);
+        emit gpu_device_coqui_changed();
+        set_restart_required();
+    }
+}
+
+int settings::gpu_device_idx_coqui() const {
+    auto current_device = gpu_device_coqui();
+
+    if (current_device.isEmpty()) return 0;
+
+    auto it = std::find(m_gpu_devices_coqui.cbegin(),
+                        m_gpu_devices_coqui.cend(), current_device);
+    if (it == m_gpu_devices_coqui.cend()) return 0;
+
+    return std::distance(m_gpu_devices_coqui.cbegin(), it);
+}
+
+void settings::set_gpu_device_idx_coqui(int value) {
+    if (value < 0 || value >= m_gpu_devices_coqui.size()) return;
+    set_gpu_device_coqui(value == 0 ? "" : m_gpu_devices_coqui.at(value));
 }
 
 QStringList settings::audio_inputs() const { return m_audio_inputs; }
@@ -1086,6 +1241,19 @@ void settings::set_gpu_scan_opencl(bool value) {
     if (value != gpu_scan_opencl()) {
         setValue(QStringLiteral("gpu_scan_opencl"), value);
         emit gpu_scan_opencl_changed();
+
+        set_restart_required();
+    }
+}
+
+bool settings::py_scan() const {
+    return value(QStringLiteral("service/py_scan"), true).toBool();
+}
+
+void settings::set_py_scan(bool value) {
+    if (value != py_scan()) {
+        setValue(QStringLiteral("service/py_scan"), value);
+        emit py_scan_changed();
 
         set_restart_required();
     }

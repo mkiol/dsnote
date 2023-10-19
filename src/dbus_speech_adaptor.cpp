@@ -203,6 +203,14 @@ int SpeechAdaptor::Cancel(int task)
     return result;
 }
 
+QVariantMap SpeechAdaptor::FeaturesAvailability()
+{
+    // handle method call org.mkiol.Speech.FeaturesAvailability
+    QVariantMap features;
+    QMetaObject::invokeMethod(parent(), "FeaturesAvailability", Q_RETURN_ARG(QVariantMap, features));
+    return features;
+}
+
 int SpeechAdaptor::KeepAliveService()
 {
     // handle method call org.mkiol.Speech.KeepAliveService

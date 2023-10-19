@@ -8,9 +8,30 @@
 #ifndef PY_TOOLS_HPP
 #define PY_TOOLS_HPP
 
+#include <iostream>
+
 namespace py_tools {
 inline static const auto python_site_path = "python/site-packages";
+
+struct libs_availability_t {
+    bool coqui_tts = false;
+    bool faster_whisper = false;
+    bool mimic3_tts = false;
+    bool transformers = false;
+    bool unikud = false;
+    bool gruut_de = false;
+    bool gruut_es = false;
+    bool gruut_fr = false;
+    bool gruut_it = false;
+    bool gruut_ru = false;
+    bool mecab = false;
+};
+
+libs_availability_t libs_availability();
 bool init_module();
 }  // namespace py_tools
+
+std::ostream& operator<<(std::ostream& os,
+                         const py_tools::libs_availability_t& availability);
 
 #endif  // PY_TOOLS_HPP

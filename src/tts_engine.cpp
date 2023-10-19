@@ -25,11 +25,36 @@
 
 #include "logger.hpp"
 
+std::ostream& operator<<(std::ostream& os, tts_engine::gpu_api_t api) {
+    switch (api) {
+        case tts_engine::gpu_api_t::opencl:
+            os << "opencl";
+            break;
+        case tts_engine::gpu_api_t::cuda:
+            os << "cuda";
+            break;
+        case tts_engine::gpu_api_t::rocm:
+            os << "rocm";
+            break;
+    }
+
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os,
                          const tts_engine::model_files_t& model_files) {
     os << "model-path=" << model_files.model_path
        << ", vocoder-path=" << model_files.vocoder_path
        << ", diacritizer=" << model_files.diacritizer_path;
+
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os,
+                         const tts_engine::gpu_device_t& gpu_device) {
+    os << "id=" << gpu_device.id << ", api=" << gpu_device.api
+       << ", name=" << gpu_device.name
+       << ", platform-name=" << gpu_device.platform_name;
 
     return os;
 }
@@ -41,7 +66,9 @@ std::ostream& operator<<(std::ostream& os, const tts_engine::config_t& config) {
        << ", lang_code=" << config.lang_code
        << ", share-dir=" << config.share_dir
        << ", cache-dir=" << config.cache_dir << ", data-dir=" << config.data_dir
-       << ", speech-speed=" << config.speech_speed;
+       << ", speech-speed=" << config.speech_speed
+       << ", use-gpu=" << config.use_gpu << ", gpu-device=["
+       << config.gpu_device << "]";
     return os;
 }
 

@@ -49,6 +49,42 @@ whisper_engine::~whisper_engine() {
     unsetenv("CUDA_VISIBLE_DEVICES");
 }
 
+bool whisper_engine::has_cuda() {
+    auto handle = dlopen("libwhisper-cublas.so", RTLD_LAZY);
+    if (!handle) {
+        LOGW("failed to open whisper-cublas lib: " << dlerror());
+        return false;
+    }
+
+    dlclose(handle);
+
+    return true;
+}
+
+bool whisper_engine::has_opencl() {
+    auto handle = dlopen("libwhisper-clblast.so", RTLD_LAZY);
+    if (!handle) {
+        LOGW("failed to open whisper-clblast lib: " << dlerror());
+        return false;
+    }
+
+    dlclose(handle);
+
+    return true;
+}
+
+bool whisper_engine::has_hip() {
+    auto handle = dlopen("libwhisper-hipblas.so", RTLD_LAZY);
+    if (!handle) {
+        LOGW("failed to open whisper-hipblas lib: " << dlerror());
+        return false;
+    }
+
+    dlclose(handle);
+
+    return true;
+}
+
 void whisper_engine::open_whisper_lib() {
 #ifdef ARCH_ARM_32
     if (cpu_tools::neon_supported()) {

@@ -11,9 +11,7 @@
 #include <stdexcept>
 
 #include "logger.hpp"
-#ifdef USE_SFOS
-#include "py_tools.hpp"
-#endif
+#include "settings.h"
 
 py_executor::~py_executor() {
     LOGD("py_executor dtor");
@@ -59,12 +57,13 @@ void py_executor::loop() {
 
     setenv("PYTHONIOENCODING", "utf-8", true);
 
-#ifdef USE_PYTHON_MODULE
     py_tools::init_module();
-#endif
 
     try {
         m_py_interpreter.emplace();
+
+        if (settings::instance()->py_scan())
+            libs_availability = py_tools::libs_availability();
 
         while (!m_shutting_down) {
             std::unique_lock<std::mutex> lock{m_mutex};

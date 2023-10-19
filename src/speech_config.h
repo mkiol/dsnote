@@ -11,6 +11,7 @@
 #include <QObject>
 #include <QString>
 #include <QVariantList>
+#include <QVariantMap>
 
 #include "config.h"
 #include "langs_list_model.h"

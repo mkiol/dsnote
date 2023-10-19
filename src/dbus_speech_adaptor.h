@@ -243,6 +243,11 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"in\" type=\"i\" name=\"task\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
 "    </method>\n"
+"    <method name=\"FeaturesAvailability\">\n"
+"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
+"      <arg direction=\"out\" type=\"a{sv}\" name=\"features\"/>\n"
+"    </method>\n"
+"    <signal name=\"FeaturesAvailabilityUpdated\"/>\n"
 "    <method name=\"Reload\">\n"
 "      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
 "    </method>\n"
@@ -348,6 +353,7 @@ public: // PROPERTIES
 
 public Q_SLOTS: // METHODS
     int Cancel(int task);
+    QVariantMap FeaturesAvailability();
     int KeepAliveService();
     int KeepAliveTask(int task);
     QVariantMap MntGetOutLangs(const QString &lang);
@@ -373,6 +379,7 @@ Q_SIGNALS: // SIGNALS
     void DefaultTtsLangPropertyChanged(const QString &lang);
     void DefaultTtsModelPropertyChanged(const QString &model);
     void ErrorOccured(int code);
+    void FeaturesAvailabilityUpdated();
     void MntLangListChanged(const QVariantList &langs);
     void MntLangsPropertyChanged(const QVariantMap &langs);
     void MntTranslateFinished(const QString &in_text, const QString &in_lang, const QString &out_text, const QString &out_lang, int task);

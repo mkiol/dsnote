@@ -18,6 +18,10 @@
 
 class whisper_engine : public stt_engine {
    public:
+    static bool has_cuda();
+    static bool has_opencl();
+    static bool has_hip();
+
     whisper_engine(config_t config, callbacks_t call_backs);
     ~whisper_engine() override;
 

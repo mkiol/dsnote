@@ -14,7 +14,8 @@ Item {
     property alias text: label.text
 
     implicitHeight: label.height + 2 * appWin.padding
-    implicitWidth: parent.width
+
+    Layout.fillWidth: true
 
     RowLayout {
         anchors.fill: parent

@@ -26,11 +26,14 @@
 #include "espeak_engine.hpp"
 #include "fasterwhisper_engine.hpp"
 #include "file_source.h"
+#include "gpu_tools.hpp"
 #include "media_compressor.hpp"
 #include "mic_source.h"
 #include "mimic3_engine.hpp"
 #include "module_tools.hpp"
 #include "piper_engine.hpp"
+#include "py_executor.hpp"
+#include "py_tools.hpp"
 #include "rhvoice_engine.hpp"
 #include "settings.h"
 #include "vosk_engine.hpp"
@@ -426,6 +429,14 @@ speech_service::speech_service(QObject *parent)
                         << task;
                     emit TtsPlaySpeechFinished(task);
                 });
+        connect(
+            this, &speech_service::features_availability_updated, this,
+            [this]() {
+                qDebug()
+                    << "[service => dbus] signal FeaturesAvailabilityUpdated";
+                emit FeaturesAvailabilityUpdated();
+            },
+            Qt::QueuedConnection);
 
         m_keepalive_timer.setSingleShot(true);
         m_keepalive_timer.setTimerType(Qt::VeryCoarseTimer);
@@ -450,6 +461,17 @@ speech_service::speech_service(QObject *parent)
             throw std::runtime_error("dbus object registration failed");
         }
     }
+
+    m_features_availability_timer.setSingleShot(true);
+    m_features_availability_timer.setTimerType(Qt::VeryCoarseTimer);
+    m_features_availability_timer.setInterval(100);
+    connect(&m_features_availability_timer, &QTimer::timeout, this, [this]() {
+        if (py_executor::instance()->libs_availability) {
+            emit features_availability_updated();
+        } else {
+            m_features_availability_timer.start();
+        }
+    });
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::service) {
@@ -941,39 +963,39 @@ QString speech_service::lang_from_model_id(const QString &model_id) {
     return l.first();
 }
 
-static std::optional<stt_engine::gpu_device_t> make_stt_gpu_device(
-    const QString &gpu_str) {
+template <typename Engine>
+static std::optional<typename Engine::gpu_device_t> make_gpu_device(
+    const QString &gpu_str, const QString &auto_device_str) {
     auto l = gpu_str.split(',');
-    if (l.size() <= 2) l = settings::instance()->auto_gpu_device().split(',');
+    if (l.size() <= 2) l = auto_device_str.split(',');
 
     qDebug() << "gpu device str:" << l;
 
     if (l.size() > 2) {
         if (l.at(0).trimmed() == "OpenCL") {
-            stt_engine::gpu_device_t device;
-            device.api = stt_engine::gpu_api_t::opencl;
+            typename Engine::gpu_device_t device;
+            device.api = Engine::gpu_api_t::opencl;
             device.id = 0;
             device.name = l.at(2).trimmed().toStdString();
             device.platform_name = l.at(1).trimmed().toStdString();
             return device;
         }
         if (l.at(0).trimmed() == "CUDA") {
-            stt_engine::gpu_device_t device;
-            device.api = stt_engine::gpu_api_t::cuda;
+            typename Engine::gpu_device_t device;
+            device.api = Engine::gpu_api_t::cuda;
             device.id = l.at(1).trimmed().toInt();
             device.name = l.at(2).trimmed().toStdString();
             return device;
         }
         if (l.at(0).trimmed() == "ROCm") {
-            stt_engine::gpu_device_t device;
-            device.api = stt_engine::gpu_api_t::rocm;
+            typename Engine::gpu_device_t device;
+            device.api = Engine::gpu_api_t::rocm;
             device.id = l.at(1).trimmed().toInt();
             device.name = l.at(2).trimmed().toStdString();
             return device;
         }
     } else {
-        qWarning() << "invalid gpu device str:" << gpu_str
-                   << settings::instance()->auto_gpu_device();
+        qWarning() << "invalid gpu device str:" << gpu_str << auto_device_str;
     }
 
     return std::nullopt;
@@ -982,35 +1004,41 @@ static std::optional<stt_engine::gpu_device_t> make_stt_gpu_device(
 QString speech_service::restart_stt_engine(
     speech_mode_t speech_mode, const QString &model_id,
     [[maybe_unused]] const QString &out_lang_id) {
-    auto model_files = choose_model_config(engine_t::stt, model_id);
-    if (model_files && model_files->stt) {
+    auto model_config = choose_model_config(engine_t::stt, model_id);
+    if (model_config && model_config->stt) {
         stt_engine::config_t config;
 
         config.model_files.model_file =
-            model_files->stt->model_file.toStdString();
+            model_config->stt->model_file.toStdString();
         config.model_files.scorer_file =
-            model_files->stt->scorer_file.toStdString();
-        if (model_files->stt->ttt)
+            model_config->stt->scorer_file.toStdString();
+        if (model_config->stt->ttt)
             config.model_files.ttt_model_file =
-                model_files->stt->ttt->model_file.toStdString();
-        config.lang = model_files->stt->lang_id.toStdString();
+                model_config->stt->ttt->model_file.toStdString();
+        config.lang = model_config->stt->lang_id.toStdString();
         config.speech_mode =
             static_cast<stt_engine::speech_mode_t>(speech_mode);
         config.translate = false;
-        config.use_gpu =
-            (model_files->stt->engine ==
-                 models_manager::model_engine_t::stt_whisper ||
-             model_files->stt->engine ==
-                 models_manager::model_engine_t::stt_fasterwhisper) &&
-            settings::instance()->whisper_use_gpu() &&
-            settings::instance()->has_gpu_device();
 
-        if (config.use_gpu) {
-            if (auto device =
-                    make_stt_gpu_device(settings::instance()->gpu_device())) {
+        if (model_config->stt->engine ==
+                models_manager::model_engine_t::stt_whisper &&
+            settings::instance()->whisper_use_gpu() &&
+            settings::instance()->has_gpu_device_whisper()) {
+            if (auto device = make_gpu_device<stt_engine>(
+                    settings::instance()->gpu_device_whisper(),
+                    settings::instance()->auto_gpu_device_whisper())) {
                 config.gpu_device = std::move(*device);
-            } else {
-                config.use_gpu = false;
+                config.use_gpu = true;
+            }
+        } else if (model_config->stt->engine ==
+                       models_manager::model_engine_t::stt_fasterwhisper &&
+                   settings::instance()->fasterwhisper_use_gpu() &&
+                   settings::instance()->has_gpu_device_fasterwhisper()) {
+            if (auto device = make_gpu_device<stt_engine>(
+                    settings::instance()->gpu_device_fasterwhisper(),
+                    settings::instance()->auto_gpu_device_fasterwhisper())) {
+                config.gpu_device = std::move(*device);
+                config.use_gpu = true;
             }
         }
 
@@ -1018,32 +1046,32 @@ QString speech_service::restart_stt_engine(
             if (!m_stt_engine) return true;
 
             const auto &type = typeid(*m_stt_engine);
-            if (model_files->stt->engine ==
-                models_manager::model_engine_t::stt_ds &&
+            if (model_config->stt->engine ==
+                    models_manager::model_engine_t::stt_ds &&
                 type != typeid(ds_engine))
                 return true;
-            if (model_files->stt->engine ==
-                models_manager::model_engine_t::stt_vosk &&
+            if (model_config->stt->engine ==
+                    models_manager::model_engine_t::stt_vosk &&
                 type != typeid(vosk_engine))
                 return true;
-            if (model_files->stt->engine ==
-                models_manager::model_engine_t::stt_whisper &&
+            if (model_config->stt->engine ==
+                    models_manager::model_engine_t::stt_whisper &&
                 type != typeid(whisper_engine))
                 return true;
-            if (model_files->stt->engine ==
-                models_manager::model_engine_t::stt_fasterwhisper &&
+            if (model_config->stt->engine ==
+                    models_manager::model_engine_t::stt_fasterwhisper &&
                 type != typeid(fasterwhisper_engine))
                 return true;
-            if (model_files->stt->engine ==
+            if (model_config->stt->engine ==
                     models_manager::model_engine_t::stt_april &&
                 type != typeid(april_engine))
                 return true;
 
             if (m_stt_engine->model_files() != config.model_files) return true;
             if (m_stt_engine->lang() != config.lang) return true;
-            if ((model_files->stt->engine ==
+            if ((model_config->stt->engine ==
                      models_manager::model_engine_t::stt_whisper ||
-                 model_files->stt->engine ==
+                 model_config->stt->engine ==
                      models_manager::model_engine_t::stt_fasterwhisper) &&
                 (config.use_gpu != m_stt_engine->use_gpu() ||
                  config.gpu_device != m_stt_engine->gpu_device()))
@@ -1081,7 +1109,7 @@ QString speech_service::restart_stt_engine(
                 [this]() { handle_stt_engine_error(); }};
 
             try {
-                switch (model_files->stt->engine) {
+                switch (model_config->stt->engine) {
                     case models_manager::model_engine_t::stt_ds:
                         m_stt_engine = std::make_unique<ds_engine>(
                             std::move(config), std::move(call_backs));
@@ -1126,7 +1154,7 @@ QString speech_service::restart_stt_engine(
                 static_cast<stt_engine::speech_mode_t>(speech_mode));
         }
 
-        return model_files->stt->model_id;
+        return model_config->stt->model_id;
     }
 
     qWarning() << "failed to restart stt engine, no valid model";
@@ -1151,6 +1179,18 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         config.speaker = model_config->tts->speaker.toStdString();
         config.speech_speed = speech_speed;
         config.options = model_config->options.toStdString();
+
+        if (model_config->tts->engine ==
+                models_manager::model_engine_t::tts_coqui &&
+            settings::instance()->coqui_use_gpu() &&
+            settings::instance()->has_gpu_device_coqui()) {
+            if (auto device = make_gpu_device<tts_engine>(
+                    settings::instance()->gpu_device_coqui(),
+                    settings::instance()->auto_gpu_device_coqui())) {
+                config.gpu_device = std::move(*device);
+                config.use_gpu = true;
+            }
+        }
 
         if (model_config->tts->model_id.contains("fairseq")) {
             auto l = model_config->tts->model_id.split('_');
@@ -1201,6 +1241,12 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             if (m_tts_engine->model_files() != config.model_files) return true;
             if (m_tts_engine->lang() != config.lang) return true;
             if (m_tts_engine->speaker() != config.speaker) return true;
+
+            if (model_config->stt->engine ==
+                    models_manager::model_engine_t::tts_coqui &&
+                (config.use_gpu != m_tts_engine->use_gpu() ||
+                 config.gpu_device != m_tts_engine->gpu_device()))
+                return true;
 
             return false;
         }();
@@ -2071,6 +2117,81 @@ QVariantMap speech_service::mnt_out_langs(QString in_lang) const {
     map = available_trg_langs(available_models_map);
 
     return map;
+}
+
+QVariantMap speech_service::features_availability() {
+    QVariantMap availability;
+
+    auto py_availability = py_executor::instance()->libs_availability;
+    if (py_availability) {
+        qDebug() << "features availability ready";
+
+        availability.insert(
+            "coqui-tts", QVariantList{py_availability->coqui_tts, "Coqui TTS"});
+        availability.insert(
+            "coqui-tts-cuda",
+            QVariantList{py_availability->coqui_tts && gpu_tools::has_cuda(),
+                         "Coqui TTS CUDA"});
+        availability.insert(
+            "coqui-tts-ja",
+            QVariantList{py_availability->coqui_tts && py_availability->mecab,
+                         "Coqui TTS " + tr("Japanese")});
+        availability.insert(
+            "mimic3-tts",
+            QVariantList{py_availability->mimic3_tts, "Mimic3 TTS"});
+        availability.insert("mimic3-tts-de",
+                            QVariantList{py_availability->mimic3_tts &&
+                                             py_availability->gruut_de,
+                                         "Mimic3 TTS " + tr("German")});
+        availability.insert("mimic3-tts-es",
+                            QVariantList{py_availability->mimic3_tts &&
+                                             py_availability->gruut_es,
+                                         "Mimic3 TTS " + tr("Spanish")});
+        availability.insert("mimic3-tts-fr",
+                            QVariantList{py_availability->mimic3_tts &&
+                                             py_availability->gruut_fr,
+                                         "Mimic3 TTS " + tr("French")});
+        availability.insert("mimic3-tts-it",
+                            QVariantList{py_availability->mimic3_tts &&
+                                             py_availability->gruut_it,
+                                         "Mimic3 TTS " + tr("Italian")});
+        availability.insert("mimic3-tts-ru",
+                            QVariantList{py_availability->mimic3_tts &&
+                                             py_availability->gruut_ru,
+                                         "Mimic3 TTS " + tr("Russian")});
+        availability.insert("faster-whisper-stt",
+                            QVariantList{py_availability->faster_whisper,
+                                         "Faster Whisper STT"});
+        availability.insert(
+            "faster-whisper-stt-cuda",
+            QVariantList{py_availability->faster_whisper &&
+                             gpu_tools::has_cuda() && gpu_tools::has_cudnn(),
+                         "Faster Whisper STT CUDA"});
+        availability.insert("punctuator",
+                            QVariantList{py_availability->transformers,
+                                         tr("Punctuation restoration")});
+        availability.insert(
+            "diacritizer-he",
+            QVariantList{
+                py_availability->transformers && py_availability->unikud,
+                tr("Diacritics restoration") + " " + tr("Hebrew")});
+
+        availability.insert(
+            "whispercpp-stt-cuda",
+            QVariantList{whisper_engine::has_cuda(), "whisper.cpp STT CUDA"});
+        availability.insert(
+            "whispercpp-stt-hip",
+            QVariantList{whisper_engine::has_hip(), "whisper.cpp STT ROCm"});
+        availability.insert("whispercpp-stt-opencl",
+                            QVariantList{whisper_engine::has_opencl(),
+                                         "whisper.cpp STT OpenCL"});
+
+    } else {
+        qDebug() << "delaying features availability";
+        m_features_availability_timer.start();
+    }
+
+    return availability;
 }
 
 int speech_service::next_task_id() {
@@ -3244,6 +3365,15 @@ int speech_service::MntTranslate(const QString &text, const QString &lang,
 QVariantMap speech_service::MntGetOutLangs(const QString &lang) {
     qDebug() << "[dbus => service] called MntGetOutLangs";
     return mnt_out_langs(lang);
+}
+
+QVariantMap speech_service::FeaturesAvailability() {
+    qDebug() << "[dbus => "
+                "service] "
+                "called "
+                "FeaturesAvailab"
+                "ility";
+    return features_availability();
 }
 
 int speech_service::Reload() {

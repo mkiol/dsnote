@@ -139,6 +139,12 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("Cancel"), argumentList);
     }
 
+    inline QDBusPendingReply<QVariantMap> FeaturesAvailability()
+    {
+        QList<QVariant> argumentList;
+        return asyncCallWithArgumentList(QStringLiteral("FeaturesAvailability"), argumentList);
+    }
+
     inline QDBusPendingReply<int> KeepAliveService()
     {
         QList<QVariant> argumentList;
@@ -258,6 +264,7 @@ Q_SIGNALS: // SIGNALS
     void DefaultTtsLangPropertyChanged(const QString &lang);
     void DefaultTtsModelPropertyChanged(const QString &model);
     void ErrorOccured(int code);
+    void FeaturesAvailabilityUpdated();
     void MntLangListChanged(const QVariantList &langs);
     void MntLangsPropertyChanged(const QVariantMap &langs);
     void MntTranslateFinished(const QString &in_text, const QString &in_lang, const QString &out_text, const QString &out_lang, int task);

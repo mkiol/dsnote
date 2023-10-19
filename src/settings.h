@@ -108,6 +108,13 @@ class settings : public QSettings, public singleton<settings> {
                    gpu_scan_hip_changed)
     Q_PROPERTY(bool gpu_scan_opencl READ gpu_scan_opencl WRITE
                    set_gpu_scan_opencl NOTIFY gpu_scan_opencl_changed)
+    Q_PROPERTY(bool whisper_use_gpu READ whisper_use_gpu WRITE
+                   set_whisper_use_gpu NOTIFY whisper_use_gpu_changed)
+    Q_PROPERTY(
+        bool fasterwhisper_use_gpu READ fasterwhisper_use_gpu WRITE
+            set_fasterwhisper_use_gpu NOTIFY fasterwhisper_use_gpu_changed)
+    Q_PROPERTY(bool coqui_use_gpu READ coqui_use_gpu WRITE set_coqui_use_gpu
+                   NOTIFY coqui_use_gpu_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -130,22 +137,47 @@ class settings : public QSettings, public singleton<settings> {
                    set_default_mnt_lang NOTIFY default_mnt_lang_changed)
     Q_PROPERTY(QString default_mnt_out_lang READ default_mnt_out_lang WRITE
                    set_default_mnt_out_lang NOTIFY default_mnt_out_lang_changed)
-    Q_PROPERTY(bool whisper_use_gpu READ whisper_use_gpu WRITE
-                   set_whisper_use_gpu NOTIFY whisper_use_gpu_changed)
+
+    Q_PROPERTY(QStringList gpu_devices_whisper READ gpu_devices_whisper NOTIFY
+                   gpu_devices_changed)
+    Q_PROPERTY(int gpu_device_idx_whisper READ gpu_device_idx_whisper WRITE
+                   set_gpu_device_idx_whisper NOTIFY gpu_device_whisper_changed)
+    Q_PROPERTY(QString gpu_device_whisper READ gpu_device_whisper WRITE
+                   set_gpu_device_whisper NOTIFY gpu_device_whisper_changed)
+    Q_PROPERTY(QString auto_gpu_device_whisper READ auto_gpu_device_whisper
+                   NOTIFY gpu_device_whisper_changed)
+
+    Q_PROPERTY(QStringList gpu_devices_fasterwhisper READ
+                   gpu_devices_fasterwhisper NOTIFY gpu_devices_changed)
     Q_PROPERTY(
-        QStringList gpu_devices READ gpu_devices NOTIFY gpu_devices_changed)
-    Q_PROPERTY(int gpu_device_idx READ gpu_device_idx WRITE set_gpu_device_idx
-                   NOTIFY gpu_device_changed)
-    Q_PROPERTY(QString gpu_device READ gpu_device WRITE set_gpu_device NOTIFY
-                   gpu_device_changed)
+        int gpu_device_idx_fasterwhisper READ gpu_device_idx_fasterwhisper WRITE
+            set_gpu_device_idx_fasterwhisper NOTIFY
+                gpu_device_fasterwhisper_changed)
+    Q_PROPERTY(QString gpu_device_fasterwhisper READ gpu_device_fasterwhisper
+                   WRITE set_gpu_device_fasterwhisper NOTIFY
+                       gpu_device_fasterwhisper_changed)
     Q_PROPERTY(
-        QString auto_gpu_device READ auto_gpu_device NOTIFY gpu_device_changed)
+        QString auto_gpu_device_fasterwhisper READ auto_gpu_device_fasterwhisper
+            NOTIFY gpu_device_fasterwhisper_changed)
+
+    Q_PROPERTY(QStringList gpu_devices_coqui READ gpu_devices_coqui NOTIFY
+                   gpu_devices_changed)
+    Q_PROPERTY(
+        int gpu_device_idx_coqui READ gpu_device_idx_coqui WRITE
+            set_gpu_device_idx_coqui NOTIFY gpu_device_fasterwhisper_changed)
+    Q_PROPERTY(QString gpu_device_coqui READ gpu_device_coqui WRITE
+                   set_gpu_device_coqui NOTIFY gpu_device_coqui_changed)
+    Q_PROPERTY(QString auto_gpu_device_coqui READ auto_gpu_device_coqui NOTIFY
+                   gpu_device_coqui_changed)
+
     Q_PROPERTY(
         QStringList audio_inputs READ audio_inputs NOTIFY audio_inputs_changed)
     Q_PROPERTY(int audio_input_idx READ audio_input_idx WRITE
                    set_audio_input_idx NOTIFY audio_input_changed)
     Q_PROPERTY(QString audio_input READ audio_input WRITE set_audio_input NOTIFY
                    audio_input_changed)
+    Q_PROPERTY(
+        bool py_scan READ py_scan WRITE set_py_scan NOTIFY py_scan_changed)
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -279,11 +311,19 @@ class settings : public QSettings, public singleton<settings> {
     void set_gpu_scan_hip(bool value);
     bool gpu_scan_opencl() const;
     void set_gpu_scan_opencl(bool value);
+    bool whisper_use_gpu() const;
+    void set_whisper_use_gpu(bool value);
+    bool fasterwhisper_use_gpu() const;
+    void set_fasterwhisper_use_gpu(bool value);
+    bool coqui_use_gpu() const;
+    void set_coqui_use_gpu(bool value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
     Q_INVOKABLE bool gpu_supported() const;
-    Q_INVOKABLE bool has_gpu_device() const;
+    Q_INVOKABLE bool has_gpu_device_whisper() const;
+    Q_INVOKABLE bool has_gpu_device_fasterwhisper() const;
+    Q_INVOKABLE bool has_gpu_device_coqui() const;
     Q_INVOKABLE bool has_audio_input() const;
     Q_INVOKABLE bool is_wayland() const;
     Q_INVOKABLE bool is_xcb() const;
@@ -319,19 +359,34 @@ class settings : public QSettings, public singleton<settings> {
     void set_restore_punctuation(bool value);
     QStringList enabled_models();
     void set_enabled_models(const QStringList &value);
-    bool whisper_use_gpu() const;
-    void set_whisper_use_gpu(bool value);
-    QStringList gpu_devices() const;
-    QString gpu_device() const;
-    QString auto_gpu_device() const;
-    void set_gpu_device(QString value);
-    int gpu_device_idx() const;
-    void set_gpu_device_idx(int value);
     QStringList audio_inputs() const;
     QString audio_input() const;
     void set_audio_input(QString value);
     int audio_input_idx() const;
     void set_audio_input_idx(int value);
+    bool py_scan() const;
+    void set_py_scan(bool value);
+
+    QStringList gpu_devices_whisper() const;
+    QString gpu_device_whisper() const;
+    QString auto_gpu_device_whisper() const;
+    void set_gpu_device_whisper(QString value);
+    int gpu_device_idx_whisper() const;
+    void set_gpu_device_idx_whisper(int value);
+
+    QStringList gpu_devices_fasterwhisper() const;
+    QString gpu_device_fasterwhisper() const;
+    QString auto_gpu_device_fasterwhisper() const;
+    void set_gpu_device_fasterwhisper(QString value);
+    int gpu_device_idx_fasterwhisper() const;
+    void set_gpu_device_idx_fasterwhisper(int value);
+
+    QStringList gpu_devices_coqui() const;
+    QString gpu_device_coqui() const;
+    QString auto_gpu_device_coqui() const;
+    void set_gpu_device_coqui(QString value);
+    int gpu_device_idx_coqui() const;
+    void set_gpu_device_idx_coqui(int value);
 
     // stt
     QString default_stt_model() const;
@@ -383,6 +438,9 @@ class settings : public QSettings, public singleton<settings> {
     void gpu_scan_cuda_changed();
     void gpu_scan_hip_changed();
     void gpu_scan_opencl_changed();
+    void whisper_use_gpu_changed();
+    void fasterwhisper_use_gpu_changed();
+    void coqui_use_gpu_changed();
 
     // service
     void models_dir_changed();
@@ -394,11 +452,13 @@ class settings : public QSettings, public singleton<settings> {
     void default_tts_models_changed(const QString &lang);
     void default_mnt_lang_changed();
     void default_mnt_out_lang_changed();
-    void whisper_use_gpu_changed();
     void gpu_devices_changed();
-    void gpu_device_changed();
+    void gpu_device_whisper_changed();
+    void gpu_device_fasterwhisper_changed();
+    void gpu_device_coqui_changed();
     void audio_inputs_changed();
     void audio_input_changed();
+    void py_scan_changed();
 
    private:
     inline static const QString settings_filename =
@@ -406,7 +466,9 @@ class settings : public QSettings, public singleton<settings> {
     inline static const QString default_qt_style =
         QStringLiteral("org.kde.desktop");
     bool m_restart_required = false;
-    QStringList m_gpu_devices;
+    QStringList m_gpu_devices_whisper;
+    QStringList m_gpu_devices_fasterwhisper;
+    QStringList m_gpu_devices_coqui;
     QStringList m_audio_inputs;
 
     static QString settings_filepath();

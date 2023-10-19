@@ -42,6 +42,9 @@ class tts_engine {
     enum class state_t { idle, initializing, encoding, error };
     friend std::ostream& operator<<(std::ostream& os, state_t state);
 
+    enum class gpu_api_t { opencl, cuda, rocm };
+    friend std::ostream& operator<<(std::ostream& os, gpu_api_t api);
+
     struct model_files_t {
         std::string model_path;
         std::string vocoder_path;
@@ -67,6 +70,23 @@ class tts_engine {
         std::function<void()> error;
     };
 
+    struct gpu_device_t {
+        int id = -1;
+        gpu_api_t api = gpu_api_t::opencl;
+        std::string name;
+        std::string platform_name;
+
+        inline bool operator==(const gpu_device_t& rhs) const {
+            return platform_name == rhs.platform_name && name == rhs.name &&
+                   id == rhs.id;
+        }
+        inline bool operator!=(const gpu_device_t& rhs) const {
+            return !(*this == rhs);
+        }
+    };
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const gpu_device_t& gpu_device);
+
     struct config_t {
         std::string lang;
         model_files_t model_files;
@@ -79,6 +99,8 @@ class tts_engine {
         std::string nb_data;
         std::string lang_code;
         unsigned int speech_speed = 10;
+        bool use_gpu = false;
+        gpu_device_t gpu_device;
         inline bool has_option(char c) const {
             return options.find(c) != std::string::npos;
         }
@@ -94,6 +116,8 @@ class tts_engine {
     inline auto model_files() const { return m_config.model_files; }
     inline auto state() const { return m_state; }
     inline auto speaker() const { return m_config.speaker; }
+    inline auto use_gpu() const { return m_config.use_gpu; }
+    inline auto gpu_device() const { return m_config.gpu_device; }
     void encode_speech(std::string text);
     static std::string merge_wav_files(std::vector<std::string>&& files);
     void set_speech_speed(unsigned int speech_speed);

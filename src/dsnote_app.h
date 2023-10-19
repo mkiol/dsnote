@@ -225,6 +225,7 @@ class dsnote_app : public QObject {
                                                const QString &body,
                                                bool permanent = false);
     Q_INVOKABLE void execute_action_name(const QString &action_name);
+    Q_INVOKABLE QVariantList features_availability();
 
    signals:
     void active_stt_model_changed();
@@ -264,6 +265,7 @@ class dsnote_app : public QObject {
     void note_changed();
     void can_undo_or_redu_note_changed();
     void can_open_next_file();
+    void features_availability_updated();
 
    private:
     enum class action_t {

@@ -80,7 +80,7 @@ DialogPage {
                 }
                 ComboBox {
                     Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? parent.width : parent.width / 2
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
                     currentIndex: {
                         if (_settings.insert_mode === Settings.InsertInLine) return 0
                         if (_settings.insert_mode === Settings.InsertNewLine) return 1
@@ -326,22 +326,22 @@ DialogPage {
 
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("If a suitable GPU device is found in the system, it will be used to accelerate processing.") + " " +
+                ToolTip.text: qsTr("If a suitable graphics card is found in the system, it will be used to accelerate processing.") + " " +
                               qsTr("GPU hardware acceleration significantly reduces the time of decoding.") + " " +
-                              qsTr("Disable this option if you observe problems when using Speech to Text with Whisper models.")
+                              qsTr("Disable this option if you observe problems when using Speech to Text with %1 models.").arg("<i>Whisper</i>")
             }
 
             Label {
                 wrapMode: Text.Wrap
                 Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                 Layout.fillWidth: true
-                visible: _settings.gpu_supported() && _settings.whisper_use_gpu && _settings.gpu_devices.length <= 1
+                visible: _settings.gpu_supported() && _settings.whisper_use_gpu && _settings.gpu_devices_whisper.length <= 1
                 color: "red"
-                text: qsTr("A suitable GPU device could not be found.")
+                text: qsTr("A suitable graphics card could not be found.")
             }
 
             GridLayout {
-                visible: _settings.gpu_supported() && _settings.whisper_use_gpu && _settings.gpu_devices.length > 1
+                visible: _settings.gpu_supported() && _settings.whisper_use_gpu && _settings.gpu_devices_whisper.length > 1
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
@@ -350,20 +350,71 @@ DialogPage {
                     wrapMode: Text.Wrap
                     Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                     Layout.fillWidth: true
-                    text: qsTr("GPU device")
+                    text: qsTr("Graphics card")
                 }
                 ComboBox {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    currentIndex: _settings.gpu_device_idx
-                    model: _settings.gpu_devices
+                    currentIndex: _settings.gpu_device_idx_whisper
+                    model: _settings.gpu_devices_whisper
                     onActivated: {
-                        _settings.gpu_device_idx = index
+                        _settings.gpu_device_idx_whisper = index
                     }
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Select preferred GPU device for hardware acceleration.")
+                    ToolTip.text: qsTr("Select preferred graphics card for hardware acceleration.")
+                }
+            }
+
+            CheckBox {
+                visible: _settings.gpu_supported()
+                checked: _settings.fasterwhisper_use_gpu
+                text: qsTr("Use GPU acceleration for Faster Whisper")
+                onCheckedChanged: {
+                    _settings.fasterwhisper_use_gpu = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("If a suitable graphics card is found in the system, it will be used to accelerate processing.") + " " +
+                              qsTr("GPU hardware acceleration significantly reduces the time of decoding.") + " " +
+                              qsTr("Disable this option if you observe problems when using Speech to Text with %1 models.").arg("<i>Faster Whisper</i>")
+            }
+
+            Label {
+                wrapMode: Text.Wrap
+                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                Layout.fillWidth: true
+                visible: _settings.gpu_supported() && _settings.fasterwhisper_use_gpu && _settings.gpu_devices_fasterwhisper.length <= 1
+                color: "red"
+                text: qsTr("A suitable graphics card could not be found.")
+            }
+
+            GridLayout {
+                visible: _settings.gpu_supported() && _settings.fasterwhisper_use_gpu && _settings.gpu_devices_fasterwhisper.length > 1
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    wrapMode: Text.Wrap
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.fillWidth: true
+                    text: qsTr("Graphics card")
+                }
+                ComboBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    currentIndex: _settings.gpu_device_idx_fasterwhisper
+                    model: _settings.gpu_devices_fasterwhisper
+                    onActivated: {
+                        _settings.gpu_device_idx_fasterwhisper = index
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Select preferred graphics card for hardware acceleration.")
                 }
             }
         }
@@ -430,6 +481,57 @@ DialogPage {
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Restore diacritical marks in the text before speech synthesis.") + " " +
                               qsTr("It works only for Arabic and Hebrew languages.")
+            }
+
+            CheckBox {
+                visible: _settings.gpu_supported()
+                checked: _settings.coqui_use_gpu
+                text: qsTr("Use GPU acceleration for Coqui")
+                onCheckedChanged: {
+                    _settings.coqui_use_gpu = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("If a suitable graphics card is found in the system, it will be used to accelerate processing.") + " " +
+                              qsTr("GPU hardware acceleration significantly reduces the time of speech synthesis.") + " " +
+                              qsTr("Disable this option if you observe problems when using Text to Speech with %1 models.").arg("<i>Coqui</i>")
+            }
+
+            Label {
+                wrapMode: Text.Wrap
+                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                Layout.fillWidth: true
+                visible: _settings.gpu_supported() && _settings.coqui_use_gpu && _settings.gpu_devices_coqui.length <= 1
+                color: "red"
+                text: qsTr("A suitable graphics card could not be found.")
+            }
+
+            GridLayout {
+                visible: _settings.gpu_supported() && _settings.coqui_use_gpu && _settings.gpu_devices_coqui.length > 1
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    wrapMode: Text.Wrap
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.fillWidth: true
+                    text: qsTr("Graphics card")
+                }
+                ComboBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    currentIndex: _settings.gpu_device_idx_coqui
+                    model: _settings.gpu_devices_coqui
+                    onActivated: {
+                        _settings.gpu_device_idx_coqui = index
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Select preferred graphics card for hardware acceleration.")
+                }
             }
         }
 
@@ -650,70 +752,113 @@ DialogPage {
 
             width: root.width
 
-            GridLayout {
-                columns: root.verticalMode ? 1 : 3
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
+            SectionLabel {
+                text: qsTr("Storage")
+            }
 
-                Label {
-                    text: qsTr("Location of language files")
-                }
-                TextField {
-                    Layout.fillWidth: true
-                    text: _settings.models_dir
-                    enabled: false
+            Label {
+                text: qsTr("Location of language files")
+            }
 
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: _settings.models_dir
-                }
-                Button {
-                    text: qsTr("Change")
-                    onClicked: directoryDialog.open()
+            Label {
+                Layout.fillWidth: true
+                Layout.leftMargin: 2 * appWin.padding
+                text: _settings.models_dir
+                wrapMode: Text.WrapAnywhere
+            }
 
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
-                }
+            Button {
+                text: qsTr("Change")
+                onClicked: directoryDialog.open()
+                Layout.leftMargin: 2 * appWin.padding
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
+            }
+
+            SectionLabel {
+                text: qsTr("Graphics cards")
             }
 
             CheckBox {
                 checked: _settings.gpu_scan_cuda
-                text: qsTr("Search for CUDA devices")
+                text: qsTr("NVIDIA CUDA")
                 onCheckedChanged: {
                     _settings.gpu_scan_cuda = checked
                 }
 
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Try to find NVIDIA CUDA devices in the system.") + " " +
+                ToolTip.text: qsTr("Try to find NVIDIA CUDA compatible graphics cards in the system.") + " " +
                               qsTr("Disable this option if you observe problems.")
             }
 
             CheckBox {
                 checked: _settings.gpu_scan_hip
-                text: qsTr("Search for ROCm devices")
+                text: qsTr("AMD ROCm")
                 onCheckedChanged: {
                     _settings.gpu_scan_hip = checked
                 }
 
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Try to find AMD ROCm devices in the system.") + " " +
+                ToolTip.text: qsTr("Try to find AMD ROCm compatible graphics cards in the system.") + " " +
                               qsTr("Disable this option if you observe problems.")
             }
 
             CheckBox {
                 checked: _settings.gpu_scan_opencl
-                text: qsTr("Search for OpenCL devices")
+                text: qsTr("OpenCL")
                 onCheckedChanged: {
                     _settings.gpu_scan_opencl = checked
                 }
 
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Try to find OpenCL devices in the system.") + " " +
+                ToolTip.text: qsTr("Try to find OpenCL compatible graphics cards in the system.") + " " +
                               qsTr("Disable this option if you observe problems.")
+            }
+
+            SectionLabel {
+                text: qsTr("Optional features")
+            }
+
+            ColumnLayout {
+                spacing: appWin.padding
+
+                BusyIndicator {
+                    visible: featureRepeter.model.length === 0
+                    running: visible
+                }
+
+                Connections {
+                    target: app
+                    onFeatures_availability_updated: {
+                        featureRepeter.model = app.features_availability()
+                    }
+                }
+
+                Repeater {
+                    id: featureRepeter
+
+                    model: app.features_availability()
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 2 * appWin.padding
+
+                        Label {
+                            text: modelData[2]
+                        }
+
+                        Label {
+                            font.bold: true
+                            text: modelData[1] ? "✔️" : "✖️"
+                            color: modelData[1] ? "green" : "red"
+                        }
+                    }
+                }
             }
         }
     }

@@ -21,6 +21,7 @@
 #include <string>
 #include <thread>
 
+#include "py_tools.hpp"
 #include "singleton.h"
 
 namespace py = pybind11;
@@ -28,6 +29,7 @@ namespace py = pybind11;
 class py_executor : public singleton<py_executor> {
    public:
     using task_t = std::function<std::string()>;
+    std::optional<py_tools::libs_availability_t> libs_availability;
     py_executor() = default;
     ~py_executor() override;
     std::future<std::string> execute(task_t task);

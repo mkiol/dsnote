@@ -17,6 +17,7 @@
 #include <string_view>
 #include <utility>
 
+#include "gpu_tools.hpp"
 #include "logger.hpp"
 #include "py_executor.hpp"
 #include "simdjson.h"
@@ -181,6 +182,13 @@ void coqui_engine::create_model() {
                                       m_config.model_files.vocoder_path, true);
 
               bool mms_model = model_file.find("fairseq") != std::string::npos;
+              
+              auto use_cuda = m_config.use_gpu &&
+                              m_config.gpu_device.api == gpu_api_t::cuda &&
+                              gpu_tools::has_cuda();
+
+              LOGD("using device: " << (use_cuda ? "cuda" : "cpu") << " "
+                                    << m_config.gpu_device.id);
 
               try {
                   auto api = py::module_::import("TTS.utils.synthesizer");
@@ -212,7 +220,7 @@ void coqui_engine::create_model() {
                           mms_model ? static_cast<py::object>(py::str(
                                           m_config.model_files.model_path))
                                     : static_cast<py::object>(py::none()),
-                      "use_cuda"_a = false);
+                      "use_cuda"_a = use_cuda);
 
                   if (m_model) {
                       auto model = m_model->attr("tts_model");

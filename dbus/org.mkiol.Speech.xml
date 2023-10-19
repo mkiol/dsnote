@@ -696,6 +696,23 @@
         </method>
 
         <!--
+            FeaturesAvailability:
+            @features: returned a dict features (feature id => true/false)
+        -->
+        <method name="FeaturesAvailability">
+            <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
+            <arg name="features" type="a{sv}" direction="out" />
+        </method>
+
+        <!--
+            FeaturesAvailabilityUpdated:
+
+            Emitted whenever availability of features get updated.
+        -->
+        <signal name="FeaturesAvailabilityUpdated">
+        </signal>
+
+        <!--
             Reload:
             @result: 0 - success, any other value - error
 
