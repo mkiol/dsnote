@@ -2125,7 +2125,7 @@ QVariantMap speech_service::mnt_out_langs(QString in_lang) const {
 }
 
 QVariantMap speech_service::features_availability() {
-    if (m_features_availability.empty()) {
+    if (m_features_availability.isEmpty()) {
         auto py_availability = py_executor::instance()->libs_availability;
         if (py_availability) {
             qDebug() << "features availability ready";

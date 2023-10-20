@@ -878,13 +878,13 @@ DialogPage {
                         spacing: 2 * appWin.padding
 
                         Label {
-                            text: modelData[2]
+                            text: modelData[1]
                         }
 
                         Label {
                             font.bold: true
-                            text: modelData[1] ? "✔️" : "✖️"
-                            color: modelData[1] ? "green" : "red"
+                            text: modelData[0] ? "✔️" : "✖️"
+                            color: modelData[0] ? "green" : "red"
                         }
                     }
                 }
