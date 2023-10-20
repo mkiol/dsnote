@@ -31,7 +31,7 @@ Dialog {
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.Wrap
-            text: qsTr("Should the text be added to the current note or replace it?")
+            text: qsTr("Add text to the current note or replace it?")
             font.pixelSize: 1.2 * appWin.textFontSize
         }
 
