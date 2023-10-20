@@ -225,6 +225,7 @@ sfdk package
 - [faster-whisper](https://github.com/guillaumekln/faster-whisper)
 - [Mimic 3](https://mycroft.ai/mimic-3)
 - [Unikud](https://github.com/morrisalp/unikud)
+- [april-asr](https://github.com/abb128/april-asr)
 
 ## License
 

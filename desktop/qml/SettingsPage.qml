@@ -814,7 +814,7 @@ DialogPage {
             }
 
             SectionLabel {
-                text: qsTr("Graphics cards support")
+                text: qsTr("Graphic cards support")
             }
 
             CheckBox {
@@ -826,7 +826,7 @@ DialogPage {
 
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Try to find NVIDIA CUDA compatible graphics cards in the system.") + " " +
+                ToolTip.text: qsTr("Try to find NVIDIA CUDA compatible graphic cards in the system.") + " " +
                               qsTr("Disable this option if you observe problems.")
             }
 
@@ -839,7 +839,7 @@ DialogPage {
 
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Try to find AMD ROCm compatible graphics cards in the system.") + " " +
+                ToolTip.text: qsTr("Try to find AMD ROCm compatible graphic cards in the system.") + " " +
                               qsTr("Disable this option if you observe problems.")
             }
 
@@ -852,12 +852,12 @@ DialogPage {
 
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Try to find OpenCL compatible graphics cards in the system.") + " " +
+                ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
                               qsTr("Disable this option if you observe problems.")
             }
 
             SectionLabel {
-                text: qsTr("Optional features availability")
+                text: qsTr("Availability of optional features")
             }
 
             ColumnLayout {

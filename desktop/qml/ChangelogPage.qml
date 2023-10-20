@@ -38,14 +38,14 @@ DialogPage {
             (<i>User Interface</i> &rarr; <i>Show desktop notification</i>).</li>
         <li>Opening files with Drag and Drop gesture.</li>
         <li>Speech speed control option has been moved to the main application window.</li>
+        <li>Fix: Application did not use native widgets on some platforms.</li>
         </ul>
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
         <li>New languages: Afrikaans, Gujarati, Hausa, Telugu, Tswana, Javanese, Hebrew</li>
-        <li>New engine: <i>Faster Whisper</i>. It provides slightly better performance comparing to the existing engine
-            for Whisper models, especially on larger models like Medium or Large. Right now <i>Faster Whisper</i> does not,
-            use GPU acceleration.</li>
-        <li>New engine: <i>april-asr</i>. It is super fast and supports intermediate results.
+        <li>New engine: <i>Faster Whisper</i>. It provides slightly better performance compared to the existing engine
+            for Whisper models, especially on bigger models like Medium or Large.</li>
+        <li>New engine: <i>april-asr</i>. It's super fast and supports intermediate results.
             New engine comes with models for the following languages: English, Polish.</li>
         <li>Inserting text to any active window. Using global keyboard shotcut or
             <i>start-listening-active-window</i> action you can
@@ -57,7 +57,7 @@ DialogPage {
         <li>Stop listening button. Unlike Cancel, with this button you can stop listening but
             the already recorded voice will be decoded into text.</li>
         <li>Support for Opus audio codec in <i>Transcribe a file</i></li>
-        <li>Fix: CUDA acceleration for Whisper models did not work on NVIDIA video cards with Maxwell architecture.</li>
+        <li>Fix: CUDA acceleration for Whisper models did not work on NVIDIA graphic cards with Maxwell architecture.</li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
@@ -71,12 +71,22 @@ DialogPage {
             <i>start-reading-clipboard</i> action you can directly read text that is in the clipboard.</li>
         <li>New Piper voices for the following languages: Arabic, English, Hungarian, Polish, Czech, German,
             Ukrainian, Vietnamese, Serbian, French, Spanish, Nepali.</li>
-        <li>More steps in speech speed option. You can set speed from 0.1 to 2.0 values.</li>
+        <li>More steps in the <i>Speech speed</i> option. You can set speed from 0.1 to 2.0 values.</li>
         <li>Diacritical marks restoration before speech synthesis for Arabic and Hebrew.
             It is enabled by default,
             but if you don't need this option, it can be disabled in the settings.</li>
         <li>Fix: Coqui Chinese MMS Hakka and Min Nan voices were broken.</li>
         <li>Fix: Exporting to audio file was not possible when text was very long.</li>
+        </ul>
+        <p>" + qsTr("Other") + ":</p>
+        <ul>
+        <li>Setting option to disable support for certain graphic cards
+            (<i>Other</i> &rarr; <i>Graphics cards support</i>). Use this option if you observe problems
+            when using GPU acceleration. If the application does not start due to graphics card problem,
+            use the <i>--gpu-scan-off</i> command line option to switch off any GPU support.</li>
+        <li>Detecting the availability of optional the features. In the settings, you can check what optional features
+            are available (<i>Other</i> &rarr; <i>Availability of optional features</i>).
+            Feature availability depends on the libraries installed on your system.</li>
         </ul>"
     }
 
