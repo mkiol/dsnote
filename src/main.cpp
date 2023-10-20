@@ -7,6 +7,7 @@
 
 #include <fmt/format.h>
 
+#include <QApplication>
 #include <QCommandLineParser>
 #include <QDebug>
 #include <QGuiApplication>
@@ -346,7 +347,7 @@ int main(int argc, char* argv[]) {
     const auto& app = *SailfishApp::application(argc, argv);
 #else
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
     QGuiApplication::setWindowIcon(QIcon{QStringLiteral(":/app_icon.svg")});
 #endif
     QGuiApplication::setApplicationName(QStringLiteral(APP_ID));
