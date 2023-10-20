@@ -464,10 +464,13 @@ speech_service::speech_service(QObject *parent)
 
     m_features_availability_timer.setSingleShot(true);
     m_features_availability_timer.setTimerType(Qt::VeryCoarseTimer);
-    m_features_availability_timer.setInterval(100);
+    m_features_availability_timer.setInterval(1000);
     connect(&m_features_availability_timer, &QTimer::timeout, this, [this]() {
+        qDebug() << "trying features availability update:"
+                 << static_cast<bool>(
+                        py_executor::instance()->libs_availability);
         if (py_executor::instance()->libs_availability) {
-            emit features_availability_updated();
+            features_availability();
         } else {
             m_features_availability_timer.start();
         }
@@ -483,6 +486,8 @@ speech_service::speech_service(QObject *parent)
     remove_cached_media_files();
 
     handle_models_changed();
+
+    features_availability();
 }
 
 speech_service::~speech_service() { qDebug() << "speech service dtor"; }
@@ -1242,7 +1247,7 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             if (m_tts_engine->lang() != config.lang) return true;
             if (m_tts_engine->speaker() != config.speaker) return true;
 
-            if (model_config->stt->engine ==
+            if (model_config->tts->engine ==
                     models_manager::model_engine_t::tts_coqui &&
                 (config.use_gpu != m_tts_engine->use_gpu() ||
                  config.gpu_device != m_tts_engine->gpu_device()))
@@ -2120,78 +2125,89 @@ QVariantMap speech_service::mnt_out_langs(QString in_lang) const {
 }
 
 QVariantMap speech_service::features_availability() {
-    QVariantMap availability;
+    if (m_features_availability.empty()) {
+        auto py_availability = py_executor::instance()->libs_availability;
+        if (py_availability) {
+            qDebug() << "features availability ready";
 
-    auto py_availability = py_executor::instance()->libs_availability;
-    if (py_availability) {
-        qDebug() << "features availability ready";
+            m_features_availability.insert(
+                "coqui-tts",
+                QVariantList{py_availability->coqui_tts, "Coqui TTS"});
+            m_features_availability.insert(
+                "coqui-tts-cuda", QVariantList{py_availability->coqui_tts &&
+                                                   py_availability->torch_cuda,
+                                               "Coqui TTS CUDA"});
+            m_features_availability.insert(
+                "coqui-tts-ja", QVariantList{py_availability->coqui_tts &&
+                                                 py_availability->mecab,
+                                             "Coqui TTS " + tr("Japanese")});
+            m_features_availability.insert(
+                "mimic3-tts",
+                QVariantList{py_availability->mimic3_tts, "Mimic3 TTS"});
+            m_features_availability.insert(
+                "mimic3-tts-de", QVariantList{py_availability->mimic3_tts &&
+                                                  py_availability->gruut_de,
+                                              "Mimic3 TTS " + tr("German")});
+            m_features_availability.insert(
+                "mimic3-tts-es", QVariantList{py_availability->mimic3_tts &&
+                                                  py_availability->gruut_es,
+                                              "Mimic3 TTS " + tr("Spanish")});
+            m_features_availability.insert(
+                "mimic3-tts-fr", QVariantList{py_availability->mimic3_tts &&
+                                                  py_availability->gruut_fr,
+                                              "Mimic3 TTS " + tr("French")});
+            m_features_availability.insert(
+                "mimic3-tts-it", QVariantList{py_availability->mimic3_tts &&
+                                                  py_availability->gruut_it,
+                                              "Mimic3 TTS " + tr("Italian")});
+            m_features_availability.insert(
+                "mimic3-tts-ru", QVariantList{py_availability->mimic3_tts &&
+                                                  py_availability->gruut_ru,
+                                              "Mimic3 TTS " + tr("Russian")});
+            m_features_availability.insert(
+                "faster-whisper-stt",
+                QVariantList{py_availability->faster_whisper,
+                             "Faster Whisper STT"});
+            m_features_availability.insert(
+                "faster-whisper-stt-cuda",
+                QVariantList{py_availability->faster_whisper &&
+                                 gpu_tools::has_cuda() &&
+                                 gpu_tools::has_cudnn(),
+                             "Faster Whisper STT CUDA"});
+            m_features_availability.insert(
+                "punctuator", QVariantList{py_availability->transformers,
+                                           tr("Punctuation restoration")});
+            m_features_availability.insert(
+                "diacritizer-he",
+                QVariantList{
+                    py_availability->transformers && py_availability->unikud,
+                    tr("Diacritics restoration") + " " + tr("Hebrew")});
 
-        availability.insert(
-            "coqui-tts", QVariantList{py_availability->coqui_tts, "Coqui TTS"});
-        availability.insert(
-            "coqui-tts-cuda",
-            QVariantList{py_availability->coqui_tts && gpu_tools::has_cuda(),
-                         "Coqui TTS CUDA"});
-        availability.insert(
-            "coqui-tts-ja",
-            QVariantList{py_availability->coqui_tts && py_availability->mecab,
-                         "Coqui TTS " + tr("Japanese")});
-        availability.insert(
-            "mimic3-tts",
-            QVariantList{py_availability->mimic3_tts, "Mimic3 TTS"});
-        availability.insert("mimic3-tts-de",
-                            QVariantList{py_availability->mimic3_tts &&
-                                             py_availability->gruut_de,
-                                         "Mimic3 TTS " + tr("German")});
-        availability.insert("mimic3-tts-es",
-                            QVariantList{py_availability->mimic3_tts &&
-                                             py_availability->gruut_es,
-                                         "Mimic3 TTS " + tr("Spanish")});
-        availability.insert("mimic3-tts-fr",
-                            QVariantList{py_availability->mimic3_tts &&
-                                             py_availability->gruut_fr,
-                                         "Mimic3 TTS " + tr("French")});
-        availability.insert("mimic3-tts-it",
-                            QVariantList{py_availability->mimic3_tts &&
-                                             py_availability->gruut_it,
-                                         "Mimic3 TTS " + tr("Italian")});
-        availability.insert("mimic3-tts-ru",
-                            QVariantList{py_availability->mimic3_tts &&
-                                             py_availability->gruut_ru,
-                                         "Mimic3 TTS " + tr("Russian")});
-        availability.insert("faster-whisper-stt",
-                            QVariantList{py_availability->faster_whisper,
-                                         "Faster Whisper STT"});
-        availability.insert(
-            "faster-whisper-stt-cuda",
-            QVariantList{py_availability->faster_whisper &&
-                             gpu_tools::has_cuda() && gpu_tools::has_cudnn(),
-                         "Faster Whisper STT CUDA"});
-        availability.insert("punctuator",
-                            QVariantList{py_availability->transformers,
-                                         tr("Punctuation restoration")});
-        availability.insert(
-            "diacritizer-he",
-            QVariantList{
-                py_availability->transformers && py_availability->unikud,
-                tr("Diacritics restoration") + " " + tr("Hebrew")});
+            m_features_availability.insert(
+                "whispercpp-stt-cuda", QVariantList{whisper_engine::has_cuda(),
+                                                    "whisper.cpp STT CUDA"});
+            m_features_availability.insert(
+                "whispercpp-stt-hip", QVariantList{whisper_engine::has_hip(),
+                                                   "whisper.cpp STT ROCm"});
+            m_features_availability.insert(
+                "whispercpp-stt-opencl",
+                QVariantList{whisper_engine::has_opencl(),
+                             "whisper.cpp STT OpenCL"});
 
-        availability.insert(
-            "whispercpp-stt-cuda",
-            QVariantList{whisper_engine::has_cuda(), "whisper.cpp STT CUDA"});
-        availability.insert(
-            "whispercpp-stt-hip",
-            QVariantList{whisper_engine::has_hip(), "whisper.cpp STT ROCm"});
-        availability.insert("whispercpp-stt-opencl",
-                            QVariantList{whisper_engine::has_opencl(),
-                                         "whisper.cpp STT OpenCL"});
+            models_manager::instance()->update_models_using_availability(
+                {/*tts_coqui=*/py_availability->coqui_tts,
+                 /*tts_mimic3=*/py_availability->mimic3_tts,
+                 /*stt_fasterwhisper=*/py_availability->faster_whisper,
+                 /*ttt_hftc=*/py_availability->transformers});
 
-    } else {
-        qDebug() << "delaying features availability";
-        m_features_availability_timer.start();
+            emit features_availability_updated();
+        } else {
+            qDebug() << "delaying features availability";
+            m_features_availability_timer.start();
+        }
     }
 
-    return availability;
+    return m_features_availability;
 }
 
 int speech_service::next_task_id() {

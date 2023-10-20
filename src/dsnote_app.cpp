@@ -2561,26 +2561,59 @@ void dsnote_app::handle_desktop_notification_closed(
     m_desktop_notification.reset();
 }
 
+bool dsnote_app::feature_available(const QString &name) const {
+    return m_features_availability.contains(name) &&
+           m_features_availability.value(name).toList().at(0).toBool();
+}
+
+bool dsnote_app::feature_fasterwhisper_stt() const {
+    return feature_available("faster-whisper-stt");
+}
+
+bool dsnote_app::feature_fasterwhisper_stt_cuda() const {
+    return feature_available("faster-whisper-stt-cuda");
+}
+
+bool dsnote_app::feature_coqui_tts() const {
+    return feature_available("coqui-tts");
+}
+
+bool dsnote_app::feature_coqui_tts_cuda() const {
+    return feature_available("coqui-tts-cuda");
+}
+
+bool dsnote_app::feature_mimic3_tts() const {
+    return feature_available("mimic3-tts");
+}
+
+bool dsnote_app::feature_punctuator() const {
+    return feature_available("punctuator");
+}
+
+bool dsnote_app::feature_diacritizer_he() const {
+    return feature_available("diacritizer-he");
+}
+
 QVariantList dsnote_app::features_availability() {
     QVariantList list;
 
-    QVariantMap map;
-
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
-        map = speech_service::instance()->features_availability();
+        m_features_availability =
+            speech_service::instance()->features_availability();
     } else {
         qDebug() << "[app => dbus] call FeaturesAvailability";
-        map = m_dbus_service.FeaturesAvailability();
+        m_features_availability = m_dbus_service.FeaturesAvailability();
     }
 
-    auto it = map.constBegin();
-    while (it != map.constEnd()) {
+    auto it = m_features_availability.constBegin();
+    while (it != m_features_availability.constEnd()) {
         auto val = it.value().toList();
-        list.push_back(
-            QVariantList{it.key(), std::move(val.at(0)), std::move(val.at(1))});
+        list.push_back(QVariantList{it.key(), val.at(0), val.at(1)});
         ++it;
     }
+
+    emit features_changed();
 
     return list;
 }

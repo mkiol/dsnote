@@ -99,6 +99,13 @@ class models_manager : public QObject, public singleton<models_manager> {
         double download_progress = 0.0;
     };
 
+    struct models_availability_t {
+        bool tts_coqui = false;
+        bool tts_mimic3 = false;
+        bool stt_fasterwhisper = false;
+        bool ttt_hftc = false;
+    };
+
     static model_role_t role_of_engine(model_engine_t engine);
     static std::optional<std::reference_wrapper<const sup_model_file_t>>
     sup_model_file_of_role(sup_model_role_t role,
@@ -128,6 +135,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     double model_download_progress(const QString& id) const;
     void set_default_model_for_lang(const QString& model_id);
     void generate_checksums();
+    void update_models_using_availability(models_availability_t availability);
 
    signals:
     void download_progress(const QString& id, double progress);
@@ -216,11 +224,14 @@ class models_manager : public QObject, public singleton<models_manager> {
     models_t m_models_for_gen_checksum;
     models_t::iterator m_it_for_gen_checksum;
     bool m_delayed_gen_checksum = false;
+    std::optional<models_availability_t> m_models_availability;
 
     static QLatin1String download_type_str(download_type type);
     static QLatin1String comp_type_str(comp_type type);
     bool parse_models_file_might_reset();
-    static void parse_models_file(bool reset, langs_t* langs, models_t* models);
+    static void parse_models_file(
+        bool reset, langs_t* langs, models_t* models,
+        std::optional<models_availability_t> models_availability);
     static QString file_name_from_id(const QString& id, model_engine_t engine);
     static QString sup_file_name_from_id(const QString& id,
                                          sup_model_role_t role);
@@ -239,7 +250,9 @@ class models_manager : public QObject, public singleton<models_manager> {
                          const QString& checksum_2,
                          const QString& path_in_archive_2, comp_type comp,
                          int parts);
-    static auto extract_models(const QJsonArray& models_jarray);
+    static auto extract_models(
+        const QJsonArray& models_jarray,
+        std::optional<models_availability_t> models_availability);
     static auto extract_langs(const QJsonArray& langs_jarray);
     static comp_type str2comp(const QString& str);
     static QString download_filename(QString filename, comp_type comp,
@@ -282,6 +295,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     static void extract_sup_models(const QString& model_id,
                                    const QJsonObject& model_obj,
                                    std::vector<sup_model_t>& sup_models);
+    void update_models_using_availability_internal();
 };
 
 #endif  // MODELS_MANAGER_H

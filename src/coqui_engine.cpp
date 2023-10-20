@@ -17,7 +17,6 @@
 #include <string_view>
 #include <utility>
 
-#include "gpu_tools.hpp"
 #include "logger.hpp"
 #include "py_executor.hpp"
 #include "simdjson.h"
@@ -182,10 +181,10 @@ void coqui_engine::create_model() {
                                       m_config.model_files.vocoder_path, true);
 
               bool mms_model = model_file.find("fairseq") != std::string::npos;
-              
+
               auto use_cuda = m_config.use_gpu &&
                               m_config.gpu_device.api == gpu_api_t::cuda &&
-                              gpu_tools::has_cuda();
+                              pe->libs_availability->torch_cuda;
 
               LOGD("using device: " << (use_cuda ? "cuda" : "cpu") << " "
                                     << m_config.gpu_device.id);

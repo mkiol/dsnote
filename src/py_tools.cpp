@@ -36,7 +36,8 @@ std::ostream& operator<<(std::ostream& os,
        << ", gruut_fr=" << availability.gruut_fr
        << ", gruut_it=" << availability.gruut_it
        << ", gruut_ru=" << availability.gruut_ru
-       << ", mecab=" << availability.mecab;
+       << ", mecab=" << availability.mecab
+       << ", torch-cuda=" << availability.torch_cuda;
 
     return os;
 }
@@ -54,6 +55,13 @@ libs_availability_t libs_availability() {
     try {
         py::module_::import("TTS.utils.synthesizer");
         availability.coqui_tts = true;
+    } catch (const std::exception& err) {
+        LOGE("py error: " << err.what());
+    }
+
+    try {
+        auto torch = py::module_::import("torch.cuda");
+        availability.torch_cuda = torch.attr("is_available")().cast<bool>();
     } catch (const std::exception& err) {
         LOGE("py error: " << err.what());
     }
@@ -129,7 +137,8 @@ libs_availability_t libs_availability() {
     }
 
     try {
-        py::module_::import("mecab");
+        py::module_::import("MeCab");
+        py::module_::import("unidic_lite");
         availability.mecab = true;
     } catch (const std::exception& err) {
         LOGE("py error: " << err.what());

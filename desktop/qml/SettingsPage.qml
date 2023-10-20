@@ -16,6 +16,7 @@ DialogPage {
     id: root
 
     property bool verticalMode: width < appWin.verticalWidthThreshold
+    property var features: app.features_availability()
 
     title: qsTr("Settings")
 
@@ -23,6 +24,13 @@ DialogPage {
         visible: _settings.restart_required
         text: qsTr("Restart the application to apply changes.")
         color: "red"
+    }
+
+    Connections {
+        target: app
+        onFeatures_availability_updated: {
+            root.features = app.features_availability()
+        }
     }
 
     TabBar {
@@ -291,7 +299,7 @@ DialogPage {
             CheckBox {
                 id: puncCheckBox
 
-                visible: _settings.py_supported()
+                visible: app.feature_punctuator
                 checked: _settings.restore_punctuation
                 text: qsTr("Restore punctuation")
                 onCheckedChanged: {
@@ -310,7 +318,9 @@ DialogPage {
                 wrapMode: Text.Wrap
                 Layout.leftMargin: verticalMode ? appWin.padding : appWin.padding
                 Layout.fillWidth: true
-                visible: _settings.py_supported() && _settings.restore_punctuation && !app.ttt_configured
+                visible: app.feature_punctuator &&
+                         _settings.restore_punctuation &&
+                         !app.ttt_configured
                 color: "red"
                 text: qsTr("To make %1 work, download %2 model.")
                         .arg("<i>" + qsTr("Restore punctuation") + "</i>").arg("<i>" + qsTr("Punctuation") + "</i>")
@@ -335,13 +345,17 @@ DialogPage {
                 wrapMode: Text.Wrap
                 Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                 Layout.fillWidth: true
-                visible: _settings.gpu_supported() && _settings.whisper_use_gpu && _settings.gpu_devices_whisper.length <= 1
+                visible: _settings.gpu_supported() &&
+                         _settings.whisper_use_gpu &&
+                         _settings.gpu_devices_whisper.length <= 1
                 color: "red"
                 text: qsTr("A suitable graphics card could not be found.")
             }
 
             GridLayout {
-                visible: _settings.gpu_supported() && _settings.whisper_use_gpu && _settings.gpu_devices_whisper.length > 1
+                visible: _settings.gpu_supported() &&
+                         _settings.whisper_use_gpu &&
+                         _settings.gpu_devices_whisper.length > 1
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
@@ -368,7 +382,7 @@ DialogPage {
             }
 
             CheckBox {
-                visible: _settings.gpu_supported()
+                visible: _settings.gpu_supported() && app.feature_fasterwhisper_stt_cuda
                 checked: _settings.fasterwhisper_use_gpu
                 text: qsTr("Use GPU acceleration for Faster Whisper")
                 onCheckedChanged: {
@@ -386,13 +400,19 @@ DialogPage {
                 wrapMode: Text.Wrap
                 Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                 Layout.fillWidth: true
-                visible: _settings.gpu_supported() && _settings.fasterwhisper_use_gpu && _settings.gpu_devices_fasterwhisper.length <= 1
+                visible: _settings.gpu_supported() &&
+                         _settings.fasterwhisper_use_gpu &&
+                         app.feature_fasterwhisper_stt_cuda &&
+                         _settings.gpu_devices_fasterwhisper.length <= 1
                 color: "red"
                 text: qsTr("A suitable graphics card could not be found.")
             }
 
             GridLayout {
-                visible: _settings.gpu_supported() && _settings.fasterwhisper_use_gpu && _settings.gpu_devices_fasterwhisper.length > 1
+                visible: _settings.gpu_supported() &&
+                         _settings.fasterwhisper_use_gpu &&
+                         app.feature_fasterwhisper_stt_cuda &&
+                         _settings.gpu_devices_fasterwhisper.length > 1
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
@@ -483,9 +503,19 @@ DialogPage {
                               qsTr("It works only for Arabic and Hebrew languages.")
             }
 
+            Label {
+                wrapMode: Text.Wrap
+                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                Layout.fillWidth: true
+                visible: _settings.diacritizer_enabled &&
+                         !app.feature_diacritizer_he
+                color: "red"
+                text: qsTr("Diacritizer for Hebrew language is not available.")
+            }
+
             CheckBox {
-                visible: _settings.gpu_supported()
                 checked: _settings.coqui_use_gpu
+                visible: _settings.gpu_supported() && app.feature_coqui_tts_cuda
                 text: qsTr("Use GPU acceleration for Coqui")
                 onCheckedChanged: {
                     _settings.coqui_use_gpu = checked
@@ -502,13 +532,19 @@ DialogPage {
                 wrapMode: Text.Wrap
                 Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                 Layout.fillWidth: true
-                visible: _settings.gpu_supported() && _settings.coqui_use_gpu && _settings.gpu_devices_coqui.length <= 1
+                visible: _settings.gpu_supported() &&
+                         _settings.coqui_use_gpu &&
+                         app.feature_coqui_tts_cuda &&
+                         _settings.gpu_devices_coqui.length <= 1
                 color: "red"
                 text: qsTr("A suitable graphics card could not be found.")
             }
 
             GridLayout {
-                visible: _settings.gpu_supported() && _settings.coqui_use_gpu && _settings.gpu_devices_coqui.length > 1
+                visible: _settings.gpu_supported() &&
+                         _settings.coqui_use_gpu &&
+                         app.feature_coqui_tts_cuda &&
+                         _settings.gpu_devices_coqui.length > 1
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
@@ -778,7 +814,7 @@ DialogPage {
             }
 
             SectionLabel {
-                text: qsTr("Graphics cards")
+                text: qsTr("Graphics cards support")
             }
 
             CheckBox {
@@ -821,7 +857,7 @@ DialogPage {
             }
 
             SectionLabel {
-                text: qsTr("Optional features")
+                text: qsTr("Optional features availability")
             }
 
             ColumnLayout {
@@ -832,17 +868,10 @@ DialogPage {
                     running: visible
                 }
 
-                Connections {
-                    target: app
-                    onFeatures_availability_updated: {
-                        featureRepeter.model = app.features_availability()
-                    }
-                }
-
                 Repeater {
                     id: featureRepeter
 
-                    model: app.features_availability()
+                    model: root.features
 
                     RowLayout {
                         Layout.fillWidth: true

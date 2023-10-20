@@ -364,6 +364,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     QMediaPlayer m_player;
     int m_task_state = 0;
     std::queue<tts_partial_result_t> m_tts_queue;
+    QVariantMap m_features_availability;
 
     void handle_models_changed();
     void handle_tts_models_changed();

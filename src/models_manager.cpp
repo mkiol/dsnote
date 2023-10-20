@@ -1394,7 +1394,9 @@ void models_manager::extract_sup_models(const QString& model_id,
     }
 }
 
-auto models_manager::extract_models(const QJsonArray& models_jarray) {
+auto models_manager::extract_models(
+    const QJsonArray& models_jarray,
+    std::optional<models_availability_t> models_availability) {
     models_t models;
 
     auto enabled_models = settings::instance()->enabled_models();
@@ -1533,24 +1535,29 @@ auto models_manager::extract_models(const QJsonArray& models_jarray) {
             continue;
         }
 #endif
-#ifndef USE_PY
-        if (engine == model_engine_t::ttt_hftc) {
-            qDebug() << "ignoring hftc model:" << model_id;
-            continue;
+        if (models_availability) {
+            if (!models_availability->ttt_hftc &&
+                engine == model_engine_t::ttt_hftc) {
+                qDebug() << "ignoring hftc model:" << model_id;
+                continue;
+            }
+            if (!models_availability->tts_coqui &&
+                engine == model_engine_t::tts_coqui) {
+                qDebug() << "ignoring coqui model:" << model_id;
+                continue;
+            }
+            if (!models_availability->stt_fasterwhisper &&
+                engine == model_engine_t::stt_fasterwhisper) {
+                qDebug() << "ignoring fasterwhisper model:" << model_id;
+                continue;
+            }
+            if (!models_availability->tts_mimic3 &&
+                engine == model_engine_t::tts_mimic3) {
+                qDebug() << "ignoring mimic3 model:" << model_id;
+                continue;
+            }
         }
-        if (engine == model_engine_t::tts_coqui) {
-            qDebug() << "ignoring coqui model:" << model_id;
-            continue;
-        }
-        if (engine == model_engine_t::stt_fasterwhisper) {
-            qDebug() << "ignoring fasterwhisper model:" << model_id;
-            continue;
-        }
-        if (engine == model_engine_t::tts_mimic3) {
-            qDebug() << "ignoring mimic3 model:" << model_id;
-            continue;
-        }
-#endif
+
         bool is_default_model_for_lang = [&] {
             switch (role_of_engine(engine)) {
                 case model_role_t::stt:
@@ -1665,12 +1672,15 @@ bool models_manager::parse_models_file_might_reset() {
 
     if (m_thread.joinable()) m_thread.join();
 
-    m_thread = std::thread{[this] {
+    m_thread = std::thread{[this, models_availability = m_models_availability] {
         do {
             m_pending_reload = false;
-            parse_models_file(false, &m_langs, &m_models);
+            parse_models_file(false, &m_langs, &m_models, models_availability);
             m_langs_of_role = make_langs_of_role(m_models);
         } while (m_pending_reload);
+
+        if (m_models_availability && !models_availability)
+            update_models_using_availability_internal();
 
         qDebug() << "models changed";
         emit models_changed();
@@ -1681,8 +1691,9 @@ bool models_manager::parse_models_file_might_reset() {
     return true;
 }
 
-void models_manager::parse_models_file(bool reset, langs_t* langs,
-                                       models_t* models) {
+void models_manager::parse_models_file(
+    bool reset, langs_t* langs, models_t* models,
+    std::optional<models_availability_t> models_availability) {
     const auto models_file_path =
         QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
             .filePath(models_file);
@@ -1700,7 +1711,7 @@ void models_manager::parse_models_file(bool reset, langs_t* langs,
             input.close();
             if (!reset) {
                 init_config();
-                parse_models_file(true, langs, models);
+                parse_models_file(true, langs, models, models_availability);
             }
         } else {
             auto version = json.object()
@@ -1718,13 +1729,14 @@ void models_manager::parse_models_file(bool reset, langs_t* langs,
                 input.close();
                 if (!reset) {
                     init_config();
-                    parse_models_file(true, langs, models);
+                    parse_models_file(true, langs, models, models_availability);
                 }
             } else {
                 *langs = extract_langs(
                     json.object().value(QStringLiteral("langs")).toArray());
                 *models = extract_models(
-                    json.object().value(QStringLiteral("models")).toArray());
+                    json.object().value(QStringLiteral("models")).toArray(),
+                    models_availability);
 
                 remove_empty_langs(*langs, *models);
             }
@@ -1879,4 +1891,46 @@ void models_manager::handle_generate_checksum(const checksum_check_t& check) {
     } else {
         emit generate_next_checksum_request();
     }
+}
+
+void models_manager::update_models_using_availability_internal() {
+    qDebug() << "updating model using availability internal";
+
+    std::for_each(m_models.begin(), m_models.end(), [&](auto& pair) {
+        if (!m_models_availability->tts_coqui &&
+            pair.second.engine == model_engine_t::tts_coqui) {
+            pair.second.hidden = true;
+            return;
+        }
+        if (!m_models_availability->tts_mimic3 &&
+            pair.second.engine == model_engine_t::tts_mimic3) {
+            pair.second.hidden = true;
+            return;
+        }
+        if (!m_models_availability->stt_fasterwhisper &&
+            pair.second.engine == model_engine_t::stt_fasterwhisper) {
+            pair.second.hidden = true;
+            return;
+        }
+        if (!m_models_availability->ttt_hftc &&
+            pair.second.engine == model_engine_t::ttt_hftc) {
+            pair.second.hidden = true;
+            return;
+        }
+    });
+
+    remove_empty_langs(m_langs, m_models);
+}
+
+void models_manager::update_models_using_availability(
+    models_availability_t availability) {
+    qDebug() << "updating model using availability";
+
+    m_models_availability = availability;
+
+    if (busy()) return;
+
+    update_models_using_availability_internal();
+
+    emit models_changed();
 }
