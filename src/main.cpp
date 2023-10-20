@@ -162,7 +162,7 @@ static cmd_options check_options(const QCoreApplication& app) {
     if (!options.valid) {
         fmt::print(stderr,
                    "Use one option from the following: --app-stanalone, --app, "
-                   "--service.");
+                   "--service.\n");
     }
 
     auto action = parser.value(action_opt);
@@ -184,7 +184,7 @@ static cmd_options check_options(const QCoreApplication& app) {
                 "start-listening, start-listening-active-window, "
                 "start-listening-clipboard, stop-listening, "
                 "start-reading, start-reading-clipboard, pause-resume-reading, "
-                "cancel.");
+                "cancel.\n");
             options.valid = false;
         } else {
             options.action = std::move(action);
