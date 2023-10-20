@@ -1,18 +1,19 @@
 diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
 --- whispercpp-org/CMakeLists.txt	2023-09-15 20:11:43.000000000 +0200
-+++ whispercpp-patched/CMakeLists.txt	2023-09-20 13:03:44.945724062 +0200
++++ whispercpp-patched/CMakeLists.txt	2023-10-20 17:12:47.320027840 +0200
 @@ -1,4 +1,4 @@
 -cmake_minimum_required (VERSION 3.5)
 +cmake_minimum_required (VERSION 3.18)
  
  project(whisper.cpp VERSION 1.4.2)
  
-@@ -170,39 +170,10 @@
+@@ -170,39 +170,11 @@
  if (WHISPER_OPENBLAS)
      set(WHISPER_BLAS_VENDOR "OpenBLAS")
      set(WHISPER_BLAS ON)
 +    set(WHISPER_EXTRA_FLAGS ${WHISPER_EXTRA_FLAGS} -DGGML_USE_OPENBLAS)
 +    set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} ${BLAS_LIB_PATH})
++    include_directories(${BLAS_INC_DIR})
  endif()
  
 -if (WHISPER_BLAS)
@@ -49,7 +50,7 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
  if (WHISPER_CUBLAS)
      cmake_minimum_required(VERSION 3.17)
  
-@@ -230,7 +201,13 @@
+@@ -230,7 +202,13 @@
  
  
  if (WHISPER_HIPBLAS)
@@ -64,7 +65,7 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
      if (NOT ${CMAKE_C_COMPILER_ID} MATCHES "Clang")
          message(WARNING "Only LLVM is supported for HIP, hint: CC=/opt/rocm/llvm/bin/clang")
      endif()
-@@ -517,7 +494,11 @@
+@@ -517,7 +495,11 @@
  
  if (GGML_SOURCES_CUDA)
      message(STATUS "GGML CUDA sources found, configuring CUDA architecture")
@@ -77,7 +78,7 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
      set_property(TARGET whisper PROPERTY CUDA_SELECT_NVCC_ARCH_FLAGS "Auto")
  endif()
  
-@@ -535,7 +516,7 @@
+@@ -535,7 +517,7 @@
  
  install(TARGETS ${TARGET}
      LIBRARY  DESTINATION lib

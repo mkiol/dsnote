@@ -134,6 +134,9 @@ else()
     set(blas_include_dir ${BLAS_INCLUDE_DIRS})
 endif()
 
+message(STATUS "OpenBLAS lib: ${blas_lib_path}")
+message(STATUS "OpenBLAS include: ${blas_include_dir}")
+
 ExternalProject_Add(whispercppfallback
     SOURCE_DIR ${external_dir}/whispercppfallback
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercppfallback
@@ -146,6 +149,7 @@ ExternalProject_Add(whispercppfallback
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
         -DBLAS_LIB_PATH=${blas_lib_path}
+        -DBLAS_INC_DIR=${blas_include_dir}
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
         -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
         -DWHISPER_OPENBLAS=ON
@@ -167,6 +171,7 @@ ExternalProject_Add(whispercppopenblas
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
         -DBLAS_LIB_PATH=${blas_lib_path}
+        -DBLAS_INC_DIR=${blas_include_dir}
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
         -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
         -DWHISPER_OPENBLAS=ON
