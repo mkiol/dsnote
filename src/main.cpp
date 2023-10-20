@@ -173,6 +173,10 @@ static cmd_options check_options(const QCoreApplication& app) {
             action.compare("start-listening-clipboard", Qt::CaseInsensitive) !=
                 0 &&
             action.compare("stop-listening", Qt::CaseInsensitive) != 0 &&
+            action.compare("start-reading", Qt::CaseInsensitive) != 0 &&
+            action.compare("start-reading-clipboard", Qt::CaseInsensitive) !=
+                0 &&
+            action.compare("pause-resume-reading", Qt::CaseInsensitive) != 0 &&
             action.compare("cancel", Qt::CaseInsensitive) != 0) {
             fmt::print(
                 stderr,
