@@ -1,6 +1,6 @@
 diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
 --- whispercpp-org/CMakeLists.txt	2023-09-15 20:11:43.000000000 +0200
-+++ whispercpp-patched/CMakeLists.txt	2023-10-20 17:12:47.320027840 +0200
++++ whispercpp-patched/CMakeLists.txt	2023-10-21 14:11:32.423632480 +0200
 @@ -1,4 +1,4 @@
 -cmake_minimum_required (VERSION 3.5)
 +cmake_minimum_required (VERSION 3.18)
@@ -50,22 +50,67 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
  if (WHISPER_CUBLAS)
      cmake_minimum_required(VERSION 3.17)
  
-@@ -230,7 +202,13 @@
+@@ -224,19 +196,18 @@
+         endif()
+ 
+     else()
+-        message(WARNING "cuBLAS not found")
++        message(FATAL_ERROR "cuBLAS not found")
+     endif()
+ endif()
  
  
  if (WHISPER_HIPBLAS)
 -    list(APPEND CMAKE_PREFIX_PATH /opt/rocm)
+-    if (NOT ${CMAKE_C_COMPILER_ID} MATCHES "Clang")
+-        message(WARNING "Only LLVM is supported for HIP, hint: CC=/opt/rocm/llvm/bin/clang")
+-    endif()
+-    if (NOT ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
+-        message(WARNING "Only LLVM is supported for HIP, hint: CXX=/opt/rocm/llvm/bin/clang++")
+-    endif()
 +    set(ROCM_PATH /opt/rocm CACHE STRING "ROCm root dir")
 +    list(APPEND CMAKE_PREFIX_PATH ${ROCM_PATH})
 +    message(STATUS "using ROCm root path ${ROCM_PATH}")
 +
 +    set(CMAKE_C_COMPILER ${ROCM_PATH}/llvm/bin/clang)
 +    set(CMAKE_CXX_COMPILER ${ROCM_PATH}/llvm/bin/clang++)
+ 
+     find_package(hip)
+     find_package(hipblas)
+@@ -245,9 +216,13 @@
+     if (${hipblas_FOUND} AND ${hip_FOUND})
+         message(STATUS "HIP and hipBLAS found")
+         add_compile_definitions(GGML_USE_HIPBLAS GGML_USE_CUBLAS)
+-        add_library(ggml-rocm OBJECT ggml-cuda.cu ggml-cuda.h)
 +
-     if (NOT ${CMAKE_C_COMPILER_ID} MATCHES "Clang")
-         message(WARNING "Only LLVM is supported for HIP, hint: CC=/opt/rocm/llvm/bin/clang")
++        set(GGML_SOURCES_HIP ggml-cuda.cu ggml-cuda.h)
++
++        add_library(ggml-rocm OBJECT ${GGML_SOURCES_HIP})
+         set_property(TARGET ggml-rocm PROPERTY POSITION_INDEPENDENT_CODE ON)
+         set_source_files_properties(ggml-cuda.cu PROPERTIES LANGUAGE CXX)
++
+         target_link_libraries(ggml-rocm PRIVATE hip::device PUBLIC hip::host roc::rocblas roc::hipblas)
+ 
+         if (WHISPER_STATIC)
+@@ -255,7 +230,7 @@
+         endif()
+         set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} ggml-rocm)
+     else()
+-        message(WARNING "hipBLAS or HIP not found. Try setting CMAKE_PREFIX_PATH=/opt/rocm")
++        message(FATAL_ERROR "hipBLAS or HIP not found. Try setting CMAKE_PREFIX_PATH=/opt/rocm")
      endif()
-@@ -517,7 +495,11 @@
+ endif()
+ 
+@@ -270,7 +245,7 @@
+ 
+         set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} clblast)
+     else()
+-        message(WARNING "CLBlast not found")
++        message(FATAL_ERROR "CLBlast not found")
+     endif()
+ endif()
+ 
+@@ -517,10 +492,23 @@
  
  if (GGML_SOURCES_CUDA)
      message(STATUS "GGML CUDA sources found, configuring CUDA architecture")
@@ -78,7 +123,19 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
      set_property(TARGET whisper PROPERTY CUDA_SELECT_NVCC_ARCH_FLAGS "Auto")
  endif()
  
-@@ -535,7 +517,7 @@
++if (GGML_SOURCES_HIP)
++    message(STATUS "GGML HIP sources found, configuring HIP architecture")
++    if(NOT DEFINED CMAKE_HIP_ARCHITECTURES)
++        set(CMAKE_HIP_ARCHITECTURES "gfx1030")
++    endif()
++    message(STATUS "HIP architectures set to ${CMAKE_HIP_ARCHITECTURES}")
++    set_property(TARGET whisper PROPERTY HIP_ARCHITECTURES ${CMAKE_HIP_ARCHITECTURES})
++endif()
++
+ if (EMSCRIPTEN)
+     set_target_properties(${TARGET} PROPERTIES COMPILE_FLAGS "-msimd128")
+ endif()
+@@ -535,7 +523,7 @@
  
  install(TARGETS ${TARGET}
      LIBRARY  DESTINATION lib
