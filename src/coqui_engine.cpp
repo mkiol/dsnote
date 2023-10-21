@@ -182,9 +182,8 @@ void coqui_engine::create_model() {
 
               bool mms_model = model_file.find("fairseq") != std::string::npos;
 
-              auto use_cuda = m_config.use_gpu &&
-                              m_config.gpu_device.api == gpu_api_t::cuda &&
-                              pe->libs_availability->torch_cuda;
+              auto use_cuda =
+                  m_config.use_gpu && pe->libs_availability->torch_cuda;
 
               LOGD("using device: " << (use_cuda ? "cuda" : "cpu") << " "
                                     << m_config.gpu_device.id);
