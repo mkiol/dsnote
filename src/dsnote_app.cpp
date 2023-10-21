@@ -2574,16 +2574,16 @@ bool dsnote_app::feature_fasterwhisper_stt() const {
     return feature_available("faster-whisper-stt");
 }
 
-bool dsnote_app::feature_fasterwhisper_stt_cuda() const {
-    return feature_available("faster-whisper-stt-cuda");
+bool dsnote_app::feature_fasterwhisper_stt_gpu() const {
+    return feature_available("faster-whisper-stt-gpu");
 }
 
 bool dsnote_app::feature_coqui_tts() const {
     return feature_available("coqui-tts");
 }
 
-bool dsnote_app::feature_coqui_tts_cuda() const {
-    return feature_available("coqui-tts-cuda");
+bool dsnote_app::feature_coqui_tts_gpu() const {
+    return feature_available("coqui-tts-gpu");
 }
 
 bool dsnote_app::feature_mimic3_tts() const {

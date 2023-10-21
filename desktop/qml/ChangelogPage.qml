@@ -84,7 +84,7 @@ DialogPage {
             (<i>Other</i> &rarr; <i>Graphics cards support</i>). Use this option if you observe problems
             when using GPU acceleration. If the application does not start due to graphics card problem,
             use the <i>--gpu-scan-off</i> command line option to switch off any GPU support.</li>
-        <li>Detecting the availability of optional the features. In the settings, you can check what optional features
+        <li>Detecting the availability of the optional features. In the settings, you can check what optional features
             are available (<i>Other</i> &rarr; <i>Availability of optional features</i>).
             Feature availability depends on the libraries installed on your system.</li>
         </ul>"

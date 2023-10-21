@@ -2130,13 +2130,16 @@ QVariantMap speech_service::features_availability() {
         if (py_availability) {
             qDebug() << "features availability ready";
 
+            auto has_cuda = gpu_tools::has_cuda();
+            auto has_cudnn = gpu_tools::has_cudnn();
+
             m_features_availability.insert(
                 "coqui-tts",
                 QVariantList{py_availability->coqui_tts, "Coqui TTS"});
             m_features_availability.insert(
-                "coqui-tts-cuda", QVariantList{py_availability->coqui_tts &&
-                                                   py_availability->torch_cuda,
-                                               "Coqui TTS CUDA"});
+                "coqui-tts-gpu", QVariantList{py_availability->coqui_tts &&
+                                                  py_availability->torch_cuda,
+                                              "Coqui TTS GPU"});
             m_features_availability.insert(
                 "coqui-tts-ja", QVariantList{py_availability->coqui_tts &&
                                                  py_availability->mecab,
@@ -2169,11 +2172,10 @@ QVariantMap speech_service::features_availability() {
                 QVariantList{py_availability->faster_whisper,
                              "Faster Whisper STT"});
             m_features_availability.insert(
-                "faster-whisper-stt-cuda",
-                QVariantList{py_availability->faster_whisper &&
-                                 gpu_tools::has_cuda() &&
-                                 gpu_tools::has_cudnn(),
-                             "Faster Whisper STT CUDA"});
+                "faster-whisper-stt-gpu",
+                QVariantList{
+                    py_availability->faster_whisper && has_cuda && has_cudnn,
+                    "Faster Whisper STT GPU"});
             m_features_availability.insert(
                 "punctuator", QVariantList{py_availability->transformers,
                                            tr("Punctuation restoration")});

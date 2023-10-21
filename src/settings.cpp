@@ -838,12 +838,14 @@ void settings::scan_gpu_devices() {
                 m_gpu_devices_coqui.push_back(std::move(item));
                 break;
             }
-            case gpu_tools::api_t::rocm:
-                m_gpu_devices_whisper.push_back(
-                    QStringLiteral("%1, %2, %3")
-                        .arg("ROCm", QString::number(device.id),
-                             QString::fromStdString(device.name)));
+            case gpu_tools::api_t::rocm: {
+                auto item = QStringLiteral("%1, %2, %3")
+                                .arg("ROCm", QString::number(device.id),
+                                     QString::fromStdString(device.name));
+                m_gpu_devices_whisper.push_back(item);
+                m_gpu_devices_coqui.push_back(std::move(item));
                 break;
+            }
         }
     });
 
