@@ -2204,6 +2204,8 @@ QVariantMap speech_service::features_availability() {
 
             settings::instance()->scan_gpu_devices();
 
+            refresh_status();
+
             emit features_availability_updated();
         } else {
             qDebug() << "delaying features availability";
@@ -2934,7 +2936,7 @@ void speech_service::set_state(state_t new_state) {
 void speech_service::refresh_status() {
     state_t new_state;
 
-    if (models_manager::instance()->busy()) {
+    if (models_manager::instance()->busy() || !feature_discovery_done()) {
         new_state = state_t::busy;
     } else if (!models_manager::instance()->has_model_of_role(
                    models_manager::model_role_t::stt) &&

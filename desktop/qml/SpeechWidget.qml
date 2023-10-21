@@ -50,7 +50,8 @@ RowLayout {
                     anchors.centerIn: parent
                     width: 27
                     height: 24
-                    visible: app.state !== DsnoteApp.StateTranscribingFile &&
+                    visible: !app.busy && !service.busy &&
+                             app.state !== DsnoteApp.StateTranscribingFile &&
                              app.state !== DsnoteApp.StateWritingSpeechToFile
                     status: {
                         switch (app.task_state) {
@@ -70,7 +71,8 @@ RowLayout {
                     anchors.centerIn: parent
                     width: 24
                     height: 24
-                    running: app.state === DsnoteApp.StateTranscribingFile ||
+                    running: app.busy || service.busy ||
+                             app.state === DsnoteApp.StateTranscribingFile ||
                              app.state === DsnoteApp.StateWritingSpeechToFile
                     visible: running
                 }
@@ -100,6 +102,8 @@ RowLayout {
                     font.pixelSize: _settings.font_size < 5 ? appWin.textFontSize : _settings.font_size
 
                     property string placeholderText: {
+                        if (app.busy || service.busy)
+                            return qsTr("Busy...")
                         if (app.task_state === DsnoteApp.TaskStateInitializing)
                             return qsTr("Getting ready, please wait...")
                         if (app.state === DsnoteApp.StateWritingSpeechToFile)

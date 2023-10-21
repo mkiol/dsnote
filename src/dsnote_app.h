@@ -382,7 +382,6 @@ class dsnote_app : public QObject {
         stt_text_destination_t::note_add;
     std::optional<desktop_notification_t> m_desktop_notification;
     QVariantMap m_features_availability;
-    bool m_received_features_availability_update = false;
 #ifdef USE_DESKTOP
     struct hotkeys_t {
         QHotkey start_listening;

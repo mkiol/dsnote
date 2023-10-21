@@ -231,10 +231,6 @@ dsnote_app::dsnote_app(QObject *parent)
     connect(this, &dsnote_app::can_open_next_file, this,
             &dsnote_app::open_next_file, Qt::QueuedConnection);
     connect(
-        this, &dsnote_app::features_availability_updated, this,
-        [this] { m_received_features_availability_update = true; },
-        Qt::QueuedConnection);
-    connect(
         this, &dsnote_app::busy_changed, this,
         [this] {
             if (!m_files_to_open.empty() && !busy())
@@ -2625,7 +2621,7 @@ QVariantList dsnote_app::features_availability() {
 void dsnote_app::execute_pending_action() {
     if (!m_pending_action) return;
 
-    if (busy() || !m_received_features_availability_update) {
+    if (busy()) {
         m_action_delay_timer.start();
         return;
     }
@@ -2670,7 +2666,7 @@ void dsnote_app::execute_action_name(const QString &action_name) {
 }
 
 void dsnote_app::execute_action(action_t action) {
-    if (busy() || !m_received_features_availability_update) {
+    if (busy()) {
         m_pending_action = action;
         m_action_delay_timer.start();
         qDebug() << "delaying action:" << action;
