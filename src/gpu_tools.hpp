@@ -22,7 +22,8 @@ struct device {
     std::string platform_name;
 };
 
-std::vector<device> available_devices(bool cuda, bool hip, bool opencl);
+std::vector<device> available_devices(bool cuda, bool hip, bool opencl,
+                                      bool opencl_always);
 void add_opencl_devices(std::vector<device>& devices);
 void add_cuda_devices(std::vector<device>& devices);
 void add_hip_devices(std::vector<device>& devices);

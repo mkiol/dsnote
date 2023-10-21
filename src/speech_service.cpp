@@ -2202,6 +2202,8 @@ QVariantMap speech_service::features_availability() {
                  /*stt_fasterwhisper=*/py_availability->faster_whisper,
                  /*ttt_hftc=*/py_availability->transformers});
 
+            settings::instance()->scan_gpu_devices();
+
             emit features_availability_updated();
         } else {
             qDebug() << "delaying features availability";

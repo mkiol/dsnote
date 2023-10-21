@@ -843,17 +843,29 @@ DialogPage {
                               qsTr("Disable this option if you observe problems.")
             }
 
-            CheckBox {
-                checked: _settings.gpu_scan_opencl
-                text: qsTr("OpenCL")
-                onCheckedChanged: {
-                    _settings.gpu_scan_opencl = checked
+            RowLayout {
+                spacing: appWin.padding
+                CheckBox {
+                    checked: _settings.gpu_scan_opencl
+                    text: qsTr("OpenCL")
+                    onCheckedChanged: {
+                        _settings.gpu_scan_opencl = checked
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
+                                  qsTr("Disable this option if you observe problems.")
                 }
 
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
-                              qsTr("Disable this option if you observe problems.")
+                ComboBox {
+                    enabled: _settings.gpu_scan_opencl
+                    currentIndex: _settings.gpu_scan_opencl_always ? 0 : 1
+                    model: [qsTr("Always"), qsTr("Only if no others were found")]
+                    onActivated: {
+                        _settings.gpu_scan_opencl_always = index === 0
+                    }
+                }
             }
 
             SectionLabel {
