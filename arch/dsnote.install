@@ -1,0 +1,11 @@
+post_install() {
+    echo "** Some features of Speech Note may require optional AUR or Python packages"
+    echo "** Please check the installation log, help or project page for more info"
+}
+
+post_upgrade() {
+	post_install
+}
+
+post_remove() {
+}
