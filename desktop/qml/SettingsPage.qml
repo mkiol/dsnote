@@ -382,7 +382,7 @@ DialogPage {
             }
 
             CheckBox {
-                visible: _settings.gpu_supported() && app.feature_fasterwhisper_stt_cuda
+                visible: _settings.gpu_supported() && app.feature_fasterwhisper_stt_gpu
                 checked: _settings.fasterwhisper_use_gpu
                 text: qsTr("Use GPU acceleration for Faster Whisper")
                 onCheckedChanged: {
@@ -402,7 +402,7 @@ DialogPage {
                 Layout.fillWidth: true
                 visible: _settings.gpu_supported() &&
                          _settings.fasterwhisper_use_gpu &&
-                         app.feature_fasterwhisper_stt_cuda &&
+                         app.feature_fasterwhisper_stt_gpu &&
                          _settings.gpu_devices_fasterwhisper.length <= 1
                 color: "red"
                 text: qsTr("A suitable graphics card could not be found.")
@@ -411,7 +411,7 @@ DialogPage {
             GridLayout {
                 visible: _settings.gpu_supported() &&
                          _settings.fasterwhisper_use_gpu &&
-                         app.feature_fasterwhisper_stt_cuda &&
+                         app.feature_fasterwhisper_stt_gpu &&
                          _settings.gpu_devices_fasterwhisper.length > 1
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
@@ -515,7 +515,7 @@ DialogPage {
 
             CheckBox {
                 checked: _settings.coqui_use_gpu
-                visible: _settings.gpu_supported() && app.feature_coqui_tts_cuda
+                visible: _settings.gpu_supported() && app.feature_coqui_tts_gpu
                 text: qsTr("Use GPU acceleration for Coqui")
                 onCheckedChanged: {
                     _settings.coqui_use_gpu = checked
@@ -534,7 +534,7 @@ DialogPage {
                 Layout.fillWidth: true
                 visible: _settings.gpu_supported() &&
                          _settings.coqui_use_gpu &&
-                         app.feature_coqui_tts_cuda &&
+                         app.feature_coqui_tts_gpu &&
                          _settings.gpu_devices_coqui.length <= 1
                 color: "red"
                 text: qsTr("A suitable graphics card could not be found.")
@@ -543,7 +543,7 @@ DialogPage {
             GridLayout {
                 visible: _settings.gpu_supported() &&
                          _settings.coqui_use_gpu &&
-                         app.feature_coqui_tts_cuda &&
+                         app.feature_coqui_tts_gpu &&
                          _settings.gpu_devices_coqui.length > 1
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
@@ -843,17 +843,29 @@ DialogPage {
                               qsTr("Disable this option if you observe problems.")
             }
 
-            CheckBox {
-                checked: _settings.gpu_scan_opencl
-                text: qsTr("OpenCL")
-                onCheckedChanged: {
-                    _settings.gpu_scan_opencl = checked
+            RowLayout {
+                spacing: appWin.padding
+                CheckBox {
+                    checked: _settings.gpu_scan_opencl
+                    text: qsTr("OpenCL")
+                    onCheckedChanged: {
+                        _settings.gpu_scan_opencl = checked
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
+                                  qsTr("Disable this option if you observe problems.")
                 }
 
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
-                              qsTr("Disable this option if you observe problems.")
+                ComboBox {
+                    enabled: _settings.gpu_scan_opencl
+                    currentIndex: _settings.gpu_scan_opencl_always ? 0 : 1
+                    model: [qsTr("Always"), qsTr("Only if no others were found")]
+                    onActivated: {
+                        _settings.gpu_scan_opencl_always = index === 0
+                    }
+                }
             }
 
             SectionLabel {

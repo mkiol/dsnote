@@ -110,6 +110,7 @@ if(arch_x8664)
                 -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
                 -DWHISPER_HIPBLAS=ON
                 -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
+                -DCMAKE_HIP_ARCHITECTURES="gfx701 gfx801 gfx802 gfx803 gfx900 gfx906 gfx908 gfx1010 gfx1011 gfx1012 gfx1030 gfx1031"
             INSTALL_COMMAND cp libwhisper.so ${external_lib_dir}/libwhisper-hipblas.so
             BUILD_ALWAYS False
         )

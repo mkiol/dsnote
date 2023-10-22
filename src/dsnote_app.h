@@ -131,11 +131,11 @@ class dsnote_app : public QObject {
     // features
     Q_PROPERTY(bool feature_fasterwhisper_stt READ feature_fasterwhisper_stt
                    NOTIFY features_changed)
-    Q_PROPERTY(bool feature_fasterwhisper_stt_cuda READ
-                   feature_fasterwhisper_stt_cuda NOTIFY features_changed)
+    Q_PROPERTY(bool feature_fasterwhisper_stt_gpu READ
+                   feature_fasterwhisper_stt_gpu NOTIFY features_changed)
     Q_PROPERTY(
         bool feature_coqui_tts READ feature_coqui_tts NOTIFY features_changed)
-    Q_PROPERTY(bool feature_coqui_tts_cuda READ feature_coqui_tts_cuda NOTIFY
+    Q_PROPERTY(bool feature_coqui_tts_gpu READ feature_coqui_tts_gpu NOTIFY
                    features_changed)
     Q_PROPERTY(
         bool feature_mimic3_tts READ feature_mimic3_tts NOTIFY features_changed)
@@ -382,7 +382,6 @@ class dsnote_app : public QObject {
         stt_text_destination_t::note_add;
     std::optional<desktop_notification_t> m_desktop_notification;
     QVariantMap m_features_availability;
-    bool m_received_features_availability_update = false;
 #ifdef USE_DESKTOP
     struct hotkeys_t {
         QHotkey start_listening;
@@ -532,9 +531,9 @@ class dsnote_app : public QObject {
     void handle_desktop_notification_closed(uint id, uint reason);
     bool feature_available(const QString &name) const;
     bool feature_fasterwhisper_stt() const;
-    bool feature_fasterwhisper_stt_cuda() const;
+    bool feature_fasterwhisper_stt_gpu() const;
     bool feature_coqui_tts() const;
-    bool feature_coqui_tts_cuda() const;
+    bool feature_coqui_tts_gpu() const;
     bool feature_mimic3_tts() const;
     bool feature_punctuator() const;
     bool feature_diacritizer_he() const;

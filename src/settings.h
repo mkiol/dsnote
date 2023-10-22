@@ -108,6 +108,9 @@ class settings : public QSettings, public singleton<settings> {
                    gpu_scan_hip_changed)
     Q_PROPERTY(bool gpu_scan_opencl READ gpu_scan_opencl WRITE
                    set_gpu_scan_opencl NOTIFY gpu_scan_opencl_changed)
+    Q_PROPERTY(
+        bool gpu_scan_opencl_always READ gpu_scan_opencl_always WRITE
+            set_gpu_scan_opencl_always NOTIFY gpu_scan_opencl_always_changed)
     Q_PROPERTY(bool whisper_use_gpu READ whisper_use_gpu WRITE
                    set_whisper_use_gpu NOTIFY whisper_use_gpu_changed)
     Q_PROPERTY(
@@ -230,6 +233,7 @@ class settings : public QSettings, public singleton<settings> {
     QString module_checksum(const QString &name) const;
     void set_module_checksum(const QString &name, const QString &value);
     void scan_gpu_devices();
+    void disable_gpu_scan();
 
     // app
     QString note() const;
@@ -267,7 +271,6 @@ class settings : public QSettings, public singleton<settings> {
     int qt_style_idx() const;
     void set_qt_style_idx(int value);
     bool restart_required() const;
-    void set_restart_required();
     void set_font_size(int value);
     int font_size() const;
     void set_audio_format(audio_format_t value);
@@ -311,6 +314,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_gpu_scan_hip(bool value);
     bool gpu_scan_opencl() const;
     void set_gpu_scan_opencl(bool value);
+    bool gpu_scan_opencl_always() const;
+    void set_gpu_scan_opencl_always(bool value);
     bool whisper_use_gpu() const;
     void set_whisper_use_gpu(bool value);
     bool fasterwhisper_use_gpu() const;
@@ -438,6 +443,7 @@ class settings : public QSettings, public singleton<settings> {
     void gpu_scan_cuda_changed();
     void gpu_scan_hip_changed();
     void gpu_scan_opencl_changed();
+    void gpu_scan_opencl_always_changed();
     void whisper_use_gpu_changed();
     void fasterwhisper_use_gpu_changed();
     void coqui_use_gpu_changed();
@@ -474,6 +480,7 @@ class settings : public QSettings, public singleton<settings> {
     static QString settings_filepath();
     void update_qt_style() const;
     void update_audio_inputs();
+    void set_restart_required(bool value);
 
     launch_mode_t m_launch_mode = launch_mode_t::app_stanalone;
 };

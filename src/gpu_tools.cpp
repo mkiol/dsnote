@@ -213,12 +213,14 @@ struct hip_api {
 };
 
 std::vector<gpu_tools::device> available_devices(bool cuda, bool hip,
-                                                 bool opencl) {
+                                                 bool opencl,
+                                                 bool opencl_always) {
     std::vector<gpu_tools::device> devices;
 
     if (cuda) add_cuda_devices(devices);
     if (hip) add_hip_devices(devices);
-    if (opencl) add_opencl_devices(devices);
+    if (opencl && (opencl_always || devices.empty()))
+        add_opencl_devices(devices);
 
     return devices;
 }

@@ -249,16 +249,9 @@ static void install_translator() {
     }
 }
 
-static void disable_gpu_scan() {
-    auto* s = settings::instance();
-    s->set_gpu_scan_cuda(false);
-    s->set_gpu_scan_hip(false);
-    s->set_gpu_scan_opencl(false);
-}
-
 static void start_service(const cmd_options& options) {
     if (options.gpu_scan_off)
-        disable_gpu_scan();
+        settings::instance()->disable_gpu_scan();
     else
         settings::instance()->scan_gpu_devices();
 
@@ -271,10 +264,10 @@ static void start_service(const cmd_options& options) {
 }
 
 static void start_app(const cmd_options& options, app_server& dbus_app_server) {
-    if (options.gpu_scan_off)
-        disable_gpu_scan();
-    else
-        settings::instance()->scan_gpu_devices();
+    if (options.gpu_scan_off) settings::instance()->disable_gpu_scan();
+
+    /*else
+        settings::instance()->scan_gpu_devices();*/
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
