@@ -179,8 +179,8 @@ class settings : public QSettings, public singleton<settings> {
                    set_audio_input_idx NOTIFY audio_input_changed)
     Q_PROPERTY(QString audio_input READ audio_input WRITE set_audio_input NOTIFY
                    audio_input_changed)
-    Q_PROPERTY(
-        bool py_scan READ py_scan WRITE set_py_scan NOTIFY py_scan_changed)
+    Q_PROPERTY(bool py_feature_scan READ py_feature_scan WRITE
+                   set_py_feature_scan NOTIFY py_feature_scan_changed)
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -369,8 +369,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_audio_input(QString value);
     int audio_input_idx() const;
     void set_audio_input_idx(int value);
-    bool py_scan() const;
-    void set_py_scan(bool value);
+    bool py_feature_scan() const;
+    void set_py_feature_scan(bool value);
 
     QStringList gpu_devices_whisper() const;
     QString gpu_device_whisper() const;
@@ -464,7 +464,7 @@ class settings : public QSettings, public singleton<settings> {
     void gpu_device_coqui_changed();
     void audio_inputs_changed();
     void audio_input_changed();
-    void py_scan_changed();
+    void py_feature_scan_changed();
 
    private:
     inline static const QString settings_filename =

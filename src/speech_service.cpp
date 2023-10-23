@@ -2183,7 +2183,7 @@ QVariantMap speech_service::features_availability() {
                 "diacritizer-he",
                 QVariantList{
                     py_availability->transformers && py_availability->unikud,
-                    tr("Diacritics restoration") + " " + tr("Hebrew")});
+                    tr("Diacritics restoration for Hebrew")});
 
             m_features_availability.insert(
                 "whispercpp-stt-cuda", QVariantList{whisper_engine::has_cuda(),

@@ -874,6 +874,7 @@ DialogPage {
 
             ColumnLayout {
                 spacing: appWin.padding
+                Layout.bottomMargin: appWin.padding
 
                 BusyIndicator {
                     visible: featureRepeter.model.length === 0
@@ -900,6 +901,19 @@ DialogPage {
                         }
                     }
                 }
+            }
+
+            CheckBox {
+                checked: _settings.py_feature_scan
+                text: qsTr("Check Python dependencies")
+                onCheckedChanged: {
+                    _settings.py_feature_scan = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Check the presence of needed Python libraries.") + " " +
+                              qsTr("Disable this option if you observe problems.")
             }
         }
     }

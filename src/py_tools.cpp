@@ -53,7 +53,7 @@ libs_availability_t libs_availability() {
     using namespace pybind11::literals;
 
     try {
-        py::module_::import("TTS.utils.synthesizer");
+        py::module_::import("TTS");
         availability.coqui_tts = true;
     } catch (const std::exception& err) {
         LOGE("py error: " << err.what());
@@ -89,7 +89,7 @@ libs_availability_t libs_availability() {
     }
 
     try {
-        py::module_::import("unikud.framework");
+        py::module_::import("unikud");
         availability.unikud = true;
     } catch (const std::exception& err) {
         LOGE("py error: " << err.what());

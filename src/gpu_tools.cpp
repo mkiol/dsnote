@@ -417,10 +417,10 @@ void add_opencl_devices(std::vector<device>& devices) {
     }
 }
 
-bool has_cuda() {
-    auto handle = dlopen("libcudart.so", RTLD_LAZY);
+static bool has_lib(const char* name) {
+    auto handle = dlopen(name, RTLD_LAZY);
     if (!handle) {
-        LOGW("failed to open cudart lib: " << dlerror());
+        LOGW("failed to open " << name << ": " << dlerror());
         return false;
     }
 
@@ -429,15 +429,9 @@ bool has_cuda() {
     return true;
 }
 
-bool has_cudnn() {
-    auto handle = dlopen("libcudnn.so", RTLD_LAZY);
-    if (!handle) {
-        LOGW("failed to open cudnn lib: " << dlerror());
-        return false;
-    }
+bool has_cuda() { return has_lib("libcudart.so"); }
 
-    dlclose(handle);
+bool has_clblast() { return has_lib("libclblast.so"); }
 
-    return true;
-}
+bool has_cudnn() { return has_lib("libcudnn.so"); }
 }  // namespace gpu_tools

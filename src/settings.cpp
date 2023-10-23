@@ -1263,14 +1263,14 @@ void settings::set_gpu_scan_opencl_always(bool value) {
     }
 }
 
-bool settings::py_scan() const {
-    return value(QStringLiteral("service/py_scan"), true).toBool();
+bool settings::py_feature_scan() const {
+    return value(QStringLiteral("service/py_feature_scan"), true).toBool();
 }
 
-void settings::set_py_scan(bool value) {
-    if (value != py_scan()) {
-        setValue(QStringLiteral("service/py_scan"), value);
-        emit py_scan_changed();
+void settings::set_py_feature_scan(bool value) {
+    if (value != py_feature_scan()) {
+        setValue(QStringLiteral("service/py_feature_scan"), value);
+        emit py_feature_scan_changed();
 
         set_restart_required(true);
     }
