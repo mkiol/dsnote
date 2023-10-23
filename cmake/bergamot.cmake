@@ -52,7 +52,8 @@ if(arch_x8664)
             -DUSE_INTRINSICS_ARMV7_NEONVFPV4=OFF
             -DUSE_INTRINSICS_ARMV7_NEON=ON
             -DBUILD_ARCH=${bergamot_build_arch}
-        INSTALL_COMMAND cp libbergamot_api.so ${external_lib_dir}/libbergamot_api-fallback.so
+            -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
+        INSTALL_COMMAND make install && cp ${external_lib_dir}/libbergamot_api.so ${external_lib_dir}/libbergamot_api-fallback.so
         BUILD_ALWAYS False
     )
 
@@ -90,6 +91,7 @@ ExternalProject_Add(bergamot
         -DUSE_INTRINSICS_ARMV7_NEON=OFF
         -DUSE_INTRINSICS_ARMV7_NEONVFPV4=ON
         -DBUILD_ARCH=${bergamot_build_arch}
+        -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
     BUILD_ALWAYS False
 )
 

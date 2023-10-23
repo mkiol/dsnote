@@ -1,9 +1,3 @@
-set(install_dir share/${info_binary_id})
-set(module_install_dir ${install_dir})
-set(share_install_dir ${install_dir}/share)
-set(lib_install_dir ${install_dir}/lib)
-set(bin_install_dir ${install_dir}/bin)
-
 install(TARGETS ${info_binary_id} RUNTIME DESTINATION bin)
 
 install(FILES "${desktop_dir}/${info_binary_id}.desktop" DESTINATION share/applications)
