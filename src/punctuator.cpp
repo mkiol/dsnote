@@ -21,6 +21,8 @@ punctuator::punctuator(const std::string& model_path, int device) {
 
     pe->execute([&, dev = pe->libs_availability->torch_cuda ? device : -1]() {
           try {
+              LOGD("creating punctuator: device=" << dev);
+
               auto trans_module = py::module_::import("transformers");
               auto tokenizer_class = trans_module.attr("AutoTokenizer");
               auto model_class =
