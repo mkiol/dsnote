@@ -2173,6 +2173,19 @@ QVariantMap speech_service::features_availability() {
                                                   py_availability->gruut_ru,
                                               "Mimic3 TTS " + tr("Russian")});
             m_features_availability.insert(
+                "mimic3-tts-sw", QVariantList{py_availability->mimic3_tts &&
+                                                  py_availability->gruut_sw,
+                                              "Mimic3 TTS " + tr("Swahili")});
+            m_features_availability.insert(
+                "mimic3-tts-fa", QVariantList{py_availability->mimic3_tts &&
+                                                  py_availability->gruut_fa,
+                                              "Mimic3 TTS " + tr("Persian")});
+            m_features_availability.insert(
+                "mimic3-tts-nl", QVariantList{py_availability->mimic3_tts &&
+                                                  py_availability->gruut_nl,
+                                              "Mimic3 TTS " + tr("Dutch")});
+
+            m_features_availability.insert(
                 "faster-whisper-stt",
                 QVariantList{py_availability->faster_whisper,
                              "Faster Whisper STT"});
