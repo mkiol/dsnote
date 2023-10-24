@@ -409,6 +409,15 @@ static void replace_characters(std::string& text, const std::string& from,
     text.assign(wchar_to_UTF8(w_text.c_str()));
 }
 
+static void add_extra_pause(std::string& text) {
+    if (text.empty()) return;
+
+    if (text.back() == '.')
+        text.append(" ,.");
+    else
+        text.append(". ,.");
+}
+
 void processor::hebrew_diacritize(std::string& text,
                                   const std::string& model_path) {
     using namespace pybind11::literals;
@@ -490,6 +499,11 @@ std::string processor::preprocess(const std::string& text,
             arabic_diacritize(new_text, diacritizer_path);
         else if (lang == "he")
             hebrew_diacritize(new_text, diacritizer_path);
+    }
+
+    if (has_option('p', options)) {
+        LOGD("extra pause needed");
+        add_extra_pause(new_text);
     }
 #ifdef DEBUG
     LOGD("text after pre-processing: " << new_text);
