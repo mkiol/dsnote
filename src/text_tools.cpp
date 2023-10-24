@@ -416,13 +416,17 @@ void processor::hebrew_diacritize(std::string& text,
     auto* pe = py_executor::instance();
 
     try {
-        text = pe->execute([&]() {
+        text = pe->execute([&, dev = pe->libs_availability->torch_cuda
+                                         ? m_device
+                                         : -1]() {
                      try {
                          if (!m_unikud) {
+                             LOGD("creating hebrew diacritizer");
+
                              auto framework =
                                  py::module_::import("unikud.framework");
                              m_unikud = framework.attr("Unikud")(
-                                 "hub_name"_a = model_path);
+                                 "hub_name"_a = model_path, "device"_a = dev);
                          }
 
                          return m_unikud.value()(text).cast<std::string>();
@@ -492,6 +496,8 @@ std::string processor::preprocess(const std::string& text,
 
     return new_text;
 }
+
+processor::processor(int device) : m_device{device} {}
 
 processor::~processor() {
     auto* pe = py_executor::instance();

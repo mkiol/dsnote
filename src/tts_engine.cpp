@@ -93,7 +93,8 @@ std::ostream& operator<<(std::ostream& os, tts_engine::state_t state) {
 
 tts_engine::tts_engine(config_t config, callbacks_t call_backs)
     : m_config{std::move(config)},
-      m_call_backs{std::move(call_backs)} {}
+      m_call_backs{std::move(call_backs)},
+      m_text_processor{config.use_gpu ? config.gpu_device.id : -1} {}
 
 tts_engine::~tts_engine() {
     LOGD("tts dtor");

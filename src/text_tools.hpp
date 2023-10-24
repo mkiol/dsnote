@@ -27,7 +27,7 @@ struct break_line_info {
 
 class processor {
    public:
-    processor() = default;
+    explicit processor(int device);
     ~processor();
     std::string preprocess(const std::string& text, const std::string& options,
                            const std::string& lang,
@@ -40,6 +40,7 @@ class processor {
    private:
     std::optional<pybind11::object> m_unikud;
     std::optional<tashkeel::State> m_tashkeel_state;
+    int m_device = -1;  // cuda device
 };
 
 std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
