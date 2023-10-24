@@ -1,15 +1,6 @@
 diff -ruN org/mycroft_mimic3_tts-0.2.4/mimic3_tts/tts.py tmp/mycroft_mimic3_tts-0.2.4/mimic3_tts/tts.py
 --- org/mycroft_mimic3_tts-0.2.4/mimic3_tts/tts.py	2022-11-04 20:05:32.000000000 +0100
 +++ tmp/mycroft_mimic3_tts-0.2.4/mimic3_tts/tts.py	2023-10-07 15:58:01.900561792 +0200
-@@ -178,7 +178,7 @@
-         ] = Mimic3TextToSpeechSystem.get_default_voices_directories()
-
-         if self.settings.voices_directories is not None:
--            voices_dirs = itertools.chain(self.settings.voices_directories, voices_dirs)
-+            voices_dirs.insert(0, self.settings.voices_directories)
-
-         known_voices = set(_VOICES.keys())
-
 @@ -591,6 +591,8 @@
          providers = None
          if self.settings.use_cuda:
