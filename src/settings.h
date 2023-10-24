@@ -234,6 +234,7 @@ class settings : public QSettings, public singleton<settings> {
     void set_module_checksum(const QString &name, const QString &value);
     void scan_gpu_devices();
     void disable_gpu_scan();
+    void disable_py_scan();
 
     // app
     QString note() const;

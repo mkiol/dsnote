@@ -816,6 +816,10 @@ void settings::scan_gpu_devices() {
     m_gpu_devices_fasterwhisper.push_back(tr("Auto"));
     m_gpu_devices_coqui.push_back(tr("Auto"));
 
+    qDebug() << "scan cuda:" << gpu_scan_cuda();
+    qDebug() << "scan hip:" << gpu_scan_hip();
+    qDebug() << "scan opencl:" << gpu_scan_opencl() << gpu_scan_opencl_always();
+
     auto devices = gpu_tools::available_devices(
         /*cuda=*/gpu_scan_cuda(),
         /*hip=*/gpu_scan_hip(),
@@ -1280,6 +1284,11 @@ void settings::disable_gpu_scan() {
     set_gpu_scan_cuda(false);
     set_gpu_scan_hip(false);
     set_gpu_scan_opencl(false);
+    set_restart_required(false);
+}
+
+void settings::disable_py_scan() {
+    set_py_feature_scan(false);
     set_restart_required(false);
 }
 
