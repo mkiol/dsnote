@@ -827,7 +827,7 @@ DialogPage {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Try to find NVIDIA CUDA compatible graphic cards in the system.") + " " +
-                              qsTr("Disable this option if you observe problems.")
+                              qsTr("Disable this option if you observe problems when launching the application.")
             }
 
             CheckBox {
@@ -840,7 +840,7 @@ DialogPage {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Try to find AMD ROCm compatible graphic cards in the system.") + " " +
-                              qsTr("Disable this option if you observe problems.")
+                              qsTr("Disable this option if you observe problems when launching the application.")
             }
 
             RowLayout {
@@ -855,7 +855,7 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
-                                  qsTr("Disable this option if you observe problems.")
+                                  qsTr("Disable this option if you observe problems when launching the application.")
                 }
 
                 ComboBox {
@@ -912,8 +912,8 @@ DialogPage {
 
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Check the presence of needed Python libraries.") + " " +
-                              qsTr("Disable this option if you observe problems.")
+                ToolTip.text: qsTr("Check the presence of the required Python libraries.") + " " +
+                              qsTr("Disable this option if you observe problems when launching the application.")
             }
         }
     }
