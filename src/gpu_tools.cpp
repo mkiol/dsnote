@@ -433,5 +433,8 @@ bool has_cuda() { return has_lib("libcudart.so"); }
 
 bool has_clblast() { return has_lib("libclblast.so"); }
 
-bool has_cudnn() { return has_lib("libcudnn.so"); }
+bool has_cudnn() {
+    if (has_lib("libcudnn.so")) return true;
+    return has_lib("libcudnn.so.8");
+}
 }  // namespace gpu_tools

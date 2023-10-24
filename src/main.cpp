@@ -48,7 +48,6 @@
 #include "dsnote_app.h"
 #include "logger.hpp"
 #include "models_list_model.h"
-#include "py_executor.hpp"
 #include "qtlogger.hpp"
 #include "settings.h"
 #include "speech_config.h"
@@ -255,7 +254,6 @@ static void start_service(const cmd_options& options) {
     else
         settings::instance()->scan_gpu_devices();
 
-    py_executor::instance()->start();
     speech_service::instance();
 
     if (options.gen_cheksums) models_manager::instance()->generate_checksums();
@@ -266,12 +264,8 @@ static void start_service(const cmd_options& options) {
 static void start_app(const cmd_options& options, app_server& dbus_app_server) {
     if (options.gpu_scan_off) settings::instance()->disable_gpu_scan();
 
-    /*else
-        settings::instance()->scan_gpu_devices();*/
-
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
-        py_executor::instance()->start();
         speech_service::instance();
 
         if (options.gen_cheksums)
@@ -360,6 +354,8 @@ int main(int argc, char* argv[]) {
     Logger::init(cmd_opts.verbose ? Logger::LogType::Trace
                                   : Logger::LogType::Error);
     initQtLogger();
+
+    qDebug() << "version:" << APP_VERSION;
 
     install_translator();
 

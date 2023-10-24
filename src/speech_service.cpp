@@ -481,6 +481,10 @@ speech_service::speech_service(QObject *parent)
         m_keepalive_timer.start();
     }
 
+    setup_env();
+
+    py_executor::instance()->start();
+
     setup_modules();
 
     remove_cached_media_files();
@@ -2137,9 +2141,10 @@ QVariantMap speech_service::features_availability() {
                 "coqui-tts",
                 QVariantList{py_availability->coqui_tts, "Coqui TTS"});
             m_features_availability.insert(
-                "coqui-tts-gpu", QVariantList{py_availability->coqui_tts &&
-                                                  py_availability->torch_cuda,
-                                              "Coqui TTS GPU"});
+                "coqui-tts-gpu",
+                QVariantList{
+                    py_availability->coqui_tts && py_availability->torch_cuda,
+                    "Coqui TTS " + tr("GPU acceleration")});
             m_features_availability.insert(
                 "coqui-tts-ja", QVariantList{py_availability->coqui_tts &&
                                                  py_availability->mecab,
@@ -2175,7 +2180,7 @@ QVariantMap speech_service::features_availability() {
                 "faster-whisper-stt-gpu",
                 QVariantList{
                     py_availability->faster_whisper && has_cuda && has_cudnn,
-                    "Faster Whisper STT GPU"});
+                    "Faster Whisper STT " + tr("GPU acceleration")});
             m_features_availability.insert(
                 "punctuator", QVariantList{py_availability->transformers,
                                            tr("Punctuation restoration")});
@@ -2186,15 +2191,18 @@ QVariantMap speech_service::features_availability() {
                     tr("Diacritics restoration for Hebrew")});
 
             m_features_availability.insert(
-                "whispercpp-stt-cuda", QVariantList{whisper_engine::has_cuda(),
-                                                    "whisper.cpp STT CUDA"});
+                "whispercpp-stt-cuda",
+                QVariantList{whisper_engine::has_cuda(),
+                             "whisper.cpp STT CUDA " + tr("GPU acceleration")});
             m_features_availability.insert(
-                "whispercpp-stt-hip", QVariantList{whisper_engine::has_hip(),
-                                                   "whisper.cpp STT ROCm"});
+                "whispercpp-stt-hip",
+                QVariantList{whisper_engine::has_hip(),
+                             "whisper.cpp STT ROCm " + tr("GPU acceleration")});
             m_features_availability.insert(
                 "whispercpp-stt-opencl",
-                QVariantList{whisper_engine::has_opencl(),
-                             "whisper.cpp STT OpenCL"});
+                QVariantList{
+                    whisper_engine::has_opencl(),
+                    "whisper.cpp STT OpenCL " + tr("GPU acceleration")});
 
             models_manager::instance()->update_models_using_availability(
                 {/*tts_coqui=*/py_availability->coqui_tts,
@@ -3231,11 +3239,7 @@ static void add_to_env_path(const QString &dir) {
     }
 }
 
-void speech_service::setup_modules() {
-    module_tools::init_module(QStringLiteral("rhvoicedata"));
-    module_tools::init_module(QStringLiteral("rhvoiceconfig"));
-    module_tools::init_module(QStringLiteral("espeakdata"));
-
+void speech_service::setup_env() {
     auto mbrola_bin_dir = module_tools::path_to_bin_dir_for_path("mbrola");
     qDebug() << "mbrola dir:" << mbrola_bin_dir;
     if (!mbrola_bin_dir.isEmpty()) add_to_env_path(mbrola_bin_dir);
@@ -3244,6 +3248,12 @@ void speech_service::setup_modules() {
     qDebug() << "espeak dir:" << espeak_bin_dir;
     if (!espeak_bin_dir.isEmpty() && espeak_bin_dir != mbrola_bin_dir)
         add_to_env_path(espeak_bin_dir);
+}
+
+void speech_service::setup_modules() {
+    module_tools::init_module(QStringLiteral("rhvoicedata"));
+    module_tools::init_module(QStringLiteral("rhvoiceconfig"));
+    module_tools::init_module(QStringLiteral("espeakdata"));
 }
 
 // DBus
