@@ -23,6 +23,7 @@
 #include <utility>
 
 #include "denoiser.hpp"
+#include "punctuator.hpp"
 #include "vad.hpp"
 
 using namespace std::chrono_literals;
@@ -179,6 +180,7 @@ class stt_engine {
     bool m_restart_requested = false;
     std::optional<std::chrono::steady_clock::time_point> m_start_time;
     processing_state_t m_processing_state = processing_state_t::idle;
+    std::optional<punctuator> m_punctuator;
 
     static void ltrim(std::string& s);
     static void rtrim(std::string& s);
@@ -200,6 +202,7 @@ class stt_engine {
     void start_processing();
     bool sentence_timer_timed_out();
     void restart_sentence_timer();
+    void create_punctuator();
 };
 
 #endif  // STT_ENGINE_H

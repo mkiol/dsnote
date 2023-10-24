@@ -1029,23 +1029,11 @@ QString speech_service::restart_stt_engine(
             static_cast<stt_engine::speech_mode_t>(speech_mode);
         config.translate = false;
 
-        if (model_config->stt->engine ==
-                models_manager::model_engine_t::stt_whisper &&
-            settings::instance()->whisper_use_gpu() &&
-            settings::instance()->has_gpu_device_whisper()) {
+        if (settings::instance()->stt_use_gpu() &&
+            settings::instance()->has_gpu_device_stt()) {
             if (auto device = make_gpu_device<stt_engine>(
-                    settings::instance()->gpu_device_whisper(),
-                    settings::instance()->auto_gpu_device_whisper())) {
-                config.gpu_device = std::move(*device);
-                config.use_gpu = true;
-            }
-        } else if (model_config->stt->engine ==
-                       models_manager::model_engine_t::stt_fasterwhisper &&
-                   settings::instance()->fasterwhisper_use_gpu() &&
-                   settings::instance()->has_gpu_device_fasterwhisper()) {
-            if (auto device = make_gpu_device<stt_engine>(
-                    settings::instance()->gpu_device_fasterwhisper(),
-                    settings::instance()->auto_gpu_device_fasterwhisper())) {
+                    settings::instance()->gpu_device_stt(),
+                    settings::instance()->auto_gpu_device_stt())) {
                 config.gpu_device = std::move(*device);
                 config.use_gpu = true;
             }
@@ -1078,12 +1066,8 @@ QString speech_service::restart_stt_engine(
 
             if (m_stt_engine->model_files() != config.model_files) return true;
             if (m_stt_engine->lang() != config.lang) return true;
-            if ((model_config->stt->engine ==
-                     models_manager::model_engine_t::stt_whisper ||
-                 model_config->stt->engine ==
-                     models_manager::model_engine_t::stt_fasterwhisper) &&
-                (config.use_gpu != m_stt_engine->use_gpu() ||
-                 config.gpu_device != m_stt_engine->gpu_device()))
+            if (config.use_gpu != m_stt_engine->use_gpu() ||
+                config.gpu_device != m_stt_engine->gpu_device())
                 return true;
             return false;
         }();
@@ -1189,13 +1173,11 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         config.speech_speed = speech_speed;
         config.options = model_config->options.toStdString();
 
-        if (model_config->tts->engine ==
-                models_manager::model_engine_t::tts_coqui &&
-            settings::instance()->coqui_use_gpu() &&
-            settings::instance()->has_gpu_device_coqui()) {
+        if (settings::instance()->tts_use_gpu() &&
+            settings::instance()->has_gpu_device_tts()) {
             if (auto device = make_gpu_device<tts_engine>(
-                    settings::instance()->gpu_device_coqui(),
-                    settings::instance()->auto_gpu_device_coqui())) {
+                    settings::instance()->gpu_device_tts(),
+                    settings::instance()->auto_gpu_device_tts())) {
                 config.gpu_device = std::move(*device);
                 config.use_gpu = true;
             }
@@ -1251,10 +1233,8 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             if (m_tts_engine->lang() != config.lang) return true;
             if (m_tts_engine->speaker() != config.speaker) return true;
 
-            if (model_config->tts->engine ==
-                    models_manager::model_engine_t::tts_coqui &&
-                (config.use_gpu != m_tts_engine->use_gpu() ||
-                 config.gpu_device != m_tts_engine->gpu_device()))
+            if (config.use_gpu != m_tts_engine->use_gpu() ||
+                config.gpu_device != m_tts_engine->gpu_device())
                 return true;
 
             return false;

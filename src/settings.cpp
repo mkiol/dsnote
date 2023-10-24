@@ -287,36 +287,25 @@ void settings::set_restore_punctuation(bool value) {
     }
 }
 
-bool settings::whisper_use_gpu() const {
-    return value(QStringLiteral("whisper_use_gpu"), false).toBool();
+bool settings::stt_use_gpu() const {
+    return value(QStringLiteral("stt_use_gpu"), false).toBool();
 }
 
-void settings::set_whisper_use_gpu(bool value) {
-    if (whisper_use_gpu() != value) {
-        setValue(QStringLiteral("whisper_use_gpu"), value);
-        emit whisper_use_gpu_changed();
+void settings::set_stt_use_gpu(bool value) {
+    if (stt_use_gpu() != value) {
+        setValue(QStringLiteral("stt_use_gpu"), value);
+        emit stt_use_gpu_changed();
     }
 }
 
-bool settings::fasterwhisper_use_gpu() const {
-    return value(QStringLiteral("fasterwhisper_use_gpu"), false).toBool();
+bool settings::tts_use_gpu() const {
+    return value(QStringLiteral("tts_use_gpu"), false).toBool();
 }
 
-void settings::set_fasterwhisper_use_gpu(bool value) {
-    if (fasterwhisper_use_gpu() != value) {
-        setValue(QStringLiteral("fasterwhisper_use_gpu"), value);
-        emit fasterwhisper_use_gpu_changed();
-    }
-}
-
-bool settings::coqui_use_gpu() const {
-    return value(QStringLiteral("coqui_use_gpu"), false).toBool();
-}
-
-void settings::set_coqui_use_gpu(bool value) {
-    if (coqui_use_gpu() != value) {
-        setValue(QStringLiteral("coqui_use_gpu"), value);
-        emit coqui_use_gpu_changed();
+void settings::set_tts_use_gpu(bool value) {
+    if (tts_use_gpu() != value) {
+        setValue(QStringLiteral("tts_use_gpu"), value);
+        emit tts_use_gpu_changed();
     }
 }
 
@@ -786,35 +775,24 @@ void settings::update_qt_style() const {
 #endif
 }
 
-QStringList settings::gpu_devices_whisper() const {
-    return m_gpu_devices_whisper;
+QStringList settings::gpu_devices_stt() const { return m_gpu_devices_stt; }
+
+QStringList settings::gpu_devices_tts() const { return m_gpu_devices_tts; }
+
+bool settings::has_gpu_device_stt() const {
+    return m_gpu_devices_stt.size() > 1;
 }
 
-QStringList settings::gpu_devices_fasterwhisper() const {
-    return m_gpu_devices_fasterwhisper;
-}
-QStringList settings::gpu_devices_coqui() const { return m_gpu_devices_coqui; }
-
-bool settings::has_gpu_device_whisper() const {
-    return m_gpu_devices_whisper.size() > 1;
-}
-
-bool settings::has_gpu_device_fasterwhisper() const {
-    return m_gpu_devices_fasterwhisper.size() > 1;
-}
-
-bool settings::has_gpu_device_coqui() const {
-    return m_gpu_devices_coqui.size() > 1;
+bool settings::has_gpu_device_tts() const {
+    return m_gpu_devices_tts.size() > 1;
 }
 
 void settings::scan_gpu_devices() {
 #ifdef ARCH_X86_64
-    m_gpu_devices_whisper.clear();
-    m_gpu_devices_fasterwhisper.clear();
-    m_gpu_devices_coqui.clear();
-    m_gpu_devices_whisper.push_back(tr("Auto"));
-    m_gpu_devices_fasterwhisper.push_back(tr("Auto"));
-    m_gpu_devices_coqui.push_back(tr("Auto"));
+    m_gpu_devices_stt.clear();
+    m_gpu_devices_tts.clear();
+    m_gpu_devices_stt.push_back(tr("Auto"));
+    m_gpu_devices_tts.push_back(tr("Auto"));
 
     qDebug() << "scan cuda:" << gpu_scan_cuda();
     qDebug() << "scan hip:" << gpu_scan_hip();
@@ -829,7 +807,7 @@ void settings::scan_gpu_devices() {
     std::for_each(devices.cbegin(), devices.cend(), [&](const auto& device) {
         switch (device.api) {
             case gpu_tools::api_t::opencl:
-                m_gpu_devices_whisper.push_back(
+                m_gpu_devices_stt.push_back(
                     QStringLiteral("%1, %2, %3")
                         .arg("OpenCL",
                              QString::fromStdString(device.platform_name),
@@ -839,177 +817,118 @@ void settings::scan_gpu_devices() {
                 auto item = QStringLiteral("%1, %2, %3")
                                 .arg("CUDA", QString::number(device.id),
                                      QString::fromStdString(device.name));
-                m_gpu_devices_whisper.push_back(item);
-                m_gpu_devices_fasterwhisper.push_back(item);
-                m_gpu_devices_coqui.push_back(std::move(item));
+                m_gpu_devices_stt.push_back(item);
+                m_gpu_devices_tts.push_back(std::move(item));
                 break;
             }
             case gpu_tools::api_t::rocm: {
                 auto item = QStringLiteral("%1, %2, %3")
                                 .arg("ROCm", QString::number(device.id),
                                      QString::fromStdString(device.name));
-                m_gpu_devices_whisper.push_back(item);
-                m_gpu_devices_coqui.push_back(std::move(item));
+                m_gpu_devices_stt.push_back(item);
+                m_gpu_devices_tts.push_back(std::move(item));
                 break;
             }
         }
     });
 
-    if (!auto_gpu_device_whisper().isEmpty())
-        m_gpu_devices_whisper.front().append(" (" + auto_gpu_device_whisper() +
-                                             ")");
-    if (!auto_gpu_device_fasterwhisper().isEmpty())
-        m_gpu_devices_fasterwhisper.front().append(
-            " (" + auto_gpu_device_fasterwhisper() + ")");
-    if (!auto_gpu_device_coqui().isEmpty())
-        m_gpu_devices_coqui.front().append(" (" + auto_gpu_device_coqui() +
-                                           ")");
+    if (!auto_gpu_device_stt().isEmpty())
+        m_gpu_devices_stt.front().append(" (" + auto_gpu_device_stt() + ")");
+    if (!auto_gpu_device_tts().isEmpty())
+        m_gpu_devices_tts.front().append(" (" + auto_gpu_device_tts() + ")");
 
     emit gpu_devices_changed();
 #endif
 }
 
-QString settings::auto_gpu_device_whisper() const {
-    return m_gpu_devices_whisper.size() <= 1 ? QString{}
-                                             : m_gpu_devices_whisper.at(1);
+QString settings::auto_gpu_device_stt() const {
+    return m_gpu_devices_stt.size() <= 1 ? QString{} : m_gpu_devices_stt.at(1);
 }
 
-QString settings::auto_gpu_device_fasterwhisper() const {
-    return m_gpu_devices_fasterwhisper.size() <= 1
-               ? QString{}
-               : m_gpu_devices_fasterwhisper.at(1);
+QString settings::auto_gpu_device_tts() const {
+    return m_gpu_devices_tts.size() <= 1 ? QString{} : m_gpu_devices_tts.at(1);
 }
 
-QString settings::auto_gpu_device_coqui() const {
-    return m_gpu_devices_coqui.size() <= 1 ? QString{}
-                                           : m_gpu_devices_coqui.at(1);
-}
-
-QString settings::gpu_device_whisper() const {
+QString settings::gpu_device_stt() const {
     auto device_str =
-        value(QStringLiteral("service/gpu_device_whisper")).toString();
-    if (std::find(std::next(m_gpu_devices_whisper.cbegin()),
-                  m_gpu_devices_whisper.cend(),
-                  device_str) == m_gpu_devices_whisper.cend()) {
+        value(QStringLiteral("service/gpu_device_stt")).toString();
+    if (std::find(std::next(m_gpu_devices_stt.cbegin()),
+                  m_gpu_devices_stt.cend(),
+                  device_str) == m_gpu_devices_stt.cend()) {
         return {};
     }
 
     return device_str;
 }
 
-void settings::set_gpu_device_whisper(QString value) {
-    if (std::find(std::next(m_gpu_devices_whisper.cbegin()),
-                  m_gpu_devices_whisper.cend(),
-                  value) == m_gpu_devices_whisper.cend())
+void settings::set_gpu_device_stt(QString value) {
+    if (std::find(std::next(m_gpu_devices_stt.cbegin()),
+                  m_gpu_devices_stt.cend(), value) == m_gpu_devices_stt.cend())
         value.clear();
 
-    if (value != gpu_device_whisper()) {
-        setValue(QStringLiteral("service/gpu_device_whisper"), value);
-        emit gpu_device_whisper_changed();
+    if (value != gpu_device_stt()) {
+        setValue(QStringLiteral("service/gpu_device_stt"), value);
+        emit gpu_device_stt_changed();
         set_restart_required(true);
     }
 }
 
-int settings::gpu_device_idx_whisper() const {
-    auto current_device = gpu_device_whisper();
+int settings::gpu_device_idx_stt() const {
+    auto current_device = gpu_device_stt();
 
     if (current_device.isEmpty()) return 0;
 
-    auto it = std::find(m_gpu_devices_whisper.cbegin(),
-                        m_gpu_devices_whisper.cend(), current_device);
-    if (it == m_gpu_devices_whisper.cend()) return 0;
+    auto it = std::find(m_gpu_devices_stt.cbegin(), m_gpu_devices_stt.cend(),
+                        current_device);
+    if (it == m_gpu_devices_stt.cend()) return 0;
 
-    return std::distance(m_gpu_devices_whisper.cbegin(), it);
+    return std::distance(m_gpu_devices_stt.cbegin(), it);
 }
 
-void settings::set_gpu_device_idx_whisper(int value) {
-    if (value < 0 || value >= m_gpu_devices_whisper.size()) return;
-    set_gpu_device_whisper(value == 0 ? "" : m_gpu_devices_whisper.at(value));
+void settings::set_gpu_device_idx_stt(int value) {
+    if (value < 0 || value >= m_gpu_devices_stt.size()) return;
+    set_gpu_device_stt(value == 0 ? "" : m_gpu_devices_stt.at(value));
 }
 
-void settings::set_gpu_device_fasterwhisper(QString value) {
-    if (std::find(std::next(m_gpu_devices_fasterwhisper.cbegin()),
-                  m_gpu_devices_fasterwhisper.cend(),
-                  value) == m_gpu_devices_fasterwhisper.cend())
-        value.clear();
-
-    if (value != gpu_device_fasterwhisper()) {
-        setValue(QStringLiteral("service/gpu_device_fasterwhisper"), value);
-        emit gpu_device_fasterwhisper_changed();
-        set_restart_required(true);
-    }
-}
-
-QString settings::gpu_device_fasterwhisper() const {
+QString settings::gpu_device_tts() const {
     auto device_str =
-        value(QStringLiteral("service/gpu_device_fasterwhisper")).toString();
-    if (std::find(std::next(m_gpu_devices_fasterwhisper.cbegin()),
-                  m_gpu_devices_fasterwhisper.cend(),
-                  device_str) == m_gpu_devices_fasterwhisper.cend()) {
+        value(QStringLiteral("service/gpu_device_tts")).toString();
+    if (std::find(std::next(m_gpu_devices_tts.cbegin()),
+                  m_gpu_devices_tts.cend(),
+                  device_str) == m_gpu_devices_tts.cend()) {
         return {};
     }
 
     return device_str;
 }
 
-int settings::gpu_device_idx_fasterwhisper() const {
-    auto current_device = gpu_device_fasterwhisper();
-
-    if (current_device.isEmpty()) return 0;
-
-    auto it = std::find(m_gpu_devices_fasterwhisper.cbegin(),
-                        m_gpu_devices_fasterwhisper.cend(), current_device);
-    if (it == m_gpu_devices_fasterwhisper.cend()) return 0;
-
-    return std::distance(m_gpu_devices_fasterwhisper.cbegin(), it);
-}
-
-void settings::set_gpu_device_idx_fasterwhisper(int value) {
-    if (value < 0 || value >= m_gpu_devices_fasterwhisper.size()) return;
-    set_gpu_device_fasterwhisper(
-        value == 0 ? "" : m_gpu_devices_fasterwhisper.at(value));
-}
-
-QString settings::gpu_device_coqui() const {
-    auto device_str =
-        value(QStringLiteral("service/gpu_device_coqui")).toString();
-    if (std::find(std::next(m_gpu_devices_coqui.cbegin()),
-                  m_gpu_devices_coqui.cend(),
-                  device_str) == m_gpu_devices_coqui.cend()) {
-        return {};
-    }
-
-    return device_str;
-}
-
-void settings::set_gpu_device_coqui(QString value) {
-    if (std::find(std::next(m_gpu_devices_coqui.cbegin()),
-                  m_gpu_devices_coqui.cend(),
-                  value) == m_gpu_devices_coqui.cend())
+void settings::set_gpu_device_tts(QString value) {
+    if (std::find(std::next(m_gpu_devices_tts.cbegin()),
+                  m_gpu_devices_tts.cend(), value) == m_gpu_devices_tts.cend())
         value.clear();
 
-    if (value != gpu_device_coqui()) {
-        setValue(QStringLiteral("service/gpu_device_coqui"), value);
-        emit gpu_device_coqui_changed();
+    if (value != gpu_device_tts()) {
+        setValue(QStringLiteral("service/gpu_device_tts"), value);
+        emit gpu_device_tts_changed();
         set_restart_required(true);
     }
 }
 
-int settings::gpu_device_idx_coqui() const {
-    auto current_device = gpu_device_coqui();
+int settings::gpu_device_idx_tts() const {
+    auto current_device = gpu_device_tts();
 
     if (current_device.isEmpty()) return 0;
 
-    auto it = std::find(m_gpu_devices_coqui.cbegin(),
-                        m_gpu_devices_coqui.cend(), current_device);
-    if (it == m_gpu_devices_coqui.cend()) return 0;
+    auto it = std::find(m_gpu_devices_tts.cbegin(), m_gpu_devices_tts.cend(),
+                        current_device);
+    if (it == m_gpu_devices_tts.cend()) return 0;
 
-    return std::distance(m_gpu_devices_coqui.cbegin(), it);
+    return std::distance(m_gpu_devices_tts.cbegin(), it);
 }
 
-void settings::set_gpu_device_idx_coqui(int value) {
-    if (value < 0 || value >= m_gpu_devices_coqui.size()) return;
-    set_gpu_device_coqui(value == 0 ? "" : m_gpu_devices_coqui.at(value));
+void settings::set_gpu_device_idx_tts(int value) {
+    if (value < 0 || value >= m_gpu_devices_tts.size()) return;
+    set_gpu_device_tts(value == 0 ? "" : m_gpu_devices_tts.at(value));
 }
 
 QStringList settings::audio_inputs() const { return m_audio_inputs; }

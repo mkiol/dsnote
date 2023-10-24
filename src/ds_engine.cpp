@@ -117,19 +117,6 @@ void ds_engine::free_ds_stream() {
     }
 }
 
-void ds_engine::create_punctuator() {
-    if (m_punctuator || m_config.model_files.ttt_model_file.empty()) return;
-
-    LOGD("creating punctuator");
-    try {
-        m_punctuator.emplace(m_config.model_files.ttt_model_file);
-
-        LOGD("punctuator created");
-    } catch (const std::runtime_error& error) {
-        LOGE("failed to create punctuator");
-    }
-}
-
 void ds_engine::create_ds_stream() {
     if (m_ds_stream || !m_ds_model) return;
 

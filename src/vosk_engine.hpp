@@ -18,7 +18,6 @@
 #include <memory>
 #endif
 
-#include "punctuator.hpp"
 #include "simdjson.h"
 #include "stt_engine.hpp"
 
@@ -64,7 +63,6 @@ class vosk_engine : public stt_engine {
     void* m_vosklib_handle = nullptr;
     VoskModel* m_vosk_model = nullptr;
     VoskRecognizer* m_vosk_recognizer = nullptr;
-    std::optional<punctuator> m_punctuator;
     simdjson::ondemand::parser m_parser;
 
 #ifdef DUMP_AUDIO_TO_FILE
@@ -75,7 +73,6 @@ class vosk_engine : public stt_engine {
 
     void open_vosk_lib();
     void create_vosk_model();
-    void create_punctuator();
     samples_process_result_t process_buff() override;
     void decode_speech(const vosk_buf_t& buf, bool eof);
     void reset_impl() override;

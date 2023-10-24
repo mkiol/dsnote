@@ -542,3 +542,17 @@ void stt_engine::restart_sentence_timer() {
     LOGT("staring sentence timer");
     m_start_time = std::chrono::steady_clock::now();
 }
+
+void stt_engine::create_punctuator() {
+    if (m_punctuator || m_config.model_files.ttt_model_file.empty()) return;
+
+    LOGD("creating punctuator");
+    try {
+        m_punctuator.emplace(m_config.model_files.ttt_model_file,
+                             m_config.use_gpu ? m_config.gpu_device.id : -1);
+
+        LOGD("punctuator created");
+    } catch (const std::runtime_error& error) {
+        LOGE("failed to create punctuator");
+    }
+}
