@@ -4,12 +4,12 @@ set(piper_checksum "213a31c23c862cbcd9de4231c07d32de35f4ee0b5b5dec52e9ae6dd3aa70
 set(piperphonemize_source_url "https://github.com/rhasspy/piper-phonemize/archive/7f7b5bd4de22f7fe24341c5bedda0dc1e33f3666.zip")
 set(piperphonemize_checksum "6bdcb21f6c5ae0deff7c9ae26bf07b994791dc800c1962fd216727e66a409929")
 
-set(onnx_x8664_url "https://github.com/microsoft/onnxruntime/releases/download/v1.14.1/onnxruntime-linux-x64-1.14.1.tgz")
-set(onnx_x8664_checksum "9a3b855e2b22ace4ab110cec10b38b74")
-set(onnx_arm64_url "https://github.com/microsoft/onnxruntime/releases/download/v1.14.1/onnxruntime-linux-aarch64-1.14.1.tgz")
-set(onnx_arm64_checksum "17556490ce7d111205c5c829acf509bf")
 set(onnx_arm32_url "https://github.com/mkiol/dsnote/releases/download/v2.0.1/onnxruntime-linux-arm32-1.14.tgz")
 set(onnx_arm32_checksum "5055ce0867a5c7c7a1920d2d76b8aace")
+set(onnx_x8664_url "https://github.com/microsoft/onnxruntime/releases/download/v1.16.1/onnxruntime-linux-x64-1.16.1.tgz")
+set(onnx_x8664_checksum "53a0f03f71587ed602e99e82773132fc634b74c2d227316fbfd4bf67181e72ed")
+set(onnx_arm64_url "https://github.com/microsoft/onnxruntime/releases/download/v1.16.1/onnxruntime-linux-aarch64-1.16.1.tgz")
+set(onnx_arm64_checksum "f10851b62eb44f9e811134737e7c6edd15733d2c1549cb6ce403808e9c047385")
 
 set(spdlog_source_url "https://github.com/gabime/spdlog/archive/76fb40d95455f249bd70824ecfcae7a8f0930fa3.zip")
 set(spdlog_checksum "9a00dd50318b9467148adc5e822e55221c65d8d8794c6890ba034eed222dcf64")
@@ -30,7 +30,7 @@ ExternalProject_Add(onnx
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/onnx
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${onnx_url}"
-    URL_MD5 "${onnx_checksum}"
+    URL_HASH SHA256=${onnx_checksum}
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
     BUILD_ALWAYS False

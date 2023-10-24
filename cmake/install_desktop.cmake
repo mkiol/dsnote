@@ -66,7 +66,7 @@ install(FILES "${PROJECT_BINARY_DIR}/rhvoicedata.tar.xz" DESTINATION ${module_in
 install(FILES "${PROJECT_BINARY_DIR}/rhvoiceconfig.tar.xz" DESTINATION ${module_install_dir})
 
 if(BUILD_PIPER)
-    install(FILES "${external_lib_dir}/libonnxruntime.so.1.14.1" DESTINATION ${lib_install_dir})
+    install(FILES "${external_lib_dir}/libonnxruntime.so.1.16.1" DESTINATION ${lib_install_dir})
     install(FILES "${external_lib_dir}/libonnxruntime.so" DESTINATION ${lib_install_dir})
 endif()
 
@@ -102,7 +102,6 @@ if(BUILD_ESPEAK)
     install(FILES "${external_lib_dir}/libespeak-ng.so.1" DESTINATION ${lib_install_dir})
     install(FILES "${external_lib_dir}/libespeak-ng.so" DESTINATION ${lib_install_dir})
 endif()
-
 
 if(WITH_SYSTEMD_SERVICE)
     configure_file("${systemd_dir}/speech.service.in" "${PROJECT_BINARY_DIR}/speech.service")
