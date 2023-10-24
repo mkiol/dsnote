@@ -83,9 +83,12 @@ void mimic3_engine::create_model() {
               try {
                   auto api = py::module_::import("mimic3_tts");
 
-                  m_tts = api.attr("Mimic3TextToSpeechSystem")(api.attr(
-                      "Mimic3Settings")("voices_directories"_a = voices_dir,
-                                        "no_download"_a = true));
+                  auto dirs = py::list();
+                  dirs.attr("append")(voices_dir);
+
+                  m_tts = api.attr("Mimic3TextToSpeechSystem")(
+                      api.attr("Mimic3Settings")("voices_directories"_a = dirs,
+                                                 "no_download"_a = true));
                   m_tts->attr("voice") = "lang/model";
 
                   if (!m_config.speaker.empty())
@@ -95,7 +98,7 @@ void mimic3_engine::create_model() {
 
                   if (py::len(m_tts->attr("_loaded_voices")) == 0 ||
                       !m_tts->attr("_loaded_voices").contains("lang/model")) {
-                      LOGE("voice loaded");
+                      LOGE("voice not loaded");
                       m_tts.reset();
                       return std::string{};
                   }
