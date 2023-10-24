@@ -27314,7 +27314,7 @@
             "speaker": "nikolaev"
         },
         {
-            "name": "Svenska (Mimic3 Lanfrica Low)",
+            "name": "Kiswahili (Mimic3 Lanfrica Low)",
             "model_id": "sw_mimic3_lanfrica_low",
             "engine": "tts_mimic3",
             "lang_id": "sw",
