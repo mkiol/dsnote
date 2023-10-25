@@ -40,7 +40,7 @@ makedepends=(
 optdepends=(
   'cuda: Support for GPU acceleration on NVidia graphic cards'
   'cudnn: Support for GPU acceleration on NVidia graphic cards'
-  'ocl-icd: Support for GPU acceleration with OpenCL"
+  'ocl-icd: Support for GPU acceleration with OpenCL'
   'python-accelerate: Support for Punctuation and Hebrew Diacritics restoration'
   'python-torchaudio: Support for Coqui TTS models'
   'python-transformers: Support for Punctuation and Hebrew Diacritics restoration'
