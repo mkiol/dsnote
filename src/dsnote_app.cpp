@@ -2566,7 +2566,7 @@ void dsnote_app::handle_desktop_notification_closed(
 }
 
 void dsnote_app::handle_desktop_notification_action_invoked(
-    [[maybe_unused]] uint id, const QString &action_key) {
+    [[maybe_unused]] uint id, [[maybe_unused]] const QString &action_key) {
     emit activate_requested();
     close_desktop_notification();
 }
@@ -2576,24 +2576,15 @@ bool dsnote_app::feature_available(const QString &name) const {
            m_features_availability.value(name).toList().at(0).toBool();
 }
 
-bool dsnote_app::feature_fasterwhisper_stt() const {
-    return feature_available("faster-whisper-stt");
+bool dsnote_app::feature_gpu_stt() const {
+    return feature_available("faster-whisper-stt-gpu") ||
+           feature_available("whispercpp-stt-cuda") ||
+           feature_available("whispercpp-stt-hip") ||
+           feature_available("whispercpp-stt-opencl");
 }
 
-bool dsnote_app::feature_fasterwhisper_stt_gpu() const {
-    return feature_available("faster-whisper-stt-gpu");
-}
-
-bool dsnote_app::feature_coqui_tts() const {
-    return feature_available("coqui-tts");
-}
-
-bool dsnote_app::feature_coqui_tts_gpu() const {
+bool dsnote_app::feature_gpu_tts() const {
     return feature_available("coqui-tts-gpu");
-}
-
-bool dsnote_app::feature_mimic3_tts() const {
-    return feature_available("mimic3-tts");
 }
 
 bool dsnote_app::feature_punctuator() const {
@@ -2602,6 +2593,13 @@ bool dsnote_app::feature_punctuator() const {
 
 bool dsnote_app::feature_diacritizer_he() const {
     return feature_available("diacritizer-he");
+}
+
+bool dsnote_app::feature_global_shortcuts() const {
+    return feature_available("ui-global-shortcuts");
+}
+bool dsnote_app::feature_text_active_window() const {
+    return feature_available("ui-text-active-window");
 }
 
 QVariantList dsnote_app::features_availability() {
@@ -2614,6 +2612,16 @@ QVariantList dsnote_app::features_availability() {
     } else {
         qDebug() << "[app => dbus] call FeaturesAvailability";
         m_features_availability = m_dbus_service.FeaturesAvailability();
+    }
+
+    if (!m_features_availability.isEmpty()) {
+        auto has_xbc = settings::instance()->is_xcb();
+        m_features_availability.insert(
+            "ui-global-shortcuts",
+            QVariantList{has_xbc, tr("Global keyboard shortcuts")});
+        m_features_availability.insert(
+            "ui-text-active-window",
+            QVariantList{has_xbc, tr("Insert text to active window")});
     }
 
     auto it = m_features_availability.constBegin();

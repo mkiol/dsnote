@@ -154,30 +154,6 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    text: qsTr("Graphical style") + " (" + qsTr("advanced option") + ")"
-                    wrapMode: Text.Wrap
-                }
-                ComboBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    currentIndex: _settings.qt_style_idx
-                    model: _settings.qt_styles()
-                    onActivated: _settings.qt_style_idx = index
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Application graphical interface style.") + " " +
-                                  qsTr("Change if you observe problems with incorrect colors under a dark theme.")
-                }
-            }
-
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
                     text: qsTr("Show desktop notification")
                 }
                 ComboBox {
@@ -209,6 +185,30 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Show desktop notification while reading or listening.")
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Graphical style") + " (" + qsTr("advanced option") + ")"
+                    wrapMode: Text.Wrap
+                }
+                ComboBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    currentIndex: _settings.qt_style_idx
+                    model: _settings.qt_styles()
+                    onActivated: _settings.qt_style_idx = index
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Application graphical interface style.") + " " +
+                                  qsTr("Change if you observe problems with incorrect colors under a dark theme.")
                 }
             }
         }
@@ -327,7 +327,7 @@ DialogPage {
             }
 
             CheckBox {
-                visible: _settings.gpu_supported()
+                visible: _settings.gpu_supported() && app.feature_gpu_stt
                 checked: _settings.stt_use_gpu
                 text: qsTr("Use GPU acceleration")
                 onCheckedChanged: {
@@ -346,6 +346,7 @@ DialogPage {
                 Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                 Layout.fillWidth: true
                 visible: _settings.gpu_supported() &&
+                         app.feature_gpu_stt &&
                          _settings.stt_use_gpu &&
                          _settings.gpu_devices_stt.length <= 1
                 color: "red"
@@ -354,6 +355,7 @@ DialogPage {
 
             GridLayout {
                 visible: _settings.gpu_supported() &&
+                         app.feature_gpu_stt &&
                          _settings.stt_use_gpu &&
                          _settings.gpu_devices_stt.length > 1
                 columns: root.verticalMode ? 1 : 2
@@ -458,7 +460,7 @@ DialogPage {
 
             CheckBox {
                 checked: _settings.tts_use_gpu
-                visible: _settings.gpu_supported()
+                visible: _settings.gpu_supported() && app.feature_gpu_tts
                 text: qsTr("Use GPU acceleration")
                 onCheckedChanged: {
                     _settings.tts_use_gpu = checked
@@ -476,6 +478,7 @@ DialogPage {
                 Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                 Layout.fillWidth: true
                 visible: _settings.gpu_supported() &&
+                         app.feature_gpu_tts &&
                          _settings.tts_use_gpu &&
                          _settings.gpu_devices_tts.length <= 1
                 color: "red"
@@ -484,6 +487,7 @@ DialogPage {
 
             GridLayout {
                 visible: _settings.gpu_supported() &&
+                         app.feature_gpu_tts &&
                          _settings.tts_use_gpu &&
                          _settings.gpu_devices_tts.length > 1
                 columns: root.verticalMode ? 1 : 2
@@ -518,7 +522,7 @@ DialogPage {
             width: root.width
 
             CheckBox {
-                visible: _settings.is_xcb()
+                visible: app.feature_global_shortcuts
                 checked: _settings.hotkeys_enabled
                 text: qsTr("Use global keyboard shortcuts")
                 onCheckedChanged: {
@@ -538,7 +542,7 @@ DialogPage {
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
-                visible: _settings.hotkeys_enabled
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
 
                 Label {
                     Layout.fillWidth: true
@@ -557,7 +561,7 @@ DialogPage {
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
-                visible: _settings.hotkeys_enabled
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts && app.feature_text_active_window
 
                 Label {
                     Layout.fillWidth: true
@@ -576,7 +580,7 @@ DialogPage {
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
-                visible: _settings.hotkeys_enabled
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
 
                 Label {
                     Layout.fillWidth: true
@@ -595,7 +599,7 @@ DialogPage {
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
-                visible: _settings.hotkeys_enabled
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
 
                 Label {
                     Layout.fillWidth: true
@@ -614,7 +618,7 @@ DialogPage {
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
-                visible: _settings.hotkeys_enabled
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
 
                 Label {
                     Layout.fillWidth: true
@@ -633,7 +637,7 @@ DialogPage {
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
-                visible: _settings.hotkeys_enabled
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
 
                 Label {
                     Layout.fillWidth: true
@@ -652,7 +656,7 @@ DialogPage {
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
-                visible: _settings.hotkeys_enabled
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
 
                 Label {
                     Layout.fillWidth: true
@@ -671,7 +675,7 @@ DialogPage {
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
-                visible: _settings.hotkeys_enabled
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
 
                 Label {
                     Layout.fillWidth: true

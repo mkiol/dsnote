@@ -129,20 +129,18 @@ class dsnote_app : public QObject {
         QVariantMap translations READ translations NOTIFY connected_changed)
 
     // features
-    Q_PROPERTY(bool feature_fasterwhisper_stt READ feature_fasterwhisper_stt
-                   NOTIFY features_changed)
-    Q_PROPERTY(bool feature_fasterwhisper_stt_gpu READ
-                   feature_fasterwhisper_stt_gpu NOTIFY features_changed)
     Q_PROPERTY(
-        bool feature_coqui_tts READ feature_coqui_tts NOTIFY features_changed)
-    Q_PROPERTY(bool feature_coqui_tts_gpu READ feature_coqui_tts_gpu NOTIFY
-                   features_changed)
+        bool feature_gpu_stt READ feature_gpu_stt NOTIFY features_changed)
     Q_PROPERTY(
-        bool feature_mimic3_tts READ feature_mimic3_tts NOTIFY features_changed)
+        bool feature_gpu_tts READ feature_gpu_tts NOTIFY features_changed)
     Q_PROPERTY(
         bool feature_punctuator READ feature_punctuator NOTIFY features_changed)
     Q_PROPERTY(bool feature_diacritizer_he READ feature_diacritizer_he NOTIFY
                    features_changed)
+    Q_PROPERTY(bool feature_global_shortcuts READ feature_global_shortcuts
+                   NOTIFY features_changed)
+    Q_PROPERTY(bool feature_text_active_window READ feature_text_active_window
+                   NOTIFY features_changed)
 
    public:
     enum service_state_t {
@@ -533,13 +531,12 @@ class dsnote_app : public QObject {
     void handle_desktop_notification_action_invoked(uint id,
                                                     const QString &action_key);
     bool feature_available(const QString &name) const;
-    bool feature_fasterwhisper_stt() const;
-    bool feature_fasterwhisper_stt_gpu() const;
-    bool feature_coqui_tts() const;
-    bool feature_coqui_tts_gpu() const;
-    bool feature_mimic3_tts() const;
+    bool feature_gpu_stt() const;
+    bool feature_gpu_tts() const;
     bool feature_punctuator() const;
     bool feature_diacritizer_he() const;
+    bool feature_global_shortcuts() const;
+    bool feature_text_active_window() const;
 };
 
 #endif  // DSNOTE_APP_H
