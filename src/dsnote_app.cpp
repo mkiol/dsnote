@@ -2606,8 +2606,13 @@ bool dsnote_app::feature_diacritizer_he() const {
 bool dsnote_app::feature_global_shortcuts() const {
     return feature_available("ui-global-shortcuts");
 }
+
 bool dsnote_app::feature_text_active_window() const {
     return feature_available("ui-text-active-window");
+}
+
+bool dsnote_app::feature_coqui_tts() const {
+    return feature_available("coqui-tts");
 }
 
 QVariantList dsnote_app::features_availability() {

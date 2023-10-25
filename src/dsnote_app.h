@@ -141,6 +141,8 @@ class dsnote_app : public QObject {
                    NOTIFY features_changed)
     Q_PROPERTY(bool feature_text_active_window READ feature_text_active_window
                    NOTIFY features_changed)
+    Q_PROPERTY(
+        bool feature_coqui_tts READ feature_coqui_tts NOTIFY features_changed)
 
    public:
     enum service_state_t {
@@ -537,6 +539,7 @@ class dsnote_app : public QObject {
     bool feature_diacritizer_he() const;
     bool feature_global_shortcuts() const;
     bool feature_text_active_window() const;
+    bool feature_coqui_tts() const;
 };
 
 #endif  // DSNOTE_APP_H

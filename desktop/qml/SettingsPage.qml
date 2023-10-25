@@ -453,6 +453,7 @@ DialogPage {
                 Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                 Layout.fillWidth: true
                 visible: _settings.diacritizer_enabled &&
+                         app.feature_coqui_tts &&
                          !app.feature_diacritizer_he
                 color: "red"
                 text: qsTr("Diacritizer for Hebrew language is not available.")
