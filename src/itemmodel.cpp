@@ -56,6 +56,8 @@ void ItemModel::updateItem([[maybe_unused]] ListItem *oldItem,
                            [[maybe_unused]] const ListItem *newItem) {}
 
 void ItemModel::workerDone() {
+    auto oldCount = getCount();
+
     auto *worker = qobject_cast<ItemWorker *>(sender());
 
     if (worker) {
@@ -80,6 +82,8 @@ void ItemModel::workerDone() {
 
         m_worker.reset(nullptr);
     }
+
+    if (oldCount != getCount()) emit countChanged();
 
     setBusy(false);
 }
