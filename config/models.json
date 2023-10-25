@@ -27249,6 +27249,7 @@
             "checksum": "768f7397",
             "checksum_quick": "cbde8fb8",
             "comp": "dir",
+            "options": "p",
             "urls": [
                 "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/config.json",
                 "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/pl_PL/m-ailabs_low/generator.onnx",
@@ -27314,7 +27315,7 @@
             "speaker": "nikolaev"
         },
         {
-            "name": "Svenska (Mimic3 Lanfrica Low)",
+            "name": "Kiswahili (Mimic3 Lanfrica Low)",
             "model_id": "sw_mimic3_lanfrica_low",
             "engine": "tts_mimic3",
             "lang_id": "sw",

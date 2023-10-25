@@ -13,7 +13,6 @@
 #include <string>
 #include <vector>
 
-#include "punctuator.hpp"
 #include "stt_engine.hpp"
 
 struct ModelState;
@@ -59,7 +58,6 @@ class ds_engine : public stt_engine {
     void* m_dslib_handle = nullptr;
     ModelState* m_ds_model = nullptr;
     StreamingState* m_ds_stream = nullptr;
-    std::optional<punctuator> m_punctuator;
     size_t m_decoded_samples = 0;
     size_t m_decoding_duration = 0;
 
@@ -67,7 +65,6 @@ class ds_engine : public stt_engine {
     void create_ds_model();
     void create_ds_stream();
     void free_ds_stream();
-    void create_punctuator();
     samples_process_result_t process_buff() override;
     void decode_speech(const ds_buf_t& buf, bool eof);
     void reset_impl() override;

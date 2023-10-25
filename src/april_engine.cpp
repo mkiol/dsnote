@@ -50,19 +50,6 @@ void april_engine::start_processing_impl() {
     create_punctuator();
 }
 
-void april_engine::create_punctuator() {
-    if (m_punctuator || m_config.model_files.ttt_model_file.empty()) return;
-
-    LOGD("creating punctuator");
-    try {
-        m_punctuator.emplace(m_config.model_files.ttt_model_file);
-
-        LOGD("punctuator created");
-    } catch (const std::runtime_error& error) {
-        LOGE("failed to create punctuator");
-    }
-}
-
 void april_engine::create_model() {
     if (m_model) return;
 

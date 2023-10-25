@@ -409,6 +409,15 @@ static void replace_characters(std::string& text, const std::string& from,
     text.assign(wchar_to_UTF8(w_text.c_str()));
 }
 
+static void add_extra_pause(std::string& text) {
+    if (text.empty()) return;
+
+    if (text.back() == '.')
+        text.append(" ,.");
+    else
+        text.append(". ,.");
+}
+
 void processor::hebrew_diacritize(std::string& text,
                                   const std::string& model_path) {
     using namespace pybind11::literals;
@@ -416,22 +425,27 @@ void processor::hebrew_diacritize(std::string& text,
     auto* pe = py_executor::instance();
 
     try {
-        text = pe->execute([&]() {
-                     try {
-                         if (!m_unikud) {
-                             auto framework =
-                                 py::module_::import("unikud.framework");
-                             m_unikud = framework.attr("Unikud")(
-                                 "hub_name"_a = model_path);
-                         }
+        text =
+            pe->execute([&, dev = m_device < 0 ? "cpu"
+                                               : fmt::format("{}:{}", "cuda",
+                                                             m_device)]() {
+                  try {
+                      if (!m_unikud) {
+                          LOGD("creating hebrew diacritizer: device=" << dev);
 
-                         return m_unikud.value()(text).cast<std::string>();
-                     } catch (const std::exception& err) {
-                         LOGE("py error: " << err.what());
-                     }
+                          auto framework =
+                              py::module_::import("unikud.framework");
+                          m_unikud = framework.attr("Unikud")(
+                              "hub_name"_a = model_path, "device"_a = dev);
+                      }
 
-                     return text;
-                 }).get();
+                      return m_unikud.value()(text).cast<std::string>();
+                  } catch (const std::exception& err) {
+                      LOGE("py error: " << err.what());
+                  }
+
+                  return text;
+              }).get();
     } catch (const std::exception& err) {
         LOGE("error: " << err.what());
     }
@@ -486,12 +500,19 @@ std::string processor::preprocess(const std::string& text,
         else if (lang == "he")
             hebrew_diacritize(new_text, diacritizer_path);
     }
+
+    if (has_option('p', options)) {
+        LOGD("extra pause needed");
+        add_extra_pause(new_text);
+    }
 #ifdef DEBUG
     LOGD("text after pre-processing: " << new_text);
 #endif
 
     return new_text;
 }
+
+processor::processor(int device) : m_device{device} {}
 
 processor::~processor() {
     auto* pe = py_executor::instance();

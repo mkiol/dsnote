@@ -265,6 +265,9 @@ dsnote_app::dsnote_app(QObject *parent)
     connect(&m_dbus_notifications,
             &OrgFreedesktopNotificationsInterface::NotificationClosed, this,
             &dsnote_app::handle_desktop_notification_closed);
+    connect(&m_dbus_notifications,
+            &OrgFreedesktopNotificationsInterface::ActionInvoked, this,
+            &dsnote_app::handle_desktop_notification_action_invoked);
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
@@ -2520,8 +2523,9 @@ void dsnote_app::process_pending_desktop_notification() {
     } else {
         auto reply = m_dbus_notifications.Notify(
             "", m_desktop_notification->id, APP_ICON_ID,
-            m_desktop_notification->summary, m_desktop_notification->body, {},
-            {}, m_desktop_notification->permanent ? 0 : -1);
+            m_desktop_notification->summary, m_desktop_notification->body,
+            /*actions=*/{"default", tr("Show")}, {},
+            m_desktop_notification->permanent ? 0 : -1);
 
         reply.waitForFinished();
         if (reply.isValid()) {
@@ -2559,6 +2563,12 @@ void dsnote_app::show_desktop_notification(const QString &summary,
 void dsnote_app::handle_desktop_notification_closed(
     [[maybe_unused]] uint id, [[maybe_unused]] uint reason) {
     m_desktop_notification.reset();
+}
+
+void dsnote_app::handle_desktop_notification_action_invoked(
+    [[maybe_unused]] uint id, const QString &action_key) {
+    emit activate_requested();
+    close_desktop_notification();
 }
 
 bool dsnote_app::feature_available(const QString &name) const {

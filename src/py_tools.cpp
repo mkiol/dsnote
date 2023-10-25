@@ -33,9 +33,12 @@ std::ostream& operator<<(std::ostream& os,
        << ", unikud=" << availability.unikud
        << ", gruut_de=" << availability.gruut_de
        << ", gruut_es=" << availability.gruut_es
+       << ", gruut_fa=" << availability.gruut_fa
        << ", gruut_fr=" << availability.gruut_fr
+       << ", gruut_nl=" << availability.gruut_nl
        << ", gruut_it=" << availability.gruut_it
        << ", gruut_ru=" << availability.gruut_ru
+       << ", gruut_sw=" << availability.gruut_sw
        << ", mecab=" << availability.mecab
        << ", torch-cuda=" << availability.torch_cuda;
 
@@ -53,7 +56,7 @@ libs_availability_t libs_availability() {
     using namespace pybind11::literals;
 
     try {
-        py::module_::import("TTS.utils.synthesizer");
+        py::module_::import("TTS");
         availability.coqui_tts = true;
     } catch (const std::exception& err) {
         LOGE("py error: " << err.what());
@@ -89,7 +92,7 @@ libs_availability_t libs_availability() {
     }
 
     try {
-        py::module_::import("unikud.framework");
+        py::module_::import("unikud");
         availability.unikud = true;
     } catch (const std::exception& err) {
         LOGE("py error: " << err.what());
@@ -129,6 +132,27 @@ libs_availability_t libs_availability() {
         try {
             py::module_::import("gruut_lang_ru");
             availability.gruut_ru = true;
+        } catch (const std::exception& err) {
+            LOGE("py error: " << err.what());
+        }
+
+        try {
+            py::module_::import("gruut_lang_fa");
+            availability.gruut_fa = true;
+        } catch (const std::exception& err) {
+            LOGE("py error: " << err.what());
+        }
+
+        try {
+            py::module_::import("gruut_lang_sw");
+            availability.gruut_sw = true;
+        } catch (const std::exception& err) {
+            LOGE("py error: " << err.what());
+        }
+
+        try {
+            py::module_::import("gruut_lang_nl");
+            availability.gruut_nl = true;
         } catch (const std::exception& err) {
             LOGE("py error: " << err.what());
         }

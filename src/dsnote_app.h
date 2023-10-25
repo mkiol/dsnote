@@ -283,6 +283,7 @@ class dsnote_app : public QObject {
     void can_open_next_file();
     void features_availability_updated();
     void features_changed();
+    void activate_requested();
 
    private:
     enum class action_t {
@@ -529,6 +530,8 @@ class dsnote_app : public QObject {
     void execute_pending_action();
     void process_pending_desktop_notification();
     void handle_desktop_notification_closed(uint id, uint reason);
+    void handle_desktop_notification_action_invoked(uint id,
+                                                    const QString &action_key);
     bool feature_available(const QString &name) const;
     bool feature_fasterwhisper_stt() const;
     bool feature_fasterwhisper_stt_gpu() const;

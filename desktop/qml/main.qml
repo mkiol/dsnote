@@ -347,5 +347,6 @@ ApplicationWindow {
         onStateChanged: update_dektop_notification()
         onTask_state_changed: update_dektop_notification()
         onIntermediate_text_changed: update_dektop_notification()
+        onActivate_requested: appWin.raise()
     }
 }

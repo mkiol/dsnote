@@ -58,7 +58,8 @@ if(arch_x8664)
                 -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
                 -DWHISPER_CLBLAST=ON
                 -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
-            INSTALL_COMMAND cp libwhisper.so ${external_lib_dir}/libwhisper-clblast.so
+                -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
+            INSTALL_COMMAND make install && cp ${external_lib_dir}/libwhisper.so ${external_lib_dir}/libwhisper-clblast.so
             BUILD_ALWAYS False
         )
 
@@ -86,7 +87,8 @@ if(arch_x8664)
                 -DWHISPER_CUBLAS=ON
                 -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
                 -DCMAKE_CUDA_ARCHITECTURES=50\\\\\\\\\\\\;52\\\\\\\\\\\\;53\\\\\\\\\\\\;60\\\\\\\\\\\\;61\\\\\\\\\\\\;62\\\\\\\\\\\\;70\\\\\\\\\\\\;72\\\\\\\\\\\\;75\\\\\\\\\\\\;80\\\\\\\\\\\\;86\\\\\\\\\\\\;87\\\\\\\\\\\\;89\\\\\\\\\\\\;90
-            INSTALL_COMMAND cp libwhisper.so ${external_lib_dir}/libwhisper-cublas.so
+                -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
+            INSTALL_COMMAND make install && cp ${external_lib_dir}/libwhisper.so ${external_lib_dir}/libwhisper-cublas.so
             BUILD_ALWAYS False
         )
 
@@ -111,7 +113,8 @@ if(arch_x8664)
                 -DWHISPER_HIPBLAS=ON
                 -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
                 -DCMAKE_HIP_ARCHITECTURES="gfx701 gfx801 gfx802 gfx803 gfx900 gfx906 gfx908 gfx1010 gfx1011 gfx1012 gfx1030 gfx1031"
-            INSTALL_COMMAND cp libwhisper.so ${external_lib_dir}/libwhisper-hipblas.so
+                -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
+            INSTALL_COMMAND make install && cp ${external_lib_dir}/libwhisper.so ${external_lib_dir}/libwhisper-hipblas.so
             BUILD_ALWAYS False
         )
 
@@ -156,7 +159,8 @@ ExternalProject_Add(whispercppfallback
         -DWHISPER_OPENBLAS=ON
         -DWHISPER_NO_AVX=ON -DWHISPER_NO_AVX2=ON -DWHISPER_NO_FMA=ON -DWHISPER_NO_F16C=ON
         -DCMAKE_C_FLAGS=${whispercppfallback_flags} -DCMAKE_CXX_FLAGS=${whispercppfallback_flags}
-    INSTALL_COMMAND cp libwhisper.so ${external_lib_dir}/libwhisper-fallback.so
+        -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
+    INSTALL_COMMAND make install && cp ${external_lib_dir}/libwhisper.so ${external_lib_dir}/libwhisper-fallback.so
     BUILD_ALWAYS False
 )
 
@@ -177,7 +181,8 @@ ExternalProject_Add(whispercppopenblas
         -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
         -DWHISPER_OPENBLAS=ON
         -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
-    INSTALL_COMMAND make install && cp libwhisper.so ${external_lib_dir}/libwhisper-openblas.so
+        -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
+    INSTALL_COMMAND make install && cp ${external_lib_dir}/libwhisper.so ${external_lib_dir}/libwhisper-openblas.so
     BUILD_ALWAYS False
 )
 

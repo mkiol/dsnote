@@ -62,8 +62,12 @@ void py_executor::loop() {
     try {
         m_py_interpreter.emplace();
 
-        if (settings::instance()->py_scan())
+        if (settings::instance()->py_feature_scan()) {
             libs_availability = py_tools::libs_availability();
+        } else {
+            LOGW("py scan is off");
+            libs_availability = py_tools::libs_availability_t{};
+        }
 
         while (!m_shutting_down) {
             std::unique_lock<std::mutex> lock{m_mutex};

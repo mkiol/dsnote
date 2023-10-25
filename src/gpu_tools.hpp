@@ -29,6 +29,7 @@ void add_cuda_devices(std::vector<device>& devices);
 void add_hip_devices(std::vector<device>& devices);
 bool has_cuda();
 bool has_cudnn();
+bool has_clblast();
 
 }  // namespace gpu_tools
 

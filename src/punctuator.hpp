@@ -20,7 +20,7 @@ namespace py = pybind11;
 
 class punctuator {
    public:
-    punctuator(const std::string& model_path);
+    punctuator(const std::string& model_path, int device = -1);
     ~punctuator();
     std::string process(std::string text);
 

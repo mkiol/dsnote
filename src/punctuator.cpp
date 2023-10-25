@@ -16,11 +16,13 @@
 
 using namespace pybind11::literals;
 
-punctuator::punctuator(const std::string& model_path) {
+punctuator::punctuator(const std::string& model_path, int device) {
     auto* pe = py_executor::instance();
 
-    pe->execute([&]() {
+    pe->execute([&, dev = pe->libs_availability->torch_cuda ? device : -1]() {
           try {
+              LOGD("creating punctuator: device=" << dev);
+
               auto trans_module = py::module_::import("transformers");
               auto tokenizer_class = trans_module.attr("AutoTokenizer");
               auto model_class =
@@ -35,9 +37,9 @@ punctuator::punctuator(const std::string& model_path) {
                   model_path, "local_files_only"_a = true,
                   "low_cpu_mem_usage"_a = true);
 
-              m_pipeline =
-                  pipeline_class("model"_a = model, "tokenizer"_a = tokenizer,
-                                 "aggregation_strategy"_a = "simple");
+              m_pipeline = pipeline_class(
+                  "model"_a = model, "tokenizer"_a = tokenizer,
+                  "aggregation_strategy"_a = "simple", "device"_a = dev);
           } catch (const std::exception& err) {
               LOGE("py error: " << err.what());
               throw std::runtime_error(std::string{"py error: "} + err.what());

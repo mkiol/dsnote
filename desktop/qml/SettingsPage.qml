@@ -328,17 +328,17 @@ DialogPage {
 
             CheckBox {
                 visible: _settings.gpu_supported()
-                checked: _settings.whisper_use_gpu
-                text: qsTr("Use GPU acceleration for Whisper")
+                checked: _settings.stt_use_gpu
+                text: qsTr("Use GPU acceleration")
                 onCheckedChanged: {
-                    _settings.whisper_use_gpu = checked
+                    _settings.stt_use_gpu = checked
                 }
 
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("If a suitable graphics card is found in the system, it will be used to accelerate processing.") + " " +
                               qsTr("GPU hardware acceleration significantly reduces the time of decoding.") + " " +
-                              qsTr("Disable this option if you observe problems when using Speech to Text with %1 models.").arg("<i>Whisper</i>")
+                              qsTr("Disable this option if you observe problems when using Speech to Text.")
             }
 
             Label {
@@ -346,16 +346,16 @@ DialogPage {
                 Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                 Layout.fillWidth: true
                 visible: _settings.gpu_supported() &&
-                         _settings.whisper_use_gpu &&
-                         _settings.gpu_devices_whisper.length <= 1
+                         _settings.stt_use_gpu &&
+                         _settings.gpu_devices_stt.length <= 1
                 color: "red"
                 text: qsTr("A suitable graphics card could not be found.")
             }
 
             GridLayout {
                 visible: _settings.gpu_supported() &&
-                         _settings.whisper_use_gpu &&
-                         _settings.gpu_devices_whisper.length > 1
+                         _settings.stt_use_gpu &&
+                         _settings.gpu_devices_stt.length > 1
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
@@ -369,67 +369,10 @@ DialogPage {
                 ComboBox {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    currentIndex: _settings.gpu_device_idx_whisper
-                    model: _settings.gpu_devices_whisper
+                    currentIndex: _settings.gpu_device_idx_stt
+                    model: _settings.gpu_devices_stt
                     onActivated: {
-                        _settings.gpu_device_idx_whisper = index
-                    }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Select preferred graphics card for hardware acceleration.")
-                }
-            }
-
-            CheckBox {
-                visible: _settings.gpu_supported() && app.feature_fasterwhisper_stt_gpu
-                checked: _settings.fasterwhisper_use_gpu
-                text: qsTr("Use GPU acceleration for Faster Whisper")
-                onCheckedChanged: {
-                    _settings.fasterwhisper_use_gpu = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("If a suitable graphics card is found in the system, it will be used to accelerate processing.") + " " +
-                              qsTr("GPU hardware acceleration significantly reduces the time of decoding.") + " " +
-                              qsTr("Disable this option if you observe problems when using Speech to Text with %1 models.").arg("<i>Faster Whisper</i>")
-            }
-
-            Label {
-                wrapMode: Text.Wrap
-                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
-                Layout.fillWidth: true
-                visible: _settings.gpu_supported() &&
-                         _settings.fasterwhisper_use_gpu &&
-                         app.feature_fasterwhisper_stt_gpu &&
-                         _settings.gpu_devices_fasterwhisper.length <= 1
-                color: "red"
-                text: qsTr("A suitable graphics card could not be found.")
-            }
-
-            GridLayout {
-                visible: _settings.gpu_supported() &&
-                         _settings.fasterwhisper_use_gpu &&
-                         app.feature_fasterwhisper_stt_gpu &&
-                         _settings.gpu_devices_fasterwhisper.length > 1
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    wrapMode: Text.Wrap
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
-                    Layout.fillWidth: true
-                    text: qsTr("Graphics card")
-                }
-                ComboBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    currentIndex: _settings.gpu_device_idx_fasterwhisper
-                    model: _settings.gpu_devices_fasterwhisper
-                    onActivated: {
-                        _settings.gpu_device_idx_fasterwhisper = index
+                        _settings.gpu_device_idx_stt = index
                     }
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -514,18 +457,18 @@ DialogPage {
             }
 
             CheckBox {
-                checked: _settings.coqui_use_gpu
-                visible: _settings.gpu_supported() && app.feature_coqui_tts_gpu
-                text: qsTr("Use GPU acceleration for Coqui")
+                checked: _settings.tts_use_gpu
+                visible: _settings.gpu_supported()
+                text: qsTr("Use GPU acceleration")
                 onCheckedChanged: {
-                    _settings.coqui_use_gpu = checked
+                    _settings.tts_use_gpu = checked
                 }
 
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("If a suitable graphics card is found in the system, it will be used to accelerate processing.") + " " +
                               qsTr("GPU hardware acceleration significantly reduces the time of speech synthesis.") + " " +
-                              qsTr("Disable this option if you observe problems when using Text to Speech with %1 models.").arg("<i>Coqui</i>")
+                              qsTr("Disable this option if you observe problems when using Text to Speech.")
             }
 
             Label {
@@ -533,18 +476,16 @@ DialogPage {
                 Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                 Layout.fillWidth: true
                 visible: _settings.gpu_supported() &&
-                         _settings.coqui_use_gpu &&
-                         app.feature_coqui_tts_gpu &&
-                         _settings.gpu_devices_coqui.length <= 1
+                         _settings.tts_use_gpu &&
+                         _settings.gpu_devices_tts.length <= 1
                 color: "red"
                 text: qsTr("A suitable graphics card could not be found.")
             }
 
             GridLayout {
                 visible: _settings.gpu_supported() &&
-                         _settings.coqui_use_gpu &&
-                         app.feature_coqui_tts_gpu &&
-                         _settings.gpu_devices_coqui.length > 1
+                         _settings.tts_use_gpu &&
+                         _settings.gpu_devices_tts.length > 1
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
@@ -558,10 +499,10 @@ DialogPage {
                 ComboBox {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    currentIndex: _settings.gpu_device_idx_coqui
-                    model: _settings.gpu_devices_coqui
+                    currentIndex: _settings.gpu_device_idx_tts
+                    model: _settings.gpu_devices_tts
                     onActivated: {
-                        _settings.gpu_device_idx_coqui = index
+                        _settings.gpu_device_idx_tts = index
                     }
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -827,7 +768,7 @@ DialogPage {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Try to find NVIDIA CUDA compatible graphic cards in the system.") + " " +
-                              qsTr("Disable this option if you observe problems.")
+                              qsTr("Disable this option if you observe problems when launching the application.")
             }
 
             CheckBox {
@@ -840,7 +781,7 @@ DialogPage {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Try to find AMD ROCm compatible graphic cards in the system.") + " " +
-                              qsTr("Disable this option if you observe problems.")
+                              qsTr("Disable this option if you observe problems when launching the application.")
             }
 
             RowLayout {
@@ -855,7 +796,7 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
-                                  qsTr("Disable this option if you observe problems.")
+                                  qsTr("Disable this option if you observe problems when launching the application.")
                 }
 
                 ComboBox {
@@ -874,6 +815,7 @@ DialogPage {
 
             ColumnLayout {
                 spacing: appWin.padding
+                Layout.bottomMargin: appWin.padding
 
                 BusyIndicator {
                     visible: featureRepeter.model.length === 0
@@ -900,6 +842,19 @@ DialogPage {
                         }
                     }
                 }
+            }
+
+            CheckBox {
+                checked: _settings.py_feature_scan
+                text: qsTr("Check Python dependencies")
+                onCheckedChanged: {
+                    _settings.py_feature_scan = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Check the presence of the required Python libraries.") + " " +
+                              qsTr("Disable this option if you observe problems when launching the application.")
             }
         }
     }

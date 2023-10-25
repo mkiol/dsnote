@@ -466,7 +466,6 @@ class speech_service : public QObject, public singleton<speech_service> {
     void update_task_state();
     static void remove_cached_media_files();
     void handle_tts_queue();
-    static void setup_modules();
     static std::vector<std::reference_wrapper<const model_data_t>>
     model_data_for_lang(
         const QString &lang_id,
@@ -477,6 +476,8 @@ class speech_service : public QObject, public singleton<speech_service> {
                                     models_manager::model_engine_t engine);
     static unsigned int tts_speech_speed_from_options(
         const QVariantMap &options);
+    static void setup_modules();
+    static void setup_env();
 
     // DBus
     Q_INVOKABLE int Cancel(int task);

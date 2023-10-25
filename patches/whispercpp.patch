@@ -1,3 +1,21 @@
+diff -ruN whispercpp-org/cmake/DefaultTargetOptions.cmake whispercpp-patched/cmake/DefaultTargetOptions.cmake
+--- whispercpp-org/cmake/DefaultTargetOptions.cmake	2023-09-15 20:11:43.000000000 +0200
++++ whispercpp-patched/cmake/DefaultTargetOptions.cmake	2023-10-23 11:12:05.417372295 +0200
+@@ -9,9 +9,13 @@
+         cxx_std_11
+     )
+ 
++if (NOT DEFINED CMAKE_INSTALL_RPATH)
++    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
++endif()
++
+ set_target_properties(${TARGET}
+     PROPERTIES
+         EXPORT_COMPILE_COMMANDS ON
+         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+-        INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib"
++        INSTALL_RPATH ${CMAKE_INSTALL_RPATH}
+ )
 diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
 --- whispercpp-org/CMakeLists.txt	2023-09-15 20:11:43.000000000 +0200
 +++ whispercpp-patched/CMakeLists.txt	2023-10-21 14:11:32.423632480 +0200

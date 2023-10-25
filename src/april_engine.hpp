@@ -15,7 +15,6 @@
 #include <string>
 #include <vector>
 
-#include "punctuator.hpp"
 #include "stt_engine.hpp"
 
 struct VoskModel;
@@ -34,13 +33,11 @@ class april_engine : public stt_engine {
     AprilASRModel m_model = nullptr;
     AprilASRSession m_session = nullptr;
     april_buf_t m_speech_buf;
-    std::optional<punctuator> m_punctuator;
     std::string m_result;
     std::string m_result_prev;
     std::string m_result_prev_segment;
 
     void create_model();
-    void create_punctuator();
     samples_process_result_t process_buff() override;
     void decode_speech(april_buf_t& buf, bool eof);
     void reset_impl() override;

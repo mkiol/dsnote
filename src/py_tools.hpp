@@ -22,9 +22,12 @@ struct libs_availability_t {
     bool unikud = false;
     bool gruut_de = false;
     bool gruut_es = false;
+    bool gruut_fa = false;
     bool gruut_fr = false;
     bool gruut_it = false;
+    bool gruut_nl = false;
     bool gruut_ru = false;
+    bool gruut_sw = false;
     bool mecab = false;
 };
 

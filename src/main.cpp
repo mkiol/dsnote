@@ -48,7 +48,6 @@
 #include "dsnote_app.h"
 #include "logger.hpp"
 #include "models_list_model.h"
-#include "py_executor.hpp"
 #include "qtlogger.hpp"
 #include "settings.h"
 #include "speech_config.h"
@@ -74,6 +73,7 @@ struct cmd_options {
     bool verbose = false;
     bool gen_cheksums = false;
     bool gpu_scan_off = false;
+    bool py_scan_off = false;
     QString action;
     QStringList files;
 };
@@ -129,6 +129,13 @@ static cmd_options check_options(const QCoreApplication& app) {
                        "Use this option when you observing problems in "
                        "starting the app.")};
     parser.addOption(gpuscanoff_opt);
+
+    QCommandLineOption pyscanoff_opt{
+        QStringLiteral("py-scan-off"),
+        QStringLiteral("Disables scanning for Python libraries. "
+                       "Use this option when you observing problems in "
+                       "starting the app.")};
+    parser.addOption(pyscanoff_opt);
 
     parser.addHelpOption();
     parser.addVersionOption();
@@ -194,6 +201,7 @@ static cmd_options check_options(const QCoreApplication& app) {
     options.verbose = parser.isSet(verbose_opt);
     options.gen_cheksums = parser.isSet(gen_checksum_opt);
     options.gpu_scan_off = parser.isSet(gpuscanoff_opt);
+    options.py_scan_off = parser.isSet(pyscanoff_opt);
     options.files = parser.positionalArguments();
 
     return options;
@@ -252,10 +260,8 @@ static void install_translator() {
 static void start_service(const cmd_options& options) {
     if (options.gpu_scan_off)
         settings::instance()->disable_gpu_scan();
-    else
-        settings::instance()->scan_gpu_devices();
+    if (options.py_scan_off) settings::instance()->disable_py_scan();
 
-    py_executor::instance()->start();
     speech_service::instance();
 
     if (options.gen_cheksums) models_manager::instance()->generate_checksums();
@@ -265,13 +271,10 @@ static void start_service(const cmd_options& options) {
 
 static void start_app(const cmd_options& options, app_server& dbus_app_server) {
     if (options.gpu_scan_off) settings::instance()->disable_gpu_scan();
-
-    /*else
-        settings::instance()->scan_gpu_devices();*/
+    if (options.py_scan_off) settings::instance()->disable_py_scan();
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
-        py_executor::instance()->start();
         speech_service::instance();
 
         if (options.gen_cheksums)
@@ -360,6 +363,8 @@ int main(int argc, char* argv[]) {
     Logger::init(cmd_opts.verbose ? Logger::LogType::Trace
                                   : Logger::LogType::Error);
     initQtLogger();
+
+    qDebug() << "version:" << APP_VERSION;
 
     install_translator();
 
