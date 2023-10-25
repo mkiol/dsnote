@@ -1,0 +1,641 @@
+app-id: net.mkiol.SpeechNote
+runtime: org.kde.Platform
+runtime-version: "5.15-22.08"
+sdk: org.kde.Sdk
+rename-desktop-file: dsnote.desktop
+rename-icon: dsnote
+rename-appdata-file: dsnote.metainfo.xml
+command: dsnote
+build-options:
+  strip: true
+  no-debuginfo: true
+finish-args:
+  - --share=ipc
+  - --share=network
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --socket=pulseaudio
+  - --device=dri
+  - --filesystem=xdg-desktop
+  - --filesystem=xdg-download
+  - --filesystem=xdg-music
+  - --filesystem=xdg-documents
+  - --filesystem=xdg-videos
+  - --talk-name=org.freedesktop.Notifications
+cleanup:
+  - "/cmake"
+  - "/etc"
+  - "/man"
+  - "/dummy"
+  - "/include"
+  - "/lib/fst"
+  - "/lib/cmake"
+  - "/lib/pkgconfig"
+  - "/lib/debug"
+  - "/lib/python3.10/site-packages/nvidia*"
+  - "/lib/python3.10/site-packages/cmake*"
+  - "/lib/python3.10/site-packages/git*"
+  - "/lib/python3.10/site-packages/Git*"
+  - "/lib/python3.10/site-packages/torch/test"
+  - "/lib/python3.10/site-packages/torch/include"
+  - "/lib/python3.10/site-packages/pypinyin/__pycache__"
+  - "/lib/python3.10/site-packages/pandas/tests"
+  - "/lib/python3.10/site-packages/torchvision*"
+  - "/share/cmake"
+  - "/share/doc"
+  - "/share/locale"
+  - "/share/man"
+  - "/share/pkgconfig"
+  - "/share/runtime"
+  - "/share/vim"
+  - "/share/ffmpeg"
+  - "/share/aclocal"
+  - "/bin/nasm"
+  - "/bin/ndisasm"
+  - "/bin/taglib*"
+  - "/bin/spellout"
+  - "*/cmake/*"
+  - "pcre2*"
+  - "xz*"
+  - "unxz*"
+  - "*.a"
+  - "*.la"
+modules:
+  - name: fmt
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DFMT_DOC=OFF
+      - -DFMT_TEST=OFF
+      - -DFMT_FUZZ=OFF
+    sources:
+      - type: archive
+        url: https://github.com/fmtlib/fmt/releases/download/9.1.0/fmt-9.1.0.zip
+        sha256: cceb4cb9366e18a5742128cb3524ce5f50e88b476f1e54737a47ffdf4df4c996
+
+  - name: openblas
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_TESTING=OFF
+      - -DBUILD_WITHOUT_LAPACK=OFF
+      - -DC_LAPACK=ON
+      - -DDYNAMIC_ARCH=ON
+      - -DBUILD_STATIC_LIBS=OFF
+      - -DBUILD_SHARED_LIBS=ON
+    build-options:
+      arch:
+        aarch64:
+          config-opts:
+            - -DTARGET=ARMV8
+    sources:
+      - type: archive
+        url: https://github.com/xianyi/OpenBLAS/releases/download/v0.3.21/OpenBLAS-0.3.21.tar.gz
+        sha256: f36ba3d7a60e7c8bcc54cd9aaa9b1223dd42eaf02c811791c37e8ca707c241ca
+
+  - name: xz
+    buildsystem: autotools
+    config-opts:
+      - --enable-xz
+      - --disable-xzdec
+      - --disable-lzmadec
+      - --disable-lzmainfo
+      - --disable-lzma-links
+      - --disable-scripts
+      - --disable-doc
+      - --disable-shared
+      - --enable-static
+      - --with-pic
+    sources:
+      - type: archive
+        url: https://downloads.sourceforge.net/lzmautils/xz-5.4.2.tar.gz
+        sha256: 87947679abcf77cc509d8d1b474218fd16b72281e2797360e909deaee1ac9d05
+
+  - name: mbrola
+    buildsystem: simple
+    build-commands:
+      - make
+      - "cp Bin/mbrola /app/bin"
+    sources:
+      - type: archive
+        url: https://github.com/numediart/MBROLA/archive/refs/tags/3.3.tar.gz
+        sha256: c01ded2c0a05667e6df2439c1c02b011a5df2bfdf49e24a524630686aea2b558
+
+  - name: espeak
+    buildsystem: autotools
+    config-opts:
+      - --with-pic
+      - --with-pcaudiolib=no
+      - --with-sonic=no
+      - --with-speechplayer=no
+      - --with-mbrola=yes
+      - --enable-static
+    sources:
+      - type: archive
+        url: https://github.com/rhasspy/espeak-ng/archive/61504f6b76bf9ebbb39b07d21cff2a02b87c99ff.zip
+        sha256: 8d9ce96189d231e527af5e26f49e293f01056a886c14a7c8eac1d58e7ced45ec
+
+  - name: boost
+    buildsystem: simple
+    build-commands:
+      - "./bootstrap.sh --prefix=/app --with-libraries=system"
+      - "./b2 -j ${FLATPAK_BUILDER_N_JOBS} install"
+    sources:
+      - type: archive
+        url: https://boostorg.jfrog.io/artifactory/main/release/1.82.0/source/boost_1_82_0.tar.bz2
+        sha256: a6e1ab9b0860e6a2881dd7b21fe9f737a095e5f33a3a874afc6a345228597ee6
+
+  - name: webrtcvad
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    sources:
+      - type: archive
+        url: https://github.com/webrtc-mirror/webrtc/archive/ac87c8df2780cb12c74942ec8a473718c76cb5b7.zip
+        sha256: 9ceb1dbd7da99ec2efd6bc18ac1004d446f51e79969203b086b4dcf0ca534c68
+      - type: patch
+        path: ../patches/webrtcvad.patch
+
+  - name: libstt
+    buildsystem: simple
+    build-commands:
+      - "chmod --recursive u+w ."
+      - "cp ./libstt.so /app/lib"
+      - "cp ./libkenlm.so /app/lib"
+      - "cp ./libtensorflowlite.so /app/lib"
+      - "cp ./libtflitedelegates.so /app/lib"
+      - "cp ./coqui-stt.h /app/include"
+    sources:
+      - type: archive
+        only-arches:
+          - x86_64
+        strip-components: 0
+        url: https://github.com/coqui-ai/STT/releases/download/v1.1.0/native_client.tflite.Linux.tar.xz
+        sha256: a6965f80cbfc92e403b2e4ab92e13650c76f131cbefb951b314df046c9e11799
+      - type: archive
+        only-arches:
+          - aarch64
+        strip-components: 0
+        url: https://github.com/coqui-ai/STT/releases/download/v1.1.0/native_client.tflite.linux.aarch64.tar.xz
+        sha256: 5c8ce5e4bb2d8fa55f5a6ac58103d9aee6a080369bc99cd5910d2615783e1ba3
+
+  - name: vosk
+    buildsystem: simple
+    build-commands:
+      - "cp ./libvosk.so /app/lib"
+      - "cp ./vosk_api.h /app/include"
+    sources:
+      - type: archive
+        only-arches:
+          - x86_64
+        url: https://github.com/alphacep/vosk-api/releases/download/v0.3.45/vosk-linux-x86_64-0.3.45.zip
+        sha256: bbdc8ed85c43979f6443142889770ea95cbfbc56cffb5c5dcd73afa875c5fbb2
+      - type: archive
+        only-arches:
+          - aarch64
+        url: https://github.com/alphacep/vosk-api/releases/download/v0.3.45/vosk-linux-aarch64-0.3.45.zip
+        sha256: 45e95d37755deb07568e79497d7feba8c03aee5a9e071df29961aa023fd94541
+
+  - name: onnx
+    buildsystem: simple
+    build-commands:
+      - "cp -r --no-target-directory ./include /app/include"
+      - "cp -r --no-target-directory ./lib /app/lib"
+    sources:
+      - type: archive
+        only-arches:
+          - x86_64
+        url: https://github.com/microsoft/onnxruntime/releases/download/v1.16.1/onnxruntime-linux-x64-1.16.1.tgz
+        sha256: 53a0f03f71587ed602e99e82773132fc634b74c2d227316fbfd4bf67181e72ed
+      - type: archive
+        only-arches:
+          - aarch64
+        url: https://github.com/microsoft/onnxruntime/releases/download/v1.16.1/onnxruntime-linux-aarch64-1.16.1.tgz
+        sha256: f10851b62eb44f9e811134737e7c6edd15733d2c1549cb6ce403808e9c047385
+
+  - name: piperphonemize
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DPKG_CONFIG_USE_CMAKE_PREFIX_PATH=ON
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    sources:
+      - type: archive
+        url: https://github.com/rhasspy/piper-phonemize/archive/7f7b5bd4de22f7fe24341c5bedda0dc1e33f3666.zip
+        sha256: 6bdcb21f6c5ae0deff7c9ae26bf07b994791dc800c1962fd216727e66a409929
+      - type: patch
+        path: ../patches/piperphonemize.patch
+
+  - name: spdlog
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    sources:
+      - type: archive
+        url: https://github.com/gabime/spdlog/archive/refs/tags/v1.11.0.tar.gz
+        sha256: ca5cae8d6cac15dae0ec63b21d6ad3530070650f68076f3a4a862ca293a858bb
+
+  - name: piper
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DPKG_CONFIG_USE_CMAKE_PREFIX_PATH=ON
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DPIPER_PHONEMIZE_INCLUDE=/app/include/piper-phonemize
+    sources:
+      - type: archive
+        url: https://github.com/rhasspy/piper/archive/e268564deb779af984ac8f632c98727447632124.zip
+        sha256: 213a31c23c862cbcd9de4231c07d32de35f4ee0b5b5dec52e9ae6dd3aa70ac12
+      - type: patch
+        path: ../patches/piper.patch
+
+  - name: ssplitcpp
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DSSPLIT_COMPILE_LIBRARY_ONLY=ON
+      - -DSSPLIT_PREFER_STATIC_COMPILE=ON
+      - -DBUILD_SHARED_LIBS=OFF
+    sources:
+      - type: archive
+        url: https://github.com/ugermann/ssplit-cpp/archive/49a8e12f11945fac82581cf056560965dcb641e6.zip
+        sha256: 31b9556e539bbd35b79d9075e1a0593233b2050c277c4058fbd290985930a39b
+      - type: patch
+        path: ../patches/ssplitcpp.patch
+
+  - name: pybind11
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=OFF
+      - -DPYBIND11_INSTALL=ON
+      - -DPYBIND11_TEST=OFF
+      - -DPYBIND11_FINDPYTHON=ON
+    sources:
+      - type: archive
+        url: https://github.com/pybind/pybind11/archive/refs/tags/v2.10.4.tar.gz
+        sha256: 832e2f309c57da9c1e6d4542dedd34b24e4192ecb4d62f6f4866a737454c9970
+
+  - name: rnnoise
+    buildsystem: autotools
+    config-opts:
+      - --disable-examples
+      - --disable-doc
+      - --disable-shared
+      - --enable-static
+      - --with-pic
+    sources:
+      - type: archive
+        url: https://github.com/GregorR/rnnoise-nu/archive/26269304e120499485438cd93acf5127c6908c68.zip
+        sha256: 93a994a3d59cb89c005f0f861fd522fe268780dc0e2e2acea56945305ed0cbf1
+
+  - name: rhvoice
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DWITH_DATA=OFF
+      - -DENABLE_MAGE=OFF
+      - -DBUILD_CLIENT=OFF
+      - -DBUILD_UTILS=OFF
+      - -DBUILD_TESTS=OFF
+      - -DBUILD_SERVICE=OFF
+      - -DBUILD_SPEECHDISPATCHER_MODULE=OFF
+      - -DCMAKE_INSTALL_LIBDIR=/app/lib
+    post-install:
+      - "mkdir -p /app/share/rhvoice"
+      - "cp -R data /app/share/rhvoice"
+      - "cp -R config /app/share/rhvoice"
+    cleanup:
+      - "libboost*"
+      - "libRHVoice_audio*"
+      - "/share/rhvoice"
+    sources:
+      - type: git
+        url: https://github.com/RHVoice/RHVoice.git
+        commit: 408db88bd1dd68fe23aef3ffac30f92018398d8b
+      - type: patch
+        path: ../patches/rhvoice.patch
+
+  - name: bergamot-fallback
+    only-arches:
+      - x86_64
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
+      - -DBLAS_INC_DIR=/app/include/openblas
+      - -DUSE_INTRINSICS_SSE2=ON
+      - -DUSE_INTRINSICS_SSE3=OFF
+      - -DUSE_INTRINSICS_SSE41=OFF
+      - -DUSE_INTRINSICS_SSE42=OFF
+      - -DUSE_INTRINSICS_AVX=ON
+      - -DUSE_INTRINSICS_AVX2=OFF
+      - -DUSE_INTRINSICS_AVX512=OFF
+      - -DBUILD_ARCH=x86-64
+    post-install:
+      - "mv /app/lib/libbergamot_api.so /app/lib/libbergamot_api-fallback.so"
+    sources:
+      - type: git
+        url: https://github.com/browsermt/bergamot-translator.git
+        commit: ada8c3922490cc6a507bcf81fa4882b435595323
+      - type: patch
+        path: ../patches/bergamot.patch
+
+  - name: bergamot
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
+      - -DBLAS_INC_DIR=/app/include/openblas
+      - -DUSE_INTRINSICS_AVX512=OFF
+      - -DUSE_INTRINSICS_ARMV7_NEONVFPV4=ON
+    build-options:
+      arch:
+        x86-64:
+          config-opts:
+            - -DBUILD_ARCH=x86-64
+        aarch64:
+          config-opts:
+            - -DBUILD_ARCH=armv8-a
+    sources:
+      - type: git
+        url: https://github.com/browsermt/bergamot-translator.git
+        commit: ada8c3922490cc6a507bcf81fa4882b435595323
+      - type: patch
+        path: ../patches/bergamot.patch
+
+  - name: rubberband
+    only-arches:
+      - x86_64
+    buildsystem: meson
+    config-opts:
+      - --buildtype=release
+      - -Dauto_features=disabled
+      - -Ddefault_library=static
+      - -Dresampler=builtin
+      - -Dfft=builtin
+    sources:
+      - type: archive
+        url: https://breakfastquay.com/files/releases/rubberband-3.3.0.tar.bz2
+        sha256: d9ef89e2b8ef9f85b13ac3c2faec30e20acf2c9f3a9c8c45ce637f2bc95e576c
+
+  - name: ogg
+    buildsystem: autotools
+    config-opts:
+      - --enable-static=true
+      - --enable-shared=false
+      - --with-pic=yes
+    sources:
+      - type: archive
+        url: https://downloads.xiph.org/releases/ogg/libogg-1.3.5.tar.xz
+        sha256: c4d91be36fc8e54deae7575241e03f4211eb102afb3fc0775fbbc1b740016705
+
+  - name: vorbis
+    buildsystem: autotools
+    config-opts:
+      - --enable-static=true
+      - --enable-shared=false
+      - --disable-oggtest
+      - --with-pic=yes
+    sources:
+      - type: archive
+        url: https://ftp.osuosl.org/pub/xiph/releases/vorbis/libvorbis-1.3.7.tar.xz
+        sha256: b33cc4934322bcbf6efcbacf49e3ca01aadbea4114ec9589d1b1e9d20f72954b
+
+  - name: nasm
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/nasm-2.15.05.tar.gz
+        sha256: 9182a118244b058651c576baa9d0366ee05983c4d4ae1d9ddd3236a9f2304997
+
+  - name: lame
+    buildsystem: autotools
+    config-opts:
+      - --enable-static=true
+      - --enable-shared=false
+      - --enable-nasm
+      - --disable-decoder
+      - --disable-analyzer-hooks
+      - --disable-frontend
+      - --with-pic=yes
+    sources:
+      - type: archive
+        url: https://altushost-swe.dl.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz
+        sha256: ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
+
+  - name: ffmpeg
+    buildsystem: autotools
+    config-opts:
+      - --disable-autodetect
+      - --disable-doc
+      - --disable-programs
+      - --disable-everything
+      - --enable-static
+      - --disable-shared
+      - --enable-nonfree
+      - --enable-gpl
+      - --enable-pic
+      - --enable-protocol=file
+      - --enable-filter=aresample
+      - --enable-filter=aformat
+      - --enable-filter=anull
+      - --enable-encoder=libmp3lame
+      - --enable-encoder=libvorbis
+      - --enable-encoder=pcm_s16le
+      - --enable-decoder=pcm_u8
+      - --enable-decoder=pcm_u32le
+      - --enable-decoder=pcm_u32be
+      - --enable-decoder=pcm_u24le
+      - --enable-decoder=pcm_u24be
+      - --enable-decoder=pcm_u16le
+      - --enable-decoder=pcm_u16be
+      - --enable-decoder=pcm_s8
+      - --enable-decoder=pcm_s32le
+      - --enable-decoder=pcm_s32be
+      - --enable-decoder=pcm_s24le
+      - --enable-decoder=pcm_s24be
+      - --enable-decoder=pcm_s16le
+      - --enable-decoder=pcm_s16be
+      - --enable-decoder=pcm_f64le
+      - --enable-decoder=pcm_f64be
+      - --enable-decoder=pcm_f32le
+      - --enable-decoder=pcm_f32be
+      - --enable-decoder=aac
+      - --enable-decoder=aac_fixed
+      - --enable-decoder=aac_latm
+      - --enable-decoder=mp3
+      - --enable-decoder=mp3adu
+      - --enable-decoder=mp3adufloat
+      - --enable-decoder=mp3float
+      - --enable-decoder=mp3on4
+      - --enable-decoder=mp3on4float
+      - --enable-decoder=libvorbis
+      - --enable-decoder=flac
+      - --enable-decoder=opus
+      - --enable-muxer=mp3
+      - --enable-muxer=ogg
+      - --enable-muxer=wav
+      - --enable-demuxer=aac
+      - --enable-demuxer=mp3
+      - --enable-demuxer=mov
+      - --enable-demuxer=ogg
+      - --enable-demuxer=matroska
+      - --enable-demuxer=flac
+      - --enable-demuxer=wav
+      - --enable-demuxer=mpegvideo
+      - --enable-parser=aac
+      - --enable-parser=aac_latm
+      - --enable-parser=ac3
+      - --enable-libmp3lame
+      - --enable-libvorbis
+      - --extra-libs=-lvorbis -logg -lm
+    sources:
+      - type: archive
+        url: https://ffmpeg.org/releases/ffmpeg-6.0.tar.xz
+        sha256: 57be87c22d9b49c112b6d24bc67d42508660e6b718b3db89c44e47e289137082
+      - type: patch
+        path: ../patches/ffmpeg.patch
+
+  - name: taglib
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=OFF
+      - -DBUILD_TESTING=OFF
+      - -DBUILD_BINDINGS=OFF
+      - -DENABLE_STATIC_RUNTIME=OFF
+    sources:
+      - type: archive
+        url: https://taglib.org/releases/taglib-1.13.1.tar.gz
+        sha256: c8da2b10f1bfec2cd7dbfcd33f4a2338db0765d851a50583d410bacf055cfd0b
+
+  - name: whispercpp-openblas
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=ON
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+      - -DWHISPER_OPENBLAS=ON
+      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
+      - -DCMAKE_C_FLAGS='-O3 -I$$C_INCLUDE_PATH/openblas'
+      - -DCMAKE_CXX_FLAGS='-O3 -I$$CPLUS_INCLUDE_PATH/openblas'
+    post-install:
+        - "mv /app/lib/libwhisper.so /app/lib/libwhisper-openblas.so"
+    sources:
+      - type: archive
+        url: https://github.com/ggerganov/whisper.cpp/archive/951a1199265ff4424f938182542cf6bac9b36154.zip
+        sha256: cdbbaa45c50e6b12df933d7a5e914477edb918622d73d159dbec0867f5da2f63
+      - type: patch
+        path: ../patches/whispercpp.patch
+
+  - name: whispercpp-fallback
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=ON
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+      - -DWHISPER_OPENBLAS=ON
+      - -DWHISPER_NO_AVX=ON
+      - -DWHISPER_NO_AVX2=ON
+      - -DWHISPER_NO_FMA=ON
+      - -DWHISPER_NO_F16C=ON
+      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
+      - -DCMAKE_C_FLAGS='-O3 -I$$C_INCLUDE_PATH/openblas'
+      - -DCMAKE_CXX_FLAGS='-O3 -I$$CPLUS_INCLUDE_PATH/openblas'
+    post-install:
+      - "mv /app/lib/libwhisper.so /app/lib/libwhisper-fallback.so"
+    sources:
+      - type: archive
+        url: https://github.com/ggerganov/whisper.cpp/archive/951a1199265ff4424f938182542cf6bac9b36154.zip
+        sha256: cdbbaa45c50e6b12df933d7a5e914477edb918622d73d159dbec0867f5da2f63
+      - type: patch
+        path: ../patches/whispercpp.patch
+
+  - name: libnumbertext
+    buildsystem: autotools
+    config-opts:
+      - --enable-static=true
+      - --enable-shared=false
+      - --with-pic=yes
+    sources:
+      - type: archive
+        url: https://github.com/Numbertext/libnumbertext/archive/a4b0225813b015a0f796754bc6718be20dd9943c.zip
+        sha256: eb4f91e4c97bb47f8cb7a31d80fdd500024bd9160c9045cdd8dff28beeac4b7a
+      - type: shell
+        commands:
+          - "autoreconf -fi"
+
+  - name: qhotkey
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    sources:
+      - type: archive
+        url: https://github.com/Skycoder42/QHotkey/archive/cd72a013275803fce33e028fc8b05ae32248da1f.zip
+        sha256: 55995114e8b5947cb6a59a19a53840eaf81fddc420fd3d180dcb0db9d8d33e13
+
+  - name: april-asr
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    sources:
+      - type: archive
+        url: https://github.com/abb128/april-asr/archive/3308e68442664552de593957cad0fa443ea183dd.zip
+        sha256: 0640fc16a43018afb1db9f17e93f545d7ac1f07e4bc47ba318d2c7311bef2df5
+
+  - name: dsnote
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DWITH_FLATPAK=ON
+      - -DWITH_DESKTOP=ON
+      - -DDOWNLOAD_LIBSTT=OFF
+      - -DBUILD_VOSK=OFF
+      - -DBUILD_LIBARCHIVE=OFF
+      - -DBUILD_FMT=OFF
+      - -DBUILD_WHISPERCPP=OFF
+      - -DBUILD_WEBRTCVAD=OFF
+      - -DBUILD_OPENBLAS=OFF
+      - -DBUILD_XZ=OFF
+      - -DBUILD_RNNOISE=OFF
+      - -DBUILD_PYBIND11=OFF
+      - -DBUILD_PYTHON_MODULE=OFF
+      - -DBUILD_ESPEAK=OFF
+      - -DBUILD_PIPER=OFF
+      - -DBUILD_SSPLITCPP=OFF
+      - -DBUILD_RHVOICE=OFF
+      - -DBUILD_BERGAMOT=OFF
+      - -DBUILD_UROMAN=OFF
+      - -DBUILD_RUBBERBAND=OFF
+      - -DBUILD_FFMPEG=OFF
+      - -DBUILD_TAGLIB=OFF
+      - -DBUILD_LIBNUMBERTEXT=OFF
+      - -DBUILD_QHOTKEY=OFF
+      - -DBUILD_APRILASR=OFF
+      - -DWITH_PY=OFF
+    sources:
+      - type: dir
+        path: ../
+        skip:
+          - flatpak
+          - external
+          - build
+          - '*-bak*'
+          - misc
+          - '.git'
+          - '*.user.*'
