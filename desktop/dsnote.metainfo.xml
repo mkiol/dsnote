@@ -88,7 +88,7 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
-    <release version="4.3.0" date="2023-10-20">
+    <release version="4.3.0" date="2023-10-25">
       <description>
       <p>Accessibility:</p>
       <ul>
@@ -106,18 +106,19 @@
           desktop notifications are shown to indicate starting or ending of listening and reading.</li>
       <li>Opening files with Drag and Drop gesture.</li>
       <li>Speech speed control option has been moved to the main application window.</li>
+      <li>Fix: Application did not use native widgets on some platforms.</li>
       </ul>
       <p>Speech to Text:</p>
       <ul>
       <li>New languages: Afrikaans, Gujarati, Hausa, Telugu, Tswana, Javanese, Hebrew</li>
       <li>New engine: 'Faster Whisper'. It provides slightly better performance comparing
           to the existing engine for Whisper models, especially on bigger models like Medium or Large.</li>
-      <li>New engine: 'april-asr'. It's super fast and supports intermediate results.
+      <li>New engine: 'april-asr'. It's lightweight and super fast STT engine.
+          It supports intermediate results.
           New engine comes with models for the following languages: English, Polish.</li>
       <li>Inserting text to any active window. Using global keyboard shotcut or
           'action' you can directly insert the decoded text into any window
-          which is currently in focus. This feature only works under X11
-          and not for all applications.</li>
+          which is currently in focus.</li>
       <li>Copy text to the clipboard. Using global keyboard shotcut or
           'action' the decoded text can be copied to the clipboard
           instead of being inserted into the current note.</li>
@@ -140,16 +141,16 @@
           Polish, Czech, German, Ukrainian, Vietnamese, Serbian, French, Spanish, Nepali.</li>
       <li>More steps in the 'Speech speed' option. You can set speed from 0.1 to 2.0 values.</li>
       <li>Diacritical marks restoration before speech synthesis for Arabic and Hebrew.</li>
+      <li>Support for GPU acceleration for 'Coqui' models.</i>
+      </li>
       <li>Fix: Coqui Chinese MMS Hakka and Min Nan voices were broken.</li>
       <li>Fix: Exporting to audio file was not possible when text was very long.</li>
       </ul>
       <p>Other:</p>
       <ul>
-      <li>Setting option to disable support for certain graphic cards.
-          Use this option if you observe problems when using GPU acceleration.</li>
+      <li>Setting option to disable support for certain graphic cards.</li>
       <li>Detecting the availability of the optional features.
-          In the settings, you can check what optional features are available.
-          Feature availability depends on the libraries installed on your system.</li>
+          In the settings, you can check what optional features are available.</li>
       </ul>
       </description>
     </release>

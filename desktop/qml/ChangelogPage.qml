@@ -45,7 +45,8 @@ DialogPage {
         <li>New languages: Afrikaans, Gujarati, Hausa, Telugu, Tswana, Javanese, Hebrew</li>
         <li>New engine: <i>Faster Whisper</i>. It provides slightly better performance compared to the existing engine
             for Whisper models, especially on bigger models like Medium or Large.</li>
-        <li>New engine: <i>april-asr</i>. It's super fast and supports intermediate results.
+        <li>New engine: <i>april-asr</i>. It's lightweight and super fast STT engine.
+            It supports intermediate results.
             New engine comes with models for the following languages: English, Polish.</li>
         <li>Inserting text to any active window. Using global keyboard shotcut or
             <i>start-listening-active-window</i> action you can
@@ -69,13 +70,19 @@ DialogPage {
         </li>
         <li>Reading text from the clipboard. Using global keyboard shotcut or
             <i>start-reading-clipboard</i> action you can directly read text that is in the clipboard.</li>
-        <li>New Piper voices for the following languages: Arabic, English, Hungarian, Polish, Czech, German,
+        <li>New <i>Piper</i> voices for the following languages: Arabic, English, Hungarian, Polish, Czech, German,
             Ukrainian, Vietnamese, Serbian, French, Spanish, Nepali.</li>
         <li>More steps in the <i>Speech speed</i> option. You can set speed from 0.1 to 2.0 values.</li>
         <li>Diacritical marks restoration before speech synthesis for Arabic and Hebrew.
             It is enabled by default,
             but if you don't need this option, it can be disabled in the settings.</li>
-        <li>Fix: Coqui Chinese MMS Hakka and Min Nan voices were broken.</li>
+        <li>Support for GPU acceleration for <i>Coqui</i> models.
+            If a suitable graphics card is found in the system, it will be used to accelerate processing.
+            This significantly reduces the time of speech synthesis.
+            GPU hardware acceleration is not enabled by default. Use the option in <i>Settings</i> to turn it on.
+            Disable, if you observe any problems when using Text to Speech with <i>Coqui</i> models.
+        </li>
+        <li>Fix: <i>Coqui</i> Chinese MMS Hakka and Min Nan voices were broken.</li>
         <li>Fix: Exporting to audio file was not possible when text was very long.</li>
         </ul>
         <p>" + qsTr("Other") + ":</p>
@@ -86,7 +93,9 @@ DialogPage {
             use the <i>--gpu-scan-off</i> command line option to switch off any GPU support.</li>
         <li>Detecting the availability of the optional features. In the settings, you can check what optional features
             are available (<i>Other</i> &rarr; <i>Availability of optional features</i>).
-            Feature availability depends on the libraries installed on your system.</li>
+            Feature availability depends on the libraries installed on your system.
+            If the application does not start due to problem in Python library,
+            use the <i>--py-scan-off</i> command line option to switch off any Python support.</li>
         </ul>"
     }
 
@@ -169,7 +178,7 @@ DialogPage {
         text: "<p>" + qsTr("Speech to Text") + ":</p>
         <ul>
         <li>Support for GPU acceleration for Whisper models.
-            If a suitable GPU device is found in the system, it will be used to accelerate processing.
+            If a suitable graphics card is found in the system, it will be used to accelerate processing.
             This significantly reduces the time of decoding (usually 2 times or more).
             GPU hardware acceleration is not enabled by default. Use the option in <i>Settings</i> to turn it on.
             Disable, if you observe any problems when using Speech to Text with Whisper models.
