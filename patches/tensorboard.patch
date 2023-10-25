@@ -1,0 +1,11 @@
+diff -ruN org/tensorboard-2.15.0.dist-info/METADATA tmp/tensorboard-2.15.0.dist-info/METADATA
+--- org/tensorboard-2.15.0.dist-info/METADATA	2020-01-01 00:00:00.000000000 +0100
++++ tmp/tensorboard-2.15.0.dist-info/METADATA	2023-10-20 19:29:27.313698726 +0200
+@@ -30,7 +30,6 @@
+ Requires-Dist: numpy >=1.12.0
+ Requires-Dist: protobuf >=3.19.6
+ Requires-Dist: requests <3,>=2.21.0
+-Requires-Dist: setuptools >=41.0.0
+ Requires-Dist: six >1.9
+ Requires-Dist: tensorboard-data-server <0.8.0,>=0.7.0
+ Requires-Dist: werkzeug >=1.0.1
