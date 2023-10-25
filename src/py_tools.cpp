@@ -59,28 +59,28 @@ libs_availability_t libs_availability() {
         py::module_::import("TTS");
         availability.coqui_tts = true;
     } catch (const std::exception& err) {
-        LOGE("py error: " << err.what());
+        LOGD("py error: " << err.what());
     }
 
     try {
         auto torch = py::module_::import("torch.cuda");
         availability.torch_cuda = torch.attr("is_available")().cast<bool>();
     } catch (const std::exception& err) {
-        LOGE("py error: " << err.what());
+        LOGD("py error: " << err.what());
     }
 
     try {
         py::module_::import("faster_whisper");
         availability.faster_whisper = true;
     } catch (const std::exception& err) {
-        LOGE("py error: " << err.what());
+        LOGD("py error: " << err.what());
     }
 
     try {
         py::module_::import("mimic3_tts");
         availability.mimic3_tts = true;
     } catch (const std::exception& err) {
-        LOGE("py error: " << err.what());
+        LOGD("py error: " << err.what());
     }
 
     try {
@@ -88,14 +88,14 @@ libs_availability_t libs_availability() {
         py::module_::import("accelerate");
         availability.transformers = true;
     } catch (const std::exception& err) {
-        LOGE("py error: " << err.what());
+        LOGD("py error: " << err.what());
     }
 
     try {
         py::module_::import("unikud");
         availability.unikud = true;
     } catch (const std::exception& err) {
-        LOGE("py error: " << err.what());
+        LOGD("py error: " << err.what());
     }
 
     try {
@@ -105,59 +105,59 @@ libs_availability_t libs_availability() {
             py::module_::import("gruut_lang_de");
             availability.gruut_de = true;
         } catch (const std::exception& err) {
-            LOGE("py error: " << err.what());
+            LOGD("py error: " << err.what());
         }
 
         try {
             py::module_::import("gruut_lang_es");
             availability.gruut_es = true;
         } catch (const std::exception& err) {
-            LOGE("py error: " << err.what());
+            LOGD("py error: " << err.what());
         }
 
         try {
             py::module_::import("gruut_lang_fr");
             availability.gruut_fr = true;
         } catch (const std::exception& err) {
-            LOGE("py error: " << err.what());
+            LOGD("py error: " << err.what());
         }
 
         try {
             py::module_::import("gruut_lang_it");
             availability.gruut_it = true;
         } catch (const std::exception& err) {
-            LOGE("py error: " << err.what());
+            LOGD("py error: " << err.what());
         }
 
         try {
             py::module_::import("gruut_lang_ru");
             availability.gruut_ru = true;
         } catch (const std::exception& err) {
-            LOGE("py error: " << err.what());
+            LOGD("py error: " << err.what());
         }
 
         try {
             py::module_::import("gruut_lang_fa");
             availability.gruut_fa = true;
         } catch (const std::exception& err) {
-            LOGE("py error: " << err.what());
+            LOGD("py error: " << err.what());
         }
 
         try {
             py::module_::import("gruut_lang_sw");
             availability.gruut_sw = true;
         } catch (const std::exception& err) {
-            LOGE("py error: " << err.what());
+            LOGD("py error: " << err.what());
         }
 
         try {
             py::module_::import("gruut_lang_nl");
             availability.gruut_nl = true;
         } catch (const std::exception& err) {
-            LOGE("py error: " << err.what());
+            LOGD("py error: " << err.what());
         }
     } catch (const std::exception& err) {
-        LOGE("py error: " << err.what());
+        LOGD("py error: " << err.what());
     }
 
     try {
@@ -165,7 +165,7 @@ libs_availability_t libs_availability() {
         py::module_::import("unidic_lite");
         availability.mecab = true;
     } catch (const std::exception& err) {
-        LOGE("py error: " << err.what());
+        LOGD("py error: " << err.what());
     }
 
     LOGD("py libs availability: [" << availability << "]");
