@@ -108,6 +108,10 @@
       <li>Speech speed control option has been moved to the main application window.</li>
       <li>Fix: Application did not use native widgets on some platforms.</li>
       </ul>
+      <p>Translator:</p>
+      <ul>
+      <li>New model: English to Hungarian</li>
+      </ul>
       <p>Speech to Text:</p>
       <ul>
       <li>New languages: Afrikaans, Gujarati, Hausa, Telugu, Tswana, Javanese, Hebrew</li>
@@ -141,8 +145,7 @@
           Polish, Czech, German, Ukrainian, Vietnamese, Serbian, French, Spanish, Nepali.</li>
       <li>More steps in the 'Speech speed' option. You can set speed from 0.1 to 2.0 values.</li>
       <li>Diacritical marks restoration before speech synthesis for Arabic and Hebrew.</li>
-      <li>Support for GPU acceleration for 'Coqui' models.</i>
-      </li>
+      <li>Support for GPU acceleration for 'Coqui' models.</li>
       <li>Fix: Coqui Chinese MMS Hakka and Min Nan voices were broken.</li>
       <li>Fix: Exporting to audio file was not possible when text was very long.</li>
       </ul>

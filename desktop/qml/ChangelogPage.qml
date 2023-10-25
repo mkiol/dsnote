@@ -40,6 +40,10 @@ DialogPage {
         <li>Speech speed control option has been moved to the main application window.</li>
         <li>Fix: Application did not use native widgets on some platforms.</li>
         </ul>
+        <p>" + qsTr("Translator") + ":</p>
+        <ul>
+        <li>New model: English to Hungarian</li>
+        </ul>
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
         <li>New languages: Afrikaans, Gujarati, Hausa, Telugu, Tswana, Javanese, Hebrew</li>
@@ -106,7 +110,7 @@ DialogPage {
     RichLabel {
         text: "<p>" + qsTr("Speech to Text") + ":</p>
         <ul>
-        <li>Improved AMD GPU acceleration support for Whisper models.
+        <li>Improved AMD GPU acceleration support for <i>Whisper</i> models.
             Whisper GPU accelerator for AMD cards uses OpenCL interface.
             OpenCL implementation shipped in Flatpak runtime 'Clover'
             does not support new AMD cards.
