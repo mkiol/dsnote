@@ -36,6 +36,7 @@
 #include "py_tools.hpp"
 #include "rhvoice_engine.hpp"
 #include "settings.h"
+#include "text_tools.hpp"
 #include "vosk_engine.hpp"
 #include "whisper_engine.hpp"
 
@@ -2129,6 +2130,11 @@ QVariantMap speech_service::features_availability() {
                 "coqui-tts-ja", QVariantList{py_availability->coqui_tts &&
                                                  py_availability->mecab,
                                              "Coqui TTS " + tr("Japanese")});
+            auto has_uroman = text_tools::has_uroman();
+            m_features_availability.insert(
+                "coqui-tts-ko",
+                QVariantList{py_availability->coqui_tts && has_uroman,
+                             "Coqui TTS " + tr("Korean")});
             m_features_availability.insert(
                 "mimic3-tts",
                 QVariantList{py_availability->mimic3_tts, "Mimic3 TTS"});
@@ -2164,7 +2170,6 @@ QVariantMap speech_service::features_availability() {
                 "mimic3-tts-nl", QVariantList{py_availability->mimic3_tts &&
                                                   py_availability->gruut_nl,
                                               "Mimic3 TTS " + tr("Dutch")});
-
             m_features_availability.insert(
                 "faster-whisper-stt",
                 QVariantList{py_availability->faster_whisper,
@@ -2200,8 +2205,25 @@ QVariantMap speech_service::features_availability() {
             models_manager::instance()->update_models_using_availability(
                 {/*tts_coqui=*/py_availability->coqui_tts,
                  /*tts_mimic3=*/py_availability->mimic3_tts,
+                 /*tts_mimic3_de=*/py_availability->mimic3_tts &&
+                     py_availability->gruut_de,
+                 /*tts_mimic3_es=*/py_availability->mimic3_tts &&
+                     py_availability->gruut_es,
+                 /*tts_mimic3_fr=*/py_availability->mimic3_tts &&
+                     py_availability->gruut_fr,
+                 /*tts_mimic3_it=*/py_availability->mimic3_tts &&
+                     py_availability->gruut_it,
+                 /*tts_mimic3_ru=*/py_availability->mimic3_tts &&
+                     py_availability->gruut_ru,
+                 /*tts_mimic3_sw=*/py_availability->mimic3_tts &&
+                     py_availability->gruut_sw,
+                 /*tts_mimic3_fa=*/py_availability->mimic3_tts &&
+                     py_availability->gruut_fa,
+                 /*tts_mimic3_nl=*/py_availability->mimic3_tts &&
+                     py_availability->gruut_nl,
                  /*stt_fasterwhisper=*/py_availability->faster_whisper,
-                 /*ttt_hftc=*/py_availability->transformers});
+                 /*ttt_hftc=*/py_availability->transformers,
+                 /*option_r=*/has_uroman});
 
             settings::instance()->scan_gpu_devices();
 

@@ -102,8 +102,17 @@ class models_manager : public QObject, public singleton<models_manager> {
     struct models_availability_t {
         bool tts_coqui = false;
         bool tts_mimic3 = false;
+        bool tts_mimic3_de = false;
+        bool tts_mimic3_es = false;
+        bool tts_mimic3_fr = false;
+        bool tts_mimic3_it = false;
+        bool tts_mimic3_ru = false;
+        bool tts_mimic3_sw = false;
+        bool tts_mimic3_fa = false;
+        bool tts_mimic3_nl = false;
         bool stt_fasterwhisper = false;
         bool ttt_hftc = false;
+        bool option_r = false;
     };
 
     static model_role_t role_of_engine(model_engine_t engine);

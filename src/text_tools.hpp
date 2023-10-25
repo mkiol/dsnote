@@ -47,8 +47,10 @@ std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
     const std::string& text, engine_t engine, const std::string& lang,
     const std::string& nb_data = {});
 void to_lower_case(std::string& text);
+bool has_uroman();
 void uroman(std::string& text, const std::string& lang_code,
             const std::string& prefix_path);
+
 void numbers_to_words(std::string& text, const std::string& lang,
                       const std::string& prefix_path);
 }  // namespace text_tools

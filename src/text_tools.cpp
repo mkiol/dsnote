@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 #include <algorithm>
+#include <cstdlib>
 #include <cwctype>
 #include <libnumbertext/Numbertext.hxx>
 #include <string_view>
@@ -318,6 +319,8 @@ static std::pair<FILE*, FILE*> popen2(const char* __command) {
         exit(1);
     }
 }
+
+bool has_uroman() { return std::system("perl --version > /dev/null") == 0; }
 
 void uroman(std::string& text, const std::string& lang_code,
             const std::string& prefix_path) {

@@ -1551,9 +1551,22 @@ auto models_manager::extract_models(
                 qDebug() << "ignoring fasterwhisper model:" << model_id;
                 continue;
             }
-            if (!models_availability->tts_mimic3 &&
-                engine == model_engine_t::tts_mimic3) {
-                qDebug() << "ignoring mimic3 model:" << model_id;
+            if (engine == model_engine_t::tts_mimic3) {
+                if (!models_availability->tts_mimic3 ||
+                    (!models_availability->tts_mimic3_de && lang_id == "de") ||
+                    (!models_availability->tts_mimic3_es && lang_id == "es") ||
+                    (!models_availability->tts_mimic3_fr && lang_id == "fr") ||
+                    (!models_availability->tts_mimic3_it && lang_id == "it") ||
+                    (!models_availability->tts_mimic3_ru && lang_id == "ru") ||
+                    (!models_availability->tts_mimic3_sw && lang_id == "sw") ||
+                    (!models_availability->tts_mimic3_fa && lang_id == "fa") ||
+                    (!models_availability->tts_mimic3_nl && lang_id == "nl")) {
+                    qDebug() << "ignoring mimic3 model:" << model_id;
+                    continue;
+                }
+            }
+            if (!models_availability->option_r && options.contains('r')) {
+                qDebug() << "ignoring model with option r:" << model_id;
                 continue;
             }
         }
@@ -1902,10 +1915,27 @@ void models_manager::update_models_using_availability_internal() {
             pair.second.hidden = true;
             return;
         }
-        if (!m_models_availability->tts_mimic3 &&
-            pair.second.engine == model_engine_t::tts_mimic3) {
-            pair.second.hidden = true;
-            return;
+        if (pair.second.engine == model_engine_t::tts_mimic3) {
+            if (!m_models_availability->tts_mimic3 ||
+                (!m_models_availability->tts_mimic3_de &&
+                 pair.second.lang_id == "de") ||
+                (!m_models_availability->tts_mimic3_es &&
+                 pair.second.lang_id == "es") ||
+                (!m_models_availability->tts_mimic3_fr &&
+                 pair.second.lang_id == "fr") ||
+                (!m_models_availability->tts_mimic3_it &&
+                 pair.second.lang_id == "it") ||
+                (!m_models_availability->tts_mimic3_ru &&
+                 pair.second.lang_id == "ru") ||
+                (!m_models_availability->tts_mimic3_sw &&
+                 pair.second.lang_id == "sw") ||
+                (!m_models_availability->tts_mimic3_fa &&
+                 pair.second.lang_id == "fa") ||
+                (!m_models_availability->tts_mimic3_nl &&
+                 pair.second.lang_id == "nl")) {
+                pair.second.hidden = true;
+                return;
+            }
         }
         if (!m_models_availability->stt_fasterwhisper &&
             pair.second.engine == model_engine_t::stt_fasterwhisper) {
@@ -1917,6 +1947,13 @@ void models_manager::update_models_using_availability_internal() {
             pair.second.hidden = true;
             return;
         }
+        if (!m_models_availability->option_r &&
+            pair.second.options.contains('r')) {
+            pair.second.hidden = true;
+            return;
+        }
+        
+        
     });
 
     remove_empty_langs(m_langs, m_models);
