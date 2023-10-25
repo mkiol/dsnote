@@ -71,6 +71,10 @@ if(arch_x8664)
     endif(BUILD_WHISPERCPP_CLBLAST)
 
     if(BUILD_WHISPERCPP_CUBLAS)
+        if (NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+            set(CMAKE_CUDA_ARCHITECTURES "50\\\\\\\\\\\\;52\\\\\\\\\\\\;53\\\\\\\\\\\\;60\\\\\\\\\\\\;61\\\\\\\\\\\\;62\\\\\\\\\\\\;70\\\\\\\\\\\\;72\\\\\\\\\\\\;75\\\\\\\\\\\\;80\\\\\\\\\\\\;86\\\\\\\\\\\\;87\\\\\\\\\\\\;89\\\\\\\\\\\\;90")
+        endif()
+
         ExternalProject_Add(whispercppcublas
             SOURCE_DIR ${external_dir}/whispercppcublas
             BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercppcublas
@@ -86,7 +90,7 @@ if(arch_x8664)
                 -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
                 -DWHISPER_CUBLAS=ON
                 -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
-                -DCMAKE_CUDA_ARCHITECTURES=50\\\\\\\\\\\\;52\\\\\\\\\\\\;53\\\\\\\\\\\\;60\\\\\\\\\\\\;61\\\\\\\\\\\\;62\\\\\\\\\\\\;70\\\\\\\\\\\\;72\\\\\\\\\\\\;75\\\\\\\\\\\\;80\\\\\\\\\\\\;86\\\\\\\\\\\\;87\\\\\\\\\\\\;89\\\\\\\\\\\\;90
+                -DCMAKE_CUDA_ARCHITECTURES=${CMAKE_CUDA_ARCHITECTURES}
                 -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
             INSTALL_COMMAND make install && cp ${external_lib_dir}/libwhisper.so ${external_lib_dir}/libwhisper-cublas.so
             BUILD_ALWAYS False
@@ -96,6 +100,10 @@ if(arch_x8664)
     endif(BUILD_WHISPERCPP_CUBLAS)
 
     if(BUILD_WHISPERCPP_HIPBLAS)
+        if (NOT DEFINED CMAKE_HIP_ARCHITECTURES)
+            set(CMAKE_HIP_ARCHITECTURES "gfx701 gfx801 gfx802 gfx803 gfx900 gfx906 gfx908 gfx1010 gfx1011 gfx1012 gfx1030 gfx1031")
+        endif()
+
         ExternalProject_Add(whispercpphipblas
             SOURCE_DIR ${external_dir}/whispercpphipblas
             BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercpphipblas
@@ -112,7 +120,7 @@ if(arch_x8664)
                 -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
                 -DWHISPER_HIPBLAS=ON
                 -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
-                -DCMAKE_HIP_ARCHITECTURES="gfx701 gfx801 gfx802 gfx803 gfx900 gfx906 gfx908 gfx1010 gfx1011 gfx1012 gfx1030 gfx1031"
+                -DCMAKE_HIP_ARCHITECTURES=${CMAKE_HIP_ARCHITECTURES}
                 -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
             INSTALL_COMMAND make install && cp ${external_lib_dir}/libwhisper.so ${external_lib_dir}/libwhisper-hipblas.so
             BUILD_ALWAYS False
