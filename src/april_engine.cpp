@@ -208,32 +208,38 @@ void april_engine::decode_speech(april_buf_t& buf, bool eof) {
     if (buf.size() > 0) aas_feed_pcm16(m_session, buf.data(), buf.size());
     if (eof) aas_flush(m_session);
 
-    if (m_result.empty()) return;
+    LOGD("==> eof" << eof);
 
-    text_tools::to_lower_case(m_result);
+    if (!m_result.empty()) {
+        LOGD("==> prev_segment" << m_result_prev_segment);
+        LOGD("==> prev" << m_result_prev);
+        LOGD("==> result" << m_result);
+
+        text_tools::to_lower_case(m_result);
 
 #ifdef DEBUG
-    LOGD("speech decoded: text=" << m_result);
+        LOGD("speech decoded: text=" << m_result);
 #else
-    LOGD("speech decoded");
+        LOGD("speech decoded");
 #endif
 
-    if (m_result_prev.size() > m_result.size()) {
-        m_result_prev_segment.append(std::move(m_result_prev));
+        if (m_result_prev.size() > m_result.size()) {
+            m_result_prev_segment.append(std::move(m_result_prev));
+        }
+
+        auto result = m_result_prev_segment + m_result;
+
+        ltrim(result);
+        rtrim(result);
+
+        if (m_punctuator) result = m_punctuator->process(result);
+
+        if (!m_intermediate_text || m_intermediate_text != result) {
+            set_intermediate_text(result);
+        }
+
+        m_result_prev.assign(std::move(m_result));
     }
-
-    auto result = m_result_prev_segment + m_result;
-
-    ltrim(result);
-    rtrim(result);
-
-    if (m_punctuator) result = m_punctuator->process(result);
-
-    if (!m_intermediate_text || m_intermediate_text != result) {
-        set_intermediate_text(result);
-    }
-
-    m_result_prev.assign(std::move(m_result));
 
     if (eof) {
         m_result_prev.clear();
