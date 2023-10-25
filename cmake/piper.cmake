@@ -5,7 +5,7 @@ set(piperphonemize_source_url "https://github.com/rhasspy/piper-phonemize/archiv
 set(piperphonemize_checksum "6bdcb21f6c5ae0deff7c9ae26bf07b994791dc800c1962fd216727e66a409929")
 
 set(onnx_arm32_url "https://github.com/mkiol/dsnote/releases/download/v2.0.1/onnxruntime-linux-arm32-1.14.tgz")
-set(onnx_arm32_checksum "5055ce0867a5c7c7a1920d2d76b8aace")
+set(onnx_arm32_checksum "4e221f5da63526cd7060a0e21350afc5eb9ba9c050f7ae15d4f34ce1c1d1480f")
 set(onnx_x8664_url "https://github.com/microsoft/onnxruntime/releases/download/v1.16.1/onnxruntime-linux-x64-1.16.1.tgz")
 set(onnx_x8664_checksum "53a0f03f71587ed602e99e82773132fc634b74c2d227316fbfd4bf67181e72ed")
 set(onnx_arm64_url "https://github.com/microsoft/onnxruntime/releases/download/v1.16.1/onnxruntime-linux-aarch64-1.16.1.tgz")
