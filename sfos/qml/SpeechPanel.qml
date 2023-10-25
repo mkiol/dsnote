@@ -19,16 +19,20 @@ Item {
     property alias busy: busyIndicator.running
     property alias progress: busyIndicator.progress
     property alias canCancel: cancelButton.visible
+    property alias canStop: stopButton.visible
     property alias canPause: pauseButton.visible
 
     signal cancelClicked()
     signal pauseClicked()
+    signal stopClicked()
     signal resumeClicked()
 
     readonly property bool _empty: text.length === 0
 
     height: Math.max(intermediateLabel.height + 2 * Theme.paddingLarge,
-                     (canPause ? pauseButton.height : 0) + (canCancel ? cancelButton.height : 0))
+                     (canPause ? pauseButton.height : 0) +
+                     (canStop ? stopButton.height : 0) +
+                     (canCancel ? cancelButton.height : 0))
 
     Rectangle {
         anchors.fill: parent
@@ -134,13 +138,24 @@ Item {
     }
 
     IconButton {
+        id: stopButton
+
+        anchors.right: parent.right
+        anchors.rightMargin: Theme.paddingSmall
+        anchors.top: parent.top
+        icon.source: "image://theme/icon-m-stop?" +
+                     (pressed ? Theme.highlightColor : Theme.primaryColor)
+        onClicked: root.stopClicked()
+    }
+
+    IconButton {
         id: cancelButton
 
         anchors.right: parent.right
         anchors.rightMargin: Theme.paddingSmall
-        anchors.top: pauseButton.visible ? pauseButton.bottom : parent.top
-        icon.source: (app.state === DsnoteApp.StatePlayingSpeech ?
-                          "image://theme/icon-m-stop?" : "image://theme/icon-m-cancel?")
+        anchors.top: pauseButton.visible ? pauseButton.bottom :
+                     stopButton.visible ? stopButton.bottom : parent.top
+        icon.source: "image://theme/icon-m-cancel?"
                           + (pressed ? Theme.highlightColor : Theme.primaryColor)
         onClicked: root.cancelClicked()
     }

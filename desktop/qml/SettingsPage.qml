@@ -445,7 +445,7 @@ DialogPage {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Restore diacritical marks in the text before speech synthesis.") + " " +
-                              qsTr("It works only for Arabic and Hebrew languages.")
+                              qsTr("This works only for Arabic and Hebrew languages.")
             }
 
             Label {

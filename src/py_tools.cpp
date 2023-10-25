@@ -49,7 +49,7 @@ namespace py_tools {
 libs_availability_t libs_availability() {
     // run only in py thread
 
-    libs_availability_t availability;
+    libs_availability_t availability{};
 
 #ifdef USE_PY
     namespace py = pybind11;

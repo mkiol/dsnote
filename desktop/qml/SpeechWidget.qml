@@ -182,8 +182,8 @@ RowLayout {
                 Layout.alignment: Qt.AlignBottom
                 Layout.preferredHeight: _icon.implicitHeight
                 icon.name: "media-playback-stop-symbolic"
-                enabled: app.task_state !== DsnoteApp.TaskStateProcessing &
-                         app.task_state !== DsnoteApp.TaskStateInitializing &
+                enabled: app.task_state !== DsnoteApp.TaskStateProcessing &&
+                         app.task_state !== DsnoteApp.TaskStateInitializing &&
                          app.state === DsnoteApp.StateListeningSingleSentence
                 visible: app.state === DsnoteApp.StateListeningSingleSentence
                 onClicked: app.stop_listen()

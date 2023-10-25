@@ -23,7 +23,7 @@ ApplicationWindow {
     function handleResource(resource) {
         console.log("share request received");
         if (resource.type === ShareResource.FilePathType) {
-            app.open_files(resource.filePath)
+            app.open_files(resource.filePath, false)
             appWin.activate()
         } else if (resource.type === ShareResource.StringDataType) {
             app.update_note(resource.data, false)
@@ -66,7 +66,7 @@ ApplicationWindow {
     Connections {
         target: _app_server
         onActivate_requested: appWin.activate()
-        onFiles_to_open_requested: app.open_files(_files_to_open)
+        onFiles_to_open_requested: app.open_files(_files_to_open, false)
     }
 
     SpeechConfig {
@@ -174,9 +174,14 @@ ApplicationWindow {
                               (app.task_state === DsnoteApp.TaskStateProcessing ||
                                app.task_state === DsnoteApp.TaskStateSpeechPlaying ||
                                app.task_state === DsnoteApp.TaskStateSpeechPaused)
+                    canStop: app.connected && !app.busy &&
+                                 app.task_state !== DsnoteApp.TaskStateProcessing &&
+                                 app.task_state !== DsnoteApp.TaskStateInitializing &&
+                                 app.state === DsnoteApp.StateListeningSingleSentence
                     onCancelClicked: app.cancel()
                     onPauseClicked: app.pause_speech()
                     onResumeClicked: app.resume_speech()
+                    onStopClicked: app.stop_listen()
                 }
 
                 BusyIndicator {
@@ -225,7 +230,7 @@ ApplicationWindow {
                     appWin.raise()
                 }
                 onFiles_to_open_requested: {
-                    app.open_files(files)
+                    app.open_files(files, false)
                     appWin.raise()
                 }
             }
@@ -241,7 +246,7 @@ ApplicationWindow {
                 onNote_copied: toast.show(qsTr("Copied!"))
                 onTranscribe_done: toast.show(qsTr("File transcription is complete!"))
                 onSpeech_to_file_done: toast.show(qsTr("Speech saved to audio file!"))
-                Component.onCompleted: app.open_files(_files_to_open)
+                Component.onCompleted: app.open_files(_files_to_open, false)
                 onError: {
                     switch (type) {
                     case DsnoteApp.ErrorFileSource:

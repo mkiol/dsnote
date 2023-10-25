@@ -7,7 +7,6 @@
 
 #include <fmt/format.h>
 
-#include <QApplication>
 #include <QCommandLineParser>
 #include <QDebug>
 #include <QGuiApplication>
@@ -39,6 +38,7 @@
 
 #include "dirmodel.h"
 #else
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <memory>
 #endif

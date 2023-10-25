@@ -76,7 +76,7 @@ Dialog {
         width: parent.width
 
         DialogHeader {
-            acceptText: qsTr("Save File")
+            acceptText: qsTr("Export to audio file")
         }
 
         ItemBox {

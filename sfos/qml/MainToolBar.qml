@@ -54,7 +54,7 @@ PullDownMenu {
                   app.state === DsnoteApp.StateListeningSingleSentence ||
                   app.state === DsnoteApp.StateIdle ||
                   app.state === DsnoteApp.StatePlayingSpeech)
-        text: qsTr("Save to audio file")
+        text: qsTr("Export to audio file")
         onClicked: {
             pageStack.push(Qt.resolvedUrl("FileWritePage.qml"), {translated: false})
         }
@@ -69,7 +69,7 @@ PullDownMenu {
                   app.state === DsnoteApp.StateListeningSingleSentence ||
                   app.state === DsnoteApp.StateIdle ||
                   app.state === DsnoteApp.StatePlayingSpeech)
-        text: qsTr("Save the translation to audio file")
+        text: qsTr("Export the translation to audio file")
         onClicked: {
             pageStack.push(Qt.resolvedUrl("FileWritePage.qml"), {translated: true})
         }

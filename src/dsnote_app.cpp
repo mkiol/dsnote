@@ -636,7 +636,10 @@ void dsnote_app::connect_service_signals() {
                 this, &dsnote_app::handle_mnt_translate_finished);
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::FeaturesAvailabilityUpdated, this,
-                [this] { emit features_availability_updated(); });
+                [this] {
+                    features_availability();
+                    emit features_availability_updated();
+                });
     }
 }
 
@@ -730,6 +733,11 @@ void dsnote_app::handle_state_changed(int status) {
     if (old_busy != busy()) {
         qDebug() << "app busy:" << old_busy << "=>" << busy();
         emit busy_changed();
+
+        if (!busy()) {
+            features_availability();
+            emit features_availability_updated();
+        }
     }
     if (old_connected != connected()) {
         qDebug() << "app connected:" << old_connected << " = > " << connected();
@@ -2605,15 +2613,29 @@ bool dsnote_app::feature_text_active_window() const {
 QVariantList dsnote_app::features_availability() {
     QVariantList list;
 
+    auto old_features_availability = m_features_availability;
+
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
         m_features_availability =
             speech_service::instance()->features_availability();
     } else {
         qDebug() << "[app => dbus] call FeaturesAvailability";
-        m_features_availability = m_dbus_service.FeaturesAvailability();
+
+        QVariantMap dbus_map = m_dbus_service.FeaturesAvailability();
+
+        m_features_availability.clear();
+
+        auto it = dbus_map.cbegin();
+        while (it != dbus_map.cend()) {
+            m_features_availability.insert(
+                it.key(),
+                qdbus_cast<QVariantList>(it.value().value<QDBusArgument>()));
+            ++it;
+        }
     }
 
+#ifdef USE_DESKTOP
     if (!m_features_availability.isEmpty()) {
         auto has_xbc = settings::instance()->is_xcb();
         m_features_availability.insert(
@@ -2623,15 +2645,36 @@ QVariantList dsnote_app::features_availability() {
             "ui-text-active-window",
             QVariantList{has_xbc, tr("Insert text to active window")});
     }
+#endif
 
-    auto it = m_features_availability.constBegin();
-    while (it != m_features_availability.constEnd()) {
+    auto it = m_features_availability.cbegin();
+    while (it != m_features_availability.cend()) {
         auto val = it.value().toList();
-        list.push_back(QVariantList{val.at(0), val.at(1)});
+        if (val.size() > 1) list.push_back(QVariantList{val.at(0), val.at(1)});
         ++it;
     }
 
-    emit features_changed();
+    if (old_features_availability != m_features_availability) {
+        if (settings::instance()->launch_mode() ==
+            settings::launch_mode_t::app) {
+            models_manager::instance()->update_models_using_availability(
+                {/*tts_coqui=*/feature_available("coqui-tts"),
+                 /*tts_mimic3=*/feature_available("mmic3-tts"),
+                 /*tts_mimic3_de=*/feature_available("mmic3-tts-de"),
+                 /*tts_mimic3_es=*/feature_available("mmic3-tts-es"),
+                 /*tts_mimic3_fr=*/feature_available("mmic3-tts-fr"),
+                 /*tts_mimic3_it=*/feature_available("mmic3-tts-it"),
+                 /*tts_mimic3_ru=*/feature_available("mmic3-tts-ru"),
+                 /*tts_mimic3_sw=*/feature_available("mmic3-tts-sw"),
+                 /*tts_mimic3_fa=*/feature_available("mmic3-tts-fa"),
+                 /*tts_mimic3_nl=*/feature_available("mmic3-tts-nl"),
+                 /*stt_fasterwhisper=*/feature_available("faster-whisper-stt"),
+                 /*ttt_hftc=*/feature_available("punctuator"),
+                 /*option_r=*/feature_available("coqui-tts-ko")});
+        }
+
+        emit features_changed();
+    }
 
     return list;
 }
