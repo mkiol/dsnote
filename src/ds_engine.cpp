@@ -212,7 +212,8 @@ stt_engine::samples_process_result_t ds_engine::process_buff() {
 
         decode_speech(m_speech_buf, final_decode);
 
-        set_processing_state(processing_state_t::idle);
+        if (m_config.speech_started)
+            set_processing_state(processing_state_t::idle);
 
         m_speech_buf.clear();
 

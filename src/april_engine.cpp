@@ -170,7 +170,8 @@ stt_engine::samples_process_result_t april_engine::process_buff() {
 
         decode_speech(m_speech_buf, final_decode);
 
-        set_processing_state(processing_state_t::idle);
+        if (m_config.speech_started)
+            set_processing_state(processing_state_t::idle);
 
         m_speech_buf.clear();
 
@@ -208,13 +209,7 @@ void april_engine::decode_speech(april_buf_t& buf, bool eof) {
     if (buf.size() > 0) aas_feed_pcm16(m_session, buf.data(), buf.size());
     if (eof) aas_flush(m_session);
 
-    LOGD("==> eof" << eof);
-
     if (!m_result.empty()) {
-        LOGD("==> prev_segment" << m_result_prev_segment);
-        LOGD("==> prev" << m_result_prev);
-        LOGD("==> result" << m_result);
-
         text_tools::to_lower_case(m_result);
 
 #ifdef DEBUG
