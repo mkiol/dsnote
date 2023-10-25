@@ -415,7 +415,7 @@ static void replace_characters(std::string& text, const std::string& from,
 static void add_extra_pause(std::string& text) {
     if (text.empty()) return;
 
-    if (text.back() == '.')
+    if (text.back() == '.' || text.back() == '!' || text.back() == '?')
         text.append(" ,.");
     else
         text.append(". ,.");
