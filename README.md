@@ -130,9 +130,10 @@ Translation files in Qt format are in [translations dir (GitHub)](https://github
 Preferred way to contribute translation is via [Transifex service](https://explore.transifex.com/mkiol/dsnote/),
 but if you would like to make a direct PR/MR, please do it.
 
-## Download
+## Install
 
 - Linux Desktop: [Flatpak](https://flathub.org/apps/net.mkiol.SpeechNote)
+- Arch Linux (git): [AUR](https://aur.archlinux.org/packages/dsnote-git)
 - Sailfish OS: [OpenRepos](https://openrepos.net/content/mkiol/speech-note)
 
 ## Building from sources
