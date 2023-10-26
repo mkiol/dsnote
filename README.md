@@ -167,6 +167,18 @@ Also to make Python components work (i.e.: 'Coqui TTS models', 'Restore punctuat
 
 To make build without support for Python components, add `-DWITH_PY=OFF` in cmake step.
 
+### Arch Linux
+
+It is also possible to build and install the latest version from the repository using the provided PKGBUILD file (please note that the same remarks about building on Linux apply):
+
+```
+git clone <git repository url>
+
+cd dsnote/arch
+
+makepkg -si
+```
+
 ### Flatpak (recommended)
 
 ```
