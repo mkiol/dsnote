@@ -56,6 +56,8 @@
 static void exit_program() {
     qDebug() << "exiting";
 
+    speech_service::remove_cached_media_files();
+
     // workaround for python thread locking
     std::quick_exit(0);
 }

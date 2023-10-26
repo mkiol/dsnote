@@ -165,6 +165,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     double tts_speech_to_file_progress(int task) const;
     QVariantMap mnt_out_langs(QString in_lang) const;
     QVariantMap features_availability();
+    static void remove_cached_media_files();
 
    signals:
     void models_changed();
@@ -464,7 +465,6 @@ class speech_service : public QObject, public singleton<speech_service> {
         const std::map<QString, model_data_t> &available_models_map);
     void set_state(state_t new_state);
     void update_task_state();
-    static void remove_cached_media_files();
     void handle_tts_queue();
     static std::vector<std::reference_wrapper<const model_data_t>>
     model_data_for_lang(
