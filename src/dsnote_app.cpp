@@ -1401,7 +1401,7 @@ QVariantList dsnote_app::available_mnt_out_langs() const {
 void dsnote_app::set_active_stt_model_idx(int idx) {
     if (active_stt_model_idx() != idx && idx > -1 &&
         idx < m_available_stt_models_map.size()) {
-        const auto &id = std::next(m_available_stt_models_map.cbegin(), idx).key();
+        auto id = std::next(m_available_stt_models_map.cbegin(), idx).key();
 
         if (settings::instance()->launch_mode() ==
             settings::launch_mode_t::app_stanalone) {
@@ -1416,8 +1416,7 @@ void dsnote_app::set_active_stt_model_idx(int idx) {
 void dsnote_app::set_active_tts_model_idx(int idx) {
     if (active_tts_model_idx() != idx && idx > -1 &&
         idx < m_available_tts_models_map.size()) {
-        const auto &id =
-            std::next(m_available_tts_models_map.cbegin(), idx).key();
+        auto id = std::next(m_available_tts_models_map.cbegin(), idx).key();
 
         if (settings::instance()->launch_mode() ==
             settings::launch_mode_t::app_stanalone) {
@@ -1437,9 +1436,8 @@ void dsnote_app::set_active_tts_model_for_in_mnt_idx(int idx) {
 
     if (active_tts_model_for_in_mnt_idx() != idx && idx > -1 &&
         idx < m_available_tts_models_for_in_mnt_map.size()) {
-        const auto &id =
-            std::next(m_available_tts_models_for_in_mnt_map.cbegin(), idx)
-                .key();
+        auto id = std::next(m_available_tts_models_for_in_mnt_map.cbegin(), idx)
+                      .key();
 
         qDebug() << "new active tts model for in mnt:" << id;
 
@@ -1458,7 +1456,7 @@ void dsnote_app::set_active_tts_model_for_out_mnt_idx(int idx) {
 
     if (active_tts_model_for_out_mnt_idx() != idx && idx > -1 &&
         idx < m_available_tts_models_for_out_mnt_map.size()) {
-        const auto &id =
+        auto id =
             std::next(m_available_tts_models_for_out_mnt_map.cbegin(), idx)
                 .key();
 
@@ -1474,8 +1472,7 @@ void dsnote_app::set_active_tts_model_for_out_mnt_idx(int idx) {
 void dsnote_app::set_active_mnt_lang_idx(int idx) {
     if (active_mnt_lang_idx() != idx && idx > -1 &&
         idx < m_available_mnt_langs_map.size()) {
-        const auto &id =
-            std::next(m_available_mnt_langs_map.cbegin(), idx).key();
+        auto id = std::next(m_available_mnt_langs_map.cbegin(), idx).key();
 
         if (settings::instance()->launch_mode() ==
             settings::launch_mode_t::app_stanalone) {
@@ -1490,8 +1487,7 @@ void dsnote_app::set_active_mnt_lang_idx(int idx) {
 void dsnote_app::set_active_mnt_out_lang_idx(int idx) {
     if (active_mnt_out_lang_idx() != idx && idx > -1 &&
         idx < m_available_mnt_out_langs_map.size()) {
-        const auto &id =
-            std::next(m_available_mnt_out_langs_map.cbegin(), idx).key();
+        auto id = std::next(m_available_mnt_out_langs_map.cbegin(), idx).key();
 
         if (settings::instance()->launch_mode() ==
             settings::launch_mode_t::app_stanalone) {
