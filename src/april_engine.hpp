@@ -34,7 +34,6 @@ class april_engine : public stt_engine {
     AprilASRSession m_session = nullptr;
     april_buf_t m_speech_buf;
     std::string m_result;
-    std::string m_result_prev;
     std::string m_result_prev_segment;
 
     void create_model();

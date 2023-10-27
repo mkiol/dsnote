@@ -63,7 +63,7 @@ void april_engine::create_model() {
 
     LOGD("model: name=" << aam_get_name(m_model)
                         << ", lang=" << aam_get_language(m_model)
-                        << ", smaple rate=" << aam_get_sample_rate(m_model));
+                        << ", sample rate=" << aam_get_sample_rate(m_model));
 
     AprilConfig config{};
     config.handler = &april_engine::decode_handler;
@@ -83,7 +83,6 @@ void april_engine::reset_impl() {
     m_speech_buf.clear();
     if (m_session) aas_flush(m_session);
     m_result.clear();
-    m_result_prev.clear();
     m_result_prev_segment.clear();
 }
 
@@ -111,7 +110,6 @@ stt_engine::samples_process_result_t april_engine::process_buff() {
         m_vad.reset();
         if (m_session) aas_flush(m_session);
         m_result.clear();
-        m_result_prev.clear();
         m_result_prev_segment.clear();
     }
 
@@ -200,6 +198,13 @@ void april_engine::decode_handler(void* user_data, AprilResultType result_type,
 
         for (size_t i = 0; i < count; ++i)
             engine->m_result.append(tokens[i].token);
+
+        text_tools::to_lower_case(engine->m_result);
+
+        if (result_type == APRIL_RESULT_RECOGNITION_FINAL) {
+            engine->m_result_prev_segment.append(std::move(engine->m_result));
+            engine->m_result.clear();
+        }
     }
 }
 
@@ -209,35 +214,26 @@ void april_engine::decode_speech(april_buf_t& buf, bool eof) {
     if (buf.size() > 0) aas_feed_pcm16(m_session, buf.data(), buf.size());
     if (eof) aas_flush(m_session);
 
-    if (!m_result.empty()) {
-        text_tools::to_lower_case(m_result);
-
 #ifdef DEBUG
-        LOGD("speech decoded: text=" << m_result);
+    LOGD("speech decoded: text=" << m_result);
 #else
-        LOGD("speech decoded");
+    LOGD("speech decoded");
 #endif
 
-        if (m_result_prev.size() > m_result.size()) {
-            m_result_prev_segment.append(std::move(m_result_prev));
-        }
+    auto result = m_result_prev_segment + m_result;
 
-        auto result = m_result_prev_segment + m_result;
+    ltrim(result);
+    rtrim(result);
 
-        ltrim(result);
-        rtrim(result);
-
-        if (m_punctuator) result = m_punctuator->process(result);
-
-        if (!m_intermediate_text || m_intermediate_text != result) {
-            set_intermediate_text(result);
-        }
-
-        m_result_prev.assign(std::move(m_result));
+    if (m_punctuator) {
+        result = m_punctuator->process(result);
+    } else {
+        text_tools::restore_caps(result);
     }
 
-    if (eof) {
-        m_result_prev.clear();
-        m_result_prev_segment.clear();
+    if (!m_intermediate_text || m_intermediate_text != result) {
+        set_intermediate_text(result);
     }
+
+    if (eof) m_result_prev_segment.clear();
 }

@@ -258,7 +258,7 @@ static std::string wchar_to_UTF8(const wchar_t* in) {
 // source: https://stackoverflow.com/a/148766
 static std::wstring UTF8_to_wchar(const char* in) {
     std::wstring out;
-    unsigned int codepoint;
+    unsigned int codepoint = 0;
     while (*in != 0) {
         unsigned char ch = static_cast<unsigned char>(*in);
         if (ch <= 0x7f)
@@ -285,6 +285,24 @@ static std::wstring UTF8_to_wchar(const char* in) {
         }
     }
     return out;
+}
+
+void restore_caps(std::string& text) {
+    auto wtext = UTF8_to_wchar(text.c_str());
+
+    std::transform(
+        wtext.cbegin(), wtext.cend(), wtext.begin(),
+        [eos = true](auto wc) mutable -> decltype(wc) {
+            if (eos && wc != ' ' && wc != '.' && wc != '!' && wc != '?') {
+                eos = false;
+                return std::towupper(wc);
+            }
+            if (!eos && (wc == '.' || wc == '!' || wc == '?')) eos = true;
+
+            return wc;
+        });
+
+    text.assign(wchar_to_UTF8(wtext.c_str()));
 }
 
 void to_lower_case(std::string& text) {
