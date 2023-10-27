@@ -130,9 +130,10 @@ Translation files in Qt format are in [translations dir (GitHub)](https://github
 Preferred way to contribute translation is via [Transifex service](https://explore.transifex.com/mkiol/dsnote/),
 but if you would like to make a direct PR/MR, please do it.
 
-## Download
+## Install
 
 - Linux Desktop: [Flatpak](https://flathub.org/apps/net.mkiol.SpeechNote)
+- Arch Linux (git): [AUR](https://aur.archlinux.org/packages/dsnote-git)
 - Sailfish OS: [OpenRepos](https://openrepos.net/content/mkiol/speech-note)
 
 ## Building from sources
@@ -165,6 +166,18 @@ In a run-time app requires following Qt QML modules (example of packages for Ubu
 Also to make Python components work (i.e.: 'Coqui TTS models', 'Restore punctuation' feature), following Python libriaries have to be installed (pip packages names): `torch` `torchaudio` `transformers` `accelerate` `TTS`.
 
 To make build without support for Python components, add `-DWITH_PY=OFF` in cmake step.
+
+### Arch Linux
+
+It is also possible to build and install the latest version from the repository using the provided PKGBUILD file (please note that the same remarks about building on Linux apply):
+
+```
+git clone <git repository url>
+
+cd dsnote/arch
+
+makepkg -si
+```
 
 ### Flatpak (recommended)
 
