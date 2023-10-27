@@ -239,6 +239,7 @@ sfdk package
 - [Mimic 3](https://mycroft.ai/mimic-3)
 - [Unikud](https://github.com/morrisalp/unikud)
 - [april-asr](https://github.com/abb128/april-asr)
+- [Opus](https://opus-codec.org/)
 
 ## License
 
@@ -279,6 +280,7 @@ sfdk package
 - **Mimic 3**, released under the [AGPL-3.0 license](https://github.com/MycroftAI/mimic3/raw/master/LICENSE)
 - **Unikud**, released under the [MIT License](https://github.com/morrisalp/unikud/raw/main/LICENSE)
 - **april-asr**, released under the [GNU General Public License v3.0](https://github.com/abb128/april-asr/raw/main/COPYING)
+- **libopus**, released under [this license](https://gitlab.xiph.org/xiph/opus/-/raw/master/COPYING)
 
 The files in the directory `nonbreaking_prefixes` were copied from 
 [mosesdecoder](https://github.com/moses-smt/mosesdecoder) project and distributed under the

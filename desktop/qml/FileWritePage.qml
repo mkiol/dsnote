@@ -22,7 +22,8 @@ DialogPage {
         switch (autoFileFormat) {
         case Settings.AudioFormatWav: return "Wav";
         case Settings.AudioFormatMp3: return "MP3";
-        case Settings.AudioFormatOgg: return "Ogg Vorbis";
+        case Settings.AudioFormatOggVorbis: return "Ogg Vorbis";
+        case Settings.AudioFormatOggOpus: return "Ogg Opus";
         case Settings.AudioFormatAuto: break;
         }
         return "MP3";
@@ -126,6 +127,7 @@ DialogPage {
 
             Layout.fillWidth: true
             onTextChanged: check_filename()
+            color: palette.text
             Component.onCompleted: {
                 text = _settings.file_save_dir + "/" +
                         _settings.file_save_filename
@@ -165,7 +167,8 @@ DialogPage {
                 switch (_settings.audio_format) {
                 case Settings.AudioFormatWav: return 1
                 case Settings.AudioFormatMp3: return 2
-                case Settings.AudioFormatOgg: return 3
+                case Settings.AudioFormatOggVorbis: return 3
+                case Settings.AudioFormatOggOpus: return 4
                 case Settings.AudioFormatAuto: break
                 }
                 return 0
@@ -176,12 +179,14 @@ DialogPage {
                 ListElement { text: "Wav"}
                 ListElement { text: "MP3"}
                 ListElement { text: "Ogg Vorbis" }
+                ListElement { text: "Ogg Opus" }
             }
             onActivated: {
                 switch (index) {
                 case 1: _settings.audio_format = Settings.AudioFormatWav; break
                 case 2: _settings.audio_format = Settings.AudioFormatMp3; break
-                case 3: _settings.audio_format = Settings.AudioFormatOgg; break
+                case 3: _settings.audio_format = Settings.AudioFormatOggVorbis; break
+                case 4: _settings.audio_format = Settings.AudioFormatOggOpus; break
                 default: _settings.audio_format = Settings.AudioFormatAuto
                 }
             }
@@ -266,6 +271,7 @@ DialogPage {
 
             Layout.fillWidth: verticalMode
             Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+            color: palette.text
         }
     }
 
@@ -287,6 +293,7 @@ DialogPage {
             Layout.fillWidth: verticalMode
             Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
             onTextEdited: root._autoTitleTag = false
+            color: palette.text
         }
     }
 
@@ -307,6 +314,7 @@ DialogPage {
             Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
             text: _settings.mtag_album_name
             onTextChanged: _settings.mtag_album_name = text
+            color: palette.text
         }
     }
 
@@ -327,6 +335,7 @@ DialogPage {
             Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
             text: _settings.mtag_artist_name
             onTextChanged: _settings.mtag_artist_name = text
+            color: palette.text
         }
     }
 
@@ -334,8 +343,16 @@ DialogPage {
         id: fileWriteDialog
 
         title: qsTr("Save File")
-        //defaultSuffix: _settings.audio_format_str
-        nameFilters: [ "MP3 (*.mp3)", "Ogg Vorbis (*.ogg)", "Wave (*.wav)" ]
+        selectedNameFilter: {
+            switch (_settings.audio_format) {
+            case Settings.AudioFormatWav: return "Wave (*.wav)"
+            case Settings.AudioFormatMp3: return "MP3 (*.mp3)"
+            case Settings.AudioFormatOggVorbis:
+            case Settings.AudioFormatOggOpus: return "Ogg (*.ogg)"
+            case Settings.AudioFormatAuto: return qsTr("All files") + " (*)"
+            }
+        }
+        nameFilters: [ "MP3 (*.mp3)", "Ogg (*.ogg)", "Wave (*.wav)", qsTr("All files") + " (*)" ]
         folder: _settings.file_save_dir_url
         selectExisting: false
         selectMultiple: false

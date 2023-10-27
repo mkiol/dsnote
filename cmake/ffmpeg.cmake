@@ -13,6 +13,9 @@ set(vorbis_checksum "b33cc4934322bcbf6efcbacf49e3ca01aadbea4114ec9589d1b1e9d20f7
 set(nasm_source_url "https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/nasm-2.15.05.tar.gz")
 set(nasm_checksum "9182a118244b058651c576baa9d0366ee05983c4d4ae1d9ddd3236a9f2304997")
 
+set(opus_source_url "https://downloads.xiph.org/releases/opus/opus-1.4.tar.gz")
+set(opus_checksum "c9b32b4253be5ae63d1ff16eea06b94b5f0f2951b7a02aceef58e3a3ce49c51f")
+
 ExternalProject_Add(nasm
     SOURCE_DIR ${external_dir}/nasm
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/nasm
@@ -67,6 +70,18 @@ ExternalProject_Add(vorbis
     INSTALL_COMMAND make DESTDIR=/ install
 )
 
+ExternalProject_Add(opus
+    SOURCE_DIR ${external_dir}/opus
+    BINARY_DIR ${PROJECT_BINARY_DIR}/external/opus
+    INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+    URL "${opus_source_url}"
+    URL_HASH SHA256=${opus_checksum}
+    CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+        -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    BUILD_ALWAYS False
+)
+
 set(ffmpeg_opts
     --disable-autodetect
     --disable-doc
@@ -84,6 +99,8 @@ set(ffmpeg_opts
     --enable-encoder=libmp3lame
     --enable-encoder=libvorbis
     --enable-encoder=pcm_s16le
+    --enable-encoder=libopus
+    --enable-encoder=flac
     --enable-decoder=pcm_u8
     --enable-decoder=pcm_u32le
     --enable-decoder=pcm_u32be
@@ -113,7 +130,7 @@ set(ffmpeg_opts
     --enable-decoder=mp3on4float
     --enable-decoder=libvorbis
     --enable-decoder=flac
-    --enable-decoder=opus
+    --enable-decoder=libopus
     --enable-muxer=mp3
     --enable-muxer=ogg
     --enable-muxer=wav
@@ -129,10 +146,12 @@ set(ffmpeg_opts
     --enable-parser=aac_latm
     --enable-parser=ac3
     --enable-libmp3lame
-    --enable-libvorbis)
+    --enable-libvorbis
+    --enable-libopus)
 
 set(ffmpeg_extra_ldflags -L${external_lib_dir})
 set(ffmpeg_extra_libs "-lvorbis -logg -lm")
+
 ExternalProject_Add(ffmpeg
     SOURCE_DIR ${external_dir}/ffmpeg
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/ffmpeg
@@ -162,6 +181,7 @@ ExternalProject_Add_StepDependencies(lame configure nasm)
 ExternalProject_Add_StepDependencies(ffmpeg configure lame)
 ExternalProject_Add_StepDependencies(vorbis configure ogg)
 ExternalProject_Add_StepDependencies(ffmpeg configure vorbis)
+ExternalProject_Add_StepDependencies(ffmpeg configure opus)
 
 list(APPEND deps_libs
     ${external_lib_dir}/libavfilter.a
@@ -175,5 +195,6 @@ list(APPEND deps_libs
     ${external_lib_dir}/libvorbis.a
     ${external_lib_dir}/libvorbisenc.a
     ${external_lib_dir}/libvorbisfile.a
-    ${external_lib_dir}/libogg.a)
-list(APPEND deps ffmpeg lame vorbis ogg)
+    ${external_lib_dir}/libogg.a
+    ${external_lib_dir}/libopus.a)
+list(APPEND deps ffmpeg lame vorbis opus ogg)

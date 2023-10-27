@@ -189,7 +189,8 @@ class settings : public QSettings, public singleton<settings> {
         AudioFormatAuto = 0,
         AudioFormatWav = 1,
         AudioFormatMp3 = 2,
-        AudioFormatOgg = 3
+        AudioFormatOggVorbis = 3,
+        AudioFormatOggOpus = 4
     };
     Q_ENUM(audio_format_t)
 
@@ -327,6 +328,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE audio_format_t
     filename_to_audio_format(const QString &filename) const;
     static QString audio_format_str_from_filename(const QString &filename);
+    static QString audio_ext_from_filename(const QString &filename);
     static audio_format_t audio_format_from_filename(const QString &filename);
     static audio_format_t filename_to_audio_format_static(
         const QString &filename);

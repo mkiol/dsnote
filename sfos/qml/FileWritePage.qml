@@ -19,7 +19,8 @@ Dialog {
         switch (autoFileFormat) {
         case Settings.AudioFormatWav: return "Wav";
         case Settings.AudioFormatMp3: return "MP3";
-        case Settings.AudioFormatOgg: return "Ogg Vorbis";
+        case Settings.AudioFormatOggVorbis: return "Ogg Vorbis";
+        case Settings.AudioFormatOggOpus: return "Ogg Opus";
         case Settings.AudioFormatAuto: break;
         }
         return "MP3";
@@ -130,10 +131,11 @@ Dialog {
             label: qsTr("Audio file format")
             currentIndex: {
                 switch (_settings.audio_format) {
-                case Settings.AudioFormatWav: return 1;
-                case Settings.AudioFormatMp3: return 2;
-                case Settings.AudioFormatOgg: return 3;
-                case Settings.AudioFormatAuto: break;
+                case Settings.AudioFormatWav: return 1
+                case Settings.AudioFormatMp3: return 2
+                case Settings.AudioFormatOggVorbis: return 3
+                case Settings.AudioFormatOggOpus: return 4
+                case Settings.AudioFormatAuto: break
                 }
                 return 0;
             }
@@ -142,12 +144,14 @@ Dialog {
                 MenuItem { text: "Wav" }
                 MenuItem { text: "MP3" }
                 MenuItem { text: "Ogg Vorbis" }
+                MenuItem { text: "Ogg Opus" }
             }
             onCurrentIndexChanged: {
                 switch (currentIndex) {
                 case 1: _settings.audio_format = Settings.AudioFormatWav; break;
                 case 2: _settings.audio_format = Settings.AudioFormatMp3; break;
-                case 3: _settings.audio_format = Settings.AudioFormatOgg; break;
+                case 3: _settings.audio_format = Settings.AudioFormatOggVorbis; break
+                case 4: _settings.audio_format = Settings.AudioFormatOggOpus; break
                 case 0:
                 default: _settings.audio_format = Settings.AudioFormatAuto;
                 }

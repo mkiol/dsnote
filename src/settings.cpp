@@ -73,14 +73,32 @@ QDebug operator<<(QDebug d, settings::speech_mode_t speech_mode) {
     return d;
 }
 
+static QString audio_format_to_ext(settings::audio_format_t format) {
+    switch (format) {
+        case settings::audio_format_t::AudioFormatWav:
+            return QStringLiteral("wav");
+        case settings::audio_format_t::AudioFormatMp3:
+            return QStringLiteral("mp3");
+        case settings::audio_format_t::AudioFormatOggVorbis:
+        case settings::audio_format_t::AudioFormatOggOpus:
+            return QStringLiteral("ogg");
+        case settings::audio_format_t::AudioFormatAuto:
+            break;
+    }
+
+    return QStringLiteral("mp3");
+}
+
 static QString audio_format_to_str(settings::audio_format_t format) {
     switch (format) {
         case settings::audio_format_t::AudioFormatWav:
             return QStringLiteral("wav");
         case settings::audio_format_t::AudioFormatMp3:
             return QStringLiteral("mp3");
-        case settings::audio_format_t::AudioFormatOgg:
-            return QStringLiteral("ogg");
+        case settings::audio_format_t::AudioFormatOggVorbis:
+            return QStringLiteral("ogg_vorbis");
+        case settings::audio_format_t::AudioFormatOggOpus:
+            return QStringLiteral("ogg_opus");
         case settings::audio_format_t::AudioFormatAuto:
             break;
     }
@@ -354,7 +372,7 @@ QString settings::file_save_dir_name() const {
 QString settings::file_save_filename() const {
     auto dir = QDir{file_save_dir()};
 
-    auto ext = audio_format_to_str(audio_format());
+    auto ext = audio_format_to_ext(audio_format());
 
     auto filename = QStringLiteral("speech-note-%1.") + ext;
 
@@ -674,6 +692,15 @@ QString settings::audio_format_str_from_filename(const QString& filename) {
     }
 }
 
+QString settings::audio_ext_from_filename(const QString& filename) {
+    if (settings::instance()->audio_format() ==
+        settings::audio_format_t::AudioFormatAuto) {
+        return audio_format_to_ext(filename_to_audio_format_static(filename));
+    } else {
+        return audio_format_to_ext(settings::instance()->audio_format());
+    }
+}
+
 settings::audio_format_t settings::filename_to_audio_format(
     const QString& filename) const {
     return filename_to_audio_format_static(QFileInfo{filename}.fileName());
@@ -685,8 +712,11 @@ settings::audio_format_t settings::filename_to_audio_format_static(
         return audio_format_t::AudioFormatWav;
     if (filename.endsWith(QLatin1String(".mp3"), Qt::CaseInsensitive))
         return audio_format_t::AudioFormatMp3;
-    if (filename.endsWith(QLatin1String(".ogg"), Qt::CaseInsensitive))
-        return audio_format_t::AudioFormatOgg;
+    if (filename.endsWith(QLatin1String(".ogg"), Qt::CaseInsensitive) ||
+        filename.endsWith(QLatin1String(".ogm"), Qt::CaseInsensitive))
+        return audio_format_t::AudioFormatOggVorbis;
+    if (filename.endsWith(QLatin1String(".ogx"), Qt::CaseInsensitive))
+        return audio_format_t::AudioFormatOggOpus;
     return audio_format_t::AudioFormatAuto;
 }
 
@@ -697,19 +727,18 @@ bool settings::file_exists(const QString& file_path) const {
 QString settings::add_ext_to_audio_filename(const QString& filename) const {
     QString new_filename = filename.trimmed();
 
-    auto audio_format_str =
-        settings::audio_format_str_from_filename(filename.trimmed());
+    auto audio_ext = settings::audio_ext_from_filename(filename.trimmed());
 
     auto sf = new_filename.split('.');
 
-    if (sf.last().toLower() != audio_format_str) {
+    if (sf.last().toLower() != audio_ext) {
         if (sf.size() > 1) {
             if (sf.last().isEmpty())
-                sf.last() = audio_format_str;
+                sf.last() = audio_ext;
             else
-                sf.last() = std::move(audio_format_str);
+                sf.last() = std::move(audio_ext);
         } else {
-            sf.push_back(std::move(audio_format_str));
+            sf.push_back(std::move(audio_ext));
         }
     }
 

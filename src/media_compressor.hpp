@@ -30,7 +30,7 @@ extern "C" {
 
 class media_compressor {
    public:
-    enum class format_t { unknown, wav, mp3, ogg };
+    enum class format_t { unknown, wav, mp3, ogg_vorbis, ogg_opus };
     friend std::ostream& operator<<(std::ostream& os, format_t format);
 
     enum class quality_t { vbr_high, vbr_medium, vbr_low };
@@ -100,7 +100,7 @@ class media_compressor {
     void clean_av_in_format();
     void process();
     bool read_frame(AVPacket* pkt);
-    bool decode_frame(AVPacket* pkt, AVFrame* frame);
+    bool decode_frame(AVPacket* pkt, AVFrame* frame_in, AVFrame* frame_out);
     bool encode_frame(AVFrame* frame, AVPacket* pkt);
     bool filter_frame(AVFrame* frame_in, AVFrame* frame_out);
     static format_t format_from_filename(const std::string& filename);

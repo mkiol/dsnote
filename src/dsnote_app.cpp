@@ -1819,17 +1819,18 @@ void dsnote_app::speech_to_file_internal(const QString &text,
     options.insert("speech_speed", settings::instance()->speech_speed());
 
     auto audio_format_str = settings::audio_format_str_from_filename(dest_file);
+    auto audio_ext = settings::audio_ext_from_filename(dest_file);
 
     options.insert("audio_format", audio_format_str);
     options.insert("audio_quality",
                    audio_quality_to_str(settings::instance()->audio_quality()));
 
-    if (QFileInfo{dest_file}.suffix().toLower() != audio_format_str) {
+    if (QFileInfo{dest_file}.suffix().toLower() != audio_ext) {
         qDebug() << "file name doesn't have proper extension for audio format";
         if (dest_file.endsWith('.'))
-            m_dest_file = dest_file + audio_format_str;
+            m_dest_file = dest_file + audio_ext;
         else
-            m_dest_file = dest_file + '.' + audio_format_str;
+            m_dest_file = dest_file + '.' + audio_ext;
     } else {
         m_dest_file = dest_file;
     }

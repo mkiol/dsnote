@@ -113,7 +113,10 @@ static settings::audio_format_t tts_audio_format_from_options(
         auto format = options.value(QStringLiteral("audio_format")).toString();
         if (format == "wav") return settings::audio_format_t::AudioFormatWav;
         if (format == "mp3") return settings::audio_format_t::AudioFormatMp3;
-        if (format == "ogg") return settings::audio_format_t::AudioFormatOgg;
+        if (format == "ogg_vorbis")
+            return settings::audio_format_t::AudioFormatOggVorbis;
+        if (format == "ogg_opus")
+            return settings::audio_format_t::AudioFormatOggOpus;
     }
 
     return settings::audio_format_t::AudioFormatAuto;
@@ -1531,7 +1534,8 @@ static QString file_ext_from_format(settings::audio_format_t format) {
             return "wav";
         case settings::audio_format_t::AudioFormatMp3:
             return "mp3";
-        case settings::audio_format_t::AudioFormatOgg:
+        case settings::audio_format_t::AudioFormatOggVorbis:
+        case settings::audio_format_t::AudioFormatOggOpus:
             return "ogg";
         case settings::audio_format_t::AudioFormatAuto:
             break;
@@ -1560,8 +1564,10 @@ static media_compressor::format_t media_format_from_audio_format(
             return media_compressor::format_t::wav;
         case settings::audio_format_t::AudioFormatMp3:
             return media_compressor::format_t::mp3;
-        case settings::audio_format_t::AudioFormatOgg:
-            return media_compressor::format_t::ogg;
+        case settings::audio_format_t::AudioFormatOggVorbis:
+            return media_compressor::format_t::ogg_vorbis;
+        case settings::audio_format_t::AudioFormatOggOpus:
+            return media_compressor::format_t::ogg_opus;
         case settings::audio_format_t::AudioFormatAuto:
             break;
     }

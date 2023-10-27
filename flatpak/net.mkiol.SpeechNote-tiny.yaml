@@ -289,6 +289,16 @@ modules:
       - --disable-shared
       - --enable-static
       - --with-pic
+      # adding prefix rnnoise_ to avoid symbol collision with libopus
+      - >
+        CFLAGS=-Dpitch_downsample=rnnoise_pitch_downsample
+        -Dpitch_search=rnnoise_pitch_search
+        -Dremove_doubling=rnnoise_remove_doubling
+        -D_celt_lpc=rnnoise__celt_lpc
+        -Dcelt_iir=rnnoise_celt_iir
+        -D_celt_autocorr=rnnoise__celt_autocorr
+        -Dcompute_gru=rnnoise_compute_gru
+        -Dcompute_dense=rnnoise_compute_dense
     sources:
       - type: archive
         url: https://github.com/GregorR/rnnoise-nu/archive/26269304e120499485438cd93acf5127c6908c68.zip
@@ -432,6 +442,16 @@ modules:
         url: https://altushost-swe.dl.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz
         sha256: ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
 
+  - name: opus
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    sources:
+      - type: archive
+        url: https://downloads.xiph.org/releases/opus/opus-1.4.tar.gz
+        sha256: c9b32b4253be5ae63d1ff16eea06b94b5f0f2951b7a02aceef58e3a3ce49c51f
+
   - name: ffmpeg
     buildsystem: autotools
     config-opts:
@@ -451,6 +471,8 @@ modules:
       - --enable-encoder=libmp3lame
       - --enable-encoder=libvorbis
       - --enable-encoder=pcm_s16le
+      - --enable-encoder=libopus
+      - --enable-encoder=flac
       - --enable-decoder=pcm_u8
       - --enable-decoder=pcm_u32le
       - --enable-decoder=pcm_u32be
@@ -480,7 +502,7 @@ modules:
       - --enable-decoder=mp3on4float
       - --enable-decoder=libvorbis
       - --enable-decoder=flac
-      - --enable-decoder=opus
+      - --enable-decoder=libopus
       - --enable-muxer=mp3
       - --enable-muxer=ogg
       - --enable-muxer=wav
@@ -497,6 +519,7 @@ modules:
       - --enable-parser=ac3
       - --enable-libmp3lame
       - --enable-libvorbis
+      - --enable-libopus
       - --extra-libs=-lvorbis -logg -lm
     sources:
       - type: archive
