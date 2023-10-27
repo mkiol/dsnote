@@ -5743,6 +5743,18 @@
             "size": "52979372"
         },
         {
+            "name": "English (April-ASR Dev)",
+            "model_id": "en_april_us_april_dev",
+            "engine": "stt_april",
+            "lang_id": "en",
+            "checksum": "299f8aeb",
+            "checksum_quick": "10478d11",
+            "urls": [
+                "https://april.sapples.net/april-english-dev-01110_en.april"
+            ],
+            "size": "336679370"
+        },
+        {
             "name": "English (April-ASR)",
             "model_id": "en_april_us_april",
             "engine": "stt_april",
@@ -5755,8 +5767,8 @@
             "size": "336581852"
         },
         {
-            "name": "Polski (April-ASR)",
-            "model_id": "pl_april_april",
+            "name": "Polski (April-ASR Dev)",
+            "model_id": "pl_april_april_dev",
             "engine": "stt_april",
             "lang_id": "pl",
             "checksum": "7e73a2dc",
@@ -5765,6 +5777,18 @@
                 "https://april.sapples.net/april-polish-dev-2_pl.april"
             ],
             "size": "336679676"
+        },
+        {
+            "name": "Français (April-ASR Dev)",
+            "model_id": "fr_april_april_dev",
+            "engine": "stt_april",
+            "lang_id": "fr",
+            "checksum": "95a0321c",
+            "checksum_quick": "e7c6d89b",
+            "urls": [
+                "https://april.sapples.net/april-french-dev-1_fr.april"
+            ],
+            "size": "336679356"
         },
         {
             "name": "Punctuation",

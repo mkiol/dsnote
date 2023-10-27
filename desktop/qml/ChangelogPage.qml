@@ -51,7 +51,7 @@ DialogPage {
             for Whisper models, especially on bigger models like Medium or Large.</li>
         <li>New engine: <i>april-asr</i>. It's lightweight and super fast STT engine.
             It supports intermediate results.
-            New engine comes with models for the following languages: English, Polish.</li>
+            New engine comes with models for the following languages: English, French, Polish.</li>
         <li>Inserting text to any active window. Using global keyboard shotcut or
             <i>start-listening-active-window</i> action you can
             directly insert the decoded text into any window which is currently in focus.
