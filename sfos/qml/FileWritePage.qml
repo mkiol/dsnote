@@ -55,6 +55,8 @@ Dialog {
         } else {
             app.speech_to_file(file_path, title_tag, track_tag)
         }
+
+        _settings.update_file_save_path(file_path)
     }
 
     Timer {

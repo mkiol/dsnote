@@ -361,6 +361,16 @@ void settings::set_file_save_dir(const QString& value) {
     }
 }
 
+void settings::update_file_save_path(const QString& path) {
+    QFileInfo fi{path};
+
+    if (!fi.baseName().isEmpty()) {
+        setValue(QStringLiteral("file_save_last_filename"), fi.fileName());
+    }
+
+    set_file_save_dir(fi.absoluteDir().absolutePath());
+}
+
 void settings::set_file_save_dir_url(const QUrl& value) {
     set_file_save_dir(value.toLocalFile());
 }
@@ -372,9 +382,22 @@ QString settings::file_save_dir_name() const {
 QString settings::file_save_filename() const {
     auto dir = QDir{file_save_dir()};
 
-    auto ext = audio_format_to_ext(audio_format());
+    auto filename = value(QStringLiteral("file_save_last_filename")).toString();
 
-    auto filename = QStringLiteral("speech-note-%1.") + ext;
+    if (filename.isEmpty()) {
+        filename = QStringLiteral("speech-note-%1.") +
+                   audio_format_to_ext(audio_format());
+    } else {
+        auto ext = audio_ext_from_filename(filename);
+
+        filename = QFileInfo{filename}.baseName();
+
+        if (!QFileInfo::exists(dir.filePath(filename + '.' + ext))) {
+            return filename + '.' + ext;
+        }
+
+        filename += "-%1." + ext;
+    }
 
     for (int i = 1; i <= 1000; ++i) {
         auto fn = filename.arg(i);
@@ -713,7 +736,7 @@ settings::audio_format_t settings::filename_to_audio_format_static(
     if (filename.endsWith(QLatin1String(".mp3"), Qt::CaseInsensitive))
         return audio_format_t::AudioFormatMp3;
     if (filename.endsWith(QLatin1String(".ogg"), Qt::CaseInsensitive) ||
-        filename.endsWith(QLatin1String(".ogm"), Qt::CaseInsensitive))
+        filename.endsWith(QLatin1String(".oga"), Qt::CaseInsensitive))
         return audio_format_t::AudioFormatOggVorbis;
     if (filename.endsWith(QLatin1String(".ogx"), Qt::CaseInsensitive))
         return audio_format_t::AudioFormatOggOpus;

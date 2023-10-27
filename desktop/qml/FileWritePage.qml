@@ -57,7 +57,7 @@ DialogPage {
             app.speech_to_file(file_path, title_tag, track_tag)
         }
 
-        _settings.file_save_dir = _settings.dir_of_file(file_path)
+        _settings.update_file_save_path(file_path)
 
         root.accept()
     }

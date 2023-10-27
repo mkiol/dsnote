@@ -235,6 +235,7 @@ class settings : public QSettings, public singleton<settings> {
     void set_file_save_dir_url(const QUrl &value);
     QString file_save_dir_name() const;
     QString file_save_filename() const;
+    Q_INVOKABLE void update_file_save_path(const QString &path);
     QString file_open_dir() const;
     void set_file_open_dir(const QString &value);
     QUrl file_open_dir_url() const;

@@ -224,7 +224,7 @@ ToolBar {
         property bool translation: false
 
         title: qsTr("Save File")
-        nameFilters: [ qsTr("Text") + " (*.txt)" ]
+        nameFilters: [ qsTr("Text") + " (*.txt)", qsTr("All files") + " (*)"]
         folder: _settings.file_save_dir_url
         selectExisting: false
         selectMultiple: false
