@@ -24,6 +24,42 @@
 #endif
 
 #include "logger.hpp"
+#include "media_compressor.hpp"
+
+static std::string file_ext_for_format(tts_engine::audio_format_t format) {
+    switch (format) {
+        case tts_engine::audio_format_t::wav:
+            return "wav";
+        case tts_engine::audio_format_t::mp3:
+            return "mp3";
+        case tts_engine::audio_format_t::ogg_vorbis:
+            return "ogg";
+        case tts_engine::audio_format_t::ogg_opus:
+            return "opus";
+        case tts_engine::audio_format_t::flac:
+            return "flac";
+    }
+
+    throw std::runtime_error("invalid audio format");
+}
+
+static media_compressor::format_t compressor_format_from_format(
+    tts_engine::audio_format_t format) {
+    switch (format) {
+        case tts_engine::audio_format_t::wav:
+            return media_compressor::format_t::wav;
+        case tts_engine::audio_format_t::mp3:
+            return media_compressor::format_t::mp3;
+        case tts_engine::audio_format_t::ogg_vorbis:
+            return media_compressor::format_t::ogg_vorbis;
+        case tts_engine::audio_format_t::ogg_opus:
+            return media_compressor::format_t::ogg_opus;
+        case tts_engine::audio_format_t::flac:
+            return media_compressor::format_t::flac;
+    }
+
+    throw std::runtime_error("invalid audio format");
+}
 
 std::ostream& operator<<(std::ostream& os, tts_engine::gpu_api_t api) {
     switch (api) {
@@ -35,6 +71,28 @@ std::ostream& operator<<(std::ostream& os, tts_engine::gpu_api_t api) {
             break;
         case tts_engine::gpu_api_t::rocm:
             os << "rocm";
+            break;
+    }
+
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, tts_engine::audio_format_t format) {
+    switch (format) {
+        case tts_engine::audio_format_t::wav:
+            os << "wav";
+            break;
+        case tts_engine::audio_format_t::mp3:
+            os << "mp3";
+            break;
+        case tts_engine::audio_format_t::ogg_vorbis:
+            os << "ogg-vorbis";
+            break;
+        case tts_engine::audio_format_t::ogg_opus:
+            os << "ogg-opus";
+            break;
+        case tts_engine::audio_format_t::flac:
+            os << "flac";
             break;
     }
 
@@ -68,7 +126,8 @@ std::ostream& operator<<(std::ostream& os, const tts_engine::config_t& config) {
        << ", cache-dir=" << config.cache_dir << ", data-dir=" << config.data_dir
        << ", speech-speed=" << config.speech_speed
        << ", use-gpu=" << config.use_gpu << ", gpu-device=["
-       << config.gpu_device << "]";
+       << config.gpu_device << "]"
+       << ", audio-format=" << config.audio_format;
     return os;
 }
 
@@ -212,7 +271,8 @@ std::string tts_engine::path_to_output_file(const std::string& text) const {
         m_config.lang +
         (m_config.speech_speed == 10 ? ""
                                      : std::to_string(m_config.speech_speed)));
-    return m_config.cache_dir + "/" + std::to_string(hash) + ".wav";
+    return m_config.cache_dir + "/" + std::to_string(hash) + '.' +
+           file_ext_for_format(m_config.audio_format);
 }
 
 static bool file_exists(const std::string& file_path) {
@@ -448,21 +508,37 @@ void tts_engine::process() {
                     /*prefix_path=*/m_config.share_dir,
                     /*diacritizer_path=*/m_config.model_files.diacritizer_path);
 
-                if (!encode_speech_impl(new_text, output_file)) {
+                auto output_file_wav =
+                    m_config.audio_format == audio_format_t::wav
+                        ? output_file
+                        : output_file + ".wav";
+
+                if (!encode_speech_impl(new_text, output_file_wav)) {
                     unlink(output_file.c_str());
                     LOGE("speech encoding error");
                     if (m_call_backs.speech_encoded) {
-                        m_call_backs.speech_encoded("", "", task.last);
+                        m_call_backs.speech_encoded(
+                            "", "", m_config.audio_format, task.last);
                     }
 
                     continue;
                 }
 
-                if (!model_supports_speed()) apply_speed(output_file);
+                if (!model_supports_speed()) apply_speed(output_file_wav);
+
+                if (m_config.audio_format != audio_format_t::wav) {
+                    media_compressor{}.compress(
+                        {output_file_wav}, output_file,
+                        compressor_format_from_format(m_config.audio_format),
+                        media_compressor::quality_t::vbr_high);
+
+                    unlink(output_file_wav.c_str());
+                }
             }
 
             if (m_call_backs.speech_encoded) {
-                m_call_backs.speech_encoded(task.text, output_file, task.last);
+                m_call_backs.speech_encoded(task.text, output_file,
+                                            m_config.audio_format, task.last);
             }
         }
 

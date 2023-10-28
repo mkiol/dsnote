@@ -80,8 +80,9 @@ static QString audio_format_to_ext(settings::audio_format_t format) {
         case settings::audio_format_t::AudioFormatMp3:
             return QStringLiteral("mp3");
         case settings::audio_format_t::AudioFormatOggVorbis:
-        case settings::audio_format_t::AudioFormatOggOpus:
             return QStringLiteral("ogg");
+        case settings::audio_format_t::AudioFormatOggOpus:
+            return QStringLiteral("opus");
         case settings::audio_format_t::AudioFormatAuto:
             break;
     }
@@ -379,10 +380,15 @@ QString settings::file_save_dir_name() const {
     return file_save_dir_url().fileName();
 }
 
+#include <QRegExp>
+
 QString settings::file_save_filename() const {
     auto dir = QDir{file_save_dir()};
 
     auto filename = value(QStringLiteral("file_save_last_filename")).toString();
+
+    const int max_i = 99999;
+    int i = 1;
 
     if (filename.isEmpty()) {
         filename = QStringLiteral("speech-note-%1.") +
@@ -396,10 +402,24 @@ QString settings::file_save_filename() const {
             return filename + '.' + ext;
         }
 
-        filename += "-%1." + ext;
+        QRegExp rx{"\\d+$"};
+        if (auto idx = rx.indexIn(filename); idx >= 0) {
+            bool ok = false;
+            auto ii = filename.midRef(idx).toInt(&ok);
+            if (ok && ii < max_i) {
+                i = ii;
+                filename = filename.mid(0, idx) + "%1." + ext;
+            } else {
+                filename += "-%1." + ext;
+            }
+        } else if (filename.endsWith('-')) {
+            filename += "%1." + ext;
+        } else {
+            filename += "-%1." + ext;
+        }
     }
 
-    for (int i = 1; i <= 1000; ++i) {
+    for (; i <= max_i; ++i) {
         auto fn = filename.arg(i);
         if (!QFileInfo::exists(dir.filePath(fn))) return fn;
     }
@@ -736,9 +756,10 @@ settings::audio_format_t settings::filename_to_audio_format_static(
     if (filename.endsWith(QLatin1String(".mp3"), Qt::CaseInsensitive))
         return audio_format_t::AudioFormatMp3;
     if (filename.endsWith(QLatin1String(".ogg"), Qt::CaseInsensitive) ||
-        filename.endsWith(QLatin1String(".oga"), Qt::CaseInsensitive))
+        filename.endsWith(QLatin1String(".oga"), Qt::CaseInsensitive) ||
+        filename.endsWith(QLatin1String(".ogx"), Qt::CaseInsensitive))
         return audio_format_t::AudioFormatOggVorbis;
-    if (filename.endsWith(QLatin1String(".ogx"), Qt::CaseInsensitive))
+    if (filename.endsWith(QLatin1String(".opus"), Qt::CaseInsensitive))
         return audio_format_t::AudioFormatOggOpus;
     return audio_format_t::AudioFormatAuto;
 }
@@ -1251,6 +1272,21 @@ void settings::set_py_feature_scan(bool value) {
     }
 }
 
+void settings::set_cache_audio_format(cache_audio_format_t value) {
+    if (cache_audio_format() != value) {
+        setValue(QStringLiteral("cache_audio_format"), static_cast<int>(value));
+        emit cache_audio_format_changed();
+        set_restart_required(true);
+    }
+}
+
+settings::cache_audio_format_t settings::cache_audio_format() const {
+    return static_cast<cache_audio_format_t>(
+        value(QStringLiteral("cache_audio_format"),
+              static_cast<int>(cache_audio_format_t::CacheAudioFormatOggOpus))
+            .toInt());
+}
+
 void settings::disable_gpu_scan() {
     set_gpu_scan_cuda(false);
     set_gpu_scan_hip(false);
@@ -1276,4 +1312,12 @@ bool settings::is_flatpak() const {
     return true;
 #endif
     return false;
+}
+
+bool settings::is_debug() const {
+#ifdef DEBUG
+    return true;
+#else
+    return false;
+#endif
 }

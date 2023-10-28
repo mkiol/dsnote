@@ -19,8 +19,8 @@ Dialog {
         switch (autoFileFormat) {
         case Settings.AudioFormatWav: return "Wav";
         case Settings.AudioFormatMp3: return "MP3";
-        case Settings.AudioFormatOggVorbis: return "Ogg Vorbis";
-        case Settings.AudioFormatOggOpus: return "Ogg Opus";
+        case Settings.AudioFormatOggVorbis: return "Vorbis";
+        case Settings.AudioFormatOggOpus: return "Opus";
         case Settings.AudioFormatAuto: break;
         }
         return "MP3";
@@ -145,8 +145,8 @@ Dialog {
                 MenuItem { text: qsTr("Auto") + " (" + root.autoFileFormatStr + ")" }
                 MenuItem { text: "Wav" }
                 MenuItem { text: "MP3" }
-                MenuItem { text: "Ogg Vorbis" }
-                MenuItem { text: "Ogg Opus" }
+                MenuItem { text: "Vorbis" }
+                MenuItem { text: "Opus" }
             }
             onCurrentIndexChanged: {
                 switch (currentIndex) {

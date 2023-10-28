@@ -30,7 +30,7 @@ extern "C" {
 
 class media_compressor {
    public:
-    enum class format_t { unknown, wav, mp3, ogg_vorbis, ogg_opus };
+    enum class format_t { unknown, wav, mp3, ogg_vorbis, ogg_opus, flac };
     friend std::ostream& operator<<(std::ostream& os, format_t format);
 
     enum class quality_t { vbr_high, vbr_medium, vbr_low };
@@ -55,8 +55,9 @@ class media_compressor {
                         quality_t quality,
                         task_finished_callback_t task_finished_callback);
     void decompress(std::vector<std::string> input_files,
-                    std::string output_file);
-    void decompress_async(std::vector<std::string> input_files);
+                    std::string output_file, bool mono_16khz);
+    void decompress_async(std::vector<std::string> input_files,
+                          bool mono_16khz);
     data_info get_data(char* data, size_t max_size);
     void cancel();
     inline bool error() const { return m_error; }
@@ -92,6 +93,8 @@ class media_compressor {
     bool m_error = false;
     std::vector<char> m_buff;
     data_info m_data_info;
+    bool m_mono_16khz = false;
+    bool m_no_decode = false;
 
     void init_av(task_t task);
     void init_av_filter(const char* arg);

@@ -45,6 +45,9 @@ class tts_engine {
     enum class gpu_api_t { opencl, cuda, rocm };
     friend std::ostream& operator<<(std::ostream& os, gpu_api_t api);
 
+    enum class audio_format_t { wav, mp3, ogg_vorbis, ogg_opus, flac };
+    friend std::ostream& operator<<(std::ostream& os, audio_format_t format);
+
     struct model_files_t {
         std::string model_path;
         std::string vocoder_path;
@@ -64,7 +67,8 @@ class tts_engine {
 
     struct callbacks_t {
         std::function<void(const std::string& text,
-                           const std::string& wav_file_path, bool last)>
+                           const std::string& audio_file_path,
+                           audio_format_t format, bool last)>
             speech_encoded;
         std::function<void(state_t state)> state_changed;
         std::function<void()> error;
@@ -101,6 +105,7 @@ class tts_engine {
         unsigned int speech_speed = 10;
         bool use_gpu = false;
         gpu_device_t gpu_device;
+        audio_format_t audio_format = audio_format_t::wav;
         inline bool has_option(char c) const {
             return options.find(c) != std::string::npos;
         }

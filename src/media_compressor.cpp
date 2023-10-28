@@ -63,6 +63,15 @@ extern "C" {
     return os;
 }
 
+[[maybe_unused]] static std::ostream& operator<<(std::ostream& os,
+                                                 const AVPacket* pkt) {
+    os << "pts=" << pkt->pts << ", dts=" << pkt->dts
+       << ", duration=" << pkt->duration << ", pos=" << pkt->pos
+       << ", sidx=" << pkt->stream_index << ", tb=" << pkt->time_base
+       << ", size=" << pkt->size;
+    return os;
+}
+
 static const char* str_from_av_error(int av_err) {
     static std::array<char, 1024> buf;
 
@@ -146,6 +155,9 @@ std::ostream& operator<<(std::ostream& os, media_compressor::format_t format) {
         case media_compressor::format_t::ogg_opus:
             os << "ogg-opus";
             break;
+        case media_compressor::format_t::flac:
+            os << "flac";
+            break;
     }
 
     return os;
@@ -186,6 +198,8 @@ media_compressor::format_t media_compressor::format_from_filename(
     if (ext == "mp3") return format_t::mp3;
     if (ext == "ogg" || ext == "oga" || ext == "ogx")
         return format_t::ogg_vorbis;
+    if (ext == "opus") return format_t::ogg_opus;
+    if (ext == "flac") return format_t::flac;
 
     return format_t::unknown;
 }
@@ -338,14 +352,21 @@ void media_compressor::init_av_in_format(const std::string& input_file) {
         throw std::runtime_error("avformat_find_stream_info error");
     }
 
-    auto in_stream_idx = av_find_best_stream(
+    m_in_audio_stream_idx = av_find_best_stream(
         m_in_av_format_ctx, AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
-    if (in_stream_idx < 0) {
+    if (m_in_audio_stream_idx < 0) {
         clean_av();
         throw std::runtime_error("no audio stream found in input file");
     }
 
-    m_in_audio_stream_idx = in_stream_idx;
+    const auto* in_stream = m_in_av_format_ctx->streams[m_in_audio_stream_idx];
+
+    LOGD("in stream: codec="
+         << in_stream->codecpar->codec_id << ", sample-rate="
+         << in_stream->codecpar->sample_rate << ", tb=" << in_stream->time_base
+         << ", frame-size=" << in_stream->codecpar->frame_size
+         << ", sample-format="
+         << static_cast<AVSampleFormat>(in_stream->codecpar->format));
 }
 
 void media_compressor::init_av(task_t task) {
@@ -354,22 +375,24 @@ void media_compressor::init_av(task_t task) {
 
     const auto* in_stream = m_in_av_format_ctx->streams[m_in_audio_stream_idx];
 
-    bool same_codec = [&]() {
+    m_no_decode = [&]() {
+        if (m_mono_16khz) return false;
+
         switch (task) {
             case task_t::compress:
                 switch (m_format) {
-                    case format_t::mp3:
-                        return in_stream->codecpar->codec_id ==
-                               AVCodecID::AV_CODEC_ID_MP3;
-                    case format_t::ogg_vorbis:
-                        return in_stream->codecpar->codec_id ==
-                               AVCodecID::AV_CODEC_ID_VORBIS;
-                    case format_t::ogg_opus:
-                        return in_stream->codecpar->codec_id ==
-                               AVCodecID::AV_CODEC_ID_OPUS;
                     case format_t::wav:
                         return in_stream->codecpar->codec_id ==
                                AVCodecID::AV_CODEC_ID_PCM_S16LE;
+                    case format_t::mp3:
+                        return in_stream->codecpar->codec_id ==
+                               AVCodecID::AV_CODEC_ID_MP3;
+                    case format_t::flac:
+                        return in_stream->codecpar->codec_id ==
+                               AVCodecID::AV_CODEC_ID_FLAC;
+                    case format_t::ogg_vorbis:
+                    case format_t::ogg_opus:
+                        return false;
                     case format_t::unknown:
                         break;
                 }
@@ -381,13 +404,9 @@ void media_compressor::init_av(task_t task) {
         return false;
     }();
 
-    if (same_codec) {
-        LOGD("in and out have the same codec: "
-             << in_stream->codecpar->codec_id);
+    if (m_no_decode) {
+        LOGD("no decode");
     } else {
-        LOGD("input: codec=" << in_stream->codecpar->codec_id
-                             << ", rate=" << in_stream->codecpar->sample_rate);
-
         const auto* decoder =
             avcodec_find_decoder(in_stream->codecpar->codec_id);
         if (!decoder) {
@@ -413,18 +432,23 @@ void media_compressor::init_av(task_t task) {
             throw std::runtime_error("avcodec_parameters_to_context error");
         }
 
-        m_in_av_audio_ctx->time_base =
-            AVRational{1, m_in_av_audio_ctx->sample_rate};
+        m_in_av_audio_ctx->time_base = in_stream->time_base;
+
+        //        m_in_av_audio_ctx->time_base =
+        //            AVRational{1, m_in_av_audio_ctx->sample_rate};
 
         if (avcodec_open2(m_in_av_audio_ctx, nullptr, nullptr) != 0) {
             clean_av();
             throw std::runtime_error("avcodec_open2 error");
         }
 
-        //    LOGD("audio decoder: sample fmt="
-        //         << m_in_av_audio_ctx->sample_fmt
-        //         << ", channel_layout=" << &m_in_av_audio_ctx->ch_layout
-        //         << ", sample_rate=" << m_in_av_audio_ctx->sample_rate);
+        LOGD("in codec: codec="
+             << m_in_av_audio_ctx->codec_id
+             << ", channels=" << m_in_av_audio_ctx->ch_layout.nb_channels
+             << ", tb=" << m_in_av_audio_ctx->time_base
+             << ", frame-size=" << m_in_av_audio_ctx->frame_size
+             << ", sample-rate=" << m_in_av_audio_ctx->sample_rate
+             << ", sample-format=" << m_in_av_audio_ctx->sample_fmt);
 
         auto encoder_name = [&]() {
             switch (task) {
@@ -436,6 +460,8 @@ void media_compressor::init_av(task_t task) {
                             return "libvorbis";
                         case format_t::ogg_opus:
                             return "libopus";
+                        case format_t::flac:
+                            return "flac";
                         case format_t::wav:
                         case format_t::unknown:
                             break;
@@ -477,23 +503,22 @@ void media_compressor::init_av(task_t task) {
                 m_in_av_audio_ctx->ch_layout.nb_channels == 1 ? 1 : 2);
             m_out_av_audio_ctx->sample_rate =
                 best_sample_rate(encoder, m_in_av_audio_ctx->sample_rate);
-            m_out_av_audio_ctx->time_base =
-                AVRational{1, m_out_av_audio_ctx->sample_rate};
+
+            m_out_av_audio_ctx->time_base = m_in_av_audio_ctx->time_base;
 
             if (m_format == format_t::ogg_opus) {
                 av_dict_set(&opts, "application", "voip", 0);
-
-                switch (m_quality) {
-                    case quality_t::vbr_high:
-                        av_dict_set(&opts, "b", "48k", 0);
-                        break;
-                    case quality_t::vbr_medium:
-                        av_dict_set(&opts, "b", "24k", 0);
-                        break;
-                    case quality_t::vbr_low:
-                        av_dict_set(&opts, "b", "10k", 0);
-                        break;
-                }
+                av_dict_set(&opts, "b",
+                            m_quality == quality_t::vbr_high  ? "48k"
+                            : m_quality == quality_t::vbr_low ? "10k"
+                                                              : "24k",
+                            0);
+            } else if (m_format == format_t::flac) {
+                av_dict_set_int(&opts, "compression_level",
+                                m_quality == quality_t::vbr_high  ? 0
+                                : m_quality == quality_t::vbr_low ? 12
+                                                                  : 5,
+                                0);
             } else {
                 m_out_av_audio_ctx->flags |= AV_CODEC_FLAG_QSCALE;
 
@@ -513,10 +538,19 @@ void media_compressor::init_av(task_t task) {
                 }
             }
         } else {
-            // STT engines support only mono 16000Hz
             m_out_av_audio_ctx->sample_fmt = AV_SAMPLE_FMT_S16;
-            m_out_av_audio_ctx->sample_rate = 16000;
-            av_channel_layout_default(&m_out_av_audio_ctx->ch_layout, 1);
+
+            if (m_mono_16khz) {
+                // STT engines support only mono 16000Hz
+                m_out_av_audio_ctx->sample_rate = 16000;
+                av_channel_layout_default(&m_out_av_audio_ctx->ch_layout, 1);
+            } else {
+                m_out_av_audio_ctx->sample_rate =
+                    m_in_av_audio_ctx->sample_rate;
+                av_channel_layout_default(
+                    &m_out_av_audio_ctx->ch_layout,
+                    m_in_av_audio_ctx->ch_layout.nb_channels == 1 ? 1 : 2);
+            }
         }
 
         if (avcodec_open2(m_out_av_audio_ctx, encoder, &opts) < 0) {
@@ -524,14 +558,24 @@ void media_compressor::init_av(task_t task) {
             throw std::runtime_error("avcodec_open2 error");
         }
 
+        clean_av_opts(&opts);
+
+        LOGD("out codec: codec="
+             << m_out_av_audio_ctx->codec_id
+             << ", channels=" << m_out_av_audio_ctx->ch_layout.nb_channels
+             << ", tb=" << m_out_av_audio_ctx->time_base
+             << ", frame-size=" << m_out_av_audio_ctx->frame_size
+             << ", sample-rate=" << m_out_av_audio_ctx->sample_rate
+             << ", sample-format=" << m_out_av_audio_ctx->sample_fmt);
+
         if (m_out_av_audio_ctx->sample_fmt != m_in_av_audio_ctx->sample_fmt) {
-            LOGD("sample format change: " << m_in_av_audio_ctx->sample_fmt
+            LOGD("sample-format change: " << m_in_av_audio_ctx->sample_fmt
                                           << " => "
                                           << m_out_av_audio_ctx->sample_fmt);
         }
 
         if (m_out_av_audio_ctx->sample_rate != m_in_av_audio_ctx->sample_rate) {
-            LOGD("sample rate change: " << m_in_av_audio_ctx->sample_rate
+            LOGD("sample-rate change: " << m_in_av_audio_ctx->sample_rate
                                         << " => "
                                         << m_out_av_audio_ctx->sample_rate);
         }
@@ -556,6 +600,8 @@ void media_compressor::init_av(task_t task) {
                     case format_t::ogg_vorbis:
                     case format_t::ogg_opus:
                         return "ogg";
+                    case format_t::flac:
+                        return "flac";
                     case format_t::wav:
                     case format_t::unknown:
                         break;
@@ -584,7 +630,7 @@ void media_compressor::init_av(task_t task) {
 
         out_stream->id = 0;
 
-        if (same_codec) {
+        if (m_no_decode) {
             if (avcodec_parameters_copy(out_stream->codecpar,
                                         in_stream->codecpar) < 0) {
                 clean_av();
@@ -608,6 +654,13 @@ void media_compressor::init_av(task_t task) {
             clean_av();
             throw std::runtime_error("avio_open error");
         }
+
+        LOGD("out stream: codec="
+             << out_stream->codecpar->codec_id
+             << ", sample-rate=" << out_stream->codecpar->sample_rate
+             << ", tb=" << out_stream->time_base << ", frame-size="
+             << out_stream->codecpar->frame_size << ", sample-format="
+             << static_cast<AVSampleFormat>(out_stream->codecpar->format));
     }
 }
 
@@ -622,7 +675,7 @@ bool media_compressor::is_media_file(const std::string& input_file) {
 }
 
 void media_compressor::decompress(std::vector<std::string> input_files,
-                                  std::string output_file) {
+                                  std::string output_file, bool mono_16khz) {
     LOGD("task decompress");
 
     if (input_files.empty()) throw std::runtime_error("empty input file list");
@@ -631,13 +684,15 @@ void media_compressor::decompress(std::vector<std::string> input_files,
                   [&](auto& file) { m_input_files.push(std::move(file)); });
 
     m_output_file = std::move(output_file);
+    m_mono_16khz = mono_16khz;
 
     init_av(task_t::decompress);
 
     process();
 }
 
-void media_compressor::decompress_async(std::vector<std::string> input_files) {
+void media_compressor::decompress_async(std::vector<std::string> input_files,
+                                        bool mono_16khz) {
     LOGD("task decompress async");
 
     if (input_files.empty()) throw std::runtime_error("empty input file list");
@@ -649,6 +704,8 @@ void media_compressor::decompress_async(std::vector<std::string> input_files) {
 
         m_input_files.push(std::move(file));
     });
+
+    m_mono_16khz = mono_16khz;
 
     init_av(task_t::decompress_async);
 
@@ -682,8 +739,16 @@ void media_compressor::compress_async(
 void media_compressor::compress(std::vector<std::string> input_files,
                                 std::string output_file, format_t format,
                                 quality_t quality) {
+    auto start = std::chrono::steady_clock::now();
+
     compress_internal(std::move(input_files), std::move(output_file), format,
                       quality, task_finished_callback_t{});
+
+    auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(
+                   std::chrono::steady_clock::now() - start)
+                   .count();
+
+    LOGD("compress stats: format=" << format << ", duration=" << dur << "ms");
 }
 
 void media_compressor::compress_internal(
@@ -762,13 +827,8 @@ void media_compressor::process() {
     int64_t next_ts = 0;
     m_data_info.eof = false;
 
-    bool no_decode = m_out_av_format_ctx &&
-                     m_in_av_format_ctx->streams[m_in_audio_stream_idx]
-                             ->codecpar->codec_id ==
-                         m_out_av_format_ctx->streams[0]->codecpar->codec_id;
-
     while (!m_shutdown) {
-        if (no_decode) {
+        if (m_no_decode) {
             if (!read_frame(pkt)) break;
         } else {
             auto* frame{frame_out};
@@ -784,14 +844,17 @@ void media_compressor::process() {
         }
 
         if (m_out_av_format_ctx) {
-            av_packet_rescale_ts(
-                pkt,
-                m_in_av_format_ctx->streams[m_in_audio_stream_idx]->time_base,
-                m_out_av_format_ctx->streams[0]->time_base);
+            auto in_tb =
+                m_in_av_format_ctx->streams[m_in_audio_stream_idx]->time_base;
+            auto out_tb = m_out_av_format_ctx->streams[0]->time_base;
 
+            pkt->duration = av_rescale_q(pkt->duration, in_tb, out_tb);
             pkt->stream_index = 0;
             pkt->pts = next_ts;
             pkt->dts = next_ts;
+            pkt->time_base = out_tb;
+            pkt->pos = -1;
+
             next_ts += pkt->duration;
 
             if (auto ret = av_write_frame(m_out_av_format_ctx, pkt); ret < 0)
@@ -849,6 +912,8 @@ bool media_compressor::read_frame(AVPacket* pkt) {
 
             throw std::runtime_error("av_read_frame error");
         }
+
+        if (pkt->flags & AV_PKT_FLAG_CORRUPT) LOGD("corrupt pkt");
 
         return true;
     }

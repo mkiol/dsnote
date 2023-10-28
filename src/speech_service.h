@@ -104,7 +104,10 @@ class speech_service : public QObject, public singleton<speech_service> {
 
     struct tts_partial_result_t {
         QString text;
-        QString wav_file_path;
+        QString audio_file_path;
+        tts_engine::audio_format_t audio_format =
+            tts_engine::audio_format_t::wav;
+        bool remove_audio_file = false;
         bool last = false;
         int task_id = INVALID_TASK;
     };
@@ -394,8 +397,10 @@ class speech_service : public QObject, public singleton<speech_service> {
                                  int task_id);
     void handle_stt_intermediate_text_decoded(const std::string &text);
     void handle_tts_speech_encoded(const std::string &text,
-                                   const std::string &wav_file_path, bool last);
-    void handle_tts_speech_encoded(const tts_partial_result_t &result);
+                                   const std::string &audio_file_path,
+                                   tts_engine::audio_format_t format,
+                                   bool last);
+    void handle_tts_speech_encoded(tts_partial_result_t result);
     void handle_speech_to_file(const tts_partial_result_t &result);
     void handle_player_state_changed(QMediaPlayer::State new_state);
     void handle_audio_available();
@@ -478,6 +483,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         const QVariantMap &options);
     static void setup_modules();
     static void setup_env();
+    void clean_tts_queue();
 
     // DBus
     Q_INVOKABLE int Cancel(int task);

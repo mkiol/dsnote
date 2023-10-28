@@ -162,6 +162,9 @@ class settings : public QSettings, public singleton<settings> {
                    audio_input_changed)
     Q_PROPERTY(bool py_feature_scan READ py_feature_scan WRITE
                    set_py_feature_scan NOTIFY py_feature_scan_changed)
+    Q_PROPERTY(
+        cache_audio_format_t cache_audio_format READ cache_audio_format WRITE
+            set_cache_audio_format NOTIFY cache_audio_format_changed)
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -193,6 +196,15 @@ class settings : public QSettings, public singleton<settings> {
         AudioFormatOggOpus = 4
     };
     Q_ENUM(audio_format_t)
+
+    enum class cache_audio_format_t {
+        CacheAudioFormatWav = 0,
+        CacheAudioFormatMp3 = 1,
+        CacheAudioFormatOggVorbis = 2,
+        CacheAudioFormatOggOpus = 3,
+        CacheAudioFormatFlac = 4
+    };
+    Q_ENUM(cache_audio_format_t)
 
     enum class audio_quality_t {
         AudioQualityVbrHigh = 10,
@@ -333,6 +345,7 @@ class settings : public QSettings, public singleton<settings> {
     static audio_format_t audio_format_from_filename(const QString &filename);
     static audio_format_t filename_to_audio_format_static(
         const QString &filename);
+    Q_INVOKABLE bool is_debug() const;
 
     // service
     QString models_dir() const;
@@ -369,6 +382,9 @@ class settings : public QSettings, public singleton<settings> {
     void set_gpu_device_tts(QString value);
     int gpu_device_idx_tts() const;
     void set_gpu_device_idx_tts(int value);
+
+    void set_cache_audio_format(cache_audio_format_t value);
+    cache_audio_format_t cache_audio_format() const;
 
     // stt
     QString default_stt_model() const;
@@ -441,6 +457,7 @@ class settings : public QSettings, public singleton<settings> {
     void audio_inputs_changed();
     void audio_input_changed();
     void py_feature_scan_changed();
+    void cache_audio_format_changed();
 
    private:
     inline static const QString settings_filename =

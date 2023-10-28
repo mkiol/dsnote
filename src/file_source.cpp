@@ -37,7 +37,7 @@ void file_source::start() {
     m_timer.setInterval(m_timer_quick);
     m_timer.start();
 
-    m_mc.decompress_async({m_file.toStdString()});
+    m_mc.decompress_async({m_file.toStdString()}, /*mono_16khz=*/true);
 }
 
 void file_source::handle_read_timeout() {

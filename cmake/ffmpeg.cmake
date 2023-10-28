@@ -77,7 +77,7 @@ ExternalProject_Add(opus
     URL "${opus_source_url}"
     URL_HASH SHA256=${opus_checksum}
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+        -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON
     BUILD_ALWAYS False
 )
@@ -134,6 +134,7 @@ set(ffmpeg_opts
     --enable-muxer=mp3
     --enable-muxer=ogg
     --enable-muxer=wav
+    --enable-muxer=flac
     --enable-demuxer=aac
     --enable-demuxer=mp3
     --enable-demuxer=mov

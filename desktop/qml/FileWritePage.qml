@@ -22,8 +22,8 @@ DialogPage {
         switch (autoFileFormat) {
         case Settings.AudioFormatWav: return "Wav";
         case Settings.AudioFormatMp3: return "MP3";
-        case Settings.AudioFormatOggVorbis: return "Ogg Vorbis";
-        case Settings.AudioFormatOggOpus: return "Ogg Opus";
+        case Settings.AudioFormatOggVorbis: return "Vorbis";
+        case Settings.AudioFormatOggOpus: return "Opus";
         case Settings.AudioFormatAuto: break;
         }
         return "MP3";
@@ -178,8 +178,8 @@ DialogPage {
                 ListElement { text: qsTr("Auto") }
                 ListElement { text: "Wav"}
                 ListElement { text: "MP3"}
-                ListElement { text: "Ogg Vorbis" }
-                ListElement { text: "Ogg Opus" }
+                ListElement { text: "Vorbis" }
+                ListElement { text: "Opus" }
             }
             onActivated: {
                 switch (index) {
@@ -347,12 +347,12 @@ DialogPage {
             switch (_settings.audio_format) {
             case Settings.AudioFormatWav: return "Wave (*.wav)"
             case Settings.AudioFormatMp3: return "MP3 (*.mp3)"
-            case Settings.AudioFormatOggVorbis:
-            case Settings.AudioFormatOggOpus: return "Ogg (*.ogg)"
+            case Settings.AudioFormatOggVorbis: return "Vorbis (*.ogg)"
+            case Settings.AudioFormatOggOpus: return "Opus (*.opus)"
             case Settings.AudioFormatAuto: return qsTr("All files") + " (*)"
             }
         }
-        nameFilters: [ "MP3 (*.mp3)", "Ogg (*.ogg)", "Wave (*.wav)", qsTr("All files") + " (*)" ]
+        nameFilters: [ "MP3 (*.mp3)", "Vorbis (*.ogg)", "Opus (*.opus)", "Wave (*.wav)", qsTr("All files") + " (*)" ]
         folder: _settings.file_save_dir_url
         selectExisting: false
         selectMultiple: false

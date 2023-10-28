@@ -181,7 +181,7 @@ speech_service::speech_service(QObject *parent)
             &speech_service::handle_mnt_engine_state_changed,
             Qt::QueuedConnection);
     connect(this, &speech_service::tts_speech_encoded, this,
-            static_cast<void (speech_service::*)(const tts_partial_result_t &)>(
+            static_cast<void (speech_service::*)(tts_partial_result_t)>(
                 &speech_service::handle_tts_speech_encoded),
             Qt::QueuedConnection);
     connect(this, &speech_service::stt_engine_shutdown, this,
@@ -1158,6 +1158,24 @@ QString speech_service::restart_stt_engine(
     return {};
 }
 
+static tts_engine::audio_format_t format_from_cache_format(
+    settings::cache_audio_format_t format) {
+    switch (format) {
+        case settings::cache_audio_format_t::CacheAudioFormatWav:
+            return tts_engine::audio_format_t::wav;
+        case settings::cache_audio_format_t::CacheAudioFormatMp3:
+            return tts_engine::audio_format_t::mp3;
+        case settings::cache_audio_format_t::CacheAudioFormatOggVorbis:
+            return tts_engine::audio_format_t::ogg_vorbis;
+        case settings::cache_audio_format_t::CacheAudioFormatOggOpus:
+            return tts_engine::audio_format_t::ogg_opus;
+        case settings::cache_audio_format_t::CacheAudioFormatFlac:
+            return tts_engine::audio_format_t::flac;
+    }
+
+    throw std::runtime_error{"invalid format"};
+}
+
 QString speech_service::restart_tts_engine(const QString &model_id,
                                            unsigned int speech_speed) {
     auto model_config = choose_model_config(engine_t::tts, model_id);
@@ -1176,6 +1194,8 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         config.speaker = model_config->tts->speaker.toStdString();
         config.speech_speed = speech_speed;
         config.options = model_config->options.toStdString();
+        config.audio_format = format_from_cache_format(
+            settings::instance()->cache_audio_format());
 
         if (settings::instance()->tts_use_gpu() &&
             settings::instance()->has_gpu_device_tts()) {
@@ -1255,10 +1275,13 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             }
 
             tts_engine::callbacks_t call_backs{
-                /*speech_encoded=*/[this](const std::string &text,
-                                          const std::string &wav_file_path,
-                                          bool last) {
-                    handle_tts_speech_encoded(text, wav_file_path, last);
+                /*speech_encoded=*/[this](
+                                       const std::string &text,
+                                       const std::string &audio_file_path,
+                                       tts_engine::audio_format_t audio_format,
+                                       bool last) {
+                    handle_tts_speech_encoded(text, audio_file_path,
+                                              audio_format, last);
                 },
                 /*state_changed=*/
                 [this](tts_engine::state_t state) {
@@ -1518,13 +1541,17 @@ void speech_service::handle_mnt_translate_finished(
     }
 }
 
-void speech_service::handle_tts_speech_encoded(const std::string &text,
-                                               const std::string &wav_file_path,
-                                               bool last) {
+void speech_service::handle_tts_speech_encoded(
+    const std::string &text, const std::string &audio_file_path,
+    tts_engine::audio_format_t format, bool last) {
     if (m_current_task) {
-        emit tts_speech_encoded({QString::fromStdString(text),
-                                 QString::fromStdString(wav_file_path), last,
-                                 m_current_task->id});
+        emit tts_speech_encoded(
+            {/*text=*/QString::fromStdString(text),
+             /*audio_file_path=*/QString::fromStdString(audio_file_path),
+             /*audio_format=*/format,
+             /*remove_ausio_file=*/false,
+             /*last=*/last,
+             /*task_id=*/m_current_task->id});
     }
 }
 
@@ -1535,8 +1562,9 @@ static QString file_ext_from_format(settings::audio_format_t format) {
         case settings::audio_format_t::AudioFormatMp3:
             return "mp3";
         case settings::audio_format_t::AudioFormatOggVorbis:
-        case settings::audio_format_t::AudioFormatOggOpus:
             return "ogg";
+        case settings::audio_format_t::AudioFormatOggOpus:
+            return "opus";
         case settings::audio_format_t::AudioFormatAuto:
             break;
     }
@@ -1606,8 +1634,8 @@ void speech_service::handle_speech_to_file(const tts_partial_result_t &result) {
     }
 
     m_current_task->counter.value += result.text.size();
-    if (!result.wav_file_path.isEmpty())
-        m_current_task->files.push_back(result.wav_file_path);
+    if (!result.audio_file_path.isEmpty())
+        m_current_task->files.push_back(result.audio_file_path);
 
     qDebug() << "partial speech to file progress:"
              << m_current_task->counter.progress();
@@ -1676,14 +1704,13 @@ void speech_service::handle_speech_to_file(const tts_partial_result_t &result) {
     }
 }
 
-void speech_service::handle_tts_speech_encoded(
-    const tts_partial_result_t &result) {
+void speech_service::handle_tts_speech_encoded(tts_partial_result_t result) {
     if (m_current_task && m_current_task->id == result.task_id) {
         if (m_current_task->speech_mode == speech_mode_t::play_speech) {
-            m_tts_queue.push(result);
+            m_tts_queue.push(std::move(result));
             handle_tts_queue();
         } else {
-            handle_speech_to_file(result);
+            handle_speech_to_file(std::move(result));
         }
     } else {
         qWarning() << "unknown task in tts speech encoded";
@@ -1701,9 +1728,20 @@ void speech_service::handle_tts_queue() {
 
     auto &result = m_tts_queue.front();
 
-    if (!result.wav_file_path.isEmpty()) {
+    if (!result.audio_file_path.isEmpty()) {
+        if (result.audio_format != tts_engine::audio_format_t::wav) {
+            auto audio_file_wav = result.audio_file_path + ".wav";
+            media_compressor{}.decompress(
+                {result.audio_file_path.toStdString()},
+                audio_file_wav.toStdString(),
+                /*mono_16khz=*/false);
+            result.audio_file_path = std::move(audio_file_wav);
+            result.audio_format = tts_engine::audio_format_t::wav;
+            result.remove_audio_file = true;
+        }
+
         m_player.setMedia(
-            QMediaContent{QUrl::fromLocalFile(result.wav_file_path)});
+            QMediaContent{QUrl::fromLocalFile(result.audio_file_path)});
 
         m_player.play();
 
@@ -1715,11 +1753,16 @@ void speech_service::handle_tts_queue() {
         if (m_tts_queue.empty()) {
             emit tts_partial_speech_playing("", task);
         } else {
+            if (result.remove_audio_file) QFile::remove(result.audio_file_path);
             m_tts_queue.pop();
         }
         emit tts_play_speech_finished(task);
     } else {
-        if (!m_tts_queue.empty()) m_tts_queue.pop();
+        if (!m_tts_queue.empty()) {
+            if (result.remove_audio_file) QFile::remove(result.audio_file_path);
+            m_tts_queue.pop();
+        }
+
         handle_tts_queue();
     }
 }
@@ -1787,11 +1830,15 @@ void speech_service::handle_player_state_changed(
             if (m_tts_queue.empty()) {
                 emit tts_partial_speech_playing("", task);
             } else {
+                if (result.remove_audio_file)
+                    QFile::remove(result.audio_file_path);
                 m_tts_queue.pop();
             }
             emit tts_play_speech_finished(task);
         } else {
+            if (result.remove_audio_file) QFile::remove(result.audio_file_path);
             m_tts_queue.pop();
+
             if (m_tts_queue.empty()) {
                 emit tts_partial_speech_playing("", task);
             }
@@ -2617,7 +2664,8 @@ int speech_service::cancel(int task) {
             stop_mnt_engine();
     }
 
-    m_tts_queue = decltype(m_tts_queue){};
+    clean_tts_queue();
+
     m_player.stop();
 
     refresh_status();
@@ -2732,6 +2780,14 @@ int speech_service::tts_resume_speech(int task) {
     return SUCCESS;
 }
 
+void speech_service::clean_tts_queue() {
+    while (!m_tts_queue.empty()) {
+        if (m_tts_queue.front().remove_audio_file)
+            QFile::remove(m_tts_queue.front().audio_file_path);
+        m_tts_queue.pop();
+    }
+}
+
 int speech_service::tts_stop_speech(int task) {
     if (state() == state_t::unknown || state() == state_t::not_configured ||
         state() == state_t::busy) {
@@ -2753,7 +2809,9 @@ int speech_service::tts_stop_speech(int task) {
 
     m_player.pause();
     stop_tts_engine();
-    m_tts_queue = decltype(m_tts_queue){};
+
+    clean_tts_queue();
+
     m_player.stop();
 
     return SUCCESS;
@@ -3240,7 +3298,8 @@ void speech_service::remove_cached_media_files() {
 
     dir.setNameFilters(QStringList{} << "*.wav"
                                      << "*.mp3"
-                                     << "*.ogg");
+                                     << "*.ogg"
+                                     << "*.flac");
     dir.setFilter(QDir::Files);
 
     for (const auto &file : std::as_const(dir).entryList()) dir.remove(file);
