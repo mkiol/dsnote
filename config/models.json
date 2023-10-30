@@ -5917,6 +5917,20 @@
             "size": "63214519"
         },
         {
+            "name": "English (Piper Hfc Medium Female)",
+            "model_id": "en_piper_us_hfc_female_medium",
+            "engine": "tts_piper",
+            "lang_id": "en",
+            "checksum": "a9bfce8a",
+            "checksum_quick": "ee67c479",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a31bce3ed50c05399b2a830efd1c607df03cf4b5/en/en_US/hfc_female/medium/en_US-hfc_female-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a31bce3ed50c05399b2a830efd1c607df03cf4b5/en/en_US/hfc_female/medium/en_US-hfc_female-medium.onnx.json"
+            ],
+            "size": "63214519"
+        },
+        {
             "name": "English (Piper Amy Low Female)",
             "model_id": "en_piper_us_amy_low",
             "engine": "tts_piper",
@@ -20086,6 +20100,33 @@
             ],
             "options": "d",
             "size": "63214510",
+            "sups": [
+                {
+                    "role": "diacritizer",
+                    "file_name": "ar_tashkeel_diacritizer.ort",
+                    "checksum": "32ad5edd",
+                    "checksum_quick": "eb5f7f7d",
+                    "size": "10261536",
+                    "urls": [
+                        "https://github.com/rhasspy/piper-phonemize/raw/8e5aa981d9628533e612652dccb93d26c66c5b21/etc/libtashkeel_model.ort"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "اللهجة الأردنية (Piper Kareem Low Male)",
+            "model_id": "ar_piper_jo_kareem_low",
+            "engine": "tts_piper",
+            "lang_id": "ar",
+            "checksum": "ccbf1424",
+            "checksum_quick": "a403aba0",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a31bce3ed50c05399b2a830efd1c607df03cf4b5/ar/ar_JO/kareem/low/ar_JO-kareem-low.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/a31bce3ed50c05399b2a830efd1c607df03cf4b5/ar/ar_JO/kareem/low/ar_JO-kareem-low.onnx.json"
+            ],
+            "options": "d",
+            "size": "63214508",
             "sups": [
                 {
                     "role": "diacritizer",
