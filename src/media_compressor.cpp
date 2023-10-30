@@ -229,7 +229,17 @@ void media_compressor::clean_av() {
     }
 
     if (m_out_av_format_ctx) {
-        if (m_out_av_format_ctx->pb) avio_closep(&m_out_av_format_ctx->pb);
+        if (m_out_av_format_ctx->pb) {
+            if (m_out_av_format_ctx->flags & AVFMT_FLAG_CUSTOM_IO) {
+                if (m_out_av_format_ctx->pb) {
+                    if (m_out_av_format_ctx->pb->buffer)
+                        av_freep(&m_out_av_format_ctx->pb->buffer);
+                    avio_context_free(&m_out_av_format_ctx->pb);
+                }
+            } else {
+                avio_closep(&m_out_av_format_ctx->pb);
+            }
+        }
         avformat_free_context(m_out_av_format_ctx);
         m_out_av_format_ctx = nullptr;
     }
@@ -359,14 +369,16 @@ void media_compressor::init_av_in_format(const std::string& input_file) {
         throw std::runtime_error("no audio stream found in input file");
     }
 
-    const auto* in_stream = m_in_av_format_ctx->streams[m_in_audio_stream_idx];
+    //    const auto* in_stream =
+    //    m_in_av_format_ctx->streams[m_in_audio_stream_idx];
 
-    LOGD("in stream: codec="
-         << in_stream->codecpar->codec_id << ", sample-rate="
-         << in_stream->codecpar->sample_rate << ", tb=" << in_stream->time_base
-         << ", frame-size=" << in_stream->codecpar->frame_size
-         << ", sample-format="
-         << static_cast<AVSampleFormat>(in_stream->codecpar->format));
+    //    LOGD("in stream: codec="
+    //         << in_stream->codecpar->codec_id << ", sample-rate="
+    //         << in_stream->codecpar->sample_rate << ", tb=" <<
+    //         in_stream->time_base
+    //         << ", frame-size=" << in_stream->codecpar->frame_size
+    //         << ", sample-format="
+    //         << static_cast<AVSampleFormat>(in_stream->codecpar->format));
 }
 
 void media_compressor::init_av(task_t task) {
@@ -398,7 +410,8 @@ void media_compressor::init_av(task_t task) {
                 }
                 break;
             case task_t::decompress:
-            case task_t::decompress_async:
+            case task_t::decompress_raw_async:
+            case task_t::decompress_wav_async:
                 break;
         }
         return false;
@@ -434,21 +447,19 @@ void media_compressor::init_av(task_t task) {
 
         m_in_av_audio_ctx->time_base = in_stream->time_base;
 
-        //        m_in_av_audio_ctx->time_base =
-        //            AVRational{1, m_in_av_audio_ctx->sample_rate};
-
         if (avcodec_open2(m_in_av_audio_ctx, nullptr, nullptr) != 0) {
             clean_av();
             throw std::runtime_error("avcodec_open2 error");
         }
 
-        LOGD("in codec: codec="
-             << m_in_av_audio_ctx->codec_id
-             << ", channels=" << m_in_av_audio_ctx->ch_layout.nb_channels
-             << ", tb=" << m_in_av_audio_ctx->time_base
-             << ", frame-size=" << m_in_av_audio_ctx->frame_size
-             << ", sample-rate=" << m_in_av_audio_ctx->sample_rate
-             << ", sample-format=" << m_in_av_audio_ctx->sample_fmt);
+        //        LOGD("in codec: codec="
+        //             << m_in_av_audio_ctx->codec_id
+        //             << ", channels=" <<
+        //             m_in_av_audio_ctx->ch_layout.nb_channels
+        //             << ", tb=" << m_in_av_audio_ctx->time_base
+        //             << ", frame-size=" << m_in_av_audio_ctx->frame_size
+        //             << ", sample-rate=" << m_in_av_audio_ctx->sample_rate
+        //             << ", sample-format=" << m_in_av_audio_ctx->sample_fmt);
 
         auto encoder_name = [&]() {
             switch (task) {
@@ -468,7 +479,8 @@ void media_compressor::init_av(task_t task) {
                     }
                     break;
                 case task_t::decompress:
-                case task_t::decompress_async:
+                case task_t::decompress_raw_async:
+                case task_t::decompress_wav_async:
                     break;
             }
 
@@ -560,13 +572,14 @@ void media_compressor::init_av(task_t task) {
 
         clean_av_opts(&opts);
 
-        LOGD("out codec: codec="
-             << m_out_av_audio_ctx->codec_id
-             << ", channels=" << m_out_av_audio_ctx->ch_layout.nb_channels
-             << ", tb=" << m_out_av_audio_ctx->time_base
-             << ", frame-size=" << m_out_av_audio_ctx->frame_size
-             << ", sample-rate=" << m_out_av_audio_ctx->sample_rate
-             << ", sample-format=" << m_out_av_audio_ctx->sample_fmt);
+        //        LOGD("out codec: codec="
+        //             << m_out_av_audio_ctx->codec_id
+        //             << ", channels=" <<
+        //             m_out_av_audio_ctx->ch_layout.nb_channels
+        //             << ", tb=" << m_out_av_audio_ctx->time_base
+        //             << ", frame-size=" << m_out_av_audio_ctx->frame_size
+        //             << ", sample-rate=" << m_out_av_audio_ctx->sample_rate
+        //             << ", sample-format=" << m_out_av_audio_ctx->sample_fmt);
 
         if (m_out_av_audio_ctx->sample_fmt != m_in_av_audio_ctx->sample_fmt) {
             LOGD("sample-format change: " << m_in_av_audio_ctx->sample_fmt
@@ -607,15 +620,16 @@ void media_compressor::init_av(task_t task) {
                         break;
                 }
                 break;
-            case task_t::decompress_async:
+            case task_t::decompress_raw_async:
                 return "";
             case task_t::decompress:
+            case task_t::decompress_wav_async:
                 break;
         }
         return "wav";
     }();
 
-    if (task != task_t::decompress_async) {
+    if (task != task_t::decompress_raw_async) {
         if (avformat_alloc_output_context2(&m_out_av_format_ctx, nullptr,
                                            format_name, nullptr) < 0) {
             clean_av();
@@ -649,19 +663,83 @@ void media_compressor::init_av(task_t task) {
 
         // av_dump_format(m_out_av_format_ctx, out_stream->id, "", 1);
 
-        if (avio_open(&m_out_av_format_ctx->pb, m_output_file.c_str(),
-                      AVIO_FLAG_WRITE) < 0) {
-            clean_av();
-            throw std::runtime_error("avio_open error");
+        if (task == task_t::decompress_wav_async) {
+            auto* out_buf = static_cast<uint8_t*>(av_malloc(BUF_MAX_SIZE));
+            if (!out_buf) {
+                av_freep(&out_buf);
+                throw std::runtime_error("unable to allocate out av buf");
+            }
+
+            m_out_av_format_ctx->pb =
+                avio_alloc_context(out_buf, BUF_MAX_SIZE, 1, this, nullptr,
+                                   write_packet_callback, nullptr);
+            if (!m_out_av_format_ctx->pb)
+                throw std::runtime_error("avio_alloc_context error");
+
+            m_out_av_format_ctx->flags |= AVFMT_FLAG_NOBUFFER |
+                                          AVFMT_FLAG_FLUSH_PACKETS |
+                                          AVFMT_FLAG_CUSTOM_IO;
+        } else {
+            if (avio_open(&m_out_av_format_ctx->pb, m_output_file.c_str(),
+                          AVIO_FLAG_WRITE) < 0) {
+                clean_av();
+                throw std::runtime_error("avio_open error");
+            }
         }
 
-        LOGD("out stream: codec="
-             << out_stream->codecpar->codec_id
-             << ", sample-rate=" << out_stream->codecpar->sample_rate
-             << ", tb=" << out_stream->time_base << ", frame-size="
-             << out_stream->codecpar->frame_size << ", sample-format="
-             << static_cast<AVSampleFormat>(out_stream->codecpar->format));
+        //        LOGD("out stream: codec="
+        //             << out_stream->codecpar->codec_id
+        //             << ", sample-rate=" << out_stream->codecpar->sample_rate
+        //             << ", tb=" << out_stream->time_base << ", frame-size="
+        //             << out_stream->codecpar->frame_size << ", sample-format="
+        //             <<
+        //             static_cast<AVSampleFormat>(out_stream->codecpar->format));
     }
+}
+
+void media_compressor::write_to_buf(const char* data, int size) {
+    if (size > BUF_MAX_SIZE)
+        throw std::runtime_error("data size too large: " +
+                                 std::to_string(size));
+
+    std::unique_lock lock{m_mtx};
+    m_cv.wait(lock, [&]() {
+        if (m_shutdown) return true;
+        if (m_buf.size() + size <= BUF_MAX_SIZE) return true;
+
+        if (m_data_ready_callback) m_data_ready_callback();
+
+        return false;
+    });
+
+    if (!m_shutdown) {
+        auto old_size = m_buf.size();
+        m_buf.resize(m_buf.size() + size);
+        memcpy(std::next(m_buf.data(), old_size), data, size);
+    }
+
+    lock.unlock();
+}
+
+int media_compressor::write_packet_callback(void* opaque, uint8_t* buf,
+                                            int buf_size) {
+    static_cast<media_compressor*>(opaque)->write_to_buf(
+        reinterpret_cast<char*>(buf), buf_size);
+
+    return buf_size;
+}
+
+void media_compressor::setup_input_files(
+    std::vector<std::string>&& input_files) {
+    if (input_files.empty()) throw std::runtime_error("empty input file list");
+
+    m_data_info = data_info{};
+    std::for_each(input_files.begin(), input_files.end(), [&](auto& file) {
+        struct stat st;
+        if (stat(file.c_str(), &st) == 0) m_data_info.total += st.st_size;
+
+        m_input_files.push(std::move(file));
+    });
 }
 
 bool media_compressor::is_media_file(const std::string& input_file) {
@@ -678,10 +756,7 @@ void media_compressor::decompress(std::vector<std::string> input_files,
                                   std::string output_file, bool mono_16khz) {
     LOGD("task decompress");
 
-    if (input_files.empty()) throw std::runtime_error("empty input file list");
-
-    std::for_each(input_files.begin(), input_files.end(),
-                  [&](auto& file) { m_input_files.push(std::move(file)); });
+    setup_input_files(std::move(input_files));
 
     m_output_file = std::move(output_file);
     m_mono_16khz = mono_16khz;
@@ -691,38 +766,58 @@ void media_compressor::decompress(std::vector<std::string> input_files,
     process();
 }
 
-void media_compressor::decompress_async(std::vector<std::string> input_files,
-                                        bool mono_16khz) {
-    LOGD("task decompress async");
-
-    if (input_files.empty()) throw std::runtime_error("empty input file list");
-
-    m_data_info = data_info{};
-    std::for_each(input_files.begin(), input_files.end(), [&](auto& file) {
-        struct stat st;
-        if (stat(file.c_str(), &st) == 0) m_data_info.total += st.st_size;
-
-        m_input_files.push(std::move(file));
-    });
+void media_compressor::decompress_async_internal(
+    task_t task, std::vector<std::string>&& input_files, bool mono_16khz,
+    data_ready_callback_t&& data_ready_callback,
+    task_finished_callback_t&& task_finished_callback) {
+    setup_input_files(std::move(input_files));
 
     m_mono_16khz = mono_16khz;
 
-    init_av(task_t::decompress_async);
+    init_av(task);
 
     if (m_async_thread.joinable()) m_async_thread.join();
+    m_data_ready_callback = std::move(data_ready_callback);
 
-    m_async_thread = std::thread([this]() {
-        try {
-            m_error = false;
+    m_async_thread =
+        std::thread([this, callback = std::move(task_finished_callback)]() {
+            try {
+                m_error = false;
 
-            LOGD("process started");
-            process();
-            LOGD("process finished");
-        } catch (const std::runtime_error& err) {
-            LOGE("exception in process: " << err.what());
-            m_error = true;
-        }
-    });
+                LOGD("process started");
+                process();
+                LOGD("process finished");
+            } catch (const std::runtime_error& err) {
+                LOGE("exception in process: " << err.what());
+                m_error = true;
+            }
+
+            if (m_data_ready_callback && m_buf.size() > 0)
+                m_data_ready_callback();
+            if (callback) callback();
+        });
+}
+
+void media_compressor::decompress_to_raw_async(
+    std::vector<std::string> input_files, bool mono_16khz,
+    data_ready_callback_t data_ready_callback,
+    task_finished_callback_t task_finished_callback) {
+    LOGD("task decompress to raw async");
+
+    decompress_async_internal(
+        task_t::decompress_raw_async, std::move(input_files), mono_16khz,
+        std::move(data_ready_callback), std::move(task_finished_callback));
+}
+
+void media_compressor::decompress_to_wav_async(
+    std::vector<std::string> input_files, bool mono_16khz,
+    data_ready_callback_t data_ready_callback,
+    task_finished_callback_t task_finished_callback) {
+    LOGD("task decompress to wav async");
+
+    decompress_async_internal(
+        task_t::decompress_wav_async, std::move(input_files), mono_16khz,
+        std::move(data_ready_callback), std::move(task_finished_callback));
 }
 
 void media_compressor::compress_async(
@@ -791,7 +886,7 @@ void media_compressor::compress_internal(
                     m_error = true;
                 }
 
-                callback();
+                if (callback) callback();
             });
 
         LOGD("task compress started");
@@ -809,6 +904,18 @@ void media_compressor::process() {
         if (avformat_write_header(m_out_av_format_ctx, nullptr) < 0)
             throw std::runtime_error("avformat_write_header error");
     }
+
+    //    LOGD("writting format header");
+    //    auto ret = avformat_write_header(m_outFormatCtx, &opts);
+    //    if (ret != AVSTREAM_INIT_IN_WRITE_HEADER &&
+    //        ret != AVSTREAM_INIT_IN_INIT_OUTPUT) {
+    //        av_dict_free(&opts);
+    //        throw std::runtime_error("avformat_write_header error");
+    //    }
+    //    LOGD("format header written, ret="
+    //         << (ret == AVSTREAM_INIT_IN_WRITE_HEADER  ? "write-header"
+    //             : ret == AVSTREAM_INIT_IN_INIT_OUTPUT ? "init-output"
+    //                                                   : "unknown"));
 
     auto* pkt = av_packet_alloc();
     if (!pkt) throw std::runtime_error("av_packet_alloc error");
@@ -860,20 +967,9 @@ void media_compressor::process() {
             if (auto ret = av_write_frame(m_out_av_format_ctx, pkt); ret < 0)
                 throw std::runtime_error("av_write_frame error");
         } else {
-            if (pkt->size > BUF_MAX_SIZE)
-                throw std::runtime_error("pkt size too large: " +
-                                         std::to_string(pkt->size));
-
-            std::unique_lock lock{m_mtx};
-            m_cv.wait(lock, [&]() {
-                return m_shutdown || m_buff.size() + pkt->size <= BUF_MAX_SIZE;
-            });
+            write_to_buf(reinterpret_cast<char*>(pkt->data), pkt->size);
 
             if (m_shutdown) break;
-
-            auto old_size = m_buff.size();
-            m_buff.resize(m_buff.size() + pkt->size);
-            memcpy(std::next(m_buff.data(), old_size), pkt->data, pkt->size);
         }
 
         av_packet_unref(pkt);
@@ -887,10 +983,16 @@ void media_compressor::process() {
         if (av_write_trailer(m_out_av_format_ctx) < 0)
             LOGW("av_write_trailer error");
 
-        avio_closep(&m_out_av_format_ctx->pb);
+        if (m_out_av_format_ctx->flags & AVFMT_FLAG_CUSTOM_IO) {
+            if (m_out_av_format_ctx->pb) {
+                if (m_out_av_format_ctx->pb->buffer)
+                    av_freep(&m_out_av_format_ctx->pb->buffer);
+                avio_context_free(&m_out_av_format_ctx->pb);
+            }
+        } else {
+            avio_closep(&m_out_av_format_ctx->pb);
 
-        if (m_shutdown) {
-            unlink(m_output_file.c_str());
+            if (m_shutdown) unlink(m_output_file.c_str());
         }
     }
 }
@@ -1093,17 +1195,19 @@ bool media_compressor::encode_frame(AVFrame* frame, AVPacket* pkt) {
     return true;
 }
 
+size_t media_compressor::data_size() const { return m_buf.size(); }
+
 media_compressor::data_info media_compressor::get_data(char* data,
                                                        size_t max_size) {
     std::unique_lock lock{m_mtx};
 
-    m_data_info.size = std::min(max_size, m_buff.size());
+    m_data_info.size = std::min(max_size, m_buf.size());
 
     if (m_data_info.size > 0) {
-        memcpy(data, m_buff.data(), m_data_info.size);
-        memmove(m_buff.data(), m_buff.data() + m_data_info.size,
-                m_buff.size() - m_data_info.size);
-        m_buff.resize(m_buff.size() - m_data_info.size);
+        memcpy(data, m_buf.data(), m_data_info.size);
+        memmove(m_buf.data(), m_buf.data() + m_data_info.size,
+                m_buf.size() - m_data_info.size);
+        m_buf.resize(m_buf.size() - m_data_info.size);
     }
 
     lock.unlock();

@@ -8,6 +8,8 @@
 #ifndef SPEECH_SERVICE_H
 #define SPEECH_SERVICE_H
 
+#include <QDebug>
+#include <QIODevice>
 #include <QMediaPlayer>
 #include <QObject>
 #include <QString>
@@ -20,6 +22,7 @@
 #include <set>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "audio_source.h"
 #include "config.h"
@@ -433,7 +436,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     std::optional<model_config_t> choose_model_config(engine_t engine_type,
                                                       QString model_id = {},
                                                       QString out_lang_id = {});
-    inline auto recording() const { return static_cast<bool>(m_source); };
+    inline auto recording() const { return static_cast<bool>(m_source); }
     void refresh_status();
     void stop_stt_engine_gracefully();
     void stop_stt_engine();

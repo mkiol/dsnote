@@ -3299,6 +3299,7 @@ void speech_service::remove_cached_media_files() {
     dir.setNameFilters(QStringList{} << "*.wav"
                                      << "*.mp3"
                                      << "*.ogg"
+                                     << "*.opus"
                                      << "*.flac");
     dir.setFilter(QDir::Files);
 

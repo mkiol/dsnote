@@ -37,6 +37,9 @@ class media_compressor {
     friend std::ostream& operator<<(std::ostream& os, quality_t quality);
 
     using task_finished_callback_t = std::function<void()>;
+    using data_ready_callback_t = std::function<void()>;
+
+    static const int BUF_MAX_SIZE = 16384;
 
     struct data_info {
         size_t size = 0;
@@ -56,14 +59,26 @@ class media_compressor {
                         task_finished_callback_t task_finished_callback);
     void decompress(std::vector<std::string> input_files,
                     std::string output_file, bool mono_16khz);
-    void decompress_async(std::vector<std::string> input_files,
-                          bool mono_16khz);
+    void decompress_to_raw_async(
+        std::vector<std::string> input_files, bool mono_16khz,
+        data_ready_callback_t data_ready_callback,
+        task_finished_callback_t task_finished_callback);
+    void decompress_to_wav_async(
+        std::vector<std::string> input_files, bool mono_16khz,
+        data_ready_callback_t data_ready_callback,
+        task_finished_callback_t task_finished_callback);
     data_info get_data(char* data, size_t max_size);
+    size_t data_size() const;
     void cancel();
     inline bool error() const { return m_error; }
 
    private:
-    enum class task_t { compress, decompress, decompress_async };
+    enum class task_t {
+        compress,
+        decompress,
+        decompress_raw_async,
+        decompress_wav_async
+    };
 
     struct filter_ctx {
         AVFilterInOut* out = nullptr;
@@ -72,8 +87,6 @@ class media_compressor {
         AVFilterContext* sink_ctx = nullptr;
         AVFilterGraph* graph = nullptr;
     };
-
-    static const int BUF_MAX_SIZE = 8192;
 
     std::queue<std::string> m_input_files;
     std::string m_output_file;
@@ -91,10 +104,11 @@ class media_compressor {
     std::condition_variable m_cv;
     std::mutex m_mtx;
     bool m_error = false;
-    std::vector<char> m_buff;
+    std::vector<char> m_buf;
     data_info m_data_info;
     bool m_mono_16khz = false;
     bool m_no_decode = false;
+    data_ready_callback_t m_data_ready_callback;
 
     void init_av(task_t task);
     void init_av_filter(const char* arg);
@@ -111,6 +125,13 @@ class media_compressor {
                            std::string output_file, format_t format,
                            quality_t quality,
                            task_finished_callback_t task_finished_callback);
+    void setup_input_files(std::vector<std::string>&& input_files);
+    void decompress_async_internal(
+        task_t task, std::vector<std::string>&& input_files, bool mono_16khz,
+        data_ready_callback_t&& data_ready_callback,
+        task_finished_callback_t&& task_finished_callback);
+    void write_to_buf(const char* data, int size);
+    static int write_packet_callback(void* opaque, uint8_t* buf, int buf_size);
 };
 
 #endif // MEDIA_COMPRESSOR_HPP
