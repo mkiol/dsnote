@@ -44,6 +44,7 @@
 #endif
 
 #include "app_server.hpp"
+#include "avlogger.hpp"
 #include "config.h"
 #include "dsnote_app.h"
 #include "logger.hpp"
@@ -365,6 +366,7 @@ int main(int argc, char* argv[]) {
     Logger::init(cmd_opts.verbose ? Logger::LogType::Trace
                                   : Logger::LogType::Error);
     initQtLogger();
+    initAvLogger();
 
     qDebug() << "version:" << APP_VERSION;
 

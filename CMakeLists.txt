@@ -287,6 +287,8 @@ set(dsnote_lib_sources
     ${sources_dir}/mimic3_engine.cpp
     ${sources_dir}/april_engine.hpp
     ${sources_dir}/april_engine.cpp
+    ${sources_dir}/avlogger.hpp
+    ${sources_dir}/avlogger.cpp
 )
 
 if(WITH_DESKTOP)
