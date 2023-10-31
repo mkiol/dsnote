@@ -731,6 +731,18 @@ DialogPage {
                 ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
             }
 
+            CheckBox {
+                checked: _settings.cache_policy === Settings.CacheRemove
+                text: qsTr("Clear cache on close")
+                onCheckedChanged: {
+                    _settings.cache_policy = checked ? Settings.CacheRemove : Settings.CacheNoRemove
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("When closing, delete all cached audio files.")
+            }
+
             SectionLabel {
                 text: qsTr("Graphic cards support")
             }

@@ -1333,6 +1333,21 @@ settings::cache_audio_format_t settings::cache_audio_format() const {
             .toInt());
 }
 
+void settings::set_cache_policy(cache_policy_t value) {
+    if (cache_policy() != value) {
+        setValue(QStringLiteral("cache_policy"), static_cast<int>(value));
+        emit cache_policy_changed();
+        set_restart_required(true);
+    }
+}
+
+settings::cache_policy_t settings::cache_policy() const {
+    return static_cast<cache_policy_t>(
+        value(QStringLiteral("cache_policy"),
+              static_cast<int>(cache_policy_t::CacheRemove))
+            .toInt());
+}
+
 void settings::disable_gpu_scan() {
     set_gpu_scan_cuda(false);
     set_gpu_scan_hip(false);

@@ -169,6 +169,8 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(
         cache_audio_format_t cache_audio_format READ cache_audio_format WRITE
             set_cache_audio_format NOTIFY cache_audio_format_changed)
+    Q_PROPERTY(cache_policy_t cache_policy READ cache_policy WRITE
+                   set_cache_policy NOTIFY cache_policy_changed)
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -209,6 +211,9 @@ class settings : public QSettings, public singleton<settings> {
         CacheAudioFormatFlac = 4
     };
     Q_ENUM(cache_audio_format_t)
+
+    enum class cache_policy_t { CacheRemove = 0, CacheNoRemove = 1 };
+    Q_ENUM(cache_policy_t)
 
     enum class audio_quality_t {
         AudioQualityVbrHigh = 10,
@@ -393,6 +398,8 @@ class settings : public QSettings, public singleton<settings> {
 
     void set_cache_audio_format(cache_audio_format_t value);
     cache_audio_format_t cache_audio_format() const;
+    void set_cache_policy(cache_policy_t value);
+    cache_policy_t cache_policy() const;
 
     // stt
     QString default_stt_model() const;
@@ -466,6 +473,7 @@ class settings : public QSettings, public singleton<settings> {
     void audio_input_changed();
     void py_feature_scan_changed();
     void cache_audio_format_changed();
+    void cache_policy_changed();
 
    private:
     inline static const QString settings_filename =

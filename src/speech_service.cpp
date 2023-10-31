@@ -3294,16 +3294,20 @@ void speech_service::stop_keepalive_current_task() {
 }
 
 void speech_service::remove_cached_media_files() {
-    QDir dir{settings::instance()->cache_dir()};
+    if (settings::instance()->cache_policy() ==
+        settings::cache_policy_t::CacheRemove) {
+        QDir dir{settings::instance()->cache_dir()};
 
-    dir.setNameFilters(QStringList{} << "*.wav"
-                                     << "*.mp3"
-                                     << "*.ogg"
-                                     << "*.opus"
-                                     << "*.flac");
-    dir.setFilter(QDir::Files);
+        dir.setNameFilters(QStringList{} << "*.wav"
+                                         << "*.mp3"
+                                         << "*.ogg"
+                                         << "*.opus"
+                                         << "*.flac");
+        dir.setFilter(QDir::Files);
 
-    for (const auto &file : std::as_const(dir).entryList()) dir.remove(file);
+        for (const auto &file : std::as_const(dir).entryList())
+            dir.remove(file);
+    }
 }
 
 static void add_to_env_path(const QString &dir) {
