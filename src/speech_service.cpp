@@ -1032,6 +1032,7 @@ QString speech_service::restart_stt_engine(
         config.speech_mode =
             static_cast<stt_engine::speech_mode_t>(speech_mode);
         config.translate = false;
+        config.options = model_config->options.toStdString();
 
         if (settings::instance()->stt_use_gpu() &&
             settings::instance()->has_gpu_device_stt()) {

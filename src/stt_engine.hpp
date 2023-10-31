@@ -105,7 +105,11 @@ class stt_engine {
         bool translate = false; /*extra whisper feature*/
         bool speech_started = false;
         bool use_gpu = false;
+        std::string options;
         gpu_device_t gpu_device;
+        inline bool has_option(char c) const {
+            return options.find(c) != std::string::npos;
+        }
     };
     friend std::ostream& operator<<(std::ostream& os, const config_t& config);
 

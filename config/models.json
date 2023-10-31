@@ -5761,6 +5761,7 @@
             "lang_id": "en",
             "checksum": "51effde",
             "checksum_quick": "36eb8c3b",
+            "options": "i",
             "urls": [
                 "https://april.sapples.net/aprilv0_en-us.april"
             ],
@@ -5773,6 +5774,7 @@
             "lang_id": "pl",
             "checksum": "7e73a2dc",
             "checksum_quick": "e44f76f6",
+            "options": "i",
             "urls": [
                 "https://april.sapples.net/april-polish-dev-2_pl.april"
             ],
@@ -5785,6 +5787,7 @@
             "lang_id": "fr",
             "checksum": "95a0321c",
             "checksum_quick": "e7c6d89b",
+            "options": "i",
             "urls": [
                 "https://april.sapples.net/april-french-dev-1_fr.april"
             ],

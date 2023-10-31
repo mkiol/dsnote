@@ -47,7 +47,8 @@ april_engine::~april_engine() {
 
 void april_engine::start_processing_impl() {
     create_model();
-    create_punctuator();
+
+    if (m_config.has_option('i')) create_punctuator();
 }
 
 void april_engine::create_model() {

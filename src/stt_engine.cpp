@@ -179,8 +179,8 @@ std::ostream& operator<<(std::ostream& os, const stt_engine::config_t& config) {
        << "], speech-mode=" << config.speech_mode
        << ", vad-mode=" << config.vad_mode
        << ", speech-started=" << config.speech_started
-       << ", use-gpu=" << config.use_gpu << ", gpu-device=["
-       << config.gpu_device << "]";
+       << ", options=" << config.options << ", use-gpu=" << config.use_gpu
+       << ", gpu-device=[" << config.gpu_device << "]";
 
     return os;
 }
