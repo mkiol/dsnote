@@ -180,7 +180,6 @@ ToolBar {
             ToolButton {
                 id: notepadButton
 
-                enabled: _settings.translator_mode
                 Layout.alignment: Qt.AlignRight
                 text: qsTr("Notepad")
                 checkable: true
@@ -189,6 +188,8 @@ ToolBar {
                     if (_settings.translator_mode) {
                         _settings.translator_mode = false
                     }
+                    translatorButton.checked = _settings.translator_mode
+                    notepadButton.checked = !_settings.translator_mode
                 }
 
                 ToolTip.visible: hovered
@@ -199,7 +200,6 @@ ToolBar {
             ToolButton {
                 id: translatorButton
 
-                enabled: !_settings.translator_mode
                 Layout.alignment: Qt.AlignRight
                 text: qsTr("Translator")
                 checkable: true
@@ -209,11 +209,21 @@ ToolBar {
                         _settings.translator_mode = true
                         _settings.hint_translator = false
                     }
+                    translatorButton.checked = _settings.translator_mode
+                    notepadButton.checked = !_settings.translator_mode
                 }
 
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTr("Switch to Translator")
+            }
+
+            Connections {
+                target: _settings
+                onTranslator_mode_changed: {
+                    translatorButton.checked = _settings.translator_mode
+                    notepadButton.checked = !_settings.translator_mode
+                }
             }
         }
     }

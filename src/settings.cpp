@@ -19,6 +19,7 @@
 #include <QVariant>
 #include <QVariantList>
 #include <algorithm>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 
@@ -627,27 +628,59 @@ void settings::set_insert_mode(insert_mode_t value) {
     }
 }
 
+bool settings::qt_style_auto() const {
+    return value(QStringLiteral("qt_style_auto"), true).toBool();
+}
+
+void settings::set_qt_style_auto(bool value) {
+    if (qt_style_auto() != value) {
+        setValue(QStringLiteral("qt_style_auto"), value);
+        emit qt_style_changed();
+        set_restart_required(true);
+    }
+}
+
 int settings::qt_style_idx() const {
+    auto name = qt_style_name();
+
+    auto styles = QQuickStyle::availableStyles();
+
+    if (name.isEmpty()) return styles.size();
+
+    return styles.indexOf(name);
+}
+
+void settings::set_qt_style_idx(int value) {
+    auto styles = QQuickStyle::availableStyles();
+
+    if (value < 0 || value >= styles.size()) {
+        set_qt_style_name({});
+        return;
+    }
+
+    set_qt_style_name(styles.at(value));
+}
+
+QString settings::qt_style_name() const {
 #ifdef USE_DESKTOP
-    auto idx = value(QStringLiteral("qt_style_idx2"), 1000).toInt();
+    auto name =
+        value(QStringLiteral("qt_style_name"), default_qt_style_kde).toString();
 
-    if (idx < 0)
-        idx = QQuickStyle::availableStyles().size();
-    else if (idx >= 1000)
-        idx = QQuickStyle::availableStyles().lastIndexOf(default_qt_style);
+    if (!QQuickStyle::availableStyles().contains(name)) return {};
 
-    return idx;
+    return name;
 #else
-    return 0;
+    return "";
 #endif
 }
 
-void settings::set_qt_style_idx([[maybe_unused]] int value) {
+void settings::set_qt_style_name([[maybe_unused]] QString name) {
 #ifdef USE_DESKTOP
-    if (value >= QQuickStyle::availableStyles().size()) value = -1;
-    if (qt_style_idx() != value) {
-        setValue(QStringLiteral("qt_style_idx2"), value);
-        emit qt_style_idx_changed();
+    if (!QQuickStyle::availableStyles().contains(name)) name.clear();
+
+    if (qt_style_name() != name) {
+        setValue(QStringLiteral("qt_style_name"), name);
+        emit qt_style_changed();
         set_restart_required(true);
     }
 #endif
@@ -831,15 +864,28 @@ void settings::update_qt_style() const {
     qDebug() << "available styles:" << styles;
     qDebug() << "style paths:" << QQuickStyle::stylePathList();
 
-    if (qt_style_idx() < 0) return;
-
     QString style;
 
-    if (qt_style_idx() >= styles.size()) {
-        qWarning() << "forcing default style";
-        style = default_qt_style;
+    if (qt_style_auto()) {
+        qDebug() << "using auto qt style";
+
+        if (is_flatpak()) {
+            auto* desk_name = getenv("XDG_CURRENT_DESKTOP");
+            style = desk_name && QString{desk_name}.contains("GNOME")
+                        ? default_qt_style_gnome
+                        : default_qt_style_kde;
+        } else {
+            style = default_qt_style_kde;
+        }
     } else {
-        style = styles.at(qt_style_idx());
+        auto idx = qt_style_idx();
+
+        if (idx < 0 || idx >= styles.size()) {
+            qDebug() << "don't forcing any qt style";
+            return;
+        }
+
+        style = styles.at(idx);
     }
 
     qDebug() << "switching to style:" << style;

@@ -37,6 +37,8 @@ RowLayout {
 
         topPadding: 2
         bottomPadding: 2
+        leftPadding: appWin.padding
+        rightPadding: appWin.padding
 
         RowLayout {
             id: row
@@ -70,7 +72,7 @@ RowLayout {
                 id: _combo2
 
                 visible: false
-                Layout.preferredWidth: appWin.buttonSize * 0.75
+                Layout.preferredWidth: appWin.buttonSize * 0.9
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                 enabled: !root.off
                 ToolTip.visible: hovered

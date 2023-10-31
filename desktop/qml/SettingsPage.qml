@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2 as Dialogs
 import QtQuick.Layouts 1.3
@@ -188,14 +188,24 @@ DialogPage {
                 }
             }
 
+            CheckBox {
+                checked: !_settings.qt_style_auto
+                text: qsTr("Use custom graphical style")
+                onCheckedChanged: {
+                    _settings.qt_style_auto = !checked
+                }
+            }
+
             GridLayout {
+                visible: !_settings.qt_style_auto
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
 
                 Label {
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                     Layout.fillWidth: true
-                    text: qsTr("Graphical style") + " (" + qsTr("advanced option") + ")"
+                    text: qsTr("Graphical style")
                     wrapMode: Text.Wrap
                 }
                 ComboBox {
@@ -555,6 +565,7 @@ DialogPage {
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
                     text: _settings.hotkey_start_listening
                     onTextChanged: _settings.hotkey_start_listening = text
+                    color: palette.text
                 }
             }
 
@@ -574,6 +585,7 @@ DialogPage {
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
                     text: _settings.hotkey_start_listening_active_window
                     onTextChanged: _settings.hotkey_start_listening_active_window = text
+                    color: palette.text
                 }
             }
 
@@ -593,6 +605,7 @@ DialogPage {
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
                     text: _settings.hotkey_start_listening_clipboard
                     onTextChanged: _settings.hotkey_start_listening_clipboard = text
+                    color: palette.text
                 }
             }
 
@@ -612,6 +625,7 @@ DialogPage {
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
                     text: _settings.hotkey_stop_listening
                     onTextChanged: _settings.hotkey_stop_listening = text
+                    color: palette.text
                 }
             }
 
@@ -631,6 +645,7 @@ DialogPage {
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
                     text: _settings.hotkey_start_reading
                     onTextChanged: _settings.hotkey_start_reading = text
+                    color: palette.text
                 }
             }
 
@@ -650,6 +665,7 @@ DialogPage {
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
                     text: _settings.hotkey_start_reading_clipboard
                     onTextChanged: _settings.hotkey_start_reading_clipboard = text
+                    color: palette.text
                 }
             }
 
@@ -669,6 +685,7 @@ DialogPage {
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
                     text: _settings.hotkey_pause_resume_reading
                     onTextChanged: _settings.hotkey_pause_resume_reading = text
+                    color: palette.text
                 }
             }
 
@@ -688,6 +705,7 @@ DialogPage {
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
                     text: _settings.hotkey_cancel
                     onTextChanged: _settings.hotkey_cancel = text
+                    color: palette.text
                 }
             }
 

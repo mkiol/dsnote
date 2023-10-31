@@ -18,6 +18,10 @@ RowLayout {
 
     Frame {
         Layout.fillWidth: true
+        leftPadding: appWin.padding
+        rightPadding: appWin.padding
+        topPadding: 0
+        bottomPadding: appWin.padding
 
         background: Item {}
 
@@ -100,6 +104,7 @@ RowLayout {
                     wrapMode: TextEdit.WordWrap
                     verticalAlignment: Text.AlignVCenter
                     font.pixelSize: _settings.font_size < 5 ? appWin.textFontSize : _settings.font_size
+                    color: palette.text
 
                     property string placeholderText: {
                         if (app.busy || service.busy)

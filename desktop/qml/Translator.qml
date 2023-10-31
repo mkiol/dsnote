@@ -88,7 +88,9 @@ ColumnLayout {
                 Layout.fillWidth: true
                 background: Item {}
                 bottomPadding: 0
-                rightPadding: grid.verticalMode ? horizontalPadding : 0
+                leftPadding: appWin.padding
+                topPadding: appWin.padding
+                rightPadding: grid.verticalMode ? appWin.padding : 0
                 enabled: app.mnt_configured
 
                 ScrollTextArea {
@@ -129,8 +131,9 @@ ColumnLayout {
                         currentIndex: app.active_mnt_lang_idx
                     }
                     frame {
+                        leftPadding: appWin.padding
                         rightPadding: grid.verticalMode || !mntInCombo.verticalMode ?
-                                          mntInCombo.first.frame.horizontalPadding : 0
+                                          appWin.padding : 0
                     }
                 }
                 second {
@@ -148,7 +151,8 @@ ColumnLayout {
                         currentIndex: app.active_tts_model_for_in_mnt_idx
                     }
                     frame {
-                        rightPadding: grid.verticalMode ? mntInCombo.second.frame.horizontalPadding : 0
+                        leftPadding: appWin.padding
+                        rightPadding: grid.verticalMode ? appWin.padding : 0
                     }
                     button {
                         text: qsTr("Read")
@@ -172,7 +176,9 @@ ColumnLayout {
                 Layout.fillWidth: true
                 background: Item {}
                 bottomPadding: 0
-                leftPadding: grid.verticalMode ? horizontalPadding : 0
+                rightPadding: appWin.padding
+                topPadding: appWin.padding
+                leftPadding: grid.verticalMode ? appWin.padding : 0
 
                 ScrollTextArea {
                     id: _translatedNoteTextArea
@@ -219,7 +225,8 @@ ColumnLayout {
                         currentIndex: app.active_mnt_out_lang_idx
                     }
                     frame {
-                        leftPadding: grid.verticalMode ? mntOutCombo.first.frame.horizontalPadding : 0
+                        rightPadding: appWin.padding
+                        leftPadding: grid.verticalMode ? appWin.padding : 0
                     }
                 }
                 second {
@@ -238,8 +245,9 @@ ColumnLayout {
                         currentIndex: app.active_tts_model_for_out_mnt_idx
                     }
                     frame {
+                        rightPadding: appWin.padding
                         leftPadding: grid.verticalMode || !mntOutCombo.verticalMode ?
-                                         mntOutCombo.second.frame.horizontalPadding : 0
+                                         appWin.padding : 0
                     }
                     button {
                         text: qsTr("Read")
@@ -260,6 +268,8 @@ ColumnLayout {
         background: Item {}
         bottomPadding: 0
         topPadding: 0
+        rightPadding: appWin.padding
+        leftPadding: appWin.padding
 
         RowLayout {
             Button {

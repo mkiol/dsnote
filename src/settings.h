@@ -51,7 +51,11 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(bool hint_translator READ hint_translator WRITE
                    set_hint_translator NOTIFY hint_translator_changed)
     Q_PROPERTY(int qt_style_idx READ qt_style_idx WRITE set_qt_style_idx NOTIFY
-                   qt_style_idx_changed)
+                   qt_style_changed)
+    Q_PROPERTY(QString qt_style_name READ qt_style_name WRITE set_qt_style_name
+                   NOTIFY qt_style_changed)
+    Q_PROPERTY(bool qt_style_auto READ qt_style_auto WRITE set_qt_style_auto
+                   NOTIFY qt_style_changed)
     Q_PROPERTY(bool restart_required READ restart_required NOTIFY
                    restart_required_changed)
     Q_PROPERTY(unsigned int speech_speed READ speech_speed WRITE
@@ -266,6 +270,10 @@ class settings : public QSettings, public singleton<settings> {
     void set_hint_translator(bool value);
     int qt_style_idx() const;
     void set_qt_style_idx(int value);
+    QString qt_style_name() const;
+    void set_qt_style_name(QString value);
+    void set_qt_style_auto(bool value);
+    bool qt_style_auto() const;
     bool restart_required() const;
     void set_font_size(int value);
     int font_size() const;
@@ -419,7 +427,7 @@ class settings : public QSettings, public singleton<settings> {
     void translate_when_typing_changed();
     void default_tts_models_for_mnt_changed(const QString &lang);
     void hint_translator_changed();
-    void qt_style_idx_changed();
+    void qt_style_changed();
     void restart_required_changed();
     void speech_speed_changed();
     void font_size_changed();
@@ -462,8 +470,10 @@ class settings : public QSettings, public singleton<settings> {
    private:
     inline static const QString settings_filename =
         QStringLiteral("settings.conf");
-    inline static const QString default_qt_style =
+    inline static const QString default_qt_style_kde =
         QStringLiteral("org.kde.desktop");
+    inline static const QString default_qt_style_gnome =
+        QStringLiteral("org.kde.breeze");
     bool m_restart_required = false;
     QStringList m_gpu_devices_stt;
     QStringList m_gpu_devices_tts;

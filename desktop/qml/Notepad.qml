@@ -59,6 +59,9 @@ ColumnLayout {
         Layout.fillWidth: true
         background: Item {}
         bottomPadding: 0
+        leftPadding: appWin.padding
+        rightPadding: appWin.padding
+        topPadding: appWin.padding
 
         ScrollTextArea {
             id: _noteTextArea
