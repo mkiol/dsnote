@@ -869,28 +869,36 @@ void settings::update_qt_style() const {
     if (qt_style_auto()) {
         qDebug() << "using auto qt style";
 
-        if (is_flatpak()) {
+        if (styles.contains(default_qt_style_gnome)) {
             auto* desk_name = getenv("XDG_CURRENT_DESKTOP");
             style = desk_name && QString{desk_name}.contains("GNOME")
                         ? default_qt_style_gnome
                         : default_qt_style_kde;
-        } else {
+        } else if (styles.contains(default_qt_style_kde)) {
             style = default_qt_style_kde;
+        } else {
+            qWarning() << "default qt style not found";
         }
     } else {
         auto idx = qt_style_idx();
 
-        if (idx < 0 || idx >= styles.size()) {
-            qDebug() << "don't forcing any qt style";
-            return;
-        }
+        if (idx >= 0 && idx < styles.size()) style = styles.at(idx);
 
-        style = styles.at(idx);
+        if (!styles.contains(style)) {
+            qWarning() << "qt style not found:" << style;
+            style.clear();
+        }
     }
 
-    qDebug() << "switching to style:" << style;
+    if (style.isEmpty()) {
+        qDebug() << "don't forcing any qt style";
+    } else {
+        qDebug() << "switching to style:" << style;
 
-    QQuickStyle::setStyle(style);
+        QQuickStyle::setStyle(style);
+    }
+
+    setenv("QT_QUICK_CONTROLS_HOVER_ENABLED", "1", 1);
 #endif
 }
 
