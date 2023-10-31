@@ -510,6 +510,7 @@ modules:
       - --enable-muxer=mp3
       - --enable-muxer=ogg
       - --enable-muxer=wav
+      - --enable-muxer=flac
       - --enable-demuxer=aac
       - --enable-demuxer=mp3
       - --enable-demuxer=mov
