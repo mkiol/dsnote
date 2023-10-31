@@ -399,52 +399,6 @@ DialogPage {
 
             width: root.width
 
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    wrapMode: Text.Wrap
-                    Layout.fillWidth: true
-                    text: qsTr("Speech speed")
-                }
-
-                Slider {
-                    id: speechSpeedSlider
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered && !pressed
-                    ToolTip.text: qsTr("Change to make synthesized speech slower or faster.")
-
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    snapMode: Slider.SnapAlways
-                    stepSize: 1
-                    from: 1
-                    to: 20
-                    value: _settings.speech_speed
-
-                    onValueChanged: {
-                        _settings.speech_speed = value
-                    }
-
-                    Connections {
-                        target: _settings
-                        onSpeech_speedChanged: {
-                            speechSpeedSlider.value = _settings.speech_speed
-                        }
-                    }
-
-                    Label {
-                        anchors.bottom: parent.handle.top
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.bottomMargin: appWin.padding
-                        text: "x " + (parent.value / 10).toFixed(1)
-                    }
-                }
-            }
-
             CheckBox {
                 checked: _settings.diacritizer_enabled
                 text: qsTr("Restore diacritics before speech synthesis")
