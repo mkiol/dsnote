@@ -22196,6 +22196,7 @@
             "name": "한국어 (Espeak Robot)",
             "model_id": "ko_espeak_ko",
             "engine": "tts_espeak",
+            "options": "a",
             "lang_id": "ko"
         },
         {
@@ -23754,7 +23755,7 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/kor.tar.gz"
             ],
-            "options": "rn",
+            "options": "arn",
             "size": "134854730"
         },
         {
@@ -27085,6 +27086,7 @@
             "lang_id": "ko",
             "checksum": "18b548b9",
             "checksum_quick": "127f51aa",
+            "options": "a",
             "comp": "dir",
             "urls": [
                 "https://github.com/MycroftAI/mimic3-voices/raw/b239a9084e21fbaa7ac78ea6e31f5de1c31c8f42/voices/ko_KO/kss_low/config.json",
