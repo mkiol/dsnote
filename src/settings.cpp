@@ -671,7 +671,7 @@ QString settings::qt_style_name() const {
 
     return name;
 #else
-    return "";
+    return {};
 #endif
 }
 

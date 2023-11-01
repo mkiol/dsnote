@@ -1289,11 +1289,14 @@ bool models_manager::checksum_ok(const QString& checksum,
 
     auto ok = expected_checksum == real_checksum;
 
-    if (ok)
+    if (ok) {
+#ifdef DEBUG
         qDebug() << "checksum ok:" << real_checksum << file_name;
-    else
+#endif
+    } else {
         qWarning() << "checksum mismatch:" << real_checksum
                    << "(expected:" << expected_checksum << ")" << file_name;
+    }
 
     return ok;
 }
@@ -1627,6 +1630,7 @@ auto models_manager::extract_models(
             }
         }
 
+#ifdef DEBUG
         if (model.exists) {
             if (model_alias_of.isEmpty())
                 qDebug() << "found model:" << model_id;
@@ -1634,6 +1638,7 @@ auto models_manager::extract_models(
                 qDebug() << "found model:" << model_id << "alias of"
                          << model_alias_of;
         }
+#endif
 
         auto model_is_enabled = enabled_models.contains(model_id);
         if (model.exists) {
