@@ -29,6 +29,8 @@
 #include "gpu_tools.hpp"
 #endif
 
+#include "module_tools.hpp"
+
 QDebug operator<<(QDebug d, settings::mode_t mode) {
     switch (mode) {
         case settings::mode_t::Stt:
@@ -121,7 +123,6 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     qDebug() << "settings file:" << fileName();
     qDebug() << "platform:" << QGuiApplication::platformName();
 
-    update_qt_style();
     update_audio_inputs();
 
     // remove qml cache
@@ -850,19 +851,46 @@ QString settings::audio_format_str() const {
 QStringList settings::qt_styles() const {
 #ifdef USE_DESKTOP
     auto styles = QQuickStyle::availableStyles();
-    styles.append(tr("Don't force"));
+    styles.append(tr("Don't force any style"));
     return styles;
 #else
     return {};
 #endif
 }
 
-void settings::update_qt_style() const {
 #ifdef USE_DESKTOP
+static bool is_kde() {
+    const auto* desk_name = getenv("XDG_CURRENT_DESKTOP");
+    return desk_name && QString{desk_name}.contains("KDE", Qt::CaseInsensitive);
+}
+
+void settings::update_qt_style(QQmlApplicationEngine* engine) const {
+    if (auto prefix = module_tools::path_to_dir_for_path(
+            QStringLiteral("lib"), QStringLiteral("plugins"));
+        !prefix.isEmpty()) {
+        QCoreApplication::addLibraryPath(
+            QStringLiteral("%1/plugins").arg(prefix));
+    }
+
+    if (auto prefix = module_tools::path_to_dir_for_path(QStringLiteral("lib"),
+                                                         QStringLiteral("qml"));
+        !prefix.isEmpty()) {
+        engine->addImportPath(QStringLiteral("%1/qml").arg(prefix));
+    }
+
+    if (auto prefix = module_tools::path_to_dir_for_path(
+            QStringLiteral("lib"), QStringLiteral("qml/QtQuick/Controls.2"));
+        !prefix.isEmpty()) {
+        QQuickStyle::addStylePath(
+            QStringLiteral("%1/qml/QtQuick/Controls.2").arg(prefix));
+    }
+
     auto styles = QQuickStyle::availableStyles();
 
     qDebug() << "available styles:" << styles;
     qDebug() << "style paths:" << QQuickStyle::stylePathList();
+    qDebug() << "import paths:" << engine->importPathList();
+    qDebug() << "library paths:" << QCoreApplication::libraryPaths();
 
     QString style;
 
@@ -870,10 +898,9 @@ void settings::update_qt_style() const {
         qDebug() << "using auto qt style";
 
         if (styles.contains(default_qt_style_gnome)) {
-            auto* desk_name = getenv("XDG_CURRENT_DESKTOP");
-            style = desk_name && QString{desk_name}.contains("GNOME")
-                        ? default_qt_style_gnome
-                        : default_qt_style_kde;
+            style = is_kde() && styles.contains(default_qt_style_kde)
+                        ? default_qt_style_kde
+                        : default_qt_style_gnome;
         } else if (styles.contains(default_qt_style_kde)) {
             style = default_qt_style_kde;
         } else {
@@ -899,8 +926,8 @@ void settings::update_qt_style() const {
     }
 
     setenv("QT_QUICK_CONTROLS_HOVER_ENABLED", "1", 1);
-#endif
 }
+#endif
 
 QStringList settings::gpu_devices_stt() const { return m_gpu_devices_stt; }
 

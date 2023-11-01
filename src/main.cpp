@@ -288,8 +288,11 @@ static void start_app(const cmd_options& options, app_server& dbus_app_server) {
     auto* view = SailfishApp::createView();
     auto* context = view->rootContext();
 #else
+    QCoreApplication::libraryPaths();
     auto engine = std::make_unique<QQmlApplicationEngine>();
     auto* context = engine->rootContext();
+
+    settings::instance()->update_qt_style(engine.get());
 #endif
     register_types();
 

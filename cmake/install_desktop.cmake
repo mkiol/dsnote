@@ -110,3 +110,8 @@ if(WITH_SYSTEMD_SERVICE)
     configure_file("${dbus_dir}/dbus_speech.service.in" "${PROJECT_BINARY_DIR}/dbus_speech.service")
     install(FILES "${PROJECT_BINARY_DIR}/dbus_speech.service" DESTINATION share/dbus-1/services RENAME ${info_dbus_service}.service)
 endif()
+
+if(BUILD_QQC2_BREEZE_STYLE)
+    install(DIRECTORY "${external_lib_dir}/qml" DESTINATION ${lib_install_dir})
+    install(DIRECTORY "${external_lib_dir}/plugins" DESTINATION ${lib_install_dir})
+endif()

@@ -13,6 +13,9 @@
 #include <QString>
 #include <QStringList>
 #include <QUrl>
+#ifdef USE_DESKTOP
+#include <QQmlApplicationEngine>
+#endif
 
 #include "qdebug.h"
 #include "singleton.h"
@@ -238,7 +241,9 @@ class settings : public QSettings, public singleton<settings> {
     void scan_gpu_devices();
     void disable_gpu_scan();
     void disable_py_scan();
-
+#ifdef USE_DESKTOP
+    void update_qt_style(QQmlApplicationEngine *engine) const;
+#endif
     // app
     QString note() const;
     void set_note(const QString &value);
@@ -488,7 +493,6 @@ class settings : public QSettings, public singleton<settings> {
     QStringList m_audio_inputs;
 
     static QString settings_filepath();
-    void update_qt_style() const;
     void update_audio_inputs();
     void set_restart_required(bool value);
 

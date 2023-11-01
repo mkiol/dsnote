@@ -39,16 +39,16 @@ bool init_module(const QString& name) {
     return true;
 }
 
-static QString path_to_dir_for_path(const QString& dir, const QString& path) {
-    auto path_full = QStringLiteral(INSTALL_PREFIX "/%1/%2").arg(dir, path);
-    if (QFileInfo::exists(path_full))
-        return QStringLiteral(INSTALL_PREFIX "/%1").arg(dir);
-
-    path_full = QStringLiteral(INSTALL_PREFIX "/share/%1/%2/%3")
-                    .arg(APP_BINARY_ID, dir, path);
+QString path_to_dir_for_path(const QString& dir, const QString& path) {
+    auto path_full = QStringLiteral(INSTALL_PREFIX "/share/%1/%2/%3")
+                         .arg(APP_BINARY_ID, dir, path);
     if (QFileInfo::exists(path_full))
         return QStringLiteral(INSTALL_PREFIX "/share/%1/%2")
             .arg(APP_BINARY_ID, dir);
+
+    path_full = QStringLiteral(INSTALL_PREFIX "/%1/%2").arg(dir, path);
+    if (QFileInfo::exists(path_full))
+        return QStringLiteral(INSTALL_PREFIX "/%1").arg(dir);
 
     path_full =
         QStringLiteral(INSTALL_PREFIX "/share/%1/%2").arg(APP_BINARY_ID, path);
