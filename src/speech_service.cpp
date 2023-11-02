@@ -2306,6 +2306,12 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
         return INVALID_TASK;
     }
 
+    if (file.isEmpty()) {
+        qWarning() << "cannot transcribe_file, file not provided";
+        emit error(error_t::file_source);
+        return INVALID_TASK;
+    }
+
     if (lang.contains('-')) lang = lang.split('-').first();
     if (out_lang.contains('-')) out_lang = out_lang.split('-').first();
 
