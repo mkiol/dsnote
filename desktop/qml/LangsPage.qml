@@ -152,7 +152,7 @@ DialogPage {
                 id: closeButton
 
                 text: qsTr("Close")
-                icon.name: "window-close-symbolic"
+                //icon.name: "window-close-symbolic"
                 onClicked: root.reject()
                 Keys.onReturnPressed: root.reject()
             }
