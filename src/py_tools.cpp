@@ -59,28 +59,28 @@ libs_availability_t libs_availability() {
         py::module_::import("TTS");
         availability.coqui_tts = true;
     } catch (const std::exception& err) {
-        LOGD("py error: " << err.what());
+        LOGD("coqui tts check py error: " << err.what());
     }
 
     try {
         auto torch = py::module_::import("torch.cuda");
         availability.torch_cuda = torch.attr("is_available")().cast<bool>();
     } catch (const std::exception& err) {
-        LOGD("py error: " << err.what());
+        LOGD("torch cuda check py error: " << err.what());
     }
 
     try {
         py::module_::import("faster_whisper");
         availability.faster_whisper = true;
     } catch (const std::exception& err) {
-        LOGD("py error: " << err.what());
+        LOGD("faster-whisper check py error: " << err.what());
     }
 
     try {
         py::module_::import("mimic3_tts");
         availability.mimic3_tts = true;
     } catch (const std::exception& err) {
-        LOGD("py error: " << err.what());
+        LOGD("mimic3 tts check py error: " << err.what());
     }
 
     try {
@@ -88,14 +88,14 @@ libs_availability_t libs_availability() {
         py::module_::import("accelerate");
         availability.transformers = true;
     } catch (const std::exception& err) {
-        LOGD("py error: " << err.what());
+        LOGD("transformers check py error: " << err.what());
     }
 
     try {
         py::module_::import("unikud");
         availability.unikud = true;
     } catch (const std::exception& err) {
-        LOGD("py error: " << err.what());
+        LOGD("unikud check py error: " << err.what());
     }
 
     try {
@@ -157,7 +157,7 @@ libs_availability_t libs_availability() {
             LOGD("py error: " << err.what());
         }
     } catch (const std::exception& err) {
-        LOGD("py error: " << err.what());
+        LOGD("gruut check py error: " << err.what());
     }
 
     try {
@@ -165,7 +165,7 @@ libs_availability_t libs_availability() {
         py::module_::import("unidic_lite");
         availability.mecab = true;
     } catch (const std::exception& err) {
-        LOGD("py error: " << err.what());
+        LOGD("mecab check py error: " << err.what());
     }
 
     LOGD("py libs availability: [" << availability << "]");
