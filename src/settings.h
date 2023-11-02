@@ -483,9 +483,9 @@ class settings : public QSettings, public singleton<settings> {
    private:
     inline static const QString settings_filename =
         QStringLiteral("settings.conf");
-    inline static const QString default_qt_style_kde =
+    inline static const QString default_qt_style =
         QStringLiteral("org.kde.desktop");
-    inline static const QString default_qt_style_gnome =
+    inline static const QString default_qt_style_fallback =
         QStringLiteral("org.kde.breeze");
     bool m_restart_required = false;
     QStringList m_gpu_devices_stt;

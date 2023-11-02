@@ -665,7 +665,7 @@ void settings::set_qt_style_idx(int value) {
 QString settings::qt_style_name() const {
 #ifdef USE_DESKTOP
     auto name =
-        value(QStringLiteral("qt_style_name"), default_qt_style_kde).toString();
+        value(QStringLiteral("qt_style_name"), default_qt_style).toString();
 
     if (!QQuickStyle::availableStyles().contains(name)) return {};
 
@@ -859,9 +859,18 @@ QStringList settings::qt_styles() const {
 }
 
 #ifdef USE_DESKTOP
-static bool is_kde() {
-    const auto* desk_name = getenv("XDG_CURRENT_DESKTOP");
-    return desk_name && QString{desk_name}.contains("KDE", Qt::CaseInsensitive);
+static bool use_default_qt_style() {
+    const auto* desk_name_str = getenv("XDG_CURRENT_DESKTOP");
+    if (!desk_name_str) {
+        qDebug() << "no XDG_CURRENT_DESKTOP";
+        return false;
+    }
+
+    qDebug() << "XDG_CURRENT_DESKTOP:" << desk_name_str;
+
+    QString desk_name{desk_name_str};
+
+    return desk_name.contains("KDE") || desk_name.contains("XFCE");
 }
 
 void settings::update_qt_style(QQmlApplicationEngine* engine) const {
@@ -897,12 +906,12 @@ void settings::update_qt_style(QQmlApplicationEngine* engine) const {
     if (qt_style_auto()) {
         qDebug() << "using auto qt style";
 
-        if (styles.contains(default_qt_style_gnome)) {
-            style = is_kde() && styles.contains(default_qt_style_kde)
-                        ? default_qt_style_kde
-                        : default_qt_style_gnome;
-        } else if (styles.contains(default_qt_style_kde)) {
-            style = default_qt_style_kde;
+        if (styles.contains(default_qt_style_fallback)) {
+            style = use_default_qt_style() && styles.contains(default_qt_style)
+                        ? default_qt_style
+                        : default_qt_style_fallback;
+        } else if (styles.contains(default_qt_style)) {
+            style = default_qt_style;
         } else {
             qWarning() << "default qt style not found";
         }
