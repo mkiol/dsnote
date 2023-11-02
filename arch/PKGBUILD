@@ -13,6 +13,7 @@ depends=(
   'fmt'
   'hicolor-icon-theme'
   'kdbusaddons5'
+  'kquickcharts5'
   'libarchive'
   'openblas'
   'perl'
@@ -22,6 +23,7 @@ depends=(
   'qt5-x11extras'
   'qt5-multimedia'
   'qt5-quickcontrols2'
+  'qqc2-desktop-style5'
   'rubberband'
   'taglib'
   'xz'
@@ -75,6 +77,7 @@ build() {
     -DBUILD_FFMPEG=ON \
     -DBUILD_TAGLIB=OFF \
     -DBUILD_VOSK=OFF \
+    -DBUILD_QQC2_BREEZE_STYLE=ON \
     -DDOWNLOAD_VOSK=ON \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -Wno-dev
