@@ -279,6 +279,7 @@ void settings::set_default_stt_model_for_lang(const QString& lang,
                                               const QString& value) {
     if (default_stt_model_for_lang(lang) != value) {
         setValue(QStringLiteral("service/default_model_%1").arg(lang), value);
+        sync();
         emit default_stt_models_changed(lang);
     }
 }
@@ -293,6 +294,7 @@ void settings::set_default_tts_model_for_lang(const QString& lang,
     if (default_tts_model_for_lang(lang) != value) {
         setValue(QStringLiteral("service/default_tts_model_%1").arg(lang),
                  value);
+        sync();
         emit default_tts_models_changed(lang);
     }
 }
@@ -642,6 +644,7 @@ void settings::set_qt_style_auto(bool value) {
 }
 
 int settings::qt_style_idx() const {
+#ifdef USE_DESKTOP
     auto name = qt_style_name();
 
     auto styles = QQuickStyle::availableStyles();
@@ -649,9 +652,12 @@ int settings::qt_style_idx() const {
     if (name.isEmpty()) return styles.size();
 
     return styles.indexOf(name);
+#endif
+    return -1;
 }
 
-void settings::set_qt_style_idx(int value) {
+void settings::set_qt_style_idx([[maybe_unused]] int value) {
+#ifdef USE_DESKTOP
     auto styles = QQuickStyle::availableStyles();
 
     if (value < 0 || value >= styles.size()) {
@@ -660,6 +666,7 @@ void settings::set_qt_style_idx(int value) {
     }
 
     set_qt_style_name(styles.at(value));
+#endif
 }
 
 QString settings::qt_style_name() const {
