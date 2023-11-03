@@ -131,6 +131,18 @@ Page {
                 text: qsTr("Other")
             }
 
+            TextSwitch {
+                checked: _settings.cache_policy === Settings.CacheRemove
+                automaticCheck: false
+                text: qsTr("Clear cache on close")
+                description: qsTr("When closing, delete all cached audio files.")
+                onClicked: {
+                    _settings.cache_policy =
+                            _settings.cache_policy === Settings.CacheRemove ?
+                                Settings.CacheNoRemove : Settings.CacheRemove
+                }
+            }
+
             ItemBox {
                 title: qsTr("Location of language files")
                 value: _settings.models_dir_name
