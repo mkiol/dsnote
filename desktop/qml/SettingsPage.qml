@@ -408,8 +408,7 @@ DialogPage {
 
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Restore diacritical marks in the text before speech synthesis.") + " " +
-                              qsTr("This works only for Arabic and Hebrew languages.")
+                ToolTip.text: qsTr("This works only for Arabic and Hebrew languages.")
             }
 
             Label {
@@ -420,7 +419,7 @@ DialogPage {
                          app.feature_coqui_tts &&
                          !app.feature_diacritizer_he
                 color: "red"
-                text: qsTr("Diacritizer for Hebrew language is not available.")
+                text: qsTr("Diacritics restoration for Hebrew language is not available.")
             }
 
             CheckBox {
@@ -749,7 +748,7 @@ DialogPage {
 
             CheckBox {
                 checked: _settings.gpu_scan_cuda
-                text: qsTr("NVIDIA CUDA")
+                text: "NVIDIA CUDA"
                 onCheckedChanged: {
                     _settings.gpu_scan_cuda = checked
                 }
@@ -762,7 +761,7 @@ DialogPage {
 
             CheckBox {
                 checked: _settings.gpu_scan_hip
-                text: qsTr("AMD ROCm")
+                text: "AMD ROCm"
                 onCheckedChanged: {
                     _settings.gpu_scan_hip = checked
                 }
@@ -777,7 +776,7 @@ DialogPage {
                 spacing: appWin.padding
                 CheckBox {
                     checked: _settings.gpu_scan_opencl
-                    text: qsTr("OpenCL")
+                    text: "OpenCL"
                     onCheckedChanged: {
                         _settings.gpu_scan_opencl = checked
                     }

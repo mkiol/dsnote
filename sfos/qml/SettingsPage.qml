@@ -120,8 +120,7 @@ Page {
                 checked: _settings.diacritizer_enabled
                 automaticCheck: false
                 text: qsTr("Restore diacritics before speech synthesis")
-                description: qsTr("Restore diacritical marks in the text before speech synthesis.") + " " +
-                             qsTr("This works only for Arabic language.")
+                description: qsTr("This works only for Arabic language.")
                 onClicked: {
                     _settings.diacritizer_enabled = !_settings.diacritizer_enabled
                 }
