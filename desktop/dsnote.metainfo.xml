@@ -88,7 +88,7 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
-    <release version="4.3.0" date="2023-10-25">
+    <release version="4.3.0" date="2023-11-03">
       <description>
       <p>Accessibility:</p>
       <ul>
@@ -129,6 +129,8 @@
       <li>Stop listening button. Unlike Cancel, with this button you can stop listening but
           the already recorded voice will be decoded into text.</li>
       <li>Support for Opus audio codec in 'Transcribe a file'</li>
+      <li>New Whisper model for English: 'Distil-Whisper Large-v2'.
+          This model is much faster than currently enabled 'Whisper Large'.</li>
       <li>Fix: CUDA acceleration for Whisper models did not work on NVIDIA graphic cards with Maxwell architecture.</li>
       </ul>
       <p>Text to Speech:</p>
@@ -151,7 +153,10 @@
       </ul>
       <p>Other:</p>
       <ul>
-      <li>Setting option to disable support for certain graphic cards.</li>
+      <li>Setting option to disable support for certain graphic cards</li>
+      <li>Setting option 'Clear cache on close'</li>
+      <li>Cache compression. Temporary audio files are stored in Opus format instead of raw audio.
+          This significantly reduces the required disk space.</li>
       <li>Detecting the availability of the optional features.
           In the settings, you can check what optional features are available.</li>
       </ul>

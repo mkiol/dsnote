@@ -62,6 +62,8 @@ DialogPage {
         <li>Stop listening button. Unlike Cancel, with this button you can stop listening but
             the already recorded voice will be decoded into text.</li>
         <li>Support for Opus audio codec in <i>Transcribe a file</i></li>
+        <li>New Whisper model for English: <i>Distil-Whisper Large-v2.</i>
+            This model is much faster than currently enabled <i>Whisper Large</i></li>.
         <li>Fix: CUDA acceleration for Whisper models did not work on NVIDIA graphic cards with Maxwell architecture.</li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
@@ -95,6 +97,9 @@ DialogPage {
             (<i>Other</i> &rarr; <i>Graphics cards support</i>). Use this option if you observe problems
             when using GPU acceleration. If the application does not start due to graphics card problem,
             use the <i>--gpu-scan-off</i> command line option to switch off any GPU support.</li>
+        <li>Setting option <i>Clear cache on close</i></li>
+        <li>Cache compression. Temporary audio files are stored in Opus format instead of raw audio.
+            This significantly reduces the required disk space.</li>
         <li>Detecting the availability of the optional features. In the settings, you can check what optional features
             are available (<i>Other</i> &rarr; <i>Availability of optional features</i>).
             Feature availability depends on the libraries installed on your system.
