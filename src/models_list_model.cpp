@@ -224,10 +224,12 @@ QVariant ModelsListItem::data(int role) const {
 
 void ModelsListItem::update(const ModelsListItem *item) {
     if (m_downloading != item->downloading() ||
-        m_available != item->available() || m_progress != item->progress()) {
+        m_available != item->available() || m_progress != item->progress() ||
+        m_default_for_lang != item->default_for_lang()) {
         m_downloading = item->downloading();
         m_available = item->available();
         m_progress = item->progress();
+        m_default_for_lang = item->default_for_lang();
         emit itemDataChanged();
     }
 }
