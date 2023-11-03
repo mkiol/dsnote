@@ -35,7 +35,6 @@ cleanup:
   - "/lib/fst"
   - "/lib/cmake"
   - "/lib/pkgconfig"
-  - "/lib/debug"
   - "/lib/python3.10/site-packages/nvidia*"
   - "/lib/python3.10/site-packages/cmake*"
   - "/lib/python3.10/site-packages/git*"
@@ -445,7 +444,7 @@ modules:
       - type: archive
         url: https://altushost-swe.dl.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz
         sha256: ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
-  
+
   - name: opus
     buildsystem: cmake-ninja
     config-opts:
@@ -766,7 +765,7 @@ modules:
       - type: file
         url: https://developer.download.nvidia.com/compute/cuda/11.7.1/local_installers/cuda_11.7.1_515.65.01_linux.run
         sha256: 52286a29706549b7d0feeb0e7e3eca1b15287c436a69fa880ad385b1be3e04db
-        
+
   - name: whispercpp-cublas
     only-arches:
       - x86_64
@@ -832,7 +831,7 @@ modules:
       - type: file
         url: http://http.us.debian.org/debian/pool/contrib/n/nvidia-nccl/libnccl2_2.18.5-1-1_amd64.deb
         sha256: e577f0edf02d8c3983c718c30453e990250a25627400ac90173e9c8df1afdddd
-  
+
   - name: uroman
     only-arches:
       - x86_64
@@ -855,7 +854,7 @@ modules:
       - ./configure -des
       - make -j${FLATPAK_BUILDER_N_JOBS}
       - cp perl /app/bin/
-      - mkdir -p /app/lib/perl5/site_perl 
+      - mkdir -p /app/lib/perl5/site_perl
       - cp -r lib/* /app/lib/perl5/site_perl/
     sources:
       - type: archive
