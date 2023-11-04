@@ -29,6 +29,55 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Version %1").arg("4.3")
+            }
+
+            LogItem {
+                title: "New Speech to Text languages"
+                description: "Speech to Text with Whisper is enabled for the following new languages: " +
+                             "Afrikaans, Gujarati, Hausa, Telugu, Tswana, Javanese, Hebrew."
+            }
+
+            LogItem {
+                title: "New Speech to Text engine: April-asr"
+                description: "It's lightweight and super fast STT engine. It also supports intermediate results. " +
+                             "New engine comes with models for the following languages: English, French, Polish."
+            }
+
+            LogItem {
+                title: "Support for Opus audio codec"
+                description: "Opus codec is optimized for speech compression. " +
+                             "It is enabled both in 'Transcribe a file' and 'Export to audio file'."
+            }
+
+            LogItem {
+                title: "New Text to Speech models for Piper engine"
+                description: "New voices for the following languages: Arabic, English, Hungarian, Polish, " +
+                             "Czech, German, Ukrainian, Vietnamese, Serbian, French, Spanish, Nepali."
+            }
+
+            LogItem {
+                title: "More steps in the 'Speech speed' option."
+                description: "You can set speech speed from 0.1 to 2.0 values."
+            }
+
+            LogItem {
+                title: "Arabic diacritical marks restoration before speech synthesis"
+                description: "It is enabled by default, but if you don't need this option, it can be disabled in the settings."
+            }
+
+            LogItem {
+                title: "Setting option: 'Clear cache on close'"
+                description: "New option let you enable/disable cache audio auto clean-up."
+            }
+
+            LogItem {
+                title: "Cache compression"
+                description: "Temporary audio files are stored in Opus format instead of raw audio. " +
+                             "This significantly reduces the required disk space."
+            }
+
+            SectionHeader {
                 text: qsTr("Version %1").arg("4.2")
             }
 
