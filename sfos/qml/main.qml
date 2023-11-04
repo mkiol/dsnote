@@ -208,7 +208,7 @@ ApplicationWindow {
                 FilePickerPage {
                     nameFilters: [ '*.wav', '*.mp3', '*.ogg', '*.oga', '*.opus', '*.flac', '*.m4a', '*.aac', '*.mp4', '*.mkv', '*.ogv', '*.webm' ]
                     onSelectedContentPropertiesChanged: {
-                        app.transcribe_file(selectedContentProperties.filePath)
+                        app.transcribe_file(selectedContentProperties.filePath, false)
                     }
                 }
             }
@@ -227,11 +227,11 @@ ApplicationWindow {
             Connections {
                 target: _app_server
                 onActivate_requested: {
-                    appWin.raise()
+                    appWin.activate()
                 }
                 onFiles_to_open_requested: {
                     app.open_files(files, false)
-                    appWin.raise()
+                    appWin.activate()
                 }
             }
 

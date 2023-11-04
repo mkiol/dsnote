@@ -239,25 +239,21 @@ dsnote_app::dsnote_app(QObject *parent)
         Qt::QueuedConnection);
 
     m_translator_delay_timer.setSingleShot(true);
-    m_translator_delay_timer.setTimerType(Qt::VeryCoarseTimer);
     m_translator_delay_timer.setInterval(500);
     connect(&m_translator_delay_timer, &QTimer::timeout, this,
             &dsnote_app::handle_translate_delayed, Qt::QueuedConnection);
 
     m_open_files_delay_timer.setSingleShot(true);
-    m_open_files_delay_timer.setTimerType(Qt::VeryCoarseTimer);
-    m_open_files_delay_timer.setInterval(250);
+    m_open_files_delay_timer.setInterval(500);
     connect(&m_open_files_delay_timer, &QTimer::timeout, this,
             &dsnote_app::open_next_file, Qt::QueuedConnection);
 
     m_action_delay_timer.setSingleShot(true);
-    m_action_delay_timer.setTimerType(Qt::VeryCoarseTimer);
     m_action_delay_timer.setInterval(250);
     connect(&m_action_delay_timer, &QTimer::timeout, this,
             &dsnote_app::execute_pending_action, Qt::QueuedConnection);
 
     m_desktop_notification_delay_timer.setSingleShot(true);
-    m_desktop_notification_delay_timer.setTimerType(Qt::VeryCoarseTimer);
     m_desktop_notification_delay_timer.setInterval(250);
     connect(&m_desktop_notification_delay_timer, &QTimer::timeout, this,
             &dsnote_app::process_pending_desktop_notification,
@@ -274,6 +270,13 @@ dsnote_app::dsnote_app(QObject *parent)
         connect_service_signals();
         update_service_state();
     } else {
+        connect(models_manager::instance(), &models_manager::models_changed,
+                this, &dsnote_app::request_reload, Qt::QueuedConnection);
+        connect(settings::instance(), &settings::models_dir_changed, this,
+                &dsnote_app::request_reload, Qt::QueuedConnection);
+        connect(settings::instance(), &settings::restore_punctuation_changed,
+                this, &dsnote_app::request_reload, Qt::QueuedConnection);
+
         m_keepalive_timer.setSingleShot(true);
         m_keepalive_timer.setTimerType(Qt::VeryCoarseTimer);
         connect(&m_keepalive_timer, &QTimer::timeout, this,
@@ -289,6 +292,25 @@ dsnote_app::dsnote_app(QObject *parent)
     }
 
     register_hotkeys();
+}
+
+void dsnote_app::request_reload() {
+    if (settings::instance()->launch_mode() != settings::launch_mode_t::app)
+        return;
+
+    if (!m_features_availability.isEmpty()) {
+        qDebug() << "[app => dbus] Reload after fau";
+        m_service_reload_called = true;
+    } else {
+        qDebug() << "[app => dbus] Reload";
+    }
+
+    auto reply = m_dbus_service.Reload();
+    reply.waitForFinished();
+
+    if (reply.argumentAt<0>() != SUCCESS) {
+        qWarning() << "failed to reload service, error was returned";
+    }
 }
 
 void dsnote_app::update_listen() {
@@ -725,6 +747,18 @@ void dsnote_app::handle_state_changed(int status) {
                  << new_service_state;
         m_service_state = new_service_state;
 
+        if (settings::instance()->launch_mode() ==
+                settings::launch_mode_t::app &&
+            m_service_state == service_state_t::StateIdle &&
+            m_service_reload_called) {
+            m_service_reload_update_done = true;
+        }
+
+        if (m_service_state == service_state_t::StateIdle) {
+            features_availability();
+            emit features_availability_updated();
+        }
+
         emit service_state_changed();
 
         update_configured_state();
@@ -733,12 +767,8 @@ void dsnote_app::handle_state_changed(int status) {
     if (old_busy != busy()) {
         qDebug() << "app busy:" << old_busy << "=>" << busy();
         emit busy_changed();
-
-        if (!busy()) {
-            features_availability();
-            emit features_availability_updated();
-        }
     }
+
     if (old_connected != connected()) {
         qDebug() << "app connected:" << old_connected << " = > " << connected();
         emit connected_changed();
@@ -1500,6 +1530,8 @@ void dsnote_app::set_active_mnt_out_lang_idx(int idx) {
 }
 
 void dsnote_app::cancel() {
+    if (busy()) return;
+
     if (!m_open_files_delay_timer.isActive()) reset_files_queue();
 
     if (settings::instance()->launch_mode() ==
@@ -1555,7 +1587,7 @@ void dsnote_app::transcribe_file(const QString &source_file, bool replace) {
     m_side_task.set(new_task);
 }
 
-void dsnote_app::transcribe_file(const QUrl &source_file, bool replace) {
+void dsnote_app::transcribe_file_url(const QUrl &source_file, bool replace) {
     transcribe_file(source_file.toLocalFile(), replace);
 }
 
@@ -1746,8 +1778,9 @@ void dsnote_app::translate() {
     emit intermediate_text_changed();
 }
 
-void dsnote_app::speech_to_file(const QUrl &dest_file, const QString &title_tag,
-                                const QString &track_tag) {
+void dsnote_app::speech_to_file_url(const QUrl &dest_file,
+                                    const QString &title_tag,
+                                    const QString &track_tag) {
     speech_to_file(dest_file.toLocalFile(), title_tag, track_tag);
 }
 
@@ -1757,10 +1790,10 @@ void dsnote_app::speech_to_file(const QString &dest_file,
     speech_to_file_internal(note(), {}, dest_file, title_tag, track_tag);
 }
 
-void dsnote_app::speech_to_file_translator(bool transtalated,
-                                           const QUrl &dest_file,
-                                           const QString &title_tag,
-                                           const QString &track_tag) {
+void dsnote_app::speech_to_file_translator_url(bool transtalated,
+                                               const QUrl &dest_file,
+                                               const QString &title_tag,
+                                               const QString &track_tag) {
     speech_to_file_translator(transtalated, dest_file.toLocalFile(), title_tag,
                               track_tag);
 }
@@ -2277,7 +2310,10 @@ void dsnote_app::update_configured_state() {
 
 bool dsnote_app::busy() const {
     return m_service_state == service_state_t::StateBusy ||
-           another_app_connected();
+           another_app_connected() ||
+           (settings::instance()->launch_mode() ==
+                settings::launch_mode_t::app &&
+            !m_service_reload_update_done);
 }
 
 bool dsnote_app::stt_configured() const { return m_stt_configured; }
@@ -2388,7 +2424,7 @@ void dsnote_app::undo_or_redu_note() {
 void dsnote_app::handle_translator_settings_changed() {
     if (settings::instance()->translator_mode()) {
         if (settings::instance()->translate_when_typing()) translate_delayed();
-    } else {
+    } else if (m_files_to_open.empty()) {
         cancel();
     }
 }
@@ -2447,7 +2483,18 @@ bool dsnote_app::load_note_from_file(const QString &input_file, bool replace) {
 }
 
 void dsnote_app::open_next_file() {
-    if (m_files_to_open.empty() || busy()) return;
+    if (m_files_to_open.empty()) return;
+
+    if (busy()) {
+        qDebug() << "delaying opening next file";
+        m_open_files_delay_timer.start();
+        return;
+    }
+
+    if (m_files_to_open.front().isEmpty()) {
+        reset_files_queue();
+        return;
+    }
 
     qDebug() << "opening file:" << m_files_to_open.front();
 
@@ -2487,6 +2534,7 @@ void dsnote_app::open_files(const QStringList &input_files, bool replace) {
     for (auto &file : input_files) m_files_to_open.push(file);
 
     if (!m_files_to_open.empty()) {
+        if (m_files_to_open.size() == 1) m_files_to_open.push({});
         if (!note().isEmpty()) make_undo();
         qDebug() << "opening files:" << input_files;
         m_stt_text_destination = replace ? stt_text_destination_t::note_replace

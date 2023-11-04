@@ -142,8 +142,6 @@ speech_service::speech_service(QObject *parent)
     : QObject{parent}, m_dbus_service_adaptor{this} {
     qDebug() << "starting service:" << settings::instance()->launch_mode();
 
-    connect(this, &speech_service::models_changed, this,
-            &speech_service::refresh_status);
     connect(models_manager::instance(), &models_manager::models_changed, this,
             &speech_service::handle_models_changed);
     connect(models_manager::instance(), &models_manager::busy_changed, this,
@@ -418,6 +416,10 @@ speech_service::speech_service(QObject *parent)
             lang_list = available_mnt_lang_list();
             qDebug() << "[service => dbus] signal MntLangListPropertyChanged";
             emit MntLangListPropertyChanged(lang_list);
+
+            m_models_changed_handled = true;
+
+            refresh_status();
         });
         connect(this, &speech_service::stt_transcribe_file_progress_changed,
                 this, [this](double progress, int task) {
@@ -464,6 +466,11 @@ speech_service::speech_service(QObject *parent)
             qWarning() << "dbus object registration failed";
             throw std::runtime_error("dbus object registration failed");
         }
+    } else {
+        connect(this, &speech_service::models_changed, this, [this] {
+            m_models_changed_handled = true;
+            refresh_status();
+        });
     }
 
     m_features_availability_timer.setSingleShot(true);
@@ -3030,7 +3037,8 @@ void speech_service::set_state(state_t new_state) {
 void speech_service::refresh_status() {
     state_t new_state;
 
-    if (models_manager::instance()->busy() || !feature_discovery_done()) {
+    if (models_manager::instance()->busy() || !feature_discovery_done() ||
+        !m_models_changed_handled) {
         new_state = state_t::busy;
     } else if (!models_manager::instance()->has_model_of_role(
                    models_manager::model_role_t::stt) &&
@@ -3504,6 +3512,11 @@ int speech_service::Reload() {
     qDebug() << "[dbus => service] called Reload";
     m_keepalive_timer.start();
 
+    m_models_changed_handled = false;
+
     models_manager::instance()->reload();
+
+    refresh_status();
+
     return SUCCESS;
 }

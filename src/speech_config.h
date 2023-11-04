@@ -57,7 +57,6 @@ class speech_config : public QObject {
     ModelsListModel *models_model();
     void handle_models_changed();
     bool busy() const;
-    void reload() const;
 };
 
 #endif  // SPEECH_CONFIG_H

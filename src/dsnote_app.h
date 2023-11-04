@@ -194,7 +194,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void set_active_tts_model_for_in_mnt_idx(int idx);
     Q_INVOKABLE void set_active_tts_model_for_out_mnt_idx(int idx);
     Q_INVOKABLE void transcribe_file(const QString &source_file, bool replace);
-    Q_INVOKABLE void transcribe_file(const QUrl &source_file, bool replace);
+    Q_INVOKABLE void transcribe_file_url(const QUrl &source_file, bool replace);
     Q_INVOKABLE void cancel();
     Q_INVOKABLE void listen();
     Q_INVOKABLE void listen_to_active_window();
@@ -210,17 +210,16 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void speech_to_file(const QString &dest_file,
                                     const QString &title_tag = {},
                                     const QString &track_tag = {});
-    Q_INVOKABLE void speech_to_file(const QUrl &dest_file,
-                                    const QString &title_tag = {},
-                                    const QString &track_tag = {});
+    Q_INVOKABLE void speech_to_file_url(const QUrl &dest_file,
+                                        const QString &title_tag = {},
+                                        const QString &track_tag = {});
     Q_INVOKABLE void speech_to_file_translator(bool transtalated,
                                                const QString &dest_file,
                                                const QString &title_tag = {},
                                                const QString &track_tag = {});
-    Q_INVOKABLE void speech_to_file_translator(bool transtalated,
-                                               const QUrl &dest_file,
-                                               const QString &title_tag = {},
-                                               const QString &track_tag = {});
+    Q_INVOKABLE void speech_to_file_translator_url(
+        bool transtalated, const QUrl &dest_file, const QString &title_tag = {},
+        const QString &track_tag = {});
     Q_INVOKABLE void save_note_to_file(const QString &dest_file);
     Q_INVOKABLE void save_note_to_file_translator(const QString &dest_file);
     Q_INVOKABLE bool load_note_from_file(const QString &input_file,
@@ -383,6 +382,8 @@ class dsnote_app : public QObject {
         stt_text_destination_t::note_add;
     std::optional<desktop_notification_t> m_desktop_notification;
     QVariantMap m_features_availability;
+    bool m_service_reload_called = false;
+    bool m_service_reload_update_done = false;
 #ifdef USE_DESKTOP
     struct hotkeys_t {
         QHotkey start_listening;
@@ -540,6 +541,7 @@ class dsnote_app : public QObject {
     bool feature_global_shortcuts() const;
     bool feature_text_active_window() const;
     bool feature_coqui_tts() const;
+    void request_reload();
 };
 
 #endif  // DSNOTE_APP_H

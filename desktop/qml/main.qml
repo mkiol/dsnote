@@ -41,11 +41,11 @@ ApplicationWindow {
 
     function transcribeFile(url) {
         if (app.note.length > 0) {
-            addTextDialog.addHandler = function(){app.transcribe_file(url, false)}
-            addTextDialog.replaceHandler = function(){app.transcribe_file(url, true)}
+            addTextDialog.addHandler = function(){app.transcribe_file_url(url, false)}
+            addTextDialog.replaceHandler = function(){app.transcribe_file_url(url, true)}
             addTextDialog.open()
         } else {
-            app.transcribe_file(url, true)
+            app.transcribe_file_url(url, true)
         }
 
         _settings.file_open_dir_url = url

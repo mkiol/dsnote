@@ -16,13 +16,6 @@
 #include "settings.h"
 
 speech_config::speech_config(QObject *parent) : QObject{parent} {
-    if (settings::instance()->launch_mode() == settings::launch_mode_t::app) {
-        connect(settings::instance(), &settings::models_dir_changed, this,
-                &speech_config::reload, Qt::QueuedConnection);
-        connect(settings::instance(), &settings::restore_punctuation_changed,
-                this, &speech_config::reload, Qt::QueuedConnection);
-    }
-
     connect(settings::instance(), &settings::default_stt_model_changed, this,
             [this] { emit default_model_changed(); });
     connect(models_manager::instance(), &models_manager::models_changed, this,
@@ -48,7 +41,6 @@ speech_config::speech_config(QObject *parent) : QObject{parent} {
 }
 
 void speech_config::handle_models_changed() {
-    reload();
     emit models_changed();
 }
 
@@ -89,25 +81,6 @@ double speech_config::model_download_progress(const QString &id) const {
 
 void speech_config::set_default_model_for_lang(const QString &model_id) {
     models_manager::instance()->set_default_model_for_lang(model_id);
-}
-
-void speech_config::reload() const {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone)
-        return;
-
-    OrgMkiolSpeechInterface dbus_service{DBUS_SERVICE_NAME, DBUS_SERVICE_PATH,
-                                         QDBusConnection::sessionBus()};
-    if (!dbus_service.isValid()) {
-        qWarning() << "failed to reload service because - no connection";
-        return;
-    }
-
-    auto reply = dbus_service.Reload();
-    reply.waitForFinished();
-
-    if (reply.argumentAt<0>() != SUCCESS)
-        qWarning() << "failed to reload service - error was returned";
 }
 
 bool speech_config::busy() const { return models_manager::instance()->busy(); }

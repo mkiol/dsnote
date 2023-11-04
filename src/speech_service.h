@@ -372,6 +372,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     int m_task_state = 0;
     std::queue<tts_partial_result_t> m_tts_queue;
     QVariantMap m_features_availability;
+    bool m_models_changed_handled = false;
 
     inline bool feature_discovery_done() const {
         return !m_features_availability.isEmpty();
