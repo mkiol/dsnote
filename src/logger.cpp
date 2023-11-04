@@ -48,7 +48,7 @@ void Logger::init(LogType level, const std::string &file) {
         m_file.reset();
         LOGI("logging to stderr enabled");
     } else {
-        m_file.emplace(file, std::ios::trunc);
+        m_file.emplace(file, std::ios::app);
         if (!m_file->good()) {
             m_file.reset();
             LOGW("failed to create log file: " << file);

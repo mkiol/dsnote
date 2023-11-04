@@ -79,6 +79,7 @@ struct cmd_options {
     bool py_scan_off = false;
     QString action;
     QStringList files;
+    QString log_file;
 };
 
 static cmd_options check_options(const QCoreApplication& app) {
@@ -139,6 +140,12 @@ static cmd_options check_options(const QCoreApplication& app) {
                        "Use this option when you observing problems in "
                        "starting the app.")};
     parser.addOption(pyscanoff_opt);
+
+    QCommandLineOption log_file_opt{
+        QStringLiteral("log-file"),
+        QStringLiteral("Write logs to <log-file> instead of stderr."),
+        QStringLiteral("log-file")};
+    parser.addOption(log_file_opt);
 
     parser.addHelpOption();
     parser.addVersionOption();
@@ -201,6 +208,7 @@ static cmd_options check_options(const QCoreApplication& app) {
         }
     }
 
+    options.log_file = parser.value(log_file_opt);
     options.verbose = parser.isSet(verbose_opt);
     options.gen_cheksums = parser.isSet(gen_checksum_opt);
     options.gpu_scan_off = parser.isSet(gpuscanoff_opt);
@@ -366,8 +374,9 @@ int main(int argc, char* argv[]) {
 
     if (!cmd_opts.valid) return 0;
 
-    Logger::init(cmd_opts.verbose ? Logger::LogType::Trace
-                                  : Logger::LogType::Error);
+    Logger::init(
+        cmd_opts.verbose ? Logger::LogType::Trace : Logger::LogType::Error,
+        cmd_opts.log_file.toStdString());
     initQtLogger();
     initAvLogger();
 
