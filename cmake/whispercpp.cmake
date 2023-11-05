@@ -1,5 +1,5 @@
-set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/951a1199265ff4424f938182542cf6bac9b36154.zip")
-set(whispercpp_checksum "cdbbaa45c50e6b12df933d7a5e914477edb918622d73d159dbec0867f5da2f63")
+set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/f96e1c5b7865e01fece99f69286d922d949a260d.zip")
+set(whispercpp_checksum "d10d5dfaa1d92ec569fdc2e28a9b7740581804907c946891b6e2d5e4aaa2167f")
 
 set(whispercpp_flags -O3 -ffast-math -I${external_include_dir}/openblas)
 set(whispercppfallback_flags ${whispercpp_flags})
@@ -66,6 +66,7 @@ if(arch_x8664)
         ExternalProject_Add_StepDependencies(clblast configure opencl)
         ExternalProject_Add_StepDependencies(whispercppclblast configure opencl)
         ExternalProject_Add_StepDependencies(whispercppclblast configure clblast)
+        ExternalProject_Add_StepDependencies(whispercppclblast configure whispercppopenblas)
 
         list(APPEND deps whispercppclblast)
     endif(BUILD_WHISPERCPP_CLBLAST)
@@ -96,6 +97,12 @@ if(arch_x8664)
             BUILD_ALWAYS False
         )
 
+        if(BUILD_WHISPERCPP_CLBLAST)
+            ExternalProject_Add_StepDependencies(whispercppclblast configure whispercppclblast)
+        else()
+            ExternalProject_Add_StepDependencies(whispercppclblast configure whispercppopenblas)
+        endif()
+
         list(APPEND deps whispercppcublas)
     endif(BUILD_WHISPERCPP_CUBLAS)
 
@@ -113,7 +120,6 @@ if(arch_x8664)
             PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                         -i ${patches_dir}/whispercpp.patch ||
                             echo "patch cmd failed, likely already patched"
-
             CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
                 -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
                 -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
@@ -125,6 +131,14 @@ if(arch_x8664)
             INSTALL_COMMAND make install && cp ${external_lib_dir}/libwhisper.so ${external_lib_dir}/libwhisper-hipblas.so
             BUILD_ALWAYS False
         )
+
+        if(BUILD_WHISPERCPP_CUBLAS)
+            ExternalProject_Add_StepDependencies(whispercppclblast configure whispercppcublas)
+        elseif(BUILD_WHISPERCPP_CLBLAST)
+            ExternalProject_Add_StepDependencies(whispercppclblast configure whispercppclblast)
+        else()
+            ExternalProject_Add_StepDependencies(whispercppclblast configure whispercppopenblas)
+        endif()
 
         list(APPEND deps whispercpphipblas)
     endif(BUILD_WHISPERCPP_HIPBLAS)
@@ -193,6 +207,8 @@ ExternalProject_Add(whispercppopenblas
     INSTALL_COMMAND make install && cp ${external_lib_dir}/libwhisper.so ${external_lib_dir}/libwhisper-openblas.so
     BUILD_ALWAYS False
 )
+
+ExternalProject_Add_StepDependencies(whispercppopenblas configure whispercppfallback)
 
 if(BUILD_OPENBLAS)
     ExternalProject_Add_StepDependencies(whispercppfallback configure openblas)

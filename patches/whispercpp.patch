@@ -1,30 +1,6 @@
-diff -ruN whispercpp-org/cmake/DefaultTargetOptions.cmake whispercpp-patched/cmake/DefaultTargetOptions.cmake
---- whispercpp-org/cmake/DefaultTargetOptions.cmake	2023-09-15 20:11:43.000000000 +0200
-+++ whispercpp-patched/cmake/DefaultTargetOptions.cmake	2023-10-23 11:12:05.417372295 +0200
-@@ -9,9 +9,13 @@
-         cxx_std_11
-     )
- 
-+if (NOT DEFINED CMAKE_INSTALL_RPATH)
-+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-+endif()
-+
- set_target_properties(${TARGET}
-     PROPERTIES
-         EXPORT_COMPILE_COMMANDS ON
-         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
--        INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib"
-+        INSTALL_RPATH ${CMAKE_INSTALL_RPATH}
- )
 diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
---- whispercpp-org/CMakeLists.txt	2023-09-15 20:11:43.000000000 +0200
-+++ whispercpp-patched/CMakeLists.txt	2023-10-21 14:11:32.423632480 +0200
-@@ -1,4 +1,4 @@
--cmake_minimum_required (VERSION 3.5)
-+cmake_minimum_required (VERSION 3.18)
- 
- project(whisper.cpp VERSION 1.4.2)
- 
+--- whispercpp-org/CMakeLists.txt	2023-11-03 20:35:05.000000000 +0100
++++ whispercpp-patched/CMakeLists.txt	2023-11-04 21:00:09.690370523 +0100
 @@ -170,39 +170,11 @@
  if (WHISPER_OPENBLAS)
      set(WHISPER_BLAS_VENDOR "OpenBLAS")
@@ -43,13 +19,13 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
 -            include_directories($ENV{OPENBLAS_PATH}/include)
 -            set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} ${BLAS_LIBRARIES})
 -        else ()
--            message(WARNING "BLAS library was not found. Environment variable OPENBLAS_PATH not defined.")
+-            message(FATAL_ERROR "BLAS library was not found. Environment variable OPENBLAS_PATH not defined.")
 -        endif ()
 -    else ()
 -        set(BLA_STATIC 1)
 -        set(BLA_VENDOR ${WHISPER_BLAS_VENDOR})
--        #    set(BLA_PREFER_PKGCONFIG 1)
 -        set(BLA_SIZEOF_INTEGER 8)
+-        set(BLA_PREFER_PKGCONFIG 1)
 -        find_package(BLAS)
 -
 -        if(BLAS_FOUND)
@@ -60,7 +36,7 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
 -            include_directories(${BLAS_INCLUDE_DIRS})
 -            set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} ${BLAS_LIBRARIES})
 -        else()
--            message(WARNING "BLAS library was not found")
+-            message(FATAL_ERROR "BLAS library was not found")
 -        endif()
 -    endif ()
 -endif ()
@@ -68,14 +44,7 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
  if (WHISPER_CUBLAS)
      cmake_minimum_required(VERSION 3.17)
  
-@@ -224,19 +196,18 @@
-         endif()
- 
-     else()
--        message(WARNING "cuBLAS not found")
-+        message(FATAL_ERROR "cuBLAS not found")
-     endif()
- endif()
+@@ -230,13 +202,12 @@
  
  
  if (WHISPER_HIPBLAS)
@@ -110,25 +79,7 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
          target_link_libraries(ggml-rocm PRIVATE hip::device PUBLIC hip::host roc::rocblas roc::hipblas)
  
          if (WHISPER_STATIC)
-@@ -255,7 +230,7 @@
-         endif()
-         set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} ggml-rocm)
-     else()
--        message(WARNING "hipBLAS or HIP not found. Try setting CMAKE_PREFIX_PATH=/opt/rocm")
-+        message(FATAL_ERROR "hipBLAS or HIP not found. Try setting CMAKE_PREFIX_PATH=/opt/rocm")
-     endif()
- endif()
- 
-@@ -270,7 +245,7 @@
- 
-         set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} clblast)
-     else()
--        message(WARNING "CLBlast not found")
-+        message(FATAL_ERROR "CLBlast not found")
-     endif()
- endif()
- 
-@@ -517,10 +492,23 @@
+@@ -521,10 +496,23 @@
  
  if (GGML_SOURCES_CUDA)
      message(STATUS "GGML CUDA sources found, configuring CUDA architecture")
@@ -153,7 +104,7 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
  if (EMSCRIPTEN)
      set_target_properties(${TARGET} PROPERTIES COMPILE_FLAGS "-msimd128")
  endif()
-@@ -535,7 +523,7 @@
+@@ -539,7 +527,7 @@
  
  install(TARGETS ${TARGET}
      LIBRARY  DESTINATION lib
@@ -162,185 +113,48 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
      RUNTIME  DESTINATION bin
      RESOURCE DESTINATION bin
      PUBLIC_HEADER DESTINATION include
-diff -ruN whispercpp-org/whisper.cpp whispercpp-patched/whisper.cpp
---- whispercpp-org/whisper.cpp	2023-09-15 20:11:43.000000000 +0200
-+++ whispercpp-patched/whisper.cpp	2023-09-20 10:15:38.675418697 +0200
-@@ -125,9 +125,15 @@
- // ggml helpers
- //
- 
--static void ggml_graph_compute_helper(std::vector<uint8_t> & buf, ggml_cgraph * graph, int n_threads) {
-+static void ggml_graph_compute_helper(
-+    std::vector<uint8_t> &buf, ggml_cgraph *graph, int n_threads,
-+    whisper_abort_callback abort_callback = nullptr,
-+    void *abort_callback_data = nullptr) {
-     struct ggml_cplan plan = ggml_graph_plan(graph, n_threads);
- 
-+    plan.abort_callback = abort_callback;
-+    plan.abort_callback_data = abort_callback_data;
+diff -ruN whispercpp-org/ggml-cuda.cu whispercpp-patched/ggml-cuda.cu
+--- whispercpp-org/ggml-cuda.cu	2023-11-03 20:35:05.000000000 +0100
++++ whispercpp-patched/ggml-cuda.cu	2023-11-05 12:09:27.924815798 +0100
+@@ -39,6 +39,7 @@
+ #define cudaDeviceCanAccessPeer hipDeviceCanAccessPeer
+ #define cudaDeviceDisablePeerAccess hipDeviceDisablePeerAccess
+ #define cudaDeviceEnablePeerAccess hipDeviceEnablePeerAccess
++#define cudaDeviceGetMemPool hipDeviceGetMemPool
+ #define cudaDeviceProp hipDeviceProp_t
+ #define cudaDeviceSynchronize hipDeviceSynchronize
+ #define cudaError_t hipError_t
+@@ -48,6 +49,7 @@
+ #define cudaEvent_t hipEvent_t
+ #define cudaEventDestroy hipEventDestroy
+ #define cudaFree hipFree
++#define cudaFreeAsync hipFreeAsync
+ #define cudaFreeHost hipHostFree
+ #define cudaGetDevice hipGetDevice
+ #define cudaGetDeviceCount hipGetDeviceCount
+@@ -55,6 +57,7 @@
+ #define cudaGetErrorString hipGetErrorString
+ #define cudaGetLastError hipGetLastError
+ #define cudaMalloc hipMalloc
++#define cudaMallocFromPoolAsync hipMallocFromPoolAsync
+ #define cudaMallocHost(ptr, size) hipHostMalloc(ptr, size, hipHostMallocDefault)
+ #define cudaMemcpy hipMemcpy
+ #define cudaMemcpy2DAsync hipMemcpy2DAsync
+@@ -63,6 +66,9 @@
+ #define cudaMemcpyDeviceToHost hipMemcpyDeviceToHost
+ #define cudaMemcpyHostToDevice hipMemcpyHostToDevice
+ #define cudaMemcpyKind hipMemcpyKind
++#define cudaMemPool_t hipMemPool_t
++#define cudaMemPoolAttrReleaseThreshold hipMemPoolAttrReleaseThreshold
++#define cudaMemPoolSetAttribute hipMemPoolSetAttribute
+ #define cudaMemset hipMemset
+ #define cudaMemsetAsync hipMemsetAsync
+ #define cudaOccupancyMaxPotentialBlockSize hipOccupancyMaxPotentialBlockSize
+@@ -73,6 +79,7 @@
+ #define cudaStreamWaitEvent(stream, event, flags) hipStreamWaitEvent(stream, event, flags)
+ #define cudaStream_t hipStream_t
+ #define cudaSuccess hipSuccess
 +
-     if (plan.work_size > 0) {
-         buf.resize(plan.work_size);
-         plan.work_data = buf.data();
-@@ -1919,10 +1925,9 @@
- //   - mel_offset: offset in the mel spectrogram (i.e. audio offset)
- //
- static bool whisper_encode_internal(
--        whisper_context & wctx,
--          whisper_state & wstate,
--              const int   mel_offset,
--              const int   n_threads) {
-+    whisper_context &wctx, whisper_state &wstate, const int mel_offset,
-+    const int n_threads, whisper_abort_callback abort_callback = nullptr,
-+    void *abort_callback_data = nullptr) {
-     const int64_t t_start_us = ggml_time_us();
- 
-     // conv
-@@ -1936,7 +1941,8 @@
-         ggml_allocr_alloc_graph(alloc, gf);
- 
-         if (!whisper_encode_external(wstate)) {
--            ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads);
-+            ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads,
-+                                      abort_callback, abort_callback_data);
-         }
-     }
- 
-@@ -1958,7 +1964,8 @@
-             ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads);
-         }
  #else
--        ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads);
-+        ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads,
-+                                  abort_callback, abort_callback_data);
- #endif
-     }
- 
-@@ -1980,7 +1987,8 @@
-             ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads);
-         }
- #else
--        ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads);
-+        ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads,
-+                                  abort_callback, abort_callback_data);
- #endif
-     }
- 
-@@ -2340,13 +2348,15 @@
- //   - n_past:     number of past tokens to prefix the prompt with
- //
- static bool whisper_decode_internal(
--        whisper_context & wctx,
--          whisper_state & wstate,
--        whisper_decoder & decoder,
--    const whisper_token * tokens,
--              const int   n_tokens,
--              const int   n_past,
--              const int   n_threads) {
-+            whisper_context & wctx,
-+            whisper_state   & wstate,
-+            whisper_decoder & decoder,
-+        const whisper_token * tokens,
-+                  const int   n_tokens,
-+                  const int   n_past,
-+                  const int   n_threads,
-+     whisper_abort_callback   abort_callback = nullptr,
-+                       void * abort_callback_data = nullptr) {
-     const int64_t t_start_us = ggml_time_us();
- 
-     const auto & model   = wctx.model;
-@@ -2378,7 +2388,8 @@
-             ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads);
-         }
- #else
--        ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads);
-+        ggml_graph_compute_helper(wstate.work_buffer, gf, n_threads,
-+                                  abort_callback, abort_callback_data);
- #endif
-     }
- 
-@@ -2410,7 +2421,6 @@
-     return true;
- }
- 
--
- //  500 -> 00:05.000
- // 6000 -> 01:00.000
- static std::string to_timestamp(int64_t t, bool comma = false) {
-@@ -3761,6 +3771,9 @@
-         /*.encoder_begin_callback           =*/ nullptr,
-         /*.encoder_begin_callback_user_data =*/ nullptr,
- 
-+        /*.abort_callback           =*/ nullptr,
-+        /*.abort_callback_user_data =*/ nullptr,
-+
-         /*.logits_filter_callback           =*/ nullptr,
-         /*.logits_filter_callback_user_data =*/ nullptr,
-     };
-@@ -4594,7 +4607,9 @@
-         }
- 
-         // encode audio features starting at offset seek
--        if (!whisper_encode_internal(*ctx, *state, seek, params.n_threads)) {
-+        if (!whisper_encode_internal(*ctx, *state, seek, params.n_threads,
-+                                     params.abort_callback,
-+                                     params.abort_callback_user_data)) {
-             log("%s: failed to encode\n", __func__);
-             return -6;
-         }
-@@ -4677,7 +4692,11 @@
-                 }
-                 WHISPER_PRINT_DEBUG("\n\n");
- 
--                if (!whisper_decode_internal(*ctx, *state, state->decoders[0], prompt.data(), prompt.size(), 0, params.n_threads)) {
-+                if (!whisper_decode_internal(*ctx, *state, state->decoders[0],
-+                                             prompt.data(), prompt.size(), 0,
-+                                             params.n_threads,
-+                                             params.abort_callback,
-+                                             params.abort_callback_user_data)) {
-                     log("%s: failed to decode\n", __func__);
-                     return -7;
-                 }
-@@ -4901,7 +4920,11 @@
- 
-                     //WHISPER_PRINT_DEBUG("%s: decoder %d: token %d, kv_self.n %d, seek_delta %d\n", __func__, j, decoder.tokens_tmp[0], decoder.kv_self.n, decoder.seek_delta);
- 
--                    if (!whisper_decode_internal(*ctx, *state, decoder, decoder.tokens_tmp.data(), decoder.tokens_tmp.size(), decoder.kv_self.n, params.n_threads)) {
-+                    if (!whisper_decode_internal(
-+                            *ctx, *state, decoder, decoder.tokens_tmp.data(),
-+                            decoder.tokens_tmp.size(), decoder.kv_self.n,
-+                            params.n_threads, params.abort_callback,
-+                            params.abort_callback_user_data)) {
-                         log("%s: failed to decode\n", __func__);
-                         return -8;
-                     }
-diff -ruN whispercpp-org/whisper.h whispercpp-patched/whisper.h
---- whispercpp-org/whisper.h	2023-09-15 20:11:43.000000000 +0200
-+++ whispercpp-patched/whisper.h	2023-09-20 09:39:53.992020188 +0200
-@@ -332,7 +332,13 @@
-     // Encoder begin callback
-     // If not NULL, called before the encoder starts
-     // If it returns false, the computation is aborted
--    typedef bool (*whisper_encoder_begin_callback)(struct whisper_context * ctx, struct whisper_state * state, void * user_data);
-+    typedef bool (*whisper_encoder_begin_callback)(struct whisper_context* ctx,
-+                                                   struct whisper_state* state,
-+                                                   void* user_data);
-+
-+    // Abort callback
-+    // If it returns true, the computation is aborted
-+    typedef bool (*whisper_abort_callback)(void* user_data);
- 
-     // Logits filter callback
-     // Can be used to modify the logits before sampling
-@@ -426,7 +432,10 @@
- 
-         // called each time before the encoder starts
-         whisper_encoder_begin_callback encoder_begin_callback;
--        void * encoder_begin_callback_user_data;
-+        void* encoder_begin_callback_user_data;
-+
-+        whisper_abort_callback abort_callback;
-+        void* abort_callback_user_data;
- 
-         // called by each decoder to filter obtained logits
-         whisper_logits_filter_callback logits_filter_callback;
+ #include <cuda_runtime.h>
+ #include <cublas_v2.h>
