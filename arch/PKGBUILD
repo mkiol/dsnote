@@ -46,9 +46,9 @@ optdepends=(
   'python-accelerate: Support for Punctuation and Hebrew Diacritics restoration'
   'python-torchaudio: Support for Coqui TTS models'
   'python-transformers: Support for Punctuation and Hebrew Diacritics restoration'
-  'python-tts: Support for Coqui TTS models'
   'rocblas: Support for GPU acceleration on AMD graphic cards'
   'rocm-opencl-runtime: Support GPU acceleration on AMD graphic cards'
+  'tts: Support for Coqui TTS models'
 )
 provides=(${_pkgname})
 conflicts=(${_pkgname})
