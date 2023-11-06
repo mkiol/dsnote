@@ -32,7 +32,7 @@ class file_source : public audio_source {
 
    private:
     static const int m_timer_quick = 5;
-    static const int m_timer_slow = 500;
+    static const int m_timer_slow = 100;
 
     QTimer m_timer;
     QByteArray m_buf;
