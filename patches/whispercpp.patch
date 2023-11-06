@@ -1,5 +1,5 @@
 diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
---- whispercpp-org/CMakeLists.txt	2023-11-03 20:35:05.000000000 +0100
+--- whispercpp-org/CMakeLists.txt	2023-11-06 10:04:24.000000000 +0100
 +++ whispercpp-patched/CMakeLists.txt	2023-11-04 21:00:09.690370523 +0100
 @@ -170,39 +170,11 @@
  if (WHISPER_OPENBLAS)
@@ -113,48 +113,3 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
      RUNTIME  DESTINATION bin
      RESOURCE DESTINATION bin
      PUBLIC_HEADER DESTINATION include
-diff -ruN whispercpp-org/ggml-cuda.cu whispercpp-patched/ggml-cuda.cu
---- whispercpp-org/ggml-cuda.cu	2023-11-03 20:35:05.000000000 +0100
-+++ whispercpp-patched/ggml-cuda.cu	2023-11-05 12:09:27.924815798 +0100
-@@ -39,6 +39,7 @@
- #define cudaDeviceCanAccessPeer hipDeviceCanAccessPeer
- #define cudaDeviceDisablePeerAccess hipDeviceDisablePeerAccess
- #define cudaDeviceEnablePeerAccess hipDeviceEnablePeerAccess
-+#define cudaDeviceGetMemPool hipDeviceGetMemPool
- #define cudaDeviceProp hipDeviceProp_t
- #define cudaDeviceSynchronize hipDeviceSynchronize
- #define cudaError_t hipError_t
-@@ -48,6 +49,7 @@
- #define cudaEvent_t hipEvent_t
- #define cudaEventDestroy hipEventDestroy
- #define cudaFree hipFree
-+#define cudaFreeAsync hipFreeAsync
- #define cudaFreeHost hipHostFree
- #define cudaGetDevice hipGetDevice
- #define cudaGetDeviceCount hipGetDeviceCount
-@@ -55,6 +57,7 @@
- #define cudaGetErrorString hipGetErrorString
- #define cudaGetLastError hipGetLastError
- #define cudaMalloc hipMalloc
-+#define cudaMallocFromPoolAsync hipMallocFromPoolAsync
- #define cudaMallocHost(ptr, size) hipHostMalloc(ptr, size, hipHostMallocDefault)
- #define cudaMemcpy hipMemcpy
- #define cudaMemcpy2DAsync hipMemcpy2DAsync
-@@ -63,6 +66,9 @@
- #define cudaMemcpyDeviceToHost hipMemcpyDeviceToHost
- #define cudaMemcpyHostToDevice hipMemcpyHostToDevice
- #define cudaMemcpyKind hipMemcpyKind
-+#define cudaMemPool_t hipMemPool_t
-+#define cudaMemPoolAttrReleaseThreshold hipMemPoolAttrReleaseThreshold
-+#define cudaMemPoolSetAttribute hipMemPoolSetAttribute
- #define cudaMemset hipMemset
- #define cudaMemsetAsync hipMemsetAsync
- #define cudaOccupancyMaxPotentialBlockSize hipOccupancyMaxPotentialBlockSize
-@@ -73,6 +79,7 @@
- #define cudaStreamWaitEvent(stream, event, flags) hipStreamWaitEvent(stream, event, flags)
- #define cudaStream_t hipStream_t
- #define cudaSuccess hipSuccess
-+
- #else
- #include <cuda_runtime.h>
- #include <cublas_v2.h>
