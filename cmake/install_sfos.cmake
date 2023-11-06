@@ -46,7 +46,13 @@ if(BUILD_RHVOICE)
 endif()
 
 if(BUILD_PIPER)
-    install(FILES "${external_lib_dir}/libonnxruntime.so.1.16.1" DESTINATION ${lib_install_dir})
+    if(arch_arm32)
+        set(onnx_ver "1.14.1")
+    else()
+        set(onnx_ver "1.16.1")
+    endif()
+
+    install(FILES "${external_lib_dir}/libonnxruntime.so.${onnx_ver}" DESTINATION ${lib_install_dir})
     install(FILES "${external_lib_dir}/libonnxruntime.so" DESTINATION ${lib_install_dir})
 endif()
 
