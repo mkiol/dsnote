@@ -44,6 +44,13 @@ class settings : public QSettings, public singleton<settings> {
                    set_file_open_dir_url NOTIFY file_open_dir_changed)
     Q_PROPERTY(QString file_open_dir_name READ file_open_dir_name NOTIFY
                    file_open_dir_changed)
+    Q_PROPERTY(QString file_audio_open_dir READ file_audio_open_dir WRITE
+                   set_file_audio_open_dir NOTIFY file_audio_open_dir_changed)
+    Q_PROPERTY(
+        QUrl file_audio_open_dir_url READ file_audio_open_dir_url WRITE
+            set_file_audio_open_dir_url NOTIFY file_audio_open_dir_changed)
+    Q_PROPERTY(QString file_audio_open_dir_name READ file_audio_open_dir_name
+                   NOTIFY file_audio_open_dir_changed)
     Q_PROPERTY(QString prev_app_ver READ prev_app_ver WRITE set_prev_app_ver
                    NOTIFY prev_app_ver_changed)
     Q_PROPERTY(bool translator_mode READ translator_mode WRITE
@@ -267,6 +274,11 @@ class settings : public QSettings, public singleton<settings> {
     QUrl file_open_dir_url() const;
     void set_file_open_dir_url(const QUrl &value);
     QString file_open_dir_name() const;
+    QString file_audio_open_dir() const;
+    void set_file_audio_open_dir(const QString &value);
+    QUrl file_audio_open_dir_url() const;
+    void set_file_audio_open_dir_url(const QUrl &value);
+    QString file_audio_open_dir_name() const;
     QString prev_app_ver() const;
     void set_prev_app_ver(const QString &value);
     bool translator_mode() const;
@@ -434,6 +446,7 @@ class settings : public QSettings, public singleton<settings> {
     void mode_changed();
     void file_save_dir_changed();
     void file_open_dir_changed();
+    void file_audio_open_dir_changed();
     void prev_app_ver_changed();
     void translator_mode_changed();
     void translate_when_typing_changed();

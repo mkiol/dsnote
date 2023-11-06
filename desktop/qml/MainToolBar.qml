@@ -273,7 +273,7 @@ ToolBar {
             qsTr("Audio files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.flac *.m4a *.aac)",
             qsTr("Video files") + " (*.mp4 *.mkv *.ogv *.webm)",
             qsTr("All files") + " (*)"]
-        folder: _settings.file_open_dir_url
+        folder: _settings.file_audio_open_dir_url
         selectExisting: true
         selectMultiple: false
         onAccepted: {

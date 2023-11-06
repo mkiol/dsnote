@@ -434,7 +434,8 @@ QString settings::file_save_filename() const {
 QString settings::file_open_dir() const {
     auto dir = value(QStringLiteral("file_open_dir")).toString();
     if (dir.isEmpty() || !QFileInfo::exists(dir)) {
-        dir = QStandardPaths::writableLocation(QStandardPaths::MusicLocation);
+        dir =
+            QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     }
 
     return dir;
@@ -457,6 +458,34 @@ void settings::set_file_open_dir_url(const QUrl& value) {
 
 QString settings::file_open_dir_name() const {
     return file_open_dir_url().fileName();
+}
+
+QString settings::file_audio_open_dir() const {
+    auto dir = value(QStringLiteral("file_audio_open_dir")).toString();
+    if (dir.isEmpty() || !QFileInfo::exists(dir)) {
+        dir = QStandardPaths::writableLocation(QStandardPaths::MusicLocation);
+    }
+
+    return dir;
+}
+
+QUrl settings::file_audio_open_dir_url() const {
+    return QUrl::fromLocalFile(file_audio_open_dir());
+}
+
+void settings::set_file_audio_open_dir(const QString& value) {
+    if (file_audio_open_dir() != value) {
+        setValue(QStringLiteral("file_audio_open_dir"), value);
+        emit file_audio_open_dir_changed();
+    }
+}
+
+void settings::set_file_audio_open_dir_url(const QUrl& value) {
+    set_file_audio_open_dir(value.toLocalFile());
+}
+
+QString settings::file_audio_open_dir_name() const {
+    return file_audio_open_dir_url().fileName();
 }
 
 settings::mode_t settings::mode() const {

@@ -37,6 +37,8 @@ ApplicationWindow {
         } else {
             app.load_note_from_file(path, true)
         }
+
+        _settings.file_open_dir = path
     }
 
     function transcribeFile(url) {
@@ -48,7 +50,7 @@ ApplicationWindow {
             app.transcribe_file_url(url, true)
         }
 
-        _settings.file_open_dir_url = url
+        _settings.file_audio_open_dir_url = url
     }
 
     function openDialog(file, props) {
