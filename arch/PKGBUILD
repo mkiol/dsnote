@@ -2,9 +2,9 @@
 
 _pkgname='dsnote'
 pkgname="${_pkgname}-git"
-pkgver=r624.455037f
+pkgver=r710.30e1fcc
 pkgrel=1
-pkgdesc="Speech Note - Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
+pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
 arch=('x86_64')
 url="https://github.com/mkiol/dsnote"
 license=('MPL2')
@@ -46,9 +46,9 @@ optdepends=(
   'python-accelerate: Support for Punctuation and Hebrew Diacritics restoration'
   'python-torchaudio: Support for Coqui TTS models'
   'python-transformers: Support for Punctuation and Hebrew Diacritics restoration'
-  'python-tts: Support for Coqui TTS models'
   'rocblas: Support for GPU acceleration on AMD graphic cards'
   'rocm-opencl-runtime: Support GPU acceleration on AMD graphic cards'
+  'tts: Support for Coqui TTS models'
 )
 provides=(${_pkgname})
 conflicts=(${_pkgname})
@@ -63,6 +63,9 @@ pkgver() {
 
 build() {
   cd "${srcdir}/${_pkgname}"
+  # fix for CUDA >= 12.3.0
+  export HOST_COMPILER=/usr/bin/g++-12
+  export CUDAHOSTCXX=/usr/bin/g++-12
   mkdir -p build
   cd build
   cmake ../ -DCMAKE_BUILD_TYPE=Release -DWITH_DESKTOP=ON \
