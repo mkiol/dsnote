@@ -113,3 +113,93 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
      RUNTIME  DESTINATION bin
      RESOURCE DESTINATION bin
      PUBLIC_HEADER DESTINATION include
+diff -ruN whispercpp-org/ggml-quants.c whispercpp-patched/ggml-quants.c
+--- whispercpp-org/ggml-quants.c	2023-11-06 10:04:24.000000000 +0100
++++ whispercpp-patched/ggml-quants.c	2023-11-06 14:40:15.083032028 +0100
+@@ -349,11 +349,36 @@
+     return res;
+ }
+ 
++typedef struct ggml_int8x16x2_t {
++    int8x16_t val[2];
++} ggml_int8x16x2_t;
++
++inline static ggml_int8x16x2_t ggml_vld1q_s8_x2(const int8_t * ptr) {
++    ggml_int8x16x2_t res;
++
++    res.val[0] = vld1q_s8(ptr + 0);
++    res.val[1] = vld1q_s8(ptr + 16);
++
++    return res;
++}
++
++#else
++
++#define ggml_int16x8x2_t  int16x8x2_t
++#define ggml_uint8x16x2_t uint8x16x2_t
++#define ggml_int8x16x2_t  int8x16x2_t
++
++#define ggml_vld1q_s16_x2 vld1q_s16_x2
++#define ggml_vld1q_u8_x2  vld1q_u8_x2
++#define ggml_vld1q_s8_x2  vld1q_s8_x2
++
++#endif
++
+ typedef struct ggml_uint8x16x4_t {
+     uint8x16_t val[4];
+ } ggml_uint8x16x4_t;
+ 
+-inline static ggml_uint8x16x4_t ggml_vld1q_u8_x4(const uint8_t * ptr) {
++inline static ggml_uint8x16x4_t ggml_vld1q_u8_x4(const uint8_t *ptr) {
+     ggml_uint8x16x4_t res;
+ 
+     res.val[0] = vld1q_u8(ptr + 0);
+@@ -364,24 +389,11 @@
+     return res;
+ }
+ 
+-typedef struct ggml_int8x16x2_t {
+-    int8x16_t val[2];
+-} ggml_int8x16x2_t;
+-
+-inline static ggml_int8x16x2_t ggml_vld1q_s8_x2(const int8_t * ptr) {
+-    ggml_int8x16x2_t res;
+-
+-    res.val[0] = vld1q_s8(ptr + 0);
+-    res.val[1] = vld1q_s8(ptr + 16);
+-
+-    return res;
+-}
+-
+ typedef struct ggml_int8x16x4_t {
+     int8x16_t val[4];
+ } ggml_int8x16x4_t;
+ 
+-inline static ggml_int8x16x4_t ggml_vld1q_s8_x4(const int8_t * ptr) {
++inline static ggml_int8x16x4_t ggml_vld1q_s8_x4(const int8_t *ptr) {
+     ggml_int8x16x4_t res;
+ 
+     res.val[0] = vld1q_s8(ptr + 0);
+@@ -391,22 +403,6 @@
+ 
+     return res;
+ }
+-
+-#else
+-
+-#define ggml_int16x8x2_t  int16x8x2_t
+-#define ggml_uint8x16x2_t uint8x16x2_t
+-#define ggml_uint8x16x4_t uint8x16x4_t
+-#define ggml_int8x16x2_t  int8x16x2_t
+-#define ggml_int8x16x4_t  int8x16x4_t
+-
+-#define ggml_vld1q_s16_x2 vld1q_s16_x2
+-#define ggml_vld1q_u8_x2  vld1q_u8_x2
+-#define ggml_vld1q_u8_x4  vld1q_u8_x4
+-#define ggml_vld1q_s8_x2  vld1q_s8_x2
+-#define ggml_vld1q_s8_x4  vld1q_s8_x4
+-
+-#endif
+ #endif
+ 
+ #if defined(__ARM_NEON) || defined(__wasm_simd128__)
