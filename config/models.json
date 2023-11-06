@@ -3178,6 +3178,18 @@
             "size": "586585021"
         },
         {
+            "name": "English (Distil-Whisper Medium)",
+            "model_id": "en_whisper_distil_medium",
+            "engine": "stt_whisper",
+            "lang_id": "en",
+            "checksum": "df327d8a",
+            "checksum_quick": "d40f93fd",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2da03b71944c4e12dc9f605d0a38e9335d09502e/en/ggml-distilled-medium-en-q5_0.bin"
+            ],
+            "size": "283911061"
+        },
+        {
             "name": "English (Distil-Whisper Large-v2)",
             "model_id": "en_whisper_distil_large2",
             "engine": "stt_whisper",
@@ -3185,7 +3197,7 @@
             "checksum": "e94359e1",
             "checksum_quick": "b7835a4d",
             "urls": [
-                "https://huggingface.co/mukowaty/ggml-whisper/resolve/d74dc88858822aeb39ccf6955d78cc9547403646/multilang/ggml-distilled-large-v2-q5_0.bin"
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/2da03b71944c4e12dc9f605d0a38e9335d09502e/en/ggml-distilled-large-v2-en-q5_0.bin"
             ],
             "size": "537411780"
         },
