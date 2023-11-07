@@ -133,7 +133,7 @@ but if you would like to make a direct PR/MR, please do it.
 ## Install
 
 - Linux Desktop: [Flatpak](https://flathub.org/apps/net.mkiol.SpeechNote)
-- Arch Linux (git): [AUR](https://aur.archlinux.org/packages/dsnote-git)
+- Arch Linux (AUR): [dsnote-git](https://aur.archlinux.org/packages/dsnote-git)
 - Sailfish OS: [OpenRepos](https://openrepos.net/content/mkiol/speech-note)
 
 ## Building from sources
@@ -240,6 +240,12 @@ sfdk package
 - [Unikud](https://github.com/morrisalp/unikud)
 - [april-asr](https://github.com/abb128/april-asr)
 - [Opus](https://opus-codec.org/)
+
+## Reviews and demos
+
+[![YouTube video](https://i.ytimg.com/vi/dYIPyS3F_eU/0.jpg)](https://youtu.be/dYIPyS3F_eU "YouTube video")
+
+[debugpoint.com](https://www.debugpoint.com/speech-note-text-to-speech/) - Speech Note 4.0
 
 ## License
 
