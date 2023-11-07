@@ -241,6 +241,11 @@ sfdk package
 - [april-asr](https://github.com/abb128/april-asr)
 - [Opus](https://opus-codec.org/)
 
+## Reviews and demos
+
+[![YouTube video](https://i.ytimg.com/vi/dYIPyS3F_eU/maxresdefault.jpg)](https://youtu.be/dYIPyS3F_eU "YouTube video")
+[debugpoint.com](https://www.debugpoint.com/speech-note-text-to-speech/) - Speech Note 4.0
+
 ## License
 
 **Speech Note** is an open source project. Source code is released under the
