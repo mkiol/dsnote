@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sv" sourcelanguage="en_US">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sv" sourcelanguage="en_US">
 <context>
     <name>AboutPage</name>
     <message>
@@ -80,17 +78,17 @@
     <message>
         <location filename="../desktop/qml/AddTextDialog.qml" line="34"/>
         <source>Add text to the current note or replace it?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vill du lägga till text i aktuell anteckning eller ersätta den?</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddTextDialog.qml" line="42"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddTextDialog.qml" line="50"/>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Ersätt</translation>
     </message>
 </context>
 <context>
@@ -103,11 +101,12 @@
     </message>
     <message>
         <location filename="../sfos/qml/ChangelogPage.qml" line="32"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="76"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="109"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="139"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="187"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="210"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="81"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="125"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="158"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="188"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="236"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="259"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="17"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="112"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="129"/>
@@ -140,7 +139,7 @@
     <message>
         <location filename="../desktop/qml/ChangelogPage.qml" line="21"/>
         <source>Accessibility</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillgänglighet</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChangelogPage.qml" line="47"/>
@@ -156,7 +155,7 @@
     <message>
         <location filename="../desktop/qml/ChangelogPage.qml" line="94"/>
         <source>Other</source>
-        <translation type="unfinished">Annat</translation>
+        <translation>Annat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChangelogPage.qml" line="32"/>
@@ -214,7 +213,7 @@
         <location filename="../sfos/qml/FileWritePage.qml" line="82"/>
         <location filename="../desktop/qml/FileWritePage.qml" line="36"/>
         <source>Export to audio file</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportera som ljudfil</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="99"/>
@@ -224,7 +223,7 @@
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="105"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportera</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="123"/>
@@ -235,7 +234,7 @@
         <location filename="../desktop/qml/FileWritePage.qml" line="352"/>
         <location filename="../desktop/qml/FileWritePage.qml" line="355"/>
         <source>All files</source>
-        <translation type="unfinished">Alla filer</translation>
+        <translation>Alla filer</translation>
     </message>
     <message>
         <location filename="../sfos/qml/FileWritePage.qml" line="129"/>
@@ -518,14 +517,6 @@
 <context>
     <name>MainToolBar</name>
     <message>
-        <source>Save to audio file</source>
-        <translation type="vanished">Spara som ljudfil</translation>
-    </message>
-    <message>
-        <source>Save the translation to audio file</source>
-        <translation type="vanished">Spara översättningen som ljudfil</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="79"/>
         <source>Mode: %1</source>
         <translation>Läge: %1</translation>
@@ -570,18 +561,10 @@
         <translation>Öppna en textfil</translation>
     </message>
     <message>
-        <source>Replace the current note with text from a text file.</source>
-        <translation type="vanished">Ersätt den aktuella anteckningen med text från en textfil.</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="43"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="79"/>
         <source>Transcribe a file</source>
         <translation>Transkribera en fil</translation>
-    </message>
-    <message>
-        <source>Convert audio from an existing audio or video file into text. The text will be appended to the current note.</source>
-        <translation type="vanished">Konvertera ljud från en befintlig ljud- eller videofil till text. Texten kommer att läggas till i den aktuella anteckningen.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="97"/>
@@ -607,7 +590,7 @@
         <location filename="../sfos/qml/MainToolBar.qml" line="57"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="127"/>
         <source>Export to audio file</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportera som ljudfil</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="141"/>
@@ -618,7 +601,7 @@
         <location filename="../sfos/qml/MainToolBar.qml" line="72"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="145"/>
         <source>Export the translation to audio file</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportera översättningen som ljudfil</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="160"/>
@@ -628,7 +611,7 @@
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="272"/>
         <source>Audio and video files</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljud- och videofiler</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="31"/>
@@ -654,7 +637,7 @@
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="91"/>
         <source>Convert audio from an existing audio or video file into text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Konvertera ljud från en befintlig ljud- eller videofil, till text.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="197"/>
@@ -789,7 +772,7 @@
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="132"/>
         <source>Speech speed</source>
-        <translation type="unfinished">Talhastighet</translation>
+        <translation>Talhastighet</translation>
     </message>
 </context>
 <context>
@@ -861,7 +844,7 @@
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="123"/>
         <source>This works only for Arabic language.</source>
-        <translation type="unfinished"></translation>
+        <translation>Detta fungerar endast för arabiska.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="61"/>
@@ -938,11 +921,6 @@
         <translation>Ladda ner %2, för att %1 skall fungera.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="25"/>
-        <source>Restart the application to apply changes.</source>
-        <translation>Starta om programmet för att tillämpa ändringarna.</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="130"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="62"/>
         <source>Other</source>
@@ -983,16 +961,88 @@
         <translation>Återställ skiljetecken</translation>
     </message>
     <message>
-        <source>If a suitable GPU device is found in the system, it will be used to accelerate processing.</source>
-        <translation type="vanished">Om en lämplig GPU-enhet hittas i systemet, kommer den att användas för att påskynda bearbetningen.</translation>
+        <location filename="../sfos/qml/SettingsPage.qml" line="94"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="52"/>
+        <source>Text to Speech</source>
+        <translation>Text-till-tal</translation>
     </message>
     <message>
-        <source>Use GPU acceleration for Whisper</source>
-        <translation type="vanished">Använda GPU-acceleration för Whisper</translation>
+        <location filename="../sfos/qml/SettingsPage.qml" line="106"/>
+        <source>Speech speed</source>
+        <translation>Talhastighet</translation>
     </message>
     <message>
-        <source>Home</source>
-        <translation type="obsolete">Hem</translation>
+        <location filename="../desktop/qml/SettingsPage.qml" line="25"/>
+        <source>Restart the application to apply changes.</source>
+        <translation>Starta om programmet för att tillämpa ändringarna.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="34"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="42"/>
+        <source>User Interface</source>
+        <translation>Användargränssnitt</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="57"/>
+        <source>Accessibility</source>
+        <translation>Tillgänglighet</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="124"/>
+        <source>Font size in text editor</source>
+        <translation>Teckenstorlek i textredigerare</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="135"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="138"/>
+        <source>Auto</source>
+        <translation>Auto</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="208"/>
+        <source>Graphical style</source>
+        <translation>Grafisk stil</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="220"/>
+        <source>Application graphical interface style.</source>
+        <translation>Programmets grafiska gränssnittsstil.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="221"/>
+        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
+        <translation>Ändra om du observerar problem med felaktiga färger under ett mörkt tema.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="157"/>
+        <source>Show desktop notification</source>
+        <translation>Visa skrivbordsavisering</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="171"/>
+        <source>Never</source>
+        <translation>Aldrig</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="172"/>
+        <source>When in background</source>
+        <translation>När i bakgrunden</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="173"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="793"/>
+        <source>Always</source>
+        <translation>Alltid</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="187"/>
+        <source>Show desktop notification while reading or listening.</source>
+        <translation>Visa skrivbordsavisering under uppläsning eller lyssning.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="193"/>
+        <source>Use custom graphical style</source>
+        <translation>Använd anpassad grafisk stil</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="240"/>
@@ -1015,334 +1065,205 @@
         <translation>Kontrollera att mikrofonen är korrekt ansluten.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="349"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="435"/>
+        <source>If a suitable graphics card is found in the system, it will be used to accelerate processing.</source>
+        <translation>Om ett lämpligt grafikkort hittas i systemet, kommer det att användas för att påskynda bearbetningen.</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="350"/>
         <source>GPU hardware acceleration significantly reduces the time of decoding.</source>
         <translation>GPU-hårdvaruacceleration minskar avkodningstiden avsevärt.</translation>
     </message>
     <message>
-        <source>Disable this option if you observe problems when using Speech to Text with Whisper models.</source>
-        <translation type="vanished">Inaktivera det här alternativet om du får problem när du använder tal-till-text med Whisper-modeller.</translation>
-    </message>
-    <message>
-        <source>A suitable GPU device could not be found.</source>
-        <translation type="vanished">Ingen passande GPU-enhet kunde identifieras.</translation>
-    </message>
-    <message>
-        <source>GPU device</source>
-        <translation type="vanished">GPU-enhet</translation>
-    </message>
-    <message>
-        <source>Select preferred GPU device for hardware acceleration.</source>
-        <translation type="vanished">Välj föredragen GPU-enhet för hårdvaruacceleration.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="654"/>
-        <source>Cancel</source>
-        <translation type="unfinished">Avbryt</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="34"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="42"/>
-        <source>User Interface</source>
-        <translation>Användargränssnitt</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="57"/>
-        <source>Accessibility</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="135"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="138"/>
-        <source>Auto</source>
-        <translation>Auto</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="208"/>
-        <source>Graphical style</source>
-        <translation>Grafisk stil</translation>
-    </message>
-    <message>
-        <source>advanced option</source>
-        <translation type="vanished">Avancerade alternativ</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="94"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="52"/>
-        <source>Text to Speech</source>
-        <translation>Text-till-tal</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="106"/>
-        <source>Speech speed</source>
-        <translation>Talhastighet</translation>
-    </message>
-    <message>
-        <source>Very slow</source>
-        <translation type="vanished">Mycket långsam</translation>
-    </message>
-    <message>
-        <source>Slow</source>
-        <translation type="vanished">Långsam</translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation type="vanished">Normal</translation>
-    </message>
-    <message>
-        <source>Fast</source>
-        <translation type="vanished">Snabb</translation>
-    </message>
-    <message>
-        <source>Very fast</source>
-        <translation type="vanished">Mycket snabb</translation>
-    </message>
-    <message>
-        <source>Change to make synthesized speech slower or faster.</source>
-        <translation type="vanished">Ändra för att göra syntetiserat tal långsammare eller snabbare.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="124"/>
-        <source>Font size in text editor</source>
-        <translation>Teckenstorlek i textredigerare</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="220"/>
-        <source>Application graphical interface style.</source>
-        <translation>Programmets grafiska gränssnittsstil.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="221"/>
-        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation>Ändra om du observerar problem med felaktiga färger under ett mörkt tema.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="157"/>
-        <source>Show desktop notification</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="171"/>
-        <source>Never</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="172"/>
-        <source>When in background</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="173"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="793"/>
-        <source>Always</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="187"/>
-        <source>Show desktop notification while reading or listening.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="193"/>
-        <source>Use custom graphical style</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="342"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="428"/>
-        <source>Use GPU acceleration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="349"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="435"/>
-        <source>If a suitable graphics card is found in the system, it will be used to accelerate processing.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="363"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="449"/>
         <source>A suitable graphics card could not be found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inget passande grafikkort kunde identifieras.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="379"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="465"/>
         <source>Graphics card</source>
-        <translation type="unfinished"></translation>
+        <translation>Grafikkort</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="392"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="478"/>
         <source>Select preferred graphics card for hardware acceleration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj föredraget grafikkort för hårdvaruacceleration.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="122"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="404"/>
         <source>Restore diacritics before speech synthesis</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställa diakritiska tecken före talsyntes</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="436"/>
         <source>GPU hardware acceleration significantly reduces the time of speech synthesis.</source>
-        <translation type="unfinished"></translation>
+        <translation>GPU-hårdvaruacceleration minskar tiden för talsyntes avsevärt.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="491"/>
         <source>Use global keyboard shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd systemövergripande tangentbordsgenvägar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="498"/>
         <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Genvägar låter dig starta eller stoppa lyssning och uppläsning med tangentbordet.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="499"/>
         <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tal-till-textresultat kan läggas till i den aktuella anteckningen, infogas i valfritt aktivt fönster (för närvarande i fokus) eller kopieras till urklipp.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="500"/>
         <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Text-till-taluppläsning kan göras från aktuell anteckning eller från text i urklipp.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="501"/>
         <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
-        <translation type="unfinished"></translation>
+        <translation>Tangentbordsgenvägar fungerar även när programmet inte är aktivt (t.ex. minimerat eller i bakgrunden).</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="502"/>
         <source>This feature only works under X11.</source>
-        <translation type="unfinished"></translation>
+        <translation>Denna funktion fungerar endast under X11.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="514"/>
         <source>Start listening</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta lyssning</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="534"/>
         <source>Start listening, text to active window</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta lyssning, text till aktivt fönster</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="554"/>
         <source>Start listening, text to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta lyssning, text till urklipp</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="574"/>
         <source>Stop listening</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppa lyssning</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="594"/>
         <source>Start reading</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta uppläsning</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="614"/>
         <source>Start reading text from clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta uppläsning av text från urklipp</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="634"/>
         <source>Pause/Resume reading</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausa/återuppta uppläsning</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="654"/>
+        <source>Cancel</source>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="667"/>
         <source>Allow external applications to invoke actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt externa program att anropa åtgärder</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="674"/>
         <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Åtgärd som gör det möjligt för externa program att anropa en viss åtgärd när %1 körs.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="682"/>
         <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Åtgärd som gör det möjligt för externa program att anropa en viss åtgärd när %1 körs.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="683"/>
         <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation type="unfinished"></translation>
+        <translation>En åtgärd kan utlösas via DBus-anrop eller med kommandoradsalternativet.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="684"/>
         <source>The following actions are currently supported:</source>
-        <translation type="unfinished"></translation>
+        <translation>Följande åtgärder stöds för närvarande:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="686"/>
         <source>Starts listening.</source>
-        <translation type="unfinished"></translation>
+        <translation>Startar lyssning.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="687"/>
         <source>Starts listening. The decoded text is inserted into the active window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Startar lyssning. Avkodad text infogas i aktivt fönster.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="688"/>
         <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Startar lyssning. Avkodad text kopieras till urklipp.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="689"/>
         <source>Stops listening. The already captured voice is decoded into text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppar lyssning. Redan inhämtat tal avkodas till text.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="690"/>
         <source>Starts reading.</source>
-        <translation type="unfinished"></translation>
+        <translation>Startar uppläsning.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="691"/>
         <source>Starts reading text from the clipboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Startar uppläsning av text från urklipp.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="692"/>
         <source>Pauses or resumes reading.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausar eller återupptar uppläsning.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="693"/>
         <source>Cancels any of the above operations.</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryter alla ovanstående åtgärder.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="695"/>
         <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Om du till exempel vill utlösa åtgärden %1 kör du följande kommando: %2.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="709"/>
         <source>Storage</source>
-        <translation type="unfinished"></translation>
+        <translation>Lagring</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="137"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="742"/>
         <source>When closing, delete all cached audio files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort alla cachelagrade ljudfiler vid avslut.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="746"/>
         <source>Graphic cards support</source>
-        <translation type="unfinished"></translation>
+        <translation>Grafikkortsstöd</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="758"/>
         <source>Try to find NVIDIA CUDA compatible graphic cards in the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>Försök hitta NVIDIA CUDA-kompatibla grafikkort i systemet.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="759"/>
@@ -1350,63 +1271,69 @@
         <location filename="../desktop/qml/SettingsPage.qml" line="787"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="845"/>
         <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktivera det här alternativet om du får problem när programmet startas.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="771"/>
         <source>Try to find AMD ROCm compatible graphic cards in the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>Försök hitta AMD ROCm-kompatibla grafikkort i systemet.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="786"/>
         <source>Try to find OpenCL compatible graphic cards in the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>Försök hitta OpenCL-kompatibla grafikkort i systemet.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="793"/>
         <source>Only if no others were found</source>
-        <translation type="unfinished"></translation>
+        <translation>Endast om inga andra hittas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="801"/>
         <source>Availability of optional features</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillgänglighet för tillvalsfunktioner</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="844"/>
         <source>Check the presence of the required Python libraries.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrollera förekomsten av de nödvändiga Python-biblioteken.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="342"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="428"/>
+        <source>Use GPU acceleration</source>
+        <translation>Använd GPU-acceleration</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="351"/>
         <source>Disable this option if you observe problems when using Speech to Text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktivera det här alternativet om du får problem när du använder tal-till-text.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="411"/>
         <source>This works only for Arabic and Hebrew languages.</source>
-        <translation type="unfinished"></translation>
+        <translation>Detta fungerar endast för arabiska och hebreiska.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="422"/>
         <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställning av diakritiska tecken för hebreiska är inte tillgänglig.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="437"/>
         <source>Disable this option if you observe problems when using Text to Speech.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktivera det här alternativet om du får problem när du använder tal-till-text.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="136"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="735"/>
         <source>Clear cache on close</source>
-        <translation type="unfinished"></translation>
+        <translation>Töm cachen vid avslut</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="837"/>
         <source>Check Python dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation>Kolla Python-beroenden</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="852"/>
@@ -1475,6 +1402,12 @@
         <translation>Översätter...</translation>
     </message>
     <message>
+        <location filename="../sfos/qml/SpeechWidget.qml" line="43"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="111"/>
+        <source>Busy...</source>
+        <translation>Upptagen...</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/SpeechWidget.qml" line="181"/>
         <source>Resume reading</source>
         <translation>Återuppta uppläsning</translation>
@@ -1487,17 +1420,7 @@
     <message>
         <location filename="../desktop/qml/SpeechWidget.qml" line="198"/>
         <source>Stops listening. The already captured voice is decoded into text.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="vanished">Stopp</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SpeechWidget.qml" line="43"/>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="111"/>
-        <source>Busy...</source>
-        <translation>Upptagen...</translation>
+        <translation>Stoppar lyssning. Redan inhämtat tal avkodas till text.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SpeechWidget.qml" line="215"/>
@@ -1613,19 +1536,19 @@
 <context>
     <name>dsnote_app</name>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="2532"/>
+        <location filename="../src/dsnote_app.cpp" line="2580"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="2645"/>
+        <location filename="../src/dsnote_app.cpp" line="2693"/>
         <source>Global keyboard shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Systemövergripande tangentbordsgenvägar</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="2648"/>
+        <location filename="../src/dsnote_app.cpp" line="2696"/>
         <source>Insert text to active window</source>
-        <translation type="unfinished"></translation>
+        <translation>Infoga text i aktivt fönster</translation>
     </message>
 </context>
 <context>
@@ -1647,147 +1570,147 @@
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="240"/>
-        <location filename="../desktop/qml/main.qml" line="288"/>
+        <location filename="../desktop/qml/main.qml" line="291"/>
         <source>The model download is complete!</source>
         <translation>Modellnerladdningen är slutförd!</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="241"/>
-        <location filename="../desktop/qml/main.qml" line="289"/>
+        <location filename="../desktop/qml/main.qml" line="292"/>
         <source>Error: Couldn&apos;t download the model file.</source>
         <translation>Fel: Kunde inte ladda ner modellfilen.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="246"/>
-        <location filename="../desktop/qml/main.qml" line="304"/>
+        <location filename="../desktop/qml/main.qml" line="307"/>
         <source>Copied!</source>
         <translation>Kopierat!</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="247"/>
-        <location filename="../desktop/qml/main.qml" line="305"/>
+        <location filename="../desktop/qml/main.qml" line="308"/>
         <source>File transcription is complete!</source>
         <translation>Transkriberingen är slutförd!</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="248"/>
-        <location filename="../desktop/qml/main.qml" line="306"/>
+        <location filename="../desktop/qml/main.qml" line="309"/>
         <source>Speech saved to audio file!</source>
         <translation>Tal sparat som ljudfil!</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="307"/>
+        <location filename="../desktop/qml/main.qml" line="310"/>
         <source>Note saved to text file!</source>
         <translation>Anteckning sparad som textfil!</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="253"/>
-        <location filename="../desktop/qml/main.qml" line="323"/>
+        <location filename="../desktop/qml/main.qml" line="326"/>
         <source>Error: Audio file processing has failed.</source>
         <translation>Fel: Ljudfilsbearbetningen misslyckades.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="256"/>
-        <location filename="../desktop/qml/main.qml" line="326"/>
+        <location filename="../desktop/qml/main.qml" line="329"/>
         <source>Error: Couldn&apos;t access Microphone.</source>
         <translation>Fel: Kunde inte komma åt mikrofonen.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="259"/>
-        <location filename="../desktop/qml/main.qml" line="329"/>
+        <location filename="../desktop/qml/main.qml" line="332"/>
         <source>Error: Speech to Text engine initialization has failed.</source>
         <translation>Fel: Tal-till-textmotorn kunde inte startas.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="262"/>
-        <location filename="../desktop/qml/main.qml" line="332"/>
+        <location filename="../desktop/qml/main.qml" line="335"/>
         <source>Error: Text to Speech engine initialization has failed.</source>
         <translation>Fel: Text-till-talmotorn kunde inte startas.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="265"/>
-        <location filename="../desktop/qml/main.qml" line="335"/>
+        <location filename="../desktop/qml/main.qml" line="338"/>
         <source>Error: Translation engine initialization has failed.</source>
         <translation>Fel: Start översättningsmotor misslyckades.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="268"/>
-        <location filename="../desktop/qml/main.qml" line="338"/>
+        <location filename="../desktop/qml/main.qml" line="341"/>
         <source>Error: Couldn&apos;t save to the file.</source>
         <translation>Fel: Kunde inte spara filen.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="271"/>
-        <location filename="../desktop/qml/main.qml" line="341"/>
+        <location filename="../desktop/qml/main.qml" line="344"/>
         <source>Error: Couldn&apos;t open the file.</source>
         <translation>Fel: Kunde inte öppna filen.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="274"/>
-        <location filename="../desktop/qml/main.qml" line="344"/>
+        <location filename="../desktop/qml/main.qml" line="347"/>
         <source>Error: An unknown problem has occurred.</source>
         <translation>Fel: Ett okänt problem har inträffat.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="117"/>
+        <location filename="../desktop/qml/main.qml" line="120"/>
         <source>Getting ready, please wait...</source>
-        <translation type="unfinished">Förbereder, vänta...</translation>
+        <translation>Förbereder, vänta...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="119"/>
+        <location filename="../desktop/qml/main.qml" line="122"/>
         <source>Processing, please wait...</source>
-        <translation type="unfinished">Bearbetar, vänta...</translation>
+        <translation>Bearbetar, vänta...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="121"/>
+        <location filename="../desktop/qml/main.qml" line="124"/>
         <source>Reading a note...</source>
-        <translation type="unfinished">Läser en anteckning...</translation>
+        <translation>Läser en anteckning...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="123"/>
+        <location filename="../desktop/qml/main.qml" line="126"/>
         <source>Reading is paused.</source>
-        <translation type="unfinished">Uppläsning är pausad.</translation>
+        <translation>Uppläsning är pausad.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="167"/>
+        <location filename="../desktop/qml/main.qml" line="170"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="168"/>
+        <location filename="../desktop/qml/main.qml" line="171"/>
         <source>Delete</source>
         <translation>Ta bort</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="169"/>
+        <location filename="../desktop/qml/main.qml" line="172"/>
         <source>Download</source>
         <translation>Ladda ner</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="170"/>
+        <location filename="../desktop/qml/main.qml" line="173"/>
         <source>Read</source>
         <translation>Läs</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="171"/>
+        <location filename="../desktop/qml/main.qml" line="174"/>
         <source>Listen</source>
         <translation>Lyssna</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="263"/>
+        <location filename="../desktop/qml/main.qml" line="266"/>
         <source>Restart the application to apply changes.</source>
-        <translation type="unfinished">Starta om programmet för att tillämpa ändringarna.</translation>
+        <translation>Starta om programmet för att tillämpa ändringarna.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="317"/>
+        <location filename="../desktop/qml/main.qml" line="320"/>
         <source>Text copied to clipboard!</source>
-        <translation type="unfinished"></translation>
+        <translation>Text kopierad till urklipp</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="126"/>
-        <location filename="../desktop/qml/main.qml" line="128"/>
+        <location filename="../desktop/qml/main.qml" line="129"/>
+        <location filename="../desktop/qml/main.qml" line="131"/>
         <source>Say something...</source>
-        <translation type="unfinished">Säg något...</translation>
+        <translation>Säg något...</translation>
     </message>
 </context>
 <context>
@@ -1800,11 +1723,7 @@
     <message>
         <location filename="../src/settings.cpp" line="861"/>
         <source>Don&apos;t force any style</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Don&apos;t force</source>
-        <translation type="vanished">Tvinga inte</translation>
+        <translation>Tvinga inte fram någon stil</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="964"/>
@@ -1818,116 +1737,116 @@
 <context>
     <name>speech_service</name>
     <message>
-        <location filename="../src/speech_service.cpp" line="2238"/>
+        <location filename="../src/speech_service.cpp" line="2245"/>
         <source>Punctuation restoration</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställning av skiljetecken</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2186"/>
+        <location filename="../src/speech_service.cpp" line="2193"/>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Japanska</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2182"/>
-        <location filename="../src/speech_service.cpp" line="2235"/>
-        <location filename="../src/speech_service.cpp" line="2248"/>
-        <location filename="../src/speech_service.cpp" line="2252"/>
-        <location filename="../src/speech_service.cpp" line="2257"/>
+        <location filename="../src/speech_service.cpp" line="2189"/>
+        <location filename="../src/speech_service.cpp" line="2242"/>
+        <location filename="../src/speech_service.cpp" line="2255"/>
+        <location filename="../src/speech_service.cpp" line="2259"/>
+        <location filename="../src/speech_service.cpp" line="2264"/>
         <source>GPU acceleration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/speech_service.cpp" line="2191"/>
-        <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>GPU-acceleration</translation>
     </message>
     <message>
         <location filename="../src/speech_service.cpp" line="2198"/>
+        <source>Korean</source>
+        <translation>Korenska</translation>
+    </message>
+    <message>
+        <location filename="../src/speech_service.cpp" line="2205"/>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Tyska</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2202"/>
+        <location filename="../src/speech_service.cpp" line="2209"/>
         <source>Spanish</source>
-        <translation type="unfinished"></translation>
+        <translation>Spanska</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2206"/>
+        <location filename="../src/speech_service.cpp" line="2213"/>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>Franska</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2210"/>
+        <location filename="../src/speech_service.cpp" line="2217"/>
         <source>Italian</source>
-        <translation type="unfinished"></translation>
+        <translation>Italienska</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2214"/>
+        <location filename="../src/speech_service.cpp" line="2221"/>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>Ryska</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2218"/>
+        <location filename="../src/speech_service.cpp" line="2225"/>
         <source>Swahili</source>
-        <translation type="unfinished"></translation>
+        <translation>Swahili</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2222"/>
+        <location filename="../src/speech_service.cpp" line="2229"/>
         <source>Persian</source>
-        <translation type="unfinished"></translation>
+        <translation>Persiska</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2226"/>
+        <location filename="../src/speech_service.cpp" line="2233"/>
         <source>Dutch</source>
-        <translation type="unfinished"></translation>
+        <translation>Nederländska</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="2243"/>
+        <location filename="../src/speech_service.cpp" line="2250"/>
         <source>Diacritics restoration for Hebrew</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställning av diakritiska tecken för Hebreiska</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3264"/>
+        <location filename="../src/speech_service.cpp" line="3272"/>
         <source>No language has been set.</source>
         <translation>Inget språk har angetts.</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3266"/>
+        <location filename="../src/speech_service.cpp" line="3274"/>
         <source>No translator model has been set.</source>
         <translation>Ingen översättningsmodell har ännu angetts.</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3267"/>
+        <location filename="../src/speech_service.cpp" line="3275"/>
         <source>Say something...</source>
         <translation>Säg något...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3269"/>
+        <location filename="../src/speech_service.cpp" line="3277"/>
         <source>Press and say something...</source>
         <translation>Håll ner och säg något...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3271"/>
+        <location filename="../src/speech_service.cpp" line="3279"/>
         <source>Click and say something...</source>
         <translation>Snabbtryck och säg något...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3272"/>
+        <location filename="../src/speech_service.cpp" line="3280"/>
         <source>Busy...</source>
         <translation>Upptagen...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3273"/>
+        <location filename="../src/speech_service.cpp" line="3281"/>
         <source>Processing, please wait...</source>
         <translation>Bearbetar, vänta...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3275"/>
+        <location filename="../src/speech_service.cpp" line="3283"/>
         <source>Getting ready, please wait...</source>
         <translation>Förbereder, vänta...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3276"/>
+        <location filename="../src/speech_service.cpp" line="3284"/>
         <source>Translating...</source>
         <translation>Översätter...</translation>
     </message>
