@@ -108,7 +108,7 @@ if(arch_x8664)
 
     if(BUILD_WHISPERCPP_HIPBLAS)
         if (NOT DEFINED CMAKE_HIP_ARCHITECTURES)
-            set(CMAKE_HIP_ARCHITECTURES "gfx701 gfx801 gfx802 gfx803 gfx900 gfx906 gfx908 gfx1010 gfx1011 gfx1012 gfx1030 gfx1031")
+            set(CMAKE_HIP_ARCHITECTURES "gfx700 gfx701 gfx702 gfx703 gfx704 gfx705 gfx801 gfx802 gfx803 gfx805 gfx810 gfx900 gfx902 gfx904 gfx906 gfx908 gfx909 gfx90a gfx90c gfx940 gfx1010 gfx1011 gfx1012 gfx1013 gfx1030 gfx1031 gfx1032 gfx1033 gfx1034 gfx1033 gfx1034 gfx1035 gfx1036 gfx1100 gfx1101 gfx1102 gfx1103")
         endif()
 
         ExternalProject_Add(whispercpphipblas

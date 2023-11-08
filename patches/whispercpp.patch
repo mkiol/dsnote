@@ -18,7 +18,7 @@ diff -ruN whisper.cpp-org/cmake/DefaultTargetOptions.cmake whisper.cpp-patched/c
  )
 diff -ruN whisper.cpp-org/CMakeLists.txt whisper.cpp-patched/CMakeLists.txt
 --- whisper.cpp-org/CMakeLists.txt	2023-11-07 15:15:48.000000000 +0100
-+++ whisper.cpp-patched/CMakeLists.txt	2023-11-07 15:47:50.719343541 +0100
++++ whisper.cpp-patched/CMakeLists.txt	2023-11-08 20:22:48.473401726 +0100
 @@ -170,39 +170,11 @@
  if (WHISPER_OPENBLAS)
      set(WHISPER_BLAS_VENDOR "OpenBLAS")
@@ -82,7 +82,7 @@ diff -ruN whisper.cpp-org/CMakeLists.txt whisper.cpp-patched/CMakeLists.txt
  
      find_package(hip)
      find_package(hipblas)
-@@ -245,9 +216,13 @@
+@@ -245,9 +216,20 @@
      if (${hipblas_FOUND} AND ${hip_FOUND})
          message(STATUS "HIP and hipBLAS found")
          add_compile_definitions(GGML_USE_HIPBLAS GGML_USE_CUBLAS)
@@ -94,10 +94,17 @@ diff -ruN whisper.cpp-org/CMakeLists.txt whisper.cpp-patched/CMakeLists.txt
          set_property(TARGET ggml-rocm PROPERTY POSITION_INDEPENDENT_CODE ON)
          set_source_files_properties(ggml-cuda.cu PROPERTIES LANGUAGE CXX)
 +
++        if (DEFINED CMAKE_HIP_ARCHITECTURES AND NOT CMAKE_HIP_ARCHITECTURES STREQUAL "")
++            message(STATUS "HIP architectures set to ${CMAKE_HIP_ARCHITECTURES}")
++            string(REPLACE " " " --offload-arch=" HIP_OPTS ${CMAKE_HIP_ARCHITECTURES})
++            set(HIP_OPTS "--offload-arch=${HIP_OPTS}")
++            set_target_properties(ggml-rocm PROPERTIES COMPILE_FLAGS ${HIP_OPTS})
++        endif()
++
          target_link_libraries(ggml-rocm PRIVATE hip::device PUBLIC hip::host roc::rocblas roc::hipblas)
  
          if (WHISPER_STATIC)
-@@ -521,10 +496,23 @@
+@@ -521,7 +503,11 @@
  
  if (GGML_SOURCES_CUDA)
      message(STATUS "GGML CUDA sources found, configuring CUDA architecture")
@@ -110,19 +117,7 @@ diff -ruN whisper.cpp-org/CMakeLists.txt whisper.cpp-patched/CMakeLists.txt
      set_property(TARGET whisper PROPERTY CUDA_SELECT_NVCC_ARCH_FLAGS "Auto")
  endif()
  
-+if (GGML_SOURCES_HIP)
-+    message(STATUS "GGML HIP sources found, configuring HIP architecture")
-+    if(NOT DEFINED CMAKE_HIP_ARCHITECTURES)
-+        set(CMAKE_HIP_ARCHITECTURES "gfx1030")
-+    endif()
-+    message(STATUS "HIP architectures set to ${CMAKE_HIP_ARCHITECTURES}")
-+    set_property(TARGET whisper PROPERTY HIP_ARCHITECTURES ${CMAKE_HIP_ARCHITECTURES})
-+endif()
-+
- if (EMSCRIPTEN)
-     set_target_properties(${TARGET} PROPERTIES COMPILE_FLAGS "-msimd128")
- endif()
-@@ -539,7 +527,7 @@
+@@ -539,7 +525,7 @@
  
  install(TARGETS ${TARGET}
      LIBRARY  DESTINATION lib
