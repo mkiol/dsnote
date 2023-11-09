@@ -40,8 +40,8 @@ Page {
 
             LogItem {
                 title: "New Speech to Text engine: April-asr"
-                description: "It's lightweight and super fast STT engine. It also supports intermediate results. " +
-                             "New engine comes with models for the following languages: English, French, Polish."
+                description: "New engine supports intermediate results and punctuation (only English). " +
+                             "It comes with models for the following languages: English, French, Polish."
             }
 
             LogItem {

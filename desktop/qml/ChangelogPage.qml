@@ -49,8 +49,7 @@ DialogPage {
         <li>New languages: Afrikaans, Gujarati, Hausa, Telugu, Tswana, Javanese, Hebrew</li>
         <li>New engine: <i>Faster Whisper</i>. It provides slightly better performance compared to the existing engine
             for Whisper models, especially on bigger models like Medium or Large.</li>
-        <li>New engine: <i>april-asr</i>. It's lightweight and super fast STT engine.
-            It supports intermediate results.
+        <li>New engine: <i>April-asr</i>. It supports intermediate results and punctuation (only English).
             New engine comes with models for the following languages: English, French, Polish.</li>
         <li>Inserting text to any active window. Using global keyboard shotcut or
             <i>start-listening-active-window</i> action you can
