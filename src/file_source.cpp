@@ -24,7 +24,7 @@ void file_source::stop() {
 void file_source::slowdown() {
     if (m_timer.interval() == m_timer_slow) return;
 
-    qDebug() << "slowdown";
+    // qDebug() << "slowdown";
     m_timer.setInterval(m_timer_slow);
     m_timer.start();
 }
@@ -32,7 +32,7 @@ void file_source::slowdown() {
 void file_source::speedup() {
     if (m_timer.interval() == m_timer_quick) return;
 
-    qDebug() << "speedup";
+    // qDebug() << "speedup";
     m_timer.setInterval(m_timer_quick);
     m_timer.start();
 }
