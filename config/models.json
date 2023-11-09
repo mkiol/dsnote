@@ -3117,6 +3117,19 @@
             "hidden": true
         },
         {
+            "name": "Multilingual (Whisper Large-v2)",
+            "model_id": "multilang_whisper_large2",
+            "engine": "stt_whisper",
+            "lang_id": "multilang",
+            "checksum": "7bff7fbe",
+            "checksum_quick": "dbda0a0f",
+            "urls": [
+                "https://huggingface.co/ggerganov/whisper.cpp/resolve/bf8b606c2fcd9173605cdf6bd2ac8a75a8141b6c/ggml-large-v2-q5_0.bin"
+            ],
+            "size": "1080732091",
+            "hidden": true
+        },
+        {
             "name": "Multilingual (Whisper Large-v3)",
             "model_id": "multilang_whisper_large",
             "engine": "stt_whisper",
@@ -3208,6 +3221,12 @@
             "lang_id": "en"
         },
         {
+            "name": "English (Whisper Large-v2)",
+            "model_id": "en_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "en"
+        },
+        {
             "name": "Español (Whisper Tiny)",
             "model_id": "es_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -3235,6 +3254,12 @@
             "name": "Español (Whisper Large-v3)",
             "model_id": "es_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "es"
+        },
+        {
+            "name": "Español (Whisper Large-v2)",
+            "model_id": "es_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "es"
         },
         {
@@ -3268,6 +3293,12 @@
             "lang_id": "it"
         },
         {
+            "name": "Italiano (Whisper Large-v2)",
+            "model_id": "it_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "it"
+        },
+        {
             "name": "Português (Whisper Tiny)",
             "model_id": "pt_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -3295,6 +3326,12 @@
             "name": "Português (Whisper Large-v3)",
             "model_id": "pt_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "pt"
+        },
+        {
+            "name": "Português (Whisper Large-v2)",
+            "model_id": "pt_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "pt"
         },
         {
@@ -3328,6 +3365,12 @@
             "lang_id": "de"
         },
         {
+            "name": "Deutsch (Whisper Large-v2)",
+            "model_id": "de_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "de"
+        },
+        {
             "name": "日本語 (Whisper Tiny)",
             "model_id": "ja_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -3355,6 +3398,12 @@
             "name": "日本語 (Whisper Large-v3)",
             "model_id": "ja_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "ja"
+        },
+        {
+            "name": "日本語 (Whisper Large-v2)",
+            "model_id": "ja_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "ja"
         },
         {
@@ -3400,6 +3449,12 @@
             "lang_id": "ru"
         },
         {
+            "name": "Русский (Whisper Large-v2)",
+            "model_id": "ru_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "ru"
+        },
+        {
             "name": "Nederlands (Whisper Tiny)",
             "model_id": "nl_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -3427,6 +3482,12 @@
             "name": "Nederlands (Whisper Large-v3)",
             "model_id": "nl_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "nl"
+        },
+        {
+            "name": "Nederlands (Whisper Large-v2)",
+            "model_id": "nl_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "nl"
         },
         {
@@ -3460,6 +3521,12 @@
             "lang_id": "id"
         },
         {
+            "name": "Bahasa Indonesia (Whisper Large-v2)",
+            "model_id": "id_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "id"
+        },
+        {
             "name": "Català (Whisper Tiny)",
             "model_id": "ca_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -3487,6 +3554,12 @@
             "name": "Català (Whisper Large-v3)",
             "model_id": "ca_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "ca"
+        },
+        {
+            "name": "Català (Whisper Large-v2)",
+            "model_id": "ca_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "ca"
         },
         {
@@ -3520,6 +3593,12 @@
             "lang_id": "fr"
         },
         {
+            "name": "Français (Whisper Large-v2)",
+            "model_id": "fr_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "fr"
+        },
+        {
             "name": "Türkçe (Whisper Tiny)",
             "model_id": "tr_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -3547,6 +3626,12 @@
             "name": "Türkçe (Whisper Large-v3)",
             "model_id": "tr_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "tr"
+        },
+        {
+            "name": "Türkçe (Whisper Large-v2)",
+            "model_id": "tr_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "tr"
         },
         {
@@ -3580,6 +3665,12 @@
             "lang_id": "sv"
         },
         {
+            "name": "Svenska (Whisper Large-v2)",
+            "model_id": "sv_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "sv"
+        },
+        {
             "name": "Українська (Whisper Tiny)",
             "model_id": "uk_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -3607,6 +3698,12 @@
             "name": "Українська (Whisper Large-v3)",
             "model_id": "uk_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "uk"
+        },
+        {
+            "name": "Українська (Whisper Large-v2)",
+            "model_id": "uk_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "uk"
         },
         {
@@ -3640,6 +3737,12 @@
             "lang_id": "ms"
         },
         {
+            "name": "Melayu (Whisper Large-v2)",
+            "model_id": "ms_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "ms"
+        },
+        {
             "name": "Norsk (Whisper Tiny)",
             "model_id": "no_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -3670,6 +3773,12 @@
             "lang_id": "no"
         },
         {
+            "name": "Norsk (Whisper Large-v2)",
+            "model_id": "no_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "no"
+        },
+        {
             "name": "Suomi (Whisper Tiny)",
             "model_id": "fi_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -3697,6 +3806,12 @@
             "name": "Suomi (Whisper Large-v3)",
             "model_id": "fi_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "fi"
+        },
+        {
+            "name": "Suomi (Whisper Large-v2)",
+            "model_id": "fi_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "fi"
         },
         {
@@ -3754,6 +3869,12 @@
             "lang_id": "cs"
         },
         {
+            "name": "Čeština (Whisper Large-v2)",
+            "model_id": "cs_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "cs"
+        },
+        {
             "name": "Slovenčina (Whisper Tiny)",
             "model_id": "sk_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -3808,6 +3929,12 @@
             "lang_id": "sk"
         },
         {
+            "name": "Slovenčina (Whisper Large-v2)",
+            "model_id": "sk_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "sk"
+        },
+        {
             "name": "中文 (Whisper Tiny)",
             "model_id": "zh_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -3835,6 +3962,12 @@
             "name": "中文 (Whisper Large-v3)",
             "model_id": "zh_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "zh"
+        },
+        {
+            "name": "中文 (Whisper Large-v2)",
+            "model_id": "zh_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "zh"
         },
         {
@@ -3868,6 +4001,12 @@
             "lang_id": "vi"
         },
         {
+            "name": "Tiếng Việt (Whisper Large-v2)",
+            "model_id": "vi_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "vi"
+        },
+        {
             "name": "ไทย (Whisper Tiny)",
             "model_id": "th_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -3898,6 +4037,12 @@
             "lang_id": "th"
         },
         {
+            "name": "ไทย (Whisper Large-v2)",
+            "model_id": "th_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "th"
+        },
+        {
             "name": "Ελληνικά (Whisper Tiny)",
             "model_id": "el_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -3925,6 +4070,12 @@
             "name": "Ελληνικά (Whisper Large-v3)",
             "model_id": "el_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "el"
+        },
+        {
+            "name": "Ελληνικά (Whisper Large-v2)",
+            "model_id": "el_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "el"
         },
         {
@@ -3970,6 +4121,12 @@
             "lang_id": "hr"
         },
         {
+            "name": "Hrvatski (Whisper Large-v2)",
+            "model_id": "hr_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "hr"
+        },
+        {
             "name": "Български (Whisper Tiny)",
             "model_id": "bg_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -3997,6 +4154,12 @@
             "name": "Български (Whisper Large-v3)",
             "model_id": "bg_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "bg"
+        },
+        {
+            "name": "Български (Whisper Large-v2)",
+            "model_id": "bg_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "bg"
         },
         {
@@ -4042,6 +4205,12 @@
             "lang_id": "ro"
         },
         {
+            "name": "Română (Whisper Large-v2)",
+            "model_id": "ro_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "ro"
+        },
+        {
             "name": "Slovenščina (Whisper Tiny)",
             "model_id": "sl_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4084,6 +4253,12 @@
             "lang_id": "sl"
         },
         {
+            "name": "Slovenščina (Whisper Large-v2)",
+            "model_id": "sl_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "sl"
+        },
+        {
             "name": "Bosanski (Whisper Tiny)",
             "model_id": "bs_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4111,6 +4286,12 @@
             "name": "Bosanski (Whisper Large-v3)",
             "model_id": "bs_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "bs"
+        },
+        {
+            "name": "Bosanski (Whisper Large-v2)",
+            "model_id": "bs_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "bs"
         },
         {
@@ -4144,6 +4325,12 @@
             "lang_id": "mk"
         },
         {
+            "name": "Македонски (Whisper Large-v2)",
+            "model_id": "mk_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "mk"
+        },
+        {
             "name": "Srpski (Whisper Tiny)",
             "model_id": "sr_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4171,6 +4358,12 @@
             "name": "Srpski (Whisper Large-v3)",
             "model_id": "sr_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "sr"
+        },
+        {
+            "name": "Srpski (Whisper Large-v2)",
+            "model_id": "sr_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "sr"
         },
         {
@@ -4216,6 +4409,12 @@
             "lang_id": "hu"
         },
         {
+            "name": "Magyar (Whisper Large-v2)",
+            "model_id": "hu_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "hu"
+        },
+        {
             "name": "हिन्दी (Whisper Tiny)",
             "model_id": "hi_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4243,6 +4442,12 @@
             "name": "हिन्दी (Whisper Large-v3)",
             "model_id": "hi_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "hi"
+        },
+        {
+            "name": "हिन्दी (Whisper Large-v2)",
+            "model_id": "hi_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "hi"
         },
         {
@@ -4276,6 +4481,12 @@
             "lang_id": "fa"
         },
         {
+            "name": "فارسی (Whisper Large-v2)",
+            "model_id": "fa_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "fa"
+        },
+        {
             "name": "Dansk (Whisper Tiny)",
             "model_id": "da_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4303,6 +4514,12 @@
             "name": "Dansk (Whisper Large-v3)",
             "model_id": "da_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "da"
+        },
+        {
+            "name": "Dansk (Whisper Large-v2)",
+            "model_id": "da_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "da"
         },
         {
@@ -4336,6 +4553,12 @@
             "lang_id": "et"
         },
         {
+            "name": "Eesti (Whisper Large-v2)",
+            "model_id": "et_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "et"
+        },
+        {
             "name": "Euskara (Whisper Tiny)",
             "model_id": "eu_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4363,6 +4586,12 @@
             "name": "Euskara (Whisper Large-v3)",
             "model_id": "eu_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "eu"
+        },
+        {
+            "name": "Euskara (Whisper Large-v2)",
+            "model_id": "eu_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "eu"
         },
         {
@@ -4396,6 +4625,12 @@
             "lang_id": "is"
         },
         {
+            "name": "íslenska (Whisper Large-v2)",
+            "model_id": "is_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "is"
+        },
+        {
             "name": "ქართული (Whisper Tiny)",
             "model_id": "ka_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4423,6 +4658,12 @@
             "name": "ქართული (Whisper Large-v3)",
             "model_id": "ka_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "ka"
+        },
+        {
+            "name": "ქართული (Whisper Large-v2)",
+            "model_id": "ka_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "ka"
         },
         {
@@ -4456,6 +4697,12 @@
             "lang_id": "kk"
         },
         {
+            "name": "Қазақ (Whisper Large-v2)",
+            "model_id": "kk_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "kk"
+        },
+        {
             "name": "한국어 (Whisper Tiny)",
             "model_id": "ko_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4483,6 +4730,12 @@
             "name": "한국어 (Whisper Large-v3)",
             "model_id": "ko_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "ko"
+        },
+        {
+            "name": "한국어 (Whisper Large-v2)",
+            "model_id": "ko_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "ko"
         },
         {
@@ -4516,6 +4769,12 @@
             "lang_id": "lt"
         },
         {
+            "name": "Lietuvių (Whisper Large-v2)",
+            "model_id": "lt_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "lt"
+        },
+        {
             "name": "Latviešu (Whisper Tiny)",
             "model_id": "lv_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4543,6 +4802,12 @@
             "name": "Latviešu (Whisper Large-v3)",
             "model_id": "lv_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "lv"
+        },
+        {
+            "name": "Latviešu (Whisper Large-v2)",
+            "model_id": "lv_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "lv"
         },
         {
@@ -4576,6 +4841,12 @@
             "lang_id": "mn"
         },
         {
+            "name": "Монгол (Whisper Large-v2)",
+            "model_id": "mn_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "mn"
+        },
+        {
             "name": "Malti (Whisper Tiny)",
             "model_id": "mt_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4603,6 +4874,12 @@
             "name": "Malti (Whisper Large-v3)",
             "model_id": "mt_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "mt"
+        },
+        {
+            "name": "Malti (Whisper Large-v2)",
+            "model_id": "mt_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "mt"
         },
         {
@@ -4636,6 +4913,12 @@
             "lang_id": "ne"
         },
         {
+            "name": "नेपाली (Whisper Large-v2)",
+            "model_id": "ne_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "ne"
+        },
+        {
             "name": "Shqip (Whisper Tiny)",
             "model_id": "sq_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4663,6 +4946,12 @@
             "name": "Shqip (Whisper Large-v3)",
             "model_id": "sq_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "sq"
+        },
+        {
+            "name": "Shqip (Whisper Large-v2)",
+            "model_id": "sq_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "sq"
         },
         {
@@ -4696,6 +4985,12 @@
             "lang_id": "sw"
         },
         {
+            "name": "Kiswahili (Whisper Large-v2)",
+            "model_id": "sw_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "sw"
+        },
+        {
             "name": "Tagalog (Whisper Tiny)",
             "model_id": "tl_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4723,6 +5018,12 @@
             "name": "Tagalog (Whisper Large-v3)",
             "model_id": "tl_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "tl"
+        },
+        {
+            "name": "Tagalog (Whisper Large-v2)",
+            "model_id": "tl_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "tl"
         },
         {
@@ -4756,6 +5057,12 @@
             "lang_id": "tt"
         },
         {
+            "name": "татарча (Whisper Large-v2)",
+            "model_id": "tt_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "tt"
+        },
+        {
             "name": "Oʻzbekcha (Whisper Tiny)",
             "model_id": "uz_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4783,6 +5090,12 @@
             "name": "Oʻzbekcha (Whisper Large-v3)",
             "model_id": "uz_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "uz"
+        },
+        {
+            "name": "Oʻzbekcha (Whisper Large-v2)",
+            "model_id": "uz_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "uz"
         },
         {
@@ -4816,6 +5129,12 @@
             "lang_id": "yo"
         },
         {
+            "name": "Yorùbá (Whisper Large-v2)",
+            "model_id": "yo_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "yo"
+        },
+        {
             "name": "Amarəñña (Whisper Tiny)",
             "model_id": "am_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4843,6 +5162,12 @@
             "name": "Amarəñña (Whisper Large-v3)",
             "model_id": "am_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "am"
+        },
+        {
+            "name": "Amarəñña (Whisper Large-v2)",
+            "model_id": "am_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "am"
         },
         {
@@ -4876,6 +5201,12 @@
             "lang_id": "ar"
         },
         {
+            "name": "عربي (Whisper Large-v2)",
+            "model_id": "ar_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "ar"
+        },
+        {
             "name": "বাংলা (Whisper Tiny)",
             "model_id": "bn_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4903,6 +5234,12 @@
             "name": "বাংলা (Whisper Large-v3)",
             "model_id": "bn_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "bn"
+        },
+        {
+            "name": "বাংলা (Whisper Large-v2)",
+            "model_id": "bn_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "bn"
         },
         {
@@ -4960,6 +5297,12 @@
             "lang_id": "pl"
         },
         {
+            "name": "Polski (Whisper Large-v2)",
+            "model_id": "pl_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "pl"
+        },
+        {
             "name": "Afrikaans (Whisper Tiny)",
             "model_id": "af_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -4987,6 +5330,12 @@
             "name": "Afrikaans (Whisper Large-v3)",
             "model_id": "af_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "af"
+        },
+        {
+            "name": "Afrikaans (Whisper Large-v2)",
+            "model_id": "af_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "af"
         },
         {
@@ -5020,6 +5369,12 @@
             "lang_id": "he"
         },
         {
+            "name": "עברית (Whisper Large-v2)",
+            "model_id": "he_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "he"
+        },
+        {
             "name": "ગુજરાતી (Whisper Tiny)",
             "model_id": "gu_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -5047,6 +5402,12 @@
             "name": "ગુજરાતી (Whisper Large-v3)",
             "model_id": "gu_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "gu"
+        },
+        {
+            "name": "ગુજરાતી (Whisper Large-v2)",
+            "model_id": "gu_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "gu"
         },
         {
@@ -5080,6 +5441,12 @@
             "lang_id": "ha"
         },
         {
+            "name": "Hausa (Whisper Large-v2)",
+            "model_id": "ha_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "ha"
+        },
+        {
             "name": "Basa Jawa (Whisper Tiny)",
             "model_id": "jv_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -5107,6 +5474,12 @@
             "name": "Basa Jawa (Whisper Large-v3)",
             "model_id": "jv_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "jv"
+        },
+        {
+            "name": "Basa Jawa (Whisper Large-v2)",
+            "model_id": "jv_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "jv"
         },
         {
@@ -5140,6 +5513,12 @@
             "lang_id": "te"
         },
         {
+            "name": "తెలుగు (Whisper Large-v2)",
+            "model_id": "te_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "te"
+        },
+        {
             "name": "Setswana (Whisper Tiny)",
             "model_id": "tn_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
@@ -5167,6 +5546,12 @@
             "name": "Setswana (Whisper Large-v3)",
             "model_id": "tn_whisper_large",
             "model_alias_of": "multilang_whisper_large",
+            "lang_id": "tn"
+        },
+        {
+            "name": "Setswana (Whisper Large-v2)",
+            "model_id": "tn_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
             "lang_id": "tn"
         },
         {
