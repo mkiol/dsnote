@@ -290,17 +290,24 @@ static std::wstring UTF8_to_wchar(const char* in) {
 void restore_caps(std::string& text) {
     auto wtext = UTF8_to_wchar(text.c_str());
 
+    auto cap_first_letter = false;
+
     std::transform(
         wtext.cbegin(), wtext.cend(), wtext.begin(),
-        [eos = true](auto wc) mutable -> decltype(wc) {
+        [eos = false, &cap_first_letter](auto wc) mutable -> decltype(wc) {
             if (eos && wc != ' ' && wc != '.' && wc != '!' && wc != '?') {
                 eos = false;
                 return std::towupper(wc);
             }
-            if (!eos && (wc == '.' || wc == '!' || wc == '?')) eos = true;
+            if (!eos && (wc == '.' || wc == '!' || wc == '?')) {
+                eos = true;
+                cap_first_letter = true;
+            }
 
             return wc;
         });
+
+    if (cap_first_letter) wtext.front() = std::towupper(wtext.front());
 
     text.assign(wchar_to_UTF8(wtext.c_str()));
 }
