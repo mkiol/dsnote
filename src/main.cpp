@@ -77,6 +77,7 @@ struct cmd_options {
     bool gen_cheksums = false;
     bool gpu_scan_off = false;
     bool py_scan_off = false;
+    bool reset_models = false;
     QString action;
     QStringList files;
     QString log_file;
@@ -140,6 +141,12 @@ static cmd_options check_options(const QCoreApplication& app) {
                        "Use this option when you observing problems in "
                        "starting the app.")};
     parser.addOption(pyscanoff_opt);
+
+    QCommandLineOption resetmodels_opt{
+        QStringLiteral("reset-models"),
+        QStringLiteral(
+            "Reset the models configuration file to default settings.")};
+    parser.addOption(resetmodels_opt);
 
     QCommandLineOption log_file_opt{
         QStringLiteral("log-file"),
@@ -213,6 +220,7 @@ static cmd_options check_options(const QCoreApplication& app) {
     options.gen_cheksums = parser.isSet(gen_checksum_opt);
     options.gpu_scan_off = parser.isSet(gpuscanoff_opt);
     options.py_scan_off = parser.isSet(pyscanoff_opt);
+    options.reset_models = parser.isSet(resetmodels_opt);
     options.files = parser.positionalArguments();
 
     return options;
@@ -385,6 +393,8 @@ int main(int argc, char* argv[]) {
     install_translator();
 
     signal(SIGINT, signal_handler);
+
+    if (cmd_opts.reset_models) models_manager::reset_models();
 
     switch (cmd_opts.launch_mode) {
         case settings::launch_mode_t::service:

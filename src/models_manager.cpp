@@ -1709,6 +1709,16 @@ bool models_manager::parse_models_file_might_reset() {
     return true;
 }
 
+void models_manager::reset_models() {
+    qDebug() << "removing models file";
+
+    auto models_file_path =
+        QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
+            .filePath(models_file);
+
+    QFile{models_file_path}.remove();
+}
+
 void models_manager::parse_models_file(
     bool reset, langs_t* langs, models_t* models,
     std::optional<models_availability_t> models_availability) {

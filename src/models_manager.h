@@ -145,6 +145,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     void set_default_model_for_lang(const QString& model_id);
     void generate_checksums();
     void update_models_using_availability(models_availability_t availability);
+    static void reset_models();
 
    signals:
     void download_progress(const QString& id, double progress);
