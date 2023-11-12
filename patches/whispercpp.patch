@@ -1,24 +1,6 @@
-diff -ruN whisper.cpp-org/cmake/DefaultTargetOptions.cmake whisper.cpp-patched/cmake/DefaultTargetOptions.cmake
---- whisper.cpp-org/cmake/DefaultTargetOptions.cmake	2023-11-07 15:15:48.000000000 +0100
-+++ whisper.cpp-patched/cmake/DefaultTargetOptions.cmake	2023-11-08 18:31:59.266704085 +0100
-@@ -9,9 +9,13 @@
-         cxx_std_11
-     )
- 
-+if (NOT DEFINED CMAKE_INSTALL_RPATH)
-+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-+endif()
-+
- set_target_properties(${TARGET}
-     PROPERTIES
-         EXPORT_COMPILE_COMMANDS ON
-         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
--        INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib"
-+        INSTALL_RPATH ${CMAKE_INSTALL_RPATH}
- )
 diff -ruN whisper.cpp-org/CMakeLists.txt whisper.cpp-patched/CMakeLists.txt
---- whisper.cpp-org/CMakeLists.txt	2023-11-07 15:15:48.000000000 +0100
-+++ whisper.cpp-patched/CMakeLists.txt	2023-11-08 20:22:48.473401726 +0100
+--- whisper.cpp-org/CMakeLists.txt	2023-11-12 05:40:36.000000000 +0100
++++ whisper.cpp-patched/CMakeLists.txt	2023-11-12 15:19:05.329230365 +0100
 @@ -170,39 +170,11 @@
  if (WHISPER_OPENBLAS)
      set(WHISPER_BLAS_VENDOR "OpenBLAS")
@@ -117,7 +99,14 @@ diff -ruN whisper.cpp-org/CMakeLists.txt whisper.cpp-patched/CMakeLists.txt
      set_property(TARGET whisper PROPERTY CUDA_SELECT_NVCC_ARCH_FLAGS "Auto")
  endif()
  
-@@ -539,7 +525,7 @@
+@@ -533,13 +519,13 @@
+     ${WHISPER_EXTRA_FLAGS}
+     )
+ 
+-set_target_properties(${TARGET} PROPERTIES PUBLIC_HEADER "whisper.h")
++set_target_properties(${TARGET} PROPERTIES PUBLIC_HEADER "whisper.h;ggml.h")
+ 
+ include(GNUInstallDirs)
  
  install(TARGETS ${TARGET}
      LIBRARY  DESTINATION lib
@@ -127,7 +116,7 @@ diff -ruN whisper.cpp-org/CMakeLists.txt whisper.cpp-patched/CMakeLists.txt
      RESOURCE DESTINATION bin
      PUBLIC_HEADER DESTINATION include
 diff -ruN whisper.cpp-org/ggml-quants.c whisper.cpp-patched/ggml-quants.c
---- whisper.cpp-org/ggml-quants.c	2023-11-07 15:15:48.000000000 +0100
+--- whisper.cpp-org/ggml-quants.c	2023-11-12 05:40:36.000000000 +0100
 +++ whisper.cpp-patched/ggml-quants.c	2023-11-06 14:40:15.083032028 +0100
 @@ -349,11 +349,36 @@
      return res;

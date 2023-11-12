@@ -124,8 +124,10 @@
       <li>Stop listening button. Unlike Cancel, with this button you can stop listening but
           the already recorded voice will be decoded into text.</li>
       <li>Support for Opus audio codec in 'Transcribe a file'</li>
+      <li>More effective GPU acceleration for Whisper models. Average decoding time has been shortened by 3 times.</li>
       <li>New Whisper models for English: 'Distil-Whisper Medium' and 'Distil-Whisper Large-v2'.
           Both Distil models are faster than currently enabled 'Whisper Medium' and 'Whisper Large'.</li>
+      <li>New version of Whisper Large model: 'Whisper Large-v3'</li>
       <li>Fix: CUDA acceleration for Whisper models did not work on NVIDIA graphic cards with Maxwell architecture.</li>
       </ul>
       <p>Text to Speech:</p>

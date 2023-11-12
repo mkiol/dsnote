@@ -219,6 +219,7 @@ modules:
     cleanup:
       - "/bin"
       - "/lib/*.so*"
+      - "/*.rst"
     sources:
       - &id051
         type: file
@@ -345,7 +346,7 @@ modules:
         type: file
         url: https://files.pythonhosted.org/packages/9f/1a/8b6d48162861009d1e017a9740431c78d860809773b66cac220a11aa3310/Flask-2.2.5-py3-none-any.whl
         sha256: 58107ed83443e86067e41eff4631b058178191a355886f8e479e347fa1285fdf
-        
+
       - type: file
         url: https://files.pythonhosted.org/packages/ac/ed/9a33eca5e2cc35dc1fea0a968509c653db9a99a5979656ae57c6c019d66b/fonttools-4.43.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
         sha256: ad0b3f6342cfa14be996971ea2b28b125ad681c6277c4cd0fbdb50340220dfb6

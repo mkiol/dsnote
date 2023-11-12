@@ -559,8 +559,8 @@ modules:
         - "mv /app/lib/libwhisper.so /app/lib/libwhisper-openblas.so"
     sources:
       - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.4.3.tar.gz
-        sha256: 5f11c0542639bfb0b3c9d1b033d10ccd69ca26e739aec9366766617bc58a6e7c
+        url: https://github.com/ggerganov/whisper.cpp/archive/684bc8bd7033bf870f4a1cf977719bb7c43fa9b9.zip
+        sha256: 292f5b51ee101be10b653c223ba19237d8ae02d7fc6a9a2ea0f5708bcd63802f
       - type: patch
         path: ../patches/whispercpp.patch
 
@@ -584,8 +584,8 @@ modules:
       - "mv /app/lib/libwhisper.so /app/lib/libwhisper-fallback.so"
     sources:
       - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.4.3.tar.gz
-        sha256: 5f11c0542639bfb0b3c9d1b033d10ccd69ca26e739aec9366766617bc58a6e7c
+        url: https://github.com/ggerganov/whisper.cpp/archive/684bc8bd7033bf870f4a1cf977719bb7c43fa9b9.zip
+        sha256: 292f5b51ee101be10b653c223ba19237d8ae02d7fc6a9a2ea0f5708bcd63802f
       - type: patch
         path: ../patches/whispercpp.patch
 
