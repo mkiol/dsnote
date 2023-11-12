@@ -84,7 +84,7 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
-    <release version="4.3.0" date="2023-11-09">
+    <release version="4.3.0" date="2023-11-12">
       <description>
       <p>Accessibility:</p>
       <ul>
