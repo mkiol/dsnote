@@ -162,12 +162,14 @@ Comparison between "Flathub" and "Tiny" Flatpak packages:
 
 ### Arch Linux
 
-It is also possible to build and install the latest version from the repository using the provided PKGBUILD file (please note that the same remarks about building on Linux apply):
+It is also possible to build and install the latest development (git) or latest stable (release) version from the repository using the provided PKGBUILD file (please note that the same remarks about building on Linux apply):
 
 ```
 git clone <git repository url>
 
-cd dsnote/arch
+cd dsnote/arch/git      # build latest git version
+# or
+cd dsnote/arch/release  # build latest release version
 
 makepkg -si
 ```
