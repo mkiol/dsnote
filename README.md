@@ -136,36 +136,29 @@ but if you would like to make a direct PR/MR, please do it.
 - Arch Linux (AUR): [dsnote-git](https://aur.archlinux.org/packages/dsnote-git)
 - Sailfish OS: [OpenRepos](https://openrepos.net/content/mkiol/speech-note)
 
+Flatpak package (published on Fluthub) includes almost all the dependencies needed to run every feature of the application.
+This includes CUDA, ROCm, Torch and Python libraries. Due to this, the size of the package and the space required after installation are significant.
+If you don't need all the functionalities, you can use much smaller "Tiny" package (available on [Releases](https://github.com/mkiol/dsnote/releases/tag/v4.3.0) page), which contains only the basic features.
+
+Comparison between "Fluthub" and "Tiny" Flatpak packages:
+
+| **Feature**             | **Fluthub** | **Tiny** |
+| ----------------------- | ----------- | ---------|
+| Coqui/DeepSpeech STT    | ✔️          | ✔️ |
+| Vosk STT                | ✔️          | ✔️ |
+| Whisper STT             | ✔️          | ✔️ |
+| Whisper STT GPU         | ✔️          | ❌ |
+| Faster Whisper STT      | ✔️          | ❌ |
+| April-ASR STT           | ✔️          | ✔️ |
+| eSpeak TTS              | ✔️          | ✔️ |
+| MBROLA TTS              | ✔️          | ✔️ |
+| Piper TTS               | ✔️          | ✔️ |
+| RHVoice TTS             | ✔️          | ✔️ |
+| Coqui TTS               | ✔️          | ❌ |
+| Mimic3 TTS              | ✔️          | ❌ |
+| Punctuation restoration | ✔️          | ❌ |
+
 ## Building from sources
-
-### Linux, a direct build (not recommended)
-
-Speech Note has many build-time and run-time dependencies. This includes shared and static libraries, 
-3rd-party executables, Python and Perl scripts. Because of these complexity, the recommended way to build 
-is to use Flatpak tool-chain (Flatpak manifest file and `flatpak-builder`). If you want to make a
-direct build (i.e. without flatpak) it is also possible but definitly more complicated.
-
-Following tools/libraries are required for building (example of packages for Ubuntu 22.04, not likely a complete list):
-`build-essential` `cmake` `git` `autoconf` `qtbase5-dev` `qtdeclarative5-dev`
-`qtmultimedia5-dev` `qtquickcontrols2-5-dev` `python3-dev` `zlib1g-dev` `libtool`
-`libboost-all-dev`.
-
-```
-git clone <git repository url>
-
-cd dsnote
-mkdir build
-cd build
-
-cmake ../ -DCMAKE_BUILD_TYPE=Release -DWITH_DESKTOP=ON
-make
-```
-
-In a run-time app requires following Qt QML modules (example of packages for Ubuntu 22.04): `qml-module-qtquick-controls` `qml-module-qtquick-dialogs` `qml-module-qtquick-controls2` `qml-module-qtquick-layouts`.
-
-Also to make Python components work (i.e.: 'Coqui TTS models', 'Restore punctuation' feature), following Python libriaries have to be installed (pip packages names): `torch` `torchaudio` `transformers` `accelerate` `TTS`.
-
-To make build without support for Python components, add `-DWITH_PY=OFF` in cmake step.
 
 ### Arch Linux
 
@@ -179,7 +172,7 @@ cd dsnote/arch
 makepkg -si
 ```
 
-### Flatpak (recommended)
+### Flatpak
 
 ```
 git clone <git repository url>
@@ -204,6 +197,28 @@ sfdk config --session target=SailfishOS-4.4.0.58-aarch64
 sfdk cmake ../ -DCMAKE_BUILD_TYPE=Release -DWITH_SFOS=ON -DWITH_PY=OFF
 sfdk package
 ```
+
+### Linux (direct build, not recommended)
+
+Speech Note has many build-time and run-time dependencies. This includes shared and static libraries, 
+3rd-party executables, Python and Perl scripts. Because of these complexity, the recommended way to build 
+is to use Flatpak tool-chain (Flatpak manifest file and [flatpak-builder](https://docs.flatpak.org/en/latest/flatpak-builder.html)). 
+If you want to make a direct build (i.e. without flatpak) it is also possible but more complicated.
+
+```
+git clone <git repository url>
+
+cd dsnote
+mkdir build
+cd build
+
+cmake ../ -DCMAKE_BUILD_TYPE=Release -DWITH_DESKTOP=ON
+make
+```
+
+To make build without support for Python components, add `-DWITH_PY=OFF` in cmake step.
+
+To see other build options search for `option(BUILD_XXX)` in `CMakeList.txt` file.
 
 ## Libraries
 
