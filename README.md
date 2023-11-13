@@ -136,13 +136,13 @@ but if you would like to make a direct PR/MR, please do it.
 - Arch Linux (AUR): [dsnote-git](https://aur.archlinux.org/packages/dsnote-git)
 - Sailfish OS: [OpenRepos](https://openrepos.net/content/mkiol/speech-note)
 
-Flatpak package (published on Fluthub) includes almost all the dependencies needed to run every feature of the application.
+Flatpak package (published on Flathub) includes almost all the dependencies needed to run every feature of the application.
 This includes CUDA, ROCm, Torch and Python libraries. Due to this, the size of the package and the space required after installation are significant.
 If you don't need all the functionalities, you can use much smaller "Tiny" package (available on [Releases](https://github.com/mkiol/dsnote/releases/tag/v4.3.0) page), which contains only the basic features.
 
-Comparison between "Fluthub" and "Tiny" Flatpak packages:
+Comparison between "Flathub" and "Tiny" Flatpak packages:
 
-| **Feature**             | **Fluthub** | **Tiny** |
+| **Feature**             | **Flathub** | **Tiny** |
 | ----------------------- | ----------- | ---------|
 | Coqui/DeepSpeech STT    | ✔️          | ✔️ |
 | Vosk STT                | ✔️          | ✔️ |
