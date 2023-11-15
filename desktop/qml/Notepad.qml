@@ -128,9 +128,13 @@ ColumnLayout {
         second {
             icon.name: "audio-speakers-symbolic"
             enabled: app.tts_configured && app.state === DsnoteApp.StateIdle
-            comboToolTip: qsTr("Text to Speech model")
-            combo2ToolTip: qsTr("Speech speed")
+            comboToolTip: app.tts_ref_voice_needed && app.available_tts_ref_voices.length === 0 ?
+                              qsTr("This model requires a voice sample.") + " " +
+                              qsTr("Create one in %1 menu").arg("<i>" + qsTr("Voice samples") + "</i>") : qsTr("Text to Speech model")
+            combo2ToolTip: qsTr("Voice sample")
+            combo3ToolTip: qsTr("Speech speed")
             comboPlaceholderText: qsTr("No Text to Speech model")
+            combo2PlaceholderText: qsTr("No voice sample")
             combo {
                 enabled: listenReadCombos.second.enabled &&
                          !listenReadCombos.second.off &&
@@ -138,8 +142,18 @@ ColumnLayout {
                 model: app.available_tts_models
                 onActivated: app.set_active_tts_model_idx(index)
                 currentIndex: app.active_tts_model_idx
+                palette.buttonText: app.tts_ref_voice_needed && app.available_tts_ref_voices.length === 0 ? "red" : palette.buttonText
             }
             combo2 {
+                visible: app.tts_ref_voice_needed && app.available_tts_ref_voices.length !== 0
+                enabled: listenReadCombos.second.enabled &&
+                         !listenReadCombos.second.off &&
+                         app.state === DsnoteApp.StateIdle
+                model: app.available_tts_ref_voices
+                onActivated: app.set_active_tts_ref_voice_idx(index)
+                currentIndex: app.active_tts_ref_voice_idx
+            }
+            combo3 {
                 visible: true
                 enabled: listenReadCombos.second.enabled &&
                          !listenReadCombos.second.off &&
@@ -175,7 +189,8 @@ ColumnLayout {
             button {
                 enabled: listenReadCombos.second.enabled &&
                          !listenReadCombos.second.off &&
-                         app.note.length !== 0
+                         app.note.length !== 0 &&
+                         (!app.tts_ref_voice_needed || app.available_tts_ref_voices.length !== 0)
                 text: qsTr("Read")
                 onClicked: app.play_speech()
             }

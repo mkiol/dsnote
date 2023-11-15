@@ -359,6 +359,7 @@ DialogPage {
         onAccepted: {
             pathField.text =
                     _settings.file_path_from_url(fileWriteDialog.fileUrl)
+            _settings.file_audio_open_dir_url = fileWriteDialog.fileUrl
         }
     }
 }

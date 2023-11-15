@@ -10,12 +10,15 @@
 #include <QClipboard>
 #include <QDBusConnection>
 #include <QDebug>
+#include <QDir>
 #include <QFile>
 #include <QGuiApplication>
+#include <QRegExp>
 #include <QTextStream>
 #include <algorithm>
 #include <utility>
 
+#include "downloader.hpp"
 #include "media_compressor.hpp"
 #include "mtag_tools.hpp"
 #include "speech_service.h"
@@ -159,6 +162,8 @@ dsnote_app::dsnote_app(QObject *parent)
                            QDBusConnection::sessionBus()} {
     qDebug() << "starting app:" << settings::instance()->launch_mode();
 
+    QDir{cache_dir()}.canonicalPath();
+
     connect(settings::instance(), &settings::note_changed, this,
             &dsnote_app::handle_note_changed);
     connect(settings::instance(), &settings::speech_mode_changed, this,
@@ -291,7 +296,54 @@ dsnote_app::dsnote_app(QObject *parent)
         do_keepalive();
     }
 
+    update_available_tts_ref_voices();
     register_hotkeys();
+}
+
+void dsnote_app::create_player() {
+    m_player = std::make_unique<QMediaPlayer>(QObject::parent(),
+                                              QMediaPlayer::LowLatency);
+    m_player->setNotifyInterval(100);
+
+    connect(
+        m_player.get(), &QMediaPlayer::stateChanged, this,
+        [this](QMediaPlayer::State state) {
+            qDebug() << "player state changed:" << state;
+            emit player_playing_changed();
+        },
+        Qt::QueuedConnection);
+    connect(
+        m_player.get(), &QMediaPlayer::mediaStatusChanged, this,
+        [this](QMediaPlayer::MediaStatus status) {
+            qDebug() << "player media status changed:" << status;
+            emit player_ready_changed();
+        },
+        Qt::QueuedConnection);
+    connect(
+        m_player.get(), &QMediaPlayer::durationChanged, this,
+        [this](long long duration) {
+            qDebug() << "player duration changed:" << duration;
+            emit player_duration_changed();
+        },
+        Qt::QueuedConnection);
+    connect(
+        m_player.get(), &QMediaPlayer::positionChanged, this,
+        [this](long long position) {
+            // qDebug() << "player position changed:" << position;
+            emit player_position_changed();
+
+            if (m_player_stop_position != -1 &&
+                position >= m_player_stop_position) {
+                m_player->pause();
+            } else if (m_player_requested_play_position != -1 &&
+                       position == 10) {
+                m_player->setPosition(m_player_requested_play_position);
+            } else if (m_player_requested_play_position == position) {
+                m_player->play();
+                m_player_requested_play_position = -1;
+            }
+        },
+        Qt::QueuedConnection);
 }
 
 void dsnote_app::request_reload() {
@@ -873,12 +925,13 @@ void dsnote_app::handle_tts_speech_to_file_finished(const QString &file,
                 settings::audio_format_t::AudioFormatWav) {
             mtag_tools::write(
                 /*path=*/m_dest_file.toStdString(),
-                /*title=*/m_dest_file_title_tag.toStdString(),
-                /*artist=*/
-                settings::instance()->mtag_artist_name().toStdString(),
-                /*album=*/
-                settings::instance()->mtag_album_name().toStdString(),
-                /*track=*/m_dest_file_track_tag.toInt());
+                /*mtag=*/{
+                    /*title=*/m_dest_file_title_tag.toStdString(),
+                    /*artist=*/
+                    settings::instance()->mtag_artist_name().toStdString(),
+                    /*album=*/
+                    settings::instance()->mtag_album_name().toStdString(),
+                    /*track=*/m_dest_file_track_tag.toInt()});
         }
 
         QFile::remove(file);
@@ -1267,6 +1320,53 @@ void dsnote_app::update_available_tts_models() {
     }
 }
 
+void dsnote_app::update_available_tts_ref_voices() {
+    QVariantMap new_available_tts_ref_voices_map{};
+
+    const auto ref_voices_dir =
+        QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
+            .filePath(s_ref_voices_dir_name);
+
+    QDir dir{ref_voices_dir};
+
+    dir.setNameFilters(QStringList{} << "*.mp3"
+                                     << "*.ogg"
+                                     << "*.opus"
+                                     << "*.flac");
+    dir.setFilter(QDir::Files);
+
+    for (const auto &file : std::as_const(dir).entryList()) {
+        auto path = dir.absoluteFilePath(file);
+        auto mtag = mtag_tools::read(path.toStdString());
+        auto name = mtag && !mtag->title.empty()
+                        ? QString::fromStdString(mtag->title)
+                        : QFileInfo{file}.baseName();
+        new_available_tts_ref_voices_map.insert(
+            file, QStringList{std::move(name), std::move(path)});
+    }
+
+    if (new_available_tts_ref_voices_map.contains(
+            settings::instance()->active_tts_ref_voice())) {
+        m_active_tts_ref_voice = settings::instance()->active_tts_ref_voice();
+    } else {
+        if (new_available_tts_ref_voices_map.isEmpty())
+            m_active_tts_ref_voice.clear();
+        else
+            m_active_tts_ref_voice =
+                new_available_tts_ref_voices_map.firstKey();
+
+        settings::instance()->set_active_tts_ref_voice(m_active_tts_ref_voice);
+    }
+
+    if (new_available_tts_ref_voices_map != m_available_tts_ref_voices_map) {
+        m_available_tts_ref_voices_map =
+            std::move(new_available_tts_ref_voices_map);
+        emit available_tts_ref_voices_changed();
+    }
+
+    emit active_tts_ref_voice_changed();
+}
+
 void dsnote_app::update_available_tts_models_for_in_mnt() {
     QVariantMap new_available_tts_models_for_in_mnt_map{};
 
@@ -1380,6 +1480,53 @@ QVariantList dsnote_app::available_tts_models() const {
     return list;
 }
 
+QVariantList dsnote_app::available_tts_ref_voices() const {
+    QVariantList list;
+
+    for (auto it = m_available_tts_ref_voices_map.constBegin();
+         it != m_available_tts_ref_voices_map.constEnd(); ++it) {
+        const auto v = it.value().toStringList();
+        if (!v.isEmpty()) list.push_back(v.front());
+    }
+
+    return list;
+}
+
+void dsnote_app::delete_tts_ref_voice(int idx) {
+    auto item = std::next(m_available_tts_ref_voices_map.cbegin(), idx).value();
+
+    auto list = item.toStringList();
+    if (list.size() < 2) return;
+
+    QFile{list.at(1)}.remove();
+    m_available_tts_ref_voices_map.remove(
+        std::next(m_available_tts_ref_voices_map.cbegin(), idx).key());
+    emit available_tts_ref_voices_changed();
+}
+
+void dsnote_app::rename_tts_ref_voice(int idx, const QString &new_name) {
+    auto &item = std::next(m_available_tts_ref_voices_map.begin(), idx).value();
+
+    auto list = item.toStringList();
+    if (list.size() < 2) return;
+
+    auto file_path_std = list.at(1).toStdString();
+    auto mtag = mtag_tools::read(file_path_std);
+
+    if (!mtag) return;
+
+    if (mtag->title == new_name.toStdString()) return;
+
+    mtag->title.assign(new_name.toStdString());
+
+    if (!mtag_tools::write(file_path_std, *mtag)) return;
+
+    list[0] = new_name;
+    item = list;
+
+    emit available_tts_ref_voices_changed();
+}
+
 QVariantList dsnote_app::available_tts_models_for_in_mnt() const {
     QVariantList list;
 
@@ -1455,6 +1602,16 @@ void dsnote_app::set_active_tts_model_idx(int idx) {
             qDebug() << "[app => dbus] set DefaultTtsModel:" << idx << id;
             m_dbus_service.setDefaultTtsModel(id);
         }
+    }
+}
+
+void dsnote_app::set_active_tts_ref_voice_idx(int idx) {
+    if (active_tts_ref_voice_idx() != idx && idx > -1 &&
+        idx < m_available_tts_ref_voices_map.size()) {
+        auto id = std::next(m_available_tts_ref_voices_map.cbegin(), idx).key();
+        settings::instance()->set_active_tts_ref_voice(id);
+        m_active_tts_ref_voice = id;
+        emit active_tts_ref_voice_changed();
     }
 }
 
@@ -1688,7 +1845,8 @@ void dsnote_app::resume_speech() {
 }
 
 void dsnote_app::play_speech_internal(const QString &text,
-                                      const QString &model_id) {
+                                      const QString &model_id,
+                                      const QString &ref_voice) {
     if (text.isEmpty()) {
         qWarning() << "text is empty";
         return;
@@ -1698,6 +1856,11 @@ void dsnote_app::play_speech_internal(const QString &text,
 
     QVariantMap options;
     options.insert("speech_speed", settings::instance()->speech_speed());
+
+    if (m_available_tts_ref_voices_map.contains(ref_voice)) {
+        auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
+        if (l.size() > 1) options.insert("ref_voice_file", l.at(1));
+    }
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
@@ -1715,10 +1878,16 @@ void dsnote_app::play_speech_internal(const QString &text,
     emit intermediate_text_changed();
 }
 
-void dsnote_app::play_speech() { play_speech_internal(note(), {}); }
+void dsnote_app::play_speech() {
+    play_speech_internal(
+        note(), {},
+        tts_ref_voice_needed() ? active_tts_ref_voice() : QString{});
+}
 
 void dsnote_app::play_speech_from_clipboard() {
-    play_speech_internal(QGuiApplication::clipboard()->text(), {});
+    play_speech_internal(
+        QGuiApplication::clipboard()->text(), {},
+        tts_ref_voice_needed() ? active_tts_ref_voice() : QString{});
 }
 
 void dsnote_app::play_speech_translator(bool transtalated) {
@@ -1734,7 +1903,8 @@ void dsnote_app::play_speech_translator(bool transtalated) {
 
     play_speech_internal(transtalated ? m_translated_text : note(),
                          transtalated ? m_active_tts_model_for_out_mnt
-                                      : m_active_tts_model_for_in_mnt);
+                                      : m_active_tts_model_for_in_mnt,
+                         {});
 }
 
 void dsnote_app::translate_delayed() {
@@ -1959,6 +2129,17 @@ QString dsnote_app::active_tts_model_name() const {
     return l.size() > 1 ? l.at(1) : QString{};
 }
 
+QString dsnote_app::active_tts_ref_voice_name() const {
+    auto it = m_available_tts_ref_voices_map.find(m_active_tts_ref_voice);
+    if (it == m_available_tts_ref_voices_map.end()) {
+        return {};
+    }
+
+    auto l = it.value().toStringList();
+
+    return l.isEmpty() ? QString{} : l.front();
+}
+
 QString dsnote_app::active_tts_model_for_in_mnt_name() const {
     auto it = m_available_tts_models_for_in_mnt_map.find(
         m_active_tts_model_for_in_mnt);
@@ -2025,6 +2206,14 @@ int dsnote_app::active_tts_model_idx() const {
         return -1;
     }
     return std::distance(m_available_tts_models_map.begin(), it);
+}
+
+int dsnote_app::active_tts_ref_voice_idx() const {
+    auto it = m_available_tts_ref_voices_map.find(m_active_tts_ref_voice);
+    if (it == m_available_tts_ref_voices_map.end()) {
+        return -1;
+    }
+    return std::distance(m_available_tts_ref_voices_map.begin(), it);
 }
 
 int dsnote_app::active_tts_model_for_in_mnt_idx() const {
@@ -2815,6 +3004,247 @@ void dsnote_app::execute_action(action_t action) {
             cancel();
             break;
     }
+}
+
+QString dsnote_app::download_content(const QUrl &url) {
+    if (!url.isValid()) return {};
+    if (url.scheme() != "http" && url.scheme() != "https") return {};
+
+    auto data = downloader{}.download_data(url);
+
+    return QString::fromUtf8(data.bytes);
+}
+
+bool dsnote_app::tts_ref_voice_needed() const {
+    if (m_available_tts_models_map.contains(m_active_tts_model)) {
+        auto model =
+            m_available_tts_models_map.value(m_active_tts_model).toStringList();
+        return model.size() > 2 && model.at(2).contains('x');
+    }
+
+    return false;
+}
+
+QString dsnote_app::cache_dir() {
+    return QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+}
+
+QString dsnote_app::import_ref_voice_file_path() {
+    return QDir{cache_dir()}.absoluteFilePath(s_imported_ref_file_name);
+}
+
+QString dsnote_app::player_import_from_url(const QUrl &url) {
+    auto path = url.toLocalFile();
+    auto wav_file_path = import_ref_voice_file_path();
+
+    try {
+        media_compressor{}.decompress({path.toStdString()},
+                                      wav_file_path.toStdString(), false);
+    } catch (const std::runtime_error &error) {
+        qWarning() << "can't import file:" << error.what();
+        return {};
+    }
+
+    if (!m_player) create_player();
+
+    m_player->setMedia(
+        QUrl{QStringLiteral("gst-pipeline: filesrc location=%1 ! wavparse ! "
+                            "audioconvert ! alsasink")
+                 .arg(wav_file_path)});
+
+    auto mtag = mtag_tools::read(path.toStdString());
+    if (mtag && !mtag->title.empty())
+        return QString::fromStdString(mtag->title);
+    else
+        return QFileInfo{path}.baseName();
+}
+
+QString dsnote_app::player_import_mic_rec() {
+    auto wav_file_path = import_ref_voice_file_path();
+
+    if (!m_player) create_player();
+
+    m_player->setMedia(
+        QUrl{QStringLiteral("gst-pipeline: filesrc location=%1 ! wavparse ! "
+                            "audioconvert ! alsasink")
+                 .arg(wav_file_path)});
+
+    return {};
+}
+
+QString dsnote_app::tts_ref_voice_auto_name() const {
+    return tts_ref_voice_unique_name(tr("Voice"), true);
+}
+
+QString dsnote_app::tts_ref_voice_unique_name(QString name,
+                                              bool add_number) const {
+    QStringList names;
+    for (auto it = m_available_tts_ref_voices_map.constBegin();
+         it != m_available_tts_ref_voices_map.constEnd(); ++it) {
+        const auto v = it.value().toStringList();
+        if (!v.isEmpty()) names.push_back(v.front());
+    }
+
+    if (!add_number && !names.contains(name)) return name;
+
+    int i = 1;
+    QRegExp rx{"\\d+$"};
+    if (auto idx = rx.indexIn(name); idx >= 0) {
+        bool ok = false;
+        auto ii = name.midRef(idx).toInt(&ok);
+        if (ok && ii < 99999) {
+            i = ii;
+            name = name.mid(0, idx) + "%1";
+        } else {
+            name += " %1";
+        }
+    } else if (name.endsWith('-')) {
+        name += "%1";
+    } else {
+        name += " %1";
+    }
+
+    for (; i < 99999; ++i) {
+        if (!names.contains(name.arg(i))) {
+            name = name.arg(i);
+            break;
+        }
+    }
+
+    return name;
+}
+
+void dsnote_app::player_export_ref_voice(long long start, long long stop,
+                                         const QString &name) {
+    QDir ref_voices_dir{
+        QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
+            .filePath(s_ref_voices_dir_name)};
+
+    QString out_file_path;
+    for (int i = 1; i < 99999; ++i) {
+        out_file_path = ref_voices_dir.absoluteFilePath(
+            QStringLiteral("voice-%1.opus").arg(i));
+        if (!QFileInfo::exists(out_file_path)) break;
+    }
+
+    auto wav_file_path = import_ref_voice_file_path();
+
+    try {
+        media_compressor{}.compress(
+            {wav_file_path.toStdString()}, out_file_path.toStdString(),
+            media_compressor::format_t::ogg_opus,
+            media_compressor::quality_t::vbr_high,
+            {static_cast<uint64_t>(start), static_cast<uint64_t>(stop), 0, 0});
+    } catch (const std::runtime_error &error) {
+        qWarning() << "can't compress file:" << error.what();
+        return;
+    }
+
+    mtag_tools::mtag_t mtag;
+    mtag.title =
+        tts_ref_voice_unique_name(
+            name.isEmpty() ? QFileInfo{out_file_path}.baseName() : name, false)
+            .toStdString();
+    mtag_tools::write(out_file_path.toStdString(), mtag);
+
+    player_reset();
+
+    update_available_tts_ref_voices();
+}
+
+void dsnote_app::player_reset() {
+    if (!m_player) return;
+
+    QFile{import_ref_voice_file_path()}.remove();
+    m_player->setMedia({});
+}
+
+bool dsnote_app::player_ready() const {
+    return m_player &&
+           (m_player->mediaStatus() == QMediaPlayer::MediaStatus::LoadedMedia ||
+            m_player->mediaStatus() ==
+                QMediaPlayer::MediaStatus::BufferedMedia ||
+            m_player->mediaStatus() == QMediaPlayer::MediaStatus::EndOfMedia);
+}
+
+void dsnote_app::create_recorder() {
+    m_recorder = std::make_unique<recorder>(import_ref_voice_file_path());
+
+    connect(
+        m_recorder.get(), &recorder::recording_changed, this,
+        [this]() {
+            qDebug() << "recorder recording changed:"
+                     << m_recorder->recording();
+            emit recorder_recording_changed();
+        },
+        Qt::QueuedConnection);
+    connect(
+        m_recorder.get(), &recorder::duration_changed, this,
+        [this]() { emit recorder_duration_changed(); }, Qt::QueuedConnection);
+    connect(
+        m_recorder.get(), &recorder::processing_changed, this,
+        [this]() {
+            player_import_mic_rec();
+            emit recorder_processing_changed();
+        },
+        Qt::QueuedConnection);
+}
+
+bool dsnote_app::recorder_recording() const {
+    return m_recorder && m_recorder->recording();
+}
+
+bool dsnote_app::recorder_processing() const {
+    return m_recorder && m_recorder->processing();
+}
+
+long long dsnote_app::recorder_duration() const {
+    return m_recorder ? m_recorder->duration() : 0;
+}
+
+void dsnote_app::recorder_start() {
+    if (!m_recorder) create_recorder();
+
+    m_recorder->start();
+}
+
+void dsnote_app::recorder_stop() {
+    if (!m_recorder) return;
+
+    m_recorder->stop();
+}
+
+bool dsnote_app::player_playing() const {
+    return m_player && m_player->state() == QMediaPlayer::State::PlayingState;
+}
+
+void dsnote_app::player_set_position(long long position) {
+    if (!m_player) return;
+
+    m_player->stop();
+    m_player->setPosition(position);
+}
+
+void dsnote_app::player_play(long long start, long long stop) {
+    if (!m_player) return;
+
+    m_player_stop_position = stop;
+    m_player_requested_play_position = start;
+    m_player->setPosition(10);
+}
+
+void dsnote_app::player_stop() {
+    if (!m_player) return;
+
+    m_player->pause();
+}
+
+long long dsnote_app::player_position() const {
+    return m_player ? m_player->position() : 0;
+}
+
+long long dsnote_app::player_duration() const {
+    return m_player ? m_player->duration() : 0;
 }
 
 void dsnote_app::register_hotkeys() {

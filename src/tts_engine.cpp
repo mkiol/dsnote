@@ -118,10 +118,11 @@ std::ostream& operator<<(std::ostream& os,
 }
 
 std::ostream& operator<<(std::ostream& os, const tts_engine::config_t& config) {
-    os << "lang=" << config.lang << ", speaker=" << config.speaker
+    os << "lang=" << config.lang << ", speaker=" << config.speaker_id
        << ", model-files=[" << config.model_files << "]"
-       << ", speaker=" << config.speaker << ", options=" << config.options
-       << ", lang_code=" << config.lang_code
+       << ", speaker=" << config.speaker_id
+       << ", speaker_wav=" << config.ref_voice_file
+       << ", options=" << config.options << ", lang_code=" << config.lang_code
        << ", share-dir=" << config.share_dir
        << ", cache-dir=" << config.cache_dir << ", data-dir=" << config.data_dir
        << ", speech-speed=" << config.speech_speed
@@ -157,6 +158,8 @@ tts_engine::tts_engine(config_t config, callbacks_t call_backs)
 
 tts_engine::~tts_engine() {
     LOGD("tts dtor");
+
+    if (!m_ref_voice_wav_file.empty()) unlink(m_ref_voice_wav_file.c_str());
 }
 
 void tts_engine::start() {
@@ -253,6 +256,11 @@ void tts_engine::set_speech_speed(unsigned int speech_speed) {
     m_config.speech_speed = std::clamp(speech_speed, 1u, 20u);
 }
 
+void tts_engine::set_ref_voice_file(std::string ref_voice_file) {
+    m_config.ref_voice_file.assign(std::move(ref_voice_file));
+    ref_voice_file.clear();
+}
+
 void tts_engine::set_state(state_t new_state) {
     if (m_shutting_down) new_state = state_t::idle;
 
@@ -266,8 +274,8 @@ void tts_engine::set_state(state_t new_state) {
 std::string tts_engine::path_to_output_file(const std::string& text) const {
     auto hash = std::hash<std::string>{}(
         text + m_config.model_files.model_path +
-        m_config.model_files.vocoder_path +
-        m_config.model_files.diacritizer_path + m_config.speaker +
+        m_config.model_files.vocoder_path + m_config.ref_voice_file +
+        m_config.model_files.diacritizer_path + m_config.speaker_id +
         m_config.lang +
         (m_config.speech_speed == 10 ? ""
                                      : std::to_string(m_config.speech_speed)));
@@ -492,6 +500,17 @@ void tts_engine::process() {
             }
         }
 
+        if (m_restart_requested) {
+            m_restart_requested = false;
+
+            if (!m_ref_voice_wav_file.empty()) {
+                unlink(m_ref_voice_wav_file.c_str());
+                m_ref_voice_wav_file.clear();
+            }
+        }
+
+        setup_ref_voice();
+
         set_state(state_t::encoding);
 
         while (!m_shutting_down && !queue.empty()) {
@@ -548,6 +567,20 @@ void tts_engine::process() {
     if (m_shutting_down) set_state(state_t::idle);
 
     LOGD("tts processing done");
+}
+
+void tts_engine::setup_ref_voice() {
+    if (m_config.ref_voice_file.empty()) return;
+
+    auto hash = std::hash<std::string>{}(m_config.ref_voice_file);
+
+    m_ref_voice_wav_file =
+        m_config.cache_dir + "/" + std::to_string(hash) + ".wav";
+
+    if (!file_exists(m_ref_voice_wav_file)) {
+        media_compressor{}.decompress({m_config.ref_voice_file},
+                                      m_ref_voice_wav_file, false);
+    }
 }
 
 // borrowed from:

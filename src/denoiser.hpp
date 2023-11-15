@@ -21,6 +21,7 @@ class denoiser {
     denoiser(int sample_rate);
     ~denoiser();
     void process(sample_t* buf, size_t size);
+    void process_char(char* buf, size_t size);
 
    private:
     using frame_t = std::array<float, 480>;

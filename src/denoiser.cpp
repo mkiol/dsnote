@@ -69,6 +69,11 @@ void denoiser::normalize_audio(sample_t* audio, size_t size) {
             std::clamp(audio[i] * new_gain >> 10, min, max));
 }
 
+void denoiser::process_char(char* buf, size_t size) {
+    denoiser::process(reinterpret_cast<sample_t*>(buf),
+                      size / sizeof(sample_t));
+}
+
 void denoiser::process(sample_t* buf, size_t size) {
     frame_t frame;
 

@@ -94,7 +94,8 @@ class tts_engine {
     struct config_t {
         std::string lang;
         model_files_t model_files;
-        std::string speaker;
+        std::string speaker_id;
+        std::string ref_voice_file;
         std::string cache_dir;
         std::string data_dir;
         std::string config_dir;
@@ -120,12 +121,15 @@ class tts_engine {
     inline auto lang() const { return m_config.lang; }
     inline auto model_files() const { return m_config.model_files; }
     inline auto state() const { return m_state; }
-    inline auto speaker() const { return m_config.speaker; }
+    inline auto speaker() const { return m_config.speaker_id; }
     inline auto use_gpu() const { return m_config.use_gpu; }
     inline auto gpu_device() const { return m_config.gpu_device; }
+    inline auto ref_voice_file() const { return m_config.ref_voice_file; }
+    inline void restart() { m_restart_requested = true; }
     void encode_speech(std::string text);
     static std::string merge_wav_files(std::vector<std::string>&& files);
     void set_speech_speed(unsigned int speech_speed);
+    void set_ref_voice_file(std::string ref_voice_file);
 
    protected:
     struct task_t {
@@ -142,6 +146,8 @@ class tts_engine {
     std::condition_variable m_cv;
     state_t m_state = state_t::idle;
     text_tools::processor m_text_processor;
+    std::string m_ref_voice_wav_file;
+    bool m_restart_requested = false;
 
     static std::string first_file_with_ext(std::string dir_path,
                                            std::string&& ext);
@@ -166,6 +172,7 @@ class tts_engine {
     std::vector<task_t> make_tasks(const std::string& text,
                                    bool split = true) const;
     void apply_speed(const std::string& file) const;
+    void setup_ref_voice();
 #ifdef ARCH_X86_64
     static bool stretch(const std::string& input_file,
                         const std::string& output_file, double time_ration,

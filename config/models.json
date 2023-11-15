@@ -23434,6 +23434,106 @@
             "size": "7618694"
         },
         {
+            "name": "Multilingual (Coqui XTTS-v2)",
+            "model_id": "multilang_coqui_xtts2",
+            "engine": "tts_coqui",
+            "lang_id": "multilang",
+            "checksum": "97ec6817",
+            "checksum_quick": "c1503831",
+            "options": "x",
+            "license": {
+                "id": "CPML",
+                "url": "https://coqui.ai/cpml.txt",
+                "accept_required": true
+            },
+            "comp": "dir",
+            "urls": [
+                "https://coqui.gateway.scarf.sh/hf-coqui/XTTS-v2/main/model.pth",
+                "https://coqui.gateway.scarf.sh/hf-coqui/XTTS-v2/main/config.json",
+                "https://coqui.gateway.scarf.sh/hf-coqui/XTTS-v2/main/vocab.json"
+            ],
+            "size": "1863923906",
+            "hidden": true
+        },
+        {
+            "name": "English (Coqui XTTS-v2)",
+            "model_id": "en_coqui_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "en"
+        },
+        {
+            "name": "عربي (Coqui XTTS-v2)",
+            "model_id": "ar_coqui_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "ar"
+        },
+        {
+            "name": "Português brasileiro (Coqui XTTS-v2)",
+            "model_id": "pt_coqui_br_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "pt"
+        },
+        {
+            "name": "中文 (Coqui XTTS-v2)",
+            "model_id": "zh_coqui_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "zh"
+        },
+        {
+            "name": "Čeština (Coqui XTTS-v2)",
+            "model_id": "cs_coqui_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "cs"
+        },
+        {
+            "name": "Nederlands (Coqui XTTS-v2)",
+            "model_id": "nl_coqui_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "nl"
+        },
+        {
+            "name": "Français (Coqui XTTS-v2)",
+            "model_id": "fr_coqui_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "fr"
+        },
+        {
+            "name": "Deutsch (Coqui XTTS-v2)",
+            "model_id": "de_coqui_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "de"
+        },
+        {
+            "name": "Italiano (Coqui XTTS-v2)",
+            "model_id": "it_coqui_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "it"
+        },
+        {
+            "name": "Polski (Coqui XTTS-v2)",
+            "model_id": "pl_coqui_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "pl"
+        },
+        {
+            "name": "Русский (Coqui XTTS-v2)",
+            "model_id": "ru_coqui_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "ru"
+        },
+        {
+            "name": "Español (Coqui XTTS-v2)",
+            "model_id": "es_coqui_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "es"
+        },
+        {
+            "name": "Türkçe (Coqui XTTS-v2)",
+            "model_id": "tr_coqui_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "tr"
+        },
+        {
             "name": "English (Coqui LJSpeech VITS Female)",
             "model_id": "en_coqui_ljspeech_vits",
             "engine": "tts_coqui",

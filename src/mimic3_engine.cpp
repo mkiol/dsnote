@@ -90,9 +90,9 @@ void mimic3_engine::create_model() {
                       api.attr("Mimic3Settings")("voices_directories"_a = dirs,
                                                  "no_download"_a = true));
                   m_tts->attr("voice") = "lang/model";
-
-                  if (!m_config.speaker.empty())
-                      m_tts->attr("speaker") = m_config.speaker;
+                  
+                  if (!m_config.speaker_id.empty())
+                      m_tts->attr("speaker") = m_config.speaker_id;
 
                   m_tts->attr("preload_voice")("lang/model");
 

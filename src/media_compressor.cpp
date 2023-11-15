@@ -381,6 +381,11 @@ void media_compressor::init_av_in_format(const std::string& input_file) {
     //         << static_cast<AVSampleFormat>(in_stream->codecpar->format));
 }
 
+static uint64_t time_ms_to_pcm_bytes(uint64_t time_ms, int sample_rate,
+                                     int channels) {
+    return (time_ms * 2 * sample_rate * channels) / 1000.0;
+}
+
 void media_compressor::init_av(task_t task) {
     init_av_in_format(m_input_files.front());
     m_input_files.pop();
@@ -416,6 +421,16 @@ void media_compressor::init_av(task_t task) {
         }
         return false;
     }();
+
+    if (in_stream->codecpar->codec_id == AV_CODEC_ID_PCM_S16LE &&
+        m_clip_info.valid_time()) {
+        m_clip_info.start_bytes = time_ms_to_pcm_bytes(
+            m_clip_info.start_time_ms, in_stream->codecpar->sample_rate,
+            in_stream->codecpar->ch_layout.nb_channels);
+        m_clip_info.stop_bytes = time_ms_to_pcm_bytes(
+            m_clip_info.stop_time_ms, in_stream->codecpar->sample_rate,
+            in_stream->codecpar->ch_layout.nb_channels);
+    }
 
     if (m_no_decode) {
         LOGD("no decode");
@@ -733,7 +748,7 @@ void media_compressor::setup_input_files(
     std::vector<std::string>&& input_files) {
     if (input_files.empty()) throw std::runtime_error("empty input file list");
 
-    m_data_info = data_info{};
+    m_data_info = data_info_t{};
     std::for_each(input_files.begin(), input_files.end(), [&](auto& file) {
         struct stat st;
         if (stat(file.c_str(), &st) == 0) m_data_info.total += st.st_size;
@@ -833,7 +848,9 @@ void media_compressor::compress_async(
 
 void media_compressor::compress(std::vector<std::string> input_files,
                                 std::string output_file, format_t format,
-                                quality_t quality) {
+                                quality_t quality, clip_info_t clip_info) {
+    m_clip_info = clip_info;
+
     auto start = std::chrono::steady_clock::now();
 
     compress_internal(std::move(input_files), std::move(output_file), format,
@@ -934,6 +951,8 @@ void media_compressor::process() {
     int64_t next_ts = 0;
     m_data_info.eof = false;
 
+    m_in_bytes_read = 0;
+
     while (!m_shutdown) {
         if (m_no_decode) {
             if (!read_frame(pkt)) break;
@@ -998,7 +1017,15 @@ void media_compressor::process() {
 }
 
 bool media_compressor::read_frame(AVPacket* pkt) {
+    bool do_clip = m_clip_info.valid_bytes();
+
     while (true) {
+        if (do_clip && m_in_bytes_read >= m_clip_info.stop_bytes) {
+            LOGD("demuxer clip stop");
+            m_data_info.eof = true;
+            break;
+        }
+
         if (auto ret = av_read_frame(m_in_av_format_ctx, pkt); ret != 0) {
             if (ret == AVERROR_EOF) {
                 if (m_input_files.empty()) {
@@ -1017,17 +1044,36 @@ bool media_compressor::read_frame(AVPacket* pkt) {
 
         if (pkt->flags & AV_PKT_FLAG_CORRUPT) LOGD("corrupt pkt");
 
+        if (pkt->stream_index != m_in_audio_stream_idx) {
+            av_packet_unref(pkt);
+            continue;
+        }
+
+        m_in_bytes_read += pkt->size;
+
+        if (do_clip && m_in_bytes_read < m_clip_info.start_bytes) {
+            av_packet_unref(pkt);
+            continue;
+        }
+
         return true;
     }
 }
 
 bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame_in,
                                     AVFrame* frame_out) {
+    bool do_clip = m_clip_info.valid_bytes();
+
     if (m_out_av_audio_ctx->frame_size > 0) {  // decoder needs fix frame size
         while (!m_shutdown &&
                av_audio_fifo_size(m_av_fifo) < m_out_av_audio_ctx->frame_size &&
                !m_data_info.eof) {
-            if (auto ret = av_read_frame(m_in_av_format_ctx, pkt); ret != 0) {
+            if (do_clip && m_in_bytes_read >= m_clip_info.stop_bytes) {
+                LOGD("demuxer clip stop");
+                m_data_info.eof = true;
+                break;
+            } else if (auto ret = av_read_frame(m_in_av_format_ctx, pkt);
+                       ret != 0) {
                 if (ret == AVERROR_EOF) {
                     if (m_input_files.empty()) {
                         LOGD("demuxer eof");
@@ -1046,6 +1092,13 @@ bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame_in,
                 if (!filter_frame(nullptr, frame_out)) continue;
             } else {
                 if (pkt->stream_index != m_in_audio_stream_idx) {
+                    av_packet_unref(pkt);
+                    continue;
+                }
+
+                m_in_bytes_read += pkt->size;
+
+                if (do_clip && m_in_bytes_read < m_clip_info.start_bytes) {
                     av_packet_unref(pkt);
                     continue;
                 }
@@ -1104,7 +1157,12 @@ bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame_in,
         }
     } else {
         while (!m_shutdown) {
-            if (auto ret = av_read_frame(m_in_av_format_ctx, pkt); ret != 0) {
+            if (do_clip && m_in_bytes_read >= m_clip_info.stop_bytes) {
+                LOGD("demuxer clip stop");
+                m_data_info.eof = true;
+                break;
+            } else if (auto ret = av_read_frame(m_in_av_format_ctx, pkt);
+                       ret != 0) {
                 if (ret == AVERROR_EOF) {
                     if (m_input_files.empty()) {
                         LOGD("demuxer eof");
@@ -1122,6 +1180,13 @@ bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame_in,
             if (m_data_info.eof) return filter_frame(nullptr, frame_out);
 
             if (pkt->stream_index != m_in_audio_stream_idx) {
+                av_packet_unref(pkt);
+                continue;
+            }
+
+            m_in_bytes_read += pkt->size;
+
+            if (do_clip && m_in_bytes_read < m_clip_info.start_bytes) {
                 av_packet_unref(pkt);
                 continue;
             }
@@ -1197,8 +1262,8 @@ bool media_compressor::encode_frame(AVFrame* frame, AVPacket* pkt) {
 
 size_t media_compressor::data_size() const { return m_buf.size(); }
 
-media_compressor::data_info media_compressor::get_data(char* data,
-                                                       size_t max_size) {
+media_compressor::data_info_t media_compressor::get_data(char* data,
+                                                         size_t max_size) {
     std::unique_lock lock{m_mtx};
 
     m_data_info.size = std::min(max_size, m_buf.size());

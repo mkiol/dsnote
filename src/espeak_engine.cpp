@@ -30,19 +30,19 @@ espeak_engine::~espeak_engine() {
 bool espeak_engine::model_created() const { return m_ok; }
 
 void espeak_engine::create_model() {
-    if (m_config.speaker.empty()) {
+    if (m_config.speaker_id.empty()) {
         LOGE("voice name missing");
         return;
     }
-
-    auto mb_voice = m_config.speaker.size() > 3 && m_config.speaker[0] == 'm' &&
-                    m_config.speaker[1] == 'b' && m_config.speaker[2] == '-';
+    
+    auto mb_voice = m_config.speaker_id.size() > 3 && m_config.speaker_id[0] == 'm' &&
+                    m_config.speaker_id[1] == 'b' && m_config.speaker_id[2] == '-';
 
     if (mb_voice && !m_config.model_files.model_path.empty()) {
         mkdir(fmt::format("{}/mbrola", m_config.data_dir).c_str(), 0777);
 
         auto link_target = fmt::format("{}/mbrola/{}", m_config.data_dir,
-                                       &m_config.speaker[3]);
+                                       &m_config.speaker_id[3]);
         remove(link_target.c_str());
 
         (void)symlink(m_config.model_files.model_path.c_str(),
@@ -58,8 +58,8 @@ void espeak_engine::create_model() {
     }
 
     if (mb_voice) m_sample_rate = 16000;
-
-    m_ok = espeak_SetVoiceByName(m_config.speaker.c_str()) == EE_OK;
+    
+    m_ok = espeak_SetVoiceByName(m_config.speaker_id.c_str()) == EE_OK;
 
     if (!m_ok) LOGE("failed to set espeak voice");
 }

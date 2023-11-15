@@ -36,7 +36,7 @@ void piper_engine::create_model() {
     try {
         int64_t speaker_id = -1;
         try {
-            speaker_id = std::stoll(m_config.speaker);
+            speaker_id = std::stoll(m_config.speaker_id);
         } catch ([[maybe_unused]] const std::invalid_argument& err) {
         }
 

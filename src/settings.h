@@ -129,6 +129,8 @@ class settings : public QSettings, public singleton<settings> {
                    stt_use_gpu_changed)
     Q_PROPERTY(bool tts_use_gpu READ tts_use_gpu WRITE set_tts_use_gpu NOTIFY
                    tts_use_gpu_changed)
+    Q_PROPERTY(QString active_tts_ref_voice READ active_tts_ref_voice WRITE
+                   set_active_tts_ref_voice NOTIFY active_tts_ref_voice_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -348,6 +350,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_stt_use_gpu(bool value);
     bool tts_use_gpu() const;
     void set_tts_use_gpu(bool value);
+    QString active_tts_ref_voice() const;
+    void set_active_tts_ref_voice(const QString &value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -473,6 +477,7 @@ class settings : public QSettings, public singleton<settings> {
     void whisper_use_gpu_changed();
     void stt_use_gpu_changed();
     void tts_use_gpu_changed();
+    void active_tts_ref_voice_changed();
 
     // service
     void models_dir_changed();

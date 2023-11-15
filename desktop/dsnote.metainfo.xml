@@ -84,6 +84,16 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
+    <release version="4.4.0" date="2023-11-15">
+      <description>
+      <p>Text to Speech:</p>
+      <ul>
+      <li>Voice cloning with Coqui XTTS model.
+          Model is enabled for the following languages: Arabic, Brazilian Portuguese, Chinese, Czech,
+          Dutch, English, French, German, Italian, Polish, Russian, Spanish and Turkish.</li>
+      </ul>
+      </description>
+    </release>
     <release version="4.3.0" date="2023-11-12">
       <description>
       <p>Accessibility:</p>

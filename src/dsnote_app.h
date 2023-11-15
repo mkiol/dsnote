@@ -27,6 +27,7 @@
 #include "config.h"
 #include "dbus_notifications_inf.h"
 #include "dbus_speech_inf.h"
+#include "recorder.hpp"
 #include "settings.h"
 
 class dsnote_app : public QObject {
@@ -41,6 +42,23 @@ class dsnote_app : public QObject {
     Q_PROPERTY(bool can_redo_note READ can_redo_note NOTIFY
                    can_undo_or_redu_note_changed)
 
+    // player
+    Q_PROPERTY(bool player_ready READ player_ready NOTIFY player_ready_changed)
+    Q_PROPERTY(
+        bool player_playing READ player_playing NOTIFY player_playing_changed)
+    Q_PROPERTY(long long player_duration READ player_duration NOTIFY
+                   player_duration_changed)
+    Q_PROPERTY(long long player_position READ player_position NOTIFY
+                   player_position_changed)
+
+    // recorder
+    Q_PROPERTY(bool recorder_recording READ recorder_recording NOTIFY
+                   recorder_recording_changed)
+    Q_PROPERTY(long long recorder_duration READ recorder_duration NOTIFY
+                   recorder_duration_changed)
+    Q_PROPERTY(bool recorder_processing READ recorder_processing NOTIFY
+                   recorder_processing_changed)
+
     // stt
     Q_PROPERTY(int active_stt_model_idx READ active_stt_model_idx NOTIFY
                    active_stt_model_changed)
@@ -51,6 +69,17 @@ class dsnote_app : public QObject {
     Q_PROPERTY(QVariantList available_stt_models READ available_stt_models
                    NOTIFY available_stt_models_changed)
 
+    // tts ref voices
+    Q_PROPERTY(int active_tts_ref_voice_idx READ active_tts_ref_voice_idx NOTIFY
+                   active_tts_ref_voice_changed)
+    Q_PROPERTY(QString active_tts_ref_voice READ active_tts_ref_voice NOTIFY
+                   active_tts_ref_voice_changed)
+    Q_PROPERTY(QString active_tts_ref_voice_name READ active_tts_ref_voice_name
+                   NOTIFY active_tts_ref_voice_changed)
+    Q_PROPERTY(
+        QVariantList available_tts_ref_voices READ available_tts_ref_voices
+            NOTIFY available_tts_ref_voices_changed)
+
     // tts
     Q_PROPERTY(int active_tts_model_idx READ active_tts_model_idx NOTIFY
                    active_tts_model_changed)
@@ -60,6 +89,8 @@ class dsnote_app : public QObject {
                    active_tts_model_changed)
     Q_PROPERTY(QVariantList available_tts_models READ available_tts_models
                    NOTIFY available_tts_models_changed)
+    Q_PROPERTY(bool tts_ref_voice_needed READ tts_ref_voice_needed NOTIFY
+                   active_tts_model_changed)
 
     // mnt
     Q_PROPERTY(int active_mnt_lang_idx READ active_mnt_lang_idx NOTIFY
@@ -189,6 +220,10 @@ class dsnote_app : public QObject {
     dsnote_app(QObject *parent = nullptr);
     Q_INVOKABLE void set_active_stt_model_idx(int idx);
     Q_INVOKABLE void set_active_tts_model_idx(int idx);
+    Q_INVOKABLE void set_active_tts_ref_voice_idx(int idx);
+    Q_INVOKABLE void delete_tts_ref_voice(int idx);
+    Q_INVOKABLE void rename_tts_ref_voice(int idx, const QString &new_name);
+    Q_INVOKABLE QString tts_ref_voice_auto_name() const;
     Q_INVOKABLE void set_active_mnt_lang_idx(int idx);
     Q_INVOKABLE void set_active_mnt_out_lang_idx(int idx);
     Q_INVOKABLE void set_active_tts_model_for_in_mnt_idx(int idx);
@@ -241,6 +276,17 @@ class dsnote_app : public QObject {
                                                bool permanent = false);
     Q_INVOKABLE void execute_action_name(const QString &action_name);
     Q_INVOKABLE QVariantList features_availability();
+    Q_INVOKABLE QString download_content(const QUrl &url);
+    Q_INVOKABLE QString player_import_from_url(const QUrl &url);
+    Q_INVOKABLE QString player_import_mic_rec();
+    Q_INVOKABLE void player_play(long long start, long long stop);
+    Q_INVOKABLE void player_stop();
+    Q_INVOKABLE void player_set_position(long long position);
+    Q_INVOKABLE void player_export_ref_voice(long long start, long long stop,
+                                             const QString &name);
+    Q_INVOKABLE void player_reset();
+    Q_INVOKABLE void recorder_start();
+    Q_INVOKABLE void recorder_stop();
 
    signals:
     void active_stt_model_changed();
@@ -283,6 +329,15 @@ class dsnote_app : public QObject {
     void features_availability_updated();
     void features_changed();
     void activate_requested();
+    void active_tts_ref_voice_changed();
+    void available_tts_ref_voices_changed();
+    void player_ready_changed();
+    void player_playing_changed();
+    void player_duration_changed();
+    void player_position_changed();
+    void recorder_recording_changed();
+    void recorder_duration_changed();
+    void recorder_processing_changed();
 
    private:
     enum class action_t {
@@ -305,6 +360,9 @@ class dsnote_app : public QObject {
     static const int INVALID_TASK = -1;
     static const int KEEPALIVE_TIME = 1000;  // 1s
     static const int MAX_INIT_ATTEMPTS = 120;
+    inline static const auto *const s_imported_ref_file_name =
+        "tmp_imported_ref_voice.wav";
+    inline static const auto *const s_ref_voices_dir_name = "ref_voices";
 
     struct task_t {
         int current = INVALID_TASK;
@@ -339,7 +397,9 @@ class dsnote_app : public QObject {
     QString m_active_stt_model;
     QVariantMap m_available_stt_models_map;
     QString m_active_tts_model;
+    QString m_active_tts_ref_voice;
     QVariantMap m_available_tts_models_map;
+    QVariantMap m_available_tts_ref_voices_map;
     QVariantMap m_available_ttt_models_map;
     QString m_active_mnt_lang;
     QString m_active_mnt_out_lang;
@@ -384,6 +444,10 @@ class dsnote_app : public QObject {
     QVariantMap m_features_availability;
     bool m_service_reload_called = false;
     bool m_service_reload_update_done = false;
+    std::unique_ptr<QMediaPlayer> m_player;
+    long long m_player_requested_play_position = -1;
+    long long m_player_stop_position = -1;
+    std::unique_ptr<recorder> m_recorder;
 #ifdef USE_DESKTOP
     struct hotkeys_t {
         QHotkey start_listening;
@@ -402,6 +466,7 @@ class dsnote_app : public QObject {
 
     [[nodiscard]] QVariantList available_stt_models() const;
     [[nodiscard]] QVariantList available_tts_models() const;
+    [[nodiscard]] QVariantList available_tts_ref_voices() const;
     [[nodiscard]] QVariantList available_mnt_langs() const;
     [[nodiscard]] QVariantList available_mnt_out_langs() const;
     [[nodiscard]] QVariantList available_tts_models_for_in_mnt() const;
@@ -427,6 +492,7 @@ class dsnote_app : public QObject {
     void update_available_stt_models();
     void update_active_tts_model();
     void update_available_tts_models();
+    void update_available_tts_ref_voices();
     void update_active_mnt_lang();
     void update_available_mnt_langs();
     void update_active_mnt_out_lang();
@@ -446,6 +512,9 @@ class dsnote_app : public QObject {
     [[nodiscard]] int active_tts_model_idx() const;
     inline QString active_tts_model() { return m_active_tts_model; }
     QString active_tts_model_name() const;
+    [[nodiscard]] int active_tts_ref_voice_idx() const;
+    inline QString active_tts_ref_voice() { return m_active_tts_ref_voice; }
+    QString active_tts_ref_voice_name() const;
     inline QString active_mnt_lang() { return m_active_mnt_lang; }
     QString active_mnt_lang_name() const;
     [[nodiscard]] int active_mnt_lang_idx() const;
@@ -519,7 +588,8 @@ class dsnote_app : public QObject {
                                  const QString &dest_file,
                                  const QString &title_tag,
                                  const QString &track);
-    void play_speech_internal(const QString &text, const QString &model_id);
+    void play_speech_internal(const QString &text, const QString &model_id,
+                              const QString &ref_voice);
     void save_note_to_file_internal(const QString &text,
                                     const QString &dest_file);
     void copy_to_clipboard_internal(const QString &text);
@@ -542,6 +612,19 @@ class dsnote_app : public QObject {
     bool feature_text_active_window() const;
     bool feature_coqui_tts() const;
     void request_reload();
+    bool tts_ref_voice_needed() const;
+    static QString cache_dir();
+    static QString import_ref_voice_file_path();
+    bool player_ready() const;
+    bool player_playing() const;
+    void create_player();
+    long long player_position() const;
+    long long player_duration() const;
+    void create_recorder();
+    bool recorder_recording() const;
+    long long recorder_duration() const;
+    bool recorder_processing() const;
+    QString tts_ref_voice_unique_name(QString name, bool add_numner) const;
 };
 
 #endif  // DSNOTE_APP_H

@@ -15,6 +15,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QGuiApplication>
+#include <QRegExp>
 #include <QStandardPaths>
 #include <QVariant>
 #include <QVariantList>
@@ -346,6 +347,17 @@ void settings::set_default_tts_model_for_mnt_lang(const QString& lang,
     }
 }
 
+QString settings::active_tts_ref_voice() const {
+    return value(QStringLiteral("active_tts_ref_voice"), {}).toString();
+}
+
+void settings::set_active_tts_ref_voice(const QString& value) {
+    if (active_tts_ref_voice() != value) {
+        setValue(QStringLiteral("active_tts_ref_voice"), value);
+        emit active_tts_ref_voice_changed();
+    }
+}
+
 QString settings::file_save_dir() const {
     auto dir = value(QStringLiteral("file_save_dir")).toString();
     if (dir.isEmpty() || !QFileInfo::exists(dir)) {
@@ -383,8 +395,6 @@ void settings::set_file_save_dir_url(const QUrl& value) {
 QString settings::file_save_dir_name() const {
     return file_save_dir_url().fileName();
 }
-
-#include <QRegExp>
 
 QString settings::file_save_filename() const {
     auto dir = QDir{file_save_dir()};

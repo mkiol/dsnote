@@ -265,6 +265,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         models_manager::model_engine_t engine =
             models_manager::model_engine_t::stt_ds;
         QString name;
+        QString options;
     };
 
     struct mnt_model_config_t {
@@ -417,7 +418,7 @@ class speech_service : public QObject, public singleton<speech_service> {
                                const QString &model_id,
                                const QString &out_lang_id);
     QString restart_tts_engine(const QString &model_id,
-                               unsigned int speech_speed);
+                               const QVariantMap &options);
     QString restart_mnt_engine(const QString &model_or_lang_id,
                                const QString &out_lang_id);
     void restart_audio_source(const QString &source_file = {});

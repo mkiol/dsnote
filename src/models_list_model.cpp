@@ -84,6 +84,8 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
             : QStringLiteral("%1 / %2").arg(model.name, model.lang_id),
         /*langId=*/model.lang_id,
         /*role=*/role,
+        /*license=*/
+        {model.license.id, model.license.url, model.license.accept_required},
         /*available=*/model.available,
         /*score=*/model.score,
         /*default_for_lang=*/model.default_for_lang,
@@ -166,8 +168,8 @@ void ModelsListModel::updateDownloading(
 }
 
 ModelsListItem::ModelsListItem(const QString &id, QString name, QString langId,
-                               ModelsListModel::ModelRole role, bool available,
-                               int score, bool default_for_lang,
+                               ModelsListModel::ModelRole role, License license,
+                               bool available, int score, bool default_for_lang,
                                bool downloading, double progress,
                                QObject *parent)
     : SelectableItem{parent},
@@ -175,6 +177,7 @@ ModelsListItem::ModelsListItem(const QString &id, QString name, QString langId,
       m_name{std::move(name)},
       m_langId{std::move(langId)},
       m_role{role},
+      m_license{std::move(license)},
       m_available{available},
       m_score{score},
       m_default_for_lang{default_for_lang},
@@ -194,6 +197,10 @@ QHash<int, QByteArray> ModelsListItem::roleNames() const {
     names[DefaultRole] = QByteArrayLiteral("default_for_lang");
     names[DownloadingRole] = QByteArrayLiteral("downloading");
     names[ProgressRole] = QByteArrayLiteral("progress");
+    names[LicenseIdRole] = QByteArrayLiteral("license_id");
+    names[LicenseUrlRole] = QByteArrayLiteral("license_url");
+    names[LicenseAccceptRequiredRole] =
+        QByteArrayLiteral("license_accept_required");
     return names;
 }
 
@@ -217,6 +224,12 @@ QVariant ModelsListItem::data(int role) const {
             return downloading();
         case ProgressRole:
             return progress();
+        case LicenseIdRole:
+            return license_id();
+        case LicenseUrlRole:
+            return license_url();
+        case LicenseAccceptRequiredRole:
+            return license_accept_required();
     }
 
     return {};

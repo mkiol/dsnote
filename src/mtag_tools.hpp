@@ -5,9 +5,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <optional>
 #include <string>
 
 namespace mtag_tools {
-bool write(const std::string &path, const std::string &title,
-           const std::string &artist, const std::string &album, int track);
+struct mtag_t {
+    std::string title;
+    std::string artist;
+    std::string album;
+    int track = 0;
+};
+
+bool write(const std::string &path, const mtag_t &mtag);
+std::optional<mtag_t> read(const std::string &path);
 }

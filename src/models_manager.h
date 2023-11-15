@@ -82,6 +82,12 @@ class models_manager : public QObject, public singleton<models_manager> {
         QString file;
     };
 
+    struct license_t {
+        QString id;
+        QUrl url;
+        bool accept_required = false;
+    };
+
     struct model_t {
         QString id;
         model_engine_t engine = model_engine_t::stt_ds;
@@ -93,6 +99,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         QString trg_lang_id;
         int score = 2;
         QString options;
+        license_t license;
         bool default_for_lang = false;
         bool available = false;
         bool downloading = false;
@@ -207,6 +214,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         QString alias_of;
         int score = -1; /* 0-5 */
         QString options;
+        license_t license;
         bool hidden = false;
         bool default_for_lang = false;
         bool exists = false;

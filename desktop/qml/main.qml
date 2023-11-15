@@ -92,6 +92,15 @@ ApplicationWindow {
         }
     }
 
+    function openModelLicenseDialog(licenseId, licenseUrl, acceptHandler) {
+        modelLicenseDialog.licenseId = licenseId
+        modelLicenseDialog.licenseUrl = licenseUrl
+        modelLicenseDialog.licenseAcceptRequired = acceptHandler ? true : false
+        modelLicenseDialog.acceptHandler = acceptHandler
+
+        modelLicenseDialog.open()
+    }
+
     function update() {
         notepad.update()
         translator.update()
@@ -217,6 +226,16 @@ ApplicationWindow {
         offset: -panel.height
         text: notepad.placeholderText
         color: notepad.noteTextArea.textArea.color
+    }
+
+    ModelLicensePage {
+        id: modelLicenseDialog
+
+        property var acceptHandler
+
+        anchors.centerIn: parent
+
+        onAcceptClicked: acceptHandler()
     }
 
     AddTextDialog {

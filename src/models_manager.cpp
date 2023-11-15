@@ -352,7 +352,7 @@ std::vector<models_manager::model_t> models_manager::models(
                     /*model_file=*/pair.second.file_name,
                     /*sup_files=*/sup_model_files(pair.second.sup_models),
                     pair.second.speaker, pair.second.trg_lang_id,
-                    pair.second.score, pair.second.options,
+                    pair.second.score, pair.second.options, pair.second.license,
                     pair.second.default_for_lang, pair.second.available,
                     pair.second.downloading, pair.second.download_progress});
             }
@@ -424,9 +424,9 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
             list.push_back({id, model.engine, model.lang_id, model.name,
                             model_file, sup_model_files(model.sup_models),
                             model.speaker, model.trg_lang_id, model.score,
-                            model.options, model.default_for_lang,
-                            model.available, model.downloading,
-                            model.download_progress});
+                            model.options, model.license,
+                            model.default_for_lang, model.available,
+                            model.downloading, model.download_progress});
         }
     }
 
@@ -1441,6 +1441,7 @@ auto models_manager::extract_models(
         bool available = false, exists = false;
         QString speaker = obj.value(QLatin1String{"speaker"}).toString();
         QString options = obj.value(QLatin1String{"options"}).toString();
+        license_t license;
 
         auto model_alias_of =
             obj.value(QLatin1String{"model_alias_of"}).toString();
@@ -1479,6 +1480,17 @@ auto models_manager::extract_models(
             for (const auto& url : aurls) urls.emplace_back(url.toString());
 
             extract_sup_models(model_id, obj, sup_models);
+
+            if (auto license_obj = obj.value("license").toObject();
+                !license_obj.isEmpty()) {
+                qDebug() << "model" << model_id << "has license";
+
+                license.id = license_obj.value("id").toString();
+                license.url = QUrl{license_obj.value("url").toString()};
+                license.accept_required =
+                    license_obj.value("accept_required").toBool();
+            }
+
         } else if (models.count(model_alias_of) > 0) {
             const auto& alias = models.at(model_alias_of);
 
@@ -1502,6 +1514,8 @@ auto models_manager::extract_models(
                 qWarning() << "no target lang for mnt model:" << model_id;
                 continue;
             }
+
+            license = alias.license;
         } else {
             qWarning() << "invalid model alias:" << model_alias_of;
             continue;
@@ -1605,6 +1619,7 @@ auto models_manager::extract_models(
             /*alias_of=*/std::move(model_alias_of),
             /*score=*/score,
             /*options=*/std::move(options),
+            /*license=*/std::move(license),
             /*hidden=*/obj.value(QLatin1String{"hidden"}).toBool(false),
             /*default_for_lang=*/is_default_model_for_lang,
             /*exists=*/exists,

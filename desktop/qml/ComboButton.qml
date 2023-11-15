@@ -17,12 +17,15 @@ RowLayout {
     property alias controlEnabled: row.enabled
     property alias combo: _combo
     property alias combo2: _combo2
+    property alias combo3: _combo3
     property alias frame: _frame
     property string comboToolTip: ""
     property string combo2ToolTip: ""
+    property string combo3ToolTip: ""
     property string buttonToolTip: ""
     readonly property bool off: combo.model.length === 0
     property string comboPlaceholderText: ""
+    property string combo2PlaceholderText: ""
     property bool verticalMode: false
     property bool comboFillWidth: true
     property int comboPrefWidth: _combo.implicitWidth
@@ -72,12 +75,24 @@ RowLayout {
                 id: _combo2
 
                 visible: false
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                enabled: !root.off
+                displayText: model.length === 0 ? root.combo2PlaceholderText : currentText
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: root.combo2ToolTip
+            }
+
+            ComboBox {
+                id: _combo3
+
+                visible: false
                 Layout.preferredWidth: appWin.buttonSize * 0.9
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                 enabled: !root.off
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: root.combo2ToolTip
+                ToolTip.text: root.combo3ToolTip
             }
 
             Button {

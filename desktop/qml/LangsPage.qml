@@ -148,6 +148,7 @@ DialogPage {
                 Keys.onReturnPressed: root.switchToLangs()
                 onClicked: root.switchToLangs()
             }
+
             Button {
                 id: closeButton
 
@@ -210,7 +211,17 @@ DialogPage {
     Component {
         id: modelItemDelegate
 
-        Item {
+        Control {
+            id: control
+
+            background: Rectangle {
+                id: bg
+
+                anchors.fill: parent
+                color: palette.text
+                opacity: control.hovered ? 0.1 : 0.0
+            }
+
             width: root.listViewItem.width
             height: downloadButton.height
 
@@ -222,6 +233,25 @@ DialogPage {
                 anchors.leftMargin: appWin.padding
                 anchors.right: availableLabel.left
                 anchors.rightMargin: appWin.padding
+            }
+
+            Button {
+                visible: model.license_id.length !== 0
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: availableLabel.left
+                anchors.rightMargin: appWin.padding
+                text: qsTr("License")
+                font.pixelSize: Qt.application.font.pixelSize * 0.5
+                width: implicitWidth * 0.75
+                height: implicitHeight * 0.75
+
+                onClicked: {
+                    appWin.openModelLicenseDialog(model.license_id, model.license_url, null)
+                }
+
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTr("Show model's license")
             }
 
             Label {
@@ -281,11 +311,16 @@ DialogPage {
                 anchors.right: parent.right
                 anchors.rightMargin: root._rightMargin
                 width: appWin.buttonSize
+                icon.name: model.available ? "edit-delete-symbolic" : ""
                 text: model.downloading ? qsTr("Cancel") : model.available ? qsTr("Delete") : qsTr("Download")
                 onClicked: {
                     if (model.downloading) service.cancel_model_download(model.id)
                     else if (model.available) service.delete_model(model.id)
-                    else service.download_model(model.id)
+                    else if (model.license_accept_required) {
+                        appWin.openModelLicenseDialog(model.license_id, model.license_url, function(){
+                            service.download_model(model.id)
+                        })
+                    } else service.download_model(model.id)
                 }
             }
         }

@@ -41,18 +41,31 @@ class media_compressor {
 
     static const int BUF_MAX_SIZE = 16384;
 
-    struct data_info {
+    struct data_info_t {
         size_t size = 0;
         uint64_t bytes_read = 0;
         uint64_t total = 0;
         bool eof = false;
     };
 
+    struct clip_info_t {
+        static const uint64_t max = std::numeric_limits<uint64_t>::max();
+
+        uint64_t start_time_ms = 0;
+        uint64_t stop_time_ms = max;
+        uint64_t start_bytes = 0;
+        uint64_t stop_bytes = max;
+
+        inline bool valid_time() const { return start_time_ms < stop_time_ms; }
+        inline bool valid_bytes() const { return start_bytes < stop_bytes; }
+    };
+
     media_compressor() = default;
     ~media_compressor();
     bool is_media_file(const std::string& input_file);
     void compress(std::vector<std::string> input_files, std::string output_file,
-                  format_t format, quality_t quality);
+                  format_t format, quality_t quality,
+                  clip_info_t clip_info = {0, 0, 0, 0});
     void compress_async(std::vector<std::string> input_files,
                         std::string output_file, format_t format,
                         quality_t quality,
@@ -67,7 +80,7 @@ class media_compressor {
         std::vector<std::string> input_files, bool mono_16khz,
         data_ready_callback_t data_ready_callback,
         task_finished_callback_t task_finished_callback);
-    data_info get_data(char* data, size_t max_size);
+    data_info_t get_data(char* data, size_t max_size);
     size_t data_size() const;
     void cancel();
     inline bool error() const { return m_error; }
@@ -105,10 +118,12 @@ class media_compressor {
     std::mutex m_mtx;
     bool m_error = false;
     std::vector<char> m_buf;
-    data_info m_data_info;
+    data_info_t m_data_info;
+    clip_info_t m_clip_info;
     bool m_mono_16khz = false;
     bool m_no_decode = false;
     data_ready_callback_t m_data_ready_callback;
+    uint64_t m_in_bytes_read = 0;
 
     void init_av(task_t task);
     void init_av_filter(const char* arg);

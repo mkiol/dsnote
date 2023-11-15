@@ -37,7 +37,7 @@ bool rhvoice_engine::model_created() const {
 bool rhvoice_engine::model_supports_speed() const { return true; }
 
 void rhvoice_engine::create_model() {
-    if (m_config.speaker.empty()) {
+    if (m_config.speaker_id.empty()) {
         LOGE("voice name missing");
         return;
     }
@@ -45,7 +45,7 @@ void rhvoice_engine::create_model() {
     mkdir(fmt::format("{}/voices", m_config.data_dir).c_str(), 0777);
 
     auto link_target =
-        fmt::format("{}/voices/{}", m_config.data_dir, m_config.speaker);
+        fmt::format("{}/voices/{}", m_config.data_dir, m_config.speaker_id);
 
     remove(link_target.c_str());
 
@@ -132,7 +132,7 @@ bool rhvoice_engine::encode_speech_impl(const std::string& text,
     }();
 
     RHVoice_synth_params synth_params{
-        /*voice_profile=*/m_config.speaker.c_str(),
+                                      /*voice_profile=*/m_config.speaker_id.c_str(),
         /*absolute_rate=*/rate,
         /*absolute_pitch=*/0.0,
         /*absolute_volume=*/0.0,

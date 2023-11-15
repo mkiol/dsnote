@@ -180,7 +180,9 @@ void coqui_engine::create_model() {
                       fix_config_file(vocoder_config_file,
                                       m_config.model_files.vocoder_path, true);
 
-              bool mms_model = model_file.find("fairseq") != std::string::npos;
+              bool dir_instead_of_file =
+                  model_file.find("fairseq") != std::string::npos ||
+                  model_file.find("xtts") != std::string::npos;
 
               auto use_cuda =
                   m_config.use_gpu && pe->libs_availability->torch_cuda;
@@ -193,31 +195,32 @@ void coqui_engine::create_model() {
 
                   m_model = api.attr("Synthesizer")(
                       "tts_checkpoint"_a =
-                          mms_model
+                          dir_instead_of_file
                               ? static_cast<py::object>(py::none())
                               : static_cast<py::object>(py::str(model_file)),
                       "tts_config_path"_a =
-                          mms_model
+                          dir_instead_of_file
                               ? static_cast<py::object>(py::str(py::none()))
                               : static_cast<py::object>(py::str(config_file)),
                       "tts_speakers_file"_a = py::none(),
                       "tts_languages_file"_a = py::none(),
                       "vocoder_checkpoint"_a =
-                          mms_model || vocoder_model_file.empty()
+                          dir_instead_of_file || vocoder_model_file.empty()
                               ? static_cast<py::object>(py::none())
                               : static_cast<py::object>(
                                     py::str(vocoder_model_file)),
                       "vocoder_config"_a =
-                          mms_model || vocoder_config_file.empty()
+                          dir_instead_of_file || vocoder_config_file.empty()
                               ? static_cast<py::object>(py::none())
                               : static_cast<py::object>(
                                     py::str(vocoder_config_file)),
                       "encoder_checkpoint"_a = py::none(),
                       "encoder_config"_a = py::none(),
                       "model_dir"_a =
-                          mms_model ? static_cast<py::object>(py::str(
-                                          m_config.model_files.model_path))
-                                    : static_cast<py::object>(py::none()),
+                          dir_instead_of_file
+                              ? static_cast<py::object>(
+                                    py::str(m_config.model_files.model_path))
+                              : static_cast<py::object>(py::none()),
                       "use_cuda"_a = use_cuda);
 
                   if (m_model) {
@@ -278,12 +281,16 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
                          auto wav = m_model->attr("tts")(
                              "text"_a = text,
                              "speaker_name"_a =
-                                 m_config.speaker.empty()
+                                 m_config.speaker_id.empty()
                                      ? static_cast<py::object>(py::none())
                                      : static_cast<py::object>(
-                                           py::str(m_config.speaker)),
+                                           py::str(m_config.speaker_id)),
                              "language_name"_a = m_config.lang,
-                             "speaker_wav"_a = py::none(),
+                             "speaker_wav"_a =
+                                 m_ref_voice_wav_file.empty()
+                                     ? static_cast<py::object>(py::none())
+                                     : static_cast<py::object>(
+                                           py::str(m_ref_voice_wav_file)),
                              "reference_wav"_a = py::none(),
                              "style_wav"_a = py::none(),
                              "style_text"_a = py::none(),

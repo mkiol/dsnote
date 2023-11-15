@@ -23,6 +23,7 @@ ToolBar {
             Layout.fillWidth: true
             ToolButton {
                 id: menuButton
+
                 icon.name: "open-menu-symbolic"
                 Layout.alignment: Qt.AlignLeft
                 onClicked: menuMenu.open()
@@ -56,6 +57,7 @@ ToolBar {
 
             ToolButton {
                 id: fileButton
+
                 enabled: app.stt_configured || app.tts_configured
                 opacity: enabled ? 1.0 : 0.6
                 Layout.alignment: Qt.AlignLeft
@@ -172,6 +174,20 @@ ToolBar {
                 ToolTip.text: qsTr("Set languages and download models.")
             }
 
+            ToolButton {
+                id: voicesButton
+
+                visible: !_settings.translator_mode && app.tts_ref_voice_needed
+                opacity: enabled ? 1.0 : 0.6
+                Layout.alignment: Qt.AlignLeft
+                text: qsTr("Voice samples")
+                onClicked: appWin.openDialog("VoiceMgmtPage.qml")
+
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTr("Voice samples are used in speech synthesis with voice cloning.")
+            }
+
             Item {
                 Layout.fillWidth: true
                 height: 1
@@ -251,6 +267,7 @@ ToolBar {
 
     Dialogs.FileDialog {
         id: textFileReadDialog
+
         title: qsTr("Open File")
         nameFilters: [
             qsTr("Text") + " (*.txt)",
@@ -267,6 +284,7 @@ ToolBar {
 
     Dialogs.FileDialog {
         id: fileReadDialog
+
         title: qsTr("Open File")
         nameFilters: [
             qsTr("Audio and video files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.flac *.m4a *.aac *.mp4 *.mkv *.ogv *.webm)",

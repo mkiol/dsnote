@@ -81,15 +81,24 @@ class ModelsListItem : public SelectableItem {
         DefaultRole,
         DownloadingRole,
         ProgressRole,
-        ModelRole
+        ModelRole,
+        LicenseIdRole,
+        LicenseUrlRole,
+        LicenseAccceptRequiredRole
+    };
+
+    struct License {
+        QString id;
+        QUrl url;
+        bool accept_required = false;
     };
 
     ModelsListItem(QObject *parent = nullptr) : SelectableItem{parent} {}
     ModelsListItem(const QString &id, QString name, QString langId,
-                   ModelsListModel::ModelRole role, bool available = true,
-                   int score = 2, bool default_for_lang = false,
-                   bool downloading = false, double progress = 0.0,
-                   QObject *parent = nullptr);
+                   ModelsListModel::ModelRole role, License license,
+                   bool available = true, int score = 2,
+                   bool default_for_lang = false, bool downloading = false,
+                   double progress = 0.0, QObject *parent = nullptr);
     QVariant data(int role) const override;
     QHash<int, QByteArray> roleNames() const override;
     inline QString id() const override { return m_id; }
@@ -101,6 +110,11 @@ class ModelsListItem : public SelectableItem {
     inline bool default_for_lang() const { return m_default_for_lang; }
     inline bool downloading() const { return m_downloading; }
     inline double progress() const { return m_progress; }
+    inline QString license_id() const { return m_license.id; }
+    inline QUrl license_url() const { return m_license.url; }
+    inline bool license_accept_required() const {
+        return m_license.accept_required;
+    }
     void update(const ModelsListItem *item);
 
    private:
@@ -108,6 +122,7 @@ class ModelsListItem : public SelectableItem {
     QString m_name;
     QString m_langId;
     ModelsListModel::ModelRole m_role = ModelsListModel::ModelRole::Stt;
+    License m_license;
     bool m_available = false;
     int m_score = 2;
     bool m_default_for_lang = false;

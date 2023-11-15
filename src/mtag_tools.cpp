@@ -13,8 +13,7 @@
 #include "logger.hpp"
 
 namespace mtag_tools {
-bool write(const std::string &path, const std::string &title,
-           const std::string &artist, const std::string &album, int track) {
+bool write(const std::string &path, const mtag_t &mtag) {
     TagLib::FileRef file{path.c_str(), false};
     if (file.isNull()) {
         LOGE("taglib cannot open file: " << path);
@@ -27,13 +26,38 @@ bool write(const std::string &path, const std::string &title,
         return false;
     }
 
-    if (!title.empty()) tag->setTitle({title, TagLib::String::UTF8});
-    if (!artist.empty()) tag->setArtist({artist, TagLib::String::UTF8});
-    if (!album.empty()) tag->setAlbum({album, TagLib::String::UTF8});
-    if (track > 0) tag->setTrack(track);
+    if (!mtag.title.empty()) tag->setTitle({mtag.title, TagLib::String::UTF8});
+    if (!mtag.artist.empty())
+        tag->setArtist({mtag.artist, TagLib::String::UTF8});
+    if (!mtag.album.empty()) tag->setAlbum({mtag.album, TagLib::String::UTF8});
+    if (mtag.track > 0) tag->setTrack(mtag.track);
 
     file.save();
 
     return true;
 }
+
+std::optional<mtag_t> read(const std::string &path) {
+    TagLib::FileRef file{path.c_str(), false};
+    if (file.isNull()) {
+        LOGE("taglib cannot open file: " << path);
+        return std::nullopt;
+    }
+
+    auto *tag = file.tag();
+    if (!tag) {
+        LOGE("taglib tag is null");
+        return std::nullopt;
+    }
+
+    mtag_t mtag;
+
+    mtag.title = tag->title().toCString(true);
+    mtag.artist = tag->artist().toCString(true);
+    mtag.album = tag->album().toCString(true);
+    mtag.track = tag->track();
+
+    return mtag;
+}
+
 }  // namespace mtag_tools
