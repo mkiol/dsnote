@@ -17,12 +17,8 @@ DialogPage {
     readonly property bool canCreate: app.player_ready && titleTextField.text.length !== 0 &&
                                       rangeSlider.first.value < rangeSlider.second.value
 
-    function format_time(time_ms) {
-        var ms = Math.round(time_ms)
-        var s = Math.floor(ms / 1000)
-        ms -= s * 1000
-
-        return s + "." + ms + " s"
+    function format_time_to_s(time_ms) {
+        return (time_ms / 1000).toFixed(1)
     }
 
     function export_voice() {
@@ -181,9 +177,9 @@ DialogPage {
 
                 Label {
                     enabled: app.player_ready
-                    text: root.format_time(rangeSlider.first.value) +
-                          " - " + root.format_time(rangeSlider.second.value) +
-                          " (" + root.format_time(rangeSlider.second.value - rangeSlider.first.value) + ")"
+                    text: root.format_time_to_s(rangeSlider.first.value) +
+                          " - " + root.format_time_to_s(rangeSlider.second.value) +
+                          " (" + qsTr("Duration: %1 seconds").arg(root.format_time_to_s(rangeSlider.second.value - rangeSlider.first.value)) + ")"
                 }
             }
         }
@@ -238,6 +234,7 @@ DialogPage {
         selectMultiple: false
         onAccepted: {
             titleTextField.text = app.player_import_from_url(fileUrl);
+            _settings.file_audio_open_dir_url = fileUrl
         }
     }
 }
