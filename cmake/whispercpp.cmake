@@ -159,7 +159,7 @@ else()
 
     find_path(BLAS_INCLUDE_DIRS NAMES cblas.h
         PATHS ${CMAKE_PREFIX_PATH}/include/openblas /usr/include/openblas /usr/local/include/openblas $ENV{BLAS_HOME}/include
-        REQUIRED NO_DEFAULT_PATH)
+        REQUIRED)
 
     set(blas_lib_path ${BLAS_LIBRARIES})
     set(blas_include_dir ${BLAS_INCLUDE_DIRS})
