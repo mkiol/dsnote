@@ -102,6 +102,8 @@ class models_manager : public QObject, public singleton<models_manager> {
         license_t license;
         bool default_for_lang = false;
         bool available = false;
+        bool dl_multi = false;
+        bool dl_off = false;
         bool downloading = false;
         double download_progress = 0.0;
     };
@@ -219,6 +221,9 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool default_for_lang = false;
         bool exists = false;
         bool available = false;
+        bool dl_multi = false;
+        bool dl_off = false;
+        size_t urls_hash = 0;
         bool downloading = false;
         double download_progress = 0.0;
         qint64 downloaded_part_data = 0;
@@ -314,6 +319,10 @@ class models_manager : public QObject, public singleton<models_manager> {
                                    const QJsonObject& model_obj,
                                    std::vector<sup_model_t>& sup_models);
     void update_models_using_availability_internal();
+    static void update_dl_multi(models_t& models);
+    static void update_dl_off(models_t& models);
+    static size_t make_url_hash(const std::vector<QUrl>& urls,
+                                const std::vector<sup_model_t>& sup_models);
 };
 
 #endif  // MODELS_MANAGER_H

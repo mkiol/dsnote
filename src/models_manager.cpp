@@ -354,6 +354,7 @@ std::vector<models_manager::model_t> models_manager::models(
                     pair.second.speaker, pair.second.trg_lang_id,
                     pair.second.score, pair.second.options, pair.second.license,
                     pair.second.default_for_lang, pair.second.available,
+                    pair.second.dl_multi, pair.second.dl_off,
                     pair.second.downloading, pair.second.download_progress});
             }
         });
@@ -421,12 +422,12 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
     for (const auto& [id, model] : m_models) {
         auto model_file = dir.filePath(model.file_name);
         if (!model.hidden && model.available && QFile::exists(model_file)) {
-            list.push_back({id, model.engine, model.lang_id, model.name,
-                            model_file, sup_model_files(model.sup_models),
-                            model.speaker, model.trg_lang_id, model.score,
-                            model.options, model.license,
-                            model.default_for_lang, model.available,
-                            model.downloading, model.download_progress});
+            list.push_back(
+                {id, model.engine, model.lang_id, model.name, model_file,
+                 sup_model_files(model.sup_models), model.speaker,
+                 model.trg_lang_id, model.score, model.options, model.license,
+                 model.default_for_lang, model.available, model.dl_multi,
+                 model.dl_off, model.downloading, model.download_progress});
         }
     }
 
@@ -522,12 +523,16 @@ void models_manager::download(const QString& id, download_type type, int part,
             settings::instance()->set_enabled_models(models);
 
             model.available = true;
+            model.exists = true;
             emit download_finished(id);
             model.downloading = false;
             model.download_progress = 0.0;
             model.downloaded_part_data = 0;
-            emit models_changed();
 
+            update_dl_multi(m_models);
+            update_dl_off(m_models);
+
+            emit models_changed();
             return;
         }
 
@@ -675,6 +680,7 @@ void models_manager::download(const QString& id, download_type type, int part,
 
     if (!model.downloading) {
         model.downloading = true;
+        update_dl_off(m_models);
         emit download_started(id);
     }
 
@@ -957,6 +963,7 @@ void models_manager::handle_download_finished() {
                 settings::instance()->set_enabled_models(models);
 
                 model.available = true;
+                model.exists = true;
                 emit download_finished(id);
             } else {
                 remove_file_or_dir(path);
@@ -981,6 +988,10 @@ void models_manager::handle_download_finished() {
     model.downloading = false;
     model.download_progress = 0.0;
     model.downloaded_part_data = 0;
+
+    update_dl_multi(m_models);
+    update_dl_off(m_models);
+
     emit models_changed();
 }
 
@@ -1010,6 +1021,8 @@ void models_manager::delete_model(const QString& id) {
     if (auto it = m_models.find(id); it != std::cend(m_models)) {
         auto& model = it->second;
 
+        bool files_deleted = false;
+
         if (!model.file_name.isEmpty()) {
             if (!std::any_of(m_models.cbegin(), m_models.cend(),
                              [id = it->first,
@@ -1018,6 +1031,7 @@ void models_manager::delete_model(const QString& id) {
                                         p.second.file_name == file_name;
                              })) {
                 remove_file_or_dir(model_path(model.file_name));
+                files_deleted = true;
             } else {
                 qDebug()
                     << "not removing model file because other model uses it:"
@@ -1041,7 +1055,7 @@ void models_manager::delete_model(const QString& id) {
                                  return false;
                              })) {
                 remove_file_or_dir(model_path(sup_model.file_name));
-
+                files_deleted = true;
             } else {
                 qDebug() << "not removing sup file because other model uses it:"
                          << sup_model.file_name;
@@ -1053,8 +1067,12 @@ void models_manager::delete_model(const QString& id) {
         settings::instance()->set_enabled_models(models);
 
         model.available = false;
+        model.exists = !files_deleted;
         model.download_progress = 0.0;
         model.downloaded_part_data = 0;
+
+        update_dl_multi(m_models);
+
         emit models_changed();
     } else {
         qWarning() << "no model with id:" << id;
@@ -1397,6 +1415,28 @@ void models_manager::extract_sup_models(const QString& model_id,
     }
 }
 
+size_t models_manager::make_url_hash(
+    const std::vector<QUrl>& urls, const std::vector<sup_model_t>& sup_models) {
+    auto merge_urls = [](const std::vector<QUrl>& urls) {
+        return std::accumulate(
+            urls.cbegin(), urls.cend(), QString{},
+            [](QString urls, const QUrl& url) {
+                return std::move(urls.append(url.toString()));
+            });
+    };
+
+    auto merge_sup_urls =
+        [&merge_urls](const std::vector<sup_model_t>& models) {
+            return std::accumulate(
+                models.cbegin(), models.cend(), QString{},
+                [&merge_urls](QString urls, const sup_model_t& model) {
+                    return std::move(urls.append(merge_urls(model.urls)));
+                });
+        };
+
+    return std::hash<QString>{}(merge_urls(urls) + merge_sup_urls(sup_models));
+}
+
 auto models_manager::extract_models(
     const QJsonArray& models_jarray,
     std::optional<models_availability_t> models_availability) {
@@ -1603,6 +1643,8 @@ auto models_manager::extract_models(
             return false;
         }();
 
+        auto url_hash = make_url_hash(urls, sup_models);
+
         priv_model_t model{
             /*engine=*/engine,
             /*lang_id=*/std::move(lang_id),
@@ -1624,6 +1666,9 @@ auto models_manager::extract_models(
             /*default_for_lang=*/is_default_model_for_lang,
             /*exists=*/exists,
             /*available=*/available,
+            /*dl_multi=*/false,
+            /*dl_off=*/false,
+            /*urls_hash=*/url_hash,
             /*downloading=*/false};
 
         if (!model.exists) {
@@ -1691,6 +1736,70 @@ auto models_manager::extract_models(
     return models;
 }
 
+void models_manager::update_dl_multi(models_manager::models_t& models) {
+    std::unordered_map<size_t, int> available_map;
+
+    std::for_each(models.cbegin(), models.cend(), [&](const auto& pair) {
+        const auto& model = pair.second;
+
+        if (model.hidden) return;
+
+        if (model.available) {
+            if (auto it = available_map.find(model.urls_hash);
+                it == available_map.cend())
+                available_map.emplace(model.urls_hash, 1);
+            else
+                ++it->second;
+        }
+    });
+
+    std::for_each(models.begin(), models.end(), [&](auto& pair) {
+        auto& model = pair.second;
+
+        if (model.hidden) return;
+
+        auto it = available_map.find(model.urls_hash);
+
+        if (it == available_map.cend())
+            model.dl_multi = false;
+        else if (model.available)
+            model.dl_multi = it->second > 1;
+        else
+            model.dl_multi = it->second > 0;
+    });
+}
+
+void models_manager::update_dl_off(models_manager::models_t& models) {
+    std::unordered_map<size_t, int> downloading_map;
+
+    std::for_each(models.cbegin(), models.cend(), [&](const auto& pair) {
+        const auto& model = pair.second;
+
+        if (model.hidden) return;
+
+        if (model.downloading) {
+            if (auto it = downloading_map.find(model.urls_hash);
+                it == downloading_map.cend())
+                downloading_map.emplace(model.urls_hash, 1);
+            else
+                ++it->second;
+        }
+    });
+
+    std::for_each(models.begin(), models.end(), [&](auto& pair) {
+        auto& model = pair.second;
+
+        if (model.hidden) return;
+
+        auto it = downloading_map.find(model.urls_hash);
+
+        if (it == downloading_map.cend())
+            model.dl_off = false;
+        else
+            model.dl_off = it->second > 0;
+    });
+}
+
 void models_manager::reload() {
     settings::instance()->sync();  // needed to update changes app -> service
 
@@ -1709,6 +1818,7 @@ bool models_manager::parse_models_file_might_reset() {
         do {
             m_pending_reload = false;
             parse_models_file(false, &m_langs, &m_models, models_availability);
+            update_dl_multi(m_models);
             m_langs_of_role = make_langs_of_role(m_models);
         } while (m_pending_reload);
 

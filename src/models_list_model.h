@@ -77,6 +77,8 @@ class ModelsListItem : public SelectableItem {
         IdRole = Qt::UserRole,
         LangIdRole,
         AvailableRole,
+        DlMultiRole,
+        DlOffRole,
         ScoreRole,
         DefaultRole,
         DownloadingRole,
@@ -96,7 +98,8 @@ class ModelsListItem : public SelectableItem {
     ModelsListItem(QObject *parent = nullptr) : SelectableItem{parent} {}
     ModelsListItem(const QString &id, QString name, QString langId,
                    ModelsListModel::ModelRole role, License license,
-                   bool available = true, int score = 2,
+                   bool available = true, bool dl_multi = false,
+                   bool dl_off = false, int score = 2,
                    bool default_for_lang = false, bool downloading = false,
                    double progress = 0.0, QObject *parent = nullptr);
     QVariant data(int role) const override;
@@ -106,6 +109,8 @@ class ModelsListItem : public SelectableItem {
     inline QString langId() const { return m_langId; }
     inline ModelsListModel::ModelRole modelRole() const { return m_role; }
     inline bool available() const { return m_available; }
+    inline bool dl_multi() const { return m_dl_multi; }
+    inline bool dl_off() const { return m_dl_off; }
     inline int score() const { return m_score; }
     inline bool default_for_lang() const { return m_default_for_lang; }
     inline bool downloading() const { return m_downloading; }
@@ -124,6 +129,8 @@ class ModelsListItem : public SelectableItem {
     ModelsListModel::ModelRole m_role = ModelsListModel::ModelRole::Stt;
     License m_license;
     bool m_available = false;
+    bool m_dl_multi = false;
+    bool m_dl_off = false;
     int m_score = 2;
     bool m_default_for_lang = false;
     bool m_downloading = false;

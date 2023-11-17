@@ -75,6 +75,7 @@ RowLayout {
                 id: _combo2
 
                 visible: false
+                Layout.preferredWidth: appWin.buttonWidth
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                 enabled: !root.off
                 displayText: model.length === 0 ? root.combo2PlaceholderText : currentText
@@ -87,7 +88,7 @@ RowLayout {
                 id: _combo3
 
                 visible: false
-                Layout.preferredWidth: appWin.buttonSize * 0.9
+                Layout.preferredWidth: appWin.buttonWidth * 0.9
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                 enabled: !root.off
                 ToolTip.visible: hovered
@@ -106,7 +107,7 @@ RowLayout {
                 ToolTip.text: root.buttonToolTip
 
                 Layout.alignment: Qt.AlignVCenter
-                Layout.preferredWidth: appWin.buttonSize
+                Layout.preferredWidth: appWin.buttonWidth
             }
         }
     }

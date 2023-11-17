@@ -214,6 +214,14 @@ DialogPage {
         Control {
             id: control
 
+            function download_model() {
+                if (model.license_accept_required) {
+                    appWin.openModelLicenseDialog(model.license_id, model.license_url, function(){
+                        service.download_model(model.id)
+                    })
+                } else service.download_model(model.id)
+            }
+
             background: Rectangle {
                 id: bg
 
@@ -289,38 +297,56 @@ DialogPage {
                 }
             }
 
-//            Button {
-//                id: _dummyButton
-//                visible: false
-//                width: implicitWidth
-//                height: 0
-//                text: {
-//                    var can = qsTr("Cancel").length
-//                    var del = qsTr("Delete").length
-//                    var dow = qsTr("Download").lenth
-//                    if (can > del && can > dow) return qsTr("Cancel")
-//                    if (del > can && del > dow) return qsTr("Delete")
-//                    return qsTr("Download")
-//                }
-//            }
-
-            Button {
+            Item {
                 id: downloadButton
 
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                anchors.rightMargin: root._rightMargin
-                width: appWin.buttonSize
-                icon.name: model.available ? "edit-delete-symbolic" : ""
-                text: model.downloading ? qsTr("Cancel") : model.available ? qsTr("Delete") : qsTr("Download")
-                onClicked: {
-                    if (model.downloading) service.cancel_model_download(model.id)
-                    else if (model.available) service.delete_model(model.id)
-                    else if (model.license_accept_required) {
-                        appWin.openModelLicenseDialog(model.license_id, model.license_url, function(){
-                            service.download_model(model.id)
-                        })
-                    } else service.download_model(model.id)
+                enabled: model.downloading || model.available || !model.dl_off
+                width: appWin.buttonWithIconWidth
+                height: appWin.buttonHeight
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    right: parent.right
+                    rightMargin: root._rightMargin
+                }
+
+                Button {
+                    anchors.fill: parent
+                    visible: !model.downloading && !model.available && !model.dl_multi
+                    icon.name: "folder-download-symbolic"
+                    text: qsTr("Download")
+                    onClicked: control.download_model()
+                }
+
+                Button {
+                    anchors.fill: parent
+                    visible: !model.downloading && !model.available && model.dl_multi
+                    icon.name: "list-add-symbolic"
+                    text: qsTr("Enable")
+                    onClicked: control.download_model()
+                }
+
+                Button {
+                    anchors.fill: parent
+                    visible: !model.downloading && model.available && !model.dl_multi
+                    icon.name: "edit-delete-symbolic"
+                    text: qsTr("Delete")
+                    onClicked: service.delete_model(model.id)
+                }
+
+                Button {
+                    anchors.fill: parent
+                    visible: !model.downloading && model.available && model.dl_multi
+                    icon.name: "list-remove-symbolic"
+                    text: qsTr("Disable")
+                    onClicked: service.delete_model(model.id)
+                }
+
+                Button {
+                    anchors.fill: parent
+                    visible: model.downloading
+                    icon.name: "action-unavailable-symbolic"
+                    text: qsTr("Cancel")
+                    onClicked: service.cancel_model_download(model.id)
                 }
             }
         }

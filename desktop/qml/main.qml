@@ -25,7 +25,9 @@ ApplicationWindow {
     readonly property bool canCancelTts: app.state === DsnoteApp.StatePlayingSpeech ||
                                 app.state === DsnoteApp.StateWritingSpeechToFile
     readonly property alias textFontSize: _dummyTextField.font.pixelSize
-    readonly property alias buttonSize: _dummyButton.width
+    readonly property alias buttonWidth: _dummyButton.width
+    readonly property alias buttonWithIconWidth: _dummyButtonWithIcon.width
+    readonly property alias buttonHeight: _dummyButton.height
 
     property var _dialogPage
 
@@ -170,16 +172,19 @@ ApplicationWindow {
 
     Button {
         id: _dummyButton
+
         visible: false
         width: implicitWidth
-        height: 0
+        height: implicitHeight
         text: {
             var list = [
                 qsTr("Cancel"),
                 qsTr("Delete"),
                 qsTr("Download"),
                 qsTr("Read"),
-                qsTr("Listen")
+                qsTr("Listen"),
+                qsTr("Enable"),
+                qsTr("Disable")
             ]
 
             list.sort(function (a, b) {
@@ -192,6 +197,16 @@ ApplicationWindow {
 
             return list[0]
         }
+    }
+
+    Button {
+        id: _dummyButtonWithIcon
+
+        visible: false
+        width: implicitWidth
+        height: 0
+        icon.name: "media-playback-stop-symbolic"
+        text: _dummyButton.text
     }
 
     ColumnLayout {

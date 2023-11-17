@@ -87,6 +87,8 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
         /*license=*/
         {model.license.id, model.license.url, model.license.accept_required},
         /*available=*/model.available,
+        /*dl_multi=*/model.dl_multi,
+        /*dl_off=*/model.dl_off,
         /*score=*/model.score,
         /*default_for_lang=*/model.default_for_lang,
         /*downloading=*/model.downloading,
@@ -169,7 +171,8 @@ void ModelsListModel::updateDownloading(
 
 ModelsListItem::ModelsListItem(const QString &id, QString name, QString langId,
                                ModelsListModel::ModelRole role, License license,
-                               bool available, int score, bool default_for_lang,
+                               bool available, bool dl_multi, bool dl_off,
+                               int score, bool default_for_lang,
                                bool downloading, double progress,
                                QObject *parent)
     : SelectableItem{parent},
@@ -179,6 +182,8 @@ ModelsListItem::ModelsListItem(const QString &id, QString name, QString langId,
       m_role{role},
       m_license{std::move(license)},
       m_available{available},
+      m_dl_multi{dl_multi},
+      m_dl_off{dl_off},
       m_score{score},
       m_default_for_lang{default_for_lang},
       m_downloading{downloading},
@@ -193,6 +198,8 @@ QHash<int, QByteArray> ModelsListItem::roleNames() const {
     names[LangIdRole] = QByteArrayLiteral("lang_id");
     names[ModelRole] = QByteArrayLiteral("role");
     names[AvailableRole] = QByteArrayLiteral("available");
+    names[DlMultiRole] = QByteArrayLiteral("dl_multi");
+    names[DlOffRole] = QByteArrayLiteral("dl_off");
     names[ScoreRole] = QByteArrayLiteral("score");
     names[DefaultRole] = QByteArrayLiteral("default_for_lang");
     names[DownloadingRole] = QByteArrayLiteral("downloading");
@@ -216,6 +223,10 @@ QVariant ModelsListItem::data(int role) const {
             return modelRole();
         case AvailableRole:
             return available();
+        case DlMultiRole:
+            return dl_multi();
+        case DlOffRole:
+            return dl_off();
         case ScoreRole:
             return score();
         case DefaultRole:
@@ -237,12 +248,17 @@ QVariant ModelsListItem::data(int role) const {
 
 void ModelsListItem::update(const ModelsListItem *item) {
     if (m_downloading != item->downloading() ||
+        m_dl_multi != item->dl_multi() || m_dl_off != item->dl_off() ||
         m_available != item->available() || m_progress != item->progress() ||
         m_default_for_lang != item->default_for_lang()) {
         m_downloading = item->downloading();
         m_available = item->available();
+        m_dl_multi = item->dl_multi();
+        m_dl_off = item->dl_off();
         m_progress = item->progress();
         m_default_for_lang = item->default_for_lang();
+        m_dl_multi = item->dl_multi();
+        m_dl_off = item->dl_off();
         emit itemDataChanged();
     }
 }

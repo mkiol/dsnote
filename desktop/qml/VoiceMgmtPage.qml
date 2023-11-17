@@ -106,7 +106,7 @@ DialogPage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: deleteButton.left
                 anchors.rightMargin: appWin.padding
-                width: appWin.buttonSize
+                width: appWin.buttonWithIconWidth
                 text: control.editActive ? qsTr("Save") : qsTr("Rename")
                 onClicked: control.editActive = !control.editActive
             }
@@ -117,7 +117,7 @@ DialogPage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: root._rightMargin
-                width: appWin.buttonSize
+                width: appWin.buttonWithIconWidth
                 text: qsTr("Delete")
                 onClicked: app.delete_tts_ref_voice(index)
             }
