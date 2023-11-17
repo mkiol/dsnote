@@ -23443,6 +23443,7 @@
             "options": "x",
             "license": {
                 "id": "CPML",
+                "name": "Coqui Public Model License 1.0.0",
                 "url": "https://coqui.ai/cpml.txt",
                 "accept_required": true
             },

@@ -85,28 +85,37 @@ class ModelsListItem : public SelectableItem {
         ProgressRole,
         ModelRole,
         LicenseIdRole,
+        LicenseNameRole,
         LicenseUrlRole,
-        LicenseAccceptRequiredRole
+        LicenseAccceptRequiredRole,
+        DownloadUrlsRole,
+        DownloadSizeRole
     };
 
     struct License {
         QString id;
+        QString name;
         QUrl url;
         bool accept_required = false;
     };
 
+    struct DownloadInfo {
+        QStringList urls;
+        QString size = 0;
+    };
+
     ModelsListItem(QObject *parent = nullptr) : SelectableItem{parent} {}
-    ModelsListItem(const QString &id, QString name, QString langId,
+    ModelsListItem(const QString &id, QString name, QString lang_id,
                    ModelsListModel::ModelRole role, License license,
-                   bool available = true, bool dl_multi = false,
-                   bool dl_off = false, int score = 2,
+                   DownloadInfo download_info, bool available = true,
+                   bool dl_multi = false, bool dl_off = false, int score = 2,
                    bool default_for_lang = false, bool downloading = false,
                    double progress = 0.0, QObject *parent = nullptr);
     QVariant data(int role) const override;
     QHash<int, QByteArray> roleNames() const override;
     inline QString id() const override { return m_id; }
     inline QString name() const { return m_name; }
-    inline QString langId() const { return m_langId; }
+    inline QString lang_id() const { return m_lang_id; }
     inline ModelsListModel::ModelRole modelRole() const { return m_role; }
     inline bool available() const { return m_available; }
     inline bool dl_multi() const { return m_dl_multi; }
@@ -116,18 +125,22 @@ class ModelsListItem : public SelectableItem {
     inline bool downloading() const { return m_downloading; }
     inline double progress() const { return m_progress; }
     inline QString license_id() const { return m_license.id; }
+    inline QString license_name() const { return m_license.name; }
     inline QUrl license_url() const { return m_license.url; }
     inline bool license_accept_required() const {
         return m_license.accept_required;
     }
+    inline QStringList download_urls() const { return m_download_info.urls; }
+    inline QString download_size() const { return m_download_info.size; }
     void update(const ModelsListItem *item);
 
    private:
     QString m_id;
     QString m_name;
-    QString m_langId;
+    QString m_lang_id;
     ModelsListModel::ModelRole m_role = ModelsListModel::ModelRole::Stt;
     License m_license;
+    DownloadInfo m_download_info;
     bool m_available = false;
     bool m_dl_multi = false;
     bool m_dl_off = false;

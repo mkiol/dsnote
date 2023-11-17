@@ -54,37 +54,32 @@ ColumnLayout {
     opacity: enabled ? 1.0 : 0.0
     Behavior on opacity { OpacityAnimator { duration: 100 } }
 
-    Frame {
+    ScrollTextArea {
+        id: _noteTextArea
+
         Layout.fillHeight: true
         Layout.fillWidth: true
-        background: Item {}
-        bottomPadding: 0
-        leftPadding: appWin.padding
-        rightPadding: appWin.padding
-        topPadding: appWin.padding
+        Layout.leftMargin: appWin.padding
+        Layout.rightMargin: appWin.padding
+        Layout.topMargin: appWin.padding
 
-        ScrollTextArea {
-            id: _noteTextArea
-
-            anchors.fill: parent
-            enabled: root.enabled
-            canUndoFallback: app.can_undo_note
-            textArea {
-                placeholderText: app.stt_configured || app.tts_configured ?
-                                     qsTr("Type here or press %1 to make a note...")
-                                        .arg("<i>" + qsTr("Listen") + "</i>") : ""
-                readOnly: root.readOnly
-                onTextChanged: {
-                    app.note = root.noteTextArea.textArea.text
-                }
+        enabled: root.enabled
+        canUndoFallback: app.can_undo_note
+        textArea {
+            placeholderText: app.stt_configured || app.tts_configured ?
+                                 qsTr("Type here or press %1 to make a note...")
+                                    .arg("<i>" + qsTr("Listen") + "</i>") : ""
+            readOnly: root.readOnly
+            onTextChanged: {
+                app.note = root.noteTextArea.textArea.text
             }
-            onCopyClicked: app.copy_to_clipboard()
-            onClearClicked: {
-                app.make_undo()
-                root.noteTextArea.textArea.text = ""
-            }
-            onUndoFallbackClicked: app.undo_or_redu_note()
         }
+        onCopyClicked: app.copy_to_clipboard()
+        onClearClicked: {
+            app.make_undo()
+            root.noteTextArea.textArea.text = ""
+        }
+        onUndoFallbackClicked: app.undo_or_redu_note()
     }
 
     DuoComboButton {

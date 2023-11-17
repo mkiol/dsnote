@@ -13,27 +13,25 @@ import QtQuick.Layouts 1.3
 Dialog {
     id: root
 
-    property string licenseId
-    property string licenseName
-    property url licenseUrl
-    property bool licenseAcceptRequired
-    property bool busy: false
+    property string name: ""
+    property var downloadUrls: []
+    property string downloadSize: ""
+    property string licenseId: ""
+    property string licenseName: ""
+    property url licenseUrl: ""
 
-    signal acceptClicked
+    readonly property bool showLicense: licenseId.length !==0 && licenseName.length !== 0
 
-    title: licenseName.length !== 0 ?
-               licenseName + " (" + licenseId + ")" : licenseId
+    title: name
 
     width: parent.width - 8 * appWin.padding
-    height: scrollView.height + footer.height + header.height + root.topPadding + root.bottomPadding
+    height: column.height + footer.height + header.height + root.topPadding + root.bottomPadding
     modal: true
     verticalPadding: appWin.padding
     horizontalPadding: appWin.padding
 
-    onLicenseUrlChanged: {
-        busy = true
-        textArea.text = app.download_content(licenseUrl)
-        busy = false
+    onDownloadUrlsChanged: {
+        urlsArea.text = downloadUrls.join("\n")
     }
 
     header: Item {
@@ -73,21 +71,6 @@ Dialog {
             }
 
             Button {
-                visible: root.licenseAcceptRequired
-                text: qsTr("Reject")
-                onClicked: root.reject()
-                Keys.onReturnPressed: root.reject()
-            }
-            Button {
-                enabled: textArea.text.length !== 0
-                visible: root.licenseAcceptRequired
-                text: qsTr("Accept")
-                onClicked: {
-                    root.acceptClicked()
-                    root.close()
-                }
-            }
-            Button {
                 visible: !root.licenseAcceptRequired
                 text: qsTr("Close")
                 onClicked: root.reject()
@@ -95,26 +78,51 @@ Dialog {
         }
     }
 
-    ScrollView {
-        id: scrollView
+    ColumnLayout {
+        id: column
 
-        anchors { left: parent.left; right: parent.right }
-        height: Math.min(textArea.implicitHeight, root.parent.height * 0.75)
-        clip: true
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-        ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+        spacing: appWin.padding
+        anchors {
+            left: parent.left
+            right: parent.right
+        }
 
-        TextArea {
-            id: textArea
+        SectionLabel {
+            visible: root.showLicense
+            text: qsTr("License")
+        }
 
+        Label {
+            visible: root.showLicense
             wrapMode: Text.Wrap
-            readOnly: true
-            textFormat: TextEdit.MarkdownText
+            text: root.licenseName.length !== 0 ?
+                      root.licenseName + " (" + root.licenseId + ")" : root.licenseId
+        }
 
-            BusyIndicator {
-                anchors.centerIn:  parent
-                running: root.busy
-            }
+        Button {
+            visible: root.showLicense && root.licenseUrl.toString().length !== 0
+            text: qsTr("Show license")
+            onClicked: appWin.showModelLicenseDialog(root.licenseId, root.licenseName, root.licenseUrl, null)
+        }
+
+        SectionLabel {
+            visible: root.downloadUrls.length !== 0
+            text: qsTr("Files to download")
+        }
+
+        Label {
+            id: urlsArea
+
+            visible: root.downloadUrls.length !== 0
+            Layout.fillWidth: true
+            wrapMode: Text.Wrap
+        }
+
+        Label {
+            visible: root.downloadUrls.length !== 0
+            Layout.fillWidth: true
+            wrapMode: Text.Wrap
+            text: qsTr("Total size: %1").arg("<b>" + root.downloadSize + "</b>");
         }
     }
 }

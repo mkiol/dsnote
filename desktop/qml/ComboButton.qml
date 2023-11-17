@@ -78,7 +78,7 @@ RowLayout {
                 Layout.preferredWidth: appWin.buttonWidth
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                 enabled: !root.off
-                displayText: model.length === 0 ? root.combo2PlaceholderText : currentText
+                displayText: !model || model.length === 0 ? root.combo2PlaceholderText : currentText
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: root.combo2ToolTip

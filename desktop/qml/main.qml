@@ -25,6 +25,8 @@ ApplicationWindow {
     readonly property bool canCancelTts: app.state === DsnoteApp.StatePlayingSpeech ||
                                 app.state === DsnoteApp.StateWritingSpeechToFile
     readonly property alias textFontSize: _dummyTextField.font.pixelSize
+    readonly property double textFontSizeBig: textFontSize * 1.2
+    readonly property double textFontSizeSmall: textFontSize * 0.8
     readonly property alias buttonWidth: _dummyButton.width
     readonly property alias buttonWithIconWidth: _dummyButtonWithIcon.width
     readonly property alias buttonHeight: _dummyButton.height
@@ -94,13 +96,26 @@ ApplicationWindow {
         }
     }
 
-    function openModelLicenseDialog(licenseId, licenseUrl, acceptHandler) {
+    function showModelLicenseDialog(licenseId, licenseName, licenseUrl, acceptHandler) {
         modelLicenseDialog.licenseId = licenseId
+        modelLicenseDialog.licenseName = licenseName
         modelLicenseDialog.licenseUrl = licenseUrl
         modelLicenseDialog.licenseAcceptRequired = acceptHandler ? true : false
         modelLicenseDialog.acceptHandler = acceptHandler
 
         modelLicenseDialog.open()
+    }
+
+    function showModelInfoDialog(name, downloadUrls, downloadSize, licenseId,
+                                 licenseName, licenseUrl, acceptHandler) {
+        modelInfoDialog.name = name
+        modelInfoDialog.downloadUrls = downloadUrls
+        modelInfoDialog.downloadSize = downloadSize
+        modelInfoDialog.licenseId = licenseId
+        modelInfoDialog.licenseName = licenseName
+        modelInfoDialog.licenseUrl = licenseUrl
+
+        modelInfoDialog.open()
     }
 
     function update() {
@@ -241,6 +256,12 @@ ApplicationWindow {
         offset: -panel.height
         text: notepad.placeholderText
         color: notepad.noteTextArea.textArea.color
+    }
+
+    ModelInfoPage {
+        id: modelInfoDialog
+
+        anchors.centerIn: parent
     }
 
     ModelLicensePage {

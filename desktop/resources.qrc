@@ -23,6 +23,7 @@
         <file>qml/Notepad.qml</file>
         <file>qml/FileWritePage.qml</file>
         <file>qml/AddTextDialog.qml</file>
+        <file>qml/ModelInfoPage.qml</file>
         <file>qml/ModelLicensePage.qml</file>
         <file>qml/VoiceImportPage.qml</file>
         <file>qml/VoiceMgmtPage.qml</file>

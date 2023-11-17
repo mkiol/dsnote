@@ -32,7 +32,7 @@ Dialog {
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.Wrap
             text: qsTr("Add text to the current note or replace it?")
-            font.pixelSize: 1.2 * appWin.textFontSize
+            font.pixelSize: appWin.textFontSizeBig
         }
 
         RowLayout {

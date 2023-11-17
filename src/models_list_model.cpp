@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QList>
 #include <algorithm>
+#include <array>
 
 ModelsListModel::ModelsListModel(QObject *parent)
     : SelectableItemModel{new ModelsListItem, parent} {
@@ -61,6 +62,26 @@ void ModelsListModel::updateItem(ListItem *oldItem, const ListItem *newItem) {
     oi->update(ni);
 }
 
+// inspiration: https://gist.github.com/dgoguerra/7194777
+static QString size_to_human_size(size_t bytes) {
+    std::array suffix = {"B", "KB", "MB", "GB", "TB"};
+
+    double dbl_bytes = bytes;
+    auto i = 0u;
+    if (bytes > 1024) {
+        for (i = 0; (bytes / 1024) > 0 && i < suffix.size() - 1;
+             i++, bytes /= 1024)
+            dbl_bytes = bytes / 1024.0;
+    }
+
+    return QStringLiteral("%1 %2")
+        .arg(dbl_bytes, 0, 'f',
+             i > 2   ? 2
+             : i > 1 ? 1
+                     : 0)
+        .arg(suffix.at(i));
+}
+
 ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
     auto role = [&] {
         switch (models_manager::role_of_engine(model.engine)) {
@@ -76,6 +97,11 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
         throw std::runtime_error{"unsupported model engine"};
     }();
 
+    ModelsListItem::DownloadInfo download_info;
+    download_info.size = size_to_human_size(model.download_info.total_size);
+    for (const auto &url : model.download_info.urls)
+        download_info.urls.push_back(url.toString());
+
     return new ModelsListItem{
         /*id=*/model.id,
         /*name=*/role == ModelRole::Mnt
@@ -85,7 +111,9 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
         /*langId=*/model.lang_id,
         /*role=*/role,
         /*license=*/
-        {model.license.id, model.license.url, model.license.accept_required},
+        {model.license.id, model.license.name, model.license.url,
+         model.license.accept_required},
+        /*download_info=*/std::move(download_info),
         /*available=*/model.available,
         /*dl_multi=*/model.dl_multi,
         /*dl_off=*/model.dl_off,
@@ -171,16 +199,17 @@ void ModelsListModel::updateDownloading(
 
 ModelsListItem::ModelsListItem(const QString &id, QString name, QString langId,
                                ModelsListModel::ModelRole role, License license,
-                               bool available, bool dl_multi, bool dl_off,
-                               int score, bool default_for_lang,
-                               bool downloading, double progress,
-                               QObject *parent)
+                               DownloadInfo download_info, bool available,
+                               bool dl_multi, bool dl_off, int score,
+                               bool default_for_lang, bool downloading,
+                               double progress, QObject *parent)
     : SelectableItem{parent},
       m_id{id},
       m_name{std::move(name)},
-      m_langId{std::move(langId)},
+      m_lang_id{std::move(langId)},
       m_role{role},
       m_license{std::move(license)},
+      m_download_info{std::move(download_info)},
       m_available{available},
       m_dl_multi{dl_multi},
       m_dl_off{dl_off},
@@ -205,9 +234,12 @@ QHash<int, QByteArray> ModelsListItem::roleNames() const {
     names[DownloadingRole] = QByteArrayLiteral("downloading");
     names[ProgressRole] = QByteArrayLiteral("progress");
     names[LicenseIdRole] = QByteArrayLiteral("license_id");
+    names[LicenseNameRole] = QByteArrayLiteral("license_name");
     names[LicenseUrlRole] = QByteArrayLiteral("license_url");
     names[LicenseAccceptRequiredRole] =
         QByteArrayLiteral("license_accept_required");
+    names[DownloadUrlsRole] = QByteArrayLiteral("download_urls");
+    names[DownloadSizeRole] = QByteArrayLiteral("download_size");
     return names;
 }
 
@@ -218,7 +250,7 @@ QVariant ModelsListItem::data(int role) const {
         case NameRole:
             return name();
         case LangIdRole:
-            return langId();
+            return lang_id();
         case ModelRole:
             return modelRole();
         case AvailableRole:
@@ -237,10 +269,16 @@ QVariant ModelsListItem::data(int role) const {
             return progress();
         case LicenseIdRole:
             return license_id();
+        case LicenseNameRole:
+            return license_name();
         case LicenseUrlRole:
             return license_url();
         case LicenseAccceptRequiredRole:
             return license_accept_required();
+        case DownloadUrlsRole:
+            return download_urls();
+        case DownloadSizeRole:
+            return download_size();
     }
 
     return {};

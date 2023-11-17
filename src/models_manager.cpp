@@ -342,22 +342,19 @@ std::vector<models_manager::model_t> models_manager::models(
     const QString& lang_id) const {
     std::vector<model_t> list;
 
-    std::for_each(
-        m_models.cbegin(), m_models.cend(), [&](const auto& pair) {
-            if (!pair.second.hidden &&
-                (lang_id.isEmpty() || lang_id == pair.second.lang_id)) {
-                list.push_back(model_t{
-                    pair.first, pair.second.engine, pair.second.lang_id,
-                    pair.second.name,
-                    /*model_file=*/pair.second.file_name,
-                    /*sup_files=*/sup_model_files(pair.second.sup_models),
-                    pair.second.speaker, pair.second.trg_lang_id,
-                    pair.second.score, pair.second.options, pair.second.license,
-                    pair.second.default_for_lang, pair.second.available,
-                    pair.second.dl_multi, pair.second.dl_off,
-                    pair.second.downloading, pair.second.download_progress});
-            }
-        });
+    std::for_each(m_models.cbegin(), m_models.cend(), [&](const auto& pair) {
+        const auto& model = pair.second;
+        if (!model.hidden && (lang_id.isEmpty() || lang_id == model.lang_id)) {
+            list.push_back(model_t{
+                pair.first, model.engine, model.lang_id, model.name,
+                /*model_file=*/model.file_name,
+                /*sup_files=*/sup_model_files(model.sup_models), model.speaker,
+                model.trg_lang_id, model.score, model.options, model.license,
+                make_download_info(model), model.default_for_lang,
+                model.available, model.dl_multi, model.dl_off,
+                model.downloading, model.download_progress});
+        }
+    });
 
     std::sort(list.begin(), list.end(), [](const auto& a, const auto& b) {
         auto ra = static_cast<int>(role_of_engine(a.engine));
@@ -414,6 +411,22 @@ std::vector<models_manager::sup_model_file_t> models_manager::sup_model_files(
     return files;
 }
 
+models_manager::download_info_t models_manager::make_download_info(
+    const priv_model_t& model) {
+    download_info_t info;
+
+    info.urls.insert(info.urls.end(), model.urls.cbegin(), model.urls.cend());
+    info.total_size = model.size;
+
+    for (const auto& sup_model : model.sup_models) {
+        info.urls.insert(info.urls.end(), sup_model.urls.cbegin(),
+                         sup_model.urls.cend());
+        info.total_size += sup_model.size;
+    }
+
+    return info;
+}
+
 std::vector<models_manager::model_t> models_manager::available_models() const {
     std::vector<model_t> list;
 
@@ -422,12 +435,13 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
     for (const auto& [id, model] : m_models) {
         auto model_file = dir.filePath(model.file_name);
         if (!model.hidden && model.available && QFile::exists(model_file)) {
-            list.push_back(
-                {id, model.engine, model.lang_id, model.name, model_file,
-                 sup_model_files(model.sup_models), model.speaker,
-                 model.trg_lang_id, model.score, model.options, model.license,
-                 model.default_for_lang, model.available, model.dl_multi,
-                 model.dl_off, model.downloading, model.download_progress});
+            list.push_back({id, model.engine, model.lang_id, model.name,
+                            model_file, sup_model_files(model.sup_models),
+                            model.speaker, model.trg_lang_id, model.score,
+                            model.options, model.license,
+                            make_download_info(model), model.default_for_lang,
+                            model.available, model.dl_multi, model.dl_off,
+                            model.downloading, model.download_progress});
         }
     }
 
@@ -524,7 +538,7 @@ void models_manager::download(const QString& id, download_type type, int part,
 
             model.available = true;
             model.exists = true;
-            emit download_finished(id);
+
             model.downloading = false;
             model.download_progress = 0.0;
             model.downloaded_part_data = 0;
@@ -532,6 +546,7 @@ void models_manager::download(const QString& id, download_type type, int part,
             update_dl_multi(m_models);
             update_dl_off(m_models);
 
+            emit download_finished(id, true);
             emit models_changed();
             return;
         }
@@ -964,7 +979,7 @@ void models_manager::handle_download_finished() {
 
                 model.available = true;
                 model.exists = true;
-                emit download_finished(id);
+                emit download_finished(id, false);
             } else {
                 remove_file_or_dir(path);
                 emit download_error(id);
@@ -1526,6 +1541,7 @@ auto models_manager::extract_models(
                 qDebug() << "model" << model_id << "has license";
 
                 license.id = license_obj.value("id").toString();
+                license.name = license_obj.value("name").toString();
                 license.url = QUrl{license_obj.value("url").toString()};
                 license.accept_required =
                     license_obj.value("accept_required").toBool();

@@ -84,8 +84,14 @@ class models_manager : public QObject, public singleton<models_manager> {
 
     struct license_t {
         QString id;
+        QString name;
         QUrl url;
         bool accept_required = false;
+    };
+
+    struct download_info_t {
+        std::vector<QUrl> urls;
+        size_t total_size = 0;
     };
 
     struct model_t {
@@ -100,6 +106,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         int score = 2;
         QString options;
         license_t license;
+        download_info_t download_info;
         bool default_for_lang = false;
         bool available = false;
         bool dl_multi = false;
@@ -158,7 +165,7 @@ class models_manager : public QObject, public singleton<models_manager> {
 
    signals:
     void download_progress(const QString& id, double progress);
-    void download_finished(const QString& id);
+    void download_finished(const QString& id, bool download_not_needed);
     void download_started(const QString& id);
     void download_error(const QString& id);
     void models_changed();
@@ -323,6 +330,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     static void update_dl_off(models_t& models);
     static size_t make_url_hash(const std::vector<QUrl>& urls,
                                 const std::vector<sup_model_t>& sup_models);
+    static download_info_t make_download_info(const priv_model_t& model);
 };
 
 #endif  // MODELS_MANAGER_H

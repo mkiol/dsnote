@@ -214,12 +214,23 @@ DialogPage {
         Control {
             id: control
 
+            property bool infoAvailable: model && (model.download_urls.length !== 0 ||
+                                         model.license_id.length !== 0 ||
+                                         model.license_name.length !== 0)
+
             function download_model() {
                 if (model.license_accept_required) {
-                    appWin.openModelLicenseDialog(model.license_id, model.license_url, function(){
+                    appWin.showModelLicenseDialog(model.license_id, model.license_name,
+                                                  model.license_url, function(){
                         service.download_model(model.id)
                     })
                 } else service.download_model(model.id)
+            }
+
+            function show_info() {
+                appWin.showModelInfoDialog(model.name, model.download_urls,
+                                           model.download_size, model.license_id,
+                                           model.license_name, model.license_url)
             }
 
             background: Rectangle {
@@ -243,31 +254,12 @@ DialogPage {
                 anchors.rightMargin: appWin.padding
             }
 
-            Button {
-                visible: model.license_id.length !== 0
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: availableLabel.left
-                anchors.rightMargin: appWin.padding
-                text: qsTr("License")
-                font.pixelSize: Qt.application.font.pixelSize * 0.5
-                width: implicitWidth * 0.75
-                height: implicitHeight * 0.75
-
-                onClicked: {
-                    appWin.openModelLicenseDialog(model.license_id, model.license_url, null)
-                }
-
-                ToolTip.visible: hovered
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: qsTr("Show model's license")
-            }
-
             Label {
                 id: availableLabel
 
                 horizontalAlignment: Text.AlignRight
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.right: bar.visible ? bar.left : downloadButton.left
+                anchors.right: bar.visible ? bar.left : infoButton.left
                 anchors.rightMargin: appWin.padding
                 text: model.available ? "\u2714" : ""
                 font.bold: true
@@ -278,9 +270,9 @@ DialogPage {
                 id: bar
 
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.right: downloadButton.left
+                anchors.right: infoButton.left
                 anchors.rightMargin: appWin.padding
-                width: visible ? downloadButton.width : 0
+                width: visible ? appWin.buttonWithIconWidth : 0
                 value: root.langsView ? 0 : model.available ? 1 : model.progress
                 visible: model.downloading
 
@@ -297,10 +289,25 @@ DialogPage {
                 }
             }
 
+            Button {
+                id: infoButton
+
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: downloadButton.left
+                anchors.rightMargin: appWin.padding
+                icon.name: "help-about-symbolic"
+                onClicked: control.show_info()
+                enabled: control.infoAvailable
+
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTr("Show model details")
+            }
+
             Item {
                 id: downloadButton
 
-                enabled: model.downloading || model.available || !model.dl_off
+                enabled: model && model.downloading || model.available || !model.dl_off
                 width: appWin.buttonWithIconWidth
                 height: appWin.buttonHeight
                 anchors {
@@ -311,7 +318,7 @@ DialogPage {
 
                 Button {
                     anchors.fill: parent
-                    visible: !model.downloading && !model.available && !model.dl_multi
+                    visible: model && !model.downloading && !model.available && !model.dl_multi
                     icon.name: "folder-download-symbolic"
                     text: qsTr("Download")
                     onClicked: control.download_model()
@@ -319,7 +326,7 @@ DialogPage {
 
                 Button {
                     anchors.fill: parent
-                    visible: !model.downloading && !model.available && model.dl_multi
+                    visible: model && !model.downloading && !model.available && model.dl_multi
                     icon.name: "list-add-symbolic"
                     text: qsTr("Enable")
                     onClicked: control.download_model()
@@ -327,7 +334,7 @@ DialogPage {
 
                 Button {
                     anchors.fill: parent
-                    visible: !model.downloading && model.available && !model.dl_multi
+                    visible: model && !model.downloading && model.available && !model.dl_multi
                     icon.name: "edit-delete-symbolic"
                     text: qsTr("Delete")
                     onClicked: service.delete_model(model.id)
@@ -335,7 +342,7 @@ DialogPage {
 
                 Button {
                     anchors.fill: parent
-                    visible: !model.downloading && model.available && model.dl_multi
+                    visible: model && !model.downloading && model.available && model.dl_multi
                     icon.name: "list-remove-symbolic"
                     text: qsTr("Disable")
                     onClicked: service.delete_model(model.id)
@@ -343,7 +350,7 @@ DialogPage {
 
                 Button {
                     anchors.fill: parent
-                    visible: model.downloading
+                    visible: model && model.downloading
                     icon.name: "action-unavailable-symbolic"
                     text: qsTr("Cancel")
                     onClicked: service.cancel_model_download(model.id)
