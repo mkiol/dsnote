@@ -11,7 +11,7 @@
 #include <QString>
 
 namespace module_tools {
-QString path_in_share_dir(const QString& path);
+// QString path_in_share_dir(const QString& path);
 QString path_to_share_dir_for_path(const QString& path);
 QString path_to_bin_dir_for_path(const QString& path);
 QString path_to_dir_for_path(const QString& dir, const QString& path);
