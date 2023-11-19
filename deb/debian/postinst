@@ -10,7 +10,7 @@ show_info() {
 
 case "$1" in
     configure)
-    show_info
+        show_info
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
