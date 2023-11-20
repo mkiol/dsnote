@@ -121,7 +121,7 @@ std::ostream& operator<<(std::ostream& os, const tts_engine::config_t& config) {
     os << "lang=" << config.lang << ", speaker=" << config.speaker_id
        << ", model-files=[" << config.model_files << "]"
        << ", speaker=" << config.speaker_id
-       << ", speaker_wav=" << config.ref_voice_file
+       << ", ref_voice_file=" << config.ref_voice_file
        << ", options=" << config.options << ", lang_code=" << config.lang_code
        << ", share-dir=" << config.share_dir
        << ", cache-dir=" << config.cache_dir << ", data-dir=" << config.data_dir
@@ -258,7 +258,7 @@ void tts_engine::set_speech_speed(unsigned int speech_speed) {
 
 void tts_engine::set_ref_voice_file(std::string ref_voice_file) {
     m_config.ref_voice_file.assign(std::move(ref_voice_file));
-    ref_voice_file.clear();
+    m_ref_voice_wav_file.clear();
 }
 
 void tts_engine::set_state(state_t new_state) {

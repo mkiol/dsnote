@@ -1957,7 +1957,9 @@ void dsnote_app::speech_to_file_url(const QUrl &dest_file,
 void dsnote_app::speech_to_file(const QString &dest_file,
                                 const QString &title_tag,
                                 const QString &track_tag) {
-    speech_to_file_internal(note(), {}, dest_file, title_tag, track_tag);
+    speech_to_file_internal(
+        note(), {}, dest_file, title_tag, track_tag,
+        tts_ref_voice_needed() ? active_tts_ref_voice() : QString{});
 }
 
 void dsnote_app::speech_to_file_translator_url(bool transtalated,
@@ -1985,7 +1987,7 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
     speech_to_file_internal(transtalated ? m_translated_text : note(),
                             transtalated ? m_active_tts_model_for_out_mnt
                                          : m_active_tts_model_for_in_mnt,
-                            dest_file, title_tag, track_tag);
+                            dest_file, title_tag, track_tag, {});
 }
 
 static QString audio_quality_to_str(settings::audio_quality_t quality) {
@@ -2005,7 +2007,8 @@ void dsnote_app::speech_to_file_internal(const QString &text,
                                          const QString &model_id,
                                          const QString &dest_file,
                                          const QString &title_tag,
-                                         const QString &track_tag) {
+                                         const QString &track_tag,
+                                         const QString &ref_voice) {
     if (text.isEmpty()) {
         qWarning() << "text is empty";
         return;
@@ -2020,6 +2023,11 @@ void dsnote_app::speech_to_file_internal(const QString &text,
 
     QVariantMap options;
     options.insert("speech_speed", settings::instance()->speech_speed());
+
+    if (m_available_tts_ref_voices_map.contains(ref_voice)) {
+        auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
+        if (l.size() > 1) options.insert("ref_voice_file", l.at(1));
+    }
 
     auto audio_format_str = settings::audio_format_str_from_filename(dest_file);
     auto audio_ext = settings::audio_ext_from_filename(dest_file);
