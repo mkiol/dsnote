@@ -1,6 +1,24 @@
+diff -ruN whisper.cpp-org/cmake/DefaultTargetOptions.cmake whisper.cpp-patched/cmake/DefaultTargetOptions.cmake
+--- whisper.cpp-org/cmake/DefaultTargetOptions.cmake	2023-11-12 05:40:36.000000000 +0100
++++ whisper.cpp-patched/cmake/DefaultTargetOptions.cmake	2023-11-08 18:31:59.266704085 +0100
+@@ -9,9 +9,13 @@
+         cxx_std_11
+     )
+ 
++if (NOT DEFINED CMAKE_INSTALL_RPATH)
++    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
++endif()
++
+ set_target_properties(${TARGET}
+     PROPERTIES
+         EXPORT_COMPILE_COMMANDS ON
+         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+-        INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib"
++        INSTALL_RPATH ${CMAKE_INSTALL_RPATH}
+ )
 diff -ruN whisper.cpp-org/CMakeLists.txt whisper.cpp-patched/CMakeLists.txt
 --- whisper.cpp-org/CMakeLists.txt	2023-11-12 05:40:36.000000000 +0100
-+++ whisper.cpp-patched/CMakeLists.txt	2023-11-12 15:19:05.329230365 +0100
++++ whisper.cpp-patched/CMakeLists.txt	2023-11-20 11:37:55.743849918 +0100
 @@ -170,39 +170,11 @@
  if (WHISPER_OPENBLAS)
      set(WHISPER_BLAS_VENDOR "OpenBLAS")
@@ -86,20 +104,35 @@ diff -ruN whisper.cpp-org/CMakeLists.txt whisper.cpp-patched/CMakeLists.txt
          target_link_libraries(ggml-rocm PRIVATE hip::device PUBLIC hip::host roc::rocblas roc::hipblas)
  
          if (WHISPER_STATIC)
-@@ -521,7 +503,11 @@
+@@ -457,7 +439,11 @@
+ # whisper - this is the main library of the project
+ #
+ 
+-set(TARGET whisper)
++if (NOT DEFINED WHISPER_TARGET_NAME)
++    set(WHISPER_TARGET_NAME whisper)
++endif()
++
++set(TARGET ${WHISPER_TARGET_NAME})
+ 
+ add_library(${TARGET}
+     ggml.h
+@@ -521,8 +507,12 @@
  
  if (GGML_SOURCES_CUDA)
      message(STATUS "GGML CUDA sources found, configuring CUDA architecture")
 -    set_property(TARGET whisper PROPERTY CUDA_ARCHITECTURES OFF)
+-    set_property(TARGET whisper PROPERTY CUDA_SELECT_NVCC_ARCH_FLAGS "Auto")
 +    if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
 +        set(CMAKE_CUDA_ARCHITECTURES 75)
 +    endif()
 +    message(STATUS "CUDA architectures set to ${CMAKE_CUDA_ARCHITECTURES}")
-+    set_property(TARGET whisper PROPERTY CUDA_ARCHITECTURES ${CMAKE_CUDA_ARCHITECTURES})
-     set_property(TARGET whisper PROPERTY CUDA_SELECT_NVCC_ARCH_FLAGS "Auto")
++    set_property(TARGET ${TARGET} PROPERTY CUDA_ARCHITECTURES ${CMAKE_CUDA_ARCHITECTURES})
++    set_property(TARGET ${TARGET} PROPERTY CUDA_SELECT_NVCC_ARCH_FLAGS "Auto")
  endif()
  
-@@ -533,13 +519,13 @@
+ if (EMSCRIPTEN)
+@@ -533,13 +523,13 @@
      ${WHISPER_EXTRA_FLAGS}
      )
  
