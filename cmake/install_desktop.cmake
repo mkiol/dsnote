@@ -20,7 +20,7 @@ else()
 endif()
 
 function(strip_all file)
-    execute_process(COMMAND ${CMAKE_STRIP} --strip-all ${file})
+    install(CODE "execute_process(COMMAND ${CMAKE_STRIP} --strip-all ${file})")
 endfunction()
 
 if(BUILD_WHISPERCPP)
@@ -78,6 +78,7 @@ install(FILES "${PROJECT_BINARY_DIR}/espeakdata.tar.xz" DESTINATION ${module_ins
 
 if(BUILD_RHVOICE)
     strip_all("${external_lib_dir}/libRHVoice_core.so.1.2.2")
+    strip_all("${external_lib_dir}/libRHVoice.so.1.2.2")
     install(FILES "${external_lib_dir}/libRHVoice_core.so.1.2.2" DESTINATION ${lib_install_dir})
     install(FILES "${external_lib_dir}/libRHVoice_core.so.1" DESTINATION ${lib_install_dir})
     install(FILES "${external_lib_dir}/libRHVoice_core.so" DESTINATION ${lib_install_dir})
