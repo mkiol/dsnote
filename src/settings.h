@@ -183,6 +183,8 @@ class settings : public QSettings, public singleton<settings> {
             set_cache_audio_format NOTIFY cache_audio_format_changed)
     Q_PROPERTY(cache_policy_t cache_policy READ cache_policy WRITE
                    set_cache_policy NOTIFY cache_policy_changed)
+    Q_PROPERTY(int num_threads READ num_threads WRITE set_num_threads NOTIFY
+                   num_threads_changed)
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -402,6 +404,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_audio_input_idx(int value);
     bool py_feature_scan() const;
     void set_py_feature_scan(bool value);
+    int num_threads() const;
+    void set_num_threads(int value);
 
     QStringList gpu_devices_stt() const;
     QString gpu_device_stt() const;
@@ -497,6 +501,7 @@ class settings : public QSettings, public singleton<settings> {
     void py_feature_scan_changed();
     void cache_audio_format_changed();
     void cache_policy_changed();
+    void num_threads_changed();
 
    private:
     inline static const QString settings_filename =
@@ -513,6 +518,7 @@ class settings : public QSettings, public singleton<settings> {
     static QString settings_filepath();
     void update_audio_inputs();
     void set_restart_required(bool value);
+    void enforce_num_threads() const;
 
     launch_mode_t m_launch_mode = launch_mode_t::app_stanalone;
 };

@@ -798,6 +798,48 @@ DialogPage {
             }
 
             SectionLabel {
+                text: qsTr("CPU options")
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Number of simultaneous threads")
+                    wrapMode: Text.Wrap
+                }
+
+                SpinBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    from: 0
+                    to: 32
+                    stepSize: 1
+                    value: _settings.num_threads < 0 ? 0 : _settings.num_threads > 32 ? 32 : _settings.num_threads
+                    textFromValue: function(value) {
+                        return value < 1 ? qsTr("Auto") : value.toString()
+                    }
+                    valueFromText: function(text) {
+                        if (text === qsTr("Auto")) return 0
+                        return parseInt(text);
+                    }
+                    onValueChanged: {
+                        _settings.num_threads = value;
+                    }
+                    Component.onCompleted: {
+                        contentItem.color = palette.text
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Set the maximum number of simultaneous CPU threads.")
+                }
+            }
+
+            SectionLabel {
                 text: qsTr("Availability of optional features")
             }
 

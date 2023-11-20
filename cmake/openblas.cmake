@@ -31,5 +31,4 @@ ExternalProject_Add(openblas
     BUILD_ALWAYS False
 )
 
-list(APPEND deps_libs "${external_lib_dir}/libopenblas.so")
 list(APPEND deps openblas)

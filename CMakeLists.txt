@@ -554,8 +554,6 @@ if(BUILD_OPENBLAS)
     include(${cmake_path}/openblas.cmake)
 else()
     pkg_search_module(openblas REQUIRED openblas)
-    list(APPEND deps_libs ${openblas_LIBRARIES})
-    list(APPEND includes ${openblas_INCLUDE_DIRS})
 endif()
 
 if(BUILD_APRILASR)

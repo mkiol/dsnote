@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <thread>
 
 #include "config.h"
 #include "mic_source.h"
@@ -124,6 +125,7 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     qDebug() << "settings file:" << fileName();
     qDebug() << "platform:" << QGuiApplication::platformName();
 
+    enforce_num_threads();
     update_audio_inputs();
 
     // remove qml cache
@@ -984,6 +986,23 @@ void settings::update_qt_style(QQmlApplicationEngine* engine) const {
 }
 #endif
 
+void settings::enforce_num_threads() const {
+    unsigned int conf_num_threads = num_threads();
+
+    unsigned int num_threads =
+        conf_num_threads > 0
+            ? std::min(conf_num_threads,
+                       std::max(std::thread::hardware_concurrency(), 2u) - 1)
+            : 0;
+
+    qDebug() << "enforcing num threads:" << num_threads;
+
+    if (num_threads > 0) {
+        setenv("OPENBLAS_NUM_THREADS", std::to_string(num_threads).c_str(), 1);
+        setenv("OMP_NUM_THREADS", std::to_string(num_threads).c_str(), 1);
+    }
+}
+
 QStringList settings::gpu_devices_stt() const { return m_gpu_devices_stt; }
 
 QStringList settings::gpu_devices_tts() const { return m_gpu_devices_tts; }
@@ -1218,6 +1237,21 @@ void settings::set_diacritizer_enabled(bool value) {
     if (value != diacritizer_enabled()) {
         setValue(QStringLiteral("diacritizer_enabled"), value);
         emit diacritizer_enabled_changed();
+    }
+}
+
+int settings::num_threads() const {
+    auto num_threads = value(QStringLiteral("service/num_threads"), 0).toInt();
+    return num_threads < 0 ? 0 : num_threads;
+}
+
+void settings::set_num_threads(int value) {
+    if (value < 1) value = 0;
+
+    if (num_threads() != value) {
+        setValue(QStringLiteral("service/num_threads"), value);
+        emit num_threads_changed();
+        set_restart_required(true);
     }
 }
 
