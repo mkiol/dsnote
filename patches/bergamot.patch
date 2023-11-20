@@ -655,23 +655,39 @@ diff -ruN bergamot-org/bergamot_api.h bergamot-patched/bergamot_api.h
 +#endif  // BERGAMOT_API_H
 diff -ruN bergamot-org/CMakeLists.txt bergamot-patched/CMakeLists.txt
 --- bergamot-org/CMakeLists.txt	2023-07-08 17:36:50.510112843 +0200
-+++ bergamot-patched/CMakeLists.txt	2023-07-08 18:26:10.063535560 +0200
-@@ -174,7 +174,14 @@
++++ bergamot-patched/CMakeLists.txt	2023-11-20 11:53:08.937187708 +0100
+@@ -53,7 +53,7 @@
+ if(MSVC)
+   add_definitions(-DUSE_SSE2=1) # Supposed to fix something in the sse_mathfun.h but not sure it does
+   set(INTRINSICS ${MSVC_BUILD_ARCH}) # ARCH we're targetting on win32. @TODO variable
+-  
++
+   set(CMAKE_CXX_FLAGS           "/EHsc /DWIN32 /D_WINDOWS /DUNICODE /D_UNICODE /D_CRT_NONSTDC_NO_WARNINGS /D_CRT_SECURE_NO_WARNINGS /bigobj")
+   set(CMAKE_CXX_FLAGS_RELEASE   "${CMAKE_CXX_FLAGS} /MT /O2 ${INTRINSICS} /MP /GL /DNDEBUG")
+   set(CMAKE_CXX_FLAGS_DEBUG     "${CMAKE_CXX_FLAGS} /MTd /Od /Ob0 ${INTRINSICS} /RTC1 /Zi /D_DEBUG")
+@@ -174,7 +174,20 @@
  if(COMPILE_WASM)
    add_subdirectory(wasm)
  else()
 -  add_subdirectory(app)
-+  add_library(bergamot_api SHARED bergamot_api.cpp)
-+  target_link_libraries(bergamot_api PRIVATE bergamot-translator)
++  if (NOT DEFINED BERGAMOTAPI_TARGET_NAME)
++      set(BERGAMOTAPI_TARGET_NAME bergamot_api)
++  endif()
 +
-+  set_target_properties(bergamot_api PROPERTIES PUBLIC_HEADER "bergamot_api.h")
-+  install(TARGETS bergamot_api
++  set(TARGET ${BERGAMOTAPI_TARGET_NAME})
++
++  add_library(${TARGET} SHARED bergamot_api.cpp)
++  target_link_libraries(${TARGET} PRIVATE bergamot-translator)
++
++  set_target_properties(${TARGET} PROPERTIES PUBLIC_HEADER "bergamot_api.h")
++  install(TARGETS ${TARGET}
 +      LIBRARY DESTINATION lib
 +      ARCHIVE DESTINATION lib
 +      PUBLIC_HEADER DESTINATION include)
  endif(COMPILE_WASM)
  
  option(COMPILE_PYTHON "Compile python bindings. Intended to be activated with setup.py" OFF)
+Binary files bergamot-org/.git/index and bergamot-patched/.git/index differ
 Binary files bergamot-org/.git/modules/3rd_party/marian-dev/index and bergamot-patched/.git/modules/3rd_party/marian-dev/index differ
 diff -ruN bergamot-org/src/translator/logging.h bergamot-patched/src/translator/logging.h
 --- bergamot-org/src/translator/logging.h	2023-07-08 17:36:50.513446177 +0200

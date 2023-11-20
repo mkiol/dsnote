@@ -18,8 +18,8 @@ else()
     find_package(BLAS REQUIRED)
 
     find_path(BLAS_INCLUDE_DIRS NAMES cblas.h
-        PATHS ${CMAKE_PREFIX_PATH}/include/openblas /usr/include/openblas /usr/local/include/openblas $ENV{BLAS_HOME}/include
-        REQUIRED NO_DEFAULT_PATH)
+        PATHS ${CMAKE_PREFIX_PATH}/include/openblas /usr/include/openblas
+        /usr/local/include/openblas $ENV{BLAS_HOME}/include REQUIRED)
 
     set(blas_lib_path ${BLAS_LIBRARIES})
     set(blas_include_dir ${BLAS_INCLUDE_DIRS})
@@ -53,7 +53,7 @@ if(arch_x8664)
             -DUSE_INTRINSICS_ARMV7_NEON=ON
             -DBUILD_ARCH=${bergamot_build_arch}
             -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
-        INSTALL_COMMAND make install && cp ${external_lib_dir}/libbergamot_api.so ${external_lib_dir}/libbergamot_api-fallback.so
+            -DBERGAMOTAPI_TARGET_NAME=bergamot_api-fallback
         BUILD_ALWAYS False
     )
 
