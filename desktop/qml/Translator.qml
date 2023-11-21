@@ -139,8 +139,13 @@ ColumnLayout {
                 second {
                     icon.name: "audio-speakers-symbolic"
                     enabled: app.mnt_configured && app.tts_configured && app.state === DsnoteApp.StateIdle
-                    comboToolTip: qsTr("Text to Speech model for language to translate from.")
+                    comboToolTip: app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voices.length === 0 ?
+                                      qsTr("This model requires a voice sample.") + " " +
+                                      qsTr("Create one in %1 menu").arg("<i>" + qsTr("Voice samples") + "</i>") :
+                                      qsTr("Text to Speech model for language to translate from.")
                     comboPlaceholderText: qsTr("No Text to Speech model")
+                    combo2PlaceholderText: qsTr("No voice sample")
+                    combo2ToolTip: qsTr("Voice sample")
                     comboFillWidth: true
                     combo {
                         model: app.available_tts_models_for_in_mnt
@@ -149,6 +154,15 @@ ColumnLayout {
                                  app.state === DsnoteApp.StateIdle
                         onActivated: app.set_active_tts_model_for_in_mnt_idx(index)
                         currentIndex: app.active_tts_model_for_in_mnt_idx
+                    }
+                    combo2 {
+                        visible: app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voices.length !== 0
+                        enabled: mntInCombo.second.enabled &&
+                                 !mntInCombo.second.off &&
+                                 app.state === DsnoteApp.StateIdle
+                        model: app.available_tts_ref_voices
+                        onActivated: app.set_active_tts_for_in_mnt_ref_voice_idx(index)
+                        currentIndex: app.active_tts_for_in_mnt_ref_voice_idx
                     }
                     frame {
                         leftPadding: appWin.padding
@@ -233,8 +247,13 @@ ColumnLayout {
                     icon.name: "audio-speakers-symbolic"
                     enabled: app.mnt_configured && app.tts_configured &&
                              app.state === DsnoteApp.StateIdle
-                    comboToolTip: qsTr("Text to Speech model for language to translate into.")
+                    comboToolTip: app.tts_for_out_mnt_ref_voice_needed && app.available_tts_ref_voices.length === 0 ?
+                                      qsTr("This model requires a voice sample.") + " " +
+                                      qsTr("Create one in %1 menu").arg("<i>" + qsTr("Voice samples") + "</i>") :
+                                      qsTr("Text to Speech model for language to translate into.")
                     comboPlaceholderText: qsTr("No Text to Speech model")
+                    combo2PlaceholderText: qsTr("No voice sample")
+                    combo2ToolTip: qsTr("Voice sample")
                     comboFillWidth: true
                     combo {
                         enabled: mntOutCombo.second.enabled &&
@@ -243,6 +262,15 @@ ColumnLayout {
                         model: app.available_tts_models_for_out_mnt
                         onActivated: app.set_active_tts_model_for_out_mnt_idx(index)
                         currentIndex: app.active_tts_model_for_out_mnt_idx
+                    }
+                    combo2 {
+                        visible: app.tts_for_out_mnt_ref_voice_needed && app.available_tts_ref_voices.length !== 0
+                        enabled: mntInCombo.second.enabled &&
+                                 !mntInCombo.second.off &&
+                                 app.state === DsnoteApp.StateIdle
+                        model: app.available_tts_ref_voices
+                        onActivated: app.set_active_tts_for_out_mnt_ref_voice_idx(index)
+                        currentIndex: app.active_tts_for_out_mnt_ref_voice_idx
                     }
                     frame {
                         rightPadding: appWin.padding

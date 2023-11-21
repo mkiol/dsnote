@@ -1349,13 +1349,46 @@ void dsnote_app::update_available_tts_ref_voices() {
             settings::instance()->active_tts_ref_voice())) {
         m_active_tts_ref_voice = settings::instance()->active_tts_ref_voice();
     } else {
-        if (new_available_tts_ref_voices_map.isEmpty())
+        if (new_available_tts_ref_voices_map.isEmpty()) {
             m_active_tts_ref_voice.clear();
-        else
+        } else {
             m_active_tts_ref_voice =
                 new_available_tts_ref_voices_map.firstKey();
+        }
 
         settings::instance()->set_active_tts_ref_voice(m_active_tts_ref_voice);
+    }
+
+    if (new_available_tts_ref_voices_map.contains(
+            settings::instance()->active_tts_for_in_mnt_ref_voice())) {
+        m_active_tts_for_in_mnt_ref_voice =
+            settings::instance()->active_tts_for_in_mnt_ref_voice();
+    } else {
+        if (new_available_tts_ref_voices_map.isEmpty()) {
+            m_active_tts_for_in_mnt_ref_voice.clear();
+        } else {
+            m_active_tts_for_in_mnt_ref_voice =
+                new_available_tts_ref_voices_map.firstKey();
+        }
+
+        settings::instance()->set_active_tts_for_in_mnt_ref_voice(
+            m_active_tts_for_in_mnt_ref_voice);
+    }
+
+    if (new_available_tts_ref_voices_map.contains(
+            settings::instance()->active_tts_for_out_mnt_ref_voice())) {
+        m_active_tts_for_out_mnt_ref_voice =
+            settings::instance()->active_tts_for_out_mnt_ref_voice();
+    } else {
+        if (new_available_tts_ref_voices_map.isEmpty()) {
+            m_active_tts_for_out_mnt_ref_voice.clear();
+        } else {
+            m_active_tts_for_out_mnt_ref_voice =
+                new_available_tts_ref_voices_map.firstKey();
+        }
+
+        settings::instance()->set_active_tts_for_out_mnt_ref_voice(
+            m_active_tts_for_out_mnt_ref_voice);
     }
 
     if (new_available_tts_ref_voices_map != m_available_tts_ref_voices_map) {
@@ -1365,6 +1398,8 @@ void dsnote_app::update_available_tts_ref_voices() {
     }
 
     emit active_tts_ref_voice_changed();
+    emit active_tts_for_in_mnt_ref_voice_changed();
+    emit active_tts_for_out_mnt_ref_voice_changed();
 }
 
 void dsnote_app::update_available_tts_models_for_in_mnt() {
@@ -1612,6 +1647,26 @@ void dsnote_app::set_active_tts_ref_voice_idx(int idx) {
         settings::instance()->set_active_tts_ref_voice(id);
         m_active_tts_ref_voice = id;
         emit active_tts_ref_voice_changed();
+    }
+}
+
+void dsnote_app::set_active_tts_for_in_mnt_ref_voice_idx(int idx) {
+    if (active_tts_for_in_mnt_ref_voice_idx() != idx && idx > -1 &&
+        idx < m_available_tts_ref_voices_map.size()) {
+        auto id = std::next(m_available_tts_ref_voices_map.cbegin(), idx).key();
+        settings::instance()->set_active_tts_for_in_mnt_ref_voice(id);
+        m_active_tts_for_in_mnt_ref_voice = id;
+        emit active_tts_for_in_mnt_ref_voice_changed();
+    }
+}
+
+void dsnote_app::set_active_tts_for_out_mnt_ref_voice_idx(int idx) {
+    if (active_tts_for_out_mnt_ref_voice_idx() != idx && idx > -1 &&
+        idx < m_available_tts_ref_voices_map.size()) {
+        auto id = std::next(m_available_tts_ref_voices_map.cbegin(), idx).key();
+        settings::instance()->set_active_tts_for_out_mnt_ref_voice(id);
+        m_active_tts_for_out_mnt_ref_voice = id;
+        emit active_tts_for_out_mnt_ref_voice_changed();
     }
 }
 
@@ -1904,7 +1959,12 @@ void dsnote_app::play_speech_translator(bool transtalated) {
     play_speech_internal(transtalated ? m_translated_text : note(),
                          transtalated ? m_active_tts_model_for_out_mnt
                                       : m_active_tts_model_for_in_mnt,
-                         {});
+                         transtalated ? tts_for_out_mnt_ref_voice_needed()
+                                            ? active_tts_for_out_mnt_ref_voice()
+                                            : QString{}
+                         : tts_for_in_mnt_ref_voice_needed()
+                             ? active_tts_for_in_mnt_ref_voice()
+                             : QString{});
 }
 
 void dsnote_app::translate_delayed() {
@@ -1984,10 +2044,16 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
         return;
     }
 
-    speech_to_file_internal(transtalated ? m_translated_text : note(),
-                            transtalated ? m_active_tts_model_for_out_mnt
-                                         : m_active_tts_model_for_in_mnt,
-                            dest_file, title_tag, track_tag, {});
+    speech_to_file_internal(
+        transtalated ? m_translated_text : note(),
+        transtalated ? m_active_tts_model_for_out_mnt
+                     : m_active_tts_model_for_in_mnt,
+        dest_file, title_tag, track_tag,
+        transtalated                        ? tts_for_out_mnt_ref_voice_needed()
+                                                  ? active_tts_for_out_mnt_ref_voice()
+                                                  : QString{}
+                               : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
+                                            : QString{});
 }
 
 static QString audio_quality_to_str(settings::audio_quality_t quality) {
@@ -2148,6 +2214,30 @@ QString dsnote_app::active_tts_ref_voice_name() const {
     return l.isEmpty() ? QString{} : l.front();
 }
 
+QString dsnote_app::active_tts_for_in_mnt_ref_voice_name() const {
+    auto it =
+        m_available_tts_ref_voices_map.find(m_active_tts_for_in_mnt_ref_voice);
+    if (it == m_available_tts_ref_voices_map.end()) {
+        return {};
+    }
+
+    auto l = it.value().toStringList();
+
+    return l.isEmpty() ? QString{} : l.front();
+}
+
+QString dsnote_app::active_tts_for_out_mnt_ref_voice_name() const {
+    auto it =
+        m_available_tts_ref_voices_map.find(m_active_tts_for_out_mnt_ref_voice);
+    if (it == m_available_tts_ref_voices_map.end()) {
+        return {};
+    }
+
+    auto l = it.value().toStringList();
+
+    return l.isEmpty() ? QString{} : l.front();
+}
+
 QString dsnote_app::active_tts_model_for_in_mnt_name() const {
     auto it = m_available_tts_models_for_in_mnt_map.find(
         m_active_tts_model_for_in_mnt);
@@ -2218,6 +2308,24 @@ int dsnote_app::active_tts_model_idx() const {
 
 int dsnote_app::active_tts_ref_voice_idx() const {
     auto it = m_available_tts_ref_voices_map.find(m_active_tts_ref_voice);
+    if (it == m_available_tts_ref_voices_map.end()) {
+        return -1;
+    }
+    return std::distance(m_available_tts_ref_voices_map.begin(), it);
+}
+
+int dsnote_app::active_tts_for_in_mnt_ref_voice_idx() const {
+    auto it =
+        m_available_tts_ref_voices_map.find(m_active_tts_for_in_mnt_ref_voice);
+    if (it == m_available_tts_ref_voices_map.end()) {
+        return -1;
+    }
+    return std::distance(m_available_tts_ref_voices_map.begin(), it);
+}
+
+int dsnote_app::active_tts_for_out_mnt_ref_voice_idx() const {
+    auto it =
+        m_available_tts_ref_voices_map.find(m_active_tts_for_out_mnt_ref_voice);
     if (it == m_available_tts_ref_voices_map.end()) {
         return -1;
     }
@@ -2541,6 +2649,13 @@ void dsnote_app::copy_to_clipboard_internal(const QString &text) {
     if (!text.isEmpty()) {
         clip->setText(text);
         emit note_copied();
+    }
+}
+
+void dsnote_app::copy_text_to_clipboard(const QString &text) {
+    auto *clip = QGuiApplication::clipboard();
+    if (!text.isEmpty()) {
+        clip->setText(text);
     }
 }
 
@@ -3023,14 +3138,25 @@ QString dsnote_app::download_content(const QUrl &url) {
     return QString::fromUtf8(data.bytes);
 }
 
-bool dsnote_app::tts_ref_voice_needed() const {
-    if (m_available_tts_models_map.contains(m_active_tts_model)) {
-        auto model =
-            m_available_tts_models_map.value(m_active_tts_model).toStringList();
+bool dsnote_app::tts_ref_voice_needed_by_id(const QString &id) const {
+    if (m_available_tts_models_map.contains(id)) {
+        auto model = m_available_tts_models_map.value(id).toStringList();
         return model.size() > 2 && model.at(2).contains('x');
     }
 
     return false;
+}
+
+bool dsnote_app::tts_ref_voice_needed() const {
+    return tts_ref_voice_needed_by_id(m_active_tts_model);
+}
+
+bool dsnote_app::tts_for_in_mnt_ref_voice_needed() const {
+    return tts_ref_voice_needed_by_id(m_active_tts_model_for_in_mnt);
+}
+
+bool dsnote_app::tts_for_out_mnt_ref_voice_needed() const {
+    return tts_ref_voice_needed_by_id(m_active_tts_model_for_out_mnt);
 }
 
 QString dsnote_app::cache_dir() {

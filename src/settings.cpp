@@ -360,6 +360,30 @@ void settings::set_active_tts_ref_voice(const QString& value) {
     }
 }
 
+QString settings::active_tts_for_in_mnt_ref_voice() const {
+    return value(QStringLiteral("active_tts_for_in_mnt_ref_voice"), {})
+        .toString();
+}
+
+void settings::set_active_tts_for_in_mnt_ref_voice(const QString& value) {
+    if (active_tts_for_in_mnt_ref_voice() != value) {
+        setValue(QStringLiteral("active_tts_for_in_mnt_ref_voice"), value);
+        emit active_tts_for_in_mnt_ref_voice_changed();
+    }
+}
+
+QString settings::active_tts_for_out_mnt_ref_voice() const {
+    return value(QStringLiteral("active_tts_for_out_mnt_ref_voice"), {})
+        .toString();
+}
+
+void settings::set_active_tts_for_out_mnt_ref_voice(const QString& value) {
+    if (active_tts_for_out_mnt_ref_voice() != value) {
+        setValue(QStringLiteral("active_tts_for_out_mnt_ref_voice"), value);
+        emit active_tts_for_out_mnt_ref_voice_changed();
+    }
+}
+
 QString settings::file_save_dir() const {
     auto dir = value(QStringLiteral("file_save_dir")).toString();
     if (dir.isEmpty() || !QFileInfo::exists(dir)) {
