@@ -89,6 +89,7 @@ DialogPage {
                 ComboBox {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? appWin.padding : 0
                     currentIndex: {
                         if (_settings.insert_mode === Settings.InsertInLine) return 0
                         if (_settings.insert_mode === Settings.InsertNewLine) return 1
@@ -127,6 +128,7 @@ DialogPage {
                 SpinBox {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? appWin.padding : 0
                     from: 4
                     to: 25
                     stepSize: 1
@@ -159,6 +161,7 @@ DialogPage {
                 ComboBox {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? appWin.padding : 0
                     currentIndex: {
                         switch(_settings.desktop_notification_policy) {
                         case Settings.DesktopNotificationNever: return 0
@@ -211,6 +214,7 @@ DialogPage {
                 ComboBox {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
                     currentIndex: _settings.qt_style_idx
                     model: _settings.qt_styles()
                     onActivated: _settings.qt_style_idx = index
@@ -242,6 +246,7 @@ DialogPage {
                 ComboBox {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? appWin.padding : 0
                     currentIndex: _settings.audio_input_idx
                     model: _settings.audio_inputs
                     onActivated: {
@@ -275,6 +280,7 @@ DialogPage {
                 ComboBox {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? appWin.padding : 0
                     currentIndex: {
                         if (_settings.speech_mode === Settings.SpeechSingleSentence) return 0
                         if (_settings.speech_mode === Settings.SpeechAutomatic) return 2
@@ -381,6 +387,7 @@ DialogPage {
                 ComboBox {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
                     currentIndex: _settings.gpu_device_idx_stt
                     model: _settings.gpu_devices_stt
                     onActivated: {
@@ -467,6 +474,7 @@ DialogPage {
                 ComboBox {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
                     currentIndex: _settings.gpu_device_idx_tts
                     model: _settings.gpu_devices_tts
                     onActivated: {
@@ -516,6 +524,7 @@ DialogPage {
                 TextField {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
                     text: _settings.hotkey_start_listening
                     onTextChanged: _settings.hotkey_start_listening = text
                     color: palette.text
@@ -536,6 +545,7 @@ DialogPage {
                 TextField {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
                     text: _settings.hotkey_start_listening_active_window
                     onTextChanged: _settings.hotkey_start_listening_active_window = text
                     color: palette.text
@@ -556,6 +566,7 @@ DialogPage {
                 TextField {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
                     text: _settings.hotkey_start_listening_clipboard
                     onTextChanged: _settings.hotkey_start_listening_clipboard = text
                     color: palette.text
@@ -576,6 +587,7 @@ DialogPage {
                 TextField {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
                     text: _settings.hotkey_stop_listening
                     onTextChanged: _settings.hotkey_stop_listening = text
                     color: palette.text
@@ -596,6 +608,7 @@ DialogPage {
                 TextField {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
                     text: _settings.hotkey_start_reading
                     onTextChanged: _settings.hotkey_start_reading = text
                     color: palette.text
@@ -616,6 +629,7 @@ DialogPage {
                 TextField {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
                     text: _settings.hotkey_start_reading_clipboard
                     onTextChanged: _settings.hotkey_start_reading_clipboard = text
                     color: palette.text
@@ -636,6 +650,7 @@ DialogPage {
                 TextField {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
                     text: _settings.hotkey_pause_resume_reading
                     onTextChanged: _settings.hotkey_pause_resume_reading = text
                     color: palette.text
@@ -656,6 +671,7 @@ DialogPage {
                 TextField {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
                     text: _settings.hotkey_cancel
                     onTextChanged: _settings.hotkey_cancel = text
                     color: palette.text
@@ -709,25 +725,40 @@ DialogPage {
                 text: qsTr("Storage")
             }
 
-            Label {
-                text: qsTr("Location of language files")
-            }
+            GridLayout {
+                columns: root.verticalMode ? 1 : 3
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
 
-            Label {
-                Layout.fillWidth: true
-                Layout.leftMargin: 2 * appWin.padding
-                text: _settings.models_dir
-                wrapMode: Text.WrapAnywhere
-            }
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Location of language files")
+                }
 
-            Button {
-                text: qsTr("Change")
-                onClicked: directoryDialog.open()
-                Layout.leftMargin: 2 * appWin.padding
+                TextField {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - langFileButton.width)
+                    Layout.leftMargin: verticalMode ? appWin.padding : 0
+                    text: _settings.models_dir
+                    color: palette.text
+                    readOnly: true
 
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
+                }
+
+                Button {
+                    id: langFileButton
+
+                    text: qsTr("Change")
+                    onClicked: directoryDialog.open()
+                    Layout.leftMargin: verticalMode ? appWin.padding : 0
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
+                }
             }
 
             CheckBox {
@@ -815,6 +846,7 @@ DialogPage {
                 SpinBox {
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? appWin.padding : 0
                     from: 0
                     to: 32
                     stepSize: 1

@@ -94,6 +94,7 @@ DialogPage {
 
                 text: modelData
                 visible: control.editActive
+                color: palette.text
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
                 anchors.leftMargin: appWin.padding

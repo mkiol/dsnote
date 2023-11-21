@@ -204,6 +204,7 @@ DialogPage {
 
             Layout.fillWidth: verticalMode
             Layout.preferredWidth: verticalMode ? gridVoceName.width : gridVoceName.width / 2
+            Layout.leftMargin: verticalMode ? appWin.padding : 0
             color: palette.text
             text: app.tts_ref_voice_auto_name()
         }
