@@ -30,10 +30,6 @@ Dialog {
     verticalPadding: appWin.padding
     horizontalPadding: appWin.padding
 
-    onDownloadUrlsChanged: {
-        urlsArea.text = downloadUrls.join("\n")
-    }
-
     header: Item {
         visible: root.title.length !== 0
         height: visible ? titleLabel.height + appWin.padding : 0
@@ -110,12 +106,34 @@ Dialog {
             text: qsTr("Files to download")
         }
 
-        Label {
-            id: urlsArea
-
-            visible: root.downloadUrls.length !== 0
+        ColumnLayout {
             Layout.fillWidth: true
-            wrapMode: Text.Wrap
+            spacing: appWin.padding / 2
+
+            Repeater {
+                model: root.downloadUrls
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    TextField {
+                        Layout.alignment: Qt.AlignTop
+                        text: modelData.toString()
+                        Layout.fillWidth: true
+                        wrapMode: Text.Wrap
+                        readOnly: true
+                    }
+
+                    Button {
+                        Layout.alignment: Qt.AlignTop
+                        icon.name: "edit-copy-symbolic"
+                        onClicked: app.copy_text_to_clipboard(modelData.toString())
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Copy")
+                    }
+                }
+            }
         }
 
         Label {
