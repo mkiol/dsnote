@@ -1391,12 +1391,10 @@ void dsnote_app::update_available_tts_ref_voices() {
             m_active_tts_for_out_mnt_ref_voice);
     }
 
-    if (new_available_tts_ref_voices_map != m_available_tts_ref_voices_map) {
-        m_available_tts_ref_voices_map =
-            std::move(new_available_tts_ref_voices_map);
-        emit available_tts_ref_voices_changed();
-    }
+    m_available_tts_ref_voices_map =
+        std::move(new_available_tts_ref_voices_map);
 
+    emit available_tts_ref_voices_changed();
     emit active_tts_ref_voice_changed();
     emit active_tts_for_in_mnt_ref_voice_changed();
     emit active_tts_for_out_mnt_ref_voice_changed();
@@ -1534,9 +1532,8 @@ void dsnote_app::delete_tts_ref_voice(int idx) {
     if (list.size() < 2) return;
 
     QFile{list.at(1)}.remove();
-    m_available_tts_ref_voices_map.remove(
-        std::next(m_available_tts_ref_voices_map.cbegin(), idx).key());
-    emit available_tts_ref_voices_changed();
+
+    update_available_tts_ref_voices();
 }
 
 void dsnote_app::rename_tts_ref_voice(int idx, const QString &new_name) {
@@ -1560,6 +1557,9 @@ void dsnote_app::rename_tts_ref_voice(int idx, const QString &new_name) {
     item = list;
 
     emit available_tts_ref_voices_changed();
+    emit active_tts_ref_voice_changed();
+    emit active_tts_for_in_mnt_ref_voice_changed();
+    emit active_tts_for_out_mnt_ref_voice_changed();
 }
 
 QVariantList dsnote_app::available_tts_models_for_in_mnt() const {
