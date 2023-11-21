@@ -9,6 +9,7 @@
 
 #include <dirent.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #include <algorithm>
@@ -271,10 +272,17 @@ void tts_engine::set_state(state_t new_state) {
     }
 }
 
+static decltype(timespec::tv_sec) create_date_sec(const std::string& file) {
+    struct stat result;
+    if (stat(file.c_str(), &result) == 0) return result.st_ctim.tv_sec;
+    return 0;
+}
+
 std::string tts_engine::path_to_output_file(const std::string& text) const {
     auto hash = std::hash<std::string>{}(
         text + m_config.model_files.model_path +
         m_config.model_files.vocoder_path + m_config.ref_voice_file +
+        std::to_string(create_date_sec(m_config.ref_voice_file)) +
         m_config.model_files.diacritizer_path + m_config.speaker_id +
         m_config.lang +
         (m_config.speech_speed == 10 ? ""
