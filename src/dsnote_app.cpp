@@ -16,6 +16,7 @@
 #include <QRegExp>
 #include <QTextStream>
 #include <algorithm>
+#include <iterator>
 #include <utility>
 
 #include "downloader.hpp"
@@ -116,6 +117,9 @@ QDebug operator<<(QDebug d, dsnote_app::error_t type) {
             break;
         case dsnote_app::error_t::ErrorLoadNoteFromFile:
             d << "load-note-from-file-error";
+            break;
+        case dsnote_app::error_t::ErrorContentDownload:
+            d << "content-download-error";
             break;
     }
 
@@ -3130,12 +3134,22 @@ void dsnote_app::execute_action(action_t action) {
 }
 
 QString dsnote_app::download_content(const QUrl &url) {
-    if (!url.isValid()) return {};
-    if (url.scheme() != "http" && url.scheme() != "https") return {};
+    QString text;
 
-    auto data = downloader{}.download_data(url);
+    if (url.isValid() && (url.scheme() == "http" || url.scheme() == "https")) {
+        qDebug() << "downloading content:" << url.toString();
 
-    return QString::fromUtf8(data.bytes);
+        auto data = downloader{}.download_data(url);
+
+        qDebug() << "downlaoded content:" << data.mime << data.bytes.size();
+
+        if (data.mime.contains(QLatin1String{"text"}, Qt::CaseInsensitive))
+            text = QString::fromUtf8(data.bytes);
+    }
+
+    if (text.isEmpty()) emit error(error_t::ErrorContentDownload);
+
+    return text;
 }
 
 bool dsnote_app::tts_ref_voice_needed_by_id(const QString &id) const {

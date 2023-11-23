@@ -21,6 +21,13 @@ Dialog {
 
     signal acceptClicked
 
+    function update_license() {
+        busy = true
+        textArea.text = ""
+        textArea.text = app.download_content(licenseUrl);
+        busy = false
+    }
+
     title: licenseName.length !== 0 ?
                licenseName + " (" + licenseId + ")" : licenseId
 
@@ -30,10 +37,8 @@ Dialog {
     verticalPadding: appWin.padding
     horizontalPadding: appWin.padding
 
-    onLicenseUrlChanged: {
-        busy = true
-        textArea.text = app.download_content(licenseUrl)
-        busy = false
+    onVisibleChanged: {
+        if (visible) update_license()
     }
 
     header: Item {

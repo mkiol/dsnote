@@ -239,6 +239,7 @@ class dsnote_app : public QObject {
         ErrorMntEngine = 5,
         ErrorSaveNoteToFile = 6,
         ErrorLoadNoteFromFile = 7,
+        ErrorContentDownload = 8,
         ErrorNoService = 100
     };
     Q_ENUM(error_t)

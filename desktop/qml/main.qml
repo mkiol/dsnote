@@ -397,6 +397,9 @@ ApplicationWindow {
             case DsnoteApp.ErrorLoadNoteFromFile:
                 toast.show(qsTr("Error: Couldn't open the file."))
                 break;
+            case DsnoteApp.ErrorContentDownload:
+                toast.show(qsTr("Error: Couldn't download a licence."))
+                break;
             default:
                 toast.show(qsTr("Error: An unknown problem has occurred."))
             }
