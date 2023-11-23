@@ -313,6 +313,18 @@ void settings::set_restore_punctuation(bool value) {
     }
 }
 
+QString settings::py_path() const {
+    return value(QStringLiteral("service/py_path"), {}).toString();
+}
+
+void settings::set_py_path(const QString& value) {
+    if (py_path() != value) {
+        setValue(QStringLiteral("service/py_path"), value);
+        emit py_path_changed();
+        set_restart_required(true);
+    }
+}
+
 bool settings::stt_use_gpu() const {
     return value(QStringLiteral("stt_use_gpu"), false).toBool();
 }

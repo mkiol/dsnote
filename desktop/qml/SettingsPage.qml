@@ -906,6 +906,10 @@ DialogPage {
                 }
             }
 
+            SectionLabel {
+                text: qsTr("Libraries")
+            }
+
             CheckBox {
                 checked: _settings.py_feature_scan
                 text: qsTr("Check Python dependencies")
@@ -917,6 +921,47 @@ DialogPage {
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Check the presence of the required Python libraries.") + " " +
                               qsTr("Disable this option if you observe problems when launching the application.")
+            }
+
+            GridLayout {
+                visible: _settings.py_feature_scan
+                columns: root.verticalMode ? 1 : 3
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Location of Python libraries")
+                    Layout.leftMargin: 2 * appWin.padding
+                }
+
+                TextField {
+                    id: pyTextField
+
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - pySaveButton.width)
+                    Layout.leftMargin: verticalMode ? 3 * appWin.padding : 0
+                    text: _settings.py_path
+                    color: palette.text
+                    placeholderText: qsTr("Leave blank to use the default value.")
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Python libraries directory (%1).").arg("<i>PYTHONPATH</i>") + " " + qsTr("Leave blank to use the default value.") + " " +
+                                  qsTr("This option may be useful if you use %1 module to manage Python libraries.").arg("<i>venv</i>")
+                }
+
+                Button {
+                    id: pySaveButton
+
+                    text: qsTr("Save")
+                    Layout.leftMargin: verticalMode ? 3 * appWin.padding : 0
+                    onClicked: _settings.py_path = pyTextField.text
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Save changes")
+                }
             }
         }
     }

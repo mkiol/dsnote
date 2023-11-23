@@ -9,6 +9,7 @@
 
 #include <cstdlib>
 #include <stdexcept>
+#include <string>
 
 #include "logger.hpp"
 #include "settings.h"
@@ -58,6 +59,12 @@ void py_executor::loop() {
     setenv("PYTHONIOENCODING", "utf-8", true);
 
     py_tools::init_module();
+
+    auto py_path = settings::instance()->py_path().toStdString();
+    if (!py_path.empty()) {
+        LOGD("setting PYTHONPATH: " << py_path);
+        setenv("PYTHONPATH", py_path.c_str(), 1);
+    }
 
     try {
         m_py_interpreter.emplace();

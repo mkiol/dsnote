@@ -109,6 +109,8 @@
       <p>Other:</p>
       <ul>
       <li>Setting option to limit number of simultaneous CPU threads</li>
+      <li>Setting option to set Python libraries directory (PYTHONPATH).
+          This option may be useful if you use 'venv' module to manage Python libraries.</li>
       </ul>
       </description>
     </release>

@@ -193,6 +193,8 @@ class settings : public QSettings, public singleton<settings> {
                    set_cache_policy NOTIFY cache_policy_changed)
     Q_PROPERTY(int num_threads READ num_threads WRITE set_num_threads NOTIFY
                    num_threads_changed)
+    Q_PROPERTY(
+        QString py_path READ py_path WRITE set_py_path NOTIFY py_path_changed)
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -418,6 +420,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_py_feature_scan(bool value);
     int num_threads() const;
     void set_num_threads(int value);
+    QString py_path() const;
+    void set_py_path(const QString &value);
 
     QStringList gpu_devices_stt() const;
     QString gpu_device_stt() const;
@@ -516,6 +520,7 @@ class settings : public QSettings, public singleton<settings> {
     void cache_audio_format_changed();
     void cache_policy_changed();
     void num_threads_changed();
+    void py_path_changed();
 
    private:
     inline static const QString settings_filename =

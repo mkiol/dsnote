@@ -42,6 +42,9 @@ DialogPage {
         <ul>
         <li>Setting option to limit number of simultaneous CPU threads
             (<i>Other</i> &rarr; <i>Number of simultaneous threads</i>)</li>
+        <li>Setting option to set Python libraries directory
+            (<i>Other</i> &rarr; <i>Location of Python libraries</i>).
+            This option may be useful if you use <i>venv</i> module to manage Python libraries.</li>
         </ul>"
     }
 
