@@ -23476,7 +23476,7 @@
         },
         {
             "name": "中文 (Coqui XTTS-v2)",
-            "model_id": "zh_coqui_xtts2",
+            "model_id": "zh_coqui_cn_xtts2",
             "model_alias_of": "multilang_coqui_xtts2",
             "lang_id": "zh"
         },
@@ -23533,6 +23533,24 @@
             "model_id": "tr_coqui_xtts2",
             "model_alias_of": "multilang_coqui_xtts2",
             "lang_id": "tr"
+        },
+        {
+            "name": "Magyar (Coqui XTTS-v2)",
+            "model_id": "hu_coqui_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "hu"
+        },
+        {
+            "name": "한국어 (Coqui XTTS-v2)",
+            "model_id": "ko_coqui_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "ko"
+        },
+        {
+            "name": "日本語 (Coqui XTTS-v2)",
+            "model_id": "ja_coqui_xtts2",
+            "model_alias_of": "multilang_coqui_xtts2",
+            "lang_id": "ja"
         },
         {
             "name": "English (Coqui LJSpeech VITS Female)",

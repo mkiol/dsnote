@@ -14,7 +14,7 @@ DialogPage {
     title: qsTr("Changes")
 
     SectionLabel {
-        text: qsTr("Version %1").arg("4.4.0 beta")
+        text: qsTr("Version %1").arg("4.4.0")
     }
 
     RichLabel {
@@ -22,7 +22,8 @@ DialogPage {
         <ul>
         <li>Voice cloning with Coqui XTTS model.
             Model is enabled for the following languages: Arabic, Brazilian Portuguese, Chinese, Czech,
-            Dutch, English, French, German, Italian, Polish, Russian, Spanish and Turkish.</li>
+            Dutch, English, French, German, Hungarian, Italian, Japanese, Korean, Polish, Russian,
+            Spanish and Turkish.</li>
         </ul>"
     }
 
