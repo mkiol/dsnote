@@ -18,12 +18,30 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Text to Speech") + ":</p>
+        text: "<p>" + qsTr("User Interface") + ":</p>
+        <ul>
+        <li>Showing model details.
+            In the model browser you can check the license and the URLs from which model is downloaded.</li>
+        <li>Distinction between <i>Download</i> and <i>Enable</i> in the model browser.
+            Some models share files with each other. When <i>Enable</i> is shown, the files are already downloaded.</li>
+        </ul>
+        <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
         <li>Voice cloning with Coqui XTTS model.
             Model is enabled for the following languages: Arabic, Brazilian Portuguese, Chinese, Czech,
             Dutch, English, French, German, Hungarian, Italian, Japanese, Korean, Polish, Russian,
-            Spanish and Turkish.</li>
+            Spanish and Turkish.
+            Text to Speech with Coqui XTTS model is very slow when GPU acceleration is not enabled.</li>
+        <li>Voice samples creator.
+            A reference voice sample is used for voice cloning.
+            You can create voice sample with a microphone or from audio or video file.
+            The sample creator is available on main toolbar (<i>Voice samples</i>)
+            only if the selected TTS model supports voice cloning.</li>
+        </ul>
+        <p>" + qsTr("Other") + ":</p>
+        <ul>
+        <li>Setting option to limit number of simultaneous CPU threads
+            (<i>Other</i> &rarr; <i>Number of simultaneous threads</i>)</li>
         </ul>"
     }
 
