@@ -23437,8 +23437,34 @@
             "size": "7618694"
         },
         {
-            "name": "Multilingual (Coqui XTTS-v2)",
-            "model_id": "multilang_coqui_xtts2",
+            "name": "Multilingual (Coqui XTTS-v2.0.3)",
+            "model_id": "multilang_coqui_xtts203",
+            "engine": "tts_coqui",
+            "lang_id": "multilang",
+            "checksum": "ae3c9981",
+            "checksum_quick": "ce376c5d",
+            "options": "x",
+            "features": [
+                "tts_voice_cloning"
+            ],
+            "license": {
+                "id": "CPML",
+                "name": "Coqui Public Model License 1.0.0",
+                "url": "https://coqui.ai/cpml.txt",
+                "accept_required": true
+            },
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/coqui/XTTS-v2/resolve/69d4f754575c4b72d991f105b4775d270438ef33/model.pth",
+                "https://huggingface.co/coqui/XTTS-v2/resolve/69d4f754575c4b72d991f105b4775d270438ef33/config.json",
+                "https://huggingface.co/coqui/XTTS-v2/resolve/69d4f754575c4b72d991f105b4775d270438ef33/vocab.json"
+            ],
+            "size": "1868302897",
+            "hidden": true
+        },
+        {
+            "name": "Multilingual (Coqui XTTS-v2.0.2)",
+            "model_id": "multilang_coqui_xtts202",
             "engine": "tts_coqui",
             "lang_id": "multilang",
             "checksum": "97ec6817",
@@ -23455,107 +23481,203 @@
             },
             "comp": "dir",
             "urls": [
-                "https://coqui.gateway.scarf.sh/hf-coqui/XTTS-v2/main/model.pth",
-                "https://coqui.gateway.scarf.sh/hf-coqui/XTTS-v2/main/config.json",
-                "https://coqui.gateway.scarf.sh/hf-coqui/XTTS-v2/main/vocab.json"
+                "https://huggingface.co/coqui/XTTS-v2/resolve/5bc1c3e2a0b1745133e3cb6c9dfb9e8850e19cb3/model.pth",
+                "https://huggingface.co/coqui/XTTS-v2/resolve/5bc1c3e2a0b1745133e3cb6c9dfb9e8850e19cb3/config.json",
+                "https://huggingface.co/coqui/XTTS-v2/resolve/5bc1c3e2a0b1745133e3cb6c9dfb9e8850e19cb3/vocab.json"
             ],
             "size": "1863923906",
             "hidden": true
         },
         {
-            "name": "English (Coqui XTTS-v2)",
-            "model_id": "en_coqui_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "English (Coqui XTTS-v2.0.3)",
+            "model_id": "en_coqui_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
             "lang_id": "en"
         },
         {
-            "name": "عربي (Coqui XTTS-v2)",
-            "model_id": "ar_coqui_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "عربي (Coqui XTTS-v2.0.3)",
+            "model_id": "ar_coqui_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
             "lang_id": "ar"
         },
         {
-            "name": "Português brasileiro (Coqui XTTS-v2)",
-            "model_id": "pt_coqui_br_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "Português brasileiro (Coqui XTTS-v2.0.3)",
+            "model_id": "pt_coqui_br_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
             "lang_id": "pt"
         },
         {
-            "name": "中文 (Coqui XTTS-v2)",
-            "model_id": "zh_coqui_cn_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "中文 (Coqui XTTS-v2.0.3)",
+            "model_id": "zh_coqui_cn_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
             "lang_id": "zh"
         },
         {
-            "name": "Čeština (Coqui XTTS-v2)",
-            "model_id": "cs_coqui_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "Čeština (Coqui XTTS-v2.0.3)",
+            "model_id": "cs_coqui_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
             "lang_id": "cs"
         },
         {
-            "name": "Nederlands (Coqui XTTS-v2)",
-            "model_id": "nl_coqui_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "Nederlands (Coqui XTTS-v2.0.3)",
+            "model_id": "nl_coqui_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
             "lang_id": "nl"
         },
         {
-            "name": "Français (Coqui XTTS-v2)",
-            "model_id": "fr_coqui_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "Français (Coqui XTTS-v2.0.3)",
+            "model_id": "fr_coqui_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
             "lang_id": "fr"
         },
         {
-            "name": "Deutsch (Coqui XTTS-v2)",
-            "model_id": "de_coqui_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "Deutsch (Coqui XTTS-v2.0.3)",
+            "model_id": "de_coqui_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
             "lang_id": "de"
         },
         {
-            "name": "Italiano (Coqui XTTS-v2)",
-            "model_id": "it_coqui_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "Italiano (Coqui XTTS-v2.0.3)",
+            "model_id": "it_coqui_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
             "lang_id": "it"
         },
         {
-            "name": "Polski (Coqui XTTS-v2)",
-            "model_id": "pl_coqui_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "Polski (Coqui XTTS-v2.0.3)",
+            "model_id": "pl_coqui_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
             "lang_id": "pl"
         },
         {
-            "name": "Русский (Coqui XTTS-v2)",
-            "model_id": "ru_coqui_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "Русский (Coqui XTTS-v2.0.3)",
+            "model_id": "ru_coqui_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
             "lang_id": "ru"
         },
         {
-            "name": "Español (Coqui XTTS-v2)",
-            "model_id": "es_coqui_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "Español (Coqui XTTS-v2.0.3)",
+            "model_id": "es_coqui_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
             "lang_id": "es"
         },
         {
-            "name": "Türkçe (Coqui XTTS-v2)",
-            "model_id": "tr_coqui_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "Türkçe (Coqui XTTS-v2.0.3)",
+            "model_id": "tr_coqui_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
             "lang_id": "tr"
         },
         {
-            "name": "Magyar (Coqui XTTS-v2)",
-            "model_id": "hu_coqui_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "Magyar (Coqui XTTS-v2.0.3)",
+            "model_id": "hu_coqui_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
             "lang_id": "hu"
         },
         {
-            "name": "한국어 (Coqui XTTS-v2)",
-            "model_id": "ko_coqui_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "한국어 (Coqui XTTS-v2.0.3)",
+            "model_id": "ko_coqui_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
             "lang_id": "ko"
         },
         {
-            "name": "日本語 (Coqui XTTS-v2)",
-            "model_id": "ja_coqui_xtts2",
-            "model_alias_of": "multilang_coqui_xtts2",
+            "name": "日本語 (Coqui XTTS-v2.0.3)",
+            "model_id": "ja_coqui_xtts203",
+            "model_alias_of": "multilang_coqui_xtts203",
+            "lang_id": "ja"
+        },
+        {
+            "name": "English (Coqui XTTS-v2.0.2)",
+            "model_id": "en_coqui_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
+            "lang_id": "en"
+        },
+        {
+            "name": "عربي (Coqui XTTS-v2.0.2)",
+            "model_id": "ar_coqui_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
+            "lang_id": "ar"
+        },
+        {
+            "name": "Português brasileiro (Coqui XTTS-v2.0.2)",
+            "model_id": "pt_coqui_br_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
+            "lang_id": "pt"
+        },
+        {
+            "name": "中文 (Coqui XTTS-v2.0.2)",
+            "model_id": "zh_coqui_cn_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
+            "lang_id": "zh"
+        },
+        {
+            "name": "Čeština (Coqui XTTS-v2.0.2)",
+            "model_id": "cs_coqui_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
+            "lang_id": "cs"
+        },
+        {
+            "name": "Nederlands (Coqui XTTS-v2.0.2)",
+            "model_id": "nl_coqui_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
+            "lang_id": "nl"
+        },
+        {
+            "name": "Français (Coqui XTTS-v2.0.2)",
+            "model_id": "fr_coqui_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
+            "lang_id": "fr"
+        },
+        {
+            "name": "Deutsch (Coqui XTTS-v2.0.2)",
+            "model_id": "de_coqui_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
+            "lang_id": "de"
+        },
+        {
+            "name": "Italiano (Coqui XTTS-v2.0.2)",
+            "model_id": "it_coqui_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
+            "lang_id": "it"
+        },
+        {
+            "name": "Polski (Coqui XTTS-v2.0.2)",
+            "model_id": "pl_coqui_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
+            "lang_id": "pl"
+        },
+        {
+            "name": "Русский (Coqui XTTS-v2.0.2)",
+            "model_id": "ru_coqui_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
+            "lang_id": "ru"
+        },
+        {
+            "name": "Español (Coqui XTTS-v2.0.2)",
+            "model_id": "es_coqui_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
+            "lang_id": "es"
+        },
+        {
+            "name": "Türkçe (Coqui XTTS-v2.0.2)",
+            "model_id": "tr_coqui_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
+            "lang_id": "tr"
+        },
+        {
+            "name": "Magyar (Coqui XTTS-v2.0.2)",
+            "model_id": "hu_coqui_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
+            "lang_id": "hu"
+        },
+        {
+            "name": "한국어 (Coqui XTTS-v2.0.2)",
+            "model_id": "ko_coqui_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
+            "lang_id": "ko"
+        },
+        {
+            "name": "日本語 (Coqui XTTS-v2.0.2)",
+            "model_id": "ja_coqui_xtts202",
+            "model_alias_of": "multilang_coqui_xtts202",
             "lang_id": "ja"
         },
         {
