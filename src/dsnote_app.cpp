@@ -1333,6 +1333,8 @@ void dsnote_app::update_available_tts_ref_voices() {
 
     QDir dir{ref_voices_dir};
 
+    if (!dir.exists()) QDir::root().mkpath(dir.absolutePath());
+
     dir.setNameFilters(QStringList{} << "*.mp3"
                                      << "*.ogg"
                                      << "*.opus"
