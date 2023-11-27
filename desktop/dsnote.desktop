@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Application
+Categories=Utility;Office;Audio;AudioVideo;TextEditor;KDE;Qt;
 Icon=dsnote
 Exec=dsnote %F
 Name=Speech Note
