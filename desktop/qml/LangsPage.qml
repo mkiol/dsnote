@@ -27,6 +27,9 @@ DialogPage {
         service.models_model.lang = lang_id
         service.models_model.filter = ""
         service.models_model.roleFilter = ModelsListModel.AllModels
+        modelFilteringWidget.close()
+        modelFilteringWidget.reset()
+        modelFilteringWidget.update()
     }
 
     function switchToModels(modelId, modelName) {
@@ -48,7 +51,10 @@ DialogPage {
 
     header: Item {
         visible: root.title.length !== 0
-        height:  visible ? Math.max(titleLabel.height, searchTextField.height, searchCombo.height) + appWin.padding : 0
+        height:  visible ? Math.max(titleLabel.height,
+                                    langFilteringWidget.height,
+                                    modelFilteringWidget.height)
+                           + appWin.padding : 0
 
         RowLayout {
             anchors {
@@ -70,62 +76,23 @@ DialogPage {
                 verticalAlignment: Qt.AlignVCenter
                 Layout.fillWidth: true
                 Layout.leftMargin: appWin.padding
-                Layout.alignment: Qt.AlignVCenter
+                Layout.alignment: root.langsView ? Qt.AlignVCenter : Qt.AlignTop
             }
 
-            ComboBox {
-                id: searchCombo
+            ModelFilteringWidget {
+                id: modelFilteringWidget
 
-                Layout.alignment: Qt.AlignVCenter
-                visible: !root.langsView
-                currentIndex: {
-                    switch (service.models_model.roleFilter) {
-                    case ModelsListModel.AllModels:
-                        return 0
-                    case ModelsListModel.SttModels:
-                        return 1
-                    case ModelsListModel.TtsModels:
-                        return 2
-                    case ModelsListModel.MntModels:
-                        return 3
-                    case ModelsListModel.OtherModels:
-                        return 4
-                    }
-                    return 0
-                }
-                model: [
-                    qsTr("All"),
-                    qsTr("Speech to Text"),
-                    qsTr("Text to Speech"),
-                    qsTr("Translator"),
-                    qsTr("Other")
-                ]
-                onActivated: {
-                    if (index === 1) service.models_model.roleFilter = ModelsListModel.SttModels
-                    else if (index === 2) service.models_model.roleFilter = ModelsListModel.TtsModels
-                    else if (index === 3) service.models_model.roleFilter = ModelsListModel.MntModels
-                    else if (index === 4) service.models_model.roleFilter = ModelsListModel.OtherModels
-                    else service.models_model.roleFilter = ModelsListModel.AllModels
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Model type")
-            }
-
-            TextField {
-                id: searchTextField
-
-                text: listViewItem.model.filter
-                placeholderText: qsTr("Type to search")
-                verticalAlignment: Qt.AlignVCenter
                 Layout.rightMargin: appWin.padding
-                Layout.preferredWidth: parent.width / 4
-                Layout.alignment: Qt.AlignVCenter
-                onTextChanged: {
-                    listViewItem.model.filter = text.toLowerCase().trim()
-                }
-                color: palette.text
+                Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                visible: !root.langsView
+            }
+
+            LangFilteringWidget {
+                id: langFilteringWidget
+
+                Layout.rightMargin: appWin.padding
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                visible: root.langsView
             }
         }
     }
@@ -228,9 +195,7 @@ DialogPage {
             }
 
             function show_info() {
-                appWin.showModelInfoDialog(model.name, model.download_urls,
-                                           model.download_size, model.license_id,
-                                           model.license_name, model.license_url)
+                appWin.showModelInfoDialog(model)
             }
 
             background: Rectangle {

@@ -12,6 +12,17 @@
 #include <algorithm>
 #include <array>
 
+static int range_mask(int start_mask, int end_mask) {
+    int mask = 0;
+    for (int flag = start_mask; flag <= end_mask; flag <<= 1) mask |= flag;
+
+    return mask;
+}
+
+static bool flag_set_in_range_mask(int flag, int start_mask, int end_mask) {
+    return flag & range_mask(start_mask, end_mask);
+}
+
 ModelsListModel::ModelsListModel(QObject *parent)
     : SelectableItemModel{new ModelsListItem, parent} {
     connect(
@@ -117,6 +128,7 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
         /*available=*/model.available,
         /*dl_multi=*/model.dl_multi,
         /*dl_off=*/model.dl_off,
+        /*dl_off=*/model.features,
         /*score=*/model.score,
         /*default_for_lang=*/model.default_for_lang,
         /*downloading=*/model.downloading,
@@ -124,20 +136,100 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
 }
 
 bool ModelsListModel::roleFilterPass(const models_manager::model_t &model) {
-    if (m_roleFilter == ModelRoleFilter::AllModels) return true;
-
     switch (models_manager::role_of_engine(model.engine)) {
         case models_manager::model_role_t::stt:
-            return m_roleFilter == ModelRoleFilter::SttModels;
+            return m_roleFilterFlags & ModelRoleFilterFlags::RoleStt;
         case models_manager::model_role_t::tts:
-            return m_roleFilter == ModelRoleFilter::TtsModels;
+            return m_roleFilterFlags & ModelRoleFilterFlags::RoleTts;
         case models_manager::model_role_t::mnt:
-            return m_roleFilter == ModelRoleFilter::MntModels;
+            return m_roleFilterFlags & ModelRoleFilterFlags::RoleMnt;
         case models_manager::model_role_t::ttt:
-            return m_roleFilter == ModelRoleFilter::OtherModels;
+            return m_roleFilterFlags & ModelRoleFilterFlags::RoleOther;
+    }
+    
+    return false;
+}
+
+bool ModelsListModel::genericFeatureFilterPass(
+    const models_manager::model_t &model) {
+    auto role = models_manager::role_of_engine(model.engine);
+    if (role == models_manager::model_role_t::mnt ||
+        role == models_manager::model_role_t::ttt)
+        return true;
+
+    for (int flag = ModelFeatureFilterFlags::FeatureGenericStart;
+         flag <= ModelFeatureFilterFlags::FeatureGenericEnd; flag <<= 1) {
+        if (!(m_featureFilterFlags & flag) && model.features & flag)
+            return false;
     }
 
+    return true;
+}
+
+bool ModelsListModel::featureFilterPass(const models_manager::model_t &model) {
+    auto none_of = [&](int start_flag, int end_flag) {
+        for (int flag = start_flag; flag <= end_flag; flag <<= 1)
+            if (m_featureFilterFlags & flag) return false;
+        return true;
+    };
+
+    if (none_of(ModelFeatureFilterFlags::FeatureSttStart,
+                ModelFeatureFilterFlags::FeatureTtsEnd))
+        return true;
+
+    auto passFeature = [&](ModelFeatureFilterFlags start_flag,
+                           ModelFeatureFilterFlags end_flag) {
+        for (int flag = start_flag; flag <= end_flag; flag <<= 1) {
+            if ((m_featureFilterFlags & flag) && (model.features & flag))
+                return true;
+        }
+
+        return false;
+    };
+
+    auto role = models_manager::role_of_engine(model.engine);
+
+    if (role == models_manager::model_role_t::stt)
+        return passFeature(ModelFeatureFilterFlags::FeatureSttStart,
+                           ModelFeatureFilterFlags::FeatureSttEnd);
+    if (role == models_manager::model_role_t::tts)
+        return passFeature(ModelFeatureFilterFlags::FeatureTtsStart,
+                           ModelFeatureFilterFlags::FeatureTtsEnd);
+
     return false;
+}
+
+void ModelsListModel::addRoleFilterFlag(ModelRoleFilterFlags flag) {
+    auto flags = m_roleFilterFlags | flag;
+    setRoleFilterFlags(flags);
+}
+
+void ModelsListModel::removeRoleFilterFlag(ModelRoleFilterFlags flag) {
+    auto flags = m_roleFilterFlags & ~(flag);
+    setRoleFilterFlags(flags);
+}
+
+void ModelsListModel::resetRoleFilterFlags() {
+    setRoleFilterFlags(ModelRoleFilterFlags::RoleDefault);
+}
+
+void ModelsListModel::addFeatureFilterFlag(ModelFeatureFilterFlags flag) {
+    auto flags = m_featureFilterFlags | flag;
+    setFeatureFilterFlags(flags);
+}
+
+void ModelsListModel::removeFeatureFilterFlag(ModelFeatureFilterFlags flag) {
+    auto flags = m_featureFilterFlags & ~(flag);
+    setFeatureFilterFlags(flags);
+}
+
+void ModelsListModel::resetFeatureFilterFlags() {
+    setFeatureFilterFlags(ModelFeatureFilterFlags::FeatureDefault);
+}
+
+bool ModelsListModel::defaultFilters() const {
+    return m_roleFilterFlags == ModelRoleFilterFlags::RoleDefault &&
+           m_featureFilterFlags == ModelFeatureFilterFlags::FeatureDefault;
 }
 
 QList<ListItem *> ModelsListModel::makeItems() {
@@ -149,23 +241,51 @@ QList<ListItem *> ModelsListModel::makeItems() {
 
     auto phase = getFilter();
 
+    int existing_not_generic_feature_flags = 0;
+    auto add_not_generic_feature_flag_if_exists =
+        [&existing_not_generic_feature_flags](int feature_flags) {
+            for (int flag = ModelFeatureFilterFlags::FeatureSttStart;
+                 flag <= ModelFeatureFilterFlags::FeatureTtsEnd; flag <<= 1)
+                if (feature_flags & flag)
+                    existing_not_generic_feature_flags |= flag;
+        };
+
     if (phase.isEmpty()) {
         std::for_each(models.cbegin(), models.cend(), [&](const auto &model) {
-            if (roleFilterPass(model)) items.push_back(makeItem(model));
+            if (roleFilterPass(model)) {
+                if (genericFeatureFilterPass(model)) {
+                    add_not_generic_feature_flag_if_exists(model.features);
+                    if (featureFilterPass(model))
+                        items.push_back(makeItem(model));
+                }
+            }
         });
     } else {
         std::for_each(models.cbegin(), models.cend(), [&](const auto &model) {
-            if (roleFilterPass(model) &&
-                (model.name.contains(phase, Qt::CaseInsensitive) ||
-                 model.lang_id.contains(phase, Qt::CaseInsensitive) ||
-                 model.trg_lang_id.contains(phase, Qt::CaseInsensitive) ||
-                 QStringLiteral("%1-%2")
-                     .arg(model.lang_id, model.trg_lang_id)
-                     .contains(phase, Qt::CaseInsensitive))) {
-                items.push_back(makeItem(model));
+            if (roleFilterPass(model)) {
+                if (genericFeatureFilterPass(model) &&
+                    (model.name.contains(phase, Qt::CaseInsensitive) ||
+                     model.lang_id.contains(phase, Qt::CaseInsensitive) ||
+                     model.trg_lang_id.contains(phase, Qt::CaseInsensitive) ||
+                     QStringLiteral("%1-%2")
+                         .arg(model.lang_id, model.trg_lang_id)
+                         .contains(phase, Qt::CaseInsensitive))) {
+                    add_not_generic_feature_flag_if_exists(model.features);
+                    if (featureFilterPass(model))
+                        items.push_back(makeItem(model));
+                }
             }
         });
     }
+
+    m_disabledFeatureFilterFlags = 0;
+    for (int flag = ModelFeatureFilterFlags::FeatureSttStart;
+         flag <= ModelFeatureFilterFlags::FeatureTtsEnd; flag <<= 1) {
+        if ((flag & existing_not_generic_feature_flags) == 0)
+            m_disabledFeatureFilterFlags |= flag;
+    }
+
+    emit disabledFeatureFilterFlagsChanged();
 
     return items;
 }
@@ -178,11 +298,38 @@ void ModelsListModel::setLang(const QString &lang) {
     }
 }
 
-void ModelsListModel::setRoleFilter(ModelRoleFilter roleFilter) {
-    if (roleFilter != m_roleFilter) {
-        m_roleFilter = roleFilter;
+void ModelsListModel::setRoleFilterFlags(int roleFilterFlags) {
+    if (roleFilterFlags != m_roleFilterFlags) {
+        auto old_default = defaultFilters();
+
+        if (flag_set_in_range_mask(roleFilterFlags,
+                                   ModelRoleFilterFlags::RoleStart,
+                                   ModelRoleFilterFlags::RoleEnd))
+            m_roleFilterFlags = roleFilterFlags;
         updateModel();
-        emit roleFilterChanged();
+        emit roleFilterFlagsChanged();
+
+        if (old_default != defaultFilters()) emit defaultFiltersChanged();
+    }
+}
+
+void ModelsListModel::setFeatureFilterFlags(int featureFilterFlags) {
+    if (featureFilterFlags != m_featureFilterFlags) {
+        auto old_default = defaultFilters();
+
+        if (flag_set_in_range_mask(
+                featureFilterFlags,
+                ModelFeatureFilterFlags::FeatureFastProcessing,
+                ModelFeatureFilterFlags::FeatureSlowProcessing) &&
+            flag_set_in_range_mask(
+                featureFilterFlags, ModelFeatureFilterFlags::FeatureQualityHigh,
+                ModelFeatureFilterFlags::FeatureQualityLow)) {
+            m_featureFilterFlags = featureFilterFlags;
+        }
+        updateModel();
+        emit featureFilterFlagsChanged();
+
+        if (old_default != defaultFilters()) emit defaultFiltersChanged();
     }
 }
 
@@ -200,9 +347,10 @@ void ModelsListModel::updateDownloading(
 ModelsListItem::ModelsListItem(const QString &id, QString name, QString langId,
                                ModelsListModel::ModelRole role, License license,
                                DownloadInfo download_info, bool available,
-                               bool dl_multi, bool dl_off, int score,
-                               bool default_for_lang, bool downloading,
-                               double progress, QObject *parent)
+                               bool dl_multi, bool dl_off, int features,
+                               int score, bool default_for_lang,
+                               bool downloading, double progress,
+                               QObject *parent)
     : SelectableItem{parent},
       m_id{id},
       m_name{std::move(name)},
@@ -213,6 +361,7 @@ ModelsListItem::ModelsListItem(const QString &id, QString name, QString langId,
       m_available{available},
       m_dl_multi{dl_multi},
       m_dl_off{dl_off},
+      m_features{features},
       m_score{score},
       m_default_for_lang{default_for_lang},
       m_downloading{downloading},
@@ -230,6 +379,7 @@ QHash<int, QByteArray> ModelsListItem::roleNames() const {
     names[DlMultiRole] = QByteArrayLiteral("dl_multi");
     names[DlOffRole] = QByteArrayLiteral("dl_off");
     names[ScoreRole] = QByteArrayLiteral("score");
+    names[FeaturesRole] = QByteArrayLiteral("features");
     names[DefaultRole] = QByteArrayLiteral("default_for_lang");
     names[DownloadingRole] = QByteArrayLiteral("downloading");
     names[ProgressRole] = QByteArrayLiteral("progress");
@@ -261,6 +411,8 @@ QVariant ModelsListItem::data(int role) const {
             return dl_off();
         case ScoreRole:
             return score();
+        case FeaturesRole:
+            return features();
         case DefaultRole:
             return default_for_lang();
         case DownloadingRole:

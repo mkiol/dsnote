@@ -28,6 +28,10 @@
         <file>qml/VoiceImportPage.qml</file>
         <file>qml/VoiceMgmtPage.qml</file>
         <file>qml/VoiceRecordPage.qml</file>
+        <file>qml/ModelFeatureButton.qml</file>
+        <file>qml/ModelFilteringWidget.qml</file>
+        <file>qml/LangFilteringWidget.qml</file>
+        <file>qml/PairLabel.qml</file>
         <file alias="config/models.json">../config/models.json</file>
         <file alias="nonbreaking_prefixes/ca.txt">../nonbreaking_prefixes/ca.txt</file>
         <file alias="nonbreaking_prefixes/cs.txt">../nonbreaking_prefixes/cs.txt</file>

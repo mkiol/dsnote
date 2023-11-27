@@ -124,6 +124,20 @@ QDebug operator<<(QDebug d, models_manager::model_role_t role) {
     return d;
 }
 
+QDebug operator<<(QDebug d, models_manager::feature_flags flags) {
+    if (flags & models_manager::fast_processing) d << "fast-processing,";
+    if (flags & models_manager::medium_processing) d << "medium-processing,";
+    if (flags & models_manager::slow_processing) d << "slow-processing,";
+    if (flags & models_manager::high_quality) d << "high-quality,";
+    if (flags & models_manager::medium_quality) d << "medium-quality,";
+    if (flags & models_manager::low_quality) d << "low-quality,";
+    if (flags & models_manager::stt_intermediate_results)
+        d << "stt-intermediate-results, ";
+    if (flags & models_manager::stt_punctuation) d << "stt-punctuation,";
+    if (flags & models_manager::tts_voice_cloning) d << "tts-voice-cloning,";
+    return d;
+}
+
 QDebug operator<<(QDebug d, models_manager::model_engine_t engine) {
     switch (engine) {
         case models_manager::model_engine_t::stt_ds:
@@ -351,7 +365,7 @@ std::vector<models_manager::model_t> models_manager::models(
                 /*sup_files=*/sup_model_files(model.sup_models), model.speaker,
                 model.trg_lang_id, model.score, model.options, model.license,
                 make_download_info(model), model.default_for_lang,
-                model.available, model.dl_multi, model.dl_off,
+                model.available, model.dl_multi, model.dl_off, model.features,
                 model.downloading, model.download_progress});
         }
     });
@@ -435,13 +449,13 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
     for (const auto& [id, model] : m_models) {
         auto model_file = dir.filePath(model.file_name);
         if (!model.hidden && model.available && QFile::exists(model_file)) {
-            list.push_back({id, model.engine, model.lang_id, model.name,
-                            model_file, sup_model_files(model.sup_models),
-                            model.speaker, model.trg_lang_id, model.score,
-                            model.options, model.license,
-                            make_download_info(model), model.default_for_lang,
-                            model.available, model.dl_multi, model.dl_off,
-                            model.downloading, model.download_progress});
+            list.push_back(
+                {id, model.engine, model.lang_id, model.name, model_file,
+                 sup_model_files(model.sup_models), model.speaker,
+                 model.trg_lang_id, model.score, model.options, model.license,
+                 make_download_info(model), model.default_for_lang,
+                 model.available, model.dl_multi, model.dl_off, model.features,
+                 model.downloading, model.download_progress});
         }
     }
 
@@ -1389,6 +1403,27 @@ models_manager::model_engine_t models_manager::engine_from_name(
     throw std::runtime_error("unknown engine: " + name.toStdString());
 }
 
+models_manager::feature_flags models_manager::feature_from_name(
+    const QString& name) {
+    if (name == QStringLiteral("fast_processing"))
+        return feature_flags::fast_processing;
+    if (name == QStringLiteral("slow_processing"))
+        return feature_flags::slow_processing;
+    if (name == QStringLiteral("high_quality"))
+        return feature_flags::high_quality;
+    if (name == QStringLiteral("medium_quality"))
+        return feature_flags::medium_quality;
+    if (name == QStringLiteral("low_quality"))
+        return feature_flags::low_quality;
+    if (name == QStringLiteral("stt_intermediate_results"))
+        return feature_flags::stt_intermediate_results;
+    if (name == QStringLiteral("stt_punctuation"))
+        return feature_flags::stt_punctuation;
+    if (name == QStringLiteral("tts_voice_cloning"))
+        return feature_flags::tts_voice_cloning;
+    return feature_flags::no_flags;
+}
+
 models_manager::sup_model_role_t models_manager::sup_model_role_from_name(
     const QString& name) {
     if (name == QStringLiteral("scorer")) return sup_model_role_t::scorer;
@@ -1452,6 +1487,126 @@ size_t models_manager::make_url_hash(
     return std::hash<QString>{}(merge_urls(urls) + merge_sup_urls(sup_models));
 }
 
+models_manager::feature_flags models_manager::add_new_feature(
+    feature_flags existing_features, feature_flags new_feature) {
+    switch (new_feature) {
+        case feature_flags::fast_processing:
+        case feature_flags::medium_processing:
+        case feature_flags::slow_processing:
+            if (existing_features & feature_flags::fast_processing ||
+                existing_features & feature_flags::medium_processing ||
+                existing_features & feature_flags::slow_processing) {
+                return existing_features;
+            }
+            break;
+        case feature_flags::high_quality:
+        case feature_flags::medium_quality:
+        case feature_flags::low_quality:
+            if (existing_features & feature_flags::high_quality ||
+                existing_features & feature_flags::medium_quality ||
+                existing_features & feature_flags::low_quality) {
+                return existing_features;
+            }
+            break;
+        case feature_flags::no_flags:
+        case feature_flags::stt_intermediate_results:
+        case feature_flags::stt_punctuation:
+        case feature_flags::tts_voice_cloning:
+            break;
+    }
+
+    return existing_features | new_feature;
+}
+
+models_manager::feature_flags models_manager::add_explicit_feature_flags(
+    const QString& model_id, model_engine_t engine,
+    feature_flags existing_features) {
+    switch (engine) {
+        case model_engine_t::stt_ds:
+            existing_features = add_new_feature(existing_features,
+                                                feature_flags::fast_processing);
+            existing_features =
+                add_new_feature(existing_features, feature_flags::low_quality);
+            existing_features = add_new_feature(
+                existing_features, feature_flags::stt_intermediate_results);
+            break;
+        case model_engine_t::stt_vosk:
+            existing_features = add_new_feature(existing_features,
+                                                feature_flags::fast_processing);
+            existing_features = add_new_feature(existing_features,
+                                                feature_flags::medium_quality);
+            existing_features = add_new_feature(
+                existing_features, feature_flags::stt_intermediate_results);
+            break;
+        case model_engine_t::stt_april:
+            existing_features = add_new_feature(
+                existing_features, feature_flags::medium_processing);
+            existing_features = add_new_feature(existing_features,
+                                                feature_flags::medium_quality);
+            existing_features = add_new_feature(
+                existing_features, feature_flags::stt_intermediate_results);
+            break;
+        case model_engine_t::stt_whisper:
+        case model_engine_t::stt_fasterwhisper:
+            if (model_id.contains("tiny")) {
+                existing_features = add_new_feature(
+                    existing_features, feature_flags::fast_processing);
+                existing_features = add_new_feature(existing_features,
+                                                    feature_flags::low_quality);
+            } else if (model_id.contains("base")) {
+                existing_features = add_new_feature(
+                    existing_features, feature_flags::medium_processing);
+                existing_features = add_new_feature(existing_features,
+                                                    feature_flags::low_quality);
+            } else {
+                existing_features = add_new_feature(
+                    existing_features, feature_flags::slow_processing);
+                existing_features = add_new_feature(
+                    existing_features, feature_flags::high_quality);
+            }
+            existing_features = add_new_feature(existing_features,
+                                                feature_flags::stt_punctuation);
+            break;
+        case model_engine_t::tts_coqui:
+            existing_features = add_new_feature(existing_features,
+                                                feature_flags::slow_processing);
+            if (model_id.contains("fairseq"))
+                existing_features = add_new_feature(
+                    existing_features, feature_flags::medium_quality);
+            else
+                existing_features = add_new_feature(
+                    existing_features, feature_flags::high_quality);
+            break;
+        case model_engine_t::tts_mimic3:
+            existing_features = add_new_feature(
+                existing_features, feature_flags::medium_processing);
+            existing_features = add_new_feature(existing_features,
+                                                feature_flags::medium_quality);
+        case model_engine_t::tts_piper:
+            existing_features =
+                add_new_feature(existing_features, feature_flags::high_quality);
+
+            if (model_id.contains("high") || model_id.contains("medium"))
+                existing_features = add_new_feature(
+                    existing_features, feature_flags::medium_processing);
+            else
+                existing_features = add_new_feature(
+                    existing_features, feature_flags::fast_processing);
+            break;
+        case model_engine_t::tts_espeak:
+        case model_engine_t::tts_rhvoice:
+            existing_features = add_new_feature(existing_features,
+                                                feature_flags::fast_processing);
+            existing_features =
+                add_new_feature(existing_features, feature_flags::low_quality);
+        case model_engine_t::mnt_bergamot:
+        case model_engine_t::ttt_hftc:
+            break;
+    }
+
+    return existing_features;
+}
+
 auto models_manager::extract_models(
     const QJsonArray& models_jarray,
     std::optional<models_availability_t> models_availability) {
@@ -1497,6 +1652,7 @@ auto models_manager::extract_models(
         QString speaker = obj.value(QLatin1String{"speaker"}).toString();
         QString options = obj.value(QLatin1String{"options"}).toString();
         license_t license;
+        feature_flags features = feature_flags::no_flags;
 
         auto model_alias_of =
             obj.value(QLatin1String{"model_alias_of"}).toString();
@@ -1547,6 +1703,13 @@ auto models_manager::extract_models(
                     license_obj.value("accept_required").toBool();
             }
 
+            if (auto features_array = obj.value("features").toArray();
+                !features_array.isEmpty()) {
+                for (const auto& obj : features_array)
+                    features = features | feature_from_name(obj.toString());
+            }
+            features = add_explicit_feature_flags(model_id, engine, features);
+
         } else if (models.count(model_alias_of) > 0) {
             const auto& alias = models.at(model_alias_of);
 
@@ -1570,6 +1733,15 @@ auto models_manager::extract_models(
                 qWarning() << "no target lang for mnt model:" << model_id;
                 continue;
             }
+
+            features = alias.features;
+            if (auto features_array = obj.value("features").toArray();
+                !features_array.isEmpty()) {
+                for (const auto& obj : features_array)
+                    features = add_new_feature(
+                        features, feature_from_name(obj.toString()));
+            }
+            features = add_explicit_feature_flags(model_id, engine, features);
 
             license = alias.license;
         } else {
@@ -1684,6 +1856,7 @@ auto models_manager::extract_models(
             /*available=*/available,
             /*dl_multi=*/false,
             /*dl_off=*/false,
+            /*features=*/features,
             /*urls_hash=*/url_hash,
             /*downloading=*/false};
 

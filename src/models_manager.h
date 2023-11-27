@@ -60,6 +60,30 @@ class models_manager : public QObject, public singleton<models_manager> {
     };
     friend QDebug operator<<(QDebug d, model_engine_t engine);
 
+    enum feature_flags {
+        no_flags = 0,
+        generic_start = 1 << 0,
+        fast_processing = generic_start,
+        medium_processing = 1 << 1,
+        slow_processing = 1 << 2,
+        high_quality = 1 << 3,
+        medium_quality = 1 << 4,
+        low_quality = 1 << 5,
+        generic_end = low_quality,
+        stt_start = 1 << 10,
+        stt_intermediate_results = stt_start,
+        stt_punctuation = 1 << 11,
+        stt_end = stt_punctuation,
+        tts_start = 1 << 20,
+        tts_voice_cloning = tts_start,
+        tts_end = tts_voice_cloning
+    };
+    friend inline feature_flags operator|(feature_flags a, feature_flags b) {
+        return static_cast<feature_flags>(static_cast<int>(a) |
+                                          static_cast<int>(b));
+    }
+    friend QDebug operator<<(QDebug d, feature_flags flags);
+
     enum class sup_model_role_t { scorer, vocoder, diacritizer };
     friend QDebug operator<<(QDebug d, sup_model_role_t role);
 
@@ -111,6 +135,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool available = false;
         bool dl_multi = false;
         bool dl_off = false;
+        feature_flags features = feature_flags::no_flags;
         bool downloading = false;
         double download_progress = 0.0;
     };
@@ -230,6 +255,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool available = false;
         bool dl_multi = false;
         bool dl_off = false;
+        feature_flags features = feature_flags::no_flags;
         size_t urls_hash = 0;
         bool downloading = false;
         double download_progress = 0.0;
@@ -300,6 +326,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         const std::vector<sup_model_t>& models, size_t idx);
     static bool sup_models_exist(const std::vector<sup_model_t>& models);
     static model_engine_t engine_from_name(const QString& name);
+    static feature_flags feature_from_name(const QString& name);
     static sup_model_role_t sup_model_role_from_name(const QString& name);
     void update_default_model_for_lang(const QString& lang_id);
     checksum_check_t extract_from_archive(
@@ -331,6 +358,11 @@ class models_manager : public QObject, public singleton<models_manager> {
     static size_t make_url_hash(const std::vector<QUrl>& urls,
                                 const std::vector<sup_model_t>& sup_models);
     static download_info_t make_download_info(const priv_model_t& model);
+    static feature_flags add_explicit_feature_flags(
+        const QString& model_id, model_engine_t engine,
+        feature_flags existing_features);
+    static feature_flags add_new_feature(feature_flags existing_features,
+                                         feature_flags new_feature);
 };
 
 #endif  // MODELS_MANAGER_H

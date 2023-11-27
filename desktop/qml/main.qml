@@ -30,6 +30,7 @@ ApplicationWindow {
     readonly property alias buttonWidth: _dummyButton.width
     readonly property alias buttonWithIconWidth: _dummyButtonWithIcon.width
     readonly property alias buttonHeight: _dummyButton.height
+    readonly property double buttonHeightShort: buttonHeight * 0.8
 
     property var _dialogPage
 
@@ -106,15 +107,8 @@ ApplicationWindow {
         modelLicenseDialog.open()
     }
 
-    function showModelInfoDialog(name, downloadUrls, downloadSize, licenseId,
-                                 licenseName, licenseUrl, acceptHandler) {
-        modelInfoDialog.name = name
-        modelInfoDialog.downloadUrls = downloadUrls
-        modelInfoDialog.downloadSize = downloadSize
-        modelInfoDialog.licenseId = licenseId
-        modelInfoDialog.licenseName = licenseName
-        modelInfoDialog.licenseUrl = licenseUrl
-
+    function showModelInfoDialog(model) {
+        modelInfoDialog.model = model
         modelInfoDialog.open()
     }
 

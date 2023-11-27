@@ -6171,6 +6171,9 @@
             "checksum": "51effde",
             "checksum_quick": "36eb8c3b",
             "options": "i",
+            "features": [
+                "stt_punctuation"
+            ],
             "urls": [
                 "https://april.sapples.net/aprilv0_en-us.april"
             ],
@@ -23441,6 +23444,9 @@
             "checksum": "97ec6817",
             "checksum_quick": "c1503831",
             "options": "x",
+            "features": [
+                "tts_voice_cloning"
+            ],
             "license": {
                 "id": "CPML",
                 "name": "Coqui Public Model License 1.0.0",
@@ -23869,6 +23875,9 @@
             "model_id": "es_coqui_css100_vits",
             "engine": "tts_coqui",
             "lang_id": "es",
+            "features": [
+                "medium_quality"
+            ],
             "checksum": "e69c1a68",
             "checksum_quick": "91829f26",
             "comp": "zip",
@@ -23883,6 +23892,9 @@
             "model_id": "es_coqui_tacotron_mai",
             "engine": "tts_coqui",
             "lang_id": "es",
+            "features": [
+                "medium_quality"
+            ],
             "checksum": "44b44288",
             "checksum_quick": "2ce047c0",
             "comp": "zip",
@@ -23995,6 +24007,9 @@
             "lang_id": "ja",
             "options": "a",
             "checksum": "99032eb4",
+            "features": [
+                "low_quality"
+            ],
             "checksum_quick": "4f01ec4d",
             "comp": "zip",
             "urls": [
@@ -24172,6 +24187,9 @@
             "model_id": "it_coqui_mai_female_glow",
             "engine": "tts_coqui",
             "lang_id": "it",
+            "features": [
+                "low_quality"
+            ],
             "checksum": "3cd75cf",
             "checksum_quick": "566e499a",
             "comp": "zip",
@@ -24187,6 +24205,9 @@
             "lang_id": "it",
             "checksum": "e592dd4d",
             "checksum_quick": "48378f5e",
+            "features": [
+                "low_quality"
+            ],
             "comp": "zip",
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--it--mai_female--vits.zip"
@@ -24198,6 +24219,9 @@
             "model_id": "it_coqui_mai_male_glow",
             "engine": "tts_coqui",
             "lang_id": "it",
+            "features": [
+                "low_quality"
+            ],
             "checksum": "b7d0c00b",
             "checksum_quick": "f91185c0",
             "comp": "zip",
@@ -24211,6 +24235,9 @@
             "model_id": "it_coqui_mai_male_vits",
             "engine": "tts_coqui",
             "lang_id": "it",
+            "features": [
+                "low_quality"
+            ],
             "checksum": "3511d195",
             "checksum_quick": "89ecf0f7",
             "comp": "zip",

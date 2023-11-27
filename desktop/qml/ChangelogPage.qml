@@ -24,6 +24,8 @@ DialogPage {
             In the model browser you can check the license and the URLs from which model is downloaded.</li>
         <li>Distinction between <i>Download</i> and <i>Enable</i> in the model browser.
             Some models share files with each other. When <i>Enable</i> is shown, the files are already downloaded.</li>
+        <li>Filter options in the model browser.
+            Models can be searched by various features such as: Processing speed, Quality, Additional capabilities.</li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>

@@ -10,19 +10,12 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2 as Dialogs
 import QtQuick.Layouts 1.3
 
+import org.mkiol.dsnote.Dsnote 1.0
+
 Dialog {
     id: root
 
-    property string name: ""
-    property var downloadUrls: []
-    property string downloadSize: ""
-    property string licenseId: ""
-    property string licenseName: ""
-    property url licenseUrl: ""
-
-    readonly property bool showLicense: licenseId.length !==0 && licenseName.length !== 0
-
-    title: name
+    property var model: null
 
     width: parent.width - 8 * appWin.padding
     height: column.height + footer.height + header.height + root.topPadding + root.bottomPadding
@@ -30,28 +23,7 @@ Dialog {
     verticalPadding: appWin.padding
     horizontalPadding: appWin.padding
 
-    header: Item {
-        visible: root.title.length !== 0
-        height: visible ? titleLabel.height + appWin.padding : 0
-
-        Label {
-            id: titleLabel
-
-            anchors {
-                left: parent.left
-                leftMargin: appWin.padding
-                top: parent.top
-                topMargin: root.topPadding
-            }
-
-            text: root.title
-            wrapMode: Text.Wrap
-            font.pixelSize: Qt.application.font.pixelSize * 1.2
-            elide: Label.ElideRight
-            horizontalAlignment: Qt.AlignLeft
-            verticalAlignment: Qt.AlignVCenter
-        }
-    }
+    header: Item {}
 
     footer: Item {
         height: footerRow.height + appWin.padding
@@ -67,7 +39,6 @@ Dialog {
             }
 
             Button {
-                visible: !root.licenseAcceptRequired
                 text: qsTr("Close")
                 onClicked: root.reject()
             }
@@ -83,26 +54,174 @@ Dialog {
             right: parent.right
         }
 
+        GridLayout {
+            Layout.fillWidth: true
+
+            rowSpacing: appWin.padding * 0.5
+            columnSpacing: appWin.padding
+            columns: 2
+
+            Label {
+                text: qsTr("Id")
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            }
+
+            Label {
+                text: root.model.id
+                font.bold: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            }
+
+            Label {
+                text: qsTr("Name")
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            }
+
+            Label {
+                text: root.model.name
+                font.bold: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            }
+
+            Label {
+                text: qsTr("Model type")
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            }
+
+            Label {
+                text: {
+                    switch (root.model.role) {
+                    case ModelsListModel.Stt:
+                        return qsTr("Speech to Text")
+                    case ModelsListModel.Tts:
+                        return qsTr("Text to Speech")
+                    case ModelsListModel.Mnt:
+                        return qsTr("Translator")
+                    case ModelsListModel.Ttt:
+                        return qsTr("Other")
+                    }
+                    return qsTr("Other")
+                }
+                font.bold: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            }
+
+            Label {
+                visible: processingFeatureLabel.visible
+                text: qsTr("Processing speed")
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            }
+
+            Label {
+                id: processingFeatureLabel
+
+                text: {
+                    var f = root.model.features;
+                    if (f & ModelsListModel.FeatureFastProcessing)
+                        return qsTr("Fast")
+                    else if (f & ModelsListModel.FeatureMediumProcessing)
+                        return qsTr("Medium")
+                    else if (f & ModelsListModel.FeatureSlowProcessing)
+                        return qsTr("Slow")
+                    return ""
+                }
+                font.bold: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                visible: text.length !== 0
+            }
+
+            Label {
+                visible: qualityFeatureLabel.visible
+                text: qsTr("Quality")
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            }
+
+            Label {
+                id: qualityFeatureLabel
+
+                text: {
+                    var f = root.model.features;
+                    if (f & ModelsListModel.FeatureQualityHigh)
+                        return qsTr("High")
+                    else if (f & ModelsListModel.FeatureQualityMedium)
+                        return qsTr("Medium")
+                    else if (f & ModelsListModel.FeatureQualityLow)
+                        return qsTr("Low")
+                    return ""
+                }
+                font.bold: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                visible: text.length !== 0
+            }
+
+            Label {
+                visible: additionalFeatureLabel.visible
+                text: qsTr("Additional capabilities")
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            }
+
+            Label {
+                id: additionalFeatureLabel
+
+                text: {
+                    var f = root.model.features;
+                    var text = ""
+                    if (f & ModelsListModel.FeatureSttIntermediateResults)
+                        text += qsTr("Intermediate Results") + " · "
+                    if (f & ModelsListModel.FeatureSttPunctuation)
+                        text += qsTr("Punctuation") + " · "
+                    if (f & ModelsListModel.FeatureTtsVoiceCloning)
+                        text += qsTr("Voice Cloning")
+
+                    if (text.length > 3 && text[text.length - 1] === ' ')
+                        text = text.substring(0, text.length - 3)
+
+                    return text
+                }
+                font.bold: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                visible: text.length !== 0
+            }
+
+            Label {
+                visible: licenseLabel.visible
+                text: qsTr("License")
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            }
+
+            RowLayout {
+                id: licenseLabel
+
+                visible: root.model.license_id.length !==0 && root.model.license_name.length !== 0
+
+                Label {
+                    text: root.model.license_name.length !== 0 ?
+                              root.model.license_name + " (" + root.model.license_id + ")" : root.model.license_id
+                    font.bold: true
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                }
+
+                Button {
+                    visible: root.model.license_url.toString().length !== 0
+                    text: qsTr("Show license")
+                    onClicked: appWin.showModelLicenseDialog(root.model.license_id, root.model.license_name, root.model.license_url, null)
+                }
+            }
+
+            Label {
+                text: qsTr("Total download size")
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            }
+
+            Label {
+                text: root.model.download_size
+                font.bold: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            }
+        }
+
         SectionLabel {
-            visible: root.showLicense
-            text: qsTr("License")
-        }
-
-        Label {
-            visible: root.showLicense
-            wrapMode: Text.Wrap
-            text: root.licenseName.length !== 0 ?
-                      root.licenseName + " (" + root.licenseId + ")" : root.licenseId
-        }
-
-        Button {
-            visible: root.showLicense && root.licenseUrl.toString().length !== 0
-            text: qsTr("Show license")
-            onClicked: appWin.showModelLicenseDialog(root.licenseId, root.licenseName, root.licenseUrl, null)
-        }
-
-        SectionLabel {
-            visible: root.downloadUrls.length !== 0
+            visible: root.model.download_urls.length !== 0
             text: qsTr("Files to download")
         }
 
@@ -111,36 +230,14 @@ Dialog {
             spacing: appWin.padding / 2
 
             Repeater {
-                model: root.downloadUrls
-                RowLayout {
+                model: root.model.download_urls
+                Label {
+                    Layout.alignment: Qt.AlignTop
+                    text: modelData.toString()
                     Layout.fillWidth: true
-
-                    TextField {
-                        Layout.alignment: Qt.AlignTop
-                        text: modelData.toString()
-                        Layout.fillWidth: true
-                        wrapMode: Text.Wrap
-                        readOnly: true
-                    }
-
-                    Button {
-                        Layout.alignment: Qt.AlignTop
-                        icon.name: "edit-copy-symbolic"
-                        onClicked: app.copy_text_to_clipboard(modelData.toString())
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Copy")
-                    }
+                    wrapMode: Text.Wrap
                 }
             }
-        }
-
-        Label {
-            visible: root.downloadUrls.length !== 0
-            Layout.fillWidth: true
-            wrapMode: Text.Wrap
-            text: qsTr("Total size: %1").arg("<b>" + root.downloadSize + "</b>");
         }
     }
 }

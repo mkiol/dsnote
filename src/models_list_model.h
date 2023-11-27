@@ -26,34 +26,84 @@ class ModelsListModel : public SelectableItemModel {
     Q_OBJECT
     Q_PROPERTY(bool downloading READ downloading NOTIFY downloadingChanged)
     Q_PROPERTY(QString lang READ lang WRITE setLang NOTIFY langChanged)
-    Q_PROPERTY(ModelRoleFilter roleFilter READ roleFilter WRITE setRoleFilter
-                   NOTIFY roleFilterChanged)
+    Q_PROPERTY(int roleFilterFlags READ roleFilterFlags WRITE setRoleFilterFlags
+                   NOTIFY roleFilterFlagsChanged)
+    Q_PROPERTY(int featureFilterFlags READ featureFilterFlags NOTIFY
+                   featureFilterFlagsChanged)
+    Q_PROPERTY(int disabledFeatureFilterFlags READ disabledFeatureFilterFlags
+                   NOTIFY disabledFeatureFilterFlagsChanged)
+    Q_PROPERTY(
+        bool defaultFilters READ defaultFilters NOTIFY defaultFiltersChanged)
    public:
     enum ModelRole { Stt = 0, Tts = 1, Mnt = 2, Ttt = 3 };
     Q_ENUM(ModelRole)
-    enum ModelRoleFilter {
-        AllModels = 0,
-        SttModels = 1,
-        TtsModels = 2,
-        MntModels = 3,
-        OtherModels = 4
+
+    enum ModelRoleFilterFlags {
+        RoleNone = 0,
+        RoleStart = 1 << 0,
+        RoleStt = RoleStart,
+        RoleTts = 1 << 1,
+        RoleMnt = 1 << 2,
+        RoleOther = 1 << 3,
+        RoleEnd = RoleOther,
+        RoleAll = RoleStt | RoleTts | RoleMnt | RoleOther,
+        RoleDefault = RoleAll
     };
-    Q_ENUM(ModelRoleFilter)
+    Q_ENUM(ModelRoleFilterFlags)
+
+    enum ModelFeatureFilterFlags {
+        FeatureNone = 0,
+        FeatureGenericStart = 1 << 0,
+        FeatureFastProcessing = FeatureGenericStart,
+        FeatureMediumProcessing = 1 << 1,
+        FeatureSlowProcessing = 1 << 2,
+        FeatureQualityHigh = 1 << 3,
+        FeatureQualityMedium = 1 << 4,
+        FeatureQualityLow = 1 << 5,
+        FeatureGenericEnd = FeatureQualityLow,
+        FeatureSttStart = 1 << 10,
+        FeatureSttIntermediateResults = FeatureSttStart,
+        FeatureSttPunctuation = 1 << 11,
+        FeatureSttEnd = FeatureSttPunctuation,
+        FeatureTtsStart = 1 << 20,
+        FeatureTtsVoiceCloning = FeatureTtsStart,
+        FeatureTtsEnd = FeatureTtsVoiceCloning,
+        FeatureAll = FeatureFastProcessing | FeatureMediumProcessing |
+                     FeatureSlowProcessing | FeatureQualityHigh |
+                     FeatureQualityMedium | FeatureQualityLow |
+                     FeatureSttIntermediateResults | FeatureSttPunctuation |
+                     FeatureTtsVoiceCloning,
+        FeatureDefault = FeatureFastProcessing | FeatureMediumProcessing |
+                         FeatureSlowProcessing | FeatureQualityHigh |
+                         FeatureQualityMedium | FeatureQualityLow
+    };
+    Q_ENUM(ModelFeatureFilterFlags)
 
     explicit ModelsListModel(QObject *parent = nullptr);
     ~ModelsListModel() override;
+    Q_INVOKABLE void addRoleFilterFlag(ModelRoleFilterFlags flag);
+    Q_INVOKABLE void removeRoleFilterFlag(ModelRoleFilterFlags flag);
+    Q_INVOKABLE void resetRoleFilterFlags();
+    Q_INVOKABLE void addFeatureFilterFlag(ModelFeatureFilterFlags flag);
+    Q_INVOKABLE void removeFeatureFilterFlag(ModelFeatureFilterFlags flag);
+    Q_INVOKABLE void resetFeatureFilterFlags();
 
    signals:
     void itemChanged(int idx);
     void downloadingChanged();
     void langChanged();
-    void roleFilterChanged();
+    void roleFilterFlagsChanged();
+    void featureFilterFlagsChanged();
+    void disabledFeatureFilterFlagsChanged();
+    void defaultFiltersChanged();
 
    private:
     int m_changedItem = -1;
     bool m_downloading = false;
     QString m_lang;
-    ModelRoleFilter m_roleFilter = ModelRoleFilter::AllModels;
+    int m_roleFilterFlags = ModelRoleFilterFlags::RoleDefault;
+    int m_featureFilterFlags = ModelFeatureFilterFlags::FeatureDefault;
+    int m_disabledFeatureFilterFlags = ModelFeatureFilterFlags::FeatureNone;
 
     QList<ListItem *> makeItems() override;
     static ListItem *makeItem(const models_manager::model_t &model);
@@ -62,11 +112,19 @@ class ModelsListModel : public SelectableItemModel {
     void updateItem(ListItem *oldItem, const ListItem *newItem) override;
     inline bool downloading() const { return m_downloading; }
     inline QString lang() const { return m_lang; }
-    inline ModelRoleFilter roleFilter() const { return m_roleFilter; }
+    inline int roleFilterFlags() const { return m_roleFilterFlags; }
+    inline int featureFilterFlags() const { return m_featureFilterFlags; }
+    inline int disabledFeatureFilterFlags() const {
+        return m_disabledFeatureFilterFlags;
+    }
     void setLang(const QString &lang);
-    void setRoleFilter(ModelRoleFilter roleFilter);
+    void setRoleFilterFlags(int roleFilterFlags);
+    void setFeatureFilterFlags(int featureFilterFlags);
     void updateDownloading(const std::vector<models_manager::model_t> &models);
     bool roleFilterPass(const models_manager::model_t &model);
+    bool genericFeatureFilterPass(const models_manager::model_t &model);
+    bool featureFilterPass(const models_manager::model_t &model);
+    bool defaultFilters() const;
 };
 
 class ModelsListItem : public SelectableItem {
@@ -80,6 +138,7 @@ class ModelsListItem : public SelectableItem {
         DlMultiRole,
         DlOffRole,
         ScoreRole,
+        FeaturesRole,
         DefaultRole,
         DownloadingRole,
         ProgressRole,
@@ -108,9 +167,10 @@ class ModelsListItem : public SelectableItem {
     ModelsListItem(const QString &id, QString name, QString lang_id,
                    ModelsListModel::ModelRole role, License license,
                    DownloadInfo download_info, bool available = true,
-                   bool dl_multi = false, bool dl_off = false, int score = 2,
-                   bool default_for_lang = false, bool downloading = false,
-                   double progress = 0.0, QObject *parent = nullptr);
+                   bool dl_multi = false, bool dl_off = false, int features = 0,
+                   int score = 2, bool default_for_lang = false,
+                   bool downloading = false, double progress = 0.0,
+                   QObject *parent = nullptr);
     QVariant data(int role) const override;
     QHash<int, QByteArray> roleNames() const override;
     inline QString id() const override { return m_id; }
@@ -120,6 +180,7 @@ class ModelsListItem : public SelectableItem {
     inline bool available() const { return m_available; }
     inline bool dl_multi() const { return m_dl_multi; }
     inline bool dl_off() const { return m_dl_off; }
+    inline int features() const { return m_features; }
     inline int score() const { return m_score; }
     inline bool default_for_lang() const { return m_default_for_lang; }
     inline bool downloading() const { return m_downloading; }
@@ -144,6 +205,7 @@ class ModelsListItem : public SelectableItem {
     bool m_available = false;
     bool m_dl_multi = false;
     bool m_dl_off = false;
+    int m_features = 0;
     int m_score = 2;
     bool m_default_for_lang = false;
     bool m_downloading = false;
