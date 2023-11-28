@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Categories=Utility;Office;Audio;AudioVideo;TextEditor;KDE;Qt;
+Categories=Utility;Office;Audio;AudioVideo;TextEditor;Translation;KDE;Qt;
 Icon=harbour-dsnote
 Exec=harbour-dsnote --app %F
 Name=Speech Note
