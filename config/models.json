@@ -335,6 +335,11 @@
             "name": "עברית",
             "name_en": "Hebrew",
             "id": "he"
+        },
+        {
+            "name": "मराठी",
+            "name_en": "Marathi",
+            "id": "mr"
         }
     ],
     "models": [
@@ -2824,6 +2829,36 @@
             "lang_id": "bn"
         },
         {
+            "name": "मराठी (FasterWhisper Tiny)",
+            "model_id": "mr_fasterwhisper_tiny",
+            "model_alias_of": "multilang_fasterwhisper_tiny",
+            "lang_id": "mr"
+        },
+        {
+            "name": "मराठी (FasterWhisper Base)",
+            "model_id": "mr_fasterwhisper_base",
+            "model_alias_of": "multilang_fasterwhisper_base",
+            "lang_id": "mr"
+        },
+        {
+            "name": "मराठी (FasterWhisper Small)",
+            "model_id": "mr_fasterwhisper_small",
+            "model_alias_of": "multilang_fasterwhisper_small",
+            "lang_id": "mr"
+        },
+        {
+            "name": "मराठी (FasterWhisper Medium)",
+            "model_id": "mr_fasterwhisper_medium",
+            "model_alias_of": "multilang_fasterwhisper_medium",
+            "lang_id": "mr"
+        },
+        {
+            "name": "मराठी (FasterWhisper Large-v2)",
+            "model_id": "mr_fasterwhisper_large2",
+            "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "mr"
+        },
+        {
             "name": "Polski (FasterWhisper Tiny)",
             "model_id": "pl_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -5241,6 +5276,48 @@
             "model_id": "bn_whisper_large2",
             "model_alias_of": "multilang_whisper_large2",
             "lang_id": "bn"
+        },
+        {
+            "name": "मराठी (Whisper Tiny)",
+            "model_id": "mr_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "mr"
+        },
+        {
+            "name": "मराठी (Whisper Base)",
+            "model_id": "mr_whisper_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "mr"
+        },
+        {
+            "name": "मराठी (Whisper Small)",
+            "model_id": "mr_whisper_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "mr"
+        },
+        {
+            "name": "मराठी (Whisper Medium)",
+            "model_id": "mr_whisper_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "mr"
+        },
+        {
+            "name": "मराठी (Whisper Large-v3)",
+            "model_id": "mr_whisper_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "mr"
+        },
+        {
+            "name": "मराठी (Whisper Large-v2)",
+            "model_id": "mr_whisper_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "mr"
+        },
+        {
+            "name": "Polski (Whisper Tiny)",
+            "model_id": "pl_whisper_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "pl"
         },
         {
             "name": "Polski (Whisper Tiny)",
@@ -24945,6 +25022,20 @@
             ],
             "options": "an",
             "size": "134892405"
+        },
+        {
+            "name": "मराठी (Coqui MMS)",
+            "model_id": "mr_coqui_fairseq_mar",
+            "engine": "tts_coqui",
+            "lang_id": "mr",
+            "checksum": "116f62aa",
+            "checksum_quick": "939f94c9",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/mar.tar.gz"
+            ],
+            "options": "an",
+            "size": "134895740"
         },
         {
             "name": "Yorùbá (Coqui MMS)",
