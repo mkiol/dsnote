@@ -2079,31 +2079,31 @@
             "lang_id": "mk"
         },
         {
-            "name": "Srpski (FasterWhisper Tiny)",
+            "name": "Српски (FasterWhisper Tiny)",
             "model_id": "sr_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
             "lang_id": "sr"
         },
         {
-            "name": "Srpski (FasterWhisper Base)",
+            "name": "Српски (FasterWhisper Base)",
             "model_id": "sr_fasterwhisper_base",
             "model_alias_of": "multilang_fasterwhisper_base",
             "lang_id": "sr"
         },
         {
-            "name": "Srpski (FasterWhisper Small)",
+            "name": "Српски (FasterWhisper Small)",
             "model_id": "sr_fasterwhisper_small",
             "model_alias_of": "multilang_fasterwhisper_small",
             "lang_id": "sr"
         },
         {
-            "name": "Srpski (FasterWhisper Medium)",
+            "name": "Српски (FasterWhisper Medium)",
             "model_id": "sr_fasterwhisper_medium",
             "model_alias_of": "multilang_fasterwhisper_medium",
             "lang_id": "sr"
         },
         {
-            "name": "Srpski (FasterWhisper Large-v2)",
+            "name": "Српски (FasterWhisper Large-v2)",
             "model_id": "sr_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
             "lang_id": "sr"
@@ -4366,37 +4366,37 @@
             "lang_id": "mk"
         },
         {
-            "name": "Srpski (Whisper Tiny)",
+            "name": "Српски (Whisper Tiny)",
             "model_id": "sr_whisper_tiny",
             "model_alias_of": "multilang_whisper_tiny",
             "lang_id": "sr"
         },
         {
-            "name": "Srpski (Whisper Base)",
+            "name": "Српски (Whisper Base)",
             "model_id": "sr_whisper_base",
             "model_alias_of": "multilang_whisper_base",
             "lang_id": "sr"
         },
         {
-            "name": "Srpski (Whisper Small)",
+            "name": "Српски (Whisper Small)",
             "model_id": "sr_whisper_small",
             "model_alias_of": "multilang_whisper_small",
             "lang_id": "sr"
         },
         {
-            "name": "Srpski (Whisper Medium)",
+            "name": "Српски (Whisper Medium)",
             "model_id": "sr_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
             "lang_id": "sr"
         },
         {
-            "name": "Srpski (Whisper Large-v3)",
+            "name": "Српски (Whisper Large-v3)",
             "model_id": "sr_whisper_large",
             "model_alias_of": "multilang_whisper_large",
             "lang_id": "sr"
         },
         {
-            "name": "Srpski (Whisper Large-v2)",
+            "name": "Српски (Whisper Large-v2)",
             "model_id": "sr_whisper_large2",
             "model_alias_of": "multilang_whisper_large2",
             "lang_id": "sr"
@@ -23343,6 +23343,20 @@
                 "https://github.com/RHVoice/suze-mkd/releases/download/v4.1/RHVoice-voice-Macedonian-Suze-v4.1.zip"
             ],
             "size": "14896090"
+        },
+        {
+            "name": "Српски (RHVoice Dragana Female)",
+            "model_id": "sr_rhvoice_dragana",
+            "engine": "tts_rhvoice",
+            "lang_id": "sr",
+            "speaker": "dragana",
+            "checksum": "4b0d15d4",
+            "checksum_quick": "aa1729cb",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/dragana-srp/releases/download/4.7/RHVoice-voice-Serbian-Dragana-v4.7.zip"
+            ],
+            "size": "23692523"
         },
         {
             "name": "Shqip (RHVoice Hana Female)",
