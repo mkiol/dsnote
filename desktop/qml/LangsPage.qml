@@ -181,9 +181,7 @@ DialogPage {
         Control {
             id: control
 
-            property bool infoAvailable: model && (model.download_urls.length !== 0 ||
-                                         model.license_id.length !== 0 ||
-                                         model.license_name.length !== 0)
+            property bool infoAvailable: model && model.id.length !== 0
 
             function download_model() {
                 if (model.license_accept_required) {

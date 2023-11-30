@@ -15,7 +15,7 @@ import org.mkiol.dsnote.Dsnote 1.0
 Dialog {
     id: root
 
-    property var model: null
+    required property var model
 
     width: parent.width - 8 * appWin.padding
     height: column.height + footer.height + header.height + root.topPadding + root.bottomPadding
@@ -209,14 +209,25 @@ Dialog {
             }
 
             Label {
+                visible: root.model.download_urls.length !== 0
                 text: qsTr("Total download size")
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
             }
 
             Label {
+                visible: root.model.download_urls.length !== 0
                 text: root.model.download_size
                 font.bold: true
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            }
+
+            Label {
+                Layout.columnSpan: 2
+                Layout.topMargin: appWin.padding
+                visible: root.model.download_urls.length === 0
+                text: qsTr("The model does not have any files to download.")
+                font.italic: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
             }
         }
 

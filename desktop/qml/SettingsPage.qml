@@ -924,7 +924,7 @@ DialogPage {
             }
 
             GridLayout {
-                visible: _settings.py_feature_scan
+                visible: _settings.py_feature_scan && !_settings.is_flatpak()
                 columns: root.verticalMode ? 1 : 3
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding

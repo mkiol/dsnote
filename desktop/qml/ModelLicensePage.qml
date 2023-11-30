@@ -13,13 +13,11 @@ import QtQuick.Layouts 1.3
 Dialog {
     id: root
 
-    property string licenseId
-    property string licenseName
-    property url licenseUrl
-    property bool licenseAcceptRequired
+    required property string licenseId
+    required property string licenseName
+    required property url licenseUrl
+    property var acceptHandler: null
     property bool busy: false
-
-    signal acceptClicked
 
     function update_license() {
         busy = true
@@ -78,22 +76,22 @@ Dialog {
             }
 
             Button {
-                visible: root.licenseAcceptRequired
+                visible: root.acceptHandler
                 text: qsTr("Reject")
                 onClicked: root.reject()
                 Keys.onReturnPressed: root.reject()
             }
             Button {
                 enabled: textArea.text.length !== 0
-                visible: root.licenseAcceptRequired
+                visible: root.acceptHandler
                 text: qsTr("Accept")
                 onClicked: {
-                    root.acceptClicked()
-                    root.close()
+                    root.acceptHandler()
+                    root.accept()
                 }
             }
             Button {
-                visible: !root.licenseAcceptRequired
+                visible: !root.acceptHandler
                 text: qsTr("Close")
                 onClicked: root.reject()
             }

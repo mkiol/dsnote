@@ -98,18 +98,16 @@ ApplicationWindow {
     }
 
     function showModelLicenseDialog(licenseId, licenseName, licenseUrl, acceptHandler) {
-        modelLicenseDialog.licenseId = licenseId
-        modelLicenseDialog.licenseName = licenseName
-        modelLicenseDialog.licenseUrl = licenseUrl
-        modelLicenseDialog.licenseAcceptRequired = acceptHandler ? true : false
-        modelLicenseDialog.acceptHandler = acceptHandler
-
-        modelLicenseDialog.open()
+        modelLicenseLoader.setSource("ModelLicensePage.qml", {
+                                      licenseId: licenseId,
+                                      licenseName: licenseName,
+                                      licenseUrl: licenseUrl,
+                                      acceptHandler: acceptHandler
+                                  })
     }
 
     function showModelInfoDialog(model) {
-        modelInfoDialog.model = model
-        modelInfoDialog.open()
+        modelInfoLoader.setSource("ModelInfoPage.qml", {model: model})
     }
 
     function update() {
@@ -252,20 +250,28 @@ ApplicationWindow {
         color: notepad.noteTextArea.textArea.color
     }
 
-    ModelInfoPage {
-        id: modelInfoDialog
+    Loader {
+        id: modelInfoLoader
 
-        anchors.centerIn: parent
+        anchors.fill: parent
+        onLoaded: {
+            item.anchors.centerIn = modelInfoLoader
+            item.open()
+            item.onRejected.connect(function(){modelInfoLoader.source = ""});
+            item.onAccepted.connect(function(){modelInfoLoader.source = ""});
+        }
     }
 
-    ModelLicensePage {
-        id: modelLicenseDialog
+    Loader {
+        id: modelLicenseLoader
 
-        property var acceptHandler
-
-        anchors.centerIn: parent
-
-        onAcceptClicked: acceptHandler()
+        anchors.fill: parent
+        onLoaded: {
+            item.anchors.centerIn = modelLicenseLoader
+            item.open()
+            item.onRejected.connect(function(){modelLicenseLoader.source = ""});
+            item.onAccepted.connect(function(){modelLicenseLoader.source = ""});
+        }
     }
 
     AddTextDialog {
