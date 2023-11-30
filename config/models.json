@@ -1169,6 +1169,24 @@
             "hidden": true
         },
         {
+            "name": "Multilingual (FasterWhisper Large-v3)",
+            "model_id": "multilang_fasterwhisper_large3",
+            "engine": "stt_fasterwhisper",
+            "lang_id": "multilang",
+            "checksum": "a6d2ed4e",
+            "checksum_quick": "56cb4e63",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/f43ed6211b3d79e844ab2a0ec6f28eba5aa7298a/faster-whisper-large-v3-int8/model.bin",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/f43ed6211b3d79e844ab2a0ec6f28eba5aa7298a/faster-whisper-large-v3-int8/config.json",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/f43ed6211b3d79e844ab2a0ec6f28eba5aa7298a/faster-whisper-large-v3-int8/tokenizer.json",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/f43ed6211b3d79e844ab2a0ec6f28eba5aa7298a/faster-whisper-large-v3-int8/vocabulary.json",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/f43ed6211b3d79e844ab2a0ec6f28eba5aa7298a/faster-whisper-large-v3-int8/preprocessor_config.json"
+            ],
+            "size": "1560282236",
+            "hidden": true
+        },
+        {
             "name": "English (FasterWhisper Tiny)",
             "model_id": "en_fasterwhisper_tiny",
             "engine": "stt_fasterwhisper",
@@ -1239,6 +1257,12 @@
             "lang_id": "en"
         },
         {
+            "name": "English (FasterWhisper Large-v3)",
+            "model_id": "en_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "en"
+        },
+        {
             "name": "Español (FasterWhisper Tiny)",
             "model_id": "es_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -1266,6 +1290,12 @@
             "name": "Español (FasterWhisper Large-v2)",
             "model_id": "es_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "es"
+        },
+        {
+            "name": "Español (FasterWhisper Large-v3)",
+            "model_id": "es_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "es"
         },
         {
@@ -1299,6 +1329,12 @@
             "lang_id": "it"
         },
         {
+            "name": "Italiano (FasterWhisper Large-v3)",
+            "model_id": "it_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "it"
+        },
+        {
             "name": "Português (FasterWhisper Tiny)",
             "model_id": "pt_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -1326,6 +1362,12 @@
             "name": "Português (FasterWhisper Large-v2)",
             "model_id": "pt_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "pt"
+        },
+        {
+            "name": "Português (FasterWhisper Large-v3)",
+            "model_id": "pt_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "pt"
         },
         {
@@ -1359,6 +1401,12 @@
             "lang_id": "de"
         },
         {
+            "name": "Deutsch (FasterWhisper Large-v3)",
+            "model_id": "de_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "de"
+        },
+        {
             "name": "日本語 (FasterWhisper Tiny)",
             "model_id": "ja_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -1386,6 +1434,12 @@
             "name": "日本語 (FasterWhisper Large-v2)",
             "model_id": "ja_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "ja"
+        },
+        {
+            "name": "日本語 (FasterWhisper Large-v3)",
+            "model_id": "ja_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "ja"
         },
         {
@@ -1419,6 +1473,12 @@
             "lang_id": "ru"
         },
         {
+            "name": "Русский (FasterWhisper Large-v3)",
+            "model_id": "ru_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "ru"
+        },
+        {
             "name": "Nederlands (FasterWhisper Tiny)",
             "model_id": "nl_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -1446,6 +1506,12 @@
             "name": "Nederlands (FasterWhisper Large-v2)",
             "model_id": "nl_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "nl"
+        },
+        {
+            "name": "Nederlands (FasterWhisper Large-v3)",
+            "model_id": "nl_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "nl"
         },
         {
@@ -1479,6 +1545,12 @@
             "lang_id": "id"
         },
         {
+            "name": "Bahasa Indonesia (FasterWhisper Large-v3)",
+            "model_id": "id_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "id"
+        },
+        {
             "name": "Català (FasterWhisper Tiny)",
             "model_id": "ca_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -1506,6 +1578,12 @@
             "name": "Català (FasterWhisper Large-v2)",
             "model_id": "ca_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "ca"
+        },
+        {
+            "name": "Català (FasterWhisper Large-v3)",
+            "model_id": "ca_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "ca"
         },
         {
@@ -1539,6 +1617,12 @@
             "lang_id": "fr"
         },
         {
+            "name": "Français (FasterWhisper Large-v3)",
+            "model_id": "fr_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "fr"
+        },
+        {
             "name": "Türkçe (FasterWhisper Tiny)",
             "model_id": "tr_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -1566,6 +1650,12 @@
             "name": "Türkçe (FasterWhisper Large-v2)",
             "model_id": "tr_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "tr"
+        },
+        {
+            "name": "Türkçe (FasterWhisper Large-v3)",
+            "model_id": "tr_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "tr"
         },
         {
@@ -1599,6 +1689,12 @@
             "lang_id": "sv"
         },
         {
+            "name": "Svenska (FasterWhisper Large-v3)",
+            "model_id": "sv_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "sv"
+        },
+        {
             "name": "Українська (FasterWhisper Tiny)",
             "model_id": "uk_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -1626,6 +1722,12 @@
             "name": "Українська (FasterWhisper Large-v2)",
             "model_id": "uk_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "uk"
+        },
+        {
+            "name": "Українська (FasterWhisper Large-v3)",
+            "model_id": "uk_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "uk"
         },
         {
@@ -1659,6 +1761,12 @@
             "lang_id": "ms"
         },
         {
+            "name": "Melayu (FasterWhisper Large-v3)",
+            "model_id": "ms_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "ms"
+        },
+        {
             "name": "Norsk (FasterWhisper Tiny)",
             "model_id": "no_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -1686,6 +1794,12 @@
             "name": "Norsk (FasterWhisper Large-v2)",
             "model_id": "no_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "no"
+        },
+        {
+            "name": "Norsk (FasterWhisper Large-v3)",
+            "model_id": "no_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "no"
         },
         {
@@ -1719,6 +1833,12 @@
             "lang_id": "fi"
         },
         {
+            "name": "Suomi (FasterWhisper Large-v3)",
+            "model_id": "fi_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "fi"
+        },
+        {
             "name": "Čeština (FasterWhisper Tiny)",
             "model_id": "cs_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -1746,6 +1866,12 @@
             "name": "Čeština (FasterWhisper Large-v2)",
             "model_id": "cs_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "cs"
+        },
+        {
+            "name": "Čeština (FasterWhisper Large-v3)",
+            "model_id": "cs_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "cs"
         },
         {
@@ -1779,6 +1905,12 @@
             "lang_id": "sk"
         },
         {
+            "name": "Slovenčina (FasterWhisper Large-v3)",
+            "model_id": "sk_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "sk"
+        },
+        {
             "name": "中文 (FasterWhisper Tiny)",
             "model_id": "zh_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -1806,6 +1938,12 @@
             "name": "中文 (FasterWhisper Large-v2)",
             "model_id": "zh_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "zh"
+        },
+        {
+            "name": "中文 (FasterWhisper Large-v3)",
+            "model_id": "zh_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "zh"
         },
         {
@@ -1874,6 +2012,12 @@
             "lang_id": "vi"
         },
         {
+            "name": "Tiếng Việt (FasterWhisper Large-v3)",
+            "model_id": "vi_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "vi"
+        },
+        {
             "name": "ไทย (FasterWhisper Tiny)",
             "model_id": "th_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -1901,6 +2045,12 @@
             "name": "ไทย (FasterWhisper Large-v2)",
             "model_id": "th_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "th"
+        },
+        {
+            "name": "ไทย (FasterWhisper Large-v3)",
+            "model_id": "th_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "th"
         },
         {
@@ -1934,6 +2084,12 @@
             "lang_id": "el"
         },
         {
+            "name": "Ελληνικά (FasterWhisper Large-v3)",
+            "model_id": "el_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "el"
+        },
+        {
             "name": "Hrvatski (FasterWhisper Tiny)",
             "model_id": "hr_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -1961,6 +2117,12 @@
             "name": "Hrvatski (FasterWhisper Large-v2)",
             "model_id": "hr_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "hr"
+        },
+        {
+            "name": "Hrvatski (FasterWhisper Large-v3)",
+            "model_id": "hr_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "hr"
         },
         {
@@ -1994,6 +2156,12 @@
             "lang_id": "bg"
         },
         {
+            "name": "Български (FasterWhisper Large-v3)",
+            "model_id": "bg_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "bg"
+        },
+        {
             "name": "Română (FasterWhisper Tiny)",
             "model_id": "ro_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2021,6 +2189,12 @@
             "name": "Română (FasterWhisper Large-v2)",
             "model_id": "ro_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "ro"
+        },
+        {
+            "name": "Română (FasterWhisper Large-v3)",
+            "model_id": "ro_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "ro"
         },
         {
@@ -2054,6 +2228,12 @@
             "lang_id": "sl"
         },
         {
+            "name": "Slovenščina (FasterWhisper Large-v3)",
+            "model_id": "sl_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "sl"
+        },
+        {
             "name": "Bosanski (FasterWhisper Tiny)",
             "model_id": "bs_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2081,6 +2261,12 @@
             "name": "Bosanski (FasterWhisper Large-v2)",
             "model_id": "bs_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "bs"
+        },
+        {
+            "name": "Bosanski (FasterWhisper Large-v3)",
+            "model_id": "bs_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "bs"
         },
         {
@@ -2114,6 +2300,12 @@
             "lang_id": "mk"
         },
         {
+            "name": "Македонски (FasterWhisper Large-v3)",
+            "model_id": "mk_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "mk"
+        },
+        {
             "name": "Српски (FasterWhisper Tiny)",
             "model_id": "sr_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2141,6 +2333,12 @@
             "name": "Српски (FasterWhisper Large-v2)",
             "model_id": "sr_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "sr"
+        },
+        {
+            "name": "Српски (FasterWhisper Large-v3)",
+            "model_id": "sr_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "sr"
         },
         {
@@ -2174,6 +2372,12 @@
             "lang_id": "hu"
         },
         {
+            "name": "Magyar (FasterWhisper Large-v3)",
+            "model_id": "hu_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "hu"
+        },
+        {
             "name": "हिन्दी (FasterWhisper Tiny)",
             "model_id": "hi_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2201,6 +2405,12 @@
             "name": "हिन्दी (FasterWhisper Large-v2)",
             "model_id": "hi_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "hi"
+        },
+        {
+            "name": "हिन्दी (FasterWhisper Large-v3)",
+            "model_id": "hi_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "hi"
         },
         {
@@ -2234,6 +2444,12 @@
             "lang_id": "fa"
         },
         {
+            "name": "فارسی (FasterWhisper Large-v3)",
+            "model_id": "fa_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "fa"
+        },
+        {
             "name": "Dansk (FasterWhisper Tiny)",
             "model_id": "da_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2261,6 +2477,12 @@
             "name": "Dansk (FasterWhisper Large-v2)",
             "model_id": "da_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "da"
+        },
+        {
+            "name": "Dansk (FasterWhisper Large-v3)",
+            "model_id": "da_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "da"
         },
         {
@@ -2294,6 +2516,12 @@
             "lang_id": "et"
         },
         {
+            "name": "Eesti (FasterWhisper Large-v3)",
+            "model_id": "et_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "et"
+        },
+        {
             "name": "Euskara (FasterWhisper Tiny)",
             "model_id": "eu_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2321,6 +2549,12 @@
             "name": "Euskara (FasterWhisper Large-v2)",
             "model_id": "eu_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "eu"
+        },
+        {
+            "name": "Euskara (FasterWhisper Large-v3)",
+            "model_id": "eu_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "eu"
         },
         {
@@ -2354,6 +2588,12 @@
             "lang_id": "is"
         },
         {
+            "name": "íslenska (FasterWhisper Large-v3)",
+            "model_id": "is_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "is"
+        },
+        {
             "name": "ქართული (FasterWhisper Tiny)",
             "model_id": "ka_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2381,6 +2621,12 @@
             "name": "ქართული (FasterWhisper Large-v2)",
             "model_id": "ka_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "ka"
+        },
+        {
+            "name": "ქართული (FasterWhisper Large-v3)",
+            "model_id": "ka_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "ka"
         },
         {
@@ -2414,6 +2660,12 @@
             "lang_id": "kk"
         },
         {
+            "name": "Қазақ (FasterWhisper Large-v3)",
+            "model_id": "kk_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "kk"
+        },
+        {
             "name": "한국어 (FasterWhisper Tiny)",
             "model_id": "ko_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2441,6 +2693,12 @@
             "name": "한국어 (FasterWhisper Large-v2)",
             "model_id": "ko_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "ko"
+        },
+        {
+            "name": "한국어 (FasterWhisper Large-v3)",
+            "model_id": "ko_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "ko"
         },
         {
@@ -2474,6 +2732,12 @@
             "lang_id": "lt"
         },
         {
+            "name": "Lietuvių (FasterWhisper Large-v3)",
+            "model_id": "lt_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "lt"
+        },
+        {
             "name": "Latviešu (FasterWhisper Tiny)",
             "model_id": "lv_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2501,6 +2765,12 @@
             "name": "Latviešu (FasterWhisper Large-v2)",
             "model_id": "lv_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "lv"
+        },
+        {
+            "name": "Latviešu (FasterWhisper Large-v3)",
+            "model_id": "lv_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "lv"
         },
         {
@@ -2534,6 +2804,12 @@
             "lang_id": "mn"
         },
         {
+            "name": "Монгол (FasterWhisper Large-v3)",
+            "model_id": "mn_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "mn"
+        },
+        {
             "name": "Malti (FasterWhisper Tiny)",
             "model_id": "mt_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2561,6 +2837,12 @@
             "name": "Malti (FasterWhisper Large-v2)",
             "model_id": "mt_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "mt"
+        },
+        {
+            "name": "Malti (FasterWhisper Large-v3)",
+            "model_id": "mt_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "mt"
         },
         {
@@ -2594,6 +2876,12 @@
             "lang_id": "ne"
         },
         {
+            "name": "नेपाली (FasterWhisper Large-v3)",
+            "model_id": "ne_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "ne"
+        },
+        {
             "name": "Shqip (FasterWhisper Tiny)",
             "model_id": "sq_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2621,6 +2909,12 @@
             "name": "Shqip (FasterWhisper Large-v2)",
             "model_id": "sq_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "sq"
+        },
+        {
+            "name": "Shqip (FasterWhisper Large-v3)",
+            "model_id": "sq_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "sq"
         },
         {
@@ -2654,6 +2948,12 @@
             "lang_id": "sw"
         },
         {
+            "name": "Kiswahili (FasterWhisper Large-v3)",
+            "model_id": "sw_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "sw"
+        },
+        {
             "name": "Tagalog (FasterWhisper Tiny)",
             "model_id": "tl_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2681,6 +2981,12 @@
             "name": "Tagalog (FasterWhisper Large-v2)",
             "model_id": "tl_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "tl"
+        },
+        {
+            "name": "Tagalog (FasterWhisper Large-v3)",
+            "model_id": "tl_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "tl"
         },
         {
@@ -2714,6 +3020,12 @@
             "lang_id": "tt"
         },
         {
+            "name": "татарча (FasterWhisper Large-v3)",
+            "model_id": "tt_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "tt"
+        },
+        {
             "name": "Oʻzbekcha (FasterWhisper Tiny)",
             "model_id": "uz_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2741,6 +3053,12 @@
             "name": "Oʻzbekcha (FasterWhisper Large-v2)",
             "model_id": "uz_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "uz"
+        },
+        {
+            "name": "Oʻzbekcha (FasterWhisper Large-v3)",
+            "model_id": "uz_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "uz"
         },
         {
@@ -2774,6 +3092,12 @@
             "lang_id": "yo"
         },
         {
+            "name": "Yorùbá (FasterWhisper Large-v3)",
+            "model_id": "yo_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "yo"
+        },
+        {
             "name": "Amarəñña (FasterWhisper Tiny)",
             "model_id": "am_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2801,6 +3125,12 @@
             "name": "Amarəñña (FasterWhisper Large-v2)",
             "model_id": "am_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "am"
+        },
+        {
+            "name": "Amarəñña (FasterWhisper Large-v3)",
+            "model_id": "am_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "am"
         },
         {
@@ -2834,6 +3164,12 @@
             "lang_id": "ar"
         },
         {
+            "name": "عربي (FasterWhisper Large-v3)",
+            "model_id": "ar_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "ar"
+        },
+        {
             "name": "বাংলা (FasterWhisper Tiny)",
             "model_id": "bn_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2861,6 +3197,12 @@
             "name": "বাংলা (FasterWhisper Large-v2)",
             "model_id": "bn_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "bn"
+        },
+        {
+            "name": "বাংলা (FasterWhisper Large-v3)",
+            "model_id": "bn_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "bn"
         },
         {
@@ -2894,6 +3236,12 @@
             "lang_id": "mr"
         },
         {
+            "name": "मराठी (FasterWhisper Large-v3)",
+            "model_id": "mr_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "mr"
+        },
+        {
             "name": "Polski (FasterWhisper Tiny)",
             "model_id": "pl_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2921,6 +3269,12 @@
             "name": "Polski (FasterWhisper Large-v2)",
             "model_id": "pl_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "pl"
+        },
+        {
+            "name": "Polski (FasterWhisper Large-v3)",
+            "model_id": "pl_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "pl"
         },
         {
@@ -2954,6 +3308,12 @@
             "lang_id": "af"
         },
         {
+            "name": "Afrikaans (FasterWhisper Large-v3)",
+            "model_id": "af_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "af"
+        },
+        {
             "name": "עברית (FasterWhisper Tiny)",
             "model_id": "he_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -2981,6 +3341,12 @@
             "name": "עברית (FasterWhisper Large-v2)",
             "model_id": "he_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "he"
+        },
+        {
+            "name": "עברית (FasterWhisper Large-v3)",
+            "model_id": "he_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "he"
         },
         {
@@ -3014,6 +3380,12 @@
             "lang_id": "gu"
         },
         {
+            "name": "ગુજરાતી (FasterWhisper Large-v3)",
+            "model_id": "gu_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "gu"
+        },
+        {
             "name": "Hausa (FasterWhisper Tiny)",
             "model_id": "ha_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -3041,6 +3413,12 @@
             "name": "Hausa (FasterWhisper Large-v2)",
             "model_id": "ha_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "ha"
+        },
+        {
+            "name": "Hausa (FasterWhisper Large-v3)",
+            "model_id": "ha_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "ha"
         },
         {
@@ -3074,6 +3452,12 @@
             "lang_id": "jv"
         },
         {
+            "name": "Basa Jawa (FasterWhisper Large-v3)",
+            "model_id": "jv_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "jv"
+        },
+        {
             "name": "తెలుగు (FasterWhisper Tiny)",
             "model_id": "te_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -3104,6 +3488,12 @@
             "lang_id": "te"
         },
         {
+            "name": "తెలుగు (FasterWhisper Large-v3)",
+            "model_id": "te_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
+            "lang_id": "te"
+        },
+        {
             "name": "Setswana (FasterWhisper Tiny)",
             "model_id": "tn_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -3131,6 +3521,12 @@
             "name": "Setswana (FasterWhisper Large-v2)",
             "model_id": "tn_fasterwhisper_large2",
             "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "tn"
+        },
+        {
+            "name": "Setswana (FasterWhisper Large-v3)",
+            "model_id": "tn_fasterwhisper_large3",
+            "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "tn"
         },
         {
