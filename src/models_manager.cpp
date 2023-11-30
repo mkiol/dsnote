@@ -359,14 +359,27 @@ std::vector<models_manager::model_t> models_manager::models(
     std::for_each(m_models.cbegin(), m_models.cend(), [&](const auto& pair) {
         const auto& model = pair.second;
         if (!model.hidden && (lang_id.isEmpty() || lang_id == model.lang_id)) {
-            list.push_back(model_t{
-                pair.first, model.engine, model.lang_id, model.name,
-                /*model_file=*/model.file_name,
-                /*sup_files=*/sup_model_files(model.sup_models), model.speaker,
-                model.trg_lang_id, model.score, model.options, model.license,
-                make_download_info(model), model.default_for_lang,
-                model.available, model.dl_multi, model.dl_off, model.features,
-                model.downloading, model.download_progress});
+            list.push_back(
+                model_t{pair.first,
+                        model.engine,
+                        model.lang_id,
+                        model.lang_code,
+                        model.name,
+                        /*model_file=*/model.file_name,
+                        /*sup_files=*/sup_model_files(model.sup_models),
+                        model.speaker,
+                        model.trg_lang_id,
+                        model.score,
+                        model.options,
+                        model.license,
+                        make_download_info(model),
+                        model.default_for_lang,
+                        model.available,
+                        model.dl_multi,
+                        model.dl_off,
+                        model.features,
+                        model.downloading,
+                        model.download_progress});
         }
     });
 
@@ -449,13 +462,26 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
     for (const auto& [id, model] : m_models) {
         auto model_file = dir.filePath(model.file_name);
         if (!model.hidden && model.available && QFile::exists(model_file)) {
-            list.push_back(
-                {id, model.engine, model.lang_id, model.name, model_file,
-                 sup_model_files(model.sup_models), model.speaker,
-                 model.trg_lang_id, model.score, model.options, model.license,
-                 make_download_info(model), model.default_for_lang,
-                 model.available, model.dl_multi, model.dl_off, model.features,
-                 model.downloading, model.download_progress});
+            list.push_back({id,
+                            model.engine,
+                            model.lang_id,
+                            model.lang_code,
+                            model.name,
+                            model_file,
+                            sup_model_files(model.sup_models),
+                            model.speaker,
+                            model.trg_lang_id,
+                            model.score,
+                            model.options,
+                            model.license,
+                            make_download_info(model),
+                            model.default_for_lang,
+                            model.available,
+                            model.dl_multi,
+                            model.dl_off,
+                            model.features,
+                            model.downloading,
+                            model.download_progress});
         }
     }
 
@@ -1836,6 +1862,7 @@ auto models_manager::extract_models(
         priv_model_t model{
             /*engine=*/engine,
             /*lang_id=*/std::move(lang_id),
+            /*lang_code=*/obj.value(QLatin1String{"lang_code"}).toString(),
             /*name=*/obj.value(QLatin1String{"name"}).toString(),
             /*file_name=*/std::move(file_name),
             /*checksum=*/std::move(checksum),

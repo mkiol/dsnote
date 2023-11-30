@@ -122,6 +122,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         QString id;
         model_engine_t engine = model_engine_t::stt_ds;
         QString lang_id;
+        QString lang_code;
         QString name;
         QString model_file;
         std::vector<sup_model_file_t> sup_files;
@@ -235,6 +236,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     struct priv_model_t {
         model_engine_t engine = model_engine_t::stt_ds;
         QString lang_id;
+        QString lang_code;
         QString name;
         QString file_name;
         QString checksum;

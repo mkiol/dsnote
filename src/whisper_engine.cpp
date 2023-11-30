@@ -367,7 +367,8 @@ whisper_full_params whisper_engine::make_wparams() {
         m_config.lang = m_config.lang.substr(0, pos);
     }
 
-    wparams.language = m_config.lang.c_str();
+    wparams.language = m_config.lang_code.empty() ? m_config.lang.c_str()
+                                                  : m_config.lang_code.c_str();
     wparams.speed_up = false;
     wparams.suppress_blank = true;
     wparams.suppress_non_speech_tokens = true;

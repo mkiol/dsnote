@@ -99,6 +99,7 @@ class stt_engine {
 
     struct config_t {
         std::string lang;
+        std::string lang_code;
         model_files_t model_files;
         speech_mode_t speech_mode = speech_mode_t::automatic;
         vad_mode_t vad_mode = vad_mode_t::aggressiveness3;

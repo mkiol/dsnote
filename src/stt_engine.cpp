@@ -175,7 +175,8 @@ std::ostream& operator<<(std::ostream& os,
 }
 
 std::ostream& operator<<(std::ostream& os, const stt_engine::config_t& config) {
-    os << "lang=" << config.lang << ", model-files=[" << config.model_files
+    os << "lang=" << config.lang << ", lang_code=" << config.lang_code
+       << ", model-files=[" << config.model_files
        << "], speech-mode=" << config.speech_mode
        << ", vad-mode=" << config.vad_mode
        << ", speech-started=" << config.speech_started

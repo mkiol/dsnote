@@ -1809,6 +1809,41 @@
             "lang_id": "zh"
         },
         {
+            "name": "广东话 (FasterWhisper Tiny)",
+            "model_id": "zh_fasterwhisper_yue_tiny",
+            "model_alias_of": "multilang_fasterwhisper_tiny",
+            "lang_id": "zh",
+            "lang_code": "yue"
+        },
+        {
+            "name": "广东话 (FasterWhisper Base)",
+            "model_id": "zh_fasterwhisper_yue_base",
+            "model_alias_of": "multilang_fasterwhisper_base",
+            "lang_id": "zh",
+            "lang_code": "yue"
+        },
+        {
+            "name": "广东话 (FasterWhisper Small)",
+            "model_id": "zh_fasterwhisper_yue_small",
+            "model_alias_of": "multilang_fasterwhisper_small",
+            "lang_id": "zh",
+            "lang_code": "yue"
+        },
+        {
+            "name": "广东话 (FasterWhisper Medium)",
+            "model_id": "zh_fasterwhisper_yue_medium",
+            "model_alias_of": "multilang_fasterwhisper_medium",
+            "lang_id": "zh",
+            "lang_code": "yue"
+        },
+        {
+            "name": "广东话 (FasterWhisper Large-v2)",
+            "model_id": "zh_fasterwhisper_yue_large2",
+            "model_alias_of": "multilang_fasterwhisper_large2",
+            "lang_id": "zh",
+            "lang_code": "yue"
+        },
+        {
             "name": "Tiếng Việt (FasterWhisper Tiny)",
             "model_id": "vi_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -4004,6 +4039,48 @@
             "model_id": "zh_whisper_large2",
             "model_alias_of": "multilang_whisper_large2",
             "lang_id": "zh"
+        },
+        {
+            "name": "广东话 (Whisper Tiny)",
+            "model_id": "zh_whisper_yue_tiny",
+            "model_alias_of": "multilang_whisper_tiny",
+            "lang_id": "zh",
+            "lang_code": "yue"
+        },
+        {
+            "name": "广东话 (Whisper Base)",
+            "model_id": "zh_whisper_yue_base",
+            "model_alias_of": "multilang_whisper_base",
+            "lang_id": "zh",
+            "lang_code": "yue"
+        },
+        {
+            "name": "广东话 (Whisper Small)",
+            "model_id": "zh_whisper_yue_small",
+            "model_alias_of": "multilang_whisper_small",
+            "lang_id": "zh",
+            "lang_code": "yue"
+        },
+        {
+            "name": "广东话 (Whisper Medium)",
+            "model_id": "zh_whisper_yue_medium",
+            "model_alias_of": "multilang_whisper_medium",
+            "lang_id": "zh",
+            "lang_code": "yue"
+        },
+        {
+            "name": "广东话 (Whisper Large-v3)",
+            "model_id": "zh_whisper_yue_large",
+            "model_alias_of": "multilang_whisper_large",
+            "lang_id": "zh",
+            "lang_code": "yue"
+        },
+        {
+            "name": "广东话 (Whisper Large-v2)",
+            "model_id": "zh_whisper_yue_large2",
+            "model_alias_of": "multilang_whisper_large2",
+            "lang_id": "zh",
+            "lang_code": "yue"
         },
         {
             "name": "Tiếng Việt (Whisper Tiny)",

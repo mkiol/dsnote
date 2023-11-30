@@ -668,7 +668,8 @@ speech_service::choose_model_config_by_id(
                 auto scorer_file = models_manager::sup_model_file_of_role(
                     models_manager::sup_model_role_t::scorer, model.sup_files);
                 config->stt = stt_model_config_t{
-                    model.lang_id, model.id, model.engine, model.model_file,
+                    model.lang_id, model.lang_code, model.id, model.engine,
+                    model.model_file,
                     /*scorer_file=*/
                     scorer_file ? scorer_file->get().file : QString{},
                     /*ttt=*/{}};
@@ -777,8 +778,8 @@ speech_service::choose_model_config_by_lang(
                     models_manager::sup_model_role_t::scorer,
                     best_model->sup_files);
                 config->stt = stt_model_config_t{
-                    best_model->lang_id, best_model->id, best_model->engine,
-                    best_model->model_file,
+                    best_model->lang_id, best_model->lang_code, best_model->id,
+                    best_model->engine, best_model->model_file,
                     /*scorer_file=*/
                     scorer_file ? scorer_file->get().file : QString{},
                     /*ttt=*/{}};
@@ -831,7 +832,8 @@ speech_service::choose_model_config_by_first(
                 auto scorer_file = models_manager::sup_model_file_of_role(
                     models_manager::sup_model_role_t::scorer, model.sup_files);
                 config->stt = stt_model_config_t{
-                    model.lang_id, model.id, model.engine, model.model_file,
+                    model.lang_id, model.lang_code, model.id, model.engine,
+                    model.model_file,
                     /*scorer_file=*/
                     scorer_file ? scorer_file->get().file : QString{},
                     /*ttt=*/{}};
@@ -1036,6 +1038,7 @@ QString speech_service::restart_stt_engine(
             config.model_files.ttt_model_file =
                 model_config->stt->ttt->model_file.toStdString();
         config.lang = model_config->stt->lang_id.toStdString();
+        config.lang_code = model_config->stt->lang_code.toStdString();
         config.speech_mode =
             static_cast<stt_engine::speech_mode_t>(speech_mode);
         config.translate = false;
