@@ -84,7 +84,7 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
-    <release version="4.4.0" date="2023-11-27">
+    <release version="4.4.0" date="2023-11-30">
       <description>
       <p>User Interface:</p>
       <ul>
@@ -95,8 +95,15 @@
       <li>Filter options in the model browser.
           Models can be searched by various features such as: Processing speed, Quality, Additional capabilities.</li>
       </ul>
+      <p>Speech to Text:</p>
+      <ul>
+      <li>Marathi language. New language is enabled with Whisper and Faster Whisper models.</li>
+      <li>New version of Faster Whisper Large model: 'FasterWhisper Large-v3'</li>
+      <li>Whisper and Faster Whisper enabled for Chinese-Cantonese language</li>
+      </ul>
       <p>Text to Speech:</p>
       <ul>
+      <li>Marathi language. New language is enabled with Coqui MMS model.</li>
       <li>Voice cloning with Coqui XTTS model.
           Model is enabled for the following languages: Arabic, Brazilian Portuguese, Chinese, Czech,
           Dutch, English, French, German, Hungarian, Italian, Japanese, Korean, Polish, Russian,
@@ -107,6 +114,7 @@
           You can create voice sample with a microphone or from audio or video file.
           The sample creator is available on main toolbar only if the selected TTS model
           supports voice cloning.</li>
+      <li>New voice for Serbian language (RHVoice model)</li>
       </ul>
       <p>Other:</p>
       <ul>

@@ -14,7 +14,7 @@ DialogPage {
     title: qsTr("Changes")
 
     SectionLabel {
-        text: qsTr("Version %1").arg("4.4.0")
+        text: qsTr("Version %1").arg("4.4.0 beta")
     }
 
     RichLabel {
@@ -27,18 +27,26 @@ DialogPage {
         <li>Filter options in the model browser.
             Models can be searched by various features such as: Processing speed, Quality, Additional capabilities.</li>
         </ul>
+        <p>" + qsTr("Speech to Text") + ":</p>
+        <ul>
+        <li>Marathi language. New language is enabled with Whisper and Faster Whisper models.</li>
+        <li>New version of Faster Whisper Large model: <i>FasterWhisper Large-v3</i></li>
+        <li>Whisper and Faster Whisper enabled for Chinese-Cantonese language (广东话)</li>
+        </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
-        <li>Voice cloning with Coqui XTTS model.
-            Model is enabled for the following languages: Arabic, Brazilian Portuguese, Chinese, Czech,
+        <li>Marathi language. New language is enabled with Coqui MMS model.</li>
+        <li>Voice cloning with Coqui XTTS models.
+            Models are enabled for the following languages: Arabic, Brazilian Portuguese, Chinese, Czech,
             Dutch, English, French, German, Hungarian, Italian, Japanese, Korean, Polish, Russian,
             Spanish and Turkish.
-            Text to Speech with Coqui XTTS model is very slow when GPU acceleration is not enabled.</li>
+            Text to Speech with Coqui XTTS models might be slow when GPU acceleration is not enabled.</li>
         <li>Voice samples creator.
             A reference voice sample is used for voice cloning.
             You can create voice sample with a microphone or from audio or video file.
             The sample creator is available on main toolbar (<i>Voice samples</i>)
             only if the selected TTS model supports voice cloning.</li>
+        <li>New voice for Serbian language (RHVoice model)</li>
         </ul>
         <p>" + qsTr("Other") + ":</p>
         <ul>

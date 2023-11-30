@@ -78,6 +78,7 @@ Following languages are supported:
 | lv          | Latvian       | ●                    | ●                 |                |                     |                 |                   | ●                |                  | ●               |                  |                   |
 | mk          | Macedonian    |                      | ●                 |                |                     |                 | ●                 | ●                |                  |                 |                  |                   |
 | mn          | Mongolian     | ● (e)                | ●                 |                |                     |                 |                   |                  |                  | ●               |                  |                   |
+| mr          | Marathi       |                      | ●                 |                |                     |                 |                   |                  |                  | ●               |                  |                   |
 | ms          | Malay         |                      | ●                 |                |                     |                 |                   | ●                | ●                | ●               |                  |                   |
 | mt          | Maltese       |                      | ●                 |                |                     |                 |                   | ●                |                  | ●               |                  |                   |
 | ne          | Nepali        |                      | ●                 |                |                     | ●               |                   | ●                |                  |                 | ●                |                   |
@@ -90,7 +91,7 @@ Following languages are supported:
 | sk          | Slovak        |                      | ●                 |                |                     | ●               | ●                 | ●                |                  | ●               |                  |                   |
 | sl          | Slovenian     | ● (e)                | ●                 |                |                     |                 |                   | ●                |                  | ●               |                  |                   |
 | sq          | Albanian      |                      | ●                 |                |                     |                 | ●                 | ●                |                  | ●               |                  |                   |
-| sr          | Serbian       |                      | ●                 |                |                     | ●               |                   | ●                |                  |                 |                  |                   |
+| sr          | Serbian       |                      | ●                 |                |                     | ●               | ●                 | ●                |                  |                 |                  |                   |
 | sv          | Swedish       |                      | ●                 | ●              |                     | ●               |                   | ●                | ●                | ●               | ●                |                   |
 | sw          | Swahili       | ●                    | ●                 |                |                     | ●               |                   | ●                |                  | ●               |                  |                   |
 | te          | Telugu        |                      | ●                 |                |                     |                 |                   | ●                |                  |                 | ●                |                   |
@@ -147,16 +148,17 @@ Comparison between "Flathub" and "Tiny" Flatpak packages:
 | Coqui/DeepSpeech STT    | ✔️          | ✔️ |
 | Vosk STT                | ✔️          | ✔️ |
 | Whisper STT             | ✔️          | ✔️ |
-| Whisper STT GPU         | ✔️          | ❌ |
-| Faster Whisper STT      | ✔️          | ❌ |
+| Whisper STT GPU         | ✔️          | ✘ |
+| Faster Whisper STT      | ✔️          | ✘ |
 | April-ASR STT           | ✔️          | ✔️ |
 | eSpeak TTS              | ✔️          | ✔️ |
 | MBROLA TTS              | ✔️          | ✔️ |
 | Piper TTS               | ✔️          | ✔️ |
 | RHVoice TTS             | ✔️          | ✔️ |
-| Coqui TTS               | ✔️          | ❌ |
-| Mimic3 TTS              | ✔️          | ❌ |
-| Punctuation restoration | ✔️          | ❌ |
+| Coqui TTS               | ✔️          | ✘ |
+| Mimic3 TTS              | ✔️          | ✘ |
+| Punctuation restoration | ✔️          | ✘ |
+| Translator              | ✔️          | ✔️ |
 
 ## Building from sources
 
