@@ -7,7 +7,7 @@ rename-icon: dsnote
 rename-appdata-file: dsnote.metainfo.xml
 command: dsnote
 build-options:
-  strip: true
+  strip: false
   no-debuginfo: true
 finish-args:
   - --share=ipc
@@ -170,6 +170,8 @@ modules:
       - "cp ./libtensorflowlite.so /app/lib"
       - "cp ./libtflitedelegates.so /app/lib"
       - "cp ./coqui-stt.h /app/include"
+    build-options:
+      strip: true
     sources:
       - type: archive
         only-arches:
@@ -189,6 +191,8 @@ modules:
     build-commands:
       - "cp ./libvosk.so /app/lib"
       - "cp ./vosk_api.h /app/include"
+    build-options:
+      strip: true
     sources:
       - type: archive
         only-arches:
@@ -331,7 +335,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RHVoice/RHVoice.git
-        commit: 408db88bd1dd68fe23aef3ffac30f92018398d8b
+        commit: 2b80f2765b7ac4b33a5cb2ce4a1ddfc2749df6a7
       - type: patch
         path: ../patches/rhvoice.patch
 
@@ -673,6 +677,8 @@ modules:
       - for file in *.deb; do [ -f "$file" ] || break; mv "$file" rocm_src && cd rocm_src && ar x "$file" && rm control.tar.* && rm debian-binary && tar -xf data.tar.* && rm data.tar.* && cd ..; done
       - mkdir -p /app/opt
       - mv rocm_src/opt/rocm-5.4.3 /app/opt/rocm
+    build-options:
+      strip: true
     cleanup:
       - /opt/rocm/bin
       - /opt/rocm/hsa
@@ -718,7 +724,7 @@ modules:
       - echo "/app/opt/rocm/lib/libamdocl64.so" > vendors/amdocl64.icd
       - mkdir -p /app/opt/opencl
       - cp -r vendors /app/opt/opencl/
-
+ 
   - name: numa
     buildsystem: autotools
     config-opts:
@@ -745,11 +751,13 @@ modules:
       - x86_64
     buildsystem: simple
     build-commands:
-      - sh cuda_11.7.1_515.65.01_linux.run --target . --noexec
+      - sh cuda_12.2.2_535.104.05_linux.run --target ./ --noexec
       - rm -rf builds/*.* && rm -rf builds/bin builds/cuda_sanitizer_api builds/integration builds/nsight_compute builds/nsight_systems builds/cuda_gdb builds/cuda_documentation
       - mkdir -p /app/opt/cuda
       - cd builds && for lib in *; do echo "copying $lib/* => /app/opt/cuda/" && if [ -d $lib ]; then cp -r $lib/* /app/opt/cuda/; else cp -P $lib /app/opt/cuda/; fi; done
       - cd builds/cuda_cupti/extras/CUPTI/lib64/ && for lib in libcupti.so*; do echo "copying $lib/* => /app/opt/cuda/lib64/" && cp -P $lib /app/opt/cuda/lib64/; done
+    build-options:
+      strip: true
     cleanup:
       - "/opt/cuda/bin"
       - "/opt/cuda/extras"
@@ -777,8 +785,8 @@ modules:
       - "/opt/cuda/targets/x86_64-linux/res"
     sources:
       - type: file
-        url: https://developer.download.nvidia.com/compute/cuda/11.7.1/local_installers/cuda_11.7.1_515.65.01_linux.run
-        sha256: 52286a29706549b7d0feeb0e7e3eca1b15287c436a69fa880ad385b1be3e04db
+        url: https://developer.download.nvidia.com/compute/cuda/12.2.2/local_installers/cuda_12.2.2_535.104.05_linux.run
+        sha256: 2b39aae3e7618d9f59a3c8fa1f1bc61f29c0b0e0df75fb05076badb352952ef2
 
   - name: whispercpp-cublas
     only-arches:
@@ -796,7 +804,7 @@ modules:
       - -DCMAKE_CUDA_FLAGS=' -allow-unsupported-compiler'
       - -DCUDAToolkit_ROOT=/app/opt/cuda
       - -DCMAKE_CUDA_COMPILER=/app/opt/cuda/bin/nvcc
-      - -DCMAKE_CUDA_ARCHITECTURES=50;52;53;60;61;62;70;72;75;80;86;87
+      - -DCMAKE_CUDA_ARCHITECTURES=50;52;53;60;61;62;70;72;75;80;86;87;89;90;90a
     post-install:
       - "mv /app/lib/libwhisper.so /app/lib/libwhisper-cublas.so"
     sources:
@@ -819,20 +827,29 @@ modules:
     only-arches:
       - x86_64
     buildsystem: simple
+    build-options:
+      strip: true
     cleanup:
       - /opt/cuda/targets/x86_64-linux/lib/libcudnn_*train*
+      - /opt/cuda/targets/x86_64-linux/include
     build-commands:
       - ar x cudnn-local-repo-ubuntu2204-8.8.0.121_1.0-1_amd64.deb && rm control.tar.* && rm debian-binary && rm *.deb
       - tar -xf data.tar.* && rm data.tar.*
-      - mv var/cudnn-local-repo-ubuntu2204-8.8.0.121/libcudnn8_8.8.0.121-1+cuda11.8_amd64.deb libcudnn.deb && rm -rf var
-      - ar x libcudnn.deb && rm control.tar.* && rm debian-binary && rm *.deb
+      - mv var/cudnn-local-repo-ubuntu2204-8.8.0.121/libcudnn8_8.8.0.121-1+cuda12.0_amd64.deb libcudnn.deb
+      - mv var/cudnn-local-repo-ubuntu2204-8.8.0.121/libcudnn8-dev_8.8.0.121-1+cuda12.0_amd64.deb libcudnn-dev.deb
+      - ar x libcudnn.deb && rm control.tar.* && rm debian-binary
       - tar -xf data.tar.* && rm data.tar.*
       - cd usr/lib/x86_64-linux-gnu && for lib in *; do echo "copying $lib/* => /app/opt/cuda/lib64/" && if [ -d $lib ]; then cp -r $lib/* /app/opt/cuda/lib64/; else cp -P $lib /app/opt/cuda/lib64/; fi; done
+      - cd /app/opt/cuda/lib64 && ln -s libcudnn.so.8 libcudnn.so
+      - ar x libcudnn-dev.deb && rm control.tar.* && rm debian-binary
+      - tar -xf data.tar.* && rm data.tar.*
+      - cd usr/include/x86_64-linux-gnu && for inc in *; do ln -s $inc ${inc%_*}.h; done
+      - cd usr/include/x86_64-linux-gnu && for inc in *; do echo "copying $inc/* => /app/opt/cuda/include/" && cp -P $inc /app/opt/cuda/include/; done
     sources:
       - type: file
-        url: https://developer.download.nvidia.com/compute/redist/cudnn/v8.8.0/local_installers/11.8/cudnn-local-repo-ubuntu2204-8.8.0.121_1.0-1_amd64.deb
-        sha256: 9620283cdd4fa23dc359762470bc13aeb66115357234c1bd0250693a8403a127
-
+        url: https://developer.download.nvidia.com/compute/redist/cudnn/v8.8.0/local_installers/12.0/cudnn-local-repo-ubuntu2204-8.8.0.121_1.0-1_amd64.deb
+        sha256: 44fe35e998530b4f5b29d8da37b58f4bb252173cd11ca847d6becd63e0c8ee5d
+        
   - name: nccl
     only-arches:
       - x86_64
@@ -841,6 +858,8 @@ modules:
       - ar x libnccl2_2.18.5-1-1_amd64.deb && rm control.tar.* && rm debian-binary && rm *.deb
       - tar -xf data.tar.* && rm data.tar.*
       - cd usr/lib/x86_64-linux-gnu && for lib in *; do echo "copying $lib/* => /app/opt/cuda/lib64/" && if [ -d $lib ]; then cp -r $lib/* /app/opt/cuda/lib64/; else cp -P $lib /app/opt/cuda/lib64/; fi; done
+    build-options:
+      strip: true
     sources:
       - type: file
         url: http://http.us.debian.org/debian/pool/contrib/n/nvidia-nccl/libnccl2_2.18.5-1-1_amd64.deb
@@ -880,6 +899,75 @@ modules:
           - exec ./configure.gnu $@
 
   - python3-modules-x86-64.yaml
+
+  - name: oneapi
+    only-arches:
+      - x86_64
+    buildsystem: simple
+    cleanup:
+      - /opt/oneapi
+    build-commands:
+      - sh l_BaseKit_p_2024.0.0.49564_offline.sh --extract-folder ./oneapi -a --eula accept --silent --install-dir ${FLATPAK_DEST}/opt/oneapi
+    sources:
+      - type: file
+        url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/20f4e6a1-6b0b-4752-b8c1-e5eacba10e01/l_BaseKit_p_2024.0.0.49564_offline.sh
+        sha256: f6613cb9c79fbf61c2e541144b8d5c70be845e071f29feb5686b64481528276d
+
+  - name: onednn
+    only-arches:
+      - x86_64
+    buildsystem: cmake-ninja
+    cleanup:
+      - /bin
+      - /include
+      - /lib/cmake
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DONEDNN_LIBRARY_TYPE=STATIC
+      - -DONEDNN_BUILD_EXAMPLES=OFF
+      - -DONEDNN_BUILD_TESTS=OFF
+      - -DONEDNN_ENABLE_WORKLOAD=INFERENCE
+      - -DONEDNN_ENABLE_PRIMITIVE=CONVOLUTION;REORDER
+      - -DONEDNN_BUILD_GRAPH=OFF
+    sources:
+      - type: archive
+        url: https://github.com/oneapi-src/oneDNN/archive/refs/tags/v3.3.1.tar.gz
+        sha256: e0b7a9452162e854cf08b4e90bcd1b382b9903ace6a61503a872573880d24c3f
+
+  - name: ctranslate2
+    only-arches:
+      - x86_64
+    buildsystem: cmake-ninja
+    cleanup:
+      - /bin
+      - /include
+      - /lib/cmake
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DBUILD_CLI=OFF
+      - -DCUDA_DYNAMIC_LOADING=ON
+      - -DWITH_CUDA=ON
+      - -DWITH_CUDNN=ON
+      - -DOPENMP_RUNTIME=COMP
+      - -DCUDA_ARCH_LIST=5.0 5.2 5.3 6.0 6.1 6.2 7.0 7.2 7.5 8.0 8.6 8.7 8.9 9.0 9.0
+      - -DCUDA_NVCC_FLAGS=-Xfatbin=-compress-all
+      - -DWITH_MKL=ON
+      - -DWITH_DNNL=ON
+      - -DWITH_RUY=ON
+      - -DINTEL_ROOT=/app/opt/oneapi
+      - -DCUDA_TOOLKIT_ROOT_DIR=/app/opt/cuda
+      - -DCMAKE_CXX_FLAGS=-msse4.1 -DTHRUST_IGNORE_CUB_VERSION_CHECK=1
+    post-install:
+      - rm -rf ${FLATPAK_DEST}/lib/python3.10/site-packages/ctranslate2*
+      - cd python && python setup.py bdist_wheel
+      - pip3 install --verbose --exists-action=i --no-index --prefix=${FLATPAK_DEST} --no-build-isolation python/dist/*.whl
+      - strip ${FLATPAK_DEST}/lib/libctranslate2.so.3.22.0
+    sources:
+      - type: git
+        url: https://github.com/OpenNMT/CTranslate2.git
+        commit: d963499e6ed496526e68fb149c908cb2da1f0255
+      - type: patch
+        path: ../patches/ctranslate2.patch
 
   - name: dsnote
     buildsystem: cmake-ninja

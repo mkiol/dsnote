@@ -1,0 +1,34 @@
+diff -ruN '--exclude=.*' CTranslate2-org/CMakeLists.txt CTranslate2-patched/CMakeLists.txt
+--- CTranslate2-org/CMakeLists.txt	2023-11-29 14:09:59.890020341 +0100
++++ CTranslate2-patched/CMakeLists.txt	2023-11-29 17:37:16.457154443 +0100
+@@ -42,6 +42,7 @@
+ endif()
+ set(INTEL_ROOT ${INTEL_ROOT_DEFAULT} CACHE FILEPATH "Path to Intel root directory")
+ set(OPENMP_RUNTIME "INTEL" CACHE STRING "OpenMP runtime (INTEL, COMP, NONE)")
++set(OPENDNN_ROOT "${INTEL_ROOT}/dnnl" CACHE FILEPATH "Path to OpenDNN root directory")
+ 
+ # Set Release build type by default to get sane performance.
+ if(NOT CMAKE_BUILD_TYPE)
+@@ -291,7 +292,7 @@
+ if(WITH_MKL)
+   find_path(MKL_ROOT include/mkl.h DOC "Path to MKL root directory" PATHS
+     $ENV{MKLROOT}
+-    ${INTEL_ROOT}/mkl
++    ${INTEL_ROOT}/mkl/latest
+     ${INTEL_ROOT}/oneAPI/mkl/latest
+     ${INTEL_ROOT}/oneapi/mkl/latest
+     )
+@@ -355,12 +356,7 @@
+ endif()
+ 
+ if(WITH_DNNL)
+-  set(ONEAPI_DNNL_PATH ${INTEL_ROOT}/oneapi/dnnl/latest)
+-  if(OPENMP_RUNTIME STREQUAL "INTEL")
+-    set(ONEAPI_DNNL_PATH ${ONEAPI_DNNL_PATH}/cpu_iomp)
+-  else()
+-    set(ONEAPI_DNNL_PATH ${ONEAPI_DNNL_PATH}/cpu_gomp)
+-  endif()
++  set(ONEAPI_DNNL_PATH ${OPENDNN_ROOT})
+ 
+   find_path(DNNL_INCLUDE_DIR NAMES dnnl.h PATHS ${ONEAPI_DNNL_PATH}/include)
+   if(DNNL_INCLUDE_DIR)
