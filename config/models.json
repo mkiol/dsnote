@@ -24062,6 +24062,19 @@
             "name": "عربي (Coqui XTTS-v2.0.3)",
             "model_id": "ar_coqui_xtts203",
             "model_alias_of": "multilang_coqui_xtts203",
+            "options": "d",
+            "sups": [
+                {
+                    "role": "diacritizer",
+                    "file_name": "ar_tashkeel_diacritizer.ort",
+                    "checksum": "32ad5edd",
+                    "checksum_quick": "eb5f7f7d",
+                    "size": "10261536",
+                    "urls": [
+                        "https://github.com/rhasspy/piper-phonemize/raw/8e5aa981d9628533e612652dccb93d26c66c5b21/etc/libtashkeel_model.ort"
+                    ]
+                }
+            ],
             "lang_id": "ar"
         },
         {
@@ -24074,6 +24087,7 @@
             "name": "中文 (Coqui XTTS-v2.0.3)",
             "model_id": "zh_coqui_cn_xtts203",
             "model_alias_of": "multilang_coqui_xtts203",
+            "options": "a",
             "lang_id": "zh"
         },
         {
@@ -24140,12 +24154,14 @@
             "name": "한국어 (Coqui XTTS-v2.0.3)",
             "model_id": "ko_coqui_xtts203",
             "model_alias_of": "multilang_coqui_xtts203",
+            "options": "a",
             "lang_id": "ko"
         },
         {
             "name": "日本語 (Coqui XTTS-v2.0.3)",
             "model_id": "ja_coqui_xtts203",
             "model_alias_of": "multilang_coqui_xtts203",
+            "options": "a",
             "lang_id": "ja"
         },
         {
@@ -24158,6 +24174,19 @@
             "name": "عربي (Coqui XTTS-v2.0.2)",
             "model_id": "ar_coqui_xtts202",
             "model_alias_of": "multilang_coqui_xtts202",
+            "options": "d",
+            "sups": [
+                {
+                    "role": "diacritizer",
+                    "file_name": "ar_tashkeel_diacritizer.ort",
+                    "checksum": "32ad5edd",
+                    "checksum_quick": "eb5f7f7d",
+                    "size": "10261536",
+                    "urls": [
+                        "https://github.com/rhasspy/piper-phonemize/raw/8e5aa981d9628533e612652dccb93d26c66c5b21/etc/libtashkeel_model.ort"
+                    ]
+                }
+            ],
             "lang_id": "ar"
         },
         {
@@ -24170,6 +24199,7 @@
             "name": "中文 (Coqui XTTS-v2.0.2)",
             "model_id": "zh_coqui_cn_xtts202",
             "model_alias_of": "multilang_coqui_xtts202",
+            "options": "a",
             "lang_id": "zh"
         },
         {
@@ -24236,12 +24266,14 @@
             "name": "한국어 (Coqui XTTS-v2.0.2)",
             "model_id": "ko_coqui_xtts202",
             "model_alias_of": "multilang_coqui_xtts202",
+            "options": "a",
             "lang_id": "ko"
         },
         {
             "name": "日本語 (Coqui XTTS-v2.0.2)",
             "model_id": "ja_coqui_xtts202",
             "model_alias_of": "multilang_coqui_xtts202",
+            "options": "a",
             "lang_id": "ja"
         },
         {
@@ -24652,6 +24684,9 @@
             "options": "a",
             "checksum": "625b3989",
             "checksum_quick": "e50a019a",
+            "features": [
+                "low_quality"
+            ],
             "comp": "zip",
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--zh-CN--baker--tacotron2-DDC-GST.zip"

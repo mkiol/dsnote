@@ -1633,6 +1633,14 @@ models_manager::feature_flags models_manager::add_explicit_feature_flags(
     return existing_features;
 }
 
+static QString merge_options(QString opts_1, const QString& opts_2) {
+    for (auto c : opts_2) {
+        if (!opts_1.contains(c)) opts_1.push_back(c);
+    }
+
+    return opts_1;
+}
+
 auto models_manager::extract_models(
     const QJsonArray& models_jarray,
     std::optional<models_availability_t> models_availability) {
@@ -1747,12 +1755,13 @@ auto models_manager::extract_models(
             size = alias.size;
             comp = alias.comp;
             urls = alias.urls;
-            sup_models = alias.sup_models;
+            extract_sup_models(model_id, obj, sup_models);
+            if (sup_models.empty()) sup_models = alias.sup_models;
             if (speaker.isEmpty()) speaker = alias.speaker;
             exists = alias.exists;
             available = alias.available;
             if (trg_lang_id.isEmpty()) trg_lang_id = alias.trg_lang_id;
-            if (options.isEmpty()) options = alias.options;
+            options = merge_options(options, alias.options);
 
             if (engine == model_engine_t::mnt_bergamot &&
                 trg_lang_id.isEmpty()) {
