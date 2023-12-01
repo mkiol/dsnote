@@ -831,24 +831,16 @@ modules:
       strip: true
     cleanup:
       - /opt/cuda/targets/x86_64-linux/lib/libcudnn_*train*
-      - /opt/cuda/targets/x86_64-linux/include
+      - /opt/cuda/include
     build-commands:
-      - ar x cudnn-local-repo-ubuntu2204-8.8.0.121_1.0-1_amd64.deb && rm control.tar.* && rm debian-binary && rm *.deb
-      - tar -xf data.tar.* && rm data.tar.*
-      - mv var/cudnn-local-repo-ubuntu2204-8.8.0.121/libcudnn8_8.8.0.121-1+cuda12.0_amd64.deb libcudnn.deb
-      - mv var/cudnn-local-repo-ubuntu2204-8.8.0.121/libcudnn8-dev_8.8.0.121-1+cuda12.0_amd64.deb libcudnn-dev.deb
-      - ar x libcudnn.deb && rm control.tar.* && rm debian-binary
-      - tar -xf data.tar.* && rm data.tar.*
-      - cd usr/lib/x86_64-linux-gnu && for lib in *; do echo "copying $lib/* => /app/opt/cuda/lib64/" && if [ -d $lib ]; then cp -r $lib/* /app/opt/cuda/lib64/; else cp -P $lib /app/opt/cuda/lib64/; fi; done
-      - cd /app/opt/cuda/lib64 && ln -s libcudnn.so.8 libcudnn.so
-      - ar x libcudnn-dev.deb && rm control.tar.* && rm debian-binary
-      - tar -xf data.tar.* && rm data.tar.*
-      - cd usr/include/x86_64-linux-gnu && for inc in *; do ln -s $inc ${inc%_*}.h; done
-      - cd usr/include/x86_64-linux-gnu && for inc in *; do echo "copying $inc/* => /app/opt/cuda/include/" && cp -P $inc /app/opt/cuda/include/; done
+      - mkdir -p ${FLATPAK_DEST}/opt/cuda/include
+      - cd include && for f in *; do echo "copying $f => ${FLATPAK_DEST}/opt/cuda/include" && cp -P $f ${FLATPAK_DEST}/opt/cuda/include/; done
+      - mkdir -p ${FLATPAK_DEST}/opt/cuda/targets/x86_64-linux/lib
+      - cd lib && for f in *; do echo "copying $f => ${FLATPAK_DEST}/opt/cuda/targets/x86_64-linux/lib" && cp -P $f ${FLATPAK_DEST}/opt/cuda/targets/x86_64-linux/lib/; done
     sources:
-      - type: file
-        url: https://developer.download.nvidia.com/compute/redist/cudnn/v8.8.0/local_installers/12.0/cudnn-local-repo-ubuntu2204-8.8.0.121_1.0-1_amd64.deb
-        sha256: 44fe35e998530b4f5b29d8da37b58f4bb252173cd11ca847d6becd63e0c8ee5d
+      - type: archive
+        url: https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-x86_64/cudnn-linux-x86_64-8.9.2.26_cuda12-archive.tar.xz
+        sha256: ccafd7d15c2bf26187d52d79d9ccf95104f4199980f5075a7c1ee3347948ce32
         
   - name: nccl
     only-arches:
@@ -857,7 +849,7 @@ modules:
     build-commands:
       - ar x libnccl2_2.18.5-1-1_amd64.deb && rm control.tar.* && rm debian-binary && rm *.deb
       - tar -xf data.tar.* && rm data.tar.*
-      - cd usr/lib/x86_64-linux-gnu && for lib in *; do echo "copying $lib/* => /app/opt/cuda/lib64/" && if [ -d $lib ]; then cp -r $lib/* /app/opt/cuda/lib64/; else cp -P $lib /app/opt/cuda/lib64/; fi; done
+      - cd usr/lib/x86_64-linux-gnu && for lib in *; do echo "copying $lib => ${FLATPAK_DEST}/opt/cuda/lib64/" && if [ -d $lib ]; then cp -r $lib/* ${FLATPAK_DEST}/opt/cuda/lib64/; else cp -P $lib ${FLATPAK_DEST}/opt/cuda/lib64/; fi; done
     build-options:
       strip: true
     sources:
@@ -870,10 +862,10 @@ modules:
       - x86_64
     buildsystem: simple
     build-commands:
-      - "mkdir -p /app/share/uroman"
-      - "cp -r ./bin /app/share/uroman"
-      - "cp -r ./data /app/share/uroman"
-      - "cp -r ./lib /app/share/uroman"
+      - "mkdir -p ${FLATPAK_DEST}/share/uroman"
+      - "cp -r ./bin ${FLATPAK_DEST}/share/uroman"
+      - "cp -r ./data ${FLATPAK_DEST}/share/uroman"
+      - "cp -r ./lib ${FLATPAK_DEST}/share/uroman"
     sources:
       - type: archive
         url: https://github.com/isi-nlp/uroman/archive/refs/tags/v1.2.8.tar.gz
@@ -886,9 +878,9 @@ modules:
     build-commands:
       - ./configure -des
       - make -j${FLATPAK_BUILDER_N_JOBS}
-      - cp perl /app/bin/
-      - mkdir -p /app/lib/perl5/site_perl
-      - cp -r lib/* /app/lib/perl5/site_perl/
+      - cp perl ${FLATPAK_DEST}/bin/
+      - mkdir -p ${FLATPAK_DEST}/lib/perl5/site_perl
+      - cp -r lib/* ${FLATPAK_DEST}/lib/perl5/site_perl/
     sources:
       - type: archive
         url: https://www.cpan.org/src/5.0/perl-5.38.0.tar.gz
