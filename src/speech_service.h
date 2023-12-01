@@ -135,7 +135,7 @@ class speech_service : public QObject, public singleton<speech_service> {
                                        const QVariantMap &options);
 
     Q_INVOKABLE int mnt_translate(const QString &text, QString lang,
-                                  QString out_lang);
+                                  QString out_lang, const QVariantMap &options);
     Q_INVOKABLE int cancel(int task);
 
     QString default_stt_model() const;
@@ -421,7 +421,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     QString restart_tts_engine(const QString &model_id,
                                const QVariantMap &options);
     QString restart_mnt_engine(const QString &model_or_lang_id,
-                               const QString &out_lang_id);
+                               const QString &out_lang_id,
+                               const QVariantMap &options);
     void restart_audio_source(const QString &source_file = {});
     void stop_stt();
     source_t audio_source_type() const;
@@ -513,6 +514,9 @@ class speech_service : public QObject, public singleton<speech_service> {
     Q_INVOKABLE double TtsGetSpeechToFileProgress(int task);
     Q_INVOKABLE int MntTranslate(const QString &text, const QString &lang,
                                  const QString &out_lang);
+    Q_INVOKABLE int MntTranslate2(const QString &text, const QString &lang,
+                                  const QString &out_lang,
+                                  const QVariantMap &options);
     Q_INVOKABLE QVariantMap MntGetOutLangs(const QString &lang);
     Q_INVOKABLE QVariantMap FeaturesAvailability();
 };

@@ -515,6 +515,25 @@
         </method>
 
         <!--
+            MntTranslate2:
+            @text: text that should be translated
+            @lang: language code (ISO 639-1) of @text
+            @out_lang: language code (ISO 639-1) @text should be translated to
+            @options: A dict of options (option-name => option-value).
+            @task: returned id of task which will be included in
+                   MntTranslateFinished signal,
+                   @task less than 0 idicates an error
+        -->
+        <method name="MntTranslate2">
+            <annotation name="org.qtproject.QtDBus.QtTypeName.In3" value="QVariantMap"/>
+            <arg name="text" type="s" direction="in" />
+            <arg name="lang" type="s" direction="in" />
+            <arg name="out_lang" type="s" direction="in" />
+            <arg name="options" type="a{sv}" direction="in" />
+            <arg name="task" type="i" direction="out" />
+        </method>
+
+        <!--
             MntGetOutLangs:
             @lang: language code (ISO 639-1) of input language
             @out_langs: returned a dict of languages (lang id => array of properties)

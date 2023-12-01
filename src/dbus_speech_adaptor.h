@@ -184,6 +184,14 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"in\" type=\"s\" name=\"out_lang\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </method>\n"
+"    <method name=\"MntTranslate2\">\n"
+"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.In3\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"text\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"lang\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"out_lang\"/>\n"
+"      <arg direction=\"in\" type=\"a{sv}\" name=\"options\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
+"    </method>\n"
 "    <method name=\"MntGetOutLangs\">\n"
 "      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"lang\"/>\n"
@@ -358,6 +366,7 @@ public Q_SLOTS: // METHODS
     int KeepAliveTask(int task);
     QVariantMap MntGetOutLangs(const QString &lang);
     int MntTranslate(const QString &text, const QString &lang, const QString &out_lang);
+    int MntTranslate2(const QString &text, const QString &lang, const QString &out_lang, const QVariantMap &options);
     int Reload();
     double SttGetFileTranscribeProgress(int task);
     int SttStartListen(int mode, const QString &lang, const QString &out_lang);

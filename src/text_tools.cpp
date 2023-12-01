@@ -7,6 +7,7 @@
 
 #include "text_tools.hpp"
 
+#include <ctype.h>
 #include <fmt/format.h>
 #include <ssplit.h>
 #include <unistd.h>
@@ -316,6 +317,18 @@ void to_lower_case(std::string& text) {
     auto wtext = UTF8_to_wchar(text.c_str());
     std::transform(wtext.cbegin(), wtext.cend(), wtext.begin(), std::towlower);
     text.assign(wchar_to_UTF8(wtext.c_str()));
+}
+
+void clean_white_characters(std::string& text) {
+    std::replace_if(
+        text.begin(), text.end(),
+        [](unsigned char c) { return std::isspace(c); }, ' ');
+
+    text.erase(std::unique(text.begin(), text.end(),
+                           [](unsigned char c1, unsigned char c2) {
+                               return std::isspace(c1) && std::isspace(c2);
+                           }),
+               text.end());
 }
 
 // source: https://stackoverflow.com/a/64359731/7767358

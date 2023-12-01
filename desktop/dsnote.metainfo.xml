@@ -84,7 +84,7 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
-    <release version="4.4.0" date="2023-11-30">
+    <release version="4.4.0" date="2023-12-01">
       <description>
       <p>User Interface:</p>
       <ul>
@@ -115,6 +115,11 @@
           The sample creator is available on main toolbar only if the selected TTS model
           supports voice cloning.</li>
       <li>New voice for Serbian language (RHVoice model)</li>
+      </ul>
+      <p>Translator:</p>
+      <ul>
+      <li>Setting option to force text cleaning before translation.
+          If the input text is incorrectly formatted, this option may improve the translation quality.</li>
       </ul>
       <p>Other:</p>
       <ul>

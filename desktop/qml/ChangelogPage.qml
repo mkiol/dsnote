@@ -48,6 +48,12 @@ DialogPage {
             only if the selected TTS model supports voice cloning.</li>
         <li>New voice for Serbian language (RHVoice model)</li>
         </ul>
+        <p>" + qsTr("Translator") + ":</p>
+        <ul>
+        <li>Setting option to force text cleaning before translation
+            (<i>Other</i> &rarr; <i>Clean text before translation</i>).
+            If the input text is incorrectly formatted, this option may improve the translation quality.</li>
+        </ul>
         <p>" + qsTr("Other") + ":</p>
         <ul>
         <li>Setting option to limit number of simultaneous CPU threads

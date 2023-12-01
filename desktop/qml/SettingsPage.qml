@@ -774,6 +774,23 @@ DialogPage {
             }
 
             SectionLabel {
+                text: qsTr("Translator")
+            }
+
+            CheckBox {
+                checked: _settings.mnt_clean_text
+                text: qsTr("Clean text before translation")
+                onCheckedChanged: {
+                    _settings.mnt_clean_text = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Removes duplicate whitespaces and extra line breaks in the text before translation.") + " " +
+                              qsTr("If the input text is incorrectly formatted, this option may improve the translation quality.")
+            }
+
+            SectionLabel {
                 text: qsTr("Graphic cards support")
             }
 

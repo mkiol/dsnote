@@ -243,6 +243,14 @@ int SpeechAdaptor::MntTranslate(const QString &text, const QString &lang, const 
     return task;
 }
 
+int SpeechAdaptor::MntTranslate2(const QString &text, const QString &lang, const QString &out_lang, const QVariantMap &options)
+{
+    // handle method call org.mkiol.Speech.MntTranslate2
+    int task;
+    QMetaObject::invokeMethod(parent(), "MntTranslate2", Q_RETURN_ARG(int, task), Q_ARG(QString, text), Q_ARG(QString, lang), Q_ARG(QString, out_lang), Q_ARG(QVariantMap, options));
+    return task;
+}
+
 int SpeechAdaptor::Reload()
 {
     // handle method call org.mkiol.Speech.Reload

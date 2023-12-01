@@ -172,6 +172,13 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("MntTranslate"), argumentList);
     }
 
+    inline QDBusPendingReply<int> MntTranslate2(const QString &text, const QString &lang, const QString &out_lang, const QVariantMap &options)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(text) << QVariant::fromValue(lang) << QVariant::fromValue(out_lang) << QVariant::fromValue(options);
+        return asyncCallWithArgumentList(QStringLiteral("MntTranslate2"), argumentList);
+    }
+
     inline QDBusPendingReply<int> Reload()
     {
         QList<QVariant> argumentList;

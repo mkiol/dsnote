@@ -1375,8 +1375,15 @@ QString speech_service::restart_tts_engine(const QString &model_id,
     return {};
 }
 
+static bool mnt_clean_text_from_options(const QVariantMap &options) {
+    if (options.contains(QStringLiteral("clean_text")))
+        return options.value(QStringLiteral("clean_text")).toBool();
+    return {};
+}
+
 QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
-                                           const QString &out_lang_id) {
+                                           const QString &out_lang_id,
+                                           const QVariantMap &options) {
     auto model_config =
         choose_model_config(engine_t::mnt, model_or_lang_id, out_lang_id);
     if (model_config && model_config->mnt) {
@@ -1389,6 +1396,7 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
         config.lang = model_config->mnt->lang_id.toStdString();
         config.out_lang = model_config->mnt->out_lang_id.toStdString();
         config.options = model_config->options.toStdString();
+        config.clean_text = mnt_clean_text_from_options(options);
 
         QFile nb_file{QStringLiteral(":/nonbreaking_prefixes/%1.txt")
                           .arg(model_config->mnt->lang_id.split('-').first())};
@@ -1447,6 +1455,8 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
             }
         } else {
             qDebug() << "new mnt engine not required";
+
+            m_mnt_engine->set_clean_text(config.clean_text);
         }
 
         m_mnt_engine->start();
@@ -2395,7 +2405,8 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
 }
 
 int speech_service::mnt_translate(const QString &text, QString lang,
-                                  QString out_lang) {
+                                  QString out_lang,
+                                  const QVariantMap &options) {
     if (state() == state_t::unknown || state() == state_t::not_configured ||
         state() == state_t::busy) {
         qWarning() << "cannot mnt translate, invalid state";
@@ -2416,12 +2427,12 @@ int speech_service::mnt_translate(const QString &text, QString lang,
 
     m_current_task = {next_task_id(),
                       engine_t::mnt,
-                      restart_mnt_engine(lang, out_lang),
+                      restart_mnt_engine(lang, out_lang, options),
                       speech_mode_t::translate,
                       out_lang,
                       {},
                       {},
-                      {},
+                      options,
                       false};
 
     if (m_current_task->model_id.isEmpty()) {
@@ -3503,7 +3514,16 @@ int speech_service::MntTranslate(const QString &text, const QString &lang,
     qDebug() << "[dbus => service] called MntTranslate";
     start_keepalive_current_task();
 
-    return mnt_translate(text, lang, out_lang);
+    return mnt_translate(text, lang, out_lang, {});
+}
+
+int speech_service::MntTranslate2(const QString &text, const QString &lang,
+                                  const QString &out_lang,
+                                  const QVariantMap &options) {
+    qDebug() << "[dbus => service] called MntTranslate2";
+    start_keepalive_current_task();
+
+    return mnt_translate(text, lang, out_lang, options);
 }
 
 QVariantMap speech_service::MntGetOutLangs(const QString &lang) {

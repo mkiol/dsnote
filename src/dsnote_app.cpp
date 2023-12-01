@@ -1996,15 +1996,18 @@ void dsnote_app::translate() {
     } else {
         int new_task = 0;
 
+        QVariantMap options;
+        options.insert("clean_text", settings::instance()->mnt_clean_text());
+
         if (settings::instance()->launch_mode() ==
             settings::launch_mode_t::app_stanalone) {
             new_task = speech_service::instance()->mnt_translate(
-                note(), m_active_mnt_lang, m_active_mnt_out_lang);
+                note(), m_active_mnt_lang, m_active_mnt_out_lang, options);
         } else {
             qDebug() << "[app => dbus] call MntTranslate";
 
-            new_task = m_dbus_service.MntTranslate(note(), m_active_mnt_lang,
-                                                   m_active_mnt_out_lang);
+            new_task = m_dbus_service.MntTranslate2(
+                note(), m_active_mnt_lang, m_active_mnt_out_lang, options);
         }
 
         m_primary_task.set(new_task);

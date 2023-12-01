@@ -56,6 +56,7 @@ class mnt_engine {
         std::string nb_data;
         std::string out_lang;
         std::string options;
+        bool clean_text = false;
     };
     friend std::ostream& operator<<(std::ostream& os, const config_t& config);
 
@@ -66,6 +67,7 @@ class mnt_engine {
     void request_stop();
     inline auto lang() const { return m_config.lang; }
     inline auto model_files() const { return m_config.model_files; }
+    inline void set_clean_text(bool value) { m_config.clean_text = value; }
     inline auto state() const { return m_state; }
     void translate(std::string text);
 
@@ -111,7 +113,7 @@ class mnt_engine {
     void create_model();
     void set_state(state_t new_state);
     void process();
-    std::string translate_internal(const std::string& text);
+    std::string translate_internal(std::string text);
     void open_bergamot_lib();
 };
 

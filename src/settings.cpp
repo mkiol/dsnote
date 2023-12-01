@@ -1426,6 +1426,17 @@ void settings::set_gpu_scan_cuda(bool value) {
     }
 }
 
+bool settings::mnt_clean_text() const {
+    return value(QStringLiteral("mnt_clean_text"), false).toBool();
+}
+
+void settings::set_mnt_clean_text(bool value) {
+    if (value != mnt_clean_text()) {
+        setValue(QStringLiteral("mnt_clean_text"), value);
+        emit mnt_clean_text_changed();
+    }
+}
+
 bool settings::gpu_scan_hip() const {
     return value(QStringLiteral("gpu_scan_hip"), true).toBool();
 }

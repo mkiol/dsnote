@@ -139,6 +139,8 @@ class settings : public QSettings, public singleton<settings> {
                    active_tts_for_out_mnt_ref_voice WRITE
                        set_active_tts_for_out_mnt_ref_voice NOTIFY
                            active_tts_for_out_mnt_ref_voice_changed)
+    Q_PROPERTY(bool mnt_clean_text READ mnt_clean_text WRITE set_mnt_clean_text
+                   NOTIFY mnt_clean_text_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -368,6 +370,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_active_tts_for_in_mnt_ref_voice(const QString &value);
     QString active_tts_for_out_mnt_ref_voice() const;
     void set_active_tts_for_out_mnt_ref_voice(const QString &value);
+    bool mnt_clean_text() const;
+    void set_mnt_clean_text(bool value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -500,6 +504,7 @@ class settings : public QSettings, public singleton<settings> {
     void active_tts_ref_voice_changed();
     void active_tts_for_in_mnt_ref_voice_changed();
     void active_tts_for_out_mnt_ref_voice_changed();
+    void mnt_clean_text_changed();
 
     // service
     void models_dir_changed();

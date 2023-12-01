@@ -29,8 +29,8 @@ std::ostream& operator<<(std::ostream& os,
 }
 
 std::ostream& operator<<(std::ostream& os, const mnt_engine::config_t& config) {
-    os << "lang=" << config.lang << ", model-files=[" << config.model_files
-       << "]";
+    os << "lang=" << config.lang << ", clean-text=" << config.clean_text
+       << ", model-files=[" << config.model_files << "]";
 
     return os;
 }
@@ -212,12 +212,14 @@ static std::string fix_text(std::string text) {
     return text;
 }
 
-std::string mnt_engine::translate_internal(const std::string& text) {
+std::string mnt_engine::translate_internal(std::string text) {
     std::vector<std::string> out_parts;
 
     auto engine = m_config.options.find('a') != std::string::npos
                       ? text_tools::engine_t::astrunc
                       : text_tools::engine_t::ssplit;
+
+    if (m_config.clean_text) text_tools::clean_white_characters(text);
 
     auto in_parts =
         text_tools::split(text, engine, m_config.lang, m_config.nb_data);
