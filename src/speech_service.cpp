@@ -1378,7 +1378,7 @@ QString speech_service::restart_tts_engine(const QString &model_id,
 static bool mnt_clean_text_from_options(const QVariantMap &options) {
     if (options.contains(QStringLiteral("clean_text")))
         return options.value(QStringLiteral("clean_text")).toBool();
-    return {};
+    return false;
 }
 
 QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,

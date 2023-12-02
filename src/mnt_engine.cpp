@@ -219,7 +219,11 @@ std::string mnt_engine::translate_internal(std::string text) {
                       ? text_tools::engine_t::astrunc
                       : text_tools::engine_t::ssplit;
 
-    if (m_config.clean_text) text_tools::clean_white_characters(text);
+    if (m_config.clean_text) {
+        text_tools::trim_lines(text);
+        text_tools::remove_hyphen_word_break(text);
+        text_tools::clean_white_characters(text);
+    }
 
     auto in_parts =
         text_tools::split(text, engine, m_config.lang, m_config.nb_data);

@@ -16,6 +16,7 @@
 #include <cstdlib>
 #include <cwctype>
 #include <libnumbertext/Numbertext.hxx>
+#include <sstream>
 #include <string_view>
 
 #include "astrunc/astrunc.h"
@@ -288,6 +289,19 @@ static std::wstring UTF8_to_wchar(const char* in) {
     return out;
 }
 
+static void ltrim(std::string& s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+                return !std::isspace(ch);
+            }));
+}
+
+static void rtrim(std::string& s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(),
+                         [](unsigned char ch) { return !std::isspace(ch); })
+                .base(),
+            s.end());
+}
+
 void restore_caps(std::string& text) {
     auto wtext = UTF8_to_wchar(text.c_str());
 
@@ -319,6 +333,33 @@ void to_lower_case(std::string& text) {
     text.assign(wchar_to_UTF8(wtext.c_str()));
 }
 
+void remove_hyphen_word_break(std::string& text) {
+    auto wtext_in = UTF8_to_wchar(text.c_str());
+    std::wstring wtext_out;
+
+    auto is_hyphen = [](wchar_t wc) {
+        wchar_t hypens[] =
+            L"\U0000002D\U00002010\U00002011\U00002012\U00002013\U00002014";
+        for (auto i = 0u; i < 6; ++i)
+            if (wc == hypens[i]) return true;
+        return false;
+    };
+
+    for (auto it = wtext_in.cbegin(); it != wtext_in.cend();
+         std::advance(it, 1)) {
+        if (it != wtext_in.cbegin() && std::next(it) != wtext_in.cend() &&
+            std::next(it, 2) != wtext_in.cend() && is_hyphen(*it) &&
+            *std::next(it) == '\n' && std::iswalpha(*std::prev(it)) &&
+            std::iswalpha(*std::next(it, 2))) {
+            std::advance(it, 1);
+        } else {
+            wtext_out.push_back(*it);
+        }
+    }
+
+    text.assign(wchar_to_UTF8(wtext_out.c_str()));
+}
+
 void clean_white_characters(std::string& text) {
     std::replace_if(
         text.begin(), text.end(),
@@ -329,6 +370,23 @@ void clean_white_characters(std::string& text) {
                                return std::isspace(c1) && std::isspace(c2);
                            }),
                text.end());
+}
+
+void trim_lines(std::string& text) {
+    auto ss_in = std::stringstream{text};
+    std::stringstream ss_out;
+
+    for (std::string line; std::getline(ss_in, line);) {
+        ltrim(line);
+        rtrim(line);
+
+        if (!line.empty()) ss_out << line << '\n';
+    }
+
+    auto s = ss_out.str();
+    if (!s.empty() && s.back() == '\n') s = s.substr(0, s.size() - 1);
+
+    text.assign(std::move(s));
 }
 
 // source: https://stackoverflow.com/a/64359731/7767358
