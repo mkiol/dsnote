@@ -876,8 +876,9 @@ modules:
       - x86_64
     buildsystem: simple
     build-commands:
-      - ./configure -des
+      - ./configure.gnu -des
       - make -j${FLATPAK_BUILDER_N_JOBS}
+      - mkdir -p ${FLATPAK_DEST}/bin
       - cp perl ${FLATPAK_DEST}/bin/
       - mkdir -p ${FLATPAK_DEST}/lib/perl5/site_perl
       - cp -r lib/* ${FLATPAK_DEST}/lib/perl5/site_perl/
@@ -885,10 +886,6 @@ modules:
       - type: archive
         url: https://www.cpan.org/src/5.0/perl-5.38.0.tar.gz
         sha256: 213ef58089d2f2c972ea353517dc60ec3656f050dcc027666e118b508423e517
-      - type: script
-        dest-filename: configure
-        commands:
-          - exec ./configure.gnu $@
 
   - python3-modules-x86-64.yaml
 

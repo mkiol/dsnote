@@ -8,8 +8,10 @@ modules:
   - name: python3-torch
     buildsystem: simple
     cleanup:
-      - "/bin"
-      - "/lib/*.so*"
+      - /bin/convert*
+      - /bin/torch*
+      - /bin/isympy
+      - /lib/*.so*
     build-options:
       strip: true
     build-commands:
@@ -107,8 +109,8 @@ modules:
   - name: python3-setuptools_scm
     buildsystem: simple
     cleanup:
-      - "/bin"
-      - "/lib/*.so*"
+      - /bin
+      - /lib/*.so*
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "setuptools_scm[toml]==8.0.4" --no-build-isolation
@@ -126,8 +128,8 @@ modules:
       - *id001
   - name: python3-accelerate
     cleanup:
-      - "/bin"
-      - "/lib/*.so*"
+      - /bin
+      - /lib/*.so*
     buildsystem: simple
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
@@ -202,7 +204,7 @@ modules:
   - name: python3-transformers
     buildsystem: simple
     cleanup:
-      - "/bin"
+      - /bin
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "transformers==4.33.3" --no-build-isolation
@@ -239,9 +241,9 @@ modules:
   - name: python3-TTS
     buildsystem: simple
     cleanup:
-      - "/bin"
-      - "/lib/*.so*"
-      - "/*.rst"
+      - /bin
+      - /lib/*.so*
+      - /*.rst
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "TTS[ja]==0.21.2" --no-build-isolation
@@ -631,8 +633,8 @@ modules:
   - name: python3-faster-whisper
     buildsystem: simple
     cleanup:
-        - "/bin"
-        - "/lib/*.so*"
+        - /bin
+        - /lib/*.so*
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "faster-whisper==0.10.0" --no-build-isolation
@@ -681,8 +683,8 @@ modules:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "mycroft_mimic3_tts[all]==0.2.4" --no-build-isolation
     cleanup:
-      - "/bin"
-      - "/lib/*.so*"
+      - /bin
+      - /lib/*.so*
     sources:
       - type: file
         url: https://files.pythonhosted.org/packages/86/14/5dc2eb02b7cc87b2f95930310a2cc5229198414919a116b564832c747bc1/Babel-2.13.1-py3-none-any.whl
@@ -932,7 +934,7 @@ modules:
       - pip3 install --verbose --no-deps --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "unikud==0.1.0" --no-build-isolation
     cleanup:
-      - "/bin"
+      - /bin
     sources:
       - type: file
         url: https://files.pythonhosted.org/packages/3c/ba/d77a3086771ecd0ae0bfeb577df75e18aa7171f7175052e0c985fb29cc14/unikud-0.1.0-py3-none-any.whl
@@ -940,8 +942,8 @@ modules:
   - name: python3-pybind11
     buildsystem: simple
     cleanup:
-      - "/bin"
-      - "/lib/python3.10/site-packages/pybind11*"
+      - /bin
+      - /lib/python3.10/site-packages/pybind11*
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "pybind11" --no-build-isolation
