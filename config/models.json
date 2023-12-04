@@ -5793,12 +5793,6 @@
             "lang_id": "pl"
         },
         {
-            "name": "Polski (Whisper Tiny)",
-            "model_id": "pl_whisper_tiny",
-            "model_alias_of": "multilang_whisper_tiny",
-            "lang_id": "pl"
-        },
-        {
             "name": "Polski (Whisper Tiny Fine-Tuned)",
             "model_id": "pl_whisper_tiny_ft",
             "engine": "stt_whisper",
