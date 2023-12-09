@@ -191,6 +191,7 @@ RowLayout {
                          app.task_state !== DsnoteApp.TaskStateInitializing &&
                          app.state === DsnoteApp.StateListeningSingleSentence
                 visible: app.state === DsnoteApp.StateListeningSingleSentence
+                text: qsTr("Stop")
                 onClicked: app.stop_listen()
 
                 ToolTip.visible: hovered
