@@ -7,6 +7,8 @@
 
 #include "py_executor.hpp"
 
+#include <fmt/format.h>
+
 #include <cstdlib>
 #include <stdexcept>
 #include <string>
@@ -53,6 +55,22 @@ std::future<std::string> py_executor::execute(task_t task) {
     return m_promise->get_future();
 }
 
+static std::string add_to_env_path(const std::string& dir) {
+    try {
+        auto* old_path = getenv("PYTHONPATH");
+        if (old_path)
+            setenv("PYTHONPATH", fmt::format("{}:{}", dir, old_path).c_str(),
+                   true);
+        else
+            setenv("PYTHONPATH", dir.c_str(), false);
+    } catch (const std::runtime_error& err) {
+        qWarning() << "error:" << err.what();
+    }
+
+    auto* new_path = getenv("PYTHONPATH");
+    return new_path ? std::string{new_path} : std::string{};
+}
+
 void py_executor::loop() {
     LOGD("py executor loop started");
 
@@ -62,8 +80,9 @@ void py_executor::loop() {
 
     auto py_path = settings::instance()->py_path().toStdString();
     if (!py_path.empty()) {
-        LOGD("setting PYTHONPATH: " << py_path);
-        setenv("PYTHONPATH", py_path.c_str(), 1);
+        LOGD("adding to PYTHONPATH: " << py_path);
+        auto new_path = add_to_env_path(py_path);
+        LOGD("new PYTHONPATH: " << new_path);
     }
 
     try {
