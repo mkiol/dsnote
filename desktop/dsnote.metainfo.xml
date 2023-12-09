@@ -104,6 +104,7 @@
       <li>New version of Faster Whisper Large model: 'FasterWhisper Large-v3'</li>
       <li>Whisper and Faster Whisper enabled for Chinese-Cantonese language</li>
       <li>Support for Speex audio codec in 'Transcribe a file'</li>
+      <li>Translate to English option for Whisper and Faster Whisper models.</li>
       </ul>
       <p>Text to Speech:</p>
       <ul>

@@ -1794,12 +1794,15 @@ void dsnote_app::transcribe_file(const QString &source_file, bool replace) {
     int new_task = 0;
 
     if (s->launch_mode() == settings::launch_mode_t::app_stanalone) {
-        new_task = speech_service::instance()->stt_transcribe_file(source_file,
-                                                                   {}, {});
+        new_task = speech_service::instance()->stt_transcribe_file(
+            source_file, {},
+            s->whisper_translate() ? QStringLiteral("en") : QString{});
     } else {
         qDebug() << "[app => dbus] call SttTranscribeFile";
 
-        new_task = m_dbus_service.SttTranscribeFile(source_file, {}, {});
+        new_task = m_dbus_service.SttTranscribeFile(
+            source_file, {},
+            s->whisper_translate() ? QStringLiteral("en") : QString{});
     }
 
     m_side_task.set(new_task);
@@ -1832,11 +1835,12 @@ void dsnote_app::listen_internal() {
     if (s->launch_mode() == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->stt_start_listen(
             static_cast<speech_service::speech_mode_t>(s->speech_mode()), {},
-            {});
+            s->whisper_translate() ? QStringLiteral("en") : QString{});
     } else {
         qDebug() << "[app => dbus] call SttStartListen:" << s->speech_mode();
         new_task = m_dbus_service.SttStartListen(
-            static_cast<int>(s->speech_mode()), {}, {});
+            static_cast<int>(s->speech_mode()), {},
+            s->whisper_translate() ? QStringLiteral("en") : QString{});
     }
 
     m_primary_task.set(new_task);
@@ -3157,6 +3161,15 @@ QString dsnote_app::download_content(const QUrl &url) {
     return text;
 }
 
+bool dsnote_app::stt_translate_needed_by_id(const QString &id) const {
+    if (m_available_stt_models_map.contains(id)) {
+        auto model = m_available_stt_models_map.value(id).toStringList();
+        return model.size() > 2 && model.at(2).contains('t');
+    }
+
+    return false;
+}
+
 bool dsnote_app::tts_ref_voice_needed_by_id(const QString &id) const {
     if (m_available_tts_models_map.contains(id)) {
         auto model = m_available_tts_models_map.value(id).toStringList();
@@ -3164,6 +3177,10 @@ bool dsnote_app::tts_ref_voice_needed_by_id(const QString &id) const {
     }
 
     return false;
+}
+
+bool dsnote_app::stt_translate_needed() const {
+    return stt_translate_needed_by_id(m_active_stt_model);
 }
 
 bool dsnote_app::tts_ref_voice_needed() const {

@@ -1437,6 +1437,17 @@ void settings::set_mnt_clean_text(bool value) {
     }
 }
 
+bool settings::whisper_translate() const {
+    return value(QStringLiteral("whisper_translate"), false).toBool();
+}
+
+void settings::set_whisper_translate(bool value) {
+    if (value != whisper_translate()) {
+        setValue(QStringLiteral("whisper_translate"), value);
+        emit whisper_translate_changed();
+    }
+}
+
 bool settings::gpu_scan_hip() const {
     return value(QStringLiteral("gpu_scan_hip"), true).toBool();
 }

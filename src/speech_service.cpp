@@ -1023,9 +1023,9 @@ static std::optional<typename Engine::gpu_device_t> make_gpu_device(
     return std::nullopt;
 }
 
-QString speech_service::restart_stt_engine(
-    speech_mode_t speech_mode, const QString &model_id,
-    [[maybe_unused]] const QString &out_lang_id) {
+QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
+                                           const QString &model_id,
+                                           const QString &out_lang_id) {
     auto model_config = choose_model_config(engine_t::stt, model_id);
     if (model_config && model_config->stt) {
         stt_engine::config_t config;
@@ -1041,7 +1041,8 @@ QString speech_service::restart_stt_engine(
         config.lang_code = model_config->stt->lang_code.toStdString();
         config.speech_mode =
             static_cast<stt_engine::speech_mode_t>(speech_mode);
-        config.translate = false;
+        config.translate = !out_lang_id.isEmpty() && out_lang_id == "en" &&
+                           config.lang != "en";
         config.options = model_config->options.toStdString();
 
         if (settings::instance()->stt_use_gpu() &&
@@ -1081,6 +1082,7 @@ QString speech_service::restart_stt_engine(
 
             if (m_stt_engine->model_files() != config.model_files) return true;
             if (m_stt_engine->lang() != config.lang) return true;
+            if (m_stt_engine->translate() != config.translate) return true;
             if (config.use_gpu != m_stt_engine->use_gpu() ||
                 config.gpu_device != m_stt_engine->gpu_device())
                 return true;

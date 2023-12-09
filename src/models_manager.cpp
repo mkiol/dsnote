@@ -1608,6 +1608,7 @@ models_manager::feature_flags models_manager::add_explicit_feature_flags(
                 existing_features, feature_flags::medium_processing);
             existing_features = add_new_feature(existing_features,
                                                 feature_flags::medium_quality);
+            break;
         case model_engine_t::tts_piper:
             existing_features =
                 add_new_feature(existing_features, feature_flags::high_quality);
@@ -1947,10 +1948,15 @@ auto models_manager::extract_models(
             }
         }
 
-        // add char replacement option for all coqui tts models
         if (model.engine == model_engine_t::tts_coqui &&
             !model.options.contains('c')) {
+            // add char replacement option for all coqui tts models
             model.options.push_back('c');
+        } else if ((model.engine == model_engine_t::stt_whisper ||
+                    model.engine == model_engine_t::stt_fasterwhisper) &&
+                   !model.options.contains('t') && model.lang_id != "en") {
+            // add translate option for all whisper stt models
+            model.options.push_back('t');
         }
 
         models.emplace(model_id, std::move(model));

@@ -68,6 +68,8 @@ class dsnote_app : public QObject {
                    active_stt_model_changed)
     Q_PROPERTY(QVariantList available_stt_models READ available_stt_models
                    NOTIFY available_stt_models_changed)
+    Q_PROPERTY(bool stt_translate_needed READ stt_translate_needed NOTIFY
+                   active_stt_model_changed)
 
     // tts ref voices
     Q_PROPERTY(int active_tts_ref_voice_idx READ active_tts_ref_voice_idx NOTIFY
@@ -657,7 +659,9 @@ class dsnote_app : public QObject {
     bool feature_text_active_window() const;
     bool feature_coqui_tts() const;
     void request_reload();
+    bool stt_translate_needed_by_id(const QString &id) const;
     bool tts_ref_voice_needed_by_id(const QString &id) const;
+    bool stt_translate_needed() const;
     bool tts_ref_voice_needed() const;
     bool tts_for_in_mnt_ref_voice_needed() const;
     bool tts_for_out_mnt_ref_voice_needed() const;

@@ -39,6 +39,7 @@ ColumnLayout {
 
         if (app.stt_configured) {
             listenReadCombos.first.combo.currentIndex = app.active_stt_model_idx
+            listenReadCombos.first.check.checked = _settings.whisper_translate
         }
         if (app.tts_configured) {
             listenReadCombos.second.combo.currentIndex = app.active_tts_model_idx
@@ -93,10 +94,18 @@ ColumnLayout {
                                             app.state === DsnoteApp.StateListeningManual)
             comboToolTip: qsTr("Speech to Text model")
             comboPlaceholderText: qsTr("No Speech to Text model")
+            checkToolTip: qsTr("Translate to English")
             combo {
                 model: app.available_stt_models
                 onActivated: app.set_active_stt_model_idx(index)
                 currentIndex: app.active_stt_model_idx
+            }
+            check {
+                visible: app.stt_translate_needed
+                checked: _settings.whisper_translate
+                onClicked: {
+                    _settings.whisper_translate = !_settings.whisper_translate
+                }
             }
             button {
                 text: qsTr("Listen")
@@ -180,7 +189,6 @@ ColumnLayout {
                 }
                 onActivated: _settings.speech_speed = index + 1
             }
-
             button {
                 enabled: listenReadCombos.second.enabled &&
                          !listenReadCombos.second.off &&

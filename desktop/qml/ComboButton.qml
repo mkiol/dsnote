@@ -18,10 +18,12 @@ RowLayout {
     property alias combo: _combo
     property alias combo2: _combo2
     property alias combo3: _combo3
+    property alias check: _check
     property alias frame: _frame
     property string comboToolTip: ""
     property string combo2ToolTip: ""
     property string combo3ToolTip: ""
+    property string checkToolTip: ""
     property string buttonToolTip: ""
     readonly property bool off: combo.model.length === 0
     property string comboPlaceholderText: ""
@@ -94,6 +96,17 @@ RowLayout {
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: root.combo3ToolTip
+            }
+
+            Switch {
+                id: _check
+
+                visible: false
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                enabled: !root.off
+                ToolTip.visible: hovered
+                //ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: root.checkToolTip
             }
 
             Button {

@@ -33,6 +33,9 @@ DialogPage {
         <li>New version of Faster Whisper Large model: <i>FasterWhisper Large-v3</i></li>
         <li>Whisper and Faster Whisper enabled for Chinese-Cantonese language (广东话)</li>
         <li>Support for Speex audio codec in <i>Transcribe a file</i></li>
+        <li>Translate to English option for Whisper and Faster Whisper models.
+            To automatically translate to English, use the switch to the right of the model selection box.
+            The option is only visible if you select a non-English Whisper or Faster Whisper model.</li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
