@@ -131,6 +131,7 @@ set(ffmpeg_opts
     --enable-decoder=libvorbis
     --enable-decoder=flac
     --enable-decoder=libopus
+    --enable-decoder=speex
     --enable-muxer=mp3
     --enable-muxer=ogg
     --enable-muxer=wav

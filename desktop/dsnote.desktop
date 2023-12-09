@@ -4,5 +4,5 @@ Categories=Utility;Office;Audio;AudioVideo;TextEditor;Translation;KDE;Qt;
 Icon=dsnote
 Exec=dsnote %F
 Name=Speech Note
-MimeType=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/opus;audio/vorbis;audio/x-vorbis;audio/wav;audio/x-wav;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;audio/mp4;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;text/plain;
+MimeType=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/opus;audio/vorbis;audio/x-vorbis;audio/x-speex;audio/speex;audio/wav;audio/x-wav;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;audio/mp4;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;text/plain;
 StartupWMClass=dsnote

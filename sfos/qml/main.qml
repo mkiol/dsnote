@@ -42,6 +42,9 @@ ApplicationWindow {
             "audio/ogg",
             "audio/vorbis",
             "audio/x-vorbis",
+            "audio/opus",
+            "audio/x-speex",
+            "audio/speex",
             "audio/wav",
             "audio/x-wav",
             "audio/flac",
@@ -206,7 +209,7 @@ ApplicationWindow {
                 id: fileReadDialog
 
                 FilePickerPage {
-                    nameFilters: [ '*.wav', '*.mp3', '*.ogg', '*.oga', '*.opus', '*.flac', '*.m4a', '*.aac', '*.mp4', '*.mkv', '*.ogv', '*.webm' ]
+                    nameFilters: [ '*.wav', '*.mp3', '*.ogg', '*.oga', '*.opus', '*.spx', '*.flac', '*.m4a', '*.aac', '*.mp4', '*.mkv', '*.ogv', '*.webm' ]
                     onSelectedContentPropertiesChanged: {
                         app.transcribe_file(selectedContentProperties.filePath, false)
                     }

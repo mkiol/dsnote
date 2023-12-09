@@ -69,6 +69,9 @@
       <mediatype>audio/ogg</mediatype>
       <mediatype>audio/vorbis</mediatype>
       <mediatype>audio/x-vorbis</mediatype>
+      <mediatype>audio/opus</mediatype>
+      <mediatype>audio/x-speex</mediatype>
+      <mediatype>audio/speex</mediatype>
       <mediatype>audio/wav</mediatype>
       <mediatype>audio/x-wav</mediatype>
       <mediatype>audio/flac</mediatype>
@@ -100,6 +103,7 @@
       <li>Marathi language. New language is enabled with Whisper and Faster Whisper models.</li>
       <li>New version of Faster Whisper Large model: 'FasterWhisper Large-v3'</li>
       <li>Whisper and Faster Whisper enabled for Chinese-Cantonese language</li>
+      <li>Support for Speex audio codec in 'Transcribe a file'</li>
       </ul>
       <p>Text to Speech:</p>
       <ul>

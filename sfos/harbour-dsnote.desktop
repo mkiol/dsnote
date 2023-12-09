@@ -4,7 +4,7 @@ Categories=Utility;Office;Audio;AudioVideo;TextEditor;Translation;KDE;Qt;
 Icon=harbour-dsnote
 Exec=harbour-dsnote --app %F
 Name=Speech Note
-MimeType=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/vorbis;audio/x-vorbis;audio/wav;audio/x-wav;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;audio/mp4;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;text/plain;
+MimeType=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/vorbis;audio/x-vorbis;audio/opus;audio/x-speex;audio/speex;audio/wav;audio/x-wav;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;audio/mp4;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;text/plain;
 X-Nemo-Application-Type=silica-qt5
 X-Share-Methods=files;
 X-DBusActivatable=true
@@ -16,5 +16,5 @@ ApplicationName=dsnote
 ExecDBus=harbour-dsnote --app
 
 [X-Share Method files]
-Capabilities=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/vorbis;audio/x-vorbis;audio/wav;audio/x-wav;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;audio/mp4;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;text/plain;
+Capabilities=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/vorbis;audio/x-vorbis;audio/opus;audio/x-speex;audio/speex;audio/wav;audio/x-wav;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;audio/mp4;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;text/plain;
 SupportsMultipleFiles=yes

@@ -288,8 +288,8 @@ ToolBar {
 
         title: qsTr("Open File")
         nameFilters: [
-            qsTr("Audio and video files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.flac *.m4a *.aac *.mp4 *.mkv *.ogv *.webm)",
-            qsTr("Audio files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.flac *.m4a *.aac)",
+            qsTr("Audio and video files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.spx *.flac *.m4a *.aac *.mp4 *.mkv *.ogv *.webm)",
+            qsTr("Audio files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.spx *.flac *.m4a *.aac)",
             qsTr("Video files") + " (*.mp4 *.mkv *.ogv *.webm)",
             qsTr("All files") + " (*)"]
         folder: _settings.file_audio_open_dir_url

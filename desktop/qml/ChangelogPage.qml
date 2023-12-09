@@ -32,6 +32,7 @@ DialogPage {
         <li>Marathi language. New language is enabled with Whisper and Faster Whisper models.</li>
         <li>New version of Faster Whisper Large model: <i>FasterWhisper Large-v3</i></li>
         <li>Whisper and Faster Whisper enabled for Chinese-Cantonese language (广东话)</li>
+        <li>Support for Speex audio codec in <i>Transcribe a file</i></li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
