@@ -78,6 +78,7 @@ struct cmd_options {
     bool gpu_scan_off = false;
     bool py_scan_off = false;
     bool reset_models = false;
+    bool start_in_tray = false;
     QString action;
     QStringList files;
     QString log_file;
@@ -147,6 +148,13 @@ static cmd_options check_options(const QCoreApplication& app) {
         QStringLiteral(
             "Reset the models configuration file to default settings.")};
     parser.addOption(resetmodels_opt);
+
+#ifdef USE_DESKTOP
+    QCommandLineOption start_in_tray_opt{
+        QStringLiteral("start-in-tray"),
+        QStringLiteral("Starts minimized to the system tray.")};
+    parser.addOption(start_in_tray_opt);
+#endif
 
     QCommandLineOption log_file_opt{
         QStringLiteral("log-file"),
@@ -222,6 +230,9 @@ static cmd_options check_options(const QCoreApplication& app) {
     options.py_scan_off = parser.isSet(pyscanoff_opt);
     options.reset_models = parser.isSet(resetmodels_opt);
     options.files = parser.positionalArguments();
+#ifdef USE_DESKTOP
+    options.start_in_tray = parser.isSet(start_in_tray_opt);
+#endif
 
     return options;
 }
@@ -339,6 +350,8 @@ static void start_app(const cmd_options& options, app_server& dbus_app_server) {
                                 options.files);
     context->setContextProperty(QStringLiteral("_requested_action"),
                                 options.action);
+    context->setContextProperty(QStringLiteral("_start_in_tray"),
+                                options.start_in_tray);
     context->setContextProperty(QStringLiteral("_app_server"),
                                 &dbus_app_server);
 

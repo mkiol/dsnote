@@ -26,6 +26,7 @@ finish-args:
   - --env=OPENCL_VENDOR_PATH=/app/opt/opencl/vendors
   - --env=PERL5LIB=/app/lib/perl5/site_perl
   - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.kde.StatusNotifierWatcher # system tray icon
 cleanup:
   - "/cmake"
   - "/etc"

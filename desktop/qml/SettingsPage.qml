@@ -192,6 +192,24 @@ DialogPage {
             }
 
             CheckBox {
+                checked: _settings.use_tray
+                text: qsTr("Use system tray icon")
+                onCheckedChanged: {
+                    _settings.use_tray = checked
+                }
+            }
+
+            CheckBox {
+                Layout.leftMargin: 2 * appWin.padding
+                visible: _settings.use_tray
+                checked: _settings.start_in_tray
+                text: qsTr("Start minimized to the system tray")
+                onCheckedChanged: {
+                    _settings.start_in_tray = checked
+                }
+            }
+
+            CheckBox {
                 checked: !_settings.qt_style_auto
                 text: qsTr("Use custom graphical style")
                 onCheckedChanged: {

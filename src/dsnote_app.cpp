@@ -302,6 +302,16 @@ dsnote_app::dsnote_app(QObject *parent)
 
     update_available_tts_ref_voices();
     register_hotkeys();
+
+#ifdef USE_DESKTOP
+    connect(&m_tray, &QSystemTrayIcon::activated, this,
+            [this](QSystemTrayIcon::ActivationReason reason) {
+                qDebug() << "tray activated:" << reason;
+                emit tray_activated();
+            });
+    connect(&m_tray, &tray_icon::action_triggered, this,
+            &dsnote_app::execute_tray_action);
+#endif
 }
 
 void dsnote_app::create_player() {
@@ -818,6 +828,8 @@ void dsnote_app::handle_state_changed(int status) {
         emit service_state_changed();
 
         update_configured_state();
+
+        update_tray_state();
     }
 
     if (old_busy != busy()) {
@@ -865,6 +877,8 @@ void dsnote_app::handle_task_state_changed(int state) {
         qDebug() << "app task state:" << m_task_state << "=>" << new_task_state;
         m_task_state = new_task_state;
         emit task_state_changed();
+
+        update_tray_task_state();
     }
 }
 
@@ -1235,6 +1249,8 @@ void dsnote_app::update_service_state() {
 
         if (old_busy != busy()) emit busy_changed();
         if (old_connected != connected()) emit connected_changed();
+
+        update_tray_state();
     }
 }
 
@@ -2148,6 +2164,8 @@ void dsnote_app::set_task_state(service_task_state_t new_state) {
         qDebug() << "app speech state:" << m_task_state << "=>" << new_state;
         m_task_state = new_state;
         emit task_state_changed();
+
+        update_tray_task_state();
     }
 }
 
@@ -3101,6 +3119,40 @@ void dsnote_app::execute_action_name(const QString &action_name) {
     }
 }
 
+#ifdef USE_DESKTOP
+void dsnote_app::execute_tray_action(tray_icon::action_t action) {
+    switch (action) {
+        case tray_icon::action_t::start_listening:
+            execute_action(action_t::start_listening);
+            break;
+        case tray_icon::action_t::start_listening_active_window:
+            execute_action(action_t::start_listening_active_window);
+            break;
+        case tray_icon::action_t::start_listening_clipboard:
+            execute_action(action_t::start_listening_clipboard);
+            break;
+        case tray_icon::action_t::stop_listening:
+            execute_action(action_t::stop_listening);
+            break;
+        case tray_icon::action_t::start_reading:
+            execute_action(action_t::start_reading);
+            break;
+        case tray_icon::action_t::start_reading_clipboard:
+            execute_action(action_t::start_reading_clipboard);
+            break;
+        case tray_icon::action_t::pause_resume_reading:
+            execute_action(action_t::pause_resume_reading);
+            break;
+        case tray_icon::action_t::cancel:
+            execute_action(action_t::cancel);
+            break;
+        case tray_icon::action_t::quit:
+            QGuiApplication::quit();
+            break;
+    }
+}
+#endif
+
 void dsnote_app::execute_action(action_t action) {
     if (busy()) {
         m_pending_action = action;
@@ -3415,6 +3467,72 @@ long long dsnote_app::player_position() const {
 
 long long dsnote_app::player_duration() const {
     return m_player ? m_player->duration() : 0;
+}
+
+void dsnote_app::update_tray_state() {
+#ifdef USE_DESKTOP
+    switch (m_service_state) {
+        case service_state_t::StateUnknown:
+        case service_state_t::StateNotConfigured:
+        case service_state_t::StateBusy:
+            m_tray.set_state(tray_icon::state_t::busy);
+            break;
+        case service_state_t::StateIdle:
+            m_tray.set_state(tray_icon::state_t::idle);
+            break;
+        case service_state_t::StateListeningManual:
+        case service_state_t::StateListeningAuto:
+        case service_state_t::StateListeningSingleSentence:
+            m_tray.set_state(tray_icon::state_t::stt);
+            break;
+        case service_state_t::StateTranscribingFile:
+            m_tray.set_state(tray_icon::state_t::stt_file);
+            break;
+        case service_state_t::StatePlayingSpeech:
+            m_tray.set_state(tray_icon::state_t::tts);
+            break;
+        case service_state_t::StateWritingSpeechToFile:
+            m_tray.set_state(tray_icon::state_t::tts_file);
+            break;
+        case service_state_t::StateTranslating:
+            m_tray.set_state(tray_icon::state_t::mnt);
+            break;
+    }
+#endif
+}
+
+void dsnote_app::update_tray_task_state() {
+#ifdef USE_DESKTOP
+    switch (m_task_state) {
+        case service_task_state_t::TaskStateIdle:
+            m_tray.set_task_state(tray_icon::task_state_t::idle);
+            break;
+        case service_task_state_t::TaskStateSpeechDetected:
+        case service_task_state_t::TaskStateProcessing:
+            m_tray.set_task_state(tray_icon::task_state_t::processing);
+            break;
+        case service_task_state_t::TaskStateInitializing:
+            m_tray.set_task_state(tray_icon::task_state_t::initializing);
+            break;
+        case service_task_state_t::TaskStateSpeechPlaying:
+            m_tray.set_task_state(tray_icon::task_state_t::playing);
+            break;
+        case service_task_state_t::TaskStateSpeechPaused:
+            m_tray.set_task_state(tray_icon::task_state_t::paused);
+            break;
+    }
+#endif
+}
+
+void dsnote_app::show_tray() {
+#ifdef USE_DESKTOP
+    m_tray.show();
+#endif
+}
+void dsnote_app::hide_tray() {
+#ifdef USE_DESKTOP
+    m_tray.hide();
+#endif
 }
 
 void dsnote_app::register_hotkeys() {

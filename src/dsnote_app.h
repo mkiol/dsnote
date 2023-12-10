@@ -22,6 +22,7 @@
 #include <qhotkey.h>
 
 #include "fake_keyboard.hpp"
+#include "tray_icon.hpp"
 #endif
 
 #include "config.h"
@@ -320,6 +321,8 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void player_reset();
     Q_INVOKABLE void recorder_start();
     Q_INVOKABLE void recorder_stop();
+    Q_INVOKABLE void show_tray();
+    Q_INVOKABLE void hide_tray();
 
    signals:
     void active_stt_model_changed();
@@ -373,6 +376,7 @@ class dsnote_app : public QObject {
     void recorder_recording_changed();
     void recorder_duration_changed();
     void recorder_processing_changed();
+    void tray_activated();
 
    private:
     enum class action_t {
@@ -499,6 +503,7 @@ class dsnote_app : public QObject {
 
     hotkeys_t m_hotkeys;
     std::optional<fake_keyboard> m_fake_keyboard;
+    tray_icon m_tray;
 #endif
 
     [[nodiscard]] QVariantList available_stt_models() const;
@@ -677,6 +682,11 @@ class dsnote_app : public QObject {
     long long recorder_duration() const;
     bool recorder_processing() const;
     QString tts_ref_voice_unique_name(QString name, bool add_numner) const;
+    void update_tray_state();
+    void update_tray_task_state();
+#ifdef USE_DESKTOP
+    void execute_tray_action(tray_icon::action_t action);
+#endif
 };
 
 #endif  // DSNOTE_APP_H

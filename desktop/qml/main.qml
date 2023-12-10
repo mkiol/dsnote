@@ -160,9 +160,14 @@ ApplicationWindow {
         }
     }
 
+    Component.onCompleted: {
+        var hidded =  _start_in_tray || (_settings.start_in_tray && _settings.use_tray)
+        visible = !hidded;
+    }
+
     width: Screen.width / 2
     height: Screen.height / 2
-    visible: true
+    visible: false
     header: MainToolBar {}
     onActiveChanged: update_dektop_notification()
 
@@ -349,10 +354,12 @@ ApplicationWindow {
     DsnoteApp {
         id: app
 
+        onTray_activated: appWin.visible ? appWin.hide() : appWin.show()
         onBusyChanged: showWelcome()
         onStt_configuredChanged: showWelcome()
         onTts_configuredChanged: showWelcome()
         Component.onCompleted: {
+            if (_start_in_tray) show_tray()
             app.open_files(_files_to_open, false)
             app.execute_action_name(_requested_action)
             showWelcome()

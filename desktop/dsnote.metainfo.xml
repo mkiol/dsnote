@@ -87,7 +87,7 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
-    <release version="4.4.0" date="2023-12-01">
+    <release version="4.4.0" date="2023-12-10">
       <description>
       <p>User Interface:</p>
       <ul>
@@ -97,6 +97,7 @@
           Some models share files with each other. When 'Enable' is shown, the files are already downloaded.</li>
       <li>Filter options in the model browser.
           Models can be searched by various features such as: Processing speed, Quality, Additional capabilities.</li>
+      <li>Setting option to minimized to the system tray</li>
       </ul>
       <p>Speech to Text:</p>
       <ul>

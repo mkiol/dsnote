@@ -26,6 +26,10 @@ DialogPage {
             Some models share files with each other. When <i>Enable</i> is shown, the files are already downloaded.</li>
         <li>Filter options in the model browser.
             Models can be searched by various features such as: Processing speed, Quality, Additional capabilities.</li>
+        <li>Setting option to minimized to the system tray.
+            To enable system tray icon, use <i>User Interface</i> &rarr; <i>Use system tray icon</i> option.
+            To always start the application minimized to the system tray, use <i>User Interface</i> &rarr; <i>Start minimized to the system tray</i> option.
+            To start the application minimized only once, use <i>--start-in-tray</i> command line option.</li>
         </ul>
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>

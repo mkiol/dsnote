@@ -1448,6 +1448,28 @@ void settings::set_whisper_translate(bool value) {
     }
 }
 
+bool settings::use_tray() const {
+    return value(QStringLiteral("use_tray"), false).toBool();
+}
+
+void settings::set_use_tray(bool value) {
+    if (value != use_tray()) {
+        setValue(QStringLiteral("use_tray"), value);
+        emit use_tray_changed();
+    }
+}
+
+bool settings::start_in_tray() const {
+    return value(QStringLiteral("start_in_tray"), false).toBool();
+}
+
+void settings::set_start_in_tray(bool value) {
+    if (value != start_in_tray()) {
+        setValue(QStringLiteral("start_in_tray"), value);
+        emit start_in_tray_changed();
+    }
+}
+
 bool settings::gpu_scan_hip() const {
     return value(QStringLiteral("gpu_scan_hip"), true).toBool();
 }
