@@ -22,7 +22,7 @@ finish-args:
   - --filesystem=xdg-documents
   - --filesystem=xdg-videos
   - --talk-name=org.freedesktop.Notifications
-  - --talk-name=org.kde.StatusNotifierWatcher
+  - --talk-name=org.kde.StatusNotifierWatcher # system tray icon
 cleanup:
   - "/cmake"
   - "/etc"
