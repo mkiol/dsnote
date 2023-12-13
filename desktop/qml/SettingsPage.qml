@@ -755,7 +755,7 @@ DialogPage {
 
                 TextField {
                     Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - langFileButton.width)
+                    Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - langFileButton.width - appWin.padding)
                     Layout.leftMargin: verticalMode ? appWin.padding : 0
                     text: _settings.models_dir
                     color: palette.text
@@ -809,61 +809,6 @@ DialogPage {
             }
 
             SectionLabel {
-                text: qsTr("Graphic cards support")
-            }
-
-            CheckBox {
-                checked: _settings.gpu_scan_cuda
-                text: "NVIDIA CUDA"
-                onCheckedChanged: {
-                    _settings.gpu_scan_cuda = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Try to find NVIDIA CUDA compatible graphic cards in the system.") + " " +
-                              qsTr("Disable this option if you observe problems when launching the application.")
-            }
-
-            CheckBox {
-                checked: _settings.gpu_scan_hip
-                text: "AMD ROCm"
-                onCheckedChanged: {
-                    _settings.gpu_scan_hip = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Try to find AMD ROCm compatible graphic cards in the system.") + " " +
-                              qsTr("Disable this option if you observe problems when launching the application.")
-            }
-
-            RowLayout {
-                spacing: appWin.padding
-                CheckBox {
-                    checked: _settings.gpu_scan_opencl
-                    text: "OpenCL"
-                    onCheckedChanged: {
-                        _settings.gpu_scan_opencl = checked
-                    }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
-                                  qsTr("Disable this option if you observe problems when launching the application.")
-                }
-
-                ComboBox {
-                    enabled: _settings.gpu_scan_opencl
-                    currentIndex: _settings.gpu_scan_opencl_always ? 0 : 1
-                    model: [qsTr("Always"), qsTr("Only if no others were found")]
-                    onActivated: {
-                        _settings.gpu_scan_opencl_always = index === 0
-                    }
-                }
-            }
-
-            SectionLabel {
                 text: qsTr("CPU options")
             }
 
@@ -903,6 +848,109 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Set the maximum number of simultaneous CPU threads.")
+                }
+            }
+
+            SectionLabel {
+                text: qsTr("Graphics card options")
+            }
+
+            CheckBox {
+                checked: _settings.gpu_scan_cuda
+                text: qsTr("Use %1").arg("NVIDIA CUDA")
+                onCheckedChanged: {
+                    _settings.gpu_scan_cuda = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Try to find NVIDIA CUDA compatible graphic cards in the system.") + " " +
+                              qsTr("Disable this option if you observe problems when launching the application.")
+            }
+
+            CheckBox {
+                checked: _settings.gpu_scan_hip
+                text: qsTr("Use %1").arg("AMD ROCm")
+                onCheckedChanged: {
+                    _settings.gpu_scan_hip = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Try to find AMD ROCm compatible graphic cards in the system.") + " " +
+                              qsTr("Disable this option if you observe problems when launching the application.")
+            }
+
+            RowLayout {
+                spacing: appWin.padding
+                CheckBox {
+                    checked: _settings.gpu_scan_opencl
+                    text: qsTr("Use %1").arg("OpenCL")
+                    onCheckedChanged: {
+                        _settings.gpu_scan_opencl = checked
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
+                                  qsTr("Disable this option if you observe problems when launching the application.")
+                }
+
+                ComboBox {
+                    enabled: _settings.gpu_scan_opencl
+                    currentIndex: _settings.gpu_scan_opencl_always ? 0 : 1
+                    model: [qsTr("Always"), qsTr("Only if no others were found")]
+                    onActivated: {
+                        _settings.gpu_scan_opencl_always = index === 0
+                    }
+                }
+            }
+
+            CheckBox {
+                checked: _settings.gpu_override_version
+                text: qsTr("Override GPU version")
+                onCheckedChanged: {
+                    _settings.gpu_override_version = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Override AMD GPU version.") + " " +
+                              qsTr("Enable this option if you observe problems when using GPU acceleration with AMD graphics card.")
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 3
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+                visible: _settings.gpu_override_version
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    text: qsTr("Version")
+                }
+                TextField {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - gpuOverrideResetButton.width - appWin.padding)
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                    text: _settings.gpu_overrided_version
+                    onTextChanged: _settings.gpu_overrided_version = text
+                    color: palette.text
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Value has the same effect as %1 environment variable.").arg("<i>HSA_OVERRIDE_GFX_VERSION</i>")
+                }
+                Button {
+                    id: gpuOverrideResetButton
+
+                    icon.name: "edit-undo-symbolic"
+                    onClicked: _settings.gpu_overrided_version = ""
+
+                    ToolTip.visible: hovered
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.text: qsTr("Reset to default value.")
                 }
             }
 
@@ -974,7 +1022,7 @@ DialogPage {
                     id: pyTextField
 
                     Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - pySaveButton.width)
+                    Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - pySaveButton.width - appWin.padding)
                     Layout.leftMargin: verticalMode ? 3 * appWin.padding : 0
                     text: _settings.py_path
                     color: palette.text

@@ -30,6 +30,8 @@ void add_hip_devices(std::vector<device>& devices);
 bool has_cuda();
 bool has_cudnn();
 bool has_clblast();
+void rocm_override_gfx_version(const std::string& arch_varsion);
+std::string rocm_overrided_gfx_version(const std::string& gpu_arch_name);
 
 }  // namespace gpu_tools
 

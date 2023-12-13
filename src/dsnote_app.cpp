@@ -305,8 +305,7 @@ dsnote_app::dsnote_app(QObject *parent)
 
 #ifdef USE_DESKTOP
     connect(&m_tray, &QSystemTrayIcon::activated, this,
-            [this](QSystemTrayIcon::ActivationReason reason) {
-                qDebug() << "tray activated:" << reason;
+            [this]([[maybe_unused]] QSystemTrayIcon::ActivationReason reason) {
                 emit tray_activated();
             });
     connect(&m_tray, &tray_icon::action_triggered, this,

@@ -203,6 +203,11 @@ class settings : public QSettings, public singleton<settings> {
                    num_threads_changed)
     Q_PROPERTY(
         QString py_path READ py_path WRITE set_py_path NOTIFY py_path_changed)
+    Q_PROPERTY(bool gpu_override_version READ gpu_override_version WRITE
+                   set_gpu_override_version NOTIFY gpu_override_version_changed)
+    Q_PROPERTY(
+        QString gpu_overrided_version READ gpu_overrided_version WRITE
+            set_gpu_overrided_version NOTIFY gpu_overrided_version_changed)
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -478,6 +483,11 @@ class settings : public QSettings, public singleton<settings> {
     QString default_mnt_out_lang() const;
     void set_default_mnt_out_lang(const QString &value);
 
+    bool gpu_override_version() const;
+    void set_gpu_override_version(bool value);
+    QString gpu_overrided_version() const;
+    void set_gpu_overrided_version(const QString &value);
+
    signals:
     // app
     void speech_mode_changed();
@@ -541,6 +551,8 @@ class settings : public QSettings, public singleton<settings> {
     void cache_policy_changed();
     void num_threads_changed();
     void py_path_changed();
+    void gpu_override_version_changed();
+    void gpu_overrided_version_changed();
 
    private:
     inline static const QString settings_filename =
@@ -552,6 +564,7 @@ class settings : public QSettings, public singleton<settings> {
     bool m_restart_required = false;
     QStringList m_gpu_devices_stt;
     QStringList m_gpu_devices_tts;
+    std::vector<QString> m_rocm_gpu_versions;
     QStringList m_audio_inputs;
 
     static QString settings_filepath();

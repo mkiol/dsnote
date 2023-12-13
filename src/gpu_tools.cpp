@@ -35,8 +35,61 @@
 namespace gpu_tools {
 enum cudaHipError { cudaHipSuccess = 0 };
 
-struct cudaHipDeviceProp {
+struct cudaDeviceProp {
     char name[256] = {};
+    char other_props[1024] = {};
+};
+
+struct hipDeviceArch {
+    unsigned hasGlobalInt32Atomics : 1;
+    unsigned hasGlobalFloatAtomicExch : 1;
+    unsigned hasSharedInt32Atomics : 1;
+    unsigned hasSharedFloatAtomicExch : 1;
+    unsigned hasFloatAtomicAdd : 1;
+    unsigned hasGlobalInt64Atomics : 1;
+    unsigned hasSharedInt64Atomics : 1;
+    unsigned hasDoubles : 1;
+    unsigned hasWarpVote : 1;
+    unsigned hasWarpBallot : 1;
+    unsigned hasWarpShuffle : 1;
+    unsigned hasFunnelShift : 1;
+    unsigned hasThreadFenceSystem : 1;
+    unsigned hasSyncThreadsExt : 1;
+    unsigned hasSurfaceFuncs : 1;
+    unsigned has3dGrid : 1;
+    unsigned hasDynamicParallelism : 1;
+};
+
+struct hipDeviceProp {
+    char name[256];
+    size_t totalGlobalMem;
+    size_t sharedMemPerBlock;
+    int regsPerBlock;
+    int warpSize;
+    int maxThreadsPerBlock;
+    int maxThreadsDim[3];
+    int maxGridSize[3];
+    int clockRate;
+    int memoryClockRate;
+    int memoryBusWidth;
+    size_t totalConstMem;
+    int major;
+    int minor;
+    int multiProcessorCount;
+    int l2CacheSize;
+    int maxThreadsPerMultiProcessor;
+    int computeMode;
+    int clockInstructionRate;
+    hipDeviceArch arch;
+    int concurrentKernels;
+    int pciDomainID;
+    int pciBusID;
+    int pciDeviceID;
+    size_t maxSharedMemoryPerMultiProcessor;
+    int isMultiGpuBoard;
+    int canMapHostMemory;
+    int gcnArch;
+    char gcnArchName[256];
     char other_props[1024] = {};
 };
 
@@ -105,7 +158,7 @@ struct opencl_api {
 struct cuda_api {
     void* handle = nullptr;
     int (*cudaGetDeviceCount)(int*) = nullptr;
-    int (*cudaGetDeviceProperties)(cudaHipDeviceProp*, int) = nullptr;
+    int (*cudaGetDeviceProperties)(cudaDeviceProp*, int) = nullptr;
     int (*cudaRuntimeGetVersion)(int*) = nullptr;
     int (*cudaDriverGetVersion)(int*) = nullptr;
 
@@ -125,7 +178,7 @@ struct cuda_api {
         }
 
         cudaGetDeviceProperties =
-            reinterpret_cast<int (*)(cudaHipDeviceProp*, int)>(
+            reinterpret_cast<int (*)(cudaDeviceProp*, int)>(
                 dlsym(handle, "cudaGetDeviceProperties"));
         if (!cudaGetDeviceProperties) {
             LOGW("failed to sym cudaGetDeviceProperties");
@@ -160,7 +213,7 @@ struct cuda_api {
 struct hip_api {
     void* handle = nullptr;
     int (*hipGetDeviceCount)(int*) = nullptr;
-    int (*hipGetDeviceProperties)(cudaHipDeviceProp*, int) = nullptr;
+    int (*hipGetDeviceProperties)(hipDeviceProp*, int) = nullptr;
     int (*hipRuntimeGetVersion)(int*) = nullptr;
     int (*hipDriverGetVersion)(int*) = nullptr;
 
@@ -179,9 +232,8 @@ struct hip_api {
             throw std::runtime_error("failed to sym hipGetDeviceCount");
         }
 
-        hipGetDeviceProperties =
-            reinterpret_cast<int (*)(cudaHipDeviceProp*, int)>(
-                dlsym(handle, "hipGetDeviceProperties"));
+        hipGetDeviceProperties = reinterpret_cast<int (*)(hipDeviceProp*, int)>(
+            dlsym(handle, "hipGetDeviceProperties"));
         if (!hipGetDeviceProperties) {
             LOGW("failed to sym hipGetDeviceProperties");
             dlclose(handle);
@@ -249,7 +301,7 @@ void add_cuda_devices(std::vector<device>& devices) {
         devices.reserve(devices.size() + device_count);
 
         for (int i = 0; i < device_count; ++i) {
-            cudaHipDeviceProp props;
+            cudaDeviceProp props;
             if (auto ret = api.cudaGetDeviceProperties(&props, i);
                 ret != cudaHipSuccess)
                 continue;
@@ -286,14 +338,16 @@ void add_hip_devices(std::vector<device>& devices) {
         devices.reserve(devices.size() + device_count);
 
         for (int i = 0; i < device_count; ++i) {
-            cudaHipDeviceProp props;
+            hipDeviceProp props;
             if (auto ret = api.hipGetDeviceProperties(&props, i);
                 ret != cudaHipSuccess)
                 continue;
-            LOGD("hip device: " << i << ", name=" << props.name);
+            LOGD("hip device: " << i << ", name=" << props.name
+                                << ", gcn-arch=" << props.gcnArch
+                                << ", gcn-arch-name=" << props.gcnArchName);
             devices.push_back({/*id=*/static_cast<uint32_t>(i), api_t::rocm,
                                /*name=*/props.name,
-                               /*platform_name=*/{}});
+                               /*platform_name=*/props.gcnArchName});
         }
     } catch ([[maybe_unused]] const std::runtime_error& err) {
     }
@@ -437,4 +491,40 @@ bool has_cudnn() {
     if (has_lib("libcudnn.so")) return true;
     return has_lib("libcudnn.so.8");
 }
+
+void rocm_override_gfx_version(const std::string& arch_version) {
+    const auto* value = getenv("HSA_OVERRIDE_GFX_VERSION");
+    if (!value) setenv("HSA_OVERRIDE_GFX_VERSION", arch_version.c_str(), 1);
+}
+
+std::string rocm_overrided_gfx_version(const std::string& gpu_arch_name) {
+    if (gpu_arch_name.find("gfx") != 0 || gpu_arch_name.size() < 4) {
+        LOGE("invalid gpu arch name: " << gpu_arch_name);
+        return {};
+    }
+
+    auto arch_version = std::stoi(gpu_arch_name.substr(3));
+    if (arch_version <= 0) {
+        LOGE("invalid gpu arch version: " << gpu_arch_name);
+        return {};
+    }
+
+    auto major = arch_version / 100;
+    auto minor = (arch_version - major * 100) / 10;
+    auto step = arch_version - major * 100 - minor * 10;
+
+    if (major == 0) {
+        major = minor;
+        minor = step;
+        step = 0;
+    }
+
+    /* HSA_OVERRIDE_GFX_VERSION=major.minor.stepping */
+
+    LOGD("rocm overrided gfx version: major=" << major << ", minor=" << minor
+                                              << ", stepping=" << step);
+
+    return fmt::format("{}.{}.{}", major, minor, 0);
+}
+
 }  // namespace gpu_tools

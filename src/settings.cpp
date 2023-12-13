@@ -1057,6 +1057,7 @@ void settings::scan_gpu_devices() {
     m_gpu_devices_tts.clear();
     m_gpu_devices_stt.push_back(tr("Auto"));
     m_gpu_devices_tts.push_back(tr("Auto"));
+    m_rocm_gpu_versions.clear();
 
     qDebug() << "scan cuda:" << gpu_scan_cuda();
     qDebug() << "scan hip:" << gpu_scan_hip();
@@ -1091,6 +1092,8 @@ void settings::scan_gpu_devices() {
                                      QString::fromStdString(device.name));
                 m_gpu_devices_stt.push_back(item);
                 m_gpu_devices_tts.push_back(std::move(item));
+                m_rocm_gpu_versions.push_back(
+                    QString::fromStdString(device.platform_name));
                 break;
             }
         }
@@ -1550,6 +1553,44 @@ settings::cache_policy_t settings::cache_policy() const {
         value(QStringLiteral("cache_policy"),
               static_cast<int>(cache_policy_t::CacheRemove))
             .toInt());
+}
+
+bool settings::gpu_override_version() const {
+    return value(QStringLiteral("service/gpu_override_version"), false)
+        .toBool();
+}
+
+void settings::set_gpu_override_version(bool value) {
+    if (gpu_override_version() != value) {
+        setValue(QStringLiteral("service/gpu_override_version"), value);
+        emit gpu_override_version_changed();
+        set_restart_required(true);
+    }
+}
+
+QString settings::gpu_overrided_version() const {
+    auto val =
+        value(QStringLiteral("service/gpu_overrided_version"), {}).toString();
+
+    if (val.isEmpty()) {
+        val =
+            m_rocm_gpu_versions.empty()
+                ? QString{}
+                : QString::fromStdString(gpu_tools::rocm_overrided_gfx_version(
+                      m_rocm_gpu_versions.front().toStdString()));
+    }
+
+    return val;
+}
+
+void settings::set_gpu_overrided_version(const QString& value) {
+    if (gpu_overrided_version() != value &&
+        settings::value(QStringLiteral("service/gpu_overrided_version"), {})
+                .toString() != value) {
+        setValue(QStringLiteral("service/gpu_overrided_version"), value);
+        emit gpu_overrided_version_changed();
+        set_restart_required(true);
+    }
 }
 
 void settings::disable_gpu_scan() {

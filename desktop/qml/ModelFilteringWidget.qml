@@ -378,7 +378,7 @@ GridLayout {
             id: modelsSearchClearAllButton
 
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-            icon.name: "edit-clear-all-symbolic"
+            icon.name: "edit-undo-symbolic"
             enabled: !root.models_model.defaultFilters || modelsSearchTextField.text.length !== 0
             onClicked: root.reset()
 

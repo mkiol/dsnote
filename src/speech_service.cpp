@@ -3373,6 +3373,16 @@ void speech_service::setup_env() {
     qDebug() << "espeak dir:" << espeak_bin_dir;
     if (!espeak_bin_dir.isEmpty() && espeak_bin_dir != mbrola_bin_dir)
         add_to_env_path(espeak_bin_dir);
+
+    if (auto ver = settings::instance()->gpu_overrided_version();
+        settings::instance()->gpu_override_version() && !ver.isEmpty()) {
+        qDebug() << "overrided gpu version:" << ver;
+        gpu_tools::rocm_override_gfx_version(ver.toStdString());
+    }
+
+    const auto *has_overide_ver = getenv("HSA_OVERRIDE_GFX_VERSION");
+    if (has_overide_ver)
+        qDebug() << "HSA_OVERRIDE_GFX_VERSION:" << has_overide_ver;
 }
 
 void speech_service::setup_modules() {
