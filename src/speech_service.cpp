@@ -2473,6 +2473,14 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
 
     qDebug() << "stt start listen";
 
+    if (m_current_task && (state() == state_t::listening_auto ||
+                           state() == state_t::listening_manual ||
+                           state() == state_t::listening_single_sentence)) {
+        qDebug() << "ignoring start listen because already listening:"
+                 << state();
+        return m_current_task->id;
+    }
+
     bool set_pending_stt_task =
         m_current_task &&
         ((m_current_task->engine == engine_t::stt &&

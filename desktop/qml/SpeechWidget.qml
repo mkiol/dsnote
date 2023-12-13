@@ -189,8 +189,13 @@ RowLayout {
                 icon.name: "media-playback-stop-symbolic"
                 enabled: app.task_state !== DsnoteApp.TaskStateProcessing &&
                          app.task_state !== DsnoteApp.TaskStateInitializing &&
-                         app.state === DsnoteApp.StateListeningSingleSentence
-                visible: app.state === DsnoteApp.StateListeningSingleSentence
+                         (app.state === DsnoteApp.StateListeningSingleSentence ||
+                          app.state === DsnoteApp.StateListeningManual ||
+                          app.state === DsnoteApp.StateListeningAuto)
+
+                visible: app.state === DsnoteApp.StateListeningSingleSentence ||
+                         app.state === DsnoteApp.StateListeningManual ||
+                         app.state === DsnoteApp.StateListeningAuto
                 text: qsTr("Stop")
                 onClicked: app.stop_listen()
 
@@ -209,6 +214,7 @@ RowLayout {
                          app.task_state === DsnoteApp.TaskStateInitializing ||
                          app.state === DsnoteApp.StateTranscribingFile ||
                          app.state === DsnoteApp.StateListeningSingleSentence ||
+                         app.state === DsnoteApp.StateListeningManual ||
                          app.state === DsnoteApp.StateListeningAuto ||
                          app.state === DsnoteApp.StatePlayingSpeech ||
                          app.state === DsnoteApp.StateWritingSpeechToFile ||
