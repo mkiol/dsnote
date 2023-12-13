@@ -61,6 +61,8 @@ DialogPage {
         <li>Setting option to force text cleaning before translation
             (<i>Other</i> &rarr; <i>Clean text before translation</i>).
             If the input text is incorrectly formatted, this option may improve the translation quality.</li>
+        <li>HTML formatting support. The translation will preserve the HTML formatting from the input text.
+            To enable, use the switch to the right of the <i>Translate</i> button.</li>
         </ul>
         <p>" + qsTr("Other") + ":</p>
         <ul>

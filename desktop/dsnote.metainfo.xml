@@ -126,6 +126,7 @@
       <ul>
       <li>Setting option to force text cleaning before translation.
           If the input text is incorrectly formatted, this option may improve the translation quality.</li>
+      <li>HTML formatting support. The translation will preserve the HTML formatting from the input text.</li>
       </ul>
       <p>Other:</p>
       <ul>

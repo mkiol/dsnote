@@ -313,6 +313,19 @@ ColumnLayout {
 
             Switch {
                 enabled: app.state === DsnoteApp.StateIdle
+                text: "HTML"
+                checked: _settings.mnt_text_is_html
+                onClicked: {
+                    _settings.mnt_text_is_html = !_settings.mnt_text_is_html
+                }
+
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTr("Preserve HTML formatting.")
+            }
+
+            Switch {
+                enabled: app.state === DsnoteApp.StateIdle
                 text: qsTr("Translate as you type")
                 checked: _settings.translate_when_typing
                 onClicked: {

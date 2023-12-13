@@ -30,7 +30,9 @@ std::ostream& operator<<(std::ostream& os,
 
 std::ostream& operator<<(std::ostream& os, const mnt_engine::config_t& config) {
     os << "lang=" << config.lang << ", clean-text=" << config.clean_text
-       << ", model-files=[" << config.model_files << "]";
+       << ", text-is-html=" << config.text_is_html
+       << ", options=" << config.options << ", model-files=["
+       << config.model_files << "]";
 
     return os;
 }
@@ -206,41 +208,25 @@ void mnt_engine::set_state(state_t new_state) {
     }
 }
 
-static std::string fix_text(std::string text) {
-    if (text.size() > 1 && text[0] == '-' && text[1] == ' ')
-        return text.substr(2);
-    return text;
-}
-
 std::string mnt_engine::translate_internal(std::string text) {
-    std::vector<std::string> out_parts;
-
-    auto engine = m_config.options.find('a') != std::string::npos
-                      ? text_tools::engine_t::astrunc
-                      : text_tools::engine_t::ssplit;
-
     if (m_config.clean_text) {
         text_tools::trim_lines(text);
         text_tools::remove_hyphen_word_break(text);
         text_tools::clean_white_characters(text);
     }
 
-    auto in_parts =
-        text_tools::split(text, engine, m_config.lang, m_config.nb_data);
-
-    out_parts.reserve(in_parts.first.size());
-
     auto start = std::chrono::steady_clock::now();
 
-    for (auto& in_part : in_parts.first) {
-        std::string out_part = m_bergamot_api_api.bergamot_api_translate(
-            m_bergamot_ctx_first, in_part.c_str());
+    try {
+        text.assign(m_bergamot_api_api.bergamot_api_translate(
+            m_bergamot_ctx_first, text.c_str(), m_config.text_is_html));
         if (m_shutting_down) return {};
         if (m_bergamot_ctx_second)
-            out_part = m_bergamot_api_api.bergamot_api_translate(
-                m_bergamot_ctx_second, out_part.c_str());
+            text.assign(m_bergamot_api_api.bergamot_api_translate(
+                m_bergamot_ctx_second, text.c_str(), m_config.text_is_html));
         if (m_shutting_down) return {};
-        if (!out_part.empty()) out_parts.push_back(std::move(out_part));
+    } catch (const std::runtime_error& err) {
+        LOGE("translation error: " << err.what());
     }
 
     auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -249,32 +235,7 @@ std::string mnt_engine::translate_internal(std::string text) {
 
     LOGD("translation completed, stats: duration=" << dur << "ms");
 
-    const auto& break_lines = in_parts.second;
-
-    return std::accumulate(
-        out_parts.cbegin(), out_parts.cend(), std::string{},
-        [&break_lines, i = static_cast<size_t>(0)](std::string a,
-                                                   std::string b) mutable {
-            b = fix_text(std::move(b));
-            if (a.empty()) {
-                return b;
-            } else {
-                std::string c{std::move(a)};
-                if (i < break_lines.size()) {
-                    const auto& bl = break_lines.at(i);
-                    if (bl.break_line)
-                        c.append(std::string(bl.count, '\n'));
-                    else
-                        c.push_back(' ');
-                    c.append(b);
-                } else {
-                    c.append(' ' + b);
-                }
-
-                ++i;
-                return c;
-            }
-        });
+    return text;
 }
 
 void mnt_engine::process() {

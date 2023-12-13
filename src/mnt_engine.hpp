@@ -55,6 +55,7 @@ class mnt_engine {
         model_files_t model_files;
         std::string nb_data;
         std::string out_lang;
+        bool text_is_html = false;
         std::string options;
         bool clean_text = false;
     };
@@ -67,6 +68,8 @@ class mnt_engine {
     void request_stop();
     inline auto lang() const { return m_config.lang; }
     inline auto model_files() const { return m_config.model_files; }
+    inline auto text_is_html() const { return m_config.text_is_html; }
+    inline void set_text_is_html(bool value) { m_config.text_is_html = value; }
     inline void set_clean_text(bool value) { m_config.clean_text = value; }
     inline auto state() const { return m_state; }
     void translate(std::string text);
@@ -84,8 +87,8 @@ class mnt_engine {
                                    size_t num_workers, size_t cache_size,
                                    const char* log_level) = nullptr;
         void (*bergamot_api_delete)(void* handle) = nullptr;
-        const char* (*bergamot_api_translate)(void* handle,
-                                              const char* text) = nullptr;
+        const char* (*bergamot_api_translate)(void* handle, const char* text,
+                                              bool text_is_html) = nullptr;
         void (*bergamot_api_cancel)(void* handle) = nullptr;
         inline auto ok() const {
             return bergamot_api_make && bergamot_api_delete &&

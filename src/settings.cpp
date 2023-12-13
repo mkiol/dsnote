@@ -683,6 +683,17 @@ void settings::set_translate_when_typing(bool value) {
     }
 }
 
+bool settings::mnt_text_is_html() const {
+    return value(QStringLiteral("mnt_text_is_html"), false).toBool();
+}
+
+void settings::set_mnt_text_is_html(bool value) {
+    if (mnt_text_is_html() != value) {
+        setValue(QStringLiteral("mnt_text_is_html"), value);
+        emit mnt_text_is_html_changed();
+    }
+}
+
 bool settings::hint_translator() const {
     return value(QStringLiteral("hint_translator"), true).toBool();
 }
