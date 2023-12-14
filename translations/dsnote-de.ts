@@ -34,7 +34,7 @@
         <location filename="../desktop/qml/AboutPage.qml" line="86"/>
         <location filename="../sfos/qml/AboutPage.qml" line="77"/>
         <source>%1 is developed as an open source project under %2.</source>
-        <translation>%1 wurde entwickelt als Open Source Projekt unter %2.</translation>
+        <translation>%1 wurde entwickelt als Open Source-Projekt unter %2.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutPage.qml" line="107"/>
@@ -46,7 +46,7 @@
         <location filename="../desktop/qml/AboutPage.qml" line="117"/>
         <location filename="../sfos/qml/AboutPage.qml" line="92"/>
         <source>Libraries in use</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwendete Bibliotheken</translation>
     </message>
     <message>
         <source>Libraries</source>
@@ -56,27 +56,27 @@
         <location filename="../desktop/qml/AboutPage.qml" line="17"/>
         <location filename="../desktop/qml/AboutPage.qml" line="63"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Über</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutPage.qml" line="51"/>
         <source>Note taking, reading and translating with Speech to Text, Text to Speech and Machine Translation</source>
-        <translation type="unfinished"></translation>
+        <translation>Notizen machen, lesen und übersetzen mit Speech to Text, Text to Speech und maschineller Übersetzung</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutPage.qml" line="67"/>
         <source>Project website:</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt-Webseite:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutPage.qml" line="73"/>
         <source>Report bugs at:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler melden unter:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutPage.qml" line="79"/>
-        <source>Support e-mail:</source>
-        <translation type="unfinished"></translation>
+        <source>Support-E-Mail:</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -107,7 +107,7 @@
         <location filename="../desktop/qml/ChangelogPage.qml" line="21"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="105"/>
         <source>Translator</source>
-        <translation type="unfinished"></translation>
+        <translation>Übersetzer</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChangelogPage.qml" line="25"/>
@@ -116,7 +116,7 @@
         <location filename="../desktop/qml/ChangelogPage.qml" line="160"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="177"/>
         <source>Speech to Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprache zu Text</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChangelogPage.qml" line="43"/>
@@ -126,7 +126,7 @@
         <location filename="../desktop/qml/ChangelogPage.qml" line="153"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="173"/>
         <source>Text to Speech</source>
-        <translation type="unfinished"></translation>
+        <translation>Text zu Sprache</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChangelogPage.qml" line="52"/>
@@ -134,7 +134,7 @@
         <location filename="../desktop/qml/ChangelogPage.qml" line="113"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="148"/>
         <source>User Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzeroberfläche</translation>
     </message>
 </context>
 <context>
@@ -142,7 +142,7 @@
     <message>
         <location filename="../desktop/qml/DialogPage.qml" line="65"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Schließen</translation>
     </message>
 </context>
 <context>
@@ -171,7 +171,7 @@
         <location filename="../desktop/qml/FileWritePage.qml" line="336"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="79"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei speichern</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="65"/>
@@ -185,36 +185,36 @@
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="98"/>
         <source>Cancel</source>
-        <translation type="unfinished">Abbruch</translation>
+        <translation>Abbruch</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="122"/>
         <source>File path</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateipfad</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="147"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="126"/>
         <source>The file exists and will be overwritten.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Datei existiert und wird überschrieben.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="157"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="130"/>
         <source>Audio file format</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio-Dateiformat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="191"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="155"/>
         <source>When %1 is selected, the format is chosen based on the file extension.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn %1 ausgewählt ist, wird das Format anhand der Dateierweiterung gewählt.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="204"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="160"/>
         <source>Compression quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Qualität der Komprimierung</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="218"/>
@@ -222,70 +222,70 @@
         <location filename="../sfos/qml/FileWritePage.qml" line="170"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="182"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoch</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="219"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="171"/>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Mittel</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="220"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="172"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Niedrig</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="233"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="182"/>
         <source>%1 results in a larger file size.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 führt zu einer größeren Dateigröße.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="242"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="191"/>
         <source>Write metadata to audio file</source>
-        <translation type="unfinished"></translation>
+        <translation>Metadaten in die Audiodatei schreiben</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="249"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="192"/>
         <source>Write track number, title, artist and album tags to audio file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schreibe Tracknummer, Titel, Interpret und Album-Tags in die Audiodatei.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="262"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="203"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="204"/>
         <source>Track number</source>
-        <translation type="unfinished"></translation>
+        <translation>Titel-Nummer</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="282"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="216"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="217"/>
         <source>Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Titel</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="303"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="227"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="228"/>
         <source>Album</source>
-        <translation type="unfinished"></translation>
+        <translation>Album</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="323"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="240"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="241"/>
         <source>Artist</source>
-        <translation type="unfinished"></translation>
+        <translation>Künstler</translation>
     </message>
     <message>
         <location filename="../sfos/qml/FileWritePage.qml" line="83"/>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateiordner</translation>
     </message>
     <message>
         <location filename="../desktop/qml/FileWritePage.qml" line="135"/>
@@ -302,7 +302,7 @@
         <location filename="../sfos/qml/FileWritePage.qml" line="112"/>
         <location filename="../sfos/qml/FileWritePage.qml" line="113"/>
         <source>File name</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateiname</translation>
     </message>
 </context>
 <context>
@@ -310,33 +310,33 @@
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="16"/>
         <source>Welcome!</source>
-        <translation type="unfinished"></translation>
+        <translation>Willkommen!</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="19"/>
         <source>%1 let you take, read and translate notes in multiple languages. It uses Speech to Text, Text to Speech and Machine Translation to do so.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit %1 können Sie Notizen in mehreren Sprachen aufnehmen, lesen und übersetzen. Dazu verwendet es Speech to Text, Text to Speech und maschinelle Übersetzung.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="21"/>
         <location filename="../desktop/qml/HelloPage.qml" line="32"/>
         <source>Speech Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Speech Note</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="22"/>
         <source>Text and voice processing take place entirely offline, locally on your computer, without using a network connection. Your privacy is always respected. No data is sent to the Internet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Text- und Sprachverarbeitung erfolgt vollständig offline, d. h. lokal auf Ihrem Computer, ohne dass eine Netzwerkverbindung erforderlich ist. Ihre Privatsphäre bleibt dabei stets gewahrt. Es werden keine Daten an das Internet gesendet.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="25"/>
         <source>To get started, you first need to set up the languages you want to use.</source>
-        <translation type="unfinished"></translation>
+        <translation>Für die ersten Schritte müssen Sie zunächst die Sprachen festlegen, die Sie verwenden möchten.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="27"/>
         <source>Click the %1 button, select a language, and then download the model files you intend to use.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicken Sie auf die Schaltfläche %1, wählen Sie eine Sprache und laden Sie dann die gewünschten Modelldateien herunter.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="28"/>
@@ -346,22 +346,22 @@
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="30"/>
         <source>To switch between %1 and %2 modes, use the toggle buttons in the upper right corner.</source>
-        <translation type="unfinished"></translation>
+        <translation>Um zwischen den Modi %1 und %2 zu wechseln, verwenden Sie die Umschalttasten in der oberen rechten Ecke.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="31"/>
         <source>Notepad</source>
-        <translation type="unfinished"></translation>
+        <translation>Notizblock</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="31"/>
         <source>Translator</source>
-        <translation type="unfinished"></translation>
+        <translation>Übersetzer</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="32"/>
         <source>Have fun with %1!</source>
-        <translation type="unfinished"></translation>
+        <translation>Viel Spaß mit %1!</translation>
     </message>
 </context>
 <context>
@@ -369,7 +369,7 @@
     <message>
         <location filename="../desktop/qml/InfoItem.qml" line="23"/>
         <source>Project website</source>
-        <translation>Projekt Webseite</translation>
+        <translation>Projekt-Webseite</translation>
     </message>
 </context>
 <context>
@@ -392,7 +392,7 @@
         <location filename="../desktop/qml/LangsPage.qml" line="97"/>
         <location filename="../sfos/qml/LangsPage.qml" line="55"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="98"/>
@@ -400,7 +400,7 @@
         <location filename="../sfos/qml/LangsPage.qml" line="56"/>
         <location filename="../sfos/qml/LangsPage.qml" line="97"/>
         <source>Speech to Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprache zu Text</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="99"/>
@@ -408,7 +408,7 @@
         <location filename="../sfos/qml/LangsPage.qml" line="57"/>
         <location filename="../sfos/qml/LangsPage.qml" line="99"/>
         <source>Text to Speech</source>
-        <translation type="unfinished"></translation>
+        <translation>Text zu Sprache</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="100"/>
@@ -416,7 +416,7 @@
         <location filename="../sfos/qml/LangsPage.qml" line="58"/>
         <location filename="../sfos/qml/LangsPage.qml" line="101"/>
         <source>Translator</source>
-        <translation type="unfinished"></translation>
+        <translation>Übersetzer</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="101"/>
@@ -424,23 +424,23 @@
         <location filename="../sfos/qml/LangsPage.qml" line="59"/>
         <location filename="../sfos/qml/LangsPage.qml" line="103"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Andere</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="113"/>
         <location filename="../sfos/qml/LangsPage.qml" line="63"/>
         <source>Model type</source>
-        <translation type="unfinished"></translation>
+        <translation>Modelltyp</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="120"/>
         <source>Type to search</source>
-        <translation type="unfinished"></translation>
+        <translation>Tippen Sie für die Suche</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="154"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="284"/>
@@ -461,13 +461,13 @@
         <location filename="../desktop/qml/LangsPage.qml" line="295"/>
         <location filename="../sfos/qml/LangsPage.qml" line="138"/>
         <source>There are no languages that match your search criteria.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es gibt keine Sprachen, die Ihren Suchkriterien entsprechen.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="296"/>
         <location filename="../sfos/qml/LangsPage.qml" line="139"/>
         <source>There are no models that match your search criteria.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es gibt keine Modelle, die Ihren Suchkriterien entsprechen.</translation>
     </message>
 </context>
 <context>
@@ -480,7 +480,7 @@
         <location filename="../desktop/qml/MainToolBar.qml" line="35"/>
         <location filename="../sfos/qml/MainToolBar.qml" line="26"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="41"/>
@@ -496,48 +496,48 @@
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="62"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="71"/>
         <source>Open a text file</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffne Textdatei</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="79"/>
         <source>Replace the current note with text from a text file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ersetze die aktuelle Notiz durch Text aus einer Textdatei.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="83"/>
         <location filename="../sfos/qml/MainToolBar.qml" line="43"/>
         <source>Transcribe a file</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei transkribieren</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="95"/>
         <source>Convert audio from an existing audio or video file into text. The text will be appended to the current note.</source>
-        <translation type="unfinished"></translation>
+        <translation>Konvertiere Audio aus einer vorhandenen Audio- oder Videodatei in Text. Der Text wird an die aktuelle Notiz angehängt.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="101"/>
         <source>Save to a text file</source>
-        <translation type="unfinished"></translation>
+        <translation>In eine Textdatei speichern</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="111"/>
         <source>Save the current note to a text file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichere die aktuelle Notiz in einer Textdatei.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="115"/>
         <source>Save the translation to a text file</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichere die Übersetzung in einer Textdatei</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="125"/>
         <source>Save the translated note to a text file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichere die übersetzte Notiz in einer Textdatei.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="131"/>
