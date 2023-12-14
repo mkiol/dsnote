@@ -521,7 +521,7 @@ diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/src/tensors/cpu/r
      vst1q_s8(&dst[ 3*rows + dstRowBegin], vreinterpretq_s8_s32(vcombine_s32( vget_low_s32(x3.val[0]),  vget_low_s32(x7.val[0]))));
 diff -ruN '--exclude=*.user' bergamot-org/bergamot_api.cpp bergamot-patched/bergamot_api.cpp
 --- bergamot-org/bergamot_api.cpp	1970-01-01 01:00:00.000000000 +0100
-+++ bergamot-patched/bergamot_api.cpp	2023-12-13 15:03:14.566807812 +0100
++++ bergamot-patched/bergamot_api.cpp	2023-12-14 19:30:25.683358065 +0100
 @@ -0,0 +1,89 @@
 +#include "bergamot_api.h"
 +

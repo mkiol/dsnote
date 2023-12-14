@@ -1,0 +1,27 @@
+diff -ruN html2md-org/src/html2md.cpp html2md-patched/src/html2md.cpp
+--- html2md-org/src/html2md.cpp	2023-08-21 19:46:09.000000000 +0200
++++ html2md-patched/src/html2md.cpp	2023-12-14 15:00:07.233043352 +0100
+@@ -188,8 +188,7 @@
+   return this;
+ }
+ 
+-Converter *Converter::appendToMd(const char *str)
+-{
++Converter *Converter::appendToMd(const char *str) {
+   if (IsInIgnoredTag())
+     return this;
+ 
+@@ -610,11 +609,11 @@
+ }
+ 
+ void Converter::TagStrikethrought::OnHasLeftOpeningTag(Converter *c) {
+-  c->appendToMd('~');
++  c->appendToMd("~~");
+ }
+ 
+ void Converter::TagStrikethrought::OnHasLeftClosingTag(Converter *c) {
+-  c->appendToMd('~');
++  c->appendToMd("~~");
+ }
+ 
+ void Converter::TagBreak::OnHasLeftOpeningTag(Converter *c) {

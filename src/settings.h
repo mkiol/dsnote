@@ -58,8 +58,8 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(
         bool translate_when_typing READ translate_when_typing WRITE
             set_translate_when_typing NOTIFY translate_when_typing_changed)
-    Q_PROPERTY(bool mnt_text_is_html READ mnt_text_is_html WRITE
-                   set_mnt_text_is_html NOTIFY mnt_text_is_html_changed)
+    Q_PROPERTY(text_format_t mnt_text_format READ mnt_text_format WRITE
+                   set_mnt_text_format NOTIFY mnt_text_format_changed)
     Q_PROPERTY(bool hint_translator READ hint_translator WRITE
                    set_hint_translator NOTIFY hint_translator_changed)
     Q_PROPERTY(int qt_style_idx READ qt_style_idx WRITE set_qt_style_idx NOTIFY
@@ -268,6 +268,14 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(desktop_notification_policy_t)
 
+    enum class text_format_t {
+        TextFormatRaw = 0,
+        TextFormatHtml = 1,
+        TextFormatMarkdown = 2,
+        TextFormatSubRip = 3
+    };
+    Q_ENUM(text_format_t)
+
     settings();
 
     launch_mode_t launch_mode() const;
@@ -314,8 +322,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_translator_mode(bool value);
     bool translate_when_typing() const;
     void set_translate_when_typing(bool value);
-    void set_mnt_text_is_html(bool value);
-    bool mnt_text_is_html() const;
+    void set_mnt_text_format(text_format_t value);
+    text_format_t mnt_text_format() const;
     QString default_tts_model_for_mnt_lang(const QString &lang);
     void set_default_tts_model_for_mnt_lang(const QString &lang,
                                             const QString &value);
@@ -534,7 +542,7 @@ class settings : public QSettings, public singleton<settings> {
     void whisper_translate_changed();
     void use_tray_changed();
     void start_in_tray_changed();
-    void mnt_text_is_html_changed();
+    void mnt_text_format_changed();
 
     // service
     void models_dir_changed();

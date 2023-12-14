@@ -2017,8 +2017,9 @@ void dsnote_app::translate() {
 
         QVariantMap options;
         options.insert("clean_text", settings::instance()->mnt_clean_text());
-        options.insert("text_is_html",
-                       settings::instance()->mnt_text_is_html());
+        options.insert(
+            "text_format",
+            static_cast<int>(settings::instance()->mnt_text_format()));
 
         if (settings::instance()->launch_mode() ==
             settings::launch_mode_t::app_stanalone) {

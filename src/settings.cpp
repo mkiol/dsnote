@@ -683,14 +683,17 @@ void settings::set_translate_when_typing(bool value) {
     }
 }
 
-bool settings::mnt_text_is_html() const {
-    return value(QStringLiteral("mnt_text_is_html"), false).toBool();
+settings::text_format_t settings::mnt_text_format() const {
+    return static_cast<text_format_t>(
+        value(QStringLiteral("mnt_text_format"),
+              static_cast<int>(text_format_t::TextFormatRaw))
+            .toInt());
 }
 
-void settings::set_mnt_text_is_html(bool value) {
-    if (mnt_text_is_html() != value) {
-        setValue(QStringLiteral("mnt_text_is_html"), value);
-        emit mnt_text_is_html_changed();
+void settings::set_mnt_text_format(text_format_t value) {
+    if (mnt_text_format() != value) {
+        setValue(QStringLiteral("mnt_text_format"), static_cast<int>(value));
+        emit mnt_text_format_changed();
     }
 }
 

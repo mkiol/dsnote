@@ -638,6 +638,32 @@ modules:
         url: https://github.com/abb128/april-asr/archive/3308e68442664552de593957cad0fa443ea183dd.zip
         sha256: 0640fc16a43018afb1db9f17e93f545d7ac1f07e4bc47ba318d2c7311bef2df5
 
+  - name: html2md
+    buildsystem: cmake-ninja
+    cleanup:
+      - /bin
+      - /include
+      - /lib/cmake
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_EXE=OFF
+    sources:
+      - type: archive
+        url: https://github.com/tim-gromeyer/html2md/archive/refs/tags/v1.5.3.tar.gz
+        sha256: 9853eeb1d2b1ca34ee7143521d03daacbcfac57a1763180ebd0730595cb46961
+      - type: patch
+        path: ../patches/html2md.patch
+
+  - name: maddy
+    buildsystem: simple
+    build-commands:
+      - cp -r include/maddy ${FLATPAK_DEST}/include
+    sources:
+      - type: archive
+        url: https://github.com/progsource/maddy/archive/refs/tags/1.3.0.tar.gz
+        sha256: 561681f8c8d2b998c153cda734107a0bc1dea4bb0df69fd813922da63fa9f3e7
+
   - name: dsnote
     buildsystem: cmake-ninja
     config-opts:
@@ -667,6 +693,8 @@ modules:
       - -DBUILD_LIBNUMBERTEXT=OFF
       - -DBUILD_QHOTKEY=OFF
       - -DBUILD_APRILASR=OFF
+      - -DBUILD_HTML2MD=OFF
+      - -DBUILD_MADDY=OFF
       - -DWITH_PY=OFF
     sources:
       - type: dir

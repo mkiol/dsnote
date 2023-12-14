@@ -9,6 +9,8 @@
 
 #include <ctype.h>
 #include <fmt/format.h>
+#include <html2md/html2md.h>
+#include <maddy/parser.h>
 #include <ssplit.h>
 #include <unistd.h>
 
@@ -16,6 +18,8 @@
 #include <cstdlib>
 #include <cwctype>
 #include <libnumbertext/Numbertext.hxx>
+#include <memory>
+#include <regex>
 #include <sstream>
 #include <string_view>
 
@@ -148,13 +152,13 @@ static astrunc::access::lang_t lang_str_to_astrunc_lang(
 }
 
 static std::vector<std::string> split_to_sentences(const std::string& text,
-                                                   engine_t engine,
+                                                   split_engine_t engine,
                                                    const std::string& lang,
                                                    const std::string& nb_data) {
     std::vector<std::string> parts;
 
     switch (engine) {
-        case engine_t::ssplit: {
+        case split_engine_t::ssplit: {
             ug::ssplit::SentenceSplitter ssplit{};
 
             if (!nb_data.empty()) ssplit.loadFromSerialized(nb_data);
@@ -168,7 +172,7 @@ static std::vector<std::string> split_to_sentences(const std::string& text,
 
             break;
         }
-        case engine_t::astrunc: {
+        case split_engine_t::astrunc: {
             int rc = astrunc::access::split(parts, text,
                                             lang_str_to_astrunc_lang(lang), -1);
             if (rc != 0) LOGE("astrunc split error");
@@ -180,7 +184,7 @@ static std::vector<std::string> split_to_sentences(const std::string& text,
 }
 
 std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
-    const std::string& text, engine_t engine, const std::string& lang,
+    const std::string& text, split_engine_t engine, const std::string& lang,
     const std::string& nb_data) {
     std::pair<std::vector<std::string>, std::vector<break_line_info>> parts;
 
@@ -515,6 +519,99 @@ static void add_extra_pause(std::string& text) {
         text.append(" ,.");
     else
         text.append(". ,.");
+}
+
+static void convert_subrip_to_html(std::string& text) {
+    std::stringstream in_ss{text};
+    std::stringstream out_ss;
+
+    unsigned int segment_line = 0;
+    std::string text_line;
+    for (std::string line; std::getline(in_ss, line);) {
+        if (line.empty()) {
+            if (!text_line.empty()) {
+                out_ss << "<p>" << text_line << "</p>";
+                text_line.clear();
+            }
+
+            out_ss << "<p></p>";
+
+            segment_line = 0;
+
+            continue;
+        }
+
+        if (segment_line == 0) {
+            if (!std::all_of(line.cbegin(), line.cend(), [](auto c) {
+                    return std::isdigit(static_cast<unsigned char>(c)) != 0;
+                })) {
+                continue;
+            }
+        }
+
+        if (segment_line < 2) {
+            out_ss << "<code>" << line << "</code>";
+            ++segment_line;
+            continue;
+        }
+
+        if (!text_line.empty()) text_line.append("<span></span>");
+
+        text_line.append(line);
+
+        ++segment_line;
+    }
+
+    if (!text_line.empty()) out_ss << "<p>" << text_line << "</p><p></p>";
+
+    text.assign(out_ss.str());
+}
+
+static void convert_html_to_subrip(std::string& text) {
+    text = std::regex_replace(text, std::regex{"<p>|<code>|<span>"}, "");
+    text = std::regex_replace(text, std::regex{"</p>|</code>|</span>"}, "\n");
+}
+
+static void convert_markdown_to_html(std::string& text) {
+    std::stringstream ss{text};
+
+    auto config = std::make_shared<maddy::ParserConfig>();
+    config->enabledParsers = maddy::types::ALL;
+
+    text.assign(maddy::Parser{config}.Parse(ss));
+}
+
+static void convert_html_to_markdown(std::string& text) {
+    bool ok = false;
+
+    text.assign(html2md::Convert(text, &ok));
+
+    if (!ok) LOGW("error in html to markdown conversion");
+}
+
+void convert_text_format_to_html(std::string& text,
+                                 text_format_t input_format) {
+    switch (input_format) {
+        case text_format_t::markdown:
+            convert_markdown_to_html(text);
+            break;
+        case text_format_t::subrip: {
+            convert_subrip_to_html(text);
+            break;
+        }
+    }
+}
+
+void convert_text_format_from_html(std::string& text,
+                                   text_format_t output_format) {
+    switch (output_format) {
+        case text_format_t::markdown:
+            convert_html_to_markdown(text);
+            break;
+        case text_format_t::subrip:
+            convert_html_to_subrip(text);
+            break;
+    }
 }
 
 void processor::hebrew_diacritize(std::string& text,

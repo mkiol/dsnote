@@ -311,17 +311,34 @@ ColumnLayout {
                 }
             }
 
-            Switch {
-                enabled: app.state === DsnoteApp.StateIdle
-                text: "HTML"
-                checked: _settings.mnt_text_is_html
-                onClicked: {
-                    _settings.mnt_text_is_html = !_settings.mnt_text_is_html
+            ComboBox {
+                currentIndex: {
+                    if (_settings.mnt_text_format === Settings.TextFormatRaw) return 0
+                    if (_settings.mnt_text_format === Settings.TextFormatHtml) return 1
+                    if (_settings.mnt_text_format === Settings.TextFormatMarkdown) return 2
+                    if (_settings.mnt_text_format === Settings.TextFormatSubRip) return 3
+                    return 0
+                }
+                model: [
+                    qsTr("Plain text"),
+                    "HTML",
+                    "Markdown",
+                    qsTr("SRT Subtitles")
+                ]
+                onActivated: {
+                    if (index === 0)
+                        _settings.mnt_text_format = Settings.TextFormatRaw
+                    else if (index === 1)
+                        _settings.mnt_text_format = Settings.TextFormatHtml
+                    else if (index === 2)
+                        _settings.mnt_text_format = Settings.TextFormatMarkdown
+                    else if (index === 3)
+                        _settings.mnt_text_format = Settings.TextFormatSubRip
                 }
 
-                ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: qsTr("Preserve HTML formatting.")
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Text format")
             }
 
             Switch {

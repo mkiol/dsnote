@@ -18,7 +18,8 @@
 #include <vector>
 
 namespace text_tools {
-enum class engine_t { ssplit, astrunc };
+enum class split_engine_t { ssplit, astrunc };
+enum class text_format_t { markdown, subrip };
 
 struct break_line_info {
     bool break_line = false;
@@ -44,7 +45,7 @@ class processor {
 };
 
 std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
-    const std::string& text, engine_t engine, const std::string& lang,
+    const std::string& text, split_engine_t engine, const std::string& lang,
     const std::string& nb_data = {});
 void restore_caps(std::string& text);
 void to_lower_case(std::string& text);
@@ -57,6 +58,9 @@ void uroman(std::string& text, const std::string& lang_code,
 
 void numbers_to_words(std::string& text, const std::string& lang,
                       const std::string& prefix_path);
+void convert_text_format_to_html(std::string& text, text_format_t input_format);
+void convert_text_format_from_html(std::string& text,
+                                   text_format_t output_format);
 }  // namespace text_tools
 
 #endif  // TEXT_TOOLS_H

@@ -26,6 +26,10 @@ class mnt_engine {
     enum class state_t { idle, initializing, translating, error };
     friend std::ostream& operator<<(std::ostream& os, state_t state);
 
+    enum class text_format_t { raw, html, markdown, subrip };
+    friend std::ostream& operator<<(std::ostream& os,
+                                    text_format_t text_format);
+
     struct model_files_t {
         std::string model_path_first;
         std::string model_path_second;
@@ -55,7 +59,7 @@ class mnt_engine {
         model_files_t model_files;
         std::string nb_data;
         std::string out_lang;
-        bool text_is_html = false;
+        text_format_t text_format = text_format_t::raw;
         std::string options;
         bool clean_text = false;
     };
@@ -68,8 +72,10 @@ class mnt_engine {
     void request_stop();
     inline auto lang() const { return m_config.lang; }
     inline auto model_files() const { return m_config.model_files; }
-    inline auto text_is_html() const { return m_config.text_is_html; }
-    inline void set_text_is_html(bool value) { m_config.text_is_html = value; }
+    inline auto text_format() const { return m_config.text_format; }
+    inline void set_text_format(text_format_t value) {
+        m_config.text_format = value;
+    }
     inline void set_clean_text(bool value) { m_config.clean_text = value; }
     inline auto state() const { return m_state; }
     void translate(std::string text);

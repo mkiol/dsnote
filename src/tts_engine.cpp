@@ -321,8 +321,8 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
     std::vector<tts_engine::task_t> tasks;
 
     if (split) {
-        auto engine = m_config.has_option('a') ? text_tools::engine_t::astrunc
-                                               : text_tools::engine_t::ssplit;
+        auto engine = m_config.has_option('a') ? text_tools::split_engine_t::astrunc
+                                               : text_tools::split_engine_t::ssplit;
         auto [parts, _] =
             text_tools::split(text, engine, m_config.lang, m_config.nb_data);
         if (!parts.empty()) {

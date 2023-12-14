@@ -21,6 +21,26 @@
 #include "text_tools.hpp"
 
 std::ostream& operator<<(std::ostream& os,
+                         mnt_engine::text_format_t text_format) {
+    switch (text_format) {
+        case mnt_engine::text_format_t::raw:
+            os << "raw";
+            break;
+        case mnt_engine::text_format_t::html:
+            os << "html";
+            break;
+        case mnt_engine::text_format_t::markdown:
+            os << "markdown";
+            break;
+        case mnt_engine::text_format_t::subrip:
+            os << "subrip";
+            break;
+    }
+
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os,
                          const mnt_engine::model_files_t& model_files) {
     os << "model-path-first=" << model_files.model_path_first
        << ", model-path-second=" << model_files.model_path_second;
@@ -30,7 +50,7 @@ std::ostream& operator<<(std::ostream& os,
 
 std::ostream& operator<<(std::ostream& os, const mnt_engine::config_t& config) {
     os << "lang=" << config.lang << ", clean-text=" << config.clean_text
-       << ", text-is-html=" << config.text_is_html
+       << ", text-format=" << config.text_format
        << ", options=" << config.options << ", model-files=["
        << config.model_files << "]";
 
@@ -208,22 +228,67 @@ void mnt_engine::set_state(state_t new_state) {
     }
 }
 
+static text_tools::text_format_t text_fromat_from_mnt_format(
+    mnt_engine::text_format_t format) {
+    switch (format) {
+        case mnt_engine::text_format_t::markdown:
+            return text_tools::text_format_t::markdown;
+        case mnt_engine::text_format_t::subrip:
+            return text_tools::text_format_t::subrip;
+        case mnt_engine::text_format_t::raw:
+        case mnt_engine::text_format_t::html:
+            break;
+    }
+
+    throw std::runtime_error{"invalid text format"};
+}
+
 std::string mnt_engine::translate_internal(std::string text) {
     if (m_config.clean_text) {
-        text_tools::trim_lines(text);
-        text_tools::remove_hyphen_word_break(text);
-        text_tools::clean_white_characters(text);
+        switch (m_config.text_format) {
+            case text_format_t::raw:
+                text_tools::trim_lines(text);
+                text_tools::remove_hyphen_word_break(text);
+                text_tools::clean_white_characters(text);
+                break;
+            case text_format_t::html:
+                text_tools::trim_lines(text);
+                text_tools::clean_white_characters(text);
+                break;
+            case text_format_t::markdown:
+                text_tools::clean_white_characters(text);
+                break;
+            case text_format_t::subrip:
+                break;
+        }
     }
+
+    switch (m_config.text_format) {
+        case text_format_t::raw:
+        case text_format_t::html:
+            break;
+        case text_format_t::markdown:
+            text_tools::convert_text_format_to_html(
+                text, text_tools::text_format_t::markdown);
+            break;
+        case text_format_t::subrip:
+            text_tools::convert_text_format_to_html(
+                text, text_tools::text_format_t::subrip);
+            break;
+    }
+
+    bool html = m_config.text_format != text_format_t::raw;
 
     auto start = std::chrono::steady_clock::now();
 
     try {
+        if (m_shutting_down) return {};
         text.assign(m_bergamot_api_api.bergamot_api_translate(
-            m_bergamot_ctx_first, text.c_str(), m_config.text_is_html));
+            m_bergamot_ctx_first, text.c_str(), html));
         if (m_shutting_down) return {};
         if (m_bergamot_ctx_second)
             text.assign(m_bergamot_api_api.bergamot_api_translate(
-                m_bergamot_ctx_second, text.c_str(), m_config.text_is_html));
+                m_bergamot_ctx_second, text.c_str(), html));
         if (m_shutting_down) return {};
     } catch (const std::runtime_error& err) {
         LOGE("translation error: " << err.what());
@@ -234,6 +299,17 @@ std::string mnt_engine::translate_internal(std::string text) {
                    .count();
 
     LOGD("translation completed, stats: duration=" << dur << "ms");
+
+    switch (m_config.text_format) {
+        case text_format_t::raw:
+        case text_format_t::html:
+            break;
+        case text_format_t::markdown:
+        case text_format_t::subrip:
+            text_tools::convert_text_format_from_html(
+                text, text_fromat_from_mnt_format(m_config.text_format));
+            break;
+    }
 
     return text;
 }
@@ -322,7 +398,7 @@ void mnt_engine::create_model() {
             *bergamot_ctx = m_bergamot_api_api.bergamot_api_make(
                 model_file.c_str(), src_vocab_file.c_str(),
                 trg_vocab_file.c_str(), shortlist_path.c_str(),
-                /*num_workers=*/1,
+                /*num_workers=*/8,
                 /*cache_size=*/500000, nullptr);
         } catch (const std::exception& err) {
             LOGE("error: " << err.what());

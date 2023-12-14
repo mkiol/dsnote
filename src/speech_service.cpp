@@ -1383,10 +1383,30 @@ static bool mnt_clean_text_from_options(const QVariantMap &options) {
     return false;
 }
 
-static bool mnt_text_is_html_from_options(const QVariantMap &options) {
-    if (options.contains(QStringLiteral("text_is_html")))
-        return options.value(QStringLiteral("text_is_html")).toBool();
-    return false;
+static settings::text_format_t mnt_text_format_from_options(
+    const QVariantMap &options) {
+    if (options.contains(QStringLiteral("text_format"))) {
+        bool ok = false;
+        auto value = options.value(QStringLiteral("text_format")).toInt(&ok);
+        if (ok) return static_cast<settings::text_format_t>(value);
+    }
+    return settings::text_format_t::TextFormatRaw;
+}
+
+static mnt_engine::text_format_t mnt_text_fromat_from_settings_format(
+    settings::text_format_t format) {
+    switch (format) {
+        case settings::text_format_t::TextFormatRaw:
+            return mnt_engine::text_format_t::raw;
+        case settings::text_format_t::TextFormatHtml:
+            return mnt_engine::text_format_t::html;
+        case settings::text_format_t::TextFormatMarkdown:
+            return mnt_engine::text_format_t::markdown;
+        case settings::text_format_t::TextFormatSubRip:
+            return mnt_engine::text_format_t::subrip;
+    }
+
+    throw std::runtime_error("invalid text format");
 }
 
 QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
@@ -1405,7 +1425,8 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
         config.out_lang = model_config->mnt->out_lang_id.toStdString();
         config.options = model_config->options.toStdString();
         config.clean_text = mnt_clean_text_from_options(options);
-        config.text_is_html = mnt_text_is_html_from_options(options);
+        config.text_format = mnt_text_fromat_from_settings_format(
+            mnt_text_format_from_options(options));
 
         QFile nb_file{QStringLiteral(":/nonbreaking_prefixes/%1.txt")
                           .arg(model_config->mnt->lang_id.split('-').first())};
@@ -1466,7 +1487,7 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
             qDebug() << "new mnt engine not required";
 
             m_mnt_engine->set_clean_text(config.clean_text);
-            m_mnt_engine->set_text_is_html(config.text_is_html);
+            m_mnt_engine->set_text_format(config.text_format);
         }
 
         m_mnt_engine->start();
