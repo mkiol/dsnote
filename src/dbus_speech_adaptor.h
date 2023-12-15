@@ -163,6 +163,10 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"out\" type=\"d\" name=\"progress\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </signal>\n"
+"    <signal name=\"MntTranslateProgress\">\n"
+"      <arg direction=\"out\" type=\"d\" name=\"progress\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
+"    </signal>\n"
 "    <signal name=\"MntTranslateFinished\">\n"
 "      <arg direction=\"out\" type=\"s\" name=\"in_text\"/>\n"
 "      <arg direction=\"out\" type=\"s\" name=\"in_lang\"/>\n"
@@ -392,6 +396,7 @@ Q_SIGNALS: // SIGNALS
     void MntLangListChanged(const QVariantList &langs);
     void MntLangsPropertyChanged(const QVariantMap &langs);
     void MntTranslateFinished(const QString &in_text, const QString &in_lang, const QString &out_text, const QString &out_lang, int task);
+    void MntTranslateProgress(double progress, int task);
     void StatePropertyChanged(int state);
     void SttFileTranscribeFinished(int task);
     void SttFileTranscribeProgress(double progress, int task);

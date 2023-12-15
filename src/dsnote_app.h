@@ -139,6 +139,8 @@ class dsnote_app : public QObject {
                    active_mnt_out_lang_changed)
     Q_PROPERTY(QString active_mnt_out_lang_name READ active_mnt_out_lang_name
                    NOTIFY active_mnt_out_lang_changed)
+    Q_PROPERTY(double translate_progress READ translate_progress NOTIFY
+                   translate_progress_changed)
 
     // tts for mnt
     Q_PROPERTY(
@@ -352,6 +354,7 @@ class dsnote_app : public QObject {
     void another_app_connected_changed();
     void transcribe_progress_changed();
     void speech_to_file_progress_changed();
+    void translate_progress_changed();
     void error(dsnote_app::error_t type);
     void transcribe_done();
     void speech_to_file_done();
@@ -452,6 +455,7 @@ class dsnote_app : public QObject {
     QVariantMap m_available_tts_models_for_out_mnt_map;
     QString m_intermediate_text;
     double m_speech_to_file_progress = -1.0;
+    double m_translate_progress = -1.0;
     double m_transcribe_progress = -1.0;
     OrgMkiolSpeechInterface m_dbus_service;
     OrgFreedesktopNotificationsInterface m_dbus_notifications;
@@ -526,6 +530,7 @@ class dsnote_app : public QObject {
     bool connected() const;
     double transcribe_progress() const;
     double speech_to_file_progress() const;
+    double translate_progress() const;
     bool another_app_connected() const;
     void update_progress();
     void update_service_state();
@@ -617,6 +622,7 @@ class dsnote_app : public QObject {
     void set_active_tts_model_for_in_mnt(const QString &model);
     void set_active_tts_model_for_out_mnt(const QString &model);
     void handle_ttt_models_changed(const QVariantMap &models);
+    void handle_mnt_translate_progress(double new_progress, int task);
     void handle_mnt_translate_finished(const QString &in_text,
                                        const QString &in_lang,
                                        const QString &out_text,

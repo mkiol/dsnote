@@ -115,6 +115,10 @@ RowLayout {
                             return qsTr("Writing speech to file...") +
                                     (app.speech_to_file_progress > 0.0 ? " " +
                                                                          Math.round(app.speech_to_file_progress * 100) + "%" : "")
+                        if (app.state === DsnoteApp.StateTranslating)
+                            return qsTr("Translating...") +
+                                    (app.translate_progress > 0.0 ? " " +
+                                                                         Math.round(app.translate_progress * 100) + "%" : "")
                         if (app.task_state === DsnoteApp.TaskStateProcessing)
                             return qsTr("Processing, please wait...")
                         if (app.state === DsnoteApp.StateTranscribingFile)
@@ -127,7 +131,6 @@ RowLayout {
 
                         if (app.task_state === DsnoteApp.TaskStateSpeechPaused) return qsTr("Reading is paused.")
                         if (app.state === DsnoteApp.StatePlayingSpeech) return qsTr("Reading a note...")
-                        if (app.state === DsnoteApp.StateTranslating) return qsTr("Translating...")
 
                         return ""
                     }

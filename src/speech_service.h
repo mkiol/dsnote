@@ -169,6 +169,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     int current_task_id() const;
     double stt_transcribe_file_progress(int task) const;
     double tts_speech_to_file_progress(int task) const;
+    double mnt_translate_progress(int task) const;
     QVariantMap mnt_out_langs(QString in_lang) const;
     QVariantMap features_availability();
     static void remove_cached_media_files();
@@ -190,6 +191,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     void tts_speech_to_file_finished(const QString &file, int task);
     void tts_speech_encoded(const speech_service::tts_partial_result_t &result);
     void tts_partial_speech_playing(const QString &text, int task);
+    void mnt_translate_progress_changed(double progress, int task);
+    void mnt_engine_translate_progress_changed(int task);
     void mnt_translate_finished(const QString &in_text, const QString &in_lang,
                                 const QString &out_text,
                                 const QString &out_lang, int task);
@@ -241,6 +244,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void MntLangListPropertyChanged(const QVariantList &langs);
     void DefaultMntLangPropertyChanged(const QString &lang);
     void DefaultMntOutLangPropertyChanged(const QString &lang);
+    void MntTranslateProgress(double progress, int task);
     void MntTranslateFinished(const QString &in_text, const QString &in_lang,
                               const QString &out_text, const QString &out_lang,
                               int task);
@@ -394,6 +398,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void handle_tts_engine_state_changed(tts_engine::state_t state);
     void handle_mnt_engine_state_changed(mnt_engine::state_t state,
                                          int task_id);
+    void handle_mnt_progress_changed(int task_id);
     void handle_mnt_translate_finished(const std::string &in_text,
                                        const std::string &in_lang,
                                        std::string &&out_text,

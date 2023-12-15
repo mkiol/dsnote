@@ -206,6 +206,12 @@ std::string mnt_engine::find_file_with_name_prefix(std::string dir_path,
     return {};
 }
 
+double mnt_engine::progress() const {
+    if (m_progress.total != 0)
+        return static_cast<double>(m_progress.current) / m_progress.total;
+    return 0.0;
+}
+
 void mnt_engine::translate(std::string text) {
     if (m_shutting_down) return;
 
@@ -277,6 +283,10 @@ std::string mnt_engine::translate_internal(std::string text) {
 
     bool html = m_config.text_format != text_format_t::raw;
 
+    m_progress.total = text.size();
+    m_progress.current = 0;
+    if (m_call_backs.progress_changed) m_call_backs.progress_changed();
+
     auto start = std::chrono::steady_clock::now();
 
     std::ostringstream out_ss;
@@ -322,6 +332,9 @@ std::string mnt_engine::translate_internal(std::string text) {
 
             out_ss << line;
             line.clear();
+
+            m_progress.current = m_progress.total - text.size();
+            if (m_call_backs.progress_changed) m_call_backs.progress_changed();
         }
     }
 
@@ -343,6 +356,9 @@ std::string mnt_engine::translate_internal(std::string text) {
                 text, text_fromat_from_mnt_format(m_config.text_format));
             break;
     }
+
+    m_progress.current = m_progress.total;
+    if (m_call_backs.progress_changed) m_call_backs.progress_changed();
 
     return text;
 }
@@ -390,8 +406,12 @@ void mnt_engine::process() {
                                          std::move(text), m_config.out_lang);
         }
 
+        m_progress = {};
+
         set_state(state_t::idle);
     }
+
+    m_progress = {};
 
     if (m_shutting_down) set_state(state_t::idle);
 

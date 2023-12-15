@@ -51,6 +51,7 @@ class mnt_engine {
                            const std::string& out_lang)>
             text_translated;
         std::function<void(state_t state)> state_changed;
+        std::function<void()> progress_changed;
         std::function<void()> error;
     };
 
@@ -78,6 +79,7 @@ class mnt_engine {
     }
     inline void set_clean_text(bool value) { m_config.clean_text = value; }
     inline auto state() const { return m_state; }
+    double progress() const;
     void translate(std::string text);
 
    private:
@@ -102,6 +104,11 @@ class mnt_engine {
         }
     };
 
+    struct progress_t {
+        unsigned int current = 0;
+        unsigned int total = 0;
+    };
+
     config_t m_config;
     callbacks_t m_call_backs;
     bergamot_api_api m_bergamot_api_api;
@@ -114,6 +121,7 @@ class mnt_engine {
     state_t m_state = state_t::idle;
     void* m_bergamot_ctx_first = nullptr;
     void* m_bergamot_ctx_second = nullptr;
+    progress_t m_progress;
 
     static std::string find_file_with_name_prefix(std::string dir_path,
                                                   std::string prefix);

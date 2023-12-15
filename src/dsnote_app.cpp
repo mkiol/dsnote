@@ -653,6 +653,10 @@ void dsnote_app::connect_service_signals() {
                 this, &dsnote_app::handle_tts_partial_speech,
                 Qt::QueuedConnection);
         connect(speech_service::instance(),
+                &speech_service::mnt_translate_progress_changed, this,
+                &dsnote_app::handle_mnt_translate_progress,
+                Qt::QueuedConnection);
+        connect(speech_service::instance(),
                 &speech_service::mnt_translate_finished, this,
                 &dsnote_app::handle_mnt_translate_finished,
                 Qt::QueuedConnection);
@@ -719,6 +723,8 @@ void dsnote_app::connect_service_signals() {
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::TtsSpeechToFileProgress, this,
                 &dsnote_app::handle_tts_speech_to_file_progress);
+        connect(&m_dbus_service, &OrgMkiolSpeechInterface::MntTranslateProgress,
+                this, &dsnote_app::handle_mnt_translate_progress);
         connect(&m_dbus_service, &OrgMkiolSpeechInterface::MntTranslateFinished,
                 this, &dsnote_app::handle_mnt_translate_finished);
         connect(&m_dbus_service,
@@ -972,6 +978,25 @@ void dsnote_app::handle_tts_speech_to_file_progress(double new_progress,
 
     m_speech_to_file_progress = new_progress;
     emit speech_to_file_progress_changed();
+}
+
+void dsnote_app::handle_mnt_translate_progress(double new_progress, int task) {
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+    } else {
+        qDebug() << "[dbus => app] signal MntTranslateProgress:" << new_progress
+                 << task;
+    }
+
+    if (m_current_task != task) {
+        qWarning() << "invalid task id";
+        return;
+    }
+
+    m_translate_progress = new_progress;
+
+    qDebug() << "translate progress:" << m_translate_progress;
+    emit translate_progress_changed();
 }
 
 void dsnote_app::handle_mnt_translate_finished(
@@ -2671,6 +2696,8 @@ double dsnote_app::transcribe_progress() const { return m_transcribe_progress; }
 double dsnote_app::speech_to_file_progress() const {
     return m_speech_to_file_progress;
 }
+
+double dsnote_app::translate_progress() const { return m_translate_progress; }
 
 bool dsnote_app::another_app_connected() const {
     return m_current_task != INVALID_TASK && m_primary_task != m_current_task &&

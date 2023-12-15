@@ -437,7 +437,7 @@
         </signal>
 
         <!--
-            TtsPartialSpeechPlaying:
+            TtsSpeechToFileProgress:
             @progress: progress of speech synthesis (0.0 - 1.0)
             @task: id of task returned in TtsSpeechToFile call
 
@@ -456,6 +456,18 @@
             Emitted whenever file transcription progress changed.
         -->
         <signal name="SttFileTranscribeProgress">
+            <arg name="progress" type="d" direction="out" />
+            <arg name="task" type="i" direction="out" />
+        </signal>
+
+        <!--
+            MntTranslateProgress:
+            @progress: progress of translation (0.0 - 1.0)
+            @task: id of task returned in MntTranslate call
+
+            Emitted whenever translate progress changed.
+        -->
+        <signal name="MntTranslateProgress">
             <arg name="progress" type="d" direction="out" />
             <arg name="task" type="i" direction="out" />
         </signal>

@@ -175,6 +175,10 @@ speech_service::speech_service(QObject *parent)
             static_cast<void (speech_service::*)(int)>(
                 &speech_service::handle_mnt_engine_error),
             Qt::QueuedConnection);
+    connect(this, &speech_service::mnt_engine_translate_progress_changed, this,
+            static_cast<void (speech_service::*)(int)>(
+                &speech_service::handle_mnt_progress_changed),
+            Qt::QueuedConnection);
     connect(this, &speech_service::mnt_engine_state_changed, this,
             &speech_service::handle_mnt_engine_state_changed,
             Qt::QueuedConnection);
@@ -343,6 +347,12 @@ speech_service::speech_service(QObject *parent)
                         << "[service => dbus] signal TtsSpeechToFileProgress:"
                         << progress << task;
                     emit TtsSpeechToFileProgress(progress, task);
+                });
+        connect(this, &speech_service::mnt_translate_progress_changed, this,
+                [this](double progress, int task) {
+                    qDebug() << "[service => dbus] signal MntTranslateProgress:"
+                             << progress << task;
+                    emit MntTranslateProgress(progress, task);
                 });
         connect(
             this, &speech_service::mnt_translate_finished, this,
@@ -1473,6 +1483,12 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
                                                       m_current_task->id);
                     }
                 },
+                /*progress_changed=*/
+                [this]() {
+                    if (m_current_task)
+                        emit mnt_engine_translate_progress_changed(
+                            m_current_task->id);
+                },
                 /*error=*/
                 [this]() { handle_mnt_engine_error(); }};
 
@@ -1851,6 +1867,12 @@ void speech_service::handle_mnt_engine_error(int task_id) {
     }
 }
 
+void speech_service::handle_mnt_progress_changed(int task_id) {
+    if (current_task_id() == task_id && m_mnt_engine) {
+        emit mnt_translate_progress_changed(m_mnt_engine->progress(), task_id);
+    }
+}
+
 void speech_service::handle_stt_text_decoded(const std::string &text) {
     if (m_current_task) {
         if (m_previous_task &&
@@ -2180,6 +2202,16 @@ double speech_service::tts_speech_to_file_progress(int task) const {
     if (m_current_task && m_current_task->id == task &&
         m_current_task->speech_mode == speech_mode_t::speech_to_file) {
         return m_progress;
+    }
+
+    qWarning() << "invalid task id";
+
+    return -1.0;
+}
+
+double speech_service::mnt_translate_progress(int task) const {
+    if (m_current_task && m_current_task->id == task && m_mnt_engine) {
+        return m_mnt_engine->progress();
     }
 
     qWarning() << "invalid task id";
