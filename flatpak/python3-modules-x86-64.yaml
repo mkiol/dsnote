@@ -1,22 +1,18 @@
-# Generated with flatpak-pip-generator --yaml --arch-dependent-allow --arch-dependent-force --output python3-tts-x86-64 torch==2.1.1 setuptools_scm[toml]==8.0.4 accelerate==0.23.0 transformers==4.33.3 TTS[ja]==0.21.2 faster-whisper==0.10.0
 name: python3-modules-x86-64
 only-arches:
   - x86_64
 build-commands: []
 buildsystem: simple
 modules:
-  - name: python3-torch
+  - name: python3-torch-deps
     buildsystem: simple
     cleanup:
-      - /bin/convert*
-      - /bin/torch*
       - /bin/isympy
-      - /lib/*.so*
     build-options:
       strip: true
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} "torch==2.1.1" --no-build-isolation
+        --prefix=${FLATPAK_DEST} Jinja2 MarkupSafe filelock fsspec mpmath networkx sympy triton typing_extensions --no-build-isolation
     sources:
       - &id002
         type: file
@@ -42,62 +38,10 @@ modules:
         type: file
         url: https://files.pythonhosted.org/packages/42/31/d2f89f1ae42718f8c8a9e440ebe38d7d5fe1e0d9eb9178ce779e365b3ab0/networkx-2.8.8-py3-none-any.whl
         sha256: e435dfa75b1d7195c7b8378c3859f0445cd88c6b0375c181ed66823a9ceb7524
-      - &id008
-        type: file
-        url: https://files.pythonhosted.org/packages/37/6d/121efd7382d5b0284239f4ab1fc1590d86d34ed4a4a2fdb13b30ca8e5740/nvidia_cublas_cu12-12.1.3.1-py3-none-manylinux1_x86_64.whl
-        sha256: ee53ccca76a6fc08fb9701aa95b6ceb242cdaab118c3bb152af4e579af792728
-      - &id009
-        type: file
-        url: https://files.pythonhosted.org/packages/7e/00/6b218edd739ecfc60524e585ba8e6b00554dd908de2c9c66c1af3e44e18d/nvidia_cuda_cupti_cu12-12.1.105-py3-none-manylinux1_x86_64.whl
-        sha256: e54fde3983165c624cb79254ae9818a456eb6e87a7fd4d56a2352c24ee542d7e
-      - &id010
-        type: file
-        url: https://files.pythonhosted.org/packages/b6/9f/c64c03f49d6fbc56196664d05dba14e3a561038a81a638eeb47f4d4cfd48/nvidia_cuda_nvrtc_cu12-12.1.105-py3-none-manylinux1_x86_64.whl
-        sha256: 339b385f50c309763ca65456ec75e17bbefcbbf2893f462cb8b90584cd27a1c2
-      - &id011
-        type: file
-        url: https://files.pythonhosted.org/packages/eb/d5/c68b1d2cdfcc59e72e8a5949a37ddb22ae6cade80cd4a57a84d4c8b55472/nvidia_cuda_runtime_cu12-12.1.105-py3-none-manylinux1_x86_64.whl
-        sha256: 6e258468ddf5796e25f1dc591a31029fa317d97a0a94ed93468fc86301d61e40
-      - &id012
-        type: file
-        url: https://files.pythonhosted.org/packages/ff/74/a2e2be7fb83aaedec84f391f082cf765dfb635e7caa9b49065f73e4835d8/nvidia_cudnn_cu12-8.9.2.26-py3-none-manylinux1_x86_64.whl
-        sha256: 5ccb288774fdfb07a7e7025ffec286971c06d8d7b4fb162525334616d7629ff9
-      - &id013
-        type: file
-        url: https://files.pythonhosted.org/packages/86/94/eb540db023ce1d162e7bea9f8f5aa781d57c65aed513c33ee9a5123ead4d/nvidia_cufft_cu12-11.0.2.54-py3-none-manylinux1_x86_64.whl
-        sha256: 794e3948a1aa71fd817c3775866943936774d1c14e7628c74f6f7417224cdf56
-      - &id014
-        type: file
-        url: https://files.pythonhosted.org/packages/44/31/4890b1c9abc496303412947fc7dcea3d14861720642b49e8ceed89636705/nvidia_curand_cu12-10.3.2.106-py3-none-manylinux1_x86_64.whl
-        sha256: 9d264c5036dde4e64f1de8c50ae753237c12e0b1348738169cd0f8a536c0e1e0
-      - &id015
-        type: file
-        url: https://files.pythonhosted.org/packages/bc/1d/8de1e5c67099015c834315e333911273a8c6aaba78923dd1d1e25fc5f217/nvidia_cusolver_cu12-11.4.5.107-py3-none-manylinux1_x86_64.whl
-        sha256: 8a7ec542f0412294b15072fa7dab71d31334014a69f953004ea7a118206fe0dd
-      - &id016
-        type: file
-        url: https://files.pythonhosted.org/packages/65/5b/cfaeebf25cd9fdec14338ccb16f6b2c4c7fa9163aefcf057d86b9cc248bb/nvidia_cusparse_cu12-12.1.0.106-py3-none-manylinux1_x86_64.whl
-        sha256: f3b50f42cf363f86ab21f720998517a659a48131e8d538dc02f8768237bd884c
-      - &id017
-        type: file
-        url: https://files.pythonhosted.org/packages/a4/05/23f8f38eec3d28e4915725b233c24d8f1a33cb6540a882f7b54be1befa02/nvidia_nccl_cu12-2.18.1-py3-none-manylinux1_x86_64.whl
-        sha256: 1a6c4acefcbebfa6de320f412bf7866de856e786e0462326ba1bac40de0b5e71
-      - &id018
-        type: file
-        url: https://files.pythonhosted.org/packages/1e/07/bf730d44c2fe1b676ad9cc2be5f5f861eb5d153fb6951987a2d6a96379a9/nvidia_nvjitlink_cu12-12.3.101-py3-none-manylinux1_x86_64.whl
-        sha256: 64335a8088e2b9d196ae8665430bc6a2b7e6ef2eb877a9c735c804bd4ff6467c
-      - &id019
-        type: file
-        url: https://files.pythonhosted.org/packages/da/d3/8057f0587683ed2fcd4dbfbdfdfa807b9160b809976099d36b8f60d08f03/nvidia_nvtx_cu12-12.1.105-py3-none-manylinux1_x86_64.whl
-        sha256: dc21cf308ca5691e7c04d962e213f8a4aa9bbfa23d95412f452254c2caeb09e5
       - &id021
         type: file
         url: https://files.pythonhosted.org/packages/d2/05/e6600db80270777c4a64238a98d442f0fd07cc8915be2a1c16da7f2b9e74/sympy-1.12-py3-none-any.whl
         sha256: c3588cd4295d0c0f603d0f2ae780587e64e2efeedb3521e46b9bb1d08d184fa5
-      - &id022
-        type: file
-        url: https://files.pythonhosted.org/packages/96/82/0966469ded5946cb4c18dd11b04eac78c943269fc79d290740d6477005e8/torch-2.1.1-cp310-cp310-manylinux1_x86_64.whl
-        sha256: 5ebc43f5355a9b7be813392b3fb0133991f0380f6f0fcc8218d5468dc45d1071
       - &id023
         type: file
         url: https://files.pythonhosted.org/packages/4d/22/91a8af421c8a8902dde76e6ef3db01b258af16c53d81e8c0d0dc13900a9e/triton-2.1.0-0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
@@ -106,6 +50,27 @@ modules:
         type: file
         url: https://files.pythonhosted.org/packages/24/21/7d397a4b7934ff4028987914ac1044d3b7d52712f30e2ac7a2ae5bc86dd0/typing_extensions-4.8.0-py3-none-any.whl
         sha256: 8f92fc8806f9a6b641eaa5318da32b44d401efaac0f6678c9bc448ba3605faa0
+
+  - name: python3-torch
+    buildsystem: simple
+    cleanup:
+      - /extensions/cpu/bin/convert*
+      - /extensions/cpu/bin/torch*
+    build-options:
+      strip: true
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+        --prefix=${FLATPAK_DEST}/extensions/cpu torch torchaudio --no-build-isolation
+    sources:
+      - &id022
+        type: file
+        url: https://download.pytorch.org/whl/cpu/torch-2.1.1%2Bcpu-cp310-cp310-linux_x86_64.whl
+        sha256: 16e6cdb1991ff1f15f469b12fffb5b20f00b1ecff8c1073c23c7760fba90fcbc
+      - &id039
+        type: file
+        url: https://download.pytorch.org/whl/cpu/torchaudio-2.1.1%2Bcpu-cp310-cp310-linux_x86_64.whl
+        sha256: ab0450b7047748c7bdceede3802eff4869dbad966275aa5d0deb237cafb50cd8
+
   - name: python3-setuptools_scm
     buildsystem: simple
     cleanup:
@@ -126,11 +91,15 @@ modules:
         url: https://files.pythonhosted.org/packages/97/75/10a9ebee3fd790d20926a90a2547f0bf78f371b2f13aa822c759680ca7b9/tomli-2.0.1-py3-none-any.whl
         sha256: 939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc
       - *id001
+
   - name: python3-accelerate
     cleanup:
       - /bin
       - /lib/*.so*
     buildsystem: simple
+    build-options:
+      env:
+        PYTHONPATH: /app/extensions/cpu/lib/python3.10/site-packages:/app/lib/python3.10/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "accelerate==0.23.0" --no-build-isolation
@@ -168,18 +137,6 @@ modules:
         type: file
         url: https://files.pythonhosted.org/packages/5b/9a/cce6992d25096371412f1a58e5c50f144299261d01dfc4c00fd563a589e7/numpy-1.22.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
         sha256: a97e82c39d9856fe7d4f9b86d8a1e66eff99cf3a8b7ba48202f659703d27c46f
-      - *id008
-      - *id009
-      - *id010
-      - *id011
-      - *id012
-      - *id013
-      - *id014
-      - *id015
-      - *id016
-      - *id017
-      - *id018
-      - *id019
       - *id020
       - &id033
         type: file
@@ -201,10 +158,14 @@ modules:
         type: file
         url: https://files.pythonhosted.org/packages/96/94/c31f58c7a7f470d5665935262ebd7455c7e4c7782eb525658d3dbf4b9403/urllib3-2.1.0-py3-none-any.whl
         sha256: 55901e917a5896a349ff771be919f8bd99aff50b79fe58fec595eb37bbc56bb3
+
   - name: python3-transformers
     buildsystem: simple
     cleanup:
       - /bin
+    build-options:
+      env:
+        PYTHONPATH: /app/extensions/cpu/lib/python3.10/site-packages:/app/lib/python3.10/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "transformers==4.33.3" --no-build-isolation
@@ -238,6 +199,7 @@ modules:
         sha256: 7150bbf6781ddb3338ce7d74f4d6f557e6c236a0a1dd3de57412214caae7fd71
       - *id001
       - *id032
+
   - name: python3-TTS
     buildsystem: simple
     cleanup:
@@ -246,9 +208,11 @@ modules:
       - /*.rst
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} "TTS[ja]==0.21.2" --no-build-isolation
+        --prefix=${FLATPAK_DEST} "TTS[ja]==0.21.3" --no-build-isolation
     build-options:
       strip: true
+      env:
+        PYTHONPATH: /app/extensions/cpu/lib/python3.10/site-packages:/app/lib/python3.10/site-packages
     sources:
       - type: file
         url: https://files.pythonhosted.org/packages/86/14/5dc2eb02b7cc87b2f95930310a2cc5229198414919a116b564832c747bc1/Babel-2.13.1-py3-none-any.whl
@@ -266,8 +230,8 @@ modules:
         url: https://files.pythonhosted.org/packages/dc/74/db1c83a11e68abca8dadce6719f02c05042a03cc9b9a95080c269705d78f/SudachiPy-0.6.7-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
         sha256: 3e3f54006158d3112d86502f1ff3ab81f1d80c75d00ffeb853522f919a853063
       - type: file
-        url: https://files.pythonhosted.org/packages/50/50/8effbf4059d38723af2f8f468a269dbcf0faddb3f9f073a226dedca8984a/TTS-0.21.2-cp310-cp310-manylinux1_x86_64.whl
-        sha256: a58cb7b8ab3b8c8c6bbb5cfeeadd5795fc17549266ed757f9617318bb7d59459
+        url: https://files.pythonhosted.org/packages/0b/ce/444b7a1bb7aa80b8b2976a3e67dc32b6fdb6a36fe08b6a3034382737bd35/TTS-0.21.3-cp310-cp310-manylinux1_x86_64.whl
+        sha256: 75e3d6afbb62ae6635379f111bfd965c1217002c1bc5249a57fcb6a91ecb8c1e
       - type: file
         url: https://files.pythonhosted.org/packages/e4/63/7685ef40c65aba621ccd2524a24181bf11f0535ab1fdba47e40738eacff6/Unidecode-1.3.7-py3-none-any.whl
         sha256: 663a537f506834ed836af26a81b210d90cbde044c47bfbdc0fbbc9f94c86a6e4
@@ -475,18 +439,6 @@ modules:
         url: https://files.pythonhosted.org/packages/ed/13/b66627125b35f2987bd9872cf028b5e1e1ffcbc8d1e182ac4e84eed3998f/numba-0.58.1-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
         sha256: 4e79b6cc0d2bf064a955934a2e02bf676bc7995ab2db929dbbc62e4c16551be6
       - *id029
-      - *id008
-      - *id009
-      - *id010
-      - *id011
-      - *id012
-      - *id013
-      - *id014
-      - *id015
-      - *id016
-      - *id017
-      - *id018
-      - *id019
       - type: file
         url: https://files.pythonhosted.org/packages/7e/80/cab10959dc1faead58dc8384a781dfbf93cb4d33d50988f7a69f1b7c9bbe/oauthlib-3.2.2-py3-none-any.whl
         sha256: 8139f29aac13e25d502680e9e19963e83f16838d48a0d71c287fe40e7067fbca
@@ -595,9 +547,7 @@ modules:
         sha256: 2b7818516e423bdaebb97c723f86a7c6b0a83d3f3b0970328d66f4d9104dc032
       - *id036
       - *id022
-      - type: file
-        url: https://files.pythonhosted.org/packages/2a/58/18754a3e193ba5fb6097830d51b788574c43ed30f9adf8106cdfd5315ad1/torchaudio-2.1.1-cp310-cp310-manylinux1_x86_64.whl
-        sha256: e73ee8e52304abff5e7ecdb9560e70b65f471ee5a528d2279af491ece875dd69
+      - *id039
       - *id031
       - type: file
         url: https://files.pythonhosted.org/packages/53/ac/b6f8928c69c0d425e1ae4b081573c2f71471acb7515652b7824be35b4d7f/trainer-0.0.32-py3-none-any.whl
@@ -630,11 +580,15 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/b6/b2/44b31699e27f82c577143d062a2b58cbe0c6e7a0828d13c0ffd10891ad40/yarl-1.9.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
         sha256: c5f3faeb8100a43adf3e7925d556801d14b5816a0ac9e75e22948e787feec642
+
   - name: python3-faster-whisper
     buildsystem: simple
     cleanup:
         - /bin
         - /lib/*.so*
+    build-options:
+      env:
+        PYTHONPATH: /app/extensions/cpu/lib/python3.10/site-packages:/app/lib/python3.10/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "faster-whisper==0.10.0" --no-build-isolation
@@ -677,8 +631,12 @@ modules:
       - *id031
       - *id001
       - *id032
+
   - name: python3-mycroft_mimic3_tts
     buildsystem: simple
+    build-options:
+      env:
+        PYTHONPATH: /app/extensions/cpu/lib/python3.10/site-packages:/app/lib/python3.10/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "mycroft_mimic3_tts[all]==0.2.4" --no-build-isolation
@@ -928,8 +886,12 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/c0/08/aad411a89366933d2a0d8f449a6e3de011de2beb6c9c3ab83a5cc2e5dbd1/xdgenvpy-2.3.5-py3-none-any.whl
         sha256: a71c60106521503a9b87408dac2ad3977ce9bd8b447b786eaf062b62b04f6f5a
+
   - name: python3-unikud
     buildsystem: simple
+    build-options:
+      env:
+        PYTHONPATH: /app/extensions/cpu/lib/python3.10/site-packages:/app/lib/python3.10/site-packages
     build-commands:
       - pip3 install --verbose --no-deps --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "unikud==0.1.0" --no-build-isolation
@@ -939,15 +901,3 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/3c/ba/d77a3086771ecd0ae0bfeb577df75e18aa7171f7175052e0c985fb29cc14/unikud-0.1.0-py3-none-any.whl
         sha256: e8d8bf88f00804ae05df87ac3e15453af092e34a63d530f255e7bb014ce43afe
-  - name: python3-pybind11
-    buildsystem: simple
-    cleanup:
-      - /bin
-      - /lib/python3.10/site-packages/pybind11*
-    build-commands:
-      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} "pybind11" --no-build-isolation
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/06/55/9f73c32dda93fa4f539fafa268f9504e83c489f460c380371d94296126cd/pybind11-2.11.1-py3-none-any.whl
-        sha256: 33cdd02a6453380dd71cc70357ce388ad1ee8d32bd0e38fc22b273d050aa29b3

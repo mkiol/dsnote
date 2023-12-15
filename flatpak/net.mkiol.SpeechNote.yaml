@@ -15,55 +15,62 @@ finish-args:
   - --socket=fallback-x11
   - --socket=wayland
   - --socket=pulseaudio
-  - --device=all
+  - --device=all # AMD ROCm (/dev/kfd)
   - --filesystem=xdg-desktop
   - --filesystem=xdg-download
   - --filesystem=xdg-music
   - --filesystem=xdg-documents
   - --filesystem=xdg-videos
   - --env=PYTORCH_TENSOREXPR=0
-  - --env=LD_LIBRARY_PATH=/app/opt/cuda/lib64
+  - --env=PYTHONPATH=/app/extensions/nvidia/lib/python3.10/site-packages:/app/extensions/amd/lib/python3.10/site-packages:/app/extensions/cpu/lib/python3.10/site-packages:/app/lib/python3.10/site-packages
+  - --env=LD_LIBRARY_PATH=/app/extensions/nvidia/lib:/app/extensions/amd/lib:/app/extensions/cpu/lib:/app/extensions/nvidia/cuda/lib64:/app/extensions/amd/rocm/lib
   - --env=OPENCL_VENDOR_PATH=/app/opt/opencl/vendors
   - --env=PERL5LIB=/app/lib/perl5/site_perl
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.kde.StatusNotifierWatcher # system tray icon
 cleanup:
-  - "/cmake"
-  - "/etc"
-  - "/man"
-  - "/dummy"
-  - "/include"
-  - "/lib/fst"
-  - "/lib/cmake"
-  - "/lib/pkgconfig"
-  - "/lib/python3.10/site-packages/nvidia*"
-  - "/lib/python3.10/site-packages/cmake*"
-  - "/lib/python3.10/site-packages/git*"
-  - "/lib/python3.10/site-packages/Git*"
-  - "/lib/python3.10/site-packages/torch/test"
-  - "/lib/python3.10/site-packages/torch/include"
-  - "/lib/python3.10/site-packages/pypinyin/__pycache__"
-  - "/lib/python3.10/site-packages/pandas/tests"
-  - "/lib/python3.10/site-packages/torchvision*"
-  - "/share/cmake"
-  - "/share/doc"
-  - "/share/locale"
-  - "/share/man"
-  - "/share/pkgconfig"
-  - "/share/runtime"
-  - "/share/vim"
-  - "/share/ffmpeg"
-  - "/share/aclocal"
-  - "/bin/nasm"
-  - "/bin/ndisasm"
-  - "/bin/taglib*"
-  - "/bin/spellout"
+  - /cmake
+  - /etc
+  - /man
+  - /dummy
+  - /include
+  - /lib/fst
+  - /lib/cmake
+  - /lib/pkgconfig
+  - /lib/python3.10/site-packages/nvidia*
+  - /lib/python3.10/site-packages/cmake*
+  - /lib/python3.10/site-packages/git*
+  - /lib/python3.10/site-packages/Git*
+  - /lib/python3.10/site-packages/torch/test
+  - /lib/python3.10/site-packages/torch/include
+  - /lib/python3.10/site-packages/pypinyin/__pycache__
+  - /lib/python3.10/site-packages/pandas/tests
+  - /lib/python3.10/site-packages/torchvision*
+  - /share/cmake
+  - /share/doc
+  - /share/locale
+  - /share/man
+  - /share/pkgconfig
+  - /share/runtime
+  - /share/vim
+  - /share/ffmpeg
+  - /share/aclocal
+  - /bin/nasm
+  - /bin/ndisasm
+  - /bin/taglib*
+  - /bin/spellout
   - "*/cmake/*"
-  - "pcre2*"
-  - "xz*"
-  - "unxz*"
+  - pcre2*
+  - xz*
+  - unxz*
   - "*.a"
   - "*.la"
+add-extensions:
+  net.mkiol.SpeechNote.Addon:
+    directory: extensions
+    no-autodownload: true
+    autodelete: true
+    subdirectories: true
 modules:
   - name: fmt
     buildsystem: cmake-ninja
@@ -670,51 +677,6 @@ modules:
         commands:
           - "autoreconf -fi"
 
-  - name: rocm-opencl
-    only-arches:
-      - x86_64
-    buildsystem: simple
-    build-commands:
-      - mkdir rocm_src
-      - for file in *.deb; do [ -f "$file" ] || break; mv "$file" rocm_src && cd rocm_src && ar x "$file" && rm control.tar.* && rm debian-binary && tar -xf data.tar.* && rm data.tar.* && cd ..; done
-      - mkdir -p /app/opt
-      - mv rocm_src/opt/rocm-5.4.3 /app/opt/rocm
-    build-options:
-      strip: true
-    cleanup:
-      - /opt/rocm/bin
-      - /opt/rocm/hsa
-      - /opt/rocm/share
-      - /opt/rocm/.info
-      - /opt/rocm/include
-      - /opt/rocm/opencl
-      - /opt/rocm/lib/libOpenCL.so*
-      - /opt/rocm/lib/cmake
-      - /opt/rocm/lib/rocmmod
-      - /opt/rocm/lib/CMakeFiles
-    sources:
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.4.3/pool/main/r/rocm-opencl/rocm-opencl_2.0.0.50403-121~22.04_amd64.deb
-        sha256: c77907c7ac874a86e20b32d5d86c649ce84abfec88679263892c5ff508722580
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.4.3/pool/main/c/comgr/comgr_2.4.0.50403-121~22.04_amd64.deb
-        sha256: b966685a075d15b50d9d68f053e72b23cfcb627802fb507fdd24357a84fa48dc
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.4.3/pool/main/h/hsa-rocr/hsa-rocr_1.7.0.50403-121~22.04_amd64.deb
-        sha256: c3e340563e7f2a8789652f2e7ddb52d47a5bf267f85d930208be3d71da970102
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.4.3/pool/main/r/rocm-core/rocm-core_5.4.3.50403-121~22.04_amd64.deb
-        sha256: f16677575d146e5b7b5194deaf6be7fb0ab57bb5b92065e5d3b2533bc32c473b
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.4.3/pool/main/r/rocm-ocl-icd/rocm-ocl-icd_2.0.0.50403-121~22.04_amd64.deb
-        sha256: 1457c69a3b11eba803f340fcc958394c03860cbed788cc936d7e017f61e11c8a
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.4.3/pool/main/r/rocm-language-runtime/rocm-language-runtime_5.4.3.50403-121~22.04_amd64.deb
-        sha256: cb8d8025b1dd40fc00678d600080174ada0c11ff5845b3aefb41248b3d52a9cf
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.4.3/pool/main/r/rocm-device-libs/rocm-device-libs_1.0.0.50403-121~22.04_amd64.deb
-        sha256: 4007016d604907c83ae999b82f012913f068b35e89cbdb81ae55461d0c6a11bd
-
   - name: opencl-vendors
     only-arches:
       - x86_64
@@ -723,10 +685,10 @@ modules:
       - mkdir vendors
       - echo "libnvidia-opencl.so" > vendors/nvidia.icd
       - echo "libMesaOpenCL.so.1" > vendors/mesa.icd
-      - echo "/app/opt/rocm/lib/libamdocl64.so" > vendors/amdocl64.icd
+      - echo "/app/extensions/amd/rocm/lib/libamdocl64.so" > vendors/amdocl64.icd
       - mkdir -p /app/opt/opencl
       - cp -r vendors /app/opt/opencl/
- 
+
   - name: numa
     buildsystem: autotools
     config-opts:
@@ -748,74 +710,6 @@ modules:
         url: https://github.com/Skycoder42/QHotkey/archive/cd72a013275803fce33e028fc8b05ae32248da1f.zip
         sha256: 55995114e8b5947cb6a59a19a53840eaf81fddc420fd3d180dcb0db9d8d33e13
 
-  - name: cuda
-    only-arches:
-      - x86_64
-    buildsystem: simple
-    build-commands:
-      - sh cuda_12.2.2_535.104.05_linux.run --target ./ --noexec
-      - rm -rf builds/*.* && rm -rf builds/bin builds/cuda_sanitizer_api builds/integration builds/nsight_compute builds/nsight_systems builds/cuda_gdb builds/cuda_documentation
-      - mkdir -p /app/opt/cuda
-      - cd builds && for lib in *; do echo "copying $lib/* => /app/opt/cuda/" && if [ -d $lib ]; then cp -r $lib/* /app/opt/cuda/; else cp -P $lib /app/opt/cuda/; fi; done
-      - cd builds/cuda_cupti/extras/CUPTI/lib64/ && for lib in libcupti.so*; do echo "copying $lib/* => /app/opt/cuda/lib64/" && cp -P $lib /app/opt/cuda/lib64/; done
-    build-options:
-      strip: true
-    cleanup:
-      - "/opt/cuda/bin"
-      - "/opt/cuda/extras"
-      - "/opt/cuda/extras"
-      - "/opt/cuda/gds*"
-      - "/opt/cuda/include"
-      - "/opt/cuda/libnvvp"
-      - "/opt/cuda/nsight*"
-      - "/opt/cuda/nv*"
-      - "/opt/cuda/pkg-config"
-      - "/opt/cuda/src"
-      - "/opt/cuda/usr"
-      - "/opt/cuda/cublas_version.txt"
-      - "/opt/cuda/LICENSE"
-      - "/opt/cuda/targets/x86_64-linux/lib/cmake"
-      - "/opt/cuda/targets/x86_64-linux/lib/lib64"
-      - "/opt/cuda/targets/x86_64-linux/lib/libOpenCL.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libcusolver.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libnppif.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libcusolverMg.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libcufile*.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libcuinj64.so*"
-      - "/opt/cuda/targets/x86_64-linux/lib/libaccinj64.so*"
-      - "/opt/cuda/targets/x86_64-linux/include"
-      - "/opt/cuda/targets/x86_64-linux/res"
-    sources:
-      - type: file
-        url: https://developer.download.nvidia.com/compute/cuda/12.2.2/local_installers/cuda_12.2.2_535.104.05_linux.run
-        sha256: 2b39aae3e7618d9f59a3c8fa1f1bc61f29c0b0e0df75fb05076badb352952ef2
-
-  - name: whispercpp-cublas
-    only-arches:
-      - x86_64
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DBUILD_SHARED_LIBS=ON
-      - -DWHISPER_BUILD_TESTS=OFF
-      - -DWHISPER_BUILD_EXAMPLES=OFF
-      - -DWHISPER_CUBLAS=ON
-      - -DCMAKE_C_FLAGS='-O3'
-      - -DCMAKE_CXX_FLAGS='-O3'
-      - -DCMAKE_CUDA_FLAGS=' -allow-unsupported-compiler'
-      - -DCUDAToolkit_ROOT=/app/opt/cuda
-      - -DCMAKE_CUDA_COMPILER=/app/opt/cuda/bin/nvcc
-      - -DCMAKE_CUDA_ARCHITECTURES=50;52;53;60;61;62;70;72;75;80;86;87;89;90;90a
-    post-install:
-      - "mv /app/lib/libwhisper.so /app/lib/libwhisper-cublas.so"
-    sources:
-      - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/684bc8bd7033bf870f4a1cf977719bb7c43fa9b9.zip
-        sha256: 292f5b51ee101be10b653c223ba19237d8ae02d7fc6a9a2ea0f5708bcd63802f
-      - type: patch
-        path: ../patches/whispercpp.patch
-
   - name: april-asr
     buildsystem: cmake-ninja
     config-opts:
@@ -824,40 +718,6 @@ modules:
       - type: archive
         url: https://github.com/abb128/april-asr/archive/3308e68442664552de593957cad0fa443ea183dd.zip
         sha256: 0640fc16a43018afb1db9f17e93f545d7ac1f07e4bc47ba318d2c7311bef2df5
-
-  - name: cudnn
-    only-arches:
-      - x86_64
-    buildsystem: simple
-    build-options:
-      strip: true
-    cleanup:
-      - /opt/cuda/targets/x86_64-linux/lib/libcudnn_*train*
-      - /opt/cuda/include
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/opt/cuda/include
-      - cd include && for f in *; do echo "copying $f => ${FLATPAK_DEST}/opt/cuda/include" && cp -P $f ${FLATPAK_DEST}/opt/cuda/include/; done
-      - mkdir -p ${FLATPAK_DEST}/opt/cuda/targets/x86_64-linux/lib
-      - cd lib && for f in *; do echo "copying $f => ${FLATPAK_DEST}/opt/cuda/targets/x86_64-linux/lib" && cp -P $f ${FLATPAK_DEST}/opt/cuda/targets/x86_64-linux/lib/; done
-    sources:
-      - type: archive
-        url: https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-x86_64/cudnn-linux-x86_64-8.9.2.26_cuda12-archive.tar.xz
-        sha256: ccafd7d15c2bf26187d52d79d9ccf95104f4199980f5075a7c1ee3347948ce32
-        
-  - name: nccl
-    only-arches:
-      - x86_64
-    buildsystem: simple
-    build-commands:
-      - ar x libnccl2_2.18.5-1-1_amd64.deb && rm control.tar.* && rm debian-binary && rm *.deb
-      - tar -xf data.tar.* && rm data.tar.*
-      - cd usr/lib/x86_64-linux-gnu && for lib in *; do echo "copying $lib => ${FLATPAK_DEST}/opt/cuda/lib64/" && if [ -d $lib ]; then cp -r $lib/* ${FLATPAK_DEST}/opt/cuda/lib64/; else cp -P $lib ${FLATPAK_DEST}/opt/cuda/lib64/; fi; done
-    build-options:
-      strip: true
-    sources:
-      - type: file
-        url: http://http.us.debian.org/debian/pool/contrib/n/nvidia-nccl/libnccl2_2.18.5-1-1_amd64.deb
-        sha256: e577f0edf02d8c3983c718c30453e990250a25627400ac90173e9c8df1afdddd
 
   - name: uroman
     only-arches:
@@ -925,34 +785,48 @@ modules:
         url: https://github.com/oneapi-src/oneDNN/archive/refs/tags/v3.3.1.tar.gz
         sha256: e0b7a9452162e854cf08b4e90bcd1b382b9903ace6a61503a872573880d24c3f
 
+  - name: python3-pybind11
+    buildsystem: simple
+    cleanup:
+      - /bin
+      - /lib/python3.10/site-packages/pybind11*
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+        --prefix=${FLATPAK_DEST} "pybind11" --no-build-isolation
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/06/55/9f73c32dda93fa4f539fafa268f9504e83c489f460c380371d94296126cd/pybind11-2.11.1-py3-none-any.whl
+        sha256: 33cdd02a6453380dd71cc70357ce388ad1ee8d32bd0e38fc22b273d050aa29b3
+
   - name: ctranslate2
     only-arches:
       - x86_64
     buildsystem: cmake-ninja
+    build-options:
+      env:
+        CTRANSLATE2_ROOT: /app/extensions/cpu
     cleanup:
-      - /bin
-      - /include
-      - /lib/cmake
+      - /extensions/cpu/bin
+      - /extensions/cpu/include
+      - /extensions/cpu/lib/cmake
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DBUILD_CLI=OFF
       - -DCUDA_DYNAMIC_LOADING=ON
-      - -DWITH_CUDA=ON
-      - -DWITH_CUDNN=ON
       - -DOPENMP_RUNTIME=COMP
-      - -DCUDA_ARCH_LIST=5.0 5.2 5.3 6.0 6.1 6.2 7.0 7.2 7.5 8.0 8.6 8.7 8.9 9.0 9.0
-      - -DCUDA_NVCC_FLAGS=-Xfatbin=-compress-all
       - -DWITH_MKL=ON
       - -DWITH_DNNL=ON
       - -DWITH_RUY=ON
       - -DINTEL_ROOT=/app/opt/oneapi
-      - -DCUDA_TOOLKIT_ROOT_DIR=/app/opt/cuda
-      - -DCMAKE_CXX_FLAGS=-msse4.1 -DTHRUST_IGNORE_CUB_VERSION_CHECK=1
+      - -DCMAKE_CXX_FLAGS=-msse4.1
+      - -DCMAKE_INSTALL_PREFIX=/app/extensions/cpu
+      - -DCMAKE_SYSTEM_PREFIX_PATH=/app
     post-install:
       - rm -rf ${FLATPAK_DEST}/lib/python3.10/site-packages/ctranslate2*
+      - mkdir -p ${FLATPAK_DEST}/extensions/cpu
       - cd python && python setup.py bdist_wheel
-      - pip3 install --verbose --exists-action=i --no-index --prefix=${FLATPAK_DEST} --no-build-isolation python/dist/*.whl
-      - strip ${FLATPAK_DEST}/lib/libctranslate2.so.3.22.0
+      - pip3 install --verbose --exists-action=i --no-index --prefix=${FLATPAK_DEST}/extensions/cpu --no-build-isolation python/dist/*.whl
+      - strip ${FLATPAK_DEST}/extensions/cpu/lib/libctranslate2.so.3.22.0
     sources:
       - type: git
         url: https://github.com/OpenNMT/CTranslate2.git
@@ -1022,6 +896,8 @@ modules:
         aarch64:
           config-opts:
             - -DWITH_PY=OFF
+    post-install:
+      - install -d ${FLATPAK_DEST}/extensions
     sources:
       - type: dir
         path: ../
