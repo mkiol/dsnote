@@ -15,6 +15,7 @@
 #include <array>
 #include <chrono>
 #include <numeric>
+#include <regex>
 
 #include "cpu_tools.hpp"
 #include "logger.hpp"
@@ -268,12 +269,9 @@ std::string mnt_engine::translate_internal(std::string text) {
         case text_format_t::html:
             break;
         case text_format_t::markdown:
-            text_tools::convert_text_format_to_html(
-                text, text_tools::text_format_t::markdown);
-            break;
         case text_format_t::subrip:
             text_tools::convert_text_format_to_html(
-                text, text_tools::text_format_t::subrip);
+                text, text_fromat_from_mnt_format(m_config.text_format));
             break;
     }
 
@@ -281,18 +279,53 @@ std::string mnt_engine::translate_internal(std::string text) {
 
     auto start = std::chrono::steady_clock::now();
 
-    try {
-        if (m_shutting_down) return {};
-        text.assign(m_bergamot_api_api.bergamot_api_translate(
-            m_bergamot_ctx_first, text.c_str(), html));
-        if (m_shutting_down) return {};
-        if (m_bergamot_ctx_second)
-            text.assign(m_bergamot_api_api.bergamot_api_translate(
-                m_bergamot_ctx_second, text.c_str(), html));
-        if (m_shutting_down) return {};
-    } catch (const std::runtime_error& err) {
-        LOGE("translation error: " << err.what());
+    std::ostringstream out_ss;
+
+    std::regex r{html ? "</p>|</div>|</h1>|</h2>|</h3>|</h4>" : "\n"};
+    std::string line;
+
+    const size_t segment_size = 1000;
+    const size_t segment_max_size = 10 * segment_size;
+
+    for (std::smatch sm;
+         std::regex_search(text, sm, r) || !line.empty() || !text.empty();) {
+        if (sm.empty()) {
+            line.append(text);
+            text.clear();
+        } else {
+            line.append(sm.prefix().str() + sm.str());
+            text.assign(sm.suffix());
+        }
+
+        if (line.size() > segment_max_size) {
+            text.insert(0, line, segment_max_size);
+            line.resize(segment_max_size);
+        }
+
+        if (sm.empty() || line.size() > segment_size) {
+            try {
+                if (m_shutting_down) return {};
+
+                line.assign(m_bergamot_api_api.bergamot_api_translate(
+                    m_bergamot_ctx_first, line.c_str(), html));
+
+                if (m_shutting_down) return {};
+
+                if (m_bergamot_ctx_second)
+                    line.assign(m_bergamot_api_api.bergamot_api_translate(
+                        m_bergamot_ctx_second, line.c_str(), html));
+
+                if (m_shutting_down) return {};
+            } catch (const std::runtime_error& err) {
+                LOGE("translation error: " << err.what());
+            }
+
+            out_ss << line;
+            line.clear();
+        }
     }
+
+    text.assign(out_ss.str());
 
     auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(
                    std::chrono::steady_clock::now() - start)
@@ -398,7 +431,7 @@ void mnt_engine::create_model() {
             *bergamot_ctx = m_bergamot_api_api.bergamot_api_make(
                 model_file.c_str(), src_vocab_file.c_str(),
                 trg_vocab_file.c_str(), shortlist_path.c_str(),
-                /*num_workers=*/8,
+                /*num_workers=*/1,
                 /*cache_size=*/500000, nullptr);
         } catch (const std::exception& err) {
             LOGE("error: " << err.what());

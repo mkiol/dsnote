@@ -528,6 +528,9 @@ static void convert_subrip_to_html(std::string& text) {
     unsigned int segment_line = 0;
     std::string text_line;
     for (std::string line; std::getline(in_ss, line);) {
+        ltrim(line);
+        rtrim(line);
+
         if (line.empty()) {
             if (!text_line.empty()) {
                 out_ss << "<p>" << text_line << "</p>";
@@ -562,7 +565,9 @@ static void convert_subrip_to_html(std::string& text) {
         ++segment_line;
     }
 
-    if (!text_line.empty()) out_ss << "<p>" << text_line << "</p><p></p>";
+    if (!text_line.empty()) {
+        out_ss << "<p>" << text_line << "</p><p></p>";
+    }
 
     text.assign(out_ss.str());
 }
