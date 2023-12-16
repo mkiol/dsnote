@@ -259,6 +259,8 @@ To see other build options search for `option(BUILD_XXX)` in `CMakeList.txt` fil
 - [Unikud](https://github.com/morrisalp/unikud)
 - [april-asr](https://github.com/abb128/april-asr)
 - [Opus](https://opus-codec.org/)
+- [html2md](https://tim-gromeyer.github.io/html2md/)
+- [maddy](https://github.com/progsource/maddy)
 
 ## Reviews and demos
 
@@ -315,6 +317,8 @@ To see other build options search for `option(BUILD_XXX)` in `CMakeList.txt` fil
 - **Unikud**, released under the [MIT License](https://github.com/morrisalp/unikud/raw/main/LICENSE)
 - **april-asr**, released under the [GNU General Public License v3.0](https://github.com/abb128/april-asr/raw/main/COPYING)
 - **libopus**, released under [this license](https://gitlab.xiph.org/xiph/opus/-/raw/master/COPYING)
+- **html2md**, released under the [MIT License](https://opensource.org/licenses/MIT)
+- **maddy**, released under the [MIT License](https://raw.githubusercontent.com/progsource/maddy/master/LICENSE)
 
 The files in the directory `nonbreaking_prefixes` were copied from 
 [mosesdecoder](https://github.com/moses-smt/mosesdecoder) project and distributed under the
