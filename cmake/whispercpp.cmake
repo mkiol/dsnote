@@ -1,10 +1,5 @@
-if(arch_x8664)
-    set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/684bc8bd7033bf870f4a1cf977719bb7c43fa9b9.zip")
-    set(whispercpp_checksum "292f5b51ee101be10b653c223ba19237d8ae02d7fc6a9a2ea0f5708bcd63802f")
-else()
-    set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.4.3.tar.gz")
-    set(whispercpp_checksum "5f11c0542639bfb0b3c9d1b033d10ccd69ca26e739aec9366766617bc58a6e7c")
-endif()
+set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.5.2.tar.gz")
+set(whispercpp_checksum "be9c4d5d4b5f28f02e36f28e602b7d2dcfd734dd1c834ddae91ae8db601e951f")
 
 set(whispercpp_flags -O3 -ffast-math -I${external_include_dir}/openblas)
 set(whispercppfallback_flags ${whispercpp_flags})
@@ -105,10 +100,6 @@ if(arch_x8664)
     endif(BUILD_WHISPERCPP_CUBLAS)
 
     if(BUILD_WHISPERCPP_HIPBLAS)
-#        if (NOT DEFINED CMAKE_HIP_ARCHITECTURES)
-#            set(CMAKE_HIP_ARCHITECTURES "gfx801 gfx802 gfx803 gfx805 gfx810 gfx900 gfx902 gfx904 gfx906 gfx908 gfx909 gfx90a gfx90c gfx940 gfx1010 gfx1011 gfx1012 gfx1013 gfx1030 gfx1031 gfx1032 gfx1033 gfx1034 gfx1033 gfx1034 gfx1035 gfx1036 gfx1100 gfx1101 gfx1102 gfx1103")
-#        endif()
-
         ExternalProject_Add(whispercpphipblas
             SOURCE_DIR ${external_dir}/whispercpphipblas
             BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercpphipblas

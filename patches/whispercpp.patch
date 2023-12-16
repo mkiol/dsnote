@@ -1,6 +1,6 @@
-diff -ruN whisper.cpp-org/cmake/DefaultTargetOptions.cmake whisper.cpp-patched/cmake/DefaultTargetOptions.cmake
---- whisper.cpp-org/cmake/DefaultTargetOptions.cmake	2023-11-12 05:40:36.000000000 +0100
-+++ whisper.cpp-patched/cmake/DefaultTargetOptions.cmake	2023-11-08 18:31:59.266704085 +0100
+diff -ruN whispercpp-org/cmake/DefaultTargetOptions.cmake whispercpp-patched/cmake/DefaultTargetOptions.cmake
+--- whispercpp-org/cmake/DefaultTargetOptions.cmake	2023-12-14 16:56:39.000000000 +0100
++++ whispercpp-patched/cmake/DefaultTargetOptions.cmake	2023-11-08 18:31:59.266704085 +0100
 @@ -9,9 +9,13 @@
          cxx_std_11
      )
@@ -16,9 +16,9 @@ diff -ruN whisper.cpp-org/cmake/DefaultTargetOptions.cmake whisper.cpp-patched/c
 -        INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib"
 +        INSTALL_RPATH ${CMAKE_INSTALL_RPATH}
  )
-diff -ruN whisper.cpp-org/CMakeLists.txt whisper.cpp-patched/CMakeLists.txt
---- whisper.cpp-org/CMakeLists.txt	2023-11-12 05:40:36.000000000 +0100
-+++ whisper.cpp-patched/CMakeLists.txt	2023-11-20 11:37:55.743849918 +0100
+diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
+--- whispercpp-org/CMakeLists.txt	2023-12-14 16:56:39.000000000 +0100
++++ whispercpp-patched/CMakeLists.txt	2023-12-16 16:29:19.864718632 +0100
 @@ -170,39 +170,11 @@
  if (WHISPER_OPENBLAS)
      set(WHISPER_BLAS_VENDOR "OpenBLAS")
@@ -132,14 +132,7 @@ diff -ruN whisper.cpp-org/CMakeLists.txt whisper.cpp-patched/CMakeLists.txt
  endif()
  
  if (EMSCRIPTEN)
-@@ -533,13 +523,13 @@
-     ${WHISPER_EXTRA_FLAGS}
-     )
- 
--set_target_properties(${TARGET} PROPERTIES PUBLIC_HEADER "whisper.h")
-+set_target_properties(${TARGET} PROPERTIES PUBLIC_HEADER "whisper.h;ggml.h")
- 
- include(GNUInstallDirs)
+@@ -539,7 +529,7 @@
  
  install(TARGETS ${TARGET}
      LIBRARY  DESTINATION lib
@@ -148,10 +141,10 @@ diff -ruN whisper.cpp-org/CMakeLists.txt whisper.cpp-patched/CMakeLists.txt
      RUNTIME  DESTINATION bin
      RESOURCE DESTINATION bin
      PUBLIC_HEADER DESTINATION include
-diff -ruN whisper.cpp-org/ggml-quants.c whisper.cpp-patched/ggml-quants.c
---- whisper.cpp-org/ggml-quants.c	2023-11-12 05:40:36.000000000 +0100
-+++ whisper.cpp-patched/ggml-quants.c	2023-11-06 14:40:15.083032028 +0100
-@@ -349,11 +349,36 @@
+diff -ruN whispercpp-org/ggml-quants.c whispercpp-patched/ggml-quants.c
+--- whispercpp-org/ggml-quants.c	2023-12-14 16:56:39.000000000 +0100
++++ whispercpp-patched/ggml-quants.c	2023-12-16 16:57:04.128060079 +0100
+@@ -349,6 +349,31 @@
      return res;
  }
  
@@ -183,13 +176,7 @@ diff -ruN whisper.cpp-org/ggml-quants.c whisper.cpp-patched/ggml-quants.c
  typedef struct ggml_uint8x16x4_t {
      uint8x16_t val[4];
  } ggml_uint8x16x4_t;
- 
--inline static ggml_uint8x16x4_t ggml_vld1q_u8_x4(const uint8_t * ptr) {
-+inline static ggml_uint8x16x4_t ggml_vld1q_u8_x4(const uint8_t *ptr) {
-     ggml_uint8x16x4_t res;
- 
-     res.val[0] = vld1q_u8(ptr + 0);
-@@ -364,24 +389,11 @@
+@@ -364,19 +389,6 @@
      return res;
  }
  
@@ -209,12 +196,6 @@ diff -ruN whisper.cpp-org/ggml-quants.c whisper.cpp-patched/ggml-quants.c
  typedef struct ggml_int8x16x4_t {
      int8x16_t val[4];
  } ggml_int8x16x4_t;
- 
--inline static ggml_int8x16x4_t ggml_vld1q_s8_x4(const int8_t * ptr) {
-+inline static ggml_int8x16x4_t ggml_vld1q_s8_x4(const int8_t *ptr) {
-     ggml_int8x16x4_t res;
- 
-     res.val[0] = vld1q_s8(ptr + 0);
 @@ -391,22 +403,6 @@
  
      return res;

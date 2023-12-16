@@ -89,8 +89,8 @@ modules:
       - mv ${FLATPAK_DEST}/lib/libwhisper.so ${FLATPAK_DEST}/lib/libwhisper-cublas.so
     sources:
       - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/684bc8bd7033bf870f4a1cf977719bb7c43fa9b9.zip
-        sha256: 292f5b51ee101be10b653c223ba19237d8ae02d7fc6a9a2ea0f5708bcd63802f
+        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.5.2.tar.gz
+        sha256: be9c4d5d4b5f28f02e36f28e602b7d2dcfd734dd1c834ddae91ae8db601e951f
       - type: patch
         path: ../patches/whispercpp.patch
   

@@ -243,14 +243,13 @@ modules:
       - -DROCM_PATH=/app/extensions/amd/rocm
       - -Dhip_DIR=/app/extensions/amd/rocm/hip
       - -Drocblas_DIR=/app/extensions/amd/rocm/rocblas
-      #- -DCMAKE_HIP_ARCHITECTURES="gfx803 gfx900 gfx906 gfx908 gfx90a gfx1030 gfx1100 gfx1101 gfx1102 gfx1103"
       - -DCMAKE_HIP_ARCHITECTURES=gfx801 gfx802 gfx803 gfx805 gfx810 gfx900 gfx902 gfx904 gfx906 gfx908 gfx909 gfx90a gfx90c gfx940 gfx1010 gfx1011 gfx1012 gfx1013 gfx1030 gfx1031 gfx1032 gfx1033 gfx1034 gfx1033 gfx1034 gfx1035 gfx1036 gfx1100 gfx1101 gfx1102 gfx1103
     post-install:
       - mv ${FLATPAK_DEST}/lib/libwhisper.so ${FLATPAK_DEST}/lib/libwhisper-hipblas.so
     sources:
       - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/684bc8bd7033bf870f4a1cf977719bb7c43fa9b9.zip
-        sha256: 292f5b51ee101be10b653c223ba19237d8ae02d7fc6a9a2ea0f5708bcd63802f
+        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.5.2.tar.gz
+        sha256: be9c4d5d4b5f28f02e36f28e602b7d2dcfd734dd1c834ddae91ae8db601e951f
       - type: patch
         path: ../patches/whispercpp.patch
 
