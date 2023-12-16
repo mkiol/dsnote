@@ -23916,13 +23916,13 @@
             "engine": "tts_rhvoice",
             "lang_id": "sk",
             "speaker": "ondro",
-            "checksum": "7047f3d",
-            "checksum_quick": "cfc8b1e8",
+            "checksum": "558ae1e9",
+            "checksum_quick": "1e4f1494",
             "comp": "zipall",
             "urls": [
-                "https://github.com/RHVoice/ondro-slk/releases/download/v4.3/RHVoice-voice-Slovak-Ondro-v4.3.zip"
+                "https://github.com/RHVoice/ondro-slk/releases/download/4.4/RHVoice-voice-Slovak-Ondro-v4.4.zip"
             ],
-            "size": "11570722"
+            "size": "11570723"
         },
         {
             "name": "Polski (RHVoice Magda Female)",
