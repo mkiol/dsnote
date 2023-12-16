@@ -15,7 +15,7 @@ import org.mkiol.dsnote.Dsnote 1.0
 Dialog {
     id: root
 
-    required property var model
+    property var model
 
     width: parent.width - 8 * appWin.padding
     height: column.height + footer.height + header.height + root.topPadding + root.bottomPadding

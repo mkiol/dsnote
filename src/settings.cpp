@@ -1570,19 +1570,26 @@ settings::cache_policy_t settings::cache_policy() const {
 }
 
 bool settings::gpu_override_version() const {
+#ifdef ARCH_X86_64
     return value(QStringLiteral("service/gpu_override_version"), false)
         .toBool();
+#else
+    return false;
+#endif
 }
 
-void settings::set_gpu_override_version(bool value) {
+void settings::set_gpu_override_version([[maybe_unused]] bool value) {
+#ifdef ARCH_X86_64
     if (gpu_override_version() != value) {
         setValue(QStringLiteral("service/gpu_override_version"), value);
         emit gpu_override_version_changed();
         set_restart_required(true);
     }
+#endif
 }
 
 QString settings::gpu_overrided_version() const {
+#ifdef ARCH_X86_64
     auto val =
         value(QStringLiteral("service/gpu_overrided_version"), {}).toString();
 
@@ -1595,9 +1602,14 @@ QString settings::gpu_overrided_version() const {
     }
 
     return val;
+#else
+    return {};
+#endif
 }
 
-void settings::set_gpu_overrided_version(const QString& value) {
+void settings::set_gpu_overrided_version(
+    [[maybe_unused]] const QString& value) {
+#ifdef ARCH_X86_64
     if (gpu_overrided_version() != value &&
         settings::value(QStringLiteral("service/gpu_overrided_version"), {})
                 .toString() != value) {
@@ -1605,6 +1617,7 @@ void settings::set_gpu_overrided_version(const QString& value) {
         emit gpu_overrided_version_changed();
         set_restart_required(true);
     }
+#endif
 }
 
 void settings::disable_gpu_scan() {

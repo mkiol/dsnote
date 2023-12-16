@@ -13,9 +13,9 @@ import QtQuick.Layouts 1.3
 Dialog {
     id: root
 
-    required property string licenseId
-    required property string licenseName
-    required property url licenseUrl
+    property string licenseId
+    property string licenseName
+    property url licenseUrl
     property var acceptHandler: null
     property bool busy: false
 

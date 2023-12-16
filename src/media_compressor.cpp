@@ -1058,6 +1058,8 @@ bool media_compressor::read_frame(AVPacket* pkt) {
 
         return true;
     }
+
+    return false;
 }
 
 bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame_in,
