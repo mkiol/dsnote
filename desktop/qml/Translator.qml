@@ -302,12 +302,10 @@ ColumnLayout {
         RowLayout {
             Button {
                 id: translateButton
-                enabled: (app.state === DsnoteApp.StateIdle && !_settings.translate_when_typing)
-                         || root.canCancelMnt
-                text: root.canCancelMnt ? qsTr("Cancel") : qsTr("Translate")
+                enabled: app.state === DsnoteApp.StateIdle && !_settings.translate_when_typing
+                text: qsTr("Translate")
                 onClicked: {
-                    if (root.canCancelMnt) app.cancel()
-                    else app.translate()
+                    app.translate()
                 }
             }
 

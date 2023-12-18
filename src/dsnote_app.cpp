@@ -180,6 +180,12 @@ dsnote_app::dsnote_app(QObject *parent)
     connect(settings::instance(), &settings::translate_when_typing_changed,
             this, &dsnote_app::handle_translator_settings_changed,
             Qt::QueuedConnection);
+    connect(settings::instance(), &settings::mnt_clean_text_changed, this,
+            &dsnote_app::handle_translator_settings_changed,
+            Qt::QueuedConnection);
+    connect(settings::instance(), &settings::mnt_text_format_changed, this,
+            &dsnote_app::handle_translator_settings_changed,
+            Qt::QueuedConnection);
     connect(settings::instance(), &settings::hotkeys_enabled_changed, this,
             &dsnote_app::register_hotkeys);
     connect(settings::instance(), &settings::hotkeys_changed, this,
