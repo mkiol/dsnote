@@ -125,16 +125,27 @@ QDebug operator<<(QDebug d, models_manager::model_role_t role) {
 }
 
 QDebug operator<<(QDebug d, models_manager::feature_flags flags) {
-    if (flags & models_manager::fast_processing) d << "fast-processing,";
-    if (flags & models_manager::medium_processing) d << "medium-processing,";
-    if (flags & models_manager::slow_processing) d << "slow-processing,";
-    if (flags & models_manager::high_quality) d << "high-quality,";
-    if (flags & models_manager::medium_quality) d << "medium-quality,";
-    if (flags & models_manager::low_quality) d << "low-quality,";
+    if (flags & models_manager::fast_processing) d << "fast-processing, ";
+    if (flags & models_manager::medium_processing) d << "medium-processing, ";
+    if (flags & models_manager::slow_processing) d << "slow-processing, ";
+    if (flags & models_manager::high_quality) d << "high-quality, ";
+    if (flags & models_manager::medium_quality) d << "medium-quality, ";
+    if (flags & models_manager::low_quality) d << "low-quality, ";
+    if (flags & models_manager::engine_stt_ds) d << "engine-stt-ds, ";
+    if (flags & models_manager::engine_stt_vosk) d << "engine-stt-vosk, ";
+    if (flags & models_manager::engine_stt_whisper) d << "engine-stt-whisper, ";
+    if (flags & models_manager::engine_stt_fasterwhisper)
+        d << "engine-stt-fasterwhisper, ";
+    if (flags & models_manager::engine_stt_april) d << "engine-stt-april, ";
+    if (flags & models_manager::engine_tts_espeak) d << "engine-tts-espeak, ";
+    if (flags & models_manager::engine_tts_piper) d << "engine-tts-piper, ";
+    if (flags & models_manager::engine_tts_rhvoice) d << "engine-tts-rhvoice, ";
+    if (flags & models_manager::engine_tts_coqui) d << "engine-tts-coqui, ";
+    if (flags & models_manager::engine_tts_mimic3) d << "engine-tts-mimic3, ";
     if (flags & models_manager::stt_intermediate_results)
         d << "stt-intermediate-results, ";
-    if (flags & models_manager::stt_punctuation) d << "stt-punctuation,";
-    if (flags & models_manager::tts_voice_cloning) d << "tts-voice-cloning,";
+    if (flags & models_manager::stt_punctuation) d << "stt-punctuation, ";
+    if (flags & models_manager::tts_voice_cloning) d << "tts-voice-cloning, ";
     return d;
 }
 
@@ -1534,6 +1545,29 @@ models_manager::feature_flags models_manager::add_new_feature(
                 return existing_features;
             }
             break;
+        case feature_flags::engine_stt_ds:
+        case feature_flags::engine_stt_vosk:
+        case feature_flags::engine_stt_whisper:
+        case feature_flags::engine_stt_fasterwhisper:
+        case feature_flags::engine_stt_april:
+        case feature_flags::engine_tts_espeak:
+        case feature_flags::engine_tts_piper:
+        case feature_flags::engine_tts_rhvoice:
+        case feature_flags::engine_tts_coqui:
+        case feature_flags::engine_tts_mimic3:
+            if (existing_features & feature_flags::engine_stt_ds ||
+                existing_features & feature_flags::engine_stt_vosk ||
+                existing_features & feature_flags::engine_stt_whisper ||
+                existing_features & feature_flags::engine_stt_fasterwhisper ||
+                existing_features & feature_flags::engine_stt_april ||
+                existing_features & feature_flags::engine_tts_espeak ||
+                existing_features & feature_flags::engine_tts_piper ||
+                existing_features & feature_flags::engine_tts_rhvoice ||
+                existing_features & feature_flags::engine_tts_coqui ||
+                existing_features & feature_flags::engine_tts_mimic3) {
+                return existing_features;
+            }
+            break;
         case feature_flags::no_flags:
         case feature_flags::stt_intermediate_results:
         case feature_flags::stt_punctuation:
@@ -1549,53 +1583,72 @@ models_manager::feature_flags models_manager::add_explicit_feature_flags(
     feature_flags existing_features) {
     switch (engine) {
         case model_engine_t::stt_ds:
-            existing_features = add_new_feature(existing_features,
-                                                feature_flags::fast_processing);
             existing_features =
-                add_new_feature(existing_features, feature_flags::low_quality);
-            existing_features = add_new_feature(
-                existing_features, feature_flags::stt_intermediate_results);
+                add_new_feature(existing_features,
+                                feature_flags::engine_stt_ds) |
+                add_new_feature(existing_features,
+                                feature_flags::fast_processing) |
+                add_new_feature(existing_features, feature_flags::low_quality) |
+                add_new_feature(existing_features,
+                                feature_flags::stt_intermediate_results);
             break;
         case model_engine_t::stt_vosk:
-            existing_features = add_new_feature(existing_features,
-                                                feature_flags::fast_processing);
-            existing_features = add_new_feature(existing_features,
-                                                feature_flags::medium_quality);
-            existing_features = add_new_feature(
-                existing_features, feature_flags::stt_intermediate_results);
+            existing_features =
+                add_new_feature(existing_features,
+                                feature_flags::engine_stt_vosk) |
+                add_new_feature(existing_features,
+                                feature_flags::fast_processing) |
+                add_new_feature(existing_features,
+                                feature_flags::medium_quality) |
+                add_new_feature(existing_features,
+                                feature_flags::stt_intermediate_results);
             break;
         case model_engine_t::stt_april:
-            existing_features = add_new_feature(
-                existing_features, feature_flags::medium_processing);
-            existing_features = add_new_feature(existing_features,
-                                                feature_flags::medium_quality);
-            existing_features = add_new_feature(
-                existing_features, feature_flags::stt_intermediate_results);
+            existing_features =
+                add_new_feature(existing_features,
+                                feature_flags::engine_stt_april) |
+                add_new_feature(existing_features,
+                                feature_flags::medium_processing) |
+                add_new_feature(existing_features,
+                                feature_flags::medium_quality) |
+                add_new_feature(existing_features,
+                                feature_flags::stt_intermediate_results);
             break;
         case model_engine_t::stt_whisper:
         case model_engine_t::stt_fasterwhisper:
+            existing_features =
+                add_new_feature(existing_features,
+                                engine == model_engine_t::stt_whisper
+                                    ? feature_flags::engine_stt_whisper
+                                    : feature_flags::engine_stt_fasterwhisper);
             if (model_id.contains("tiny")) {
-                existing_features = add_new_feature(
-                    existing_features, feature_flags::fast_processing);
-                existing_features = add_new_feature(existing_features,
-                                                    feature_flags::low_quality);
+                existing_features =
+                    add_new_feature(existing_features,
+                                    feature_flags::fast_processing) |
+                    add_new_feature(existing_features,
+                                    feature_flags::low_quality);
             } else if (model_id.contains("base")) {
-                existing_features = add_new_feature(
-                    existing_features, feature_flags::medium_processing);
-                existing_features = add_new_feature(existing_features,
-                                                    feature_flags::low_quality);
+                existing_features =
+                    add_new_feature(existing_features,
+                                    feature_flags::medium_processing) |
+                    add_new_feature(existing_features,
+                                    feature_flags::low_quality);
             } else {
-                existing_features = add_new_feature(
-                    existing_features, feature_flags::slow_processing);
-                existing_features = add_new_feature(
-                    existing_features, feature_flags::high_quality);
+                existing_features =
+                    add_new_feature(existing_features,
+                                    feature_flags::slow_processing) |
+                    add_new_feature(existing_features,
+                                    feature_flags::high_quality);
             }
             existing_features = add_new_feature(existing_features,
                                                 feature_flags::stt_punctuation);
             break;
         case model_engine_t::tts_coqui:
-            existing_features = add_new_feature(existing_features,
-                                                feature_flags::slow_processing);
+            existing_features =
+                add_new_feature(existing_features,
+                                feature_flags::engine_tts_coqui) |
+                add_new_feature(existing_features,
+                                feature_flags::slow_processing);
             if (model_id.contains("fairseq"))
                 existing_features = add_new_feature(
                     existing_features, feature_flags::medium_quality);
@@ -1604,13 +1657,18 @@ models_manager::feature_flags models_manager::add_explicit_feature_flags(
                     existing_features, feature_flags::high_quality);
             break;
         case model_engine_t::tts_mimic3:
-            existing_features = add_new_feature(
-                existing_features, feature_flags::medium_processing);
-            existing_features = add_new_feature(existing_features,
-                                                feature_flags::medium_quality);
+            existing_features =
+                add_new_feature(existing_features,
+                                feature_flags::engine_tts_mimic3) |
+                add_new_feature(existing_features,
+                                feature_flags::medium_processing) |
+                add_new_feature(existing_features,
+                                feature_flags::medium_quality);
             break;
         case model_engine_t::tts_piper:
             existing_features =
+                add_new_feature(existing_features,
+                                feature_flags::engine_tts_piper) |
                 add_new_feature(existing_features, feature_flags::high_quality);
 
             if (model_id.contains("high") || model_id.contains("medium"))
@@ -1622,9 +1680,13 @@ models_manager::feature_flags models_manager::add_explicit_feature_flags(
             break;
         case model_engine_t::tts_espeak:
         case model_engine_t::tts_rhvoice:
-            existing_features = add_new_feature(existing_features,
-                                                feature_flags::fast_processing);
             existing_features =
+                add_new_feature(existing_features,
+                                engine == model_engine_t::tts_espeak
+                                    ? feature_flags::engine_tts_espeak
+                                    : feature_flags::engine_tts_rhvoice) |
+                add_new_feature(existing_features,
+                                feature_flags::fast_processing) |
                 add_new_feature(existing_features, feature_flags::low_quality);
         case model_engine_t::mnt_bergamot:
         case model_engine_t::ttt_hftc:

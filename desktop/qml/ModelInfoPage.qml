@@ -107,6 +107,44 @@ Dialog {
             }
 
             Label {
+                visible: engineName.visible
+                text: qsTr("Engine")
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            }
+
+            Label {
+                id: engineName
+
+                visible: text.length !== 0
+                text: {
+                    var f = root.model.features;
+                    if (f & ModelsListModel.FeatureEngineSttDs)
+                        return "DeepSpeech"
+                    else if (f & ModelsListModel.FeatureEngineSttVosk)
+                        return "Vosk"
+                    else if (f & ModelsListModel.FeatureEngineSttWhisper)
+                        return "Whisper (whisper-cpp)"
+                    else if (f & ModelsListModel.FeatureEngineSttFasterWhisper)
+                        return "FasterWhisper"
+                    else if (f & ModelsListModel.FeatureEngineSttApril)
+                        return "April-ASR"
+                    else if (f & ModelsListModel.FeatureEngineTtsEspeak)
+                        return "eSpeak"
+                    else if (f & ModelsListModel.FeatureEngineTtsPiper)
+                        return "Piper"
+                    else if (f & ModelsListModel.FeatureEngineTtsRhvoice)
+                        return "RHVoice"
+                    else if (f & ModelsListModel.FeatureEngineTtsCoqui)
+                        return "Coqui"
+                    else if (f & ModelsListModel.FeatureEngineTtsMimic3)
+                        return "Mimic3"
+                    return ""
+                }
+                font.bold: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            }
+
+            Label {
                 visible: processingFeatureLabel.visible
                 text: qsTr("Processing speed")
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight

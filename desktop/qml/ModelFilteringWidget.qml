@@ -20,6 +20,9 @@ GridLayout {
     height: visible ? implicitHeight : 0
 
     property var models_model: service.models_model
+    readonly property int rowButtonsWidth: Math.max(roleFilters.width, engineSttFilters.width,
+                                                    engineTtsFilters.width, speedFilters.width,
+                                                    qualityFilters.width, additionalFeaturesFilters.width)
 
     function open() {
         filterButton.checked = true
@@ -54,6 +57,18 @@ GridLayout {
         sttIrFeature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureSttIntermediateResults
         sttPuFeature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureSttPunctuation
         ttsVcFeature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureTtsVoiceCloning
+        engineSttDsFeature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureEngineSttDs
+        engineSttVoskFeature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureEngineSttVosk
+        engineSttWhisperFeature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureEngineSttWhisper
+        engineSttFasterWhisperFeature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureEngineSttFasterWhisper
+        engineSttAprilFeature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureEngineSttApril
+        engineTtsEspeakFeature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureEngineTtsEspeak
+        engineTtsPiperFeature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureEngineTtsPiper
+        engineTtsRhvoiceFeature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureEngineTtsRhvoice
+        engineTtsCoquiFeature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureEngineTtsCoqui
+        engineTtsMimic3Feature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureEngineTtsMimic3
+        engineSttFilters.enabled = stt_visible
+        engineTtsFilters.enabled = tts_visible
         speedFilters.enabled = stt_visible || tts_visible
         qualityFilters.enabled = stt_visible || tts_visible
         additionalFeaturesFilters.enabled = stt_visible || tts_visible
@@ -79,80 +94,254 @@ GridLayout {
         Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
     }
 
-    RowLayout {
-        id: roleFilters
+    ColumnLayout {
+        Layout.alignment: Qt.AlignRight
 
+        RowLayout {
+            id: roleFilters
+
+            spacing: appWin.padding * 0.5
+            Layout.alignment: Qt.AlignRight
+
+            ModelFeatureButton {
+                id: sttFeature
+
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                text: qsTr("Speech to Text")
+                onToggled: {
+                    if (checked) root.models_model.addRoleFilterFlag(ModelsListModel.RoleStt)
+                    else root.models_model.removeRoleFilterFlag(ModelsListModel.RoleStt)
+                }
+            }
+            ModelFeatureButton {
+                id: ttsFeature
+
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                text: qsTr("Text to Speech")
+                onToggled: {
+                    if (checked) root.models_model.addRoleFilterFlag(ModelsListModel.RoleTts)
+                    else root.models_model.removeRoleFilterFlag(ModelsListModel.RoleTts)
+                }
+            }
+            ModelFeatureButton {
+                id: mntFeature
+
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                text: qsTr("Translator")
+                onToggled: {
+                    if (checked) root.models_model.addRoleFilterFlag(ModelsListModel.RoleMnt)
+                    else root.models_model.removeRoleFilterFlag(ModelsListModel.RoleMnt)
+                }
+            }
+            ModelFeatureButton {
+                id: otherFeature
+
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                text: qsTr("Other")
+                onToggled: {
+                    if (checked) root.models_model.addRoleFilterFlag(ModelsListModel.RoleOther)
+                    else root.models_model.removeRoleFilterFlag(ModelsListModel.RoleOther)
+                }
+            }
+
+            Item {
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                width: filterButton.width + 2
+                height: filterButton.height + 2
+
+                Rectangle {
+                    anchors.fill: parent
+                    visible: root.models_model.featureFilterFlags !== ModelsListModel.FeatureDefault
+                    height: 1
+                    radius: 5
+                    width: filterButton.width
+                    color: filterButton.palette.highlight
+                    opacity: 0.5
+                }
+
+                Button {
+                    id: filterButton
+
+                    flat: true
+                    icon.name: "filter-symbolic"
+                    checkable: true
+                    anchors.centerIn: parent
+                    implicitHeight: appWin.buttonHeightShort
+
+                    ToolTip.visible: hovered
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.text: checked ? qsTr("Hide filter options") : qsTr("Show filter options")
+                }
+            }
+        }
+
+        Rectangle {
+            visible: filterButton.checked
+            Layout.preferredWidth: root.rowButtonsWidth
+            height: 1
+            color: palette.buttonText
+            opacity: 0.2
+            Layout.alignment: Qt.AlignVCenter
+        }
+    }
+
+    Label {
+        visible: engineSttFilters.visible
+        text: qsTr("Engine")
+        Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+    }
+
+    RowLayout {
+        id: engineSttFilters
+
+        visible: filterButton.checked
         spacing: appWin.padding * 0.5
 
         ModelFeatureButton {
-            id: sttFeature
+            id: engineSttDsFeature
 
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-            text: qsTr("Speech to Text")
+            text: "DeepSpeech"
             onToggled: {
-                if (checked) root.models_model.addRoleFilterFlag(ModelsListModel.RoleStt)
-                else root.models_model.removeRoleFilterFlag(ModelsListModel.RoleStt)
+                if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureEngineSttDs)
+                else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureEngineSttDs)
             }
         }
+
         ModelFeatureButton {
-            id: ttsFeature
+            id: engineSttVoskFeature
 
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-            text: qsTr("Text to Speech")
+            text: "Vosk"
             onToggled: {
-                if (checked) root.models_model.addRoleFilterFlag(ModelsListModel.RoleTts)
-                else root.models_model.removeRoleFilterFlag(ModelsListModel.RoleTts)
+                if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureEngineSttVosk)
+                else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureEngineSttVosk)
             }
         }
+
         ModelFeatureButton {
-            id: mntFeature
+            id: engineSttWhisperFeature
 
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-            text: qsTr("Translator")
+            text: "Whisper"
             onToggled: {
-                if (checked) root.models_model.addRoleFilterFlag(ModelsListModel.RoleMnt)
-                else root.models_model.removeRoleFilterFlag(ModelsListModel.RoleMnt)
+                if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureEngineSttWhisper)
+                else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureEngineSttWhisper)
             }
         }
+
         ModelFeatureButton {
-            id: otherFeature
+            id: engineSttFasterWhisperFeature
 
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-            text: qsTr("Other")
+            text: "FasterWhisper"
             onToggled: {
-                if (checked) root.models_model.addRoleFilterFlag(ModelsListModel.RoleOther)
-                else root.models_model.removeRoleFilterFlag(ModelsListModel.RoleOther)
+                if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureEngineSttFasterWhisper)
+                else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureEngineSttFasterWhisper)
             }
         }
 
-        Item {
+        ModelFeatureButton {
+            id: engineSttAprilFeature
+
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-            width: filterButton.width + 2
-            height: filterButton.height + 2
-
-            Rectangle {
-                anchors.fill: parent
-                visible: root.models_model.featureFilterFlags !== ModelsListModel.FeatureDefault
-                height: 1
-                radius: 5
-                width: filterButton.width
-                color: filterButton.palette.highlight
-                opacity: 0.5
+            text: "April-ASR"
+            onToggled: {
+                if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureEngineSttApril)
+                else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureEngineSttApril)
             }
+        }
 
-            Button {
-                id: filterButton
+        Button {
+            visible: !engineTtsFilters.visible
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            flat: true
+            icon.name: "help-about-symbolic"
+            implicitHeight: appWin.buttonHeightShort
 
-                flat: true
-                icon.name: "filter-symbolic"
-                checkable: true
-                anchors.centerIn: parent
-                implicitHeight: appWin.buttonHeightShort
+            ToolTip.visible: hovered || down
+            ToolTip.delay: 0
+            ToolTip.text: qsTr("Filter by the engine type.")
+        }
+    }
 
-                ToolTip.visible: hovered
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: checked ? qsTr("Hide filter options") : qsTr("Show filter options")
+    Label {
+        visible: engineTtsFilters.visible
+        opacity: engineSttFilters.visible ? 0.0 : 1.0
+        text: qsTr("Engine")
+        Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+    }
+
+    RowLayout {
+        id: engineTtsFilters
+
+        visible: filterButton.checked
+        spacing: appWin.padding * 0.5
+
+        ModelFeatureButton {
+            id: engineTtsEspeakFeature
+
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            text: "eSpeak"
+            onToggled: {
+                if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureEngineTtsEspeak)
+                else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureEngineTtsEspeak)
             }
+        }
+
+        ModelFeatureButton {
+            id: engineTtsPiperFeature
+
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            text: "Piper"
+            onToggled: {
+                if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureEngineTtsPiper)
+                else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureEngineTtsPiper)
+            }
+        }
+
+        ModelFeatureButton {
+            id: engineTtsRhvoiceFeature
+
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            text: "RHVoice"
+            onToggled: {
+                if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureEngineTtsRhvoice)
+                else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureEngineTtsRhvoice)
+            }
+        }
+
+        ModelFeatureButton {
+            id: engineTtsCoquiFeature
+
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            text: "Coqui"
+            onToggled: {
+                if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureEngineTtsCoqui)
+                else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureEngineTtsCoqui)
+            }
+        }
+
+        ModelFeatureButton {
+            id: engineTtsMimic3Feature
+
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            text: "Mimic3"
+            onToggled: {
+                if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureEngineTtsMimic3)
+                else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureEngineTtsMimic3)
+            }
+        }
+
+        Button {
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            flat: true
+            icon.name: "help-about-symbolic"
+            implicitHeight: appWin.buttonHeightShort
+
+            ToolTip.visible: hovered || down
+            ToolTip.delay: 0
+            ToolTip.text: qsTr("Filter by the engine type.")
         }
     }
 
@@ -219,55 +408,66 @@ GridLayout {
         Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
     }
 
-    RowLayout {
-        id: qualityFilters
+    ColumnLayout {
+        RowLayout {
+            id: qualityFilters
 
-        visible: filterButton.checked
-        spacing: appWin.padding * 0.5
+            visible: filterButton.checked
+            spacing: appWin.padding * 0.5
 
-        ModelFeatureButton {
-            id: qualityHiFeature
+            ModelFeatureButton {
+                id: qualityHiFeature
 
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-            text: qsTr("High")
-            onToggled: {
-                if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureQualityHigh)
-                else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureQualityHigh)
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                text: qsTr("High")
+                onToggled: {
+                    if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureQualityHigh)
+                    else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureQualityHigh)
+                }
+            }
+            ModelFeatureButton {
+                id: qualityMeFeature
+
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                text: qsTr("Medium")
+                onToggled: {
+                    if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureQualityMedium)
+                    else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureQualityMedium)
+                }
+            }
+            ModelFeatureButton {
+                id: qualityLoFeature
+
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                text: qsTr("Low")
+                onToggled: {
+                    if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureQualityLow)
+                    else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureQualityLow)
+                }
+            }
+
+            Button {
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                flat: true
+                icon.name: "help-about-symbolic"
+                implicitHeight: appWin.buttonHeightShort
+
+                ToolTip.visible: hovered || down
+                ToolTip.delay: 0
+                ToolTip.text: qsTr("Filter by the quality of the output produced by the model.") + " " +
+                              qsTr("In case of STT, it is the accuracy of speech recognition.") + " " +
+                              qsTr("In case of TTS, it is the naturalness of speech synthesis.")
             }
         }
-        ModelFeatureButton {
-            id: qualityMeFeature
 
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-            text: qsTr("Medium")
-            onToggled: {
-                if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureQualityMedium)
-                else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureQualityMedium)
-            }
-        }
-        ModelFeatureButton {
-            id: qualityLoFeature
-
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-            text: qsTr("Low")
-            onToggled: {
-                if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureQualityLow)
-                else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureQualityLow)
-            }
-        }
-
-        Button {
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-            flat: true
-            icon.name: "help-about-symbolic"
-            implicitHeight: appWin.buttonHeightShort
-
-            ToolTip.visible: hovered || down
-            ToolTip.delay: 0
-            ToolTip.text: qsTr("Filter by the quality of the output produced by the model.") + " " +
-                          qsTr("In case of STT, it is the accuracy of speech recognition.") + " " +
-                          qsTr("In case of TTS, it is the naturalness of speech synthesis.")
-        }
+//        Rectangle {
+//            visible: filterButton.checked
+//            Layout.preferredWidth: root.rowButtonsWidth
+//            height: 1
+//            color: palette.buttonText
+//            opacity: 0.2
+//            Layout.alignment: Qt.AlignVCenter
+//        }
     }
 
     Label {

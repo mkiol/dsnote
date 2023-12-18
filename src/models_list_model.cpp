@@ -128,7 +128,7 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
         /*available=*/model.available,
         /*dl_multi=*/model.dl_multi,
         /*dl_off=*/model.dl_off,
-        /*dl_off=*/model.features,
+        /*features=*/model.features,
         /*score=*/model.score,
         /*default_for_lang=*/model.default_for_lang,
         /*downloading=*/model.downloading,
@@ -157,7 +157,7 @@ bool ModelsListModel::genericFeatureFilterPass(
         role == models_manager::model_role_t::ttt)
         return true;
 
-    for (int flag = ModelFeatureFilterFlags::FeatureGenericStart;
+    for (unsigned int flag = ModelFeatureFilterFlags::FeatureGenericStart;
          flag <= ModelFeatureFilterFlags::FeatureGenericEnd; flag <<= 1) {
         if (!(m_featureFilterFlags & flag) && model.features & flag)
             return false;
@@ -167,8 +167,8 @@ bool ModelsListModel::genericFeatureFilterPass(
 }
 
 bool ModelsListModel::featureFilterPass(const models_manager::model_t &model) {
-    auto none_of = [&](int start_flag, int end_flag) {
-        for (int flag = start_flag; flag <= end_flag; flag <<= 1)
+    auto none_of = [&](unsigned int start_flag, unsigned int end_flag) {
+        for (auto flag = start_flag; flag <= end_flag; flag <<= 1)
             if (m_featureFilterFlags & flag) return false;
         return true;
     };
@@ -179,7 +179,7 @@ bool ModelsListModel::featureFilterPass(const models_manager::model_t &model) {
 
     auto passFeature = [&](ModelFeatureFilterFlags start_flag,
                            ModelFeatureFilterFlags end_flag) {
-        for (int flag = start_flag; flag <= end_flag; flag <<= 1) {
+        for (unsigned int flag = start_flag; flag <= end_flag; flag <<= 1) {
             if ((m_featureFilterFlags & flag) && (model.features & flag))
                 return true;
         }
@@ -244,7 +244,7 @@ QList<ListItem *> ModelsListModel::makeItems() {
     int existing_not_generic_feature_flags = 0;
     auto add_not_generic_feature_flag_if_exists =
         [&existing_not_generic_feature_flags](int feature_flags) {
-            for (int flag = ModelFeatureFilterFlags::FeatureSttStart;
+            for (unsigned int flag = ModelFeatureFilterFlags::FeatureSttStart;
                  flag <= ModelFeatureFilterFlags::FeatureTtsEnd; flag <<= 1)
                 if (feature_flags & flag)
                     existing_not_generic_feature_flags |= flag;
@@ -255,8 +255,9 @@ QList<ListItem *> ModelsListModel::makeItems() {
             if (roleFilterPass(model)) {
                 if (genericFeatureFilterPass(model)) {
                     add_not_generic_feature_flag_if_exists(model.features);
-                    if (featureFilterPass(model))
+                    if (featureFilterPass(model)) {
                         items.push_back(makeItem(model));
+                    }
                 }
             }
         });
@@ -279,7 +280,7 @@ QList<ListItem *> ModelsListModel::makeItems() {
     }
 
     m_disabledFeatureFilterFlags = 0;
-    for (int flag = ModelFeatureFilterFlags::FeatureSttStart;
+    for (unsigned int flag = ModelFeatureFilterFlags::FeatureSttStart;
          flag <= ModelFeatureFilterFlags::FeatureTtsEnd; flag <<= 1) {
         if ((flag & existing_not_generic_feature_flags) == 0)
             m_disabledFeatureFilterFlags |= flag;
@@ -298,22 +299,46 @@ void ModelsListModel::setLang(const QString &lang) {
     }
 }
 
-void ModelsListModel::setRoleFilterFlags(int roleFilterFlags) {
+void ModelsListModel::setRoleFilterFlags(unsigned int roleFilterFlags) {
     if (roleFilterFlags != m_roleFilterFlags) {
         auto old_default = defaultFilters();
 
         if (flag_set_in_range_mask(roleFilterFlags,
                                    ModelRoleFilterFlags::RoleStart,
-                                   ModelRoleFilterFlags::RoleEnd))
+                                   ModelRoleFilterFlags::RoleEnd)) {
             m_roleFilterFlags = roleFilterFlags;
+
+            if (m_roleFilterFlags & ModelRoleFilterFlags::RoleStt) {
+                if (!flag_set_in_range_mask(
+                        m_featureFilterFlags,
+                        ModelFeatureFilterFlags::FeatureEngineSttStart,
+                        ModelFeatureFilterFlags::FeatureEngineSttEnd)) {
+                    m_featureFilterFlags |=
+                        ModelFeatureFilterFlags::FeatureAllSttEngines;
+                    emit featureFilterFlagsChanged();
+                }
+            }
+            if (m_roleFilterFlags & ModelRoleFilterFlags::RoleTts) {
+                if (!flag_set_in_range_mask(
+                        m_featureFilterFlags,
+                        ModelFeatureFilterFlags::FeatureEngineTtsStart,
+                        ModelFeatureFilterFlags::FeatureEngineTtsEnd)) {
+                    m_featureFilterFlags |=
+                        ModelFeatureFilterFlags::FeatureAllTtsEngines;
+                    emit featureFilterFlagsChanged();
+                }
+            }
+        }
+
         updateModel();
+
         emit roleFilterFlagsChanged();
 
         if (old_default != defaultFilters()) emit defaultFiltersChanged();
     }
 }
 
-void ModelsListModel::setFeatureFilterFlags(int featureFilterFlags) {
+void ModelsListModel::setFeatureFilterFlags(unsigned int featureFilterFlags) {
     if (featureFilterFlags != m_featureFilterFlags) {
         auto old_default = defaultFilters();
 
@@ -323,7 +348,23 @@ void ModelsListModel::setFeatureFilterFlags(int featureFilterFlags) {
                 ModelFeatureFilterFlags::FeatureSlowProcessing) &&
             flag_set_in_range_mask(
                 featureFilterFlags, ModelFeatureFilterFlags::FeatureQualityHigh,
-                ModelFeatureFilterFlags::FeatureQualityLow)) {
+                ModelFeatureFilterFlags::FeatureQualityLow) &&
+            ((m_roleFilterFlags & ModelRoleFilterFlags::RoleStt &&
+              m_roleFilterFlags & ModelRoleFilterFlags::RoleTts &&
+              flag_set_in_range_mask(
+                  featureFilterFlags,
+                  ModelFeatureFilterFlags::FeatureEngineSttStart,
+                  ModelFeatureFilterFlags::FeatureEngineTtsEnd)) ||
+             (m_roleFilterFlags & ModelRoleFilterFlags::RoleStt &&
+              flag_set_in_range_mask(
+                  featureFilterFlags,
+                  ModelFeatureFilterFlags::FeatureEngineSttStart,
+                  ModelFeatureFilterFlags::FeatureEngineSttEnd)) ||
+             (m_roleFilterFlags & ModelRoleFilterFlags::RoleTts &&
+              flag_set_in_range_mask(
+                  featureFilterFlags,
+                  ModelFeatureFilterFlags::FeatureEngineTtsStart,
+                  ModelFeatureFilterFlags::FeatureEngineTtsEnd)))) {
             m_featureFilterFlags = featureFilterFlags;
         }
         updateModel();
@@ -347,10 +388,10 @@ void ModelsListModel::updateDownloading(
 ModelsListItem::ModelsListItem(const QString &id, QString name, QString langId,
                                ModelsListModel::ModelRole role, License license,
                                DownloadInfo download_info, bool available,
-                               bool dl_multi, bool dl_off, int features,
-                               int score, bool default_for_lang,
-                               bool downloading, double progress,
-                               QObject *parent)
+                               bool dl_multi, bool dl_off,
+                               unsigned int features, int score,
+                               bool default_for_lang, bool downloading,
+                               double progress, QObject *parent)
     : SelectableItem{parent},
       m_id{id},
       m_name{std::move(name)},

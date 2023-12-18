@@ -60,7 +60,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     };
     friend QDebug operator<<(QDebug d, model_engine_t engine);
 
-    enum feature_flags {
+    enum feature_flags : unsigned int {
         no_flags = 0,
         generic_start = 1 << 0,
         fast_processing = generic_start,
@@ -69,12 +69,22 @@ class models_manager : public QObject, public singleton<models_manager> {
         high_quality = 1 << 3,
         medium_quality = 1 << 4,
         low_quality = 1 << 5,
-        generic_end = low_quality,
-        stt_start = 1 << 10,
+        engine_stt_ds = 1 << 6,
+        engine_stt_vosk = 1 << 7,
+        engine_stt_whisper = 1 << 8,
+        engine_stt_fasterwhisper = 1 << 9,
+        engine_stt_april = 1 << 10,
+        engine_tts_espeak = 1 << 11,
+        engine_tts_piper = 1 << 12,
+        engine_tts_rhvoice = 1 << 13,
+        engine_tts_coqui = 1 << 14,
+        engine_tts_mimic3 = 1 << 15,
+        generic_end = engine_tts_mimic3,
+        stt_start = 1 << 20,
         stt_intermediate_results = stt_start,
-        stt_punctuation = 1 << 11,
+        stt_punctuation = 1 << 21,
         stt_end = stt_punctuation,
-        tts_start = 1 << 20,
+        tts_start = 1 << 30,
         tts_voice_cloning = tts_start,
         tts_end = tts_voice_cloning
     };
