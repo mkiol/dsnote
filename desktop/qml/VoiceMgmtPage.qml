@@ -53,6 +53,13 @@ DialogPage {
         }
     }
 
+    onOpenedChanged: {
+        if (!opened) {
+            app.player_reset()
+            app.recorder_reset()
+        }
+    }
+
     Component {
         id: voiceDelegate
 
@@ -92,18 +99,37 @@ DialogPage {
             TextField {
                 id: editField
 
+                enabled: !app.player_playing
                 text: modelData
                 visible: control.editActive
                 color: palette.text
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
                 anchors.leftMargin: appWin.padding
-                anchors.right: renameButton.left
+                anchors.right: playButton.left
                 anchors.rightMargin: appWin.padding
             }
 
             Button {
+                id: playButton
+
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: renameButton.left
+                anchors.rightMargin: appWin.padding
+                icon.name: app.player_playing && app.player_current_voice_ref_idx === index ?
+                               "media-playback-stop-symbolic" : "media-playback-start-symbolic"
+                onClicked: {
+                    if (app.player_playing && app.player_current_voice_ref_idx === index)
+                        app.player_stop_voice_ref()
+                    else
+                        app.player_play_voice_ref_idx(index)
+                }
+            }
+
+            Button {
                 id: renameButton
+
+                enabled: !app.player_playing
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: deleteButton.left
                 anchors.rightMargin: appWin.padding
@@ -114,6 +140,8 @@ DialogPage {
 
             Button {
                 id: deleteButton
+
+                enabled: !app.player_playing
                 icon.name: "edit-delete-symbolic"
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right

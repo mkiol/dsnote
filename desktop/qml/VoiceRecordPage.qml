@@ -49,7 +49,7 @@ Dialog {
                 onClicked: {
                     if (app.recorder_recording) {
                         app.recorder_stop()
-                        root.close()
+                        root.accept()
                     } else {
                         app.recorder_start()
                     }

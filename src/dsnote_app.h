@@ -51,6 +51,9 @@ class dsnote_app : public QObject {
                    player_duration_changed)
     Q_PROPERTY(long long player_position READ player_position NOTIFY
                    player_position_changed)
+    Q_PROPERTY(
+        int player_current_voice_ref_idx READ player_current_voice_ref_idx
+            NOTIFY player_current_voice_ref_idx_changed)
 
     // recorder
     Q_PROPERTY(bool recorder_recording READ recorder_recording NOTIFY
@@ -258,7 +261,6 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void set_active_tts_for_out_mnt_ref_voice_idx(int idx);
     Q_INVOKABLE void delete_tts_ref_voice(int idx);
     Q_INVOKABLE void rename_tts_ref_voice(int idx, const QString &new_name);
-    Q_INVOKABLE QString tts_ref_voice_auto_name() const;
     Q_INVOKABLE void set_active_mnt_lang_idx(int idx);
     Q_INVOKABLE void set_active_mnt_out_lang_idx(int idx);
     Q_INVOKABLE void set_active_tts_model_for_in_mnt_idx(int idx);
@@ -313,16 +315,18 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void execute_action_name(const QString &action_name);
     Q_INVOKABLE QVariantList features_availability();
     Q_INVOKABLE QString download_content(const QUrl &url);
-    Q_INVOKABLE QString player_import_from_url(const QUrl &url);
-    Q_INVOKABLE QString player_import_mic_rec();
+    Q_INVOKABLE void player_import_from_url(const QUrl &url);
+    Q_INVOKABLE void player_play_voice_ref_idx(int idx);
     Q_INVOKABLE void player_play(long long start, long long stop);
     Q_INVOKABLE void player_stop();
     Q_INVOKABLE void player_set_position(long long position);
     Q_INVOKABLE void player_export_ref_voice(long long start, long long stop,
                                              const QString &name);
+    Q_INVOKABLE void player_stop_voice_ref();
     Q_INVOKABLE void player_reset();
     Q_INVOKABLE void recorder_start();
     Q_INVOKABLE void recorder_stop();
+    Q_INVOKABLE void recorder_reset();
     Q_INVOKABLE void show_tray();
     Q_INVOKABLE void hide_tray();
 
@@ -379,7 +383,10 @@ class dsnote_app : public QObject {
     void recorder_recording_changed();
     void recorder_duration_changed();
     void recorder_processing_changed();
+    void recorder_new_stream_name(QString name);
+    void recorder_new_probs(QVariantList probs);
     void tray_activated();
+    void player_current_voice_ref_idx_changed();
 
    private:
     enum class action_t {
@@ -492,6 +499,7 @@ class dsnote_app : public QObject {
     std::unique_ptr<QMediaPlayer> m_player;
     long long m_player_requested_play_position = -1;
     long long m_player_stop_position = -1;
+    int m_player_current_voice_ref_idx = -1;
     std::unique_ptr<recorder> m_recorder;
 #ifdef USE_DESKTOP
     struct hotkeys_t {
@@ -683,13 +691,20 @@ class dsnote_app : public QObject {
     void create_player();
     long long player_position() const;
     long long player_duration() const;
-    void create_recorder();
+    void create_mic_recorder();
     bool recorder_recording() const;
     long long recorder_duration() const;
     bool recorder_processing() const;
     QString tts_ref_voice_unique_name(QString name, bool add_numner) const;
     void update_tray_state();
     void update_tray_task_state();
+    void player_import_rec();
+    void player_set_path(const QString &wav_file_path);
+    void player_import_from_rec_path(const QString &path);
+    QString tts_ref_voice_auto_name() const;
+    inline int player_current_voice_ref_idx() const {
+        return m_player_current_voice_ref_idx;
+    }
 #ifdef USE_DESKTOP
     void execute_tray_action(tray_icon::action_t action);
 #endif

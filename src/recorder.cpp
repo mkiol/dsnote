@@ -9,23 +9,11 @@
 
 #include <QAudioFormat>
 #include <QDebug>
+#include <QFileInfo>
 
 #include "denoiser.hpp"
+#include "media_compressor.hpp"
 #include "settings.h"
-
-static const int sample_rate = 44100;
-
-static QAudioFormat audio_format() {
-    QAudioFormat format;
-    format.setSampleRate(sample_rate);
-    format.setChannelCount(1);
-    format.setSampleSize(16);
-    format.setCodec(QStringLiteral("audio/pcm"));
-    format.setByteOrder(QAudioFormat::LittleEndian);
-    format.setSampleType(QAudioFormat::SignedInt);
-
-    return format;
-}
 
 static bool has_audio_input(const QString& name) {
     auto ad_list = QAudioDeviceInfo::availableDevices(QAudio::AudioInput);
@@ -44,43 +32,87 @@ static QAudioDeviceInfo audio_input_info(const QString& name) {
 
 recorder::recorder(QString wav_file_path, QObject* parent)
     : QObject{parent}, m_wav_file_path{std::move(wav_file_path)} {
-    auto format = audio_format();
+    init();
+}
 
-    auto input_name = settings::instance()->audio_input();
-    if (input_name.isEmpty() || !has_audio_input(input_name)) {
-        auto info = QAudioDeviceInfo::defaultInputDevice();
-        if (info.isNull()) {
-            qWarning() << "no audio input";
-            throw std::runtime_error("no audio input");
-        }
-
-        input_name = info.deviceName();
-    }
-
-    auto input_info = audio_input_info(input_name);
-    if (!input_info.isFormatSupported(format)) {
-        qWarning() << "format not supported for audio input:"
-                   << input_info.deviceName();
-        throw std::runtime_error("audio format is not supported");
-    }
-
-    qDebug() << "using audio input:" << input_info.deviceName();
-    m_audio_input = std::make_unique<QAudioInput>(input_info, format);
-
-    connect(m_audio_input.get(), &QAudioInput::stateChanged, this,
-            [this](QAudio::State new_state) {
-                qDebug() << "recorder state:" << new_state;
-
-                emit recording_changed();
-            });
-    connect(m_audio_input.get(), &QAudioInput::notify, this, [this]() {
-        m_duration = m_audio_input->elapsedUSecs() / 1000000;
-        emit duration_changed();
-    });
+recorder::recorder(QString input_file_path, QString wav_file_path,
+                   QObject* parent)
+    : QObject{parent},
+      m_input_file_path{std::move(input_file_path)},
+      m_wav_file_path{std::move(wav_file_path)} {
+    init();
 }
 
 recorder::~recorder() {
+    cancel();
     if (m_processing_thread.joinable()) m_processing_thread.join();
+
+    if (m_audio_input) m_audio_input->stop();
+}
+
+void recorder::cancel() {
+    qDebug() << "recorder cancel requested";
+    m_cancel_requested = true;
+}
+
+void recorder::init() {
+    if (!m_input_file_path.isEmpty()) {
+        if (!QFileInfo::exists(m_input_file_path)) {
+            qCritical() << "cannot open file:" << m_input_file_path;
+            throw std::runtime_error{"cannot open file: " +
+                                     m_input_file_path.toStdString()};
+        }
+
+        qDebug() << "using existing file for recording";
+    } else {
+        qDebug() << "using mic for recording";
+
+        auto format = make_audio_format();
+
+        auto input_name = settings::instance()->audio_input();
+        if (input_name.isEmpty() || !has_audio_input(input_name)) {
+            auto info = QAudioDeviceInfo::defaultInputDevice();
+            if (info.isNull()) {
+                qWarning() << "no audio input";
+                throw std::runtime_error("no audio input");
+            }
+
+            input_name = info.deviceName();
+        }
+
+        auto input_info = audio_input_info(input_name);
+        if (!input_info.isFormatSupported(format)) {
+            qWarning() << "format not supported for audio input:"
+                       << input_info.deviceName();
+            throw std::runtime_error("audio format is not supported");
+        }
+
+        qDebug() << "using audio input:" << input_info.deviceName();
+        m_audio_input = std::make_unique<QAudioInput>(input_info, format);
+
+        connect(m_audio_input.get(), &QAudioInput::stateChanged, this,
+                [this](QAudio::State new_state) {
+                    qDebug() << "recorder state:" << new_state;
+
+                    emit recording_changed();
+                });
+        connect(m_audio_input.get(), &QAudioInput::notify, this, [this]() {
+            m_duration = m_audio_input->elapsedUSecs() / 1000000;
+            emit duration_changed();
+        });
+    }
+}
+
+QAudioFormat recorder::make_audio_format() {
+    QAudioFormat format;
+    format.setSampleRate(m_sample_rate);
+    format.setChannelCount(m_num_channels);
+    format.setSampleSize(16);
+    format.setCodec(QStringLiteral("audio/pcm"));
+    format.setByteOrder(QAudioFormat::LittleEndian);
+    format.setSampleType(QAudioFormat::SignedInt);
+
+    return format;
 }
 
 long long recorder::duration() const { return m_duration; }
@@ -115,6 +147,8 @@ static void write_wav_header(int sample_rate, int sample_width, int channels,
 }
 
 void recorder::start() {
+    if (!m_audio_input) return;
+
     qDebug() << "recorder start";
 
     m_audio_device.close();
@@ -123,29 +157,73 @@ void recorder::start() {
     emit duration_changed();
 
     m_audio_device.setFileName(m_wav_file_path);
+    if (m_audio_device.exists()) m_audio_device.remove();
     m_audio_device.open(QIODevice::OpenModeFlag::ReadWrite);
     m_audio_device.seek(sizeof(wav_header));
     m_audio_input->start(&m_audio_device);
 }
 
-static void denoise(QFile& file) {
-    file.seek(sizeof(wav_header));
+void recorder::denoise(int sample_rate) {
+    auto clean_ref_voice = settings::instance()->clean_ref_voice();
 
-    auto data = file.readAll();
+    int flags = denoiser::task_flags::task_probs;
+    if (clean_ref_voice) {
+        flags |= (denoiser::task_flags::task_normalize_two_pass |
+                  denoiser::task_flags::task_denoise);
+    }
 
-    denoiser{sample_rate}.process_char(data.data(), data.size());
+    denoiser dn{
+        sample_rate, flags,
+        static_cast<uint64_t>(m_audio_device.size() - sizeof(wav_header))};
 
-    file.seek(sizeof(wav_header));
+    std::array<char, denoiser::frame_size * 100> buff;
 
-    file.write(data);
+    m_audio_device.seek(sizeof(wav_header));
+
+    while (!m_cancel_requested) {
+        auto size = m_audio_device.read(buff.data(), buff.size());
+        if (size <= 0) break;
+
+        dn.process_char(buff.data(), size);
+
+        if (clean_ref_voice) {
+            m_audio_device.seek(m_audio_device.pos() - size);
+            m_audio_device.write(buff.data(), size);
+        }
+
+        if (static_cast<size_t>(size) < buff.size()) break;
+    }
+
+    if (clean_ref_voice) {
+        m_audio_device.seek(sizeof(wav_header));
+
+        while (!m_cancel_requested) {
+            auto size = m_audio_device.read(buff.data(), buff.size());
+            if (size <= 0) break;
+
+            dn.normalize_second_pass_char(buff.data(), size);
+
+            m_audio_device.seek(m_audio_device.pos() - size);
+            m_audio_device.write(buff.data(), size);
+
+            if (static_cast<size_t>(size) < buff.size()) break;
+        }
+    }
+
+    m_probs = dn.speech_probs();
+
+    m_audio_device.seek(sizeof(wav_header));
 }
 
 void recorder::stop() {
+    if (!m_audio_input) return;
+
     qDebug() << "recorder stop";
 
     m_audio_input->stop();
 
     unsigned long pos = m_audio_device.pos();
+
     if (pos <= sizeof(wav_header)) {
         qWarning() << "invalid size in recorded file";
         m_audio_device.close();
@@ -155,32 +233,69 @@ void recorder::stop() {
     process();
 }
 
-void recorder::export_to_file() {
-    unsigned long pos = m_audio_device.pos();
+void recorder::process_from_mic() {
+    denoise(m_sample_rate);
 
     m_audio_device.seek(0);
 
-    write_wav_header(sample_rate, 2, 1, (pos - sizeof(wav_header)) / 2,
+    write_wav_header(m_sample_rate, 2, m_num_channels,
+                     (m_audio_device.size() - sizeof(wav_header)) / 2,
                      m_audio_device);
+}
 
-    m_audio_device.close();
-    m_audio_input->reset();
+void recorder::process_from_input_file() {
+    try {
+        media_compressor{}.decompress(
+            {m_input_file_path.toStdString()}, m_wav_file_path.toStdString(),
+            {/*mono=*/true, /*sample_rate_16=*/false});
+    } catch (const std::runtime_error& error) {
+        qCritical() << "cannot decompress file:" << error.what();
+        return;
+    }
 
-    m_duration = 0;
-    emit duration_changed();
+    m_audio_device.setFileName(m_wav_file_path);
+
+    if (!m_audio_device.open(QIODevice::OpenModeFlag::ReadWrite)) {
+        qCritical() << "cannot open file:" << m_wav_file_path;
+        return;
+    }
+
+    wav_header header{};
+
+    if (static_cast<unsigned long>(m_audio_device.read(
+            reinterpret_cast<char*>(&header), sizeof(wav_header))) <
+        sizeof(wav_header)) {
+        qCritical() << "invalid wav header size";
+        return;
+    }
+
+    denoise(header.sample_rate);
 }
 
 void recorder::process() {
     if (m_processing_thread.joinable()) m_processing_thread.join();
 
+    if (m_audio_input) m_audio_input->reset();
+
+    m_cancel_requested = false;
+
     m_processing_thread = std::thread{[this] {
         qDebug() << "recorder processing started";
-        denoise(m_audio_device);
-        export_to_file();
-        qDebug() << "recorder processing ended";
+
+        if (m_input_file_path.isEmpty())
+            process_from_mic();
+        else
+            process_from_input_file();
+
+        m_audio_device.close();
+
+        m_duration = 0;
+        emit duration_changed();
 
         m_processing = false;
         emit processing_changed();
+
+        qDebug() << "recorder processing ended";
     }};
 
     m_processing = true;
@@ -188,7 +303,8 @@ void recorder::process() {
 }
 
 bool recorder::recording() const {
-    return m_audio_input->state() == QAudio::State::ActiveState;
+    return m_audio_input &&
+           m_audio_input->state() == QAudio::State::ActiveState;
 }
 
 bool recorder::processing() const { return m_processing; }

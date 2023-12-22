@@ -41,6 +41,10 @@ extern "C" {
     return os;
 }
 
+static bool time_base_equal(AVRational l, AVRational r) {
+    return l.den == r.den && l.num == r.num;
+}
+
 [[maybe_unused]] static std::ostream& operator<<(std::ostream& os,
                                                  AVSampleFormat fmt) {
     const auto* name = av_get_sample_fmt_name(fmt);
@@ -393,7 +397,7 @@ void media_compressor::init_av(task_t task) {
     const auto* in_stream = m_in_av_format_ctx->streams[m_in_audio_stream_idx];
 
     m_no_decode = [&]() {
-        if (m_mono_16khz) return false;
+        if (m_options.mono || m_options.sample_rate_16) return false;
 
         switch (task) {
             case task_t::compress:
@@ -566,17 +570,26 @@ void media_compressor::init_av(task_t task) {
             }
         } else {
             m_out_av_audio_ctx->sample_fmt = AV_SAMPLE_FMT_S16;
+            m_out_av_audio_ctx->time_base = m_in_av_audio_ctx->time_base;
+            m_out_av_audio_ctx->sample_rate = m_in_av_audio_ctx->sample_rate;
 
-            if (m_mono_16khz) {
+            if (m_options.sample_rate_16 || m_options.mono) {
                 // STT engines support only mono 16000Hz
-                m_out_av_audio_ctx->sample_rate = 16000;
-                av_channel_layout_default(&m_out_av_audio_ctx->ch_layout, 1);
+                if (m_options.sample_rate_16) {
+                    m_out_av_audio_ctx->sample_rate = 16000;
+                    m_out_av_audio_ctx->time_base = {1, 16000};
+                }
+
+                if (m_options.mono)
+                    av_channel_layout_default(&m_out_av_audio_ctx->ch_layout,
+                                              1);
             } else {
                 m_out_av_audio_ctx->sample_rate =
                     m_in_av_audio_ctx->sample_rate;
                 av_channel_layout_default(
                     &m_out_av_audio_ctx->ch_layout,
                     m_in_av_audio_ctx->ch_layout.nb_channels == 1 ? 1 : 2);
+                m_out_av_audio_ctx->time_base = m_in_av_audio_ctx->time_base;
             }
         }
 
@@ -595,6 +608,12 @@ void media_compressor::init_av(task_t task) {
         //             << ", frame-size=" << m_out_av_audio_ctx->frame_size
         //             << ", sample-rate=" << m_out_av_audio_ctx->sample_rate
         //             << ", sample-format=" << m_out_av_audio_ctx->sample_fmt);
+
+        if (!time_base_equal(m_out_av_audio_ctx->time_base,
+                             m_in_av_audio_ctx->time_base)) {
+            LOGD("time-base change: " << m_out_av_audio_ctx->time_base << " => "
+                                      << m_in_av_audio_ctx->time_base);
+        }
 
         if (m_out_av_audio_ctx->sample_fmt != m_in_av_audio_ctx->sample_fmt) {
             LOGD("sample-format change: " << m_in_av_audio_ctx->sample_fmt
@@ -650,6 +669,8 @@ void media_compressor::init_av(task_t task) {
             clean_av();
             throw std::runtime_error("avformat_alloc_output_context2 error");
         }
+
+        m_out_av_format_ctx->flags |= AVFMT_FLAG_BITEXACT;
 
         auto* out_stream = avformat_new_stream(m_out_av_format_ctx, nullptr);
         if (!out_stream) {
@@ -768,13 +789,13 @@ bool media_compressor::is_media_file(const std::string& input_file) {
 }
 
 void media_compressor::decompress(std::vector<std::string> input_files,
-                                  std::string output_file, bool mono_16khz) {
+                                  std::string output_file, options_t options) {
     LOGD("task decompress");
 
     setup_input_files(std::move(input_files));
 
     m_output_file = std::move(output_file);
-    m_mono_16khz = mono_16khz;
+    m_options = options;
 
     init_av(task_t::decompress);
 
@@ -782,12 +803,12 @@ void media_compressor::decompress(std::vector<std::string> input_files,
 }
 
 void media_compressor::decompress_async_internal(
-    task_t task, std::vector<std::string>&& input_files, bool mono_16khz,
+    task_t task, std::vector<std::string>&& input_files, options_t options,
     data_ready_callback_t&& data_ready_callback,
     task_finished_callback_t&& task_finished_callback) {
     setup_input_files(std::move(input_files));
 
-    m_mono_16khz = mono_16khz;
+    m_options = options;
 
     init_av(task);
 
@@ -814,24 +835,24 @@ void media_compressor::decompress_async_internal(
 }
 
 void media_compressor::decompress_to_raw_async(
-    std::vector<std::string> input_files, bool mono_16khz,
+    std::vector<std::string> input_files, options_t options,
     data_ready_callback_t data_ready_callback,
     task_finished_callback_t task_finished_callback) {
     LOGD("task decompress to raw async");
 
     decompress_async_internal(
-        task_t::decompress_raw_async, std::move(input_files), mono_16khz,
+        task_t::decompress_raw_async, std::move(input_files), options,
         std::move(data_ready_callback), std::move(task_finished_callback));
 }
 
 void media_compressor::decompress_to_wav_async(
-    std::vector<std::string> input_files, bool mono_16khz,
+    std::vector<std::string> input_files, options_t options,
     data_ready_callback_t data_ready_callback,
     task_finished_callback_t task_finished_callback) {
     LOGD("task decompress to wav async");
 
     decompress_async_internal(
-        task_t::decompress_wav_async, std::move(input_files), mono_16khz,
+        task_t::decompress_wav_async, std::move(input_files), options,
         std::move(data_ready_callback), std::move(task_finished_callback));
 }
 

@@ -149,6 +149,8 @@ class settings : public QSettings, public singleton<settings> {
         bool use_tray READ use_tray WRITE set_use_tray NOTIFY use_tray_changed)
     Q_PROPERTY(bool start_in_tray READ start_in_tray WRITE set_start_in_tray
                    NOTIFY start_in_tray_changed)
+    Q_PROPERTY(bool clean_ref_voice READ clean_ref_voice WRITE
+                   set_clean_ref_voice NOTIFY clean_ref_voice_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -401,6 +403,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_use_tray(bool value);
     bool start_in_tray() const;
     void set_start_in_tray(bool value);
+    bool clean_ref_voice() const;
+    void set_clean_ref_voice(bool value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -543,6 +547,7 @@ class settings : public QSettings, public singleton<settings> {
     void use_tray_changed();
     void start_in_tray_changed();
     void mnt_text_format_changed();
+    void clean_ref_voice_changed();
 
     // service
     void models_dir_changed();

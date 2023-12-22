@@ -1476,6 +1476,17 @@ void settings::set_use_tray(bool value) {
     }
 }
 
+bool settings::clean_ref_voice() const {
+    return value(QStringLiteral("clean_ref_voice"), true).toBool();
+}
+
+void settings::set_clean_ref_voice(bool value) {
+    if (value != clean_ref_voice()) {
+        setValue(QStringLiteral("clean_ref_voice"), value);
+        emit clean_ref_voice_changed();
+    }
+}
+
 bool settings::start_in_tray() const {
     return value(QStringLiteral("start_in_tray"), false).toBool();
 }

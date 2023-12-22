@@ -3290,43 +3290,89 @@ QString dsnote_app::import_ref_voice_file_path() {
     return QDir{cache_dir()}.absoluteFilePath(s_imported_ref_file_name);
 }
 
-QString dsnote_app::player_import_from_url(const QUrl &url) {
-    auto path = url.toLocalFile();
-    auto wav_file_path = import_ref_voice_file_path();
+void dsnote_app::player_stop_voice_ref() {
+    if (!m_player) return;
 
-    try {
-        media_compressor{}.decompress({path.toStdString()},
-                                      wav_file_path.toStdString(), false);
-    } catch (const std::runtime_error &error) {
-        qWarning() << "can't import file:" << error.what();
-        return {};
-    }
+    m_player->setMedia({});
 
-    if (!m_player) create_player();
-
-    m_player->setMedia(
-        QUrl{QStringLiteral("gst-pipeline: filesrc location=%1 ! wavparse ! "
-                            "audioconvert ! alsasink")
-                 .arg(wav_file_path)});
-
-    auto mtag = mtag_tools::read(path.toStdString());
-    if (mtag && !mtag->title.empty())
-        return QString::fromStdString(mtag->title);
-    else
-        return QFileInfo{path}.baseName();
+    m_player_current_voice_ref_idx = -1;
+    emit player_current_voice_ref_idx_changed();
 }
 
-QString dsnote_app::player_import_mic_rec() {
-    auto wav_file_path = import_ref_voice_file_path();
+void dsnote_app::player_play_voice_ref_idx(int idx) {
+    auto item = std::next(m_available_tts_ref_voices_map.cbegin(), idx).value();
 
+    auto list = item.toStringList();
+    if (list.size() < 2) return;
+
+    auto wav_file = QDir{cache_dir()}.absoluteFilePath(
+        QFileInfo{list.at(1)}.fileName() + "-refvoice.wav");
+
+    try {
+        media_compressor{}.decompress(
+            {list.at(1).toStdString()}, wav_file.toStdString(),
+            {/*mono=*/false, /*sample_rate_16=*/false});
+    } catch (const std::runtime_error &err) {
+        qCritical() << err.what();
+        return;
+    }
+
+    player_set_path(wav_file);
+
+    m_player->play();
+
+    m_player_current_voice_ref_idx = idx;
+    emit player_current_voice_ref_idx_changed();
+}
+
+void dsnote_app::player_import_from_url(const QUrl &url) {
+    player_import_from_rec_path(url.toLocalFile());
+}
+
+void dsnote_app::player_import_from_rec_path(const QString &path) {
+    m_recorder = std::make_unique<recorder>(path, import_ref_voice_file_path());
+
+    connect(
+        m_recorder.get(), &recorder::processing_changed, this,
+        [this, path]() {
+            if (m_recorder && !m_recorder->processing()) {
+                auto mtag = mtag_tools::read(path.toStdString());
+                if (mtag && !mtag->title.empty())
+                    emit recorder_new_stream_name(
+                        QString::fromStdString(mtag->title));
+                else
+                    emit recorder_new_stream_name(QFileInfo{path}.baseName());
+
+                player_import_rec();
+            }
+
+            emit recorder_processing_changed();
+        },
+        Qt::QueuedConnection);
+
+    m_recorder->process();
+}
+
+void dsnote_app::player_import_rec() {
+    player_set_path(import_ref_voice_file_path());
+
+    if (m_recorder) {
+        QVariantList vprobs;
+        auto probs = m_recorder->probs();
+        std::transform(probs.cbegin(), probs.cend(), std::back_inserter(vprobs),
+                       [](auto prob) { return QVariant::fromValue(prob); });
+
+        emit recorder_new_probs(vprobs);
+    }
+}
+
+void dsnote_app::player_set_path(const QString &wav_file_path) {
     if (!m_player) create_player();
 
     m_player->setMedia(
         QUrl{QStringLiteral("gst-pipeline: filesrc location=%1 ! wavparse ! "
                             "audioconvert ! alsasink")
                  .arg(wav_file_path)});
-
-    return {};
 }
 
 QString dsnote_app::tts_ref_voice_auto_name() const {
@@ -3424,14 +3470,12 @@ bool dsnote_app::player_ready() const {
             m_player->mediaStatus() == QMediaPlayer::MediaStatus::EndOfMedia);
 }
 
-void dsnote_app::create_recorder() {
+void dsnote_app::create_mic_recorder() {
     m_recorder = std::make_unique<recorder>(import_ref_voice_file_path());
 
     connect(
         m_recorder.get(), &recorder::recording_changed, this,
         [this]() {
-            qDebug() << "recorder recording changed:"
-                     << m_recorder->recording();
             emit recorder_recording_changed();
         },
         Qt::QueuedConnection);
@@ -3441,7 +3485,10 @@ void dsnote_app::create_recorder() {
     connect(
         m_recorder.get(), &recorder::processing_changed, this,
         [this]() {
-            player_import_mic_rec();
+            if (m_recorder && !m_recorder->processing()) {
+                emit recorder_new_stream_name(tts_ref_voice_auto_name());
+                player_import_rec();
+            }
             emit recorder_processing_changed();
         },
         Qt::QueuedConnection);
@@ -3460,7 +3507,7 @@ long long dsnote_app::recorder_duration() const {
 }
 
 void dsnote_app::recorder_start() {
-    if (!m_recorder) create_recorder();
+    create_mic_recorder();
 
     m_recorder->start();
 }
@@ -3470,6 +3517,8 @@ void dsnote_app::recorder_stop() {
 
     m_recorder->stop();
 }
+
+void dsnote_app::recorder_reset() { m_recorder.reset(); }
 
 bool dsnote_app::player_playing() const {
     return m_player && m_player->state() == QMediaPlayer::State::PlayingState;

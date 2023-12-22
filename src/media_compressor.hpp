@@ -36,6 +36,11 @@ class media_compressor {
     enum class quality_t { vbr_high, vbr_medium, vbr_low };
     friend std::ostream& operator<<(std::ostream& os, quality_t quality);
 
+    struct options_t {
+        bool mono = false;
+        bool sample_rate_16 = false; /*smaple-rate = 16KHz*/
+    };
+
     using task_finished_callback_t = std::function<void()>;
     using data_ready_callback_t = std::function<void()>;
 
@@ -71,13 +76,13 @@ class media_compressor {
                         quality_t quality,
                         task_finished_callback_t task_finished_callback);
     void decompress(std::vector<std::string> input_files,
-                    std::string output_file, bool mono_16khz);
+                    std::string output_file, options_t options);
     void decompress_to_raw_async(
-        std::vector<std::string> input_files, bool mono_16khz,
+        std::vector<std::string> input_files, options_t options,
         data_ready_callback_t data_ready_callback,
         task_finished_callback_t task_finished_callback);
     void decompress_to_wav_async(
-        std::vector<std::string> input_files, bool mono_16khz,
+        std::vector<std::string> input_files, options_t options,
         data_ready_callback_t data_ready_callback,
         task_finished_callback_t task_finished_callback);
     data_info_t get_data(char* data, size_t max_size);
@@ -120,7 +125,7 @@ class media_compressor {
     std::vector<char> m_buf;
     data_info_t m_data_info;
     clip_info_t m_clip_info;
-    bool m_mono_16khz = false;
+    options_t m_options;
     bool m_no_decode = false;
     data_ready_callback_t m_data_ready_callback;
     uint64_t m_in_bytes_read = 0;
@@ -142,7 +147,7 @@ class media_compressor {
                            task_finished_callback_t task_finished_callback);
     void setup_input_files(std::vector<std::string>&& input_files);
     void decompress_async_internal(
-        task_t task, std::vector<std::string>&& input_files, bool mono_16khz,
+        task_t task, std::vector<std::string>&& input_files, options_t options,
         data_ready_callback_t&& data_ready_callback,
         task_finished_callback_t&& task_finished_callback);
     void write_to_buf(const char* data, int size);

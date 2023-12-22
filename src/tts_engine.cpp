@@ -586,8 +586,9 @@ void tts_engine::setup_ref_voice() {
         m_config.cache_dir + "/" + std::to_string(hash) + ".wav";
 
     if (!file_exists(m_ref_voice_wav_file)) {
-        media_compressor{}.decompress({m_config.ref_voice_file},
-                                      m_ref_voice_wav_file, false);
+        media_compressor{}.decompress(
+            {m_config.ref_voice_file}, m_ref_voice_wav_file,
+            {/*mono=*/false, /*sample_rate_16=*/false});
     }
 }
 

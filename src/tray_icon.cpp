@@ -8,6 +8,7 @@
 #include "tray_icon.hpp"
 
 #include <QDebug>
+#include <algorithm>
 
 #include "config.h"
 #include "settings.h"
@@ -48,9 +49,6 @@ void tray_icon::set_task_state(task_state_t task_state) {
 }
 
 void tray_icon::update_menu() {
-    qDebug() << "update menu" << static_cast<int>(m_state)
-             << static_cast<int>(m_task_state);
-
     std::for_each(m_actions.cbegin(), m_actions.cend(), [this](auto& p) {
         switch (p.first) {
             case action_t::start_listening:

@@ -8,6 +8,7 @@
 #ifndef RECORDER_H
 #define RECORDER_H
 
+#include <QAudioFormat>
 #include <QAudioInput>
 #include <QFile>
 #include <QIODevice>
@@ -15,18 +16,25 @@
 #include <QString>
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <thread>
+#include <vector>
 
-class recorder : public QObject {
+class recorder final : public QObject {
     Q_OBJECT
    public:
     explicit recorder(QString wav_file_path, QObject* parent = nullptr);
+    explicit recorder(QString input_file_path, QString wav_file_path,
+                      QObject* parent = nullptr);
     ~recorder() final;
     void start();
     void stop();
+    void process();
+    void cancel();
     bool recording() const;
     bool processing() const;
     long long duration() const;
+    inline std::vector<float> probs() const { return m_probs; }
 
    signals:
     void recording_changed();
@@ -34,6 +42,9 @@ class recorder : public QObject {
     void processing_changed();
 
    private:
+    static const int m_sample_rate = 44100;
+    static const int m_num_channels = 1;
+
     struct wav_header {
         uint8_t RIFF[4] = {'R', 'I', 'F', 'F'};
         uint32_t chunk_size = 0;
@@ -51,14 +62,20 @@ class recorder : public QObject {
     };
 
     std::unique_ptr<QAudioInput> m_audio_input;
+    QString m_input_file_path;
     QString m_wav_file_path;
     QFile m_audio_device;
     long long m_duration = 0;
     std::thread m_processing_thread;
     bool m_processing = false;
+    void process_from_input_file();
+    void process_from_mic();
+    std::vector<float> m_probs;
+    bool m_cancel_requested = false;
 
-    void process();
-    void export_to_file();
+    void init();
+    static QAudioFormat make_audio_format();
+    void denoise(int sample_rate);
 };
 
 #endif  // RECORDER_H

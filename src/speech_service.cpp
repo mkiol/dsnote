@@ -1812,7 +1812,7 @@ void speech_service::handle_tts_queue() {
             media_compressor{}.decompress(
                 {result.audio_file_path.toStdString()},
                 audio_file_wav.toStdString(),
-                /*mono_16khz=*/false);
+                {/*mono=*/false, /*sample_rate_16=*/false});
             result.audio_file_path = std::move(audio_file_wav);
             result.audio_format = tts_engine::audio_format_t::wav;
             result.remove_audio_file = true;
@@ -2262,9 +2262,13 @@ QVariantMap speech_service::features_availability() {
         auto py_availability = py_executor::instance()->libs_availability;
         if (py_availability) {
             qDebug() << "features availability ready";
-
+#ifdef ARCH_X86_64
             auto has_cuda = gpu_tools::has_cuda();
             auto has_cudnn = gpu_tools::has_cudnn();
+#else
+            auto has_cuda = false;
+            auto has_cudnn = false;
+#endif
 
             m_features_availability.insert(
                 "coqui-tts",

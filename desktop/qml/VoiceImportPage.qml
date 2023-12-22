@@ -15,7 +15,7 @@ DialogPage {
 
     readonly property bool verticalMode: width < appWin.verticalWidthThreshold
     readonly property bool canCreate: app.player_ready && titleTextField.text.length !== 0 &&
-                                      rangeSlider.first.value < rangeSlider.second.value
+                                      rangeSlider.first.value < rangeSlider.second.value && !app.recorder_processing
 
     function format_time_to_s(time_ms) {
         return (time_ms / 1000).toFixed(1)
@@ -29,8 +29,10 @@ DialogPage {
     }
 
     onOpenedChanged: {
-        if (!opened)
+        if (!opened) {
             app.player_reset()
+            app.recorder_reset()
+        }
     }
 
     title: qsTr("Create a new voice sample")
@@ -57,7 +59,7 @@ DialogPage {
                 id: closeButton
 
                 text: qsTr("Cancel")
-                //icon.name: "window-close-symbolic"
+                icon.name: "action-unavailable-symbolic"
                 onClicked: root.reject()
                 Keys.onReturnPressed: root.reject()
             }
@@ -80,10 +82,19 @@ DialogPage {
             rangeSlider.first.value = 0
             rangeSlider.second.value = app.player_duration
         }
+        onRecorder_new_stream_name: {
+            titleTextField.text = name
+        }
+        onRecorder_new_probs: {
+            console.log("probs:", probs.length)
+            probsRow.probs = probs
+            probsRow.segSize = (rangeSlider.width -
+                                rangeSlider.first.handle.width / 2) / probsRow.probs.length
+        }
     }
 
     GridLayout {
-        columns: root.verticalMode ? 1 : 2
+        columns: root.verticalMode ? 1 : 3
         columnSpacing: appWin.padding
         rowSpacing: appWin.padding
         enabled: !app.recorder_processing
@@ -108,6 +119,18 @@ DialogPage {
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.visible: hovered
             ToolTip.text: qsTr("Use a voice sample from an audio file.")
+        }
+
+        CheckBox {
+            checked: _settings.clean_ref_voice
+            text: qsTr("Clean up audio")
+            onCheckedChanged: {
+                _settings.clean_ref_voice = checked
+            }
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Normalize the volume and remove non-speech noise in recording or imported audio file.")
         }
     }
 
@@ -150,7 +173,31 @@ DialogPage {
                     }
                 }
 
+                Row {
+                    id: probsRow
+
+                    property var probs: []
+                    property int segSize: 0
+
+                    visible: rangeSlider.enabled
+                    spacing: 0
+                    height: 6
+                    x: 0.3 * rangeSlider.first.handle.width
+                    y: rangeSlider.height / 2 - 3
+
+                    Repeater {
+                        model: probsRow.probs
+                        Rectangle {
+                            height: 6
+                            width: probsRow.segSize
+                            color: "red"
+                            opacity: 0.8 * modelData
+                        }
+                    }
+                }
+
                 Rectangle {
+                    visible: rangeSlider.enabled
                     height: 3
                     y: parent.height / 2
                     x: parent.first.handle.x + parent.first.handle.width / 2
@@ -186,12 +233,12 @@ DialogPage {
     }
 
     GridLayout {
-        id: gridVoceName
+        id: gridVoiceName
 
         columns: root.verticalMode ? 1 : 2
         columnSpacing: appWin.padding
         rowSpacing: appWin.padding
-        enabled: app.player_ready
+        enabled: app.player_ready && !app.recorder_processing
 
         Label {
             Layout.fillWidth: true
@@ -203,10 +250,9 @@ DialogPage {
             id: titleTextField
 
             Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? gridVoceName.width : gridVoceName.width / 2
+            Layout.preferredWidth: verticalMode ? gridVoiceName.width : gridVoiceName.width / 2
             Layout.leftMargin: verticalMode ? appWin.padding : 0
             color: palette.text
-            text: app.tts_ref_voice_auto_name()
         }
     }
 
@@ -214,6 +260,7 @@ DialogPage {
         id: voiceRecordDialog
 
         anchors.centerIn: parent
+        onRejected: app.recorder_reset()
     }
 
     BusyIndicator {
@@ -234,7 +281,8 @@ DialogPage {
         selectExisting: true
         selectMultiple: false
         onAccepted: {
-            titleTextField.text = app.player_import_from_url(fileUrl);
+            titleTextField.text = ""
+            app.player_import_from_url(fileUrl);
             _settings.file_audio_open_dir_url = fileUrl
         }
     }
