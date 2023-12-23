@@ -10,6 +10,7 @@
 #include <QAudioFormat>
 #include <QDebug>
 #include <QFileInfo>
+#include <chrono>
 
 #include "denoiser.hpp"
 #include "media_compressor.hpp"
@@ -172,6 +173,8 @@ void recorder::denoise(int sample_rate) {
                   denoiser::task_flags::task_denoise);
     }
 
+    auto start = std::chrono::steady_clock::now();
+
     denoiser dn{
         sample_rate, flags,
         static_cast<uint64_t>(m_audio_device.size() - sizeof(wav_header))};
@@ -209,6 +212,12 @@ void recorder::denoise(int sample_rate) {
             if (static_cast<size_t>(size) < buff.size()) break;
         }
     }
+
+    auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(
+                   std::chrono::steady_clock::now() - start)
+                   .count();
+
+    qDebug() << "processing dur:" << dur;
 
     m_probs = dn.speech_probs();
 

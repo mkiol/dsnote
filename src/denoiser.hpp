@@ -50,7 +50,7 @@ class denoiser {
     std::vector<float> m_speech_probs;
     int m_task_flags = task_flags::task_none;
     uint64_t m_full_size = 0;
-    int m_normalize_peek = 1;
+    int m_normalize_peek = 0;
 
     void normalize_audio(sample_t* audio, size_t size, bool second_pass);
 };

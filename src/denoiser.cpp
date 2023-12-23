@@ -52,8 +52,8 @@ std::vector<float> denoiser::speech_probs() {
     return m_speech_probs;
 }
 
+// TO-DO: refactor with simd
 void denoiser::normalize_audio(sample_t* audio, size_t size, bool second_pass) {
-    // inspired by https://github.com/fluffy-critter/AudioCompress
     int max = std::numeric_limits<sample_t>::max();
     int min = std::numeric_limits<sample_t>::min();
     int target_gain = max * 0.75;
@@ -61,8 +61,7 @@ void denoiser::normalize_audio(sample_t* audio, size_t size, bool second_pass) {
     if (m_task_flags & task_normalize ||
         m_task_flags & task_normalize_two_pass) {
         for (size_t i = 0; i < size; ++i) {
-            int val = audio[i];
-            if (val < 0) val = -val;
+            int val = std::abs(audio[i]);
             if (val > m_normalize_peek) m_normalize_peek = val;
         }
     }
@@ -84,7 +83,7 @@ void denoiser::normalize_audio(sample_t* audio, size_t size, bool second_pass) {
             audio[i] = static_cast<sample_t>(
                 std::clamp(audio[i] * new_gain >> 10, min, max));
 
-        if (m_task_flags & task_normalize) m_normalize_peek = 1;
+        if (m_task_flags & task_normalize) m_normalize_peek = 0;
     }
 }
 
