@@ -97,7 +97,7 @@ DialogPage {
                 id: closeButton
 
                 text: qsTr("Cancel")
-                //icon.name: "window-close-symbolic"
+                icon.name: "action-unavailable-symbolic"
                 onClicked: root.reject()
                 Keys.onReturnPressed: root.reject()
             }

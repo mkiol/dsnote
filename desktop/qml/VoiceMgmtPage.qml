@@ -68,6 +68,11 @@ DialogPage {
 
             property bool editActive: false
 
+            function stop_playback() {
+                if (app.player_playing)
+                    app.player_stop_voice_ref()
+            }
+
             background: Rectangle {
                 id: bg
 
@@ -78,10 +83,6 @@ DialogPage {
 
             width: root.listViewItem.width
             height: deleteButton.height
-            onEditActiveChanged: {
-                if (!editActive)
-                    app.rename_tts_ref_voice(index, editField.text)
-            }
 
             Label {
                 id: nameField
@@ -96,29 +97,58 @@ DialogPage {
                 anchors.rightMargin: appWin.padding
             }
 
-            TextField {
-                id: editField
-
-                enabled: !app.player_playing
-                text: modelData
+            RowLayout {
                 visible: control.editActive
-                color: palette.text
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
                 anchors.leftMargin: appWin.padding
                 anchors.right: playButton.left
                 anchors.rightMargin: appWin.padding
+
+                TextField {
+                    id: editField
+
+                    Layout.fillWidth: true
+                    text: modelData
+                    color: palette.text
+                }
+
+                Button {
+                    width: appWin.buttonWithIconWidth
+                    text: qsTr("Save")
+                    icon.name: "document-save-symbolic"
+                    onClicked: {
+                        control.editActive = !control.editActive
+
+                        if (editField.text.length !== 0)
+                            app.rename_tts_ref_voice(index, editField.text)
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Save changes")
+                }
+
+                Button {
+                    width: appWin.buttonWithIconWidth
+                    icon.name: "action-unavailable-symbolic"
+                    text: qsTr("Cancel")
+                    onClicked: control.editActive = !control.editActive
+                }
             }
 
             Button {
                 id: playButton
 
+                enabled: !control.editActive
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: renameButton.left
                 anchors.rightMargin: appWin.padding
                 icon.name: app.player_playing && app.player_current_voice_ref_idx === index ?
                                "media-playback-stop-symbolic" : "media-playback-start-symbolic"
                 onClicked: {
+                    control.editActive = false
+
                     if (app.player_playing && app.player_current_voice_ref_idx === index)
                         app.player_stop_voice_ref()
                     else
@@ -129,26 +159,32 @@ DialogPage {
             Button {
                 id: renameButton
 
-                enabled: !app.player_playing
+                enabled: !control.editActive
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: deleteButton.left
                 anchors.rightMargin: appWin.padding
                 width: appWin.buttonWithIconWidth
-                text: control.editActive ? qsTr("Save") : qsTr("Rename")
-                onClicked: control.editActive = !control.editActive
+                text: qsTr("Rename")
+                onClicked: {
+                    control.stop_playback()
+                    control.editActive = !control.editActive
+                }
             }
 
             Button {
                 id: deleteButton
 
-                enabled: !app.player_playing
+                enabled: !control.editActive
                 icon.name: "edit-delete-symbolic"
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: root._rightMargin
                 width: appWin.buttonWithIconWidth
                 text: qsTr("Delete")
-                onClicked: app.delete_tts_ref_voice(index)
+                onClicked: {
+                    control.stop_playback()
+                    app.delete_tts_ref_voice(index)
+                }
             }
         }
     }
