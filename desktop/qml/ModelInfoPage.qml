@@ -22,6 +22,7 @@ Dialog {
     modal: true
     verticalPadding: appWin.padding
     horizontalPadding: appWin.padding
+    clip: true
 
     header: Item {}
 
@@ -125,7 +126,7 @@ Dialog {
                     else if (f & ModelsListModel.FeatureEngineSttWhisper)
                         return "Whisper (whisper-cpp)"
                     else if (f & ModelsListModel.FeatureEngineSttFasterWhisper)
-                        return "FasterWhisper"
+                        return "Faster Whisper"
                     else if (f & ModelsListModel.FeatureEngineSttApril)
                         return "April-ASR"
                     else if (f & ModelsListModel.FeatureEngineTtsEspeak)
@@ -138,6 +139,30 @@ Dialog {
                         return "Coqui"
                     else if (f & ModelsListModel.FeatureEngineTtsMimic3)
                         return "Mimic3"
+                    return ""
+                }
+                font.bold: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            }
+
+            Label {
+                visible: gpuCapsLabel.visible
+                text: qsTr("Supported GPU acceleration")
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            }
+
+            Label {
+                id: gpuCapsLabel
+
+                visible: text.length !== 0
+                text: {
+                    var f = root.model.features;
+                    if (f & ModelsListModel.FeatureEngineSttWhisper)
+                        return "NVIDIA CUDA, AMD ROCm, OpenCL"
+                    else if (f & ModelsListModel.FeatureEngineSttFasterWhisper)
+                        return "NVIDIA CUDA"
+                    else if (f & ModelsListModel.FeatureEngineTtsCoqui)
+                        return "NVIDIA CUDA, AMD ROCm"
                     return ""
                 }
                 font.bold: true
@@ -274,17 +299,26 @@ Dialog {
             text: qsTr("Files to download")
         }
 
-        ColumnLayout {
-            Layout.fillWidth: true
-            spacing: appWin.padding / 2
+        ScrollView {
+            id: filesView
 
-            Repeater {
-                model: root.model.download_urls
-                Label {
-                    Layout.alignment: Qt.AlignTop
-                    text: modelData.toString()
-                    Layout.fillWidth: true
-                    wrapMode: Text.Wrap
+            Layout.fillWidth: true
+            Layout.preferredHeight: Math.min(filesCol.height, 0.2 * appWin.height)
+                                    + 2 * ScrollBar.horizontal.height
+            clip: true
+
+            ColumnLayout {
+                id: filesCol
+
+                spacing: appWin.padding / 2
+
+                Repeater {
+                    model: root.model.download_urls
+                    Label {
+                        Layout.alignment: Qt.AlignTop
+                        text: modelData.toString()
+                        Layout.fillWidth: true
+                    }
                 }
             }
         }

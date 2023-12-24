@@ -28,7 +28,8 @@ Dialog {
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.Wrap
-            text: app.recorder_recording ? qsTr("Say something...") : qsTr("Press %1 to start recording.").arg("<i>" + qsTr("Start") + "</i>")
+            text: app.recorder_recording ? qsTr("Say something...") :
+                                           qsTr("Press %1 to start recording.").arg("<i>" + qsTr("Start") + "</i>")
             font.pixelSize: appWin.textFontSizeBig
         }
 
