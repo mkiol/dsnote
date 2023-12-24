@@ -365,26 +365,34 @@ void remove_hyphen_word_break(std::string& text) {
 }
 
 void clean_white_characters(std::string& text) {
-    std::replace_if(
-        text.begin(), text.end(),
-        [](unsigned char c) { return std::isspace(c); }, ' ');
-
-    text.erase(std::unique(text.begin(), text.end(),
-                           [](unsigned char c1, unsigned char c2) {
-                               return std::isspace(c1) && std::isspace(c2);
-                           }),
-               text.end());
+    text =
+        std::regex_replace(text, std::regex{"\n\n+|\r\r+|\r\n(\r\n)+"}, "_n_");
+    text = std::regex_replace(text, std::regex{"\\s+"}, " ");
+    text = std::regex_replace(text, std::regex{"_n_"}, "\n\n");
+    text = std::regex_replace(text, std::regex{" \n|\n "}, "\n");
 }
 
 void trim_lines(std::string& text) {
     auto ss_in = std::stringstream{text};
     std::stringstream ss_out;
 
+    bool first_line = true;
+    bool prev_line_empty = false;
     for (std::string line; std::getline(ss_in, line);) {
         ltrim(line);
         rtrim(line);
 
-        if (!line.empty()) ss_out << line << '\n';
+        if (line.empty()) {
+            prev_line_empty = !first_line;
+        } else {
+            if (prev_line_empty) {
+                ss_out << '\n';
+                prev_line_empty = false;
+            }
+            ss_out << line << '\n';
+
+            first_line = false;
+        }
     }
 
     auto s = ss_out.str();

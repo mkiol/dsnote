@@ -49,12 +49,36 @@ TEST_CASE("text_tools", "[to_lower_case]") {
 }
 
 TEST_CASE("text_tools", "[clean_white_characters]") {
-    SECTION("latin text") {
-        std::string text = "Hello.   \n\n \t How\tare\t  you\rtoday?";
+    SECTION("remove duplicated") {
+        std::string text = "Hello.   \t How\tare\t  you\rtoday?";
 
         text_tools::clean_white_characters(text);
 
         REQUIRE(text == "Hello. How are you today?");
+    }
+
+    SECTION("remove single newline") {
+        std::string text = "Hello. \nHow are you today?";
+
+        text_tools::clean_white_characters(text);
+
+        REQUIRE(text == "Hello. How are you today?");
+    }
+
+    SECTION("preserve double newline") {
+        std::string text = "Hello. \n\n\n How are you today?";
+
+        text_tools::clean_white_characters(text);
+
+        REQUIRE(text == "Hello.\n\nHow are you today?");
+    }
+
+    SECTION("mixed newline control chars") {
+        std::string text = "Hello.\r\n\r\nHow are\nyou\rtoday?";
+
+        text_tools::clean_white_characters(text);
+
+        REQUIRE(text == "Hello.\n\nHow are you today?");
     }
 }
 
@@ -93,11 +117,31 @@ TEST_CASE("text_tools", "[remove_hyphen_word_break]") {
 }
 
 TEST_CASE("text_tools", "[trim_lines]") {
-    SECTION("latin text") {
-        std::string text = "\nHello.  \n How are you?\t";
+    SECTION("generic") {
+        std::string text = "Hello.  \n How are you?\t";
 
         text_tools::trim_lines(text);
 
+        INFO(text);
+
         REQUIRE(text == "Hello.\nHow are you?");
+    }
+
+    SECTION("preserve double line ends") {
+        std::string text = "Hello. \n\n\n How are you?";
+
+        text_tools::trim_lines(text);
+
+        REQUIRE(text == "Hello.\n\nHow are you?");
+    }
+
+    SECTION("trim first empty lines") {
+        std::string text = "\n\nHello. How are you?";
+
+        text_tools::trim_lines(text);
+
+        INFO(text);
+
+        REQUIRE(text == "Hello. How are you?");
     }
 }
