@@ -271,7 +271,7 @@ ToolBar {
 
         title: qsTr("Open File")
         nameFilters: [
-            qsTr("Text") + " (*.txt)",
+            qsTr("Text") + " (*.txt *.srt)",
             qsTr("All files") + " (*)"]
         folder: _settings.file_open_dir_url
         selectExisting: true
