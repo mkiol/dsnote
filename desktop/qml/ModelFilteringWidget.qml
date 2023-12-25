@@ -456,7 +456,7 @@ GridLayout {
                 ToolTip.delay: 0
                 ToolTip.text: qsTr("Filter by the quality of the output produced by the model.") + " " +
                               qsTr("In case of STT, it is the accuracy of speech recognition.") + " " +
-                              qsTr("In case of TTS, it is the naturalness of speech synthesis.")
+                              qsTr("In case of TTS, it is the naturalness of synthesized voice.")
             }
         }
 

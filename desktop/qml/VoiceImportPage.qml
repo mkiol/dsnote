@@ -130,7 +130,7 @@ DialogPage {
 
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.visible: hovered
-            ToolTip.text: qsTr("Normalize the volume and remove non-speech noise in recording or imported audio file.")
+            ToolTip.text: qsTr("Automatically normalize volume and remove non-speech noise in a microphone recording or imported audio file.")
         }
     }
 

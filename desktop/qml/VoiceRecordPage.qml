@@ -56,6 +56,12 @@ Dialog {
                     }
                 }
             }
+
+            Button {
+                text: qsTr("Cancel")
+                icon.name: "action-unavailable-symbolic"
+                onClicked: root.reject()
+            }
         }
     }
 }
