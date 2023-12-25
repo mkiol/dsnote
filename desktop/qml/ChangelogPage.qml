@@ -20,12 +20,13 @@ DialogPage {
     RichLabel {
         text: "<p>" + qsTr("User Interface") + ":</p>
         <ul>
-        <li>Showing model details.
-            In the model browser you can check the license and the URLs from which model is downloaded.</li>
+        <li>Model details.
+            You can check various model properties in the model browser, like license or URLs from which model is downloaded.</li>
         <li>Distinction between <i>Download</i> and <i>Enable</i> in the model browser.
-            Some models share files with each other. When <i>Enable</i> is shown, the files are already downloaded.</li>
+            Some models share files with each other. When <i>Enable</i> is shown instead of <i>Download</i>,
+            the files are already downloaded.</li>
         <li>Filter options in the model browser.
-            Models can be searched by various features such as: Processing speed, Quality, Additional capabilities.</li>
+            Models can be searched by various features such as: Engine type, Processing speed, Quality, Additional capabilities.</li>
         <li>Setting option to minimize to the system tray.
             To enable system tray icon, use <i>User Interface</i> &rarr; <i>Use system tray icon</i> option.
             To always start the application minimized to the system tray, use <i>User Interface</i> &rarr; <i>Start minimized to the system tray</i> option.
@@ -58,12 +59,13 @@ DialogPage {
         </ul>
         <p>" + qsTr("Translator") + ":</p>
         <ul>
-        <li>Setting option to force text cleaning before translation
-            (<i>Other</i> &rarr; <i>Clean text before translation</i>).
-            If the input text is incorrectly formatted, this option may improve the translation quality.</li>
+        <li>Option to force text cleaning before translation.
+            If the input text is incorrectly formatted, this option may improve the translation quality.
+            To enable, use the switch to the right of <i>Translate</i> button.</li>
         <li>Text formatting support. The translation will preserve the formatting from the input text.
             Supported formats are: HTML, Markdown and SRT Subtitles.
             To enable, use the drop-down menu to the right of the <i>Translate</i> button.</li>
+        <li>Translation progress indicator</li>
         </ul>
         <p>" + qsTr("Other") + ":</p>
         <ul>

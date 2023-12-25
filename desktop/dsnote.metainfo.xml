@@ -87,14 +87,14 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
-    <release version="4.4.0" date="2023-12-10">
+    <release version="4.4.0" date="2023-12-25">
       <description>
       <p>User Interface:</p>
       <ul>
-      <li>Showing model details.
-          In the model browser you can check the license and the URLs from which model is downloaded.</li>
+      <li>Model details.
+          You can check various model properties in the model browser, like license or URLs from which model is downloaded.</li>
       <li>Distinction between 'Download' and 'Enable' in the model browser.
-          Some models share files with each other. When 'Enable' is shown, the files are already downloaded.</li>
+          Some models share files with each other. When 'Enable' is shown instead of 'Download' the files are already downloaded.</li>
       <li>Filter options in the model browser.
           Models can be searched by various features such as: Processing speed, Quality, Additional capabilities.</li>
       <li>Setting option to minimize to the system tray</li>
@@ -124,10 +124,11 @@
       </ul>
       <p>Translator:</p>
       <ul>
-      <li>Setting option to force text cleaning before translation.
+      <li>Option to force text cleaning before translation.
           If the input text is incorrectly formatted, this option may improve the translation quality.</li>
       <li>Text formatting support. The translation will preserve the formatting from the input text.
           Supported formats are: HTML, Markdown and SRT Subtitles.</li>
+      <li>Translation progress indicator</li>
       </ul>
       <p>Other:</p>
       <ul>

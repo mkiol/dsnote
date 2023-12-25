@@ -340,6 +340,21 @@ ColumnLayout {
             }
 
             Switch {
+                enabled: app.state === DsnoteApp.StateIdle &&
+                         _settings.mnt_text_format !== Settings.TextFormatSubRip
+                text: qsTr("Clean text")
+                checked: _settings.mnt_clean_text
+                onClicked: {
+                    _settings.mnt_clean_text = !_settings.mnt_clean_text
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Remove duplicate whitespaces and extra line breaks in the text before translation.") + " " +
+                              qsTr("If the input text is incorrectly formatted, this option may improve the translation quality.")
+            }
+
+            Switch {
                 enabled: app.state === DsnoteApp.StateIdle
                 text: qsTr("Translate as you type")
                 checked: _settings.translate_when_typing
