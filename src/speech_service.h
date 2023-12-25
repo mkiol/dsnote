@@ -102,7 +102,8 @@ class speech_service : public QObject, public singleton<speech_service> {
         file_source = 2,
         stt_engine = 3,
         tts_engine = 4,
-        mnt_engine = 5
+        mnt_engine = 5,
+        mnt_runtime = 6
     };
 
     struct tts_partial_result_t {
@@ -203,7 +204,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void stt_engine_eof(int task_id);
     void stt_engine_error(int task_id);
     void tts_engine_error(int task_id);
-    void mnt_engine_error(int task_id);
+    void mnt_engine_error(mnt_engine::error_t error_type, int task_id);
     void stt_engine_shutdown();
     void default_stt_model_changed();
     void default_stt_lang_changed();
@@ -393,8 +394,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     void handle_stt_engine_error(int task_id);
     void handle_tts_engine_error();
     void handle_tts_engine_error(int task_id);
-    void handle_mnt_engine_error();
-    void handle_mnt_engine_error(int task_id);
+    void handle_mnt_engine_error(mnt_engine::error_t error_type);
+    void handle_mnt_engine_error(mnt_engine::error_t error_type, int task_id);
     void handle_tts_engine_state_changed(tts_engine::state_t state);
     void handle_mnt_engine_state_changed(mnt_engine::state_t state,
                                          int task_id);
@@ -529,5 +530,6 @@ class speech_service : public QObject, public singleton<speech_service> {
 Q_DECLARE_METATYPE(speech_service::tts_partial_result_t)
 Q_DECLARE_METATYPE(speech_service::error_t)
 Q_DECLARE_METATYPE(mnt_engine::state_t)
+Q_DECLARE_METATYPE(mnt_engine::error_t)
 
 #endif  // SPEECH_SERVICE_H

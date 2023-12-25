@@ -30,6 +30,9 @@ class mnt_engine {
     friend std::ostream& operator<<(std::ostream& os,
                                     text_format_t text_format);
 
+    enum class error_t { init, runtime };
+    friend std::ostream& operator<<(std::ostream& os, error_t error_type);
+
     struct model_files_t {
         std::string model_path_first;
         std::string model_path_second;
@@ -52,7 +55,7 @@ class mnt_engine {
             text_translated;
         std::function<void(state_t state)> state_changed;
         std::function<void()> progress_changed;
-        std::function<void()> error;
+        std::function<void(error_t error_type)> error;
     };
 
     struct config_t {

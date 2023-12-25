@@ -172,7 +172,7 @@ speech_service::speech_service(QObject *parent)
                 &speech_service::handle_tts_engine_error),
             Qt::QueuedConnection);
     connect(this, &speech_service::mnt_engine_error, this,
-            static_cast<void (speech_service::*)(int)>(
+            static_cast<void (speech_service::*)(mnt_engine::error_t, int)>(
                 &speech_service::handle_mnt_engine_error),
             Qt::QueuedConnection);
     connect(this, &speech_service::mnt_engine_translate_progress_changed, this,
@@ -1490,7 +1490,9 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
                             m_current_task->id);
                 },
                 /*error=*/
-                [this]() { handle_mnt_engine_error(); }};
+                [this](mnt_engine::error_t error_type) {
+                    handle_mnt_engine_error(error_type);
+                }};
 
             try {
                 m_mnt_engine = std::make_unique<mnt_engine>(
@@ -1849,14 +1851,23 @@ void speech_service::handle_tts_engine_error() {
     if (m_current_task) emit tts_engine_error(m_current_task->id);
 }
 
-void speech_service::handle_mnt_engine_error() {
-    if (m_current_task) emit mnt_engine_error(m_current_task->id);
+void speech_service::handle_mnt_engine_error(mnt_engine::error_t error_type) {
+    if (m_current_task) emit mnt_engine_error(error_type, m_current_task->id);
 }
 
-void speech_service::handle_mnt_engine_error(int task_id) {
+void speech_service::handle_mnt_engine_error(mnt_engine::error_t error_type,
+                                             int task_id) {
     qDebug() << "mnt engine error";
 
-    emit error(error_t::mnt_engine);
+    emit error([error_type]() {
+        switch (error_type) {
+            case mnt_engine::error_t::init:
+                return error_t::mnt_engine;
+            case mnt_engine::error_t::runtime:
+                return error_t::mnt_runtime;
+        }
+        throw std::runtime_error("invalid mnt error");
+    }());
 
     if (current_task_id() == task_id) {
         cancel(task_id);

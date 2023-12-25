@@ -41,6 +41,19 @@ std::ostream& operator<<(std::ostream& os,
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, mnt_engine::error_t error_type) {
+    switch (error_type) {
+        case mnt_engine::error_t::init:
+            os << "init";
+            break;
+        case mnt_engine::error_t::runtime:
+            os << "runtime";
+            break;
+    }
+
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os,
                          const mnt_engine::model_files_t& model_files) {
     os << "model-path-first=" << model_files.model_path_first
@@ -328,6 +341,7 @@ std::string mnt_engine::translate_internal(std::string text) {
                 if (m_shutting_down) return {};
             } catch (const std::runtime_error& err) {
                 LOGE("translation error: " << err.what());
+                if (m_call_backs.error) m_call_backs.error(error_t::runtime);
             }
 
             out_ss << line;
@@ -387,7 +401,7 @@ void mnt_engine::process() {
 
             if (!model_created()) {
                 set_state(state_t::error);
-                if (m_call_backs.error) m_call_backs.error();
+                if (m_call_backs.error) m_call_backs.error(error_t::init);
                 break;
             }
         }

@@ -245,9 +245,10 @@ class dsnote_app : public QObject {
         ErrorSttEngine = 3,
         ErrorTtsEngine = 4,
         ErrorMntEngine = 5,
-        ErrorSaveNoteToFile = 6,
-        ErrorLoadNoteFromFile = 7,
-        ErrorContentDownload = 8,
+        ErrorMntRuntime = 6,  // has to be the same as speech_service::error_t
+        ErrorSaveNoteToFile = 10,
+        ErrorLoadNoteFromFile = 11,
+        ErrorContentDownload = 12,
         ErrorNoService = 100
     };
     Q_ENUM(error_t)
