@@ -575,8 +575,6 @@ modules:
         - "mv /app/lib/libwhisper.so /app/lib/libwhisper-openblas.so"
     sources:
       - type: archive
-        only-arches:
-          - x86_64
         url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.5.2.tar.gz
         sha256: be9c4d5d4b5f28f02e36f28e602b7d2dcfd734dd1c834ddae91ae8db601e951f
       - type: patch
@@ -602,8 +600,6 @@ modules:
       - "mv /app/lib/libwhisper.so /app/lib/libwhisper-fallback.so"
     sources:
       - type: archive
-        only-arches:
-          - x86_64
         url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.5.2.tar.gz
         sha256: be9c4d5d4b5f28f02e36f28e602b7d2dcfd734dd1c834ddae91ae8db601e951f
       - type: patch
