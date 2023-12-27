@@ -134,7 +134,7 @@ ColumnLayout {
             enabled: app.tts_configured && app.state === DsnoteApp.StateIdle
             comboToolTip: app.tts_ref_voice_needed && app.available_tts_ref_voices.length === 0 ?
                               qsTr("This model requires a voice sample.") + " " +
-                              qsTr("Create one in %1 menu").arg("<i>" + qsTr("Voice samples") + "</i>") : qsTr("Text to Speech model")
+                              qsTr("Create one in %1.").arg("<i>" + qsTr("Voice samples") + "</i>") : qsTr("Text to Speech model")
             combo2ToolTip: qsTr("Voice sample")
             combo3ToolTip: qsTr("Speech speed")
             comboPlaceholderText: qsTr("No Text to Speech model")
