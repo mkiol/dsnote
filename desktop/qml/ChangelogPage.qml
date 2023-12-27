@@ -18,7 +18,18 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("User Interface") + ":</p>
+        text: "<p>Flatpak:</p>
+        <ul>
+        <li>Modular Flatpak package.
+            The application package is divided into a base package <i>net.mkiol.SpeechNote</i> and
+            two optional add-ons: <i>net.mkiol.SpeechNote.amd</i> and <i>net.mkiol.SpeechNote.nvidia</i>.
+            Add-ons packages provide a set of libraries for GPU acceleration with AMD and NVIDIA graphics cards.
+            The \"modular\" approach makes the base Flatpak package much smaller.</li>
+        <li>NVIDIA CUDA runtime update to version 12.2</li>
+        <li>AMD ROCm runtime update to version 5.6</li>
+        <li>PyTorch update to version 2.1.1</li>
+        </ul>
+        <p>" + qsTr("User Interface") + ":</p>
         <ul>
         <li>Model details.
             You can check various model properties in the model browser, like license or URLs from which model is downloaded.</li>
@@ -41,6 +52,12 @@ DialogPage {
         <li>Translate to English option for Whisper and Faster Whisper models.
             To automatically translate to English, use the switch to the right of the model selection box.
             The option is only visible if you select a non-English Whisper or Faster Whisper model.</li>
+        <li>More effective GPU acceleration for Whisper models with AMD graphics cards.
+            Average decoding time has been shortened by 3 times.
+            If you are using Flatpak package, install <i>net.mkiol.SpeechNote.amd</i> add-on
+            to enable full support for AMD ROCm acceleration.
+            GPU acceleration for AMD graphics cards works only with <i>Whisper</i> models (whisper.cpp engine).
+            In particular, it does not work with <i>Faster Whisper</i> models.</li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
@@ -56,6 +73,9 @@ DialogPage {
             The sample creator is available on main toolbar (<i>Voice samples</i>)
             only if the selected TTS model supports voice cloning.</li>
         <li>New voice for Serbian language (RHVoice model)</li>
+        <li>GPU acceleration for Coqui models with AMD graphics cards.
+            If you are using Flatpak package, install <i>net.mkiol.SpeechNote.amd</i> add-on
+            to enable full support for AMD ROCm acceleration.</li>
         </ul>
         <p>" + qsTr("Translator") + ":</p>
         <ul>
@@ -69,6 +89,9 @@ DialogPage {
         </ul>
         <p>" + qsTr("Other") + ":</p>
         <ul>
+        <li>Setting option to override GPU version
+            (<i>Other</i> &rarr; <i>Override GPU version</i>).
+            Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</li>
         <li>Setting option to limit number of simultaneous CPU threads
             (<i>Other</i> &rarr; <i>Number of simultaneous threads</i>)</li>
         <li>Setting option to set Python libraries directory

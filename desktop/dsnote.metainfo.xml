@@ -87,8 +87,19 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
-    <release version="4.4.0" date="2023-12-25">
+    <release version="4.4.0" date="2023-12-27">
       <description>
+      <p>Flatpak:</p>
+      <ul>
+      <li>Modular Flatpak package.
+          The application package is divided into a base package 'net.mkiol.SpeechNote' and
+          two optional add-ons: 'net.mkiol.SpeechNote.amd' and 'net.mkiol.SpeechNote.nvidia'.
+          Add-ons packages provide a set of libraries for GPU acceleration with AMD and NVIDIA graphics cards.
+          The "modular" approach makes the base Flatpak package much smaller.</li>
+      <li>NVIDIA CUDA runtime update to version 12.2</li>
+      <li>AMD ROCm runtime update to version 5.6</li>
+      <li>PyTorch update to version 2.1.1</li>
+      </ul>
       <p>User Interface:</p>
       <ul>
       <li>Model details.
@@ -105,7 +116,8 @@
       <li>New version of Faster Whisper Large model: 'FasterWhisper Large-v3'</li>
       <li>Whisper and Faster Whisper enabled for Chinese-Cantonese language</li>
       <li>Support for Speex audio codec in 'Transcribe a file'</li>
-      <li>Translate to English option for Whisper and Faster Whisper models.</li>
+      <li>Translate to English option for Whisper and Faster Whisper models</li>
+      <li>More effective GPU acceleration for Whisper models with AMD graphics cards</li>
       </ul>
       <p>Text to Speech:</p>
       <ul>
@@ -121,6 +133,7 @@
           The sample creator is available on main toolbar only if the selected TTS model
           supports voice cloning.</li>
       <li>New voice for Serbian language (RHVoice model)</li>
+      <li>GPU acceleration for Coqui models with AMD graphics cards</li>
       </ul>
       <p>Translator:</p>
       <ul>
@@ -132,6 +145,7 @@
       </ul>
       <p>Other:</p>
       <ul>
+      <li>Setting option to override GPU version (AMD graphics cards)</li>
       <li>Setting option to limit number of simultaneous CPU threads</li>
       <li>Setting option to set Python libraries directory (PYTHONPATH).
           This option may be useful if you use 'venv' module to manage Python libraries.</li>
