@@ -83,7 +83,7 @@ void denoiser::normalize_audio(sample_t* audio, size_t size, bool second_pass) {
             audio[i] = static_cast<sample_t>(
                 std::clamp(audio[i] * new_gain >> 10, min, max));
 
-        if (m_task_flags & task_normalize) m_normalize_peek = 0;
+        if (m_task_flags & task_normalize) m_normalize_peek = 1;
     }
 }
 
