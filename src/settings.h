@@ -501,8 +501,8 @@ class settings : public QSettings, public singleton<settings> {
 
     bool gpu_override_version() const;
     void set_gpu_override_version(bool value);
-    QString gpu_overrided_version() const;
-    void set_gpu_overrided_version(const QString &value);
+    QString gpu_overrided_version();
+    void set_gpu_overrided_version(QString new_value);
 
    signals:
     // app

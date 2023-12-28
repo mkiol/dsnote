@@ -1599,17 +1599,15 @@ void settings::set_gpu_override_version([[maybe_unused]] bool value) {
 #endif
 }
 
-QString settings::gpu_overrided_version() const {
+QString settings::gpu_overrided_version() {
 #ifdef ARCH_X86_64
     auto val =
         value(QStringLiteral("service/gpu_overrided_version"), {}).toString();
 
-    if (val.isEmpty()) {
-        val =
-            m_rocm_gpu_versions.empty()
-                ? QString{}
-                : QString::fromStdString(gpu_tools::rocm_overrided_gfx_version(
-                      m_rocm_gpu_versions.front().toStdString()));
+    if (val.isEmpty() && !m_rocm_gpu_versions.empty()) {
+        val = QString::fromStdString(gpu_tools::rocm_overrided_gfx_version(
+            m_rocm_gpu_versions.front().toStdString()));
+        setValue(QStringLiteral("service/gpu_overrided_version"), val);
     }
 
     return val;
@@ -1618,13 +1616,18 @@ QString settings::gpu_overrided_version() const {
 #endif
 }
 
-void settings::set_gpu_overrided_version(
-    [[maybe_unused]] const QString& value) {
+void settings::set_gpu_overrided_version([[maybe_unused]] QString new_value) {
 #ifdef ARCH_X86_64
-    if (gpu_overrided_version() != value &&
-        settings::value(QStringLiteral("service/gpu_overrided_version"), {})
-                .toString() != value) {
-        setValue(QStringLiteral("service/gpu_overrided_version"), value);
+    auto old_value =
+        value(QStringLiteral("service/gpu_overrided_version"), {}).toString();
+    if (new_value.isEmpty() && !m_rocm_gpu_versions.empty()) {
+        new_value =
+            QString::fromStdString(gpu_tools::rocm_overrided_gfx_version(
+                m_rocm_gpu_versions.front().toStdString()));
+    }
+
+    if (old_value != new_value) {
+        setValue(QStringLiteral("service/gpu_overrided_version"), new_value);
         emit gpu_overrided_version_changed();
         set_restart_required(true);
     }
