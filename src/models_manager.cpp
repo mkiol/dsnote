@@ -2016,7 +2016,8 @@ auto models_manager::extract_models(
             model.options.push_back('c');
         } else if ((model.engine == model_engine_t::stt_whisper ||
                     model.engine == model_engine_t::stt_fasterwhisper) &&
-                   !model.options.contains('t') && model.lang_id != "en") {
+                   !model.options.contains('t') && model.lang_id != "en" &&
+                   !model.hidden) {
             // add translate option for all whisper stt models
             model.options.push_back('t');
         }
