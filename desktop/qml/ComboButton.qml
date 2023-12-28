@@ -31,6 +31,9 @@ RowLayout {
     property bool verticalMode: false
     property bool comboFillWidth: true
     property int comboPrefWidth: _combo.implicitWidth
+    property alias comboRedBorder: _comboRedBorder.visible
+    property alias combo2RedBorder: _combo2RedBorder.visible
+    property alias combo3RedBorder: _combo3RedBorder.visible
 
     Layout.fillWidth: verticalMode ? true : comboFillWidth
 
@@ -71,31 +74,64 @@ RowLayout {
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: root.comboToolTip
+
+                Rectangle {
+                    id: _comboRedBorder
+
+                    visible: false
+                    border.width: 1
+                    border.color: "red"
+                    radius: 2
+                    anchors.fill: parent
+                    color: "transparent"
+                }
             }
 
             ComboBox {
                 id: _combo2
 
                 visible: false
-                Layout.preferredWidth: appWin.buttonWidth
+                Layout.preferredWidth: appWin.buttonWidth * 1.5
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                 enabled: !root.off
                 displayText: !model || model.length === 0 ? root.combo2PlaceholderText : currentText
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: root.combo2ToolTip
+
+                Rectangle {
+                    id: _combo2RedBorder
+
+                    visible: false
+                    border.width: 1
+                    border.color: "red"
+                    radius: 2
+                    anchors.fill: parent
+                    color: "transparent"
+                }
             }
 
             ComboBox {
                 id: _combo3
 
                 visible: false
-                Layout.preferredWidth: appWin.buttonWidth * 0.9
+                Layout.preferredWidth: appWin.buttonWidth
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                 enabled: !root.off
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: root.combo3ToolTip
+
+                Rectangle {
+                    id: _combo3RedBorder
+
+                    visible: false
+                    border.width: 1
+                    border.color: "red"
+                    radius: 2
+                    anchors.fill: parent
+                    color: "transparent"
+                }
             }
 
             Switch {

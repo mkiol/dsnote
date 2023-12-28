@@ -147,6 +147,7 @@ ColumnLayout {
                     combo2PlaceholderText: qsTr("No voice sample")
                     combo2ToolTip: qsTr("Voice sample")
                     comboFillWidth: true
+                    comboRedBorder: !mntInCombo.second.off && app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voices.length === 0
                     combo {
                         model: app.available_tts_models_for_in_mnt
                         enabled: mntInCombo.second.enabled &&
@@ -172,7 +173,8 @@ ColumnLayout {
                         text: qsTr("Read")
                         enabled: mntInCombo.second.enabled &&
                                  !mntInCombo.second.off &&
-                                 app.note.length !== 0
+                                 app.note.length !== 0 &&
+                                 (!app.tts_for_in_mnt_ref_voice_needed || app.available_tts_ref_voices.length !== 0)
                         onClicked: app.play_speech_translator(false)
                     }
                 }
@@ -255,6 +257,7 @@ ColumnLayout {
                     combo2PlaceholderText: qsTr("No voice sample")
                     combo2ToolTip: qsTr("Voice sample")
                     comboFillWidth: true
+                    comboRedBorder: !mntOutCombo.second.off && app.available_tts_models_for_out_mnt && app.available_tts_ref_voices.length === 0
                     combo {
                         enabled: mntOutCombo.second.enabled &&
                                  !mntOutCombo.second.off &&
@@ -282,7 +285,8 @@ ColumnLayout {
                         enabled: mntOutCombo.second.enabled &&
                                  !mntOutCombo.second.off &&
                                  app.translated_text.length !== 0 &&
-                                 app.state !== DsnoteApp.StateTranslating
+                                 app.state !== DsnoteApp.StateTranslating &&
+                                 (!app.tts_for_out_mnt_ref_voice_needed || app.available_tts_ref_voices.length !== 0)
                         onClicked: app.play_speech_translator(true)
                     }
                 }

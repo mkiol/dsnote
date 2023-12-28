@@ -139,6 +139,7 @@ ColumnLayout {
             combo3ToolTip: qsTr("Speech speed")
             comboPlaceholderText: qsTr("No Text to Speech model")
             combo2PlaceholderText: qsTr("No voice sample")
+            comboRedBorder: app.tts_ref_voice_needed && app.available_tts_ref_voices.length === 0
             combo {
                 enabled: listenReadCombos.second.enabled &&
                          !listenReadCombos.second.off &&
@@ -146,7 +147,6 @@ ColumnLayout {
                 model: app.available_tts_models
                 onActivated: app.set_active_tts_model_idx(index)
                 currentIndex: app.active_tts_model_idx
-                palette.buttonText: app.tts_ref_voice_needed && app.available_tts_ref_voices.length === 0 ? "red" : palette.buttonText
             }
             combo2 {
                 visible: app.tts_ref_voice_needed && app.available_tts_ref_voices.length !== 0
