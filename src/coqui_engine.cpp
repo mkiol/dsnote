@@ -225,6 +225,11 @@ void coqui_engine::create_model() {
 
                   if (m_model) {
                       auto model = m_model->attr("tts_model");
+
+                      auto model_class_name =
+                          model.get_type().attr("__name__").cast<std::string>();
+                      LOGD("model class name: " << model_class_name);
+
                       if (py::hasattr(model, "length_scale")) {
                           m_initial_length_scale =
                               model.attr("length_scale").cast<float>();
@@ -235,6 +240,10 @@ void coqui_engine::create_model() {
                               model.attr("duration_threshold").cast<float>();
                           LOGD("initial duration threshold: "
                                << *m_initial_duration_threshold);
+                      } else if (model_class_name == "Xtts") {
+                          m_speed_supported = true;
+                      } else {
+                          LOGD("model does not have initial speed");
                       }
                   }
               } catch (const std::exception& err) {
@@ -253,29 +262,40 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
                                       const std::string& out_file) {
     auto* pe = py_executor::instance();
 
-    auto length_scale =
-        m_initial_length_scale
-            ? vits_length_scale(m_config.speech_speed, *m_initial_length_scale)
-            : 1.0f;
-
-    auto duration_threshold =
-        m_initial_duration_threshold
-            ? overflow_duration_threshold(m_config.speech_speed,
-                                          *m_initial_duration_threshold)
-            : 0.55f;
-
-    LOGD("speed: length_scale=" << length_scale << ", duration_threshold:"
-                                << duration_threshold);
-
     try {
         return pe->execute([&]() {
                      try {
-                         auto model = m_model->attr("tts_model");
-                         if (py::hasattr(model, "length_scale")) {
-                             model.attr("length_scale") = length_scale;
-                         } else if (py::hasattr(model, "duration_threshold")) {
-                             model.attr("duration_threshold") =
-                                 duration_threshold;
+                         float speed = 1.0;
+
+                         if (m_speed_supported) {
+                             speed = m_config.speech_speed / 10.0;
+                         } else {
+                             auto model = m_model->attr("tts_model");
+                             if (py::hasattr(model, "length_scale")) {
+                                 auto length_scale =
+                                     m_initial_length_scale
+                                         ? vits_length_scale(
+                                               m_config.speech_speed,
+                                               *m_initial_length_scale)
+                                         : 1.0f;
+                                 model.attr("length_scale") = length_scale;
+
+                                 LOGD("speed: length_scale=" << length_scale);
+
+                             } else if (py::hasattr(model,
+                                                    "duration_threshold")) {
+                                 auto duration_threshold =
+                                     m_initial_duration_threshold
+                                         ? overflow_duration_threshold(
+                                               m_config.speech_speed,
+                                               *m_initial_duration_threshold)
+                                         : 0.55f;
+
+                                 LOGD("speed: duration_threshold="
+                                      << duration_threshold);
+                                 model.attr("duration_threshold") =
+                                     duration_threshold;
+                             }
                          }
 
                          auto wav = m_model->attr("tts")(
@@ -294,7 +314,8 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
                              "reference_wav"_a = py::none(),
                              "style_wav"_a = py::none(),
                              "style_text"_a = py::none(),
-                             "reference_speaker_name"_a = py::none());
+                             "reference_speaker_name"_a = py::none(),
+                             "speed"_a = speed);
 
                          m_model->attr("save_wav")("wav"_a = wav,
                                                    "path"_a = out_file);
@@ -313,5 +334,6 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
 }
 
 bool coqui_engine::model_supports_speed() const {
-    return m_initial_length_scale || m_initial_duration_threshold;
+    return m_speed_supported || m_initial_length_scale ||
+           m_initial_duration_threshold;
 }

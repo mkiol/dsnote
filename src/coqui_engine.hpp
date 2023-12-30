@@ -34,6 +34,7 @@ class coqui_engine : public tts_engine {
     std::optional<py::object> m_model;
     std::optional<float> m_initial_length_scale;
     std::optional<float> m_initial_duration_threshold;
+    bool m_speed_supported = false;
 
     bool model_created() const final;
     bool model_supports_speed() const final;
