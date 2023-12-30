@@ -72,7 +72,7 @@ DialogPage {
             You can create voice sample with a microphone or from audio or video file.
             The sample creator is available on main toolbar (<i>Voice samples</i>)
             only if the selected TTS model supports voice cloning.</li>
-        <li>New voice for Serbian language (RHVoice model)</li>
+        <li>New voices for Serbian and Uzbek languages (RHVoice models)</li>
         <li>GPU acceleration for Coqui models with AMD graphics cards.
             If you are using Flatpak package, install <i>net.mkiol.SpeechNote.amd</i> add-on
             to enable full support for AMD ROCm acceleration.</li>

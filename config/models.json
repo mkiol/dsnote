@@ -23784,6 +23784,34 @@
             "size": "3692627"
         },
         {
+            "name": "Oʻzbekcha (RHVoice Islom Male)",
+            "model_id": "uz_rhvoice_islom",
+            "engine": "tts_rhvoice",
+            "lang_id": "uz",
+            "speaker": "islom",
+            "checksum": "2603cccb",
+            "checksum_quick": "1e353005",
+            "comp": "zip",
+            "urls": [
+                "https://github.com/RHVoice/islom-uzb/archive/refs/tags/4.1.1.zip"
+            ],
+            "size": "26123818"
+        },
+        {
+            "name": "Oʻzbekcha (RHVoice Dilnavoz Female)",
+            "model_id": "uz_rhvoice_dilnavoz",
+            "engine": "tts_rhvoice",
+            "lang_id": "uz",
+            "speaker": "dilnavoz",
+            "checksum": "8f6300b",
+            "checksum_quick": "9824e1ac",
+            "comp": "zip",
+            "urls": [
+                "https://github.com/RHVoice/dilnavoz-uzb/archive/refs/tags/4.0.zip"
+            ],
+            "size": "14753043"
+        },
+        {
             "name": "Македонски (RHVoice Kiko Female)",
             "model_id": "mk_rhvoice_kiko",
             "engine": "tts_rhvoice",
