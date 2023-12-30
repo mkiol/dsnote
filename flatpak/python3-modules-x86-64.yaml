@@ -208,7 +208,7 @@ modules:
       - /*.rst
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} "TTS[ja]==0.21.3" --no-build-isolation
+        --prefix=${FLATPAK_DEST} "TTS[ja]==0.22.0" --no-build-isolation
     build-options:
       strip: true
       env:
@@ -230,8 +230,8 @@ modules:
         url: https://files.pythonhosted.org/packages/dc/74/db1c83a11e68abca8dadce6719f02c05042a03cc9b9a95080c269705d78f/SudachiPy-0.6.7-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
         sha256: 3e3f54006158d3112d86502f1ff3ab81f1d80c75d00ffeb853522f919a853063
       - type: file
-        url: https://files.pythonhosted.org/packages/0b/ce/444b7a1bb7aa80b8b2976a3e67dc32b6fdb6a36fe08b6a3034382737bd35/TTS-0.21.3-cp310-cp310-manylinux1_x86_64.whl
-        sha256: 75e3d6afbb62ae6635379f111bfd965c1217002c1bc5249a57fcb6a91ecb8c1e
+        url: https://files.pythonhosted.org/packages/6e/36/dce195a2b9ff3a11863f53fc35109f8e1f2c7d40419f999f9d0a12cc23e5/TTS-0.22.0-cp310-cp310-manylinux1_x86_64.whl
+        sha256: 6dce2e3a9434bd4d3815b51f4080ccdddd82466cf40fc0e0a70eff14b7cc1d3f
       - type: file
         url: https://files.pythonhosted.org/packages/e4/63/7685ef40c65aba621ccd2524a24181bf11f0535ab1fdba47e40738eacff6/Unidecode-1.3.7-py3-none-any.whl
         sha256: 663a537f506834ed836af26a81b210d90cbde044c47bfbdc0fbbc9f94c86a6e4
