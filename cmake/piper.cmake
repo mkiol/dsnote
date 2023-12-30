@@ -97,5 +97,9 @@ ExternalProject_Add_StepDependencies(piper configure onnx)
 ExternalProject_Add_StepDependencies(piper configure piperphonemize)
 ExternalProject_Add_StepDependencies(piper configure spdlog)
 
-list(APPEND deps_libs "${external_lib_dir}/libpiper_api.a" "${external_lib_dir}/libspdlog.a" "${external_lib_dir}/libpiper_phonemize.a" onnxruntime)
-list(APPEND deps piper piperphonemize spdlog onnxruntime)
+list(APPEND deps_libs
+    "${external_lib_dir}/libpiper_api.a"
+    "${external_lib_dir}/libspdlog.a"
+    "${external_lib_dir}/libpiper_phonemize.a"
+    "${external_lib_dir}/libonnxruntime.so")
+list(APPEND deps piper piperphonemize spdlog onnx)
