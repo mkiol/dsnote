@@ -109,6 +109,9 @@ QDebug operator<<(QDebug d, dsnote_app::error_t type) {
         case dsnote_app::error_t::ErrorMntEngine:
             d << "mnt-engine-error";
             break;
+        case dsnote_app::error_t::ErrorMntRuntime:
+            d << "mnt-runtime-error";
+            break;
         case dsnote_app::error_t::ErrorNoService:
             d << "no-service-error";
             break;
