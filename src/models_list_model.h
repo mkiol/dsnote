@@ -99,7 +99,9 @@ class ModelsListModel : public SelectableItemModel {
         FeatureDefault = FeatureFastProcessing | FeatureMediumProcessing |
                          FeatureSlowProcessing | FeatureQualityHigh |
                          FeatureQualityMedium | FeatureQualityLow |
-                         FeatureAllSttEngines | FeatureAllTtsEngines
+                         FeatureAllSttEngines | FeatureAllTtsEngines,
+        FeatureAdditional = FeatureSttIntermediateResults |
+                            FeatureSttPunctuation | FeatureTtsVoiceCloning
 
     };
     Q_ENUM(ModelFeatureFilterFlags)

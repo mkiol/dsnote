@@ -330,6 +330,9 @@ void ModelsListModel::setRoleFilterFlags(unsigned int roleFilterFlags) {
             }
         }
 
+        setFeatureFilterFlags(m_featureFilterFlags &
+                              ~(ModelFeatureFilterFlags::FeatureAdditional));
+
         updateModel();
 
         emit roleFilterFlagsChanged();
