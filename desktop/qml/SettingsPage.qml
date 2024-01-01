@@ -277,12 +277,18 @@ DialogPage {
                 }
             }
 
-            Label {
-                wrapMode: Text.Wrap
-                Layout.fillWidth: true
-                visible: _settings.audio_inputs.length <= 1
+            InlineMessage {
                 color: "red"
-                text: qsTr("No audio source could be found.") + " " + qsTr("Make sure the microphone is properly connected.")
+                Layout.fillWidth: true
+                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                visible: _settings.audio_inputs.length <= 1
+
+                Label {
+                    color: "red"
+                    Layout.fillWidth: true
+                    wrapMode: Text.Wrap
+                    text: qsTr("No audio source could be found.") + " " + qsTr("Make sure the microphone is properly connected.")
+                }
             }
 
             GridLayout {
@@ -348,16 +354,21 @@ DialogPage {
                               qsTr("When this option is enabled model initialization takes much longer and memory usage is much higher.")
             }
 
-            Label {
-                wrapMode: Text.Wrap
-                Layout.leftMargin: verticalMode ? appWin.padding : appWin.padding
+            InlineMessage {
+                color: "red"
                 Layout.fillWidth: true
+                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                 visible: app.feature_punctuator &&
                          _settings.restore_punctuation &&
                          !app.ttt_configured
-                color: "red"
-                text: qsTr("To make %1 work, download %2 model.")
-                        .arg("<i>" + qsTr("Restore punctuation") + "</i>").arg("<i>" + qsTr("Punctuation") + "</i>")
+
+                Label {
+                    color: "red"
+                    Layout.fillWidth: true
+                    wrapMode: Text.Wrap
+                    text: qsTr("To make %1 work, download %2 model.")
+                            .arg("<i>" + qsTr("Restore punctuation") + "</i>").arg("<i>" + qsTr("Punctuation") + "</i>")
+                }
             }
 
             CheckBox {
@@ -375,16 +386,21 @@ DialogPage {
                               qsTr("Disable this option if you observe problems when using Speech to Text.")
             }
 
-            Label {
-                wrapMode: Text.Wrap
-                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+            InlineMessage {
+                color: "red"
                 Layout.fillWidth: true
+                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                 visible: _settings.gpu_supported() &&
                          app.feature_gpu_stt &&
                          _settings.stt_use_gpu &&
                          _settings.gpu_devices_stt.length <= 1
-                color: "red"
-                text: qsTr("A suitable graphics card could not be found.")
+
+                Label {
+                    color: "red"
+                    Layout.fillWidth: true
+                    wrapMode: Text.Wrap
+                    text: qsTr("A suitable graphics card could not be found.")
+                }
             }
 
             GridLayout {
@@ -436,15 +452,20 @@ DialogPage {
                 ToolTip.text: qsTr("This works only for Arabic and Hebrew languages.")
             }
 
-            Label {
-                wrapMode: Text.Wrap
-                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+            InlineMessage {
+                color: "red"
                 Layout.fillWidth: true
+                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                 visible: _settings.diacritizer_enabled &&
                          app.feature_coqui_tts &&
                          !app.feature_diacritizer_he
-                color: "red"
-                text: qsTr("Diacritics restoration for Hebrew language is not available.")
+
+                Label {
+                    color: "red"
+                    Layout.fillWidth: true
+                    wrapMode: Text.Wrap
+                    text: qsTr("Diacritics restoration for Hebrew language is not available.")
+                }
             }
 
             CheckBox {
@@ -462,16 +483,21 @@ DialogPage {
                               qsTr("Disable this option if you observe problems when using Text to Speech.")
             }
 
-            Label {
-                wrapMode: Text.Wrap
-                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+            InlineMessage {
+                color: "red"
                 Layout.fillWidth: true
+                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
                 visible: _settings.gpu_supported() &&
                          app.feature_gpu_tts &&
                          _settings.tts_use_gpu &&
                          _settings.gpu_devices_tts.length <= 1
-                color: "red"
-                text: qsTr("A suitable graphics card could not be found.")
+
+                Label {
+                    color: "red"
+                    Layout.fillWidth: true
+                    wrapMode: Text.Wrap
+                    text: qsTr("A suitable graphics card could not be found.")
+                }
             }
 
             GridLayout {
@@ -708,29 +734,35 @@ DialogPage {
                 ToolTip.text: qsTr("Action allow external application to invoke certain operation when %1 is running.").arg("<i>Speech Note</i>");
             }
 
-            Label {
-                visible: _settings.actions_api_enabled
+
+            InlineMessage {
+                color: palette.text
                 Layout.leftMargin: verticalMode ? 1 * appWin.padding : 2 * appWin.padding
                 Layout.fillWidth: true
-                wrapMode: Text.Wrap
-                text: "<p>" + qsTr("Action allows external application to invoke certain operation when %1 is running.").arg("<i>Speech Note</i>") + " " +
-                      qsTr("An action can be triggered via DBus call or with command-line option.") + " " +
-                      qsTr("The following actions are currently supported:") +
-                      "</p><ul>" +
-                      "<li><i>start-listening</i> - " + qsTr("Starts listening.") + "</li>" +
-                      "<li><i>start-listening-active-window</i> (X11) - " + qsTr("Starts listening. The decoded text is inserted into the active window.") + "</li>" +
-                      "<li><i>start-listening-clipboard</i> - " + qsTr("Starts listening. The decoded text is copied to the clipboard.") + "</li>" +
-                      "<li><i>stop-listening</i> - " + qsTr("Stops listening. The already captured voice is decoded into text.") + "</li>" +
-                      "<li><i>start-reading</i> - " + qsTr("Starts reading.") + "</li>" +
-                      "<li><i>start-reading-clipboard</i> - " + qsTr("Starts reading text from the clipboard.") + "</li>" +
-                      "<li><i>pause-resume-reading</i> - " + qsTr("Pauses or resumes reading.") + "</li>" +
-                      "<li><i>cancel</i> - " + qsTr("Cancels any of the above operations.") + "</li>" +
-                      "</ul>" +
-                      qsTr("For example, to trigger %1 action, execute the following command: %2.")
-                              .arg("<i>start-listening</i>")
-                              .arg(_settings.is_flatpak() ?
-                                "<i>flatpak run net.mkiol.SpeechNote --action start-listening</i>" :
-                                "<i>dsnote --action start-listening</i>")
+                visible: _settings.actions_api_enabled
+
+                Label {
+                    Layout.fillWidth: true
+                    wrapMode: Text.Wrap
+                    text: "<p>" + qsTr("Action allows external application to invoke certain operation when %1 is running.").arg("<i>Speech Note</i>") + " " +
+                          qsTr("An action can be triggered via DBus call or with command-line option.") + " " +
+                          qsTr("The following actions are currently supported:") +
+                          "</p><ul>" +
+                          "<li><i>start-listening</i> - " + qsTr("Starts listening.") + "</li>" +
+                          "<li><i>start-listening-active-window</i> (X11) - " + qsTr("Starts listening. The decoded text is inserted into the active window.") + "</li>" +
+                          "<li><i>start-listening-clipboard</i> - " + qsTr("Starts listening. The decoded text is copied to the clipboard.") + "</li>" +
+                          "<li><i>stop-listening</i> - " + qsTr("Stops listening. The already captured voice is decoded into text.") + "</li>" +
+                          "<li><i>start-reading</i> - " + qsTr("Starts reading.") + "</li>" +
+                          "<li><i>start-reading-clipboard</i> - " + qsTr("Starts reading text from the clipboard.") + "</li>" +
+                          "<li><i>pause-resume-reading</i> - " + qsTr("Pauses or resumes reading.") + "</li>" +
+                          "<li><i>cancel</i> - " + qsTr("Cancels any of the above operations.") + "</li>" +
+                          "</ul>" +
+                          qsTr("For example, to trigger %1 action, execute the following command: %2.")
+                                  .arg("<i>start-listening</i>")
+                                  .arg(_settings.is_flatpak() ?
+                                    "<i>flatpak run net.mkiol.SpeechNote --action start-listening</i>" :
+                                    "<i>dsnote --action start-listening</i>")
+                }
             }
         }
 
@@ -939,6 +971,29 @@ DialogPage {
 
             SectionLabel {
                 text: qsTr("Availability of optional features")
+            }
+
+            InlineMessage {
+                color: "red"
+                Layout.fillWidth: true
+                visible: _settings.is_flatpak() &&
+                         (_settings.addon_flags & Settings.AddonAmd) == 0 && (_settings.addon_flags & Settings.AddonNvidia) == 0
+
+                Label {
+                    color: "red"
+                    Layout.fillWidth: true
+                    wrapMode: Text.Wrap
+                    text: qsTr("The Flatpak add-on that provides GPU acceleration is not installed.")
+                }
+
+                Label {
+                    color: "red"
+                    Layout.fillWidth: true
+                    wrapMode: Text.Wrap
+                    text: qsTr("To enable GPU acceleration, install %1 add-on for AMD graphics card or %2 add-on for NVIDIA graphics card.")
+                        .arg("<i>net.mkiol.SpeechNote.Addon.amd</i>")
+                        .arg("<i>net.mkiol.SpeechNote.Addon.nvidia</i>")
+                }
             }
 
             ColumnLayout {

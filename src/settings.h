@@ -151,6 +151,8 @@ class settings : public QSettings, public singleton<settings> {
                    NOTIFY start_in_tray_changed)
     Q_PROPERTY(bool clean_ref_voice READ clean_ref_voice WRITE
                    set_clean_ref_voice NOTIFY clean_ref_voice_changed)
+    Q_PROPERTY(
+        unsigned int addon_flags READ addon_flags NOTIFY addon_flags_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -277,6 +279,13 @@ class settings : public QSettings, public singleton<settings> {
         TextFormatSubRip = 3
     };
     Q_ENUM(text_format_t)
+
+    enum addon_flags_t : unsigned int {
+        AddonNone = 0,
+        AddonNvidia = 1 << 0,
+        AddonAmd = 1 << 1
+    };
+    Q_ENUM(addon_flags_t)
 
     settings();
 
@@ -405,6 +414,7 @@ class settings : public QSettings, public singleton<settings> {
     void set_start_in_tray(bool value);
     bool clean_ref_voice() const;
     void set_clean_ref_voice(bool value);
+    unsigned int addon_flags() const;
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -548,6 +558,7 @@ class settings : public QSettings, public singleton<settings> {
     void start_in_tray_changed();
     void mnt_text_format_changed();
     void clean_ref_voice_changed();
+    void addon_flags_changed();
 
     // service
     void models_dir_changed();
@@ -584,11 +595,13 @@ class settings : public QSettings, public singleton<settings> {
     QStringList m_gpu_devices_tts;
     std::vector<QString> m_rocm_gpu_versions;
     QStringList m_audio_inputs;
+    unsigned int m_addon_flags = addon_flags_t::AddonNone;
 
     static QString settings_filepath();
     void update_audio_inputs();
     void set_restart_required(bool value);
     void enforce_num_threads() const;
+    void update_addon_flags();
 
     launch_mode_t m_launch_mode = launch_mode_t::app_stanalone;
 };

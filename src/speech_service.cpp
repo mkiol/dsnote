@@ -2364,7 +2364,6 @@ QVariantMap speech_service::features_availability() {
                 QVariantList{
                     whisper_engine::has_opencl(),
                     "whisper.cpp STT OpenCL " + tr("GPU acceleration")});
-
             models_manager::instance()->update_models_using_availability(
                 {/*tts_coqui=*/py_availability->coqui_tts,
                  /*tts_mimic3=*/py_availability->mimic3_tts,

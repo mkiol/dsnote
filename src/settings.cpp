@@ -125,6 +125,7 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     qDebug() << "settings file:" << fileName();
     qDebug() << "platform:" << QGuiApplication::platformName();
 
+    update_addon_flags();
     enforce_num_threads();
     update_audio_inputs();
 
@@ -1667,4 +1668,26 @@ bool settings::is_debug() const {
 #else
     return false;
 #endif
+}
+
+unsigned int settings::addon_flags() const { return m_addon_flags; }
+
+void settings::update_addon_flags() {
+    unsigned int new_flags = addon_flags_t::AddonNone;
+
+#ifdef USE_FLATPAK
+    if (QFileInfo::exists(QStringLiteral("/app/extensions/nvidia"))) {
+        new_flags |= addon_flags_t::AddonNvidia;
+        qDebug() << "nvidia addon exists";
+    }
+    if (QFileInfo::exists(QStringLiteral("/app/extensions/amd"))) {
+        new_flags |= addon_flags_t::AddonAmd;
+        qDebug() << "amd addon exists";
+    }
+#endif
+
+    if (new_flags != m_addon_flags) {
+        m_addon_flags = new_flags;
+        emit addon_flags_changed();
+    }
 }

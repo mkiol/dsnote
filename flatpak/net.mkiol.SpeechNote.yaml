@@ -71,6 +71,8 @@ add-extensions:
     no-autodownload: true
     autodelete: true
     subdirectories: true
+    version: stable
+    versions: stable;beta;test;master
 modules:
   - name: fmt
     buildsystem: cmake-ninja
