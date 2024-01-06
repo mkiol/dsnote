@@ -79,6 +79,7 @@ DialogPage {
         </ul>
         <p>" + qsTr("Translator") + ":</p>
         <ul>
+        <li>New model: Lithuanian to English</li>
         <li>Option to force text cleaning before translation.
             If the input text is incorrectly formatted, this option may improve the translation quality.
             To enable, use the switch to the right of <i>Translate</i> button.</li>

@@ -137,6 +137,7 @@
       </ul>
       <p>Translator:</p>
       <ul>
+      <li>New model: Lithuanian to English</li>
       <li>Option to force text cleaning before translation.
           If the input text is incorrectly formatted, this option may improve the translation quality.</li>
       <li>Text formatting support. The translation will preserve the formatting from the input text.

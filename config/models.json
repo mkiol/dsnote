@@ -26146,6 +26146,23 @@
             "size": "16368261"
         },
         {
+            "name": "iš lietuvių į anglų (Lithuanian to English)",
+            "model_id": "lt_bergamot_lten",
+            "engine": "mnt_bergamot",
+            "lang_id": "lt",
+            "trg_lang_id": "en",
+            "score": 0,
+            "checksum": "697cbfcd",
+            "checksum_quick": "70c0698d",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/b16359f7a4d154a539a8d4216bf9f5727a7af01b/models/dev/lten/model.lten.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/b16359f7a4d154a539a8d4216bf9f5727a7af01b/models/dev/lten/lex.50.50.lten.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/b16359f7a4d154a539a8d4216bf9f5727a7af01b/models/dev/lten/vocab.lten.spm.gz"
+            ],
+            "size": "15755883"
+        },
+        {
             "name": "Afrikaans (Mimic3 Google NWU Low)",
             "model_id": "af_mimic3_za_google_nwu_low",
             "engine": "tts_mimic3",
