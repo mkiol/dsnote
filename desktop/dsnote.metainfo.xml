@@ -87,7 +87,7 @@
       <mediatype>text/plain</mediatype>
   </provides>
   <releases>
-    <release version="4.4.0" date="2023-12-27">
+    <release version="4.4.0" date="2024-01-07">
       <description>
       <p>Flatpak:</p>
       <ul>
@@ -109,6 +109,7 @@
       <li>Filter options in the model browser.
           Models can be searched by various features such as: Processing speed, Quality, Additional capabilities.</li>
       <li>Setting option to minimize to the system tray</li>
+      <li>Setting option to enable/disable including of recognized or read text in desktop notifications</li>
       </ul>
       <p>Speech to Text:</p>
       <ul>

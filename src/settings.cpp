@@ -1431,6 +1431,18 @@ void settings::set_desktop_notification_policy(
     }
 }
 
+bool settings::desktop_notification_details() const {
+    return value(QStringLiteral("desktop_notification_details"), false)
+        .toBool();
+}
+
+void settings::set_desktop_notification_details(bool value) {
+    if (value != desktop_notification_details()) {
+        setValue(QStringLiteral("desktop_notification_details"), value);
+        emit desktop_notification_details_changed();
+    }
+}
+
 bool settings::gpu_scan_cuda() const {
     return value(QStringLiteral("gpu_scan_cuda"), true).toBool();
 }

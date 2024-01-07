@@ -114,6 +114,10 @@ class settings : public QSettings, public singleton<settings> {
         desktop_notification_policy_t desktop_notification_policy READ
             desktop_notification_policy WRITE set_desktop_notification_policy
                 NOTIFY desktop_notification_policy_changed)
+    Q_PROPERTY(
+        bool desktop_notification_details READ desktop_notification_details
+            WRITE set_desktop_notification_details NOTIFY
+                desktop_notification_details_changed)
     Q_PROPERTY(bool actions_api_enabled READ actions_api_enabled WRITE
                    set_actions_api_enabled NOTIFY actions_api_enabled_changed)
     Q_PROPERTY(bool diacritizer_enabled READ diacritizer_enabled WRITE
@@ -380,6 +384,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_hotkey_cancel(const QString &value);
     desktop_notification_policy_t desktop_notification_policy() const;
     void set_desktop_notification_policy(desktop_notification_policy_t value);
+    bool desktop_notification_details() const;
+    void set_desktop_notification_details(bool value);
     bool actions_api_enabled() const;
     void set_actions_api_enabled(bool value);
     bool diacritizer_enabled() const;
@@ -540,6 +546,7 @@ class settings : public QSettings, public singleton<settings> {
     void hotkeys_enabled_changed();
     void hotkeys_changed();
     void desktop_notification_policy_changed();
+    void desktop_notification_details_changed();
     void actions_api_enabled_changed();
     void diacritizer_enabled_changed();
     void gpu_scan_cuda_changed();

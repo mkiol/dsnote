@@ -42,6 +42,8 @@ DialogPage {
             To enable system tray icon, use <i>User Interface</i> &rarr; <i>Use system tray icon</i> option.
             To always start the application minimized to the system tray, use <i>User Interface</i> &rarr; <i>Start minimized to the system tray</i> option.
             To start the application minimized only once, use <i>--start-in-tray</i> command line option.</li>
+        <li>Setting option to enable/disable including of recognized or read text in desktop notifications
+            (<i>Include recognized or read text in notifications</i>)</li>
         </ul>
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>

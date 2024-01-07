@@ -192,6 +192,16 @@ DialogPage {
             }
 
             CheckBox {
+                Layout.leftMargin: 2 * appWin.padding
+                visible: _settings.desktop_notification_policy !== Settings.DesktopNotificationNever
+                checked: _settings.desktop_notification_details
+                text: qsTr("Include recognized or read text in notifications")
+                onCheckedChanged: {
+                    _settings.desktop_notification_details = checked
+                }
+            }
+
+            CheckBox {
                 checked: _settings.use_tray
                 text: qsTr("Use system tray icon")
                 onCheckedChanged: {

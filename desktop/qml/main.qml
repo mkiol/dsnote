@@ -153,7 +153,7 @@ ApplicationWindow {
             }
 
             var text_body = ""
-            if (app.intermediate_text.length !== 0)
+            if (_settings.desktop_notification_details && app.intermediate_text.length !== 0)
                 text_body = app.intermediate_text
 
             app.show_desktop_notification(text_summary, text_body, true)
