@@ -1,6 +1,6 @@
 diff -ruN whispercpp-org/cmake/DefaultTargetOptions.cmake whispercpp-patched/cmake/DefaultTargetOptions.cmake
---- whispercpp-org/cmake/DefaultTargetOptions.cmake	2023-12-14 16:56:39.000000000 +0100
-+++ whispercpp-patched/cmake/DefaultTargetOptions.cmake	2023-11-08 18:31:59.266704085 +0100
+--- whispercpp-org/cmake/DefaultTargetOptions.cmake	2024-01-05 16:11:27.000000000 +0100
++++ whispercpp-patched/cmake/DefaultTargetOptions.cmake	2024-01-06 15:32:40.421868638 +0100
 @@ -9,9 +9,13 @@
          cxx_std_11
      )
@@ -17,8 +17,8 @@ diff -ruN whispercpp-org/cmake/DefaultTargetOptions.cmake whispercpp-patched/cma
 +        INSTALL_RPATH ${CMAKE_INSTALL_RPATH}
  )
 diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
---- whispercpp-org/CMakeLists.txt	2023-12-14 16:56:39.000000000 +0100
-+++ whispercpp-patched/CMakeLists.txt	2023-12-16 16:29:19.864718632 +0100
+--- whispercpp-org/CMakeLists.txt	2024-01-05 16:11:27.000000000 +0100
++++ whispercpp-patched/CMakeLists.txt	2024-01-06 16:01:11.997877220 +0100
 @@ -170,39 +170,11 @@
  if (WHISPER_OPENBLAS)
      set(WHISPER_BLAS_VENDOR "OpenBLAS")
@@ -62,7 +62,7 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
  if (WHISPER_CUBLAS)
      cmake_minimum_required(VERSION 3.17)
  
-@@ -230,13 +202,12 @@
+@@ -236,13 +208,12 @@
  
  
  if (WHISPER_HIPBLAS)
@@ -82,7 +82,7 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
  
      find_package(hip)
      find_package(hipblas)
-@@ -245,9 +216,20 @@
+@@ -251,9 +222,20 @@
      if (${hipblas_FOUND} AND ${hip_FOUND})
          message(STATUS "HIP and hipBLAS found")
          add_compile_definitions(GGML_USE_HIPBLAS GGML_USE_CUBLAS)
@@ -104,7 +104,7 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
          target_link_libraries(ggml-rocm PRIVATE hip::device PUBLIC hip::host roc::rocblas roc::hipblas)
  
          if (WHISPER_STATIC)
-@@ -457,7 +439,11 @@
+@@ -463,7 +445,11 @@
  # whisper - this is the main library of the project
  #
  
@@ -117,22 +117,26 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
  
  add_library(${TARGET}
      ggml.h
-@@ -521,8 +507,12 @@
- 
+@@ -528,13 +514,13 @@
  if (GGML_SOURCES_CUDA)
      message(STATUS "GGML CUDA sources found, configuring CUDA architecture")
--    set_property(TARGET whisper PROPERTY CUDA_ARCHITECTURES OFF)
+     # Only configure gmml CUDA architectures is not globally set
+-    if (NOT DEFINED GGML_CUDA_ARCHITECTURES)
++    if (NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+         # Not overriden by user, so set defaults
+-        set(GGML_CUDA_ARCHITECTURES 52 61 70)
++        set(CMAKE_CUDA_ARCHITECTURES 52 61 70)
+     endif()
+-    message(STATUS "GGML Configuring CUDA architectures ${GGML_CUDA_ARCHITECTURES}")
+-    set_property(TARGET whisper PROPERTY CUDA_ARCHITECTURES ${GGML_CUDA_ARCHITECTURES})
 -    set_property(TARGET whisper PROPERTY CUDA_SELECT_NVCC_ARCH_FLAGS "Auto")
-+    if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-+        set(CMAKE_CUDA_ARCHITECTURES 75)
-+    endif()
-+    message(STATUS "CUDA architectures set to ${CMAKE_CUDA_ARCHITECTURES}")
++    message(STATUS "GGML Configuring CUDA architectures ${CMAKE_CUDA_ARCHITECTURES}")
 +    set_property(TARGET ${TARGET} PROPERTY CUDA_ARCHITECTURES ${CMAKE_CUDA_ARCHITECTURES})
 +    set_property(TARGET ${TARGET} PROPERTY CUDA_SELECT_NVCC_ARCH_FLAGS "Auto")
  endif()
  
  if (EMSCRIPTEN)
-@@ -539,7 +529,7 @@
+@@ -551,7 +537,7 @@
  
  install(TARGETS ${TARGET}
      LIBRARY  DESTINATION lib
@@ -142,80 +146,57 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
      RESOURCE DESTINATION bin
      PUBLIC_HEADER DESTINATION include
 diff -ruN whispercpp-org/ggml-quants.c whispercpp-patched/ggml-quants.c
---- whispercpp-org/ggml-quants.c	2023-12-14 16:56:39.000000000 +0100
-+++ whispercpp-patched/ggml-quants.c	2023-12-16 16:57:04.128060079 +0100
-@@ -349,6 +349,31 @@
-     return res;
- }
+--- whispercpp-org/ggml-quants.c	2024-01-05 16:11:27.000000000 +0100
++++ whispercpp-patched/ggml-quants.c	2024-01-07 15:43:52.296262202 +0100
+@@ -394,17 +394,43 @@
  
-+typedef struct ggml_int8x16x2_t {
-+    int8x16_t val[2];
-+} ggml_int8x16x2_t;
+ #else
+ 
+-#define ggml_int16x8x2_t  int16x8x2_t
++typedef struct ggml_uint8x16x4_t {
++    uint8x16_t val[4];
++} ggml_uint8x16x4_t;
 +
-+inline static ggml_int8x16x2_t ggml_vld1q_s8_x2(const int8_t * ptr) {
-+    ggml_int8x16x2_t res;
++inline static ggml_uint8x16x4_t ggml_vld1q_u8_x4(const uint8_t *ptr) {
++    ggml_uint8x16x4_t res;
 +
-+    res.val[0] = vld1q_s8(ptr + 0);
-+    res.val[1] = vld1q_s8(ptr + 16);
++    res.val[0] = vld1q_u8(ptr + 0);
++    res.val[1] = vld1q_u8(ptr + 16);
++    res.val[2] = vld1q_u8(ptr + 32);
++    res.val[3] = vld1q_u8(ptr + 48);
 +
 +    return res;
 +}
 +
-+#else
++typedef struct ggml_int8x16x4_t {
++    int8x16_t val[4];
++} ggml_int8x16x4_t;
 +
-+#define ggml_int16x8x2_t  int16x8x2_t
-+#define ggml_uint8x16x2_t uint8x16x2_t
-+#define ggml_int8x16x2_t  int8x16x2_t
++inline static ggml_int8x16x4_t ggml_vld1q_s8_x4(const int8_t *ptr) {
++    ggml_int8x16x4_t res;
 +
-+#define ggml_vld1q_s16_x2 vld1q_s16_x2
-+#define ggml_vld1q_u8_x2  vld1q_u8_x2
-+#define ggml_vld1q_s8_x2  vld1q_s8_x2
++    res.val[0] = vld1q_s8(ptr + 0);
++    res.val[1] = vld1q_s8(ptr + 16);
++    res.val[2] = vld1q_s8(ptr + 32);
++    res.val[3] = vld1q_s8(ptr + 48);
 +
-+#endif
++    return res;
++}
 +
- typedef struct ggml_uint8x16x4_t {
-     uint8x16_t val[4];
- } ggml_uint8x16x4_t;
-@@ -364,19 +389,6 @@
-     return res;
- }
- 
--typedef struct ggml_int8x16x2_t {
--    int8x16_t val[2];
--} ggml_int8x16x2_t;
--
--inline static ggml_int8x16x2_t ggml_vld1q_s8_x2(const int8_t * ptr) {
--    ggml_int8x16x2_t res;
--
--    res.val[0] = vld1q_s8(ptr + 0);
--    res.val[1] = vld1q_s8(ptr + 16);
--
--    return res;
--}
--
- typedef struct ggml_int8x16x4_t {
-     int8x16_t val[4];
- } ggml_int8x16x4_t;
-@@ -391,22 +403,6 @@
- 
-     return res;
- }
--
--#else
--
--#define ggml_int16x8x2_t  int16x8x2_t
--#define ggml_uint8x16x2_t uint8x16x2_t
++#define ggml_int16x8x2_t int16x8x2_t
+ #define ggml_uint8x16x2_t uint8x16x2_t
 -#define ggml_uint8x16x4_t uint8x16x4_t
 -#define ggml_int8x16x2_t  int8x16x2_t
 -#define ggml_int8x16x4_t  int8x16x4_t
--
--#define ggml_vld1q_s16_x2 vld1q_s16_x2
++#define ggml_int8x16x2_t int8x16x2_t
+ 
+ #define ggml_vld1q_s16_x2 vld1q_s16_x2
 -#define ggml_vld1q_u8_x2  vld1q_u8_x2
 -#define ggml_vld1q_u8_x4  vld1q_u8_x4
 -#define ggml_vld1q_s8_x2  vld1q_s8_x2
 -#define ggml_vld1q_s8_x4  vld1q_s8_x4
--
--#endif
++#define ggml_vld1q_u8_x2 vld1q_u8_x2
++#define ggml_vld1q_s8_x2 vld1q_s8_x2
+ 
  #endif
  
- #if defined(__ARM_NEON) || defined(__wasm_simd128__)

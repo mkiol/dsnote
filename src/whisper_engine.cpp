@@ -347,8 +347,8 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
     return samples_process_result_t::wait_for_samples;
 }
 
-static bool encoder_begin_callback([[maybe_unused]] whisper_context* ctx,
-                                   [[maybe_unused]] whisper_state* state,
+static bool encoder_begin_callback([[maybe_unused]] void* ctx,
+                                   [[maybe_unused]] void* state,
                                    void* user_data) {
     bool is_aborted = *static_cast<bool*>(user_data);
     return !is_aborted;
