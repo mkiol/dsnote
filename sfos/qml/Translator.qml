@@ -193,10 +193,11 @@ Item {
                     onClearClicked: root.translatedNoteTextArea.textArea.text = ""
                     onCopyClicked: app.copy_translation_to_clipboard()
 
-                    BusyIndicator {
+                    BusyIndicatorWithProgress {
                         anchors.centerIn: parent
                         size: BusyIndicatorSize.Large
                         running: app.state === DsnoteApp.StateTranslating
+                        progress: app.translate_progress > 0.0 ? app.translate_progress : -1.0
                     }
                 }
 

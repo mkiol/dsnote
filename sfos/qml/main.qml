@@ -267,11 +267,17 @@ ApplicationWindow {
                     case DsnoteApp.ErrorMntEngine:
                         toast.show(qsTr("Error: Translation engine initialization has failed."))
                         break;
+                    case DsnoteApp.ErrorMntRuntime:
+                        toast.show(qsTr("Error: Not all text has been translated."))
+                        break;
                     case DsnoteApp.ErrorSaveNoteToFile:
                         toast.show(qsTr("Error: Couldn't save to the file."))
                         break;
                     case DsnoteApp.ErrorLoadNoteFromFile:
                         toast.show(qsTr("Error: Couldn't open the file."))
+                        break;
+                    case DsnoteApp.ErrorContentDownload:
+                        toast.show(qsTr("Error: Couldn't download a licence."))
                         break;
                     default:
                         toast.show(qsTr("Error: An unknown problem has occurred."))

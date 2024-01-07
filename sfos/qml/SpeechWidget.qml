@@ -44,6 +44,9 @@ SpeechPanel {
         if (!app.stt_configured && !app.tts_configured) return qsTr("No language has been set.")
         if (app.task_state === DsnoteApp.TaskStateInitializing) return qsTr("Getting ready, please wait...")
         if (app.state === DsnoteApp.StateWritingSpeechToFile) return qsTr("Writing speech to file...")
+        if (app.state === DsnoteApp.StateTranslating)
+            return qsTr("Translating...") +
+                    (app.translate_progress > 0.0 ? " " + Math.round(app.translate_progress * 100) + "%" : "")
         if (app.task_state === DsnoteApp.TaskStateProcessing) return qsTr("Processing, please wait...")
         if (app.state === DsnoteApp.StateTranscribingFile) return qsTr("Transcribing audio file...")
         if (app.state === DsnoteApp.StateListeningSingleSentence ||
@@ -51,7 +54,6 @@ SpeechPanel {
                 app.state === DsnoteApp.StateListeningAuto) return qsTr("Say something...")
         if (app.task_state === DsnoteApp.TaskStateSpeechPaused) return qsTr("Reading is paused.")
         if (app.state === DsnoteApp.StatePlayingSpeech) return qsTr("Reading a note...")
-        if (app.state === DsnoteApp.StateTranslating) return qsTr("Translating...")
         return ""
     }
 
