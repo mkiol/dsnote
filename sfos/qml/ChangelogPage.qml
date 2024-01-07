@@ -29,6 +29,40 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Version %1").arg("4.4")
+            }
+
+            LogItem {
+                title: "Distinction between 'Download' and 'Enable' in the model browser"
+                description: "Some models share files with each other. When 'Enable' is shown instead of 'Download', the files are already downloaded."
+            }
+
+            LogItem {
+                title: "Speech To Text for Marathi language"
+                description: "New language is enabled with Whisper models."
+            }
+
+            LogItem {
+                title: "Speex audio codec"
+                description: "Support for Speex audio codec in 'Transcribe a file'"
+            }
+
+            LogItem {
+                title: "New voices for Serbian and Uzbek languages"
+                description: "New voices are enabled with RHVoice models"
+            }
+
+            LogItem {
+                title: "Translator: Lithuanian to English"
+                description: "New model for Lithuanian to English translations"
+            }
+
+            LogItem {
+                title: "Translator progress indicator"
+                description: "The progress indicator displays the percentage of translation completion."
+            }
+
+            SectionHeader {
                 text: qsTr("Version %1").arg("4.3")
             }
 
