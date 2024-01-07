@@ -8,18 +8,15 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
+import harbour.dsnote.Dsnote 1.0
+
 SimpleListItem {
     id: root
 
-    property string name
-    property string modelId
-    property int score: 2
-    property bool defaultModelForLangAllowed: false
-    property bool defaultModelForLang: false
-    property bool available: true
-    property bool downloading: false
+    property var mobj: null
     property double progress: 0.0
-
+    readonly property bool defaultModelForLangAllowed: mobj.role === ModelsListModel.Stt ||
+                                                       mobj.role === ModelsListModel.Tts
     readonly property color itemColor: highlighted ? Theme.highlightColor : Theme.primaryColor
     readonly property color secondaryItemColor: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
 
@@ -30,7 +27,7 @@ SimpleListItem {
     title.horizontalAlignment: Text.AlignLeft
 
     title.text: {
-        if (available && defaultModelForLang) return "⭐ " + name
+        if (mobj.available && mobj.default_for_lang) return "⭐ " + mobj.name
         return name
     }
 
@@ -38,29 +35,40 @@ SimpleListItem {
         id: menuComp
         ContextMenu {
             MenuItem {
-                visible: root.available && root.defaultModelForLangAllowed && !root.defaultModelForLang
+                visible: root.mobj.available && root.defaultModelForLangAllowed && !root.mobj.default_for_lang
                 text: qsTr("Set as default for this language")
                 onClicked: {
-                    if (root.default_model_for_lang) return
-                    service.set_default_model_for_lang(modelId)
+                    if (root.mobj.default_for_lang) return
+                    service.set_default_model_for_lang(mobj.id)
                 }
             }
+
             MenuItem {
-                text: root.downloading ? qsTr("Cancel") : root.available ? qsTr("Delete") : qsTr("Download")
-                onClicked: {
-                    if (root.downloading) service.cancel_model_download(root.modelId)
-                    else if (root.available) service.delete_model(root.modelId)
-                    else service.download_model(root.modelId)
-                }
+                enabled: !root.mobj.dl_off
+                visible: !root.mobj.downloading && !root.mobj.available
+                text: root.mobj.dl_multi ? qsTr("Enable") : qsTr("Download")
+                onClicked: service.download_model(root.mobj.id)
+            }
+
+            MenuItem {
+                visible: !root.mobj.downloading && root.mobj.available
+                text: root.mobj.dl_multi ? qsTr("Disable") : qsTr("Delete")
+                onClicked: service.delete_model(root.mobj.id)
+            }
+
+            MenuItem {
+                visible: root.mobj.downloading
+                text: qsTr("Cancel")
+                onClicked: service.cancel_model_download(root.mobj.id)
             }
         }
     }
 
-    onProgressChanged: progressLabel.text = formatProgress(progress)
+    onProgressChanged: progressLabel.text = formatProgress(root.progress)
     Connections {
         target: service
         onModel_download_progress_changed: {
-            if (root.modelId === id) {
+            if (root.mobj.id === id) {
                 progressLabel.text = formatProgress(progress)
             }
         }
@@ -68,17 +76,17 @@ SimpleListItem {
     Component.onCompleted: {
         if (downloading) {
             progressLabel.text = formatProgress(
-                        service.model_download_progress(root.modelId))
+                        service.model_download_progress(root.mobj.id))
         }
     }
 
     menu: menuComp
 
-    textRightMargin: root.available || root.downloading ?
+    textRightMargin: root.mobj.available || root.mobj.downloading ?
                          Theme.horizontalPageMargin + Theme.iconSizeMedium : Theme.horizontalPageMargin
 
     Image {
-        visible: root.available
+        visible: root.mobj.available
         source: "image://theme/icon-m-certificates?" + root.itemColor
         anchors.right: parent.right
         anchors.rightMargin: Theme.horizontalPageMargin
@@ -88,7 +96,7 @@ SimpleListItem {
     }
 
     BusyIndicator {
-        visible: root.downloading
+        visible: root.mobj.downloading
         anchors.right: parent.right
         anchors.rightMargin: Theme.horizontalPageMargin
         anchors.verticalCenter: parent.verticalCenter

@@ -63,16 +63,16 @@ Page {
                 label: qsTr("Model type")
                 currentIndex: {
                     if (root.langsView) return
-                    switch (service.models_model.roleFilter) {
-                    case ModelsListModel.AllModels:
+                    switch (service.models_model.roleFilterFlags) {
+                    case ModelsListModel.RoleAll:
                         return 0
-                    case ModelsListModel.SttModels:
+                    case ModelsListModel.RoleStt:
                         return 1
-                    case ModelsListModel.TtsModels:
+                    case ModelsListModel.RoleTts:
                         return 2
-                    case ModelsListModel.MntModels:
+                    case ModelsListModel.RoleMnt:
                         return 3
-                    case ModelsListModel.OtherModels:
+                    case ModelsListModel.RoleOther:
                         return 4
                     }
                     return 0
@@ -80,11 +80,11 @@ Page {
                 onCurrentIndexChanged: {
                     if (root.langsView) return
                     var index = searchPageHeader.combo.currentIndex
-                    if (index === 1) service.models_model.roleFilter = ModelsListModel.SttModels
-                    else if (index === 2) service.models_model.roleFilter = ModelsListModel.TtsModels
-                    else if (index === 3) service.models_model.roleFilter = ModelsListModel.MntModels
-                    else if (index === 4) service.models_model.roleFilter = ModelsListModel.OtherModels
-                    else service.models_model.roleFilter = ModelsListModel.AllModels
+                    if (index === 1) service.models_model.roleFilterFlags = ModelsListModel.RoleStt
+                    else if (index === 2) service.models_model.roleFilterFlags = ModelsListModel.RoleTts
+                    else if (index === 3) service.models_model.roleFilterFlags = ModelsListModel.RoleMnt
+                    else if (index === 4) service.models_model.roleFilterFlags = ModelsListModel.RoleOther
+                    else service.models_model.roleFilterFlags = ModelsListModel.RoleAll
                 }
             }
         }
@@ -108,14 +108,8 @@ Page {
         Component {
             id: modelItemDelegate
             ModelItem {
-                name: model.name
-                modelId: model.id
-                available: model.available
-                downloading: model.downloading
+                mobj: model
                 progress: model.progress
-                score: model.score
-                defaultModelForLangAllowed: model.role === ModelsListModel.Stt || model.role === ModelsListModel.Tts
-                defaultModelForLang: model.default_for_lang
             }
         }
 
