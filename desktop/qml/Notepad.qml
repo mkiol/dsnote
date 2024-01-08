@@ -35,19 +35,20 @@ ColumnLayout {
     }
 
     function update() {
+        if (noteTextArea.textArea.text !== app.note) {
+            noteTextArea.textArea.text = app.note
+            noteTextArea.scrollToBottom()
+        }
+
         if (!root.enabled || app.busy || service.busy) return;
 
         if (app.stt_configured) {
             listenReadCombos.first.combo.currentIndex = app.active_stt_model_idx
             listenReadCombos.first.check.checked = _settings.whisper_translate
         }
+
         if (app.tts_configured) {
             listenReadCombos.second.combo.currentIndex = app.active_tts_model_idx
-        }
-
-        if (noteTextArea.textArea.text !== app.note) {
-            noteTextArea.textArea.text = app.note
-            noteTextArea.scrollToBottom()
         }
     }
 
@@ -87,7 +88,7 @@ ColumnLayout {
         id: listenReadCombos
 
         Layout.fillWidth: true
-        verticalMode: width < appWin.verticalWidthThreshold
+        verticalMode: width < (appWin.verticalWidthThreshold * (app.tts_ref_voice_needed ? 1.4 : 1.0))
         first {
             icon.name: "audio-input-microphone-symbolic"
             enabled: app.stt_configured && (app.state === DsnoteApp.StateIdle ||
@@ -140,6 +141,7 @@ ColumnLayout {
             comboPlaceholderText: qsTr("No Text to Speech model")
             combo2PlaceholderText: qsTr("No voice sample")
             comboRedBorder: app.tts_ref_voice_needed && app.available_tts_ref_voices.length === 0
+            showSeparator: !listenReadCombos.verticalMode
             combo {
                 enabled: listenReadCombos.second.enabled &&
                          !listenReadCombos.second.off &&

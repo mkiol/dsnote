@@ -91,8 +91,8 @@ RowLayout {
                 Layout.preferredHeight: Math.max(_combo.height,
                                                  speechText.implicitHeight + topPadding + bottomPadding)
                 background: Rectangle {
-                    color: palette.button
-                    border.color: palette.buttonText
+                    color: frame.palette.button
+                    border.color: frame.palette.buttonText
                     opacity: 0.3
                     radius: 3
                 }

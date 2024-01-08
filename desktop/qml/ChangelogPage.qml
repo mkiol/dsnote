@@ -43,7 +43,7 @@ DialogPage {
             To always start the application minimized to the system tray, use <i>User Interface</i> &rarr; <i>Start minimized to the system tray</i> option.
             To start the application minimized only once, use <i>--start-in-tray</i> command line option.</li>
         <li>Setting option to enable/disable including of recognized or read text in desktop notifications
-            (<i>Include recognized or read text in notifications</i>)</li>
+            (<i>User Interface</i> &rarr; <i>Include recognized or read text in notifications</i>)</li>
         </ul>
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
@@ -59,7 +59,7 @@ DialogPage {
             If you are using Flatpak package, install <i>net.mkiol.SpeechNote.amd</i> add-on
             to enable full support for AMD ROCm acceleration.
             GPU acceleration for AMD graphics cards works only with <i>Whisper</i> models (whisper.cpp engine).
-            In particular, it does not work with <i>Faster Whisper</i> models.</li>
+            It does not work with <i>Faster Whisper</i> models.</li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
@@ -100,6 +100,7 @@ DialogPage {
         <li>Setting option to set Python libraries directory
             (<i>Other</i> &rarr; <i>Location of Python libraries</i>).
             This option may be useful if you use <i>venv</i> module to manage Python libraries.</li>
+            Using this option only makes sense for non Flatpak installations.
         </ul>"
     }
 

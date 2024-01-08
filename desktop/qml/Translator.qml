@@ -43,6 +43,16 @@ ColumnLayout {
     }
 
     function update() {
+        if (noteTextArea.textArea.text !== app.note) {
+            noteTextArea.textArea.text = app.note
+            noteTextArea.scrollToBottom()
+        }
+
+        if (translatedNoteTextArea.textArea.text !== app.translated_text) {
+            translatedNoteTextArea.textArea.text = app.translated_text
+            translatedNoteTextArea.scrollToBottom()
+        }
+
         if (!root.enabled || app.busy || service.busy) return;
 
         if (app.mnt_configured) {
@@ -53,15 +63,6 @@ ColumnLayout {
             mntInCombo.second.combo.currentIndex = app.active_tts_model_for_in_mnt_idx
             mntOutCombo.second.combo.currentIndex = app.active_tts_model_for_out_mnt_idx
         }
-
-        if (noteTextArea.textArea.text !== app.note) {
-            noteTextArea.textArea.text = app.note
-            noteTextArea.scrollToBottom()
-        }
-        if (translatedNoteTextArea.textArea.text !== app.translated_text) {
-            translatedNoteTextArea.textArea.text = app.translated_text
-            translatedNoteTextArea.scrollToBottom()
-        }
     }
 
     visible: opacity > 0.0
@@ -71,7 +72,8 @@ ColumnLayout {
     GridLayout {
         id: grid
 
-        property bool verticalMode: width < appWin.verticalWidthThreshold
+        property bool verticalMode: width < (appWin.verticalWidthThreshold *
+                            (app.tts_for_in_mnt_ref_voice_needed || app.tts_for_out_mnt_ref_voice_needed ? 1.4 : 1.0))
 
         columns: verticalMode ? 1 : 2
         Layout.fillHeight: true
@@ -148,6 +150,7 @@ ColumnLayout {
                     combo2ToolTip: qsTr("Voice sample")
                     comboFillWidth: true
                     comboRedBorder: !mntInCombo.second.off && app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voices.length === 0
+                    showSeparator: !mntInCombo.verticalMode
                     combo {
                         model: app.available_tts_models_for_in_mnt
                         enabled: mntInCombo.second.enabled &&
@@ -258,6 +261,7 @@ ColumnLayout {
                     combo2ToolTip: qsTr("Voice sample")
                     comboFillWidth: true
                     comboRedBorder: !mntOutCombo.second.off && app.available_tts_models_for_out_mnt && app.available_tts_ref_voices.length === 0
+                    showSeparator: !mntOutCombo.verticalMode
                     combo {
                         enabled: mntOutCombo.second.enabled &&
                                  !mntOutCombo.second.off &&
@@ -313,6 +317,17 @@ ColumnLayout {
                 }
             }
 
+            Switch {
+                enabled: app.state === DsnoteApp.StateIdle
+                text: qsTr("Translate as you type")
+                checked: _settings.translate_when_typing
+                onClicked: {
+                    _settings.translate_when_typing = !_settings.translate_when_typing
+                }
+            }
+
+            ToolSeparator {}
+
             ComboBox {
                 currentIndex: {
                     if (_settings.mnt_text_format === Settings.TextFormatRaw) return 0
@@ -346,7 +361,7 @@ ColumnLayout {
             Switch {
                 enabled: app.state === DsnoteApp.StateIdle &&
                          _settings.mnt_text_format !== Settings.TextFormatSubRip
-                text: qsTr("Clean text")
+                text: qsTr("Clean up the text")
                 checked: _settings.mnt_clean_text
                 onClicked: {
                     _settings.mnt_clean_text = !_settings.mnt_clean_text
@@ -356,15 +371,6 @@ ColumnLayout {
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Remove duplicate whitespaces and extra line breaks in the text before translation.") + " " +
                               qsTr("If the input text is incorrectly formatted, this option may improve the translation quality.")
-            }
-
-            Switch {
-                enabled: app.state === DsnoteApp.StateIdle
-                text: qsTr("Translate as you type")
-                checked: _settings.translate_when_typing
-                onClicked: {
-                    _settings.translate_when_typing = !_settings.translate_when_typing
-                }
             }
         }
     }

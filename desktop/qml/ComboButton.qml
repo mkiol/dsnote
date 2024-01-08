@@ -34,6 +34,7 @@ RowLayout {
     property alias comboRedBorder: _comboRedBorder.visible
     property alias combo2RedBorder: _combo2RedBorder.visible
     property alias combo3RedBorder: _combo3RedBorder.visible
+    property alias showSeparator: _separator.visible
 
     Layout.fillWidth: verticalMode ? true : comboFillWidth
 
@@ -53,11 +54,19 @@ RowLayout {
 
             anchors.fill: parent
 
+            ToolSeparator {
+                id: _separator
+
+                orientation: Qt.Vertical
+                visible: false
+                enabled: true
+            }
+
             ToolButton {
                 id: _icon
+
                 hoverEnabled: false
                 down: false
-
                 Layout.alignment: Qt.AlignVCenter
                 visible: icon.name.length !== 0
                 enabled: !root.off
