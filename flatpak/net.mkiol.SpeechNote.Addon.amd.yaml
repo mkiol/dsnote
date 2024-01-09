@@ -3,8 +3,6 @@ runtime: net.mkiol.SpeechNote
 sdk: org.kde.Sdk//5.15-22.08
 build-extension: true
 appstream-compose: false
-only-arches:
-  - x86_64
 build-options:
   no-debuginfo: true
   prefix: /app/extensions/amd
@@ -13,6 +11,8 @@ cleanup:
   - "*.a"
 modules:
   - name: rocm
+    only-arches:
+      - x86_64
     buildsystem: simple
     build-commands:
       - mkdir rocm_src
@@ -230,6 +230,8 @@ modules:
         sha256: 9f094a2eebbfc849b7ce628ba2e08aa063aa7cb19526dd1754676c894ee2c824
 
   - name: whispercpp-hipblas
+    only-arches:
+      - x86_64
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
@@ -254,6 +256,8 @@ modules:
         path: ../patches/whispercpp.patch
 
   - name: oneapi
+    only-arches:
+      - x86_64
     buildsystem: simple
     cleanup:
       - /oneapi
@@ -265,6 +269,8 @@ modules:
         sha256: f6613cb9c79fbf61c2e541144b8d5c70be845e071f29feb5686b64481528276d
 
   - name: onednn
+    only-arches:
+      - x86_64
     buildsystem: cmake-ninja
     cleanup:
       - /bin
@@ -284,6 +290,8 @@ modules:
         sha256: e0b7a9452162e854cf08b4e90bcd1b382b9903ace6a61503a872573880d24c3f
 
   - name: python3-pybind11
+    only-arches:
+      - x86_64
     buildsystem: simple
     cleanup:
       - /bin
@@ -297,6 +305,8 @@ modules:
         sha256: 33cdd02a6453380dd71cc70357ce388ad1ee8d32bd0e38fc22b273d050aa29b3
 
   - name: ctranslate2
+    only-arches:
+      - x86_64
     buildsystem: cmake-ninja
     build-options:
       env:
@@ -330,6 +340,8 @@ modules:
         path: ../patches/ctranslate2.patch
 
   - name: python3-torch-rocm
+    only-arches:
+      - x86_64
     buildsystem: simple
     cleanup:
       - /bin/convert*

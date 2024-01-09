@@ -3,8 +3,6 @@ runtime: net.mkiol.SpeechNote
 sdk: org.kde.Sdk//5.15-22.08
 build-extension: true
 appstream-compose: false
-only-arches:
-  - x86_64
 build-options:
   no-debuginfo: true
   prefix: /app/extensions/nvidia
@@ -13,6 +11,8 @@ cleanup:
   - /lib/*.a
 modules:
   - name: cuda
+    only-arches:
+      - x86_64
     buildsystem: simple
     build-commands:
       - sh cuda_12.2.2_535.104.05_linux.run --target ./ --noexec
@@ -71,6 +71,8 @@ modules:
         sha256: 2b39aae3e7618d9f59a3c8fa1f1bc61f29c0b0e0df75fb05076badb352952ef2
 
   - name: whispercpp-cublas
+    only-arches:
+      - x86_64
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
@@ -95,6 +97,8 @@ modules:
         path: ../patches/whispercpp.patch
   
   - name: cudnn
+    only-arches:
+      - x86_64
     buildsystem: simple
     build-options:
       strip: true
@@ -124,6 +128,8 @@ modules:
         sha256: ccafd7d15c2bf26187d52d79d9ccf95104f4199980f5075a7c1ee3347948ce32
         
   - name: nccl
+    only-arches:
+      - x86_64
     buildsystem: simple
     build-commands:
       - ar x libnccl2_2.18.5-1-1_amd64.deb && rm control.tar.* && rm debian-binary && rm *.deb
@@ -147,6 +153,8 @@ modules:
         sha256: e577f0edf02d8c3983c718c30453e990250a25627400ac90173e9c8df1afdddd
 
   - name: oneapi
+    only-arches:
+      - x86_64
     buildsystem: simple
     cleanup:
       - /oneapi
@@ -158,6 +166,8 @@ modules:
         sha256: f6613cb9c79fbf61c2e541144b8d5c70be845e071f29feb5686b64481528276d
 
   - name: onednn
+    only-arches:
+      - x86_64
     buildsystem: cmake-ninja
     cleanup:
       - /bin
@@ -177,6 +187,8 @@ modules:
         sha256: e0b7a9452162e854cf08b4e90bcd1b382b9903ace6a61503a872573880d24c3f
 
   - name: python3-pybind11
+    only-arches:
+      - x86_64
     buildsystem: simple
     cleanup:
       - /bin
@@ -190,6 +202,8 @@ modules:
         sha256: 33cdd02a6453380dd71cc70357ce388ad1ee8d32bd0e38fc22b273d050aa29b3
 
   - name: ctranslate2
+    only-arches:
+      - x86_64
     buildsystem: cmake-ninja
     build-options:
       env:
@@ -227,6 +241,8 @@ modules:
         path: ../patches/ctranslate2.patch
 
   - name: python3-torch-cuda
+    only-arches:
+      - x86_64
     buildsystem: simple
     cleanup:
       - /bin/convert*
