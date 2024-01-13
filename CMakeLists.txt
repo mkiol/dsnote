@@ -269,8 +269,8 @@ set(dsnote_lib_sources
     ${sources_dir}/espeak_engine.cpp
     ${sources_dir}/rhvoice_engine.hpp
     ${sources_dir}/rhvoice_engine.cpp
-    ${sources_dir}/simdjson.h
     ${sources_dir}/nlohmann/json.hpp
+    ${sources_dir}/simdjson.h
     ${sources_dir}/simdjson.cpp
     ${sources_dir}/py_executor.hpp
     ${sources_dir}/py_executor.cpp
