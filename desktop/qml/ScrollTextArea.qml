@@ -125,7 +125,7 @@ Item {
             id: clearButton
 
             Layout.alignment: Qt.AlignRight
-            icon.name: "edit-clear-all-symbolic"
+            icon.name: "edit-delete-symbolic"
             onClicked: root.clearClicked()
             visible: root.canClear && !root.textArea.readOnly && root.textArea.text.length !== 0
 
