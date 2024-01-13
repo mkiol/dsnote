@@ -590,6 +590,30 @@
         </method>
 
         <!--
+            SttStartListen2:
+            @mode: 0 - Automatic, 1 - Manual, 2 - One Sentence
+            @lang: language code (ISO 639-1) or model id
+            @out_lang: Language code (ISO 639-1) language the decoded text
+                       will be translated into. When empty text won't be translated.
+            @options: A dict of options (option-name => option-value).
+            @task: returned id of task which will be included in
+                   SttIntermediateTextDecoded and SttTextDecoded signals,
+                   @task less than 0 idicates an error
+
+            When @mode is Automatic, SttTextDecoded signal is emitted everytime
+            when silent is detected in the speech. When @mode is Manual or
+            One Sentence, exacly one SttTextDecoded signal is emitted.
+        -->
+        <method name="SttStartListen2">
+            <annotation name="org.qtproject.QtDBus.QtTypeName.In3" value="QVariantMap"/>
+            <arg name="mode" type="i" direction="in" />
+            <arg name="lang" type="s" direction="in" />
+            <arg name="out_lang" type="s" direction="in" />
+            <arg name="options" type="a{sv}" direction="in" />
+            <arg name="task" type="i" direction="out" />
+        </method>
+
+        <!--
             SttStopListen:
             @task: id of task returned in SttStartListen call
             @result: 0 - success, any other value - error
@@ -608,6 +632,7 @@
             @lang: language code (ISO 639-1) or model id
             @out_lang: Language code (ISO 639-1) language the decoded text
                        will be translated into. When empty text won't be translated.
+            @options: A dict of options (option-name => option-value).
             @task: returned id of task which will be included in
                    SttIntermediateTextDecoded and SttTextDecoded signals,
                    @task less than 0 idicates an error
@@ -619,9 +644,11 @@
             SttFileTranscribeProgress signal is emitted.
         -->
         <method name="SttTranscribeFile">
+            <annotation name="org.qtproject.QtDBus.QtTypeName.In3" value="QVariantMap"/>
             <arg name="file" type="s" direction="in" />
             <arg name="lang" type="s" direction="in" />
             <arg name="out_lang" type="s" direction="in" />
+            <arg name="options" type="a{sv}" direction="in" />
             <arg name="task" type="i" direction="out" />
         </method>
 

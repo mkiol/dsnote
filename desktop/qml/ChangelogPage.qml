@@ -60,6 +60,9 @@ DialogPage {
             to enable full support for AMD ROCm acceleration.
             GPU acceleration for AMD graphics cards works only with <i>Whisper</i> models (whisper.cpp engine).
             It does not work with <i>Faster Whisper</i> models.</li>
+        <li>Subtitles generation. To generate timestamped text in SRT format,
+            change the text format using the drop-down menu at the bottom of the text area.
+            Check the settings to find the subtitle options.</li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
@@ -87,7 +90,7 @@ DialogPage {
             To enable, use the switch to the right of <i>Translate</i> button.</li>
         <li>Text formatting support. The translation will preserve the formatting from the input text.
             Supported formats are: HTML, Markdown and SRT Subtitles.
-            To enable, use the drop-down menu to the right of the <i>Translate</i> button.</li>
+            To enable, use the drop-down menu at the bottom of the text area.</li>
         <li>Translation progress indicator</li>
         </ul>
         <p>" + qsTr("Other") + ":</p>

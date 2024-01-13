@@ -210,14 +210,24 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"in\" type=\"s\" name=\"out_lang\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </method>\n"
+"    <method name=\"SttStartListen2\">\n"
+"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.In3\"/>\n"
+"      <arg direction=\"in\" type=\"i\" name=\"mode\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"lang\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"out_lang\"/>\n"
+"      <arg direction=\"in\" type=\"a{sv}\" name=\"options\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
+"    </method>\n"
 "    <method name=\"SttStopListen\">\n"
 "      <arg direction=\"in\" type=\"i\" name=\"task\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
 "    </method>\n"
 "    <method name=\"SttTranscribeFile\">\n"
+"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.In3\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"file\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"lang\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"out_lang\"/>\n"
+"      <arg direction=\"in\" type=\"a{sv}\" name=\"options\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </method>\n"
 "    <method name=\"TtsPlaySpeech\">\n"
@@ -374,8 +384,9 @@ public Q_SLOTS: // METHODS
     int Reload();
     double SttGetFileTranscribeProgress(int task);
     int SttStartListen(int mode, const QString &lang, const QString &out_lang);
+    int SttStartListen2(int mode, const QString &lang, const QString &out_lang, const QVariantMap &options);
     int SttStopListen(int task);
-    int SttTranscribeFile(const QString &file, const QString &lang, const QString &out_lang);
+    int SttTranscribeFile(const QString &file, const QString &lang, const QString &out_lang, const QVariantMap &options);
     double TtsGetSpeechToFileProgress(int task);
     int TtsPauseSpeech(int task);
     int TtsPlaySpeech(const QString &text, const QString &lang);

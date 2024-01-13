@@ -28,6 +28,17 @@
 #include "py_executor.hpp"
 
 namespace text_tools {
+std::ostream& operator<<(std::ostream& os,
+                         const text_tools::segment_t& segment) {
+    os << "n=" << segment.n << ", t0=" << segment.t0 << ", t1=" << segment.t1
+       << ", text=" << segment.text;
+    return os;
+}
+
+bool segment_t::operator==(const text_tools::segment_t& rhs) const {
+    return n == rhs.n && t0 == rhs.t0 && t1 == rhs.t1 && text == rhs.text;
+}
+
 static astrunc::access::lang_t lang_str_to_astrunc_lang(
     const std::string& lang) {
     if (lang.size() < 2) return astrunc::access::lang_t::NONE;
@@ -625,6 +636,227 @@ void convert_text_format_from_html(std::string& text,
             convert_html_to_subrip(text);
             break;
     }
+}
+
+// copied from wisper.cpp
+std::string to_timestamp(size_t msec, bool comma) {
+    size_t hr = msec / (1000 * 60 * 60);
+    msec = msec - hr * (1000 * 60 * 60);
+    size_t min = msec / (1000 * 60);
+    msec = msec - min * (1000 * 60);
+    size_t sec = msec / 1000;
+    msec = msec - sec * 1000;
+
+    char buf[32];
+    snprintf(buf, sizeof(buf), "%02d:%02d:%02d%s%03d", static_cast<int>(hr),
+             static_cast<int>(min), static_cast<int>(sec), comma ? "," : ".",
+             static_cast<int>(msec));
+
+    return std::string{buf};
+}
+
+void segment_to_subrip_text(const segment_t& segment, std::ostringstream& os) {
+    os << segment.n << '\n'
+       << to_timestamp(segment.t0, true) << " --> "
+       << to_timestamp(segment.t1, true) << '\n'
+       << segment.text << "\n\n";
+}
+
+std::string segment_to_subrip_text(const segment_t& segment) {
+    std::ostringstream os;
+    segment_to_subrip_text(segment, os);
+    return os.str();
+}
+
+std::string segments_to_subrip_text(const std::vector<segment_t>& segments) {
+    std::ostringstream os;
+
+    std::for_each(
+        segments.cbegin(), segments.cend(),
+        [&os](const auto& segment) { segment_to_subrip_text(segment, os); });
+
+    return os.str();
+}
+
+static bool restore_punctuation_in_segment_internal(
+    const std::string& text_with_punctuation, const std::string& lower_text,
+    std::string::const_iterator& head, segment_t& segment) {
+    auto h = head;
+    auto s_h = segment.text.begin();
+
+    while (h != lower_text.cend() && s_h != segment.text.end()) {
+        auto [it1, it2] = std::mismatch(s_h, segment.text.end(), h);
+
+        if (it2 == lower_text.cend()) break;
+
+        h = std::next(it2);
+
+        if (std::string{".,?!:-"}.find(*it2) == std::string::npos) break;
+
+        s_h = it1 == segment.text.end() ? it1 : std::next(it1);
+
+        if (h != lower_text.cend()) h = std::next(h);
+    }
+
+    if (std::max<size_t>(0, std::distance(head, h)) < segment.text.size())
+        return false;
+
+    auto beg = std::next(text_with_punctuation.cbegin(),
+                         std::distance(lower_text.cbegin(), head));
+    auto end = std::next(text_with_punctuation.cbegin(),
+                         std::distance(lower_text.cbegin(), h));
+    segment.text.assign(beg, end);
+    rtrim(segment.text);
+
+    head = h;
+
+    return true;
+}
+
+void restore_punctuation_in_segment(const std::string& text_with_punctuation,
+                                    segment_t& segment) {
+    auto lower_text = text_with_punctuation;
+    to_lower_case(lower_text);
+
+    auto head = lower_text.cbegin();
+
+    restore_punctuation_in_segment_internal(text_with_punctuation, lower_text,
+                                            head, segment);
+}
+
+void restore_punctuation_in_segments(const std::string& text_with_punctuation,
+                                     std::vector<segment_t>& segments) {
+    auto lower_text = text_with_punctuation;
+    to_lower_case(lower_text);
+
+    auto head = lower_text.cbegin();
+
+    for (auto& segment : segments) {
+        if (!restore_punctuation_in_segment_internal(text_with_punctuation,
+                                                     lower_text, head, segment))
+            break;
+
+        // auto h = head;
+        // auto s_h = segment.text.begin();
+
+        // while (h != lower_text.cend() && s_h != segment.text.end()) {
+        //     auto [it1, it2] = std::mismatch(s_h, segment.text.end(), h);
+
+        //     if (it2 == lower_text.cend()) break;
+
+        //     h = std::next(it2);
+
+        //     if (std::string{".,?!:-"}.find(*it2) == std::string::npos) break;
+
+        //     s_h = it1 == segment.text.end() ? it1 : std::next(it1);
+
+        //     if (h != lower_text.cend()) h = std::next(h);
+        // }
+
+        // if (std::max<size_t>(0, std::distance(head, h)) <
+        // segment.text.size())
+        //     break;
+
+        // auto beg = std::next(text_with_punctuation.cbegin(),
+        //                      std::distance(lower_text.cbegin(), head));
+        // auto end = std::next(text_with_punctuation.cbegin(),
+        //                      std::distance(lower_text.cbegin(), h));
+        // segment.text.assign(beg, end);
+        // rtrim(segment.text);
+
+        // head = h;
+    }
+}
+
+void break_segment_to_multiline(unsigned int min_line_size,
+                                unsigned int max_line_size,
+                                segment_t& segment) {
+    if (min_line_size == 0 || max_line_size == 0) return;
+
+    static const std::array punct_chars{'.', ',', '?', '!', ':', '-'};
+
+    auto head = segment.text.cbegin();
+    auto h = head;
+
+    std::string new_segment_text;
+
+    auto trim_iterator = [&](std::string::const_iterator beg,
+                             std::string::const_iterator it) {
+        auto dist = std::distance(beg, it);
+
+        if (dist <= 0) return it;
+        if (it != segment.text.cend() && *it == ' ') return it;
+
+        std::advance(beg, std::min<std::ptrdiff_t>(min_line_size, dist));
+
+        auto init_it = it;
+        for (it = std::prev(it); it != beg; --it)
+            if (*it == ' ') break;
+
+        if (it == beg) return init_it;
+
+        return it;
+    };
+
+    while (true) {
+        auto it = std::find_first_of(h, segment.text.cend(),
+                                     punct_chars.cbegin(), punct_chars.cend());
+        if (it != segment.text.cend()) ++it;
+
+        auto line_size = std::distance(head, it);
+
+        if (line_size == 0) break;
+
+        if (it == segment.text.cend() && line_size < min_line_size) {
+            if (!new_segment_text.empty()) new_segment_text.push_back('\n');
+            new_segment_text.append(head, it);
+
+            break;
+        }
+
+        if (it == segment.text.cend() || line_size > max_line_size) {
+            it = trim_iterator(
+                head,
+                std::next(head,
+                          std::min(static_cast<std::ptrdiff_t>(max_line_size),
+                                   line_size)));
+
+            if (!new_segment_text.empty()) new_segment_text.push_back('\n');
+            new_segment_text.append(head, it);
+
+            if (it != segment.text.cend() && *it == ' ') ++it;
+
+            head = it;
+            h = head;
+
+            continue;
+        }
+
+        if (line_size >= min_line_size) {
+            if (!new_segment_text.empty()) new_segment_text.push_back('\n');
+            new_segment_text.append(head, it);
+
+            if (it != segment.text.cend() && *it == ' ') ++it;
+
+            head = it;
+            h = head;
+
+            continue;
+        }
+
+        h = it;
+    }
+
+    segment.text.assign(std::move(new_segment_text));
+}
+
+void break_segments_to_multiline(unsigned int min_line_size,
+                                 unsigned int max_line_size,
+                                 std::vector<segment_t>& segments) {
+    if (min_line_size == 0 || max_line_size == 0) return;
+
+    for (auto& segment : segments)
+        break_segment_to_multiline(min_line_size, max_line_size, segment);
 }
 
 void processor::hebrew_diacritize(std::string& text,

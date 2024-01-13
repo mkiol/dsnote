@@ -68,6 +68,9 @@ void ds_engine::open_ds_lib() {
     m_ds_api.STT_FinishStream =
         reinterpret_cast<decltype(m_ds_api.STT_FinishStream)>(
             dlsym(m_dslib_handle, "STT_FinishStream"));
+    m_ds_api.STT_FinishStreamWithMetadata =
+        reinterpret_cast<decltype(m_ds_api.STT_FinishStreamWithMetadata)>(
+            dlsym(m_dslib_handle, "STT_FinishStreamWithMetadata"));
     m_ds_api.STT_IntermediateDecode =
         reinterpret_cast<decltype(m_ds_api.STT_IntermediateDecode)>(
             dlsym(m_dslib_handle, "STT_IntermediateDecode"));
@@ -77,6 +80,9 @@ void ds_engine::open_ds_lib() {
     m_ds_api.STT_FreeString =
         reinterpret_cast<decltype(m_ds_api.STT_FreeString)>(
             dlsym(m_dslib_handle, "STT_FreeString"));
+    m_ds_api.STT_FreeMetadata =
+        reinterpret_cast<decltype(m_ds_api.STT_FreeMetadata)>(
+            dlsym(m_dslib_handle, "STT_FreeMetadata"));
 
     if (!m_ds_api.ok()) {
         LOGE("failed to register ds api");
@@ -149,6 +155,7 @@ stt_engine::samples_process_result_t ds_engine::process_buff() {
         m_speech_buf.clear();
         m_start_time.reset();
         m_vad.reset();
+        reset_segment_counters();
 
         free_ds_stream();
         create_ds_stream();
@@ -162,11 +169,7 @@ stt_engine::samples_process_result_t ds_engine::process_buff() {
     const auto& vad_buf =
         m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.size);
 
-    m_in_buf.clear();
-
     bool vad_status = !vad_buf.empty();
-
-    m_in_buf.clear();
 
     if (vad_status) {
         LOGD("vad: speech detected");
@@ -176,8 +179,12 @@ stt_engine::samples_process_result_t ds_engine::process_buff() {
             set_speech_detection_status(
                 speech_detection_status_t::speech_detected);
 
-        m_speech_buf.insert(m_speech_buf.end(), vad_buf.cbegin(),
-                            vad_buf.cend());
+        if (m_config.text_format == text_format_t::raw)
+            m_speech_buf.insert(m_speech_buf.end(), vad_buf.cbegin(),
+                                vad_buf.cend());
+        else
+            m_speech_buf.insert(m_speech_buf.end(), m_in_buf.buf.cbegin(),
+                                m_in_buf.buf.cbegin() + m_in_buf.size);
 
         restart_sentence_timer();
     } else {
@@ -189,7 +196,16 @@ stt_engine::samples_process_result_t ds_engine::process_buff() {
             LOGD("sentence timeout");
             m_call_backs.sentence_timeout();
         }
+
+        if (m_speech_buf.empty())
+            m_segment_time_discarded_before +=
+                (1000 * m_in_buf.size) / m_sample_rate;
+        else
+            m_segment_time_discarded_after +=
+                (1000 * m_in_buf.size) / m_sample_rate;
     }
+
+    m_in_buf.clear();
 
     if (m_thread_exit_requested) {
         free_buf();
@@ -210,7 +226,13 @@ stt_engine::samples_process_result_t ds_engine::process_buff() {
         LOGD("speech frame: samples=" << m_speech_buf.size()
                                       << ", final=" << final_decode);
 
+        m_segment_time_offset += m_segment_time_discarded_before;
+        m_segment_time_discarded_before = 0;
+
         decode_speech(m_speech_buf, final_decode);
+
+        m_segment_time_offset += m_segment_time_discarded_after;
+        m_segment_time_discarded_after = 0;
 
         if (m_config.speech_started)
             set_processing_state(processing_state_t::idle);
@@ -233,6 +255,56 @@ stt_engine::samples_process_result_t ds_engine::process_buff() {
     return samples_process_result_t::wait_for_samples;
 }
 
+std::pair<std::string, std::vector<text_tools::segment_t>>
+ds_engine::segments_from_meta(const Metadata* meta) {
+    std::pair<std::string, std::vector<text_tools::segment_t>> result;
+
+    if (meta->num_transcripts == 0) return result;
+
+    const size_t max_dur = m_config.sub_config.min_segment_dur == 0
+                               ? 60000
+                               : m_config.sub_config.min_segment_dur * 1000;
+    std::optional<size_t> t0;
+    std::optional<float> start;
+    std::string segment_text;
+
+    auto last_idx = meta->transcripts[0].num_tokens - 1;
+    for (size_t i = 0; i <= last_idx; ++i) {
+        const auto* text = meta->transcripts[0].tokens[i].text;
+
+        if (!text) continue;
+
+        if (!start) start = meta->transcripts[0].tokens[i].start_time;
+        auto end = meta->transcripts[0].tokens[i].start_time;
+
+        if (!segment_text.empty() || text[0] != ' ') segment_text.append(text);
+
+        result.first.append(text);
+
+        if (t0) {
+            if (text[0] == ' ' || i == last_idx) {
+                size_t t1 =
+                    static_cast<double>(end) * 1000 + m_segment_time_offset;
+
+                if (t1 - *t0 > max_dur || i == last_idx) {
+                    if (text[0] == ' ')
+                        segment_text.resize(segment_text.size() - 1);
+                    result.second.push_back(
+                        {++m_segment_offset, *t0, t1, std::move(segment_text)});
+                    segment_text.clear();
+                    t0.reset();
+                }
+            }
+        } else {
+            t0 = static_cast<double>(*start) * 1000 + m_segment_time_offset;
+        }
+
+        if (text[0] == ' ') start.reset();
+    }
+
+    return result;
+}
+
 void ds_engine::decode_speech(const ds_buf_t& buf, bool eof) {
     if (!m_ds_stream && eof) return;
 
@@ -244,42 +316,63 @@ void ds_engine::decode_speech(const ds_buf_t& buf, bool eof) {
 
     m_ds_api.STT_FeedAudioContent(m_ds_stream, buf.data(), buf.size());
 
-    auto* cstr = [=] {
-        if (!eof) return m_ds_api.STT_IntermediateDecode(m_ds_stream);
-        auto* cstr = m_ds_api.STT_FinishStream(m_ds_stream);
+    if (eof && m_config.text_format == text_format_t::subrip) {
+        auto* meta = m_ds_api.STT_FinishStreamWithMetadata(m_ds_stream, 1);
+
+        LOGD("speech decoded");
+
+        auto segments = segments_from_meta(meta);
+        m_ds_api.STT_FreeMetadata(meta);
+
         m_ds_stream = nullptr;
-        return cstr;
-    }();
 
-    std::string result{cstr};
-    m_ds_api.STT_FreeString(cstr);
+        if (m_punctuator) {
+            segments.first = m_punctuator->process(segments.first);
+            text_tools::restore_punctuation_in_segments(segments.first,
+                                                        segments.second);
+        }
 
-    if (!buf.empty()) {
-        auto decoding_dur =
-            std::chrono::duration_cast<std::chrono::milliseconds>(
-                std::chrono::steady_clock::now() - decoding_start)
-                .count();
+        text_tools::break_segments_to_multiline(
+            m_config.sub_config.min_line_length,
+            m_config.sub_config.max_line_length, segments.second);
 
-        m_decoding_duration += decoding_dur;
-        m_decoded_samples += buf.size();
+        set_intermediate_text(
+            text_tools::segments_to_subrip_text(segments.second));
+    } else {
+        auto* cstr = eof ? m_ds_api.STT_FinishStream(m_ds_stream)
+                         : m_ds_api.STT_IntermediateDecode(m_ds_stream);
+        std::string result{cstr};
+        m_ds_api.STT_FreeString(cstr);
 
-        LOGD("speech decoded, stats: samples="
-             << m_decoded_samples << ", duration=" << m_decoding_duration
-             << "ms ("
-             << static_cast<double>(m_decoding_duration) /
-                    ((1000 * m_decoded_samples) /
-                     static_cast<double>(m_sample_rate))
-             << ")");
-    }
+        if (eof) m_ds_stream = nullptr;
 
 #ifdef DEBUG
-    LOGD("speech decoded: text=" << result);
+        LOGD("speech decoded: text=" << result);
 #else
-    LOGD("speech decoded");
+        LOGD("speech decoded");
 #endif
 
-    if (m_punctuator) result = m_punctuator->process(result);
+        if (!buf.empty()) {
+            auto decoding_dur =
+                std::chrono::duration_cast<std::chrono::milliseconds>(
+                    std::chrono::steady_clock::now() - decoding_start)
+                    .count();
 
-    if (!m_intermediate_text || m_intermediate_text != result)
-        set_intermediate_text(result);
+            m_decoding_duration += decoding_dur;
+            m_decoded_samples += buf.size();
+
+            LOGD("speech decoded, stats: samples="
+                 << m_decoded_samples << ", duration=" << m_decoding_duration
+                 << "ms ("
+                 << static_cast<double>(m_decoding_duration) /
+                        ((1000 * m_decoded_samples) /
+                         static_cast<double>(m_sample_rate))
+                 << ")");
+        }
+
+        if (m_punctuator) result = m_punctuator->process(result);
+
+        if (!m_intermediate_text || m_intermediate_text != result)
+            set_intermediate_text(result);
+    }
 }

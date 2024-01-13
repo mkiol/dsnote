@@ -123,10 +123,12 @@ class speech_service : public QObject, public singleton<speech_service> {
     Q_INVOKABLE void delete_model(const QString &id);
 
     Q_INVOKABLE int stt_start_listen(speech_service::speech_mode_t mode,
-                                     QString lang, QString out_lang);
+                                     QString lang, QString out_lang,
+                                     const QVariantMap &options);
     Q_INVOKABLE int stt_stop_listen(int task);
     Q_INVOKABLE int stt_transcribe_file(const QString &file, QString lang,
-                                        QString out_lang);
+                                        QString out_lang,
+                                        const QVariantMap &options);
     Q_INVOKABLE int tts_play_speech(const QString &text, QString lang,
                                     const QVariantMap &options);
     Q_INVOKABLE int tts_pause_speech(int task);
@@ -423,7 +425,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     void handle_audio_ended();
     QString restart_stt_engine(speech_mode_t speech_mode,
                                const QString &model_id,
-                               const QString &out_lang_id);
+                               const QString &out_lang_id,
+                               const QVariantMap &options);
     QString restart_tts_engine(const QString &model_id,
                                const QVariantMap &options);
     QString restart_mnt_engine(const QString &model_or_lang_id,
@@ -505,9 +508,13 @@ class speech_service : public QObject, public singleton<speech_service> {
     Q_INVOKABLE int Reload();
     Q_INVOKABLE int SttStartListen(int mode, const QString &lang,
                                    const QString &out_lang);
+    Q_INVOKABLE int SttStartListen2(int mode, const QString &lang,
+                                    const QString &out_lang,
+                                    const QVariantMap &options);
     Q_INVOKABLE int SttStopListen(int task);
     Q_INVOKABLE int SttTranscribeFile(const QString &file, const QString &lang,
-                                      const QString &out_lang);
+                                      const QString &out_lang,
+                                      const QVariantMap &options);
     Q_INVOKABLE double SttGetFileTranscribeProgress(int task);
     Q_INVOKABLE int TtsPlaySpeech(const QString &text, const QString &lang);
     Q_INVOKABLE int TtsPlaySpeech2(const QString &text, const QString &lang,

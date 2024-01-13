@@ -19,6 +19,7 @@
 #include "gpu_tools.hpp"
 #include "logger.hpp"
 #include "py_executor.hpp"
+#include "text_tools.hpp"
 
 using namespace pybind11::literals;
 
@@ -64,6 +65,17 @@ void fasterwhisper_engine::push_buf_to_whisper_buf(
                        return static_cast<whisper_buf_t::value_type>(sample) /
                               32768.0F;
                    });
+}
+
+void fasterwhisper_engine::push_buf_to_whisper_buf(
+    in_buf_t::buf_t::value_type* data, in_buf_t::buf_t::size_type size,
+    whisper_buf_t& whisper_buf) {
+    // convert s16 to f32 sample format
+    whisper_buf.reserve(whisper_buf.size() + size);
+    for (size_t i = 0; i < size; ++i) {
+        whisper_buf.push_back(static_cast<whisper_buf_t::value_type>(data[i]) /
+                              32768.0F);
+    }
 }
 
 void fasterwhisper_engine::reset_impl() { m_speech_buf.clear(); }
@@ -146,14 +158,13 @@ stt_engine::samples_process_result_t fasterwhisper_engine::process_buff() {
         m_speech_buf.clear();
         m_start_time.reset();
         m_vad.reset();
+        reset_segment_counters();
     }
 
     m_denoiser.process(m_in_buf.buf.data(), m_in_buf.size);
 
     const auto& vad_buf =
         m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.size);
-
-    m_in_buf.clear();
 
     bool vad_status = !vad_buf.empty();
 
@@ -167,6 +178,12 @@ stt_engine::samples_process_result_t fasterwhisper_engine::process_buff() {
 
         push_buf_to_whisper_buf(vad_buf, m_speech_buf);
 
+        if (m_config.text_format == text_format_t::raw)
+            push_buf_to_whisper_buf(vad_buf, m_speech_buf);
+        else
+            push_buf_to_whisper_buf(m_in_buf.buf.data(), m_in_buf.size,
+                                    m_speech_buf);
+
         restart_sentence_timer();
     } else {
         LOGD("vad: no speech");
@@ -179,7 +196,16 @@ stt_engine::samples_process_result_t fasterwhisper_engine::process_buff() {
 
         if (m_config.speech_mode == speech_mode_t::automatic)
             set_speech_detection_status(speech_detection_status_t::no_speech);
+
+        if (m_speech_buf.empty())
+            m_segment_time_discarded_before +=
+                (1000 * m_in_buf.size) / m_sample_rate;
+        else
+            m_segment_time_discarded_after +=
+                (1000 * m_in_buf.size) / m_sample_rate;
     }
+
+    m_in_buf.clear();
 
     auto decode_samples = [&] {
         if (m_speech_buf.size() > m_speech_max_size) {
@@ -230,7 +256,14 @@ stt_engine::samples_process_result_t fasterwhisper_engine::process_buff() {
 
     LOGD("speech frame: samples=" << m_speech_buf.size());
 
+    m_segment_time_offset += m_segment_time_discarded_before;
+    m_segment_time_discarded_before = 0;
+
     decode_speech(m_speech_buf);
+
+    m_segment_time_offset += (m_segment_time_discarded_after +
+                              (1000 * m_speech_buf.size() / m_sample_rate));
+    m_segment_time_discarded_after = 0;
 
     set_processing_state(processing_state_t::idle);
 
@@ -280,6 +313,9 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
 
                          std::ostringstream os;
 
+                         bool subrip =
+                             m_config.text_format == text_format_t::subrip;
+
                          auto i = 0;
                          for (auto& segment : segments) {
                              auto text =
@@ -292,11 +328,39 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
 #ifdef DEBUG
                              LOGD("segment: " << text);
 #endif
-                             if (i != 0) os << ' ';
-                             os << text;
+
+                             if (subrip) {
+                                 auto t0 = static_cast<size_t>(std::max(
+                                               0.0, segment.attr("start")
+                                                        .cast<double>())) *
+                                           1000;
+                                 auto t1 =
+                                     static_cast<size_t>(std::max(
+                                         0.0,
+                                         segment.attr("end").cast<double>())) *
+                                     1000;
+
+                                 t0 += m_segment_time_offset;
+                                 t1 += m_segment_time_offset;
+
+                                 text_tools::segment_t segment{
+                                     i + 1 + m_segment_offset, t0, t1, text};
+                                 text_tools::break_segment_to_multiline(
+                                     m_config.sub_config.min_line_length,
+                                     m_config.sub_config.max_line_length,
+                                     segment);
+
+                                 text_tools::segment_to_subrip_text(segment,
+                                                                    os);
+                             } else {
+                                 if (i != 0) os << ' ';
+                                 os << std::move(text);
+                             }
 
                              ++i;
                          }
+
+                         m_segment_offset += i;
 
                          return os.str();
                      } catch (const std::exception& err) {

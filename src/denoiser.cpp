@@ -134,8 +134,9 @@ void denoiser::process(sample_t* buf, size_t size) {
                 }
             }
 
-            if (m_task_flags & task_denoise)
+            if (m_task_flags & task_denoise) {
                 for (size_t i = 0; i < samples; ++i) cur[i] = frame[i];
+            }
 
             cur += samples;
         }

@@ -13,6 +13,7 @@ Item {
     id: root
 
     property alias textArea: _textArea
+    property alias textFormatCombo: _textFormatCombo
     property color textColor: palette.text
     property bool canUndo: true
     property bool canUndoFallback: false
@@ -20,7 +21,7 @@ Item {
     property bool canClear: true
     property bool canPaste: true
     readonly property bool _fitContent: scrollView.availableHeight - 2 * appWin.padding >= scrollView.contentHeight
-    readonly property bool _contextActive: copyButton.hovered || clearButton.hovered ||
+    readonly property bool _contextActive: _textFormatCombo.hovered || copyButton.hovered || clearButton.hovered ||
                                            undoButton.hovered || redoButton.hovered || pasteButton.hovered ||
                                            _fitContent
 
@@ -74,14 +75,32 @@ Item {
         anchors {
             bottom: parent.bottom
             bottomMargin: appWin.padding
+            left: parent.left
+            leftMargin: appWin.padding
             right: parent.right
             rightMargin: appWin.padding + (scrollView.ScrollBar.vertical.visible ?
                                                scrollView.ScrollBar.vertical.width : 0)
         }
 
+        ComboBox {
+            id: _textFormatCombo
+
+            Layout.alignment: Qt.AlignLeft
+            visible: model !== undefined && model.length !== 0
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Text format")
+        }
+
+        Item {
+            Layout.fillWidth: true
+        }
+
         ToolButton {
             id: copyButton
 
+            Layout.alignment: Qt.AlignRight
             icon.name: "edit-copy-symbolic"
             onClicked: root.copyClicked()
             visible: root.textArea.text.length !== 0
@@ -93,6 +112,7 @@ Item {
         ToolButton {
             id: pasteButton
 
+            Layout.alignment: Qt.AlignRight
             icon.name: "edit-paste-symbolic"
             onClicked: root.textArea.paste()
             visible: root.canPaste && root.textArea.canPaste
@@ -104,6 +124,7 @@ Item {
         ToolButton {
             id: clearButton
 
+            Layout.alignment: Qt.AlignRight
             icon.name: "edit-clear-all-symbolic"
             onClicked: root.clearClicked()
             visible: root.canClear && !root.textArea.readOnly && root.textArea.text.length !== 0
@@ -115,6 +136,7 @@ Item {
         ToolButton {
             id: undoButton
 
+            Layout.alignment: Qt.AlignRight
             icon.name: "edit-undo-symbolic"
             onClicked: {
                 if (root.textArea.canUndo)
@@ -131,6 +153,7 @@ Item {
         ToolButton {
             id: redoButton
 
+            Layout.alignment: Qt.AlignRight
             icon.name: "edit-redo-symbolic"
             onClicked: root.textArea.redo()
             visible: !root.textArea.readOnly && root.canRedo && root.textArea.canRedo

@@ -119,6 +119,7 @@
       <li>Support for Speex audio codec in 'Transcribe a file'</li>
       <li>Translate to English option for Whisper and Faster Whisper models</li>
       <li>More effective GPU acceleration for Whisper models with AMD graphics cards</li>
+      <li>Subtitles generation</li>
       </ul>
       <p>Text to Speech:</p>
       <ul>

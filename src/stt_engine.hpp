@@ -53,6 +53,10 @@ class stt_engine {
     enum class gpu_api_t { opencl, cuda, rocm };
     friend std::ostream& operator<<(std::ostream& os, gpu_api_t api);
 
+    enum class text_format_t { raw, subrip };
+    friend std::ostream& operator<<(std::ostream& os,
+                                    text_format_t text_format);
+
     struct model_files_t {
         std::string model_file;
         std::string scorer_file;
@@ -69,6 +73,14 @@ class stt_engine {
     };
     friend std::ostream& operator<<(std::ostream& os,
                                     const model_files_t& model_files);
+
+    struct sub_config_t {
+        size_t min_segment_dur = 0;
+        size_t min_line_length = 0;
+        size_t max_line_length = 0;
+    };
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const sub_config_t& sub_config);
 
     struct callbacks_t {
         std::function<void(const std::string& text)> text_decoded;
@@ -106,8 +118,10 @@ class stt_engine {
         bool translate = false; /*extra whisper feature*/
         bool speech_started = false;
         bool use_gpu = false;
+        text_format_t text_format = text_format_t::raw;
         std::string options;
         gpu_device_t gpu_device;
+        sub_config_t sub_config;
         inline bool has_option(char c) const {
             return options.find(c) != std::string::npos;
         }
@@ -134,6 +148,13 @@ class stt_engine {
     inline auto translate() const { return m_config.translate; }
     inline auto use_gpu() const { return m_config.use_gpu; }
     inline auto gpu_device() const { return m_config.gpu_device; }
+    inline auto text_format() const { return m_config.text_format; }
+    inline void set_text_format(text_format_t value) {
+        m_config.text_format = value;
+    }
+    inline void set_sub_config(sub_config_t value) {
+        m_config.sub_config = value;
+    }
 
    protected:
     enum class lock_type_t { free, processed, borrowed };
@@ -187,6 +208,10 @@ class stt_engine {
     std::optional<std::chrono::steady_clock::time_point> m_start_time;
     processing_state_t m_processing_state = processing_state_t::idle;
     std::optional<punctuator> m_punctuator;
+    unsigned int m_segment_offset = 0;
+    size_t m_segment_time_offset = 0;
+    size_t m_segment_time_discarded_before = 0;
+    size_t m_segment_time_discarded_after = 0;
 
     static void ltrim(std::string& s);
     static void rtrim(std::string& s);
@@ -209,6 +234,7 @@ class stt_engine {
     bool sentence_timer_timed_out();
     void restart_sentence_timer();
     void create_punctuator();
+    void reset_segment_counters();
 };
 
 #endif  // STT_ENGINE_H

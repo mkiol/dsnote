@@ -155,14 +155,19 @@ class whisper_engine : public stt_engine {
         int (*whisper_full_n_segments)(void* ctx) = nullptr;
         const char* (*whisper_full_get_segment_text)(void* ctx,
                                                      int i_segment) = nullptr;
+        int64_t (*whisper_full_get_segment_t0)(void* ctx,
+                                               int i_segment) = nullptr;
+        int64_t (*whisper_full_get_segment_t1)(void* ctx,
+                                               int i_segment) = nullptr;
         void (*whisper_free)(void* ctx) = nullptr;
         whisper_full_params (*whisper_full_default_params)(
             whisper_sampling_strategy strategy) = nullptr;
         inline auto ok() const {
             return whisper_init_from_file && whisper_print_system_info &&
                    whisper_full && whisper_full_n_segments &&
-                   whisper_full_get_segment_text && whisper_free &&
-                   whisper_full_default_params;
+                   whisper_full_get_segment_text &&
+                   whisper_full_get_segment_t0 && whisper_full_get_segment_t1 &&
+                   whisper_free && whisper_full_default_params;
         }
     };
 
@@ -179,6 +184,9 @@ class whisper_engine : public stt_engine {
     static void push_buf_to_whisper_buf(
         const std::vector<in_buf_t::buf_t::value_type>& buf,
         whisper_buf_t& whisper_buf);
+    static void push_buf_to_whisper_buf(in_buf_t::buf_t::value_type* data,
+                                        in_buf_t::buf_t::size_type size,
+                                        whisper_buf_t& whisper_buf);
     whisper_full_params make_wparams();
     void reset_impl() override;
     void stop_processing_impl() override;

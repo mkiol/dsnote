@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "stt_engine.hpp"
+#include "text_tools.hpp"
 
 struct VoskModel;
 struct VoskRecognizer;
@@ -35,6 +36,11 @@ class april_engine : public stt_engine {
     april_buf_t m_speech_buf;
     std::string m_result;
     std::string m_result_prev_segment;
+    size_t m_result_size_consumed = 0;
+    std::optional<size_t> m_prev_segment_start_time;
+    std::optional<size_t> m_prev_segment_end_time;
+    size_t m_prev_segment_dur_per_token = 0;
+    std::vector<text_tools::segment_t> m_segments;
 
     void create_model();
     samples_process_result_t process_buff() override;

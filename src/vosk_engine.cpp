@@ -17,8 +17,10 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <sstream>
 
 #include "logger.hpp"
+#include "nlohmann/json.hpp"
 
 using namespace std::chrono_literals;
 
@@ -128,7 +130,9 @@ void vosk_engine::open_vosk_lib() {
     m_vosk_api.vosk_recognizer_final_result =
         reinterpret_cast<decltype(m_vosk_api.vosk_recognizer_final_result)>(
             dlsym(m_vosklib_handle, "vosk_recognizer_final_result"));
-
+    m_vosk_api.vosk_recognizer_set_words =
+        reinterpret_cast<decltype(m_vosk_api.vosk_recognizer_set_words)>(
+            dlsym(m_vosklib_handle, "vosk_recognizer_set_words"));
     if (!m_vosk_api.ok()) {
         LOGE("failed to register vosk api");
         throw std::runtime_error("failed to register vosk api");
@@ -168,6 +172,8 @@ void vosk_engine::create_vosk_model() {
         throw std::runtime_error("failed to create vosk recognizer");
     }
 
+    m_vosk_api.vosk_recognizer_set_words(m_vosk_recognizer, 1);
+
     LOGD("vosk model created");
 }
 
@@ -205,6 +211,7 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
         m_speech_buf.clear();
         m_start_time.reset();
         m_vad.reset();
+        reset_segment_counters();
 
         if (m_vosk_recognizer)
             m_vosk_api.vosk_recognizer_reset(m_vosk_recognizer);
@@ -241,11 +248,7 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
         vad_buf.size() * sizeof(decltype(m_in_buf.buf)::value_type));
 #endif
 
-    m_in_buf.clear();
-
     bool vad_status = !vad_buf.empty();
-
-    m_in_buf.clear();
 
     if (vad_status) {
         LOGD("vad: speech detected");
@@ -255,8 +258,12 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
             set_speech_detection_status(
                 speech_detection_status_t::speech_detected);
 
-        m_speech_buf.insert(m_speech_buf.end(), vad_buf.cbegin(),
-                            vad_buf.cend());
+        if (m_config.text_format == text_format_t::raw)
+            m_speech_buf.insert(m_speech_buf.end(), vad_buf.cbegin(),
+                                vad_buf.cend());
+        else
+            m_speech_buf.insert(m_speech_buf.end(), m_in_buf.buf.cbegin(),
+                                m_in_buf.buf.cbegin() + m_in_buf.size);
 
         restart_sentence_timer();
     } else {
@@ -268,7 +275,16 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
             LOGD("sentence timeout");
             m_call_backs.sentence_timeout();
         }
+
+        if (m_speech_buf.empty())
+            m_segment_time_discarded_before +=
+                (1000 * m_in_buf.size) / m_sample_rate;
+        else
+            m_segment_time_discarded_after +=
+                (1000 * m_in_buf.size) / m_sample_rate;
     }
+
+    m_in_buf.clear();
 
     if (m_thread_exit_requested) {
         free_buf();
@@ -289,7 +305,13 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
         LOGD("speech frame: samples=" << m_speech_buf.size()
                                       << ", final=" << final_decode);
 
+        m_segment_time_offset += m_segment_time_discarded_before;
+        m_segment_time_discarded_before = 0;
+
         decode_speech(m_speech_buf, final_decode);
+
+        m_segment_time_offset += m_segment_time_discarded_after;
+        m_segment_time_discarded_after = 0;
 
         if (m_config.speech_started)
             set_processing_state(processing_state_t::idle);
@@ -311,20 +333,76 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
     return samples_process_result_t::wait_for_samples;
 }
 
-std::string vosk_engine::get_from_json(const char* name, const char* str) {
-    auto json = simdjson::padded_string{str, strlen(str)};
+static std::string from_json(const char* name, const char* str) {
+    std::string text;
 
-    auto doc = m_parser.iterate(json);
-    if (doc.error() != simdjson::SUCCESS) {
-        LOGE("failed to simdjson iterate");
-        return {};
+    try {
+        text.assign(nlohmann::json::parse(str)[name]);
+    } catch (const nlohmann::json::parse_error& err) {
+        LOGE("json parse error: " << err.what() << ", id=" << err.id
+                                  << ", pos=" << err.byte << ", doc=" << str);
     }
 
-    std::string_view sv;
+    return text;
+}
 
-    if (!doc[name].get(sv)) return std::string{sv};
+static std::string partial_text_from_json(const char* str) {
+    return from_json("partial", str);
+}
 
-    return {};
+static std::string text_from_json(const char* str) {
+    return from_json("text", str);
+}
+
+std::pair<std::string, std::vector<text_tools::segment_t>>
+vosk_engine::segments_from_json(const char* str) {
+    std::pair<std::string, std::vector<text_tools::segment_t>> result;
+
+    try {
+        auto doc = nlohmann::json::parse(str);
+
+        result.first = doc["text"];
+
+        const size_t max_dur = m_config.sub_config.min_segment_dur == 0
+                                   ? 60000
+                                   : m_config.sub_config.min_segment_dur * 1000;
+        std::optional<size_t> t0;
+        std::string segment_text;
+
+        if (doc["result"].is_array()) {
+            const auto& arr = doc["result"];
+            for (auto it = arr.cbegin(); it != arr.cend(); ++it) {
+                std::string text = it.value()["word"];
+                if (text.empty()) continue;
+
+                float start = it.value()["start"];
+                float end = it.value()["end"];
+
+                segment_text.append(std::move(text));
+
+                if (t0) {
+                    size_t t1 = end * 1000 + m_segment_time_offset;
+
+                    if (t1 - *t0 > max_dur || it == std::prev(arr.cend())) {
+                        result.second.push_back({++m_segment_offset, *t0, t1,
+                                                 std::move(segment_text)});
+                        segment_text.clear();
+                        t0.reset();
+                    } else {
+                        segment_text.push_back(' ');
+                    }
+                } else {
+                    segment_text.push_back(' ');
+                    t0 = start * 1000 + m_segment_time_offset;
+                }
+            }
+        }
+    } catch (const nlohmann::json::parse_error& err) {
+        LOGE("json parse error: " << err.what() << ", id=" << err.id
+                                  << ", pos=" << err.byte << ", doc=" << str);
+    }
+
+    return result;
 }
 
 void vosk_engine::decode_speech(const vosk_buf_t& buf, bool eof) {
@@ -339,40 +417,56 @@ void vosk_engine::decode_speech(const vosk_buf_t& buf, bool eof) {
     }
 
     if (ret == 0 && !eof) {
-        // append silence to force partial result
-
-        std::array<vosk_buf_t::value_type, m_in_buf_max_size> silence{};
-
-        auto ret = m_vosk_api.vosk_recognizer_accept_waveform_s(
-            m_vosk_recognizer, silence.data(), silence.size());
-
-        if (ret == 0) {
-            LOGD("no speech decoded");
+        if (m_config.text_format == text_format_t::subrip) {
             return;
+        } else {
+            // append silence to force partial result
+            std::array<vosk_buf_t::value_type, m_in_buf_max_size> silence{};
+
+            auto ret = m_vosk_api.vosk_recognizer_accept_waveform_s(
+                m_vosk_recognizer, silence.data(), silence.size());
+            if (ret == 0) {
+                LOGD("no speech decoded");
+                return;
+            }
         }
     }
 
-    auto result = [&] {
-        if (eof)
-            return get_from_json(
-                "text",
-                m_vosk_api.vosk_recognizer_final_result(m_vosk_recognizer));
+    if (m_config.text_format == text_format_t::subrip && eof) {
+        auto segments = segments_from_json(
+            m_vosk_api.vosk_recognizer_final_result(m_vosk_recognizer));
 
-        return get_from_json(
-            "partial",
-            m_vosk_api.vosk_recognizer_partial_result(m_vosk_recognizer));
-    }();
+        if (m_punctuator) {
+            segments.first = m_punctuator->process(segments.first);
+            text_tools::restore_punctuation_in_segments(segments.first,
+                                                        segments.second);
+        }
+
+        text_tools::break_segments_to_multiline(
+            m_config.sub_config.min_line_length,
+            m_config.sub_config.max_line_length, segments.second);
+
+        set_intermediate_text(
+            text_tools::segments_to_subrip_text(segments.second));
+    } else {
+        auto result =
+            eof ? text_from_json(m_vosk_api.vosk_recognizer_final_result(
+                      m_vosk_recognizer))
+                : partial_text_from_json(
+                      m_vosk_api.vosk_recognizer_partial_result(
+                          m_vosk_recognizer));
 
 #ifdef DEBUG
-    LOGD("speech decoded: text=" << result);
+        LOGD("speech decoded: text=" << result);
 #else
-    LOGD("speech decoded");
+        LOGD("speech decoded");
 #endif
 
-    if (m_punctuator) result = m_punctuator->process(result);
+        if (m_punctuator) result = m_punctuator->process(result);
 
-    if (!m_intermediate_text || m_intermediate_text != result)
-        set_intermediate_text(result);
+        if (!m_intermediate_text || m_intermediate_text != result)
+            set_intermediate_text(result);
+    }
 
     if (eof) m_vosk_api.vosk_recognizer_reset(m_vosk_recognizer);
 }

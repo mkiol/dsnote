@@ -698,6 +698,20 @@ void settings::set_mnt_text_format(text_format_t value) {
     }
 }
 
+settings::text_format_t settings::stt_text_format() const {
+    return static_cast<text_format_t>(
+        value(QStringLiteral("stt_text_format"),
+              static_cast<int>(text_format_t::TextFormatRaw))
+            .toInt());
+}
+
+void settings::set_stt_text_format(text_format_t value) {
+    if (stt_text_format() != value) {
+        setValue(QStringLiteral("stt_text_format"), static_cast<int>(value));
+        emit stt_text_format_changed();
+    }
+}
+
 bool settings::hint_translator() const {
     return value(QStringLiteral("hint_translator"), true).toBool();
 }
@@ -1497,6 +1511,50 @@ void settings::set_clean_ref_voice(bool value) {
     if (value != clean_ref_voice()) {
         setValue(QStringLiteral("clean_ref_voice"), value);
         emit clean_ref_voice_changed();
+    }
+}
+
+unsigned int settings::sub_min_segment_dur() const {
+    return value(QStringLiteral("sub_min_segment_dur"), 4).toUInt();
+}
+
+void settings::set_sub_min_segment_dur(unsigned int value) {
+    if (value != sub_min_segment_dur()) {
+        setValue(QStringLiteral("sub_min_segment_dur"), value);
+        emit sub_config_changed();
+    }
+}
+
+unsigned int settings::sub_min_line_length() const {
+    return value(QStringLiteral("sub_min_line_length"), 30).toUInt();
+}
+
+void settings::set_sub_min_line_length(unsigned int value) {
+    if (value != sub_min_line_length()) {
+        setValue(QStringLiteral("sub_min_line_length"), value);
+        emit sub_config_changed();
+    }
+}
+
+unsigned int settings::sub_max_line_length() const {
+    return value(QStringLiteral("sub_max_line_length"), 60).toUInt();
+}
+
+void settings::set_sub_max_line_length(unsigned int value) {
+    if (value != sub_max_line_length()) {
+        setValue(QStringLiteral("sub_max_line_length"), value);
+        emit sub_config_changed();
+    }
+}
+
+bool settings::sub_break_lines() const {
+    return value(QStringLiteral("sub_break_lines"), false).toBool();
+}
+
+void settings::set_sub_break_lines(bool value) {
+    if (value != sub_break_lines()) {
+        setValue(QStringLiteral("sub_break_lines"), value);
+        emit sub_config_changed();
     }
 }
 

@@ -251,7 +251,17 @@ ToolBar {
         property bool translation: false
 
         title: qsTr("Save File")
-        nameFilters: [ qsTr("Text") + " (*.txt)", qsTr("All files") + " (*)"]
+        selectedNameFilter: {
+            switch (_settings.translator_mode ? _settings.mnt_text_format : _settings.stt_text_format) {
+            case Settings.TextFormatSubRip: return "SRT Subtitles (*.srt)"
+            case Settings.TextFormatRaw:
+            case Settings.TextFormatHtml:
+            case Settings.TextFormatMarkdown:
+                break;
+            }
+            return qsTr("Text") + " (*.txt)"
+        }
+        nameFilters: [ qsTr("Text") + " (*.txt)", "SRT Subtitles (*.srt)", qsTr("All files") + " (*)"]
         folder: _settings.file_save_dir_url
         selectExisting: false
         selectMultiple: false
@@ -271,7 +281,7 @@ ToolBar {
 
         title: qsTr("Open File")
         nameFilters: [
-            qsTr("Text") + " (*.txt *.srt)",
+            qsTr("All supported files") + " (*.txt *.srt)",
             qsTr("All files") + " (*)"]
         folder: _settings.file_open_dir_url
         selectExisting: true
@@ -288,9 +298,7 @@ ToolBar {
 
         title: qsTr("Open File")
         nameFilters: [
-            qsTr("Audio and video files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.spx *.flac *.m4a *.aac *.mp4 *.mkv *.ogv *.webm)",
-            qsTr("Audio files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.spx *.flac *.m4a *.aac)",
-            qsTr("Video files") + " (*.mp4 *.mkv *.ogv *.webm)",
+            qsTr("All supported files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.spx *.flac *.m4a *.aac *.mp4 *.mkv *.ogv *.webm)",
             qsTr("All files") + " (*)"]
         folder: _settings.file_audio_open_dir_url
         selectExisting: true

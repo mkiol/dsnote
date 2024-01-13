@@ -157,10 +157,33 @@ std::ostream& operator<<(std::ostream& os, stt_engine::gpu_api_t api) {
 }
 
 std::ostream& operator<<(std::ostream& os,
+                         stt_engine::text_format_t text_format) {
+    switch (text_format) {
+        case stt_engine::text_format_t::raw:
+            os << "raw";
+            break;
+        case stt_engine::text_format_t::subrip:
+            os << "subrip";
+            break;
+    }
+
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os,
                          const stt_engine::model_files_t& model_files) {
     os << "model-file=" << model_files.model_file
        << ", scorer-file=" << model_files.scorer_file
        << ", ttt-model-file=" << model_files.ttt_model_file;
+
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os,
+                         const stt_engine::sub_config_t& sub_config) {
+    os << "min-segment-dur=" << sub_config.min_segment_dur
+       << ", min-line-length=" << sub_config.min_line_length
+       << ", max-line-length=" << sub_config.max_line_length;
 
     return os;
 }
@@ -180,8 +203,10 @@ std::ostream& operator<<(std::ostream& os, const stt_engine::config_t& config) {
        << "], speech-mode=" << config.speech_mode
        << ", vad-mode=" << config.vad_mode
        << ", speech-started=" << config.speech_started
+       << ", text-format=" << config.text_format
        << ", options=" << config.options << ", use-gpu=" << config.use_gpu
-       << ", gpu-device=[" << config.gpu_device << "]";
+       << ", gpu-device=[" << config.gpu_device << "]"
+       << ", sub-config=[" << config.sub_config << "]";
 
     return os;
 }
@@ -202,6 +227,7 @@ void stt_engine::start() {
     if (m_processing_thread.joinable()) m_processing_thread.join();
 
     m_thread_exit_requested = false;
+    reset_segment_counters();
 
     m_processing_thread = std::thread{&stt_engine::start_processing, this};
 
@@ -471,6 +497,8 @@ void stt_engine::flush(flush_t type) {
     if (type == flush_t::eof) {
         m_call_backs.eof();
     }
+
+    if (type == flush_t::restart) reset_segment_counters();
 }
 
 void stt_engine::set_speech_mode(speech_mode_t mode) {
@@ -556,4 +584,11 @@ void stt_engine::create_punctuator() {
     } catch (const std::runtime_error& error) {
         LOGE("failed to create punctuator");
     }
+}
+
+void stt_engine::reset_segment_counters() {
+    m_segment_offset = 0;
+    m_segment_time_offset = 0;
+    m_segment_time_discarded_before = 0;
+    m_segment_time_discarded_after = 0;
 }

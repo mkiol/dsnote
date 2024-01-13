@@ -18,8 +18,8 @@
 #include <memory>
 #endif
 
-#include "simdjson.h"
 #include "stt_engine.hpp"
+#include "text_tools.hpp"
 
 struct VoskModel;
 struct VoskRecognizer;
@@ -46,13 +46,15 @@ class vosk_engine : public stt_engine {
             VoskRecognizer* recognizer) = nullptr;
         const char* (*vosk_recognizer_final_result)(
             VoskRecognizer* recognizer) = nullptr;
+        void (*vosk_recognizer_set_words)(VoskRecognizer* recognizer,
+                                          int words) = nullptr;
 
         inline auto ok() const {
             return vosk_model_new && vosk_model_free && vosk_recognizer_new &&
                    vosk_recognizer_reset && vosk_recognizer_free &&
                    vosk_recognizer_accept_waveform_s &&
                    vosk_recognizer_partial_result &&
-                   vosk_recognizer_final_result;
+                   vosk_recognizer_final_result && vosk_recognizer_set_words;
         }
     };
 
@@ -63,7 +65,6 @@ class vosk_engine : public stt_engine {
     void* m_vosklib_handle = nullptr;
     VoskModel* m_vosk_model = nullptr;
     VoskRecognizer* m_vosk_recognizer = nullptr;
-    simdjson::ondemand::parser m_parser;
 
 #ifdef DUMP_AUDIO_TO_FILE
     std::unique_ptr<std::ofstream> m_file_audio_input;
@@ -78,7 +79,8 @@ class vosk_engine : public stt_engine {
     void reset_impl() override;
     void start_processing_impl() override;
     void push_inbuf_to_samples();
-    std::string get_from_json(const char* name, const char* str);
+    std::pair<std::string, std::vector<text_tools::segment_t>>
+    segments_from_json(const char* str);
 };
 
 #endif  // VOSK_ENGINE_H

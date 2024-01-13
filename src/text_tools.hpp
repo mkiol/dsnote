@@ -12,14 +12,27 @@
 #include <pybind11/pytypes.h>
 #define slots Q_SLOTS
 
+#include <iostream>
 #include <optional>
 #include <piper-phonemize/tashkeel.hpp>
+#include <sstream>
 #include <string>
 #include <vector>
 
 namespace text_tools {
 enum class split_engine_t { ssplit, astrunc };
 enum class text_format_t { markdown, subrip };
+
+struct segment_t {
+    size_t n = 0;
+    size_t t0 = 0;
+    size_t t1 = 0;
+    std::string text;
+
+    bool operator==(const text_tools::segment_t& rhs) const;
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const text_tools::segment_t& segment);
+};
 
 struct break_line_info {
     bool break_line = false;
@@ -61,6 +74,19 @@ void numbers_to_words(std::string& text, const std::string& lang,
 void convert_text_format_to_html(std::string& text, text_format_t input_format);
 void convert_text_format_from_html(std::string& text,
                                    text_format_t output_format);
+std::string to_timestamp(size_t t, bool comma = false);
+void segment_to_subrip_text(const segment_t& segment, std::ostringstream& os);
+std::string segment_to_subrip_text(const segment_t& segment);
+std::string segments_to_subrip_text(const std::vector<segment_t>& segments);
+void restore_punctuation_in_segment(const std::string& text_with_punctuation,
+                                    segment_t& segment);
+void restore_punctuation_in_segments(const std::string& text_with_punctuation,
+                                     std::vector<segment_t>& segments);
+void break_segment_to_multiline(unsigned int min_line_size,
+                                unsigned int max_line_size, segment_t& segment);
+void break_segments_to_multiline(unsigned int min_line_size,
+                                 unsigned int max_line_size,
+                                 std::vector<segment_t>& segments);
 }  // namespace text_tools
 
 #endif  // TEXT_TOOLS_H

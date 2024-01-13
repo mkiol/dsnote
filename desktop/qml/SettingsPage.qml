@@ -361,7 +361,8 @@ DialogPage {
                 ToolTip.text: qsTr("Enable advanced punctuation restoration after speech recognition. To make it work, " +
                                    "make sure you have enabled %1 model for your language.")
                               .arg("<i>" + qsTr("Punctuation") + "</i>") + " " +
-                              qsTr("When this option is enabled model initialization takes much longer and memory usage is much higher.")
+                              qsTr("When this option is enabled model initialization takes much longer and memory usage is much higher.") + " " +
+                              qsTr("This option only works with models that do not natively support punctuation.")
             }
 
             InlineMessage {
@@ -441,6 +442,115 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Select preferred graphics card for hardware acceleration.")
+                }
+            }
+
+            SectionLabel {
+                text: qsTr("Subtitles")
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Minimum segment duration")
+                    wrapMode: Text.Wrap
+                }
+
+                SpinBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? appWin.padding : 0
+                    from: 1
+                    to: 60
+                    stepSize: 1
+                    value: _settings.sub_min_segment_dur
+                    onValueChanged: {
+                        _settings.sub_min_segment_dur = value;
+                    }
+                    Component.onCompleted: {
+                        contentItem.color = palette.text
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Set the minimum duration (in seconds) of the subtitle segment.") + " " +
+                                  qsTr("This option only works with %1 and %2 models.").arg("<i>DeepSpeech/Coqui</i>").arg("<i>Vosk</i>")
+                }
+            }
+
+            CheckBox {
+                checked: _settings.sub_break_lines
+                text: qsTr("Break text lines")
+                onCheckedChanged: {
+                    _settings.sub_break_lines = checked
+                }
+            }
+
+            GridLayout {
+                visible: _settings.sub_break_lines
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    text: qsTr("Minimum line length")
+                    wrapMode: Text.Wrap
+                }
+
+                SpinBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                    from: 1
+                    to: 1000
+                    stepSize: 1
+                    value: _settings.sub_min_line_length
+                    onValueChanged: {
+                        _settings.sub_min_line_length = value;
+                        if (_settings.sub_max_line_length < value)
+                            _settings.sub_max_line_length = value;
+                    }
+                    Component.onCompleted: {
+                        contentItem.color = palette.text
+                    }
+                }
+            }
+
+            GridLayout {
+                visible: _settings.sub_break_lines
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    text: qsTr("Maximum line length")
+                    wrapMode: Text.Wrap
+                }
+
+                SpinBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                    from: 1
+                    to: 1000
+                    stepSize: 1
+                    value: _settings.sub_max_line_length
+                    onValueChanged: {
+                        _settings.sub_max_line_length = value;
+                        if (_settings.sub_min_line_length > value)
+                            _settings.sub_min_line_length = value;
+                    }
+                    Component.onCompleted: {
+                        contentItem.color = palette.text
+                    }
                 }
             }
         }

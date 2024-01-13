@@ -1033,9 +1033,49 @@ static std::optional<typename Engine::gpu_device_t> make_gpu_device(
     return std::nullopt;
 }
 
+static settings::text_format_t text_format_from_options(
+    const QVariantMap &options) {
+    if (options.contains(QStringLiteral("text_format"))) {
+        bool ok = false;
+        auto value = options.value(QStringLiteral("text_format")).toInt(&ok);
+        if (ok) return static_cast<settings::text_format_t>(value);
+    }
+    return settings::text_format_t::TextFormatRaw;
+}
+
+static stt_engine::text_format_t stt_text_fromat_from_settings_format(
+    settings::text_format_t format) {
+    switch (format) {
+        case settings::text_format_t::TextFormatRaw:
+            return stt_engine::text_format_t::raw;
+        case settings::text_format_t::TextFormatSubRip:
+            return stt_engine::text_format_t::subrip;
+        case settings::text_format_t::TextFormatMarkdown:
+        case settings::text_format_t::TextFormatHtml:
+            break;
+    }
+
+    throw std::runtime_error("invalid text format");
+}
+
+static stt_engine::sub_config_t stt_sub_config_from_options(
+    const QVariantMap &options) {
+    stt_engine::sub_config_t sub_config{};
+
+    if (auto k = QStringLiteral("sub_min_segment_dur"); options.contains(k))
+        sub_config.min_segment_dur = options.value(k).toUInt();
+    if (auto k = QStringLiteral("sub_min_line_length"); options.contains(k))
+        sub_config.min_line_length = options.value(k).toUInt();
+    if (auto k = QStringLiteral("sub_max_line_length"); options.contains(k))
+        sub_config.max_line_length = options.value(k).toUInt();
+
+    return sub_config;
+}
+
 QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                                            const QString &model_id,
-                                           const QString &out_lang_id) {
+                                           const QString &out_lang_id,
+                                           const QVariantMap &options) {
     auto model_config = choose_model_config(engine_t::stt, model_id);
     if (model_config && model_config->stt) {
         stt_engine::config_t config;
@@ -1054,6 +1094,9 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         config.translate = !out_lang_id.isEmpty() && out_lang_id == "en" &&
                            config.lang != "en";
         config.options = model_config->options.toStdString();
+        config.text_format = stt_text_fromat_from_settings_format(
+            text_format_from_options(options));
+        config.sub_config = stt_sub_config_from_options(options);
 
         if (settings::instance()->stt_use_gpu() &&
             settings::instance()->has_gpu_device_stt()) {
@@ -1172,6 +1215,8 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             m_stt_engine->start();
             m_stt_engine->set_speech_mode(
                 static_cast<stt_engine::speech_mode_t>(speech_mode));
+            m_stt_engine->set_text_format(config.text_format);
+            m_stt_engine->set_sub_config(config.sub_config);
         }
 
         return model_config->stt->model_id;
@@ -1393,16 +1438,6 @@ static bool mnt_clean_text_from_options(const QVariantMap &options) {
     return false;
 }
 
-static settings::text_format_t mnt_text_format_from_options(
-    const QVariantMap &options) {
-    if (options.contains(QStringLiteral("text_format"))) {
-        bool ok = false;
-        auto value = options.value(QStringLiteral("text_format")).toInt(&ok);
-        if (ok) return static_cast<settings::text_format_t>(value);
-    }
-    return settings::text_format_t::TextFormatRaw;
-}
-
 static mnt_engine::text_format_t mnt_text_fromat_from_settings_format(
     settings::text_format_t format) {
     switch (format) {
@@ -1436,7 +1471,7 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
         config.options = model_config->options.toStdString();
         config.clean_text = mnt_clean_text_from_options(options);
         config.text_format = mnt_text_fromat_from_settings_format(
-            mnt_text_format_from_options(options));
+            text_format_from_options(options));
 
         QFile nb_file{QStringLiteral(":/nonbreaking_prefixes/%1.txt")
                           .arg(model_config->mnt->lang_id.split('-').first())};
@@ -2407,7 +2442,8 @@ int speech_service::next_task_id() {
 }
 
 int speech_service::stt_transcribe_file(const QString &file, QString lang,
-                                        QString out_lang) {
+                                        QString out_lang,
+                                        const QVariantMap &options) {
     if (state() == state_t::unknown || state() == state_t::not_configured ||
         state() == state_t::busy) {
         qWarning() << "cannot transcribe_file, invalid state";
@@ -2432,12 +2468,12 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
     m_current_task = {
         next_task_id(),
         engine_t::stt,
-        restart_stt_engine(speech_mode_t::automatic, lang, out_lang),
+        restart_stt_engine(speech_mode_t::automatic, lang, out_lang, options),
         speech_mode_t::automatic,
         out_lang,
         {},
         {},
-        {},
+        options,
         false};
 
     if (m_current_task->model_id.isEmpty()) {
@@ -2536,7 +2572,8 @@ int speech_service::mnt_translate(const QString &text, QString lang,
 }
 
 int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
-                                     QString out_lang) {
+                                     QString out_lang,
+                                     const QVariantMap &options) {
     if (state() == state_t::unknown || state() == state_t::not_configured ||
         state() == state_t::busy) {
         qWarning() << "cannot stt start listen, invalid state";
@@ -2572,12 +2609,12 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
 
     m_current_task = {next_task_id(),
                       engine_t::stt,
-                      restart_stt_engine(mode, lang, out_lang),
+                      restart_stt_engine(mode, lang, out_lang, options),
                       mode,
                       out_lang,
                       {},
                       {},
-                      {},
+                      options,
                       false};
 
     if (m_current_task->model_id.isEmpty()) {
@@ -2765,7 +2802,7 @@ int speech_service::cancel(int task) {
         if (m_pending_task->engine == engine_t::stt) {
             if (m_current_task->engine == engine_t::tts) stop_tts_engine();
             restart_stt_engine(next_task.speech_mode, next_task.model_id,
-                               next_task.out_lang);
+                               next_task.out_lang, next_task.options);
         } else if (next_task.engine == engine_t::tts) {
             if (m_current_task->engine == engine_t::stt) stop_stt_engine();
             restart_tts_engine(m_pending_task->model_id, {});
@@ -3495,7 +3532,30 @@ int speech_service::SttStartListen(int mode, const QString &lang,
         return INVALID_TASK;
     }
 
-    return stt_start_listen(speech_mode, lang, out_lang);
+    return stt_start_listen(speech_mode, lang, out_lang, {});
+}
+
+int speech_service::SttStartListen2(int mode, const QString &lang,
+                                    const QString &out_lang,
+                                    const QVariantMap &options) {
+    qDebug() << "[dbus => service] called StartListen2:" << lang << mode
+             << out_lang;
+    m_keepalive_timer.start();
+
+    speech_mode_t speech_mode;
+
+    if (mode == 0)
+        speech_mode = speech_mode_t::automatic;
+    else if (mode == 1)
+        speech_mode = speech_mode_t::manual;
+    else if (mode == 2)
+        speech_mode = speech_mode_t::single_sentence;
+    else {
+        qWarning() << "invalid speech mode";
+        return INVALID_TASK;
+    }
+
+    return stt_start_listen(speech_mode, lang, out_lang, options);
 }
 
 int speech_service::SttStopListen(int task) {
@@ -3513,12 +3573,13 @@ int speech_service::Cancel(int task) {
 }
 
 int speech_service::SttTranscribeFile(const QString &file, const QString &lang,
-                                      const QString &out_lang) {
+                                      const QString &out_lang,
+                                      const QVariantMap &options) {
     qDebug() << "[dbus => service] called TranscribeFile:" << file << lang
              << out_lang;
     start_keepalive_current_task();
 
-    return stt_transcribe_file(file, lang, out_lang);
+    return stt_transcribe_file(file, lang, out_lang, options);
 }
 
 double speech_service::SttGetFileTranscribeProgress(int task) {

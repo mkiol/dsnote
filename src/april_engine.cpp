@@ -112,6 +112,8 @@ stt_engine::samples_process_result_t april_engine::process_buff() {
         if (m_session) aas_flush(m_session);
         m_result.clear();
         m_result_prev_segment.clear();
+        reset_segment_counters();
+        m_segments.clear();
     }
 
     m_denoiser.process(m_in_buf.buf.data(), m_in_buf.size);
@@ -119,11 +121,7 @@ stt_engine::samples_process_result_t april_engine::process_buff() {
     const auto& vad_buf =
         m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.size);
 
-    m_in_buf.clear();
-
     bool vad_status = !vad_buf.empty();
-
-    m_in_buf.clear();
 
     if (vad_status) {
         LOGD("vad: speech detected");
@@ -133,8 +131,12 @@ stt_engine::samples_process_result_t april_engine::process_buff() {
             set_speech_detection_status(
                 speech_detection_status_t::speech_detected);
 
-        m_speech_buf.insert(m_speech_buf.end(), vad_buf.cbegin(),
-                            vad_buf.cend());
+        if (m_config.text_format == text_format_t::raw)
+            m_speech_buf.insert(m_speech_buf.end(), vad_buf.cbegin(),
+                                vad_buf.cend());
+        else
+            m_speech_buf.insert(m_speech_buf.end(), m_in_buf.buf.cbegin(),
+                                m_in_buf.buf.cbegin() + m_in_buf.size);
 
         restart_sentence_timer();
     } else {
@@ -146,7 +148,16 @@ stt_engine::samples_process_result_t april_engine::process_buff() {
             LOGD("sentence timeout");
             m_call_backs.sentence_timeout();
         }
+
+        if (m_speech_buf.empty())
+            m_segment_time_discarded_before +=
+                (1000 * m_in_buf.size) / m_sample_rate;
+        else
+            m_segment_time_discarded_after +=
+                (1000 * m_in_buf.size) / m_sample_rate;
     }
+
+    m_in_buf.clear();
 
     if (m_thread_exit_requested) {
         free_buf();
@@ -167,7 +178,13 @@ stt_engine::samples_process_result_t april_engine::process_buff() {
         LOGD("speech frame: samples=" << m_speech_buf.size()
                                       << ", final=" << final_decode);
 
+        m_segment_time_offset += m_segment_time_discarded_before;
+        m_segment_time_discarded_before = 0;
+
         decode_speech(m_speech_buf, final_decode);
+
+        m_segment_time_offset += m_segment_time_discarded_after;
+        m_segment_time_discarded_after = 0;
 
         if (m_config.speech_started)
             set_processing_state(processing_state_t::idle);
@@ -195,6 +212,11 @@ void april_engine::decode_handler(void* user_data, AprilResultType result_type,
                    result_type == APRIL_RESULT_RECOGNITION_PARTIAL)) {
         auto* engine = static_cast<april_engine*>(user_data);
 
+        if (!engine->m_result_prev_segment.empty() &&
+            engine->m_result.empty()) {
+            engine->m_prev_segment_end_time = tokens->time_ms;
+        }
+
         engine->m_result.clear();
 
         for (size_t i = 0; i < count; ++i)
@@ -203,8 +225,9 @@ void april_engine::decode_handler(void* user_data, AprilResultType result_type,
         text_tools::to_lower_case(engine->m_result);
 
         if (result_type == APRIL_RESULT_RECOGNITION_FINAL) {
-            engine->m_result_prev_segment.append(std::move(engine->m_result));
+            engine->m_result_prev_segment.append(engine->m_result);
             engine->m_result.clear();
+            engine->m_prev_segment_start_time = tokens->time_ms;
         }
     }
 }
@@ -221,20 +244,79 @@ void april_engine::decode_speech(april_buf_t& buf, bool eof) {
     LOGD("speech decoded");
 #endif
 
-    auto result = m_result_prev_segment + m_result;
+    bool prev_segment_finished =
+        m_config.text_format == text_format_t::subrip &&
+        ((m_prev_segment_end_time && m_prev_segment_start_time) || eof);
 
-    ltrim(result);
-    rtrim(result);
+    if (prev_segment_finished) {
+        std::string result{
+            m_result_prev_segment.cbegin() + m_result_size_consumed,
+            m_result_prev_segment.cend()};
 
-    if (m_punctuator) {
-        result = m_punctuator->process(result);
+        m_result_size_consumed = m_result_prev_segment.size();
+
+        ltrim(result);
+        rtrim(result);
+
+        if (*m_prev_segment_end_time <= *m_prev_segment_start_time) {
+            m_prev_segment_end_time =
+                *m_prev_segment_start_time +
+                result.size() * m_prev_segment_dur_per_token;
+        } else {
+            m_prev_segment_dur_per_token =
+                (*m_prev_segment_end_time - *m_prev_segment_start_time) /
+                result.size();
+        }
+
+        m_segments.push_back(
+            {++m_segment_offset,
+             *m_prev_segment_start_time + m_segment_time_offset,
+             *m_prev_segment_end_time + m_segment_time_offset,
+             std::move(result)});
+
+        m_prev_segment_start_time.reset();
+        m_prev_segment_end_time.reset();
+    }
+
+    if (eof && m_config.text_format == text_format_t::subrip) {
+        ltrim(m_result_prev_segment);
+        rtrim(m_result_prev_segment);
+
+        if (m_punctuator) {
+            m_result_prev_segment =
+                m_punctuator->process(m_result_prev_segment);
+        } else {
+            text_tools::restore_caps(m_result_prev_segment);
+        }
+
+        text_tools::restore_punctuation_in_segments(m_result_prev_segment,
+                                                    m_segments);
+
+        text_tools::break_segments_to_multiline(
+            m_config.sub_config.min_line_length,
+            m_config.sub_config.max_line_length, m_segments);
+
+        set_intermediate_text(text_tools::segments_to_subrip_text(m_segments));
+
+        m_result_prev_segment.clear();
+        m_result_size_consumed = 0;
+        m_segments.clear();
     } else {
-        text_tools::restore_caps(result);
-    }
+        auto result = m_result_prev_segment + m_result;
 
-    if (!m_intermediate_text || m_intermediate_text != result) {
-        set_intermediate_text(result);
-    }
+        ltrim(result);
+        rtrim(result);
 
-    if (eof) m_result_prev_segment.clear();
+        if (m_punctuator) {
+            result = m_punctuator->process(result);
+        } else {
+            text_tools::restore_caps(result);
+        }
+
+        if (!m_intermediate_text || m_intermediate_text != result) {
+            set_intermediate_text(result);
+        }
+
+        if (eof) m_result_prev_segment.clear();
+    }
 }

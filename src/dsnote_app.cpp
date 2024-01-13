@@ -495,8 +495,12 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
     switch (m_stt_text_destination) {
         case stt_text_destination_t::note_add:
             make_undo();
-            set_note(insert_to_note(settings::instance()->note(), text, lang,
-                                    settings::instance()->insert_mode()));
+            set_note(
+                insert_to_note(settings::instance()->note(), text, lang,
+                               settings::instance()->stt_text_format() ==
+                                       settings::text_format_t::TextFormatSubRip
+                                   ? settings::insert_mode_t::InsertInLine
+                                   : settings::instance()->insert_mode()));
             this->m_intermediate_text.clear();
             emit text_changed();
             emit intermediate_text_changed();
@@ -1842,16 +1846,24 @@ void dsnote_app::transcribe_file(const QString &source_file, bool replace) {
 
     int new_task = 0;
 
+    QVariantMap options;
+    options.insert("text_format", static_cast<int>(s->stt_text_format()));
+    options.insert("sub_min_segment_dur", s->sub_min_segment_dur());
+    if (s->sub_break_lines()) {
+        options.insert("sub_min_line_length", s->sub_min_line_length());
+        options.insert("sub_max_line_length", s->sub_max_line_length());
+    }
+
     if (s->launch_mode() == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->stt_transcribe_file(
             source_file, {},
-            s->whisper_translate() ? QStringLiteral("en") : QString{});
+            s->whisper_translate() ? QStringLiteral("en") : QString{}, options);
     } else {
         qDebug() << "[app => dbus] call SttTranscribeFile";
 
         new_task = m_dbus_service.SttTranscribeFile(
             source_file, {},
-            s->whisper_translate() ? QStringLiteral("en") : QString{});
+            s->whisper_translate() ? QStringLiteral("en") : QString{}, options);
     }
 
     m_side_task.set(new_task);
@@ -1881,15 +1893,23 @@ void dsnote_app::listen_internal() {
 
     int new_task = 0;
 
+    QVariantMap options;
+    options.insert("text_format", static_cast<int>(s->stt_text_format()));
+    options.insert("sub_min_segment_dur", s->sub_min_segment_dur());
+    if (s->sub_break_lines()) {
+        options.insert("sub_min_line_length", s->sub_min_line_length());
+        options.insert("sub_max_line_length", s->sub_max_line_length());
+    }
+
     if (s->launch_mode() == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->stt_start_listen(
             static_cast<speech_service::speech_mode_t>(s->speech_mode()), {},
-            s->whisper_translate() ? QStringLiteral("en") : QString{});
+            s->whisper_translate() ? QStringLiteral("en") : QString{}, options);
     } else {
-        qDebug() << "[app => dbus] call SttStartListen:" << s->speech_mode();
-        new_task = m_dbus_service.SttStartListen(
+        qDebug() << "[app => dbus] call SttStartListen2:" << s->speech_mode();
+        new_task = m_dbus_service.SttStartListen2(
             static_cast<int>(s->speech_mode()), {},
-            s->whisper_translate() ? QStringLiteral("en") : QString{});
+            s->whisper_translate() ? QStringLiteral("en") : QString{}, options);
     }
 
     m_primary_task.set(new_task);

@@ -9,6 +9,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 #include <string>
+#include <vector>
 
 TEST_CASE("text_tools", "[restore_caps]") {
     SECTION("latin text") {
@@ -143,5 +144,63 @@ TEST_CASE("text_tools", "[trim_lines]") {
         INFO(text);
 
         REQUIRE(text == "Hello. How are you?");
+    }
+}
+
+TEST_CASE("text_tools", "[restore_punctuation_in_segments]") {
+    SECTION("empty_text_with_punctuation") {
+        std::string text_with_punctuation = "";
+        std::vector<text_tools::segment_t> in_segments = {
+            {1, 0, 0, "abc dfgh ijklm"}, {2, 0, 0, "abc"}, {3, 0, 0, "dfgh"}};
+
+        std::vector<text_tools::segment_t> out_segments = in_segments;
+
+        text_tools::restore_punctuation_in_segments(text_with_punctuation,
+                                                    in_segments);
+
+        REQUIRE(in_segments == out_segments);
+    }
+
+    SECTION("text_with_punctuation_for_one_segment") {
+        std::string text_with_punctuation = "Abc dfgh, ijklm.";
+        std::vector<text_tools::segment_t> in_segments = {
+            {1, 0, 0, "abc dfgh ijklm"}, {2, 0, 0, "abc"}, {3, 0, 0, "dfgh"}};
+
+        std::vector<text_tools::segment_t> out_segments = {
+            {1, 0, 0, "Abc dfgh, ijklm."}, {2, 0, 0, "abc"}, {3, 0, 0, "dfgh"}};
+
+        text_tools::restore_punctuation_in_segments(text_with_punctuation,
+                                                    in_segments);
+
+        REQUIRE(in_segments == out_segments);
+    }
+
+    SECTION("text_with_punctuation_shorter_than_segment") {
+        std::string text_with_punctuation = "Abc dfgh,";
+        std::vector<text_tools::segment_t> in_segments = {
+            {1, 0, 0, "abc dfgh ijklm"}, {2, 0, 0, "abc"}, {3, 0, 0, "dfgh"}};
+
+        std::vector<text_tools::segment_t> out_segments = in_segments;
+
+        text_tools::restore_punctuation_in_segments(text_with_punctuation,
+                                                    in_segments);
+
+        REQUIRE(in_segments == out_segments);
+    }
+
+    SECTION("one_line_segments") {
+        std::string text_with_punctuation = "Abc dfgh, ijklm. Abc dfgh.";
+        std::vector<text_tools::segment_t> in_segments = {
+            {1, 0, 0, "abc dfgh ijklm"}, {2, 0, 0, "abc"}, {3, 0, 0, "dfgh"}};
+
+        std::vector<text_tools::segment_t> out_segments = {
+            {1, 0, 0, "Abc dfgh, ijklm."},
+            {2, 0, 0, "Abc"},
+            {3, 0, 0, "dfgh."}};
+
+        text_tools::restore_punctuation_in_segments(text_with_punctuation,
+                                                    in_segments);
+
+        REQUIRE(in_segments == out_segments);
     }
 }

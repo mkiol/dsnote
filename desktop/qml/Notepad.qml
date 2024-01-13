@@ -76,6 +76,24 @@ ColumnLayout {
                 app.note = root.noteTextArea.textArea.text
             }
         }
+        textFormatCombo {
+            currentIndex: {
+                if (_settings.stt_text_format === Settings.TextFormatRaw) return 0
+                if (_settings.stt_text_format === Settings.TextFormatSubRip) return 1
+                return 0
+            }
+            model: [
+                qsTr("Plain text"),
+                qsTr("SRT Subtitles")
+            ]
+            onActivated: {
+                if (index === 0)
+                    _settings.stt_text_format = Settings.TextFormatRaw
+                else if (index === 1)
+                    _settings.stt_text_format = Settings.TextFormatSubRip
+            }
+        }
+
         onCopyClicked: app.copy_to_clipboard()
         onClearClicked: {
             app.make_undo()

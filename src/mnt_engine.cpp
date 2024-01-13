@@ -132,7 +132,7 @@ void mnt_engine::open_bergamot_lib() {
         LOGW("using bergamot-fallback");
         m_bergamotlib_handle = dlopen("libbergamot_api-fallback.so", RTLD_LAZY);
     } else {
-        LOGE("avx not supported by bergamot needs it");
+        LOGE("avx not supported but bergamot needs it");
         throw std::runtime_error(
             "failed to open bergamot lib: avx not supported");
     }

@@ -14,6 +14,7 @@
 #define slots Q_SLOTS
 
 #include <optional>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -42,6 +43,9 @@ class fasterwhisper_engine : public stt_engine {
     static void push_buf_to_whisper_buf(
         const std::vector<in_buf_t::buf_t::value_type>& buf,
         whisper_buf_t& whisper_buf);
+    static void push_buf_to_whisper_buf(in_buf_t::buf_t::value_type* data,
+                                        in_buf_t::buf_t::size_type size,
+                                        whisper_buf_t& whisper_buf);
 
     void reset_impl() override;
     void stop_processing_impl() override;

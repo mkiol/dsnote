@@ -275,6 +275,14 @@ int SpeechAdaptor::SttStartListen(int mode, const QString &lang, const QString &
     return task;
 }
 
+int SpeechAdaptor::SttStartListen2(int mode, const QString &lang, const QString &out_lang, const QVariantMap &options)
+{
+    // handle method call org.mkiol.Speech.SttStartListen2
+    int task;
+    QMetaObject::invokeMethod(parent(), "SttStartListen2", Q_RETURN_ARG(int, task), Q_ARG(int, mode), Q_ARG(QString, lang), Q_ARG(QString, out_lang), Q_ARG(QVariantMap, options));
+    return task;
+}
+
 int SpeechAdaptor::SttStopListen(int task)
 {
     // handle method call org.mkiol.Speech.SttStopListen
@@ -283,11 +291,11 @@ int SpeechAdaptor::SttStopListen(int task)
     return result;
 }
 
-int SpeechAdaptor::SttTranscribeFile(const QString &file, const QString &lang, const QString &out_lang)
+int SpeechAdaptor::SttTranscribeFile(const QString &file, const QString &lang, const QString &out_lang, const QVariantMap &options)
 {
     // handle method call org.mkiol.Speech.SttTranscribeFile
     int task;
-    QMetaObject::invokeMethod(parent(), "SttTranscribeFile", Q_RETURN_ARG(int, task), Q_ARG(QString, file), Q_ARG(QString, lang), Q_ARG(QString, out_lang));
+    QMetaObject::invokeMethod(parent(), "SttTranscribeFile", Q_RETURN_ARG(int, task), Q_ARG(QString, file), Q_ARG(QString, lang), Q_ARG(QString, out_lang), Q_ARG(QVariantMap, options));
     return task;
 }
 
