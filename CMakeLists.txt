@@ -117,7 +117,7 @@ set(info_conf_version "62")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · locness3")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
-{fmt} · Piper · RHVoice · ssplit-cpp · eSpeak NG · Bergamot Translator · \
+{fmt} · Piper · RHVoice · ssplit-cpp · nlohmann JSON · eSpeak NG · Bergamot Translator · \
 Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis · Opus · TagLib · \
 libnumbertext · april-asr · html2md · maddy")
 if (WITH_DESKTOP)

@@ -497,7 +497,7 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
             make_undo();
             set_note(
                 insert_to_note(settings::instance()->note(), text, lang,
-                               settings::instance()->stt_text_format() ==
+                               settings::instance()->stt_tts_text_format() ==
                                        settings::text_format_t::TextFormatSubRip
                                    ? settings::insert_mode_t::InsertInLine
                                    : settings::instance()->insert_mode()));
@@ -1847,7 +1847,7 @@ void dsnote_app::transcribe_file(const QString &source_file, bool replace) {
     int new_task = 0;
 
     QVariantMap options;
-    options.insert("text_format", static_cast<int>(s->stt_text_format()));
+    options.insert("text_format", static_cast<int>(s->stt_tts_text_format()));
     options.insert("sub_min_segment_dur", s->sub_min_segment_dur());
     if (s->sub_break_lines()) {
         options.insert("sub_min_line_length", s->sub_min_line_length());
@@ -1894,7 +1894,12 @@ void dsnote_app::listen_internal() {
     int new_task = 0;
 
     QVariantMap options;
-    options.insert("text_format", static_cast<int>(s->stt_text_format()));
+    auto text_format =
+        m_stt_text_destination == stt_text_destination_t::note_add ||
+                m_stt_text_destination == stt_text_destination_t::note_replace
+            ? s->stt_tts_text_format()
+            : settings::text_format_t::TextFormatRaw;
+    options.insert("text_format", static_cast<int>(text_format));
     options.insert("sub_min_segment_dur", s->sub_min_segment_dur());
     if (s->sub_break_lines()) {
         options.insert("sub_min_line_length", s->sub_min_line_length());
@@ -1980,7 +1985,8 @@ void dsnote_app::resume_speech() {
 
 void dsnote_app::play_speech_internal(const QString &text,
                                       const QString &model_id,
-                                      const QString &ref_voice) {
+                                      const QString &ref_voice,
+                                      settings::text_format_t text_format) {
     if (text.isEmpty()) {
         qWarning() << "text is empty";
         return;
@@ -1990,6 +1996,7 @@ void dsnote_app::play_speech_internal(const QString &text,
 
     QVariantMap options;
     options.insert("speech_speed", settings::instance()->speech_speed());
+    options.insert("text_format", static_cast<int>(text_format));
 
     if (m_available_tts_ref_voices_map.contains(ref_voice)) {
         auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
@@ -2014,14 +2021,15 @@ void dsnote_app::play_speech_internal(const QString &text,
 
 void dsnote_app::play_speech() {
     play_speech_internal(
-        note(), {},
-        tts_ref_voice_needed() ? active_tts_ref_voice() : QString{});
+        note(), {}, tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
+        settings::instance()->stt_tts_text_format());
 }
 
 void dsnote_app::play_speech_from_clipboard() {
     play_speech_internal(
         QGuiApplication::clipboard()->text(), {},
-        tts_ref_voice_needed() ? active_tts_ref_voice() : QString{});
+        tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
+        settings::text_format_t::TextFormatRaw);
 }
 
 void dsnote_app::play_speech_translator(bool transtalated) {
@@ -2043,7 +2051,8 @@ void dsnote_app::play_speech_translator(bool transtalated) {
                                             : QString{}
                          : tts_for_in_mnt_ref_voice_needed()
                              ? active_tts_for_in_mnt_ref_voice()
-                             : QString{});
+                             : QString{},
+                         settings::instance()->mnt_text_format());
 }
 
 void dsnote_app::translate_delayed() {
@@ -2104,7 +2113,8 @@ void dsnote_app::speech_to_file(const QString &dest_file,
                                 const QString &track_tag) {
     speech_to_file_internal(
         note(), {}, dest_file, title_tag, track_tag,
-        tts_ref_voice_needed() ? active_tts_ref_voice() : QString{});
+        tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
+        settings::instance()->stt_tts_text_format());
 }
 
 void dsnote_app::speech_to_file_translator_url(bool transtalated,
@@ -2138,7 +2148,8 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
                                                   ? active_tts_for_out_mnt_ref_voice()
                                                   : QString{}
                                : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
-                                            : QString{});
+                                            : QString{},
+        settings::instance()->mnt_text_format());
 }
 
 static QString audio_quality_to_str(settings::audio_quality_t quality) {
@@ -2154,12 +2165,10 @@ static QString audio_quality_to_str(settings::audio_quality_t quality) {
     return QStringLiteral("vbr_medium");
 }
 
-void dsnote_app::speech_to_file_internal(const QString &text,
-                                         const QString &model_id,
-                                         const QString &dest_file,
-                                         const QString &title_tag,
-                                         const QString &track_tag,
-                                         const QString &ref_voice) {
+void dsnote_app::speech_to_file_internal(
+    const QString &text, const QString &model_id, const QString &dest_file,
+    const QString &title_tag, const QString &track_tag,
+    const QString &ref_voice, settings::text_format_t text_format) {
     if (text.isEmpty()) {
         qWarning() << "text is empty";
         return;
@@ -2174,6 +2183,7 @@ void dsnote_app::speech_to_file_internal(const QString &text,
 
     QVariantMap options;
     options.insert("speech_speed", settings::instance()->speech_speed());
+    options.insert("text_format", static_cast<int>(text_format));
 
     if (m_available_tts_ref_voices_map.contains(ref_voice)) {
         auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();

@@ -78,6 +78,7 @@ std::string to_timestamp(size_t t, bool comma = false);
 void segment_to_subrip_text(const segment_t& segment, std::ostringstream& os);
 std::string segment_to_subrip_text(const segment_t& segment);
 std::string segments_to_subrip_text(const std::vector<segment_t>& segments);
+std::vector<segment_t> subrip_text_to_segments(const std::string& text);
 void restore_punctuation_in_segment(const std::string& text_with_punctuation,
                                     segment_t& segment);
 void restore_punctuation_in_segments(const std::string& text_with_punctuation,

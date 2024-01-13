@@ -654,9 +654,11 @@ class dsnote_app : public QObject {
     void speech_to_file_internal(const QString &text, const QString &model_id,
                                  const QString &dest_file,
                                  const QString &title_tag, const QString &track,
-                                 const QString &ref_voice);
+                                 const QString &ref_voice,
+                                 settings::text_format_t text_format);
     void play_speech_internal(const QString &text, const QString &model_id,
-                              const QString &ref_voice);
+                              const QString &ref_voice,
+                              settings::text_format_t text_format);
     void save_note_to_file_internal(const QString &text,
                                     const QString &dest_file);
     void copy_to_clipboard_internal(const QString &text);

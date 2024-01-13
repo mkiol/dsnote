@@ -48,6 +48,10 @@ class tts_engine {
     enum class audio_format_t { wav, mp3, ogg_vorbis, ogg_opus, flac };
     friend std::ostream& operator<<(std::ostream& os, audio_format_t format);
 
+    enum class text_format_t { raw, subrip };
+    friend std::ostream& operator<<(std::ostream& os,
+                                    text_format_t text_format);
+
     struct model_files_t {
         std::string model_path;
         std::string vocoder_path;
@@ -100,6 +104,7 @@ class tts_engine {
         std::string data_dir;
         std::string config_dir;
         std::string share_dir;
+        text_format_t text_format = text_format_t::raw;
         std::string options;
         std::string nb_data;
         std::string lang_code;
@@ -126,6 +131,10 @@ class tts_engine {
     inline auto gpu_device() const { return m_config.gpu_device; }
     inline auto ref_voice_file() const { return m_config.ref_voice_file; }
     inline void restart() { m_restart_requested = true; }
+    inline auto text_format() const { return m_config.text_format; }
+    inline void set_text_format(text_format_t value) {
+        m_config.text_format = value;
+    }
     void encode_speech(std::string text);
     static std::string merge_wav_files(std::vector<std::string>&& files);
     void set_speech_speed(unsigned int speech_speed);

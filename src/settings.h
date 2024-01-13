@@ -60,8 +60,8 @@ class settings : public QSettings, public singleton<settings> {
             set_translate_when_typing NOTIFY translate_when_typing_changed)
     Q_PROPERTY(text_format_t mnt_text_format READ mnt_text_format WRITE
                    set_mnt_text_format NOTIFY mnt_text_format_changed)
-    Q_PROPERTY(text_format_t stt_text_format READ stt_text_format WRITE
-                   set_stt_text_format NOTIFY stt_text_format_changed)
+    Q_PROPERTY(text_format_t stt_tts_text_format READ stt_tts_text_format WRITE
+                   set_stt_tts_text_format NOTIFY stt_tts_text_format_changed)
     Q_PROPERTY(bool hint_translator READ hint_translator WRITE
                    set_hint_translator NOTIFY hint_translator_changed)
     Q_PROPERTY(int qt_style_idx READ qt_style_idx WRITE set_qt_style_idx NOTIFY
@@ -349,8 +349,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_translate_when_typing(bool value);
     void set_mnt_text_format(text_format_t value);
     text_format_t mnt_text_format() const;
-    void set_stt_text_format(text_format_t value);
-    text_format_t stt_text_format() const;
+    void set_stt_tts_text_format(text_format_t value);
+    text_format_t stt_tts_text_format() const;
     QString default_tts_model_for_mnt_lang(const QString &lang);
     void set_default_tts_model_for_mnt_lang(const QString &lang,
                                             const QString &value);
@@ -584,7 +584,7 @@ class settings : public QSettings, public singleton<settings> {
     void use_tray_changed();
     void start_in_tray_changed();
     void mnt_text_format_changed();
-    void stt_text_format_changed();
+    void stt_tts_text_format_changed();
     void clean_ref_voice_changed();
     void addon_flags_changed();
     void sub_config_changed();

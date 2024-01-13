@@ -698,17 +698,18 @@ void settings::set_mnt_text_format(text_format_t value) {
     }
 }
 
-settings::text_format_t settings::stt_text_format() const {
+settings::text_format_t settings::stt_tts_text_format() const {
     return static_cast<text_format_t>(
-        value(QStringLiteral("stt_text_format"),
+        value(QStringLiteral("stt_tts_text_format"),
               static_cast<int>(text_format_t::TextFormatRaw))
             .toInt());
 }
 
-void settings::set_stt_text_format(text_format_t value) {
-    if (stt_text_format() != value) {
-        setValue(QStringLiteral("stt_text_format"), static_cast<int>(value));
-        emit stt_text_format_changed();
+void settings::set_stt_tts_text_format(text_format_t value) {
+    if (stt_tts_text_format() != value) {
+        setValue(QStringLiteral("stt_tts_text_format"),
+                 static_cast<int>(value));
+        emit stt_tts_text_format_changed();
     }
 }
 

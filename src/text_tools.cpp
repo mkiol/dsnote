@@ -544,7 +544,9 @@ static void convert_subrip_to_html(std::string& text) {
     std::stringstream in_ss{text};
     std::stringstream out_ss;
 
-    unsigned int segment_line = 0;
+    static const std::regex html_tags{"<[^>]*>"};
+
+    unsigned int n = 0;
     std::string text_line;
     for (std::string line; std::getline(in_ss, line);) {
         ltrim(line);
@@ -558,12 +560,12 @@ static void convert_subrip_to_html(std::string& text) {
 
             out_ss << "<p></p>";
 
-            segment_line = 0;
+            n = 0;
 
             continue;
         }
 
-        if (segment_line == 0) {
+        if (n == 0) {
             if (!std::all_of(line.cbegin(), line.cend(), [](auto c) {
                     return std::isdigit(static_cast<unsigned char>(c)) != 0;
                 })) {
@@ -571,17 +573,18 @@ static void convert_subrip_to_html(std::string& text) {
             }
         }
 
-        if (segment_line < 2) {
+        if (n < 2) {
             out_ss << "<code>" << line << "</code>";
-            ++segment_line;
+            ++n;
             continue;
         }
 
         if (!text_line.empty()) text_line.append("<span></span>");
 
+        line = std::regex_replace(line, html_tags, "");
         text_line.append(line);
 
-        ++segment_line;
+        ++n;
     }
 
     if (!text_line.empty()) {
@@ -676,6 +679,58 @@ std::string segments_to_subrip_text(const std::vector<segment_t>& segments) {
         [&os](const auto& segment) { segment_to_subrip_text(segment, os); });
 
     return os.str();
+}
+
+std::vector<segment_t> subrip_text_to_segments(const std::string& text) {
+    std::vector<segment_t> segments;
+
+    static const std::regex html_tags{"<[^>]*>"};
+
+    std::istringstream in_ss{text};
+
+    unsigned int n = 0;
+    std::string text_line;
+    for (std::string line; std::getline(in_ss, line);) {
+        ltrim(line);
+        rtrim(line);
+
+        if (line.empty()) {
+            if (!text_line.empty()) {
+                segments.push_back({n, 0, 0, std::move(text_line)});
+                text_line.clear();
+            }
+
+            n = 0;
+
+            continue;
+        }
+
+        if (n == 0) {
+            if (!std::all_of(line.cbegin(), line.cend(), [](auto c) {
+                    return std::isdigit(static_cast<unsigned char>(c)) != 0;
+                })) {
+                continue;
+            }
+        }
+
+        if (n < 2) {
+            ++n;
+            continue;
+        }
+
+        line = std::regex_replace(line, html_tags, "");
+
+        if (!text_line.empty()) text_line.push_back(' ');
+        text_line.append(line);
+
+        ++n;
+    }
+
+    if (!text_line.empty()) {
+        segments.push_back({n, 0, 0, std::move(text_line)});
+    }
+
+    return segments;
 }
 
 static bool restore_punctuation_in_segment_internal(

@@ -78,8 +78,8 @@ ColumnLayout {
         }
         textFormatCombo {
             currentIndex: {
-                if (_settings.stt_text_format === Settings.TextFormatRaw) return 0
-                if (_settings.stt_text_format === Settings.TextFormatSubRip) return 1
+                if (_settings.stt_tts_text_format === Settings.TextFormatRaw) return 0
+                if (_settings.stt_tts_text_format === Settings.TextFormatSubRip) return 1
                 return 0
             }
             model: [
@@ -88,9 +88,9 @@ ColumnLayout {
             ]
             onActivated: {
                 if (index === 0)
-                    _settings.stt_text_format = Settings.TextFormatRaw
+                    _settings.stt_tts_text_format = Settings.TextFormatRaw
                 else if (index === 1)
-                    _settings.stt_text_format = Settings.TextFormatSubRip
+                    _settings.stt_tts_text_format = Settings.TextFormatSubRip
             }
         }
 

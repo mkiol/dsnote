@@ -1250,6 +1250,20 @@ static QString tts_ref_voice_file_from_options(const QVariantMap &options) {
     return {};
 }
 
+static tts_engine::text_format_t tts_text_fromat_from_settings_format(
+    settings::text_format_t format) {
+    switch (format) {
+        case settings::text_format_t::TextFormatSubRip:
+            return tts_engine::text_format_t::subrip;
+        case settings::text_format_t::TextFormatRaw:
+        case settings::text_format_t::TextFormatMarkdown:
+        case settings::text_format_t::TextFormatHtml:
+            return tts_engine::text_format_t::raw;
+    }
+
+    throw std::runtime_error("invalid text format");
+}
+
 QString speech_service::restart_tts_engine(const QString &model_id,
                                            const QVariantMap &options) {
     auto model_config = choose_model_config(engine_t::tts, model_id);
@@ -1268,6 +1282,8 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         config.speaker_id = model_config->tts->speaker.toStdString();
         config.speech_speed = tts_speech_speed_from_options(options);
         config.options = model_config->options.toStdString();
+        config.text_format = tts_text_fromat_from_settings_format(
+            text_format_from_options(options));
         config.audio_format = format_from_cache_format(
             settings::instance()->cache_audio_format());
         config.ref_voice_file =
@@ -1420,6 +1436,7 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             qDebug() << "new tts engine not required";
             m_tts_engine->set_speech_speed(config.speech_speed);
             m_tts_engine->set_ref_voice_file(std::move(config.ref_voice_file));
+            m_tts_engine->set_text_format(config.text_format);
             m_tts_engine->restart();
         }
 

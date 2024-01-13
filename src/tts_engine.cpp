@@ -101,6 +101,20 @@ std::ostream& operator<<(std::ostream& os, tts_engine::audio_format_t format) {
 }
 
 std::ostream& operator<<(std::ostream& os,
+                         tts_engine::text_format_t text_format) {
+    switch (text_format) {
+        case tts_engine::text_format_t::raw:
+            os << "raw";
+            break;
+        case tts_engine::text_format_t::subrip:
+            os << "subrip";
+            break;
+    }
+
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os,
                          const tts_engine::model_files_t& model_files) {
     os << "model-path=" << model_files.model_path
        << ", vocoder-path=" << model_files.vocoder_path
@@ -123,6 +137,7 @@ std::ostream& operator<<(std::ostream& os, const tts_engine::config_t& config) {
        << ", model-files=[" << config.model_files << "]"
        << ", speaker=" << config.speaker_id
        << ", ref_voice_file=" << config.ref_voice_file
+       << ", text-format=" << config.text_format
        << ", options=" << config.options << ", lang_code=" << config.lang_code
        << ", share-dir=" << config.share_dir
        << ", cache-dir=" << config.cache_dir << ", data-dir=" << config.data_dir
@@ -320,24 +335,37 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
                                                        bool split) const {
     std::vector<tts_engine::task_t> tasks;
 
-    if (split) {
-        auto engine = m_config.has_option('a') ? text_tools::split_engine_t::astrunc
-                                               : text_tools::split_engine_t::ssplit;
-        auto [parts, _] =
-            text_tools::split(text, engine, m_config.lang, m_config.nb_data);
-        if (!parts.empty()) {
-            tasks.reserve(parts.size());
+    if (m_config.text_format == text_format_t::subrip) {
+        auto segments = text_tools::subrip_text_to_segments(text);
+        if (!segments.empty()) {
+            tasks.reserve(segments.size());
 
-            for (auto& part : parts) {
-                trim(part);
-                if (!part.empty())
-                    tasks.push_back(task_t{std::move(part), false});
-            }
+            for (auto& segment : segments)
+                tasks.push_back(task_t{std::move(segment.text), false});
 
             tasks.back().last = true;
         }
     } else {
-        tasks.push_back(task_t{text, true});
+        if (split) {
+            auto engine = m_config.has_option('a')
+                              ? text_tools::split_engine_t::astrunc
+                              : text_tools::split_engine_t::ssplit;
+            auto [parts, _] = text_tools::split(text, engine, m_config.lang,
+                                                m_config.nb_data);
+            if (!parts.empty()) {
+                tasks.reserve(parts.size());
+
+                for (auto& part : parts) {
+                    trim(part);
+                    if (!part.empty())
+                        tasks.push_back(task_t{std::move(part), false});
+                }
+
+                tasks.back().last = true;
+            }
+        } else {
+            tasks.push_back(task_t{text, true});
+        }
     }
 
     return tasks;

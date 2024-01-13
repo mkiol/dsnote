@@ -252,8 +252,8 @@ ToolBar {
 
         title: qsTr("Save File")
         selectedNameFilter: {
-            switch (_settings.translator_mode ? _settings.mnt_text_format : _settings.stt_text_format) {
-            case Settings.TextFormatSubRip: return "SRT Subtitles (*.srt)"
+            switch (_settings.translator_mode ? _settings.mnt_text_format : _settings.stt_tts_text_format) {
+            case Settings.TextFormatSubRip: return qsTr("SRT Subtitles") + " (*.srt)"
             case Settings.TextFormatRaw:
             case Settings.TextFormatHtml:
             case Settings.TextFormatMarkdown:
@@ -261,7 +261,7 @@ ToolBar {
             }
             return qsTr("Text") + " (*.txt)"
         }
-        nameFilters: [ qsTr("Text") + " (*.txt)", "SRT Subtitles (*.srt)", qsTr("All files") + " (*)"]
+        nameFilters: [ qsTr("Text") + " (*.txt)", qsTr("SRT Subtitles") + " (*.srt)", qsTr("All files") + " (*)"]
         folder: _settings.file_save_dir_url
         selectExisting: false
         selectMultiple: false
