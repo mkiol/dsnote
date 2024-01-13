@@ -16,64 +16,35 @@
 #include "stt_engine.hpp"
 #include "text_tools.hpp"
 
+/*** copied from 'coqui-stt.h' START ***/
+
 typedef struct TokenMetadata {
-    /** The text corresponding to this token */
     const char* const text;
-
-    /** Position of the token in units of 20ms */
     const unsigned int timestep;
-
-    /** Position of the token in seconds */
     const float start_time;
 } TokenMetadata;
 
-/**
- * @brief A single transcript computed by the model, including a confidence
- *        value and the metadata for its constituent tokens.
- */
 typedef struct CandidateTranscript {
-    /** Array of TokenMetadata objects */
     const TokenMetadata* const tokens;
-    /** Size of the tokens array */
     const unsigned int num_tokens;
-    /** Approximated confidence value for this transcript. This is roughly the
-     * sum of the acoustic model logit values for each timestep/character that
-     * contributed to the creation of this transcript.
-     */
     const double confidence;
 
 } CandidateTranscript;
 
-/**
- * @brief  An structure to contain emissions (the softmax output of individual
- *         timesteps) from the acoustic model.
- *
- * @member The layout of the emissions member is time major, thus to access the
- *         probability of symbol j at timestep i you would use
- *         emissions[i * num_symbols + j]
- */
 typedef struct AcousticModelEmissions {
-    /** number of symbols in the alphabet, including CTC blank */
     int num_symbols;
-    /** num_symbols long array of NUL-terminated strings */
     const char** symbols;
-    /** total number of timesteps */
     int num_timesteps;
-    /** num_timesteps long array, each pointer is a num_symbols long array */
     const double* emissions;
 } AcousticModelEmissions;
 
-/**
- * @brief An array of CandidateTranscript objects computed by the model.
- */
 typedef struct Metadata {
-    /** Array of CandidateTranscript objects */
     const CandidateTranscript* const transcripts;
-    /** Size of the transcripts array */
     const unsigned int num_transcripts;
-    /** Logits and information to decode them **/
     const AcousticModelEmissions* const emissions;
 } Metadata;
+
+/*** copied from 'coqui-stt.h' END ***/
 
 struct ModelState;
 struct StreamingState;

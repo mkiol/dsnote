@@ -735,36 +735,6 @@ void restore_punctuation_in_segments(const std::string& text_with_punctuation,
         if (!restore_punctuation_in_segment_internal(text_with_punctuation,
                                                      lower_text, head, segment))
             break;
-
-        // auto h = head;
-        // auto s_h = segment.text.begin();
-
-        // while (h != lower_text.cend() && s_h != segment.text.end()) {
-        //     auto [it1, it2] = std::mismatch(s_h, segment.text.end(), h);
-
-        //     if (it2 == lower_text.cend()) break;
-
-        //     h = std::next(it2);
-
-        //     if (std::string{".,?!:-"}.find(*it2) == std::string::npos) break;
-
-        //     s_h = it1 == segment.text.end() ? it1 : std::next(it1);
-
-        //     if (h != lower_text.cend()) h = std::next(h);
-        // }
-
-        // if (std::max<size_t>(0, std::distance(head, h)) <
-        // segment.text.size())
-        //     break;
-
-        // auto beg = std::next(text_with_punctuation.cbegin(),
-        //                      std::distance(lower_text.cbegin(), head));
-        // auto end = std::next(text_with_punctuation.cbegin(),
-        //                      std::distance(lower_text.cbegin(), h));
-        // segment.text.assign(beg, end);
-        // rtrim(segment.text);
-
-        // head = h;
     }
 }
 
