@@ -68,6 +68,7 @@ class media_compressor {
     media_compressor() = default;
     ~media_compressor();
     bool is_media_file(const std::string& input_file);
+    size_t duration(const std::string& input_file);
     void compress(std::vector<std::string> input_files, std::string output_file,
                   format_t format, quality_t quality,
                   clip_info_t clip_info = {0, 0, 0, 0});

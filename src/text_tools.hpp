@@ -74,7 +74,7 @@ void numbers_to_words(std::string& text, const std::string& lang,
 void convert_text_format_to_html(std::string& text, text_format_t input_format);
 void convert_text_format_from_html(std::string& text,
                                    text_format_t output_format);
-std::string to_timestamp(size_t t, bool comma = false);
+std::string to_timestamp(size_t t);
 void segment_to_subrip_text(const segment_t& segment, std::ostringstream& os);
 std::string segment_to_subrip_text(const segment_t& segment);
 std::string segments_to_subrip_text(const std::vector<segment_t>& segments);

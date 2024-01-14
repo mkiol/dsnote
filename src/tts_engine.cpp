@@ -8,6 +8,7 @@
 #include "tts_engine.hpp"
 
 #include <dirent.h>
+#include <fmt/format.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -306,6 +307,12 @@ std::string tts_engine::path_to_output_file(const std::string& text) const {
            file_ext_for_format(m_config.audio_format);
 }
 
+std::string tts_engine::path_to_output_silence_file(
+    size_t duration_msec, audio_format_t format) const {
+    return fmt::format("{}/silence_{}.{}", m_config.cache_dir, duration_msec,
+                       file_ext_for_format(format));
+}
+
 static bool file_exists(const std::string& file_path) {
     struct stat buffer {};
     return stat(file_path.c_str(), &buffer) == 0;
@@ -340,8 +347,13 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
         if (!segments.empty()) {
             tasks.reserve(segments.size());
 
-            for (auto& segment : segments)
-                tasks.push_back(task_t{std::move(segment.text), false});
+            tasks.push_back(task_t{std::move(segments.front().text),
+                                   segments.front().t0, segments.front().t1,
+                                   true, false});
+
+            for (auto it = segments.begin() + 1; it != segments.end(); ++it)
+                tasks.push_back(
+                    task_t{std::move(it->text), it->t0, it->t1, false, false});
 
             tasks.back().last = true;
         }
@@ -354,17 +366,20 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
                                                 m_config.nb_data);
             if (!parts.empty()) {
                 tasks.reserve(parts.size());
+                tasks.push_back(
+                    task_t{std::move(parts.front()), 0, 0, true, false});
 
-                for (auto& part : parts) {
-                    trim(part);
-                    if (!part.empty())
-                        tasks.push_back(task_t{std::move(part), false});
+                for (auto it = parts.begin() + 1; it != parts.end(); ++it) {
+                    trim(*it);
+                    if (!it->empty())
+                        tasks.push_back(
+                            task_t{std::move(*it), 0, 0, false, false});
                 }
 
                 tasks.back().last = true;
             }
         } else {
-            tasks.push_back(task_t{text, true});
+            tasks.push_back(task_t{text, 0, 0, true, true});
         }
     }
 
@@ -549,9 +564,13 @@ void tts_engine::process() {
 
         set_state(state_t::encoding);
 
+        size_t speech_time = 0;
+
         while (!m_shutting_down && !queue.empty()) {
             auto task = std::move(queue.front());
             queue.pop();
+
+            if (task.first) speech_time = 0;
 
             auto output_file = path_to_output_file(task.text);
 
@@ -591,6 +610,45 @@ void tts_engine::process() {
                 }
             }
 
+            if (task.t1 != 0) {
+                if (speech_time < task.t0) {
+                    auto duration = task.t0 - speech_time;
+                    speech_time += duration;
+
+                    auto silence_out_file = path_to_output_silence_file(
+                        duration, m_config.audio_format);
+
+                    if (!file_exists(silence_out_file)) {
+                        auto silence_out_file_wav = path_to_output_silence_file(
+                            duration, audio_format_t::wav);
+
+                        make_silence_wav_file(duration, silence_out_file_wav);
+
+                        if (m_config.audio_format != audio_format_t::wav) {
+                            media_compressor{}.compress(
+                                {silence_out_file_wav}, silence_out_file,
+                                compressor_format_from_format(
+                                    m_config.audio_format),
+                                media_compressor::quality_t::vbr_high);
+
+                            unlink(silence_out_file_wav.c_str());
+                        } else {
+                            silence_out_file = std::move(silence_out_file_wav);
+                        }
+                    }
+
+                    if (m_call_backs.speech_encoded) {
+                        m_call_backs.speech_encoded(
+                            "", silence_out_file, m_config.audio_format, false);
+                    }
+
+                } else if (speech_time > task.t0) {
+                    LOGW("speech delay: " << speech_time - task.t0);
+                }
+
+                speech_time += media_compressor{}.duration(output_file);
+            }
+
             if (m_call_backs.speech_encoded) {
                 m_call_backs.speech_encoded(task.text, output_file,
                                             m_config.audio_format, task.last);
@@ -603,6 +661,19 @@ void tts_engine::process() {
     if (m_shutting_down) set_state(state_t::idle);
 
     LOGD("tts processing done");
+}
+
+void tts_engine::make_silence_wav_file(size_t duration_msec,
+                                       const std::string& output_file) const {
+    const int sample_rate = 16000;
+    const uint32_t nb_samples = sample_rate * (duration_msec / 1000.0);
+
+    std::ofstream wav_file{output_file};
+
+    write_wav_header(sample_rate, 2, 1, nb_samples, wav_file);
+
+    std::string silence(nb_samples * 2, '\0');
+    wav_file.write(silence.data(), silence.size());
 }
 
 void tts_engine::setup_ref_voice() {

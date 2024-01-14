@@ -143,6 +143,9 @@ class tts_engine {
    protected:
     struct task_t {
         std::string text;
+        size_t t0 = 0;
+        size_t t1 = 0;
+        bool first = false;
         bool last = false;
     };
 
@@ -177,11 +180,15 @@ class tts_engine {
                                     const std::string& out_file) = 0;
     void set_state(state_t new_state);
     std::string path_to_output_file(const std::string& text) const;
+    std::string path_to_output_silence_file(size_t duration,
+                                            audio_format_t format) const;
     void process();
     std::vector<task_t> make_tasks(const std::string& text,
                                    bool split = true) const;
     void apply_speed(const std::string& file) const;
     void setup_ref_voice();
+    void make_silence_wav_file(size_t duration_msec,
+                               const std::string& output_file) const;
 #ifdef ARCH_X86_64
     static bool stretch(const std::string& input_file,
                         const std::string& output_file, double time_ration,

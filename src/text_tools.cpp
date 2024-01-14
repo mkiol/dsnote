@@ -22,6 +22,8 @@
 #include <regex>
 #include <sstream>
 #include <string_view>
+#include <tuple>
+#include <utility>
 
 #include "astrunc/astrunc.h"
 #include "logger.hpp"
@@ -642,7 +644,7 @@ void convert_text_format_from_html(std::string& text,
 }
 
 // copied from wisper.cpp
-std::string to_timestamp(size_t msec, bool comma) {
+std::string to_timestamp(size_t msec) {
     size_t hr = msec / (1000 * 60 * 60);
     msec = msec - hr * (1000 * 60 * 60);
     size_t min = msec / (1000 * 60);
@@ -652,7 +654,7 @@ std::string to_timestamp(size_t msec, bool comma) {
 
     char buf[32];
     snprintf(buf, sizeof(buf), "%02d:%02d:%02d%s%03d", static_cast<int>(hr),
-             static_cast<int>(min), static_cast<int>(sec), comma ? "," : ".",
+             static_cast<int>(min), static_cast<int>(sec), ",",
              static_cast<int>(msec));
 
     return std::string{buf};
@@ -660,8 +662,8 @@ std::string to_timestamp(size_t msec, bool comma) {
 
 void segment_to_subrip_text(const segment_t& segment, std::ostringstream& os) {
     os << segment.n << '\n'
-       << to_timestamp(segment.t0, true) << " --> "
-       << to_timestamp(segment.t1, true) << '\n'
+       << to_timestamp(segment.t0) << " --> " << to_timestamp(segment.t1)
+       << '\n'
        << segment.text << "\n\n";
 }
 
@@ -681,22 +683,68 @@ std::string segments_to_subrip_text(const std::vector<segment_t>& segments) {
     return os.str();
 }
 
+static std::optional<std::pair<size_t, size_t>> parse_subrip_time_line(
+    const std::string& text) {
+    static const std::regex time_rx{
+        "(\\d+):(\\d+):(\\d+)[,.](\\d{1,3})\\d*\\s+-->\\s+(\\d+):(\\d+):(\\d+)"
+        "\\d*[,.](\\d{1,3})\\s*"};
+
+    std::pair<size_t, size_t> time{0ll, 0ll};
+
+    std::smatch pieces_match;
+
+    try {
+        if (std::regex_match(text, pieces_match, time_rx)) {
+            for (std::size_t i = 1; i < pieces_match.size(); ++i) {
+                size_t t = std::clamp(std::stoll(pieces_match[i].str()), 0ll,
+                                      i == 4 || i == 8 ? 999ll : 60ll);
+                if (i == 1)
+                    time.first += t * 60 * 60 * 1000;
+                else if (i == 2)
+                    time.first += t * 60 * 1000;
+                else if (i == 3)
+                    time.first += t * 1000;
+                else if (i == 4)
+                    time.first += t;
+                else if (i == 5)
+                    time.second += t * 60 * 60 * 1000;
+                else if (i == 6)
+                    time.second += t * 60 * 1000;
+                else if (i == 7)
+                    time.second += t * 1000;
+                else if (i == 8)
+                    time.second += t;
+            }
+
+            return time;
+        }
+    } catch (const std::exception& e) {
+        LOGE(e.what());
+    }
+
+    LOGE("can't parse subrip line");
+
+    return std::nullopt;
+}
+
 std::vector<segment_t> subrip_text_to_segments(const std::string& text) {
     std::vector<segment_t> segments;
 
-    static const std::regex html_tags{"<[^>]*>"};
+    static const std::regex html_tags_rx{"<[^>]*>"};
 
     std::istringstream in_ss{text};
 
     unsigned int n = 0;
     std::string text_line;
+    std::pair<size_t, size_t> t;
     for (std::string line; std::getline(in_ss, line);) {
         ltrim(line);
         rtrim(line);
 
         if (line.empty()) {
             if (!text_line.empty()) {
-                segments.push_back({n, 0, 0, std::move(text_line)});
+                segments.push_back({segments.size() + 1, t.first, t.second,
+                                    std::move(text_line)});
                 text_line.clear();
             }
 
@@ -706,19 +754,26 @@ std::vector<segment_t> subrip_text_to_segments(const std::string& text) {
         }
 
         if (n == 0) {
-            if (!std::all_of(line.cbegin(), line.cend(), [](auto c) {
+            if (std::all_of(line.cbegin(), line.cend(), [](auto c) {
                     return std::isdigit(static_cast<unsigned char>(c)) != 0;
                 })) {
-                continue;
+                ++n;
             }
-        }
-
-        if (n < 2) {
-            ++n;
             continue;
         }
 
-        line = std::regex_replace(line, html_tags, "");
+        if (n < 2) {
+            if (auto time = parse_subrip_time_line(line)) {
+                t = time.value();
+                ++n;
+            } else {
+                n = 0;
+            }
+
+            continue;
+        }
+
+        line = std::regex_replace(line, html_tags_rx, "");
 
         if (!text_line.empty()) text_line.push_back(' ');
         text_line.append(line);
@@ -727,7 +782,8 @@ std::vector<segment_t> subrip_text_to_segments(const std::string& text) {
     }
 
     if (!text_line.empty()) {
-        segments.push_back({n, 0, 0, std::move(text_line)});
+        segments.push_back(
+            {segments.size() + 1, t.first, t.second, std::move(text_line)});
     }
 
     return segments;

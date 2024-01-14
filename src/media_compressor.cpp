@@ -788,6 +788,23 @@ bool media_compressor::is_media_file(const std::string& input_file) {
     return true;
 }
 
+size_t media_compressor::duration(const std::string& input_file) {
+    try {
+        init_av_in_format(input_file);
+
+        const auto* in_stream =
+            m_in_av_format_ctx->streams[m_in_audio_stream_idx];
+
+        return std::max<size_t>(
+            0, av_rescale_q(in_stream->duration, in_stream->time_base,
+                            AVRational{1, 1000}));
+    } catch (const std::runtime_error& err) {
+        LOGE("can't get duration: " << err.what());
+    }
+
+    return 0;
+}
+
 void media_compressor::decompress(std::vector<std::string> input_files,
                                   std::string output_file, options_t options) {
     LOGD("task decompress");
