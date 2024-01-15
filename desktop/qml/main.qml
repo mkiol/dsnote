@@ -296,6 +296,19 @@ ApplicationWindow {
         onReplaceClicked: replaceHandler()
     }
 
+    StreamSelectionDialog {
+        id: streamSelectionDialog
+
+        property string filePath
+        property bool replace: false
+
+        anchors.centerIn: parent
+
+        onAccepted: {
+            app.transcribe_file(filePath, replace, selectedId)
+        }
+    }
+
     DropArea {
         anchors.fill: parent
 
@@ -379,6 +392,12 @@ ApplicationWindow {
 
             if (policy)
                 app.show_desktop_notification(qsTr("Text copied to clipboard!"), "", false)
+        }
+        onTranscribe_file_multiple_streams: {
+            streamSelectionDialog.filePath = file_path
+            streamSelectionDialog.streams = streams
+            streamSelectionDialog.replace = replace
+            streamSelectionDialog.open()
         }
 
         onError: {

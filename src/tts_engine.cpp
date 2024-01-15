@@ -687,7 +687,7 @@ void tts_engine::setup_ref_voice() {
     if (!file_exists(m_ref_voice_wav_file)) {
         media_compressor{}.decompress(
             {m_config.ref_voice_file}, m_ref_voice_wav_file,
-            {/*mono=*/false, /*sample_rate_16=*/false});
+            {/*mono=*/false, /*sample_rate_16=*/false, /*stream_index=*/-1});
     }
 }
 

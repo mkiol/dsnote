@@ -19,7 +19,8 @@
 class file_source : public audio_source {
     Q_OBJECT
    public:
-    explicit file_source(const QString &file, QObject *parent = nullptr);
+    explicit file_source(const QString &file, int stream_index,
+                         QObject *parent = nullptr);
     bool ok() const override;
     audio_data read_audio(char *buf, size_t max_size) override;
     double progress() const override;
@@ -43,6 +44,7 @@ class file_source : public audio_source {
     bool m_error = false;
     media_compressor m_mc;
     double m_progress = 0.0;
+    int m_stream_index = -1;
 
     void start();
     void handle_read_timeout();

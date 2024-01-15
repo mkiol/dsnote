@@ -36,9 +36,20 @@ class media_compressor {
     enum class quality_t { vbr_high, vbr_medium, vbr_low };
     friend std::ostream& operator<<(std::ostream& os, quality_t quality);
 
+    enum class media_type_t { audio, video, subtitles };
+    friend std::ostream& operator<<(std::ostream& os, media_type_t media_type);
+
+    struct stream_t {
+        int index = 0;
+        media_type_t media_type = media_type_t::audio;
+        std::string title;
+        std::string language;
+    };
+
     struct options_t {
         bool mono = false;
         bool sample_rate_16 = false; /*smaple-rate = 16KHz*/
+        int stream_index = -1;
     };
 
     using task_finished_callback_t = std::function<void()>;
@@ -68,6 +79,7 @@ class media_compressor {
     media_compressor() = default;
     ~media_compressor();
     bool is_media_file(const std::string& input_file);
+    std::vector<stream_t> streams_info(const std::string& input_file);
     size_t duration(const std::string& input_file);
     void compress(std::vector<std::string> input_files, std::string output_file,
                   format_t format, quality_t quality,
@@ -117,7 +129,7 @@ class media_compressor {
     AVCodecContext* m_out_av_audio_ctx = nullptr;
     filter_ctx m_av_filter_ctx;
     AVAudioFifo* m_av_fifo = nullptr;
-    int m_in_audio_stream_idx = 0;
+    int m_in_audio_stream_idx = -1;
     bool m_shutdown = false;
     std::thread m_async_thread;
     std::condition_variable m_cv;
@@ -133,7 +145,8 @@ class media_compressor {
 
     void init_av(task_t task);
     void init_av_filter(const char* arg);
-    void init_av_in_format(const std::string& input_file);
+    void init_av_in_format(const std::string& input_file,
+                           bool skip_stream_discovery);
     void clean_av();
     void clean_av_in_format();
     void process();

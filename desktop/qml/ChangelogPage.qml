@@ -63,6 +63,8 @@ DialogPage {
         <li>Subtitles generation. To generate timestamped text in SRT format,
             change the text format using the drop-down menu at the bottom of the text area.
             Check the settings to find the subtitle options.</li>
+        <li>Support for multiple audio streams in a video file. If the video file contains more than one audio stream,
+            you are asked to select which one to transcribe.</li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
@@ -81,6 +83,9 @@ DialogPage {
         <li>GPU acceleration for Coqui models with AMD graphics cards.
             If you are using Flatpak package, install <i>net.mkiol.SpeechNote.amd</i> add-on
             to enable full support for AMD ROCm acceleration.</li>
+        <li>Speech synchronized with subtitle timestamps. When the text format is set to <i>SRT Subtitles</i>,
+            the generated speech will be synchronized with the subtitle timestamps.
+            This can be useful if you want to make voice over.</li>
         </ul>
         <p>" + qsTr("Translator") + ":</p>
         <ul>
@@ -102,8 +107,8 @@ DialogPage {
             (<i>Other</i> &rarr; <i>Number of simultaneous threads</i>)</li>
         <li>Setting option to set Python libraries directory
             (<i>Other</i> &rarr; <i>Location of Python libraries</i>).
-            This option may be useful if you use <i>venv</i> module to manage Python libraries.</li>
-            Using this option only makes sense for non Flatpak installations.
+            This option may be useful if you use <i>venv</i> module to manage Python libraries.
+            Using this option only makes sense for non Flatpak installations.</li>
         </ul>"
     }
 

@@ -432,7 +432,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     QString restart_mnt_engine(const QString &model_or_lang_id,
                                const QString &out_lang_id,
                                const QVariantMap &options);
-    void restart_audio_source(const QString &source_file = {});
+    void restart_audio_source(const QString &source_file = {},
+                              int stream_index = -1);
     void stop_stt();
     source_t audio_source_type() const;
     void set_progress(double progress);

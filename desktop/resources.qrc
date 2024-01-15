@@ -33,6 +33,7 @@
         <file>qml/LangFilteringWidget.qml</file>
         <file>qml/PairLabel.qml</file>
         <file>qml/InlineMessage.qml</file>
+        <file>qml/StreamSelectionDialog.qml</file>
         <file alias="config/models.json">../config/models.json</file>
         <file alias="nonbreaking_prefixes/ca.txt">../nonbreaking_prefixes/ca.txt</file>
         <file alias="nonbreaking_prefixes/cs.txt">../nonbreaking_prefixes/cs.txt</file>

@@ -9,8 +9,8 @@
 
 #include <QDebug>
 
-file_source::file_source(const QString &file, QObject *parent)
-    : audio_source{parent}, m_file{file} {
+file_source::file_source(const QString &file, int stream_index, QObject *parent)
+    : audio_source{parent}, m_file{file}, m_stream_index{stream_index} {
     start();
 }
 
@@ -43,11 +43,12 @@ void file_source::start() {
     m_timer.setInterval(m_timer_quick);
     m_timer.start();
 
-    m_mc.decompress_to_raw_async(
-        {m_file.toStdString()},
-        /*options=*/{/*mono=*/true, /*sample_rate_16=*/true},
-        /*data_ready_callback=*/{},
-        /*task_finished_callback=*/{});
+    m_mc.decompress_to_raw_async({m_file.toStdString()},
+                                 /*options=*/
+                                 {/*mono=*/true, /*sample_rate_16=*/true,
+                                  /*stream_index=*/m_stream_index},
+                                 /*data_ready_callback=*/{},
+                                 /*task_finished_callback=*/{});
 }
 
 void file_source::handle_read_timeout() {

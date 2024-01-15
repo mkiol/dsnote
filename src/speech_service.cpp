@@ -1866,7 +1866,8 @@ void speech_service::handle_tts_queue() {
             media_compressor{}.decompress(
                 {result.audio_file_path.toStdString()},
                 audio_file_wav.toStdString(),
-                {/*mono=*/false, /*sample_rate_16=*/false});
+                {/*mono=*/false, /*sample_rate_16=*/false,
+                 /*stream_index=*/-1});
             result.audio_file_path = std::move(audio_file_wav);
             result.audio_format = tts_engine::audio_format_t::wav;
             result.remove_audio_file = true;
@@ -2458,6 +2459,16 @@ int speech_service::next_task_id() {
     return m_last_task_id;
 }
 
+static int stream_index_from_options(const QVariantMap &options) {
+    if (auto k = QStringLiteral("stream_index"); options.contains(k)) {
+        bool ok = false;
+        auto value = options.value(k).toInt(&ok);
+        if (ok) return value;
+    }
+
+    return -1;
+}
+
 int speech_service::stt_transcribe_file(const QString &file, QString lang,
                                         QString out_lang,
                                         const QVariantMap &options) {
@@ -2505,11 +2516,15 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
         return INVALID_TASK;
     }
 
+    auto stream_index = stream_index_from_options(options);
+
+    qDebug() << "requested stream index:" << stream_index;
+
     try {
         if (QFileInfo::exists(file))
-            restart_audio_source(file);
+            restart_audio_source(file, stream_index);
         else
-            restart_audio_source(QUrl{file}.toLocalFile());
+            restart_audio_source(QUrl{file}.toLocalFile(), stream_index);
     } catch (const std::runtime_error &err) {
         m_current_task.reset();
 
@@ -3079,7 +3094,8 @@ void speech_service::handle_audio_ended() {
     }
 }
 
-void speech_service::restart_audio_source(const QString &source_file) {
+void speech_service::restart_audio_source(const QString &source_file,
+                                          int stream_index) {
     if (m_stt_engine && m_stt_engine->started()) {
         qDebug() << "creating audio source";
 
@@ -3088,7 +3104,7 @@ void speech_service::restart_audio_source(const QString &source_file) {
         if (source_file.isEmpty())
             m_source = std::make_unique<mic_source>();
         else
-            m_source = std::make_unique<file_source>(source_file);
+            m_source = std::make_unique<file_source>(source_file, stream_index);
 
         set_progress(m_source->progress());
         connect(m_source.get(), &audio_source::audio_available, this,

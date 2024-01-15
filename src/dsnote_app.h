@@ -266,8 +266,10 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void set_active_mnt_out_lang_idx(int idx);
     Q_INVOKABLE void set_active_tts_model_for_in_mnt_idx(int idx);
     Q_INVOKABLE void set_active_tts_model_for_out_mnt_idx(int idx);
-    Q_INVOKABLE void transcribe_file(const QString &source_file, bool replace);
-    Q_INVOKABLE void transcribe_file_url(const QUrl &source_file, bool replace);
+    Q_INVOKABLE void transcribe_file(const QString &source_file, bool replace,
+                                     int stream_index = -1);
+    Q_INVOKABLE void transcribe_file_url(const QUrl &source_file, bool replace,
+                                         int stream_id = -1);
     Q_INVOKABLE void cancel();
     Q_INVOKABLE void listen();
     Q_INVOKABLE void listen_to_active_window();
@@ -388,6 +390,8 @@ class dsnote_app : public QObject {
     void recorder_new_probs(QVariantList probs);
     void tray_activated();
     void player_current_voice_ref_idx_changed();
+    void transcribe_file_multiple_streams(QString file_path,
+                                          QStringList streams, bool replace);
 
    private:
     enum class action_t {

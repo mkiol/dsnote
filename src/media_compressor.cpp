@@ -76,23 +76,62 @@ static bool time_base_equal(AVRational l, AVRational r) {
     return os;
 }
 
+[[maybe_unused]] static std::ostream& operator<<(std::ostream& os,
+                                                 AVMediaType media_type) {
+    switch (media_type) {
+        case AVMEDIA_TYPE_VIDEO:
+            os << "video";
+            break;
+        case AVMEDIA_TYPE_AUDIO:
+            os << "audio";
+            break;
+        case AVMEDIA_TYPE_DATA:
+            os << "data";
+            break;
+        case AVMEDIA_TYPE_SUBTITLE:
+            os << "subtitle";
+            break;
+        case AVMEDIA_TYPE_ATTACHMENT:
+            os << "attachment";
+            break;
+        case AVMEDIA_TYPE_NB:
+            os << "nb";
+            break;
+        case AVMEDIA_TYPE_UNKNOWN:
+            os << "unknown";
+            break;
+    }
+
+    return os;
+}
+
+[[maybe_unused]] static std::ostream& operator<<(std::ostream& os,
+                                                 const AVDictionary* dict) {
+    if (dict) {
+        AVDictionaryEntry* t = nullptr;
+        while ((t = av_dict_get(dict, "", t, AV_DICT_IGNORE_SUFFIX))) {
+            os << "[" << t->key << "=" << t->value << "],";
+        }
+    }
+
+    return os;
+}
+
+static char* value_from_av_dict(const char* key, const AVDictionary* dict) {
+    if (dict) {
+        AVDictionaryEntry* t = nullptr;
+        while ((t = av_dict_get(dict, "", t, AV_DICT_IGNORE_SUFFIX))) {
+            if (strcmp(key, t->key) == 0) return t->value;
+        }
+    }
+
+    return nullptr;
+}
+
 static const char* str_from_av_error(int av_err) {
     static std::array<char, 1024> buf;
 
     return av_make_error_string(buf.data(), buf.size(), av_err);
-}
-
-static std::string str_for_av_opts(const AVDictionary* opts) {
-    if (!opts) return {};
-
-    std::ostringstream os;
-
-    AVDictionaryEntry* t = nullptr;
-    while ((t = av_dict_get(opts, "", t, AV_DICT_IGNORE_SUFFIX))) {
-        os << "[" << t->key << "=" << t->value << "],";
-    }
-
-    return os.str();
 }
 
 static AVSampleFormat best_sample_format(const AVCodec* encoder,
@@ -137,7 +176,7 @@ static int best_sample_rate(const AVCodec* encoder, int decoder_sample_rate) {
 
 [[maybe_unused]] static void clean_av_opts(AVDictionary** opts) {
     if (*opts != nullptr) {
-        LOGW("rejected av options: " << str_for_av_opts(*opts));
+        LOGW("rejected av options: " << *opts);
         av_dict_free(opts);
     }
 }
@@ -345,7 +384,8 @@ void media_compressor::init_av_filter(const char* arg) {
     }
 }
 
-void media_compressor::init_av_in_format(const std::string& input_file) {
+void media_compressor::init_av_in_format(const std::string& input_file,
+                                         bool skip_stream_discovery) {
     clean_av_in_format();
 
     LOGD("opening file: " << input_file);
@@ -366,11 +406,32 @@ void media_compressor::init_av_in_format(const std::string& input_file) {
         throw std::runtime_error("avformat_find_stream_info error");
     }
 
-    m_in_audio_stream_idx = av_find_best_stream(
-        m_in_av_format_ctx, AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
-    if (m_in_audio_stream_idx < 0) {
-        clean_av();
-        throw std::runtime_error("no audio stream found in input file");
+    m_in_audio_stream_idx = -1;
+
+    if (skip_stream_discovery) return;
+
+    if (m_options.stream_index < 0) {
+        m_in_audio_stream_idx = av_find_best_stream(
+            m_in_av_format_ctx, AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
+        if (m_in_audio_stream_idx < 0) {
+            clean_av();
+            throw std::runtime_error("no audio stream found in input file");
+        }
+    } else {
+        for (auto i = 0u; i < m_in_av_format_ctx->nb_streams; ++i) {
+            if (m_in_av_format_ctx->streams[i]->index ==
+                    m_options.stream_index &&
+                m_in_av_format_ctx->streams[i]->codecpar->codec_type ==
+                    AVMEDIA_TYPE_AUDIO) {
+                m_in_audio_stream_idx = i;
+            }
+        }
+
+        if (m_in_audio_stream_idx < 0) {
+            clean_av();
+            throw std::runtime_error(
+                "no audio stream with requested index found in input file");
+        }
     }
 
     //    const auto* in_stream =
@@ -391,7 +452,7 @@ static uint64_t time_ms_to_pcm_bytes(uint64_t time_ms, int sample_rate,
 }
 
 void media_compressor::init_av(task_t task) {
-    init_av_in_format(m_input_files.front());
+    init_av_in_format(m_input_files.front(), false);
     m_input_files.pop();
 
     const auto* in_stream = m_in_av_format_ctx->streams[m_in_audio_stream_idx];
@@ -780,7 +841,7 @@ void media_compressor::setup_input_files(
 
 bool media_compressor::is_media_file(const std::string& input_file) {
     try {
-        init_av_in_format(input_file);
+        init_av_in_format(input_file, false);
     } catch (const std::runtime_error& err) {
         return false;
     }
@@ -788,9 +849,61 @@ bool media_compressor::is_media_file(const std::string& input_file) {
     return true;
 }
 
+std::vector<media_compressor::stream_t> media_compressor::streams_info(
+    const std::string& input_file) {
+    std::vector<media_compressor::stream_t> streams;
+
+    try {
+        init_av_in_format(input_file, true);
+
+        for (auto i = 0u; i < m_in_av_format_ctx->nb_streams; ++i) {
+            LOGD("stream: idx="
+                 << m_in_av_format_ctx->streams[i]->index << ", type="
+                 << m_in_av_format_ctx->streams[i]->codecpar->codec_type
+                 << ", metadata=[" << m_in_av_format_ctx->streams[i]->metadata
+                 << "]");
+
+            media_type_t media_type = media_type_t::audio;
+
+            switch (m_in_av_format_ctx->streams[i]->codecpar->codec_type) {
+                case AVMEDIA_TYPE_VIDEO:
+                    media_type = media_type_t::video;
+                    break;
+                case AVMEDIA_TYPE_AUDIO:
+                    media_type = media_type_t::audio;
+                    break;
+                case AVMEDIA_TYPE_SUBTITLE:
+                    media_type = media_type_t::subtitles;
+                    break;
+                case AVMEDIA_TYPE_DATA:
+                case AVMEDIA_TYPE_ATTACHMENT:
+                case AVMEDIA_TYPE_NB:
+                case AVMEDIA_TYPE_UNKNOWN:
+                    continue;
+            }
+
+            stream_t stream;
+            stream.index = m_in_av_format_ctx->streams[i]->index;
+            stream.media_type = media_type;
+            if (const auto* value = value_from_av_dict(
+                    "title", m_in_av_format_ctx->streams[i]->metadata))
+                stream.title = value;
+            if (const auto* value = value_from_av_dict(
+                    "language", m_in_av_format_ctx->streams[i]->metadata))
+                stream.language = value;
+
+            streams.push_back(std::move(stream));
+        }
+    } catch (const std::runtime_error& err) {
+        LOGE("can't get streams info: " << err.what());
+    }
+
+    return streams;
+}
+
 size_t media_compressor::duration(const std::string& input_file) {
     try {
-        init_av_in_format(input_file);
+        init_av_in_format(input_file, false);
 
         const auto* in_stream =
             m_in_av_format_ctx->streams[m_in_audio_stream_idx];
@@ -1071,7 +1184,7 @@ bool media_compressor::read_frame(AVPacket* pkt) {
                     m_data_info.eof = true;
                     return false;
                 } else {
-                    init_av_in_format(m_input_files.front());
+                    init_av_in_format(m_input_files.front(), false);
                     m_input_files.pop();
                     continue;
                 }
@@ -1119,7 +1232,7 @@ bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame_in,
                         LOGD("demuxer eof");
                         m_data_info.eof = true;
                     } else {
-                        init_av_in_format(m_input_files.front());
+                        init_av_in_format(m_input_files.front(), false);
                         m_input_files.pop();
                         continue;
                     }
@@ -1208,7 +1321,7 @@ bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame_in,
                         LOGD("demuxer eof");
                         m_data_info.eof = true;
                     } else {
-                        init_av_in_format(m_input_files.front());
+                        init_av_in_format(m_input_files.front(), false);
                         m_input_files.pop();
                         continue;
                     }

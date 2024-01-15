@@ -1838,7 +1838,67 @@ void dsnote_app::cancel() {
     emit intermediate_text_changed();
 }
 
-void dsnote_app::transcribe_file(const QString &source_file, bool replace) {
+void dsnote_app::transcribe_file(const QString &source_file, bool replace,
+                                 int stream_index) {
+    auto streams_info =
+        media_compressor{}.streams_info(source_file.toStdString());
+
+    if (stream_index >= 0) {
+        auto it = std::find_if(streams_info.cbegin(), streams_info.cend(),
+                               [stream_index](const auto &stream) {
+                                   return stream.index == stream_index;
+                               });
+
+        if (it == streams_info.cend()) {
+            qWarning() << "file does not contain requested stream:"
+                       << source_file << stream_index;
+
+            emit error(error_t::ErrorSttEngine);
+            return;
+        }
+    } else {
+        auto nb_audio_streams = std::count_if(
+            streams_info.cbegin(), streams_info.cend(), [](const auto &stream) {
+                return stream.media_type ==
+                       media_compressor::media_type_t::audio;
+            });
+
+        if (nb_audio_streams == 0) {
+            qWarning() << "file does not contain any audio streams"
+                       << source_file;
+
+            emit error(error_t::ErrorSttEngine);
+            return;
+        }
+
+        if (nb_audio_streams > 1) {
+            qDebug() << "file contains more that one audio stream";
+
+            QStringList streams_names;
+            for (const auto &stream : streams_info) {
+                if (stream.media_type ==
+                    media_compressor::media_type_t::audio) {
+                    streams_names.push_back(
+                        (stream.title.empty()
+                             ? tr("Unnamed stream") + " " +
+                                   QString::number(streams_names.size() + 1)
+                             : QString::fromStdString(stream.title)) +
+                        (stream.language.empty()
+                             ? QStringLiteral(" (%1)").arg(stream.index)
+                             : QStringLiteral(" / %1 (%2)")
+                                   .arg(QString::fromStdString(stream.language))
+                                   .arg(stream.index)));
+                }
+            }
+
+            emit transcribe_file_multiple_streams(source_file, streams_names,
+                                                  replace);
+            return;
+        }
+    }
+
+    qDebug() << "selected stream index:" << stream_index;
+
     m_stt_text_destination = replace ? stt_text_destination_t::note_replace
                                      : stt_text_destination_t::note_add;
 
@@ -1849,6 +1909,7 @@ void dsnote_app::transcribe_file(const QString &source_file, bool replace) {
     QVariantMap options;
     options.insert("text_format", static_cast<int>(s->stt_tts_text_format()));
     options.insert("sub_min_segment_dur", s->sub_min_segment_dur());
+    options.insert("stream_index", stream_index);
     if (s->sub_break_lines()) {
         options.insert("sub_min_line_length", s->sub_min_line_length());
         options.insert("sub_max_line_length", s->sub_max_line_length());
@@ -1869,8 +1930,9 @@ void dsnote_app::transcribe_file(const QString &source_file, bool replace) {
     m_side_task.set(new_task);
 }
 
-void dsnote_app::transcribe_file_url(const QUrl &source_file, bool replace) {
-    transcribe_file(source_file.toLocalFile(), replace);
+void dsnote_app::transcribe_file_url(const QUrl &source_file, bool replace,
+                                     int stream_id) {
+    transcribe_file(source_file.toLocalFile(), replace, stream_id);
 }
 
 void dsnote_app::listen() {
@@ -3344,7 +3406,7 @@ void dsnote_app::player_play_voice_ref_idx(int idx) {
     try {
         media_compressor{}.decompress(
             {list.at(1).toStdString()}, wav_file.toStdString(),
-            {/*mono=*/false, /*sample_rate_16=*/false});
+            {/*mono=*/false, /*sample_rate_16=*/false, /*stream_index=*/-1});
     } catch (const std::runtime_error &err) {
         qCritical() << err.what();
         return;
