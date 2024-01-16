@@ -18,6 +18,7 @@
 #include <QStandardPaths>
 #include <QString>
 
+#include "cpu_tools.hpp"
 #include "logger.hpp"
 
 #ifdef USE_PYTHON_MODULE
@@ -55,25 +56,44 @@ libs_availability_t libs_availability() {
     namespace py = pybind11;
     using namespace pybind11::literals;
 
-    try {
-        py::module_::import("TTS");
-        availability.coqui_tts = true;
-    } catch (const std::exception& err) {
-        LOGD("coqui tts check py error: " << err.what());
-    }
+    if (cpu_tools::cpuinfo().feature_flags & cpu_tools::feature_flags_t::avx) {
+        try {
+            auto torch = py::module_::import("torch.cuda");
+            availability.torch_cuda = torch.attr("is_available")().cast<bool>();
+        } catch (const std::exception& err) {
+            LOGD("torch cuda check py error: " << err.what());
+        }
 
-    try {
-        auto torch = py::module_::import("torch.cuda");
-        availability.torch_cuda = torch.attr("is_available")().cast<bool>();
-    } catch (const std::exception& err) {
-        LOGD("torch cuda check py error: " << err.what());
-    }
+        try {
+            py::module_::import("TTS");
+            availability.coqui_tts = true;
+        } catch (const std::exception& err) {
+            LOGD("coqui tts check py error: " << err.what());
+        }
 
-    try {
-        py::module_::import("faster_whisper");
-        availability.faster_whisper = true;
-    } catch (const std::exception& err) {
-        LOGD("faster-whisper check py error: " << err.what());
+        try {
+            py::module_::import("faster_whisper");
+            availability.faster_whisper = true;
+        } catch (const std::exception& err) {
+            LOGD("faster-whisper check py error: " << err.what());
+        }
+
+        try {
+            py::module_::import("transformers");
+            py::module_::import("accelerate");
+            availability.transformers = true;
+        } catch (const std::exception& err) {
+            LOGD("transformers check py error: " << err.what());
+        }
+
+        try {
+            py::module_::import("unikud");
+            availability.unikud = true;
+        } catch (const std::exception& err) {
+            LOGD("unikud check py error: " << err.what());
+        }
+    } else {
+        LOGW("disabling torch dependent libraries as avx is not supported");
     }
 
     try {
@@ -81,21 +101,6 @@ libs_availability_t libs_availability() {
         availability.mimic3_tts = true;
     } catch (const std::exception& err) {
         LOGD("mimic3 tts check py error: " << err.what());
-    }
-
-    try {
-        py::module_::import("transformers");
-        py::module_::import("accelerate");
-        availability.transformers = true;
-    } catch (const std::exception& err) {
-        LOGD("transformers check py error: " << err.what());
-    }
-
-    try {
-        py::module_::import("unikud");
-        availability.unikud = true;
-    } catch (const std::exception& err) {
-        LOGD("unikud check py error: " << err.what());
     }
 
     try {
