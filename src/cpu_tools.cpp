@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -11,8 +11,11 @@
 #include <array>
 #include <fstream>
 #include <iterator>
+#include <regex>
 #include <string>
 #include <thread>
+
+#include "logger.hpp"
 
 std::ostream& operator<<(std::ostream& os, cpu_tools::arch_t arch) {
     switch (arch) {
@@ -33,7 +36,28 @@ std::ostream& operator<<(std::ostream& os, cpu_tools::arch_t arch) {
     return os;
 }
 
-cpu_tools::arch_t cpu_tools::arch() {
+std::ostream& operator<<(std::ostream& os, cpu_tools::cpuinfo_t cpuinfo) {
+    os << "processor-count=" << cpuinfo.number_of_processors << ", flags=[";
+
+    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) os << "avx, ";
+    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx2)
+        os << "avx2, ";
+    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx512)
+        os << "avx512, ";
+    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::fma) os << "fma, ";
+    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c)
+        os << "f16c, ";
+    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::asimd)
+        os << "asimd, ";
+
+    os << "]";
+
+    return os;
+}
+
+namespace cpu_tools {
+
+arch_t arch() {
 #ifdef ARCH_X86_64
     return arch_t::x86_64;
 #elif ARCH_ARM_32
@@ -44,78 +68,59 @@ cpu_tools::arch_t cpu_tools::arch() {
     return arch_t::unknown;
 }
 
-int cpu_tools::number_of_cores() {
-    static const auto count = [] {
-        std::ifstream cpuinfo{"/proc/cpuinfo"};
-        auto count =
-            std::count(std::istream_iterator<std::string>{cpuinfo},
-                       std::istream_iterator<std::string>{}, "processor");
-        if (count == 0)
-            return static_cast<int>(std::thread::hardware_concurrency());
-        return static_cast<int>(count);
-    }();
-
-    return count;
-}
-
-bool cpu_tools::neon_supported() {
-    static const bool supported = [] {
-        std::array flags = {"asimd"};  // neon-fp-armv8
-
-        std::ifstream cpuinfo("/proc/cpuinfo");
-        return std::find_first_of(std::istream_iterator<std::string>{cpuinfo},
-                                  std::istream_iterator<std::string>{},
-                                  flags.cbegin(), flags.cend()) !=
-               std::istream_iterator<std::string>{};
-    }();
-
-    return supported;
-}
-
-bool cpu_tools::avx_avx2_fma_f16c_supported() {
-    static const bool supported = [] {
-        std::array flags = {"avx", "avx2", "fma", "f16c"};
-
-        std::ifstream cpuinfo("/proc/cpuinfo");
-
-        for (const auto& flag : flags) {
-            if (std::find(std::istream_iterator<std::string>{cpuinfo},
-                          std::istream_iterator<std::string>{},
-                          flag) == std::istream_iterator<std::string>{}) {
-                return false;
-            }
+cpuinfo_t cpuinfo() {
+    static auto cpuinfo = []() {
+        std::ifstream cpuinfo_file{"/proc/cpuinfo"};
+        if (!cpuinfo_file) {
+            LOGE("can't open cpuinfo");
+            return cpuinfo_t{};
         }
 
-        return true;
+        return parse_cpuinfo(cpuinfo_file);
     }();
 
-    return supported;
+    return cpuinfo;
 }
 
-bool cpu_tools::avx_supported() {
-    static const bool supported = [] {
-        std::array flags = {"avx"};
+cpuinfo_t parse_cpuinfo(std::istream& stream) {
+    cpuinfo_t cpuinfo;
 
-        std::ifstream cpuinfo("/proc/cpuinfo");
-        return std::find_first_of(std::istream_iterator<std::string>{cpuinfo},
-                                  std::istream_iterator<std::string>{},
-                                  flags.cbegin(), flags.cend()) !=
-               std::istream_iterator<std::string>{};
-    }();
+    try {
+        std::regex processor_rx{"processor\\s+:\\s+\\d+"};
+        std::regex flags_rx{"Features|flags\\s+:\\s+(.*)"};
 
-    return supported;
+        for (std::string line; std::getline(stream, line);) {
+            if (std::smatch pieces_match;
+                std::regex_match(line, pieces_match, processor_rx))
+                ++cpuinfo.number_of_processors;
+
+            if (cpuinfo.feature_flags != feature_flags_t::none) continue;
+
+            if (std::smatch pieces_match;
+                std::regex_match(line, pieces_match, flags_rx) &&
+                pieces_match.size() > 1) {
+                if (pieces_match[1].str().find("avx") != std::string::npos)
+                    cpuinfo.feature_flags |= feature_flags_t::avx;
+                if (pieces_match[1].str().find("avx2") != std::string::npos)
+                    cpuinfo.feature_flags |= feature_flags_t::avx2;
+                if (pieces_match[1].str().find("avx512") != std::string::npos)
+                    cpuinfo.feature_flags |= feature_flags_t::avx512;
+                if (pieces_match[1].str().find("fma") != std::string::npos)
+                    cpuinfo.feature_flags |= feature_flags_t::fma;
+                if (pieces_match[1].str().find("f16c") != std::string::npos)
+                    cpuinfo.feature_flags |= feature_flags_t::f16c;
+                if (pieces_match[1].str().find("asimd") != std::string::npos)
+                    cpuinfo.feature_flags |= feature_flags_t::asimd;
+
+                LOGD("cpu flags: " << pieces_match[1].str());
+            }
+        }
+    } catch (const std::exception& e) {
+        LOGE("can't parse cpuinfo: " << e.what());
+    }
+
+    LOGD("cpuinfo: " << cpuinfo);
+
+    return cpuinfo;
 }
-
-bool cpu_tools::avx_avx2_supported() {
-    static const bool supported = [] {
-        std::array flags = {"avx", "avx2"};
-
-        std::ifstream cpuinfo("/proc/cpuinfo");
-        return std::find_first_of(std::istream_iterator<std::string>{cpuinfo},
-                                  std::istream_iterator<std::string>{},
-                                  flags.cbegin(), flags.cend()) !=
-               std::istream_iterator<std::string>{};
-    }();
-
-    return supported;
-}
+}  // namespace cpu_tools

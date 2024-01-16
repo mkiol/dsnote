@@ -88,7 +88,8 @@ bool whisper_engine::has_hip() {
 
 void whisper_engine::open_whisper_lib() {
 #ifdef ARCH_ARM_32
-    if (cpu_tools::neon_supported()) {
+    if (cpu_tools::cpuinfo().feature_flags &
+        cpu_tools::feature_flags_t::asimd) {
         LOGD("using whisper-openblas");
         m_whisperlib_handle = dlopen("libwhisper-openblas.so", RTLD_LAZY);
     } else {
@@ -99,7 +100,11 @@ void whisper_engine::open_whisper_lib() {
     LOGD("using whisper-openblas");
     m_whisperlib_handle = dlopen("libwhisper-openblas.so", RTLD_LAZY);
 #else
-    if (cpu_tools::avx_avx2_fma_f16c_supported()) {
+    if (auto cpuinfo = cpu_tools::cpuinfo();
+        cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx &&
+        cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx2 &&
+        cpuinfo.feature_flags & cpu_tools::feature_flags_t::fma &&
+        cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) {
         if (m_config.use_gpu) {
             if (m_config.gpu_device.api == gpu_api_t::cuda) {
                 LOGD("using whisper-cublas");

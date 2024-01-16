@@ -126,9 +126,12 @@ mnt_engine::~mnt_engine() {
 
 void mnt_engine::open_bergamot_lib() {
 #ifdef ARCH_X86_64
-    if (cpu_tools::avx_avx2_supported()) {
+    if (auto cpuinfo = cpu_tools::cpuinfo();
+        cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx &&
+        cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx2) {
         m_bergamotlib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
-    } else if (cpu_tools::avx_supported()) {
+    } else if (cpu_tools::cpuinfo().feature_flags &
+               cpu_tools::feature_flags_t::avx) {
         LOGW("using bergamot-fallback");
         m_bergamotlib_handle = dlopen("libbergamot_api-fallback.so", RTLD_LAZY);
     } else {

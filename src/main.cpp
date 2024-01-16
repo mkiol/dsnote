@@ -46,6 +46,7 @@
 #include "app_server.hpp"
 #include "avlogger.hpp"
 #include "config.h"
+#include "cpu_tools.hpp"
 #include "dsnote_app.h"
 #include "logger.hpp"
 #include "models_list_model.h"
@@ -402,6 +403,8 @@ int main(int argc, char* argv[]) {
     initAvLogger();
 
     qDebug() << "version:" << APP_VERSION;
+
+    cpu_tools::cpuinfo();
 
     install_translator();
 
