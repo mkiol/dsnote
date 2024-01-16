@@ -2337,11 +2337,13 @@ QVariantMap speech_service::features_availability() {
             m_features_availability.insert(
                 "coqui-tts",
                 QVariantList{py_availability->coqui_tts, "Coqui TTS"});
+#ifdef ARCH_X86_64
             m_features_availability.insert(
                 "coqui-tts-gpu",
                 QVariantList{
                     py_availability->coqui_tts && py_availability->torch_cuda,
                     "Coqui TTS " + tr("GPU acceleration")});
+#endif
             m_features_availability.insert(
                 "coqui-tts-ja", QVariantList{py_availability->coqui_tts &&
                                                  py_availability->mecab,
@@ -2390,11 +2392,13 @@ QVariantMap speech_service::features_availability() {
                 "faster-whisper-stt",
                 QVariantList{py_availability->faster_whisper,
                              "Faster Whisper STT"});
+#ifdef ARCH_X86_64
             m_features_availability.insert(
                 "faster-whisper-stt-gpu",
                 QVariantList{
                     py_availability->faster_whisper && has_cuda && has_cudnn,
                     "Faster Whisper STT " + tr("GPU acceleration")});
+#endif
             m_features_availability.insert(
                 "punctuator", QVariantList{py_availability->transformers,
                                            tr("Punctuation restoration")});
@@ -2403,7 +2407,7 @@ QVariantMap speech_service::features_availability() {
                 QVariantList{
                     py_availability->transformers && py_availability->unikud,
                     tr("Diacritics restoration for Hebrew")});
-
+#ifdef ARCH_X86_64
             m_features_availability.insert(
                 "whispercpp-stt-cuda",
                 QVariantList{whisper_engine::has_cuda(),
@@ -2417,6 +2421,7 @@ QVariantMap speech_service::features_availability() {
                 QVariantList{
                     whisper_engine::has_opencl(),
                     "whisper.cpp STT OpenCL " + tr("GPU acceleration")});
+#endif
             models_manager::instance()->update_models_using_availability(
                 {/*tts_coqui=*/py_availability->coqui_tts,
                  /*tts_mimic3=*/py_availability->mimic3_tts,

@@ -987,10 +987,12 @@ DialogPage {
             }
 
             SectionLabel {
+                visible: _settings.gpu_supported()
                 text: qsTr("Graphics card options")
             }
 
             CheckBox {
+                visible: _settings.gpu_supported()
                 checked: _settings.gpu_scan_cuda
                 text: qsTr("Use %1").arg("NVIDIA CUDA")
                 onCheckedChanged: {
@@ -1004,6 +1006,7 @@ DialogPage {
             }
 
             CheckBox {
+                visible: _settings.gpu_supported()
                 checked: _settings.gpu_scan_hip
                 text: qsTr("Use %1").arg("AMD ROCm")
                 onCheckedChanged: {
@@ -1017,6 +1020,7 @@ DialogPage {
             }
 
             RowLayout {
+                visible: _settings.gpu_supported()
                 spacing: appWin.padding
                 CheckBox {
                     checked: _settings.gpu_scan_opencl
@@ -1042,6 +1046,7 @@ DialogPage {
             }
 
             CheckBox {
+                visible: _settings.gpu_supported()
                 checked: _settings.gpu_override_version
                 text: qsTr("Override GPU version")
                 onCheckedChanged: {
@@ -1058,7 +1063,7 @@ DialogPage {
                 columns: root.verticalMode ? 1 : 3
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
-                visible: _settings.gpu_override_version
+                visible: _settings.gpu_supported() && _settings.gpu_override_version
 
                 Label {
                     Layout.fillWidth: true
@@ -1096,7 +1101,7 @@ DialogPage {
             InlineMessage {
                 color: "red"
                 Layout.fillWidth: true
-                visible: _settings.is_flatpak() &&
+                visible: _settings.gpu_supported() && _settings.is_flatpak() &&
                          (_settings.addon_flags & Settings.AddonAmd) == 0 && (_settings.addon_flags & Settings.AddonNvidia) == 0
 
                 Label {
