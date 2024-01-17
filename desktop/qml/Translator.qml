@@ -285,7 +285,7 @@ ColumnLayout {
                     combo2PlaceholderText: qsTr("No voice sample")
                     combo2ToolTip: qsTr("Voice sample")
                     comboFillWidth: true
-                    comboRedBorder: !mntOutCombo.second.off && app.available_tts_models_for_out_mnt && app.available_tts_ref_voices.length === 0
+                    comboRedBorder: !mntOutCombo.second.off && app.tts_for_out_mnt_ref_voice_needed && app.available_tts_ref_voices.length === 0
                     showSeparator: !mntOutCombo.verticalMode
                     combo {
                         enabled: mntOutCombo.second.enabled &&
