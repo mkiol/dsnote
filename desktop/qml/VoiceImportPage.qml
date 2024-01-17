@@ -61,7 +61,7 @@ DialogPage {
                 text: qsTr("Cancel")
                 icon.name: "action-unavailable-symbolic"
                 onClicked: root.reject()
-                Keys.onReturnPressed: root.reject()
+                Keys.onEscapePressed: root.reject()
             }
 
             Button {

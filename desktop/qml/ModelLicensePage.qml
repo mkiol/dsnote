@@ -79,7 +79,7 @@ Dialog {
                 visible: root.acceptHandler
                 text: qsTr("Reject")
                 onClicked: root.reject()
-                Keys.onReturnPressed: root.reject()
+                Keys.onEscapePressed: root.reject()
             }
             Button {
                 enabled: textArea.text.length !== 0

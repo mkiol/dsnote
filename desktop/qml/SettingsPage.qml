@@ -61,6 +61,17 @@ DialogPage {
         TabButton {
             text: qsTr("Other")
             width: implicitWidth
+
+            Dot {
+                visible: _settings.hint_addons
+                size: parent.height / 5
+
+                anchors {
+                    right: parent.right
+                    rightMargin: appWin.padding
+                    verticalCenter: parent.verticalCenter
+                }
+            }
         }
     }
 
@@ -1100,24 +1111,27 @@ DialogPage {
 
             InlineMessage {
                 color: "red"
+                closable: true
                 Layout.fillWidth: true
-                visible: _settings.gpu_supported() && _settings.is_flatpak() &&
-                         (_settings.addon_flags & Settings.AddonAmd) == 0 && (_settings.addon_flags & Settings.AddonNvidia) == 0
+                visible: _settings.hint_addons &&
+                         (_settings.addon_flags & Settings.AddonAmd) == 0 &&
+                         (_settings.addon_flags & Settings.AddonNvidia) == 0
+                onCloseClicked: _settings.hint_addons = false
 
                 Label {
                     color: "red"
                     Layout.fillWidth: true
                     wrapMode: Text.Wrap
-                    text: qsTr("The Flatpak add-on that provides GPU acceleration is not installed.")
+                    text: qsTr("The Flatpak add-on for GPU acceleration is not installed.")
                 }
 
                 Label {
                     color: "red"
                     Layout.fillWidth: true
                     wrapMode: Text.Wrap
-                    text: qsTr("To enable GPU acceleration, install %1 add-on for AMD graphics card or %2 add-on for NVIDIA graphics card.")
-                        .arg("<i>net.mkiol.SpeechNote.Addon.amd</i>")
-                        .arg("<i>net.mkiol.SpeechNote.Addon.nvidia</i>")
+                    text: qsTr("To enable GPU acceleration, install either %1 add-on for AMD graphics card or %2 add-on for NVIDIA graphics card.")
+                        .arg("<i><b>net.mkiol.SpeechNote.Addon.amd</b></i>")
+                        .arg("<i><b>net.mkiol.SpeechNote.Addon.nvidia</b></i>")
                 }
             }
 

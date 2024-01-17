@@ -12,7 +12,10 @@ Control {
      id: root
 
      property color color: palette.highlight
+     property bool closable: false
      default property alias content: column.data
+
+     signal closeClicked
 
      padding: appWin.padding
      implicitHeight: column.height + 2 * appWin.padding
@@ -29,12 +32,25 @@ Control {
      ColumnLayout {
          id: column
          y: appWin.padding
+         x: appWin.padding
+         width: parent.width - 3*x - closeButton.width
+     }
 
+     Button {
+         id: closeButton
+
+         visible: root.closable
+         icon.name: "window-close-symbolic"
+         onClicked: root.closeClicked()
          anchors {
-             left: parent.left
-             leftMargin: appWin.padding
              right: parent.right
              rightMargin: appWin.padding
+             top: parent.top
+             topMargin: appWin.padding
          }
+
+         ToolTip.visible: hovered
+         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+         ToolTip.text: qsTr("Close")
      }
  }

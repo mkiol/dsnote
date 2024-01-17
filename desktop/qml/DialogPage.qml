@@ -79,7 +79,7 @@ Dialog {
             text: qsTr("Close")
             //icon.name: "window-close-symbolic"
             onClicked: root.reject()
-            Keys.onReturnPressed: root.reject()
+            Keys.onEscapePressed: root.reject()
         }
     }
 

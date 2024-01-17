@@ -64,6 +64,8 @@ class settings : public QSettings, public singleton<settings> {
                    set_stt_tts_text_format NOTIFY stt_tts_text_format_changed)
     Q_PROPERTY(bool hint_translator READ hint_translator WRITE
                    set_hint_translator NOTIFY hint_translator_changed)
+    Q_PROPERTY(bool hint_addons READ hint_addons WRITE set_hint_addons NOTIFY
+                   hint_addons_changed)
     Q_PROPERTY(int qt_style_idx READ qt_style_idx WRITE set_qt_style_idx NOTIFY
                    qt_style_changed)
     Q_PROPERTY(QString qt_style_name READ qt_style_name WRITE set_qt_style_name
@@ -356,6 +358,8 @@ class settings : public QSettings, public singleton<settings> {
                                             const QString &value);
     bool hint_translator() const;
     void set_hint_translator(bool value);
+    bool hint_addons() const;
+    void set_hint_addons(bool value);
     int qt_style_idx() const;
     void set_qt_style_idx(int value);
     QString qt_style_name() const;
@@ -554,6 +558,7 @@ class settings : public QSettings, public singleton<settings> {
     void translate_when_typing_changed();
     void default_tts_models_for_mnt_changed(const QString &lang);
     void hint_translator_changed();
+    void hint_addons_changed();
     void qt_style_changed();
     void restart_required_changed();
     void speech_speed_changed();

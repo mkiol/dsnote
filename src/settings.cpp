@@ -724,6 +724,18 @@ void settings::set_hint_translator(bool value) {
     }
 }
 
+bool settings::hint_addons() const {
+    return value(QStringLiteral("hint_addons"), gpu_supported() && is_flatpak())
+        .toBool();
+}
+
+void settings::set_hint_addons(bool value) {
+    if (hint_addons() != value) {
+        setValue(QStringLiteral("hint_addons"), value);
+        emit hint_addons_changed();
+    }
+}
+
 settings::insert_mode_t settings::insert_mode() const {
     return static_cast<insert_mode_t>(
         value(QStringLiteral("insert_mode"),
