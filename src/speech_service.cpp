@@ -2329,11 +2329,7 @@ QVariantMap speech_service::features_availability() {
 #ifdef ARCH_X86_64
             auto has_cuda = gpu_tools::has_cuda();
             auto has_cudnn = gpu_tools::has_cudnn();
-#else
-            auto has_cuda = false;
-            auto has_cudnn = false;
 #endif
-
             m_features_availability.insert(
                 "coqui-tts",
                 QVariantList{py_availability->coqui_tts, "Coqui TTS"});
