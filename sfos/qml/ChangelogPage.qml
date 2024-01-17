@@ -33,11 +33,6 @@ Page {
             }
 
             LogItem {
-                title: "Distinction between 'Download' and 'Enable' in the model browser"
-                description: "Some models share files with each other. When 'Enable' is shown instead of 'Download', the files are already downloaded."
-            }
-
-            LogItem {
                 title: "Speech To Text for Marathi language"
                 description: "New language is enabled with Whisper models."
             }
@@ -60,6 +55,16 @@ Page {
             LogItem {
                 title: "Translator progress indicator"
                 description: "The progress indicator displays the percentage of translation completion."
+            }
+
+            LogItem {
+                title: "Distinction between 'Download' and 'Enable' in the model browser"
+                description: "Some models share files with each other. When 'Enable' is shown instead of 'Download', the files are already downloaded."
+            }
+
+            LogItem {
+                title: "Support for multiple audio streams in a video file"
+                description: "If the video file contains more than one audio stream, you are asked to select which one to transcribe."
             }
 
             SectionHeader {

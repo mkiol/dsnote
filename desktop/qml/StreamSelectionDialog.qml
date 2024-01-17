@@ -13,7 +13,7 @@ Dialog {
     id: root
 
     property var streams
-    property int selectedId: -1
+    property int selectedId: 0
 
     modal: true
     width: Math.min(implicitWidth, parent.width - 2 * appWin.padding)

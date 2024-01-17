@@ -250,6 +250,11 @@ ApplicationWindow {
                 onTranscribe_done: toast.show(qsTr("File transcription is complete!"))
                 onSpeech_to_file_done: toast.show(qsTr("Speech saved to audio file!"))
                 Component.onCompleted: app.open_files(_files_to_open, false)
+                onTranscribe_file_multiple_streams: {
+                    pageStack.push(Qt.resolvedUrl("StreamSelectionDialog.qml"),
+                                   {acceptDestination: root, acceptDestinationAction: PageStackAction.Pop,
+                                    filePath: file_path, replace: replace, streams: streams})
+                }
                 onError: {
                     switch (type) {
                     case DsnoteApp.ErrorFileSource:
