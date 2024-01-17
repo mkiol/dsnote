@@ -1113,9 +1113,7 @@ DialogPage {
                 color: "red"
                 closable: true
                 Layout.fillWidth: true
-                visible: _settings.hint_addons &&
-                         (_settings.addon_flags & Settings.AddonAmd) == 0 &&
-                         (_settings.addon_flags & Settings.AddonNvidia) == 0
+                visible: _settings.hint_addons
                 onCloseClicked: _settings.hint_addons = false
 
                 Label {

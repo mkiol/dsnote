@@ -725,8 +725,11 @@ void settings::set_hint_translator(bool value) {
 }
 
 bool settings::hint_addons() const {
-    return value(QStringLiteral("hint_addons"), gpu_supported() && is_flatpak())
-        .toBool();
+    if (gpu_supported() && is_flatpak() &&
+        addon_flags() == addon_flags_t::AddonNone)
+        return value(QStringLiteral("hint_addons"), true).toBool();
+    else
+        return false;
 }
 
 void settings::set_hint_addons(bool value) {
