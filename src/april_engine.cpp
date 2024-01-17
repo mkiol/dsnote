@@ -258,21 +258,24 @@ void april_engine::decode_speech(april_buf_t& buf, bool eof) {
         ltrim(result);
         rtrim(result);
 
-        if (*m_prev_segment_end_time <= *m_prev_segment_start_time) {
-            m_prev_segment_end_time =
-                *m_prev_segment_start_time +
-                result.size() * m_prev_segment_dur_per_token;
-        } else {
-            m_prev_segment_dur_per_token =
-                (*m_prev_segment_end_time - *m_prev_segment_start_time) /
-                result.size();
-        }
+        if (m_prev_segment_start_time) {
+            if (!m_prev_segment_end_time ||
+                *m_prev_segment_end_time <= *m_prev_segment_start_time) {
+                m_prev_segment_end_time =
+                    *m_prev_segment_start_time +
+                    result.size() * m_prev_segment_dur_per_token;
+            } else {
+                m_prev_segment_dur_per_token =
+                    (*m_prev_segment_end_time - *m_prev_segment_start_time) /
+                    result.size();
+            }
 
-        m_segments.push_back(
-            {++m_segment_offset,
-             *m_prev_segment_start_time + m_segment_time_offset,
-             *m_prev_segment_end_time + m_segment_time_offset,
-             std::move(result)});
+            m_segments.push_back(
+                {++m_segment_offset,
+                 *m_prev_segment_start_time + m_segment_time_offset,
+                 *m_prev_segment_end_time + m_segment_time_offset,
+                 std::move(result)});
+        }
 
         m_prev_segment_start_time.reset();
         m_prev_segment_end_time.reset();
