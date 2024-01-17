@@ -125,11 +125,11 @@
       <p>Text to Speech:</p>
       <ul>
       <li>Marathi language. New language is enabled with Coqui MMS model.</li>
-      <li>Voice cloning with Coqui XTTS model.
-          Model is enabled for the following languages: Arabic, Brazilian Portuguese, Chinese, Czech,
+      <li>Voice cloning with Coqui XTTS and YourTTS models.
+          Coqui XTTS models are enabled for: Arabic, Brazilian Portuguese, Chinese, Czech,
           Dutch, English, French, German, Hungarian, Italian, Japanese, Korean, Polish, Russian,
           Spanish and Turkish.
-          Text to Speech with Coqui XTTS model is very slow when GPU acceleration is not enabled.</li>
+          Coqui YourTTS model is enabled for: English, French and Brazilian Portuguese.</li>
       <li>Voice samples creator.
           A reference voice sample is used for voice cloning.
           You can create voice sample with a microphone or from audio or video file.

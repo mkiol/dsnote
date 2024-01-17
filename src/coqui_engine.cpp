@@ -85,10 +85,10 @@ std::string coqui_engine::fix_config_file(const std::string& config_file,
             std::string_view sv;
 
             if (!doc["speakers_file"].get(sv)) return std::string{sv};
-
             if (!doc["model_args"]["speakers_file"].get(sv))
                 return std::string{sv};
-
+            if (!doc["model_args"]["speaker_encoder_config_path"].get(sv))
+                            return std::string{sv};
             if (!doc["audio"]["stats_path"].get(sv)) return std::string{sv};
         } catch (const simdjson::simdjson_error& err) {
             LOGD("error: " << err.what());
@@ -305,7 +305,8 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
                                      ? static_cast<py::object>(py::none())
                                      : static_cast<py::object>(
                                            py::str(m_config.speaker_id)),
-                             "language_name"_a = m_config.lang,
+                             "language_name"_a = m_config.lang_code.empty() ? 
+                                                     m_config.lang : m_config.lang_code,
                              "speaker_wav"_a =
                                  m_ref_voice_wav_file.empty()
                                      ? static_cast<py::object>(py::none())

@@ -692,7 +692,8 @@ speech_service::choose_model_config_by_id(
                     models_manager::sup_model_role_t::diacritizer,
                     model.sup_files);
                 config->tts = tts_model_config_t{
-                    model.lang_id, model.id, model.engine, model.model_file,
+                    model.lang_id, model.lang_code, model.id, model.engine,
+                    model.model_file,
                     /*vocoder_file=*/
                     vocoder_file ? vocoder_file->get().file : QString{},
                     /*diacritizer_file=*/
@@ -803,8 +804,8 @@ speech_service::choose_model_config_by_lang(
                     models_manager::sup_model_role_t::diacritizer,
                     best_model->sup_files);
                 config->tts = tts_model_config_t{
-                    best_model->lang_id, best_model->id, best_model->engine,
-                    best_model->model_file,
+                    best_model->lang_id, best_model->lang_code, best_model->id,
+                    best_model->engine, best_model->model_file,
                     /*vocoder_file=*/
                     vocoder_file ? vocoder_file->get().file : QString{},
                     /*diacritizer_file=*/
@@ -856,7 +857,8 @@ speech_service::choose_model_config_by_first(
                     models_manager::sup_model_role_t::diacritizer,
                     model.sup_files);
                 config->tts = tts_model_config_t{
-                    model.lang_id, model.id, model.engine, model.model_file,
+                    model.lang_id, model.lang_code, model.id, model.engine,
+                    model.model_file,
                     /*vocoder_file=*/
                     vocoder_file ? vocoder_file->get().file : QString{},
                     /*diacritizer_file=*/
@@ -1288,6 +1290,7 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             settings::instance()->cache_audio_format());
         config.ref_voice_file =
             tts_ref_voice_file_from_options(options).toStdString();
+        config.lang_code = model_config->tts->lang_code.toStdString();
 
         if (settings::instance()->tts_use_gpu() &&
             settings::instance()->has_gpu_device_tts()) {

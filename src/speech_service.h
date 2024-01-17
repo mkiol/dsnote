@@ -286,6 +286,7 @@ class speech_service : public QObject, public singleton<speech_service> {
 
     struct tts_model_config_t {
         QString lang_id;
+        QString lang_code;
         QString model_id;
         models_manager::model_engine_t engine =
             models_manager::model_engine_t::tts_piper;

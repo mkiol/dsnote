@@ -225,7 +225,7 @@ std::string tts_engine::first_file_with_ext(std::string dir_path,
 
         std::string fn{dirent->d_name};
 
-        if (fn.substr(fn.find_last_of('.') + 1) == ext)
+        if (!fn.empty() && fn.front() != '.' && fn.substr(fn.find_last_of('.') + 1) == ext)
             return dir_path.append("/").append(fn);
     }
 

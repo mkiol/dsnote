@@ -24023,6 +24023,50 @@
             "size": "7618694"
         },
         {
+            "name": "Multilingual (Coqui YourTTS)",
+            "model_id": "multilang_coqui_yourtts",
+            "engine": "tts_coqui",
+            "lang_id": "multilang",
+            "checksum": "7ab81639",
+            "checksum_quick": "c82d98bd",
+            "size": "425247518",
+            "options": "x",
+            "features": [
+                "tts_voice_cloning"
+            ],
+            "license": {
+                "id": "CC BY-NC-ND 4.0",
+                "name": "Creative Commons BY-NC-ND 4.0",
+                "url": "https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.txt",
+                "accept_required": false
+            },
+            "comp": "zip",
+            "urls": [
+                "https://github.com/coqui-ai/TTS/releases/download/v0.10.1_models/tts_models--multilingual--multi-dataset--your_tts.zip"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "English (Coqui YourTTS)",
+            "model_id": "en_coqui_yourtts",
+            "model_alias_of": "multilang_coqui_yourtts",
+            "lang_id": "en"
+        },
+        {
+            "name": "Français (Coqui YourTTS)",
+            "model_id": "fr_coqui_yourtts",
+            "model_alias_of": "multilang_coqui_yourtts",
+            "lang_id": "fr",
+            "lang_code": "fr-fr"
+        },
+        {
+            "name": "Português brasileiro (Coqui YourTTS)",
+            "model_id": "pt_coqui_br_yourtts",
+            "model_alias_of": "multilang_coqui_yourtts",
+            "lang_id": "pt",
+            "lang_code": "pt-br"
+        },
+        {
             "name": "Multilingual (Coqui XTTS-v2.0.3)",
             "model_id": "multilang_coqui_xtts203",
             "engine": "tts_coqui",
