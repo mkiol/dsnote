@@ -147,6 +147,10 @@ class tts_engine {
         size_t t1 = 0;
         bool first = false;
         bool last = false;
+
+        inline bool empty() const {
+            return text.empty() && t0 == 0ll && t1 == 0ll;
+        }
     };
 
     config_t m_config;

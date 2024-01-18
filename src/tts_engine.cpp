@@ -256,6 +256,11 @@ void tts_engine::encode_speech(std::string text) {
 
     auto tasks = make_tasks(text);
 
+    if (tasks.empty()) {
+        LOGW("no task to process");
+        tasks.push_back(task_t{"", 0, 0, true, true});
+    }
+
     {
         std::lock_guard lock{m_mutex};
         for (auto& task : tasks) {
@@ -571,6 +576,14 @@ void tts_engine::process() {
             queue.pop();
 
             if (task.first) speech_time = 0;
+
+            if (task.empty() && task.last) {
+                if (m_call_backs.speech_encoded) {
+                    m_call_backs.speech_encoded({}, {}, audio_format_t::wav,
+                                                true);
+                }
+                continue;
+            }
 
             auto output_file = path_to_output_file(task.text);
 
