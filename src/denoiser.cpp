@@ -58,8 +58,8 @@ void denoiser::normalize_audio(sample_t* audio, size_t size, bool second_pass) {
     int min = std::numeric_limits<sample_t>::min();
     int target_gain = max * 0.75;
 
-    if (m_task_flags & task_normalize ||
-        m_task_flags & task_normalize_two_pass) {
+    if (!second_pass && (m_task_flags & task_normalize ||
+                         m_task_flags & task_normalize_two_pass)) {
         for (size_t i = 0; i < size; ++i) {
             int val = std::abs(audio[i]);
             if (val > m_normalize_peek) m_normalize_peek = val;
