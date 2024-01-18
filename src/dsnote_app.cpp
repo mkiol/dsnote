@@ -160,6 +160,19 @@ QDebug operator<<(QDebug d, dsnote_app::action_t action) {
     return d;
 }
 
+QDebug operator<<(QDebug d, dsnote_app::auto_text_format_t format) {
+    switch (format) {
+        case dsnote_app::auto_text_format_t::AutoTextFormatRaw:
+            d << "raw";
+            break;
+        case dsnote_app::auto_text_format_t::AutoTextFormatSubRip:
+            d << "subrip";
+            break;
+    }
+
+    return d;
+}
+
 dsnote_app::dsnote_app(QObject *parent)
     : QObject{parent},
       m_dbus_service{DBUS_SERVICE_NAME, DBUS_SERVICE_PATH,
@@ -276,6 +289,12 @@ dsnote_app::dsnote_app(QObject *parent)
     connect(&m_desktop_notification_delay_timer, &QTimer::timeout, this,
             &dsnote_app::process_pending_desktop_notification,
             Qt::QueuedConnection);
+
+    m_auto_format_delay_timer.setSingleShot(true);
+    m_auto_format_delay_timer.setInterval(500);
+    connect(&m_auto_format_delay_timer, &QTimer::timeout, this,
+            &dsnote_app::update_auto_text_format, Qt::QueuedConnection);
+
     connect(&m_dbus_notifications,
             &OrgFreedesktopNotificationsInterface::NotificationClosed, this,
             &dsnote_app::handle_desktop_notification_closed);
@@ -311,6 +330,7 @@ dsnote_app::dsnote_app(QObject *parent)
 
     update_available_tts_ref_voices();
     register_hotkeys();
+    update_auto_text_format();
 
 #ifdef USE_DESKTOP
     connect(&m_tray, &QSystemTrayIcon::activated, this,
@@ -2908,6 +2928,8 @@ void dsnote_app::handle_note_changed() {
     if (settings::instance()->translator_mode() &&
         settings::instance()->translate_when_typing())
         translate_delayed();
+
+    update_auto_text_format_delayed();
 }
 
 void dsnote_app::save_note_to_file(const QString &dest_file) {
@@ -3701,6 +3723,22 @@ void dsnote_app::update_tray_task_state() {
             break;
     }
 #endif
+}
+
+void dsnote_app::update_auto_text_format_delayed() {
+    m_auto_format_delay_timer.start();
+}
+
+void dsnote_app::update_auto_text_format() {
+    auto format = text_tools::subrip_text_start(note().toStdString(), 10)
+                      ? auto_text_format_t::AutoTextFormatSubRip
+                      : auto_text_format_t::AutoTextFormatRaw;
+
+    if (m_auto_text_format != format) {
+        qDebug() << "auto text format:" << m_auto_text_format << "=>" << format;
+        m_auto_text_format = format;
+        emit auto_text_format_changed();
+    }
 }
 
 void dsnote_app::show_tray() {

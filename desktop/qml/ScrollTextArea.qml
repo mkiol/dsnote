@@ -14,6 +14,7 @@ Item {
 
     property alias textArea: _textArea
     property alias textFormatCombo: _textFormatCombo
+    property alias textFormatInvalid: _textFormatComboRedBorder.visible
     property color textColor: palette.text
     property bool canUndo: true
     property bool canUndoFallback: false
@@ -90,7 +91,18 @@ Item {
 
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.visible: hovered
-            ToolTip.text: qsTr("Text format")
+            ToolTip.text: root.textFormatInvalid ? qsTr("The text format may be incorrect!") : qsTr("Text format")
+
+            Rectangle {
+                id: _textFormatComboRedBorder
+
+                visible: false
+                border.width: 1
+                border.color: "red"
+                radius: 2
+                anchors.fill: parent
+                color: "transparent"
+            }
         }
 
         Item {

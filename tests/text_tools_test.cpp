@@ -8,6 +8,7 @@
 #include "text_tools.hpp"
 
 #include <catch2/catch_test_macros.hpp>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -200,46 +201,115 @@ TEST_CASE("text_tools", "[restore_punctuation_in_segments]") {
 TEST_CASE("text_tools", "[subrip_text_to_segments]") {
     SECTION("line_breaks") {
         std::string subrip_text =
-            "1\n00:00:1,100 --> 00:00:2,000\nHello,\nhow are "
-            "you?\n\n2\n00:01:0,000 --> 000:02:2,000\nI'm fine.\nThank you\n";
+            "1\n"
+            "00:00:1,100 --> 00:00:2,000\n"
+            "Hello,\nhow are you?\n"
+            "\n"
+            "2\n"
+            "00:01:0,000 --> 000:02:2,000\n"
+            "I'm fine.\n"
+            "Thank you\n";
         std::vector<text_tools::segment_t> expected_segments = {
             {1, 1100, 2000, "Hello, how are you?"},
             {2, 60000, 122000, "I'm fine. Thank you"}};
 
-        auto segments = text_tools::subrip_text_to_segments(subrip_text);
+        auto segments = text_tools::subrip_text_to_segments(subrip_text, 0);
 
         REQUIRE(segments == expected_segments);
     }
 
     SECTION("valid_srt_with_dot") {
-        std::string subrip_text = "1\n00:00:1.100 --> 00:00:2.000\nHello";
+        std::string subrip_text =
+            "1\n"
+            "00:00:1.100 --> 00:00:2.000\n"
+            "Hello";
         std::vector<text_tools::segment_t> expected_segments = {
             {1, 1100, 2000, "Hello"}};
 
-        auto segments = text_tools::subrip_text_to_segments(subrip_text);
+        auto segments = text_tools::subrip_text_to_segments(subrip_text, 0);
 
         REQUIRE(segments == expected_segments);
     }
 
     SECTION("long_timestamp") {
-        std::string subrip_text = "1\n00:00:0,99999999 --> 00:00:1,0\nHello";
+        std::string subrip_text =
+            "1\n"
+            "00:00:0,99999999 --> 00:00:1,0\n"
+            "Hello";
         std::vector<text_tools::segment_t> expected_segments = {
             {1, 999, 1000, "Hello"}};
 
-        auto segments = text_tools::subrip_text_to_segments(subrip_text);
+        auto segments = text_tools::subrip_text_to_segments(subrip_text, 0);
 
         REQUIRE(segments == expected_segments);
     }
 
     SECTION("invalid_timestamp") {
         std::string subrip_text =
-            "1\n00:00:0 --> 00:00:1.0\nHello\n\n"
-            "2\n00:00:0,1 --> 00:00:1,0\nHello again";
+            "1\n"
+            "00:00:0 --> 00:00:1.0\n"
+            "Hello\n"
+            "\n"
+            "2\n"
+            "00:00:0,1 --> 00:00:1,0\n"
+            "Hello again";
         std::vector<text_tools::segment_t> expected_segments = {
             {1, 1, 1000, "Hello again"}};
 
-        auto segments = text_tools::subrip_text_to_segments(subrip_text);
+        auto segments = text_tools::subrip_text_to_segments(subrip_text, 0);
 
         REQUIRE(segments == expected_segments);
+    }
+
+    SECTION("offset") {
+        std::string subrip_text =
+            "01234567891\n"
+            "00:00:0,0 --> 00:00:1,0\n"
+            "Hello\n";
+        std::vector<text_tools::segment_t> expected_segments = {
+            {1, 0, 1000, "Hello"}};
+
+        auto segments = text_tools::subrip_text_to_segments(subrip_text, 10);
+
+        REQUIRE(segments == expected_segments);
+    }
+}
+
+TEST_CASE("text_tools", "[subrip_text_start]") {
+    SECTION("no_offset") {
+        std::string subrip_text =
+            "1\n"
+            "00:00:1,100 --> 00:00:2,000\n"
+            "Hello how are you?";
+
+        auto start = text_tools::subrip_text_start(subrip_text, 100);
+
+        REQUIRE(start);
+        REQUIRE(start.value() == 0);
+    }
+
+    SECTION("offset") {
+        std::string subrip_text =
+            "1\n"
+            "1\n"
+            "00:00:1,100 --> 00:00:2,000\n"
+            "Hello how are you?";
+
+        auto start = text_tools::subrip_text_start(subrip_text, 100);
+
+        REQUIRE(start);
+        REQUIRE(start.value() == 2);
+    }
+
+    SECTION("first_two_lines") {
+        std::string subrip_text =
+            "1\n"
+            "1\n"
+            "00:00:1,100 --> 00:00:2,000\n"
+            "Hello how are you?";
+
+        auto start = text_tools::subrip_text_start(subrip_text, 2);
+
+        REQUIRE_FALSE(start);
     }
 }

@@ -348,19 +348,24 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
     std::vector<tts_engine::task_t> tasks;
 
     if (m_config.text_format == text_format_t::subrip) {
-        auto segments = text_tools::subrip_text_to_segments(text);
-        if (!segments.empty()) {
-            tasks.reserve(segments.size());
+        auto subrip_start_idx = text_tools::subrip_text_start(text, 100);
+        if (subrip_start_idx) {
+            auto segments =
+                text_tools::subrip_text_to_segments(text, *subrip_start_idx);
 
-            tasks.push_back(task_t{std::move(segments.front().text),
-                                   segments.front().t0, segments.front().t1,
-                                   true, false});
+            if (!segments.empty()) {
+                tasks.reserve(segments.size());
 
-            for (auto it = segments.begin() + 1; it != segments.end(); ++it)
-                tasks.push_back(
-                    task_t{std::move(it->text), it->t0, it->t1, false, false});
+                tasks.push_back(task_t{std::move(segments.front().text),
+                                       segments.front().t0, segments.front().t1,
+                                       true, false});
 
-            tasks.back().last = true;
+                for (auto it = segments.begin() + 1; it != segments.end(); ++it)
+                    tasks.push_back(task_t{std::move(it->text), it->t0, it->t1,
+                                           false, false});
+
+                tasks.back().last = true;
+            }
         }
     } else {
         if (split) {

@@ -660,6 +660,48 @@ std::string to_timestamp(size_t msec) {
     return std::string{buf};
 }
 
+static bool is_digit(char c) { return c >= '0' && c <= '9'; }
+
+static const std::regex subrip_time_rx{
+    "(\\d+):(\\d+):(\\d+)[,.](\\d{1,3})\\d*\\s+-->\\s+(\\d+):(\\d+):(\\d+)"
+    "\\d*[,.](\\d{1,3})\\s*"};
+
+std::optional<size_t> subrip_text_start(const std::string& text,
+                                        size_t max_lines) {
+    enum class state_t { unknown, num_line };
+
+    state_t state = state_t::unknown;
+    size_t subrip_start = 0;
+    std::istringstream is{text};
+
+    size_t n = 0;
+    for (std::string line; n < max_lines && std::getline(is, line); ++n) {
+        switch (state) {
+            case state_t::unknown:
+                if (is && !line.empty() &&
+                    std::all_of(line.cbegin(), line.cend(), is_digit)) {
+                    state = state_t::num_line;
+                    subrip_start = is.tellg();
+                    subrip_start -= line.size() + 1;
+                }
+                break;
+            case state_t::num_line:
+                if (std::regex_match(line.cbegin(), line.cend(),
+                                     subrip_time_rx))
+                    return subrip_start;
+                if (is && std::all_of(line.cbegin(), line.cend(), is_digit)) {
+                    state = state_t::num_line;
+                    subrip_start = is.tellg();
+                    subrip_start -= line.size() + 1;
+                } else
+                    state = state_t::unknown;
+                break;
+        }
+    }
+
+    return std::nullopt;
+}
+
 void segment_to_subrip_text(const segment_t& segment, std::ostringstream& os) {
     os << segment.n << '\n'
        << to_timestamp(segment.t0) << " --> " << to_timestamp(segment.t1)
@@ -727,12 +769,14 @@ static std::optional<std::pair<size_t, size_t>> parse_subrip_time_line(
     return std::nullopt;
 }
 
-std::vector<segment_t> subrip_text_to_segments(const std::string& text) {
+std::vector<segment_t> subrip_text_to_segments(const std::string& text,
+                                               size_t offset) {
     std::vector<segment_t> segments;
 
     static const std::regex html_tags_rx{"<[^>]*>"};
 
     std::istringstream in_ss{text};
+    in_ss.seekg(offset, std::ios::beg);
 
     unsigned int n = 0;
     std::string text_line;

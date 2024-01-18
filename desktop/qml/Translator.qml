@@ -107,6 +107,13 @@ ColumnLayout {
                             app.note = root.noteTextArea.textArea.text
                         }
                     }
+                    textFormatInvalid: {
+                        if (root.noteTextArea.textArea.text.length == 0) return false
+                        if (app.auto_text_format === DsnoteApp.AutoTextFormatSubRip)
+                            return _settings.mnt_text_format !== Settings.TextFormatSubRip
+                        else
+                            return _settings.mnt_text_format === Settings.TextFormatSubRip
+                    }
                     textFormatCombo {
                         currentIndex: {
                             if (_settings.mnt_text_format === Settings.TextFormatRaw) return 0

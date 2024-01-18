@@ -34,6 +34,18 @@ DialogPage {
             icon.name: "special-effects-symbolic"
             onClicked: appWin.openDialog("VoiceImportPage.qml")
             Keys.onReturnPressed: appWin.openDialog("VoiceImportPage.qml")
+
+            Dot {
+                visible: app.available_tts_ref_voices.length === 0 && ((app.tts_ref_voice_needed && !_settings.translator_mode) ||
+                         (_settings.translator_mode && (app.tts_for_in_mnt_ref_voice_needed || app.tts_for_out_mnt_ref_voice_needed)))
+                size: createNewButton.height / 5
+                anchors {
+                    right: createNewButton.right
+                    rightMargin: size / 2
+                    top: createNewButton.top
+                    topMargin: size / 2
+                }
+            }
         }
 
         Button {

@@ -75,10 +75,13 @@ void convert_text_format_to_html(std::string& text, text_format_t input_format);
 void convert_text_format_from_html(std::string& text,
                                    text_format_t output_format);
 std::string to_timestamp(size_t t);
+std::optional<size_t> subrip_text_start(const std::string& text,
+                                        size_t max_lines);
 void segment_to_subrip_text(const segment_t& segment, std::ostringstream& os);
 std::string segment_to_subrip_text(const segment_t& segment);
 std::string segments_to_subrip_text(const std::vector<segment_t>& segments);
-std::vector<segment_t> subrip_text_to_segments(const std::string& text);
+std::vector<segment_t> subrip_text_to_segments(const std::string& text,
+                                               size_t offset);
 void restore_punctuation_in_segment(const std::string& text_with_punctuation,
                                     segment_t& segment);
 void restore_punctuation_in_segments(const std::string& text_with_punctuation,

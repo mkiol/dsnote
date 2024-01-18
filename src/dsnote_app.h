@@ -209,6 +209,8 @@ class dsnote_app : public QObject {
                    NOTIFY features_changed)
     Q_PROPERTY(
         bool feature_coqui_tts READ feature_coqui_tts NOTIFY features_changed)
+    Q_PROPERTY(auto_text_format_t auto_text_format READ auto_text_format NOTIFY
+                   auto_text_format_changed)
 
    public:
     enum service_state_t {
@@ -253,6 +255,13 @@ class dsnote_app : public QObject {
     };
     Q_ENUM(error_t)
     friend QDebug operator<<(QDebug d, error_t type);
+
+    enum class auto_text_format_t {
+        AutoTextFormatRaw = 0,
+        AutoTextFormatSubRip = 3
+    };
+    Q_ENUM(auto_text_format_t)
+    friend QDebug operator<<(QDebug d, auto_text_format_t format);
 
     dsnote_app(QObject *parent = nullptr);
     Q_INVOKABLE void set_active_stt_model_idx(int idx);
@@ -392,6 +401,7 @@ class dsnote_app : public QObject {
     void player_current_voice_ref_idx_changed();
     void transcribe_file_multiple_streams(QString file_path,
                                           QStringList streams, bool replace);
+    void auto_text_format_changed();
 
    private:
     enum class action_t {
@@ -483,6 +493,7 @@ class dsnote_app : public QObject {
     QTimer m_open_files_delay_timer;
     QTimer m_action_delay_timer;
     QTimer m_desktop_notification_delay_timer;
+    QTimer m_auto_format_delay_timer;
     bool m_stt_configured = false;
     bool m_tts_configured = false;
     bool m_ttt_configured = false;
@@ -506,6 +517,8 @@ class dsnote_app : public QObject {
     long long m_player_stop_position = -1;
     int m_player_current_voice_ref_idx = -1;
     std::unique_ptr<recorder> m_recorder;
+    auto_text_format_t m_auto_text_format =
+        auto_text_format_t::AutoTextFormatRaw;
 #ifdef USE_DESKTOP
     struct hotkeys_t {
         QHotkey start_listening;
@@ -608,6 +621,8 @@ class dsnote_app : public QObject {
     void update_active_mnt_out_lang_idx();
     inline service_state_t service_state() const { return m_service_state; }
     inline auto task_state() const { return m_task_state; }
+    inline auto auto_text_format() const { return m_auto_text_format; }
+
     void do_keepalive();
     void handle_keepalive_task_timeout();
     void handle_service_error(int code);
@@ -705,6 +720,8 @@ class dsnote_app : public QObject {
     QString tts_ref_voice_unique_name(QString name, bool add_numner) const;
     void update_tray_state();
     void update_tray_task_state();
+    void update_auto_text_format_delayed();
+    void update_auto_text_format();
     void player_import_rec();
     void player_set_path(const QString &wav_file_path);
     void player_import_from_rec_path(const QString &path);
