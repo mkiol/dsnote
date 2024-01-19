@@ -31,12 +31,9 @@ DialogPage {
         </ul>
         <p>" + qsTr("User Interface") + ":</p>
         <ul>
-        <li>Model details.
-            You can check various model properties in the model browser, like license or URLs from which model is downloaded.</li>
-        <li>Distinction between <i>Download</i> and <i>Enable</i> in the model browser.
-            Some models share files with each other. When <i>Enable</i> is shown instead of <i>Download</i>,
-            the files are already downloaded.</li>
-        <li>Filter options in the model browser.
+        <li>Improvements to the model browser.
+            You can check various model properties such as size, license, and the URLs from which the model is downloaded.</li>
+        <li>Model filtering options.
             Models can be searched by various features such as: Engine type, Processing speed, Quality, Additional capabilities.</li>
         <li>Setting option to minimize to the system tray.
             To enable system tray icon, use <i>User Interface</i> &rarr; <i>Use system tray icon</i> option.

@@ -28,10 +28,9 @@
     <keyword>tts</keyword>
     <keyword>text-to-speech</keyword>
     <keyword>speech-synthesis</keyword>
-    <keyword>nmt</keyword>
-    <keyword>neural-machine-translation</keyword>
     <keyword>machine-translation</keyword>
     <keyword>translator</keyword>
+    <keyword>subtitles</keyword>
     <keyword>deepspeech</keyword>
     <keyword>vosk</keyword>
     <keyword>whisper</keyword>
@@ -50,10 +49,6 @@
     <screenshot>
       <caption>Translator mode</caption>
       <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshots/speechnote-screenshot-fullscreen-translator.png</image>
-    </screenshot>
-    <screenshot>
-      <caption>Translator mode on Plasma Mobile</caption>
-      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshots/speechnote-screenshot-mobile-translator.png</image>
     </screenshot>
   </screenshots>
   <url type="homepage">https://github.com/mkiol/dsnote</url>
@@ -85,9 +80,10 @@
       <mediatype>video/x-matroska</mediatype>
       <mediatype>video/webm</mediatype>
       <mediatype>text/plain</mediatype>
+      <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.4.0" date="2024-01-07">
+    <release version="4.4.0" date="2024-01-19">
       <description>
       <p>Flatpak:</p>
       <ul>
@@ -102,11 +98,9 @@
       </ul>
       <p>User Interface:</p>
       <ul>
-      <li>Model details.
-          You can check various model properties in the model browser, like license or URLs from which model is downloaded.</li>
-      <li>Distinction between 'Download' and 'Enable' in the model browser.
-          Some models share files with each other. When 'Enable' is shown instead of 'Download' the files are already downloaded.</li>
-      <li>Filter options in the model browser.
+      <li>Improvements to the model browser.
+          You can check various model properties such as size, license, and the URLs from which the model is downloaded.</li>
+      <li>Model filtering options.
           Models can be searched by various features such as: Processing speed, Quality, Additional capabilities.</li>
       <li>Setting option to minimize to the system tray</li>
       <li>Setting option to enable/disable including of recognized or read text in desktop notifications</li>

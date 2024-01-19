@@ -58,8 +58,10 @@ Page {
             }
 
             LogItem {
-                title: "Distinction between 'Download' and 'Enable' in the model browser"
-                description: "Some models share files with each other. When 'Enable' is shown instead of 'Download', the files are already downloaded."
+                title: "Improvements to the model browser"
+                description: "Distinction between 'Download' and 'Enable'. " +
+                             "Some models share files with each other. When 'Enable' is shown instead of 'Download', " +
+                             "the files are already downloaded."
             }
 
             LogItem {
