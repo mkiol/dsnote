@@ -3657,6 +3657,18 @@
             "size": "586585021"
         },
         {
+            "name": "English (Distil-Whisper Small)",
+            "model_id": "en_whisper_distil_small",
+            "engine": "stt_whisper",
+            "lang_id": "en",
+            "checksum": "c49d9542",
+            "checksum_quick": "d1428883",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/39b1afd580eaa8f5c767f25ca06167324f71a7a9/en/ggml-distilled-small-en-q5_0.bin"
+            ],
+            "size": "122890793"
+        },
+        {
             "name": "English (Distil-Whisper Medium)",
             "model_id": "en_whisper_distil_medium",
             "engine": "stt_whisper",
