@@ -52,5 +52,6 @@ Control {
          ToolTip.visible: hovered
          ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
          ToolTip.text: qsTr("Close")
+         hoverEnabled: true
      }
  }

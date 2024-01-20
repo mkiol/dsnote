@@ -36,7 +36,9 @@ DialogPage {
     TabBar {
         id: bar
 
+        visible: !root.verticalMode
         width: parent.width
+        onCurrentIndexChanged: comboBar.currentIndex = currentIndex
 
         TabButton {
             text: qsTr("User Interface")
@@ -72,6 +74,33 @@ DialogPage {
                     verticalCenter: parent.verticalCenter
                 }
             }
+        }
+    }
+
+    ColumnLayout {
+        visible: root.verticalMode
+        Layout.fillWidth: true
+
+        ComboBox {
+            id: comboBar
+
+            Layout.fillWidth: true
+            onCurrentIndexChanged: bar.currentIndex = currentIndex
+
+            model: [
+                qsTr("User Interface"),
+                qsTr("Speech to Text"),
+                qsTr("Text to Speech"),
+                qsTr("Accessibility"),
+                qsTr("Other")
+            ]
+        }
+
+        Rectangle {
+            color: palette.highlight
+            height: 2
+            radius: 2
+            Layout.fillWidth: true
         }
     }
 
@@ -123,6 +152,7 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Text is appended to the note in the same line or after line break.")
+                    hoverEnabled: true
                 }
             }
 
@@ -199,6 +229,7 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Show desktop notification while reading or listening.")
+                    hoverEnabled: true
                 }
             }
 
@@ -262,6 +293,7 @@ DialogPage {
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Application graphical interface style.") + " " +
                                   qsTr("Change if you observe problems with incorrect colors under a dark theme.")
+                    hoverEnabled: true
                 }
             }
         }
@@ -295,6 +327,7 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Select preferred audio source.")
+                    hoverEnabled: true
                 }
             }
 
@@ -354,6 +387,7 @@ DialogPage {
                                     .arg("<i>" + qsTr("Listen") + "</i>") + "<br/>" +
                                   "<i>" + qsTr("Always on") + "</i>" + " — " + qsTr("After clicking on the %1 button, listening is always turn on.")
                                     .arg("<i>" + qsTr("Listen") + "</i>")
+                    hoverEnabled: true
                 }
             }
 
@@ -374,6 +408,7 @@ DialogPage {
                               .arg("<i>" + qsTr("Punctuation") + "</i>") + " " +
                               qsTr("When this option is enabled model initialization takes much longer and memory usage is much higher.") + " " +
                               qsTr("This option only works with models that do not natively support punctuation.")
+                hoverEnabled: true
             }
 
             InlineMessage {
@@ -406,6 +441,7 @@ DialogPage {
                 ToolTip.text: qsTr("If a suitable graphics card is found in the system, it will be used to accelerate processing.") + " " +
                               qsTr("GPU hardware acceleration significantly reduces the time of decoding.") + " " +
                               qsTr("Disable this option if you observe problems when using Speech to Text.")
+                hoverEnabled: true
             }
 
             InlineMessage {
@@ -490,6 +526,7 @@ DialogPage {
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Set the minimum duration (in seconds) of the subtitle segment.") + " " +
                                   qsTr("This option only works with %1 and %2 models.").arg("<i>DeepSpeech/Coqui</i>").arg("<i>Vosk</i>")
+                    hoverEnabled: true
                 }
             }
 
@@ -581,6 +618,7 @@ DialogPage {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("This works only for Arabic and Hebrew languages.")
+                hoverEnabled: true
             }
 
             InlineMessage {
@@ -612,6 +650,7 @@ DialogPage {
                 ToolTip.text: qsTr("If a suitable graphics card is found in the system, it will be used to accelerate processing.") + " " +
                               qsTr("GPU hardware acceleration significantly reduces the time of speech synthesis.") + " " +
                               qsTr("Disable this option if you observe problems when using Text to Speech.")
+                hoverEnabled: true
             }
 
             InlineMessage {
@@ -659,6 +698,7 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Select preferred graphics card for hardware acceleration.")
+                    hoverEnabled: true
                 }
             }
         }
@@ -683,6 +723,7 @@ DialogPage {
                               qsTr("Text to Speech reading can be from current note or from text in the clipboard.") + " " +
                               qsTr("Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).") + " " +
                               qsTr("This feature only works under X11.")
+                hoverEnabled: true
             }
 
             GridLayout {
@@ -862,7 +903,8 @@ DialogPage {
 
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Action allow external application to invoke certain operation when %1 is running.").arg("<i>Speech Note</i>");
+                ToolTip.text: qsTr("Action allow external application to invoke certain operation when %1 is running.").arg("<i>Speech Note</i>")
+                hoverEnabled: true
             }
 
 
@@ -927,6 +969,7 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
+                    hoverEnabled: true
                 }
 
                 Button {
@@ -939,6 +982,7 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
+                    hoverEnabled: true
                 }
             }
 
@@ -952,6 +996,7 @@ DialogPage {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("When closing, delete all cached audio files.")
+                hoverEnabled: true
             }
 
             SectionLabel {
@@ -994,6 +1039,7 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Set the maximum number of simultaneous CPU threads.")
+                    hoverEnabled: true
                 }
             }
 
@@ -1014,6 +1060,7 @@ DialogPage {
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Try to find NVIDIA CUDA compatible graphic cards in the system.") + " " +
                               qsTr("Disable this option if you observe problems when launching the application.")
+                hoverEnabled: true
             }
 
             CheckBox {
@@ -1028,6 +1075,7 @@ DialogPage {
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Try to find AMD ROCm compatible graphic cards in the system.") + " " +
                               qsTr("Disable this option if you observe problems when launching the application.")
+                hoverEnabled: true
             }
 
             RowLayout {
@@ -1044,6 +1092,7 @@ DialogPage {
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
                                   qsTr("Disable this option if you observe problems when launching the application.")
+                    hoverEnabled: true
                 }
 
                 ComboBox {
@@ -1068,6 +1117,7 @@ DialogPage {
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Override AMD GPU version.") + " " +
                               qsTr("Enable this option if you observe problems when using GPU acceleration with AMD graphics card.")
+                hoverEnabled: true
             }
 
             GridLayout {
@@ -1092,6 +1142,7 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Value has the same effect as %1 environment variable.").arg("<i>HSA_OVERRIDE_GFX_VERSION</i>")
+                    hoverEnabled: true
                 }
                 Button {
                     id: gpuOverrideResetButton
@@ -1102,6 +1153,7 @@ DialogPage {
                     ToolTip.visible: hovered
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.text: qsTr("Reset to default value.")
+                    hoverEnabled: true
                 }
             }
 
@@ -1179,6 +1231,8 @@ DialogPage {
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Check the presence of the required Python libraries.") + " " +
                               qsTr("Disable this option if you observe problems when launching the application.")
+                hoverEnabled: true
+
             }
 
             GridLayout {
@@ -1207,6 +1261,7 @@ DialogPage {
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Python libraries directory (%1).").arg("<i>PYTHONPATH</i>") + " " + qsTr("Leave blank to use the default value.") + " " +
                                   qsTr("This option may be useful if you use %1 module to manage Python libraries.").arg("<i>venv</i>")
+                    hoverEnabled: true
                 }
 
                 Button {

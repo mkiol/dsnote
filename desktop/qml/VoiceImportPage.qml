@@ -28,6 +28,12 @@ DialogPage {
         appWin.openDialog("VoiceMgmtPage.qml")
     }
 
+    function update_probs(probs) {
+        probsRow.probs = probs
+        probsRow.segSize = (rangeSlider.width -
+                            rangeSlider.first.handle.width / 2) / probsRow.probs.length
+    }
+
     onOpenedChanged: {
         if (!opened) {
             app.player_reset()
@@ -85,12 +91,7 @@ DialogPage {
         onRecorder_new_stream_name: {
             titleTextField.text = name
         }
-        onRecorder_new_probs: {
-            console.log("probs:", probs.length)
-            probsRow.probs = probs
-            probsRow.segSize = (rangeSlider.width -
-                                rangeSlider.first.handle.width / 2) / probsRow.probs.length
-        }
+        onRecorder_new_probs: root.update_probs(probs)
     }
 
     GridLayout {
@@ -108,6 +109,7 @@ DialogPage {
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.visible: hovered
             ToolTip.text: qsTr("Use a voice sample recorded from a microphone.")
+            hoverEnabled: true
         }
 
         Button {
@@ -119,6 +121,7 @@ DialogPage {
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.visible: hovered
             ToolTip.text: qsTr("Use a voice sample from an audio file.")
+            hoverEnabled: true
         }
 
         CheckBox {
@@ -131,6 +134,7 @@ DialogPage {
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.visible: hovered
             ToolTip.text: qsTr("Automatically normalize volume and remove non-speech noise in a microphone recording or imported audio file.")
+            hoverEnabled: true
         }
     }
 
@@ -153,6 +157,7 @@ DialogPage {
             RangeSlider {
                 id: rangeSlider
 
+                onWidthChanged: root.update_probs(probsRow.probs)
                 Layout.fillWidth: true
                 from: 0
                 to: app.player_duration
@@ -210,15 +215,20 @@ DialogPage {
                 spacing: appWin.padding
 
                 Button {
-                    icon.name: app.player_playing ?
-                                   "media-playback-stop-symbolic" : "media-playback-start-symbolic"
-                    text: app.player_playing ? qsTr("Stop") : qsTr("Play")
+                    enabled: !app.player_playing
+                    icon.name: "media-playback-start-symbolic"
+                    text: qsTr("Play")
                     onClicked: {
-                        if (app.player_playing)
-                            app.player_stop()
-                        else {
-                            app.player_play(rangeSlider.first.value, rangeSlider.second.value)
-                        }
+                        app.player_play(rangeSlider.first.value, rangeSlider.second.value)
+                    }
+                }
+
+                Button {
+                    enabled: app.player_playing
+                    icon.name: "media-playback-stop-symbolic"
+                    text: qsTr("Stop")
+                    onClicked: {
+                        app.player_stop()
                     }
                 }
 

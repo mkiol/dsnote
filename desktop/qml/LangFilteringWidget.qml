@@ -42,5 +42,6 @@ RowLayout {
         ToolTip.visible: hovered
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
         ToolTip.text: qsTr("Clear text")
+        hoverEnabled: true
     }
 }

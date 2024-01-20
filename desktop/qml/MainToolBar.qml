@@ -114,6 +114,7 @@ ToolBar {
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: qsTr("Convert audio from an existing audio or video file into text.")
+                        hoverEnabled: true
                     }
 
                     MenuSeparator {}
@@ -130,6 +131,7 @@ ToolBar {
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: qsTr("Save the current note to a text file.")
+                        hoverEnabled: true
                     }
 
                     MenuItem {
@@ -144,6 +146,7 @@ ToolBar {
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: qsTr("Save the translated note to a text file.")
+                        hoverEnabled: true
                     }
 
                     MenuSeparator {}
@@ -164,6 +167,7 @@ ToolBar {
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: qsTr("Convert text from the current note into speech and save in an audio file.")
+                        hoverEnabled: true
                     }
 
                     MenuItem {
@@ -183,6 +187,7 @@ ToolBar {
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: qsTr("Convert translated text into speech and save in an audio file.")
+                        hoverEnabled: true
                     }
                 }
             }
@@ -195,6 +200,7 @@ ToolBar {
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTr("Set languages and download models.")
+                hoverEnabled: true
             }
 
             ToolButton {
@@ -210,6 +216,7 @@ ToolBar {
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTr("Voice samples are used in speech synthesis with voice cloning.")
+                hoverEnabled: true
 
                 Dot {
                     visible: app.available_tts_ref_voices.length === 0 && ((app.tts_ref_voice_needed && !_settings.translator_mode) ||
@@ -247,6 +254,7 @@ ToolBar {
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTr("Switch to Notepad")
+                hoverEnabled: true
             }
 
             ToolButton {
@@ -268,6 +276,7 @@ ToolBar {
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTr("Switch to Translator")
+                hoverEnabled: true
             }
 
             Connections {

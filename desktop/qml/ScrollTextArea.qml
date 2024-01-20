@@ -92,6 +92,7 @@ Item {
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.visible: hovered
             ToolTip.text: root.textFormatInvalid ? qsTr("The text format may be incorrect!") : qsTr("Text format")
+            hoverEnabled: true
 
             Rectangle {
                 id: _textFormatComboRedBorder
@@ -120,6 +121,7 @@ Item {
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTr("Copy")
+            hoverEnabled: true
         }
         ToolButton {
             id: pasteButton
@@ -132,6 +134,7 @@ Item {
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTr("Paste")
+            hoverEnabled: true
         }
         ToolButton {
             id: clearButton
@@ -144,6 +147,7 @@ Item {
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTr("Clear")
+            hoverEnabled: true
         }
         ToolButton {
             id: undoButton
@@ -161,6 +165,7 @@ Item {
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTr("Undo")
+            hoverEnabled: true
         }
         ToolButton {
             id: redoButton
@@ -173,6 +178,7 @@ Item {
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTr("Redo")
+            hoverEnabled: true
         }
     }
 }

@@ -171,6 +171,7 @@ GridLayout {
                     ToolTip.visible: hovered
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.text: checked ? qsTr("Hide filter options") : qsTr("Show filter options")
+                    hoverEnabled: true
                 }
             }
         }
@@ -262,6 +263,7 @@ GridLayout {
             ToolTip.visible: hovered || down
             ToolTip.delay: 0
             ToolTip.text: qsTr("Filter by the engine type.")
+            hoverEnabled: true
         }
     }
 
@@ -342,6 +344,7 @@ GridLayout {
             ToolTip.visible: hovered || down
             ToolTip.delay: 0
             ToolTip.text: qsTr("Filter by the engine type.")
+            hoverEnabled: true
         }
     }
 
@@ -399,6 +402,7 @@ GridLayout {
             ToolTip.text: qsTr("Filter by the processing power required by the model.") + " " +
                           qsTr("Fast model works well even on older hardware.") + " " +
                           qsTr("Slow model needs new CPU and sometimes works only when GPU acceleration is enabled.")
+            hoverEnabled: true
         }
     }
 
@@ -457,6 +461,7 @@ GridLayout {
                 ToolTip.text: qsTr("Filter by the quality of the output produced by the model.") + " " +
                               qsTr("In case of STT, it is the accuracy of speech recognition.") + " " +
                               qsTr("In case of TTS, it is the naturalness of synthesized voice.")
+                hoverEnabled: true
             }
         }
 
@@ -495,6 +500,7 @@ GridLayout {
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTr("Speech recognition results are generated in near real time.")
+            hoverEnabled: true
         }
         ModelFeatureButton {
             id: sttPuFeature
@@ -509,6 +515,7 @@ GridLayout {
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTr("Speech decoding recognizes punctuation marks.")
+            hoverEnabled: true
         }
         ModelFeatureButton {
             id: ttsVcFeature
@@ -523,6 +530,7 @@ GridLayout {
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTr("The model can imitate certain characteristics of another voice based on a voice sample.")
+            hoverEnabled: true
         }
 
         Button {
@@ -535,6 +543,7 @@ GridLayout {
             ToolTip.delay: 0
             ToolTip.text: qsTr("Filter by additional capabilities offered by model.") + " " +
                           qsTr("Select to show only models with selected capabilities.")
+            hoverEnabled: true
         }
     }
 
@@ -572,6 +581,7 @@ GridLayout {
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTr("Clear text")
+            hoverEnabled: true
         }
 
         Button {
@@ -585,6 +595,7 @@ GridLayout {
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTr("Reset all filters to default values.")
+            hoverEnabled: true
         }
     }
 }

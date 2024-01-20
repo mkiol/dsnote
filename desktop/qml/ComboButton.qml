@@ -82,7 +82,8 @@ RowLayout {
                 displayText: root.off ? root.comboPlaceholderText : currentText
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: root.comboToolTip
+                ToolTip.text: root.comboToolTip + (implicitWidth > width ? " | " + currentText : "")
+                hoverEnabled: true
 
                 Rectangle {
                     id: _comboRedBorder
@@ -106,7 +107,8 @@ RowLayout {
                 displayText: !model || model.length === 0 ? root.combo2PlaceholderText : currentText
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: root.combo2ToolTip
+                ToolTip.text: root.combo2ToolTip + (implicitWidth > width ? " | " + currentText : "")
+                hoverEnabled: true
 
                 Rectangle {
                     id: _combo2RedBorder
@@ -129,7 +131,8 @@ RowLayout {
                 enabled: !root.off
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: root.combo3ToolTip
+                ToolTip.text: root.combo3ToolTip + (implicitWidth > width ? " | " + currentText : "")
+                hoverEnabled: true
 
                 Rectangle {
                     id: _combo3RedBorder
@@ -152,6 +155,7 @@ RowLayout {
                 ToolTip.visible: hovered
                 //ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: root.checkToolTip
+                hoverEnabled: true
             }
 
             Button {

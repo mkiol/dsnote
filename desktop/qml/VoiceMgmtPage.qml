@@ -139,6 +139,7 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Save changes")
+                    hoverEnabled: true
                 }
 
                 Button {

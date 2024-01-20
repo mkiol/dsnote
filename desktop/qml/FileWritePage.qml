@@ -195,6 +195,7 @@ DialogPage {
             ToolTip.visible: hovered
             ToolTip.text: qsTr("When %1 is selected, the format is chosen based on the file extension.")
                                 .arg("<i>" +  qsTr("Auto") + "</i>")
+            hoverEnabled: true
         }
     }
 
@@ -236,6 +237,7 @@ DialogPage {
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.visible: hovered
             ToolTip.text: qsTr("%1 results in a larger file size.").arg("<i>" + qsTr("High") + "</i>")
+            hoverEnabled: true
         }
     }
 
@@ -252,6 +254,7 @@ DialogPage {
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
         ToolTip.visible: hovered
         ToolTip.text: qsTr("Write track number, title, artist and album tags to audio file.")
+        hoverEnabled: true
     }
 
     GridLayout {

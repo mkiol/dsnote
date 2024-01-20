@@ -265,6 +265,7 @@ DialogPage {
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTr("Show model details")
+                hoverEnabled: true
             }
 
             Item {

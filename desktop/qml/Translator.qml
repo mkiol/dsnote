@@ -339,28 +339,39 @@ ColumnLayout {
         rightPadding: appWin.padding
         leftPadding: appWin.padding
 
-        RowLayout {
-            Button {
-                id: translateButton
-                enabled: app.state === DsnoteApp.StateIdle && !_settings.translate_when_typing
-                text: qsTr("Translate")
-                onClicked: {
-                    app.translate()
+        GridLayout {
+            columns: root.verticalMode ? (mntOutCombo.verticalMode ? 1 : 2) : 2
+            columnSpacing: appWin.padding
+            rowSpacing: appWin.padding
+
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+
+                Button {
+                    id: translateButton
+                    enabled: app.state === DsnoteApp.StateIdle && !_settings.translate_when_typing
+                    text: qsTr("Translate")
+                    onClicked: {
+                        app.translate()
+                    }
+                }
+
+                Switch {
+                    enabled: app.state === DsnoteApp.StateIdle
+                    text: qsTr("Translate as you type")
+                    checked: _settings.translate_when_typing
+                    onClicked: {
+                        _settings.translate_when_typing = !_settings.translate_when_typing
+                    }
+                }
+
+                ToolSeparator {
+                    visible: !root.verticalMode
                 }
             }
 
             Switch {
-                enabled: app.state === DsnoteApp.StateIdle
-                text: qsTr("Translate as you type")
-                checked: _settings.translate_when_typing
-                onClicked: {
-                    _settings.translate_when_typing = !_settings.translate_when_typing
-                }
-            }
-
-            ToolSeparator {}
-
-            Switch {
+                Layout.alignment: Qt.AlignCenter
                 enabled: app.state === DsnoteApp.StateIdle &&
                          _settings.mnt_text_format !== Settings.TextFormatSubRip
                 text: qsTr("Clean up the text")
@@ -373,6 +384,7 @@ ColumnLayout {
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Remove duplicate whitespaces and extra line breaks in the text before translation.") + " " +
                               qsTr("If the input text is incorrectly formatted, this option may improve the translation quality.")
+                hoverEnabled: true
             }
         }
     }

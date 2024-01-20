@@ -87,7 +87,9 @@ ApplicationWindow {
     }
 
     function showWelcome() {
-        if (!app.busy && !app.stt_configured && !app.tts_configured) {
+        if (app.busy) return
+
+        if (!app.stt_configured && !app.tts_configured) {
             appWin.openDialogIfNotOpen("HelloPage.qml")
         } else if (APP_VERSION !== _settings.prev_app_ver) {
             _settings.prev_app_ver = APP_VERSION
@@ -186,8 +188,6 @@ ApplicationWindow {
         id: _dummyButton
 
         visible: false
-        width: implicitWidth
-        height: implicitHeight
         text: {
             var list = [
                 qsTr("Cancel"),
@@ -215,8 +215,6 @@ ApplicationWindow {
         id: _dummyButtonWithIcon
 
         visible: false
-        width: implicitWidth
-        height: 0
         icon.name: "media-playback-stop-symbolic"
         text: _dummyButton.text
     }
