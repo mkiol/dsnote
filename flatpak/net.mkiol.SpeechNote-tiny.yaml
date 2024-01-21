@@ -21,46 +21,46 @@ finish-args:
   - --filesystem=xdg-music
   - --filesystem=xdg-documents
   - --filesystem=xdg-videos
+  - --env=LD_LIBRARY_PATH=/app/extensions/nvidia/lib:/app/extensions/amd/lib:/app/extensions/cpu/lib:/app/extensions/nvidia/cuda/lib64:/app/extensions/amd/rocm/lib
+  - --env=OPENCL_VENDOR_PATH=/app/opt/opencl/vendors
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.kde.StatusNotifierWatcher # system tray icon
 cleanup:
-  - "/cmake"
-  - "/etc"
-  - "/man"
-  - "/dummy"
-  - "/include"
-  - "/lib/fst"
-  - "/lib/cmake"
-  - "/lib/pkgconfig"
-  - "/lib/debug"
-  - "/lib/python3.10/site-packages/nvidia*"
-  - "/lib/python3.10/site-packages/cmake*"
-  - "/lib/python3.10/site-packages/git*"
-  - "/lib/python3.10/site-packages/Git*"
-  - "/lib/python3.10/site-packages/torch/test"
-  - "/lib/python3.10/site-packages/torch/include"
-  - "/lib/python3.10/site-packages/pypinyin/__pycache__"
-  - "/lib/python3.10/site-packages/pandas/tests"
-  - "/lib/python3.10/site-packages/torchvision*"
-  - "/share/cmake"
-  - "/share/doc"
-  - "/share/locale"
-  - "/share/man"
-  - "/share/pkgconfig"
-  - "/share/runtime"
-  - "/share/vim"
-  - "/share/ffmpeg"
-  - "/share/aclocal"
-  - "/bin/nasm"
-  - "/bin/ndisasm"
-  - "/bin/taglib*"
-  - "/bin/spellout"
+  - /cmake
+  - /etc
+  - /man
+  - /dummy
+  - /include
+  - /lib/fst
+  - /lib/cmake
+  - /lib/pkgconfig
+  - /share/cmake
+  - /share/doc
+  - /share/locale
+  - /share/man
+  - /share/pkgconfig
+  - /share/runtime
+  - /share/vim
+  - /share/ffmpeg
+  - /share/aclocal
+  - /bin/nasm
+  - /bin/ndisasm
+  - /bin/taglib*
+  - /bin/spellout
   - "*/cmake/*"
-  - "pcre2*"
-  - "xz*"
-  - "unxz*"
+  - pcre2*
+  - xz*
+  - unxz*
   - "*.a"
   - "*.la"
+add-extensions:
+  net.mkiol.SpeechNote.Addon:
+    directory: extensions
+    no-autodownload: true
+    autodelete: true
+    subdirectories: true
+    version: stable
+    versions: stable;beta;test;master
 modules:
   - name: fmt
     buildsystem: cmake-ninja
@@ -561,10 +561,8 @@ modules:
         - "mv /app/lib/libwhisper.so /app/lib/libwhisper-openblas.so"
     sources:
       - type: archive
-        only-arches:
-          - x86_64
-        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.5.2.tar.gz
-        sha256: be9c4d5d4b5f28f02e36f28e602b7d2dcfd734dd1c834ddae91ae8db601e951f
+        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.5.4.tar.gz
+        sha256: 06eed84de310fdf5408527e41e863ac3b80b8603576ba0521177464b1b341a3a
       - type: patch
         path: ../patches/whispercpp.patch
 
@@ -588,10 +586,52 @@ modules:
       - "mv /app/lib/libwhisper.so /app/lib/libwhisper-fallback.so"
     sources:
       - type: archive
-        only-arches:
-          - x86_64
-        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.5.2.tar.gz
-        sha256: be9c4d5d4b5f28f02e36f28e602b7d2dcfd734dd1c834ddae91ae8db601e951f
+        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.5.4.tar.gz
+        sha256: 06eed84de310fdf5408527e41e863ac3b80b8603576ba0521177464b1b341a3a
+      - type: patch
+        path: ../patches/whispercpp.patch
+
+  - name: opencl-headers
+    only-arches:
+      - x86_64
+    buildsystem: cmake-ninja
+    sources:
+      - type: git
+        url: https://github.com/KhronosGroup/OpenCL-Headers.git
+        commit: 4fdcfb0ae675f2f63a9add9552e0af62c2b4ed30
+
+  - name: clblast
+    only-arches:
+      - x86_64
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DTUNERS=OFF
+    sources:
+      - type: git
+        url: https://github.com/CNugteren/CLBlast.git
+        commit: e3ce21bb937f07b8282dccf4823e2acbdf286d17
+
+  - name: whispercpp-clblast
+    only-arches:
+      - x86_64
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=ON
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+      - -DWHISPER_CLBLAST=ON
+      - -DCMAKE_C_FLAGS='-O3'
+      - -DCMAKE_CXX_FLAGS='-O3'
+    post-install:
+      - "mv /app/lib/libwhisper.so /app/lib/libwhisper-clblast.so"
+    sources:
+      - type: archive
+        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.5.4.tar.gz
+        sha256: 06eed84de310fdf5408527e41e863ac3b80b8603576ba0521177464b1b341a3a
       - type: patch
         path: ../patches/whispercpp.patch
 
@@ -608,6 +648,29 @@ modules:
       - type: shell
         commands:
           - "autoreconf -fi"
+
+  - name: opencl-vendors
+    only-arches:
+      - x86_64
+    buildsystem: simple
+    build-commands:
+      - mkdir vendors
+      - echo "libnvidia-opencl.so" > vendors/nvidia.icd
+      - echo "libMesaOpenCL.so.1" > vendors/mesa.icd
+      - echo "/app/extensions/amd/rocm/lib/libamdocl64.so" > vendors/amdocl64.icd
+      - mkdir -p /app/opt/opencl
+      - cp -r vendors /app/opt/opencl/
+
+  - name: numa
+    buildsystem: autotools
+    config-opts:
+      - --with-pic
+    cleanup:
+      - /bin
+    sources:
+      - type: archive
+        url: https://github.com/numactl/numactl/releases/download/v2.0.16/numactl-2.0.16.tar.gz
+        sha256: 1b242f893af977a1d31af6ce9d6b8dafdd2d8ec3dc9207f7c2dc0d3446e7c7c8
 
   - name: qhotkey
     buildsystem: cmake-ninja
@@ -686,6 +749,8 @@ modules:
       - -DBUILD_HTML2MD=OFF
       - -DBUILD_MADDY=OFF
       - -DWITH_PY=OFF
+    post-install:
+      - install -d ${FLATPAK_DEST}/extensions
     sources:
       - type: dir
         path: ../
