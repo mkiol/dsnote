@@ -155,7 +155,7 @@ Comparison between Base, Tiny and Add-ons Flatpak packages:
 | **Sizes**     | **Base** | **Tiny** | **Addon AMD** | **Addon NVIDIA** |
 | ------------- | ---------| ---------| --------------| ---------------- |
 | Download size | 0.9 GiB  |  70 MiB  |  +2.1 GiB     | +3.8 GiB         |
-| Unpacked size | 2.9 GiB  | 0.9 GiB  | +11.5 GiB     | +6.9 GiB         |
+| Unpacked size | 2.9 GiB  | 170 MiB  | +11.5 GiB     | +6.9 GiB         |
 
 | **Features**                         | **Base** | **Tiny** | **Addon AMD** | **Addon NVIDIA** |
 | ------------------------------------ | ---------| ---------| --------------| ---------------- |
