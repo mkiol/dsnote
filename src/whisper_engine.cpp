@@ -416,7 +416,6 @@ whisper_full_params whisper_engine::make_wparams() {
     wparams.suppress_non_speech_tokens = true;
     wparams.single_segment = false;
     wparams.translate = m_config.translate;
-    wparams.no_context = true;
     wparams.n_threads = std::min(
         m_threads,
         std::max(1, static_cast<int>(std::thread::hardware_concurrency())));
@@ -424,6 +423,8 @@ whisper_full_params whisper_engine::make_wparams() {
     wparams.encoder_begin_callback_user_data = &m_thread_exit_requested;
     wparams.abort_callback = abort_callback;
     wparams.abort_callback_user_data = &m_thread_exit_requested;
+    wparams.print_progress = false;
+    wparams.print_timestamps = false;
 
     LOGD("cpu info: arch=" << cpu_tools::arch() << ", cores="
                            << std::thread::hardware_concurrency());
