@@ -4,6 +4,17 @@ Linux desktop and Sailfish OS app for note taking, reading and translating with 
 
 <a href='https://flathub.org/apps/net.mkiol.SpeechNote'><img width='240' alt='Download on Flathub' src='https://dl.flathub.org/assets/badges/flathub-badge-en.png'/></a>
 
+## Contents of this README
+
+- [Description](#description)
+- [Languages and Models](#languages-and-models)
+- [Install](#install)
+- [Flatpak packages](#flatpak-packages)
+- [Building from sources](#building-from-sources)
+- [Contributing to Speech Note](#contributing-to-speech-note)
+- [Reviews and demos](#reviews-and-demos)
+- [License](#license)
+
 ## Description
 
 **Speech Note** let you take, read and translate notes in multiple languages.
@@ -16,7 +27,7 @@ respected. No data is sent to the Internet.
 Currently these are used:
 
 - Speech to Text (STT)
-    - [Coqui STT](https://github.com/coqui-ai/STT)
+    - [Coqui STT (a fork of Mozilla DeepSpeech)](https://github.com/coqui-ai/STT)
     - [Vosk](https://alphacephei.com/vosk)
     - [whisper.cpp](https://github.com/ggerganov/whisper.cpp)
     - [Faster Whisper](https://github.com/guillaumekln/faster-whisper)
@@ -116,49 +127,56 @@ Details of models which are currently configured for download are described in
 [models.json (GitHub)](https://github.com/mkiol/dsnote/blob/main/config/models.json) or
 [models.json (GitLab)](https://gitlab.com/mkiol/dsnote/-/blob/main/config/models.json).
 
-## Contributions
-
-Any contribution is very welcome!
-
-Project is hosted both on [GitHub](https://github.com/mkiol/dsnote) and [GitLab](https://gitlab.com/mkiol/dsnote).
-Feel free to make a PR/MR, report an issue or reqest for new feature on the platform you prefer the most.
-
-### Translation
-
-Translation files in Qt format are in [translations dir (GitHub)](https://github.com/mkiol/dsnote/tree/main/translations) or
-[translations dir (GitLab)](https://gitlab.com/mkiol/dsnote/-/tree/main/translations).
-
-Preferred way to contribute translation is via [Transifex service](https://explore.transifex.com/mkiol/dsnote/),
-but if you would like to make a direct PR/MR, please do it.
-
 ## Install
 
 - Linux Desktop: [Flatpak](https://flathub.org/apps/net.mkiol.SpeechNote)
 - Arch Linux (AUR): [dsnote-git](https://aur.archlinux.org/packages/dsnote-git)
 - Sailfish OS: [OpenRepos](https://openrepos.net/content/mkiol/speech-note)
 
-Flatpak package (published on Flathub) includes almost all the dependencies needed to run every feature of the application.
-This includes CUDA, ROCm, Torch and Python libraries. Due to this, the size of the package and the space required after installation are significant.
-If you don't need all the functionalities, you can use much smaller "Tiny" package (available on [Releases](https://github.com/mkiol/dsnote/releases/tag/v4.3.0) page), which contains only the basic features.
+### Flatpak packages
 
-Comparison between "Flathub" and "Tiny" Flatpak packages:
+Starting from v4.4.0, the app distributed via Flatpak (published on Flathub) consists of the following packages:
 
-| **Feature**             | **Flathub** | **Tiny** |
-| ----------------------- | ----------- | ---------|
-| Coqui/DeepSpeech STT    | ✔️          | ✔️ |
-| Vosk STT                | ✔️          | ✔️ |
-| Whisper STT             | ✔️          | ✔️ |
-| Whisper STT GPU         | ✔️          | ✘ |
-| Faster Whisper STT      | ✔️          | ✘ |
-| April-ASR STT           | ✔️          | ✔️ |
-| eSpeak TTS              | ✔️          | ✔️ |
-| MBROLA TTS              | ✔️          | ✔️ |
-| Piper TTS               | ✔️          | ✔️ |
-| RHVoice TTS             | ✔️          | ✔️ |
-| Coqui TTS               | ✔️          | ✘ |
-| Mimic3 TTS              | ✔️          | ✘ |
-| Punctuation restoration | ✔️          | ✘ |
-| Translator              | ✔️          | ✔️ |
+ - Base package "Speech Note" (net.mkiol.SpeechNote)
+ - Add-on for AMD graphics card "Speech Note AMD" (net.mkiol.SpeechNote.Addon.amd)
+ - Add-on for NVIDIA graphics card "Speech Note NVIDIA" (net.mkiol.SpeechNote.Addon.nvidia)
+
+Base package includes all the dependencies needed to run every feature of the application.
+Add-ons add the capability of GPU acceleration, which speeds up some operations in the application.
+
+Base package and add-ons contain many "heavy" libraries like CUDA, ROCm, Torch and Python libraries.
+Due to this, the size of the packages and the space required after installation are significant.
+If you don't need all the functionalities, you can use much smaller "Tiny" package
+(available on [Releases](https://github.com/mkiol/dsnote/releases/tag/v4.3.0) page), 
+which provides only the basic features. If you need, you can also use "Tiny" packages together with GPU acceleration add-on.
+
+Comparison between Base, Tiny and Add-ons Flatpak packages:
+
+| **Sizes**     | **Base** | **Tiny** | **Addon AMD** | **Addon NVIDIA** |
+| ------------- | ---------| ---------| --------------| ---------------- |
+| Download size | 0.9 GiB  |  70 MiB  |  +2.1 GiB     | +3.8 GiB         |
+| Unpacked size | 2.9 GiB  | 0.9 GiB  | +11.5 GiB     | +6.9 GiB         |
+
+| **Features**                         | **Base** | **Tiny** | **Addon AMD** | **Addon NVIDIA** |
+| ------------------------------------ | ---------| ---------| --------------| ---------------- |
+| Coqui/DeepSpeech STT                 | +        | +        |               |                  |
+| Vosk STT                             | +        | +        |               |                  |
+| Whisper (whisper.cpp) STT            | +        | +        |               |                  |
+| Whisper (whisper.cpp) STT AMD GPU    | -        | -        | +             |                  |
+| Whisper (whisper.cpp) STT NVIDIA GPU | -        | -        |               | +                |
+| Faster Whisper STT                   | +        | -        |               |                  |
+| Faster Whisper STT NVIDIA GPU        | -        | -        |               | +                |
+| April-ASR STT                        | +        | +        |               |                  |
+| eSpeak TTS                           | +        | +        |               |                  |
+| MBROLA TTS                           | +        | +        |               |                  |
+| Piper TTS                            | +        | +        |               |                  |
+| RHVoice TTS                          | +        | +        |               |                  |
+| Coqui TTS                            | +        | -        |               |                  |
+| Coqui TTS AMD GPU                    | -        | -        | +             |                  |
+| Coqui TTS NVIDIA GPU                 | -        | -        |               | +                |
+| Mimic3 TTS                           | +        | -        |               |                  |
+| Punctuation restoration              | +        | -        |               |                  |
+| Translator                           | +        | +        |               |                  |
 
 ## Building from sources
 
@@ -223,6 +241,21 @@ make
 To make build without support for Python components, add `-DWITH_PY=OFF` in cmake step.
 
 To see other build options search for `option(BUILD_XXX)` in `CMakeList.txt` file.
+
+## Contributing to Speech Note
+
+Any contribution is very welcome!
+
+Project is hosted both on [GitHub](https://github.com/mkiol/dsnote) and [GitLab](https://gitlab.com/mkiol/dsnote).
+Feel free to make a PR/MR, report an issue or reqest for new feature on the platform you prefer the most.
+
+### Translation
+
+Translation files in Qt format are in [translations dir (GitHub)](https://github.com/mkiol/dsnote/tree/main/translations) or
+[translations dir (GitLab)](https://gitlab.com/mkiol/dsnote/-/tree/main/translations).
+
+Preferred way to contribute translation is via [Transifex service](https://explore.transifex.com/mkiol/dsnote/),
+but if you would like to make a direct PR/MR, please do it.
 
 ## Libraries
 
