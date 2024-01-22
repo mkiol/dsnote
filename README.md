@@ -8,7 +8,7 @@ Linux desktop and Sailfish OS app for note taking, reading and translating with 
 
 - [Description](#description)
 - [Languages and Models](#languages-and-models)
-- [Install](#install)
+- [How to install](#how-to-install)
 - [Flatpak packages](#flatpak-packages)
 - [Building from sources](#building-from-sources)
 - [Contributing to Speech Note](#contributing-to-speech-note)
@@ -127,10 +127,12 @@ Details of models which are currently configured for download are described in
 [models.json (GitHub)](https://github.com/mkiol/dsnote/blob/main/config/models.json) or
 [models.json (GitLab)](https://gitlab.com/mkiol/dsnote/-/blob/main/config/models.json).
 
-## Install
+## How to install
 
 - Linux Desktop: [Flatpak](https://flathub.org/apps/net.mkiol.SpeechNote)
-- Arch Linux (AUR): [dsnote-git](https://aur.archlinux.org/packages/dsnote-git)
+- Arch Linux (AUR):
+  - [dsnote](https://aur.archlinux.org/packages/dsnote)
+  - [dsnote-git](https://aur.archlinux.org/packages/dsnote-git)
 - Sailfish OS: [OpenRepos](https://openrepos.net/content/mkiol/speech-note)
 
 ### Flatpak packages
@@ -152,31 +154,31 @@ which provides only the basic features. If you need, you can also use "Tiny" pac
 
 Comparison between Base, Tiny and Add-ons Flatpak packages:
 
-| **Sizes**     | **Base** | **Tiny** | **Addon AMD** | **Addon NVIDIA** |
-| ------------- | ---------| ---------| --------------| ---------------- |
-| Download size | 0.9 GiB  |  70 MiB  |  +2.1 GiB     | +3.8 GiB         |
-| Unpacked size | 2.9 GiB  | 170 MiB  | +11.5 GiB     | +6.9 GiB         |
+| **Sizes**     | **Base** | **Tiny** | **AMD add-on** | **NVIDIA add-on** |
+| ------------- | ---------| ---------| -------------- | ----------------- |
+| Download size | 0.9 GiB  |  70 MiB  |  +2.1 GiB      | +3.8 GiB          |
+| Unpacked size | 2.9 GiB  | 170 MiB  | +11.5 GiB      | +6.9 GiB          |
 
-| **Features**                         | **Base** | **Tiny** | **Addon AMD** | **Addon NVIDIA** |
-| ------------------------------------ | ---------| ---------| --------------| ---------------- |
-| Coqui/DeepSpeech STT                 | +        | +        |               |                  |
-| Vosk STT                             | +        | +        |               |                  |
-| Whisper (whisper.cpp) STT            | +        | +        |               |                  |
-| Whisper (whisper.cpp) STT AMD GPU    | -        | -        | +             |                  |
-| Whisper (whisper.cpp) STT NVIDIA GPU | -        | -        |               | +                |
-| Faster Whisper STT                   | +        | -        |               |                  |
-| Faster Whisper STT NVIDIA GPU        | -        | -        |               | +                |
-| April-ASR STT                        | +        | +        |               |                  |
-| eSpeak TTS                           | +        | +        |               |                  |
-| MBROLA TTS                           | +        | +        |               |                  |
-| Piper TTS                            | +        | +        |               |                  |
-| RHVoice TTS                          | +        | +        |               |                  |
-| Coqui TTS                            | +        | -        |               |                  |
-| Coqui TTS AMD GPU                    | -        | -        | +             |                  |
-| Coqui TTS NVIDIA GPU                 | -        | -        |               | +                |
-| Mimic3 TTS                           | +        | -        |               |                  |
-| Punctuation restoration              | +        | -        |               |                  |
-| Translator                           | +        | +        |               |                  |
+| **Features**                         | **Base** | **Tiny** | **AMD add-on** | **NVIDIA add-on** |
+| ------------------------------------ | ---------| ---------| -------------- | ----------------- |
+| Coqui/DeepSpeech STT                 | +        | +        |                |                   |
+| Vosk STT                             | +        | +        |                |                   |
+| Whisper (whisper.cpp) STT            | +        | +        |                |                   |
+| Whisper (whisper.cpp) STT AMD GPU    | -        | -        | +              |                   |
+| Whisper (whisper.cpp) STT NVIDIA GPU | -        | -        |                | +                 |
+| Faster Whisper STT                   | +        | -        |                |                   |
+| Faster Whisper STT NVIDIA GPU        | -        | -        |                | +                 |
+| April-ASR STT                        | +        | +        |                |                   |
+| eSpeak TTS                           | +        | +        |                |                   |
+| MBROLA TTS                           | +        | +        |                |                   |
+| Piper TTS                            | +        | +        |                |                   |
+| RHVoice TTS                          | +        | +        |                |                   |
+| Coqui TTS                            | +        | -        |                |                   |
+| Coqui TTS AMD GPU                    | -        | -        | +              |                   |
+| Coqui TTS NVIDIA GPU                 | -        | -        |                | +                 |
+| Mimic3 TTS                           | +        | -        |                |                   |
+| Punctuation restoration              | +        | -        |                |                   |
+| Translator                           | +        | +        |                |                   |
 
 ## Building from sources
 
