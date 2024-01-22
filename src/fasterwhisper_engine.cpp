@@ -176,8 +176,6 @@ stt_engine::samples_process_result_t fasterwhisper_engine::process_buff() {
             set_speech_detection_status(
                 speech_detection_status_t::speech_detected);
 
-        push_buf_to_whisper_buf(vad_buf, m_speech_buf);
-
         if (m_config.text_format == text_format_t::raw)
             push_buf_to_whisper_buf(vad_buf, m_speech_buf);
         else
