@@ -1895,6 +1895,16 @@ auto models_manager::extract_models(
                 qDebug() << "ignoring fasterwhisper model:" << model_id;
                 continue;
             }
+            if (!models_availability->stt_ds &&
+                engine == model_engine_t::stt_ds) {
+                qDebug() << "ignoring ds model:" << model_id;
+                continue;
+            }
+            if (!models_availability->mnt_bergamot &&
+                engine == model_engine_t::mnt_bergamot) {
+                qDebug() << "ignoring bergamot model:" << model_id;
+                continue;
+            }
             if (engine == model_engine_t::tts_mimic3) {
                 if (!models_availability->tts_mimic3 ||
                     (!models_availability->tts_mimic3_de && lang_id == "de") ||
@@ -2374,6 +2384,16 @@ void models_manager::update_models_using_availability_internal() {
         }
         if (!m_models_availability->stt_fasterwhisper &&
             pair.second.engine == model_engine_t::stt_fasterwhisper) {
+            pair.second.hidden = true;
+            return;
+        }
+        if (!m_models_availability->stt_ds &&
+            pair.second.engine == model_engine_t::stt_ds) {
+            pair.second.hidden = true;
+            return;
+        }
+        if (!m_models_availability->mnt_bergamot &&
+            pair.second.engine == model_engine_t::mnt_bergamot) {
             pair.second.hidden = true;
             return;
         }

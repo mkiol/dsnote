@@ -58,6 +58,7 @@ libs_availability_t libs_availability() {
 
     if (cpu_tools::cpuinfo().feature_flags & cpu_tools::feature_flags_t::avx) {
         try {
+            LOGD("checking: torch cuda");
             auto torch = py::module_::import("torch.cuda");
             availability.torch_cuda = torch.attr("is_available")().cast<bool>();
         } catch (const std::exception& err) {
@@ -65,6 +66,7 @@ libs_availability_t libs_availability() {
         }
 
         try {
+            LOGD("checking: coqui tts");
             py::module_::import("TTS");
             availability.coqui_tts = true;
         } catch (const std::exception& err) {
@@ -72,6 +74,7 @@ libs_availability_t libs_availability() {
         }
 
         try {
+            LOGD("checking: faster-whisper");
             py::module_::import("faster_whisper");
             availability.faster_whisper = true;
         } catch (const std::exception& err) {
@@ -79,7 +82,9 @@ libs_availability_t libs_availability() {
         }
 
         try {
+            LOGD("checking: transformers");
             py::module_::import("transformers");
+            LOGD("checking: accelerate");
             py::module_::import("accelerate");
             availability.transformers = true;
         } catch (const std::exception& err) {
@@ -87,6 +92,7 @@ libs_availability_t libs_availability() {
         }
 
         try {
+            LOGD("checking: unikud");
             py::module_::import("unikud");
             availability.unikud = true;
         } catch (const std::exception& err) {
@@ -97,6 +103,7 @@ libs_availability_t libs_availability() {
     }
 
     try {
+        LOGD("checking: mimic3 tts");
         py::module_::import("mimic3_tts");
         availability.mimic3_tts = true;
     } catch (const std::exception& err) {
@@ -104,9 +111,11 @@ libs_availability_t libs_availability() {
     }
 
     try {
+        LOGD("checking: gruut");
         py::module_::import("gruut");
 
         try {
+            LOGD("checking: gruut-de");
             py::module_::import("gruut_lang_de");
             availability.gruut_de = true;
         } catch (const std::exception& err) {
@@ -114,6 +123,7 @@ libs_availability_t libs_availability() {
         }
 
         try {
+            LOGD("checking: gruut-es");
             py::module_::import("gruut_lang_es");
             availability.gruut_es = true;
         } catch (const std::exception& err) {
@@ -121,6 +131,7 @@ libs_availability_t libs_availability() {
         }
 
         try {
+            LOGD("checking: gruut-fr");
             py::module_::import("gruut_lang_fr");
             availability.gruut_fr = true;
         } catch (const std::exception& err) {
@@ -128,6 +139,7 @@ libs_availability_t libs_availability() {
         }
 
         try {
+            LOGD("checking: gruut-it");
             py::module_::import("gruut_lang_it");
             availability.gruut_it = true;
         } catch (const std::exception& err) {
@@ -135,6 +147,7 @@ libs_availability_t libs_availability() {
         }
 
         try {
+            LOGD("checking: gruut-ru");
             py::module_::import("gruut_lang_ru");
             availability.gruut_ru = true;
         } catch (const std::exception& err) {
@@ -142,6 +155,7 @@ libs_availability_t libs_availability() {
         }
 
         try {
+            LOGD("checking: gruut-fa");
             py::module_::import("gruut_lang_fa");
             availability.gruut_fa = true;
         } catch (const std::exception& err) {
@@ -149,6 +163,7 @@ libs_availability_t libs_availability() {
         }
 
         try {
+            LOGD("checking: gruut-sw");
             py::module_::import("gruut_lang_sw");
             availability.gruut_sw = true;
         } catch (const std::exception& err) {
@@ -156,6 +171,7 @@ libs_availability_t libs_availability() {
         }
 
         try {
+            LOGD("checking: gruut-nl");
             py::module_::import("gruut_lang_nl");
             availability.gruut_nl = true;
         } catch (const std::exception& err) {
@@ -166,7 +182,9 @@ libs_availability_t libs_availability() {
     }
 
     try {
+        LOGD("checking: mecab");
         py::module_::import("MeCab");
+        LOGD("checking: unidic-lite");
         py::module_::import("unidic_lite");
         availability.mecab = true;
     } catch (const std::exception& err) {

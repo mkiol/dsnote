@@ -14,6 +14,7 @@
 #include <cstdint>
 #include <fstream>
 
+#include "cpu_tools.hpp"
 #include "logger.hpp"
 
 using namespace std::chrono_literals;
@@ -45,6 +46,12 @@ ds_engine::~ds_engine() {
 }
 
 void ds_engine::open_ds_lib() {
+    if ((cpu_tools::cpuinfo().feature_flags &
+         cpu_tools::feature_flags_t::avx) == 0) {
+        LOGE("avx not supported but ds engine needs it");
+        throw std::runtime_error("failed to init ds engine: avx not supported");
+    }
+
     m_dslib_handle = dlopen("libstt.so", RTLD_LAZY);
     if (m_dslib_handle == nullptr) {
         LOGE("failed to open ds lib");

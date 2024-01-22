@@ -89,12 +89,14 @@ cpuinfo_t parse_cpuinfo(std::istream& stream) {
         std::regex processor_rx{"processor\\s+:\\s+\\d+"};
         std::regex flags_rx{"Features|flags\\s+:\\s+(.*)"};
 
+        bool flags_done = false;
+
         for (std::string line; std::getline(stream, line);) {
             if (std::smatch pieces_match;
                 std::regex_match(line, pieces_match, processor_rx))
                 ++cpuinfo.number_of_processors;
 
-            if (cpuinfo.feature_flags != feature_flags_t::none) continue;
+            if (flags_done) continue;
 
             if (std::smatch pieces_match;
                 std::regex_match(line, pieces_match, flags_rx) &&
@@ -113,6 +115,7 @@ cpuinfo_t parse_cpuinfo(std::istream& stream) {
                     cpuinfo.feature_flags |= feature_flags_t::asimd;
 
                 LOGD("cpu flags: " << pieces_match[1].str());
+                flags_done = true;
             }
         }
     } catch (const std::exception& e) {

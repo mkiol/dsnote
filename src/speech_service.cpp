@@ -22,6 +22,7 @@
 
 #include "april_engine.hpp"
 #include "coqui_engine.hpp"
+#include "cpu_tools.hpp"
 #include "ds_engine.hpp"
 #include "espeak_engine.hpp"
 #include "fasterwhisper_engine.hpp"
@@ -1205,8 +1206,9 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                         throw std::runtime_error{
                             "invalid model engine, expected stt"};
                 }
-            } catch (const std::runtime_error &error) {
-                qWarning() << "failed to create stt engine:" << error.what();
+            } catch (const std::runtime_error &err) {
+                qWarning() << "failed to create stt engine:" << err.what();
+                emit error(error_t::stt_engine);
                 return {};
             }
 
@@ -1431,8 +1433,9 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                         throw std::runtime_error{
                             "invalid model engine, expected tts"};
                 }
-            } catch (const std::runtime_error &error) {
-                qWarning() << "failed to create tts engine:" << error.what();
+            } catch (const std::runtime_error &err) {
+                qWarning() << "failed to create tts engine:" << err.what();
+                emit error(error_t::tts_engine);
                 return {};
             }
         } else {
@@ -1552,8 +1555,9 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
             try {
                 m_mnt_engine = std::make_unique<mnt_engine>(
                     std::move(config), std::move(call_backs));
-            } catch (const std::runtime_error &error) {
-                qWarning() << "failed to create mnt engine:" << error.what();
+            } catch (const std::runtime_error &err) {
+                qWarning() << "failed to create mnt engine:" << err.what();
+                emit error(error_t::mnt_engine);
                 return {};
             }
         } else {
@@ -2332,6 +2336,8 @@ QVariantMap speech_service::features_availability() {
 #ifdef ARCH_X86_64
             auto has_cuda = gpu_tools::has_cuda();
             auto has_cudnn = gpu_tools::has_cudnn();
+            auto has_avx = (cpu_tools::cpuinfo().feature_flags &
+                            cpu_tools::feature_flags_t::avx) != 0;
 #endif
             m_features_availability.insert(
                 "coqui-tts",
@@ -2406,6 +2412,26 @@ QVariantMap speech_service::features_availability() {
                 QVariantList{
                     py_availability->transformers && py_availability->unikud,
                     tr("Diacritics restoration for Hebrew")});
+
+#ifdef ARCH_X86_64
+            bool stt_ds = has_avx;
+            if (!stt_ds)
+                qWarning()
+                    << "disabling ds engine because cpu doesn't support avx";
+
+            bool mnt_bergamot = has_avx;
+            if (!mnt_bergamot)
+                qWarning()
+                    << "disabling translator because cpu doesn't support avx";
+#else
+            bool stt_ds = true;
+            bool mnt_bergamot = true;
+#endif
+            m_features_availability.insert(
+                "coqui-stt", QVariantList{stt_ds, "Coqui/DeepSpeech STT"});
+            m_features_availability.insert(
+                "translator", QVariantList{mnt_bergamot, "Translator"});
+
 #ifdef ARCH_X86_64
             m_features_availability.insert(
                 "whispercpp-stt-cuda",
@@ -2441,6 +2467,8 @@ QVariantMap speech_service::features_availability() {
                  /*tts_mimic3_nl=*/py_availability->mimic3_tts &&
                      py_availability->gruut_nl,
                  /*stt_fasterwhisper=*/py_availability->faster_whisper,
+                 /*stt_ds=*/stt_ds,
+                 /*mnt_bergamot=*/true, /*don't disable mt models*/
                  /*ttt_hftc=*/py_availability->transformers,
                  /*option_r=*/has_uroman});
 
