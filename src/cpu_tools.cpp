@@ -86,8 +86,8 @@ cpuinfo_t parse_cpuinfo(std::istream& stream) {
     cpuinfo_t cpuinfo;
 
     try {
-        std::regex processor_rx{"processor\\s+:\\s+\\d+"};
-        std::regex flags_rx{"Features|flags\\s+:\\s+(.*)"};
+        std::regex processor_rx{"processor\\s*:\\s+\\d+"};
+        std::regex flags_rx{"(Features|flags)\\s*:\\s+(.*)"};
 
         bool flags_done = false;
 
@@ -100,21 +100,21 @@ cpuinfo_t parse_cpuinfo(std::istream& stream) {
 
             if (std::smatch pieces_match;
                 std::regex_match(line, pieces_match, flags_rx) &&
-                pieces_match.size() > 1) {
-                if (pieces_match[1].str().find("avx") != std::string::npos)
+                pieces_match.size() > 2) {
+                if (pieces_match[2].str().find("avx") != std::string::npos)
                     cpuinfo.feature_flags |= feature_flags_t::avx;
-                if (pieces_match[1].str().find("avx2") != std::string::npos)
+                if (pieces_match[2].str().find("avx2") != std::string::npos)
                     cpuinfo.feature_flags |= feature_flags_t::avx2;
-                if (pieces_match[1].str().find("avx512") != std::string::npos)
+                if (pieces_match[2].str().find("avx512") != std::string::npos)
                     cpuinfo.feature_flags |= feature_flags_t::avx512;
-                if (pieces_match[1].str().find("fma") != std::string::npos)
+                if (pieces_match[2].str().find("fma") != std::string::npos)
                     cpuinfo.feature_flags |= feature_flags_t::fma;
-                if (pieces_match[1].str().find("f16c") != std::string::npos)
+                if (pieces_match[2].str().find("f16c") != std::string::npos)
                     cpuinfo.feature_flags |= feature_flags_t::f16c;
-                if (pieces_match[1].str().find("asimd") != std::string::npos)
+                if (pieces_match[2].str().find("asimd") != std::string::npos)
                     cpuinfo.feature_flags |= feature_flags_t::asimd;
 
-                LOGD("cpu flags: " << pieces_match[1].str());
+                LOGD("cpu flags: " << pieces_match[2].str());
                 flags_done = true;
             }
         }
