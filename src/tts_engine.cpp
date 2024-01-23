@@ -263,10 +263,7 @@ void tts_engine::encode_speech(std::string text) {
 
     {
         std::lock_guard lock{m_mutex};
-        for (auto& task : tasks) {
-            LOGD("task: " << task.text);
-            m_queue.push(std::move(task));
-        }
+        for (auto& task : tasks) m_queue.push(std::move(task));
     }
 
     LOGD("task pushed");
@@ -365,32 +362,35 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
                                            false, false});
 
                 tasks.back().last = true;
+
+                return tasks;
             }
+        }
+
+        LOGW("tts fallback to plain text");
+    }
+
+    if (split) {
+        auto engine = m_config.has_option('a')
+                          ? text_tools::split_engine_t::astrunc
+                          : text_tools::split_engine_t::ssplit;
+        auto [parts, _] =
+            text_tools::split(text, engine, m_config.lang, m_config.nb_data);
+        if (!parts.empty()) {
+            tasks.reserve(parts.size());
+            tasks.push_back(
+                task_t{std::move(parts.front()), 0, 0, true, false});
+
+            for (auto it = parts.begin() + 1; it != parts.end(); ++it) {
+                trim(*it);
+                if (!it->empty())
+                    tasks.push_back(task_t{std::move(*it), 0, 0, false, false});
+            }
+
+            tasks.back().last = true;
         }
     } else {
-        if (split) {
-            auto engine = m_config.has_option('a')
-                              ? text_tools::split_engine_t::astrunc
-                              : text_tools::split_engine_t::ssplit;
-            auto [parts, _] = text_tools::split(text, engine, m_config.lang,
-                                                m_config.nb_data);
-            if (!parts.empty()) {
-                tasks.reserve(parts.size());
-                tasks.push_back(
-                    task_t{std::move(parts.front()), 0, 0, true, false});
-
-                for (auto it = parts.begin() + 1; it != parts.end(); ++it) {
-                    trim(*it);
-                    if (!it->empty())
-                        tasks.push_back(
-                            task_t{std::move(*it), 0, 0, false, false});
-                }
-
-                tasks.back().last = true;
-            }
-        } else {
-            tasks.push_back(task_t{text, 0, 0, true, true});
-        }
+        tasks.push_back(task_t{text, 0, 0, true, true});
     }
 
     return tasks;
