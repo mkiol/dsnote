@@ -85,6 +85,10 @@ QList<ListItem *> LangsListModel::makeItems() {
         });
     }
 
+    std::stable_partition(items.begin(), items.end(), [](const auto *item) {
+        return static_cast<const LangsListItem *>(item)->available();
+    });
+
     return items;
 }
 
