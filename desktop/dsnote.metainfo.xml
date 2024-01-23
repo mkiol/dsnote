@@ -88,10 +88,10 @@
       <p>Flatpak:</p>
       <ul>
       <li>Modular Flatpak package.
-          The application package is divided into a base package 'net.mkiol.SpeechNote' and
-          two optional add-ons: 'net.mkiol.SpeechNote.amd' and 'net.mkiol.SpeechNote.nvidia'.
+          The application package is divided into a base package 'Speech Note' (net.mkiol.SpeechNote) and
+          two optional add-ons: 'Speech Note AMD' (net.mkiol.SpeechNote.amd) and 'Speech Note NVIDIA' (net.mkiol.SpeechNote.nvidia).
           Add-ons packages provide a set of libraries for GPU acceleration with AMD and NVIDIA graphics cards.
-          The "modular" approach makes the base Flatpak package much smaller.</li>
+          New "modular" approach makes the base Flatpak package much smaller.</li>
       <li>NVIDIA CUDA runtime update to version 12.2</li>
       <li>AMD ROCm runtime update to version 5.6</li>
       <li>PyTorch update to version 2.1.1</li>
@@ -109,6 +109,8 @@
       <ul>
       <li>Marathi language. New language is enabled with Whisper and Faster Whisper models.</li>
       <li>New version of Faster Whisper Large model: 'FasterWhisper Large-v3'</li>
+      <li>New 'Distil' Faster Whisper models for English.
+          'Distil' models are potentially faster than regular models.</li>
       <li>Whisper and Faster Whisper enabled for Chinese-Cantonese language</li>
       <li>Support for Speex audio codec in 'Transcribe a file'</li>
       <li>Translate to English option for Whisper and Faster Whisper models</li>
