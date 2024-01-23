@@ -9,6 +9,7 @@
 
 #include <dirent.h>
 #include <dlfcn.h>
+#include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -432,6 +433,8 @@ void vosk_engine::decode_speech(const vosk_buf_t& buf, bool eof) {
         }
     }
 
+    const char* old_locale = setlocale(LC_NUMERIC, "C");
+
     if (m_config.text_format == text_format_t::subrip && eof) {
         auto segments = segments_from_json(
             m_vosk_api.vosk_recognizer_final_result(m_vosk_recognizer));
@@ -467,6 +470,8 @@ void vosk_engine::decode_speech(const vosk_buf_t& buf, bool eof) {
         if (!m_intermediate_text || m_intermediate_text != result)
             set_intermediate_text(result);
     }
+
+    setlocale(LC_NUMERIC, old_locale);
 
     if (eof) m_vosk_api.vosk_recognizer_reset(m_vosk_recognizer);
 }
