@@ -10,6 +10,7 @@ Linux desktop and Sailfish OS app for note taking, reading and translating with 
 - [Languages and Models](#languages-and-models)
 - [How to install](#how-to-install)
 - [Flatpak packages](#flatpak-packages)
+- [Beta version](#beta-version)
 - [Building from sources](#building-from-sources)
 - [Contributing to Speech Note](#contributing-to-speech-note)
 - [Reviews and demos](#reviews-and-demos)
@@ -179,6 +180,12 @@ Comparison between Base, Tiny and Add-ons Flatpak packages:
 | Mimic3 TTS                           | +        | -        |                |                   |
 | Punctuation restoration              | +        | -        |                |                   |
 | Translator                           | +        | +        |                |                   |
+
+### Beta version
+
+In addition to the stable version in the Flathub repository, you can try to test the "Beta" version of the upcoming release. This version is usable, but may contain more bugs.
+
+Beta version is available in "flathub-beta" repository. Follow [these instructions](https://discourse.flathub.org/t/how-to-use-flathub-beta/2111) to enable flathub-beta on your computer.
 
 ## Building from sources
 
