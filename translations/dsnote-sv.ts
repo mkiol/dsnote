@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sv" sourcelanguage="en_US">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sv" sourcelanguage="en_US">
 <context>
     <name>AboutPage</name>
     <message>
@@ -430,7 +428,7 @@
     <message>
         <location filename="../desktop/qml/InlineMessage.qml" line="54"/>
         <source>Close</source>
-        <translation type="unfinished">Stäng</translation>
+        <translation>Stäng</translation>
     </message>
 </context>
 <context>
@@ -438,12 +436,12 @@
     <message>
         <location filename="../desktop/qml/LangFilteringWidget.qml" line="29"/>
         <source>Type to search</source>
-        <translation type="unfinished">Skriv för att söka</translation>
+        <translation>Skriv för att söka</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangFilteringWidget.qml" line="44"/>
         <source>Clear text</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort text</translation>
     </message>
 </context>
 <context>
@@ -501,10 +499,6 @@
         <translation>Modelltyp</translation>
     </message>
     <message>
-        <source>Type to search</source>
-        <translation type="vanished">Skriv för att söka</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/LangsPage.qml" line="122"/>
         <source>Close</source>
         <translation>Stäng</translation>
@@ -512,17 +506,17 @@
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="267"/>
         <source>Show model details</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa modelldetaljer</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="294"/>
         <source>Enable</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="310"/>
         <source>Disable</source>
-        <translation type="unfinished"></translation>
+        <translation>Avaktivera</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="318"/>
@@ -647,22 +641,10 @@
         <translation>Konvertera översatt text till tal och spara i en ljudfil.</translation>
     </message>
     <message>
-        <source>Audio and video files</source>
-        <translation type="vanished">Ljud- och videofiler</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="31"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="192"/>
         <source>Languages</source>
         <translation>Språk</translation>
-    </message>
-    <message>
-        <source>Audio files</source>
-        <translation type="vanished">Ljudfiler</translation>
-    </message>
-    <message>
-        <source>Video files</source>
-        <translation type="vanished">Videofiler</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="197"/>
@@ -677,12 +659,12 @@
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="207"/>
         <source>Voice samples</source>
-        <translation type="unfinished"></translation>
+        <translation>Röstprover</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="212"/>
         <source>Voice samples are used in speech synthesis with voice cloning.</source>
-        <translation type="unfinished"></translation>
+        <translation>Röstprover används i talsyntes med röstkloning.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="249"/>
@@ -698,7 +680,7 @@
         <location filename="../desktop/qml/MainToolBar.qml" line="291"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="299"/>
         <source>SRT Subtitles</source>
-        <translation type="unfinished"></translation>
+        <translation>SRT-undertexter</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="297"/>
@@ -716,7 +698,7 @@
         <location filename="../desktop/qml/MainToolBar.qml" line="319"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="336"/>
         <source>All supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>Alla filer som stöds</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="288"/>
@@ -736,180 +718,180 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="93"/>
         <source>Model type</source>
-        <translation type="unfinished">Modelltyp</translation>
+        <translation>Modelltyp</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="110"/>
         <source>Speech to Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Tal-till-text</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="120"/>
         <source>Text to Speech</source>
-        <translation type="unfinished"></translation>
+        <translation>Text-till-tal</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="130"/>
         <source>Translator</source>
-        <translation type="unfinished">Översättare</translation>
+        <translation>Översättare</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="140"/>
         <source>Other</source>
-        <translation type="unfinished">Annat</translation>
+        <translation>Annat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="173"/>
         <source>Hide filter options</source>
-        <translation type="unfinished"></translation>
+        <translation>Dölj filtreringsalternativ</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="173"/>
         <source>Show filter options</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa filtreringsalternativ</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="190"/>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="271"/>
         <source>Engine</source>
-        <translation type="unfinished"></translation>
+        <translation>Motor</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="264"/>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="344"/>
         <source>Filter by the engine type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtrera efter motortyp.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="350"/>
         <source>Processing speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Processhastighet</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="364"/>
         <source>Fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Snabb</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="374"/>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="432"/>
         <source>Medium</source>
-        <translation type="unfinished">Medium</translation>
+        <translation>Medium</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="384"/>
         <source>Slow</source>
-        <translation type="unfinished"></translation>
+        <translation>Långsam</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="399"/>
         <source>Filter by the processing power required by the model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtrera efter den processorkraft som krävs av modellen.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="400"/>
         <source>Fast model works well even on older hardware.</source>
-        <translation type="unfinished"></translation>
+        <translation>Snabb modell fungerar bra även på äldre hårdvara.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="401"/>
         <source>Slow model needs new CPU and sometimes works only when GPU acceleration is enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Långsam modell behöver nyare CPU och fungerar ibland bara när GPU-acceleration är aktiverat.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="407"/>
         <source>Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvalitet</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="422"/>
         <source>High</source>
-        <translation type="unfinished">Hög</translation>
+        <translation>Hög</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="442"/>
         <source>Low</source>
-        <translation type="unfinished">Låg</translation>
+        <translation>Låg</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="457"/>
         <source>Filter by the quality of the output produced by the model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtrera efter kvaliteten på utdata som produceras av modellen.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="458"/>
         <source>In case of STT, it is the accuracy of speech recognition.</source>
-        <translation type="unfinished"></translation>
+        <translation>När det gäller STT är det noggrannheten i taligenkänningen.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="459"/>
         <source>In case of TTS, it is the naturalness of synthesized voice.</source>
-        <translation type="unfinished"></translation>
+        <translation>När det gäller TTS är det naturligheten i syntetiserad röst.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="475"/>
         <source>Additional capabilities</source>
-        <translation type="unfinished"></translation>
+        <translation>Ytterligare kapaciteter</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="489"/>
         <source>Intermediate Results</source>
-        <translation type="unfinished"></translation>
+        <translation>Mellanliggande resultat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="497"/>
         <source>Speech recognition results are generated in near real time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Taligenkänningsresultat genereras nästan i realtid.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="503"/>
         <source>Punctuation</source>
-        <translation type="unfinished">Interpunktion</translation>
+        <translation>Interpunktion</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="511"/>
         <source>Speech decoding recognizes punctuation marks.</source>
-        <translation type="unfinished"></translation>
+        <translation>Talavkodning känner igen skiljetecken.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="517"/>
         <source>Voice Cloning</source>
-        <translation type="unfinished"></translation>
+        <translation>Röstkloning</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="525"/>
         <source>The model can imitate certain characteristics of another voice based on a voice sample.</source>
-        <translation type="unfinished"></translation>
+        <translation>Modellen kan imitera vissa egenskaper hos en annan röst baserat på ett röstprov.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="536"/>
         <source>Filter by additional capabilities offered by model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtrera efter ytterligare kapaciteter som erbjuds av modell.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="537"/>
         <source>Select to show only models with selected capabilities.</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj det här för att bara visa modeller med valda kapaciteter.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="543"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="557"/>
         <source>Type to search</source>
-        <translation type="unfinished">Skriv för att söka</translation>
+        <translation>Skriv för att söka</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="574"/>
         <source>Clear text</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort text</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="587"/>
         <source>Reset all filters to default values.</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ alla filter till standardvärden.</translation>
     </message>
 </context>
 <context>
@@ -917,138 +899,134 @@
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="43"/>
         <source>Close</source>
-        <translation type="unfinished">Stäng</translation>
+        <translation>Stäng</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="66"/>
         <source>Id</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="77"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="88"/>
         <source>Model type</source>
-        <translation type="unfinished">Modelltyp</translation>
+        <translation>Modelltyp</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="96"/>
         <source>Speech to Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Tal-till-text</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="98"/>
         <source>Text to Speech</source>
-        <translation type="unfinished"></translation>
+        <translation>Text-till-tal</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="100"/>
         <source>Translator</source>
-        <translation type="unfinished">Översättare</translation>
+        <translation>Översättare</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="102"/>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="104"/>
         <source>Other</source>
-        <translation type="unfinished">Annat</translation>
+        <translation>Annat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="112"/>
         <source>Engine</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>GPU acceleration</source>
-        <translation type="obsolete">GPU-acceleration</translation>
+        <translation>Motor</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="150"/>
         <source>Supported GPU acceleration</source>
-        <translation type="unfinished"></translation>
+        <translation>GPU-acceleration som stöds</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="174"/>
         <source>Processing speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Processhastighet</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="184"/>
         <source>Fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Snabb</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="186"/>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="210"/>
         <source>Medium</source>
-        <translation type="unfinished">Medium</translation>
+        <translation>Medium</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="188"/>
         <source>Slow</source>
-        <translation type="unfinished"></translation>
+        <translation>Långsam</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="198"/>
         <source>Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvalitet</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="208"/>
         <source>High</source>
-        <translation type="unfinished">Hög</translation>
+        <translation>Hög</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="212"/>
         <source>Low</source>
-        <translation type="unfinished">Låg</translation>
+        <translation>Låg</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="222"/>
         <source>Additional capabilities</source>
-        <translation type="unfinished"></translation>
+        <translation>Ytterligare kapaciteter</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="233"/>
         <source>Intermediate Results</source>
-        <translation type="unfinished"></translation>
+        <translation>Mellanliggande resultat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="235"/>
         <source>Punctuation</source>
-        <translation type="unfinished">Interpunktion</translation>
+        <translation>Interpunktion</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="237"/>
         <source>Voice Cloning</source>
-        <translation type="unfinished"></translation>
+        <translation>Röstkloning</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="251"/>
         <source>License</source>
-        <translation type="unfinished"></translation>
+        <translation>Licens</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="269"/>
         <source>Show license</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa Licens</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="276"/>
         <source>Total download size</source>
-        <translation type="unfinished"></translation>
+        <translation>Total nerladdningsstorlek</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="291"/>
         <source>The model does not have any files to download.</source>
-        <translation type="unfinished"></translation>
+        <translation>Modellen har inga filer att ladda ner.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="299"/>
         <source>Files to download</source>
-        <translation type="unfinished"></translation>
+        <translation>Filer att ladda ner</translation>
     </message>
 </context>
 <context>
@@ -1061,7 +1039,7 @@
     <message>
         <location filename="../sfos/qml/ModelItem.qml" line="49"/>
         <source>Enable</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ModelItem.qml" line="55"/>
@@ -1076,7 +1054,7 @@
     <message>
         <location filename="../sfos/qml/ModelItem.qml" line="55"/>
         <source>Disable</source>
-        <translation type="unfinished"></translation>
+        <translation>Avaktivera</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ModelItem.qml" line="61"/>
@@ -1089,17 +1067,17 @@
     <message>
         <location filename="../desktop/qml/ModelLicensePage.qml" line="80"/>
         <source>Reject</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvisa</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelLicensePage.qml" line="87"/>
         <source>Accept</source>
-        <translation type="unfinished"></translation>
+        <translation>Acceptera</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelLicensePage.qml" line="95"/>
         <source>Close</source>
-        <translation type="unfinished">Stäng</translation>
+        <translation>Stäng</translation>
     </message>
 </context>
 <context>
@@ -1167,12 +1145,12 @@
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="93"/>
         <source>Plain text</source>
-        <translation type="unfinished"></translation>
+        <translation>Oformaterad text</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="94"/>
         <source>SRT Subtitles</source>
-        <translation type="unfinished"></translation>
+        <translation>SRT-undertexter</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="121"/>
@@ -1182,12 +1160,12 @@
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="123"/>
         <source>Translate to English</source>
-        <translation type="unfinished"></translation>
+        <translation>Översätt till Engelska</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="162"/>
         <source>This model requires a voice sample.</source>
-        <translation type="unfinished"></translation>
+        <translation>Denna modell kräver ett röstprov.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="163"/>
@@ -1197,17 +1175,17 @@
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="163"/>
         <source>Voice samples</source>
-        <translation type="unfinished"></translation>
+        <translation>Röstprover</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="163"/>
         <source>Create one in %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa ett i %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="164"/>
         <source>Voice sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Röstprov</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="165"/>
@@ -1217,7 +1195,7 @@
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="167"/>
         <source>No voice sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Inget röstprov</translation>
     </message>
 </context>
 <context>
@@ -1225,12 +1203,12 @@
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="94"/>
         <source>Text format</source>
-        <translation type="unfinished"></translation>
+        <translation>Textformat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="94"/>
         <source>The text format may be incorrect!</source>
-        <translation type="unfinished"></translation>
+        <translation>Textformatet kan vara felaktigt!</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="122"/>
@@ -1500,17 +1478,17 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="209"/>
         <source>Include recognized or read text in notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>Inkludera igenkänd eller läst text i aviseringar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="217"/>
         <source>Use system tray icon</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd systemfältsikon</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="227"/>
         <source>Start minimized to the system tray</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta minimerad i systemfältet</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="235"/>
@@ -1540,7 +1518,7 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="376"/>
         <source>This option only works with models that do not natively support punctuation.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det här alternativet fungerar bara med modeller som inte har inbyggt stöd för skiljetecken.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="406"/>
@@ -1728,55 +1706,47 @@
         <translation>Lagring</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="1123"/>
-        <source>The Flatpak add-on for GPU acceleration is not installed.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="1130"/>
-        <source>To enable GPU acceleration, install either %1 add-on for AMD graphics card or %2 add-on for NVIDIA graphics card.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Translator</source>
-        <translation type="obsolete">Översättare</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="958"/>
         <source>CPU options</source>
-        <translation type="unfinished"></translation>
+        <translation>CPU-alternativ</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="968"/>
         <source>Number of simultaneous threads</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal simultana trådar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="996"/>
         <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange max antal simultana CPU-trådar.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1002"/>
         <source>Graphics card options</source>
-        <translation type="unfinished"></translation>
+        <translation>Grafikkortsalternativ</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1008"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="1022"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="1038"/>
         <source>Use %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd %1</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="1123"/>
+        <source>The Flatpak add-on for GPU acceleration is not installed.</source>
+        <translation>Flatpak-tillägget för GPU-acceleration är inte installerat.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="1130"/>
+        <source>To enable GPU acceleration, install either %1 add-on for AMD graphics card or %2 add-on for NVIDIA graphics card.</source>
+        <translation>Om du vill aktivera GPU-acceleration installerar du antingen %1-tillägget för AMD-grafikkort eller %2-tillägget för NVIDIA-grafikkort.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="137"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="954"/>
         <source>When closing, delete all cached audio files.</source>
         <translation>Ta bort alla cachelagrade ljudfiler vid avslut.</translation>
-    </message>
-    <message>
-        <source>Graphic cards support</source>
-        <translation type="vanished">Grafikkortsstöd</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1015"/>
@@ -1809,32 +1779,32 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1062"/>
         <source>Override GPU version</source>
-        <translation type="unfinished"></translation>
+        <translation>Åsidosätt GPU-version</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1069"/>
         <source>Override AMD GPU version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Åsidosätt AMD:s GPU-version.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1070"/>
         <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera det här alternativet om du får problem när du använder GPU-acceleration med AMD-grafikkort.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1082"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1094"/>
         <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdet har samma effekt som miljövariabeln %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1104"/>
         <source>Reset to default value.</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ till standardvärde.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1109"/>
@@ -1844,7 +1814,7 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1168"/>
         <source>Libraries</source>
-        <translation type="unfinished"></translation>
+        <translation>Bibliotek</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1180"/>
@@ -1865,37 +1835,37 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="460"/>
         <source>Subtitles</source>
-        <translation type="unfinished"></translation>
+        <translation>Undertexter</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="470"/>
         <source>Minimum segment duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Minsta varaktighet för segment</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="491"/>
         <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange den minsta varaktigheten (i sekunder) för undertextsegmentet.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="492"/>
         <source>This option only works with %1 and %2 models.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det här alternativet fungerar bara med modellerna %1 och %2.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="498"/>
         <source>Break text lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Radbryt</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="513"/>
         <source>Minimum line length</source>
-        <translation type="unfinished"></translation>
+        <translation>Minsta radlängd</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="545"/>
         <source>Maximum line length</source>
-        <translation type="unfinished"></translation>
+        <translation>Största radlängd</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="583"/>
@@ -1926,33 +1896,33 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1192"/>
         <source>Location of Python libraries</source>
-        <translation type="unfinished"></translation>
+        <translation>Plats för Python-bibliotek</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1204"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="1208"/>
         <source>Leave blank to use the default value.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lämnas tomt för standardvärde.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1208"/>
         <source>Python libraries directory (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Katalog för Python-bibliotek (%1).</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1209"/>
         <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det här alternativet kan vara användbart om du använder %1-modulen för att hantera Python-bibliotek.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1215"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1221"/>
         <source>Save changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara ändringar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1229"/>
@@ -2039,7 +2009,7 @@
     <message>
         <location filename="../desktop/qml/SpeechWidget.qml" line="202"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Stopp</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SpeechWidget.qml" line="207"/>
@@ -2057,27 +2027,23 @@
     <message>
         <location filename="../desktop/qml/StreamSelectionDialog.qml" line="44"/>
         <source>Cancel</source>
-        <translation type="unfinished">Avbryt</translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../desktop/qml/StreamSelectionDialog.qml" line="51"/>
         <source>Transcribe selected stream</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Transcribe a file</source>
-        <translation type="obsolete">Transkribera en fil</translation>
+        <translation>Transkribera vald ström</translation>
     </message>
     <message>
         <location filename="../sfos/qml/StreamSelectionDialog.qml" line="38"/>
         <location filename="../desktop/qml/StreamSelectionDialog.qml" line="68"/>
         <source>The file contains multiple audio streams. Select which one you want to process.</source>
-        <translation type="unfinished"></translation>
+        <translation>Filen innehåller flera ljudströmmar. Välj vilken du vill bearbeta.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/StreamSelectionDialog.qml" line="44"/>
         <source>Audio stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljudström</translation>
     </message>
 </context>
 <context>
@@ -2172,23 +2138,23 @@
         <location filename="../desktop/qml/Translator.qml" line="177"/>
         <location filename="../desktop/qml/Translator.qml" line="288"/>
         <source>This model requires a voice sample.</source>
-        <translation type="unfinished"></translation>
+        <translation>Denna modell kräver ett röstprov.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="289"/>
         <source>Create one in %1 menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa ett i %1-menyn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="178"/>
         <location filename="../desktop/qml/Translator.qml" line="289"/>
         <source>Voice samples</source>
-        <translation type="unfinished"></translation>
+        <translation>Röstprover</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="178"/>
         <source>Create one in %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa ett i %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="179"/>
@@ -2199,13 +2165,13 @@
         <location filename="../desktop/qml/Translator.qml" line="181"/>
         <location filename="../desktop/qml/Translator.qml" line="292"/>
         <source>No voice sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Inget röstprov</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="182"/>
         <location filename="../desktop/qml/Translator.qml" line="293"/>
         <source>Voice sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Röstprov</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="269"/>
@@ -2220,27 +2186,27 @@
     <message>
         <location filename="../desktop/qml/Translator.qml" line="126"/>
         <source>Plain text</source>
-        <translation type="unfinished"></translation>
+        <translation>Oformaterad text</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="129"/>
         <source>SRT Subtitles</source>
-        <translation type="unfinished"></translation>
+        <translation>SRT-undertexter</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="366"/>
         <source>Clean up the text</source>
-        <translation type="unfinished"></translation>
+        <translation>Rensa texten</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="374"/>
         <source>Remove duplicate whitespaces and extra line breaks in the text before translation.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort dubbletter av blanksteg och extra radbrytningar i texten före översättning.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="375"/>
         <source>If the input text is incorrectly formatted, this option may improve the translation quality.</source>
-        <translation type="unfinished"></translation>
+        <translation>Om indatatexten är felaktigt formaterad kan det här alternativet förbättra översättningskvaliteten.</translation>
     </message>
 </context>
 <context>
@@ -2248,97 +2214,97 @@
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="38"/>
         <source>Create a new voice sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa ett nytt röstprov</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="61"/>
         <source>Cancel</source>
-        <translation type="unfinished">Avbryt</translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="68"/>
         <source>Create</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="105"/>
         <source>Use a microphone</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd en mikrofon</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="110"/>
         <source>Use a voice sample recorded from a microphone.</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd ett röstprov, inspelat från en mikrofon.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="116"/>
         <source>Import from a file</source>
-        <translation type="unfinished"></translation>
+        <translation>Importera från en fil</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="121"/>
         <source>Use a voice sample from an audio file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd ett röstprov från en ljudfil.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="126"/>
         <source>Clean up audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Rensa ljud</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="133"/>
         <source>Automatically normalize volume and remove non-speech noise in a microphone recording or imported audio file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Normalisera volymen automatiskt och ta bort icke-talbrus i en mikrofoninspelning eller importerad ljudfil.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="143"/>
         <source>Use the range slider to clip the audio sample to the part containing speech.</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd skjutreglaget för att klippa ut ljudprovet till den del som innehåller tal.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="215"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Stopp</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="215"/>
         <source>Play</source>
-        <translation type="unfinished"></translation>
+        <translation>Spela</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="229"/>
         <source>Duration: %1 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Varaktighet: %1 sekunder</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="246"/>
         <source>Voice name</source>
-        <translation type="unfinished"></translation>
+        <translation>Röstnamn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="274"/>
         <source>Open File</source>
-        <translation type="unfinished">Öppna fil</translation>
+        <translation>Öppna fil</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="276"/>
         <source>Audio and video files</source>
-        <translation type="unfinished">Ljud- och videofiler</translation>
+        <translation>Ljud- och videofiler</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="277"/>
         <source>Audio files</source>
-        <translation type="unfinished">Ljudfiler</translation>
+        <translation>Ljudfiler</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="278"/>
         <source>Video files</source>
-        <translation type="unfinished">Videofiler</translation>
+        <translation>Videofiler</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="279"/>
         <source>All files</source>
-        <translation type="unfinished">Alla filer</translation>
+        <translation>Alla filer</translation>
     </message>
 </context>
 <context>
@@ -2346,52 +2312,52 @@
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="18"/>
         <source>Voice samples</source>
-        <translation type="unfinished"></translation>
+        <translation>Röstprover</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="33"/>
         <source>Create a new voice sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa ett nytt röstprov</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="61"/>
         <source>Close</source>
-        <translation type="unfinished">Stäng</translation>
+        <translation>Stäng</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="130"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="141"/>
         <source>Save changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara ändringar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="147"/>
         <source>Cancel</source>
-        <translation type="unfinished">Avbryt</translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="179"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt namn</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="195"/>
         <source>Delete</source>
-        <translation type="unfinished">Ta bort</translation>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="205"/>
         <source>You haven&apos;t created voice samples yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Du har inte skapat röstprover än.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="206"/>
         <source>Use %1 to make a new one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd %1 för att skapa ett nytt.</translation>
     </message>
 </context>
 <context>
@@ -2399,28 +2365,28 @@
     <message>
         <location filename="../desktop/qml/VoiceRecordPage.qml" line="31"/>
         <source>Say something...</source>
-        <translation type="unfinished">Säg något...</translation>
+        <translation>Säg något...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceRecordPage.qml" line="32"/>
         <source>Press %1 to start recording.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tryck %1 för att starta inspelning.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceRecordPage.qml" line="32"/>
         <location filename="../desktop/qml/VoiceRecordPage.qml" line="49"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceRecordPage.qml" line="49"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppa</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceRecordPage.qml" line="61"/>
         <source>Cancel</source>
-        <translation type="unfinished">Avbryt</translation>
+        <translation>Avbryt</translation>
     </message>
 </context>
 <context>
@@ -2428,7 +2394,7 @@
     <message>
         <location filename="../src/dsnote_app.cpp" line="1903"/>
         <source>Unnamed stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Namnlös ström</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="3075"/>
@@ -2448,7 +2414,7 @@
     <message>
         <location filename="../src/dsnote_app.cpp" line="3496"/>
         <source>Voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Röst</translation>
     </message>
 </context>
 <context>
@@ -2599,12 +2565,12 @@
     <message>
         <location filename="../desktop/qml/main.qml" line="198"/>
         <source>Enable</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="199"/>
         <source>Disable</source>
-        <translation type="unfinished"></translation>
+        <translation>Avaktivera</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="338"/>
@@ -2614,19 +2580,19 @@
     <message>
         <location filename="../desktop/qml/main.qml" line="394"/>
         <source>Text copied to clipboard!</source>
-        <translation>Text kopierad till urklipp</translation>
+        <translation>Text kopierad till urklipp!</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="276"/>
         <location filename="../desktop/qml/main.qml" line="421"/>
         <source>Error: Not all text has been translated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: All text har inte översatts.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="285"/>
         <location filename="../desktop/qml/main.qml" line="430"/>
         <source>Error: Couldn&apos;t download a licence.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Kunde inte ladda ner en licens.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="146"/>
@@ -2778,57 +2744,57 @@
     <message>
         <location filename="../src/tray_icon.cpp" line="71"/>
         <source>Resume reading</source>
-        <translation type="unfinished">Återuppta uppläsning</translation>
+        <translation>Återuppta uppläsning</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="72"/>
         <source>Pause reading</source>
-        <translation type="unfinished">Pausa uppläsning</translation>
+        <translation>Pausa uppläsning</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="91"/>
         <source>Start listening</source>
-        <translation type="unfinished">Starta lyssning</translation>
+        <translation>Starta lyssning</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="97"/>
         <source>Start listening, text to active window</source>
-        <translation type="unfinished">Starta lyssning, text till aktivt fönster</translation>
+        <translation>Starta lyssning, text till aktivt fönster</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="103"/>
         <source>Start listening, text to clipboard</source>
-        <translation type="unfinished">Starta lyssning, text till urklipp</translation>
+        <translation>Starta lyssning, text till urklipp</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="108"/>
         <source>Stop listening</source>
-        <translation type="unfinished">Stoppa lyssning</translation>
+        <translation>Stoppa lyssning</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="114"/>
         <source>Start reading</source>
-        <translation type="unfinished">Starta uppläsning</translation>
+        <translation>Starta uppläsning</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="119"/>
         <source>Start reading text from clipboard</source>
-        <translation type="unfinished">Starta uppläsning av text från urklipp</translation>
+        <translation>Starta uppläsning av text från urklipp</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="124"/>
         <source>Pause/Resume reading</source>
-        <translation type="unfinished">Pausa/återuppta uppläsning</translation>
+        <translation>Pausa/Återuppta uppläsning</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="130"/>
         <source>Cancel</source>
-        <translation type="unfinished">Avbryt</translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="136"/>
         <source>Quit</source>
-        <translation type="unfinished">Avsluta</translation>
+        <translation>Avsluta</translation>
     </message>
 </context>
 </TS>
