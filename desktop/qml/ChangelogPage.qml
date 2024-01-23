@@ -82,7 +82,8 @@ DialogPage {
         <li>New voices for Serbian and Uzbek languages (RHVoice models)</li>
         <li>GPU acceleration for Coqui models with AMD graphics cards.
             If you are using Flatpak package, install <i>net.mkiol.SpeechNote.amd</i> add-on
-            to enable full support for AMD ROCm acceleration.</li>
+            to enable full support for AMD ROCm acceleration.
+            If you observe problems when using GPU acceleration with AMD graphics card, enable <i>Override GPU version</i> option.</li>
         <li>Speech synchronized with subtitle timestamps. When the text format is set to <i>SRT Subtitles</i>,
             the generated speech will be synchronized with the subtitle timestamps.
             This can be useful if you want to make voice over.</li>
