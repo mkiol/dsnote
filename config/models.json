@@ -24530,6 +24530,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/eng.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134859962"
         },
@@ -24544,6 +24550,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/jam.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134875189"
         },
@@ -24601,6 +24613,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/amh.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "rn",
             "size": "134816378"
         },
@@ -24615,6 +24633,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/ara.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "dn",
             "size": "134871646",
             "sups": [
@@ -24655,6 +24679,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/bul.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134838761"
         },
@@ -24771,6 +24801,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/spa.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134860496"
         },
@@ -24830,6 +24866,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/hak.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "anr",
             "size": "134881386"
         },
@@ -24844,6 +24886,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/nan.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "anr",
             "size": "134880972"
         },
@@ -24928,6 +24976,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/deu.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134859841"
         },
@@ -24956,6 +25010,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/ell.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134888550"
         },
@@ -24970,6 +25030,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/grc.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134897188"
         },
@@ -24984,6 +25050,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/eus.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134841288"
         },
@@ -24998,6 +25070,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/hin.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "an",
             "size": "134894586"
         },
@@ -25012,6 +25090,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/ind.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134876610"
         },
@@ -25026,6 +25110,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/isl.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134839016"
         },
@@ -25118,6 +25208,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/hun.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134839047"
         },
@@ -25146,6 +25242,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/kaz.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134866072"
         },
@@ -25160,6 +25262,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/kor.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "arn",
             "size": "134854730"
         },
@@ -25174,6 +25282,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/lat.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134858503"
         },
@@ -25216,6 +25330,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/lav.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134868094"
         },
@@ -25244,6 +25364,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/zlm.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134865938"
         },
@@ -25300,6 +25426,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/por.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134853594"
         },
@@ -25328,6 +25460,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/ron.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134866051"
         },
@@ -25342,6 +25480,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/rus.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134877023"
         },
@@ -25370,6 +25514,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/sqi.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134865248"
         },
@@ -25398,6 +25548,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/swe.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134861242"
         },
@@ -25426,6 +25582,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/tha.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "an",
             "size": "134895489"
         },
@@ -25440,6 +25602,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/tgl.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134878211"
         },
@@ -25454,6 +25622,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/uzb-script_cyrillic.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134879575"
         },
@@ -25468,6 +25642,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/vie.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134900282"
         },
@@ -25482,6 +25662,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/tat.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134870686"
         },
@@ -25522,6 +25708,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/tur.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134861899"
         },
@@ -25536,6 +25728,12 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.10.1_models/tts_models--ca--custom--vits.zip"
             ],
+            "license": {
+                "id": "CC BY 4.0",
+                "name": "Creative Commons Attribution 4.0",
+                "url": "https://creativecommons.org/licenses/by/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "size": "944438622",
             "hidden": true
         },
@@ -25599,6 +25797,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/cat.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134841474"
         },
@@ -25613,6 +25817,12 @@
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.10.1_models/tts_models--fa--custom--glow-tts.zip"
             ],
+            "license": {
+                "id": "CC BY 4.0",
+                "name": "Creative Commons Attribution 4.0",
+                "url": "https://creativecommons.org/licenses/by/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "size": "316082601"
         },
         {
@@ -25668,6 +25878,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/ben.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "an",
             "size": "134892405"
         },
@@ -25682,6 +25898,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/mar.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "an",
             "size": "134895740"
         },
@@ -25696,6 +25918,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/yor.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134869027"
         },
@@ -25724,6 +25952,12 @@
             "urls": [
                 "https://dl.fbaipublicfiles.com/mms/tts/pol.tar.gz"
             ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "options": "n",
             "size": "134856548"
         },

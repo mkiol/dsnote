@@ -1792,8 +1792,6 @@ auto models_manager::extract_models(
 
             if (auto license_obj = obj.value("license").toObject();
                 !license_obj.isEmpty()) {
-                qDebug() << "model" << model_id << "has license";
-
                 license.id = license_obj.value("id").toString();
                 license.name = license_obj.value("name").toString();
                 license.url = QUrl{license_obj.value("url").toString()};
