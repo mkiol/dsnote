@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,7 +14,7 @@ DialogPage {
     title: qsTr("Changes")
 
     SectionLabel {
-        text: qsTr("Version %1").arg("4.4.0 beta")
+        text: qsTr("Version %1").arg("4.4.0")
     }
 
     RichLabel {
