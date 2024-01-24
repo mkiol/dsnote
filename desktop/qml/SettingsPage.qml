@@ -70,8 +70,9 @@ DialogPage {
 
                 anchors {
                     right: parent.right
-                    rightMargin: appWin.padding
-                    verticalCenter: parent.verticalCenter
+                    rightMargin: size / 2
+                    top: parent.top
+                    topMargin: size / 2
                 }
             }
         }
