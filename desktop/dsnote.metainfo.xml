@@ -54,6 +54,7 @@
   <url type="homepage">https://github.com/mkiol/dsnote</url>
   <url type="bugtracker">https://github.com/mkiol/dsnote/issues</url>
   <url type="translate">https://app.transifex.com/mkiol/dsnote</url>
+  <url type="donation">https://github.com/mkiol/dsnote#how-to-support</url>
   <update_contact>dsnote_AT_mkiol.net</update_contact>
   <launchable type="desktop-id">net.mkiol.SpeechNote.desktop</launchable>
   <content_rating type="oars-1.1" />

@@ -13,6 +13,7 @@ Linux desktop and Sailfish OS app for note taking, reading and translating with 
 - [Beta version](#beta-version)
 - [Building from sources](#building-from-sources)
 - [Contributing to Speech Note](#contributing-to-speech-note)
+- [How to support](#how-to-support)
 - [Reviews and demos](#reviews-and-demos)
 - [License](#license)
 
@@ -265,6 +266,16 @@ Translation files in Qt format are in [translations dir (GitHub)](https://github
 
 Preferred way to contribute translation is via [Transifex service](https://explore.transifex.com/mkiol/dsnote/),
 but if you would like to make a direct PR/MR, please do it.
+
+## How to support
+
+If you find **Speech Note** useful and would like to support this project,
+please consider doing one or two of the following:
+
+- give a &#11088; on [GitHub](https://github.com/mkiol/dsnote) or/and [GitLab](https://gitlab.com/mkiol/dsnote),
+- write a review with your applications manager app (Discover, Software or other),
+- tell other people about this app by mentioning it on your social media,
+- make a small donation via [Liberapay](https://liberapay.com/mkiol/donate).
 
 ## Libraries
 
