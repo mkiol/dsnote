@@ -5,7 +5,7 @@ install(FILES "${sfos_dir}/icons/86x86/${info_binary_id}.png" DESTINATION share/
 install(FILES "${sfos_dir}/icons/108x108/${info_binary_id}.png" DESTINATION share/icons/hicolor/108x108/apps)
 install(FILES "${sfos_dir}/icons/128x128/${info_binary_id}.png" DESTINATION share/icons/hicolor/128x128/apps)
 install(FILES "${sfos_dir}/icons/172x172/${info_binary_id}.png" DESTINATION share/icons/hicolor/172x172/apps)
-install(FILES ${qm_files} DESTINATION ${install_dir})
+install(FILES ${qm_files} DESTINATION ${install_dir}/translations)
 install(DIRECTORY "${sfos_dir}/qml" DESTINATION ${install_dir})
 
 configure_file("${sfos_dir}/dbus_app.service.in" "${PROJECT_BINARY_DIR}/dbus_app.service")
