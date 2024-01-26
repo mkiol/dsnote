@@ -151,7 +151,7 @@ Add-ons add the capability of GPU acceleration, which speeds up some operations 
 Base package and add-ons contain many "heavy" libraries like CUDA, ROCm, Torch and Python libraries.
 Due to this, the size of the packages and the space required after installation are significant.
 If you don't need all the functionalities, you can use much smaller "Tiny" package
-(available on [Releases](https://github.com/mkiol/dsnote/releases/tag/v4.3.0) page), 
+(available on [Releases](https://github.com/mkiol/dsnote/releases/tag/v4.4.0) page), 
 which provides only the basic features. If you need, you can also use "Tiny" packages together with GPU acceleration add-on.
 
 Comparison between Base, Tiny and Add-ons Flatpak packages:
