@@ -13,6 +13,22 @@ DialogPage {
 
     title: qsTr("Changes")
 
+        SectionLabel {
+        text: qsTr("Version %1").arg("4.4.1 beta")
+    }
+
+    RichLabel {
+        text: "<p>" + qsTr("Text to Speech") + ":</p>
+        <ul>
+        <li>New voice for Persian language: <i>Piper Gyro Medium</i></li>
+        </ul>
+        <p>" + qsTr("Translator") + ":</p>
+        <ul>
+        <li>New models: Greek to English, Maltese to English,
+            Slovenian to English, Turkish to English</li>
+        </ul>"
+    }
+
     SectionLabel {
         text: qsTr("Version %1").arg("4.4.0")
     }

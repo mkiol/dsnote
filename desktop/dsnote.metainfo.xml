@@ -84,6 +84,19 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
+    <release version="4.4.1" date="2024-01-27">
+      <description>
+      <p>Text to Speech:</p>
+      <ul>
+      <li>New voice for Persian language: 'Piper Gyro Medium'</li>
+      </ul>
+      <p>Translator:</p>
+      <ul>
+      <li>New models: Greek to English, Maltese to English,
+          Slovenian to English, Turkish to English</li>
+      </ul>
+      </description>
+    </release>
     <release version="4.4.0" date="2024-01-23">
       <description>
       <p>Flatpak:</p>

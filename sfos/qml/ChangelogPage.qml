@@ -43,13 +43,13 @@ Page {
             }
 
             LogItem {
-                title: "New voices for Serbian and Uzbek languages"
-                description: "New voices are enabled with RHVoice models"
+                title: "New voices for Serbian, Uzbek and Persian languages"
+                description: "New voices are enabled with RHVoice and Piper models"
             }
 
             LogItem {
-                title: "Translator: Lithuanian to English"
-                description: "New model for Lithuanian to English translations"
+                title: "New translator models"
+                description: "New models: Lithuanian to English, Greek to English, Maltese to English, Slovenian to English, Turkish to English"
             }
 
             LogItem {
