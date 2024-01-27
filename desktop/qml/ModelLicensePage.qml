@@ -112,7 +112,7 @@ Dialog {
 
             wrapMode: Text.Wrap
             readOnly: true
-            textFormat: TextEdit.MarkdownText
+            textFormat: TextEdit.PlainText
 
             BusyIndicator {
                 anchors.centerIn:  parent
