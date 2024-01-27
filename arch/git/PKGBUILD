@@ -2,7 +2,7 @@
 
 _pkgname='dsnote'
 pkgname="${_pkgname}-git"
-pkgver=r730.cecaeb0
+pkgver=r912.bfa3be3
 pkgrel=1
 pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
 arch=(
