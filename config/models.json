@@ -21160,6 +21160,20 @@
             ]
         },
         {
+            "name": "فارسی (Piper Gyro Medium Male)",
+            "model_id": "fa_piper_ir_gyro_medium",
+            "engine": "tts_piper",
+            "lang_id": "fa",
+            "checksum": "d3c8682d",
+            "checksum_quick": "bacefedb",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/gyroing/Persian-Piper-Model-gyro/resolve/6fcedcc4d48520d6a6e9f77248e91b4b43e54cf5/fa_IR-gyro-meduim.onnx",
+                "https://huggingface.co/gyroing/Persian-Piper-Model-gyro/resolve/6fcedcc4d48520d6a6e9f77248e91b4b43e54cf5/fa_IR-gyro-meduim.onnx.json"
+            ],
+            "size": "63137585"
+        },
+        {
             "name": "Català (Piper Upc Ona Low Female)",
             "model_id": "ca_piper_upc_ona_low",
             "engine": "tts_piper",
