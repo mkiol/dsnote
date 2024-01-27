@@ -85,7 +85,7 @@ build() {
     -DDOWNLOAD_VOSK=ON \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -Wno-dev
-  make -j$(($(nproc)-2))
+  test $(nproc) -gt 2 && make -j$(($(nproc)-2)) || make
 }
 
 package() {
