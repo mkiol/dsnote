@@ -25989,6 +25989,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/ende/lex.50.50.ende.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/ende/vocab.deen.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "21876940"
         },
         {
@@ -26005,6 +26011,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enbg/lex.50.50.enbg.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enbg/vocab.bgen.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "23676444"
         },
         {
@@ -26021,6 +26033,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/encs/lex.50.50.encs.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/encs/vocab.csen.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "2147483"
         },
         {
@@ -26037,6 +26055,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enes/lex.50.50.enes.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enes/vocab.esen.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "21321514"
         },
         {
@@ -26053,6 +26077,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enet/lex.50.50.enet.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enet/vocab.eten.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "20678152"
         },
         {
@@ -26069,6 +26099,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enfr/lex.50.50.enfr.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enfr/vocab.fren.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "25867035"
         },
         {
@@ -26085,6 +26121,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enit/lex.50.50.enit.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enit/vocab.enit.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "22456876"
         },
         {
@@ -26101,6 +26143,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enpl/lex.50.50.enpl.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enpl/vocab.enpl.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "21613790"
         },
         {
@@ -26117,6 +26165,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enpt/lex.50.50.enpt.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enpt/vocab.enpt.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "22311945"
         },
         {
@@ -26133,6 +26187,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enfa/lex.50.50.enfa.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enfa/vocab.enfa.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "23040864"
         },
         {
@@ -26149,6 +26209,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/ennl/lex.50.50.ennl.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/ennl/vocab.ennl.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "22451524"
         },
         {
@@ -26165,6 +26231,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enru/lex.50.50.enru.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enru/vocab.enru.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "21135281"
         },
         {
@@ -26182,6 +26254,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enuk/trgvocab.enuk.spm",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/enuk/srcvocab.enuk.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "37411199"
         },
         {
@@ -26198,6 +26276,12 @@
                 "https://github.com/mozilla/firefox-translations-models/raw/619b644811323ed672a1a299d287f0d82eeac71a/models/dev/enhu/lex.50.50.enhu.s2t.bin.gz",
                 "https://github.com/mozilla/firefox-translations-models/raw/619b644811323ed672a1a299d287f0d82eeac71a/models/dev/enhu/vocab.enhu.spm.gz"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "15199624"
         },
         {
@@ -26214,6 +26298,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/caen/lex.50.50.caen.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/caen/vocab.caen.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "23205178"
         },
         {
@@ -26230,6 +26320,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/bgen/lex.50.50.bgen.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/bgen/vocab.bgen.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "24252224"
         },
         {
@@ -26246,6 +26342,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/csen/lex.50.50.csen.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/csen/vocab.csen.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "22454499"
         },
         {
@@ -26262,6 +26364,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/deen/lex.50.50.deen.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/deen/vocab.deen.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "22980866"
         },
         {
@@ -26278,6 +26386,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/esen/lex.50.50.esen.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/esen/vocab.esen.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "21835298"
         },
         {
@@ -26294,6 +26408,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/eten/lex.50.50.eten.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/eten/vocab.eten.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "21952316"
         },
         {
@@ -26310,6 +26430,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/fren/lex.50.50.fren.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/fren/vocab.fren.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "26799303"
         },
         {
@@ -26326,6 +26452,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/iten/lex.50.50.iten.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/iten/vocab.iten.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "22939372"
         },
         {
@@ -26343,6 +26475,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/nben/lex.50.50.nben.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/nben/vocab.nben.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "14988104"
         },
         {
@@ -26359,6 +26497,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/plen/lex.50.50.plen.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/plen/vocab.plen.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "22869702"
         },
         {
@@ -26375,6 +26519,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/pten/lex.50.50.pten.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/pten/vocab.pten.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "22768065"
         },
         {
@@ -26392,6 +26542,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/faen/lex.50.50.faen.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/faen/vocab.faen.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "24191369"
         },
         {
@@ -26409,6 +26565,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/isen/lex.50.50.isen.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/isen/vocab.isen.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "20895807"
         },
         {
@@ -26426,6 +26588,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/nlen/lex.50.50.nlen.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/nlen/vocab.nlen.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "22897125"
         },
         {
@@ -26443,6 +26611,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/ruen/lex.50.50.ruen.s2t.bin",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/ruen/vocab.ruen.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "23176440"
         },
         {
@@ -26461,6 +26635,12 @@
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/uken/srcvocab.uken.spm",
                 "https://storage.googleapis.com/bergamot-models-sandbox/0.3.4/uken/trgvocab.uken.spm"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "36872677"
         },
         {
@@ -26478,6 +26658,12 @@
                 "https://github.com/mozilla/firefox-translations-models/raw/58222938742c5f60480d6508775437f08c8aacaf/models/dev/huen/lex.50.50.huen.s2t.bin.gz",
                 "https://github.com/mozilla/firefox-translations-models/raw/58222938742c5f60480d6508775437f08c8aacaf/models/dev/huen/vocab.huen.spm.gz"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "16387915"
         },
         {
@@ -26495,6 +26681,12 @@
                 "https://github.com/mozilla/firefox-translations-models/raw/58222938742c5f60480d6508775437f08c8aacaf/models/dev/fien/lex.50.50.fien.s2t.bin.gz",
                 "https://github.com/mozilla/firefox-translations-models/raw/58222938742c5f60480d6508775437f08c8aacaf/models/dev/fien/vocab.fien.spm.gz"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "16368261"
         },
         {
@@ -26512,7 +26704,105 @@
                 "https://github.com/mozilla/firefox-translations-models/raw/b16359f7a4d154a539a8d4216bf9f5727a7af01b/models/dev/lten/lex.50.50.lten.s2t.bin.gz",
                 "https://github.com/mozilla/firefox-translations-models/raw/b16359f7a4d154a539a8d4216bf9f5727a7af01b/models/dev/lten/vocab.lten.spm.gz"
             ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
             "size": "15755883"
+        },
+        {
+            "name": "Ελληνικά προς Αγγλικά (Greek to English)",
+            "model_id": "el_bergamot_elen",
+            "engine": "mnt_bergamot",
+            "lang_id": "el",
+            "trg_lang_id": "en",
+            "score": 0,
+            "checksum": "d4cd6028",
+            "checksum_quick": "98864139",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7aadb7b7e5a92ba087db66bf211b44b704c0b291/models/dev/elen/model.elen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7aadb7b7e5a92ba087db66bf211b44b704c0b291/models/dev/elen/lex.50.50.elen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7aadb7b7e5a92ba087db66bf211b44b704c0b291/models/dev/elen/vocab.elen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "size": "15354168"
+        },
+        {
+            "name": "mill-Malti għall-Ingliż (Maltese to English)",
+            "model_id": "mt_bergamot_mten",
+            "engine": "mnt_bergamot",
+            "lang_id": "mt",
+            "trg_lang_id": "en",
+            "score": 0,
+            "checksum": "1f2002d1",
+            "checksum_quick": "7d488909",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7aadb7b7e5a92ba087db66bf211b44b704c0b291/models/dev/mten/model.mten.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7aadb7b7e5a92ba087db66bf211b44b704c0b291/models/dev/mten/lex.50.50.mten.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7aadb7b7e5a92ba087db66bf211b44b704c0b291/models/dev/mten/vocab.mten.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "size": "15557847"
+        },
+        {
+            "name": "slovenščine v angleščino (Slovenian to English)",
+            "model_id": "sl_bergamot_slen",
+            "engine": "mnt_bergamot",
+            "lang_id": "sl",
+            "trg_lang_id": "en",
+            "score": 0,
+            "checksum": "96dfb88f",
+            "checksum_quick": "935117e3",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7aadb7b7e5a92ba087db66bf211b44b704c0b291/models/dev/slen/model.slen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7aadb7b7e5a92ba087db66bf211b44b704c0b291/models/dev/slen/lex.50.50.slen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7aadb7b7e5a92ba087db66bf211b44b704c0b291/models/dev/slen/vocab.slen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "size": "15103765"
+        },
+        {
+            "name": "Türkçeden İngilizceye (Turkish to English)",
+            "model_id": "tr_bergamot_tren",
+            "engine": "mnt_bergamot",
+            "lang_id": "tr",
+            "trg_lang_id": "en",
+            "score": 0,
+            "checksum": "8785781f",
+            "checksum_quick": "e4945d8f",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7aadb7b7e5a92ba087db66bf211b44b704c0b291/models/dev/tren/model.tren.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7aadb7b7e5a92ba087db66bf211b44b704c0b291/models/dev/tren/lex.50.50.tren.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7aadb7b7e5a92ba087db66bf211b44b704c0b291/models/dev/tren/vocab.tren.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "size": "15250843"
         },
         {
             "name": "Afrikaans (Mimic3 Google NWU Low)",
