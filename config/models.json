@@ -412,7 +412,13 @@
                         "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models.scorer"
                     ]
                 }
-            ]
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "English (Coqui Huge)",
@@ -435,7 +441,13 @@
                         "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv1.0.0-huge-vocab/huge-vocabulary.scorer"
                     ]
                 }
-            ]
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "English (Coqui Large)",
@@ -460,7 +472,13 @@
                         "https://github.com/coqui-ai/STT-models/releases/download/english%2Fcoqui%2Fv1.0.0-large-vocab/large_vocabulary.scorer"
                     ]
                 }
-            ]
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Deutsch (DeepSpeech Jaco)",
@@ -735,7 +753,13 @@
                         "https://github.com/mkiol/dsnote/releases/download/v1.8.0/pl_mkiol.scorer.xz"
                     ]
                 }
-            ]
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Русский (DeepSpeech Joe Meyer)",
@@ -807,7 +831,13 @@
                         "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspeech-0.9.3-models-zh-CN.scorer"
                     ]
                 }
-            ]
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Nederlands (DeepSpeech Acabunoc)",
@@ -21171,6 +21201,11 @@
                 "https://huggingface.co/gyroing/Persian-Piper-Model-gyro/resolve/6fcedcc4d48520d6a6e9f77248e91b4b43e54cf5/fa_IR-gyro-meduim.onnx",
                 "https://huggingface.co/gyroing/Persian-Piper-Model-gyro/resolve/6fcedcc4d48520d6a6e9f77248e91b4b43e54cf5/fa_IR-gyro-meduim.onnx.json"
             ],
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            },
             "size": "63137585"
         },
         {
