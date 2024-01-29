@@ -5,7 +5,10 @@ pkgname="${_pkgname}"
 pkgver=4.4.0
 pkgrel=1
 pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
-arch=('x86_64')
+arch=(
+  'x86_64'
+  'aarch64'
+)
 url="https://github.com/mkiol/dsnote"
 license=('MPL2')
 depends=(
@@ -31,24 +34,28 @@ depends=(
 makedepends=(
   'boost'
   'cmake'
-  'cuda'
   'extra-cmake-modules'
   'git'
   'meson'
   'pybind11'
   'qt5-tools'
+)
+makedepends_x86_64=(
+  'cuda'
   'rocm-hip-sdk'
 )
 optdepends=(
-  'cuda: Support for GPU acceleration on NVidia graphic cards'
-  'cudnn: Support for GPU acceleration on NVidia graphic cards'
   'ocl-icd: Support for GPU acceleration with OpenCL'
   'python-accelerate: Support for Punctuation and Hebrew Diacritics restoration'
   'python-torchaudio: Support for Coqui TTS models'
   'python-transformers: Support for Punctuation and Hebrew Diacritics restoration'
+  'tts: Support for Coqui TTS models'
+)
+optdepends_x86_64=(
+  'cuda: Support for GPU acceleration on NVidia graphic cards'
+  'cudnn: Support for GPU acceleration on NVidia graphic cards'
   'rocblas: Support for GPU acceleration on AMD graphic cards'
   'rocm-opencl-runtime: Support GPU acceleration on AMD graphic cards'
-  'tts: Support for Coqui TTS models'
 )
 provides=(${_pkgname})
 conflicts=(${_pkgname}-git)
@@ -58,10 +65,12 @@ sha256sums=('9b9aa92b0bc90870aac97ef14d9d31bd24f55b05b7e854cfd29fe84ba48c1f8f')
 
 build() {
   cd "${srcdir}/${_pkgname}-${pkgver}"
-  # fix for CUDA >= 12.3.0
-  export HOST_COMPILER=/usr/bin/g++-12
-  export CUDAHOSTCXX=/usr/bin/g++-12
-  export CUDA_PATH=/opt/cuda
+  if [[ "${CARCH}" == "x86_64" ]]; then
+    # fix for CUDA >= 12.3.0
+    export HOST_COMPILER=/usr/bin/g++-12
+    export CUDAHOSTCXX=/usr/bin/g++-12
+    export CUDA_PATH=/opt/cuda
+  fi
   mkdir -p build
   cd build
   cmake ../ -DCMAKE_BUILD_TYPE=Release -DWITH_DESKTOP=ON \
@@ -79,7 +88,10 @@ build() {
     -DBUILD_QQC2_BREEZE_STYLE=ON \
     -DDOWNLOAD_VOSK=ON \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -Wno-dev
+    -Wno-dev \
+    -DCMAKE_HIP_ARCHITECTURES="gfx801 gfx802 gfx803 gfx805 gfx810 gfx900 gfx902 gfx904 gfx906 gfx908 gfx909 gfx90a gfx90c gfx940 gfx1010 gfx1011 gfx1012 gfx1013 gfx1030 gfx1031 gfx1032 gfx1033 gfx1034 gfx1035 gfx1036 gfx1100 gfx1101 gfx1102 gfx1103"
+
+
   test $(nproc) -gt 2 && make -j$(($(nproc)-2)) || make
 }
 
