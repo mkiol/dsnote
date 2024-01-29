@@ -93,7 +93,7 @@ build() {
     -DBUILD_QQC2_BREEZE_STYLE=ON \
     -DDOWNLOAD_VOSK=ON \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -Wno-dev \
+    -Wno-dev
 
   test $(nproc) -gt 2 && make -j$(($(nproc)-2)) || make
 }
