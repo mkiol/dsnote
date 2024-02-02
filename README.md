@@ -231,7 +231,7 @@ sfdk cmake ../ -DCMAKE_BUILD_TYPE=Release -DWITH_SFOS=ON -DWITH_PY=OFF
 sfdk package
 ```
 
-### Linux (direct build, not recommended)
+### Linux (direct build)
 
 Speech Note has many build-time and run-time dependencies. This includes shared and static libraries, 
 3rd-party executables, Python and Perl scripts. Because of these complexity, the recommended way to build 
@@ -262,8 +262,7 @@ Feel free to make a PR/MR, report an issue or reqest for new feature on the plat
 
 ### Translation
 
-Translation files in Qt format are in [translations dir (GitHub)](https://github.com/mkiol/dsnote/tree/main/translations) or
-[translations dir (GitLab)](https://gitlab.com/mkiol/dsnote/-/tree/main/translations).
+Translation files in Qt format are in `translations` directory.
 
 Preferred way to contribute translation is via [Transifex service](https://explore.transifex.com/mkiol/dsnote/),
 but if you would like to make a direct PR/MR, please do it.
@@ -273,10 +272,10 @@ but if you would like to make a direct PR/MR, please do it.
 If you find **Speech Note** useful and would like to support this project,
 please consider doing one or two of the following:
 
-- give a &#11088; on [GitHub](https://github.com/mkiol/dsnote) or/and [GitLab](https://gitlab.com/mkiol/dsnote),
-- write a review with your applications manager app (Discover, Software or other),
-- tell other people about this app by mentioning it on your social media,
-- make a small donation via [Liberapay](https://liberapay.com/mkiol/donate).
+- Give a &#11088; on [GitHub](https://github.com/mkiol/dsnote) or/and [GitLab](https://gitlab.com/mkiol/dsnote).
+- Write a review in ypur applications manager app (Discover, Software or any other).
+- Tell others about this app by mentioning it on social media.
+- If you have spare money, make a small donation via [Liberapay](https://liberapay.com/mkiol/donate).
 
 ## Libraries
 
