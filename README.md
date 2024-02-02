@@ -152,7 +152,7 @@ Add-ons add the capability of GPU acceleration, which speeds up some operations 
 Base package and add-ons contain many "heavy" libraries like CUDA, ROCm, Torch and Python libraries.
 Due to this, the size of the packages and the space required after installation are significant.
 If you don't need all the functionalities, you can use much smaller "Tiny" package
-(available on [Releases](https://github.com/mkiol/dsnote/releases/tag/v4.4.0) page), 
+(available on [Releases](https://github.com/mkiol/dsnote/releases/tag/v4.4.0) page),
 which provides only the basic features. If you need, you can also use "Tiny" packages together with GPU acceleration add-on.
 
 Comparison between Base, Tiny and Add-ons Flatpak packages:
@@ -233,9 +233,9 @@ sfdk package
 
 ### Linux (direct build)
 
-Speech Note has many build-time and run-time dependencies. This includes shared and static libraries, 
-3rd-party executables, Python and Perl scripts. Because of these complexity, the recommended way to build 
-is to use Flatpak tool-chain (Flatpak manifest file and [flatpak-builder](https://docs.flatpak.org/en/latest/flatpak-builder.html)). 
+Speech Note has many build-time and run-time dependencies. This includes shared and static libraries,
+3rd-party executables, Python and Perl scripts. Because of these complexity, the recommended way to build
+is to use Flatpak tool-chain (Flatpak manifest file and [flatpak-builder](https://docs.flatpak.org/en/latest/flatpak-builder.html)).
 If you want to make a direct build (i.e. without flatpak) it is also possible but more complicated.
 
 ```
@@ -273,7 +273,7 @@ If you find **Speech Note** useful and would like to support this project,
 please consider doing one or two of the following:
 
 - Give a &#11088; on [GitHub](https://github.com/mkiol/dsnote) or/and [GitLab](https://gitlab.com/mkiol/dsnote).
-- Write a review in ypur applications manager app (Discover, Software or any other).
+- Write a review in your applications manager app (Discover, Software or any other).
 - Tell others about this app by mentioning it on social media.
 - If you have spare money, make a small donation via [Liberapay](https://liberapay.com/mkiol/donate).
 
@@ -362,7 +362,7 @@ please consider doing one or two of the following:
 - **FFmpeg**, released under the [GNU Lesser General Public License version 2.1 or later](https://git.ffmpeg.org/gitweb/ffmpeg.git/blob_plain/HEAD:/LICENSE.md)
 - **LAME**, released under the LGPL
 - **Vorbis**, released under [this license](https://gitlab.xiph.org/xiph/vorbis/-/raw/master/COPYING?ref_type=heads)
-- **TagLib**, released under the [GNU Lesser General Public License (LGPL)](https://raw.githubusercontent.com/taglib/taglib/master/COPYING.LGPL) 
+- **TagLib**, released under the [GNU Lesser General Public License (LGPL)](https://raw.githubusercontent.com/taglib/taglib/master/COPYING.LGPL)
               and [Mozilla Public License (MPL)](https://raw.githubusercontent.com/taglib/taglib/master/COPYING.MPL)
 - **libnumbertext**, released under the [BSD License](https://raw.githubusercontent.com/Numbertext/libnumbertext/master/COPYING)
 - **KDBusAddons**, released under the [LGPL licenses](https://invent.kde.org/frameworks/kdbusaddons/-/tree/master/LICENSES?ref_type=heads)
@@ -375,7 +375,7 @@ please consider doing one or two of the following:
 - **html2md**, released under the [MIT License](https://opensource.org/licenses/MIT)
 - **maddy**, released under the [MIT License](https://raw.githubusercontent.com/progsource/maddy/master/LICENSE)
 
-The files in the directory `nonbreaking_prefixes` were copied from 
+The files in the directory `nonbreaking_prefixes` were copied from
 [mosesdecoder](https://github.com/moses-smt/mosesdecoder) project and distributed under the
 [GNU Lesser General Public License v2.1](https://github.com/moses-smt/mosesdecoder/raw/master/COPYING).
 
