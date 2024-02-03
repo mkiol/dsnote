@@ -83,8 +83,8 @@ modules:
       - -DFMT_FUZZ=OFF
     sources:
       - type: archive
-        url: https://github.com/fmtlib/fmt/releases/download/9.1.0/fmt-9.1.0.zip
-        sha256: cceb4cb9366e18a5742128cb3524ce5f50e88b476f1e54737a47ffdf4df4c996
+        url: https://github.com/fmtlib/fmt/releases/download/10.2.1/fmt-10.2.1.zip
+        sha256: 312151a2d13c8327f5c9c586ac6cf7cddc1658e8f53edae0ec56509c8fa516c9
 
   - name: openblas
     buildsystem: cmake-ninja
