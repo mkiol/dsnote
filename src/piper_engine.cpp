@@ -48,6 +48,11 @@ void piper_engine::create_model() {
     } catch (const std::exception& err) {
         LOGE("error: " << err.what());
     }
+
+    if (!m_piper)
+        LOGE("failed to create piper model");
+    else
+        LOGD("piper model created");
 }
 
 bool piper_engine::model_supports_speed() const { return true; }

@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,12 +13,12 @@
 #include <pybind11/pytypes.h>
 #define slots Q_SLOTS
 
+#include <any>
 #include <condition_variable>
 #include <functional>
 #include <future>
 #include <mutex>
 #include <optional>
-#include <string>
 #include <thread>
 
 #include "py_tools.hpp"
@@ -28,11 +28,11 @@ namespace py = pybind11;
 
 class py_executor : public singleton<py_executor> {
    public:
-    using task_t = std::function<std::string()>;
+    using task_t = std::function<std::any()>;
     std::optional<py_tools::libs_availability_t> libs_availability;
     py_executor() = default;
     ~py_executor() override;
-    std::future<std::string> execute(task_t task);
+    std::optional<std::future<std::any>> execute(task_t task);
     void start();
     void stop();
 
@@ -43,7 +43,7 @@ class py_executor : public singleton<py_executor> {
     std::thread m_thread;
     std::optional<py::scoped_interpreter> m_py_interpreter;
     std::optional<task_t> m_task;
-    std::optional<std::promise<std::string>> m_promise;
+    std::optional<std::promise<std::any>> m_promise;
 
     void loop();
 };

@@ -61,7 +61,10 @@ void espeak_engine::create_model() {
     
     m_ok = espeak_SetVoiceByName(m_config.speaker_id.c_str()) == EE_OK;
 
-    if (!m_ok) LOGE("failed to set espeak voice");
+    if (!m_ok)
+        LOGE("failed to create espeak voice");
+    else
+        LOGD("espeak voice created");
 }
 
 struct callback_data {

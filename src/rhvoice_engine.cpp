@@ -73,9 +73,10 @@ void rhvoice_engine::create_model() {
 
     m_rhvoice_engine = RHVoice_new_tts_engine(&init_params);
 
-    if (!m_rhvoice_engine) {
-        LOGE("failed to init rhvoice engine");
-    }
+    if (!m_rhvoice_engine)
+        LOGE("failed to create rhvoice model");
+    else
+        LOGD("rhvoice model created");
 }
 
 struct callback_data {

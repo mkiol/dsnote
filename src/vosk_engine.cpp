@@ -141,11 +141,11 @@ void vosk_engine::open_vosk_lib() {
 }
 
 void vosk_engine::start_processing_impl() {
-    create_vosk_model();
+    create_model();
     create_punctuator();
 }
 
-void vosk_engine::create_vosk_model() {
+void vosk_engine::create_model() {
     if (m_vosk_model) return;
 
     LOGD("creating vosk model");

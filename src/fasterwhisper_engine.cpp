@@ -39,21 +39,19 @@ void fasterwhisper_engine::stop() {
     stt_engine::stop();
 
     if (m_model) {
-        auto* pe = py_executor::instance();
+        auto task = py_executor::instance()->execute([&]() {
+            try {
+                m_model.reset();
+            } catch (const std::exception& err) {
+                LOGE("py error: " << err.what());
+            }
+            return std::any{};
+        });
 
-        try {
-            pe->execute([&]() {
-                  try {
-                      m_model.reset();
-                  } catch (const std::exception& err) {
-                      LOGE("py error: " << err.what());
-                  }
-                  return std::string{};
-              }).get();
-        } catch (const std::exception& err) {
-            LOGE("error: " << err.what());
-        }
+        if (task) task->get();
     }
+
+    LOGD("fasterwhisper stopped");
 }
 
 void fasterwhisper_engine::push_buf_to_whisper_buf(
@@ -92,52 +90,41 @@ void fasterwhisper_engine::create_model() {
 
     LOGD("creating fasterwhisper model");
 
-    auto* pe = py_executor::instance();
+    auto task = py_executor::instance()->execute([&]() {
+        auto n_threads = std::min(
+            m_threads,
+            std::max(1, static_cast<int>(std::thread::hardware_concurrency())));
+        auto use_cuda = m_config.use_gpu &&
+                        m_config.gpu_device.api == gpu_api_t::cuda &&
+                        gpu_tools::has_cudnn();
 
-    bool ok = false;
+        LOGD("cpu info: arch=" << cpu_tools::arch() << ", cores="
+                               << std::thread::hardware_concurrency());
+        LOGD("using threads: " << n_threads << "/"
+                               << std::thread::hardware_concurrency());
+        LOGD("using device: " << (use_cuda ? "cuda" : "cpu") << " "
+                              << m_config.gpu_device.id);
 
-    try {
-        ok = pe->execute([&]() {
-                   auto n_threads = std::min(
-                       m_threads,
-                       std::max(1, static_cast<int>(
-                                       std::thread::hardware_concurrency())));
-                   auto use_cuda = m_config.use_gpu &&
-                                   m_config.gpu_device.api == gpu_api_t::cuda &&
-                                   gpu_tools::has_cudnn();
+        try {
+            auto fw = py::module_::import("faster_whisper");
 
-                   LOGD("cpu info: arch="
-                        << cpu_tools::arch()
-                        << ", cores=" << std::thread::hardware_concurrency());
-                   LOGD("using threads: "
-                        << n_threads << "/"
-                        << std::thread::hardware_concurrency());
-                   LOGD("using device: " << (use_cuda ? "cuda" : "cpu") << " "
-                                         << m_config.gpu_device.id);
+            m_model.emplace(fw.attr("WhisperModel")(
+                "model_size_or_path"_a = m_config.model_files.model_file,
+                "device"_a = use_cuda ? "cuda" : "cpu",
+                "device_index"_a = use_cuda ? m_config.gpu_device.id : 0,
+                "local_files_only"_a = true, "cpu_threads"_a = n_threads));
+        } catch (const std::exception& err) {
+            LOGE("py error: " << err.what());
+            m_model.reset();
+            return false;
+        }
+        return true;
+    });
 
-                   try {
-                       auto fw = py::module_::import("faster_whisper");
-
-                       m_model.emplace(fw.attr("WhisperModel")(
-                           "model_size_or_path"_a =
-                               m_config.model_files.model_file,
-                           "device"_a = use_cuda ? "cuda" : "cpu",
-                           "device_index"_a =
-                               use_cuda ? m_config.gpu_device.id : 0,
-                           "local_files_only"_a = true,
-                           "cpu_threads"_a = n_threads));
-                   } catch (const std::exception& err) {
-                       LOGE("py error: " << err.what());
-                       m_model.reset();
-                       return std::string{"false"};
-                   }
-                   return std::string{"true"};
-               }).get() == "true";
-    } catch (const std::exception& err) {
-        LOGE("failed to create fasterwhisper model: " << err.what());
+    if (!task || !std::any_cast<bool>(task->get())) {
+        LOGE("failed to create fasterwhisper model");
+        throw std::runtime_error{"failed to create fasterwhisper model"};
     }
-
-    if (!ok) throw std::runtime_error("failed to create fasterwhisper model");
 
     LOGD("fasterwhisper model created");
 }
@@ -289,87 +276,73 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
 
     auto decoding_start = std::chrono::steady_clock::now();
 
-    auto* pe = py_executor::instance();
+    auto task = py_executor::instance()->execute([&]() {
+        try {
+            py::array_t<float> array(buf.size());
+            auto r = array.mutable_unchecked<1>();
+            for (py::ssize_t i = 0; i < r.shape(0); ++i) r(i) = buf[i];
 
-    std::string text;
+            auto seg_tuple = m_model->attr("transcribe")(
+                "audio"_a = array, "beam_size"_a = 5,
+                "language"_a = m_config.lang,
+                "task"_a = m_config.translate ? "translate" : "transcribe");
 
-    try {
-        text = pe->execute([&]() {
-                     try {
-                         py::array_t<float> array(buf.size());
-                         auto r = array.mutable_unchecked<1>();
-                         for (py::ssize_t i = 0; i < r.shape(0); ++i)
-                             r(i) = buf[i];
+            auto segments = *seg_tuple.cast<py::list>().begin();
 
-                         auto seg_tuple = m_model->attr("transcribe")(
-                             "audio"_a = array, "beam_size"_a = 5,
-                             "language"_a = m_config.lang,
-                             "task"_a = m_config.translate ? "translate"
-                                                           : "transcribe");
+            std::ostringstream os;
 
-                         auto segments = *seg_tuple.cast<py::list>().begin();
+            bool subrip = m_config.text_format == text_format_t::subrip;
 
-                         std::ostringstream os;
+            auto i = 0;
+            for (auto& segment : segments) {
+                auto text = segment.attr("text").cast<std::string>();
 
-                         bool subrip =
-                             m_config.text_format == text_format_t::subrip;
+                rtrim(text);
+                ltrim(text);
 
-                         auto i = 0;
-                         for (auto& segment : segments) {
-                             auto text =
-                                 segment.attr("text").cast<std::string>();
-
-                             rtrim(text);
-                             ltrim(text);
-
-                             if (text.empty()) continue;
+                if (text.empty()) continue;
 #ifdef DEBUG
-                             LOGD("segment: " << text);
+                LOGD("segment: " << text);
 #endif
 
-                             if (subrip) {
-                                 auto t0 = static_cast<size_t>(std::max(
-                                               0.0, segment.attr("start")
-                                                        .cast<double>())) *
-                                           1000;
-                                 auto t1 =
-                                     static_cast<size_t>(std::max(
-                                         0.0,
-                                         segment.attr("end").cast<double>())) *
-                                     1000;
+                if (subrip) {
+                    auto t0 = static_cast<size_t>(std::max(
+                                  0.0, segment.attr("start").cast<double>())) *
+                              1000;
+                    auto t1 = static_cast<size_t>(std::max(
+                                  0.0, segment.attr("end").cast<double>())) *
+                              1000;
 
-                                 t0 += m_segment_time_offset;
-                                 t1 += m_segment_time_offset;
+                    t0 += m_segment_time_offset;
+                    t1 += m_segment_time_offset;
 
-                                 text_tools::segment_t segment{
-                                     i + 1 + m_segment_offset, t0, t1, text};
-                                 text_tools::break_segment_to_multiline(
-                                     m_config.sub_config.min_line_length,
-                                     m_config.sub_config.max_line_length,
-                                     segment);
+                    text_tools::segment_t segment{i + 1 + m_segment_offset, t0,
+                                                  t1, text};
+                    text_tools::break_segment_to_multiline(
+                        m_config.sub_config.min_line_length,
+                        m_config.sub_config.max_line_length, segment);
 
-                                 text_tools::segment_to_subrip_text(segment,
-                                                                    os);
-                             } else {
-                                 if (i != 0) os << ' ';
-                                 os << std::move(text);
-                             }
+                    text_tools::segment_to_subrip_text(segment, os);
+                } else {
+                    if (i != 0) os << ' ';
+                    os << std::move(text);
+                }
 
-                             ++i;
-                         }
+                ++i;
+            }
 
-                         m_segment_offset += i;
+            m_segment_offset += i;
 
-                         return os.str();
-                     } catch (const std::exception& err) {
-                         LOGE("fasterwhisper py error: " << err.what());
-                         return std::string{""};
-                     }
-                 }).get();
-    } catch (const std::exception& err) {
-        LOGE("fasterwhisper error: " << err.what());
-        return;
-    }
+            return os.str();
+        } catch (const std::exception& err) {
+            LOGE("fasterwhisper py error: " << err.what());
+            return std::string{""};
+        }
+    });
+
+    if (!task) return;
+
+    auto text = std::any_cast<std::string>(task->get());
 
     if (m_thread_exit_requested) return;
 
