@@ -2447,6 +2447,10 @@ QVariantMap speech_service::features_availability() {
                     whisper_engine::has_opencl(),
                     "whisper.cpp STT OpenCL " + tr("GPU acceleration")});
 #endif
+            auto tts_rhvoice = rhvoice_engine::available();
+            m_features_availability.insert(
+                "rhvoice-tts", QVariantList{tts_rhvoice, "RHVoice TTS"});
+
             models_manager::instance()->update_models_using_availability(
                 {/*tts_coqui=*/py_availability->coqui_tts,
                  /*tts_mimic3=*/py_availability->mimic3_tts,
@@ -2466,6 +2470,7 @@ QVariantMap speech_service::features_availability() {
                      py_availability->gruut_fa,
                  /*tts_mimic3_nl=*/py_availability->mimic3_tts &&
                      py_availability->gruut_nl,
+                 /*tts_rhvoice=*/tts_rhvoice,
                  /*stt_fasterwhisper=*/py_availability->faster_whisper,
                  /*stt_ds=*/stt_ds,
                  /*mnt_bergamot=*/true, /*don't disable mt models*/

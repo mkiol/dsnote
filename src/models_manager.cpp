@@ -1888,6 +1888,11 @@ auto models_manager::extract_models(
                 qDebug() << "ignoring coqui model:" << model_id;
                 continue;
             }
+            if (!models_availability->tts_rhvoice &&
+                engine == model_engine_t::tts_rhvoice) {
+                qDebug() << "ignoring rhvoice model:" << model_id;
+                continue;
+            }
             if (!models_availability->stt_fasterwhisper &&
                 engine == model_engine_t::stt_fasterwhisper) {
                 qDebug() << "ignoring fasterwhisper model:" << model_id;
@@ -2380,6 +2385,11 @@ void models_manager::update_models_using_availability_internal() {
                 return;
             }
         }
+        if (!m_models_availability->tts_rhvoice &&
+            pair.second.engine == model_engine_t::tts_rhvoice) {
+            pair.second.hidden = true;
+            return;
+        }
         if (!m_models_availability->stt_fasterwhisper &&
             pair.second.engine == model_engine_t::stt_fasterwhisper) {
             pair.second.hidden = true;
@@ -2405,8 +2415,6 @@ void models_manager::update_models_using_availability_internal() {
             pair.second.hidden = true;
             return;
         }
-        
-        
     });
 
     remove_empty_langs(m_langs, m_models);

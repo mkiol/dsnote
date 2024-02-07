@@ -162,6 +162,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool tts_mimic3_sw = false;
         bool tts_mimic3_fa = false;
         bool tts_mimic3_nl = false;
+        bool tts_rhvoice = false;
         bool stt_fasterwhisper = false;
         bool stt_ds = false;
         bool mnt_bergamot = false;

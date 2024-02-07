@@ -120,6 +120,15 @@ void rhvoice_engine::open_lib() {
     }
 }
 
+bool rhvoice_engine::available() {
+    auto lib_handle = dlopen("libRHVoice.so", RTLD_LAZY);
+    if (lib_handle == nullptr) return false;
+
+    dlclose(lib_handle);
+
+    return true;
+}
+
 bool rhvoice_engine::model_created() const {
     return m_rhvoice_engine != nullptr;
 }

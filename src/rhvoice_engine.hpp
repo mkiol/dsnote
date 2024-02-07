@@ -29,6 +29,7 @@ class rhvoice_engine : public tts_engine {
    public:
     rhvoice_engine(config_t config, callbacks_t call_backs);
     ~rhvoice_engine() override;
+    static bool available();
 
    private:
     struct rhvoice_api {
