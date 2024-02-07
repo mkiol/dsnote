@@ -1903,6 +1903,11 @@ auto models_manager::extract_models(
                 qDebug() << "ignoring ds model:" << model_id;
                 continue;
             }
+            if (!models_availability->stt_vosk &&
+                engine == model_engine_t::stt_vosk) {
+                qDebug() << "ignoring vosk model:" << model_id;
+                continue;
+            }
             if (!models_availability->mnt_bergamot &&
                 engine == model_engine_t::mnt_bergamot) {
                 qDebug() << "ignoring bergamot model:" << model_id;
@@ -2397,6 +2402,11 @@ void models_manager::update_models_using_availability_internal() {
         }
         if (!m_models_availability->stt_ds &&
             pair.second.engine == model_engine_t::stt_ds) {
+            pair.second.hidden = true;
+            return;
+        }
+        if (!m_models_availability->stt_vosk &&
+            pair.second.engine == model_engine_t::stt_vosk) {
             pair.second.hidden = true;
             return;
         }

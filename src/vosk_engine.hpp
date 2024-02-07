@@ -28,6 +28,7 @@ class vosk_engine : public stt_engine {
    public:
     vosk_engine(config_t config, callbacks_t call_backs);
     ~vosk_engine() override;
+    static bool available();
 
    private:
     using vosk_buf_t = std::vector<int16_t>;
@@ -62,7 +63,7 @@ class vosk_engine : public stt_engine {
 
     vosk_buf_t m_speech_buf;
     vosk_api m_vosk_api;
-    void* m_vosklib_handle = nullptr;
+    void* m_lib_handle = nullptr;
     VoskModel* m_vosk_model = nullptr;
     VoskRecognizer* m_vosk_recognizer = nullptr;
 
@@ -72,7 +73,7 @@ class vosk_engine : public stt_engine {
     std::unique_ptr<std::ofstream> m_file_audio_after_vad;
 #endif
 
-    void open_vosk_lib();
+    void open_lib();
     void create_model();
     samples_process_result_t process_buff() override;
     void decode_speech(const vosk_buf_t& buf, bool eof);

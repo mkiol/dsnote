@@ -2451,6 +2451,10 @@ QVariantMap speech_service::features_availability() {
             m_features_availability.insert(
                 "rhvoice-tts", QVariantList{tts_rhvoice, "RHVoice TTS"});
 
+            auto stt_vosk = vosk_engine::available();
+            m_features_availability.insert("vosk-stt",
+                                           QVariantList{stt_vosk, "Vosk STT"});
+
             models_manager::instance()->update_models_using_availability(
                 {/*tts_coqui=*/py_availability->coqui_tts,
                  /*tts_mimic3=*/py_availability->mimic3_tts,
@@ -2473,6 +2477,7 @@ QVariantMap speech_service::features_availability() {
                  /*tts_rhvoice=*/tts_rhvoice,
                  /*stt_fasterwhisper=*/py_availability->faster_whisper,
                  /*stt_ds=*/stt_ds,
+                 /*stt_vosk=*/stt_vosk,
                  /*mnt_bergamot=*/true, /*don't disable mt models*/
                  /*ttt_hftc=*/py_availability->transformers,
                  /*option_r=*/has_uroman});

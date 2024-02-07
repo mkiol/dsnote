@@ -3216,6 +3216,7 @@ QVariantList dsnote_app::features_availability() {
                  /*tts_rhvoice=*/feature_available("rhvoice-tts"),
                  /*stt_fasterwhisper=*/feature_available("faster-whisper-stt"),
                  /*stt_ds=*/feature_available("coqui-stt"),
+                 /*stt_vosk=*/feature_available("vosk-stt"),
                  /*mnt_bergamot=*/true, /*don't disable mt models*/
                  /*ttt_hftc=*/feature_available("punctuator"),
                  /*option_r=*/feature_available("coqui-tts-ko")});

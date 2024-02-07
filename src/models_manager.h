@@ -165,6 +165,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool tts_rhvoice = false;
         bool stt_fasterwhisper = false;
         bool stt_ds = false;
+        bool stt_vosk = false;
         bool mnt_bergamot = false;
         bool ttt_hftc = false;
         bool option_r = false;
