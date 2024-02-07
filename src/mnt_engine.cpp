@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -97,7 +97,7 @@ mnt_engine::mnt_engine(config_t config, callbacks_t call_backs)
     if (m_config.model_files.model_path_first.empty())
         throw std::runtime_error("model-path-first is empty");
 
-    open_bergamot_lib();
+    open_lib();
 }
 
 mnt_engine::~mnt_engine() {
@@ -118,53 +118,81 @@ mnt_engine::~mnt_engine() {
 
     m_bergamot_api_api = {};
 
-    if (m_bergamotlib_handle) {
-        dlclose(m_bergamotlib_handle);
-        m_bergamotlib_handle = nullptr;
+    if (m_lib_handle) {
+        dlclose(m_lib_handle);
+        m_lib_handle = nullptr;
     }
 }
 
-void mnt_engine::open_bergamot_lib() {
+void mnt_engine::open_lib() {
 #ifdef ARCH_X86_64
     if (auto cpuinfo = cpu_tools::cpuinfo();
         cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx &&
         cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx2) {
-        m_bergamotlib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
+        m_lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
     } else if (cpu_tools::cpuinfo().feature_flags &
                cpu_tools::feature_flags_t::avx) {
         LOGW("using bergamot-fallback");
-        m_bergamotlib_handle = dlopen("libbergamot_api-fallback.so", RTLD_LAZY);
+        m_lib_handle = dlopen("libbergamot_api-fallback.so", RTLD_LAZY);
     } else {
         LOGE("avx not supported but bergamot needs it");
         throw std::runtime_error(
             "failed to open bergamot lib: avx not supported");
     }
 #else
-    m_bergamotlib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
+    m_lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
 #endif
 
-    if (m_bergamotlib_handle == nullptr) {
+    if (m_lib_handle == nullptr) {
         LOGE("failed to open bergamot lib: " << dlerror());
         throw std::runtime_error("failed to open bergamot lib");
     }
 
     m_bergamot_api_api.bergamot_api_make =
         reinterpret_cast<decltype(m_bergamot_api_api.bergamot_api_make)>(
-            dlsym(m_bergamotlib_handle, "bergamot_api_make"));
+            dlsym(m_lib_handle, "bergamot_api_make"));
     m_bergamot_api_api.bergamot_api_delete =
         reinterpret_cast<decltype(m_bergamot_api_api.bergamot_api_delete)>(
-            dlsym(m_bergamotlib_handle, "bergamot_api_delete"));
+            dlsym(m_lib_handle, "bergamot_api_delete"));
     m_bergamot_api_api.bergamot_api_translate =
         reinterpret_cast<decltype(m_bergamot_api_api.bergamot_api_translate)>(
-            dlsym(m_bergamotlib_handle, "bergamot_api_translate"));
+            dlsym(m_lib_handle, "bergamot_api_translate"));
     m_bergamot_api_api.bergamot_api_cancel =
         reinterpret_cast<decltype(m_bergamot_api_api.bergamot_api_cancel)>(
-            dlsym(m_bergamotlib_handle, "bergamot_api_cancel"));
+            dlsym(m_lib_handle, "bergamot_api_cancel"));
 
     if (!m_bergamot_api_api.ok()) {
         LOGE("failed to register bergamon api");
         throw std::runtime_error("failed to register bergamot api");
     }
+}
+
+bool mnt_engine::available() {
+    void* lib_handle = nullptr;
+#ifdef ARCH_X86_64
+    if (auto cpuinfo = cpu_tools::cpuinfo();
+        cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx &&
+        cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx2) {
+        lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
+    } else if (cpu_tools::cpuinfo().feature_flags &
+               cpu_tools::feature_flags_t::avx) {
+        lib_handle = dlopen("libbergamot_api-fallback.so", RTLD_LAZY);
+    } else {
+        LOGW("mnt not available because cpu doesn't have avx");
+        return false;
+    }
+#else
+    lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
+#endif
+
+    if (lib_handle == nullptr) {
+        LOGE("failed to open bergamot lib: " << dlerror());
+        return false;
+    }
+
+    dlclose(lib_handle);
+
+    return true;
 }
 
 void mnt_engine::start() {

@@ -122,7 +122,10 @@ void rhvoice_engine::open_lib() {
 
 bool rhvoice_engine::available() {
     auto lib_handle = dlopen("libRHVoice.so", RTLD_LAZY);
-    if (lib_handle == nullptr) return false;
+    if (lib_handle == nullptr) {
+        LOGE("failed to open rhvoice lib: " << dlerror());
+        return false;
+    }
 
     dlclose(lib_handle);
 

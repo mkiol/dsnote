@@ -2336,8 +2336,6 @@ QVariantMap speech_service::features_availability() {
 #ifdef ARCH_X86_64
             auto has_cuda = gpu_tools::has_cuda();
             auto has_cudnn = gpu_tools::has_cudnn();
-            auto has_avx = (cpu_tools::cpuinfo().feature_flags &
-                            cpu_tools::feature_flags_t::avx) != 0;
 #endif
             m_features_availability.insert(
                 "coqui-tts",
@@ -2413,24 +2411,13 @@ QVariantMap speech_service::features_availability() {
                     py_availability->transformers && py_availability->unikud,
                     tr("Diacritics restoration for Hebrew")});
 
-#ifdef ARCH_X86_64
-            bool stt_ds = has_avx;
-            if (!stt_ds)
-                qWarning()
-                    << "disabling ds engine because cpu doesn't support avx";
+            bool stt_ds = ds_engine::available();
+            bool mnt = mnt_engine::available();
 
-            bool mnt_bergamot = has_avx;
-            if (!mnt_bergamot)
-                qWarning()
-                    << "disabling translator because cpu doesn't support avx";
-#else
-            bool stt_ds = true;
-            bool mnt_bergamot = true;
-#endif
             m_features_availability.insert(
                 "coqui-stt", QVariantList{stt_ds, "Coqui/DeepSpeech STT"});
-            m_features_availability.insert(
-                "translator", QVariantList{mnt_bergamot, "Translator"});
+            m_features_availability.insert("translator",
+                                           QVariantList{mnt, "Translator"});
 
 #ifdef ARCH_X86_64
             m_features_availability.insert(
@@ -2478,7 +2465,7 @@ QVariantMap speech_service::features_availability() {
                  /*stt_fasterwhisper=*/py_availability->faster_whisper,
                  /*stt_ds=*/stt_ds,
                  /*stt_vosk=*/stt_vosk,
-                 /*mnt_bergamot=*/true, /*don't disable mt models*/
+                 /*mnt_bergamot=*/mnt,
                  /*ttt_hftc=*/py_availability->transformers,
                  /*option_r=*/has_uroman});
 

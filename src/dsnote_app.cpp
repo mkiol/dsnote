@@ -3155,6 +3155,10 @@ bool dsnote_app::feature_coqui_tts() const {
     return feature_available("coqui-tts");
 }
 
+bool dsnote_app::feature_translator() const {
+    return feature_available("translator");
+}
+
 QVariantList dsnote_app::features_availability() {
     QVariantList list;
 
@@ -3200,6 +3204,12 @@ QVariantList dsnote_app::features_availability() {
     }
 
     if (old_features_availability != m_features_availability) {
+        auto translator_enabled = feature_available("translator");
+
+        if (!translator_enabled) {
+            settings::instance()->set_translator_mode(false);
+        }
+
         if (settings::instance()->launch_mode() ==
             settings::launch_mode_t::app) {
             models_manager::instance()->update_models_using_availability(
@@ -3217,7 +3227,7 @@ QVariantList dsnote_app::features_availability() {
                  /*stt_fasterwhisper=*/feature_available("faster-whisper-stt"),
                  /*stt_ds=*/feature_available("coqui-stt"),
                  /*stt_vosk=*/feature_available("vosk-stt"),
-                 /*mnt_bergamot=*/true, /*don't disable mt models*/
+                 /*mnt_bergamot=*/translator_enabled,
                  /*ttt_hftc=*/feature_available("punctuator"),
                  /*option_r=*/feature_available("coqui-tts-ko")});
         }

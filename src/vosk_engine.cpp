@@ -142,7 +142,10 @@ void vosk_engine::open_lib() {
 
 bool vosk_engine::available() {
     auto lib_handle = dlopen("libvosk.so", RTLD_LAZY);
-    if (lib_handle == nullptr) return false;
+    if (lib_handle == nullptr) {
+        LOGE("failed to open vosk lib: " << dlerror());
+        return false;
+    }
 
     dlclose(lib_handle);
 

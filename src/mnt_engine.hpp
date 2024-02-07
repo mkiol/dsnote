@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -71,6 +71,7 @@ class mnt_engine {
 
     mnt_engine(config_t config, callbacks_t call_backs);
     virtual ~mnt_engine();
+    static bool available();
     void start();
     void stop();
     void request_stop();
@@ -115,7 +116,7 @@ class mnt_engine {
     config_t m_config;
     callbacks_t m_call_backs;
     bergamot_api_api m_bergamot_api_api;
-    void* m_bergamotlib_handle = nullptr;
+    void* m_lib_handle = nullptr;
     std::thread m_processing_thread;
     bool m_shutting_down = false;
     std::queue<task_t> m_queue;
@@ -134,7 +135,7 @@ class mnt_engine {
     void set_state(state_t new_state);
     void process();
     std::string translate_internal(std::string text);
-    void open_bergamot_lib();
+    void open_lib();
 };
 
 #endif // MNT_ENGINE_HPP

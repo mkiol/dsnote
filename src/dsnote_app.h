@@ -209,6 +209,8 @@ class dsnote_app : public QObject {
                    NOTIFY features_changed)
     Q_PROPERTY(
         bool feature_coqui_tts READ feature_coqui_tts NOTIFY features_changed)
+    Q_PROPERTY(
+        bool feature_translator READ feature_translator NOTIFY features_changed)
     Q_PROPERTY(auto_text_format_t auto_text_format READ auto_text_format NOTIFY
                    auto_text_format_changed)
 
@@ -699,6 +701,7 @@ class dsnote_app : public QObject {
     bool feature_global_shortcuts() const;
     bool feature_text_active_window() const;
     bool feature_coqui_tts() const;
+    bool feature_translator() const;
     void request_reload();
     bool stt_translate_needed_by_id(const QString &id) const;
     bool tts_ref_voice_needed_by_id(const QString &id) const;
