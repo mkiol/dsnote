@@ -35,6 +35,7 @@ option(BUILD_RNNOISE "download sources of rnnoise-nu lib, build and link statica
 option(BUILD_PYBIND11 "download sources of pybind11, build and link statically" ON)
 option(BUILD_PYTHON_MODULE "make python module archive" OFF)
 option(BUILD_ESPEAK "download sources of espeak-ng lib, build and link statically" ON)
+option(BUILD_ESPEAK_MODULE "make espeak module archive" ON)
 option(BUILD_PIPER "download sources of piper lib, build and link statically" ON)
 option(BUILD_SSPLITCPP "download sources of ssplitcpp lib, build and link statically" ON)
 option(BUILD_RHVOICE "download sources of rhvoice lib, build and install shared lib" ON)
@@ -520,7 +521,9 @@ else()
     list(APPEND includes ${espeak_INCLUDE_DIRS})
 endif()
 
-include(${cmake_path}/espeak_module.cmake)
+if(BUILD_ESPEAK_MODULE)
+    include(${cmake_path}/espeak_module.cmake)
+endif()
 
 if(BUILD_PIPER)
     include(${cmake_path}/piper.cmake)

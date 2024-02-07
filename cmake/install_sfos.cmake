@@ -31,6 +31,8 @@ endif()
 
 if(BUILD_PIPER OR BUILD_ESPEAK)
     install(PROGRAMS "${external_bin_dir}/mbrola" DESTINATION share/${info_binary_id}/bin)
+endif()
+if(BUILD_ESPEAK_MODULE)
     install(FILES "${PROJECT_BINARY_DIR}/espeakdata.tar.xz" DESTINATION ${module_install_dir})
 endif()
 

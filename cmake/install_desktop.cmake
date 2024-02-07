@@ -74,7 +74,10 @@ if(BUILD_PIPER OR BUILD_ESPEAK)
     install(PROGRAMS "${external_bin_dir}/espeak-ng" DESTINATION ${bin_install_dir})
     install(DIRECTORY "${external_share_dir}/espeak-ng-data" DESTINATION ${share_install_dir})
 endif()
-install(FILES "${PROJECT_BINARY_DIR}/espeakdata.tar.xz" DESTINATION ${module_install_dir})
+
+if(BUILD_ESPEAK_MODULE)
+    install(FILES "${PROJECT_BINARY_DIR}/espeakdata.tar.xz" DESTINATION ${module_install_dir})
+endif()
 
 if(BUILD_RHVOICE)
     strip_all("${external_lib_dir}/libRHVoice_core.so.1.2.2")
