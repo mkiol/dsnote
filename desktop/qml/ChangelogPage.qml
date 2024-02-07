@@ -13,8 +13,8 @@ DialogPage {
 
     title: qsTr("Changes")
 
-        SectionLabel {
-        text: qsTr("Version %1").arg("4.4.1 beta")
+    SectionLabel {
+        text: qsTr("Version %1").arg(APP_VERSION)
     }
 
     RichLabel {

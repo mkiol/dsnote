@@ -84,7 +84,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.4.1" date="2024-01-27">
+    <release version="4.5.0-beta" date="2024-02-07">
       <description>
       <p>Text to Speech:</p>
       <ul>

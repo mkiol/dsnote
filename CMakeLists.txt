@@ -114,6 +114,7 @@ set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_conf_version "66")
+set(info_version_type "beta")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · locness3 · devSJR · vovkiv")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
@@ -124,7 +125,7 @@ if (WITH_DESKTOP)
     set(info_libs_str "${info_libs_str} · Hugging Face Transformers · KDBusAddons · QHotkey")
 endif()
 
-project(${id} VERSION 4.4.1)
+project(${id} VERSION 4.5.0)
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES ".*arm.*")
     message(STATUS "arm architecture detected")

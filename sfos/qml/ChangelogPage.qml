@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -29,6 +29,20 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Version %1").arg(APP_VERSION)
+            }
+
+            LogItem {
+                title: "New translator models"
+                description: "New models: Greek to English, Maltese to English, Slovenian to English, Turkish to English"
+            }
+
+            LogItem {
+                title: "New voice for Persian language"
+                description: "New voice enabled with Piper model"
+            }
+
+            SectionHeader {
                 text: qsTr("Version %1").arg("4.4")
             }
 
@@ -43,13 +57,13 @@ Page {
             }
 
             LogItem {
-                title: "New voices for Serbian, Uzbek and Persian languages"
-                description: "New voices are enabled with RHVoice and Piper models"
+                title: "New voices for Serbian and Uzbek languages"
+                description: "New voices are enabled with RHVoice models"
             }
 
             LogItem {
                 title: "New translator models"
-                description: "New models: Lithuanian to English, Greek to English, Maltese to English, Slovenian to English, Turkish to English"
+                description: "New model: Lithuanian to English"
             }
 
             LogItem {
