@@ -38,6 +38,7 @@ option(BUILD_ESPEAK "download sources of espeak-ng lib, build and link staticall
 option(BUILD_PIPER "download sources of piper lib, build and link statically" ON)
 option(BUILD_SSPLITCPP "download sources of ssplitcpp lib, build and link statically" ON)
 option(BUILD_RHVOICE "download sources of rhvoice lib, build and install shared lib" ON)
+option(BUILD_RHVOICE_MODULE "make rhvoice module archive" ON)
 option(BUILD_BERGAMOT "download sources of bergamot-translator lib, build and install shared lib" ON)
 option(BUILD_UROMAN "download sources of uroman and install uroman lib" ON) # only for x86_64
 option(BUILD_RUBBERBAND "download sources of rubberband lib, build and link statically" ON) # only for x86_64
@@ -499,13 +500,11 @@ endif()
 
 if(BUILD_RHVOICE)
     include(${cmake_path}/rhvoice.cmake)
-else()
-    find_library(rhvoice_core_path RHVoice_core REQUIRED)
-    find_library(rhvoice_path RHVoice REQUIRED)
-    list(APPEND deps_libs ${rhvoice_core_path} ${rhvoice_path})
 endif()
 
-include(${cmake_path}/rhvoice_module.cmake)
+if(BUILD_RHVOICE_MODULE)
+    include(${cmake_path}/rhvoice_module.cmake)
+endif()
 
 if(BUILD_PIPER OR BUILD_ESPEAK)
     include(${cmake_path}/espeak.cmake)

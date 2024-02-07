@@ -1,4 +1,4 @@
-if(BUILD_RHVOICE)
+if(BUILD_ESPEAK)
     set(espeak_data_dir ${external_share_dir})
 else()
     set(espeak_data_dir ${CMAKE_INSTALL_PREFIX}/share)
@@ -15,6 +15,6 @@ add_library(espeakdata_module STATIC "${CMAKE_BINARY_DIR}/espeakdata.tar.xz")
 
 list(APPEND deps espeakdata_module)
 
-if(BUILD_RHVOICE)
+if(BUILD_ESPEAK)
     add_dependencies(espeakdata_module espeak)
 endif()
