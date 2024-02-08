@@ -182,6 +182,7 @@ set(share_install_dir "${install_dir}/share")
 set(lib_install_dir "${install_dir}/lib")
 set(bin_install_dir "${install_dir}/bin")
 set(rpath_install_dir "${CMAKE_INSTALL_PREFIX}/${lib_install_dir}")
+set(translations_resource_file "${CMAKE_BINARY_DIR}/translations.qrc")
 
 set(xz_path "xz")
 if(WITH_FLATPAK)
@@ -190,6 +191,9 @@ if(WITH_FLATPAK)
 elseif(BUILD_XZ)
     set(xz_path "${external_bin_dir}/xz")
 endif()
+
+set(deps "") # dependencies of dsnote_lib and dsnote
+set(deps_libs "") # libs to link to dsnote_lib and dsnote
 
 # global config
 
@@ -329,7 +333,7 @@ set(resources "")
 if(WITH_DESKTOP)
     list(APPEND resources
         "${desktop_dir}/resources.qrc"
-        "${CMAKE_BINARY_DIR}/translations.qrc")
+        ${translations_resource_file})
 endif()
 
 if(WITH_SFOS)
@@ -409,8 +413,11 @@ include(${cmake_path}/translations.cmake)
 
 # dependencies
 
-set(deps "")
-set(deps_libs compiler_flags pthread ${CMAKE_DL_LIBS})
+list(APPEND deps_libs
+    compiler_flags
+    pthread
+    ${CMAKE_DL_LIBS})
+
 set(deps_dirs "")
 
 include(FindPkgConfig)
