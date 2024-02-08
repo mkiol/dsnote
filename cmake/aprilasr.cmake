@@ -9,6 +9,7 @@ ExternalProject_Add(aprilasr
     URL_HASH SHA256=${aprilasr_checksum}
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
+        -DCMAKE_INSTALL_LIBDIR=lib
     BUILD_ALWAYS False
 )
 

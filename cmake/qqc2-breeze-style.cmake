@@ -9,7 +9,7 @@ ExternalProject_Add(qqc2breeze
     URL_HASH SHA256=${qqc2breeze_checksum}
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
-        -DLIB_INSTALL_DIR=${external_lib_dir}
+        -DCMAKE_INSTALL_LIBDIR=lib
     BUILD_ALWAYS False
 )
 

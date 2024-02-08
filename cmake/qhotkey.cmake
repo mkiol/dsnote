@@ -9,6 +9,7 @@ ExternalProject_Add(qhotkey
     URL_HASH SHA256=${qhotkey_checksum}
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+        -DCMAKE_INSTALL_LIBDIR=lib
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON
     BUILD_ALWAYS False
 )
