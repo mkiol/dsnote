@@ -12,6 +12,7 @@ Linux desktop and Sailfish OS app for note taking, reading and translating with 
 - [Flatpak packages](#flatpak-packages)
 - [Beta version](#beta-version)
 - [Building from sources](#building-from-sources)
+- [How to enable a custom model](#how-to-enable-a-custom-model)
 - [Contributing to Speech Note](#contributing-to-speech-note)
 - [How to support](#how-to-support)
 - [Reviews and demos](#reviews-and-demos)
@@ -252,6 +253,68 @@ make
 To make build without support for Python components, add `-DWITH_PY=OFF` in cmake step.
 
 To see other build options search for `option(BUILD_XXX)` in `CMakeList.txt` file.
+
+## How to enable a custom model
+
+All models available for download are specified in the configuration file (config/models.json).
+To enable a custom model that is compatible with currently supported engines, simply edit this file and restart the application.
+
+When you first run the application, the models configuration file is created in:
+
+- `~/.local/share/net.mkiol/dsnote/models.json`, or
+- `~/.var/app/net.mkiol.SpeechNote/data/net.mkiol/dsnote/models.json` (Flatpak), or
+- `~/.local/share/org.mkiol/dsnote/models.json` (Sailfish OS)
+
+You can freely edit currently enabled models or add new ones.
+
+Model definition looks like this:
+
+```
+{
+    "name": "<model name>",
+    "model_id": "<model unique id>",
+    "engine": "<engine type>",
+    "lang_id": "<lang id>",
+    "checksum": "<md5 checksum>",
+    "checksum_quick": "<partial md5 checksum>",
+    "comp": "<compression type",
+    "urls": [
+        <model URLs>
+    ],
+    "size": "<download size of all files>"
+}
+```
+
+Allowed engine types: `stt_ds`, `stt_vosk`, `stt_april`, `stt_whisper`, `stt_fasterwhisper`, `tts_piper`, `tts_rhvoice`, `tts_espeak`, `tts_coqui`, `tts_mimic3`, `mnt_bergamot`
+
+Allowed compression types: `none`, `gz`, `xz`, `tarxz`, `targz`, `zip`, `zipall`, `dir`, `dirgz`
+
+Allowed URL types: `http`, `https`, `file`
+
+Checksums are calculated for all files after unpacking. If you are adding a new model, you can use the `--generate-checksums` command line option to find the right checksums. To do this, put empty strings in both `checksum` and `checksum_quick`, save the file and run Speech Note with the mentioned option.
+
+For example:
+
+```
+{
+    "name": "New Piper Voice",
+    "model_id": "en_piper_new",
+    "engine": "tts_piper",
+    "lang_id": "en",
+    "checksum": "",
+    "checksum_quick": "",
+    "size": ""
+    "comp": "dir",
+    "urls": [
+        "file:///home/me/models/new-model-medium.onnx",
+        "file:///home/me/models/new-model-medium.onnx.json"
+    ]
+}
+```
+
+```
+flatpak run net.mkiol.SpeechNote --verbose --gen-checksums
+```
 
 ## Contributing to Speech Note
 
