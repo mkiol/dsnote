@@ -535,7 +535,7 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
             emit intermediate_text_changed();
             break;
         case stt_text_destination_t::active_window:
-#ifdef USE_DESKTOP
+#ifdef USE_X11_FEATURES
             m_fake_keyboard.emplace();
             m_fake_keyboard->send_text(text);
             emit text_decoded_to_active_window();
@@ -3186,7 +3186,11 @@ QVariantList dsnote_app::features_availability() {
 
 #ifdef USE_DESKTOP
     if (!m_features_availability.isEmpty()) {
+#ifdef USE_X11_FEATURES
         auto has_xbc = settings::instance()->is_xcb();
+#else
+        auto has_xbc = false;
+#endif
         m_features_availability.insert(
             "ui-global-shortcuts",
             QVariantList{has_xbc, tr("Global keyboard shortcuts")});
@@ -3334,7 +3338,9 @@ void dsnote_app::execute_action(action_t action) {
             listen();
             break;
         case dsnote_app::action_t::start_listening_active_window:
-            listen_to_active_window();
+#ifdef USE_X11_FEATURES
+            if (settings::instance()->is_xcb()) listen_to_active_window();
+#endif
             break;
         case dsnote_app::action_t::start_listening_clipboard:
             listen_to_clipboard();
@@ -3767,7 +3773,7 @@ void dsnote_app::hide_tray() {
 }
 
 void dsnote_app::register_hotkeys() {
-#ifdef USE_DESKTOP
+#ifdef USE_X11_FEATURES
     auto *s = settings::instance();
 
     if (!s->is_xcb()) {

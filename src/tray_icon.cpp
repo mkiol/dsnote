@@ -89,6 +89,7 @@ void tray_icon::make_menu() {
         m_menu.addAction(
             QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
             tr("Start listening")));
+#ifdef USE_X11_FEATURES
     if (settings::instance()->is_xcb()) {
         m_actions.emplace(
             action_t::start_listening_active_window,
@@ -96,6 +97,7 @@ void tray_icon::make_menu() {
                                  "audio-input-microphone-symbolic")),
                              tr("Start listening, text to active window")));
     }
+#endif
     m_actions.emplace(
         action_t::start_listening_clipboard,
         m_menu.addAction(

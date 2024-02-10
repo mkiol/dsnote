@@ -17,6 +17,7 @@ option(WITH_SANITIZERS "enable asan and ubsan in debug build" ON)
 option(WITH_STATIC_SANITIZERS "link asan and ubsan statically in debug build" OFF)
 option(WITH_PY "enable python libraries" ${WITH_DESKTOP})
 option(WITH_SYSTEMD_SERVICE "enable systemd service" ${WITH_SFOS})
+option(WITH_X11_FEATURES "enable x11 features" ON)
 
 option(DOWNLOAD_LIBSTT "download libstt binary and install shared lib" ON)
 option(DOWNLOAD_VOSK "download vosk binary and install shared lib (don't use together with BUILD_VOSK)" OFF)
@@ -79,6 +80,10 @@ if(WITH_SFOS)
     if (${WITH_PY} AND NOT ${BUILD_PYTHON_MODULE})
         set(BUILD_PYTHON_MODULE ON)
         message(WARNING "enabling BUILD_PYTHON_MODULE because WITH_PY is on")
+    endif()
+    if (WITH_X11_FEATURES)
+        set(WITH_X11_FEATURES OFF)
+        message(WARNING "disabling WITH_X11_FEATURES on sfos")
     endif()
     set(BUILD_QQC2_DESKTOP_STYLE OFF)
 endif()
@@ -316,10 +321,14 @@ set(dsnote_lib_sources
 
 if(WITH_DESKTOP)
     list(APPEND dsnote_lib_sources
-        ${sources_dir}/fake_keyboard.hpp
-        ${sources_dir}/fake_keyboard.cpp
         ${sources_dir}/tray_icon.hpp
         ${sources_dir}/tray_icon.cpp)
+endif()
+
+if(WITH_X11_FEATURES)
+    list(APPEND dsnote_lib_sources
+        ${sources_dir}/fake_keyboard.hpp
+        ${sources_dir}/fake_keyboard.cpp)
 endif()
 
 configure_file(config.h.in config.h)
@@ -399,6 +408,7 @@ target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_SFOS}>:USE_
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_DESKTOP}>:USE_DESKTOP>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_PY}>:USE_PY>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_FLATPAK}>:USE_FLATPAK>")
+target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_X11_FEATURES}>:USE_X11_FEATURES>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${BUILD_PYTHON_MODULE}>:USE_PYTHON_MODULE>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<CONFIG:Debug>:DEBUG>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>")
@@ -434,25 +444,27 @@ if(WITH_DESKTOP)
     find_package(Qt5 COMPONENTS QuickControls2 Widgets REQUIRED)
     list(APPEND deps_libs Qt5::QuickControls2 Qt5::Widgets)
 
-    find_package(X11 REQUIRED)
-    list(APPEND deps_libs X11)
+    if(WITH_X11_FEATURES)
+        find_package(X11 REQUIRED)
+        list(APPEND deps_libs X11)
 
-    find_package(Qt5 COMPONENTS X11Extras REQUIRED)
-    list(APPEND deps_libs Qt5::X11Extras)
+        find_package(Qt5 COMPONENTS X11Extras REQUIRED)
+        list(APPEND deps_libs Qt5::X11Extras)
 
-    pkg_search_module(xkbcommon REQUIRED xkbcommon)
-    list(APPEND deps_libs ${xkbcommon_LIBRARIES})
-    list(APPEND includes ${xkbcommon_INCLUDE_DIRS})
+        pkg_search_module(xkbcommon REQUIRED xkbcommon)
+        list(APPEND deps_libs ${xkbcommon_LIBRARIES})
+        list(APPEND includes ${xkbcommon_INCLUDE_DIRS})
 
-    pkg_search_module(xkbcommonx11 REQUIRED xkbcommon-x11)
-    list(APPEND deps_libs ${xkbcommonx11_LIBRARIES})
-    list(APPEND includes ${xkbcommonx11_INCLUDE_DIRS})
+        pkg_search_module(xkbcommonx11 REQUIRED xkbcommon-x11)
+        list(APPEND deps_libs ${xkbcommonx11_LIBRARIES})
+        list(APPEND includes ${xkbcommonx11_INCLUDE_DIRS})
 
-    if(BUILD_QHOTKEY)
-        include(${cmake_path}/qhotkey.cmake)
-    else()
-        find_library(qhotkey_path qhotkey REQUIRED)
-        list(APPEND deps_libs ${qhotkey_path})
+        if(BUILD_QHOTKEY)
+            include(${cmake_path}/qhotkey.cmake)
+        else()
+            find_library(qhotkey_path qhotkey REQUIRED)
+            list(APPEND deps_libs ${qhotkey_path})
+        endif()
     endif()
 
     include(${cmake_path}/kdbusservice.cmake)

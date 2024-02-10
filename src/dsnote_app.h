@@ -18,10 +18,12 @@
 #include <optional>
 #include <queue>
 
-#ifdef USE_DESKTOP
+#ifdef USE_X11_FEATURES
 #include <qhotkey.h>
-
 #include "fake_keyboard.hpp"
+#endif
+
+#ifdef USE_DESKTOP
 #include "tray_icon.hpp"
 #endif
 
@@ -521,7 +523,7 @@ class dsnote_app : public QObject {
     std::unique_ptr<recorder> m_recorder;
     auto_text_format_t m_auto_text_format =
         auto_text_format_t::AutoTextFormatRaw;
-#ifdef USE_DESKTOP
+#ifdef USE_X11_FEATURES
     struct hotkeys_t {
         QHotkey start_listening;
         QHotkey start_listening_active_window;
@@ -535,6 +537,8 @@ class dsnote_app : public QObject {
 
     hotkeys_t m_hotkeys;
     std::optional<fake_keyboard> m_fake_keyboard;
+#endif
+#ifdef USE_DESKTOP
     tray_icon m_tray;
 #endif
 
