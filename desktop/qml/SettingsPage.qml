@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1079,31 +1079,19 @@ DialogPage {
                 hoverEnabled: true
             }
 
-            RowLayout {
+            CheckBox {
                 visible: _settings.gpu_supported()
-                spacing: appWin.padding
-                CheckBox {
-                    checked: _settings.gpu_scan_opencl
-                    text: qsTr("Use %1").arg("OpenCL")
-                    onCheckedChanged: {
-                        _settings.gpu_scan_opencl = checked
-                    }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
-                                  qsTr("Disable this option if you observe problems when launching the application.")
-                    hoverEnabled: true
+                checked: _settings.gpu_scan_opencl
+                text: qsTr("Use %1").arg("OpenCL")
+                onCheckedChanged: {
+                    _settings.gpu_scan_opencl = checked
                 }
 
-                ComboBox {
-                    enabled: _settings.gpu_scan_opencl
-                    currentIndex: _settings.gpu_scan_opencl_always ? 0 : 1
-                    model: [qsTr("Always"), qsTr("Only if no others were found")]
-                    onActivated: {
-                        _settings.gpu_scan_opencl_always = index === 0
-                    }
-                }
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
+                              qsTr("Disable this option if you observe problems when launching the application.")
+                hoverEnabled: true
             }
 
             CheckBox {

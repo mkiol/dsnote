@@ -112,6 +112,28 @@ static QString audio_format_to_str(settings::audio_format_t format) {
     return QStringLiteral("mp3");
 }
 
+QDebug operator<<(QDebug d, settings::gpu_feature_flags_t gpu_features) {
+    if (gpu_features &
+        settings::gpu_feature_flags_t::gpu_feature_stt_whispercpp_cuda)
+        d << "stt-whispercpp-cuda,";
+    if (gpu_features &
+        settings::gpu_feature_flags_t::gpu_feature_stt_whispercpp_hip)
+        d << "stt-whispercpp-hip,";
+    if (gpu_features &
+        settings::gpu_feature_flags_t::gpu_feature_stt_whispercpp_opencl)
+        d << "stt-whispercpp-opencl,";
+    if (gpu_features &
+        settings::gpu_feature_flags_t::gpu_feature_stt_fasterwhisper_cuda)
+        d << "stt-fasterwhisper-cuda,";
+    if (gpu_features &
+        settings::gpu_feature_flags_t::gpu_feature_tts_coqui_cuda)
+        d << "tts-coqui-cuda,";
+    if (gpu_features & settings::gpu_feature_flags_t::gpu_feature_tts_coqui_hip)
+        d << "tts-coqui-hip";
+
+    return d;
+}
+
 settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     qDebug() << "app:" << APP_ORG << APP_ID;
     qDebug() << "config location:"
@@ -1096,7 +1118,7 @@ bool settings::has_gpu_device_tts() const {
     return m_gpu_devices_tts.size() > 1;
 }
 
-void settings::scan_gpu_devices() {
+void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
 #ifdef ARCH_X86_64
     m_gpu_devices_stt.clear();
     m_gpu_devices_tts.clear();
@@ -1106,17 +1128,38 @@ void settings::scan_gpu_devices() {
 
     qDebug() << "scan cuda:" << gpu_scan_cuda();
     qDebug() << "scan hip:" << gpu_scan_hip();
-    qDebug() << "scan opencl:" << gpu_scan_opencl() << gpu_scan_opencl_always();
+    qDebug() << "scan opencl:" << gpu_scan_opencl();
+    qDebug() << "gpu feature flags:"
+             << static_cast<gpu_feature_flags_t>(gpu_feature_flags);
+
+    bool disable_stt_cuda =
+        (gpu_feature_flags &
+         gpu_feature_flags_t::gpu_feature_stt_fasterwhisper_cuda) == 0 &&
+        (gpu_feature_flags &
+         gpu_feature_flags_t::gpu_feature_stt_whispercpp_cuda) == 0;
+    bool disable_stt_hip =
+        (gpu_feature_flags &
+         gpu_feature_flags_t::gpu_feature_stt_whispercpp_hip) == 0;
+    bool disable_stt_opencl =
+        (gpu_feature_flags &
+         gpu_feature_flags_t::gpu_feature_stt_whispercpp_opencl) == 0;
+    bool disable_tts_cuda =
+        (gpu_feature_flags & gpu_feature_flags_t::gpu_feature_tts_coqui_cuda) ==
+        0;
+    bool disable_tts_hip =
+        (gpu_feature_flags & gpu_feature_flags_t::gpu_feature_tts_coqui_hip) ==
+        0;
 
     auto devices = gpu_tools::available_devices(
         /*cuda=*/gpu_scan_cuda(),
         /*hip=*/gpu_scan_hip(),
         /*opencl=*/gpu_scan_opencl(),
-        /*opencl_always=*/gpu_scan_opencl_always());
+        /*opencl_always=*/true);
 
     std::for_each(devices.cbegin(), devices.cend(), [&](const auto& device) {
         switch (device.api) {
             case gpu_tools::api_t::opencl:
+                if (disable_stt_opencl) return;
                 m_gpu_devices_stt.push_back(
                     QStringLiteral("%1, %2, %3")
                         .arg("OpenCL",
@@ -1124,19 +1167,21 @@ void settings::scan_gpu_devices() {
                              QString::fromStdString(device.name)));
                 break;
             case gpu_tools::api_t::cuda: {
+                if (disable_stt_cuda && disable_tts_cuda) return;
                 auto item = QStringLiteral("%1, %2, %3")
                                 .arg("CUDA", QString::number(device.id),
                                      QString::fromStdString(device.name));
-                m_gpu_devices_stt.push_back(item);
-                m_gpu_devices_tts.push_back(std::move(item));
+                if (!disable_stt_cuda) m_gpu_devices_stt.push_back(item);
+                if (!disable_tts_cuda) m_gpu_devices_tts.push_back(item);
                 break;
             }
             case gpu_tools::api_t::rocm: {
+                if (disable_stt_hip && disable_tts_hip) return;
                 auto item = QStringLiteral("%1, %2, %3")
                                 .arg("ROCm", QString::number(device.id),
                                      QString::fromStdString(device.name));
-                m_gpu_devices_stt.push_back(item);
-                m_gpu_devices_tts.push_back(std::move(item));
+                if (!disable_stt_hip) m_gpu_devices_stt.push_back(item);
+                if (!disable_tts_hip) m_gpu_devices_tts.push_back(item);
                 m_rocm_gpu_versions.push_back(
                     QString::fromStdString(device.platform_name));
                 break;
@@ -1606,19 +1651,6 @@ void settings::set_gpu_scan_opencl(bool value) {
     if (value != gpu_scan_opencl()) {
         setValue(QStringLiteral("gpu_scan_opencl"), value);
         emit gpu_scan_opencl_changed();
-
-        set_restart_required(true);
-    }
-}
-
-bool settings::gpu_scan_opencl_always() const {
-    return value(QStringLiteral("gpu_scan_opencl_always"), false).toBool();
-}
-
-void settings::set_gpu_scan_opencl_always(bool value) {
-    if (value != gpu_scan_opencl_always()) {
-        setValue(QStringLiteral("gpu_scan_opencl_always"), value);
-        emit gpu_scan_opencl_always_changed();
 
         set_restart_required(true);
     }

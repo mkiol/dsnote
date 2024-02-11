@@ -132,9 +132,6 @@ class settings : public QSettings, public singleton<settings> {
                    gpu_scan_hip_changed)
     Q_PROPERTY(bool gpu_scan_opencl READ gpu_scan_opencl WRITE
                    set_gpu_scan_opencl NOTIFY gpu_scan_opencl_changed)
-    Q_PROPERTY(
-        bool gpu_scan_opencl_always READ gpu_scan_opencl_always WRITE
-            set_gpu_scan_opencl_always NOTIFY gpu_scan_opencl_always_changed)
     Q_PROPERTY(bool stt_use_gpu READ stt_use_gpu WRITE set_stt_use_gpu NOTIFY
                    stt_use_gpu_changed)
     Q_PROPERTY(bool tts_use_gpu READ tts_use_gpu WRITE set_tts_use_gpu NOTIFY
@@ -303,13 +300,29 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(addon_flags_t)
 
+    enum gpu_feature_flags_t : unsigned int {
+        gpu_feature_none = 0,
+        gpu_feature_stt_whispercpp_cuda = 1 << 0,
+        gpu_feature_stt_whispercpp_hip = 1 << 1,
+        gpu_feature_stt_whispercpp_opencl = 1 << 2,
+        gpu_feature_stt_fasterwhisper_cuda = 1 << 3,
+        gpu_feature_tts_coqui_cuda = 1 << 4,
+        gpu_feature_tts_coqui_hip = 1 << 5,
+        gpu_feature_all =
+            gpu_feature_stt_whispercpp_cuda | gpu_feature_stt_whispercpp_hip |
+            gpu_feature_stt_whispercpp_hip | gpu_feature_stt_whispercpp_opencl |
+            gpu_feature_stt_fasterwhisper_cuda | gpu_feature_tts_coqui_cuda |
+            gpu_feature_tts_coqui_hip
+    };
+    friend QDebug operator<<(QDebug d, gpu_feature_flags_t gpu_feature_flags);
+
     settings();
 
     launch_mode_t launch_mode() const;
     void set_launch_mode(launch_mode_t launch_mode);
     QString module_checksum(const QString &name) const;
     void set_module_checksum(const QString &name, const QString &value);
-    void scan_gpu_devices();
+    void scan_gpu_devices(unsigned int gpu_feature_flags);
     void disable_gpu_scan();
     void disable_py_scan();
 #ifdef USE_DESKTOP
@@ -412,8 +425,6 @@ class settings : public QSettings, public singleton<settings> {
     void set_gpu_scan_hip(bool value);
     bool gpu_scan_opencl() const;
     void set_gpu_scan_opencl(bool value);
-    bool gpu_scan_opencl_always() const;
-    void set_gpu_scan_opencl_always(bool value);
     bool whisper_use_gpu() const;
     void set_whisper_use_gpu(bool value);
     bool stt_use_gpu() const;
@@ -577,7 +588,6 @@ class settings : public QSettings, public singleton<settings> {
     void gpu_scan_cuda_changed();
     void gpu_scan_hip_changed();
     void gpu_scan_opencl_changed();
-    void gpu_scan_opencl_always_changed();
     void whisper_use_gpu_changed();
     void stt_use_gpu_changed();
     void tts_use_gpu_changed();
