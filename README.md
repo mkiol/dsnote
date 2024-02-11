@@ -291,7 +291,7 @@ Allowed compression types: `none`, `gz`, `xz`, `tarxz`, `targz`, `zip`, `zipall`
 
 Allowed URL types: `http`, `https`, `file`
 
-Checksums are calculated for all files after unpacking. If you are adding a new model, you can use the `--generate-checksums` command line option to find the right checksums. To do this, put empty strings in both `checksum` and `checksum_quick`, save the file and run Speech Note with the mentioned option.
+Checksums are calculated for all files after unpacking. If you are adding a new model, you can use the `--gen-checksums` command line option to find the right checksums. To do this, put empty strings in both `checksum` and `checksum_quick`, save the file and run Speech Note with the mentioned option.
 
 For example:
 

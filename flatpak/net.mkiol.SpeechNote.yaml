@@ -1,6 +1,6 @@
 app-id: net.mkiol.SpeechNote
 runtime: org.kde.Platform
-runtime-version: "5.15-22.08"
+runtime-version: "5.15-23.08"
 sdk: org.kde.Sdk
 rename-desktop-file: dsnote.desktop
 rename-icon: dsnote
@@ -8,7 +8,6 @@ rename-appdata-file: dsnote.metainfo.xml
 command: dsnote
 build-options:
   strip: false
-  no-debuginfo: true
 finish-args:
   - --share=ipc
   - --share=network
@@ -22,7 +21,7 @@ finish-args:
   - --filesystem=xdg-documents
   - --filesystem=xdg-videos
   - --env=PYTORCH_TENSOREXPR=0
-  - --env=PYTHONPATH=/app/extensions/nvidia/lib/python3.10/site-packages:/app/extensions/amd/lib/python3.10/site-packages:/app/extensions/cpu/lib/python3.10/site-packages:/app/lib/python3.10/site-packages
+  - --env=PYTHONPATH=/app/extensions/nvidia/lib/python3.11/site-packages:/app/extensions/amd/lib/python3.11/site-packages:/app/extensions/cpu/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
   - --env=LD_LIBRARY_PATH=/app/extensions/nvidia/lib:/app/extensions/amd/lib:/app/extensions/cpu/lib:/app/extensions/nvidia/cuda/lib64:/app/extensions/amd/rocm/lib
   - --env=OPENCL_VENDOR_PATH=/app/opt/opencl/vendors
   - --env=PERL5LIB=/app/lib/perl5/site_perl
@@ -34,18 +33,19 @@ cleanup:
   - /man
   - /dummy
   - /include
-  - /lib/fst
   - /lib/cmake
   - /lib/pkgconfig
-  - /lib/python3.10/site-packages/nvidia*
-  - /lib/python3.10/site-packages/cmake*
-  - /lib/python3.10/site-packages/git*
-  - /lib/python3.10/site-packages/Git*
-  - /lib/python3.10/site-packages/torch/test
-  - /lib/python3.10/site-packages/torch/include
-  - /lib/python3.10/site-packages/pypinyin/__pycache__
-  - /lib/python3.10/site-packages/pandas/tests
-  - /lib/python3.10/site-packages/torchvision*
+  - /lib/python3.11/site-packages/__pycache__
+  - /lib/python3.11/site-packages/nvidia*
+  - /lib/python3.11/site-packages/cmake*
+  - /lib/python3.11/site-packages/git*
+  - /lib/python3.11/site-packages/Git*
+  - /lib/python3.11/site-packages/torch/test
+  - /lib/python3.11/site-packages/torch/include
+  - /lib/python3.11/site-packages/pypinyin/__pycache__
+  - /lib/python3.11/site-packages/pandas/tests
+  - /lib/python3.11/site-packages/torchvision*
+  - /lib/debug/opt
   - /share/cmake
   - /share/doc
   - /share/locale
@@ -55,14 +55,7 @@ cleanup:
   - /share/vim
   - /share/ffmpeg
   - /share/aclocal
-  - /bin/nasm
-  - /bin/ndisasm
-  - /bin/taglib*
   - /bin/spellout
-  - "*/cmake/*"
-  - pcre2*
-  - xz*
-  - unxz*
   - "*.a"
   - "*.la"
 add-extensions:
@@ -98,6 +91,7 @@ modules:
       - -DBUILD_STATIC_LIBS=OFF
       - -DBUILD_SHARED_LIBS=ON
     build-options:
+      no-debuginfo: true
       arch:
         aarch64:
           config-opts:
@@ -107,29 +101,12 @@ modules:
         url: https://github.com/xianyi/OpenBLAS/releases/download/v0.3.21/OpenBLAS-0.3.21.tar.gz
         sha256: f36ba3d7a60e7c8bcc54cd9aaa9b1223dd42eaf02c811791c37e8ca707c241ca
 
-  - name: xz
-    buildsystem: autotools
-    config-opts:
-      - --enable-xz
-      - --disable-xzdec
-      - --disable-lzmadec
-      - --disable-lzmainfo
-      - --disable-lzma-links
-      - --disable-scripts
-      - --disable-doc
-      - --disable-shared
-      - --enable-static
-      - --with-pic
-    sources:
-      - type: archive
-        url: https://downloads.sourceforge.net/lzmautils/xz-5.4.2.tar.gz
-        sha256: 87947679abcf77cc509d8d1b474218fd16b72281e2797360e909deaee1ac9d05
-
   - name: mbrola
     buildsystem: simple
     build-commands:
       - make
-      - "cp Bin/mbrola /app/bin"
+      - mkdir -p /app/bin
+      - cp Bin/mbrola /app/bin
     sources:
       - type: archive
         url: https://github.com/numediart/MBROLA/archive/refs/tags/3.3.tar.gz
@@ -139,18 +116,21 @@ modules:
     buildsystem: autotools
     config-opts:
       - --with-pic
+      - --enable-static
       - --with-pcaudiolib=no
       - --with-sonic=no
       - --with-speechplayer=no
       - --with-mbrola=yes
-      - --enable-static
+      - --with-extdict-ru
     sources:
       - type: archive
-        url: https://github.com/rhasspy/espeak-ng/archive/61504f6b76bf9ebbb39b07d21cff2a02b87c99ff.zip
-        sha256: 8d9ce96189d231e527af5e26f49e293f01056a886c14a7c8eac1d58e7ced45ec
+        url: https://github.com/rhasspy/espeak-ng/archive/8593723f10cfd9befd50de447f14bf0a9d2a14a4.zip
+        sha256: cc8092f23a28ccd79b1c5e62984a4c4ac1959d2d0b8193ac208d728c620bd5ed
 
   - name: boost
     buildsystem: simple
+    cleanup:
+      - /lib
     build-commands:
       - "./bootstrap.sh --prefix=/app --with-libraries=system"
       - "./b2 -j ${FLATPAK_BUILDER_N_JOBS} install"
@@ -203,6 +183,7 @@ modules:
       - "cp ./vosk_api.h /app/include"
     build-options:
       strip: true
+      no-debuginfo: true
     sources:
       - type: archive
         only-arches:
@@ -288,15 +269,15 @@ modules:
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DBUILD_SHARED_LIBS=OFF
       - -DPYBIND11_INSTALL=ON
       - -DPYBIND11_TEST=OFF
       - -DPYBIND11_FINDPYTHON=ON
+    cleanup:
+      - /share
     sources:
       - type: archive
-        url: https://github.com/pybind/pybind11/archive/refs/tags/v2.10.4.tar.gz
-        sha256: 832e2f309c57da9c1e6d4542dedd34b24e4192ecb4d62f6f4866a737454c9970
+        url: https://github.com/pybind/pybind11/archive/refs/tags/v2.11.1.tar.gz
+        sha256: d475978da0cdc2d43b73f30910786759d593a9d8ee05b1b6846d1eb16c6d2e0c
 
   - name: rnnoise
     buildsystem: autotools
@@ -414,61 +395,6 @@ modules:
         url: https://breakfastquay.com/files/releases/rubberband-3.3.0.tar.bz2
         sha256: d9ef89e2b8ef9f85b13ac3c2faec30e20acf2c9f3a9c8c45ce637f2bc95e576c
 
-  - name: ogg
-    buildsystem: autotools
-    config-opts:
-      - --enable-static=true
-      - --enable-shared=false
-      - --with-pic=yes
-    sources:
-      - type: archive
-        url: https://downloads.xiph.org/releases/ogg/libogg-1.3.5.tar.xz
-        sha256: c4d91be36fc8e54deae7575241e03f4211eb102afb3fc0775fbbc1b740016705
-
-  - name: vorbis
-    buildsystem: autotools
-    config-opts:
-      - --enable-static=true
-      - --enable-shared=false
-      - --disable-oggtest
-      - --with-pic=yes
-    sources:
-      - type: archive
-        url: https://ftp.osuosl.org/pub/xiph/releases/vorbis/libvorbis-1.3.7.tar.xz
-        sha256: b33cc4934322bcbf6efcbacf49e3ca01aadbea4114ec9589d1b1e9d20f72954b
-
-  - name: nasm
-    buildsystem: autotools
-    sources:
-      - type: archive
-        url: https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/nasm-2.15.05.tar.gz
-        sha256: 9182a118244b058651c576baa9d0366ee05983c4d4ae1d9ddd3236a9f2304997
-
-  - name: lame
-    buildsystem: autotools
-    config-opts:
-      - --enable-static=true
-      - --enable-shared=false
-      - --enable-nasm
-      - --disable-decoder
-      - --disable-analyzer-hooks
-      - --disable-frontend
-      - --with-pic=yes
-    sources:
-      - type: archive
-        url: https://altushost-swe.dl.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz
-        sha256: ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
-
-  - name: opus
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-    sources:
-      - type: archive
-        url: https://downloads.xiph.org/releases/opus/opus-1.4.tar.gz
-        sha256: c9b32b4253be5ae63d1ff16eea06b94b5f0f2951b7a02aceef58e3a3ce49c51f
-
   - name: ffmpeg
     buildsystem: autotools
     config-opts:
@@ -542,24 +468,8 @@ modules:
       - --extra-libs=-lvorbis -logg -lm
     sources:
       - type: archive
-        url: https://ffmpeg.org/releases/ffmpeg-6.0.tar.xz
-        sha256: 57be87c22d9b49c112b6d24bc67d42508660e6b718b3db89c44e47e289137082
-      - type: patch
-        path: ../patches/ffmpeg.patch
-
-  - name: taglib
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DBUILD_SHARED_LIBS=OFF
-      - -DBUILD_TESTING=OFF
-      - -DBUILD_BINDINGS=OFF
-      - -DENABLE_STATIC_RUNTIME=OFF
-    sources:
-      - type: archive
-        url: https://taglib.org/releases/taglib-1.13.1.tar.gz
-        sha256: c8da2b10f1bfec2cd7dbfcd33f4a2338db0765d851a50583d410bacf055cfd0b
+        url: https://ffmpeg.org/releases/ffmpeg-6.1.1.tar.xz
+        sha256: 8684f4b00f94b85461884c3719382f1261f0d9eb3d59640a1f4ac0873616f968
 
   - name: whispercpp-openblas
     buildsystem: cmake-ninja
@@ -620,6 +530,8 @@ modules:
     only-arches:
       - x86_64
     buildsystem: cmake-ninja
+    build-options:
+      no-debuginfo: true
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
@@ -690,6 +602,8 @@ modules:
 
   - name: qhotkey
     buildsystem: cmake-ninja
+    build-options:
+      no-debuginfo: true
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
@@ -725,6 +639,8 @@ modules:
     only-arches:
       - x86_64
     buildsystem: simple
+    build-options:
+      no-debuginfo: true
     build-commands:
       - ./configure.gnu -des
       - make -j${FLATPAK_BUILDER_N_JOBS}
@@ -743,6 +659,8 @@ modules:
     only-arches:
       - x86_64
     buildsystem: simple
+    build-options:
+      no-debuginfo: true
     cleanup:
       - /opt/oneapi
     build-commands:
@@ -756,10 +674,10 @@ modules:
     only-arches:
       - x86_64
     buildsystem: cmake-ninja
+    build-options:
+      no-debuginfo: true
     cleanup:
       - /bin
-      - /include
-      - /lib/cmake
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DONEDNN_LIBRARY_TYPE=STATIC
@@ -777,7 +695,7 @@ modules:
     buildsystem: simple
     cleanup:
       - /bin
-      - /lib/python3.10/site-packages/pybind11*
+      - /lib/python3.11/site-packages/pybind11*
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "pybind11" --no-build-isolation
@@ -791,6 +709,7 @@ modules:
       - x86_64
     buildsystem: cmake-ninja
     build-options:
+      no-debuginfo: true
       env:
         CTRANSLATE2_ROOT: /app/extensions/cpu
     cleanup:
@@ -810,7 +729,7 @@ modules:
       - -DCMAKE_INSTALL_PREFIX=/app/extensions/cpu
       - -DCMAKE_SYSTEM_PREFIX_PATH=/app
     post-install:
-      - rm -rf ${FLATPAK_DEST}/lib/python3.10/site-packages/ctranslate2*
+      - rm -rf ${FLATPAK_DEST}/lib/python3.11/site-packages/ctranslate2*
       - mkdir -p ${FLATPAK_DEST}/extensions/cpu
       - cd python && python setup.py bdist_wheel
       - pip3 install --verbose --exists-action=i --no-index --prefix=${FLATPAK_DEST}/extensions/cpu --no-build-isolation python/dist/*.whl
@@ -824,10 +743,6 @@ modules:
 
   - name: html2md
     buildsystem: cmake-ninja
-    cleanup:
-      - /bin
-      - /include
-      - /lib/cmake
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON

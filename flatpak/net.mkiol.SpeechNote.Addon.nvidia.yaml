@@ -1,6 +1,8 @@
 id: net.mkiol.SpeechNote.Addon.nvidia
 runtime: net.mkiol.SpeechNote
-sdk: org.kde.Sdk//5.15-22.08
+sdk: org.kde.Sdk//5.15-23.08
+sdk-extensions: 
+  - org.freedesktop.Sdk.Extension.llvm16
 build-extension: true
 appstream-compose: false
 build-options:
@@ -74,6 +76,10 @@ modules:
     only-arches:
       - x86_64
     buildsystem: cmake-ninja
+    build-options:
+      env:
+        HOST_COMPILER: /usr/lib/sdk/llvm16/bin/clang++
+        CUDAHOSTCXX: /usr/lib/sdk/llvm16/bin/clang++
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
@@ -104,6 +110,7 @@ modules:
       strip: true
     cleanup:
       - /cuda/targets/x86_64-linux/lib/libcudnn_*train*
+      - /cuda/targets/x86_64-linux/include
       - /cuda/include
     build-commands:
       - mkdir -p ${FLATPAK_DEST}/cuda/include
@@ -172,6 +179,7 @@ modules:
     cleanup:
       - /bin
       - /include
+      - /share/doc
       - /lib/cmake
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
@@ -192,7 +200,7 @@ modules:
     buildsystem: simple
     cleanup:
       - /bin
-      - /lib/python3.10/site-packages/pybind11*
+      - /lib/python3.11/site-packages/pybind11*
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "pybind11" --no-build-isolation
@@ -204,10 +212,10 @@ modules:
   - name: ctranslate2
     only-arches:
       - x86_64
-    buildsystem: cmake-ninja
+    buildsystem: cmake
     build-options:
       env:
-        PYTHONPATH: /app/extensions/nvidia/lib/python3.10/site-packages:/app/lib/python3.10/site-packages
+        PYTHONPATH: /app/extensions/nvidia/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
         CTRANSLATE2_ROOT: /app/extensions/nvidia
     cleanup:
       - /bin
@@ -221,7 +229,7 @@ modules:
       - -DWITH_CUDNN=ON
       - -DOPENMP_RUNTIME=COMP
       - -DCUDA_ARCH_LIST=5.0 5.2 5.3 6.0 6.1 6.2 7.0 7.2 7.5 8.0 8.6 8.7 8.9 9.0 9.0
-      - -DCUDA_NVCC_FLAGS=-Xfatbin=-compress-all
+      - -DCUDA_NVCC_FLAGS=-Xfatbin=-compress-all -allow-unsupported-compiler -ccbin /usr/lib/sdk/llvm16/bin/clang++
       - -DWITH_MKL=ON
       - -DWITH_DNNL=ON
       - -DWITH_RUY=ON
@@ -229,6 +237,7 @@ modules:
       - -DCUDA_TOOLKIT_ROOT_DIR=/app/extensions/nvidia/cuda
       - -DCMAKE_CXX_FLAGS=-msse4.1 -DTHRUST_IGNORE_CUB_VERSION_CHECK=1
       - -DCMAKE_SYSTEM_PREFIX_PATH=/app
+      - -DCMAKE_VERBOSE_MAKEFILE=ON
     post-install:
       - cd python && python setup.py bdist_wheel
       - pip3 install --verbose --exists-action=i --no-index --prefix=${FLATPAK_DEST} --no-build-isolation python/dist/*.whl
@@ -247,22 +256,22 @@ modules:
     cleanup:
       - /bin/convert*
       - /bin/torch*
-      - /lib/python3.10/site-packages/nvidia*
-      - /lib/python3.10/site-packages/torch/include
+      - /lib/python3.11/site-packages/nvidia*
+      - /lib/python3.11/site-packages/torch/include
     build-options:
       strip: true
       env:
-        PYTHONPATH: /app/extensions/nvidia/lib/python3.10/site-packages:/app/lib/python3.10/site-packages
+        PYTHONPATH: /app/extensions/nvidia/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} torch torchaudio --no-build-isolation
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/96/82/0966469ded5946cb4c18dd11b04eac78c943269fc79d290740d6477005e8/torch-2.1.1-cp310-cp310-manylinux1_x86_64.whl
-        sha256: 5ebc43f5355a9b7be813392b3fb0133991f0380f6f0fcc8218d5468dc45d1071
+        url: https://files.pythonhosted.org/packages/65/1f/de6bc1b246531db81d9a6afc491356b17d70e6c898e16f564970849f69b6/torch-2.1.1-cp311-cp311-manylinux1_x86_64.whl
+        sha256: 98fea993639b0bb432dfceb7b538f07c0f1c33386d63f635219f49254968c80f
       - type: file
-        url: https://files.pythonhosted.org/packages/2a/58/18754a3e193ba5fb6097830d51b788574c43ed30f9adf8106cdfd5315ad1/torchaudio-2.1.1-cp310-cp310-manylinux1_x86_64.whl
-        sha256: e73ee8e52304abff5e7ecdb9560e70b65f471ee5a528d2279af491ece875dd69
+        url: https://files.pythonhosted.org/packages/c9/ea/e6d473fbc9ba5cdad16b9afcc64f767c049c73a6dc4064d60a3b26706d1d/torchaudio-2.1.1-cp311-cp311-manylinux1_x86_64.whl
+        sha256: c64f72122b6225a5c6dbd957360933b7ddf65327d755ee182221ced01ca38c4d
       - type: file
         url: https://files.pythonhosted.org/packages/37/6d/121efd7382d5b0284239f4ab1fc1590d86d34ed4a4a2fdb13b30ca8e5740/nvidia_cublas_cu12-12.1.3.1-py3-none-manylinux1_x86_64.whl
         sha256: ee53ccca76a6fc08fb9701aa95b6ceb242cdaab118c3bb152af4e579af792728

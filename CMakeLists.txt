@@ -191,7 +191,6 @@ set(translations_resource_file "${CMAKE_BINARY_DIR}/translations.qrc")
 
 set(xz_path "xz")
 if(WITH_FLATPAK)
-    set(xz_path "/app/bin/xz")
     set(rpath_install_dir "${CMAKE_INSTALL_PREFIX}/lib")
 elseif(BUILD_XZ)
     set(xz_path "${external_bin_dir}/xz")
