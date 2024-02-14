@@ -84,8 +84,19 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.5.0-beta" date="2024-02-07">
+    <release version="4.5.0-beta" date="2024-02-14">
       <description>
+      <p>User Interface:</p>
+      <ul>
+      <li>Import subtitles embedded into video file.
+          If your video file contains one or many subtitle streams, you can import the selected subtitles into notebook.</li>
+      <li>Unified file importing.
+          Text, subtitles, audio and video files can be imported using unified menu bar option 'Import from a file'.
+      <li>Settings option to enable/disable remembering the last note.
+          If the option is disabled, the last note will not be available after restarting the app.</li>
+      <li>Speech Note has been translated into Ukrainian and Russian languages.
+          Many thanks to Vovkiv for this contribution!
+      </ul>
       <p>Text to Speech:</p>
       <ul>
       <li>New voice for Persian language: 'Piper Gyro Medium'</li>

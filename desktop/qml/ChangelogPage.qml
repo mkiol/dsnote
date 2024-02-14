@@ -18,7 +18,19 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Text to Speech") + ":</p>
+        text: "<p>" + qsTr("User Interface") + ":</p>
+        <ul>
+        <li>Import subtitles embedded into video file.
+            If your video file contains one or many subtitle streams, you can import the selected subtitles into notebook.
+        <li>Unified file importing.
+            Text, subtitles, audio and video files can be imported using unified menu bar option <i>Import from a file</i>.
+        <li>Settings option to enable/disable remembering the last note.
+            If the option is disabled, the last note will not be available after restarting the app.
+            (<i>User Interface</i> &rarr; <i>Remember the last note</i>)</li>
+        <li><i>Speech Note</i> has been translated into Ukrainian and Russian languages.
+            Many thanks to <i>Vovkiv</i> for this contribution!
+        </ul>
+        <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
         <li>New voice for Persian language: <i>Piper Gyro Medium</i></li>
         </ul>

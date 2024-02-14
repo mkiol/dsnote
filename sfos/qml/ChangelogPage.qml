@@ -33,6 +33,11 @@ Page {
             }
 
             LogItem {
+                title: "Settings option to remember the last note"
+                description: "If the option is disabled, the last note will not be available after restarting the app."
+            }
+
+            LogItem {
                 title: "New translator models"
                 description: "New models: Greek to English, Maltese to English, Slovenian to English, Turkish to English"
             }
@@ -40,6 +45,11 @@ Page {
             LogItem {
                 title: "New voice for Persian language"
                 description: "New voice enabled with Piper model"
+            }
+
+            LogItem {
+                title: "Speech Note translated into Ukrainian and Russian"
+                description: "Many thanks to Vovkiv for this contribution!"
             }
 
             SectionHeader {
