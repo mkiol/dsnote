@@ -316,6 +316,8 @@ set(dsnote_lib_sources
     ${sources_dir}/downloader.cpp
     ${sources_dir}/recorder.hpp
     ${sources_dir}/recorder.cpp
+    ${sources_dir}/media_converter.hpp
+    ${sources_dir}/media_converter.cpp
 )
 
 if(WITH_DESKTOP)

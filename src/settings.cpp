@@ -540,25 +540,6 @@ QString settings::file_audio_open_dir() const {
     return dir;
 }
 
-QUrl settings::file_audio_open_dir_url() const {
-    return QUrl::fromLocalFile(file_audio_open_dir());
-}
-
-void settings::set_file_audio_open_dir(const QString& value) {
-    if (file_audio_open_dir() != value) {
-        setValue(QStringLiteral("file_audio_open_dir"), value);
-        emit file_audio_open_dir_changed();
-    }
-}
-
-void settings::set_file_audio_open_dir_url(const QUrl& value) {
-    set_file_audio_open_dir(value.toLocalFile());
-}
-
-QString settings::file_audio_open_dir_name() const {
-    return file_audio_open_dir_url().fileName();
-}
-
 settings::mode_t settings::mode() const {
     return static_cast<mode_t>(
         value(QStringLiteral("mode"), static_cast<int>(mode_t::Stt)).toInt());

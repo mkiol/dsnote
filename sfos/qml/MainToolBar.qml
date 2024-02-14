@@ -15,7 +15,9 @@ import harbour.dsnote.Dsnote 1.0
 PullDownMenu {
     id: root
 
-    busy: app.busy || service.busy || app.state === DsnoteApp.StateTranscribingFile
+    busy: app.busy || service.busy ||
+          app.state === DsnoteApp.StateTranscribingFile ||
+          app.state === DsnoteApp.StateExtractingSubtitles
 
     MenuItem {
         text: qsTr("About %1").arg(APP_NAME)
@@ -40,7 +42,7 @@ PullDownMenu {
                   app.state === DsnoteApp.StateListeningSingleSentence ||
                   app.state === DsnoteApp.StateIdle ||
                   app.state === DsnoteApp.StatePlayingSpeech)
-        text: qsTr("Transcribe a file")
+        text: qsTr("Import from a file")
         onClicked: {
             pageStack.push(fileReadDialog)
         }

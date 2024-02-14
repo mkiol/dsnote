@@ -22,7 +22,6 @@
 
 #include "april_engine.hpp"
 #include "coqui_engine.hpp"
-#include "cpu_tools.hpp"
 #include "ds_engine.hpp"
 #include "espeak_engine.hpp"
 #include "fasterwhisper_engine.hpp"
@@ -1813,8 +1812,8 @@ void speech_service::handle_speech_to_file(const tts_partial_result_t &result) {
                                 speech_service::state_t::writing_speech_to_file)
                                 compressor.cancel();
                         });
-
-                compressor.compress_async(
+                
+                compressor.compress_to_file_async(
                     std::move(input_files), out_file.toStdString(),
                     media_format_from_audio_format(format),
                     media_quality_from_audio_quality(quality),
@@ -1870,11 +1869,11 @@ void speech_service::handle_tts_queue() {
     if (!result.audio_file_path.isEmpty()) {
         if (result.audio_format != tts_engine::audio_format_t::wav) {
             auto audio_file_wav = result.audio_file_path + ".wav";
-            media_compressor{}.decompress(
+            media_compressor{}.decompress_to_file(
                 {result.audio_file_path.toStdString()},
                 audio_file_wav.toStdString(),
                 {/*mono=*/false, /*sample_rate_16=*/false,
-                 /*stream_index=*/-1});
+                 /*stream=*/{}});
             result.audio_file_path = std::move(audio_file_wav);
             result.audio_format = tts_engine::audio_format_t::wav;
             result.remove_audio_file = true;
@@ -2333,6 +2332,8 @@ QVariantMap speech_service::features_availability() {
         auto py_availability = py_executor::instance()->libs_availability;
         if (py_availability) {
             qDebug() << "features availability ready";
+            unsigned int gpu_feature_flags =
+                settings::gpu_feature_flags_t::gpu_feature_none;
 #ifdef ARCH_X86_64
             auto has_cuda = gpu_tools::has_cuda();
             auto has_cudnn = gpu_tools::has_cudnn();
@@ -2341,11 +2342,15 @@ QVariantMap speech_service::features_availability() {
                 "coqui-tts",
                 QVariantList{py_availability->coqui_tts, "Coqui TTS"});
 #ifdef ARCH_X86_64
+            bool tts_coqui_cuda =
+                py_availability->coqui_tts && py_availability->torch_cuda;
             m_features_availability.insert(
                 "coqui-tts-gpu",
-                QVariantList{
-                    py_availability->coqui_tts && py_availability->torch_cuda,
-                    "Coqui TTS " + tr("GPU acceleration")});
+                QVariantList{tts_coqui_cuda,
+                             "Coqui TTS " + tr("GPU acceleration")});
+            if (tts_coqui_cuda)
+                gpu_feature_flags |=
+                    settings::gpu_feature_flags_t::gpu_feature_tts_coqui_cuda;
 #endif
             m_features_availability.insert(
                 "coqui-tts-ja", QVariantList{py_availability->coqui_tts &&
@@ -2396,11 +2401,15 @@ QVariantMap speech_service::features_availability() {
                 QVariantList{py_availability->faster_whisper,
                              "Faster Whisper STT"});
 #ifdef ARCH_X86_64
+            bool stt_fasterwhisper_cuda =
+                py_availability->faster_whisper && has_cuda && has_cudnn;
             m_features_availability.insert(
                 "faster-whisper-stt-gpu",
-                QVariantList{
-                    py_availability->faster_whisper && has_cuda && has_cudnn,
-                    "Faster Whisper STT " + tr("GPU acceleration")});
+                QVariantList{stt_fasterwhisper_cuda,
+                             "Faster Whisper STT " + tr("GPU acceleration")});
+            if (stt_fasterwhisper_cuda)
+                gpu_feature_flags |= settings::gpu_feature_flags_t::
+                    gpu_feature_stt_fasterwhisper_cuda;
 #endif
             m_features_availability.insert(
                 "punctuator", QVariantList{py_availability->transformers,
@@ -2420,19 +2429,33 @@ QVariantMap speech_service::features_availability() {
                                            QVariantList{mnt, "Translator"});
 
 #ifdef ARCH_X86_64
+            bool stt_whispercpp_cuda = whisper_engine::has_cuda();
             m_features_availability.insert(
                 "whispercpp-stt-cuda",
                 QVariantList{whisper_engine::has_cuda(),
                              "whisper.cpp STT CUDA " + tr("GPU acceleration")});
+            if (stt_whispercpp_cuda)
+                gpu_feature_flags |= settings::gpu_feature_flags_t::
+                    gpu_feature_stt_whispercpp_cuda;
+
+            bool stt_whispercpp_hip = whisper_engine::has_hip();
             m_features_availability.insert(
                 "whispercpp-stt-hip",
-                QVariantList{whisper_engine::has_hip(),
+                QVariantList{stt_whispercpp_hip,
                              "whisper.cpp STT ROCm " + tr("GPU acceleration")});
+            if (stt_whispercpp_hip)
+                gpu_feature_flags |= settings::gpu_feature_flags_t::
+                    gpu_feature_stt_whispercpp_hip;
+
+            bool stt_whispercpp_opencl = whisper_engine::has_opencl();
             m_features_availability.insert(
                 "whispercpp-stt-opencl",
                 QVariantList{
-                    whisper_engine::has_opencl(),
+                    stt_whispercpp_opencl,
                     "whisper.cpp STT OpenCL " + tr("GPU acceleration")});
+            if (stt_whispercpp_opencl)
+                gpu_feature_flags |= settings::gpu_feature_flags_t::
+                    gpu_feature_stt_whispercpp_opencl;
 #endif
             auto tts_rhvoice = rhvoice_engine::available();
             m_features_availability.insert(
@@ -2469,7 +2492,7 @@ QVariantMap speech_service::features_availability() {
                  /*ttt_hftc=*/py_availability->transformers,
                  /*option_r=*/has_uroman});
 
-            settings::instance()->scan_gpu_devices();
+            settings::instance()->scan_gpu_devices(gpu_feature_flags);
 
             refresh_status();
 

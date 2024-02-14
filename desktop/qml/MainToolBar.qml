@@ -93,34 +93,29 @@ ToolBar {
                     y: fileButton.height
 
                     MenuItem {
-                        text: qsTr("Open a text file")
+                        text: qsTr("Import from a file")
                         icon.name: "document-open-symbolic"
+                        enabled: !_settings.translator_mode &&
+                            (app.state === DsnoteApp.StateListeningManual ||
+                            app.state === DsnoteApp.StateListeningAuto ||
+                            app.state === DsnoteApp.StateListeningSingleSentence ||
+                            app.state === DsnoteApp.StateIdle ||
+                            app.state === DsnoteApp.StatePlayingSpeech)
                         onClicked: {
-                            textFileReadDialog.open()
+                            fileReadDialog.open()
                         }
-                    }
-
-                    MenuItem {
-                        text: qsTr("Transcribe a file")
-                        icon.name: "document-open-symbolic"
-                        enabled: !_settings.translator_mode && app.stt_configured &&
-                                 (app.state === DsnoteApp.StateListeningManual ||
-                                  app.state === DsnoteApp.StateListeningAuto ||
-                                  app.state === DsnoteApp.StateListeningSingleSentence ||
-                                  app.state === DsnoteApp.StateIdle ||
-                                  app.state === DsnoteApp.StatePlayingSpeech)
-                        onClicked: fileReadDialog.open()
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Convert audio from an existing audio or video file into text.")
+                        ToolTip.text: qsTr("Import a note from a file.") + " " +
+                                      qsTr("If the file is a media file, the audio is converted to text.")
                         hoverEnabled: true
                     }
 
                     MenuSeparator {}
 
                     MenuItem {
-                        text: qsTr("Save to a text file")
+                        text: qsTr("Export to a text file")
                         icon.name: "document-save-symbolic"
                         enabled: app.note.length !== 0
                         onClicked: {
@@ -135,7 +130,7 @@ ToolBar {
                     }
 
                     MenuItem {
-                        text: qsTr("Save the translation to a text file")
+                        text: qsTr("Export the translation to a text file")
                         icon.name: "document-save-symbolic"
                         enabled: app.translated_text.length !== 0 && _settings.translator_mode
                         onClicked: {
@@ -296,7 +291,7 @@ ToolBar {
 
         property bool translation: false
 
-        title: qsTr("Save File")
+        title: qsTr("Export to a file")
         selectedNameFilter: {
             switch (_settings.translator_mode ? _settings.mnt_text_format : _settings.stt_tts_text_format) {
             case Settings.TextFormatSubRip: return qsTr("SRT Subtitles") + " (*.srt)"
@@ -323,34 +318,19 @@ ToolBar {
     }
 
     Dialogs.FileDialog {
-        id: textFileReadDialog
+        id: fileReadDialog
 
-        title: qsTr("Open File")
+        title: qsTr("Import from a file")
         nameFilters: [
-            qsTr("All supported files") + " (*.txt *.srt)",
+            qsTr("All supported files") + " (*.txt *.srt *.ass *.ssa *.sub *.vtt *.wav *.mp3 *.ogg *.oga *.ogx *.opus *.spx *.flac *.m4a *.aac *.mp4 *.mkv *.ogv *.webm)",
             qsTr("All files") + " (*)"]
         folder: _settings.file_open_dir_url
         selectExisting: true
         selectMultiple: false
         onAccepted: {
             var file_path =
-                _settings.file_path_from_url(textFileReadDialog.fileUrl)
-            appWin.openTextFile(file_path)
-        }
-    }
-
-    Dialogs.FileDialog {
-        id: fileReadDialog
-
-        title: qsTr("Open File")
-        nameFilters: [
-            qsTr("All supported files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.spx *.flac *.m4a *.aac *.mp4 *.mkv *.ogv *.webm)",
-            qsTr("All files") + " (*)"]
-        folder: _settings.file_audio_open_dir_url
-        selectExisting: true
-        selectMultiple: false
-        onAccepted: {
-            appWin.transcribeFile(fileReadDialog.fileUrl)
+                _settings.file_path_from_url(fileReadDialog.fileUrl)
+            appWin.openFile(file_path)
         }
     }
 }

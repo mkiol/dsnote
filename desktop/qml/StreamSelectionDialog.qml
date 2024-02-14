@@ -12,8 +12,12 @@ import QtQuick.Layouts 1.3
 Dialog {
     id: root
 
-    property var streams
-    property int selectedId: 0
+    property var audioStreams
+    property var subtitlesStreams
+    property int selectedIndex: 0
+
+    readonly property bool hasAudio: audioStreams !== undefined && audioStreams.length > 0
+    readonly property bool hasSubtitles: subtitlesStreams !== undefined && subtitlesStreams.length > 0
 
     modal: true
     width: Math.min(implicitWidth, parent.width - 2 * appWin.padding)
@@ -21,8 +25,13 @@ Dialog {
     closePolicy: Popup.CloseOnEscape
     clip: true
 
+    function updateSelectedIndex(name) {
+        selectedIndex = parseInt(name.substring(name.lastIndexOf("(") + 1, name.lastIndexOf(")")))
+    }
+
     onOpened: {
-        combo.currentIndex = 0
+        comboAudio.currentIndex = 0
+        comboSubtitles.currentIndex = 0
     }
 
     header: Item {}
@@ -46,13 +55,6 @@ Dialog {
                 onClicked: root.reject()
                 Keys.onEscapePressed: root.reject()
             }
-
-            Button {
-                text: qsTr("Transcribe selected stream")
-                icon.name: "document-open-symbolic"
-                Keys.onReturnPressed: root.accept()
-                onClicked: root.accept()
-            }
         }
     }
 
@@ -60,22 +62,76 @@ Dialog {
         id: column
 
         width: parent.width
-        spacing: appWin.padding
+        spacing: appWin.padding * 2
 
         Label {
             Layout.fillWidth: true
             wrapMode: Text.Wrap
-            text: qsTr("The file contains multiple audio streams. Select which one you want to process.")
+            text: qsTr("The file contains multiple streams. Select which one you want to process.")
             font.pixelSize: appWin.textFontSizeBig
         }
 
-        ComboBox {
-            id: combo
+        ColumnLayout {
+            visible: root.hasAudio
+            Layout.fillWidth: true
+            spacing: appWin.padding
 
-            model: root.streams
-            onActivated: {
-                var name = displayText
-                root.selectedId = parseInt(name.substring(name.lastIndexOf("(") + 1, name.lastIndexOf(")")))
+            SectionLabel {
+                Layout.fillWidth: true
+                text: qsTr("Audio streams")
+            }
+
+            ComboBox {
+                id: comboAudio
+
+                Layout.fillWidth: true
+                model: root.audioStreams
+            }
+
+            Button {
+                Layout.alignment: Qt.AlignRight
+                text: qsTr("Transcribe selected audio stream")
+                icon.name: "document-open-symbolic"
+                Keys.onReturnPressed: {
+                    root.updateSelectedIndex(comboAudio.displayText)
+                    root.accept()
+                }
+                onClicked: {
+                    root.updateSelectedIndex(comboAudio.displayText)
+                    root.accept()
+                }
+            }
+        }
+
+        ColumnLayout {
+            visible: root.hasSubtitles
+            Layout.fillWidth: true
+            spacing: appWin.padding
+
+            SectionLabel {
+                Layout.fillWidth: true
+                text: qsTr("Subtitles")
+            }
+
+            ComboBox {
+                id: comboSubtitles
+
+                Layout.fillWidth: true
+                model: root.subtitlesStreams
+            }
+
+            Button {
+                Layout.alignment: Qt.AlignRight
+                text: qsTr("Import selected subtitles")
+                icon.name: "document-open-symbolic"
+                Keys.onReturnPressed: {
+                    root.updateSelectedIndex(comboSubtitles.displayText)
+                    root.accept()
+                }
+                onClicked: {
+                    root.updateSelectedIndex(comboSubtitles.displayText)
+                    root.accept()
+                }
             }
         }
     }

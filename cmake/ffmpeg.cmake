@@ -1,5 +1,5 @@
-set(ffmpeg_source_url "https://ffmpeg.org/releases/ffmpeg-6.0.tar.xz")
-set(ffmpeg_checksum "57be87c22d9b49c112b6d24bc67d42508660e6b718b3db89c44e47e289137082")
+set(ffmpeg_source_url "https://ffmpeg.org/releases/ffmpeg-6.1.1.tar.xz")
+set(ffmpeg_checksum "8684f4b00f94b85461884c3719382f1261f0d9eb3d59640a1f4ac0873616f968")
 
 set(lame_source_url "https://altushost-swe.dl.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz")
 set(lame_checksum "ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e")
@@ -101,6 +101,11 @@ set(ffmpeg_opts
     --enable-encoder=pcm_s16le
     --enable-encoder=libopus
     --enable-encoder=flac
+    --enable-encoder=srt
+    --enable-encoder=subrip
+    --enable-encoder=ass
+    --enable-encoder=ssa
+    --enable-encoder=webvtt
     --enable-decoder=pcm_u8
     --enable-decoder=pcm_u32le
     --enable-decoder=pcm_u32be
@@ -135,10 +140,20 @@ set(ffmpeg_opts
     --enable-decoder=ac3
     --enable-decoder=ac3_fixed
     --enable-decoder=eac3
+    --enable-decoder=srt
+    --enable-decoder=subrip
+    --enable-decoder=ass
+    --enable-decoder=ssa
+    --enable-decoder=webvtt
+    --enable-decoder=vplayer
+    --enable-decoder=microdvd
     --enable-muxer=mp3
     --enable-muxer=ogg
     --enable-muxer=wav
     --enable-muxer=flac
+    --enable-muxer=srt
+    --enable-muxer=ass
+    --enable-muxer=webvtt
     --enable-demuxer=aac
     --enable-demuxer=mp3
     --enable-demuxer=mov
@@ -147,6 +162,10 @@ set(ffmpeg_opts
     --enable-demuxer=flac
     --enable-demuxer=wav
     --enable-demuxer=mpegvideo
+    --enable-demuxer=srt
+    --enable-demuxer=ass
+    --enable-demuxer=webvtt
+    --enable-demuxer=microdvd
     --enable-parser=aac
     --enable-parser=aac_latm
     --enable-parser=ac3

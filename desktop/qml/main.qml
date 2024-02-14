@@ -34,28 +34,16 @@ ApplicationWindow {
 
     property var _dialogPage
 
-    function openTextFile(path) {
+    function openFile(path) {
         if (app.note.length > 0) {
-            addTextDialog.addHandler = function(){app.load_note_from_file(path, false)}
-            addTextDialog.replaceHandler = function(){app.load_note_from_file(path, true)}
+            addTextDialog.addHandler = function(){app.open_file(path, -1, false)}
+            addTextDialog.replaceHandler = function(){app.open_file(path, -1, true)}
             addTextDialog.open()
         } else {
-            app.load_note_from_file(path, true)
+            app.open_file(path, -1, true)
         }
 
         _settings.file_open_dir = path
-    }
-
-    function transcribeFile(url) {
-        if (app.note.length > 0) {
-            addTextDialog.addHandler = function(){app.transcribe_file_url(url, false)}
-            addTextDialog.replaceHandler = function(){app.transcribe_file_url(url, true)}
-            addTextDialog.open()
-        } else {
-            app.transcribe_file_url(url, true)
-        }
-
-        _settings.file_audio_open_dir_url = url
     }
 
     function openDialog(file, props) {
@@ -298,12 +286,12 @@ ApplicationWindow {
         id: streamSelectionDialog
 
         property string filePath
-        property bool replace: false
+        property string replace
 
         anchors.centerIn: parent
 
         onAccepted: {
-            app.transcribe_file(filePath, replace, selectedId)
+            app.open_file(filePath, selectedIndex, replace)
         }
     }
 
@@ -391,9 +379,10 @@ ApplicationWindow {
             if (policy)
                 app.show_desktop_notification(qsTr("Text copied to clipboard!"), "", false)
         }
-        onTranscribe_file_multiple_streams: {
+        onOpen_file_multiple_streams: {
             streamSelectionDialog.filePath = file_path
-            streamSelectionDialog.streams = streams
+            streamSelectionDialog.audioStreams = audio_streams
+            streamSelectionDialog.subtitlesStreams = subtitles_streams
             streamSelectionDialog.replace = replace
             streamSelectionDialog.open()
         }

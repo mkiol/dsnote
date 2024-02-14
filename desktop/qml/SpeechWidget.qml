@@ -56,12 +56,11 @@ RowLayout {
 
                     SpeechIndicator {
                         id: indicator
+
                         anchors.centerIn: parent
                         width: 27
                         height: 24
-                        visible: !app.busy && !service.busy &&
-                                 app.state !== DsnoteApp.StateTranscribingFile &&
-                                 app.state !== DsnoteApp.StateWritingSpeechToFile
+                        visible: !busyIndicator.running
                         status: {
                             switch (app.task_state) {
                             case DsnoteApp.TaskStateIdle: return 0;
@@ -77,12 +76,15 @@ RowLayout {
                     }
 
                     BusyIndicator {
+                        id: busyIndicator
+
                         anchors.centerIn: parent
                         width: 24
                         height: 24
                         running: app.busy || service.busy ||
                                  app.state === DsnoteApp.StateTranscribingFile ||
-                                 app.state === DsnoteApp.StateWritingSpeechToFile
+                                 app.state === DsnoteApp.StateWritingSpeechToFile ||
+                                 app.state === DsnoteApp.StateExtractingSubtitles
                         visible: running
                     }
                 }
@@ -120,6 +122,9 @@ RowLayout {
                                 return qsTr("Writing speech to file...") +
                                         (app.speech_to_file_progress > 0.0 ? " " +
                                                                              Math.round(app.speech_to_file_progress * 100) + "%" : "")
+                            if (app.state === DsnoteApp.StateExtractingSubtitles)
+                                return qsTr("Extracting subtitles...") +
+                                        (app.mc_progress > 0.0 ? " " + Math.round(app.mc_progress * 100) + "%" : "")
                             if (app.state === DsnoteApp.StateTranslating)
                                 return qsTr("Translating...") +
                                         (app.translate_progress > 0.0 ? " " +

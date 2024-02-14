@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -167,7 +167,8 @@ ApplicationWindow {
                     id: panel
 
                     property bool open: !app.connected ||
-                                        (app.state !== DsnoteApp.StateIdle && app.state !== DsnoteApp.StateTranslating) ||
+                                        (app.state !== DsnoteApp.StateIdle &&
+                                         app.state !== DsnoteApp.StateTranslating) ||
                                         root.panelAlwaysOpen
                     width: parent.width
                     enabled: open
@@ -209,9 +210,9 @@ ApplicationWindow {
                 id: fileReadDialog
 
                 FilePickerPage {
-                    nameFilters: [ '*.wav', '*.mp3', '*.ogg', '*.oga', '*.opus', '*.spx', '*.flac', '*.m4a', '*.aac', '*.mp4', '*.mkv', '*.ogv', '*.webm' ]
+                    nameFilters: [ '*.txt', '*.srt', '*.ass', '*.ssa', '*.sub', '*.vtt', '*.wav', '*.mp3', '*.ogg', '*.oga', '*.ogx', '*.opus', '*.spx', '*.flac', '*.m4a', '*.aac', '*.mp4', '*.mkv', '*.ogv', '*.webm' ]
                     onSelectedContentPropertiesChanged: {
-                        app.transcribe_file(selectedContentProperties.filePath, false)
+                        app.open_file(selectedContentProperties.filePath, -1, false)
                     }
                 }
             }
@@ -250,10 +251,11 @@ ApplicationWindow {
                 onTranscribe_done: toast.show(qsTr("File transcription is complete!"))
                 onSpeech_to_file_done: toast.show(qsTr("Speech saved to audio file!"))
                 Component.onCompleted: app.open_files(_files_to_open, false)
-                onTranscribe_file_multiple_streams: {
+                onOpen_file_multiple_streams: {
                     pageStack.push(Qt.resolvedUrl("StreamSelectionDialog.qml"),
                                    {acceptDestination: root, acceptDestinationAction: PageStackAction.Pop,
-                                    filePath: file_path, replace: replace, streams: streams})
+                                    filePath: file_path, replace: replace, audioStreams: audio_streams,
+                                       subtitlesStreams: subtitles_streams})
                 }
                 onError: {
                     switch (type) {

@@ -56,6 +56,9 @@ QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
         case dsnote_app::service_state_t::StateTranslating:
             d << "translating";
             break;
+        case dsnote_app::service_state_t::StateExtractingSubtitles:
+            d << "extracting-subtitles";
+            break;
         case dsnote_app::service_state_t::StateUnknown:
             d << "unknown";
             break;
@@ -268,6 +271,10 @@ dsnote_app::dsnote_app(QObject *parent)
                 m_open_files_delay_timer.start();
         },
         Qt::QueuedConnection);
+    connect(&m_mc, &media_converter::state_changed, this,
+            &dsnote_app::handle_mc_state_changed, Qt::QueuedConnection);
+    connect(&m_mc, &media_converter::progress_changed, this,
+            &dsnote_app::handle_mc_progress_changed, Qt::QueuedConnection);
 
     m_translator_delay_timer.setSingleShot(true);
     m_translator_delay_timer.setInterval(500);
@@ -512,8 +519,8 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
         return;
     }
 
-    switch (m_stt_text_destination) {
-        case stt_text_destination_t::note_add:
+    switch (m_text_destination) {
+        case text_destination_t::note_add:
             make_undo();
             set_note(
                 insert_to_note(settings::instance()->note(), text, lang,
@@ -525,16 +532,16 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
             emit text_changed();
             emit intermediate_text_changed();
             break;
-        case stt_text_destination_t::note_replace:
+        case text_destination_t::note_replace:
             make_undo();
             set_note(insert_to_note(QString{}, text, lang,
                                     settings::instance()->insert_mode()));
-            m_stt_text_destination = stt_text_destination_t::note_add;
+            m_text_destination = text_destination_t::note_add;
             this->m_intermediate_text.clear();
             emit text_changed();
             emit intermediate_text_changed();
             break;
-        case stt_text_destination_t::active_window:
+        case text_destination_t::active_window:
 #ifdef USE_X11_FEATURES
             m_fake_keyboard.emplace();
             m_fake_keyboard->send_text(text);
@@ -543,7 +550,7 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
             qWarning() << "send to keyboard is not implemented";
 #endif
             break;
-        case stt_text_destination_t::clipboard:
+        case text_destination_t::clipboard:
             QGuiApplication::clipboard()->setText(text);
             emit text_decoded_to_clipboard();
             break;
@@ -1292,6 +1299,14 @@ void dsnote_app::update_service_state() {
         new_state = static_cast<service_state_t>(m_dbus_service.state());
     }
 
+    switch (m_mc.state()) {
+        case media_converter::state_t::idle:
+            break;
+        case media_converter::state_t::extracting_subtitles:
+            new_state = service_state_t::StateExtractingSubtitles;
+            break;
+    }
+
     if (m_service_state != new_state) {
         const auto old_busy = busy();
         const auto old_connected = connected();
@@ -1858,69 +1873,12 @@ void dsnote_app::cancel() {
     emit intermediate_text_changed();
 }
 
-void dsnote_app::transcribe_file(const QString &source_file, bool replace,
-                                 int stream_index) {
-    auto streams_info =
-        media_compressor{}.streams_info(source_file.toStdString());
+void dsnote_app::transcribe_file(const QString &file_path, int stream_index,
+                                 bool replace) {
+    qDebug() << "requested stream index for transcribe:" << stream_index;
 
-    if (stream_index >= 0) {
-        auto it = std::find_if(streams_info.cbegin(), streams_info.cend(),
-                               [stream_index](const auto &stream) {
-                                   return stream.index == stream_index;
-                               });
-
-        if (it == streams_info.cend()) {
-            qWarning() << "file does not contain requested stream:"
-                       << source_file << stream_index;
-
-            emit error(error_t::ErrorSttEngine);
-            return;
-        }
-    } else {
-        auto nb_audio_streams = std::count_if(
-            streams_info.cbegin(), streams_info.cend(), [](const auto &stream) {
-                return stream.media_type ==
-                       media_compressor::media_type_t::audio;
-            });
-
-        if (nb_audio_streams == 0) {
-            qWarning() << "file does not contain any audio streams"
-                       << source_file;
-
-            emit error(error_t::ErrorSttEngine);
-            return;
-        }
-
-        if (nb_audio_streams > 1) {
-            qDebug() << "file contains more that one audio stream";
-
-            QStringList streams_names;
-            for (const auto &stream : streams_info) {
-                if (stream.media_type ==
-                    media_compressor::media_type_t::audio) {
-                    streams_names.push_back(
-                        (stream.title.empty()
-                             ? tr("Unnamed stream") + " " +
-                                   QString::number(streams_names.size() + 1)
-                             : QString::fromStdString(stream.title)) +
-                        (stream.language.empty()
-                             ? QStringLiteral(" (%1)").arg(stream.index)
-                             : QStringLiteral(" / %1 (%2)")
-                                   .arg(QString::fromStdString(stream.language))
-                                   .arg(stream.index)));
-                }
-            }
-
-            emit transcribe_file_multiple_streams(source_file, streams_names,
-                                                  replace);
-            return;
-        }
-    }
-
-    qDebug() << "selected stream index:" << stream_index;
-
-    m_stt_text_destination = replace ? stt_text_destination_t::note_replace
-                                     : stt_text_destination_t::note_add;
+    m_text_destination = replace ? text_destination_t::note_replace
+                                 : text_destination_t::note_add;
 
     auto *s = settings::instance();
 
@@ -1937,36 +1895,31 @@ void dsnote_app::transcribe_file(const QString &source_file, bool replace,
 
     if (s->launch_mode() == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->stt_transcribe_file(
-            source_file, {},
+            file_path, {},
             s->whisper_translate() ? QStringLiteral("en") : QString{}, options);
     } else {
         qDebug() << "[app => dbus] call SttTranscribeFile";
 
         new_task = m_dbus_service.SttTranscribeFile(
-            source_file, {},
+            file_path, {},
             s->whisper_translate() ? QStringLiteral("en") : QString{}, options);
     }
 
     m_side_task.set(new_task);
 }
 
-void dsnote_app::transcribe_file_url(const QUrl &source_file, bool replace,
-                                     int stream_id) {
-    transcribe_file(source_file.toLocalFile(), replace, stream_id);
-}
-
 void dsnote_app::listen() {
-    m_stt_text_destination = stt_text_destination_t::note_add;
+    m_text_destination = text_destination_t::note_add;
     listen_internal();
 }
 
 void dsnote_app::listen_to_active_window() {
-    m_stt_text_destination = stt_text_destination_t::active_window;
+    m_text_destination = text_destination_t::active_window;
     listen_internal();
 }
 
 void dsnote_app::listen_to_clipboard() {
-    m_stt_text_destination = stt_text_destination_t::clipboard;
+    m_text_destination = text_destination_t::clipboard;
     listen_internal();
 }
 
@@ -1977,8 +1930,8 @@ void dsnote_app::listen_internal() {
 
     QVariantMap options;
     auto text_format =
-        m_stt_text_destination == stt_text_destination_t::note_add ||
-                m_stt_text_destination == stt_text_destination_t::note_replace
+        m_text_destination == text_destination_t::note_add ||
+                m_text_destination == text_destination_t::note_replace
             ? s->stt_tts_text_format()
             : settings::text_format_t::TextFormatRaw;
     options.insert("text_format", static_cast<int>(text_format));
@@ -2977,6 +2930,142 @@ bool dsnote_app::load_note_from_file(const QString &input_file, bool replace) {
     return true;
 }
 
+void dsnote_app::open_file(const QString &file_path, int stream_index,
+                           bool replace) {
+    if (!open_file_internal(file_path, stream_index, replace)) {
+        qWarning() << "failed to open file:" << file_path;
+        emit error(error_t::ErrorLoadNoteFromFile);
+    }
+}
+
+void dsnote_app::handle_mc_state_changed() {
+    update_service_state();
+
+    if (m_mc.state() == media_converter::state_t::idle) {
+        if (m_mc.task() == media_converter::task_t::extract_subtitles_async) {
+            update_note(m_mc.string_data(),
+                        m_text_destination == text_destination_t::note_replace);
+        }
+        m_mc.clear();
+    }
+}
+
+void dsnote_app::handle_mc_progress_changed() {
+    qDebug() << "mc progress:" << m_mc.progress();
+    emit mc_progress_changed();
+}
+
+std::optional<bool> dsnote_app::open_file_internal(const QString &file_path,
+                                                   int stream_index,
+                                                   bool replace) {
+    qDebug() << "opening file:" << file_path << stream_index;
+
+    auto media_info = media_compressor{}.media_info(file_path.toStdString());
+
+    if (media_info) {
+        qDebug() << QString::fromStdString([&]() {
+            std::ostringstream os;
+            os << *media_info;
+            return os.str();
+        }());
+
+        if (media_info->audio_streams.empty() &&
+            media_info->subtitles_streams.empty()) {
+            qWarning() << "file does not contain audio or subtitles streams";
+            return std::nullopt;
+        }
+
+        if (stream_index < 0) {
+            if ((!media_info->audio_streams.empty() &&
+                 !media_info->subtitles_streams.empty()) ||
+                media_info->audio_streams.size() > 1 ||
+                media_info->subtitles_streams.size() > 1) {
+                qDebug() << "file contains more than one stream";
+
+                auto make_streams_names =
+                    [](const std::vector<media_compressor::stream_t> &streams) {
+                        QStringList streams_names;
+                        for (const auto &stream : streams) {
+                            streams_names.push_back(
+                                (stream.title.empty()
+                                     ? tr("Unnamed stream") + " " +
+                                           QString::number(
+                                               streams_names.size() + 1)
+                                     : QString::fromStdString(stream.title)) +
+                                (stream.language.empty()
+                                     ? QStringLiteral(" (%1)").arg(stream.index)
+                                     : QStringLiteral(" / %1 (%2)")
+                                           .arg(QString::fromStdString(
+                                               stream.language))
+                                           .arg(stream.index)));
+                        }
+                        return streams_names;
+                    };
+
+                emit open_file_multiple_streams(
+                    file_path, make_streams_names(media_info->audio_streams),
+                    make_streams_names(media_info->subtitles_streams), replace);
+
+                return true;
+            }
+
+            if (!media_info->audio_streams.empty())
+                stream_index = media_info->audio_streams.front().index;
+            else
+                stream_index = media_info->subtitles_streams.front().index;
+        }
+
+        auto stream_by_id_it =
+            std::find_if(media_info->audio_streams.cbegin(),
+                         media_info->audio_streams.cend(),
+                         [stream_index](const auto &stream) {
+                             return stream.index == stream_index;
+                         });
+        if (stream_by_id_it == media_info->audio_streams.cend())
+            stream_by_id_it =
+                std::find_if(media_info->subtitles_streams.cbegin(),
+                             media_info->subtitles_streams.cend(),
+                             [stream_index](const auto &stream) {
+                                 return stream.index == stream_index;
+                             });
+        if (stream_by_id_it == media_info->subtitles_streams.cend()) {
+            qDebug() << "requested stream not found:" << stream_index;
+            return std::nullopt;
+        }
+
+        if (stream_by_id_it->media_type ==
+            media_compressor::media_type_t::audio) {
+            if (stt_configured()) {
+                qDebug() << "opening audio stream";
+                transcribe_file(file_path, stream_by_id_it->index, replace);
+            } else {
+                qWarning() << "can't transcribe because stt is not configured";
+                return std::nullopt;
+            }
+        } else if (stream_by_id_it->media_type ==
+                   media_compressor::media_type_t::subtitles) {
+            if (!m_mc.extract_subtitles_async(file_path,
+                                              stream_by_id_it->index)) {
+                qCritical() << "can't extract subtitles";
+                return std::nullopt;
+            }
+            m_text_destination = replace ? text_destination_t::note_replace
+                                         : text_destination_t::note_add;
+            return true;
+        } else {
+            qCritical() << "invalid stream type";
+            return std::nullopt;
+        }
+    } else {
+        if (!load_note_from_file(file_path, replace)) {
+            qWarning() << "can't open text file";
+            return std::nullopt;
+        }
+    }
+
+    return media_info.has_value();
+}
+
 void dsnote_app::open_next_file() {
     if (m_files_to_open.empty()) return;
 
@@ -2991,35 +3080,16 @@ void dsnote_app::open_next_file() {
         return;
     }
 
-    qDebug() << "opening file:" << m_files_to_open.front();
+    auto is_media_file = open_file_internal(
+        m_files_to_open.front(), -1,
+        m_text_destination == text_destination_t::note_replace ? true : false);
 
-    if (media_compressor{}.is_media_file(
-            m_files_to_open.front().toStdString())) {
-        if (stt_configured())
-            transcribe_file(
-                m_files_to_open.front(),
-                m_stt_text_destination == stt_text_destination_t::note_replace
-                    ? true
-                    : false);
-        else {
-            qWarning() << "can't transcribe because stt is not configured";
-            reset_files_queue();
-            return;
-        }
+    if (is_media_file) {
         m_files_to_open.pop();
+        if (!is_media_file.value()) emit can_open_next_file();
     } else {
-        if (!load_note_from_file(
-                m_files_to_open.front(),
-                m_stt_text_destination == stt_text_destination_t::note_replace
-                    ? true
-                    : false)) {
-            reset_files_queue();
-            return;
-        }
-
-        m_files_to_open.pop();
-
-        emit can_open_next_file();
+        reset_files_queue();
+        emit error(error_t::ErrorLoadNoteFromFile);
     }
 }
 
@@ -3032,8 +3102,8 @@ void dsnote_app::open_files(const QStringList &input_files, bool replace) {
         if (m_files_to_open.size() == 1) m_files_to_open.push({});
         if (!note().isEmpty()) make_undo();
         qDebug() << "opening files:" << input_files;
-        m_stt_text_destination = replace ? stt_text_destination_t::note_replace
-                                         : stt_text_destination_t::note_add;
+        m_text_destination = replace ? text_destination_t::note_replace
+                                     : text_destination_t::note_add;
         m_open_files_delay_timer.start();
     }
 }
@@ -3446,9 +3516,10 @@ void dsnote_app::player_play_voice_ref_idx(int idx) {
         QFileInfo{list.at(1)}.fileName() + "-refvoice.wav");
 
     try {
-        media_compressor{}.decompress(
+        media_compressor{}.decompress_to_file(
             {list.at(1).toStdString()}, wav_file.toStdString(),
-            {/*mono=*/false, /*sample_rate_16=*/false, /*stream_index=*/-1});
+            {/*mono=*/false, /*sample_rate_16=*/false,
+             /*stream=*/{}});
     } catch (const std::runtime_error &err) {
         qCritical() << err.what();
         return;
@@ -3570,7 +3641,7 @@ void dsnote_app::player_export_ref_voice(long long start, long long stop,
     auto wav_file_path = import_ref_voice_file_path();
 
     try {
-        media_compressor{}.compress(
+        media_compressor{}.compress_to_file(
             {wav_file_path.toStdString()}, out_file_path.toStdString(),
             media_compressor::format_t::ogg_opus,
             media_compressor::quality_t::vbr_high,
@@ -3696,6 +3767,7 @@ void dsnote_app::update_tray_state() {
         case service_state_t::StateUnknown:
         case service_state_t::StateNotConfigured:
         case service_state_t::StateBusy:
+        case service_state_t::StateExtractingSubtitles:
             m_tray.set_state(tray_icon::state_t::busy);
             break;
         case service_state_t::StateIdle:
