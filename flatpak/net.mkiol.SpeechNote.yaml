@@ -110,17 +110,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/numediart/MBROLA/archive/refs/tags/3.3.tar.gz
-        sha256: c01ded2c0a05667e6df2439c1c02b011a5d        IconButton {
-            id: undoButton
-
-            width: parent.size
-            height: parent.size
-            icon.width: width; icon.height: height
-            visible: !root.textArea.readOnly && (root.canUndo || root.canRedo)
-            icon.source: (root.canUndo ? "image://theme/icon-m-rotate-left?" : "image://theme/icon-m-rotate-right?") +
-                         (pressed ? Theme.highlightColor : Theme.primaryColor)
-            onClicked: root.undoClicked()
-        }f2bfdf49e24a524630686aea2b558
+        sha256: c01ded2c0a05667e6df2439c1c02b011a5df2bfdf49e24a524630686aea2b558
 
   - name: espeak
     buildsystem: autotools
