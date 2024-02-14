@@ -581,12 +581,18 @@ void settings::set_speech_speed(unsigned int value) {
 }
 
 QString settings::note() const {
-    return value(QStringLiteral("note"), {}).toString();
+    if (keep_last_note())
+        return value(QStringLiteral("note"), {}).toString();
+    else
+        return m_note;
 }
 
 void settings::set_note(const QString& value) {
     if (note() != value) {
-        setValue(QStringLiteral("note"), value);
+        if (keep_last_note())
+            setValue(QStringLiteral("note"), value);
+        else
+            m_note = value;
         emit note_changed();
     }
 }
@@ -1597,6 +1603,25 @@ void settings::set_sub_break_lines(bool value) {
     if (value != sub_break_lines()) {
         setValue(QStringLiteral("sub_break_lines"), value);
         emit sub_config_changed();
+    }
+}
+
+bool settings::keep_last_note() const {
+    return value(QStringLiteral("keep_last_note"), true).toBool();
+}
+
+void settings::set_keep_last_note(bool new_value) {
+    if (new_value != keep_last_note()) {
+        setValue(QStringLiteral("keep_last_note"), new_value);
+        emit keep_last_note_changed();
+
+        if (new_value) {
+            setValue(QStringLiteral("note"), m_note);
+            m_note.clear();
+        } else {
+            m_note = value(QStringLiteral("note"), {}).toString();
+            setValue(QStringLiteral("note"), {});
+        }
     }
 }
 

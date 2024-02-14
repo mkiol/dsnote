@@ -116,6 +116,19 @@ DialogPage {
 
             width: root.width
 
+            CheckBox {
+                checked: _settings.keep_last_note
+                text: qsTr("Remember the last note")
+                onCheckedChanged: {
+                    _settings.keep_last_note = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("The note will be saved automatically, so when you restart the app, your last note will always be available.")
+                hoverEnabled: true
+            }
+
             GridLayout {
                 id: grid
 

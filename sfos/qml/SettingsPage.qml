@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -32,6 +32,16 @@ Page {
 
             SectionHeader {
                 text: qsTr("User Interface")
+            }
+
+            TextSwitch {
+                checked: _settings.keep_last_note
+                automaticCheck: false
+                text: qsTr("Remember the last note")
+                description: qsTr("The note will be saved automatically, so when you restart the app, your last note will always be available.")
+                onClicked: {
+                    _settings.keep_last_note = !_settings.keep_last_note
+                }
             }
 
             ComboBox {

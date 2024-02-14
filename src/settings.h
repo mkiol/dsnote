@@ -159,6 +159,8 @@ class settings : public QSettings, public singleton<settings> {
                    set_sub_max_line_length NOTIFY sub_config_changed)
     Q_PROPERTY(bool sub_break_lines READ sub_break_lines WRITE
                    set_sub_break_lines NOTIFY sub_config_changed)
+    Q_PROPERTY(bool keep_last_note READ keep_last_note WRITE set_keep_last_note
+                   NOTIFY keep_last_note_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -445,6 +447,8 @@ class settings : public QSettings, public singleton<settings> {
     unsigned int sub_max_line_length() const;
     bool sub_break_lines() const;
     void set_sub_break_lines(bool value);
+    bool keep_last_note() const;
+    void set_keep_last_note(bool value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -592,6 +596,7 @@ class settings : public QSettings, public singleton<settings> {
     void clean_ref_voice_changed();
     void addon_flags_changed();
     void sub_config_changed();
+    void keep_last_note_changed();
 
     // service
     void models_dir_changed();
@@ -637,6 +642,7 @@ class settings : public QSettings, public singleton<settings> {
     void update_addon_flags();
 
     launch_mode_t m_launch_mode = launch_mode_t::app_stanalone;
+    QString m_note;
 };
 
 #endif  // SETTINGS_H
