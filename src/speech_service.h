@@ -112,6 +112,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         tts_engine::audio_format_t audio_format =
             tts_engine::audio_format_t::wav;
         bool remove_audio_file = false;
+        double progress = 0.0;
         bool last = false;
         int task_id = INVALID_TASK;
     };
@@ -319,24 +320,13 @@ class speech_service : public QObject, public singleton<speech_service> {
         QString options;
     };
 
-    struct counter_t {
-        size_t value = 0;
-        size_t total = 0;
-
-        inline double progress() const {
-            return total == 0 ? 0.0
-                              : static_cast<double>(value) /
-                                    static_cast<double>(total);
-        }
-    };
-
     struct task_t {
         int id = INVALID_TASK;
         engine_t engine = engine_t::stt;
         QString model_id;
         speech_mode_t speech_mode = speech_mode_t::single_sentence;
         QString out_lang;
-        counter_t counter;
+        double progress = 0.0;
         std::vector<QString> files;
         QVariantMap options;
         bool paused = false;
@@ -414,7 +404,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void handle_tts_speech_encoded(const std::string &text,
                                    const std::string &audio_file_path,
                                    tts_engine::audio_format_t format,
-                                   bool last);
+                                   double progress, bool last);
     void handle_tts_speech_encoded(tts_partial_result_t result);
     void handle_speech_to_file(const tts_partial_result_t &result);
     void handle_player_state_changed(QMediaPlayer::State new_state);

@@ -1375,9 +1375,9 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                                        const std::string &text,
                                        const std::string &audio_file_path,
                                        tts_engine::audio_format_t audio_format,
-                                       bool last) {
+                                       double progress, bool last) {
                     handle_tts_speech_encoded(text, audio_file_path,
-                                              audio_format, last);
+                                              audio_format, progress, last);
                 },
                 /*state_changed=*/
                 [this](tts_engine::state_t state) {
@@ -1681,13 +1681,14 @@ void speech_service::handle_mnt_translate_finished(
 
 void speech_service::handle_tts_speech_encoded(
     const std::string &text, const std::string &audio_file_path,
-    tts_engine::audio_format_t format, bool last) {
+    tts_engine::audio_format_t format, double progress, bool last) {
     if (m_current_task) {
         emit tts_speech_encoded(
             {/*text=*/QString::fromStdString(text),
              /*audio_file_path=*/QString::fromStdString(audio_file_path),
              /*audio_format=*/format,
              /*remove_ausio_file=*/false,
+             /*progress=*/progress,
              /*last=*/last,
              /*task_id=*/m_current_task->id});
     }
@@ -1771,14 +1772,13 @@ void speech_service::handle_speech_to_file(const tts_partial_result_t &result) {
         return;
     }
 
-    m_current_task->counter.value += result.text.size();
+    m_current_task->progress = result.progress;
     if (!result.audio_file_path.isEmpty())
         m_current_task->files.push_back(result.audio_file_path);
 
-    qDebug() << "partial speech to file progress:"
-             << m_current_task->counter.progress();
+    qDebug() << "partial speech to file progress:" << m_current_task->progress;
 
-    emit tts_speech_to_file_progress_changed(m_current_task->counter.progress(),
+    emit tts_speech_to_file_progress_changed(m_current_task->progress,
                                              result.task_id);
 
     if (result.last) {
@@ -2551,7 +2551,7 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
         restart_stt_engine(speech_mode_t::automatic, lang, out_lang, options),
         speech_mode_t::automatic,
         out_lang,
-        {},
+        0.0,
         {},
         options,
         false};
@@ -2627,7 +2627,7 @@ int speech_service::mnt_translate(const QString &text, QString lang,
                       restart_mnt_engine(lang, out_lang, options),
                       speech_mode_t::translate,
                       out_lang,
-                      {},
+                      0.0,
                       {},
                       options,
                       false};
@@ -2696,7 +2696,7 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
                       restart_stt_engine(mode, lang, out_lang, options),
                       mode,
                       out_lang,
-                      {},
+                      0.0,
                       {},
                       options,
                       false};
@@ -2768,7 +2768,7 @@ int speech_service::tts_play_speech(const QString &text, QString lang,
                       restart_tts_engine(lang, options),
                       speech_mode_t::play_speech,
                       lang,
-                      {},
+                      0.0,
                       {},
                       options,
                       false};
@@ -2827,7 +2827,7 @@ int speech_service::tts_speech_to_file(const QString &text, QString lang,
                       restart_tts_engine(lang, options),
                       speech_mode_t::speech_to_file,
                       lang,
-                      {0, static_cast<size_t>(text.size())},
+                      0.0,
                       {},
                       options,
                       false};

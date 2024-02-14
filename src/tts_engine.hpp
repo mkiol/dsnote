@@ -72,7 +72,7 @@ class tts_engine {
     struct callbacks_t {
         std::function<void(const std::string& text,
                            const std::string& audio_file_path,
-                           audio_format_t format, bool last)>
+                           audio_format_t format, double progress, bool last)>
             speech_encoded;
         std::function<void(state_t state)> state_changed;
         std::function<void()> error;

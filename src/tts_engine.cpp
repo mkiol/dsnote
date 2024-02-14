@@ -575,20 +575,29 @@ void tts_engine::process() {
         set_state(state_t::encoding);
 
         size_t speech_time = 0;
+        size_t total_tasks_nb = 0;
 
         while (!m_shutting_down && !queue.empty()) {
             auto task = std::move(queue.front());
-            queue.pop();
 
-            if (task.first) speech_time = 0;
+            if (task.first) {
+                speech_time = 0;
+                total_tasks_nb = queue.size();
+            }
+
+            queue.pop();
 
             if (task.empty() && task.last) {
                 if (m_call_backs.speech_encoded) {
                     m_call_backs.speech_encoded({}, {}, audio_format_t::wav,
-                                                true);
+                                                1.0, true);
                 }
                 continue;
             }
+
+            double progress =
+                static_cast<double>(total_tasks_nb - queue.size()) /
+                total_tasks_nb;
 
             auto output_file = path_to_output_file(task.text);
 
@@ -610,7 +619,7 @@ void tts_engine::process() {
                     LOGE("speech encoding error");
                     if (m_call_backs.speech_encoded) {
                         m_call_backs.speech_encoded(
-                            "", "", m_config.audio_format, task.last);
+                            "", "", m_config.audio_format, progress, task.last);
                     }
 
                     continue;
@@ -656,8 +665,9 @@ void tts_engine::process() {
                     }
 
                     if (m_call_backs.speech_encoded) {
-                        m_call_backs.speech_encoded(
-                            "", silence_out_file, m_config.audio_format, false);
+                        m_call_backs.speech_encoded("", silence_out_file,
+                                                    m_config.audio_format,
+                                                    progress, false);
                     }
 
                 } else if (speech_time > task.t0) {
@@ -669,7 +679,8 @@ void tts_engine::process() {
 
             if (m_call_backs.speech_encoded) {
                 m_call_backs.speech_encoded(task.text, output_file,
-                                            m_config.audio_format, task.last);
+                                            m_config.audio_format, progress,
+                                            task.last);
             }
         }
 
