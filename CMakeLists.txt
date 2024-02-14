@@ -135,7 +135,11 @@ set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libar
 Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis · Opus · TagLib · \
 libnumbertext · april-asr · html2md · maddy")
 if (WITH_DESKTOP)
-    set(info_libs_str "${info_libs_str} · Hugging Face Transformers · KDBusAddons · QHotkey")
+    set(info_libs_str "${info_libs_str} · KDBusAddons")
+
+    if (WITH_X11_FEATURES)
+        set(info_libs_str "${info_libs_str} · QHotkey")
+    endif()
 endif()
 
 project(${id} VERSION 4.5.0)
