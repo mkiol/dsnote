@@ -236,7 +236,6 @@ ToolBar {
 
                 Layout.alignment: Qt.AlignRight
                 text: qsTr("Notepad")
-                visible: app.feature_translator
                 checkable: true
                 checked: !_settings.translator_mode
                 onClicked: {
@@ -258,7 +257,6 @@ ToolBar {
 
                 Layout.alignment: Qt.AlignRight
                 text: qsTr("Translator")
-                visible: app.feature_translator
                 checkable: true
                 checked: _settings.translator_mode
                 onClicked: {

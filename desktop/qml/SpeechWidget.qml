@@ -84,7 +84,7 @@ RowLayout {
                         running: app.busy || service.busy ||
                                  app.state === DsnoteApp.StateTranscribingFile ||
                                  app.state === DsnoteApp.StateWritingSpeechToFile ||
-                                 app.state === DsnoteApp.StateExtractingSubtitles
+                                 app.state === DsnoteApp.StateImportingSubtitles
                         visible: running
                     }
                 }
@@ -122,8 +122,8 @@ RowLayout {
                                 return qsTr("Writing speech to file...") +
                                         (app.speech_to_file_progress > 0.0 ? " " +
                                                                              Math.round(app.speech_to_file_progress * 100) + "%" : "")
-                            if (app.state === DsnoteApp.StateExtractingSubtitles)
-                                return qsTr("Extracting subtitles...") +
+                            if (app.state === DsnoteApp.StateImportingSubtitles)
+                                return qsTr("Importing subtitles...") +
                                         (app.mc_progress > 0.0 ? " " + Math.round(app.mc_progress * 100) + "%" : "")
                             if (app.state === DsnoteApp.StateTranslating)
                                 return qsTr("Translating...") +

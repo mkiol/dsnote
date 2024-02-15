@@ -14,8 +14,8 @@ QDebug operator<<(QDebug d, media_converter::state_t state) {
         case media_converter::state_t::idle:
             d << "idle";
             break;
-        case media_converter::state_t::extracting_subtitles:
-            d << "extracting-subtitles";
+        case media_converter::state_t::importing_subtitles:
+            d << "importing-subtitles";
             break;
     }
 
@@ -27,8 +27,8 @@ QDebug operator<<(QDebug d, media_converter::task_t task) {
         case media_converter::task_t::none:
             d << "none";
             break;
-        case media_converter::task_t::extract_subtitles_async:
-            d << "extract-subtitles-async";
+        case media_converter::task_t::import_subtitles_async:
+            d << "import-subtitles-async";
             break;
     }
 
@@ -40,10 +40,10 @@ void media_converter::clear() {
     m_progress = 0.0;
 }
 
-bool media_converter::extract_subtitles_async(const QString& file_path,
+bool media_converter::import_subtitles_async(const QString& file_path,
                                               int stream_index) {
-    qDebug() << "media converter task:" << task_t::extract_subtitles_async;
-    m_task = task_t::extract_subtitles_async;
+    qDebug() << "media converter task:" << task_t::import_subtitles_async;
+    m_task = task_t::import_subtitles_async;
     m_data.clear();
     m_progress = 0.0;
 
@@ -64,8 +64,8 @@ bool media_converter::extract_subtitles_async(const QString& file_path,
         m_task = task_t::none;
         return false;
     }
-
-    set_state(state_t::extracting_subtitles);
+    
+    set_state(state_t::importing_subtitles);
 
     return true;
 }

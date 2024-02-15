@@ -37,7 +37,7 @@ SpeechPanel {
           app.task_state !== DsnoteApp.TaskStateInitializing &&
           (app.state === DsnoteApp.StateTranscribingFile ||
           app.state === DsnoteApp.StateWritingSpeechToFile ||
-          app.state === DsnoteApp.StateExtractingSubtitles)
+          app.state === DsnoteApp.StateImportingSubtitles)
     text: app.intermediate_text
     textPlaceholder: {
         if (!app.connected) return qsTr("Starting...")
@@ -45,8 +45,8 @@ SpeechPanel {
         if (!app.stt_configured && !app.tts_configured) return qsTr("No language has been set.")
         if (app.task_state === DsnoteApp.TaskStateInitializing) return qsTr("Getting ready, please wait...")
         if (app.state === DsnoteApp.StateWritingSpeechToFile) return qsTr("Writing speech to file...")
-        if (app.state === DsnoteApp.StateExtractingSubtitles)
-            return qsTr("Extracting subtitles...") +
+        if (app.state === DsnoteApp.StateImportingSubtitles)
+            return qsTr("Importing subtitles...") +
                     (app.mc_progress > 0.0 ? " " + Math.round(app.mc_progress * 100) + "%" : "")
         if (app.state === DsnoteApp.StateTranslating)
             return qsTr("Translating...") +
@@ -63,5 +63,5 @@ SpeechPanel {
 
     progress: app.state === DsnoteApp.StateTranscribingFile ? app.transcribe_progress :
               app.state === DsnoteApp.StateWritingSpeechToFile ? app.speech_to_file_progress :
-              app.state === DsnoteApp.StateExtractingSubtitles ? app.mc_progress : -1.0
+              app.state === DsnoteApp.StateImportingSubtitles ? app.mc_progress : -1.0
 }

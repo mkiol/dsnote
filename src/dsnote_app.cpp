@@ -56,8 +56,8 @@ QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
         case dsnote_app::service_state_t::StateTranslating:
             d << "translating";
             break;
-        case dsnote_app::service_state_t::StateExtractingSubtitles:
-            d << "extracting-subtitles";
+        case dsnote_app::service_state_t::StateImportingSubtitles:
+            d << "importing-subtitles";
             break;
         case dsnote_app::service_state_t::StateUnknown:
             d << "unknown";
@@ -1302,8 +1302,8 @@ void dsnote_app::update_service_state() {
     switch (m_mc.state()) {
         case media_converter::state_t::idle:
             break;
-        case media_converter::state_t::extracting_subtitles:
-            new_state = service_state_t::StateExtractingSubtitles;
+        case media_converter::state_t::importing_subtitles:
+            new_state = service_state_t::StateImportingSubtitles;
             break;
     }
 
@@ -2942,7 +2942,7 @@ void dsnote_app::handle_mc_state_changed() {
     update_service_state();
 
     if (m_mc.state() == media_converter::state_t::idle) {
-        if (m_mc.task() == media_converter::task_t::extract_subtitles_async) {
+        if (m_mc.task() == media_converter::task_t::import_subtitles_async) {
             update_note(m_mc.string_data(),
                         m_text_destination == text_destination_t::note_replace);
         }
@@ -2982,29 +2982,58 @@ std::optional<bool> dsnote_app::open_file_internal(const QString &file_path,
                 media_info->subtitles_streams.size() > 1) {
                 qDebug() << "file contains more than one stream";
 
-                auto make_streams_names =
-                    [](const std::vector<media_compressor::stream_t> &streams) {
-                        QStringList streams_names;
-                        for (const auto &stream : streams) {
-                            streams_names.push_back(
-                                (stream.title.empty()
-                                     ? tr("Unnamed stream") + " " +
-                                           QString::number(
-                                               streams_names.size() + 1)
-                                     : QString::fromStdString(stream.title)) +
-                                (stream.language.empty()
-                                     ? QStringLiteral(" (%1)").arg(stream.index)
-                                     : QStringLiteral(" / %1 (%2)")
-                                           .arg(QString::fromStdString(
-                                               stream.language))
-                                           .arg(stream.index)));
-                        }
-                        return streams_names;
-                    };
+                QStringList streams_names;
 
-                emit open_file_multiple_streams(
-                    file_path, make_streams_names(media_info->audio_streams),
-                    make_streams_names(media_info->subtitles_streams), replace);
+                auto make_streams_names = [&streams_names](
+                                              const std::vector<
+                                                  media_compressor::stream_t>
+                                                  &streams) {
+                    std::transform(
+                        streams.cbegin(), streams.cend(),
+                        std::back_inserter(streams_names),
+                        [&](const auto &stream) {
+                            QString stream_name;
+
+                            switch (stream.media_type) {
+                                case media_compressor::media_type_t::audio:
+                                    stream_name.append(tr("Audio"));
+                                    break;
+                                case media_compressor::media_type_t::video:
+                                    stream_name.append(tr("Video"));
+                                    break;
+                                case media_compressor::media_type_t::subtitles:
+                                    stream_name.append(tr("Subtitles"));
+                                    break;
+                            }
+
+                            stream_name.append(" · ");
+
+                            if (stream.title.empty()) {
+                                stream_name.append(
+                                    tr("Unnamed stream") +
+                                    QString::number(streams_names.size() + 1));
+                            } else {
+                                stream_name.append(
+                                    QString::fromStdString(stream.title));
+                            }
+
+                            if (!stream.language.empty()) {
+                                stream_name.append(QStringLiteral(" / %1").arg(
+                                    QString::fromStdString(stream.language)));
+                            }
+
+                            stream_name.append(
+                                QStringLiteral(" (%1)").arg(stream.index));
+
+                            return stream_name;
+                        });
+                };
+
+                make_streams_names(media_info->audio_streams);
+                make_streams_names(media_info->subtitles_streams);
+
+                emit open_file_multiple_streams(file_path, streams_names,
+                                                replace);
 
                 return true;
             }
@@ -3044,8 +3073,8 @@ std::optional<bool> dsnote_app::open_file_internal(const QString &file_path,
             }
         } else if (stream_by_id_it->media_type ==
                    media_compressor::media_type_t::subtitles) {
-            if (!m_mc.extract_subtitles_async(file_path,
-                                              stream_by_id_it->index)) {
+            if (!m_mc.import_subtitles_async(file_path,
+                                             stream_by_id_it->index)) {
                 qCritical() << "can't extract subtitles";
                 return std::nullopt;
             }
@@ -3767,7 +3796,7 @@ void dsnote_app::update_tray_state() {
         case service_state_t::StateUnknown:
         case service_state_t::StateNotConfigured:
         case service_state_t::StateBusy:
-        case service_state_t::StateExtractingSubtitles:
+        case service_state_t::StateImportingSubtitles:
             m_tray.set_state(tray_icon::state_t::busy);
             break;
         case service_state_t::StateIdle:

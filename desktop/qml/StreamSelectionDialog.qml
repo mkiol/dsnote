@@ -12,12 +12,8 @@ import QtQuick.Layouts 1.3
 Dialog {
     id: root
 
-    property var audioStreams
-    property var subtitlesStreams
+    property var streams
     property int selectedIndex: 0
-
-    readonly property bool hasAudio: audioStreams !== undefined && audioStreams.length > 0
-    readonly property bool hasSubtitles: subtitlesStreams !== undefined && subtitlesStreams.length > 0
 
     modal: true
     width: Math.min(implicitWidth, parent.width - 2 * appWin.padding)
@@ -30,8 +26,7 @@ Dialog {
     }
 
     onOpened: {
-        comboAudio.currentIndex = 0
-        comboSubtitles.currentIndex = 0
+        combo.currentIndex = 0
     }
 
     header: Item {}
@@ -45,6 +40,20 @@ Dialog {
                 rightMargin: root.rightPadding
                 bottom: parent.bottom
                 bottomMargin: root.bottomPadding
+            }
+
+            Button {
+                Layout.alignment: Qt.AlignRight
+                text: qsTr("Import selected stream")
+                icon.name: "document-open-symbolic"
+                Keys.onReturnPressed: {
+                    root.updateSelectedIndex(combo.displayText)
+                    root.accept()
+                }
+                onClicked: {
+                    root.updateSelectedIndex(combo.displayText)
+                    root.accept()
+                }
             }
 
             Button {
@@ -67,72 +76,15 @@ Dialog {
         Label {
             Layout.fillWidth: true
             wrapMode: Text.Wrap
-            text: qsTr("The file contains multiple streams. Select which one you want to process.")
+            text: qsTr("The file contains multiple streams. Select which one you want to import.")
             font.pixelSize: appWin.textFontSizeBig
         }
 
-        ColumnLayout {
-            visible: root.hasAudio
+        ComboBox {
+            id: combo
+
             Layout.fillWidth: true
-            spacing: appWin.padding
-
-            SectionLabel {
-                Layout.fillWidth: true
-                text: qsTr("Audio streams")
-            }
-
-            ComboBox {
-                id: comboAudio
-
-                Layout.fillWidth: true
-                model: root.audioStreams
-            }
-
-            Button {
-                Layout.alignment: Qt.AlignRight
-                text: qsTr("Transcribe selected audio stream")
-                icon.name: "document-open-symbolic"
-                Keys.onReturnPressed: {
-                    root.updateSelectedIndex(comboAudio.displayText)
-                    root.accept()
-                }
-                onClicked: {
-                    root.updateSelectedIndex(comboAudio.displayText)
-                    root.accept()
-                }
-            }
-        }
-
-        ColumnLayout {
-            visible: root.hasSubtitles
-            Layout.fillWidth: true
-            spacing: appWin.padding
-
-            SectionLabel {
-                Layout.fillWidth: true
-                text: qsTr("Subtitles")
-            }
-
-            ComboBox {
-                id: comboSubtitles
-
-                Layout.fillWidth: true
-                model: root.subtitlesStreams
-            }
-
-            Button {
-                Layout.alignment: Qt.AlignRight
-                text: qsTr("Import selected subtitles")
-                icon.name: "document-open-symbolic"
-                Keys.onReturnPressed: {
-                    root.updateSelectedIndex(comboSubtitles.displayText)
-                    root.accept()
-                }
-                onClicked: {
-                    root.updateSelectedIndex(comboSubtitles.displayText)
-                    root.accept()
-                }
-            }
+            model: root.streams
         }
     }
 }

@@ -94,19 +94,20 @@ DialogPage {
             }
 
             Button {
+                text: qsTr("Export")
+
+                icon.name: "document-save-symbolic"
+                Keys.onReturnPressed: root.save_file()
+                onClicked: root.save_file()
+            }
+
+            Button {
                 id: closeButton
 
                 text: qsTr("Cancel")
                 icon.name: "action-unavailable-symbolic"
                 onClicked: root.reject()
                 Keys.onEscapePressed: root.reject()
-            }
-            Button {
-                text: qsTr("Export")
-
-                icon.name: "document-save-symbolic"
-                Keys.onReturnPressed: root.save_file()
-                onClicked: root.save_file()
             }
         }
     }

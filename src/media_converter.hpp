@@ -18,10 +18,10 @@
 class media_converter : public QObject {
     Q_OBJECT
    public:
-    enum class state_t { idle, extracting_subtitles };
+    enum class state_t { idle, importing_subtitles };
     friend QDebug operator<<(QDebug d, state_t state);
 
-    enum class task_t { none, extract_subtitles_async };
+    enum class task_t { none, import_subtitles_async };
     friend QDebug operator<<(QDebug d, task_t task);
 
     media_converter();
@@ -31,7 +31,7 @@ class media_converter : public QObject {
     inline auto progress() const { return m_progress; }
     QString string_data() const;
 
-    bool extract_subtitles_async(const QString& file_path, int stream_index);
+    bool import_subtitles_async(const QString& file_path, int stream_index);
     void clear();
 
    signals:

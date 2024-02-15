@@ -62,20 +62,20 @@ DialogPage {
             }
 
             Button {
+                text: qsTr("Create")
+                enabled: root.canCreate
+                icon.name: "document-save-symbolic"
+                Keys.onReturnPressed: root.export_voice()
+                onClicked: root.export_voice()
+            }
+
+            Button {
                 id: closeButton
 
                 text: qsTr("Cancel")
                 icon.name: "action-unavailable-symbolic"
                 onClicked: root.reject()
                 Keys.onEscapePressed: root.reject()
-            }
-
-            Button {
-                text: qsTr("Create")
-                enabled: root.canCreate
-                icon.name: "document-save-symbolic"
-                Keys.onReturnPressed: root.export_voice()
-                onClicked: root.export_voice()
             }
         }
     }

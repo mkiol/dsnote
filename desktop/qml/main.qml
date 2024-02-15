@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -381,8 +381,7 @@ ApplicationWindow {
         }
         onOpen_file_multiple_streams: {
             streamSelectionDialog.filePath = file_path
-            streamSelectionDialog.audioStreams = audio_streams
-            streamSelectionDialog.subtitlesStreams = subtitles_streams
+            streamSelectionDialog.streams = streams
             streamSelectionDialog.replace = replace
             streamSelectionDialog.open()
         }

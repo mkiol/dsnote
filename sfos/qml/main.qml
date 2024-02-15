@@ -254,8 +254,7 @@ ApplicationWindow {
                 onOpen_file_multiple_streams: {
                     pageStack.push(Qt.resolvedUrl("StreamSelectionDialog.qml"),
                                    {acceptDestination: root, acceptDestinationAction: PageStackAction.Pop,
-                                    filePath: file_path, replace: replace, audioStreams: audio_streams,
-                                       subtitlesStreams: subtitles_streams})
+                                    filePath: file_path, replace: replace, streams: streams})
                 }
                 onError: {
                     switch (type) {

@@ -231,7 +231,7 @@ class dsnote_app : public QObject {
         StatePlayingSpeech = 8,
         StateWritingSpeechToFile = 9,
         StateTranslating = 10,
-        StateExtractingSubtitles = 20
+        StateImportingSubtitles = 20
     };
     Q_ENUM(service_state_t)
     friend QDebug operator<<(QDebug d, service_state_t state);
@@ -404,9 +404,7 @@ class dsnote_app : public QObject {
     void recorder_new_probs(QVariantList probs);
     void tray_activated();
     void player_current_voice_ref_idx_changed();
-    void open_file_multiple_streams(QString file_path,
-                                    QStringList audio_streams,
-                                    QStringList subtitles_streams,
+    void open_file_multiple_streams(QString file_path, QStringList streams,
                                     bool replace);
     void auto_text_format_changed();
     void mc_progress_changed();
