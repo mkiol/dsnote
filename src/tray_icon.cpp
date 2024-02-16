@@ -56,13 +56,14 @@ void tray_icon::update_menu() {
             case action_t::start_listening_clipboard:
             case action_t::start_reading:
             case action_t::start_reading_clipboard:
-                p.second->setEnabled(m_state == state_t::idle);
+                // p.second->setEnabled(m_state == state_t::idle);
+                p.second->setProperty("enabled", m_state == state_t::idle);
                 break;
             case action_t::stop_listening:
                 p.second->setProperty("enabled", m_state == state_t::stt);
                 break;
             case action_t::pause_resume_reading:
-                p.second->setEnabled(m_state == state_t::tts);
+
                 p.second->setIcon(QIcon::fromTheme(
                     m_task_state == task_state_t::paused
                         ? QStringLiteral("media-playback-start-symbolic")
@@ -131,6 +132,11 @@ void tray_icon::make_menu() {
             QIcon::fromTheme(QStringLiteral("action-unavailable-symbolic")),
             tr("Cancel")));
     m_menu.addSeparator();
+    m_actions.emplace(
+        action_t::toggle_app_window,
+        m_menu.addAction(
+            QIcon::fromTheme(QStringLiteral("view-restore-symbolic")),
+            tr("Show/Hide")));
     m_actions.emplace(
         action_t::quit,
         m_menu.addAction(

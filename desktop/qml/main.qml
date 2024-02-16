@@ -361,6 +361,7 @@ ApplicationWindow {
             if (_start_in_tray) show_tray()
             app.open_files(_files_to_open, false)
             app.execute_action_name(_requested_action)
+            app.set_app_window(appWin);
             showWelcome()
         }
 

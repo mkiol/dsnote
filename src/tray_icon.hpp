@@ -26,7 +26,8 @@ class tray_icon : public QSystemTrayIcon {
         start_reading_clipboard,
         pause_resume_reading,
         cancel,
-        quit
+        quit,
+        toggle_app_window
     };
     enum class state_t { idle, busy, stt, stt_file, tts, tts_file, mnt };
     enum class task_state_t {

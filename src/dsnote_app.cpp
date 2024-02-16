@@ -3510,6 +3510,11 @@ void dsnote_app::execute_tray_action(tray_icon::action_t action) {
         case tray_icon::action_t::quit:
             QGuiApplication::quit();
             break;
+        case tray_icon::action_t::toggle_app_window:
+            if (m_app_window)
+                m_app_window->setProperty(
+                    "visible", !m_app_window->property("visible").toBool());
+            break;
     }
 }
 #endif
@@ -3954,6 +3959,10 @@ void dsnote_app::update_auto_text_format() {
         m_auto_text_format = format;
         emit auto_text_format_changed();
     }
+}
+
+void dsnote_app::set_app_window(QObject *app_window) {
+    m_app_window = app_window;
 }
 
 void dsnote_app::show_tray() {

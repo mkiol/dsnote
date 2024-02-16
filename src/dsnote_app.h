@@ -345,6 +345,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void recorder_reset();
     Q_INVOKABLE void show_tray();
     Q_INVOKABLE void hide_tray();
+    Q_INVOKABLE void set_app_window(QObject *app_window);
 
    signals:
     void active_stt_model_changed();
@@ -526,6 +527,7 @@ class dsnote_app : public QObject {
     auto_text_format_t m_auto_text_format =
         auto_text_format_t::AutoTextFormatRaw;
     media_converter m_mc;
+    QObject *m_app_window = nullptr;
 #ifdef USE_X11_FEATURES
     struct hotkeys_t {
         QHotkey start_listening;
