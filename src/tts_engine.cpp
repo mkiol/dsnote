@@ -631,7 +631,10 @@ void tts_engine::process() {
                     media_compressor{}.compress_to_file(
                         {output_file_wav}, output_file,
                         compressor_format_from_format(m_config.audio_format),
-                        media_compressor::quality_t::vbr_high);
+                        {media_compressor::quality_t::vbr_high,
+                         false,
+                         false,
+                         {}});
 
                     unlink(output_file_wav.c_str());
                 }
@@ -656,7 +659,10 @@ void tts_engine::process() {
                                 {silence_out_file_wav}, silence_out_file,
                                 compressor_format_from_format(
                                     m_config.audio_format),
-                                media_compressor::quality_t::vbr_high);
+                                {media_compressor::quality_t::vbr_high,
+                                 false,
+                                 false,
+                                 {}});
 
                             unlink(silence_out_file_wav.c_str());
                         } else {
@@ -714,10 +720,11 @@ void tts_engine::setup_ref_voice() {
         m_config.cache_dir + "/" + std::to_string(hash) + ".wav";
 
     if (!file_exists(m_ref_voice_wav_file)) {
-        media_compressor{}.decompress_to_file({m_config.ref_voice_file},
-                                      m_ref_voice_wav_file,
-                                      {/*mono=*/false, /*sample_rate_16=*/false,
-                                       /*stream=*/{}});
+        media_compressor{}.decompress_to_file(
+            {m_config.ref_voice_file}, m_ref_voice_wav_file,
+            {media_compressor::quality_t::vbr_medium, /*mono=*/false,
+             /*sample_rate_16=*/false,
+             /*stream=*/{}});
     }
 }
 

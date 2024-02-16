@@ -365,9 +365,9 @@ ApplicationWindow {
         }
 
         onNote_copied: toast.show(qsTr("Copied!"))
-        onTranscribe_done: toast.show(qsTr("File transcription is complete!"))
-        onSpeech_to_file_done: toast.show(qsTr("Speech saved to audio file!"))
-        onSave_note_to_file_done: toast.show(qsTr("Note saved to text file!"))
+        onTranscribe_done: toast.show(qsTr("Export to file is complete!"))
+        onSpeech_to_file_done: toast.show(qsTr("Export to file is complete!"))
+        onSave_note_to_file_done: toast.show(qsTr("Export to file is complete!"))
         onText_decoded_to_clipboard: {
             var policy = false
             switch(_settings.desktop_notification_policy) {

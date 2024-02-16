@@ -35,13 +35,8 @@ PullDownMenu {
     }
 
     MenuItem {
-        visible: !_settings.translator_mode && app.stt_configured
-        enabled: !_settings.translator_mode &&
-                 (app.state === DsnoteApp.StateListeningManual ||
-                  app.state === DsnoteApp.StateListeningAuto ||
-                  app.state === DsnoteApp.StateListeningSingleSentence ||
-                  app.state === DsnoteApp.StateIdle ||
-                  app.state === DsnoteApp.StatePlayingSpeech)
+        visible: !_settings.translator_mode
+        enabled: !app.busy
         text: qsTr("Import from a file")
         onClicked: {
             pageStack.push(fileReadDialog)
@@ -49,31 +44,19 @@ PullDownMenu {
     }
 
     MenuItem {
-        visible: app.tts_configured && (!_settings.translator_mode || app.mnt_configured)
-        enabled: app.note.length !== 0 &&
-                 (app.state === DsnoteApp.StateListeningManual ||
-                  app.state === DsnoteApp.StateListeningAuto ||
-                  app.state === DsnoteApp.StateListeningSingleSentence ||
-                  app.state === DsnoteApp.StateIdle ||
-                  app.state === DsnoteApp.StatePlayingSpeech)
-        text: qsTr("Export to audio file")
+        enabled: app.note.length !== 0 && !app.busy
+        text: qsTr("Export to a file")
         onClicked: {
-            pageStack.push(Qt.resolvedUrl("FileWritePage.qml"), {translated: false})
+            pageStack.push(Qt.resolvedUrl("ExportFilePage.qml"), {translated: false})
         }
     }
 
     MenuItem {
-        visible: _settings.translator_mode && app.mnt_configured && app.tts_configured
-        enabled: _settings.translator_mode && app.translated_text.length !== 0 &&
-                 app.tts_configured && app.active_tts_model_for_out_mnt.length !== 0 &&
-                 (app.state === DsnoteApp.StateListeningManual ||
-                  app.state === DsnoteApp.StateListeningAuto ||
-                  app.state === DsnoteApp.StateListeningSingleSentence ||
-                  app.state === DsnoteApp.StateIdle ||
-                  app.state === DsnoteApp.StatePlayingSpeech)
-        text: qsTr("Export the translation to audio file")
+        visible: _settings.translator_mode
+        enabled: app.translated_text.length !== 0 && !app.busy
+        text: qsTr("Export the translation to a file")
         onClicked: {
-            pageStack.push(Qt.resolvedUrl("FileWritePage.qml"), {translated: true})
+            pageStack.push(Qt.resolvedUrl("ExportFilePage.qml"), {translated: true})
         }
     }
 

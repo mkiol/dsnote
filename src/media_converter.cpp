@@ -17,6 +17,9 @@ QDebug operator<<(QDebug d, media_converter::state_t state) {
         case media_converter::state_t::importing_subtitles:
             d << "importing-subtitles";
             break;
+        case media_converter::state_t::exporting_to_subtitles:
+            d << "exporting-to-subtitles";
+            break;
     }
 
     return d;
@@ -30,6 +33,9 @@ QDebug operator<<(QDebug d, media_converter::task_t task) {
         case media_converter::task_t::import_subtitles_async:
             d << "import-subtitles-async";
             break;
+        case media_converter::task_t::export_to_subtitles_async:
+            d << "export-to-subtitles-async";
+            break;
     }
 
     return d;
@@ -38,6 +44,35 @@ QDebug operator<<(QDebug d, media_converter::task_t task) {
 void media_converter::clear() {
     m_data.clear();
     m_progress = 0.0;
+}
+
+bool media_converter::export_to_subtitles_async(
+    const QString& input_file_path, const QString& output_file_path,
+    media_compressor::format_t format) {
+    qDebug() << "media converter task:" << task_t::export_to_subtitles_async;
+    m_task = task_t::export_to_subtitles_async;
+    m_data.clear();
+    m_progress = 0.0;
+
+    try {
+        m_mc = std::make_unique<media_compressor>();
+        m_mc->compress_to_file_async(
+            {input_file_path.toStdString()}, output_file_path.toStdString(),
+            format,
+            {media_compressor::quality_t::vbr_medium, false, false,
+             media_compressor::stream_t{
+                 -1, media_compressor::media_type_t::subtitles, {}, {}}},
+            [&]() { emit processing_done(); });
+    } catch (const std::runtime_error& err) {
+        qCritical() << "media converter error:" << err.what();
+        m_mc.reset();
+        m_task = task_t::none;
+        return false;
+    }
+
+    set_state(state_t::exporting_to_subtitles);
+
+    return true;
 }
 
 bool media_converter::import_subtitles_async(const QString& file_path,
@@ -51,7 +86,7 @@ bool media_converter::import_subtitles_async(const QString& file_path,
         m_mc = std::make_unique<media_compressor>();
         m_mc->decompress_to_data_format_async(
             {file_path.toStdString()},
-            {false, false,
+            {media_compressor::quality_t::vbr_medium, false, false,
              media_compressor::stream_t{
                  stream_index,
                  media_compressor::media_type_t::subtitles,
@@ -64,7 +99,7 @@ bool media_converter::import_subtitles_async(const QString& file_path,
         m_task = task_t::none;
         return false;
     }
-    
+
     set_state(state_t::importing_subtitles);
 
     return true;

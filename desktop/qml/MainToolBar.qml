@@ -81,8 +81,6 @@ ToolBar {
             ToolButton {
                 id: fileButton
 
-                enabled: app.stt_configured || app.tts_configured
-                opacity: enabled ? 1.0 : 0.6
                 Layout.alignment: Qt.AlignLeft
                 text: qsTr("File")
                 onClicked: fileMenu.open()
@@ -95,93 +93,45 @@ ToolBar {
                     MenuItem {
                         text: qsTr("Import from a file")
                         icon.name: "document-open-symbolic"
-                        enabled: !_settings.translator_mode &&
-                            (app.state === DsnoteApp.StateListeningManual ||
-                            app.state === DsnoteApp.StateListeningAuto ||
-                            app.state === DsnoteApp.StateListeningSingleSentence ||
-                            app.state === DsnoteApp.StateIdle ||
-                            app.state === DsnoteApp.StatePlayingSpeech)
+                        enabled: !_settings.translator_mode && !app.busy
                         onClicked: {
                             fileReadDialog.open()
                         }
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Import a note from a file.") + " " +
-                                      qsTr("If the file is a media file, the audio is converted to text.")
+                        ToolTip.text: qsTr("Import a note from a text file, subtitle file, video or audio file.") + " " +
+                                      qsTr("If the imported file is an audio or video file, the audio is converted to text.")
                         hoverEnabled: true
                     }
 
                     MenuSeparator {}
 
                     MenuItem {
-                        text: qsTr("Export to a text file")
+                        text: qsTr("Export to a file")
                         icon.name: "document-save-symbolic"
-                        enabled: app.note.length !== 0
+                        enabled: app.note.length !== 0 //&& !app.busy
                         onClicked: {
-                            fileWriteDialog.translation = false
-                            fileWriteDialog.open()
+                            appWin.openDialog("ExportFilePage.qml", {"translated": false})
                         }
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Save the current note to a text file.")
+                        ToolTip.text: qsTr("Export the current note to a text file, subtitle file or audio file.")
                         hoverEnabled: true
                     }
 
                     MenuItem {
-                        text: qsTr("Export the translation to a text file")
+                        text: qsTr("Export the translation to a file")
                         icon.name: "document-save-symbolic"
-                        enabled: app.translated_text.length !== 0 && _settings.translator_mode
+                        enabled: app.translated_text.length !== 0 && _settings.translator_mode //&& !app.busy
                         onClicked: {
-                            fileWriteDialog.translation = true
-                            fileWriteDialog.open()
+                            appWin.openDialog("ExportFilePage.qml", {"translated": true})
                         }
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Save the translated note to a text file.")
-                        hoverEnabled: true
-                    }
-
-                    MenuSeparator {}
-
-                    MenuItem {
-                        text: qsTr("Export to audio file")
-                        icon.name: "document-save-symbolic"
-                        enabled: app.note.length !== 0 && app.tts_configured &&
-                                 (app.state === DsnoteApp.StateListeningManual ||
-                                  app.state === DsnoteApp.StateListeningAuto ||
-                                  app.state === DsnoteApp.StateListeningSingleSentence ||
-                                  app.state === DsnoteApp.StateIdle ||
-                                  app.state === DsnoteApp.StatePlayingSpeech)
-                        onClicked: {
-                            appWin.openDialog("FileWritePage.qml", {"translated": false})
-                        }
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Convert text from the current note into speech and save in an audio file.")
-                        hoverEnabled: true
-                    }
-
-                    MenuItem {
-                        text: qsTr("Export the translation to audio file")
-                        icon.name: "document-save-symbolic"
-                        enabled: app.translated_text.length !== 0 && _settings.translator_mode &&
-                                 app.tts_configured && app.active_tts_model_for_out_mnt.length !== 0 &&
-                                 (app.state === DsnoteApp.StateListeningManual ||
-                                  app.state === DsnoteApp.StateListeningAuto ||
-                                  app.state === DsnoteApp.StateListeningSingleSentence ||
-                                  app.state === DsnoteApp.StateIdle ||
-                                  app.state === DsnoteApp.StatePlayingSpeech)
-                        onClicked: {
-                            appWin.openDialog("FileWritePage.qml", {"translated": true})
-                        }
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Convert translated text into speech and save in an audio file.")
+                        ToolTip.text: qsTr("Export the translated note to a text file, subtitle file or audio file.")
                         hoverEnabled: true
                     }
                 }

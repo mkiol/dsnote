@@ -51,11 +51,12 @@ void file_source::start() {
                                 {},
                                 {}})
                       : std::nullopt;
-    
+
     m_mc.decompress_to_data_raw_async(
         {m_file.toStdString()},
         /*options=*/
-        {/*mono=*/true, /*sample_rate_16=*/true, /*stream=*/std::move(stream)},
+        {media_compressor::quality_t::vbr_medium, /*mono=*/true,
+         /*sample_rate_16=*/true, /*stream=*/std::move(stream)},
         /*data_ready_callback=*/{},
         /*task_finished_callback=*/{});
 }

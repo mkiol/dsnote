@@ -1812,11 +1812,14 @@ void speech_service::handle_speech_to_file(const tts_partial_result_t &result) {
                                 speech_service::state_t::writing_speech_to_file)
                                 compressor.cancel();
                         });
-                
+
                 compressor.compress_to_file_async(
                     std::move(input_files), out_file.toStdString(),
                     media_format_from_audio_format(format),
-                    media_quality_from_audio_quality(quality),
+                    {media_quality_from_audio_quality(quality),
+                     false,
+                     false,
+                     {}},
                     [&loop]() { loop.quit(); });
 
                 loop.exec();
@@ -1872,7 +1875,8 @@ void speech_service::handle_tts_queue() {
             media_compressor{}.decompress_to_file(
                 {result.audio_file_path.toStdString()},
                 audio_file_wav.toStdString(),
-                {/*mono=*/false, /*sample_rate_16=*/false,
+                {media_compressor::quality_t::vbr_medium, /*mono=*/false,
+                 /*sample_rate_16=*/false,
                  /*stream=*/{}});
             result.audio_file_path = std::move(audio_file_wav);
             result.audio_format = tts_engine::audio_format_t::wav;

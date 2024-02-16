@@ -30,14 +30,36 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(insert_mode_t insert_mode READ insert_mode WRITE set_insert_mode
                    NOTIFY insert_mode_changed)
     Q_PROPERTY(mode_t mode READ mode WRITE set_mode NOTIFY mode_changed)
-    Q_PROPERTY(QString file_save_dir READ file_save_dir WRITE set_file_save_dir
-                   NOTIFY file_save_dir_changed)
-    Q_PROPERTY(QUrl file_save_dir_url READ file_save_dir_url WRITE
-                   set_file_save_dir_url NOTIFY file_save_dir_changed)
-    Q_PROPERTY(QString file_save_dir_name READ file_save_dir_name NOTIFY
-                   file_save_dir_changed)
-    Q_PROPERTY(QString file_save_filename READ file_save_filename NOTIFY
-                   file_save_dir_changed)
+
+    Q_PROPERTY(QString audio_file_save_dir READ audio_file_save_dir WRITE
+                   set_audio_file_save_dir NOTIFY audio_file_save_dir_changed)
+    Q_PROPERTY(
+        QUrl audio_file_save_dir_url READ audio_file_save_dir_url WRITE
+            set_audio_file_save_dir_url NOTIFY audio_file_save_dir_changed)
+    Q_PROPERTY(QString audio_file_save_dir_name READ audio_file_save_dir_name
+                   NOTIFY audio_file_save_dir_changed)
+    Q_PROPERTY(QString audio_file_save_filename READ audio_file_save_filename
+                   NOTIFY audio_file_save_dir_changed)
+
+    Q_PROPERTY(QString video_file_save_dir READ video_file_save_dir WRITE
+                   set_video_file_save_dir NOTIFY video_file_save_dir_changed)
+    Q_PROPERTY(
+        QUrl video_file_save_dir_url READ video_file_save_dir_url WRITE
+            set_audio_file_save_dir_url NOTIFY video_file_save_dir_changed)
+    Q_PROPERTY(QString video_file_save_dir_name READ video_file_save_dir_name
+                   NOTIFY video_file_save_dir_changed)
+    Q_PROPERTY(QString video_file_save_filename READ video_file_save_filename
+                   NOTIFY video_file_save_dir_changed)
+
+    Q_PROPERTY(QString text_file_save_dir READ text_file_save_dir WRITE
+                   set_text_file_save_dir NOTIFY text_file_save_dir_changed)
+    Q_PROPERTY(QUrl text_file_save_dir_url READ text_file_save_dir_url WRITE
+                   set_text_file_save_dir_url NOTIFY text_file_save_dir_changed)
+    Q_PROPERTY(QString text_file_save_dir_name READ text_file_save_dir_name
+                   NOTIFY text_file_save_dir_changed)
+    Q_PROPERTY(QString text_file_save_filename READ text_file_save_filename
+                   NOTIFY text_file_save_dir_changed)
+
     Q_PROPERTY(QString file_open_dir READ file_open_dir WRITE set_file_open_dir
                    NOTIFY file_open_dir_changed)
     Q_PROPERTY(QUrl file_open_dir_url READ file_open_dir_url WRITE
@@ -71,6 +93,8 @@ class settings : public QSettings, public singleton<settings> {
                    set_speech_speed NOTIFY speech_speed_changed)
     Q_PROPERTY(int font_size READ font_size WRITE set_font_size NOTIFY
                    font_size_changed)
+    Q_PROPERTY(text_file_format_t text_file_format READ text_file_format WRITE
+                   set_text_file_format NOTIFY text_file_format_changed)
     Q_PROPERTY(audio_format_t audio_format READ audio_format WRITE
                    set_audio_format NOTIFY audio_format_changed)
     Q_PROPERTY(QString audio_format_str READ audio_format_str NOTIFY
@@ -254,6 +278,15 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(audio_format_t)
 
+    enum class text_file_format_t {
+        TextFileFormatAuto = 0,
+        TextFileFormatRaw = 1,
+        TextFileFormatSrt = 2,
+        TextFileFormatAss = 3,
+        TextFileFormatVtt = 4
+    };
+    Q_ENUM(text_file_format_t)
+
     enum class cache_audio_format_t {
         CacheAudioFormatWav = 0,
         CacheAudioFormatMp3 = 1,
@@ -334,13 +367,28 @@ class settings : public QSettings, public singleton<settings> {
     void set_insert_mode(insert_mode_t value);
     mode_t mode() const;
     void set_mode(mode_t value);
-    QString file_save_dir() const;
-    void set_file_save_dir(const QString &value);
-    QUrl file_save_dir_url() const;
-    void set_file_save_dir_url(const QUrl &value);
-    QString file_save_dir_name() const;
-    QString file_save_filename() const;
-    Q_INVOKABLE void update_file_save_path(const QString &path);
+
+    QString audio_file_save_dir() const;
+    void set_audio_file_save_dir(const QString &value);
+    QUrl audio_file_save_dir_url() const;
+    void set_audio_file_save_dir_url(const QUrl &value);
+    QString audio_file_save_dir_name() const;
+    QString audio_file_save_filename() const;
+    Q_INVOKABLE void update_audio_file_save_path(const QString &path);
+    QString video_file_save_dir() const;
+    void set_video_file_save_dir(const QString &value);
+    QUrl video_file_save_dir_url() const;
+    void set_video_file_save_dir_url(const QUrl &value);
+    QString video_file_save_dir_name() const;
+    QString video_file_save_filename() const;
+    Q_INVOKABLE void update_video_file_save_path(const QString &path);
+    QString text_file_save_dir() const;
+    void set_text_file_save_dir(const QString &value);
+    QUrl text_file_save_dir_url() const;
+    void set_text_file_save_dir_url(const QUrl &value);
+    QString text_file_save_dir_name() const;
+    QString text_file_save_filename() const;
+    Q_INVOKABLE void update_text_file_save_path(const QString &path);
     QString file_open_dir() const;
     void set_file_open_dir(const QString &value);
     QUrl file_open_dir_url() const;
@@ -373,6 +421,8 @@ class settings : public QSettings, public singleton<settings> {
     bool restart_required() const;
     void set_font_size(int value);
     int font_size() const;
+    void set_text_file_format(text_file_format_t value);
+    text_file_format_t text_file_format() const;
     void set_audio_format(audio_format_t value);
     audio_format_t audio_format() const;
     void set_audio_quality(audio_quality_t value);
@@ -476,6 +526,19 @@ class settings : public QSettings, public singleton<settings> {
     static audio_format_t audio_format_from_filename(const QString &filename);
     static audio_format_t filename_to_audio_format_static(
         const QString &filename);
+
+    Q_INVOKABLE QString
+    add_ext_to_text_file_filename(const QString &filename) const;
+    Q_INVOKABLE QString
+    add_ext_to_text_file_path(const QString &file_path) const;
+    Q_INVOKABLE text_file_format_t
+    filename_to_text_file_format(const QString &filename) const;
+    static QString text_file_ext_from_filename(const QString &filename);
+    static text_file_format_t text_file_format_from_filename(
+        const QString &filename);
+    static text_file_format_t filename_to_text_file_format_static(
+        const QString &filename);
+
     Q_INVOKABLE bool is_debug() const;
 
     // service
@@ -554,7 +617,9 @@ class settings : public QSettings, public singleton<settings> {
     void note_changed();
     void insert_mode_changed();
     void mode_changed();
-    void file_save_dir_changed();
+    void audio_file_save_dir_changed();
+    void video_file_save_dir_changed();
+    void text_file_save_dir_changed();
     void file_open_dir_changed();
     void file_audio_open_dir_changed();
     void prev_app_ver_changed();
@@ -567,6 +632,7 @@ class settings : public QSettings, public singleton<settings> {
     void restart_required_changed();
     void speech_speed_changed();
     void font_size_changed();
+    void text_file_format_changed();
     void audio_format_changed();
     void audio_quality_changed();
     void mtag_album_name_changed();

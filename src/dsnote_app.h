@@ -231,7 +231,8 @@ class dsnote_app : public QObject {
         StatePlayingSpeech = 8,
         StateWritingSpeechToFile = 9,
         StateTranslating = 10,
-        StateImportingSubtitles = 20
+        StateImportingSubtitles = 20,
+        StateExportingSubtitles = 21
     };
     Q_ENUM(service_state_t)
     friend QDebug operator<<(QDebug d, service_state_t state);
@@ -309,10 +310,9 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void speech_to_file_translator_url(
         bool transtalated, const QUrl &dest_file, const QString &title_tag = {},
         const QString &track_tag = {});
-    Q_INVOKABLE void save_note_to_file(const QString &dest_file);
-    Q_INVOKABLE void save_note_to_file_translator(const QString &dest_file);
-    Q_INVOKABLE bool load_note_from_file(const QString &input_file,
-                                         bool replace);
+    Q_INVOKABLE void export_note_to_text_file(
+        const QString &dest_file, /*settings::text_file_format_t*/ int format,
+        bool translation);
     Q_INVOKABLE void open_files(const QStringList &input_files, bool replace);
     Q_INVOKABLE void open_files_url(const QList<QUrl> &input_urls,
                                     bool replace);
@@ -320,8 +320,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void copy_to_clipboard();
     Q_INVOKABLE void copy_translation_to_clipboard();
     Q_INVOKABLE void copy_text_to_clipboard(const QString &text);
-    Q_INVOKABLE bool file_exists(const QString &file) const;
-    Q_INVOKABLE bool file_exists(const QUrl &file) const;
+    Q_INVOKABLE QVariantMap file_info(const QString &file) const;
     Q_INVOKABLE void undo_or_redu_note();
     Q_INVOKABLE void make_undo();
     Q_INVOKABLE void update_note(const QString &text, bool replace);
@@ -740,9 +739,15 @@ class dsnote_app : public QObject {
     void update_tray_task_state();
     void update_auto_text_format_delayed();
     void update_auto_text_format();
+    bool load_note_from_file(const QString &input_file, bool replace);
+    void export_note_to_subtitles(const QString &dest_file,
+                                  settings::text_file_format_t format,
+                                  const QString &text);
     void player_import_rec();
     void player_set_path(const QString &wav_file_path);
     void player_import_from_rec_path(const QString &path);
+    static QStringList make_streams_names(
+        const std::vector<media_compressor::stream_t> &streams);
     QString tts_ref_voice_auto_name() const;
     inline int player_current_voice_ref_idx() const {
         return m_player_current_voice_ref_idx;

@@ -59,6 +59,9 @@ QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
         case dsnote_app::service_state_t::StateImportingSubtitles:
             d << "importing-subtitles";
             break;
+        case dsnote_app::service_state_t::StateExportingSubtitles:
+            d << "exporting-subtitles";
+            break;
         case dsnote_app::service_state_t::StateUnknown:
             d << "unknown";
             break;
@@ -1304,6 +1307,9 @@ void dsnote_app::update_service_state() {
             break;
         case media_converter::state_t::importing_subtitles:
             new_state = service_state_t::StateImportingSubtitles;
+            break;
+        case media_converter::state_t::exporting_to_subtitles:
+            new_state = service_state_t::StateExportingSubtitles;
             break;
     }
 
@@ -2799,12 +2805,32 @@ void dsnote_app::copy_translation_to_clipboard() {
     copy_to_clipboard_internal(m_translated_text);
 }
 
-bool dsnote_app::file_exists(const QString &file) const {
-    return QFileInfo::exists(file);
-}
+QVariantMap dsnote_app::file_info(const QString &file) const {
+    QVariantMap map;
 
-bool dsnote_app::file_exists(const QUrl &file) const {
-    return file_exists(file.toLocalFile());
+    if (!QFileInfo::exists(file)) return map;
+
+    auto info = media_compressor{}.media_info(file.toStdString());
+
+    QString type = "unknown";
+
+    if (info) {
+        if (!info->video_streams.empty())
+            type = "video";
+        else if (!info->audio_streams.empty())
+            type = "audio";
+        else if (!info->subtitles_streams.empty())
+            type = "sub";
+        map.insert("type", type);
+
+        map.insert("video_streams", make_streams_names(info->video_streams));
+        map.insert("audio_streams", make_streams_names(info->audio_streams));
+        map.insert("sub_streams", make_streams_names(info->subtitles_streams));
+    }
+
+    map.insert("type", type);
+
+    return map;
 }
 
 QString dsnote_app::translated_text() const { return m_translated_text; }
@@ -2885,12 +2911,63 @@ void dsnote_app::handle_note_changed() {
     update_auto_text_format_delayed();
 }
 
-void dsnote_app::save_note_to_file(const QString &dest_file) {
-    save_note_to_file_internal(note(), dest_file);
+void dsnote_app::export_note_to_subtitles(const QString &dest_file,
+                                          settings::text_file_format_t format,
+                                          const QString &text) {
+    auto tmp_file = QDir{settings::instance()->cache_dir()}.filePath("tmp.srt");
+
+    QFile file{tmp_file};
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qWarning() << "failed to open file for write:" << dest_file;
+        emit error(error_t::ErrorSaveNoteToFile);
+        return;
+    }
+    QTextStream out{&file};
+    out << text;
+    file.close();
+
+    if (!m_mc.export_to_subtitles_async(tmp_file, dest_file, [format] {
+            switch (format) {
+                case settings::text_file_format_t::TextFileFormatAss:
+                    return media_compressor::format_t::ass;
+                case settings::text_file_format_t::TextFileFormatVtt:
+                    return media_compressor::format_t::vtt;
+                case settings::text_file_format_t::TextFileFormatSrt:
+                case settings::text_file_format_t::TextFileFormatRaw:
+                case settings::text_file_format_t::TextFileFormatAuto:
+                    break;
+            }
+            return media_compressor::format_t::srt;
+        }())) {
+        qWarning() << "failed to export to subtitles:" << dest_file;
+        emit error(error_t::ErrorSaveNoteToFile);
+        return;
+    }
 }
 
-void dsnote_app::save_note_to_file_translator(const QString &dest_file) {
-    save_note_to_file_internal(translated_text(), dest_file);
+void dsnote_app::export_note_to_text_file(
+    const QString &dest_file,
+    /*settings::text_file_format_t*/ int format, bool translation) {
+    auto enum_format = static_cast<settings::text_file_format_t>(format);
+
+    if (enum_format == settings::text_file_format_t::TextFileFormatAuto)
+        enum_format = settings::filename_to_text_file_format_static(
+            QFileInfo{dest_file}.fileName());
+
+    switch (enum_format) {
+        case settings::text_file_format_t::TextFileFormatRaw:
+            save_note_to_file_internal(translation ? translated_text() : note(),
+                                       dest_file);
+            break;
+        case settings::text_file_format_t::TextFileFormatSrt:
+        case settings::text_file_format_t::TextFileFormatAss:
+        case settings::text_file_format_t::TextFileFormatVtt:
+            export_note_to_subtitles(dest_file, enum_format,
+                                     translation ? translated_text() : note());
+            break;
+        case settings::text_file_format_t::TextFileFormatAuto:
+            break;
+    }
 }
 
 void dsnote_app::save_note_to_file_internal(const QString &text,
@@ -2942,10 +3019,19 @@ void dsnote_app::handle_mc_state_changed() {
     update_service_state();
 
     if (m_mc.state() == media_converter::state_t::idle) {
-        if (m_mc.task() == media_converter::task_t::import_subtitles_async) {
-            update_note(m_mc.string_data(),
-                        m_text_destination == text_destination_t::note_replace);
+        switch (m_mc.task()) {
+            case media_converter::task_t::import_subtitles_async:
+                update_note(
+                    m_mc.string_data(),
+                    m_text_destination == text_destination_t::note_replace);
+                break;
+            case media_converter::task_t::export_to_subtitles_async:
+                emit save_note_to_file_done();
+                break;
+            case media_converter::task_t::none:
+                break;
         }
+
         m_mc.clear();
     }
 }
@@ -2953,6 +3039,46 @@ void dsnote_app::handle_mc_state_changed() {
 void dsnote_app::handle_mc_progress_changed() {
     qDebug() << "mc progress:" << m_mc.progress();
     emit mc_progress_changed();
+}
+
+QStringList dsnote_app::make_streams_names(
+    const std::vector<media_compressor::stream_t> &streams) {
+    QStringList names;
+    std::transform(streams.cbegin(), streams.cend(), std::back_inserter(names),
+                   [&](const auto &stream) {
+                       QString name;
+
+                       switch (stream.media_type) {
+                           case media_compressor::media_type_t::audio:
+                               name.append(tr("Audio"));
+                               break;
+                           case media_compressor::media_type_t::video:
+                               name.append(tr("Video"));
+                               break;
+                           case media_compressor::media_type_t::subtitles:
+                               name.append(tr("Subtitles"));
+                               break;
+                       }
+
+                       name.append(" · ");
+
+                       if (stream.title.empty()) {
+                           name.append(tr("Unnamed stream") +
+                                       QString::number(names.size() + 1));
+                       } else {
+                           name.append(QString::fromStdString(stream.title));
+                       }
+
+                       if (!stream.language.empty()) {
+                           name.append(QStringLiteral(" / %1").arg(
+                               QString::fromStdString(stream.language)));
+                       }
+
+                       name.append(QStringLiteral(" (%1)").arg(stream.index));
+
+                       return name;
+                   });
+    return names;
 }
 
 std::optional<bool> dsnote_app::open_file_internal(const QString &file_path,
@@ -2983,54 +3109,10 @@ std::optional<bool> dsnote_app::open_file_internal(const QString &file_path,
                 qDebug() << "file contains more than one stream";
 
                 QStringList streams_names;
-
-                auto make_streams_names = [&streams_names](
-                                              const std::vector<
-                                                  media_compressor::stream_t>
-                                                  &streams) {
-                    std::transform(
-                        streams.cbegin(), streams.cend(),
-                        std::back_inserter(streams_names),
-                        [&](const auto &stream) {
-                            QString stream_name;
-
-                            switch (stream.media_type) {
-                                case media_compressor::media_type_t::audio:
-                                    stream_name.append(tr("Audio"));
-                                    break;
-                                case media_compressor::media_type_t::video:
-                                    stream_name.append(tr("Video"));
-                                    break;
-                                case media_compressor::media_type_t::subtitles:
-                                    stream_name.append(tr("Subtitles"));
-                                    break;
-                            }
-
-                            stream_name.append(" · ");
-
-                            if (stream.title.empty()) {
-                                stream_name.append(
-                                    tr("Unnamed stream") +
-                                    QString::number(streams_names.size() + 1));
-                            } else {
-                                stream_name.append(
-                                    QString::fromStdString(stream.title));
-                            }
-
-                            if (!stream.language.empty()) {
-                                stream_name.append(QStringLiteral(" / %1").arg(
-                                    QString::fromStdString(stream.language)));
-                            }
-
-                            stream_name.append(
-                                QStringLiteral(" (%1)").arg(stream.index));
-
-                            return stream_name;
-                        });
-                };
-
-                make_streams_names(media_info->audio_streams);
-                make_streams_names(media_info->subtitles_streams);
+                streams_names.append(
+                    make_streams_names(media_info->audio_streams));
+                streams_names.append(
+                    make_streams_names(media_info->subtitles_streams));
 
                 emit open_file_multiple_streams(file_path, streams_names,
                                                 replace);
@@ -3073,8 +3155,13 @@ std::optional<bool> dsnote_app::open_file_internal(const QString &file_path,
             }
         } else if (stream_by_id_it->media_type ==
                    media_compressor::media_type_t::subtitles) {
-            if (!m_mc.import_subtitles_async(file_path,
-                                             stream_by_id_it->index)) {
+            if (m_mc.import_subtitles_async(file_path,
+                                            stream_by_id_it->index)) {
+                settings::instance()->set_stt_tts_text_format(
+                    settings::text_format_t::TextFormatSubRip);
+                settings::instance()->set_mnt_text_format(
+                    settings::text_format_t::TextFormatSubRip);
+            } else {
                 qCritical() << "can't extract subtitles";
                 return std::nullopt;
             }
@@ -3086,7 +3173,12 @@ std::optional<bool> dsnote_app::open_file_internal(const QString &file_path,
             return std::nullopt;
         }
     } else {
-        if (!load_note_from_file(file_path, replace)) {
+        if (load_note_from_file(file_path, replace)) {
+            settings::instance()->set_stt_tts_text_format(
+                settings::text_format_t::TextFormatRaw);
+            settings::instance()->set_mnt_text_format(
+                settings::text_format_t::TextFormatRaw);
+        } else {
             qWarning() << "can't open text file";
             return std::nullopt;
         }
@@ -3547,7 +3639,8 @@ void dsnote_app::player_play_voice_ref_idx(int idx) {
     try {
         media_compressor{}.decompress_to_file(
             {list.at(1).toStdString()}, wav_file.toStdString(),
-            {/*mono=*/false, /*sample_rate_16=*/false,
+            {media_compressor::quality_t::vbr_medium, /*mono=*/false,
+             /*sample_rate_16=*/false,
              /*stream=*/{}});
     } catch (const std::runtime_error &err) {
         qCritical() << err.what();
@@ -3673,7 +3766,7 @@ void dsnote_app::player_export_ref_voice(long long start, long long stop,
         media_compressor{}.compress_to_file(
             {wav_file_path.toStdString()}, out_file_path.toStdString(),
             media_compressor::format_t::ogg_opus,
-            media_compressor::quality_t::vbr_high,
+            {media_compressor::quality_t::vbr_high, false, false, {}},
             {static_cast<uint64_t>(start), static_cast<uint64_t>(stop), 0, 0});
     } catch (const std::runtime_error &error) {
         qWarning() << "can't compress file:" << error.what();
@@ -3797,6 +3890,7 @@ void dsnote_app::update_tray_state() {
         case service_state_t::StateNotConfigured:
         case service_state_t::StateBusy:
         case service_state_t::StateImportingSubtitles:
+        case service_state_t::StateExportingSubtitles:
             m_tray.set_state(tray_icon::state_t::busy);
             break;
         case service_state_t::StateIdle:

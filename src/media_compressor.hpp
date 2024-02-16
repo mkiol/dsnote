@@ -33,7 +33,17 @@ extern "C" {
 
 class media_compressor {
    public:
-    enum class format_t { unknown, wav, mp3, ogg_vorbis, ogg_opus, flac };
+    enum class format_t {
+        unknown,
+        wav,
+        mp3,
+        ogg_vorbis,
+        ogg_opus,
+        flac,
+        srt,
+        ass,
+        vtt
+    };
     friend std::ostream& operator<<(std::ostream& os, format_t format);
 
     enum class quality_t { vbr_high, vbr_medium, vbr_low };
@@ -43,7 +53,7 @@ class media_compressor {
     friend std::ostream& operator<<(std::ostream& os, media_type_t media_type);
 
     struct stream_t {
-        int index = 0;
+        int index = -1;
         media_type_t media_type = media_type_t::audio;
         std::string title;
         std::string language;
@@ -58,6 +68,7 @@ class media_compressor {
     friend std::ostream& operator<<(std::ostream& os, media_info_t media_info);
 
     struct options_t {
+        quality_t quality = quality_t::vbr_medium;
         bool mono = false;
         bool sample_rate_16 = false; /*smaple-rate = 16KHz*/
         std::optional<stream_t> stream;
@@ -93,11 +104,11 @@ class media_compressor {
     size_t duration(const std::string& input_file);
     void compress_to_file(std::vector<std::string> input_files,
                           std::string output_file, format_t format,
-                          quality_t quality,
+                          options_t options,
                           clip_info_t clip_info = {0, 0, 0, 0});
     void compress_to_file_async(
         std::vector<std::string> input_files, std::string output_file,
-        format_t format, quality_t quality,
+        format_t format, options_t options,
         task_finished_callback_t task_finished_callback);
     void decompress_to_file(std::vector<std::string> input_files,
                             std::string output_file, options_t options);
@@ -138,7 +149,6 @@ class media_compressor {
     std::queue<std::string> m_input_files;
     std::string m_output_file;
     format_t m_format = format_t::unknown;
-    quality_t m_quality = quality_t::vbr_medium;
     AVFormatContext* m_in_av_format_ctx = nullptr;
     AVFormatContext* m_out_av_format_ctx = nullptr;
     AVCodecContext* m_in_av_ctx = nullptr;
@@ -175,7 +185,7 @@ class media_compressor {
     static format_t format_from_filename(const std::string& filename);
     void compress_internal(std::vector<std::string> input_files,
                            std::string output_file, format_t format,
-                           quality_t quality,
+                           options_t options,
                            task_finished_callback_t task_finished_callback);
     void setup_input_files(std::vector<std::string>&& input_files);
     void decompress_async_internal(

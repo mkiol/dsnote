@@ -14,6 +14,7 @@ Dialog {
 
     property var streams
     property int selectedIndex: 0
+    readonly property bool canAccept: app.stt_configured || combo.displayText.lastIndexOf("Audio") !== 0
 
     modal: true
     width: Math.min(implicitWidth, parent.width - 2 * appWin.padding)
@@ -44,6 +45,7 @@ Dialog {
 
             Button {
                 Layout.alignment: Qt.AlignRight
+                enabled: root.canAccept
                 text: qsTr("Import selected stream")
                 icon.name: "document-open-symbolic"
                 Keys.onReturnPressed: {
@@ -85,6 +87,18 @@ Dialog {
 
             Layout.fillWidth: true
             model: root.streams
+        }
+
+        InlineMessage {
+            color: "red"
+            Layout.fillWidth: true
+            visible: !root.canAccept
+
+            Label {
+                color: "red"
+                wrapMode: Text.Wrap
+                text: qsTr("Speech to Text model has not been set up yet.")
+            }
         }
     }
 }

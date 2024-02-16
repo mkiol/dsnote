@@ -25,36 +25,57 @@ Dialog {
         selectedIndex = parseInt(name.substring(name.lastIndexOf("(") + 1, name.lastIndexOf(")")))
     }
 
+    canAccept: app.stt_configured || combo.value.lastIndexOf("Audio") !== 0
+
     onAccepted: {
         updateSelectedIndex(combo.value)
         app.open_file(filePath, selectedIndex, replace)
     }
 
-    Column {
+    SilicaFlickable {
         width: parent.width
+        height: parent.height
+        contentHeight: column.height
+        clip: true
 
-        DialogHeader {}
+        Column {
+            id: column
 
-        Label {
-            font.pixelSize: Theme.fontSizeLarge
-            x: Theme.horizontalPageMargin
-            width: parent.width - 2*x
-            color: Theme.secondaryHighlightColor
-            wrapMode: Text.Wrap
-            text: qsTr("The file contains multiple streams. Select which one you want to import.")
-        }
+            width: parent.width
 
-        Spacer {}
+            DialogHeader {}
 
-        ComboBox {
-            id: combo
+            Label {
+                font.pixelSize: Theme.fontSizeLarge
+                x: Theme.horizontalPageMargin
+                width: parent.width - 2*x
+                color: Theme.secondaryHighlightColor
+                wrapMode: Text.Wrap
+                text: qsTr("The file contains multiple streams. Select which one you want to import.")
+            }
 
-            label: qsTr("Stream")
-            menu: ContextMenu {
-                Repeater {
-                    model: root.streams
-                    MenuItem { text: modelData }
+            Spacer {}
+
+            ComboBox {
+                id: combo
+
+                label: qsTr("Stream")
+                menu: ContextMenu {
+                    Repeater {
+                        model: root.streams
+                        MenuItem { text: modelData }
+                    }
                 }
+            }
+
+            Spacer {}
+
+            PaddedLabel {
+                id: errorLabel
+
+                visible: !root.canAccept
+                color: Theme.errorColor
+                text: qsTr("Speech to Text model has not been set up yet.")
             }
         }
     }

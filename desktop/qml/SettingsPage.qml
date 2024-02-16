@@ -97,12 +97,7 @@ DialogPage {
             ]
         }
 
-        Rectangle {
-            color: palette.highlight
-            height: 2
-            radius: 2
-            Layout.fillWidth: true
-        }
+        HorizontalLine{}
     }
 
     StackLayout {
@@ -248,7 +243,7 @@ DialogPage {
             }
 
             CheckBox {
-                Layout.leftMargin: 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 visible: _settings.desktop_notification_policy !== Settings.DesktopNotificationNever
                 checked: _settings.desktop_notification_details
                 text: qsTr("Include recognized or read text in notifications")
@@ -266,7 +261,7 @@ DialogPage {
             }
 
             CheckBox {
-                Layout.leftMargin: 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 visible: _settings.use_tray
                 checked: _settings.start_in_tray
                 text: qsTr("Start minimized to the system tray")
@@ -290,7 +285,7 @@ DialogPage {
                 rowSpacing: appWin.padding
 
                 Label {
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     Layout.fillWidth: true
                     text: qsTr("Graphical style")
                     wrapMode: Text.Wrap
@@ -348,7 +343,7 @@ DialogPage {
             InlineMessage {
                 color: "red"
                 Layout.fillWidth: true
-                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 visible: _settings.audio_inputs.length <= 1
 
                 Label {
@@ -428,7 +423,7 @@ DialogPage {
             InlineMessage {
                 color: "red"
                 Layout.fillWidth: true
-                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 visible: app.feature_punctuator &&
                          _settings.restore_punctuation &&
                          !app.ttt_configured
@@ -461,7 +456,7 @@ DialogPage {
             InlineMessage {
                 color: "red"
                 Layout.fillWidth: true
-                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 visible: _settings.gpu_supported() &&
                          app.feature_gpu_stt &&
                          _settings.stt_use_gpu &&
@@ -486,7 +481,7 @@ DialogPage {
 
                 Label {
                     wrapMode: Text.Wrap
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     Layout.fillWidth: true
                     text: qsTr("Graphics card")
                 }
@@ -560,7 +555,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Minimum line length")
                     wrapMode: Text.Wrap
                 }
@@ -592,7 +587,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Maximum line length")
                     wrapMode: Text.Wrap
                 }
@@ -638,7 +633,7 @@ DialogPage {
             InlineMessage {
                 color: "red"
                 Layout.fillWidth: true
-                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 visible: _settings.diacritizer_enabled &&
                          app.feature_coqui_tts &&
                          !app.feature_diacritizer_he
@@ -670,7 +665,7 @@ DialogPage {
             InlineMessage {
                 color: "red"
                 Layout.fillWidth: true
-                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 visible: _settings.gpu_supported() &&
                          app.feature_gpu_tts &&
                          _settings.tts_use_gpu &&
@@ -695,7 +690,7 @@ DialogPage {
 
                 Label {
                     wrapMode: Text.Wrap
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     Layout.fillWidth: true
                     text: qsTr("Graphics card")
                 }
@@ -748,7 +743,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Start listening")
                 }
                 TextField {
@@ -769,7 +764,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Start listening, text to active window")
                 }
                 TextField {
@@ -790,7 +785,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Start listening, text to clipboard")
                 }
                 TextField {
@@ -811,7 +806,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Stop listening")
                 }
                 TextField {
@@ -832,7 +827,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Start reading")
                 }
                 TextField {
@@ -853,7 +848,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Start reading text from clipboard")
                 }
                 TextField {
@@ -874,7 +869,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Pause/Resume reading")
                 }
                 TextField {
@@ -895,7 +890,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Cancel")
                 }
                 TextField {
@@ -924,7 +919,7 @@ DialogPage {
 
             InlineMessage {
                 color: palette.text
-                Layout.leftMargin: verticalMode ? 1 * appWin.padding : 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 Layout.fillWidth: true
                 visible: _settings.actions_api_enabled
 
@@ -1130,7 +1125,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Version")
                 }
                 TextField {
@@ -1151,6 +1146,7 @@ DialogPage {
 
                     icon.name: "edit-undo-symbolic"
                     onClicked: _settings.gpu_overrided_version = ""
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
 
                     ToolTip.visible: hovered
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -1246,7 +1242,7 @@ DialogPage {
                 Label {
                     Layout.fillWidth: true
                     text: qsTr("Location of Python libraries")
-                    Layout.leftMargin: 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                 }
 
                 TextField {
@@ -1254,7 +1250,7 @@ DialogPage {
 
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - pySaveButton.width - appWin.padding)
-                    Layout.leftMargin: verticalMode ? 3 * appWin.padding : 0
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
                     text: _settings.py_path
                     color: palette.text
                     placeholderText: qsTr("Leave blank to use the default value.")
@@ -1270,7 +1266,7 @@ DialogPage {
                     id: pySaveButton
 
                     text: qsTr("Save")
-                    Layout.leftMargin: verticalMode ? 3 * appWin.padding : 0
+                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
                     onClicked: _settings.py_path = pyTextField.text
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval

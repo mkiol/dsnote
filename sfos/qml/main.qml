@@ -248,8 +248,9 @@ ApplicationWindow {
             Connections {
                 target: app
                 onNote_copied: toast.show(qsTr("Copied!"))
-                onTranscribe_done: toast.show(qsTr("File transcription is complete!"))
-                onSpeech_to_file_done: toast.show(qsTr("Speech saved to audio file!"))
+                onTranscribe_done: toast.show(qsTr("Export to file is complete!"))
+                onSpeech_to_file_done: toast.show(qsTr("Export to file is complete!"))
+                onSave_note_to_file_done: toast.show(qsTr("Export to file is complete!"))
                 Component.onCompleted: app.open_files(_files_to_open, false)
                 onOpen_file_multiple_streams: {
                     pageStack.push(Qt.resolvedUrl("StreamSelectionDialog.qml"),
