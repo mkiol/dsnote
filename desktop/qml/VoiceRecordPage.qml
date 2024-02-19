@@ -38,26 +38,38 @@ Dialog {
             Layout.alignment: Qt.AlignHCenter
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignHCenter
+            color: app.recorder_duration >= 10 ? "green" : "red"
             text: app.recorder_duration + "s"
         }
 
         RowLayout {
+            Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter
 
             Button {
-                icon.name: app.recorder_recording ? "media-playback-stop-symbolic" : "media-record-symbolic"
-                text: app.recorder_recording ? qsTr("Stop") : qsTr("Start")
+                width: appWin.buttonWithIconWidth
+                visible: app.recorder_recording
+                enabled: app.recorder_duration >= 10
+                icon.name: "media-playback-stop-symbolic"
+                text: qsTr("Stop")
                 onClicked: {
-                    if (app.recorder_recording) {
-                        app.recorder_stop()
-                        root.accept()
-                    } else {
-                        app.recorder_start()
-                    }
+                    app.recorder_stop()
+                    root.accept()
                 }
             }
 
             Button {
+                width: appWin.buttonWithIconWidth
+                visible: !app.recorder_recording
+                icon.name: "media-record-symbolic"
+                text: qsTr("Start")
+                onClicked: {
+                    app.recorder_start()
+                }
+            }
+
+            Button {
+                width: appWin.buttonWithIconWidth
                 text: qsTr("Cancel")
                 icon.name: "action-unavailable-symbolic"
                 onClicked: root.reject()

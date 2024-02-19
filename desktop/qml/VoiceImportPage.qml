@@ -195,7 +195,7 @@ DialogPage {
                         Rectangle {
                             height: 6
                             width: probsRow.segSize
-                            color: "red"
+                            color: "green"
                             opacity: 0.8 * modelData
                         }
                     }
@@ -263,6 +263,21 @@ DialogPage {
             Layout.preferredWidth: verticalMode ? gridVoiceName.width : gridVoiceName.width / 2
             Layout.leftMargin: verticalMode ? appWin.padding : 0
             color: palette.text
+        }
+    }
+
+    Item { height: 1}
+
+    InlineMessage {
+        visible: app.player_ready
+        color: palette.text
+        Layout.leftMargin: appWin.padding
+        Layout.fillWidth: true
+
+        Label {
+            Layout.fillWidth: true
+            wrapMode: Text.Wrap
+            text: qsTr("Tip: If you're not satisfied with voice cloning quality, try creating a few different voice samples and see which one gives you the best result.")
         }
     }
 

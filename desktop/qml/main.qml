@@ -184,7 +184,9 @@ ApplicationWindow {
                 qsTr("Read"),
                 qsTr("Listen"),
                 qsTr("Enable"),
-                qsTr("Disable")
+                qsTr("Disable"),
+                qsTr("Stop"),
+                qsTr("Start")
             ]
 
             list.sort(function (a, b) {
