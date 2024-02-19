@@ -77,7 +77,7 @@ ApplicationWindow {
     function showWelcome() {
         if (app.busy) return
 
-        if (!app.stt_configured && !app.tts_configured) {
+        if (!app.stt_configured && !app.tts_configured && !app.mnt_configured) {
             appWin.openDialogIfNotOpen("HelloPage.qml")
         } else if (APP_VERSION !== _settings.prev_app_ver) {
             _settings.prev_app_ver = APP_VERSION
