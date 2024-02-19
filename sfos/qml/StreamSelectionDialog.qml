@@ -29,7 +29,7 @@ Dialog {
 
     onAccepted: {
         updateSelectedIndex(combo.value)
-        app.open_file(filePath, selectedIndex, replace)
+        app.import_file(filePath, selectedIndex, replace)
     }
 
     SilicaFlickable {

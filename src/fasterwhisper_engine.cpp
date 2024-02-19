@@ -233,7 +233,7 @@ stt_engine::samples_process_result_t fasterwhisper_engine::process_buff() {
         return samples_process_result_t::no_samples_needed;
     }
 
-    set_processing_state(processing_state_t::decoding);
+    set_state(state_t::decoding);
 
     if (!vad_status) {
         set_speech_detection_status(speech_detection_status_t::no_speech);
@@ -250,7 +250,7 @@ stt_engine::samples_process_result_t fasterwhisper_engine::process_buff() {
                               (1000 * m_speech_buf.size() / m_sample_rate));
     m_segment_time_discarded_after = 0;
 
-    set_processing_state(processing_state_t::idle);
+    set_state(state_t::idle);
 
     if (m_config.speech_mode == speech_mode_t::single_sentence &&
         (!m_intermediate_text || m_intermediate_text->empty())) {

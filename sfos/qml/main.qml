@@ -23,7 +23,7 @@ ApplicationWindow {
     function handleResource(resource) {
         console.log("share request received");
         if (resource.type === ShareResource.FilePathType) {
-            app.open_files(resource.filePath, false)
+            app.import_files(resource.filePath, false)
             appWin.activate()
         } else if (resource.type === ShareResource.StringDataType) {
             app.update_note(resource.data, false)
@@ -57,6 +57,8 @@ ApplicationWindow {
             "video/ogg",
             "video/x-matroska",
             "video/webm",
+            "application/x-subrip",
+            "text/vtt",
             "text/plain"
         ]
 
@@ -69,7 +71,7 @@ ApplicationWindow {
     Connections {
         target: _app_server
         onActivate_requested: appWin.activate()
-        onFiles_to_open_requested: app.open_files(_files_to_open, false)
+        onFiles_to_open_requested: app.import_files(_files_to_open, false)
     }
 
     SpeechConfig {
@@ -173,12 +175,26 @@ ApplicationWindow {
                     width: parent.width
                     enabled: open
                     y: open ? parent.height - height : parent.height
-                    canCancel: app.connected && !app.busy && (root.canCancelStt || root.canCancelTts)
-                    canPause: app.state === DsnoteApp.StatePlayingSpeech &&
+                    canCancel: app.connected && !app.busy &&
+                               app.task_state !== DsnoteApp.TaskStateCancelling &&
+                                 (app.task_state === DsnoteApp.TaskStateProcessing ||
+                                 app.task_state === DsnoteApp.TaskStateInitializing ||
+                                 app.state === DsnoteApp.StateTranscribingFile ||
+                                 app.state === DsnoteApp.StateListeningSingleSentence ||
+                                 app.state === DsnoteApp.StateListeningManual ||
+                                 app.state === DsnoteApp.StateListeningAuto ||
+                                 app.state === DsnoteApp.StatePlayingSpeech ||
+                                 app.state === DsnoteApp.StateWritingSpeechToFile ||
+                                 app.state === DsnoteApp.StateTranslating ||
+                                 app.state === DsnoteApp.StateExportingSubtitles ||
+                                 app.state === DsnoteApp.StateImportingSubtitles)
+                    canPause: app.task_state !== DsnoteApp.TaskStateCancelling &&
+                              app.state === DsnoteApp.StatePlayingSpeech &&
                               (app.task_state === DsnoteApp.TaskStateProcessing ||
                                app.task_state === DsnoteApp.TaskStateSpeechPlaying ||
                                app.task_state === DsnoteApp.TaskStateSpeechPaused)
-                    canStop: app.connected && !app.busy &&
+                    canStop: app.task_state !== DsnoteApp.TaskStateCancelling &&
+                             app.connected && !app.busy &&
                                  app.task_state !== DsnoteApp.TaskStateProcessing &&
                                  app.task_state !== DsnoteApp.TaskStateInitializing &&
                                  app.state === DsnoteApp.StateListeningSingleSentence
@@ -212,7 +228,7 @@ ApplicationWindow {
                 FilePickerPage {
                     nameFilters: [ '*.txt', '*.srt', '*.ass', '*.ssa', '*.sub', '*.vtt', '*.wav', '*.mp3', '*.ogg', '*.oga', '*.ogx', '*.opus', '*.spx', '*.flac', '*.m4a', '*.aac', '*.mp4', '*.mkv', '*.ogv', '*.webm' ]
                     onSelectedContentPropertiesChanged: {
-                        app.open_file(selectedContentProperties.filePath, -1, false)
+                        app.import_file(selectedContentProperties.filePath, -1, false)
                     }
                 }
             }
@@ -234,7 +250,7 @@ ApplicationWindow {
                     appWin.activate()
                 }
                 onFiles_to_open_requested: {
-                    app.open_files(files, false)
+                    app.import_files(files, false)
                     appWin.activate()
                 }
             }
@@ -248,11 +264,11 @@ ApplicationWindow {
             Connections {
                 target: app
                 onNote_copied: toast.show(qsTr("Copied!"))
-                onTranscribe_done: toast.show(qsTr("Export to file is complete!"))
+                onTranscribe_done: toast.show(qsTr("Import from the file is complete!"))
                 onSpeech_to_file_done: toast.show(qsTr("Export to file is complete!"))
                 onSave_note_to_file_done: toast.show(qsTr("Export to file is complete!"))
-                Component.onCompleted: app.open_files(_files_to_open, false)
-                onOpen_file_multiple_streams: {
+                Component.onCompleted: app.import_files(_files_to_open, false)
+                onImport_file_multiple_streams: {
                     pageStack.push(Qt.resolvedUrl("StreamSelectionDialog.qml"),
                                    {acceptDestination: root, acceptDestinationAction: PageStackAction.Pop,
                                     filePath: file_path, replace: replace, streams: streams})
@@ -277,11 +293,23 @@ ApplicationWindow {
                     case DsnoteApp.ErrorMntRuntime:
                         toast.show(qsTr("Error: Not all text has been translated."))
                         break;
-                    case DsnoteApp.ErrorSaveNoteToFile:
-                        toast.show(qsTr("Error: Couldn't save to the file."))
+                    case DsnoteApp.ErrorExportFileGeneral:
+                        toast.show(qsTr("Error: Couldn't export to the file."))
                         break;
-                    case DsnoteApp.ErrorLoadNoteFromFile:
-                        toast.show(qsTr("Error: Couldn't open the file."))
+                    case DsnoteApp.ErrorImportFileGeneral:
+                        toast.show(qsTr("Error: Couldn't import the file."))
+                        break;
+                    case DsnoteApp.ErrorImportFileNoStreams:
+                        toast.show(qsTr("Error: Couldn't import. The file does not contain audio or subtitles."))
+                        break;
+                    case DsnoteApp.ErrorSttNotConfigured:
+                        toast.show(qsTr("Error: Speech to Text model has been set up yet."))
+                        break;
+                    case DsnoteApp.ErrorTtsNotConfigured:
+                        toast.show(qsTr("Error: Text to Speech model has been set up yet."))
+                        break;
+                    case DsnoteApp.ErrorMntNotConfigured:
+                        toast.show(qsTr("Error: Translator model has been set up yet."))
                         break;
                     case DsnoteApp.ErrorContentDownload:
                         toast.show(qsTr("Error: Couldn't download a licence."))

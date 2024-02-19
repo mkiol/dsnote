@@ -69,6 +69,7 @@ RowLayout {
                             case DsnoteApp.TaskStateInitializing: return 3;
                             case DsnoteApp.TaskStateSpeechPlaying: return 4;
                             case DsnoteApp.TaskStateSpeechPaused: return 5;
+                            case DsnoteApp.TaskStateCancelling: return 3;
                             }
                             return 0;
                         }
@@ -117,6 +118,8 @@ RowLayout {
                         property string placeholderText: {
                             if (app.busy || service.busy)
                                 return qsTr("Busy...")
+                            if (app.task_state === DsnoteApp.TaskStateCancelling)
+                                return qsTr("Cancelling, please wait...")
                             if (app.task_state === DsnoteApp.TaskStateInitializing)
                                 return qsTr("Getting ready, please wait...")
                             if (app.state === DsnoteApp.StateWritingSpeechToFile)
@@ -210,7 +213,8 @@ RowLayout {
                     Layout.preferredHeight: _icon.implicitHeight
                     icon.name: app.task_state === DsnoteApp.TaskStateSpeechPaused ?
                                    "media-playback-start-symbolic" : "media-playback-pause-symbolic"
-                    enabled: app.state === DsnoteApp.StatePlayingSpeech &&
+                    enabled: app.task_state !== DsnoteApp.TaskStateCancelling &&
+                             app.state === DsnoteApp.StatePlayingSpeech &&
                              (app.task_state === DsnoteApp.TaskStateProcessing ||
                               app.task_state === DsnoteApp.TaskStateSpeechPlaying ||
                               app.task_state === DsnoteApp.TaskStateSpeechPaused)
@@ -236,7 +240,8 @@ RowLayout {
                     Layout.alignment: Qt.AlignBottom
                     Layout.preferredHeight: _icon.implicitHeight
                     icon.name: "media-playback-stop-symbolic"
-                    enabled: app.task_state !== DsnoteApp.TaskStateProcessing &&
+                    enabled: app.task_state !== DsnoteApp.TaskStateCancelling &&
+                             app.task_state !== DsnoteApp.TaskStateProcessing &&
                              app.task_state !== DsnoteApp.TaskStateInitializing &&
                              (app.state === DsnoteApp.StateListeningSingleSentence ||
                               app.state === DsnoteApp.StateListeningManual ||
@@ -261,7 +266,8 @@ RowLayout {
                     Layout.alignment: Qt.AlignBottom
                     Layout.preferredHeight: _icon.implicitHeight
                     icon.name: "action-unavailable-symbolic"
-                    enabled: app.task_state === DsnoteApp.TaskStateProcessing ||
+                    enabled: app.task_state !== DsnoteApp.TaskStateCancelling &&
+                             (app.task_state === DsnoteApp.TaskStateProcessing ||
                              app.task_state === DsnoteApp.TaskStateInitializing ||
                              app.state === DsnoteApp.StateTranscribingFile ||
                              app.state === DsnoteApp.StateListeningSingleSentence ||
@@ -269,7 +275,9 @@ RowLayout {
                              app.state === DsnoteApp.StateListeningAuto ||
                              app.state === DsnoteApp.StatePlayingSpeech ||
                              app.state === DsnoteApp.StateWritingSpeechToFile ||
-                             app.state === DsnoteApp.StateTranslating
+                             app.state === DsnoteApp.StateTranslating ||
+                             app.state === DsnoteApp.StateExportingSubtitles ||
+                             app.state === DsnoteApp.StateImportingSubtitles)
                     text: qsTr("Cancel")
                     onClicked: app.cancel()
                 }

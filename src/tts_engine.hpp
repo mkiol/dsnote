@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -39,7 +39,14 @@ class tts_engine {
         uint32_t data_size = 0;
     };
 
-    enum class state_t { idle, initializing, encoding, error };
+    enum class state_t {
+        idle,
+        stopping,
+        initializing,
+        encoding,
+        stopped,
+        error
+    };
     friend std::ostream& operator<<(std::ostream& os, state_t state);
 
     enum class gpu_api_t { opencl, cuda, rocm };
@@ -156,7 +163,6 @@ class tts_engine {
     config_t m_config;
     callbacks_t m_call_backs;
     std::thread m_processing_thread;
-    bool m_shutting_down = false;
     std::queue<task_t> m_queue;
     std::mutex m_mutex;
     std::condition_variable m_cv;
@@ -193,6 +199,10 @@ class tts_engine {
     void setup_ref_voice();
     void make_silence_wav_file(size_t duration_msec,
                                const std::string& output_file) const;
+    inline bool is_shutdown() const {
+        return m_state == state_t::stopping || m_state == state_t::stopped ||
+               m_state == state_t::error;
+    }
 #ifdef ARCH_X86_64
     static bool stretch(const std::string& input_file,
                         const std::string& output_file, double time_ration,

@@ -1029,7 +1029,7 @@ std::optional<media_compressor::media_info_t> media_compressor::media_info(
             }
         }
     } catch (const std::runtime_error& err) {
-        LOGE("can't get media info: " << err.what());
+        LOGD("can't get media info: " << err.what());
         return std::nullopt;
     }
 

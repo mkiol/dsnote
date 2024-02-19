@@ -35,7 +35,8 @@ class tray_icon : public QSystemTrayIcon {
         processing = 1,
         initializing = 2,
         playing = 3,
-        paused = 4
+        paused = 4,
+        cancelling = 5
     };
 
     explicit tray_icon(QObject *parent = nullptr);

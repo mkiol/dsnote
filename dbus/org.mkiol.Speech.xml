@@ -10,7 +10,8 @@
                           3 = Idle, 4 = Listening Manual, 5 = Listening Auto,
                           6 = Transcribing File, 7 = Listening One-sentence,
                           8 = Playing speech, 9 = Writing speech synthesis to file,
-                          10 = Translating
+                          10 = Translating, 20 = Importing subtitles,
+                          21 = Exporting subtitles
             Unrecognized states should be considered equal to Unknown.
         -->
         <property name="State" type="i" access="read" />
@@ -31,7 +32,8 @@
             An indicator of state of current task.
             Valid states: 0 = Idle, 1 = Speech Detected,
                           2 = Processing, 3 = Initializing,
-                          4 = Playing Speech, 5 = Speech Paused.
+                          4 = Playing Speech, 5 = Speech Paused,
+                          6 = Cancelling.
             When state is 4 or 7 (Listening Manual, Listening One-sentence) task state
             is never 0.
         -->

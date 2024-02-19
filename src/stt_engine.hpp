@@ -90,6 +90,8 @@ class stt_engine {
         std::function<void()> sentence_timeout;
         std::function<void()> eof;
         std::function<void()> error;
+        std::function<void()> stopping;
+        std::function<void()> stopped;
     };
 
     struct gpu_device_t {
@@ -134,7 +136,9 @@ class stt_engine {
     void return_buf(const char* c_buf, size_t size, bool sof, bool eof);
     void start();
     void stop();
+    void request_stop();
     bool started() const;
+    bool stopping() const;
     inline void restart() { m_restart_requested = true; }
     speech_detection_status_t speech_detection_status() const;
     void set_speech_mode(speech_mode_t mode);
@@ -155,6 +159,7 @@ class stt_engine {
     inline void set_sub_config(sub_config_t value) {
         m_config.sub_config = value;
     }
+    inline bool stop_requested() const { return m_thread_exit_requested; }
 
    protected:
     enum class lock_type_t { free, processed, borrowed };
@@ -167,8 +172,8 @@ class stt_engine {
     friend std::ostream& operator<<(std::ostream& os,
                                     samples_process_result_t result);
 
-    enum class processing_state_t { idle, initializing, decoding };
-    friend std::ostream& operator<<(std::ostream& os, processing_state_t state);
+    enum class state_t { idle, initializing, decoding };
+    friend std::ostream& operator<<(std::ostream& os, state_t state);
 
     inline static const size_t m_sample_rate = 16000;  // 1s
     inline static const size_t m_in_buf_max_size = 24000;
@@ -206,7 +211,7 @@ class stt_engine {
         speech_detection_status_t::no_speech;
     bool m_restart_requested = false;
     std::optional<std::chrono::steady_clock::time_point> m_start_time;
-    processing_state_t m_processing_state = processing_state_t::idle;
+    state_t m_state = state_t::idle;
     std::optional<punctuator> m_punctuator;
     unsigned int m_segment_offset = 0;
     size_t m_segment_time_offset = 0;
@@ -228,9 +233,9 @@ class stt_engine {
     void free_buf();
     void set_speech_detection_status(speech_detection_status_t status);
     void set_intermediate_text(const std::string& text);
-    void set_processing_state(processing_state_t new_state);
+    void set_state(state_t new_state);
     void reset_in_processing();
-    void start_processing();
+    void process();
     bool sentence_timer_timed_out();
     void restart_sentence_timer();
     void create_punctuator();

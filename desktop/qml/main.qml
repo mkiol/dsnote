@@ -36,14 +36,14 @@ ApplicationWindow {
 
     function openFile(path) {
         if (app.note.length > 0) {
-            addTextDialog.addHandler = function(){app.open_file(path, -1, false)}
-            addTextDialog.replaceHandler = function(){app.open_file(path, -1, true)}
+            addTextDialog.addHandler = function(){app.import_file(path, -1, false)}
+            addTextDialog.replaceHandler = function(){app.import_file(path, -1, true)}
             addTextDialog.open()
         } else {
-            app.open_file(path, -1, true)
+            app.import_file(path, -1, true)
         }
 
-        _settings.file_open_dir = path
+        _settings.file_open_dir = _settings.dir_of_file(path)
     }
 
     function openDialog(file, props) {
@@ -291,7 +291,7 @@ ApplicationWindow {
         anchors.centerIn: parent
 
         onAccepted: {
-            app.open_file(filePath, selectedIndex, replace)
+            app.import_file(filePath, selectedIndex, replace)
         }
     }
 
@@ -303,11 +303,11 @@ ApplicationWindow {
 
             if (app.note.length > 0) {
                 var urls = drop.urls
-                addTextDialog.addHandler = function(){app.open_files_url(urls, false)}
-                addTextDialog.replaceHandler = function(){app.open_files_url(urls, true)}
+                addTextDialog.addHandler = function(){app.import_files_url(urls, false)}
+                addTextDialog.replaceHandler = function(){app.import_files_url(urls, true)}
                 addTextDialog.open()
             } else {
-                app.open_files_url(drop.urls, true)
+                app.import_files_url(drop.urls, true)
             }
         }
     }
@@ -332,11 +332,11 @@ ApplicationWindow {
         onFiles_to_open_requested: {
             if (app.note.length > 0) {
                 var list_of_files = files
-                addTextDialog.addHandler = function(){app.open_files(list_of_files, false)}
-                addTextDialog.replaceHandler = function(){app.open_files(list_of_files, true)}
+                addTextDialog.addHandler = function(){app.import_files(list_of_files, false)}
+                addTextDialog.replaceHandler = function(){app.import_files(list_of_files, true)}
                 addTextDialog.open()
             } else {
-                app.open_files(files, true)
+                app.import_files(files, true)
             }
 
             appWin.raise()
@@ -359,14 +359,14 @@ ApplicationWindow {
         onTts_configuredChanged: showWelcome()
         Component.onCompleted: {
             if (_start_in_tray) show_tray()
-            app.open_files(_files_to_open, false)
+            app.import_files(_files_to_open, false)
             app.execute_action_name(_requested_action)
             app.set_app_window(appWin);
             showWelcome()
         }
 
         onNote_copied: toast.show(qsTr("Copied!"))
-        onTranscribe_done: toast.show(qsTr("Export to file is complete!"))
+        onTranscribe_done: toast.show(qsTr("Import from the file is complete!"))
         onSpeech_to_file_done: toast.show(qsTr("Export to file is complete!"))
         onSave_note_to_file_done: toast.show(qsTr("Export to file is complete!"))
         onText_decoded_to_clipboard: {
@@ -380,7 +380,7 @@ ApplicationWindow {
             if (policy)
                 app.show_desktop_notification(qsTr("Text copied to clipboard!"), "", false)
         }
-        onOpen_file_multiple_streams: {
+        onImport_file_multiple_streams: {
             streamSelectionDialog.filePath = file_path
             streamSelectionDialog.streams = streams
             streamSelectionDialog.replace = replace
@@ -407,11 +407,23 @@ ApplicationWindow {
             case DsnoteApp.ErrorMntRuntime:
                 toast.show(qsTr("Error: Not all text has been translated."))
                 break;
-            case DsnoteApp.ErrorSaveNoteToFile:
-                toast.show(qsTr("Error: Couldn't save to the file."))
+            case DsnoteApp.ErrorExportFileGeneral:
+                toast.show(qsTr("Error: Couldn't export to the file."))
                 break;
-            case DsnoteApp.ErrorLoadNoteFromFile:
-                toast.show(qsTr("Error: Couldn't open the file."))
+            case DsnoteApp.ErrorImportFileGeneral:
+                toast.show(qsTr("Error: Couldn't import the file."))
+                break;
+            case DsnoteApp.ErrorImportFileNoStreams:
+                toast.show(qsTr("Error: Couldn't import. The file does not contain audio or subtitles."))
+                break;
+            case DsnoteApp.ErrorSttNotConfigured:
+                toast.show(qsTr("Error: Speech to Text model has been set up yet."))
+                break;
+            case DsnoteApp.ErrorTtsNotConfigured:
+                toast.show(qsTr("Error: Text to Speech model has been set up yet."))
+                break;
+            case DsnoteApp.ErrorMntNotConfigured:
+                toast.show(qsTr("Error: Translator model has been set up yet."))
                 break;
             case DsnoteApp.ErrorContentDownload:
                 toast.show(qsTr("Error: Couldn't download a licence."))

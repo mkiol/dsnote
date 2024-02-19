@@ -93,7 +93,7 @@ ToolBar {
                     MenuItem {
                         text: qsTr("Import from a file")
                         icon.name: "document-open-symbolic"
-                        enabled: !_settings.translator_mode && !app.busy
+                        enabled: !app.busy
                         onClicked: {
                             fileReadDialog.open()
                         }
@@ -231,37 +231,6 @@ ToolBar {
                     notepadButton.checked = !_settings.translator_mode
                 }
             }
-        }
-    }
-
-    Dialogs.FileDialog {
-        id: fileWriteDialog
-
-        property bool translation: false
-
-        title: qsTr("Export to a file")
-        selectedNameFilter: {
-            switch (_settings.translator_mode ? _settings.mnt_text_format : _settings.stt_tts_text_format) {
-            case Settings.TextFormatSubRip: return qsTr("SRT Subtitles") + " (*.srt)"
-            case Settings.TextFormatRaw:
-            case Settings.TextFormatHtml:
-            case Settings.TextFormatMarkdown:
-                break;
-            }
-            return qsTr("Text") + " (*.txt)"
-        }
-        nameFilters: [ qsTr("Text") + " (*.txt)", qsTr("SRT Subtitles") + " (*.srt)", qsTr("All files") + " (*)"]
-        folder: _settings.file_save_dir_url
-        selectExisting: false
-        selectMultiple: false
-        onAccepted: {
-            var file_path =
-                _settings.file_path_from_url(fileWriteDialog.fileUrl)
-
-            if (translation)
-                app.save_note_to_file_translator(file_path)
-            else
-                app.save_note_to_file(file_path)
         }
     }
 

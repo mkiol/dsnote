@@ -104,16 +104,15 @@ std::ostream& operator<<(std::ostream& os,
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os,
-                         stt_engine::processing_state_t state) {
+std::ostream& operator<<(std::ostream& os, stt_engine::state_t state) {
     switch (state) {
-        case stt_engine::processing_state_t::idle:
+        case stt_engine::state_t::idle:
             os << "idle";
             break;
-        case stt_engine::processing_state_t::initializing:
+        case stt_engine::state_t::initializing:
             os << "initializing";
             break;
-        case stt_engine::processing_state_t::decoding:
+        case stt_engine::state_t::decoding:
             os << "decoding";
             break;
     }
@@ -214,47 +213,60 @@ std::ostream& operator<<(std::ostream& os, const stt_engine::config_t& config) {
 stt_engine::stt_engine(config_t config, callbacks_t call_backs)
     : m_config{std::move(config)}, m_call_backs{std::move(call_backs)} {}
 
-stt_engine::~stt_engine() { LOGD("engine dtor"); }
+stt_engine::~stt_engine() { LOGD("stt dtor"); }
 
 void stt_engine::start() {
     if (started()) {
-        LOGW("engine already started");
+        LOGW("stt already started");
         return;
     }
 
-    LOGD("starting engine");
+    LOGD("stt start");
 
+    m_thread_exit_requested = true;
     if (m_processing_thread.joinable()) m_processing_thread.join();
 
     m_thread_exit_requested = false;
     reset_segment_counters();
 
-    m_processing_thread = std::thread{&stt_engine::start_processing, this};
+    m_processing_thread = std::thread{&stt_engine::process, this};
 
-    LOGD("engine started");
+    LOGD("stt start completed");
 }
 
 bool stt_engine::started() const {
     return m_processing_thread.joinable() && !m_thread_exit_requested;
 }
 
+bool stt_engine::stopping() const {
+    return m_processing_thread.joinable() && m_thread_exit_requested;
+}
+
 void stt_engine::stop_processing_impl() {}
 void stt_engine::start_processing_impl() {}
 
-void stt_engine::stop() {
+void stt_engine::request_stop() {
     if (m_thread_exit_requested) {
-        LOGD("engine stop already requested");
+        LOGD("stt stop already requested");
         return;
     }
 
-    m_thread_exit_requested = true;
+    LOGD("stt stop requested");
 
-    LOGD("stop requested");
+    m_thread_exit_requested = true;
 
     stop_processing_impl();
 
+    m_processing_cv.notify_all();
+
+    if (m_call_backs.stopping) m_call_backs.stopping();
+}
+
+void stt_engine::stop() {
+    request_stop();
+
     if (!m_processing_thread.joinable()) {
-        LOGD("processing thread already stopped");
+        LOGD("stt already stopped");
         return;
     }
 
@@ -262,24 +274,22 @@ void stt_engine::stop() {
     if (m_processing_thread.joinable()) m_processing_thread.join();
     m_config.speech_started = false;
     set_speech_detection_status(speech_detection_status_t::no_speech);
-    set_processing_state(processing_state_t::idle);
+    set_state(state_t::idle);
 
-    LOGD("stop completed");
+    LOGD("stt stop completed");
 }
 
-void stt_engine::start_processing() {
-    LOGD("processing started");
+void stt_engine::process() {
+    LOGD("stt processing started");
 
     m_thread_exit_requested = false;
 
     try {
-        set_processing_state(processing_state_t::initializing);
+        set_state(state_t::initializing);
         start_processing_impl();
-        set_processing_state(processing_state_t::idle);
+        set_state(state_t::idle);
 
         while (true) {
-            LOGT("processing iter");
-
             std::unique_lock lock{m_processing_mtx};
 
             if (m_thread_exit_requested) break;
@@ -296,14 +306,16 @@ void stt_engine::start_processing() {
 
         flush(flush_t::exit);
     } catch (const std::runtime_error& e) {
-        LOGE("processing error: " << e.what());
+        LOGE("stt processing error: " << e.what());
 
         if (m_call_backs.error) m_call_backs.error();
     }
 
     reset_in_processing();
 
-    LOGD("processing ended");
+    LOGD("stt processing ended");
+
+    if (m_call_backs.stopped) m_call_backs.stopped();
 }
 
 bool stt_engine::lock_buf(lock_type_t desired_lock) {
@@ -434,29 +446,29 @@ void stt_engine::set_intermediate_text(const std::string& text) {
 
 stt_engine::speech_detection_status_t stt_engine::speech_detection_status()
     const {
-    switch (m_processing_state) {
-        case processing_state_t::initializing:
+    switch (m_state) {
+        case state_t::initializing:
             return speech_detection_status_t::initializing;
-        case processing_state_t::decoding:
+        case state_t::decoding:
             if (m_speech_detection_status ==
                 speech_detection_status_t::speech_detected)
                 break;
             else
                 return speech_detection_status_t::decoding;
-        case processing_state_t::idle:
+        case state_t::idle:
             break;
     }
 
     return m_speech_detection_status;
 }
 
-void stt_engine::set_processing_state(processing_state_t new_state) {
-    if (m_processing_state != new_state) {
+void stt_engine::set_state(state_t new_state) {
+    if (m_state != new_state) {
         auto old_speech_status = speech_detection_status();
 
-        LOGD("processing state: " << m_processing_state << " => " << new_state);
+        LOGD("stt state: " << m_state << " => " << new_state);
 
-        m_processing_state = new_state;
+        m_state = new_state;
 
         auto new_speech_status = speech_detection_status();
 

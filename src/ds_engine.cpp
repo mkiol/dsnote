@@ -246,7 +246,7 @@ stt_engine::samples_process_result_t ds_engine::process_buff() {
     }();
 
     if (final_decode || !m_speech_buf.empty()) {
-        set_processing_state(processing_state_t::decoding);
+        set_state(state_t::decoding);
 
         LOGD("speech frame: samples=" << m_speech_buf.size()
                                       << ", final=" << final_decode);
@@ -259,8 +259,7 @@ stt_engine::samples_process_result_t ds_engine::process_buff() {
         m_segment_time_offset += m_segment_time_discarded_after;
         m_segment_time_discarded_after = 0;
 
-        if (m_config.speech_started)
-            set_processing_state(processing_state_t::idle);
+        if (m_config.speech_started) set_state(state_t::idle);
 
         m_speech_buf.clear();
 

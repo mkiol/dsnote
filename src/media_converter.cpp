@@ -14,6 +14,12 @@ QDebug operator<<(QDebug d, media_converter::state_t state) {
         case media_converter::state_t::idle:
             d << "idle";
             break;
+        case media_converter::state_t::cancelling:
+            d << "cancelling";
+            break;
+        case media_converter::state_t::error:
+            d << "error";
+            break;
         case media_converter::state_t::importing_subtitles:
             d << "importing-subtitles";
             break;
@@ -44,15 +50,25 @@ QDebug operator<<(QDebug d, media_converter::task_t task) {
 void media_converter::clear() {
     m_data.clear();
     m_progress = 0.0;
+    m_state = state_t::idle;
+    m_task = task_t::none;
+    m_cancelled = false;
+}
+
+void media_converter::cancel() {
+    if (!m_mc || m_state == state_t::idle || m_state == state_t::cancelling)
+        return;
+
+    set_state(state_t::cancelling);
+    m_mc->cancel();
 }
 
 bool media_converter::export_to_subtitles_async(
     const QString& input_file_path, const QString& output_file_path,
     media_compressor::format_t format) {
     qDebug() << "media converter task:" << task_t::export_to_subtitles_async;
+    clear();
     m_task = task_t::export_to_subtitles_async;
-    m_data.clear();
-    m_progress = 0.0;
 
     try {
         m_mc = std::make_unique<media_compressor>();
@@ -78,9 +94,8 @@ bool media_converter::export_to_subtitles_async(
 bool media_converter::import_subtitles_async(const QString& file_path,
                                               int stream_index) {
     qDebug() << "media converter task:" << task_t::import_subtitles_async;
+    clear();
     m_task = task_t::import_subtitles_async;
-    m_data.clear();
-    m_progress = 0.0;
 
     try {
         m_mc = std::make_unique<media_compressor>();
@@ -115,6 +130,10 @@ media_converter::media_converter() : QObject{} {
 void media_converter::set_state(state_t new_state) {
     if (m_state != new_state) {
         qDebug() << "media converter state:" << m_state << "=>" << new_state;
+
+        if (m_state == state_t::cancelling && new_state == state_t::idle)
+            m_cancelled = true;
+
         m_state = new_state;
         emit state_changed();
     }
@@ -129,8 +148,9 @@ void media_converter::set_progress(double new_progress) {
 }
 
 void media_converter::handle_processing_done() {
+    bool is_error = m_mc ? m_mc->error() : false;
     m_mc.reset();
-    set_state(state_t::idle);
+    set_state(is_error ? state_t::error : state_t::idle);
 }
 
 void media_converter::handle_data() {

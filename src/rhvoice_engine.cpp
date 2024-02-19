@@ -203,7 +203,7 @@ int rhvoice_engine::play_speech_callback(const short* samples,
         return 0;
     }
 
-    if (cb_data->engine->m_shutting_down) {
+    if (cb_data->engine->is_shutdown()) {
         LOGD("end of rhvoice play speech due to shutdown");
         return 0;
     }
@@ -267,7 +267,7 @@ bool rhvoice_engine::encode_speech_impl(const std::string& text,
 
     m_rhvoice_api.RHVoice_delete_message(message);
 
-    if (m_shutting_down) {
+    if (is_shutdown()) {
         cb_data.wav_file.close();
         unlink(out_file.c_str());
         return false;

@@ -18,7 +18,8 @@ ColumnLayout {
     property alias noteTextArea: _noteTextArea
     property alias translatedNoteTextArea: _translatedNoteTextArea
     property bool readOnly: false
-    readonly property bool canCancelMnt: app.state === DsnoteApp.StateTranslating
+    readonly property bool canCancelMnt: app.state === DsnoteApp.StateTranslating &&
+                                         app.task_state !== DsnoteApp.TaskStateCancelling
     readonly property int _mntComboSize: Math.max(mntInCombo.first.combo.implicitWidth,
                                                   mntOutCombo.first.combo.implicitWidth)
     readonly property string placeholderText: qsTr("Translator model has not been set up yet.") + " " +

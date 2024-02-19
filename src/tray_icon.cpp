@@ -63,7 +63,6 @@ void tray_icon::update_menu() {
                 p.second->setProperty("enabled", m_state == state_t::stt);
                 break;
             case action_t::pause_resume_reading:
-
                 p.second->setIcon(QIcon::fromTheme(
                     m_task_state == task_state_t::paused
                         ? QStringLiteral("media-playback-start-symbolic")
@@ -73,10 +72,13 @@ void tray_icon::update_menu() {
                                       : tr("Pause reading"));
                 break;
             case action_t::cancel:
-                p.second->setProperty("enabled", m_state != state_t::idle &&
-                                                     m_state != state_t::busy);
+                p.second->setProperty(
+                    "enabled", m_state != state_t::idle &&
+                                   m_state != state_t::busy &&
+                                   m_task_state != task_state_t::cancelling);
                 break;
             case action_t::quit:
+            case action_t::toggle_app_window:
                 break;
         }
     });

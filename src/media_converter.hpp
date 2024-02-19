@@ -18,7 +18,13 @@
 class media_converter : public QObject {
     Q_OBJECT
    public:
-    enum class state_t { idle, importing_subtitles, exporting_to_subtitles };
+    enum class state_t {
+        idle,
+        cancelling,
+        error,
+        importing_subtitles,
+        exporting_to_subtitles
+    };
     friend QDebug operator<<(QDebug d, state_t state);
 
     enum class task_t {
@@ -33,6 +39,7 @@ class media_converter : public QObject {
     inline auto state() const { return m_state; }
     inline auto task() const { return m_task; }
     inline auto progress() const { return m_progress; }
+    inline auto cancelled() const { return m_cancelled; }
     QString string_data() const;
 
     bool import_subtitles_async(const QString& file_path, int stream_index);
@@ -40,6 +47,7 @@ class media_converter : public QObject {
                                    const QString& output_file_path,
                                    media_compressor::format_t format);
     void clear();
+    void cancel();
 
    signals:
     void progress_changed();
@@ -51,6 +59,7 @@ class media_converter : public QObject {
     state_t m_state = state_t::idle;
     task_t m_task = task_t::none;
     double m_progress = 0.0;
+    bool m_cancelled = false;
 
     Q_SIGNAL void data_received();
     Q_SIGNAL void processing_done();

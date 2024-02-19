@@ -29,6 +29,7 @@ SpeechPanel {
         case DsnoteApp.TaskStateInitializing: return 3
         case DsnoteApp.TaskStateSpeechPlaying: return 4
         case DsnoteApp.TaskStateSpeechPaused: return 5
+        case DsnoteApp.TaskStateCancelling: return 3;
         }
         return 0;
     }
@@ -44,6 +45,8 @@ SpeechPanel {
         if (!app.connected) return qsTr("Starting...")
         if (app.busy || service.busy) return qsTr("Busy...")
         if (!app.stt_configured && !app.tts_configured) return qsTr("No language has been set.")
+        if (app.task_state === DsnoteApp.TaskStateCancelling)
+            return qsTr("Cancelling, please wait...")
         if (app.task_state === DsnoteApp.TaskStateInitializing) return qsTr("Getting ready, please wait...")
         if (app.state === DsnoteApp.StateWritingSpeechToFile) return qsTr("Writing speech to file...")
         if (app.state === DsnoteApp.StateImportingSubtitles)

@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -154,6 +154,12 @@ std::ostream& operator<<(std::ostream& os, tts_engine::state_t state) {
         case tts_engine::state_t::idle:
             os << "idle";
             break;
+        case tts_engine::state_t::stopping:
+            os << "stopping";
+            break;
+        case tts_engine::state_t::stopped:
+            os << "stopped";
+            break;
         case tts_engine::state_t::initializing:
             os << "initializing";
             break;
@@ -182,13 +188,12 @@ tts_engine::~tts_engine() {
 void tts_engine::start() {
     LOGD("tts start");
 
-    m_shutting_down = true;
+    m_state = state_t::stopping;
     m_cv.notify_one();
     if (m_processing_thread.joinable()) m_processing_thread.join();
 
     m_queue = std::queue<task_t>{};
     m_state = state_t::idle;
-    m_shutting_down = false;
     m_processing_thread = std::thread{&tts_engine::process, this};
 
     LOGD("tts start completed");
@@ -197,12 +202,12 @@ void tts_engine::start() {
 void tts_engine::stop() {
     LOGD("tts stop started");
 
-    m_shutting_down = true;
-
-    set_state(state_t::idle);
+    set_state(state_t::stopping);
 
     m_cv.notify_one();
     if (m_processing_thread.joinable()) m_processing_thread.join();
+
+    set_state(state_t::stopped);
 
     LOGD("tts stop completed");
 }
@@ -210,9 +215,8 @@ void tts_engine::stop() {
 void tts_engine::request_stop() {
     LOGD("tts stop requested");
 
-    m_shutting_down = true;
-
-    set_state(state_t::idle);
+    set_state(state_t::stopping);
+    m_cv.notify_one();
 }
 
 std::string tts_engine::first_file_with_ext(std::string dir_path,
@@ -252,7 +256,7 @@ std::string tts_engine::find_file_with_name_prefix(std::string dir_path,
 }
 
 void tts_engine::encode_speech(std::string text) {
-    if (m_shutting_down) return;
+    if (is_shutdown()) return;
 
     auto tasks = make_tasks(text);
 
@@ -281,7 +285,19 @@ void tts_engine::set_ref_voice_file(std::string ref_voice_file) {
 }
 
 void tts_engine::set_state(state_t new_state) {
-    if (m_shutting_down) new_state = state_t::idle;
+    if (is_shutdown()) {
+        switch (new_state) {
+            case state_t::idle:
+            case state_t::stopping:
+            case state_t::initializing:
+            case state_t::encoding:
+                new_state = state_t::stopping;
+                break;
+            case state_t::stopped:
+            case state_t::error:
+                break;
+        }
+    }
 
     if (m_state != new_state) {
         LOGD("tts engine state: " << m_state << " => " << new_state);
@@ -537,17 +553,15 @@ void tts_engine::process() {
 
     decltype(m_queue) queue;
 
-    while (!m_shutting_down && m_state != state_t::error) {
+    while (!is_shutdown()) {
         {
             std::unique_lock<std::mutex> lock{m_mutex};
-            m_cv.wait(lock, [this] {
-                return (m_shutting_down || m_state == state_t::error) ||
-                       !m_queue.empty();
-            });
+            m_cv.wait(lock,
+                      [this] { return is_shutdown() || !m_queue.empty(); });
             std::swap(queue, m_queue);
         }
 
-        if (m_shutting_down || m_state == state_t::error) break;
+        if (is_shutdown()) break;
 
         if (!model_created()) {
             set_state(state_t::initializing);
@@ -557,9 +571,10 @@ void tts_engine::process() {
             if (!model_created()) {
                 set_state(state_t::error);
                 if (m_call_backs.error) m_call_backs.error();
-                break;
             }
         }
+
+        if (is_shutdown()) break;
 
         if (m_restart_requested) {
             m_restart_requested = false;
@@ -572,12 +587,14 @@ void tts_engine::process() {
 
         setup_ref_voice();
 
+        if (is_shutdown()) break;
+
         set_state(state_t::encoding);
 
         size_t speech_time = 0;
         size_t total_tasks_nb = 0;
 
-        while (!m_shutting_down && !queue.empty()) {
+        while (!is_shutdown() && !queue.empty()) {
             auto task = std::move(queue.front());
 
             if (task.first) {
@@ -683,6 +700,8 @@ void tts_engine::process() {
                 speech_time += media_compressor{}.duration(output_file);
             }
 
+            if (is_shutdown()) break;
+
             if (m_call_backs.speech_encoded) {
                 m_call_backs.speech_encoded(task.text, output_file,
                                             m_config.audio_format, progress,
@@ -690,10 +709,10 @@ void tts_engine::process() {
             }
         }
 
-        set_state(state_t::idle);
+        if (!is_shutdown()) set_state(state_t::idle);
     }
 
-    if (m_shutting_down) set_state(state_t::idle);
+    if (m_state != state_t::error) set_state(state_t::stopped);
 
     LOGD("tts processing done");
 }
