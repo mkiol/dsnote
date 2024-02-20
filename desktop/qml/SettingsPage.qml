@@ -1115,153 +1115,6 @@ DialogPage {
             }
 
             SectionLabel {
-                text: qsTr("CPU options")
-            }
-
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Number of simultaneous threads")
-                    wrapMode: Text.Wrap
-                }
-
-                SpinBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? appWin.padding : 0
-                    from: 0
-                    to: 32
-                    stepSize: 1
-                    value: _settings.num_threads < 0 ? 0 : _settings.num_threads > 32 ? 32 : _settings.num_threads
-                    textFromValue: function(value) {
-                        return value < 1 ? qsTr("Auto") : value.toString()
-                    }
-                    valueFromText: function(text) {
-                        if (text === qsTr("Auto")) return 0
-                        return parseInt(text);
-                    }
-                    onValueChanged: {
-                        _settings.num_threads = value;
-                    }
-                    Component.onCompleted: {
-                        contentItem.color = palette.text
-                    }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Set the maximum number of simultaneous CPU threads.")
-                    hoverEnabled: true
-                }
-            }
-
-            SectionLabel {
-                visible: _settings.gpu_supported()
-                text: qsTr("Graphics card options")
-            }
-
-            CheckBox {
-                visible: _settings.gpu_supported()
-                checked: _settings.gpu_scan_cuda
-                text: qsTr("Use %1").arg("NVIDIA CUDA")
-                onCheckedChanged: {
-                    _settings.gpu_scan_cuda = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Try to find NVIDIA CUDA compatible graphic cards in the system.") + " " +
-                              qsTr("Disable this option if you observe problems when launching the application.")
-                hoverEnabled: true
-            }
-
-            CheckBox {
-                visible: _settings.gpu_supported()
-                checked: _settings.gpu_scan_hip
-                text: qsTr("Use %1").arg("AMD ROCm")
-                onCheckedChanged: {
-                    _settings.gpu_scan_hip = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Try to find AMD ROCm compatible graphic cards in the system.") + " " +
-                              qsTr("Disable this option if you observe problems when launching the application.")
-                hoverEnabled: true
-            }
-
-            CheckBox {
-                visible: _settings.gpu_supported()
-                checked: _settings.gpu_scan_opencl
-                text: qsTr("Use %1").arg("OpenCL")
-                onCheckedChanged: {
-                    _settings.gpu_scan_opencl = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
-                              qsTr("Disable this option if you observe problems when launching the application.")
-                hoverEnabled: true
-            }
-
-            CheckBox {
-                visible: _settings.gpu_supported()
-                checked: _settings.gpu_override_version
-                text: qsTr("Override GPU version")
-                onCheckedChanged: {
-                    _settings.gpu_override_version = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Override AMD GPU version.") + " " +
-                              qsTr("Enable this option if you observe problems when using GPU acceleration with AMD graphics card.")
-                hoverEnabled: true
-            }
-
-            GridLayout {
-                columns: root.verticalMode ? 1 : 3
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-                visible: _settings.gpu_supported() && _settings.gpu_override_version
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: appWin.padding
-                    text: qsTr("Version")
-                }
-                TextField {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - gpuOverrideResetButton.width - appWin.padding)
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
-                    text: _settings.gpu_overrided_version
-                    onTextChanged: _settings.gpu_overrided_version = text
-                    color: palette.text
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Value has the same effect as %1 environment variable.").arg("<i>HSA_OVERRIDE_GFX_VERSION</i>")
-                    hoverEnabled: true
-                }
-                Button {
-                    id: gpuOverrideResetButton
-
-                    icon.name: "edit-undo-symbolic"
-                    onClicked: _settings.gpu_overrided_version = ""
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
-
-                    ToolTip.visible: hovered
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.text: qsTr("Reset to default value.")
-                    hoverEnabled: true
-                }
-            }
-
-            SectionLabel {
                 text: qsTr("Availability of optional features")
             }
 
@@ -1320,64 +1173,227 @@ DialogPage {
                 }
             }
 
-            SectionLabel {
-                text: qsTr("Libraries")
+            Button {
+                id: advancedButton
+
+                Layout.alignment: Qt.AlignHCenter
+                checkable: true
+                checked: false
+                text: checked ? qsTr("Hide advanced settings") : qsTr("Show advanced settings")
             }
 
-            CheckBox {
-                checked: _settings.py_feature_scan
-                text: qsTr("Check Python dependencies")
-                onCheckedChanged: {
-                    _settings.py_feature_scan = checked
+            ColumnLayout {
+                id: advancedTab
+
+                visible: advancedButton.checked
+                width: root.width
+
+                SectionLabel {
+                    text: qsTr("CPU options")
                 }
 
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Check the presence of the required Python libraries.") + " " +
-                              qsTr("Disable this option if you observe problems when launching the application.")
-                hoverEnabled: true
+                GridLayout {
+                    columns: root.verticalMode ? 1 : 2
+                    columnSpacing: appWin.padding
+                    rowSpacing: appWin.padding
 
-            }
+                    Label {
+                        Layout.fillWidth: true
+                        text: qsTr("Number of simultaneous threads")
+                        wrapMode: Text.Wrap
+                    }
 
-            GridLayout {
-                visible: _settings.py_feature_scan && !_settings.is_flatpak()
-                columns: root.verticalMode ? 1 : 3
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
+                    SpinBox {
+                        Layout.fillWidth: verticalMode
+                        Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                        Layout.leftMargin: verticalMode ? appWin.padding : 0
+                        from: 0
+                        to: 32
+                        stepSize: 1
+                        value: _settings.num_threads < 0 ? 0 : _settings.num_threads > 32 ? 32 : _settings.num_threads
+                        textFromValue: function(value) {
+                            return value < 1 ? qsTr("Auto") : value.toString()
+                        }
+                        valueFromText: function(text) {
+                            if (text === qsTr("Auto")) return 0
+                            return parseInt(text);
+                        }
+                        onValueChanged: {
+                            _settings.num_threads = value;
+                        }
+                        Component.onCompleted: {
+                            contentItem.color = palette.text
+                        }
 
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Location of Python libraries")
-                    Layout.leftMargin: appWin.padding
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Set the maximum number of simultaneous CPU threads.")
+                        hoverEnabled: true
+                    }
                 }
 
-                TextField {
-                    id: pyTextField
+                SectionLabel {
+                    visible: _settings.gpu_supported()
+                    text: qsTr("Graphics card options")
+                }
 
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - pySaveButton.width - appWin.padding)
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
-                    text: _settings.py_path
-                    color: palette.text
-                    placeholderText: qsTr("Leave blank to use the default value.")
+                CheckBox {
+                    visible: _settings.gpu_supported()
+                    checked: _settings.gpu_scan_cuda
+                    text: qsTr("Use %1").arg("NVIDIA CUDA")
+                    onCheckedChanged: {
+                        _settings.gpu_scan_cuda = checked
+                    }
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Python libraries directory (%1).").arg("<i>PYTHONPATH</i>") + " " + qsTr("Leave blank to use the default value.") + " " +
-                                  qsTr("This option may be useful if you use %1 module to manage Python libraries.").arg("<i>venv</i>")
+                    ToolTip.text: qsTr("Try to find NVIDIA CUDA compatible graphic cards in the system.") + " " +
+                                  qsTr("Disable this option if you observe problems when launching the application.")
                     hoverEnabled: true
                 }
 
-                Button {
-                    id: pySaveButton
-
-                    text: qsTr("Save")
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
-                    onClicked: _settings.py_path = pyTextField.text
+                CheckBox {
+                    visible: _settings.gpu_supported()
+                    checked: _settings.gpu_scan_hip
+                    text: qsTr("Use %1").arg("AMD ROCm")
+                    onCheckedChanged: {
+                        _settings.gpu_scan_hip = checked
+                    }
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Save changes")
+                    ToolTip.text: qsTr("Try to find AMD ROCm compatible graphic cards in the system.") + " " +
+                                  qsTr("Disable this option if you observe problems when launching the application.")
+                    hoverEnabled: true
+                }
+
+                CheckBox {
+                    visible: _settings.gpu_supported()
+                    checked: _settings.gpu_scan_opencl
+                    text: qsTr("Use %1").arg("OpenCL")
+                    onCheckedChanged: {
+                        _settings.gpu_scan_opencl = checked
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
+                                  qsTr("Disable this option if you observe problems when launching the application.")
+                    hoverEnabled: true
+                }
+
+                CheckBox {
+                    visible: _settings.gpu_supported()
+                    checked: _settings.gpu_override_version
+                    text: qsTr("Override GPU version")
+                    onCheckedChanged: {
+                        _settings.gpu_override_version = checked
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Override AMD GPU version.") + " " +
+                                  qsTr("Enable this option if you observe problems when using GPU acceleration with AMD graphics card.")
+                    hoverEnabled: true
+                }
+
+                GridLayout {
+                    columns: root.verticalMode ? 1 : 3
+                    columnSpacing: appWin.padding
+                    rowSpacing: appWin.padding
+                    visible: _settings.gpu_supported() && _settings.gpu_override_version
+
+                    Label {
+                        Layout.fillWidth: true
+                        Layout.leftMargin: appWin.padding
+                        text: qsTr("Version")
+                    }
+                    TextField {
+                        Layout.fillWidth: verticalMode
+                        Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - gpuOverrideResetButton.width - appWin.padding)
+                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                        text: _settings.gpu_overrided_version
+                        onTextChanged: _settings.gpu_overrided_version = text
+                        color: palette.text
+
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Value has the same effect as %1 environment variable.").arg("<i>HSA_OVERRIDE_GFX_VERSION</i>")
+                        hoverEnabled: true
+                    }
+                    Button {
+                        id: gpuOverrideResetButton
+
+                        icon.name: "edit-undo-symbolic"
+                        onClicked: _settings.gpu_overrided_version = ""
+                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Reset to default value.")
+                        hoverEnabled: true
+                    }
+                }
+
+                SectionLabel {
+                    text: qsTr("Libraries")
+                }
+
+                CheckBox {
+                    checked: _settings.py_feature_scan
+                    text: qsTr("Check Python dependencies")
+                    onCheckedChanged: {
+                        _settings.py_feature_scan = checked
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Check the presence of the required Python libraries.") + " " +
+                                  qsTr("Disable this option if you observe problems when launching the application.")
+                    hoverEnabled: true
+
+                }
+
+                GridLayout {
+                    visible: _settings.py_feature_scan && !_settings.is_flatpak()
+                    columns: root.verticalMode ? 1 : 3
+                    columnSpacing: appWin.padding
+                    rowSpacing: appWin.padding
+
+                    Label {
+                        Layout.fillWidth: true
+                        text: qsTr("Location of Python libraries")
+                        Layout.leftMargin: appWin.padding
+                    }
+
+                    TextField {
+                        id: pyTextField
+
+                        Layout.fillWidth: verticalMode
+                        Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - pySaveButton.width - appWin.padding)
+                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                        text: _settings.py_path
+                        color: palette.text
+                        placeholderText: qsTr("Leave blank to use the default value.")
+
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Python libraries directory (%1).").arg("<i>PYTHONPATH</i>") + " " + qsTr("Leave blank to use the default value.") + " " +
+                                      qsTr("This option may be useful if you use %1 module to manage Python libraries.").arg("<i>venv</i>")
+                        hoverEnabled: true
+                    }
+
+                    Button {
+                        id: pySaveButton
+
+                        text: qsTr("Save")
+                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                        onClicked: _settings.py_path = pyTextField.text
+
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Save changes")
+                    }
                 }
             }
         }
