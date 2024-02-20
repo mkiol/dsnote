@@ -381,9 +381,10 @@ please consider doing one or two of the following:
 
 ## Reviews and demos
 
-- [Screenshots](https://gitlab.com/mkiol/dsnote/-/tree/main/desktop/screenshots)
-- [Speech Note video demo](https://www.youtube.com/watch?v=yNoubuHNDq8) (Speech Note 4.0)
-- [Translator feature video demo](https://www.youtube.com/watch?v=psRT0UPFb04) (Speech Note 4.0)
+- [Screenshots](https://gitlab.com/mkiol/dsnote/-/tree/main/desktop/screenshots) (Speech Note 4.4)
+- [alternativalinux](https://www.alternativalinux.it/riconoscimento-sintesi-vocale-e-traduttore-per-linux/) (Speech Note 4.4, Italian)
+- [alternativalinux video](https://www.youtube.com/watch?v=6Peoss66fMg) (Speech Note 4.4, Italian)
+- [ZDNET](https://www.zdnet.com/article/how-to-enable-speech-to-text-in-linux-with-this-simple-app/) (Speech Note 4.2)
 - [Translator feature video demo on Sailfish OS](https://www.youtube.com/watch?v=88cdPpvBmmI) (Speech Note 4.0)
 - [Translator feature video demo on PinePhone](https://www.youtube.com/watch?v=kTsM3kUxE2Q) (Speech Note 4.0)
 - [DebugPoint.com](https://www.debugpoint.com/speech-note-text-to-speech/) (Speech Note 4.0)
@@ -392,7 +393,6 @@ please consider doing one or two of the following:
 - [LinuxLinks](https://www.linuxlinks.com/machine-learning-linux-speech-note/) (Speech Note 4.0)
 - [The Linux Cast video](https://www.youtube.com/watch?v=zlLVgTB42Bo) (Speech Note 4.0)
 - [CONNECTwww.com](https://connectwww.com/speech-note-offline-speech-to-text-text-to-speech-and-translation-app/) (Speech Note 4.0)
-- [ZDNET](https://www.zdnet.com/article/how-to-enable-speech-to-text-in-linux-with-this-simple-app/) (Speech Note 4.2)
 
 ## License
 
