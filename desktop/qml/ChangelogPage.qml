@@ -37,7 +37,7 @@ DialogPage {
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
         <li>New voice for Persian language: <i>Piper Gyro Medium</i></li>
-        <li>Settings option to enable/disable speech synchronization with subtitle timestamps (<i>Text to Speech</i> &rarr; <i>Sync speech with subtitle timestamps</i>).
+        <li>Settings option to enable/disable speech synchronization with subtitle timestamps (<i>Text to Speech</i> &rarr; <i>Sync speech with timestamps</i>).
             This may be useful for creating voiceovers.</li>
         </ul>
         <p>" + qsTr("Translator") + ":</p>

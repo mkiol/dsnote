@@ -527,6 +527,8 @@ DialogPage {
                     text: qsTr("Graphics card")
                 }
                 ComboBox {
+                    id: sttGpuCombo
+
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
                     Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
@@ -539,6 +541,28 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Select preferred graphics card for hardware acceleration.")
+                }
+            }
+
+            InlineMessage {
+                color: palette.text
+                Layout.fillWidth: true
+                Layout.leftMargin: verticalMode ? 2 * appWin.padding : appWin.padding
+                visible: _settings.gpu_supported() &&
+                         app.feature_gpu_stt &&
+                         _settings.stt_use_gpu &&
+                         _settings.gpu_devices_stt.length > 1 &&
+                         sttGpuCombo.displayText.search("ROCm") !== -1
+
+
+                Label {
+                    color: palette.text
+                    Layout.fillWidth: true
+                    textFormat: Text.RichText
+                    wrapMode: Text.Wrap
+                    text: qsTr("Tip: If you observe problems with GPU acceleration, try to enable %1 option.")
+                          .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
+                                       qsTr("Override GPU version") + "</i>");
                 }
             }
 
@@ -659,20 +683,6 @@ DialogPage {
             width: root.width
 
             CheckBox {
-                checked: _settings.tts_subtitles_sync
-                text: qsTr("Sync speech with subtitle timestamps")
-                onCheckedChanged: {
-                    _settings.tts_subtitles_sync = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("When reading or exporting subtitles to file, synchronize the generated speech with the subtitle timestamps.") + " " +
-                              qsTr("This may be useful for creating voiceovers.")
-                hoverEnabled: true
-            }
-
-            CheckBox {
                 checked: _settings.diacritizer_enabled
                 text: qsTr("Restore diacritics before speech synthesis")
                 onCheckedChanged: {
@@ -750,6 +760,8 @@ DialogPage {
                     text: qsTr("Graphics card")
                 }
                 ComboBox {
+                    id: ttsGpuCombo
+
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
                     Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
@@ -764,6 +776,45 @@ DialogPage {
                     ToolTip.text: qsTr("Select preferred graphics card for hardware acceleration.")
                     hoverEnabled: true
                 }
+            }
+
+            InlineMessage {
+                color: palette.text
+                Layout.fillWidth: true
+                Layout.leftMargin: verticalMode ? 2 * appWin.padding : appWin.padding
+                visible: _settings.gpu_supported() &&
+                         app.feature_gpu_tts &&
+                         _settings.tts_use_gpu &&
+                         _settings.gpu_devices_tts.length > 1 &&
+                         ttsGpuCombo.displayText.search("ROCm") !== -1
+
+                Label {
+                    color: palette.text
+                    Layout.fillWidth: true
+                    textFormat: Text.RichText
+                    wrapMode: Text.Wrap
+                    text: qsTr("Tip: If you observe problems with GPU acceleration, try to enable %1 option.")
+                          .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
+                                       qsTr("Override GPU version") + "</i>");
+                }
+            }
+
+            SectionLabel {
+                text: qsTr("Subtitles")
+            }
+
+            CheckBox {
+                checked: _settings.tts_subtitles_sync
+                text: qsTr("Sync speech with timestamps")
+                onCheckedChanged: {
+                    _settings.tts_subtitles_sync = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("When reading or exporting subtitles to file, synchronize the generated speech with the subtitle timestamps.") + " " +
+                              qsTr("This may be useful for creating voiceovers.")
+                hoverEnabled: true
             }
         }
 
