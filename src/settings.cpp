@@ -1852,6 +1852,17 @@ void settings::set_gpu_scan_opencl(bool value) {
     }
 }
 
+bool settings::tts_subtitles_sync() const {
+    return value(QStringLiteral("tts_subtitles_sync"), true).toBool();
+}
+
+void settings::set_tts_subtitles_sync(bool value) {
+    if (value != tts_subtitles_sync()) {
+        setValue(QStringLiteral("tts_subtitles_sync"), value);
+        emit tts_subtitles_sync_changed();
+    }
+}
+
 bool settings::py_feature_scan() const {
     return value(QStringLiteral("service/py_feature_scan"), true).toBool();
 }

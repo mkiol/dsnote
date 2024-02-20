@@ -249,6 +249,8 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(
         file_import_action_t file_import_action READ file_import_action WRITE
             set_file_import_action NOTIFY file_import_action_changed)
+    Q_PROPERTY(bool tts_subtitles_sync READ tts_subtitles_sync WRITE
+                   set_tts_subtitles_sync NOTIFY tts_subtitles_sync_changed)
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -623,6 +625,9 @@ class settings : public QSettings, public singleton<settings> {
     QString gpu_overrided_version();
     void set_gpu_overrided_version(QString new_value);
 
+    bool tts_subtitles_sync() const;
+    void set_tts_subtitles_sync(bool value);
+
    signals:
     // app
     void speech_mode_changed();
@@ -676,6 +681,7 @@ class settings : public QSettings, public singleton<settings> {
     void sub_config_changed();
     void keep_last_note_changed();
     void file_import_action_changed();
+    void tts_subtitles_sync_changed();
 
     // service
     void models_dir_changed();

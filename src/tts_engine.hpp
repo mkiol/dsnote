@@ -112,6 +112,7 @@ class tts_engine {
         std::string config_dir;
         std::string share_dir;
         text_format_t text_format = text_format_t::raw;
+        bool sync_subs = false;
         std::string options;
         std::string nb_data;
         std::string lang_code;
@@ -142,6 +143,7 @@ class tts_engine {
     inline void set_text_format(text_format_t value) {
         m_config.text_format = value;
     }
+    inline void set_sync_subs(bool value) { m_config.sync_subs = value; }
     void encode_speech(std::string text);
     static std::string merge_wav_files(std::vector<std::string>&& files);
     void set_speech_speed(unsigned int speech_speed);

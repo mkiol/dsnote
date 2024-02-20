@@ -1289,6 +1289,12 @@ static QString tts_ref_voice_file_from_options(const QVariantMap &options) {
     return {};
 }
 
+static bool sync_subs_from_options(const QVariantMap &options) {
+    if (options.contains(QStringLiteral("sync_subs")))
+        return options.value(QStringLiteral("sync_subs")).toBool();
+    return false;
+}
+
 static tts_engine::text_format_t tts_text_fromat_from_settings_format(
     settings::text_format_t format) {
     switch (format) {
@@ -1323,6 +1329,7 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         config.options = model_config->options.toStdString();
         config.text_format = tts_text_fromat_from_settings_format(
             text_format_from_options(options));
+        config.sync_subs = sync_subs_from_options(options);
         config.audio_format = format_from_cache_format(
             settings::instance()->cache_audio_format());
         config.ref_voice_file =
@@ -1484,6 +1491,7 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             m_tts_engine->set_speech_speed(config.speech_speed);
             m_tts_engine->set_ref_voice_file(std::move(config.ref_voice_file));
             m_tts_engine->set_text_format(config.text_format);
+            m_tts_engine->set_sync_subs(config.sync_subs);
             m_tts_engine->restart();
         }
 

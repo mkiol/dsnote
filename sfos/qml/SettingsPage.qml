@@ -161,6 +161,17 @@ Page {
                 }
             }
 
+            TextSwitch {
+                checked: _settings.tts_subtitles_sync
+                automaticCheck: false
+                text: qsTr("Sync speech with subtitle timestamps")
+                description: qsTr("When reading or exporting subtitles to file, synchronize the generated speech with the subtitle timestamps.") + " " +
+                             qsTr("This may be useful for creating voiceovers.")
+                onClicked: {
+                    _settings.tts_subtitles_sync = !_settings.tts_subtitles_sync
+                }
+            }
+
             SectionHeader {
                 text: qsTr("Other")
             }

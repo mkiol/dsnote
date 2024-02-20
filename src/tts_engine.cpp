@@ -139,7 +139,8 @@ std::ostream& operator<<(std::ostream& os, const tts_engine::config_t& config) {
        << ", speaker=" << config.speaker_id
        << ", ref_voice_file=" << config.ref_voice_file
        << ", text-format=" << config.text_format
-       << ", options=" << config.options << ", lang_code=" << config.lang_code
+       << ", sync_subs=" << config.sync_subs << ", options=" << config.options
+       << ", lang_code=" << config.lang_code
        << ", share-dir=" << config.share_dir
        << ", cache-dir=" << config.cache_dir << ", data-dir=" << config.data_dir
        << ", speech-speed=" << config.speech_speed
@@ -369,13 +370,24 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
             if (!segments.empty()) {
                 tasks.reserve(segments.size());
 
+                if (!m_config.sync_subs) {
+                    segments.front().t0 = 0;
+                    segments.front().t1 = 0;
+                }
+
                 tasks.push_back(task_t{std::move(segments.front().text),
                                        segments.front().t0, segments.front().t1,
                                        true, false});
 
-                for (auto it = segments.begin() + 1; it != segments.end(); ++it)
+                for (auto it = segments.begin() + 1; it != segments.end();
+                     ++it) {
+                    if (!m_config.sync_subs) {
+                        it->t0 = 0;
+                        it->t1 = 0;
+                    }
                     tasks.push_back(task_t{std::move(it->text), it->t0, it->t1,
                                            false, false});
+                }
 
                 tasks.back().last = true;
 

@@ -102,6 +102,8 @@
       <p>Text to Speech:</p>
       <ul>
       <li>New voice for Persian language: 'Piper Gyro Medium'</li>
+      <li>Settings option to enable/disable speech synchronization with subtitle timestamps.
+          This may be useful for creating voiceovers.</li>
       </ul>
       <p>Translator:</p>
       <ul>

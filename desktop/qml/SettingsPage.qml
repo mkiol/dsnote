@@ -659,6 +659,20 @@ DialogPage {
             width: root.width
 
             CheckBox {
+                checked: _settings.tts_subtitles_sync
+                text: qsTr("Sync speech with subtitle timestamps")
+                onCheckedChanged: {
+                    _settings.tts_subtitles_sync = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("When reading or exporting subtitles to file, synchronize the generated speech with the subtitle timestamps.") + " " +
+                              qsTr("This may be useful for creating voiceovers.")
+                hoverEnabled: true
+            }
+
+            CheckBox {
                 checked: _settings.diacritizer_enabled
                 text: qsTr("Restore diacritics before speech synthesis")
                 onCheckedChanged: {
