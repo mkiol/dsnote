@@ -246,6 +246,9 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(
         QString gpu_overrided_version READ gpu_overrided_version WRITE
             set_gpu_overrided_version NOTIFY gpu_overrided_version_changed)
+    Q_PROPERTY(
+        file_import_action_t file_import_action READ file_import_action WRITE
+            set_file_import_action NOTIFY file_import_action_changed)
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -268,6 +271,13 @@ class settings : public QSettings, public singleton<settings> {
         InsertNewLine = 0,
     };
     Q_ENUM(insert_mode_t)
+
+    enum class file_import_action_t {
+        FileImportActionAsk = 0,
+        FileImportActionAppend = 1,
+        FileImportActionReplace = 2
+    };
+    Q_ENUM(file_import_action_t)
 
     enum class audio_format_t {
         AudioFormatAuto = 0,
@@ -499,6 +509,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_sub_break_lines(bool value);
     bool keep_last_note() const;
     void set_keep_last_note(bool value);
+    file_import_action_t file_import_action() const;
+    void set_file_import_action(file_import_action_t value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -663,6 +675,7 @@ class settings : public QSettings, public singleton<settings> {
     void addon_flags_changed();
     void sub_config_changed();
     void keep_last_note_changed();
+    void file_import_action_changed();
 
     // service
     void models_dir_changed();

@@ -133,6 +133,47 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
+                    text: qsTr("File import action")
+                }
+                ComboBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? appWin.padding : 0
+                    currentIndex: {
+                        if (_settings.file_import_action === Settings.FileImportActionAsk) return 0
+                        if (_settings.file_import_action === Settings.FileImportActionAppend) return 1
+                        if (_settings.file_import_action === Settings.FileImportActionReplace) return 2
+                        return 0
+                    }
+                    model: [
+                        qsTr("Ask whether to add or replace"),
+                        qsTr("Add to an existing note"),
+                        qsTr("Replace an existing note")
+                    ]
+                    onActivated: {
+                        if (index === 1) {
+                            _settings.file_import_action = Settings.FileImportActionAppend
+                        } else if (index === 2) {
+                            _settings.file_import_action = Settings.FileImportActionReplace
+                        } else {
+                            _settings.file_import_action = Settings.FileImportActionAsk
+                        }
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.")
+                    hoverEnabled: true
+                }
+            }
+
+            GridLayout {
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
                     text: qsTr("Text appending style")
                 }
                 ComboBox {

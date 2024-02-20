@@ -35,12 +35,12 @@ ApplicationWindow {
     property var _dialogPage
 
     function openFile(path) {
-        if (app.note.length > 0) {
+        if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
             addTextDialog.addHandler = function(){app.import_file(path, -1, false)}
             addTextDialog.replaceHandler = function(){app.import_file(path, -1, true)}
             addTextDialog.open()
         } else {
-            app.import_file(path, -1, true)
+            app.import_file(path, -1, _settings.file_import_action === Settings.FileImportActionReplace)
         }
 
         _settings.file_open_dir = _settings.dir_of_file(path)
@@ -273,11 +273,6 @@ ApplicationWindow {
         property var addHandler
         property var replaceHandler
 
-        property bool text: true
-
-        property string textFilePath
-        property url audioFileUrl
-
         anchors.centerIn: parent
 
         onAddClicked: addHandler()
@@ -303,13 +298,13 @@ ApplicationWindow {
         onDropped: {
             if (!drop.hasUrls) return
 
-            if (app.note.length > 0) {
+            if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
                 var urls = drop.urls
                 addTextDialog.addHandler = function(){app.import_files_url(urls, false)}
                 addTextDialog.replaceHandler = function(){app.import_files_url(urls, true)}
                 addTextDialog.open()
             } else {
-                app.import_files_url(drop.urls, true)
+                app.import_files_url(drop.urls, _settings.file_import_action === Settings.FileImportActionReplace)
             }
         }
     }
@@ -329,18 +324,22 @@ ApplicationWindow {
 
     Connections {
         target: _app_server
-        onActivate_requested: appWin.raise()
+        onActivate_requested: {
+            appWin.show()
+            appWin.raise()
+        }
         onAction_requested: app.execute_action_name(action_name)
         onFiles_to_open_requested: {
-            if (app.note.length > 0) {
+            if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
                 var list_of_files = files
                 addTextDialog.addHandler = function(){app.import_files(list_of_files, false)}
                 addTextDialog.replaceHandler = function(){app.import_files(list_of_files, true)}
                 addTextDialog.open()
             } else {
-                app.import_files(files, true)
+                app.import_files(files, _settings.file_import_action === Settings.FileImportActionReplace)
             }
 
+            appWin.show()
             appWin.raise()
         }
     }
@@ -361,7 +360,18 @@ ApplicationWindow {
         onTts_configuredChanged: showWelcome()
         Component.onCompleted: {
             if (_start_in_tray) show_tray()
-            app.import_files(_files_to_open, false)
+            if (_files_to_open.length > 0) {
+                appWin.show()
+
+                if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
+                    var list_of_files = _files_to_open
+                    addTextDialog.addHandler = function(){app.import_files(list_of_files, false)}
+                    addTextDialog.replaceHandler = function(){app.import_files(list_of_files, true)}
+                    addTextDialog.open()
+                } else {
+                    app.import_files(_files_to_open, _settings.file_import_action === Settings.FileImportActionReplace)
+                }
+            }
             app.execute_action_name(_requested_action)
             app.set_app_window(appWin);
             showWelcome()
@@ -437,6 +447,9 @@ ApplicationWindow {
         onStateChanged: update_dektop_notification()
         onTask_state_changed: update_dektop_notification()
         onIntermediate_text_changed: update_dektop_notification()
-        onActivate_requested: appWin.raise()
+        onActivate_requested: {
+            appWin.show()
+            appWin.raise()
+        }
     }
 }

@@ -1669,6 +1669,20 @@ void settings::set_desktop_notification_policy(
     }
 }
 
+settings::file_import_action_t settings::file_import_action() const {
+    return static_cast<file_import_action_t>(
+        value(QStringLiteral("file_import_action"),
+              static_cast<int>(file_import_action_t::FileImportActionAsk))
+            .toInt());
+}
+
+void settings::set_file_import_action(file_import_action_t value) {
+    if (value != file_import_action()) {
+        setValue(QStringLiteral("file_import_action"), static_cast<int>(value));
+        emit file_import_action_changed();
+    }
+}
+
 bool settings::desktop_notification_details() const {
     return value(QStringLiteral("desktop_notification_details"), false)
         .toBool();

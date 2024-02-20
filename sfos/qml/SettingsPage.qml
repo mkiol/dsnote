@@ -45,6 +45,31 @@ Page {
             }
 
             ComboBox {
+                label: qsTr("File import action")
+                currentIndex: {
+                    if (_settings.file_import_action === Settings.FileImportActionAsk) return 0
+                    if (_settings.file_import_action === Settings.FileImportActionAppend) return 1
+                    if (_settings.file_import_action === Settings.FileImportActionReplace) return 2
+                    return 0
+                }
+                menu: ContextMenu {
+                    MenuItem { text: qsTr("Ask whether to add or replace") }
+                    MenuItem { text: qsTr("Add to an existing note") }
+                    MenuItem { text: qsTr("Replace an existing note") }
+                }
+                onCurrentIndexChanged: {
+                    if (currentIndex === 1) {
+                        _settings.file_import_action = Settings.FileImportActionAppend
+                    } else if (currentIndex === 2) {
+                        _settings.file_import_action = Settings.FileImportActionReplace
+                    } else {
+                        _settings.file_import_action = Settings.FileImportActionAsk
+                    }
+                }
+                description: qsTr("The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.")
+            }
+
+            ComboBox {
                 label: qsTr("Text appending style")
                 currentIndex: {
                     if (_settings.insert_mode === Settings.InsertInLine) return 0
