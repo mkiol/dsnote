@@ -43,12 +43,22 @@ void file_source::start() {
     m_timer.setInterval(m_timer_quick);
     m_timer.start();
 
-    m_mc.decompress_to_raw_async({m_file.toStdString()},
-                                 /*options=*/
-                                 {/*mono=*/true, /*sample_rate_16=*/true,
-                                  /*stream_index=*/m_stream_index},
-                                 /*data_ready_callback=*/{},
-                                 /*task_finished_callback=*/{});
+    auto stream = m_stream_index >= 0
+                      ? std::make_optional<media_compressor::stream_t>(
+                            media_compressor::stream_t{
+                                m_stream_index,
+                                media_compressor::media_type_t::audio,
+                                {},
+                                {}})
+                      : std::nullopt;
+
+    m_mc.decompress_to_data_raw_async(
+        {m_file.toStdString()},
+        /*options=*/
+        {media_compressor::quality_t::vbr_medium, /*mono=*/true,
+         /*sample_rate_16=*/true, /*stream=*/std::move(stream)},
+        /*data_ready_callback=*/{},
+        /*task_finished_callback=*/{});
 }
 
 void file_source::handle_read_timeout() {

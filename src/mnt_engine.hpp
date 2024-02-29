@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23,7 +23,14 @@
 
 class mnt_engine {
    public:
-    enum class state_t { idle, initializing, translating, error };
+    enum class state_t {
+        idle,
+        stopping,
+        initializing,
+        translating,
+        stopped,
+        error
+    };
     friend std::ostream& operator<<(std::ostream& os, state_t state);
 
     enum class text_format_t { raw, html, markdown, subrip };
@@ -71,6 +78,7 @@ class mnt_engine {
 
     mnt_engine(config_t config, callbacks_t call_backs);
     virtual ~mnt_engine();
+    static bool available();
     void start();
     void stop();
     void request_stop();
@@ -115,13 +123,12 @@ class mnt_engine {
     config_t m_config;
     callbacks_t m_call_backs;
     bergamot_api_api m_bergamot_api_api;
-    void* m_bergamotlib_handle = nullptr;
+    void* m_lib_handle = nullptr;
     std::thread m_processing_thread;
-    bool m_shutting_down = false;
     std::queue<task_t> m_queue;
     std::mutex m_mutex;
     std::condition_variable m_cv;
-    state_t m_state = state_t::idle;
+    state_t m_state = state_t::stopped;
     void* m_bergamot_ctx_first = nullptr;
     void* m_bergamot_ctx_second = nullptr;
     progress_t m_progress;
@@ -134,7 +141,11 @@ class mnt_engine {
     void set_state(state_t new_state);
     void process();
     std::string translate_internal(std::string text);
-    void open_bergamot_lib();
+    void open_lib();
+    inline bool is_shutdown() const {
+        return m_state == state_t::stopping || m_state == state_t::stopped ||
+               m_state == state_t::error;
+    }
 };
 
 #endif // MNT_ENGINE_HPP

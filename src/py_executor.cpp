@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -37,9 +37,13 @@ void py_executor::stop() {
     LOGD("shutdown completed");
 }
 
-std::future<std::string> py_executor::execute(task_t task) {
-    if (m_shutting_down)
-        throw std::runtime_error("failed to execute task due to shutdown");
+std::optional<std::future<std::any> > py_executor::execute(task_t task) {
+    if (m_shutting_down || !m_thread.joinable()) {
+        LOGW(
+            "task not pushed because py executor loop not running or shutting "
+            "down");
+        return std::nullopt;
+    }
 
     {
         std::lock_guard lock{m_mutex};
@@ -109,7 +113,9 @@ void py_executor::loop() {
             }
 
             try {
+                LOGD("py task execution: start");
                 m_promise->set_value(task.value()());
+                LOGD("py task execution: end");
             } catch (const std::exception& err) {
                 LOGE("py task error: " << err.what());
                 m_promise->set_exception(std::current_exception());

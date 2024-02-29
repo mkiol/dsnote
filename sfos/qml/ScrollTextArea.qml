@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,6 +18,8 @@ SilicaItem {
     property bool canUndo: false
     property bool canRedo: false
     property bool canClear: true
+    readonly property bool canScrollBeginning: !flick.atYBeginning && flick.contentHeight > 0
+    readonly property bool canScrollBottom: !flick.atYEnd && flick.contentHeight > 0
     property alias placeholderLabel: _placeholderLabel.text
 
     signal clearClicked()
@@ -25,8 +27,15 @@ SilicaItem {
     signal undoClicked()
 
     function scrollToBottom() {
-        if (!flick.atYEnd && flick.contentHeight > 0) {
+        if (canScrollBottom) {
             flick.contentY = flick.contentHeight - flick.height
+            flick.returnToBounds()
+        }
+    }
+
+    function scrollToBeginning() {
+        if (canScrollBeginning) {
+            flick.contentY = 0
             flick.returnToBounds()
         }
     }
@@ -127,6 +136,33 @@ SilicaItem {
                          (pressed ? Theme.highlightColor : Theme.primaryColor)
             onClicked: root.undoClicked()
         }
+        IconButton {
+            id: bottomButton
+
+            width: parent.size
+            height: parent.size
+            icon.width: width; icon.height: height
+            visible: root.canScrollBottom
+            icon.source: "image://theme/icon-m-page-down?" +
+                         (pressed ? Theme.highlightColor : Theme.primaryColor)
+            onClicked: {
+                root.scrollToBottom()
+            }
+        }
+        IconButton {
+            id: beginningButton
+
+            width: parent.size
+            height: parent.size
+            icon.width: width; icon.height: height
+            visible: root.canScrollBeginning
+            icon.source: "image://theme/icon-m-page-up?"+
+                         (pressed ? Theme.highlightColor : Theme.primaryColor)
+            onClicked: {
+                root.scrollToBeginning()
+            }
+        }
+
     }
 
     Rectangle {

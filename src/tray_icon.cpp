@@ -56,13 +56,13 @@ void tray_icon::update_menu() {
             case action_t::start_listening_clipboard:
             case action_t::start_reading:
             case action_t::start_reading_clipboard:
-                p.second->setEnabled(m_state == state_t::idle);
+                // p.second->setEnabled(m_state == state_t::idle);
+                p.second->setProperty("enabled", m_state == state_t::idle);
                 break;
             case action_t::stop_listening:
                 p.second->setProperty("enabled", m_state == state_t::stt);
                 break;
             case action_t::pause_resume_reading:
-                p.second->setEnabled(m_state == state_t::tts);
                 p.second->setIcon(QIcon::fromTheme(
                     m_task_state == task_state_t::paused
                         ? QStringLiteral("media-playback-start-symbolic")
@@ -72,10 +72,13 @@ void tray_icon::update_menu() {
                                       : tr("Pause reading"));
                 break;
             case action_t::cancel:
-                p.second->setProperty("enabled", m_state != state_t::idle &&
-                                                     m_state != state_t::busy);
+                p.second->setProperty(
+                    "enabled", m_state != state_t::idle &&
+                                   m_state != state_t::busy &&
+                                   m_task_state != task_state_t::cancelling);
                 break;
             case action_t::quit:
+            case action_t::toggle_app_window:
                 break;
         }
     });
@@ -89,6 +92,7 @@ void tray_icon::make_menu() {
         m_menu.addAction(
             QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
             tr("Start listening")));
+#ifdef USE_X11_FEATURES
     if (settings::instance()->is_xcb()) {
         m_actions.emplace(
             action_t::start_listening_active_window,
@@ -96,6 +100,7 @@ void tray_icon::make_menu() {
                                  "audio-input-microphone-symbolic")),
                              tr("Start listening, text to active window")));
     }
+#endif
     m_actions.emplace(
         action_t::start_listening_clipboard,
         m_menu.addAction(
@@ -129,6 +134,11 @@ void tray_icon::make_menu() {
             QIcon::fromTheme(QStringLiteral("action-unavailable-symbolic")),
             tr("Cancel")));
     m_menu.addSeparator();
+    m_actions.emplace(
+        action_t::toggle_app_window,
+        m_menu.addAction(
+            QIcon::fromTheme(QStringLiteral("view-restore-symbolic")),
+            tr("Show/Hide")));
     m_actions.emplace(
         action_t::quit,
         m_menu.addAction(

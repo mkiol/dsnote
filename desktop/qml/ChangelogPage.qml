@@ -13,14 +13,32 @@ DialogPage {
 
     title: qsTr("Changes")
 
-        SectionLabel {
-        text: qsTr("Version %1").arg("4.4.1 beta")
+    SectionLabel {
+        text: qsTr("Version %1").arg(APP_VERSION)
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Text to Speech") + ":</p>
+        text: "<p>" + qsTr("User Interface") + ":</p>
+        <ul>
+        <li>Import subtitles embedded into video file.
+            If your video file contains one or many subtitle streams, you can import the selected subtitles into notepad.</li>
+        <li>Support for more subtiles formats. You can import and export subtitles in SRT, WebVTT and ASS formats.</li>
+        <li>Unified file importing and exporting.
+            Text, subtitles, audio and video files can be imported or exported using unified menu bar option
+            (<i>Import from a file</i> or <i>Export to a file</i>).</li>
+        <li>Settings option to enable/disable remembering the last note.
+            If the option is disabled, the last note will not be available after restarting the app.
+            (<i>User Interface</i> &rarr; <i>Remember the last note</i>)</li>
+        <li>Settings option for default action when importing note from a file (<i>User Interface</i> &rarr; <i>File import action</i>).
+            You can set <i>Ask whether to add or replace</i>, <i>Add to an existing note</i> or <i>Replace an existing note</i>.</li>
+        <li><i>Speech Note</i> has been translated into Ukrainian and Russian languages.
+            Many thanks to <i>Vovkiv</i> for this contribution!</li>
+        </ul>
+        <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
         <li>New voice for Persian language: <i>Piper Gyro Medium</i></li>
+        <li>Settings option to enable/disable speech synchronization with subtitle timestamps (<i>Text to Speech</i> &rarr; <i>Sync speech with timestamps</i>).
+            This may be useful for creating voiceovers.</li>
         </ul>
         <p>" + qsTr("Translator") + ":</p>
         <ul>

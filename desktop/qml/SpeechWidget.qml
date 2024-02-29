@@ -56,12 +56,11 @@ RowLayout {
 
                     SpeechIndicator {
                         id: indicator
+
                         anchors.centerIn: parent
                         width: 27
                         height: 24
-                        visible: !app.busy && !service.busy &&
-                                 app.state !== DsnoteApp.StateTranscribingFile &&
-                                 app.state !== DsnoteApp.StateWritingSpeechToFile
+                        visible: !busyIndicator.running
                         status: {
                             switch (app.task_state) {
                             case DsnoteApp.TaskStateIdle: return 0;
@@ -70,6 +69,7 @@ RowLayout {
                             case DsnoteApp.TaskStateInitializing: return 3;
                             case DsnoteApp.TaskStateSpeechPlaying: return 4;
                             case DsnoteApp.TaskStateSpeechPaused: return 5;
+                            case DsnoteApp.TaskStateCancelling: return 3;
                             }
                             return 0;
                         }
@@ -77,12 +77,16 @@ RowLayout {
                     }
 
                     BusyIndicator {
+                        id: busyIndicator
+
                         anchors.centerIn: parent
                         width: 24
                         height: 24
                         running: app.busy || service.busy ||
                                  app.state === DsnoteApp.StateTranscribingFile ||
-                                 app.state === DsnoteApp.StateWritingSpeechToFile
+                                 app.state === DsnoteApp.StateWritingSpeechToFile ||
+                                 app.state === DsnoteApp.StateImportingSubtitles ||
+                                 app.state === DsnoteApp.StateExportingSubtitles
                         visible: running
                     }
                 }
@@ -114,12 +118,19 @@ RowLayout {
                         property string placeholderText: {
                             if (app.busy || service.busy)
                                 return qsTr("Busy...")
+                            if (app.task_state === DsnoteApp.TaskStateCancelling)
+                                return qsTr("Cancelling, please wait...")
                             if (app.task_state === DsnoteApp.TaskStateInitializing)
                                 return qsTr("Getting ready, please wait...")
                             if (app.state === DsnoteApp.StateWritingSpeechToFile)
                                 return qsTr("Writing speech to file...") +
                                         (app.speech_to_file_progress > 0.0 ? " " +
                                                                              Math.round(app.speech_to_file_progress * 100) + "%" : "")
+                            if (app.state === DsnoteApp.StateImportingSubtitles)
+                                return qsTr("Importing subtitles...") +
+                                        (app.mc_progress > 0.0 ? " " + Math.round(app.mc_progress * 100) + "%" : "")
+                            if (app.state === DsnoteApp.StateExportingSubtitles)
+                                return qsTr("Exporting subtitles...")
                             if (app.state === DsnoteApp.StateTranslating)
                                 return qsTr("Translating...") +
                                         (app.translate_progress > 0.0 ? " " +
@@ -202,7 +213,8 @@ RowLayout {
                     Layout.preferredHeight: _icon.implicitHeight
                     icon.name: app.task_state === DsnoteApp.TaskStateSpeechPaused ?
                                    "media-playback-start-symbolic" : "media-playback-pause-symbolic"
-                    enabled: app.state === DsnoteApp.StatePlayingSpeech &&
+                    enabled: app.task_state !== DsnoteApp.TaskStateCancelling &&
+                             app.state === DsnoteApp.StatePlayingSpeech &&
                              (app.task_state === DsnoteApp.TaskStateProcessing ||
                               app.task_state === DsnoteApp.TaskStateSpeechPlaying ||
                               app.task_state === DsnoteApp.TaskStateSpeechPaused)
@@ -228,7 +240,8 @@ RowLayout {
                     Layout.alignment: Qt.AlignBottom
                     Layout.preferredHeight: _icon.implicitHeight
                     icon.name: "media-playback-stop-symbolic"
-                    enabled: app.task_state !== DsnoteApp.TaskStateProcessing &&
+                    enabled: app.task_state !== DsnoteApp.TaskStateCancelling &&
+                             app.task_state !== DsnoteApp.TaskStateProcessing &&
                              app.task_state !== DsnoteApp.TaskStateInitializing &&
                              (app.state === DsnoteApp.StateListeningSingleSentence ||
                               app.state === DsnoteApp.StateListeningManual ||
@@ -253,7 +266,8 @@ RowLayout {
                     Layout.alignment: Qt.AlignBottom
                     Layout.preferredHeight: _icon.implicitHeight
                     icon.name: "action-unavailable-symbolic"
-                    enabled: app.task_state === DsnoteApp.TaskStateProcessing ||
+                    enabled: app.task_state !== DsnoteApp.TaskStateCancelling &&
+                             (app.task_state === DsnoteApp.TaskStateProcessing ||
                              app.task_state === DsnoteApp.TaskStateInitializing ||
                              app.state === DsnoteApp.StateTranscribingFile ||
                              app.state === DsnoteApp.StateListeningSingleSentence ||
@@ -261,7 +275,9 @@ RowLayout {
                              app.state === DsnoteApp.StateListeningAuto ||
                              app.state === DsnoteApp.StatePlayingSpeech ||
                              app.state === DsnoteApp.StateWritingSpeechToFile ||
-                             app.state === DsnoteApp.StateTranslating
+                             app.state === DsnoteApp.StateTranslating ||
+                             app.state === DsnoteApp.StateExportingSubtitles ||
+                             app.state === DsnoteApp.StateImportingSubtitles)
                     text: qsTr("Cancel")
                     onClicked: app.cancel()
                 }

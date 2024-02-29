@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -19,58 +19,6 @@ ApplicationWindow {
     allowedOrientations: Orientation.All
     initialPage: mainPage
     cover: Qt.resolvedUrl("CoverPage.qml")
-
-    function handleResource(resource) {
-        console.log("share request received");
-        if (resource.type === ShareResource.FilePathType) {
-            app.open_files(resource.filePath, false)
-            appWin.activate()
-        } else if (resource.type === ShareResource.StringDataType) {
-            app.update_note(resource.data, false)
-            appWin.activate()
-        } else {
-            console.warn("unknown resource type:", resource.type)
-        }
-    }
-
-    ShareProvider {
-        method: "files"
-        capabilities: [
-            "audio/aac",
-            "audio/mpeg",
-            "audio/x-mp3",
-            "audio/ogg",
-            "audio/vorbis",
-            "audio/x-vorbis",
-            "audio/opus",
-            "audio/x-speex",
-            "audio/speex",
-            "audio/wav",
-            "audio/x-wav",
-            "audio/flac",
-            "audio/x-flac",
-            "audio/x-matroska",
-            "audio/webm",
-            "audio/mp4",
-            "video/mpeg",
-            "video/mp4",
-            "video/ogg",
-            "video/x-matroska",
-            "video/webm",
-            "text/plain"
-        ]
-
-        onTriggered: {
-            for(var i = 0; i < resources.length; i++)
-                handleResource(resources[i])
-        }
-    }
-
-    Connections {
-        target: _app_server
-        onActivate_requested: appWin.activate()
-        onFiles_to_open_requested: app.open_files(_files_to_open, false)
-    }
 
     SpeechConfig {
         id: service
@@ -104,6 +52,83 @@ ApplicationWindow {
                 translator.update()
             }
 
+            function handleResource(resource) {
+                if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
+                    if (resource.type === ShareResource.FilePathType) {
+                        var paths = resource.filePath
+                        addTextDialog.addHandler = function(){app.import_files(paths, -1, false)}
+                        addTextDialog.replaceHandler = function(){app.import_file(paths, -1, true)}
+                        addTextDialog.show()
+                        appWin.activate()
+                    } else if (resource.type === ShareResource.StringDataType) {
+                        var text = resource.data
+                        addTextDialog.addHandler = function(){app.update_note(text, false)}
+                        addTextDialog.replaceHandler = function(){app.update_note(text, true)}
+                        addTextDialog.show()
+                        appWin.activate()
+                    } else {
+                        console.warn("unknown resource type:", resource.type)
+                    }
+                } else {
+                    if (resource.type === ShareResource.FilePathType) {
+                        app.import_files(resource.filePath, _settings.file_import_action === Settings.FileImportActionAsk)
+                        appWin.activate()
+                    } else if (resource.type === ShareResource.StringDataType) {
+                        app.update_note(resource.data, _settings.file_import_action === Settings.FileImportActionAsk)
+                        appWin.activate()
+                    } else {
+                        console.warn("unknown resource type:", resource.type)
+                    }
+                }
+            }
+
+            function openFile(path) {
+                if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
+                    addTextDialog.addHandler = function(){app.import_file(path, -1, false)}
+                    addTextDialog.replaceHandler = function(){app.import_file(path, -1, true)}
+                    addTextDialog.show()
+                } else {
+                    app.import_file(path, -1, _settings.file_import_action === Settings.FileImportActionReplace)
+                }
+
+                _settings.file_open_dir = _settings.dir_of_file(path)
+            }
+
+            ShareProvider {
+                method: "files"
+                capabilities: [
+                    "audio/aac",
+                    "audio/mpeg",
+                    "audio/x-mp3",
+                    "audio/ogg",
+                    "audio/vorbis",
+                    "audio/x-vorbis",
+                    "audio/opus",
+                    "audio/x-speex",
+                    "audio/speex",
+                    "audio/wav",
+                    "audio/x-wav",
+                    "audio/flac",
+                    "audio/x-flac",
+                    "audio/x-matroska",
+                    "audio/webm",
+                    "audio/mp4",
+                    "video/mpeg",
+                    "video/mp4",
+                    "video/ogg",
+                    "video/x-matroska",
+                    "video/webm",
+                    "application/x-subrip",
+                    "text/vtt",
+                    "text/plain"
+                ]
+
+                onTriggered: {
+                    for(var i = 0; i < resources.length; i++)
+                        handleResource(resources[i])
+                }
+            }
+
             onOrientationChanged: update()
 
             Component.onCompleted: {
@@ -117,7 +142,7 @@ ApplicationWindow {
                 id: flick
 
                 width: parent.width
-                height: parent.height
+                height: parent.height - (addTextDialog.expanded ? addTextDialog.height : 0)
                 contentHeight: Math.max(column.height +
                                         (translator.visible ? translator.height : 0) +
                                         (notepad.visible ? notepad.height : 0) +
@@ -167,17 +192,32 @@ ApplicationWindow {
                     id: panel
 
                     property bool open: !app.connected ||
-                                        (app.state !== DsnoteApp.StateIdle && app.state !== DsnoteApp.StateTranslating) ||
+                                        (app.state !== DsnoteApp.StateIdle &&
+                                         app.state !== DsnoteApp.StateTranslating) ||
                                         root.panelAlwaysOpen
                     width: parent.width
                     enabled: open
                     y: open ? parent.height - height : parent.height
-                    canCancel: app.connected && !app.busy && (root.canCancelStt || root.canCancelTts)
-                    canPause: app.state === DsnoteApp.StatePlayingSpeech &&
+                    canCancel: app.connected && !app.busy &&
+                               app.task_state !== DsnoteApp.TaskStateCancelling &&
+                                 (app.task_state === DsnoteApp.TaskStateProcessing ||
+                                 app.task_state === DsnoteApp.TaskStateInitializing ||
+                                 app.state === DsnoteApp.StateTranscribingFile ||
+                                 app.state === DsnoteApp.StateListeningSingleSentence ||
+                                 app.state === DsnoteApp.StateListeningManual ||
+                                 app.state === DsnoteApp.StateListeningAuto ||
+                                 app.state === DsnoteApp.StatePlayingSpeech ||
+                                 app.state === DsnoteApp.StateWritingSpeechToFile ||
+                                 app.state === DsnoteApp.StateTranslating ||
+                                 app.state === DsnoteApp.StateExportingSubtitles ||
+                                 app.state === DsnoteApp.StateImportingSubtitles)
+                    canPause: app.task_state !== DsnoteApp.TaskStateCancelling &&
+                              app.state === DsnoteApp.StatePlayingSpeech &&
                               (app.task_state === DsnoteApp.TaskStateProcessing ||
                                app.task_state === DsnoteApp.TaskStateSpeechPlaying ||
                                app.task_state === DsnoteApp.TaskStateSpeechPaused)
-                    canStop: app.connected && !app.busy &&
+                    canStop: app.task_state !== DsnoteApp.TaskStateCancelling &&
+                             app.connected && !app.busy &&
                                  app.task_state !== DsnoteApp.TaskStateProcessing &&
                                  app.task_state !== DsnoteApp.TaskStateInitializing &&
                                  app.state === DsnoteApp.StateListeningSingleSentence
@@ -196,7 +236,7 @@ ApplicationWindow {
                 VerticalScrollDecorator {
                     flickable: flick
                 }
-            }
+            }         
 
             HintLabel {
                 enabled: _settings.hint_translator
@@ -205,13 +245,24 @@ ApplicationWindow {
                 onClicked: _settings.hint_translator = false
             }
 
+            AddTextDialog {
+                id: addTextDialog
+
+                property var addHandler
+                property var replaceHandler
+
+                open: false
+                onAddClicked: addHandler()
+                onReplaceClicked: replaceHandler()
+            }
+
             Component {
                 id: fileReadDialog
 
                 FilePickerPage {
-                    nameFilters: [ '*.wav', '*.mp3', '*.ogg', '*.oga', '*.opus', '*.spx', '*.flac', '*.m4a', '*.aac', '*.mp4', '*.mkv', '*.ogv', '*.webm' ]
+                    nameFilters: [ '*.txt', '*.srt', '*.ass', '*.ssa', '*.sub', '*.vtt', '*.wav', '*.mp3', '*.ogg', '*.oga', '*.ogx', '*.opus', '*.spx', '*.flac', '*.m4a', '*.aac', '*.mp4', '*.mkv', '*.ogv', '*.webm' ]
                     onSelectedContentPropertiesChanged: {
-                        app.transcribe_file(selectedContentProperties.filePath, false)
+                        openFile(selectedContentProperties.filePath)
                     }
                 }
             }
@@ -223,19 +274,25 @@ ApplicationWindow {
             }
 
             Connections {
-                target: _settings
-                onTranslator_modeChanged: root.update()
+                target: _app_server
+                onActivate_requested: appWin.activate()
+                onFiles_to_open_requested: {
+                    if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
+                        var list_of_files = files
+                        addTextDialog.addHandler = function(){app.import_files(list_of_files, false)}
+                        addTextDialog.replaceHandler = function(){app.import_files(list_of_files, true)}
+                        addTextDialog.show()
+                    } else {
+                        app.import_files(_files_to_open, _settings.file_import_action === Settings.FileImportActionReplace)
+                    }
+
+                    appWin.activate()
+                }
             }
 
             Connections {
-                target: _app_server
-                onActivate_requested: {
-                    appWin.activate()
-                }
-                onFiles_to_open_requested: {
-                    app.open_files(files, false)
-                    appWin.activate()
-                }
+                target: _settings
+                onTranslator_modeChanged: root.update()
             }
 
             Connections {
@@ -247,10 +304,26 @@ ApplicationWindow {
             Connections {
                 target: app
                 onNote_copied: toast.show(qsTr("Copied!"))
-                onTranscribe_done: toast.show(qsTr("File transcription is complete!"))
-                onSpeech_to_file_done: toast.show(qsTr("Speech saved to audio file!"))
-                Component.onCompleted: app.open_files(_files_to_open, false)
-                onTranscribe_file_multiple_streams: {
+                onTranscribe_done: toast.show(qsTr("Import from the file is complete!"))
+                onSpeech_to_file_done: toast.show(qsTr("Export to file is complete!"))
+                onSave_note_to_file_done: toast.show(qsTr("Export to file is complete!"))
+                Component.onCompleted: {
+                    if (_files_to_open.length > 0) {
+                        appWin.activate()
+
+                        if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
+                            var list_of_files = _files_to_open
+                            addTextDialog.addHandler = function(){app.import_files(list_of_files, false)}
+                            addTextDialog.replaceHandler = function(){app.import_files(list_of_files, true)}
+                            addTextDialog.show()
+                        } else {
+                            app.import_files(_files_to_open, _settings.file_import_action === Settings.FileImportActionReplace)
+                        }
+                    }
+                    app.execute_action_name(_requested_action)
+                    app.import_files(_files_to_open, false)
+                }
+                onImport_file_multiple_streams: {
                     pageStack.push(Qt.resolvedUrl("StreamSelectionDialog.qml"),
                                    {acceptDestination: root, acceptDestinationAction: PageStackAction.Pop,
                                     filePath: file_path, replace: replace, streams: streams})
@@ -275,11 +348,23 @@ ApplicationWindow {
                     case DsnoteApp.ErrorMntRuntime:
                         toast.show(qsTr("Error: Not all text has been translated."))
                         break;
-                    case DsnoteApp.ErrorSaveNoteToFile:
-                        toast.show(qsTr("Error: Couldn't save to the file."))
+                    case DsnoteApp.ErrorExportFileGeneral:
+                        toast.show(qsTr("Error: Couldn't export to the file."))
                         break;
-                    case DsnoteApp.ErrorLoadNoteFromFile:
-                        toast.show(qsTr("Error: Couldn't open the file."))
+                    case DsnoteApp.ErrorImportFileGeneral:
+                        toast.show(qsTr("Error: Couldn't import the file."))
+                        break;
+                    case DsnoteApp.ErrorImportFileNoStreams:
+                        toast.show(qsTr("Error: Couldn't import. The file does not contain audio or subtitles."))
+                        break;
+                    case DsnoteApp.ErrorSttNotConfigured:
+                        toast.show(qsTr("Error: Speech to Text model has been set up yet."))
+                        break;
+                    case DsnoteApp.ErrorTtsNotConfigured:
+                        toast.show(qsTr("Error: Text to Speech model has been set up yet."))
+                        break;
+                    case DsnoteApp.ErrorMntNotConfigured:
+                        toast.show(qsTr("Error: Translator model has been set up yet."))
                         break;
                     case DsnoteApp.ErrorContentDownload:
                         toast.show(qsTr("Error: Couldn't download a licence."))

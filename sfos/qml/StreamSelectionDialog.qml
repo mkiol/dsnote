@@ -14,44 +14,68 @@ Dialog {
     id: root
 
     property var streams
-    property int selectedId: 0
+    property int selectedIndex: 0
+
     property string filePath
     property bool replace: false
 
     allowedOrientations: Orientation.All
 
-    onAccepted: {
-        app.transcribe_file(filePath, replace, selectedId)
+    function updateSelectedIndex(name) {
+        selectedIndex = parseInt(name.substring(name.lastIndexOf("(") + 1, name.lastIndexOf(")")))
     }
 
-    Column {
+    canAccept: app.stt_configured || combo.value.lastIndexOf("Audio") !== 0
+
+    onAccepted: {
+        updateSelectedIndex(combo.value)
+        app.import_file(filePath, selectedIndex, replace)
+    }
+
+    SilicaFlickable {
         width: parent.width
+        height: parent.height
+        contentHeight: column.height
+        clip: true
 
-        DialogHeader {}
+        Column {
+            id: column
 
-        Label {
-            font.pixelSize: Theme.fontSizeLarge
-            x: Theme.horizontalPageMargin
-            width: parent.width - 2*x
-            color: Theme.secondaryHighlightColor
-            wrapMode: Text.Wrap
-            text: qsTr("The file contains multiple audio streams. Select which one you want to process.")
-        }
+            width: parent.width
 
-        ComboBox {
-            id: combo
+            DialogHeader {}
 
-            label: qsTr("Audio stream")
-            menu: ContextMenu {
-                Repeater {
-                    model: root.streams
-                    MenuItem { text: modelData }
+            Label {
+                font.pixelSize: Theme.fontSizeLarge
+                x: Theme.horizontalPageMargin
+                width: parent.width - 2*x
+                color: Theme.secondaryHighlightColor
+                wrapMode: Text.Wrap
+                text: qsTr("The file contains multiple streams. Select which one you want to import.")
+            }
+
+            Spacer {}
+
+            ComboBox {
+                id: combo
+
+                label: qsTr("Stream")
+                menu: ContextMenu {
+                    Repeater {
+                        model: root.streams
+                        MenuItem { text: modelData }
+                    }
                 }
             }
 
-            onCurrentIndexChanged: {
-                var name = value
-                root.selectedId = parseInt(name.substring(name.lastIndexOf("(") + 1, name.lastIndexOf(")")))
+            Spacer {}
+
+            PaddedLabel {
+                id: errorLabel
+
+                visible: !root.canAccept
+                color: Theme.errorColor
+                text: qsTr("Speech to Text model has not been set up yet.")
             }
         }
     }

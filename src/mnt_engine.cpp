@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -76,6 +76,12 @@ std::ostream& operator<<(std::ostream& os, mnt_engine::state_t state) {
         case mnt_engine::state_t::idle:
             os << "idle";
             break;
+        case mnt_engine::state_t::stopping:
+            os << "stopping";
+            break;
+        case mnt_engine::state_t::stopped:
+            os << "stopped";
+            break;
         case mnt_engine::state_t::initializing:
             os << "initializing";
             break;
@@ -97,7 +103,7 @@ mnt_engine::mnt_engine(config_t config, callbacks_t call_backs)
     if (m_config.model_files.model_path_first.empty())
         throw std::runtime_error("model-path-first is empty");
 
-    open_bergamot_lib();
+    open_lib();
 }
 
 mnt_engine::~mnt_engine() {
@@ -118,48 +124,48 @@ mnt_engine::~mnt_engine() {
 
     m_bergamot_api_api = {};
 
-    if (m_bergamotlib_handle) {
-        dlclose(m_bergamotlib_handle);
-        m_bergamotlib_handle = nullptr;
+    if (m_lib_handle) {
+        dlclose(m_lib_handle);
+        m_lib_handle = nullptr;
     }
 }
 
-void mnt_engine::open_bergamot_lib() {
+void mnt_engine::open_lib() {
 #ifdef ARCH_X86_64
     if (auto cpuinfo = cpu_tools::cpuinfo();
         cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx &&
         cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx2) {
-        m_bergamotlib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
+        m_lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
     } else if (cpu_tools::cpuinfo().feature_flags &
                cpu_tools::feature_flags_t::avx) {
         LOGW("using bergamot-fallback");
-        m_bergamotlib_handle = dlopen("libbergamot_api-fallback.so", RTLD_LAZY);
+        m_lib_handle = dlopen("libbergamot_api-fallback.so", RTLD_LAZY);
     } else {
         LOGE("avx not supported but bergamot needs it");
         throw std::runtime_error(
             "failed to open bergamot lib: avx not supported");
     }
 #else
-    m_bergamotlib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
+    m_lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
 #endif
 
-    if (m_bergamotlib_handle == nullptr) {
+    if (m_lib_handle == nullptr) {
         LOGE("failed to open bergamot lib: " << dlerror());
         throw std::runtime_error("failed to open bergamot lib");
     }
 
     m_bergamot_api_api.bergamot_api_make =
         reinterpret_cast<decltype(m_bergamot_api_api.bergamot_api_make)>(
-            dlsym(m_bergamotlib_handle, "bergamot_api_make"));
+            dlsym(m_lib_handle, "bergamot_api_make"));
     m_bergamot_api_api.bergamot_api_delete =
         reinterpret_cast<decltype(m_bergamot_api_api.bergamot_api_delete)>(
-            dlsym(m_bergamotlib_handle, "bergamot_api_delete"));
+            dlsym(m_lib_handle, "bergamot_api_delete"));
     m_bergamot_api_api.bergamot_api_translate =
         reinterpret_cast<decltype(m_bergamot_api_api.bergamot_api_translate)>(
-            dlsym(m_bergamotlib_handle, "bergamot_api_translate"));
+            dlsym(m_lib_handle, "bergamot_api_translate"));
     m_bergamot_api_api.bergamot_api_cancel =
         reinterpret_cast<decltype(m_bergamot_api_api.bergamot_api_cancel)>(
-            dlsym(m_bergamotlib_handle, "bergamot_api_cancel"));
+            dlsym(m_lib_handle, "bergamot_api_cancel"));
 
     if (!m_bergamot_api_api.ok()) {
         LOGE("failed to register bergamon api");
@@ -167,16 +173,43 @@ void mnt_engine::open_bergamot_lib() {
     }
 }
 
+bool mnt_engine::available() {
+    void* lib_handle = nullptr;
+#ifdef ARCH_X86_64
+    if (auto cpuinfo = cpu_tools::cpuinfo();
+        cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx &&
+        cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx2) {
+        lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
+    } else if (cpu_tools::cpuinfo().feature_flags &
+               cpu_tools::feature_flags_t::avx) {
+        lib_handle = dlopen("libbergamot_api-fallback.so", RTLD_LAZY);
+    } else {
+        LOGW("mnt not available because cpu doesn't have avx");
+        return false;
+    }
+#else
+    lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
+#endif
+
+    if (lib_handle == nullptr) {
+        LOGE("failed to open bergamot lib: " << dlerror());
+        return false;
+    }
+
+    dlclose(lib_handle);
+
+    return true;
+}
+
 void mnt_engine::start() {
     LOGD("mnt start");
 
-    m_shutting_down = true;
+    m_state = state_t::stopping;
     m_cv.notify_one();
     if (m_processing_thread.joinable()) m_processing_thread.join();
 
     m_queue = std::queue<task_t>{};
     m_state = state_t::idle;
-    m_shutting_down = false;
     m_processing_thread = std::thread{&mnt_engine::process, this};
 
     LOGD("mnt start completed");
@@ -185,12 +218,12 @@ void mnt_engine::start() {
 void mnt_engine::stop() {
     LOGD("mnt stop started");
 
-    m_shutting_down = true;
-
-    set_state(state_t::idle);
+    set_state(state_t::stopping);
 
     m_cv.notify_one();
     if (m_processing_thread.joinable()) m_processing_thread.join();
+
+    set_state(state_t::stopped);
 
     LOGD("mnt stop completed");
 }
@@ -198,9 +231,8 @@ void mnt_engine::stop() {
 void mnt_engine::request_stop() {
     LOGD("mnt stop requested");
 
-    m_shutting_down = true;
-
-    set_state(state_t::idle);
+    set_state(state_t::stopping);
+    m_cv.notify_one();
 }
 
 std::string mnt_engine::find_file_with_name_prefix(std::string dir_path,
@@ -229,7 +261,7 @@ double mnt_engine::progress() const {
 }
 
 void mnt_engine::translate(std::string text) {
-    if (m_shutting_down) return;
+    if (is_shutdown()) return;
 
     {
         std::lock_guard lock{m_mutex};
@@ -242,7 +274,19 @@ void mnt_engine::translate(std::string text) {
 }
 
 void mnt_engine::set_state(state_t new_state) {
-    if (m_shutting_down) new_state = state_t::idle;
+    if (is_shutdown()) {
+        switch (new_state) {
+            case state_t::idle:
+            case state_t::stopping:
+            case state_t::initializing:
+            case state_t::translating:
+                new_state = state_t::stopping;
+                break;
+            case state_t::stopped:
+            case state_t::error:
+                break;
+        }
+    }
 
     if (m_state != new_state) {
         LOGD("mnt engine state: " << m_state << " => " << new_state);
@@ -330,18 +374,18 @@ std::string mnt_engine::translate_internal(std::string text) {
 
         if (sm.empty() || line.size() > segment_size) {
             try {
-                if (m_shutting_down) return {};
+                if (is_shutdown()) return {};
 
                 line.assign(m_bergamot_api_api.bergamot_api_translate(
                     m_bergamot_ctx_first, line.c_str(), html));
 
-                if (m_shutting_down) return {};
+                if (is_shutdown()) return {};
 
                 if (m_bergamot_ctx_second)
                     line.assign(m_bergamot_api_api.bergamot_api_translate(
                         m_bergamot_ctx_second, line.c_str(), html));
 
-                if (m_shutting_down) return {};
+                if (is_shutdown()) return {};
             } catch (const std::runtime_error& err) {
                 LOGE("translation error: " << err.what());
                 if (m_call_backs.error) m_call_backs.error(error_t::runtime);
@@ -385,17 +429,15 @@ void mnt_engine::process() {
 
     decltype(m_queue) queue;
 
-    while (!m_shutting_down && m_state != state_t::error) {
+    while (!is_shutdown()) {
         {
             std::unique_lock<std::mutex> lock{m_mutex};
-            m_cv.wait(lock, [this] {
-                return (m_shutting_down || m_state == state_t::error) ||
-                       !m_queue.empty();
-            });
+            m_cv.wait(lock,
+                      [this] { return is_shutdown() || !m_queue.empty(); });
             std::swap(queue, m_queue);
         }
 
-        if (m_shutting_down || m_state == state_t::error) break;
+        if (is_shutdown()) break;
 
         if (!model_created()) {
             set_state(state_t::initializing);
@@ -411,13 +453,13 @@ void mnt_engine::process() {
 
         set_state(state_t::translating);
 
-        while (!m_shutting_down && !queue.empty()) {
+        while (!is_shutdown() && !queue.empty()) {
             auto task = std::move(queue.front());
             queue.pop();
 
             auto text = translate_internal(task.text);
 
-            if (m_shutting_down) break;
+            if (is_shutdown()) break;
 
             m_call_backs.text_translated(task.text, m_config.lang,
                                          std::move(text), m_config.out_lang);
@@ -425,12 +467,12 @@ void mnt_engine::process() {
 
         m_progress = {};
 
-        set_state(state_t::idle);
+        if (!is_shutdown()) set_state(state_t::idle);
     }
 
     m_progress = {};
 
-    if (m_shutting_down) set_state(state_t::idle);
+    if (m_state != state_t::error) set_state(state_t::stopped);
 
     LOGD("mnt processing done");
 }

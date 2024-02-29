@@ -17,6 +17,7 @@ option(WITH_SANITIZERS "enable asan and ubsan in debug build" ON)
 option(WITH_STATIC_SANITIZERS "link asan and ubsan statically in debug build" OFF)
 option(WITH_PY "enable python libraries" ${WITH_DESKTOP})
 option(WITH_SYSTEMD_SERVICE "enable systemd service" ${WITH_SFOS})
+option(WITH_X11_FEATURES "enable x11 features" ON)
 
 option(DOWNLOAD_LIBSTT "download libstt binary and install shared lib" ON)
 option(DOWNLOAD_VOSK "download vosk binary and install shared lib (don't use together with BUILD_VOSK)" OFF)
@@ -35,9 +36,11 @@ option(BUILD_RNNOISE "download sources of rnnoise-nu lib, build and link statica
 option(BUILD_PYBIND11 "download sources of pybind11, build and link statically" ON)
 option(BUILD_PYTHON_MODULE "make python module archive" OFF)
 option(BUILD_ESPEAK "download sources of espeak-ng lib, build and link statically" ON)
+option(BUILD_ESPEAK_MODULE "make espeak module archive" ON)
 option(BUILD_PIPER "download sources of piper lib, build and link statically" ON)
 option(BUILD_SSPLITCPP "download sources of ssplitcpp lib, build and link statically" ON)
 option(BUILD_RHVOICE "download sources of rhvoice lib, build and install shared lib" ON)
+option(BUILD_RHVOICE_MODULE "make rhvoice module archive" ON)
 option(BUILD_BERGAMOT "download sources of bergamot-translator lib, build and install shared lib" ON)
 option(BUILD_UROMAN "download sources of uroman and install uroman lib" ON) # only for x86_64
 option(BUILD_RUBBERBAND "download sources of rubberband lib, build and link statically" ON) # only for x86_64
@@ -62,6 +65,11 @@ if(NOT ${WITH_DESKTOP} AND NOT ${WITH_SFOS})
     message(FATAL_ERROR "one of the options should be set (WITH_DESKTOP or WITH_SFOS)")
 endif()
 
+if(NOT ${WITH_PY} AND ${BUILD_UROMAN})
+    set(BUILD_UROMAN OFF)
+    message(WARNING "disabling BUILD_UROMAN because WITH_PY is off")
+endif()
+
 if(WITH_DESKTOP)
     if(WITH_FLATPAK)
         set(BUILD_PYTHON_MODULE OFF)
@@ -69,8 +77,13 @@ if(WITH_DESKTOP)
     endif()
 endif()
 if(WITH_SFOS)
-    if (WITH_PY)
+    if (${WITH_PY} AND NOT ${BUILD_PYTHON_MODULE})
         set(BUILD_PYTHON_MODULE ON)
+        message(WARNING "enabling BUILD_PYTHON_MODULE because WITH_PY is on")
+    endif()
+    if (WITH_X11_FEATURES)
+        set(WITH_X11_FEATURES OFF)
+        message(WARNING "disabling WITH_X11_FEATURES on sfos")
     endif()
     set(BUILD_QQC2_DESKTOP_STYLE OFF)
 endif()
@@ -114,17 +127,22 @@ set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_conf_version "66")
+set(info_version_type "beta")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
-Åke Engelbrektson · L'Africain · Albano Battistella · locness3 · devSJR · vovkiv")
+Åke Engelbrektson · L'Africain · Albano Battistella · Locness3 · DevSJR · Vovkiv")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · nlohmann JSON · eSpeak NG · Bergamot Translator · \
 Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis · Opus · TagLib · \
 libnumbertext · april-asr · html2md · maddy")
 if (WITH_DESKTOP)
-    set(info_libs_str "${info_libs_str} · Hugging Face Transformers · KDBusAddons · QHotkey")
+    set(info_libs_str "${info_libs_str} · KDBusAddons")
+
+    if (WITH_X11_FEATURES)
+        set(info_libs_str "${info_libs_str} · QHotkey")
+    endif()
 endif()
 
-project(${id} VERSION 4.4.1)
+project(${id} VERSION 4.5.0)
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES ".*arm.*")
     message(STATUS "arm architecture detected")
@@ -173,14 +191,17 @@ set(share_install_dir "${install_dir}/share")
 set(lib_install_dir "${install_dir}/lib")
 set(bin_install_dir "${install_dir}/bin")
 set(rpath_install_dir "${CMAKE_INSTALL_PREFIX}/${lib_install_dir}")
+set(translations_resource_file "${CMAKE_BINARY_DIR}/translations.qrc")
 
 set(xz_path "xz")
 if(WITH_FLATPAK)
-    set(xz_path "/app/bin/xz")
     set(rpath_install_dir "${CMAKE_INSTALL_PREFIX}/lib")
 elseif(BUILD_XZ)
     set(xz_path "${external_bin_dir}/xz")
 endif()
+
+set(deps "") # dependencies of dsnote_lib and dsnote
+set(deps_libs "") # libs to link to dsnote_lib and dsnote
 
 # global config
 
@@ -299,14 +320,20 @@ set(dsnote_lib_sources
     ${sources_dir}/downloader.cpp
     ${sources_dir}/recorder.hpp
     ${sources_dir}/recorder.cpp
+    ${sources_dir}/media_converter.hpp
+    ${sources_dir}/media_converter.cpp
 )
 
 if(WITH_DESKTOP)
     list(APPEND dsnote_lib_sources
-        ${sources_dir}/fake_keyboard.hpp
-        ${sources_dir}/fake_keyboard.cpp
         ${sources_dir}/tray_icon.hpp
         ${sources_dir}/tray_icon.cpp)
+endif()
+
+if(WITH_X11_FEATURES)
+    list(APPEND dsnote_lib_sources
+        ${sources_dir}/fake_keyboard.hpp
+        ${sources_dir}/fake_keyboard.cpp)
 endif()
 
 configure_file(config.h.in config.h)
@@ -320,7 +347,7 @@ set(resources "")
 if(WITH_DESKTOP)
     list(APPEND resources
         "${desktop_dir}/resources.qrc"
-        "${CMAKE_BINARY_DIR}/translations.qrc")
+        ${translations_resource_file})
 endif()
 
 if(WITH_SFOS)
@@ -386,6 +413,7 @@ target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_SFOS}>:USE_
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_DESKTOP}>:USE_DESKTOP>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_PY}>:USE_PY>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_FLATPAK}>:USE_FLATPAK>")
+target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_X11_FEATURES}>:USE_X11_FEATURES>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${BUILD_PYTHON_MODULE}>:USE_PYTHON_MODULE>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<CONFIG:Debug>:DEBUG>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>")
@@ -400,8 +428,11 @@ include(${cmake_path}/translations.cmake)
 
 # dependencies
 
-set(deps "")
-set(deps_libs compiler_flags pthread ${CMAKE_DL_LIBS})
+list(APPEND deps_libs
+    compiler_flags
+    pthread
+    ${CMAKE_DL_LIBS})
+
 set(deps_dirs "")
 
 include(FindPkgConfig)
@@ -418,25 +449,27 @@ if(WITH_DESKTOP)
     find_package(Qt5 COMPONENTS QuickControls2 Widgets REQUIRED)
     list(APPEND deps_libs Qt5::QuickControls2 Qt5::Widgets)
 
-    find_package(X11 REQUIRED)
-    list(APPEND deps_libs X11)
+    if(WITH_X11_FEATURES)
+        find_package(X11 REQUIRED)
+        list(APPEND deps_libs X11)
 
-    find_package(Qt5 COMPONENTS X11Extras REQUIRED)
-    list(APPEND deps_libs Qt5::X11Extras)
+        find_package(Qt5 COMPONENTS X11Extras REQUIRED)
+        list(APPEND deps_libs Qt5::X11Extras)
 
-    pkg_search_module(xkbcommon REQUIRED xkbcommon)
-    list(APPEND deps_libs ${xkbcommon_LIBRARIES})
-    list(APPEND includes ${xkbcommon_INCLUDE_DIRS})
+        pkg_search_module(xkbcommon REQUIRED xkbcommon)
+        list(APPEND deps_libs ${xkbcommon_LIBRARIES})
+        list(APPEND includes ${xkbcommon_INCLUDE_DIRS})
 
-    pkg_search_module(xkbcommonx11 REQUIRED xkbcommon-x11)
-    list(APPEND deps_libs ${xkbcommonx11_LIBRARIES})
-    list(APPEND includes ${xkbcommonx11_INCLUDE_DIRS})
+        pkg_search_module(xkbcommonx11 REQUIRED xkbcommon-x11)
+        list(APPEND deps_libs ${xkbcommonx11_LIBRARIES})
+        list(APPEND includes ${xkbcommonx11_INCLUDE_DIRS})
 
-    if(BUILD_QHOTKEY)
-        include(${cmake_path}/qhotkey.cmake)
-    else()
-        find_library(qhotkey_path qhotkey REQUIRED)
-        list(APPEND deps_libs ${qhotkey_path})
+        if(BUILD_QHOTKEY)
+            include(${cmake_path}/qhotkey.cmake)
+        else()
+            find_library(qhotkey_path qhotkey REQUIRED)
+            list(APPEND deps_libs ${qhotkey_path})
+        endif()
     endif()
 
     include(${cmake_path}/kdbusservice.cmake)
@@ -498,13 +531,11 @@ endif()
 
 if(BUILD_RHVOICE)
     include(${cmake_path}/rhvoice.cmake)
-else()
-    find_library(rhvoice_core_path RHVoice_core REQUIRED)
-    find_library(rhvoice_path RHVoice REQUIRED)
-    list(APPEND deps_libs ${rhvoice_core_path} ${rhvoice_path})
 endif()
 
-include(${cmake_path}/rhvoice_module.cmake)
+if(BUILD_RHVOICE_MODULE)
+    include(${cmake_path}/rhvoice_module.cmake)
+endif()
 
 if(BUILD_PIPER OR BUILD_ESPEAK)
     include(${cmake_path}/espeak.cmake)
@@ -514,7 +545,9 @@ else()
     list(APPEND includes ${espeak_INCLUDE_DIRS})
 endif()
 
-include(${cmake_path}/espeak_module.cmake)
+if(BUILD_ESPEAK_MODULE)
+    include(${cmake_path}/espeak_module.cmake)
+endif()
 
 if(BUILD_PIPER)
     include(${cmake_path}/piper.cmake)

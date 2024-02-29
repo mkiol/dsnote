@@ -53,6 +53,7 @@ class ds_engine : public stt_engine {
    public:
     ds_engine(config_t config, callbacks_t call_backs);
     ~ds_engine() override;
+    static bool available();
 
    private:
     using ds_buf_t = std::vector<int16_t>;
@@ -89,13 +90,13 @@ class ds_engine : public stt_engine {
 
     ds_buf_t m_speech_buf;
     ds_api m_ds_api;
-    void* m_dslib_handle = nullptr;
+    void* m_lib_handle = nullptr;
     ModelState* m_ds_model = nullptr;
     StreamingState* m_ds_stream = nullptr;
     size_t m_decoded_samples = 0;
     size_t m_decoding_duration = 0;
 
-    void open_ds_lib();
+    void open_lib();
     void create_ds_model();
     void create_ds_stream();
     void free_ds_stream();

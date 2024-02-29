@@ -75,7 +75,7 @@ size_t du(const std::string& path) {
 
 vosk_engine::vosk_engine(config_t config, callbacks_t call_backs)
     : stt_engine{std::move(config), std::move(call_backs)} {
-    open_vosk_lib();
+    open_lib();
     m_speech_buf.reserve(m_speech_max_size);
 }
 
@@ -94,58 +94,70 @@ vosk_engine::~vosk_engine() {
 
     m_vosk_api = {};
 
-    if (m_vosklib_handle) {
-        dlclose(m_vosklib_handle);
-        m_vosklib_handle = nullptr;
+    if (m_lib_handle) {
+        dlclose(m_lib_handle);
+        m_lib_handle = nullptr;
     }
 }
 
-void vosk_engine::open_vosk_lib() {
-    m_vosklib_handle = dlopen("libvosk.so", RTLD_LAZY);
-    if (m_vosklib_handle == nullptr) {
+void vosk_engine::open_lib() {
+    m_lib_handle = dlopen("libvosk.so", RTLD_LAZY);
+    if (m_lib_handle == nullptr) {
         LOGE("failed to open vosk lib: " << dlerror());
         throw std::runtime_error("failed to open vosk lib");
     }
 
     m_vosk_api.vosk_model_new =
         reinterpret_cast<decltype(m_vosk_api.vosk_model_new)>(
-            dlsym(m_vosklib_handle, "vosk_model_new"));
+            dlsym(m_lib_handle, "vosk_model_new"));
     m_vosk_api.vosk_model_free =
         reinterpret_cast<decltype(m_vosk_api.vosk_model_free)>(
-            dlsym(m_vosklib_handle, "vosk_model_free"));
+            dlsym(m_lib_handle, "vosk_model_free"));
     m_vosk_api.vosk_recognizer_new =
         reinterpret_cast<decltype(m_vosk_api.vosk_recognizer_new)>(
-            dlsym(m_vosklib_handle, "vosk_recognizer_new"));
+            dlsym(m_lib_handle, "vosk_recognizer_new"));
     m_vosk_api.vosk_recognizer_reset =
         reinterpret_cast<decltype(m_vosk_api.vosk_recognizer_reset)>(
-            dlsym(m_vosklib_handle, "vosk_recognizer_reset"));
+            dlsym(m_lib_handle, "vosk_recognizer_reset"));
     m_vosk_api.vosk_recognizer_free =
         reinterpret_cast<decltype(m_vosk_api.vosk_recognizer_free)>(
-            dlsym(m_vosklib_handle, "vosk_recognizer_free"));
-    m_vosk_api.vosk_recognizer_accept_waveform_s = reinterpret_cast<decltype(
-        m_vosk_api.vosk_recognizer_accept_waveform_s)>(
-        dlsym(m_vosklib_handle, "vosk_recognizer_accept_waveform_s"));
+            dlsym(m_lib_handle, "vosk_recognizer_free"));
+    m_vosk_api.vosk_recognizer_accept_waveform_s = reinterpret_cast<
+        decltype(m_vosk_api.vosk_recognizer_accept_waveform_s)>(
+        dlsym(m_lib_handle, "vosk_recognizer_accept_waveform_s"));
     m_vosk_api.vosk_recognizer_partial_result =
         reinterpret_cast<decltype(m_vosk_api.vosk_recognizer_partial_result)>(
-            dlsym(m_vosklib_handle, "vosk_recognizer_partial_result"));
+            dlsym(m_lib_handle, "vosk_recognizer_partial_result"));
     m_vosk_api.vosk_recognizer_final_result =
         reinterpret_cast<decltype(m_vosk_api.vosk_recognizer_final_result)>(
-            dlsym(m_vosklib_handle, "vosk_recognizer_final_result"));
+            dlsym(m_lib_handle, "vosk_recognizer_final_result"));
     m_vosk_api.vosk_recognizer_set_words =
         reinterpret_cast<decltype(m_vosk_api.vosk_recognizer_set_words)>(
-            dlsym(m_vosklib_handle, "vosk_recognizer_set_words"));
+            dlsym(m_lib_handle, "vosk_recognizer_set_words"));
     if (!m_vosk_api.ok()) {
         LOGE("failed to register vosk api");
         throw std::runtime_error("failed to register vosk api");
     }
 }
 
+bool vosk_engine::available() {
+    auto lib_handle = dlopen("libvosk.so", RTLD_LAZY);
+    if (lib_handle == nullptr) {
+        LOGE("failed to open vosk lib: " << dlerror());
+        return false;
+    }
+
+    dlclose(lib_handle);
+
+    return true;
+}
+
 void vosk_engine::start_processing_impl() {
-    create_vosk_model();
+    create_model();
     create_punctuator();
 }
 
-void vosk_engine::create_vosk_model() {
+void vosk_engine::create_model() {
     if (m_vosk_model) return;
 
     LOGD("creating vosk model");
@@ -301,7 +313,7 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
     }();
 
     if (final_decode || !m_speech_buf.empty()) {
-        set_processing_state(processing_state_t::decoding);
+        set_state(state_t::decoding);
 
         LOGD("speech frame: samples=" << m_speech_buf.size()
                                       << ", final=" << final_decode);
@@ -314,8 +326,7 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
         m_segment_time_offset += m_segment_time_discarded_after;
         m_segment_time_discarded_after = 0;
 
-        if (m_config.speech_started)
-            set_processing_state(processing_state_t::idle);
+        if (m_config.speech_started) set_state(state_t::idle);
 
         m_speech_buf.clear();
 

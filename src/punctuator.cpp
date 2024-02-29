@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -17,63 +17,63 @@
 using namespace pybind11::literals;
 
 punctuator::punctuator(const std::string& model_path, int device) {
-    auto* pe = py_executor::instance();
+    auto task = py_executor::instance()->execute(
+        [&, dev = py_executor::instance()->libs_availability->torch_cuda
+                      ? device
+                      : -1]() {
+            try {
+                LOGD("creating punctuator: device=" << dev);
 
-    pe->execute([&, dev = pe->libs_availability->torch_cuda ? device : -1]() {
-          try {
-              LOGD("creating punctuator: device=" << dev);
+                auto trans_module = py::module_::import("transformers");
+                auto tokenizer_class = trans_module.attr("AutoTokenizer");
+                auto model_class =
+                    trans_module.attr("AutoModelForTokenClassification");
+                auto pipeline_class =
+                    trans_module.attr("TokenClassificationPipeline");
 
-              auto trans_module = py::module_::import("transformers");
-              auto tokenizer_class = trans_module.attr("AutoTokenizer");
-              auto model_class =
-                  trans_module.attr("AutoModelForTokenClassification");
-              auto pipeline_class =
-                  trans_module.attr("TokenClassificationPipeline");
+                auto tokenizer = tokenizer_class.attr("from_pretrained")(
+                    model_path, "local_files_only"_a = true,
+                    "low_cpu_mem_usage"_a = true);
+                auto model = model_class.attr("from_pretrained")(
+                    model_path, "local_files_only"_a = true,
+                    "low_cpu_mem_usage"_a = true);
 
-              auto tokenizer = tokenizer_class.attr("from_pretrained")(
-                  model_path, "local_files_only"_a = true,
-                  "low_cpu_mem_usage"_a = true);
-              auto model = model_class.attr("from_pretrained")(
-                  model_path, "local_files_only"_a = true,
-                  "low_cpu_mem_usage"_a = true);
+                m_pipeline = pipeline_class(
+                    "model"_a = model, "tokenizer"_a = tokenizer,
+                    "aggregation_strategy"_a = "simple", "device"_a = dev);
+            } catch (const std::exception& err) {
+                LOGE("py error: " << err.what());
+                throw std::runtime_error(std::string{"py error: "} +
+                                         err.what());
+            }
 
-              m_pipeline = pipeline_class(
-                  "model"_a = model, "tokenizer"_a = tokenizer,
-                  "aggregation_strategy"_a = "simple", "device"_a = dev);
-          } catch (const std::exception& err) {
-              LOGE("py error: " << err.what());
-              throw std::runtime_error(std::string{"py error: "} + err.what());
-          }
+            return std::any{};
+        });
 
-          return std::string{};
-      }).get();
+    if (task) task->get();
 }
 
 punctuator::~punctuator() {
     LOGD("puntuator dtor");
 
-    auto* pe = py_executor::instance();
+    auto task = py_executor::instance()->execute([&]() {
+        try {
+            m_pipeline.reset();
+        } catch (const std::exception& err) {
+            LOGE("py error: " << err.what());
+        }
+        return std::any{};
+    });
 
-    try {
-        pe->execute([&]() {
-              try {
-                  m_pipeline.reset();
-              } catch (const std::exception& err) {
-                  LOGE("py error: " << err.what());
-              }
-              return std::string{};
-          }).get();
-    } catch (const std::exception& err) {
-        LOGE("error: " << err.what());
-    }
+    if (task) task->get();
+
+    LOGD("puntuator stopped");
 }
 
 std::string punctuator::process(std::string text) {
-    auto* pe = py_executor::instance();
-
-    try {
-        return pe
-            ->execute([&]() {
+    auto task =
+        py_executor::instance()->execute(
+            [&]() {
                 try {
                     auto result = m_pipeline->attr("__call__")(text);
 
@@ -112,10 +112,9 @@ std::string punctuator::process(std::string text) {
                 }
 
                 return text;
-            })
-            .get();
-    } catch (const std::exception& err) {
-        LOGE("error: " << err.what());
-        return text;
-    }
+            });
+
+    if (task) return std::any_cast<std::string>(task->get());
+
+    return text;
 }

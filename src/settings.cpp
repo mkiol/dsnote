@@ -95,6 +95,23 @@ static QString audio_format_to_ext(settings::audio_format_t format) {
     return QStringLiteral("mp3");
 }
 
+static QString text_file_format_to_ext(settings::text_file_format_t format) {
+    switch (format) {
+        case settings::text_file_format_t::TextFileFormatRaw:
+            return QStringLiteral("txt");
+        case settings::text_file_format_t::TextFileFormatSrt:
+            return QStringLiteral("srt");
+        case settings::text_file_format_t::TextFileFormatAss:
+            return QStringLiteral("ass");
+        case settings::text_file_format_t::TextFileFormatVtt:
+            return QStringLiteral("vtt");
+        case settings::text_file_format_t::TextFileFormatAuto:
+            break;
+    }
+
+    return QStringLiteral("txt");
+}
+
 static QString audio_format_to_str(settings::audio_format_t format) {
     switch (format) {
         case settings::audio_format_t::AudioFormatWav:
@@ -110,6 +127,28 @@ static QString audio_format_to_str(settings::audio_format_t format) {
     }
 
     return QStringLiteral("mp3");
+}
+
+QDebug operator<<(QDebug d, settings::gpu_feature_flags_t gpu_features) {
+    if (gpu_features &
+        settings::gpu_feature_flags_t::gpu_feature_stt_whispercpp_cuda)
+        d << "stt-whispercpp-cuda,";
+    if (gpu_features &
+        settings::gpu_feature_flags_t::gpu_feature_stt_whispercpp_hip)
+        d << "stt-whispercpp-hip,";
+    if (gpu_features &
+        settings::gpu_feature_flags_t::gpu_feature_stt_whispercpp_opencl)
+        d << "stt-whispercpp-opencl,";
+    if (gpu_features &
+        settings::gpu_feature_flags_t::gpu_feature_stt_fasterwhisper_cuda)
+        d << "stt-fasterwhisper-cuda,";
+    if (gpu_features &
+        settings::gpu_feature_flags_t::gpu_feature_tts_coqui_cuda)
+        d << "tts-coqui-cuda,";
+    if (gpu_features & settings::gpu_feature_flags_t::gpu_feature_tts_coqui_hip)
+        d << "tts-coqui-hip";
+
+    return d;
 }
 
 settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
@@ -397,58 +436,14 @@ void settings::set_active_tts_for_out_mnt_ref_voice(const QString& value) {
     }
 }
 
-QString settings::file_save_dir() const {
-    auto dir = value(QStringLiteral("file_save_dir")).toString();
-    if (dir.isEmpty() || !QFileInfo::exists(dir)) {
-        dir = QStandardPaths::writableLocation(QStandardPaths::MusicLocation);
-    }
-
-    return dir;
-}
-
-QUrl settings::file_save_dir_url() const {
-    return QUrl::fromLocalFile(file_save_dir());
-}
-
-void settings::set_file_save_dir(const QString& value) {
-    if (file_save_dir() != value) {
-        setValue(QStringLiteral("file_save_dir"), value);
-        emit file_save_dir_changed();
-    }
-}
-
-void settings::update_file_save_path(const QString& path) {
-    QFileInfo fi{path};
-
-    if (!fi.baseName().isEmpty()) {
-        setValue(QStringLiteral("file_save_last_filename"), fi.fileName());
-    }
-
-    set_file_save_dir(fi.absoluteDir().absolutePath());
-}
-
-void settings::set_file_save_dir_url(const QUrl& value) {
-    set_file_save_dir(value.toLocalFile());
-}
-
-QString settings::file_save_dir_name() const {
-    return file_save_dir_url().fileName();
-}
-
-QString settings::file_save_filename() const {
-    auto dir = QDir{file_save_dir()};
-
-    auto filename = value(QStringLiteral("file_save_last_filename")).toString();
-
+static QString file_save_filename(const QDir& dir, QString filename,
+                                  const QString& ext) {
     const int max_i = 99999;
     int i = 1;
 
     if (filename.isEmpty()) {
-        filename = QStringLiteral("speech-note-%1.") +
-                   audio_format_to_ext(audio_format());
+        filename = QStringLiteral("speech-note-%1.") + ext;
     } else {
-        auto ext = audio_ext_from_filename(filename);
-
         filename = QFileInfo{filename}.baseName();
 
         if (!QFileInfo::exists(dir.filePath(filename + '.' + ext))) {
@@ -478,6 +473,154 @@ QString settings::file_save_filename() const {
     }
 
     return filename.arg(1);
+}
+
+QString settings::audio_file_save_dir() const {
+    auto dir = value(QStringLiteral("audio_file_save_dir")).toString();
+    if (dir.isEmpty() || !QFileInfo::exists(dir)) {
+        dir = QStandardPaths::writableLocation(QStandardPaths::MusicLocation);
+    }
+
+    return dir;
+}
+
+QUrl settings::audio_file_save_dir_url() const {
+    return QUrl::fromLocalFile(audio_file_save_dir());
+}
+
+void settings::set_audio_file_save_dir(const QString& value) {
+    if (audio_file_save_dir() != value) {
+        setValue(QStringLiteral("audio_file_save_dir"), value);
+        emit audio_file_save_dir_changed();
+    }
+}
+
+void settings::update_audio_file_save_path(const QString& path) {
+    QFileInfo fi{path};
+
+    if (!fi.baseName().isEmpty()) {
+        setValue(QStringLiteral("audio_file_save_last_filename"),
+                 fi.fileName());
+    }
+
+    set_audio_file_save_dir(fi.absoluteDir().absolutePath());
+}
+
+void settings::set_audio_file_save_dir_url(const QUrl& value) {
+    set_audio_file_save_dir(value.toLocalFile());
+}
+
+QString settings::audio_file_save_dir_name() const {
+    return audio_file_save_dir_url().fileName();
+}
+
+QString settings::audio_file_save_filename() const {
+    auto filename =
+        value(QStringLiteral("audio_file_save_last_filename")).toString();
+
+    return file_save_filename(QDir{audio_file_save_dir()}, filename,
+                              filename.isEmpty()
+                                  ? audio_format_to_ext(audio_format())
+                                  : audio_ext_from_filename(filename));
+}
+
+QString settings::video_file_save_dir() const {
+    auto dir = value(QStringLiteral("video_file_save_dir")).toString();
+    if (dir.isEmpty() || !QFileInfo::exists(dir)) {
+        dir = QStandardPaths::writableLocation(QStandardPaths::MusicLocation);
+    }
+
+    return dir;
+}
+
+QUrl settings::video_file_save_dir_url() const {
+    return QUrl::fromLocalFile(video_file_save_dir());
+}
+
+void settings::set_video_file_save_dir(const QString& value) {
+    if (video_file_save_dir() != value) {
+        setValue(QStringLiteral("video_file_save_dir"), value);
+        emit video_file_save_dir_changed();
+    }
+}
+
+void settings::update_video_file_save_path(const QString& path) {
+    QFileInfo fi{path};
+
+    if (!fi.baseName().isEmpty()) {
+        setValue(QStringLiteral("video_file_save_last_filename"),
+                 fi.fileName());
+    }
+
+    set_video_file_save_dir(fi.absoluteDir().absolutePath());
+}
+
+void settings::set_video_file_save_dir_url(const QUrl& value) {
+    set_video_file_save_dir(value.toLocalFile());
+}
+
+QString settings::video_file_save_dir_name() const {
+    return video_file_save_dir_url().fileName();
+}
+
+QString settings::video_file_save_filename() const {
+    auto filename =
+        value(QStringLiteral("video_file_save_last_filename")).toString();
+
+    // TODO:
+    // return file_save_filename(
+    //     QDir{video_file_save_dir()}, filename,
+    //     filename.isEmpty() ? video_file_format_to_ext(video_file_format())
+    //                        : video_file_ext_from_filename(filename));
+    return {};
+}
+
+QString settings::text_file_save_dir() const {
+    auto dir = value(QStringLiteral("text_file_save_dir")).toString();
+    if (dir.isEmpty() || !QFileInfo::exists(dir)) {
+        dir = QStandardPaths::writableLocation(QStandardPaths::MusicLocation);
+    }
+
+    return dir;
+}
+
+QUrl settings::text_file_save_dir_url() const {
+    return QUrl::fromLocalFile(text_file_save_dir());
+}
+
+void settings::set_text_file_save_dir(const QString& value) {
+    if (text_file_save_dir() != value) {
+        setValue(QStringLiteral("text_file_save_dir"), value);
+        emit text_file_save_dir_changed();
+    }
+}
+
+void settings::update_text_file_save_path(const QString& path) {
+    QFileInfo fi{path};
+
+    if (!fi.baseName().isEmpty()) {
+        setValue(QStringLiteral("text_file_save_last_filename"), fi.fileName());
+    }
+
+    set_text_file_save_dir(fi.absoluteDir().absolutePath());
+}
+
+void settings::set_text_file_save_dir_url(const QUrl& value) {
+    set_text_file_save_dir(value.toLocalFile());
+}
+
+QString settings::text_file_save_dir_name() const {
+    return text_file_save_dir_url().fileName();
+}
+
+QString settings::text_file_save_filename() const {
+    auto filename =
+        value(QStringLiteral("text_file_save_last_filename")).toString();
+
+    return file_save_filename(QDir{text_file_save_dir()}, filename,
+                              filename.isEmpty()
+                                  ? text_file_format_to_ext(text_file_format())
+                                  : text_file_ext_from_filename(filename));
 }
 
 QString settings::file_open_dir() const {
@@ -516,25 +659,6 @@ QString settings::file_audio_open_dir() const {
     }
 
     return dir;
-}
-
-QUrl settings::file_audio_open_dir_url() const {
-    return QUrl::fromLocalFile(file_audio_open_dir());
-}
-
-void settings::set_file_audio_open_dir(const QString& value) {
-    if (file_audio_open_dir() != value) {
-        setValue(QStringLiteral("file_audio_open_dir"), value);
-        emit file_audio_open_dir_changed();
-    }
-}
-
-void settings::set_file_audio_open_dir_url(const QUrl& value) {
-    set_file_audio_open_dir(value.toLocalFile());
-}
-
-QString settings::file_audio_open_dir_name() const {
-    return file_audio_open_dir_url().fileName();
 }
 
 settings::mode_t settings::mode() const {
@@ -578,12 +702,18 @@ void settings::set_speech_speed(unsigned int value) {
 }
 
 QString settings::note() const {
-    return value(QStringLiteral("note"), {}).toString();
+    if (keep_last_note())
+        return value(QStringLiteral("note"), {}).toString();
+    else
+        return m_note;
 }
 
 void settings::set_note(const QString& value) {
     if (note() != value) {
-        setValue(QStringLiteral("note"), value);
+        if (keep_last_note())
+            setValue(QStringLiteral("note"), value);
+        else
+            m_note = value;
         emit note_changed();
     }
 }
@@ -597,6 +727,20 @@ void settings::set_font_size(int value) {
         setValue(QStringLiteral("font_size"), value);
         emit font_size_changed();
     }
+}
+
+void settings::set_text_file_format(text_file_format_t value) {
+    if (text_file_format() != value) {
+        setValue(QStringLiteral("text_file_format"), static_cast<int>(value));
+        emit text_file_format_changed();
+    }
+}
+
+settings::text_file_format_t settings::text_file_format() const {
+    return static_cast<text_file_format_t>(
+        value(QStringLiteral("text_file_format"),
+              static_cast<int>(text_file_format_t::TextFileFormatAuto))
+            .toInt());
 }
 
 void settings::set_audio_format(audio_format_t value) {
@@ -617,7 +761,7 @@ void settings::set_audio_quality(audio_quality_t value) {
     if (audio_quality() != value) {
         setValue(QStringLiteral("audio_quality"), static_cast<int>(value));
         emit audio_quality_changed();
-        emit file_save_dir_changed();
+        emit audio_file_save_dir_changed();
     }
 }
 
@@ -927,37 +1071,78 @@ settings::audio_format_t settings::filename_to_audio_format_static(
     return audio_format_t::AudioFormatAuto;
 }
 
+QString settings::text_file_ext_from_filename(const QString& filename) {
+    if (settings::instance()->text_file_format() ==
+        settings::text_file_format_t::TextFileFormatAuto) {
+        return text_file_format_to_ext(
+            filename_to_text_file_format_static(filename));
+    } else {
+        return text_file_format_to_ext(
+            settings::instance()->text_file_format());
+    }
+}
+
+settings::text_file_format_t settings::filename_to_text_file_format(
+    const QString& filename) const {
+    return filename_to_text_file_format_static(QFileInfo{filename}.fileName());
+}
+
+settings::text_file_format_t settings::filename_to_text_file_format_static(
+    const QString& filename) {
+    if (filename.endsWith(QLatin1String(".txt"), Qt::CaseInsensitive))
+        return text_file_format_t::TextFileFormatRaw;
+    if (filename.endsWith(QLatin1String(".srt"), Qt::CaseInsensitive))
+        return text_file_format_t::TextFileFormatSrt;
+    if (filename.endsWith(QLatin1String(".ass"), Qt::CaseInsensitive))
+        return text_file_format_t::TextFileFormatAss;
+    if (filename.endsWith(QLatin1String(".vtt"), Qt::CaseInsensitive))
+        return text_file_format_t::TextFileFormatVtt;
+    return text_file_format_t::TextFileFormatAuto;
+}
+
 bool settings::file_exists(const QString& file_path) const {
     return QFileInfo::exists(file_path.trimmed());
 }
 
-QString settings::add_ext_to_audio_filename(const QString& filename) const {
-    QString new_filename = filename.trimmed();
+static QString add_ext_to_filename(QString filename, QString ext) {
+    auto sf = filename.split('.');
 
-    auto audio_ext = settings::audio_ext_from_filename(filename.trimmed());
-
-    auto sf = new_filename.split('.');
-
-    if (sf.last().toLower() != audio_ext) {
+    if (sf.last().toLower() != ext) {
         if (sf.size() > 1) {
             if (sf.last().isEmpty())
-                sf.last() = audio_ext;
+                sf.last() = ext;
             else
-                sf.last() = std::move(audio_ext);
+                sf.last() = std::move(ext);
         } else {
-            sf.push_back(std::move(audio_ext));
+            sf.push_back(std::move(ext));
         }
     }
 
-    new_filename = sf.join('.');
+    filename = sf.join('.');
 
-    return new_filename;
+    return filename;
+}
+
+QString settings::add_ext_to_audio_filename(const QString& filename) const {
+    return add_ext_to_filename(filename.trimmed(),
+                               audio_ext_from_filename(filename.trimmed()));
 }
 
 QString settings::add_ext_to_audio_file_path(const QString& file_path) const {
     QFileInfo fi{file_path.trimmed()};
     return fi.absoluteDir().absoluteFilePath(
         add_ext_to_audio_filename(fi.fileName()));
+}
+
+QString settings::add_ext_to_text_file_filename(const QString& filename) const {
+    return add_ext_to_filename(filename.trimmed(),
+                               text_file_ext_from_filename(filename.trimmed()));
+}
+
+QString settings::add_ext_to_text_file_path(const QString& file_path) const {
+    QFileInfo fi{file_path.trimmed()};
+    return fi.absoluteDir().absoluteFilePath(
+        add_ext_to_text_file_filename(fi.fileName()));
 }
 
 QString settings::base_name_from_file_path(const QString& file_path) const {
@@ -1096,7 +1281,7 @@ bool settings::has_gpu_device_tts() const {
     return m_gpu_devices_tts.size() > 1;
 }
 
-void settings::scan_gpu_devices() {
+void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
 #ifdef ARCH_X86_64
     m_gpu_devices_stt.clear();
     m_gpu_devices_tts.clear();
@@ -1106,17 +1291,38 @@ void settings::scan_gpu_devices() {
 
     qDebug() << "scan cuda:" << gpu_scan_cuda();
     qDebug() << "scan hip:" << gpu_scan_hip();
-    qDebug() << "scan opencl:" << gpu_scan_opencl() << gpu_scan_opencl_always();
+    qDebug() << "scan opencl:" << gpu_scan_opencl();
+    qDebug() << "gpu feature flags:"
+             << static_cast<gpu_feature_flags_t>(gpu_feature_flags);
+
+    bool disable_stt_cuda =
+        (gpu_feature_flags &
+         gpu_feature_flags_t::gpu_feature_stt_fasterwhisper_cuda) == 0 &&
+        (gpu_feature_flags &
+         gpu_feature_flags_t::gpu_feature_stt_whispercpp_cuda) == 0;
+    bool disable_stt_hip =
+        (gpu_feature_flags &
+         gpu_feature_flags_t::gpu_feature_stt_whispercpp_hip) == 0;
+    bool disable_stt_opencl =
+        (gpu_feature_flags &
+         gpu_feature_flags_t::gpu_feature_stt_whispercpp_opencl) == 0;
+    bool disable_tts_cuda =
+        (gpu_feature_flags & gpu_feature_flags_t::gpu_feature_tts_coqui_cuda) ==
+        0;
+    bool disable_tts_hip =
+        (gpu_feature_flags & gpu_feature_flags_t::gpu_feature_tts_coqui_hip) ==
+        0;
 
     auto devices = gpu_tools::available_devices(
         /*cuda=*/gpu_scan_cuda(),
         /*hip=*/gpu_scan_hip(),
         /*opencl=*/gpu_scan_opencl(),
-        /*opencl_always=*/gpu_scan_opencl_always());
+        /*opencl_always=*/true);
 
     std::for_each(devices.cbegin(), devices.cend(), [&](const auto& device) {
         switch (device.api) {
             case gpu_tools::api_t::opencl:
+                if (disable_stt_opencl) return;
                 m_gpu_devices_stt.push_back(
                     QStringLiteral("%1, %2, %3")
                         .arg("OpenCL",
@@ -1124,19 +1330,21 @@ void settings::scan_gpu_devices() {
                              QString::fromStdString(device.name)));
                 break;
             case gpu_tools::api_t::cuda: {
+                if (disable_stt_cuda && disable_tts_cuda) return;
                 auto item = QStringLiteral("%1, %2, %3")
                                 .arg("CUDA", QString::number(device.id),
                                      QString::fromStdString(device.name));
-                m_gpu_devices_stt.push_back(item);
-                m_gpu_devices_tts.push_back(std::move(item));
+                if (!disable_stt_cuda) m_gpu_devices_stt.push_back(item);
+                if (!disable_tts_cuda) m_gpu_devices_tts.push_back(item);
                 break;
             }
             case gpu_tools::api_t::rocm: {
+                if (disable_stt_hip && disable_tts_hip) return;
                 auto item = QStringLiteral("%1, %2, %3")
                                 .arg("ROCm", QString::number(device.id),
                                      QString::fromStdString(device.name));
-                m_gpu_devices_stt.push_back(item);
-                m_gpu_devices_tts.push_back(std::move(item));
+                if (!disable_stt_hip) m_gpu_devices_stt.push_back(item);
+                if (!disable_tts_hip) m_gpu_devices_tts.push_back(item);
                 m_rocm_gpu_versions.push_back(
                     QString::fromStdString(device.platform_name));
                 break;
@@ -1461,6 +1669,20 @@ void settings::set_desktop_notification_policy(
     }
 }
 
+settings::file_import_action_t settings::file_import_action() const {
+    return static_cast<file_import_action_t>(
+        value(QStringLiteral("file_import_action"),
+              static_cast<int>(file_import_action_t::FileImportActionAsk))
+            .toInt());
+}
+
+void settings::set_file_import_action(file_import_action_t value) {
+    if (value != file_import_action()) {
+        setValue(QStringLiteral("file_import_action"), static_cast<int>(value));
+        emit file_import_action_changed();
+    }
+}
+
 bool settings::desktop_notification_details() const {
     return value(QStringLiteral("desktop_notification_details"), false)
         .toBool();
@@ -1574,6 +1796,25 @@ void settings::set_sub_break_lines(bool value) {
     }
 }
 
+bool settings::keep_last_note() const {
+    return value(QStringLiteral("keep_last_note"), true).toBool();
+}
+
+void settings::set_keep_last_note(bool new_value) {
+    if (new_value != keep_last_note()) {
+        setValue(QStringLiteral("keep_last_note"), new_value);
+        emit keep_last_note_changed();
+
+        if (new_value) {
+            setValue(QStringLiteral("note"), m_note);
+            m_note.clear();
+        } else {
+            m_note = value(QStringLiteral("note"), {}).toString();
+            setValue(QStringLiteral("note"), {});
+        }
+    }
+}
+
 bool settings::start_in_tray() const {
     return value(QStringLiteral("start_in_tray"), false).toBool();
 }
@@ -1611,16 +1852,14 @@ void settings::set_gpu_scan_opencl(bool value) {
     }
 }
 
-bool settings::gpu_scan_opencl_always() const {
-    return value(QStringLiteral("gpu_scan_opencl_always"), false).toBool();
+bool settings::tts_subtitles_sync() const {
+    return value(QStringLiteral("tts_subtitles_sync"), true).toBool();
 }
 
-void settings::set_gpu_scan_opencl_always(bool value) {
-    if (value != gpu_scan_opencl_always()) {
-        setValue(QStringLiteral("gpu_scan_opencl_always"), value);
-        emit gpu_scan_opencl_always_changed();
-
-        set_restart_required(true);
+void settings::set_tts_subtitles_sync(bool value) {
+    if (value != tts_subtitles_sync()) {
+        setValue(QStringLiteral("tts_subtitles_sync"), value);
+        emit tts_subtitles_sync_changed();
     }
 }
 

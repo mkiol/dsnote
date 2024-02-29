@@ -231,9 +231,9 @@ void whisper_engine::stop_processing_impl() {
     }
 }
 
-void whisper_engine::start_processing_impl() { create_whisper_model(); }
+void whisper_engine::start_processing_impl() { create_model(); }
 
-void whisper_engine::create_whisper_model() {
+void whisper_engine::create_model() {
     if (m_whisper_ctx) return;
 
     LOGD("creating whisper model");
@@ -242,8 +242,8 @@ void whisper_engine::create_whisper_model() {
         m_config.model_files.model_file.c_str());
 
     if (m_whisper_ctx == nullptr) {
-        LOGE("failed to create whisper ctx");
-        throw std::runtime_error("failed to create whisper ctx");
+        LOGE("failed to create whisper model");
+        throw std::runtime_error("failed to create whisper model");
     }
 
     LOGD("whisper model created");
@@ -353,7 +353,7 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
         return samples_process_result_t::no_samples_needed;
     }
 
-    set_processing_state(processing_state_t::decoding);
+    set_state(state_t::decoding);
 
     if (!vad_status) {
         set_speech_detection_status(speech_detection_status_t::no_speech);
@@ -370,7 +370,7 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
                               (1000 * m_speech_buf.size() / m_sample_rate));
     m_segment_time_discarded_after = 0;
 
-    set_processing_state(processing_state_t::idle);
+    set_state(state_t::idle);
 
     if (m_config.speech_mode == speech_mode_t::single_sentence &&
         (!m_intermediate_text || m_intermediate_text->empty())) {
@@ -438,7 +438,7 @@ whisper_full_params whisper_engine::make_wparams() {
 void whisper_engine::decode_speech(const whisper_buf_t& buf) {
     LOGD("speech decoding started");
 
-    create_whisper_model();
+    create_model();
 
     auto decoding_start = std::chrono::steady_clock::now();
 

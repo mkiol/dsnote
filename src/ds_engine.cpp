@@ -21,7 +21,7 @@ using namespace std::chrono_literals;
 
 ds_engine::ds_engine(config_t config, callbacks_t call_backs)
     : stt_engine{std::move(config), std::move(call_backs)} {
-    open_ds_lib();
+    open_lib();
     m_speech_buf.reserve(m_speech_max_size);
 }
 
@@ -39,62 +39,80 @@ ds_engine::~ds_engine() {
 
     m_ds_api = {};
 
-    if (m_dslib_handle) {
-        dlclose(m_dslib_handle);
-        m_dslib_handle = nullptr;
+    if (m_lib_handle) {
+        dlclose(m_lib_handle);
+        m_lib_handle = nullptr;
     }
 }
 
-void ds_engine::open_ds_lib() {
+void ds_engine::open_lib() {
     if ((cpu_tools::cpuinfo().feature_flags &
          cpu_tools::feature_flags_t::avx) == 0) {
         LOGE("avx not supported but ds engine needs it");
         throw std::runtime_error("failed to init ds engine: avx not supported");
     }
 
-    m_dslib_handle = dlopen("libstt.so", RTLD_LAZY);
-    if (m_dslib_handle == nullptr) {
+    m_lib_handle = dlopen("libstt.so", RTLD_LAZY);
+    if (m_lib_handle == nullptr) {
         LOGE("failed to open ds lib");
         throw std::runtime_error("failed to open ds lib");
     }
 
     m_ds_api.STT_CreateModel =
         reinterpret_cast<decltype(m_ds_api.STT_CreateModel)>(
-            dlsym(m_dslib_handle, "STT_CreateModel"));
+            dlsym(m_lib_handle, "STT_CreateModel"));
     m_ds_api.STT_FreeModel = reinterpret_cast<decltype(m_ds_api.STT_FreeModel)>(
-        dlsym(m_dslib_handle, "STT_FreeModel"));
+        dlsym(m_lib_handle, "STT_FreeModel"));
     m_ds_api.STT_EnableExternalScorer =
         reinterpret_cast<decltype(m_ds_api.STT_EnableExternalScorer)>(
-            dlsym(m_dslib_handle, "STT_EnableExternalScorer"));
+            dlsym(m_lib_handle, "STT_EnableExternalScorer"));
     m_ds_api.STT_CreateStream =
         reinterpret_cast<decltype(m_ds_api.STT_CreateStream)>(
-            dlsym(m_dslib_handle, "STT_CreateStream"));
+            dlsym(m_lib_handle, "STT_CreateStream"));
     m_ds_api.STT_FreeStream =
         reinterpret_cast<decltype(m_ds_api.STT_FreeStream)>(
-            dlsym(m_dslib_handle, "STT_FreeStream"));
+            dlsym(m_lib_handle, "STT_FreeStream"));
     m_ds_api.STT_FinishStream =
         reinterpret_cast<decltype(m_ds_api.STT_FinishStream)>(
-            dlsym(m_dslib_handle, "STT_FinishStream"));
+            dlsym(m_lib_handle, "STT_FinishStream"));
     m_ds_api.STT_FinishStreamWithMetadata =
         reinterpret_cast<decltype(m_ds_api.STT_FinishStreamWithMetadata)>(
-            dlsym(m_dslib_handle, "STT_FinishStreamWithMetadata"));
+            dlsym(m_lib_handle, "STT_FinishStreamWithMetadata"));
     m_ds_api.STT_IntermediateDecode =
         reinterpret_cast<decltype(m_ds_api.STT_IntermediateDecode)>(
-            dlsym(m_dslib_handle, "STT_IntermediateDecode"));
+            dlsym(m_lib_handle, "STT_IntermediateDecode"));
     m_ds_api.STT_FeedAudioContent =
         reinterpret_cast<decltype(m_ds_api.STT_FeedAudioContent)>(
-            dlsym(m_dslib_handle, "STT_FeedAudioContent"));
+            dlsym(m_lib_handle, "STT_FeedAudioContent"));
     m_ds_api.STT_FreeString =
         reinterpret_cast<decltype(m_ds_api.STT_FreeString)>(
-            dlsym(m_dslib_handle, "STT_FreeString"));
+            dlsym(m_lib_handle, "STT_FreeString"));
     m_ds_api.STT_FreeMetadata =
         reinterpret_cast<decltype(m_ds_api.STT_FreeMetadata)>(
-            dlsym(m_dslib_handle, "STT_FreeMetadata"));
+            dlsym(m_lib_handle, "STT_FreeMetadata"));
 
     if (!m_ds_api.ok()) {
         LOGE("failed to register ds api");
         throw std::runtime_error("failed to register ds api");
     }
+}
+
+bool ds_engine::available() {
+    if ((cpu_tools::cpuinfo().feature_flags &
+         cpu_tools::feature_flags_t::avx) == 0) {
+        LOGE("avx not supported but ds engine needs it");
+        return false;
+    }
+
+    auto lib_handle = dlopen("libstt.so", RTLD_LAZY);
+    if (lib_handle == nullptr) {
+        LOGE("failed to open stt lib: " << dlerror());
+        return false;
+    }
+
+    dlclose(lib_handle);
+
+    return true;
 }
 
 void ds_engine::start_processing_impl() {
@@ -228,7 +246,7 @@ stt_engine::samples_process_result_t ds_engine::process_buff() {
     }();
 
     if (final_decode || !m_speech_buf.empty()) {
-        set_processing_state(processing_state_t::decoding);
+        set_state(state_t::decoding);
 
         LOGD("speech frame: samples=" << m_speech_buf.size()
                                       << ", final=" << final_decode);
@@ -241,8 +259,7 @@ stt_engine::samples_process_result_t ds_engine::process_buff() {
         m_segment_time_offset += m_segment_time_discarded_after;
         m_segment_time_discarded_after = 0;
 
-        if (m_config.speech_started)
-            set_processing_state(processing_state_t::idle);
+        if (m_config.speech_started) set_state(state_t::idle);
 
         m_speech_buf.clear();
 

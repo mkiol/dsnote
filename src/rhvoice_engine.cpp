@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -7,6 +7,7 @@
 
 #include "rhvoice_engine.hpp"
 
+#include <dlfcn.h>
 #include <fmt/format.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -16,18 +17,119 @@
 
 #include "logger.hpp"
 
+enum RHVoice_punctuation_mode {
+    RHVoice_punctuation_default,
+    RHVoice_punctuation_none,
+    RHVoice_punctuation_all,
+    RHVoice_punctuation_some
+};
+
+enum RHVoice_capitals_mode {
+    RHVoice_capitals_default,
+    RHVoice_capitals_off,
+    RHVoice_capitals_word,
+    RHVoice_capitals_pitch,
+    RHVoice_capitals_sound
+};
+
+struct RHVoice_synth_params {
+    const char* voice_profile;
+    double absolute_rate, absolute_pitch, absolute_volume;
+    double relative_rate, relative_pitch, relative_volume;
+    RHVoice_punctuation_mode punctuation_mode;
+    const char* punctuation_list;
+    RHVoice_capitals_mode capitals_mode;
+    int flags;
+};
+
+struct RHVoice_callbacks {
+    int (*set_sample_rate)(int sample_rate, void* user_data);
+    int (*play_speech)(const short* samples, unsigned int count,
+                       void* user_data);
+    int (*process_mark)(const char* name, void* user_data);
+    int (*word_starts)(unsigned int position, unsigned int length,
+                       void* user_data);
+    int (*word_ends)(unsigned int position, unsigned int length,
+                     void* user_data);
+    int (*sentence_starts)(unsigned int position, unsigned int length,
+                           void* user_data);
+    int (*sentence_ends)(unsigned int position, unsigned int length,
+                         void* user_data);
+    int (*play_audio)(const char* src, void* user_data);
+    void (*done)(void* user_data);
+};
+
+struct RHVoice_init_params {
+    const char *data_path, *config_path;
+    const char** resource_paths;
+    RHVoice_callbacks callbacks;
+    unsigned int options;
+};
+
 rhvoice_engine::rhvoice_engine(config_t config, callbacks_t call_backs)
-    : tts_engine{std::move(config), std::move(call_backs)} {}
+    : tts_engine{std::move(config), std::move(call_backs)} {
+    open_lib();
+}
 
 rhvoice_engine::~rhvoice_engine() {
     LOGD("rhvoice dtor");
 
     stop();
 
-    if (m_rhvoice_engine) {
-        RHVoice_delete_tts_engine(m_rhvoice_engine);
-        m_rhvoice_engine = nullptr;
+    if (m_rhvoice_api.ok()) {
+        if (m_rhvoice_engine) {
+            m_rhvoice_api.RHVoice_delete_tts_engine(m_rhvoice_engine);
+            m_rhvoice_engine = nullptr;
+        }
     }
+
+    m_rhvoice_api = {};
+
+    if (m_lib_handle) {
+        dlclose(m_lib_handle);
+        m_lib_handle = nullptr;
+    }
+}
+
+void rhvoice_engine::open_lib() {
+    m_lib_handle = dlopen("libRHVoice.so", RTLD_LAZY);
+    if (m_lib_handle == nullptr) {
+        LOGE("failed to open rhvoice lib: " << dlerror());
+        throw std::runtime_error("failed to open rhvoice lib");
+    }
+
+    m_rhvoice_api.RHVoice_new_tts_engine =
+        reinterpret_cast<decltype(m_rhvoice_api.RHVoice_new_tts_engine)>(
+            dlsym(m_lib_handle, "RHVoice_new_tts_engine"));
+    m_rhvoice_api.RHVoice_delete_tts_engine =
+        reinterpret_cast<decltype(m_rhvoice_api.RHVoice_delete_tts_engine)>(
+            dlsym(m_lib_handle, "RHVoice_delete_tts_engine"));
+    m_rhvoice_api.RHVoice_new_message =
+        reinterpret_cast<decltype(m_rhvoice_api.RHVoice_new_message)>(
+            dlsym(m_lib_handle, "RHVoice_new_message"));
+    m_rhvoice_api.RHVoice_speak =
+        reinterpret_cast<decltype(m_rhvoice_api.RHVoice_speak)>(
+            dlsym(m_lib_handle, "RHVoice_speak"));
+    m_rhvoice_api.RHVoice_delete_message =
+        reinterpret_cast<decltype(m_rhvoice_api.RHVoice_delete_message)>(
+            dlsym(m_lib_handle, "RHVoice_delete_message"));
+
+    if (!m_rhvoice_api.ok()) {
+        LOGE("failed to sym rhvoice lib: " << dlerror());
+        throw std::runtime_error("failed to sym rhvoice lib");
+    }
+}
+
+bool rhvoice_engine::available() {
+    auto lib_handle = dlopen("libRHVoice.so", RTLD_LAZY);
+    if (lib_handle == nullptr) {
+        LOGE("failed to open rhvoice lib: " << dlerror());
+        return false;
+    }
+
+    dlclose(lib_handle);
+
+    return true;
 }
 
 bool rhvoice_engine::model_created() const {
@@ -71,11 +173,12 @@ void rhvoice_engine::create_model() {
                                     /*callbacks=*/callbacks,
                                     /*options=*/0};
 
-    m_rhvoice_engine = RHVoice_new_tts_engine(&init_params);
+    m_rhvoice_engine = m_rhvoice_api.RHVoice_new_tts_engine(&init_params);
 
-    if (!m_rhvoice_engine) {
-        LOGE("failed to init rhvoice engine");
-    }
+    if (!m_rhvoice_engine)
+        LOGE("failed to create rhvoice model");
+    else
+        LOGD("rhvoice model created");
 }
 
 struct callback_data {
@@ -100,7 +203,7 @@ int rhvoice_engine::play_speech_callback(const short* samples,
         return 0;
     }
 
-    if (cb_data->engine->m_shutting_down) {
+    if (cb_data->engine->is_shutdown()) {
         LOGD("end of rhvoice play speech due to shutdown");
         return 0;
     }
@@ -144,9 +247,9 @@ bool rhvoice_engine::encode_speech_impl(const std::string& text,
         /*capitals_mode=*/RHVoice_capitals_default,
         /*flags=*/0};
 
-    auto message =
-        RHVoice_new_message(m_rhvoice_engine, text.c_str(), text.size(),
-                            RHVoice_message_text, &synth_params, &cb_data);
+    auto message = m_rhvoice_api.RHVoice_new_message(
+        m_rhvoice_engine, text.c_str(), text.size(), RHVoice_message_text,
+        &synth_params, &cb_data);
     if (!message) {
         LOGE("failed to create rhvoice message");
         cb_data.wav_file.close();
@@ -154,17 +257,17 @@ bool rhvoice_engine::encode_speech_impl(const std::string& text,
         return false;
     }
 
-    if (RHVoice_speak(message) == 0) {
+    if (m_rhvoice_api.RHVoice_speak(message) == 0) {
         LOGE("rhvoice speek failed");
-        RHVoice_delete_message(message);
+        m_rhvoice_api.RHVoice_delete_message(message);
         cb_data.wav_file.close();
         unlink(out_file.c_str());
         return false;
     }
 
-    RHVoice_delete_message(message);
+    m_rhvoice_api.RHVoice_delete_message(message);
 
-    if (m_shutting_down) {
+    if (is_shutdown()) {
         cb_data.wav_file.close();
         unlink(out_file.c_str());
         return false;

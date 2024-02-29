@@ -1,6 +1,7 @@
-# only finished translations
-set(enabled_translations en fr it nl pl sv uk)
-#set(enabled_translations cs de en fr it nl pl sv zh_CN uk)
+# all translations
+set(enabled_translations cs de en fr it nl pl ru sv zh_CN uk)
+# finished translations
+set(enabled_translations en fr it nl pl ru sv uk)
 
 find_package(Qt5 COMPONENTS Core LinguistTools)
 
@@ -11,12 +12,14 @@ endforeach()
 
 qt5_create_translation(qm_files ${CMAKE_SOURCE_DIR}/src ${desktop_dir}/qml ${sfos_dir}/qml ${ts_files})
 
+# pack translations to resource file only for desktop
 string(REPLACE ";" " " enabled_translations_str "${enabled_translations}")
 add_custom_command(
-  OUTPUT translations.qrc
-  COMMAND sh -c "${tools_dir}/make_translations_qrc.sh ${info_translations_id} /translations ${CMAKE_BINARY_DIR}/translations.qrc ${enabled_translations_str}"
+  OUTPUT ${translations_resource_file}
+  COMMAND sh -c "${tools_dir}/make_translations_qrc.sh ${info_translations_id} /translations ${translations_resource_file} ${enabled_translations_str}"
   DEPENDS ${qm_files}
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
   VERBATIM)
-add_library(translations STATIC "${CMAKE_BINARY_DIR}/translations.qrc")
-target_link_libraries(${info_binary_id} translations)
+add_library(translations STATIC ${translations_resource_file})
+
+list(APPEND deps translations)

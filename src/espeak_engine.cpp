@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -61,7 +61,10 @@ void espeak_engine::create_model() {
     
     m_ok = espeak_SetVoiceByName(m_config.speaker_id.c_str()) == EE_OK;
 
-    if (!m_ok) LOGE("failed to set espeak voice");
+    if (!m_ok)
+        LOGE("failed to create espeak voice");
+    else
+        LOGD("espeak voice created");
 }
 
 struct callback_data {
@@ -77,7 +80,7 @@ int espeak_engine::synth_callback(short* wav, int size, espeak_EVENT* event) {
         return 0;
     }
 
-    if (cb_data->engine->m_shutting_down) {
+    if (cb_data->engine->is_shutdown()) {
         LOGD("end of espeak synth due to shutdown");
         return 1;
     }
@@ -133,7 +136,7 @@ bool espeak_engine::encode_speech_impl(const std::string& text,
         return false;
     }
 
-    if (m_shutting_down) {
+    if (is_shutdown()) {
         cb_data.wav_file.close();
         unlink(out_file.c_str());
         return false;

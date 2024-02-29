@@ -1,15 +1,15 @@
 set(mbrola_source_url "https://github.com/numediart/MBROLA/archive/refs/tags/3.3.tar.gz")
-set(mbrola_checksum "06993903c7b8d3a8d21cc66cd5a28219")
+set(mbrola_checksum "c01ded2c0a05667e6df2439c1c02b011a5df2bfdf49e24a524630686aea2b558")
 
-set(espeak_source_url "https://github.com/rhasspy/espeak-ng/archive/61504f6b76bf9ebbb39b07d21cff2a02b87c99ff.zip")
-set(espeak_checksum "56e002023d76dc166f1843d066b8b1d6")
+set(espeak_source_url "https://github.com/rhasspy/espeak-ng/archive/8593723f10cfd9befd50de447f14bf0a9d2a14a4.zip")
+set(espeak_checksum "cc8092f23a28ccd79b1c5e62984a4c4ac1959d2d0b8193ac208d728c620bd5ed")
 
 ExternalProject_Add(mbrola
     SOURCE_DIR ${external_dir}/mbrola
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/mbrola
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-    URL "${mbrola_source_url}"
-    URL_MD5 "${mbrola_checksum}"
+    URL ${mbrola_source_url}
+    URL_HASH SHA256=${mbrola_checksum}
     CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR>
     BUILD_COMMAND ${MAKE}
     BUILD_ALWAYS False
@@ -20,8 +20,8 @@ ExternalProject_Add(espeak
     SOURCE_DIR ${external_dir}/espeak
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/espeak
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-    URL "${espeak_source_url}"
-    URL_MD5 "${espeak_checksum}"
+    URL ${espeak_source_url}
+    URL_HASH SHA256=${espeak_checksum}
     CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> &&
         <BINARY_DIR>/autogen.sh &&
         <BINARY_DIR>/configure --prefix=<INSTALL_DIR> --with-pic

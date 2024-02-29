@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -34,28 +34,16 @@ ApplicationWindow {
 
     property var _dialogPage
 
-    function openTextFile(path) {
-        if (app.note.length > 0) {
-            addTextDialog.addHandler = function(){app.load_note_from_file(path, false)}
-            addTextDialog.replaceHandler = function(){app.load_note_from_file(path, true)}
+    function openFile(path) {
+        if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
+            addTextDialog.addHandler = function(){app.import_file(path, -1, false)}
+            addTextDialog.replaceHandler = function(){app.import_file(path, -1, true)}
             addTextDialog.open()
         } else {
-            app.load_note_from_file(path, true)
+            app.import_file(path, -1, _settings.file_import_action === Settings.FileImportActionReplace)
         }
 
-        _settings.file_open_dir = path
-    }
-
-    function transcribeFile(url) {
-        if (app.note.length > 0) {
-            addTextDialog.addHandler = function(){app.transcribe_file_url(url, false)}
-            addTextDialog.replaceHandler = function(){app.transcribe_file_url(url, true)}
-            addTextDialog.open()
-        } else {
-            app.transcribe_file_url(url, true)
-        }
-
-        _settings.file_audio_open_dir_url = url
+        _settings.file_open_dir = _settings.dir_of_file(path)
     }
 
     function openDialog(file, props) {
@@ -89,7 +77,7 @@ ApplicationWindow {
     function showWelcome() {
         if (app.busy) return
 
-        if (!app.stt_configured && !app.tts_configured) {
+        if (!app.stt_configured && !app.tts_configured && !app.mnt_configured) {
             appWin.openDialogIfNotOpen("HelloPage.qml")
         } else if (APP_VERSION !== _settings.prev_app_ver) {
             _settings.prev_app_ver = APP_VERSION
@@ -196,7 +184,9 @@ ApplicationWindow {
                 qsTr("Read"),
                 qsTr("Listen"),
                 qsTr("Enable"),
-                qsTr("Disable")
+                qsTr("Disable"),
+                qsTr("Stop"),
+                qsTr("Start")
             ]
 
             list.sort(function (a, b) {
@@ -283,11 +273,6 @@ ApplicationWindow {
         property var addHandler
         property var replaceHandler
 
-        property bool text: true
-
-        property string textFilePath
-        property url audioFileUrl
-
         anchors.centerIn: parent
 
         onAddClicked: addHandler()
@@ -298,12 +283,12 @@ ApplicationWindow {
         id: streamSelectionDialog
 
         property string filePath
-        property bool replace: false
+        property string replace
 
         anchors.centerIn: parent
 
         onAccepted: {
-            app.transcribe_file(filePath, replace, selectedId)
+            app.import_file(filePath, selectedIndex, replace)
         }
     }
 
@@ -313,13 +298,13 @@ ApplicationWindow {
         onDropped: {
             if (!drop.hasUrls) return
 
-            if (app.note.length > 0) {
+            if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
                 var urls = drop.urls
-                addTextDialog.addHandler = function(){app.open_files_url(urls, false)}
-                addTextDialog.replaceHandler = function(){app.open_files_url(urls, true)}
+                addTextDialog.addHandler = function(){app.import_files_url(urls, false)}
+                addTextDialog.replaceHandler = function(){app.import_files_url(urls, true)}
                 addTextDialog.open()
             } else {
-                app.open_files_url(drop.urls, true)
+                app.import_files_url(drop.urls, _settings.file_import_action === Settings.FileImportActionReplace)
             }
         }
     }
@@ -339,18 +324,22 @@ ApplicationWindow {
 
     Connections {
         target: _app_server
-        onActivate_requested: appWin.raise()
+        onActivate_requested: {
+            appWin.show()
+            appWin.raise()
+        }
         onAction_requested: app.execute_action_name(action_name)
         onFiles_to_open_requested: {
-            if (app.note.length > 0) {
+            if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
                 var list_of_files = files
-                addTextDialog.addHandler = function(){app.open_files(list_of_files, false)}
-                addTextDialog.replaceHandler = function(){app.open_files(list_of_files, true)}
+                addTextDialog.addHandler = function(){app.import_files(list_of_files, false)}
+                addTextDialog.replaceHandler = function(){app.import_files(list_of_files, true)}
                 addTextDialog.open()
             } else {
-                app.open_files(files, true)
+                app.import_files(files, _settings.file_import_action === Settings.FileImportActionReplace)
             }
 
+            appWin.show()
             appWin.raise()
         }
     }
@@ -371,15 +360,27 @@ ApplicationWindow {
         onTts_configuredChanged: showWelcome()
         Component.onCompleted: {
             if (_start_in_tray) show_tray()
-            app.open_files(_files_to_open, false)
+            if (_files_to_open.length > 0) {
+                appWin.show()
+
+                if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
+                    var list_of_files = _files_to_open
+                    addTextDialog.addHandler = function(){app.import_files(list_of_files, false)}
+                    addTextDialog.replaceHandler = function(){app.import_files(list_of_files, true)}
+                    addTextDialog.open()
+                } else {
+                    app.import_files(_files_to_open, _settings.file_import_action === Settings.FileImportActionReplace)
+                }
+            }
             app.execute_action_name(_requested_action)
+            app.set_app_window(appWin);
             showWelcome()
         }
 
         onNote_copied: toast.show(qsTr("Copied!"))
-        onTranscribe_done: toast.show(qsTr("File transcription is complete!"))
-        onSpeech_to_file_done: toast.show(qsTr("Speech saved to audio file!"))
-        onSave_note_to_file_done: toast.show(qsTr("Note saved to text file!"))
+        onTranscribe_done: toast.show(qsTr("Import from the file is complete!"))
+        onSpeech_to_file_done: toast.show(qsTr("Export to file is complete!"))
+        onSave_note_to_file_done: toast.show(qsTr("Export to file is complete!"))
         onText_decoded_to_clipboard: {
             var policy = false
             switch(_settings.desktop_notification_policy) {
@@ -391,7 +392,7 @@ ApplicationWindow {
             if (policy)
                 app.show_desktop_notification(qsTr("Text copied to clipboard!"), "", false)
         }
-        onTranscribe_file_multiple_streams: {
+        onImport_file_multiple_streams: {
             streamSelectionDialog.filePath = file_path
             streamSelectionDialog.streams = streams
             streamSelectionDialog.replace = replace
@@ -418,11 +419,23 @@ ApplicationWindow {
             case DsnoteApp.ErrorMntRuntime:
                 toast.show(qsTr("Error: Not all text has been translated."))
                 break;
-            case DsnoteApp.ErrorSaveNoteToFile:
-                toast.show(qsTr("Error: Couldn't save to the file."))
+            case DsnoteApp.ErrorExportFileGeneral:
+                toast.show(qsTr("Error: Couldn't export to the file."))
                 break;
-            case DsnoteApp.ErrorLoadNoteFromFile:
-                toast.show(qsTr("Error: Couldn't open the file."))
+            case DsnoteApp.ErrorImportFileGeneral:
+                toast.show(qsTr("Error: Couldn't import the file."))
+                break;
+            case DsnoteApp.ErrorImportFileNoStreams:
+                toast.show(qsTr("Error: Couldn't import. The file does not contain audio or subtitles."))
+                break;
+            case DsnoteApp.ErrorSttNotConfigured:
+                toast.show(qsTr("Error: Speech to Text model has been set up yet."))
+                break;
+            case DsnoteApp.ErrorTtsNotConfigured:
+                toast.show(qsTr("Error: Text to Speech model has been set up yet."))
+                break;
+            case DsnoteApp.ErrorMntNotConfigured:
+                toast.show(qsTr("Error: Translator model has been set up yet."))
                 break;
             case DsnoteApp.ErrorContentDownload:
                 toast.show(qsTr("Error: Couldn't download a licence."))
@@ -434,6 +447,9 @@ ApplicationWindow {
         onStateChanged: update_dektop_notification()
         onTask_state_changed: update_dektop_notification()
         onIntermediate_text_changed: update_dektop_notification()
-        onActivate_requested: appWin.raise()
+        onActivate_requested: {
+            appWin.show()
+            appWin.raise()
+        }
     }
 }

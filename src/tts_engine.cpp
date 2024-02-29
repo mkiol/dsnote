@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -139,7 +139,8 @@ std::ostream& operator<<(std::ostream& os, const tts_engine::config_t& config) {
        << ", speaker=" << config.speaker_id
        << ", ref_voice_file=" << config.ref_voice_file
        << ", text-format=" << config.text_format
-       << ", options=" << config.options << ", lang_code=" << config.lang_code
+       << ", sync_subs=" << config.sync_subs << ", options=" << config.options
+       << ", lang_code=" << config.lang_code
        << ", share-dir=" << config.share_dir
        << ", cache-dir=" << config.cache_dir << ", data-dir=" << config.data_dir
        << ", speech-speed=" << config.speech_speed
@@ -153,6 +154,12 @@ std::ostream& operator<<(std::ostream& os, tts_engine::state_t state) {
     switch (state) {
         case tts_engine::state_t::idle:
             os << "idle";
+            break;
+        case tts_engine::state_t::stopping:
+            os << "stopping";
+            break;
+        case tts_engine::state_t::stopped:
+            os << "stopped";
             break;
         case tts_engine::state_t::initializing:
             os << "initializing";
@@ -182,13 +189,12 @@ tts_engine::~tts_engine() {
 void tts_engine::start() {
     LOGD("tts start");
 
-    m_shutting_down = true;
+    m_state = state_t::stopping;
     m_cv.notify_one();
     if (m_processing_thread.joinable()) m_processing_thread.join();
 
     m_queue = std::queue<task_t>{};
     m_state = state_t::idle;
-    m_shutting_down = false;
     m_processing_thread = std::thread{&tts_engine::process, this};
 
     LOGD("tts start completed");
@@ -197,12 +203,12 @@ void tts_engine::start() {
 void tts_engine::stop() {
     LOGD("tts stop started");
 
-    m_shutting_down = true;
-
-    set_state(state_t::idle);
+    set_state(state_t::stopping);
 
     m_cv.notify_one();
     if (m_processing_thread.joinable()) m_processing_thread.join();
+
+    set_state(state_t::stopped);
 
     LOGD("tts stop completed");
 }
@@ -210,9 +216,8 @@ void tts_engine::stop() {
 void tts_engine::request_stop() {
     LOGD("tts stop requested");
 
-    m_shutting_down = true;
-
-    set_state(state_t::idle);
+    set_state(state_t::stopping);
+    m_cv.notify_one();
 }
 
 std::string tts_engine::first_file_with_ext(std::string dir_path,
@@ -252,7 +257,7 @@ std::string tts_engine::find_file_with_name_prefix(std::string dir_path,
 }
 
 void tts_engine::encode_speech(std::string text) {
-    if (m_shutting_down) return;
+    if (is_shutdown()) return;
 
     auto tasks = make_tasks(text);
 
@@ -281,7 +286,19 @@ void tts_engine::set_ref_voice_file(std::string ref_voice_file) {
 }
 
 void tts_engine::set_state(state_t new_state) {
-    if (m_shutting_down) new_state = state_t::idle;
+    if (is_shutdown()) {
+        switch (new_state) {
+            case state_t::idle:
+            case state_t::stopping:
+            case state_t::initializing:
+            case state_t::encoding:
+                new_state = state_t::stopping;
+                break;
+            case state_t::stopped:
+            case state_t::error:
+                break;
+        }
+    }
 
     if (m_state != new_state) {
         LOGD("tts engine state: " << m_state << " => " << new_state);
@@ -353,13 +370,24 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
             if (!segments.empty()) {
                 tasks.reserve(segments.size());
 
+                if (!m_config.sync_subs) {
+                    segments.front().t0 = 0;
+                    segments.front().t1 = 0;
+                }
+
                 tasks.push_back(task_t{std::move(segments.front().text),
                                        segments.front().t0, segments.front().t1,
                                        true, false});
 
-                for (auto it = segments.begin() + 1; it != segments.end(); ++it)
+                for (auto it = segments.begin() + 1; it != segments.end();
+                     ++it) {
+                    if (!m_config.sync_subs) {
+                        it->t0 = 0;
+                        it->t1 = 0;
+                    }
                     tasks.push_back(task_t{std::move(it->text), it->t0, it->t1,
                                            false, false});
+                }
 
                 tasks.back().last = true;
 
@@ -537,17 +565,15 @@ void tts_engine::process() {
 
     decltype(m_queue) queue;
 
-    while (!m_shutting_down && m_state != state_t::error) {
+    while (!is_shutdown()) {
         {
             std::unique_lock<std::mutex> lock{m_mutex};
-            m_cv.wait(lock, [this] {
-                return (m_shutting_down || m_state == state_t::error) ||
-                       !m_queue.empty();
-            });
+            m_cv.wait(lock,
+                      [this] { return is_shutdown() || !m_queue.empty(); });
             std::swap(queue, m_queue);
         }
 
-        if (m_shutting_down || m_state == state_t::error) break;
+        if (is_shutdown()) break;
 
         if (!model_created()) {
             set_state(state_t::initializing);
@@ -557,9 +583,10 @@ void tts_engine::process() {
             if (!model_created()) {
                 set_state(state_t::error);
                 if (m_call_backs.error) m_call_backs.error();
-                break;
             }
         }
+
+        if (is_shutdown()) break;
 
         if (m_restart_requested) {
             m_restart_requested = false;
@@ -572,23 +599,34 @@ void tts_engine::process() {
 
         setup_ref_voice();
 
+        if (is_shutdown()) break;
+
         set_state(state_t::encoding);
 
         size_t speech_time = 0;
+        size_t total_tasks_nb = 0;
 
-        while (!m_shutting_down && !queue.empty()) {
+        while (!is_shutdown() && !queue.empty()) {
             auto task = std::move(queue.front());
-            queue.pop();
 
-            if (task.first) speech_time = 0;
+            if (task.first) {
+                speech_time = 0;
+                total_tasks_nb = queue.size();
+            }
+
+            queue.pop();
 
             if (task.empty() && task.last) {
                 if (m_call_backs.speech_encoded) {
                     m_call_backs.speech_encoded({}, {}, audio_format_t::wav,
-                                                true);
+                                                1.0, true);
                 }
                 continue;
             }
+
+            double progress =
+                static_cast<double>(total_tasks_nb - queue.size()) /
+                total_tasks_nb;
 
             auto output_file = path_to_output_file(task.text);
 
@@ -610,7 +648,7 @@ void tts_engine::process() {
                     LOGE("speech encoding error");
                     if (m_call_backs.speech_encoded) {
                         m_call_backs.speech_encoded(
-                            "", "", m_config.audio_format, task.last);
+                            "", "", m_config.audio_format, progress, task.last);
                     }
 
                     continue;
@@ -619,10 +657,13 @@ void tts_engine::process() {
                 if (!model_supports_speed()) apply_speed(output_file_wav);
 
                 if (m_config.audio_format != audio_format_t::wav) {
-                    media_compressor{}.compress(
+                    media_compressor{}.compress_to_file(
                         {output_file_wav}, output_file,
                         compressor_format_from_format(m_config.audio_format),
-                        media_compressor::quality_t::vbr_high);
+                        {media_compressor::quality_t::vbr_high,
+                         false,
+                         false,
+                         {}});
 
                     unlink(output_file_wav.c_str());
                 }
@@ -643,11 +684,14 @@ void tts_engine::process() {
                         make_silence_wav_file(duration, silence_out_file_wav);
 
                         if (m_config.audio_format != audio_format_t::wav) {
-                            media_compressor{}.compress(
+                            media_compressor{}.compress_to_file(
                                 {silence_out_file_wav}, silence_out_file,
                                 compressor_format_from_format(
                                     m_config.audio_format),
-                                media_compressor::quality_t::vbr_high);
+                                {media_compressor::quality_t::vbr_high,
+                                 false,
+                                 false,
+                                 {}});
 
                             unlink(silence_out_file_wav.c_str());
                         } else {
@@ -656,8 +700,9 @@ void tts_engine::process() {
                     }
 
                     if (m_call_backs.speech_encoded) {
-                        m_call_backs.speech_encoded(
-                            "", silence_out_file, m_config.audio_format, false);
+                        m_call_backs.speech_encoded("", silence_out_file,
+                                                    m_config.audio_format,
+                                                    progress, false);
                     }
 
                 } else if (speech_time > task.t0) {
@@ -667,16 +712,19 @@ void tts_engine::process() {
                 speech_time += media_compressor{}.duration(output_file);
             }
 
+            if (is_shutdown()) break;
+
             if (m_call_backs.speech_encoded) {
                 m_call_backs.speech_encoded(task.text, output_file,
-                                            m_config.audio_format, task.last);
+                                            m_config.audio_format, progress,
+                                            task.last);
             }
         }
 
-        set_state(state_t::idle);
+        if (!is_shutdown()) set_state(state_t::idle);
     }
 
-    if (m_shutting_down) set_state(state_t::idle);
+    if (m_state != state_t::error) set_state(state_t::stopped);
 
     LOGD("tts processing done");
 }
@@ -703,9 +751,11 @@ void tts_engine::setup_ref_voice() {
         m_config.cache_dir + "/" + std::to_string(hash) + ".wav";
 
     if (!file_exists(m_ref_voice_wav_file)) {
-        media_compressor{}.decompress(
+        media_compressor{}.decompress_to_file(
             {m_config.ref_voice_file}, m_ref_voice_wav_file,
-            {/*mono=*/false, /*sample_rate_16=*/false, /*stream_index=*/-1});
+            {media_compressor::quality_t::vbr_medium, /*mono=*/false,
+             /*sample_rate_16=*/false,
+             /*stream=*/{}});
     }
 }
 

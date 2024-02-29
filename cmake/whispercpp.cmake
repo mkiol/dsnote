@@ -39,6 +39,7 @@ if(arch_x8664)
             UPDATE_COMMAND ""
             CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
                 -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+                -DCMAKE_INSTALL_LIBDIR=lib
                 -DTUNERS=OFF
             BUILD_ALWAYS False
         )
@@ -54,6 +55,7 @@ if(arch_x8664)
                             echo "patch cmd failed, likely already patched"
             CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
                 -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
+                -DCMAKE_INSTALL_LIBDIR=lib
                 -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
                 -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
                 -DWHISPER_CLBLAST=ON
@@ -86,6 +88,7 @@ if(arch_x8664)
                             echo "patch cmd failed, likely already patched"
             CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
                 -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+                -DCMAKE_INSTALL_LIBDIR=lib
                 -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
                 -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
                 -DWHISPER_CUBLAS=ON
@@ -115,6 +118,7 @@ if(arch_x8664)
                             echo "patch cmd failed, likely already patched"
             CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
                 -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+                -DCMAKE_INSTALL_LIBDIR=lib
                 -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
                 -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
                 -DWHISPER_HIPBLAS=ON
@@ -159,6 +163,7 @@ ExternalProject_Add(whispercppfallback
                     echo "patch cmd failed, likely already patched"
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+        -DCMAKE_INSTALL_LIBDIR=lib
         -DBLAS_LIB_PATH=${blas_lib_path}
         -DBLAS_INC_DIR=${blas_include_dir}
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
@@ -182,6 +187,7 @@ ExternalProject_Add(whispercppopenblas
                     echo "patch cmd failed, likely already patched"
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+        -DCMAKE_INSTALL_LIBDIR=lib
         -DBLAS_LIB_PATH=${blas_lib_path}
         -DBLAS_INC_DIR=${blas_include_dir}
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON

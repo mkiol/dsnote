@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -988,33 +988,27 @@ void processor::hebrew_diacritize(std::string& text,
                                   const std::string& model_path) {
     using namespace pybind11::literals;
 
-    auto* pe = py_executor::instance();
+    auto task = py_executor::instance()->execute(
+        [&, dev = m_device < 0 ? "cpu"
+                               : fmt::format("{}:{}", "cuda", m_device)]() {
+            try {
+                if (!m_unikud) {
+                    LOGD("creating hebrew diacritizer: device=" << dev);
 
-    try {
-        text =
-            pe->execute([&, dev = m_device < 0 ? "cpu"
-                                               : fmt::format("{}:{}", "cuda",
-                                                             m_device)]() {
-                  try {
-                      if (!m_unikud) {
-                          LOGD("creating hebrew diacritizer: device=" << dev);
+                    auto framework = py::module_::import("unikud.framework");
+                    m_unikud = framework.attr("Unikud")(
+                        "hub_name"_a = model_path, "device"_a = dev);
+                }
 
-                          auto framework =
-                              py::module_::import("unikud.framework");
-                          m_unikud = framework.attr("Unikud")(
-                              "hub_name"_a = model_path, "device"_a = dev);
-                      }
+                return m_unikud.value()(text).cast<std::string>();
+            } catch (const std::exception& err) {
+                LOGE("py error: " << err.what());
+            }
 
-                      return m_unikud.value()(text).cast<std::string>();
-                  } catch (const std::exception& err) {
-                      LOGE("py error: " << err.what());
-                  }
+            return text;
+        });
 
-                  return text;
-              }).get();
-    } catch (const std::exception& err) {
-        LOGE("error: " << err.what());
-    }
+    if (task) text.assign(std::any_cast<std::string>(task->get()));
 }
 
 void processor::arabic_diacritize(std::string& text,
@@ -1081,20 +1075,16 @@ std::string processor::preprocess(const std::string& text,
 processor::processor(int device) : m_device{device} {}
 
 processor::~processor() {
-    auto* pe = py_executor::instance();
+    auto task = py_executor::instance()->execute([&]() {
+        try {
+            m_unikud.reset();
+        } catch (const std::exception& err) {
+            LOGE("py error: " << err.what());
+        }
+        return std::any{};
+    });
 
-    try {
-        pe->execute([&]() {
-              try {
-                  m_unikud.reset();
-              } catch (const std::exception& err) {
-                  LOGE("py error: " << err.what());
-              }
-              return std::string{};
-          }).get();
-    } catch (const std::exception& err) {
-        LOGE("error: " << err.what());
-    }
+    if (task) task->get();
 }
 
 }  // namespace text_tools

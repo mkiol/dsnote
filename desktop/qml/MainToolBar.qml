@@ -81,8 +81,6 @@ ToolBar {
             ToolButton {
                 id: fileButton
 
-                enabled: app.stt_configured || app.tts_configured
-                opacity: enabled ? 1.0 : 0.6
                 Layout.alignment: Qt.AlignLeft
                 text: qsTr("File")
                 onClicked: fileMenu.open()
@@ -93,100 +91,47 @@ ToolBar {
                     y: fileButton.height
 
                     MenuItem {
-                        text: qsTr("Open a text file")
+                        text: qsTr("Import from a file")
                         icon.name: "document-open-symbolic"
+                        enabled: !app.busy
                         onClicked: {
-                            textFileReadDialog.open()
+                            fileReadDialog.open()
                         }
-                    }
-
-                    MenuItem {
-                        text: qsTr("Transcribe a file")
-                        icon.name: "document-open-symbolic"
-                        enabled: !_settings.translator_mode && app.stt_configured &&
-                                 (app.state === DsnoteApp.StateListeningManual ||
-                                  app.state === DsnoteApp.StateListeningAuto ||
-                                  app.state === DsnoteApp.StateListeningSingleSentence ||
-                                  app.state === DsnoteApp.StateIdle ||
-                                  app.state === DsnoteApp.StatePlayingSpeech)
-                        onClicked: fileReadDialog.open()
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Convert audio from an existing audio or video file into text.")
+                        ToolTip.text: qsTr("Import a note from a text file, subtitle file, video or audio file.") + " " +
+                                      qsTr("If the imported file is an audio or video file, the audio is converted to text.")
                         hoverEnabled: true
                     }
 
                     MenuSeparator {}
 
                     MenuItem {
-                        text: qsTr("Save to a text file")
+                        text: qsTr("Export to a file")
                         icon.name: "document-save-symbolic"
-                        enabled: app.note.length !== 0
+                        enabled: app.note.length !== 0 && !app.busy
                         onClicked: {
-                            fileWriteDialog.translation = false
-                            fileWriteDialog.open()
+                            appWin.openDialog("ExportFilePage.qml", {"translated": false})
                         }
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Save the current note to a text file.")
+                        ToolTip.text: qsTr("Export the current note to a text file, subtitle file or audio file.")
                         hoverEnabled: true
                     }
 
                     MenuItem {
-                        text: qsTr("Save the translation to a text file")
+                        text: qsTr("Export the translation to a file")
                         icon.name: "document-save-symbolic"
-                        enabled: app.translated_text.length !== 0 && _settings.translator_mode
+                        enabled: app.translated_text.length !== 0 && _settings.translator_mode && !app.busy
                         onClicked: {
-                            fileWriteDialog.translation = true
-                            fileWriteDialog.open()
+                            appWin.openDialog("ExportFilePage.qml", {"translated": true})
                         }
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Save the translated note to a text file.")
-                        hoverEnabled: true
-                    }
-
-                    MenuSeparator {}
-
-                    MenuItem {
-                        text: qsTr("Export to audio file")
-                        icon.name: "document-save-symbolic"
-                        enabled: app.note.length !== 0 && app.tts_configured &&
-                                 (app.state === DsnoteApp.StateListeningManual ||
-                                  app.state === DsnoteApp.StateListeningAuto ||
-                                  app.state === DsnoteApp.StateListeningSingleSentence ||
-                                  app.state === DsnoteApp.StateIdle ||
-                                  app.state === DsnoteApp.StatePlayingSpeech)
-                        onClicked: {
-                            appWin.openDialog("FileWritePage.qml", {"translated": false})
-                        }
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Convert text from the current note into speech and save in an audio file.")
-                        hoverEnabled: true
-                    }
-
-                    MenuItem {
-                        text: qsTr("Export the translation to audio file")
-                        icon.name: "document-save-symbolic"
-                        enabled: app.translated_text.length !== 0 && _settings.translator_mode &&
-                                 app.tts_configured && app.active_tts_model_for_out_mnt.length !== 0 &&
-                                 (app.state === DsnoteApp.StateListeningManual ||
-                                  app.state === DsnoteApp.StateListeningAuto ||
-                                  app.state === DsnoteApp.StateListeningSingleSentence ||
-                                  app.state === DsnoteApp.StateIdle ||
-                                  app.state === DsnoteApp.StatePlayingSpeech)
-                        onClicked: {
-                            appWin.openDialog("FileWritePage.qml", {"translated": true})
-                        }
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Convert translated text into speech and save in an audio file.")
+                        ToolTip.text: qsTr("Export the translated note to a text file, subtitle file or audio file.")
                         hoverEnabled: true
                     }
                 }
@@ -290,65 +235,19 @@ ToolBar {
     }
 
     Dialogs.FileDialog {
-        id: fileWriteDialog
+        id: fileReadDialog
 
-        property bool translation: false
-
-        title: qsTr("Save File")
-        selectedNameFilter: {
-            switch (_settings.translator_mode ? _settings.mnt_text_format : _settings.stt_tts_text_format) {
-            case Settings.TextFormatSubRip: return qsTr("SRT Subtitles") + " (*.srt)"
-            case Settings.TextFormatRaw:
-            case Settings.TextFormatHtml:
-            case Settings.TextFormatMarkdown:
-                break;
-            }
-            return qsTr("Text") + " (*.txt)"
-        }
-        nameFilters: [ qsTr("Text") + " (*.txt)", qsTr("SRT Subtitles") + " (*.srt)", qsTr("All files") + " (*)"]
-        folder: _settings.file_save_dir_url
-        selectExisting: false
-        selectMultiple: false
-        onAccepted: {
-            var file_path =
-                _settings.file_path_from_url(fileWriteDialog.fileUrl)
-
-            if (translation)
-                app.save_note_to_file_translator(file_path)
-            else
-                app.save_note_to_file(file_path)
-        }
-    }
-
-    Dialogs.FileDialog {
-        id: textFileReadDialog
-
-        title: qsTr("Open File")
+        title: qsTr("Import from a file")
         nameFilters: [
-            qsTr("All supported files") + " (*.txt *.srt)",
+            qsTr("All supported files") + " (*.txt *.srt *.ass *.ssa *.sub *.vtt *.wav *.mp3 *.ogg *.oga *.ogx *.opus *.spx *.flac *.m4a *.aac *.mp4 *.mkv *.ogv *.webm)",
             qsTr("All files") + " (*)"]
         folder: _settings.file_open_dir_url
         selectExisting: true
         selectMultiple: false
         onAccepted: {
             var file_path =
-                _settings.file_path_from_url(textFileReadDialog.fileUrl)
-            appWin.openTextFile(file_path)
-        }
-    }
-
-    Dialogs.FileDialog {
-        id: fileReadDialog
-
-        title: qsTr("Open File")
-        nameFilters: [
-            qsTr("All supported files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.spx *.flac *.m4a *.aac *.mp4 *.mkv *.ogv *.webm)",
-            qsTr("All files") + " (*)"]
-        folder: _settings.file_audio_open_dir_url
-        selectExisting: true
-        selectMultiple: false
-        onAccepted: {
-            appWin.transcribeFile(fileReadDialog.fileUrl)
+                _settings.file_path_from_url(fileReadDialog.fileUrl)
+            appWin.openFile(file_path)
         }
     }
 }

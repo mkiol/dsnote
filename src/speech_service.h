@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -96,7 +96,7 @@ class speech_service : public QObject, public singleton<speech_service> {
 
     enum class source_t { none = 0, mic = 1, file = 2 };
 
-    enum class error_t {
+    enum class error_t : unsigned int {
         generic = 0,
         mic_source = 1,
         file_source = 2,
@@ -112,6 +112,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         tts_engine::audio_format_t audio_format =
             tts_engine::audio_format_t::wav;
         bool remove_audio_file = false;
+        double progress = 0.0;
         bool last = false;
         int task_id = INVALID_TASK;
     };
@@ -201,13 +202,18 @@ class speech_service : public QObject, public singleton<speech_service> {
                                 const QString &out_lang, int task);
     void requet_update_task_state();
     void mnt_engine_state_changed(mnt_engine::state_t state, int task_id);
+    void tts_engine_state_changed(tts_engine::state_t state, int task_id);
     void current_task_changed();
     void sentence_timeout(int task_id);
     void stt_engine_eof(int task_id);
     void stt_engine_error(int task_id);
+    void stt_engine_stopped(int task_id);
+    void stt_engine_stopping(int task_id);
     void tts_engine_error(int task_id);
     void mnt_engine_error(mnt_engine::error_t error_type, int task_id);
     void stt_engine_shutdown();
+    void stt_engine_state_changed(stt_engine::speech_detection_status_t state,
+                                  int task_id);
     void default_stt_model_changed();
     void default_stt_lang_changed();
     void default_tts_model_changed();
@@ -319,24 +325,13 @@ class speech_service : public QObject, public singleton<speech_service> {
         QString options;
     };
 
-    struct counter_t {
-        size_t value = 0;
-        size_t total = 0;
-
-        inline double progress() const {
-            return total == 0 ? 0.0
-                              : static_cast<double>(value) /
-                                    static_cast<double>(total);
-        }
-    };
-
     struct task_t {
         int id = INVALID_TASK;
         engine_t engine = engine_t::stt;
         QString model_id;
         speech_mode_t speech_mode = speech_mode_t::single_sentence;
         QString out_lang;
-        counter_t counter;
+        double progress = 0.0;
         std::vector<QString> files;
         QVariantMap options;
         bool paused = false;
@@ -377,7 +372,6 @@ class speech_service : public QObject, public singleton<speech_service> {
     int m_last_intermediate_text_task = INVALID_TASK;
     std::optional<task_t> m_previous_task;
     std::optional<task_t> m_current_task;
-    std::optional<task_t> m_pending_task;
     QMediaPlayer m_player;
     int m_task_state = 0;
     std::queue<tts_partial_result_t> m_tts_queue;
@@ -389,17 +383,16 @@ class speech_service : public QObject, public singleton<speech_service> {
     }
     void handle_models_changed();
     void handle_tts_models_changed();
-    void handle_stt_sentence_timeout();
     void handle_stt_sentence_timeout(int task_id);
-    void handle_stt_engine_eof();
     void handle_stt_engine_eof(int task_id);
-    void handle_stt_engine_error();
     void handle_stt_engine_error(int task_id);
-    void handle_tts_engine_error();
+    void handle_stt_engine_stopped(int task_id);
+    void handle_stt_engine_stopping(int task_id);
     void handle_tts_engine_error(int task_id);
     void handle_mnt_engine_error(mnt_engine::error_t error_type);
     void handle_mnt_engine_error(mnt_engine::error_t error_type, int task_id);
-    void handle_tts_engine_state_changed(tts_engine::state_t state);
+    void handle_tts_engine_state_changed(tts_engine::state_t state,
+                                         int task_id);
     void handle_mnt_engine_state_changed(mnt_engine::state_t state,
                                          int task_id);
     void handle_mnt_progress_changed(int task_id);
@@ -414,13 +407,13 @@ class speech_service : public QObject, public singleton<speech_service> {
     void handle_tts_speech_encoded(const std::string &text,
                                    const std::string &audio_file_path,
                                    tts_engine::audio_format_t format,
-                                   bool last);
+                                   double progress, bool last);
     void handle_tts_speech_encoded(tts_partial_result_t result);
     void handle_speech_to_file(const tts_partial_result_t &result);
     void handle_player_state_changed(QMediaPlayer::State new_state);
     void handle_audio_available();
-    void handle_stt_speech_detection_status_changed(
-        stt_engine::speech_detection_status_t status);
+    void handle_stt_engine_state_changed(
+        stt_engine::speech_detection_status_t status, int task_id);
     void handle_processing_changed(bool processing);
     void handle_audio_error();
     void handle_audio_ended();
@@ -540,5 +533,7 @@ Q_DECLARE_METATYPE(speech_service::tts_partial_result_t)
 Q_DECLARE_METATYPE(speech_service::error_t)
 Q_DECLARE_METATYPE(mnt_engine::state_t)
 Q_DECLARE_METATYPE(mnt_engine::error_t)
+Q_DECLARE_METATYPE(tts_engine::state_t)
+Q_DECLARE_METATYPE(stt_engine::speech_detection_status_t)
 
 #endif  // SPEECH_SERVICE_H

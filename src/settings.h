@@ -30,27 +30,42 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(insert_mode_t insert_mode READ insert_mode WRITE set_insert_mode
                    NOTIFY insert_mode_changed)
     Q_PROPERTY(mode_t mode READ mode WRITE set_mode NOTIFY mode_changed)
-    Q_PROPERTY(QString file_save_dir READ file_save_dir WRITE set_file_save_dir
-                   NOTIFY file_save_dir_changed)
-    Q_PROPERTY(QUrl file_save_dir_url READ file_save_dir_url WRITE
-                   set_file_save_dir_url NOTIFY file_save_dir_changed)
-    Q_PROPERTY(QString file_save_dir_name READ file_save_dir_name NOTIFY
-                   file_save_dir_changed)
-    Q_PROPERTY(QString file_save_filename READ file_save_filename NOTIFY
-                   file_save_dir_changed)
+
+    Q_PROPERTY(QString audio_file_save_dir READ audio_file_save_dir WRITE
+                   set_audio_file_save_dir NOTIFY audio_file_save_dir_changed)
+    Q_PROPERTY(
+        QUrl audio_file_save_dir_url READ audio_file_save_dir_url WRITE
+            set_audio_file_save_dir_url NOTIFY audio_file_save_dir_changed)
+    Q_PROPERTY(QString audio_file_save_dir_name READ audio_file_save_dir_name
+                   NOTIFY audio_file_save_dir_changed)
+    Q_PROPERTY(QString audio_file_save_filename READ audio_file_save_filename
+                   NOTIFY audio_file_save_dir_changed)
+
+    Q_PROPERTY(QString video_file_save_dir READ video_file_save_dir WRITE
+                   set_video_file_save_dir NOTIFY video_file_save_dir_changed)
+    Q_PROPERTY(
+        QUrl video_file_save_dir_url READ video_file_save_dir_url WRITE
+            set_audio_file_save_dir_url NOTIFY video_file_save_dir_changed)
+    Q_PROPERTY(QString video_file_save_dir_name READ video_file_save_dir_name
+                   NOTIFY video_file_save_dir_changed)
+    Q_PROPERTY(QString video_file_save_filename READ video_file_save_filename
+                   NOTIFY video_file_save_dir_changed)
+
+    Q_PROPERTY(QString text_file_save_dir READ text_file_save_dir WRITE
+                   set_text_file_save_dir NOTIFY text_file_save_dir_changed)
+    Q_PROPERTY(QUrl text_file_save_dir_url READ text_file_save_dir_url WRITE
+                   set_text_file_save_dir_url NOTIFY text_file_save_dir_changed)
+    Q_PROPERTY(QString text_file_save_dir_name READ text_file_save_dir_name
+                   NOTIFY text_file_save_dir_changed)
+    Q_PROPERTY(QString text_file_save_filename READ text_file_save_filename
+                   NOTIFY text_file_save_dir_changed)
+
     Q_PROPERTY(QString file_open_dir READ file_open_dir WRITE set_file_open_dir
                    NOTIFY file_open_dir_changed)
     Q_PROPERTY(QUrl file_open_dir_url READ file_open_dir_url WRITE
                    set_file_open_dir_url NOTIFY file_open_dir_changed)
     Q_PROPERTY(QString file_open_dir_name READ file_open_dir_name NOTIFY
                    file_open_dir_changed)
-    Q_PROPERTY(QString file_audio_open_dir READ file_audio_open_dir WRITE
-                   set_file_audio_open_dir NOTIFY file_audio_open_dir_changed)
-    Q_PROPERTY(
-        QUrl file_audio_open_dir_url READ file_audio_open_dir_url WRITE
-            set_file_audio_open_dir_url NOTIFY file_audio_open_dir_changed)
-    Q_PROPERTY(QString file_audio_open_dir_name READ file_audio_open_dir_name
-                   NOTIFY file_audio_open_dir_changed)
     Q_PROPERTY(QString prev_app_ver READ prev_app_ver WRITE set_prev_app_ver
                    NOTIFY prev_app_ver_changed)
     Q_PROPERTY(bool translator_mode READ translator_mode WRITE
@@ -78,6 +93,8 @@ class settings : public QSettings, public singleton<settings> {
                    set_speech_speed NOTIFY speech_speed_changed)
     Q_PROPERTY(int font_size READ font_size WRITE set_font_size NOTIFY
                    font_size_changed)
+    Q_PROPERTY(text_file_format_t text_file_format READ text_file_format WRITE
+                   set_text_file_format NOTIFY text_file_format_changed)
     Q_PROPERTY(audio_format_t audio_format READ audio_format WRITE
                    set_audio_format NOTIFY audio_format_changed)
     Q_PROPERTY(QString audio_format_str READ audio_format_str NOTIFY
@@ -132,9 +149,6 @@ class settings : public QSettings, public singleton<settings> {
                    gpu_scan_hip_changed)
     Q_PROPERTY(bool gpu_scan_opencl READ gpu_scan_opencl WRITE
                    set_gpu_scan_opencl NOTIFY gpu_scan_opencl_changed)
-    Q_PROPERTY(
-        bool gpu_scan_opencl_always READ gpu_scan_opencl_always WRITE
-            set_gpu_scan_opencl_always NOTIFY gpu_scan_opencl_always_changed)
     Q_PROPERTY(bool stt_use_gpu READ stt_use_gpu WRITE set_stt_use_gpu NOTIFY
                    stt_use_gpu_changed)
     Q_PROPERTY(bool tts_use_gpu READ tts_use_gpu WRITE set_tts_use_gpu NOTIFY
@@ -169,6 +183,8 @@ class settings : public QSettings, public singleton<settings> {
                    set_sub_max_line_length NOTIFY sub_config_changed)
     Q_PROPERTY(bool sub_break_lines READ sub_break_lines WRITE
                    set_sub_break_lines NOTIFY sub_config_changed)
+    Q_PROPERTY(bool keep_last_note READ keep_last_note WRITE set_keep_last_note
+                   NOTIFY keep_last_note_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -230,6 +246,11 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(
         QString gpu_overrided_version READ gpu_overrided_version WRITE
             set_gpu_overrided_version NOTIFY gpu_overrided_version_changed)
+    Q_PROPERTY(
+        file_import_action_t file_import_action READ file_import_action WRITE
+            set_file_import_action NOTIFY file_import_action_changed)
+    Q_PROPERTY(bool tts_subtitles_sync READ tts_subtitles_sync WRITE
+                   set_tts_subtitles_sync NOTIFY tts_subtitles_sync_changed)
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -253,6 +274,13 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(insert_mode_t)
 
+    enum class file_import_action_t {
+        FileImportActionAsk = 0,
+        FileImportActionAppend = 1,
+        FileImportActionReplace = 2
+    };
+    Q_ENUM(file_import_action_t)
+
     enum class audio_format_t {
         AudioFormatAuto = 0,
         AudioFormatWav = 1,
@@ -261,6 +289,15 @@ class settings : public QSettings, public singleton<settings> {
         AudioFormatOggOpus = 4
     };
     Q_ENUM(audio_format_t)
+
+    enum class text_file_format_t {
+        TextFileFormatAuto = 0,
+        TextFileFormatRaw = 1,
+        TextFileFormatSrt = 2,
+        TextFileFormatAss = 3,
+        TextFileFormatVtt = 4
+    };
+    Q_ENUM(text_file_format_t)
 
     enum class cache_audio_format_t {
         CacheAudioFormatWav = 0,
@@ -303,13 +340,29 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(addon_flags_t)
 
+    enum gpu_feature_flags_t : unsigned int {
+        gpu_feature_none = 0,
+        gpu_feature_stt_whispercpp_cuda = 1 << 0,
+        gpu_feature_stt_whispercpp_hip = 1 << 1,
+        gpu_feature_stt_whispercpp_opencl = 1 << 2,
+        gpu_feature_stt_fasterwhisper_cuda = 1 << 3,
+        gpu_feature_tts_coqui_cuda = 1 << 4,
+        gpu_feature_tts_coqui_hip = 1 << 5,
+        gpu_feature_all =
+            gpu_feature_stt_whispercpp_cuda | gpu_feature_stt_whispercpp_hip |
+            gpu_feature_stt_whispercpp_hip | gpu_feature_stt_whispercpp_opencl |
+            gpu_feature_stt_fasterwhisper_cuda | gpu_feature_tts_coqui_cuda |
+            gpu_feature_tts_coqui_hip
+    };
+    friend QDebug operator<<(QDebug d, gpu_feature_flags_t gpu_feature_flags);
+
     settings();
 
     launch_mode_t launch_mode() const;
     void set_launch_mode(launch_mode_t launch_mode);
     QString module_checksum(const QString &name) const;
     void set_module_checksum(const QString &name, const QString &value);
-    void scan_gpu_devices();
+    void scan_gpu_devices(unsigned int gpu_feature_flags);
     void disable_gpu_scan();
     void disable_py_scan();
 #ifdef USE_DESKTOP
@@ -326,23 +379,34 @@ class settings : public QSettings, public singleton<settings> {
     void set_insert_mode(insert_mode_t value);
     mode_t mode() const;
     void set_mode(mode_t value);
-    QString file_save_dir() const;
-    void set_file_save_dir(const QString &value);
-    QUrl file_save_dir_url() const;
-    void set_file_save_dir_url(const QUrl &value);
-    QString file_save_dir_name() const;
-    QString file_save_filename() const;
-    Q_INVOKABLE void update_file_save_path(const QString &path);
+
+    QString audio_file_save_dir() const;
+    void set_audio_file_save_dir(const QString &value);
+    QUrl audio_file_save_dir_url() const;
+    void set_audio_file_save_dir_url(const QUrl &value);
+    QString audio_file_save_dir_name() const;
+    QString audio_file_save_filename() const;
+    Q_INVOKABLE void update_audio_file_save_path(const QString &path);
+    QString video_file_save_dir() const;
+    void set_video_file_save_dir(const QString &value);
+    QUrl video_file_save_dir_url() const;
+    void set_video_file_save_dir_url(const QUrl &value);
+    QString video_file_save_dir_name() const;
+    QString video_file_save_filename() const;
+    Q_INVOKABLE void update_video_file_save_path(const QString &path);
+    QString text_file_save_dir() const;
+    void set_text_file_save_dir(const QString &value);
+    QUrl text_file_save_dir_url() const;
+    void set_text_file_save_dir_url(const QUrl &value);
+    QString text_file_save_dir_name() const;
+    QString text_file_save_filename() const;
+    Q_INVOKABLE void update_text_file_save_path(const QString &path);
     QString file_open_dir() const;
     void set_file_open_dir(const QString &value);
     QUrl file_open_dir_url() const;
     void set_file_open_dir_url(const QUrl &value);
     QString file_open_dir_name() const;
     QString file_audio_open_dir() const;
-    void set_file_audio_open_dir(const QString &value);
-    QUrl file_audio_open_dir_url() const;
-    void set_file_audio_open_dir_url(const QUrl &value);
-    QString file_audio_open_dir_name() const;
     QString prev_app_ver() const;
     void set_prev_app_ver(const QString &value);
     bool translator_mode() const;
@@ -369,6 +433,8 @@ class settings : public QSettings, public singleton<settings> {
     bool restart_required() const;
     void set_font_size(int value);
     int font_size() const;
+    void set_text_file_format(text_file_format_t value);
+    text_file_format_t text_file_format() const;
     void set_audio_format(audio_format_t value);
     audio_format_t audio_format() const;
     void set_audio_quality(audio_quality_t value);
@@ -412,8 +478,6 @@ class settings : public QSettings, public singleton<settings> {
     void set_gpu_scan_hip(bool value);
     bool gpu_scan_opencl() const;
     void set_gpu_scan_opencl(bool value);
-    bool gpu_scan_opencl_always() const;
-    void set_gpu_scan_opencl_always(bool value);
     bool whisper_use_gpu() const;
     void set_whisper_use_gpu(bool value);
     bool stt_use_gpu() const;
@@ -445,6 +509,10 @@ class settings : public QSettings, public singleton<settings> {
     unsigned int sub_max_line_length() const;
     bool sub_break_lines() const;
     void set_sub_break_lines(bool value);
+    bool keep_last_note() const;
+    void set_keep_last_note(bool value);
+    file_import_action_t file_import_action() const;
+    void set_file_import_action(file_import_action_t value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -472,6 +540,19 @@ class settings : public QSettings, public singleton<settings> {
     static audio_format_t audio_format_from_filename(const QString &filename);
     static audio_format_t filename_to_audio_format_static(
         const QString &filename);
+
+    Q_INVOKABLE QString
+    add_ext_to_text_file_filename(const QString &filename) const;
+    Q_INVOKABLE QString
+    add_ext_to_text_file_path(const QString &file_path) const;
+    Q_INVOKABLE text_file_format_t
+    filename_to_text_file_format(const QString &filename) const;
+    static QString text_file_ext_from_filename(const QString &filename);
+    static text_file_format_t text_file_format_from_filename(
+        const QString &filename);
+    static text_file_format_t filename_to_text_file_format_static(
+        const QString &filename);
+
     Q_INVOKABLE bool is_debug() const;
 
     // service
@@ -544,13 +625,18 @@ class settings : public QSettings, public singleton<settings> {
     QString gpu_overrided_version();
     void set_gpu_overrided_version(QString new_value);
 
+    bool tts_subtitles_sync() const;
+    void set_tts_subtitles_sync(bool value);
+
    signals:
     // app
     void speech_mode_changed();
     void note_changed();
     void insert_mode_changed();
     void mode_changed();
-    void file_save_dir_changed();
+    void audio_file_save_dir_changed();
+    void video_file_save_dir_changed();
+    void text_file_save_dir_changed();
     void file_open_dir_changed();
     void file_audio_open_dir_changed();
     void prev_app_ver_changed();
@@ -563,6 +649,7 @@ class settings : public QSettings, public singleton<settings> {
     void restart_required_changed();
     void speech_speed_changed();
     void font_size_changed();
+    void text_file_format_changed();
     void audio_format_changed();
     void audio_quality_changed();
     void mtag_album_name_changed();
@@ -577,7 +664,6 @@ class settings : public QSettings, public singleton<settings> {
     void gpu_scan_cuda_changed();
     void gpu_scan_hip_changed();
     void gpu_scan_opencl_changed();
-    void gpu_scan_opencl_always_changed();
     void whisper_use_gpu_changed();
     void stt_use_gpu_changed();
     void tts_use_gpu_changed();
@@ -593,6 +679,9 @@ class settings : public QSettings, public singleton<settings> {
     void clean_ref_voice_changed();
     void addon_flags_changed();
     void sub_config_changed();
+    void keep_last_note_changed();
+    void file_import_action_changed();
+    void tts_subtitles_sync_changed();
 
     // service
     void models_dir_changed();
@@ -638,6 +727,7 @@ class settings : public QSettings, public singleton<settings> {
     void update_addon_flags();
 
     launch_mode_t m_launch_mode = launch_mode_t::app_stanalone;
+    QString m_note;
 };
 
 #endif  // SETTINGS_H

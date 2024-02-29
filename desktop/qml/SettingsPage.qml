@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -97,12 +97,7 @@ DialogPage {
             ]
         }
 
-        Rectangle {
-            color: palette.highlight
-            height: 2
-            radius: 2
-            Layout.fillWidth: true
-        }
+        HorizontalLine{}
     }
 
     StackLayout {
@@ -116,9 +111,63 @@ DialogPage {
 
             width: root.width
 
+            CheckBox {
+                checked: _settings.keep_last_note
+                text: qsTr("Remember the last note")
+                onCheckedChanged: {
+                    _settings.keep_last_note = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("The note will be saved automatically, so when you restart the app, your last note will always be available.")
+                hoverEnabled: true
+            }
+
             GridLayout {
                 id: grid
 
+                columns: root.verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
+                rowSpacing: appWin.padding
+
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("File import action")
+                }
+                ComboBox {
+                    Layout.fillWidth: verticalMode
+                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                    Layout.leftMargin: verticalMode ? appWin.padding : 0
+                    currentIndex: {
+                        if (_settings.file_import_action === Settings.FileImportActionAsk) return 0
+                        if (_settings.file_import_action === Settings.FileImportActionAppend) return 1
+                        if (_settings.file_import_action === Settings.FileImportActionReplace) return 2
+                        return 0
+                    }
+                    model: [
+                        qsTr("Ask whether to add or replace"),
+                        qsTr("Add to an existing note"),
+                        qsTr("Replace an existing note")
+                    ]
+                    onActivated: {
+                        if (index === 1) {
+                            _settings.file_import_action = Settings.FileImportActionAppend
+                        } else if (index === 2) {
+                            _settings.file_import_action = Settings.FileImportActionReplace
+                        } else {
+                            _settings.file_import_action = Settings.FileImportActionAsk
+                        }
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.")
+                    hoverEnabled: true
+                }
+            }
+
+            GridLayout {
                 columns: root.verticalMode ? 1 : 2
                 columnSpacing: appWin.padding
                 rowSpacing: appWin.padding
@@ -235,7 +284,7 @@ DialogPage {
             }
 
             CheckBox {
-                Layout.leftMargin: 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 visible: _settings.desktop_notification_policy !== Settings.DesktopNotificationNever
                 checked: _settings.desktop_notification_details
                 text: qsTr("Include recognized or read text in notifications")
@@ -253,7 +302,7 @@ DialogPage {
             }
 
             CheckBox {
-                Layout.leftMargin: 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 visible: _settings.use_tray
                 checked: _settings.start_in_tray
                 text: qsTr("Start minimized to the system tray")
@@ -277,7 +326,7 @@ DialogPage {
                 rowSpacing: appWin.padding
 
                 Label {
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     Layout.fillWidth: true
                     text: qsTr("Graphical style")
                     wrapMode: Text.Wrap
@@ -335,7 +384,7 @@ DialogPage {
             InlineMessage {
                 color: "red"
                 Layout.fillWidth: true
-                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 visible: _settings.audio_inputs.length <= 1
 
                 Label {
@@ -415,7 +464,7 @@ DialogPage {
             InlineMessage {
                 color: "red"
                 Layout.fillWidth: true
-                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 visible: app.feature_punctuator &&
                          _settings.restore_punctuation &&
                          !app.ttt_configured
@@ -448,7 +497,7 @@ DialogPage {
             InlineMessage {
                 color: "red"
                 Layout.fillWidth: true
-                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 visible: _settings.gpu_supported() &&
                          app.feature_gpu_stt &&
                          _settings.stt_use_gpu &&
@@ -473,11 +522,13 @@ DialogPage {
 
                 Label {
                     wrapMode: Text.Wrap
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     Layout.fillWidth: true
                     text: qsTr("Graphics card")
                 }
                 ComboBox {
+                    id: sttGpuCombo
+
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
                     Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
@@ -490,6 +541,28 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Select preferred graphics card for hardware acceleration.")
+                }
+            }
+
+            InlineMessage {
+                color: palette.text
+                Layout.fillWidth: true
+                Layout.leftMargin: verticalMode ? 2 * appWin.padding : appWin.padding
+                visible: _settings.gpu_supported() &&
+                         app.feature_gpu_stt &&
+                         _settings.stt_use_gpu &&
+                         _settings.gpu_devices_stt.length > 1 &&
+                         sttGpuCombo.displayText.search("ROCm") !== -1
+
+
+                Label {
+                    color: palette.text
+                    Layout.fillWidth: true
+                    textFormat: Text.RichText
+                    wrapMode: Text.Wrap
+                    text: qsTr("Tip: If you observe problems with GPU acceleration, try to enable %1 option.")
+                          .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
+                                       qsTr("Override GPU version") + "</i>");
                 }
             }
 
@@ -547,7 +620,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Minimum line length")
                     wrapMode: Text.Wrap
                 }
@@ -579,7 +652,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Maximum line length")
                     wrapMode: Text.Wrap
                 }
@@ -625,7 +698,7 @@ DialogPage {
             InlineMessage {
                 color: "red"
                 Layout.fillWidth: true
-                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 visible: _settings.diacritizer_enabled &&
                          app.feature_coqui_tts &&
                          !app.feature_diacritizer_he
@@ -657,7 +730,7 @@ DialogPage {
             InlineMessage {
                 color: "red"
                 Layout.fillWidth: true
-                Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 visible: _settings.gpu_supported() &&
                          app.feature_gpu_tts &&
                          _settings.tts_use_gpu &&
@@ -682,11 +755,13 @@ DialogPage {
 
                 Label {
                     wrapMode: Text.Wrap
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     Layout.fillWidth: true
                     text: qsTr("Graphics card")
                 }
                 ComboBox {
+                    id: ttsGpuCombo
+
                     Layout.fillWidth: verticalMode
                     Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
                     Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
@@ -701,6 +776,45 @@ DialogPage {
                     ToolTip.text: qsTr("Select preferred graphics card for hardware acceleration.")
                     hoverEnabled: true
                 }
+            }
+
+            InlineMessage {
+                color: palette.text
+                Layout.fillWidth: true
+                Layout.leftMargin: verticalMode ? 2 * appWin.padding : appWin.padding
+                visible: _settings.gpu_supported() &&
+                         app.feature_gpu_tts &&
+                         _settings.tts_use_gpu &&
+                         _settings.gpu_devices_tts.length > 1 &&
+                         ttsGpuCombo.displayText.search("ROCm") !== -1
+
+                Label {
+                    color: palette.text
+                    Layout.fillWidth: true
+                    textFormat: Text.RichText
+                    wrapMode: Text.Wrap
+                    text: qsTr("Tip: If you observe problems with GPU acceleration, try to enable %1 option.")
+                          .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
+                                       qsTr("Override GPU version") + "</i>");
+                }
+            }
+
+            SectionLabel {
+                text: qsTr("Subtitles")
+            }
+
+            CheckBox {
+                checked: _settings.tts_subtitles_sync
+                text: qsTr("Sync speech with timestamps")
+                onCheckedChanged: {
+                    _settings.tts_subtitles_sync = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("When reading or exporting subtitles to file, synchronize the generated speech with the subtitle timestamps.") + " " +
+                              qsTr("This may be useful for creating voiceovers.")
+                hoverEnabled: true
             }
         }
 
@@ -735,7 +849,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Start listening")
                 }
                 TextField {
@@ -756,7 +870,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Start listening, text to active window")
                 }
                 TextField {
@@ -777,7 +891,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Start listening, text to clipboard")
                 }
                 TextField {
@@ -798,7 +912,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Stop listening")
                 }
                 TextField {
@@ -819,7 +933,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Start reading")
                 }
                 TextField {
@@ -840,7 +954,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Start reading text from clipboard")
                 }
                 TextField {
@@ -861,7 +975,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Pause/Resume reading")
                 }
                 TextField {
@@ -882,7 +996,7 @@ DialogPage {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
+                    Layout.leftMargin: appWin.padding
                     text: qsTr("Cancel")
                 }
                 TextField {
@@ -911,7 +1025,7 @@ DialogPage {
 
             InlineMessage {
                 color: palette.text
-                Layout.leftMargin: verticalMode ? 1 * appWin.padding : 2 * appWin.padding
+                Layout.leftMargin: appWin.padding
                 Layout.fillWidth: true
                 visible: _settings.actions_api_enabled
 
@@ -1001,164 +1115,6 @@ DialogPage {
             }
 
             SectionLabel {
-                text: qsTr("CPU options")
-            }
-
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Number of simultaneous threads")
-                    wrapMode: Text.Wrap
-                }
-
-                SpinBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? appWin.padding : 0
-                    from: 0
-                    to: 32
-                    stepSize: 1
-                    value: _settings.num_threads < 0 ? 0 : _settings.num_threads > 32 ? 32 : _settings.num_threads
-                    textFromValue: function(value) {
-                        return value < 1 ? qsTr("Auto") : value.toString()
-                    }
-                    valueFromText: function(text) {
-                        if (text === qsTr("Auto")) return 0
-                        return parseInt(text);
-                    }
-                    onValueChanged: {
-                        _settings.num_threads = value;
-                    }
-                    Component.onCompleted: {
-                        contentItem.color = palette.text
-                    }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Set the maximum number of simultaneous CPU threads.")
-                    hoverEnabled: true
-                }
-            }
-
-            SectionLabel {
-                visible: _settings.gpu_supported()
-                text: qsTr("Graphics card options")
-            }
-
-            CheckBox {
-                visible: _settings.gpu_supported()
-                checked: _settings.gpu_scan_cuda
-                text: qsTr("Use %1").arg("NVIDIA CUDA")
-                onCheckedChanged: {
-                    _settings.gpu_scan_cuda = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Try to find NVIDIA CUDA compatible graphic cards in the system.") + " " +
-                              qsTr("Disable this option if you observe problems when launching the application.")
-                hoverEnabled: true
-            }
-
-            CheckBox {
-                visible: _settings.gpu_supported()
-                checked: _settings.gpu_scan_hip
-                text: qsTr("Use %1").arg("AMD ROCm")
-                onCheckedChanged: {
-                    _settings.gpu_scan_hip = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Try to find AMD ROCm compatible graphic cards in the system.") + " " +
-                              qsTr("Disable this option if you observe problems when launching the application.")
-                hoverEnabled: true
-            }
-
-            RowLayout {
-                visible: _settings.gpu_supported()
-                spacing: appWin.padding
-                CheckBox {
-                    checked: _settings.gpu_scan_opencl
-                    text: qsTr("Use %1").arg("OpenCL")
-                    onCheckedChanged: {
-                        _settings.gpu_scan_opencl = checked
-                    }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
-                                  qsTr("Disable this option if you observe problems when launching the application.")
-                    hoverEnabled: true
-                }
-
-                ComboBox {
-                    enabled: _settings.gpu_scan_opencl
-                    currentIndex: _settings.gpu_scan_opencl_always ? 0 : 1
-                    model: [qsTr("Always"), qsTr("Only if no others were found")]
-                    onActivated: {
-                        _settings.gpu_scan_opencl_always = index === 0
-                    }
-                }
-            }
-
-            CheckBox {
-                visible: _settings.gpu_supported()
-                checked: _settings.gpu_override_version
-                text: qsTr("Override GPU version")
-                onCheckedChanged: {
-                    _settings.gpu_override_version = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Override AMD GPU version.") + " " +
-                              qsTr("Enable this option if you observe problems when using GPU acceleration with AMD graphics card.")
-                hoverEnabled: true
-            }
-
-            GridLayout {
-                columns: root.verticalMode ? 1 : 3
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-                visible: _settings.gpu_supported() && _settings.gpu_override_version
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
-                    text: qsTr("Version")
-                }
-                TextField {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - gpuOverrideResetButton.width - appWin.padding)
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
-                    text: _settings.gpu_overrided_version
-                    onTextChanged: _settings.gpu_overrided_version = text
-                    color: palette.text
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Value has the same effect as %1 environment variable.").arg("<i>HSA_OVERRIDE_GFX_VERSION</i>")
-                    hoverEnabled: true
-                }
-                Button {
-                    id: gpuOverrideResetButton
-
-                    icon.name: "edit-undo-symbolic"
-                    onClicked: _settings.gpu_overrided_version = ""
-
-                    ToolTip.visible: hovered
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.text: qsTr("Reset to default value.")
-                    hoverEnabled: true
-                }
-            }
-
-            SectionLabel {
                 text: qsTr("Availability of optional features")
             }
 
@@ -1217,64 +1173,227 @@ DialogPage {
                 }
             }
 
-            SectionLabel {
-                text: qsTr("Libraries")
+            Button {
+                id: advancedButton
+
+                Layout.alignment: Qt.AlignHCenter
+                checkable: true
+                checked: false
+                text: checked ? qsTr("Hide advanced settings") : qsTr("Show advanced settings")
             }
 
-            CheckBox {
-                checked: _settings.py_feature_scan
-                text: qsTr("Check Python dependencies")
-                onCheckedChanged: {
-                    _settings.py_feature_scan = checked
+            ColumnLayout {
+                id: advancedTab
+
+                visible: advancedButton.checked
+                width: root.width
+
+                SectionLabel {
+                    text: qsTr("CPU options")
                 }
 
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Check the presence of the required Python libraries.") + " " +
-                              qsTr("Disable this option if you observe problems when launching the application.")
-                hoverEnabled: true
+                GridLayout {
+                    columns: root.verticalMode ? 1 : 2
+                    columnSpacing: appWin.padding
+                    rowSpacing: appWin.padding
 
-            }
+                    Label {
+                        Layout.fillWidth: true
+                        text: qsTr("Number of simultaneous threads")
+                        wrapMode: Text.Wrap
+                    }
 
-            GridLayout {
-                visible: _settings.py_feature_scan && !_settings.is_flatpak()
-                columns: root.verticalMode ? 1 : 3
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
+                    SpinBox {
+                        Layout.fillWidth: verticalMode
+                        Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
+                        Layout.leftMargin: verticalMode ? appWin.padding : 0
+                        from: 0
+                        to: 32
+                        stepSize: 1
+                        value: _settings.num_threads < 0 ? 0 : _settings.num_threads > 32 ? 32 : _settings.num_threads
+                        textFromValue: function(value) {
+                            return value < 1 ? qsTr("Auto") : value.toString()
+                        }
+                        valueFromText: function(text) {
+                            if (text === qsTr("Auto")) return 0
+                            return parseInt(text);
+                        }
+                        onValueChanged: {
+                            _settings.num_threads = value;
+                        }
+                        Component.onCompleted: {
+                            contentItem.color = palette.text
+                        }
 
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Location of Python libraries")
-                    Layout.leftMargin: 2 * appWin.padding
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Set the maximum number of simultaneous CPU threads.")
+                        hoverEnabled: true
+                    }
                 }
 
-                TextField {
-                    id: pyTextField
+                SectionLabel {
+                    visible: _settings.gpu_supported()
+                    text: qsTr("Graphics card options")
+                }
 
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - pySaveButton.width - appWin.padding)
-                    Layout.leftMargin: verticalMode ? 3 * appWin.padding : 0
-                    text: _settings.py_path
-                    color: palette.text
-                    placeholderText: qsTr("Leave blank to use the default value.")
+                CheckBox {
+                    visible: _settings.gpu_supported()
+                    checked: _settings.gpu_scan_cuda
+                    text: qsTr("Use %1").arg("NVIDIA CUDA")
+                    onCheckedChanged: {
+                        _settings.gpu_scan_cuda = checked
+                    }
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Python libraries directory (%1).").arg("<i>PYTHONPATH</i>") + " " + qsTr("Leave blank to use the default value.") + " " +
-                                  qsTr("This option may be useful if you use %1 module to manage Python libraries.").arg("<i>venv</i>")
+                    ToolTip.text: qsTr("Try to find NVIDIA CUDA compatible graphic cards in the system.") + " " +
+                                  qsTr("Disable this option if you observe problems when launching the application.")
                     hoverEnabled: true
                 }
 
-                Button {
-                    id: pySaveButton
-
-                    text: qsTr("Save")
-                    Layout.leftMargin: verticalMode ? 3 * appWin.padding : 0
-                    onClicked: _settings.py_path = pyTextField.text
+                CheckBox {
+                    visible: _settings.gpu_supported()
+                    checked: _settings.gpu_scan_hip
+                    text: qsTr("Use %1").arg("AMD ROCm")
+                    onCheckedChanged: {
+                        _settings.gpu_scan_hip = checked
+                    }
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Save changes")
+                    ToolTip.text: qsTr("Try to find AMD ROCm compatible graphic cards in the system.") + " " +
+                                  qsTr("Disable this option if you observe problems when launching the application.")
+                    hoverEnabled: true
+                }
+
+                CheckBox {
+                    visible: _settings.gpu_supported()
+                    checked: _settings.gpu_scan_opencl
+                    text: qsTr("Use %1").arg("OpenCL")
+                    onCheckedChanged: {
+                        _settings.gpu_scan_opencl = checked
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
+                                  qsTr("Disable this option if you observe problems when launching the application.")
+                    hoverEnabled: true
+                }
+
+                CheckBox {
+                    visible: _settings.gpu_supported()
+                    checked: _settings.gpu_override_version
+                    text: qsTr("Override GPU version")
+                    onCheckedChanged: {
+                        _settings.gpu_override_version = checked
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Override AMD GPU version.") + " " +
+                                  qsTr("Enable this option if you observe problems when using GPU acceleration with AMD graphics card.")
+                    hoverEnabled: true
+                }
+
+                GridLayout {
+                    columns: root.verticalMode ? 1 : 3
+                    columnSpacing: appWin.padding
+                    rowSpacing: appWin.padding
+                    visible: _settings.gpu_supported() && _settings.gpu_override_version
+
+                    Label {
+                        Layout.fillWidth: true
+                        Layout.leftMargin: appWin.padding
+                        text: qsTr("Version")
+                    }
+                    TextField {
+                        Layout.fillWidth: verticalMode
+                        Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - gpuOverrideResetButton.width - appWin.padding)
+                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                        text: _settings.gpu_overrided_version
+                        onTextChanged: _settings.gpu_overrided_version = text
+                        color: palette.text
+
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Value has the same effect as %1 environment variable.").arg("<i>HSA_OVERRIDE_GFX_VERSION</i>")
+                        hoverEnabled: true
+                    }
+                    Button {
+                        id: gpuOverrideResetButton
+
+                        icon.name: "edit-undo-symbolic"
+                        onClicked: _settings.gpu_overrided_version = ""
+                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Reset to default value.")
+                        hoverEnabled: true
+                    }
+                }
+
+                SectionLabel {
+                    text: qsTr("Libraries")
+                }
+
+                CheckBox {
+                    checked: _settings.py_feature_scan
+                    text: qsTr("Check Python dependencies")
+                    onCheckedChanged: {
+                        _settings.py_feature_scan = checked
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Check the presence of the required Python libraries.") + " " +
+                                  qsTr("Disable this option if you observe problems when launching the application.")
+                    hoverEnabled: true
+
+                }
+
+                GridLayout {
+                    visible: _settings.py_feature_scan && !_settings.is_flatpak()
+                    columns: root.verticalMode ? 1 : 3
+                    columnSpacing: appWin.padding
+                    rowSpacing: appWin.padding
+
+                    Label {
+                        Layout.fillWidth: true
+                        text: qsTr("Location of Python libraries")
+                        Layout.leftMargin: appWin.padding
+                    }
+
+                    TextField {
+                        id: pyTextField
+
+                        Layout.fillWidth: verticalMode
+                        Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - pySaveButton.width - appWin.padding)
+                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                        text: _settings.py_path
+                        color: palette.text
+                        placeholderText: qsTr("Leave blank to use the default value.")
+
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Python libraries directory (%1).").arg("<i>PYTHONPATH</i>") + " " + qsTr("Leave blank to use the default value.") + " " +
+                                      qsTr("This option may be useful if you use %1 module to manage Python libraries.").arg("<i>venv</i>")
+                        hoverEnabled: true
+                    }
+
+                    Button {
+                        id: pySaveButton
+
+                        text: qsTr("Save")
+                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                        onClicked: _settings.py_path = pyTextField.text
+
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Save changes")
+                    }
                 }
             }
         }

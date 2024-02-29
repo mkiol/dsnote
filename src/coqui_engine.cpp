@@ -44,21 +44,19 @@ void coqui_engine::stop() {
     tts_engine::stop();
 
     if (m_model) {
-        auto* pe = py_executor::instance();
+        auto task = py_executor::instance()->execute([&]() {
+            try {
+                m_model.reset();
+            } catch (const std::exception& err) {
+                LOGE("py error: " << err.what());
+            }
+            return std::any{};
+        });
 
-        try {
-            pe->execute([&]() {
-                  try {
-                      m_model.reset();
-                  } catch (const std::exception& err) {
-                      LOGE("py error: " << err.what());
-                  }
-                  return std::string{};
-              }).get();
-        } catch (const std::exception& err) {
-            LOGE("error: " << err.what());
-        }
+        if (task) task->get();
     }
+
+    LOGD("coqui stopped");
 }
 
 static std::string replace_all(std::string str, const std::string& from,
@@ -152,194 +150,178 @@ std::string coqui_engine::fix_config_file(const std::string& config_file,
 }
 
 void coqui_engine::create_model() {
-    auto* pe = py_executor::instance();
+    auto task = py_executor::instance()->execute([&]() {
+        auto model_file = find_file_with_name_prefix(
+            m_config.model_files.model_path, "model_file");
+        if (model_file.empty())
+            model_file =
+                first_file_with_ext(m_config.model_files.model_path, "pth");
+        if (model_file.empty())
+            model_file =
+                first_file_with_ext(m_config.model_files.model_path, "tar");
 
-    try {
-        pe->execute([&]() {
-              auto model_file = find_file_with_name_prefix(
-                  m_config.model_files.model_path, "model_file");
-              if (model_file.empty())
-                  model_file = first_file_with_ext(
-                      m_config.model_files.model_path, "pth");
-              if (model_file.empty())
-                  model_file = first_file_with_ext(
-                      m_config.model_files.model_path, "tar");
+        auto config_file = find_file_with_name_prefix(
+            m_config.model_files.model_path, "config.json");
 
-              auto config_file = find_file_with_name_prefix(
-                  m_config.model_files.model_path, "config.json");
+        if (model_file.empty() || config_file.empty()) {
+            LOGE("failed to find model or config files");
+            return false;
+        }
 
-              if (model_file.empty() || config_file.empty()) {
-                  LOGE("failed to find model or config files");
-                  return std::string{};
-              }
+        LOGD("model files: " << model_file << " " << config_file);
 
-              LOGD("model files: " << model_file << " " << config_file);
+        config_file = fix_config_file(config_file,
+                                      m_config.model_files.model_path, false);
 
-              config_file = fix_config_file(
-                  config_file, m_config.model_files.model_path, false);
+        auto vocoder_model_file =
+            first_file_with_ext(m_config.model_files.vocoder_path, "pth");
+        auto vocoder_config_file =
+            first_file_with_ext(m_config.model_files.vocoder_path, "json");
 
-              auto vocoder_model_file =
-                  first_file_with_ext(m_config.model_files.vocoder_path, "pth");
-              auto vocoder_config_file = first_file_with_ext(
-                  m_config.model_files.vocoder_path, "json");
+        if (!vocoder_config_file.empty())
+            vocoder_config_file = fix_config_file(
+                vocoder_config_file, m_config.model_files.vocoder_path, true);
 
-              if (!vocoder_config_file.empty())
-                  vocoder_config_file =
-                      fix_config_file(vocoder_config_file,
-                                      m_config.model_files.vocoder_path, true);
+        bool dir_instead_of_file =
+            model_file.find("fairseq") != std::string::npos ||
+            model_file.find("xtts") != std::string::npos;
 
-              bool dir_instead_of_file =
-                  model_file.find("fairseq") != std::string::npos ||
-                  model_file.find("xtts") != std::string::npos;
+        auto use_cuda = m_config.use_gpu &&
+                        py_executor::instance()->libs_availability->torch_cuda;
 
-              auto use_cuda =
-                  m_config.use_gpu && pe->libs_availability->torch_cuda;
+        LOGD("using device: " << (use_cuda ? "cuda" : "cpu") << " "
+                              << m_config.gpu_device.id);
 
-              LOGD("using device: " << (use_cuda ? "cuda" : "cpu") << " "
-                                    << m_config.gpu_device.id);
+        try {
+            auto api = py::module_::import("TTS.utils.synthesizer");
 
-              try {
-                  auto api = py::module_::import("TTS.utils.synthesizer");
+            m_model = api.attr("Synthesizer")(
+                "tts_checkpoint"_a =
+                    dir_instead_of_file
+                        ? static_cast<py::object>(py::none())
+                        : static_cast<py::object>(py::str(model_file)),
+                "tts_config_path"_a =
+                    dir_instead_of_file
+                        ? static_cast<py::object>(py::str(py::none()))
+                        : static_cast<py::object>(py::str(config_file)),
+                "tts_speakers_file"_a = py::none(),
+                "tts_languages_file"_a = py::none(),
+                "vocoder_checkpoint"_a =
+                    dir_instead_of_file || vocoder_model_file.empty()
+                        ? static_cast<py::object>(py::none())
+                        : static_cast<py::object>(py::str(vocoder_model_file)),
+                "vocoder_config"_a =
+                    dir_instead_of_file || vocoder_config_file.empty()
+                        ? static_cast<py::object>(py::none())
+                        : static_cast<py::object>(py::str(vocoder_config_file)),
+                "encoder_checkpoint"_a = py::none(),
+                "encoder_config"_a = py::none(),
+                "model_dir"_a = dir_instead_of_file
+                                    ? static_cast<py::object>(py::str(
+                                          m_config.model_files.model_path))
+                                    : static_cast<py::object>(py::none()),
+                "use_cuda"_a = use_cuda);
 
-                  m_model = api.attr("Synthesizer")(
-                      "tts_checkpoint"_a =
-                          dir_instead_of_file
-                              ? static_cast<py::object>(py::none())
-                              : static_cast<py::object>(py::str(model_file)),
-                      "tts_config_path"_a =
-                          dir_instead_of_file
-                              ? static_cast<py::object>(py::str(py::none()))
-                              : static_cast<py::object>(py::str(config_file)),
-                      "tts_speakers_file"_a = py::none(),
-                      "tts_languages_file"_a = py::none(),
-                      "vocoder_checkpoint"_a =
-                          dir_instead_of_file || vocoder_model_file.empty()
-                              ? static_cast<py::object>(py::none())
-                              : static_cast<py::object>(
-                                    py::str(vocoder_model_file)),
-                      "vocoder_config"_a =
-                          dir_instead_of_file || vocoder_config_file.empty()
-                              ? static_cast<py::object>(py::none())
-                              : static_cast<py::object>(
-                                    py::str(vocoder_config_file)),
-                      "encoder_checkpoint"_a = py::none(),
-                      "encoder_config"_a = py::none(),
-                      "model_dir"_a =
-                          dir_instead_of_file
-                              ? static_cast<py::object>(
-                                    py::str(m_config.model_files.model_path))
-                              : static_cast<py::object>(py::none()),
-                      "use_cuda"_a = use_cuda);
+            if (m_model) {
+                auto model = m_model->attr("tts_model");
 
-                  if (m_model) {
-                      auto model = m_model->attr("tts_model");
+                auto model_class_name =
+                    model.get_type().attr("__name__").cast<std::string>();
+                LOGD("model class name: " << model_class_name);
 
-                      auto model_class_name =
-                          model.get_type().attr("__name__").cast<std::string>();
-                      LOGD("model class name: " << model_class_name);
+                if (py::hasattr(model, "length_scale")) {
+                    m_initial_length_scale =
+                        model.attr("length_scale").cast<float>();
+                    LOGD("initial length scale: " << *m_initial_length_scale);
+                } else if (py::hasattr(model, "duration_threshold")) {
+                    m_initial_duration_threshold =
+                        model.attr("duration_threshold").cast<float>();
+                    LOGD("initial duration threshold: "
+                         << *m_initial_duration_threshold);
+                } else if (model_class_name == "Xtts") {
+                    m_speed_supported = true;
+                } else {
+                    LOGD("model does not have initial speed");
+                }
+            }
+        } catch (const std::exception& err) {
+            LOGE("py error: " << err.what());
+            return false;
+        }
+        return true;
+    });
 
-                      if (py::hasattr(model, "length_scale")) {
-                          m_initial_length_scale =
-                              model.attr("length_scale").cast<float>();
-                          LOGD("initial length scale: "
-                               << *m_initial_length_scale);
-                      } else if (py::hasattr(model, "duration_threshold")) {
-                          m_initial_duration_threshold =
-                              model.attr("duration_threshold").cast<float>();
-                          LOGD("initial duration threshold: "
-                               << *m_initial_duration_threshold);
-                      } else if (model_class_name == "Xtts") {
-                          m_speed_supported = true;
-                      } else {
-                          LOGD("model does not have initial speed");
-                      }
-                  }
-              } catch (const std::exception& err) {
-                  LOGE("py error: " << err.what());
-              }
-              return std::string{};
-          }).get();
-    } catch (const std::exception& err) {
-        LOGE("error: " << err.what());
-    }
+    if (!task || !std::any_cast<bool>(task->get()))
+        LOGE("failed to create coqui model");
+    else
+        LOGD("coqui model created");
 }
 
 bool coqui_engine::model_created() const { return static_cast<bool>(m_model); }
 
 bool coqui_engine::encode_speech_impl(const std::string& text,
                                       const std::string& out_file) {
-    auto* pe = py_executor::instance();
+    auto task = py_executor::instance()->execute([&]() {
+        try {
+            float speed = 1.0;
 
-    try {
-        return pe->execute([&]() {
-                     try {
-                         float speed = 1.0;
+            if (m_speed_supported) {
+                speed = m_config.speech_speed / 10.0;
+            } else {
+                auto model = m_model->attr("tts_model");
+                if (py::hasattr(model, "length_scale")) {
+                    auto length_scale =
+                        m_initial_length_scale
+                            ? vits_length_scale(m_config.speech_speed,
+                                                *m_initial_length_scale)
+                            : 1.0f;
+                    model.attr("length_scale") = length_scale;
 
-                         if (m_speed_supported) {
-                             speed = m_config.speech_speed / 10.0;
-                         } else {
-                             auto model = m_model->attr("tts_model");
-                             if (py::hasattr(model, "length_scale")) {
-                                 auto length_scale =
-                                     m_initial_length_scale
-                                         ? vits_length_scale(
-                                               m_config.speech_speed,
-                                               *m_initial_length_scale)
-                                         : 1.0f;
-                                 model.attr("length_scale") = length_scale;
+                    LOGD("speed: length_scale=" << length_scale);
 
-                                 LOGD("speed: length_scale=" << length_scale);
+                } else if (py::hasattr(model, "duration_threshold")) {
+                    auto duration_threshold =
+                        m_initial_duration_threshold
+                            ? overflow_duration_threshold(
+                                  m_config.speech_speed,
+                                  *m_initial_duration_threshold)
+                            : 0.55f;
 
-                             } else if (py::hasattr(model,
-                                                    "duration_threshold")) {
-                                 auto duration_threshold =
-                                     m_initial_duration_threshold
-                                         ? overflow_duration_threshold(
-                                               m_config.speech_speed,
-                                               *m_initial_duration_threshold)
-                                         : 0.55f;
+                    LOGD("speed: duration_threshold=" << duration_threshold);
+                    model.attr("duration_threshold") = duration_threshold;
+                }
+            }
 
-                                 LOGD("speed: duration_threshold="
-                                      << duration_threshold);
-                                 model.attr("duration_threshold") =
-                                     duration_threshold;
-                             }
-                         }
+            auto wav = m_model->attr("tts")(
+                "text"_a = text,
+                "speaker_name"_a =
+                    m_config.speaker_id.empty()
+                        ? static_cast<py::object>(py::none())
+                        : static_cast<py::object>(py::str(m_config.speaker_id)),
+                "language_name"_a = m_config.lang_code.empty()
+                                        ? m_config.lang
+                                        : m_config.lang_code,
+                "speaker_wav"_a = m_ref_voice_wav_file.empty()
+                                      ? static_cast<py::object>(py::none())
+                                      : static_cast<py::object>(
+                                            py::str(m_ref_voice_wav_file)),
+                "reference_wav"_a = py::none(), "style_wav"_a = py::none(),
+                "style_text"_a = py::none(),
+                "reference_speaker_name"_a = py::none(), "speed"_a = speed);
 
-                         auto wav = m_model->attr("tts")(
-                             "text"_a = text,
-                             "speaker_name"_a =
-                                 m_config.speaker_id.empty()
-                                     ? static_cast<py::object>(py::none())
-                                     : static_cast<py::object>(
-                                           py::str(m_config.speaker_id)),
-                             "language_name"_a = m_config.lang_code.empty() ? 
-                                                     m_config.lang : m_config.lang_code,
-                             "speaker_wav"_a =
-                                 m_ref_voice_wav_file.empty()
-                                     ? static_cast<py::object>(py::none())
-                                     : static_cast<py::object>(
-                                           py::str(m_ref_voice_wav_file)),
-                             "reference_wav"_a = py::none(),
-                             "style_wav"_a = py::none(),
-                             "style_text"_a = py::none(),
-                             "reference_speaker_name"_a = py::none(),
-                             "speed"_a = speed);
+            m_model->attr("save_wav")("wav"_a = wav, "path"_a = out_file);
+        } catch (const std::exception& err) {
+            LOGE("py error: " << err.what());
+            return false;
+        }
 
-                         m_model->attr("save_wav")("wav"_a = wav,
-                                                   "path"_a = out_file);
-                     } catch (const std::exception& err) {
-                         LOGE("py error: " << err.what());
-                         return std::string{"false"};
-                     }
+        LOGD("voice synthesized successfully");
+        return true;
+    });
 
-                     LOGD("voice synthesized successfully");
-                     return std::string{"true"};
-                 }).get() == "true";
-    } catch (const std::exception& err) {
-        LOGE("error: " << err.what());
-        return false;
-    }
+    if (!task || !std::any_cast<bool>(task->get())) return false;
+
+    return true;
 }
 
 bool coqui_engine::model_supports_speed() const {

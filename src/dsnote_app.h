@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,16 +18,19 @@
 #include <optional>
 #include <queue>
 
-#ifdef USE_DESKTOP
+#ifdef USE_X11_FEATURES
 #include <qhotkey.h>
-
 #include "fake_keyboard.hpp"
+#endif
+
+#ifdef USE_DESKTOP
 #include "tray_icon.hpp"
 #endif
 
 #include "config.h"
 #include "dbus_notifications_inf.h"
 #include "dbus_speech_inf.h"
+#include "media_converter.hpp"
 #include "recorder.hpp"
 #include "settings.h"
 
@@ -189,6 +192,7 @@ class dsnote_app : public QObject {
                    transcribe_progress_changed)
     Q_PROPERTY(double speech_to_file_progress READ speech_to_file_progress
                    NOTIFY speech_to_file_progress_changed)
+    Q_PROPERTY(double mc_progress READ mc_progress NOTIFY mc_progress_changed)
     Q_PROPERTY(
         service_state_t state READ service_state NOTIFY service_state_changed)
     Q_PROPERTY(
@@ -209,6 +213,8 @@ class dsnote_app : public QObject {
                    NOTIFY features_changed)
     Q_PROPERTY(
         bool feature_coqui_tts READ feature_coqui_tts NOTIFY features_changed)
+    Q_PROPERTY(
+        bool feature_translator READ feature_translator NOTIFY features_changed)
     Q_PROPERTY(auto_text_format_t auto_text_format READ auto_text_format NOTIFY
                    auto_text_format_changed)
 
@@ -224,7 +230,9 @@ class dsnote_app : public QObject {
         StateListeningSingleSentence = 7,
         StatePlayingSpeech = 8,
         StateWritingSpeechToFile = 9,
-        StateTranslating = 10
+        StateTranslating = 10,
+        StateImportingSubtitles = 20,
+        StateExportingSubtitles = 21
     };
     Q_ENUM(service_state_t)
     friend QDebug operator<<(QDebug d, service_state_t state);
@@ -235,12 +243,13 @@ class dsnote_app : public QObject {
         TaskStateProcessing = 2,
         TaskStateInitializing = 3,
         TaskStateSpeechPlaying = 4,
-        TaskStateSpeechPaused = 5
+        TaskStateSpeechPaused = 5,
+        TaskStateCancelling = 6
     };
     Q_ENUM(service_task_state_t)
     friend QDebug operator<<(QDebug d, service_task_state_t type);
 
-    enum error_t {
+    enum error_t : unsigned int {
         ErrorGeneric = 0,
         ErrorMicSource = 1,
         ErrorFileSource = 2,
@@ -248,13 +257,30 @@ class dsnote_app : public QObject {
         ErrorTtsEngine = 4,
         ErrorMntEngine = 5,
         ErrorMntRuntime = 6,  // has to be the same as speech_service::error_t
-        ErrorSaveNoteToFile = 10,
-        ErrorLoadNoteFromFile = 11,
-        ErrorContentDownload = 12,
+        ErrorExportFileGeneral = 10,
+        ErrorImportFileGeneral = 11,
+        ErrorImportFileNoStreams = 12,
+        ErrorSttNotConfigured = 13,
+        ErrorTtsNotConfigured = 14,
+        ErrorMntNotConfigured = 15,
+        ErrorContentDownload = 16,
         ErrorNoService = 100
     };
     Q_ENUM(error_t)
     friend QDebug operator<<(QDebug d, error_t type);
+
+    enum class file_import_result_t {
+        ok_streams_selection,
+        ok_import_audio,
+        ok_import_subtitles,
+        ok_import_text,
+        error_no_supported_streams,
+        error_requested_stream_not_found,
+        error_import_audio_stt_not_configured,
+        error_import_subtitles_error,
+        error_import_text_error
+    };
+    friend QDebug operator<<(QDebug d, file_import_result_t type);
 
     enum class auto_text_format_t {
         AutoTextFormatRaw = 0,
@@ -275,10 +301,8 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void set_active_mnt_out_lang_idx(int idx);
     Q_INVOKABLE void set_active_tts_model_for_in_mnt_idx(int idx);
     Q_INVOKABLE void set_active_tts_model_for_out_mnt_idx(int idx);
-    Q_INVOKABLE void transcribe_file(const QString &source_file, bool replace,
-                                     int stream_index = -1);
-    Q_INVOKABLE void transcribe_file_url(const QUrl &source_file, bool replace,
-                                         int stream_id = -1);
+    Q_INVOKABLE void import_file(const QString &file_path, int stream_index,
+                                 bool replace);
     Q_INVOKABLE void cancel();
     Q_INVOKABLE void listen();
     Q_INVOKABLE void listen_to_active_window();
@@ -304,19 +328,17 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void speech_to_file_translator_url(
         bool transtalated, const QUrl &dest_file, const QString &title_tag = {},
         const QString &track_tag = {});
-    Q_INVOKABLE void save_note_to_file(const QString &dest_file);
-    Q_INVOKABLE void save_note_to_file_translator(const QString &dest_file);
-    Q_INVOKABLE bool load_note_from_file(const QString &input_file,
-                                         bool replace);
-    Q_INVOKABLE void open_files(const QStringList &input_files, bool replace);
-    Q_INVOKABLE void open_files_url(const QList<QUrl> &input_urls,
-                                    bool replace);
+    Q_INVOKABLE void export_to_text_file(
+        const QString &dest_file, /*settings::text_file_format_t*/ int format,
+        bool translation);
+    Q_INVOKABLE void import_files(const QStringList &input_files, bool replace);
+    Q_INVOKABLE void import_files_url(const QList<QUrl> &input_urls,
+                                      bool replace);
     Q_INVOKABLE void stop_play_speech();
     Q_INVOKABLE void copy_to_clipboard();
     Q_INVOKABLE void copy_translation_to_clipboard();
     Q_INVOKABLE void copy_text_to_clipboard(const QString &text);
-    Q_INVOKABLE bool file_exists(const QString &file) const;
-    Q_INVOKABLE bool file_exists(const QUrl &file) const;
+    Q_INVOKABLE QVariantMap file_info(const QString &file) const;
     Q_INVOKABLE void undo_or_redu_note();
     Q_INVOKABLE void make_undo();
     Q_INVOKABLE void update_note(const QString &text, bool replace);
@@ -341,6 +363,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void recorder_reset();
     Q_INVOKABLE void show_tray();
     Q_INVOKABLE void hide_tray();
+    Q_INVOKABLE void set_app_window(QObject *app_window);
 
    signals:
     void active_stt_model_changed();
@@ -399,9 +422,10 @@ class dsnote_app : public QObject {
     void recorder_new_probs(QVariantList probs);
     void tray_activated();
     void player_current_voice_ref_idx_changed();
-    void transcribe_file_multiple_streams(QString file_path,
-                                          QStringList streams, bool replace);
+    void import_file_multiple_streams(QString file_path, QStringList streams,
+                                      bool replace);
     void auto_text_format_changed();
+    void mc_progress_changed();
 
    private:
     enum class action_t {
@@ -451,12 +475,14 @@ class dsnote_app : public QObject {
         bool close_request = false;
     };
 
-    enum class stt_text_destination_t {
+    enum class text_destination_t {
         note_add,
         note_replace,
         active_window,
         clipboard
     };
+
+    enum class mc_state_t { idle, extracting_subtitles };
 
     QString m_active_stt_model;
     QVariantMap m_available_stt_models_map;
@@ -484,7 +510,6 @@ class dsnote_app : public QObject {
     service_state_t m_service_state = service_state_t::StateUnknown;
     service_task_state_t m_task_state = service_task_state_t::TaskStateIdle;
     task_t m_primary_task;
-    task_t m_side_task;
     int m_current_task = INVALID_TASK;
     int m_init_attempts = -1;
     QTimer m_keepalive_timer;
@@ -506,8 +531,7 @@ class dsnote_app : public QObject {
     bool m_undo_flag = false;  // true => undo, false => redu
     std::queue<QString> m_files_to_open;
     std::optional<action_t> m_pending_action;
-    stt_text_destination_t m_stt_text_destination =
-        stt_text_destination_t::note_add;
+    text_destination_t m_text_destination = text_destination_t::note_add;
     std::optional<desktop_notification_t> m_desktop_notification;
     QVariantMap m_features_availability;
     bool m_service_reload_called = false;
@@ -519,7 +543,9 @@ class dsnote_app : public QObject {
     std::unique_ptr<recorder> m_recorder;
     auto_text_format_t m_auto_text_format =
         auto_text_format_t::AutoTextFormatRaw;
-#ifdef USE_DESKTOP
+    media_converter m_mc;
+    QObject *m_app_window = nullptr;
+#ifdef USE_X11_FEATURES
     struct hotkeys_t {
         QHotkey start_listening;
         QHotkey start_listening_active_window;
@@ -533,6 +559,8 @@ class dsnote_app : public QObject {
 
     hotkeys_t m_hotkeys;
     std::optional<fake_keyboard> m_fake_keyboard;
+#endif
+#ifdef USE_DESKTOP
     tray_icon m_tray;
 #endif
 
@@ -558,6 +586,8 @@ class dsnote_app : public QObject {
     double speech_to_file_progress() const;
     double translate_progress() const;
     bool another_app_connected() const;
+    static service_task_state_t make_new_task_state(
+        int task_state_from_service);
     void update_progress();
     void update_service_state();
     void update_task_state();
@@ -576,7 +606,8 @@ class dsnote_app : public QObject {
     void update_available_tts_models_for_out_mnt();
     void update_current_task();
     void update_listen();
-    void set_task_state(service_task_state_t speech);
+    void set_service_state(service_state_t new_service_state);
+    void set_task_state(service_task_state_t new_task_state);
     void handle_stt_intermediate_text(const QString &text, const QString &lang,
                                       int task);
     [[nodiscard]] int active_stt_model_idx() const;
@@ -622,6 +653,7 @@ class dsnote_app : public QObject {
     inline service_state_t service_state() const { return m_service_state; }
     inline auto task_state() const { return m_task_state; }
     inline auto auto_text_format() const { return m_auto_text_format; }
+    inline auto mc_progress() const { return m_mc.progress(); }
 
     void do_keepalive();
     void handle_keepalive_task_timeout();
@@ -655,9 +687,10 @@ class dsnote_app : public QObject {
                                        const QString &in_lang,
                                        const QString &out_text,
                                        const QString &out_lang, int task);
+    void handle_mc_state_changed();
+    void handle_mc_progress_changed();
     void connect_service_signals();
     void start_keepalive();
-    void check_transcribe_taks();
     QVariantMap translations() const;
     static QString insert_to_note(QString note, QString new_text,
                                   const QString &lang,
@@ -678,10 +711,13 @@ class dsnote_app : public QObject {
     void play_speech_internal(const QString &text, const QString &model_id,
                               const QString &ref_voice,
                               settings::text_format_t text_format);
-    void save_note_to_file_internal(const QString &text,
-                                    const QString &dest_file);
+    void export_to_file_internal(const QString &text, const QString &dest_file);
     void copy_to_clipboard_internal(const QString &text);
     void handle_translate_delayed();
+    void transcribe_file(const QString &file_path, int stream_index,
+                         bool replace);
+    file_import_result_t import_file_internal(const QString &file_path,
+                                              int stream_index, bool replace);
     void open_next_file();
     void reset_files_queue();
     void register_hotkeys();
@@ -699,6 +735,7 @@ class dsnote_app : public QObject {
     bool feature_global_shortcuts() const;
     bool feature_text_active_window() const;
     bool feature_coqui_tts() const;
+    bool feature_translator() const;
     void request_reload();
     bool stt_translate_needed_by_id(const QString &id) const;
     bool tts_ref_voice_needed_by_id(const QString &id) const;
@@ -722,9 +759,15 @@ class dsnote_app : public QObject {
     void update_tray_task_state();
     void update_auto_text_format_delayed();
     void update_auto_text_format();
+    bool import_text_file(const QString &input_file, bool replace);
+    void export_to_subtitles(const QString &dest_file,
+                             settings::text_file_format_t format,
+                             const QString &text);
     void player_import_rec();
     void player_set_path(const QString &wav_file_path);
     void player_import_from_rec_path(const QString &path);
+    static QStringList make_streams_names(
+        const std::vector<media_compressor::stream_t> &streams);
     QString tts_ref_voice_auto_name() const;
     inline int player_current_voice_ref_idx() const {
         return m_player_current_voice_ref_idx;

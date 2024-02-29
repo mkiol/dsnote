@@ -4,7 +4,7 @@ Categories=Utility;Office;Audio;AudioVideo;TextEditor;Translation;KDE;Qt;
 Icon=harbour-dsnote
 Exec=harbour-dsnote --app %F
 Name=Speech Note
-MimeType=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/vorbis;audio/x-vorbis;audio/opus;audio/x-speex;audio/speex;audio/wav;audio/x-wav;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;audio/mp4;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;text/plain;
+MimeType=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/vorbis;audio/x-vorbis;audio/opus;audio/x-speex;audio/speex;audio/wav;audio/x-wav;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;audio/mp4;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;application/x-subrip;text/vtt;text/plain;
 Keywords=SpeechNote
 Comment=Take, read and translate notes in multiple languages, using Speech to Text, Text to Speech and Machine Translation.
 X-Nemo-Application-Type=silica-qt5
@@ -18,5 +18,5 @@ ApplicationName=dsnote
 ExecDBus=harbour-dsnote --app
 
 [X-Share Method files]
-Capabilities=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/vorbis;audio/x-vorbis;audio/opus;audio/x-speex;audio/speex;audio/wav;audio/x-wav;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;audio/mp4;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;text/plain;
+Capabilities=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/vorbis;audio/x-vorbis;audio/opus;audio/x-speex;audio/speex;audio/wav;audio/x-wav;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;audio/mp4;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;application/x-subrip;text/vtt;text/plain;
 SupportsMultipleFiles=yes

@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -32,6 +32,41 @@ Page {
 
             SectionHeader {
                 text: qsTr("User Interface")
+            }
+
+            TextSwitch {
+                checked: _settings.keep_last_note
+                automaticCheck: false
+                text: qsTr("Remember the last note")
+                description: qsTr("The note will be saved automatically, so when you restart the app, your last note will always be available.")
+                onClicked: {
+                    _settings.keep_last_note = !_settings.keep_last_note
+                }
+            }
+
+            ComboBox {
+                label: qsTr("File import action")
+                currentIndex: {
+                    if (_settings.file_import_action === Settings.FileImportActionAsk) return 0
+                    if (_settings.file_import_action === Settings.FileImportActionAppend) return 1
+                    if (_settings.file_import_action === Settings.FileImportActionReplace) return 2
+                    return 0
+                }
+                menu: ContextMenu {
+                    MenuItem { text: qsTr("Ask whether to add or replace") }
+                    MenuItem { text: qsTr("Add to an existing note") }
+                    MenuItem { text: qsTr("Replace an existing note") }
+                }
+                onCurrentIndexChanged: {
+                    if (currentIndex === 1) {
+                        _settings.file_import_action = Settings.FileImportActionAppend
+                    } else if (currentIndex === 2) {
+                        _settings.file_import_action = Settings.FileImportActionReplace
+                    } else {
+                        _settings.file_import_action = Settings.FileImportActionAsk
+                    }
+                }
+                description: qsTr("The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.")
             }
 
             ComboBox {
@@ -123,6 +158,17 @@ Page {
                 description: qsTr("This works only for Arabic language.")
                 onClicked: {
                     _settings.diacritizer_enabled = !_settings.diacritizer_enabled
+                }
+            }
+
+            TextSwitch {
+                checked: _settings.tts_subtitles_sync
+                automaticCheck: false
+                text: qsTr("Sync speech with subtitle timestamps")
+                description: qsTr("When reading or exporting subtitles to file, synchronize the generated speech with the subtitle timestamps.") + " " +
+                             qsTr("This may be useful for creating voiceovers.")
+                onClicked: {
+                    _settings.tts_subtitles_sync = !_settings.tts_subtitles_sync
                 }
             }
 

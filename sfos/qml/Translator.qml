@@ -19,7 +19,8 @@ Item {
     property alias noteTextArea: _noteTextArea
     property alias translatedNoteTextArea: _translatedNoteTextArea
     property bool readOnly: false
-    readonly property bool canCancelMnt: app.state === DsnoteApp.StateTranslating
+    readonly property bool canCancelMnt: app.state === DsnoteApp.StateTranslating &&
+                                         app.task_state !== DsnoteApp.TaskStateCancelling
     readonly property double textAreaHeight: root.verticalMode ?
                                         (root.maxHeight -
                                          mntInCombo.itemHeight - mntOutCombo.itemHeight -
@@ -273,8 +274,9 @@ Item {
 
                     anchors.verticalCenter: parent.verticalCenter
                     enabled: (app.state === DsnoteApp.StateIdle && !_settings.translate_when_typing) || root.canCancelMnt
-                    text: root.canCancelMnt ? qsTr("Cancel") : qsTr("Translate")
+                    text: root.canCancelMnt ? qsTr("Cancel") : app.task_state === DsnoteApp.TaskStateCancelling ? qsTr("Cancelling...") : qsTr("Translate")
                     onClicked: {
+                        if (app.task_state === DsnoteApp.TaskStateCancelling) return
                         if (root.canCancelMnt) app.cancel()
                         else app.translate()
                     }

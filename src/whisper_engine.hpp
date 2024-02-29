@@ -178,7 +178,7 @@ class whisper_engine : public stt_engine {
     whisper_full_params m_wparams{};
 
     void open_whisper_lib();
-    void create_whisper_model();
+    void create_model();
     samples_process_result_t process_buff() override;
     void decode_speech(const whisper_buf_t& buf);
     static void push_buf_to_whisper_buf(

@@ -1,6 +1,6 @@
 id: net.mkiol.SpeechNote.Addon.amd
 runtime: net.mkiol.SpeechNote
-sdk: org.kde.Sdk//5.15-22.08
+sdk: org.kde.Sdk//5.15-23.08
 build-extension: true
 appstream-compose: false
 build-options:
@@ -275,6 +275,7 @@ modules:
     cleanup:
       - /bin
       - /include
+      - /share/doc
       - /lib/cmake
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
@@ -295,7 +296,7 @@ modules:
     buildsystem: simple
     cleanup:
       - /bin
-      - /lib/python3.10/site-packages/pybind11*
+      - /lib/python3.11/site-packages/pybind11*
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "pybind11" --no-build-isolation
@@ -310,7 +311,7 @@ modules:
     buildsystem: cmake-ninja
     build-options:
       env:
-        PYTHONPATH: /app/extensions/amd/lib/python3.10/site-packages:/app/lib/python3.10/site-packages
+        PYTHONPATH: /app/extensions/amd/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
         CTRANSLATE2_ROOT: /app/extensions/amd
     cleanup:
       - /bin
@@ -346,32 +347,32 @@ modules:
     cleanup:
       - /bin/convert*
       - /bin/torch*
-      - /lib/python3.10/site-packages/torch/lib/rocblas
-      - /lib/python3.10/site-packages/torch/lib/libamd*
-      - /lib/python3.10/site-packages/torch/lib/libroc*
-      - /lib/python3.10/site-packages/torch/lib/libhip*
-      - /lib/python3.10/site-packages/torch/lib/libhsa*
-      - /lib/python3.10/site-packages/torch/lib/libMIOpen*
-      - /lib/python3.10/site-packages/torch/lib/librccl*
-      - /lib/python3.10/site-packages/torch/lib/libnuma*
-      - /lib/python3.10/site-packages/torch/lib/msccl-algorithms
-      - /lib/python3.10/site-packages/torch/include
+      - /lib/python3.11/site-packages/torch/lib/rocblas
+      - /lib/python3.11/site-packages/torch/lib/libamd*
+      - /lib/python3.11/site-packages/torch/lib/libroc*
+      - /lib/python3.11/site-packages/torch/lib/libhip*
+      - /lib/python3.11/site-packages/torch/lib/libhsa*
+      - /lib/python3.11/site-packages/torch/lib/libMIOpen*
+      - /lib/python3.11/site-packages/torch/lib/librccl*
+      - /lib/python3.11/site-packages/torch/lib/libnuma*
+      - /lib/python3.11/site-packages/torch/lib/msccl-algorithms
+      - /lib/python3.11/site-packages/torch/include
     build-options:
       env:
-        PYTHONPATH: /app/extensions/amd/lib/python3.10/site-packages:/app/lib/python3.10/site-packages
+        PYTHONPATH: /app/extensions/amd/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} torch torchaudio --no-build-isolation
     sources:
       - type: file
-        url: https://download.pytorch.org/whl/rocm5.6/torch-2.1.1%2Brocm5.6-cp310-cp310-linux_x86_64.whl
-        sha256: 3c6b4b79ee67c7a0c0b856703d132e9426125240f955b279639c722765dbaa88
+        url: https://download.pytorch.org/whl/rocm5.6/torch-2.1.1%2Brocm5.6-cp311-cp311-linux_x86_64.whl
+        sha256: bec4f16d63f965c08e37d541461b878e21ab087d2eae8f0e830811144a6fc1dc
       - type: file
-        url: https://download.pytorch.org/whl/rocm5.6/torchaudio-2.1.1%2Brocm5.6-cp310-cp310-linux_x86_64.whl
-        sha256: 298531c253d171e0e894117d1a1e6a6f00b2012f33ac54d934274fb5ce8c8868
+        url: https://download.pytorch.org/whl/rocm5.6/torchaudio-2.1.1%2Brocm5.6-cp311-cp311-linux_x86_64.whl
+        sha256: b1f4580e64eefa71e11e56cbe2315d14651d7d77be249f727bac2a72aad4ad7e
       - type: file
-        url: https://download.pytorch.org/whl/pytorch_triton_rocm-2.1.0-cp310-cp310-linux_x86_64.whl
-        sha256: 12fbf2ded4e5efcab0ff9ecc2de17f667dc4ef0a8a952ab9b549344ca4feb19e
+        url: https://download.pytorch.org/whl/pytorch_triton_rocm-2.1.0-cp311-cp311-linux_x86_64.whl
+        sha256: 317686e3b0b72c0c4162fe7893cbcc8ba37c1ab6bee3d0830b547dcc97c208e1
 
   - name: metadata
     buildsystem: simple

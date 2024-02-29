@@ -13,13 +13,18 @@ Dialog {
     id: root
 
     property var streams
-    property int selectedId: 0
+    property int selectedIndex: 0
+    readonly property bool canAccept: app.stt_configured || combo.displayText.lastIndexOf("Audio") !== 0
 
     modal: true
     width: Math.min(implicitWidth, parent.width - 2 * appWin.padding)
     height: column.implicitHeight + 2 * verticalPadding + footer.height
     closePolicy: Popup.CloseOnEscape
     clip: true
+
+    function updateSelectedIndex(name) {
+        selectedIndex = parseInt(name.substring(name.lastIndexOf("(") + 1, name.lastIndexOf(")")))
+    }
 
     onOpened: {
         combo.currentIndex = 0
@@ -39,19 +44,27 @@ Dialog {
             }
 
             Button {
+                Layout.alignment: Qt.AlignRight
+                enabled: root.canAccept
+                text: qsTr("Import selected stream")
+                icon.name: "document-open-symbolic"
+                Keys.onReturnPressed: {
+                    root.updateSelectedIndex(combo.displayText)
+                    root.accept()
+                }
+                onClicked: {
+                    root.updateSelectedIndex(combo.displayText)
+                    root.accept()
+                }
+            }
+
+            Button {
                 id: closeButton
 
                 text: qsTr("Cancel")
                 icon.name: "action-unavailable-symbolic"
                 onClicked: root.reject()
                 Keys.onEscapePressed: root.reject()
-            }
-
-            Button {
-                text: qsTr("Transcribe selected stream")
-                icon.name: "document-open-symbolic"
-                Keys.onReturnPressed: root.accept()
-                onClicked: root.accept()
             }
         }
     }
@@ -60,22 +73,31 @@ Dialog {
         id: column
 
         width: parent.width
-        spacing: appWin.padding
+        spacing: appWin.padding * 2
 
         Label {
             Layout.fillWidth: true
             wrapMode: Text.Wrap
-            text: qsTr("The file contains multiple audio streams. Select which one you want to process.")
+            text: qsTr("The file contains multiple streams. Select which one you want to import.")
             font.pixelSize: appWin.textFontSizeBig
         }
 
         ComboBox {
             id: combo
 
+            Layout.fillWidth: true
             model: root.streams
-            onActivated: {
-                var name = displayText
-                root.selectedId = parseInt(name.substring(name.lastIndexOf("(") + 1, name.lastIndexOf(")")))
+        }
+
+        InlineMessage {
+            color: "red"
+            Layout.fillWidth: true
+            visible: !root.canAccept
+
+            Label {
+                color: "red"
+                wrapMode: Text.Wrap
+                text: qsTr("Speech to Text model has not been set up yet.")
             }
         }
     }
