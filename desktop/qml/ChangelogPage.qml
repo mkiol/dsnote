@@ -18,7 +18,11 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("User Interface") + ":</p>
+        text: "<p>" + qsTr("Accessibility") + ":</p>
+        <ul>
+        <li>Fix: Accented characters (e.g.: ã, ê) were not transferred correctly to the active window.</li>
+        </ul>
+        <p>" + qsTr("User Interface") + ":</p>
         <ul>
         <li>Import subtitles embedded into video file.
             If your video file contains one or many subtitle streams, you can import the selected subtitles into notepad.</li>

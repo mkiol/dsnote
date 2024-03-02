@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -10,23 +10,19 @@
 #include <X11/XKBlib.h>
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
+#include <xkbcommon/xkbcommon-compose.h>
 #include <xkbcommon/xkbcommon-x11.h>
 #include <xkbcommon/xkbcommon.h>
 
 #include <QX11Info>
 #include <algorithm>
 #include <chrono>
+#include <optional>
 #include <thread>
 
-struct key_code_t {
-    unsigned int sym = 0;
-    unsigned int code = 0;
-    unsigned int mask = 0;
-    unsigned int layout = 0;
-};
-
 static XKeyEvent create_key_event(Display *display, Window &win,
-                                  Window &win_root, key_code_t key) {
+                                  Window &win_root,
+                                  fake_keyboard::key_code_t key) {
     XKeyEvent event;
     memset(&event, 0, sizeof(XKeyEvent));
     event.display = display;
@@ -49,50 +45,94 @@ static XKeyEvent create_key_event(Display *display, Window &win,
     return event;
 }
 
-static key_code_t key_from_character(Display *display, xkb_keymap *keymap,
-                                     unsigned int num_layouts,
-                                     /*UTF-32*/ uint32_t character) {
-    key_code_t key;
-    key.sym = xkb_utf32_to_keysym(character);
-    key.code = XKeysymToKeycode(display, key.sym);
+static std::vector<fake_keyboard::key_code_t> key_from_character(
+    Display *display, xkb_context *xkb_ctx, xkb_keymap *keymap,
+    unsigned int num_layouts,
+    /*UTF-32*/ uint32_t character) {
+    auto sym = xkb_utf32_to_keysym(character);
 
-    for (unsigned int l = 0; l < num_layouts; ++l) {
-        auto num_levels_for_key =
-            xkb_keymap_num_levels_for_key(keymap, key.code, l);
+    auto find_key_layout =
+        [&](xkb_keysym_t sym) -> std::optional<fake_keyboard::key_code_t> {
+        fake_keyboard::key_code_t key;
+        key.sym = sym;
+        key.code = XKeysymToKeycode(display, key.sym);
 
-        bool found = false;
+        for (unsigned int l = 0; l < num_layouts; ++l) {
+            auto num_levels_for_key =
+                xkb_keymap_num_levels_for_key(keymap, key.code, l);
 
-        for (unsigned int i = 0; i < num_levels_for_key; ++i) {
-            const xkb_keysym_t *syms_out;
-            auto sym_size = xkb_keymap_key_get_syms_by_level(keymap, key.code,
-                                                             l, i, &syms_out);
-            for (int ii = 0; ii < sym_size; ++ii) {
-                if (syms_out[ii] == key.sym) {
-                    if (i == 1)
-                        key.mask = ShiftMask;
-                    else if (i == 2)
-                        key.mask =
-                            XkbKeysymToModifiers(display, XK_ISO_Level3_Shift);
-                    else if (i == 3)
-                        key.mask =
-                            XkbKeysymToModifiers(display, XK_ISO_Level3_Shift) |
-                            ShiftMask;
+            for (unsigned int i = 0; i < num_levels_for_key; ++i) {
+                const xkb_keysym_t *syms_out;
+                auto sym_size = xkb_keymap_key_get_syms_by_level(
+                    keymap, key.code, l, i, &syms_out);
+                for (int ii = 0; ii < sym_size; ++ii) {
+                    if (syms_out[ii] == key.sym) {
+                        key.layout = l;
 
-                    found = true;
+                        if (i == 1)
+                            key.mask = ShiftMask;
+                        else if (i == 2)
+                            key.mask = XkbKeysymToModifiers(
+                                display, XK_ISO_Level3_Shift);
+                        else if (i == 3)
+                            key.mask = XkbKeysymToModifiers(
+                                           display, XK_ISO_Level3_Shift) |
+                                       ShiftMask;
+                        return key;
+                    }
+                }
+            }
+        }
+
+        return std::nullopt;
+    };
+
+    auto find_compose_keys = [&](xkb_keysym_t sym) {
+        std::vector<fake_keyboard::key_code_t> keys;
+
+        auto *table = xkb_compose_table_new_from_locale(
+            xkb_ctx, "C", XKB_COMPOSE_COMPILE_NO_FLAGS);
+
+        if (!table) return keys;
+
+        auto *iter = xkb_compose_table_iterator_new(table);
+
+        if (!iter) return keys;
+
+        xkb_compose_table_entry *entry;
+        while ((entry = xkb_compose_table_iterator_next(iter))) {
+            if (xkb_compose_table_entry_keysym(entry) == sym) {
+                size_t sequence_length = 0;
+                const auto *sequence =
+                    xkb_compose_table_entry_sequence(entry, &sequence_length);
+                if (sequence && sequence_length > 0) {
+                    for (size_t i = 0; i < sequence_length; ++i) {
+                        auto key = find_key_layout(sequence[i]);
+                        if (key) keys.push_back(*key);
+                    }
                     break;
                 }
             }
-
-            if (found) break;
         }
 
-        if (found) {
-            key.layout = l;
-            break;
-        }
-    }
+        xkb_compose_table_iterator_free(iter);
+        xkb_compose_table_unref(table);
 
-    return key;
+        return keys;
+    };
+
+    // return single key code
+    if (auto key = find_key_layout(sym)) return {*key};
+
+    // return compose key codes
+    auto keys = find_compose_keys(sym);
+    if (auto keys = find_compose_keys(sym); !keys.empty()) return keys;
+
+    // fallback, just return key code without layout
+    fake_keyboard::key_code_t key;
+    key.sym = sym;
+    key.code = XKeysymToKeycode(display, key.sym);
+    return {key};
 }
 
 fake_keyboard::fake_keyboard(QObject *parent)
@@ -157,23 +197,32 @@ void fake_keyboard::send_text(const QString &text) {
     }
 
     m_text = text;
+
     m_text_cursor = 0;
 
     m_delay_timer.start();
 }
 
 void fake_keyboard::send_keyevent() {
-    if (m_text_cursor >= m_text.size()) {
+    if (m_text_cursor >= m_text.size() && m_keys_to_send_queue.empty()) {
         m_delay_timer.stop();
 
         emit text_sending_completed();
         return;
     }
 
-    auto event = create_key_event(
-        m_x11_display, m_focus_window, m_root_window,
-        key_from_character(m_x11_display, m_xkb_keymap, m_num_layouts,
-                           m_text.at(m_text_cursor).unicode()));
+    if (m_keys_to_send_queue.empty()) {
+        for (auto key : key_from_character(m_x11_display, m_xkb_ctx,
+                                           m_xkb_keymap, m_num_layouts,
+                                           m_text.at(m_text_cursor).unicode()))
+            m_keys_to_send_queue.push(key);
+        ++m_text_cursor;
+    }
+
+    auto &key = m_keys_to_send_queue.front();
+
+    auto event =
+        create_key_event(m_x11_display, m_focus_window, m_root_window, key);
     event.type = KeyPress;
     XSendEvent(event.display, event.window, True, KeyPressMask,
                reinterpret_cast<XEvent *>(&event));
@@ -186,5 +235,5 @@ void fake_keyboard::send_keyevent() {
 
     XSync(event.display, False);
 
-    ++m_text_cursor;
+    m_keys_to_send_queue.pop();
 }

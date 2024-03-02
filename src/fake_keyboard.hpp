@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,6 +14,7 @@
 #include <QStringList>
 #include <QTimer>
 #include <QX11Info>
+#include <queue>
 
 struct xcb_connection_t;
 struct xkb_context;
@@ -22,6 +23,13 @@ struct xkb_keymap;
 class fake_keyboard : public QObject {
     Q_OBJECT
    public:
+    struct key_code_t {
+        unsigned int sym = 0;
+        unsigned int code = 0;
+        unsigned int mask = 0;
+        unsigned int layout = 0;
+    };
+
     fake_keyboard(QObject* parent = nullptr);
     ~fake_keyboard();
     void send_text(const QString& text);
@@ -41,6 +49,7 @@ class fake_keyboard : public QObject {
     int m_text_cursor = 0;
     QTimer m_delay_timer;
     unsigned int m_num_layouts = 0;
+    std::queue<key_code_t> m_keys_to_send_queue;
 
     void send_keyevent();
 };

@@ -86,6 +86,10 @@
   <releases>
     <release version="4.5.0-beta" date="2024-02-20">
       <description>
+      <p>Accessibility:</p>
+      <ul>
+      <li>Fix: Accented characters (e.g.: ã, ê) were not transferred correctly to the active window.</li>
+      </ul>
       <p>User Interface:</p>
       <ul>
       <li>Import subtitles embedded into video file.
