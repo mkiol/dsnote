@@ -114,6 +114,41 @@ Item {
                     }
                     onCopyClicked: app.copy_to_clipboard()
                     onUndoClicked: app.undo_or_redu_note()
+                    formatInvalid: {
+                        if (root.noteTextArea.textArea.text.length == 0) return false
+                        if (app.auto_text_format === DsnoteApp.AutoTextFormatSubRip)
+                            return _settings.mnt_text_format !== Settings.TextFormatSubRip
+                        else
+                            return _settings.mnt_text_format === Settings.TextFormatSubRip
+                    }
+                    onFormatClicked: {
+                        switch(_settings.mnt_text_format) {
+                        case Settings.TextFormatRaw:
+                            _settings.mnt_text_format = Settings.TextFormatHtml
+                            break;
+                        case Settings.TextFormatHtml:
+                            _settings.mnt_text_format = Settings.TextFormatMarkdown
+                            break;
+                        case Settings.TextFormatMarkdown:
+                            _settings.mnt_text_format = Settings.TextFormatSubRip
+                            break;
+                        case Settings.TextFormatSubRip:
+                            _settings.mnt_text_format = Settings.TextFormatRaw
+                            break;
+                        }
+                    }
+                    formatName: {
+                        switch(_settings.mnt_text_format) {
+                        case Settings.TextFormatRaw:
+                            return qsTr("Plain text")
+                        case Settings.TextFormatHtml:
+                            return "HTML"
+                        case Settings.TextFormatMarkdown:
+                            return "Markdown"
+                        case Settings.TextFormatSubRip:
+                            return qsTr("SRT Subtitles")
+                        }
+                    }
                 }
 
                 DuoComboButton {

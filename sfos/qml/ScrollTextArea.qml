@@ -21,10 +21,13 @@ SilicaItem {
     readonly property bool canScrollBeginning: !flick.atYBeginning && flick.contentHeight > 0
     readonly property bool canScrollBottom: !flick.atYEnd && flick.contentHeight > 0
     property alias placeholderLabel: _placeholderLabel.text
+    property alias formatName: formatButton.text
+    property bool formatInvalid: false
 
     signal clearClicked()
     signal copyClicked()
     signal undoClicked()
+    signal formatClicked()
 
     function scrollToBottom() {
         if (canScrollBottom) {
@@ -92,74 +95,97 @@ SilicaItem {
         color: _textArea.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
     }
 
-    Row {
+    Item {
+        id: toolsRow
+
         property double size: Theme.itemSizeSmall * 0.6
+
         opacity: root.textArea.highlighted ? 0.0 :
-                 root.enabled && (flick.moving || copyButton.pressed || clearButton.pressed || undoButton.pressed ||
+                 root.enabled && (flick.moving || copyButton.pressed || clearButton.pressed ||
+                                  undoButton.pressed || bottomButton.pressed || beginningButton.pressed ||
                  flick.contentHeight <= (root.height - size)) ? 1.0 : 0.4
         Behavior on opacity { FadeAnimator {} }
         visible: opacity > 0.0
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.rightMargin: Theme.horizontalPageMargin
-        spacing: Theme.paddingSmall
+        anchors.left: parent.left
+        anchors.leftMargin: Theme.horizontalPageMargin
         height: size + Theme.paddingLarge
 
-        IconButton {
-            id: copyButton
+        Button {
+            id: formatButton
 
-            width: parent.size
+            preferredWidth: Theme.buttonWidthExtraSmall
+            anchors.left: parent.left
             height: parent.size
-            visible: root.textArea.text.length !== 0
-            icon.width: width; icon.height: height
-            icon.source: "image://theme/icon-m-clipboard?" + (pressed ? Theme.highlightColor : Theme.primaryColor)
-            onClicked: root.copyClicked()
+            visible: root.textArea.text.length !== 0 && text.length !== 0
+            onClicked: root.formatClicked()
+            color: root.formatInvalid ? Theme.errorColor : Theme.primaryColor
+            backgroundColor: Theme.rgba(color, 0.05)
         }
-        IconButton {
-            id: clearButton
 
-            width: parent.size
-            height: parent.size
-            icon.width: width; icon.height: height
-            visible: root.canClear && !textArea.readOnly && textArea.text.length !== 0
-            icon.source: "image://theme/icon-m-clear?" + (pressed ? Theme.highlightColor : Theme.primaryColor)
-            onClicked: root.clearClicked()
-        }
-        IconButton {
-            id: undoButton
+        Row {
+            spacing: Theme.paddingSmall
+            height: parent.height
+            anchors.right: parent.right
 
-            width: parent.size
-            height: parent.size
-            icon.width: width; icon.height: height
-            visible: !root.textArea.readOnly && (root.canUndo || root.canRedo)
-            icon.source: (root.canUndo ? "image://theme/icon-m-rotate-left?" : "image://theme/icon-m-rotate-right?") +
-                         (pressed ? Theme.highlightColor : Theme.primaryColor)
-            onClicked: root.undoClicked()
-        }
-        IconButton {
-            id: bottomButton
+            IconButton {
+                id: copyButton
 
-            width: parent.size
-            height: parent.size
-            icon.width: width; icon.height: height
-            visible: root.canScrollBottom
-            icon.source: "image://theme/icon-m-page-down?" +
-                         (pressed ? Theme.highlightColor : Theme.primaryColor)
-            onClicked: {
-                root.scrollToBottom()
+                width: toolsRow.size
+                height: toolsRow.size
+                visible: root.textArea.text.length !== 0
+                icon.width: width; icon.height: height
+                icon.source: "image://theme/icon-m-clipboard?" + (pressed ? Theme.highlightColor : Theme.primaryColor)
+                onClicked: root.copyClicked()
             }
-        }
-        IconButton {
-            id: beginningButton
+            IconButton {
+                id: clearButton
 
-            width: parent.size
-            height: parent.size
-            icon.width: width; icon.height: height
-            visible: root.canScrollBeginning
-            icon.source: "image://theme/icon-m-page-up?"+
-                         (pressed ? Theme.highlightColor : Theme.primaryColor)
-            onClicked: {
-                root.scrollToBeginning()
+                width: toolsRow.size
+                height: toolsRow.size
+                icon.width: width; icon.height: height
+                visible: root.canClear && !textArea.readOnly && textArea.text.length !== 0
+                icon.source: "image://theme/icon-m-clear?" + (pressed ? Theme.highlightColor : Theme.primaryColor)
+                onClicked: root.clearClicked()
+            }
+            IconButton {
+                id: undoButton
+
+                width: toolsRow.size
+                height: toolsRow.size
+                icon.width: width; icon.height: height
+                visible: !root.textArea.readOnly && (root.canUndo || root.canRedo)
+                icon.source: (root.canUndo ? "image://theme/icon-m-rotate-left?" : "image://theme/icon-m-rotate-right?") +
+                             (pressed ? Theme.highlightColor : Theme.primaryColor)
+                onClicked: root.undoClicked()
+            }
+            IconButton {
+                id: bottomButton
+
+                width: toolsRow.size
+                height: toolsRow.size
+                icon.width: width; icon.height: height
+                visible: root.canScrollBottom
+                icon.source: "image://theme/icon-m-page-down?" +
+                             (pressed ? Theme.highlightColor : Theme.primaryColor)
+                onClicked: {
+                    root.scrollToBottom()
+                }
+            }
+            IconButton {
+                id: beginningButton
+
+                width: toolsRow.size
+                height: toolsRow.size
+                icon.width: width; icon.height: height
+                visible: root.canScrollBeginning
+                icon.source: "image://theme/icon-m-page-up?"+
+                             (pressed ? Theme.highlightColor : Theme.primaryColor)
+                onClicked: {
+                    root.scrollToBeginning()
+                }
             }
         }
 

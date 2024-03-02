@@ -74,6 +74,31 @@ Column {
         }
         onCopyClicked: app.copy_to_clipboard()
         onUndoClicked: app.undo_or_redu_note()
+        formatInvalid: {
+            if (root.noteTextArea.textArea.text.length == 0) return false
+            if (app.auto_text_format === DsnoteApp.AutoTextFormatSubRip)
+                return _settings.stt_tts_text_format !== Settings.TextFormatSubRip
+            else
+                return _settings.stt_tts_text_format === Settings.TextFormatSubRip
+        }
+        onFormatClicked: {
+            switch(_settings.stt_tts_text_format) {
+            case Settings.TextFormatRaw:
+                _settings.stt_tts_text_format = Settings.TextFormatSubRip
+                break;
+            case Settings.TextFormatSubRip:
+                _settings.stt_tts_text_format = Settings.TextFormatRaw
+                break;
+            }
+        }
+        formatName: {
+            switch(_settings.stt_tts_text_format) {
+            case Settings.TextFormatRaw:
+                return qsTr("Plain text")
+            case Settings.TextFormatSubRip:
+                return qsTr("SRT Subtitles")
+            }
+        }
 
         PlaceholderLabel {
             enabled: !app.busy && !service.busy && app.connected &&
