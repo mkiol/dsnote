@@ -107,6 +107,13 @@ QDebug operator<<(QDebug d, speech_service::state_t state_value) {
     return d;
 }
 
+static bool tts_not_merge_files_options(const QVariantMap &options) {
+    if (options.contains(QStringLiteral("not_merge_files"))) {
+        return options.value(QStringLiteral("not_merge_files")).toBool();
+    }
+    return false;
+}
+
 static settings::audio_format_t tts_audio_format_from_options(
     const QVariantMap &options) {
     if (options.contains(QStringLiteral("audio_format"))) {
@@ -349,11 +356,11 @@ speech_service::speech_service(QObject *parent)
                     emit TtsPartialSpeechPlaying(text, task);
                 });
         connect(this, &speech_service::tts_speech_to_file_finished, this,
-                [this](const QString &file, int task) {
+                [this](const QStringList &files, int task) {
                     qDebug()
                         << "[service => dbus] signal TtsSpeechToFileFinished:"
                         << task;
-                    emit TtsSpeechToFileFinished(file, task);
+                    emit TtsSpeechToFileFinished(files, task);
                 });
         connect(this, &speech_service::tts_speech_to_file_progress_changed,
                 this, [this](double progress, int task) {
@@ -1781,13 +1788,13 @@ static media_compressor::format_t media_format_from_audio_format(
     settings::audio_format_t format) {
     switch (format) {
         case settings::audio_format_t::AudioFormatWav:
-            return media_compressor::format_t::wav;
+            return media_compressor::format_t::audio_wav;
         case settings::audio_format_t::AudioFormatMp3:
-            return media_compressor::format_t::mp3;
+            return media_compressor::format_t::audio_mp3;
         case settings::audio_format_t::AudioFormatOggVorbis:
-            return media_compressor::format_t::ogg_vorbis;
+            return media_compressor::format_t::audio_ogg_vorbis;
         case settings::audio_format_t::AudioFormatOggOpus:
-            return media_compressor::format_t::ogg_opus;
+            return media_compressor::format_t::audio_ogg_opus;
         case settings::audio_format_t::AudioFormatAuto:
             break;
     }
@@ -1837,62 +1844,77 @@ void speech_service::handle_speech_to_file(const tts_partial_result_t &result) {
     if (result.last) {
         qDebug() << "speech to file finished";
 
-        auto format = tts_audio_format_from_options(m_current_task->options);
-        auto quality = tts_audio_quality_from_options(m_current_task->options);
-        auto out_file = QStringLiteral("%1-%2.%3")
-                            .arg(merged_file_path(m_current_task->files),
-                                 audio_quality_to_str(quality),
-                                 file_ext_from_format(format));
-
-        qDebug() << "out file:" << out_file;
-
-        if (!QFileInfo::exists(out_file)) {
-            std::vector<std::string> input_files;
+        if (tts_not_merge_files_options(m_current_task->options)) {
+            QStringList files;
             std::transform(m_current_task->files.cbegin(),
                            m_current_task->files.cend(),
-                           std::back_inserter(input_files),
-                           [](const auto &file) { return file.toStdString(); });
+                           std::back_inserter(files),
+                           [](const auto &file) { return file; });
+            emit tts_speech_to_file_finished(std::move(files), result.task_id);
+        } else {
+            auto format =
+                tts_audio_format_from_options(m_current_task->options);
+            auto quality =
+                tts_audio_quality_from_options(m_current_task->options);
+            auto out_file = QStringLiteral("%1-%2.%3")
+                                .arg(merged_file_path(m_current_task->files),
+                                     audio_quality_to_str(quality),
+                                     file_ext_from_format(format));
 
-            bool error = false;
+            qDebug() << "out file:" << out_file;
 
-            try {
-                QEventLoop loop;
-                media_compressor compressor;
+            if (!QFileInfo::exists(out_file)) {
+                std::vector<std::string> input_files;
+                std::transform(
+                    m_current_task->files.cbegin(),
+                    m_current_task->files.cend(),
+                    std::back_inserter(input_files),
+                    [](const auto &file) { return file.toStdString(); });
 
-                connect(this, &speech_service::state_changed, &loop,
+                bool error = false;
+
+                try {
+                    QEventLoop loop;
+                    media_compressor compressor;
+
+                    connect(
+                        this, &speech_service::state_changed, &loop,
                         [this, &compressor]() {
                             if (state() !=
                                 speech_service::state_t::writing_speech_to_file)
                                 compressor.cancel();
                         });
 
-                compressor.compress_to_file_async(
-                    std::move(input_files), out_file.toStdString(),
-                    media_format_from_audio_format(format),
-                    {media_quality_from_audio_quality(quality),
-                     false,
-                     false,
-                     {}},
-                    [&loop]() { loop.quit(); });
+                    media_compressor::options_t opts{
+                        media_quality_from_audio_quality(quality),
+                        media_compressor::flags_t::flag_none,
+                        {},
+                        {}};
 
-                loop.exec();
+                    compressor.compress_to_file_async(
+                        std::move(input_files), out_file.toStdString(),
+                        media_format_from_audio_format(format), opts, {},
+                        [&loop]() { loop.quit(); });
 
-                error = compressor.error();
+                    loop.exec();
 
-            } catch (const std::runtime_error &err) {
-                qWarning() << "compressor error:" << err.what();
-                error = true;
+                    error = compressor.error();
+
+                } catch (const std::runtime_error &err) {
+                    qWarning() << "compressor error:" << err.what();
+                    error = true;
+                }
+
+                if (error) {
+                    QFile::remove(out_file);
+                    emit tts_engine_error(result.task_id);
+                    cancel(result.task_id);
+                    return;
+                }
             }
 
-            if (error) {
-                QFile::remove(out_file);
-                emit tts_engine_error(result.task_id);
-                cancel(result.task_id);
-                return;
-            }
+            emit tts_speech_to_file_finished({out_file}, result.task_id);
         }
-
-        emit tts_speech_to_file_finished(out_file, result.task_id);
 
         cancel(result.task_id);
     }
@@ -1927,10 +1949,7 @@ void speech_service::handle_tts_queue() {
             auto audio_file_wav = result.audio_file_path + ".wav";
             media_compressor{}.decompress_to_file(
                 {result.audio_file_path.toStdString()},
-                audio_file_wav.toStdString(),
-                {media_compressor::quality_t::vbr_medium, /*mono=*/false,
-                 /*sample_rate_16=*/false,
-                 /*stream=*/{}});
+                audio_file_wav.toStdString(), {});
             result.audio_file_path = std::move(audio_file_wav);
             result.audio_format = tts_engine::audio_format_t::wav;
             result.remove_audio_file = true;

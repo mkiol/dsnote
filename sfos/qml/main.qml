@@ -209,8 +209,8 @@ ApplicationWindow {
                                  app.state === DsnoteApp.StatePlayingSpeech ||
                                  app.state === DsnoteApp.StateWritingSpeechToFile ||
                                  app.state === DsnoteApp.StateTranslating ||
-                                 app.state === DsnoteApp.StateExportingSubtitles ||
-                                 app.state === DsnoteApp.StateImportingSubtitles)
+                                 app.state === DsnoteApp.StateExporting ||
+                                 app.state === DsnoteApp.StateImporting)
                     canPause: app.task_state !== DsnoteApp.TaskStateCancelling &&
                               app.state === DsnoteApp.StatePlayingSpeech &&
                               (app.task_state === DsnoteApp.TaskStateProcessing ||
@@ -305,7 +305,6 @@ ApplicationWindow {
                 target: app
                 onNote_copied: toast.show(qsTr("Copied!"))
                 onTranscribe_done: toast.show(qsTr("Import from the file is complete!"))
-                onSpeech_to_file_done: toast.show(qsTr("Export to file is complete!"))
                 onSave_note_to_file_done: toast.show(qsTr("Export to file is complete!"))
                 Component.onCompleted: {
                     if (_files_to_open.length > 0) {

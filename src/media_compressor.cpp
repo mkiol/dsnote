@@ -7,6 +7,7 @@
 
 #include "media_compressor.hpp"
 
+#include <fmt/format.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -41,7 +42,7 @@ extern "C" {
     return os;
 }
 
-static bool time_base_equal(AVRational l, AVRational r) {
+[[maybe_unused]] static bool time_base_equal(AVRational l, AVRational r) {
     return l.den == r.den && l.num == r.num;
 }
 
@@ -158,6 +159,8 @@ static int best_sample_rate(const AVCodec* encoder, int decoder_sample_rate) {
 
     int best_rate = 0;
 
+    if (strcmp(encoder->name, "libopus") == 0) return 48000;
+
     for (int i = 0; encoder->supported_samplerates[i] != 0; ++i) {
         if (best_rate == 0) best_rate = encoder->supported_samplerates[i];
 
@@ -186,29 +189,29 @@ std::ostream& operator<<(std::ostream& os, media_compressor::format_t format) {
         case media_compressor::format_t::unknown:
             os << "unknown";
             break;
-        case media_compressor::format_t::wav:
-            os << "wav";
+        case media_compressor::format_t::audio_wav:
+            os << "audio-wav";
             break;
-        case media_compressor::format_t::mp3:
-            os << "mp3";
+        case media_compressor::format_t::audio_mp3:
+            os << "audio-mp3";
             break;
-        case media_compressor::format_t::ogg_vorbis:
-            os << "ogg-vorbis";
+        case media_compressor::format_t::audio_ogg_vorbis:
+            os << "audio-ogg-vorbis";
             break;
-        case media_compressor::format_t::ogg_opus:
-            os << "ogg-opus";
+        case media_compressor::format_t::audio_ogg_opus:
+            os << "audio-ogg-opus";
             break;
-        case media_compressor::format_t::flac:
-            os << "flac";
+        case media_compressor::format_t::audio_flac:
+            os << "audio-flac";
             break;
-        case media_compressor::format_t::srt:
-            os << "srt";
+        case media_compressor::format_t::sub_srt:
+            os << "sub-srt";
             break;
-        case media_compressor::format_t::ass:
-            os << "ass";
+        case media_compressor::format_t::sub_ass:
+            os << "sub-ass";
             break;
-        case media_compressor::format_t::vtt:
-            os << "vtt";
+        case media_compressor::format_t::sub_vtt:
+            os << "sub-vtt";
             break;
     }
 
@@ -235,6 +238,9 @@ std::ostream& operator<<(std::ostream& os,
 std::ostream& operator<<(std::ostream& os,
                          media_compressor::media_type_t media_type) {
     switch (media_type) {
+        case media_compressor::media_type_t::unknown:
+            os << "unknown";
+            break;
         case media_compressor::media_type_t::audio:
             os << "audio";
             break;
@@ -288,11 +294,14 @@ media_compressor::format_t media_compressor::format_from_filename(
     auto ext = filename.substr(idx + 1);
     text_tools::to_lower_case(ext);
 
-    if (ext == "mp3") return format_t::mp3;
+    if (ext == "mp3") return format_t::audio_mp3;
     if (ext == "ogg" || ext == "oga" || ext == "ogx")
-        return format_t::ogg_vorbis;
-    if (ext == "opus") return format_t::ogg_opus;
-    if (ext == "flac") return format_t::flac;
+        return format_t::audio_ogg_vorbis;
+    if (ext == "opus") return format_t::audio_ogg_opus;
+    if (ext == "flac") return format_t::audio_flac;
+    if (ext == "srt") return format_t::sub_srt;
+    if (ext == "aas" || ext == "ssa") return format_t::sub_ass;
+    if (ext == "vtt") return format_t::sub_vtt;
 
     return format_t::unknown;
 }
@@ -310,9 +319,6 @@ void media_compressor::clean_av_in_format() {
 }
 
 void media_compressor::clean_av() {
-    if (m_av_filter_ctx.in != nullptr) avfilter_inout_free(&m_av_filter_ctx.in);
-    if (m_av_filter_ctx.out != nullptr)
-        avfilter_inout_free(&m_av_filter_ctx.out);
     if (m_av_filter_ctx.graph != nullptr)
         avfilter_graph_free(&m_av_filter_ctx.graph);
 
@@ -341,16 +347,16 @@ void media_compressor::clean_av() {
     if (m_in_av_ctx) avcodec_free_context(&m_in_av_ctx);
 
     clean_av_in_format();
+
+    if (m_in_main_av_ctx) avcodec_free_context(&m_in_main_av_ctx);
+
+    if (m_in_main_av_format_ctx) avformat_close_input(&m_in_main_av_format_ctx);
 }
 
-void media_compressor::init_av_filter(const char* arg) {
-    m_av_filter_ctx.in = avfilter_inout_alloc();
-    m_av_filter_ctx.out = avfilter_inout_alloc();
+void media_compressor::init_av_filter() {
     m_av_filter_ctx.graph = avfilter_graph_alloc();
-    if (!m_av_filter_ctx.in || !m_av_filter_ctx.out || !m_av_filter_ctx.graph) {
-        clean_av();
-        throw std::runtime_error("failed to allocate av filter");
-    }
+    if (!m_av_filter_ctx.graph)
+        throw std::runtime_error("failed to allocate av filter graph");
 
     const auto* buffersrc = avfilter_get_by_name("abuffer");
     if (!buffersrc) throw std::runtime_error("no abuffer filter");
@@ -359,29 +365,86 @@ void media_compressor::init_av_filter(const char* arg) {
         av_channel_layout_default(&m_in_av_ctx->ch_layout,
                                   m_in_av_ctx->ch_layout.nb_channels);
 
-    std::array<char, 512> src_args{};
-    auto s =
-        snprintf(src_args.data(), src_args.size(),
-                 "sample_rate=%d:sample_fmt=%s:time_base=%d/%d:channel_layout=",
-                 m_in_av_ctx->sample_rate,
-                 av_get_sample_fmt_name(m_in_av_ctx->sample_fmt),
-                 m_in_av_ctx->time_base.num, m_in_av_ctx->time_base.den);
-    av_channel_layout_describe(&m_in_av_ctx->ch_layout, &src_args.at(s),
-                               src_args.size() - s);
-    // LOGD("filter bufsrc: " << src_args.data());
+    if (m_in_main_av_ctx) {
+        if (m_in_main_av_ctx->ch_layout.order == AV_CHANNEL_ORDER_UNSPEC)
+            av_channel_layout_default(&m_in_main_av_ctx->ch_layout,
+                                      m_in_main_av_ctx->ch_layout.nb_channels);
+    }
 
-    if (avfilter_graph_create_filter(&m_av_filter_ctx.src_ctx, buffersrc, "in",
-                                     src_args.data(), nullptr,
+    auto make_src_args = [](const AVCodecContext* codec_ctx) {
+        std::string args(512, '\0');
+        auto s = snprintf(
+            args.data(), args.size(),
+            "sample_rate=%d:sample_fmt=%s:time_base=%d/%d:channel_layout=",
+            codec_ctx->sample_rate,
+            av_get_sample_fmt_name(codec_ctx->sample_fmt),
+            codec_ctx->time_base.num, codec_ctx->time_base.den);
+        auto lsize = av_channel_layout_describe(&codec_ctx->ch_layout,
+                                                &args.at(s), args.size() - s);
+        args.resize(s + lsize - 1);
+        return args;
+    };
+
+    AVFilterContext* filter_mix_ctx = nullptr;
+    AVFilterContext* filter_volume_ctx = nullptr;
+
+    auto args = make_src_args(m_in_av_ctx);
+    LOGD("filter src args: " << args);
+
+    if (avfilter_graph_create_filter(&m_av_filter_ctx.src_ctx, buffersrc, "src",
+                                     args.data(), nullptr,
                                      m_av_filter_ctx.graph) < 0) {
         clean_av();
-        throw std::runtime_error("avfilter_graph_create_filter error");
+        throw std::runtime_error("src avfilter_graph_create_filter error");
+    }
+
+    if (m_in_main_av_ctx) {
+        args = make_src_args(m_in_main_av_ctx);
+        LOGD("main filter src args: " << args);
+
+        if (avfilter_graph_create_filter(&m_av_filter_ctx.src_main_ctx,
+                                         buffersrc, "src_main", args.data(),
+                                         nullptr, m_av_filter_ctx.graph) < 0) {
+            clean_av();
+            throw std::runtime_error(
+                "main src avfilter_graph_create_filter error");
+        }
+
+        const auto* amix = avfilter_get_by_name("amix");
+        if (!amix) throw std::runtime_error("no amix filter");
+
+        if (avfilter_graph_create_filter(&filter_mix_ctx, amix, "mix",
+                                         "inputs=2:duration=first", nullptr,
+                                         m_av_filter_ctx.graph) < 0) {
+            clean_av();
+            throw std::runtime_error("mix avfilter_graph_create_filter error");
+        }
+
+        bool change_volume = m_options && m_options->stream &&
+                             m_options->stream->volume_change != 0;
+        if (change_volume) {
+            const auto* volume = avfilter_get_by_name("volume");
+            if (!volume) throw std::runtime_error("no volume filter");
+
+            if (avfilter_graph_create_filter(
+                    &filter_volume_ctx, volume, "volume",
+                    fmt::format(
+                        "volume={}dB",
+                        std::clamp(m_options->stream->volume_change, -30, 30))
+                        .c_str(),
+                    nullptr, m_av_filter_ctx.graph) < 0) {
+                clean_av();
+                throw std::runtime_error(
+                    "volume avfilter_graph_create_filter error");
+            }
+        }
     }
 
     const auto* buffersink = avfilter_get_by_name("abuffersink");
     if (!buffersink) throw std::runtime_error("no abuffersink filter");
 
     if (avfilter_graph_create_filter(&m_av_filter_ctx.sink_ctx, buffersink,
-                                     "out", nullptr, nullptr,
+                                     "sink", nullptr, nullptr,
                                      m_av_filter_ctx.graph) < 0) {
         clean_av();
         throw std::runtime_error("avfilter_graph_create_filter error");
@@ -411,26 +474,88 @@ void media_compressor::init_av_filter(const char* arg) {
         throw std::runtime_error("av_opt_set_int_list error");
     }
 
-    m_av_filter_ctx.out->name = av_strdup("in");
-    m_av_filter_ctx.out->filter_ctx = m_av_filter_ctx.src_ctx;
-    m_av_filter_ctx.out->pad_idx = 0;
-    m_av_filter_ctx.out->next = nullptr;
+    if (m_in_main_av_ctx) {
+        if (filter_volume_ctx) {
+            if (avfilter_link(m_av_filter_ctx.src_main_ctx, 0,
+                              filter_volume_ctx, 0) < 0)
+                throw std::runtime_error("src_main_ctx avfilter_link error");
+            if (avfilter_link(filter_volume_ctx, 0, filter_mix_ctx, 0) < 0)
+                throw std::runtime_error("volume_ctx avfilter_link error");
+        } else {
+            if (avfilter_link(m_av_filter_ctx.src_main_ctx, 0, filter_mix_ctx,
+                              0) < 0)
+                throw std::runtime_error("src_main_ctx avfilter_link error");
+        }
 
-    m_av_filter_ctx.in->name = av_strdup("out");
-    m_av_filter_ctx.in->filter_ctx = m_av_filter_ctx.sink_ctx;
-    m_av_filter_ctx.in->pad_idx = 0;
-    m_av_filter_ctx.in->next = nullptr;
-
-    if (avfilter_graph_parse_ptr(m_av_filter_ctx.graph, arg,
-                                 &m_av_filter_ctx.in, &m_av_filter_ctx.out,
-                                 nullptr) < 0) {
-        clean_av();
-        throw std::runtime_error("audio avfilter_graph_parse_ptr error");
+        if (avfilter_link(m_av_filter_ctx.src_ctx, 0, filter_mix_ctx, 1) < 0)
+            throw std::runtime_error("src_ctx avfilter_link error");
+        if (avfilter_link(filter_mix_ctx, 0, m_av_filter_ctx.sink_ctx, 0) < 0)
+            throw std::runtime_error("mix_ctx avfilter_link error");
+    } else {
+        if (avfilter_link(m_av_filter_ctx.src_ctx, 0, m_av_filter_ctx.sink_ctx,
+                          0) < 0)
+            throw std::runtime_error("src_ctx avfilter_link error");
     }
 
     if (avfilter_graph_config(m_av_filter_ctx.graph, nullptr) < 0) {
         clean_av();
         throw std::runtime_error("audio avfilter_graph_config error");
+    }
+
+#ifdef DEBUG
+    auto* graph_str = avfilter_graph_dump(m_av_filter_ctx.graph, nullptr);
+    if (graph_str) {
+        LOGD("filter graph:\n" << graph_str);
+        av_free(graph_str);
+    }
+#endif
+}
+
+void media_compressor::init_av_in_main_format(const std::string& input_file) {
+    LOGD("opening main file: " << input_file);
+
+    if (auto ret = avformat_open_input(&m_in_main_av_format_ctx,
+                                       input_file.c_str(), nullptr, nullptr);
+        ret < 0) {
+        LOGE("main avformat_open_input error: " << str_from_av_error(ret));
+        throw std::runtime_error("main avformat_open_input error");
+    }
+
+    if (!m_in_main_av_format_ctx) {
+        throw std::runtime_error("main in_av_main_format_ctx is null");
+    }
+
+    if (avformat_find_stream_info(m_in_main_av_format_ctx, nullptr) < 0) {
+        clean_av();
+        throw std::runtime_error("main avformat_find_stream_info error");
+    }
+
+    if (m_in_main_av_format_ctx->nb_streams == 0) {
+        clean_av();
+        throw std::runtime_error("no main stream");
+    }
+
+    m_in_main_stream_idx = -1;
+
+    if (m_options && m_options->stream && m_options->stream->index >= 0) {
+        if (m_options->stream->media_type != media_type_t::audio)
+            throw std::runtime_error{
+                "invalid media type, only audio is supported"};
+        m_in_main_stream_idx = m_options->stream->index;
+        LOGD("stream requested => selecting audio stream: "
+             << m_in_main_stream_idx);
+
+    } else {
+        LOGD("no stream requested => auto selecting audio stream");
+    }
+
+    m_in_main_stream_idx =
+        av_find_best_stream(m_in_main_av_format_ctx, AVMEDIA_TYPE_AUDIO,
+                            m_in_main_stream_idx, -1, nullptr, 0);
+    if (m_in_main_stream_idx < 0) {
+        clean_av();
+        throw std::runtime_error(
+            "no stream with requested index found in input file");
     }
 }
 
@@ -456,14 +581,31 @@ void media_compressor::init_av_in_format(const std::string& input_file,
         throw std::runtime_error("avformat_find_stream_info error");
     }
 
+    if (m_in_av_format_ctx->nb_streams == 0) {
+        clean_av();
+        throw std::runtime_error("no stream");
+    }
+
     m_in_stream_idx = -1;
 
     if (skip_stream_discovery) return;
 
-    if (!m_options.stream || m_options.stream->index < 0) {
-        AVMediaType type = AVMEDIA_TYPE_AUDIO;
-        if (m_options.stream) {
-            switch (m_options.stream->media_type) {
+    if (m_file_progress_callback && m_total_files_to_process > 0) {
+        m_file_progress_callback(
+            m_total_files_to_process - m_input_files.size(),
+            m_total_files_to_process);
+    }
+
+    if (!m_options || !m_options->stream) {
+        LOGD("no stream type requested => selecting first stream");
+        m_in_stream_idx = 0;
+        return;
+    }
+
+    if (m_in_main_av_format_ctx || m_options->stream->index < 0) {
+        AVMediaType type = AVMEDIA_TYPE_UNKNOWN;
+        if (m_options->stream) {
+            switch (m_options->stream->media_type) {
                 case media_type_t::video:
                     type = AVMEDIA_TYPE_VIDEO;
                     break;
@@ -471,46 +613,51 @@ void media_compressor::init_av_in_format(const std::string& input_file,
                     type = AVMEDIA_TYPE_SUBTITLE;
                     break;
                 case media_type_t::audio:
+                    type = AVMEDIA_TYPE_AUDIO;
+                    break;
+                case media_type_t::unknown:
                     break;
             }
+        }
+
+        if (type == AVMEDIA_TYPE_UNKNOWN) {
+            LOGD("stream unknown type requested => selecting first stream");
+            m_in_stream_idx = 0;
+            return;
         }
 
         m_in_stream_idx =
             av_find_best_stream(m_in_av_format_ctx, type, -1, -1, nullptr, 0);
         if (m_in_stream_idx < 0) {
             clean_av();
-            throw std::runtime_error("no stream found in input file");
-        }
-    } else {
-        for (auto i = 0u; i < m_in_av_format_ctx->nb_streams; ++i) {
-            if (m_in_av_format_ctx->streams[i]->index ==
-                    m_options.stream->index &&
-                ((m_in_av_format_ctx->streams[i]->codecpar->codec_type ==
-                      AVMEDIA_TYPE_AUDIO &&
-                  m_options.stream->media_type == media_type_t::audio) ||
-                 (m_in_av_format_ctx->streams[i]->codecpar->codec_type ==
-                      AVMEDIA_TYPE_SUBTITLE &&
-                  m_options.stream->media_type == media_type_t::subtitles))) {
-                m_in_stream_idx = i;
-            }
+            throw std::runtime_error(
+                "no stream with requested type found in input file");
         }
 
-        if (m_in_stream_idx < 0) {
-            clean_av();
-            throw std::runtime_error(
-                "no stream with requested index and type found in input file");
+        LOGD("stream type requested => selecting stream: " << m_in_stream_idx);
+
+        return;
+    }
+
+    for (auto i = 0u; i < m_in_av_format_ctx->nb_streams; ++i) {
+        if (m_in_av_format_ctx->streams[i]->index == m_options->stream->index &&
+            ((m_in_av_format_ctx->streams[i]->codecpar->codec_type ==
+                  AVMEDIA_TYPE_AUDIO &&
+              m_options->stream->media_type == media_type_t::audio) ||
+             (m_in_av_format_ctx->streams[i]->codecpar->codec_type ==
+                  AVMEDIA_TYPE_SUBTITLE &&
+              m_options->stream->media_type == media_type_t::subtitles))) {
+            m_in_stream_idx = i;
         }
     }
 
-    // const auto* in_stream = m_in_av_format_ctx->streams[m_in_stream_idx];
+    if (m_in_stream_idx < 0) {
+        clean_av();
+        throw std::runtime_error(
+            "no stream with requested index and type found in input file");
+    }
 
-    // LOGD("in stream: codec="
-    //      << in_stream->codecpar->codec_id << ", sample-rate="
-    //      << in_stream->codecpar->sample_rate << ", tb=" <<
-    //      in_stream->time_base
-    //      << ", frame-size=" << in_stream->codecpar->frame_size
-    //      << ", sample-format="
-    //      << static_cast<AVSampleFormat>(in_stream->codecpar->format));
+    LOGD("stream index requested => selecting stream: " << m_in_stream_idx);
 }
 
 static uint64_t time_ms_to_pcm_bytes(uint64_t time_ms, int sample_rate,
@@ -518,47 +665,96 @@ static uint64_t time_ms_to_pcm_bytes(uint64_t time_ms, int sample_rate,
     return (time_ms * 2 * sample_rate * channels) / 1000.0;
 }
 
+void media_compressor::setup_decoder(const AVStream* in_stream,
+                                     AVCodecContext** in_av_ctx) {
+    const auto* decoder = avcodec_find_decoder(in_stream->codecpar->codec_id);
+    if (!decoder) {
+        clean_av();
+        throw std::runtime_error("avcodec_find_decoder error");
+    }
+
+    *in_av_ctx = avcodec_alloc_context3(decoder);
+    if (!*in_av_ctx) {
+        clean_av();
+        throw std::runtime_error("avcodec_alloc_context3 error");
+    }
+
+    auto* ctx = *in_av_ctx;
+
+    if (avcodec_parameters_to_context(ctx, in_stream->codecpar) < 0) {
+        clean_av();
+        throw std::runtime_error("avcodec_parameters_to_context error");
+    }
+
+    if (auto ret = avcodec_open2(ctx, nullptr, nullptr); ret != 0) {
+        clean_av();
+        LOGE("avcodec_open2 error: " << str_from_av_error(ret));
+        throw std::runtime_error("avcodec_open2 error");
+    }
+}
+
 void media_compressor::init_av(task_t task) {
+    m_in_av_ctx = nullptr;
+    m_in_main_av_ctx = nullptr;
+    m_in_av_format_ctx = nullptr;
+    m_in_main_av_format_ctx = nullptr;
+
+    if (task == task_t::compress_mix_to_file) {
+        init_av_in_main_format(m_main_input_file);
+
+        const auto* in_main_stream =
+            m_in_main_av_format_ctx->streams[m_in_main_stream_idx];
+        LOGD("input main codec: "
+             << in_main_stream->codecpar->codec_id << " ("
+             << static_cast<int>(in_main_stream->codecpar->codec_id) << ")");
+    }
+
     init_av_in_format(m_input_files.front(), false);
     m_input_files.pop();
 
     const auto* in_stream = m_in_av_format_ctx->streams[m_in_stream_idx];
-
     LOGD("input codec: " << in_stream->codecpar->codec_id << " ("
                          << static_cast<int>(in_stream->codecpar->codec_id)
                          << ")");
 
+    LOGD("requested out format: " << m_format);
+
     m_no_decode = [&]() {
-        if (m_options.mono || m_options.sample_rate_16) return false;
+        if (m_options &&
+            ((m_options->flags & flag_force_mono_output) ||
+             (m_options->flags & flag_force_16k_sample_rate_output)))
+            return false;
 
         switch (task) {
             case task_t::compress_to_file:
                 switch (m_format) {
-                    case format_t::wav:
+                    case format_t::audio_wav:
                         return in_stream->codecpar->codec_id ==
                                AVCodecID::AV_CODEC_ID_PCM_S16LE;
-                    case format_t::mp3:
+                    case format_t::audio_mp3:
                         return in_stream->codecpar->codec_id ==
                                AVCodecID::AV_CODEC_ID_MP3;
-                    case format_t::flac:
+                    case format_t::audio_flac:
                         return in_stream->codecpar->codec_id ==
                                AVCodecID::AV_CODEC_ID_FLAC;
-                    case format_t::srt:
+                    case format_t::sub_srt:
                         return in_stream->codecpar->codec_id ==
                                AVCodecID::AV_CODEC_ID_SUBRIP;
-                    case format_t::ass:
+                    case format_t::sub_ass:
                         return in_stream->codecpar->codec_id ==
                                AVCodecID::AV_CODEC_ID_SSA;
-                    case format_t::vtt:
+                    case format_t::sub_vtt:
                         return in_stream->codecpar->codec_id ==
                                AVCodecID::AV_CODEC_ID_WEBVTT;
-                    case format_t::ogg_vorbis:
-                    case format_t::ogg_opus:
+                    case format_t::audio_ogg_vorbis:
+                    case format_t::audio_ogg_opus:
                         return false;
                     case format_t::unknown:
                         break;
                 }
                 break;
+            case task_t::compress_mix_to_file:
+                return false;
             case task_t::decompress_to_file:
             case task_t::decompress_to_file_async:
             case task_t::decompress_to_data_raw_async:
@@ -568,108 +764,89 @@ void media_compressor::init_av(task_t task) {
         return false;
     }();
 
-    if (in_stream->codecpar->codec_id == AV_CODEC_ID_PCM_S16LE &&
-        m_clip_info.valid_time()) {
-        m_clip_info.start_bytes = time_ms_to_pcm_bytes(
-            m_clip_info.start_time_ms, in_stream->codecpar->sample_rate,
-            in_stream->codecpar->ch_layout.nb_channels);
-        m_clip_info.stop_bytes = time_ms_to_pcm_bytes(
-            m_clip_info.stop_time_ms, in_stream->codecpar->sample_rate,
-            in_stream->codecpar->ch_layout.nb_channels);
+    if (m_options && m_options->clip_info) {
+        if (in_stream->codecpar->codec_id == AV_CODEC_ID_PCM_S16LE &&
+            m_options->clip_info && m_options->clip_info->valid_time()) {
+            m_options->clip_info->start_bytes = time_ms_to_pcm_bytes(
+                m_options->clip_info->start_time_ms,
+                in_stream->codecpar->sample_rate,
+                in_stream->codecpar->ch_layout.nb_channels);
+            m_options->clip_info->stop_bytes = time_ms_to_pcm_bytes(
+                m_options->clip_info->stop_time_ms,
+                in_stream->codecpar->sample_rate,
+                in_stream->codecpar->ch_layout.nb_channels);
+        } else {
+            m_options->clip_info.reset();
+        }
+    }
+
+    if (in_stream->codecpar->codec_id == AV_CODEC_ID_PCM_S16LE && m_options &&
+        m_options->clip_info && m_options->clip_info->valid_time()) {
+        m_options->clip_info->start_bytes =
+            time_ms_to_pcm_bytes(m_options->clip_info->start_time_ms,
+                                 in_stream->codecpar->sample_rate,
+                                 in_stream->codecpar->ch_layout.nb_channels);
+        m_options->clip_info->stop_bytes =
+            time_ms_to_pcm_bytes(m_options->clip_info->stop_time_ms,
+                                 in_stream->codecpar->sample_rate,
+                                 in_stream->codecpar->ch_layout.nb_channels);
     }
 
     if (m_no_decode) {
         LOGD("no decode");
     } else {
-        const auto* decoder =
-            avcodec_find_decoder(in_stream->codecpar->codec_id);
-        if (!decoder) {
-            clean_av();
-            throw std::runtime_error("avcodec_find_decoder error");
+        setup_decoder(in_stream, &m_in_av_ctx);
+
+        if (task == task_t::compress_mix_to_file) {
+            const auto* in_main_stream =
+                m_in_main_av_format_ctx->streams[m_in_main_stream_idx];
+            setup_decoder(in_main_stream, &m_in_main_av_ctx);
         }
-
-        //    LOGD("sample fmts supported by decoder:");
-        //    for (int i = 0; decoder->sample_fmts[i] != AV_SAMPLE_FMT_NONE;
-        //    ++i) {
-        //        LOGD("[" << i << "]: " << decoder->sample_fmts[i]);
-        //    }
-
-        m_in_av_ctx = avcodec_alloc_context3(decoder);
-        if (!m_in_av_ctx) {
-            clean_av();
-            throw std::runtime_error("avcodec_alloc_context3 error");
-        }
-
-        if (avcodec_parameters_to_context(m_in_av_ctx, in_stream->codecpar) <
-            0) {
-            clean_av();
-            throw std::runtime_error("avcodec_parameters_to_context error");
-        }
-
-        m_in_av_ctx->time_base = in_stream->time_base;
-
-        if (auto ret = avcodec_open2(m_in_av_ctx, nullptr, nullptr); ret != 0) {
-            clean_av();
-            LOGE("avcodec_open2 error: " << str_from_av_error(ret));
-            throw std::runtime_error("avcodec_open2 error");
-        }
-
-        //        LOGD("in codec: codec="
-        //             << m_in_av_audio_ctx->codec_id
-        //             << ", channels=" <<
-        //             m_in_av_audio_ctx->ch_layout.nb_channels
-        //             << ", tb=" << m_in_av_audio_ctx->time_base
-        //             << ", frame-size=" << m_in_av_audio_ctx->frame_size
-        //             << ", sample-rate=" << m_in_av_audio_ctx->sample_rate
-        //             << ", sample-format=" << m_in_av_audio_ctx->sample_fmt);
 
         auto encoder_name = [&]() {
             switch (task) {
                 case task_t::compress_to_file:
+                case task_t::compress_mix_to_file:
                     switch (m_format) {
-                        case format_t::mp3:
+                        case format_t::audio_mp3:
                             return "libmp3lame";
-                        case format_t::ogg_vorbis:
+                        case format_t::audio_ogg_vorbis:
                             return "libvorbis";
-                        case format_t::ogg_opus:
+                        case format_t::audio_ogg_opus:
                             return "libopus";
-                        case format_t::flac:
+                        case format_t::audio_flac:
                             return "flac";
-                        case format_t::srt:
+                        case format_t::sub_srt:
                             return "subrip";
-                        case format_t::ass:
-                            return "ssa";
-                        case format_t::vtt:
+                        case format_t::sub_ass:
+                            return "ass";
+                        case format_t::sub_vtt:
                             return "webvtt";
-                        case format_t::wav:
+                        case format_t::audio_wav:
                         case format_t::unknown:
-                            break;
+                            return "pcm_s16le";
                     }
                     break;
                 case task_t::decompress_to_file:
                 case task_t::decompress_to_file_async:
                 case task_t::decompress_to_data_raw_async:
                 case task_t::decompress_to_data_format_async:
-                    if (in_stream->codecpar->codec_type ==
-                        AVMEDIA_TYPE_SUBTITLE)
-                        return "subrip";
-                    break;
+                    return in_stream->codecpar->codec_type ==
+                                   AVMEDIA_TYPE_SUBTITLE
+                               ? "subrip"
+                               : "pcm_s16le";
             }
 
-            return "pcm_s16le";
+            throw std::runtime_error{"invalid encoder requested"};
         }();
+
+        LOGD("encoder name: " << encoder_name);
 
         const auto* encoder = avcodec_find_encoder_by_name(encoder_name);
         if (!encoder) {
             clean_av();
             throw std::runtime_error("no encoder");
         }
-
-        //    LOGD("sample fmts supported by encoder:");
-        //    for (int i = 0; encoder->sample_fmts[i] != AV_SAMPLE_FMT_NONE;
-        //    ++i) {
-        //        LOGD("[" << i << "]: " << encoder->sample_fmts[i]);
-        //    }
 
         m_out_av_ctx = avcodec_alloc_context3(encoder);
         if (!m_out_av_ctx) {
@@ -679,53 +856,85 @@ void media_compressor::init_av(task_t task) {
 
         AVDictionary* opts = nullptr;
 
-        if (task == task_t::compress_to_file) {
+        if (task == task_t::compress_to_file ||
+            task == task_t::compress_mix_to_file) {
             if (m_out_av_ctx->codec_type == AVMEDIA_TYPE_AUDIO) {
-                m_out_av_ctx->sample_fmt =
-                    best_sample_format(encoder, m_in_av_ctx->sample_fmt);
-                av_channel_layout_default(
-                    &m_out_av_ctx->ch_layout,
-                    m_in_av_ctx->ch_layout.nb_channels == 1 ? 1 : 2);
-                m_out_av_ctx->sample_rate =
-                    best_sample_rate(encoder, m_in_av_ctx->sample_rate);
-
-                m_out_av_ctx->time_base = m_in_av_ctx->time_base;
-
-                if (m_format == format_t::ogg_opus) {
-                    av_dict_set(&opts, "application", "voip", 0);
-                    av_dict_set(&opts, "b",
-                                m_options.quality == quality_t::vbr_high ? "48k"
-                                : m_options.quality == quality_t::vbr_low
-                                    ? "10k"
-                                    : "24k",
-                                0);
-                } else if (m_format == format_t::flac) {
-                    av_dict_set_int(&opts, "compression_level",
-                                    m_options.quality == quality_t::vbr_high ? 0
-                                    : m_options.quality == quality_t::vbr_low
-                                        ? 12
-                                        : 5,
-                                    0);
+                if (m_in_main_av_ctx) {
+                    av_channel_layout_default(
+                        &m_out_av_ctx->ch_layout,
+                        std::max(
+                            m_in_main_av_ctx->ch_layout.nb_channels == 1 ? 1
+                                                                         : 2,
+                            m_in_av_ctx->ch_layout.nb_channels == 1 ? 1 : 2));
+                    m_out_av_ctx->sample_rate = best_sample_rate(
+                        encoder, std::max(m_in_main_av_ctx->sample_rate,
+                                          m_in_av_ctx->sample_rate));
+                    m_out_av_ctx->sample_fmt = best_sample_format(
+                        encoder, AVSampleFormat::AV_SAMPLE_FMT_FLT);
                 } else {
-                    m_out_av_ctx->flags |= AV_CODEC_FLAG_QSCALE;
+                    av_channel_layout_default(
+                        &m_out_av_ctx->ch_layout,
+                        m_in_av_ctx->ch_layout.nb_channels == 1 ? 1 : 2);
+                    m_out_av_ctx->sample_rate =
+                        best_sample_rate(encoder, m_in_av_ctx->sample_rate);
+                    m_out_av_ctx->sample_fmt =
+                        best_sample_format(encoder, m_in_av_ctx->sample_fmt);
+                }
 
-                    switch (m_options.quality) {
-                        case quality_t::vbr_high:
-                            m_out_av_ctx->global_quality =
-                                FF_QP2LAMBDA *
-                                (m_format == format_t::mp3 ? 0 : 10);
-                            break;
-                        case quality_t::vbr_medium:
-                            m_out_av_ctx->global_quality =
-                                FF_QP2LAMBDA *
-                                (m_format == format_t::mp3 ? 4 : 3);
-                            break;
-                        case quality_t::vbr_low:
-                            m_out_av_ctx->global_quality =
-                                FF_QP2LAMBDA *
-                                (m_format == format_t::mp3 ? 9 : 0);
-                            break;
-                    }
+                m_out_av_ctx->time_base = {1, m_out_av_ctx->sample_rate};
+
+                if (m_format == format_t::audio_ogg_opus) {
+                    const auto* q = [&] {
+                        switch (m_options ? m_options->quality
+                                          : quality_t::vbr_medium) {
+                            case quality_t::vbr_high:
+                                return "48k";
+                            case quality_t::vbr_low:
+                                return "10k";
+                            case quality_t::vbr_medium:
+                                break;
+                        }
+                        return "24k";
+                    }();
+
+                    av_dict_set(&opts, "application", "voip", 0);
+                    av_dict_set(&opts, "b", q, 0);
+                } else if (m_format == format_t::audio_flac) {
+                    auto q = [&] {
+                        switch (m_options ? m_options->quality
+                                          : quality_t::vbr_medium) {
+                            case quality_t::vbr_high:
+                                return 0;
+                            case quality_t::vbr_low:
+                                return 12;
+                            case quality_t::vbr_medium:
+                                break;
+                        }
+                        return 5;
+                    }();
+
+                    av_dict_set_int(&opts, "compression_level", q, 0);
+                } else {
+                    auto q = [&] {
+                        switch (m_options ? m_options->quality
+                                          : quality_t::vbr_medium) {
+                            case quality_t::vbr_high:
+                                return FF_QP2LAMBDA *
+                                       (m_format == format_t::audio_mp3 ? 0
+                                                                        : 10);
+                            case quality_t::vbr_low:
+                                return FF_QP2LAMBDA *
+                                       (m_format == format_t::audio_mp3 ? 9
+                                                                        : 0);
+                            case quality_t::vbr_medium:
+                                break;
+                        }
+                        return FF_QP2LAMBDA *
+                               (m_format == format_t::audio_mp3 ? 4 : 3);
+                    }();
+
+                    m_out_av_ctx->flags |= AV_CODEC_FLAG_QSCALE;
+                    m_out_av_ctx->global_quality = q;
                 }
             } else if (m_out_av_ctx->codec_type == AVMEDIA_TYPE_SUBTITLE) {
                 m_out_av_ctx->time_base = AV_TIME_BASE_Q;
@@ -737,6 +946,8 @@ void media_compressor::init_av(task_t task) {
 
                 m_out_av_ctx->subtitle_header_size =
                     m_in_av_ctx->subtitle_header_size;
+            } else {
+                throw std::runtime_error{"unsupported codec type"};
             }
         } else {
             if (m_out_av_ctx->codec_type == AVMEDIA_TYPE_AUDIO) {
@@ -744,15 +955,24 @@ void media_compressor::init_av(task_t task) {
                 m_out_av_ctx->time_base = m_in_av_ctx->time_base;
                 m_out_av_ctx->sample_rate = m_in_av_ctx->sample_rate;
 
-                if (m_options.sample_rate_16 || m_options.mono) {
+                if (m_options &&
+                    ((m_options->flags & flag_force_mono_output) ||
+                     (m_options->flags & flag_force_16k_sample_rate_output))) {
                     // STT engines support only mono 16000Hz
-                    if (m_options.sample_rate_16) {
+                    if (m_options->flags & flag_force_16k_sample_rate_output) {
                         m_out_av_ctx->sample_rate = 16000;
                         m_out_av_ctx->time_base = {1, 16000};
+                    } else {
+                        m_out_av_ctx->sample_rate = m_in_av_ctx->sample_rate;
                     }
 
-                    if (m_options.mono)
+                    if (m_options->flags & flag_force_mono_output) {
                         av_channel_layout_default(&m_out_av_ctx->ch_layout, 1);
+                    } else {
+                        av_channel_layout_default(
+                            &m_out_av_ctx->ch_layout,
+                            m_in_av_ctx->ch_layout.nb_channels == 1 ? 1 : 2);
+                    }
                 } else {
                     m_out_av_ctx->sample_rate = m_in_av_ctx->sample_rate;
                     av_channel_layout_default(
@@ -771,7 +991,7 @@ void media_compressor::init_av(task_t task) {
                 m_out_av_ctx->subtitle_header_size =
                     m_in_av_ctx->subtitle_header_size;
             } else {
-                throw std::runtime_error("unsupported media type");
+                throw std::runtime_error("unsupported codec type");
             }
         }
 
@@ -783,32 +1003,24 @@ void media_compressor::init_av(task_t task) {
 
         clean_av_opts(&opts);
 
-        //        LOGD("out codec: codec="
-        //             << m_out_av_audio_ctx->codec_id
-        //             << ", channels=" <<
-        //             m_out_av_audio_ctx->ch_layout.nb_channels
-        //             << ", tb=" << m_out_av_audio_ctx->time_base
-        //             << ", frame-size=" << m_out_av_audio_ctx->frame_size
-        //             << ", sample-rate=" << m_out_av_audio_ctx->sample_rate
-        //             << ", sample-format=" << m_out_av_audio_ctx->sample_fmt);
+        LOGD("decoder frame-size: " << m_in_av_ctx->frame_size);
+        if (m_in_main_av_ctx)
+            LOGD("main decoder frame-size: " << m_in_main_av_ctx->frame_size);
+        LOGD("encoder frame-size: " << m_out_av_ctx->frame_size);
 
-        if (!time_base_equal(m_out_av_ctx->time_base, m_in_av_ctx->time_base)) {
-            LOGD("time-base change: " << m_out_av_ctx->time_base << " => "
-                                      << m_in_av_ctx->time_base);
+        LOGD("time-base change: " << m_in_av_ctx->time_base << " => "
+                                  << m_out_av_ctx->time_base);
+        if (m_in_main_av_ctx) {
+            LOGD("main time-base change: " << m_in_main_av_ctx->time_base
+                                           << " => "
+                                           << m_out_av_ctx->time_base);
         }
 
         if (m_out_av_ctx->codec_type == AVMEDIA_TYPE_AUDIO) {
-            if (m_out_av_ctx->sample_fmt != m_in_av_ctx->sample_fmt) {
-                LOGD("sample-format change: " << m_in_av_ctx->sample_fmt
-                                              << " => "
-                                              << m_out_av_ctx->sample_fmt);
-            }
-
-            if (m_out_av_ctx->sample_rate != m_in_av_ctx->sample_rate) {
-                LOGD("sample-rate change: " << m_in_av_ctx->sample_rate
-                                            << " => "
-                                            << m_out_av_ctx->sample_rate);
-            }
+            LOGD("sample-format change: " << m_in_av_ctx->sample_fmt << " => "
+                                          << m_out_av_ctx->sample_fmt);
+            LOGD("sample-rate change: " << m_in_av_ctx->sample_rate << " => "
+                                        << m_out_av_ctx->sample_rate);
 
             m_av_fifo =
                 av_audio_fifo_alloc(m_out_av_ctx->sample_fmt,
@@ -818,30 +1030,40 @@ void media_compressor::init_av(task_t task) {
                 throw std::runtime_error("av_audio_fifo_alloc error");
             }
 
-            init_av_filter("anull");
+            if (m_in_main_av_ctx) {
+                LOGD("main sample-format change: "
+                     << m_in_main_av_ctx->sample_fmt << " => "
+                     << m_out_av_ctx->sample_fmt);
+                LOGD("sample-rate change: " << m_in_main_av_ctx->sample_rate
+                                            << " => "
+                                            << m_out_av_ctx->sample_rate);
+            }
+
+            init_av_filter();
         }
     }
 
     auto* format_name = [&]() {
         switch (task) {
+            case task_t::compress_mix_to_file:
             case task_t::compress_to_file:
                 switch (m_format) {
-                    case format_t::mp3:
+                    case format_t::audio_mp3:
                         return "mp3";
-                    case format_t::ogg_vorbis:
-                    case format_t::ogg_opus:
+                    case format_t::audio_ogg_vorbis:
+                    case format_t::audio_ogg_opus:
                         return "ogg";
-                    case format_t::flac:
+                    case format_t::audio_flac:
                         return "flac";
-                    case format_t::srt:
+                    case format_t::sub_srt:
                         return "srt";
-                    case format_t::ass:
+                    case format_t::sub_ass:
                         return "ass";
-                    case format_t::vtt:
+                    case format_t::sub_vtt:
                         return "webvtt";
-                    case format_t::wav:
+                    case format_t::audio_wav:
                     case format_t::unknown:
-                        break;
+                        return "wav";
                 }
                 break;
             case task_t::decompress_to_data_raw_async:
@@ -849,12 +1071,14 @@ void media_compressor::init_av(task_t task) {
             case task_t::decompress_to_file:
             case task_t::decompress_to_file_async:
             case task_t::decompress_to_data_format_async:
-                if (in_stream->codecpar->codec_type == AVMEDIA_TYPE_SUBTITLE)
-                    return "srt";
-                break;
+                return in_stream->codecpar->codec_type == AVMEDIA_TYPE_SUBTITLE
+                           ? "srt"
+                           : "wav";
         }
-        return "wav";
+        throw std::runtime_error{"invalid output format name"};
     }();
+
+    LOGD("output format: " << format_name);
 
     if (task != task_t::decompress_to_data_raw_async) {
         if (avformat_alloc_output_context2(&m_out_av_format_ctx, nullptr,
@@ -863,34 +1087,46 @@ void media_compressor::init_av(task_t task) {
             throw std::runtime_error("avformat_alloc_output_context2 error");
         }
 
-        m_out_av_format_ctx->flags |= AVFMT_FLAG_BITEXACT;
+        if (strncmp(format_name, "wav", 3) == 0)
+            m_out_av_format_ctx->flags |= AVFMT_FLAG_BITEXACT;
 
-        auto* out_stream = avformat_new_stream(m_out_av_format_ctx, nullptr);
-        if (!out_stream) {
-            clean_av();
-            throw std::runtime_error("avformat_new_stream error");
-        }
-
-        out_stream->id = 0;
-
-        if (m_no_decode) {
-            if (avcodec_parameters_copy(out_stream->codecpar,
-                                        in_stream->codecpar) < 0) {
+        auto allocate_out_stream = [&](const AVStream* in_stream) {
+            auto* out_stream =
+                avformat_new_stream(m_out_av_format_ctx, nullptr);
+            if (!out_stream) {
                 clean_av();
-                throw std::runtime_error("avcodec_parameters_copy error");
+                throw std::runtime_error("avformat_new_stream error");
             }
-            out_stream->time_base = in_stream->time_base;
-        } else {
-            if (avcodec_parameters_from_context(out_stream->codecpar,
-                                                m_out_av_ctx) < 0) {
-                clean_av();
-                throw std::runtime_error(
-                    "avcodec_parameters_from_context error");
-            }
-            out_stream->time_base = m_out_av_ctx->time_base;
-        }
 
-        // av_dump_format(m_out_av_format_ctx, out_stream->id, "", 1);
+            if (in_stream) {
+                if (avcodec_parameters_copy(out_stream->codecpar,
+                                            in_stream->codecpar) < 0) {
+                    clean_av();
+                    throw std::runtime_error("avcodec_parameters_copy error");
+                }
+
+                out_stream->time_base = in_stream->time_base;
+                av_dict_copy(&out_stream->metadata, in_stream->metadata, 0);
+            } else if (m_out_av_ctx) {
+                if (avcodec_parameters_from_context(out_stream->codecpar,
+                                                    m_out_av_ctx) < 0) {
+                    clean_av();
+                    throw std::runtime_error(
+                        "avcodec_parameters_from_context error");
+                }
+
+                out_stream->time_base = m_out_av_ctx->time_base;
+            } else {
+                throw std::runtime_error{"can't allocate out stream"};
+            }
+
+            return out_stream->index;
+        };
+
+        m_out_stream_idx =
+            allocate_out_stream(m_out_av_ctx ? nullptr : in_stream);
+
+        LOGD("out stream idx: " << m_out_stream_idx);
 
         if (task == task_t::decompress_to_data_format_async) {
             auto* out_buf = static_cast<uint8_t*>(av_malloc(BUF_MAX_SIZE));
@@ -915,14 +1151,6 @@ void media_compressor::init_av(task_t task) {
                 throw std::runtime_error("avio_open error");
             }
         }
-
-        //        LOGD("out stream: codec="
-        //             << out_stream->codecpar->codec_id
-        //             << ", sample-rate=" << out_stream->codecpar->sample_rate
-        //             << ", tb=" << out_stream->time_base << ", frame-size="
-        //             << out_stream->codecpar->frame_size << ", sample-format="
-        //             <<
-        //             static_cast<AVSampleFormat>(out_stream->codecpar->format));
     }
 }
 
@@ -979,13 +1207,6 @@ std::optional<media_compressor::media_info_t> media_compressor::media_info(
         init_av_in_format(input_file, true);
 
         for (auto i = 0u; i < m_in_av_format_ctx->nb_streams; ++i) {
-            // LOGD("stream: idx="
-            //      << m_in_av_format_ctx->streams[i]->index << ", type="
-            //      << m_in_av_format_ctx->streams[i]->codecpar->codec_type
-            //      << ", metadata=[" <<
-            //      m_in_av_format_ctx->streams[i]->metadata
-            //      << "]");
-
             media_type_t media_type = media_type_t::audio;
 
             switch (m_in_av_format_ctx->streams[i]->codecpar->codec_type) {
@@ -1026,6 +1247,9 @@ std::optional<media_compressor::media_info_t> media_compressor::media_info(
                     media_info_data.subtitles_streams.push_back(
                         std::move(stream));
                     break;
+                case media_type_t::unknown:
+                    // this should not happen
+                    return std::nullopt;
             }
         }
     } catch (const std::runtime_error& err) {
@@ -1036,25 +1260,27 @@ std::optional<media_compressor::media_info_t> media_compressor::media_info(
     return media_info_data;
 }
 
-size_t media_compressor::duration(const std::string& input_file) {
+std::pair<size_t, unsigned int> media_compressor::duration_and_rate(
+    const std::string& input_file) {
     try {
         init_av_in_format(input_file, false);
 
         const auto* in_stream = m_in_av_format_ctx->streams[m_in_stream_idx];
 
-        return std::max<size_t>(
-            0, av_rescale_q(in_stream->duration, in_stream->time_base,
-                            AVRational{1, 1000}));
+        return {std::max<size_t>(
+                    0, av_rescale_q(in_stream->duration, in_stream->time_base,
+                                    AVRational{1, 1000})),
+                in_stream->codecpar->sample_rate};
     } catch (const std::runtime_error& err) {
-        LOGE("can't get duration: " << err.what());
+        LOGE("can't get duration and rate: " << err.what());
     }
 
-    return 0;
+    return {0, 0};
 }
 
 void media_compressor::decompress_to_file(std::vector<std::string> input_files,
                                           std::string output_file,
-                                          options_t options) {
+                                          std::optional<options_t> options) {
     LOGD("task decompress to file");
 
     setup_input_files(std::move(input_files));
@@ -1064,12 +1290,17 @@ void media_compressor::decompress_to_file(std::vector<std::string> input_files,
 
     init_av(task_t::decompress_to_file);
 
+    m_error = false;
+
     process();
+
+    if (m_error) unlink(m_output_file.c_str());
 }
 
 void media_compressor::decompress_to_file_async(
     std::vector<std::string> input_files, std::string output_file,
-    options_t options, task_finished_callback_t task_finished_callback) {
+    std::optional<options_t> options,
+    task_finished_callback_t task_finished_callback) {
     LOGD("task decompress to file async");
 
     decompress_async_internal(task_t::decompress_to_file_async,
@@ -1080,7 +1311,7 @@ void media_compressor::decompress_to_file_async(
 
 void media_compressor::decompress_async_internal(
     task_t task, std::vector<std::string>&& input_files,
-    std::string output_file, options_t options,
+    std::string output_file, std::optional<options_t> options,
     data_ready_callback_t&& data_ready_callback,
     task_finished_callback_t&& task_finished_callback) {
     setup_input_files(std::move(input_files));
@@ -1104,16 +1335,18 @@ void media_compressor::decompress_async_internal(
             } catch (const std::runtime_error& err) {
                 LOGE("exception in process: " << err.what());
                 m_error = true;
+                unlink(m_output_file.c_str());
             }
 
             if (m_data_ready_callback && m_buf.size() > 0)
                 m_data_ready_callback();
+
             if (callback) callback();
         });
 }
 
 void media_compressor::decompress_to_data_raw_async(
-    std::vector<std::string> input_files, options_t options,
+    std::vector<std::string> input_files, std::optional<options_t> options,
     data_ready_callback_t data_ready_callback,
     task_finished_callback_t task_finished_callback) {
     LOGD("task decompress to data raw async");
@@ -1125,69 +1358,101 @@ void media_compressor::decompress_to_data_raw_async(
 }
 
 void media_compressor::decompress_to_data_format_async(
-    std::vector<std::string> input_files, options_t options,
+    std::vector<std::string> input_files, std::optional<options_t> options,
     data_ready_callback_t data_ready_callback,
     task_finished_callback_t task_finished_callback) {
     LOGD("task decompress to data format async");
 
     decompress_async_internal(task_t::decompress_to_data_format_async,
-                              std::move(input_files), {}, options,
+                              std::move(input_files), {}, std::move(options),
                               std::move(data_ready_callback),
                               std::move(task_finished_callback));
 }
 
 void media_compressor::compress_to_file_async(
     std::vector<std::string> input_files, std::string output_file,
-    format_t format, options_t options,
+    format_t format, std::optional<options_t> options,
+    file_progress_callback_t file_progress_callback,
     task_finished_callback_t task_finished_callback) {
+    LOGD("task compress to file async");
+
     if (!task_finished_callback)
         throw std::runtime_error{"callback not provided"};
 
-    compress_internal(std::move(input_files), std::move(output_file), format,
-                      std::move(options), std::move(task_finished_callback));
+    compress_internal(task_t::compress_to_file, {}, std::move(input_files),
+                      std::move(output_file), format, std::move(options),
+                      std::move(file_progress_callback),
+                      std::move(task_finished_callback));
 }
 
 void media_compressor::compress_to_file(std::vector<std::string> input_files,
                                         std::string output_file,
-                                        format_t format, options_t options,
-                                        clip_info_t clip_info) {
-    m_clip_info = clip_info;
+                                        format_t format,
+                                        std::optional<options_t> options) {
+    LOGD("task compress to file");
 
-    auto start = std::chrono::steady_clock::now();
+    compress_internal(task_t::compress_to_file, {}, std::move(input_files),
+                      std::move(output_file), format, std::move(options),
+                      file_progress_callback_t{}, task_finished_callback_t{});
+}
 
-    compress_internal(std::move(input_files), std::move(output_file), format,
-                      std::move(options), task_finished_callback_t{});
+void media_compressor::compress_mix_to_file(
+    std::string main_input_file, std::vector<std::string> input_files,
+    std::string output_file, format_t format,
+    std::optional<options_t> options) {
+    LOGD("task compress mix to file");
 
-    auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(
-                   std::chrono::steady_clock::now() - start)
-                   .count();
+    if (main_input_file.empty())
+        throw std::runtime_error{"empty main input file"};
 
-    LOGD("compress stats: format=" << format << ", duration=" << dur << "ms");
+    compress_internal(task_t::compress_mix_to_file, std::move(main_input_file),
+                      std::move(input_files), std::move(output_file), format,
+                      std::move(options), file_progress_callback_t{},
+                      task_finished_callback_t{});
+}
+
+void media_compressor::compress_mix_to_file_async(
+    std::string main_input_file, std::vector<std::string> input_files,
+    std::string output_file, format_t format, std::optional<options_t> options,
+    file_progress_callback_t file_progress_callback,
+    task_finished_callback_t task_finished_callback) {
+    LOGD("task compress mix to file async");
+
+    if (!task_finished_callback)
+        throw std::runtime_error{"callback not provided"};
+
+    if (main_input_file.empty())
+        throw std::runtime_error{"empty main input file"};
+
+    compress_internal(task_t::compress_mix_to_file, std::move(main_input_file),
+                      std::move(input_files), std::move(output_file), format,
+                      std::move(options), std::move(file_progress_callback),
+                      std::move(task_finished_callback));
 }
 
 void media_compressor::compress_internal(
+    task_t task, std::string main_input_file,
     std::vector<std::string> input_files, std::string output_file,
-    format_t format, options_t options,
+    format_t format, std::optional<options_t> options,
+    file_progress_callback_t file_progress_callback,
     task_finished_callback_t task_finished_callback) {
-    LOGD("task compress to file: format="
-         << format << ", quality=" << options.quality
-         << ", async=" << static_cast<bool>(task_finished_callback));
-
     if (input_files.empty()) throw std::runtime_error{"empty input file list"};
+    if (output_file.empty()) throw std::runtime_error{"empty output file"};
+    if (format == format_t::unknown)
+        format = format_from_filename(m_output_file);
+    if (format == format_t::unknown)
+        throw std::runtime_error("unknown format requested");
 
     std::for_each(input_files.begin(), input_files.end(),
                   [&](auto& file) { m_input_files.push(std::move(file)); });
-
-    m_format = format;
-    if (format == format_t::unknown)
-        m_format = format_from_filename(m_output_file);
-    if (m_format == format_t::unknown)
-        throw std::runtime_error("unknown format requested");
-    m_options = std::move(options);
-
     m_output_file = std::move(output_file);
+    m_main_input_file = std::move(main_input_file);
+    m_options = std::move(options);
+    m_format = format;
+    m_file_progress_callback = std::move(file_progress_callback);
+    m_total_files_to_process = m_input_files.size();
 
-    init_av(task_t::compress_to_file);
+    init_av(task);
 
     if (task_finished_callback) {
         if (m_async_thread.joinable()) m_async_thread.join();
@@ -1203,6 +1468,7 @@ void media_compressor::compress_internal(
                 } catch (const std::runtime_error& err) {
                     LOGE("exception in process: " << err.what());
                     m_error = true;
+                    unlink(m_output_file.c_str());
                 }
 
                 if (callback) callback();
@@ -1213,6 +1479,8 @@ void media_compressor::compress_internal(
         m_error = false;
 
         process();
+
+        if (m_error) unlink(m_output_file.c_str());
 
         LOGD("task compress finished");
     }
@@ -1240,61 +1508,71 @@ void media_compressor::process() {
 
     AVSubtitle subtitle{};
 
-    int64_t next_ts = 0;
+    int next_ts = 0;
+
+    m_data_info.in_eof = false;
+    m_data_info.main_in_eof = false;
+    m_data_info.filter_eof = false;
     m_data_info.eof = false;
 
     m_in_bytes_read = 0;
 
-    while (!m_shutdown) {
+    bool processing_subtitles =
+        (m_out_av_format_ctx &&
+         m_out_av_format_ctx->streams[m_out_stream_idx]->codecpar->codec_type ==
+             AVMEDIA_TYPE_SUBTITLE) ||
+        (m_in_av_format_ctx &&
+         m_in_av_format_ctx->streams[m_in_stream_idx]->codecpar->codec_type ==
+             AVMEDIA_TYPE_SUBTITLE);
+
+    while (!m_shutdown && !m_data_info.eof) {
         if (m_no_decode) {
-            if (!read_frame(pkt)) break;
+            if (!read_frame(pkt))
+                if (!m_data_info.eof) continue;
         } else {
-            auto* frame{frame_out};
+            bool do_flush = false;
 
-            if (!decode_frame(pkt, frame_in, frame, &subtitle)) frame = nullptr;
-
-            if (m_shutdown) break;
-
-            if (m_out_av_ctx->codec_type == AVMEDIA_TYPE_SUBTITLE) {
-                if (m_data_info.eof) break;
-                if (!encode_subtitle(pkt, &subtitle)) {
-                    if (frame) continue;
-                    break;
+            if (!m_data_info.filter_eof) {
+                if (!decode_frame(pkt, frame_in, frame_out, &subtitle)) {
+                    if (!m_data_info.filter_eof) continue;
+                    do_flush = true;
                 }
             } else {
-                if (!encode_frame(frame, pkt)) {
-                    if (frame) continue;
-                    break;
+                do_flush = true;
+            }
+
+            if (processing_subtitles) {
+                if (!encode_subtitle(pkt, do_flush ? nullptr : &subtitle))
+                    if (!m_data_info.eof) continue;
+            } else if (!encode_frame(do_flush ? nullptr : frame_out, pkt)) {
+                if (!m_data_info.eof) continue;
+            }
+        }
+
+        if (!m_data_info.eof) {
+            if (m_out_av_format_ctx) {
+                if (!processing_subtitles) {
+                    pkt->pts = next_ts;
+                    pkt->dts = next_ts;
+                    next_ts += pkt->duration;
                 }
-            }
-        }
 
-        if (m_out_av_format_ctx) {
-            if (m_out_av_format_ctx->streams[0]->codecpar->codec_type !=
-                AVMEDIA_TYPE_SUBTITLE) {
-                auto in_tb =
-                    m_in_av_format_ctx->streams[m_in_stream_idx]->time_base;
-                auto out_tb = m_out_av_format_ctx->streams[0]->time_base;
+                LOGT("pkt: " << pkt);
 
-                pkt->duration = av_rescale_q(pkt->duration, in_tb, out_tb);
-                pkt->stream_index = 0;
-                pkt->pts = next_ts;
-                pkt->dts = next_ts;
-                pkt->time_base = out_tb;
-                pkt->pos = -1;
+                if (auto ret = av_write_frame(m_out_av_format_ctx, pkt);
+                    ret < 0)
+                    throw std::runtime_error("av_write_frame error");
+            } else {
+                write_to_buf(reinterpret_cast<char*>(pkt->data), pkt->size);
 
-                next_ts += pkt->duration;
+                if (m_shutdown) break;
             }
 
-            if (auto ret = av_write_frame(m_out_av_format_ctx, pkt); ret < 0)
-                throw std::runtime_error("av_write_frame error");
-        } else {
-            write_to_buf(reinterpret_cast<char*>(pkt->data), pkt->size);
-
-            if (m_shutdown) break;
+            av_packet_unref(pkt);
+        } else if (m_out_av_format_ctx) {
+            LOGD("muxer flush");
+            av_write_frame(m_out_av_format_ctx, nullptr);
         }
-
-        av_packet_unref(pkt);
     }
 
     av_packet_free(&pkt);
@@ -1321,11 +1599,12 @@ void media_compressor::process() {
 }
 
 bool media_compressor::read_frame(AVPacket* pkt) {
-    bool do_clip = m_clip_info.valid_bytes();
-
     while (true) {
-        if (do_clip && m_in_bytes_read >= m_clip_info.stop_bytes) {
+        if (m_options && m_options->clip_info &&
+            m_in_bytes_read >= m_options->clip_info->stop_bytes) {
             LOGD("demuxer clip stop");
+            m_data_info.in_eof = true;
+            m_data_info.filter_eof = true;
             m_data_info.eof = true;
             break;
         }
@@ -1334,6 +1613,8 @@ bool media_compressor::read_frame(AVPacket* pkt) {
             if (ret == AVERROR_EOF) {
                 if (m_input_files.empty()) {
                     LOGD("demuxer eof");
+                    m_data_info.in_eof = true;
+                    m_data_info.filter_eof = true;
                     m_data_info.eof = true;
                     return false;
                 } else {
@@ -1355,10 +1636,18 @@ bool media_compressor::read_frame(AVPacket* pkt) {
 
         m_in_bytes_read += pkt->size;
 
-        if (do_clip && m_in_bytes_read < m_clip_info.start_bytes) {
+        if (m_options && m_options->clip_info &&
+            m_in_bytes_read < m_options->clip_info->start_bytes) {
             av_packet_unref(pkt);
             continue;
         }
+
+        auto in_tb = m_in_av_format_ctx->streams[m_in_stream_idx]->time_base;
+        auto out_tb = m_out_av_format_ctx->streams[m_out_stream_idx]->time_base;
+        pkt->duration = av_rescale_q(pkt->duration, in_tb, out_tb);
+        pkt->stream_index = m_out_stream_idx;
+        pkt->time_base = out_tb;
+        pkt->pos = -1;
 
         return true;
     }
@@ -1366,25 +1655,29 @@ bool media_compressor::read_frame(AVPacket* pkt) {
     return false;
 }
 
-bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame_in,
-                                    AVFrame* frame_out, AVSubtitle* subtitle) {
-    bool do_clip = m_clip_info.valid_bytes() &&
-                   m_out_av_ctx->codec_type != AVMEDIA_TYPE_SUBTITLE;
+bool media_compressor::decode_frame_fix_size(AVPacket* pkt, AVFrame* frame_in,
+                                             AVFrame* frame_out) {
+    const bool decode_main = m_in_main_av_ctx != nullptr;
 
-    if (m_out_av_ctx->frame_size > 0) {  // decoder needs fix frame size
-        while (!m_shutdown &&
-               av_audio_fifo_size(m_av_fifo) < m_out_av_ctx->frame_size &&
-               !m_data_info.eof) {
-            if (do_clip && m_in_bytes_read >= m_clip_info.stop_bytes) {
-                LOGD("demuxer clip stop");
-                m_data_info.eof = true;
-                break;
-            } else if (auto ret = av_read_frame(m_in_av_format_ctx, pkt);
-                       ret != 0) {
+    while (!m_shutdown &&
+           av_audio_fifo_size(m_av_fifo) < m_out_av_ctx->frame_size &&
+           !m_data_info.filter_eof) {
+        if (m_options && m_options->clip_info &&
+            m_in_bytes_read >= m_options->clip_info->stop_bytes) {
+            LOGD("demuxer clip stop");
+            m_data_info.in_eof = true;
+            m_data_info.filter_eof = true;
+            break;
+        }
+
+        bool got_frame = false;
+
+        while (!m_data_info.in_eof) {
+            if (auto ret = av_read_frame(m_in_av_format_ctx, pkt); ret != 0) {
                 if (ret == AVERROR_EOF) {
                     if (m_input_files.empty()) {
                         LOGD("demuxer eof");
-                        m_data_info.eof = true;
+                        m_data_info.in_eof = true;
                     } else {
                         init_av_in_format(m_input_files.front(), false);
                         m_input_files.pop();
@@ -1395,83 +1688,159 @@ bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame_in,
                 }
             }
 
-            if (m_data_info.eof) {
-                if (!filter_frame(nullptr, frame_out)) continue;
-            } else {
-                if (pkt->stream_index != m_in_stream_idx) {
+            if (m_data_info.in_eof) break;
+
+            if (pkt->stream_index != m_in_stream_idx) {
+                av_packet_unref(pkt);
+                continue;
+            }
+
+            m_in_bytes_read += pkt->size;
+
+            if (m_options && m_options->clip_info &&
+                m_in_bytes_read < m_options->clip_info->start_bytes) {
+                av_packet_unref(pkt);
+                continue;
+            }
+
+            if (auto ret = avcodec_send_packet(m_in_av_ctx, pkt);
+                ret != 0 && ret != AVERROR(EAGAIN)) {
+                av_packet_unref(pkt);
+                LOGW("audio decoding error: " << ret << " "
+                                              << str_from_av_error(ret));
+                continue;
+            }
+
+            av_packet_unref(pkt);
+
+            if (auto ret = avcodec_receive_frame(m_in_av_ctx, frame_in);
+                ret != 0) {
+                if (ret == AVERROR(EAGAIN)) continue;
+
+                throw std::runtime_error("avcodec_receive_frame error");
+            }
+
+            frame_in->time_base = m_in_av_ctx->time_base;
+
+            got_frame =
+                filter_frame(m_av_filter_ctx.src_ctx, frame_in, frame_out);
+
+            break;
+        }
+
+        if (!got_frame && m_data_info.in_eof && !m_data_info.filter_eof) {
+            got_frame =
+                filter_frame(m_av_filter_ctx.src_ctx, nullptr, frame_out);
+        }
+
+        if (!got_frame && decode_main) {
+            while (!m_data_info.main_in_eof) {
+                if (auto ret = av_read_frame(m_in_main_av_format_ctx, pkt);
+                    ret != 0) {
+                    if (ret == AVERROR_EOF) {
+                        LOGD("main demuxer eof");
+                        m_data_info.main_in_eof = true;
+                    } else {
+                        throw std::runtime_error("main av_read_frame error");
+                    }
+                }
+
+                if (m_data_info.main_in_eof) break;
+
+                if (pkt->stream_index != m_in_main_stream_idx) {
                     av_packet_unref(pkt);
                     continue;
                 }
 
-                m_in_bytes_read += pkt->size;
-
-                if (do_clip && m_in_bytes_read < m_clip_info.start_bytes) {
-                    av_packet_unref(pkt);
-                    continue;
-                }
-
-                if (auto ret = avcodec_send_packet(m_in_av_ctx, pkt);
+                if (auto ret = avcodec_send_packet(m_in_main_av_ctx, pkt);
                     ret != 0 && ret != AVERROR(EAGAIN)) {
                     av_packet_unref(pkt);
-                    LOGW("audio decoding error: " << ret << " "
-                                                  << str_from_av_error(ret));
+                    LOGW("main audio decoding error: "
+                         << ret << " " << str_from_av_error(ret));
                     continue;
                 }
 
                 av_packet_unref(pkt);
 
-                if (auto ret = avcodec_receive_frame(m_in_av_ctx, frame_in);
+                if (auto ret =
+                        avcodec_receive_frame(m_in_main_av_ctx, frame_in);
                     ret != 0) {
                     if (ret == AVERROR(EAGAIN)) continue;
 
                     throw std::runtime_error("avcodec_receive_frame error");
                 }
 
-                if (!filter_frame(frame_in, frame_out)) continue;
+                got_frame = filter_frame(m_av_filter_ctx.src_main_ctx, frame_in,
+                                         frame_out);
+                break;
             }
 
-            if (av_audio_fifo_realloc(m_av_fifo, av_audio_fifo_size(m_av_fifo) +
-                                                     frame_out->nb_samples) < 0)
-                throw std::runtime_error("av_audio_fifo_realloc error");
-
-            if (av_audio_fifo_write(
-                    m_av_fifo, reinterpret_cast<void**>(frame_out->data),
-                    frame_out->nb_samples) < frame_out->nb_samples)
-                throw std::runtime_error("av_audio_fifo_write error");
-
-            av_frame_unref(frame_out);
+            if (!got_frame && !m_data_info.filter_eof && m_data_info.in_eof &&
+                m_data_info.main_in_eof) {
+                LOGD("sending eof to filter");
+                got_frame = filter_frame(m_av_filter_ctx.src_main_ctx, nullptr,
+                                         frame_out);
+            }
         }
 
-        auto size_to_read =
-            std::min(av_audio_fifo_size(m_av_fifo), m_out_av_ctx->frame_size);
+        if (!got_frame) continue;
 
-        if (size_to_read == 0) return false;
+        if (av_audio_fifo_realloc(m_av_fifo, av_audio_fifo_size(m_av_fifo) +
+                                                 frame_out->nb_samples) < 0)
+            throw std::runtime_error("av_audio_fifo_realloc error");
 
-        frame_out->nb_samples = size_to_read;
-        av_channel_layout_copy(&frame_out->ch_layout, &m_in_av_ctx->ch_layout);
-        frame_out->format = m_out_av_ctx->sample_fmt;
-        frame_out->sample_rate = m_out_av_ctx->sample_rate;
+        if (av_audio_fifo_write(m_av_fifo,
+                                reinterpret_cast<void**>(frame_out->data),
+                                frame_out->nb_samples) < frame_out->nb_samples)
+            throw std::runtime_error("av_audio_fifo_write error");
 
-        if (av_frame_get_buffer(frame_out, 0) != 0)
-            throw std::runtime_error("av_frame_get_buffer error");
+        av_frame_unref(frame_out);
+    }
 
-        if (av_audio_fifo_read(m_av_fifo,
-                               reinterpret_cast<void**>(frame_out->data),
-                               size_to_read) < size_to_read) {
-            throw std::runtime_error("av_audio_fifo_read error");
+    auto size_to_read =
+        std::min(av_audio_fifo_size(m_av_fifo), m_out_av_ctx->frame_size);
+
+    if (size_to_read == 0) return false;
+
+    frame_out->nb_samples = size_to_read;
+    av_channel_layout_copy(&frame_out->ch_layout, &m_out_av_ctx->ch_layout);
+    frame_out->format = m_out_av_ctx->sample_fmt;
+    frame_out->sample_rate = m_out_av_ctx->sample_rate;
+    frame_out->time_base = m_out_av_ctx->time_base;
+
+    if (av_frame_get_buffer(frame_out, 0) != 0)
+        throw std::runtime_error("av_frame_get_buffer error");
+
+    if (av_audio_fifo_read(m_av_fifo, reinterpret_cast<void**>(frame_out->data),
+                           size_to_read) < size_to_read) {
+        throw std::runtime_error("av_audio_fifo_read error");
+    }
+
+    return true;
+}
+
+bool media_compressor::decode_frame_var_size(AVPacket* pkt, AVFrame* frame_in,
+                                             AVFrame* frame_out,
+                                             AVSubtitle* subtitle) {
+    const bool decode_main = m_in_main_av_format_ctx && m_in_main_av_ctx;
+
+    bool got_frame = false;
+
+    while (!m_shutdown && !got_frame && !m_data_info.filter_eof) {
+        if (m_options && m_options->clip_info &&
+            m_in_bytes_read >= m_options->clip_info->stop_bytes) {
+            LOGD("demuxer clip stop");
+            m_data_info.in_eof = true;
+            m_data_info.filter_eof = true;
+            break;
         }
-    } else {
-        while (!m_shutdown) {
-            if (do_clip && m_in_bytes_read >= m_clip_info.stop_bytes) {
-                LOGD("demuxer clip stop");
-                m_data_info.eof = true;
-                break;
-            } else if (auto ret = av_read_frame(m_in_av_format_ctx, pkt);
-                       ret != 0) {
+
+        while (!m_data_info.in_eof) {
+            if (auto ret = av_read_frame(m_in_av_format_ctx, pkt); ret != 0) {
                 if (ret == AVERROR_EOF) {
                     if (m_input_files.empty()) {
                         LOGD("demuxer eof");
-                        m_data_info.eof = true;
+                        m_data_info.in_eof = true;
                     } else {
                         init_av_in_format(m_input_files.front(), false);
                         m_input_files.pop();
@@ -1482,16 +1851,7 @@ bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame_in,
                 }
             }
 
-            pkt->time_base =
-                m_in_av_format_ctx->streams[m_in_stream_idx]->time_base;
-
-            if (m_data_info.eof) {
-                if (m_out_av_ctx->codec_type == AVMEDIA_TYPE_SUBTITLE) {
-                    return false;
-                } else {
-                    return filter_frame(nullptr, frame_out);
-                }
-            }
+            if (m_data_info.in_eof) break;
 
             if (pkt->stream_index != m_in_stream_idx) {
                 av_packet_unref(pkt);
@@ -1508,25 +1868,27 @@ bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame_in,
                 }
 
                 if (got_output == 0) {
-                    LOGW("no subtitle output");
+                    LOGW("subtitle demuxer eof");
                     av_packet_unref(pkt);
-                    m_data_info.eof = true;
+                    m_data_info.in_eof = true;
+                    m_data_info.filter_eof = true;
                     return false;
-                    continue;
                 }
 
                 auto pts = pkt->pts;
                 if (pts == AV_NOPTS_VALUE) pts = pkt->dts;
                 if (pts == AV_NOPTS_VALUE) pts = 0;
 
-                // subtitle->pts = av_rescale_q(pts, pkt->time_base, {1, 1000});
                 subtitle->pts = pts;
                 subtitle->end_display_time =
                     av_rescale_q(pkt->duration, pkt->time_base, {1, 1000});
 
                 av_packet_unref(pkt);
+
+                got_frame = true;
             } else {
-                if (do_clip && m_in_bytes_read < m_clip_info.start_bytes) {
+                if (m_options && m_options->clip_info &&
+                    m_in_bytes_read < m_options->clip_info->start_bytes) {
                     av_packet_unref(pkt);
                     continue;
                 }
@@ -1548,18 +1910,97 @@ bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame_in,
                     throw std::runtime_error("avcodec_receive_frame error");
                 }
 
-                if (!filter_frame(frame_in, frame_out)) continue;
+                got_frame =
+                    filter_frame(m_av_filter_ctx.src_ctx, frame_in, frame_out);
             }
 
             break;
         }
+
+        if (!got_frame && m_data_info.in_eof && !m_data_info.filter_eof) {
+            if (m_out_av_ctx->codec_type == AVMEDIA_TYPE_SUBTITLE) {
+                m_data_info.filter_eof = true;
+                return false;
+            } else {
+                got_frame =
+                    filter_frame(m_av_filter_ctx.src_ctx, nullptr, frame_out);
+            }
+        }
+
+        if (!got_frame && decode_main) {
+            while (!m_data_info.main_in_eof) {
+                if (auto ret = av_read_frame(m_in_main_av_format_ctx, pkt);
+                    ret != 0) {
+                    if (ret == AVERROR_EOF) {
+                        LOGD("main demuxer eof");
+                        m_data_info.main_in_eof = true;
+                    } else {
+                        throw std::runtime_error("main av_read_frame error");
+                    }
+                }
+
+                if (m_data_info.main_in_eof) break;
+
+                if (pkt->stream_index != m_in_main_stream_idx) {
+                    av_packet_unref(pkt);
+                    continue;
+                }
+
+                if (auto ret = avcodec_send_packet(m_in_main_av_ctx, pkt);
+                    ret != 0 && ret != AVERROR(EAGAIN)) {
+                    av_packet_unref(pkt);
+                    LOGW("main audio frame decoding error: "
+                         << ret << " " << str_from_av_error(ret));
+                    continue;
+                }
+
+                av_packet_unref(pkt);
+
+                if (auto ret =
+                        avcodec_receive_frame(m_in_main_av_ctx, frame_in);
+                    ret != 0) {
+                    if (ret == AVERROR(EAGAIN)) continue;
+
+                    throw std::runtime_error("avcodec_receive_frame error");
+                }
+
+                got_frame = filter_frame(m_av_filter_ctx.src_main_ctx, frame_in,
+                                         frame_out);
+
+                break;
+            }
+
+            if (!got_frame && !m_data_info.filter_eof && m_data_info.in_eof &&
+                m_data_info.main_in_eof) {
+                LOGD("sending eof to filter");
+                got_frame = filter_frame(m_av_filter_ctx.src_main_ctx, nullptr,
+                                         frame_out);
+            }
+        }
     }
 
-    return true;
+    if (got_frame && m_out_av_ctx->codec_type != AVMEDIA_TYPE_SUBTITLE) {
+        av_channel_layout_copy(&frame_out->ch_layout, &m_out_av_ctx->ch_layout);
+        frame_out->format = m_out_av_ctx->sample_fmt;
+        frame_out->sample_rate = m_out_av_ctx->sample_rate;
+        frame_out->time_base = m_out_av_ctx->time_base;
+    }
+
+    return got_frame;
 }
 
-bool media_compressor::filter_frame(AVFrame* frame_in, AVFrame* frame_out) {
-    if (av_buffersrc_add_frame_flags(m_av_filter_ctx.src_ctx, frame_in,
+bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame_in,
+                                    AVFrame* frame_out, AVSubtitle* subtitle) {
+    if (m_out_av_ctx->frame_size > 0) {  // encoder needs fix frame size
+        return decode_frame_fix_size(pkt, frame_in, frame_out);
+    }
+
+    return decode_frame_var_size(pkt, frame_in, frame_out, subtitle);
+}
+
+bool media_compressor::filter_frame(AVFilterContext* src_ctx, AVFrame* frame_in,
+                                    AVFrame* frame_out) {
+    if (av_buffersrc_add_frame_flags(src_ctx, frame_in,
                                      AV_BUFFERSRC_FLAG_PUSH) < 0) {
         av_frame_unref(frame_in);
         throw std::runtime_error("av_buffersrc_add_frame_flags error");
@@ -1568,7 +2009,15 @@ bool media_compressor::filter_frame(AVFrame* frame_in, AVFrame* frame_out) {
     av_frame_unref(frame_in);
 
     auto ret = av_buffersink_get_frame(m_av_filter_ctx.sink_ctx, frame_out);
-    if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) return false;
+
+    if (ret == AVERROR(EAGAIN)) return false;
+
+    if (ret == AVERROR_EOF) {
+        LOGD("filter eof");
+        m_data_info.filter_eof = true;
+        return false;
+    }
+
     if (ret < 0) {
         av_frame_unref(frame_out);
         throw std::runtime_error("audio av_buffersink_get_frame error");
@@ -1578,6 +2027,14 @@ bool media_compressor::filter_frame(AVFrame* frame_in, AVFrame* frame_out) {
 }
 
 bool media_compressor::encode_subtitle(AVPacket* pkt, AVSubtitle* subtitle) {
+    if (subtitle == nullptr) {
+        LOGD("encoder eof");
+        m_data_info.in_eof = true;
+        m_data_info.filter_eof = false;
+        m_data_info.eof = true;
+        return false;
+    }
+
     if (av_new_packet(pkt, 1024 * 1024) < 0)
         throw std::runtime_error("av_new_packet for subtitle error");
 
@@ -1601,29 +2058,51 @@ bool media_compressor::encode_subtitle(AVPacket* pkt, AVSubtitle* subtitle) {
     pkt->duration =
         av_rescale_q(subtitle->end_display_time, {1, 1000}, pkt->time_base);
     pkt->dts = pkt->pts;
+    pkt->stream_index = m_out_stream_idx;
 
     return true;
 }
 
 bool media_compressor::encode_frame(AVFrame* frame, AVPacket* pkt) {
-    if (auto ret = avcodec_send_frame(m_out_av_ctx, frame);
-        ret != 0 && ret != AVERROR(EAGAIN) && ret != AVERROR_EOF) {
-        av_frame_unref(frame);
+    auto ret = avcodec_send_frame(m_out_av_ctx, frame);
+
+    av_frame_unref(frame);
+
+    if (ret == AVERROR_EOF) {
+        LOGD("encoder flushed");
+    } else if (ret == AVERROR(EAGAIN)) {
+        LOGD("encoder send again");
+    } else if (ret < 0) {
         LOGW("avcodec_send_frame error: " << ret << " "
                                           << str_from_av_error(ret));
         return false;
     }
 
-    av_frame_unref(frame);
-
     if (auto ret = avcodec_receive_packet(m_out_av_ctx, pkt); ret != 0) {
-        if (ret == AVERROR(EAGAIN)) return false;
-        if (ret == AVERROR_EOF) {
+        if (ret == AVERROR(EAGAIN)) {
+            return false;
+        } else if (ret == AVERROR_EOF) {
             LOGD("encoder eof");
+            m_data_info.in_eof = true;
+            m_data_info.filter_eof = true;
+            m_data_info.eof = true;
             return false;
         }
 
         throw std::runtime_error("audio avcodec_receive_packet error");
+    }
+
+    if (m_out_av_ctx) {
+        pkt->stream_index = m_out_stream_idx;
+        pkt->time_base = m_out_av_ctx->time_base;
+        pkt->pos = -1;
+    } else {
+        auto in_tb = m_in_av_format_ctx->streams[m_in_stream_idx]->time_base;
+        auto out_tb = m_out_av_format_ctx->streams[m_out_stream_idx]->time_base;
+        pkt->duration = av_rescale_q(pkt->duration, in_tb, out_tb);
+        pkt->stream_index = m_out_stream_idx;
+        pkt->time_base = out_tb;
+        pkt->pos = -1;
     }
 
     return true;

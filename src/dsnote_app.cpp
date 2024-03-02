@@ -56,11 +56,11 @@ QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
         case dsnote_app::service_state_t::StateTranslating:
             d << "translating";
             break;
-        case dsnote_app::service_state_t::StateImportingSubtitles:
-            d << "importing-subtitles";
+        case dsnote_app::service_state_t::StateImporting:
+            d << "importing";
             break;
-        case dsnote_app::service_state_t::StateExportingSubtitles:
-            d << "exporting-subtitles";
+        case dsnote_app::service_state_t::StateExporting:
+            d << "exporting";
             break;
         case dsnote_app::service_state_t::StateUnknown:
             d << "unknown";
@@ -227,6 +227,33 @@ QDebug operator<<(QDebug d, dsnote_app::auto_text_format_t format) {
     }
 
     return d;
+}
+
+static QString audio_quality_to_str(settings::audio_quality_t quality) {
+    switch (quality) {
+        case settings::audio_quality_t::AudioQualityVbrHigh:
+            return QStringLiteral("vbr_high");
+        case settings::audio_quality_t::AudioQualityVbrMedium:
+            return QStringLiteral("vbr_medium");
+        case settings::audio_quality_t::AudioQualityVbrLow:
+            return QStringLiteral("vbr_low");
+    }
+
+    return QStringLiteral("vbr_medium");
+}
+
+static media_compressor::quality_t audio_quality_to_media_quality(
+    settings::audio_quality_t quality) {
+    switch (quality) {
+        case settings::audio_quality_t::AudioQualityVbrHigh:
+            return media_compressor::quality_t::vbr_high;
+        case settings::audio_quality_t::AudioQualityVbrMedium:
+            return media_compressor::quality_t::vbr_medium;
+        case settings::audio_quality_t::AudioQualityVbrLow:
+            return media_compressor::quality_t::vbr_low;
+    }
+
+    throw std::runtime_error{"invalid quality value"};
 }
 
 dsnote_app::dsnote_app(QObject *parent)
@@ -959,36 +986,33 @@ void dsnote_app::handle_tts_play_speech_finished(int task) {
     emit intermediate_text_changed();
 }
 
-void dsnote_app::handle_tts_speech_to_file_finished(const QString &file,
+void dsnote_app::handle_tts_speech_to_file_finished(const QStringList &files,
                                                     int task) {
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
     } else {
-        qDebug() << "[dbus => app] signal TtsSpeechToFileFinished:" << file
-                 << task;
+        qDebug() << "[dbus => app] signal TtsSpeechToFileFinished:" << task;
     }
 
-    if (m_dest_file.isEmpty()) return;
+    qDebug() << "speech to file finished";
 
-    if (QFile::exists(m_dest_file)) QFile::remove(m_dest_file);
+    if (m_dest_file_info.output_path.isEmpty()) {
+        qWarning() << "input file is empty";
+        return;
+    }
 
-    if (QFile::copy(file, m_dest_file)) {
-        if (settings::instance()->mtag() &&
-            settings::audio_format_from_filename(m_dest_file) !=
-                settings::audio_format_t::AudioFormatWav) {
-            mtag_tools::write(
-                /*path=*/m_dest_file.toStdString(),
-                /*mtag=*/{
-                    /*title=*/m_dest_file_title_tag.toStdString(),
-                    /*artist=*/
-                    settings::instance()->mtag_artist_name().toStdString(),
-                    /*album=*/
-                    settings::instance()->mtag_album_name().toStdString(),
-                    /*track=*/m_dest_file_track_tag.toInt()});
-        }
+    if (QFile::exists(m_dest_file_info.output_path))
+        QFile::remove(m_dest_file_info.output_path);
 
-        QFile::remove(file);
-        emit speech_to_file_done();
+    if (m_dest_file_info.input_path.isEmpty()) {
+        export_to_audio_internal(files, m_dest_file_info.output_path);
+    } else if (QFile::exists(m_dest_file_info.input_path)) {
+        export_to_audio_mix_internal(m_dest_file_info.input_path,
+                                     m_dest_file_info.input_stream_index, files,
+                                     m_dest_file_info.output_path);
+    } else {
+        qWarning() << "input file doesn't exist:"
+                   << m_dest_file_info.input_path;
     }
 }
 
@@ -1165,6 +1189,8 @@ void dsnote_app::handle_stt_file_transcribe_progress(double new_progress,
         qWarning() << "invalid task id";
         return;
     }
+
+    qDebug() << "transcribe progress:" << new_progress;
 
     m_transcribe_progress = new_progress;
     emit transcribe_progress_changed();
@@ -1807,6 +1833,8 @@ void dsnote_app::cancel() {
             return;
         case media_converter::state_t::importing_subtitles:
         case media_converter::state_t::exporting_to_subtitles:
+        case media_converter::state_t::exporting_to_audio:
+        case media_converter::state_t::exporting_to_audio_mix:
             qDebug() << "cancelling mc";
             m_mc.cancel();
             return;
@@ -2100,27 +2128,17 @@ void dsnote_app::translate() {
     emit intermediate_text_changed();
 }
 
-void dsnote_app::speech_to_file_url(const QUrl &dest_file,
-                                    const QString &title_tag,
-                                    const QString &track_tag) {
-    speech_to_file(dest_file.toLocalFile(), title_tag, track_tag);
-}
-
 void dsnote_app::speech_to_file(const QString &dest_file,
                                 const QString &title_tag,
                                 const QString &track_tag) {
+    m_dest_file_info = dest_file_info_t{};
+
     speech_to_file_internal(
         note(), {}, dest_file, title_tag, track_tag,
         tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
-        settings::instance()->stt_tts_text_format());
-}
-
-void dsnote_app::speech_to_file_translator_url(bool transtalated,
-                                               const QUrl &dest_file,
-                                               const QString &title_tag,
-                                               const QString &track_tag) {
-    speech_to_file_translator(transtalated, dest_file.toLocalFile(), title_tag,
-                              track_tag);
+        settings::instance()->stt_tts_text_format(),
+        settings::instance()->audio_format(),
+        settings::instance()->audio_quality());
 }
 
 void dsnote_app::speech_to_file_translator(bool transtalated,
@@ -2137,6 +2155,8 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
         return;
     }
 
+    m_dest_file_info = dest_file_info_t{};
+
     speech_to_file_internal(
         transtalated ? m_translated_text : note(),
         transtalated ? m_active_tts_model_for_out_mnt
@@ -2147,26 +2167,17 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
                                                   : QString{}
                                : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
                                             : QString{},
-        settings::instance()->mnt_text_format());
-}
-
-static QString audio_quality_to_str(settings::audio_quality_t quality) {
-    switch (quality) {
-        case settings::audio_quality_t::AudioQualityVbrHigh:
-            return QStringLiteral("vbr_high");
-        case settings::audio_quality_t::AudioQualityVbrMedium:
-            return QStringLiteral("vbr_medium");
-        case settings::audio_quality_t::AudioQualityVbrLow:
-            return QStringLiteral("vbr_low");
-    }
-
-    return QStringLiteral("vbr_medium");
+        settings::instance()->mnt_text_format(),
+        settings::instance()->audio_format(),
+        settings::instance()->audio_quality());
 }
 
 void dsnote_app::speech_to_file_internal(
     const QString &text, const QString &model_id, const QString &dest_file,
     const QString &title_tag, const QString &track_tag,
-    const QString &ref_voice, settings::text_format_t text_format) {
+    const QString &ref_voice, settings::text_format_t text_format,
+    settings::audio_format_t audio_format,
+    settings::audio_quality_t audio_quality) {
     if (text.isEmpty()) {
         qWarning() << "text is empty";
         return;
@@ -2183,31 +2194,33 @@ void dsnote_app::speech_to_file_internal(
     options.insert("speech_speed", settings::instance()->speech_speed());
     options.insert("text_format", static_cast<int>(text_format));
     options.insert("sync_subs", settings::instance()->tts_subtitles_sync());
+    options.insert("not_merge_files", true);
 
     if (m_available_tts_ref_voices_map.contains(ref_voice)) {
         auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
         if (l.size() > 1) options.insert("ref_voice_file", l.at(1));
     }
 
-    auto audio_format_str = settings::audio_format_str_from_filename(dest_file);
-    auto audio_ext = settings::audio_ext_from_filename(dest_file);
+    auto audio_format_str =
+        settings::audio_format_str_from_filename(audio_format, dest_file);
+    auto audio_ext = settings::audio_ext_from_filename(audio_format, dest_file);
 
     options.insert("audio_format", audio_format_str);
-    options.insert("audio_quality",
-                   audio_quality_to_str(settings::instance()->audio_quality()));
+    options.insert("audio_quality", audio_quality_to_str(audio_quality));
 
     if (QFileInfo{dest_file}.suffix().toLower() != audio_ext) {
         qDebug() << "file name doesn't have proper extension for audio format";
         if (dest_file.endsWith('.'))
-            m_dest_file = dest_file + audio_ext;
+            m_dest_file_info.output_path = dest_file + audio_ext;
         else
-            m_dest_file = dest_file + '.' + audio_ext;
+            m_dest_file_info.output_path =
+                m_dest_file_info.output_path + '.' + audio_ext;
     } else {
-        m_dest_file = dest_file;
+        m_dest_file_info.output_path = dest_file;
     }
 
-    m_dest_file_title_tag = title_tag;
-    m_dest_file_track_tag = track_tag;
+    m_dest_file_info.title_tag = title_tag;
+    m_dest_file_info.track_tag = track_tag;
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
@@ -2231,10 +2244,13 @@ void dsnote_app::set_service_state(service_state_t new_service_state) {
         case media_converter::state_t::cancelling:
             break;
         case media_converter::state_t::importing_subtitles:
-            new_service_state = service_state_t::StateImportingSubtitles;
+            new_service_state = service_state_t::StateImporting;
             break;
         case media_converter::state_t::exporting_to_subtitles:
-            new_service_state = service_state_t::StateExportingSubtitles;
+        case media_converter::state_t::exporting_to_audio:
+        case media_converter::state_t::exporting_to_audio_mix:
+            new_service_state = service_state_t::StateExporting;
+
             break;
     }
 
@@ -2287,6 +2303,8 @@ void dsnote_app::set_task_state(service_task_state_t new_task_state) {
         case media_converter::state_t::error:
         case media_converter::state_t::importing_subtitles:
         case media_converter::state_t::exporting_to_subtitles:
+        case media_converter::state_t::exporting_to_audio:
+        case media_converter::state_t::exporting_to_audio_mix:
             break;
     }
 
@@ -2831,15 +2849,12 @@ QVariantMap dsnote_app::file_info(const QString &file) const {
     QString type = "unknown";
 
     if (info) {
-        if (!info->video_streams.empty())
-            type = "video";
-        else if (!info->audio_streams.empty())
+        if (!info->audio_streams.empty())
             type = "audio";
         else if (!info->subtitles_streams.empty())
             type = "sub";
         map.insert("type", type);
 
-        map.insert("video_streams", make_streams_names(info->video_streams));
         map.insert("audio_streams", make_streams_names(info->audio_streams));
         map.insert("sub_streams", make_streams_names(info->subtitles_streams));
     }
@@ -2912,7 +2927,8 @@ void dsnote_app::undo_or_redu_note() {
 void dsnote_app::handle_translator_settings_changed() {
     if (settings::instance()->translator_mode()) {
         if (settings::instance()->translate_when_typing()) translate_delayed();
-    } else if (m_files_to_open.empty()) {
+    } else if (m_files_to_open.empty() &&
+               task_state() != service_task_state_t::TaskStateCancelling) {
         cancel();
     }
 }
@@ -2927,50 +2943,178 @@ void dsnote_app::handle_note_changed() {
     update_auto_text_format_delayed();
 }
 
-void dsnote_app::export_to_subtitles(const QString &dest_file,
-                                     settings::text_file_format_t format,
-                                     const QString &text) {
+static QString make_note_tmp_file(const QString &text) {
     auto tmp_file = QDir{settings::instance()->cache_dir()}.filePath("tmp.srt");
 
     QFile file{tmp_file};
+
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qWarning() << "failed to open file for write:" << dest_file;
-        emit error(error_t::ErrorExportFileGeneral);
-        return;
+        qWarning() << "failed to open tmp file for write";
+        return {};
     }
+
     QTextStream out{&file};
     out << text;
     file.close();
 
+    return tmp_file;
+}
+
+void dsnote_app::export_to_audio_mix_translator(bool transtalated,
+                                                const QString &input_file,
+                                                int input_stream_index,
+                                                const QString &dest_file,
+                                                const QString &title_tag,
+                                                const QString &track_tag) {
+    if (!transtalated && m_active_tts_model_for_in_mnt.isEmpty()) {
+        qWarning() << "no active tts model for in mnt";
+        return;
+    }
+
+    if (transtalated && m_active_tts_model_for_out_mnt.isEmpty()) {
+        qWarning() << "no active tts model for out mnt";
+        return;
+    }
+
+    m_dest_file_info = dest_file_info_t{};
+    m_dest_file_info.input_path = input_file;
+    m_dest_file_info.input_stream_index = input_stream_index;
+
+    speech_to_file_internal(
+        transtalated ? m_translated_text : note(),
+        transtalated ? m_active_tts_model_for_out_mnt
+                     : m_active_tts_model_for_in_mnt,
+        dest_file, title_tag, track_tag,
+        transtalated                        ? tts_for_out_mnt_ref_voice_needed()
+                                                  ? active_tts_for_out_mnt_ref_voice()
+                                                  : QString{}
+                               : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
+                                            : QString{},
+        settings::instance()->mnt_text_format(),
+        settings::audio_format_t::AudioFormatOggOpus,
+        settings::audio_quality_t::AudioQualityVbrHigh);
+}
+
+void dsnote_app::export_to_audio_mix(const QString &input_file,
+                                     int input_stream_index,
+                                     const QString &dest_file,
+                                     const QString &title_tag,
+                                     const QString &track_tag) {
+    m_dest_file_info = dest_file_info_t{};
+    m_dest_file_info.input_path = input_file;
+    m_dest_file_info.input_stream_index = input_stream_index;
+
+    speech_to_file_internal(
+        note(), {}, dest_file, title_tag, track_tag,
+        tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
+        settings::instance()->stt_tts_text_format(),
+        settings::audio_format_t::AudioFormatOggOpus,
+        settings::audio_quality_t::AudioQualityVbrHigh);
+}
+
+void dsnote_app::export_to_audio_internal(const QStringList &input_files,
+                                          const QString &dest_file) {
+    auto format = settings::instance()->audio_format();
+
+    if (format == settings::audio_format_t::AudioFormatAuto)
+        format = settings::filename_to_audio_format_static(
+            QFileInfo{dest_file}.fileName());
+
+    if (!m_mc.export_to_audio_async(
+            input_files, dest_file,
+            [format] {
+                switch (format) {
+                    case settings::audio_format_t::AudioFormatMp3:
+                        return media_compressor::format_t::audio_mp3;
+                    case settings::audio_format_t::AudioFormatOggOpus:
+                        return media_compressor::format_t::audio_ogg_opus;
+                    case settings::audio_format_t::AudioFormatOggVorbis:
+                        return media_compressor::format_t::audio_ogg_vorbis;
+                    case settings::audio_format_t::AudioFormatWav:
+                        return media_compressor::format_t::audio_wav;
+                    case settings::audio_format_t::AudioFormatAuto:
+                        break;
+                }
+                throw std::runtime_error{"invalid format"};
+            }(),
+            audio_quality_to_media_quality(
+                settings::instance()->audio_quality()))) {
+        qWarning() << "failed export to audio";
+        emit error(error_t::ErrorExportFileGeneral);
+    }
+}
+
+void dsnote_app::export_to_audio_mix_internal(const QString &main_input_file,
+                                              int main_stream_index,
+                                              const QStringList &input_files,
+                                              const QString &dest_file) {
+    auto format = settings::instance()->audio_format();
+
+    if (format == settings::audio_format_t::AudioFormatAuto)
+        format = settings::filename_to_audio_format_static(
+            QFileInfo{dest_file}.fileName());
+
+    if (!m_mc.export_to_audio_mix_async(
+            main_input_file, main_stream_index, input_files, dest_file,
+            [format] {
+                switch (format) {
+                    case settings::audio_format_t::AudioFormatMp3:
+                        return media_compressor::format_t::audio_mp3;
+                    case settings::audio_format_t::AudioFormatOggOpus:
+                        return media_compressor::format_t::audio_ogg_opus;
+                    case settings::audio_format_t::AudioFormatOggVorbis:
+                        return media_compressor::format_t::audio_ogg_vorbis;
+                    case settings::audio_format_t::AudioFormatWav:
+                        return media_compressor::format_t::audio_wav;
+                    case settings::audio_format_t::AudioFormatAuto:
+                        break;
+                }
+                throw std::runtime_error{"invalid format"};
+            }(),
+            audio_quality_to_media_quality(
+                settings::instance()->audio_quality()),
+            settings::instance()->mix_volume_change())) {
+        qWarning() << "failed export to audio mix";
+        emit error(error_t::ErrorExportFileGeneral);
+    }
+}
+
+void dsnote_app::export_to_subtitles(const QString &dest_file,
+                                     settings::text_file_format_t format,
+                                     const QString &text) {
+    auto tmp_file = make_note_tmp_file(text);
+    if (tmp_file.isEmpty()) {
+        emit error(error_t::ErrorExportFileGeneral);
+        return;
+    }
+
     if (!m_mc.export_to_subtitles_async(tmp_file, dest_file, [format] {
             switch (format) {
                 case settings::text_file_format_t::TextFileFormatAss:
-                    return media_compressor::format_t::ass;
+                    return media_compressor::format_t::sub_ass;
                 case settings::text_file_format_t::TextFileFormatVtt:
-                    return media_compressor::format_t::vtt;
+                    return media_compressor::format_t::sub_vtt;
                 case settings::text_file_format_t::TextFileFormatSrt:
                 case settings::text_file_format_t::TextFileFormatRaw:
                 case settings::text_file_format_t::TextFileFormatAuto:
                     break;
             }
-            return media_compressor::format_t::srt;
+            return media_compressor::format_t::sub_srt;
         }())) {
         qWarning() << "failed to export to subtitles:" << dest_file;
         emit error(error_t::ErrorExportFileGeneral);
-        return;
     }
 }
 
-void dsnote_app::export_to_text_file(
-    const QString &dest_file,
-    /*settings::text_file_format_t*/ int format, bool translation) {
-    auto enum_format = static_cast<settings::text_file_format_t>(format);
+void dsnote_app::export_to_text_file(const QString &dest_file,
+                                     bool translation) {
+    auto format = settings::instance()->text_file_format();
 
-    if (enum_format == settings::text_file_format_t::TextFileFormatAuto)
-        enum_format = settings::filename_to_text_file_format_static(
+    if (format == settings::text_file_format_t::TextFileFormatAuto)
+        format = settings::filename_to_text_file_format_static(
             QFileInfo{dest_file}.fileName());
 
-    switch (enum_format) {
+    switch (format) {
         case settings::text_file_format_t::TextFileFormatRaw:
             export_to_file_internal(translation ? translated_text() : note(),
                                     dest_file);
@@ -2978,7 +3122,7 @@ void dsnote_app::export_to_text_file(
         case settings::text_file_format_t::TextFileFormatSrt:
         case settings::text_file_format_t::TextFileFormatAss:
         case settings::text_file_format_t::TextFileFormatVtt:
-            export_to_subtitles(dest_file, enum_format,
+            export_to_subtitles(dest_file, format,
                                 translation ? translated_text() : note());
             break;
         case settings::text_file_format_t::TextFileFormatAuto:
@@ -3082,11 +3226,39 @@ void dsnote_app::handle_mc_state_changed() {
                     emit can_open_next_file();
                 }
                 break;
-            case media_converter::task_t::export_to_subtitles_async:
-                if (mc_error)
+            case media_converter::task_t::export_to_audio_async:
+            case media_converter::task_t::export_to_audio_mix_async:
+                if (mc_error) {
                     emit error(error_t::ErrorExportFileGeneral);
-                else
+                } else {
+                    if (settings::instance()->mtag() &&
+                        settings::audio_format_from_filename(
+                            m_dest_file_info.output_path) !=
+                            settings::audio_format_t::AudioFormatWav) {
+                        mtag_tools::write(
+                            /*path=*/m_dest_file_info.output_path.toStdString(),
+                            /*mtag=*/{
+                                /*title=*/m_dest_file_info.title_tag
+                                    .toStdString(),
+                                /*artist=*/
+                                settings::instance()
+                                    ->mtag_artist_name()
+                                    .toStdString(),
+                                /*album=*/
+                                settings::instance()
+                                    ->mtag_album_name()
+                                    .toStdString(),
+                                /*track=*/m_dest_file_info.track_tag.toInt()});
+                    }
                     emit save_note_to_file_done();
+                }
+                break;
+            case media_converter::task_t::export_to_subtitles_async:
+                if (mc_error) {
+                    emit error(error_t::ErrorExportFileGeneral);
+                } else {
+                    emit save_note_to_file_done();
+                }
                 break;
             case media_converter::task_t::none:
                 break;
@@ -3118,12 +3290,14 @@ QStringList dsnote_app::make_streams_names(
                            case media_compressor::media_type_t::subtitles:
                                name.append(tr("Subtitles"));
                                break;
+                           case media_compressor::media_type_t::unknown:
+                               throw std::runtime_error{"invalid media type"};
                        }
 
                        name.append(" · ");
 
                        if (stream.title.empty()) {
-                           name.append(tr("Unnamed stream") +
+                           name.append(tr("Unnamed stream") + " " +
                                        QString::number(names.size() + 1));
                        } else {
                            name.append(QString::fromStdString(stream.title));
@@ -3226,6 +3400,7 @@ dsnote_app::file_import_result_t dsnote_app::import_file_internal(
                                              : text_destination_t::note_add;
                 return file_import_result_t::ok_import_subtitles;
             case media_compressor::media_type_t::video:
+            case media_compressor::media_type_t::unknown:
                 break;
         }
 
@@ -3722,11 +3897,8 @@ void dsnote_app::player_play_voice_ref_idx(int idx) {
         QFileInfo{list.at(1)}.fileName() + "-refvoice.wav");
 
     try {
-        media_compressor{}.decompress_to_file(
-            {list.at(1).toStdString()}, wav_file.toStdString(),
-            {media_compressor::quality_t::vbr_medium, /*mono=*/false,
-             /*sample_rate_16=*/false,
-             /*stream=*/{}});
+        media_compressor{}.decompress_to_file({list.at(1).toStdString()},
+                                              wav_file.toStdString(), {});
     } catch (const std::runtime_error &err) {
         qCritical() << err.what();
         return;
@@ -3848,11 +4020,17 @@ void dsnote_app::player_export_ref_voice(long long start, long long stop,
     auto wav_file_path = import_ref_voice_file_path();
 
     try {
+        media_compressor::options_t opts{
+            media_compressor::quality_t::vbr_high,
+            media_compressor::flags_t::flag_none,
+            {},
+            /*clip_info=*/
+            media_compressor::clip_info_t{static_cast<uint64_t>(start),
+                                          static_cast<uint64_t>(stop), 0, 0}};
+
         media_compressor{}.compress_to_file(
             {wav_file_path.toStdString()}, out_file_path.toStdString(),
-            media_compressor::format_t::ogg_opus,
-            {media_compressor::quality_t::vbr_high, false, false, {}},
-            {static_cast<uint64_t>(start), static_cast<uint64_t>(stop), 0, 0});
+            media_compressor::format_t::audio_ogg_opus, opts);
     } catch (const std::runtime_error &error) {
         qWarning() << "can't compress file:" << error.what();
         return;
@@ -3974,8 +4152,8 @@ void dsnote_app::update_tray_state() {
         case service_state_t::StateUnknown:
         case service_state_t::StateNotConfigured:
         case service_state_t::StateBusy:
-        case service_state_t::StateImportingSubtitles:
-        case service_state_t::StateExportingSubtitles:
+        case service_state_t::StateImporting:
+        case service_state_t::StateExporting:
             m_tray.set_state(tray_icon::state_t::busy);
             break;
         case service_state_t::StateIdle:

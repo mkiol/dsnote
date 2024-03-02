@@ -15,9 +15,7 @@ import harbour.dsnote.Dsnote 1.0
 PullDownMenu {
     id: root
 
-    busy: app.busy || service.busy ||
-          app.state === DsnoteApp.StateTranscribingFile ||
-          app.state === DsnoteApp.StateExtractingSubtitles
+    busy: app.busy || service.busy || app.state !== DsnoteApp.StateIdle
 
     MenuItem {
         text: qsTr("About %1").arg(APP_NAME)

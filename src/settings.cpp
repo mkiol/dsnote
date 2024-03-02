@@ -112,6 +112,21 @@ static QString text_file_format_to_ext(settings::text_file_format_t format) {
     return QStringLiteral("txt");
 }
 
+static QString video_file_format_to_ext(settings::video_file_format_t format) {
+    switch (format) {
+        case settings::video_file_format_t::VideoFileFormatMp4:
+            return QStringLiteral("mp4");
+        case settings::video_file_format_t::VideoFileFormatMkv:
+            return QStringLiteral("mkv");
+        case settings::video_file_format_t::VideoFileFormatWebm:
+            return QStringLiteral("webm");
+        case settings::video_file_format_t::VideoFileFormatAuto:
+            break;
+    }
+
+    return QStringLiteral("mkv");
+}
+
 static QString audio_format_to_str(settings::audio_format_t format) {
     switch (format) {
         case settings::audio_format_t::AudioFormatWav:
@@ -518,10 +533,10 @@ QString settings::audio_file_save_filename() const {
     auto filename =
         value(QStringLiteral("audio_file_save_last_filename")).toString();
 
-    return file_save_filename(QDir{audio_file_save_dir()}, filename,
-                              filename.isEmpty()
-                                  ? audio_format_to_ext(audio_format())
-                                  : audio_ext_from_filename(filename));
+    return file_save_filename(
+        QDir{audio_file_save_dir()}, filename,
+        filename.isEmpty() ? audio_format_to_ext(audio_format())
+                           : audio_ext_from_filename(audio_format(), filename));
 }
 
 QString settings::video_file_save_dir() const {
@@ -567,12 +582,10 @@ QString settings::video_file_save_filename() const {
     auto filename =
         value(QStringLiteral("video_file_save_last_filename")).toString();
 
-    // TODO:
-    // return file_save_filename(
-    //     QDir{video_file_save_dir()}, filename,
-    //     filename.isEmpty() ? video_file_format_to_ext(video_file_format())
-    //                        : video_file_ext_from_filename(filename));
-    return {};
+    return file_save_filename(
+        QDir{video_file_save_dir()}, filename,
+        filename.isEmpty() ? video_file_format_to_ext(video_file_format())
+                           : video_file_ext_from_filename(filename));
 }
 
 QString settings::text_file_save_dir() const {
@@ -743,6 +756,20 @@ settings::text_file_format_t settings::text_file_format() const {
             .toInt());
 }
 
+void settings::set_video_file_format(video_file_format_t value) {
+    if (video_file_format() != value) {
+        setValue(QStringLiteral("video_file_format"), static_cast<int>(value));
+        emit video_file_format_changed();
+    }
+}
+
+settings::video_file_format_t settings::video_file_format() const {
+    return static_cast<video_file_format_t>(
+        value(QStringLiteral("video_file_format"),
+              static_cast<int>(video_file_format_t::VideoFileFormatAuto))
+            .toInt());
+}
+
 void settings::set_audio_format(audio_format_t value) {
     if (audio_format() != value) {
         setValue(QStringLiteral("audio_format"), static_cast<int>(value));
@@ -796,7 +823,7 @@ QString settings::mtag_artist_name() const {
 }
 
 bool settings::mtag() const {
-    return value(QStringLiteral("mtag"), true).toBool();
+    return value(QStringLiteral("mtag"), false).toBool();
 }
 
 void settings::set_mtag(bool value) {
@@ -1033,21 +1060,28 @@ settings::audio_format_t settings::audio_format_from_filename(
     }
 }
 
-QString settings::audio_format_str_from_filename(const QString& filename) {
-    if (settings::instance()->audio_format() ==
-        settings::audio_format_t::AudioFormatAuto) {
+QString settings::audio_format_str_from_filename(audio_format_t audio_format,
+                                                 const QString& filename) {
+    if (audio_format == settings::audio_format_t::AudioFormatAuto)
+        audio_format = settings::instance()->audio_format();
+
+    if (audio_format == settings::audio_format_t::AudioFormatAuto) {
         return audio_format_to_str(filename_to_audio_format_static(filename));
     } else {
-        return audio_format_to_str(settings::instance()->audio_format());
+        return audio_format_to_str(audio_format);
     }
 }
 
-QString settings::audio_ext_from_filename(const QString& filename) {
+QString settings::audio_ext_from_filename(audio_format_t audio_format,
+                                          const QString& filename) {
+    if (audio_format == settings::audio_format_t::AudioFormatAuto)
+        audio_format = settings::instance()->audio_format();
+
     if (settings::instance()->audio_format() ==
         settings::audio_format_t::AudioFormatAuto) {
         return audio_format_to_ext(filename_to_audio_format_static(filename));
     } else {
-        return audio_format_to_ext(settings::instance()->audio_format());
+        return audio_format_to_ext(audio_format);
     }
 }
 
@@ -1100,6 +1134,33 @@ settings::text_file_format_t settings::filename_to_text_file_format_static(
     return text_file_format_t::TextFileFormatAuto;
 }
 
+QString settings::video_file_ext_from_filename(const QString& filename) {
+    if (settings::instance()->video_file_format() ==
+        settings::video_file_format_t::VideoFileFormatAuto) {
+        return video_file_format_to_ext(
+            filename_to_video_file_format_static(filename));
+    } else {
+        return video_file_format_to_ext(
+            settings::instance()->video_file_format());
+    }
+}
+
+settings::video_file_format_t settings::filename_to_video_file_format(
+    const QString& filename) const {
+    return filename_to_video_file_format_static(QFileInfo{filename}.fileName());
+}
+
+settings::video_file_format_t settings::filename_to_video_file_format_static(
+    const QString& filename) {
+    if (filename.endsWith(QLatin1String(".mp4"), Qt::CaseInsensitive))
+        return video_file_format_t::VideoFileFormatMp4;
+    if (filename.endsWith(QLatin1String(".mkv"), Qt::CaseInsensitive))
+        return video_file_format_t::VideoFileFormatMkv;
+    if (filename.endsWith(QLatin1String(".webm"), Qt::CaseInsensitive))
+        return video_file_format_t::VideoFileFormatWebm;
+    return video_file_format_t::VideoFileFormatAuto;
+}
+
 bool settings::file_exists(const QString& file_path) const {
     return QFileInfo::exists(file_path.trimmed());
 }
@@ -1124,8 +1185,10 @@ static QString add_ext_to_filename(QString filename, QString ext) {
 }
 
 QString settings::add_ext_to_audio_filename(const QString& filename) const {
-    return add_ext_to_filename(filename.trimmed(),
-                               audio_ext_from_filename(filename.trimmed()));
+    return add_ext_to_filename(
+        filename.trimmed(),
+        audio_ext_from_filename(settings::instance()->audio_format(),
+                                filename.trimmed()));
 }
 
 QString settings::add_ext_to_audio_file_path(const QString& file_path) const {
@@ -1143,6 +1206,18 @@ QString settings::add_ext_to_text_file_path(const QString& file_path) const {
     QFileInfo fi{file_path.trimmed()};
     return fi.absoluteDir().absoluteFilePath(
         add_ext_to_text_file_filename(fi.fileName()));
+}
+
+QString settings::add_ext_to_video_file_filename(
+    const QString& filename) const {
+    return add_ext_to_filename(
+        filename.trimmed(), video_file_ext_from_filename(filename.trimmed()));
+}
+
+QString settings::add_ext_to_video_file_path(const QString& file_path) const {
+    QFileInfo fi{file_path.trimmed()};
+    return fi.absoluteDir().absoluteFilePath(
+        add_ext_to_video_file_filename(fi.fileName()));
 }
 
 QString settings::base_name_from_file_path(const QString& file_path) const {
@@ -1532,6 +1607,20 @@ void settings::set_diacritizer_enabled(bool value) {
     }
 }
 
+int settings::mix_volume_change() const {
+    return std::clamp(value(QStringLiteral("mix_volume_change"), 0).toInt(),
+                      -30, 30);
+}
+
+void settings::set_mix_volume_change(int value) {
+    value = std::clamp(value, -30, 30);
+
+    if (mix_volume_change() != value) {
+        setValue(QStringLiteral("mix_volume_change"), value);
+        emit mix_volume_change_changed();
+    }
+}
+
 int settings::num_threads() const {
     auto num_threads = value(QStringLiteral("service/num_threads"), 0).toInt();
     return num_threads < 0 ? 0 : num_threads;
@@ -1680,6 +1769,20 @@ void settings::set_file_import_action(file_import_action_t value) {
     if (value != file_import_action()) {
         setValue(QStringLiteral("file_import_action"), static_cast<int>(value));
         emit file_import_action_changed();
+    }
+}
+
+settings::default_export_tab_t settings::default_export_tab() const {
+    return static_cast<default_export_tab_t>(
+        value(QStringLiteral("default_export_tab"),
+              static_cast<int>(default_export_tab_t::DefaultExportTabText))
+            .toInt());
+}
+
+void settings::set_default_export_tab(default_export_tab_t value) {
+    if (value != default_export_tab()) {
+        setValue(QStringLiteral("default_export_tab"), static_cast<int>(value));
+        emit default_export_tab_changed();
     }
 }
 

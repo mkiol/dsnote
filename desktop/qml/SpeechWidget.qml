@@ -85,8 +85,8 @@ RowLayout {
                         running: app.busy || service.busy ||
                                  app.state === DsnoteApp.StateTranscribingFile ||
                                  app.state === DsnoteApp.StateWritingSpeechToFile ||
-                                 app.state === DsnoteApp.StateImportingSubtitles ||
-                                 app.state === DsnoteApp.StateExportingSubtitles
+                                 app.state === DsnoteApp.StateImporting ||
+                                 app.state === DsnoteApp.StateExporting
                         visible: running
                     }
                 }
@@ -123,28 +123,28 @@ RowLayout {
                             if (app.task_state === DsnoteApp.TaskStateInitializing)
                                 return qsTr("Getting ready, please wait...")
                             if (app.state === DsnoteApp.StateWritingSpeechToFile)
-                                return qsTr("Writing speech to file...") +
+                                return qsTr("Converting text to speech...") +
                                         (app.speech_to_file_progress > 0.0 ? " " +
                                                                              Math.round(app.speech_to_file_progress * 100) + "%" : "")
-                            if (app.state === DsnoteApp.StateImportingSubtitles)
-                                return qsTr("Importing subtitles...") +
+                            if (app.state === DsnoteApp.StateImporting)
+                                return qsTr("Importing from a file...") +
                                         (app.mc_progress > 0.0 ? " " + Math.round(app.mc_progress * 100) + "%" : "")
-                            if (app.state === DsnoteApp.StateExportingSubtitles)
-                                return qsTr("Exporting subtitles...")
+                            if (app.state === DsnoteApp.StateExporting)
+                                return qsTr("Exporting to a file...") +
+                                        (app.mc_progress > 0.0 ? " " + Math.round(app.mc_progress * 100) + "%" : "")
                             if (app.state === DsnoteApp.StateTranslating)
                                 return qsTr("Translating...") +
                                         (app.translate_progress > 0.0 ? " " +
                                                                              Math.round(app.translate_progress * 100) + "%" : "")
-                            if (app.task_state === DsnoteApp.TaskStateProcessing)
-                                return qsTr("Processing, please wait...")
                             if (app.state === DsnoteApp.StateTranscribingFile)
                                 return qsTr("Transcribing audio file...") +
                                         (app.transcribe_progress > 0.0 ? " " +
                                                                          Math.round(app.transcribe_progress * 100) + "%" : "")
+                            if (app.task_state === DsnoteApp.TaskStateProcessing)
+                                return qsTr("Processing, please wait...")
                             if (app.state === DsnoteApp.StateListeningSingleSentence ||
                                     app.state === DsnoteApp.StateListeningAuto ||
                                     app.state === DsnoteApp.StateListeningManual) return qsTr("Say something...")
-
                             if (app.task_state === DsnoteApp.TaskStateSpeechPaused) return qsTr("Reading is paused.")
                             if (app.state === DsnoteApp.StatePlayingSpeech) return qsTr("Reading a note...")
 
@@ -276,8 +276,8 @@ RowLayout {
                              app.state === DsnoteApp.StatePlayingSpeech ||
                              app.state === DsnoteApp.StateWritingSpeechToFile ||
                              app.state === DsnoteApp.StateTranslating ||
-                             app.state === DsnoteApp.StateExportingSubtitles ||
-                             app.state === DsnoteApp.StateImportingSubtitles)
+                             app.state === DsnoteApp.StateExporting ||
+                             app.state === DsnoteApp.StateImporting)
                     text: qsTr("Cancel")
                     onClicked: app.cancel()
                 }

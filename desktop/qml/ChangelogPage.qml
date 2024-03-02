@@ -39,6 +39,10 @@ DialogPage {
         <li>New voice for Persian language: <i>Piper Gyro Medium</i></li>
         <li>Settings option to enable/disable speech synchronization with subtitle timestamps (<i>Text to Speech</i> &rarr; <i>Sync speech with timestamps</i>).
             This may be useful for creating voiceovers.</li>
+        <li>Mixing speech with audio from an existing file.
+            When exporting to a file, you can overlay speech with audio from an existing media file.
+            This can be useful when creating voice overs from subtitles
+            (<i>Export to a file</i> &rarr; <i>Mix speech with audio from an existing file</i>).</li>
         </ul>
         <p>" + qsTr("Translator") + ":</p>
         <ul>

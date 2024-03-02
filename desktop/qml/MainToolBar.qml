@@ -93,7 +93,7 @@ ToolBar {
                     MenuItem {
                         text: qsTr("Import from a file")
                         icon.name: "document-open-symbolic"
-                        enabled: !app.busy
+                        enabled: !app.busy && app.state === DsnoteApp.StateIdle
                         onClicked: {
                             fileReadDialog.open()
                         }
@@ -110,7 +110,7 @@ ToolBar {
                     MenuItem {
                         text: qsTr("Export to a file")
                         icon.name: "document-save-symbolic"
-                        enabled: app.note.length !== 0 && !app.busy
+                        enabled: app.note.length !== 0 && !app.busy && app.state === DsnoteApp.StateIdle
                         onClicked: {
                             appWin.openDialog("ExportFilePage.qml", {"translated": false})
                         }
@@ -124,7 +124,7 @@ ToolBar {
                     MenuItem {
                         text: qsTr("Export the translation to a file")
                         icon.name: "document-save-symbolic"
-                        enabled: app.translated_text.length !== 0 && _settings.translator_mode && !app.busy
+                        enabled: app.translated_text.length !== 0 && _settings.translator_mode && !app.busy && app.state === DsnoteApp.StateIdle
                         onClicked: {
                             appWin.openDialog("ExportFilePage.qml", {"translated": true})
                         }

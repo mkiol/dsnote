@@ -414,13 +414,14 @@
 
         <!--
             TtsSpeechToFileFinished:
-            @file: path to wav file with speech audio
+            @files: list of paths to file with speech audio
             @task: id of task returned in TtsSpeechToFile call
 
             Emitted whenever speech synthesis is completely finished.
         -->
         <signal name="TtsSpeechToFileFinished">
-            <arg name="file" type="s" direction="out" />
+            <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QStringList"/>
+            <arg name="files" type="as" direction="out" />
             <arg name="task" type="i" direction="out" />
         </signal>
 

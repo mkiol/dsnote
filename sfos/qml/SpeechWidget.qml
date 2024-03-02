@@ -37,9 +37,9 @@ SpeechPanel {
     busy: app.task_state !== DsnoteApp.TaskStateProcessing &&
           app.task_state !== DsnoteApp.TaskStateInitializing &&
           (app.state === DsnoteApp.StateTranscribingFile ||
-          app.state === DsnoteApp.StateWritingSpeechToFile ||
-          app.state === DsnoteApp.StateImportingSubtitles ||
-          app.state === DsnoteApp.StateExportingSubtitles)
+           app.state === DsnoteApp.StateWritingSpeechToFile ||
+           app.state === DsnoteApp.StateImporting ||
+           app.state === DsnoteApp.StateExporting)
     text: app.intermediate_text
     textPlaceholder: {
         if (!app.connected) return qsTr("Starting...")
@@ -48,15 +48,13 @@ SpeechPanel {
         if (app.task_state === DsnoteApp.TaskStateCancelling)
             return qsTr("Cancelling, please wait...")
         if (app.task_state === DsnoteApp.TaskStateInitializing) return qsTr("Getting ready, please wait...")
-        if (app.state === DsnoteApp.StateWritingSpeechToFile) return qsTr("Writing speech to file...")
-        if (app.state === DsnoteApp.StateImportingSubtitles)
-            return qsTr("Importing subtitles...") +
-                    (app.mc_progress > 0.0 ? " " + Math.round(app.mc_progress * 100) + "%" : "")
-        if (app.state === DsnoteApp.StateExportingSubtitles)
-            return qsTr("Exporting subtitles...")
+        if (app.state === DsnoteApp.StateWritingSpeechToFile) return qsTr("Converting text to speech...")
+        if (app.state === DsnoteApp.StateImporting)
+            return qsTr("Importing from a file...")
+        if (app.state === DsnoteApp.StateExporting)
+            return qsTr("Exporting to a file...")
         if (app.state === DsnoteApp.StateTranslating)
-            return qsTr("Translating...") +
-                    (app.translate_progress > 0.0 ? " " + Math.round(app.translate_progress * 100) + "%" : "")
+            return qsTr("Translating...")
         if (app.task_state === DsnoteApp.TaskStateProcessing) return qsTr("Processing, please wait...")
         if (app.state === DsnoteApp.StateTranscribingFile) return qsTr("Transcribing audio file...")
         if (app.state === DsnoteApp.StateListeningSingleSentence ||
@@ -69,5 +67,7 @@ SpeechPanel {
 
     progress: app.state === DsnoteApp.StateTranscribingFile ? app.transcribe_progress :
               app.state === DsnoteApp.StateWritingSpeechToFile ? app.speech_to_file_progress :
-              app.state === DsnoteApp.StateImportingSubtitles ? app.mc_progress : -1.0
+              app.state === DsnoteApp.StateTranslating ? app.translate_progress :
+              app.state === DsnoteApp.StateImporting || app.state === DsnoteApp.StateExporting ?
+                                                             app.mc_progress : -1.0
 }

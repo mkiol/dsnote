@@ -148,7 +148,8 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </signal>\n"
 "    <signal name=\"TtsSpeechToFileFinished\">\n"
-"      <arg direction=\"out\" type=\"s\" name=\"file\"/>\n"
+"      <annotation value=\"QStringList\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
+"      <arg direction=\"out\" type=\"as\" name=\"files\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </signal>\n"
 "    <signal name=\"TtsPartialSpeechPlaying\">\n"
@@ -423,7 +424,7 @@ Q_SIGNALS: // SIGNALS
     void TtsModelsPropertyChanged(const QVariantMap &models);
     void TtsPartialSpeechPlaying(const QString &text, int task);
     void TtsPlaySpeechFinished(int task);
-    void TtsSpeechToFileFinished(const QString &file, int task);
+    void TtsSpeechToFileFinished(const QStringList &files, int task);
     void TtsSpeechToFileProgress(double progress, int task);
     void TttLangsPropertyChanged(const QVariantMap &langs);
     void TttModelsPropertyChanged(const QVariantMap &models);

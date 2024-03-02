@@ -52,13 +52,18 @@ void file_source::start() {
                                 {}})
                       : std::nullopt;
 
-    m_mc.decompress_to_data_raw_async(
-        {m_file.toStdString()},
-        /*options=*/
-        {media_compressor::quality_t::vbr_medium, /*mono=*/true,
-         /*sample_rate_16=*/true, /*stream=*/std::move(stream)},
-        /*data_ready_callback=*/{},
-        /*task_finished_callback=*/{});
+    media_compressor::options_t opts{
+        media_compressor::quality_t::vbr_medium,
+        media_compressor::flags_t::flag_force_mono_output |
+            media_compressor::flags_t::flag_force_16k_sample_rate_output,
+        stream,
+        /*clip_info=*/{}};
+
+    m_mc.decompress_to_data_raw_async({m_file.toStdString()},
+                                      /*options=*/
+                                      opts,
+                                      /*data_ready_callback=*/{},
+                                      /*task_finished_callback=*/{});
 }
 
 void file_source::handle_read_timeout() {

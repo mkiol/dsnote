@@ -23,18 +23,22 @@ class media_converter : public QObject {
         cancelling,
         error,
         importing_subtitles,
-        exporting_to_subtitles
+        exporting_to_subtitles,
+        exporting_to_audio,
+        exporting_to_audio_mix
     };
     friend QDebug operator<<(QDebug d, state_t state);
 
     enum class task_t {
         none,
         import_subtitles_async,
-        export_to_subtitles_async
+        export_to_subtitles_async,
+        export_to_audio_async,
+        export_to_audio_mix_async
     };
     friend QDebug operator<<(QDebug d, task_t task);
 
-    media_converter();
+    media_converter(QObject* parent = nullptr);
 
     inline auto state() const { return m_state; }
     inline auto task() const { return m_task; }
@@ -46,6 +50,17 @@ class media_converter : public QObject {
     bool export_to_subtitles_async(const QString& input_file_path,
                                    const QString& output_file_path,
                                    media_compressor::format_t format);
+    bool export_to_audio_mix_async(const QString& input_main_file_path,
+                                   int main_stream_index,
+                                   const QStringList& input_file_paths,
+                                   const QString& output_file_path,
+                                   media_compressor::format_t format,
+                                   media_compressor::quality_t quality,
+                                   int volume_change);
+    bool export_to_audio_async(const QStringList& input_file_paths,
+                               const QString& output_file_path,
+                               media_compressor::format_t format,
+                               media_compressor::quality_t quality);
     void clear();
     void cancel();
 
@@ -63,10 +78,12 @@ class media_converter : public QObject {
 
     Q_SIGNAL void data_received();
     Q_SIGNAL void processing_done();
+    Q_SIGNAL void file_progress_updated(unsigned int done, unsigned int total);
 
     void set_state(state_t new_state);
     void set_progress(double new_progress);
     void handle_processing_done();
+    void handle_file_progress_updated(unsigned int done, unsigned int total);
     void handle_data();
 };
 

@@ -95,7 +95,9 @@ set(ffmpeg_opts
     --enable-protocol=file
     --enable-filter=aresample
     --enable-filter=aformat
+    --enable-filter=amix
     --enable-filter=anull
+    --enable-filter=volume
     --enable-encoder=libmp3lame
     --enable-encoder=libvorbis
     --enable-encoder=pcm_s16le
@@ -185,6 +187,7 @@ ExternalProject_Add(ffmpeg
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/ffmpeg.patch ||
                     echo "patch cmd failed, likely already patched"
+    UPDATE_COMMAND ""
     CONFIGURE_COMMAND CPATH=${external_include_dir}
         LIBRARY_PATH=${external_lib_dir}
         PATH=$ENV{PATH}:${external_bin_dir} PKG_CONFIG_PATH=${external_lib_dir}/pkgconfig

@@ -104,6 +104,8 @@
       <li>New voice for Persian language: 'Piper Gyro Medium'</li>
       <li>Settings option to enable/disable speech synchronization with subtitle timestamps.
           This may be useful for creating voiceovers.</li>
+      <li>Mixing speech with audio from an existing file.
+          When exporting to a file, you can overlay speech with audio from an existing media file.</li>
       </ul>
       <p>Translator:</p>
       <ul>

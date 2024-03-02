@@ -397,7 +397,9 @@ modules:
       - --enable-protocol=file
       - --enable-filter=aresample
       - --enable-filter=aformat
+      - --enable-filter=amix
       - --enable-filter=anull
+      - --enable-filter=volume
       - --enable-encoder=libmp3lame
       - --enable-encoder=libvorbis
       - --enable-encoder=pcm_s16le

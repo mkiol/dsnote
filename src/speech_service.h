@@ -192,7 +192,7 @@ class speech_service : public QObject, public singleton<speech_service> {
                                        int task);
     void stt_text_decoded(const QString &text, const QString &lang, int task);
     void tts_play_speech_finished(int task);
-    void tts_speech_to_file_finished(const QString &file, int task);
+    void tts_speech_to_file_finished(QStringList files, int task);
     void tts_speech_encoded(const speech_service::tts_partial_result_t &result);
     void tts_partial_speech_playing(const QString &text, int task);
     void mnt_translate_progress_changed(double progress, int task);
@@ -233,7 +233,7 @@ class speech_service : public QObject, public singleton<speech_service> {
                                     int task);
     void SttTextDecoded(const QString &text, const QString &lang, int task);
     void TtsPlaySpeechFinished(int task);
-    void TtsSpeechToFileFinished(const QString &file, int task);
+    void TtsSpeechToFileFinished(const QStringList &files, int task);
     void TtsPartialSpeechPlaying(const QString &text, int task);
     void TtsSpeechToFileProgress(double progress, int task);
     void SttLangsPropertyChanged(const QVariantMap &langs);

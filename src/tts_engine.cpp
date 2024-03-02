@@ -49,15 +49,15 @@ static media_compressor::format_t compressor_format_from_format(
     tts_engine::audio_format_t format) {
     switch (format) {
         case tts_engine::audio_format_t::wav:
-            return media_compressor::format_t::wav;
+            return media_compressor::format_t::audio_wav;
         case tts_engine::audio_format_t::mp3:
-            return media_compressor::format_t::mp3;
+            return media_compressor::format_t::audio_mp3;
         case tts_engine::audio_format_t::ogg_vorbis:
-            return media_compressor::format_t::ogg_vorbis;
+            return media_compressor::format_t::audio_ogg_vorbis;
         case tts_engine::audio_format_t::ogg_opus:
-            return media_compressor::format_t::ogg_opus;
+            return media_compressor::format_t::audio_ogg_opus;
         case tts_engine::audio_format_t::flac:
-            return media_compressor::format_t::flac;
+            return media_compressor::format_t::audio_flac;
     }
 
     throw std::runtime_error("invalid audio format");
@@ -327,9 +327,10 @@ std::string tts_engine::path_to_output_file(const std::string& text) const {
 }
 
 std::string tts_engine::path_to_output_silence_file(
-    size_t duration_msec, audio_format_t format) const {
-    return fmt::format("{}/silence_{}.{}", m_config.cache_dir, duration_msec,
-                       file_ext_for_format(format));
+    size_t duration_msec, unsigned int sample_rate,
+    audio_format_t format) const {
+    return fmt::format("{}/silence_{}_{}.{}", m_config.cache_dir, duration_msec,
+                       sample_rate, file_ext_for_format(format));
 }
 
 static bool file_exists(const std::string& file_path) {
@@ -657,47 +658,61 @@ void tts_engine::process() {
                 if (!model_supports_speed()) apply_speed(output_file_wav);
 
                 if (m_config.audio_format != audio_format_t::wav) {
+                    media_compressor::options_t opts{
+                        media_compressor::quality_t::vbr_high,
+                        media_compressor::flags_t::flag_none,
+                        {},
+                        {}};
+
                     media_compressor{}.compress_to_file(
                         {output_file_wav}, output_file,
                         compressor_format_from_format(m_config.audio_format),
-                        {media_compressor::quality_t::vbr_high,
-                         false,
-                         false,
-                         {}});
+                        opts);
 
                     unlink(output_file_wav.c_str());
                 }
             }
 
+            auto [speech_duration, speech_sample_rate] =
+                media_compressor{}.duration_and_rate(output_file);
+
             if (task.t1 != 0) {
                 if (speech_time < task.t0) {
                     auto duration = task.t0 - speech_time;
-                    speech_time += duration;
 
                     auto silence_out_file = path_to_output_silence_file(
-                        duration, m_config.audio_format);
+                        duration, speech_sample_rate, m_config.audio_format);
 
                     if (!file_exists(silence_out_file)) {
                         auto silence_out_file_wav = path_to_output_silence_file(
-                            duration, audio_format_t::wav);
+                            duration, speech_sample_rate, audio_format_t::wav);
 
-                        make_silence_wav_file(duration, silence_out_file_wav);
+                        make_silence_wav_file(duration, speech_sample_rate,
+                                              silence_out_file_wav);
 
                         if (m_config.audio_format != audio_format_t::wav) {
+                            media_compressor::options_t opts{
+                                media_compressor::quality_t::vbr_high,
+                                media_compressor::flags_t::flag_none,
+                                {},
+                                {}};
+
                             media_compressor{}.compress_to_file(
                                 {silence_out_file_wav}, silence_out_file,
                                 compressor_format_from_format(
                                     m_config.audio_format),
-                                {media_compressor::quality_t::vbr_high,
-                                 false,
-                                 false,
-                                 {}});
+                                opts);
 
                             unlink(silence_out_file_wav.c_str());
                         } else {
                             silence_out_file = std::move(silence_out_file_wav);
                         }
                     }
+
+                    auto [silence_duration, _] =
+                        media_compressor{}.duration_and_rate(silence_out_file);
+
+                    speech_time += silence_duration;
 
                     if (m_call_backs.speech_encoded) {
                         m_call_backs.speech_encoded("", silence_out_file,
@@ -706,10 +721,12 @@ void tts_engine::process() {
                     }
 
                 } else if (speech_time > task.t0) {
-                    LOGW("speech delay: " << speech_time - task.t0);
+                    LOGW("speech is delayed: "
+                         << speech_time - task.t0
+                         << ", consider increasing speech speed");
                 }
 
-                speech_time += media_compressor{}.duration(output_file);
+                speech_time += speech_duration;
             }
 
             if (is_shutdown()) break;
@@ -730,9 +747,9 @@ void tts_engine::process() {
 }
 
 void tts_engine::make_silence_wav_file(size_t duration_msec,
+                                       unsigned int sample_rate,
                                        const std::string& output_file) const {
-    const int sample_rate = 16000;
-    const uint32_t nb_samples = sample_rate * (duration_msec / 1000.0);
+    uint32_t nb_samples = (sample_rate * duration_msec) / 1000;
 
     std::ofstream wav_file{output_file};
 
@@ -751,11 +768,8 @@ void tts_engine::setup_ref_voice() {
         m_config.cache_dir + "/" + std::to_string(hash) + ".wav";
 
     if (!file_exists(m_ref_voice_wav_file)) {
-        media_compressor{}.decompress_to_file(
-            {m_config.ref_voice_file}, m_ref_voice_wav_file,
-            {media_compressor::quality_t::vbr_medium, /*mono=*/false,
-             /*sample_rate_16=*/false,
-             /*stream=*/{}});
+        media_compressor{}.decompress_to_file({m_config.ref_voice_file},
+                                              m_ref_voice_wav_file, {});
     }
 }
 

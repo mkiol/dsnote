@@ -298,7 +298,7 @@ Q_SIGNALS: // SIGNALS
     void TtsModelsPropertyChanged(const QVariantMap &models);
     void TtsPartialSpeechPlaying(const QString &text, int task);
     void TtsPlaySpeechFinished(int task);
-    void TtsSpeechToFileFinished(const QString &file, int task);
+    void TtsSpeechToFileFinished(const QStringList &files, int task);
     void TtsSpeechToFileProgress(double progress, int task);
     void TttLangsPropertyChanged(const QVariantMap &langs);
     void TttModelsPropertyChanged(const QVariantMap &models);

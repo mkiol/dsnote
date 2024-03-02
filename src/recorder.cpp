@@ -254,11 +254,15 @@ void recorder::process_from_mic() {
 
 void recorder::process_from_input_file() {
     try {
-        media_compressor{}.decompress_to_file(
-            {m_input_file_path.toStdString()}, m_wav_file_path.toStdString(),
-            {media_compressor::quality_t::vbr_medium, /*mono=*/true,
-             /*sample_rate_16=*/false,
-             /*stream=*/{}});
+        media_compressor::options_t opts{
+            media_compressor::quality_t::vbr_medium,
+            media_compressor::flag_force_mono_output,
+            {},
+            {}};
+
+        media_compressor{}.decompress_to_file({m_input_file_path.toStdString()},
+                                              m_wav_file_path.toStdString(),
+                                              opts);
     } catch (const std::runtime_error& error) {
         qCritical() << "cannot decompress file:" << error.what();
         return;

@@ -58,10 +58,14 @@ Dialog {
             ComboBox {
                 id: modeCombo
 
+                currentIndex: _settings.default_export_tab === Settings.DefaultExportTabText ? 0 : 1
                 label: qsTr("Export destination")
                 menu: ContextMenu {
-                    MenuItem { text: qsTr("Text or Subtitle file") }
-                    MenuItem { text: qsTr("Audio file") }
+                    MenuItem { text: qsTr("Export to text or subtitle file") }
+                    MenuItem { text: qsTr("Export to audio file") }
+                }
+                onCurrentIndexChanged: {
+                    _settings.default_export_tab = currentIndex === 0 ? Settings.DefaultExportTabText : 1
                 }
             }
 
@@ -90,14 +94,13 @@ Dialog {
                     var file_path = _settings.text_file_save_dir + "/" + file_name
 
                     overwriteLabel0.visible = _settings.file_exists(file_path)
-                    updateTitleTagTimer.restart()
                 }
 
                 function save_file() {
                     var file_path = _settings.text_file_save_dir + "/" +
                             _settings.add_ext_to_text_file_filename(nameField0.text)
 
-                    app.export_note_to_text_file(file_path, _settings.text_file_format, root.translated)
+                    app.export_to_text_file(file_path, root.translated)
                     _settings.update_text_file_save_path(file_path)
                 }
 
@@ -178,11 +181,10 @@ Dialog {
                     }
                     onCurrentIndexChanged: {
                         switch (currentIndex) {
-                        case 1: _settings.text_file_format = Settings.TextFileFormatRaw; break;
-                        case 2: _settings.text_file_format = Settings.TextFileFormatSrt; break;
+                        case 1: _settings.text_file_format = Settings.TextFileFormatRaw; break
+                        case 2: _settings.text_file_format = Settings.TextFileFormatSrt; break
                         case 3: _settings.text_file_format = Settings.TextFileFormatAss; break
                         case 4: _settings.text_file_format = Settings.TextFileFormatVtt; break
-                        case 0:
                         default: _settings.text_file_format = Settings.TextFileFormatAuto;
                         }
                     }

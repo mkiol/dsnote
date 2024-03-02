@@ -193,13 +193,14 @@ class tts_engine {
     void set_state(state_t new_state);
     std::string path_to_output_file(const std::string& text) const;
     std::string path_to_output_silence_file(size_t duration,
+                                            unsigned int sample_rate,
                                             audio_format_t format) const;
     void process();
     std::vector<task_t> make_tasks(const std::string& text,
                                    bool split = true) const;
     void apply_speed(const std::string& file) const;
     void setup_ref_voice();
-    void make_silence_wav_file(size_t duration_msec,
+    void make_silence_wav_file(size_t duration_msec, unsigned int sample_rate,
                                const std::string& output_file) const;
     inline bool is_shutdown() const {
         return m_state == state_t::stopping || m_state == state_t::stopped ||

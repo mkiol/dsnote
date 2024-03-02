@@ -231,8 +231,8 @@ class dsnote_app : public QObject {
         StatePlayingSpeech = 8,
         StateWritingSpeechToFile = 9,
         StateTranslating = 10,
-        StateImportingSubtitles = 20,
-        StateExportingSubtitles = 21
+        StateImporting = 20,
+        StateExporting = 21
     };
     Q_ENUM(service_state_t)
     friend QDebug operator<<(QDebug d, service_state_t state);
@@ -318,19 +318,23 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void speech_to_file(const QString &dest_file,
                                     const QString &title_tag = {},
                                     const QString &track_tag = {});
-    Q_INVOKABLE void speech_to_file_url(const QUrl &dest_file,
-                                        const QString &title_tag = {},
-                                        const QString &track_tag = {});
     Q_INVOKABLE void speech_to_file_translator(bool transtalated,
                                                const QString &dest_file,
                                                const QString &title_tag = {},
                                                const QString &track_tag = {});
-    Q_INVOKABLE void speech_to_file_translator_url(
-        bool transtalated, const QUrl &dest_file, const QString &title_tag = {},
-        const QString &track_tag = {});
-    Q_INVOKABLE void export_to_text_file(
-        const QString &dest_file, /*settings::text_file_format_t*/ int format,
-        bool translation);
+    Q_INVOKABLE void export_to_text_file(const QString &dest_file,
+                                         bool translation);
+    Q_INVOKABLE void export_to_audio_mix(const QString &input_file,
+                                         int input_stream_index,
+                                         const QString &dest_file,
+                                         const QString &title_tag,
+                                         const QString &track_tag);
+    Q_INVOKABLE void export_to_audio_mix_translator(bool transtalated,
+                                                    const QString &input_file,
+                                                    int input_stream_index,
+                                                    const QString &dest_file,
+                                                    const QString &title_tag,
+                                                    const QString &track_tag);
     Q_INVOKABLE void import_files(const QStringList &input_files, bool replace);
     Q_INVOKABLE void import_files_url(const QList<QUrl> &input_urls,
                                       bool replace);
@@ -396,7 +400,6 @@ class dsnote_app : public QObject {
     void translate_progress_changed();
     void error(dsnote_app::error_t type);
     void transcribe_done();
-    void speech_to_file_done();
     void save_note_to_file_done();
     void service_state_changed();
     void note_copied();
@@ -484,6 +487,16 @@ class dsnote_app : public QObject {
 
     enum class mc_state_t { idle, extracting_subtitles };
 
+    struct dest_file_info_t {
+        QString input_path;
+        QString output_path;
+        int input_stream_index = -1;
+        QString title_tag;
+        QString track_tag;
+        settings::audio_format_t audio_format =
+            settings::audio_format_t::AudioFormatWav;
+    };
+
     QString m_active_stt_model;
     QVariantMap m_available_stt_models_map;
     QString m_active_tts_model;
@@ -523,9 +536,8 @@ class dsnote_app : public QObject {
     bool m_tts_configured = false;
     bool m_ttt_configured = false;
     bool m_mnt_configured = false;
-    QString m_dest_file;
-    QString m_dest_file_title_tag;
-    QString m_dest_file_track_tag;
+
+    dest_file_info_t m_dest_file_info;
     QString m_translated_text;
     QString m_prev_text;
     bool m_undo_flag = false;  // true => undo, false => redu
@@ -661,7 +673,7 @@ class dsnote_app : public QObject {
     void handle_stt_file_transcribe_finished(int task);
     void handle_stt_file_transcribe_progress(double new_progress, int task);
     void handle_tts_play_speech_finished(int task);
-    void handle_tts_speech_to_file_finished(const QString &file, int task);
+    void handle_tts_speech_to_file_finished(const QStringList &files, int task);
     void handle_tts_speech_to_file_progress(double new_progress, int task);
     void handle_stt_default_model_changed(const QString &model);
     void set_active_stt_model(const QString &model);
@@ -707,7 +719,9 @@ class dsnote_app : public QObject {
                                  const QString &dest_file,
                                  const QString &title_tag, const QString &track,
                                  const QString &ref_voice,
-                                 settings::text_format_t text_format);
+                                 settings::text_format_t text_format,
+                                 settings::audio_format_t audio_format,
+                                 settings::audio_quality_t audio_quality);
     void play_speech_internal(const QString &text, const QString &model_id,
                               const QString &ref_voice,
                               settings::text_format_t text_format);
@@ -763,6 +777,12 @@ class dsnote_app : public QObject {
     void export_to_subtitles(const QString &dest_file,
                              settings::text_file_format_t format,
                              const QString &text);
+    void export_to_audio_mix_internal(const QString &main_input_file,
+                                      int main_stream_index,
+                                      const QStringList &input_files,
+                                      const QString &dest_file);
+    void export_to_audio_internal(const QStringList &input_files,
+                                  const QString &dest_file);
     void player_import_rec();
     void player_set_path(const QString &wav_file_path);
     void player_import_from_rec_path(const QString &path);

@@ -95,6 +95,8 @@ class settings : public QSettings, public singleton<settings> {
                    font_size_changed)
     Q_PROPERTY(text_file_format_t text_file_format READ text_file_format WRITE
                    set_text_file_format NOTIFY text_file_format_changed)
+    Q_PROPERTY(video_file_format_t video_file_format READ video_file_format
+                   WRITE set_video_file_format NOTIFY video_file_format_changed)
     Q_PROPERTY(audio_format_t audio_format READ audio_format WRITE
                    set_audio_format NOTIFY audio_format_changed)
     Q_PROPERTY(QString audio_format_str READ audio_format_str NOTIFY
@@ -185,6 +187,9 @@ class settings : public QSettings, public singleton<settings> {
                    set_sub_break_lines NOTIFY sub_config_changed)
     Q_PROPERTY(bool keep_last_note READ keep_last_note WRITE set_keep_last_note
                    NOTIFY keep_last_note_changed)
+    Q_PROPERTY(
+        default_export_tab_t default_export_tab READ default_export_tab WRITE
+            set_default_export_tab NOTIFY default_export_tab_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -251,6 +256,8 @@ class settings : public QSettings, public singleton<settings> {
             set_file_import_action NOTIFY file_import_action_changed)
     Q_PROPERTY(bool tts_subtitles_sync READ tts_subtitles_sync WRITE
                    set_tts_subtitles_sync NOTIFY tts_subtitles_sync_changed)
+    Q_PROPERTY(int mix_volume_change READ mix_volume_change WRITE
+                   set_mix_volume_change NOTIFY mix_volume_change_changed)
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -299,6 +306,14 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(text_file_format_t)
 
+    enum class video_file_format_t {
+        VideoFileFormatAuto = 0,
+        VideoFileFormatMp4 = 1,
+        VideoFileFormatMkv = 2,
+        VideoFileFormatWebm = 3
+    };
+    Q_ENUM(video_file_format_t)
+
     enum class cache_audio_format_t {
         CacheAudioFormatWav = 0,
         CacheAudioFormatMp3 = 1,
@@ -332,6 +347,12 @@ class settings : public QSettings, public singleton<settings> {
         TextFormatSubRip = 3
     };
     Q_ENUM(text_format_t)
+
+    enum class default_export_tab_t {
+        DefaultExportTabText = 0,
+        DefaultExportTabAudio = 1
+    };
+    Q_ENUM(default_export_tab_t)
 
     enum addon_flags_t : unsigned int {
         AddonNone = 0,
@@ -435,6 +456,8 @@ class settings : public QSettings, public singleton<settings> {
     int font_size() const;
     void set_text_file_format(text_file_format_t value);
     text_file_format_t text_file_format() const;
+    void set_video_file_format(video_file_format_t value);
+    video_file_format_t video_file_format() const;
     void set_audio_format(audio_format_t value);
     audio_format_t audio_format() const;
     void set_audio_quality(audio_quality_t value);
@@ -513,6 +536,10 @@ class settings : public QSettings, public singleton<settings> {
     void set_keep_last_note(bool value);
     file_import_action_t file_import_action() const;
     void set_file_import_action(file_import_action_t value);
+    default_export_tab_t default_export_tab() const;
+    void set_default_export_tab(default_export_tab_t value);
+    int mix_volume_change() const;
+    void set_mix_volume_change(int value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -535,12 +562,13 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE QString dir_of_file(const QString &file_path) const;
     Q_INVOKABLE audio_format_t
     filename_to_audio_format(const QString &filename) const;
-    static QString audio_format_str_from_filename(const QString &filename);
-    static QString audio_ext_from_filename(const QString &filename);
+    static QString audio_format_str_from_filename(
+        settings::audio_format_t audio_format, const QString &filename);
+    static QString audio_ext_from_filename(
+        settings::audio_format_t audio_format, const QString &filename);
     static audio_format_t audio_format_from_filename(const QString &filename);
     static audio_format_t filename_to_audio_format_static(
         const QString &filename);
-
     Q_INVOKABLE QString
     add_ext_to_text_file_filename(const QString &filename) const;
     Q_INVOKABLE QString
@@ -551,6 +579,17 @@ class settings : public QSettings, public singleton<settings> {
     static text_file_format_t text_file_format_from_filename(
         const QString &filename);
     static text_file_format_t filename_to_text_file_format_static(
+        const QString &filename);
+    Q_INVOKABLE QString
+    add_ext_to_video_file_filename(const QString &filename) const;
+    Q_INVOKABLE QString
+    add_ext_to_video_file_path(const QString &file_path) const;
+    Q_INVOKABLE video_file_format_t
+    filename_to_video_file_format(const QString &filename) const;
+    static QString video_file_ext_from_filename(const QString &filename);
+    static video_file_format_t video_file_format_from_filename(
+        const QString &filename);
+    static video_file_format_t filename_to_video_file_format_static(
         const QString &filename);
 
     Q_INVOKABLE bool is_debug() const;
@@ -580,21 +619,18 @@ class settings : public QSettings, public singleton<settings> {
     void set_num_threads(int value);
     QString py_path() const;
     void set_py_path(const QString &value);
-
     QStringList gpu_devices_stt() const;
     QString gpu_device_stt() const;
     QString auto_gpu_device_stt() const;
     void set_gpu_device_stt(QString value);
     int gpu_device_idx_stt() const;
     void set_gpu_device_idx_stt(int value);
-
     QStringList gpu_devices_tts() const;
     QString gpu_device_tts() const;
     QString auto_gpu_device_tts() const;
     void set_gpu_device_tts(QString value);
     int gpu_device_idx_tts() const;
     void set_gpu_device_idx_tts(int value);
-
     void set_cache_audio_format(cache_audio_format_t value);
     cache_audio_format_t cache_audio_format() const;
     void set_cache_policy(cache_policy_t value);
@@ -650,6 +686,7 @@ class settings : public QSettings, public singleton<settings> {
     void speech_speed_changed();
     void font_size_changed();
     void text_file_format_changed();
+    void video_file_format_changed();
     void audio_format_changed();
     void audio_quality_changed();
     void mtag_album_name_changed();
@@ -681,7 +718,9 @@ class settings : public QSettings, public singleton<settings> {
     void sub_config_changed();
     void keep_last_note_changed();
     void file_import_action_changed();
+    void default_export_tab_changed();
     void tts_subtitles_sync_changed();
+    void mix_volume_change_changed();
 
     // service
     void models_dir_changed();
