@@ -476,7 +476,7 @@ void numbers_to_words(std::string& text, const std::string& lang,
 
     auto to_words = [&](std::string&& word) {
         auto trailer_idx = word.find_last_not_of(".,");
-        if (trailer_idx == std::string::npos) return word;
+        if (trailer_idx == std::string::npos) return std::move(word);
 
         auto trailer =
             trailer_idx < word.size() - 1 ? word.substr(trailer_idx + 1) : "";
@@ -488,7 +488,7 @@ void numbers_to_words(std::string& text, const std::string& lang,
             LOGW("can't convert number to words: " << word);
             word.append(trailer);
         }
-        return word;
+        return std::move(word);
     };
 
     std::size_t start = 0, end = 0;

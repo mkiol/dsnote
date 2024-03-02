@@ -334,8 +334,15 @@ std::string mnt_engine::translate_internal(std::string text) {
         case text_format_t::raw:
         case text_format_t::html:
             break;
-        case text_format_t::markdown:
         case text_format_t::subrip:
+            if (!text_tools::subrip_text_start(text, 100)) {
+                LOGW(
+                    "subrip format requested but text is not subrip => "
+                    "forcing raw format");
+                break;
+            }
+            [[fallthrough]];
+        case text_format_t::markdown:
             text_tools::convert_text_format_to_html(
                 text, text_fromat_from_mnt_format(m_config.text_format));
             break;
