@@ -125,7 +125,6 @@ static std::vector<fake_keyboard::key_code_t> key_from_character(
     if (auto key = find_key_layout(sym)) return {*key};
 
     // return compose key codes
-    auto keys = find_compose_keys(sym);
     if (auto keys = find_compose_keys(sym); !keys.empty()) return keys;
 
     // fallback, just return key code without layout
