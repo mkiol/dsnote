@@ -10,8 +10,7 @@
                           3 = Idle, 4 = Listening Manual, 5 = Listening Auto,
                           6 = Transcribing File, 7 = Listening One-sentence,
                           8 = Playing speech, 9 = Writing speech synthesis to file,
-                          10 = Translating, 20 = Importing subtitles,
-                          21 = Exporting subtitles
+                          10 = Translating, 11 = Restoring text
             Unrecognized states should be considered equal to Unknown.
         -->
         <property name="State" type="i" access="read" />
@@ -827,6 +826,38 @@
         <signal name="TttModelsPropertyChanged">
           <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
           <arg name="models" type="a{sv}" direction="out" />
+        </signal>
+
+        <!-- tts experimental api -->
+
+        <!--
+            TtsRestoreText:
+            @text: input text
+            @lang: language code (ISO 639-1) or model id
+            @options: A dict of options (option-name => option-value).
+            @task: returned id of task which will be included in TtsRestoreTextFinished signals,
+                   @task less than 0 idicates an error
+
+            Restores the given text.
+        -->
+        <method name="TtsRestoreText">
+            <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="QVariantMap"/>
+            <arg name="text" type="s" direction="in" />
+            <arg name="lang" type="s" direction="in" />
+            <arg name="options" type="a{sv}" direction="in" />
+            <arg name="task" type="i" direction="out" />
+        </method>
+
+        <!--
+            TtsRestoreTextFinished:
+            @text: text after restoration
+            @task: id of task returned in TttRestoreText call
+
+            Emitted whenever TttRestoreText is finished.
+        -->
+        <signal name="TtsRestoreTextFinished">
+            <arg name="text" type="s" direction="out" />
+            <arg name="task" type="i" direction="out" />
         </signal>
     </interface>
 </node>

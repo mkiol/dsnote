@@ -43,7 +43,8 @@ class tts_engine {
         idle,
         stopping,
         initializing,
-        encoding,
+        speech_encoding,
+        text_restoring,
         stopped,
         error
     };
@@ -81,6 +82,7 @@ class tts_engine {
                            const std::string& audio_file_path,
                            audio_format_t format, double progress, bool last)>
             speech_encoded;
+        std::function<void(const std::string& text)> text_restored;
         std::function<void(state_t state)> state_changed;
         std::function<void()> error;
     };
@@ -144,16 +146,20 @@ class tts_engine {
         m_config.text_format = value;
     }
     inline void set_sync_subs(bool value) { m_config.sync_subs = value; }
-    void encode_speech(std::string text);
+    void encode_speech(const std::string& text);
+    void restore_text(const std::string& text);
     static std::string merge_wav_files(std::vector<std::string>&& files);
     void set_speech_speed(unsigned int speech_speed);
     void set_ref_voice_file(std::string ref_voice_file);
 
    protected:
+    enum class task_type_t { speech_encoding, text_restoration };
+
     struct task_t {
         std::string text;
         size_t t0 = 0;
         size_t t1 = 0;
+        task_type_t type = task_type_t::speech_encoding;
         bool first = false;
         bool last = false;
 
@@ -196,12 +202,16 @@ class tts_engine {
                                             unsigned int sample_rate,
                                             audio_format_t format) const;
     void process();
-    std::vector<task_t> make_tasks(const std::string& text,
-                                   bool split = true) const;
+    void process_encode_speech(const task_t& task, size_t& speech_time,
+                               double progress);
+    void process_restore_text(const task_t& task, std::string& restored_text);
+    std::vector<task_t> make_tasks(const std::string& text, bool split,
+                                   task_type_t type) const;
     void apply_speed(const std::string& file) const;
     void setup_ref_voice();
     void make_silence_wav_file(size_t duration_msec, unsigned int sample_rate,
                                const std::string& output_file) const;
+    void push_tasks(const std::string& text, task_type_t type);
     inline bool is_shutdown() const {
         return m_state == state_t::stopping || m_state == state_t::stopped ||
                m_state == state_t::error;

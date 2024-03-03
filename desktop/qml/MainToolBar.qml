@@ -176,6 +176,21 @@ ToolBar {
                 }
             }
 
+            ToolButton {
+                Layout.alignment: Qt.AlignLeft
+                text: qsTr("Repair text")
+                visible: _settings.show_repair_text && app.tts_configured && app.note.length !== 0 && !_settings.translator_mode
+                enabled: !app.busy && app.state === DsnoteApp.StateIdle
+                onClicked: {
+                    app.restore_text()
+                }
+
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTr("Changes the text to make it better suited for Text to Speech.")
+                hoverEnabled: true
+            }
+
             Item {
                 Layout.fillWidth: true
                 height: 1

@@ -799,6 +799,20 @@ DialogPage {
                 }
             }
 
+            CheckBox {
+                checked: _settings.show_repair_text
+                text: qsTr("Show %1 option").arg("<i>" + qsTr("Repair text") + "</i>")
+                onCheckedChanged: {
+                    _settings.show_repair_text = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Text repair always happens before Text to Speech processing, but with this option you can see what exactly is being sent to the engine.") + " " +
+                              qsTr("For example, this can be useful when you want to check text after restoring diacritical marks.")
+                hoverEnabled: true
+            }
+
             SectionLabel {
                 text: qsTr("Subtitles")
             }

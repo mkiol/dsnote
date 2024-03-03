@@ -85,6 +85,7 @@ RowLayout {
                         running: app.busy || service.busy ||
                                  app.state === DsnoteApp.StateTranscribingFile ||
                                  app.state === DsnoteApp.StateWritingSpeechToFile ||
+                                 app.state === DsnoteApp.StateRestoringText ||
                                  app.state === DsnoteApp.StateImporting ||
                                  app.state === DsnoteApp.StateExporting
                         visible: running
@@ -122,6 +123,8 @@ RowLayout {
                                 return qsTr("Cancelling, please wait...")
                             if (app.task_state === DsnoteApp.TaskStateInitializing)
                                 return qsTr("Getting ready, please wait...")
+                            if (app.state === DsnoteApp.StateRestoringText)
+                                return qsTr("Repairing the text...")
                             if (app.state === DsnoteApp.StateWritingSpeechToFile)
                                 return qsTr("Converting text to speech...") +
                                         (app.speech_to_file_progress > 0.0 ? " " +

@@ -99,6 +99,9 @@ QDebug operator<<(QDebug d, speech_service::state_t state_value) {
         case speech_service::state_t::translating:
             d << "translating";
             break;
+        case speech_service::state_t::restoring_text:
+            d << "restoring-text";
+            break;
         case speech_service::state_t::unknown:
             d << "unknown";
             break;
@@ -207,6 +210,8 @@ speech_service::speech_service(QObject *parent)
             static_cast<void (speech_service::*)(tts_partial_result_t)>(
                 &speech_service::handle_tts_speech_encoded),
             Qt::QueuedConnection);
+    connect(this, &speech_service::tts_text_restored, this,
+            &speech_service::handle_tts_text_restored, Qt::QueuedConnection);
     connect(this, &speech_service::stt_engine_shutdown, this,
             [this] { stop_stt_engine(); });
     connect(
@@ -361,6 +366,13 @@ speech_service::speech_service(QObject *parent)
                         << "[service => dbus] signal TtsSpeechToFileFinished:"
                         << task;
                     emit TtsSpeechToFileFinished(files, task);
+                });
+        connect(this, &speech_service::tts_restore_text_finished, this,
+                [this](const QString &text, int task) {
+                    qDebug()
+                        << "[service => dbus] signal TtsRestoreTextFinished:"
+                        << task;
+                    emit TtsRestoreTextFinished(text, task);
                 });
         connect(this, &speech_service::tts_speech_to_file_progress_changed,
                 this, [this](double progress, int task) {
@@ -1429,6 +1441,13 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                     handle_tts_speech_encoded(text, audio_file_path,
                                               audio_format, progress, last);
                 },
+                /*text_restored=*/
+                [this](const std::string &text) {
+                    if (m_current_task) {
+                        emit tts_text_restored(QString::fromStdString(text),
+                                               m_current_task->id);
+                    }
+                },
                 /*state_changed=*/
                 [this](tts_engine::state_t state) {
                     if (m_current_task) {
@@ -2037,6 +2056,17 @@ void speech_service::handle_stt_engine_state_changed(
     [[maybe_unused]] stt_engine::speech_detection_status_t status,
     int task_id) {
     if (current_task_id() == task_id) update_task_state();
+}
+
+void speech_service::handle_tts_text_restored(const QString &text,
+                                              int task_id) {
+    if (current_task_id() == task_id) {
+        emit tts_restore_text_finished(text, task_id);
+
+        stop_keepalive_current_task();
+        stop_tts_engine();
+        update_task_state();
+    }
 }
 
 void speech_service::handle_player_state_changed(
@@ -2723,6 +2753,60 @@ int speech_service::mnt_translate(const QString &text, QString lang,
     return m_current_task->id;
 }
 
+int speech_service::tts_restore_text(const QString &text, QString lang,
+                                     const QVariantMap &options) {
+    if (state() == state_t::unknown || state() == state_t::not_configured ||
+        state() == state_t::busy) {
+        qWarning() << "cannot tts restore text, invalid state";
+        return INVALID_TASK;
+    }
+
+    if (lang.contains('-')) lang = lang.split('-').first();
+
+    if (m_current_task) {
+        if (m_current_task->engine == engine_t::stt) {
+            stt_stop_listen(m_current_task->id);
+        } else if (m_current_task->engine == engine_t::tts)
+            tts_stop_speech(m_current_task->id);
+    }
+
+    qDebug() << "tts restore text";
+
+    m_current_task.reset();
+
+    m_current_task = {next_task_id(),
+                      engine_t::tts,
+                      restart_tts_engine(lang, options),
+                      speech_mode_t::play_speech,
+                      lang,
+                      0.0,
+                      {},
+                      options,
+                      false};
+
+    if (m_current_task->model_id.isEmpty()) {
+        m_current_task.reset();
+
+        qWarning() << "failed to restart engine";
+
+        emit current_task_changed();
+
+        refresh_status();
+
+        return INVALID_TASK;
+    }
+
+    if (m_tts_engine) m_tts_engine->restore_text(text.toStdString());
+
+    start_keepalive_current_task();
+
+    emit current_task_changed();
+
+    update_task_state();
+
+    return m_current_task->id;
+}
+
 int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
                                      QString out_lang,
                                      const QVariantMap &options) {
@@ -2924,7 +3008,7 @@ int speech_service::cancel(int task) {
 
     if (m_current_task->engine == engine_t::tts) {
         if (m_tts_engine &&
-            (m_tts_engine->state() == tts_engine::state_t::encoding ||
+            (m_tts_engine->state() == tts_engine::state_t::speech_encoding ||
              m_tts_engine->state() == tts_engine::state_t::initializing))
             m_tts_engine->request_stop();
         else
@@ -3252,7 +3336,8 @@ void speech_service::update_task_state() {
                    m_tts_engine->state() != tts_engine::state_t::idle &&
                    m_tts_engine->state() != tts_engine::state_t::stopped) {
             switch (m_tts_engine->state()) {
-                case tts_engine::state_t::encoding:
+                case tts_engine::state_t::speech_encoding:
+                case tts_engine::state_t::text_restoring:
                     return 2;
                 case tts_engine::state_t::initializing:
                     return 3;
@@ -3339,10 +3424,14 @@ void speech_service::refresh_status() {
             new_state = state_t::unknown;
         }
     } else if (m_current_task && m_current_task->engine == engine_t::tts) {
-        if (m_current_task->speech_mode == speech_mode_t::play_speech)
+        if (m_tts_engine &&
+            m_tts_engine->state() == tts_engine::state_t::text_restoring) {
+            new_state = state_t::restoring_text;
+        } else if (m_current_task->speech_mode == speech_mode_t::play_speech) {
             new_state = state_t::playing_speech;
-        else
+        } else {
             new_state = state_t::writing_speech_to_file;
+        }
     } else if (m_current_task && m_current_task->engine == engine_t::mnt) {
         if (m_mnt_engine &&
             m_mnt_engine->state() != mnt_engine::state_t::idle &&
@@ -3801,6 +3890,14 @@ int speech_service::MntTranslate2(const QString &text, const QString &lang,
 QVariantMap speech_service::MntGetOutLangs(const QString &lang) {
     qDebug() << "[dbus => service] called MntGetOutLangs";
     return mnt_out_langs(lang);
+}
+
+int speech_service::TtsRestoreText(const QString &text, const QString &lang,
+                                   const QVariantMap &options) {
+    qDebug() << "[dbus => service] called TtsRestoreText";
+    start_keepalive_current_task();
+
+    return tts_restore_text(text, lang, options);
 }
 
 QVariantMap speech_service::FeaturesAvailability() {

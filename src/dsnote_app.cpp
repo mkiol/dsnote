@@ -56,6 +56,9 @@ QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
         case dsnote_app::service_state_t::StateTranslating:
             d << "translating";
             break;
+        case dsnote_app::service_state_t::StateRestoringText:
+            d << "restoring-text";
+            break;
         case dsnote_app::service_state_t::StateImporting:
             d << "importing";
             break;
@@ -748,6 +751,10 @@ void dsnote_app::connect_service_signals() {
                 &dsnote_app::handle_tts_play_speech_finished,
                 Qt::QueuedConnection);
         connect(speech_service::instance(),
+                &speech_service::tts_restore_text_finished, this,
+                &dsnote_app::handle_tts_restore_text_finished,
+                Qt::QueuedConnection);
+        connect(speech_service::instance(),
                 &speech_service::tts_speech_to_file_finished, this,
                 &dsnote_app::handle_tts_speech_to_file_finished,
                 Qt::QueuedConnection);
@@ -827,6 +834,9 @@ void dsnote_app::connect_service_signals() {
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::TtsPlaySpeechFinished, this,
                 &dsnote_app::handle_tts_play_speech_finished);
+        connect(&m_dbus_service,
+                &OrgMkiolSpeechInterface::TtsRestoreTextFinished, this,
+                &dsnote_app::handle_tts_restore_text_finished);
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::TtsSpeechToFileFinished, this,
                 &dsnote_app::handle_tts_speech_to_file_finished);
@@ -984,6 +994,17 @@ void dsnote_app::handle_tts_play_speech_finished(int task) {
 
     this->m_intermediate_text.clear();
     emit intermediate_text_changed();
+}
+
+void dsnote_app::handle_tts_restore_text_finished(const QString &text,
+                                                  int task) {
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+    } else {
+        qDebug() << "[dbus => app] signal TtsRestoreTextFinished:" << task;
+    }
+
+    update_note(text, true);
 }
 
 void dsnote_app::handle_tts_speech_to_file_finished(const QStringList &files,
@@ -2049,6 +2070,35 @@ void dsnote_app::play_speech() {
     play_speech_internal(
         note(), {}, tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
         settings::instance()->stt_tts_text_format());
+}
+
+void dsnote_app::restore_text() {
+    if (note().isEmpty()) {
+        qWarning() << "text is empty";
+        return;
+    }
+
+    int new_task = 0;
+
+    QVariantMap options;
+    options.insert(
+        "text_format",
+        static_cast<int>(settings::instance()->stt_tts_text_format()));
+
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+        new_task =
+            speech_service::instance()->tts_restore_text(note(), {}, options);
+    } else {
+        qDebug() << "[app => dbus] call TtsRestoreText";
+
+        new_task = m_dbus_service.TtsRestoreText(note(), {}, options);
+    }
+
+    m_primary_task.set(new_task);
+
+    this->m_intermediate_text.clear();
+    emit intermediate_text_changed();
 }
 
 void dsnote_app::play_speech_from_clipboard() {

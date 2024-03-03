@@ -231,6 +231,7 @@ class dsnote_app : public QObject {
         StatePlayingSpeech = 8,
         StateWritingSpeechToFile = 9,
         StateTranslating = 10,
+        StateRestoringText = 11,
         StateImporting = 20,
         StateExporting = 21
     };
@@ -311,6 +312,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void play_speech();
     Q_INVOKABLE void play_speech_from_clipboard();
     Q_INVOKABLE void play_speech_translator(bool transtalated);
+    Q_INVOKABLE void restore_text();
     Q_INVOKABLE void pause_speech();
     Q_INVOKABLE void resume_speech();
     Q_INVOKABLE void translate();
@@ -673,6 +675,7 @@ class dsnote_app : public QObject {
     void handle_stt_file_transcribe_finished(int task);
     void handle_stt_file_transcribe_progress(double new_progress, int task);
     void handle_tts_play_speech_finished(int task);
+    void handle_tts_restore_text_finished(const QString &text, int task);
     void handle_tts_speech_to_file_finished(const QStringList &files, int task);
     void handle_tts_speech_to_file_progress(double new_progress, int task);
     void handle_stt_default_model_changed(const QString &model);

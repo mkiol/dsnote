@@ -23,7 +23,8 @@ ApplicationWindow {
                                 app.state === DsnoteApp.StateListeningAuto ||
                                 app.state === DsnoteApp.StateListeningManual
     readonly property bool canCancelTts: app.state === DsnoteApp.StatePlayingSpeech ||
-                                app.state === DsnoteApp.StateWritingSpeechToFile
+                                app.state === DsnoteApp.StateWritingSpeechToFile ||
+                                app.state === DsnoteApp.StateRestoringText
     readonly property alias textFontSize: _dummyTextField.font.pixelSize
     readonly property double textFontSizeBig: textFontSize * 1.2
     readonly property double textFontSizeSmall: textFontSize * 0.8

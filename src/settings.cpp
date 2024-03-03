@@ -1929,6 +1929,17 @@ void settings::set_start_in_tray(bool value) {
     }
 }
 
+bool settings::show_repair_text() const {
+    return value(QStringLiteral("show_repair_text"), false).toBool();
+}
+
+void settings::set_show_repair_text(bool value) {
+    if (value != show_repair_text()) {
+        setValue(QStringLiteral("show_repair_text"), value);
+        emit show_repair_text_changed();
+    }
+}
+
 bool settings::gpu_scan_hip() const {
     return value(QStringLiteral("gpu_scan_hip"), true).toBool();
 }

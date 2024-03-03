@@ -190,6 +190,8 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(
         default_export_tab_t default_export_tab READ default_export_tab WRITE
             set_default_export_tab NOTIFY default_export_tab_changed)
+    Q_PROPERTY(bool show_repair_text READ show_repair_text WRITE
+                   set_show_repair_text NOTIFY show_repair_text_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -521,6 +523,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_use_tray(bool value);
     bool start_in_tray() const;
     void set_start_in_tray(bool value);
+    bool show_repair_text() const;
+    void set_show_repair_text(bool value);
     bool clean_ref_voice() const;
     void set_clean_ref_voice(bool value);
     unsigned int addon_flags() const;
@@ -721,6 +725,7 @@ class settings : public QSettings, public singleton<settings> {
     void default_export_tab_changed();
     void tts_subtitles_sync_changed();
     void mix_volume_change_changed();
+    void show_repair_text_changed();
 
     // service
     void models_dir_changed();

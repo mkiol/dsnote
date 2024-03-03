@@ -248,6 +248,13 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("TtsPlaySpeech2"), argumentList);
     }
 
+    inline QDBusPendingReply<int> TtsRestoreText(const QString &text, const QString &lang, const QVariantMap &options)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(text) << QVariant::fromValue(lang) << QVariant::fromValue(options);
+        return asyncCallWithArgumentList(QStringLiteral("TtsRestoreText"), argumentList);
+    }
+
     inline QDBusPendingReply<int> TtsResumeSpeech(int task)
     {
         QList<QVariant> argumentList;
@@ -298,6 +305,7 @@ Q_SIGNALS: // SIGNALS
     void TtsModelsPropertyChanged(const QVariantMap &models);
     void TtsPartialSpeechPlaying(const QString &text, int task);
     void TtsPlaySpeechFinished(int task);
+    void TtsRestoreTextFinished(const QString &text, int task);
     void TtsSpeechToFileFinished(const QStringList &files, int task);
     void TtsSpeechToFileProgress(double progress, int task);
     void TttLangsPropertyChanged(const QVariantMap &langs);

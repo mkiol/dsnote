@@ -81,7 +81,8 @@ class speech_service : public QObject, public singleton<speech_service> {
         listening_single_sentence = 7,
         playing_speech = 8,
         writing_speech_to_file = 9,
-        translating = 10
+        translating = 10,
+        restoring_text = 11
     };
     friend QDebug operator<<(QDebug d, state_t state_value);
 
@@ -137,7 +138,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     Q_INVOKABLE int tts_stop_speech(int task);
     Q_INVOKABLE int tts_speech_to_file(const QString &text, QString lang,
                                        const QVariantMap &options);
-
+    Q_INVOKABLE int tts_restore_text(const QString &text, QString lang,
+                                     const QVariantMap &options);
     Q_INVOKABLE int mnt_translate(const QString &text, QString lang,
                                   QString out_lang, const QVariantMap &options);
     Q_INVOKABLE int cancel(int task);
@@ -195,6 +197,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     void tts_speech_to_file_finished(QStringList files, int task);
     void tts_speech_encoded(const speech_service::tts_partial_result_t &result);
     void tts_partial_speech_playing(const QString &text, int task);
+    void tts_text_restored(const QString &text, int task);
+    void tts_restore_text_finished(const QString &text, int task);
     void mnt_translate_progress_changed(double progress, int task);
     void mnt_engine_translate_progress_changed(int task);
     void mnt_translate_finished(const QString &in_text, const QString &in_lang,
@@ -236,6 +240,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void TtsSpeechToFileFinished(const QStringList &files, int task);
     void TtsPartialSpeechPlaying(const QString &text, int task);
     void TtsSpeechToFileProgress(double progress, int task);
+    void TtsRestoreTextFinished(const QString &text, int task);
     void SttLangsPropertyChanged(const QVariantMap &langs);
     void SttLangListPropertyChanged(const QVariantList &langs);
     void DefaultSttLangPropertyChanged(const QString &lang);
@@ -400,6 +405,7 @@ class speech_service : public QObject, public singleton<speech_service> {
                                        const std::string &in_lang,
                                        std::string &&out_text,
                                        const std::string &out_lang);
+    void handle_tts_text_restored(const QString &text, int task_id);
     void handle_stt_text_decoded(const std::string &text);
     void handle_stt_text_decoded(const QString &text, const QString &model_id,
                                  int task_id);
@@ -526,6 +532,8 @@ class speech_service : public QObject, public singleton<speech_service> {
                                   const QString &out_lang,
                                   const QVariantMap &options);
     Q_INVOKABLE QVariantMap MntGetOutLangs(const QString &lang);
+    Q_INVOKABLE int TtsRestoreText(const QString &text, const QString &lang,
+                                   const QVariantMap &options);
     Q_INVOKABLE QVariantMap FeaturesAvailability();
 };
 
