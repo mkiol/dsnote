@@ -67,6 +67,15 @@ QDebug operator<<(QDebug d, const mnt_engine::config_t &config) {
     return d;
 }
 
+QDebug operator<<(QDebug d, const text_repair_engine::config_t &config) {
+    std::stringstream ss;
+    ss << config;
+
+    d << QString::fromStdString(ss.str());
+
+    return d;
+}
+
 QDebug operator<<(QDebug d, speech_service::state_t state_value) {
     switch (state_value) {
         case speech_service::state_t::busy:
@@ -99,8 +108,8 @@ QDebug operator<<(QDebug d, speech_service::state_t state_value) {
         case speech_service::state_t::translating:
             d << "translating";
             break;
-        case speech_service::state_t::restoring_text:
-            d << "restoring-text";
+        case speech_service::state_t::repairing_text:
+            d << "repairing-text";
             break;
         case speech_service::state_t::unknown:
             d << "unknown";
@@ -192,6 +201,10 @@ speech_service::speech_service(QObject *parent)
             static_cast<void (speech_service::*)(int)>(
                 &speech_service::handle_tts_engine_error),
             Qt::QueuedConnection);
+    connect(this, &speech_service::text_repair_engine_error, this,
+            static_cast<void (speech_service::*)(int)>(
+                &speech_service::handle_text_repair_engine_error),
+            Qt::QueuedConnection);
     connect(this, &speech_service::mnt_engine_error, this,
             static_cast<void (speech_service::*)(mnt_engine::error_t, int)>(
                 &speech_service::handle_mnt_engine_error),
@@ -206,12 +219,15 @@ speech_service::speech_service(QObject *parent)
     connect(this, &speech_service::tts_engine_state_changed, this,
             &speech_service::handle_tts_engine_state_changed,
             Qt::QueuedConnection);
+    connect(this, &speech_service::text_repair_engine_state_changed, this,
+            &speech_service::handle_text_repair_engine_state_changed,
+            Qt::QueuedConnection);
     connect(this, &speech_service::tts_speech_encoded, this,
             static_cast<void (speech_service::*)(tts_partial_result_t)>(
                 &speech_service::handle_tts_speech_encoded),
             Qt::QueuedConnection);
-    connect(this, &speech_service::tts_text_restored, this,
-            &speech_service::handle_tts_text_restored, Qt::QueuedConnection);
+    connect(this, &speech_service::ttt_text_repaired, this,
+            &speech_service::handle_ttt_text_repaired, Qt::QueuedConnection);
     connect(this, &speech_service::stt_engine_shutdown, this,
             [this] { stop_stt_engine(); });
     connect(
@@ -367,12 +383,12 @@ speech_service::speech_service(QObject *parent)
                         << task;
                     emit TtsSpeechToFileFinished(files, task);
                 });
-        connect(this, &speech_service::tts_restore_text_finished, this,
+        connect(this, &speech_service::ttt_repair_text_finished, this,
                 [this](const QString &text, int task) {
                     qDebug()
                         << "[service => dbus] signal TtsRestoreTextFinished:"
                         << task;
-                    emit TtsRestoreTextFinished(text, task);
+                    emit TtrRepairTextFinished(text, task);
                 });
         connect(this, &speech_service::tts_speech_to_file_progress_changed,
                 this, [this](double progress, int task) {
@@ -741,6 +757,8 @@ speech_service::choose_model_config_by_id(
                     /*model_id_second=*/{},
                     /*model_file_second=*/{}};
                 break;
+            case engine_t::text_repair:
+                break;
         }
         config->options = model.options;
     }
@@ -846,6 +864,7 @@ speech_service::choose_model_config_by_lang(
                     best_model->speaker};
                 break;
             }
+            case engine_t::text_repair:
             case engine_t::mnt:
                 break;
         }
@@ -899,6 +918,7 @@ speech_service::choose_model_config_by_first(
                     model.speaker};
                 break;
             }
+            case engine_t::text_repair:
             case engine_t::mnt:
                 break;
         }
@@ -921,6 +941,37 @@ speech_service::choose_model_config(engine_t engine_type,
         return std::nullopt;
     }
 
+    if (engine_type == engine_t::text_repair) {
+        speech_service::model_config_t config;
+        config.text_repair.emplace();
+
+        if (auto it = std::find_if(
+                models.cbegin(), models.cend(),
+                [&](const auto &model) {
+                    return model.engine ==
+                           models_manager::model_engine_t::ttt_tashkeel;
+                });
+            it != models.cend()) {
+            config.text_repair->diacritizer_ar = {it->id, it->model_file};
+        } else {
+            qDebug() << "can't find arabic diacritization model";
+        }
+
+        if (auto it = std::find_if(
+                models.cbegin(), models.cend(),
+                [&](const auto &model) {
+                    return model.engine ==
+                           models_manager::model_engine_t::ttt_unikud;
+                });
+            it != models.cend()) {
+            config.text_repair->diacritizer_he = {it->id, it->model_file};
+        } else {
+            qDebug() << "can't find hebrew diacritization model";
+        }
+
+        return config;
+    }
+
     if (model_or_lang_id.isEmpty()) {
         switch (engine_type) {
             case engine_t::stt:
@@ -931,6 +982,8 @@ speech_service::choose_model_config(engine_t engine_type,
                 break;
             case engine_t::mnt:
                 model_or_lang_id = settings::instance()->default_mnt_lang();
+                break;
+            case engine_t::text_repair:
                 break;
         }
     }
@@ -968,6 +1021,7 @@ speech_service::choose_model_config(engine_t engine_type,
                     break;
                 case engine_t::tts:
                     model_id = active_config->tts->model_id;
+                case engine_t::text_repair:
                 case engine_t::mnt:
                     break;
             }
@@ -986,10 +1040,9 @@ speech_service::choose_model_config(engine_t engine_type,
         settings::instance()->restore_punctuation()) {
         auto it = std::find_if(
             models.cbegin(), models.cend(), [&](const auto &model) {
-                if (models_manager::role_of_engine(model.engine) !=
-                    models_manager::model_role_t::ttt)
-                    return false;
-                return model.lang_id == active_config->stt->lang_id;
+                return model.engine ==
+                           models_manager::model_engine_t::ttt_hftc &&
+                       model.lang_id == active_config->stt->lang_id;
             });
 
         if (it != models.cend()) {
@@ -1251,6 +1304,8 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                             std::move(config), std::move(call_backs));
                         break;
                     case models_manager::model_engine_t::ttt_hftc:
+                    case models_manager::model_engine_t::ttt_tashkeel:
+                    case models_manager::model_engine_t::ttt_unikud:
                     case models_manager::model_engine_t::tts_coqui:
                     case models_manager::model_engine_t::tts_piper:
                     case models_manager::model_engine_t::tts_espeak:
@@ -1444,7 +1499,7 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                 /*text_restored=*/
                 [this](const std::string &text) {
                     if (m_current_task) {
-                        emit tts_text_restored(QString::fromStdString(text),
+                        emit ttt_text_repaired(QString::fromStdString(text),
                                                m_current_task->id);
                     }
                 },
@@ -1498,6 +1553,8 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                             std::move(config), std::move(call_backs));
                         break;
                     case models_manager::model_engine_t::ttt_hftc:
+                    case models_manager::model_engine_t::ttt_tashkeel:
+                    case models_manager::model_engine_t::ttt_unikud:
                     case models_manager::model_engine_t::stt_ds:
                     case models_manager::model_engine_t::stt_vosk:
                     case models_manager::model_engine_t::stt_whisper:
@@ -1649,6 +1706,101 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
     return {};
 }
 
+static text_repair_engine::text_format_t
+text_repair_text_fromat_from_settings_format(settings::text_format_t format) {
+    switch (format) {
+        case settings::text_format_t::TextFormatSubRip:
+            return text_repair_engine::text_format_t::subrip;
+        case settings::text_format_t::TextFormatRaw:
+        case settings::text_format_t::TextFormatMarkdown:
+        case settings::text_format_t::TextFormatHtml:
+            return text_repair_engine::text_format_t::raw;
+    }
+
+    throw std::runtime_error("invalid text format");
+}
+
+bool speech_service::restart_text_repair_engine(const QVariantMap &options) {
+    auto model_config = choose_model_config(engine_t::text_repair);
+    if (model_config && model_config->text_repair) {
+        text_repair_engine::config_t config;
+
+        if (model_config->text_repair->diacritizer_ar)
+            config.model_files.diacritizer_path_ar =
+                model_config->text_repair->diacritizer_ar->model_file
+                    .toStdString();
+        if (model_config->text_repair->diacritizer_he)
+            config.model_files.diacritizer_path_he =
+                model_config->text_repair->diacritizer_he->model_file
+                    .toStdString();
+        config.options = model_config->options.toStdString();
+        config.text_format = text_repair_text_fromat_from_settings_format(
+            text_format_from_options(options));
+        config.share_dir =
+            module_tools::path_to_share_dir_for_path("/libnumbertext")
+                .toStdString();
+
+        bool new_engine_required = [&] {
+            if (!m_text_repair_engine) return true;
+
+            if (config.use_gpu != m_text_repair_engine->use_gpu() ||
+                config.gpu_device != m_text_repair_engine->gpu_device())
+                return true;
+
+            return false;
+        }();
+
+        qDebug() << "restart text-repair engine config:" << config;
+
+        if (new_engine_required) {
+            qDebug() << "new text-repair engine required";
+
+            if (m_text_repair_engine) {
+                m_text_repair_engine.reset();
+                qDebug() << "text-repair engine destroyed successfully";
+            }
+
+            text_repair_engine::callbacks_t call_backs{
+                /*text_repaired=*/[this](const std::string &text) {
+                    if (m_current_task)
+                        emit ttt_text_repaired(QString::fromStdString(text),
+                                               m_current_task->id);
+                },
+                /*state_changed=*/
+                [this](text_repair_engine::state_t state) {
+                    if (m_current_task)
+                        emit text_repair_engine_state_changed(
+                            state, m_current_task->id);
+                },
+                /*error=*/
+                [this]() {
+                    if (m_current_task)
+                        emit text_repair_engine_error(m_current_task->id);
+                }};
+
+            try {
+                m_text_repair_engine = std::make_unique<text_repair_engine>(
+                    std::move(config), std::move(call_backs));
+            } catch (const std::runtime_error &err) {
+                qWarning() << "failed to create text-repair engine:"
+                           << err.what();
+                emit error(error_t::text_repair_engine);
+                return {};
+            }
+        } else {
+            qDebug() << "new text-repair engine not required";
+            m_text_repair_engine->set_text_format(config.text_format);
+        }
+
+        m_text_repair_engine->start();
+
+        return true;
+    }
+
+    qWarning() << "failed to restart text-repair engine, no valid model";
+    return false;
+}
+
 void speech_service::handle_stt_intermediate_text_decoded(
     const std::string &text) {
     if (m_current_task) {
@@ -1721,14 +1873,33 @@ void speech_service::handle_tts_engine_error(int task_id) {
     }
 }
 
-void speech_service::handle_tts_engine_state_changed(
-    [[maybe_unused]] tts_engine::state_t state, int task_id) {
+void speech_service::handle_tts_engine_state_changed(tts_engine::state_t state,
+                                                     int task_id) {
     qDebug() << "tts engine state changed:" << task_id;
 
     if ((state == tts_engine::state_t::stopped ||
          state == tts_engine::state_t::error) &&
         m_current_task && m_current_task->id == task_id) {
+        if (state == tts_engine::state_t::error)
+            emit error(error_t::tts_engine);
+
         stop_tts_engine();
+    }
+
+    emit requet_update_task_state();
+}
+
+void speech_service::handle_text_repair_engine_state_changed(
+    text_repair_engine::state_t state, int task_id) {
+    qDebug() << "text-repair engine state changed:" << task_id;
+
+    if ((state == text_repair_engine::state_t::stopped ||
+         state == text_repair_engine::state_t::error) &&
+        m_current_task && m_current_task->id == task_id) {
+        if (state == text_repair_engine::state_t::error)
+            emit error(error_t::text_repair_engine);
+
+        stop_text_repair_engine();
     }
 
     emit requet_update_task_state();
@@ -2028,6 +2199,18 @@ void speech_service::handle_mnt_engine_error(mnt_engine::error_t error_type,
     }
 }
 
+void speech_service::handle_text_repair_engine_error(int task_id) {
+    qDebug() << "text-repair engine error";
+
+    if (current_task_id() == task_id) {
+        cancel(task_id);
+        if (m_text_repair_engine) {
+            m_text_repair_engine.reset();
+            qDebug() << "text-repair engine destroyed successfully";
+        }
+    }
+}
+
 void speech_service::handle_mnt_progress_changed(int task_id) {
     if (current_task_id() == task_id && m_mnt_engine) {
         emit mnt_translate_progress_changed(m_mnt_engine->progress(), task_id);
@@ -2058,10 +2241,10 @@ void speech_service::handle_stt_engine_state_changed(
     if (current_task_id() == task_id) update_task_state();
 }
 
-void speech_service::handle_tts_text_restored(const QString &text,
+void speech_service::handle_ttt_text_repaired(const QString &text,
                                               int task_id) {
     if (current_task_id() == task_id) {
-        emit tts_restore_text_finished(text, task_id);
+        emit ttt_repair_text_finished(text, task_id);
 
         stop_keepalive_current_task();
         stop_tts_engine();
@@ -2753,50 +2936,61 @@ int speech_service::mnt_translate(const QString &text, QString lang,
     return m_current_task->id;
 }
 
-int speech_service::tts_restore_text(const QString &text, QString lang,
-                                     const QVariantMap &options) {
+static text_repair_engine::task_type_t text_repair_task_type_from_options(
+    const QVariantMap &options) {
+    if (options.contains(QStringLiteral("task_type"))) {
+        bool ok = false;
+        auto value = options.value(QStringLiteral("task_type")).toInt(&ok);
+        if (ok) return static_cast<text_repair_engine::task_type_t>(value);
+    }
+    return text_repair_engine::task_type_t::none;
+}
+
+int speech_service::ttt_repair_text(const QString &text,
+                                    const QVariantMap &options) {
     if (state() == state_t::unknown || state() == state_t::not_configured ||
         state() == state_t::busy) {
-        qWarning() << "cannot tts restore text, invalid state";
+        qWarning() << "cannot tts repair text, invalid state";
         return INVALID_TASK;
     }
-
-    if (lang.contains('-')) lang = lang.split('-').first();
 
     if (m_current_task) {
         if (m_current_task->engine == engine_t::stt) {
             stt_stop_listen(m_current_task->id);
-        } else if (m_current_task->engine == engine_t::tts)
+        } else if (m_current_task->engine == engine_t::tts) {
             tts_stop_speech(m_current_task->id);
+        }
     }
 
-    qDebug() << "tts restore text";
+    qDebug() << "ttt repair text";
 
     m_current_task.reset();
 
-    m_current_task = {next_task_id(),
-                      engine_t::tts,
-                      restart_tts_engine(lang, options),
-                      speech_mode_t::play_speech,
-                      lang,
-                      0.0,
-                      {},
-                      options,
-                      false};
-
-    if (m_current_task->model_id.isEmpty()) {
+    if (!restart_text_repair_engine(options)) {
         m_current_task.reset();
-
         qWarning() << "failed to restart engine";
-
         emit current_task_changed();
-
         refresh_status();
-
         return INVALID_TASK;
     }
 
-    if (m_tts_engine) m_tts_engine->restore_text(text.toStdString());
+    m_current_task = {
+        next_task_id(), engine_t::text_repair,
+        /*model=*/{},   speech_mode_t::play_speech, {}, 0.0, {}, options,
+        false};
+
+    if (m_text_repair_engine) {
+        auto task_type = text_repair_task_type_from_options(options);
+        if (task_type == text_repair_engine::task_type_t::none) {
+            m_current_task.reset();
+            qWarning() << "invalid text repair task type";
+            emit current_task_changed();
+            refresh_status();
+            return INVALID_TASK;
+        }
+
+        m_text_repair_engine->repair_text(text.toStdString(), task_type);
+    }
 
     start_keepalive_current_task();
 
@@ -3199,6 +3393,20 @@ void speech_service::stop_tts_engine() {
     update_task_state();
 }
 
+void speech_service::stop_text_repair_engine() {
+    qDebug() << "stop text-repair engine";
+
+    if (m_current_task) {
+        m_current_task.reset();
+        stop_keepalive_current_task();
+        emit current_task_changed();
+    }
+
+    if (m_text_repair_engine) m_text_repair_engine->request_stop();
+
+    update_task_state();
+}
+
 void speech_service::stop_stt_engine() {
     qDebug() << "stop stt engine";
 
@@ -3363,6 +3571,21 @@ void speech_service::update_task_state() {
                 case mnt_engine::state_t::stopped:
                     break;
             }
+        } else if (m_text_repair_engine &&
+                   m_text_repair_engine->state() !=
+                       text_repair_engine::state_t::idle &&
+                   m_text_repair_engine->state() !=
+                       text_repair_engine::state_t::stopped) {
+            switch (m_text_repair_engine->state()) {
+                case text_repair_engine::state_t::processing:
+                    return 2;
+                case text_repair_engine::state_t::stopping:
+                    return 6;
+                case text_repair_engine::state_t::error:
+                case text_repair_engine::state_t::idle:
+                case text_repair_engine::state_t::stopped:
+                    break;
+            }
         }
 
         return 0;
@@ -3426,7 +3649,7 @@ void speech_service::refresh_status() {
     } else if (m_current_task && m_current_task->engine == engine_t::tts) {
         if (m_tts_engine &&
             m_tts_engine->state() == tts_engine::state_t::text_restoring) {
-            new_state = state_t::restoring_text;
+            new_state = state_t::repairing_text;
         } else if (m_current_task->speech_mode == speech_mode_t::play_speech) {
             new_state = state_t::playing_speech;
         } else {
@@ -3439,6 +3662,15 @@ void speech_service::refresh_status() {
             new_state = state_t::translating;
         else
             new_state = state_t::idle;
+    } else if (m_current_task &&
+               m_current_task->engine == engine_t::text_repair) {
+        if (m_text_repair_engine &&
+            m_text_repair_engine->state() ==
+                text_repair_engine::state_t::processing) {
+            new_state = state_t::repairing_text;
+        } else {
+            new_state = state_t::idle;
+        }
     } else {
         new_state = state_t::idle;
     }
@@ -3892,12 +4124,12 @@ QVariantMap speech_service::MntGetOutLangs(const QString &lang) {
     return mnt_out_langs(lang);
 }
 
-int speech_service::TtsRestoreText(const QString &text, const QString &lang,
-                                   const QVariantMap &options) {
-    qDebug() << "[dbus => service] called TtsRestoreText";
+int speech_service::TttRepairText(const QString &text,
+                                  const QVariantMap &options) {
+    qDebug() << "[dbus => service] called TttRepairText";
     start_keepalive_current_task();
 
-    return tts_restore_text(text, lang, options);
+    return ttt_repair_text(text, options);
 }
 
 QVariantMap speech_service::FeaturesAvailability() {

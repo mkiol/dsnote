@@ -385,6 +385,11 @@ void clean_white_characters(std::string& text) {
     text = std::regex_replace(text, std::regex{" \n|\n "}, "\n");
 }
 
+void trim_line(std::string& text) {
+    ltrim(text);
+    rtrim(text);
+}
+
 void trim_lines(std::string& text) {
     auto ss_in = std::stringstream{text};
     std::stringstream ss_out;
@@ -1015,7 +1020,12 @@ void processor::arabic_diacritize(std::string& text,
                                   const std::string& model_path) {
     if (!m_tashkeel_state) {
         m_tashkeel_state.emplace();
-        tashkeel::tashkeel_load(model_path, *m_tashkeel_state);
+        try {
+            tashkeel::tashkeel_load(model_path, *m_tashkeel_state);
+        } catch ([[maybe_unused]] const std::exception& error) {
+            m_tashkeel_state.reset();
+            return;
+        }
     }
 
     text.assign(tashkeel::tashkeel_run(text, *m_tashkeel_state));

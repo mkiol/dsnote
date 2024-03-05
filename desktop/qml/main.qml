@@ -381,6 +381,7 @@ ApplicationWindow {
         onNote_copied: toast.show(qsTr("Copied!"))
         onTranscribe_done: toast.show(qsTr("Import from the file is complete!"))
         onSave_note_to_file_done: toast.show(qsTr("Export to file is complete!"))
+        onText_repair_done: toast.show(qsTr("Text repair is complete!"))
         onText_decoded_to_clipboard: {
             var policy = false
             switch(_settings.desktop_notification_policy) {
@@ -418,6 +419,9 @@ ApplicationWindow {
                 break;
             case DsnoteApp.ErrorMntRuntime:
                 toast.show(qsTr("Error: Not all text has been translated."))
+                break;
+            case DsnoteApp.ErrorTextRepairEngine:
+                toast.show(qsTr("Error: Couldn't repair the text."))
                 break;
             case DsnoteApp.ErrorExportFileGeneral:
                 toast.show(qsTr("Error: Couldn't export to the file."))

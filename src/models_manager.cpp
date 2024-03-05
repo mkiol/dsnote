@@ -169,6 +169,12 @@ QDebug operator<<(QDebug d, models_manager::model_engine_t engine) {
         case models_manager::model_engine_t::ttt_hftc:
             d << "ttt-hftc";
             break;
+        case models_manager::model_engine_t::ttt_tashkeel:
+            d << "ttt-tashkeel";
+            break;
+        case models_manager::model_engine_t::ttt_unikud:
+            d << "ttt-unikud";
+            break;
         case models_manager::model_engine_t::tts_coqui:
             d << "tts-coqui";
             break;
@@ -1093,8 +1099,16 @@ void models_manager::delete_model(const QString& id) {
             if (!std::any_of(m_models.cbegin(), m_models.cend(),
                              [id = it->first,
                               file_name = model.file_name](const auto& p) {
-                                 return p.second.available && p.first != id &&
-                                        p.second.file_name == file_name;
+                                 if (!p.second.available || p.first == id)
+                                     return false;
+                                 return p.second.file_name == file_name ||
+                                        std::any_of(
+                                            p.second.sup_models.cbegin(),
+                                            p.second.sup_models.cend(),
+                                            [&](const auto& sup) {
+                                                return sup.file_name ==
+                                                       file_name;
+                                            });
                              })) {
                 remove_file_or_dir(model_path(model.file_name));
                 files_deleted = true;
@@ -1113,6 +1127,8 @@ void models_manager::delete_model(const QString& id) {
                               file_name = sup_model.file_name](const auto& p) {
                                  if (!p.second.available || p.first == id)
                                      return false;
+                                 if (p.second.file_name == file_name)
+                                     return true;
                                  for (const auto& sup_model :
                                       p.second.sup_models) {
                                      if (sup_model.file_name == file_name)
@@ -1404,6 +1420,8 @@ models_manager::model_role_t models_manager::role_of_engine(
         case model_engine_t::stt_april:
             return model_role_t::stt;
         case model_engine_t::ttt_hftc:
+        case model_engine_t::ttt_tashkeel:
+        case model_engine_t::ttt_unikud:
             return model_role_t::ttt;
         case model_engine_t::tts_coqui:
         case model_engine_t::tts_piper:
@@ -1428,6 +1446,9 @@ models_manager::model_engine_t models_manager::engine_from_name(
         return model_engine_t::stt_fasterwhisper;
     if (name == QStringLiteral("stt_april")) return model_engine_t::stt_april;
     if (name == QStringLiteral("ttt_hftc")) return model_engine_t::ttt_hftc;
+    if (name == QStringLiteral("ttt_tashkeel"))
+        return model_engine_t::ttt_tashkeel;
+    if (name == QStringLiteral("ttt_unikud")) return model_engine_t::ttt_unikud;
     if (name == QStringLiteral("tts_coqui")) return model_engine_t::tts_coqui;
     if (name == QStringLiteral("tts_piper")) return model_engine_t::tts_piper;
     if (name == QStringLiteral("tts_espeak")) return model_engine_t::tts_espeak;
@@ -1502,8 +1523,7 @@ void models_manager::extract_sup_models(const QString& model_id,
     }
 }
 
-size_t models_manager::make_url_hash(
-    const std::vector<QUrl>& urls, const std::vector<sup_model_t>& sup_models) {
+void models_manager::update_url_hash(priv_model_t& model) {
     auto merge_urls = [](const std::vector<QUrl>& urls) {
         return std::accumulate(
             urls.cbegin(), urls.cend(), QString{},
@@ -1521,7 +1541,11 @@ size_t models_manager::make_url_hash(
                 });
         };
 
-    return std::hash<QString>{}(merge_urls(urls) + merge_sup_urls(sup_models));
+    model.urls_hash = std::hash<QString>{}(merge_urls(model.urls) +
+                                           merge_sup_urls(model.sup_models));
+
+    for (auto& sup_model : model.sup_models)
+        sup_model.urls_hash = std::hash<QString>{}(merge_urls(sup_model.urls));
 }
 
 models_manager::feature_flags models_manager::add_new_feature(
@@ -1690,6 +1714,8 @@ models_manager::feature_flags models_manager::add_explicit_feature_flags(
                 add_new_feature(existing_features, feature_flags::low_quality);
         case model_engine_t::mnt_bergamot:
         case model_engine_t::ttt_hftc:
+        case model_engine_t::ttt_tashkeel:
+        case model_engine_t::ttt_unikud:
             break;
     }
 
@@ -1948,8 +1974,6 @@ auto models_manager::extract_models(
             return false;
         }();
 
-        auto url_hash = make_url_hash(urls, sup_models);
-
         priv_model_t model{
             /*engine=*/engine,
             /*lang_id=*/std::move(lang_id),
@@ -1975,8 +1999,10 @@ auto models_manager::extract_models(
             /*dl_multi=*/false,
             /*dl_off=*/false,
             /*features=*/features,
-            /*urls_hash=*/url_hash,
+            /*urls_hash=*/0,
             /*downloading=*/false};
+
+        update_url_hash(model);
 
         if (!model.exists) {
             if (!model.file_name.isEmpty()) {
@@ -2063,6 +2089,14 @@ void models_manager::update_dl_multi(models_manager::models_t& models) {
                 available_map.emplace(model.urls_hash, 1);
             else
                 ++it->second;
+
+            for (const auto& sup_model : model.sup_models) {
+                if (auto it = available_map.find(sup_model.urls_hash);
+                    it == available_map.cend())
+                    available_map.emplace(sup_model.urls_hash, 1);
+                else
+                    ++it->second;
+            }
         }
     });
 
@@ -2096,6 +2130,14 @@ void models_manager::update_dl_off(models_manager::models_t& models) {
                 downloading_map.emplace(model.urls_hash, 1);
             else
                 ++it->second;
+
+            for (const auto& sup_model : model.sup_models) {
+                if (auto it = downloading_map.find(sup_model.urls_hash);
+                    it == downloading_map.cend())
+                    downloading_map.emplace(sup_model.urls_hash, 1);
+                else
+                    ++it->second;
+            }
         }
     });
 
@@ -2104,12 +2146,21 @@ void models_manager::update_dl_off(models_manager::models_t& models) {
 
         if (model.hidden) return;
 
-        auto it = downloading_map.find(model.urls_hash);
+        if (auto it = downloading_map.find(model.urls_hash);
+            it != downloading_map.cend() && it->second > 0) {
+            model.dl_off = true;
+            return;
+        }
 
-        if (it == downloading_map.cend())
-            model.dl_off = false;
-        else
-            model.dl_off = it->second > 0;
+        for (const auto& sup_model : model.sup_models) {
+            if (auto it = downloading_map.find(sup_model.urls_hash);
+                it != downloading_map.cend() && it->second > 0) {
+                model.dl_off = true;
+                return;
+            }
+        }
+
+        model.dl_off = false;
     });
 }
 
@@ -2221,9 +2272,12 @@ QString models_manager::file_name_from_id(const QString& id,
             return id + ".ggml";
         case model_engine_t::stt_april:
             return id + ".april";
+        case model_engine_t::ttt_tashkeel:
+            return id + ".ort";
         case model_engine_t::stt_fasterwhisper:
         case model_engine_t::stt_vosk:
         case model_engine_t::ttt_hftc:
+        case model_engine_t::ttt_unikud:
         case model_engine_t::tts_coqui:
         case model_engine_t::tts_piper:
         case model_engine_t::tts_espeak:

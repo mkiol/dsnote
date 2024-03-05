@@ -312,6 +312,19 @@ DialogPage {
             }
 
             CheckBox {
+                checked: _settings.show_repair_text
+                text: qsTr("Show %1 option").arg("<i>" + qsTr("Repair text") + "</i>")
+                onCheckedChanged: {
+                    _settings.show_repair_text = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Once enabled, a menu with text correction options appears on the main toolbar.")
+                hoverEnabled: true
+            }
+
+            CheckBox {
                 checked: !_settings.qt_style_auto
                 text: qsTr("Use custom graphical style")
                 onCheckedChanged: {
@@ -467,7 +480,7 @@ DialogPage {
                 Layout.leftMargin: appWin.padding
                 visible: app.feature_punctuator &&
                          _settings.restore_punctuation &&
-                         !app.ttt_configured
+                         !app.ttt_punctuation_configured
 
                 Label {
                     color: "red"
@@ -684,7 +697,7 @@ DialogPage {
 
             CheckBox {
                 checked: _settings.diacritizer_enabled
-                text: qsTr("Restore diacritics before speech synthesis")
+                text: qsTr("Restore diacritical marks before speech synthesis")
                 onCheckedChanged: {
                     _settings.diacritizer_enabled = checked
                 }
@@ -797,20 +810,6 @@ DialogPage {
                           .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
                                        qsTr("Override GPU version") + "</i>");
                 }
-            }
-
-            CheckBox {
-                checked: _settings.show_repair_text
-                text: qsTr("Show %1 option").arg("<i>" + qsTr("Repair text") + "</i>")
-                onCheckedChanged: {
-                    _settings.show_repair_text = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Text repair always happens before Text to Speech processing, but with this option you can see what exactly is being sent to the engine.") + " " +
-                              qsTr("For example, this can be useful when you want to check text after restoring diacritical marks.")
-                hoverEnabled: true
             }
 
             SectionLabel {

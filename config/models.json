@@ -6856,6 +6856,12 @@
             "hidden": true
         },
         {
+            "name": "Пунктуация",
+            "model_id": "bg_hftc_kredor",
+            "model_alias_of": "multilang_hftc_kredor",
+            "lang_id": "bg"
+        },
+        {
             "name": "Punctuation",
             "model_id": "en_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
@@ -6950,6 +6956,34 @@
             "model_id": "da_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "da"
+        },
+        {
+            "name": "استعادة علامات التشكيل",
+            "model_id": "ar_tashkeel_diacritizer",
+            "engine": "ttt_tashkeel",
+            "lang_id": "ar",
+            "checksum": "32ad5edd",
+            "checksum_quick": "eb5f7f7d",
+            "size": "10261536",
+            "urls": [
+                "https://github.com/rhasspy/piper-phonemize/raw/8e5aa981d9628533e612652dccb93d26c66c5b21/etc/libtashkeel_model.ort"
+            ]
+        },
+        {
+            "name": "שחזור סימנים דיקריטיים",
+            "model_id": "he_unikud_diacritizer",
+            "engine": "ttt_unikud",
+            "lang_id": "he",
+            "checksum": "aa71afdc",
+            "checksum_quick": "895a39a2",
+            "size": "528617731",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/malper/unikud/resolve/73fdb7a158634826a73b66846d1b743fd700e990/pytorch_model.bin",
+                "https://huggingface.co/malper/unikud/resolve/73fdb7a158634826a73b66846d1b743fd700e990/config.json",
+                "https://huggingface.co/malper/unikud/resolve/73fdb7a158634826a73b66846d1b743fd700e990/special_tokens_map.json",
+                "https://huggingface.co/malper/unikud/resolve/73fdb7a158634826a73b66846d1b743fd700e990/tokenizer_config.json"
+            ]
         },
         {
             "name": "English (Piper Hfc Medium Male)",

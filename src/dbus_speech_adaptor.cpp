@@ -331,14 +331,6 @@ int SpeechAdaptor::TtsPlaySpeech2(const QString &text, const QString &lang, cons
     return task;
 }
 
-int SpeechAdaptor::TtsRestoreText(const QString &text, const QString &lang, const QVariantMap &options)
-{
-    // handle method call org.mkiol.Speech.TtsRestoreText
-    int task;
-    QMetaObject::invokeMethod(parent(), "TtsRestoreText", Q_RETURN_ARG(int, task), Q_ARG(QString, text), Q_ARG(QString, lang), Q_ARG(QVariantMap, options));
-    return task;
-}
-
 int SpeechAdaptor::TtsResumeSpeech(int task)
 {
     // handle method call org.mkiol.Speech.TtsResumeSpeech
@@ -361,5 +353,13 @@ int SpeechAdaptor::TtsStopSpeech(int task)
     int result;
     QMetaObject::invokeMethod(parent(), "TtsStopSpeech", Q_RETURN_ARG(int, result), Q_ARG(int, task));
     return result;
+}
+
+int SpeechAdaptor::TttRepairText(const QString &text, const QVariantMap &options)
+{
+    // handle method call org.mkiol.Speech.TttRepairText
+    int task;
+    QMetaObject::invokeMethod(parent(), "TttRepairText", Q_RETURN_ARG(int, task), Q_ARG(QString, text), Q_ARG(QVariantMap, options));
+    return task;
 }
 

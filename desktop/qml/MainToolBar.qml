@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -176,19 +176,32 @@ ToolBar {
                 }
             }
 
+
             ToolButton {
+                id: repairTextButton
+
                 Layout.alignment: Qt.AlignLeft
                 text: qsTr("Repair text")
-                visible: _settings.show_repair_text && app.tts_configured && app.note.length !== 0 && !_settings.translator_mode
-                enabled: !app.busy && app.state === DsnoteApp.StateIdle
-                onClicked: {
-                    app.restore_text()
-                }
+                visible: _settings.show_repair_text && !_settings.translator_mode
+                onClicked: rapairTextMenu.open()
 
-                ToolTip.visible: hovered
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: qsTr("Changes the text to make it better suited for Text to Speech.")
-                hoverEnabled: true
+                Menu {
+                    id: rapairTextMenu
+
+                    y: repairTextButton.height
+
+                    MenuItem {
+                        text: qsTr("Restore diacritical marks (%1)").arg(qsTr("Arabic"))
+                        enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.ttt_diacritizer_ar_configured
+                        onClicked: app.restore_diacritics_ar()
+                    }
+
+                    MenuItem {
+                        text: qsTr("Restore diacritical marks (%1)").arg(qsTr("Hebrew"))
+                        enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.feature_diacritizer_he && app.ttt_diacritizer_he_configured
+                        onClicked: app.restore_diacritics_he()
+                    }
+                }
             }
 
             Item {

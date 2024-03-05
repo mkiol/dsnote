@@ -271,7 +271,7 @@ DialogPage {
             Item {
                 id: downloadButton
 
-                enabled: model && model.downloading || model.available || !model.dl_off
+                enabled: model && model.downloading || !model.dl_off
                 width: appWin.buttonWithIconWidth
                 height: appWin.buttonHeight
                 anchors {

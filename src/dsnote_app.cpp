@@ -56,8 +56,8 @@ QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
         case dsnote_app::service_state_t::StateTranslating:
             d << "translating";
             break;
-        case dsnote_app::service_state_t::StateRestoringText:
-            d << "restoring-text";
+        case dsnote_app::service_state_t::StateRepairingText:
+            d << "repairing-text";
             break;
         case dsnote_app::service_state_t::StateImporting:
             d << "importing";
@@ -123,6 +123,9 @@ QDebug operator<<(QDebug d, dsnote_app::error_t type) {
             break;
         case dsnote_app::error_t::ErrorMntRuntime:
             d << "mnt-runtime-error";
+            break;
+        case dsnote_app::error_t::ErrorTextRepairEngine:
+            d << "text-repair-engine-error";
             break;
         case dsnote_app::error_t::ErrorNoService:
             d << "no-service-error";
@@ -751,8 +754,8 @@ void dsnote_app::connect_service_signals() {
                 &dsnote_app::handle_tts_play_speech_finished,
                 Qt::QueuedConnection);
         connect(speech_service::instance(),
-                &speech_service::tts_restore_text_finished, this,
-                &dsnote_app::handle_tts_restore_text_finished,
+                &speech_service::ttt_repair_text_finished, this,
+                &dsnote_app::handle_ttt_repair_text_finished,
                 Qt::QueuedConnection);
         connect(speech_service::instance(),
                 &speech_service::tts_speech_to_file_finished, this,
@@ -835,8 +838,8 @@ void dsnote_app::connect_service_signals() {
                 &OrgMkiolSpeechInterface::TtsPlaySpeechFinished, this,
                 &dsnote_app::handle_tts_play_speech_finished);
         connect(&m_dbus_service,
-                &OrgMkiolSpeechInterface::TtsRestoreTextFinished, this,
-                &dsnote_app::handle_tts_restore_text_finished);
+                &OrgMkiolSpeechInterface::TttRepairTextFinished, this,
+                &dsnote_app::handle_ttt_repair_text_finished);
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::TtsSpeechToFileFinished, this,
                 &dsnote_app::handle_tts_speech_to_file_finished);
@@ -996,15 +999,22 @@ void dsnote_app::handle_tts_play_speech_finished(int task) {
     emit intermediate_text_changed();
 }
 
-void dsnote_app::handle_tts_restore_text_finished(const QString &text,
-                                                  int task) {
+void dsnote_app::handle_ttt_repair_text_finished(const QString &text,
+                                                 int task) {
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
     } else {
-        qDebug() << "[dbus => app] signal TtsRestoreTextFinished:" << task;
+        qDebug() << "[dbus => app] signal TttRepairTextFinished:" << task;
+    }
+
+    if (m_primary_task != task) {
+        qWarning() << "invalid task id";
+        return;
     }
 
     update_note(text, true);
+
+    emit text_repair_done();
 }
 
 void dsnote_app::handle_tts_speech_to_file_finished(const QStringList &files,
@@ -1016,6 +1026,11 @@ void dsnote_app::handle_tts_speech_to_file_finished(const QStringList &files,
     }
 
     qDebug() << "speech to file finished";
+
+    if (m_primary_task != task) {
+        qWarning() << "invalid task id";
+        return;
+    }
 
     if (m_dest_file_info.output_path.isEmpty()) {
         qWarning() << "input file is empty";
@@ -2072,7 +2087,15 @@ void dsnote_app::play_speech() {
         settings::instance()->stt_tts_text_format());
 }
 
-void dsnote_app::restore_text() {
+void dsnote_app::restore_diacritics_ar() {
+    repair_text(text_repair_task_type_t::restore_diacritics_ar);
+}
+
+void dsnote_app::restore_diacritics_he() {
+    repair_text(text_repair_task_type_t::restore_diacritics_he);
+}
+
+void dsnote_app::repair_text(text_repair_task_type_t task_type) {
     if (note().isEmpty()) {
         qWarning() << "text is empty";
         return;
@@ -2084,15 +2107,15 @@ void dsnote_app::restore_text() {
     options.insert(
         "text_format",
         static_cast<int>(settings::instance()->stt_tts_text_format()));
+    options.insert("task_type", static_cast<int>(task_type));
 
     if (settings::instance()->launch_mode() ==
         settings::launch_mode_t::app_stanalone) {
-        new_task =
-            speech_service::instance()->tts_restore_text(note(), {}, options);
+        new_task = speech_service::instance()->ttt_repair_text(note(), options);
     } else {
-        qDebug() << "[app => dbus] call TtsRestoreText";
+        qDebug() << "[app => dbus] call TttRepairText";
 
-        new_task = m_dbus_service.TtsRestoreText(note(), {}, options);
+        new_task = m_dbus_service.TttRepairText(note(), options);
     }
 
     m_primary_task.set(new_task);
@@ -2791,12 +2814,43 @@ void dsnote_app::update_configured_state() {
         return true;
     }();
 
-    auto new_ttt_configured = [this] {
+    auto new_ttt_diacritizer_ar_configured = [this] {
         if (m_service_state == service_state_t::StateUnknown ||
             m_service_state == service_state_t::StateNotConfigured ||
             m_available_ttt_models_map.empty())
             return false;
-        return true;
+        return m_available_ttt_models_map.contains("ar_tashkeel_diacritizer");
+    }();
+
+    auto new_ttt_diacritizer_he_configured = [this] {
+        if (m_service_state == service_state_t::StateUnknown ||
+            m_service_state == service_state_t::StateNotConfigured ||
+            m_available_ttt_models_map.empty())
+            return false;
+        return m_available_ttt_models_map.contains("he_unikud_diacritizer");
+    }();
+
+    auto new_ttt_punctuation_configured = [this] {
+        if (m_service_state == service_state_t::StateUnknown ||
+            m_service_state == service_state_t::StateNotConfigured ||
+            m_available_ttt_models_map.empty())
+            return false;
+        return m_available_ttt_models_map.contains("bg_hftc_kredor") ||
+               m_available_ttt_models_map.contains("en_hftc_kredor") ||
+               m_available_ttt_models_map.contains("de_hftc_kredor") ||
+               m_available_ttt_models_map.contains("fr_hftc_kredor") ||
+               m_available_ttt_models_map.contains("es_hftc_kredor") ||
+               m_available_ttt_models_map.contains("it_hftc_kredor") ||
+               m_available_ttt_models_map.contains("pl_hftc_kredor") ||
+               m_available_ttt_models_map.contains("nl_hftc_kredor") ||
+               m_available_ttt_models_map.contains("cs_hftc_kredor") ||
+               m_available_ttt_models_map.contains("pt_hftc_kredor") ||
+               m_available_ttt_models_map.contains("sl_hftc_kredor") ||
+               m_available_ttt_models_map.contains("sv_hftc_kredor") ||
+               m_available_ttt_models_map.contains("hu_hftc_kredor") ||
+               m_available_ttt_models_map.contains("ro_hftc_kredor") ||
+               m_available_ttt_models_map.contains("sk_hftc_kredor") ||
+               m_available_ttt_models_map.contains("da_hftc_kredor");
     }();
 
     auto new_mnt_configured = [this] {
@@ -2821,11 +2875,28 @@ void dsnote_app::update_configured_state() {
         emit tts_configured_changed();
     }
 
-    if (m_ttt_configured != new_ttt_configured) {
-        qDebug() << "app ttt configured:" << m_ttt_configured << "=>"
-                 << new_ttt_configured;
-        m_ttt_configured = new_ttt_configured;
-        emit ttt_configured_changed();
+    if (m_ttt_diacritizer_ar_configured != new_ttt_diacritizer_ar_configured) {
+        qDebug() << "app ttt diacritize-ar configured:"
+                 << m_ttt_diacritizer_ar_configured << "=>"
+                 << new_ttt_diacritizer_ar_configured;
+        m_ttt_diacritizer_ar_configured = new_ttt_diacritizer_ar_configured;
+        emit ttt_diacritizer_ar_configured_changed();
+    }
+
+    if (m_ttt_diacritizer_he_configured != new_ttt_diacritizer_he_configured) {
+        qDebug() << "app ttt diacritize-he configured:"
+                 << m_ttt_diacritizer_he_configured << "=>"
+                 << new_ttt_diacritizer_he_configured;
+        m_ttt_diacritizer_he_configured = new_ttt_diacritizer_he_configured;
+        emit ttt_diacritizer_he_configured_changed();
+    }
+
+    if (m_ttt_punctuation_configured != new_ttt_punctuation_configured) {
+        qDebug() << "app ttt punctuation configured:"
+                 << m_ttt_punctuation_configured << "=>"
+                 << new_ttt_punctuation_configured;
+        m_ttt_punctuation_configured = new_ttt_punctuation_configured;
+        emit ttt_punctuation_configured_changed();
     }
 
     if (m_mnt_configured != new_mnt_configured) {
@@ -2848,7 +2919,17 @@ bool dsnote_app::stt_configured() const { return m_stt_configured; }
 
 bool dsnote_app::tts_configured() const { return m_tts_configured; }
 
-bool dsnote_app::ttt_configured() const { return m_ttt_configured; }
+bool dsnote_app::ttt_diacritizer_ar_configured() const {
+    return m_ttt_diacritizer_ar_configured;
+}
+
+bool dsnote_app::ttt_diacritizer_he_configured() const {
+    return m_ttt_diacritizer_he_configured;
+}
+
+bool dsnote_app::ttt_punctuation_configured() const {
+    return m_ttt_punctuation_configured;
+}
 
 bool dsnote_app::mnt_configured() const { return m_mnt_configured; }
 
@@ -4211,6 +4292,7 @@ void dsnote_app::update_tray_state() {
         case service_state_t::StateBusy:
         case service_state_t::StateImporting:
         case service_state_t::StateExporting:
+        case service_state_t::StateRepairingText:
             m_tray.set_state(tray_icon::state_t::busy);
             break;
         case service_state_t::StateIdle:

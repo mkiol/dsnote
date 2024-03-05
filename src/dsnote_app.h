@@ -182,7 +182,13 @@ class dsnote_app : public QObject {
     Q_PROPERTY(
         bool tts_configured READ tts_configured NOTIFY tts_configured_changed)
     Q_PROPERTY(
-        bool ttt_configured READ ttt_configured NOTIFY ttt_configured_changed)
+        bool ttt_diacritizer_ar_configured READ ttt_diacritizer_ar_configured
+            NOTIFY ttt_diacritizer_ar_configured_changed)
+    Q_PROPERTY(
+        bool ttt_diacritizer_he_configured READ ttt_diacritizer_he_configured
+            NOTIFY ttt_diacritizer_he_configured_changed)
+    Q_PROPERTY(bool ttt_punctuation_configured READ ttt_punctuation_configured
+                   NOTIFY ttt_punctuation_configured_changed)
     Q_PROPERTY(
         bool mnt_configured READ mnt_configured NOTIFY mnt_configured_changed)
     Q_PROPERTY(bool connected READ connected NOTIFY connected_changed)
@@ -231,7 +237,7 @@ class dsnote_app : public QObject {
         StatePlayingSpeech = 8,
         StateWritingSpeechToFile = 9,
         StateTranslating = 10,
-        StateRestoringText = 11,
+        StateRepairingText = 11,
         StateImporting = 20,
         StateExporting = 21
     };
@@ -257,7 +263,9 @@ class dsnote_app : public QObject {
         ErrorSttEngine = 3,
         ErrorTtsEngine = 4,
         ErrorMntEngine = 5,
-        ErrorMntRuntime = 6,  // has to be the same as speech_service::error_t
+        ErrorMntRuntime = 6,
+        ErrorTextRepairEngine =
+            7,  // has to be the same as speech_service::error_t
         ErrorExportFileGeneral = 10,
         ErrorImportFileGeneral = 11,
         ErrorImportFileNoStreams = 12,
@@ -312,7 +320,8 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void play_speech();
     Q_INVOKABLE void play_speech_from_clipboard();
     Q_INVOKABLE void play_speech_translator(bool transtalated);
-    Q_INVOKABLE void restore_text();
+    Q_INVOKABLE void restore_diacritics_ar();
+    Q_INVOKABLE void restore_diacritics_he();
     Q_INVOKABLE void pause_speech();
     Q_INVOKABLE void resume_speech();
     Q_INVOKABLE void translate();
@@ -393,7 +402,9 @@ class dsnote_app : public QObject {
     void busy_changed();
     void stt_configured_changed();
     void tts_configured_changed();
-    void ttt_configured_changed();
+    void ttt_diacritizer_ar_configured_changed();
+    void ttt_diacritizer_he_configured_changed();
+    void ttt_punctuation_configured_changed();
     void mnt_configured_changed();
     void connected_changed();
     void another_app_connected_changed();
@@ -402,6 +413,7 @@ class dsnote_app : public QObject {
     void translate_progress_changed();
     void error(dsnote_app::error_t type);
     void transcribe_done();
+    void text_repair_done();
     void save_note_to_file_done();
     void service_state_changed();
     void note_copied();
@@ -444,6 +456,12 @@ class dsnote_app : public QObject {
         cancel
     };
     friend QDebug operator<<(QDebug d, action_t type);
+
+    enum class text_repair_task_type_t {
+        none = 0,
+        restore_diacritics_ar = 1,
+        restore_diacritics_he = 2
+    };
 
     inline static const QString DBUS_SERVICE_NAME{
         QStringLiteral(APP_DBUS_SPEECH_SERVICE)};
@@ -536,8 +554,10 @@ class dsnote_app : public QObject {
     QTimer m_auto_format_delay_timer;
     bool m_stt_configured = false;
     bool m_tts_configured = false;
-    bool m_ttt_configured = false;
     bool m_mnt_configured = false;
+    bool m_ttt_diacritizer_ar_configured = false;
+    bool m_ttt_diacritizer_he_configured = false;
+    bool m_ttt_punctuation_configured = false;
 
     dest_file_info_t m_dest_file_info;
     QString m_translated_text;
@@ -593,7 +613,9 @@ class dsnote_app : public QObject {
     void update_configured_state();
     bool stt_configured() const;
     bool tts_configured() const;
-    bool ttt_configured() const;
+    bool ttt_diacritizer_ar_configured() const;
+    bool ttt_diacritizer_he_configured() const;
+    bool ttt_punctuation_configured() const;
     bool mnt_configured() const;
     bool connected() const;
     double transcribe_progress() const;
@@ -675,7 +697,7 @@ class dsnote_app : public QObject {
     void handle_stt_file_transcribe_finished(int task);
     void handle_stt_file_transcribe_progress(double new_progress, int task);
     void handle_tts_play_speech_finished(int task);
-    void handle_tts_restore_text_finished(const QString &text, int task);
+    void handle_ttt_repair_text_finished(const QString &text, int task);
     void handle_tts_speech_to_file_finished(const QStringList &files, int task);
     void handle_tts_speech_to_file_progress(double new_progress, int task);
     void handle_stt_default_model_changed(const QString &model);
@@ -795,6 +817,7 @@ class dsnote_app : public QObject {
     inline int player_current_voice_ref_idx() const {
         return m_player_current_voice_ref_idx;
     }
+    void repair_text(text_repair_task_type_t task_type);
 #ifdef USE_DESKTOP
     void execute_tray_action(tray_icon::action_t action);
 #endif

@@ -51,6 +51,8 @@ class models_manager : public QObject, public singleton<models_manager> {
         stt_fasterwhisper,
         stt_april,
         ttt_hftc,
+        ttt_tashkeel,
+        ttt_unikud,
         tts_coqui,
         tts_piper,
         tts_espeak,
@@ -245,6 +247,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         comp_type comp = comp_type::none;
         std::vector<QUrl> urls;
         long long size = 0;
+        size_t urls_hash = 0;
     };
 
     struct priv_model_t {
@@ -371,8 +374,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     void update_models_using_availability_internal();
     static void update_dl_multi(models_t& models);
     static void update_dl_off(models_t& models);
-    static size_t make_url_hash(const std::vector<QUrl>& urls,
-                                const std::vector<sup_model_t>& sup_models);
+    static void update_url_hash(priv_model_t& model);
     static download_info_t make_download_info(const priv_model_t& model);
     static feature_flags add_explicit_feature_flags(
         const QString& model_id, model_engine_t engine,

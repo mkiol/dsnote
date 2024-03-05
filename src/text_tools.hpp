@@ -63,6 +63,7 @@ std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
 void restore_caps(std::string& text);
 void to_lower_case(std::string& text);
 void trim_lines(std::string& text);
+void trim_line(std::string& text);
 void remove_hyphen_word_break(std::string& text);
 void clean_white_characters(std::string& text);
 bool has_uroman();

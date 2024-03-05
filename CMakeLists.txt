@@ -126,7 +126,7 @@ set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
 set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
-set(info_conf_version "66")
+set(info_conf_version "67")
 set(info_version_type "beta")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · Locness3 · DevSJR · Vovkiv")
@@ -322,6 +322,8 @@ set(dsnote_lib_sources
     ${sources_dir}/recorder.cpp
     ${sources_dir}/media_converter.hpp
     ${sources_dir}/media_converter.cpp
+    ${sources_dir}/text_repair_engine.hpp
+    ${sources_dir}/text_repair_engine.cpp
 )
 
 if(WITH_DESKTOP)

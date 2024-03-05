@@ -10,7 +10,7 @@
                           3 = Idle, 4 = Listening Manual, 5 = Listening Auto,
                           6 = Transcribing File, 7 = Listening One-sentence,
                           8 = Playing speech, 9 = Writing speech synthesis to file,
-                          10 = Translating, 11 = Restoring text
+                          10 = Translating, 11 = Repairing text
             Unrecognized states should be considered equal to Unknown.
         -->
         <property name="State" type="i" access="read" />
@@ -828,34 +828,32 @@
           <arg name="models" type="a{sv}" direction="out" />
         </signal>
 
-        <!-- tts experimental api -->
+        <!-- ttt experimental api -->
 
         <!--
-            TtsRestoreText:
+            TttRepairText:
             @text: input text
-            @lang: language code (ISO 639-1) or model id
             @options: A dict of options (option-name => option-value).
-            @task: returned id of task which will be included in TtsRestoreTextFinished signals,
+            @task: returned id of task which will be included in TttRepairTextFinished signals,
                    @task less than 0 idicates an error
 
             Restores the given text.
         -->
-        <method name="TtsRestoreText">
-            <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="QVariantMap"/>
+        <method name="TttRepairText">
+            <annotation name="org.qtproject.QtDBus.QtTypeName.In1" value="QVariantMap"/>
             <arg name="text" type="s" direction="in" />
-            <arg name="lang" type="s" direction="in" />
             <arg name="options" type="a{sv}" direction="in" />
             <arg name="task" type="i" direction="out" />
         </method>
 
         <!--
-            TtsRestoreTextFinished:
+            TttRepairTextFinished:
             @text: text after restoration
-            @task: id of task returned in TttRestoreText call
+            @task: id of task returned in TttRepairText call
 
-            Emitted whenever TttRestoreText is finished.
+            Emitted whenever TttRepairText is finished.
         -->
-        <signal name="TtsRestoreTextFinished">
+        <signal name="TttRepairTextFinished">
             <arg name="text" type="s" direction="out" />
             <arg name="task" type="i" direction="out" />
         </signal>

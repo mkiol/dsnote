@@ -298,14 +298,13 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
 "      <arg direction=\"out\" type=\"a{sv}\" name=\"models\"/>\n"
 "    </signal>\n"
-"    <method name=\"TtsRestoreText\">\n"
-"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.In2\"/>\n"
+"    <method name=\"TttRepairText\">\n"
+"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.In1\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"text\"/>\n"
-"      <arg direction=\"in\" type=\"s\" name=\"lang\"/>\n"
 "      <arg direction=\"in\" type=\"a{sv}\" name=\"options\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </method>\n"
-"    <signal name=\"TtsRestoreTextFinished\">\n"
+"    <signal name=\"TttRepairTextFinished\">\n"
 "      <arg direction=\"out\" type=\"s\" name=\"text\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"task\"/>\n"
 "    </signal>\n"
@@ -403,10 +402,10 @@ public Q_SLOTS: // METHODS
     int TtsPauseSpeech(int task);
     int TtsPlaySpeech(const QString &text, const QString &lang);
     int TtsPlaySpeech2(const QString &text, const QString &lang, const QVariantMap &options);
-    int TtsRestoreText(const QString &text, const QString &lang, const QVariantMap &options);
     int TtsResumeSpeech(int task);
     int TtsSpeechToFile(const QString &text, const QString &lang, const QVariantMap &options);
     int TtsStopSpeech(int task);
+    int TttRepairText(const QString &text, const QVariantMap &options);
 Q_SIGNALS: // SIGNALS
     void CurrentTaskPropertyChanged(int task);
     void DefaultMntLangPropertyChanged(const QString &lang);
@@ -436,11 +435,11 @@ Q_SIGNALS: // SIGNALS
     void TtsModelsPropertyChanged(const QVariantMap &models);
     void TtsPartialSpeechPlaying(const QString &text, int task);
     void TtsPlaySpeechFinished(int task);
-    void TtsRestoreTextFinished(const QString &text, int task);
     void TtsSpeechToFileFinished(const QStringList &files, int task);
     void TtsSpeechToFileProgress(double progress, int task);
     void TttLangsPropertyChanged(const QVariantMap &langs);
     void TttModelsPropertyChanged(const QVariantMap &models);
+    void TttRepairTextFinished(const QString &text, int task);
 };
 
 #endif

@@ -31,6 +31,7 @@
 #include "models_manager.h"
 #include "singleton.h"
 #include "stt_engine.hpp"
+#include "text_repair_engine.hpp"
 #include "tts_engine.hpp"
 
 QDebug operator<<(QDebug d, const stt_engine::config_t &config);
@@ -82,7 +83,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         playing_speech = 8,
         writing_speech_to_file = 9,
         translating = 10,
-        restoring_text = 11
+        repairing_text = 11
     };
     friend QDebug operator<<(QDebug d, state_t state_value);
 
@@ -104,7 +105,8 @@ class speech_service : public QObject, public singleton<speech_service> {
         stt_engine = 3,
         tts_engine = 4,
         mnt_engine = 5,
-        mnt_runtime = 6
+        mnt_runtime = 6,
+        text_repair_engine = 7
     };
 
     struct tts_partial_result_t {
@@ -138,8 +140,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     Q_INVOKABLE int tts_stop_speech(int task);
     Q_INVOKABLE int tts_speech_to_file(const QString &text, QString lang,
                                        const QVariantMap &options);
-    Q_INVOKABLE int tts_restore_text(const QString &text, QString lang,
-                                     const QVariantMap &options);
+    Q_INVOKABLE int ttt_repair_text(const QString &text,
+                                    const QVariantMap &options);
     Q_INVOKABLE int mnt_translate(const QString &text, QString lang,
                                   QString out_lang, const QVariantMap &options);
     Q_INVOKABLE int cancel(int task);
@@ -197,8 +199,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     void tts_speech_to_file_finished(QStringList files, int task);
     void tts_speech_encoded(const speech_service::tts_partial_result_t &result);
     void tts_partial_speech_playing(const QString &text, int task);
-    void tts_text_restored(const QString &text, int task);
-    void tts_restore_text_finished(const QString &text, int task);
+    void ttt_text_repaired(const QString &text, int task);
+    void ttt_repair_text_finished(const QString &text, int task);
     void mnt_translate_progress_changed(double progress, int task);
     void mnt_engine_translate_progress_changed(int task);
     void mnt_translate_finished(const QString &in_text, const QString &in_lang,
@@ -207,6 +209,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     void requet_update_task_state();
     void mnt_engine_state_changed(mnt_engine::state_t state, int task_id);
     void tts_engine_state_changed(tts_engine::state_t state, int task_id);
+    void text_repair_engine_state_changed(text_repair_engine::state_t state,
+                                          int task_id);
     void current_task_changed();
     void sentence_timeout(int task_id);
     void stt_engine_eof(int task_id);
@@ -214,6 +218,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void stt_engine_stopped(int task_id);
     void stt_engine_stopping(int task_id);
     void tts_engine_error(int task_id);
+    void text_repair_engine_error(int task_id);
     void mnt_engine_error(mnt_engine::error_t error_type, int task_id);
     void stt_engine_shutdown();
     void stt_engine_state_changed(stt_engine::speech_detection_status_t state,
@@ -240,7 +245,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void TtsSpeechToFileFinished(const QStringList &files, int task);
     void TtsPartialSpeechPlaying(const QString &text, int task);
     void TtsSpeechToFileProgress(double progress, int task);
-    void TtsRestoreTextFinished(const QString &text, int task);
+    void TtrRepairTextFinished(const QString &text, int task);
     void SttLangsPropertyChanged(const QVariantMap &langs);
     void SttLangListPropertyChanged(const QVariantList &langs);
     void DefaultSttLangPropertyChanged(const QString &lang);
@@ -265,7 +270,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void FeaturesAvailabilityUpdated();
 
    private:
-    enum class engine_t { stt, tts, mnt };
+    enum class engine_t { stt, tts, mnt, text_repair };
 
     struct lang_to_model_map_t {
         std::unordered_map<QString, QString> stt;
@@ -323,10 +328,17 @@ class speech_service : public QObject, public singleton<speech_service> {
         std::optional<ttt_model_config_t> ttt;
     };
 
+    struct text_repair_model_config_t {
+        std::optional<ttt_model_config_t> diacritizer_he;
+        std::optional<ttt_model_config_t> diacritizer_ar;
+        std::optional<ttt_model_config_t> punctuation;
+    };
+
     struct model_config_t {
         std::optional<stt_model_config_t> stt;
         std::optional<tts_model_config_t> tts;
         std::optional<mnt_model_config_t> mnt;
+        std::optional<text_repair_model_config_t> text_repair;
         QString options;
     };
 
@@ -356,6 +368,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     int m_last_task_id = INVALID_TASK;
     std::unique_ptr<stt_engine> m_stt_engine;
     std::unique_ptr<tts_engine> m_tts_engine;
+    std::unique_ptr<text_repair_engine> m_text_repair_engine;
     std::unique_ptr<mnt_engine> m_mnt_engine;
     std::unique_ptr<audio_source> m_source;
     std::map<QString, model_data_t>
@@ -394,10 +407,13 @@ class speech_service : public QObject, public singleton<speech_service> {
     void handle_stt_engine_stopped(int task_id);
     void handle_stt_engine_stopping(int task_id);
     void handle_tts_engine_error(int task_id);
+    void handle_text_repair_engine_error(int task_id);
     void handle_mnt_engine_error(mnt_engine::error_t error_type);
     void handle_mnt_engine_error(mnt_engine::error_t error_type, int task_id);
     void handle_tts_engine_state_changed(tts_engine::state_t state,
                                          int task_id);
+    void handle_text_repair_engine_state_changed(
+        text_repair_engine::state_t state, int task_id);
     void handle_mnt_engine_state_changed(mnt_engine::state_t state,
                                          int task_id);
     void handle_mnt_progress_changed(int task_id);
@@ -405,7 +421,7 @@ class speech_service : public QObject, public singleton<speech_service> {
                                        const std::string &in_lang,
                                        std::string &&out_text,
                                        const std::string &out_lang);
-    void handle_tts_text_restored(const QString &text, int task_id);
+    void handle_ttt_text_repaired(const QString &text, int task_id);
     void handle_stt_text_decoded(const std::string &text);
     void handle_stt_text_decoded(const QString &text, const QString &model_id,
                                  int task_id);
@@ -432,6 +448,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     QString restart_mnt_engine(const QString &model_or_lang_id,
                                const QString &out_lang_id,
                                const QVariantMap &options);
+    bool restart_text_repair_engine(const QVariantMap &options);
     void restart_audio_source(const QString &source_file = {},
                               int stream_index = -1);
     void stop_stt();
@@ -455,6 +472,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void stop_stt_engine_gracefully();
     void stop_stt_engine();
     void stop_tts_engine();
+    void stop_text_repair_engine();
     void stop_mnt_engine();
     QString test_default_stt_model(const QString &lang) const;
     QString test_default_tts_model(const QString &lang) const;
@@ -532,8 +550,8 @@ class speech_service : public QObject, public singleton<speech_service> {
                                   const QString &out_lang,
                                   const QVariantMap &options);
     Q_INVOKABLE QVariantMap MntGetOutLangs(const QString &lang);
-    Q_INVOKABLE int TtsRestoreText(const QString &text, const QString &lang,
-                                   const QVariantMap &options);
+    Q_INVOKABLE int TttRepairText(const QString &text,
+                                  const QVariantMap &options);
     Q_INVOKABLE QVariantMap FeaturesAvailability();
 };
 
@@ -543,5 +561,6 @@ Q_DECLARE_METATYPE(mnt_engine::state_t)
 Q_DECLARE_METATYPE(mnt_engine::error_t)
 Q_DECLARE_METATYPE(tts_engine::state_t)
 Q_DECLARE_METATYPE(stt_engine::speech_detection_status_t)
+Q_DECLARE_METATYPE(text_repair_engine::state_t)
 
 #endif  // SPEECH_SERVICE_H

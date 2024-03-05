@@ -7,8 +7,8 @@ ExternalProject_Add(maddy
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL ${maddy_source_url}
     URL_HASH SHA256=${maddy_checksum}
-    CONFIGURE_COMMAND ""
-    BUILD_COMMAND ""
+    CONFIGURE_COMMAND cp -r ${external_dir}/maddy/include/maddy ${external_include_dir}/
+    BUILD_COMMAND cp -r ${external_dir}/maddy/include/maddy ${external_include_dir}/
     INSTALL_COMMAND cp -r ${external_dir}/maddy/include/maddy ${external_include_dir}/
 )
 
