@@ -322,6 +322,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void play_speech_translator(bool transtalated);
     Q_INVOKABLE void restore_diacritics_ar();
     Q_INVOKABLE void restore_diacritics_he();
+    Q_INVOKABLE void restore_punctuation();
     Q_INVOKABLE void pause_speech();
     Q_INVOKABLE void resume_speech();
     Q_INVOKABLE void translate();
@@ -460,7 +461,8 @@ class dsnote_app : public QObject {
     enum class text_repair_task_type_t {
         none = 0,
         restore_diacritics_ar = 1,
-        restore_diacritics_he = 2
+        restore_diacritics_he = 2,
+        restore_punctuation = 3,
     };
 
     inline static const QString DBUS_SERVICE_NAME{

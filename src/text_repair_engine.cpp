@@ -55,7 +55,8 @@ std::ostream& operator<<(std::ostream& os,
 std::ostream& operator<<(std::ostream& os,
                          const text_repair_engine::model_files_t& model_files) {
     os << "diacritizer_he=" << model_files.diacritizer_path_he
-       << ", diacritizer_ar=" << model_files.diacritizer_path_ar;
+       << ", diacritizer_ar=" << model_files.diacritizer_path_ar
+       << ", punctuator=" << model_files.punctuator_path;
 
     return os;
 }
@@ -77,6 +78,9 @@ std::ostream& operator<<(std::ostream& os,
             break;
         case text_repair_engine::task_type_t::restore_diacritics_he:
             os << "restore-diacritics-he";
+            break;
+        case text_repair_engine::task_type_t::restore_punctuation:
+            os << "restore-punctuation";
             break;
         case text_repair_engine::task_type_t::none:
             os << "none";
@@ -118,9 +122,7 @@ std::ostream& operator<<(std::ostream& os, text_repair_engine::state_t state) {
 }
 
 text_repair_engine::text_repair_engine(config_t config, callbacks_t call_backs)
-    : m_config{std::move(config)},
-      m_call_backs{std::move(call_backs)},
-      m_text_processor{config.use_gpu ? config.gpu_device.id : -1} {}
+    : m_config{std::move(config)}, m_call_backs{std::move(call_backs)} {}
 
 text_repair_engine::~text_repair_engine() {
     LOGD("text-repair dtor");
@@ -166,7 +168,7 @@ void text_repair_engine::repair_text(const std::string& text,
 
     LOGD("text-repair task: " << task_type);
 
-    auto tasks = make_tasks(text, true, task_type);
+    auto tasks = make_tasks(text, task_type);
 
     if (tasks.empty()) {
         LOGW("no task to process");
@@ -205,7 +207,7 @@ void text_repair_engine::set_state(state_t new_state) {
 }
 
 std::vector<text_repair_engine::task_t> text_repair_engine::make_tasks(
-    const std::string& text, bool split, task_type_t task_type) const {
+    const std::string& text, task_type_t task_type) const {
     std::vector<text_repair_engine::task_t> tasks;
 
     if (m_config.text_format == text_format_t::subrip) {
@@ -235,7 +237,7 @@ std::vector<text_repair_engine::task_t> text_repair_engine::make_tasks(
         LOGW("text-repair fallback to plain text");
     }
 
-    if (split) {
+    if (task_type != task_type_t::restore_punctuation) {
         auto [parts, _] =
             text_tools::split(text, text_tools::split_engine_t::astrunc, [&] {
                 switch (task_type) {
@@ -243,6 +245,7 @@ std::vector<text_repair_engine::task_t> text_repair_engine::make_tasks(
                         return "ar";
                     case task_type_t::restore_diacritics_he:
                         return "he";
+                    case task_type_t::restore_punctuation:
                     case task_type_t::none:
                         break;
                 }
@@ -273,12 +276,32 @@ void text_repair_engine::process_task(task_t& task,
                                       std::string& repaired_text) {
     switch (task.type) {
         case task_type_t::restore_diacritics_ar:
-            m_text_processor.arabic_diacritize(
+        case task_type_t::restore_diacritics_he:
+            if (!m_text_processor)
+                m_text_processor.emplace(
+                    m_config.use_gpu ? m_config.gpu_device.id : -1);
+            break;
+        case task_type_t::restore_punctuation:
+            if (!m_punctuator)
+                m_punctuator.emplace(
+                    m_config.model_files.punctuator_path,
+                    m_config.use_gpu ? m_config.gpu_device.id : -1);
+            break;
+        case task_type_t::none:
+            throw std::runtime_error{"invalid task type"};
+    }
+
+    switch (task.type) {
+        case task_type_t::restore_diacritics_ar:
+            m_text_processor->arabic_diacritize(
                 task.text, m_config.model_files.diacritizer_path_ar);
             break;
         case task_type_t::restore_diacritics_he:
-            m_text_processor.hebrew_diacritize(
+            m_text_processor->hebrew_diacritize(
                 task.text, m_config.model_files.diacritizer_path_he);
+            break;
+        case task_type_t::restore_punctuation:
+            task.text = m_punctuator->process(task.text);
             break;
         case task_type_t::none:
             throw std::runtime_error{"invalid task type"};

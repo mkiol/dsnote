@@ -191,14 +191,26 @@ ToolBar {
                     y: repairTextButton.height
 
                     MenuItem {
+                        text: qsTr("Restore punctuation")
+                        enabled: !app.busy && app.state === DsnoteApp.StateIdle &&
+                                 app.feature_punctuator && app.ttt_punctuation_configured &&
+                                 app.note.length !== 0
+                        onClicked: app.restore_punctuation()
+                    }
+
+                    MenuItem {
                         text: qsTr("Restore diacritical marks (%1)").arg(qsTr("Arabic"))
-                        enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.ttt_diacritizer_ar_configured
+                        enabled: !app.busy && app.state === DsnoteApp.StateIdle &&
+                                 app.ttt_diacritizer_ar_configured &&
+                                 app.note.length !== 0
                         onClicked: app.restore_diacritics_ar()
                     }
 
                     MenuItem {
                         text: qsTr("Restore diacritical marks (%1)").arg(qsTr("Hebrew"))
-                        enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.feature_diacritizer_he && app.ttt_diacritizer_he_configured
+                        enabled: !app.busy && app.state === DsnoteApp.StateIdle &&
+                                 app.feature_diacritizer_he && app.ttt_diacritizer_he_configured &&
+                                 app.note.length !== 0
                         onClicked: app.restore_diacritics_he()
                     }
                 }

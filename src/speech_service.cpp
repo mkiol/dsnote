@@ -969,6 +969,18 @@ speech_service::choose_model_config(engine_t engine_type,
             qDebug() << "can't find hebrew diacritization model";
         }
 
+        if (auto it = std::find_if(
+                models.cbegin(), models.cend(),
+                [&](const auto &model) {
+                    return model.engine ==
+                           models_manager::model_engine_t::ttt_hftc;
+                });
+            it != models.cend()) {
+            config.text_repair->punctuation = {it->id, it->model_file};
+        } else {
+            qDebug() << "can't find punctuation model";
+        }
+
         return config;
     }
 
@@ -1732,6 +1744,10 @@ bool speech_service::restart_text_repair_engine(const QVariantMap &options) {
         if (model_config->text_repair->diacritizer_he)
             config.model_files.diacritizer_path_he =
                 model_config->text_repair->diacritizer_he->model_file
+                    .toStdString();
+        if (model_config->text_repair->punctuation)
+            config.model_files.punctuator_path =
+                model_config->text_repair->punctuation->model_file
                     .toStdString();
         config.options = model_config->options.toStdString();
         config.text_format = text_repair_text_fromat_from_settings_format(

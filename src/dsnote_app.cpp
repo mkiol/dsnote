@@ -2095,6 +2095,10 @@ void dsnote_app::restore_diacritics_he() {
     repair_text(text_repair_task_type_t::restore_diacritics_he);
 }
 
+void dsnote_app::restore_punctuation() {
+    repair_text(text_repair_task_type_t::restore_punctuation);
+}
+
 void dsnote_app::repair_text(text_repair_task_type_t task_type) {
     if (note().isEmpty()) {
         qWarning() << "text is empty";
