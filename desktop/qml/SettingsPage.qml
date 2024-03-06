@@ -37,7 +37,7 @@ DialogPage {
         id: bar
 
         visible: !root.verticalMode
-        width: parent.width
+        Layout.fillWidth: true
         onCurrentIndexChanged: comboBar.currentIndex = currentIndex
 
         TabButton {
@@ -101,15 +101,14 @@ DialogPage {
     }
 
     StackLayout {
-        width: root.width
-        Layout.topMargin: appWin.padding
+        property alias verticalMode: root.verticalMode
 
+        Layout.fillWidth: true
+        Layout.topMargin: appWin.padding
         currentIndex: bar.currentIndex
 
         ColumnLayout {
             id: userInterfaceTab
-
-            width: root.width
 
             CheckBox {
                 checked: _settings.keep_last_note
@@ -124,21 +123,10 @@ DialogPage {
                 hoverEnabled: true
             }
 
-            GridLayout {
-                id: grid
-
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("File import action")
-                }
-                ComboBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? appWin.padding : 0
+            ComboBoxForm {
+                label.text: qsTr("File import action")
+                toolTip: qsTr("The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.")
+                comboBox {
                     currentIndex: {
                         if (_settings.file_import_action === Settings.FileImportActionAsk) return 0
                         if (_settings.file_import_action === Settings.FileImportActionAppend) return 1
@@ -159,27 +147,13 @@ DialogPage {
                             _settings.file_import_action = Settings.FileImportActionAsk
                         }
                     }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.")
-                    hoverEnabled: true
                 }
             }
 
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Text appending style")
-                }
-                ComboBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? appWin.padding : 0
+            ComboBoxForm {
+                label.text: qsTr("Text appending style")
+                toolTip: qsTr("Text is appended to the note in the same line or after line break.")
+                comboBox {
                     currentIndex: {
                         if (_settings.insert_mode === Settings.InsertInLine) return 0
                         if (_settings.insert_mode === Settings.InsertNewLine) return 1
@@ -198,28 +172,12 @@ DialogPage {
                             _settings.insert_mode = Settings.InsertInLine
                         }
                     }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Text is appended to the note in the same line or after line break.")
-                    hoverEnabled: true
                 }
             }
 
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Font size in text editor")
-                    wrapMode: Text.Wrap
-                }
-                SpinBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? appWin.padding : 0
+            SpinBoxForm {
+                label.text: qsTr("Font size in text editor")
+                spinBox {
                     from: 4
                     to: 25
                     stepSize: 1
@@ -232,27 +190,15 @@ DialogPage {
                         return parseInt(text);
                     }
                     onValueChanged: {
-                        _settings.font_size = value;
-                    }
-                    Component.onCompleted: {
-                        contentItem.color = palette.text
+                        _settings.font_size = spinBox.value;
                     }
                 }
             }
 
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Show desktop notification")
-                }
-                ComboBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? appWin.padding : 0
+            ComboBoxForm {
+                label.text: qsTr("Show desktop notification")
+                toolTip: qsTr("Show desktop notification while reading or listening.")
+                comboBox {
                     currentIndex: {
                         switch(_settings.desktop_notification_policy) {
                         case Settings.DesktopNotificationNever: return 0
@@ -275,11 +221,6 @@ DialogPage {
                             _settings.desktop_notification_policy = Settings.DesktopNotificationAlways
                         }
                     }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Show desktop notification while reading or listening.")
-                    hoverEnabled: true
                 }
             }
 
@@ -332,31 +273,16 @@ DialogPage {
                 }
             }
 
-            GridLayout {
+            ComboBoxForm {
+                indends: 1
                 visible: !_settings.qt_style_auto
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.leftMargin: appWin.padding
-                    Layout.fillWidth: true
-                    text: qsTr("Graphical style")
-                    wrapMode: Text.Wrap
-                }
-                ComboBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                label.text: qsTr("Graphical style")
+                toolTip: qsTr("Application graphical interface style.") + " " +
+                         qsTr("Change if you observe problems with incorrect colors under a dark theme.")
+                comboBox {
                     currentIndex: _settings.qt_style_idx
                     model: _settings.qt_styles()
                     onActivated: _settings.qt_style_idx = index
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Application graphical interface style.") + " " +
-                                  qsTr("Change if you observe problems with incorrect colors under a dark theme.")
-                    hoverEnabled: true
                 }
             }
         }
@@ -364,64 +290,36 @@ DialogPage {
         ColumnLayout {
             id: speechToTextTab
 
-            width: root.width
-
-            GridLayout {
+            ComboBoxForm {
                 visible: _settings.audio_inputs.length > 1
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    wrapMode: Text.Wrap
-                    Layout.fillWidth: true
-                    text: qsTr("Audio source")
-                }
-                ComboBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? appWin.padding : 0
+                label.text: qsTr("Audio source")
+                toolTip: qsTr("Select preferred audio source.")
+                comboBox {
                     currentIndex: _settings.audio_input_idx
                     model: _settings.audio_inputs
                     onActivated: {
                         _settings.audio_input_idx = index
                     }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Select preferred audio source.")
-                    hoverEnabled: true
                 }
             }
 
-            InlineMessage {
-                color: "red"
-                Layout.fillWidth: true
-                Layout.leftMargin: appWin.padding
+            TipMessage {
+                indends: 1
                 visible: _settings.audio_inputs.length <= 1
-
-                Label {
-                    color: "red"
-                    Layout.fillWidth: true
-                    wrapMode: Text.Wrap
-                    text: qsTr("No audio source could be found.") + " " + qsTr("Make sure the microphone is properly connected.")
-                }
+                text: qsTr("No audio source could be found.") + " " +
+                      qsTr("Make sure the microphone is properly connected.")
             }
 
-            GridLayout {
-                Layout.fillWidth: true
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Listening mode")
-                }
-                ComboBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? appWin.padding : 0
+            ComboBoxForm {
+                visible: _settings.audio_inputs.length > 1
+                label.text: qsTr("Listening mode")
+                toolTip: "<i>" + qsTr("One sentence") + "</i>" + " — " + qsTr("Clicking on the %1 button starts listening, which ends when the first sentence is recognized.")
+                         .arg("<i>" + qsTr("Listen") + "</i>") + "<br/>" +
+                         "<i>" + qsTr("Press and hold") + "</i>" + " — " + qsTr("Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.")
+                         .arg("<i>" + qsTr("Listen") + "</i>") + "<br/>" +
+                         "<i>" + qsTr("Always on") + "</i>" + " — " + qsTr("After clicking on the %1 button, listening is always turn on.")
+                         .arg("<i>" + qsTr("Listen") + "</i>")
+                comboBox {
                     currentIndex: {
                         if (_settings.speech_mode === Settings.SpeechSingleSentence) return 0
                         if (_settings.speech_mode === Settings.SpeechAutomatic) return 2
@@ -441,16 +339,6 @@ DialogPage {
                             _settings.speech_mode = Settings.SpeechManual
                         }
                     }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: "<i>" + qsTr("One sentence") + "</i>" + " — " + qsTr("Clicking on the %1 button starts listening, which ends when the first sentence is recognized.")
-                                    .arg("<i>" + qsTr("Listen") + "</i>") + "<br/>" +
-                                  "<i>" + qsTr("Press and hold") + "</i>" + " — " + qsTr("Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.")
-                                    .arg("<i>" + qsTr("Listen") + "</i>") + "<br/>" +
-                                  "<i>" + qsTr("Always on") + "</i>" + " — " + qsTr("After clicking on the %1 button, listening is always turn on.")
-                                    .arg("<i>" + qsTr("Listen") + "</i>")
-                    hoverEnabled: true
                 }
             }
 
@@ -474,21 +362,13 @@ DialogPage {
                 hoverEnabled: true
             }
 
-            InlineMessage {
-                color: "red"
-                Layout.fillWidth: true
-                Layout.leftMargin: appWin.padding
+            TipMessage {
+                indends: 1
                 visible: app.feature_punctuator &&
                          _settings.restore_punctuation &&
                          !app.ttt_punctuation_configured
-
-                Label {
-                    color: "red"
-                    Layout.fillWidth: true
-                    wrapMode: Text.Wrap
-                    text: qsTr("To make %1 work, download %2 model.")
-                            .arg("<i>" + qsTr("Restore punctuation") + "</i>").arg("<i>" + qsTr("Punctuation") + "</i>")
-                }
+                text: qsTr("To make %1 work, download %2 model.")
+                      .arg("<i>" + qsTr("Restore punctuation") + "</i>").arg("<i>" + qsTr("Punctuation") + "</i>")
             }
 
             CheckBox {
@@ -507,113 +387,65 @@ DialogPage {
                 hoverEnabled: true
             }
 
-            InlineMessage {
-                color: "red"
-                Layout.fillWidth: true
-                Layout.leftMargin: appWin.padding
+            TipMessage {
+                indends: 1
                 visible: _settings.gpu_supported() &&
                          app.feature_gpu_stt &&
                          _settings.stt_use_gpu &&
                          _settings.gpu_devices_stt.length <= 1
-
-                Label {
-                    color: "red"
-                    Layout.fillWidth: true
-                    wrapMode: Text.Wrap
-                    text: qsTr("A suitable graphics card could not be found.")
-                }
+                text: qsTr("A suitable graphics card could not be found.")
             }
 
-            GridLayout {
+            ComboBoxForm {
+                id: sttGpuCombo
+
+                indends: 1
                 visible: _settings.gpu_supported() &&
                          app.feature_gpu_stt &&
                          _settings.stt_use_gpu &&
                          _settings.gpu_devices_stt.length > 1
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    wrapMode: Text.Wrap
-                    Layout.leftMargin: appWin.padding
-                    Layout.fillWidth: true
-                    text: qsTr("Graphics card")
-                }
-                ComboBox {
-                    id: sttGpuCombo
-
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                label.text: qsTr("Graphics card")
+                toolTip: qsTr("Select preferred graphics card for hardware acceleration.")
+                comboBox {
                     currentIndex: _settings.gpu_device_idx_stt
                     model: _settings.gpu_devices_stt
                     onActivated: {
                         _settings.gpu_device_idx_stt = index
                     }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Select preferred graphics card for hardware acceleration.")
                 }
             }
 
-            InlineMessage {
+            TipMessage {
+                indends: 2
                 color: palette.text
-                Layout.fillWidth: true
-                Layout.leftMargin: verticalMode ? 2 * appWin.padding : appWin.padding
                 visible: _settings.gpu_supported() &&
                          app.feature_gpu_stt &&
                          _settings.stt_use_gpu &&
                          _settings.gpu_devices_stt.length > 1 &&
                          sttGpuCombo.displayText.search("ROCm") !== -1
+                text: qsTr("Tip: If you observe problems with GPU acceleration, try to enable %1 option.")
+                      .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
+                      qsTr("Override GPU version") + "</i>")
+                label.textFormat: Text.RichText
 
-
-                Label {
-                    color: palette.text
-                    Layout.fillWidth: true
-                    textFormat: Text.RichText
-                    wrapMode: Text.Wrap
-                    text: qsTr("Tip: If you observe problems with GPU acceleration, try to enable %1 option.")
-                          .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
-                                       qsTr("Override GPU version") + "</i>");
-                }
             }
 
             SectionLabel {
                 text: qsTr("Subtitles")
             }
 
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Minimum segment duration")
-                    wrapMode: Text.Wrap
-                }
-
-                SpinBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? appWin.padding : 0
+            SpinBoxForm {
+                label.text: qsTr("Minimum segment duration")
+                toolTip: qsTr("Set the minimum duration (in seconds) of the subtitle segment.") + " " +
+                         qsTr("This option only works with %1 and %2 models.").arg("<i>DeepSpeech/Coqui</i>").arg("<i>Vosk</i>")
+                spinBox {
                     from: 1
                     to: 60
                     stepSize: 1
                     value: _settings.sub_min_segment_dur
                     onValueChanged: {
-                        _settings.sub_min_segment_dur = value;
+                        _settings.sub_min_segment_dur = spinBox.value;
                     }
-                    Component.onCompleted: {
-                        contentItem.color = palette.text
-                    }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Set the minimum duration (in seconds) of the subtitle segment.") + " " +
-                                  qsTr("This option only works with %1 and %2 models.").arg("<i>DeepSpeech/Coqui</i>").arg("<i>Vosk</i>")
-                    hoverEnabled: true
                 }
             }
 
@@ -625,66 +457,36 @@ DialogPage {
                 }
             }
 
-            GridLayout {
+            SpinBoxForm {
+                indends: 1
                 visible: _settings.sub_break_lines
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: appWin.padding
-                    text: qsTr("Minimum line length")
-                    wrapMode: Text.Wrap
-                }
-
-                SpinBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                label.text: qsTr("Minimum line length")
+                spinBox {
                     from: 1
                     to: 1000
                     stepSize: 1
                     value: _settings.sub_min_line_length
                     onValueChanged: {
-                        _settings.sub_min_line_length = value;
-                        if (_settings.sub_max_line_length < value)
-                            _settings.sub_max_line_length = value;
-                    }
-                    Component.onCompleted: {
-                        contentItem.color = palette.text
+                        _settings.sub_min_line_length = spinBox.value;
+                        if (_settings.sub_max_line_length < spinBox.value)
+                            _settings.sub_max_line_length = spinBox.value
                     }
                 }
             }
 
-            GridLayout {
+            SpinBoxForm {
+                indends: 1
                 visible: _settings.sub_break_lines
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: appWin.padding
-                    text: qsTr("Maximum line length")
-                    wrapMode: Text.Wrap
-                }
-
-                SpinBox {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                label.text: qsTr("Maximum line length")
+                spinBox {
                     from: 1
                     to: 1000
                     stepSize: 1
                     value: _settings.sub_max_line_length
                     onValueChanged: {
-                        _settings.sub_max_line_length = value;
-                        if (_settings.sub_min_line_length > value)
-                            _settings.sub_min_line_length = value;
-                    }
-                    Component.onCompleted: {
-                        contentItem.color = palette.text
+                        _settings.sub_max_line_length = spinBox.value;
+                        if (_settings.sub_min_line_length > spinBox.value)
+                            _settings.sub_min_line_length = spinBox.value;
                     }
                 }
             }
@@ -692,8 +494,6 @@ DialogPage {
 
         ColumnLayout {
             id: textToSpeechTab
-
-            width: root.width
 
             CheckBox {
                 checked: _settings.diacritizer_enabled
@@ -708,20 +508,12 @@ DialogPage {
                 hoverEnabled: true
             }
 
-            InlineMessage {
-                color: "red"
-                Layout.fillWidth: true
-                Layout.leftMargin: appWin.padding
+            TipMessage {
+                indends: 1
                 visible: _settings.diacritizer_enabled &&
                          app.feature_coqui_tts &&
                          !app.feature_diacritizer_he
-
-                Label {
-                    color: "red"
-                    Layout.fillWidth: true
-                    wrapMode: Text.Wrap
-                    text: qsTr("Diacritics restoration for Hebrew language is not available.")
-                }
+                text: qsTr("Diacritics restoration for Hebrew language is not available.")
             }
 
             CheckBox {
@@ -740,76 +532,46 @@ DialogPage {
                 hoverEnabled: true
             }
 
-            InlineMessage {
-                color: "red"
-                Layout.fillWidth: true
-                Layout.leftMargin: appWin.padding
+            TipMessage {
+                indends: 1
                 visible: _settings.gpu_supported() &&
                          app.feature_gpu_tts &&
                          _settings.tts_use_gpu &&
                          _settings.gpu_devices_tts.length <= 1
-
-                Label {
-                    color: "red"
-                    Layout.fillWidth: true
-                    wrapMode: Text.Wrap
-                    text: qsTr("A suitable graphics card could not be found.")
-                }
+                text: qsTr("A suitable graphics card could not be found.")
             }
 
-            GridLayout {
+            ComboBoxForm {
+                id: ttsGpuCombo
+
+                indends: 1
                 visible: _settings.gpu_supported() &&
                          app.feature_gpu_tts &&
                          _settings.tts_use_gpu &&
                          _settings.gpu_devices_tts.length > 1
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    wrapMode: Text.Wrap
-                    Layout.leftMargin: appWin.padding
-                    Layout.fillWidth: true
-                    text: qsTr("Graphics card")
-                }
-                ComboBox {
-                    id: ttsGpuCombo
-
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                label.text: qsTr("Graphics card")
+                toolTip: qsTr("Select preferred graphics card for hardware acceleration.")
+                comboBox {
                     currentIndex: _settings.gpu_device_idx_tts
                     model: _settings.gpu_devices_tts
                     onActivated: {
                         _settings.gpu_device_idx_tts = index
                     }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Select preferred graphics card for hardware acceleration.")
-                    hoverEnabled: true
                 }
             }
 
-            InlineMessage {
+            TipMessage {
+                indends: 2
                 color: palette.text
-                Layout.fillWidth: true
-                Layout.leftMargin: verticalMode ? 2 * appWin.padding : appWin.padding
                 visible: _settings.gpu_supported() &&
                          app.feature_gpu_tts &&
                          _settings.tts_use_gpu &&
                          _settings.gpu_devices_tts.length > 1 &&
                          ttsGpuCombo.displayText.search("ROCm") !== -1
-
-                Label {
-                    color: palette.text
-                    Layout.fillWidth: true
-                    textFormat: Text.RichText
-                    wrapMode: Text.Wrap
-                    text: qsTr("Tip: If you observe problems with GPU acceleration, try to enable %1 option.")
-                          .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
-                                       qsTr("Override GPU version") + "</i>");
-                }
+                text: qsTr("Tip: If you observe problems with GPU acceleration, try to enable %1 option.")
+                      .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
+                      qsTr("Override GPU version") + "</i>")
+                label.textFormat: Text.RichText
             }
 
             SectionLabel {
@@ -834,8 +596,6 @@ DialogPage {
         ColumnLayout {
             id: accessibilityTab
 
-            width: root.width
-
             CheckBox {
                 visible: app.feature_global_shortcuts
                 checked: _settings.hotkeys_enabled
@@ -854,171 +614,83 @@ DialogPage {
                 hoverEnabled: true
             }
 
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
+            TextFieldForm {
+                indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: appWin.padding
-                    text: qsTr("Start listening")
-                }
-                TextField {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                label.text: qsTr("Start listening")
+                textField {
                     text: _settings.hotkey_start_listening
                     onTextChanged: _settings.hotkey_start_listening = text
-                    color: palette.text
                 }
             }
 
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
+            TextFieldForm {
+                indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts && app.feature_text_active_window
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: appWin.padding
-                    text: qsTr("Start listening, text to active window")
-                }
-                TextField {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                label.text: qsTr("Start listening, text to active window")
+                textField {
                     text: _settings.hotkey_start_listening_active_window
                     onTextChanged: _settings.hotkey_start_listening_active_window = text
-                    color: palette.text
                 }
             }
 
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
+            TextFieldForm {
+                indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: appWin.padding
-                    text: qsTr("Start listening, text to clipboard")
-                }
-                TextField {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                label.text: qsTr("Start listening, text to clipboard")
+                textField {
                     text: _settings.hotkey_start_listening_clipboard
                     onTextChanged: _settings.hotkey_start_listening_clipboard = text
-                    color: palette.text
                 }
             }
 
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
+            TextFieldForm {
+                indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: appWin.padding
-                    text: qsTr("Stop listening")
-                }
-                TextField {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                label.text: qsTr("Stop listening")
+                textField {
                     text: _settings.hotkey_stop_listening
                     onTextChanged: _settings.hotkey_stop_listening = text
-                    color: palette.text
                 }
             }
 
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
+            TextFieldForm {
+                indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: appWin.padding
-                    text: qsTr("Start reading")
-                }
-                TextField {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                label.text: qsTr("Start reading")
+                textField {
                     text: _settings.hotkey_start_reading
                     onTextChanged: _settings.hotkey_start_reading = text
-                    color: palette.text
                 }
             }
 
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
+            TextFieldForm {
+                indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: appWin.padding
-                    text: qsTr("Start reading text from clipboard")
-                }
-                TextField {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                label.text: qsTr("Start reading text from clipboard")
+                textField {
                     text: _settings.hotkey_start_reading_clipboard
                     onTextChanged: _settings.hotkey_start_reading_clipboard = text
-                    color: palette.text
                 }
             }
 
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
+            TextFieldForm {
+                indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: appWin.padding
-                    text: qsTr("Pause/Resume reading")
-                }
-                TextField {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                label.text: qsTr("Pause/Resume reading")
+                textField {
                     text: _settings.hotkey_pause_resume_reading
                     onTextChanged: _settings.hotkey_pause_resume_reading = text
-                    color: palette.text
                 }
             }
 
-            GridLayout {
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
+            TextFieldForm {
+                indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: appWin.padding
-                    text: qsTr("Cancel")
-                }
-                TextField {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                    Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                label.text: qsTr("Cancel")
+                textField {
                     text: _settings.hotkey_cancel
                     onTextChanged: _settings.hotkey_cancel = text
-                    color: palette.text
                 }
             }
 
@@ -1031,86 +703,53 @@ DialogPage {
 
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Action allow external application to invoke certain operation when %1 is running.").arg("<i>Speech Note</i>")
+                ToolTip.text: qsTr("Action allow external application to invoke certain operation when %1 is running.")
+                              .arg("<i>Speech Note</i>")
                 hoverEnabled: true
             }
 
-
-            InlineMessage {
+            TipMessage {
                 color: palette.text
-                Layout.leftMargin: appWin.padding
-                Layout.fillWidth: true
+                indends: 1
                 visible: _settings.actions_api_enabled
-
-                Label {
-                    Layout.fillWidth: true
-                    wrapMode: Text.Wrap
-                    text: "<p>" + qsTr("Action allows external application to invoke certain operation when %1 is running.").arg("<i>Speech Note</i>") + " " +
-                          qsTr("An action can be triggered via DBus call or with command-line option.") + " " +
-                          qsTr("The following actions are currently supported:") +
-                          "</p><ul>" +
-                          "<li><i>start-listening</i> - " + qsTr("Starts listening.") + "</li>" +
-                          "<li><i>start-listening-active-window</i> (X11) - " + qsTr("Starts listening. The decoded text is inserted into the active window.") + "</li>" +
-                          "<li><i>start-listening-clipboard</i> - " + qsTr("Starts listening. The decoded text is copied to the clipboard.") + "</li>" +
-                          "<li><i>stop-listening</i> - " + qsTr("Stops listening. The already captured voice is decoded into text.") + "</li>" +
-                          "<li><i>start-reading</i> - " + qsTr("Starts reading.") + "</li>" +
-                          "<li><i>start-reading-clipboard</i> - " + qsTr("Starts reading text from the clipboard.") + "</li>" +
-                          "<li><i>pause-resume-reading</i> - " + qsTr("Pauses or resumes reading.") + "</li>" +
-                          "<li><i>cancel</i> - " + qsTr("Cancels any of the above operations.") + "</li>" +
-                          "</ul>" +
-                          qsTr("For example, to trigger %1 action, execute the following command: %2.")
-                                  .arg("<i>start-listening</i>")
-                                  .arg(_settings.is_flatpak() ?
-                                    "<i>flatpak run net.mkiol.SpeechNote --action start-listening</i>" :
-                                    "<i>dsnote --action start-listening</i>")
-                }
+                text: "<p>" + qsTr("Action allows external application to invoke certain operation when %1 is running.").arg("<i>Speech Note</i>") + " " +
+                      qsTr("An action can be triggered via DBus call or with command-line option.") + " " +
+                      qsTr("The following actions are currently supported:") +
+                      "</p><ul>" +
+                      "<li><i>start-listening</i> - " + qsTr("Starts listening.") + "</li>" +
+                      "<li><i>start-listening-active-window</i> (X11) - " + qsTr("Starts listening. The decoded text is inserted into the active window.") + "</li>" +
+                      "<li><i>start-listening-clipboard</i> - " + qsTr("Starts listening. The decoded text is copied to the clipboard.") + "</li>" +
+                      "<li><i>stop-listening</i> - " + qsTr("Stops listening. The already captured voice is decoded into text.") + "</li>" +
+                      "<li><i>start-reading</i> - " + qsTr("Starts reading.") + "</li>" +
+                      "<li><i>start-reading-clipboard</i> - " + qsTr("Starts reading text from the clipboard.") + "</li>" +
+                      "<li><i>pause-resume-reading</i> - " + qsTr("Pauses or resumes reading.") + "</li>" +
+                      "<li><i>cancel</i> - " + qsTr("Cancels any of the above operations.") + "</li>" +
+                      "</ul>" +
+                      qsTr("For example, to trigger %1 action, execute the following command: %2.")
+                              .arg("<i>start-listening</i>")
+                              .arg(_settings.is_flatpak() ?
+                                "<i>flatpak run net.mkiol.SpeechNote --action start-listening</i>" :
+                                "<i>dsnote --action start-listening</i>")
             }
         }
 
         ColumnLayout {
             id: otherTab
 
-            width: root.width
-
             SectionLabel {
                 text: qsTr("Storage")
             }
 
-            GridLayout {
-                columns: root.verticalMode ? 1 : 3
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Location of language files")
-                }
-
-                TextField {
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - langFileButton.width - appWin.padding)
-                    Layout.leftMargin: verticalMode ? appWin.padding : 0
+            TextFieldForm {
+                label.text: qsTr("Location of language files")
+                toolTip: qsTr("Directory where language files are downloaded to and stored.")
+                textField {
                     text: _settings.models_dir
-                    color: palette.text
                     readOnly: true
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
-                    hoverEnabled: true
                 }
-
-                Button {
-                    id: langFileButton
-
+                button {
                     text: qsTr("Change")
                     onClicked: directoryDialog.open()
-                    Layout.leftMargin: verticalMode ? appWin.padding : 0
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Directory where language files are downloaded to and stored.")
-                    hoverEnabled: true
                 }
             }
 
@@ -1205,21 +844,10 @@ DialogPage {
                     text: qsTr("CPU options")
                 }
 
-                GridLayout {
-                    columns: root.verticalMode ? 1 : 2
-                    columnSpacing: appWin.padding
-                    rowSpacing: appWin.padding
-
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTr("Number of simultaneous threads")
-                        wrapMode: Text.Wrap
-                    }
-
-                    SpinBox {
-                        Layout.fillWidth: verticalMode
-                        Layout.preferredWidth: verticalMode ? grid.width : grid.width / 2
-                        Layout.leftMargin: verticalMode ? appWin.padding : 0
+                SpinBoxForm {
+                    label.text: qsTr("Number of simultaneous threads")
+                    toolTip: qsTr("Set the maximum number of simultaneous CPU threads.")
+                    spinBox {
                         from: 0
                         to: 32
                         stepSize: 1
@@ -1232,16 +860,8 @@ DialogPage {
                             return parseInt(text);
                         }
                         onValueChanged: {
-                            _settings.num_threads = value;
+                            _settings.num_threads = spinBox.value;
                         }
-                        Component.onCompleted: {
-                            contentItem.color = palette.text
-                        }
-
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Set the maximum number of simultaneous CPU threads.")
-                        hoverEnabled: true
                     }
                 }
 
@@ -1310,41 +930,18 @@ DialogPage {
                     hoverEnabled: true
                 }
 
-                GridLayout {
-                    columns: root.verticalMode ? 1 : 3
-                    columnSpacing: appWin.padding
-                    rowSpacing: appWin.padding
+                TextFieldForm {
+                    indends: 1
                     visible: _settings.gpu_supported() && _settings.gpu_override_version
-
-                    Label {
-                        Layout.fillWidth: true
-                        Layout.leftMargin: appWin.padding
-                        text: qsTr("Version")
-                    }
-                    TextField {
-                        Layout.fillWidth: verticalMode
-                        Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - gpuOverrideResetButton.width - appWin.padding)
-                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                    label.text: qsTr("Version")
+                    toolTip: qsTr("Value has the same effect as %1 environment variable.").arg("<i>HSA_OVERRIDE_GFX_VERSION</i>")
+                    textField {
                         text: _settings.gpu_overrided_version
                         onTextChanged: _settings.gpu_overrided_version = text
-                        color: palette.text
-
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Value has the same effect as %1 environment variable.").arg("<i>HSA_OVERRIDE_GFX_VERSION</i>")
-                        hoverEnabled: true
                     }
-                    Button {
-                        id: gpuOverrideResetButton
-
-                        icon.name: "edit-undo-symbolic"
+                    button {
+                        text: qsTr("Reset to default")
                         onClicked: _settings.gpu_overrided_version = ""
-                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Reset to default value.")
-                        hoverEnabled: true
                     }
                 }
 
@@ -1367,45 +964,19 @@ DialogPage {
 
                 }
 
-                GridLayout {
+                TextFieldForm {
+                    indends: 1
                     visible: _settings.py_feature_scan && !_settings.is_flatpak()
-                    columns: root.verticalMode ? 1 : 3
-                    columnSpacing: appWin.padding
-                    rowSpacing: appWin.padding
-
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTr("Location of Python libraries")
-                        Layout.leftMargin: appWin.padding
-                    }
-
-                    TextField {
-                        id: pyTextField
-
-                        Layout.fillWidth: verticalMode
-                        Layout.preferredWidth: verticalMode ? grid.width : (grid.width / 2 - pySaveButton.width - appWin.padding)
-                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                    label.text: qsTr("Location of Python libraries")
+                    toolTip: qsTr("Python libraries directory (%1).").arg("<i>PYTHONPATH</i>") + " " + qsTr("Leave blank to use the default value.") + " " +
+                             qsTr("This option may be useful if you use %1 module to manage Python libraries.").arg("<i>venv</i>")
+                    textField {
                         text: _settings.py_path
-                        color: palette.text
                         placeholderText: qsTr("Leave blank to use the default value.")
-
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Python libraries directory (%1).").arg("<i>PYTHONPATH</i>") + " " + qsTr("Leave blank to use the default value.") + " " +
-                                      qsTr("This option may be useful if you use %1 module to manage Python libraries.").arg("<i>venv</i>")
-                        hoverEnabled: true
                     }
-
-                    Button {
-                        id: pySaveButton
-
+                    button {
                         text: qsTr("Save")
-                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
                         onClicked: _settings.py_path = pyTextField.text
-
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Save changes")
                     }
                 }
             }

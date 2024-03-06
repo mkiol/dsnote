@@ -35,7 +35,7 @@ Control {
 
          y: appWin.padding
          x: appWin.padding
-         width: parent.width - 3*x - closeButton.width
+         width: parent.width - 3*x - (root.closable ? closeButton.width : 0)
      }
 
      Button {

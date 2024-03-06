@@ -121,16 +121,16 @@ DialogPage {
     }
 
     StackLayout {
+        property alias verticalMode: root.verticalMode
+
         Layout.fillWidth: true
         Layout.topMargin: appWin.padding
-
         currentIndex: root.mode
 
         ColumnLayout {
             id: root0
 
             spacing: appWin.padding
-            Layout.fillWidth: true
 
             readonly property var autoFileFormat: _settings.filename_to_text_file_format(pathField0.text)
             readonly property string autoFileFormatStr: {
@@ -145,7 +145,7 @@ DialogPage {
             }
 
             function check_filename() {
-                overwriteLabel0.visible = _settings.file_exists(pathField0.text)
+                overwriteWarning0.visible = _settings.file_exists(pathField0.text)
             }
 
             function save_file() {
@@ -167,71 +167,36 @@ DialogPage {
                 onText_file_save_dir_changed: root0.check_filename()
             }
 
-            GridLayout {
-                id: grid00
+            TextFieldForm {
+                id: pathField0
 
-                columns: root.verticalMode ? 1 : 3
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-                Layout.fillWidth: true
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("File path")
-                }
-                TextField {
-                    id: pathField0
-
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid00.width : grid00.width / 2
-                    Layout.leftMargin: verticalMode ? appWin.padding : 0
-                    onTextChanged: root0.check_filename()
-                    color: palette.text
-                    Component.onCompleted: {
-                        text = _settings.text_file_save_dir + "/" +
-                                _settings.text_file_save_filename
-                    }
-                }
-                Button {
+                label.text: qsTr("File path")
+                textField.onTextChanged: root0.check_filename()
+                button {
                     text: qsTr("Change")
-                    Layout.leftMargin: verticalMode ? appWin.padding : 0
                     onClicked: fileWriteDialog0.open()
                 }
+                Component.onCompleted: {
+                    textField.text = _settings.text_file_save_dir + "/" +
+                                     _settings.text_file_save_filename
+                }
             }
 
-            InlineMessage {
-                id: overwriteLabel0
+            TipMessage {
+                id: overwriteWarning0
 
-                color: "red"
-                Layout.fillWidth: true
-                Layout.leftMargin: appWin.padding
+                indends: 1
                 visible: false
-
-                Label {
-                    color: "red"
-                    wrapMode: Text.Wrap
-                    text: qsTr("The file exists and will be overwritten.")
-                }
+                text: qsTr("The file exists and will be overwritten.")
             }
 
-            GridLayout {
-                id: grid01
+            ComboBoxForm {
+                id: formatComboBox0
 
-                columns: root.verticalMode ? 1 : 2
-                columnSpacing: appWin.padding
-                rowSpacing: appWin.padding
-                Layout.fillWidth: true
-
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Text file format")
-                }
-                ComboBox {
-                    id: formatComboBox0
-
-                    Layout.fillWidth: verticalMode
-                    Layout.preferredWidth: verticalMode ? grid01.width : grid01.width / 2
-                    Layout.leftMargin: verticalMode ? appWin.padding : 0
+                label.text: qsTr("Text file format")
+                toolTip: qsTr("When %1 is selected, the format is chosen based on the file extension.")
+                              .arg("<i>" +  qsTr("Auto") + "</i>")
+                comboBox {
                     currentIndex: {
                         switch (_settings.text_file_format) {
                         case Settings.TextFileFormatRaw: return 1
@@ -259,12 +224,6 @@ DialogPage {
                         default: _settings.text_file_format = Settings.TextFileFormatAuto
                         }
                     }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("When %1 is selected, the format is chosen based on the file extension.")
-                                        .arg("<i>" +  qsTr("Auto") + "</i>")
-                    hoverEnabled: true
                 }
             }
 
@@ -289,7 +248,6 @@ DialogPage {
         ColumnLayout {
             id: root1
 
-            Layout.fillWidth: true
             spacing: appWin.padding
 
             readonly property var autoFileFormat: _settings.filename_to_audio_format(pathField1.text)
@@ -312,7 +270,7 @@ DialogPage {
             property bool _autoTitleTag: true
 
             function check_filename() {
-                overwriteLabel1.visible = _settings.file_exists(pathField1.text)
+                overwriteWarning1.visible = _settings.file_exists(pathField1.text)
                 updateTitleTagTimer.restart()
             }
 
@@ -323,11 +281,11 @@ DialogPage {
             function check_input_file() {
                 var map = app.file_info(pathFieldIn1.text)
                 if (map["type"] === "audio") {
-                    overwriteLabelIn1.visible = false
+                    overwriteWarningIn1.visible = false
                     multipleStreamsCombo1.model = map["audio_streams"]
                 } else {
-                    overwriteLabelIn1.visible = true
-                    multipleStreamsPane1.visible = false
+                    overwriteWarningIn1.visible = true
+                    multipleStreamsCombo1.visible = false
                     multipleStreamsCombo1.model = null
                 }
             }
@@ -371,18 +329,11 @@ DialogPage {
                 formatComboBox1.model.setProperty(0, "text", qsTr("Auto") + " (" + root1.autoFileFormatStr + ")")
             }
 
-            InlineMessage {
+            TipMessage {
                 id: errorLabel
 
-                color: "red"
-                Layout.fillWidth: true
                 visible: !app.tts_configured
-
-                Label {
-                    color: "red"
-                    wrapMode: Text.Wrap
-                    text: qsTr("Text to Speech model has not been set up yet.")
-                }
+                text: qsTr("Text to Speech model has not been set up yet.")
             }
 
             ColumnLayout {
@@ -406,72 +357,36 @@ DialogPage {
                     onAudio_file_save_dir_changed: root1.check_filename()
                 }
 
-                GridLayout {
-                    id: grid10
+                TextFieldForm {
+                    id: pathField1
 
-                    columns: root.verticalMode ? 1 : 3
-                    columnSpacing: appWin.padding
-                    rowSpacing: appWin.padding
-                    Layout.fillWidth: true
-
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTr("File path")
-                    }
-                    TextField {
-                        id: pathField1
-
-                        Layout.fillWidth: verticalMode
-                        Layout.preferredWidth: verticalMode ? grid10.width : grid10.width / 2
-                        Layout.leftMargin: verticalMode ? appWin.padding : 0
-                        onTextChanged: root1.check_filename()
-                        color: palette.text
-                        Component.onCompleted: {
-                            text = _settings.audio_file_save_dir + "/" +
-                                    _settings.audio_file_save_filename
-                        }
-                    }
-                    Button {
+                    label.text: qsTr("File path")
+                    textField.onTextChanged: root1.check_filename()
+                    button {
                         text: qsTr("Change")
-                        Layout.leftMargin: verticalMode ? appWin.padding : 0
                         onClicked: fileWriteDialog1.open()
                     }
+                    Component.onCompleted: {
+                        textField.text = _settings.audio_file_save_dir + "/" +
+                                         _settings.audio_file_save_filename
+                    }
                 }
 
-                InlineMessage {
-                    id: overwriteLabel1
+                TipMessage {
+                    id: overwriteWarning1
 
-                    color: "red"
-                    Layout.fillWidth: true
-                    Layout.leftMargin: appWin.padding
+                    indends: 1
                     visible: false
-
-                    Label {
-                        color: "red"
-                        Layout.fillWidth: true
-                        wrapMode: Text.Wrap
-                        text: qsTr("The file exists and will be overwritten.")
-                    }
+                    text: qsTr("The file exists and will be overwritten.")
                 }
 
-                GridLayout {
-                    id: grid11
+                ComboBoxForm {
+                    id: formatComboBox1
 
-                    columns: root.verticalMode ? 1 : 2
-                    columnSpacing: appWin.padding
-                    rowSpacing: appWin.padding
-                    Layout.fillWidth: true
-
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTr("Audio file format")
-                    }
-                    ComboBox {
-                        id: formatComboBox1
-
-                        Layout.fillWidth: verticalMode
-                        Layout.preferredWidth: verticalMode ? grid11.width : grid11.width / 2
-                        Layout.leftMargin: verticalMode ? appWin.padding : 0
+                    label.text: qsTr("Audio file format")
+                    toolTip: qsTr("When %1 is selected, the format is chosen based on the file extension.")
+                                  .arg("<i>" +  qsTr("Auto") + "</i>")
+                    comboBox {
                         currentIndex: {
                             switch (_settings.audio_format) {
                             case Settings.AudioFormatWav: return 1
@@ -499,32 +414,13 @@ DialogPage {
                             default: _settings.audio_format = Settings.AudioFormatAuto
                             }
                         }
-
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("When %1 is selected, the format is chosen based on the file extension.")
-                                            .arg("<i>" +  qsTr("Auto") + "</i>")
-                        hoverEnabled: true
                     }
                 }
 
-                GridLayout {
-                    id: grid12
-
-                    columns: root.verticalMode ? 1 : 2
-                    columnSpacing: appWin.padding
-                    rowSpacing: appWin.padding
-                    enabled: root1.compressedFormat
-                    Layout.fillWidth: true
-
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTr("Compression quality")
-                    }
-                    ComboBox {
-                        Layout.fillWidth: verticalMode
-                        Layout.preferredWidth: verticalMode ? grid12.width : grid12.width / 2
-                        Layout.leftMargin: verticalMode ? appWin.padding : 0
+                ComboBoxForm {
+                    label.text: qsTr("Compression quality")
+                    toolTip: qsTr("%1 results in a larger file size.").arg("<i>" + qsTr("High") + "</i>")
+                    comboBox {
                         currentIndex: {
                             switch (_settings.audio_quality) {
                             case Settings.AudioQualityVbrHigh: return 0;
@@ -546,11 +442,6 @@ DialogPage {
                             default: _settings.audio_quality = Settings.AudioQualityVbrMedium;
                             }
                         }
-
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("%1 results in a larger file size.").arg("<i>" + qsTr("High") + "</i>")
-                        hoverEnabled: true
                     }
                 }
 
@@ -570,105 +461,46 @@ DialogPage {
                     hoverEnabled: true
                 }
 
-                GridLayout {
-                    id: grid13
+                TextFieldForm {
+                    id: mtagTrackTextField
 
-                    columns: root.verticalMode ? 1 : 2
-                    columnSpacing: appWin.padding
-                    rowSpacing: appWin.padding
+                    indends: 1
+                    label.text: qsTr("Track number")
+                    textField.inputMethodHints: Qt.ImhDigitsOnly
                     visible: _settings.mtag
                     enabled: mtagCheckBox.enabled
-                    Layout.fillWidth: true
-
-                    Label {
-                        Layout.fillWidth: true
-                        Layout.leftMargin: appWin.padding
-                        text: qsTr("Track number")
-                    }
-                    TextField {
-                        id: mtagTrackTextField
-
-                        Layout.fillWidth: verticalMode
-                        Layout.preferredWidth: verticalMode ? grid13.width : grid13.width / 2
-                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
-                        color: palette.text
-                    }
                 }
 
-                GridLayout {
-                    id: grid14
+                TextFieldForm {
+                    id: mtagTitleTextField
 
-                    columns: root.verticalMode ? 1 : 2
-                    columnSpacing: appWin.padding
-                    rowSpacing: appWin.padding
+                    indends: 1
+                    label.text: qsTr("Title")
+                    textField.onTextEdited: root1._autoTitleTag = false
                     visible: _settings.mtag
                     enabled: mtagCheckBox.enabled
-                    Layout.fillWidth: true
-
-                    Label {
-                        Layout.fillWidth: true
-                        Layout.leftMargin: appWin.padding
-                        text: qsTr("Title")
-                    }
-                    TextField {
-                        id: mtagTitleTextField
-
-                        Layout.fillWidth: verticalMode
-                        Layout.preferredWidth: verticalMode ? grid14.width : grid14.width / 2
-                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
-                        onTextEdited: root1._autoTitleTag = false
-                        color: palette.text
-                    }
                 }
 
-                GridLayout {
-                    id: grid15
-
-                    columns: root.verticalMode ? 1 : 2
-                    columnSpacing: appWin.padding
-                    rowSpacing: appWin.padding
-                    visible: _settings.mtag
-                    enabled: mtagCheckBox.enabled
-                    Layout.fillWidth: true
-
-                    Label {
-                        Layout.fillWidth: true
-                        Layout.leftMargin: appWin.padding
-                        text: qsTr("Album")
-                    }
-                    TextField {
-                        Layout.fillWidth: verticalMode
-                        Layout.preferredWidth: verticalMode ? grid15.width : grid15.width / 2
-                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                TextFieldForm {
+                    indends: 1
+                    label.text: qsTr("Album")
+                    textField {
                         text: _settings.mtag_album_name
-                        onTextChanged: _settings.mtag_album_name = text
-                        color: palette.text
+                        onTextChanged: _settings.mtag_album_name = textField.text
                     }
-                }
-
-                GridLayout {
-                    id: grid16
-
-                    columns: root.verticalMode ? 1 : 2
-                    columnSpacing: appWin.padding
-                    rowSpacing: appWin.padding
                     visible: _settings.mtag
                     enabled: mtagCheckBox.enabled
-                    Layout.fillWidth: true
+                }
 
-                    Label {
-                        Layout.fillWidth: true
-                        Layout.leftMargin: appWin.padding
-                        text: qsTr("Artist")
-                    }
-                    TextField {
-                        Layout.fillWidth: verticalMode
-                        Layout.preferredWidth: verticalMode ? grid16.width : grid16.width / 2
-                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
+                TextFieldForm {
+                    indends: 1
+                    label.text: qsTr("Artist")
+                    textField {
                         text: _settings.mtag_artist_name
-                        onTextChanged: _settings.mtag_artist_name = text
-                        color: palette.text
+                        onTextChanged: _settings.mtag_artist_name = textField.text
                     }
+                    visible: _settings.mtag
+                    enabled: mtagCheckBox.enabled
                 }
 
                 CheckBox {
@@ -684,99 +516,47 @@ DialogPage {
                     hoverEnabled: true
                 }
 
-                GridLayout {
-                    id: grid17
+                TextFieldForm {
+                    id: pathFieldIn1
 
+                    indends: 1
                     visible: mixCheck1.checked
-                    columns: root.verticalMode ? 1 : 3
-                    columnSpacing: appWin.padding
-                    rowSpacing: appWin.padding
-                    Layout.fillWidth: true
-
-                    Label {
-                        Layout.fillWidth: true
-                        Layout.leftMargin: appWin.padding
-                        text: qsTr("File for mixing")
-                    }
-                    TextField {
-                        id: pathFieldIn1
-
-                        Layout.fillWidth: verticalMode
-                        Layout.preferredWidth: verticalMode ? grid17.width : grid17.width / 2
-                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
-                        placeholderText: qsTr("Set the file you want to use for mixing")
+                    label.text: qsTr("File for mixing")
+                    textField {
                         onTextChanged: root1.check_input_file()
-                        color: palette.text
+                        placeholderText: qsTr("Set the file you want to use for mixing")
                         readOnly: true
                     }
-                    Button {
+                    button {
                         text: qsTr("Change")
-                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
                         onClicked: fileReadDialog1.open()
                     }
                 }
 
-                InlineMessage {
-                    id: overwriteLabelIn1
+                TipMessage {
+                    id: overwriteWarningIn1
 
-                    color: "red"
-                    Layout.fillWidth: true
-                    Layout.leftMargin: appWin.padding
+                    indends: 2
                     visible: mixCheck1.checked && !root1.mixOk && pathFieldIn1.text.length !== 0
-
-                    Label {
-                        color: "red"
-                        Layout.fillWidth: true
-                        wrapMode: Text.Wrap
-                        text: qsTr("The file contains no audio.")
-                    }
+                    text: qsTr("The file contains no audio.")
                 }
 
-                GridLayout {
-                    id: multipleStreamsPane1
+                ComboBoxForm {
+                    id: multipleStreamsCombo1
 
-                    columns: root.verticalMode ? 1 : 2
-                    columnSpacing: appWin.padding
-                    rowSpacing: appWin.padding
-                    Layout.fillWidth: true
-                    visible: root1.mixOk &&
-                             multipleStreamsCombo1.model.length > 1
-
-                    Label {
-                        Layout.fillWidth: true
-                        Layout.leftMargin: appWin.padding
-                        text: qsTr("Audio stream")
-                    }
-                    ComboBox {
-                        id: multipleStreamsCombo1
-
-                        Layout.fillWidth: verticalMode
-                        Layout.preferredWidth: verticalMode ? multipleStreamsPane1.width : multipleStreamsPane1.width / 2
-                        Layout.leftMargin: verticalMode ? 2 * appWin.padding : 0
-                    }
+                    visible: root1.mixOk && model.length > 1
+                    indends: 1
+                    label.text: qsTr("Audio stream")
                 }
 
-                GridLayout {
-                    id: grid18
-
+                SpinBoxForm {
                     visible: mixCheck1.checked
-                    columns: root.verticalMode ? 1 : 2
-                    columnSpacing: appWin.padding
-                    rowSpacing: appWin.padding
-                    Layout.fillWidth: true
-
-                    Label {
-                        enabled: root1.mixOk
-                        Layout.fillWidth: true
-                        Layout.leftMargin: appWin.padding
-                        text: qsTr("Volume change")
-                    }
-
-                    SpinBox {
-                        enabled: root1.mixOk
-                        Layout.fillWidth: verticalMode
-                        Layout.preferredWidth: verticalMode ? 2 * grid18.width : grid18.width / 2
-                        Layout.leftMargin: verticalMode ? appWin.padding : 0
+                    indends: 1
+                    label.text: qsTr("Volume change")
+                    toolTip: qsTr("Modify the volume of the audio from the file selected for mixing.") + " " +
+                             qsTr("Allowed values are between -30 dB and 30 dB.") + " " +
+                             qsTr("When the value is set to 0, the volume will not be changed.")
+                    spinBox {
                         from: -30
                         to: 30
                         stepSize: 1
@@ -788,19 +568,8 @@ DialogPage {
                             return parseInt(text);
                         }
                         onValueChanged: {
-                            _settings.mix_volume_change = value;
+                            _settings.mix_volume_change = spinBox.value;
                         }
-                        /*Component.onCompleted: {
-                            contentItem.color = palette.text
-                        }*/
-
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Modify the volume of the audio from the file selected for mixing.") + " " +
-                                      qsTr("Allowed values are between -30 dB and 30 dB.") + " " +
-                                      qsTr("When the value is set to 0, the volume will not be changed.")
-
-                        hoverEnabled: true
                     }
                 }
 

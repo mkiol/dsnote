@@ -149,35 +149,6 @@ ToolBar {
             }
 
             ToolButton {
-                id: voicesButton
-
-                visible: (app.tts_ref_voice_needed && !_settings.translator_mode) ||
-                         (_settings.translator_mode && (app.tts_for_in_mnt_ref_voice_needed || app.tts_for_out_mnt_ref_voice_needed))
-                opacity: enabled ? 1.0 : 0.6
-                Layout.alignment: Qt.AlignLeft
-                text: qsTr("Voice samples")
-                onClicked: appWin.openDialog("VoiceMgmtPage.qml")
-
-                ToolTip.visible: hovered
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: qsTr("Voice samples are used in speech synthesis with voice cloning.")
-                hoverEnabled: true
-
-                Dot {
-                    visible: app.available_tts_ref_voices.length === 0 && ((app.tts_ref_voice_needed && !_settings.translator_mode) ||
-                             (_settings.translator_mode && (app.tts_for_in_mnt_ref_voice_needed || app.tts_for_out_mnt_ref_voice_needed)))
-                    size: menuButton.height / 5
-                    anchors {
-                        right: voicesButton.right
-                        rightMargin: size / 2
-                        top: voicesButton.top
-                        topMargin: size / 2
-                    }
-                }
-            }
-
-
-            ToolButton {
                 id: repairTextButton
 
                 Layout.alignment: Qt.AlignLeft
@@ -212,6 +183,34 @@ ToolBar {
                                  app.feature_diacritizer_he && app.ttt_diacritizer_he_configured &&
                                  app.note.length !== 0
                         onClicked: app.restore_diacritics_he()
+                    }
+                }
+            }
+
+            ToolButton {
+                id: voicesButton
+
+                visible: (app.tts_ref_voice_needed && !_settings.translator_mode) ||
+                         (_settings.translator_mode && (app.tts_for_in_mnt_ref_voice_needed || app.tts_for_out_mnt_ref_voice_needed))
+                opacity: enabled ? 1.0 : 0.6
+                Layout.alignment: Qt.AlignLeft
+                text: qsTr("Voice samples")
+                onClicked: appWin.openDialog("VoiceMgmtPage.qml")
+
+                ToolTip.visible: hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTr("Voice samples are used in speech synthesis with voice cloning.")
+                hoverEnabled: true
+
+                Dot {
+                    visible: app.available_tts_ref_voices.length === 0 && ((app.tts_ref_voice_needed && !_settings.translator_mode) ||
+                             (_settings.translator_mode && (app.tts_for_in_mnt_ref_voice_needed || app.tts_for_out_mnt_ref_voice_needed)))
+                    size: menuButton.height / 5
+                    anchors {
+                        right: voicesButton.right
+                        rightMargin: size / 2
+                        top: voicesButton.top
+                        topMargin: size / 2
                     }
                 }
             }

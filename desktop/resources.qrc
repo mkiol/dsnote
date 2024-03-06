@@ -36,6 +36,10 @@
         <file>qml/StreamSelectionDialog.qml</file>
         <file>qml/Dot.qml</file>
         <file>qml/HorizontalLine.qml</file>
+        <file>qml/TextFieldForm.qml</file>
+        <file>qml/ComboBoxForm.qml</file>
+        <file>qml/TipMessage.qml</file>
+        <file>qml/SpinBoxForm.qml</file>
         <file alias="config/models.json">../config/models.json</file>
         <file alias="nonbreaking_prefixes/ca.txt">../nonbreaking_prefixes/ca.txt</file>
         <file alias="nonbreaking_prefixes/cs.txt">../nonbreaking_prefixes/cs.txt</file>
