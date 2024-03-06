@@ -1856,6 +1856,22 @@ void dsnote_app::set_active_mnt_out_lang_idx(int idx) {
     }
 }
 
+void dsnote_app::switch_mnt_langs() {
+    auto in_id = active_mnt_lang();
+    auto out_id = active_mnt_out_lang();
+
+    if (settings::instance()->launch_mode() ==
+        settings::launch_mode_t::app_stanalone) {
+        speech_service::instance()->set_default_mnt_lang(out_id);
+        speech_service::instance()->set_default_mnt_out_lang(in_id);
+    } else {
+        qDebug() << "[app => dbus] set DefaultMntLang:" << out_id;
+        m_dbus_service.setDefaultMntLang(out_id);
+        qDebug() << "[app => dbus] set DefaultMntOutLang:" << in_id;
+        m_dbus_service.setDefaultMntOutLang(in_id);
+    }
+}
+
 void dsnote_app::cancel() {
     if (busy()) return;
 
@@ -4367,6 +4383,14 @@ void dsnote_app::update_auto_text_format() {
 
 void dsnote_app::set_app_window(QObject *app_window) {
     m_app_window = app_window;
+}
+
+void dsnote_app::switch_translated_text() {
+    if (m_translated_text.isEmpty()) return;
+
+    switch_mnt_langs();
+
+    update_note(m_translated_text, true);
 }
 
 void dsnote_app::show_tray() {

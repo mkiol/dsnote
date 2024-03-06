@@ -358,6 +358,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void undo_or_redu_note();
     Q_INVOKABLE void make_undo();
     Q_INVOKABLE void update_note(const QString &text, bool replace);
+    Q_INVOKABLE void switch_translated_text();
     Q_INVOKABLE void close_desktop_notification();
     Q_INVOKABLE void show_desktop_notification(const QString &summary,
                                                const QString &body,
@@ -820,6 +821,7 @@ class dsnote_app : public QObject {
         return m_player_current_voice_ref_idx;
     }
     void repair_text(text_repair_task_type_t task_type);
+    void switch_mnt_langs();
 #ifdef USE_DESKTOP
     void execute_tray_action(tray_icon::action_t action);
 #endif

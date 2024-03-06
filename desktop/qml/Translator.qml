@@ -245,12 +245,21 @@ ColumnLayout {
                     canUndo: false
                     canRedo: false
                     canPaste: false
+                    canPushAdd: app.translated_text.length !== 0
+                    canPushReplace: app.translated_text.length !== 0 && app.note.length !== 0
                     textArea {
                         onTextChanged: {
                             app.translated_text = root.translatedNoteTextArea.textArea.text
                         }
                     }
                     onCopyClicked: app.copy_translation_to_clipboard()
+                    onPushAddClicked: {
+                        if (app.note.length === 0) app.switch_translated_text()
+                        else app.update_note(app.translated_text, false)
+                    }
+                    onPushReplaceClicked: {
+                        app.switch_translated_text()
+                    }
                 }
 
                 PlaceholderLabel {
