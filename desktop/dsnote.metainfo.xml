@@ -84,7 +84,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.5.0-beta" date="2024-02-20">
+    <release version="4.5.0-beta" date="2024-03-7">
       <description>
       <p>Accessibility:</p>
       <ul>
@@ -100,6 +100,10 @@
       <li>Settings option to enable/disable remembering the last note.
           If the option is disabled, the last note will not be available after restarting the app.</li>
       <li>Settings option for default action when importing note from a file.</li>
+      <li>Enhanced text editor font settings.
+          You can set the font family, style and size of the font used in the text editor.</li>
+      <li>Text to Text repair options.
+          With these options you can directly fix diacritical marks and punctuation in the text.</li>
       <li>Speech Note has been translated into Ukrainian and Russian languages.
           Many thanks to Vovkiv for this contribution!</li>
       </ul>
@@ -107,7 +111,7 @@
       <ul>
       <li>New voice for Persian language: 'Piper Gyro Medium'</li>
       <li>Settings option to enable/disable speech synchronization with subtitle timestamps.
-          This may be useful for creating voiceovers.</li>
+          This may be useful for creating voice overs.</li>
       <li>Mixing speech with audio from an existing file.
           When exporting to a file, you can overlay speech with audio from an existing media file.</li>
       </ul>
@@ -115,6 +119,7 @@
       <ul>
       <li>New models: Greek to English, Maltese to English,
           Slovenian to English, Turkish to English</li>
+      <li>Handy buttons to quickly add translated text to the note or to replace it</li>
       </ul>
       </description>
     </release>

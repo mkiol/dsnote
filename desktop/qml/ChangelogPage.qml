@@ -35,14 +35,21 @@ DialogPage {
             (<i>User Interface</i> &rarr; <i>Remember the last note</i>)</li>
         <li>Settings option for default action when importing note from a file (<i>User Interface</i> &rarr; <i>File import action</i>).
             You can set <i>Ask whether to add or replace</i>, <i>Add to an existing note</i> or <i>Replace an existing note</i>.</li>
+        <li>Enhanced text editor font settings. You can set the font family, style and size of the font used in the text editor
+            (<i>User Interface</i> &rarr; <i>Font in text editor</i>).</li>
+        <li>Text to Text repair options.
+            With these options you can directly fix diacritical marks and punctuation in the text.
+            Options are hidden by default. Use <i>User Interface</i> &rarr; <i>Show Repair text options</i> to enable them.
+            To use <i>Restore punctuation</i> and <i>Restore diacritical marks</i> you need to download additional models.</li>
         <li><i>Speech Note</i> has been translated into Ukrainian and Russian languages.
             Many thanks to <i>Vovkiv</i> for this contribution!</li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
         <li>New voice for Persian language: <i>Piper Gyro Medium</i></li>
-        <li>Settings option to enable/disable speech synchronization with subtitle timestamps (<i>Text to Speech</i> &rarr; <i>Sync speech with timestamps</i>).
-            This may be useful for creating voiceovers.</li>
+        <li>Settings option to enable/disable speech synchronization with subtitle timestamps
+            (<i>Text to Speech</i> &rarr; <i>Sync speech with timestamps</i>).
+            This may be useful for creating voice overs.</li>
         <li>Mixing speech with audio from an existing file.
             When exporting to a file, you can overlay speech with audio from an existing media file.
             This can be useful when creating voice overs from subtitles
@@ -52,6 +59,7 @@ DialogPage {
         <ul>
         <li>New models: Greek to English, Maltese to English,
             Slovenian to English, Turkish to English</li>
+        <li>Handy buttons to quickly add translated text to the note or to replace it (<i>Add</li>, <i>Replace</i>)</li>
         </ul>"
     }
 

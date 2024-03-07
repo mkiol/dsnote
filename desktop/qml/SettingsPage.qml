@@ -262,7 +262,7 @@ DialogPage {
 
             CheckBox {
                 checked: _settings.show_repair_text
-                text: qsTr("Show %1 option").arg("<i>" + qsTr("Repair text") + "</i>")
+                text: qsTr("Show %1 options").arg("<i>" + qsTr("Repair text") + "</i>")
                 onCheckedChanged: {
                     _settings.show_repair_text = checked
                 }
@@ -596,7 +596,7 @@ DialogPage {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("When reading or exporting subtitles to file, synchronize the generated speech with the subtitle timestamps.") + " " +
-                              qsTr("This may be useful for creating voiceovers.")
+                              qsTr("This may be useful for creating voice overs.")
                 hoverEnabled: true
             }
         }
