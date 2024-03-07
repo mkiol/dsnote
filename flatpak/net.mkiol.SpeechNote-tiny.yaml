@@ -654,6 +654,23 @@ modules:
         url: https://github.com/progsource/maddy/archive/refs/tags/1.3.0.tar.gz
         sha256: 561681f8c8d2b998c153cda734107a0bc1dea4bb0df69fd813922da63fa9f3e7
 
+  - name: xkbcommon
+    buildsystem: meson
+    config-opts:
+      - --buildtype=release
+      - -Ddefault_library=static
+      - -Denable-docs=false
+      - -Denable-tools=false
+      - -Denable-bash-completion=false
+      - -Dx-locale-root=/usr/share/X11/locale
+    cleanup:
+      - /bin
+      - /libexec
+    sources:
+      - type: archive
+        url: https://xkbcommon.org/download/libxkbcommon-1.6.0.tar.xz
+        sha256: 0edc14eccdd391514458bc5f5a4b99863ed2d651e4dd761a90abf4f46ef99c2b        
+
   - name: dsnote
     buildsystem: cmake-ninja
     config-opts:

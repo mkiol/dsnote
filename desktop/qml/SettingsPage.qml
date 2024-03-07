@@ -954,12 +954,27 @@ DialogPage {
                 }
 
                 SectionLabel {
+                    visible: _settings.is_xcb()
+                    text: "X11"
+                }
+
+                TextFieldForm {
+                    visible: _settings.is_xcb()
+                    label.text: qsTr("Compose file")
+                    toolTip: qsTr("X11 compose file used in %1.").arg("<i>" + qsTr("Insert into active window") + "</i>")
+                    textField {
+                        text: _settings.x11_compose_file
+                        onTextChanged: _settings.x11_compose_file = text
+                    }
+                }
+
+                SectionLabel {
                     text: qsTr("Libraries")
                 }
 
                 CheckBox {
                     checked: _settings.py_feature_scan
-                    text: qsTr("Check Python dependencies")
+                    text: qsTr("Use Python libriaries")
                     onCheckedChanged: {
                         _settings.py_feature_scan = checked
                     }

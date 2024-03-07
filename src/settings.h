@@ -193,6 +193,8 @@ class settings : public QSettings, public singleton<settings> {
             set_default_export_tab NOTIFY default_export_tab_changed)
     Q_PROPERTY(bool show_repair_text READ show_repair_text WRITE
                    set_show_repair_text NOTIFY show_repair_text_changed)
+    Q_PROPERTY(QString x11_compose_file READ x11_compose_file WRITE
+                   set_x11_compose_file NOTIFY x11_compose_file_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -545,6 +547,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_default_export_tab(default_export_tab_t value);
     int mix_volume_change() const;
     void set_mix_volume_change(int value);
+    QString x11_compose_file() const;
+    void set_x11_compose_file(const QString &value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -727,6 +731,7 @@ class settings : public QSettings, public singleton<settings> {
     void tts_subtitles_sync_changed();
     void mix_volume_change_changed();
     void show_repair_text_changed();
+    void x11_compose_file_changed();
 
     // service
     void models_dir_changed();

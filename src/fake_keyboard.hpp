@@ -19,6 +19,7 @@
 struct xcb_connection_t;
 struct xkb_context;
 struct xkb_keymap;
+struct xkb_compose_table;
 
 class fake_keyboard : public QObject {
     Q_OBJECT
@@ -43,6 +44,7 @@ class fake_keyboard : public QObject {
     xcb_connection_t* m_xcb_conn = nullptr;
     xkb_context* m_xkb_ctx = nullptr;
     xkb_keymap* m_xkb_keymap = nullptr;
+    xkb_compose_table* m_xkb_compose_table = nullptr;
     unsigned long m_root_window = 0;
     unsigned long m_focus_window = 0;
     QString m_text;
@@ -52,6 +54,8 @@ class fake_keyboard : public QObject {
     std::queue<key_code_t> m_keys_to_send_queue;
 
     void send_keyevent();
+    std::vector<fake_keyboard::key_code_t> key_from_character(
+        /*UTF-32*/ uint32_t character);
 };
 
 #endif  // FAKE_KEYBOARD_HPP

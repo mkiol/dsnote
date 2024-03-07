@@ -926,6 +926,24 @@ void settings::set_insert_mode(insert_mode_t value) {
     }
 }
 
+QString settings::x11_compose_file() const {
+    // #ifdef USE_FLATPAK
+    //     return value(QStringLiteral("x11_compose_file"),
+    //                  "/usr/share/X11/locale/en_US.UTF-8/Compose")
+    //         .toString();
+    // #else
+    //     return value(QStringLiteral("x11_compose_file"), {}).toString();
+    // #endif
+    return value(QStringLiteral("x11_compose_file"), {}).toString();
+}
+
+void settings::set_x11_compose_file(const QString& value) {
+    if (x11_compose_file() != value) {
+        setValue(QStringLiteral("x11_compose_file"), value);
+        emit x11_compose_file_changed();
+    }
+}
+
 bool settings::qt_style_auto() const {
     return value(QStringLiteral("qt_style_auto"), true).toBool();
 }
