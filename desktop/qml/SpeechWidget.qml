@@ -113,7 +113,7 @@ RowLayout {
                         anchors.fill: parent
                         wrapMode: TextEdit.Wrap
                         verticalAlignment: Text.AlignVCenter
-                        font.pixelSize: _settings.font_size < 5 ? appWin.textFontSize : _settings.font_size
+                        font: _settings.notepad_font
                         color: palette.text
 
                         property string placeholderText: {

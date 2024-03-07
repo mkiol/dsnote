@@ -175,23 +175,31 @@ DialogPage {
                 }
             }
 
-            SpinBoxForm {
-                label.text: qsTr("Font size in text editor")
-                spinBox {
-                    from: 4
-                    to: 25
-                    stepSize: 1
-                    value: _settings.font_size < 5 ? 4 : _settings.font_size
-                    textFromValue: function(value) {
-                        return value < 5 ? qsTr("Auto") : value.toString() + " px"
+            TextFieldForm {
+                label.text: qsTr("Font in text editor")
+                compact: true
+                textField {
+                    text: {
+                        var font = _settings.notepad_font
+                        if (font.family.length == 0 || font.family == "0")
+                            font.family = qsTr("Default")
+                        return font.family + " " + font.pointSize + "pt"
                     }
-                    valueFromText: function(text) {
-                        if (text === qsTr("Auto")) return 4
-                        return parseInt(text);
-                    }
-                    onValueChanged: {
-                        _settings.font_size = spinBox.value;
-                    }
+                    readOnly: true
+                }
+                button {
+                    text: qsTr("Change")
+                    onClicked: fontDialog.open()
+                }
+            }
+
+            Dialogs.FontDialog {
+                id: fontDialog
+
+                title: qsTr("Please choose a font")
+                font: _settings.notepad_font
+                onAccepted: {
+                    _settings.notepad_font = fontDialog.font
                 }
             }
 
@@ -940,7 +948,7 @@ DialogPage {
                         onTextChanged: _settings.gpu_overrided_version = text
                     }
                     button {
-                        text: qsTr("Reset to default")
+                        text: qsTr("Reset")
                         onClicked: _settings.gpu_overrided_version = ""
                     }
                 }

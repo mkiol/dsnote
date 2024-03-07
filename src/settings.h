@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,6 +8,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <QFont>
 #include <QObject>
 #include <QSettings>
 #include <QString>
@@ -91,8 +92,8 @@ class settings : public QSettings, public singleton<settings> {
                    restart_required_changed)
     Q_PROPERTY(unsigned int speech_speed READ speech_speed WRITE
                    set_speech_speed NOTIFY speech_speed_changed)
-    Q_PROPERTY(int font_size READ font_size WRITE set_font_size NOTIFY
-                   font_size_changed)
+    Q_PROPERTY(QFont notepad_font READ notepad_font WRITE set_notepad_font
+                   NOTIFY notepad_font_changed)
     Q_PROPERTY(text_file_format_t text_file_format READ text_file_format WRITE
                    set_text_file_format NOTIFY text_file_format_changed)
     Q_PROPERTY(video_file_format_t video_file_format READ video_file_format
@@ -454,8 +455,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_qt_style_auto(bool value);
     bool qt_style_auto() const;
     bool restart_required() const;
-    void set_font_size(int value);
-    int font_size() const;
+    void set_notepad_font(const QFont &value);
+    QFont notepad_font() const;
     void set_text_file_format(text_file_format_t value);
     text_file_format_t text_file_format() const;
     void set_video_file_format(video_file_format_t value);
@@ -688,7 +689,7 @@ class settings : public QSettings, public singleton<settings> {
     void qt_style_changed();
     void restart_required_changed();
     void speech_speed_changed();
-    void font_size_changed();
+    void notepad_font_changed();
     void text_file_format_changed();
     void video_file_format_changed();
     void audio_format_changed();

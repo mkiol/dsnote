@@ -23,11 +23,11 @@ Item {
     property bool canPaste: true
     property bool canPushAdd: false
     property bool canPushReplace: false
-    readonly property bool _fitContent: scrollView.availableHeight - 2 * appWin.padding >= scrollView.contentHeight
+    readonly property bool _fitContent: scrollView.availableHeight - 4 * appWin.padding >= scrollView.contentHeight
     readonly property bool _contextActive: _textFormatCombo.hovered || copyButton.hovered || clearButton.hovered ||
                                            undoButton.hovered || redoButton.hovered || pasteButton.hovered ||
+                                           textPushButtonAdd.hovered || textPushButtonReplace.hovered ||
                                            _fitContent
-
     signal clearClicked()
     signal copyClicked()
     signal undoFallbackClicked()
@@ -65,8 +65,7 @@ Item {
             }
             wrapMode: TextEdit.WordWrap
             verticalAlignment: TextEdit.AlignTop
-            font.pixelSize: _settings.font_size < 5 ? appWin.textFontSize : _settings.font_size
-
+            font: _settings.notepad_font
             Keys.onUpPressed: scrollView.ScrollBar.vertical.decrease()
             Keys.onDownPressed: scrollView.ScrollBar.vertical.increase()
         }
@@ -117,7 +116,7 @@ Item {
             Button {
                 id: textPushButtonAdd
 
-                text: qsTr("Add to note")
+                text: qsTr("Add")
                 visible: root.canPushAdd
                 onClicked: root.pushAddClicked()
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -129,7 +128,7 @@ Item {
             Button {
                 id: textPushButtonReplace
 
-                text: qsTr("Replace note")
+                text: qsTr("Replace")
                 visible: root.canPushReplace
                 onClicked: root.pushReplaceClicked()
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval

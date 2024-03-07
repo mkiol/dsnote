@@ -22,6 +22,7 @@ GridLayout {
     property alias textField: _textField
     property alias button: _button
     property alias text: _textField.text
+    property bool compact: true
 
     columns: verticalMode ? 1 : button.visible ? 3 : 2
     columnSpacing: appWin.padding
@@ -39,7 +40,7 @@ GridLayout {
         id: _textField
 
         Layout.fillWidth: root.verticalMode
-        Layout.preferredWidth: root.verticalMode ? 0 : parent.width / 2
+        Layout.preferredWidth: root.verticalMode ? 0 : (parent.width / 2) - (compact ? _button.width + root.columnSpacing : 0)
         Layout.leftMargin: root.verticalMode ? (root.indends + 1) * appWin.padding : 0
         color: palette.text
 

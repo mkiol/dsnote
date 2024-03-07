@@ -731,14 +731,16 @@ void settings::set_note(const QString& value) {
     }
 }
 
-int settings::font_size() const {
-    return value(QStringLiteral("font_size"), 0).toInt();
+QFont settings::notepad_font() const {
+    QFont font;
+    font.fromString(value(QStringLiteral("notepad_font"), 0).toString());
+    return font;
 }
 
-void settings::set_font_size(int value) {
-    if (font_size() != value) {
-        setValue(QStringLiteral("font_size"), value);
-        emit font_size_changed();
+void settings::set_notepad_font(const QFont& value) {
+    if (notepad_font() != value) {
+        setValue(QStringLiteral("notepad_font"), value.toString());
+        emit notepad_font_changed();
     }
 }
 
