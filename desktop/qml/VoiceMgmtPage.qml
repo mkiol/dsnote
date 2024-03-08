@@ -123,6 +123,8 @@ DialogPage {
                     Layout.fillWidth: true
                     text: modelData
                     color: palette.text
+
+                    TextContextMenu {}
                 }
 
                 Button {

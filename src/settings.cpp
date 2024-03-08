@@ -1267,6 +1267,8 @@ QStringList settings::qt_styles() const {
 #endif
 }
 
+bool settings::is_native_style() const { return m_native_style; }
+
 #ifdef USE_DESKTOP
 static bool use_default_qt_style() {
     const auto* desk_name_str = getenv("XDG_CURRENT_DESKTOP");
@@ -1282,7 +1284,7 @@ static bool use_default_qt_style() {
     return desk_name.contains("KDE") || desk_name.contains("XFCE");
 }
 
-void settings::update_qt_style(QQmlApplicationEngine* engine) const {
+void settings::update_qt_style(QQmlApplicationEngine* engine) {
     if (auto prefix = module_tools::path_to_dir_for_path(
             QStringLiteral("lib"), QStringLiteral("plugins"));
         !prefix.isEmpty()) {
@@ -1337,13 +1339,14 @@ void settings::update_qt_style(QQmlApplicationEngine* engine) const {
 
     if (style.isEmpty()) {
         qDebug() << "don't forcing any qt style";
+        m_native_style = true;
     } else {
         qDebug() << "switching to style:" << style;
 
         QQuickStyle::setStyle(style);
-    }
 
-    setenv("QT_QUICK_CONTROLS_HOVER_ENABLED", "1", 1);
+        m_native_style = style == default_qt_style;
+    }
 }
 #endif
 

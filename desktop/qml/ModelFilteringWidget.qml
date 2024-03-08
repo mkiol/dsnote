@@ -569,6 +569,8 @@ GridLayout {
                                    - modelsSearchClearButton.width - modelsSearchClearAllButton.width - appWin.padding
             onTextChanged: listViewItem.model.filter = text.toLowerCase().trim()
             color: palette.text
+
+            TextContextMenu {}
         }
 
         Button {

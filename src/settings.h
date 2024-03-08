@@ -392,7 +392,7 @@ class settings : public QSettings, public singleton<settings> {
     void disable_gpu_scan();
     void disable_py_scan();
 #ifdef USE_DESKTOP
-    void update_qt_style(QQmlApplicationEngine *engine) const;
+    void update_qt_style(QQmlApplicationEngine *engine);
 #endif
     // app
     QString note() const;
@@ -600,8 +600,8 @@ class settings : public QSettings, public singleton<settings> {
         const QString &filename);
     static video_file_format_t filename_to_video_file_format_static(
         const QString &filename);
-
     Q_INVOKABLE bool is_debug() const;
+    Q_INVOKABLE bool is_native_style() const;
 
     // service
     QString models_dir() const;
@@ -769,6 +769,7 @@ class settings : public QSettings, public singleton<settings> {
     std::vector<QString> m_rocm_gpu_versions;
     QStringList m_audio_inputs;
     unsigned int m_addon_flags = addon_flags_t::AddonNone;
+    bool m_native_style = false;
 
     static QString settings_filepath();
     void update_audio_inputs();
