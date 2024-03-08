@@ -139,26 +139,21 @@ modules:
       - x86_64
     buildsystem: simple
     build-commands:
-      - ar x libnccl2_2.18.5-1-1_amd64.deb && rm control.tar.* && rm debian-binary && rm *.deb
-      - tar -xf data.tar.* && rm data.tar.*
       - |
         set -e
-        cd usr/lib/x86_64-linux-gnu
-        for f in *; do 
+        cd lib
+        for f in *.so*; do 
           echo "copying $f => ${FLATPAK_DEST}/cuda/lib64/"
-          if [ -d $f ]; then 
-            cp -r $f/* ${FLATPAK_DEST}/cuda/lib64/
-          else
-            cp -P $f ${FLATPAK_DEST}/cuda/lib64/
-          fi
+          cp -P $f ${FLATPAK_DEST}/cuda/lib64/
         done
     build-options:
       strip: true
     sources:
-      - type: file
-        url: http://http.us.debian.org/debian/pool/contrib/n/nvidia-nccl/libnccl2_2.18.5-1-1_amd64.deb
-        sha256: e577f0edf02d8c3983c718c30453e990250a25627400ac90173e9c8df1afdddd
-
+      - type: archive
+        archive-type: "tar-zst"
+        url: https://archlinux.org/packages/extra/x86_64/nccl/download
+        sha256: 25c5a35b372273a5fb9ece4eae022327c85d811774e5fd15362c7f9c9152465b
+        
   - name: oneapi
     only-arches:
       - x86_64
@@ -209,7 +204,7 @@ modules:
         url: https://files.pythonhosted.org/packages/06/55/9f73c32dda93fa4f539fafa268f9504e83c489f460c380371d94296126cd/pybind11-2.11.1-py3-none-any.whl
         sha256: 33cdd02a6453380dd71cc70357ce388ad1ee8d32bd0e38fc22b273d050aa29b3
 
-  - name: ctranslate2
+  - name: ctranslate2-cuda
     only-arches:
       - x86_64
     buildsystem: cmake-ninja
@@ -240,11 +235,11 @@ modules:
     post-install:
       - cd python && python setup.py bdist_wheel
       - pip3 install --verbose --exists-action=i --no-index --prefix=${FLATPAK_DEST} --no-build-isolation python/dist/*.whl
-      - strip ${FLATPAK_DEST}/lib/libctranslate2.so.3.22.0
+      - strip ${FLATPAK_DEST}/lib/libctranslate2.so.4.0.0
     sources:
       - type: git
         url: https://github.com/OpenNMT/CTranslate2.git
-        commit: d963499e6ed496526e68fb149c908cb2da1f0255
+        commit: 63c1ae5d9d0859cee2ad6cce7b77405be1a45702
       - type: patch
         path: ../patches/ctranslate2.patch
 
@@ -263,14 +258,17 @@ modules:
         PYTHONPATH: /app/extensions/nvidia/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} torch torchaudio --no-build-isolation
+        --prefix=${FLATPAK_DEST} torch torchaudio triton --no-build-isolation
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/65/1f/de6bc1b246531db81d9a6afc491356b17d70e6c898e16f564970849f69b6/torch-2.1.1-cp311-cp311-manylinux1_x86_64.whl
-        sha256: 98fea993639b0bb432dfceb7b538f07c0f1c33386d63f635219f49254968c80f
+        url: https://files.pythonhosted.org/packages/2c/df/5810707da6f2fd4be57f0cc417987c0fa16a2eecf0b1b71f82ea555dc619/torch-2.2.1-cp311-cp311-manylinux1_x86_64.whl
+        sha256: d86664ec85902967d902e78272e97d1aff1d331f7619d398d3ffab1c9b8e9157
       - type: file
-        url: https://files.pythonhosted.org/packages/c9/ea/e6d473fbc9ba5cdad16b9afcc64f767c049c73a6dc4064d60a3b26706d1d/torchaudio-2.1.1-cp311-cp311-manylinux1_x86_64.whl
-        sha256: c64f72122b6225a5c6dbd957360933b7ddf65327d755ee182221ced01ca38c4d
+        url: https://files.pythonhosted.org/packages/bd/ac/3974caaa459bf2c3a244a84be8d17561f631f7d42af370fc311defeca2fb/triton-2.2.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: da58a152bddb62cafa9a857dd2bc1f886dbf9f9c90a2b5da82157cd2b34392b0
+      - type: file
+        url: https://files.pythonhosted.org/packages/a6/57/ccebdda4db80e384166c70d8645fa998637051b3b19aca1fd8de80602afb/torchaudio-2.2.1-cp311-cp311-manylinux1_x86_64.whl
+        sha256: 7df7d5d9100116be38ff7b27b628820dca4a9e3fe79394605141d339e3b3e46d
       - type: file
         url: https://files.pythonhosted.org/packages/37/6d/121efd7382d5b0284239f4ab1fc1590d86d34ed4a4a2fdb13b30ca8e5740/nvidia_cublas_cu12-12.1.3.1-py3-none-manylinux1_x86_64.whl
         sha256: ee53ccca76a6fc08fb9701aa95b6ceb242cdaab118c3bb152af4e579af792728
@@ -299,11 +297,11 @@ modules:
         url: https://files.pythonhosted.org/packages/65/5b/cfaeebf25cd9fdec14338ccb16f6b2c4c7fa9163aefcf057d86b9cc248bb/nvidia_cusparse_cu12-12.1.0.106-py3-none-manylinux1_x86_64.whl
         sha256: f3b50f42cf363f86ab21f720998517a659a48131e8d538dc02f8768237bd884c
       - type: file
-        url: https://files.pythonhosted.org/packages/a4/05/23f8f38eec3d28e4915725b233c24d8f1a33cb6540a882f7b54be1befa02/nvidia_nccl_cu12-2.18.1-py3-none-manylinux1_x86_64.whl
-        sha256: 1a6c4acefcbebfa6de320f412bf7866de856e786e0462326ba1bac40de0b5e71
+        url: https://files.pythonhosted.org/packages/38/00/d0d4e48aef772ad5aebcf70b73028f88db6e5640b36c38e90445b7a57c45/nvidia_nccl_cu12-2.19.3-py3-none-manylinux1_x86_64.whl
+        sha256: a9734707a2c96443331c1e48c717024aa6678a0e2a4cb66b2c364d18cee6b48d
       - type: file
-        url: https://files.pythonhosted.org/packages/1e/07/bf730d44c2fe1b676ad9cc2be5f5f861eb5d153fb6951987a2d6a96379a9/nvidia_nvjitlink_cu12-12.3.101-py3-none-manylinux1_x86_64.whl
-        sha256: 64335a8088e2b9d196ae8665430bc6a2b7e6ef2eb877a9c735c804bd4ff6467c
+        url: https://files.pythonhosted.org/packages/58/d1/d1c80553f9d5d07b6072bc132607d75a0ef3600e28e1890e11c0f55d7346/nvidia_nvjitlink_cu12-12.4.99-py3-none-manylinux2014_x86_64.whl
+        sha256: c6428836d20fe7e327191c175791d38570e10762edc588fb46749217cd444c74
       - type: file
         url: https://files.pythonhosted.org/packages/da/d3/8057f0587683ed2fcd4dbfbdfdfa807b9160b809976099d36b8f60d08f03/nvidia_nvtx_cu12-12.1.105-py3-none-manylinux1_x86_64.whl
         sha256: dc21cf308ca5691e7c04d962e213f8a4aa9bbfa23d95412f452254c2caeb09e5

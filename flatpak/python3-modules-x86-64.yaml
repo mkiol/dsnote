@@ -13,7 +13,7 @@ modules:
       strip: true
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} Jinja2 MarkupSafe filelock fsspec mpmath networkx sympy triton typing_extensions --no-build-isolation
+        --prefix=${FLATPAK_DEST} Jinja2 MarkupSafe filelock fsspec mpmath networkx sympy typing_extensions --no-build-isolation
     sources:
       - &id002
         type: file
@@ -43,9 +43,6 @@ modules:
         type: file
         url: https://files.pythonhosted.org/packages/d2/05/e6600db80270777c4a64238a98d442f0fd07cc8915be2a1c16da7f2b9e74/sympy-1.12-py3-none-any.whl
         sha256: c3588cd4295d0c0f603d0f2ae780587e64e2efeedb3521e46b9bb1d08d184fa5
-      - type: file
-        url: https://files.pythonhosted.org/packages/5c/c1/54fffb2eb13d293d9a429fead3646752ea190de0229bcf3d591ba2481263/triton-2.1.0-0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
-        sha256: 919b06453f0033ea52c13eaf7833de0e57db3178d23d4e04f9fc71c4f2c32bf8
       - &id001
         type: file
         url: https://files.pythonhosted.org/packages/b7/f4/6a90020cd2d93349b442bfcb657d0dc91eee65491600b2cb1d388bc98e6b/typing_extensions-4.9.0-py3-none-any.whl
@@ -65,12 +62,12 @@ modules:
     sources:
       - &id022
         type: file
-        url: http://download.pytorch.org/whl/cpu/torch-2.1.1%2Bcpu-cp311-cp311-linux_x86_64.whl
-        sha256: d83b13cb17544f9851cc31fed197865eae0c0f5d32df9d8d6d8535df7d2e5109
+        url: https://download.pytorch.org/whl/cpu/torch-2.2.1%2Bcpu-cp311-cp311-linux_x86_64.whl
+        sha256: 6bc973d5632374b92b4b293817b4d2ff8c8ce1c784c748b471dba1fffcd9c333
       - &id039
         type: file
-        url: http://download.pytorch.org/whl/cpu/torchaudio-2.1.1%2Bcpu-cp311-cp311-linux_x86_64.whl
-        sha256: e0eb276958fcbd7c88f5daf761823e36ce5e41332d40f9e01fb49d80d7cc1bb1
+        url: https://download.pytorch.org/whl/cpu/torchaudio-2.2.1%2Bcpu-cp311-cp311-linux_x86_64.whl
+        sha256: bb5eac4b5fa715b451b34aeb336c30b2f943922e8774e07ea39831a81c773f8e
 
   - name: python3-setuptools_scm
     buildsystem: simple
@@ -591,23 +588,23 @@ modules:
         PYTHONPATH: /app/extensions/cpu/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} "faster-whisper==0.10.0" --no-build-isolation
+        --prefix=${FLATPAK_DEST} "faster-whisper==1.0.1" --no-build-isolation
     sources:
       - *id023
       - type: file
-        url: https://files.pythonhosted.org/packages/55/ac/8c31205c9b49ea3e0111276a2f3ea8dae42dd026cee0832e46658c9a4650/av-10.0.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: 69fd5a38395191a0f4b71adf31057ff177c9f0762914d73d8797742339ad67d0
+        url: https://files.pythonhosted.org/packages/a6/45/f0c2a87e7cae809a58dbf90ecfa4be342414d4b208f47cb97f41fb77eb3f/av-11.0.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: 13790fbb889b955baf885fe3761e923e85537ef414173465ec293177cedb7b99
       - *id024
       - *id025
       - type: file
         url: https://files.pythonhosted.org/packages/a7/06/3d6badcf13db419e25b07041d9c7b4a2c331d3f4e7134445ec5df57714cd/coloredlogs-15.0.1-py2.py3-none-any.whl
         sha256: 612ee75c546f53e92e70049c9dbfcc18c935a2b9a53b66085ce9ef6a6e5c0934
       - type: file
-        url: https://files.pythonhosted.org/packages/f2/53/2c20e1ab3a92e615585ddddb98a3a76637bc664be6e3a5123566e2b23677/ctranslate2-3.24.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: 17f8a67684404a776cd2961ff98a6aa0b2fe0ec0488b58d903df3ae1cb6136f3
+        url: https://files.pythonhosted.org/packages/60/6c/e38303443479483fb0900256b2cda80ae11e9c162e784a8b73f46672be93/ctranslate2-4.0.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: 8c185580ef598c45e343ec3af33bcdb634c723100aef01d26b937da7b2f263dc
       - type: file
-        url: https://files.pythonhosted.org/packages/f9/6f/9171462ce4569d5ba8e3b26fbf45a2123ed764220fb183ef17e1be9e9ca5/faster-whisper-0.10.0.tar.gz
-        sha256: 591809328b93c8e4594d52097ec6352a270a81fbb7b956254967f28700f7e4da
+        url: https://files.pythonhosted.org/packages/2b/3c/afdc84846ea13933876e8ca32c58d64cd4361fddfc6ede34c0ca3f0105ce/faster_whisper-1.0.1-py3-none-any.whl
+        sha256: 7803bf7abcaae0376158d7b064ba927d44b6ce1fa9f6250d6d13038354d1d01a
       - *id004
       - type: file
         url: https://files.pythonhosted.org/packages/6f/12/d5c79ee252793ffe845d58a913197bfa02ae9a0b5c9bc3dc4b58d477b9e7/flatbuffers-23.5.26-py2.py3-none-any.whl

@@ -757,11 +757,11 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/extensions/cpu
       - cd python && python setup.py bdist_wheel
       - pip3 install --verbose --exists-action=i --no-index --prefix=${FLATPAK_DEST}/extensions/cpu --no-build-isolation python/dist/*.whl
-      - strip ${FLATPAK_DEST}/extensions/cpu/lib/libctranslate2.so.3.22.0
+      - strip ${FLATPAK_DEST}/extensions/cpu/lib/libctranslate2.so.4.0.0
     sources:
       - type: git
         url: https://github.com/OpenNMT/CTranslate2.git
-        commit: d963499e6ed496526e68fb149c908cb2da1f0255
+        commit: 63c1ae5d9d0859cee2ad6cce7b77405be1a45702
       - type: patch
         path: ../patches/ctranslate2.patch
 
