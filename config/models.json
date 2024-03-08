@@ -26064,7 +26064,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "21876940"
+            "size": "21876940",
+            "recommended_model": "de_bergamot_deen"
         },
         {
             "name": "English to Bulgarian",
@@ -26086,7 +26087,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "23676444"
+            "size": "23676444",
+            "recommended_model": "bg_bergamot_bgen"
         },
         {
             "name": "English to Czech",
@@ -26108,7 +26110,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "2147483"
+            "size": "2147483",
+            "recommended_model": "cs_bergamot_csen"
         },
         {
             "name": "English to Spanish",
@@ -26130,7 +26133,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "21321514"
+            "size": "21321514",
+            "recommended_model": "es_bergamot_esen"
         },
         {
             "name": "English to Estonian",
@@ -26152,7 +26156,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "20678152"
+            "size": "20678152",
+            "recommended_model": "et_bergamot_eten"
         },
         {
             "name": "English to French",
@@ -26174,7 +26179,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "25867035"
+            "size": "25867035",
+            "recommended_model": "fr_bergamot_fren"
         },
         {
             "name": "English to Italian",
@@ -26196,7 +26202,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "22456876"
+            "size": "22456876",
+            "recommended_model": "it_bergamot_iten"
         },
         {
             "name": "English to Polish",
@@ -26218,7 +26225,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "21613790"
+            "size": "21613790",
+            "recommended_model": "pl_bergamot_plen"
         },
         {
             "name": "English to Portuguese",
@@ -26240,7 +26248,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "22311945"
+            "size": "22311945",
+            "recommended_model": "pt_bergamot_pten"
         },
         {
             "name": "English to Persian",
@@ -26262,7 +26271,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "23040864"
+            "size": "23040864",
+            "recommended_model": "fa_bergamot_faen"
         },
         {
             "name": "English to Dutch",
@@ -26284,7 +26294,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "22451524"
+            "size": "22451524",
+            "recommended_model": "nl_bergamot_nlen"
         },
         {
             "name": "English to Russian",
@@ -26306,7 +26317,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "21135281"
+            "size": "21135281",
+            "recommended_model": "ru_bergamot_ruen"
         },
         {
             "name": "English to Ukrainian",
@@ -26329,7 +26341,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "37411199"
+            "size": "37411199",
+            "recommended_model": "uk_bergamot_uken"
         },
         {
             "name": "English to Hungarian",
@@ -26351,7 +26364,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "15199624"
+            "size": "15199624",
+            "recommended_model": "hu_bergamot_huen"
         },
         {
             "name": "Català a anglès (Catalan to English)",
@@ -26395,7 +26409,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "24252224"
+            "size": "24252224",
+            "recommended_model": "en_bergamot_enbg"
         },
         {
             "name": "Česky do angličtiny (Czech to English)",
@@ -26417,7 +26432,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "22454499"
+            "size": "22454499",
+            "recommended_model": "en_bergamot_encs"
         },
         {
             "name": "Deutsch in Englisch (German to English)",
@@ -26439,7 +26455,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "22980866"
+            "size": "22980866",
+            "recommended_model": "en_bergamot_ende"
         },
         {
             "name": "Español a ingles (Spanish to English)",
@@ -26461,7 +26478,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "21835298"
+            "size": "21835298",
+            "recommended_model": "en_bergamot_enes"
         },
         {
             "name": "Eesti keelest inglise (Estonian to English)",
@@ -26483,7 +26501,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "21952316"
+            "size": "21952316",
+            "recommended_model": "en_bergamot_enet"
         },
         {
             "name": "Français vers l'anglais (French to English)",
@@ -26505,7 +26524,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "26799303"
+            "size": "26799303",
+            "recommended_model": "en_bergamot_enfr"
         },
         {
             "name": "Dall'italiano all'inglese (Italian to English)",
@@ -26527,7 +26547,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "22939372"
+            "size": "22939372",
+            "recommended_model": "en_bergamot_enit"
         },
         {
             "name": "Norsk til engelsk (Norwegian to English)",
@@ -26572,7 +26593,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "22869702"
+            "size": "22869702",
+            "recommended_model": "en_bergamot_enpl"
         },
         {
             "name": "Português para inglês (Portuguese to English)",
@@ -26594,7 +26616,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "22768065"
+            "size": "22768065",
+            "recommended_model": "en_bergamot_enpt"
         },
         {
             "name": "فارسی به انگلیسی (Persian to English)",
@@ -26617,7 +26640,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "24191369"
+            "size": "24191369",
+            "recommended_model": "en_bergamot_enfa"
         },
         {
             "name": "Íslensku yfir á ensku (Icelandic to English)",
@@ -26663,7 +26687,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "22897125"
+            "size": "22897125",
+            "recommended_model": "en_bergamot_ennl"
         },
         {
             "name": "Русский на английский (Russian to English)",
@@ -26686,7 +26711,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "23176440"
+            "size": "23176440",
+            "recommended_model": "en_bergamot_enru"
         },
         {
             "name": "Українська на англійську (Ukrainian to English)",
@@ -26710,7 +26736,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "36872677"
+            "size": "36872677",
+            "recommended_model": "en_bergamot_enuk"
         },
         {
             "name": "magyarról angolra (Hungarian to English)",
@@ -26733,7 +26760,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "16387915"
+            "size": "16387915",
+            "recommended_model": "en_bergamot_enhu"
         },
         {
             "name": "suomesta englanniksi (Finnish to English)",

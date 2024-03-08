@@ -235,6 +235,10 @@ models_manager::models_manager(QObject* parent) : QObject{parent} {
     connect(this, &models_manager::generate_next_checksum_request, this,
             &models_manager::generate_next_checksum, Qt::QueuedConnection);
 
+    connect(this, &models_manager::download_finished, this,
+            &models_manager::handle_download_model_finished,
+            Qt::QueuedConnection);
+
     connect(
         this, &models_manager::busy_changed, this,
         [&] {
@@ -1777,6 +1781,7 @@ auto models_manager::extract_models(
         QString options = obj.value(QLatin1String{"options"}).toString();
         license_t license;
         feature_flags features = feature_flags::no_flags;
+        QString recommended_model;
 
         auto model_alias_of =
             obj.value(QLatin1String{"model_alias_of"}).toString();
@@ -1832,6 +1837,7 @@ auto models_manager::extract_models(
             }
             features = add_explicit_feature_flags(model_id, engine, features);
 
+            recommended_model = obj.value("recommended_model").toString();
         } else if (models.count(model_alias_of) > 0) {
             const auto& alias = models.at(model_alias_of);
 
@@ -1867,6 +1873,10 @@ auto models_manager::extract_models(
             features = add_explicit_feature_flags(model_id, engine, features);
 
             license = alias.license;
+
+            if (auto model = obj.value("recommended_model").toString();
+                !model.isEmpty())
+                recommended_model = std::move(model);
         } else {
             qWarning() << "invalid model alias:" << model_alias_of;
             continue;
@@ -2000,6 +2010,7 @@ auto models_manager::extract_models(
             /*dl_off=*/false,
             /*features=*/features,
             /*urls_hash=*/0,
+            /*recommended_model=*/std::move(recommended_model),
             /*downloading=*/false};
 
         update_url_hash(model);
@@ -2351,6 +2362,32 @@ void models_manager::generate_next_checksum() {
     fmt::print("downloading model: {}\n",
                m_it_for_gen_checksum->first.toStdString());
     download_model(m_it_for_gen_checksum->first);
+}
+
+void models_manager::handle_download_model_finished(
+    const QString& id, [[maybe_unused]] bool download_not_needed) {
+    if (m_models.count(id) == 0) return;
+
+    const auto& model = m_models.at(id);
+
+    if (model.recommended_model.isEmpty()) return;
+
+    if (m_models.count(model.recommended_model) == 0) {
+        qWarning() << "recommended model missing:" << model.recommended_model;
+        return;
+    }
+
+    const auto& recommended_model = m_models.at(model.recommended_model);
+
+    if (recommended_model.available) {
+        qDebug() << "recommended model already available:"
+                 << model.recommended_model;
+        return;
+    }
+
+    qDebug() << "downloading recommended model:" << model.recommended_model;
+
+    download_model(model.recommended_model);
 }
 
 void models_manager::generate_checksums() {

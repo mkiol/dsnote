@@ -276,6 +276,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool dl_off = false;
         feature_flags features = feature_flags::no_flags;
         size_t urls_hash = 0;
+        QString recommended_model;
         bool downloading = false;
         double download_progress = 0.0;
         qint64 downloaded_part_data = 0;
@@ -381,6 +382,8 @@ class models_manager : public QObject, public singleton<models_manager> {
         feature_flags existing_features);
     static feature_flags add_new_feature(feature_flags existing_features,
                                          feature_flags new_feature);
+    void handle_download_model_finished(const QString& id,
+                                        bool download_not_needed);
 };
 
 #endif  // MODELS_MANAGER_H
