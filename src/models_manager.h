@@ -266,6 +266,18 @@ class models_manager : public QObject, public singleton<models_manager> {
         QString trg_lang_id;
         QString alias_of;
         int score = -1; /* 0-5 */
+        /* options:
+         * d - tts, restore diacritics
+         * a - tts, use astrunc sentence segmenter
+         * n - tts, convert numbers to words
+         * r - tts, use romanizer
+         * l - tts, convert to lower case
+         * p - tts, add extra pause at the end
+         * x - tts, voice cloning supported
+         * c - tts, convert quote to standard one
+         * s - tts, add extra space before dot
+         * i - stt, punctuation supported
+         */
         QString options;
         license_t license;
         bool hidden = false;

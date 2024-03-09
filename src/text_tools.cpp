@@ -1053,16 +1053,6 @@ std::string processor::preprocess(const std::string& text,
         uroman(new_text, lang_code, prefix_path);
     }
 
-    if (has_option('l', options)) {
-        LOGD("to-lower pre-processing needed");
-        to_lower_case(new_text);
-    }
-
-    if (has_option('c', options)) {
-        LOGD("char replace pre-processing needed");
-        replace_characters(new_text, "“”‘’", "\"\"''");
-    }
-
     if (has_option('d', options) && !diacritizer_path.empty()) {
         LOGD("diacritize pre-processing needed");
         if (lang == "ar")
@@ -1071,8 +1061,20 @@ std::string processor::preprocess(const std::string& text,
             hebrew_diacritize(new_text, diacritizer_path);
     }
 
+    if (has_option('l', options)) {
+        to_lower_case(new_text);
+    }
+
+    if (has_option('c', options)) {
+        replace_characters(new_text, "“”‘’", "\"\"''");
+    }
+
+    if (has_option('s', options)) {
+        new_text = std::regex_replace(new_text, std::regex{"\\."}, " .");
+        LOGD("out: " << new_text);
+    }
+
     if (has_option('p', options)) {
-        LOGD("extra pause needed");
         add_extra_pause(new_text);
     }
 #ifdef DEBUG

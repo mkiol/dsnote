@@ -24327,7 +24327,8 @@
             "name": "Italiano (Coqui XTTS-v2.0.3)",
             "model_id": "it_coqui_xtts203",
             "model_alias_of": "multilang_coqui_xtts203",
-            "lang_id": "it"
+            "lang_id": "it",
+            "options": "s"
         },
         {
             "name": "Polski (Coqui XTTS-v2.0.3)",
@@ -24439,7 +24440,8 @@
             "name": "Italiano (Coqui XTTS-v2.0.2)",
             "model_id": "it_coqui_xtts202",
             "model_alias_of": "multilang_coqui_xtts202",
-            "lang_id": "it"
+            "lang_id": "it",
+            "options": "s"
         },
         {
             "name": "Polski (Coqui XTTS-v2.0.2)",
