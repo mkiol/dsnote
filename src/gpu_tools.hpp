@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -29,7 +29,6 @@ void add_cuda_devices(std::vector<device>& devices);
 void add_hip_devices(std::vector<device>& devices);
 bool has_cuda();
 bool has_cudnn();
-bool has_clblast();
 void rocm_override_gfx_version(const std::string& arch_varsion);
 std::string rocm_overrided_gfx_version(const std::string& gpu_arch_name);
 

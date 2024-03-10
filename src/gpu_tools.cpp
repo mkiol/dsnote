@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -38,6 +38,12 @@ enum cudaHipError { cudaHipSuccess = 0 };
 struct cudaDeviceProp {
     char name[256] = {};
     char other_props[1024] = {};
+};
+
+enum CUresult { CUDA_SUCCESS = 0, CUDA_ERROR_UNKNOWN = 999 };
+enum CUdevice_attribute {
+    CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MAJOR = 75,
+    CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MINOR = 76
 };
 
 struct hipDeviceArch {
@@ -155,14 +161,95 @@ struct opencl_api {
     }
 };
 
-struct cuda_api {
+struct cuda_dev_api {
+    void* handle = nullptr;
+    CUresult (*cuInit)(unsigned int Flags);
+    CUresult (*cuGetErrorName)(CUresult error, const char** pStr);
+    CUresult (*cuDriverGetVersion)(int* driverVersion);
+    CUresult (*cuDeviceGetCount)(int* count) = nullptr;
+    CUresult (*cuDeviceGet)(int* dev, int ordinal) = nullptr;
+    CUresult (*cuDeviceGetName)(char* name, int len, int dev) = nullptr;
+    CUresult (*cuDeviceGetAttribute)(int* pi, CUdevice_attribute attrib,
+                                     int dev) = nullptr;
+
+    cuda_dev_api() {
+        handle = dlopen("libcuda.so", RTLD_LAZY);
+        if (!handle) {
+            LOGW("failed to open cuda lib: " << dlerror());
+            throw std::runtime_error("failed to open cuda lib");
+        }
+
+        cuInit = reinterpret_cast<decltype(cuInit)>(dlsym(handle, "cuInit"));
+        if (!cuInit) {
+            LOGW("failed to sym cuInit");
+            dlclose(handle);
+            throw std::runtime_error("failed to sym cuInit");
+        }
+
+        cuGetErrorName = reinterpret_cast<decltype(cuGetErrorName)>(
+            dlsym(handle, "cuGetErrorName"));
+        if (!cuGetErrorName) {
+            LOGW("failed to sym cuGetErrorName");
+            dlclose(handle);
+            throw std::runtime_error("failed to sym cuGetErrorName");
+        }
+
+        cuDriverGetVersion = reinterpret_cast<decltype(cuDriverGetVersion)>(
+            dlsym(handle, "cuDriverGetVersion"));
+        if (!cuDriverGetVersion) {
+            LOGW("failed to sym cuDriverGetVersion");
+            dlclose(handle);
+            throw std::runtime_error("failed to sym cuDriverGetVersion");
+        }
+
+        cuDeviceGetCount = reinterpret_cast<decltype(cuDeviceGetCount)>(
+            dlsym(handle, "cuDeviceGetCount"));
+        if (!cuDeviceGetCount) {
+            LOGW("failed to sym cuDeviceGetCount");
+            dlclose(handle);
+            throw std::runtime_error("failed to sym cuDeviceGetCount");
+        }
+
+        cuDeviceGet = reinterpret_cast<decltype(cuDeviceGet)>(
+            dlsym(handle, "cuDeviceGet"));
+        if (!cuDeviceGet) {
+            LOGW("failed to sym cuDeviceGet");
+            dlclose(handle);
+            throw std::runtime_error("failed to sym cuDeviceGet");
+        }
+
+        cuDeviceGetName = reinterpret_cast<decltype(cuDeviceGetName)>(
+            dlsym(handle, "cuDeviceGetName"));
+        if (!cuDeviceGetName) {
+            LOGW("failed to sym cuDeviceGetName");
+            dlclose(handle);
+            throw std::runtime_error("failed to sym cuDeviceGetName");
+        }
+
+        cuDeviceGetAttribute = reinterpret_cast<decltype(cuDeviceGetAttribute)>(
+            dlsym(handle, "cuDeviceGetAttribute"));
+        if (!cuDeviceGetAttribute) {
+            LOGW("failed to sym cuDeviceGetAttribute");
+            dlclose(handle);
+            throw std::runtime_error("failed to sym cuDeviceGetAttribute");
+        }
+    }
+
+    ~cuda_dev_api() {
+        if (handle) {
+            dlclose(handle);
+        }
+    }
+};
+
+struct cuda_runtime_api {
     void* handle = nullptr;
     int (*cudaGetDeviceCount)(int*) = nullptr;
     int (*cudaGetDeviceProperties)(cudaDeviceProp*, int) = nullptr;
     int (*cudaRuntimeGetVersion)(int*) = nullptr;
     int (*cudaDriverGetVersion)(int*) = nullptr;
 
-    cuda_api() {
+    cuda_runtime_api() {
         handle = dlopen("libcudart.so", RTLD_LAZY);
         if (!handle) {
             LOGW("failed to open cudart lib: " << dlerror());
@@ -203,7 +290,7 @@ struct cuda_api {
         }
     }
 
-    ~cuda_api() {
+    ~cuda_runtime_api() {
         if (handle) {
             dlclose(handle);
         }
@@ -264,13 +351,132 @@ struct hip_api {
     }
 };
 
+static void add_cuda_runtime_devices(std::vector<device>& devices) {
+    LOGD("scanning for cuda runtime devices");
+
+    cuda_runtime_api api;
+
+    int dr_ver = 0, rt_ver = 0;
+    api.cudaDriverGetVersion(&dr_ver);
+    api.cudaRuntimeGetVersion(&rt_ver);
+
+    LOGD("cuda version: driver=" << dr_ver << ", runtime=" << rt_ver);
+
+    int device_count = 0;
+    if (auto ret = api.cudaGetDeviceCount(&device_count);
+        ret != cudaHipSuccess) {
+        LOGW("cudaGetDeviceCount error: " << ret);
+        return;
+    }
+
+    LOGD("cuda number of devices: " << device_count);
+
+    devices.reserve(devices.size() + device_count);
+
+    for (int i = 0; i < device_count; ++i) {
+        cudaDeviceProp props;
+        if (auto ret = api.cudaGetDeviceProperties(&props, i);
+            ret != cudaHipSuccess)
+            continue;
+        LOGD("cuda device: " << i << ", name=" << props.name);
+        devices.push_back({/*id=*/static_cast<uint32_t>(i), api_t::cuda,
+                           /*name=*/props.name,
+                           /*platform_name=*/{}});
+    }
+}
+
+static void add_cuda_dev_devices(std::vector<device>& devices) {
+    LOGD("scanning for cuda devices");
+
+    cuda_dev_api api;
+
+    auto logErr = [&](const char* name, CUresult code) {
+        const char* str = nullptr;
+        if (auto ret = api.cuGetErrorName(code, &str);
+            ret != CUresult::CUDA_SUCCESS) {
+            LOGW(name << " error: " << code);
+        } else {
+            LOGW(name << " error: " << str << " (" << code << ")");
+        }
+    };
+
+    if (auto ret = api.cuInit(0); ret != CUresult::CUDA_SUCCESS) {
+        logErr("cuInit", ret);
+        return;
+    }
+
+    int dr_ver = 0;
+    if (auto ret = api.cuDriverGetVersion(&dr_ver);
+        ret != CUresult::CUDA_SUCCESS) {
+        logErr("cuDriverGetVersion", ret);
+        return;
+    }
+
+    LOGD("cuda version: driver=" << dr_ver);
+
+    int device_count = 0;
+    if (auto ret = api.cuDeviceGetCount(&device_count);
+        ret != CUresult::CUDA_SUCCESS) {
+        logErr("cuDeviceGetCount", ret);
+        return;
+    }
+
+    LOGD("cuda number of devices: " << device_count);
+
+    devices.reserve(devices.size() + device_count);
+
+    for (int i = 0; i < device_count; ++i) {
+        int dev = 0;
+        if (auto ret = api.cuDeviceGet(&dev, i);
+            ret != CUresult::CUDA_SUCCESS) {
+            LOGW("cuDeviceGet[" << i << "] error: " << ret);
+            continue;
+        }
+
+        char name[256];
+        if (auto ret = api.cuDeviceGetName(name, 256, dev);
+            ret != CUresult::CUDA_SUCCESS) {
+            LOGW("cuDeviceGetName[" << i << "] error: " << ret);
+            continue;
+        }
+
+        int comp_cap_major = 0;
+        if (auto ret = api.cuDeviceGetAttribute(
+                &comp_cap_major,
+                CUdevice_attribute::
+                    CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MAJOR,
+                dev);
+            ret != CUresult::CUDA_SUCCESS) {
+            LOGW("cuDeviceGetAttribute[" << i << "] error: " << ret);
+            continue;
+        }
+
+        int comp_cap_minor = 0;
+        if (auto ret = api.cuDeviceGetAttribute(
+                &comp_cap_minor,
+                CUdevice_attribute::
+                    CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MINOR,
+                dev);
+            ret != CUresult::CUDA_SUCCESS) {
+            LOGW("cuDeviceGetAttribute[" << i << "] error: " << ret);
+            continue;
+        }
+
+        LOGD("cuda device: " << i << ", name=" << name << ", comp-cap="
+                             << comp_cap_major << '.' << comp_cap_minor);
+        devices.push_back({/*id=*/static_cast<uint32_t>(i), api_t::cuda,
+                           /*name=*/name,
+                           /*platform_name=*/{}});
+    }
+}
+
 std::vector<gpu_tools::device> available_devices(bool cuda, bool hip,
                                                  bool opencl,
                                                  bool opencl_always) {
     std::vector<gpu_tools::device> devices;
 
-    if (cuda) add_cuda_devices(devices);
     if (hip) add_hip_devices(devices);
+    if (cuda) add_cuda_devices(devices);
     if (opencl && (opencl_always || devices.empty()))
         add_opencl_devices(devices);
 
@@ -281,36 +487,12 @@ void add_cuda_devices(std::vector<device>& devices) {
     LOGD("scanning for cuda devices");
 
     try {
-        cuda_api api;
-
-        int dr_ver = 0, rt_ver = 0;
-        api.cudaDriverGetVersion(&dr_ver);
-        api.cudaRuntimeGetVersion(&rt_ver);
-
-        LOGD("cuda version: driver=" << dr_ver << ", runtime=" << rt_ver);
-
-        int device_count = 0;
-        if (auto ret = api.cudaGetDeviceCount(&device_count);
-            ret != cudaHipSuccess) {
-            LOGW("cudaGetDeviceCount returned: " << ret);
-            return;
-        }
-
-        LOGD("cuda number of devices: " << device_count);
-
-        devices.reserve(devices.size() + device_count);
-
-        for (int i = 0; i < device_count; ++i) {
-            cudaDeviceProp props;
-            if (auto ret = api.cudaGetDeviceProperties(&props, i);
-                ret != cudaHipSuccess)
-                continue;
-            LOGD("cuda device: " << i << ", name=" << props.name);
-            devices.push_back({/*id=*/static_cast<uint32_t>(i), api_t::cuda,
-                               /*name=*/props.name,
-                               /*platform_name=*/{}});
-        }
+        add_cuda_dev_devices(devices);
     } catch ([[maybe_unused]] const std::runtime_error& err) {
+        try {
+            add_cuda_runtime_devices(devices);
+        } catch ([[maybe_unused]] const std::runtime_error& err) {
+        }
     }
 }
 
@@ -329,7 +511,7 @@ void add_hip_devices(std::vector<device>& devices) {
         int device_count = 0;
         if (auto ret = api.hipGetDeviceCount(&device_count);
             ret != cudaHipSuccess) {
-            LOGW("hipGetDeviceCount returned: " << ret);
+            LOGW("hipGetDeviceCount error: " << ret);
             return;
         }
 
@@ -367,7 +549,7 @@ void add_opencl_devices(std::vector<device>& devices) {
         if (auto ret =
                 api.clGetPlatformIDs(max_items, platform_ids, &n_platforms);
             ret != CL_SUCCESS) {
-            LOGW("clGetPlatformIDs returned: " << ret);
+            LOGW("clGetPlatformIDs error: " << ret);
             return;
         }
 
@@ -383,7 +565,7 @@ void add_opencl_devices(std::vector<device>& devices) {
                     api.clGetPlatformInfo(platform_ids[i], CL_PLATFORM_NAME,
                                           max_name_size, &pname, nullptr);
                 ret != CL_SUCCESS) {
-                LOGW("clGetPlatformInfo for name returned: " << ret);
+                LOGW("clGetPlatformInfo for name error: " << ret);
                 continue;
             }
 
@@ -392,7 +574,7 @@ void add_opencl_devices(std::vector<device>& devices) {
                     api.clGetPlatformInfo(platform_ids[i], CL_PLATFORM_VENDOR,
                                           max_name_size, &vendor, nullptr);
                 ret != CL_SUCCESS) {
-                LOGW("clGetPlatformInfo for vendor returned: " << ret);
+                LOGW("clGetPlatformInfo for vendor error: " << ret);
                 continue;
             }
 
@@ -406,7 +588,7 @@ void add_opencl_devices(std::vector<device>& devices) {
             if (ret == CL_DEVICE_NOT_FOUND) {
                 n_devices = 0;
             } else if (ret != CL_SUCCESS) {
-                LOGW("clGetDeviceIDs returned: " << ret);
+                LOGW("clGetDeviceIDs error: " << ret);
                 continue;
             }
 
@@ -421,7 +603,7 @@ void add_opencl_devices(std::vector<device>& devices) {
                         api.clGetDeviceInfo(device_ids[j], CL_DEVICE_NAME,
                                             max_name_size, &dname, nullptr);
                     ret != CL_SUCCESS) {
-                    LOGW("clGetDeviceInfo for name returned: " << ret);
+                    LOGW("clGetDeviceInfo for name error: " << ret);
                     continue;
                 }
 
@@ -430,7 +612,7 @@ void add_opencl_devices(std::vector<device>& devices) {
                         api.clGetDeviceInfo(device_ids[j], CL_DEVICE_TYPE,
                                             sizeof(type), &type, nullptr);
                     ret != CL_SUCCESS) {
-                    LOGW("clGetDeviceInfo for type returned: " << ret);
+                    LOGW("clGetDeviceInfo for type error: " << ret);
                     continue;
                 }
 
@@ -483,9 +665,7 @@ static bool has_lib(const char* name) {
     return true;
 }
 
-bool has_cuda() { return has_lib("libcudart.so"); }
-
-bool has_clblast() { return has_lib("libclblast.so"); }
+bool has_cuda() { return has_lib("libcuda.so"); }
 
 bool has_cudnn() {
     if (has_lib("libcudnn.so")) return true;
