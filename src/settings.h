@@ -281,8 +281,9 @@ class settings : public QSettings, public singleton<settings> {
     friend QDebug operator<<(QDebug d, speech_mode_t speech_mode);
 
     enum class insert_mode_t {
-        InsertInLine = 1,
         InsertNewLine = 0,
+        InsertInLine = 1,
+        InsertAfterEmptyLine = 2
     };
     Q_ENUM(insert_mode_t)
 

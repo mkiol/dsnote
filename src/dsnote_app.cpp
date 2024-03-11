@@ -566,8 +566,21 @@ QString dsnote_app::insert_to_note(QString note, QString new_text,
                 auto last_char = note.at(note.size() - 1);
                 if (last_char.isLetterOrNumber())
                     ss << dot << '\n';
-                else
+                else if (last_char != '\n')
                     ss << '\n';
+            }
+            break;
+        case settings::insert_mode_t::InsertAfterEmptyLine:
+            if (!note.isEmpty()) {
+                auto last_char = note.at(note.size() - 1);
+                auto one_before_last_char =
+                    note.size() > 1 ? note.at(note.size() - 2) : '\0';
+                if (last_char.isLetterOrNumber())
+                    ss << dot << "\n\n";
+                else if (last_char == '\n' && one_before_last_char != '\n')
+                    ss << '\n';
+                else if (last_char != '\n')
+                    ss << "\n\n";
             }
             break;
     }

@@ -157,17 +157,21 @@ DialogPage {
                     currentIndex: {
                         if (_settings.insert_mode === Settings.InsertInLine) return 0
                         if (_settings.insert_mode === Settings.InsertNewLine) return 1
+                        if (_settings.insert_mode === Settings.InsertAfterEmptyLine) return 2
                         return 0
                     }
                     model: [
                         qsTr("In line"),
-                        qsTr("After line break")
+                        qsTr("After line break"),
+                        qsTr("After empty line")
                     ]
                     onActivated: {
                         if (index === 0) {
                             _settings.insert_mode = Settings.InsertInLine
                         } else if (index === 1) {
                             _settings.insert_mode = Settings.InsertNewLine
+                        } else if (index === 2) {
+                            _settings.insert_mode = Settings.InsertAfterEmptyLine
                         } else {
                             _settings.insert_mode = Settings.InsertInLine
                         }
