@@ -41,6 +41,9 @@ DialogPage {
             With these options you can directly fix diacritical marks and punctuation in the text.
             Options are hidden by default. Use <i>User Interface</i> &rarr; <i>Show Repair text options</i> to enable them.
             To use <i>Restore punctuation</i> and <i>Restore diacritical marks</i> you need to download additional models.</li>
+        <li>Text context menu with additional options: <i>Read selection</i> and <i>Translate selection</i>.
+            To activate context menu use mouse right click.</li>
+        <li>New text appending style: <i>After empty line</i></li>
         <li><i>Speech Note</i> has been translated into Ukrainian and Russian languages.
             Many thanks to <i>Vovkiv</i> for this contribution!</li>
         </ul>
@@ -54,12 +57,14 @@ DialogPage {
             When exporting to a file, you can overlay speech with audio from an existing media file.
             This can be useful when creating voice overs from subtitles
             (<i>Export to a file</i> &rarr; <i>Mix speech with audio from an existing file</i>).</li>
+        <li>Context menu option to read from cursor position or read only selected text</li>
         </ul>
         <p>" + qsTr("Translator") + ":</p>
         <ul>
         <li>New models: Greek to English, Maltese to English,
             Slovenian to English, Turkish to English, English to Catalan</li>
         <li>Handy buttons to quickly add translated text to the note or to replace it (<i>Add</li>, <i>Replace</i>)</li>
+        <li>Context menu option to translate from cursor position or translate only selected text</li>
         </ul>"
     }
 

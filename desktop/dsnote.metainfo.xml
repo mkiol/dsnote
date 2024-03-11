@@ -104,6 +104,8 @@
           You can set the font family, style and size of the font used in the text editor.</li>
       <li>Text to Text repair options.
           With these options you can directly fix diacritical marks and punctuation in the text.</li>
+      <li>Text context menu with additional options: 'Read selection' and 'Translate selection'</li>
+      <li>New text appending style: 'After empty line'</li>
       <li>Speech Note has been translated into Ukrainian and Russian languages.
           Many thanks to Vovkiv for this contribution!</li>
       </ul>
@@ -114,12 +116,14 @@
           This may be useful for creating voice overs.</li>
       <li>Mixing speech with audio from an existing file.
           When exporting to a file, you can overlay speech with audio from an existing media file.</li>
+      <li>Context menu option to read from cursor position or read only selected text</li>
       </ul>
       <p>Translator:</p>
       <ul>
       <li>New models: Greek to English, Maltese to English,
           Slovenian to English, Turkish to English, English to Catalan</li>
       <li>Handy buttons to quickly add translated text to the note or to replace it</li>
+      <li>Context menu option to translate from cursor position or translate only selected text</li>
       </ul>
       </description>
     </release>
