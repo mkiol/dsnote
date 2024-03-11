@@ -16,16 +16,20 @@ import org.mkiol.dsnote.Settings 1.0
 ToolBar {
     id: root
 
-    ColumnLayout {
+    property bool verticalMode: width < appWin.verticalWidthThreshold * 0.8
+
+    GridLayout {
         anchors.fill: parent
+        columns: root.verticalMode ? 1 : 2
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.alignment: Qt.AlignLeft
+
             ToolButton {
                 id: menuButton
 
                 icon.name: "open-menu-symbolic"
-                Layout.alignment: Qt.AlignLeft
                 onClicked: menuMenu.open()
 
                 Menu {
@@ -76,12 +80,16 @@ ToolBar {
                         topMargin: size / 2
                     }
                 }
+
+                Item {
+                    height: 1
+                    Layout.fillWidth: true
+                }
             }
 
             ToolButton {
                 id: fileButton
 
-                Layout.alignment: Qt.AlignLeft
                 text: qsTr("File")
                 onClicked: fileMenu.open()
 
@@ -138,7 +146,6 @@ ToolBar {
             }
 
             ToolButton {
-                Layout.alignment: Qt.AlignLeft
                 text: qsTr("Languages")
                 onClicked: appWin.openDialog("LangsPage.qml")
 
@@ -151,7 +158,6 @@ ToolBar {
             ToolButton {
                 id: repairTextButton
 
-                Layout.alignment: Qt.AlignLeft
                 text: qsTr("Repair text")
                 visible: _settings.show_repair_text && !_settings.translator_mode
                 onClicked: rapairTextMenu.open()
@@ -214,16 +220,17 @@ ToolBar {
                     }
                 }
             }
+        }
 
-            Item {
-                Layout.fillWidth: true
-                height: 1
-            }
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.alignment: root.verticalMode ? Qt.AlignHCenter : Qt.AlignRight
 
             ToolButton {
                 id: notepadButton
 
-                Layout.alignment: Qt.AlignRight
+                Layout.fillWidth: root.verticalMode
+                Layout.preferredWidth: root.verticalMode ? root.width / 2 : implicitWidth
                 text: qsTr("Notepad")
                 checkable: true
                 checked: !_settings.translator_mode
@@ -244,7 +251,8 @@ ToolBar {
             ToolButton {
                 id: translatorButton
 
-                Layout.alignment: Qt.AlignRight
+                Layout.fillWidth: root.verticalMode
+                Layout.preferredWidth: root.verticalMode ? root.width / 2 : implicitWidth
                 text: qsTr("Translator")
                 checkable: true
                 checked: _settings.translator_mode
