@@ -58,7 +58,7 @@ DialogPage {
         <p>" + qsTr("Translator") + ":</p>
         <ul>
         <li>New models: Greek to English, Maltese to English,
-            Slovenian to English, Turkish to English</li>
+            Slovenian to English, Turkish to English, English to Catalan</li>
         <li>Handy buttons to quickly add translated text to the note or to replace it (<i>Add</li>, <i>Replace</i>)</li>
         </ul>"
     }

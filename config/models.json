@@ -26370,6 +26370,29 @@
             "recommended_model": "hu_bergamot_huen"
         },
         {
+            "name": "English to Catalan",
+            "model_id": "en_bergamot_enca",
+            "engine": "mnt_bergamot",
+            "lang_id": "en",
+            "trg_lang_id": "ca",
+            "checksum": "aacbc10e",
+            "checksum_quick": "948af8a7",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/c822f9d3efd2623e0c823f3cf0c2e5a258fb2eac/models/dev/enca/model.enca.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/c822f9d3efd2623e0c823f3cf0c2e5a258fb2eac/models/dev/enca/lex.50.50.enca.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/c822f9d3efd2623e0c823f3cf0c2e5a258fb2eac/models/dev/enca/vocab.enca.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "size": "15191249",
+            "recommended_model": "ca_bergamot_caen"
+        },
+        {
             "name": "Català a anglès (Catalan to English)",
             "model_id": "ca_bergamot_caen",
             "engine": "mnt_bergamot",
@@ -26389,7 +26412,8 @@
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
             },
-            "size": "23205178"
+            "size": "23205178",
+            "recommended_model": "en_bergamot_enca"
         },
         {
             "name": "Български към английски (Bulgarian to English)",
