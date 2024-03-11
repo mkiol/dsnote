@@ -6856,7 +6856,7 @@
             "hidden": true
         },
         {
-            "name": "Пунктуация",
+            "name": "Пунктуация (Punctuation)",
             "model_id": "bg_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "bg"
@@ -6868,97 +6868,97 @@
             "lang_id": "en"
         },
         {
-            "name": "Zeichensetzung",
+            "name": "Zeichensetzung (Punctuation)",
             "model_id": "de_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "de"
         },
         {
-            "name": "Ponctuation",
+            "name": "Ponctuation (Punctuation)",
             "model_id": "fr_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "fr"
         },
         {
-            "name": "Puntuación",
+            "name": "Puntuación (Punctuation)",
             "model_id": "es_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "es"
         },
         {
-            "name": "Punteggiatura",
+            "name": "Punteggiatura (Punctuation)",
             "model_id": "it_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "it"
         },
         {
-            "name": "Interpunkcja",
+            "name": "Interpunkcja (Punctuation)",
             "model_id": "pl_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "pl"
         },
         {
-            "name": "Leestekens",
+            "name": "Leestekens (Punctuation)",
             "model_id": "nl_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "nl"
         },
         {
-            "name": "Interpunkce",
+            "name": "Interpunkce (Punctuation)",
             "model_id": "cs_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "cs"
         },
         {
-            "name": "Pontuação",
+            "name": "Pontuação (Punctuation)",
             "model_id": "pt_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "pt"
         },
         {
-            "name": "Interpunkcija",
+            "name": "Interpunkcija (Punctuation)",
             "model_id": "sl_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "sl"
         },
         {
-            "name": "Στίξη",
+            "name": "Στίξη (Punctuation)",
             "model_id": "el_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "el"
         },
         {
-            "name": "Interpunktion",
+            "name": "Interpunktion (Punctuation)",
             "model_id": "sv_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "sv"
         },
         {
-            "name": "Szótagolás",
+            "name": "Szótagolás (Punctuation)",
             "model_id": "hu_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "hu"
         },
         {
-            "name": "Punctuație",
+            "name": "Punctuație (Punctuation)",
             "model_id": "ro_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "ro"
         },
         {
-            "name": "Interpunkcia",
+            "name": "Interpunkcia (Punctuation)",
             "model_id": "sk_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "sk"
         },
         {
-            "name": "Tegnsætning",
+            "name": "Tegnsætning (Punctuation)",
             "model_id": "da_hftc_kredor",
             "model_alias_of": "multilang_hftc_kredor",
             "lang_id": "da"
         },
         {
-            "name": "استعادة علامات التشكيل",
+            "name": "استعادة علامات التشكيل (Restoration of diacritics)",
             "model_id": "ar_tashkeel_diacritizer",
             "engine": "ttt_tashkeel",
             "lang_id": "ar",
@@ -6970,7 +6970,7 @@
             ]
         },
         {
-            "name": "שחזור סימנים דיקריטיים",
+            "name": "שחזור סימנים דיקריטיים (Restoration of diacritics)",
             "model_id": "he_unikud_diacritizer",
             "engine": "ttt_unikud",
             "lang_id": "he",
