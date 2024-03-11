@@ -1071,7 +1071,6 @@ std::string processor::preprocess(const std::string& text,
 
     if (has_option('s', options)) {
         new_text = std::regex_replace(new_text, std::regex{"\\."}, " .");
-        LOGD("out: " << new_text);
     }
 
     if (has_option('p', options)) {

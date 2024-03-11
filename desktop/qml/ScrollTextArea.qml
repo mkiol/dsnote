@@ -16,6 +16,7 @@ Item {
     property alias textFormatCombo: _textFormatCombo
     property alias textFormatInvalid: _textFormatComboRedBorder.visible
     property color textColor: palette.text
+    property bool showTranslate: false
     property bool canUndo: true
     property bool canUndoFallback: false
     property bool canRedo: true
@@ -24,6 +25,7 @@ Item {
     property bool canPushAdd: false
     property bool canPushReplace: false
     property bool canReadSelected: false
+    property bool canTranslateSelected: false
     readonly property bool _fitContent: scrollView.availableHeight - 4 * appWin.padding >= scrollView.contentHeight
     readonly property bool _contextActive: _textFormatCombo.hovered || copyButton.hovered || clearButton.hovered ||
                                            undoButton.hovered || redoButton.hovered || pasteButton.hovered ||
@@ -35,6 +37,7 @@ Item {
     signal pushAddClicked()
     signal pushReplaceClicked()
     signal readSelectedClicked(int start, int end);
+    signal translateSelectedClicked(int start, int end);
 
     function scrollToBottom() {
         var position = (scrollView.contentHeight - scrollView.availableHeight) / scrollView.contentHeight
@@ -111,6 +114,49 @@ Item {
                     enabled: root.textArea.cursorPosition > 0 && root.canReadSelected
                     onTriggered: {
                         root.readSelectedClicked(0, root.textArea.cursorPosition)
+                    }
+                }
+
+                MenuSeparator {
+                    visible: root.showTranslate
+                }
+
+                MenuItem {
+                    visible: root.showTranslate
+                    action: Action {
+                        icon.name: "insert-text-symbolic"
+                        text: qsTr("Translate selection")
+                    }
+                    enabled: root.textArea.selectedText.length !== 0 && root.canTranslateSelected
+                    onTriggered: {
+                        root.translateSelectedClicked(root.textArea.selectionStart,
+                                                 root.textArea.selectionEnd)
+                    }
+                }
+
+                MenuItem {
+                    visible: root.showTranslate
+                    action: Action {
+                        icon.name: "insert-text-symbolic"
+                        text: qsTr("Translate from cursor position")
+                    }
+                    enabled: root.textArea.cursorPosition >= 0 &&
+                             root.textArea.cursorPosition < root.textArea.text.length &&
+                             root.canTranslateSelected
+                    onTriggered: {
+                        root.translateSelectedClicked(root.textArea.cursorPosition, -1)
+                    }
+                }
+
+                MenuItem {
+                    visible: root.showTranslate
+                    action: Action {
+                        icon.name: "insert-text-symbolic"
+                        text: qsTr("Translate to cursor position")
+                    }
+                    enabled: root.textArea.cursorPosition > 0 && root.canTranslateSelected
+                    onTriggered: {
+                        root.translateSelectedClicked(0, root.textArea.cursorPosition)
                     }
                 }
             }

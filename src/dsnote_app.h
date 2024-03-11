@@ -329,6 +329,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void pause_speech();
     Q_INVOKABLE void resume_speech();
     Q_INVOKABLE void translate();
+    Q_INVOKABLE void translate_selected(int start, int end);
     Q_INVOKABLE void translate_delayed();
     Q_INVOKABLE void speech_to_file(const QString &dest_file,
                                     const QString &title_tag = {},
@@ -804,6 +805,7 @@ class dsnote_app : public QObject {
     void update_tray_task_state();
     void update_auto_text_format_delayed();
     void update_auto_text_format();
+    void translate_internal(const QString &text);
     bool import_text_file(const QString &input_file, bool replace);
     void export_to_subtitles(const QString &dest_file,
                              settings::text_file_format_t format,

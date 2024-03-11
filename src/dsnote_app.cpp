@@ -2236,13 +2236,28 @@ void dsnote_app::handle_translate_delayed() {
         translate_delayed();
 }
 
-void dsnote_app::translate() {
+void dsnote_app::translate_selected(int start, int end) {
+    auto size = note().size();
+
+    if (size == 0) return;
+
+    start = std::clamp(start, 0, size);
+    end = end < 0 ? size : std::clamp(end, start, size);
+
+    if (start == end) return;
+
+    translate_internal(note().mid(start, end - start));
+}
+
+void dsnote_app::translate() { translate_internal(note()); }
+
+void dsnote_app::translate_internal(const QString &text) {
     if (m_active_mnt_lang.isEmpty() || m_active_mnt_out_lang.isEmpty()) {
         qWarning() << "invalid active mnt lang";
         return;
     }
 
-    if (note().isEmpty()) {
+    if (text.isEmpty()) {
         set_translated_text({});
     } else {
         int new_task = 0;
@@ -2256,12 +2271,12 @@ void dsnote_app::translate() {
         if (settings::instance()->launch_mode() ==
             settings::launch_mode_t::app_stanalone) {
             new_task = speech_service::instance()->mnt_translate(
-                note(), m_active_mnt_lang, m_active_mnt_out_lang, options);
+                text, m_active_mnt_lang, m_active_mnt_out_lang, options);
         } else {
             qDebug() << "[app => dbus] call MntTranslate";
 
             new_task = m_dbus_service.MntTranslate2(
-                note(), m_active_mnt_lang, m_active_mnt_out_lang, options);
+                text, m_active_mnt_lang, m_active_mnt_out_lang, options);
         }
 
         m_primary_task.set(new_task);

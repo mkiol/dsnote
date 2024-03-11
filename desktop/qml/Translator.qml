@@ -103,6 +103,8 @@ ColumnLayout {
                     anchors.fill: parent
                     canUndoFallback: app.can_undo_note
                     canReadSelected: mntInCombo.second.button.enabled
+                    showTranslate: true
+                    canTranslateSelected: mntInCombo.first.enabled && mntInCombo.first.combo.model.length !== 0
                     textArea {
                         placeholderText: app.mnt_configured ? qsTr("Type here text to translate from...") : ""
                         onTextChanged: {
@@ -149,6 +151,9 @@ ColumnLayout {
                     onUndoFallbackClicked: app.undo_or_redu_note()
                     onReadSelectedClicked: {
                         app.play_speech_translator_selected(start, end, false)
+                    }
+                    onTranslateSelectedClicked: {
+                        app.translate_selected(start, end)
                     }
                 }
             }
