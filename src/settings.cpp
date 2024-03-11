@@ -927,13 +927,6 @@ void settings::set_insert_mode(insert_mode_t value) {
 }
 
 QString settings::x11_compose_file() const {
-    // #ifdef USE_FLATPAK
-    //     return value(QStringLiteral("x11_compose_file"),
-    //                  "/usr/share/X11/locale/en_US.UTF-8/Compose")
-    //         .toString();
-    // #else
-    //     return value(QStringLiteral("x11_compose_file"), {}).toString();
-    // #endif
     return value(QStringLiteral("x11_compose_file"), {}).toString();
 }
 

@@ -12,9 +12,22 @@ Menu {
     id: root
 
     property var textArea: parent
+    property bool disableNative: false
+
+    modal: true
 
     Component.onCompleted: {
-        if (!_settings.is_native_style()) {
+        var is_native = _settings.is_native_style()
+
+        if (is_native && disableNative) {
+            for (var i = 0; i < textArea.resources.length; ++i) {
+                if (textArea.resources[i].toString().indexOf("TapHandler") >= 0) {
+                    textArea.resources[i].acceptedButtons = Qt.LeftButton
+                }
+            }
+        }
+
+        if (!is_native || disableNative) {
             textArea.pressed.connect(function(event){
                 if (event.button !== Qt.RightButton) return
 
@@ -26,54 +39,89 @@ Menu {
     }
 
     MenuItem {
-        text: qsTr("Undo")
+        action: Action {
+            icon.name: "edit-undo-symbolic"
+            text: qsTr("Undo")
+            shortcut: StandardKey.Undo
+        }
         enabled: root.textArea.canUndo
-        icon.name: "edit-undo-symbolic"
-        onClicked: root.textArea.undo()
+        onTriggered: {
+            root.textArea.undo()
+        }
     }
 
     MenuItem {
-        text: qsTr("Redo")
+        action: Action {
+            icon.name: "edit-redo-symbolic"
+            text: qsTr("Redo")
+            shortcut: StandardKey.Redo
+        }
         enabled: root.textArea.canRedo
-        icon.name: "edit-redo-symbolic"
-        onClicked: root.textArea.redo()
+        onTriggered: {
+            root.textArea.redo()
+        }
     }
 
     MenuSeparator {}
 
     MenuItem {
-        text: qsTr("Cut")
-        icon.name: "edit-cut-symbolic"
+        action: Action {
+            icon.name: "edit-cut-symbolic"
+            text: qsTr("Cut")
+            shortcut: StandardKey.Cut
+        }
         enabled: root.textArea.selectedText.length !== 0
-        onClicked: root.textArea.cut()
+        onTriggered: {
+            root.textArea.cut()
+        }
     }
 
     MenuItem {
-        text: qsTr("Copy")
-        icon.name: "edit-copy-symbolic"
+        action: Action {
+            icon.name: "edit-copy-symbolic"
+            text: qsTr("Copy")
+            shortcut: StandardKey.Copy
+        }
         enabled: root.textArea.selectedText.length !== 0
-        onClicked: root.textArea.copy()
+        onTriggered: {
+            root.textArea.copy()
+        }
     }
 
     MenuItem {
-        text: qsTr("Paste")
+        action: Action {
+            icon.name: "edit-paste-symbolic"
+            text: qsTr("Paste")
+            shortcut: StandardKey.Paste
+        }
         enabled: root.textArea.canPaste
-        icon.name: "edit-paste-symbolic"
-        onClicked: root.textArea.paste()
+        onTriggered: {
+            root.textArea.paste()
+        }
     }
 
     MenuItem {
-        text: qsTr("Delete")
+        action: Action {
+            icon.name: "edit-delete-symbolic"
+            text: qsTr("Delete")
+            shortcut: StandardKey.Delete
+        }
         enabled: root.textArea.selectedText.length !== 0
-        icon.name: "edit-delete-symbolic"
-        onClicked: root.textArea.remove(root.textArea.selectionStart, root.textArea.selectionEnd)
+        onTriggered: {
+            root.textArea.remove(root.textArea.selectionStart, root.textArea.selectionEnd)
+        }
     }
 
     MenuSeparator {}
 
     MenuItem {
-        text: qsTr("Select All")
-        icon.name: "edit-select-all-symbolic"
-        onClicked: root.textArea.selectAll()
+        action: Action {
+            icon.name: "edit-select-all-symbolic"
+            text: qsTr("Select All")
+            shortcut: StandardKey.SelectAll
+        }
+        onTriggered: {
+            root.textArea.selectAll()
+        }
     }
 }

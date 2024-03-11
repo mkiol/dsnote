@@ -67,6 +67,7 @@ ColumnLayout {
 
         enabled: root.enabled
         canUndoFallback: app.can_undo_note
+        canReadSelected: listenReadCombos.second.button.enabled
         textArea {
             placeholderText: app.stt_configured || app.tts_configured ?
                                  qsTr("Type here or press %1 to make a note...")
@@ -107,6 +108,9 @@ ColumnLayout {
             root.noteTextArea.textArea.text = ""
         }
         onUndoFallbackClicked: app.undo_or_redu_note()
+        onReadSelectedClicked: {
+            app.play_speech_selected(start, end)
+        }
     }
 
     DuoComboButton {

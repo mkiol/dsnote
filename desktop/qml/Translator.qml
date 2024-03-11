@@ -102,6 +102,7 @@ ColumnLayout {
                     enabled: !root.readOnly && app.mnt_configured
                     anchors.fill: parent
                     canUndoFallback: app.can_undo_note
+                    canReadSelected: mntInCombo.second.button.enabled
                     textArea {
                         placeholderText: app.mnt_configured ? qsTr("Type here text to translate from...") : ""
                         onTextChanged: {
@@ -146,6 +147,9 @@ ColumnLayout {
                         root.noteTextArea.textArea.text = ""
                     }
                     onUndoFallbackClicked: app.undo_or_redu_note()
+                    onReadSelectedClicked: {
+                        app.play_speech_translator_selected(start, end, false)
+                    }
                 }
             }
 
@@ -247,6 +251,7 @@ ColumnLayout {
                     canPaste: false
                     canPushAdd: app.translated_text.length !== 0
                     canPushReplace: app.translated_text.length !== 0 && app.note.length !== 0
+                    canReadSelected: mntOutCombo.second.button.enabled
                     textArea {
                         onTextChanged: {
                             app.translated_text = root.translatedNoteTextArea.textArea.text
@@ -259,6 +264,9 @@ ColumnLayout {
                     }
                     onPushReplaceClicked: {
                         app.switch_translated_text()
+                    }
+                    onReadSelectedClicked: {
+                        app.play_speech_translator_selected(start, end, true)
                     }
                 }
 
@@ -314,8 +322,8 @@ ColumnLayout {
                     }
                     combo2 {
                         visible: app.tts_for_out_mnt_ref_voice_needed && app.available_tts_ref_voices.length !== 0
-                        enabled: mntInCombo.second.enabled &&
-                                 !mntInCombo.second.off &&
+                        enabled: mntOutCombo.second.enabled &&
+                                 !mntOutCombo.second.off &&
                                  app.state === DsnoteApp.StateIdle
                         model: app.available_tts_ref_voices
                         onActivated: app.set_active_tts_for_out_mnt_ref_voice_idx(index)

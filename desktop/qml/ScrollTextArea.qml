@@ -23,6 +23,7 @@ Item {
     property bool canPaste: true
     property bool canPushAdd: false
     property bool canPushReplace: false
+    property bool canReadSelected: false
     readonly property bool _fitContent: scrollView.availableHeight - 4 * appWin.padding >= scrollView.contentHeight
     readonly property bool _contextActive: _textFormatCombo.hovered || copyButton.hovered || clearButton.hovered ||
                                            undoButton.hovered || redoButton.hovered || pasteButton.hovered ||
@@ -33,6 +34,7 @@ Item {
     signal undoFallbackClicked()
     signal pushAddClicked()
     signal pushReplaceClicked()
+    signal readSelectedClicked(int start, int end);
 
     function scrollToBottom() {
         var position = (scrollView.contentHeight - scrollView.availableHeight) / scrollView.contentHeight
@@ -71,7 +73,47 @@ Item {
             Keys.onUpPressed: scrollView.ScrollBar.vertical.decrease()
             Keys.onDownPressed: scrollView.ScrollBar.vertical.increase()
 
-            TextContextMenu {}
+            TextContextMenu {
+                disableNative: true
+
+                MenuSeparator {}
+
+                MenuItem {
+                    action: Action {
+                        icon.name: "audio-speakers-symbolic"
+                        text: qsTr("Read selection")
+                    }
+                    enabled: root.textArea.selectedText.length !== 0 && root.canReadSelected
+                    onTriggered: {
+                        root.readSelectedClicked(root.textArea.selectionStart,
+                                                 root.textArea.selectionEnd)
+                    }
+                }
+
+                MenuItem {
+                    action: Action {
+                        icon.name: "audio-speakers-symbolic"
+                        text: qsTr("Read from cursor position")
+                    }
+                    enabled: root.textArea.cursorPosition >= 0 &&
+                             root.textArea.cursorPosition < root.textArea.text.length &&
+                             root.canReadSelected
+                    onTriggered: {
+                        root.readSelectedClicked(root.textArea.cursorPosition, -1)
+                    }
+                }
+
+                MenuItem {
+                    action: Action {
+                        icon.name: "audio-speakers-symbolic"
+                        text: qsTr("Read to cursor position")
+                    }
+                    enabled: root.textArea.cursorPosition > 0 && root.canReadSelected
+                    onTriggered: {
+                        root.readSelectedClicked(0, root.textArea.cursorPosition)
+                    }
+                }
+            }
         }
     }
 

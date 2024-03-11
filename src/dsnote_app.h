@@ -318,8 +318,11 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void listen_to_clipboard();
     Q_INVOKABLE void stop_listen();
     Q_INVOKABLE void play_speech();
+    Q_INVOKABLE void play_speech_selected(int start, int end);
     Q_INVOKABLE void play_speech_from_clipboard();
     Q_INVOKABLE void play_speech_translator(bool transtalated);
+    Q_INVOKABLE void play_speech_translator_selected(int start, int end,
+                                                     bool transtalated);
     Q_INVOKABLE void restore_diacritics_ar();
     Q_INVOKABLE void restore_diacritics_he();
     Q_INVOKABLE void restore_punctuation();

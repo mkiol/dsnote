@@ -187,6 +187,8 @@ void text_repair_engine::repair_text(const std::string& text,
 
 void text_repair_engine::set_state(state_t new_state) {
     if (is_shutdown()) {
+        if (m_state == state_t::error) return;
+
         switch (new_state) {
             case state_t::idle:
             case state_t::stopping:

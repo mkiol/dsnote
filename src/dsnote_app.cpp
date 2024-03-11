@@ -2103,6 +2103,56 @@ void dsnote_app::play_speech() {
         settings::instance()->stt_tts_text_format());
 }
 
+void dsnote_app::play_speech_selected(int start, int end) {
+    auto size = note().size();
+
+    if (size == 0) return;
+
+    start = std::clamp(start, 0, size);
+    end = end < 0 ? size : std::clamp(end, start, size);
+
+    if (start == end) return;
+
+    play_speech_internal(
+        note().mid(start, end - start), {},
+        tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
+        settings::instance()->stt_tts_text_format());
+}
+
+void dsnote_app::play_speech_translator_selected(int start, int end,
+                                                 bool transtalated) {
+    auto size = transtalated ? m_translated_text.size() : note().size();
+
+    if (size == 0) return;
+
+    start = std::clamp(start, 0, size);
+    end = end < 0 ? size : std::clamp(end, start, size);
+
+    if (start == end) return;
+
+    if (!transtalated && m_active_tts_model_for_in_mnt.isEmpty()) {
+        qWarning() << "no active tts model for in mnt";
+        return;
+    }
+
+    if (transtalated && m_active_tts_model_for_out_mnt.isEmpty()) {
+        qWarning() << "no active tts model for out mnt";
+        return;
+    }
+
+    play_speech_internal(
+        transtalated ? m_translated_text.mid(start, end - start)
+                     : note().mid(start, end - start),
+        transtalated ? m_active_tts_model_for_out_mnt
+                     : m_active_tts_model_for_in_mnt,
+        transtalated                        ? tts_for_out_mnt_ref_voice_needed()
+                                                  ? active_tts_for_out_mnt_ref_voice()
+                                                  : QString{}
+                               : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
+                                            : QString{},
+        settings::instance()->mnt_text_format());
+}
+
 void dsnote_app::restore_diacritics_ar() {
     repair_text(text_repair_task_type_t::restore_diacritics_ar);
 }
