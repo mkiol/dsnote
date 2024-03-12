@@ -2,9 +2,7 @@ app-id: net.mkiol.SpeechNote
 runtime: org.kde.Platform
 runtime-version: "5.15-23.08"
 sdk: org.kde.Sdk
-rename-desktop-file: dsnote.desktop
 rename-icon: dsnote
-rename-appdata-file: dsnote.metainfo.xml
 command: dsnote
 build-options:
   strip: false
@@ -25,6 +23,7 @@ finish-args:
   - --env=LD_LIBRARY_PATH=/app/extensions/nvidia/lib:/app/extensions/amd/lib:/app/extensions/cpu/lib:/app/extensions/nvidia/cuda/lib64:/app/extensions/amd/rocm/lib
   - --env=OPENCL_VENDOR_PATH=/app/opt/opencl/vendors
   - --env=PERL5LIB=/app/lib/perl5/site_perl
+  - --env=QT_QUICK_CONTROLS_HOVER_ENABLED=1
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.kde.StatusNotifierWatcher # system tray icon
 cleanup:
@@ -757,11 +756,11 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/extensions/cpu
       - cd python && python setup.py bdist_wheel
       - pip3 install --verbose --exists-action=i --no-index --prefix=${FLATPAK_DEST}/extensions/cpu --no-build-isolation python/dist/*.whl
-      - strip ${FLATPAK_DEST}/extensions/cpu/lib/libctranslate2.so.4.0.0
+      - strip ${FLATPAK_DEST}/extensions/cpu/lib/libctranslate2.so.4.1.0
     sources:
       - type: git
         url: https://github.com/OpenNMT/CTranslate2.git
-        commit: 63c1ae5d9d0859cee2ad6cce7b77405be1a45702
+        commit: bfa0cb3c03ba02df0d53659aa5235611d701c574
       - type: patch
         path: ../patches/ctranslate2.patch
 
