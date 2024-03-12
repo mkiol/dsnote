@@ -1,7 +1,18 @@
 install(TARGETS ${info_binary_id} RUNTIME DESTINATION bin)
 
-install(FILES "${desktop_dir}/${info_binary_id}.desktop" DESTINATION share/applications)
-install(FILES "${desktop_dir}/${info_binary_id}.metainfo.xml" DESTINATION share/metainfo)
+configure_file(${desktop_dir}/${info_id}.desktop.in ${info_app_icon_id}.desktop)
+install(FILES ${info_app_icon_id}.desktop DESTINATION share/applications)
+
+configure_file(${desktop_dir}/${info_id}.metainfo.xml.in ${info_app_icon_id}.metainfo.xml)
+install(FILES ${info_app_icon_id}.metainfo.xml DESTINATION share/metainfo)
+
+configure_file("${desktop_dir}/dbus_app.service.in" "${PROJECT_BINARY_DIR}/dbus_app.service")
+if(WITH_FLATPAK)
+    install(FILES "${PROJECT_BINARY_DIR}/dbus_app.service" DESTINATION share/dbus-1/services RENAME ${info_dbus_app_service}.service)
+else()
+    install(FILES "${PROJECT_BINARY_DIR}/dbus_app.service" DESTINATION share/dbus-1/services RENAME ${info_binary_id}.service)
+endif()
+
 install(FILES "${desktop_dir}/${info_binary_id}.svg" DESTINATION share/icons/hicolor/scalable/apps)
 install(FILES "${desktop_dir}/icons/16x16/${info_binary_id}.png" DESTINATION share/icons/hicolor/16x16/apps)
 install(FILES "${desktop_dir}/icons/32x32/${info_binary_id}.png" DESTINATION share/icons/hicolor/32x32/apps)
@@ -11,13 +22,6 @@ install(FILES "${desktop_dir}/icons/96x96/${info_binary_id}.png" DESTINATION sha
 install(FILES "${desktop_dir}/icons/128x128/${info_binary_id}.png" DESTINATION share/icons/hicolor/128x128/apps)
 install(FILES "${desktop_dir}/icons/256x256/${info_binary_id}.png" DESTINATION share/icons/hicolor/256x256/apps)
 install(FILES "${desktop_dir}/icons/512x512/${info_binary_id}.png" DESTINATION share/icons/hicolor/512x512/apps)
-
-configure_file("${desktop_dir}/dbus_app.service.in" "${PROJECT_BINARY_DIR}/dbus_app.service")
-if(WITH_FLATPAK)
-    install(FILES "${PROJECT_BINARY_DIR}/dbus_app.service" DESTINATION share/dbus-1/services RENAME ${info_dbus_app_service}.service)
-else()
-    install(FILES "${PROJECT_BINARY_DIR}/dbus_app.service" DESTINATION share/dbus-1/services RENAME ${info_binary_id}.service)
-endif()
 
 function(strip_all file)
     install(CODE "execute_process(COMMAND ${CMAKE_STRIP} --strip-all ${file})")

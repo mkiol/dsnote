@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2024 Michal Kosciesza -->
 <component type="desktop-application">
-  <id>net.mkiol.SpeechNote</id>
+  <id>@info_app_icon_id@</id>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>MPL-2.0</project_license>
-  <developer_name>Michal Kosciesza</developer_name>
-  <name>Speech Note</name>
+  <project_license>@info_license_spdx@</project_license>
+  <developer_name>@info_author@</developer_name>
+  <name>@info_name@</name>
   <summary>Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation</summary>
   <description>
     <p>Speech Note let you take, read and translate notes in multiple languages.
@@ -56,7 +56,7 @@
   <url type="translate">https://app.transifex.com/mkiol/dsnote</url>
   <url type="donation">https://github.com/mkiol/dsnote#how-to-support</url>
   <update_contact>dsnote_AT_mkiol.net</update_contact>
-  <launchable type="desktop-id">net.mkiol.SpeechNote.desktop</launchable>
+  <launchable type="desktop-id">@info_app_icon_id@.desktop</launchable>
   <content_rating type="oars-1.1" />
   <provides>
       <mediatype>audio/aac</mediatype>

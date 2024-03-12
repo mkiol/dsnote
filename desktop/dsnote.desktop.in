@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
 Categories=Utility;Office;Audio;AudioVideo;TextEditor;Translation;KDE;Qt;
-Icon=dsnote
-Exec=dsnote %F
-Name=Speech Note
+Icon=@info_app_icon_id@
+Exec=@info_binary_id@ %F
+Name=@info_name@
 MimeType=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/opus;audio/vorbis;audio/x-vorbis;audio/x-speex;audio/speex;audio/wav;audio/x-wav;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;audio/mp4;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;text/plain;application/x-subrip;
-StartupWMClass=net.mkiol.dsnote
-Keywords=SpeechNote
+StartupWMClass=@info_org@.@info_binary_id@
+Keywords=@info_name@;@id@;
 Comment=Take, read and translate notes in multiple languages, using Speech to Text, Text to Speech and Machine Translation.
