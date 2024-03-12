@@ -1400,9 +1400,7 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
     bool disable_tts_cuda =
         (gpu_feature_flags & gpu_feature_flags_t::gpu_feature_tts_coqui_cuda) ==
         0;
-    bool disable_tts_hip =
-        (gpu_feature_flags & gpu_feature_flags_t::gpu_feature_tts_coqui_hip) ==
-        0;
+    bool disable_tts_hip = disable_tts_cuda;
 
     auto devices = gpu_tools::available_devices(
         /*cuda=*/gpu_scan_cuda(),
