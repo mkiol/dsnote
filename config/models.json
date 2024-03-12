@@ -20136,6 +20136,20 @@
             "speaker": "903"
         },
         {
+            "name": "English (Piper Kristin Medium Female)",
+            "model_id": "en_piper_us_kristin_medium",
+            "engine": "tts_piper",
+            "lang_id": "en",
+            "checksum": "2e101a15",
+            "checksum_quick": "966a98d1",
+            "size": "63544539",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/en/en_US/kristin/medium/en_US-kristin-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/en/en_US/kristin/medium/en_US-kristin-medium.onnx.json"
+            ]
+        },
+        {
             "name": "English (Piper Ryan High Male)",
             "model_id": "en_piper_us_ryan_high",
             "engine": "tts_piper",
@@ -20190,8 +20204,7 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/en/en_GB/alan/medium/en_GB-alan-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/en/en_GB/alan/medium/en_GB-alan-medium.onnx.json"
             ],
-            "size": "63216499",
-            "hidden": true
+            "size": "63216499"
         },
         {
             "name": "English British (Piper Alba Medium Female)",
@@ -20206,6 +20219,20 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/en/en_GB/alba/medium/en_GB-alba-medium.onnx.json"
             ],
             "size": "63216499"
+        },
+        {
+            "name": "English British (Piper Cori High Female)",
+            "model_id": "en_piper_gb_cori_high",
+            "engine": "tts_piper",
+            "lang_id": "en",
+            "checksum": "d0c9f893",
+            "checksum_quick": "d4197a43",
+            "size": "114232507",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/en/en_GB/cori/high/en_GB-cori-high.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/en/en_GB/cori/high/en_GB-cori-high.onnx.json"
+            ]
         },
         {
             "name": "English British (Piper Aru Medium)",
@@ -21224,23 +21251,43 @@
             ]
         },
         {
+            "name": "فارسی (Piper Amir Medium Male)",
+            "model_id": "fa_piper_ir_amir_medium",
+            "engine": "tts_piper",
+            "lang_id": "fa",
+            "checksum": "f14404cb",
+            "checksum_quick": "ee22958f",
+            "size": "63544529",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/fa/fa_IR/amir/medium/fa_IR-amir-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/fa/fa_IR/amir/medium/fa_IR-amir-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
             "name": "فارسی (Piper Gyro Medium Male)",
             "model_id": "fa_piper_ir_gyro_medium",
             "engine": "tts_piper",
             "lang_id": "fa",
-            "checksum": "d3c8682d",
-            "checksum_quick": "bacefedb",
+            "checksum": "1058bb8a",
+            "checksum_quick": "80fd1d14",
+            "size": "63135459",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/gyroing/Persian-Piper-Model-gyro/resolve/6fcedcc4d48520d6a6e9f77248e91b4b43e54cf5/fa_IR-gyro-meduim.onnx",
-                "https://huggingface.co/gyroing/Persian-Piper-Model-gyro/resolve/6fcedcc4d48520d6a6e9f77248e91b4b43e54cf5/fa_IR-gyro-meduim.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/fa/fa_IR/gyro/medium/fa_IR-gyro-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/fa/fa_IR/gyro/medium/fa_IR-gyro-medium.onnx.json"
             ],
             "license": {
                 "id": "MIT",
                 "name": "MIT License",
                 "accept_required": false
-            },
-            "size": "63137585"
+            }
         },
         {
             "name": "Català (Piper Upc Ona Low Female)",
@@ -21625,6 +21672,26 @@
             "size": "63216506"
         },
         {
+            "name": "Español mexicano (Piper Claude High)",
+            "model_id": "es_piper_mx_claude_high",
+            "engine": "tts_piper",
+            "lang_id": "es",
+            "checksum": "20149dd4",
+            "checksum_quick": "7b0b04ab",
+            "size": "63135464",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/es/es_MX/claude/high/es_MX-claude-high.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/es/es_MX/claude/high/es_MX-claude-high.onnx.json"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License, Version 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            }
+        },
+        {
             "name": "Suomi (Piper Harri Low Male)",
             "model_id": "fi_piper_harri_low",
             "engine": "tts_piper",
@@ -21651,6 +21718,26 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fi/fi_FI/harri/medium/fi_FI-harri-medium.onnx.json"
             ],
             "size": "63216492"
+        },
+        {
+            "name": "Français (Piper Tom Medium Male)",
+            "model_id": "fr_piper_tom_medium",
+            "engine": "tts_piper",
+            "lang_id": "fr",
+            "checksum": "72136d3e",
+            "checksum_quick": "c12d9624",
+            "size": "63524189",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/fr/fr_FR/tom/medium/fr_FR-tom-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/fr/fr_FR/tom/medium/fr_FR-tom-medium.onnx.json"
+            ],
+            "license": {
+                "id": "AGPL-3.0",
+                "name": "GNU Affero General Public License Version 3",
+                "url": "https://www.gnu.org/licenses/agpl-3.0.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Français (Piper Gilles Low Male)",
@@ -22334,6 +22421,26 @@
             "size": "63214449"
         },
         {
+            "name": "Slovenščina (Piper Artur Medium Male)",
+            "model_id": "sl_piper_artur_medium",
+            "engine": "tts_piper",
+            "lang_id": "sl",
+            "checksum": "67e7ec25",
+            "checksum_quick": "32fadcf4",
+            "size": "63213654",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/sl/sl_SI/artur/medium/sl_SI-artur-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/sl/sl_SI/artur/medium/sl_SI-artur-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC BY 4.0",
+                "name": "Creative Commons Attribution 4.0 International",
+                "url": "https://creativecommons.org/licenses/by/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
             "name": "Kiswahili (Piper Lanfrica Medium Male)",
             "model_id": "sw_piper_cd_lanfrica_medium",
             "engine": "tts_piper",
@@ -22360,6 +22467,26 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/tr/tr_TR/dfki/medium/tr_TR-dfki-medium.onnx.json"
             ],
             "size": "63214446"
+        },
+        {
+            "name": "Türkçe (Piper Fettah Medium Male)",
+            "model_id": "tr_piper_fettah_medium",
+            "engine": "tts_piper",
+            "lang_id": "tr",
+            "checksum": "3bb6b221",
+            "checksum_quick": "f0b34cf2",
+            "size": "63214363",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/tr/tr_TR/fettah/medium/tr_TR-fettah-medium.onnx.json",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/tr/tr_TR/fettah/medium/tr_TR-fettah-medium.onnx"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Türkçe (Piper Fahrettin Medium Male)",
