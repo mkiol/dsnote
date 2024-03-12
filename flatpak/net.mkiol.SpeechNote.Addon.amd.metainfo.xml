@@ -22,7 +22,7 @@
       <description>
         <ul>
         <li>PyTorch update to version 2.2.1</li>
-        <li>ROCm update to version 5.7.1</li>
+        <li>ROCm update to version 5.7.3</li>
         <li>CTranslate2 update to version 4.1.0</li>
         <li>faster-whisper update to version 1.0.1</li>
         </ul>

@@ -84,7 +84,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.5.0-beta" date="2024-03-7">
+    <release version="4.5.0-beta" date="2024-03-12">
       <description>
       <p>Accessibility:</p>
       <ul>
@@ -111,7 +111,7 @@
       </ul>
       <p>Text to Speech:</p>
       <ul>
-      <li>New voice for Persian language: 'Piper Gyro Medium'</li>
+      <li>New Piper voices for English, Persian, Slovenian, Turkish, French and Spanish</li>
       <li>Settings option to enable/disable speech synchronization with subtitle timestamps.
           This may be useful for creating voice overs.</li>
       <li>Mixing speech with audio from an existing file.

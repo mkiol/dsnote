@@ -49,7 +49,7 @@ DialogPage {
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
-        <li>New voice for Persian language: <i>Piper Gyro Medium</i></li>
+        <li>New Piper voices for English, Persian, Slovenian, Turkish, French and Spanish</li>
         <li>Settings option to enable/disable speech synchronization with subtitle timestamps
             (<i>Text to Speech</i> &rarr; <i>Sync speech with timestamps</i>).
             This may be useful for creating voice overs.</li>
@@ -65,6 +65,13 @@ DialogPage {
             Slovenian to English, Turkish to English, English to Catalan</li>
         <li>Handy buttons to quickly add translated text to the note or to replace it (<i>Add</li>, <i>Replace</i>)</li>
         <li>Context menu option to translate from cursor position or translate only selected text</li>
+        </ul>
+        <p>" + qsTr("Flatpak") + ":</p>
+        <ul>
+        <li>AMD ROCm update to version 5.7.3</li>
+        <li>PyTorch update to version 2.2.1</li>
+        <li>CTranslate2 update to version 4.1.0</li>
+        <li>Faster-Whisper update to version 1.0.1</li>
         </ul>"
     }
 
