@@ -18,7 +18,15 @@
   <url type="bugtracker">https://github.com/mkiol/dsnote/issues</url>
   <update_contact>dsnote_AT_mkiol.net</update_contact>
   <releases>
-    <release version="1.0.1" date="2024-02-10"/>
+    <release version="1.1.0" date="2024-03-12">
+      <description>
+        <ul>
+        <li>PyTorch update to version 2.2.1</li>
+        <li>CTranslate2 update to version 4.1.0</li>
+        <li>faster-whisper update to version 1.0.1</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.0" date="2024-01-08"/>
   </releases>
 </component>
