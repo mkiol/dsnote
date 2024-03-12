@@ -915,7 +915,7 @@ void settings::set_hint_addons(bool value) {
 settings::insert_mode_t settings::insert_mode() const {
     return static_cast<insert_mode_t>(
         value(QStringLiteral("insert_mode"),
-              static_cast<int>(insert_mode_t::InsertInLine))
+              static_cast<int>(insert_mode_t::InsertNewLine))
             .toInt());
 }
 
