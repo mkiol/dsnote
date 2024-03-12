@@ -275,6 +275,8 @@ void mnt_engine::translate(std::string text) {
 
 void mnt_engine::set_state(state_t new_state) {
     if (is_shutdown()) {
+        if (m_state == state_t::error || m_state == state_t::stopped) return;
+
         switch (new_state) {
             case state_t::idle:
             case state_t::stopping:
@@ -479,7 +481,7 @@ void mnt_engine::process() {
 
     m_progress = {};
 
-    if (m_state != state_t::error) set_state(state_t::stopped);
+    set_state(state_t::stopped);
 
     LOGD("mnt processing done");
 }

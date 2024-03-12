@@ -304,7 +304,8 @@ void tts_engine::set_ref_voice_file(std::string ref_voice_file) {
 
 void tts_engine::set_state(state_t new_state) {
     if (is_shutdown()) {
-        if (m_state == state_t::error) return;
+        if (m_state == state_t::error || m_state == state_t::stopped) return;
+
         switch (new_state) {
             case state_t::idle:
             case state_t::stopping:
@@ -792,7 +793,7 @@ void tts_engine::process() {
         if (!is_shutdown()) set_state(state_t::idle);
     }
 
-    if (m_state != state_t::error) set_state(state_t::stopped);
+    set_state(state_t::stopped);
 
     LOGD("tts processing done");
 }
