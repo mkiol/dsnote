@@ -152,6 +152,9 @@ class settings : public QSettings, public singleton<settings> {
                    gpu_scan_hip_changed)
     Q_PROPERTY(bool gpu_scan_opencl READ gpu_scan_opencl WRITE
                    set_gpu_scan_opencl NOTIFY gpu_scan_opencl_changed)
+    Q_PROPERTY(
+        bool gpu_scan_opencl_legacy READ gpu_scan_opencl_legacy WRITE
+            set_gpu_scan_opencl_legacy NOTIFY gpu_scan_opencl_legacy_changed)
     Q_PROPERTY(bool stt_use_gpu READ stt_use_gpu WRITE set_stt_use_gpu NOTIFY
                    stt_use_gpu_changed)
     Q_PROPERTY(bool tts_use_gpu READ tts_use_gpu WRITE set_tts_use_gpu NOTIFY
@@ -507,6 +510,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_gpu_scan_hip(bool value);
     bool gpu_scan_opencl() const;
     void set_gpu_scan_opencl(bool value);
+    bool gpu_scan_opencl_legacy() const;
+    void set_gpu_scan_opencl_legacy(bool value);
     bool whisper_use_gpu() const;
     void set_whisper_use_gpu(bool value);
     bool stt_use_gpu() const;
@@ -711,6 +716,7 @@ class settings : public QSettings, public singleton<settings> {
     void gpu_scan_cuda_changed();
     void gpu_scan_hip_changed();
     void gpu_scan_opencl_changed();
+    void gpu_scan_opencl_legacy_changed();
     void whisper_use_gpu_changed();
     void stt_use_gpu_changed();
     void tts_use_gpu_changed();

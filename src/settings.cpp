@@ -1383,6 +1383,7 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
     qDebug() << "scan cuda:" << gpu_scan_cuda();
     qDebug() << "scan hip:" << gpu_scan_hip();
     qDebug() << "scan opencl:" << gpu_scan_opencl();
+    qDebug() << "scan opencl legacy:" << gpu_scan_opencl_legacy();
     qDebug() << "gpu feature flags:"
              << static_cast<gpu_feature_flags_t>(gpu_feature_flags);
 
@@ -1408,38 +1409,42 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
         /*opencl=*/gpu_scan_opencl(),
         /*opencl_always=*/true);
 
-    std::for_each(devices.cbegin(), devices.cend(), [&](const auto& device) {
-        switch (device.api) {
-            case gpu_tools::api_t::opencl:
-                if (disable_stt_opencl) return;
-                m_gpu_devices_stt.push_back(
-                    QStringLiteral("%1, %2, %3")
-                        .arg("OpenCL",
-                             QString::fromStdString(device.platform_name),
-                             QString::fromStdString(device.name)));
-                break;
-            case gpu_tools::api_t::cuda: {
-                if (disable_stt_cuda && disable_tts_cuda) return;
-                auto item = QStringLiteral("%1, %2, %3")
-                                .arg("CUDA", QString::number(device.id),
-                                     QString::fromStdString(device.name));
-                if (!disable_stt_cuda) m_gpu_devices_stt.push_back(item);
-                if (!disable_tts_cuda) m_gpu_devices_tts.push_back(item);
-                break;
+    std::for_each(
+        devices.cbegin(), devices.cend(),
+        [&, disable_clover = !gpu_scan_opencl_legacy()](const auto& device) {
+            switch (device.api) {
+                case gpu_tools::api_t::opencl:
+                    if (disable_stt_opencl) return;
+                    if (disable_clover && device.platform_name == "Clover")
+                        return;
+                    m_gpu_devices_stt.push_back(
+                        QStringLiteral("%1, %2, %3")
+                            .arg("OpenCL",
+                                 QString::fromStdString(device.platform_name),
+                                 QString::fromStdString(device.name)));
+                    break;
+                case gpu_tools::api_t::cuda: {
+                    if (disable_stt_cuda && disable_tts_cuda) return;
+                    auto item = QStringLiteral("%1, %2, %3")
+                                    .arg("CUDA", QString::number(device.id),
+                                         QString::fromStdString(device.name));
+                    if (!disable_stt_cuda) m_gpu_devices_stt.push_back(item);
+                    if (!disable_tts_cuda) m_gpu_devices_tts.push_back(item);
+                    break;
+                }
+                case gpu_tools::api_t::rocm: {
+                    if (disable_stt_hip && disable_tts_hip) return;
+                    auto item = QStringLiteral("%1, %2, %3")
+                                    .arg("ROCm", QString::number(device.id),
+                                         QString::fromStdString(device.name));
+                    if (!disable_stt_hip) m_gpu_devices_stt.push_back(item);
+                    if (!disable_tts_hip) m_gpu_devices_tts.push_back(item);
+                    m_rocm_gpu_versions.push_back(
+                        QString::fromStdString(device.platform_name));
+                    break;
+                }
             }
-            case gpu_tools::api_t::rocm: {
-                if (disable_stt_hip && disable_tts_hip) return;
-                auto item = QStringLiteral("%1, %2, %3")
-                                .arg("ROCm", QString::number(device.id),
-                                     QString::fromStdString(device.name));
-                if (!disable_stt_hip) m_gpu_devices_stt.push_back(item);
-                if (!disable_tts_hip) m_gpu_devices_tts.push_back(item);
-                m_rocm_gpu_versions.push_back(
-                    QString::fromStdString(device.platform_name));
-                break;
-            }
-        }
-    });
+        });
 
     if (!auto_gpu_device_stt().isEmpty())
         m_gpu_devices_stt.front().append(" (" + auto_gpu_device_stt() + ")");
@@ -1975,6 +1980,19 @@ void settings::set_gpu_scan_opencl(bool value) {
     if (value != gpu_scan_opencl()) {
         setValue(QStringLiteral("gpu_scan_opencl"), value);
         emit gpu_scan_opencl_changed();
+
+        set_restart_required(true);
+    }
+}
+
+bool settings::gpu_scan_opencl_legacy() const {
+    return value(QStringLiteral("gpu_scan_opencl_legacy"), false).toBool();
+}
+
+void settings::set_gpu_scan_opencl_legacy(bool value) {
+    if (value != gpu_scan_opencl_legacy()) {
+        setValue(QStringLiteral("gpu_scan_opencl_legacy"), value);
+        emit gpu_scan_opencl_legacy_changed();
 
         set_restart_required(true);
     }

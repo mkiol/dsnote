@@ -929,6 +929,15 @@ DialogPage {
 
                 CheckBox {
                     visible: _settings.gpu_supported()
+                    checked: _settings.gpu_scan_opencl_legacy
+                    text: qsTr("Use %1").arg("OpenCL (Clover)")
+                    onCheckedChanged: {
+                        _settings.gpu_scan_opencl_legacy = checked
+                    }
+                }
+
+                CheckBox {
+                    visible: _settings.gpu_supported()
                     checked: _settings.gpu_override_version
                     text: qsTr("Override GPU version")
                     onCheckedChanged: {
