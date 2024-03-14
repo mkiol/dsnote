@@ -4,9 +4,11 @@
   <id>@info_app_icon_id@</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>@info_license_spdx@</project_license>
-  <developer_name>@info_author@</developer_name>
+  <developer id="@info_org@">
+    <name>@info_author@</name>
+  </developer>
   <name>@info_name@</name>
-  <summary>Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation</summary>
+  <summary>Notes with offline Speech to Text, Text to Speech and Machine Translation</summary>
   <description>
     <p>Speech Note let you take, read and translate notes in multiple languages.
       It uses Speech to Text, Text to Speech and Machine Translation to do so.
@@ -14,6 +16,10 @@
       computer, without using a network connection. Your privacy is always
       respected. No data is sent to the Internet.</p>
   </description>
+  <branding>
+    <color type="primary" scheme_preference="light">#6b94ad</color>
+    <color type="primary" scheme_preference="dark">#0f5d8a</color>
+  </branding>
   <categories>
     <category>AudioVideo</category>
   </categories>
@@ -44,11 +50,19 @@
   <screenshots>
     <screenshot type="default">
       <caption>Speech Note main window</caption>
-      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshots/speechnote-screenshot-fullscreen.png</image>
+      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshots/speechnote-screenshot-light-notepad.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Speech Note main window (dark theme)</caption>
+      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshots/speechnote-screenshot-dark-notepad.png</image>
     </screenshot>
     <screenshot>
       <caption>Translator mode</caption>
-      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshots/speechnote-screenshot-fullscreen-translator.png</image>
+      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshots/speechnote-screenshot-light-translator.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Translator mode (dark theme)</caption>
+      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshots/speechnote-screenshot-dark-translator.png</image>
     </screenshot>
   </screenshots>
   <url type="homepage">https://github.com/mkiol/dsnote</url>
@@ -84,7 +98,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.5.0-beta" date="2024-03-12">
+    <release version="4.5.0-beta" date="2024-03-14">
       <description>
       <p>Accessibility:</p>
       <ul>

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2023 Michal Kosciesza -->
+<!-- Copyright 2024 Michal Kosciesza -->
 <component type="addon">
   <id>net.mkiol.SpeechNote.Addon.nvidia</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MPL-2.0</project_license>
-  <developer_name>Michal Kosciesza</developer_name>
+  <developer id="net.mkiol">
+    <name>Michal Kosciesza</name>
+  </developer>
   <extends>net.mkiol.SpeechNote</extends>
   <name>Speech Note NVIDIA</name>
   <summary>Support for GPU acceleration with NVIDIA graphics cards in Speech Note</summary>
@@ -18,7 +20,7 @@
   <url type="bugtracker">https://github.com/mkiol/dsnote/issues</url>
   <update_contact>dsnote_AT_mkiol.net</update_contact>
   <releases>
-    <release version="1.1.0" date="2024-03-12">
+    <release version="1.1.0" date="2024-03-14">
       <description>
         <ul>
         <li>PyTorch update to version 2.2.1</li>

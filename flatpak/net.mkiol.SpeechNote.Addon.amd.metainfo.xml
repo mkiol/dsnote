@@ -4,7 +4,9 @@
   <id>net.mkiol.SpeechNote.Addon.amd</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MPL-2.0</project_license>
-  <developer_name>Michal Kosciesza</developer_name>
+  <developer id="net.mkiol">
+    <name>Michal Kosciesza</name>
+  </developer>
   <extends>net.mkiol.SpeechNote</extends>
   <name>Speech Note AMD</name>
   <summary>Support for GPU acceleration with AMD graphics cards in Speech Note</summary>
@@ -18,7 +20,7 @@
   <url type="bugtracker">https://github.com/mkiol/dsnote/issues</url>
   <update_contact>dsnote_AT_mkiol.net</update_contact>
   <releases>
-    <release version="1.1.0" date="2024-03-12">
+    <release version="1.1.0" date="2024-03-14">
       <description>
         <ul>
         <li>PyTorch update to version 2.2.1</li>
