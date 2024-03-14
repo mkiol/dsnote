@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -135,7 +135,10 @@ void denoiser::process(sample_t* buf, size_t size) {
             }
 
             if (m_task_flags & task_denoise) {
-                for (size_t i = 0; i < samples; ++i) cur[i] = frame[i];
+                if (prob < 0.1)
+                    for (size_t i = 0; i < samples; ++i) cur[i] = 0;
+                else
+                    for (size_t i = 0; i < samples; ++i) cur[i] = frame[i];
             }
 
             cur += samples;
