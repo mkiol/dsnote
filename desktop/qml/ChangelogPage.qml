@@ -49,6 +49,8 @@ DialogPage {
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
+        <li><a href='https://collabora.github.io/WhisperSpeech/'>WhisperSpeech</a> engine.
+            The new engine comes with models for English and Polish languages. All models support voice cloning.</li>
         <li>New Piper voices for English, Persian, Slovenian, Turkish, French and Spanish</li>
         <li>Settings option to enable/disable speech synchronization with subtitle timestamps
             (<i>Text to Speech</i> &rarr; <i>Sync speech with timestamps</i>).
@@ -68,6 +70,7 @@ DialogPage {
         </ul>
         <p>" + qsTr("Flatpak") + ":</p>
         <ul>
+        <li>Flatpak runtime update to version 5.15-23.08</li>
         <li>AMD ROCm update to version 5.7.3</li>
         <li>PyTorch update to version 2.2.1</li>
         <li>CTranslate2 update to version 4.1.0</li>

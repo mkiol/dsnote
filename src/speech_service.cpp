@@ -39,6 +39,7 @@
 #include "text_tools.hpp"
 #include "vosk_engine.hpp"
 #include "whisper_engine.hpp"
+#include "whisperspeech_engine.hpp"
 
 QDebug operator<<(QDebug d, const stt_engine::config_t &config) {
     std::stringstream ss;
@@ -1323,6 +1324,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                     case models_manager::model_engine_t::tts_espeak:
                     case models_manager::model_engine_t::tts_rhvoice:
                     case models_manager::model_engine_t::tts_mimic3:
+                    case models_manager::model_engine_t::tts_whisperspeech:
                     case models_manager::model_engine_t::mnt_bergamot:
                         throw std::runtime_error{
                             "invalid model engine, expected stt"};
@@ -1405,6 +1407,10 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             model_config->tts->model_file.toStdString();
         config.model_files.vocoder_path =
             model_config->tts->vocoder_file.toStdString();
+        config.model_files.hub_path = QFileInfo{model_config->tts->model_file}
+                                          .dir()
+                                          .absolutePath()
+                                          .toStdString();
         if (settings::instance()->diacritizer_enabled())
             config.model_files.diacritizer_path =
                 model_config->tts->diacritizer_file.toStdString();
@@ -1476,6 +1482,10 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             if (model_config->tts->engine ==
                 models_manager::model_engine_t::tts_mimic3 &&
                 type != typeid(mimic3_engine))
+                return true;
+            if (model_config->tts->engine ==
+                    models_manager::model_engine_t::tts_whisperspeech &&
+                type != typeid(whisperspeech_engine))
                 return true;
 
             if (m_tts_engine->model_files() != config.model_files) return true;
@@ -1562,6 +1572,10 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                         config.data_dir =
                             module_tools::unpacked_dir("mimic3").toStdString();
                         m_tts_engine = std::make_unique<mimic3_engine>(
+                            std::move(config), std::move(call_backs));
+                        break;
+                    case models_manager::model_engine_t::tts_whisperspeech:
+                        m_tts_engine = std::make_unique<whisperspeech_engine>(
                             std::move(config), std::move(call_backs));
                         break;
                     case models_manager::model_engine_t::ttt_hftc:
@@ -2643,6 +2657,10 @@ QVariantMap speech_service::features_availability() {
             m_features_availability.insert(
                 "coqui-tts",
                 QVariantList{py_availability->coqui_tts, "Coqui TTS"});
+            m_features_availability.insert(
+                "whisperspeech-tts",
+                QVariantList{py_availability->whisperspeech_tts,
+                             "WhisperSpeech TTS"});
 #ifdef ARCH_X86_64
             bool tts_coqui_cuda =
                 py_availability->coqui_tts && py_availability->torch_cuda;
@@ -2653,6 +2671,16 @@ QVariantMap speech_service::features_availability() {
             if (tts_coqui_cuda)
                 gpu_feature_flags |=
                     settings::gpu_feature_flags_t::gpu_feature_tts_coqui_cuda;
+
+            bool tts_whisperspeech_cuda = py_availability->whisperspeech_tts &&
+                                          py_availability->torch_cuda;
+            m_features_availability.insert(
+                "whisperspeech-tts-gpu",
+                QVariantList{tts_whisperspeech_cuda,
+                             "WhisperSpeech TTS " + tr("GPU acceleration")});
+            if (tts_whisperspeech_cuda)
+                gpu_feature_flags |= settings::gpu_feature_flags_t::
+                    gpu_feature_tts_whisperspeech_cuda;
 #endif
             m_features_availability.insert(
                 "coqui-tts-ja", QVariantList{py_availability->coqui_tts &&
@@ -2787,6 +2815,7 @@ QVariantMap speech_service::features_availability() {
                  /*tts_mimic3_nl=*/py_availability->mimic3_tts &&
                      py_availability->gruut_nl,
                  /*tts_rhvoice=*/tts_rhvoice,
+                 /*tts_whisperspeech=*/py_availability->whisperspeech_tts,
                  /*stt_fasterwhisper=*/py_availability->faster_whisper,
                  /*stt_ds=*/stt_ds,
                  /*stt_vosk=*/stt_vosk,

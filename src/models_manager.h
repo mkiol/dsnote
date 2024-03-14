@@ -58,6 +58,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         tts_espeak,
         tts_rhvoice,
         tts_mimic3,
+        tts_whisperspeech,
         mnt_bergamot
     };
     friend QDebug operator<<(QDebug d, model_engine_t engine);
@@ -81,7 +82,8 @@ class models_manager : public QObject, public singleton<models_manager> {
         engine_tts_rhvoice = 1 << 13,
         engine_tts_coqui = 1 << 14,
         engine_tts_mimic3 = 1 << 15,
-        generic_end = engine_tts_mimic3,
+        engine_tts_whisperspeech = 1 << 16,
+        generic_end = engine_tts_whisperspeech,
         stt_start = 1 << 20,
         stt_intermediate_results = stt_start,
         stt_punctuation = 1 << 21,
@@ -96,7 +98,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     }
     friend QDebug operator<<(QDebug d, feature_flags flags);
 
-    enum class sup_model_role_t { scorer, vocoder, diacritizer };
+    enum class sup_model_role_t { scorer, vocoder, diacritizer, hub };
     friend QDebug operator<<(QDebug d, sup_model_role_t role);
 
     struct lang_t {
@@ -165,6 +167,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool tts_mimic3_fa = false;
         bool tts_mimic3_nl = false;
         bool tts_rhvoice = false;
+        bool tts_whisperspeech = false;
         bool stt_fasterwhisper = false;
         bool stt_ds = false;
         bool stt_vosk = false;
@@ -276,6 +279,8 @@ class models_manager : public QObject, public singleton<models_manager> {
          * x - tts, voice cloning supported
          * c - tts, convert quote to standard one
          * s - tts, add extra space before dot
+         * 0 - tts, add extra silence
+         * q - tts, do not split into sentences
          * i - stt, punctuation supported
          */
         QString options;
@@ -354,6 +359,7 @@ class models_manager : public QObject, public singleton<models_manager> {
                             const QString& file_name);
     static bool model_checksum_ok(const priv_model_t& model);
     static bool sup_model_checksum_ok(const sup_model_t& model);
+    static bool sup_models_checksum_ok(const std::vector<sup_model_t>& models);
     static std::optional<size_t> sup_models_checksum_last_nok(
         const std::vector<sup_model_t>& models, size_t idx);
     static bool sup_models_exist(const std::vector<sup_model_t>& models);

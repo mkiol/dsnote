@@ -119,7 +119,8 @@ std::ostream& operator<<(std::ostream& os,
                          const tts_engine::model_files_t& model_files) {
     os << "model-path=" << model_files.model_path
        << ", vocoder-path=" << model_files.vocoder_path
-       << ", diacritizer=" << model_files.diacritizer_path;
+       << ", diacritizer=" << model_files.diacritizer_path
+       << ", diacritizer=" << model_files.hub_path;
 
     return os;
 }
@@ -260,7 +261,7 @@ std::string tts_engine::find_file_with_name_prefix(std::string dir_path,
 }
 
 void tts_engine::push_tasks(const std::string& text, task_type_t type) {
-    auto tasks = make_tasks(text, true, type);
+    auto tasks = make_tasks(text, !m_config.has_option('q'), type);
 
     if (tasks.empty()) {
         LOGW("no task to process");
@@ -300,6 +301,11 @@ void tts_engine::set_speech_speed(unsigned int speech_speed) {
 void tts_engine::set_ref_voice_file(std::string ref_voice_file) {
     m_config.ref_voice_file.assign(std::move(ref_voice_file));
     m_ref_voice_wav_file.clear();
+    reset_ref_voice();
+}
+
+void tts_engine::reset_ref_voice() {
+    // do nothing
 }
 
 void tts_engine::set_state(state_t new_state) {
@@ -333,15 +339,15 @@ static decltype(timespec::tv_sec) create_date_sec(const std::string& file) {
     return 0;
 }
 
-std::string tts_engine::path_to_output_file(const std::string& text) const {
+std::string tts_engine::path_to_output_file(const std::string& text,
+                                            unsigned int speech_speed) const {
     auto hash = std::hash<std::string>{}(
         text + m_config.model_files.model_path +
         m_config.model_files.vocoder_path + m_config.ref_voice_file +
         std::to_string(create_date_sec(m_config.ref_voice_file)) +
         m_config.model_files.diacritizer_path + m_config.speaker_id +
         m_config.lang +
-        (m_config.speech_speed == 10 ? ""
-                                     : std::to_string(m_config.speech_speed)));
+        (speech_speed == 10 ? "" : std::to_string(speech_speed)));
     return m_config.cache_dir + "/" + std::to_string(hash) + '.' +
            file_ext_for_format(m_config.audio_format);
 }
@@ -460,6 +466,71 @@ static void sample_buf_f32_to_s16(const float* input, int16_t* output,
         output[i] = static_cast<int16_t>(input[i] * 32768.0F);
 }
 
+bool tts_engine::add_silence(const std::string& wav_file,
+                             size_t duration_msec) {
+    std::ifstream is{wav_file, std::ios::binary | std::ios::ate};
+    if (!is) {
+        LOGE("failed to open input file: " << wav_file);
+        return false;
+    }
+
+    auto tmp_file = wav_file + "_tmp";
+
+    std::ofstream os{tmp_file, std::ios::binary};
+    if (!os) {
+        LOGE("failed to open output file: " << tmp_file);
+        return false;
+    }
+
+    size_t size = is.tellg();
+    if (size < sizeof(wav_header)) {
+        LOGE("file header is too short");
+        os.close();
+        unlink(tmp_file.c_str());
+        return false;
+    }
+
+    is.seekg(0, std::ios::beg);
+    auto header = read_wav_header(is);
+
+    size -= is.tellg();
+
+    LOGD("wav file info: sample-rate=" << header.sample_rate
+                                       << ", channels=" << header.num_channels);
+
+    auto silence_size =
+        (header.num_channels * duration_msec * header.sample_rate) / 500;
+
+    os.seekp(0);
+    write_wav_header(header.sample_rate, sizeof(int16_t), header.num_channels,
+                     (size + silence_size) / sizeof(int16_t), os);
+
+    static const size_t buf_size = 8192;
+    char buf[buf_size];
+
+    while (is && size > 0) {
+        auto size_to_read = std::min<size_t>(size, buf_size);
+        is.read(buf, size_to_read);
+        os.write(buf, size_to_read);
+        size -= size_to_read;
+    }
+
+    if (silence_size > 0) {
+        std::fill(&buf[0], &buf[buf_size - 1], 0);
+
+        while (os && silence_size > 0) {
+            auto size_to_write = std::min<size_t>(silence_size, buf_size);
+            os.write(buf, size_to_write);
+            silence_size -= size_to_write;
+        }
+    }
+
+    unlink(wav_file.c_str());
+    rename(tmp_file.c_str(), wav_file.c_str());
+
+    return true;
+}
+
 bool tts_engine::stretch(const std::string& input_file,
                          const std::string& output_file, double time_ration,
                          double pitch_ratio) {
@@ -493,7 +564,8 @@ bool tts_engine::stretch(const std::string& input_file,
         return false;
     }
 
-    size -= is.tellg();
+    size_t in_wav_header_size = is.tellg();
+    size -= in_wav_header_size;
 
     LOGD("stretcher sample rate: " << header.sample_rate);
 
@@ -514,24 +586,28 @@ bool tts_engine::stretch(const std::string& input_file,
     float buf_f[buf_f_size];
     float* buf_f_ptr[2] = {buf_f, nullptr};  // mono
 
-    while (is) {
-        const auto size_to_read = std::min<size_t>(size, buf_c_size);
-        const auto size_to_write = size_to_read / sizeof(int16_t);
+    auto size_left = size;
+    while (is && size_left > 0) {
+        auto size_to_read = std::min<size_t>(size_left, buf_c_size);
+        auto size_to_write = size_to_read / sizeof(int16_t);
         is.read(buf_c, size_to_read);
         sample_buf_s16_to_f32(reinterpret_cast<int16_t*>(buf_c), buf_f,
                               size_to_write);
         float* buf_f_c[2] = {buf_f, nullptr};
         rb.study(buf_f_c, size_to_write, !static_cast<bool>(is));
+        size_left -= size_to_read;
     }
 
     is.clear();
-    is.seekg(sizeof(wav_header), std::ios::beg);
+    is.seekg(in_wav_header_size, std::ios::beg);
     os.seekp(sizeof(wav_header));
 
-    while (is) {
-        const auto size_to_read = std::min<size_t>(size, buf_c_size);
+    size_left = size;
+    while (is && size_left > 0) {
+        const auto size_to_read = std::min<size_t>(size_left, buf_c_size);
         const auto size_to_write = size_to_read / sizeof(int16_t);
         is.read(buf_c, size_to_read);
+        size_left -= size_to_read;
         sample_buf_s16_to_f32(reinterpret_cast<int16_t*>(buf_c), buf_f,
                               size_to_write);
         rb.process(buf_f_ptr, size_to_write, !is);
@@ -615,9 +691,7 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
         return;
     }
 
-    auto output_file = path_to_output_file(task.text);
-
-    if (!file_exists(output_file)) {
+    auto encode_speech = [&](const std::string& output_file) {
         auto new_text = m_text_processor.preprocess(
             /*text=*/task.text, /*options=*/m_config.options,
             /*lang=*/m_config.lang,
@@ -637,23 +711,82 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
                                             progress, task.last);
             }
 
-            return;
+            return std::string{};
         }
 
-        if (!model_supports_speed()) apply_speed(output_file_wav);
+        if (m_config.has_option('0')) add_silence(output_file_wav, 100);
 
-        if (m_config.audio_format != audio_format_t::wav) {
-            media_compressor::options_t opts{
-                media_compressor::quality_t::vbr_high,
-                media_compressor::flags_t::flag_none,
-                {},
-                {}};
+        return output_file_wav;
+    };
 
-            media_compressor{}.compress_to_file(
-                {output_file_wav}, output_file,
-                compressor_format_from_format(m_config.audio_format), opts);
+    bool do_speech_change = !model_supports_speed();
 
-            unlink(output_file_wav.c_str());
+    auto output_file = path_to_output_file(task.text, m_config.speech_speed);
+
+    if (!file_exists(output_file)) {
+        if (!do_speech_change) {
+            auto output_file_wav = encode_speech(output_file);
+            if (output_file_wav.empty()) return;
+
+            if (m_config.audio_format != audio_format_t::wav) {
+                media_compressor::options_t opts{
+                    media_compressor::quality_t::vbr_high,
+                    media_compressor::flags_t::flag_none,
+                    {},
+                    {}};
+
+                media_compressor{}.compress_to_file(
+                    {output_file_wav}, output_file,
+                    compressor_format_from_format(m_config.audio_format), opts);
+
+                unlink(output_file_wav.c_str());
+            }
+        } else {
+            auto output_file_no_speed = path_to_output_file(task.text, 10);
+
+            if (!file_exists(output_file_no_speed)) {
+                auto output_file_wav = encode_speech(output_file_no_speed);
+                if (output_file_wav.empty()) return;
+
+                if (m_config.audio_format != audio_format_t::wav) {
+                    media_compressor::options_t opts{
+                        media_compressor::quality_t::vbr_high,
+                        media_compressor::flags_t::flag_none,
+                        {},
+                        {}};
+
+                    media_compressor{}.compress_to_file(
+                        {output_file_wav}, output_file_no_speed,
+                        compressor_format_from_format(m_config.audio_format),
+                        opts);
+
+                    unlink(output_file_wav.c_str());
+                }
+            }
+
+            auto output_file_wav = output_file_no_speed;
+
+            if (m_config.audio_format != audio_format_t::wav) {
+                output_file_wav = output_file_no_speed + ".wav";
+                media_compressor{}.decompress_to_file({output_file_no_speed},
+                                                      output_file_wav, {});
+            }
+
+            apply_speed(output_file_wav);
+
+            if (m_config.audio_format != audio_format_t::wav) {
+                media_compressor::options_t opts{
+                    media_compressor::quality_t::vbr_high,
+                    media_compressor::flags_t::flag_none,
+                    {},
+                    {}};
+
+                media_compressor{}.compress_to_file(
+                    {output_file_wav}, output_file,
+                    compressor_format_from_format(m_config.audio_format), opts);
+
+                unlink(output_file_wav.c_str());
+            }
         }
     }
 
@@ -842,8 +975,21 @@ void tts_engine::write_wav_header(int sample_rate, int sample_width,
 
 tts_engine::wav_header tts_engine::read_wav_header(std::ifstream& wav_file) {
     wav_header header;
+
     if (!wav_file.read(reinterpret_cast<char*>(&header), sizeof(wav_header)))
         throw std::runtime_error("failed to read file");
+
+    if (header.data[0] != 'd' || header.data[1] != 'a' ||
+        header.data[2] != 't' || header.data[3] != 'a') {
+        wav_file.seekg(sizeof(wav_header) + header.data_size);
+
+        if (!wav_file.read(reinterpret_cast<char*>(&header.data),
+                           sizeof(header.data)))
+            throw std::runtime_error("failed to read file");
+        if (!wav_file.read(reinterpret_cast<char*>(&header.data_size),
+                           sizeof(header.data_size)))
+            throw std::runtime_error("failed to read file");
+    }
 
     return header;
 }

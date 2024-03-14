@@ -142,6 +142,8 @@ QDebug operator<<(QDebug d, models_manager::feature_flags flags) {
     if (flags & models_manager::engine_tts_rhvoice) d << "engine-tts-rhvoice, ";
     if (flags & models_manager::engine_tts_coqui) d << "engine-tts-coqui, ";
     if (flags & models_manager::engine_tts_mimic3) d << "engine-tts-mimic3, ";
+    if (flags & models_manager::engine_tts_whisperspeech)
+        d << "engine-tts-whisperspeech, ";
     if (flags & models_manager::stt_intermediate_results)
         d << "stt-intermediate-results, ";
     if (flags & models_manager::stt_punctuation) d << "stt-punctuation, ";
@@ -190,6 +192,9 @@ QDebug operator<<(QDebug d, models_manager::model_engine_t engine) {
         case models_manager::model_engine_t::tts_mimic3:
             d << "tts-mimic3";
             break;
+        case models_manager::model_engine_t::tts_whisperspeech:
+            d << "tts-whisperspeech";
+            break;
         case models_manager::model_engine_t::mnt_bergamot:
             d << "mnt-bergamot";
             break;
@@ -208,6 +213,9 @@ QDebug operator<<(QDebug d, models_manager::sup_model_role_t role) {
             break;
         case models_manager::sup_model_role_t::diacritizer:
             d << "diacritizer";
+            break;
+        case models_manager::sup_model_role_t::hub:
+            d << "hub";
             break;
     }
 
@@ -1361,6 +1369,11 @@ bool models_manager::model_checksum_ok(const priv_model_t& model) {
     return true;
 }
 
+bool models_manager::sup_models_checksum_ok(
+    const std::vector<sup_model_t>& models) {
+    return !sup_models_checksum_last_nok(models, 0).has_value();
+}
+
 std::optional<size_t> models_manager::sup_models_checksum_last_nok(
     const std::vector<sup_model_t>& models, size_t idx) {
     for (size_t i = idx; i < models.size(); ++i) {
@@ -1432,6 +1445,7 @@ models_manager::model_role_t models_manager::role_of_engine(
         case model_engine_t::tts_espeak:
         case model_engine_t::tts_rhvoice:
         case model_engine_t::tts_mimic3:
+        case model_engine_t::tts_whisperspeech:
             return model_role_t::tts;
         case model_engine_t::mnt_bergamot:
             return model_role_t::mnt;
@@ -1459,6 +1473,8 @@ models_manager::model_engine_t models_manager::engine_from_name(
     if (name == QStringLiteral("tts_rhvoice"))
         return model_engine_t::tts_rhvoice;
     if (name == QStringLiteral("tts_mimic3")) return model_engine_t::tts_mimic3;
+    if (name == QStringLiteral("tts_whisperspeech"))
+        return model_engine_t::tts_whisperspeech;
     if (name == QStringLiteral("mnt_bergamot"))
         return model_engine_t::mnt_bergamot;
 
@@ -1492,6 +1508,7 @@ models_manager::sup_model_role_t models_manager::sup_model_role_from_name(
     if (name == QStringLiteral("vocoder")) return sup_model_role_t::vocoder;
     if (name == QStringLiteral("diacritizer"))
         return sup_model_role_t::diacritizer;
+    if (name == QStringLiteral("hub")) return sup_model_role_t::hub;
     throw std::runtime_error("unknown sup role: " + name.toStdString());
 }
 
@@ -1583,6 +1600,7 @@ models_manager::feature_flags models_manager::add_new_feature(
         case feature_flags::engine_tts_rhvoice:
         case feature_flags::engine_tts_coqui:
         case feature_flags::engine_tts_mimic3:
+        case feature_flags::engine_tts_whisperspeech:
             if (existing_features & feature_flags::engine_stt_ds ||
                 existing_features & feature_flags::engine_stt_vosk ||
                 existing_features & feature_flags::engine_stt_whisper ||
@@ -1592,7 +1610,8 @@ models_manager::feature_flags models_manager::add_new_feature(
                 existing_features & feature_flags::engine_tts_piper ||
                 existing_features & feature_flags::engine_tts_rhvoice ||
                 existing_features & feature_flags::engine_tts_coqui ||
-                existing_features & feature_flags::engine_tts_mimic3) {
+                existing_features & feature_flags::engine_tts_mimic3 ||
+                existing_features & feature_flags::engine_tts_whisperspeech) {
                 return existing_features;
             }
             break;
@@ -1683,6 +1702,15 @@ models_manager::feature_flags models_manager::add_explicit_feature_flags(
             else
                 existing_features = add_new_feature(
                     existing_features, feature_flags::high_quality);
+            break;
+        case model_engine_t::tts_whisperspeech:
+            existing_features =
+                add_new_feature(existing_features,
+                                feature_flags::engine_tts_whisperspeech) |
+                add_new_feature(existing_features,
+                                feature_flags::slow_processing);
+            existing_features =
+                add_new_feature(existing_features, feature_flags::high_quality);
             break;
         case model_engine_t::tts_mimic3:
             existing_features =
@@ -1924,6 +1952,11 @@ auto models_manager::extract_models(
                 qDebug() << "ignoring coqui model:" << model_id;
                 continue;
             }
+            if (!models_availability->tts_whisperspeech &&
+                engine == model_engine_t::tts_whisperspeech) {
+                qDebug() << "ignoring whisperspeech model:" << model_id;
+                continue;
+            }
             if (!models_availability->tts_rhvoice &&
                 engine == model_engine_t::tts_rhvoice) {
                 qDebug() << "ignoring rhvoice model:" << model_id;
@@ -2022,14 +2055,14 @@ auto models_manager::extract_models(
                                 model.file_name)) {
                     if (model.sup_models.empty() ||
                         (sup_models_exist(model.sup_models) &&
-                         !sup_models_checksum_last_nok(model.sup_models, 0))) {
+                         sup_models_checksum_ok(model.sup_models))) {
                         model.exists = true;
                     }
                 }
             } else if (engine == model_engine_t::tts_espeak &&
                        (model.sup_models.empty() ||
                         (sup_models_exist(model.sup_models) &&
-                         !sup_models_checksum_last_nok(model.sup_models, 0)))) {
+                         sup_models_checksum_ok(model.sup_models)))) {
                 model.exists = true;
             }
         }
@@ -2294,6 +2327,7 @@ QString models_manager::file_name_from_id(const QString& id,
         case model_engine_t::tts_espeak:
         case model_engine_t::tts_rhvoice:
         case model_engine_t::tts_mimic3:
+        case model_engine_t::tts_whisperspeech:
         case model_engine_t::mnt_bergamot:
             return id;
     }
@@ -2310,6 +2344,8 @@ QString models_manager::sup_file_name_from_id(const QString& id,
             return id + "_vocoder";
         case sup_model_role_t::diacritizer:
             return id + "_diacritizer";
+        case sup_model_role_t::hub:
+            return id + "_hub";
     }
 
     throw std::runtime_error("invalid sup role");
@@ -2421,7 +2457,7 @@ void models_manager::print_priv_model(const QString& id,
     fmt::print(
         "\"model_id\": \"{}\",\n\"checksum\": "
         "\"{}\",\n\"checksum_quick\": \"{}\",\n\"size\": "
-        "\"{}\"\n\n",
+        "\"{}\",\n\n",
         id.toStdString(), model.checksum.toStdString(),
         model.checksum_quick.toStdString(), model.size);
 }
@@ -2456,6 +2492,11 @@ void models_manager::update_models_using_availability_internal() {
     std::for_each(m_models.begin(), m_models.end(), [&](auto& pair) {
         if (!m_models_availability->tts_coqui &&
             pair.second.engine == model_engine_t::tts_coqui) {
+            pair.second.hidden = true;
+            return;
+        }
+        if (!m_models_availability->tts_whisperspeech &&
+            pair.second.engine == model_engine_t::tts_whisperspeech) {
             pair.second.hidden = true;
             return;
         }

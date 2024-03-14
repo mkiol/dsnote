@@ -18,6 +18,7 @@ struct libs_availability_t {
     bool torch_cuda = false;
     bool faster_whisper = false;
     bool mimic3_tts = false;
+    bool whisperspeech_tts = false;
     bool transformers = false;
     bool unikud = false;
     bool gruut_de = false;

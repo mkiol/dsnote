@@ -75,10 +75,24 @@ static std::string add_to_env_path(const std::string& dir) {
     return new_path ? std::string{new_path} : std::string{};
 }
 
+static void set_env(const char* name, const char* value) {
+    auto* old_value = getenv(name);
+    setenv(name, value, 1);
+    if (old_value)
+        LOGD("set env: " << name << " = " << old_value << " => " << value);
+    else
+        LOGD("set env: " << name << " = " << value);
+}
+
 void py_executor::loop() {
     LOGD("py executor loop started");
 
-    setenv("PYTHONIOENCODING", "utf-8", true);
+    set_env("PYTHONIOENCODING", "utf-8");
+    set_env("HF_HUB_DISABLE_TELEMETRY", "1");
+    set_env("HF_HUB_OFFLINE", "1");
+    set_env("HF_HUB_LOCAL_DIR_AUTO_SYMLINK_THRESHOLD", "100000000000");
+    set_env("HF_HUB_CACHE",
+            settings::instance()->cache_dir().toStdString().c_str());
 
     py_tools::init_module();
 

@@ -162,6 +162,12 @@ QDebug operator<<(QDebug d, settings::gpu_feature_flags_t gpu_features) {
         d << "tts-coqui-cuda,";
     if (gpu_features & settings::gpu_feature_flags_t::gpu_feature_tts_coqui_hip)
         d << "tts-coqui-hip";
+    if (gpu_features &
+        settings::gpu_feature_flags_t::gpu_feature_tts_whisperspeech_cuda)
+        d << "tts-whisperspeech-cuda,";
+    if (gpu_features &
+        settings::gpu_feature_flags_t::gpu_feature_tts_whisperspeech_hip)
+        d << "tts-whisperspeech-hip";
 
     return d;
 }
@@ -1400,7 +1406,9 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
          gpu_feature_flags_t::gpu_feature_stt_whispercpp_opencl) == 0;
     bool disable_tts_cuda =
         (gpu_feature_flags & gpu_feature_flags_t::gpu_feature_tts_coqui_cuda) ==
-        0;
+            0 &&
+        (gpu_feature_flags &
+         gpu_feature_flags_t::gpu_feature_tts_whisperspeech_cuda) == 0;
     bool disable_tts_hip = disable_tts_cuda;
 
     auto devices = gpu_tools::available_devices(

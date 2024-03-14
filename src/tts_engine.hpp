@@ -64,11 +64,13 @@ class tts_engine {
         std::string model_path;
         std::string vocoder_path;
         std::string diacritizer_path;
+        std::string hub_path;
 
         inline bool operator==(const model_files_t& rhs) const {
             return model_path == rhs.model_path &&
                    vocoder_path == rhs.vocoder_path &&
-                   diacritizer_path == rhs.diacritizer_path;
+                   diacritizer_path == rhs.diacritizer_path &&
+                   hub_path == rhs.hub_path;
         };
         inline bool operator!=(const model_files_t& rhs) const {
             return !(*this == rhs);
@@ -194,10 +196,12 @@ class tts_engine {
     virtual bool model_created() const = 0;
     virtual bool model_supports_speed() const = 0;
     virtual void create_model() = 0;
+    virtual void reset_ref_voice();
     virtual bool encode_speech_impl(const std::string& text,
                                     const std::string& out_file) = 0;
     void set_state(state_t new_state);
-    std::string path_to_output_file(const std::string& text) const;
+    std::string path_to_output_file(const std::string& text,
+                                    unsigned int speech_speed) const;
     std::string path_to_output_silence_file(size_t duration,
                                             unsigned int sample_rate,
                                             audio_format_t format) const;
@@ -216,6 +220,7 @@ class tts_engine {
         return m_state == state_t::stopping || m_state == state_t::stopped ||
                m_state == state_t::error;
     }
+    static bool add_silence(const std::string& wav_fil, size_t duration_msec);
 #ifdef ARCH_X86_64
     static bool stretch(const std::string& input_file,
                         const std::string& output_file, double time_ration,

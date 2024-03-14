@@ -111,6 +111,8 @@
       </ul>
       <p>Text to Speech:</p>
       <ul>
+      <li>WhisperSpeech engine.
+          The new engine comes with models for English and Polish languages. All models support voice cloning.</li>
       <li>New Piper voices for English, Persian, Slovenian, Turkish, French and Spanish</li>
       <li>Settings option to enable/disable speech synchronization with subtitle timestamps.
           This may be useful for creating voice overs.</li>
@@ -124,6 +126,13 @@
           Slovenian to English, Turkish to English, English to Catalan</li>
       <li>Handy buttons to quickly add translated text to the note or to replace it</li>
       <li>Context menu option to translate from cursor position or translate only selected text</li>
+      </ul>
+      <p>Flatpak:</p>
+      <ul>
+      <li>Flatpak runtime update to version 5.15-23.08</li>
+      <li>PyTorch update to version 2.2.1</li>
+      <li>CTranslate2 update to version 4.1.0</li>
+      <li>Faster-Whisper update to version 1.0.1</li>
       </ul>
       </description>
     </release>

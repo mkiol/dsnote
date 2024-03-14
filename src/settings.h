@@ -378,11 +378,14 @@ class settings : public QSettings, public singleton<settings> {
         gpu_feature_stt_fasterwhisper_cuda = 1 << 3,
         gpu_feature_tts_coqui_cuda = 1 << 4,
         gpu_feature_tts_coqui_hip = 1 << 5,
+        gpu_feature_tts_whisperspeech_cuda = 1 << 6,
+        gpu_feature_tts_whisperspeech_hip = 1 << 7,
         gpu_feature_all =
             gpu_feature_stt_whispercpp_cuda | gpu_feature_stt_whispercpp_hip |
             gpu_feature_stt_whispercpp_hip | gpu_feature_stt_whispercpp_opencl |
             gpu_feature_stt_fasterwhisper_cuda | gpu_feature_tts_coqui_cuda |
-            gpu_feature_tts_coqui_hip
+            gpu_feature_tts_coqui_hip | gpu_feature_tts_whisperspeech_cuda |
+            gpu_feature_tts_whisperspeech_hip
     };
     friend QDebug operator<<(QDebug d, gpu_feature_flags_t gpu_feature_flags);
 

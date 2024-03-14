@@ -879,3 +879,39 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/c0/08/aad411a89366933d2a0d8f449a6e3de011de2beb6c9c3ab83a5cc2e5dbd1/xdgenvpy-2.3.5-py3-none-any.whl
         sha256: a71c60106521503a9b87408dac2ad3977ce9bd8b447b786eaf062b62b04f6f5a
+
+  - name: python3-whisperspeech
+    buildsystem: simple
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+        --prefix=${FLATPAK_DEST} whisperspeech --no-build-isolation
+    sources:
+      - *id022
+      - *id039
+      - type: file
+        url: https://files.pythonhosted.org/packages/33/c9/751b6401887f4b50f9307cc1e53d287b3dc77c375c126aeb6335aff73ccb/HyperPyYAML-1.2.2-py3-none-any.whl
+        sha256: 3c5864bdc8864b2f0fbd7bc495e7e8fdf2dfd5dd80116f72da27ca96a128bdeb
+      - type: file
+        url: https://files.pythonhosted.org/packages/de/32/14022eea7761f5a5d1e3a827351c3279b7f6e95feaf477dc9c5429a3b682/WhisperSpeech-0.8-py3-none-any.whl
+        sha256: e28315dd6da39dd3cc457f4d67e4a13549f421a3cba6be57e203d8165af8574d
+      - type: file
+        url: https://files.pythonhosted.org/packages/39/b8/3059245adb5e4421222aab3852ac7f47d68eba82c8c62b88928ec1c69431/fastcore-1.5.29-py3-none-any.whl
+        sha256: a7d7e89faf968f2d8584df2deca344c3974f6cf476e1299cd3c067d8fa7440e9
+      - type: file
+        url: https://files.pythonhosted.org/packages/a7/8f/213223fdee199c55db81e2d0c669f30e8285c5be2526c4ed924de39247da/fastprogress-1.0.3-py3-none-any.whl
+        sha256: 6dfea88f7a4717b0a8d6ee2048beae5dbed369f932a368c5dd9caff34796f7c5
+      - type: file
+        url: https://files.pythonhosted.org/packages/73/67/8ece580cc363331d9a53055130f86b096bf16e38156e33b1d3014fffda6b/ruamel.yaml-0.18.6-py3-none-any.whl
+        sha256: 57b53ba33def16c4f3d807c0ccbc00f8a6081827e81ba2491691b76882d0c636
+      - type: file
+        url: https://files.pythonhosted.org/packages/a4/f7/22d6b620ed895a05d40802d8281eff924dc6190f682d933d4efff60db3b5/ruamel.yaml.clib-0.2.8-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_24_x86_64.whl
+        sha256: 25c515e350e5b739842fc3228d662413ef28f295791af5e5110b543cf0b57d9b
+      - type: file
+        url: https://files.pythonhosted.org/packages/fb/12/2f5c8d4764b00033cf1c935b702d3bb878d10be9f0b87f0253495832d85f/sentencepiece-0.2.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: e58b47f933aca74c6a60a79dcb21d5b9e47416256c795c2d58d55cec27f9551d
+      - type: file
+        url: https://files.pythonhosted.org/packages/30/ff/9629de25786cf6ce38b7754b352a9904ce8c90b22a127d9d0d9c45ef5693/speechbrain-0.5.16-py3-none-any.whl
+        sha256: 3b400b077d5b9c260c54ceadd4a1ae8e06d6f0b768e8e552bc0448b816f9050d
+      - type: file
+        url: https://files.pythonhosted.org/packages/0a/45/82fe9b5696eb5dd4f84632f75b549b48bed0c33a5920b6309fbafd7e3477/vocos-0.1.0-py3-none-any.whl
+        sha256: 0ac13eaef68596074301e912d781399b3defa4b4ca60b6bc52c8a4b9209ca235

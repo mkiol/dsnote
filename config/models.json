@@ -24293,6 +24293,237 @@
             "size": "7618694"
         },
         {
+            "name": "Multilingual (WhisperSpeech Tiny)",
+            "model_id": "multilang_whisperspeech_q4_tiny_enpl",
+            "engine": "tts_whisperspeech",
+            "lang_id": "multilang",
+            "checksum": "864b54c1",
+            "checksum_quick": "981eadaf",
+            "size": "154322024",
+            "options": "x0",
+            "features": [
+                "tts_voice_cloning"
+            ],
+            "sups": [
+                {
+                    "role": "hub",
+                    "file_name": "torch_encodec_24khz_hub",
+                    "checksum": "ce95470c",
+                    "checksum_quick": "d1c8f228",
+                    "size": "93179721",
+                    "comp": "dir",
+                    "urls": [
+                        "https://dl.fbaipublicfiles.com/encodec/v0/encodec_24khz-d7cc33bc.th"
+                    ]
+                },
+                {
+                    "role": "hub",
+                    "file_name": "hf_speechbrain--spkrec-ecapa-voxceleb_hub",
+                    "checksum": "99c1afd4",
+                    "checksum_quick": "c4956ec8",
+                    "size": "88991666",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/hyperparams.yaml",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/embedding_model.ckpt",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/mean_var_norm_emb.ckpt",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/classifier.ckpt",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/label_encoder.txt"
+                    ]
+                },
+                {
+                    "role": "hub",
+                    "file_name": "hf_charactr--vocos-encodec-24khz_hub",
+                    "checksum": "70d3c237",
+                    "checksum_quick": "df465f3",
+                    "size": "40365403",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/charactr/vocos-encodec-24khz/resolve/4e61d082c08045a4c11e5b148ad93b1d0c591a14/pytorch_model.bin",
+                        "https://huggingface.co/charactr/vocos-encodec-24khz/resolve/4e61d082c08045a4c11e5b148ad93b1d0c591a14/config.yaml"
+                    ]
+                }
+            ],
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            },
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/collabora/whisperspeech/resolve/c75448166db02fe8b66a48c2e60a295089e75c91/s2a-q4-tiny-en%2Bpl.model",
+                "https://huggingface.co/collabora/whisperspeech/resolve/c75448166db02fe8b66a48c2e60a295089e75c91/t2s-tiny-en%2Bpl.model"
+
+            ],
+            "hidden": true
+        },
+        {
+            "name": "Multilingual (WhisperSpeech Base)",
+            "model_id": "multilang_whisperspeech_q4_base_enpl",
+            "engine": "tts_whisperspeech",
+            "lang_id": "multilang",
+            "checksum": "badbb4fb",
+            "checksum_quick": "92292d6c",
+            "size": "395746538",
+            "options": "x0",
+            "features": [
+                "tts_voice_cloning"
+            ],
+            "sups": [
+                {
+                    "role": "hub",
+                    "file_name": "torch_encodec_24khz_hub",
+                    "checksum": "ce95470c",
+                    "checksum_quick": "d1c8f228",
+                    "size": "93179721",
+                    "comp": "dir",
+                    "urls": [
+                        "https://dl.fbaipublicfiles.com/encodec/v0/encodec_24khz-d7cc33bc.th"
+                    ]
+                },
+                {
+                    "role": "hub",
+                    "file_name": "hf_speechbrain--spkrec-ecapa-voxceleb_hub",
+                    "checksum": "99c1afd4",
+                    "checksum_quick": "c4956ec8",
+                    "size": "88991666",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/hyperparams.yaml",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/embedding_model.ckpt",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/mean_var_norm_emb.ckpt",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/classifier.ckpt",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/label_encoder.txt"
+                    ]
+                },
+                {
+                    "role": "hub",
+                    "file_name": "hf_charactr--vocos-encodec-24khz_hub",
+                    "checksum": "70d3c237",
+                    "checksum_quick": "df465f3",
+                    "size": "40365403",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/charactr/vocos-encodec-24khz/resolve/4e61d082c08045a4c11e5b148ad93b1d0c591a14/pytorch_model.bin",
+                        "https://huggingface.co/charactr/vocos-encodec-24khz/resolve/4e61d082c08045a4c11e5b148ad93b1d0c591a14/config.yaml"
+                    ]
+                }
+            ],
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            },
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/collabora/whisperspeech/resolve/c75448166db02fe8b66a48c2e60a295089e75c91/s2a-q4-base-en%2Bpl.model",
+                "https://huggingface.co/collabora/whisperspeech/resolve/c75448166db02fe8b66a48c2e60a295089e75c91/t2s-base-en%2Bpl.model"
+
+            ],
+            "hidden": true
+        },
+        {
+            "name": "Multilingual (WhisperSpeech Small)",
+            "model_id": "multilang_whisperspeech_q4_small_enpl",
+            "engine": "tts_whisperspeech",
+            "lang_id": "multilang",
+            "checksum": "59f58555",
+            "checksum_quick": "5834dea7",
+            "size": "1730328846",
+            "options": "x0",
+            "features": [
+                "tts_voice_cloning"
+            ],
+            "sups": [
+                {
+                    "role": "hub",
+                    "file_name": "torch_encodec_24khz_hub",
+                    "checksum": "ce95470c",
+                    "checksum_quick": "d1c8f228",
+                    "size": "93179721",
+                    "comp": "dir",
+                    "urls": [
+                        "https://dl.fbaipublicfiles.com/encodec/v0/encodec_24khz-d7cc33bc.th"
+                    ]
+                },
+                {
+                    "role": "hub",
+                    "file_name": "hf_speechbrain--spkrec-ecapa-voxceleb_hub",
+                    "checksum": "99c1afd4",
+                    "checksum_quick": "c4956ec8",
+                    "size": "88991666",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/hyperparams.yaml",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/embedding_model.ckpt",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/mean_var_norm_emb.ckpt",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/classifier.ckpt",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/label_encoder.txt"
+                    ]
+                },
+                {
+                    "role": "hub",
+                    "file_name": "hf_charactr--vocos-encodec-24khz_hub",
+                    "checksum": "70d3c237",
+                    "checksum_quick": "df465f3",
+                    "size": "40365403",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/charactr/vocos-encodec-24khz/resolve/4e61d082c08045a4c11e5b148ad93b1d0c591a14/pytorch_model.bin",
+                        "https://huggingface.co/charactr/vocos-encodec-24khz/resolve/4e61d082c08045a4c11e5b148ad93b1d0c591a14/config.yaml"
+                    ]
+                }
+            ],
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            },
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/collabora/whisperspeech/resolve/c75448166db02fe8b66a48c2e60a295089e75c91/s2a-q4-small-en%2Bpl.model",
+                "https://huggingface.co/collabora/whisperspeech/resolve/c75448166db02fe8b66a48c2e60a295089e75c91/t2s-small-en%2Bpl.model"
+
+            ],
+            "hidden": true
+        },
+        {
+            "name": "English (WhisperSpeech Tiny)",
+            "model_id": "en_whisperspeech_q4_tiny_enpl",
+            "model_alias_of": "multilang_whisperspeech_q4_tiny_enpl",
+            "lang_id": "en"
+        },
+        {
+            "name": "Polski (WhisperSpeech Tiny)",
+            "model_id": "pl_whisperspeech_q4_tiny_enpl",
+            "model_alias_of": "multilang_whisperspeech_q4_tiny_enpl",
+            "lang_id": "pl"
+        },
+        {
+            "name": "English (WhisperSpeech Base)",
+            "model_id": "en_whisperspeech_q4_base_enpl",
+            "model_alias_of": "multilang_whisperspeech_q4_base_enpl",
+            "lang_id": "en"
+        },
+        {
+            "name": "Polski (WhisperSpeech Base)",
+            "model_id": "pl_whisperspeech_q4_base_enpl",
+            "model_alias_of": "multilang_whisperspeech_q4_base_enpl",
+            "lang_id": "pl"
+        },
+        {
+            "name": "English (WhisperSpeech Small)",
+            "model_id": "en_whisperspeech_q4_small_enpl",
+            "model_alias_of": "multilang_whisperspeech_q4_small_enpl",
+            "lang_id": "en"
+        },
+        {
+            "name": "Polski (WhisperSpeech Small)",
+            "model_id": "pl_whisperspeech_q4_small_enpl",
+            "model_alias_of": "multilang_whisperspeech_q4_small_enpl",
+            "lang_id": "pl"
+        },
+        {
             "name": "Multilingual (Coqui YourTTS)",
             "model_id": "multilang_coqui_yourtts",
             "engine": "tts_coqui",

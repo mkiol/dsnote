@@ -30,6 +30,7 @@ std::ostream& operator<<(std::ostream& os,
     os << "coqui-tts=" << availability.coqui_tts
        << ", faster-whisper=" << availability.faster_whisper
        << ", mimic3-tts=" << availability.mimic3_tts
+       << ", whisperspeech-tts=" << availability.whisperspeech_tts
        << ", transformers=" << availability.transformers
        << ", unikud=" << availability.unikud
        << ", gruut_de=" << availability.gruut_de
@@ -71,6 +72,14 @@ libs_availability_t libs_availability() {
             availability.coqui_tts = true;
         } catch (const std::exception& err) {
             LOGD("coqui tts check py error: " << err.what());
+        }
+
+        try {
+            LOGD("checking: whisperspeech tts");
+            py::module_::import("whisperspeech");
+            availability.whisperspeech_tts = true;
+        } catch (const std::exception& err) {
+            LOGD("whisperspeech tts check py error: " << err.what());
         }
 
         try {

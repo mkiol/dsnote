@@ -74,8 +74,9 @@ class ModelsListModel : public SelectableItemModel {
         FeatureEngineTtsRhvoice = 1 << 13,
         FeatureEngineTtsCoqui = 1 << 14,
         FeatureEngineTtsMimic3 = 1 << 15,
-        FeatureEngineTtsEnd = FeatureEngineTtsMimic3,
-        FeatureGenericEnd = FeatureEngineTtsMimic3,
+        FeatureEngineTtsWhisperSpeech = 1 << 16,
+        FeatureEngineTtsEnd = FeatureEngineTtsWhisperSpeech,
+        FeatureGenericEnd = FeatureEngineTtsWhisperSpeech,
         FeatureSttStart = 1 << 20,
         FeatureSttIntermediateResults = FeatureSttStart,
         FeatureSttPunctuation = 1 << 21,
@@ -89,7 +90,8 @@ class ModelsListModel : public SelectableItemModel {
                                FeatureEngineSttApril,
         FeatureAllTtsEngines = FeatureEngineTtsEspeak | FeatureEngineTtsPiper |
                                FeatureEngineTtsRhvoice | FeatureEngineTtsCoqui |
-                               FeatureEngineTtsMimic3,
+                               FeatureEngineTtsMimic3 |
+                               FeatureEngineTtsWhisperSpeech,
         FeatureAll = FeatureFastProcessing | FeatureMediumProcessing |
                      FeatureSlowProcessing | FeatureQualityHigh |
                      FeatureQualityMedium | FeatureQualityLow |

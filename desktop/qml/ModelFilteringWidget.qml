@@ -67,6 +67,7 @@ GridLayout {
         engineTtsRhvoiceFeature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureEngineTtsRhvoice
         engineTtsCoquiFeature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureEngineTtsCoqui
         engineTtsMimic3Feature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureEngineTtsMimic3
+        engineTtsWhisperSpeechFeature.checked = models_model.featureFilterFlags & ModelsListModel.FeatureEngineTtsWhisperSpeech
         engineSttFilters.enabled = stt_visible
         engineTtsFilters.enabled = tts_visible
         speedFilters.enabled = stt_visible || tts_visible
@@ -332,6 +333,17 @@ GridLayout {
             onToggled: {
                 if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureEngineTtsMimic3)
                 else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureEngineTtsMimic3)
+            }
+        }
+
+        ModelFeatureButton {
+            id: engineTtsWhisperSpeechFeature
+
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            text: "WhisperSpeech"
+            onToggled: {
+                if (checked) root.models_model.addFeatureFilterFlag(ModelsListModel.FeatureEngineTtsWhisperSpeech)
+                else root.models_model.removeFeatureFilterFlag(ModelsListModel.FeatureEngineTtsWhisperSpeech)
             }
         }
 
