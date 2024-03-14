@@ -145,6 +145,8 @@ std::ostream& operator<<(std::ostream& os, const tts_engine::config_t& config) {
        << ", share-dir=" << config.share_dir
        << ", cache-dir=" << config.cache_dir << ", data-dir=" << config.data_dir
        << ", speech-speed=" << config.speech_speed
+       << ", split-into-sentences=" << config.split_into_sentences
+       << ", use-engine-speed-control=" << config.use_engine_speed_control
        << ", use-gpu=" << config.use_gpu << ", gpu-device=["
        << config.gpu_device << "]"
        << ", audio-format=" << config.audio_format;
@@ -261,7 +263,8 @@ std::string tts_engine::find_file_with_name_prefix(std::string dir_path,
 }
 
 void tts_engine::push_tasks(const std::string& text, task_type_t type) {
-    auto tasks = make_tasks(text, !m_config.has_option('q'), type);
+    auto tasks = make_tasks(
+        text, m_config.split_into_sentences && !m_config.has_option('q'), type);
 
     if (tasks.empty()) {
         LOGW("no task to process");
@@ -340,13 +343,14 @@ static decltype(timespec::tv_sec) create_date_sec(const std::string& file) {
 }
 
 std::string tts_engine::path_to_output_file(const std::string& text,
-                                            unsigned int speech_speed) const {
+                                            unsigned int speech_speed,
+                                            bool do_speech_change) const {
     auto hash = std::hash<std::string>{}(
         text + m_config.model_files.model_path +
         m_config.model_files.vocoder_path + m_config.ref_voice_file +
         std::to_string(create_date_sec(m_config.ref_voice_file)) +
         m_config.model_files.diacritizer_path + m_config.speaker_id +
-        m_config.lang +
+        m_config.lang + (do_speech_change ? "1" : "0") +
         (speech_speed == 10 ? "" : std::to_string(speech_speed)));
     return m_config.cache_dir + "/" + std::to_string(hash) + '.' +
            file_ext_for_format(m_config.audio_format);
@@ -719,9 +723,11 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
         return output_file_wav;
     };
 
-    bool do_speech_change = !model_supports_speed();
+    bool do_speech_change =
+        !m_config.use_engine_speed_control || !model_supports_speed();
 
-    auto output_file = path_to_output_file(task.text, m_config.speech_speed);
+    auto output_file =
+        path_to_output_file(task.text, m_config.speech_speed, do_speech_change);
 
     if (!file_exists(output_file)) {
         if (!do_speech_change) {
@@ -742,7 +748,8 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
                 unlink(output_file_wav.c_str());
             }
         } else {
-            auto output_file_no_speed = path_to_output_file(task.text, 10);
+            auto output_file_no_speed =
+                path_to_output_file(task.text, 10, false);
 
             if (!file_exists(output_file_no_speed)) {
                 auto output_file_wav = encode_speech(output_file_no_speed);

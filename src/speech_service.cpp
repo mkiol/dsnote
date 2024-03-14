@@ -1377,6 +1377,21 @@ static QString tts_ref_voice_file_from_options(const QVariantMap &options) {
     return {};
 }
 
+static bool tts_split_into_sentences_from_options(const QVariantMap &options) {
+    if (options.contains(QStringLiteral("split_into_sentences")))
+        return options.value(QStringLiteral("split_into_sentences"), true)
+            .toBool();
+    return true;
+}
+
+static bool tts_use_engine_speed_control_from_options(
+    const QVariantMap &options) {
+    if (options.contains(QStringLiteral("use_engine_speed_control")))
+        return options.value(QStringLiteral("use_engine_speed_control"), true)
+            .toBool();
+    return true;
+}
+
 static bool sync_subs_from_options(const QVariantMap &options) {
     if (options.contains(QStringLiteral("sync_subs")))
         return options.value(QStringLiteral("sync_subs")).toBool();
@@ -1427,6 +1442,10 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         config.ref_voice_file =
             tts_ref_voice_file_from_options(options).toStdString();
         config.lang_code = model_config->tts->lang_code.toStdString();
+        config.split_into_sentences =
+            tts_split_into_sentences_from_options(options);
+        config.use_engine_speed_control =
+            tts_use_engine_speed_control_from_options(options);
 
         if (settings::instance()->tts_use_gpu() &&
             settings::instance()->has_gpu_device_tts()) {
@@ -1601,6 +1620,9 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             m_tts_engine->set_ref_voice_file(std::move(config.ref_voice_file));
             m_tts_engine->set_text_format(config.text_format);
             m_tts_engine->set_sync_subs(config.sync_subs);
+            m_tts_engine->set_split_into_sentences(config.split_into_sentences);
+            m_tts_engine->set_use_engine_speed_control(
+                config.use_engine_speed_control);
             m_tts_engine->restart();
         }
 

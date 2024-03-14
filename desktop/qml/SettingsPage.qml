@@ -529,6 +529,35 @@ DialogPage {
             }
 
             CheckBox {
+                checked: _settings.tts_split_into_sentences
+                text: qsTr("Split text into sentences")
+                onCheckedChanged: {
+                    _settings.tts_split_into_sentences = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.") + " " +
+                              qsTr("This speeds up reading, but in some models the naturalness of speech may be reduced.")
+                hoverEnabled: true
+            }
+
+            CheckBox {
+                checked: _settings.tts_use_engine_speed_control
+                text: qsTr("Use engine speed control")
+                onCheckedChanged: {
+                    _settings.tts_use_engine_speed_control = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("If the TTS engine supports speed control, it will be used.") + " " +
+                              qsTr("When this option is disabled, speed manipulation takes place during audio post-processing.") + " " +
+                              qsTr("The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.")
+                hoverEnabled: true
+            }
+
+            CheckBox {
                 checked: _settings.tts_use_gpu
                 visible: _settings.gpu_supported() && app.feature_gpu_tts
                 text: qsTr("Use GPU acceleration")

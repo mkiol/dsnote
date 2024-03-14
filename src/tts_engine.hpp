@@ -121,6 +121,8 @@ class tts_engine {
         std::string nb_data;
         std::string lang_code;
         unsigned int speech_speed = 10;
+        bool split_into_sentences = true;
+        bool use_engine_speed_control = true;
         bool use_gpu = false;
         gpu_device_t gpu_device;
         audio_format_t audio_format = audio_format_t::wav;
@@ -146,6 +148,18 @@ class tts_engine {
     inline auto text_format() const { return m_config.text_format; }
     inline void set_text_format(text_format_t value) {
         m_config.text_format = value;
+    }
+    inline auto split_into_sentences() const {
+        return m_config.split_into_sentences;
+    }
+    inline void set_split_into_sentences(bool value) {
+        m_config.split_into_sentences = value;
+    }
+    inline auto use_engine_speed_control() const {
+        return m_config.use_engine_speed_control;
+    }
+    inline void set_use_engine_speed_control(bool value) {
+        m_config.use_engine_speed_control = value;
     }
     inline void set_sync_subs(bool value) { m_config.sync_subs = value; }
     void encode_speech(const std::string& text);
@@ -201,7 +215,8 @@ class tts_engine {
                                     const std::string& out_file) = 0;
     void set_state(state_t new_state);
     std::string path_to_output_file(const std::string& text,
-                                    unsigned int speech_speed) const;
+                                    unsigned int speech_speed,
+                                    bool do_speech_change) const;
     std::string path_to_output_silence_file(size_t duration,
                                             unsigned int sample_rate,
                                             audio_format_t format) const;

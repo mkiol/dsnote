@@ -198,6 +198,13 @@ class settings : public QSettings, public singleton<settings> {
                    set_show_repair_text NOTIFY show_repair_text_changed)
     Q_PROPERTY(QString x11_compose_file READ x11_compose_file WRITE
                    set_x11_compose_file NOTIFY x11_compose_file_changed)
+    Q_PROPERTY(bool tts_split_into_sentences READ tts_split_into_sentences WRITE
+                   set_tts_split_into_sentences NOTIFY
+                       tts_split_into_sentences_changed)
+    Q_PROPERTY(
+        bool tts_use_engine_speed_control READ tts_use_engine_speed_control
+            WRITE set_tts_use_engine_speed_control NOTIFY
+                tts_use_engine_speed_control_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -537,6 +544,10 @@ class settings : public QSettings, public singleton<settings> {
     void set_start_in_tray(bool value);
     bool show_repair_text() const;
     void set_show_repair_text(bool value);
+    bool tts_split_into_sentences() const;
+    void set_tts_split_into_sentences(bool value);
+    bool tts_use_engine_speed_control() const;
+    void set_tts_use_engine_speed_control(bool value);
     bool clean_ref_voice() const;
     void set_clean_ref_voice(bool value);
     unsigned int addon_flags() const;
@@ -742,6 +753,8 @@ class settings : public QSettings, public singleton<settings> {
     void mix_volume_change_changed();
     void show_repair_text_changed();
     void x11_compose_file_changed();
+    void tts_split_into_sentences_changed();
+    void tts_use_engine_speed_control_changed();
 
     // service
     void models_dir_changed();

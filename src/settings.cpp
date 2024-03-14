@@ -1967,6 +1967,28 @@ void settings::set_show_repair_text(bool value) {
     }
 }
 
+bool settings::tts_split_into_sentences() const {
+    return value(QStringLiteral("tts_split_into_sentences"), true).toBool();
+}
+
+void settings::set_tts_split_into_sentences(bool value) {
+    if (value != tts_split_into_sentences()) {
+        setValue(QStringLiteral("tts_split_into_sentences"), value);
+        emit tts_split_into_sentences_changed();
+    }
+}
+
+bool settings::tts_use_engine_speed_control() const {
+    return value(QStringLiteral("tts_use_engine_speed_control"), true).toBool();
+}
+
+void settings::set_tts_use_engine_speed_control(bool value) {
+    if (value != tts_use_engine_speed_control()) {
+        setValue(QStringLiteral("tts_use_engine_speed_control"), value);
+        emit tts_use_engine_speed_control_changed();
+    }
+}
+
 bool settings::gpu_scan_hip() const {
     return value(QStringLiteral("gpu_scan_hip"), true).toBool();
 }
