@@ -18,11 +18,7 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Accessibility") + ":</p>
-        <ul>
-        <li>Fix: Accented characters (e.g.: ã, ê) were not transferred correctly to the active window.</li>
-        </ul>
-        <p>" + qsTr("User Interface") + ":</p>
+        text: "<p>" + qsTr("User Interface") + ":</p>
         <ul>
         <li>Import subtitles embedded into video file.
             If your video file contains one or many subtitle streams, you can import the selected subtitles into notepad.</li>
@@ -49,7 +45,8 @@ DialogPage {
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
-        <li><a href='https://collabora.github.io/WhisperSpeech/'>WhisperSpeech</a> engine.
+        <li><a href='https://collabora.github.io/WhisperSpeech/'>WhisperSpeech</a> engine
+            that generates voice with exceptional naturalness.
             The new engine comes with models for English and Polish languages. All models support voice cloning.</li>
         <li>New Piper voices for English, Persian, Slovenian, Turkish, French and Spanish</li>
         <li>Settings option to enable/disable speech synchronization with subtitle timestamps
@@ -65,8 +62,13 @@ DialogPage {
         <ul>
         <li>New models: Greek to English, Maltese to English,
             Slovenian to English, Turkish to English, English to Catalan</li>
-        <li>Handy buttons to quickly add translated text to the note or to replace it (<i>Add</li>, <i>Replace</i>)</li>
+        <li>Handy buttons to quickly add translated text to the note or
+            to replace it and switch languages (<i>Add</li>, <i>Replace</i>).</li>
         <li>Context menu option to translate from cursor position or translate only selected text</li>
+        </ul>
+        <p>" + qsTr("Accessibility") + ":</p>
+        <ul>
+        <li>Fix: Accented characters (e.g.: ã, ê) were not transferred correctly to the active window.</li>
         </ul>
         <p>" + qsTr("Flatpak") + ":</p>
         <ul>

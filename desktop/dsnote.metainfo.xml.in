@@ -98,12 +98,8 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.5.0-beta" date="2024-03-14">
+    <release version="4.5.0" date="2024-03-15">
       <description>
-      <p>Accessibility:</p>
-      <ul>
-      <li>Fix: Accented characters (e.g.: ã, ê) were not transferred correctly to the active window.</li>
-      </ul>
       <p>User Interface:</p>
       <ul>
       <li>Import subtitles embedded into video file.
@@ -125,7 +121,7 @@
       </ul>
       <p>Text to Speech:</p>
       <ul>
-      <li>WhisperSpeech engine.
+      <li>WhisperSpeech engine that generates voice with exceptional naturalness.
           The new engine comes with models for English and Polish languages. All models support voice cloning.</li>
       <li>New Piper voices for English, Persian, Slovenian, Turkish, French and Spanish</li>
       <li>Settings option to enable/disable speech synchronization with subtitle timestamps.
@@ -138,8 +134,12 @@
       <ul>
       <li>New models: Greek to English, Maltese to English,
           Slovenian to English, Turkish to English, English to Catalan</li>
-      <li>Handy buttons to quickly add translated text to the note or to replace it</li>
+      <li>Handy buttons to quickly add translated text to the note, replace it and switch languages.</li>
       <li>Context menu option to translate from cursor position or translate only selected text</li>
+      </ul>
+      <p>Accessibility:</p>
+      <ul>
+      <li>Fix: Accented characters (e.g.: ã, ê) were not transferred correctly to the active window.</li>
       </ul>
       <p>Flatpak:</p>
       <ul>
@@ -147,6 +147,7 @@
       <li>PyTorch update to version 2.2.1</li>
       <li>CTranslate2 update to version 4.1.0</li>
       <li>Faster-Whisper update to version 1.0.1</li>
+      <li>New library: WhisperSpeech</li>
       </ul>
       </description>
     </release>
