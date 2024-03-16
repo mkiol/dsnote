@@ -138,9 +138,17 @@ class tts_engine {
     void stop();
     void request_stop();
     inline auto lang() const { return m_config.lang; }
+    inline void set_lang(const std::string& value) { m_config.lang = value; }
+    inline auto lang_code() const { return m_config.lang_code; }
+    inline void set_lang_code(const std::string& value) {
+        m_config.lang_code = value;
+    }
     inline auto model_files() const { return m_config.model_files; }
     inline auto state() const { return m_state; }
     inline auto speaker() const { return m_config.speaker_id; }
+    inline void set_speaker(const std::string& value) {
+        m_config.speaker_id = value;
+    }
     inline auto use_gpu() const { return m_config.use_gpu; }
     inline auto gpu_device() const { return m_config.gpu_device; }
     inline auto ref_voice_file() const { return m_config.ref_voice_file; }

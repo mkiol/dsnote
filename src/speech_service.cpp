@@ -1506,10 +1506,30 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                     models_manager::model_engine_t::tts_whisperspeech &&
                 type != typeid(whisperspeech_engine))
                 return true;
+            if (model_config->tts->engine ==
+                    models_manager::model_engine_t::tts_espeak &&
+                type != typeid(espeak_engine))
+                return true;
 
             if (m_tts_engine->model_files() != config.model_files) return true;
-            if (m_tts_engine->lang() != config.lang) return true;
-            if (m_tts_engine->speaker() != config.speaker_id) return true;
+
+            bool engine_restart_when_speaker_changed =
+                model_config->tts->engine ==
+                    models_manager::model_engine_t::tts_piper ||
+                model_config->tts->engine ==
+                    models_manager::model_engine_t::tts_rhvoice ||
+                model_config->tts->engine ==
+                    models_manager::model_engine_t::tts_espeak;
+            if (engine_restart_when_speaker_changed &&
+                m_tts_engine->speaker() != config.speaker_id)
+                return true;
+
+            bool engine_restart_when_lang_changed =
+                model_config->tts->engine ==
+                models_manager::model_engine_t::tts_espeak;
+            if (engine_restart_when_lang_changed &&
+                m_tts_engine->lang() != config.lang)
+                return true;
 
             if (config.use_gpu != m_tts_engine->use_gpu() ||
                 config.gpu_device != m_tts_engine->gpu_device())
@@ -1623,6 +1643,9 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             m_tts_engine->set_split_into_sentences(config.split_into_sentences);
             m_tts_engine->set_use_engine_speed_control(
                 config.use_engine_speed_control);
+            m_tts_engine->set_speaker(config.speaker_id);
+            m_tts_engine->set_lang(config.lang);
+            m_tts_engine->set_lang_code(config.lang_code);
             m_tts_engine->restart();
         }
 

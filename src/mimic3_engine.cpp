@@ -84,9 +84,6 @@ void mimic3_engine::create_model() {
                     "voices_directories"_a = dirs, "no_download"_a = true));
             m_tts->attr("voice") = "lang/model";
 
-            if (!m_config.speaker_id.empty())
-                m_tts->attr("speaker") = m_config.speaker_id;
-
             m_tts->attr("preload_voice")("lang/model");
 
             if (py::len(m_tts->attr("_loaded_voices")) == 0 ||
@@ -140,6 +137,8 @@ bool mimic3_engine::encode_speech_impl(const std::string& text,
     auto task = py_executor::instance()->execute([&]() {
         try {
             m_tts->attr("settings").attr("length_scale") = length_scale;
+            if (!m_config.speaker_id.empty())
+                m_tts->attr("speaker") = m_config.speaker_id;
 
             m_tts->attr("begin_utterance")();
             m_tts->attr("speak_text")(text);
