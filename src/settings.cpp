@@ -2028,13 +2028,17 @@ void settings::set_gpu_scan_opencl_legacy(bool value) {
     }
 }
 
-bool settings::tts_subtitles_sync() const {
-    return value(QStringLiteral("tts_subtitles_sync"), true).toBool();
+settings::tts_subtitles_sync_mode_t settings::tts_subtitles_sync() const {
+    return static_cast<settings::tts_subtitles_sync_mode_t>(
+        value(QStringLiteral("tts_subtitles_sync"),
+              static_cast<int>(settings::tts_subtitles_sync_mode_t::
+                                   TtsSubtitleSyncOnFitOnlyIfLonger))
+            .toInt());
 }
 
-void settings::set_tts_subtitles_sync(bool value) {
+void settings::set_tts_subtitles_sync(tts_subtitles_sync_mode_t value) {
     if (value != tts_subtitles_sync()) {
-        setValue(QStringLiteral("tts_subtitles_sync"), value);
+        setValue(QStringLiteral("tts_subtitles_sync"), static_cast<int>(value));
         emit tts_subtitles_sync_changed();
     }
 }

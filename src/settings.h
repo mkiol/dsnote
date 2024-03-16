@@ -269,8 +269,9 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(
         file_import_action_t file_import_action READ file_import_action WRITE
             set_file_import_action NOTIFY file_import_action_changed)
-    Q_PROPERTY(bool tts_subtitles_sync READ tts_subtitles_sync WRITE
-                   set_tts_subtitles_sync NOTIFY tts_subtitles_sync_changed)
+    Q_PROPERTY(
+        tts_subtitles_sync_mode_t tts_subtitles_sync READ tts_subtitles_sync
+            WRITE set_tts_subtitles_sync NOTIFY tts_subtitles_sync_changed)
     Q_PROPERTY(int mix_volume_change READ mix_volume_change WRITE
                    set_mix_volume_change NOTIFY mix_volume_change_changed)
 
@@ -296,6 +297,14 @@ class settings : public QSettings, public singleton<settings> {
         InsertAfterEmptyLine = 2
     };
     Q_ENUM(insert_mode_t)
+
+    enum class tts_subtitles_sync_mode_t {
+        TtsSubtitleSyncOff = 0,
+        TtsSubtitleSyncOnDontFit = 1,
+        TtsSubtitleSyncOnAlwaysFit = 2,
+        TtsSubtitleSyncOnFitOnlyIfLonger = 3
+    };
+    Q_ENUM(tts_subtitles_sync_mode_t)
 
     enum class file_import_action_t {
         FileImportActionAsk = 0,
@@ -690,8 +699,8 @@ class settings : public QSettings, public singleton<settings> {
     QString gpu_overrided_version();
     void set_gpu_overrided_version(QString new_value);
 
-    bool tts_subtitles_sync() const;
-    void set_tts_subtitles_sync(bool value);
+    tts_subtitles_sync_mode_t tts_subtitles_sync() const;
+    void set_tts_subtitles_sync(tts_subtitles_sync_mode_t value);
 
    signals:
     // app

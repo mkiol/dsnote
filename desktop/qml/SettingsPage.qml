@@ -619,18 +619,38 @@ DialogPage {
                 text: qsTr("Subtitles")
             }
 
-            CheckBox {
-                checked: _settings.tts_subtitles_sync
-                text: qsTr("Sync speech with timestamps")
-                onCheckedChanged: {
-                    _settings.tts_subtitles_sync = checked
+            ComboBoxForm {
+                label.text: qsTr("Sync speech with timestamps")
+                toolTip: "<i>" + qsTr("Don't sync") + "</i>" + " — " + qsTr("Subtitle timestamps are ignored when reading or exporting to a file.") + "<br/><br/>" +
+                         "<i>" + qsTr("Sync but don't adjust speed") + "</i>" + " — " + qsTr("Speech is synchronized with timestamps.") + "<br/><br/>" +
+                         "<i>" + qsTr("Sync and only increase speed to fit") + "</i>" + " — " + qsTr("Speech is synchronized with timestamps and speed is adjusted so that the duration of speech is never longer than the duration of the subtitle segment.")  + "<br/><br/>" +
+                         "<i>" + qsTr("Sync and increase or decrease speed to fit") + "</i>" + " — " + qsTr("Speech is synchronized with timestamps and the speed is adjusted so that the duration of the speech is exactly the same as the duration of the subtitle segment.")
+                comboBox {
+                    currentIndex: {
+                        if (_settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOff) return 0
+                        if (_settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnDontFit) return 1
+                        if (_settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnFitOnlyIfLonger) return 2
+                        if (_settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnAlwaysFit) return 3
+                        return 1
+                    }
+                    model: [
+                        qsTr("Don't sync"),
+                        qsTr("Sync but don't adjust speed"),
+                        qsTr("Sync and only increase speed to fit"),
+                        qsTr("Sync and increase or decrease speed to fit")
+                    ]
+                    onActivated: {
+                        if (index === 1) {
+                            _settings.tts_subtitles_sync = Settings.TtsSubtitleSyncOnDontFit
+                        } else if (index === 2) {
+                            _settings.tts_subtitles_sync = Settings.TtsSubtitleSyncOnFitOnlyIfLonger
+                        } else if (index === 3) {
+                            _settings.tts_subtitles_sync = Settings.TtsSubtitleSyncOnAlwaysFit
+                        } else {
+                            _settings.tts_subtitles_sync = Settings.TtsSubtitleSyncOff
+                        }
+                    }
                 }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("When reading or exporting subtitles to file, synchronize the generated speech with the subtitle timestamps.") + " " +
-                              qsTr("This may be useful for creating voice overs.")
-                hoverEnabled: true
             }
         }
 

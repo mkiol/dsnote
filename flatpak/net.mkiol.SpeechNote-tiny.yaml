@@ -369,8 +369,6 @@ modules:
         path: ../patches/bergamot.patch
 
   - name: rubberband
-    only-arches:
-      - x86_64
     buildsystem: meson
     config-opts:
       - --buildtype=release
@@ -401,6 +399,7 @@ modules:
       - --enable-filter=amix
       - --enable-filter=anull
       - --enable-filter=volume
+      - --enable-filter=rubberband
       - --enable-encoder=libmp3lame
       - --enable-encoder=libvorbis
       - --enable-encoder=pcm_s16le
@@ -477,11 +476,14 @@ modules:
       - --enable-libmp3lame
       - --enable-libvorbis
       - --enable-libopus
+      - --enable-librubberband
       - --extra-libs=-lvorbis -logg -lm
     sources:
       - type: archive
         url: https://ffmpeg.org/releases/ffmpeg-6.1.1.tar.xz
         sha256: 8684f4b00f94b85461884c3719382f1261f0d9eb3d59640a1f4ac0873616f968
+      - type: patch
+        path: ../patches/ffmpeg.patch
 
   - name: whispercpp-openblas
     buildsystem: cmake-ninja

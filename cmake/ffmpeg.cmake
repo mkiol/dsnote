@@ -98,6 +98,7 @@ set(ffmpeg_opts
     --enable-filter=amix
     --enable-filter=anull
     --enable-filter=volume
+    --enable-filter=rubberband
     --enable-encoder=libmp3lame
     --enable-encoder=libvorbis
     --enable-encoder=pcm_s16le
@@ -173,7 +174,8 @@ set(ffmpeg_opts
     --enable-parser=ac3
     --enable-libmp3lame
     --enable-libvorbis
-    --enable-libopus)
+    --enable-libopus
+    --enable-librubberband)
 
 set(ffmpeg_extra_ldflags -L${external_lib_dir})
 set(ffmpeg_extra_libs "-lvorbis -logg -lm")

@@ -257,6 +257,7 @@ void recorder::process_from_input_file() {
         media_compressor::options_t opts{
             media_compressor::quality_t::vbr_medium,
             media_compressor::flag_force_mono_output,
+            1.0,
             {},
             {}};
 

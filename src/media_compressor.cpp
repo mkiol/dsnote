@@ -387,6 +387,7 @@ void media_compressor::init_av_filter() {
 
     AVFilterContext* filter_mix_ctx = nullptr;
     AVFilterContext* filter_volume_ctx = nullptr;
+    AVFilterContext* filter_rubberband_ctx = nullptr;
 
     auto args = make_src_args(m_in_av_ctx);
     LOGD("filter src args: " << args);
@@ -437,6 +438,20 @@ void media_compressor::init_av_filter() {
                 throw std::runtime_error(
                     "volume avfilter_graph_create_filter error");
             }
+        }
+    } else if ((m_options->flags & flags_t::flag_change_speed) != 0) {
+        const auto* rubberband = avfilter_get_by_name("rubberband");
+        if (!rubberband) throw std::runtime_error("no rubberband filter");
+
+        if (avfilter_graph_create_filter(
+                &filter_rubberband_ctx, rubberband, "rubberband",
+                fmt::format("tempo={}:transients=smooth:window=long",
+                            m_options->speed)
+                    .c_str(),
+                nullptr, m_av_filter_ctx.graph) < 0) {
+            clean_av();
+            throw std::runtime_error(
+                "rubberband avfilter_graph_create_filter error");
         }
     }
 
@@ -491,6 +506,14 @@ void media_compressor::init_av_filter() {
             throw std::runtime_error("src_ctx avfilter_link error");
         if (avfilter_link(filter_mix_ctx, 0, m_av_filter_ctx.sink_ctx, 0) < 0)
             throw std::runtime_error("mix_ctx avfilter_link error");
+    } else if (filter_rubberband_ctx) {
+        if (avfilter_link(m_av_filter_ctx.src_ctx, 0, filter_rubberband_ctx,
+                          0) < 0)
+            throw std::runtime_error("src_ctx avfilter_link error");
+        if (avfilter_link(filter_rubberband_ctx, 0, m_av_filter_ctx.sink_ctx,
+                          0) < 0)
+            throw std::runtime_error(
+                "filter_rubberband_ctx avfilter_link error");
     } else {
         if (avfilter_link(m_av_filter_ctx.src_ctx, 0, m_av_filter_ctx.sink_ctx,
                           0) < 0)
@@ -722,7 +745,8 @@ void media_compressor::init_av(task_t task) {
     m_no_decode = [&]() {
         if (m_options &&
             ((m_options->flags & flag_force_mono_output) ||
-             (m_options->flags & flag_force_16k_sample_rate_output)))
+             (m_options->flags & flag_force_16k_sample_rate_output) ||
+             (m_options->flags & flag_change_speed)))
             return false;
 
         switch (task) {

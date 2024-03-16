@@ -2087,7 +2087,9 @@ void dsnote_app::play_speech_internal(const QString &text,
     QVariantMap options;
     options.insert("speech_speed", settings::instance()->speech_speed());
     options.insert("text_format", static_cast<int>(text_format));
-    options.insert("sync_subs", settings::instance()->tts_subtitles_sync());
+    options.insert(
+        "sync_subs",
+        static_cast<int>(settings::instance()->tts_subtitles_sync()));
     options.insert("split_into_sentences",
                    settings::instance()->tts_split_into_sentences());
     options.insert("use_engine_speed_control",
@@ -2368,7 +2370,9 @@ void dsnote_app::speech_to_file_internal(
     QVariantMap options;
     options.insert("speech_speed", settings::instance()->speech_speed());
     options.insert("text_format", static_cast<int>(text_format));
-    options.insert("sync_subs", settings::instance()->tts_subtitles_sync());
+    options.insert(
+        "sync_subs",
+        static_cast<int>(settings::instance()->tts_subtitles_sync()));
     options.insert("not_merge_files", true);
     options.insert("split_into_sentences",
                    settings::instance()->tts_split_into_sentences());
@@ -4267,6 +4271,7 @@ void dsnote_app::player_export_ref_voice(long long start, long long stop,
         media_compressor::options_t opts{
             media_compressor::quality_t::vbr_high,
             media_compressor::flags_t::flag_none,
+            1.0,
             {},
             /*clip_info=*/
             media_compressor::clip_info_t{static_cast<uint64_t>(start),

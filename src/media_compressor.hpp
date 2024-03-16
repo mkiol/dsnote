@@ -84,7 +84,8 @@ class media_compressor {
     enum flags_t : unsigned int {
         flag_none = 0,
         flag_force_mono_output = 1 << 0,
-        flag_force_16k_sample_rate_output = 1 << 1
+        flag_force_16k_sample_rate_output = 1 << 1,
+        flag_change_speed = 1 << 2
     };
     inline friend flags_t operator|(flags_t a, flags_t b) {
         return static_cast<flags_t>(static_cast<unsigned int>(a) |
@@ -94,6 +95,7 @@ class media_compressor {
     struct options_t {
         quality_t quality = quality_t::vbr_medium;
         flags_t flags = flags_t::flag_none;
+        double speed = 1.0;
         std::optional<stream_t> stream;
         std::optional<clip_info_t> clip_info;
     };

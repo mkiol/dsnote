@@ -60,6 +60,15 @@ class tts_engine {
     friend std::ostream& operator<<(std::ostream& os,
                                     text_format_t text_format);
 
+    enum class subtitles_sync_mode_t {
+        off = 0,
+        on_dont_fit = 1,
+        on_always_fit = 2,
+        on_fit_only_if_longer = 3
+    };
+    friend std::ostream& operator<<(std::ostream& os,
+                                    subtitles_sync_mode_t mode);
+
     struct model_files_t {
         std::string model_path;
         std::string vocoder_path;
@@ -116,7 +125,7 @@ class tts_engine {
         std::string config_dir;
         std::string share_dir;
         text_format_t text_format = text_format_t::raw;
-        bool sync_subs = false;
+        subtitles_sync_mode_t sync_subs = subtitles_sync_mode_t::off;
         std::string options;
         std::string nb_data;
         std::string lang_code;
@@ -169,7 +178,9 @@ class tts_engine {
     inline void set_use_engine_speed_control(bool value) {
         m_config.use_engine_speed_control = value;
     }
-    inline void set_sync_subs(bool value) { m_config.sync_subs = value; }
+    inline void set_sync_subs(subtitles_sync_mode_t value) {
+        m_config.sync_subs = value;
+    }
     void encode_speech(const std::string& text);
     void restore_text(const std::string& text);
     static std::string merge_wav_files(std::vector<std::string>&& files);
@@ -234,7 +245,6 @@ class tts_engine {
     void process_restore_text(const task_t& task, std::string& restored_text);
     std::vector<task_t> make_tasks(const std::string& text, bool split,
                                    task_type_t type) const;
-    void apply_speed(const std::string& file) const;
     void setup_ref_voice();
     void make_silence_wav_file(size_t duration_msec, unsigned int sample_rate,
                                const std::string& output_file) const;
@@ -244,11 +254,6 @@ class tts_engine {
                m_state == state_t::error;
     }
     static bool add_silence(const std::string& wav_fil, size_t duration_msec);
-#ifdef ARCH_X86_64
-    static bool stretch(const std::string& input_file,
-                        const std::string& output_file, double time_ration,
-                        double pitch_ratio);
-#endif
 };
 
 #endif // TTS_ENGINE_HPP

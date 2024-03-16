@@ -1392,10 +1392,31 @@ static bool tts_use_engine_speed_control_from_options(
     return true;
 }
 
-static bool sync_subs_from_options(const QVariantMap &options) {
-    if (options.contains(QStringLiteral("sync_subs")))
-        return options.value(QStringLiteral("sync_subs")).toBool();
-    return false;
+static tts_engine::subtitles_sync_mode_t tts_subtitles_sync_mode_from_settings(
+    settings::tts_subtitles_sync_mode_t mode) {
+    switch (mode) {
+        case settings::tts_subtitles_sync_mode_t::TtsSubtitleSyncOff:
+            return tts_engine::subtitles_sync_mode_t::off;
+        case settings::tts_subtitles_sync_mode_t::TtsSubtitleSyncOnDontFit:
+            return tts_engine::subtitles_sync_mode_t::on_dont_fit;
+        case settings::tts_subtitles_sync_mode_t::TtsSubtitleSyncOnAlwaysFit:
+            return tts_engine::subtitles_sync_mode_t::on_always_fit;
+        case settings::tts_subtitles_sync_mode_t::
+            TtsSubtitleSyncOnFitOnlyIfLonger:
+            return tts_engine::subtitles_sync_mode_t::on_fit_only_if_longer;
+    }
+
+    throw std::runtime_error("invalid subtitles sync mode");
+}
+
+static settings::tts_subtitles_sync_mode_t sync_subs_from_options(
+    const QVariantMap &options) {
+    if (options.contains(QStringLiteral("sync_subs"))) {
+        bool ok = false;
+        auto value = options.value(QStringLiteral("sync_subs")).toInt(&ok);
+        if (ok) return static_cast<settings::tts_subtitles_sync_mode_t>(value);
+    }
+    return settings::tts_subtitles_sync_mode_t::TtsSubtitleSyncOff;
 }
 
 static tts_engine::text_format_t tts_text_fromat_from_settings_format(
@@ -1436,7 +1457,8 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         config.options = model_config->options.toStdString();
         config.text_format = tts_text_fromat_from_settings_format(
             text_format_from_options(options));
-        config.sync_subs = sync_subs_from_options(options);
+        config.sync_subs = tts_subtitles_sync_mode_from_settings(
+            sync_subs_from_options(options));
         config.audio_format = format_from_cache_format(
             settings::instance()->cache_audio_format());
         config.ref_voice_file =
@@ -2153,6 +2175,7 @@ void speech_service::handle_speech_to_file(const tts_partial_result_t &result) {
                     media_compressor::options_t opts{
                         media_quality_from_audio_quality(quality),
                         media_compressor::flags_t::flag_none,
+                        1.0,
                         {},
                         {}};
 

@@ -92,6 +92,7 @@ bool media_converter::export_to_subtitles_async(
         media_compressor::options_t opts{
             media_compressor::quality_t::vbr_medium,
             media_compressor::flag_none,
+            1.0,
             media_compressor::stream_t{
                 -1, media_compressor::media_type_t::subtitles, {}, {}, 0},
             {}};
@@ -123,6 +124,7 @@ bool media_converter::import_subtitles_async(const QString& file_path,
         media_compressor::options_t opts{
             media_compressor::quality_t::vbr_medium,
             media_compressor::flag_none,
+            1.0,
             media_compressor::stream_t{
                 stream_index,
                 media_compressor::media_type_t::subtitles,
@@ -157,7 +159,7 @@ bool media_converter::export_to_audio_async(
         m_mc = std::make_unique<media_compressor>();
 
         media_compressor::options_t opts{
-            quality, media_compressor::flag_none, {}, {}};
+            quality, media_compressor::flag_none, 1.0, {}, {}};
 
         std::vector<std::string> input_files;
         std::transform(input_file_paths.cbegin(), input_file_paths.cend(),
@@ -198,6 +200,7 @@ bool media_converter::export_to_audio_mix_async(
         media_compressor::options_t opts{
             quality,
             media_compressor::flag_none,
+            1.0,
             media_compressor::stream_t{main_stream_index,
                                        media_compressor::media_type_t::audio,
                                        {},

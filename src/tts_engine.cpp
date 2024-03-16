@@ -116,6 +116,26 @@ std::ostream& operator<<(std::ostream& os,
 }
 
 std::ostream& operator<<(std::ostream& os,
+                         tts_engine::subtitles_sync_mode_t mode) {
+    switch (mode) {
+        case tts_engine::subtitles_sync_mode_t::off:
+            os << "off";
+            break;
+        case tts_engine::subtitles_sync_mode_t::on_dont_fit:
+            os << "on-dont-fit";
+            break;
+        case tts_engine::subtitles_sync_mode_t::on_always_fit:
+            os << "on-always-fit";
+            break;
+        case tts_engine::subtitles_sync_mode_t::on_fit_only_if_longer:
+            os << "on-fit-only-if-longer";
+            break;
+    }
+
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os,
                          const tts_engine::model_files_t& model_files) {
     os << "model-path=" << model_files.model_path
        << ", vocoder-path=" << model_files.vocoder_path
@@ -402,7 +422,7 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
             if (!segments.empty()) {
                 tasks.reserve(segments.size());
 
-                if (!m_config.sync_subs) {
+                if (m_config.sync_subs == subtitles_sync_mode_t::off) {
                     segments.front().t0 = 0;
                     segments.front().t1 = 0;
                 }
@@ -413,7 +433,7 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
 
                 for (auto it = segments.begin() + 1; it != segments.end();
                      ++it) {
-                    if (!m_config.sync_subs) {
+                    if (m_config.sync_subs == subtitles_sync_mode_t::off) {
                         it->t0 = 0;
                         it->t1 = 0;
                     }
@@ -455,19 +475,6 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
     }
 
     return tasks;
-}
-
-#ifdef ARCH_X86_64
-static void sample_buf_s16_to_f32(const int16_t* input, float* output,
-                                  size_t size) {
-    for (size_t i = 0; i < size; ++i)
-        output[i] = static_cast<float>(input[i]) / 32768.0F;
-}
-
-static void sample_buf_f32_to_s16(const float* input, int16_t* output,
-                                  size_t size) {
-    for (size_t i = 0; i < size; ++i)
-        output[i] = static_cast<int16_t>(input[i] * 32768.0F);
 }
 
 bool tts_engine::add_silence(const std::string& wav_file,
@@ -535,134 +542,6 @@ bool tts_engine::add_silence(const std::string& wav_file,
     return true;
 }
 
-bool tts_engine::stretch(const std::string& input_file,
-                         const std::string& output_file, double time_ration,
-                         double pitch_ratio) {
-    std::ifstream is{input_file, std::ios::binary | std::ios::ate};
-    if (!is) {
-        LOGE("failed to open input file for stretch: " << input_file);
-        return false;
-    }
-
-    std::ofstream os{output_file, std::ios::binary};
-    if (!os) {
-        LOGE("failed to open output file for stretch: " << output_file);
-        return false;
-    }
-
-    size_t size = is.tellg();
-    if (size < sizeof(wav_header)) {
-        LOGE("file header is too short");
-        os.close();
-        unlink(output_file.c_str());
-        return false;
-    }
-
-    is.seekg(0, std::ios::beg);
-    auto header = read_wav_header(is);
-
-    if (header.num_channels != 1) {
-        LOGE("stretching is supported only for mono");
-        os.close();
-        unlink(output_file.c_str());
-        return false;
-    }
-
-    size_t in_wav_header_size = is.tellg();
-    size -= in_wav_header_size;
-
-    LOGD("stretcher sample rate: " << header.sample_rate);
-
-    RubberBand::RubberBandStretcher rb{
-        header.sample_rate, /*mono*/ 1,
-        RubberBand::RubberBandStretcher::DefaultOptions |
-            RubberBand::RubberBandStretcher::OptionProcessOffline |
-            RubberBand::RubberBandStretcher::OptionEngineFiner |
-            RubberBand::RubberBandStretcher::OptionSmoothingOn |
-            RubberBand::RubberBandStretcher::OptionTransientsSmooth |
-            RubberBand::RubberBandStretcher::OptionWindowLong,
-        time_ration, pitch_ratio};
-
-    static const size_t buf_c_size = 8192;
-    static const size_t buf_f_size = 4096;
-
-    char buf_c[buf_c_size];
-    float buf_f[buf_f_size];
-    float* buf_f_ptr[2] = {buf_f, nullptr};  // mono
-
-    auto size_left = size;
-    while (is && size_left > 0) {
-        auto size_to_read = std::min<size_t>(size_left, buf_c_size);
-        auto size_to_write = size_to_read / sizeof(int16_t);
-        is.read(buf_c, size_to_read);
-        sample_buf_s16_to_f32(reinterpret_cast<int16_t*>(buf_c), buf_f,
-                              size_to_write);
-        float* buf_f_c[2] = {buf_f, nullptr};
-        rb.study(buf_f_c, size_to_write, !static_cast<bool>(is));
-        size_left -= size_to_read;
-    }
-
-    is.clear();
-    is.seekg(in_wav_header_size, std::ios::beg);
-    os.seekp(sizeof(wav_header));
-
-    size_left = size;
-    while (is && size_left > 0) {
-        const auto size_to_read = std::min<size_t>(size_left, buf_c_size);
-        const auto size_to_write = size_to_read / sizeof(int16_t);
-        is.read(buf_c, size_to_read);
-        size_left -= size_to_read;
-        sample_buf_s16_to_f32(reinterpret_cast<int16_t*>(buf_c), buf_f,
-                              size_to_write);
-        rb.process(buf_f_ptr, size_to_write, !is);
-
-        while (true) {
-            auto size_rb = rb.available();
-            if (size_rb <= 0) break;
-
-            auto size_r =
-                rb.retrieve(buf_f_ptr, std::min<size_t>(size_rb, buf_f_size));
-            if (size_r == 0) break;
-
-            sample_buf_f32_to_s16(buf_f, reinterpret_cast<int16_t*>(buf_c),
-                                  size_r);
-            os.write(buf_c, size_r * sizeof(int16_t));
-        }
-    }
-
-    auto data_size = static_cast<size_t>(os.tellp()) - sizeof(wav_header);
-
-    if (data_size == 0) {
-        os.close();
-        unlink(output_file.c_str());
-        return false;
-    }
-
-    os.seekp(0);
-    write_wav_header(header.sample_rate, sizeof(int16_t), 1,
-                     data_size / sizeof(int16_t), os);
-
-    return true;
-}
-#endif  // ARCH_X86_64
-
-void tts_engine::apply_speed([[maybe_unused]] const std::string& file) const {
-#ifdef ARCH_X86_64
-    auto tmp_file = file + "_tmp";
-
-    if (m_config.speech_speed > 0 && m_config.speech_speed <= 20 &&
-        m_config.speech_speed != 10) {
-        auto speech_speed = 20 - (m_config.speech_speed - 1);
-
-        if (stretch(file, tmp_file, static_cast<double>(speech_speed) / 10.0,
-                    1.0)) {
-            unlink(file.c_str());
-            rename(tmp_file.c_str(), file.c_str());
-        }
-    }
-#endif  // ARCH_X86_64
-}
-
 void tts_engine::process_restore_text(const task_t& task,
                                       std::string& restored_text) {
     if (task.empty() && task.last) {
@@ -723,13 +602,23 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
         return output_file_wav;
     };
 
-    bool do_speech_change =
-        !m_config.use_engine_speed_control || !model_supports_speed();
+    bool fit_into_timestamp =
+        m_config.sync_subs == subtitles_sync_mode_t::on_always_fit ||
+        m_config.sync_subs == subtitles_sync_mode_t::on_fit_only_if_longer;
 
-    auto output_file =
-        path_to_output_file(task.text, m_config.speech_speed, do_speech_change);
+    bool follow_timestamps = task.t1 != 0;
 
-    if (!file_exists(output_file)) {
+    bool do_speech_change = !m_config.use_engine_speed_control ||
+                            !model_supports_speed() ||
+                            (fit_into_timestamp && follow_timestamps);
+
+    auto output_file = path_to_output_file(
+        task.text,
+        follow_timestamps && fit_into_timestamp ? 0 : m_config.speech_speed,
+        do_speech_change);
+
+    if ((follow_timestamps && fit_into_timestamp) ||
+        !file_exists(output_file)) {
         if (!do_speech_change) {
             auto output_file_wav = encode_speech(output_file);
             if (output_file_wav.empty()) return;
@@ -738,6 +627,7 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
                 media_compressor::options_t opts{
                     media_compressor::quality_t::vbr_high,
                     media_compressor::flags_t::flag_none,
+                    1.0,
                     {},
                     {}};
 
@@ -759,6 +649,7 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
                     media_compressor::options_t opts{
                         media_compressor::quality_t::vbr_high,
                         media_compressor::flags_t::flag_none,
+                        1.0,
                         {},
                         {}};
 
@@ -779,28 +670,58 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
                                                       output_file_wav, {});
             }
 
-            apply_speed(output_file_wav);
+            media_compressor::options_t opts{
+                media_compressor::quality_t::vbr_high,
+                media_compressor::flags_t::flag_none,
+                1.0,
+                {},
+                {}};
 
-            if (m_config.audio_format != audio_format_t::wav) {
-                media_compressor::options_t opts{
-                    media_compressor::quality_t::vbr_high,
-                    media_compressor::flags_t::flag_none,
-                    {},
-                    {}};
+            if (follow_timestamps && fit_into_timestamp && task.t1 > task.t0) {
+                auto [speech_duration, _] =
+                    media_compressor{}.duration_and_rate(output_file_wav);
+                auto segment_duration = task.t1 - task.t0;
 
-                media_compressor{}.compress_to_file(
-                    {output_file_wav}, output_file,
-                    compressor_format_from_format(m_config.audio_format), opts);
+                if (segment_duration != speech_duration &&
+                    (m_config.sync_subs ==
+                         subtitles_sync_mode_t::on_always_fit ||
+                     (m_config.sync_subs ==
+                          subtitles_sync_mode_t::on_fit_only_if_longer &&
+                      segment_duration < speech_duration))) {
+                    opts.flags = media_compressor::flags_t::flag_change_speed;
+                    opts.speed =
+                        speech_duration / static_cast<double>(segment_duration);
 
-                unlink(output_file_wav.c_str());
+                    LOGD("duration change to fit: "
+                         << speech_duration << " => " << segment_duration
+                         << ", adjusted speed=" << opts.speed);
+                }
+            } else {
+                if (m_config.speech_speed > 0 && m_config.speech_speed <= 20 &&
+                    m_config.speech_speed != 10) {
+                    opts.flags = media_compressor::flags_t::flag_change_speed;
+                    opts.speed =
+                        static_cast<double>(20 - (m_config.speech_speed - 1)) /
+                        10.0;
+                }
             }
+
+            media_compressor{}.compress_to_file(
+                {output_file_wav}, output_file,
+                compressor_format_from_format(m_config.audio_format), opts);
+
+            auto [speech_duration_after_fit, __] =
+                media_compressor{}.duration_and_rate(output_file);
+            LOGD("fit durations after: " << speech_duration_after_fit);
+
+            unlink(output_file_wav.c_str());
         }
     }
 
     auto [speech_duration, speech_sample_rate] =
         media_compressor{}.duration_and_rate(output_file);
 
-    if (task.t1 != 0) {
+    if (follow_timestamps) {
         if (speech_time < task.t0) {
             auto duration = task.t0 - speech_time;
 
@@ -818,6 +739,7 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
                     media_compressor::options_t opts{
                         media_compressor::quality_t::vbr_high,
                         media_compressor::flags_t::flag_none,
+                        1.0,
                         {},
                         {}};
 
