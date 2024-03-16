@@ -1043,6 +1043,8 @@ std::string processor::preprocess(const std::string& text,
                                   const std::string& diacritizer_path) {
     std::string new_text{text};
 
+    if (new_text.empty()) return new_text;
+
     if (has_option('n', options)) {
         LOGD("numbers-to-words pre-processing needed");
         numbers_to_words(new_text, lang, prefix_path);
@@ -1070,7 +1072,9 @@ std::string processor::preprocess(const std::string& text,
     }
 
     if (has_option('s', options)) {
-        new_text = std::regex_replace(new_text, std::regex{"\\."}, " .");
+        if (new_text.at(new_text.size() - 1) == '.')
+            new_text.at(new_text.size() - 1) = ' ';
+        new_text = std::regex_replace(new_text, std::regex{"\\. "}, "\n");
     }
 
     if (has_option('p', options)) {

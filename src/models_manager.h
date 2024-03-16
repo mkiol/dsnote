@@ -278,7 +278,7 @@ class models_manager : public QObject, public singleton<models_manager> {
          * p - tts, add extra pause at the end
          * x - tts, voice cloning supported
          * c - tts, convert quote to standard one
-         * s - tts, add extra space before dot
+         * s - tts, avoid "punto" issue
          * 0 - tts, add extra silence
          * q - tts, do not split into sentences
          * i - stt, punctuation supported

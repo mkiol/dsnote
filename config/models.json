@@ -24574,7 +24574,7 @@
             "lang_id": "multilang",
             "checksum": "ae3c9981",
             "checksum_quick": "ce376c5d",
-            "options": "x",
+            "options": "xs",
             "features": [
                 "tts_voice_cloning"
             ],
@@ -24600,7 +24600,7 @@
             "lang_id": "multilang",
             "checksum": "97ec6817",
             "checksum_quick": "c1503831",
-            "options": "x",
+            "options": "xs",
             "features": [
                 "tts_voice_cloning"
             ],
@@ -24685,8 +24685,7 @@
             "name": "Italiano (Coqui XTTS-v2.0.3)",
             "model_id": "it_coqui_xtts203",
             "model_alias_of": "multilang_coqui_xtts203",
-            "lang_id": "it",
-            "options": "s"
+            "lang_id": "it"
         },
         {
             "name": "Polski (Coqui XTTS-v2.0.3)",
@@ -24798,8 +24797,7 @@
             "name": "Italiano (Coqui XTTS-v2.0.2)",
             "model_id": "it_coqui_xtts202",
             "model_alias_of": "multilang_coqui_xtts202",
-            "lang_id": "it",
-            "options": "s"
+            "lang_id": "it"
         },
         {
             "name": "Polski (Coqui XTTS-v2.0.2)",
