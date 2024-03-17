@@ -439,7 +439,8 @@ void media_compressor::init_av_filter() {
                     "volume avfilter_graph_create_filter error");
             }
         }
-    } else if ((m_options->flags & flags_t::flag_change_speed) != 0) {
+    } else if (m_options &&
+               (m_options->flags & flags_t::flag_change_speed) != 0) {
         const auto* rubberband = avfilter_get_by_name("rubberband");
         if (!rubberband) throw std::runtime_error("no rubberband filter");
 
