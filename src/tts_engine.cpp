@@ -140,7 +140,7 @@ std::ostream& operator<<(std::ostream& os,
     os << "model-path=" << model_files.model_path
        << ", vocoder-path=" << model_files.vocoder_path
        << ", diacritizer=" << model_files.diacritizer_path
-       << ", diacritizer=" << model_files.hub_path;
+       << ", hub-path=" << model_files.hub_path;
 
     return os;
 }
@@ -701,18 +701,13 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
                     m_config.speech_speed != 10) {
                     opts.flags = media_compressor::flags_t::flag_change_speed;
                     opts.speed =
-                        static_cast<double>(20 - (m_config.speech_speed - 1)) /
-                        10.0;
+                        static_cast<double>(m_config.speech_speed) / 10.0;
                 }
             }
 
             media_compressor{}.compress_to_file(
                 {output_file_wav}, output_file,
                 compressor_format_from_format(m_config.audio_format), opts);
-
-            auto [speech_duration_after_fit, __] =
-                media_compressor{}.duration_and_rate(output_file);
-            LOGD("fit durations after: " << speech_duration_after_fit);
 
             unlink(output_file_wav.c_str());
         }

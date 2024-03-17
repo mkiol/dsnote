@@ -998,7 +998,8 @@ void processor::hebrew_diacritize(std::string& text,
                                : fmt::format("{}:{}", "cuda", m_device)]() {
             try {
                 if (!m_unikud) {
-                    LOGD("creating hebrew diacritizer: device=" << dev);
+                    LOGD("creating hebrew diacritizer: device="
+                         << dev << ", model-path=" << model_path);
 
                     auto framework = py::module_::import("unikud.framework");
                     m_unikud = framework.attr("Unikud")(
