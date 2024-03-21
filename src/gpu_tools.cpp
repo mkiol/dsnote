@@ -487,10 +487,10 @@ void add_cuda_devices(std::vector<device>& devices) {
     LOGD("scanning for cuda devices");
 
     try {
-        add_cuda_dev_devices(devices);
+        add_cuda_runtime_devices(devices);
     } catch ([[maybe_unused]] const std::runtime_error& err) {
         try {
-            add_cuda_runtime_devices(devices);
+            add_cuda_dev_devices(devices);
         } catch ([[maybe_unused]] const std::runtime_error& err) {
         }
     }

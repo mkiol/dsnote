@@ -882,6 +882,10 @@ modules:
 
   - name: python3-whisperspeech
     buildsystem: simple
+    build-options:
+      no-debuginfo: true
+      env:
+        PYTHONPATH: /app/extensions/cpu/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} whisperspeech --no-build-isolation
