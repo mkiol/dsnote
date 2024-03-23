@@ -1,0 +1,12 @@
+diff -ruN ffmpeg-org/libavfilter/af_rubberband.c ffmpeg-patched/libavfilter/af_rubberband.c
+--- ffmpeg-org/libavfilter/af_rubberband.c	2023-11-11 01:25:17.000000000 +0100
++++ ffmpeg-patched/libavfilter/af_rubberband.c	2024-03-16 18:11:47.809708442 +0100
+@@ -133,7 +133,7 @@
+     RubberBandContext *s = ctx->priv;
+     int opts = s->transients|s->detector|s->phase|s->window|
+                s->smoothing|s->formant|s->opitch|s->channels|
+-               RubberBandOptionProcessRealTime;
++               RubberBandOptionProcessOffline|RubberBandOptionEngineFiner;
+ 
+     if (s->rbs)
+         rubberband_delete(s->rbs);
