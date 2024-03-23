@@ -2719,7 +2719,7 @@ QVariantMap speech_service::features_availability() {
             unsigned int gpu_feature_flags =
                 settings::gpu_feature_flags_t::gpu_feature_none;
 #ifdef ARCH_X86_64
-            auto has_cuda = gpu_tools::has_cuda();
+            auto has_cuda = gpu_tools::has_cuda_runtime();
             auto has_cudnn = gpu_tools::has_cudnn();
 #endif
             m_features_availability.insert(

@@ -654,7 +654,7 @@ void add_opencl_devices(std::vector<device>& devices) {
 }
 
 static bool has_lib(const char* name) {
-    auto handle = dlopen(name, RTLD_LAZY);
+    auto* handle = dlopen(name, RTLD_LAZY);
     if (!handle) {
         LOGW("failed to open " << name << ": " << dlerror());
         return false;
@@ -665,7 +665,7 @@ static bool has_lib(const char* name) {
     return true;
 }
 
-bool has_cuda() { return has_lib("libcuda.so"); }
+bool has_cuda_runtime() { return has_lib("libcudart.so"); }
 
 bool has_cudnn() {
     if (has_lib("libcudnn.so")) return true;
