@@ -8,13 +8,16 @@
 #include "gpu_tools.hpp"
 
 #include <dlfcn.h>
-#include <fmt/format.h>
+#include <fmt/core.h>
 
 #include <algorithm>
+#include <cstdint>
 #include <cstdlib>
 #include <cstring>
 #include <stdexcept>
+#include <string>
 #include <utility>
+#include <vector>
 
 #include "logger.hpp"
 
@@ -356,7 +359,8 @@ static void add_cuda_runtime_devices(std::vector<device>& devices) {
 
     cuda_runtime_api api;
 
-    int dr_ver = 0, rt_ver = 0;
+    int dr_ver = 0;
+    int rt_ver = 0;
     api.cudaDriverGetVersion(&dr_ver);
     api.cudaRuntimeGetVersion(&rt_ver);
 
@@ -366,7 +370,7 @@ static void add_cuda_runtime_devices(std::vector<device>& devices) {
     if (auto ret = api.cudaGetDeviceCount(&device_count);
         ret != cudaHipSuccess) {
         LOGW("cudaGetDeviceCount error: " << ret);
-        return;
+        throw std::runtime_error{"cuda runtime get device count error"};
     }
 
     LOGD("cuda number of devices: " << device_count);
@@ -402,14 +406,14 @@ static void add_cuda_dev_devices(std::vector<device>& devices) {
 
     if (auto ret = api.cuInit(0); ret != CUresult::CUDA_SUCCESS) {
         logErr("cuInit", ret);
-        return;
+        throw std::runtime_error{"cuda init error"};
     }
 
     int dr_ver = 0;
     if (auto ret = api.cuDriverGetVersion(&dr_ver);
         ret != CUresult::CUDA_SUCCESS) {
         logErr("cuDriverGetVersion", ret);
-        return;
+        throw std::runtime_error{"cuda driver get version error"};
     }
 
     LOGD("cuda version: driver=" << dr_ver);
@@ -418,7 +422,7 @@ static void add_cuda_dev_devices(std::vector<device>& devices) {
     if (auto ret = api.cuDeviceGetCount(&device_count);
         ret != CUresult::CUDA_SUCCESS) {
         logErr("cuDeviceGetCount", ret);
-        return;
+        throw std::runtime_error{"cuda device get count error"};
     }
 
     LOGD("cuda number of devices: " << device_count);
@@ -487,11 +491,14 @@ void add_cuda_devices(std::vector<device>& devices) {
     LOGD("scanning for cuda devices");
 
     try {
-        add_cuda_runtime_devices(devices);
-    } catch ([[maybe_unused]] const std::runtime_error& err) {
+        add_cuda_dev_devices(devices);
+    } catch (const std::runtime_error& err) {
+        LOGW(err.what());
+
         try {
-            add_cuda_dev_devices(devices);
-        } catch ([[maybe_unused]] const std::runtime_error& err) {
+            add_cuda_runtime_devices(devices);
+        } catch (const std::runtime_error& err) {
+            LOGW(err.what());
         }
     }
 }
@@ -502,7 +509,8 @@ void add_hip_devices(std::vector<device>& devices) {
     try {
         hip_api api;
 
-        int dr_ver = 0, rt_ver = 0;
+        int dr_ver = 0;
+        int rt_ver = 0;
         api.hipDriverGetVersion(&dr_ver);
         api.hipRuntimeGetVersion(&rt_ver);
 
@@ -607,7 +615,7 @@ void add_opencl_devices(std::vector<device>& devices) {
                     continue;
                 }
 
-                uint64_t type;
+                uint64_t type = 0;
                 if (auto ret =
                         api.clGetDeviceInfo(device_ids[j], CL_DEVICE_TYPE,
                                             sizeof(type), &type, nullptr);
