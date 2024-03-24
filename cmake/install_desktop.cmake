@@ -1,10 +1,10 @@
 install(TARGETS ${info_binary_id} RUNTIME DESTINATION bin)
 
-configure_file(${desktop_dir}/${info_id}.desktop.in ${info_app_icon_id}.desktop)
-install(FILES ${info_app_icon_id}.desktop DESTINATION share/applications)
+configure_file("${desktop_dir}/${info_id}.desktop.in" "${PROJECT_BINARY_DIR}/${info_app_icon_id}.desktop")
+install(FILES "${PROJECT_BINARY_DIR}/${info_app_icon_id}.desktop" DESTINATION share/applications)
 
-configure_file(${desktop_dir}/${info_id}.metainfo.xml.in ${info_app_icon_id}.metainfo.xml)
-install(FILES ${info_app_icon_id}.metainfo.xml DESTINATION share/metainfo)
+configure_file("${desktop_dir}/${info_id}.metainfo.xml.in" "${PROJECT_BINARY_DIR}/${info_app_icon_id}.metainfo.xml")
+install(FILES "${PROJECT_BINARY_DIR}/${info_app_icon_id}.metainfo.xml" DESTINATION share/metainfo)
 
 configure_file("${desktop_dir}/dbus_app.service.in" "${PROJECT_BINARY_DIR}/dbus_app.service")
 if(WITH_FLATPAK)
