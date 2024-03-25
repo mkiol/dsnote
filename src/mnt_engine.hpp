@@ -8,18 +8,14 @@
 #ifndef MNT_ENGINE_HPP
 #define MNT_ENGINE_HPP
 
-#include <bergamot_api.h>
-
 #include <condition_variable>
-#include <fstream>
+#include <cstddef>
 #include <functional>
 #include <iostream>
 #include <mutex>
-#include <optional>
 #include <queue>
 #include <string>
 #include <thread>
-#include <vector>
 
 class mnt_engine {
    public:
@@ -148,4 +144,4 @@ class mnt_engine {
     }
 };
 
-#endif // MNT_ENGINE_HPP
+#endif  // MNT_ENGINE_HPP

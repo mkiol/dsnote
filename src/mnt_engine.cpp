@@ -12,12 +12,13 @@
 #include <sys/stat.h>
 
 #include <algorithm>
-#include <array>
 #include <chrono>
-#include <numeric>
 #include <regex>
+#include <string>
 
+#ifdef ARCH_X86_64
 #include "cpu_tools.hpp"
+#endif
 #include "logger.hpp"
 #include "text_tools.hpp"
 
