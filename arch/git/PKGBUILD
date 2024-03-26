@@ -2,7 +2,7 @@
 
 _pkgname='dsnote'
 pkgname="${_pkgname}-git"
-pkgver=r912.bfa3be3
+pkgver=r1027.1487b7a
 pkgrel=1
 pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
 arch=(
@@ -16,8 +16,8 @@ depends=(
   'fmt'
   'hicolor-icon-theme'
   'kdbusaddons5'
-  'kquickcharts5'
   'libarchive'
+  'ocl-icd'
   'openblas'
   'perl'
   'python>=3.11'
@@ -45,7 +45,6 @@ makedepends_x86_64=(
   'rocm-hip-sdk'
 )
 optdepends=(
-  'ocl-icd: Support for GPU acceleration with OpenCL'
   'python-accelerate: Support for Punctuation and Hebrew Diacritics restoration'
   'python-torchaudio: Support for Coqui TTS models'
   'python-transformers: Support for Punctuation and Hebrew Diacritics restoration'
