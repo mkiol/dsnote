@@ -41,8 +41,8 @@ makedepends=(
   'qt5-tools'
 )
 makedepends_x86_64=(
-  'cuda'
-  'rocm-hip-sdk'
+#  'cuda'
+#  'rocm-hip-sdk'
 )
 optdepends=(
   'python-accelerate: Support for Punctuation and Hebrew Diacritics restoration'
@@ -54,7 +54,7 @@ optdepends_x86_64=(
   'cuda: Support for GPU acceleration on NVidia graphic cards'
   'cudnn: Support for GPU acceleration on NVidia graphic cards'
   'rocblas: Support for GPU acceleration on AMD graphic cards'
-  'rocm-opencl-runtime: Support GPU acceleration on AMD graphic cards'
+  'rocm-opencl-runtime: Support for GPU acceleration on AMD graphic cards'
 )
 provides=(${_pkgname})
 conflicts=(${_pkgname})
@@ -92,6 +92,9 @@ build() {
     -DBUILD_QQC2_BREEZE_STYLE=ON \
     -DDOWNLOAD_VOSK=ON \
     -DCMAKE_INSTALL_PREFIX=/usr \
+    -DBUILD_WHISPERCPP_CUBLAS=OFF \
+    -DBUILD_WHISPERCPP_HIPBLAS=OFF \
+    -DBUILD_BERGAMOT=OFF \
     -Wno-dev
 
   test $(nproc) -gt 2 && make -j$(($(nproc)-2)) || make
