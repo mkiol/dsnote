@@ -71,8 +71,8 @@ build() {
   cd "${srcdir}/${_pkgname}"
   if [[ "${CARCH}" == "x86_64" ]]; then
     # fix for CUDA >= 12.3.0
-    export HOST_COMPILER=/usr/bin/g++-12
-    export CUDAHOSTCXX=/usr/bin/g++-12
+    export HOST_COMPILER=/usr/bin/g++
+    export CUDAHOSTCXX=/usr/bin/g++
     export CUDA_PATH=/opt/cuda
   fi
   mkdir -p build
