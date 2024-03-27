@@ -181,10 +181,12 @@ void rhvoice_engine::create_model() {
         LOGD("rhvoice model created");
 }
 
+namespace {
 struct callback_data {
     rhvoice_engine* engine = nullptr;
     std::ofstream wav_file;
 };
+}  // namespace
 
 int rhvoice_engine::set_sample_rate_callback(int sample_rate, void* user_data) {
     auto* cb_data = static_cast<callback_data*>(user_data);

@@ -10,7 +10,6 @@
 
 #include <espeak-ng/speak_lib.h>
 
-#include <optional>
 #include <string>
 
 #include "tts_engine.hpp"

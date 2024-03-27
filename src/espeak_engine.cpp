@@ -67,10 +67,12 @@ void espeak_engine::create_model() {
         LOGD("espeak voice created");
 }
 
+namespace {
 struct callback_data {
     espeak_engine* engine = nullptr;
     std::ofstream wav_file;
 };
+}  // namespace
 
 int espeak_engine::synth_callback(short* wav, int size, espeak_EVENT* event) {
     auto cb_data = static_cast<callback_data*>(event->user_data);
