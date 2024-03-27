@@ -92,6 +92,7 @@ set(ffmpeg_opts
     --enable-nonfree
     --enable-gpl
     --enable-pic
+    --enable-lto
     --enable-protocol=file
     --enable-filter=aresample
     --enable-filter=aformat
