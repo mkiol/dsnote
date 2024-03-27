@@ -403,7 +403,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     endif()
 else()
     target_compile_options(compiler_flags INTERFACE "-pie;-Wall;-Wextra;-Wpedantic;-O3;-g")
-    target_link_options(compiler_flags INTERFACE "-pie;-fno-stack-protector")
+    target_link_options(compiler_flags INTERFACE "-pie;-flto;-fno-fat-lto-objects")
 endif()
 
 set(link_opts "-Wl,--disable-new-dtags;-Wl,-pie;-Wl,-rpath,${rpath_install_dir}")
