@@ -153,6 +153,7 @@ ToolBar {
                     ToolButton {
                         text: qsTr("Languages")
                         onClicked: appWin.openDialog("LangsPage.qml")
+                        enabled: !app.busy
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval

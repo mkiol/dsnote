@@ -16,7 +16,6 @@
 #include <QUrl>
 #include <QVariant>
 #include <QVariantList>
-#include <optional>
 
 #include "itemmodel.h"
 #include "listmodel.h"
@@ -26,10 +25,10 @@ class ModelsListModel : public SelectableItemModel {
     Q_OBJECT
     Q_PROPERTY(bool downloading READ downloading NOTIFY downloadingChanged)
     Q_PROPERTY(QString lang READ lang WRITE setLang NOTIFY langChanged)
-    Q_PROPERTY(int roleFilterFlags READ roleFilterFlags WRITE setRoleFilterFlags
-                   NOTIFY roleFilterFlagsChanged)
-    Q_PROPERTY(unsigned int featureFilterFlags READ featureFilterFlags NOTIFY
-                   featureFilterFlagsChanged)
+    Q_PROPERTY(unsigned int roleFilterFlags READ roleFilterFlags WRITE
+                   setRoleFilterFlags NOTIFY roleFilterFlagsChanged)
+    Q_PROPERTY(unsigned int featureFilterFlags READ featureFilterFlags WRITE
+                   setFeatureFilterFlags NOTIFY featureFilterFlagsChanged)
     Q_PROPERTY(
         unsigned int disabledFeatureFilterFlags READ disabledFeatureFilterFlags
             NOTIFY disabledFeatureFilterFlagsChanged)
@@ -40,12 +39,12 @@ class ModelsListModel : public SelectableItemModel {
     Q_ENUM(ModelRole)
 
     enum ModelRoleFilterFlags : unsigned int {
-        RoleNone = 0,
-        RoleStart = 1 << 0,
+        RoleNone = 0U,
+        RoleStart = 1U << 0U,
         RoleStt = RoleStart,
-        RoleTts = 1 << 1,
-        RoleMnt = 1 << 2,
-        RoleOther = 1 << 3,
+        RoleTts = 1U << 1U,
+        RoleMnt = 1U << 2U,
+        RoleOther = 1U << 3U,
         RoleEnd = RoleOther,
         RoleAll = RoleStt | RoleTts | RoleMnt | RoleOther,
         RoleDefault = RoleAll
@@ -53,37 +52,40 @@ class ModelsListModel : public SelectableItemModel {
     Q_ENUM(ModelRoleFilterFlags)
 
     enum ModelFeatureFilterFlags : unsigned int {
-        FeatureNone = 0,
-        FeatureGenericStart = 1 << 0,
+        FeatureNone = 0U,
+        FeatureGenericStart = 1U << 0U,
+        FeatureFirst = FeatureGenericStart,
         FeatureFastProcessing = FeatureGenericStart,
-        FeatureMediumProcessing = 1 << 1,
-        FeatureSlowProcessing = 1 << 2,
-        FeatureQualityHigh = 1 << 3,
-        FeatureQualityMedium = 1 << 4,
-        FeatureQualityLow = 1 << 5,
-        FeatureEngineSttStart = 1 << 6,
+        FeatureMediumProcessing = 1U << 1U,
+        FeatureSlowProcessing = 1U << 2U,
+        FeatureQualityHigh = 1U << 3U,
+        FeatureQualityMedium = 1U << 4U,
+        FeatureQualityLow = 1U << 5U,
+        FeatureEngineSttStart = 1U << 6U,
         FeatureEngineSttDs = FeatureEngineSttStart,
-        FeatureEngineSttVosk = 1 << 7,
-        FeatureEngineSttWhisper = 1 << 8,
-        FeatureEngineSttFasterWhisper = 1 << 9,
-        FeatureEngineSttApril = 1 << 10,
+        FeatureEngineSttVosk = 1U << 7U,
+        FeatureEngineSttWhisper = 1U << 8U,
+        FeatureEngineSttFasterWhisper = 1U << 9U,
+        FeatureEngineSttApril = 1U << 10U,
         FeatureEngineSttEnd = FeatureEngineSttApril,
-        FeatureEngineTtsStart = 1 << 11,
+        FeatureEngineTtsStart = 1U << 11U,
         FeatureEngineTtsEspeak = FeatureEngineTtsStart,
-        FeatureEngineTtsPiper = 1 << 12,
-        FeatureEngineTtsRhvoice = 1 << 13,
-        FeatureEngineTtsCoqui = 1 << 14,
-        FeatureEngineTtsMimic3 = 1 << 15,
-        FeatureEngineTtsWhisperSpeech = 1 << 16,
+        FeatureEngineTtsPiper = 1U << 12U,
+        FeatureEngineTtsRhvoice = 1U << 13U,
+        FeatureEngineTtsCoqui = 1U << 14U,
+        FeatureEngineTtsMimic3 = 1U << 15U,
+        FeatureEngineTtsWhisperSpeech = 1U << 16U,
         FeatureEngineTtsEnd = FeatureEngineTtsWhisperSpeech,
-        FeatureGenericEnd = FeatureEngineTtsWhisperSpeech,
-        FeatureSttStart = 1 << 20,
+        FeatureEngineOther = 1U << 17U,
+        FeatureGenericEnd = FeatureEngineOther,
+        FeatureSttStart = 1U << 20U,
         FeatureSttIntermediateResults = FeatureSttStart,
-        FeatureSttPunctuation = 1 << 21,
+        FeatureSttPunctuation = 1U << 21U,
         FeatureSttEnd = FeatureSttPunctuation,
-        FeatureTtsStart = 1 << 30,
+        FeatureTtsStart = 1U << 30U,
         FeatureTtsVoiceCloning = FeatureTtsStart,
         FeatureTtsEnd = FeatureTtsVoiceCloning,
+        FeatureLast = FeatureTtsEnd,
         FeatureAllSttEngines = FeatureEngineSttDs | FeatureEngineSttVosk |
                                FeatureEngineSttWhisper |
                                FeatureEngineSttFasterWhisper |
@@ -107,6 +109,7 @@ class ModelsListModel : public SelectableItemModel {
 
     };
     Q_ENUM(ModelFeatureFilterFlags)
+    friend QDebug operator<<(QDebug d, ModelFeatureFilterFlags flags);
 
     explicit ModelsListModel(QObject *parent = nullptr);
     ~ModelsListModel() override;
@@ -151,9 +154,8 @@ class ModelsListModel : public SelectableItemModel {
     void setRoleFilterFlags(unsigned roleFilterFlags);
     void setFeatureFilterFlags(unsigned int featureFilterFlags);
     void updateDownloading(const std::vector<models_manager::model_t> &models);
-    bool roleFilterPass(const models_manager::model_t &model);
-    bool genericFeatureFilterPass(const models_manager::model_t &model);
-    bool featureFilterPass(const models_manager::model_t &model);
+    bool roleFilterPass(const models_manager::model_t &model) const;
+    bool featureFilterPass(const models_manager::model_t &model) const;
     bool defaultFilters() const;
 };
 

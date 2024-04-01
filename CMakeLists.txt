@@ -207,7 +207,6 @@ set(deps_libs "") # libs to link to dsnote_lib and dsnote
 
 set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_SKIP_RPATH ON)
 
@@ -363,6 +362,8 @@ endif()
 
 add_executable(${info_binary_id} ${resources} "${sources_dir}/main.cpp")
 set_property(TARGET ${info_binary_id} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+set_property(TARGET ${info_binary_id} PROPERTY AUTORCC TRUE)
+
 target_link_libraries(${info_binary_id} dsnote_lib)
 
 add_custom_command(TARGET ${info_binary_id} POST_BUILD

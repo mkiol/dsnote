@@ -85,6 +85,7 @@ DialogPage {
                 Layout.rightMargin: appWin.padding
                 Layout.alignment: Qt.AlignTop | Qt.AlignRight
                 visible: !root.langsView
+                height: visible ? implicitWidth : 0
             }
 
             LangFilteringWidget {

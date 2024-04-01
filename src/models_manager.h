@@ -19,7 +19,6 @@
 #include <optional>
 #include <set>
 #include <thread>
-#include <tuple>
 #include <unordered_map>
 #include <vector>
 
@@ -64,37 +63,38 @@ class models_manager : public QObject, public singleton<models_manager> {
     friend QDebug operator<<(QDebug d, model_engine_t engine);
 
     enum feature_flags : unsigned int {
-        no_flags = 0,
-        generic_start = 1 << 0,
+        no_flags = 0U,
+        generic_start = 1U << 0U,
         fast_processing = generic_start,
-        medium_processing = 1 << 1,
-        slow_processing = 1 << 2,
-        high_quality = 1 << 3,
-        medium_quality = 1 << 4,
-        low_quality = 1 << 5,
-        engine_stt_ds = 1 << 6,
-        engine_stt_vosk = 1 << 7,
-        engine_stt_whisper = 1 << 8,
-        engine_stt_fasterwhisper = 1 << 9,
-        engine_stt_april = 1 << 10,
-        engine_tts_espeak = 1 << 11,
-        engine_tts_piper = 1 << 12,
-        engine_tts_rhvoice = 1 << 13,
-        engine_tts_coqui = 1 << 14,
-        engine_tts_mimic3 = 1 << 15,
-        engine_tts_whisperspeech = 1 << 16,
-        generic_end = engine_tts_whisperspeech,
-        stt_start = 1 << 20,
+        medium_processing = 1U << 1U,
+        slow_processing = 1U << 2U,
+        high_quality = 1U << 3U,
+        medium_quality = 1U << 4U,
+        low_quality = 1U << 5U,
+        engine_stt_ds = 1U << 6U,
+        engine_stt_vosk = 1U << 7U,
+        engine_stt_whisper = 1U << 8U,
+        engine_stt_fasterwhisper = 1U << 9U,
+        engine_stt_april = 1U << 10U,
+        engine_tts_espeak = 1U << 11U,
+        engine_tts_piper = 1U << 12U,
+        engine_tts_rhvoice = 1U << 13U,
+        engine_tts_coqui = 1U << 14U,
+        engine_tts_mimic3 = 1U << 15U,
+        engine_tts_whisperspeech = 1U << 16U,
+        engine_other = 1U << 17U,
+        generic_end = engine_other,
+        stt_start = 1U << 20U,
         stt_intermediate_results = stt_start,
-        stt_punctuation = 1 << 21,
+        stt_punctuation = 1U << 21U,
         stt_end = stt_punctuation,
-        tts_start = 1 << 30,
+        tts_start = 1U << 30U,
         tts_voice_cloning = tts_start,
         tts_end = tts_voice_cloning
     };
     friend inline feature_flags operator|(feature_flags a, feature_flags b) {
-        return static_cast<feature_flags>(static_cast<int>(a) |
-                                          static_cast<int>(b));
+        return static_cast<feature_flags>(static_cast<unsigned int>(a) |
+                                          static_cast<unsigned int>(b));
     }
     friend QDebug operator<<(QDebug d, feature_flags flags);
 

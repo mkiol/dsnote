@@ -12,14 +12,123 @@
 #include <algorithm>
 #include <array>
 
-static int range_mask(int start_mask, int end_mask) {
-    int mask = 0;
-    for (int flag = start_mask; flag <= end_mask; flag <<= 1) mask |= flag;
+QDebug operator<<(QDebug d, ModelsListModel::ModelFeatureFilterFlags flags) {
+    auto print_flag_name = [&d](ModelsListModel::ModelFeatureFilterFlags flag) {
+        switch (flag) {
+            case ModelsListModel::ModelFeatureFilterFlags::FeatureNone:
+                d << "none";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureFastProcessing:
+                d << "fast-processing";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureMediumProcessing:
+                d << "medium-processing";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureSlowProcessing:
+                d << "slow-processing";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::FeatureQualityHigh:
+                d << "quality-high";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::FeatureQualityMedium:
+                d << "quality-medium";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::FeatureQualityLow:
+                d << "quality-low";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::FeatureEngineSttDs:
+                d << "engine-stt-ds";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::FeatureEngineSttVosk:
+                d << "engine-stt-vosk";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureEngineSttWhisper:
+                d << "engine-stt-whisper";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureEngineSttFasterWhisper:
+                d << "engine-stt-faster-whisper";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureEngineSttApril:
+                d << "engine-stt-april";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureEngineTtsEspeak:
+                d << "engine-tts-espeak";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureEngineTtsPiper:
+                d << "engine-tts-piper";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureEngineTtsRhvoice:
+                d << "engine-tts-rhvoice";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureEngineTtsCoqui:
+                d << "engine-tts-coqui";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureEngineTtsMimic3:
+                d << "engine-tts-mimic3";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureEngineTtsWhisperSpeech:
+                d << "engine-tts-whisper-speech";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::FeatureEngineOther:
+                d << "engine-other";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureSttIntermediateResults:
+                d << "stt-intermediate-results";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureSttPunctuation:
+                d << "stt-punctuation";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureTtsVoiceCloning:
+                d << "tts-voice-cloning";
+                break;
+            default:
+                break;
+        }
+    };
+
+    if (flags == ModelsListModel::ModelFeatureFilterFlags::FeatureNone) {
+        print_flag_name(flags);
+    } else {
+        for (unsigned int flag =
+                 ModelsListModel::ModelFeatureFilterFlags::FeatureFirst;
+             flag <= ModelsListModel::ModelFeatureFilterFlags::FeatureLast;
+             flag <<= 1U) {
+            if ((flags & flag) > 0) {
+                print_flag_name(
+                    static_cast<ModelsListModel::ModelFeatureFilterFlags>(
+                        flag));
+            }
+        }
+    }
+
+    return d;
+}
+
+static unsigned int range_mask(unsigned int start_mask, unsigned int end_mask) {
+    unsigned int mask = 0;
+    for (unsigned int flag = start_mask; flag <= end_mask; flag <<= 1U)
+        mask |= flag;
 
     return mask;
 }
 
-static bool flag_set_in_range_mask(int flag, int start_mask, int end_mask) {
+static bool flag_set_in_range_mask(unsigned int flag, unsigned int start_mask,
+                                   unsigned int end_mask) {
     return flag & range_mask(start_mask, end_mask);
 }
 
@@ -78,7 +187,7 @@ static QString size_to_human_size(size_t bytes) {
     std::array suffix = {"B", "KB", "MB", "GB", "TB"};
 
     double dbl_bytes = bytes;
-    auto i = 0u;
+    auto i = 0U;
     if (bytes > 1024) {
         for (i = 0; (bytes / 1024) > 0 && i < suffix.size() - 1;
              i++, bytes /= 1024)
@@ -119,7 +228,7 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
             ? QStringLiteral("%1 / %2-%3")
                   .arg(model.name, model.lang_id, model.trg_lang_id)
             : QStringLiteral("%1 / %2").arg(model.name, model.lang_id),
-        /*langId=*/model.lang_id,
+        /*lang_id=*/model.lang_id,
         /*role=*/role,
         /*license=*/
         {model.license.id, model.license.name, model.license.url,
@@ -135,7 +244,8 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
         /*progress=*/model.download_progress};
 }
 
-bool ModelsListModel::roleFilterPass(const models_manager::model_t &model) {
+bool ModelsListModel::roleFilterPass(
+    const models_manager::model_t &model) const {
     switch (models_manager::role_of_engine(model.engine)) {
         case models_manager::model_role_t::stt:
             return m_roleFilterFlags & ModelRoleFilterFlags::RoleStt;
@@ -150,51 +260,12 @@ bool ModelsListModel::roleFilterPass(const models_manager::model_t &model) {
     return false;
 }
 
-bool ModelsListModel::genericFeatureFilterPass(
-    const models_manager::model_t &model) {
-    auto role = models_manager::role_of_engine(model.engine);
-    if (role == models_manager::model_role_t::mnt ||
-        role == models_manager::model_role_t::ttt)
-        return true;
-
-    for (unsigned int flag = ModelFeatureFilterFlags::FeatureGenericStart;
-         flag <= ModelFeatureFilterFlags::FeatureGenericEnd; flag <<= 1) {
-        if (!(m_featureFilterFlags & flag) && model.features & flag)
-            return false;
+bool ModelsListModel::featureFilterPass(
+    const models_manager::model_t &model) const {
+    for (unsigned int flag = ModelFeatureFilterFlags::FeatureFirst;
+         flag <= ModelFeatureFilterFlags::FeatureLast; flag <<= 1U) {
+        if (m_featureFilterFlags & flag && model.features & flag) return true;
     }
-
-    return true;
-}
-
-bool ModelsListModel::featureFilterPass(const models_manager::model_t &model) {
-    auto none_of = [&](unsigned int start_flag, unsigned int end_flag) {
-        for (auto flag = start_flag; flag <= end_flag; flag <<= 1)
-            if (m_featureFilterFlags & flag) return false;
-        return true;
-    };
-
-    if (none_of(ModelFeatureFilterFlags::FeatureSttStart,
-                ModelFeatureFilterFlags::FeatureTtsEnd))
-        return true;
-
-    auto passFeature = [&](ModelFeatureFilterFlags start_flag,
-                           ModelFeatureFilterFlags end_flag) {
-        for (unsigned int flag = start_flag; flag <= end_flag; flag <<= 1) {
-            if ((m_featureFilterFlags & flag) && (model.features & flag))
-                return true;
-        }
-
-        return false;
-    };
-
-    auto role = models_manager::role_of_engine(model.engine);
-
-    if (role == models_manager::model_role_t::stt)
-        return passFeature(ModelFeatureFilterFlags::FeatureSttStart,
-                           ModelFeatureFilterFlags::FeatureSttEnd);
-    if (role == models_manager::model_role_t::tts)
-        return passFeature(ModelFeatureFilterFlags::FeatureTtsStart,
-                           ModelFeatureFilterFlags::FeatureTtsEnd);
 
     return false;
 }
@@ -241,39 +312,27 @@ QList<ListItem *> ModelsListModel::makeItems() {
 
     auto phase = getFilter();
 
-    int existing_not_generic_feature_flags = 0;
-    auto add_not_generic_feature_flag_if_exists =
-        [&existing_not_generic_feature_flags](int feature_flags) {
-            for (unsigned int flag = ModelFeatureFilterFlags::FeatureSttStart;
-                 flag <= ModelFeatureFilterFlags::FeatureTtsEnd; flag <<= 1)
-                if (feature_flags & flag)
-                    existing_not_generic_feature_flags |= flag;
-        };
+    unsigned int existing_not_generic_feature_flags = 0;
 
     if (phase.isEmpty()) {
         std::for_each(models.cbegin(), models.cend(), [&](const auto &model) {
             if (roleFilterPass(model)) {
-                if (genericFeatureFilterPass(model)) {
-                    add_not_generic_feature_flag_if_exists(model.features);
-                    if (featureFilterPass(model)) {
-                        items.push_back(makeItem(model));
-                    }
+                if (featureFilterPass(model)) {
+                    items.push_back(makeItem(model));
                 }
             }
         });
     } else {
         std::for_each(models.cbegin(), models.cend(), [&](const auto &model) {
             if (roleFilterPass(model)) {
-                if (genericFeatureFilterPass(model) &&
+                if (featureFilterPass(model) &&
                     (model.name.contains(phase, Qt::CaseInsensitive) ||
                      model.lang_id.contains(phase, Qt::CaseInsensitive) ||
                      model.trg_lang_id.contains(phase, Qt::CaseInsensitive) ||
                      QStringLiteral("%1-%2")
                          .arg(model.lang_id, model.trg_lang_id)
                          .contains(phase, Qt::CaseInsensitive))) {
-                    add_not_generic_feature_flag_if_exists(model.features);
-                    if (featureFilterPass(model))
-                        items.push_back(makeItem(model));
+                    items.push_back(makeItem(model));
                 }
             }
         });
@@ -281,7 +340,7 @@ QList<ListItem *> ModelsListModel::makeItems() {
 
     m_disabledFeatureFilterFlags = 0;
     for (unsigned int flag = ModelFeatureFilterFlags::FeatureSttStart;
-         flag <= ModelFeatureFilterFlags::FeatureTtsEnd; flag <<= 1) {
+         flag <= ModelFeatureFilterFlags::FeatureTtsEnd; flag <<= 1U) {
         if ((flag & existing_not_generic_feature_flags) == 0)
             m_disabledFeatureFilterFlags |= flag;
     }
@@ -303,30 +362,26 @@ void ModelsListModel::setRoleFilterFlags(unsigned int roleFilterFlags) {
     if (roleFilterFlags != m_roleFilterFlags) {
         auto old_default = defaultFilters();
 
-        if (flag_set_in_range_mask(roleFilterFlags,
-                                   ModelRoleFilterFlags::RoleStart,
-                                   ModelRoleFilterFlags::RoleEnd)) {
-            m_roleFilterFlags = roleFilterFlags;
+        m_roleFilterFlags = roleFilterFlags;
 
-            if (m_roleFilterFlags & ModelRoleFilterFlags::RoleStt) {
-                if (!flag_set_in_range_mask(
-                        m_featureFilterFlags,
-                        ModelFeatureFilterFlags::FeatureEngineSttStart,
-                        ModelFeatureFilterFlags::FeatureEngineSttEnd)) {
-                    m_featureFilterFlags |=
-                        ModelFeatureFilterFlags::FeatureAllSttEngines;
-                    emit featureFilterFlagsChanged();
-                }
+        if (m_roleFilterFlags & ModelRoleFilterFlags::RoleStt) {
+            if (!flag_set_in_range_mask(
+                    m_featureFilterFlags,
+                    ModelFeatureFilterFlags::FeatureEngineSttStart,
+                    ModelFeatureFilterFlags::FeatureEngineSttEnd)) {
+                m_featureFilterFlags |=
+                    ModelFeatureFilterFlags::FeatureAllSttEngines;
+                emit featureFilterFlagsChanged();
             }
-            if (m_roleFilterFlags & ModelRoleFilterFlags::RoleTts) {
-                if (!flag_set_in_range_mask(
-                        m_featureFilterFlags,
-                        ModelFeatureFilterFlags::FeatureEngineTtsStart,
-                        ModelFeatureFilterFlags::FeatureEngineTtsEnd)) {
-                    m_featureFilterFlags |=
-                        ModelFeatureFilterFlags::FeatureAllTtsEngines;
-                    emit featureFilterFlagsChanged();
-                }
+        }
+        if (m_roleFilterFlags & ModelRoleFilterFlags::RoleTts) {
+            if (!flag_set_in_range_mask(
+                    m_featureFilterFlags,
+                    ModelFeatureFilterFlags::FeatureEngineTtsStart,
+                    ModelFeatureFilterFlags::FeatureEngineTtsEnd)) {
+                m_featureFilterFlags |=
+                    ModelFeatureFilterFlags::FeatureAllTtsEngines;
+                emit featureFilterFlagsChanged();
             }
         }
 
@@ -345,31 +400,8 @@ void ModelsListModel::setFeatureFilterFlags(unsigned int featureFilterFlags) {
     if (featureFilterFlags != m_featureFilterFlags) {
         auto old_default = defaultFilters();
 
-        if (flag_set_in_range_mask(
-                featureFilterFlags,
-                ModelFeatureFilterFlags::FeatureFastProcessing,
-                ModelFeatureFilterFlags::FeatureSlowProcessing) &&
-            flag_set_in_range_mask(
-                featureFilterFlags, ModelFeatureFilterFlags::FeatureQualityHigh,
-                ModelFeatureFilterFlags::FeatureQualityLow) &&
-            ((m_roleFilterFlags & ModelRoleFilterFlags::RoleStt &&
-              m_roleFilterFlags & ModelRoleFilterFlags::RoleTts &&
-              flag_set_in_range_mask(
-                  featureFilterFlags,
-                  ModelFeatureFilterFlags::FeatureEngineSttStart,
-                  ModelFeatureFilterFlags::FeatureEngineTtsEnd)) ||
-             (m_roleFilterFlags & ModelRoleFilterFlags::RoleStt &&
-              flag_set_in_range_mask(
-                  featureFilterFlags,
-                  ModelFeatureFilterFlags::FeatureEngineSttStart,
-                  ModelFeatureFilterFlags::FeatureEngineSttEnd)) ||
-             (m_roleFilterFlags & ModelRoleFilterFlags::RoleTts &&
-              flag_set_in_range_mask(
-                  featureFilterFlags,
-                  ModelFeatureFilterFlags::FeatureEngineTtsStart,
-                  ModelFeatureFilterFlags::FeatureEngineTtsEnd)))) {
-            m_featureFilterFlags = featureFilterFlags;
-        }
+        m_featureFilterFlags = featureFilterFlags;
+
         updateModel();
         emit featureFilterFlagsChanged();
 

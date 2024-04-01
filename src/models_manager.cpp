@@ -1601,6 +1601,7 @@ models_manager::feature_flags models_manager::add_new_feature(
         case feature_flags::engine_tts_coqui:
         case feature_flags::engine_tts_mimic3:
         case feature_flags::engine_tts_whisperspeech:
+        case feature_flags::engine_other:
             if (existing_features & feature_flags::engine_stt_ds ||
                 existing_features & feature_flags::engine_stt_vosk ||
                 existing_features & feature_flags::engine_stt_whisper ||
@@ -1611,7 +1612,8 @@ models_manager::feature_flags models_manager::add_new_feature(
                 existing_features & feature_flags::engine_tts_rhvoice ||
                 existing_features & feature_flags::engine_tts_coqui ||
                 existing_features & feature_flags::engine_tts_mimic3 ||
-                existing_features & feature_flags::engine_tts_whisperspeech) {
+                existing_features & feature_flags::engine_tts_whisperspeech ||
+                existing_features & feature_flags::engine_other) {
                 return existing_features;
             }
             break;
@@ -1744,10 +1746,42 @@ models_manager::feature_flags models_manager::add_explicit_feature_flags(
                 add_new_feature(existing_features,
                                 feature_flags::fast_processing) |
                 add_new_feature(existing_features, feature_flags::low_quality);
+            break;
         case model_engine_t::mnt_bergamot:
+            existing_features =
+                add_new_feature(existing_features,
+                                feature_flags::engine_other) |
+                add_new_feature(existing_features,
+                                feature_flags::fast_processing) |
+                add_new_feature(existing_features,
+                                feature_flags::medium_quality);
+            break;
         case model_engine_t::ttt_hftc:
+            existing_features =
+                add_new_feature(existing_features,
+                                feature_flags::engine_other) |
+                add_new_feature(existing_features,
+                                feature_flags::slow_processing) |
+                add_new_feature(existing_features,
+                                feature_flags::medium_quality);
+            break;
         case model_engine_t::ttt_tashkeel:
+            existing_features =
+                add_new_feature(existing_features,
+                                feature_flags::engine_other) |
+                add_new_feature(existing_features,
+                                feature_flags::fast_processing) |
+                add_new_feature(existing_features,
+                                feature_flags::medium_quality);
+            break;
         case model_engine_t::ttt_unikud:
+            existing_features =
+                add_new_feature(existing_features,
+                                feature_flags::engine_other) |
+                add_new_feature(existing_features,
+                                feature_flags::slow_processing) |
+                add_new_feature(existing_features,
+                                feature_flags::medium_quality);
             break;
     }
 
