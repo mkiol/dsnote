@@ -15,7 +15,7 @@ import org.mkiol.dsnote.Settings 1.0
 DialogPage {
     id: root
 
-    property bool verticalMode: width < appWin.verticalWidthThreshold
+    property bool verticalMode: bar.implicitWidth > (root.width - 2 * appWin.padding)
     property var features: app.features_availability()
 
     title: qsTr("Settings")
