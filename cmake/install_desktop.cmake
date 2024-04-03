@@ -27,6 +27,10 @@ function(strip_all file)
     install(CODE "execute_process(COMMAND ${CMAKE_STRIP} --strip-all ${file})")
 endfunction()
 
+function(remove_runpath file)
+    install(CODE "execute_process(COMMAND patchelf --remove-rpath ${file})")
+endfunction()
+
 if(BUILD_WHISPERCPP)
     strip_all("${external_lib_dir}/libwhisper-openblas.so")
     strip_all("${external_lib_dir}/libwhisper-fallback.so")
@@ -53,6 +57,7 @@ if(BUILD_WHISPERCPP)
 endif()
 
 if(DOWNLOAD_LIBSTT)
+    remove_runpath("${external_lib_dir}/libstt.so")
     strip_all("${external_lib_dir}/libstt.so")
     strip_all("${external_lib_dir}/libkenlm.so")
     strip_all("${external_lib_dir}/libtensorflowlite.so")
