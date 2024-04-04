@@ -1,6 +1,6 @@
 diff -ruN rhvoice-org/cmake/VersionFromGit.cmake rhvoice-patched/cmake/VersionFromGit.cmake
---- rhvoice-org/cmake/VersionFromGit.cmake	2023-05-20 17:16:22.518560362 +0200
-+++ rhvoice-patched/cmake/VersionFromGit.cmake	2023-05-19 20:15:21.026264385 +0200
+--- rhvoice-org/cmake/VersionFromGit.cmake	2024-04-04 19:47:59.208965598 +0200
++++ rhvoice-patched/cmake/VersionFromGit.cmake	2024-04-04 19:50:38.725123966 +0200
 @@ -12,46 +12,7 @@
  		set(VERSION_EXPORT "${${variablesPrefix}_VERSION_EXPORT}")
  		message(STATUS "Using cached versions: ${VERSION_FROM_GIT}, ${VERSION_TIME}, ${VERSION_EXPORT}")
@@ -49,14 +49,27 @@ diff -ruN rhvoice-org/cmake/VersionFromGit.cmake rhvoice-patched/cmake/VersionFr
  		set(${variablesPrefix}_VERSION_FROM_GIT "${VERSION_FROM_GIT}" CACHE STRING "Version from git")
  		set(${variablesPrefix}_VERSION_TIME "${VERSION_TIME}" CACHE STRING "Commit time from git")
  		set(${variablesPrefix}_VERSION_EXPORT "${VERSION_EXPORT}" CACHE STRING "Commit time from git")
-Binary files rhvoice-org/.git/index and rhvoice-patched/.git/index differ
+diff -ruN rhvoice-org/src/core/CMakeLists.txt rhvoice-patched/src/core/CMakeLists.txt
+--- rhvoice-org/src/core/CMakeLists.txt	2024-04-04 19:47:59.228965532 +0200
++++ rhvoice-patched/src/core/CMakeLists.txt	2024-04-04 19:52:40.481426924 +0200
+@@ -49,8 +49,8 @@
+ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/config.h")
+
+ target_link_libraries(RHVoice_core "${libs2link}")
+-harden("RHVoice_core")
+-add_sanitizers("RHVoice_core")
++#harden("RHVoice_core")
++#add_sanitizers("RHVoice_core")
+
+ cpack_add_component(core
+ 	DISPLAY_NAME "Synthesis core"
 diff -ruN rhvoice-org/src/hts_engine/HTS_engine.c rhvoice-patched/src/hts_engine/HTS_engine.c
---- rhvoice-org/src/hts_engine/HTS_engine.c	2023-05-20 17:16:22.608559590 +0200
-+++ rhvoice-patched/src/hts_engine/HTS_engine.c	2023-05-20 13:28:38.314853379 +0200
+--- rhvoice-org/src/hts_engine/HTS_engine.c	2024-04-04 19:47:59.235632176 +0200
++++ rhvoice-patched/src/hts_engine/HTS_engine.c	2024-04-04 19:50:38.725123966 +0200
 @@ -74,6 +74,7 @@
- 
+
  HTS_ENGINE_C_START;
- 
+
 +#include <locale.h>
  #include <stdlib.h>             /* for atof() */
  #include <string.h>             /* for strcpy() */
@@ -64,7 +77,7 @@ diff -ruN rhvoice-org/src/hts_engine/HTS_engine.c rhvoice-patched/src/hts_engine
 @@ -81,6 +82,13 @@
  /* hts_engine libraries */
  #include "HTS_hidden.h"
- 
+
 +static double locale_independent_atof(const char *str) {
 +    const char *old_locale = setlocale(LC_NUMERIC, "C");
 +    double value = atof(str);
@@ -81,16 +94,23 @@ diff -ruN rhvoice-org/src/hts_engine/HTS_engine.c rhvoice-patched/src/hts_engine
     if (find != NULL)
 -      engine->condition.alpha = atof(&find[strlen("ALPHA=")]);
 +      engine->condition.alpha = locale_independent_atof(&find[strlen("ALPHA=")]);
- 
+
     /* interpolation weights */
     engine->condition.duration_iw = (double *) HTS_calloc(num_voices, sizeof(double));
 diff -ruN rhvoice-org/src/lib/CMakeLists.txt rhvoice-patched/src/lib/CMakeLists.txt
---- rhvoice-org/src/lib/CMakeLists.txt	2023-05-20 17:16:22.621892810 +0200
-+++ rhvoice-patched/src/lib/CMakeLists.txt	2023-05-21 17:30:03.809199639 +0200
-@@ -20,9 +20,13 @@
+--- rhvoice-org/src/lib/CMakeLists.txt	2024-04-04 19:47:59.238965499 +0200
++++ rhvoice-patched/src/lib/CMakeLists.txt	2024-04-04 19:52:15.951498796 +0200
+@@ -15,14 +15,18 @@
+
+ add_library(RHVoice SHARED "${CMAKE_CURRENT_SOURCE_DIR}/lib.cpp")
+ set_target_properties(RHVoice PROPERTIES VERSION "${RHVOICE_VERSION}" SOVERSION "${RHVOICE_VERSION_MAJOR}")
+-harden("RHVoice")
+-add_sanitizers("RHVoice")
++#harden("RHVoice")
++#add_sanitizers("RHVoice")
  target_include_directories(RHVoice PRIVATE "${INCLUDE_DIR}" "${HTS_LABELS_KIT_INCLUDES}")
  target_link_libraries("RHVoice" "RHVoice_core")
- 
+
 +file(GLOB RHVoice_INCLUDE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/../include/*.h")
 +set_target_properties("RHVoice" PROPERTIES PUBLIC_HEADER "${RHVoice_INCLUDE_FILES}")
 +
@@ -99,5 +119,5 @@ diff -ruN rhvoice-org/src/lib/CMakeLists.txt rhvoice-patched/src/lib/CMakeLists.
  	COMPONENT "lib"
 +	PUBLIC_HEADER DESTINATION include
  )
- 
+
  set("CPACK_DEBIAN_LIB_PACKAGE_NAME" "librhvoice" PARENT_SCOPE)
