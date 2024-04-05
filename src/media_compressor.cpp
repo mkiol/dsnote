@@ -426,14 +426,13 @@ void media_compressor::init_av_filter() {
         if (change_volume) {
             const auto* volume = avfilter_get_by_name("volume");
             if (!volume) throw std::runtime_error("no volume filter");
-
-            if (avfilter_graph_create_filter(
-                    &filter_volume_ctx, volume, "volume",
-                    fmt::format(
-                        "volume={}dB",
-                        std::clamp(m_options->stream->volume_change, -30, 30))
-                        .c_str(),
-                    nullptr, m_av_filter_ctx.graph) < 0) {
+            args = fmt::format(
+                "volume={}dB",
+                std::clamp(m_options->stream->volume_change, -30, 30));
+            LOGD("volume filter args: " << args);
+            if (avfilter_graph_create_filter(&filter_volume_ctx, volume,
+                                             "volume", args.c_str(), nullptr,
+                                             m_av_filter_ctx.graph) < 0) {
                 clean_av();
                 throw std::runtime_error(
                     "volume avfilter_graph_create_filter error");
@@ -444,12 +443,12 @@ void media_compressor::init_av_filter() {
         const auto* rubberband = avfilter_get_by_name("rubberband");
         if (!rubberband) throw std::runtime_error("no rubberband filter");
 
-        if (avfilter_graph_create_filter(
-                &filter_rubberband_ctx, rubberband, "rubberband",
-                fmt::format("tempo={}:transients=smooth:window=long",
-                            m_options->speed)
-                    .c_str(),
-                nullptr, m_av_filter_ctx.graph) < 0) {
+        args = fmt::format("tempo={}:transients=smooth:window=long",
+                           m_options->speed);
+        LOGD("rubberband filter args: " << args);
+        if (avfilter_graph_create_filter(&filter_rubberband_ctx, rubberband,
+                                         "rubberband", args.c_str(), nullptr,
+                                         m_av_filter_ctx.graph) < 0) {
             clean_av();
             throw std::runtime_error(
                 "rubberband avfilter_graph_create_filter error");
