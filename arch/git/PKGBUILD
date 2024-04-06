@@ -105,6 +105,9 @@ build() {
     pacman -Qi rocm-hip-sdk &> /dev/null || CMAKE+=" -DBUILD_WHISPERCPP_HIPBLAS=OFF"
   fi
 
+  # Disable bergamot at build time (used for CI only)
+  #CMAKE+=" -DBUILD_BERGAMOT=OFF"
+
   cmake ../ $CMAKE
 
   test $(nproc) -gt 2 && make -j$(($(nproc)-2)) || make
