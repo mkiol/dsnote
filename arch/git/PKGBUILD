@@ -37,6 +37,7 @@ makedepends=(
   'extra-cmake-modules'
   'git'
   'meson'
+  'patchelf'
   'pybind11'
   'qt5-tools'
 )
