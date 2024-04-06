@@ -254,11 +254,14 @@ void recorder::process_from_mic() {
 
 void recorder::process_from_input_file() {
     try {
+        media_compressor::stream_t stream;
+        stream.media_type = media_compressor::media_type_t::audio;
+
         media_compressor::options_t opts{
             media_compressor::quality_t::vbr_medium,
             media_compressor::flag_force_mono_output,
             1.0,
-            {},
+            std::move(stream),
             {}};
 
         media_compressor{}.decompress_to_file({m_input_file_path.toStdString()},
