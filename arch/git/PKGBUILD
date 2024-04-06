@@ -111,8 +111,8 @@ build() {
     pacman -Qi rocm-hip-sdk &> /dev/null && FULL_BUILD || CMAKE+=" -DBUILD_WHISPERCPP_HIPBLAS=OFF"
   fi
 
-  # Disable bergamot (Translation)
-  CI_BUILD && CMAKE+=" -DBUILD_BERGAMOT=OFF"
+  # Disable bergamot (translation) and RHVoice (CI build only)
+  CI_BUILD && CMAKE+=" -DBUILD_BERGAMOT=OFF -DBUILD_RHVOICE=OFF"
 
   cmake ../ $CMAKE
 
