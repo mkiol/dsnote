@@ -56,6 +56,7 @@ optdepends_x86_64=(
   'rocblas: Support for GPU acceleration on AMD graphic cards'
   'rocm-opencl-runtime: Support for GPU acceleration on AMD graphic cards'
 )
+options=('!debug')
 provides=(${_pkgname})
 conflicts=(${_pkgname})
 install=${_pkgname}.install
