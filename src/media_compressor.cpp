@@ -443,7 +443,7 @@ void media_compressor::init_av_filter() {
         const auto* rubberband = avfilter_get_by_name("rubberband");
         if (!rubberband) throw std::runtime_error("no rubberband filter");
 
-        args = fmt::format("tempo={}:transients=smooth:window=long",
+        args = fmt::format("tempo={:.2}:transients=smooth:window=long",
                            m_options->speed);
         LOGD("rubberband filter args: " << args);
         if (avfilter_graph_create_filter(&filter_rubberband_ctx, rubberband,
