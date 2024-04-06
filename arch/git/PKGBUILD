@@ -90,24 +90,29 @@ build() {
         -DCMAKE_INSTALL_PREFIX=/usr \
         -Wno-dev"
 
-  if [[ "${CARCH}" == "x86_64" ]]; then
-    ######### !! IMPORTANT!! ##########
-    # For CUDA and/or ROCm support,
-    # please uncomment respective entry
-    # in makedepends_x86_64 or install
-    # the dependency package before building
-    ###################################
+  #################### !! IMPORTANT!! ######################
+  # CUDA and/or ROCm support are experimental and may break!
+  # In order to enable support for either, please uncomment
+  # the respective entry in makedepends_x86_64 or install
+  # the dependency package and change FULL_BUILD value
+  # below to true *before* building.
+  ##########################################################
 
+  FULL_BUILD=false
+
+  CI_BUILD=false
+
+  if [[ "${CARCH}" == "x86_64" ]]; then
     # Do not build for CUDA if needed package is not found
-    pacman -Qi cuda &> /dev/null || CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=OFF"
-    pacman -Qi cuda &> /dev/null && export CUDA_PATH=/opt/cuda
+    pacman -Qi cuda &> /dev/null && FULL_BUILD || CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=OFF"
+    pacman -Qi cuda &> /dev/null && FULL_BUILD && export CUDA_PATH=/opt/cuda
 
     # Do not build for HIP if needed package is not found
-    pacman -Qi rocm-hip-sdk &> /dev/null || CMAKE+=" -DBUILD_WHISPERCPP_HIPBLAS=OFF"
+    pacman -Qi rocm-hip-sdk &> /dev/null && FULL_BUILD || CMAKE+=" -DBUILD_WHISPERCPP_HIPBLAS=OFF"
   fi
 
-  # Disable bergamot at build time (used for CI only)
-  #CMAKE+=" -DBUILD_BERGAMOT=OFF"
+  # Disable bergamot (Translation)
+  CI_BUILD && CMAKE+=" -DBUILD_BERGAMOT=OFF"
 
   cmake ../ $CMAKE
 
