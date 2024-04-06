@@ -49,6 +49,7 @@ DialogPage {
             that generates voice with exceptional naturalness.
             The new engine comes with models for English and Polish languages. All models support voice cloning.</li>
         <li>New Piper voices for English, Persian, Slovenian, Turkish, French and Spanish</li>
+        <li>New RHVoice voice for Czech</li>
         <li>Settings option to enable/disable speech synchronization with subtitle timestamps
             (<i>Text to Speech</i> &rarr; <i>Sync speech with timestamps</i>).
             This may be useful for creating voice overs.</li>
@@ -62,6 +63,7 @@ DialogPage {
         <ul>
         <li>New models: Greek to English, Maltese to English,
             Slovenian to English, Turkish to English, English to Catalan</li>
+        <li>Updated models: Czech and Lithuanian</li>
         <li>Handy buttons to quickly add translated text to the note or
             to replace it and switch languages (<i>Add</li>, <i>Replace</i>).</li>
         <li>Context menu option to translate from cursor position or translate only selected text</li>

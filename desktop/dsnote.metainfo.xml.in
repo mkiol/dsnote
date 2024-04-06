@@ -98,7 +98,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.5.0" date="2024-03-15">
+    <release version="4.5.0" date="2024-04-06">
       <description>
       <p>User Interface:</p>
       <ul>
@@ -124,6 +124,7 @@
       <li>WhisperSpeech engine that generates voice with exceptional naturalness.
           The new engine comes with models for English and Polish languages. All models support voice cloning.</li>
       <li>New Piper voices for English, Persian, Slovenian, Turkish, French and Spanish</li>
+      <li>New RHVoice voice for Czech</li>
       <li>Settings option to enable/disable speech synchronization with subtitle timestamps.
           This may be useful for creating voice overs.</li>
       <li>Mixing speech with audio from an existing file.
@@ -134,6 +135,7 @@
       <ul>
       <li>New models: Greek to English, Maltese to English,
           Slovenian to English, Turkish to English, English to Catalan</li>
+      <li>Updated models: Czech and Lithuanian</li>
       <li>Handy buttons to quickly add translated text to the note, replace it and switch languages.</li>
       <li>Context menu option to translate from cursor position or translate only selected text</li>
       </ul>
