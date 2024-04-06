@@ -2,7 +2,7 @@
 
 _pkgname='dsnote'
 pkgname="${_pkgname}-git"
-pkgver=r1035.55a8504
+pkgver=r1039.6f26237
 pkgrel=1
 pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
 arch=(
@@ -103,17 +103,17 @@ build() {
 
   if [[ "${CARCH}" == "x86_64" ]]; then
     # Do not build for CUDA if needed package is not found
-    pacman -Qi cuda &> /dev/null && FULL_BUILD || CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=OFF"
-    pacman -Qi cuda &> /dev/null && FULL_BUILD && export CUDA_PATH=/opt/cuda
+    pacman -Qi cuda &> /dev/null && $FULL_BUILD || CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=OFF"
+    pacman -Qi cuda &> /dev/null && $FULL_BUILD && export CUDA_PATH=/opt/cuda
 
     # Do not build for HIP if needed package is not found
-    pacman -Qi rocm-hip-sdk &> /dev/null && FULL_BUILD || CMAKE+=" -DBUILD_WHISPERCPP_HIPBLAS=OFF"
+    pacman -Qi rocm-hip-sdk &> /dev/null && $FULL_BUILD || CMAKE+=" -DBUILD_WHISPERCPP_HIPBLAS=OFF"
   fi
 
   CI_BUILD=false
 
   # Disable bergamot and RHVoice (used for CI builds only)
-  CI_BUILD && CMAKE+=" -DBUILD_BERGAMOT=OFF -DBUILD_RHVOICE=OFF"
+  $CI_BUILD && CMAKE+=" -DBUILD_BERGAMOT=OFF -DBUILD_RHVOICE_MODULE=OFF"
 
   cmake ../ $CMAKE
 
