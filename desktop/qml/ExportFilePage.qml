@@ -16,7 +16,7 @@ DialogPage {
     id: root
 
     property bool translated: false
-    readonly property bool verticalMode: width < appWin.verticalWidthThreshold
+    readonly property bool verticalMode: bar.implicitWidth > (width - 2 * appWin.padding)
     readonly property alias mode: modeCombo.currentIndex
     readonly property bool canAccept: {
         switch(mode) {

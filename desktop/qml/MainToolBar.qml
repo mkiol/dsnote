@@ -138,6 +138,8 @@ ToolBar {
                                 text: qsTr("Export the translation to a file")
                                 icon.name: "document-save-symbolic"
                                 enabled: app.translated_text.length !== 0 && _settings.translator_mode && !app.busy && app.state === DsnoteApp.StateIdle
+                                visible: enabled
+                                height: visible ? implicitHeight : 0
                                 onClicked: {
                                     appWin.openDialog("ExportFilePage.qml", {"translated": true})
                                 }

@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -119,10 +119,12 @@ Item {
 
                 MenuSeparator {
                     visible: root.showTranslate
+                    height: visible ? implicitHeight : 0
                 }
 
                 MenuItem {
                     visible: root.showTranslate
+                    height: visible ? implicitHeight : 0
                     action: Action {
                         icon.name: "insert-text-symbolic"
                         text: qsTr("Translate selection")
@@ -136,6 +138,7 @@ Item {
 
                 MenuItem {
                     visible: root.showTranslate
+                    height: visible ? implicitHeight : 0
                     action: Action {
                         icon.name: "insert-text-symbolic"
                         text: qsTr("Translate from cursor position")
@@ -150,6 +153,7 @@ Item {
 
                 MenuItem {
                     visible: root.showTranslate
+                    height: visible ? implicitHeight : 0
                     action: Action {
                         icon.name: "insert-text-symbolic"
                         text: qsTr("Translate to cursor position")

@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,7 +13,7 @@ import QtQuick.Layouts 1.3
 DialogPage {
     id: root
 
-    readonly property bool verticalMode: width < appWin.verticalWidthThreshold
+    readonly property bool verticalMode: (micButton.implicitWidth + fileButton.implicitWidth + cleanupButton.implicitWidth) > (width - 2 * appWin.padding)
     readonly property bool canCreate: app.player_ready && titleTextField.text.length !== 0 &&
                                       rangeSlider.first.value < rangeSlider.second.value && !app.recorder_processing
 
@@ -101,6 +101,8 @@ DialogPage {
         enabled: !app.recorder_processing
 
         Button {
+            id: micButton
+
             Layout.fillWidth: root.verticalMode
             icon.name: "audio-input-microphone-symbolic"
             text: qsTr("Use a microphone")
@@ -113,6 +115,8 @@ DialogPage {
         }
 
         Button {
+            id: fileButton
+
             Layout.fillWidth: root.verticalMode
             icon.name: "document-open-symbolic"
             text: qsTr("Import from a file")
@@ -125,6 +129,8 @@ DialogPage {
         }
 
         CheckBox {
+            id: cleanupButton
+
             checked: _settings.clean_ref_voice
             text: qsTr("Clean up audio")
             onCheckedChanged: {
