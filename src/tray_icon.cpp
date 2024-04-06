@@ -50,26 +50,37 @@ void tray_icon::set_task_state(task_state_t task_state) {
 
 void tray_icon::update_menu() {
     std::for_each(m_actions.cbegin(), m_actions.cend(), [this](auto& p) {
+        auto stt_configured = !m_active_stt_model.isEmpty();
+        auto tts_configured = !m_active_tts_model.isEmpty();
+
         switch (p.first) {
             case action_t::start_listening:
             case action_t::start_listening_active_window:
             case action_t::start_listening_clipboard:
-            case action_t::start_reading:
-            case action_t::start_reading_clipboard:
-                // p.second->setEnabled(m_state == state_t::idle);
-                p.second->setProperty("enabled", m_state == state_t::idle);
+                p.second->setProperty(
+                    "enabled", stt_configured && m_state == state_t::idle);
                 break;
             case action_t::stop_listening:
-                p.second->setProperty("enabled", m_state == state_t::stt);
+                p.second->setProperty(
+                    "enabled", stt_configured && m_state == state_t::stt);
+
+                break;
+            case action_t::start_reading:
+            case action_t::start_reading_clipboard:
+                p.second->setProperty(
+                    "enabled", tts_configured && m_state == state_t::idle);
                 break;
             case action_t::pause_resume_reading:
-                p.second->setIcon(QIcon::fromTheme(
+                p.second->setProperty("enabled", tts_configured &&
+                                                     m_state != state_t::idle &&
+                                                     m_state != state_t::busy);
+                qobject_cast<QAction*>(p.second)->setIcon(QIcon::fromTheme(
                     m_task_state == task_state_t::paused
                         ? QStringLiteral("media-playback-start-symbolic")
                         : QStringLiteral("media-playback-pause-symbolic")));
-                p.second->setText(m_task_state == task_state_t::paused
-                                      ? tr("Resume reading")
-                                      : tr("Pause reading"));
+                qobject_cast<QAction*>(p.second)->setText(
+                    m_task_state == task_state_t::paused ? tr("Resume reading")
+                                                         : tr("Pause reading"));
                 break;
             case action_t::cancel:
                 p.second->setProperty(
@@ -77,6 +88,46 @@ void tray_icon::update_menu() {
                                    m_state != state_t::busy &&
                                    m_task_state != task_state_t::cancelling);
                 break;
+            case action_t::change_stt_model: {
+                auto* menu = qobject_cast<QMenu*>(p.second);
+                menu->setProperty("enabled",
+                                  stt_configured && m_state == state_t::idle);
+                menu->setTitle(!stt_configured ? tr("No Speech to Text model")
+                                               : m_active_stt_model);
+                menu->clear();
+                for (auto it = m_stt_models.cbegin(); it != m_stt_models.cend();
+                     ++it) {
+                    auto* action = menu->addAction(it->toString());
+                    action->setProperty("idx", static_cast<int>(std::distance(
+                                                   m_stt_models.cbegin(), it)));
+                    connect(action, &QAction::triggered, this, [this]() {
+                        emit action_triggered(
+                            tray_icon::action_t::change_stt_model,
+                            sender()->property("idx").toInt());
+                    });
+                }
+                break;
+            }
+            case action_t::change_tts_model: {
+                auto* menu = qobject_cast<QMenu*>(p.second);
+                menu->setProperty("enabled",
+                                  tts_configured && m_state == state_t::idle);
+                menu->setTitle(!tts_configured ? tr("No Text to Speech model")
+                                               : m_active_tts_model);
+                menu->clear();
+                for (auto it = m_tts_models.cbegin(); it != m_tts_models.cend();
+                     ++it) {
+                    auto* action = menu->addAction(it->toString());
+                    action->setProperty("idx", static_cast<int>(std::distance(
+                                                   m_tts_models.cbegin(), it)));
+                    connect(action, &QAction::triggered, this, [this]() {
+                        emit action_triggered(
+                            tray_icon::action_t::change_tts_model,
+                            sender()->property("idx").toInt());
+                    });
+                }
+                break;
+            }
             case action_t::quit:
             case action_t::toggle_app_window:
                 break;
@@ -111,6 +162,11 @@ void tray_icon::make_menu() {
         m_menu.addAction(
             QIcon::fromTheme(QStringLiteral("media-playback-stop-symbolic")),
             tr("Stop listening")));
+    m_actions.emplace(
+        action_t::change_stt_model,
+        m_menu.addMenu(
+            QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
+            QString{}));
     m_menu.addSeparator();
     m_actions.emplace(
         action_t::start_reading,
@@ -127,6 +183,11 @@ void tray_icon::make_menu() {
         m_menu.addAction(
             QIcon::fromTheme(QStringLiteral("media-playback-pause-symbolic")),
             tr("Pause/Resume reading")));
+    m_actions.emplace(
+        action_t::change_tts_model,
+        m_menu.addMenu(
+            QIcon::fromTheme(QStringLiteral("audio-speakers-symbolic")),
+            QString{}));
     m_menu.addSeparator();
     m_actions.emplace(
         action_t::cancel,
@@ -146,11 +207,35 @@ void tray_icon::make_menu() {
             tr("Quit")));
 
     std::for_each(m_actions.cbegin(), m_actions.cend(), [this](const auto& p) {
-        connect(p.second, &QAction::triggered, this,
-                [this, action = p.first]() { emit action_triggered(action); });
+        if (typeid(*p.second) == typeid(QAction)) {
+            connect(qobject_cast<QAction*>(p.second), &QAction::triggered, this,
+                    [this, action = p.first]() {
+                        emit action_triggered(action, 0);
+                    });
+        }
     });
 
     update_menu();
 
     setContextMenu(&m_menu);
+}
+
+void tray_icon::set_stt_models(QVariantList&& stt_models) {
+    m_stt_models = std::move(stt_models);
+    update_menu();
+}
+
+void tray_icon::set_active_stt_model(QString&& stt_model) {
+    m_active_stt_model = std::move(stt_model);
+    update_menu();
+}
+
+void tray_icon::set_tts_models(QVariantList&& tts_models) {
+    m_tts_models = std::move(tts_models);
+    update_menu();
+}
+
+void tray_icon::set_active_tts_model(QString&& tts_model) {
+    m_active_tts_model = std::move(tts_model);
+    update_menu();
 }

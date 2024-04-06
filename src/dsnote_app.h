@@ -828,7 +828,7 @@ class dsnote_app : public QObject {
     void repair_text(text_repair_task_type_t task_type);
     void switch_mnt_langs();
 #ifdef USE_DESKTOP
-    void execute_tray_action(tray_icon::action_t action);
+    void execute_tray_action(tray_icon::action_t action, int value);
 #endif
 };
 

@@ -333,6 +333,16 @@ dsnote_app::dsnote_app(QObject *parent)
             reset_progress();
         }
     });
+#ifdef USE_DESKTOP
+    connect(this, &dsnote_app::available_stt_models_changed, this,
+            [this]() { m_tray.set_stt_models(available_stt_models()); });
+    connect(this, &dsnote_app::active_stt_model_changed, this,
+            [this]() { m_tray.set_active_stt_model(active_stt_model_name()); });
+    connect(this, &dsnote_app::available_tts_models_changed, this,
+            [this]() { m_tray.set_tts_models(available_tts_models()); });
+    connect(this, &dsnote_app::active_tts_model_changed, this,
+            [this]() { m_tray.set_active_tts_model(active_tts_model_name()); });
+#endif
     connect(this, &dsnote_app::active_stt_model_changed, this,
             &dsnote_app::update_listen);
     connect(this, &dsnote_app::available_stt_models_changed, this,
@@ -3984,7 +3994,7 @@ void dsnote_app::execute_action_name(const QString &action_name) {
 }
 
 #ifdef USE_DESKTOP
-void dsnote_app::execute_tray_action(tray_icon::action_t action) {
+void dsnote_app::execute_tray_action(tray_icon::action_t action, int value) {
     switch (action) {
         case tray_icon::action_t::start_listening:
             execute_action(action_t::start_listening);
@@ -4017,6 +4027,12 @@ void dsnote_app::execute_tray_action(tray_icon::action_t action) {
             if (m_app_window)
                 m_app_window->setProperty(
                     "visible", !m_app_window->property("visible").toBool());
+            break;
+        case tray_icon::action_t::change_stt_model:
+            set_active_stt_model_idx(value);
+            break;
+        case tray_icon::action_t::change_tts_model:
+            set_active_tts_model_idx(value);
             break;
     }
 }
