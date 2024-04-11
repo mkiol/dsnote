@@ -95,19 +95,18 @@ int espeak_engine::synth_callback(short* wav, int size, espeak_EVENT* event) {
 bool espeak_engine::model_supports_speed() const { return true; }
 
 bool espeak_engine::encode_speech_impl(const std::string& text,
+                                       unsigned int speed,
                                        const std::string& out_file) {
-    auto rate = [this]() {
+    auto rate = [speed]() {
         auto default_rate = espeak_GetParameter(espeakRATE, 0);
 
-        if (m_config.speech_speed < 1 || m_config.speech_speed > 20 ||
-            m_config.speech_speed == 10) {
+        if (speed < 1 || speed > 20 || speed == 10) {
             return default_rate;
         }
 
-        return std::clamp<int>(
-            static_cast<float>(default_rate) *
-                (static_cast<float>(m_config.speech_speed) / 10.0f),
-            80, 450);
+        return std::clamp<int>(static_cast<float>(default_rate) *
+                                   (static_cast<float>(speed) / 10.0f),
+                               80, 450);
     }();
 
     espeak_SetParameter(espeakRATE, rate, 0);

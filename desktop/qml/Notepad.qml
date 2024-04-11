@@ -192,7 +192,10 @@ ColumnLayout {
                 visible: true
                 enabled: listenReadCombos.second.enabled &&
                          !listenReadCombos.second.off &&
-                         app.state === DsnoteApp.StateIdle
+                         app.state === DsnoteApp.StateIdle &&
+                         (_settings.stt_tts_text_format !== Settings.TextFormatSubRip ||
+                          _settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOff ||
+                          _settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnDontFit)
                 textRole: "text"
                 valueRole: "value"
                 currentIndex: _settings.speech_speed - 1;

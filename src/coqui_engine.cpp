@@ -260,21 +260,21 @@ void coqui_engine::create_model() {
 bool coqui_engine::model_created() const { return static_cast<bool>(m_model); }
 
 bool coqui_engine::encode_speech_impl(const std::string& text,
+                                      unsigned int speed,
                                       const std::string& out_file) {
-    auto task = py_executor::instance()->execute([&]() {
+    auto task = py_executor::instance()->execute([&, speed]() {
         try {
-            float speed = 1.0;
+            float speed_f = 1.0;
 
             if (m_speed_supported) {
-                speed = m_config.speech_speed / 10.0;
+                speed_f = static_cast<float>(speed) / 10.0F;
             } else {
                 auto model = m_model->attr("tts_model");
                 if (py::hasattr(model, "length_scale")) {
                     auto length_scale =
                         m_initial_length_scale
-                            ? vits_length_scale(m_config.speech_speed,
-                                                *m_initial_length_scale)
-                            : 1.0f;
+                            ? vits_length_scale(speed, *m_initial_length_scale)
+                            : 1.0F;
                     model.attr("length_scale") = length_scale;
 
                     LOGD("speed: length_scale=" << length_scale);
@@ -283,9 +283,8 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
                     auto duration_threshold =
                         m_initial_duration_threshold
                             ? overflow_duration_threshold(
-                                  m_config.speech_speed,
-                                  *m_initial_duration_threshold)
-                            : 0.55f;
+                                  speed, *m_initial_duration_threshold)
+                            : 0.55F;
 
                     LOGD("speed: duration_threshold=" << duration_threshold);
                     model.attr("duration_threshold") = duration_threshold;
@@ -307,7 +306,7 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
                                             py::str(m_ref_voice_wav_file)),
                 "reference_wav"_a = py::none(), "style_wav"_a = py::none(),
                 "style_text"_a = py::none(),
-                "reference_speaker_name"_a = py::none(), "speed"_a = speed);
+                "reference_speaker_name"_a = py::none(), "speed"_a = speed_f);
 
             m_model->attr("save_wav")("wav"_a = wav, "path"_a = out_file);
         } catch (const std::exception& err) {

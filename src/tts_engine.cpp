@@ -19,11 +19,6 @@
 #include <cmath>
 #include <cstdio>
 #include <fstream>
-#include <locale>
-
-#ifdef ARCH_X86_64
-#include <rubberband/RubberBandStretcher.h>
-#endif
 
 #include "logger.hpp"
 #include "media_compressor.hpp"
@@ -204,7 +199,7 @@ std::ostream& operator<<(std::ostream& os, tts_engine::state_t state) {
 tts_engine::tts_engine(config_t config, callbacks_t call_backs)
     : m_config{std::move(config)},
       m_call_backs{std::move(call_backs)},
-      m_text_processor{config.use_gpu ? config.gpu_device.id : -1} {}
+      m_text_processor{m_config.use_gpu ? m_config.gpu_device.id : -1} {}
 
 tts_engine::~tts_engine() {
     LOGD("tts dtor");
@@ -247,7 +242,7 @@ void tts_engine::request_stop() {
 }
 
 std::string tts_engine::first_file_with_ext(std::string dir_path,
-                                            std::string&& ext) {
+                                            const std::string& ext) {
     auto* dirp = opendir(dir_path.c_str());
     if (!dirp) return {};
 
@@ -264,7 +259,7 @@ std::string tts_engine::first_file_with_ext(std::string dir_path,
 }
 
 std::string tts_engine::find_file_with_name_prefix(std::string dir_path,
-                                                   std::string prefix) {
+                                                   const std::string& prefix) {
     auto* dirp = opendir(dir_path.c_str());
     if (!dirp) return {};
 
@@ -288,7 +283,9 @@ void tts_engine::push_tasks(const std::string& text, task_type_t type) {
 
     if (tasks.empty()) {
         LOGW("no task to process");
-        tasks.push_back(task_t{"", 0, 0, type, true, true});
+        tasks.push_back(
+            task_t{"", 0, 0, type,
+                   task_flags::task_flag_first | task_flags::task_flag_last});
     }
 
     {
@@ -318,7 +315,7 @@ void tts_engine::restore_text(const std::string& text) {
 }
 
 void tts_engine::set_speech_speed(unsigned int speech_speed) {
-    m_config.speech_speed = std::clamp(speech_speed, 1u, 20u);
+    m_config.speech_speed = std::clamp(speech_speed, 1U, 20U);
 }
 
 void tts_engine::set_ref_voice_file(std::string ref_voice_file) {
@@ -429,7 +426,7 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
 
                 tasks.push_back(task_t{std::move(segments.front().text),
                                        segments.front().t0, segments.front().t1,
-                                       type, true, false});
+                                       type, task_flags::task_flag_first});
 
                 for (auto it = segments.begin() + 1; it != segments.end();
                      ++it) {
@@ -438,10 +435,10 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
                         it->t1 = 0;
                     }
                     tasks.push_back(task_t{std::move(it->text), it->t0, it->t1,
-                                           type, false, false});
+                                           type, task_flags::task_flag_none});
                 }
 
-                tasks.back().last = true;
+                tasks.back().flags |= task_flags::task_flag_last;
 
                 return tasks;
             }
@@ -458,20 +455,22 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
             text_tools::split(text, engine, m_config.lang, m_config.nb_data);
         if (!parts.empty()) {
             tasks.reserve(parts.size());
-            tasks.push_back(
-                task_t{std::move(parts.front()), 0, 0, type, true, false});
+            tasks.push_back(task_t{std::move(parts.front()), 0, 0, type,
+                                   task_flags::task_flag_first});
 
             for (auto it = parts.begin() + 1; it != parts.end(); ++it) {
                 trim(*it);
                 if (!it->empty())
-                    tasks.push_back(
-                        task_t{std::move(*it), 0, 0, type, false, false});
+                    tasks.push_back(task_t{std::move(*it), 0, 0, type,
+                                           task_flags::task_flag_none});
             }
 
-            tasks.back().last = true;
+            tasks.back().flags |= task_flags::task_flag_last;
         }
     } else {
-        tasks.push_back(task_t{text, 0, 0, type, true, true});
+        tasks.push_back(
+            task_t{text, 0, 0, type,
+                   task_flags::task_flag_first | task_flags::task_flag_last});
     }
 
     return tasks;
@@ -544,7 +543,7 @@ bool tts_engine::add_silence(const std::string& wav_file,
 
 void tts_engine::process_restore_text(const task_t& task,
                                       std::string& restored_text) {
-    if (task.empty() && task.last) {
+    if (task.empty() && (task.flags & task_flags::task_flag_last)) {
         if (m_call_backs.text_restored) {
             m_call_backs.text_restored(restored_text);
         }
@@ -560,21 +559,23 @@ void tts_engine::process_restore_text(const task_t& task,
         /*prefix_path=*/m_config.share_dir,
         /*diacritizer_path=*/m_config.model_files.diacritizer_path));
 
-    if (m_call_backs.text_restored && task.last) {
+    if (m_call_backs.text_restored &&
+        (task.flags & task_flags::task_flag_last)) {
         m_call_backs.text_restored(restored_text);
     }
 }
 
 void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
                                        double progress) {
-    if (task.empty() && task.last) {
+    if (task.empty() && (task.flags & task_flags::task_flag_last)) {
         if (m_call_backs.speech_encoded) {
             m_call_backs.speech_encoded({}, {}, audio_format_t::wav, 1.0, true);
         }
         return;
     }
 
-    auto encode_speech = [&](const std::string& output_file) {
+    auto encode_speech = [&](const std::string& output_file,
+                             unsigned int speed) {
         auto new_text = m_text_processor.preprocess(
             /*text=*/task.text, /*options=*/m_config.options,
             /*lang=*/m_config.lang,
@@ -586,12 +587,13 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
                                    ? output_file
                                    : output_file + ".wav";
 
-        if (!encode_speech_impl(new_text, output_file_wav)) {
+        if (!encode_speech_impl(new_text, speed, output_file_wav)) {
             unlink(output_file.c_str());
             LOGE("speech encoding error");
             if (m_call_backs.speech_encoded) {
-                m_call_backs.speech_encoded("", "", m_config.audio_format,
-                                            progress, task.last);
+                m_call_backs.speech_encoded(
+                    "", "", m_config.audio_format, progress,
+                    (task.flags & task_flags::task_flag_last) > 0);
             }
 
             return std::string{};
@@ -608,19 +610,20 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
 
     bool follow_timestamps = task.t1 != 0;
 
-    bool do_speech_change = !m_config.use_engine_speed_control ||
-                            !model_supports_speed() ||
-                            (fit_into_timestamp && follow_timestamps);
+    bool do_speed_change = !m_config.use_engine_speed_control ||
+                           !model_supports_speed() ||
+                           (fit_into_timestamp && follow_timestamps);
 
     auto output_file = path_to_output_file(
         task.text,
         follow_timestamps && fit_into_timestamp ? 0 : m_config.speech_speed,
-        do_speech_change);
+        do_speed_change);
 
     if ((follow_timestamps && fit_into_timestamp) ||
         !file_exists(output_file)) {
-        if (!do_speech_change) {
-            auto output_file_wav = encode_speech(output_file);
+        if (!do_speed_change) {
+            auto output_file_wav =
+                encode_speech(output_file, m_config.speech_speed);
             if (output_file_wav.empty()) return;
 
             if (m_config.audio_format != audio_format_t::wav) {
@@ -642,7 +645,7 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
                 path_to_output_file(task.text, 10, false);
 
             if (!file_exists(output_file_no_speed)) {
-                auto output_file_wav = encode_speech(output_file_no_speed);
+                auto output_file_wav = encode_speech(output_file_no_speed, 10);
                 if (output_file_wav.empty()) return;
 
                 if (m_config.audio_format != audio_format_t::wav) {
@@ -771,8 +774,9 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
     if (is_shutdown()) return;
 
     if (m_call_backs.speech_encoded) {
-        m_call_backs.speech_encoded(task.text, output_file,
-                                    m_config.audio_format, progress, task.last);
+        m_call_backs.speech_encoded(
+            task.text, output_file, m_config.audio_format, progress,
+            (task.flags & task_flags::task_flag_last) > 0);
     }
 }
 
@@ -824,7 +828,7 @@ void tts_engine::process() {
         while (!is_shutdown() && !queue.empty()) {
             auto task = std::move(queue.front());
 
-            if (task.first) {
+            if (task.flags & task_flags::task_flag_first) {
                 speech_time = 0;
                 total_tasks_nb = queue.size();
             }
@@ -922,11 +926,11 @@ float tts_engine::vits_length_scale(unsigned int speech_speed,
                                     float initial_length_scale) {
     return initial_length_scale *
            std::pow<float>(
-               (-0.9f * std::clamp(speech_speed, 1u, 20u) + 19) / 10.0f, 2);
+               (-0.9F * std::clamp(speech_speed, 1U, 20U) + 19) / 10.0F, 2);
 }
 
 float tts_engine::overflow_duration_threshold(
     unsigned int speech_speed, float initial_duration_threshold) {
     return initial_duration_threshold *
-           (static_cast<float>(std::clamp(speech_speed, 1u, 20u)) / 10.0f);
+           (static_cast<float>(std::clamp(speech_speed, 1U, 20U)) / 10.0F);
 }

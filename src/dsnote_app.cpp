@@ -2095,7 +2095,17 @@ void dsnote_app::play_speech_internal(const QString &text,
     int new_task = 0;
 
     QVariantMap options;
-    options.insert("speech_speed", settings::instance()->speech_speed());
+    options.insert(
+        "speech_speed",
+        settings::instance()->stt_tts_text_format() !=
+                    settings::text_format_t::TextFormatSubRip ||
+                settings::instance()->tts_subtitles_sync() ==
+                    settings::tts_subtitles_sync_mode_t::TtsSubtitleSyncOff ||
+                settings::instance()->tts_subtitles_sync() ==
+                    settings::tts_subtitles_sync_mode_t::
+                        TtsSubtitleSyncOnDontFit
+            ? settings::instance()->speech_speed()
+            : 10);
     options.insert("text_format", static_cast<int>(text_format));
     options.insert(
         "sync_subs",
@@ -2378,7 +2388,17 @@ void dsnote_app::speech_to_file_internal(
     int new_task = 0;
 
     QVariantMap options;
-    options.insert("speech_speed", settings::instance()->speech_speed());
+    options.insert(
+        "speech_speed",
+        settings::instance()->stt_tts_text_format() !=
+                    settings::text_format_t::TextFormatSubRip ||
+                settings::instance()->tts_subtitles_sync() ==
+                    settings::tts_subtitles_sync_mode_t::TtsSubtitleSyncOff ||
+                settings::instance()->tts_subtitles_sync() ==
+                    settings::tts_subtitles_sync_mode_t::
+                        TtsSubtitleSyncOnDontFit
+            ? settings::instance()->speech_speed()
+            : 10);
     options.insert("text_format", static_cast<int>(text_format));
     options.insert(
         "sync_subs",

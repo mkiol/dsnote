@@ -58,9 +58,9 @@ void piper_engine::create_model() {
 bool piper_engine::model_supports_speed() const { return true; }
 
 bool piper_engine::encode_speech_impl(const std::string& text,
+                                      unsigned int speed,
                                       const std::string& out_file) {
-    auto length_scale =
-        vits_length_scale(m_config.speech_speed, m_initial_length_scale);
+    auto length_scale = vits_length_scale(speed, m_initial_length_scale);
 
     LOGD("length_scale: " << length_scale);
 

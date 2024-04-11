@@ -117,9 +117,9 @@ void mimic3_engine::create_model() {
 bool mimic3_engine::model_created() const { return static_cast<bool>(m_tts); }
 
 bool mimic3_engine::encode_speech_impl(const std::string& text,
-                                      const std::string& out_file) {
-    auto length_scale =
-        vits_length_scale(m_config.speech_speed, m_initial_length_scale);
+                                       unsigned int speed,
+                                       const std::string& out_file) {
+    auto length_scale = vits_length_scale(speed, m_initial_length_scale);
 
     LOGD("length_scale: " << length_scale);
 
@@ -144,7 +144,7 @@ bool mimic3_engine::encode_speech_impl(const std::string& text,
             m_tts->attr("speak_text")(text);
             auto results = m_tts->attr("end_utterance")();
 
-            for (auto& result : results) {
+            for (const auto& result : results) {
                 sample_rate = result.attr("sample_rate_hz").cast<int>();
 
                 auto bytes = result.attr("audio_bytes");

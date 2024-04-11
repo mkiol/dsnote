@@ -621,10 +621,10 @@ DialogPage {
 
             ComboBoxForm {
                 label.text: qsTr("Sync speech with timestamps")
-                toolTip: "<i>" + qsTr("Don't sync") + "</i>" + " — " + qsTr("Subtitle timestamps are ignored when reading or exporting to a file.") + "<br/><br/>" +
-                         "<i>" + qsTr("Sync but don't adjust speed") + "</i>" + " — " + qsTr("Speech is synchronized with timestamps.") + "<br/><br/>" +
-                         "<i>" + qsTr("Sync and only increase speed to fit") + "</i>" + " — " + qsTr("Speech is synchronized with timestamps and speed is adjusted so that the duration of speech is never longer than the duration of the subtitle segment.")  + "<br/><br/>" +
-                         "<i>" + qsTr("Sync and increase or decrease speed to fit") + "</i>" + " — " + qsTr("Speech is synchronized with timestamps and the speed is adjusted so that the duration of the speech is exactly the same as the duration of the subtitle segment.")
+                toolTip: "<i>" + qsTr("Don't sync") + "</i>" + " — " + qsTr("Subtitle timestamps are ignored when reading or exporting to a file.") + "<br/> " +
+                         "<i>" + qsTr("Sync but don't adjust speed") + "</i>" + " — " + qsTr("Speech is synchronized according to timestamps.") + "<br/> " +
+                         "<i>" + qsTr("Sync and only increase speed to fit") + "</i>" + " — " + qsTr("Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.")  + "<br/> " +
+                         "<i>" + qsTr("Sync and increase or decrease speed to fit") + "</i>" + " — " + qsTr("Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.")
                 comboBox {
                     currentIndex: {
                         if (_settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOff) return 0
@@ -636,7 +636,7 @@ DialogPage {
                     model: [
                         qsTr("Don't sync"),
                         qsTr("Sync but don't adjust speed"),
-                        qsTr("Sync and only increase speed to fit"),
+                        qsTr("Sync and increase speed to fit"),
                         qsTr("Sync and increase or decrease speed to fit")
                     ]
                     onActivated: {
@@ -651,6 +651,14 @@ DialogPage {
                         }
                     }
                 }
+            }
+
+            TipMessage {
+                indends: 1
+                color: palette.text
+                visible: _settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnFitOnlyIfLonger ||
+                         _settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnAlwaysFit
+                text: qsTr("When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.")
             }
         }
 
