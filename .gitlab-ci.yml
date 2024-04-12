@@ -1,0 +1,95 @@
+stages:
+  - build-arch
+  - upload
+  - release
+
+
+.setenv:
+  before_script:
+    - export TERM="linux"
+    - export PROOT=$(pwd)
+    - export VERSION="$(echo $CI_COMMIT_TAG | grep -oE '[0-9]+(\.[0-9]+)+')"
+    - mkdir _build
+    - echo "VERSION=${VERSION}" >> _build/build.env
+    - echo "RELEASE_TYPE=$(echo $CI_COMMIT_TAG | grep -oE '[a-z]+')" >> _build/build.env
+    - echo "PACKAGE_REGISTRY_URL=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/${VERSION}" >> _build/build.env
+
+
+build-arch:
+  stage: build-arch
+  image: archlinux:base-devel
+  extends: .setenv
+  script:
+    - echo "Building ${VERSION} for ArchLinux..."
+    - cp $PROOT/arch/git/* _build/
+    - chmod 0777 -R _build 
+    - pacman -Syu --noconfirm 1> /dev/null
+    - pacman -S --noconfirm git 1> /dev/null
+    - useradd -m archuser && passwd -d archuser 1> /dev/null
+    - echo "archuser ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-archuser
+    - chmod 0440 /etc/sudoers.d/90-archuser
+    - sudo -u archuser git config --global --add safe.directory $PWD
+    - cd _build
+    - sed -i "s/CI_BUILD=false/CI_BUILD=true/" PKGBUILD # enabled CI build
+    - sed -i "s/ || make/ || make -j$(nproc)/" PKGBUILD # user all cores to build
+    - sudo -u archuser makepkg --syncdeps --noconfirm 1> /dev/null
+    - rm dsnote.install PKGBUILD || true
+    - rm -rf dsnote pkg src || true
+    - export ARCH_BINARY="$(ls dsnote-git-*-x86_64.pkg.tar.zst)"
+    - echo "ARCH_BINARY=${ARCH_BINARY}" >> build.env
+    - echo "ZST_CHECKSUM=$(sha256sum ${ARCH_BINARY})" >> build.env
+  artifacts:
+    expire_in: 48h
+    paths:
+      - _build/
+    reports:
+      dotenv: _build/build.env 
+  only:
+    - tags
+    - main
+  except:
+    - branches
+
+
+upload:
+  stage: upload
+  image: curlimages/curl:latest
+  needs:
+    - job: build-arch
+      artifacts: true
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+    - if: '$CI_COMMIT_TAG =~ /^rc\d+\.\d+\.\d+-\d+$/'
+  script:
+    - echo "Uploading ${VERSION}..."
+    - |
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file _build/${ARCH_BINARY} ${PACKAGE_REGISTRY_URL}/${ARCH_BINARY}
+  artifacts:
+    reports:
+      dotenv: _build/build.env
+
+
+release:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  needs:
+    - job: upload
+      artifacts: true
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+  script:
+    - echo "Running release job for version '${VERSION}'."
+    - set -e
+    - |
+      echo "Release created using release-cli.<br/>" > release_notes.md
+      echo "<br/>" >> release_notes.md
+      echo "SHA256SUM:<br/>" >> release_notes.md
+      echo "${ZST_CHECKSUM}<br/>" >> release_notes.md
+  release:
+    name: "Release $CI_COMMIT_TAG"
+    tag_name: "$CI_COMMIT_TAG"
+    description: "$(cat release_notes.md)"
+    assets:
+      links:
+        - name: "${ARCH_BINARY}"
+          url: "${PACKAGE_REGISTRY_URL}/${ARCH_BINARY}"
