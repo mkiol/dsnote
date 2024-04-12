@@ -116,6 +116,7 @@
           With these options you can directly fix diacritical marks and punctuation in the text.</li>
       <li>Text context menu with additional options: 'Read selection' and 'Translate selection'</li>
       <li>New text appending style: 'After empty line'</li>
+      <li>System tray menu for changing active STT/TTS model</li>
       <li>Speech Note has been translated into Ukrainian and Russian languages.
           Many thanks to Vovkiv for this contribution!</li>
       </ul>
@@ -141,6 +142,8 @@
       </ul>
       <p>Accessibility:</p>
       <ul>
+      <li>New 'Actions' for STT/TTS model switching: 'switch-to-next-stt-model', 'switch-to-prev-stt-model',
+          'switch-to-next-tts-model', 'switch-to-prev-tts-model', 'set-stt-model', 'set-tts-model'</li>
       <li>Fix: Accented characters (e.g.: ã, ê) were not transferred correctly to the active window.</li>
       </ul>
       <p>Flatpak:</p>

@@ -301,6 +301,10 @@ class dsnote_app : public QObject {
     dsnote_app(QObject *parent = nullptr);
     Q_INVOKABLE void set_active_stt_model_idx(int idx);
     Q_INVOKABLE void set_active_tts_model_idx(int idx);
+    Q_INVOKABLE void set_active_next_stt_model();
+    Q_INVOKABLE void set_active_next_tts_model();
+    Q_INVOKABLE void set_active_prev_stt_model();
+    Q_INVOKABLE void set_active_prev_tts_model();
     Q_INVOKABLE void set_active_tts_ref_voice_idx(int idx);
     Q_INVOKABLE void set_active_tts_for_in_mnt_ref_voice_idx(int idx);
     Q_INVOKABLE void set_active_tts_for_out_mnt_ref_voice_idx(int idx);
@@ -367,7 +371,8 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void show_desktop_notification(const QString &summary,
                                                const QString &body,
                                                bool permanent = false);
-    Q_INVOKABLE void execute_action_name(const QString &action_name);
+    Q_INVOKABLE void execute_action_name(const QString &action_name,
+                                         const QString &extra);
     Q_INVOKABLE QVariantList features_availability();
     Q_INVOKABLE QString download_content(const QUrl &url);
     Q_INVOKABLE void player_import_from_url(const QUrl &url);
@@ -459,7 +464,13 @@ class dsnote_app : public QObject {
         start_reading,
         start_reading_clipboard,
         pause_resume_reading,
-        cancel
+        cancel,
+        switch_to_next_stt_model,
+        switch_to_prev_stt_model,
+        switch_to_next_tts_model,
+        switch_to_prev_tts_model,
+        set_stt_model,
+        set_tts_model
     };
     friend QDebug operator<<(QDebug d, action_t type);
 
@@ -571,7 +582,7 @@ class dsnote_app : public QObject {
     QString m_prev_text;
     bool m_undo_flag = false;  // true => undo, false => redu
     std::queue<QString> m_files_to_open;
-    std::optional<action_t> m_pending_action;
+    std::optional<std::pair<action_t, QString>> m_pending_action;
     text_destination_t m_text_destination = text_destination_t::note_add;
     std::optional<desktop_notification_t> m_desktop_notification;
     QVariantMap m_features_availability;
@@ -709,6 +720,8 @@ class dsnote_app : public QObject {
     void handle_tts_speech_to_file_progress(double new_progress, int task);
     void handle_stt_default_model_changed(const QString &model);
     void set_active_stt_model(const QString &model);
+    void set_active_stt_model_or_lang(const QString &model_or_lang);
+    void set_active_tts_model_or_lang(const QString &model_or_lang);
     void handle_tts_default_model_changed(const QString &model);
     void set_active_tts_model(const QString &model);
     void handle_current_task_changed(int task);
@@ -767,7 +780,7 @@ class dsnote_app : public QObject {
     void open_next_file();
     void reset_files_queue();
     void register_hotkeys();
-    void execute_action(action_t action);
+    void execute_action(action_t action, const QString &extra);
     void execute_pending_action();
     void process_pending_desktop_notification();
     void handle_desktop_notification_closed(uint id, uint reason);

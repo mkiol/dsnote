@@ -2397,7 +2397,7 @@ QVariantMap speech_service::available_models(
                           QStringList{p.second.model_id,
                                       QStringLiteral("%1 / %2").arg(
                                           p.second.name, p.second.lang_id),
-                                      p.second.options});
+                                      p.second.options, p.second.lang_id});
                   });
 
     return map;

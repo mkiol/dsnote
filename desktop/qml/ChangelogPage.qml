@@ -40,6 +40,7 @@ DialogPage {
         <li>Text context menu with additional options: <i>Read selection</i> and <i>Translate selection</i>.
             To activate context menu use mouse right click.</li>
         <li>New text appending style: <i>After empty line</i></li>
+        <li>System tray menu for changing active STT/TTS model</li>
         <li><i>Speech Note</i> has been translated into Ukrainian and Russian languages.
             Many thanks to <i>Vovkiv</i> for this contribution!</li>
         </ul>
@@ -70,6 +71,8 @@ DialogPage {
         </ul>
         <p>" + qsTr("Accessibility") + ":</p>
         <ul>
+        <li>New <i>Actions</i> for STT/TTS model switching: <i>switch-to-next-stt-model</i>, <i>switch-to-prev-stt-model</i>,
+            <i>switch-to-next-tts-model</i>, <i>switch-to-prev-tts-model</i>, <i>set-stt-model</i>, <i>set-tts-model</i></li>
         <li>Fix: Accented characters (e.g.: ã, ê) were not transferred correctly to the active window.</li>
         </ul>
         <p>" + qsTr("Flatpak") + ":</p>

@@ -793,6 +793,12 @@ DialogPage {
                       "<li><i>start-reading-clipboard</i> - " + qsTr("Starts reading text from the clipboard.") + "</li>" +
                       "<li><i>pause-resume-reading</i> - " + qsTr("Pauses or resumes reading.") + "</li>" +
                       "<li><i>cancel</i> - " + qsTr("Cancels any of the above operations.") + "</li>" +
+                      "<li><i>switch-to-next-stt-model</i> - " + qsTr("Switches to next STT model.") + "</li>" +
+                      "<li><i>switch-to-prev-stt-model</i> - " + qsTr("Switches to previous STT model.") + "</li>" +
+                      "<li><i>switch-to-next-tts-model</i> - " + qsTr("Switches to next TTS model.") + "</li>" +
+                      "<li><i>switch-to-prev-tts-model</i> - " + qsTr("Switches to previous TTS model.") + "</li>" +
+                      "<li><i>set-stt-model</i> - " + qsTr("Sets STT model.") + "</li>" +
+                      "<li><i>set-tts-model</i> - " + qsTr("Sets TTS model.") + "</li>" +
                       "</ul>" +
                       qsTr("For example, to trigger %1 action, execute the following command: %2.")
                               .arg("<i>start-listening</i>")

@@ -329,7 +329,7 @@ ApplicationWindow {
             appWin.show()
             appWin.raise()
         }
-        onAction_requested: app.execute_action_name(action_name)
+        onAction_requested: app.execute_action_name(action_name, action_extra)
         onFiles_to_open_requested: {
             if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
                 var list_of_files = files
@@ -373,7 +373,7 @@ ApplicationWindow {
                     app.import_files(_files_to_open, _settings.file_import_action === Settings.FileImportActionReplace)
                 }
             }
-            app.execute_action_name(_requested_action)
+            app.execute_action_name(_requested_action, _requested_extra)
             app.set_app_window(appWin);
             showWelcome()
         }

@@ -64,7 +64,7 @@ void app_server::ActivateAction(
     [[maybe_unused]] const QVariantMap &platform_data) {
     qDebug() << "[dbus app] ActivateAction called:" << action_name;
 
-    emit action_requested(action_name);
+    emit action_requested(action_name, {});
 }
 
 void app_server::Open(const QStringList &uris,
@@ -86,23 +86,34 @@ void app_server::activateRequested(const QStringList& arguments,
     if (arguments.isEmpty()) return;
 
     QString action_name;
+    QString id_name;
     QStringList files;
 
-    bool action_option = false;
+    enum class option_t { none, action, id };
+    option_t option = option_t::none;
+
     std::for_each(
         std::next(arguments.cbegin()), arguments.cend(),
         [&](const QString& argument) {
             if (argument == "--action") {
-                action_option = true;
+                option = option_t::action;
                 return;
-            } else if (argument.startsWith('-')) {
-                action_option = false;
+            }
+            if (argument == "--id") {
+                option = option_t::id;
+                return;
+            }
+            if (argument.startsWith('-')) {
+                option = option_t::none;
                 return;
             }
 
-            if (action_option) {
+            if (option == option_t::action) {
                 action_name = argument;
-                action_option = false;
+                option = option_t::none;
+            } else if (option == option_t::id) {
+                id_name = argument;
+                option = option_t::none;
             } else {
                 auto scheme = QUrl{argument}.scheme();
                 if (scheme.isEmpty()) {
@@ -119,7 +130,7 @@ void app_server::activateRequested(const QStringList& arguments,
     if (action_name.isEmpty())
         files_to_open(files);
     else
-        emit action_requested(action_name);
+        emit action_requested(action_name, id_name);
 }
 
 void app_server::activateActionRequested(const QString& actionName,
@@ -127,7 +138,7 @@ void app_server::activateActionRequested(const QString& actionName,
     qDebug() << "[dbus app] activateActionRequested:" << actionName
              << parameter;
 
-    emit action_requested(actionName);
+    emit action_requested(actionName, parameter.toString());
 }
 
 void app_server::openRequested(const QList<QUrl>& uris) {

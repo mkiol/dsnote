@@ -217,6 +217,24 @@ QDebug operator<<(QDebug d, dsnote_app::action_t action) {
         case dsnote_app::action_t::cancel:
             d << "cancel";
             break;
+        case dsnote_app::action_t::switch_to_next_stt_model:
+            d << "switch-to-next-stt-model";
+            break;
+        case dsnote_app::action_t::switch_to_prev_stt_model:
+            d << "switch-to-prev-stt-model";
+            break;
+        case dsnote_app::action_t::switch_to_next_tts_model:
+            d << "switch-to-next-tts-model";
+            break;
+        case dsnote_app::action_t::switch_to_prev_tts_model:
+            d << "switch-to-prev-tts-model";
+            break;
+        case dsnote_app::action_t::set_stt_model:
+            d << "set-stt-model";
+            break;
+        case dsnote_app::action_t::set_tts_model:
+            d << "set-tts-model";
+            break;
     }
 
     return d;
@@ -1149,6 +1167,51 @@ void dsnote_app::set_active_stt_model(const QString &model) {
     }
 }
 
+static QVariantMap::const_iterator active_model_or_lang_it(
+    const QString &model_or_lang, const QVariantMap &map) {
+    QVariantMap::const_iterator it = map.find(model_or_lang);
+
+    if (it == map.cend()) {
+        // trying find model by lang
+        it = std::find_if(
+            map.cbegin(), map.cend(), [&model_or_lang](const auto &key) {
+                auto l = key.toStringList();
+                if (l.size() > 3)
+                    return l.size() > 3 &&
+                           l.at(3).compare(model_or_lang,
+                                           Qt::CaseInsensitive) == 0;
+            });
+    }
+
+    return it;
+}
+
+void dsnote_app::set_active_stt_model_or_lang(const QString &model_or_lang) {
+    if (m_active_stt_model != model_or_lang) {
+        auto it =
+            active_model_or_lang_it(model_or_lang, m_available_stt_models_map);
+        if (it == m_available_stt_models_map.cend()) {
+            qWarning() << "can't swith to stt model or lang:" << model_or_lang;
+        } else {
+            set_active_stt_model_idx(
+                std::distance(m_available_stt_models_map.cbegin(), it));
+        }
+    }
+}
+
+void dsnote_app::set_active_tts_model_or_lang(const QString &model_or_lang) {
+    if (m_active_tts_model != model_or_lang) {
+        auto it =
+            active_model_or_lang_it(model_or_lang, m_available_tts_models_map);
+        if (it == m_available_tts_models_map.cend()) {
+            qWarning() << "can't swith to tts model or lang:" << model_or_lang;
+        } else {
+            set_active_tts_model_idx(
+                std::distance(m_available_tts_models_map.cbegin(), it));
+        }
+    }
+}
+
 void dsnote_app::set_active_mnt_lang(const QString &lang) {
     if (m_active_mnt_lang != lang) {
         qDebug() << "app active mnt lang:" << m_active_mnt_lang << "=>" << lang;
@@ -1761,6 +1824,42 @@ void dsnote_app::set_active_stt_model_idx(int idx) {
             m_dbus_service.setDefaultSttModel(id);
         }
     }
+}
+
+void dsnote_app::set_active_next_stt_model() {
+    auto idx = active_stt_model_idx();
+    if (idx < 0) return;
+
+    idx = idx >= m_available_stt_models_map.size() - 1 ? 0 : idx + 1;
+
+    set_active_stt_model_idx(idx);
+}
+
+void dsnote_app::set_active_next_tts_model() {
+    auto idx = active_tts_model_idx();
+    if (idx < 0) return;
+
+    idx = idx >= m_available_tts_models_map.size() - 1 ? 0 : idx + 1;
+
+    set_active_tts_model_idx(idx);
+}
+
+void dsnote_app::set_active_prev_stt_model() {
+    auto idx = active_stt_model_idx();
+    if (idx < 0) return;
+
+    idx = idx == 0 ? m_available_stt_models_map.size() - 1 : idx - 1;
+
+    set_active_stt_model_idx(idx);
+}
+
+void dsnote_app::set_active_prev_tts_model() {
+    auto idx = active_tts_model_idx();
+    if (idx < 0) return;
+
+    idx = idx == 0 ? m_available_tts_models_map.size() - 1 : idx - 1;
+
+    set_active_tts_model_idx(idx);
 }
 
 void dsnote_app::set_active_tts_model_idx(int idx) {
@@ -3974,12 +4073,14 @@ void dsnote_app::execute_pending_action() {
         return;
     }
 
-    execute_action(m_pending_action.value());
+    execute_action(m_pending_action.value().first,
+                   m_pending_action.value().second);
 
     m_pending_action.reset();
 }
 
-void dsnote_app::execute_action_name(const QString &action_name) {
+void dsnote_app::execute_action_name(const QString &action_name,
+                                     const QString &extra) {
     if (action_name.isEmpty()) return;
 
     if (!settings::instance()->actions_api_enabled()) {
@@ -3988,28 +4089,44 @@ void dsnote_app::execute_action_name(const QString &action_name) {
     }
 
     if (action_name.compare("start-listening", Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::start_listening);
+        execute_action(action_t::start_listening, extra);
     } else if (action_name.compare("start-listening-active-window",
                                    Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::start_listening_active_window);
+        execute_action(action_t::start_listening_active_window, extra);
     } else if (action_name.compare("start-listening-clipboard",
                                    Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::start_listening_clipboard);
+        execute_action(action_t::start_listening_clipboard, extra);
     } else if (action_name.compare("stop-listening", Qt::CaseInsensitive) ==
                0) {
-        execute_action(action_t::stop_listening);
+        execute_action(action_t::stop_listening, extra);
     } else if (action_name.compare("start-reading", Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::start_reading);
+        execute_action(action_t::start_reading, extra);
     } else if (action_name.compare("start-reading-clipboard",
                                    Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::start_reading_clipboard);
+        execute_action(action_t::start_reading_clipboard, extra);
     } else if (action_name.compare("pause-resume-reading",
                                    Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::pause_resume_reading);
+        execute_action(action_t::pause_resume_reading, extra);
     } else if (action_name.compare("cancel", Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::cancel);
+        execute_action(action_t::cancel, extra);
+    } else if (action_name.compare("switch-to-next-stt-model",
+                                   Qt::CaseInsensitive) == 0) {
+        execute_action(action_t::switch_to_next_stt_model, extra);
+    } else if (action_name.compare("switch-to-prev-stt-model",
+                                   Qt::CaseInsensitive) == 0) {
+        execute_action(action_t::switch_to_prev_stt_model, extra);
+    } else if (action_name.compare("switch-to-next-tts-model",
+                                   Qt::CaseInsensitive) == 0) {
+        execute_action(action_t::switch_to_next_tts_model, extra);
+    } else if (action_name.compare("switch-to-prev-tts-model",
+                                   Qt::CaseInsensitive) == 0) {
+        execute_action(action_t::switch_to_prev_tts_model, extra);
+    } else if (action_name.compare("set-stt-model", Qt::CaseInsensitive) == 0) {
+        execute_action(action_t::set_stt_model, extra);
+    } else if (action_name.compare("set-tts-model", Qt::CaseInsensitive) == 0) {
+        execute_action(action_t::set_tts_model, extra);
     } else {
-        qWarning() << "invalid action:" << action_name;
+        qWarning() << "invalid action:" << action_name << extra;
     }
 }
 
@@ -4017,28 +4134,28 @@ void dsnote_app::execute_action_name(const QString &action_name) {
 void dsnote_app::execute_tray_action(tray_icon::action_t action, int value) {
     switch (action) {
         case tray_icon::action_t::start_listening:
-            execute_action(action_t::start_listening);
+            execute_action(action_t::start_listening, {});
             break;
         case tray_icon::action_t::start_listening_active_window:
-            execute_action(action_t::start_listening_active_window);
+            execute_action(action_t::start_listening_active_window, {});
             break;
         case tray_icon::action_t::start_listening_clipboard:
-            execute_action(action_t::start_listening_clipboard);
+            execute_action(action_t::start_listening_clipboard, {});
             break;
         case tray_icon::action_t::stop_listening:
-            execute_action(action_t::stop_listening);
+            execute_action(action_t::stop_listening, {});
             break;
         case tray_icon::action_t::start_reading:
-            execute_action(action_t::start_reading);
+            execute_action(action_t::start_reading, {});
             break;
         case tray_icon::action_t::start_reading_clipboard:
-            execute_action(action_t::start_reading_clipboard);
+            execute_action(action_t::start_reading_clipboard, {});
             break;
         case tray_icon::action_t::pause_resume_reading:
-            execute_action(action_t::pause_resume_reading);
+            execute_action(action_t::pause_resume_reading, {});
             break;
         case tray_icon::action_t::cancel:
-            execute_action(action_t::cancel);
+            execute_action(action_t::cancel, {});
             break;
         case tray_icon::action_t::quit:
             QGuiApplication::quit();
@@ -4058,15 +4175,15 @@ void dsnote_app::execute_tray_action(tray_icon::action_t action, int value) {
 }
 #endif
 
-void dsnote_app::execute_action(action_t action) {
+void dsnote_app::execute_action(action_t action, const QString &extra) {
     if (busy()) {
-        m_pending_action = action;
+        m_pending_action = std::make_pair(action, extra);
         m_action_delay_timer.start();
         qDebug() << "delaying action:" << action;
         return;
     }
 
-    qDebug() << "executing action:" << action;
+    qDebug() << "executing action:" << action << extra;
 
     switch (action) {
         case dsnote_app::action_t::start_listening:
@@ -4097,6 +4214,24 @@ void dsnote_app::execute_action(action_t action) {
             break;
         case dsnote_app::action_t::cancel:
             cancel();
+            break;
+        case dsnote_app::action_t::switch_to_next_stt_model:
+            set_active_next_stt_model();
+            break;
+        case dsnote_app::action_t::switch_to_prev_stt_model:
+            set_active_prev_stt_model();
+            break;
+        case dsnote_app::action_t::switch_to_next_tts_model:
+            set_active_next_tts_model();
+            break;
+        case dsnote_app::action_t::switch_to_prev_tts_model:
+            set_active_prev_tts_model();
+            break;
+        case dsnote_app::action_t::set_stt_model:
+            if (!extra.isEmpty()) set_active_stt_model_or_lang(extra);
+            break;
+        case dsnote_app::action_t::set_tts_model:
+            if (!extra.isEmpty()) set_active_tts_model_or_lang(extra);
             break;
     }
 }
@@ -4564,7 +4699,7 @@ void dsnote_app::register_hotkeys() {
             QObject::connect(
                 &m_hotkeys.start_listening, &QHotkey::activated, this, [&]() {
                     qDebug() << "hot key activated: start-listening";
-                    execute_action(action_t::start_listening);
+                    execute_action(action_t::start_listening, {});
                 });
         }
 
@@ -4576,7 +4711,7 @@ void dsnote_app::register_hotkeys() {
                 this, [&]() {
                     qDebug()
                         << "hot key activated: start-listening-active-window";
-                    execute_action(action_t::start_listening_active_window);
+                    execute_action(action_t::start_listening_active_window, {});
                 });
         }
 
@@ -4587,7 +4722,7 @@ void dsnote_app::register_hotkeys() {
                 &m_hotkeys.start_listening_clipboard, &QHotkey::activated, this,
                 [&]() {
                     qDebug() << "hot key activated: start-listening-clipboard";
-                    execute_action(action_t::start_listening_clipboard);
+                    execute_action(action_t::start_listening_clipboard, {});
                 });
         }
 
@@ -4597,7 +4732,7 @@ void dsnote_app::register_hotkeys() {
             QObject::connect(
                 &m_hotkeys.stop_listening, &QHotkey::activated, this, [&]() {
                     qDebug() << "hot key activated: stop-listening";
-                    execute_action(action_t::stop_listening);
+                    execute_action(action_t::stop_listening, {});
                 });
         }
 
@@ -4607,7 +4742,7 @@ void dsnote_app::register_hotkeys() {
             QObject::connect(&m_hotkeys.start_reading, &QHotkey::activated,
                              this, [&]() {
                                  qDebug() << "hot key activated: start-reading";
-                                 execute_action(action_t::start_reading);
+                                 execute_action(action_t::start_reading, {});
                              });
         }
 
@@ -4618,7 +4753,7 @@ void dsnote_app::register_hotkeys() {
                 &m_hotkeys.start_reading_clipboard, &QHotkey::activated, this,
                 [&]() {
                     qDebug() << "hot key activated: start-reading-clipboard";
-                    execute_action(action_t::start_reading_clipboard);
+                    execute_action(action_t::start_reading_clipboard, {});
                 });
         }
 
@@ -4629,7 +4764,7 @@ void dsnote_app::register_hotkeys() {
                 &m_hotkeys.pause_resume_reading, &QHotkey::activated, this,
                 [&]() {
                     qDebug() << "hot key activated: pause-resume-reading";
-                    execute_action(action_t::pause_resume_reading);
+                    execute_action(action_t::pause_resume_reading, {});
                 });
         }
 
@@ -4639,7 +4774,7 @@ void dsnote_app::register_hotkeys() {
             QObject::connect(&m_hotkeys.cancel, &QHotkey::activated, this,
                              [&]() {
                                  qDebug() << "hot key activated: cancel";
-                                 execute_action(action_t::cancel);
+                                 execute_action(action_t::cancel, {});
                              });
         }
     }
