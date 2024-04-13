@@ -23998,6 +23998,20 @@
             "size": "10647609"
         },
         {
+            "name": "Čeština (RHVoice Radek Male)",
+            "model_id": "cs_rhvoice_radek",
+            "engine": "tts_rhvoice",
+            "lang_id": "cs",
+            "speaker": "radek",
+            "checksum": "9b3fac6c",
+            "checksum_quick": "4876e987",
+            "size": "3476703",
+            "comp": "zip",
+            "urls": [
+                "https://github.com/RHVoice/radek-cze/archive/fbaffec148462e80adf7a069fecd5f54362ea79f.zip"
+            ]
+        },
+        {
             "name": "English (RHVoice Slt Female)",
             "model_id": "en_rhvoice_slt",
             "engine": "tts_rhvoice",
@@ -24115,13 +24129,13 @@
             "engine": "tts_rhvoice",
             "lang_id": "sr",
             "speaker": "dragana",
-            "checksum": "4b0d15d4",
-            "checksum_quick": "aa1729cb",
+            "checksum": "5b0b047",
+            "checksum_quick": "10f117d7",
+            "size": "35618017",
             "comp": "zipall",
             "urls": [
-                "https://github.com/RHVoice/dragana-srp/releases/download/4.7/RHVoice-voice-Serbian-Dragana-v4.7.zip"
-            ],
-            "size": "23692523"
+                "https://github.com/RHVoice/dragana-srp/releases/download/4.8/RHVoice-voice-Serbian-Dragana-v4.8.zip"
+            ]
         },
         {
             "name": "Shqip (RHVoice Hana Female)",

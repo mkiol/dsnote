@@ -189,17 +189,21 @@ class tts_engine {
 
    protected:
     enum class task_type_t { speech_encoding, text_restoration };
+    enum task_flags : unsigned int {
+        task_flag_none = 0U,
+        task_flag_first = 1U << 0U,
+        task_flag_last = 1U << 1U
+    };
 
     struct task_t {
         std::string text;
         size_t t0 = 0;
         size_t t1 = 0;
         task_type_t type = task_type_t::speech_encoding;
-        bool first = false;
-        bool last = false;
+        unsigned int flags = task_flags::task_flag_none;
 
         inline bool empty() const {
-            return text.empty() && t0 == 0ll && t1 == 0ll;
+            return text.empty() && t0 == 0LL && t1 == 0LL;
         }
     };
 
@@ -215,9 +219,9 @@ class tts_engine {
     bool m_restart_requested = false;
 
     static std::string first_file_with_ext(std::string dir_path,
-                                           std::string&& ext);
+                                           const std::string& ext);
     static std::string find_file_with_name_prefix(std::string dir_path,
-                                                  std::string prefix);
+                                                  const std::string& prefix);
     static void write_wav_header(int sample_rate, int sample_width,
                                  int channels, uint32_t num_samples,
                                  std::ofstream& wav_file);
@@ -230,7 +234,7 @@ class tts_engine {
     virtual bool model_supports_speed() const = 0;
     virtual void create_model() = 0;
     virtual void reset_ref_voice();
-    virtual bool encode_speech_impl(const std::string& text,
+    virtual bool encode_speech_impl(const std::string& text, unsigned int speed,
                                     const std::string& out_file) = 0;
     void set_state(state_t new_state);
     std::string path_to_output_file(const std::string& text,

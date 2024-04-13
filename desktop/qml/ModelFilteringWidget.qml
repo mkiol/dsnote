@@ -163,6 +163,10 @@ ColumnLayout {
         GridLayout {
             columns: 4
 
+            readonly property int maxComboWidth: Math.max(modelType_combo.implicitWidth,
+                                                          engine_combo.implicitWidth, speed_combo.implicitWidth,
+                                                          quality_combo.implicitWidth, caps_combo.implicitWidth)
+
             // modelType
 
             CheckBox {
@@ -194,6 +198,7 @@ ColumnLayout {
 
                 enabled: modelType_checkBox.checked
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                Layout.preferredWidth: parent.maxComboWidth
                 hoverEnabled: true
 
                 model: [
@@ -249,6 +254,7 @@ ColumnLayout {
 
                 enabled: engine_checkBox.checked
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                Layout.preferredWidth: parent.maxComboWidth
                 hoverEnabled: true
 
                 model: [
@@ -312,6 +318,7 @@ ColumnLayout {
 
                 enabled: speed_checkBox.checked
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                Layout.preferredWidth: parent.maxComboWidth
                 hoverEnabled: true
 
                 model: [
@@ -368,6 +375,7 @@ ColumnLayout {
 
                 enabled: quality_checkBox.checked
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                Layout.preferredWidth: parent.maxComboWidth
                 hoverEnabled: true
 
                 model: [
@@ -424,6 +432,7 @@ ColumnLayout {
 
                 enabled: caps_checkBox.checked
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                Layout.preferredWidth: parent.maxComboWidth
                 hoverEnabled: true
 
                 model: [

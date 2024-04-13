@@ -12,6 +12,7 @@
 #include <QMenu>
 #include <QObject>
 #include <QSystemTrayIcon>
+#include <QVariantMap>
 #include <unordered_map>
 
 class tray_icon : public QSystemTrayIcon {
@@ -27,7 +28,9 @@ class tray_icon : public QSystemTrayIcon {
         pause_resume_reading,
         cancel,
         quit,
-        toggle_app_window
+        toggle_app_window,
+        change_stt_model,
+        change_tts_model
     };
     enum class state_t { idle, busy, stt, stt_file, tts, tts_file, mnt };
     enum class task_state_t {
@@ -42,15 +45,23 @@ class tray_icon : public QSystemTrayIcon {
     explicit tray_icon(QObject *parent = nullptr);
     void set_state(state_t state);
     void set_task_state(task_state_t task_state);
+    void set_stt_models(QVariantList&& stt_models);
+    void set_active_stt_model(QString&& stt_model);
+    void set_tts_models(QVariantList&& tts_models);
+    void set_active_tts_model(QString&& tts_model);
 
    signals:
-    void action_triggered(action_t action);
+    void action_triggered(action_t action, int value);
 
    private:
     QMenu m_menu;
     state_t m_state = state_t::busy;
     task_state_t m_task_state = task_state_t::idle;
-    std::unordered_map<action_t, QAction *> m_actions;
+    std::unordered_map<action_t, QObject*> m_actions;
+    QVariantList m_stt_models;
+    QString m_active_stt_model;
+    QVariantList m_tts_models;
+    QString m_active_tts_model;
 
     void make_menu();
     void update_menu();

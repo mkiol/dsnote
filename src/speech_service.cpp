@@ -1453,7 +1453,6 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         config.lang = model_config->tts->lang_id.toStdString();
         config.cache_dir = settings::instance()->cache_dir().toStdString();
         config.speaker_id = model_config->tts->speaker.toStdString();
-        config.speech_speed = tts_speech_speed_from_options(options);
         config.options = model_config->options.toStdString();
         config.text_format = tts_text_fromat_from_settings_format(
             text_format_from_options(options));
@@ -1468,6 +1467,7 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             tts_split_into_sentences_from_options(options);
         config.use_engine_speed_control =
             tts_use_engine_speed_control_from_options(options);
+        config.speech_speed = tts_speech_speed_from_options(options);
 
         if (settings::instance()->tts_use_gpu() &&
             settings::instance()->has_gpu_device_tts()) {
@@ -2397,7 +2397,7 @@ QVariantMap speech_service::available_models(
                           QStringList{p.second.model_id,
                                       QStringLiteral("%1 / %2").arg(
                                           p.second.name, p.second.lang_id),
-                                      p.second.options});
+                                      p.second.options, p.second.lang_id});
                   });
 
     return map;
@@ -3174,7 +3174,6 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
 
 unsigned int speech_service::tts_speech_speed_from_options(
     const QVariantMap &options) {
-    qDebug() << "options:" << options;
     if (options.contains(QStringLiteral("speech_speed"))) {
         bool ok = false;
         auto speed = options.value(QStringLiteral("speech_speed")).toInt(&ok);

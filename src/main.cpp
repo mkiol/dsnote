@@ -81,6 +81,7 @@ struct cmd_options {
     bool reset_models = false;
     bool start_in_tray = false;
     QString action;
+    QString id;
     QStringList files;
     QString log_file;
 };
@@ -119,9 +120,18 @@ static cmd_options check_options(const QCoreApplication& app) {
             "start-listening, start-listening-active-window, "
             "start-listening-clipboard, stop-listening, "
             "start-reading, start-reading-clipboard, pause-resume-reading, "
-            "cancel."),
+            "cancel, switch-to-next-stt-model, switch-to-prev-stt-model, "
+            "switch-to-next-tts-model, switch-to-prev-tts-model, "
+            "set-stt-model, set-tts-model."),
         QStringLiteral("action")};
     parser.addOption(action_opt);
+
+    QCommandLineOption id_opt{
+        QStringLiteral("id"),
+        QStringLiteral("Language or model id. Used together with set-stt-model "
+                       "or set-tts-model action."),
+        QStringLiteral("id")};
+    parser.addOption(id_opt);
 
     QCommandLineOption gen_checksum_opt{
         QStringLiteral("gen-checksums"),
@@ -210,17 +220,40 @@ static cmd_options check_options(const QCoreApplication& app) {
             action.compare("start-reading-clipboard", Qt::CaseInsensitive) !=
                 0 &&
             action.compare("pause-resume-reading", Qt::CaseInsensitive) != 0 &&
-            action.compare("cancel", Qt::CaseInsensitive) != 0) {
+            action.compare("cancel", Qt::CaseInsensitive) != 0 &&
+            action.compare("switch-to-next-stt-model", Qt::CaseInsensitive) !=
+                0 &&
+            action.compare("switch-to-prev-stt-model", Qt::CaseInsensitive) !=
+                0 &&
+            action.compare("switch-to-next-tts-model", Qt::CaseInsensitive) !=
+                0 &&
+            action.compare("switch-to-prev-tts-model", Qt::CaseInsensitive) !=
+                0 &&
+            action.compare("set-stt-model", Qt::CaseInsensitive) != 0 &&
+            action.compare("set-tts-model", Qt::CaseInsensitive) != 0) {
             fmt::print(
                 stderr,
                 "Invalid action. Use one option from the following: "
                 "start-listening, start-listening-active-window, "
                 "start-listening-clipboard, stop-listening, "
                 "start-reading, start-reading-clipboard, pause-resume-reading, "
-                "cancel.\n");
+                "cancel, switch-to-next-stt-model, switch-to-prev-stt-model, "
+                "switch-to-next-tts-model, switch-to-prev-tts-model, "
+                "set-stt-model, set-tts-model.\n");
             options.valid = false;
         } else {
             options.action = std::move(action);
+
+            if (action.compare("set-stt-model", Qt::CaseInsensitive) == 0 ||
+                action.compare("set-tts-model", Qt::CaseInsensitive) == 0) {
+                auto id = parser.value(id_opt);
+                if (id.isEmpty()) {
+                    fmt::print(stderr, "Missing language or model id.\n");
+                    options.valid = false;
+                } else {
+                    options.id = std::move(id);
+                }
+            }
         }
     }
 
@@ -351,6 +384,7 @@ static void start_app(const cmd_options& options, app_server& dbus_app_server) {
                                 options.files);
     context->setContextProperty(QStringLiteral("_requested_action"),
                                 options.action);
+    context->setContextProperty(QStringLiteral("_requested_extra"), options.id);
     context->setContextProperty(QStringLiteral("_start_in_tray"),
                                 options.start_in_tray);
     context->setContextProperty(QStringLiteral("_app_server"),

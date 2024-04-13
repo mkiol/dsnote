@@ -217,6 +217,7 @@ int rhvoice_engine::play_speech_callback(const short* samples,
 }
 
 bool rhvoice_engine::encode_speech_impl(const std::string& text,
+                                        unsigned int speed,
                                         const std::string& out_file) {
     callback_data cb_data{this, std::ofstream{out_file, std::ios::binary}};
 
@@ -227,13 +228,12 @@ bool rhvoice_engine::encode_speech_impl(const std::string& text,
 
     cb_data.wav_file.seekp(sizeof(wav_header));
 
-    double rate = [this]() {
-        if (m_config.speech_speed < 1 || m_config.speech_speed > 20 ||
-            m_config.speech_speed == 10) {
+    double rate = [speed]() {
+        if (speed < 1 || speed > 20 || speed == 10) {
             return 0.0;
         }
 
-        return (static_cast<double>(m_config.speech_speed) / 10.0) - 1.0;
+        return (static_cast<double>(speed) / 10.0) - 1.0;
     }();
 
     RHVoice_synth_params synth_params{
@@ -249,7 +249,7 @@ bool rhvoice_engine::encode_speech_impl(const std::string& text,
         /*capitals_mode=*/RHVoice_capitals_default,
         /*flags=*/0};
 
-    auto message = m_rhvoice_api.RHVoice_new_message(
+    auto* message = m_rhvoice_api.RHVoice_new_message(
         m_rhvoice_engine, text.c_str(), text.size(), RHVoice_message_text,
         &synth_params, &cb_data);
     if (!message) {

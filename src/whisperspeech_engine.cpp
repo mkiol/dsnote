@@ -164,8 +164,9 @@ bool whisperspeech_engine::model_created() const { return static_cast<bool>(m_mo
 
 void whisperspeech_engine::reset_ref_voice() { m_speaker.reset(); }
 
-bool whisperspeech_engine::encode_speech_impl(const std::string& text,
-                                      const std::string& out_file) {
+bool whisperspeech_engine::encode_speech_impl(
+    const std::string& text, [[maybe_unused]] unsigned int speed,
+    const std::string& out_file) {
     auto task = py_executor::instance()->execute([&]() {
         try {
             if (!m_speaker && !m_ref_voice_wav_file.empty()) {

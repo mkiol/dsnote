@@ -408,6 +408,17 @@ void settings::set_tts_use_gpu(bool value) {
     }
 }
 
+bool settings::use_toggle_for_hotkey() const {
+    return value(QStringLiteral("use_toggle_for_hotkey"), true).toBool();
+}
+
+void settings::set_use_toggle_for_hotkey(bool value) {
+    if (use_toggle_for_hotkey() != value) {
+        setValue(QStringLiteral("use_toggle_for_hotkey"), value);
+        emit use_toggle_for_hotkey_changed();
+    }
+}
+
 QString settings::default_tts_model_for_mnt_lang(const QString& lang) {
     return value(QStringLiteral("default_tts_model_for_mnt_%1").arg(lang), {})
         .toString();
@@ -1763,6 +1774,58 @@ QString settings::hotkey_cancel() const {
 void settings::set_hotkey_cancel(const QString& value) {
     if (value != hotkey_cancel()) {
         setValue(QStringLiteral("hotkey_cancel"), value);
+        emit hotkeys_changed();
+    }
+}
+
+QString settings::hotkey_switch_to_next_stt_model() const {
+    return value(QStringLiteral("hotkey_switch_to_next_stt_model"),
+                 QStringLiteral("Ctrl+Alt+Shift+B"))
+        .toString();
+}
+
+void settings::set_hotkey_switch_to_next_stt_model(const QString& value) {
+    if (value != hotkey_switch_to_next_stt_model()) {
+        setValue(QStringLiteral("hotkey_switch_to_next_stt_model"), value);
+        emit hotkeys_changed();
+    }
+}
+
+QString settings::hotkey_switch_to_prev_stt_model() const {
+    return value(QStringLiteral("hotkey_switch_to_prev_stt_model"),
+                 QStringLiteral("Ctrl+Alt+Shift+V"))
+        .toString();
+}
+
+void settings::set_hotkey_switch_to_prev_stt_model(const QString& value) {
+    if (value != hotkey_switch_to_prev_stt_model()) {
+        setValue(QStringLiteral("hotkey_switch_to_prev_stt_model"), value);
+        emit hotkeys_changed();
+    }
+}
+
+QString settings::hotkey_switch_to_next_tts_model() const {
+    return value(QStringLiteral("hotkey_switch_to_next_tts_model"),
+                 QStringLiteral("Ctrl+Alt+Shift+M"))
+        .toString();
+}
+
+void settings::set_hotkey_switch_to_next_tts_model(const QString& value) {
+    if (value != hotkey_switch_to_next_stt_model()) {
+        setValue(QStringLiteral("hotkey_switch_to_next_tts_model"), value);
+        emit hotkeys_changed();
+    }
+}
+
+QString settings::hotkey_switch_to_prev_tts_model() const {
+    return value(QStringLiteral("hotkey_switch_to_prev_tts_model"),
+                 QStringLiteral("Ctrl+Alt+Shift+N"))
+        .toString();
+}
+
+void settings::set_hotkey_switch_to_prev_tts_model(const QString& value) {
+    if (value != hotkey_switch_to_prev_stt_model()) {
+        setValue(QStringLiteral("hotkey_switch_to_prev_tts_model"), value);
         emit hotkeys_changed();
     }
 }

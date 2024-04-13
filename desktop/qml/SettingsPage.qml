@@ -621,10 +621,10 @@ DialogPage {
 
             ComboBoxForm {
                 label.text: qsTr("Sync speech with timestamps")
-                toolTip: "<i>" + qsTr("Don't sync") + "</i>" + " — " + qsTr("Subtitle timestamps are ignored when reading or exporting to a file.") + "<br/><br/>" +
-                         "<i>" + qsTr("Sync but don't adjust speed") + "</i>" + " — " + qsTr("Speech is synchronized with timestamps.") + "<br/><br/>" +
-                         "<i>" + qsTr("Sync and only increase speed to fit") + "</i>" + " — " + qsTr("Speech is synchronized with timestamps and speed is adjusted so that the duration of speech is never longer than the duration of the subtitle segment.")  + "<br/><br/>" +
-                         "<i>" + qsTr("Sync and increase or decrease speed to fit") + "</i>" + " — " + qsTr("Speech is synchronized with timestamps and the speed is adjusted so that the duration of the speech is exactly the same as the duration of the subtitle segment.")
+                toolTip: "<i>" + qsTr("Don't sync") + "</i>" + " — " + qsTr("Subtitle timestamps are ignored when reading or exporting to a file.") + "<br/> " +
+                         "<i>" + qsTr("Sync but don't adjust speed") + "</i>" + " — " + qsTr("Speech is synchronized according to timestamps.") + "<br/> " +
+                         "<i>" + qsTr("Sync and only increase speed to fit") + "</i>" + " — " + qsTr("Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.")  + "<br/> " +
+                         "<i>" + qsTr("Sync and increase or decrease speed to fit") + "</i>" + " — " + qsTr("Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.")
                 comboBox {
                     currentIndex: {
                         if (_settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOff) return 0
@@ -636,7 +636,7 @@ DialogPage {
                     model: [
                         qsTr("Don't sync"),
                         qsTr("Sync but don't adjust speed"),
-                        qsTr("Sync and only increase speed to fit"),
+                        qsTr("Sync and increase speed to fit"),
                         qsTr("Sync and increase or decrease speed to fit")
                     ]
                     onActivated: {
@@ -651,6 +651,14 @@ DialogPage {
                         }
                     }
                 }
+            }
+
+            TipMessage {
+                indends: 1
+                color: palette.text
+                visible: _settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnFitOnlyIfLonger ||
+                         _settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnAlwaysFit
+                text: qsTr("When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.")
             }
         }
 
@@ -672,6 +680,21 @@ DialogPage {
                               qsTr("Text to Speech reading can be from current note or from text in the clipboard.") + " " +
                               qsTr("Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).") + " " +
                               qsTr("This feature only works under X11.")
+                hoverEnabled: true
+            }
+
+            CheckBox {
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
+                checked: _settings.use_toggle_for_hotkey
+                text: qsTr("Toggle behavior")
+                onCheckedChanged: {
+                    _settings.use_toggle_for_hotkey = checked
+                }
+                Layout.leftMargin: appWin.padding
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.")
                 hoverEnabled: true
             }
 
@@ -755,6 +778,46 @@ DialogPage {
                 }
             }
 
+            TextFieldForm {
+                indends: 1
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
+                label.text: qsTr("Switch to next STT model")
+                textField {
+                    text: _settings.hotkey_switch_to_next_stt_model
+                    onTextChanged: _settings.hotkey_switch_to_next_stt_model = text
+                }
+            }
+
+            TextFieldForm {
+                indends: 1
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
+                label.text: qsTr("Switch to previous STT model")
+                textField {
+                    text: _settings.hotkey_switch_to_prev_stt_model
+                    onTextChanged: _settings.hotkey_switch_to_prev_stt_model = text
+                }
+            }
+
+            TextFieldForm {
+                indends: 1
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
+                label.text: qsTr("Switch to next TTS model")
+                textField {
+                    text: _settings.hotkey_switch_to_next_tts_model
+                    onTextChanged: _settings.hotkey_switch_to_next_tts_model = text
+                }
+            }
+
+            TextFieldForm {
+                indends: 1
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
+                label.text: qsTr("Switch to previous TTS model")
+                textField {
+                    text: _settings.hotkey_switch_to_prev_tts_model
+                    onTextChanged: _settings.hotkey_switch_to_prev_tts_model = text
+                }
+            }
+
             CheckBox {
                 checked: _settings.actions_api_enabled
                 text: qsTr("Allow external applications to invoke actions")
@@ -782,9 +845,15 @@ DialogPage {
                       "<li><i>start-listening-clipboard</i> - " + qsTr("Starts listening. The decoded text is copied to the clipboard.") + "</li>" +
                       "<li><i>stop-listening</i> - " + qsTr("Stops listening. The already captured voice is decoded into text.") + "</li>" +
                       "<li><i>start-reading</i> - " + qsTr("Starts reading.") + "</li>" +
-                      "<li><i>start-reading-clipboard</i> - " + qsTr("Starts reading text from the clipboard.") + "</li>" +
+                      "<li><i>start-reading-clipboard</i> (X11) - " + qsTr("Starts reading text from the clipboard.") + "</li>" +
                       "<li><i>pause-resume-reading</i> - " + qsTr("Pauses or resumes reading.") + "</li>" +
                       "<li><i>cancel</i> - " + qsTr("Cancels any of the above operations.") + "</li>" +
+                      "<li><i>switch-to-next-stt-model</i> - " + qsTr("Switches to next STT model.") + "</li>" +
+                      "<li><i>switch-to-prev-stt-model</i> - " + qsTr("Switches to previous STT model.") + "</li>" +
+                      "<li><i>switch-to-next-tts-model</i> - " + qsTr("Switches to next TTS model.") + "</li>" +
+                      "<li><i>switch-to-prev-tts-model</i> - " + qsTr("Switches to previous TTS model.") + "</li>" +
+                      "<li><i>set-stt-model</i> - " + qsTr("Sets STT model.") + "</li>" +
+                      "<li><i>set-tts-model</i> - " + qsTr("Sets TTS model.") + "</li>" +
                       "</ul>" +
                       qsTr("For example, to trigger %1 action, execute the following command: %2.")
                               .arg("<i>start-listening</i>")

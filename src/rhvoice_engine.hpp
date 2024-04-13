@@ -61,7 +61,7 @@ class rhvoice_engine : public tts_engine {
     bool model_created() const final;
     bool model_supports_speed() const final;
     void create_model() final;
-    bool encode_speech_impl(const std::string& text,
+    bool encode_speech_impl(const std::string& text, unsigned int speed,
                             const std::string& out_file) final;
     static int play_speech_callback(const short* samples, unsigned int count,
                                     void* user_data);

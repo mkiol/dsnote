@@ -8,6 +8,7 @@
 #include "media_compressor.hpp"
 
 #include <fmt/format.h>
+#include <locale.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -446,13 +447,17 @@ void media_compressor::init_av_filter() {
         args = fmt::format("tempo={:.2}:transients=smooth:window=long",
                            m_options->speed);
         LOGD("rubberband filter args: " << args);
+
+        const char* old_locale = setlocale(LC_NUMERIC, "C");
         if (avfilter_graph_create_filter(&filter_rubberband_ctx, rubberband,
                                          "rubberband", args.c_str(), nullptr,
                                          m_av_filter_ctx.graph) < 0) {
+            setlocale(LC_NUMERIC, old_locale);
             clean_av();
             throw std::runtime_error(
                 "rubberband avfilter_graph_create_filter error");
         }
+        setlocale(LC_NUMERIC, old_locale);
     }
 
     const auto* buffersink = avfilter_get_by_name("abuffersink");

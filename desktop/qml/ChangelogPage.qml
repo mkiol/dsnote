@@ -40,6 +40,7 @@ DialogPage {
         <li>Text context menu with additional options: <i>Read selection</i> and <i>Translate selection</i>.
             To activate context menu use mouse right click.</li>
         <li>New text appending style: <i>After empty line</i></li>
+        <li>System tray menu for changing active STT/TTS model</li>
         <li><i>Speech Note</i> has been translated into Ukrainian and Russian languages.
             Many thanks to <i>Vovkiv</i> for this contribution!</li>
         </ul>
@@ -49,6 +50,7 @@ DialogPage {
             that generates voice with exceptional naturalness.
             The new engine comes with models for English and Polish languages. All models support voice cloning.</li>
         <li>New Piper voices for English, Persian, Slovenian, Turkish, French and Spanish</li>
+        <li>New RHVoice voice for Czech</li>
         <li>Settings option to enable/disable speech synchronization with subtitle timestamps
             (<i>Text to Speech</i> &rarr; <i>Sync speech with timestamps</i>).
             This may be useful for creating voice overs.</li>
@@ -62,12 +64,19 @@ DialogPage {
         <ul>
         <li>New models: Greek to English, Maltese to English,
             Slovenian to English, Turkish to English, English to Catalan</li>
+        <li>Updated models: Czech and Lithuanian</li>
         <li>Handy buttons to quickly add translated text to the note or
-            to replace it and switch languages (<i>Add</li>, <i>Replace</i>).</li>
+            to replace it and switch languages (<i>Add</i>, <i>Replace</i>).</li>
         <li>Context menu option to translate from cursor position or translate only selected text</li>
         </ul>
         <p>" + qsTr("Accessibility") + ":</p>
         <ul>
+        <li>New <i>Actions</i> for STT/TTS models switching: <i>switch-to-next-stt-model</i>, <i>switch-to-prev-stt-model</i>,
+            <i>switch-to-next-tts-model</i>, <i>switch-to-prev-tts-model</i>, <i>set-stt-model</i>, <i>set-tts-model</i></li>
+        <li>New global keyboard shortcuts for STT/TTS models switching (X11 only): <i>Switch to next STT model</i>,
+            <i>Switch to prev STT model</i>, <i>Switch to next TTS model</i>, <i>Switch to prev TTS model</i></li>
+        <li>Toggle option for keyboard shortcuts (X11 only). When <i>Toggle behavior</i> is enabled,
+            Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</li>
         <li>Fix: Accented characters (e.g.: ã, ê) were not transferred correctly to the active window.</li>
         </ul>
         <p>" + qsTr("Flatpak") + ":</p>
