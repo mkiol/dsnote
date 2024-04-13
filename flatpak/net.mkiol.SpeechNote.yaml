@@ -325,7 +325,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RHVoice/RHVoice.git
-        commit: 527d914ab60ebcdeb297c8393f699300d4c731c4
+        commit: 3ba2a849c14e547d54f111b53fc39e484939f66c
       - type: patch
         path: ../patches/rhvoice.patch
 
@@ -803,7 +803,7 @@ modules:
     sources:
       - type: archive
         url: https://xkbcommon.org/download/libxkbcommon-1.6.0.tar.xz
-        sha256: 0edc14eccdd391514458bc5f5a4b99863ed2d651e4dd761a90abf4f46ef99c2b        
+        sha256: 0edc14eccdd391514458bc5f5a4b99863ed2d651e4dd761a90abf4f46ef99c2b
 
   - name: dsnote
     buildsystem: cmake-ninja
