@@ -683,6 +683,21 @@ DialogPage {
                 hoverEnabled: true
             }
 
+            CheckBox {
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
+                checked: _settings.use_toggle_for_hotkey
+                text: qsTr("Toggle behavior")
+                onCheckedChanged: {
+                    _settings.use_toggle_for_hotkey = checked
+                }
+                Layout.leftMargin: appWin.padding
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.")
+                hoverEnabled: true
+            }
+
             TextFieldForm {
                 indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts

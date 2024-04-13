@@ -4707,7 +4707,17 @@ void dsnote_app::register_hotkeys() {
             QObject::connect(
                 &m_hotkeys.start_listening, &QHotkey::activated, this, [&]() {
                     qDebug() << "hot key activated: start-listening";
-                    execute_action(action_t::start_listening, {});
+                    if (settings::instance()->use_toggle_for_hotkey() &&
+                        (service_state() ==
+                             service_state_t::StateListeningSingleSentence ||
+                         service_state() ==
+                             service_state_t::StateListeningManual ||
+                         service_state() ==
+                             service_state_t::StateListeningAuto)) {
+                        execute_action(action_t::stop_listening, {});
+                    } else {
+                        execute_action(action_t::start_listening, {});
+                    }
                 });
         }
 
@@ -4719,7 +4729,18 @@ void dsnote_app::register_hotkeys() {
                 this, [&]() {
                     qDebug()
                         << "hot key activated: start-listening-active-window";
-                    execute_action(action_t::start_listening_active_window, {});
+                    if (settings::instance()->use_toggle_for_hotkey() &&
+                        (service_state() ==
+                             service_state_t::StateListeningSingleSentence ||
+                         service_state() ==
+                             service_state_t::StateListeningManual ||
+                         service_state() ==
+                             service_state_t::StateListeningAuto)) {
+                        execute_action(action_t::stop_listening, {});
+                    } else {
+                        execute_action(action_t::start_listening_active_window,
+                                       {});
+                    }
                 });
         }
 
@@ -4730,7 +4751,17 @@ void dsnote_app::register_hotkeys() {
                 &m_hotkeys.start_listening_clipboard, &QHotkey::activated, this,
                 [&]() {
                     qDebug() << "hot key activated: start-listening-clipboard";
-                    execute_action(action_t::start_listening_clipboard, {});
+                    if (settings::instance()->use_toggle_for_hotkey() &&
+                        (service_state() ==
+                             service_state_t::StateListeningSingleSentence ||
+                         service_state() ==
+                             service_state_t::StateListeningManual ||
+                         service_state() ==
+                             service_state_t::StateListeningAuto)) {
+                        execute_action(action_t::stop_listening, {});
+                    } else {
+                        execute_action(action_t::start_listening_clipboard, {});
+                    }
                 });
         }
 
@@ -4750,7 +4781,15 @@ void dsnote_app::register_hotkeys() {
             QObject::connect(&m_hotkeys.start_reading, &QHotkey::activated,
                              this, [&]() {
                                  qDebug() << "hot key activated: start-reading";
-                                 execute_action(action_t::start_reading, {});
+                                 if (settings::instance()
+                                         ->use_toggle_for_hotkey() &&
+                                     service_state() ==
+                                         service_state_t::StatePlayingSpeech) {
+                                     execute_action(action_t::cancel, {});
+                                 } else {
+                                     execute_action(action_t::start_reading,
+                                                    {});
+                                 }
                              });
         }
 
@@ -4761,7 +4800,13 @@ void dsnote_app::register_hotkeys() {
                 &m_hotkeys.start_reading_clipboard, &QHotkey::activated, this,
                 [&]() {
                     qDebug() << "hot key activated: start-reading-clipboard";
-                    execute_action(action_t::start_reading_clipboard, {});
+                    if (settings::instance()->use_toggle_for_hotkey() &&
+                        service_state() ==
+                            service_state_t::StatePlayingSpeech) {
+                        execute_action(action_t::cancel, {});
+                    } else {
+                        execute_action(action_t::start_reading_clipboard, {});
+                    }
                 });
         }
 

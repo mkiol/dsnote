@@ -408,6 +408,17 @@ void settings::set_tts_use_gpu(bool value) {
     }
 }
 
+bool settings::use_toggle_for_hotkey() const {
+    return value(QStringLiteral("use_toggle_for_hotkey"), true).toBool();
+}
+
+void settings::set_use_toggle_for_hotkey(bool value) {
+    if (use_toggle_for_hotkey() != value) {
+        setValue(QStringLiteral("use_toggle_for_hotkey"), value);
+        emit use_toggle_for_hotkey_changed();
+    }
+}
+
 QString settings::default_tts_model_for_mnt_lang(const QString& lang) {
     return value(QStringLiteral("default_tts_model_for_mnt_%1").arg(lang), {})
         .toString();

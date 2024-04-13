@@ -75,6 +75,8 @@ DialogPage {
             <i>switch-to-next-tts-model</i>, <i>switch-to-prev-tts-model</i>, <i>set-stt-model</i>, <i>set-tts-model</i></li>
         <li>New global keyboard shortcuts for STT/TTS models switching (X11 only): <i>Switch to next STT model</i>,
             <i>Switch to prev STT model</i>, <i>Switch to next TTS model</i>, <i>Switch to prev TTS model</i></li>
+        <li>Toggle option for keyboard shortcuts (X11 only). When <i>Toggle behavior</i> is enabled,
+            Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</li>
         <li>Fix: Accented characters (e.g.: ã, ê) were not transferred correctly to the active window.</li>
         </ul>
         <p>" + qsTr("Flatpak") + ":</p>

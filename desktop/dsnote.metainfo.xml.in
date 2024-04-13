@@ -146,6 +146,9 @@
           'switch-to-next-tts-model', 'switch-to-prev-tts-model', 'set-stt-model', 'set-tts-model'</li>
       <li>New global keyboard shortcuts for STT/TTS models switching (X11 only): 'Switch to next STT model',
           'Switch to prev STT model', 'Switch to next TTS model', 'Switch to prev TTS model'</li>
+      <li>Toggle option for keyboard shortcuts (X11 only). When 'Toggle behavior' is enabled,
+          Start listening/reading shortcuts will also stop listening/reading if they are triggered
+          while listening/reading is active.</li>
       <li>Fix: Accented characters (e.g.: ã, ê) were not transferred correctly to the active window.</li>
       </ul>
       <p>Flatpak:</p>

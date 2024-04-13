@@ -150,7 +150,9 @@ class settings : public QSettings, public singleton<settings> {
         QString hotkey_switch_to_prev_tts_model READ
             hotkey_switch_to_prev_tts_model WRITE
                 set_hotkey_switch_to_prev_tts_model NOTIFY hotkeys_changed)
-
+    Q_PROPERTY(
+        bool use_toggle_for_hotkey READ use_toggle_for_hotkey WRITE
+            set_use_toggle_for_hotkey NOTIFY use_toggle_for_hotkey_changed)
     Q_PROPERTY(
         desktop_notification_policy_t desktop_notification_policy READ
             desktop_notification_policy WRITE set_desktop_notification_policy
@@ -540,6 +542,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_hotkey_switch_to_prev_stt_model(const QString &value);
     QString hotkey_switch_to_prev_tts_model() const;
     void set_hotkey_switch_to_prev_tts_model(const QString &value);
+    void set_use_toggle_for_hotkey(bool value);
+    bool use_toggle_for_hotkey() const;
     desktop_notification_policy_t desktop_notification_policy() const;
     void set_desktop_notification_policy(desktop_notification_policy_t value);
     bool desktop_notification_details() const;
@@ -789,6 +793,7 @@ class settings : public QSettings, public singleton<settings> {
     void x11_compose_file_changed();
     void tts_split_into_sentences_changed();
     void tts_use_engine_speed_control_changed();
+    void use_toggle_for_hotkey_changed();
 
     // service
     void models_dir_changed();
