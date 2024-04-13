@@ -1767,6 +1767,58 @@ void settings::set_hotkey_cancel(const QString& value) {
     }
 }
 
+QString settings::hotkey_switch_to_next_stt_model() const {
+    return value(QStringLiteral("hotkey_switch_to_next_stt_model"),
+                 QStringLiteral("Ctrl+Alt+Shift+B"))
+        .toString();
+}
+
+void settings::set_hotkey_switch_to_next_stt_model(const QString& value) {
+    if (value != hotkey_switch_to_next_stt_model()) {
+        setValue(QStringLiteral("hotkey_switch_to_next_stt_model"), value);
+        emit hotkeys_changed();
+    }
+}
+
+QString settings::hotkey_switch_to_prev_stt_model() const {
+    return value(QStringLiteral("hotkey_switch_to_prev_stt_model"),
+                 QStringLiteral("Ctrl+Alt+Shift+V"))
+        .toString();
+}
+
+void settings::set_hotkey_switch_to_prev_stt_model(const QString& value) {
+    if (value != hotkey_switch_to_prev_stt_model()) {
+        setValue(QStringLiteral("hotkey_switch_to_prev_stt_model"), value);
+        emit hotkeys_changed();
+    }
+}
+
+QString settings::hotkey_switch_to_next_tts_model() const {
+    return value(QStringLiteral("hotkey_switch_to_next_tts_model"),
+                 QStringLiteral("Ctrl+Alt+Shift+M"))
+        .toString();
+}
+
+void settings::set_hotkey_switch_to_next_tts_model(const QString& value) {
+    if (value != hotkey_switch_to_next_stt_model()) {
+        setValue(QStringLiteral("hotkey_switch_to_next_tts_model"), value);
+        emit hotkeys_changed();
+    }
+}
+
+QString settings::hotkey_switch_to_prev_tts_model() const {
+    return value(QStringLiteral("hotkey_switch_to_prev_tts_model"),
+                 QStringLiteral("Ctrl+Alt+Shift+N"))
+        .toString();
+}
+
+void settings::set_hotkey_switch_to_prev_tts_model(const QString& value) {
+    if (value != hotkey_switch_to_prev_stt_model()) {
+        setValue(QStringLiteral("hotkey_switch_to_prev_tts_model"), value);
+        emit hotkeys_changed();
+    }
+}
+
 settings::desktop_notification_policy_t settings::desktop_notification_policy()
     const {
     return static_cast<desktop_notification_policy_t>(

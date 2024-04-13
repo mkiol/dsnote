@@ -4683,6 +4683,10 @@ void dsnote_app::register_hotkeys() {
     QObject::disconnect(&m_hotkeys.start_reading_clipboard);
     QObject::disconnect(&m_hotkeys.pause_resume_reading);
     QObject::disconnect(&m_hotkeys.cancel);
+    QObject::disconnect(&m_hotkeys.switch_to_next_stt_model);
+    QObject::disconnect(&m_hotkeys.switch_to_prev_stt_model);
+    QObject::disconnect(&m_hotkeys.switch_to_next_tts_model);
+    QObject::disconnect(&m_hotkeys.switch_to_prev_tts_model);
     m_hotkeys.start_listening.setRegistered(false);
     m_hotkeys.start_listening_active_window.setRegistered(false);
     m_hotkeys.start_listening_clipboard.setRegistered(false);
@@ -4691,6 +4695,10 @@ void dsnote_app::register_hotkeys() {
     m_hotkeys.start_reading_clipboard.setRegistered(false);
     m_hotkeys.pause_resume_reading.setRegistered(false);
     m_hotkeys.cancel.setRegistered(false);
+    m_hotkeys.switch_to_next_stt_model.setRegistered(false);
+    m_hotkeys.switch_to_prev_stt_model.setRegistered(false);
+    m_hotkeys.switch_to_next_tts_model.setRegistered(false);
+    m_hotkeys.switch_to_prev_tts_model.setRegistered(false);
 
     if (s->hotkeys_enabled()) {
         if (!s->hotkey_start_listening().isEmpty()) {
@@ -4776,6 +4784,50 @@ void dsnote_app::register_hotkeys() {
                                  qDebug() << "hot key activated: cancel";
                                  execute_action(action_t::cancel, {});
                              });
+        }
+
+        if (!s->hotkey_switch_to_next_stt_model().isEmpty()) {
+            m_hotkeys.switch_to_next_stt_model.setShortcut(
+                QKeySequence{s->hotkey_switch_to_next_stt_model()}, true);
+            QObject::connect(
+                &m_hotkeys.switch_to_next_stt_model, &QHotkey::activated, this,
+                [&]() {
+                    qDebug() << "hot key activated: switch-to-next-stt-model";
+                    execute_action(action_t::switch_to_next_stt_model, {});
+                });
+        }
+
+        if (!s->hotkey_switch_to_prev_stt_model().isEmpty()) {
+            m_hotkeys.switch_to_prev_stt_model.setShortcut(
+                QKeySequence{s->hotkey_switch_to_prev_stt_model()}, true);
+            QObject::connect(
+                &m_hotkeys.switch_to_prev_stt_model, &QHotkey::activated, this,
+                [&]() {
+                    qDebug() << "hot key activated: switch-to-prev-stt-model";
+                    execute_action(action_t::switch_to_prev_stt_model, {});
+                });
+        }
+
+        if (!s->hotkey_switch_to_next_tts_model().isEmpty()) {
+            m_hotkeys.switch_to_next_tts_model.setShortcut(
+                QKeySequence{s->hotkey_switch_to_next_tts_model()}, true);
+            QObject::connect(
+                &m_hotkeys.switch_to_next_tts_model, &QHotkey::activated, this,
+                [&]() {
+                    qDebug() << "hot key activated: switch-to-next-tts-model";
+                    execute_action(action_t::switch_to_next_tts_model, {});
+                });
+        }
+
+        if (!s->hotkey_switch_to_prev_tts_model().isEmpty()) {
+            m_hotkeys.switch_to_prev_tts_model.setShortcut(
+                QKeySequence{s->hotkey_switch_to_prev_tts_model()}, true);
+            QObject::connect(
+                &m_hotkeys.switch_to_prev_tts_model, &QHotkey::activated, this,
+                [&]() {
+                    qDebug() << "hot key activated: switch-to-prev-tts-model";
+                    execute_action(action_t::switch_to_prev_tts_model, {});
+                });
         }
     }
 #endif

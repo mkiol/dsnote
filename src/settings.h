@@ -135,6 +135,23 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(QString hotkey_cancel READ hotkey_cancel WRITE set_hotkey_cancel
                    NOTIFY hotkeys_changed)
     Q_PROPERTY(
+        QString hotkey_switch_to_next_stt_model READ
+            hotkey_switch_to_next_stt_model WRITE
+                set_hotkey_switch_to_next_stt_model NOTIFY hotkeys_changed)
+    Q_PROPERTY(
+        QString hotkey_switch_to_next_tts_model READ
+            hotkey_switch_to_next_tts_model WRITE
+                set_hotkey_switch_to_next_tts_model NOTIFY hotkeys_changed)
+    Q_PROPERTY(
+        QString hotkey_switch_to_prev_stt_model READ
+            hotkey_switch_to_prev_stt_model WRITE
+                set_hotkey_switch_to_prev_stt_model NOTIFY hotkeys_changed)
+    Q_PROPERTY(
+        QString hotkey_switch_to_prev_tts_model READ
+            hotkey_switch_to_prev_tts_model WRITE
+                set_hotkey_switch_to_prev_tts_model NOTIFY hotkeys_changed)
+
+    Q_PROPERTY(
         desktop_notification_policy_t desktop_notification_policy READ
             desktop_notification_policy WRITE set_desktop_notification_policy
                 NOTIFY desktop_notification_policy_changed)
@@ -515,6 +532,14 @@ class settings : public QSettings, public singleton<settings> {
     void set_hotkey_pause_resume_reading(const QString &value);
     QString hotkey_cancel() const;
     void set_hotkey_cancel(const QString &value);
+    QString hotkey_switch_to_next_stt_model() const;
+    void set_hotkey_switch_to_next_stt_model(const QString &value);
+    QString hotkey_switch_to_next_tts_model() const;
+    void set_hotkey_switch_to_next_tts_model(const QString &value);
+    QString hotkey_switch_to_prev_stt_model() const;
+    void set_hotkey_switch_to_prev_stt_model(const QString &value);
+    QString hotkey_switch_to_prev_tts_model() const;
+    void set_hotkey_switch_to_prev_tts_model(const QString &value);
     desktop_notification_policy_t desktop_notification_policy() const;
     void set_desktop_notification_policy(desktop_notification_policy_t value);
     bool desktop_notification_details() const;

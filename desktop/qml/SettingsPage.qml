@@ -763,6 +763,46 @@ DialogPage {
                 }
             }
 
+            TextFieldForm {
+                indends: 1
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
+                label.text: qsTr("Switch to next STT model")
+                textField {
+                    text: _settings.hotkey_switch_to_next_stt_model
+                    onTextChanged: _settings.hotkey_switch_to_next_stt_model = text
+                }
+            }
+
+            TextFieldForm {
+                indends: 1
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
+                label.text: qsTr("Switch to previous STT model")
+                textField {
+                    text: _settings.hotkey_switch_to_prev_stt_model
+                    onTextChanged: _settings.hotkey_switch_to_prev_stt_model = text
+                }
+            }
+
+            TextFieldForm {
+                indends: 1
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
+                label.text: qsTr("Switch to next TTS model")
+                textField {
+                    text: _settings.hotkey_switch_to_next_tts_model
+                    onTextChanged: _settings.hotkey_switch_to_next_tts_model = text
+                }
+            }
+
+            TextFieldForm {
+                indends: 1
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
+                label.text: qsTr("Switch to previous TTS model")
+                textField {
+                    text: _settings.hotkey_switch_to_prev_tts_model
+                    onTextChanged: _settings.hotkey_switch_to_prev_tts_model = text
+                }
+            }
+
             CheckBox {
                 checked: _settings.actions_api_enabled
                 text: qsTr("Allow external applications to invoke actions")
@@ -790,7 +830,7 @@ DialogPage {
                       "<li><i>start-listening-clipboard</i> - " + qsTr("Starts listening. The decoded text is copied to the clipboard.") + "</li>" +
                       "<li><i>stop-listening</i> - " + qsTr("Stops listening. The already captured voice is decoded into text.") + "</li>" +
                       "<li><i>start-reading</i> - " + qsTr("Starts reading.") + "</li>" +
-                      "<li><i>start-reading-clipboard</i> - " + qsTr("Starts reading text from the clipboard.") + "</li>" +
+                      "<li><i>start-reading-clipboard</i> (X11) - " + qsTr("Starts reading text from the clipboard.") + "</li>" +
                       "<li><i>pause-resume-reading</i> - " + qsTr("Pauses or resumes reading.") + "</li>" +
                       "<li><i>cancel</i> - " + qsTr("Cancels any of the above operations.") + "</li>" +
                       "<li><i>switch-to-next-stt-model</i> - " + qsTr("Switches to next STT model.") + "</li>" +

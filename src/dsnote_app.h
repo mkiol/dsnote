@@ -607,6 +607,10 @@ class dsnote_app : public QObject {
         QHotkey start_reading_clipboard;
         QHotkey pause_resume_reading;
         QHotkey cancel;
+        QHotkey switch_to_next_stt_model;
+        QHotkey switch_to_prev_stt_model;
+        QHotkey switch_to_next_tts_model;
+        QHotkey switch_to_prev_tts_model;
     };
 
     hotkeys_t m_hotkeys;

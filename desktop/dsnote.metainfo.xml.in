@@ -142,8 +142,10 @@
       </ul>
       <p>Accessibility:</p>
       <ul>
-      <li>New 'Actions' for STT/TTS model switching: 'switch-to-next-stt-model', 'switch-to-prev-stt-model',
+      <li>New 'Actions' for STT/TTS models switching: 'switch-to-next-stt-model', 'switch-to-prev-stt-model',
           'switch-to-next-tts-model', 'switch-to-prev-tts-model', 'set-stt-model', 'set-tts-model'</li>
+      <li>New global keyboard shortcuts for STT/TTS models switching (X11 only): 'Switch to next STT model',
+          'Switch to prev STT model', 'Switch to next TTS model', 'Switch to prev TTS model'</li>
       <li>Fix: Accented characters (e.g.: ã, ê) were not transferred correctly to the active window.</li>
       </ul>
       <p>Flatpak:</p>

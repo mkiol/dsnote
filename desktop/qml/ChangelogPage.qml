@@ -66,13 +66,15 @@ DialogPage {
             Slovenian to English, Turkish to English, English to Catalan</li>
         <li>Updated models: Czech and Lithuanian</li>
         <li>Handy buttons to quickly add translated text to the note or
-            to replace it and switch languages (<i>Add</li>, <i>Replace</i>).</li>
+            to replace it and switch languages (<i>Add</i>, <i>Replace</i>).</li>
         <li>Context menu option to translate from cursor position or translate only selected text</li>
         </ul>
         <p>" + qsTr("Accessibility") + ":</p>
         <ul>
-        <li>New <i>Actions</i> for STT/TTS model switching: <i>switch-to-next-stt-model</i>, <i>switch-to-prev-stt-model</i>,
+        <li>New <i>Actions</i> for STT/TTS models switching: <i>switch-to-next-stt-model</i>, <i>switch-to-prev-stt-model</i>,
             <i>switch-to-next-tts-model</i>, <i>switch-to-prev-tts-model</i>, <i>set-stt-model</i>, <i>set-tts-model</i></li>
+        <li>New global keyboard shortcuts for STT/TTS models switching (X11 only): <i>Switch to next STT model</i>,
+            <i>Switch to prev STT model</i>, <i>Switch to next TTS model</i>, <i>Switch to prev TTS model</i></li>
         <li>Fix: Accented characters (e.g.: ã, ê) were not transferred correctly to the active window.</li>
         </ul>
         <p>" + qsTr("Flatpak") + ":</p>
