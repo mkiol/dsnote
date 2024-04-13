@@ -113,7 +113,7 @@ build() {
   CI_BUILD=false
 
   # Disable bergamot and RHVoice (used for CI builds only)
-  $CI_BUILD && CMAKE+=" -DBUILD_BERGAMOT=OFF -DBUILD_RHVOICE_MODULE=OFF"
+  $CI_BUILD && CMAKE+=" -DBUILD_BERGAMOT=OFF -DBUILD_RHVOICE=OFF -DBUILD_RHVOICE_MODULE=OFF"
 
   cmake ../ $CMAKE
 
