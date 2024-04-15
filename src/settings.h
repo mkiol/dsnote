@@ -263,12 +263,9 @@ class settings : public QSettings, public singleton<settings> {
                    set_gpu_device_tts NOTIFY gpu_device_tts_changed)
     Q_PROPERTY(QString auto_gpu_device_tts READ auto_gpu_device_tts NOTIFY
                    gpu_device_tts_changed)
-    Q_PROPERTY(
-        QStringList audio_inputs READ audio_inputs NOTIFY audio_inputs_changed)
-    Q_PROPERTY(int audio_input_idx READ audio_input_idx WRITE
-                   set_audio_input_idx NOTIFY audio_input_changed)
-    Q_PROPERTY(QString audio_input READ audio_input WRITE set_audio_input NOTIFY
-                   audio_input_changed)
+
+    Q_PROPERTY(QString audio_input_device READ audio_input_device WRITE
+                   set_audio_input_device NOTIFY audio_input_device_changed)
     Q_PROPERTY(bool py_feature_scan READ py_feature_scan WRITE
                    set_py_feature_scan NOTIFY py_feature_scan_changed)
     Q_PROPERTY(
@@ -613,7 +610,6 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE bool gpu_supported() const;
     Q_INVOKABLE bool has_gpu_device_stt() const;
     Q_INVOKABLE bool has_gpu_device_tts() const;
-    Q_INVOKABLE bool has_audio_input() const;
     Q_INVOKABLE bool is_wayland() const;
     Q_INVOKABLE bool is_xcb() const;
     Q_INVOKABLE bool is_flatpak() const;
@@ -675,11 +671,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_restore_punctuation(bool value);
     QStringList enabled_models();
     void set_enabled_models(const QStringList &value);
-    QStringList audio_inputs() const;
-    QString audio_input() const;
-    void set_audio_input(QString value);
-    int audio_input_idx() const;
-    void set_audio_input_idx(int value);
+    QString audio_input_device() const;
+    void set_audio_input_device(QString value);
     bool py_feature_scan() const;
     void set_py_feature_scan(bool value);
     int num_threads() const;
@@ -808,8 +801,7 @@ class settings : public QSettings, public singleton<settings> {
     void gpu_devices_changed();
     void gpu_device_stt_changed();
     void gpu_device_tts_changed();
-    void audio_inputs_changed();
-    void audio_input_changed();
+    void audio_input_device_changed();
     void py_feature_scan_changed();
     void cache_audio_format_changed();
     void cache_policy_changed();
@@ -829,12 +821,10 @@ class settings : public QSettings, public singleton<settings> {
     QStringList m_gpu_devices_stt;
     QStringList m_gpu_devices_tts;
     std::vector<QString> m_rocm_gpu_versions;
-    QStringList m_audio_inputs;
     unsigned int m_addon_flags = addon_flags_t::AddonNone;
     bool m_native_style = false;
 
     static QString settings_filepath();
-    void update_audio_inputs();
     void set_restart_required(bool value);
     void enforce_num_threads() const;
     void update_addon_flags();

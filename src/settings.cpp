@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -21,8 +21,6 @@
 #include <QVariantList>
 #include <algorithm>
 #include <cstdlib>
-#include <fstream>
-#include <iostream>
 #include <thread>
 
 #include "config.h"
@@ -187,7 +185,6 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
 
     update_addon_flags();
     enforce_num_threads();
-    update_audio_inputs();
 
     // remove qml cache
     QDir{QStandardPaths::writableLocation(QStandardPaths::CacheLocation) +
@@ -718,12 +715,12 @@ void settings::set_speech_mode(speech_mode_t value) {
 }
 
 unsigned int settings::speech_speed() const {
-    return std::clamp(value(QStringLiteral("speech_speed2"), 10u).toUInt(), 1u,
-                      20u);
+    return std::clamp(value(QStringLiteral("speech_speed2"), 10U).toUInt(), 1U,
+                      20U);
 }
 
 void settings::set_speech_speed(unsigned int value) {
-    value = std::clamp(value, 1u, 20u);
+    value = std::clamp(value, 1U, 20U);
 
     if (speech_speed() != value) {
         setValue(QStringLiteral("speech_speed2"), static_cast<int>(value));
@@ -1366,7 +1363,7 @@ void settings::enforce_num_threads() const {
     unsigned int num_threads =
         conf_num_threads > 0
             ? std::min(conf_num_threads,
-                       std::max(std::thread::hardware_concurrency(), 2u) - 1)
+                       std::max(std::thread::hardware_concurrency(), 2U) - 1)
             : 0;
 
     qDebug() << "enforcing num threads:" << num_threads;
@@ -1564,51 +1561,15 @@ void settings::set_gpu_device_idx_tts(int value) {
     set_gpu_device_tts(value == 0 ? "" : m_gpu_devices_tts.at(value));
 }
 
-QStringList settings::audio_inputs() const { return m_audio_inputs; }
-
-bool settings::has_audio_input() const { return m_audio_inputs.size() > 1; }
-
-void settings::update_audio_inputs() {
-    auto inputs = mic_source::audio_inputs();
-
-    m_audio_inputs.clear();
-    m_audio_inputs.push_back(tr("Auto"));
-
-    std::transform(
-        inputs.cbegin(), inputs.cend(), std::back_inserter(m_audio_inputs),
-        [](const auto& input) { return QStringLiteral("%1").arg(input); });
-
-    emit audio_inputs_changed();
+QString settings::audio_input_device() const {
+    return value(QStringLiteral("audio_input_device")).toString();
 }
 
-QString settings::audio_input() const {
-    return value(QStringLiteral("service/audio_input")).toString();
-}
-
-void settings::set_audio_input(QString value) {
-    if (value == tr("Auto")) value.clear();
-
-    if (value != audio_input()) {
-        setValue(QStringLiteral("service/audio_input"), value);
-        emit audio_input_changed();
+void settings::set_audio_input_device(QString value) {
+    if (value != audio_input_device()) {
+        setValue(QStringLiteral("audio_input_device"), value);
+        emit audio_input_device_changed();
     }
-}
-
-int settings::audio_input_idx() const {
-    auto current_input = audio_input();
-
-    if (current_input.isEmpty()) return 0;
-
-    auto it = std::find(m_audio_inputs.cbegin(), m_audio_inputs.cend(),
-                        current_input);
-    if (it == m_audio_inputs.cend()) return 0;
-
-    return std::distance(m_audio_inputs.cbegin(), it);
-}
-
-void settings::set_audio_input_idx(int value) {
-    if (value < 0 || value >= m_audio_inputs.size()) return;
-    set_audio_input(value == 0 ? "" : m_audio_inputs.at(value));
 }
 
 bool settings::hotkeys_enabled() const {

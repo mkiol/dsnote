@@ -286,7 +286,8 @@ dsnote_app::dsnote_app(QObject *parent)
                      QDBusConnection::sessionBus()},
       m_dbus_notifications{"org.freedesktop.Notifications",
                            "/org/freedesktop/Notifications",
-                           QDBusConnection::sessionBus()} {
+                           QDBusConnection::sessionBus()},
+      m_audio_dm{[&] { emit audio_devices_changed(); }} {
     qDebug() << "starting app:" << settings::instance()->launch_mode();
 
     QDir{cache_dir()}.canonicalPath();
@@ -313,6 +314,9 @@ dsnote_app::dsnote_app(QObject *parent)
             &dsnote_app::register_hotkeys);
     connect(settings::instance(), &settings::hotkeys_changed, this,
             &dsnote_app::register_hotkeys);
+    connect(settings::instance(), &settings::audio_input_device_changed, this,
+            [this] { emit audio_source_changed(); });
+
     connect(this, &dsnote_app::service_state_changed, this, [this] {
         auto reset_progress = [this]() {
             if (m_transcribe_progress != -1.0) {
@@ -384,6 +388,9 @@ dsnote_app::dsnote_app(QObject *parent)
                 m_open_files_delay_timer.start();
         },
         Qt::QueuedConnection);
+    connect(
+        this, &dsnote_app::audio_devices_changed, this,
+        [this] { update_audio_sources(); }, Qt::QueuedConnection);
     connect(&m_mc, &media_converter::state_changed, this,
             &dsnote_app::handle_mc_state_changed, Qt::QueuedConnection);
     connect(&m_mc, &media_converter::progress_changed, this,
@@ -451,6 +458,7 @@ dsnote_app::dsnote_app(QObject *parent)
     update_available_tts_ref_voices();
     register_hotkeys();
     handle_note_changed();
+    update_audio_sources();
 
 #ifdef USE_DESKTOP
     connect(&m_tray, &QSystemTrayIcon::activated, this,
@@ -1176,10 +1184,8 @@ static QVariantMap::const_iterator active_model_or_lang_it(
         it = std::find_if(
             map.cbegin(), map.cend(), [&model_or_lang](const auto &key) {
                 auto l = key.toStringList();
-                if (l.size() > 3)
-                    return l.size() > 3 &&
-                           l.at(3).compare(model_or_lang,
-                                           Qt::CaseInsensitive) == 0;
+                return l.size() > 3 &&
+                       l.at(3).compare(model_or_lang, Qt::CaseInsensitive) == 0;
             });
     }
 
@@ -4653,6 +4659,61 @@ void dsnote_app::switch_translated_text() {
     switch_mnt_langs();
 
     update_note(m_translated_text, true);
+}
+
+void dsnote_app::update_audio_sources() {
+    m_audio_sources.clear();
+    m_audio_sources.push_back(tr("Auto"));
+
+    auto dm_sources = m_audio_dm.sources();
+    std::transform(dm_sources.cbegin(), dm_sources.cend(),
+                   std::back_inserter(m_audio_sources),
+                   [](const auto &dm_source) {
+                       return QString::fromStdString(dm_source.description);
+                   });
+
+    emit audio_sources_changed();
+}
+
+QStringList dsnote_app::audio_sources() const { return m_audio_sources; }
+
+QString dsnote_app::audio_source() {
+    auto name = settings::instance()->audio_input_device();
+
+    auto dev = m_audio_dm.source_by_name(name.toStdString());
+
+    if (!dev) return {};
+
+    return QString::fromStdString(dev->description);
+}
+
+void dsnote_app::set_audio_source(QString value) {
+    if (value == tr("Auto")) value.clear();
+
+    if (!value.isEmpty()) {
+        auto dev = m_audio_dm.source_by_description(value.toStdString());
+        value = dev ? QString::fromStdString(dev->name) : QString{};
+    }
+
+    settings::instance()->set_audio_input_device(value);
+}
+
+int dsnote_app::audio_source_idx() {
+    auto dev = m_audio_dm.source_by_name(
+        settings::instance()->audio_input_device().toStdString());
+
+    if (!dev) return 0;
+
+    auto it = std::find(m_audio_sources.cbegin(), m_audio_sources.cend(),
+                        QString::fromStdString(dev->description));
+    if (it == m_audio_sources.cend()) return 0;
+
+    return std::distance(m_audio_sources.cbegin(), it);
+}
+
+void dsnote_app::set_audio_source_idx(int value) {
+    if (value < 0 || value >= m_audio_sources.size()) return;
+    set_audio_source(value == 0 ? "" : m_audio_sources.at(value));
 }
 
 void dsnote_app::show_tray() {

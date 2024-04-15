@@ -41,6 +41,7 @@ DialogPage {
             To activate context menu use mouse right click.</li>
         <li>New text appending style: <i>After empty line</i></li>
         <li>System tray menu for changing active STT/TTS model</li>
+        <li>User friendly names of audio input devices (<i>Speech to Text</i> &rarr; <i>Audio input device</i>)</li>
         <li><i>Speech Note</i> has been translated into Ukrainian and Russian languages.
             Many thanks to <i>Vovkiv</i> for this contribution!</li>
         </ul>

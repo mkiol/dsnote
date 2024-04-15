@@ -126,7 +126,7 @@ set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
 set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
-set(info_conf_version "75")
+set(info_conf_version "76")
 set(info_version_type "beta")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · Locness3 · DevSJR · Vovkiv")
@@ -325,6 +325,8 @@ set(dsnote_lib_sources
     ${sources_dir}/text_repair_engine.cpp
     ${sources_dir}/whisperspeech_engine.hpp
     ${sources_dir}/whisperspeech_engine.cpp
+    ${sources_dir}/audio_device_manager.cpp
+    ${sources_dir}/audio_device_manager.hpp
 )
 
 if(WITH_DESKTOP)
@@ -446,6 +448,10 @@ include(ExternalProject)
 pkg_search_module(zlib REQUIRED zlib)
 list(APPEND deps_libs ${zlib_LIBRARIES})
 list(APPEND includes ${zlib_INCLUDE_DIRS})
+
+pkg_search_module(pulse REQUIRED libpulse)
+list(APPEND deps_libs ${pulse_LIBRARIES})
+list(APPEND includes ${pulse_INCLUDE_DIRS})
 
 find_package(Qt5 COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick DBus LinguistTools REQUIRED)
 list(APPEND deps_libs Qt5::Core Qt5::Network Qt5::Multimedia Qt5::Gui Qt5::Quick Qt5::DBus)

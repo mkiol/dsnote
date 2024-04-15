@@ -302,28 +302,30 @@ DialogPage {
         ColumnLayout {
             id: speechToTextTab
 
+            property bool has_audio_sources: app.audio_sources.length > 1
+
             ComboBoxForm {
-                visible: _settings.audio_inputs.length > 1
-                label.text: qsTr("Audio source")
-                toolTip: qsTr("Select preferred audio source.")
+                visible: speechToTextTab.has_audio_sources
+                label.text: qsTr("Audio input device")
+                toolTip: qsTr("Select preferred audio input device.")
                 comboBox {
-                    currentIndex: _settings.audio_input_idx
-                    model: _settings.audio_inputs
+                    currentIndex: app.audio_source_idx
+                    model: app.audio_sources
                     onActivated: {
-                        _settings.audio_input_idx = index
+                        app.audio_source_idx = index
                     }
                 }
             }
 
             TipMessage {
                 indends: 1
-                visible: _settings.audio_inputs.length <= 1
+                visible: !speechToTextTab.has_audio_sources
                 text: qsTr("No audio source could be found.") + " " +
                       qsTr("Make sure the microphone is properly connected.")
             }
 
             ComboBoxForm {
-                visible: _settings.audio_inputs.length > 1
+                visible: speechToTextTab.has_audio_sources
                 label.text: qsTr("Listening mode")
                 toolTip: "<i>" + qsTr("One sentence") + "</i>" + " — " + qsTr("Clicking on the %1 button starts listening, which ends when the first sentence is recognized.")
                          .arg("<i>" + qsTr("Listen") + "</i>") + "<br/>" +

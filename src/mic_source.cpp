@@ -90,7 +90,7 @@ QStringList mic_source::audio_inputs() {
 void mic_source::init_audio() {
     auto format = audio_format();
 
-    auto input_name = settings::instance()->audio_input();
+    auto input_name = settings::instance()->audio_input_device();
     if (input_name.isEmpty() || !has_audio_input(input_name)) {
         auto info = QAudioDeviceInfo::defaultInputDevice();
         if (info.isNull()) {
