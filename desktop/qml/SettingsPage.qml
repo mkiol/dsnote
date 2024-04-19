@@ -444,6 +444,15 @@ DialogPage {
 
             }
 
+            TipMessage {
+                indends: 1
+                visible: _settings.gpu_supported() &&
+                         app.feature_gpu_stt && _settings.stt_use_gpu &&
+                         _settings.error_flags & Settings.ErrorCudaUnknown > 0
+                text: qsTr("Most likely, NVIDIA kernel module has not been fully initialized.") + " " +
+                      qsTr("Try executing %1 before running Speech Note.").arg("<i>nvidia-modprobe -c 0 -u</i>")
+            }
+
             SectionLabel {
                 text: qsTr("Subtitles")
             }
@@ -615,6 +624,15 @@ DialogPage {
                       .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
                       qsTr("Override GPU version") + "</i>")
                 label.textFormat: Text.RichText
+            }
+
+            TipMessage {
+                indends: 1
+                visible: _settings.gpu_supported() &&
+                         app.feature_gpu_tts && _settings.tts_use_gpu &&
+                         _settings.error_flags & Settings.ErrorCudaUnknown > 0
+                text: qsTr("Most likely, NVIDIA kernel module has not been fully initialized.") + " " +
+                      qsTr("Try executing %1 before running Speech Note.").arg("<i>nvidia-modprobe -c 0 -u</i>")
             }
 
             SectionLabel {

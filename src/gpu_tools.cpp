@@ -9,6 +9,7 @@
 
 #include <dlfcn.h>
 #include <fmt/core.h>
+#include <sys/stat.h>
 
 #include <algorithm>
 #include <cstdint>
@@ -36,7 +37,7 @@
 #define CL_DEVICE_TYPE_ALL 0xFFFFFFFF
 
 namespace gpu_tools {
-enum cudaHipError { cudaHipSuccess = 0 };
+enum cudaHipError { cudaHipSuccess = 0, cudaHipUnknownError = 999 };
 
 struct cudaDeviceProp {
     char name[256] = {};
@@ -354,7 +355,14 @@ struct hip_api {
     }
 };
 
-static void add_cuda_runtime_devices(std::vector<device>& devices) {
+static bool file_exists(const char* name) {
+    struct stat buffer;
+    return (stat(name, &buffer) == 0);
+}
+
+static bool has_nvidia_gpu() { return file_exists("/dev/nvidiactl"); }
+
+static cudaHipError add_cuda_runtime_devices(std::vector<device>& devices) {
     LOGD("scanning for cuda runtime devices");
 
     cuda_runtime_api api;
@@ -370,7 +378,7 @@ static void add_cuda_runtime_devices(std::vector<device>& devices) {
     if (auto ret = api.cudaGetDeviceCount(&device_count);
         ret != cudaHipSuccess) {
         LOGW("cudaGetDeviceCount error: " << ret);
-        throw std::runtime_error{"cuda runtime get device count error"};
+        return static_cast<cudaHipError>(ret);
     }
 
     LOGD("cuda number of devices: " << device_count);
@@ -387,6 +395,8 @@ static void add_cuda_runtime_devices(std::vector<device>& devices) {
                            /*name=*/props.name,
                            /*platform_name=*/{}});
     }
+
+    return cudaHipSuccess;
 }
 
 static void add_cuda_dev_devices(std::vector<device>& devices) {
@@ -474,33 +484,35 @@ static void add_cuda_dev_devices(std::vector<device>& devices) {
     }
 }
 
-std::vector<gpu_tools::device> available_devices(bool cuda, bool hip,
-                                                 bool opencl,
-                                                 bool opencl_always) {
-    std::vector<gpu_tools::device> devices;
+available_devices_result available_devices(bool cuda, bool hip, bool opencl,
+                                           bool opencl_always) {
+    available_devices_result result;
 
-    if (hip) add_hip_devices(devices);
-    if (cuda) add_cuda_devices(devices);
-    if (opencl && (opencl_always || devices.empty()))
-        add_opencl_devices(devices);
+    if (hip) add_hip_devices(result.devices);
+    if (cuda) result.error = add_cuda_devices(result.devices);
+    if (opencl && (opencl_always || result.devices.empty()))
+        add_opencl_devices(result.devices);
 
-    return devices;
+    return result;
 }
 
-void add_cuda_devices(std::vector<device>& devices) {
+error_t add_cuda_devices(std::vector<device>& devices) {
     LOGD("scanning for cuda devices");
+
+    error_t error = error_t::no_error;
 
     try {
         add_cuda_dev_devices(devices);
     } catch (const std::runtime_error& err) {
         LOGW(err.what());
 
-        try {
-            add_cuda_runtime_devices(devices);
-        } catch (const std::runtime_error& err) {
-            LOGW(err.what());
+        if (has_nvidia_gpu()) {
+            if (add_cuda_runtime_devices(devices) == cudaHipUnknownError)
+                error = error_t::cuda_uknown_error;
         }
     }
+
+    return error;
 }
 
 void add_hip_devices(std::vector<device>& devices) {

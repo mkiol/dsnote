@@ -1419,14 +1419,14 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
          gpu_feature_flags_t::gpu_feature_tts_whisperspeech_cuda) == 0;
     bool disable_tts_hip = disable_tts_cuda;
 
-    auto devices = gpu_tools::available_devices(
+    auto result = gpu_tools::available_devices(
         /*cuda=*/gpu_scan_cuda(),
         /*hip=*/gpu_scan_hip(),
         /*opencl=*/gpu_scan_opencl(),
         /*opencl_always=*/true);
 
     std::for_each(
-        devices.cbegin(), devices.cend(),
+        result.devices.cbegin(), result.devices.cend(),
         [&, disable_clover = !gpu_scan_opencl_legacy()](const auto& device) {
             switch (device.api) {
                 case gpu_tools::api_t::opencl:
@@ -1468,6 +1468,16 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
         m_gpu_devices_tts.front().append(" (" + auto_gpu_device_tts() + ")");
 
     emit gpu_devices_changed();
+
+    if (result.error == gpu_tools::error_t::cuda_uknown_error &&
+        (!is_flatpak() || addon_flags() & addon_flags_t::AddonNvidia) > 0) {
+        qWarning() << "*********************************************";
+        qWarning() << "Most likely, NVIDIA kernel module has not been fully "
+                      "initialized. Try executing 'nvidia-modprobe -c 0 -u' "
+                      "before running Speech Note";
+        qWarning() << "*********************************************";
+        add_error_flags(error_flags_t::ErrorCudaUnknown);
+    }
 #endif
 }
 
@@ -2218,5 +2228,17 @@ void settings::update_addon_flags() {
     if (new_flags != m_addon_flags) {
         m_addon_flags = new_flags;
         emit addon_flags_changed();
+    }
+}
+
+unsigned int settings::error_flags() const { return m_error_flags; }
+
+void settings::add_error_flags(error_flags_t new_flag) {
+    unsigned int new_flags =
+        m_error_flags | static_cast<unsigned int>(new_flag);
+
+    if (new_flags != m_error_flags) {
+        m_error_flags = new_flags;
+        emit error_flags_changed();
     }
 }
