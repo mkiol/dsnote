@@ -20,7 +20,8 @@
 class mic_source : public audio_source {
     Q_OBJECT
    public:
-    explicit mic_source(QObject* parent = nullptr);
+    explicit mic_source(const QString& preferred_audio_input,
+                        QObject* parent = nullptr);
     ~mic_source() override;
     bool ok() const override;
     audio_data read_audio(char* buf, size_t max_size) override;
@@ -40,7 +41,7 @@ class mic_source : public audio_source {
     bool m_ended = false;
     bool m_stopped = false;
 
-    void init_audio();
+    void init_audio(const QString& preferred_audio_input);
     void start();
     void handle_state_changed(QAudio::State new_state);
     void handle_read_timeout();

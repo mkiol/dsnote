@@ -2107,6 +2107,7 @@ void dsnote_app::listen_internal() {
             ? s->stt_tts_text_format()
             : settings::text_format_t::TextFormatRaw;
     options.insert("text_format", static_cast<int>(text_format));
+    options.insert("audio_input", s->audio_input_device());
     options.insert("sub_min_segment_dur", s->sub_min_segment_dur());
     if (s->sub_break_lines()) {
         options.insert("sub_min_line_length", s->sub_min_line_length());
