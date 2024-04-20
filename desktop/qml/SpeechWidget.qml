@@ -16,7 +16,7 @@ import org.mkiol.dsnote.Settings 1.0
 RowLayout {
     id: root
 
-    property bool verticalMode: width < appWin.verticalWidthThreshold * 0.8
+    property bool verticalMode: width < appWin.height * 0.8
 
     Frame {
         Layout.fillWidth: true

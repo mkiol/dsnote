@@ -13,7 +13,7 @@ import QtQuick.Layouts 1.3
 DialogPage {
     id: root
 
-    readonly property bool verticalMode: width < appWin.verticalWidthThreshold
+    readonly property bool verticalMode: width < appWin.height
 
     title: qsTr("Voice samples")
 

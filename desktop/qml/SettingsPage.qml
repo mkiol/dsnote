@@ -63,18 +63,6 @@ DialogPage {
         TabButton {
             text: qsTr("Other")
             width: implicitWidth
-
-            Dot {
-                visible: _settings.hint_addons
-                size: parent.height / 5
-
-                anchors {
-                    right: parent.right
-                    rightMargin: size / 2
-                    top: parent.top
-                    topMargin: size / 2
-                }
-            }
         }
     }
 
@@ -918,30 +906,6 @@ DialogPage {
 
             SectionLabel {
                 text: qsTr("Availability of optional features")
-            }
-
-            InlineMessage {
-                color: "red"
-                closable: true
-                Layout.fillWidth: true
-                visible: _settings.hint_addons
-                onCloseClicked: _settings.hint_addons = false
-
-                Label {
-                    color: "red"
-                    Layout.fillWidth: true
-                    wrapMode: Text.Wrap
-                    text: qsTr("The Flatpak add-on for GPU acceleration is not installed.")
-                }
-
-                Label {
-                    color: "red"
-                    Layout.fillWidth: true
-                    wrapMode: Text.Wrap
-                    text: qsTr("To enable GPU acceleration, install either %1 add-on for AMD graphics card or %2 add-on for NVIDIA graphics card.")
-                        .arg("<i><b>net.mkiol.SpeechNote.Addon.amd</b></i>")
-                        .arg("<i><b>net.mkiol.SpeechNote.Addon.nvidia</b></i>")
-                }
             }
 
             ColumnLayout {

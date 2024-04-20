@@ -44,6 +44,8 @@ Control {
          visible: root.closable
          icon.name: "window-close-symbolic"
          onClicked: root.closeClicked()
+         height: Math.min(implicitHeight, column.height)
+         width: height
          anchors {
              right: parent.right
              rightMargin: appWin.padding

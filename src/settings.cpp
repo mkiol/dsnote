@@ -24,7 +24,6 @@
 #include <thread>
 
 #include "config.h"
-#include "mic_source.h"
 #ifdef ARCH_X86_64
 #include "gpu_tools.hpp"
 #endif
@@ -2228,6 +2227,16 @@ void settings::update_addon_flags() {
     if (new_flags != m_addon_flags) {
         m_addon_flags = new_flags;
         emit addon_flags_changed();
+
+        if (m_addon_flags & addon_flags_t::AddonNvidia &&
+            m_addon_flags & addon_flags_t::AddonAmd) {
+            qWarning() << "*********************************************";
+            qWarning() << "Both NVIDIA and AMD GPU acceleration add-ons are "
+                          "installed, which is not optimal. "
+                          "Uninstall one of them.";
+            qWarning() << "*********************************************";
+            add_error_flags(error_flags_t::ErrorMoreThanOneGpuAddons);
+        }
     }
 }
 
