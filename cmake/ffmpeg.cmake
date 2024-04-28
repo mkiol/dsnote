@@ -92,7 +92,6 @@ set(ffmpeg_opts
     --enable-nonfree
     --enable-gpl
     --enable-pic
-    --enable-lto
     --enable-protocol=file
     --enable-filter=aresample
     --enable-filter=aformat
@@ -178,6 +177,10 @@ set(ffmpeg_opts
     --enable-libopus
     --enable-librubberband)
 
+if(arch_x8664)
+    set(ffmpeg_opts ${ffmpeg_opts} --enable-lto)
+endif(arch_x8664)
+
 set(ffmpeg_extra_ldflags -L${external_lib_dir})
 set(ffmpeg_extra_libs "-lvorbis -logg -lm")
 
@@ -212,6 +215,9 @@ ExternalProject_Add_StepDependencies(ffmpeg configure lame)
 ExternalProject_Add_StepDependencies(vorbis configure ogg)
 ExternalProject_Add_StepDependencies(ffmpeg configure vorbis)
 ExternalProject_Add_StepDependencies(ffmpeg configure opus)
+if(BUILD_RUBBERBAND)
+    ExternalProject_Add_StepDependencies(ffmpeg configure rubberband)
+endif()
 
 list(APPEND deps_libs
     ${external_lib_dir}/libavfilter.a
@@ -227,4 +233,8 @@ list(APPEND deps_libs
     ${external_lib_dir}/libvorbisfile.a
     ${external_lib_dir}/libogg.a
     ${external_lib_dir}/libopus.a)
-list(APPEND deps ffmpeg lame vorbis opus ogg)
+if(BUILD_RUBBERBAND)
+    list(APPEND deps_libs "${external_lib_dir}/librubberband.a")
+endif()
+
+list(APPEND deps ffmpeg lame vorbis opus ogg rubberband)

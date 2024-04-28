@@ -9,7 +9,7 @@ ExternalProject_Add(rubberband
     URL_HASH SHA256=${rubberband_checksum}
     CONFIGURE_COMMAND PKG_CONFIG_PATH=${external_lib_dir}/pkgconfig
         meson setup --prefix=<INSTALL_DIR> --buildtype=release --libdir=lib
-        -Dauto_features=disabled -Ddefault_library=static
+        -Dauto_features=disabled
         -Dresampler=builtin -Dfft=builtin
         -Dextra_include_dirs=${external_include_dir}
         -Dextra_lib_dirs=${external_lib_dir}
