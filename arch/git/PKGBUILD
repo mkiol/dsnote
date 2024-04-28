@@ -18,6 +18,7 @@ depends=(
   'hicolor-icon-theme'
   'kdbusaddons5'
   'libarchive'
+  'libpulse'
   'ocl-icd'
   'openblas'
   'perl'
