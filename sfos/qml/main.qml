@@ -319,7 +319,7 @@ ApplicationWindow {
                             app.import_files(_files_to_open, _settings.file_import_action === Settings.FileImportActionReplace)
                         }
                     }
-                    app.execute_action_name(_requested_action)
+                    app.execute_action_name(_requested_action, _requested_extra)
                     app.import_files(_files_to_open, false)
                 }
                 onImport_file_multiple_streams: {

@@ -119,7 +119,7 @@ SilicaItem {
             preferredWidth: Theme.buttonWidthExtraSmall
             anchors.left: parent.left
             height: parent.size
-            visible: root.textArea.text.length !== 0 && text.length !== 0
+            visible: text.length !== 0
             onClicked: root.formatClicked()
             color: root.formatInvalid ? Theme.errorColor : Theme.primaryColor
             backgroundColor: Theme.rgba(color, 0.05)
