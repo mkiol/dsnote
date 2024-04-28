@@ -80,7 +80,7 @@ DialogPage {
             Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</li>
         <li>Fix: Accented characters (e.g.: ã, ê) were not transferred correctly to the active window.</li>
         </ul>
-        <p>" + qsTr("Flatpak") + ":</p>
+        <p>Flatpak:</p>
         <ul>
         <li>Flatpak runtime update to version 5.15-23.08</li>
         <li>AMD ROCm update to version 5.7.3</li>
