@@ -21275,13 +21275,13 @@
             "model_id": "fa_piper_ir_gyro_medium",
             "engine": "tts_piper",
             "lang_id": "fa",
-            "checksum": "1058bb8a",
-            "checksum_quick": "80fd1d14",
-            "size": "63135459",
+            "checksum": "d58540a3",
+            "checksum_quick": "407e5588",
+            "size": "63137711",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/fa/fa_IR/gyro/medium/fa_IR-gyro-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/0c9c5d340496a47205a799eb046aab69334a88e9/fa/fa_IR/gyro/medium/fa_IR-gyro-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/7fb40b320b8e58e32cd7a345137cced4610b0c46/fa/fa_IR/gyro/medium/fa_IR-gyro-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/7fb40b320b8e58e32cd7a345137cced4610b0c46/fa/fa_IR/gyro/medium/fa_IR-gyro-medium.onnx.json"
             ],
             "license": {
                 "id": "MIT",
