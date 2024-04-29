@@ -22,7 +22,7 @@ DialogPage {
         <ul>
         <li>Import subtitles embedded into video file.
             If your video file contains one or many subtitle streams, you can import the selected subtitles into notepad.</li>
-        <li>Support for more subtiles formats. You can import and export subtitles in SRT, WebVTT and ASS formats.</li>
+        <li>Support for more subtitles formats. You can import and export subtitles in SRT, WebVTT and ASS formats.</li>
         <li>Unified file importing and exporting.
             Text, subtitles, audio and video files can be imported or exported using unified menu bar option
             (<i>Import from a file</i> or <i>Export to a file</i>).</li>
@@ -59,7 +59,8 @@ DialogPage {
             When exporting to a file, you can overlay speech with audio from an existing media file.
             This can be useful when creating voice overs from subtitles
             (<i>Export to a file</i> &rarr; <i>Mix speech with audio from an existing file</i>).</li>
-        <li>Context menu option to read from cursor position or read only selected text</li>
+        <li>Context menu option to read from cursor position or read only selected text.
+            To activate context menu use mouse right click.</li>
         </ul>
         <p>" + qsTr("Translator") + ":</p>
         <ul>
@@ -68,7 +69,8 @@ DialogPage {
         <li>Updated models: Czech and Lithuanian</li>
         <li>Handy buttons to quickly add translated text to the note or
             to replace it and switch languages (<i>Add</i>, <i>Replace</i>).</li>
-        <li>Context menu option to translate from cursor position or translate only selected text</li>
+        <li>Context menu option to translate from cursor position or translate only selected text.
+            To activate context menu use mouse right click.</li>
         </ul>
         <p>" + qsTr("Accessibility") + ":</p>
         <ul>
