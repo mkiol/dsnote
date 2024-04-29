@@ -235,6 +235,7 @@ list(APPEND deps_libs
     ${external_lib_dir}/libopus.a)
 if(BUILD_RUBBERBAND)
     list(APPEND deps_libs "${external_lib_dir}/librubberband.a")
+    list(APPEND deps ffmpeg lame vorbis opus ogg rubberband)
+else()
+    list(APPEND deps ffmpeg lame vorbis opus ogg)
 endif()
-
-list(APPEND deps ffmpeg lame vorbis opus ogg rubberband)
