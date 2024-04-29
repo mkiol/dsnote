@@ -47,16 +47,6 @@ ToolBar {
                                 text: qsTr("Settings")
                                 icon.name: "document-properties-symbolic"
                                 onClicked: appWin.openDialog("SettingsPage.qml")
-
-                                Dot {
-                                    size: settingMenuItem.height / 5
-                                    visible: _settings.hint_addons
-                                    anchors {
-                                        right: settingMenuItem.right
-                                        rightMargin: appWin.padding
-                                        verticalCenter: settingMenuItem.verticalCenter
-                                    }
-                                }
                             }
 
                             MenuItem {
@@ -72,17 +62,6 @@ ToolBar {
                                     appWin.close()
                                     Qt.quit()
                                 }
-                            }
-                        }
-
-                        Dot {
-                            size: menuButton.height / 5
-                            visible: _settings.hint_addons
-                            anchors {
-                                right: menuButton.right
-                                rightMargin: size / 2
-                                top: menuButton.top
-                                topMargin: size / 2
                             }
                         }
 

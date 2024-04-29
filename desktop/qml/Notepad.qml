@@ -63,7 +63,6 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.leftMargin: appWin.padding
         Layout.rightMargin: appWin.padding
-        Layout.topMargin: appWin.padding
 
         enabled: root.enabled
         canUndoFallback: app.can_undo_note
@@ -117,7 +116,7 @@ ColumnLayout {
         id: listenReadCombos
 
         Layout.fillWidth: true
-        verticalMode: width < (appWin.verticalWidthThreshold * (app.tts_ref_voice_needed ? 1.4 : 1.0))
+        verticalMode: width < appWin.height * (app.tts_ref_voice_needed ? 1.4 : 1.0)
         first {
             icon.name: "audio-input-microphone-symbolic"
             enabled: app.stt_configured && (app.state === DsnoteApp.StateIdle ||

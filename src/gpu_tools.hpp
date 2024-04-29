@@ -14,6 +14,7 @@
 
 namespace gpu_tools {
 enum class api_t { opencl, cuda, rocm };
+enum class error_t { no_error, cuda_uknown_error };
 
 struct device {
     uint32_t id;
@@ -22,10 +23,15 @@ struct device {
     std::string platform_name;
 };
 
-std::vector<device> available_devices(bool cuda, bool hip, bool opencl,
-                                      bool opencl_always);
+struct available_devices_result {
+    error_t error = error_t::no_error;
+    std::vector<device> devices;
+};
+
+available_devices_result available_devices(bool cuda, bool hip, bool opencl,
+                                           bool opencl_always);
 void add_opencl_devices(std::vector<device>& devices);
-void add_cuda_devices(std::vector<device>& devices);
+error_t add_cuda_devices(std::vector<device>& devices);
 void add_hip_devices(std::vector<device>& devices);
 bool has_cuda_runtime();
 bool has_cudnn();

@@ -41,6 +41,7 @@ DialogPage {
             To activate context menu use mouse right click.</li>
         <li>New text appending style: <i>After empty line</i></li>
         <li>System tray menu for changing active STT/TTS model</li>
+        <li>User friendly names of audio input devices (<i>Speech to Text</i> &rarr; <i>Audio input device</i>)</li>
         <li><i>Speech Note</i> has been translated into Ukrainian and Russian languages.
             Many thanks to <i>Vovkiv</i> for this contribution!</li>
         </ul>
@@ -79,7 +80,7 @@ DialogPage {
             Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</li>
         <li>Fix: Accented characters (e.g.: ã, ê) were not transferred correctly to the active window.</li>
         </ul>
-        <p>" + qsTr("Flatpak") + ":</p>
+        <p>Flatpak:</p>
         <ul>
         <li>Flatpak runtime update to version 5.15-23.08</li>
         <li>AMD ROCm update to version 5.7.3</li>

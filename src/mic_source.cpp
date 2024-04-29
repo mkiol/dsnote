@@ -10,11 +10,10 @@
 #include <QAudioFormat>
 #include <QDebug>
 
-#include "settings.h"
-
-mic_source::mic_source(QObject* parent) : audio_source{parent} {
+mic_source::mic_source(const QString& preferred_audio_input, QObject* parent)
+    : audio_source{parent} {
     qDebug() << "mic source created";
-    init_audio();
+    init_audio(preferred_audio_input);
     start();
 }
 
@@ -87,11 +86,12 @@ QStringList mic_source::audio_inputs() {
     return list;
 }
 
-void mic_source::init_audio() {
+void mic_source::init_audio(const QString& preferred_audio_input) {
     auto format = audio_format();
 
-    auto input_name = settings::instance()->audio_input();
-    if (input_name.isEmpty() || !has_audio_input(input_name)) {
+    auto input_name{preferred_audio_input};
+    if (preferred_audio_input.isEmpty() ||
+        !has_audio_input(preferred_audio_input)) {
         auto info = QAudioDeviceInfo::defaultInputDevice();
         if (info.isNull()) {
             qWarning() << "no audio input";
@@ -108,7 +108,8 @@ void mic_source::init_audio() {
         throw std::runtime_error("audio format is not supported");
     }
 
-    qDebug() << "using audio input:" << input_info.deviceName();
+    qDebug() << "using audio input:" << input_info.deviceName()
+             << "(preferred was " << preferred_audio_input << ")";
     m_audio_input = std::make_unique<QAudioInput>(input_info, format);
 
     connect(m_audio_input.get(), &QAudioInput::stateChanged, this,

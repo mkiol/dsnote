@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -21,12 +21,9 @@
 #include <QVariantList>
 #include <algorithm>
 #include <cstdlib>
-#include <fstream>
-#include <iostream>
 #include <thread>
 
 #include "config.h"
-#include "mic_source.h"
 #ifdef ARCH_X86_64
 #include "gpu_tools.hpp"
 #endif
@@ -187,7 +184,6 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
 
     update_addon_flags();
     enforce_num_threads();
-    update_audio_inputs();
 
     // remove qml cache
     QDir{QStandardPaths::writableLocation(QStandardPaths::CacheLocation) +
@@ -718,12 +714,12 @@ void settings::set_speech_mode(speech_mode_t value) {
 }
 
 unsigned int settings::speech_speed() const {
-    return std::clamp(value(QStringLiteral("speech_speed2"), 10u).toUInt(), 1u,
-                      20u);
+    return std::clamp(value(QStringLiteral("speech_speed2"), 10U).toUInt(), 1U,
+                      20U);
 }
 
 void settings::set_speech_speed(unsigned int value) {
-    value = std::clamp(value, 1u, 20u);
+    value = std::clamp(value, 1U, 20U);
 
     if (speech_speed() != value) {
         setValue(QStringLiteral("speech_speed2"), static_cast<int>(value));
@@ -1366,7 +1362,7 @@ void settings::enforce_num_threads() const {
     unsigned int num_threads =
         conf_num_threads > 0
             ? std::min(conf_num_threads,
-                       std::max(std::thread::hardware_concurrency(), 2u) - 1)
+                       std::max(std::thread::hardware_concurrency(), 2U) - 1)
             : 0;
 
     qDebug() << "enforcing num threads:" << num_threads;
@@ -1422,14 +1418,14 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
          gpu_feature_flags_t::gpu_feature_tts_whisperspeech_cuda) == 0;
     bool disable_tts_hip = disable_tts_cuda;
 
-    auto devices = gpu_tools::available_devices(
+    auto result = gpu_tools::available_devices(
         /*cuda=*/gpu_scan_cuda(),
         /*hip=*/gpu_scan_hip(),
         /*opencl=*/gpu_scan_opencl(),
         /*opencl_always=*/true);
 
     std::for_each(
-        devices.cbegin(), devices.cend(),
+        result.devices.cbegin(), result.devices.cend(),
         [&, disable_clover = !gpu_scan_opencl_legacy()](const auto& device) {
             switch (device.api) {
                 case gpu_tools::api_t::opencl:
@@ -1471,6 +1467,16 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
         m_gpu_devices_tts.front().append(" (" + auto_gpu_device_tts() + ")");
 
     emit gpu_devices_changed();
+
+    if (result.error == gpu_tools::error_t::cuda_uknown_error &&
+        (!is_flatpak() || addon_flags() & addon_flags_t::AddonNvidia) > 0) {
+        qWarning() << "*********************************************";
+        qWarning() << "Most likely, NVIDIA kernel module has not been fully "
+                      "initialized. Try executing 'nvidia-modprobe -c 0 -u' "
+                      "before running Speech Note";
+        qWarning() << "*********************************************";
+        add_error_flags(error_flags_t::ErrorCudaUnknown);
+    }
 #endif
 }
 
@@ -1564,51 +1570,15 @@ void settings::set_gpu_device_idx_tts(int value) {
     set_gpu_device_tts(value == 0 ? "" : m_gpu_devices_tts.at(value));
 }
 
-QStringList settings::audio_inputs() const { return m_audio_inputs; }
-
-bool settings::has_audio_input() const { return m_audio_inputs.size() > 1; }
-
-void settings::update_audio_inputs() {
-    auto inputs = mic_source::audio_inputs();
-
-    m_audio_inputs.clear();
-    m_audio_inputs.push_back(tr("Auto"));
-
-    std::transform(
-        inputs.cbegin(), inputs.cend(), std::back_inserter(m_audio_inputs),
-        [](const auto& input) { return QStringLiteral("%1").arg(input); });
-
-    emit audio_inputs_changed();
+QString settings::audio_input_device() const {
+    return value(QStringLiteral("audio_input_device")).toString();
 }
 
-QString settings::audio_input() const {
-    return value(QStringLiteral("service/audio_input")).toString();
-}
-
-void settings::set_audio_input(QString value) {
-    if (value == tr("Auto")) value.clear();
-
-    if (value != audio_input()) {
-        setValue(QStringLiteral("service/audio_input"), value);
-        emit audio_input_changed();
+void settings::set_audio_input_device(QString value) {
+    if (value != audio_input_device()) {
+        setValue(QStringLiteral("audio_input_device"), value);
+        emit audio_input_device_changed();
     }
-}
-
-int settings::audio_input_idx() const {
-    auto current_input = audio_input();
-
-    if (current_input.isEmpty()) return 0;
-
-    auto it = std::find(m_audio_inputs.cbegin(), m_audio_inputs.cend(),
-                        current_input);
-    if (it == m_audio_inputs.cend()) return 0;
-
-    return std::distance(m_audio_inputs.cbegin(), it);
-}
-
-void settings::set_audio_input_idx(int value) {
-    if (value < 0 || value >= m_audio_inputs.size()) return;
-    set_audio_input(value == 0 ? "" : m_audio_inputs.at(value));
 }
 
 bool settings::hotkeys_enabled() const {
@@ -2257,5 +2227,27 @@ void settings::update_addon_flags() {
     if (new_flags != m_addon_flags) {
         m_addon_flags = new_flags;
         emit addon_flags_changed();
+
+        if (m_addon_flags & addon_flags_t::AddonNvidia &&
+            m_addon_flags & addon_flags_t::AddonAmd) {
+            qWarning() << "*********************************************";
+            qWarning() << "Both NVIDIA and AMD GPU acceleration add-ons are "
+                          "installed, which is not optimal. "
+                          "Uninstall one of them.";
+            qWarning() << "*********************************************";
+            add_error_flags(error_flags_t::ErrorMoreThanOneGpuAddons);
+        }
+    }
+}
+
+unsigned int settings::error_flags() const { return m_error_flags; }
+
+void settings::add_error_flags(error_flags_t new_flag) {
+    unsigned int new_flags =
+        m_error_flags | static_cast<unsigned int>(new_flag);
+
+    if (new_flags != m_error_flags) {
+        m_error_flags = new_flags;
+        emit error_flags_changed();
     }
 }

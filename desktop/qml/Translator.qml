@@ -73,8 +73,7 @@ ColumnLayout {
     GridLayout {
         id: grid
 
-        property bool verticalMode: width < (appWin.verticalWidthThreshold *
-                            (app.tts_for_in_mnt_ref_voice_needed || app.tts_for_out_mnt_ref_voice_needed ? 1.4 : 1.0))
+        property bool verticalMode: appWin.width <= appWin.height
 
         columns: verticalMode ? 1 : 2
         Layout.fillHeight: true
@@ -92,7 +91,7 @@ ColumnLayout {
                 background: Item {}
                 bottomPadding: 0
                 leftPadding: appWin.padding
-                topPadding: appWin.padding
+                topPadding: 0
                 rightPadding: grid.verticalMode ? appWin.padding : 0
                 enabled: app.mnt_configured
 
@@ -162,7 +161,7 @@ ColumnLayout {
                 id: mntInCombo
 
                 Layout.fillWidth: true
-                verticalMode: width < appWin.verticalWidthThreshold
+                verticalMode: width < appWin.height
                 first {
                     enabled: app.mnt_configured && app.state === DsnoteApp.StateIdle
                     comboToolTip: qsTr("Pick the language to translate from.")
@@ -238,7 +237,7 @@ ColumnLayout {
                 background: Item {}
                 bottomPadding: 0
                 rightPadding: appWin.padding
-                topPadding: appWin.padding
+                topPadding: grid.verticalMode ? appWin.padding : 0
                 leftPadding: grid.verticalMode ? appWin.padding : 0
 
                 ScrollTextArea {
@@ -286,7 +285,7 @@ ColumnLayout {
                 id: mntOutCombo
 
                 Layout.fillWidth: true
-                verticalMode: width < appWin.verticalWidthThreshold
+                verticalMode: width < appWin.height
                 first {
                     enabled: app.mnt_configured && app.state === DsnoteApp.StateIdle
                     comboToolTip: qsTr("Pick the language to translate into.")

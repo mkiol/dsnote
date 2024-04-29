@@ -20,6 +20,7 @@ BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(zlib)
+BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  desktop-file-utils
 BuildRequires:  curl
 BuildRequires:  cmake
@@ -32,6 +33,7 @@ BuildRequires:  python3-pip
 BuildRequires:  python3-devel
 BuildRequires:  git
 BuildRequires:  boost-devel
+BuildRequires:  meson
 
 %description
 Speech Note let you take, read and translate notes in multiple languages.

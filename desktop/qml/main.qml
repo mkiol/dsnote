@@ -17,7 +17,6 @@ ApplicationWindow {
     id: appWin
 
     readonly property int padding: 8
-    readonly property double verticalWidthThreshold: 600
     readonly property bool canCancelStt: app.state === DsnoteApp.StateTranscribingFile ||
                                 app.state === DsnoteApp.StateListeningSingleSentence ||
                                 app.state === DsnoteApp.StateListeningAuto ||
@@ -211,12 +210,43 @@ ApplicationWindow {
     }
 
     ColumnLayout {
+        id: padColumn
+
         anchors.fill: parent
         spacing: appWin.padding
+
+        readonly property bool showingTip: warningTip1.visible || warningTip2.visible
+
+        TipMessage {
+            id: warningTip1
+            visible: _settings.error_flags & Settings.ErrorMoreThanOneGpuAddons
+            verticalMode: true
+            Layout.topMargin: appWin.padding
+            Layout.leftMargin: appWin.padding
+            Layout.rightMargin: appWin.padding
+            closable: true
+            text: qsTr("Both NVIDIA and AMD GPU acceleration add-ons are installed, which is not optimal. Uninstall one of them.")
+        }
+
+        TipMessage {
+            id: warningTip2
+            visible: _settings.hint_addons
+            verticalMode: true
+            Layout.topMargin: appWin.padding
+            Layout.leftMargin: appWin.padding
+            Layout.rightMargin: appWin.padding
+            onCloseClicked: _settings.hint_addons = false
+            closable: true
+            text: qsTr("The Flatpak add-on for GPU acceleration is not installed.") + " " +
+                  qsTr("To enable GPU acceleration, install either %1 add-on for AMD graphics card or %2 add-on for NVIDIA graphics card.")
+                                          .arg("<i><b>Speech Note AMD (net.mkiol.SpeechNote.Addon.amd)</b></i>")
+                                          .arg("<i><b>Speech Note NVIDIA (net.mkiol.SpeechNote.Addon.nvidia)</b></i>")
+        }
 
         Translator {
             id: translator
 
+            Layout.topMargin: padColumn.showingTip ? 0 : appWin.padding
             Layout.fillWidth: true
             enabled: _settings.translator_mode
             readOnly: appWin.canCancelStt
@@ -225,6 +255,7 @@ ApplicationWindow {
         Notepad {
             id: notepad
 
+            Layout.topMargin: padColumn.showingTip ? 0 : appWin.padding
             Layout.fillWidth: true
             enabled: !_settings.translator_mode
         }

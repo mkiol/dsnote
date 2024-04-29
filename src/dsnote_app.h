@@ -27,6 +27,7 @@
 #include "tray_icon.hpp"
 #endif
 
+#include "audio_device_manager.hpp"
 #include "config.h"
 #include "dbus_notifications_inf.h"
 #include "dbus_speech_inf.h"
@@ -173,6 +174,14 @@ class dsnote_app : public QObject {
     Q_PROPERTY(QVariantList available_tts_models_for_out_mnt READ
                    available_tts_models_for_out_mnt NOTIFY
                        available_tts_models_for_out_mnt_changed)
+
+    // audio sources
+    Q_PROPERTY(QStringList audio_sources READ audio_sources NOTIFY
+                   audio_sources_changed)
+    Q_PROPERTY(int audio_source_idx READ audio_source_idx WRITE
+                   set_audio_source_idx NOTIFY audio_source_changed)
+    Q_PROPERTY(QString audio_source READ audio_source WRITE set_audio_source
+                   NOTIFY audio_source_changed)
 
     Q_PROPERTY(service_task_state_t task_state READ task_state NOTIFY
                    task_state_changed)
@@ -454,6 +463,9 @@ class dsnote_app : public QObject {
                                       bool replace);
     void auto_text_format_changed();
     void mc_progress_changed();
+    void audio_devices_changed();
+    void audio_source_changed();
+    void audio_sources_changed();
 
    private:
     enum class action_t {
@@ -596,6 +608,8 @@ class dsnote_app : public QObject {
     auto_text_format_t m_auto_text_format =
         auto_text_format_t::AutoTextFormatRaw;
     media_converter m_mc;
+    audio_device_manager m_audio_dm;
+    QStringList m_audio_sources;
     QObject *m_app_window = nullptr;
 #ifdef USE_X11_FEATURES
     struct hotkeys_t {
@@ -712,7 +726,12 @@ class dsnote_app : public QObject {
     inline auto task_state() const { return m_task_state; }
     inline auto auto_text_format() const { return m_auto_text_format; }
     inline auto mc_progress() const { return m_mc.progress(); }
-
+    QStringList audio_sources() const;
+    QString audio_source();
+    void update_audio_sources();
+    void set_audio_source(QString value);
+    int audio_source_idx();
+    void set_audio_source_idx(int value);
     void do_keepalive();
     void handle_keepalive_task_timeout();
     void handle_service_error(int code);

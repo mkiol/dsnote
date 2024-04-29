@@ -510,9 +510,6 @@ DialogPage {
                     text: qsTr("Mix speech with audio from an existing file")
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Overlay speech with audio from an existing media file.") + " " +
-                                  qsTr("The resulting audio will have the same duration as the audio from the file selected for mixing.") + " " +
-                                  qsTr("This can be useful when creating voice overs from subtitles.")
                     hoverEnabled: true
                 }
 

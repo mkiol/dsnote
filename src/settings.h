@@ -224,6 +224,8 @@ class settings : public QSettings, public singleton<settings> {
         bool tts_use_engine_speed_control READ tts_use_engine_speed_control
             WRITE set_tts_use_engine_speed_control NOTIFY
                 tts_use_engine_speed_control_changed)
+    Q_PROPERTY(
+        unsigned int error_flags READ error_flags NOTIFY error_flags_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -263,12 +265,9 @@ class settings : public QSettings, public singleton<settings> {
                    set_gpu_device_tts NOTIFY gpu_device_tts_changed)
     Q_PROPERTY(QString auto_gpu_device_tts READ auto_gpu_device_tts NOTIFY
                    gpu_device_tts_changed)
-    Q_PROPERTY(
-        QStringList audio_inputs READ audio_inputs NOTIFY audio_inputs_changed)
-    Q_PROPERTY(int audio_input_idx READ audio_input_idx WRITE
-                   set_audio_input_idx NOTIFY audio_input_changed)
-    Q_PROPERTY(QString audio_input READ audio_input WRITE set_audio_input NOTIFY
-                   audio_input_changed)
+
+    Q_PROPERTY(QString audio_input_device READ audio_input_device WRITE
+                   set_audio_input_device NOTIFY audio_input_device_changed)
     Q_PROPERTY(bool py_feature_scan READ py_feature_scan WRITE
                    set_py_feature_scan NOTIFY py_feature_scan_changed)
     Q_PROPERTY(
@@ -398,26 +397,33 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(default_export_tab_t)
 
+    enum error_flags_t : unsigned int {
+        ErrorNoError = 0U,
+        ErrorCudaUnknown = 1U << 0U,
+        ErrorMoreThanOneGpuAddons = 1U << 1U
+    };
+    Q_ENUM(error_flags_t)
+
     enum addon_flags_t : unsigned int {
-        AddonNone = 0,
-        AddonNvidia = 1 << 0,
-        AddonAmd = 1 << 1
+        AddonNone = 0U,
+        AddonNvidia = 1U << 0U,
+        AddonAmd = 1U << 1U
     };
     Q_ENUM(addon_flags_t)
 
     enum gpu_feature_flags_t : unsigned int {
-        gpu_feature_none = 0,
-        gpu_feature_stt_whispercpp_cuda = 1 << 0,
-        gpu_feature_stt_whispercpp_hip = 1 << 1,
-        gpu_feature_stt_whispercpp_opencl = 1 << 2,
-        gpu_feature_stt_fasterwhisper_cuda = 1 << 3,
-        gpu_feature_tts_coqui_cuda = 1 << 4,
-        gpu_feature_tts_coqui_hip = 1 << 5,
-        gpu_feature_tts_whisperspeech_cuda = 1 << 6,
-        gpu_feature_tts_whisperspeech_hip = 1 << 7,
+        gpu_feature_none = 0U,
+        gpu_feature_stt_whispercpp_cuda = 1U << 0U,
+        gpu_feature_stt_whispercpp_hip = 1U << 1U,
+        gpu_feature_stt_whispercpp_opencl = 1U << 2U,
+        gpu_feature_stt_fasterwhisper_cuda = 1U << 3U,
+        gpu_feature_tts_coqui_cuda = 1U << 4U,
+        gpu_feature_tts_coqui_hip = 1U << 5U,
+        gpu_feature_tts_whisperspeech_cuda = 1U << 6U,
+        gpu_feature_tts_whisperspeech_hip = 1U << 7U,
         gpu_feature_all =
             gpu_feature_stt_whispercpp_cuda | gpu_feature_stt_whispercpp_hip |
-            gpu_feature_stt_whispercpp_hip | gpu_feature_stt_whispercpp_opencl |
+            gpu_feature_stt_whispercpp_opencl |
             gpu_feature_stt_fasterwhisper_cuda | gpu_feature_tts_coqui_cuda |
             gpu_feature_tts_coqui_hip | gpu_feature_tts_whisperspeech_cuda |
             gpu_feature_tts_whisperspeech_hip
@@ -589,6 +595,7 @@ class settings : public QSettings, public singleton<settings> {
     bool clean_ref_voice() const;
     void set_clean_ref_voice(bool value);
     unsigned int addon_flags() const;
+    unsigned int error_flags() const;
     void set_sub_min_segment_dur(unsigned int value);
     unsigned int sub_min_segment_dur() const;
     void set_sub_min_line_length(unsigned int value);
@@ -613,7 +620,6 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE bool gpu_supported() const;
     Q_INVOKABLE bool has_gpu_device_stt() const;
     Q_INVOKABLE bool has_gpu_device_tts() const;
-    Q_INVOKABLE bool has_audio_input() const;
     Q_INVOKABLE bool is_wayland() const;
     Q_INVOKABLE bool is_xcb() const;
     Q_INVOKABLE bool is_flatpak() const;
@@ -675,11 +681,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_restore_punctuation(bool value);
     QStringList enabled_models();
     void set_enabled_models(const QStringList &value);
-    QStringList audio_inputs() const;
-    QString audio_input() const;
-    void set_audio_input(QString value);
-    int audio_input_idx() const;
-    void set_audio_input_idx(int value);
+    QString audio_input_device() const;
+    void set_audio_input_device(QString value);
     bool py_feature_scan() const;
     void set_py_feature_scan(bool value);
     int num_threads() const;
@@ -794,6 +797,7 @@ class settings : public QSettings, public singleton<settings> {
     void tts_split_into_sentences_changed();
     void tts_use_engine_speed_control_changed();
     void use_toggle_for_hotkey_changed();
+    void error_flags_changed();
 
     // service
     void models_dir_changed();
@@ -808,8 +812,7 @@ class settings : public QSettings, public singleton<settings> {
     void gpu_devices_changed();
     void gpu_device_stt_changed();
     void gpu_device_tts_changed();
-    void audio_inputs_changed();
-    void audio_input_changed();
+    void audio_input_device_changed();
     void py_feature_scan_changed();
     void cache_audio_format_changed();
     void cache_policy_changed();
@@ -829,14 +832,14 @@ class settings : public QSettings, public singleton<settings> {
     QStringList m_gpu_devices_stt;
     QStringList m_gpu_devices_tts;
     std::vector<QString> m_rocm_gpu_versions;
-    QStringList m_audio_inputs;
     unsigned int m_addon_flags = addon_flags_t::AddonNone;
+    unsigned int m_error_flags = error_flags_t::ErrorNoError;
     bool m_native_style = false;
 
     static QString settings_filepath();
-    void update_audio_inputs();
     void set_restart_required(bool value);
     void enforce_num_threads() const;
+    void add_error_flags(error_flags_t new_flag);
     void update_addon_flags();
 
     launch_mode_t m_launch_mode = launch_mode_t::app_stanalone;

@@ -2971,9 +2971,10 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
 
     try {
         if (QFileInfo::exists(file))
-            restart_audio_source(file, stream_index);
+            restart_audio_source(stt_source_file_props_t{file, stream_index});
         else
-            restart_audio_source(QUrl{file}.toLocalFile(), stream_index);
+            restart_audio_source(stt_source_file_props_t{
+                QUrl{file}.toLocalFile(), stream_index});
     } catch (const std::runtime_error &err) {
         m_current_task.reset();
         qCritical() << "audio source error:" << err.what();
@@ -3160,7 +3161,11 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
         return INVALID_TASK;
     }
 
-    restart_audio_source();
+    restart_audio_source([&] {
+        if (options.contains(QStringLiteral("audio_input")))
+            return options.value(QStringLiteral("audio_input")).toString();
+        return QString{};
+    }());
     if (m_stt_engine) m_stt_engine->set_speech_started(true);
 
     start_keepalive_current_task();
@@ -3524,7 +3529,7 @@ void speech_service::stop_stt_engine() {
 
     if (m_stt_engine) m_stt_engine->stop();
 
-    restart_audio_source();
+    restart_audio_source({});
 
     if (m_current_task) {
         m_current_task.reset();
@@ -3574,17 +3579,20 @@ void speech_service::handle_audio_ended() {
     }
 }
 
-void speech_service::restart_audio_source(const QString &source_file,
-                                          int stream_index) {
+void speech_service::restart_audio_source(
+    const std::variant<QString, stt_source_file_props_t> &config) {
     if (m_stt_engine && m_stt_engine->started()) {
         qDebug() << "creating audio source";
 
         if (m_source) m_source->disconnect();
 
-        if (source_file.isEmpty())
-            m_source = std::make_unique<mic_source>();
-        else
-            m_source = std::make_unique<file_source>(source_file, stream_index);
+        if (std::holds_alternative<stt_source_file_props_t>(config)) {
+            m_source = std::make_unique<file_source>(
+                std::get<stt_source_file_props_t>(config).file,
+                std::get<stt_source_file_props_t>(config).stream_index);
+        } else {
+            m_source = std::make_unique<mic_source>(std::get<QString>(config));
+        }
 
         set_progress(m_source->progress());
         connect(m_source.get(), &audio_source::audio_available, this,

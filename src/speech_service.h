@@ -22,6 +22,7 @@
 #include <set>
 #include <string>
 #include <utility>
+#include <variant>
 #include <vector>
 
 #include "audio_source.h"
@@ -449,8 +450,12 @@ class speech_service : public QObject, public singleton<speech_service> {
                                const QString &out_lang_id,
                                const QVariantMap &options);
     bool restart_text_repair_engine(const QVariantMap &options);
-    void restart_audio_source(const QString &source_file = {},
-                              int stream_index = -1);
+    struct stt_source_file_props_t {
+        QString file;
+        int stream_index = -1;
+    };
+    void restart_audio_source(
+        const std::variant<QString, stt_source_file_props_t> &config);
     void stop_stt();
     source_t audio_source_type() const;
     void set_progress(double progress);

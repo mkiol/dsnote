@@ -117,6 +117,7 @@
       <li>Text context menu with additional options: 'Read selection' and 'Translate selection'</li>
       <li>New text appending style: 'After empty line'</li>
       <li>System tray menu for changing active STT/TTS model</li>
+      <li>User-friendly names for audio input devices</li>
       <li>Speech Note has been translated into Ukrainian and Russian languages.
           Many thanks to Vovkiv for this contribution!</li>
       </ul>

@@ -63,18 +63,6 @@ DialogPage {
         TabButton {
             text: qsTr("Other")
             width: implicitWidth
-
-            Dot {
-                visible: _settings.hint_addons
-                size: parent.height / 5
-
-                anchors {
-                    right: parent.right
-                    rightMargin: size / 2
-                    top: parent.top
-                    topMargin: size / 2
-                }
-            }
         }
     }
 
@@ -302,28 +290,30 @@ DialogPage {
         ColumnLayout {
             id: speechToTextTab
 
+            property bool has_audio_sources: app.audio_sources.length > 1
+
             ComboBoxForm {
-                visible: _settings.audio_inputs.length > 1
-                label.text: qsTr("Audio source")
-                toolTip: qsTr("Select preferred audio source.")
+                visible: speechToTextTab.has_audio_sources
+                label.text: qsTr("Audio input device")
+                toolTip: qsTr("Select preferred audio input device.")
                 comboBox {
-                    currentIndex: _settings.audio_input_idx
-                    model: _settings.audio_inputs
+                    currentIndex: app.audio_source_idx
+                    model: app.audio_sources
                     onActivated: {
-                        _settings.audio_input_idx = index
+                        app.audio_source_idx = index
                     }
                 }
             }
 
             TipMessage {
                 indends: 1
-                visible: _settings.audio_inputs.length <= 1
+                visible: !speechToTextTab.has_audio_sources
                 text: qsTr("No audio source could be found.") + " " +
                       qsTr("Make sure the microphone is properly connected.")
             }
 
             ComboBoxForm {
-                visible: _settings.audio_inputs.length > 1
+                visible: speechToTextTab.has_audio_sources
                 label.text: qsTr("Listening mode")
                 toolTip: "<i>" + qsTr("One sentence") + "</i>" + " — " + qsTr("Clicking on the %1 button starts listening, which ends when the first sentence is recognized.")
                          .arg("<i>" + qsTr("Listen") + "</i>") + "<br/>" +
@@ -440,6 +430,15 @@ DialogPage {
                       qsTr("Override GPU version") + "</i>")
                 label.textFormat: Text.RichText
 
+            }
+
+            TipMessage {
+                indends: 1
+                visible: _settings.gpu_supported() &&
+                         app.feature_gpu_stt && _settings.stt_use_gpu &&
+                         _settings.error_flags & Settings.ErrorCudaUnknown > 0
+                text: qsTr("Most likely, NVIDIA kernel module has not been fully initialized.") + " " +
+                      qsTr("Try executing %1 before running Speech Note.").arg("<i>nvidia-modprobe -c 0 -u</i>")
             }
 
             SectionLabel {
@@ -615,6 +614,15 @@ DialogPage {
                 label.textFormat: Text.RichText
             }
 
+            TipMessage {
+                indends: 1
+                visible: _settings.gpu_supported() &&
+                         app.feature_gpu_tts && _settings.tts_use_gpu &&
+                         _settings.error_flags & Settings.ErrorCudaUnknown > 0
+                text: qsTr("Most likely, NVIDIA kernel module has not been fully initialized.") + " " +
+                      qsTr("Try executing %1 before running Speech Note.").arg("<i>nvidia-modprobe -c 0 -u</i>")
+            }
+
             SectionLabel {
                 text: qsTr("Subtitles")
             }
@@ -623,7 +631,7 @@ DialogPage {
                 label.text: qsTr("Sync speech with timestamps")
                 toolTip: "<i>" + qsTr("Don't sync") + "</i>" + " — " + qsTr("Subtitle timestamps are ignored when reading or exporting to a file.") + "<br/> " +
                          "<i>" + qsTr("Sync but don't adjust speed") + "</i>" + " — " + qsTr("Speech is synchronized according to timestamps.") + "<br/> " +
-                         "<i>" + qsTr("Sync and only increase speed to fit") + "</i>" + " — " + qsTr("Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.")  + "<br/> " +
+                         "<i>" + qsTr("Sync and increase speed to fit") + "</i>" + " — " + qsTr("Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.")  + "<br/> " +
                          "<i>" + qsTr("Sync and increase or decrease speed to fit") + "</i>" + " — " + qsTr("Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.")
                 comboBox {
                     currentIndex: {
@@ -898,30 +906,6 @@ DialogPage {
 
             SectionLabel {
                 text: qsTr("Availability of optional features")
-            }
-
-            InlineMessage {
-                color: "red"
-                closable: true
-                Layout.fillWidth: true
-                visible: _settings.hint_addons
-                onCloseClicked: _settings.hint_addons = false
-
-                Label {
-                    color: "red"
-                    Layout.fillWidth: true
-                    wrapMode: Text.Wrap
-                    text: qsTr("The Flatpak add-on for GPU acceleration is not installed.")
-                }
-
-                Label {
-                    color: "red"
-                    Layout.fillWidth: true
-                    wrapMode: Text.Wrap
-                    text: qsTr("To enable GPU acceleration, install either %1 add-on for AMD graphics card or %2 add-on for NVIDIA graphics card.")
-                        .arg("<i><b>net.mkiol.SpeechNote.Addon.amd</b></i>")
-                        .arg("<i><b>net.mkiol.SpeechNote.Addon.nvidia</b></i>")
-                }
             }
 
             ColumnLayout {

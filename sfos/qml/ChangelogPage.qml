@@ -33,18 +33,52 @@ Page {
             }
 
             LogItem {
-                title: "Settings option to remember the last note"
+                title: "Subtitles generation in STT"
+                description: "To generate timestamped text in SRT format, " +
+                             "change the text format using the button at the bottom of the text area. " +
+                             "Check the settings to find more subtitle options."
+            }
+
+            LogItem {
+                title: "Speech synchronized with subtitle timestamps in TTS"
+                description: "When the text format is set to 'SRT Subtitles', " +
+                             "the generated speech will be synchronized with the subtitle timestamps. " +
+                             "This can be useful if you want to make voice over."
+            }
+
+            LogItem {
+                title: "Unified file importing and exporting"
+                description: "Text, subtitles, audio and video files can be imported or exported using unified pull-down menu option."
+            }
+
+            LogItem {
+                title: "Settings option to enable/disable remembering the last note"
                 description: "If the option is disabled, the last note will not be available after restarting the app."
             }
 
             LogItem {
-                title: "New translator models"
-                description: "New models: Greek to English, Maltese to English, Slovenian to English, Turkish to English"
+                title: "Settings option for default action when importing note from a file"
+                description: "You can set 'Ask whether to add or replace', 'Add to an existing note' or 'Replace an existing note'."
             }
 
             LogItem {
-                title: "New voice for Persian language"
-                description: "New voice enabled with Piper model"
+                title: "New Piper voices"
+                description: "New voices for English, Persian, Slovenian, Turkish, French and Spanish"
+            }
+
+            LogItem {
+                title: "New RHVoice voice"
+                description: "New voice for Czech language"
+            }
+
+            LogItem {
+                title: "New translator models"
+                description: "New models: Greek to English, Maltese to English, Slovenian to English, Turkish to English, English to Catalan"
+            }
+
+            LogItem {
+                title: "Updated translator models"
+                description: "Updated models: Czech and Lithuanian"
             }
 
             LogItem {

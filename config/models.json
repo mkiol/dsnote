@@ -6848,9 +6848,9 @@
             "checksum_quick": "b8b03e8a",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/kredor/punctuate-16/resolve/0915fb7e29e76dbe40ccbc251fa19abb94f3f5aa/config.json",
-                "https://huggingface.co/kredor/punctuate-16/resolve/0915fb7e29e76dbe40ccbc251fa19abb94f3f5aa/pytorch_model.bin",
-                "https://huggingface.co/kredor/punctuate-16/resolve/0915fb7e29e76dbe40ccbc251fa19abb94f3f5aa/tokenizer.json"
+                "https://huggingface.co/mukowaty/punctuate-16/resolve/3eaff4f3669ab76b3f8b6c33aadcae4a4399e311/config.json",
+                "https://huggingface.co/mukowaty/punctuate-16/resolve/3eaff4f3669ab76b3f8b6c33aadcae4a4399e311/pytorch_model.bin",
+                "https://huggingface.co/mukowaty/punctuate-16/resolve/3eaff4f3669ab76b3f8b6c33aadcae4a4399e311/tokenizer.json"
             ],
             "size": "1126993609",
             "hidden": true

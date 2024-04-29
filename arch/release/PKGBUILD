@@ -18,6 +18,7 @@ depends=(
   'kdbusaddons5'
   'kquickcharts5'
   'libarchive'
+  'libpulse'
   'openblas'
   'perl'
   'python>=3.11'

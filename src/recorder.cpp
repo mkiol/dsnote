@@ -70,7 +70,7 @@ void recorder::init() {
 
         auto format = make_audio_format();
 
-        auto input_name = settings::instance()->audio_input();
+        auto input_name = settings::instance()->audio_input_device();
         if (input_name.isEmpty() || !has_audio_input(input_name)) {
             auto info = QAudioDeviceInfo::defaultInputDevice();
             if (info.isNull()) {

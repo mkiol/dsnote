@@ -26,6 +26,9 @@ InlineMessage {
     Layout.fillWidth: _fill
     Layout.preferredWidth: _fill ? 0 : _textWidth + 5 * appWin.padding
     Layout.leftMargin: indends * appWin.padding
+    Layout.rightMargin: indends * appWin.padding
+
+    onCloseClicked: visible = false
 
     FontMetrics {
         id: fontMetrics
