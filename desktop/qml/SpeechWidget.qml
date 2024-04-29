@@ -79,9 +79,7 @@ RowLayout {
                     BusyIndicator {
                         id: busyIndicator
 
-                        anchors.centerIn: parent
-                        width: 24
-                        height: 24
+                        anchors.fill: parent
                         running: app.busy || service.busy ||
                                  app.state === DsnoteApp.StateTranscribingFile ||
                                  app.state === DsnoteApp.StateWritingSpeechToFile ||
