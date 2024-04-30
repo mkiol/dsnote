@@ -507,8 +507,12 @@ error_t add_cuda_devices(std::vector<device>& devices) {
         LOGW(err.what());
 
         if (has_nvidia_gpu()) {
-            if (add_cuda_runtime_devices(devices) == cudaHipUnknownError)
-                error = error_t::cuda_uknown_error;
+            try {
+                if (add_cuda_runtime_devices(devices) == cudaHipUnknownError)
+                    error = error_t::cuda_uknown_error;
+            } catch (const std::runtime_error& err) {
+                LOGW(err.what());
+            }
         }
     }
 
