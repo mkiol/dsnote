@@ -110,15 +110,15 @@
     </message>
     <message>
         <location filename="../desktop/qml/ChangelogPage.qml" line="17"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="94"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="194"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="290"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="307"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="361"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="397"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="425"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="440"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="465"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="96"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="196"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="292"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="309"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="363"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="399"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="427"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="442"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="467"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="32"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="90"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="131"/>
@@ -132,59 +132,59 @@
         <translation>Verze %1</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="64"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="168"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="220"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="311"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="401"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="65"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="170"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="222"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="313"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="403"/>
         <source>Translator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="73"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="198"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="75"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="200"/>
         <source>Accessibility</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="122"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="224"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="294"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="315"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="365"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="433"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="456"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="473"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="124"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="226"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="296"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="317"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="367"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="435"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="458"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="475"/>
         <source>Speech to Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="179"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="272"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="181"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="274"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChangelogPage.qml" line="48"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="145"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="247"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="334"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="375"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="415"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="429"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="449"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="469"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="147"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="249"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="336"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="377"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="417"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="431"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="451"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="471"/>
         <source>Text to Speech</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChangelogPage.qml" line="21"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="109"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="209"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="345"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="390"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="409"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="444"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="111"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="211"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="347"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="392"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="411"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="446"/>
         <source>User Interface</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2483,98 +2483,98 @@
 <context>
     <name>SpeechWidget</name>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="125"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="123"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="50"/>
         <source>Getting ready, please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="147"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="145"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="58"/>
         <source>Processing, please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="143"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="141"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="59"/>
         <source>Transcribing audio file...</source>
         <translation>Přepisuji audio soubor...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="150"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="148"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="62"/>
         <source>Say something...</source>
         <translation>Řekněte něco...</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="151"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="149"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="63"/>
         <source>Reading is paused.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="152"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="150"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="64"/>
         <source>Reading a note...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="139"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="137"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="57"/>
         <source>Translating...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="123"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="121"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="49"/>
         <source>Cancelling, please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="127"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="125"/>
         <source>Repairing the text...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="129"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="127"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="51"/>
         <source>Converting text to speech...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="133"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="131"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="53"/>
         <source>Importing from a file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="136"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="134"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="55"/>
         <source>Exporting to a file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="235"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="233"/>
         <source>Resume reading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="235"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="233"/>
         <source>Pause reading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="256"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="254"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="261"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="259"/>
         <source>Stops listening. The already captured voice is decoded into text.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="284"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="282"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2584,7 +2584,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="121"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="119"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="46"/>
         <source>Busy...</source>
         <translation type="unfinished"></translation>
@@ -3268,24 +3268,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="467"/>
-        <location filename="../sfos/qml/main.qml" line="360"/>
-        <source>Error: Speech to Text model has been set up yet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="470"/>
-        <location filename="../sfos/qml/main.qml" line="363"/>
-        <source>Error: Text to Speech model has been set up yet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="473"/>
-        <location filename="../sfos/qml/main.qml" line="366"/>
-        <source>Error: Translator model has been set up yet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/main.qml" line="476"/>
         <location filename="../sfos/qml/main.qml" line="369"/>
         <source>Error: Couldn&apos;t download a licence.</source>
@@ -3322,6 +3304,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../desktop/qml/main.qml" line="467"/>
+        <location filename="../sfos/qml/main.qml" line="360"/>
+        <source>Error: Speech to Text model has not been set up yet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/main.qml" line="470"/>
+        <location filename="../sfos/qml/main.qml" line="363"/>
+        <source>Error: Text to Speech model has not been set up yet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/main.qml" line="473"/>
+        <source>Error: Translator model has been not set up yet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/main.qml" line="479"/>
         <location filename="../sfos/qml/main.qml" line="372"/>
         <source>Error: An unknown problem has occurred.</source>
@@ -3340,6 +3339,11 @@
     <message>
         <location filename="../sfos/qml/main.qml" line="244"/>
         <source>Translator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="366"/>
+        <source>Error: Translator model has not been set up yet.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

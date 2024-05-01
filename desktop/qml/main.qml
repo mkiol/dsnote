@@ -464,13 +464,13 @@ ApplicationWindow {
                 toast.show(qsTr("Error: Couldn't import. The file does not contain audio or subtitles."))
                 break;
             case DsnoteApp.ErrorSttNotConfigured:
-                toast.show(qsTr("Error: Speech to Text model has been set up yet."))
+                toast.show(qsTr("Error: Speech to Text model has not been set up yet."))
                 break;
             case DsnoteApp.ErrorTtsNotConfigured:
-                toast.show(qsTr("Error: Text to Speech model has been set up yet."))
+                toast.show(qsTr("Error: Text to Speech model has not been set up yet."))
                 break;
             case DsnoteApp.ErrorMntNotConfigured:
-                toast.show(qsTr("Error: Translator model has been set up yet."))
+                toast.show(qsTr("Error: Translator model has been not set up yet."))
                 break;
             case DsnoteApp.ErrorContentDownload:
                 toast.show(qsTr("Error: Couldn't download a licence."))
