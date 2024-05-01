@@ -2983,6 +2983,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../desktop/qml/main.qml" line="473"/>
         <location filename="../sfos/qml/main.qml" line="366"/>
         <source>Error: Translator model has not been set up yet.</source>
         <translation type="unfinished"></translation>
@@ -3057,11 +3058,6 @@
         <location filename="../desktop/qml/main.qml" line="470"/>
         <location filename="../sfos/qml/main.qml" line="363"/>
         <source>Error: Text to Speech model has not been set up yet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="473"/>
-        <source>Error: Translator model has been not set up yet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

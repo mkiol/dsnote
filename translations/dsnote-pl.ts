@@ -4059,9 +4059,8 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <translation>Błąd: Model zamiany tekstu na mowę nie został jeszcze skonfigurowany.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="473"/>
         <source>Error: Translator model has been not set up yet.</source>
-        <translation>Błąd: Model do tłumaczeń nie został jeszcze skonfigurowany.</translation>
+        <translation type="vanished">Błąd: Model do tłumaczeń nie został jeszcze skonfigurowany.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="452"/>
@@ -4157,6 +4156,7 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <translation>Tłumacz</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/main.qml" line="473"/>
         <location filename="../sfos/qml/main.qml" line="366"/>
         <source>Error: Translator model has not been set up yet.</source>
         <translation>Błąd: Model do tłumaczeń nie został jeszcze skonfigurowany.</translation>

@@ -2983,6 +2983,7 @@
         <translation>Traduttore</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/main.qml" line="473"/>
         <location filename="../sfos/qml/main.qml" line="366"/>
         <source>Error: Translator model has not been set up yet.</source>
         <translation>Errore: il modello del traduttore non è stato ancora impostato.</translation>
@@ -3060,9 +3061,8 @@
         <translation>Errore: il modello di sintesi vocale da testo a parlato non è stato ancora configurato.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="473"/>
         <source>Error: Translator model has been not set up yet.</source>
-        <translation>Errore: il modello del traduttore non è stato ancora impostato.</translation>
+        <translation type="vanished">Errore: il modello del traduttore non è stato ancora impostato.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="479"/>

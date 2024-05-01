@@ -470,7 +470,7 @@ ApplicationWindow {
                 toast.show(qsTr("Error: Text to Speech model has not been set up yet."))
                 break;
             case DsnoteApp.ErrorMntNotConfigured:
-                toast.show(qsTr("Error: Translator model has been not set up yet."))
+                toast.show(qsTr("Error: Translator model has not been set up yet."))
                 break;
             case DsnoteApp.ErrorContentDownload:
                 toast.show(qsTr("Error: Couldn't download a licence."))

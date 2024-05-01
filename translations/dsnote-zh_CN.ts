@@ -3272,11 +3272,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="473"/>
-        <source>Error: Translator model has been not set up yet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/main.qml" line="479"/>
         <location filename="../sfos/qml/main.qml" line="372"/>
         <source>Error: An unknown problem has occurred.</source>
@@ -3298,6 +3293,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../desktop/qml/main.qml" line="473"/>
         <location filename="../sfos/qml/main.qml" line="366"/>
         <source>Error: Translator model has not been set up yet.</source>
         <translation type="unfinished"></translation>
