@@ -1872,7 +1872,7 @@ void settings::set_gpu_scan_cuda(bool value) {
 }
 
 bool settings::mnt_clean_text() const {
-    return value(QStringLiteral("mnt_clean_text"), true).toBool();
+    return value(QStringLiteral("mnt_clean_text"), false).toBool();
 }
 
 void settings::set_mnt_clean_text(bool value) {
