@@ -20,6 +20,7 @@
 #include <cstdio>
 #include <fstream>
 
+#include "denoiser.hpp"
 #include "logger.hpp"
 #include "media_compressor.hpp"
 
@@ -476,8 +477,8 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
     return tasks;
 }
 
-bool tts_engine::add_silence(const std::string& wav_file,
-                             size_t duration_msec) {
+bool tts_engine::post_process_wav(const std::string& wav_file,
+                                  size_t silence_duration_msec) {
     std::ifstream is{wav_file, std::ios::binary | std::ios::ate};
     if (!is) {
         LOGE("failed to open input file: " << wav_file);
@@ -503,26 +504,47 @@ bool tts_engine::add_silence(const std::string& wav_file,
     is.seekg(0, std::ios::beg);
     auto header = read_wav_header(is);
 
-    size -= is.tellg();
+    size_t header_size = is.tellg();
+    size -= header_size;
 
     LOGD("wav file info: sample-rate=" << header.sample_rate
                                        << ", channels=" << header.num_channels);
 
     auto silence_size =
-        (header.num_channels * duration_msec * header.sample_rate) / 500;
+        (header.num_channels * silence_duration_msec * header.sample_rate) /
+        500;
 
     os.seekp(0);
     write_wav_header(header.sample_rate, sizeof(int16_t), header.num_channels,
                      (size + silence_size) / sizeof(int16_t), os);
 
+    denoiser dn{static_cast<int>(header.sample_rate),
+                denoiser::task_flags::task_normalize_two_pass, size};
+
     static const size_t buf_size = 8192;
     char buf[buf_size];
 
-    while (is && size > 0) {
-        auto size_to_read = std::min<size_t>(size, buf_size);
+    auto tmp_size = size;
+    while (is && tmp_size > 0) {
+        auto size_to_read = std::min<size_t>(tmp_size, buf_size);
         is.read(buf, size_to_read);
+
+        dn.process_char(buf, size_to_read);
+
+        tmp_size -= size_to_read;
+    }
+
+    is.seekg(header_size);
+    tmp_size = size;
+
+    while (is && tmp_size > 0) {
+        auto size_to_read = std::min<size_t>(tmp_size, buf_size);
+        is.read(buf, size_to_read);
+
+        dn.normalize_second_pass_char(buf, size_to_read);
+
         os.write(buf, size_to_read);
-        size -= size_to_read;
+        tmp_size -= size_to_read;
     }
 
     if (silence_size > 0) {
@@ -599,7 +621,7 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
             return std::string{};
         }
 
-        if (m_config.has_option('0')) add_silence(output_file_wav, 100);
+        post_process_wav(output_file_wav, m_config.has_option('0') ? 150 : 0);
 
         return output_file_wav;
     };

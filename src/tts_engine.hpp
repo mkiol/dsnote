@@ -257,7 +257,8 @@ class tts_engine {
         return m_state == state_t::stopping || m_state == state_t::stopped ||
                m_state == state_t::error;
     }
-    static bool add_silence(const std::string& wav_fil, size_t duration_msec);
+    static bool post_process_wav(const std::string& wav_file,
+                                 size_t silence_duration_msec);
 };
 
 #endif // TTS_ENGINE_HPP
