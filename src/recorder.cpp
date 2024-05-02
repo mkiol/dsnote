@@ -167,7 +167,7 @@ void recorder::start() {
 void recorder::denoise(int sample_rate) {
     auto clean_ref_voice = settings::instance()->clean_ref_voice();
 
-    int flags = denoiser::task_flags::task_probs;
+    unsigned int flags = denoiser::task_flags::task_probs;
     if (clean_ref_voice) {
         flags |= (denoiser::task_flags::task_normalize_two_pass |
                   denoiser::task_flags::task_denoise);

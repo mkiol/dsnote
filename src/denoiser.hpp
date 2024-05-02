@@ -17,18 +17,20 @@ struct DenoiseState;
 
 class denoiser {
    public:
-    enum task_flags {
-        task_none = 0,
-        task_denoise = 1 << 0,
-        task_normalize = 1 << 1,
-        task_normalize_two_pass = 1 << 2,
-        task_probs = 1 << 3
+    enum task_flags : unsigned int {
+        task_none = 0U,
+        task_denoise = 1U << 0U,
+        task_denoise_hard = 1U << 1U,
+        task_normalize = 1U << 2U,
+        task_normalize_two_pass = 1U << 3U,
+        task_probs = 1U << 4U
     };
 
     inline static const size_t frame_size = 480;
     using sample_t = int16_t;
 
-    explicit denoiser(int sample_rate, int tasks, uint64_t full_size = 0);
+    explicit denoiser(int sample_rate, unsigned int tasks,
+                      uint64_t full_size = 0);
     ~denoiser();
     void process(sample_t* buf, size_t size);
     void process_char(char* buf, size_t size);
@@ -48,7 +50,7 @@ class denoiser {
 
     DenoiseState* m_state = nullptr;
     std::vector<float> m_speech_probs;
-    int m_task_flags = task_flags::task_none;
+    unsigned int m_task_flags = task_flags::task_none;
     uint64_t m_full_size = 0;
     int m_normalize_peek = 1;
 

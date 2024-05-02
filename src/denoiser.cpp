@@ -17,9 +17,10 @@ extern "C" {
 
 #include "logger.hpp"
 
-denoiser::denoiser(int sample_rate, int tasks, uint64_t full_size)
+denoiser::denoiser(int sample_rate, unsigned int tasks, uint64_t full_size)
     : m_task_flags{tasks}, m_full_size{full_size} {
-    if ((m_task_flags & task_denoise) || (m_task_flags & task_probs)) {
+    if ((m_task_flags & task_denoise) || (m_task_flags & task_denoise_hard) ||
+        (m_task_flags & task_probs)) {
         auto* model = rnnoise_get_model("orig");
         if (model == nullptr) LOGE("rnnoise model not found");
 
@@ -67,7 +68,7 @@ void denoiser::normalize_audio(sample_t* audio, size_t size, bool second_pass) {
     }
 
     if (m_task_flags & task_normalize || second_pass) {
-        auto new_gain = [=]() {
+        auto new_gain = [&]() {
             int max_ampl = 32;
 
             int new_gain = (1 << 10) * target_gain / m_normalize_peek;
@@ -102,7 +103,8 @@ void denoiser::process_char(char* buf, size_t size) {
 }
 
 void denoiser::process(sample_t* buf, size_t size) {
-    if ((m_task_flags & task_denoise) || (m_task_flags & task_probs)) {
+    if ((m_task_flags & task_denoise) || (m_task_flags & task_denoise_hard) ||
+        (m_task_flags & task_probs)) {
         frame_t frame;
 
         auto* cur = buf;
@@ -134,11 +136,13 @@ void denoiser::process(sample_t* buf, size_t size) {
                 }
             }
 
-            if (m_task_flags & task_denoise) {
+            if (m_task_flags & task_denoise_hard) {
                 if (prob < 0.1)
                     for (size_t i = 0; i < samples; ++i) cur[i] = 0;
                 else
                     for (size_t i = 0; i < samples; ++i) cur[i] = frame[i];
+            } else if (m_task_flags & task_denoise) {
+                for (size_t i = 0; i < samples; ++i) cur[i] = frame[i];
             }
 
             cur += samples;
