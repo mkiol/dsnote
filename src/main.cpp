@@ -354,6 +354,11 @@ static void start_app(const cmd_options& options, app_server& dbus_app_server) {
     auto* context = engine->rootContext();
 
     settings::instance()->update_qt_style(engine.get());
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 7, 0)
+    QGuiApplication::setDesktopFileName(APP_ICON_ID);
+    qDebug() << "desktop file:" << QGuiApplication::desktopFileName();
+#endif
 #endif
     register_types();
 
