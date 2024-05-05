@@ -172,6 +172,7 @@ DialogPage {
 
                 label.text: qsTr("File path")
                 textField.onTextChanged: root0.check_filename()
+                textField.readOnly: _settings.is_flatpak()
                 button {
                     text: qsTr("Change")
                     onClicked: fileWriteDialog0.open()
@@ -362,6 +363,7 @@ DialogPage {
 
                     label.text: qsTr("File path")
                     textField.onTextChanged: root1.check_filename()
+                    textField.readOnly: _settings.is_flatpak()
                     button {
                         text: qsTr("Change")
                         onClicked: fileWriteDialog1.open()
