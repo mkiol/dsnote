@@ -1910,7 +1910,9 @@ bool media_compressor::decode_frame_var_size(AVPacket* pkt, AVFrame* frame_in,
 
                 subtitle->pts = pts;
                 subtitle->end_display_time =
-                    av_rescale_q(pkt->duration, pkt->time_base, {1, 1000});
+                    pkt->time_base.num > 0
+                        ? av_rescale_q(pkt->duration, pkt->time_base, {1, 1000})
+                        : pkt->duration;
 
                 av_packet_unref(pkt);
 
@@ -2020,7 +2022,9 @@ bool media_compressor::decode_frame_var_size(AVPacket* pkt, AVFrame* frame_in,
 
 bool media_compressor::decode_frame(AVPacket* pkt, AVFrame* frame_in,
                                     AVFrame* frame_out, AVSubtitle* subtitle) {
-    if (m_out_av_ctx->frame_size > 0) {  // encoder needs fix frame size
+    if (m_out_av_ctx->frame_size > 0 &&
+        m_out_av_ctx->codec_type !=
+            AVMEDIA_TYPE_SUBTITLE) {  // encoder needs fix frame size
         return decode_frame_fix_size(pkt, frame_in, frame_out);
     }
 
