@@ -508,9 +508,6 @@ DialogPage {
 
                     checked: false
                     text: qsTr("Mix speech with audio from an existing file")
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    hoverEnabled: true
                 }
 
                 TextFieldForm {
