@@ -42,8 +42,13 @@ DialogPage {
         <li>New text appending style: <i>After empty line</i></li>
         <li>System tray menu for changing active STT/TTS model</li>
         <li>User friendly names of audio input devices (<i>Speech to Text</i> &rarr; <i>Audio input device</i>)</li>
-        <li><i>Speech Note</i> has been translated into Ukrainian and Russian languages.
-            Many thanks to <i>Vovkiv</i> for this contribution!</li>
+        <li>Simplified model filtering. It is now less flexible, but much easier to understand and use.</li>
+        <li><i>Speech Note</i> has been translated into Ukrainian and Russian languages.</li>
+        <li>Fix: Cancellation was blocking the user interface.</li>
+        </ul>
+        <p>" + qsTr("Speech to Text") + ":</p>
+        <ul>
+        <li>Fix: Punctuation model could not be downloaded.</li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
@@ -61,6 +66,8 @@ DialogPage {
             (<i>Export to a file</i> &rarr; <i>Mix speech with audio from an existing file</i>).</li>
         <li>Context menu option to read from cursor position or read only selected text.
             To activate context menu use mouse right click.</li>
+        <li>Speech audio is always normalized after TTS processing.</li>
+        <li>Fix: Mimic3 models could not be downloaded.</li>
         </ul>
         <p>" + qsTr("Translator") + ":</p>
         <ul>

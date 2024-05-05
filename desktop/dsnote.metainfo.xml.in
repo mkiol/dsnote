@@ -98,7 +98,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.5.0" date="2024-04-06">
+    <release version="4.5.0" date="2024-05-05">
       <description>
       <p>User Interface:</p>
       <ul>
@@ -117,9 +117,14 @@
       <li>Text context menu with additional options: 'Read selection' and 'Translate selection'</li>
       <li>New text appending style: 'After empty line'</li>
       <li>System tray menu for changing active STT/TTS model</li>
-      <li>User-friendly names for audio input devices</li>
-      <li>Speech Note has been translated into Ukrainian and Russian languages.
-          Many thanks to Vovkiv for this contribution!</li>
+      <li>User friendly names for audio input devices</li>
+      <li>Simplified model filtering. It is now less flexible, but much easier to understand and use.</li>
+      <li>Speech Note has been translated into Ukrainian and Russian languages.</li>
+      <li>Fix: Cancellation was blocking the user interface.</li>
+      </ul>
+      <p>Speech to Text:</p>
+      <ul>
+      <li>Fix: Punctuation model could not be downloaded.</li>
       </ul>
       <p>Text to Speech:</p>
       <ul>
@@ -132,6 +137,8 @@
       <li>Mixing speech with audio from an existing file.
           When exporting to a file, you can overlay speech with audio from an existing media file.</li>
       <li>Context menu option to read from cursor position or read only selected text</li>
+      <li>Speech audio is always normalized after TTS processing.</li>
+      <li>Fix: Mimic3 models could not be downloaded.</li>
       </ul>
       <p>Translator:</p>
       <ul>
