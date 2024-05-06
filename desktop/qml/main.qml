@@ -215,7 +215,7 @@ ApplicationWindow {
         anchors.fill: parent
         spacing: appWin.padding
 
-        readonly property bool showingTip: warningTip1.visible || warningTip2.visible
+        readonly property bool showingTip: warningTip1.visible || warningTip2.visible || warningTip3.visible
 
         TipMessage {
             id: warningTip1
@@ -241,6 +241,21 @@ ApplicationWindow {
                   qsTr("To enable GPU acceleration, install either %1 add-on for AMD graphics card or %2 add-on for NVIDIA graphics card.")
                                           .arg("<i><b>Speech Note AMD (net.mkiol.SpeechNote.Addon.amd)</b></i>")
                                           .arg("<i><b>Speech Note NVIDIA (net.mkiol.SpeechNote.Addon.nvidia)</b></i>")
+        }
+
+        TipMessage {
+            id: warningTip3
+
+            visible: _settings.gpu_supported() &&
+                     app.feature_gpu_stt && _settings.stt_use_gpu &&
+                     _settings.error_flags & Settings.ErrorCudaUnknown > 0
+            verticalMode: true
+            Layout.topMargin: appWin.padding
+            Layout.leftMargin: appWin.padding
+            Layout.rightMargin: appWin.padding
+            closable: true
+            text: qsTr("Most likely, NVIDIA kernel module has not been fully initialized.") + " " +
+                  qsTr("Try executing %1 before running Speech Note.").arg("<i>nvidia-modprobe -c 0 -u</i>")
         }
 
         Translator {
