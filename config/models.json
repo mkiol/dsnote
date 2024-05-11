@@ -24861,6 +24861,32 @@
             "lang_id": "ja"
         },
         {
+            "name": "Tiếng Việt (Coqui viXTTS)",
+            "model_id": "vi_coqui_vixtts203",
+            "engine": "tts_coqui",
+            "lang_id": "vi",
+            "lang_code": "en",
+            "checksum": "37088002",
+            "checksum_quick": "c774113a",
+            "size": "1875759043",
+            "options": "xs",
+            "features": [
+                "tts_voice_cloning"
+            ],
+            "license": {
+                "id": "CPML",
+                "name": "Coqui Public Model License 1.0.0",
+                "url": "https://coqui.ai/cpml.txt",
+                "accept_required": true
+            },
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/capleaf/viXTTS/resolve/c06f4378883110615941aab481532a9802440b05/model.pth",
+                "https://huggingface.co/capleaf/viXTTS/resolve/c06f4378883110615941aab481532a9802440b05/config.json",
+                "https://huggingface.co/capleaf/viXTTS/resolve/c06f4378883110615941aab481532a9802440b05/vocab.json"
+            ]
+        },
+        {
             "name": "English (Coqui XTTS-v2.0.2)",
             "model_id": "en_coqui_xtts202",
             "model_alias_of": "multilang_coqui_xtts202",

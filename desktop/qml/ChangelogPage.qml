@@ -58,6 +58,8 @@ DialogPage {
         <li><a href='https://collabora.github.io/WhisperSpeech/'>WhisperSpeech</a> engine
             that generates voice with exceptional naturalness.
             The new engine comes with models for English and Polish languages. All models support voice cloning.</li>
+        <li>New voice cloning model for Vietnamese: <i>Coqui viXTTS</i>.
+            Model is a fine-tuned version of the phenomenal <i>Coqui XTTS</i>.</li>
         <li>New Piper voices for English, Persian, Slovenian, Turkish, French and Spanish</li>
         <li>New RHVoice voice for Czech</li>
         <li>Settings option to enable/disable speech synchronization with subtitle timestamps
