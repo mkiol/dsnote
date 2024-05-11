@@ -11,7 +11,7 @@
 #define APP_ID "@info_id@"
 #define APP_BINARY_ID "@info_binary_id@"
 #define APP_NAME "@info_name@"
-#define APP_VERSION "@PROJECT_VERSION@-@info_version_type@"
+#define APP_VERSION "@PROJECT_VERSION@@info_version_type@"
 #define APP_ORG "@info_org@"
 #define APP_DOMAIN "@info_domain@"
 #define APP_AUTHOR "@info_author@"

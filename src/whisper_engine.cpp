@@ -415,7 +415,7 @@ whisper_full_params whisper_engine::make_wparams() {
     wparams.suppress_blank = true;
     wparams.suppress_non_speech_tokens = true;
     wparams.single_segment = false;
-    wparams.translate = m_config.translate;
+    wparams.translate = m_config.translate && m_config.has_option('t');
     wparams.n_threads = std::min(
         m_threads,
         std::max(1, static_cast<int>(std::thread::hardware_concurrency())));

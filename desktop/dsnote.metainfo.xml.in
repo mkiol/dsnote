@@ -124,6 +124,9 @@
       </ul>
       <p>Speech to Text:</p>
       <ul>
+      <li>Updated Distil model for English: 'Distil Large-v3'.
+          New model is enabled both for Whisper and Faster Whisper.</li>
+      <li>New Fine-Tuned Whisper models for Slovenian and Polish.</li>
       <li>Fix: Punctuation model could not be downloaded.</li>
       </ul>
       <p>Text to Speech:</p>

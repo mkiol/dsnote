@@ -285,7 +285,9 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
             auto seg_tuple = m_model->attr("transcribe")(
                 "audio"_a = array, "beam_size"_a = 5,
                 "language"_a = m_config.lang,
-                "task"_a = m_config.translate ? "translate" : "transcribe");
+                "task"_a = m_config.translate && m_config.has_option('t')
+                               ? "translate"
+                               : "transcribe");
 
             auto segments = *seg_tuple.cast<py::list>().begin();
 

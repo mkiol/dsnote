@@ -282,6 +282,7 @@ class models_manager : public QObject, public singleton<models_manager> {
          * 0 - tts, add extra silence
          * q - tts, do not split into sentences
          * i - stt, punctuation supported
+         * t - stt, translate to english supported
          */
         QString options;
         license_t license;

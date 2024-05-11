@@ -1128,6 +1128,7 @@
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/15d956df6a221df330485e243b2a5ed41f0e2728/faster-whisper-tiny-int8/vocabulary.json"
             ],
             "size": "45679437",
+            "options": "t",
             "hidden": true
         },
         {
@@ -1145,6 +1146,7 @@
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/15d956df6a221df330485e243b2a5ed41f0e2728/faster-whisper-base-int8/vocabulary.json"
             ],
             "size": "82679495",
+            "options": "t",
             "hidden": true
         },
         {
@@ -1162,6 +1164,7 @@
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/15d956df6a221df330485e243b2a5ed41f0e2728/faster-whisper-small-int8/vocabulary.json"
             ],
             "size": "257618046",
+            "options": "t",
             "hidden": true
         },
         {
@@ -1179,6 +1182,7 @@
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/15d956df6a221df330485e243b2a5ed41f0e2728/faster-whisper-medium-int8/vocabulary.json"
             ],
             "size": "788456347",
+            "options": "t",
             "hidden": true
         },
         {
@@ -1196,6 +1200,7 @@
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/15d956df6a221df330485e243b2a5ed41f0e2728/faster-whisper-large-v2-int8/vocabulary.json"
             ],
             "size": "1577980678",
+            "options": "t",
             "hidden": true
         },
         {
@@ -1214,6 +1219,7 @@
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/f43ed6211b3d79e844ab2a0ec6f28eba5aa7298a/faster-whisper-large-v3-int8/preprocessor_config.json"
             ],
             "size": "1560282236",
+            "options": "t",
             "hidden": true
         },
         {
@@ -1294,7 +1300,12 @@
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/1c43af55aaf36590b893f5ad9b1d1181bdc8f70d/faster-whisper-distil-small.en-int8/config.json",
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/1c43af55aaf36590b893f5ad9b1d1181bdc8f70d/faster-whisper-distil-small.en-int8/tokenizer.json",
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/1c43af55aaf36590b893f5ad9b1d1181bdc8f70d/faster-whisper-distil-small.en-int8/vocabulary.json"
-            ]
+            ],
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            }
         },
         {
             "name": "English (Distil-FasterWhisper Medium)",
@@ -1310,7 +1321,12 @@
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/1c43af55aaf36590b893f5ad9b1d1181bdc8f70d/faster-whisper-distil-medium.en-int8/config.json",
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/1c43af55aaf36590b893f5ad9b1d1181bdc8f70d/faster-whisper-distil-medium.en-int8/tokenizer.json",
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/1c43af55aaf36590b893f5ad9b1d1181bdc8f70d/faster-whisper-distil-medium.en-int8/vocabulary.json"
-            ]
+            ],
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            }
         },
         {
             "name": "English (Distil-FasterWhisper Large-v2)",
@@ -1326,7 +1342,33 @@
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/1c43af55aaf36590b893f5ad9b1d1181bdc8f70d/faster-whisper-distil-large-v2.en-int8/config.json",
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/1c43af55aaf36590b893f5ad9b1d1181bdc8f70d/faster-whisper-distil-large-v2.en-int8/tokenizer.json",
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/1c43af55aaf36590b893f5ad9b1d1181bdc8f70d/faster-whisper-distil-large-v2.en-int8/vocabulary.json"
-            ]
+            ],
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "English (Distil-FasterWhisper Large-v3)",
+            "model_id": "en_fasterwhisper_distil_large3",
+            "engine": "stt_fasterwhisper",
+            "lang_id": "en",
+            "checksum": "4850231d",
+            "checksum_quick": "53b49b86",
+            "size": "764951965",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/c388e4ecdaf12738da6551b47dcd357b7deff195/faster-whisper-distil-large-v3.en-int8/model.bin",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/c388e4ecdaf12738da6551b47dcd357b7deff195/faster-whisper-distil-large-v3.en-int8/config.json",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/c388e4ecdaf12738da6551b47dcd357b7deff195/faster-whisper-distil-large-v3.en-int8/tokenizer.json",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/c388e4ecdaf12738da6551b47dcd357b7deff195/faster-whisper-distil-large-v3.en-int8/vocabulary.json"
+            ],
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            }
         },
         {
             "name": "English (FasterWhisper Large-v2)",
@@ -3618,6 +3660,7 @@
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/multilang/ggml-tiny-q5_0.bin"
             ],
             "size": "32152673",
+            "options": "t",
             "hidden": true
         },
         {
@@ -3632,6 +3675,7 @@
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/multilang/ggml-base-q5_0.bin"
             ],
             "size": "59707625",
+            "options": "t",
             "hidden": true
         },
         {
@@ -3645,6 +3689,7 @@
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/multilang/ggml-small-q5_0.bin"
             ],
             "size": "190085487",
+            "options": "t",
             "hidden": true
         },
         {
@@ -3658,6 +3703,7 @@
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/multilang/ggml-medium-q5_0.bin"
             ],
             "size": "586572019",
+            "options": "t",
             "hidden": true
         },
         {
@@ -3671,6 +3717,7 @@
                 "https://huggingface.co/ggerganov/whisper.cpp/resolve/bf8b606c2fcd9173605cdf6bd2ac8a75a8141b6c/ggml-large-v2-q5_0.bin"
             ],
             "size": "1080732091",
+            "options": "t",
             "hidden": true
         },
         {
@@ -3684,6 +3731,7 @@
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/b13abf4db8f26dc6e9037ea19ab8339ae89a8ccc/multilang/ggml-large-v3-q5_0.bin"
             ],
             "size": "1081140203",
+            "options": "t",
             "hidden": true
         },
         {
@@ -3741,10 +3789,15 @@
             "lang_id": "en",
             "checksum": "c49d9542",
             "checksum_quick": "d1428883",
+            "size": "122890793",
             "urls": [
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/39b1afd580eaa8f5c767f25ca06167324f71a7a9/en/ggml-distilled-small-en-q5_0.bin"
             ],
-            "size": "122890793"
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            }
         },
         {
             "name": "English (Distil-Whisper Medium)",
@@ -3753,10 +3806,15 @@
             "lang_id": "en",
             "checksum": "df327d8a",
             "checksum_quick": "d40f93fd",
+            "size": "283911061",
             "urls": [
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2da03b71944c4e12dc9f605d0a38e9335d09502e/en/ggml-distilled-medium-en-q5_0.bin"
             ],
-            "size": "283911061"
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            }
         },
         {
             "name": "English (Distil-Whisper Large-v2)",
@@ -3765,10 +3823,32 @@
             "lang_id": "en",
             "checksum": "e94359e1",
             "checksum_quick": "b7835a4d",
+            "size": "537411780",
             "urls": [
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2da03b71944c4e12dc9f605d0a38e9335d09502e/en/ggml-distilled-large-v2-en-q5_0.bin"
             ],
-            "size": "537411780"
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "English (Distil-Whisper Large-v3)",
+            "model_id": "en_whisper_distil_large3",
+            "engine": "stt_whisper",
+            "lang_id": "en",
+            "checksum": "960323c8",
+            "checksum_quick": "880629f2",
+            "size": "537819875",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/743aa7db6f450897766b2a213e62f651d1f7a5fe/en/ggml-distilled-large-v3-en-q5_0.bin"
+            ],
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            }
         },
         {
             "name": "English (Whisper Large-v3)",
@@ -4833,7 +4913,7 @@
             "lang_id": "sl"
         },
         {
-            "name": "Slovenščina (Whisper Medium Fine-Tuned)",
+            "name": "Slovenščina (Whisper Medium Fine-Tuned Mikr)",
             "model_id": "sl_whisper_medium_ft",
             "engine": "stt_whisper",
             "lang_id": "sl",
@@ -4855,6 +4935,24 @@
             "model_id": "sl_whisper_large2",
             "model_alias_of": "multilang_whisper_large2",
             "lang_id": "sl"
+        },
+        {
+            "name": "Slovenščina (Whisper Small Fine-Tuned Samolego)",
+            "model_id": "sl_whisper_small_ft_samolego",
+            "engine": "stt_whisper",
+            "lang_id": "sl",
+            "checksum": "f4d6f12e",
+            "checksum_quick": "4280b7c9",
+            "size": "175209680",
+            "urls": [
+                "https://huggingface.co/samolego/whisper-small-slovenian/resolve/4f7ea599bf463826ed812289d0132e3385ce9260/quantized/model_q5_0.ggml"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Bosanski (Whisper Tiny)",
@@ -5913,7 +6011,7 @@
             "lang_id": "pl"
         },
         {
-            "name": "Polski (Whisper Medium Fine-Tuned)",
+            "name": "Polski (Whisper Medium Fine-Tuned Aspik)",
             "model_id": "pl_whisper_medium_ft",
             "engine": "stt_whisper",
             "lang_id": "pl",
@@ -5935,6 +6033,23 @@
             "model_id": "pl_whisper_large2",
             "model_alias_of": "multilang_whisper_large2",
             "lang_id": "pl"
+        },
+        {
+            "name": "Polish (Distil-Whisper Large-v3 Fine-Tuned Aspik)",
+            "model_id": "pl_whisper_distil_large3_aspik",
+            "engine": "stt_whisper",
+            "lang_id": "pl",
+            "checksum": "2ed1ca64",
+            "checksum_quick": "377656e4",
+            "size": "537819875",
+            "urls": [
+                "https://huggingface.co/mukowaty/ggml-whisper/resolve/743aa7db6f450897766b2a213e62f651d1f7a5fe/pl/ggml-distilled-large-v3-aspik101-q5_0.bin"
+            ],
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            }
         },
         {
             "name": "Afrikaans (Whisper Tiny)",
