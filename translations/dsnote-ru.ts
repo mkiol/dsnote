@@ -19,32 +19,32 @@
         <translation>Веб-сайт проекта</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutPage.qml" line="58"/>
         <location filename="../sfos/qml/AboutPage.qml" line="57"/>
+        <location filename="../desktop/qml/AboutPage.qml" line="58"/>
         <source>Changes</source>
         <translation>Изменения</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutPage.qml" line="94"/>
         <location filename="../sfos/qml/AboutPage.qml" line="63"/>
+        <location filename="../desktop/qml/AboutPage.qml" line="94"/>
         <source>Authors</source>
         <translation>Авторы</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutPage.qml" line="86"/>
         <location filename="../sfos/qml/AboutPage.qml" line="77"/>
+        <location filename="../desktop/qml/AboutPage.qml" line="86"/>
         <source>%1 is developed as an open source project under %2.</source>
         <translation>%1 это проект с открытым исходным кодом, лицензированным под %2.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutPage.qml" line="107"/>
         <location filename="../sfos/qml/AboutPage.qml" line="83"/>
+        <location filename="../desktop/qml/AboutPage.qml" line="107"/>
         <source>Translators</source>
         <translation>Переводчики</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AboutPage.qml" line="117"/>
         <location filename="../sfos/qml/AboutPage.qml" line="92"/>
+        <location filename="../desktop/qml/AboutPage.qml" line="117"/>
         <source>Libraries in use</source>
         <translation>Библиотеки которые используются</translation>
     </message>
@@ -78,20 +78,20 @@
 <context>
     <name>AddTextDialog</name>
     <message>
-        <location filename="../desktop/qml/AddTextDialog.qml" line="34"/>
         <location filename="../sfos/qml/AddTextDialog.qml" line="33"/>
+        <location filename="../desktop/qml/AddTextDialog.qml" line="34"/>
         <source>Add text to the current note or replace it?</source>
         <translation>Добавить текст к текущей заметке или заменить ее?</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AddTextDialog.qml" line="42"/>
         <location filename="../sfos/qml/AddTextDialog.qml" line="41"/>
+        <location filename="../desktop/qml/AddTextDialog.qml" line="42"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/AddTextDialog.qml" line="50"/>
         <location filename="../sfos/qml/AddTextDialog.qml" line="49"/>
+        <location filename="../desktop/qml/AddTextDialog.qml" line="50"/>
         <source>Replace</source>
         <translation>Заменить</translation>
     </message>
@@ -99,22 +99,12 @@
 <context>
     <name>ChangelogPage</name>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="14"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="28"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="14"/>
         <source>Changes</source>
         <translation>Изменения</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="17"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="96"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="196"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="292"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="309"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="363"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="399"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="427"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="442"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="467"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="32"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="90"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="131"/>
@@ -124,63 +114,74 @@
         <location filename="../sfos/qml/ChangelogPage.qml" line="287"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="335"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="358"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="17"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="103"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="203"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="299"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="316"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="370"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="406"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="434"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="449"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="474"/>
         <source>Version %1</source>
         <translation>Версия %1</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="65"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="170"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="222"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="313"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="403"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="72"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="177"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="229"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="320"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="410"/>
         <source>Translator</source>
         <translation>Переводчик</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="48"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="147"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="249"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="336"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="377"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="417"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="431"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="451"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="471"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="53"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="154"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="256"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="343"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="384"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="424"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="438"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="458"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="478"/>
         <source>Text to Speech</source>
         <translation>Текст-в-речь</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="75"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="200"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="82"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="207"/>
         <source>Accessibility</source>
         <translation>Доступность</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="124"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="226"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="296"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="317"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="367"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="435"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="458"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="475"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="49"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="131"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="233"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="303"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="324"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="374"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="442"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="465"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="482"/>
         <source>Speech to Text</source>
         <translation>Речь-в-текст</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="181"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="274"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="188"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="281"/>
         <source>Other</source>
         <translation>Другое</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChangelogPage.qml" line="21"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="111"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="211"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="347"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="392"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="411"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="446"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="118"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="218"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="354"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="399"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="418"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="453"/>
         <source>User Interface</source>
         <translation>Пользовательский интерфейс</translation>
     </message>
@@ -214,82 +215,82 @@
 <context>
     <name>ExportFilePage</name>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="35"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="55"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="35"/>
         <source>Export to a file</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспортивать в файл</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="62"/>
         <source>Export destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Расположение экспорта</translation>
     </message>
     <message>
+        <location filename="../sfos/qml/ExportFilePage.qml" line="64"/>
         <location filename="../desktop/qml/ExportFilePage.qml" line="91"/>
         <location filename="../desktop/qml/ExportFilePage.qml" line="115"/>
-        <location filename="../sfos/qml/ExportFilePage.qml" line="64"/>
         <source>Export to text or subtitle file</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспортировать в текст или файл субтитров</translation>
     </message>
     <message>
+        <location filename="../sfos/qml/ExportFilePage.qml" line="65"/>
         <location filename="../desktop/qml/ExportFilePage.qml" line="96"/>
         <location filename="../desktop/qml/ExportFilePage.qml" line="116"/>
-        <location filename="../sfos/qml/ExportFilePage.qml" line="65"/>
         <source>Export to audio file</source>
-        <translation type="unfinished">Экспортировать в аудио файл</translation>
+        <translation>Экспортировать в аудио файл</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="138"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="214"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="83"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="178"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="138"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="215"/>
         <source>SRT Subtitles</source>
-        <translation type="unfinished">Субтитры SRT</translation>
+        <translation>Субтитры SRT</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="139"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="215"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="84"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="179"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="139"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="216"/>
         <source>ASS Subtitles</source>
-        <translation type="unfinished"></translation>
+        <translation>Субтитры ASS</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="140"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="216"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="85"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="180"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="140"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="217"/>
         <source>WebVTT Subtitles</source>
-        <translation type="unfinished"></translation>
+        <translation>Субтитры WebVTT</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="144"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="213"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="89"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="177"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="144"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="214"/>
         <source>Plain text</source>
-        <translation type="unfinished">Простой текст</translation>
+        <translation>Простой текст</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="117"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="261"/>
         <source>Folder</source>
-        <translation type="unfinished">Папка</translation>
+        <translation>Папка</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="176"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="366"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="528"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="122"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="266"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="177"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="368"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="527"/>
         <source>Change</source>
-        <translation type="unfinished">Изменить</translation>
+        <translation>Изменить</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="132"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="276"/>
         <source>Set default</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить по-умолчанию</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="146"/>
@@ -297,316 +298,213 @@
         <location filename="../sfos/qml/ExportFilePage.qml" line="290"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="291"/>
         <source>File name</source>
-        <translation type="unfinished">Название файла</translation>
+        <translation>Название файла</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="190"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="380"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="160"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="304"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="191"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="382"/>
         <source>The file exists and will be overwritten.</source>
-        <translation type="unfinished">Файл существует и будет перезаписан.</translation>
+        <translation>Файл существует и будет перезаписан.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="196"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="164"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="197"/>
         <source>Text file format</source>
-        <translation type="unfinished"></translation>
+        <translation>Формат текстового файла</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="158"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="198"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="212"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="329"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="388"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="402"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="176"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="191"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="320"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="336"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="158"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="199"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="213"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="330"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="390"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="404"/>
         <source>Auto</source>
-        <translation type="unfinished">Автоматически</translation>
+        <translation>Автоматически</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="197"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="387"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="191"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="336"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="198"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="389"/>
         <source>When %1 is selected, the format is chosen based on the file extension.</source>
-        <translation type="unfinished">Когда выбрана опция %1, формат выбирается в зависимости от расширения файла.</translation>
+        <translation>Когда выбрана опция %1, формат выбирается в зависимости от расширения файла.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="386"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="308"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="388"/>
         <source>Audio file format</source>
-        <translation type="unfinished">Формат аудио файла</translation>
+        <translation>Формат аудио файла</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="421"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="341"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="423"/>
         <source>Compression quality</source>
-        <translation type="unfinished">Качество сжатия</translation>
+        <translation>Качество сжатия</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="422"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="433"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="351"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="363"/>
-        <source>High</source>
-        <translation type="unfinished">Высокое</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="434"/>
-        <location filename="../sfos/qml/ExportFilePage.qml" line="352"/>
-        <source>Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="424"/>
         <location filename="../desktop/qml/ExportFilePage.qml" line="435"/>
+        <source>High</source>
+        <translation>Высокое</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/ExportFilePage.qml" line="352"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="436"/>
+        <source>Medium</source>
+        <translation>Среднее</translation>
+    </message>
+    <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="353"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="437"/>
         <source>Low</source>
-        <translation type="unfinished">Низкое</translation>
+        <translation>Низкое</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="422"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="363"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="424"/>
         <source>%1 results in a larger file size.</source>
-        <translation type="unfinished">%1 приведет к файлам с большим размером.</translation>
+        <translation>%1 приведет к файлам с большим размером.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="453"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="372"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="455"/>
         <source>Write metadata to audio file</source>
-        <translation type="unfinished">Записать метаданные в аудио файл</translation>
+        <translation>Записать метаданные в аудио файл</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="460"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="373"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="462"/>
         <source>Write track number, title, artist and album tags to audio file.</source>
-        <translation type="unfinished">Записать теги номера трека, названия, исполнителя и альбома в аудио файл.</translation>
+        <translation>Записать теги номера трека, названия, исполнителя и альбома в аудио файл.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="468"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="384"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="385"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="470"/>
         <source>Track number</source>
-        <translation type="unfinished">Номер трека</translation>
+        <translation>Номер трека</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="478"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="397"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="398"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="480"/>
         <source>Title</source>
-        <translation type="unfinished">Название</translation>
+        <translation>Название</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="486"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="408"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="409"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="488"/>
         <source>Album</source>
-        <translation type="unfinished">Альбом</translation>
+        <translation>Альбом</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="497"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="421"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="422"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="499"/>
         <source>Artist</source>
-        <translation type="unfinished">Исполнитель</translation>
+        <translation>Исполнитель</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="336"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="437"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="337"/>
         <source>Text to Speech model has not been set up yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Модель текста-в-речь еще не была настроена.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="49"/>
         <source>Export</source>
-        <translation type="unfinished">Экспортировать</translation>
+        <translation>Экспортировать</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="71"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Отменить</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="173"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="363"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="364"/>
         <source>File path</source>
-        <translation type="unfinished">Путь к файлу</translation>
+        <translation>Путь к файлу</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="233"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="593"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="234"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="592"/>
         <source>Save File</source>
-        <translation type="unfinished">Сохранить файл</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="235"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="578"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="595"/>
-        <source>All supported files</source>
-        <translation type="unfinished">Все поддерживаемые файлы</translation>
+        <translation>Сохранить файл</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="236"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="579"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="596"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="577"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="594"/>
+        <source>All supported files</source>
+        <translation>Все поддерживаемые файлы</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="237"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="578"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="595"/>
         <source>All files</source>
-        <translation type="unfinished">Все файлы</translation>
+        <translation>Все файлы</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="510"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="512"/>
         <source>Mix speech with audio from an existing file</source>
-        <translation type="unfinished"></translation>
+        <translation>Миксовать речь с аудио из существующего файла</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="521"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="520"/>
         <source>File for mixing</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл для миксования</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="524"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="523"/>
         <source>Set the file you want to use for mixing</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите файл который желаете использовать для миксования</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="538"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="537"/>
         <source>The file contains no audio.</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл не содержит аудио.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="546"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="545"/>
         <source>Audio stream</source>
-        <translation type="unfinished">Аудио поток</translation>
+        <translation>Аудио поток</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="551"/>
+        <source>Volume change</source>
+        <translation>Изменение громкости</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="552"/>
-        <source>Volume change</source>
-        <translation type="unfinished"></translation>
+        <source>Modify the volume of the audio from the file selected for mixing.</source>
+        <translation>Модифицировать громкость аудио из файла выбранного для миксования.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="553"/>
-        <source>Modify the volume of the audio from the file selected for mixing.</source>
-        <translation type="unfinished"></translation>
+        <source>Allowed values are between -30 dB and 30 dB.</source>
+        <translation>Разрешены значения между -30 Дц и 30 Дц.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="554"/>
-        <source>Allowed values are between -30 dB and 30 dB.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="555"/>
         <source>When the value is set to 0, the volume will not be changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если значение установлено на 0, тогда громкость не будет меняться.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="576"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="575"/>
         <source>Open file</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FileWritePage</name>
-    <message>
-        <source>Save File</source>
-        <translation type="vanished">Сохранить файл</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="vanished">Автоматически</translation>
-    </message>
-    <message>
-        <source>Export to audio file</source>
-        <translation type="vanished">Экспортировать в аудио файл</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Отменить</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="vanished">Экспортировать</translation>
-    </message>
-    <message>
-        <source>File path</source>
-        <translation type="vanished">Путь к файлу</translation>
-    </message>
-    <message>
-        <source>All files</source>
-        <translation type="vanished">Все файлы</translation>
-    </message>
-    <message>
-        <source>The file exists and will be overwritten.</source>
-        <translation type="vanished">Файл существует и будет перезаписан.</translation>
-    </message>
-    <message>
-        <source>Audio file format</source>
-        <translation type="vanished">Формат аудио файла</translation>
-    </message>
-    <message>
-        <source>When %1 is selected, the format is chosen based on the file extension.</source>
-        <translation type="vanished">Когда выбрана опция %1, формат выбирается в зависимости от расширения файла.</translation>
-    </message>
-    <message>
-        <source>Compression quality</source>
-        <translation type="vanished">Качество сжатия</translation>
-    </message>
-    <message>
-        <source>High</source>
-        <translation type="vanished">Высокое</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation type="vanished">Среднее</translation>
-    </message>
-    <message>
-        <source>Low</source>
-        <translation type="vanished">Низкое</translation>
-    </message>
-    <message>
-        <source>%1 results in a larger file size.</source>
-        <translation type="vanished">%1 приведет к файлам с большим размером.</translation>
-    </message>
-    <message>
-        <source>Write metadata to audio file</source>
-        <translation type="vanished">Записать метаданные в аудио файл</translation>
-    </message>
-    <message>
-        <source>Write track number, title, artist and album tags to audio file.</source>
-        <translation type="vanished">Записать теги номера трека, названия, исполнителя и альбома в аудио файл.</translation>
-    </message>
-    <message>
-        <source>Track number</source>
-        <translation type="vanished">Номер трека</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation type="vanished">Название</translation>
-    </message>
-    <message>
-        <source>Album</source>
-        <translation type="vanished">Альбом</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation type="vanished">Исполнитель</translation>
-    </message>
-    <message>
-        <source>Folder</source>
-        <translation type="vanished">Папка</translation>
-    </message>
-    <message>
-        <source>Change</source>
-        <translation type="vanished">Изменить</translation>
-    </message>
-    <message>
-        <source>Set default</source>
-        <translation type="vanished">Установить по-умолчанию</translation>
-    </message>
-    <message>
-        <source>File name</source>
-        <translation type="vanished">Название файла</translation>
+        <translation>Открыть файл</translation>
     </message>
 </context>
 <context>
@@ -708,8 +606,8 @@
 <context>
     <name>LangsPage</name>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="24"/>
         <location filename="../sfos/qml/LangsPage.qml" line="52"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="24"/>
         <source>Languages</source>
         <translation>Языки</translation>
     </message>
@@ -719,30 +617,30 @@
         <translation>Все</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="168"/>
         <location filename="../sfos/qml/LangsPage.qml" line="56"/>
         <location filename="../sfos/qml/LangsPage.qml" line="97"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="168"/>
         <source>Speech to Text</source>
         <translation>Речь-в-текст</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="170"/>
         <location filename="../sfos/qml/LangsPage.qml" line="57"/>
         <location filename="../sfos/qml/LangsPage.qml" line="99"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="170"/>
         <source>Text to Speech</source>
         <translation>Текст-в-речь</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="172"/>
         <location filename="../sfos/qml/LangsPage.qml" line="58"/>
         <location filename="../sfos/qml/LangsPage.qml" line="101"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="172"/>
         <source>Translator</source>
         <translation>Переводчик</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="174"/>
         <location filename="../sfos/qml/LangsPage.qml" line="59"/>
         <location filename="../sfos/qml/LangsPage.qml" line="103"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="174"/>
         <source>Other</source>
         <translation>Другое</translation>
     </message>
@@ -787,14 +685,14 @@
         <translation>Загрузить</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="328"/>
         <location filename="../sfos/qml/LangsPage.qml" line="132"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="328"/>
         <source>There are no languages that match your search criteria.</source>
         <translation>Не удалось найти языки которые подпадали бы под ваши критерии поиска.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="329"/>
         <location filename="../sfos/qml/LangsPage.qml" line="133"/>
+        <location filename="../desktop/qml/LangsPage.qml" line="329"/>
         <source>There are no models that match your search criteria.</source>
         <translation>Не удалось найти модели которые подпадали бы под ваши критерии поиска.</translation>
     </message>
@@ -802,23 +700,23 @@
 <context>
     <name>MainToolBar</name>
     <message>
+        <location filename="../sfos/qml/MainToolBar.qml" line="38"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="86"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="274"/>
-        <location filename="../sfos/qml/MainToolBar.qml" line="38"/>
         <source>Import from a file</source>
-        <translation type="unfinished">Импортировать из файла</translation>
+        <translation>Импортировать из файла</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="103"/>
         <location filename="../sfos/qml/MainToolBar.qml" line="46"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="103"/>
         <source>Export to a file</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспортивать в файл</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="117"/>
         <location filename="../sfos/qml/MainToolBar.qml" line="55"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="117"/>
         <source>Export the translation to a file</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспортировать перевод в файл</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="62"/>
@@ -826,26 +724,26 @@
         <translation>Режим: %1</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="251"/>
         <location filename="../sfos/qml/MainToolBar.qml" line="62"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="251"/>
         <source>Translator</source>
         <translation>Переводчик</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="241"/>
         <location filename="../sfos/qml/MainToolBar.qml" line="63"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="241"/>
         <source>Notepad</source>
         <translation>Блокнот</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="47"/>
         <location filename="../sfos/qml/MainToolBar.qml" line="26"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="47"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="53"/>
         <location filename="../sfos/qml/MainToolBar.qml" line="21"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="53"/>
         <source>About %1</source>
         <translation>Про %1</translation>
     </message>
@@ -860,48 +758,8 @@
         <translation>Файл</translation>
     </message>
     <message>
-        <source>Open a text file</source>
-        <translation type="vanished">Открыть текстовый файл</translation>
-    </message>
-    <message>
-        <source>Transcribe a file</source>
-        <translation type="vanished">Выполнить транскрипцию файла</translation>
-    </message>
-    <message>
-        <source>Save to a text file</source>
-        <translation type="vanished">Сохранить в текстовый файл</translation>
-    </message>
-    <message>
-        <source>Save the current note to a text file.</source>
-        <translation type="vanished">Сохранить текущую заметку в текстовый файл.</translation>
-    </message>
-    <message>
-        <source>Save the translation to a text file</source>
-        <translation type="vanished">Сохранить перевод в текстовый файл</translation>
-    </message>
-    <message>
-        <source>Save the translated note to a text file.</source>
-        <translation type="vanished">Сохранить переведенную заметку в текстовый файл.</translation>
-    </message>
-    <message>
-        <source>Export to audio file</source>
-        <translation type="vanished">Экспортировать в аудио файл</translation>
-    </message>
-    <message>
-        <source>Convert text from the current note into speech and save in an audio file.</source>
-        <translation type="vanished">Конвертировать текст из текущей заметки в речь и сохранить в аудио файл.</translation>
-    </message>
-    <message>
-        <source>Export the translation to audio file</source>
-        <translation type="vanished">Экспортировать перевод в аудио файл</translation>
-    </message>
-    <message>
-        <source>Convert translated text into speech and save in an audio file.</source>
-        <translation type="vanished">Конвертировать переведенный текст в речь и сохранить в аудио файл.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/MainToolBar.qml" line="135"/>
         <location filename="../sfos/qml/MainToolBar.qml" line="31"/>
+        <location filename="../desktop/qml/MainToolBar.qml" line="135"/>
         <source>Languages</source>
         <translation>Языки</translation>
     </message>
@@ -911,54 +769,50 @@
         <translation>Установить языки и загрузить модели.</translation>
     </message>
     <message>
-        <source>Convert audio from an existing audio or video file into text.</source>
-        <translation type="vanished">Конвертировать аудио из существующего аудио или видео файла в текст.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="95"/>
         <source>Import a note from a text file, subtitle file, video or audio file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Импоротировать заметку из текстового файла, файла субтитров, видео или аудио файла.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="96"/>
         <source>If the imported file is an audio or video file, the audio is converted to text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если импортированный файл это аудио или видео файл, аудио будет конвертировано в текст.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="112"/>
         <source>Export the current note to a text file, subtitle file or audio file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспортировать текущую заметку в текстовый файл, файл субтитров или в аудио файл.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="128"/>
         <source>Export the translated note to a text file, subtitle file or audio file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспортировать переведенную заметку в текстовый файл, файл субтитров или аудио файл.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="148"/>
         <source>Repair text</source>
-        <translation type="unfinished"></translation>
+        <translation>Восстановить текст</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="158"/>
         <source>Restore punctuation</source>
-        <translation type="unfinished">Восстанавливать знаки препинания</translation>
+        <translation>Восстанавливать знаки препинания</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="166"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="174"/>
         <source>Restore diacritical marks (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Восстановить диакретические знаки (%1)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="166"/>
         <source>Arabic</source>
-        <translation type="unfinished"></translation>
+        <translation>Арабский</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="174"/>
         <source>Hebrew</source>
-        <translation type="unfinished"></translation>
+        <translation>Иврит</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="190"/>
@@ -981,25 +835,9 @@
         <translation>Переключиться на Переводчика</translation>
     </message>
     <message>
-        <source>SRT Subtitles</source>
-        <translation type="vanished">Субтитры SRT</translation>
-    </message>
-    <message>
-        <source>Text</source>
-        <translation type="vanished">Текст</translation>
-    </message>
-    <message>
-        <source>Open File</source>
-        <translation type="vanished">Открыть файл</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="276"/>
         <source>All supported files</source>
         <translation>Все поддерживаемые файлы</translation>
-    </message>
-    <message>
-        <source>Save File</source>
-        <translation type="vanished">Сохранить файл</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="277"/>
@@ -1048,7 +886,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="222"/>
         <source>Filter by the model type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Фильтровать за типом модели.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="248"/>
@@ -1137,26 +975,14 @@
         <translation>Промежуточные результаты</translation>
     </message>
     <message>
-        <source>Speech recognition results are generated in near real time.</source>
-        <translation type="vanished">результаты распознавания речи генерируются почти в реальном времени.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="440"/>
         <source>Punctuation</source>
         <translation>Знаки препинания</translation>
     </message>
     <message>
-        <source>Speech decoding recognizes punctuation marks.</source>
-        <translation type="vanished">Распознавание речи умеет расставлять знаки препинания.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="441"/>
         <source>Voice Cloning</source>
         <translation>Клонирование голоса</translation>
-    </message>
-    <message>
-        <source>The model can imitate certain characteristics of another voice based on a voice sample.</source>
-        <translation type="vanished">Эта модель может имитировать некоторые особенности другого голоса базируясь на образце голоса.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="456"/>
@@ -1169,10 +995,6 @@
         <translation>Выберите чтобы только показывать модели с выбранными возможностями. </translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Имя</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="100"/>
         <source>Type to search</source>
         <translation>Введите запрос для поиска</translation>
@@ -1181,10 +1003,6 @@
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="119"/>
         <source>Clear text</source>
         <translation>Очистить текст</translation>
-    </message>
-    <message>
-        <source>Reset all filters to default values.</source>
-        <translation type="vanished">Установить все опции фильтрования на стандартные значения.</translation>
     </message>
 </context>
 <context>
@@ -1376,40 +1194,40 @@
 <context>
     <name>Notepad</name>
     <message>
-        <location filename="../desktop/qml/Notepad.qml" line="72"/>
         <location filename="../sfos/qml/Notepad.qml" line="64"/>
+        <location filename="../desktop/qml/Notepad.qml" line="72"/>
         <source>Type here or press %1 to make a note...</source>
         <translation>Печатайте тут или нажмите %1 чтобы сделать заметку…</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Notepad.qml" line="73"/>
-        <location filename="../desktop/qml/Notepad.qml" line="140"/>
         <location filename="../sfos/qml/Notepad.qml" line="65"/>
         <location filename="../sfos/qml/Notepad.qml" line="136"/>
+        <location filename="../desktop/qml/Notepad.qml" line="73"/>
+        <location filename="../desktop/qml/Notepad.qml" line="140"/>
         <source>Listen</source>
         <translation>Прослушать</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Notepad.qml" line="20"/>
         <location filename="../sfos/qml/Notepad.qml" line="107"/>
+        <location filename="../desktop/qml/Notepad.qml" line="20"/>
         <source>Neither Speech to Text nor Text to Speech model has been set up yet.</source>
         <translation>Ни речь-в-текст, ни текст-в-речь модели не были настроены.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Notepad.qml" line="21"/>
         <location filename="../sfos/qml/Notepad.qml" line="108"/>
+        <location filename="../desktop/qml/Notepad.qml" line="21"/>
         <source>Go to the %1 to download models for the languages you intend to use.</source>
         <translation>Перейдите в %1 чтобы загрузить модели которые собираетесь использовать.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Notepad.qml" line="22"/>
         <location filename="../sfos/qml/Notepad.qml" line="109"/>
+        <location filename="../desktop/qml/Notepad.qml" line="22"/>
         <source>Languages</source>
         <translation>Языки</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Notepad.qml" line="125"/>
         <location filename="../sfos/qml/Notepad.qml" line="123"/>
+        <location filename="../desktop/qml/Notepad.qml" line="125"/>
         <source>No Speech to Text model</source>
         <translation>Нет модели речи-в-текст</translation>
     </message>
@@ -1419,8 +1237,8 @@
         <translation>Речь-в-текст</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Notepad.qml" line="169"/>
         <location filename="../sfos/qml/Notepad.qml" line="159"/>
+        <location filename="../desktop/qml/Notepad.qml" line="169"/>
         <source>No Text to Speech model</source>
         <translation>Нет модели для текста-в-речь</translation>
     </message>
@@ -1430,20 +1248,20 @@
         <translation>Текст-в-речь</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Notepad.qml" line="230"/>
         <location filename="../sfos/qml/Notepad.qml" line="175"/>
+        <location filename="../desktop/qml/Notepad.qml" line="230"/>
         <source>Read</source>
         <translation>Прочитать</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Notepad.qml" line="93"/>
         <location filename="../sfos/qml/Notepad.qml" line="97"/>
+        <location filename="../desktop/qml/Notepad.qml" line="93"/>
         <source>Plain text</source>
         <translation>Простой текст</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Notepad.qml" line="94"/>
         <location filename="../sfos/qml/Notepad.qml" line="99"/>
+        <location filename="../desktop/qml/Notepad.qml" line="94"/>
         <source>SRT Subtitles</source>
         <translation>Субтитры SRT</translation>
     </message>
@@ -1498,32 +1316,32 @@
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="87"/>
         <source>Read selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Прочесть выбранное</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="99"/>
         <source>Read from cursor position</source>
-        <translation type="unfinished"></translation>
+        <translation>Прочитать с позиции курсора</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="112"/>
         <source>Read to cursor position</source>
-        <translation type="unfinished"></translation>
+        <translation>Прочитать в позицию курсора</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="130"/>
         <source>Translate selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевести выбранное</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="144"/>
         <source>Translate from cursor position</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевести с позиции курсора</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="159"/>
         <source>Translate to cursor position</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевести в позицию курсора</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="193"/>
@@ -1538,22 +1356,22 @@
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="215"/>
         <source>Add</source>
-        <translation type="unfinished">Добавить</translation>
+        <translation>Добавить</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="220"/>
         <source>Add the translated text to the note.</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить переведенный текст к заметке.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="227"/>
         <source>Replace</source>
-        <translation type="unfinished">Заменить</translation>
+        <translation>Заменить</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="232"/>
         <source>Replace the note with translated text and switch languages.</source>
-        <translation type="unfinished"></translation>
+        <translation>Заменить заметку переведенным текстом и переключить языки.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="251"/>
@@ -1584,80 +1402,80 @@
 <context>
     <name>SettingsPage</name>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="21"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="30"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="21"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="103"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="41"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="103"/>
         <source>Remember the last note</source>
-        <translation type="unfinished"></translation>
+        <translation>Запоминать последнюю заметку</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="110"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="42"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="110"/>
         <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Заметка будет автоматически сохраняться, поэтому когда вы будете перезагружать приложение, ваша последняя заметка будет всегда доступна.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="115"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="49"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="115"/>
         <source>File import action</source>
-        <translation type="unfinished"></translation>
+        <translation>Действие импортирования файла</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="125"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="57"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="125"/>
         <source>Ask whether to add or replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Спрашивать добавить или заменить</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="126"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="58"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="126"/>
         <source>Add to an existing note</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить к текущей заметке</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="127"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="59"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="127"/>
         <source>Replace an existing note</source>
-        <translation type="unfinished"></translation>
+        <translation>Заменить текущую заметку</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="116"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="70"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="116"/>
         <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation type="unfinished"></translation>
+        <translation>Действие при импортировании заметки из файла. Вы можете добавить импортированный текст в текущую заметку или заменить ее.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="317"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="107"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="317"/>
         <source>Listening mode</source>
         <translation>Режим прослушивания</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="318"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="331"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="114"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="127"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="318"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="331"/>
         <source>One sentence</source>
         <translation>Одно предложение</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="320"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="332"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="115"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="129"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="320"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="332"/>
         <source>Press and hold</source>
         <translation>Нажать и удерживать</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="322"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="333"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="116"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="131"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="322"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="333"/>
         <source>Always on</source>
         <translation>Всегда прослушивать</translation>
     </message>
@@ -1667,61 +1485,61 @@
         <translation>Эта опция влияет только на арабский язык.</translation>
     </message>
     <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="103"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="49"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="81"/>
-        <location filename="../sfos/qml/SettingsPage.qml" line="103"/>
         <source>Speech to Text</source>
         <translation>Речь-в-текст</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="318"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="127"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="318"/>
         <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
         <translation>Нажмите на %1 кнопку чтобы начать прослушивание, которое закончится когда будет распознано первое предложение.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="319"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="321"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="323"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="128"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="130"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="132"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="319"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="321"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="323"/>
         <source>Listen</source>
         <translation>Слушать</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="320"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="129"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="320"/>
         <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
         <translation>Нажатие и удерживание %1 кнопки включит прослушивание. Когда вы ее отпустите, прослушивание отключится.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="322"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="131"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="322"/>
         <source>After clicking on the %1 button, listening is always turn on.</source>
         <translation>После нажатия на %1 кнопку, прослушивание всегда будет включено.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="142"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="74"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="142"/>
         <source>Text appending style</source>
         <translation>Стиль добавления текста</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="152"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="82"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="152"/>
         <source>In line</source>
         <translation>На той же строке</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="153"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="83"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="153"/>
         <source>After line break</source>
         <translation>После разрыва строки</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="143"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="97"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="143"/>
         <source>Text is appended to the note in the same line or after line break.</source>
         <translation>Текст будет добавляться к заметке на той же строке или после разрыва строки.</translation>
     </message>
@@ -1742,11 +1560,11 @@
         <translation>Чтобы %1 заработало, нужно загрузить %2 модель.</translation>
     </message>
     <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="338"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="64"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="84"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="429"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="612"/>
-        <location filename="../sfos/qml/SettingsPage.qml" line="338"/>
         <source>Other</source>
         <translation>Другое</translation>
     </message>
@@ -1756,21 +1574,21 @@
         <translation>Когда эта опция включена, модель будет запускаться дольше и больше памяти потреблять.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="882"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="354"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="882"/>
         <source>Location of language files</source>
         <translation>Расположение файлов языка</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="883"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="356"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="883"/>
         <source>Directory where language files are downloaded to and stored.</source>
         <translation>Папка где файлы языка будут загружены и сохранены.</translation>
     </message>
     <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="360"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="183"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="889"/>
-        <location filename="../sfos/qml/SettingsPage.qml" line="360"/>
         <source>Change</source>
         <translation>Изменить</translation>
     </message>
@@ -1786,9 +1604,9 @@
         <translation>Восстанавливать знаки препинания</translation>
     </message>
     <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="233"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="54"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="82"/>
-        <location filename="../sfos/qml/SettingsPage.qml" line="233"/>
         <source>Text to Speech</source>
         <translation>Текст-в-речь</translation>
     </message>
@@ -1803,9 +1621,9 @@
         <translation>Перезапустите приложение, чтобы изменения вступили в силу.</translation>
     </message>
     <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="35"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="44"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="80"/>
-        <location filename="../sfos/qml/SettingsPage.qml" line="35"/>
         <source>User Interface</source>
         <translation>Пользовательский интерфейс</translation>
     </message>
@@ -1814,10 +1632,6 @@
         <location filename="../desktop/qml/SettingsPage.qml" line="83"/>
         <source>Accessibility</source>
         <translation>Доступность</translation>
-    </message>
-    <message>
-        <source>Font size in text editor</source>
-        <translation type="vanished">Размер шрифта в текстовом редакторе</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="970"/>
@@ -1866,25 +1680,25 @@
         <translation>Показывать системные уведомления при чтении или записывании.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="154"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="84"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="154"/>
         <source>After empty line</source>
-        <translation type="unfinished"></translation>
+        <translation>После пустой строки</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="171"/>
         <source>Font in text editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Шрифт в текстовом редакторе</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="177"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>По-умолчанию</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="191"/>
         <source>Please choose a font</source>
-        <translation type="unfinished"></translation>
+        <translation>Пожалуйста, выберите шрифт</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="231"/>
@@ -1904,30 +1718,22 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="257"/>
         <source>Show %1 options</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать %1 опции(й)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="257"/>
         <source>Repair text</source>
-        <translation type="unfinished"></translation>
+        <translation>Восстановить текст</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="264"/>
         <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation type="unfinished"></translation>
+        <translation>Когда активно, меню с опциями коррекцией текста появится на главной панели инструментов.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="270"/>
         <source>Use custom graphical style</source>
         <translation>Использовать собственный графический стиль</translation>
-    </message>
-    <message>
-        <source>Audio source</source>
-        <translation type="vanished">Источник аудио</translation>
-    </message>
-    <message>
-        <source>Select preferred audio source.</source>
-        <translation type="vanished">Выбрать предпочитаемый источник аудио.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="311"/>
@@ -1965,13 +1771,13 @@
         <location filename="../desktop/qml/SettingsPage.qml" line="440"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="622"/>
         <source>Most likely, NVIDIA kernel module has not been fully initialized.</source>
-        <translation type="unfinished"></translation>
+        <translation>Скорее всего, модуль ядро NVIDIA не был полностью инициализирован.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="441"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="623"/>
         <source>Try executing %1 before running Speech Note.</source>
-        <translation type="unfinished"></translation>
+        <translation>Попробовать выполнить %1 перед запуском Голосовых заметок.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="409"/>
@@ -1996,72 +1802,72 @@
         <translation>Видеоускорение значительно уменьшает время синтеза речи.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="631"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="296"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="631"/>
         <source>Sync speech with timestamps</source>
-        <translation type="unfinished"></translation>
+        <translation>Синхронизировать с временными метками</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="632"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="645"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="305"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="321"/>
-        <source>Don&apos;t sync</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="632"/>
-        <location filename="../sfos/qml/SettingsPage.qml" line="321"/>
-        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../desktop/qml/SettingsPage.qml" line="645"/>
+        <source>Don&apos;t sync</source>
+        <translation>Не синхронизировать</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="633"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="646"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="321"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="632"/>
+        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
+        <translation>Временные метки субтитров будут игнорироваться при чтении или экспорте в файл.</translation>
+    </message>
+    <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="306"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="322"/>
-        <source>Sync but don&apos;t adjust speed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="633"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="646"/>
+        <source>Sync but don&apos;t adjust speed</source>
+        <translation>Синхронизировать, но не менять скорость</translation>
+    </message>
+    <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="322"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="633"/>
         <source>Speech is synchronized according to timestamps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Речь будет синхронизироваться в зависимости от временных метках.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="634"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="323"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="634"/>
         <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation type="unfinished"></translation>
+        <translation>Синхронизировать текст в зависимости от временных меток. Скорость будет подгоняться автоматически, поэтому длительность речи никогда не будет больше чем длительность сегмента субтитров.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="635"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="648"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="308"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="324"/>
-        <source>Sync and increase or decrease speed to fit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="635"/>
-        <location filename="../sfos/qml/SettingsPage.qml" line="324"/>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../desktop/qml/SettingsPage.qml" line="648"/>
+        <source>Sync and increase or decrease speed to fit</source>
+        <translation>Синхронизировать и увеличить или уменьшить скорость</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="634"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="647"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="324"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="635"/>
+        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
+        <translation>Синхронизировать текст в зависимости от временных меток. Скорость будет подгоняться автоматически, поэтому длительность речи будет такой же, как и длительность сегмента субтитров.</translation>
+    </message>
+    <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="307"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="323"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="634"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="647"/>
         <source>Sync and increase speed to fit</source>
-        <translation type="unfinished"></translation>
+        <translation>Синхронизировать и увеличить скорость</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="669"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="332"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="669"/>
         <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation type="unfinished"></translation>
+        <translation>Когда установлен текстовый формат SRT субтитров, изменение скорость отключено, поскольку скорость будет подгоняться автоматически.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="679"/>
@@ -2096,12 +1902,12 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="697"/>
         <source>Toggle behavior</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключить поведение</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="705"/>
         <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сочетание клавиш для прослушивания/чтения так же остановит прослушивание/чтение если оно было нажато во время активного прослушивания/чтения.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="712"/>
@@ -2146,22 +1952,22 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="792"/>
         <source>Switch to next STT model</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключиться на следующую модель речи-в-текст</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="802"/>
         <source>Switch to previous STT model</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключиться на предыдущую модель речи-в-текст</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="812"/>
         <source>Switch to next TTS model</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключиться на следующую модель текста-в-речь</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="822"/>
         <source>Switch to previous TTS model</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключиться на предыдущую модель текста-в-речь</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="831"/>
@@ -2231,32 +2037,32 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="859"/>
         <source>Switches to next STT model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключит на следущую модель речи-в-речь.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="860"/>
         <source>Switches to previous STT model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключит на предыдущую модель речи-в-текст.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="861"/>
         <source>Switches to next TTS model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключит на следущую модель текста-в-речь.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="862"/>
         <source>Switches to previous TTS model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключит на предыдущую модель текста-в-речь.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="863"/>
         <source>Sets STT model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Установит модель речи-в-текст.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="864"/>
         <source>Sets TTS model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Установит модель текста-в-речь.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="866"/>
@@ -2271,12 +2077,12 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="948"/>
         <source>Hide advanced settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Спрятать расширенные настройки</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="948"/>
         <source>Show advanced settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать расширенные настройки</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="958"/>
@@ -2307,16 +2113,8 @@
         <translation>Использовать %1</translation>
     </message>
     <message>
-        <source>The Flatpak add-on for GPU acceleration is not installed.</source>
-        <translation type="vanished">Flatpak расширение для видеоускорения не установлен.</translation>
-    </message>
-    <message>
-        <source>To enable GPU acceleration, install either %1 add-on for AMD graphics card or %2 add-on for NVIDIA graphics card.</source>
-        <translation type="vanished">Чтобы активировать видеоускорение, установите либо %1 расширение для AMD видеокарт, либо %2 для NVIDIA видеокарт.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="903"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="345"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="903"/>
         <source>When closing, delete all cached audio files.</source>
         <translation>Удалять все кешированые аудио файлы при закрытии.</translation>
     </message>
@@ -2342,10 +2140,6 @@
         <location filename="../desktop/qml/SettingsPage.qml" line="1027"/>
         <source>Try to find OpenCL compatible graphic cards in the system.</source>
         <translation>Пробовать искать видеокарту в системе совместимую с OpenCL.</translation>
-    </message>
-    <message>
-        <source>Only if no others were found</source>
-        <translation type="vanished">Только если других не нашлось</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="430"/>
@@ -2375,10 +2169,6 @@
         <translation>Значение имеет тот же эффект, что и %1 переменная среды.</translation>
     </message>
     <message>
-        <source>Reset to default value.</source>
-        <translation type="vanished">Сбросить к стандартному значению.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="908"/>
         <source>Availability of optional features</source>
         <translation>Доступность опциональных возможностей</translation>
@@ -2386,22 +2176,22 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1066"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Скинуть</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1078"/>
         <source>Compose file</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл композиции</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1079"/>
         <source>X11 compose file used in %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл композиции X11 который используется в %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1079"/>
         <source>Insert into active window</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставлять в активное окно</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1087"/>
@@ -2411,7 +2201,7 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1092"/>
         <source>Use Python libriaries</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать библиотеки Python</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1099"/>
@@ -2427,12 +2217,12 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="297"/>
         <source>Audio input device</source>
-        <translation type="unfinished"></translation>
+        <translation>Устройство аудио ввода</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="298"/>
         <source>Select preferred audio input device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите предпочитаемое устройство аудио ввода.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="388"/>
@@ -2443,56 +2233,56 @@
         <location filename="../desktop/qml/SettingsPage.qml" line="428"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="611"/>
         <source>Tip: If you observe problems with GPU acceleration, try to enable %1 option.</source>
-        <translation type="unfinished"></translation>
+        <translation>Совет: если вы наблюдаете проблемы с видеоускорением, попробуйте включить %1 опцию.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="445"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="627"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="136"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="292"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="445"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="627"/>
         <source>Subtitles</source>
         <translation>Субтитры</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="449"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="142"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="449"/>
         <source>Minimum segment duration</source>
         <translation>Минимальная длительность сегмента</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="450"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="165"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="450"/>
         <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
         <translation>Установить минимальную длительность (в секундах) для сегмента субтитров.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="451"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="166"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="451"/>
         <source>This option only works with %1 and %2 models.</source>
         <translation>Эта опция работает только для моделей с %1 и %2.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="465"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="172"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="465"/>
         <source>Break text lines</source>
         <translation>Разрывать строки</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="474"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="182"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="474"/>
         <source>Minimum line length</source>
         <translation>Минимальная длина строчки</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="491"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="208"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="491"/>
         <source>Maximum line length</source>
         <translation>Максимальная длина строчки</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="511"/>
         <source>Restore diacritical marks before speech synthesis</source>
-        <translation type="unfinished"></translation>
+        <translation>Восстанавить диакритические знаки перед синтезом речи</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="518"/>
@@ -2505,46 +2295,46 @@
         <translation>Восстановление диакритических знаков для иврита недоступно.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="532"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="271"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="532"/>
         <source>Split text into sentences</source>
-        <translation type="unfinished"></translation>
+        <translation>Разделить текст на предложения</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="539"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="272"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="539"/>
         <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation type="unfinished"></translation>
+        <translation>Текст будет разделен на предложения и синтез речи для каждого предложения будет выполняться парралельно.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="540"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="273"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="540"/>
         <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation type="unfinished"></translation>
+        <translation>Это ускорит чтение, но натуральность речи у некоторых моделей может упасть.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="546"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="282"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="546"/>
         <source>Use engine speed control</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать управление скоростью движка</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="553"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="283"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="553"/>
         <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если движок текста-в-речь поддерживает управление скоростью, тогда оно будет использоваться.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="554"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="284"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="554"/>
         <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если эта опция отключена, манипуляция скоростью будет происходить во время пост-обработки аудио.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="555"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="285"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="555"/>
         <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation type="unfinished"></translation>
+        <translation>Фактическая скорость после пост-обработки аудио намного более предсказуемая, но натуральность речи может упасть.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="571"/>
@@ -2552,14 +2342,10 @@
         <translation>Выключите эту опцию, если вы наблюдаете проблемы при использовании текста-в-речь.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="896"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="344"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="896"/>
         <source>Clear cache on close</source>
         <translation>Очищать кеш при закрытии</translation>
-    </message>
-    <message>
-        <source>Check Python dependencies</source>
-        <translation type="vanished">Проверить зависимости Python</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1108"/>
@@ -2588,10 +2374,6 @@
         <translation>Сохранить</translation>
     </message>
     <message>
-        <source>Save changes</source>
-        <translation type="vanished">Сохранить изменения</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1126"/>
         <source>Select Directory</source>
         <translation>Выбрать словарь</translation>
@@ -2610,85 +2392,81 @@
         <translation>Язык еще не был настроен.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="121"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="49"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="121"/>
         <source>Cancelling, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Отменяем, подождите…</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="123"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="50"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="123"/>
         <source>Getting ready, please wait...</source>
         <translation>Готовимся, подождите…</translation>
     </message>
     <message>
-        <source>Writing speech to file...</source>
-        <translation type="vanished">Записываем речь в файл…</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="127"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="51"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="127"/>
         <source>Converting text to speech...</source>
-        <translation type="unfinished"></translation>
+        <translation>Конвертируем текст в речь…</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="131"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="53"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="131"/>
         <source>Importing from a file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Импортируем из файла…</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="134"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="55"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="134"/>
         <source>Exporting to a file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспортируем в файл…</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="145"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="58"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="145"/>
         <source>Processing, please wait...</source>
         <translation>Обрабатываем, подождите…</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="141"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="59"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="141"/>
         <source>Transcribing audio file...</source>
         <translation>Транскрипция аудио файла…</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="148"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="62"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="148"/>
         <source>Say something...</source>
         <translation>Скажите что-то…</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="149"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="63"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="149"/>
         <source>Reading is paused.</source>
         <translation>Чтение на паузе.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="150"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="64"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="150"/>
         <source>Reading a note...</source>
         <translation>Читаем заметку…</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="137"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="57"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="137"/>
         <source>Translating...</source>
         <translation>Переводим…</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SpeechWidget.qml" line="119"/>
         <location filename="../sfos/qml/SpeechWidget.qml" line="46"/>
+        <location filename="../desktop/qml/SpeechWidget.qml" line="119"/>
         <source>Busy...</source>
         <translation>Заняты…</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SpeechWidget.qml" line="125"/>
         <source>Repairing the text...</source>
-        <translation type="unfinished"></translation>
+        <translation>Восстанавливаем текст…</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SpeechWidget.qml" line="233"/>
@@ -2721,7 +2499,7 @@
     <message>
         <location filename="../desktop/qml/StreamSelectionDialog.qml" line="49"/>
         <source>Import selected stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Импортировать выбранный поток</translation>
     </message>
     <message>
         <location filename="../desktop/qml/StreamSelectionDialog.qml" line="64"/>
@@ -2729,33 +2507,21 @@
         <translation>Закрыть</translation>
     </message>
     <message>
-        <source>Transcribe selected stream</source>
-        <translation type="vanished">Выполнить транскрипцию выбранного потока</translation>
-    </message>
-    <message>
-        <source>The file contains multiple audio streams. Select which one you want to process.</source>
-        <translation type="vanished">Этот файл содержит несколько аудио потоков. Выберите один который желаете обработать.</translation>
-    </message>
-    <message>
-        <source>Audio stream</source>
-        <translation type="vanished">Аудио поток</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/StreamSelectionDialog.qml" line="81"/>
         <location filename="../sfos/qml/StreamSelectionDialog.qml" line="54"/>
+        <location filename="../desktop/qml/StreamSelectionDialog.qml" line="81"/>
         <source>The file contains multiple streams. Select which one you want to import.</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл содержит несколько потоков. Выберите какой желаете импортировать.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/StreamSelectionDialog.qml" line="62"/>
         <source>Stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Поток</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/StreamSelectionDialog.qml" line="100"/>
         <location filename="../sfos/qml/StreamSelectionDialog.qml" line="78"/>
+        <location filename="../desktop/qml/StreamSelectionDialog.qml" line="100"/>
         <source>Speech to Text model has not been set up yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Модель речи-в-текст еще не была настроена.</translation>
     </message>
 </context>
 <context>
@@ -2763,70 +2529,70 @@
     <message>
         <location filename="../desktop/qml/TextContextMenu.qml" line="44"/>
         <source>Undo</source>
-        <translation type="unfinished">Отменить действие</translation>
+        <translation>Отменить действие</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TextContextMenu.qml" line="56"/>
         <source>Redo</source>
-        <translation type="unfinished">Вернуть действие</translation>
+        <translation>Вернуть действие</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TextContextMenu.qml" line="70"/>
         <source>Cut</source>
-        <translation type="unfinished"></translation>
+        <translation>Вырезать</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TextContextMenu.qml" line="82"/>
         <source>Copy</source>
-        <translation type="unfinished">Скопировать</translation>
+        <translation>Скопировать</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TextContextMenu.qml" line="94"/>
         <source>Paste</source>
-        <translation type="unfinished">Вставить</translation>
+        <translation>Вставить</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TextContextMenu.qml" line="106"/>
         <source>Delete</source>
-        <translation type="unfinished">Удалить</translation>
+        <translation>Удалить</translation>
     </message>
     <message>
         <location filename="../desktop/qml/TextContextMenu.qml" line="120"/>
         <source>Select All</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать все</translation>
     </message>
 </context>
 <context>
     <name>Translator</name>
     <message>
-        <location filename="../desktop/qml/Translator.qml" line="25"/>
         <location filename="../sfos/qml/Translator.qml" line="75"/>
+        <location filename="../desktop/qml/Translator.qml" line="25"/>
         <source>Translator model has not been set up yet.</source>
         <translation>Модель переводчика еще не была настроена.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Translator.qml" line="26"/>
         <location filename="../sfos/qml/Translator.qml" line="76"/>
+        <location filename="../desktop/qml/Translator.qml" line="26"/>
         <source>Go to the %1 to download models for the languages you intend to use.</source>
         <translation>Перейдите в %1 чтобы загрузить модели которые собираетесь использовать.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Translator.qml" line="27"/>
         <location filename="../sfos/qml/Translator.qml" line="77"/>
+        <location filename="../desktop/qml/Translator.qml" line="27"/>
         <source>Languages</source>
         <translation>Языки</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Translator.qml" line="108"/>
         <location filename="../sfos/qml/Translator.qml" line="105"/>
+        <location filename="../desktop/qml/Translator.qml" line="108"/>
         <source>Type here text to translate from...</source>
         <translation>Напечатайте текст здесь, чтобы его перевести…</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Translator.qml" line="168"/>
-        <location filename="../desktop/qml/Translator.qml" line="292"/>
         <location filename="../sfos/qml/Translator.qml" line="163"/>
         <location filename="../sfos/qml/Translator.qml" line="250"/>
+        <location filename="../desktop/qml/Translator.qml" line="168"/>
+        <location filename="../desktop/qml/Translator.qml" line="292"/>
         <source>No Translator model</source>
         <translation>Нет модели переводчика</translation>
     </message>
@@ -2836,10 +2602,10 @@
         <translation>Перевести из</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Translator.qml" line="189"/>
-        <location filename="../desktop/qml/Translator.qml" line="313"/>
         <location filename="../sfos/qml/Translator.qml" line="180"/>
         <location filename="../sfos/qml/Translator.qml" line="268"/>
+        <location filename="../desktop/qml/Translator.qml" line="189"/>
+        <location filename="../desktop/qml/Translator.qml" line="313"/>
         <source>No Text to Speech model</source>
         <translation>Нет модели для текста-в-речь</translation>
     </message>
@@ -2850,10 +2616,10 @@
         <translation>Текст-в-речь</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Translator.qml" line="217"/>
-        <location filename="../desktop/qml/Translator.qml" line="342"/>
         <location filename="../sfos/qml/Translator.qml" line="200"/>
         <location filename="../sfos/qml/Translator.qml" line="289"/>
+        <location filename="../desktop/qml/Translator.qml" line="217"/>
+        <location filename="../desktop/qml/Translator.qml" line="342"/>
         <source>Read</source>
         <translation>Прочесть</translation>
     </message>
@@ -2868,19 +2634,19 @@
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Translator.qml" line="375"/>
         <location filename="../sfos/qml/Translator.qml" line="312"/>
+        <location filename="../desktop/qml/Translator.qml" line="375"/>
         <source>Translate</source>
         <translation>Перевести</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="312"/>
         <source>Cancelling...</source>
-        <translation type="unfinished"></translation>
+        <translation>Отменяем…</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Translator.qml" line="383"/>
         <location filename="../sfos/qml/Translator.qml" line="335"/>
+        <location filename="../desktop/qml/Translator.qml" line="383"/>
         <source>Translate as you type</source>
         <translation>Переводить пока вы печатаете</translation>
     </message>
@@ -2939,14 +2705,14 @@
         <translation>Модель текста-в-речь для языка на который нужно перевести.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Translator.qml" line="129"/>
         <location filename="../sfos/qml/Translator.qml" line="143"/>
+        <location filename="../desktop/qml/Translator.qml" line="129"/>
         <source>Plain text</source>
         <translation>Простой текст</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/Translator.qml" line="132"/>
         <location filename="../sfos/qml/Translator.qml" line="149"/>
+        <location filename="../desktop/qml/Translator.qml" line="132"/>
         <source>SRT Subtitles</source>
         <translation>Субтитры SRT</translation>
     </message>
@@ -3041,7 +2807,7 @@
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="288"/>
         <source>Tip: If you&apos;re not satisfied with voice cloning quality, try creating a few different voice samples and see which one gives you the best result.</source>
-        <translation type="unfinished"></translation>
+        <translation>Совет: если вы не довольны качеством клонированния голоса, попробуйте создать несколько образцом голоса и проверьте какой из них дает самый удовлетворительный результат.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="307"/>
@@ -3156,17 +2922,17 @@
     <message>
         <location filename="../src/dsnote_app.cpp" line="3669"/>
         <source>Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудио</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="3672"/>
         <source>Video</source>
-        <translation type="unfinished"></translation>
+        <translation>Видео</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="3675"/>
         <source>Subtitles</source>
-        <translation type="unfinished">Субтитры</translation>
+        <translation>Субтитры</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="3684"/>
@@ -3197,7 +2963,7 @@
         <location filename="../src/dsnote_app.cpp" line="4667"/>
         <location filename="../src/dsnote_app.cpp" line="4692"/>
         <source>Auto</source>
-        <translation type="unfinished">Автоматически</translation>
+        <translation>Автоматически</translation>
     </message>
 </context>
 <context>
@@ -3218,94 +2984,86 @@
         <translation>Переводчик</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="473"/>
         <location filename="../sfos/qml/main.qml" line="366"/>
+        <location filename="../desktop/qml/main.qml" line="488"/>
         <source>Error: Translator model has not been set up yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: модель переводчика еще не была настроена.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="382"/>
         <location filename="../sfos/qml/main.qml" line="300"/>
+        <location filename="../desktop/qml/main.qml" line="397"/>
         <source>The model download is complete!</source>
         <translation>Загрузка модели завершена!</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="383"/>
         <location filename="../sfos/qml/main.qml" line="301"/>
+        <location filename="../desktop/qml/main.qml" line="398"/>
         <source>Error: Couldn&apos;t download the model file.</source>
         <translation>Ошибка: не удалось загрузить файл модели.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="412"/>
         <location filename="../sfos/qml/main.qml" line="306"/>
+        <location filename="../desktop/qml/main.qml" line="427"/>
         <source>Copied!</source>
         <translation>Скопировано!</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="413"/>
         <location filename="../sfos/qml/main.qml" line="307"/>
+        <location filename="../desktop/qml/main.qml" line="428"/>
         <source>Import from the file is complete!</source>
-        <translation type="unfinished"></translation>
+        <translation>Импортирование в файл завершено!</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="414"/>
         <location filename="../sfos/qml/main.qml" line="308"/>
+        <location filename="../desktop/qml/main.qml" line="429"/>
         <source>Export to file is complete!</source>
-        <translation type="unfinished"></translation>
+        <translation>Эскпортирование в файл завершено!</translation>
     </message>
     <message>
-        <source>File transcription is complete!</source>
-        <translation type="vanished">Транскрипция файла завершена!</translation>
-    </message>
-    <message>
-        <source>Speech saved to audio file!</source>
-        <translation type="vanished">Речь сохранена в аудио файл!</translation>
-    </message>
-    <message>
-        <source>Note saved to text file!</source>
-        <translation type="vanished">Заметка сохранена в текстовый файл!</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="437"/>
         <location filename="../sfos/qml/main.qml" line="333"/>
+        <location filename="../desktop/qml/main.qml" line="452"/>
         <source>Error: Audio file processing has failed.</source>
         <translation>Ошибка: не удалось обработать аудио файл.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="440"/>
         <location filename="../sfos/qml/main.qml" line="336"/>
+        <location filename="../desktop/qml/main.qml" line="455"/>
         <source>Error: Couldn&apos;t access Microphone.</source>
         <translation>Ошибка: не удалось получить доступ к микрофону.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="443"/>
         <location filename="../sfos/qml/main.qml" line="339"/>
+        <location filename="../desktop/qml/main.qml" line="458"/>
         <source>Error: Speech to Text engine initialization has failed.</source>
         <translation>Ошибка: не удалось инициализировать движок речи-в-текст.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="446"/>
         <location filename="../sfos/qml/main.qml" line="342"/>
+        <location filename="../desktop/qml/main.qml" line="461"/>
         <source>Error: Text to Speech engine initialization has failed.</source>
         <translation>Ошибка: не удалось инициализировать движок текста-в-речь.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="449"/>
         <location filename="../sfos/qml/main.qml" line="345"/>
+        <location filename="../desktop/qml/main.qml" line="464"/>
         <source>Error: Translation engine initialization has failed.</source>
         <translation>Ошибка: не удалось инициализировать движок переводчика.</translation>
     </message>
     <message>
-        <source>Error: Couldn&apos;t save to the file.</source>
-        <translation type="vanished">Ошибка: не удалось сохранить в файл.</translation>
+        <location filename="../sfos/qml/main.qml" line="360"/>
+        <location filename="../desktop/qml/main.qml" line="482"/>
+        <source>Error: Speech to Text model has not been set up yet.</source>
+        <translation>Ошибка: модель речи-в-текст еще не была настроена.</translation>
     </message>
     <message>
-        <source>Error: Couldn&apos;t open the file.</source>
-        <translation type="vanished">Ошибка: не удалось открыть файл.</translation>
+        <location filename="../sfos/qml/main.qml" line="363"/>
+        <location filename="../desktop/qml/main.qml" line="485"/>
+        <source>Error: Text to Speech model has not been set up yet.</source>
+        <translation>Ошибка: модель текста-в-речь еще не была настроена.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="479"/>
         <location filename="../sfos/qml/main.qml" line="372"/>
+        <location filename="../desktop/qml/main.qml" line="494"/>
         <source>Error: An unknown problem has occurred.</source>
         <translation>Ошибка: случилась неизвестная проблема.</translation>
     </message>
@@ -3367,87 +3125,85 @@
     <message>
         <location filename="../desktop/qml/main.qml" line="188"/>
         <source>Stop</source>
-        <translation type="unfinished">Остановить</translation>
+        <translation>Остановить</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="189"/>
         <source>Start</source>
-        <translation type="unfinished">Начать</translation>
+        <translation>Начать</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="228"/>
         <source>Both NVIDIA and AMD GPU acceleration add-ons are installed, which is not optimal. Uninstall one of them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Установленно одновременно расширения для видеоускорения AMD и NVIDIA, что не есть оптимальным. Удалите один из них.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="240"/>
         <source>The Flatpak add-on for GPU acceleration is not installed.</source>
-        <translation type="unfinished">Flatpak расширение для видеоускорения не установлен.</translation>
+        <translation>Flatpak расширение для видеоускорения не установлен.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="241"/>
         <source>To enable GPU acceleration, install either %1 add-on for AMD graphics card or %2 add-on for NVIDIA graphics card.</source>
-        <translation type="unfinished">Чтобы активировать видеоускорение, установите либо %1 расширение для AMD видеокарт, либо %2 для NVIDIA видеокарт.</translation>
+        <translation>Чтобы активировать видеоускорение, установите или %1 расширение для AMD видеокарт или %2 расширение для NVIDIA видеокарт.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="353"/>
+        <location filename="../desktop/qml/main.qml" line="257"/>
+        <source>Most likely, NVIDIA kernel module has not been fully initialized.</source>
+        <translation type="unfinished">Скорее всего, модуль ядро NVIDIA не был полностью инициализирован.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/main.qml" line="258"/>
+        <source>Try executing %1 before running Speech Note.</source>
+        <translation type="unfinished">Попробовать выполнить %1 перед запуском Голосовых заметок.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/main.qml" line="368"/>
         <source>Restart the application to apply changes.</source>
         <translation>Перезапустите приложение, чтобы изменения вступили в силу.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="415"/>
+        <location filename="../desktop/qml/main.qml" line="430"/>
         <source>Text repair is complete!</source>
-        <translation type="unfinished"></translation>
+        <translation>Восстановление текста завершено!</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="425"/>
+        <location filename="../desktop/qml/main.qml" line="440"/>
         <source>Text copied to clipboard!</source>
         <translation>Текст скопирован в буфер обмена!</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="455"/>
-        <source>Error: Couldn&apos;t repair the text.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="467"/>
-        <location filename="../sfos/qml/main.qml" line="360"/>
-        <source>Error: Speech to Text model has not been set up yet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/main.qml" line="470"/>
-        <location filename="../sfos/qml/main.qml" line="363"/>
-        <source>Error: Text to Speech model has not been set up yet.</source>
-        <translation type="unfinished"></translation>
+        <source>Error: Couldn&apos;t repair the text.</source>
+        <translation>Ошибка: не удалось восстановить текст.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="452"/>
         <location filename="../sfos/qml/main.qml" line="348"/>
+        <location filename="../desktop/qml/main.qml" line="467"/>
         <source>Error: Not all text has been translated.</source>
         <translation>Ошибка: не весь текст был переведен.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="458"/>
         <location filename="../sfos/qml/main.qml" line="351"/>
+        <location filename="../desktop/qml/main.qml" line="473"/>
         <source>Error: Couldn&apos;t export to the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: не удалось импортировать в файл.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="461"/>
         <location filename="../sfos/qml/main.qml" line="354"/>
-        <source>Error: Couldn&apos;t import the file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="464"/>
-        <location filename="../sfos/qml/main.qml" line="357"/>
-        <source>Error: Couldn&apos;t import. The file does not contain audio or subtitles.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/main.qml" line="476"/>
+        <source>Error: Couldn&apos;t import the file.</source>
+        <translation>Ошибка: не удалось импортировать файл.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="357"/>
+        <location filename="../desktop/qml/main.qml" line="479"/>
+        <source>Error: Couldn&apos;t import. The file does not contain audio or subtitles.</source>
+        <translation>Ошибка: не удалось импортировать. Файл не содержит аудио или субтитров.</translation>
+    </message>
+    <message>
         <location filename="../sfos/qml/main.qml" line="369"/>
+        <location filename="../desktop/qml/main.qml" line="491"/>
         <source>Error: Couldn&apos;t download a licence.</source>
         <translation>Ошибка: не удалось загрузить лицензию.</translation>
     </message>
@@ -3610,12 +3366,12 @@
     <message>
         <location filename="../src/tray_icon.cpp" line="95"/>
         <source>No Speech to Text model</source>
-        <translation type="unfinished">Нет модели речи-в-текст</translation>
+        <translation>Нет модели речи-в-текст</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="115"/>
         <source>No Text to Speech model</source>
-        <translation type="unfinished">Нет модели для текста-в-речь</translation>
+        <translation>Нет модели для текста-в-речь</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="145"/>
@@ -3660,7 +3416,7 @@
     <message>
         <location filename="../src/tray_icon.cpp" line="202"/>
         <source>Show/Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать/спрятать</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="207"/>
