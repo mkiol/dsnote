@@ -2137,6 +2137,12 @@ auto models_manager::extract_models(
             !model.options.contains('c')) {
             // add char replacement option for all coqui tts models
             model.options.push_back('c');
+        } else if ((model.engine == model_engine_t::stt_whisper ||
+                    model.engine == model_engine_t::stt_fasterwhisper) &&
+                   !model.hidden && model.options.contains('t') &&
+                   model.lang_id == "en") {
+            // remove translate to english option for all english models
+            model.options.remove('t');
         }
 
         models.emplace(model_id, std::move(model));
