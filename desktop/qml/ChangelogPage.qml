@@ -99,8 +99,8 @@ DialogPage {
         <li>Flatpak runtime update to version 5.15-23.08</li>
         <li>AMD ROCm update to version 5.7.3</li>
         <li>PyTorch update to version 2.2.1</li>
-        <li>CTranslate2 update to version 4.1.0</li>
-        <li>Faster-Whisper update to version 1.0.1</li>
+        <li>CTranslate2 update to version 4.2.1</li>
+        <li>Faster-Whisper update to version 1.0.2</li>
         </ul>"
     }
 

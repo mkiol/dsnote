@@ -589,7 +589,7 @@ modules:
         PYTHONPATH: /app/extensions/cpu/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} "faster-whisper==1.0.1" --no-build-isolation
+        --prefix=${FLATPAK_DEST} "faster-whisper==1.0.2" --no-build-isolation
     sources:
       - *id023
       - type: file
@@ -604,8 +604,8 @@ modules:
         url: https://files.pythonhosted.org/packages/60/6c/e38303443479483fb0900256b2cda80ae11e9c162e784a8b73f46672be93/ctranslate2-4.0.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
         sha256: 8c185580ef598c45e343ec3af33bcdb634c723100aef01d26b937da7b2f263dc
       - type: file
-        url: https://files.pythonhosted.org/packages/2b/3c/afdc84846ea13933876e8ca32c58d64cd4361fddfc6ede34c0ca3f0105ce/faster_whisper-1.0.1-py3-none-any.whl
-        sha256: 7803bf7abcaae0376158d7b064ba927d44b6ce1fa9f6250d6d13038354d1d01a
+        url: https://files.pythonhosted.org/packages/4e/77/3f7474863c99732edadcd5a7fc34ba5779b0bd71610ede65182fd2610323/faster_whisper-1.0.2-py3-none-any.whl
+        sha256: d968c289222e766a49ed97eecec24e934bdef405183f57d6d434a364bb3569c1
       - *id004
       - type: file
         url: https://files.pythonhosted.org/packages/6f/12/d5c79ee252793ffe845d58a913197bfa02ae9a0b5c9bc3dc4b58d477b9e7/flatbuffers-23.5.26-py2.py3-none-any.whl
