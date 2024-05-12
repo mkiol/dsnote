@@ -1368,7 +1368,8 @@
                 "id": "MIT",
                 "name": "MIT License",
                 "accept_required": false
-            }
+            },
+            "hidden": true
         },
         {
             "name": "English (FasterWhisper Large-v2)",

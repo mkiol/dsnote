@@ -48,8 +48,8 @@ DialogPage {
         </ul>
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
-        <li>Updated Distil model for English: <i>Distil Large-v3</i>.
-            New model is enabled both for Whisper and Faster Whisper.</li>
+        <li>Updated <i>Distil</i> model for English: <i>Distil Large-v3</i>.
+            New model is enabled for Whisper engine.</li>
         <li>New Fine-Tuned Whisper models for Slovenian and Polish.</li>
         <li>Fix: Punctuation model could not be downloaded.</li>
         </ul>
