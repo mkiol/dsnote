@@ -383,7 +383,9 @@ please consider doing one or two of the following:
 
 ## Reviews and demos
 
-- [Screenshots](https://gitlab.com/mkiol/dsnote/-/tree/main/desktop/screenshots) (Speech Note 4.4)
+- [Screenshots](https://gitlab.com/mkiol/dsnote/-/tree/main/desktop/screenshots) (Speech Note 4.5)
+- [Marco's Box](https://www.marcosbox.org/2024/02/speech-note-trascrivi-e-traduci-offline-.html) (Speech Note 4.4, Italian)
+- [Marco's Box video](https://www.youtube.com/watch?v=6fNgZlh-O-w) (Speech Note 4.4, Italian)
 - [alternativalinux](https://www.alternativalinux.it/riconoscimento-sintesi-vocale-e-traduttore-per-linux/) (Speech Note 4.4, Italian)
 - [alternativalinux video](https://www.youtube.com/watch?v=6Peoss66fMg) (Speech Note 4.4, Italian)
 - [ZDNET](https://www.zdnet.com/article/how-to-enable-speech-to-text-in-linux-with-this-simple-app/) (Speech Note 4.2)
