@@ -1354,22 +1354,22 @@
             "model_id": "en_fasterwhisper_distil_large3",
             "engine": "stt_fasterwhisper",
             "lang_id": "en",
-            "checksum": "4850231d",
-            "checksum_quick": "53b49b86",
-            "size": "764951965",
+            "checksum": "2727a074",
+            "checksum_quick": "328c18dd",
+            "size": "764952305",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/c388e4ecdaf12738da6551b47dcd357b7deff195/faster-whisper-distil-large-v3.en-int8/model.bin",
-                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/c388e4ecdaf12738da6551b47dcd357b7deff195/faster-whisper-distil-large-v3.en-int8/config.json",
-                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/c388e4ecdaf12738da6551b47dcd357b7deff195/faster-whisper-distil-large-v3.en-int8/tokenizer.json",
-                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/c388e4ecdaf12738da6551b47dcd357b7deff195/faster-whisper-distil-large-v3.en-int8/vocabulary.json"
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/59b4d139bbc97e84822899643a836f04d75c2eba/faster-whisper-distil-large-v3.en-int8/model.bin",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/59b4d139bbc97e84822899643a836f04d75c2eba/faster-whisper-distil-large-v3.en-int8/config.json",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/59b4d139bbc97e84822899643a836f04d75c2eba/faster-whisper-distil-large-v3.en-int8/tokenizer.json",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/59b4d139bbc97e84822899643a836f04d75c2eba/faster-whisper-distil-large-v3.en-int8/vocabulary.json",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/59b4d139bbc97e84822899643a836f04d75c2eba/faster-whisper-distil-large-v3.en-int8/preprocessor_config.json"
             ],
             "license": {
                 "id": "MIT",
                 "name": "MIT License",
                 "accept_required": false
-            },
-            "hidden": true
+            }
         },
         {
             "name": "English (FasterWhisper Large-v2)",
@@ -3397,6 +3397,28 @@
             "model_id": "pl_fasterwhisper_large3",
             "model_alias_of": "multilang_fasterwhisper_large3",
             "lang_id": "pl"
+        },
+        {
+            "name": "Polski (Distil-FasterWhisper Large-v3 Fine-Tuned Aspik)",
+            "model_id": "pl_fasterwhisper_distil_large3_aspik",
+            "engine": "stt_fasterwhisper",
+            "lang_id": "pl",
+            "checksum": "6097f0d",
+            "checksum_quick": "2e6d4ad2",
+            "size": "771116877",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/6d4522c71fcedcb5909179ae195c895217ea10fe/faster-whisper-distil-large-v3-aspik101.pl-int8/model.bin",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/6d4522c71fcedcb5909179ae195c895217ea10fe/faster-whisper-distil-large-v3-aspik101.pl-int8/config.json",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/6d4522c71fcedcb5909179ae195c895217ea10fe/faster-whisper-distil-large-v3-aspik101.pl-int8/tokenizer.json",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/6d4522c71fcedcb5909179ae195c895217ea10fe/faster-whisper-distil-large-v3-aspik101.pl-int8/vocabulary.json",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/6d4522c71fcedcb5909179ae195c895217ea10fe/faster-whisper-distil-large-v3-aspik101.pl-int8/preprocessor_config.json"
+            ],
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            }
         },
         {
             "name": "Afrikaans (FasterWhisper Tiny)",
