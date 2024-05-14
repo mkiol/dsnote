@@ -4,7 +4,6 @@ sdk: org.kde.Sdk//5.15-23.08
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm16
 build-extension: true
-appstream-compose: false
 build-options:
   no-debuginfo: true
   prefix: /app/extensions/nvidia
@@ -151,8 +150,8 @@ modules:
     sources:
       - type: archive
         archive-type: "tar-zst"
-        url: https://archlinux.org/packages/extra/x86_64/nccl/download
-        sha256: 25c5a35b372273a5fb9ece4eae022327c85d811774e5fd15362c7f9c9152465b
+        url: https://mirror.sunred.org/archlinux/extra/os/x86_64/nccl-2.21.5-1-x86_64.pkg.tar.zst
+        sha256: 91c7c06f758416965ba1c5301a1e0cfed1cdddbadb3e936703f3c6dca42d3a95
 
   - name: oneapi
     only-arches:
@@ -305,12 +304,3 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/da/d3/8057f0587683ed2fcd4dbfbdfdfa807b9160b809976099d36b8f60d08f03/nvidia_nvtx_cu12-12.1.105-py3-none-manylinux1_x86_64.whl
         sha256: dc21cf308ca5691e7c04d962e213f8a4aa9bbfa23d95412f452254c2caeb09e5
-
-  - name: metadata
-    buildsystem: simple
-    build-commands:
-      - install -Dm644 -t ${FLATPAK_DEST}/share/metainfo ${FLATPAK_ID}.metainfo.xml
-      - appstream-compose -v --basename=${FLATPAK_ID} --prefix=${FLATPAK_DEST} --origin=flatpak ${FLATPAK_ID}
-    sources:
-      - type: file
-        path: net.mkiol.SpeechNote.Addon.nvidia.metainfo.xml

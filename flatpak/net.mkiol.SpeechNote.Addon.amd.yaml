@@ -365,19 +365,13 @@ modules:
     sources:
       - type: file
         url: https://download.pytorch.org/whl/rocm5.7/torch-2.2.1%2Brocm5.7-cp311-cp311-linux_x86_64.whl
+        dest-filename: torch-2.2.1+rocm5.7-cp311-cp311-linux_x86_64.whl
         sha256: 90b68d286582ae3fc0253b0e9598a71683db13d43aadfe9ffac9e80a4630a920
       - type: file
         url: https://download.pytorch.org/whl/rocm5.7/torchaudio-2.2.1%2Brocm5.7-cp311-cp311-linux_x86_64.whl
+        dest-filename: torchaudio-2.2.1+rocm5.7-cp311-cp311-linux_x86_64.whl
         sha256: 4f09dac8e96e46b83692d3c976ce6c8374cd6cce964057dc4b9dcae3800a2157
       - type: file
         url: https://download.pytorch.org/whl/pytorch_triton_rocm-2.2.0-cp311-cp311-linux_x86_64.whl
         sha256: f8ac03d7e4114bd37c3ed1f98d84cdb15f1b1c5b3c0ecac305ada0d683520b9d
 
-  - name: metadata
-    buildsystem: simple
-    build-commands:
-      - install -Dm644 -t ${FLATPAK_DEST}/share/metainfo ${FLATPAK_ID}.metainfo.xml
-      - appstream-compose -v --basename=${FLATPAK_ID} --prefix=${FLATPAK_DEST} --origin=flatpak ${FLATPAK_ID}
-    sources:
-      - type: file
-        path: net.mkiol.SpeechNote.Addon.amd.metainfo.xml
