@@ -469,8 +469,11 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
             tasks.back().flags |= task_flags::task_flag_last;
         }
     } else {
+        auto t_text{text};
+        text_tools::trim_line(t_text);
+
         tasks.push_back(
-            task_t{text, 0, 0, type,
+            task_t{t_text, 0, 0, type,
                    task_flags::task_flag_first | task_flags::task_flag_last});
     }
 
