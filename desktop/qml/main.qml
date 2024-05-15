@@ -255,7 +255,7 @@ ApplicationWindow {
             Layout.rightMargin: appWin.padding
             closable: true
             text: qsTr("Most likely, NVIDIA kernel module has not been fully initialized.") + " " +
-                  qsTr("Try executing %1 before running Speech Note.").arg("<i>nvidia-modprobe -c 0 -u</i>")
+                  qsTr("Try executing %1 before running Speech Note.").arg("<i>\"nvidia-modprobe -c 0 -u\"</i>")
         }
 
         Translator {
