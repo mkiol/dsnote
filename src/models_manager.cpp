@@ -222,6 +222,30 @@ QDebug operator<<(QDebug d, models_manager::sup_model_role_t role) {
     return d;
 }
 
+QDebug operator<<(QDebug d,
+                  models_manager::models_availability_t models_availability) {
+    if (models_availability.tts_coqui) d << "tts_coqui,";
+    if (models_availability.tts_mimic3) d << "tts_mimic3,";
+    if (models_availability.tts_mimic3_de) d << "tts_mimic3_de,";
+    if (models_availability.tts_mimic3_es) d << "tts_mimic3_es,";
+    if (models_availability.tts_mimic3_fr) d << "tts_mimic3_fr,";
+    if (models_availability.tts_mimic3_it) d << "tts_mimic3_it,";
+    if (models_availability.tts_mimic3_ru) d << "tts_mimic3_ru,";
+    if (models_availability.tts_mimic3_sw) d << "tts_mimic3_sw,";
+    if (models_availability.tts_mimic3_fa) d << "tts_mimic3_fa,";
+    if (models_availability.tts_mimic3_nl) d << "tts_mimic3_nl,";
+    if (models_availability.tts_rhvoice) d << "tts_rhvoice,";
+    if (models_availability.tts_whisperspeech) d << "tts_whisperspeech,";
+    if (models_availability.stt_fasterwhisper) d << "stt_fasterwhisper,";
+    if (models_availability.stt_ds) d << "stt_ds,";
+    if (models_availability.stt_vosk) d << "stt_vosk,";
+    if (models_availability.mnt_bergamot) d << "mnt_bergamot,";
+    if (models_availability.ttt_hftc) d << "ttt_hftc";
+    if (models_availability.option_r) d << "option_r,";
+
+    return d;
+}
+
 static void remove_file_or_dir(const QString& path) {
     if (path.isEmpty()) return;
 
@@ -1959,6 +1983,10 @@ auto models_manager::extract_models(
         }
 #endif
 #ifdef USE_SFOS
+        if (role_of_engine(engine) == model_role_t::ttt) {
+            qDebug() << "ignoring ttt model on sfos:" << model_id;
+            continue;
+        }
         if (engine == model_engine_t::stt_vosk &&
             (model_id.contains("large") || model_id.contains("medium"))) {
             qDebug() << "ignoring vosk large model on sfos:" << model_id;
@@ -2598,7 +2626,7 @@ void models_manager::update_models_using_availability_internal() {
 
 void models_manager::update_models_using_availability(
     models_availability_t availability) {
-    qDebug() << "updating model using availability";
+    qDebug() << "updating models using availability:" << availability;
 
     m_models_availability = availability;
 

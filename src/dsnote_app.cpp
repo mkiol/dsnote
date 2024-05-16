@@ -4058,6 +4058,7 @@ QVariantList dsnote_app::features_availability() {
                  /*tts_mimic3_fa=*/feature_available("mmic3-tts-fa"),
                  /*tts_mimic3_nl=*/feature_available("mmic3-tts-nl"),
                  /*tts_rhvoice=*/feature_available("rhvoice-tts"),
+                 /*tts_whisperspeech=*/feature_available("whisperspeech-tts"),
                  /*stt_fasterwhisper=*/feature_available("faster-whisper-stt"),
                  /*stt_ds=*/feature_available("coqui-stt"),
                  /*stt_vosk=*/feature_available("vosk-stt"),

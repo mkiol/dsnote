@@ -175,6 +175,8 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool ttt_hftc = false;
         bool option_r = false;
     };
+    friend QDebug operator<<(QDebug d,
+                             models_availability_t models_availability);
 
     static model_role_t role_of_engine(model_engine_t engine);
     static std::optional<std::reference_wrapper<const sup_model_file_t>>
