@@ -48,9 +48,11 @@ DialogPage {
         </ul>
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
-        <li>Updated <i>Distil</i> model for English: <i>Distil Large-v3</i>.
+        <li>Updated <a href='https://huggingface.co/distil-whisper/distil-large-v3'>Distil</a> model for English: <i>Distil Large-v3</i>.
             New model is enabled for Whisper and Faster Whisper engines.</li>
-        <li>New Fine-Tuned Whisper models for Slovenian and Polish.</li>
+        <li>New Fine-Tuned Whisper models for
+            <a href='https://huggingface.co/samolego/whisper-small-slovenian'>Slovenian<a> and
+            <a href='https://huggingface.co/Aspik101/distil-whisper-large-v3-pl'>Polish</a></li>
         <li>Fix: Punctuation model could not be downloaded.</li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
