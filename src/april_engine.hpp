@@ -43,6 +43,7 @@ class april_engine : public stt_engine {
     std::vector<text_tools::segment_t> m_segments;
 
     void create_model();
+    void restart_session(bool force);
     samples_process_result_t process_buff() override;
     void decode_speech(april_buf_t& buf, bool eof);
     void reset_impl() override;

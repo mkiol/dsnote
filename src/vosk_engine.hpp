@@ -75,6 +75,7 @@ class vosk_engine : public stt_engine {
 
     void open_lib();
     void create_model();
+    void restart_recognizer(bool force);
     samples_process_result_t process_buff() override;
     void decode_speech(const vosk_buf_t& buf, bool eof);
     void reset_impl() override;

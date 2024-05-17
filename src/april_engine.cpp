@@ -51,6 +51,23 @@ void april_engine::start_processing_impl() {
     if (m_config.has_option('i')) create_punctuator();
 }
 
+void april_engine::restart_session(bool force) {
+    if (!force && !m_session) return;
+
+    if (m_session) aas_free(m_session);
+
+    AprilConfig config{};
+    config.handler = &april_engine::decode_handler;
+    config.userdata = this;
+    config.flags = APRIL_CONFIG_FLAG_ZERO_BIT;
+
+    m_session = aas_create_session(m_model, config);
+    if (m_session == nullptr) {
+        LOGE("failed to create april session");
+        throw std::runtime_error("failed to create april session");
+    }
+}
+
 void april_engine::create_model() {
     if (m_model) return;
 
@@ -66,23 +83,14 @@ void april_engine::create_model() {
                         << ", lang=" << aam_get_language(m_model)
                         << ", sample rate=" << aam_get_sample_rate(m_model));
 
-    AprilConfig config{};
-    config.handler = &april_engine::decode_handler;
-    config.userdata = this;
-    config.flags = APRIL_CONFIG_FLAG_ZERO_BIT;
-
-    m_session = aas_create_session(m_model, config);
-    if (m_session == nullptr) {
-        LOGE("failed to create april session");
-        throw std::runtime_error("failed to create april session");
-    }
+    restart_session(true);
 
     LOGD("april model created");
 }
 
 void april_engine::reset_impl() {
     m_speech_buf.clear();
-    if (m_session) aas_flush(m_session);
+    restart_session(false);
     m_result.clear();
     m_result_prev_segment.clear();
 }
@@ -109,9 +117,11 @@ stt_engine::samples_process_result_t april_engine::process_buff() {
         m_speech_buf.clear();
         m_start_time.reset();
         m_vad.reset();
-        if (m_session) aas_flush(m_session);
+        restart_session(false);
         m_result.clear();
         m_result_prev_segment.clear();
+        m_prev_segment_end_time.reset();
+        m_prev_segment_start_time.reset();
         reset_segment_counters();
         m_segments.clear();
     }

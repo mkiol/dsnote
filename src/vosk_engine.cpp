@@ -157,6 +157,21 @@ void vosk_engine::start_processing_impl() {
     create_punctuator();
 }
 
+void vosk_engine::restart_recognizer(bool force) {
+    if (!force && !m_vosk_recognizer) return;
+
+    if (m_vosk_recognizer) m_vosk_api.vosk_recognizer_free(m_vosk_recognizer);
+
+    m_vosk_recognizer =
+        m_vosk_api.vosk_recognizer_new(m_vosk_model, m_sample_rate);
+    if (m_vosk_recognizer == nullptr) {
+        LOGE("failed to create vosk recognizer");
+        throw std::runtime_error("failed to create vosk recognizer");
+    }
+
+    m_vosk_api.vosk_recognizer_set_words(m_vosk_recognizer, 1);
+}
+
 void vosk_engine::create_model() {
     if (m_vosk_model) return;
 
@@ -178,14 +193,7 @@ void vosk_engine::create_model() {
         throw std::runtime_error("failed to create vosk model");
     }
 
-    m_vosk_recognizer =
-        m_vosk_api.vosk_recognizer_new(m_vosk_model, m_sample_rate);
-    if (m_vosk_recognizer == nullptr) {
-        LOGE("failed to create vosk recognizer");
-        throw std::runtime_error("failed to create vosk recognizer");
-    }
-
-    m_vosk_api.vosk_recognizer_set_words(m_vosk_recognizer, 1);
+    restart_recognizer(true);
 
     LOGD("vosk model created");
 }
@@ -199,7 +207,7 @@ void vosk_engine::reset_impl() {
     m_file_audio_after_vad.reset();
 #endif
 
-    if (m_vosk_recognizer) m_vosk_api.vosk_recognizer_reset(m_vosk_recognizer);
+    restart_recognizer(false);
 }
 
 void vosk_engine::push_inbuf_to_samples() {
@@ -226,8 +234,7 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
         m_vad.reset();
         reset_segment_counters();
 
-        if (m_vosk_recognizer)
-            m_vosk_api.vosk_recognizer_reset(m_vosk_recognizer);
+        restart_recognizer(false);
     }
 
 #ifdef DUMP_AUDIO_TO_FILE
@@ -372,7 +379,6 @@ vosk_engine::segments_from_json(const char* str) {
 
     try {
         auto doc = nlohmann::json::parse(str);
-
         result.first = doc["text"];
 
         const size_t max_dur = m_config.sub_config.min_segment_dur == 0
@@ -483,6 +489,4 @@ void vosk_engine::decode_speech(const vosk_buf_t& buf, bool eof) {
     }
 
     setlocale(LC_NUMERIC, old_locale);
-
-    if (eof) m_vosk_api.vosk_recognizer_reset(m_vosk_recognizer);
 }
