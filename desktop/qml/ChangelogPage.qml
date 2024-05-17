@@ -51,7 +51,7 @@ DialogPage {
         <li>Updated <a href='https://huggingface.co/distil-whisper/distil-large-v3'>Distil</a> model for English: <i>Distil Large-v3</i>.
             New model is enabled for Whisper and Faster Whisper engines.</li>
         <li>New Fine-Tuned Whisper models for
-            <a href='https://huggingface.co/samolego/whisper-small-slovenian'>Slovenian<a> and
+            <a href='https://huggingface.co/samolego/whisper-small-slovenian'>Slovenian</a> and
             <a href='https://huggingface.co/Aspik101/distil-whisper-large-v3-pl'>Polish</a></li>
         <li>Fix: Punctuation model could not be downloaded.</li>
         </ul>
@@ -60,7 +60,7 @@ DialogPage {
         <li><a href='https://collabora.github.io/WhisperSpeech/'>WhisperSpeech</a> engine
             that generates voice with exceptional naturalness.
             The new engine comes with models for English and Polish languages. All models support voice cloning.</li>
-        <li>New voice cloning model for Vietnamese: <i>Coqui viXTTS</i>.
+        <li>New voice cloning model for Vietnamese: <a href='https://huggingface.co/capleaf/viXTTS'>viXTTS</a>.
             Model is a fine-tuned version of the phenomenal <i>Coqui XTTS</i>.</li>
         <li>New Piper voices for English, Persian, Slovenian, Turkish, French and Spanish</li>
         <li>New RHVoice voice for Czech</li>
