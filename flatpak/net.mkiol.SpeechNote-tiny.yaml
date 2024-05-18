@@ -2,9 +2,7 @@ app-id: net.mkiol.SpeechNote
 runtime: org.kde.Platform
 runtime-version: "5.15-23.08"
 sdk: org.kde.Sdk
-rename-desktop-file: dsnote.desktop
 rename-icon: dsnote
-rename-appdata-file: dsnote.metainfo.xml
 command: dsnote
 build-options:
   strip: false
@@ -672,7 +670,7 @@ modules:
     sources:
       - type: archive
         url: https://xkbcommon.org/download/libxkbcommon-1.6.0.tar.xz
-        sha256: 0edc14eccdd391514458bc5f5a4b99863ed2d651e4dd761a90abf4f46ef99c2b        
+        sha256: 0edc14eccdd391514458bc5f5a4b99863ed2d651e4dd761a90abf4f46ef99c2b
 
   - name: dsnote
     buildsystem: cmake-ninja
