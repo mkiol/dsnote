@@ -15,6 +15,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <algorithm>
 
 #include "config.h"
 #include "logger.hpp"

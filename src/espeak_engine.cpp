@@ -13,6 +13,7 @@
 
 #include <cstdlib>
 #include <fstream>
+#include <algorithm>
 
 #include "logger.hpp"
 
@@ -34,7 +35,7 @@ void espeak_engine::create_model() {
         LOGE("voice name missing");
         return;
     }
-    
+
     auto mb_voice = m_config.speaker_id.size() > 3 && m_config.speaker_id[0] == 'm' &&
                     m_config.speaker_id[1] == 'b' && m_config.speaker_id[2] == '-';
 
@@ -58,7 +59,7 @@ void espeak_engine::create_model() {
     }
 
     if (mb_voice) m_sample_rate = 16000;
-    
+
     m_ok = espeak_SetVoiceByName(m_config.speaker_id.c_str()) == EE_OK;
 
     if (!m_ok)
