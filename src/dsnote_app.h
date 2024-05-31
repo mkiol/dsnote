@@ -214,10 +214,15 @@ class dsnote_app : public QObject {
         QVariantMap translations READ translations NOTIFY connected_changed)
 
     // features
-    Q_PROPERTY(
-        bool feature_gpu_stt READ feature_gpu_stt NOTIFY features_changed)
-    Q_PROPERTY(
-        bool feature_gpu_tts READ feature_gpu_tts NOTIFY features_changed)
+#define GPU_ENGINE(name)                                                  \
+    Q_PROPERTY(bool feature_##name##_gpu READ feature_##name##_gpu NOTIFY \
+                   features_changed)
+    GPU_ENGINE(whispercpp)
+    GPU_ENGINE(fasterwhisper)
+    GPU_ENGINE(coqui)
+    GPU_ENGINE(whisperspeech)
+#undef GPU_ENGINE
+
     Q_PROPERTY(
         bool feature_punctuator READ feature_punctuator NOTIFY features_changed)
     Q_PROPERTY(bool feature_diacritizer_he READ feature_diacritizer_he NOTIFY
@@ -810,8 +815,14 @@ class dsnote_app : public QObject {
     void handle_desktop_notification_action_invoked(uint id,
                                                     const QString &action_key);
     bool feature_available(const QString &name) const;
-    bool feature_gpu_stt() const;
-    bool feature_gpu_tts() const;
+
+#define GPU_ENGINE(name) bool feature_##name##_gpu() const;
+    GPU_ENGINE(whispercpp)
+    GPU_ENGINE(fasterwhisper)
+    GPU_ENGINE(coqui)
+    GPU_ENGINE(whisperspeech)
+#undef GPU_ENGINE
+
     bool feature_punctuator() const;
     bool feature_diacritizer_he() const;
     bool feature_global_shortcuts() const;

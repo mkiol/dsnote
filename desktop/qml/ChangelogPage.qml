@@ -49,8 +49,8 @@ DialogPage {
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
         <li>Updated <a href='https://huggingface.co/distil-whisper/distil-large-v3'>Distil</a> model for English: <i>Distil Large-v3</i>.
-            New model is enabled for whisper.cpp and Faster Whisper engines.</li>
-        <li>New Fine-Tuned whisper.cpp and Faster Whisper models for
+            New model is enabled for WhisperCpp and FasterWhisper engines.</li>
+        <li>New Fine-Tuned WhisperCpp and FasterWhisper models for
             <a href='https://huggingface.co/samolego/whisper-small-slovenian'>Slovenian</a> and
             <a href='https://huggingface.co/Aspik101/distil-whisper-large-v3-pl'>Polish</a></li>
         <li>Fix: Punctuation model could not be downloaded.</li>
@@ -138,12 +138,12 @@ DialogPage {
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
         <li>Marathi language. New language is enabled with <i>WhisperCpp</i> and <i>FasterWhisper</i> models.</li>
-        <li>New version of Faster Whisper Large model: <i>FasterWhisper Large-v3</i></li>
+        <li>New version of FasterWhisper Large model: <i>FasterWhisper Large-v3</i></li>
         <li>New <i>Distil</i> Faster Whisper models for English.
             Distil models are potentially faster than regular models.</li>
-        <li>Whisper.cpp and Faster Whisper enabled for Chinese-Cantonese language (广东话)</li>
+        <li>WhisperCpp and FasterWhisper enabled for Chinese-Cantonese language (广东话)</li>
         <li>Support for Speex audio codec in <i>Transcribe a file</i></li>
-        <li>Translate to English option for whisper.cpp and Faster Whisper models.
+        <li>Translate to English option for WhisperCpp and FasterWhisper models.
             To automatically translate to English, use the switch to the right of the model selection box.
             The option is only visible if you select a non-English <i>WhisperCpp</i> or <i>FasterWhisper</i> model.</li>
         <li>More effective GPU acceleration for Whisper models with AMD graphics cards.

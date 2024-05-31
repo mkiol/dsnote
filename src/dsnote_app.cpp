@@ -3954,15 +3954,22 @@ bool dsnote_app::feature_available(const QString &name) const {
            m_features_availability.value(name).toList().at(0).toBool();
 }
 
-bool dsnote_app::feature_gpu_stt() const {
-    return feature_available("faster-whisper-stt-gpu") ||
-           feature_available("whispercpp-stt-cuda") ||
+bool dsnote_app::feature_whispercpp_gpu() const {
+    return feature_available("whispercpp-stt-cuda") ||
            feature_available("whispercpp-stt-hip") ||
            feature_available("whispercpp-stt-opencl");
 }
 
-bool dsnote_app::feature_gpu_tts() const {
+bool dsnote_app::feature_fasterwhisper_gpu() const {
+    return feature_available("faster-whisper-stt-gpu");
+}
+
+bool dsnote_app::feature_coqui_gpu() const {
     return feature_available("coqui-tts-gpu");
+}
+
+bool dsnote_app::feature_whisperspeech_gpu() const {
+    return feature_available("whisperspeech-tts-gpu");
 }
 
 bool dsnote_app::feature_punctuator() const {

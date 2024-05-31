@@ -1201,19 +1201,22 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         config.beam_search = settings::instance()->whispercpp_beam_search();
         config.cpu_threads = settings::instance()->whispercpp_cpu_threads();
 
-        if (settings::instance()->stt_use_gpu() &&
-            settings::instance()->has_gpu_device_stt()) {
-            if (auto device = make_gpu_device<stt_engine>(
-                    settings::instance()->gpu_device_stt(),
-                    settings::instance()->auto_gpu_device_stt())) {
-                config.gpu_device = std::move(*device);
-                config.gpu_device.flash_attn =
-                    (config.gpu_device.api == stt_engine::gpu_api_t::cuda ||
-                     config.gpu_device.api == stt_engine::gpu_api_t::rocm) &&
-                    settings::instance()->whispercpp_gpu_flash_attn();
-                config.use_gpu = true;
-            }
+        // clang-format off
+#define GPU_ENGINE(name) \
+        if (settings::instance()->name##_use_gpu() && settings::instance()->has_##name##_gpu_device()) { \
+            if (auto device = make_gpu_device<stt_engine>(settings::instance()->name##_gpu_device(), settings::instance()->name##_auto_gpu_device())) { \
+                config.gpu_device = std::move(*device); \
+                config.gpu_device.flash_attn = \
+                    (config.gpu_device.api == stt_engine::gpu_api_t::cuda || config.gpu_device.api == stt_engine::gpu_api_t::rocm) && \
+                    settings::instance()->whispercpp_gpu_flash_attn(); \
+                config.use_gpu = true; \
+            } \
         }
+        
+        GPU_ENGINE(whispercpp)
+        GPU_ENGINE(fasterwhisper)
+#undef GPU_ENGINE
+        // clang-format on
 
         bool new_engine_required = [&] {
             if (!m_stt_engine) return true;
@@ -1475,15 +1478,19 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             tts_use_engine_speed_control_from_options(options);
         config.speech_speed = tts_speech_speed_from_options(options);
 
-        if (settings::instance()->tts_use_gpu() &&
-            settings::instance()->has_gpu_device_tts()) {
-            if (auto device = make_gpu_device<tts_engine>(
-                    settings::instance()->gpu_device_tts(),
-                    settings::instance()->auto_gpu_device_tts())) {
-                config.gpu_device = std::move(*device);
-                config.use_gpu = true;
-            }
+        // clang-format off
+#define GPU_ENGINE(name) \
+        if (settings::instance()->name##_use_gpu() && settings::instance()->has_##name##_gpu_device()) { \
+            if (auto device = make_gpu_device<tts_engine>(settings::instance()->name##_gpu_device(), settings::instance()->name##_auto_gpu_device())) { \
+                config.gpu_device = std::move(*device); \
+                config.use_gpu = true; \
+            } \
         }
+        
+        GPU_ENGINE(coqui)
+        GPU_ENGINE(whisperspeech)
+#undef GPU_ENGINE
+        // clang-format on
 
         if (model_config->tts->model_id.contains("fairseq")) {
             auto l = model_config->tts->model_id.split('_');
@@ -2803,14 +2810,14 @@ QVariantMap speech_service::features_availability() {
             m_features_availability.insert(
                 "faster-whisper-stt",
                 QVariantList{py_availability->faster_whisper,
-                             "Faster Whisper STT"});
+                             "FasterWhisper STT"});
 #ifdef ARCH_X86_64
             bool stt_fasterwhisper_cuda =
                 py_availability->faster_whisper && has_cuda && has_cudnn;
             m_features_availability.insert(
                 "faster-whisper-stt-gpu",
                 QVariantList{stt_fasterwhisper_cuda,
-                             "Faster Whisper STT " + tr("GPU acceleration")});
+                             "FasterWhisper STT " + tr("GPU acceleration")});
             if (stt_fasterwhisper_cuda)
                 gpu_feature_flags |= settings::gpu_feature_flags_t::
                     gpu_feature_stt_fasterwhisper_cuda;
@@ -2837,7 +2844,7 @@ QVariantMap speech_service::features_availability() {
             m_features_availability.insert(
                 "whispercpp-stt-cuda",
                 QVariantList{whisper_engine::has_cuda(),
-                             "whisper.cpp STT CUDA " + tr("GPU acceleration")});
+                             "WhisperCpp STT CUDA " + tr("GPU acceleration")});
             if (stt_whispercpp_cuda)
                 gpu_feature_flags |= settings::gpu_feature_flags_t::
                     gpu_feature_stt_whispercpp_cuda;
@@ -2846,7 +2853,7 @@ QVariantMap speech_service::features_availability() {
             m_features_availability.insert(
                 "whispercpp-stt-hip",
                 QVariantList{stt_whispercpp_hip,
-                             "whisper.cpp STT ROCm " + tr("GPU acceleration")});
+                             "WhisperCpp STT ROCm " + tr("GPU acceleration")});
             if (stt_whispercpp_hip)
                 gpu_feature_flags |= settings::gpu_feature_flags_t::
                     gpu_feature_stt_whispercpp_hip;
@@ -2856,7 +2863,7 @@ QVariantMap speech_service::features_availability() {
                 "whispercpp-stt-opencl",
                 QVariantList{
                     stt_whispercpp_opencl,
-                    "whisper.cpp STT OpenCL " + tr("GPU acceleration")});
+                    "WhisperCpp STT OpenCL " + tr("GPU acceleration")});
             if (stt_whispercpp_opencl)
                 gpu_feature_flags |= settings::gpu_feature_flags_t::
                     gpu_feature_stt_whispercpp_opencl;

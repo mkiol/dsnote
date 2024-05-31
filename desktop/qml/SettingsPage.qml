@@ -313,7 +313,7 @@ DialogPage {
             // }
 
             ComboBoxForm {
-                visible: speechToTextTab.has_audio_sources
+                // visible: speechToTextTab.has_audio_sources
                 label.text: qsTr("Listening mode")
                 toolTip: "<i>" + qsTr("One sentence") + "</i>" + " — " + qsTr("Clicking on the %1 button starts listening, which ends when the first sentence is recognized.")
                          .arg("<i>" + qsTr("Listen") + "</i>") + "<br/>" +
@@ -371,74 +371,6 @@ DialogPage {
                          !app.ttt_punctuation_configured
                 text: qsTr("To make %1 work, download %2 model.")
                       .arg("<i>" + qsTr("Restore punctuation") + "</i>").arg("<i>" + qsTr("Punctuation") + "</i>")
-            }
-
-            CheckBox {
-                visible: _settings.gpu_supported() && app.feature_gpu_stt
-                checked: _settings.stt_use_gpu
-                text: qsTr("Use GPU acceleration")
-                onCheckedChanged: {
-                    _settings.stt_use_gpu = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("If a suitable graphics card is found in the system, it will be used to accelerate processing.") + " " +
-                              qsTr("GPU hardware acceleration significantly reduces the time of decoding.") + " " +
-                              qsTr("Disable this option if you observe problems when using Speech to Text.")
-                hoverEnabled: true
-            }
-
-            TipMessage {
-                indends: 1
-                visible: _settings.gpu_supported() &&
-                         app.feature_gpu_stt &&
-                         _settings.stt_use_gpu &&
-                         _settings.gpu_devices_stt.length <= 1
-                text: qsTr("A suitable graphics card could not be found.")
-            }
-
-            ComboBoxForm {
-                id: sttGpuCombo
-
-                indends: 1
-                visible: _settings.gpu_supported() &&
-                         app.feature_gpu_stt &&
-                         _settings.stt_use_gpu &&
-                         _settings.gpu_devices_stt.length > 1
-                label.text: qsTr("Graphics card")
-                toolTip: qsTr("Select preferred graphics card for hardware acceleration.")
-                comboBox {
-                    currentIndex: _settings.gpu_device_idx_stt
-                    model: _settings.gpu_devices_stt
-                    onActivated: {
-                        _settings.gpu_device_idx_stt = index
-                    }
-                }
-            }
-
-            TipMessage {
-                indends: 2
-                color: palette.text
-                visible: _settings.gpu_supported() &&
-                         app.feature_gpu_stt &&
-                         _settings.stt_use_gpu &&
-                         _settings.gpu_devices_stt.length > 1 &&
-                         sttGpuCombo.displayText.search("ROCm") !== -1
-                text: qsTr("Tip: If you observe problems with GPU acceleration, try to enable %1 option.")
-                      .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
-                      qsTr("Override GPU version") + "</i>")
-                label.textFormat: Text.RichText
-
-            }
-
-            TipMessage {
-                indends: 1
-                visible: _settings.gpu_supported() &&
-                         app.feature_gpu_stt && _settings.stt_use_gpu &&
-                         _settings.error_flags & Settings.ErrorCudaUnknown > 0
-                text: qsTr("Most likely, NVIDIA kernel module has not been fully initialized.") + " " +
-                      qsTr("Try executing %1 before running Speech Note.").arg("<i>\"nvidia-modprobe -c 0 -u\"</i>")
             }
 
             SectionLabel {
@@ -501,6 +433,34 @@ DialogPage {
                     }
                 }
             }
+
+            SectionLabel {
+                text: qsTr("%1 engine options").arg("WhisperCpp")
+                visible: _settings.gpu_supported() && app.feature_whispercpp_gpu
+            }
+
+            GpuComboBox {
+                visible: _settings.gpu_supported() && app.feature_whispercpp_gpu
+                devices: _settings.whispercpp_gpu_devices
+                device_index: _settings.whispercpp_gpu_device_idx
+                use_gpu: _settings.whispercpp_use_gpu
+                onUse_gpuChanged: _settings.whispercpp_use_gpu = use_gpu
+                onDevice_indexChanged: _settings.whispercpp_gpu_device_idx = device_index
+            }
+
+            SectionLabel {
+                text: qsTr("%1 engine options").arg("FasterWhisper")
+                visible: _settings.gpu_supported() && app.feature_fasterwhisper_gpu
+            }
+
+            GpuComboBox {
+                visible: _settings.gpu_supported() && app.feature_fasterwhisper_gpu
+                devices: _settings.fasterwhisper_gpu_devices
+                device_index: _settings.fasterwhisper_gpu_device_idx
+                use_gpu: _settings.fasterwhisper_use_gpu
+                onUse_gpuChanged: _settings.fasterwhisper_use_gpu = use_gpu
+                onDevice_indexChanged: _settings.fasterwhisper_gpu_device_idx = device_index
+            }
         }
 
         ColumnLayout {
@@ -556,73 +516,6 @@ DialogPage {
                 hoverEnabled: true
             }
 
-            CheckBox {
-                checked: _settings.tts_use_gpu
-                visible: _settings.gpu_supported() && app.feature_gpu_tts
-                text: qsTr("Use GPU acceleration")
-                onCheckedChanged: {
-                    _settings.tts_use_gpu = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("If a suitable graphics card is found in the system, it will be used to accelerate processing.") + " " +
-                              qsTr("GPU hardware acceleration significantly reduces the time of speech synthesis.") + " " +
-                              qsTr("Disable this option if you observe problems when using Text to Speech.")
-                hoverEnabled: true
-            }
-
-            TipMessage {
-                indends: 1
-                visible: _settings.gpu_supported() &&
-                         app.feature_gpu_tts &&
-                         _settings.tts_use_gpu &&
-                         _settings.gpu_devices_tts.length <= 1
-                text: qsTr("A suitable graphics card could not be found.")
-            }
-
-            ComboBoxForm {
-                id: ttsGpuCombo
-
-                indends: 1
-                visible: _settings.gpu_supported() &&
-                         app.feature_gpu_tts &&
-                         _settings.tts_use_gpu &&
-                         _settings.gpu_devices_tts.length > 1
-                label.text: qsTr("Graphics card")
-                toolTip: qsTr("Select preferred graphics card for hardware acceleration.")
-                comboBox {
-                    currentIndex: _settings.gpu_device_idx_tts
-                    model: _settings.gpu_devices_tts
-                    onActivated: {
-                        _settings.gpu_device_idx_tts = index
-                    }
-                }
-            }
-
-            TipMessage {
-                indends: 2
-                color: palette.text
-                visible: _settings.gpu_supported() &&
-                         app.feature_gpu_tts &&
-                         _settings.tts_use_gpu &&
-                         _settings.gpu_devices_tts.length > 1 &&
-                         ttsGpuCombo.displayText.search("ROCm") !== -1
-                text: qsTr("Tip: If you observe problems with GPU acceleration, try to enable %1 option.")
-                      .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
-                      qsTr("Override GPU version") + "</i>")
-                label.textFormat: Text.RichText
-            }
-
-            TipMessage {
-                indends: 1
-                visible: _settings.gpu_supported() &&
-                         app.feature_gpu_tts && _settings.tts_use_gpu &&
-                         _settings.error_flags & Settings.ErrorCudaUnknown > 0
-                text: qsTr("Most likely, NVIDIA kernel module has not been fully initialized.") + " " +
-                      qsTr("Try executing %1 before running Speech Note.").arg("<i>nvidia-modprobe -c 0 -u</i>")
-            }
-
             SectionLabel {
                 text: qsTr("Subtitles")
             }
@@ -667,6 +560,34 @@ DialogPage {
                 visible: _settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnFitOnlyIfLonger ||
                          _settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnAlwaysFit
                 text: qsTr("When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.")
+            }
+
+            SectionLabel {
+                text: qsTr("%1 engine options").arg("Coqui")
+                visible: _settings.gpu_supported() && app.feature_coqui_gpu
+            }
+
+            GpuComboBox {
+                visible: _settings.gpu_supported() && app.feature_coqui_gpu
+                devices: _settings.coqui_gpu_devices
+                device_index: _settings.coqui_gpu_device_idx
+                use_gpu: _settings.coqui_use_gpu
+                onUse_gpuChanged: _settings.coqui_use_gpu = use_gpu
+                onDevice_indexChanged: _settings.coqui_gpu_device_idx = device_index
+            }
+
+            SectionLabel {
+                text: qsTr("%1 engine options").arg("WhisperSpeech")
+                visible: _settings.gpu_supported() && app.feature_whisperspeech_gpu
+            }
+
+            GpuComboBox {
+                visible: _settings.gpu_supported() && app.feature_whisperspeech_gpu
+                devices: _settings.whisperspeech_gpu_devices
+                device_index: _settings.whisperspeech_gpu_device_idx
+                use_gpu: _settings.whisperspeech_use_gpu
+                onUse_gpuChanged: _settings.whisperspeech_use_gpu = use_gpu
+                onDevice_indexChanged: _settings.whisperspeech_gpu_device_idx = device_index
             }
         }
 

@@ -174,10 +174,6 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(
         bool gpu_scan_opencl_legacy READ gpu_scan_opencl_legacy WRITE
             set_gpu_scan_opencl_legacy NOTIFY gpu_scan_opencl_legacy_changed)
-    Q_PROPERTY(bool stt_use_gpu READ stt_use_gpu WRITE set_stt_use_gpu NOTIFY
-                   stt_use_gpu_changed)
-    Q_PROPERTY(bool tts_use_gpu READ tts_use_gpu WRITE set_tts_use_gpu NOTIFY
-                   tts_use_gpu_changed)
     Q_PROPERTY(QString active_tts_ref_voice READ active_tts_ref_voice WRITE
                    set_active_tts_ref_voice NOTIFY active_tts_ref_voice_changed)
     Q_PROPERTY(QString active_tts_for_in_mnt_ref_voice READ
@@ -247,25 +243,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(QString default_mnt_lang READ default_mnt_lang WRITE
                    set_default_mnt_lang NOTIFY default_mnt_lang_changed)
     Q_PROPERTY(QString default_mnt_out_lang READ default_mnt_out_lang WRITE
-                   set_default_mnt_out_lang NOTIFY default_mnt_out_lang_changed)
-
-    Q_PROPERTY(QStringList gpu_devices_stt READ gpu_devices_stt NOTIFY
-                   gpu_devices_changed)
-    Q_PROPERTY(int gpu_device_idx_stt READ gpu_device_idx_stt WRITE
-                   set_gpu_device_idx_stt NOTIFY gpu_device_stt_changed)
-    Q_PROPERTY(QString gpu_device_stt READ gpu_device_stt WRITE
-                   set_gpu_device_stt NOTIFY gpu_device_stt_changed)
-    Q_PROPERTY(QString auto_gpu_device_stt READ auto_gpu_device_stt NOTIFY
-                   gpu_device_stt_changed)
-    Q_PROPERTY(QStringList gpu_devices_tts READ gpu_devices_tts NOTIFY
-                   gpu_devices_changed)
-    Q_PROPERTY(int gpu_device_idx_tts READ gpu_device_idx_tts WRITE
-                   set_gpu_device_idx_tts NOTIFY gpu_device_tts_changed)
-    Q_PROPERTY(QString gpu_device_tts READ gpu_device_tts WRITE
-                   set_gpu_device_tts NOTIFY gpu_device_tts_changed)
-    Q_PROPERTY(QString auto_gpu_device_tts READ auto_gpu_device_tts NOTIFY
-                   gpu_device_tts_changed)
-
+                   set_default_mnt_out_lang NOTIFY default_mnt_out_lang_changed)    
     Q_PROPERTY(QString audio_input_device READ audio_input_device WRITE
                    set_audio_input_device NOTIFY audio_input_device_changed)
     Q_PROPERTY(bool py_feature_scan READ py_feature_scan WRITE
@@ -301,6 +279,25 @@ class settings : public QSettings, public singleton<settings> {
                    set_whispercpp_cpu_threads NOTIFY whispercpp_changed)
     Q_PROPERTY(int whispercpp_beam_search READ whispercpp_beam_search WRITE
                    set_whispercpp_beam_search NOTIFY whispercpp_changed)
+
+#define GPU_ENGINE(name)                                                     \
+    Q_PROPERTY(bool name##_use_gpu READ name##_use_gpu WRITE                 \
+                   set_##name##_use_gpu NOTIFY name##_use_gpu_changed)       \
+    Q_PROPERTY(QStringList name##_gpu_devices READ name##_gpu_devices NOTIFY \
+                   gpu_devices_changed)                                      \
+    Q_PROPERTY(                                                              \
+        int name##_gpu_device_idx READ name##_gpu_device_idx WRITE           \
+            set_##name##_gpu_device_idx NOTIFY name##_gpu_device_changed)    \
+    Q_PROPERTY(QString name##_gpu_device READ name##_gpu_device WRITE        \
+                   set_##name##_gpu_device NOTIFY name##_gpu_device_changed) \
+    Q_PROPERTY(QString name##_auto_gpu_device READ                           \
+                   name##_auto_gpu_device NOTIFY name##_gpu_device_changed)
+
+    GPU_ENGINE(whispercpp)
+    GPU_ENGINE(fasterwhisper)
+    GPU_ENGINE(coqui)
+    GPU_ENGINE(whisperspeech)
+#undef GPU_ENGINE
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -575,12 +572,6 @@ class settings : public QSettings, public singleton<settings> {
     void set_gpu_scan_opencl(bool value);
     bool gpu_scan_opencl_legacy() const;
     void set_gpu_scan_opencl_legacy(bool value);
-    bool whisper_use_gpu() const;
-    void set_whisper_use_gpu(bool value);
-    bool stt_use_gpu() const;
-    void set_stt_use_gpu(bool value);
-    bool tts_use_gpu() const;
-    void set_tts_use_gpu(bool value);
     QString active_tts_ref_voice() const;
     void set_active_tts_ref_voice(const QString &value);
     QString active_tts_for_in_mnt_ref_voice() const;
@@ -627,8 +618,6 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
     Q_INVOKABLE bool gpu_supported() const;
-    Q_INVOKABLE bool has_gpu_device_stt() const;
-    Q_INVOKABLE bool has_gpu_device_tts() const;
     Q_INVOKABLE bool is_wayland() const;
     Q_INVOKABLE bool is_xcb() const;
     Q_INVOKABLE bool is_flatpak() const;
@@ -698,18 +687,6 @@ class settings : public QSettings, public singleton<settings> {
     void set_num_threads(int value);
     QString py_path() const;
     void set_py_path(const QString &value);
-    QStringList gpu_devices_stt() const;
-    QString gpu_device_stt() const;
-    QString auto_gpu_device_stt() const;
-    void set_gpu_device_stt(QString value);
-    int gpu_device_idx_stt() const;
-    void set_gpu_device_idx_stt(int value);
-    QStringList gpu_devices_tts() const;
-    QString gpu_device_tts() const;
-    QString auto_gpu_device_tts() const;
-    void set_gpu_device_tts(QString value);
-    int gpu_device_idx_tts() const;
-    void set_gpu_device_idx_tts(int value);
     void set_cache_audio_format(cache_audio_format_t value);
     cache_audio_format_t cache_audio_format() const;
     void set_cache_policy(cache_policy_t value);
@@ -734,12 +711,30 @@ class settings : public QSettings, public singleton<settings> {
     void set_gpu_overrided_version(QString new_value);
     tts_subtitles_sync_mode_t tts_subtitles_sync() const;
     void set_tts_subtitles_sync(tts_subtitles_sync_mode_t value);
+
     bool whispercpp_gpu_flash_attn() const;
     void set_whispercpp_gpu_flash_attn(bool value);
     int whispercpp_cpu_threads() const;
     void set_whispercpp_cpu_threads(int value);
     int whispercpp_beam_search() const;
     void set_whispercpp_beam_search(int value);
+
+#define GPU_ENGINE(name)                              \
+    bool name##_use_gpu() const;                      \
+    void set_##name##_use_gpu(bool value);            \
+    Q_INVOKABLE bool has_##name##_gpu_device() const; \
+    QStringList name##_gpu_devices() const;           \
+    QString name##_gpu_device() const;                \
+    QString name##_auto_gpu_device() const;           \
+    void set_##name##_gpu_device(QString value);      \
+    int name##_gpu_device_idx() const;                \
+    void set_##name##_gpu_device_idx(int value);
+
+    GPU_ENGINE(whispercpp)
+    GPU_ENGINE(fasterwhisper)
+    GPU_ENGINE(coqui)
+    GPU_ENGINE(whisperspeech)
+#undef GPU_ENGINE
 
    signals:
     // app
@@ -779,9 +774,6 @@ class settings : public QSettings, public singleton<settings> {
     void gpu_scan_hip_changed();
     void gpu_scan_opencl_changed();
     void gpu_scan_opencl_legacy_changed();
-    void whisper_use_gpu_changed();
-    void stt_use_gpu_changed();
-    void tts_use_gpu_changed();
     void active_tts_ref_voice_changed();
     void active_tts_for_in_mnt_ref_voice_changed();
     void active_tts_for_out_mnt_ref_voice_changed();
@@ -816,9 +808,6 @@ class settings : public QSettings, public singleton<settings> {
     void default_tts_models_changed(const QString &lang);
     void default_mnt_lang_changed();
     void default_mnt_out_lang_changed();
-    void gpu_devices_changed();
-    void gpu_device_stt_changed();
-    void gpu_device_tts_changed();
     void audio_input_device_changed();
     void py_feature_scan_changed();
     void cache_audio_format_changed();
@@ -827,7 +816,17 @@ class settings : public QSettings, public singleton<settings> {
     void py_path_changed();
     void gpu_override_version_changed();
     void gpu_overrided_version_changed();
+    void gpu_devices_changed();
     void whispercpp_changed();
+
+#define GPU_ENGINE(name)              \
+    void name##_gpu_device_changed(); \
+    void name##_use_gpu_changed();
+    GPU_ENGINE(whispercpp)
+    GPU_ENGINE(fasterwhisper)
+    GPU_ENGINE(coqui)
+    GPU_ENGINE(whisperspeech)
+#undef GPU_ENGINE
 
    private:
     inline static const QString settings_filename =
@@ -837,8 +836,12 @@ class settings : public QSettings, public singleton<settings> {
     inline static const QString default_qt_style_fallback =
         QStringLiteral("org.kde.breeze");
     bool m_restart_required = false;
-    QStringList m_gpu_devices_stt;
-    QStringList m_gpu_devices_tts;
+#define GPU_ENGINE(name) QStringList m_##name##_gpu_devices;
+    GPU_ENGINE(whispercpp)
+    GPU_ENGINE(fasterwhisper)
+    GPU_ENGINE(coqui)
+    GPU_ENGINE(whisperspeech)
+#undef GPU_ENGINE
     std::vector<QString> m_rocm_gpu_versions;
     unsigned int m_addon_flags = addon_flags_t::AddonNone;
     unsigned int m_error_flags = error_flags_t::ErrorNoError;
