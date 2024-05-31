@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,6 +13,7 @@
 #include <chrono>
 #include <cstdlib>
 #include <sstream>
+#include <string>
 
 #include "cpu_tools.hpp"
 #include "logger.hpp"
@@ -46,12 +47,10 @@ whisper_engine::~whisper_engine() {
 
     unsetenv("GGML_OPENCL_PLATFORM");
     unsetenv("GGML_OPENCL_DEVICE");
-    unsetenv("HIP_VISIBLE_DEVICES");
-    unsetenv("CUDA_VISIBLE_DEVICES");
 }
 
 bool whisper_engine::has_cuda() {
-    auto handle = dlopen("libwhisper-cublas.so", RTLD_LAZY);
+    auto* handle = dlopen("libwhisper-cublas.so", RTLD_LAZY);
     if (!handle) {
         LOGW("failed to open whisper-cublas lib: " << dlerror());
         return false;
@@ -63,7 +62,7 @@ bool whisper_engine::has_cuda() {
 }
 
 bool whisper_engine::has_opencl() {
-    auto handle = dlopen("libwhisper-clblast.so", RTLD_LAZY);
+    auto* handle = dlopen("libwhisper-clblast.so", RTLD_LAZY);
     if (!handle) {
         LOGW("failed to open whisper-clblast lib: " << dlerror());
         return false;
@@ -75,7 +74,7 @@ bool whisper_engine::has_opencl() {
 }
 
 bool whisper_engine::has_hip() {
-    auto handle = dlopen("libwhisper-hipblas.so", RTLD_LAZY);
+    auto* handle = dlopen("libwhisper-hipblas.so", RTLD_LAZY);
     if (!handle) {
         LOGW("failed to open whisper-hipblas lib: " << dlerror());
         return false;
@@ -167,9 +166,9 @@ void whisper_engine::open_whisper_lib() {
         throw std::runtime_error("failed to open whisper lib");
     }
 
-    m_whisper_api.whisper_init_from_file =
-        reinterpret_cast<decltype(m_whisper_api.whisper_init_from_file)>(
-            dlsym(m_whisperlib_handle, "whisper_init_from_file"));
+    m_whisper_api.whisper_init_from_file_with_params = reinterpret_cast<
+        decltype(m_whisper_api.whisper_init_from_file_with_params)>(
+        dlsym(m_whisperlib_handle, "whisper_init_from_file_with_params"));
     m_whisper_api.whisper_print_system_info =
         reinterpret_cast<decltype(m_whisper_api.whisper_print_system_info)>(
             dlsym(m_whisperlib_handle, "whisper_print_system_info"));
@@ -194,6 +193,9 @@ void whisper_engine::open_whisper_lib() {
     m_whisper_api.whisper_full_default_params =
         reinterpret_cast<decltype(m_whisper_api.whisper_full_default_params)>(
             dlsym(m_whisperlib_handle, "whisper_full_default_params"));
+    m_whisper_api.whisper_context_default_params = reinterpret_cast<
+        decltype(m_whisper_api.whisper_context_default_params)>(
+        dlsym(m_whisperlib_handle, "whisper_context_default_params"));
 
     if (!m_whisper_api.ok()) {
         LOGE("failed to register whisper api");
@@ -238,8 +240,13 @@ void whisper_engine::create_model() {
 
     LOGD("creating whisper model");
 
-    m_whisper_ctx = m_whisper_api.whisper_init_from_file(
-        m_config.model_files.model_file.c_str());
+    auto params = m_whisper_api.whisper_context_default_params();
+    params.use_gpu = m_config.use_gpu;
+    params.gpu_device = m_config.gpu_device.id;
+    params.flash_attn = m_config.gpu_device.flash_attn;
+
+    m_whisper_ctx = m_whisper_api.whisper_init_from_file_with_params(
+        m_config.model_files.model_file.c_str(), params);
 
     if (m_whisper_ctx == nullptr) {
         LOGE("failed to create whisper model");
@@ -403,7 +410,7 @@ static bool abort_callback(void* user_data) {
 
 whisper_full_params whisper_engine::make_wparams() {
     whisper_full_params wparams =
-        m_whisper_api.whisper_full_default_params(WHISPER_SAMPLING_GREEDY);
+        m_whisper_api.whisper_full_default_params(WHISPER_SAMPLING_BEAM_SEARCH);
 
     if (auto pos = m_config.lang.find('-'); pos != std::string::npos) {
         m_config.lang = m_config.lang.substr(0, pos);
@@ -411,14 +418,14 @@ whisper_full_params whisper_engine::make_wparams() {
 
     wparams.language = m_config.lang_code.empty() ? m_config.lang.c_str()
                                                   : m_config.lang_code.c_str();
-    wparams.speed_up = false;
+    wparams.beam_search = {static_cast<int>(m_config.beam_search), 0.0};
     wparams.suppress_blank = true;
     wparams.suppress_non_speech_tokens = true;
     wparams.single_segment = false;
     wparams.translate = m_config.translate && m_config.has_option('t');
-    wparams.n_threads = std::min(
-        m_threads,
-        std::max(1, static_cast<int>(std::thread::hardware_concurrency())));
+    wparams.n_threads = static_cast<int>(
+        std::min(m_config.cpu_threads,
+                 std::max(1U, std::thread::hardware_concurrency())));
     wparams.encoder_begin_callback = encoder_begin_callback;
     wparams.encoder_begin_callback_user_data = &m_thread_exit_requested;
     wparams.abort_callback = abort_callback;

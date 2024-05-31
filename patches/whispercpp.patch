@@ -1,6 +1,6 @@
-diff -ruN whispercpp-org/cmake/DefaultTargetOptions.cmake whispercpp-patched/cmake/DefaultTargetOptions.cmake
---- whispercpp-org/cmake/DefaultTargetOptions.cmake	2024-01-05 16:11:27.000000000 +0100
-+++ whispercpp-patched/cmake/DefaultTargetOptions.cmake	2024-01-06 15:32:40.421868638 +0100
+diff -ruN whispercpp-1.6.2-org/cmake/DefaultTargetOptions.cmake whispercpp-1.6.2-patched/cmake/DefaultTargetOptions.cmake
+--- whispercpp-1.6.2-org/cmake/DefaultTargetOptions.cmake	2024-05-27 09:35:09.000000000 +0200
++++ whispercpp-1.6.2-patched/cmake/DefaultTargetOptions.cmake	2024-05-26 18:00:38.405498253 +0200
 @@ -9,9 +9,13 @@
          cxx_std_11
      )
@@ -16,40 +16,92 @@ diff -ruN whispercpp-org/cmake/DefaultTargetOptions.cmake whispercpp-patched/cma
 -        INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib"
 +        INSTALL_RPATH ${CMAKE_INSTALL_RPATH}
  )
-diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
---- whispercpp-org/CMakeLists.txt	2024-01-05 16:11:27.000000000 +0100
-+++ whispercpp-patched/CMakeLists.txt	2024-01-06 16:01:11.997877220 +0100
-@@ -170,39 +170,11 @@
+diff -ruN whispercpp-1.6.2-org/CMakeLists.txt whispercpp-1.6.2-patched/CMakeLists.txt
+--- whispercpp-1.6.2-org/CMakeLists.txt	2024-05-27 09:35:09.000000000 +0200
++++ whispercpp-1.6.2-patched/CMakeLists.txt	2024-05-28 18:39:24.101390460 +0200
+@@ -248,91 +248,11 @@
  if (WHISPER_OPENBLAS)
      set(WHISPER_BLAS_VENDOR "OpenBLAS")
      set(WHISPER_BLAS ON)
+-    # BLA_PKGCONFIG_BLAS is supported since CMake 3.25.
+-    # FindBLAS.cmake pkg-config logic seems incomplete, because when
+-    # BLA_SIZEOF_INTEGER is 8, then it should search for blas64 instead of blas.
+-    # blas.pc/blas64.pc are not always provided, so let's be more specific
+-    # and go with openblas.pc/openblas64.pc if WHISPER_OPENBLAS is on.
+-    if (WHISPER_OPENBLAS_INTERFACE64)
+-        set(WHISPER_BLAS_LIB "openblas64")
+-    else ()
+-        set(WHISPER_BLAS_LIB "openblas")
+-    endif ()
+-    set(BLA_PKGCONFIG_BLAS ${WHISPER_BLAS_LIB})
+-    # OpenBLAS prebuilt libraries for Windows do not have "64" suffix in filename.
+-    # (But .pc file has "64" suffix in filename for USE_64BITINT=1 Windows build.)
+-    if (MSVC)
+-        set(WHISPER_BLAS_LIB "openblas")
+-    endif ()
 +    set(WHISPER_EXTRA_FLAGS ${WHISPER_EXTRA_FLAGS} -DGGML_USE_OPENBLAS)
 +    set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} ${BLAS_LIB_PATH})
 +    include_directories(${BLAS_INC_DIR})
  endif()
  
 -if (WHISPER_BLAS)
--    if (WIN32)
--        if(DEFINED ENV{OPENBLAS_PATH})
--            set(BLAS_LIBRARIES $ENV{OPENBLAS_PATH}/lib/libopenblas.dll.a)
--            message(STATUS "Libraries ${BLAS_LIBRARIES}")
--            set(WHISPER_EXTRA_FLAGS ${WHISPER_EXTRA_FLAGS} -DGGML_USE_OPENBLAS)
--            include_directories($ENV{OPENBLAS_PATH}/include)
--            set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} ${BLAS_LIBRARIES})
+-    if (NOT "$ENV{OPENBLAS_PATH}" STREQUAL "")
+-        if (WHISPER_STATIC)
+-            set(WHISPER_BLAS_LIB_PREFIX ${CMAKE_STATIC_LIBRARY_PREFIX})
+-            set(WHISPER_BLAS_LIB_SUFFIX ${CMAKE_STATIC_LIBRARY_SUFFIX})
 -        else ()
--            message(FATAL_ERROR "BLAS library was not found. Environment variable OPENBLAS_PATH not defined.")
+-            if (CMAKE_IMPORT_LIBRARY_SUFFIX)
+-                set(WHISPER_BLAS_LIB_PREFIX ${CMAKE_IMPORT_LIBRARY_PREFIX})
+-                set(WHISPER_BLAS_LIB_SUFFIX ${CMAKE_IMPORT_LIBRARY_SUFFIX})
+-            else ()
+-                set(WHISPER_BLAS_LIB_PREFIX ${CMAKE_SHARED_LIBRARY_PREFIX})
+-                set(WHISPER_BLAS_LIB_SUFFIX ${CMAKE_SHARED_LIBRARY_SUFFIX})
+-            endif ()
 -        endif ()
+-        # OpenBLAS prebuilt libraries hardcode "lib" prefix in filename even on Windows
+-        if (WHISPER_OPENBLAS)
+-            set(WHISPER_BLAS_LIB_PREFIX "lib")
+-        endif ()
+-        message(STATUS "BLAS compatible library path provided")
+-        set(BLAS_LIBRARIES "$ENV{OPENBLAS_PATH}/lib/${WHISPER_BLAS_LIB_PREFIX}${WHISPER_BLAS_LIB}${WHISPER_BLAS_LIB_SUFFIX}")
+-        message(STATUS "Libraries ${BLAS_LIBRARIES}")
+-        set(BLAS_INCLUDE_DIRS "$ENV{OPENBLAS_PATH}/include")
+-        message(STATUS "Include dirs ${BLAS_INCLUDE_DIRS}")
+-        if (NOT EXISTS "${BLAS_LIBRARIES}")
+-            message(FATAL_ERROR "BLAS library was not found. Environment variable OPENBLAS_PATH misdefined.")
+-        endif ()
+-        set(WHISPER_EXTRA_FLAGS ${WHISPER_EXTRA_FLAGS} -DGGML_USE_OPENBLAS)
+-        include_directories(${BLAS_INCLUDE_DIRS})
+-        set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} ${BLAS_LIBRARIES})
 -    else ()
--        set(BLA_STATIC 1)
+-        if (WHISPER_STATIC)
+-            # FindBLAS.cmake pkg-config logic seems incomplete, because when
+-            # BLA_STATIC is on, then it should use pkg_check_modules_static
+-            # instead of pkg_check_modules.
+-            # Some manual variable overriding may be necessary if you don't
+-            # achieve desired results.
+-            set(BLA_STATIC 1)
+-        endif ()
 -        set(BLA_VENDOR ${WHISPER_BLAS_VENDOR})
--        set(BLA_SIZEOF_INTEGER 8)
+-        if (WHISPER_OPENBLAS_INTERFACE64)
+-            set(BLA_SIZEOF_INTEGER 8)
+-        else ()
+-            set(BLA_SIZEOF_INTEGER 4)
+-        endif()
 -        set(BLA_PREFER_PKGCONFIG 1)
 -        find_package(BLAS)
 -
 -        if(BLAS_FOUND)
 -            message(STATUS "BLAS compatible library found")
 -            message(STATUS "Libraries ${BLAS_LIBRARIES}")
--            find_path(BLAS_INCLUDE_DIRS cblas.h /usr/include/openblas /usr/local/include/openblas $ENV{BLAS_HOME}/include)
+-            if (NOT DEFINED BLAS_INCLUDE_DIRS)
+-                if (PKGC_BLAS_FOUND)
+-                    set(BLAS_INCLUDE_DIRS "${PKGC_BLAS_INCLUDE_DIRS}")
+-                else ()
+-                    find_path(BLAS_INCLUDE_DIRS cblas.h /usr/include/openblas)
+-                endif()
+-            endif()
+-            message(STATUS "Include dirs ${BLAS_INCLUDE_DIRS}")
 -            set(WHISPER_EXTRA_FLAGS ${WHISPER_EXTRA_FLAGS} -DGGML_USE_OPENBLAS)
 -            include_directories(${BLAS_INCLUDE_DIRS})
 -            set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} ${BLAS_LIBRARIES})
@@ -59,10 +111,10 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
 -    endif ()
 -endif ()
 -
- if (WHISPER_CUBLAS)
-     cmake_minimum_required(VERSION 3.17)
- 
-@@ -236,13 +208,12 @@
+ if (WHISPER_MKL)
+     find_package(MKL CONFIG REQUIRED PATHS $ENV{MKLROOT})
+     message(STATUS "Imported oneMKL targets: ${MKL_IMPORTED_TARGETS}")
+@@ -380,13 +300,12 @@
  
  
  if (WHISPER_HIPBLAS)
@@ -82,29 +134,7 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
  
      find_package(hip)
      find_package(hipblas)
-@@ -251,9 +222,20 @@
-     if (${hipblas_FOUND} AND ${hip_FOUND})
-         message(STATUS "HIP and hipBLAS found")
-         add_compile_definitions(GGML_USE_HIPBLAS GGML_USE_CUBLAS)
--        add_library(ggml-rocm OBJECT ggml-cuda.cu ggml-cuda.h)
-+
-+        set(GGML_SOURCES_HIP ggml-cuda.cu ggml-cuda.h)
-+
-+        add_library(ggml-rocm OBJECT ${GGML_SOURCES_HIP})
-         set_property(TARGET ggml-rocm PROPERTY POSITION_INDEPENDENT_CODE ON)
-         set_source_files_properties(ggml-cuda.cu PROPERTIES LANGUAGE CXX)
-+
-+        if (DEFINED CMAKE_HIP_ARCHITECTURES AND NOT CMAKE_HIP_ARCHITECTURES STREQUAL "")
-+            message(STATUS "HIP architectures set to ${CMAKE_HIP_ARCHITECTURES}")
-+            string(REPLACE " " " --offload-arch=" HIP_OPTS ${CMAKE_HIP_ARCHITECTURES})
-+            set(HIP_OPTS "--offload-arch=${HIP_OPTS}")
-+            set_target_properties(ggml-rocm PROPERTIES COMPILE_FLAGS ${HIP_OPTS})
-+        endif()
-+
-         target_link_libraries(ggml-rocm PRIVATE hip::device PUBLIC hip::host roc::rocblas roc::hipblas)
- 
-         if (WHISPER_STATIC)
-@@ -463,7 +445,11 @@
+@@ -659,7 +578,11 @@
  # whisper - this is the main library of the project
  #
  
@@ -117,26 +147,39 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
  
  add_library(${TARGET}
      ggml.h
-@@ -528,13 +514,13 @@
- if (GGML_SOURCES_CUDA)
-     message(STATUS "GGML CUDA sources found, configuring CUDA architecture")
-     # Only configure gmml CUDA architectures is not globally set
--    if (NOT DEFINED GGML_CUDA_ARCHITECTURES)
-+    if (NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-         # Not overriden by user, so set defaults
--        set(GGML_CUDA_ARCHITECTURES 52 61 70)
-+        set(CMAKE_CUDA_ARCHITECTURES 52 61 70)
+@@ -683,7 +606,7 @@
+     .
+ )
+ # Set the version numbers
+-set_target_properties(whisper PROPERTIES
++set_target_properties(${TARGET} PROPERTIES
+     VERSION ${PROJECT_VERSION}
+     SOVERSION ${SOVERSION}
+ )
+@@ -745,8 +668,20 @@
+         set(GGML_CUDA_ARCHITECTURES 52 61 70)
      endif()
--    message(STATUS "GGML Configuring CUDA architectures ${GGML_CUDA_ARCHITECTURES}")
+     message(STATUS "GGML Configuring CUDA architectures ${GGML_CUDA_ARCHITECTURES}")
 -    set_property(TARGET whisper PROPERTY CUDA_ARCHITECTURES ${GGML_CUDA_ARCHITECTURES})
 -    set_property(TARGET whisper PROPERTY CUDA_SELECT_NVCC_ARCH_FLAGS "Auto")
-+    message(STATUS "GGML Configuring CUDA architectures ${CMAKE_CUDA_ARCHITECTURES}")
-+    set_property(TARGET ${TARGET} PROPERTY CUDA_ARCHITECTURES ${CMAKE_CUDA_ARCHITECTURES})
++    set_property(TARGET ${TARGET} PROPERTY CUDA_ARCHITECTURES ${GGML_CUDA_ARCHITECTURES})
 +    set_property(TARGET ${TARGET} PROPERTY CUDA_SELECT_NVCC_ARCH_FLAGS "Auto")
++endif()
++
++if (GGML_SOURCES_ROCM)
++    message(STATUS "GGML ROCM sources found, configuring ROCM architecture")
++    # Only configure gmml ROCM architectures is not globally set
++    if (NOT DEFINED GGML_ROCM_ARCHITECTURES)
++        # Not overriden by user, so set defaults
++        set(GGML_ROCM_ARCHITECTURES "gfx1010 gfx1030 gfx1100")
++    endif()
++    string(REPLACE " " " --offload-arch=" HIP_OPTS ${GGML_ROCM_ARCHITECTURES})
++    set(HIP_OPTS "--offload-arch=${HIP_OPTS}")
++    set_target_properties(${TARGET} PROPERTIES COMPILE_FLAGS ${HIP_OPTS})
  endif()
  
  if (EMSCRIPTEN)
-@@ -551,7 +537,7 @@
+@@ -764,7 +699,7 @@
  
  install(TARGETS ${TARGET}
      LIBRARY  DESTINATION lib
@@ -145,70 +188,3 @@ diff -ruN whispercpp-org/CMakeLists.txt whispercpp-patched/CMakeLists.txt
      RUNTIME  DESTINATION bin
      RESOURCE DESTINATION bin
      PUBLIC_HEADER DESTINATION include
-diff -ruN whispercpp-org/ggml-cuda.cu whispercpp-patched/ggml-cuda.cu
---- whispercpp-org/ggml-cuda.cu	2024-01-05 16:11:27.000000000 +0100
-+++ whispercpp-patched/ggml-cuda.cu	2024-03-15 19:17:37.976067547 +0100
-@@ -6811,7 +6811,7 @@
- #ifdef __HIP_PLATFORM_AMD__
-         // Workaround for a rocBLAS bug when using multiple graphics cards:
-         // https://github.com/ROCmSoftwarePlatform/rocBLAS/issues/1346
--        rocblas_initialize();
-+        // rocblas_initialize();
-         CUDA_CHECK(cudaDeviceSynchronize());
- #endif
- 
-diff -ruN whispercpp-org/ggml-quants.c whispercpp-patched/ggml-quants.c
---- whispercpp-org/ggml-quants.c	2024-01-05 16:11:27.000000000 +0100
-+++ whispercpp-patched/ggml-quants.c	2024-01-07 15:43:52.296262202 +0100
-@@ -394,17 +394,43 @@
- 
- #else
- 
--#define ggml_int16x8x2_t  int16x8x2_t
-+typedef struct ggml_uint8x16x4_t {
-+    uint8x16_t val[4];
-+} ggml_uint8x16x4_t;
-+
-+inline static ggml_uint8x16x4_t ggml_vld1q_u8_x4(const uint8_t *ptr) {
-+    ggml_uint8x16x4_t res;
-+
-+    res.val[0] = vld1q_u8(ptr + 0);
-+    res.val[1] = vld1q_u8(ptr + 16);
-+    res.val[2] = vld1q_u8(ptr + 32);
-+    res.val[3] = vld1q_u8(ptr + 48);
-+
-+    return res;
-+}
-+
-+typedef struct ggml_int8x16x4_t {
-+    int8x16_t val[4];
-+} ggml_int8x16x4_t;
-+
-+inline static ggml_int8x16x4_t ggml_vld1q_s8_x4(const int8_t *ptr) {
-+    ggml_int8x16x4_t res;
-+
-+    res.val[0] = vld1q_s8(ptr + 0);
-+    res.val[1] = vld1q_s8(ptr + 16);
-+    res.val[2] = vld1q_s8(ptr + 32);
-+    res.val[3] = vld1q_s8(ptr + 48);
-+
-+    return res;
-+}
-+
-+#define ggml_int16x8x2_t int16x8x2_t
- #define ggml_uint8x16x2_t uint8x16x2_t
--#define ggml_uint8x16x4_t uint8x16x4_t
--#define ggml_int8x16x2_t  int8x16x2_t
--#define ggml_int8x16x4_t  int8x16x4_t
-+#define ggml_int8x16x2_t int8x16x2_t
- 
- #define ggml_vld1q_s16_x2 vld1q_s16_x2
--#define ggml_vld1q_u8_x2  vld1q_u8_x2
--#define ggml_vld1q_u8_x4  vld1q_u8_x4
--#define ggml_vld1q_s8_x2  vld1q_s8_x2
--#define ggml_vld1q_s8_x4  vld1q_s8_x4
-+#define ggml_vld1q_u8_x2 vld1q_u8_x2
-+#define ggml_vld1q_s8_x2 vld1q_s8_x2
- 
- #endif
- 

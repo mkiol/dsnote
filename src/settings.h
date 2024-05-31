@@ -293,6 +293,15 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(int mix_volume_change READ mix_volume_change WRITE
                    set_mix_volume_change NOTIFY mix_volume_change_changed)
 
+    // whisper.cpp
+    Q_PROPERTY(
+        bool whispercpp_gpu_flash_attn READ whispercpp_gpu_flash_attn WRITE
+            set_whispercpp_gpu_flash_attn NOTIFY whispercpp_changed)
+    Q_PROPERTY(int whispercpp_cpu_threads READ whispercpp_cpu_threads WRITE
+                   set_whispercpp_cpu_threads NOTIFY whispercpp_changed)
+    Q_PROPERTY(int whispercpp_beam_search READ whispercpp_beam_search WRITE
+                   set_whispercpp_beam_search NOTIFY whispercpp_changed)
+
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
     Q_ENUM(mode_t)
@@ -705,34 +714,32 @@ class settings : public QSettings, public singleton<settings> {
     cache_audio_format_t cache_audio_format() const;
     void set_cache_policy(cache_policy_t value);
     cache_policy_t cache_policy() const;
-
-    // stt
     QString default_stt_model() const;
     void set_default_stt_model(const QString &value);
     QString default_stt_model_for_lang(const QString &lang);
     void set_default_stt_model_for_lang(const QString &lang,
                                         const QString &value);
-
-    // tts
     QString default_tts_model() const;
     void set_default_tts_model(const QString &value);
     QString default_tts_model_for_lang(const QString &lang);
     void set_default_tts_model_for_lang(const QString &lang,
                                         const QString &value);
-
-    // mnt
     QString default_mnt_lang() const;
     void set_default_mnt_lang(const QString &value);
     QString default_mnt_out_lang() const;
     void set_default_mnt_out_lang(const QString &value);
-
     bool gpu_override_version() const;
     void set_gpu_override_version(bool value);
     QString gpu_overrided_version();
     void set_gpu_overrided_version(QString new_value);
-
     tts_subtitles_sync_mode_t tts_subtitles_sync() const;
     void set_tts_subtitles_sync(tts_subtitles_sync_mode_t value);
+    bool whispercpp_gpu_flash_attn() const;
+    void set_whispercpp_gpu_flash_attn(bool value);
+    int whispercpp_cpu_threads() const;
+    void set_whispercpp_cpu_threads(int value);
+    int whispercpp_beam_search() const;
+    void set_whispercpp_beam_search(int value);
 
    signals:
     // app
@@ -820,6 +827,7 @@ class settings : public QSettings, public singleton<settings> {
     void py_path_changed();
     void gpu_override_version_changed();
     void gpu_overrided_version_changed();
+    void whispercpp_changed();
 
    private:
     inline static const QString settings_filename =

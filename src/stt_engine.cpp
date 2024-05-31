@@ -191,7 +191,8 @@ std::ostream& operator<<(std::ostream& os,
                          const stt_engine::gpu_device_t& gpu_device) {
     os << "id=" << gpu_device.id << ", api=" << gpu_device.api
        << ", name=" << gpu_device.name
-       << ", platform-name=" << gpu_device.platform_name;
+       << ", platform-name=" << gpu_device.platform_name
+       << ", flash-attn=" << gpu_device.flash_attn;
 
     return os;
 }
@@ -203,6 +204,8 @@ std::ostream& operator<<(std::ostream& os, const stt_engine::config_t& config) {
        << ", vad-mode=" << config.vad_mode
        << ", speech-started=" << config.speech_started
        << ", text-format=" << config.text_format
+       << ", cpu-threads=" << config.cpu_threads
+       << ", beam-search=" << config.beam_search
        << ", options=" << config.options << ", use-gpu=" << config.use_gpu
        << ", gpu-device=[" << config.gpu_device << "]"
        << ", sub-config=[" << config.sub_config << "]";

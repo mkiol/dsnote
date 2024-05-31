@@ -2119,6 +2119,47 @@ settings::cache_policy_t settings::cache_policy() const {
             .toInt());
 }
 
+bool settings::whispercpp_gpu_flash_attn() const {
+    return value(QStringLiteral("service/whispercpp_gpu_flash_attn"), true)
+        .toBool();
+}
+
+void settings::set_whispercpp_gpu_flash_attn(bool value) {
+    if (whispercpp_gpu_flash_attn() != value) {
+        setValue(QStringLiteral("service/whispercpp_gpu_flash_attn"), value);
+        emit whispercpp_changed();
+        set_restart_required(true);
+    }
+}
+
+int settings::whispercpp_cpu_threads() const {
+    return std::clamp<int>(
+        value(QStringLiteral("service/whispercpp_cpu_threads"), 4).toInt(), 1,
+        std::thread::hardware_concurrency());
+}
+
+void settings::set_whispercpp_cpu_threads(int value) {
+    if (whispercpp_cpu_threads() != value) {
+        setValue(QStringLiteral("service/whispercpp_cpu_threads"), value);
+        emit whispercpp_changed();
+        set_restart_required(true);
+    }
+}
+
+int settings::whispercpp_beam_search() const {
+    return std::clamp<int>(
+        value(QStringLiteral("service/whispercpp_beam_search"), 1).toInt(), 1,
+        100);
+}
+
+void settings::set_whispercpp_beam_search(int value) {
+    if (whispercpp_beam_search() != value) {
+        setValue(QStringLiteral("service/whispercpp_beam_search"), value);
+        emit whispercpp_changed();
+        set_restart_required(true);
+    }
+}
+
 bool settings::gpu_override_version() const {
 #ifdef ARCH_X86_64
     return value(QStringLiteral("service/gpu_override_version"), false)

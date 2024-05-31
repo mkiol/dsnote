@@ -1,5 +1,5 @@
-set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.5.4.tar.gz")
-set(whispercpp_checksum "06eed84de310fdf5408527e41e863ac3b80b8603576ba0521177464b1b341a3a")
+set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.6.2.tar.gz")
+set(whispercpp_checksum "da7988072022acc3cfa61b370b3c51baad017f1900c3dc4e68cb276499f66894")
 
 set(whispercpp_flags -O3 -ffast-math -I${external_include_dir}/openblas)
 set(whispercppfallback_flags ${whispercpp_flags})
@@ -91,9 +91,9 @@ if(arch_x8664)
                 -DCMAKE_INSTALL_LIBDIR=lib
                 -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
                 -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
-                -DWHISPER_CUBLAS=ON
+                -DWHISPER_CUDA=ON
                 -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
-                -DCMAKE_CUDA_ARCHITECTURES=${CMAKE_CUDA_ARCHITECTURES}
+                -DGGML_CUDA_ARCHITECTURES=${CMAKE_CUDA_ARCHITECTURES}
                 -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
                 -DWHISPER_TARGET_NAME=whisper-cublas
             BUILD_ALWAYS False
@@ -123,7 +123,7 @@ if(arch_x8664)
                 -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
                 -DWHISPER_HIPBLAS=ON
                 -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
-                -DCMAKE_HIP_ARCHITECTURES=${CMAKE_HIP_ARCHITECTURES}
+                -DGGML_ROCM_ARCHITECTURES=${CMAKE_HIP_ARCHITECTURES}
                 -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
                 -DWHISPER_TARGET_NAME=whisper-hipblas
             BUILD_ALWAYS False

@@ -99,6 +99,7 @@ class stt_engine {
         gpu_api_t api = gpu_api_t::opencl;
         std::string name;
         std::string platform_name;
+        bool flash_attn = false;
 
         inline bool operator==(const gpu_device_t& rhs) const {
             return platform_name == rhs.platform_name && name == rhs.name &&
@@ -120,6 +121,8 @@ class stt_engine {
         bool translate = false; /*extra whisper feature*/
         bool speech_started = false;
         bool use_gpu = false;
+        unsigned int cpu_threads = 4;
+        unsigned int beam_search = 5;
         text_format_t text_format = text_format_t::raw;
         std::string options;
         gpu_device_t gpu_device;

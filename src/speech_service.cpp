@@ -1198,6 +1198,8 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         config.text_format = stt_text_fromat_from_settings_format(
             text_format_from_options(options));
         config.sub_config = stt_sub_config_from_options(options);
+        config.beam_search = settings::instance()->whispercpp_beam_search();
+        config.cpu_threads = settings::instance()->whispercpp_cpu_threads();
 
         if (settings::instance()->stt_use_gpu() &&
             settings::instance()->has_gpu_device_stt()) {
@@ -1205,6 +1207,10 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                     settings::instance()->gpu_device_stt(),
                     settings::instance()->auto_gpu_device_stt())) {
                 config.gpu_device = std::move(*device);
+                config.gpu_device.flash_attn =
+                    (config.gpu_device.api == stt_engine::gpu_api_t::cuda ||
+                     config.gpu_device.api == stt_engine::gpu_api_t::rocm) &&
+                    settings::instance()->whispercpp_gpu_flash_attn();
                 config.use_gpu = true;
             }
         }
