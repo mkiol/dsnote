@@ -21734,8 +21734,7 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/es/es_ES/mls_10246/low/es_ES-mls_10246-low.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/es/es_ES/mls_10246/low/es_ES-mls_10246-low.onnx.json"
             ],
-            "size": "63118672",
-            "hidden": true
+            "size": "63118672"
         },
         {
             "name": "Español (Piper MLS 9972 Low Female)",
@@ -21749,8 +21748,7 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/es/es_ES/mls_9972/low/es_ES-mls_9972-low.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/es/es_ES/mls_9972/low/es_ES-mls_9972-low.onnx.json"
             ],
-            "size": "63118671",
-            "hidden": true
+            "size": "63118671"
         },
         {
             "name": "Español (Piper Davefx Medium Male)",
