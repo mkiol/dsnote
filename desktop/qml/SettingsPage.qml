@@ -290,10 +290,10 @@ DialogPage {
         ColumnLayout {
             id: speechToTextTab
 
-            property bool has_audio_sources: app.audio_sources.length > 1
+            // property bool has_audio_sources: app.audio_sources.length > 1
 
             ComboBoxForm {
-                visible: speechToTextTab.has_audio_sources
+                // visible: speechToTextTab.has_audio_sources
                 label.text: qsTr("Audio input device")
                 toolTip: qsTr("Select preferred audio input device.")
                 comboBox {
@@ -305,12 +305,12 @@ DialogPage {
                 }
             }
 
-            TipMessage {
-                indends: 1
-                visible: !speechToTextTab.has_audio_sources
-                text: qsTr("No audio source could be found.") + " " +
-                      qsTr("Make sure the microphone is properly connected.")
-            }
+            // TipMessage {
+            //     indends: 1
+            //     visible: !speechToTextTab.has_audio_sources
+            //     text: qsTr("No audio source could be found.") + " " +
+            //           qsTr("Make sure the microphone is properly connected.")
+            // }
 
             ComboBoxForm {
                 visible: speechToTextTab.has_audio_sources

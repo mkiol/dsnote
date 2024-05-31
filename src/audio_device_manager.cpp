@@ -90,10 +90,16 @@ audio_device_manager::audio_device_manager(
             this);
         if (!op) throw std::runtime_error("pa_context_subscribe error");
         pa_operation_unref(op);
+    } catch (const std::runtime_error &err) {
+        clean();
+
+        LOGE(std::string{"error when initializing pulse-audio: "} + err.what());
+        return;
     } catch (...) {
         clean();
 
-        throw;
+        LOGE("error when initializing pulse-audio");
+        return;
     }
 
     m_sources_changed_cb = std::move(sources_changed_cb);
