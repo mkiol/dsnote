@@ -260,9 +260,9 @@ ColumnLayout {
                 model: [
                     "April-ASR STT",
                     "DeepSpeech STT",
-                    "FasterWhisper STT",
+                    "Faster Whisper STT",
                     "Vosk STT",
-                    "Whisper STT",
+                    "whisper.cpp STT",
                     "Coqui TTS",
                     "eSpeak TTS",
                     "Mimic3 TTS",

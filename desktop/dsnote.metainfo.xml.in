@@ -125,8 +125,8 @@
       <p>Speech to Text:</p>
       <ul>
       <li>Updated 'Distil' model for English: 'Distil Large-v3'.
-          New model is enabled for Whisper and Faster Whisper engines.</li>
-      <li>New Fine-Tuned Whisper models for Slovenian and Polish.</li>
+          New model is enabled for whisper.cpp and Faster Whisper engines.</li>
+      <li>New Fine-Tuned whisper.cpp and Faster Whisper models for Slovenian and Polish.</li>
       <li>Fix: Punctuation model could not be downloaded.</li>
       </ul>
       <p>Text to Speech:</p>
@@ -197,14 +197,14 @@
       </ul>
       <p>Speech to Text:</p>
       <ul>
-      <li>Marathi language. New language is enabled with Whisper and Faster Whisper models.</li>
+      <li>Marathi language. New language is enabled with whisper.cpp and Faster Whisper models.</li>
       <li>New version of Faster Whisper Large model: 'FasterWhisper Large-v3'</li>
-      <li>New 'Distil' Faster Whisper models for English.
+      <li>New 'Distil' FasterWhisper models for English.
           'Distil' models are potentially faster than regular models.</li>
-      <li>Whisper and Faster Whisper enabled for Chinese-Cantonese language</li>
+      <li>Whisper.cpp and Faster Whisper enabled for Chinese-Cantonese language</li>
       <li>Support for Speex audio codec in 'Transcribe a file'</li>
-      <li>Translate to English option for Whisper and Faster Whisper models</li>
-      <li>More effective GPU acceleration for Whisper models with AMD graphics cards</li>
+      <li>Translate to English option for whisper.cpp and Faster Whisper models</li>
+      <li>More effective GPU acceleration for whisper.cpp models with AMD graphics cards</li>
       <li>Subtitles generation</li>
       <li>Support for multiple audio streams in a video file</li>
       </ul>

@@ -124,7 +124,7 @@ Dialog {
                     else if (f & ModelsListModel.FeatureEngineSttVosk)
                         return "Vosk"
                     else if (f & ModelsListModel.FeatureEngineSttWhisper)
-                        return "Whisper (whisper-cpp)"
+                        return "whisper.cpp"
                     else if (f & ModelsListModel.FeatureEngineSttFasterWhisper)
                         return "Faster Whisper"
                     else if (f & ModelsListModel.FeatureEngineSttApril)
