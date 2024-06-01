@@ -1213,8 +1213,11 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             } \
         }
         
-        GPU_ENGINE(whispercpp)
-        GPU_ENGINE(fasterwhisper)
+        if (model_config->stt->engine == models_manager::model_engine_t::stt_whisper) {
+            GPU_ENGINE(whispercpp)
+        } else if (model_config->stt->engine == models_manager::model_engine_t::stt_fasterwhisper) {
+            GPU_ENGINE(fasterwhisper)
+        }
 #undef GPU_ENGINE
         // clang-format on
 
@@ -1487,8 +1490,11 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             } \
         }
         
-        GPU_ENGINE(coqui)
-        GPU_ENGINE(whisperspeech)
+        if (model_config->tts->engine == models_manager::model_engine_t::tts_coqui) {
+            GPU_ENGINE(coqui)
+        } else if (model_config->tts->engine == models_manager::model_engine_t::tts_whisperspeech) {
+            GPU_ENGINE(whisperspeech)
+        }
 #undef GPU_ENGINE
         // clang-format on
 
