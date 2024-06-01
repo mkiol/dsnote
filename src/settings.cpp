@@ -1353,15 +1353,15 @@ void settings::enforce_num_threads() const {
 
 void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
 #ifdef ARCH_X86_64
-#define GPU_ENGINE(name)            \
+#define ENGINE_OPTS(name)           \
     m_##name##_gpu_devices.clear(); \
     m_##name##_gpu_devices.push_back(tr("Auto"));
 
-    GPU_ENGINE(whispercpp)
-    GPU_ENGINE(fasterwhisper)
-    GPU_ENGINE(coqui)
-    GPU_ENGINE(whisperspeech)
-#undef GPU_ENGINE
+    ENGINE_OPTS(whispercpp)
+    ENGINE_OPTS(fasterwhisper)
+    ENGINE_OPTS(coqui)
+    ENGINE_OPTS(whisperspeech)
+#undef ENGINE_OPTS
 
     m_rocm_gpu_versions.clear();
 
@@ -1449,16 +1449,16 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
             }
         });
 
-#define GPU_ENGINE(name)                             \
+#define ENGINE_OPTS(name)                            \
     if (!name##_auto_gpu_device().isEmpty())         \
         m_##name##_gpu_devices.front().append(" (" + \
                                               name##_auto_gpu_device() + ")");
 
-    GPU_ENGINE(whispercpp)
-    GPU_ENGINE(fasterwhisper)
-    GPU_ENGINE(coqui)
-    GPU_ENGINE(whisperspeech)
-#undef GPU_ENGINE
+    ENGINE_OPTS(whispercpp)
+    ENGINE_OPTS(fasterwhisper)
+    ENGINE_OPTS(coqui)
+    ENGINE_OPTS(whisperspeech)
+#undef ENGINE_OPTS
 
     emit gpu_devices_changed();
 
@@ -1474,7 +1474,56 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
 #endif
 }
 
-#define GPU_ENGINE(name)                                                      \
+#define ENGINE_OPTS(name)                                                      \
+    bool settings::name##_gpu_flash_attn() const {                             \
+        return value(QStringLiteral("service/" #name "_gpu_flash_attn"),       \
+                     false)                                                    \
+            .toBool();                                                         \
+    }                                                                          \
+    void settings::set_##name##_gpu_flash_attn(bool value) {                   \
+        if (name##_gpu_flash_attn() != value) {                                \
+            setValue(QStringLiteral("service/" #name "_gpu_flash_attn"),       \
+                     value);                                                   \
+            emit name##_changed();                                             \
+            set_restart_required(true);                                        \
+        }                                                                      \
+    }                                                                          \
+    int settings::name##_cpu_threads() const {                                 \
+        return std::clamp<int>(                                                \
+            value(QStringLiteral("service/" #name "_cpu_threads"), 4).toInt(), \
+            1, std::thread::hardware_concurrency());                           \
+    }                                                                          \
+    void settings::set_##name##_cpu_threads(int value) {                       \
+        if (name##_cpu_threads() != value) {                                   \
+            setValue(QStringLiteral("service/" #name "_cpu_threads"), value);  \
+            emit name##_changed();                                             \
+            set_restart_required(true);                                        \
+        }                                                                      \
+    }                                                                          \
+    int settings::name##_beam_search() const {                                 \
+        return std::clamp<int>(                                                \
+            value(QStringLiteral("service/" #name "_beam_search"), 1).toInt(), \
+            1, 100);                                                           \
+    }                                                                          \
+    void settings::set_##name##_beam_search(int value) {                       \
+        if (name##_beam_search() != value) {                                   \
+            setValue(QStringLiteral("service/" #name "_beam_search"), value);  \
+            emit name##_changed();                                             \
+            set_restart_required(true);                                        \
+        }                                                                      \
+    }                                                                          \
+    void settings::reset_##name##_options() {                                  \
+        set_##name##_gpu_flash_attn(false);                                    \
+        set_##name##_cpu_threads(4);                                           \
+        set_##name##_beam_search(1);                                           \
+        set_##name##_use_gpu(false);                                           \
+    }
+
+ENGINE_OPTS(whispercpp)
+ENGINE_OPTS(fasterwhisper)
+#undef ENGINE_OPTS
+
+#define ENGINE_OPTS(name)                                                     \
     bool settings::name##_use_gpu() const {                                   \
         return value(QStringLiteral(#name "_use_gpu"), false).toBool();       \
     }                                                                         \
@@ -1530,11 +1579,11 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
             value == 0 ? "" : m_##name##_gpu_devices.at(value));              \
     }
 
-GPU_ENGINE(whispercpp)
-GPU_ENGINE(fasterwhisper)
-GPU_ENGINE(coqui)
-GPU_ENGINE(whisperspeech)
-#undef GPU_ENGINE
+ENGINE_OPTS(whispercpp)
+ENGINE_OPTS(fasterwhisper)
+ENGINE_OPTS(coqui)
+ENGINE_OPTS(whisperspeech)
+#undef ENGINE_OPTS
 
 QString settings::audio_input_device() const {
     return value(QStringLiteral("audio_input_device")).toString();
@@ -2083,47 +2132,6 @@ settings::cache_policy_t settings::cache_policy() const {
         value(QStringLiteral("cache_policy"),
               static_cast<int>(cache_policy_t::CacheRemove))
             .toInt());
-}
-
-bool settings::whispercpp_gpu_flash_attn() const {
-    return value(QStringLiteral("service/whispercpp_gpu_flash_attn"), true)
-        .toBool();
-}
-
-void settings::set_whispercpp_gpu_flash_attn(bool value) {
-    if (whispercpp_gpu_flash_attn() != value) {
-        setValue(QStringLiteral("service/whispercpp_gpu_flash_attn"), value);
-        emit whispercpp_changed();
-        set_restart_required(true);
-    }
-}
-
-int settings::whispercpp_cpu_threads() const {
-    return std::clamp<int>(
-        value(QStringLiteral("service/whispercpp_cpu_threads"), 4).toInt(), 1,
-        std::thread::hardware_concurrency());
-}
-
-void settings::set_whispercpp_cpu_threads(int value) {
-    if (whispercpp_cpu_threads() != value) {
-        setValue(QStringLiteral("service/whispercpp_cpu_threads"), value);
-        emit whispercpp_changed();
-        set_restart_required(true);
-    }
-}
-
-int settings::whispercpp_beam_search() const {
-    return std::clamp<int>(
-        value(QStringLiteral("service/whispercpp_beam_search"), 1).toInt(), 1,
-        100);
-}
-
-void settings::set_whispercpp_beam_search(int value) {
-    if (whispercpp_beam_search() != value) {
-        setValue(QStringLiteral("service/whispercpp_beam_search"), value);
-        emit whispercpp_changed();
-        set_restart_required(true);
-    }
 }
 
 bool settings::gpu_override_version() const {

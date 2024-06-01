@@ -1202,23 +1202,25 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         config.cpu_threads = settings::instance()->whispercpp_cpu_threads();
 
         // clang-format off
-#define GPU_ENGINE(name) \
+#define ENGINE_OPTS(name) \
+        config.beam_search = settings::instance()->name##_beam_search(); \
+        config.cpu_threads = settings::instance()->name##_cpu_threads(); \
         if (settings::instance()->name##_use_gpu() && settings::instance()->has_##name##_gpu_device()) { \
             if (auto device = make_gpu_device<stt_engine>(settings::instance()->name##_gpu_device(), settings::instance()->name##_auto_gpu_device())) { \
                 config.gpu_device = std::move(*device); \
                 config.gpu_device.flash_attn = \
                     (config.gpu_device.api == stt_engine::gpu_api_t::cuda || config.gpu_device.api == stt_engine::gpu_api_t::rocm) && \
-                    settings::instance()->whispercpp_gpu_flash_attn(); \
+                    settings::instance()->name##_gpu_flash_attn(); \
                 config.use_gpu = true; \
             } \
         }
         
         if (model_config->stt->engine == models_manager::model_engine_t::stt_whisper) {
-            GPU_ENGINE(whispercpp)
+            ENGINE_OPTS(whispercpp)
         } else if (model_config->stt->engine == models_manager::model_engine_t::stt_fasterwhisper) {
-            GPU_ENGINE(fasterwhisper)
+            ENGINE_OPTS(fasterwhisper)
         }
-#undef GPU_ENGINE
+#undef ENGINE_OPTS
         // clang-format on
 
         bool new_engine_required = [&] {
@@ -1482,7 +1484,7 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         config.speech_speed = tts_speech_speed_from_options(options);
 
         // clang-format off
-#define GPU_ENGINE(name) \
+#define ENGINE_OPTS(name) \
         if (settings::instance()->name##_use_gpu() && settings::instance()->has_##name##_gpu_device()) { \
             if (auto device = make_gpu_device<tts_engine>(settings::instance()->name##_gpu_device(), settings::instance()->name##_auto_gpu_device())) { \
                 config.gpu_device = std::move(*device); \
@@ -1491,11 +1493,11 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         }
         
         if (model_config->tts->engine == models_manager::model_engine_t::tts_coqui) {
-            GPU_ENGINE(coqui)
+            ENGINE_OPTS(coqui)
         } else if (model_config->tts->engine == models_manager::model_engine_t::tts_whisperspeech) {
-            GPU_ENGINE(whisperspeech)
+            ENGINE_OPTS(whisperspeech)
         }
-#undef GPU_ENGINE
+#undef ENGINE_OPTS
         // clang-format on
 
         if (model_config->tts->model_id.contains("fairseq")) {

@@ -271,6 +271,18 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(int mix_volume_change READ mix_volume_change WRITE
                    set_mix_volume_change NOTIFY mix_volume_change_changed)
 
+#define ENGINE_OPTS(name)                                                  \
+    Q_PROPERTY(bool name##_gpu_flash_attn READ name##_gpu_flash_attn WRITE \
+                   set_##name##_gpu_flash_attn NOTIFY name##_changed)      \
+    Q_PROPERTY(int name##_cpu_threads READ name##_cpu_threads WRITE        \
+                   set_##name##_cpu_threads NOTIFY name##_changed)         \
+    Q_PROPERTY(int name##_beam_search READ name##_beam_search WRITE        \
+                   set_##name##_beam_search NOTIFY name##_changed)
+
+    ENGINE_OPTS(whispercpp)
+    ENGINE_OPTS(fasterwhisper)
+#undef ENGINE_OPTS
+
     // whisper.cpp
     Q_PROPERTY(
         bool whispercpp_gpu_flash_attn READ whispercpp_gpu_flash_attn WRITE
@@ -280,7 +292,9 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(int whispercpp_beam_search READ whispercpp_beam_search WRITE
                    set_whispercpp_beam_search NOTIFY whispercpp_changed)
 
-#define GPU_ENGINE(name)                                                     \
+    // faster-whisper
+
+#define ENGINE_OPTS(name)                                                    \
     Q_PROPERTY(bool name##_use_gpu READ name##_use_gpu WRITE                 \
                    set_##name##_use_gpu NOTIFY name##_use_gpu_changed)       \
     Q_PROPERTY(QStringList name##_gpu_devices READ name##_gpu_devices NOTIFY \
@@ -293,11 +307,11 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(QString name##_auto_gpu_device READ                           \
                    name##_auto_gpu_device NOTIFY name##_gpu_device_changed)
 
-    GPU_ENGINE(whispercpp)
-    GPU_ENGINE(fasterwhisper)
-    GPU_ENGINE(coqui)
-    GPU_ENGINE(whisperspeech)
-#undef GPU_ENGINE
+    ENGINE_OPTS(whispercpp)
+    ENGINE_OPTS(fasterwhisper)
+    ENGINE_OPTS(coqui)
+    ENGINE_OPTS(whisperspeech)
+#undef ENGINE_OPTS
 
    public:
     enum class mode_t { Stt = 0, Tts = 1 };
@@ -712,14 +726,20 @@ class settings : public QSettings, public singleton<settings> {
     tts_subtitles_sync_mode_t tts_subtitles_sync() const;
     void set_tts_subtitles_sync(tts_subtitles_sync_mode_t value);
 
-    bool whispercpp_gpu_flash_attn() const;
-    void set_whispercpp_gpu_flash_attn(bool value);
-    int whispercpp_cpu_threads() const;
-    void set_whispercpp_cpu_threads(int value);
-    int whispercpp_beam_search() const;
-    void set_whispercpp_beam_search(int value);
+#define ENGINE_OPTS(name)                         \
+    bool name##_gpu_flash_attn() const;           \
+    void set_##name##_gpu_flash_attn(bool value); \
+    int name##_cpu_threads() const;               \
+    void set_##name##_cpu_threads(int value);     \
+    int name##_beam_search() const;               \
+    void set_##name##_beam_search(int value);     \
+    Q_INVOKABLE void reset_##name##_options();
 
-#define GPU_ENGINE(name)                              \
+    ENGINE_OPTS(whispercpp)
+    ENGINE_OPTS(fasterwhisper)
+#undef ENGINE_OPTS
+
+#define ENGINE_OPTS(name)                             \
     bool name##_use_gpu() const;                      \
     void set_##name##_use_gpu(bool value);            \
     Q_INVOKABLE bool has_##name##_gpu_device() const; \
@@ -730,11 +750,11 @@ class settings : public QSettings, public singleton<settings> {
     int name##_gpu_device_idx() const;                \
     void set_##name##_gpu_device_idx(int value);
 
-    GPU_ENGINE(whispercpp)
-    GPU_ENGINE(fasterwhisper)
-    GPU_ENGINE(coqui)
-    GPU_ENGINE(whisperspeech)
-#undef GPU_ENGINE
+    ENGINE_OPTS(whispercpp)
+    ENGINE_OPTS(fasterwhisper)
+    ENGINE_OPTS(coqui)
+    ENGINE_OPTS(whisperspeech)
+#undef ENGINE_OPTS
 
    signals:
     // app
@@ -817,16 +837,20 @@ class settings : public QSettings, public singleton<settings> {
     void gpu_override_version_changed();
     void gpu_overrided_version_changed();
     void gpu_devices_changed();
-    void whispercpp_changed();
 
-#define GPU_ENGINE(name)              \
+#define ENGINE_OPTS(name) void name##_changed();
+    ENGINE_OPTS(whispercpp)
+    ENGINE_OPTS(fasterwhisper)
+#undef ENGINE_OPTS
+
+#define ENGINE_OPTS(name)             \
     void name##_gpu_device_changed(); \
     void name##_use_gpu_changed();
-    GPU_ENGINE(whispercpp)
-    GPU_ENGINE(fasterwhisper)
-    GPU_ENGINE(coqui)
-    GPU_ENGINE(whisperspeech)
-#undef GPU_ENGINE
+    ENGINE_OPTS(whispercpp)
+    ENGINE_OPTS(fasterwhisper)
+    ENGINE_OPTS(coqui)
+    ENGINE_OPTS(whisperspeech)
+#undef ENGINE_OPTS
 
    private:
     inline static const QString settings_filename =
@@ -836,12 +860,12 @@ class settings : public QSettings, public singleton<settings> {
     inline static const QString default_qt_style_fallback =
         QStringLiteral("org.kde.breeze");
     bool m_restart_required = false;
-#define GPU_ENGINE(name) QStringList m_##name##_gpu_devices;
-    GPU_ENGINE(whispercpp)
-    GPU_ENGINE(fasterwhisper)
-    GPU_ENGINE(coqui)
-    GPU_ENGINE(whisperspeech)
-#undef GPU_ENGINE
+#define ENGINE_OPTS(name) QStringList m_##name##_gpu_devices;
+    ENGINE_OPTS(whispercpp)
+    ENGINE_OPTS(fasterwhisper)
+    ENGINE_OPTS(coqui)
+    ENGINE_OPTS(whisperspeech)
+#undef ENGINE_OPTS
     std::vector<QString> m_rocm_gpu_versions;
     unsigned int m_addon_flags = addon_flags_t::AddonNone;
     unsigned int m_error_flags = error_flags_t::ErrorNoError;

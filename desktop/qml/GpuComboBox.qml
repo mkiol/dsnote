@@ -21,7 +21,11 @@ ColumnLayout {
 
     Layout.fillWidth: true
 
+    onUse_gpuChanged: checkBox = use_gpu
+
     CheckBox {
+        id: checkBox
+
         checked: root.use_gpu
         text: qsTr("Use GPU acceleration")
         onCheckedChanged: {
@@ -32,7 +36,7 @@ ColumnLayout {
         ToolTip.visible: hovered
         ToolTip.text: qsTr("If a suitable graphics card is found in the system, it will be used to accelerate processing.") + " " +
                       qsTr("GPU hardware acceleration significantly reduces the time of decoding.") + " " +
-                      qsTr("Disable this option if you observe problems when using Speech to Text.")
+                      qsTr("Disable this option if you observe problems.")
         hoverEnabled: true
     }
 

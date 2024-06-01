@@ -214,14 +214,14 @@ class dsnote_app : public QObject {
         QVariantMap translations READ translations NOTIFY connected_changed)
 
     // features
-#define GPU_ENGINE(name)                                                  \
+#define ENGINE_OPTS(name)                                                  \
     Q_PROPERTY(bool feature_##name##_gpu READ feature_##name##_gpu NOTIFY \
                    features_changed)
-    GPU_ENGINE(whispercpp)
-    GPU_ENGINE(fasterwhisper)
-    GPU_ENGINE(coqui)
-    GPU_ENGINE(whisperspeech)
-#undef GPU_ENGINE
+    ENGINE_OPTS(whispercpp)
+    ENGINE_OPTS(fasterwhisper)
+    ENGINE_OPTS(coqui)
+    ENGINE_OPTS(whisperspeech)
+#undef ENGINE_OPTS
 
     Q_PROPERTY(
         bool feature_punctuator READ feature_punctuator NOTIFY features_changed)
@@ -816,12 +816,12 @@ class dsnote_app : public QObject {
                                                     const QString &action_key);
     bool feature_available(const QString &name) const;
 
-#define GPU_ENGINE(name) bool feature_##name##_gpu() const;
-    GPU_ENGINE(whispercpp)
-    GPU_ENGINE(fasterwhisper)
-    GPU_ENGINE(coqui)
-    GPU_ENGINE(whisperspeech)
-#undef GPU_ENGINE
+#define ENGINE_OPTS(name) bool feature_##name##_gpu() const;
+    ENGINE_OPTS(whispercpp)
+    ENGINE_OPTS(fasterwhisper)
+    ENGINE_OPTS(coqui)
+    ENGINE_OPTS(whisperspeech)
+#undef ENGINE_OPTS
 
     bool feature_punctuator() const;
     bool feature_diacritizer_he() const;

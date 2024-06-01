@@ -91,9 +91,9 @@ void fasterwhisper_engine::create_model() {
     LOGD("creating fasterwhisper model");
 
     auto task = py_executor::instance()->execute([&]() {
-        auto n_threads = std::min(
-            m_threads,
-            std::max(1, static_cast<int>(std::thread::hardware_concurrency())));
+        auto n_threads = static_cast<int>(
+            std::min(m_config.cpu_threads,
+                     std::max(1U, std::thread::hardware_concurrency())));
         auto use_cuda = m_config.use_gpu &&
                         m_config.gpu_device.api == gpu_api_t::cuda &&
                         gpu_tools::has_cudnn();
@@ -112,7 +112,8 @@ void fasterwhisper_engine::create_model() {
                 "model_size_or_path"_a = m_config.model_files.model_file,
                 "device"_a = use_cuda ? "cuda" : "cpu",
                 "device_index"_a = use_cuda ? m_config.gpu_device.id : 0,
-                "local_files_only"_a = true, "cpu_threads"_a = n_threads));
+                "local_files_only"_a = true, "cpu_threads"_a = n_threads,
+                "flash_attention"_a = m_config.gpu_device.flash_attn));
         } catch (const std::exception& err) {
             LOGE("py error: " << err.what());
             m_model.reset();
@@ -283,7 +284,7 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
             for (py::ssize_t i = 0; i < r.shape(0); ++i) r(i) = buf[i];
 
             auto seg_tuple = m_model->attr("transcribe")(
-                "audio"_a = array, "beam_size"_a = 5,
+                "audio"_a = array, "beam_size"_a = m_config.beam_search,
                 "language"_a = m_config.lang,
                 "task"_a = m_config.translate && m_config.has_option('t')
                                ? "translate"
