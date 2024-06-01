@@ -1024,6 +1024,8 @@ DialogPage {
                 }
 
                 TextFieldForm {
+                    id: pyTextField
+
                     indends: 1
                     visible: _settings.py_feature_scan && !_settings.is_flatpak()
                     label.text: qsTr("Location of Python libraries")
@@ -1035,7 +1037,7 @@ DialogPage {
                     }
                     button {
                         text: qsTr("Save")
-                        onClicked: _settings.py_path = pyTextField.text
+                        onClicked: _settings.py_path = pyTextField.textField.text
                     }
                 }
             }
