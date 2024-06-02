@@ -92,7 +92,7 @@ modules:
       - -DCMAKE_CUDA_FLAGS=' -allow-unsupported-compiler'
       - -DCUDAToolkit_ROOT=/app/extensions/nvidia/cuda
       - -DCMAKE_CUDA_COMPILER=/app/extensions/nvidia/cuda/bin/nvcc
-      - -DCMAKE_CUDA_ARCHITECTURES=50;52;53;60;61;62;70;72;75;80;86;87;89;90;90a
+      - -DGGML_CUDA_ARCHITECTURES=50;52;53;60;61;62;70;72;75;80;86;87;89;90;90a
     sources:
       - type: archive
         url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.6.2.tar.gz
