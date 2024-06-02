@@ -271,6 +271,16 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(int mix_volume_change READ mix_volume_change WRITE
                    set_mix_volume_change NOTIFY mix_volume_change_changed)
 
+    // engine options
+
+#define ENGINE_OPTS(name)                         \
+    Q_PROPERTY(                                   \
+        bool name##_short_audio_optimization READ \
+            name##_short_audio_optimization WRITE \
+                set_##name##_short_audio_optimization NOTIFY name##_changed)
+    ENGINE_OPTS(whispercpp)
+#undef ENGINE_OPTS
+
 #define ENGINE_OPTS(name)                                                  \
     Q_PROPERTY(bool name##_gpu_flash_attn READ name##_gpu_flash_attn WRITE \
                    set_##name##_gpu_flash_attn NOTIFY name##_changed)      \
@@ -727,6 +737,12 @@ class settings : public QSettings, public singleton<settings> {
     void set_tts_subtitles_sync(tts_subtitles_sync_mode_t value);
 
 #define ENGINE_OPTS(name)                         \
+    bool name##_short_audio_optimization() const; \
+    void set_##name##_short_audio_optimization(bool value);
+    ENGINE_OPTS(whispercpp)
+#undef ENGINE_OPTS
+
+#define ENGINE_OPTS(name)                         \
     bool name##_gpu_flash_attn() const;           \
     void set_##name##_gpu_flash_attn(bool value); \
     int name##_cpu_threads() const;               \
@@ -734,7 +750,6 @@ class settings : public QSettings, public singleton<settings> {
     int name##_beam_search() const;               \
     void set_##name##_beam_search(int value);     \
     Q_INVOKABLE void reset_##name##_options();
-
     ENGINE_OPTS(whispercpp)
     ENGINE_OPTS(fasterwhisper)
 #undef ENGINE_OPTS
@@ -749,7 +764,6 @@ class settings : public QSettings, public singleton<settings> {
     void set_##name##_gpu_device(QString value);      \
     int name##_gpu_device_idx() const;                \
     void set_##name##_gpu_device_idx(int value);
-
     ENGINE_OPTS(whispercpp)
     ENGINE_OPTS(fasterwhisper)
     ENGINE_OPTS(coqui)

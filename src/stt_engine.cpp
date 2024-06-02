@@ -206,6 +206,7 @@ std::ostream& operator<<(std::ostream& os, const stt_engine::config_t& config) {
        << ", text-format=" << config.text_format
        << ", cpu-threads=" << config.cpu_threads
        << ", beam-search=" << config.beam_search
+       << ", short-audio-optimization=" << config.short_audio_optimization
        << ", options=" << config.options << ", use-gpu=" << config.use_gpu
        << ", gpu-device=[" << config.gpu_device << "]"
        << ", sub-config=[" << config.sub_config << "]";

@@ -451,6 +451,15 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 
     bool subrip = m_config.text_format == text_format_t::subrip;
 
+    if (m_config.short_audio_optimization) {
+        // short audio clips optimization
+        // https://github.com/ggerganov/whisper.cpp/issues/1855
+        m_wparams.audio_ctx = std::min<int>(
+            ((1500 * buf.size()) / (m_sample_rate * 30)) + 128, 1500);
+    }
+
+    LOGD("audio_ctx: " << m_wparams.audio_ctx);
+
     std::ostringstream os;
 
     if (auto ret = m_whisper_api.whisper_full(m_whisper_ctx, m_wparams,

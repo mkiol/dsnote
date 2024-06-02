@@ -1217,6 +1217,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         
         if (model_config->stt->engine == models_manager::model_engine_t::stt_whisper) {
             ENGINE_OPTS(whispercpp)
+            config.short_audio_optimization = settings::instance()->whispercpp_short_audio_optimization();
         } else if (model_config->stt->engine == models_manager::model_engine_t::stt_fasterwhisper) {
             ENGINE_OPTS(fasterwhisper)
         }

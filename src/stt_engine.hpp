@@ -123,6 +123,7 @@ class stt_engine {
         bool use_gpu = false;
         unsigned int cpu_threads = 4;
         unsigned int beam_search = 5;
+        bool short_audio_optimization = true; /*extra whisper feature*/
         text_format_t text_format = text_format_t::raw;
         std::string options;
         gpu_device_t gpu_device;

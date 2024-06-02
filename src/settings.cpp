@@ -1474,6 +1474,25 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
 #endif
 }
 
+#define ENGINE_OPTS(name)                                                     \
+    bool settings::name##_short_audio_optimization() const {                  \
+        return value(QStringLiteral("service/" #name                          \
+                                    "_short_audio_optimization"),             \
+                     true)                                                    \
+            .toBool();                                                        \
+    }                                                                         \
+    void settings::set_##name##_short_audio_optimization(bool value) {        \
+        if (name##_short_audio_optimization() != value) {                     \
+            setValue(                                                         \
+                QStringLiteral("service/" #name "_short_audio_optimization"), \
+                value);                                                       \
+            emit name##_changed();                                            \
+            set_restart_required(true);                                       \
+        }                                                                     \
+    }
+ENGINE_OPTS(whispercpp)
+#undef ENGINE_OPTS
+
 #define ENGINE_OPTS(name)                                                      \
     bool settings::name##_gpu_flash_attn() const {                             \
         return value(QStringLiteral("service/" #name "_gpu_flash_attn"),       \
