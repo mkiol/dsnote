@@ -53,6 +53,9 @@ class stt_engine {
     enum class gpu_api_t { opencl, cuda, rocm, openvino };
     friend std::ostream& operator<<(std::ostream& os, gpu_api_t api);
 
+    enum class audio_ctx_conf_t { dynamic, no_change, custom };
+    friend std::ostream& operator<<(std::ostream& os, audio_ctx_conf_t conf);
+
     enum class text_format_t { raw, subrip };
     friend std::ostream& operator<<(std::ostream& os,
                                     text_format_t text_format);
@@ -126,7 +129,10 @@ class stt_engine {
         bool use_gpu = false;
         unsigned int cpu_threads = 4;
         unsigned int beam_search = 5;
-        bool short_audio_optimization = true; /*extra whisper feature*/
+
+        audio_ctx_conf_t audio_ctx_conf =
+            audio_ctx_conf_t::dynamic; /*extra whisper feature*/
+        int audio_ctx_size = 1500;     /*extra whisper feature*/
         text_format_t text_format = text_format_t::raw;
         std::string options;
         gpu_device_t gpu_device;

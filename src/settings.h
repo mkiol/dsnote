@@ -275,11 +275,12 @@ class settings : public QSettings, public singleton<settings> {
 
     // engine options
 
-#define ENGINE_OPTS(name)                         \
-    Q_PROPERTY(                                   \
-        bool name##_short_audio_optimization READ \
-            name##_short_audio_optimization WRITE \
-                set_##name##_short_audio_optimization NOTIFY name##_changed)
+#define ENGINE_OPTS(name)                                                    \
+    Q_PROPERTY(option_t name##_audioctx_size READ name##_audioctx_size WRITE \
+                   set_##name##_audioctx_size NOTIFY name##_changed)         \
+    Q_PROPERTY(                                                              \
+        int name##_audioctx_size_value READ name##_audioctx_size_value WRITE \
+            set_##name##_audioctx_size_value NOTIFY name##_changed)
     ENGINE_OPTS(whispercpp)
 #undef ENGINE_OPTS
 
@@ -454,6 +455,9 @@ class settings : public QSettings, public singleton<settings> {
             hw_feature_tts_whisperspeech_hip
     };
     friend QDebug operator<<(QDebug d, hw_feature_flags_t hw_feature_flags);
+
+    enum class option_t { OptionAuto = 0, OptionDefault = 1, OptionCustom = 2 };
+    Q_ENUM(option_t)
 
     settings();
 
@@ -733,9 +737,11 @@ class settings : public QSettings, public singleton<settings> {
     tts_subtitles_sync_mode_t tts_subtitles_sync() const;
     void set_tts_subtitles_sync(tts_subtitles_sync_mode_t value);
 
-#define ENGINE_OPTS(name)                         \
-    bool name##_short_audio_optimization() const; \
-    void set_##name##_short_audio_optimization(bool value);
+#define ENGINE_OPTS(name)                            \
+    option_t name##_audioctx_size() const;           \
+    void set_##name##_audioctx_size(option_t value); \
+    int name##_audioctx_size_value() const;          \
+    void set_##name##_audioctx_size_value(int value);
     ENGINE_OPTS(whispercpp)
 #undef ENGINE_OPTS
 

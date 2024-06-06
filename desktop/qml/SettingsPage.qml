@@ -475,6 +475,53 @@ DialogPage {
                 }
             }
 
+            ComboBoxForm {
+                label.text: qsTr("Audio context size")
+                toolTip: qsTr("A smaller value speeds up decoding, but can have a negative impact on accuracy.") + " " +
+                         qsTr("When %1 is set, the size is adjusted dynamically for each audio chunk.").arg(qsTr("Dynamic")) + " " +
+                         qsTr("When %1 is set, the default fixed size is used.").arg(qsTr("Default")) + " " +
+                         qsTr("To define a custom size, use the %1 option.").arg(qsTr("Custom"))
+                comboBox {
+                    currentIndex: {
+                        switch(_settings.whispercpp_audioctx_size) {
+                        case Settings.OptionAuto: return 0
+                        case Settings.OptionDefault: return 1
+                        case Settings.OptionCustom: return 2
+                        }
+                        return 0
+                    }
+                    model: [
+                        qsTr("Dynamic"),
+                        qsTr("Default"),
+                        qsTr("Custom")
+                    ]
+                    onActivated: {
+                        if (index === 0) {
+                            _settings.whispercpp_audioctx_size = Settings.OptionAuto
+                        } else if (index === 1) {
+                            _settings.whispercpp_audioctx_size = Settings.OptionDefault
+                        } else if (index === 2) {
+                            _settings.whispercpp_audioctx_size = Settings.OptionCustom
+                        }
+                    }
+                }
+            }
+
+            SpinBoxForm {
+                indends: 1
+                visible: _settings.whispercpp_audioctx_size === Settings.OptionCustom
+                label.text: qsTr("Size")
+                spinBox {
+                    from: 1
+                    to: 3000
+                    stepSize: 1
+                    value: _settings.whispercpp_audioctx_size_value
+                    onValueChanged: {
+                        _settings.whispercpp_audioctx_size_value = spinBox.value;
+                    }
+                }
+            }
+
             GpuComboBox {
                 id: whispercppGpuComboBox
 

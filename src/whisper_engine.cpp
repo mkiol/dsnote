@@ -503,6 +503,8 @@ whisper_full_params whisper_engine::make_wparams() {
             file >> wparams.audio_ctx;
             LOGD("openvino audio_ctx: " << wparams.audio_ctx);
         }
+    } else if (m_config.audio_ctx_conf == audio_ctx_conf_t::custom) {
+        wparams.audio_ctx = m_config.audio_ctx_size;
     }
 
     LOGD("cpu info: arch=" << cpu_tools::arch() << ", cores="
@@ -523,7 +525,8 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 
     bool subrip = m_config.text_format == text_format_t::subrip;
 
-    if (m_config.short_audio_optimization && !use_openvino()) {
+    if (m_config.audio_ctx_conf == audio_ctx_conf_t::dynamic &&
+        !use_openvino()) {
         // short audio clips optimization
         // https://github.com/ggerganov/whisper.cpp/issues/1855
         m_wparams.audio_ctx = std::min<int>(

@@ -1242,7 +1242,15 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         
         if (model_config->stt->engine == models_manager::model_engine_t::stt_whisper) {
             ENGINE_OPTS(whispercpp)
-            config.short_audio_optimization = settings::instance()->whispercpp_short_audio_optimization();
+            config.audio_ctx_conf = []{
+                switch(settings::instance()->whispercpp_audioctx_size()) {
+                case settings::option_t::OptionAuto: return stt_engine::audio_ctx_conf_t::dynamic;
+                case settings::option_t::OptionDefault: return stt_engine::audio_ctx_conf_t::no_change;
+                case settings::option_t::OptionCustom: return stt_engine::audio_ctx_conf_t::custom;
+                }
+                return stt_engine::audio_ctx_conf_t::dynamic;
+            }();
+            config.audio_ctx_size = settings::instance()->whispercpp_audioctx_size_value();
         } else if (model_config->stt->engine == models_manager::model_engine_t::stt_fasterwhisper) {
             ENGINE_OPTS(fasterwhisper)
         }

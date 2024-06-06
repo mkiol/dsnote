@@ -1494,17 +1494,29 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
 }
 
 #define ENGINE_OPTS(name)                                                     \
-    bool settings::name##_short_audio_optimization() const {                  \
-        return value(QStringLiteral("service/" #name                          \
-                                    "_short_audio_optimization"),             \
-                     true)                                                    \
-            .toBool();                                                        \
+    settings::option_t settings::name##_audioctx_size() const {               \
+        return static_cast<settings::option_t>(                               \
+            value(QStringLiteral("service/" #name "_audioctx_size"),          \
+                  static_cast<int>(settings::option_t::OptionAuto))           \
+                .toInt());                                                    \
     }                                                                         \
-    void settings::set_##name##_short_audio_optimization(bool value) {        \
-        if (name##_short_audio_optimization() != value) {                     \
-            setValue(                                                         \
-                QStringLiteral("service/" #name "_short_audio_optimization"), \
-                value);                                                       \
+    void settings::set_##name##_audioctx_size(settings::option_t value) {     \
+        if (name##_audioctx_size() != value) {                                \
+            setValue(QStringLiteral("service/" #name "_audioctx_size"),       \
+                     static_cast<int>(value));                                \
+            emit name##_changed();                                            \
+            set_restart_required(true);                                       \
+        }                                                                     \
+    }                                                                         \
+    int settings::name##_audioctx_size_value() const {                        \
+        return value(QStringLiteral("service/" #name "_audioctx_size_value"), \
+                     1500)                                                    \
+            .toInt();                                                         \
+    }                                                                         \
+    void settings::set_##name##_audioctx_size_value(int value) {              \
+        if (name##_audioctx_size_value() != value) {                          \
+            setValue(QStringLiteral("service/" #name "_audioctx_size_value"), \
+                     value);                                                  \
             emit name##_changed();                                            \
             set_restart_required(true);                                       \
         }                                                                     \

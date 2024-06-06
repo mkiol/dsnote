@@ -158,6 +158,22 @@ std::ostream& operator<<(std::ostream& os, stt_engine::gpu_api_t api) {
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, stt_engine::audio_ctx_conf_t conf) {
+    switch (conf) {
+        case stt_engine::audio_ctx_conf_t::dynamic:
+            os << "dynamic";
+            break;
+        case stt_engine::audio_ctx_conf_t::no_change:
+            os << "no-change";
+            break;
+        case stt_engine::audio_ctx_conf_t::custom:
+            os << "custom";
+            break;
+    }
+
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os,
                          stt_engine::text_format_t text_format) {
     switch (text_format) {
@@ -211,7 +227,8 @@ std::ostream& operator<<(std::ostream& os, const stt_engine::config_t& config) {
        << ", text-format=" << config.text_format
        << ", cpu-threads=" << config.cpu_threads
        << ", beam-search=" << config.beam_search
-       << ", short-audio-optimization=" << config.short_audio_optimization
+       << ", audio-ctx-conf=" << config.audio_ctx_conf
+       << ", audio-ctx-conf-size=" << config.audio_ctx_size
        << ", options=" << config.options << ", use-gpu=" << config.use_gpu
        << ", gpu-device=[" << config.gpu_device << "]"
        << ", sub-config=[" << config.sub_config << "]";
