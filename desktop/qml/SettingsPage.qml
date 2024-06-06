@@ -436,7 +436,6 @@ DialogPage {
 
             SectionLabel {
                 text: qsTr("%1 engine options").arg("WhisperCpp")
-                visible: _settings.gpu_supported() && app.feature_whispercpp_gpu
             }
 
             SpinBoxForm {
@@ -479,7 +478,7 @@ DialogPage {
             GpuComboBox {
                 id: whispercppGpuComboBox
 
-                visible: _settings.gpu_supported() && app.feature_whispercpp_gpu
+                visible: _settings.hw_accel_supported() && app.feature_whispercpp_gpu
                 devices: _settings.whispercpp_gpu_devices
                 device_index: _settings.whispercpp_gpu_device_idx
                 use_gpu: _settings.whispercpp_use_gpu
@@ -490,7 +489,7 @@ DialogPage {
             CheckBox {
                 id: whispercppFlashAttnCheckBox
 
-                visible: _settings.gpu_supported() && app.feature_whispercpp_gpu && _settings.whispercpp_use_gpu
+                visible: _settings.hw_accel_supported() && app.feature_whispercpp_gpu && _settings.whispercpp_use_gpu
                 checked: _settings.whispercpp_gpu_flash_attn
                 text: qsTr("Use Flash Attention")
                 onCheckedChanged: {
@@ -505,20 +504,19 @@ DialogPage {
                 hoverEnabled: true
             }
 
-            Button {
-                text: qsTr("Reset to default values")
-                onClicked: {
-                    _settings.reset_whispercpp_options()
-                    whispercppGpuComboBox.use_gpu = _settings.whispercpp_use_gpu
-                    whispercppFlashAttnCheckBox.checked = _settings.whispercpp_gpu_flash_attn
-                    whispercppBeamSpinBox.spinBox.value = _settings.whispercpp_beam_search
-                    whispercppThreadsSpinBox.spinBox.value = _settings.whispercpp_cpu_threads
-                }
-            }
+            // Button {
+            //     text: qsTr("Reset to default values")
+            //     onClicked: {
+            //         _settings.reset_whispercpp_options()
+            //         whispercppGpuComboBox.use_gpu = _settings.whispercpp_use_gpu
+            //         whispercppFlashAttnCheckBox.checked = _settings.whispercpp_gpu_flash_attn
+            //         whispercppBeamSpinBox.spinBox.value = _settings.whispercpp_beam_search
+            //         whispercppThreadsSpinBox.spinBox.value = _settings.whispercpp_cpu_threads
+            //     }
+            // }
 
             SectionLabel {
                 text: qsTr("%1 engine options").arg("FasterWhisper")
-                visible: _settings.gpu_supported() && app.feature_fasterwhisper_gpu
             }
 
             SpinBoxForm {
@@ -561,7 +559,7 @@ DialogPage {
             GpuComboBox {
                 id: fasterwhisperGpuComboBox
 
-                visible: _settings.gpu_supported() && app.feature_fasterwhisper_gpu
+                visible: _settings.hw_accel_supported() && app.feature_fasterwhisper_gpu
                 devices: _settings.fasterwhisper_gpu_devices
                 device_index: _settings.fasterwhisper_gpu_device_idx
                 use_gpu: _settings.fasterwhisper_use_gpu
@@ -572,7 +570,7 @@ DialogPage {
             CheckBox {
                 id: fasterwhisperFlashAttnCheckBox
 
-                visible: _settings.gpu_supported() && app.feature_fasterwhisper_gpu && _settings.fasterwhisper_use_gpu
+                visible: _settings.hw_accel_supported() && app.feature_fasterwhisper_gpu && _settings.fasterwhisper_use_gpu
                 checked: _settings.fasterwhisper_gpu_flash_attn
                 text: qsTr("Use Flash Attention")
                 onCheckedChanged: {
@@ -587,16 +585,16 @@ DialogPage {
                 hoverEnabled: true
             }
 
-            Button {
-                text: qsTr("Reset to default values")
-                onClicked: {
-                    _settings.reset_fasterwhisper_options()
-                    fasterwhisperGpuComboBox.use_gpu = _settings.fasterwhisper_use_gpu
-                    fasterwhisperFlashAttnCheckBox.checked = _settings.fasterwhisper_gpu_flash_attn
-                    fasterwhisperBeamSpinBox.spinBox.value = _settings.fasterwhisper_beam_search
-                    fasterwhisperThreadsSpinBox.spinBox.value = _settings.fasterwhisper_cpu_threads
-                }
-            }
+            // Button {
+            //     text: qsTr("Reset to default values")
+            //     onClicked: {
+            //         _settings.reset_fasterwhisper_options()
+            //         fasterwhisperGpuComboBox.use_gpu = _settings.fasterwhisper_use_gpu
+            //         fasterwhisperFlashAttnCheckBox.checked = _settings.fasterwhisper_gpu_flash_attn
+            //         fasterwhisperBeamSpinBox.spinBox.value = _settings.fasterwhisper_beam_search
+            //         fasterwhisperThreadsSpinBox.spinBox.value = _settings.fasterwhisper_cpu_threads
+            //     }
+            // }
         }
 
         ColumnLayout {
@@ -700,11 +698,11 @@ DialogPage {
 
             SectionLabel {
                 text: qsTr("%1 engine options").arg("Coqui")
-                visible: _settings.gpu_supported() && app.feature_coqui_gpu
+                visible: _settings.hw_accel_supported() && app.feature_coqui_gpu
             }
 
             GpuComboBox {
-                visible: _settings.gpu_supported() && app.feature_coqui_gpu
+                visible: _settings.hw_accel_supported() && app.feature_coqui_gpu
                 devices: _settings.coqui_gpu_devices
                 device_index: _settings.coqui_gpu_device_idx
                 use_gpu: _settings.coqui_use_gpu
@@ -714,11 +712,11 @@ DialogPage {
 
             SectionLabel {
                 text: qsTr("%1 engine options").arg("WhisperSpeech")
-                visible: _settings.gpu_supported() && app.feature_whisperspeech_gpu
+                visible: _settings.hw_accel_supported() && app.feature_whisperspeech_gpu
             }
 
             GpuComboBox {
-                visible: _settings.gpu_supported() && app.feature_whisperspeech_gpu
+                visible: _settings.hw_accel_supported() && app.feature_whisperspeech_gpu
                 devices: _settings.whisperspeech_gpu_devices
                 device_index: _settings.whisperspeech_gpu_device_idx
                 use_gpu: _settings.whisperspeech_use_gpu
@@ -1037,16 +1035,16 @@ DialogPage {
                 }
 
                 SectionLabel {
-                    visible: _settings.gpu_supported()
-                    text: qsTr("Graphics card options")
+                    visible: _settings.hw_accel_supported()
+                    text: qsTr("Hardware acceleration options")
                 }
 
                 CheckBox {
-                    visible: _settings.gpu_supported()
-                    checked: _settings.gpu_scan_cuda
+                    visible: _settings.hw_accel_supported()
+                    checked: _settings.hw_scan_cuda
                     text: qsTr("Use %1").arg("NVIDIA CUDA")
                     onCheckedChanged: {
-                        _settings.gpu_scan_cuda = checked
+                        _settings.hw_scan_cuda = checked
                     }
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -1057,11 +1055,11 @@ DialogPage {
                 }
 
                 CheckBox {
-                    visible: _settings.gpu_supported()
-                    checked: _settings.gpu_scan_hip
+                    visible: _settings.hw_accel_supported()
+                    checked: _settings.hw_scan_hip
                     text: qsTr("Use %1").arg("AMD ROCm")
                     onCheckedChanged: {
-                        _settings.gpu_scan_hip = checked
+                        _settings.hw_scan_hip = checked
                     }
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -1072,11 +1070,41 @@ DialogPage {
                 }
 
                 CheckBox {
-                    visible: _settings.gpu_supported()
-                    checked: _settings.gpu_scan_opencl
+                    visible: _settings.hw_accel_supported()
+                    checked: _settings.hw_scan_hip
+                    text: qsTr("Use %1").arg("AMD ROCm")
+                    onCheckedChanged: {
+                        _settings.hw_scan_hip = checked
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Try to find AMD ROCm compatible graphic cards in the system.") + " " +
+                                  qsTr("Disable this option if you observe problems when launching the application.")
+                    hoverEnabled: true
+                }
+
+                CheckBox {
+                    visible: _settings.hw_accel_supported()
+                    checked: _settings.hw_scan_openvino
+                    text: qsTr("Use %1").arg("OpenVINO")
+                    onCheckedChanged: {
+                        _settings.hw_scan_openvino = checked
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Try to find OpenVINO compatible hardware in the system.") + " " +
+                                  qsTr("Disable this option if you observe problems when launching the application.")
+                    hoverEnabled: true
+                }
+
+                CheckBox {
+                    visible: _settings.hw_accel_supported()
+                    checked: _settings.hw_scan_opencl
                     text: qsTr("Use %1").arg("OpenCL")
                     onCheckedChanged: {
-                        _settings.gpu_scan_opencl = checked
+                        _settings.hw_scan_opencl = checked
                     }
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -1087,16 +1115,16 @@ DialogPage {
                 }
 
                 CheckBox {
-                    visible: _settings.gpu_supported()
-                    checked: _settings.gpu_scan_opencl_legacy
+                    visible: _settings.hw_accel_supported()
+                    checked: _settings.hw_scan_opencl_legacy
                     text: qsTr("Use %1").arg("OpenCL (Clover)")
                     onCheckedChanged: {
-                        _settings.gpu_scan_opencl_legacy = checked
+                        _settings.hw_scan_opencl_legacy = checked
                     }
                 }
 
                 CheckBox {
-                    visible: _settings.gpu_supported()
+                    visible: _settings.hw_accel_supported()
                     checked: _settings.gpu_override_version
                     text: qsTr("Override GPU version")
                     onCheckedChanged: {
@@ -1112,7 +1140,7 @@ DialogPage {
 
                 TextFieldForm {
                     indends: 1
-                    visible: _settings.gpu_supported() && _settings.gpu_override_version
+                    visible: _settings.hw_accel_supported() && _settings.gpu_override_version
                     label.text: qsTr("Version")
                     toolTip: qsTr("Value has the same effect as %1 environment variable.").arg("<i>HSA_OVERRIDE_GFX_VERSION</i>")
                     textField {

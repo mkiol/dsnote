@@ -558,7 +558,7 @@ speech_service::speech_service(QObject *parent)
 
     setup_modules();
 
-    remove_cached_media_files();
+    remove_cached_files();
 
     handle_models_changed();
 
@@ -727,11 +727,16 @@ speech_service::choose_model_config_by_id(
             case engine_t::stt: {
                 auto scorer_file = models_manager::sup_model_file_of_role(
                     models_manager::sup_model_role_t::scorer, model.sup_files);
+                auto openvino_file = models_manager::sup_model_file_of_role(
+                    models_manager::sup_model_role_t::openvino,
+                    model.sup_files);
                 config->stt = stt_model_config_t{
                     model.lang_id, model.lang_code, model.id, model.engine,
                     model.model_file,
                     /*scorer_file=*/
                     scorer_file ? scorer_file->get().file : QString{},
+                    /*openvino_file=*/
+                    openvino_file ? openvino_file->get().file : QString{},
                     /*ttt=*/{}};
                 break;
             }
@@ -840,11 +845,16 @@ speech_service::choose_model_config_by_lang(
                 auto scorer_file = models_manager::sup_model_file_of_role(
                     models_manager::sup_model_role_t::scorer,
                     best_model->sup_files);
+                auto openvino_file = models_manager::sup_model_file_of_role(
+                    models_manager::sup_model_role_t::openvino,
+                    best_model->sup_files);
                 config->stt = stt_model_config_t{
                     best_model->lang_id, best_model->lang_code, best_model->id,
                     best_model->engine, best_model->model_file,
                     /*scorer_file=*/
                     scorer_file ? scorer_file->get().file : QString{},
+                    /*openvino_file=*/
+                    openvino_file ? openvino_file->get().file : QString{},
                     /*ttt=*/{}};
                 break;
             }
@@ -895,11 +905,16 @@ speech_service::choose_model_config_by_first(
             case engine_t::stt: {
                 auto scorer_file = models_manager::sup_model_file_of_role(
                     models_manager::sup_model_role_t::scorer, model.sup_files);
+                auto openvino_file = models_manager::sup_model_file_of_role(
+                    models_manager::sup_model_role_t::openvino,
+                    model.sup_files);
                 config->stt = stt_model_config_t{
                     model.lang_id, model.lang_code, model.id, model.engine,
                     model.model_file,
                     /*scorer_file=*/
                     scorer_file ? scorer_file->get().file : QString{},
+                    /*openvino_file=*/
+                    openvino_file ? scorer_file->get().file : QString{},
                     /*ttt=*/{}};
                 break;
             }
@@ -1127,6 +1142,13 @@ static std::optional<typename Engine::gpu_device_t> make_gpu_device(
             device.name = l.at(2).trimmed().toStdString();
             return device;
         }
+        if (l.at(0).trimmed() == "OpenVINO") {
+            typename Engine::gpu_device_t device;
+            device.api = Engine::gpu_api_t::openvino;
+            device.id = 0;
+            device.name = l.at(1).trimmed().toStdString();
+            return device;
+        }
     } else {
         qWarning() << "invalid gpu device str:" << gpu_str << auto_device_str;
     }
@@ -1185,6 +1207,8 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             model_config->stt->model_file.toStdString();
         config.model_files.scorer_file =
             model_config->stt->scorer_file.toStdString();
+        config.model_files.openvino_model_file =
+            model_config->stt->openvino_file.toStdString();
         if (model_config->stt->ttt)
             config.model_files.ttt_model_file =
                 model_config->stt->ttt->model_file.toStdString();
@@ -1200,6 +1224,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         config.sub_config = stt_sub_config_from_options(options);
         config.beam_search = settings::instance()->whispercpp_beam_search();
         config.cpu_threads = settings::instance()->whispercpp_cpu_threads();
+        config.cache_dir = settings::instance()->cache_dir().toStdString();
 
         // clang-format off
 #define ENGINE_OPTS(name) \
@@ -1249,6 +1274,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                 type != typeid(april_engine))
                 return true;
 
+            if (m_stt_engine->model_files() != config.model_files) return true;
             if (m_stt_engine->model_files() != config.model_files) return true;
             if (m_stt_engine->lang() != config.lang) return true;
             if (m_stt_engine->translate() != config.translate) return true;
@@ -2738,8 +2764,8 @@ QVariantMap speech_service::features_availability() {
         auto py_availability = py_executor::instance()->libs_availability;
         if (py_availability) {
             qDebug() << "features availability ready";
-            unsigned int gpu_feature_flags =
-                settings::gpu_feature_flags_t::gpu_feature_none;
+            unsigned int hw_feature_flags =
+                settings::hw_feature_flags_t::hw_feature_none;
 #ifdef ARCH_X86_64
             auto has_cuda = gpu_tools::has_cuda_runtime();
             auto has_cudnn = gpu_tools::has_cudnn();
@@ -2757,20 +2783,20 @@ QVariantMap speech_service::features_availability() {
             m_features_availability.insert(
                 "coqui-tts-gpu",
                 QVariantList{tts_coqui_cuda,
-                             "Coqui TTS " + tr("GPU acceleration")});
+                             "Coqui TTS " + tr("HW acceleration")});
             if (tts_coqui_cuda)
-                gpu_feature_flags |=
-                    settings::gpu_feature_flags_t::gpu_feature_tts_coqui_cuda;
+                hw_feature_flags |=
+                    settings::hw_feature_flags_t::hw_feature_tts_coqui_cuda;
 
             bool tts_whisperspeech_cuda = py_availability->whisperspeech_tts &&
                                           py_availability->torch_cuda;
             m_features_availability.insert(
                 "whisperspeech-tts-gpu",
                 QVariantList{tts_whisperspeech_cuda,
-                             "WhisperSpeech TTS " + tr("GPU acceleration")});
+                             "WhisperSpeech TTS " + tr("HW acceleration")});
             if (tts_whisperspeech_cuda)
-                gpu_feature_flags |= settings::gpu_feature_flags_t::
-                    gpu_feature_tts_whisperspeech_cuda;
+                hw_feature_flags |= settings::hw_feature_flags_t::
+                    hw_feature_tts_whisperspeech_cuda;
 #endif
             m_features_availability.insert(
                 "coqui-tts-ja", QVariantList{py_availability->coqui_tts &&
@@ -2826,10 +2852,10 @@ QVariantMap speech_service::features_availability() {
             m_features_availability.insert(
                 "faster-whisper-stt-gpu",
                 QVariantList{stt_fasterwhisper_cuda,
-                             "FasterWhisper STT " + tr("GPU acceleration")});
+                             "FasterWhisper STT " + tr("HW acceleration")});
             if (stt_fasterwhisper_cuda)
-                gpu_feature_flags |= settings::gpu_feature_flags_t::
-                    gpu_feature_stt_fasterwhisper_cuda;
+                hw_feature_flags |= settings::hw_feature_flags_t::
+                    hw_feature_stt_fasterwhisper_cuda;
 #endif
             m_features_availability.insert(
                 "punctuator", QVariantList{py_availability->transformers,
@@ -2853,29 +2879,38 @@ QVariantMap speech_service::features_availability() {
             m_features_availability.insert(
                 "whispercpp-stt-cuda",
                 QVariantList{whisper_engine::has_cuda(),
-                             "WhisperCpp STT CUDA " + tr("GPU acceleration")});
+                             "WhisperCpp STT CUDA " + tr("HW acceleration")});
             if (stt_whispercpp_cuda)
-                gpu_feature_flags |= settings::gpu_feature_flags_t::
-                    gpu_feature_stt_whispercpp_cuda;
+                hw_feature_flags |= settings::hw_feature_flags_t::
+                    hw_feature_stt_whispercpp_cuda;
 
             bool stt_whispercpp_hip = whisper_engine::has_hip();
             m_features_availability.insert(
                 "whispercpp-stt-hip",
                 QVariantList{stt_whispercpp_hip,
-                             "WhisperCpp STT ROCm " + tr("GPU acceleration")});
+                             "WhisperCpp STT ROCm " + tr("HW acceleration")});
             if (stt_whispercpp_hip)
-                gpu_feature_flags |= settings::gpu_feature_flags_t::
-                    gpu_feature_stt_whispercpp_hip;
+                hw_feature_flags |=
+                    settings::hw_feature_flags_t::hw_feature_stt_whispercpp_hip;
+
+            bool stt_whispercpp_openvino = whisper_engine::has_openvino();
+            m_features_availability.insert(
+                "whispercpp-stt-openvino",
+                QVariantList{
+                    stt_whispercpp_openvino,
+                    "WhisperCpp STT OpenVINO " + tr("HW acceleration")});
+            if (stt_whispercpp_openvino)
+                hw_feature_flags |= settings::hw_feature_flags_t::
+                    hw_feature_stt_whispercpp_openvino;
 
             bool stt_whispercpp_opencl = whisper_engine::has_opencl();
             m_features_availability.insert(
                 "whispercpp-stt-opencl",
-                QVariantList{
-                    stt_whispercpp_opencl,
-                    "WhisperCpp STT OpenCL " + tr("GPU acceleration")});
+                QVariantList{stt_whispercpp_opencl,
+                             "WhisperCpp STT OpenCL " + tr("HW acceleration")});
             if (stt_whispercpp_opencl)
-                gpu_feature_flags |= settings::gpu_feature_flags_t::
-                    gpu_feature_stt_whispercpp_opencl;
+                hw_feature_flags |= settings::hw_feature_flags_t::
+                    hw_feature_stt_whispercpp_opencl;
 #endif
             auto tts_rhvoice = rhvoice_engine::available();
             m_features_availability.insert(
@@ -2913,7 +2948,7 @@ QVariantMap speech_service::features_availability() {
                  /*ttt_hftc=*/py_availability->transformers,
                  /*option_r=*/has_uroman});
 
-            settings::instance()->scan_gpu_devices(gpu_feature_flags);
+            settings::instance()->scan_hw_devices(hw_feature_flags);
 
             refresh_status();
 
@@ -4036,10 +4071,12 @@ void speech_service::stop_keepalive_current_task() {
     m_keepalive_current_task_timer.stop();
 }
 
-void speech_service::remove_cached_media_files() {
+void speech_service::remove_cached_files() {
     if (settings::instance()->cache_policy() ==
         settings::cache_policy_t::CacheRemove) {
         QDir dir{settings::instance()->cache_dir()};
+
+        // media files
 
         dir.setNameFilters(QStringList{} << "*.wav"
                                          << "*.mp3"
@@ -4050,6 +4087,14 @@ void speech_service::remove_cached_media_files() {
 
         for (const auto &file : std::as_const(dir).entryList())
             dir.remove(file);
+
+        // openvino chache
+
+        dir.setNameFilters(QStringList{} << "*-encoder-openvino-cache");
+        dir.setFilter(QDir::Dirs);
+
+        for (const auto &file : std::as_const(dir).entryList())
+            QDir{dir.absoluteFilePath(file)}.removeRecursively();
     }
 }
 

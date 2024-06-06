@@ -3957,7 +3957,8 @@ bool dsnote_app::feature_available(const QString &name) const {
 bool dsnote_app::feature_whispercpp_gpu() const {
     return feature_available("whispercpp-stt-cuda") ||
            feature_available("whispercpp-stt-hip") ||
-           feature_available("whispercpp-stt-opencl");
+           feature_available("whispercpp-stt-opencl") ||
+           feature_available("whispercpp-stt-openvino");
 }
 
 bool dsnote_app::feature_fasterwhisper_gpu() const {

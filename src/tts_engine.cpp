@@ -70,6 +70,9 @@ std::ostream& operator<<(std::ostream& os, tts_engine::gpu_api_t api) {
         case tts_engine::gpu_api_t::rocm:
             os << "rocm";
             break;
+        case tts_engine::gpu_api_t::openvino:
+            os << "openvino";
+            break;
     }
 
     return os;

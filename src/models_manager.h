@@ -83,6 +83,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         engine_tts_mimic3 = 1U << 15U,
         engine_tts_whisperspeech = 1U << 16U,
         engine_other = 1U << 17U,
+        hw_openvino = 1U << 18U,
         generic_end = engine_other,
         stt_start = 1U << 20U,
         stt_intermediate_results = stt_start,
@@ -98,7 +99,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     }
     friend QDebug operator<<(QDebug d, feature_flags flags);
 
-    enum class sup_model_role_t { scorer, vocoder, diacritizer, hub };
+    enum class sup_model_role_t { scorer, vocoder, diacritizer, hub, openvino };
     friend QDebug operator<<(QDebug d, sup_model_role_t role);
 
     struct lang_t {
@@ -398,7 +399,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     static void update_dl_off(models_t& models);
     static void update_url_hash(priv_model_t& model);
     static download_info_t make_download_info(const priv_model_t& model);
-    static feature_flags add_explicit_feature_flags(
+    static feature_flags add_implicit_feature_flags(
         const QString& model_id, model_engine_t engine,
         feature_flags existing_features);
     static feature_flags add_new_feature(feature_flags existing_features,

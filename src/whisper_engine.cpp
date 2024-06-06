@@ -7,11 +7,16 @@
 
 #include "whisper_engine.hpp"
 
+#include <dirent.h>
 #include <dlfcn.h>
+#include <fmt/format.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include <algorithm>
 #include <chrono>
 #include <cstdlib>
+#include <fstream>
 #include <sstream>
 #include <string>
 
@@ -61,6 +66,18 @@ bool whisper_engine::has_cuda() {
     return true;
 }
 
+bool whisper_engine::has_openvino() {
+    auto* handle = dlopen("libwhisper-openvino.so", RTLD_LAZY);
+    if (!handle) {
+        LOGW("failed to open whisper-openvino lib: " << dlerror());
+        return false;
+    }
+
+    dlclose(handle);
+
+    return true;
+}
+
 bool whisper_engine::has_opencl() {
     auto* handle = dlopen("libwhisper-clblast.so", RTLD_LAZY);
     if (!handle) {
@@ -83,6 +100,11 @@ bool whisper_engine::has_hip() {
     dlclose(handle);
 
     return true;
+}
+
+bool whisper_engine::use_openvino() const {
+    return m_config.gpu_device.api == gpu_api_t::openvino &&
+           !m_config.model_files.openvino_model_file.empty();
 }
 
 void whisper_engine::open_whisper_lib() {
@@ -108,28 +130,24 @@ void whisper_engine::open_whisper_lib() {
             if (m_config.gpu_device.api == gpu_api_t::cuda) {
                 LOGD("using whisper-cublas");
 
-                if (m_config.gpu_device.id >= 0)
-                    setenv("CUDA_VISIBLE_DEVICES",
-                           std::to_string(m_config.gpu_device.id).c_str(), 1);
-                else
-                    unsetenv("CUDA_VISIBLE_DEVICES");
-
                 m_whisperlib_handle = dlopen("libwhisper-cublas.so", RTLD_LAZY);
                 if (m_whisperlib_handle == nullptr)
                     LOGE("failed to open libwhisper-cublas.so: " << dlerror());
             } else if (m_config.gpu_device.api == gpu_api_t::rocm) {
                 LOGD("using whisper-hipblas");
 
-                if (m_config.gpu_device.id >= 0)
-                    setenv("HIP_VISIBLE_DEVICES",
-                           std::to_string(m_config.gpu_device.id).c_str(), 1);
-                else
-                    unsetenv("HIP_VISIBLE_DEVICES");
-
                 m_whisperlib_handle =
                     dlopen("libwhisper-hipblas.so", RTLD_LAZY);
                 if (m_whisperlib_handle == nullptr)
                     LOGE("failed to open libwhisper-hipblas.so: " << dlerror());
+            } else if (use_openvino()) {
+                LOGD("using whisper-openvino");
+
+                m_whisperlib_handle =
+                    dlopen("libwhisper-openvino.so", RTLD_LAZY);
+                if (m_whisperlib_handle == nullptr)
+                    LOGE(
+                        "failed to open libwhisper-openvino.so: " << dlerror());
             } else if (m_config.gpu_device.api == gpu_api_t::opencl) {
                 LOGD("using whisper-clblast");
 
@@ -196,6 +214,9 @@ void whisper_engine::open_whisper_lib() {
     m_whisper_api.whisper_context_default_params = reinterpret_cast<
         decltype(m_whisper_api.whisper_context_default_params)>(
         dlsym(m_whisperlib_handle, "whisper_context_default_params"));
+    m_whisper_api.whisper_ctx_init_openvino_encoder = reinterpret_cast<
+        decltype(m_whisper_api.whisper_ctx_init_openvino_encoder)>(
+        dlsym(m_whisperlib_handle, "whisper_ctx_init_openvino_encoder"));
 
     if (!m_whisper_api.ok()) {
         LOGE("failed to register whisper api");
@@ -235,6 +256,24 @@ void whisper_engine::stop_processing_impl() {
 
 void whisper_engine::start_processing_impl() { create_model(); }
 
+static std::string first_file_with_ext(std::string dir_path,
+                                       const std::string& ext) {
+    auto* dirp = opendir(dir_path.c_str());
+    if (!dirp) return {};
+
+    while (auto* dirent = readdir(dirp)) {
+        if (dirent->d_type != DT_REG) continue;
+
+        std::string fn{dirent->d_name};
+
+        if (!fn.empty() && fn.front() != '.' &&
+            fn.substr(fn.find_last_of('.') + 1) == ext)
+            return dir_path.append("/").append(fn);
+    }
+
+    return {};
+}
+
 void whisper_engine::create_model() {
     if (m_whisper_ctx) return;
 
@@ -251,6 +290,28 @@ void whisper_engine::create_model() {
     if (m_whisper_ctx == nullptr) {
         LOGE("failed to create whisper model");
         throw std::runtime_error("failed to create whisper model");
+    }
+
+    if (use_openvino()) {
+        auto idx = m_config.model_files.model_file.rfind('/');
+        auto ov_file = first_file_with_ext(
+            m_config.model_files.openvino_model_file, "xml");
+        if (idx != std::string::npos && !ov_file.empty()) {
+            LOGD("using openvino model: " << ov_file);
+            auto cache_dir =
+                fmt::format("{}/{}-encoder-openvino-cache", m_config.cache_dir,
+                            m_config.model_files.model_file.substr(idx));
+
+            if (m_whisper_api.whisper_ctx_init_openvino_encoder(
+                    m_whisper_ctx, ov_file.c_str(),
+                    m_config.gpu_device.name.empty()
+                        ? "CPU"
+                        : m_config.gpu_device.name.c_str(),
+                    cache_dir.c_str()) != 0) {
+                LOGE("failed to init openvino");
+                throw std::runtime_error("failed to init openvino");
+            }
+        }
     }
 
     LOGD("whisper model created");
@@ -433,6 +494,17 @@ whisper_full_params whisper_engine::make_wparams() {
     wparams.print_progress = false;
     wparams.print_timestamps = false;
 
+    if (!m_config.model_files.openvino_model_file.empty()) {
+        // read audio_ctx from config file for openvino
+        auto config_file = first_file_with_ext(
+            m_config.model_files.openvino_model_file, "config");
+        if (!config_file.empty()) {
+            std::ifstream file{config_file};
+            file >> wparams.audio_ctx;
+            LOGD("openvino audio_ctx: " << wparams.audio_ctx);
+        }
+    }
+
     LOGD("cpu info: arch=" << cpu_tools::arch() << ", cores="
                            << std::thread::hardware_concurrency());
     LOGD("using threads: " << wparams.n_threads << "/"
@@ -451,7 +523,7 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 
     bool subrip = m_config.text_format == text_format_t::subrip;
 
-    if (m_config.short_audio_optimization) {
+    if (m_config.short_audio_optimization && !use_openvino()) {
         // short audio clips optimization
         // https://github.com/ggerganov/whisper.cpp/issues/1855
         m_wparams.audio_ctx = std::min<int>(

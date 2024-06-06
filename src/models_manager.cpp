@@ -144,6 +144,8 @@ QDebug operator<<(QDebug d, models_manager::feature_flags flags) {
     if (flags & models_manager::engine_tts_mimic3) d << "engine-tts-mimic3, ";
     if (flags & models_manager::engine_tts_whisperspeech)
         d << "engine-tts-whisperspeech, ";
+    if (flags & models_manager::engine_other) d << "engine-other, ";
+    if (flags & models_manager::hw_openvino) d << "hw-openvino, ";
     if (flags & models_manager::stt_intermediate_results)
         d << "stt-intermediate-results, ";
     if (flags & models_manager::stt_punctuation) d << "stt-punctuation, ";
@@ -216,6 +218,9 @@ QDebug operator<<(QDebug d, models_manager::sup_model_role_t role) {
             break;
         case models_manager::sup_model_role_t::hub:
             d << "hub";
+            break;
+        case models_manager::sup_model_role_t::openvino:
+            d << "openvino";
             break;
     }
 
@@ -1523,6 +1528,8 @@ models_manager::feature_flags models_manager::feature_from_name(
         return feature_flags::stt_punctuation;
     if (name == QStringLiteral("tts_voice_cloning"))
         return feature_flags::tts_voice_cloning;
+    if (name == QStringLiteral("hw_openvino"))
+        return feature_flags::hw_openvino;
     return feature_flags::no_flags;
 }
 
@@ -1533,6 +1540,7 @@ models_manager::sup_model_role_t models_manager::sup_model_role_from_name(
     if (name == QStringLiteral("diacritizer"))
         return sup_model_role_t::diacritizer;
     if (name == QStringLiteral("hub")) return sup_model_role_t::hub;
+    if (name == QStringLiteral("openvino")) return sup_model_role_t::openvino;
     throw std::runtime_error("unknown sup role: " + name.toStdString());
 }
 
@@ -1645,13 +1653,14 @@ models_manager::feature_flags models_manager::add_new_feature(
         case feature_flags::stt_intermediate_results:
         case feature_flags::stt_punctuation:
         case feature_flags::tts_voice_cloning:
+        case feature_flags::hw_openvino:
             break;
     }
 
     return existing_features | new_feature;
 }
 
-models_manager::feature_flags models_manager::add_explicit_feature_flags(
+models_manager::feature_flags models_manager::add_implicit_feature_flags(
     const QString& model_id, model_engine_t engine,
     feature_flags existing_features) {
     switch (engine) {
@@ -1921,7 +1930,7 @@ auto models_manager::extract_models(
                 for (const auto& obj : features_array)
                     features = features | feature_from_name(obj.toString());
             }
-            features = add_explicit_feature_flags(model_id, engine, features);
+            features = add_implicit_feature_flags(model_id, engine, features);
 
             recommended_model = obj.value("recommended_model").toString();
         } else if (models.count(model_alias_of) > 0) {
@@ -1956,7 +1965,7 @@ auto models_manager::extract_models(
                     features = add_new_feature(
                         features, feature_from_name(obj.toString()));
             }
-            features = add_explicit_feature_flags(model_id, engine, features);
+            features = add_implicit_feature_flags(model_id, engine, features);
 
             license = alias.license;
 
@@ -2408,6 +2417,8 @@ QString models_manager::sup_file_name_from_id(const QString& id,
             return id + "_diacritizer";
         case sup_model_role_t::hub:
             return id + "_hub";
+        case sup_model_role_t::openvino:
+            return id + "_openvino";
     }
 
     throw std::runtime_error("invalid sup role");

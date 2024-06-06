@@ -131,6 +131,31 @@ if(arch_x8664)
 
         list(APPEND deps whispercpphipblas)
     endif(BUILD_WHISPERCPP_HIPBLAS)
+
+    if(BUILD_WHISPERCPP_OPENVINO)
+        ExternalProject_Add(whispercppopenvino
+            SOURCE_DIR ${external_dir}/whispercppopenvino
+            BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercppopenvino
+            INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+            URL "${whispercpp_source_url}"
+            URL_HASH SHA256=${whispercpp_checksum}
+            PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
+                        -i ${patches_dir}/whispercpp.patch ||
+                            echo "patch cmd failed, likely already patched"
+            CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+                -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+                -DCMAKE_INSTALL_LIBDIR=lib
+                -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
+                -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
+                -DWHISPER_OPENVINO=ON
+                -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
+                -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
+                -DWHISPER_TARGET_NAME=whisper-openvino
+            BUILD_ALWAYS False
+        )
+
+        list(APPEND deps whispercppopenvino)
+    endif(BUILD_WHISPERCPP_OPENVINO)
 endif()
 
 if(BUILD_OPENBLAS)

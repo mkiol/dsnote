@@ -58,7 +58,7 @@
 static void exit_program() {
     qDebug() << "exiting";
 
-    speech_service::remove_cached_media_files();
+    speech_service::remove_cached_files();
 
     // workaround for python thread locking
     std::quick_exit(0);
@@ -76,7 +76,7 @@ struct cmd_options {
         settings::launch_mode_t::app_stanalone;
     bool verbose = false;
     bool gen_cheksums = false;
-    bool gpu_scan_off = false;
+    bool hw_scan_off = false;
     bool py_scan_off = false;
     bool reset_models = false;
     bool start_in_tray = false;
@@ -140,12 +140,13 @@ static cmd_options check_options(const QCoreApplication& app) {
             "when adding new models to config file manually.")};
     parser.addOption(gen_checksum_opt);
 
-    QCommandLineOption gpuscanoff_opt{
-        QStringLiteral("gpu-scan-off"),
-        QStringLiteral("Disables scanning for CUDA, ROCm and OpenCL devices. "
+    QCommandLineOption hwscanoff_opt{
+        QStringLiteral("hw-scan-off"),
+        QStringLiteral("Disables scanning for CUDA, ROCm, OpenVINO and OpenCL "
+                       "compatible hardware. "
                        "Use this option when you observing problems in "
                        "starting the app.")};
-    parser.addOption(gpuscanoff_opt);
+    parser.addOption(hwscanoff_opt);
 
     QCommandLineOption pyscanoff_opt{
         QStringLiteral("py-scan-off"),
@@ -242,8 +243,6 @@ static cmd_options check_options(const QCoreApplication& app) {
                 "set-stt-model, set-tts-model.\n");
             options.valid = false;
         } else {
-            options.action = std::move(action);
-
             if (action.compare("set-stt-model", Qt::CaseInsensitive) == 0 ||
                 action.compare("set-tts-model", Qt::CaseInsensitive) == 0) {
                 auto id = parser.value(id_opt);
@@ -254,13 +253,15 @@ static cmd_options check_options(const QCoreApplication& app) {
                     options.id = std::move(id);
                 }
             }
+
+            options.action = std::move(action);
         }
     }
 
     options.log_file = parser.value(log_file_opt);
     options.verbose = parser.isSet(verbose_opt);
     options.gen_cheksums = parser.isSet(gen_checksum_opt);
-    options.gpu_scan_off = parser.isSet(gpuscanoff_opt);
+    options.hw_scan_off = parser.isSet(hwscanoff_opt);
     options.py_scan_off = parser.isSet(pyscanoff_opt);
     options.reset_models = parser.isSet(resetmodels_opt);
     options.files = parser.positionalArguments();
@@ -322,8 +323,7 @@ static void install_translator() {
 }
 
 static void start_service(const cmd_options& options) {
-    if (options.gpu_scan_off)
-        settings::instance()->disable_gpu_scan();
+    if (options.hw_scan_off) settings::instance()->disable_hw_scan();
     if (options.py_scan_off) settings::instance()->disable_py_scan();
 
     speech_service::instance();
@@ -334,7 +334,7 @@ static void start_service(const cmd_options& options) {
 }
 
 static void start_app(const cmd_options& options, app_server& dbus_app_server) {
-    if (options.gpu_scan_off) settings::instance()->disable_gpu_scan();
+    if (options.hw_scan_off) settings::instance()->disable_hw_scan();
     if (options.py_scan_off) settings::instance()->disable_py_scan();
 
     if (settings::instance()->launch_mode() ==

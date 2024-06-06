@@ -141,29 +141,31 @@ static QString audio_format_to_str(settings::audio_format_t format) {
     return QStringLiteral("mp3");
 }
 
-QDebug operator<<(QDebug d, settings::gpu_feature_flags_t gpu_features) {
-    if (gpu_features &
-        settings::gpu_feature_flags_t::gpu_feature_stt_whispercpp_cuda)
+QDebug operator<<(QDebug d, settings::hw_feature_flags_t hw_features) {
+    if (hw_features &
+        settings::hw_feature_flags_t::hw_feature_stt_whispercpp_cuda)
         d << "stt-whispercpp-cuda,";
-    if (gpu_features &
-        settings::gpu_feature_flags_t::gpu_feature_stt_whispercpp_hip)
+    if (hw_features &
+        settings::hw_feature_flags_t::hw_feature_stt_whispercpp_hip)
         d << "stt-whispercpp-hip,";
-    if (gpu_features &
-        settings::gpu_feature_flags_t::gpu_feature_stt_whispercpp_opencl)
+    if (hw_features &
+        settings::hw_feature_flags_t::hw_feature_stt_whispercpp_openvino)
+        d << "stt-whispercpp-openvino,";
+    if (hw_features &
+        settings::hw_feature_flags_t::hw_feature_stt_whispercpp_opencl)
         d << "stt-whispercpp-opencl,";
-    if (gpu_features &
-        settings::gpu_feature_flags_t::gpu_feature_stt_fasterwhisper_cuda)
+    if (hw_features &
+        settings::hw_feature_flags_t::hw_feature_stt_fasterwhisper_cuda)
         d << "stt-fasterwhisper-cuda,";
-    if (gpu_features &
-        settings::gpu_feature_flags_t::gpu_feature_tts_coqui_cuda)
+    if (hw_features & settings::hw_feature_flags_t::hw_feature_tts_coqui_cuda)
         d << "tts-coqui-cuda,";
-    if (gpu_features & settings::gpu_feature_flags_t::gpu_feature_tts_coqui_hip)
+    if (hw_features & settings::hw_feature_flags_t::hw_feature_tts_coqui_hip)
         d << "tts-coqui-hip";
-    if (gpu_features &
-        settings::gpu_feature_flags_t::gpu_feature_tts_whisperspeech_cuda)
+    if (hw_features &
+        settings::hw_feature_flags_t::hw_feature_tts_whisperspeech_cuda)
         d << "tts-whisperspeech-cuda,";
-    if (gpu_features &
-        settings::gpu_feature_flags_t::gpu_feature_tts_whisperspeech_hip)
+    if (hw_features &
+        settings::hw_feature_flags_t::hw_feature_tts_whisperspeech_hip)
         d << "tts-whisperspeech-hip";
 
     return d;
@@ -889,7 +891,7 @@ void settings::set_hint_translator(bool value) {
 }
 
 bool settings::hint_addons() const {
-    if (gpu_supported() && is_flatpak() &&
+    if (hw_accel_supported() && is_flatpak() &&
         addon_flags() == addon_flags_t::AddonNone)
         return value(QStringLiteral("hint_addons"), true).toBool();
     else
@@ -1009,7 +1011,7 @@ bool settings::py_supported() const {
 #endif
 }
 
-bool settings::gpu_supported() const {
+bool settings::hw_accel_supported() const {
 #ifdef ARCH_X86_64
     return true;
 #else
@@ -1351,7 +1353,7 @@ void settings::enforce_num_threads() const {
     }
 }
 
-void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
+void settings::scan_hw_devices(unsigned int hw_feature_flags) {
 #ifdef ARCH_X86_64
 #define ENGINE_OPTS(name)           \
     m_##name##_gpu_devices.clear(); \
@@ -1365,43 +1367,47 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
 
     m_rocm_gpu_versions.clear();
 
-    qDebug() << "scan cuda:" << gpu_scan_cuda();
-    qDebug() << "scan hip:" << gpu_scan_hip();
-    qDebug() << "scan opencl:" << gpu_scan_opencl();
-    qDebug() << "scan opencl legacy:" << gpu_scan_opencl_legacy();
-    qDebug() << "gpu feature flags:"
-             << static_cast<gpu_feature_flags_t>(gpu_feature_flags);
+    qDebug() << "scan cuda:" << hw_scan_cuda();
+    qDebug() << "scan hip:" << hw_scan_hip();
+    qDebug() << "scan openvino:" << hw_scan_openvino();
+    qDebug() << "scan opencl:" << hw_scan_opencl();
+    qDebug() << "scan opencl legacy:" << hw_scan_opencl_legacy();
+    qDebug() << "hw feature flags:"
+             << static_cast<hw_feature_flags_t>(hw_feature_flags);
 
     bool disable_fasterwhisper_cuda =
-        (gpu_feature_flags &
-         gpu_feature_flags_t::gpu_feature_stt_fasterwhisper_cuda) == 0;
+        (hw_feature_flags &
+         hw_feature_flags_t::hw_feature_stt_fasterwhisper_cuda) == 0;
     bool disable_whispercpp_cuda =
-        (gpu_feature_flags &
-         gpu_feature_flags_t::gpu_feature_stt_whispercpp_cuda) == 0;
+        (hw_feature_flags &
+         hw_feature_flags_t::hw_feature_stt_whispercpp_cuda) == 0;
+    bool disable_whispercpp_openvino =
+        (hw_feature_flags &
+         hw_feature_flags_t::hw_feature_stt_whispercpp_openvino) == 0;
     bool disable_whispercpp_hip =
-        (gpu_feature_flags &
-         gpu_feature_flags_t::gpu_feature_stt_whispercpp_hip) == 0;
+        (hw_feature_flags &
+         hw_feature_flags_t::hw_feature_stt_whispercpp_hip) == 0;
     bool disable_whispercpp_opencl =
-        (gpu_feature_flags &
-         gpu_feature_flags_t::gpu_feature_stt_whispercpp_opencl) == 0;
+        (hw_feature_flags &
+         hw_feature_flags_t::hw_feature_stt_whispercpp_opencl) == 0;
     bool disable_coqui_cuda =
-        (gpu_feature_flags & gpu_feature_flags_t::gpu_feature_tts_coqui_cuda) ==
-        0;
+        (hw_feature_flags & hw_feature_flags_t::hw_feature_tts_coqui_cuda) == 0;
     bool disable_whisperspeech_cuda =
-        (gpu_feature_flags &
-         gpu_feature_flags_t::gpu_feature_tts_whisperspeech_cuda) == 0;
+        (hw_feature_flags &
+         hw_feature_flags_t::hw_feature_tts_whisperspeech_cuda) == 0;
     bool disable_coqui_hip = disable_coqui_cuda;
     bool disable_whisperspeech_hip = disable_whisperspeech_cuda;
 
     auto result = gpu_tools::available_devices(
-        /*cuda=*/gpu_scan_cuda(),
-        /*hip=*/gpu_scan_hip(),
-        /*opencl=*/gpu_scan_opencl(),
+        /*cuda=*/hw_scan_cuda(),
+        /*hip=*/hw_scan_hip(),
+        /*openvino=*/hw_scan_openvino(),
+        /*opencl=*/hw_scan_opencl(),
         /*opencl_always=*/true);
 
     std::for_each(
         result.devices.cbegin(), result.devices.cend(),
-        [&, disable_clover = !gpu_scan_opencl_legacy()](const auto& device) {
+        [&, disable_clover = !hw_scan_opencl_legacy()](const auto& device) {
             switch (device.api) {
                 case gpu_tools::api_t::opencl:
                     if (disable_whispercpp_opencl) return;
@@ -1409,17 +1415,20 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
                         return;
                     m_whispercpp_gpu_devices.push_back(
                         QStringLiteral("%1, %2, %3")
-                            .arg("OpenCL",
-                                 QString::fromStdString(device.platform_name),
-                                 QString::fromStdString(device.name)));
+                            .arg(
+                                "OpenCL",
+                                QString::fromStdString(device.platform_name)
+                                    .trimmed(),
+                                QString::fromStdString(device.name).trimmed()));
                     break;
                 case gpu_tools::api_t::cuda: {
                     if (disable_fasterwhisper_cuda && disable_whispercpp_cuda &&
                         disable_coqui_cuda && disable_whisperspeech_cuda)
                         return;
-                    auto item = QStringLiteral("%1, %2, %3")
-                                    .arg("CUDA", QString::number(device.id),
-                                         QString::fromStdString(device.name));
+                    auto item =
+                        QStringLiteral("%1, %2, %3")
+                            .arg("CUDA", QString::number(device.id),
+                                 QString::fromStdString(device.name).trimmed());
                     if (!disable_fasterwhisper_cuda)
                         m_fasterwhisper_gpu_devices.push_back(item);
                     if (!disable_whispercpp_cuda)
@@ -1434,9 +1443,10 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
                     if (disable_whispercpp_hip && disable_coqui_hip &&
                         disable_whisperspeech_hip)
                         return;
-                    auto item = QStringLiteral("%1, %2, %3")
-                                    .arg("ROCm", QString::number(device.id),
-                                         QString::fromStdString(device.name));
+                    auto item =
+                        QStringLiteral("%1, %2, %3")
+                            .arg("ROCm", QString::number(device.id),
+                                 QString::fromStdString(device.name).trimmed());
                     if (!disable_whispercpp_hip)
                         m_whispercpp_gpu_devices.push_back(item);
                     if (!disable_coqui_hip) m_coqui_gpu_devices.push_back(item);
@@ -1446,6 +1456,15 @@ void settings::scan_gpu_devices(unsigned int gpu_feature_flags) {
                         QString::fromStdString(device.platform_name));
                     break;
                 }
+                case gpu_tools::api_t::openvino:
+                    if (disable_whispercpp_openvino) return;
+                    m_whispercpp_gpu_devices.push_back(
+                        QStringLiteral("%1, %2, %3")
+                            .arg("OpenVINO",
+                                 QString::fromStdString(device.name).trimmed(),
+                                 QString::fromStdString(device.platform_name)
+                                     .trimmed()));
+                    break;
             }
         });
 
@@ -1892,19 +1911,6 @@ void settings::set_desktop_notification_details(bool value) {
     }
 }
 
-bool settings::gpu_scan_cuda() const {
-    return value(QStringLiteral("gpu_scan_cuda"), true).toBool();
-}
-
-void settings::set_gpu_scan_cuda(bool value) {
-    if (value != gpu_scan_cuda()) {
-        setValue(QStringLiteral("gpu_scan_cuda"), value);
-        emit gpu_scan_cuda_changed();
-
-        set_restart_required(true);
-    }
-}
-
 bool settings::mnt_clean_text() const {
     return value(QStringLiteral("mnt_clean_text"), false).toBool();
 }
@@ -2056,40 +2062,66 @@ void settings::set_tts_use_engine_speed_control(bool value) {
     }
 }
 
-bool settings::gpu_scan_hip() const {
-    return value(QStringLiteral("gpu_scan_hip"), true).toBool();
+bool settings::hw_scan_cuda() const {
+    return value(QStringLiteral("hw_scan_cuda"), true).toBool();
 }
 
-void settings::set_gpu_scan_hip(bool value) {
-    if (value != gpu_scan_hip()) {
-        setValue(QStringLiteral("gpu_scan_hip"), value);
-        emit gpu_scan_hip_changed();
+void settings::set_hw_scan_cuda(bool value) {
+    if (value != hw_scan_cuda()) {
+        setValue(QStringLiteral("hw_scan_cuda"), value);
+        emit hw_scan_cuda_changed();
 
         set_restart_required(true);
     }
 }
 
-bool settings::gpu_scan_opencl() const {
-    return value(QStringLiteral("gpu_scan_opencl"), true).toBool();
+bool settings::hw_scan_hip() const {
+    return value(QStringLiteral("hw_scan_hip"), true).toBool();
 }
 
-void settings::set_gpu_scan_opencl(bool value) {
-    if (value != gpu_scan_opencl()) {
-        setValue(QStringLiteral("gpu_scan_opencl"), value);
-        emit gpu_scan_opencl_changed();
+void settings::set_hw_scan_hip(bool value) {
+    if (value != hw_scan_hip()) {
+        setValue(QStringLiteral("hw_scan_hip"), value);
+        emit hw_scan_hip_changed();
 
         set_restart_required(true);
     }
 }
 
-bool settings::gpu_scan_opencl_legacy() const {
-    return value(QStringLiteral("gpu_scan_opencl_legacy"), false).toBool();
+bool settings::hw_scan_opencl() const {
+    return value(QStringLiteral("hw_scan_opencl"), true).toBool();
 }
 
-void settings::set_gpu_scan_opencl_legacy(bool value) {
-    if (value != gpu_scan_opencl_legacy()) {
-        setValue(QStringLiteral("gpu_scan_opencl_legacy"), value);
-        emit gpu_scan_opencl_legacy_changed();
+void settings::set_hw_scan_opencl(bool value) {
+    if (value != hw_scan_opencl()) {
+        setValue(QStringLiteral("hw_scan_opencl"), value);
+        emit hw_scan_opencl_changed();
+
+        set_restart_required(true);
+    }
+}
+
+bool settings::hw_scan_opencl_legacy() const {
+    return value(QStringLiteral("hw_scan_opencl_legacy"), false).toBool();
+}
+
+void settings::set_hw_scan_opencl_legacy(bool value) {
+    if (value != hw_scan_opencl_legacy()) {
+        setValue(QStringLiteral("hw_scan_opencl_legacy"), value);
+        emit hw_scan_opencl_legacy_changed();
+
+        set_restart_required(true);
+    }
+}
+
+bool settings::hw_scan_openvino() const {
+    return value(QStringLiteral("hw_scan_openvino"), true).toBool();
+}
+
+void settings::set_hw_scan_openvino(bool value) {
+    if (value != hw_scan_openvino()) {
+        setValue(QStringLiteral("hw_scan_openvino"), value);
+        emit hw_scan_openvino_changed();
 
         set_restart_required(true);
     }
@@ -2207,10 +2239,10 @@ void settings::set_gpu_overrided_version([[maybe_unused]] QString new_value) {
 #endif
 }
 
-void settings::disable_gpu_scan() {
-    set_gpu_scan_cuda(false);
-    set_gpu_scan_hip(false);
-    set_gpu_scan_opencl(false);
+void settings::disable_hw_scan() {
+    set_hw_scan_cuda(false);
+    set_hw_scan_hip(false);
+    set_hw_scan_opencl(false);
     set_restart_required(false);
 }
 

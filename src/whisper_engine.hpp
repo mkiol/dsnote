@@ -282,8 +282,9 @@ struct whisper_full_params {
 class whisper_engine : public stt_engine {
    public:
     static bool has_cuda();
-    static bool has_opencl();
     static bool has_hip();
+    static bool has_openvino();
+    static bool has_opencl();
 
     whisper_engine(config_t config, callbacks_t call_backs);
     ~whisper_engine() override;
@@ -310,13 +311,17 @@ class whisper_engine : public stt_engine {
         whisper_full_params (*whisper_full_default_params)(
             whisper_sampling_strategy strategy) = nullptr;
         whisper_context_params (*whisper_context_default_params)() = nullptr;
+        int (*whisper_ctx_init_openvino_encoder)(
+            void* ctx, const char* model_path, const char* device,
+            const char* cache_dir) = nullptr;
         inline auto ok() const {
             return whisper_init_from_file_with_params &&
                    whisper_print_system_info && whisper_full &&
                    whisper_full_n_segments && whisper_full_get_segment_text &&
                    whisper_full_get_segment_t0 && whisper_full_get_segment_t1 &&
                    whisper_free && whisper_full_default_params &&
-                   whisper_context_default_params;
+                   whisper_context_default_params &&
+                   whisper_ctx_init_openvino_encoder;
         }
     };
 
@@ -340,6 +345,7 @@ class whisper_engine : public stt_engine {
     void reset_impl() override;
     void stop_processing_impl() override;
     void start_processing_impl() override;
+    bool use_openvino() const;
 };
 
 #endif  // WHISPER_ENGINE_H

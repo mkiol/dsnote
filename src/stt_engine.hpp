@@ -50,7 +50,7 @@ class stt_engine {
     };
     friend std::ostream& operator<<(std::ostream& os, vad_mode_t mode);
 
-    enum class gpu_api_t { opencl, cuda, rocm };
+    enum class gpu_api_t { opencl, cuda, rocm, openvino };
     friend std::ostream& operator<<(std::ostream& os, gpu_api_t api);
 
     enum class text_format_t { raw, subrip };
@@ -61,11 +61,13 @@ class stt_engine {
         std::string model_file;
         std::string scorer_file;
         std::string ttt_model_file;
+        std::string openvino_model_file; /* used only in whisper.cpp */
 
         inline bool operator==(const model_files_t& rhs) const {
             return model_file == rhs.model_file &&
                    scorer_file == rhs.scorer_file &&
-                   ttt_model_file == rhs.ttt_model_file;
+                   ttt_model_file == rhs.ttt_model_file &&
+                   openvino_model_file == rhs.openvino_model_file;
         };
         inline bool operator!=(const model_files_t& rhs) const {
             return !(*this == rhs);
@@ -116,6 +118,7 @@ class stt_engine {
         std::string lang;
         std::string lang_code;
         model_files_t model_files;
+        std::string cache_dir;
         speech_mode_t speech_mode = speech_mode_t::automatic;
         vad_mode_t vad_mode = vad_mode_t::aggressiveness3;
         bool translate = false; /*extra whisper feature*/

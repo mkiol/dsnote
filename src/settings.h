@@ -165,15 +165,17 @@ class settings : public QSettings, public singleton<settings> {
                    set_actions_api_enabled NOTIFY actions_api_enabled_changed)
     Q_PROPERTY(bool diacritizer_enabled READ diacritizer_enabled WRITE
                    set_diacritizer_enabled NOTIFY diacritizer_enabled_changed)
-    Q_PROPERTY(bool gpu_scan_cuda READ gpu_scan_cuda WRITE set_gpu_scan_cuda
-                   NOTIFY gpu_scan_cuda_changed)
-    Q_PROPERTY(bool gpu_scan_hip READ gpu_scan_hip WRITE set_gpu_scan_hip NOTIFY
-                   gpu_scan_hip_changed)
-    Q_PROPERTY(bool gpu_scan_opencl READ gpu_scan_opencl WRITE
-                   set_gpu_scan_opencl NOTIFY gpu_scan_opencl_changed)
+    Q_PROPERTY(bool hw_scan_cuda READ hw_scan_cuda WRITE set_hw_scan_cuda NOTIFY
+                   hw_scan_cuda_changed)
+    Q_PROPERTY(bool hw_scan_hip READ hw_scan_hip WRITE set_hw_scan_hip NOTIFY
+                   hw_scan_hip_changed)
+    Q_PROPERTY(bool hw_scan_opencl READ hw_scan_opencl WRITE set_hw_scan_opencl
+                   NOTIFY hw_scan_opencl_changed)
     Q_PROPERTY(
-        bool gpu_scan_opencl_legacy READ gpu_scan_opencl_legacy WRITE
-            set_gpu_scan_opencl_legacy NOTIFY gpu_scan_opencl_legacy_changed)
+        bool hw_scan_opencl_legacy READ hw_scan_opencl_legacy WRITE
+            set_hw_scan_opencl_legacy NOTIFY hw_scan_opencl_legacy_changed)
+    Q_PROPERTY(bool hw_scan_openvino READ hw_scan_openvino WRITE
+                   set_hw_scan_openvino NOTIFY hw_scan_openvino_changed)
     Q_PROPERTY(QString active_tts_ref_voice READ active_tts_ref_voice WRITE
                    set_active_tts_ref_voice NOTIFY active_tts_ref_voice_changed)
     Q_PROPERTY(QString active_tts_for_in_mnt_ref_voice READ
@@ -292,15 +294,6 @@ class settings : public QSettings, public singleton<settings> {
     ENGINE_OPTS(whispercpp)
     ENGINE_OPTS(fasterwhisper)
 #undef ENGINE_OPTS
-
-    // whisper.cpp
-    Q_PROPERTY(
-        bool whispercpp_gpu_flash_attn READ whispercpp_gpu_flash_attn WRITE
-            set_whispercpp_gpu_flash_attn NOTIFY whispercpp_changed)
-    Q_PROPERTY(int whispercpp_cpu_threads READ whispercpp_cpu_threads WRITE
-                   set_whispercpp_cpu_threads NOTIFY whispercpp_changed)
-    Q_PROPERTY(int whispercpp_beam_search READ whispercpp_beam_search WRITE
-                   set_whispercpp_beam_search NOTIFY whispercpp_changed)
 
     // faster-whisper
 
@@ -441,24 +434,26 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(addon_flags_t)
 
-    enum gpu_feature_flags_t : unsigned int {
-        gpu_feature_none = 0U,
-        gpu_feature_stt_whispercpp_cuda = 1U << 0U,
-        gpu_feature_stt_whispercpp_hip = 1U << 1U,
-        gpu_feature_stt_whispercpp_opencl = 1U << 2U,
-        gpu_feature_stt_fasterwhisper_cuda = 1U << 3U,
-        gpu_feature_tts_coqui_cuda = 1U << 4U,
-        gpu_feature_tts_coqui_hip = 1U << 5U,
-        gpu_feature_tts_whisperspeech_cuda = 1U << 6U,
-        gpu_feature_tts_whisperspeech_hip = 1U << 7U,
-        gpu_feature_all =
-            gpu_feature_stt_whispercpp_cuda | gpu_feature_stt_whispercpp_hip |
-            gpu_feature_stt_whispercpp_opencl |
-            gpu_feature_stt_fasterwhisper_cuda | gpu_feature_tts_coqui_cuda |
-            gpu_feature_tts_coqui_hip | gpu_feature_tts_whisperspeech_cuda |
-            gpu_feature_tts_whisperspeech_hip
+    enum hw_feature_flags_t : unsigned int {
+        hw_feature_none = 0U,
+        hw_feature_stt_whispercpp_cuda = 1U << 0U,
+        hw_feature_stt_whispercpp_hip = 1U << 1U,
+        hw_feature_stt_whispercpp_openvino = 1U << 2U,
+        hw_feature_stt_whispercpp_opencl = 1U << 3U,
+        hw_feature_stt_fasterwhisper_cuda = 1U << 4U,
+        hw_feature_tts_coqui_cuda = 1U << 5U,
+        hw_feature_tts_coqui_hip = 1U << 6U,
+        hw_feature_tts_whisperspeech_cuda = 1U << 7U,
+        hw_feature_tts_whisperspeech_hip = 1U << 8U,
+        hw_feature_all =
+            hw_feature_stt_whispercpp_cuda | hw_feature_stt_whispercpp_hip |
+            hw_feature_stt_whispercpp_openvino |
+            hw_feature_stt_whispercpp_opencl |
+            hw_feature_stt_fasterwhisper_cuda | hw_feature_tts_coqui_cuda |
+            hw_feature_tts_coqui_hip | hw_feature_tts_whisperspeech_cuda |
+            hw_feature_tts_whisperspeech_hip
     };
-    friend QDebug operator<<(QDebug d, gpu_feature_flags_t gpu_feature_flags);
+    friend QDebug operator<<(QDebug d, hw_feature_flags_t hw_feature_flags);
 
     settings();
 
@@ -466,8 +461,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_launch_mode(launch_mode_t launch_mode);
     QString module_checksum(const QString &name) const;
     void set_module_checksum(const QString &name, const QString &value);
-    void scan_gpu_devices(unsigned int gpu_feature_flags);
-    void disable_gpu_scan();
+    void scan_hw_devices(unsigned int hw_feature_flags);
+    void disable_hw_scan();
     void disable_py_scan();
 #ifdef USE_DESKTOP
     void update_qt_style(QQmlApplicationEngine *engine);
@@ -588,14 +583,16 @@ class settings : public QSettings, public singleton<settings> {
     void set_actions_api_enabled(bool value);
     bool diacritizer_enabled() const;
     void set_diacritizer_enabled(bool value);
-    bool gpu_scan_cuda() const;
-    void set_gpu_scan_cuda(bool value);
-    bool gpu_scan_hip() const;
-    void set_gpu_scan_hip(bool value);
-    bool gpu_scan_opencl() const;
-    void set_gpu_scan_opencl(bool value);
-    bool gpu_scan_opencl_legacy() const;
-    void set_gpu_scan_opencl_legacy(bool value);
+    bool hw_scan_cuda() const;
+    void set_hw_scan_cuda(bool value);
+    bool hw_scan_hip() const;
+    void set_hw_scan_hip(bool value);
+    bool hw_scan_opencl() const;
+    void set_hw_scan_opencl(bool value);
+    bool hw_scan_opencl_legacy() const;
+    void set_hw_scan_opencl_legacy(bool value);
+    bool hw_scan_openvino() const;
+    void set_hw_scan_openvino(bool value);
     QString active_tts_ref_voice() const;
     void set_active_tts_ref_voice(const QString &value);
     QString active_tts_for_in_mnt_ref_voice() const;
@@ -641,7 +638,7 @@ class settings : public QSettings, public singleton<settings> {
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
-    Q_INVOKABLE bool gpu_supported() const;
+    Q_INVOKABLE bool hw_accel_supported() const;
     Q_INVOKABLE bool is_wayland() const;
     Q_INVOKABLE bool is_xcb() const;
     Q_INVOKABLE bool is_flatpak() const;
@@ -804,10 +801,11 @@ class settings : public QSettings, public singleton<settings> {
     void desktop_notification_details_changed();
     void actions_api_enabled_changed();
     void diacritizer_enabled_changed();
-    void gpu_scan_cuda_changed();
-    void gpu_scan_hip_changed();
-    void gpu_scan_opencl_changed();
-    void gpu_scan_opencl_legacy_changed();
+    void hw_scan_cuda_changed();
+    void hw_scan_hip_changed();
+    void hw_scan_opencl_changed();
+    void hw_scan_opencl_legacy_changed();
+    void hw_scan_openvino_changed();
     void active_tts_ref_voice_changed();
     void active_tts_for_in_mnt_ref_voice_changed();
     void active_tts_for_out_mnt_ref_voice_changed();

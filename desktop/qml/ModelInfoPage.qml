@@ -147,7 +147,7 @@ Dialog {
 
             Label {
                 visible: gpuCapsLabel.visible
-                text: qsTr("Supported GPU acceleration")
+                text: qsTr("Supported hardware acceleration")
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
             }
 
@@ -157,9 +157,11 @@ Dialog {
                 visible: text.length !== 0
                 text: {
                     var f = root.model.features;
-                    if (f & ModelsListModel.FeatureEngineSttWhisper)
+                    if (f & ModelsListModel.FeatureEngineSttWhisper) {
+                        if (f & ModelsListModel.FeatureHwOpenVino)
+                            return "NVIDIA CUDA, AMD ROCm, OpenVINO, OpenCL"
                         return "NVIDIA CUDA, AMD ROCm, OpenCL"
-                    else if (f & ModelsListModel.FeatureEngineSttFasterWhisper)
+                    } else if (f & ModelsListModel.FeatureEngineSttFasterWhisper)
                         return "NVIDIA CUDA"
                     else if (f & ModelsListModel.FeatureEngineTtsCoqui)
                         return "NVIDIA CUDA, AMD ROCm"

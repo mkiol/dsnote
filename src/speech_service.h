@@ -181,7 +181,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     double mnt_translate_progress(int task) const;
     QVariantMap mnt_out_langs(QString in_lang) const;
     QVariantMap features_availability();
-    static void remove_cached_media_files();
+    static void remove_cached_files();
 
    signals:
     void models_changed();
@@ -326,6 +326,7 @@ class speech_service : public QObject, public singleton<speech_service> {
             models_manager::model_engine_t::stt_ds;
         QString model_file;
         QString scorer_file;
+        QString openvino_file;
         std::optional<ttt_model_config_t> ttt;
     };
 

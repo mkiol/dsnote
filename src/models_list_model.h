@@ -77,6 +77,7 @@ class ModelsListModel : public SelectableItemModel {
         FeatureEngineTtsWhisperSpeech = 1U << 16U,
         FeatureEngineTtsEnd = FeatureEngineTtsWhisperSpeech,
         FeatureEngineOther = 1U << 17U,
+        FeatureHwOpenVino = 1U << 18U,
         FeatureGenericEnd = FeatureEngineOther,
         FeatureSttStart = 1U << 20U,
         FeatureSttIntermediateResults = FeatureSttStart,

@@ -20,7 +20,7 @@ finish-args:
   - --filesystem=xdg-videos
   - --env=PYTORCH_TENSOREXPR=0
   - --env=PYTHONPATH=/app/extensions/nvidia/lib/python3.11/site-packages:/app/extensions/amd/lib/python3.11/site-packages:/app/extensions/cpu/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
-  - --env=LD_LIBRARY_PATH=/app/extensions/nvidia/lib:/app/extensions/amd/lib:/app/extensions/cpu/lib:/app/extensions/nvidia/cuda/lib64:/app/extensions/amd/rocm/lib
+  - --env=LD_LIBRARY_PATH=/app/opt/intel/lib:/app/extensions/nvidia/lib:/app/extensions/amd/lib:/app/extensions/cpu/lib:/app/extensions/nvidia/cuda/lib64:/app/extensions/amd/rocm/lib
   - --env=OPENCL_VENDOR_PATH=/app/opt/opencl/vendors
   - --env=PERL5LIB=/app/lib/perl5/site_perl
   - --env=QT_QUICK_CONTROLS_HOVER_ENABLED=1
@@ -801,6 +801,79 @@ modules:
       - type: archive
         url: https://xkbcommon.org/download/libxkbcommon-1.6.0.tar.xz
         sha256: 0edc14eccdd391514458bc5f5a4b99863ed2d651e4dd761a90abf4f46ef99c2b
+
+  - name: openvino
+    only-arches:
+      - x86_64
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/opt/intel/openvino
+      - cp -r runtime ${FLATPAK_DEST}/opt/intel/openvino
+      - mkdir -p ${FLATPAK_DEST}/opt/intel/lib
+      - |
+        set -e
+        cd runtime/lib/intel64
+        for f in *.so*; do
+          if [ -f $f ]; then
+            echo "copying $f => ${FLATPAK_DEST}/opt/intel/lib"
+            cp -P $f ${FLATPAK_DEST}/opt/intel/lib
+          fi
+        done
+    cleanup:
+      - /opt/intel/openvino
+      - /opt/intel/lib/*_paddle_*
+      - /opt/intel/lib/*_pytorch_*
+      - /opt/intel/lib/*_tensorflow_*
+    sources:
+      - type: archive
+        url: https://storage.openvinotoolkit.org/repositories/openvino/packages/2024.1/linux/l_openvino_toolkit_ubuntu22_2024.1.0.15008.f4afc983258_x86_64.tgz
+        sha256: 69f15878f54d7b61eb54eb5b2631741f147e85383539f5436a6672fb07c459d2
+
+  - name: whispercpp-openvino
+    only-arches:
+      - x86_64
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=ON
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+      - -DWHISPER_OPENVINO=ON
+      - -DWHISPER_TARGET_NAME=whisper-openvino
+      - -DCMAKE_C_FLAGS='-O3'
+      - -DCMAKE_CXX_FLAGS='-O3'
+      - -DOpenVINO_DIR=/app/opt/intel/openvino/runtime/cmake
+    sources:
+      - type: archive
+        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.6.2.tar.gz
+        sha256: da7988072022acc3cfa61b370b3c51baad017f1900c3dc4e68cb276499f66894
+      - type: patch
+        path: ../patches/whispercpp.patch
+
+  - name: tbb
+    only-arches:
+      - x86_64
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/opt/intel/lib
+      - chmod u+x ./l_tbb_oneapi_p_2021.12.0.499_offline.sh
+      - ./l_tbb_oneapi_p_2021.12.0.499_offline.sh  -a --eula accept --cli --silent --install-dir=./
+      - |
+        set -e
+        cd tbb/latest/lib
+        for f in *.so*; do
+          if [ -f $f ]; then
+            echo "copying $f => ${FLATPAK_DEST}/opt/intel/lib"
+            cp -P $f ${FLATPAK_DEST}/opt/intel/lib
+          fi
+        done
+    cleanup:
+      - /opt/intel/lib/*_debug*
+    sources:
+      - type: file
+        url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/b31f6b79-10aa-4119-a437-48fe2775633b/l_tbb_oneapi_p_2021.12.0.499_offline.sh
+        sha256: 13e981cb4d9d3f72058cc136f8cdedf6ba9af225ae317f91b59e2050b0d49e43
 
   - name: dsnote
     buildsystem: cmake-ninja

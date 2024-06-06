@@ -150,6 +150,9 @@ std::ostream& operator<<(std::ostream& os, stt_engine::gpu_api_t api) {
         case stt_engine::gpu_api_t::rocm:
             os << "rocm";
             break;
+        case stt_engine::gpu_api_t::openvino:
+            os << "openvino";
+            break;
     }
 
     return os;
@@ -173,6 +176,7 @@ std::ostream& operator<<(std::ostream& os,
                          const stt_engine::model_files_t& model_files) {
     os << "model-file=" << model_files.model_file
        << ", scorer-file=" << model_files.scorer_file
+       << ", openvino-file=" << model_files.openvino_model_file
        << ", ttt-model-file=" << model_files.ttt_model_file;
 
     return os;
@@ -200,7 +204,8 @@ std::ostream& operator<<(std::ostream& os,
 std::ostream& operator<<(std::ostream& os, const stt_engine::config_t& config) {
     os << "lang=" << config.lang << ", lang_code=" << config.lang_code
        << ", model-files=[" << config.model_files
-       << "], speech-mode=" << config.speech_mode
+       << "], cache-dir=" << config.cache_dir
+       << ", speech-mode=" << config.speech_mode
        << ", vad-mode=" << config.vad_mode
        << ", speech-started=" << config.speech_started
        << ", text-format=" << config.text_format

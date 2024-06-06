@@ -27,15 +27,15 @@ ColumnLayout {
         id: checkBox
 
         checked: root.use_gpu
-        text: qsTr("Use GPU acceleration")
+        text: qsTr("Use hardware acceleration")
         onCheckedChanged: {
             root.use_gpu = checked
         }
 
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
         ToolTip.visible: hovered
-        ToolTip.text: qsTr("If a suitable graphics card is found in the system, it will be used to accelerate processing.") + " " +
-                      qsTr("GPU hardware acceleration significantly reduces the time of decoding.") + " " +
+        ToolTip.text: qsTr("If a suitable hardware accelerator (CPU or graphics card) is found in the system, it will be used to speed up processing.") + " " +
+                      qsTr("Hardware acceleration significantly reduces the time of decoding.") + " " +
                       qsTr("Disable this option if you observe problems.")
         hoverEnabled: true
     }
@@ -43,7 +43,7 @@ ColumnLayout {
     TipMessage {
         indends: 1
         visible: root.use_gpu && root.devices.length <= 1
-        text: qsTr("A suitable graphics card could not be found.")
+        text: qsTr("A suitable hardware accelerator could not be found.")
     }
 
     ComboBoxForm {
@@ -51,8 +51,8 @@ ColumnLayout {
 
         indends: 1
         visible: root.use_gpu && root.devices.length > 1
-        label.text: qsTr("Graphics card")
-        toolTip: qsTr("Select preferred graphics card for hardware acceleration.")
+        label.text: qsTr("Hardware accelerator")
+        toolTip: qsTr("Select preferred hardware accelerator.")
         comboBox {
             currentIndex: root.device_index
             model: root.devices
@@ -66,7 +66,7 @@ ColumnLayout {
         indends: 2
         color: palette.text
         visible: root.use_gpu && root.devices.length > 1 && gpuCombo.displayText.search("ROCm") !== -1
-        text: qsTr("Tip: If you observe problems with GPU acceleration, try to enable %1 option.")
+        text: qsTr("Tip: If you observe problems with hardware acceleration, try to enable %1 option.")
               .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
               qsTr("Override GPU version") + "</i>")
         label.textFormat: Text.RichText

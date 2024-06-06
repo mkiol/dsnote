@@ -13,7 +13,7 @@
 #include <vector>
 
 namespace gpu_tools {
-enum class api_t { opencl, cuda, rocm };
+enum class api_t { opencl, cuda, rocm, openvino };
 enum class error_t { no_error, cuda_uknown_error };
 
 struct device {
@@ -28,13 +28,15 @@ struct available_devices_result {
     std::vector<device> devices;
 };
 
-available_devices_result available_devices(bool cuda, bool hip, bool opencl,
-                                           bool opencl_always);
+available_devices_result available_devices(bool cuda, bool hip, bool openvino,
+                                           bool opencl, bool opencl_always);
 void add_opencl_devices(std::vector<device>& devices);
 error_t add_cuda_devices(std::vector<device>& devices);
 void add_hip_devices(std::vector<device>& devices);
+void add_openvino_devices(std::vector<device>& devices);
 bool has_cuda_runtime();
 bool has_cudnn();
+bool has_openvino();
 void rocm_override_gfx_version(const std::string& arch_version);
 std::string rocm_overrided_gfx_version(const std::string& gpu_arch_name);
 
