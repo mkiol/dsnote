@@ -96,7 +96,7 @@ build() {
   # value below to true *before* making the build.
   ##########################################################
 
-  FULL_BUILD=false
+  FULL_BUILD=true
 
   if [[ "${CARCH}" == "x86_64" ]]; then
     # Do not build for CUDA if needed package is not found
