@@ -435,213 +435,253 @@ DialogPage {
             }
 
             SectionLabel {
-                text: qsTr("%1 engine options").arg("WhisperCpp")
+                text: qsTr("Engine options")
             }
 
-            SpinBoxForm {
-                id: whispercppThreadsSpinBox
+            TabBar {
+                id: sttEnginesBar
 
-                label.text: qsTr("Number of simultaneous threads")
-                toolTip: qsTr("Set the maximum number of simultaneous CPU threads.") + " " +
-                         qsTr("A higher value does not necessarily speed up decoding.")
-                spinBox {
-                    from: 0
-                    to: 32
-                    stepSize: 1
-                    value: _settings.whispercpp_cpu_threads < 1 ? 1 : _settings.whispercpp_cpu_threads > 32 ? 32 : _settings.whispercpp_cpu_threads
-                    textFromValue: function(value) { return value.toString() }
-                    valueFromText: function(text) { return parseInt(text); }
-                    onValueChanged: {
-                        _settings.whispercpp_cpu_threads = spinBox.value;
-                    }
+                Layout.fillWidth: true
+                currentIndex: _settings.settings_stt_engine_idx
+                onCurrentIndexChanged: _settings.settings_stt_engine_idx = currentIndex
+
+                TabButton {
+                    text: "WhisperCpp"
+                    width: implicitWidth
+                }
+
+                TabButton {
+                    text: "FasterWhisper"
+                    width: implicitWidth
                 }
             }
 
-            SpinBoxForm {
-                id: whispercppBeamSpinBox
+            StackLayout {
+                property alias verticalMode: root.verticalMode
 
-                label.text: qsTr("Beam search width")
-                toolTip: qsTr("A higher value may improve quality, but decoding time may also increase.")
-                spinBox {
-                    from: 0
-                    to: 100
-                    stepSize: 1
-                    value: _settings.whispercpp_beam_search < 1 ? 1 : _settings.whispercpp_beam_search > 100 ? 100 : _settings.whispercpp_beam_search
-                    textFromValue: function(value) { return value.toString() }
-                    valueFromText: function(text) { return parseInt(text); }
-                    onValueChanged: {
-                        _settings.whispercpp_beam_search = spinBox.value;
-                    }
-                }
-            }
+                Layout.fillWidth: true
+                Layout.topMargin: appWin.padding
+                currentIndex: sttEnginesBar.currentIndex
 
-            ComboBoxForm {
-                label.text: qsTr("Audio context size")
-                toolTip: qsTr("A smaller value speeds up decoding, but can have a negative impact on accuracy.") + " " +
-                         qsTr("When %1 is set, the size is adjusted dynamically for each audio chunk.").arg(qsTr("Dynamic")) + " " +
-                         qsTr("When %1 is set, the default fixed size is used.").arg(qsTr("Default")) + " " +
-                         qsTr("To define a custom size, use the %1 option.").arg(qsTr("Custom"))
-                comboBox {
-                    currentIndex: {
-                        switch(_settings.whispercpp_audioctx_size) {
-                        case Settings.OptionAuto: return 0
-                        case Settings.OptionDefault: return 1
-                        case Settings.OptionCustom: return 2
-                        }
-                        return 0
-                    }
-                    model: [
-                        qsTr("Dynamic"),
-                        qsTr("Default"),
-                        qsTr("Custom")
-                    ]
-                    onActivated: {
-                        if (index === 0) {
-                            _settings.whispercpp_audioctx_size = Settings.OptionAuto
-                        } else if (index === 1) {
-                            _settings.whispercpp_audioctx_size = Settings.OptionDefault
-                        } else if (index === 2) {
-                            _settings.whispercpp_audioctx_size = Settings.OptionCustom
+                ColumnLayout {
+                    id: whispercppTab
+
+                    SpinBoxForm {
+                        id: whispercppThreadsSpinBox
+
+                        label.text: qsTr("Number of simultaneous threads")
+                        toolTip: qsTr("Set the maximum number of simultaneous CPU threads.") + " " +
+                                 qsTr("A higher value does not necessarily speed up decoding.")
+                        spinBox {
+                            from: 0
+                            to: 32
+                            stepSize: 1
+                            value: _settings.whispercpp_cpu_threads < 1 ? 1 : _settings.whispercpp_cpu_threads > 32 ? 32 : _settings.whispercpp_cpu_threads
+                            textFromValue: function(value) { return value.toString() }
+                            valueFromText: function(text) { return parseInt(text); }
+                            onValueChanged: {
+                                _settings.whispercpp_cpu_threads = spinBox.value;
+                            }
                         }
                     }
-                }
-            }
 
-            SpinBoxForm {
-                indends: 1
-                visible: _settings.whispercpp_audioctx_size === Settings.OptionCustom
-                label.text: qsTr("Size")
-                spinBox {
-                    from: 1
-                    to: 3000
-                    stepSize: 1
-                    value: _settings.whispercpp_audioctx_size_value
-                    onValueChanged: {
-                        _settings.whispercpp_audioctx_size_value = spinBox.value;
+                    SpinBoxForm {
+                        id: whispercppBeamSpinBox
+
+                        label.text: qsTr("Beam search width")
+                        toolTip: qsTr("A higher value may improve quality, but decoding time may also increase.")
+                        spinBox {
+                            from: 0
+                            to: 100
+                            stepSize: 1
+                            value: _settings.whispercpp_beam_search < 1 ? 1 : _settings.whispercpp_beam_search > 100 ? 100 : _settings.whispercpp_beam_search
+                            textFromValue: function(value) { return value.toString() }
+                            valueFromText: function(text) { return parseInt(text); }
+                            onValueChanged: {
+                                _settings.whispercpp_beam_search = spinBox.value;
+                            }
+                        }
                     }
-                }
-            }
 
-            GpuComboBox {
-                id: whispercppGpuComboBox
+                    ComboBoxForm {
+                        id: whispercppContextSizeComboBox
 
-                visible: _settings.hw_accel_supported() && app.feature_whispercpp_gpu
-                devices: _settings.whispercpp_gpu_devices
-                device_index: _settings.whispercpp_gpu_device_idx
-                use_gpu: _settings.whispercpp_use_gpu
-                onUse_gpuChanged: _settings.whispercpp_use_gpu = use_gpu
-                onDevice_indexChanged: _settings.whispercpp_gpu_device_idx = device_index
-            }
-
-            CheckBox {
-                id: whispercppFlashAttnCheckBox
-
-                visible: _settings.hw_accel_supported() && app.feature_whispercpp_gpu && _settings.whispercpp_use_gpu
-                checked: _settings.whispercpp_gpu_flash_attn
-                text: qsTr("Use Flash Attention")
-                onCheckedChanged: {
-                    _settings.whispercpp_gpu_flash_attn = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Flash Attention may reduce the time of decoding when using GPU acceleration.") + " " +
-                              qsTr("Your graphics card has to support this feature.") + " " +
-                              qsTr("Disable this option if you observe problems.")
-                hoverEnabled: true
-            }
-
-            // Button {
-            //     text: qsTr("Reset to default values")
-            //     onClicked: {
-            //         _settings.reset_whispercpp_options()
-            //         whispercppGpuComboBox.use_gpu = _settings.whispercpp_use_gpu
-            //         whispercppFlashAttnCheckBox.checked = _settings.whispercpp_gpu_flash_attn
-            //         whispercppBeamSpinBox.spinBox.value = _settings.whispercpp_beam_search
-            //         whispercppThreadsSpinBox.spinBox.value = _settings.whispercpp_cpu_threads
-            //     }
-            // }
-
-            SectionLabel {
-                text: qsTr("%1 engine options").arg("FasterWhisper")
-            }
-
-            SpinBoxForm {
-                id: fasterwhisperThreadsSpinBox
-
-                label.text: qsTr("Number of simultaneous threads")
-                toolTip: qsTr("Set the maximum number of simultaneous CPU threads.") + " " +
-                         qsTr("A higher value does not necessarily speed up decoding.")
-                spinBox {
-                    from: 0
-                    to: 32
-                    stepSize: 1
-                    value: _settings.fasterwhisper_cpu_threads < 1 ? 1 : _settings.fasterwhisper_cpu_threads > 32 ? 32 : _settings.fasterwhisper_cpu_threads
-                    textFromValue: function(value) { return value.toString() }
-                    valueFromText: function(text) { return parseInt(text); }
-                    onValueChanged: {
-                        _settings.fasterwhisper_cpu_threads = spinBox.value;
+                        label.text: qsTr("Audio context size")
+                        toolTip: qsTr("A smaller value speeds up decoding, but can have a negative impact on accuracy.") + " " +
+                                 qsTr("When %1 is set, the size is adjusted dynamically for each audio chunk.").arg(qsTr("Dynamic")) + " " +
+                                 qsTr("When %1 is set, the default fixed size is used.").arg("<i>" + qsTr("Default") + "</i>") + " " +
+                                 qsTr("To define a custom size, use the %1 option.").arg("<i>" + qsTr("Custom") + "</i>")
+                        comboBox {
+                            currentIndex: {
+                                switch(_settings.whispercpp_audioctx_size) {
+                                case Settings.OptionAuto: return 0
+                                case Settings.OptionDefault: return 1
+                                case Settings.OptionCustom: return 2
+                                }
+                                return 0
+                            }
+                            model: [
+                                qsTr("Dynamic"),
+                                qsTr("Default"),
+                                qsTr("Custom")
+                            ]
+                            onActivated: {
+                                if (index === 0) {
+                                    _settings.whispercpp_audioctx_size = Settings.OptionAuto
+                                } else if (index === 1) {
+                                    _settings.whispercpp_audioctx_size = Settings.OptionDefault
+                                } else if (index === 2) {
+                                    _settings.whispercpp_audioctx_size = Settings.OptionCustom
+                                }
+                            }
+                        }
                     }
-                }
-            }
 
-            SpinBoxForm {
-                id: fasterwhisperBeamSpinBox
+                    SpinBoxForm {
+                        id: whispercppContextSizeSpinBox
 
-                label.text: qsTr("Beam search width")
-                toolTip: qsTr("A higher value may improve quality, but decoding time may also increase.")
-                spinBox {
-                    from: 0
-                    to: 100
-                    stepSize: 1
-                    value: _settings.fasterwhisper_beam_search < 1 ? 1 : _settings.fasterwhisper_beam_search > 100 ? 100 : _settings.fasterwhisper_beam_search
-                    textFromValue: function(value) { return value.toString() }
-                    valueFromText: function(text) { return parseInt(text); }
-                    onValueChanged: {
-                        _settings.fasterwhisper_beam_search = spinBox.value;
+                        indends: 1
+                        enabled: _settings.whispercpp_audioctx_size === Settings.OptionCustom
+                        label.text: qsTr("Size")
+                        spinBox {
+                            from: 1
+                            to: 3000
+                            stepSize: 1
+                            value: _settings.whispercpp_audioctx_size_value
+                            onValueChanged: {
+                                _settings.whispercpp_audioctx_size_value = spinBox.value;
+                            }
+                        }
                     }
+
+                    GpuComboBox {
+                        id: whispercppGpuComboBox
+
+                        enabled: _settings.hw_accel_supported() && app.feature_whispercpp_gpu
+                        devices: _settings.whispercpp_gpu_devices
+                        device_index: _settings.whispercpp_gpu_device_idx
+                        use_gpu: _settings.whispercpp_use_gpu
+                        onUse_gpuChanged: _settings.whispercpp_use_gpu = use_gpu
+                        onDevice_indexChanged: _settings.whispercpp_gpu_device_idx = device_index
+                    }
+
+                    CheckBox {
+                        id: whispercppFlashAttnCheckBox
+
+                        enabled: _settings.hw_accel_supported() && app.feature_whispercpp_gpu && _settings.whispercpp_use_gpu
+                        checked: _settings.whispercpp_gpu_flash_attn
+                        text: qsTr("Use Flash Attention")
+                        onCheckedChanged: {
+                            _settings.whispercpp_gpu_flash_attn = checked
+                        }
+
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Flash Attention may reduce the time of decoding when using GPU acceleration.") + " " +
+                                      qsTr("Your graphics card has to support this feature.") + " " +
+                                      qsTr("Disable this option if you observe problems.")
+                        hoverEnabled: true
+                    }
+
+                    // Button {
+                    //     text: qsTr("Reset to default values")
+                    //     Layout.alignment: Qt.AlignHCenter
+
+                    //     onClicked: {
+                    //         _settings.reset_whispercpp_options()
+                    //         whispercppGpuComboBox.use_gpu = _settings.whispercpp_use_gpu
+                    //         whispercppFlashAttnCheckBox.checked = _settings.whispercpp_gpu_flash_attn
+                    //         whispercppBeamSpinBox.spinBox.value = _settings.whispercpp_beam_search
+                    //         whispercppThreadsSpinBox.spinBox.value = _settings.whispercpp_cpu_threads
+                    //         whispercppContextSizeComboBox.comboBox.currentIndex = 0
+                    //         whispercppContextSizeSpinBox.spinBox.value = 1500
+                    //     }
+                    // }
+                }
+
+                ColumnLayout {
+                    id: fasterwhisperTab
+
+                    SpinBoxForm {
+                        id: fasterwhisperThreadsSpinBox
+
+                        label.text: qsTr("Number of simultaneous threads")
+                        toolTip: qsTr("Set the maximum number of simultaneous CPU threads.") + " " +
+                                 qsTr("A higher value does not necessarily speed up decoding.")
+                        spinBox {
+                            from: 0
+                            to: 32
+                            stepSize: 1
+                            value: _settings.fasterwhisper_cpu_threads < 1 ? 1 : _settings.fasterwhisper_cpu_threads > 32 ? 32 : _settings.fasterwhisper_cpu_threads
+                            textFromValue: function(value) { return value.toString() }
+                            valueFromText: function(text) { return parseInt(text); }
+                            onValueChanged: {
+                                _settings.fasterwhisper_cpu_threads = spinBox.value;
+                            }
+                        }
+                    }
+
+                    SpinBoxForm {
+                        id: fasterwhisperBeamSpinBox
+
+                        label.text: qsTr("Beam search width")
+                        toolTip: qsTr("A higher value may improve quality, but decoding time may also increase.")
+                        spinBox {
+                            from: 0
+                            to: 100
+                            stepSize: 1
+                            value: _settings.fasterwhisper_beam_search < 1 ? 1 : _settings.fasterwhisper_beam_search > 100 ? 100 : _settings.fasterwhisper_beam_search
+                            textFromValue: function(value) { return value.toString() }
+                            valueFromText: function(text) { return parseInt(text); }
+                            onValueChanged: {
+                                _settings.fasterwhisper_beam_search = spinBox.value;
+                            }
+                        }
+                    }
+
+                    GpuComboBox {
+                        id: fasterwhisperGpuComboBox
+
+                        enabled: _settings.hw_accel_supported() && app.feature_fasterwhisper_gpu
+                        devices: _settings.fasterwhisper_gpu_devices
+                        device_index: _settings.fasterwhisper_gpu_device_idx
+                        use_gpu: _settings.fasterwhisper_use_gpu
+                        onUse_gpuChanged: _settings.fasterwhisper_use_gpu = use_gpu
+                        onDevice_indexChanged: _settings.fasterwhisper_gpu_device_idx = device_index
+                    }
+
+                    CheckBox {
+                        id: fasterwhisperFlashAttnCheckBox
+
+                        enabled: _settings.hw_accel_supported() && app.feature_fasterwhisper_gpu && _settings.fasterwhisper_use_gpu
+                        checked: _settings.fasterwhisper_gpu_flash_attn
+                        text: qsTr("Use Flash Attention")
+                        onCheckedChanged: {
+                            _settings.fasterwhisper_gpu_flash_attn = checked
+                        }
+
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Flash Attention may reduce the time of decoding when using GPU acceleration.") + " " +
+                                      qsTr("Your graphics card has to support this feature.") + " " +
+                                      qsTr("Disable this option if you observe problems.")
+                        hoverEnabled: true
+                    }
+
+                    // Button {
+                    //     text: qsTr("Reset to default values")
+                    //     Layout.alignment: Qt.AlignHCenter
+
+                    //     onClicked: {
+                    //         _settings.reset_fasterwhisper_options()
+                    //         fasterwhisperGpuComboBox.use_gpu = _settings.fasterwhisper_use_gpu
+                    //         fasterwhisperFlashAttnCheckBox.checked = _settings.fasterwhisper_gpu_flash_attn
+                    //         fasterwhisperBeamSpinBox.spinBox.value = _settings.fasterwhisper_beam_search
+                    //         fasterwhisperThreadsSpinBox.spinBox.value = _settings.fasterwhisper_cpu_threads
+                    //     }
+                    // }
                 }
             }
-
-            GpuComboBox {
-                id: fasterwhisperGpuComboBox
-
-                visible: _settings.hw_accel_supported() && app.feature_fasterwhisper_gpu
-                devices: _settings.fasterwhisper_gpu_devices
-                device_index: _settings.fasterwhisper_gpu_device_idx
-                use_gpu: _settings.fasterwhisper_use_gpu
-                onUse_gpuChanged: _settings.fasterwhisper_use_gpu = use_gpu
-                onDevice_indexChanged: _settings.fasterwhisper_gpu_device_idx = device_index
-            }
-
-            CheckBox {
-                id: fasterwhisperFlashAttnCheckBox
-
-                visible: _settings.hw_accel_supported() && app.feature_fasterwhisper_gpu && _settings.fasterwhisper_use_gpu
-                checked: _settings.fasterwhisper_gpu_flash_attn
-                text: qsTr("Use Flash Attention")
-                onCheckedChanged: {
-                    _settings.fasterwhisper_gpu_flash_attn = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Flash Attention may reduce the time of decoding when using GPU acceleration.") + " " +
-                              qsTr("Your graphics card has to support this feature.") + " " +
-                              qsTr("Disable this option if you observe problems.")
-                hoverEnabled: true
-            }
-
-            // Button {
-            //     text: qsTr("Reset to default values")
-            //     onClicked: {
-            //         _settings.reset_fasterwhisper_options()
-            //         fasterwhisperGpuComboBox.use_gpu = _settings.fasterwhisper_use_gpu
-            //         fasterwhisperFlashAttnCheckBox.checked = _settings.fasterwhisper_gpu_flash_attn
-            //         fasterwhisperBeamSpinBox.spinBox.value = _settings.fasterwhisper_beam_search
-            //         fasterwhisperThreadsSpinBox.spinBox.value = _settings.fasterwhisper_cpu_threads
-            //     }
-            // }
         }
 
         ColumnLayout {
@@ -744,31 +784,60 @@ DialogPage {
             }
 
             SectionLabel {
-                text: qsTr("%1 engine options").arg("Coqui")
-                visible: _settings.hw_accel_supported() && app.feature_coqui_gpu
+                text: qsTr("Engine options")
             }
 
-            GpuComboBox {
-                visible: _settings.hw_accel_supported() && app.feature_coqui_gpu
-                devices: _settings.coqui_gpu_devices
-                device_index: _settings.coqui_gpu_device_idx
-                use_gpu: _settings.coqui_use_gpu
-                onUse_gpuChanged: _settings.coqui_use_gpu = use_gpu
-                onDevice_indexChanged: _settings.coqui_gpu_device_idx = device_index
+            TabBar {
+                id: ttsEnginesBar
+
+                Layout.fillWidth: true
+                currentIndex: _settings.settings_tts_engine_idx
+                onCurrentIndexChanged: _settings.settings_tts_engine_idx = currentIndex
+                visible: _settings.hw_accel_supported() && (app.feature_coqui_gpu || app.feature_whisperspeech_gpu)
+
+                TabButton {
+                    text: "Coqui"
+                    width: implicitWidth
+                }
+
+                TabButton {
+                    text: "WhisperSpeech"
+                    width: implicitWidth
+                }
             }
 
-            SectionLabel {
-                text: qsTr("%1 engine options").arg("WhisperSpeech")
-                visible: _settings.hw_accel_supported() && app.feature_whisperspeech_gpu
-            }
+            StackLayout {
+                property alias verticalMode: root.verticalMode
 
-            GpuComboBox {
-                visible: _settings.hw_accel_supported() && app.feature_whisperspeech_gpu
-                devices: _settings.whisperspeech_gpu_devices
-                device_index: _settings.whisperspeech_gpu_device_idx
-                use_gpu: _settings.whisperspeech_use_gpu
-                onUse_gpuChanged: _settings.whisperspeech_use_gpu = use_gpu
-                onDevice_indexChanged: _settings.whisperspeech_gpu_device_idx = device_index
+                Layout.fillWidth: true
+                Layout.topMargin: appWin.padding
+                currentIndex: ttsEnginesBar.currentIndex
+
+                ColumnLayout {
+                    id: coquiTab
+
+                    GpuComboBox {
+                        enabled: app.feature_coqui_gpu
+                        devices: _settings.coqui_gpu_devices
+                        device_index: _settings.coqui_gpu_device_idx
+                        use_gpu: _settings.coqui_use_gpu
+                        onUse_gpuChanged: _settings.coqui_use_gpu = use_gpu
+                        onDevice_indexChanged: _settings.coqui_gpu_device_idx = device_index
+                    }
+                }
+
+                ColumnLayout {
+                    id: whisperspeechTab
+
+                    GpuComboBox {
+                        enabled: app.feature_whisperspeech_gpu
+                        devices: _settings.whisperspeech_gpu_devices
+                        device_index: _settings.whisperspeech_gpu_device_idx
+                        use_gpu: _settings.whisperspeech_use_gpu
+                        onUse_gpuChanged: _settings.whisperspeech_use_gpu = use_gpu
+                        onDevice_indexChanged: _settings.whisperspeech_gpu_device_idx = device_index
+                    }
+                }
             }
         }
 

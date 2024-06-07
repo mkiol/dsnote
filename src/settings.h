@@ -224,6 +224,12 @@ class settings : public QSettings, public singleton<settings> {
                 tts_use_engine_speed_control_changed)
     Q_PROPERTY(
         unsigned int error_flags READ error_flags NOTIFY error_flags_changed)
+    Q_PROPERTY(
+        int settings_stt_engine_idx READ settings_stt_engine_idx WRITE
+            set_settings_stt_engine_idx NOTIFY settings_stt_engine_idx_changed)
+    Q_PROPERTY(
+        int settings_tts_engine_idx READ settings_tts_engine_idx WRITE
+            set_settings_tts_engine_idx NOTIFY settings_tts_engine_idx_changed)
 
     // service
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -276,21 +282,17 @@ class settings : public QSettings, public singleton<settings> {
     // engine options
 
 #define ENGINE_OPTS(name)                                                    \
+    Q_PROPERTY(bool name##_gpu_flash_attn READ name##_gpu_flash_attn WRITE   \
+                   set_##name##_gpu_flash_attn NOTIFY name##_changed)        \
+    Q_PROPERTY(int name##_cpu_threads READ name##_cpu_threads WRITE          \
+                   set_##name##_cpu_threads NOTIFY name##_changed)           \
+    Q_PROPERTY(int name##_beam_search READ name##_beam_search WRITE          \
+                   set_##name##_beam_search NOTIFY name##_changed)           \
     Q_PROPERTY(option_t name##_audioctx_size READ name##_audioctx_size WRITE \
                    set_##name##_audioctx_size NOTIFY name##_changed)         \
     Q_PROPERTY(                                                              \
         int name##_audioctx_size_value READ name##_audioctx_size_value WRITE \
             set_##name##_audioctx_size_value NOTIFY name##_changed)
-    ENGINE_OPTS(whispercpp)
-#undef ENGINE_OPTS
-
-#define ENGINE_OPTS(name)                                                  \
-    Q_PROPERTY(bool name##_gpu_flash_attn READ name##_gpu_flash_attn WRITE \
-                   set_##name##_gpu_flash_attn NOTIFY name##_changed)      \
-    Q_PROPERTY(int name##_cpu_threads READ name##_cpu_threads WRITE        \
-                   set_##name##_cpu_threads NOTIFY name##_changed)         \
-    Q_PROPERTY(int name##_beam_search READ name##_beam_search WRITE        \
-                   set_##name##_beam_search NOTIFY name##_changed)
 
     ENGINE_OPTS(whispercpp)
     ENGINE_OPTS(fasterwhisper)
@@ -639,6 +641,10 @@ class settings : public QSettings, public singleton<settings> {
     void set_mix_volume_change(int value);
     QString x11_compose_file() const;
     void set_x11_compose_file(const QString &value);
+    int settings_stt_engine_idx() const;
+    void set_settings_stt_engine_idx(int value);
+    int settings_tts_engine_idx() const;
+    void set_settings_tts_engine_idx(int value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -737,21 +743,17 @@ class settings : public QSettings, public singleton<settings> {
     tts_subtitles_sync_mode_t tts_subtitles_sync() const;
     void set_tts_subtitles_sync(tts_subtitles_sync_mode_t value);
 
-#define ENGINE_OPTS(name)                            \
-    option_t name##_audioctx_size() const;           \
-    void set_##name##_audioctx_size(option_t value); \
-    int name##_audioctx_size_value() const;          \
-    void set_##name##_audioctx_size_value(int value);
-    ENGINE_OPTS(whispercpp)
-#undef ENGINE_OPTS
-
-#define ENGINE_OPTS(name)                         \
-    bool name##_gpu_flash_attn() const;           \
-    void set_##name##_gpu_flash_attn(bool value); \
-    int name##_cpu_threads() const;               \
-    void set_##name##_cpu_threads(int value);     \
-    int name##_beam_search() const;               \
-    void set_##name##_beam_search(int value);     \
+#define ENGINE_OPTS(name)                             \
+    bool name##_gpu_flash_attn() const;               \
+    void set_##name##_gpu_flash_attn(bool value);     \
+    int name##_cpu_threads() const;                   \
+    void set_##name##_cpu_threads(int value);         \
+    int name##_beam_search() const;                   \
+    void set_##name##_beam_search(int value);         \
+    option_t name##_audioctx_size() const;            \
+    void set_##name##_audioctx_size(option_t value);  \
+    int name##_audioctx_size_value() const;           \
+    void set_##name##_audioctx_size_value(int value); \
     Q_INVOKABLE void reset_##name##_options();
     ENGINE_OPTS(whispercpp)
     ENGINE_OPTS(fasterwhisper)
@@ -835,6 +837,8 @@ class settings : public QSettings, public singleton<settings> {
     void tts_use_engine_speed_control_changed();
     void use_toggle_for_hotkey_changed();
     void error_flags_changed();
+    void settings_stt_engine_idx_changed();
+    void settings_tts_engine_idx_changed();
 
     // service
     void models_dir_changed();

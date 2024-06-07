@@ -1493,37 +1493,6 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
 #endif
 }
 
-#define ENGINE_OPTS(name)                                                     \
-    settings::option_t settings::name##_audioctx_size() const {               \
-        return static_cast<settings::option_t>(                               \
-            value(QStringLiteral("service/" #name "_audioctx_size"),          \
-                  static_cast<int>(settings::option_t::OptionAuto))           \
-                .toInt());                                                    \
-    }                                                                         \
-    void settings::set_##name##_audioctx_size(settings::option_t value) {     \
-        if (name##_audioctx_size() != value) {                                \
-            setValue(QStringLiteral("service/" #name "_audioctx_size"),       \
-                     static_cast<int>(value));                                \
-            emit name##_changed();                                            \
-            set_restart_required(true);                                       \
-        }                                                                     \
-    }                                                                         \
-    int settings::name##_audioctx_size_value() const {                        \
-        return value(QStringLiteral("service/" #name "_audioctx_size_value"), \
-                     1500)                                                    \
-            .toInt();                                                         \
-    }                                                                         \
-    void settings::set_##name##_audioctx_size_value(int value) {              \
-        if (name##_audioctx_size_value() != value) {                          \
-            setValue(QStringLiteral("service/" #name "_audioctx_size_value"), \
-                     value);                                                  \
-            emit name##_changed();                                            \
-            set_restart_required(true);                                       \
-        }                                                                     \
-    }
-ENGINE_OPTS(whispercpp)
-#undef ENGINE_OPTS
-
 #define ENGINE_OPTS(name)                                                      \
     bool settings::name##_gpu_flash_attn() const {                             \
         return value(QStringLiteral("service/" #name "_gpu_flash_attn"),       \
@@ -1562,11 +1531,40 @@ ENGINE_OPTS(whispercpp)
             set_restart_required(true);                                        \
         }                                                                      \
     }                                                                          \
+    settings::option_t settings::name##_audioctx_size() const {                \
+        return static_cast<settings::option_t>(                                \
+            value(QStringLiteral("service/" #name "_audioctx_size"),           \
+                  static_cast<int>(settings::option_t::OptionAuto))            \
+                .toInt());                                                     \
+    }                                                                          \
+    void settings::set_##name##_audioctx_size(settings::option_t value) {      \
+        if (name##_audioctx_size() != value) {                                 \
+            setValue(QStringLiteral("service/" #name "_audioctx_size"),        \
+                     static_cast<int>(value));                                 \
+            emit name##_changed();                                             \
+            set_restart_required(true);                                        \
+        }                                                                      \
+    }                                                                          \
+    int settings::name##_audioctx_size_value() const {                         \
+        return value(QStringLiteral("service/" #name "_audioctx_size_value"),  \
+                     1500)                                                     \
+            .toInt();                                                          \
+    }                                                                          \
+    void settings::set_##name##_audioctx_size_value(int value) {               \
+        if (name##_audioctx_size_value() != value) {                           \
+            setValue(QStringLiteral("service/" #name "_audioctx_size_value"),  \
+                     value);                                                   \
+            emit name##_changed();                                             \
+            set_restart_required(true);                                        \
+        }                                                                      \
+    }                                                                          \
     void settings::reset_##name##_options() {                                  \
         set_##name##_gpu_flash_attn(false);                                    \
         set_##name##_cpu_threads(4);                                           \
         set_##name##_beam_search(1);                                           \
         set_##name##_use_gpu(false);                                           \
+        set_##name##_audioctx_size(settings::option_t::OptionAuto);            \
+        set_##name##_audioctx_size_value(1500);                                \
     }
 
 ENGINE_OPTS(whispercpp)
@@ -2195,6 +2193,28 @@ settings::cache_policy_t settings::cache_policy() const {
         value(QStringLiteral("cache_policy"),
               static_cast<int>(cache_policy_t::CacheRemove))
             .toInt());
+}
+
+int settings::settings_stt_engine_idx() const {
+    return value(QStringLiteral("settings_stt_engine_idx"), 0).toInt();
+}
+
+void settings::set_settings_stt_engine_idx(int value) {
+    if (settings_stt_engine_idx() != value) {
+        setValue(QStringLiteral("settings_stt_engine_idx"), value);
+        emit settings_stt_engine_idx_changed();
+    }
+}
+
+int settings::settings_tts_engine_idx() const {
+    return value(QStringLiteral("settings_tts_engine_idx"), 0).toInt();
+}
+
+void settings::set_settings_tts_engine_idx(int value) {
+    if (settings_tts_engine_idx() != value) {
+        setValue(QStringLiteral("settings_tts_engine_idx"), value);
+        emit settings_tts_engine_idx_changed();
+    }
 }
 
 bool settings::gpu_override_version() const {
