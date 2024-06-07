@@ -2,7 +2,7 @@
 
 _pkgname='dsnote'
 pkgname="${_pkgname}"
-pkgver=4.4.0
+pkgver=4.5.0
 pkgrel=1
 pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
 arch=(
@@ -14,11 +14,12 @@ license=('MPL2')
 depends=(
   'boost-libs'
   'fmt'
+  'glslang'
   'hicolor-icon-theme'
   'kdbusaddons5'
-  'kquickcharts5'
   'libarchive'
   'libpulse'
+  'ocl-icd'
   'openblas'
   'perl'
   'python>=3.11'
@@ -38,15 +39,15 @@ makedepends=(
   'extra-cmake-modules'
   'git'
   'meson'
+  'patchelf'
   'pybind11'
   'qt5-tools'
 )
 makedepends_x86_64=(
-  'cuda'
-  'rocm-hip-sdk'
+#  'cuda'
+#  'rocm-hip-sdk'
 )
 optdepends=(
-  'ocl-icd: Support for GPU acceleration with OpenCL'
   'python-accelerate: Support for Punctuation and Hebrew Diacritics restoration'
   'python-torchaudio: Support for Coqui TTS models'
   'python-transformers: Support for Punctuation and Hebrew Diacritics restoration'
@@ -56,42 +57,62 @@ optdepends_x86_64=(
   'cuda: Support for GPU acceleration on NVidia graphic cards'
   'cudnn: Support for GPU acceleration on NVidia graphic cards'
   'rocblas: Support for GPU acceleration on AMD graphic cards'
-  'rocm-opencl-runtime: Support GPU acceleration on AMD graphic cards'
+  'rocm-opencl-runtime: Support for GPU acceleration on AMD graphic cards'
 )
+options=('!debug')
 provides=(${_pkgname})
 conflicts=(${_pkgname}-git)
 install=${_pkgname}.install
 source=(https://github.com/mkiol/dsnote/archive/refs/tags/v${pkgver}.tar.gz)
-sha256sums=('9b9aa92b0bc90870aac97ef14d9d31bd24f55b05b7e854cfd29fe84ba48c1f8f')
+sha256sums=('fbdd53dd1ee1b48a6ef475f33ed710473e591840cb984e203f346ba79ef1ecbd')
 
 build() {
   cd "${srcdir}/${_pkgname}-${pkgver}"
-  if [[ "${CARCH}" == "x86_64" ]]; then
-    # fix for CUDA >= 12.3.0
-    export HOST_COMPILER=/usr/bin/g++-12
-    export CUDAHOSTCXX=/usr/bin/g++-12
-    export CUDA_PATH=/opt/cuda
-  fi
   mkdir -p build
   cd build
-  cmake ../ -DCMAKE_BUILD_TYPE=Release -DWITH_DESKTOP=ON \
-    -DWITH_PY=ON \
-    -DBUILD_LIBARCHIVE=OFF \
-    -DBUILD_FMT=OFF \
-    -DBUILD_CATCH2=OFF \
-    -DBUILD_OPENBLAS=OFF \
-    -DBUILD_XZ=OFF \
-    -DBUILD_PYBIND11=OFF \
-    -DBUILD_RUBBERBAND=OFF \
-    -DBUILD_FFMPEG=ON \
-    -DBUILD_TAGLIB=OFF \
-    -DBUILD_VOSK=OFF \
-    -DBUILD_QQC2_BREEZE_STYLE=ON \
-    -DDOWNLOAD_VOSK=ON \
-    -DCMAKE_INSTALL_PREFIX=/usr \
-    -Wno-dev \
-    -DCMAKE_HIP_ARCHITECTURES="gfx801 gfx802 gfx803 gfx805 gfx810 gfx900 gfx902 gfx904 gfx906 gfx908 gfx909 gfx90a gfx90c gfx940 gfx1010 gfx1011 gfx1012 gfx1013 gfx1030 gfx1031 gfx1032 gfx1033 gfx1034 gfx1035 gfx1036 gfx1100 gfx1101 gfx1102 gfx1103"
 
+  CMAKE="-DCMAKE_BUILD_TYPE=Release -DWITH_DESKTOP=ON \
+        -DWITH_PY=ON \
+        -DBUILD_LIBARCHIVE=OFF \
+        -DBUILD_FMT=OFF \
+        -DBUILD_CATCH2=OFF \
+        -DBUILD_OPENBLAS=OFF \
+        -DBUILD_XZ=OFF \
+        -DBUILD_PYBIND11=OFF \
+        -DBUILD_RUBBERBAND=OFF \
+        -DBUILD_FFMPEG=ON \
+        -DBUILD_TAGLIB=OFF \
+        -DBUILD_VOSK=OFF \
+        -DBUILD_QQC2_BREEZE_STYLE=ON \
+        -DDOWNLOAD_VOSK=ON \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -Wno-dev"
+
+  #################### !! IMPORTANT!! ######################
+  # CUDA and/or ROCm support are experimental and may break!
+  # In order to enable support for either, please uncomment
+  # the respective entry in makedepends_x86_64 (or install
+  # the dependency package first) and change FULL_BUILD
+  # value below to true *before* making the build.
+  ##########################################################
+
+  FULL_BUILD=true
+
+  if [[ "${CARCH}" == "x86_64" ]]; then
+    # Do not build for CUDA if needed package is not found
+    pacman -Qi cuda &> /dev/null && $FULL_BUILD || CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=OFF"
+    pacman -Qi cuda &> /dev/null && $FULL_BUILD && export CUDA_PATH=/opt/cuda
+
+    # Do not build for HIP if needed package is not found
+    pacman -Qi rocm-hip-sdk &> /dev/null && $FULL_BUILD || CMAKE+=" -DBUILD_WHISPERCPP_HIPBLAS=OFF"
+  fi
+
+  CI_BUILD=false
+
+  # Disable bergamot and RHVoice (used for CI builds only)
+  $CI_BUILD && CMAKE+=" -DBUILD_BERGAMOT=OFF -DBUILD_RHVOICE=OFF -DBUILD_RHVOICE_MODULE=OFF"
+
+  cmake ../ $CMAKE
 
   test $(nproc) -gt 2 && make -j$(($(nproc)-2)) || make
 }
