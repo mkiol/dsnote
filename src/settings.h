@@ -172,6 +172,8 @@ class settings : public QSettings, public singleton<settings> {
             set_hw_scan_opencl_legacy NOTIFY hw_scan_opencl_legacy_changed)
     Q_PROPERTY(bool hw_scan_openvino READ hw_scan_openvino WRITE
                    set_hw_scan_openvino NOTIFY hw_scan_openvino_changed)
+    Q_PROPERTY(bool hw_scan_openvino_gpu READ hw_scan_openvino_gpu WRITE
+                   set_hw_scan_openvino_gpu NOTIFY hw_scan_openvino_gpu_changed)
     Q_PROPERTY(QString active_tts_ref_voice READ active_tts_ref_voice WRITE
                    set_active_tts_ref_voice NOTIFY active_tts_ref_voice_changed)
     Q_PROPERTY(QString active_tts_for_in_mnt_ref_voice READ
@@ -232,6 +234,7 @@ class settings : public QSettings, public singleton<settings> {
             set_settings_tts_engine_idx NOTIFY settings_tts_engine_idx_changed)
 
     // service
+
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
                    models_dir_changed)
     Q_PROPERTY(QUrl models_dir_url READ models_dir_url WRITE set_models_dir_url
@@ -610,6 +613,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_hw_scan_opencl_legacy(bool value);
     bool hw_scan_openvino() const;
     void set_hw_scan_openvino(bool value);
+    bool hw_scan_openvino_gpu() const;
+    void set_hw_scan_openvino_gpu(bool value);
     QString active_tts_ref_voice() const;
     void set_active_tts_ref_voice(const QString &value);
     QString active_tts_for_in_mnt_ref_voice() const;
@@ -826,6 +831,7 @@ class settings : public QSettings, public singleton<settings> {
     void hw_scan_opencl_changed();
     void hw_scan_opencl_legacy_changed();
     void hw_scan_openvino_changed();
+    void hw_scan_openvino_gpu_changed();
     void active_tts_ref_voice_changed();
     void active_tts_for_in_mnt_ref_voice_changed();
     void active_tts_for_out_mnt_ref_voice_changed();

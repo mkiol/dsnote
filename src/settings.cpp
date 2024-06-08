@@ -881,9 +881,6 @@ void settings::set_stt_tts_text_format(text_format_t value) {
 }
 
 unsigned int settings::hint_done_flags() const {
-    qDebug() << "hint_done_flags: "
-             << (value(QStringLiteral("hint_done_flags"), 0).toUInt() &
-                 hint_done_flags_t::HintDoneHwAccel);
     return value(QStringLiteral("hint_done_flags"), 0).toUInt();
 }
 
@@ -1361,6 +1358,7 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
     qDebug() << "scan cuda:" << hw_scan_cuda();
     qDebug() << "scan hip:" << hw_scan_hip();
     qDebug() << "scan openvino:" << hw_scan_openvino();
+    qDebug() << "scan openvino_gpu:" << hw_scan_openvino_gpu();
     qDebug() << "scan opencl:" << hw_scan_opencl();
     qDebug() << "scan opencl legacy:" << hw_scan_opencl_legacy();
     qDebug() << "hw feature flags:"
@@ -1398,7 +1396,8 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
 
     std::for_each(
         result.devices.cbegin(), result.devices.cend(),
-        [&, disable_clover = !hw_scan_opencl_legacy()](const auto& device) {
+        [&, disable_clover = !hw_scan_opencl_legacy(),
+         disable_ov_gpu = !hw_scan_openvino_gpu()](const auto& device) {
             switch (device.api) {
                 case gpu_tools::api_t::opencl:
                     if (disable_whispercpp_opencl) return;
@@ -1449,6 +1448,11 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
                 }
                 case gpu_tools::api_t::openvino:
                     if (disable_whispercpp_openvino) return;
+                    if (disable_ov_gpu && QString::fromStdString(device.name)
+                                              .contains(QLatin1String{"GPU"},
+                                                        Qt::CaseInsensitive)) {
+                        return;
+                    }
                     m_whispercpp_gpu_devices.push_back(
                         QStringLiteral("%1, %2, %3")
                             .arg("OpenVINO",
@@ -2125,6 +2129,21 @@ void settings::set_hw_scan_openvino(bool value) {
     if (value != hw_scan_openvino()) {
         setValue(QStringLiteral("hw_scan_openvino"), value);
         emit hw_scan_openvino_changed();
+
+        set_restart_required(true);
+    }
+}
+
+bool settings::hw_scan_openvino_gpu() const {
+    return value(QStringLiteral("hw_scan_openvino_gpu"),
+                 false /* OpenVINO INT4 models don't work on GPU */)
+        .toBool();
+}
+
+void settings::set_hw_scan_openvino_gpu(bool value) {
+    if (value != hw_scan_openvino_gpu()) {
+        setValue(QStringLiteral("hw_scan_openvino_gpu"), value);
+        emit hw_scan_openvino_gpu_changed();
 
         set_restart_required(true);
     }
