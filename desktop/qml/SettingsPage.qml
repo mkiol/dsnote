@@ -567,7 +567,6 @@ DialogPage {
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Flash Attention may reduce the time of decoding when using GPU acceleration.") + " " +
-                                      qsTr("Your graphics card has to support this feature.") + " " +
                                       qsTr("Disable this option if you observe problems.")
                         hoverEnabled: true
                     }
@@ -651,7 +650,6 @@ DialogPage {
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Flash Attention may reduce the time of decoding when using GPU acceleration.") + " " +
-                                      qsTr("Your graphics card has to support this feature.") + " " +
                                       qsTr("Disable this option if you observe problems.")
                         hoverEnabled: true
                     }

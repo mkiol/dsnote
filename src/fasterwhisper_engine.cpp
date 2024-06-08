@@ -104,8 +104,9 @@ void fasterwhisper_engine::create_model() {
                                << std::thread::hardware_concurrency());
         LOGD("using device: " << (use_cuda ? "cuda" : "cpu") << " "
                               << m_config.gpu_device.id);
+        LOGD("using flash-attention: " << m_config.gpu_device.flash_attn);
 
-        try {
+        auto make_model = [&] {
             auto fw = py::module_::import("faster_whisper");
 
             m_model.emplace(fw.attr("WhisperModel")(
@@ -114,8 +115,28 @@ void fasterwhisper_engine::create_model() {
                 "device_index"_a = use_cuda ? m_config.gpu_device.id : 0,
                 "local_files_only"_a = true, "cpu_threads"_a = n_threads,
                 "flash_attention"_a = m_config.gpu_device.flash_attn));
+        };
+
+        try {
+            make_model();
         } catch (const std::exception& err) {
             LOGE("py error: " << err.what());
+
+            if (std::string{err.what()}.find("FlashAttention") !=
+                std::string::npos) {
+                LOGD(
+                    "flash-attention is not supported for gpu => retrying with "
+                    "disabled flash-attention");
+                m_config.gpu_device.flash_attn = false;
+
+                try {
+                    make_model();
+                    return true;
+                } catch (const std::exception& err) {
+                    LOGE("py error: " << err.what());
+                }
+            }
+
             m_model.reset();
             return false;
         }
