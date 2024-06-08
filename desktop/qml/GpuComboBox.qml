@@ -21,7 +21,7 @@ ColumnLayout {
 
     Layout.fillWidth: true
 
-    onUse_gpuChanged: checkBox = use_gpu
+    onUse_gpuChanged: checkBox.checked = use_gpu
 
     CheckBox {
         id: checkBox
@@ -70,12 +70,19 @@ ColumnLayout {
               .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
               qsTr("Override GPU version") + "</i>")
         label.textFormat: Text.RichText
+    }
 
+    TipMessage {
+        indends: 2
+        color: palette.text
+        visible: root.use_gpu && root.devices.length > 1 && gpuCombo.displayText.search("OpenVINO") !== -1
+        text: qsTr("Tip: OpenVINO acceleration is most effective when processing long sentences with large models.") + " " +
+              qsTr("For short sentences, better results can be obtained without hardware acceleration enabled.")
     }
 
     TipMessage {
         indends: 1
-        visible: root.use_gpu && _settings.error_flags & Settings.ErrorCudaUnknown > 0
+        visible: root.use_gpu && ((_settings.error_flags & Settings.ErrorCudaUnknown) > 0)
         text: qsTr("Most likely, NVIDIA kernel module has not been fully initialized.") + " " +
               qsTr("Try executing %1 before running Speech Note.").arg("<i>\"nvidia-modprobe -c 0 -u\"</i>")
     }

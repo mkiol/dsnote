@@ -185,6 +185,7 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     qDebug() << "platform:" << QGuiApplication::platformName();
 
     update_addon_flags();
+    update_system_flags();
     enforce_num_threads();
 
     // remove qml cache
@@ -879,29 +880,19 @@ void settings::set_stt_tts_text_format(text_format_t value) {
     }
 }
 
-bool settings::hint_translator() const {
-    return value(QStringLiteral("hint_translator"), true).toBool();
+unsigned int settings::hint_done_flags() const {
+    qDebug() << "hint_done_flags: "
+             << (value(QStringLiteral("hint_done_flags"), 0).toUInt() &
+                 hint_done_flags_t::HintDoneHwAccel);
+    return value(QStringLiteral("hint_done_flags"), 0).toUInt();
 }
 
-void settings::set_hint_translator(bool value) {
-    if (hint_translator() != value) {
-        setValue(QStringLiteral("hint_translator"), value);
-        emit hint_translator_changed();
-    }
-}
+void settings::set_hint_done(settings::hint_done_flags_t value) {
+    auto flags = hint_done_flags() | value;
 
-bool settings::hint_addons() const {
-    if (hw_accel_supported() && is_flatpak() &&
-        addon_flags() == addon_flags_t::AddonNone)
-        return value(QStringLiteral("hint_addons"), true).toBool();
-    else
-        return false;
-}
-
-void settings::set_hint_addons(bool value) {
-    if (hint_addons() != value) {
-        setValue(QStringLiteral("hint_addons"), value);
-        emit hint_addons_changed();
+    if (hint_done_flags() != flags) {
+        setValue(QStringLiteral("hint_done_flags"), flags);
+        emit hint_done_flags_changed();
     }
 }
 
@@ -1490,6 +1481,8 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
         qWarning() << "*********************************************";
         add_error_flags(error_flags_t::ErrorCudaUnknown);
     }
+
+    update_system_flags();
 #endif
 }
 
@@ -2335,6 +2328,34 @@ void settings::update_addon_flags() {
             qWarning() << "*********************************************";
             add_error_flags(error_flags_t::ErrorMoreThanOneGpuAddons);
         }
+    }
+}
+
+unsigned int settings::system_flags() const { return m_system_flags; }
+
+void settings::update_system_flags() {
+    unsigned int new_flags = system_flags_t::SystemNone;
+
+    if (gpu_tools::has_nvidia_gpu()) {
+        new_flags |= system_flags_t::SystemNvidiaGpu;
+        qDebug() << "nvidia gpu detected";
+    }
+    if (gpu_tools::has_amd_gpu()) {
+        new_flags |= system_flags_t::SystemAmdGpu;
+        qDebug() << "amd gpu detected";
+    }
+
+    if (m_whispercpp_gpu_devices.size() > 1 ||
+        m_fasterwhisper_gpu_devices.size() > 1 ||
+        m_coqui_gpu_devices.size() > 1 ||
+        m_whisperspeech_gpu_devices.size() > 1) {
+        new_flags |= system_flags_t::SystemHwAccel;
+        qDebug() << "hw accel detected";
+    }
+
+    if (new_flags != m_system_flags) {
+        m_system_flags = new_flags;
+        emit system_flags_changed();
     }
 }
 

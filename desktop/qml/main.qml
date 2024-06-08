@@ -215,48 +215,53 @@ ApplicationWindow {
         anchors.fill: parent
         spacing: appWin.padding
 
-        readonly property bool showingTip: warningTip1.visible || warningTip2.visible || warningTip3.visible
+        readonly property bool showingTip: warningTip1.visible || warningTip2.visible ||
+                                           warningTip3.visible || warningTip4.visible
 
-        TipMessage {
+        MainTipMessage {
             id: warningTip1
+
+            warning: true
             visible: _settings.error_flags & Settings.ErrorMoreThanOneGpuAddons
-            verticalMode: true
-            Layout.topMargin: appWin.padding
-            Layout.leftMargin: appWin.padding
-            Layout.rightMargin: appWin.padding
-            closable: true
             text: qsTr("Both NVIDIA and AMD GPU acceleration add-ons are installed, which is not optimal. Uninstall one of them.")
         }
 
-        TipMessage {
+        MainTipMessage {
             id: warningTip2
-            visible: _settings.hint_addons
-            verticalMode: true
-            Layout.topMargin: appWin.padding
-            Layout.leftMargin: appWin.padding
-            Layout.rightMargin: appWin.padding
-            onCloseClicked: _settings.hint_addons = false
-            closable: true
+
+            warning: false
+            visible: _settings.hw_accel_supported() && _settings.is_flatpak() &&
+                     ((_settings.hint_done_flags & Settings.HintDoneAddon) == 0) &&
+                     (((_settings.system_flags & Settings.SystemAmdGpu) > 0) ||
+                      ((_settings.system_flags & Settings.SystemNvidiaGpu) > 0))
+            onCloseClicked: _settings.set_hint_done(Settings.HintDoneAddon)
             text: qsTr("The Flatpak add-on for GPU acceleration is not installed.") + " " +
-                  qsTr("To enable GPU acceleration, install either %1 add-on for AMD graphics card or %2 add-on for NVIDIA graphics card.")
-                                          .arg("<i><b>Speech Note AMD (net.mkiol.SpeechNote.Addon.amd)</b></i>")
-                                          .arg("<i><b>Speech Note NVIDIA (net.mkiol.SpeechNote.Addon.nvidia)</b></i>")
+                  qsTr("To enable GPU acceleration, install either %1 or %2 add-on.")
+                          .arg("<i><b>Speech Note AMD (net.mkiol.SpeechNote.Addon.amd)</b></i>")
+                          .arg("<i><b>Speech Note NVIDIA (net.mkiol.SpeechNote.Addon.nvidia)</b></i>")
         }
 
-        TipMessage {
+        MainTipMessage {
             id: warningTip3
 
+            warning: true
             visible: _settings.hw_accel_supported() &&
                      ((app.feature_whispercpp_gpu && _settings.whispercpp_use_gpu) ||
                       (app.feature_fasterwhisper_gpu && _settings.fasterwhisper_use_gpu)) &&
-                     _settings.error_flags & Settings.ErrorCudaUnknown > 0
-            verticalMode: true
-            Layout.topMargin: appWin.padding
-            Layout.leftMargin: appWin.padding
-            Layout.rightMargin: appWin.padding
-            closable: true
+                     ((_settings.error_flags & Settings.ErrorCudaUnknown) > 0)
             text: qsTr("Most likely, NVIDIA kernel module has not been fully initialized.") + " " +
                   qsTr("Try executing %1 before running Speech Note.").arg("<i>\"nvidia-modprobe -c 0 -u\"</i>")
+        }
+
+        MainTipMessage {
+            id: warningTip4
+
+            warning: false
+            visible: _settings.hw_accel_supported() &&
+                     ((_settings.system_flags & Settings.SystemHwAccel) > 0) &&
+                     ((_settings.hint_done_flags & Settings.HintDoneHwAccel) == 0)
+            onCloseClicked: _settings.set_hint_done(Settings.HintDoneHwAccel)
+            text: qsTr("To speed up processing, enable hardware acceleration in the settings.")
         }
 
         Translator {
@@ -285,7 +290,8 @@ ApplicationWindow {
     }
 
     PlaceholderLabel {
-        enabled: !_settings.translator_mode && !app.stt_configured && !app.tts_configured && app.note.length === 0
+        enabled: !_settings.translator_mode && !app.stt_configured &&
+                 !app.tts_configured && app.note.length === 0
         offset: -panel.height
         text: notepad.placeholderText
         color: notepad.noteTextArea.textArea.color

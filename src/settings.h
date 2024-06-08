@@ -78,10 +78,6 @@ class settings : public QSettings, public singleton<settings> {
                    set_mnt_text_format NOTIFY mnt_text_format_changed)
     Q_PROPERTY(text_format_t stt_tts_text_format READ stt_tts_text_format WRITE
                    set_stt_tts_text_format NOTIFY stt_tts_text_format_changed)
-    Q_PROPERTY(bool hint_translator READ hint_translator WRITE
-                   set_hint_translator NOTIFY hint_translator_changed)
-    Q_PROPERTY(bool hint_addons READ hint_addons WRITE set_hint_addons NOTIFY
-                   hint_addons_changed)
     Q_PROPERTY(int qt_style_idx READ qt_style_idx WRITE set_qt_style_idx NOTIFY
                    qt_style_changed)
     Q_PROPERTY(QString qt_style_name READ qt_style_name WRITE set_qt_style_name
@@ -198,6 +194,8 @@ class settings : public QSettings, public singleton<settings> {
                    set_clean_ref_voice NOTIFY clean_ref_voice_changed)
     Q_PROPERTY(
         unsigned int addon_flags READ addon_flags NOTIFY addon_flags_changed)
+    Q_PROPERTY(
+        unsigned int system_flags READ system_flags NOTIFY system_flags_changed)
     Q_PROPERTY(unsigned int sub_min_segment_dur READ sub_min_segment_dur WRITE
                    set_sub_min_segment_dur NOTIFY sub_config_changed)
     Q_PROPERTY(unsigned int sub_min_line_length READ sub_min_line_length WRITE
@@ -224,6 +222,8 @@ class settings : public QSettings, public singleton<settings> {
                 tts_use_engine_speed_control_changed)
     Q_PROPERTY(
         unsigned int error_flags READ error_flags NOTIFY error_flags_changed)
+    Q_PROPERTY(unsigned int hint_done_flags READ hint_done_flags NOTIFY
+                   hint_done_flags_changed)
     Q_PROPERTY(
         int settings_stt_engine_idx READ settings_stt_engine_idx WRITE
             set_settings_stt_engine_idx NOTIFY settings_stt_engine_idx_changed)
@@ -437,6 +437,21 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(addon_flags_t)
 
+    enum system_flags_t : unsigned int {
+        SystemNone = 0U,
+        SystemHwAccel = 1U << 0U,
+        SystemNvidiaGpu = 1U << 1U,
+        SystemAmdGpu = 1U << 2U
+    };
+    Q_ENUM(system_flags_t)
+
+    enum hint_done_flags_t : unsigned int {
+        HintDoneNone = 0U,
+        HintDoneAddon = 1U << 0U,
+        HintDoneHwAccel = 1U << 1U
+    };
+    Q_ENUM(hint_done_flags_t)
+
     enum hw_feature_flags_t : unsigned int {
         hw_feature_none = 0U,
         hw_feature_stt_whispercpp_cuda = 1U << 0U,
@@ -525,10 +540,6 @@ class settings : public QSettings, public singleton<settings> {
     QString default_tts_model_for_mnt_lang(const QString &lang);
     void set_default_tts_model_for_mnt_lang(const QString &lang,
                                             const QString &value);
-    bool hint_translator() const;
-    void set_hint_translator(bool value);
-    bool hint_addons() const;
-    void set_hint_addons(bool value);
     int qt_style_idx() const;
     void set_qt_style_idx(int value);
     QString qt_style_name() const;
@@ -622,6 +633,7 @@ class settings : public QSettings, public singleton<settings> {
     bool clean_ref_voice() const;
     void set_clean_ref_voice(bool value);
     unsigned int addon_flags() const;
+    unsigned int system_flags() const;
     unsigned int error_flags() const;
     void set_sub_min_segment_dur(unsigned int value);
     unsigned int sub_min_segment_dur() const;
@@ -645,6 +657,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_settings_stt_engine_idx(int value);
     int settings_tts_engine_idx() const;
     void set_settings_tts_engine_idx(int value);
+    unsigned int hint_done_flags() const;
+    Q_INVOKABLE void set_hint_done(settings::hint_done_flags_t value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -790,8 +804,6 @@ class settings : public QSettings, public singleton<settings> {
     void translator_mode_changed();
     void translate_when_typing_changed();
     void default_tts_models_for_mnt_changed(const QString &lang);
-    void hint_translator_changed();
-    void hint_addons_changed();
     void qt_style_changed();
     void restart_required_changed();
     void speech_speed_changed();
@@ -825,6 +837,8 @@ class settings : public QSettings, public singleton<settings> {
     void stt_tts_text_format_changed();
     void clean_ref_voice_changed();
     void addon_flags_changed();
+    void system_flags_changed();
+    void hint_done_flags_changed();
     void sub_config_changed();
     void keep_last_note_changed();
     void file_import_action_changed();
@@ -891,6 +905,7 @@ class settings : public QSettings, public singleton<settings> {
     std::vector<QString> m_rocm_gpu_versions;
     unsigned int m_addon_flags = addon_flags_t::AddonNone;
     unsigned int m_error_flags = error_flags_t::ErrorNoError;
+    unsigned int m_system_flags = system_flags_t::SystemNone;
     bool m_native_style = false;
 
     static QString settings_filepath();
@@ -898,6 +913,7 @@ class settings : public QSettings, public singleton<settings> {
     void enforce_num_threads() const;
     void add_error_flags(error_flags_t new_flag);
     void update_addon_flags();
+    void update_system_flags();
 
     launch_mode_t m_launch_mode = launch_mode_t::app_stanalone;
     QString m_note;

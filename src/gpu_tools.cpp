@@ -485,11 +485,13 @@ struct hip_api {
 };
 
 static bool file_exists(const char* name) {
-    struct stat buffer;
+    struct stat buffer {};
     return (stat(name, &buffer) == 0);
 }
 
-static bool has_nvidia_gpu() { return file_exists("/dev/nvidiactl"); }
+bool has_nvidia_gpu() { return file_exists("/dev/nvidiactl"); }
+
+bool has_amd_gpu() { return file_exists("/dev/kfd"); }
 
 static cudaHipError add_cuda_runtime_devices(std::vector<device>& devices) {
     LOGD("scanning for cuda runtime devices");

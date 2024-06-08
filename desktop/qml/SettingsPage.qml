@@ -507,10 +507,10 @@ DialogPage {
                         id: whispercppContextSizeComboBox
 
                         label.text: qsTr("Audio context size")
-                        toolTip: qsTr("A smaller value speeds up decoding, but can have a negative impact on accuracy.") + " " +
-                                 qsTr("When %1 is set, the size is adjusted dynamically for each audio chunk.").arg(qsTr("Dynamic")) + " " +
+                        toolTip: qsTr("When %1 is set, the size is adjusted dynamically for each audio chunk.").arg(qsTr("Dynamic")) + " " +
                                  qsTr("When %1 is set, the default fixed size is used.").arg("<i>" + qsTr("Default") + "</i>") + " " +
-                                 qsTr("To define a custom size, use the %1 option.").arg("<i>" + qsTr("Custom") + "</i>")
+                                 qsTr("To define a custom size, use the %1 option.").arg("<i>" + qsTr("Custom") + "</i>") + " " +
+                                 qsTr("A smaller value speeds up decoding, but can have a negative impact on accuracy.")
                         comboBox {
                             currentIndex: {
                                 switch(_settings.whispercpp_audioctx_size) {
@@ -541,7 +541,7 @@ DialogPage {
                         id: whispercppContextSizeSpinBox
 
                         indends: 1
-                        enabled: _settings.whispercpp_audioctx_size === Settings.OptionCustom
+                        visible: _settings.whispercpp_audioctx_size === Settings.OptionCustom
                         label.text: qsTr("Size")
                         spinBox {
                             from: 1
@@ -552,23 +552,12 @@ DialogPage {
                                 _settings.whispercpp_audioctx_size_value = spinBox.value;
                             }
                         }
-                    }
-
-                    GpuComboBox {
-                        id: whispercppGpuComboBox
-
-                        enabled: _settings.hw_accel_supported() && app.feature_whispercpp_gpu
-                        devices: _settings.whispercpp_gpu_devices
-                        device_index: _settings.whispercpp_gpu_device_idx
-                        use_gpu: _settings.whispercpp_use_gpu
-                        onUse_gpuChanged: _settings.whispercpp_use_gpu = use_gpu
-                        onDevice_indexChanged: _settings.whispercpp_gpu_device_idx = device_index
+                        toolTip: qsTr("A smaller value speeds up decoding, but can have a negative impact on accuracy.")
                     }
 
                     CheckBox {
                         id: whispercppFlashAttnCheckBox
 
-                        enabled: _settings.hw_accel_supported() && app.feature_whispercpp_gpu && _settings.whispercpp_use_gpu
                         checked: _settings.whispercpp_gpu_flash_attn
                         text: qsTr("Use Flash Attention")
                         onCheckedChanged: {
@@ -581,6 +570,17 @@ DialogPage {
                                       qsTr("Your graphics card has to support this feature.") + " " +
                                       qsTr("Disable this option if you observe problems.")
                         hoverEnabled: true
+                    }
+
+                    GpuComboBox {
+                        id: whispercppGpuComboBox
+
+                        enabled: _settings.hw_accel_supported() && app.feature_whispercpp_gpu
+                        devices: _settings.whispercpp_gpu_devices
+                        device_index: _settings.whispercpp_gpu_device_idx
+                        use_gpu: _settings.whispercpp_use_gpu
+                        onUse_gpuChanged: _settings.whispercpp_use_gpu = use_gpu
+                        onDevice_indexChanged: _settings.whispercpp_gpu_device_idx = device_index
                     }
 
                     // Button {
@@ -639,21 +639,9 @@ DialogPage {
                         }
                     }
 
-                    GpuComboBox {
-                        id: fasterwhisperGpuComboBox
-
-                        enabled: _settings.hw_accel_supported() && app.feature_fasterwhisper_gpu
-                        devices: _settings.fasterwhisper_gpu_devices
-                        device_index: _settings.fasterwhisper_gpu_device_idx
-                        use_gpu: _settings.fasterwhisper_use_gpu
-                        onUse_gpuChanged: _settings.fasterwhisper_use_gpu = use_gpu
-                        onDevice_indexChanged: _settings.fasterwhisper_gpu_device_idx = device_index
-                    }
-
                     CheckBox {
                         id: fasterwhisperFlashAttnCheckBox
 
-                        enabled: _settings.hw_accel_supported() && app.feature_fasterwhisper_gpu && _settings.fasterwhisper_use_gpu
                         checked: _settings.fasterwhisper_gpu_flash_attn
                         text: qsTr("Use Flash Attention")
                         onCheckedChanged: {
@@ -666,6 +654,17 @@ DialogPage {
                                       qsTr("Your graphics card has to support this feature.") + " " +
                                       qsTr("Disable this option if you observe problems.")
                         hoverEnabled: true
+                    }
+
+                    GpuComboBox {
+                        id: fasterwhisperGpuComboBox
+
+                        enabled: _settings.hw_accel_supported() && app.feature_fasterwhisper_gpu
+                        devices: _settings.fasterwhisper_gpu_devices
+                        device_index: _settings.fasterwhisper_gpu_device_idx
+                        use_gpu: _settings.fasterwhisper_use_gpu
+                        onUse_gpuChanged: _settings.fasterwhisper_use_gpu = use_gpu
+                        onDevice_indexChanged: _settings.fasterwhisper_gpu_device_idx = device_index
                     }
 
                     // Button {
