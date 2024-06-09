@@ -113,13 +113,19 @@ void whisper_engine::open_whisper_lib() {
         cpu_tools::feature_flags_t::asimd) {
         LOGD("using whisper-openblas");
         m_whisperlib_handle = dlopen("libwhisper-openblas.so", RTLD_LAZY);
+        if (m_whisperlib_handle == nullptr)
+            LOGE("failed to open libwhisper-openblas.so: " << dlerror());
     } else {
         LOGW("using whisper-fallback");
         m_whisperlib_handle = dlopen("libwhisper-fallback.so", RTLD_LAZY);
+        if (m_whisperlib_handle == nullptr)
+            LOGE("failed to open libwhisper-fallback.so: " << dlerror());
     }
 #elif ARCH_ARM_64
     LOGD("using whisper-openblas");
     m_whisperlib_handle = dlopen("libwhisper-openblas.so", RTLD_LAZY);
+    if (m_whisperlib_handle == nullptr)
+        LOGE("failed to open libwhisper-openblas.so: " << dlerror());
 #else
     if (auto cpuinfo = cpu_tools::cpuinfo();
         cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx &&
@@ -172,16 +178,24 @@ void whisper_engine::open_whisper_lib() {
         if (m_whisperlib_handle == nullptr) {
             LOGD("using whisper-openblas");
             m_whisperlib_handle = dlopen("libwhisper-openblas.so", RTLD_LAZY);
+            if (m_whisperlib_handle == nullptr)
+                LOGE("failed to open libwhisper-openblas.so: " << dlerror());
         }
     } else {
         LOGW("using whisper-fallback");
         m_whisperlib_handle = dlopen("libwhisper-fallback.so", RTLD_LAZY);
+        if (m_whisperlib_handle == nullptr)
+            LOGE("failed to open libwhisper-fallback.so: " << dlerror());
     }
 #endif
 
     if (m_whisperlib_handle == nullptr) {
-        LOGE("failed to open whisper lib: " << dlerror());
-        throw std::runtime_error("failed to open whisper lib");
+        LOGW("using whisper");
+        m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
+        if (m_whisperlib_handle == nullptr) {
+            LOGE("failed to open libwhisper.so: " << dlerror());
+            throw std::runtime_error("failed to open whisper lib");
+        }
     }
 
     m_whisper_api.whisper_init_from_file_with_params = reinterpret_cast<
