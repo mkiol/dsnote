@@ -3949,52 +3949,62 @@ void dsnote_app::handle_desktop_notification_action_invoked(
     close_desktop_notification();
 }
 
-bool dsnote_app::feature_available(const QString &name) const {
-    return m_features_availability.contains(name) &&
-           m_features_availability.value(name).toList().at(0).toBool();
+bool dsnote_app::feature_available(const QString &name,
+                                   bool default_value) const {
+    if (m_features_availability.contains(name))
+        return m_features_availability.value(name).toList().at(0).toBool();
+    return default_value;
 }
 
 bool dsnote_app::feature_whispercpp_gpu() const {
-    return feature_available("whispercpp-stt-cuda") ||
-           feature_available("whispercpp-stt-hip") ||
-           feature_available("whispercpp-stt-opencl") ||
-           feature_available("whispercpp-stt-openvino");
+    return feature_available("whispercpp-stt-cuda", false) ||
+           feature_available("whispercpp-stt-hip", false) ||
+           feature_available("whispercpp-stt-opencl", false) ||
+           feature_available("whispercpp-stt-openvino", false);
+}
+
+bool dsnote_app::feature_fasterwhisper_stt() const {
+    return feature_available("faster-whisper-stt", false);
 }
 
 bool dsnote_app::feature_fasterwhisper_gpu() const {
-    return feature_available("faster-whisper-stt-gpu");
-}
-
-bool dsnote_app::feature_coqui_gpu() const {
-    return feature_available("coqui-tts-gpu");
-}
-
-bool dsnote_app::feature_whisperspeech_gpu() const {
-    return feature_available("whisperspeech-tts-gpu");
-}
-
-bool dsnote_app::feature_punctuator() const {
-    return feature_available("punctuator");
-}
-
-bool dsnote_app::feature_diacritizer_he() const {
-    return feature_available("diacritizer-he");
-}
-
-bool dsnote_app::feature_global_shortcuts() const {
-    return feature_available("ui-global-shortcuts");
-}
-
-bool dsnote_app::feature_text_active_window() const {
-    return feature_available("ui-text-active-window");
+    return feature_available("faster-whisper-stt-gpu", false);
 }
 
 bool dsnote_app::feature_coqui_tts() const {
-    return feature_available("coqui-tts");
+    return feature_available("coqui-tts", false);
+}
+
+bool dsnote_app::feature_coqui_gpu() const {
+    return feature_available("coqui-tts-gpu", false);
+}
+
+bool dsnote_app::feature_whisperspeech_tts() const {
+    return feature_available("whisperspeech-tts", false);
+}
+
+bool dsnote_app::feature_whisperspeech_gpu() const {
+    return feature_available("whisperspeech-tts-gpu", false);
+}
+
+bool dsnote_app::feature_punctuator() const {
+    return feature_available("punctuator", false);
+}
+
+bool dsnote_app::feature_diacritizer_he() const {
+    return feature_available("diacritizer-he", false);
+}
+
+bool dsnote_app::feature_global_shortcuts() const {
+    return feature_available("ui-global-shortcuts", false);
+}
+
+bool dsnote_app::feature_text_active_window() const {
+    return feature_available("ui-text-active-window", false);
 }
 
 bool dsnote_app::feature_translator() const {
-    return feature_available("translator");
+    return feature_available("translator", true);
 }
 
 QVariantList dsnote_app::features_availability() {
@@ -4046,7 +4056,7 @@ QVariantList dsnote_app::features_availability() {
     }
 
     if (old_features_availability != m_features_availability) {
-        auto translator_enabled = feature_available("translator");
+        auto translator_enabled = feature_available("translator", false);
 
         if (!translator_enabled) {
             settings::instance()->set_translator_mode(false);
@@ -4055,24 +4065,26 @@ QVariantList dsnote_app::features_availability() {
         if (settings::instance()->launch_mode() ==
             settings::launch_mode_t::app) {
             models_manager::instance()->update_models_using_availability(
-                {/*tts_coqui=*/feature_available("coqui-tts"),
-                 /*tts_mimic3=*/feature_available("mmic3-tts"),
-                 /*tts_mimic3_de=*/feature_available("mmic3-tts-de"),
-                 /*tts_mimic3_es=*/feature_available("mmic3-tts-es"),
-                 /*tts_mimic3_fr=*/feature_available("mmic3-tts-fr"),
-                 /*tts_mimic3_it=*/feature_available("mmic3-tts-it"),
-                 /*tts_mimic3_ru=*/feature_available("mmic3-tts-ru"),
-                 /*tts_mimic3_sw=*/feature_available("mmic3-tts-sw"),
-                 /*tts_mimic3_fa=*/feature_available("mmic3-tts-fa"),
-                 /*tts_mimic3_nl=*/feature_available("mmic3-tts-nl"),
-                 /*tts_rhvoice=*/feature_available("rhvoice-tts"),
-                 /*tts_whisperspeech=*/feature_available("whisperspeech-tts"),
-                 /*stt_fasterwhisper=*/feature_available("faster-whisper-stt"),
-                 /*stt_ds=*/feature_available("coqui-stt"),
-                 /*stt_vosk=*/feature_available("vosk-stt"),
+                {/*tts_coqui=*/feature_available("coqui-tts", false),
+                 /*tts_mimic3=*/feature_available("mmic3-tts", false),
+                 /*tts_mimic3_de=*/feature_available("mmic3-tts-de", false),
+                 /*tts_mimic3_es=*/feature_available("mmic3-tts-es", false),
+                 /*tts_mimic3_fr=*/feature_available("mmic3-tts-fr", false),
+                 /*tts_mimic3_it=*/feature_available("mmic3-tts-it", false),
+                 /*tts_mimic3_ru=*/feature_available("mmic3-tts-ru", false),
+                 /*tts_mimic3_sw=*/feature_available("mmic3-tts-sw", false),
+                 /*tts_mimic3_fa=*/feature_available("mmic3-tts-fa", false),
+                 /*tts_mimic3_nl=*/feature_available("mmic3-tts-nl", false),
+                 /*tts_rhvoice=*/feature_available("rhvoice-tts", false),
+                 /*tts_whisperspeech=*/
+                 feature_available("whisperspeech-tts", false),
+                 /*stt_fasterwhisper=*/
+                 feature_available("faster-whisper-stt", false),
+                 /*stt_ds=*/feature_available("coqui-stt", false),
+                 /*stt_vosk=*/feature_available("vosk-stt", false),
                  /*mnt_bergamot=*/translator_enabled,
-                 /*ttt_hftc=*/feature_available("punctuator"),
-                 /*option_r=*/feature_available("coqui-tts-ko")});
+                 /*ttt_hftc=*/feature_available("punctuator", false),
+                 /*option_r=*/feature_available("coqui-tts-ko", false)});
         }
 
         emit features_changed();

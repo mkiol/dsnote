@@ -214,27 +214,22 @@ class dsnote_app : public QObject {
         QVariantMap translations READ translations NOTIFY connected_changed)
 
     // features
-#define ENGINE_OPTS(name)                                                  \
-    Q_PROPERTY(bool feature_##name##_gpu READ feature_##name##_gpu NOTIFY \
-                   features_changed)
-    ENGINE_OPTS(whispercpp)
-    ENGINE_OPTS(fasterwhisper)
-    ENGINE_OPTS(coqui)
-    ENGINE_OPTS(whisperspeech)
-#undef ENGINE_OPTS
+#define FEATURE_OPT(name) \
+    Q_PROPERTY(bool feature_##name READ feature_##name NOTIFY features_changed)
+    FEATURE_OPT(whispercpp_gpu)
+    FEATURE_OPT(fasterwhisper_stt)
+    FEATURE_OPT(fasterwhisper_gpu)
+    FEATURE_OPT(whisperspeech_tts)
+    FEATURE_OPT(whisperspeech_gpu)
+    FEATURE_OPT(coqui_tts)
+    FEATURE_OPT(coqui_gpu)
+    FEATURE_OPT(punctuator)
+    FEATURE_OPT(diacritizer_he)
+    FEATURE_OPT(global_shortcuts)
+    FEATURE_OPT(text_active_window)
+    FEATURE_OPT(translator)
+#undef FEATURE_OPT
 
-    Q_PROPERTY(
-        bool feature_punctuator READ feature_punctuator NOTIFY features_changed)
-    Q_PROPERTY(bool feature_diacritizer_he READ feature_diacritizer_he NOTIFY
-                   features_changed)
-    Q_PROPERTY(bool feature_global_shortcuts READ feature_global_shortcuts
-                   NOTIFY features_changed)
-    Q_PROPERTY(bool feature_text_active_window READ feature_text_active_window
-                   NOTIFY features_changed)
-    Q_PROPERTY(
-        bool feature_coqui_tts READ feature_coqui_tts NOTIFY features_changed)
-    Q_PROPERTY(
-        bool feature_translator READ feature_translator NOTIFY features_changed)
     Q_PROPERTY(auto_text_format_t auto_text_format READ auto_text_format NOTIFY
                    auto_text_format_changed)
 
@@ -814,21 +809,23 @@ class dsnote_app : public QObject {
     void handle_desktop_notification_closed(uint id, uint reason);
     void handle_desktop_notification_action_invoked(uint id,
                                                     const QString &action_key);
-    bool feature_available(const QString &name) const;
+    bool feature_available(const QString &name, bool default_value) const;
 
-#define ENGINE_OPTS(name) bool feature_##name##_gpu() const;
-    ENGINE_OPTS(whispercpp)
-    ENGINE_OPTS(fasterwhisper)
-    ENGINE_OPTS(coqui)
-    ENGINE_OPTS(whisperspeech)
-#undef ENGINE_OPTS
+#define FEATURE_OPT(name) bool feature_##name() const;
+    FEATURE_OPT(whispercpp_gpu)
+    FEATURE_OPT(fasterwhisper_stt)
+    FEATURE_OPT(fasterwhisper_gpu)
+    FEATURE_OPT(whisperspeech_tts)
+    FEATURE_OPT(whisperspeech_gpu)
+    FEATURE_OPT(coqui_tts)
+    FEATURE_OPT(coqui_gpu)
+    FEATURE_OPT(punctuator)
+    FEATURE_OPT(diacritizer_he)
+    FEATURE_OPT(global_shortcuts)
+    FEATURE_OPT(text_active_window)
+    FEATURE_OPT(translator)
+#undef FEATURE_OPT
 
-    bool feature_punctuator() const;
-    bool feature_diacritizer_he() const;
-    bool feature_global_shortcuts() const;
-    bool feature_text_active_window() const;
-    bool feature_coqui_tts() const;
-    bool feature_translator() const;
     void request_reload();
     bool stt_translate_needed_by_id(const QString &id) const;
     bool tts_ref_voice_needed_by_id(const QString &id) const;

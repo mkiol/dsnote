@@ -442,7 +442,7 @@ DialogPage {
                 id: sttEnginesBar
 
                 Layout.fillWidth: true
-                currentIndex: _settings.settings_stt_engine_idx
+                currentIndex: app.feature_fasterwhisper_stt ? _settings.settings_stt_engine_idx : 0
                 onCurrentIndexChanged: _settings.settings_stt_engine_idx = currentIndex
 
                 TabButton {
@@ -451,6 +451,7 @@ DialogPage {
                 }
 
                 TabButton {
+                    enabled: app.feature_fasterwhisper_stt
                     text: "FasterWhisper"
                     width: implicitWidth
                 }
@@ -507,7 +508,7 @@ DialogPage {
                         id: whispercppContextSizeComboBox
 
                         label.text: qsTr("Audio context size")
-                        toolTip: qsTr("When %1 is set, the size is adjusted dynamically for each audio chunk.").arg(qsTr("Dynamic")) + " " +
+                        toolTip: qsTr("When %1 is set, the size is adjusted dynamically for each audio chunk.").arg("<i>" + qsTr("Dynamic") + "</i>") + " " +
                                  qsTr("When %1 is set, the default fixed size is used.").arg("<i>" + qsTr("Default") + "</i>") + " " +
                                  qsTr("To define a custom size, use the %1 option.").arg("<i>" + qsTr("Custom") + "</i>") + " " +
                                  qsTr("A smaller value speeds up decoding, but can have a negative impact on accuracy.")
@@ -782,23 +783,26 @@ DialogPage {
 
             SectionLabel {
                 text: qsTr("Engine options")
+                visible: app.feature_coqui_tts || app.feature_whisperspeech_tts
             }
 
             TabBar {
                 id: ttsEnginesBar
 
                 Layout.fillWidth: true
-                currentIndex: _settings.settings_tts_engine_idx
+                currentIndex: !app.feature_coqui_tts ? 1 : !app.feature_whisperspeech_tts ? 0 : _settings.settings_tts_engine_idx
                 onCurrentIndexChanged: _settings.settings_tts_engine_idx = currentIndex
-                visible: _settings.hw_accel_supported() && (app.feature_coqui_gpu || app.feature_whisperspeech_gpu)
+                visible: app.feature_coqui_tts || app.feature_whisperspeech_tts
 
                 TabButton {
                     text: "Coqui"
+                    enabled: app.feature_coqui_tts
                     width: implicitWidth
                 }
 
                 TabButton {
                     text: "WhisperSpeech"
+                    enabled: app.feature_whisperspeech_tts
                     width: implicitWidth
                 }
             }

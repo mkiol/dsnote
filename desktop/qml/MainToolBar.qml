@@ -240,21 +240,12 @@ ToolBar {
                     TabButton {
                         text: qsTr("Notepad")
                         width: implicitWidth
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Switch to Notepad")
-                        hoverEnabled: true
                     }
 
                     TabButton {
                         text: qsTr("Translator")
                         width: implicitWidth
-
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Switch to Translator")
-                        hoverEnabled: true
+                        enabled: app.feature_translator
                     }
                 }
 
