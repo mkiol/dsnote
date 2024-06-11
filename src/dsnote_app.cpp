@@ -2220,6 +2220,8 @@ void dsnote_app::play_speech_internal(const QString &text,
                    settings::instance()->tts_split_into_sentences());
     options.insert("use_engine_speed_control",
                    settings::instance()->tts_use_engine_speed_control());
+    options.insert("tag_mode",
+                   static_cast<int>(settings::instance()->tts_tag_mode()));
 
     if (m_available_tts_ref_voices_map.contains(ref_voice)) {
         auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
@@ -2514,6 +2516,8 @@ void dsnote_app::speech_to_file_internal(
                    settings::instance()->tts_split_into_sentences());
     options.insert("use_engine_speed_control",
                    settings::instance()->tts_use_engine_speed_control());
+    options.insert("tag_mode",
+                   static_cast<int>(settings::instance()->tts_tag_mode()));
 
     if (m_available_tts_ref_voices_map.contains(ref_voice)) {
         auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();

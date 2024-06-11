@@ -22,6 +22,7 @@
 namespace text_tools {
 enum class split_engine_t { ssplit, astrunc };
 enum class text_format_t { markdown, subrip };
+enum class tag_t { none, silence, speech_change };
 
 struct segment_t {
     size_t n = 0;
@@ -32,6 +33,12 @@ struct segment_t {
     bool operator==(const text_tools::segment_t& rhs) const;
     friend std::ostream& operator<<(std::ostream& os,
                                     const text_tools::segment_t& segment);
+};
+
+struct taged_segment_t {
+    std::string text;
+    tag_t type = tag_t::none;
+    unsigned int value = 0;
 };
 
 struct break_line_info {
@@ -60,6 +67,8 @@ class processor {
 std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
     const std::string& text, split_engine_t engine, const std::string& lang,
     const std::string& nb_data = {});
+std::vector<taged_segment_t> split_by_tags(const std::string& text);
+std::string remove_tags(const std::string& text);
 void restore_caps(std::string& text);
 void to_lower_case(std::string& text);
 void trim_lines(std::string& text);

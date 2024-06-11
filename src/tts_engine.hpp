@@ -69,6 +69,13 @@ class tts_engine {
     friend std::ostream& operator<<(std::ostream& os,
                                     subtitles_sync_mode_t mode);
 
+    enum class tag_mode_t {
+        disable = 0,
+        ignore = 1,
+        support = 2,
+    };
+    friend std::ostream& operator<<(std::ostream& os, tag_mode_t mode);
+
     struct model_files_t {
         std::string model_path;
         std::string vocoder_path;
@@ -126,6 +133,7 @@ class tts_engine {
         std::string share_dir;
         text_format_t text_format = text_format_t::raw;
         subtitles_sync_mode_t sync_subs = subtitles_sync_mode_t::off;
+        tag_mode_t tag_mode = tag_mode_t::support;
         std::string options;
         std::string nb_data;
         std::string lang_code;
@@ -181,6 +189,7 @@ class tts_engine {
     inline void set_sync_subs(subtitles_sync_mode_t value) {
         m_config.sync_subs = value;
     }
+    inline void set_tag_mode(tag_mode_t value) { m_config.tag_mode = value; }
     void encode_speech(const std::string& text);
     void restore_text(const std::string& text);
     static std::string merge_wav_files(std::vector<std::string>&& files);
@@ -199,6 +208,8 @@ class tts_engine {
         std::string text;
         size_t t0 = 0;
         size_t t1 = 0;
+        unsigned int speed = 0;
+        unsigned int silence_duration = 0;
         task_type_t type = task_type_t::speech_encoding;
         unsigned int flags = task_flags::task_flag_none;
 
@@ -249,6 +260,11 @@ class tts_engine {
     void process_restore_text(const task_t& task, std::string& restored_text);
     std::vector<task_t> make_tasks(const std::string& text, bool split,
                                    task_type_t type) const;
+    void make_plain_tasks(const std::string& text, bool split,
+                          unsigned int speed, task_type_t type,
+                          std::vector<task_t>& tasks) const;
+    void make_subrip_tasks(const std::string& text, unsigned int speed,
+                           task_type_t type, std::vector<task_t>& tasks) const;
     void setup_ref_voice();
     void make_silence_wav_file(size_t duration_msec, unsigned int sample_rate,
                                const std::string& output_file) const;

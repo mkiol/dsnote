@@ -735,6 +735,37 @@ DialogPage {
                 hoverEnabled: true
             }
 
+            CheckBox {
+                checked: _settings.tts_tag_mode === Settings.TtsTagModeSupport
+                text: qsTr("Use control tags")
+                onCheckedChanged: {
+                    _settings.tts_tag_mode = checked ?
+                                Settings.TtsTagModeSupport :
+                                Settings.TtsTagModeIgnore;
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.") + " " +
+                              qsTr("When this option is disabled, tags are ignored.")
+                hoverEnabled: true
+            }
+
+            TipMessage {
+                color: palette.text
+                indends: 1
+                visible: _settings.tts_tag_mode === Settings.TtsTagModeSupport
+                text: "<p>" + qsTr("Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.") + " " +
+                      qsTr("To use control tags, insert %1 into the text.")
+                        .arg("<i>{tag-name: value}</i>") + " " +
+                      qsTr("The following control tags are currently supported:") +
+                      "</p><ul>" +
+                      "<li><i>{speed: X}</i> - " + qsTr("Changes speed.") + " " + qsTr("%1 is a floating-point number in the range from 0.1 to 2.0.").arg("<i>X</i>") + "</li>" +
+                      "<li><i>{silence: Xy}</i> - " + qsTr("Inserts silence.") + " " + qsTr("%1 is a floating-point number and %2 is an unit name (%3).").arg("<i>X</i>").arg("<i>y</i>").arg("<i>ms</i>, <i>s</i>, <i>m</i>")+ "</li>" +
+                      "</ul>" +
+                      "Examples of usage: <i>{speed: 0.5} {speed: 2.0} {silence: 100ms} {silence: 1.5s} {silence: 2m}</i>"
+            }
+
             SectionLabel {
                 text: qsTr("Subtitles")
             }

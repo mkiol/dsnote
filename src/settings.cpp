@@ -2164,6 +2164,20 @@ void settings::set_tts_subtitles_sync(tts_subtitles_sync_mode_t value) {
     }
 }
 
+settings::tts_tag_mode_t settings::tts_tag_mode() const {
+    return static_cast<settings::tts_tag_mode_t>(
+        value(QStringLiteral("tts_tag_mode"),
+              static_cast<int>(settings::tts_tag_mode_t::TtsTagModeSupport))
+            .toInt());
+}
+
+void settings::set_tts_tag_mode(tts_tag_mode_t value) {
+    if (value != tts_tag_mode()) {
+        setValue(QStringLiteral("tts_tag_mode"), static_cast<int>(value));
+        emit tts_tag_mode_changed();
+    }
+}
+
 bool settings::py_feature_scan() const {
     return value(QStringLiteral("service/py_feature_scan"), true).toBool();
 }

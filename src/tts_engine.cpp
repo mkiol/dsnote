@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <array>
 #include <cctype>
+#include <clocale>
 #include <cmath>
 #include <cstdio>
 #include <fstream>
@@ -134,6 +135,22 @@ std::ostream& operator<<(std::ostream& os,
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, tts_engine::tag_mode_t mode) {
+    switch (mode) {
+        case tts_engine::tag_mode_t::disable:
+            os << "disable";
+            break;
+        case tts_engine::tag_mode_t::ignore:
+            os << "ignore";
+            break;
+        case tts_engine::tag_mode_t::support:
+            os << "support";
+            break;
+    }
+
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os,
                          const tts_engine::model_files_t& model_files) {
     os << "model-path=" << model_files.model_path
@@ -159,8 +176,8 @@ std::ostream& operator<<(std::ostream& os, const tts_engine::config_t& config) {
        << ", speaker=" << config.speaker_id
        << ", ref_voice_file=" << config.ref_voice_file
        << ", text-format=" << config.text_format
-       << ", sync_subs=" << config.sync_subs << ", options=" << config.options
-       << ", lang_code=" << config.lang_code
+       << ", sync_subs=" << config.sync_subs << ", tag_mode=" << config.tag_mode
+       << ", options=" << config.options << ", lang_code=" << config.lang_code
        << ", share-dir=" << config.share_dir
        << ", cache-dir=" << config.cache_dir << ", data-dir=" << config.data_dir
        << ", speech-speed=" << config.speech_speed
@@ -288,7 +305,7 @@ void tts_engine::push_tasks(const std::string& text, task_type_t type) {
     if (tasks.empty()) {
         LOGW("no task to process");
         tasks.push_back(
-            task_t{"", 0, 0, type,
+            task_t{"", 0, 0, 0, 0, type,
                    task_flags::task_flag_first | task_flags::task_flag_last});
     }
 
@@ -409,48 +426,40 @@ static inline void trim(std::string& s) {
     ltrim(s);
 }
 
-std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
-                                                       bool split,
-                                                       task_type_t type) const {
-    std::vector<tts_engine::task_t> tasks;
+void tts_engine::make_subrip_tasks(
+    const std::string& text, unsigned int speed, task_type_t type,
+    std::vector<tts_engine::task_t>& tasks) const {
+    auto subrip_start_idx = text_tools::subrip_text_start(text, 100);
+    if (subrip_start_idx) {
+        auto segments =
+            text_tools::subrip_text_to_segments(text, *subrip_start_idx);
 
-    if (m_config.text_format == text_format_t::subrip) {
-        auto subrip_start_idx = text_tools::subrip_text_start(text, 100);
-        if (subrip_start_idx) {
-            auto segments =
-                text_tools::subrip_text_to_segments(text, *subrip_start_idx);
+        if (!segments.empty()) {
+            tasks.reserve(segments.size());
 
-            if (!segments.empty()) {
-                tasks.reserve(segments.size());
+            task_t task;
 
-                if (m_config.sync_subs == subtitles_sync_mode_t::off) {
-                    segments.front().t0 = 0;
-                    segments.front().t1 = 0;
+            for (auto& seg : segments) {
+                task_t task;
+
+                if (m_config.sync_subs != subtitles_sync_mode_t::off) {
+                    task.t0 = seg.t0;
+                    task.t1 = seg.t1;
                 }
 
-                tasks.push_back(task_t{std::move(segments.front().text),
-                                       segments.front().t0, segments.front().t1,
-                                       type, task_flags::task_flag_first});
+                task.text = std::move(seg.text);
+                task.speed = speed;
+                task.type = type;
 
-                for (auto it = segments.begin() + 1; it != segments.end();
-                     ++it) {
-                    if (m_config.sync_subs == subtitles_sync_mode_t::off) {
-                        it->t0 = 0;
-                        it->t1 = 0;
-                    }
-                    tasks.push_back(task_t{std::move(it->text), it->t0, it->t1,
-                                           type, task_flags::task_flag_none});
-                }
-
-                tasks.back().flags |= task_flags::task_flag_last;
-
-                return tasks;
+                tasks.push_back(std::move(task));
             }
         }
-
-        LOGW("tts fallback to plain text");
     }
+}
 
+void tts_engine::make_plain_tasks(
+    const std::string& text, bool split, unsigned int speed, task_type_t type,
+    std::vector<tts_engine::task_t>& tasks) const {
     if (split) {
         auto engine = m_config.has_option('a')
                           ? text_tools::split_engine_t::astrunc
@@ -459,25 +468,72 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
             text_tools::split(text, engine, m_config.lang, m_config.nb_data);
         if (!parts.empty()) {
             tasks.reserve(parts.size());
-            tasks.push_back(task_t{std::move(parts.front()), 0, 0, type,
-                                   task_flags::task_flag_first});
-
-            for (auto it = parts.begin() + 1; it != parts.end(); ++it) {
-                trim(*it);
-                if (!it->empty())
-                    tasks.push_back(task_t{std::move(*it), 0, 0, type,
-                                           task_flags::task_flag_none});
+            for (auto& part : parts) {
+                trim(part);
+                if (!part.empty()) {
+                    task_t task;
+                    task.text = std::move(part);
+                    task.speed = speed;
+                    task.type = type;
+                    tasks.push_back(std::move(task));
+                }
             }
-
-            tasks.back().flags |= task_flags::task_flag_last;
         }
     } else {
         auto t_text{text};
         text_tools::trim_line(t_text);
 
-        tasks.push_back(
-            task_t{t_text, 0, 0, type,
-                   task_flags::task_flag_first | task_flags::task_flag_last});
+        task_t task;
+        task.text = std::move(t_text);
+        task.speed = speed;
+        task.type = type;
+
+        tasks.push_back(std::move(task));
+    }
+}
+
+std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
+                                                       bool split,
+                                                       task_type_t type) const {
+    std::vector<tts_engine::task_t> tasks;
+
+    auto speed{m_config.speech_speed};
+
+    if (m_config.text_format == text_format_t::subrip) {
+        make_subrip_tasks(text, speed, type, tasks);
+
+        if (tasks.empty()) LOGW("tts fallback to plain text");
+    }
+
+    if (tasks.empty()) {
+        switch (m_config.tag_mode) {
+            case tag_mode_t::disable:
+                make_plain_tasks(text, split, speed, type, tasks);
+                break;
+            case tag_mode_t::ignore:
+                make_plain_tasks(text_tools::remove_tags(text), split, speed,
+                                 type, tasks);
+                break;
+            case tag_mode_t::support:
+                for (const auto& part : text_tools::split_by_tags(text)) {
+                    switch (part.type) {
+                        case text_tools::tag_t::none:
+                        case text_tools::tag_t::silence:
+                            break;
+                        case text_tools::tag_t::speech_change:
+                            speed = part.value;
+                            break;
+                    }
+
+                    make_plain_tasks(part.text, split, speed, type, tasks);
+                }
+                break;
+        }
+    }
+
+    if (!tasks.empty()) {
+        tasks.front().flags |= task_flags::task_flag_first;
+        tasks.back().flags |= task_flags::task_flag_last;
     }
 
     return tasks;
@@ -638,20 +694,23 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
 
     bool follow_timestamps = task.t1 != 0;
 
+    if (task.speed != m_config.speech_speed) {
+        LOGD("speed change: " << m_config.speech_speed << " => " << task.speed);
+        LOGD("task text: " << task.text);
+    }
+
     bool do_speed_change = !m_config.use_engine_speed_control ||
                            !model_supports_speed() ||
                            (fit_into_timestamp && follow_timestamps);
 
     auto output_file = path_to_output_file(
-        task.text,
-        follow_timestamps && fit_into_timestamp ? 0 : m_config.speech_speed,
+        task.text, follow_timestamps && fit_into_timestamp ? 0 : task.speed,
         do_speed_change);
 
     if ((follow_timestamps && fit_into_timestamp) ||
         !file_exists(output_file)) {
         if (!do_speed_change) {
-            auto output_file_wav =
-                encode_speech(output_file, m_config.speech_speed);
+            auto output_file_wav = encode_speech(output_file, task.speed);
             if (output_file_wav.empty()) return;
 
             if (m_config.audio_format != audio_format_t::wav) {
@@ -728,11 +787,9 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
                          << ", adjusted speed=" << opts.speed);
                 }
             } else {
-                if (m_config.speech_speed > 0 && m_config.speech_speed <= 20 &&
-                    m_config.speech_speed != 10) {
+                if (task.speed > 0 && task.speed <= 20 && task.speed != 10) {
                     opts.flags = media_compressor::flags_t::flag_change_speed;
-                    opts.speed =
-                        static_cast<double>(m_config.speech_speed) / 10.0;
+                    opts.speed = static_cast<double>(task.speed) / 10.0;
                 }
             }
 

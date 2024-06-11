@@ -232,6 +232,16 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(
         int settings_tts_engine_idx READ settings_tts_engine_idx WRITE
             set_settings_tts_engine_idx NOTIFY settings_tts_engine_idx_changed)
+    Q_PROPERTY(
+        file_import_action_t file_import_action READ file_import_action WRITE
+            set_file_import_action NOTIFY file_import_action_changed)
+    Q_PROPERTY(
+        tts_subtitles_sync_mode_t tts_subtitles_sync READ tts_subtitles_sync
+            WRITE set_tts_subtitles_sync NOTIFY tts_subtitles_sync_changed)
+    Q_PROPERTY(int mix_volume_change READ mix_volume_change WRITE
+                   set_mix_volume_change NOTIFY mix_volume_change_changed)
+    Q_PROPERTY(tts_tag_mode_t tts_tag_mode READ tts_tag_mode WRITE
+                   set_tts_tag_mode NOTIFY tts_tag_mode_changed)
 
     // service
 
@@ -273,14 +283,6 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(
         QString gpu_overrided_version READ gpu_overrided_version WRITE
             set_gpu_overrided_version NOTIFY gpu_overrided_version_changed)
-    Q_PROPERTY(
-        file_import_action_t file_import_action READ file_import_action WRITE
-            set_file_import_action NOTIFY file_import_action_changed)
-    Q_PROPERTY(
-        tts_subtitles_sync_mode_t tts_subtitles_sync READ tts_subtitles_sync
-            WRITE set_tts_subtitles_sync NOTIFY tts_subtitles_sync_changed)
-    Q_PROPERTY(int mix_volume_change READ mix_volume_change WRITE
-                   set_mix_volume_change NOTIFY mix_volume_change_changed)
 
     // engine options
 
@@ -425,6 +427,13 @@ class settings : public QSettings, public singleton<settings> {
         DefaultExportTabAudio = 1
     };
     Q_ENUM(default_export_tab_t)
+
+    enum class tts_tag_mode_t {
+        TtsTagModeDisable = 0,
+        TtsTagModeIgnore = 1,
+        TtsTagModeSupport = 2,
+    };
+    Q_ENUM(tts_tag_mode_t)
 
     enum error_flags_t : unsigned int {
         ErrorNoError = 0U,
@@ -664,6 +673,10 @@ class settings : public QSettings, public singleton<settings> {
     void set_settings_tts_engine_idx(int value);
     unsigned int hint_done_flags() const;
     Q_INVOKABLE void set_hint_done(settings::hint_done_flags_t value);
+    tts_subtitles_sync_mode_t tts_subtitles_sync() const;
+    void set_tts_subtitles_sync(tts_subtitles_sync_mode_t value);
+    tts_tag_mode_t tts_tag_mode() const;
+    void set_tts_tag_mode(tts_tag_mode_t value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -759,8 +772,6 @@ class settings : public QSettings, public singleton<settings> {
     void set_gpu_override_version(bool value);
     QString gpu_overrided_version();
     void set_gpu_overrided_version(QString new_value);
-    tts_subtitles_sync_mode_t tts_subtitles_sync() const;
-    void set_tts_subtitles_sync(tts_subtitles_sync_mode_t value);
 
 #define ENGINE_OPTS(name)                             \
     bool name##_gpu_flash_attn() const;               \
@@ -859,6 +870,7 @@ class settings : public QSettings, public singleton<settings> {
     void error_flags_changed();
     void settings_stt_engine_idx_changed();
     void settings_tts_engine_idx_changed();
+    void tts_tag_mode_changed();
 
     // service
     void models_dir_changed();

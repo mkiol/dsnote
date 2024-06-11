@@ -1482,6 +1482,30 @@ static tts_engine::text_format_t tts_text_fromat_from_settings_format(
     throw std::runtime_error("invalid text format");
 }
 
+static settings::tts_tag_mode_t tts_tag_mode_from_options(
+    const QVariantMap &options) {
+    if (options.contains(QStringLiteral("tag_mode"))) {
+        bool ok = false;
+        auto value = options.value(QStringLiteral("tag_mode")).toInt(&ok);
+        if (ok) return static_cast<settings::settings::tts_tag_mode_t>(value);
+    }
+    return settings::settings::tts_tag_mode_t::TtsTagModeSupport;
+}
+
+static tts_engine::tag_mode_t tts_tag_mode_from_settings_tag_mode(
+    settings::tts_tag_mode_t mode) {
+    switch (mode) {
+        case settings::tts_tag_mode_t::TtsTagModeDisable:
+            return tts_engine::tag_mode_t::disable;
+        case settings::tts_tag_mode_t::TtsTagModeIgnore:
+            return tts_engine::tag_mode_t::ignore;
+        case settings::tts_tag_mode_t::TtsTagModeSupport:
+            return tts_engine::tag_mode_t::support;
+    }
+
+    throw std::runtime_error("invalid tag mode");
+}
+
 QString speech_service::restart_tts_engine(const QString &model_id,
                                            const QVariantMap &options) {
     auto model_config = choose_model_config(engine_t::tts, model_id);
@@ -1517,6 +1541,8 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         config.use_engine_speed_control =
             tts_use_engine_speed_control_from_options(options);
         config.speech_speed = tts_speech_speed_from_options(options);
+        config.tag_mode = tts_tag_mode_from_settings_tag_mode(
+            tts_tag_mode_from_options(options));
 
         // clang-format off
 #define ENGINE_OPTS(name) \
@@ -1724,6 +1750,7 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             m_tts_engine->set_speaker(config.speaker_id);
             m_tts_engine->set_lang(config.lang);
             m_tts_engine->set_lang_code(config.lang_code);
+            m_tts_engine->set_tag_mode(config.tag_mode);
             m_tts_engine->restart();
         }
 

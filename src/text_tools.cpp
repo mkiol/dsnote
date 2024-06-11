@@ -707,6 +707,67 @@ std::optional<size_t> subrip_text_start(const std::string& text,
     return std::nullopt;
 }
 
+static const std::regex tag_rx{
+    "\\s*\\{\\s*(silence|speed)\\:\\s*([\\d\\.]+)\\s*(ms|s|m)*\\s*\\}\\s*"};
+
+std::string remove_tags(const std::string& text) {
+    return std::regex_replace(text, tag_rx, " ");
+}
+
+std::vector<taged_segment_t> split_by_tags(const std::string& text) {
+    std::vector<taged_segment_t> parts;
+
+    double pending_value = 0;
+    tag_t pending_tag = tag_t::none;
+
+    std::smatch match;
+    auto it = text.cbegin();
+
+    const char* old_locale = setlocale(LC_NUMERIC, "C");
+
+    while (std::regex_search(it, text.cend(), match, tag_rx)) {
+        if (it != match.prefix().second) {
+            parts.push_back({match.prefix(), pending_tag,
+                             static_cast<unsigned int>(pending_value)});
+            pending_value = 0;
+            pending_tag = tag_t::none;
+        }
+
+        try {
+            auto v = std::stod(match[2]);
+
+            if (match[1] == "silence") {
+                if (match[3] == "s")
+                    v *= 1000.0;  // sec => msec
+                else if (match[3] == "m")
+                    v *= (60.0 * 1000.0);  // min => msec
+
+                pending_tag = tag_t::silence;
+                pending_value =
+                    std::clamp(v, 0.0, std::numeric_limits<double>::max());
+            } else if (match[1] == "speed") {
+                pending_tag = tag_t::speech_change;
+                pending_value = std::clamp(v, 0.1, 2.0) * 10;
+            }
+        } catch (const std::logic_error& err) {
+            LOGD("can't convert: '" << match[2] << "' to double, "
+                                    << err.what());
+        }
+
+        it = match.suffix().first;
+    }
+
+    if (it != text.cend()) {
+        parts.push_back({{it, text.cend()},
+                         pending_tag,
+                         static_cast<unsigned int>(pending_value)});
+    }
+
+    setlocale(LC_NUMERIC, old_locale);
+
+    return parts;
+}
+
 void segment_to_subrip_text(const segment_t& segment, std::ostringstream& os) {
     os << segment.n << '\n'
        << to_timestamp(segment.t0) << " --> " << to_timestamp(segment.t1)
