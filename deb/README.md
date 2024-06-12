@@ -1,4 +1,4 @@
-## Building on Ubuntu 23.10
+## Building on Ubuntu 24.04
 
 In order to build on Ubuntu, first install [makedeb](https://www.makedeb.org/).
 
@@ -29,8 +29,3 @@ optdepends_x86_64=(
 ```
 
 It is possible to disable the suport for NVidia, AMD or both at the same time.
-
-
-### Latest Ubuntu LTS
-
-Only latest Ubuntu version is supported, but maybe it is possible to build the app for the most recent Ubuntu LTS version **without** the support for both NVidia and AMD. Please follow the instructions above to disable support for _both_ GPUs, and hope for it to build without errors. OpenCL support may still work.
