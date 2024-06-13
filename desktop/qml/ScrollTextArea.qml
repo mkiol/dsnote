@@ -25,7 +25,9 @@ Item {
     property bool canPushAdd: false
     property bool canPushReplace: false
     property bool canReadSelected: false
+    property bool canReadAll: false
     property bool canTranslateSelected: false
+    property bool canTranslateAll: false
     readonly property bool _fitContent: scrollView.availableHeight - 4 * appWin.padding >= scrollView.contentHeight
     readonly property bool _contextActive: _textFormatCombo.hovered || copyButton.hovered || clearButton.hovered ||
                                            undoButton.hovered || redoButton.hovered || pasteButton.hovered ||
@@ -84,12 +86,14 @@ Item {
                 MenuItem {
                     action: Action {
                         icon.name: "audio-speakers-symbolic"
-                        text: qsTr("Read selection")
+                        text: (root.textArea.selectedText.length !== 0 && root.canReadSelected) ? qsTr("Read selection") : qsTr("Read All")
                     }
-                    enabled: root.textArea.selectedText.length !== 0 && root.canReadSelected
+                    enabled: (root.textArea.selectedText.length !== 0 && root.canReadSelected) || root.canReadAll
                     onTriggered: {
-                        root.readSelectedClicked(root.textArea.selectionStart,
-                                                 root.textArea.selectionEnd)
+                        if (root.textArea.selectedText.length !== 0 && root.canReadSelected)
+                            root.readSelectedClicked(root.textArea.selectionStart, root.textArea.selectionEnd)
+                        else
+                            root.readSelectedClicked(0, root.textArea.selectedText.length - 1)
                     }
                 }
 
@@ -127,12 +131,14 @@ Item {
                     height: visible ? implicitHeight : 0
                     action: Action {
                         icon.name: "insert-text-symbolic"
-                        text: qsTr("Translate selection")
+                        text: (root.textArea.selectedText.length !== 0 && root.canTranslateSelected) ? qsTr("Translate selection") : qsTr("Translate All")
                     }
-                    enabled: root.textArea.selectedText.length !== 0 && root.canTranslateSelected
+                    enabled: (root.textArea.selectedText.length !== 0 && root.canTranslateSelected) || root.canTranslateSelected
                     onTriggered: {
-                        root.translateSelectedClicked(root.textArea.selectionStart,
-                                                 root.textArea.selectionEnd)
+                        if (root.textArea.selectedText.length !== 0 && root.canTranslateSelected)
+                            root.translateSelectedClicked(root.textArea.selectionStart, root.textArea.selectionEnd)
+                        else
+                            root.translateSelectedClicked(0, root.textArea.selectedText.length - 1)
                     }
                 }
 
