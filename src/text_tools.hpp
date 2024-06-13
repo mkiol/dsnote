@@ -22,7 +22,7 @@
 namespace text_tools {
 enum class split_engine_t { ssplit, astrunc };
 enum class text_format_t { markdown, subrip };
-enum class tag_t { none, silence, speech_change };
+enum class tag_type_t { none, silence, speech_change };
 
 struct segment_t {
     size_t n = 0;
@@ -35,10 +35,14 @@ struct segment_t {
                                     const text_tools::segment_t& segment);
 };
 
+struct tag_t {
+    tag_type_t type = tag_type_t::none;
+    unsigned int value = 0;
+};
+
 struct taged_segment_t {
     std::string text;
-    tag_t type = tag_t::none;
-    unsigned int value = 0;
+    std::vector<tag_t> tags;
 };
 
 struct break_line_info {

@@ -717,8 +717,7 @@ std::string remove_tags(const std::string& text) {
 std::vector<taged_segment_t> split_by_tags(const std::string& text) {
     std::vector<taged_segment_t> parts;
 
-    double pending_value = 0;
-    tag_t pending_tag = tag_t::none;
+    std::vector<tag_t> pending_tags;
 
     std::smatch match;
     auto it = text.cbegin();
@@ -727,10 +726,8 @@ std::vector<taged_segment_t> split_by_tags(const std::string& text) {
 
     while (std::regex_search(it, text.cend(), match, tag_rx)) {
         if (it != match.prefix().second) {
-            parts.push_back({match.prefix(), pending_tag,
-                             static_cast<unsigned int>(pending_value)});
-            pending_value = 0;
-            pending_tag = tag_t::none;
+            parts.push_back({match.prefix(), std::move(pending_tags)});
+            pending_tags.clear();
         }
 
         try {
@@ -742,12 +739,14 @@ std::vector<taged_segment_t> split_by_tags(const std::string& text) {
                 else if (match[3] == "m")
                     v *= (60.0 * 1000.0);  // min => msec
 
-                pending_tag = tag_t::silence;
-                pending_value =
-                    std::clamp(v, 0.0, std::numeric_limits<double>::max());
+                pending_tags.push_back(
+                    {tag_type_t::silence,
+                     static_cast<unsigned int>(std::clamp(
+                         v, 0.0, std::numeric_limits<double>::max()))});
             } else if (match[1] == "speed") {
-                pending_tag = tag_t::speech_change;
-                pending_value = std::clamp(v, 0.1, 2.0) * 10;
+                pending_tags.push_back(
+                    {tag_type_t::speech_change,
+                     static_cast<unsigned int>(std::clamp(v, 0.1, 2.0) * 10)});
             }
         } catch (const std::logic_error& err) {
             LOGD("can't convert: '" << match[2] << "' to double, "
@@ -757,10 +756,8 @@ std::vector<taged_segment_t> split_by_tags(const std::string& text) {
         it = match.suffix().first;
     }
 
-    if (it != text.cend()) {
-        parts.push_back({{it, text.cend()},
-                         pending_tag,
-                         static_cast<unsigned int>(pending_value)});
+    if (it != text.cend() || !pending_tags.empty()) {
+        parts.push_back({{it, text.cend()}, std::move(pending_tags)});
     }
 
     setlocale(LC_NUMERIC, old_locale);
