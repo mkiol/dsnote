@@ -17,6 +17,7 @@ Item {
     property alias textFormatInvalid: _textFormatComboRedBorder.visible
     property color textColor: palette.text
     property bool showTranslate: false
+    property bool showControlTags: false
     property bool canUndo: true
     property bool canUndoFallback: false
     property bool canRedo: true
@@ -80,6 +81,36 @@ Item {
 
             TextContextMenu {
                 disableNative: true
+
+                MenuSeparator {}
+
+                Menu {
+                    title: qsTr("Insert control tag")
+                    enabled: root.showControlTags
+                    height: enabled ? implicitHeight : 0
+
+                    MenuItem {
+                        action: Action {
+                            text: "{speed: 1.0}"
+                        }
+                        enabled: root.showControlTags
+                        visible: enabled
+                        onTriggered: {
+                            root.textArea.insert(root.textArea.cursorPosition, "{speed: 1.0}")
+                        }
+                    }
+
+                    MenuItem {
+                        action: Action {
+                            text: "{silence: 1s}"
+                        }
+                        enabled: root.showControlTags
+                        visible: enabled
+                        onTriggered: {
+                            root.textArea.insert(root.textArea.cursorPosition, "{silence: 1s}")
+                        }
+                    }
+                }
 
                 MenuSeparator {}
 

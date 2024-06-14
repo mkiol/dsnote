@@ -106,6 +106,7 @@ ColumnLayout {
                     showTranslate: true
                     canTranslateSelected: mntInCombo.first.enabled && mntInCombo.first.combo.model.length !== 0
                     canTranslateAll: canTranslateSelected
+                    showControlTags: canReadSelected
                     textArea {
                         placeholderText: app.mnt_configured ? qsTr("Type here text to translate from...") : ""
                         onTextChanged: {
