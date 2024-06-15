@@ -353,6 +353,8 @@ std::string mnt_engine::translate_internal(std::string text) {
 
     bool html = m_config.text_format != text_format_t::raw;
 
+    text_tools::convert_control_tags_to_html(text);
+
     m_progress.total = text.size();
     m_progress.current = 0;
     if (m_call_backs.progress_changed) m_call_backs.progress_changed();
@@ -387,13 +389,13 @@ std::string mnt_engine::translate_internal(std::string text) {
                 if (is_shutdown()) return {};
 
                 line.assign(m_bergamot_api_api.bergamot_api_translate(
-                    m_bergamot_ctx_first, line.c_str(), html));
+                    m_bergamot_ctx_first, line.c_str(), true));
 
                 if (is_shutdown()) return {};
 
                 if (m_bergamot_ctx_second)
                     line.assign(m_bergamot_api_api.bergamot_api_translate(
-                        m_bergamot_ctx_second, line.c_str(), html));
+                        m_bergamot_ctx_second, line.c_str(), true));
 
                 if (is_shutdown()) return {};
             } catch (const std::runtime_error& err) {
@@ -416,6 +418,8 @@ std::string mnt_engine::translate_internal(std::string text) {
                    .count();
 
     LOGD("translation completed, stats: duration=" << dur << "ms");
+
+    text_tools::convert_html_to_control_tags(text);
 
     switch (m_config.text_format) {
         case text_format_t::raw:

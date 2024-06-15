@@ -707,15 +707,62 @@ std::optional<size_t> subrip_text_start(const std::string& text,
     return std::nullopt;
 }
 
-static const std::regex tag_rx{
-    "\\s*\\{\\s*(silence|speed)\\:\\s*([\\d\\.]+)\\s*(ms|s|m)*\\s*\\}\\s*"};
+void convert_control_tags_to_html(std::string& text) {
+    std::string out_text;
 
-std::string remove_tags(const std::string& text) {
-    return std::regex_replace(text, tag_rx, " ");
+    static const std::regex rx{
+        "\\s*\\{\\s*[a-zA-Z]+\\:\\s*[\\d\\.]*\\s*[a-zA-Z]*\\s*\\}\\s*"};
+
+    std::smatch match;
+    auto it = text.cbegin();
+
+    while (std::regex_search(it, text.cend(), match, rx)) {
+        out_text.append(fmt::format("{}<code>{}</code>", match.prefix().str(),
+                                    match[0].str()));
+        it = match.suffix().first;
+    }
+
+    if (it != text.cend()) {
+        out_text.append(it, text.cend());
+    }
+
+    text.assign(std::move(out_text));
 }
 
-std::vector<taged_segment_t> split_by_tags(const std::string& text) {
+void convert_html_to_control_tags(std::string& text) {
+    std::string out_text;
+
+    static const std::regex rx{
+        "<code>(\\s*\\{\\s*[a-zA-Z]+\\:\\s*[\\d\\.]*\\s*[a-zA-Z]*\\s*\\}\\s*)</"
+        "code>"};
+
+    std::smatch match;
+    auto it = text.cbegin();
+
+    while (std::regex_search(it, text.cend(), match, rx)) {
+        out_text.append(match.prefix().str() + match[1].str());
+        it = match.suffix().first;
+    }
+
+    if (it != text.cend()) {
+        out_text.append(it, text.cend());
+    }
+
+    text.assign(std::move(out_text));
+}
+
+std::string remove_control_tags(const std::string& text) {
+    static const std::regex rx{
+        "\\s?\\{\\s*([a-zA-Z]+)\\:\\s*([\\d\\.]*)\\s*([a-zA-Z]*)\\s*\\}\\s?"};
+
+    return std::regex_replace(text, rx, " ");
+}
+
+std::vector<taged_segment_t> split_by_control_tags(const std::string& text) {
     std::vector<taged_segment_t> parts;
+
+    static const std::regex rx{
+        "\\s*\\{\\s*([a-zA-Z]+)\\:\\s*([\\d\\.]*)\\s*([a-zA-Z]*)\\s*\\}\\s*"};
 
     std::vector<tag_t> pending_tags;
 
@@ -724,7 +771,7 @@ std::vector<taged_segment_t> split_by_tags(const std::string& text) {
 
     const char* old_locale = setlocale(LC_NUMERIC, "C");
 
-    while (std::regex_search(it, text.cend(), match, tag_rx)) {
+    while (std::regex_search(it, text.cend(), match, rx)) {
         if (it != match.prefix().second) {
             parts.push_back({match.prefix(), std::move(pending_tags)});
             pending_tags.clear();
@@ -734,11 +781,10 @@ std::vector<taged_segment_t> split_by_tags(const std::string& text) {
             auto v = std::stod(match[2]);
 
             if (match[1] == "silence") {
-                if (match[3] == "s")
+                if (match[3] == "s" || match[3] == "sec")
                     v *= 1000.0;  // sec => msec
-                else if (match[3] == "m")
+                else if (match[3] == "m" || match[3] == "min")
                     v *= (60.0 * 1000.0);  // min => msec
-
                 pending_tags.push_back(
                     {tag_type_t::silence,
                      static_cast<unsigned int>(std::clamp(
@@ -747,6 +793,8 @@ std::vector<taged_segment_t> split_by_tags(const std::string& text) {
                 pending_tags.push_back(
                     {tag_type_t::speech_change,
                      static_cast<unsigned int>(std::clamp(v, 0.1, 2.0) * 10)});
+            } else {
+                LOGW("unknown control tag: " << match[1]);
             }
         } catch (const std::logic_error& err) {
             LOGD("can't convert: '" << match[2] << "' to double, "

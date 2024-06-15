@@ -521,11 +521,11 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
                 make_plain_tasks(text, split, speed, 0, type, tasks);
                 break;
             case tag_mode_t::ignore:
-                make_plain_tasks(text_tools::remove_tags(text), split, speed, 0,
+                make_plain_tasks(text_tools::remove_control_tags(text), split, speed, 0,
                                  type, tasks);
                 break;
             case tag_mode_t::support:
-                for (const auto& part : text_tools::split_by_tags(text)) {
+                for (const auto& part : text_tools::split_by_control_tags(text)) {
                     auto silent_duration = 0U;
 
                     for (const auto& tag : part.tags) {
