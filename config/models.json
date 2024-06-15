@@ -340,6 +340,11 @@
             "name": "मराठी",
             "name_en": "Marathi",
             "id": "mr"
+        },
+        {
+            "name": "Cymraeg",
+            "name_en": "Welsh",
+            "id": "cy"
         }
     ],
     "models": [
@@ -21511,6 +21516,66 @@
             "speaker": "108"
         },
         {
+            "name": "English (Piper Bryce Medium Male)",
+            "model_id": "en_piper_us_bryce_medium",
+            "engine": "tts_piper",
+            "lang_id": "en",
+            "checksum": "e99b52ca",
+            "checksum_quick": "d753997",
+            "size": "63552729",
+            "comp": "dir",
+            "info-url": "https://brycebeattie.com/files/tts",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/en/en_US/bryce/medium/en_US-bryce-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/en/en_US/bryce/medium/en_US-bryce-medium.onnx.json"
+            ]
+        },
+        {
+            "name": "English (Piper John Medium Male)",
+            "model_id": "en_piper_us_john_medium",
+            "engine": "tts_piper",
+            "lang_id": "en",
+            "checksum": "64242460",
+            "checksum_quick": "85d055e9",
+            "size": "63552728",
+            "comp": "dir",
+            "info-url": "https://brycebeattie.com/files/tts",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/en/en_US/john/medium/en_US-john-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/en/en_US/john/medium/en_US-john-medium.onnx.json"
+            ]
+        },
+        {
+            "name": "English (Piper Norman Medium Male)",
+            "model_id": "en_piper_us_norman_medium",
+            "engine": "tts_piper",
+            "lang_id": "en",
+            "checksum": "2abe0799",
+            "checksum_quick": "bac45b17",
+            "size": "63552731",
+            "comp": "dir",
+            "info-url": "https://brycebeattie.com/files/tts",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/en/en_US/norman/medium/en_US-norman-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/en/en_US/norman/medium/en_US-norman-medium.onnx.json"
+            ]
+        },
+        {
+            "name": "Cymraeg (Piper Gwryw Gogleddol Medium Male)",
+            "model_id": "cy_piper_gb_gwrywgogleddol_medium",
+            "engine": "tts_piper",
+            "lang_id": "cy",
+            "checksum": "93f71bd7",
+            "checksum_quick": "e0e285fe",
+            "size": "63532397",
+            "comp": "dir",
+            "info-url": "https://git.techiaith.bangor.ac.uk/data-porth-technolegau-iaith/corpws-talentau-llais",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/cy/cy_GB/gwryw_gogleddol/medium/cy_GB-gwryw_gogleddol-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/cy/cy_GB/gwryw_gogleddol/medium/cy_GB-gwryw_gogleddol-medium.onnx.json"
+            ]
+        },
+        {
             "name": "اللهجة الأردنية (Piper Kareem Medium Male)",
             "model_id": "ar_piper_jo_kareem_medium",
             "engine": "tts_piper",
@@ -22248,6 +22313,21 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/it/it_IT/riccardo/x_low/it_IT-riccardo-x_low.onnx.json"
             ],
             "size": "28144938"
+        },
+        {
+            "name": "Italiano (Piper Paola Medium Female)",
+            "model_id": "it_piper_paola_medium",
+            "engine": "tts_piper",
+            "lang_id": "it",
+            "checksum": "91cf9366",
+            "checksum_quick": "9681e5f",
+            "size": "63534521",
+            "comp": "dir",
+            "info-url": "https://huggingface.co/datasets/paolapersico1/Voice-Dataset-Italian",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/it/it_IT/paola/medium/it_IT-paola-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/it/it_IT/paola/medium/it_IT-paola-medium.onnx.json"
+            ]
         },
         {
             "name": "ქართული (Piper Natia Medium Female)",
