@@ -98,6 +98,51 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
+    <release version="4.6.0" date="2024-06-15">
+      <description>
+      <p>User Interface:</p>
+      <ul>
+      <li>Speech Note has been translated into Norwegian language.</li>
+      </ul>
+      <p>Speech to Text:</p>
+      <ul>
+      <li>The name of the all Whisper models has been changed to 'WhisperCpp' to better reflect the engine behind them.
+          Currently, Whisper is supported with 'WhisperCpp' and 'FasterWhisper' engines.
+          Both engines are optimized to achieve the best performance.</li>
+      <li>Separate settings for engines.
+          The configuration of each engine has been separated in the settings.
+          You can separately set the parameters for 'WhisperCpp' and 'FasterWhisper'.
+          The new configuration parameters that have been added to the settings are:
+          'Number of simultaneous threads', 'Beam search width',
+          'Audio context size', 'Use Flash Attention'.</li>
+      <li>Quicker decoding with 'WhisperCpp'.
+          Optimization for short sentences has been added to 'WhisperCpp' engine. With it, the speed of STT has doubled!</li>
+      <li>Support for OpenVINO hardware acceleration in 'WhisperCpp.
+          With OpenVINO decoding on CPU is much quicker. If you are not using GPU acceleration,
+          it is recommended to enable OpenVINO in 'WhisperCpp' engine settings.
+          Currently, OpenVINO is enabled only for CPU acceleration.</li>
+      <li>Option for inserting processing statistics.
+          New settings option allows inserting processing related information to the text after decoding,
+          such as processing time and audio length. This can be useful for comparing the performance of different models,
+          engines and their parameters.</li>
+      </ul>
+      <p>Text to Speech:</p>
+      <ul>
+      <li>Control tags for advance TTS processing.
+          Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.
+          To use control tags, insert '{speed: 0.5}' or '{silence: 1s}' into the text.
+          For convenience, you can also insert predefined control tags using text context menu 'Insert control tag'.</li>
+      <li>Welsh language. New language is enabled with 'Piper' voice.</li>
+      <li>New 'Piper' voices for Spanish, Italian and English</li>
+      </ul>
+      <p>Flatpak:</p>
+      <ul>
+      <li>New library: OpenVINO version 2024.1.0.15008</li>
+      <li>whisper.cpp update to version 1.6.2</li>
+      <li>CTranslate2 update to version 4.3.1</li>
+      </ul>
+      </description>
+    </release>
     <release version="4.5.0" date="2024-05-05">
       <description>
       <p>User Interface:</p>

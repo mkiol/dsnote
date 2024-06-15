@@ -14,6 +14,59 @@ DialogPage {
     title: qsTr("Changes")
 
     SectionLabel {
+        text: qsTr("Version %1").arg(APP_VERSION)
+    }
+
+    RichLabel {
+        text: "<p>" + qsTr("User Interface") + ":</p>
+        <ul>
+        <li><i>Speech Note</i> has been translated into Norwegian language.</li>
+        </ul>
+        <p>" + qsTr("Speech to Text") + ":</p>
+        <ul>
+        <li>The name of the all Whisper models has been changed to <i>WhisperCpp</i> to better reflect the engine behind them.
+            Currently, Whisper is supported with <i>WhisperCpp</i> and <i>FasterWhisper</i> engines.
+            Both engines are optimized to achieve the best performance.</li>
+        <li>Separate settings for engines.
+            The configuration of each engine has been separated in the settings.
+            You can separately set the parameters for <i>WhisperCpp</i> and <i>FasterWhisper</i>.
+            The new configuration parameters that have been added to the settings are:
+            <i>Number of simultaneous threads</i>, <i>Beam search width</i>,
+            <i>Audio context size</i>, <i>Use Flash Attention</i>.
+            The default settings were chosen to get the shortest STT decoding time, which may in some cases result in slightly worse accuracy.
+            If you notice a degradation in accuracy, change the decoding parameters.</li>
+        <li>Quicker decoding with <i>WhisperCpp</i>.
+            Optimization for short sentences has been added to <i>WhisperCpp</i> engine. With it, the speed of STT has doubled.</li>
+        <li>Support for <i>OpenVINO</i> hardware acceleration in <i>WhisperCpp</i>.
+            <i>OpenVINO</i> hardware acceleration has been enabled for <i>WhisperCpp</i> engine and selected models.
+            With <i>OpenVINO</i> decoding on CPU is much quicker. If you are not using GPU acceleration,
+            it is recommended to enable <i>OpenVINO</i> in <i>WhisperCpp</i> engine settings.
+            Currently, <i>OpenVINO</i> is enabled only for CPU acceleration.</li>
+        <li>Option for inserting processing statistics.
+            New settings option allows inserting processing related information to the text after decoding,
+            such as processing time and audio length. This can be useful for comparing the performance of different models,
+            engines and their parameters. Option works only with <i>WhisperCpp</i> and <i>FasterWhisper</i> engines
+            (<i>Speech to Text</i> &rarr; <i>Insert statistics</i>).</li>
+        </ul>
+        <p>" + qsTr("Text to Speech") + ":</p>
+        <ul>
+        <li>Control tags for advance TTS processing.
+            Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.
+            To use control tags, insert <i>{speed: 0.5}</i> or <i>{silence: 1s}</i> into the text.
+            To learn more about control tags go to <i>Text to Speech</i> &rarr; <i>Use control tags</i> in the settings.</i>
+            For convenience, you can also insert predefined control tags using text context menu <i>Insert control tag</i>.</li>
+        <li>Welsh language. New language is enabled with <i>Piper</i> voice.</li>
+        <li>New <i>Piper</i> voices for Spanish, Italian and English</li>
+        </ul>
+        <p>Flatpak:</p>
+        <ul>
+        <li>New library: OpenVINO version 2024.1.0.15008</li>
+        <li>whisper.cpp update to version 1.6.2</li>
+        <li>CTranslate2 update to version 4.3.1</li>
+        </ul>"
+    }
+
+    SectionLabel {
         text: qsTr("Version %1").arg("4.5.0")
     }
 
