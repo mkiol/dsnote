@@ -213,7 +213,6 @@ ApplicationWindow {
         id: padColumn
 
         anchors.fill: parent
-        //spacing: appWin.padding
         spacing: 0
 
         readonly property bool showingTip: warningTip1.visible || warningTip2.visible ||
@@ -249,7 +248,9 @@ ApplicationWindow {
             warning: false
             visible: _settings.hw_accel_supported() &&
                      ((_settings.system_flags & Settings.SystemHwAccel) > 0) &&
-                     ((_settings.hint_done_flags & Settings.HintDoneHwAccel) == 0)
+                     ((_settings.hint_done_flags & Settings.HintDoneHwAccel) == 0) &&
+                     !_settings.whispercpp_use_gpu && !_settings.fasterwhisper_use_gpu &&
+                     !_settings.coqui_use_gpu && !_settings.whisperspeech_use_gpu
             onCloseClicked: _settings.set_hint_done(Settings.HintDoneHwAccel)
             text: qsTr("To speed up processing, enable hardware acceleration in the settings.")
         }
@@ -281,6 +282,10 @@ ApplicationWindow {
             Layout.topMargin: appWin.padding
             Layout.fillWidth: true
             enabled: !_settings.translator_mode
+        }
+
+        Item {
+            height: 5
         }
 
         SpeechWidget {
