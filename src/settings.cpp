@@ -1492,8 +1492,7 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
 
 #define ENGINE_OPTS(name)                                                      \
     bool settings::name##_gpu_flash_attn() const {                             \
-        return value(QStringLiteral("service/" #name "_gpu_flash_attn"),       \
-                     false)                                                    \
+        return value(QStringLiteral("service/" #name "_gpu_flash_attn"), true) \
             .toBool();                                                         \
     }                                                                          \
     void settings::set_##name##_gpu_flash_attn(bool value) {                   \
