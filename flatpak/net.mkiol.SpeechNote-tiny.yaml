@@ -312,7 +312,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RHVoice/RHVoice.git
-        commit: 3ba2a849c14e547d54f111b53fc39e484939f66c
+        commit: e1f6853d465bac96de6d690f8dd0ffb82cc3401b
       - type: patch
         path: ../patches/rhvoice.patch
 

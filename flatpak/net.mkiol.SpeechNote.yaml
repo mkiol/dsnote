@@ -325,7 +325,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RHVoice/RHVoice.git
-        commit: 3ba2a849c14e547d54f111b53fc39e484939f66c
+        commit: e1f6853d465bac96de6d690f8dd0ffb82cc3401b
       - type: patch
         path: ../patches/rhvoice.patch
 
@@ -755,11 +755,11 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/extensions/cpu
       - cd python && python setup.py bdist_wheel
       - pip3 install --verbose --exists-action=i --no-index --prefix=${FLATPAK_DEST}/extensions/cpu --no-build-isolation python/dist/*.whl
-      - strip ${FLATPAK_DEST}/extensions/cpu/lib/libctranslate2.so.4.2.1
+      - strip ${FLATPAK_DEST}/extensions/cpu/lib/libctranslate2.so.4.3.1
     sources:
       - type: git
         url: https://github.com/OpenNMT/CTranslate2.git
-        commit: 0527ef7a2988f0b65b2c534168ae2df687ed9dc6
+        commit: v4.3.1
       - type: patch
         path: ../patches/ctranslate2.patch
 
