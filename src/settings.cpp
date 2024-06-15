@@ -2402,3 +2402,14 @@ void settings::add_error_flags(error_flags_t new_flag) {
         emit error_flags_changed();
     }
 }
+
+bool settings::stt_insert_stats() const {
+    return value(QStringLiteral("stt_insert_stats"), false).toBool();
+}
+
+void settings::set_stt_insert_stats(bool value) {
+    if (stt_insert_stats() != value) {
+        setValue(QStringLiteral("stt_insert_stats"), value);
+        emit stt_insert_stats_changed();
+    }
+}

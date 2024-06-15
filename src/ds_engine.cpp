@@ -380,6 +380,8 @@ void ds_engine::decode_speech(const ds_buf_t& buf, bool eof) {
         LOGD("speech decoded");
 #endif
 
+        std::string stats;
+
         if (!buf.empty()) {
             auto decoding_dur =
                 std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -389,13 +391,7 @@ void ds_engine::decode_speech(const ds_buf_t& buf, bool eof) {
             m_decoding_duration += decoding_dur;
             m_decoded_samples += buf.size();
 
-            LOGD("speech decoded, stats: samples="
-                 << m_decoded_samples << ", duration=" << m_decoding_duration
-                 << "ms ("
-                 << static_cast<double>(m_decoding_duration) /
-                        ((1000 * m_decoded_samples) /
-                         static_cast<double>(m_sample_rate))
-                 << ")");
+            report_stats(m_decoded_samples, m_sample_rate, m_decoding_duration);
         }
 
         if (m_punctuator) result = m_punctuator->process(result);

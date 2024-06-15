@@ -7,13 +7,11 @@
 
 #include "stt_engine.hpp"
 
+#include <fmt/format.h>
+
 #include <algorithm>
-#include <cmath>
 #include <cstring>
-#include <fstream>
 #include <iterator>
-#include <numeric>
-#include <sstream>
 
 #include "logger.hpp"
 
@@ -229,8 +227,10 @@ std::ostream& operator<<(std::ostream& os, const stt_engine::config_t& config) {
        << ", beam-search=" << config.beam_search
        << ", audio-ctx-conf=" << config.audio_ctx_conf
        << ", audio-ctx-conf-size=" << config.audio_ctx_size
-       << ", options=" << config.options << ", use-gpu=" << config.use_gpu
-       << ", gpu-device=[" << config.gpu_device << "]"
+       << ", options=" << config.options
+       << ", insert-stats=" << config.insert_stats
+       << ", use-gpu=" << config.use_gpu << ", gpu-device=["
+       << config.gpu_device << "]"
        << ", sub-config=[" << config.sub_config << "]";
 
     return os;
@@ -629,4 +629,16 @@ void stt_engine::reset_segment_counters() {
     m_segment_time_offset = 0;
     m_segment_time_discarded_before = 0;
     m_segment_time_discarded_after = 0;
+}
+
+std::string stt_engine::report_stats(size_t nb_samples, size_t sample_rate,
+                                     size_t processing_duration_ms) {
+    auto audio_dur = (1000 * nb_samples) / static_cast<double>(sample_rate);
+    LOGD("stats: nb-samples="
+         << nb_samples << ", audio-duration=" << static_cast<size_t>(audio_dur)
+         << "ms, processing-duration=" << processing_duration_ms << "ms ("
+         << static_cast<double>(processing_duration_ms) / audio_dur << ")");
+
+    return fmt::format("[audio-length: {}ms, processing-time: {}ms]",
+                       static_cast<size_t>(audio_dur), processing_duration_ms);
 }

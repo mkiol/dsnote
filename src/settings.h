@@ -242,6 +242,8 @@ class settings : public QSettings, public singleton<settings> {
                    set_mix_volume_change NOTIFY mix_volume_change_changed)
     Q_PROPERTY(tts_tag_mode_t tts_tag_mode READ tts_tag_mode WRITE
                    set_tts_tag_mode NOTIFY tts_tag_mode_changed)
+    Q_PROPERTY(bool stt_insert_stats READ stt_insert_stats WRITE
+                   set_stt_insert_stats NOTIFY stt_insert_stats_changed)
 
     // service
 
@@ -677,6 +679,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_tts_subtitles_sync(tts_subtitles_sync_mode_t value);
     tts_tag_mode_t tts_tag_mode() const;
     void set_tts_tag_mode(tts_tag_mode_t value);
+    bool stt_insert_stats() const;
+    void set_stt_insert_stats(bool value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -871,6 +875,7 @@ class settings : public QSettings, public singleton<settings> {
     void settings_stt_engine_idx_changed();
     void settings_tts_engine_idx_changed();
     void tts_tag_mode_changed();
+    void stt_insert_stats_changed();
 
     // service
     void models_dir_changed();

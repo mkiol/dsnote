@@ -2060,6 +2060,7 @@ void dsnote_app::transcribe_file(const QString &file_path, int stream_index,
     options.insert("text_format", static_cast<int>(s->stt_tts_text_format()));
     options.insert("sub_min_segment_dur", s->sub_min_segment_dur());
     options.insert("stream_index", stream_index);
+    options.insert("insert_stats", s->stt_insert_stats());
     if (s->sub_break_lines()) {
         options.insert("sub_min_line_length", s->sub_min_line_length());
         options.insert("sub_max_line_length", s->sub_max_line_length());
@@ -2108,6 +2109,7 @@ void dsnote_app::listen_internal() {
             : settings::text_format_t::TextFormatRaw;
     options.insert("text_format", static_cast<int>(text_format));
     options.insert("audio_input", s->audio_input_device());
+    options.insert("insert_stats", s->stt_insert_stats());
     options.insert("sub_min_segment_dur", s->sub_min_segment_dur());
     if (s->sub_break_lines()) {
         options.insert("sub_min_line_length", s->sub_min_line_length());

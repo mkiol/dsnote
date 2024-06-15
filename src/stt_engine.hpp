@@ -126,6 +126,7 @@ class stt_engine {
         vad_mode_t vad_mode = vad_mode_t::aggressiveness3;
         bool translate = false; /*extra whisper feature*/
         bool speech_started = false;
+        bool insert_stats = false;
         bool use_gpu = false;
         unsigned int cpu_threads = 4;
         unsigned int beam_search = 5;
@@ -173,6 +174,7 @@ class stt_engine {
         m_config.sub_config = value;
     }
     inline bool stop_requested() const { return m_thread_exit_requested; }
+    inline void set_insert_stats(bool value) { m_config.insert_stats = value; }
 
    protected:
     enum class lock_type_t { free, processed, borrowed };
@@ -239,6 +241,8 @@ class stt_engine {
     virtual void reset_impl() = 0;
     virtual void stop_processing_impl();
     virtual void start_processing_impl();
+    virtual std::string report_stats(size_t nb_samples, size_t sample_rate,
+                                     size_t processing_duration_ms);
     void flush(flush_t type);
     bool lock_buf(lock_type_t desired_lock);
     bool lock_buff_for_processing();
