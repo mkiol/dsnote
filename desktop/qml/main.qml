@@ -213,7 +213,8 @@ ApplicationWindow {
         id: padColumn
 
         anchors.fill: parent
-        spacing: appWin.padding
+        //spacing: appWin.padding
+        spacing: 0
 
         readonly property bool showingTip: warningTip1.visible || warningTip2.visible ||
                                            warningTip3.visible || warningTip4.visible
@@ -231,6 +232,7 @@ ApplicationWindow {
 
             warning: false
             visible: _settings.hw_accel_supported() && _settings.is_flatpak() &&
+                     _settings.addon_flags == Settings.AddonNone &&
                      ((_settings.hint_done_flags & Settings.HintDoneAddon) == 0) &&
                      (((_settings.system_flags & Settings.SystemAmdGpu) > 0) ||
                       ((_settings.system_flags & Settings.SystemNvidiaGpu) > 0))
@@ -239,6 +241,17 @@ ApplicationWindow {
                   qsTr("To enable GPU acceleration, install either %1 or %2 add-on.")
                           .arg("<i><b>Speech Note AMD (net.mkiol.SpeechNote.Addon.amd)</b></i>")
                           .arg("<i><b>Speech Note NVIDIA (net.mkiol.SpeechNote.Addon.nvidia)</b></i>")
+        }
+
+        MainTipMessage {
+            id: warningTip4
+
+            warning: false
+            visible: _settings.hw_accel_supported() &&
+                     ((_settings.system_flags & Settings.SystemHwAccel) > 0) &&
+                     ((_settings.hint_done_flags & Settings.HintDoneHwAccel) == 0)
+            onCloseClicked: _settings.set_hint_done(Settings.HintDoneHwAccel)
+            text: qsTr("To speed up processing, enable hardware acceleration in the settings.")
         }
 
         MainTipMessage {
@@ -253,21 +266,10 @@ ApplicationWindow {
                   qsTr("Try executing %1 before running Speech Note.").arg("<i>\"nvidia-modprobe -c 0 -u\"</i>")
         }
 
-        MainTipMessage {
-            id: warningTip4
-
-            warning: false
-            visible: _settings.hw_accel_supported() &&
-                     ((_settings.system_flags & Settings.SystemHwAccel) > 0) &&
-                     ((_settings.hint_done_flags & Settings.HintDoneHwAccel) == 0)
-            onCloseClicked: _settings.set_hint_done(Settings.HintDoneHwAccel)
-            text: qsTr("To speed up processing, enable hardware acceleration in the settings.")
-        }
-
         Translator {
             id: translator
 
-            Layout.topMargin: padColumn.showingTip ? 0 : appWin.padding
+            Layout.topMargin: appWin.padding
             Layout.fillWidth: true
             enabled: _settings.translator_mode
             readOnly: appWin.canCancelStt
@@ -276,7 +278,7 @@ ApplicationWindow {
         Notepad {
             id: notepad
 
-            Layout.topMargin: padColumn.showingTip ? 0 : appWin.padding
+            Layout.topMargin: appWin.padding
             Layout.fillWidth: true
             enabled: !_settings.translator_mode
         }
