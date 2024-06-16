@@ -2366,6 +2366,7 @@ void settings::update_addon_flags() {
 unsigned int settings::system_flags() const { return m_system_flags; }
 
 void settings::update_system_flags() {
+#ifdef ARCH_X86_64
     unsigned int new_flags = system_flags_t::SystemNone;
 
     if (gpu_tools::has_nvidia_gpu()) {
@@ -2389,6 +2390,7 @@ void settings::update_system_flags() {
         m_system_flags = new_flags;
         emit system_flags_changed();
     }
+#endif
 }
 
 unsigned int settings::error_flags() const { return m_error_flags; }
