@@ -50,19 +50,19 @@
   <screenshots>
     <screenshot type="default">
       <caption>Speech Note main window</caption>
-      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshots/speechnote-screenshot-light-notepad.png</image>
+      <image>https://gitlab.com/mkiol/dsnote/-/raw/5d8a190c182886f34a1a729bdbf09fd02acaf4e9/desktop/screenshots/speechnote-screenshot-light-notepad.png</image>
     </screenshot>
     <screenshot>
       <caption>Speech Note main window (dark theme)</caption>
-      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshots/speechnote-screenshot-dark-notepad.png</image>
+      <image>https://gitlab.com/mkiol/dsnote/-/raw/5d8a190c182886f34a1a729bdbf09fd02acaf4e9/desktop/screenshots/speechnote-screenshot-dark-notepad.png</image>
     </screenshot>
     <screenshot>
       <caption>Translator mode</caption>
-      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshots/speechnote-screenshot-light-translator.png</image>
+      <image>https://gitlab.com/mkiol/dsnote/-/raw/5d8a190c182886f34a1a729bdbf09fd02acaf4e9/desktop/screenshots/speechnote-screenshot-light-translator.png</image>
     </screenshot>
     <screenshot>
       <caption>Translator mode (dark theme)</caption>
-      <image>https://raw.githubusercontent.com/mkiol/dsnote/main/desktop/screenshots/speechnote-screenshot-dark-translator.png</image>
+      <image>https://gitlab.com/mkiol/dsnote/-/raw/5d8a190c182886f34a1a729bdbf09fd02acaf4e9/desktop/screenshots/speechnote-screenshot-dark-translator.png</image>
     </screenshot>
   </screenshots>
   <url type="homepage">https://github.com/mkiol/dsnote</url>
