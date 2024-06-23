@@ -1236,21 +1236,6 @@ DialogPage {
 
                 CheckBox {
                     visible: _settings.hw_accel_supported()
-                    checked: _settings.hw_scan_hip
-                    text: qsTr("Use %1").arg("AMD ROCm")
-                    onCheckedChanged: {
-                        _settings.hw_scan_hip = checked
-                    }
-
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Try to find AMD ROCm compatible graphic cards in the system.") + " " +
-                                  qsTr("Disable this option if you observe problems when launching the application.")
-                    hoverEnabled: true
-                }
-
-                CheckBox {
-                    visible: _settings.hw_accel_supported()
                     checked: _settings.hw_scan_openvino
                     text: qsTr("Use %1").arg("OpenVINO")
                     onCheckedChanged: {
