@@ -1195,6 +1195,16 @@ static stt_engine::sub_config_t stt_sub_config_from_options(
     return sub_config;
 }
 
+static bool stt_insert_stats_from_options(const QVariantMap &options) {
+    if (options.contains(QStringLiteral("insert_stats"))) {
+        bool ok = false;
+        auto value = options.value(QStringLiteral("insert_stats")).toInt(&ok);
+        if (ok) return value;
+    }
+
+    return false;
+}
+
 QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                                            const QString &model_id,
                                            const QString &out_lang_id,
@@ -1225,6 +1235,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         config.beam_search = settings::instance()->whispercpp_beam_search();
         config.cpu_threads = settings::instance()->whispercpp_cpu_threads();
         config.cache_dir = settings::instance()->cache_dir().toStdString();
+        config.insert_stats = stt_insert_stats_from_options(options);
 
         // clang-format off
 #define ENGINE_OPTS(name) \
@@ -1393,6 +1404,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                 static_cast<stt_engine::speech_mode_t>(speech_mode));
             m_stt_engine->set_text_format(config.text_format);
             m_stt_engine->set_sub_config(config.sub_config);
+            m_stt_engine->set_insert_stats(config.insert_stats);
         }
 
         return model_config->stt->model_id;

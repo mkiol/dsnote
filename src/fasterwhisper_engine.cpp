@@ -370,18 +370,17 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
 
     if (m_thread_exit_requested) return;
 
-    auto decoding_dur = std::chrono::duration_cast<std::chrono::milliseconds>(
-                            std::chrono::steady_clock::now() - decoding_start)
-                            .count();
-
-    LOGD("speech decoded, stats: samples="
-         << buf.size() << ", duration=" << decoding_dur << "ms ("
-         << static_cast<double>(decoding_dur) /
-                ((1000 * buf.size()) / static_cast<double>(m_sample_rate))
-         << ")");
+    auto stats = report_stats(
+        buf.size(), m_sample_rate,
+        static_cast<size_t>(
+            std::max(0L, std::chrono::duration_cast<std::chrono::milliseconds>(
+                             std::chrono::steady_clock::now() - decoding_start)
+                             .count())));
 
     auto result = merge_texts(m_intermediate_text.value_or(std::string{}),
                               std::move(text));
+
+    if (m_config.insert_stats) result.append(" " + stats);
 
 #ifdef DEBUG
     LOGD("speech decoded: text=" << result);

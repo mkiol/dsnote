@@ -22,7 +22,7 @@
 namespace text_tools {
 enum class split_engine_t { ssplit, astrunc };
 enum class text_format_t { markdown, subrip };
-enum class tag_t { none, silence, speech_change };
+enum class tag_type_t { none, silence, speech_change };
 
 struct segment_t {
     size_t n = 0;
@@ -35,10 +35,14 @@ struct segment_t {
                                     const text_tools::segment_t& segment);
 };
 
+struct tag_t {
+    tag_type_t type = tag_type_t::none;
+    unsigned int value = 0;
+};
+
 struct taged_segment_t {
     std::string text;
-    tag_t type = tag_t::none;
-    unsigned int value = 0;
+    std::vector<tag_t> tags;
 };
 
 struct break_line_info {
@@ -67,8 +71,8 @@ class processor {
 std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
     const std::string& text, split_engine_t engine, const std::string& lang,
     const std::string& nb_data = {});
-std::vector<taged_segment_t> split_by_tags(const std::string& text);
-std::string remove_tags(const std::string& text);
+std::vector<taged_segment_t> split_by_control_tags(const std::string& text);
+std::string remove_control_tags(const std::string& text);
 void restore_caps(std::string& text);
 void to_lower_case(std::string& text);
 void trim_lines(std::string& text);
@@ -84,6 +88,8 @@ void numbers_to_words(std::string& text, const std::string& lang,
 void convert_text_format_to_html(std::string& text, text_format_t input_format);
 void convert_text_format_from_html(std::string& text,
                                    text_format_t output_format);
+void convert_control_tags_to_html(std::string& text);
+void convert_html_to_control_tags(std::string& text);
 std::string to_timestamp(size_t t);
 std::optional<size_t> subrip_text_start(const std::string& text,
                                         size_t max_lines);

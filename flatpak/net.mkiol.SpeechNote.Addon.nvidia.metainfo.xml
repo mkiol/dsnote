@@ -20,6 +20,14 @@
   <url type="bugtracker">https://github.com/mkiol/dsnote/issues</url>
   <update_contact>dsnote_AT_mkiol.net</update_contact>
   <releases>
+    <release version="1.2.0" date="2024-06-15">
+      <description>
+        <ul>
+        <li>whisper.cpp update to version 1.6.2</li>
+        <li>CTranslate2 update to version 4.3.1</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.1.0" date="2024-05-13">
       <description>
         <ul>

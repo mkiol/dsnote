@@ -373,6 +373,23 @@ DialogPage {
                       .arg("<i>" + qsTr("Restore punctuation") + "</i>").arg("<i>" + qsTr("Punctuation") + "</i>")
             }
 
+            CheckBox {
+                id: statsCheckBox
+
+                checked: _settings.stt_insert_stats
+                text: qsTr("Insert statistics")
+                onCheckedChanged: {
+                    _settings.stt_insert_stats = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Inserts processing related information to the text, such as processing time and audio length.") + " " +
+                              qsTr("This option can be useful for comparing the performance of different models, engines and their parameters.") + " " +
+                              qsTr("This option does not work with all engines.")
+                hoverEnabled: true
+            }
+
             SectionLabel {
                 text: qsTr("Subtitles")
             }

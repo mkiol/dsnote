@@ -1492,8 +1492,7 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
 
 #define ENGINE_OPTS(name)                                                      \
     bool settings::name##_gpu_flash_attn() const {                             \
-        return value(QStringLiteral("service/" #name "_gpu_flash_attn"),       \
-                     false)                                                    \
+        return value(QStringLiteral("service/" #name "_gpu_flash_attn"), true) \
             .toBool();                                                         \
     }                                                                          \
     void settings::set_##name##_gpu_flash_attn(bool value) {                   \
@@ -2367,6 +2366,7 @@ void settings::update_addon_flags() {
 unsigned int settings::system_flags() const { return m_system_flags; }
 
 void settings::update_system_flags() {
+#ifdef ARCH_X86_64
     unsigned int new_flags = system_flags_t::SystemNone;
 
     if (gpu_tools::has_nvidia_gpu()) {
@@ -2390,6 +2390,7 @@ void settings::update_system_flags() {
         m_system_flags = new_flags;
         emit system_flags_changed();
     }
+#endif
 }
 
 unsigned int settings::error_flags() const { return m_error_flags; }
@@ -2401,5 +2402,16 @@ void settings::add_error_flags(error_flags_t new_flag) {
     if (new_flags != m_error_flags) {
         m_error_flags = new_flags;
         emit error_flags_changed();
+    }
+}
+
+bool settings::stt_insert_stats() const {
+    return value(QStringLiteral("stt_insert_stats"), false).toBool();
+}
+
+void settings::set_stt_insert_stats(bool value) {
+    if (stt_insert_stats() != value) {
+        setValue(QStringLiteral("stt_insert_stats"), value);
+        emit stt_insert_stats_changed();
     }
 }

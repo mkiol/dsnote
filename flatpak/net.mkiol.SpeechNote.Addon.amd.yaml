@@ -330,11 +330,11 @@ modules:
     post-install:
       - cd python && python setup.py bdist_wheel
       - pip3 install --verbose --exists-action=i --no-index --prefix=${FLATPAK_DEST} --no-build-isolation python/dist/*.whl
-      - strip ${FLATPAK_DEST}/lib/libctranslate2.so.4.2.1
+      - strip ${FLATPAK_DEST}/lib/libctranslate2.so.4.3.1
     sources:
       - type: git
         url: https://github.com/OpenNMT/CTranslate2.git
-        commit: 0527ef7a2988f0b65b2c534168ae2df687ed9dc6
+        commit: v4.3.1
       - type: patch
         path: ../patches/ctranslate2.patch
 

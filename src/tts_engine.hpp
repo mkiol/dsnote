@@ -214,7 +214,8 @@ class tts_engine {
         unsigned int flags = task_flags::task_flag_none;
 
         inline bool empty() const {
-            return text.empty() && t0 == 0LL && t1 == 0LL;
+            return text.empty() && t0 == 0LL && t1 == 0LL &&
+                   silence_duration == 0UL;
         }
     };
 
@@ -228,6 +229,7 @@ class tts_engine {
     text_tools::processor m_text_processor;
     std::string m_ref_voice_wav_file;
     bool m_restart_requested = false;
+    unsigned int m_last_speech_sample_rate = 48000;
 
     static std::string first_file_with_ext(std::string dir_path,
                                            const std::string& ext);
@@ -261,10 +263,13 @@ class tts_engine {
     std::vector<task_t> make_tasks(const std::string& text, bool split,
                                    task_type_t type) const;
     void make_plain_tasks(const std::string& text, bool split,
-                          unsigned int speed, task_type_t type,
-                          std::vector<task_t>& tasks) const;
+                          unsigned int speed, unsigned int silence_duration,
+                          task_type_t type, std::vector<task_t>& tasks) const;
     void make_subrip_tasks(const std::string& text, unsigned int speed,
-                           task_type_t type, std::vector<task_t>& tasks) const;
+                           unsigned int silence_duration, task_type_t type,
+                           std::vector<task_t>& tasks) const;
+    size_t handle_silence(unsigned long duration, unsigned int sample_rate,
+                          double progress, bool last) const;
     void setup_ref_voice();
     void make_silence_wav_file(size_t duration_msec, unsigned int sample_rate,
                                const std::string& output_file) const;

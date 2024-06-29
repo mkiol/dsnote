@@ -67,6 +67,8 @@ ColumnLayout {
         enabled: root.enabled
         canUndoFallback: app.can_undo_note
         canReadSelected: listenReadCombos.second.button.enabled
+        canReadAll: canReadSelected
+        showControlTags: canReadSelected
         textArea {
             placeholderText: app.stt_configured || app.tts_configured ?
                                  qsTr("Type here or press %1 to make a note...")

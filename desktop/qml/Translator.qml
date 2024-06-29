@@ -102,8 +102,11 @@ ColumnLayout {
                     anchors.fill: parent
                     canUndoFallback: app.can_undo_note
                     canReadSelected: mntInCombo.second.button.enabled
+                    canReadAll: canReadSelected
                     showTranslate: true
                     canTranslateSelected: mntInCombo.first.enabled && mntInCombo.first.combo.model.length !== 0
+                    canTranslateAll: canTranslateSelected
+                    showControlTags: canReadSelected
                     textArea {
                         placeholderText: app.mnt_configured ? qsTr("Type here text to translate from...") : ""
                         onTextChanged: {
@@ -256,6 +259,7 @@ ColumnLayout {
                     canPushAdd: app.translated_text.length !== 0
                     canPushReplace: app.translated_text.length !== 0 && app.note.length !== 0
                     canReadSelected: mntOutCombo.second.button.enabled
+                    canReadAll: canReadSelected
                     textArea {
                         onTextChanged: {
                             app.translated_text = root.translatedNoteTextArea.textArea.text

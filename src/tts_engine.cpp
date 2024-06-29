@@ -427,8 +427,8 @@ static inline void trim(std::string& s) {
 }
 
 void tts_engine::make_subrip_tasks(
-    const std::string& text, unsigned int speed, task_type_t type,
-    std::vector<tts_engine::task_t>& tasks) const {
+    const std::string& text, unsigned int speed, unsigned int silence_duration,
+    task_type_t type, std::vector<tts_engine::task_t>& tasks) const {
     auto subrip_start_idx = text_tools::subrip_text_start(text, 100);
     if (subrip_start_idx) {
         auto segments =
@@ -449,6 +449,7 @@ void tts_engine::make_subrip_tasks(
 
                 task.text = std::move(seg.text);
                 task.speed = speed;
+                task.silence_duration = silence_duration;
                 task.type = type;
 
                 tasks.push_back(std::move(task));
@@ -458,7 +459,8 @@ void tts_engine::make_subrip_tasks(
 }
 
 void tts_engine::make_plain_tasks(
-    const std::string& text, bool split, unsigned int speed, task_type_t type,
+    const std::string& text, bool split, unsigned int speed,
+    unsigned int silence_duration, task_type_t type,
     std::vector<tts_engine::task_t>& tasks) const {
     if (split) {
         auto engine = m_config.has_option('a')
@@ -466,7 +468,13 @@ void tts_engine::make_plain_tasks(
                           : text_tools::split_engine_t::ssplit;
         auto [parts, _] =
             text_tools::split(text, engine, m_config.lang, m_config.nb_data);
-        if (!parts.empty()) {
+        if (parts.empty()) {
+            task_t task;
+            task.speed = speed;
+            task.silence_duration = silence_duration;
+            task.type = type;
+            tasks.push_back(std::move(task));
+        } else {
             tasks.reserve(parts.size());
             for (auto& part : parts) {
                 trim(part);
@@ -474,6 +482,7 @@ void tts_engine::make_plain_tasks(
                     task_t task;
                     task.text = std::move(part);
                     task.speed = speed;
+                    task.silence_duration = silence_duration;
                     task.type = type;
                     tasks.push_back(std::move(task));
                 }
@@ -486,6 +495,7 @@ void tts_engine::make_plain_tasks(
         task_t task;
         task.text = std::move(t_text);
         task.speed = speed;
+        task.silence_duration = silence_duration;
         task.type = type;
 
         tasks.push_back(std::move(task));
@@ -500,7 +510,7 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
     auto speed{m_config.speech_speed};
 
     if (m_config.text_format == text_format_t::subrip) {
-        make_subrip_tasks(text, speed, type, tasks);
+        make_subrip_tasks(text, speed, 0, type, tasks);
 
         if (tasks.empty()) LOGW("tts fallback to plain text");
     }
@@ -508,24 +518,31 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
     if (tasks.empty()) {
         switch (m_config.tag_mode) {
             case tag_mode_t::disable:
-                make_plain_tasks(text, split, speed, type, tasks);
+                make_plain_tasks(text, split, speed, 0, type, tasks);
                 break;
             case tag_mode_t::ignore:
-                make_plain_tasks(text_tools::remove_tags(text), split, speed,
+                make_plain_tasks(text_tools::remove_control_tags(text), split, speed, 0,
                                  type, tasks);
                 break;
             case tag_mode_t::support:
-                for (const auto& part : text_tools::split_by_tags(text)) {
-                    switch (part.type) {
-                        case text_tools::tag_t::none:
-                        case text_tools::tag_t::silence:
-                            break;
-                        case text_tools::tag_t::speech_change:
-                            speed = part.value;
-                            break;
+                for (const auto& part : text_tools::split_by_control_tags(text)) {
+                    auto silent_duration = 0U;
+
+                    for (const auto& tag : part.tags) {
+                        switch (tag.type) {
+                            case text_tools::tag_type_t::none:
+                                break;
+                            case text_tools::tag_type_t::silence:
+                                silent_duration += tag.value;
+                                break;
+                            case text_tools::tag_type_t::speech_change:
+                                speed = tag.value;
+                                break;
+                        }
                     }
 
-                    make_plain_tasks(part.text, split, speed, type, tasks);
+                    make_plain_tasks(part.text, split, speed, silent_duration,
+                                     type, tasks);
                 }
                 break;
         }
@@ -649,9 +666,50 @@ void tts_engine::process_restore_text(const task_t& task,
     }
 }
 
+size_t tts_engine::handle_silence(unsigned long duration,
+                                  unsigned int sample_rate, double progress,
+                                  bool last) const {
+    auto silence_out_file = path_to_output_silence_file(duration, sample_rate,
+                                                        m_config.audio_format);
+
+    if (!file_exists(silence_out_file)) {
+        auto silence_out_file_wav = path_to_output_silence_file(
+            duration, sample_rate, audio_format_t::wav);
+
+        make_silence_wav_file(duration, sample_rate, silence_out_file_wav);
+
+        if (m_config.audio_format != audio_format_t::wav) {
+            media_compressor::options_t opts{
+                media_compressor::quality_t::vbr_high,
+                media_compressor::flags_t::flag_none,
+                1.0,
+                {},
+                {}};
+
+            media_compressor{}.compress_to_file(
+                {silence_out_file_wav}, silence_out_file,
+                compressor_format_from_format(m_config.audio_format), opts);
+
+            unlink(silence_out_file_wav.c_str());
+        } else {
+            silence_out_file = std::move(silence_out_file_wav);
+        }
+    }
+
+    auto [silence_duration, _] =
+        media_compressor{}.duration_and_rate(silence_out_file);
+
+    if (m_call_backs.speech_encoded) {
+        m_call_backs.speech_encoded("", silence_out_file, m_config.audio_format,
+                                    progress, last);
+    }
+
+    return silence_duration;
+}
+
 void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
                                        double progress) {
-    if (task.empty() && (task.flags & task_flags::task_flag_last)) {
+    if (task.empty() && task.flags & task_flags::task_flag_last) {
         if (m_call_backs.speech_encoded) {
             m_call_backs.speech_encoded({}, {}, audio_format_t::wav, 1.0, true);
         }
@@ -696,24 +754,75 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
 
     if (task.speed != m_config.speech_speed) {
         LOGD("speed change: " << m_config.speech_speed << " => " << task.speed);
-        LOGD("task text: " << task.text);
     }
 
-    bool do_speed_change = !m_config.use_engine_speed_control ||
-                           !model_supports_speed() ||
-                           (fit_into_timestamp && follow_timestamps);
+    auto make_output_file = [&]() {
+        if (task.text.empty()) return std::string{};
 
-    auto output_file = path_to_output_file(
-        task.text, follow_timestamps && fit_into_timestamp ? 0 : task.speed,
-        do_speed_change);
+        bool do_speed_change = !m_config.use_engine_speed_control ||
+                               !model_supports_speed() ||
+                               (fit_into_timestamp && follow_timestamps);
 
-    if ((follow_timestamps && fit_into_timestamp) ||
-        !file_exists(output_file)) {
-        if (!do_speed_change) {
-            auto output_file_wav = encode_speech(output_file, task.speed);
-            if (output_file_wav.empty()) return;
+        auto output_file = path_to_output_file(
+            task.text, follow_timestamps && fit_into_timestamp ? 0 : task.speed,
+            do_speed_change);
 
-            if (m_config.audio_format != audio_format_t::wav) {
+        if ((follow_timestamps && fit_into_timestamp) ||
+            !file_exists(output_file)) {
+            if (!do_speed_change) {
+                auto output_file_wav = encode_speech(output_file, task.speed);
+                if (output_file_wav.empty()) return std::string{};
+
+                if (m_config.audio_format != audio_format_t::wav) {
+                    media_compressor::options_t opts{
+                        media_compressor::quality_t::vbr_high,
+                        media_compressor::flags_t::flag_none,
+                        1.0,
+                        {},
+                        {}};
+
+                    media_compressor{}.compress_to_file(
+                        {output_file_wav}, output_file,
+                        compressor_format_from_format(m_config.audio_format),
+                        opts);
+
+                    unlink(output_file_wav.c_str());
+                }
+            } else {
+                auto output_file_no_speed =
+                    path_to_output_file(task.text, 10, false);
+
+                if (!file_exists(output_file_no_speed)) {
+                    auto output_file_wav =
+                        encode_speech(output_file_no_speed, 10);
+                    if (output_file_wav.empty()) return std::string{};
+
+                    if (m_config.audio_format != audio_format_t::wav) {
+                        media_compressor::options_t opts{
+                            media_compressor::quality_t::vbr_high,
+                            media_compressor::flags_t::flag_none,
+                            1.0,
+                            {},
+                            {}};
+
+                        media_compressor{}.compress_to_file(
+                            {output_file_wav}, output_file_no_speed,
+                            compressor_format_from_format(
+                                m_config.audio_format),
+                            opts);
+
+                        unlink(output_file_wav.c_str());
+                    }
+                }
+
+                auto output_file_wav = output_file_no_speed;
+
+                if (m_config.audio_format != audio_format_t::wav) {
+                    output_file_wav = output_file_no_speed + ".wav";
+                    media_compressor{}.decompress_to_file(
+                        {output_file_no_speed}, output_file_wav, {});
+                }
+
                 media_compressor::options_t opts{
                     media_compressor::quality_t::vbr_high,
                     media_compressor::flags_t::flag_none,
@@ -721,147 +830,86 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
                     {},
                     {}};
 
+                if (follow_timestamps && fit_into_timestamp &&
+                    task.t1 > task.t0) {
+                    auto [speech_duration, _] =
+                        media_compressor{}.duration_and_rate(output_file_wav);
+                    auto segment_duration = task.t1 - task.t0;
+
+                    if (segment_duration != speech_duration &&
+                        (m_config.sync_subs ==
+                             subtitles_sync_mode_t::on_always_fit ||
+                         (m_config.sync_subs ==
+                              subtitles_sync_mode_t::on_fit_only_if_longer &&
+                          segment_duration < speech_duration))) {
+                        opts.flags =
+                            media_compressor::flags_t::flag_change_speed;
+                        opts.speed = speech_duration /
+                                     static_cast<double>(segment_duration);
+
+                        LOGD("duration change to fit: "
+                             << speech_duration << " => " << segment_duration
+                             << ", adjusted speed=" << opts.speed);
+                    }
+                } else {
+                    if (task.speed > 0 && task.speed <= 20 &&
+                        task.speed != 10) {
+                        opts.flags =
+                            media_compressor::flags_t::flag_change_speed;
+                        opts.speed = static_cast<double>(task.speed) / 10.0;
+                    }
+                }
+
                 media_compressor{}.compress_to_file(
                     {output_file_wav}, output_file,
                     compressor_format_from_format(m_config.audio_format), opts);
 
                 unlink(output_file_wav.c_str());
             }
-        } else {
-            auto output_file_no_speed =
-                path_to_output_file(task.text, 10, false);
-
-            if (!file_exists(output_file_no_speed)) {
-                auto output_file_wav = encode_speech(output_file_no_speed, 10);
-                if (output_file_wav.empty()) return;
-
-                if (m_config.audio_format != audio_format_t::wav) {
-                    media_compressor::options_t opts{
-                        media_compressor::quality_t::vbr_high,
-                        media_compressor::flags_t::flag_none,
-                        1.0,
-                        {},
-                        {}};
-
-                    media_compressor{}.compress_to_file(
-                        {output_file_wav}, output_file_no_speed,
-                        compressor_format_from_format(m_config.audio_format),
-                        opts);
-
-                    unlink(output_file_wav.c_str());
-                }
-            }
-
-            auto output_file_wav = output_file_no_speed;
-
-            if (m_config.audio_format != audio_format_t::wav) {
-                output_file_wav = output_file_no_speed + ".wav";
-                media_compressor{}.decompress_to_file({output_file_no_speed},
-                                                      output_file_wav, {});
-            }
-
-            media_compressor::options_t opts{
-                media_compressor::quality_t::vbr_high,
-                media_compressor::flags_t::flag_none,
-                1.0,
-                {},
-                {}};
-
-            if (follow_timestamps && fit_into_timestamp && task.t1 > task.t0) {
-                auto [speech_duration, _] =
-                    media_compressor{}.duration_and_rate(output_file_wav);
-                auto segment_duration = task.t1 - task.t0;
-
-                if (segment_duration != speech_duration &&
-                    (m_config.sync_subs ==
-                         subtitles_sync_mode_t::on_always_fit ||
-                     (m_config.sync_subs ==
-                          subtitles_sync_mode_t::on_fit_only_if_longer &&
-                      segment_duration < speech_duration))) {
-                    opts.flags = media_compressor::flags_t::flag_change_speed;
-                    opts.speed =
-                        speech_duration / static_cast<double>(segment_duration);
-
-                    LOGD("duration change to fit: "
-                         << speech_duration << " => " << segment_duration
-                         << ", adjusted speed=" << opts.speed);
-                }
-            } else {
-                if (task.speed > 0 && task.speed <= 20 && task.speed != 10) {
-                    opts.flags = media_compressor::flags_t::flag_change_speed;
-                    opts.speed = static_cast<double>(task.speed) / 10.0;
-                }
-            }
-
-            media_compressor{}.compress_to_file(
-                {output_file_wav}, output_file,
-                compressor_format_from_format(m_config.audio_format), opts);
-
-            unlink(output_file_wav.c_str());
         }
+
+        return output_file;
+    };
+
+    auto output_file = make_output_file();
+
+    size_t speech_duration = 0;
+    if (!output_file.empty()) {
+        std::tie(speech_duration, m_last_speech_sample_rate) =
+            media_compressor{}.duration_and_rate(output_file);
     }
 
-    auto [speech_duration, speech_sample_rate] =
-        media_compressor{}.duration_and_rate(output_file);
+    bool no_speech = output_file.empty();
+    bool delayed_silence = follow_timestamps && speech_time < task.t0;
+    bool last_task = (task.flags & task_flags::task_flag_last) > 0;
+
+    if (task.silence_duration > 0) {
+        speech_time += handle_silence(
+            task.silence_duration, m_last_speech_sample_rate, progress,
+            !delayed_silence && no_speech && last_task);
+    }
 
     if (follow_timestamps) {
         if (speech_time < task.t0) {
-            auto duration = task.t0 - speech_time;
-
-            auto silence_out_file = path_to_output_silence_file(
-                duration, speech_sample_rate, m_config.audio_format);
-
-            if (!file_exists(silence_out_file)) {
-                auto silence_out_file_wav = path_to_output_silence_file(
-                    duration, speech_sample_rate, audio_format_t::wav);
-
-                make_silence_wav_file(duration, speech_sample_rate,
-                                      silence_out_file_wav);
-
-                if (m_config.audio_format != audio_format_t::wav) {
-                    media_compressor::options_t opts{
-                        media_compressor::quality_t::vbr_high,
-                        media_compressor::flags_t::flag_none,
-                        1.0,
-                        {},
-                        {}};
-
-                    media_compressor{}.compress_to_file(
-                        {silence_out_file_wav}, silence_out_file,
-                        compressor_format_from_format(m_config.audio_format),
-                        opts);
-
-                    unlink(silence_out_file_wav.c_str());
-                } else {
-                    silence_out_file = std::move(silence_out_file_wav);
-                }
-            }
-
-            auto [silence_duration, _] =
-                media_compressor{}.duration_and_rate(silence_out_file);
-
-            speech_time += silence_duration;
-
-            if (m_call_backs.speech_encoded) {
-                m_call_backs.speech_encoded("", silence_out_file,
-                                            m_config.audio_format, progress,
-                                            false);
-            }
-
+            speech_time +=
+                handle_silence(task.t0 - speech_time, m_last_speech_sample_rate,
+                               progress, no_speech && last_task);
         } else if (speech_time > task.t0) {
             LOGW("speech is delayed: " << speech_time - task.t0
                                        << ", consider increasing speech speed");
         }
-
-        speech_time += speech_duration;
     }
+
+    speech_time += speech_duration;
 
     if (is_shutdown()) return;
 
-    if (m_call_backs.speech_encoded) {
-        m_call_backs.speech_encoded(
-            task.text, output_file, m_config.audio_format, progress,
-            (task.flags & task_flags::task_flag_last) > 0);
+    if (!no_speech) {
+        if (m_call_backs.speech_encoded) {
+            m_call_backs.speech_encoded(task.text, output_file,
+                                        m_config.audio_format, progress,
+                                        last_task);
+        }
     }
 }
 
