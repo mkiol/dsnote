@@ -1,0 +1,11 @@
+Package: dsnote
+Version: 4.5.0-1
+Architecture: amd64
+Homepage: https://github.com/mkiol/dsnote
+Maintainer: LFdev <lfdev+deb@envs.net>
+Section: misc
+Depends: breeze-icon-theme, hicolor-icon-theme, libarchive13, libc6, libfmt9, libkf5dbusaddons5, liblzma5, libopenblas0, libpython3.11, libqt5multimedia5, libqt5multimedia5-plugins, libqt5quickcontrols2-5, libqt5x11extras5, librubberband2, libtag1v5, ocl-icd-libopencl1, perl, python3, qml-module-org-kde-qqc2breezestyle, qml-module-org-kde-qqc2desktopstyle, qml-module-org-kde-quickcharts, qml-module-qtquick-controls, qml-module-qtquick-dialogs, zlib1g
+Suggests: intel-opencl-icd, libcudart12, nvidia-cudnn
+Description: Offline note taking, reading and translating
+ Note taking, reading and translating with offline Speech to Text,
+ Text to Speech and Machine Translation.
