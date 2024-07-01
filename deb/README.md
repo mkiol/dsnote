@@ -1,7 +1,7 @@
 ### Build dependencies on Ubuntu 24.04
 
 ```
-$ sudo apt appstream autoconf build-essential cmake extra-cmake-modules \
+$ sudo apt installl appstream autoconf build-essential cmake extra-cmake-modules \
     git kirigami2-dev libarchive-dev libboost-all-dev libfmt-dev \
     libkf5dbusaddons-dev libkf5qqc2desktopstyle-dev libkf5iconthemes-dev \
     liblzma-dev libopenblas-dev libpulse-dev libqt5x11extras5-dev \
