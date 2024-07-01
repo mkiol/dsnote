@@ -1,13 +1,13 @@
-# Maintainer: LFdev <lfdev+deb at envs dot net>
+maintainer=("LFdev <lfdev+deb@envs.net>")
+compatible=('*:noble' '*:24.04')
 
 _pkgname='dsnote'
 pkgname="${_pkgname}"
-pkgver=4.4.0
+pkgver=4.5.0
 pkgrel=1
 pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
 arch=(
     'amd64'
-    'arm64'
 )
 depends=(
     'breeze-icon-theme'
@@ -25,6 +25,7 @@ depends=(
     'libqt5x11extras5'
     'librubberband2'
     'libtag1v5'
+    'ocl-icd-libopencl1'
     'perl'
     'python3>=3.11'
     'qml-module-org-kde-qqc2breezestyle'
@@ -50,12 +51,14 @@ makedepends=(
     'libkf5iconthemes-dev'
     'liblzma-dev'
     'libopenblas-dev'
+    'libpulse-dev'
     'libqt5x11extras5-dev'
     'librubberband-dev'
     'libtag1-dev'
     'libtool'
     'libxkbcommon-x11-dev'
     'ocl-icd-opencl-dev'
+    'patchelf'
     'pybind11-dev'
     'python3-dev'
     'qtbase5-dev'
@@ -64,31 +67,24 @@ makedepends=(
     'qtquickcontrols2-5-dev'
     'qttools5-dev'
     'zlib1g-dev'
-)
-makedepends_x86_64=(
     'nvidia-cuda-dev'     # Support for GPU acceleration on NVidia GPU
     'nvidia-cuda-toolkit' # Support for GPU acceleration on NVidia GPU
-    'rocm-hip-sdk'        # Support GPU acceleration on AMD GPU
+#    'rocm-hip-sdk'        # Support GPU acceleration on AMD GPU
 )
 optdepends=(
-    'ocl-icd-libopencl1'  # Support for GPU acceleration with OpenCL
-)
-optdepends_x86_64=(
-    'intel-opencl-icd'    # Support for Intel GPU acceleration with OpenCL
-    'libcudart12'         # Support for GPU acceleration on NVidia GPU
-    'nvidia-cudnn'        # Support for GPU acceleration on NVidia GPU
-    'rocblas'             # Support for GPU acceleration on AMD GPU
-    'rocm-opencl-runtime' # Support GPU acceleration on AMD GPU
+    'intel-opencl-icd: Support for Intel GPU acceleration with OpenCL'
+    'libcudart12: Support for GPU acceleration on NVidia GPU'
+    'nvidia-cudnn: Support for GPU acceleration on NVidia GPU'
+    'rocblas: Support for GPU acceleration on AMD GPU'
+    'rocm-opencl-runtime: Support for GPU acceleration on AMD GPU'
 )
 
-provides=(${_pkgname})
 conflicts=(${_pkgname}-git)
-postinst="deb.postinst"
 url="https://github.com/mkiol/dsnote"
 license=('MPL-2.0')
 
 source=(https://github.com/mkiol/dsnote/archive/refs/tags/v${pkgver}.tar.gz)
-sha256sums=('9b9aa92b0bc90870aac97ef14d9d31bd24f55b05b7e854cfd29fe84ba48c1f8f')
+sha256sums=('fbdd53dd1ee1b48a6ef475f33ed710473e591840cb984e203f346ba79ef1ecbd')
 
 build() {
     cd "${srcdir}/${_pkgname}-${pkgver}"
@@ -120,12 +116,7 @@ build() {
     dpkg -s rocm-hip-sdk &> /dev/null && ROCM=true || ROCM=false
     $ROCM || CMAKE+=" -DBUILD_WHISPERCPP_HIPBLAS=OFF"
 
-    if [ $ROCM ]; then
-        # Temporary fix to allow support for more GPU cards using ROCm
-        cmake ../ $CMAKE -DCMAKE_HIP_ARCHITECTURES="gfx801 gfx802 gfx803 gfx805 gfx810 gfx900 gfx902 gfx904 gfx906 gfx908 gfx909 gfx90a gfx90c gfx940 gfx1010 gfx1011 gfx1012 gfx1013 gfx1030 gfx1031 gfx1032 gfx1033 gfx1034 gfx1035 gfx1036 gfx1100 gfx1101 gfx1102 gfx1103"
-    else
-        cmake ../ $CMAKE
-    fi
+    cmake ../ $CMAKE
 
     test $(nproc) -gt 2 && make -j$(($(nproc)-2)) || make
 }
@@ -142,6 +133,11 @@ package() {
     # Start the app using X even on Wayland so all features work
     sed -i "s/Exec=dsnote/Exec=env QT_QPA_PLATFORM=xcb dsnote/" \
         "${pkgdir}/usr/share/applications/dsnote.desktop"
+}
+
+post_install() {
+    echo "** Some features of Speech Note may require optional Python packages"
+    echo "** Please check the help or project page for more info"
 }
 
 # vim: set sw=4 expandtab:
