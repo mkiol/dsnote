@@ -13,15 +13,17 @@ Dialog {
     id: root
 
     default property alias content: column.data
-    property alias listViewItem: listView
+    //property alias listViewItem: listView
+    property alias listViewStackItem: listViewStack
     property alias flickItem: flick
     property alias placeholderLabel: _placeholderLabel
     property alias footerLabel: _footerLabel
+    readonly property bool listViewExists: !listViewStackItem.empty
     readonly property real _rightMargin: scrollBar.visible ? appWin.padding + scrollBar.width : appWin.padding
     readonly property real _leftMargin: appWin.padding
 
     implicitHeight: Math.min(
-                        header.height + flick.contentHeight + (listView.model ? root.parent.height : 0) + footer.height + 8 * verticalPadding,
+                        header.height + flick.contentHeight + (listViewExists ? root.parent.height : 0) + footer.height + 8 * verticalPadding,
                         parent.height - 4 * appWin.padding)
     implicitWidth: parent.width - 4 * appWin.padding
     anchors.centerIn: parent
@@ -101,30 +103,40 @@ Dialog {
             enabled: false
         }
 
-        ListView {
-            id: listView
+        StackView {
+            id: listViewStack
 
             anchors.fill: parent
-            topMargin: appWin.padding
-            bottomMargin: appWin.padding
+        }
 
-            focus: true
-            clip: true
-            spacing: appWin.padding
+        Component {
+            id: listViewComp
 
-            Keys.onUpPressed: listViewScrollBar.decrease()
-            Keys.onDownPressed: listViewScrollBar.increase()
+            ListView {
+                id: listView
 
-            ScrollBar.vertical: ScrollBar {
-                id: listViewScrollBar
+                anchors.fill: parent
+                topMargin: appWin.padding
+                bottomMargin: appWin.padding
+
+                focus: true
+                clip: true
+                spacing: appWin.padding
+
+                Keys.onUpPressed: listViewScrollBar.decrease()
+                Keys.onDownPressed: listViewScrollBar.increase()
+
+                ScrollBar.vertical: ScrollBar {
+                    id: listViewScrollBar
+                }
             }
         }
 
         Flickable {
             id: flick
 
-            anchors.fill: listView.model ? null : parent
-            visible: !listView.model
+            anchors.fill: root.listViewExists ? null : parent
+            visible: !root.listViewExists
             contentWidth: width
             contentHeight: column.height + 2 * appWin.padding
             topMargin: appWin.padding

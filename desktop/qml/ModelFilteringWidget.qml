@@ -14,6 +14,7 @@ import org.mkiol.dsnote.Dsnote 1.0
 ColumnLayout {
     id: root
 
+    readonly property alias opened: filterButton.checked
     property var models_model: service.models_model
     readonly property alias filtering_visible: filterButton.checked
 

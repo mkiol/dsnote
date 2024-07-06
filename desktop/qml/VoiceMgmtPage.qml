@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,6 +16,10 @@ DialogPage {
     readonly property bool verticalMode: width < appWin.height
 
     title: qsTr("Voice samples")
+
+    Component.onCompleted: {
+        listViewStackItem.push(listViewComp)
+    }
 
     footer: Item {
         height: closeButton.height + appWin.padding
@@ -93,7 +97,7 @@ DialogPage {
                 opacity: control.hovered ? 0.1 : 0.0
             }
 
-            width: root.listViewItem.width
+            width: root.listViewStackItem.currentItem.width
             height: deleteButton.height
 
             Label {
@@ -207,11 +211,28 @@ DialogPage {
     placeholderLabel {
         text: qsTr("You haven't created voice samples yet.") + " " +
               qsTr("Use %1 to make a new one.").arg("<i>" + createNewButton.text + "</i>")
-        enabled: root.listViewItem.model.length === 0
+        enabled: root.listViewStackItem.currentItem.width.model.length === 0
     }
 
-    listViewItem {
-        model: app.available_tts_ref_voices
-        delegate: voiceDelegate
+    Component {
+        id: listViewComp
+
+        ListView {
+            id: listView
+
+            focus: true
+            clip: true
+            spacing: appWin.padding
+
+            Keys.onUpPressed: listViewScrollBar.decrease()
+            Keys.onDownPressed: listViewScrollBar.increase()
+
+            ScrollBar.vertical: ScrollBar {
+                id: listViewScrollBar
+            }
+
+            model: app.available_tts_ref_voices
+            delegate: voiceDelegate
+        }
     }
 }

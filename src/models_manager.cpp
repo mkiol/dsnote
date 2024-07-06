@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+﻿/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -411,33 +411,104 @@ std::vector<models_manager::lang_t> models_manager::langs() const {
 }
 
 std::vector<models_manager::model_t> models_manager::models(
-    const QString& lang_id) const {
+    const QString& lang_id, const QString& pack_id) const {
     std::vector<model_t> list;
 
-    std::for_each(m_models.cbegin(), m_models.cend(), [&](const auto& pair) {
-        const auto& model = pair.second;
-        if (!model.hidden && (lang_id.isEmpty() || lang_id == model.lang_id)) {
-            list.push_back(
-                model_t{pair.first,
-                        model.engine,
-                        model.lang_id,
-                        model.lang_code,
-                        model.name,
-                        /*model_file=*/model.file_name,
-                        /*sup_files=*/sup_model_files(model.sup_models),
-                        model.speaker,
-                        model.trg_lang_id,
-                        model.score,
-                        model.options,
-                        model.license,
-                        make_download_info(model),
-                        model.default_for_lang,
-                        model.available,
-                        model.dl_multi,
-                        model.dl_off,
-                        model.features,
-                        model.downloading,
-                        model.download_progress});
+    struct model_status {
+        bool available = false;
+        bool downloading = false;
+        unsigned int pack_count = 0;
+        unsigned int pack_available_count = 0;
+    };
+
+    std::unordered_map<QString, model_status> pack_status_map;
+
+    std::for_each(m_models.cbegin(), m_models.cend(),
+                  [&](const std::pair<QString, priv_model_t>& pair) {
+                      const auto& model = pair.second;
+
+                      if (model.disabled) return;
+
+                      if (!lang_id.isEmpty() && lang_id != model.lang_id)
+                          return;
+
+                      if (!pack_id.isEmpty() && pack_id != model.pack_id)
+                          return;
+
+                      for (const auto& pack : model.packs) {
+                          list.push_back(model_t{/*id=*/pack.id,
+                                                 /*engine=*/model.engine,
+                                                 /*lang_id=*/model.lang_id,
+                                                 /*lang_code=*/{},
+                                                 /*name=*/pack.name,
+                                                 /*model_file=*/{},
+                                                 /*sup_files=*/{},
+                                                 /*pack_id=*/pack.id,
+                                                 /*pack_count=*/0,
+                                                 /*pack_available_count=*/0,
+                                                 /*packs=*/{},
+                                                 /*speaker=*/{},
+                                                 /*trg_lang_id=*/{},
+                                                 /*score=*/model.score,
+                                                 /*options=*/{},
+                                                 /*license=*/{},
+                                                 /*download_info=*/{},
+                                                 /*default_for_lang=*/{},
+                                                 /*available=*/{},
+                                                 /*dl_multi=*/{},
+                                                 /*dl_off=*/{},
+                                                 /*features=*/model.features,
+                                                 /*downloading=*/{},
+                                                 /*download_progress=*/{}});
+                      }
+
+                      if (model.hidden) return;
+
+                      if (pack_id.isEmpty() && !model.pack_id.isEmpty()) {
+                          auto& pm = pack_status_map[model.pack_id];
+                          if (!pm.available && model.available)
+                              pm.available = true;
+                          if (!pm.downloading && model.downloading)
+                              pm.downloading = true;
+                          ++pm.pack_count;
+                          if (model.available) ++pm.pack_available_count;
+                          return;
+                      }
+
+                      list.push_back(model_t{
+                          /*id=*/pair.first,
+                          /*engine=*/model.engine,
+                          /*lang_id=*/model.lang_id,
+                          /*lang_code=*/model.lang_code,
+                          /*name=*/model.name,
+                          /*model_file=*/model.file_name,
+                          /*sup_files=*/sup_model_files(model.sup_models),
+                          /*pack_id=*/{},
+                          /*pack_count=*/{},
+                          /*pack_available_count=*/{},
+                          /*packs=*/model.packs,
+                          /*speaker=*/model.speaker,
+                          /*trg_lang_id=*/model.trg_lang_id,
+                          /*score=*/model.score,
+                          /*options=*/model.options,
+                          /*license=*/model.license,
+                          /*download_info=*/make_download_info(model),
+                          /*default_for_lang=*/model.default_for_lang,
+                          /*available=*/model.available,
+                          /*dl_multi=*/model.dl_multi,
+                          /*dl_off=*/model.dl_off,
+                          /*features=*/model.features,
+                          /*downloading=*/model.downloading,
+                          /*download_progress=*/model.download_progress});
+                  });
+
+    std::for_each(list.begin(), list.end(), [&pack_status_map](auto& model) {
+        if (!model.pack_id.isEmpty() && pack_status_map.count(model.id) > 0) {
+            const auto& status = pack_status_map.at(model.id);
+            model.available = status.available;
+            model.downloading = status.downloading;
+            model.pack_count = status.pack_count;
+            model.pack_available_count = status.pack_available_count;
         }
     });
 
@@ -457,7 +528,8 @@ bool models_manager::has_model_of_role(model_role_t role) const {
     QDir dir{settings::instance()->models_dir()};
 
     return std::find_if(m_models.cbegin(), m_models.cend(), [&](const auto& p) {
-               return !p.second.hidden && p.second.available &&
+               return !p.second.disabled && !p.second.hidden &&
+                      p.second.available &&
                       models_manager::role_of_engine(p.second.engine) == role &&
                       QFile::exists(
                           dir.filePath(dir.filePath(p.second.file_name)));
@@ -519,7 +591,8 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
 
     for (const auto& [id, model] : m_models) {
         auto model_file = dir.filePath(model.file_name);
-        if (!model.hidden && model.available && QFile::exists(model_file)) {
+        if (!model.disabled && !model.hidden && model.available &&
+            QFile::exists(model_file)) {
             list.push_back({id,
                             model.engine,
                             model.lang_id,
@@ -527,6 +600,10 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
                             model.name,
                             model_file,
                             sup_model_files(model.sup_models),
+                            /*pack_id=*/model.pack_id,
+                            /*pack_count=*/0,
+                            /*pack_available_count=*/0,
+                            /*packs=*/model.packs,
                             model.speaker,
                             model.trg_lang_id,
                             model.score,
@@ -556,14 +633,15 @@ bool models_manager::model_exists(const QString& id) const {
 bool models_manager::lang_available(const QString& id) const {
     return std::any_of(
         m_models.cbegin(), m_models.cend(), [&id](const auto& model) {
-            return model.second.lang_id == id && model.second.available;
+            return model.second.available && !model.second.disabled &&
+                   model.second.lang_id == id;
         });
 }
 
 bool models_manager::lang_downloading(const QString& id) const {
     return std::any_of(
         m_models.cbegin(), m_models.cend(), [&id](const auto& model) {
-            return model.second.lang_id == id && model.second.downloading;
+            return model.second.downloading && model.second.lang_id == id;
         });
 }
 
@@ -1576,6 +1654,21 @@ void models_manager::extract_sup_models(const QString& model_id,
     }
 }
 
+void models_manager::extract_packs(const QJsonObject& model_obj,
+                                   std::vector<pack_t>& packs) {
+    auto packs_json = model_obj.value(QLatin1String{"packs"}).toArray();
+
+    for (const auto& pack_json : packs_json) {
+        auto pack_obj = pack_json.toObject();
+
+        pack_t pack_ele;
+        pack_ele.id = pack_obj.value(QLatin1String{"id"}).toString();
+        pack_ele.name = pack_obj.value(QLatin1String{"name"}).toString();
+
+        packs.push_back(std::move(pack_ele));
+    }
+}
+
 void models_manager::update_url_hash(priv_model_t& model) {
     auto merge_urls = [](const std::vector<QUrl>& urls) {
         return std::accumulate(
@@ -1868,6 +1961,8 @@ auto models_manager::extract_models(
         std::vector<QUrl> urls;
         long long size = 0;
         std::vector<sup_model_t> sup_models;
+        QString pack_id;
+        std::vector<pack_t> packs;
         QString trg_lang_id =
             obj.value(QLatin1String{"trg_lang_id"}).toString();
         int score = obj.value(QLatin1String{"score"}).toInt(-1);
@@ -1915,6 +2010,7 @@ auto models_manager::extract_models(
             for (const auto& url : aurls) urls.emplace_back(url.toString());
 
             extract_sup_models(model_id, obj, sup_models);
+            extract_packs(obj, packs);
 
             if (auto license_obj = obj.value("license").toObject();
                 !license_obj.isEmpty()) {
@@ -1936,6 +2032,7 @@ auto models_manager::extract_models(
         } else if (models.count(model_alias_of) > 0) {
             const auto& alias = models.at(model_alias_of);
 
+            if (!alias.packs.empty()) pack_id = model_alias_of;
             engine = alias.engine;
             if (score == -1) score = alias.score;
             file_name = alias.file_name;
@@ -2100,12 +2197,15 @@ auto models_manager::extract_models(
             /*urls=*/std::move(urls),
             /*size=*/size,
             /*sup_models=*/std::move(sup_models),
+            /*pack_id=*/std::move(pack_id),
+            /*packs=*/std::move(packs),
             /*speaker=*/speaker,
             /*trg_lang_id=*/std::move(trg_lang_id),
             /*alias_of=*/std::move(model_alias_of),
             /*score=*/score,
             /*options=*/std::move(options),
             /*license=*/std::move(license),
+            /*disabled=*/false,
             /*hidden=*/obj.value(QLatin1String{"hidden"}).toBool(false),
             /*default_for_lang=*/is_default_model_for_lang,
             /*exists=*/exists,
@@ -2176,8 +2276,8 @@ auto models_manager::extract_models(
             model.options.push_back('c');
         } else if ((model.engine == model_engine_t::stt_whisper ||
                     model.engine == model_engine_t::stt_fasterwhisper) &&
-                   !model.hidden && model.options.contains('t') &&
-                   model.lang_id == "en") {
+                   !model.disabled && !model.hidden &&
+                   model.options.contains('t') && model.lang_id == "en") {
             // remove translate to english option for all english models
             model.options.remove('t');
         }
@@ -2196,7 +2296,7 @@ void models_manager::update_dl_multi(models_manager::models_t& models) {
     std::for_each(models.cbegin(), models.cend(), [&](const auto& pair) {
         const auto& model = pair.second;
 
-        if (model.hidden) return;
+        if (model.disabled || model.hidden) return;
 
         if (model.available) {
             if (auto it = available_map.find(model.urls_hash);
@@ -2218,7 +2318,7 @@ void models_manager::update_dl_multi(models_manager::models_t& models) {
     std::for_each(models.begin(), models.end(), [&](auto& pair) {
         auto& model = pair.second;
 
-        if (model.hidden) return;
+        if (model.disabled || model.hidden) return;
 
         auto it = available_map.find(model.urls_hash);
 
@@ -2237,7 +2337,7 @@ void models_manager::update_dl_off(models_manager::models_t& models) {
     std::for_each(models.cbegin(), models.cend(), [&](const auto& pair) {
         const auto& model = pair.second;
 
-        if (model.hidden) return;
+        if (model.disabled || model.hidden) return;
 
         if (model.downloading) {
             if (auto it = downloading_map.find(model.urls_hash);
@@ -2259,7 +2359,7 @@ void models_manager::update_dl_off(models_manager::models_t& models) {
     std::for_each(models.begin(), models.end(), [&](auto& pair) {
         auto& model = pair.second;
 
-        if (model.hidden) return;
+        if (model.disabled || model.hidden) return;
 
         if (auto it = downloading_map.find(model.urls_hash);
             it != downloading_map.cend() && it->second > 0) {
@@ -2565,12 +2665,12 @@ void models_manager::update_models_using_availability_internal() {
     std::for_each(m_models.begin(), m_models.end(), [&](auto& pair) {
         if (!m_models_availability->tts_coqui &&
             pair.second.engine == model_engine_t::tts_coqui) {
-            pair.second.hidden = true;
+            pair.second.disabled = true;
             return;
         }
         if (!m_models_availability->tts_whisperspeech &&
             pair.second.engine == model_engine_t::tts_whisperspeech) {
-            pair.second.hidden = true;
+            pair.second.disabled = true;
             return;
         }
         if (pair.second.engine == model_engine_t::tts_mimic3) {
@@ -2591,43 +2691,43 @@ void models_manager::update_models_using_availability_internal() {
                  pair.second.lang_id == "fa") ||
                 (!m_models_availability->tts_mimic3_nl &&
                  pair.second.lang_id == "nl")) {
-                pair.second.hidden = true;
+                pair.second.disabled = true;
                 return;
             }
         }
         if (!m_models_availability->tts_rhvoice &&
             pair.second.engine == model_engine_t::tts_rhvoice) {
-            pair.second.hidden = true;
+            pair.second.disabled = true;
             return;
         }
         if (!m_models_availability->stt_fasterwhisper &&
             pair.second.engine == model_engine_t::stt_fasterwhisper) {
-            pair.second.hidden = true;
+            pair.second.disabled = true;
             return;
         }
         if (!m_models_availability->stt_ds &&
             pair.second.engine == model_engine_t::stt_ds) {
-            pair.second.hidden = true;
+            pair.second.disabled = true;
             return;
         }
         if (!m_models_availability->stt_vosk &&
             pair.second.engine == model_engine_t::stt_vosk) {
-            pair.second.hidden = true;
+            pair.second.disabled = true;
             return;
         }
         if (!m_models_availability->mnt_bergamot &&
             pair.second.engine == model_engine_t::mnt_bergamot) {
-            pair.second.hidden = true;
+            pair.second.disabled = true;
             return;
         }
         if (!m_models_availability->ttt_hftc &&
             pair.second.engine == model_engine_t::ttt_hftc) {
-            pair.second.hidden = true;
+            pair.second.disabled = true;
             return;
         }
         if (!m_models_availability->option_r &&
             pair.second.options.contains('r')) {
-            pair.second.hidden = true;
+            pair.second.disabled = true;
             return;
         }
     });

@@ -232,6 +232,9 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
                   .arg(model.name, model.lang_id, model.trg_lang_id)
             : QStringLiteral("%1 / %2").arg(model.name, model.lang_id),
         /*lang_id=*/model.lang_id,
+        /*pack_id=*/model.pack_id,
+        /*pack_count=*/static_cast<int>(model.pack_count),
+        /*pack_available_count=*/static_cast<int>(model.pack_available_count),
         /*role=*/role,
         /*license=*/
         {model.license.id, model.license.name, model.license.url,
@@ -309,7 +312,7 @@ bool ModelsListModel::defaultFilters() const {
 QList<ListItem *> ModelsListModel::makeItems() {
     QList<ListItem *> items;
 
-    auto models = models_manager::instance()->models(m_lang);
+    auto models = models_manager::instance()->models(m_lang, m_pack);
 
     updateDownloading(models);
 
@@ -358,6 +361,14 @@ void ModelsListModel::setLang(const QString &lang) {
         m_lang = lang;
         updateModel();
         emit langChanged();
+    }
+}
+
+void ModelsListModel::setPack(const QString &pack) {
+    if (pack != m_pack) {
+        m_pack = pack;
+        updateModel();
+        emit packChanged();
     }
 }
 
@@ -423,17 +434,19 @@ void ModelsListModel::updateDownloading(
     }
 }
 
-ModelsListItem::ModelsListItem(const QString &id, QString name, QString langId,
-                               ModelsListModel::ModelRole role, License license,
-                               DownloadInfo download_info, bool available,
-                               bool dl_multi, bool dl_off,
-                               unsigned int features, int score,
-                               bool default_for_lang, bool downloading,
-                               double progress, QObject *parent)
+ModelsListItem::ModelsListItem(
+    const QString &id, QString name, QString lang_id, QString pack_id,
+    int pack_count, int pack_available_count, ModelsListModel::ModelRole role,
+    License license, DownloadInfo download_info, bool available, bool dl_multi,
+    bool dl_off, unsigned int features, int score, bool default_for_lang,
+    bool downloading, double progress, QObject *parent)
     : SelectableItem{parent},
       m_id{id},
       m_name{std::move(name)},
-      m_lang_id{std::move(langId)},
+      m_lang_id{std::move(lang_id)},
+      m_pack_id{std::move(pack_id)},
+      m_pack_count{pack_count},
+      m_pack_available_count{pack_available_count},
       m_role{role},
       m_license{std::move(license)},
       m_download_info{std::move(download_info)},
@@ -453,6 +466,9 @@ QHash<int, QByteArray> ModelsListItem::roleNames() const {
     names[IdRole] = QByteArrayLiteral("id");
     names[NameRole] = QByteArrayLiteral("name");
     names[LangIdRole] = QByteArrayLiteral("lang_id");
+    names[PackIdRole] = QByteArrayLiteral("pack_id");
+    names[PackCountRole] = QByteArrayLiteral("pack_count");
+    names[PackAvailableCountRole] = QByteArrayLiteral("pack_available_count");
     names[ModelRole] = QByteArrayLiteral("role");
     names[AvailableRole] = QByteArrayLiteral("available");
     names[DlMultiRole] = QByteArrayLiteral("dl_multi");
@@ -480,6 +496,12 @@ QVariant ModelsListItem::data(int role) const {
             return name();
         case LangIdRole:
             return lang_id();
+        case PackIdRole:
+            return pack_id();
+        case PackCountRole:
+            return pack_count();
+        case PackAvailableCountRole:
+            return pack_available_count();
         case ModelRole:
             return modelRole();
         case AvailableRole:
@@ -510,6 +532,8 @@ QVariant ModelsListItem::data(int role) const {
             return download_urls();
         case DownloadSizeRole:
             return download_size();
+        default:
+            break;
     }
 
     return {};
@@ -519,6 +543,7 @@ void ModelsListItem::update(const ModelsListItem *item) {
     if (m_downloading != item->downloading() ||
         m_dl_multi != item->dl_multi() || m_dl_off != item->dl_off() ||
         m_available != item->available() || m_progress != item->progress() ||
+        m_pack_available_count != item->pack_available_count() ||
         m_default_for_lang != item->default_for_lang()) {
         m_downloading = item->downloading();
         m_available = item->available();
@@ -528,6 +553,7 @@ void ModelsListItem::update(const ModelsListItem *item) {
         m_default_for_lang = item->default_for_lang();
         m_dl_multi = item->dl_multi();
         m_dl_off = item->dl_off();
+        m_pack_available_count = item->pack_available_count();
         emit itemDataChanged();
     }
 }

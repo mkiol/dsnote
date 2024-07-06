@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -39,6 +39,7 @@ speech_config::speech_config(QObject *parent) : QObject{parent} {
 
     m_langs_model.updateModel();
     m_models_model.updateModel();
+    m_pack_model.updateModel();
 }
 
 void speech_config::handle_models_changed() {
@@ -48,6 +49,8 @@ void speech_config::handle_models_changed() {
 ModelsListModel *speech_config::models_model() { return &m_models_model; }
 
 LangsListModel *speech_config::langs_model() { return &m_langs_model; }
+
+ModelsListModel *speech_config::pack_model() { return &m_pack_model; }
 
 QVariantList speech_config::available_models() const {
     const auto available_models_list =

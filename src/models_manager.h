@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -133,6 +133,11 @@ class models_manager : public QObject, public singleton<models_manager> {
         size_t total_size = 0;
     };
 
+    struct pack_t {
+        QString id;
+        QString name;
+    };
+
     struct model_t {
         QString id;
         model_engine_t engine = model_engine_t::stt_ds;
@@ -141,6 +146,10 @@ class models_manager : public QObject, public singleton<models_manager> {
         QString name;
         QString model_file;
         std::vector<sup_model_file_t> sup_files;
+        QString pack_id;
+        unsigned int pack_count = 0;
+        unsigned int pack_available_count = 0;
+        std::vector<pack_t> packs;
         QString speaker;
         QString trg_lang_id;
         int score = 2;
@@ -192,7 +201,8 @@ class models_manager : public QObject, public singleton<models_manager> {
     ~models_manager() override;
     [[nodiscard]] bool ok() const;
     std::vector<model_t> available_models() const;
-    std::vector<model_t> models(const QString& lang_id = {}) const;
+    std::vector<model_t> models(const QString& lang_id,
+                                const QString& pack_id) const;
     std::vector<lang_t> langs() const;
     std::unordered_map<QString, lang_basic_t> langs_map() const;
     std::unordered_map<QString, lang_basic_t> available_langs_map() const;
@@ -268,6 +278,8 @@ class models_manager : public QObject, public singleton<models_manager> {
         std::vector<QUrl> urls;
         long long size = 0;
         std::vector<sup_model_t> sup_models;
+        QString pack_id;
+        std::vector<pack_t> packs;
         QString speaker;
         QString trg_lang_id;
         QString alias_of;
@@ -289,6 +301,7 @@ class models_manager : public QObject, public singleton<models_manager> {
          */
         QString options;
         license_t license;
+        bool disabled = false;
         bool hidden = false;
         bool default_for_lang = false;
         bool exists = false;
@@ -394,6 +407,8 @@ class models_manager : public QObject, public singleton<models_manager> {
     static void extract_sup_models(const QString& model_id,
                                    const QJsonObject& model_obj,
                                    std::vector<sup_model_t>& sup_models);
+    static void extract_packs(const QJsonObject& model_obj,
+                              std::vector<pack_t>& packs);
     void update_models_using_availability_internal();
     static void update_dl_multi(models_t& models);
     static void update_dl_off(models_t& models);

@@ -31,6 +31,7 @@
         <file>qml/ModelFeatureButton.qml</file>
         <file>qml/ModelFilteringWidget.qml</file>
         <file>qml/LangFilteringWidget.qml</file>
+        <file>qml/PackFilteringWidget.qml</file>
         <file>qml/PairLabel.qml</file>
         <file>qml/InlineMessage.qml</file>
         <file>qml/StreamSelectionDialog.qml</file>

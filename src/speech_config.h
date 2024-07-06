@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+﻿/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -24,6 +24,7 @@ class speech_config : public QObject {
                    models_changed)
     Q_PROPERTY(LangsListModel *langs_model READ langs_model CONSTANT)
     Q_PROPERTY(ModelsListModel *models_model READ models_model CONSTANT)
+    Q_PROPERTY(ModelsListModel *pack_model READ pack_model CONSTANT)
     Q_PROPERTY(bool busy READ busy NOTIFY busy_changed)
    public:
     explicit speech_config(QObject *parent = nullptr);
@@ -51,10 +52,12 @@ class speech_config : public QObject {
 
     LangsListModel m_langs_model;
     ModelsListModel m_models_model;
+    ModelsListModel m_pack_model;
 
     QVariantList available_models() const;
     LangsListModel *langs_model();
     ModelsListModel *models_model();
+    ModelsListModel *pack_model();
     void handle_models_changed();
     bool busy() const;
 };

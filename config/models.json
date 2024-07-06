@@ -7361,7 +7361,7 @@
             "size": "63216493"
         },
         {
-            "name": "English (Piper Arctic Medium Male)",
+            "name": "English (Piper Arctic Medium)",
             "model_id": "en_piper_us_arctic_medium",
             "engine": "tts_piper",
             "lang_id": "en",
@@ -7373,7 +7373,13 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/en/en_US/arctic/medium/en_US-arctic-medium.onnx.json"
             ],
             "size": "76781924",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "en_piper_us_arctic_medium",
+                    "name": "English (Piper Arctic Medium)"
+                }
+            ]
         },
         {
             "name": "English (Piper Arctic Awb Medium)",
@@ -7570,7 +7576,13 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/en/en_US/l2arctic/medium/en_US-l2arctic-medium.onnx.json"
             ],
             "size": "76794340",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "en_piper_us_l2arctic_medium",
+                    "name": "English (Piper L2Arctic Medium)"
+                }
+            ]
         },
         {
             "name": "English (Piper L2Arctic Txhc Medium)",
@@ -7781,8 +7793,15 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/en/en_US/libritts/high/en_US-libritts-high.onnx.json"
             ],
             "size": "136707572",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "en_piper_us_libritts_high",
+                    "name": "English (Piper LibriTTS High)"
+                }
+            ]
         },
+
         {
             "name": "English (Piper LibriTTS P3922 High)",
             "model_id": "en_piper_us_libritts_high_0",
@@ -14124,7 +14143,13 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/en/en_US/libritts_r/medium/en_US-libritts_r-medium.onnx.json"
             ],
             "size": "78609229",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "en_piper_us_libritts_r_medium",
+                    "name": "English (Piper LibriTTS-R Medium)"
+                }
+            ]
         },
         {
             "name": "English (Piper LibriTTS-R 3922 Medium)",
@@ -20566,7 +20591,13 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/en/en_GB/aru/medium/en_GB-aru-medium.onnx.json"
             ],
             "size": "76769512",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "en_piper_gb_aru_medium",
+                    "name": "English British (Piper Aru Medium)"
+                }
+            ]
         },
         {
             "name": "English British (Piper Aru 03 Medium Female)",
@@ -20665,7 +20696,13 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/en/en_GB/semaine/medium/en_GB-semaine-medium.onnx.json"
             ],
             "size": "76750979",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "en_piper_gb_semaine_medium",
+                    "name": "English British (Piper Semaine Medium)"
+                }
+            ]
         },
         {
             "name": "English British (Piper Semaine Prudence Medium Female)",
@@ -20750,7 +20787,13 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/en/en_GB/vctk/medium/en_GB-vctk-medium.onnx.json"
             ],
             "size": "76970145",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "en_piper_gb_vctk_medium",
+                    "name": "English British (Piper VCTK Medium)"
+                }
+            ]
         },
         {
             "name": "English British (Piper VCTK P239 Medium)",
@@ -21877,7 +21920,13 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/de/de_DE/thorsten_emotional/medium/de_DE-thorsten_emotional-medium.onnx.json"
             ],
             "size": "76759128",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "de_piper_thorsten_emotional_medium",
+                    "name": "Deutsch (Piper Thorsten-Emotion Medium)"
+                }
+            ]
         },
         {
             "name": "Deutsch (Piper Thorsten-Emotion Amused Medium Male)",
@@ -22985,7 +23034,13 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/vi/vi_VN/vivos/x_low/vi_VN-vivos-x_low.onnx.json"
             ],
             "size": "27805242",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "vi_piper_vivos_low",
+                    "name": "Tiếng Việt (Piper Vivos Low)"
+                }
+            ]
         },
         {
             "name": "Tiếng Việt (Piper Vivos Vivosspk13 Low)",
@@ -25313,7 +25368,13 @@
                 "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--en--vctk--vits.zip"
             ],
             "size": "147691678",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "en_coqui_vctk_vits",
+                    "name": "English (Coqui VCTK VITS)"
+                }
+            ]
         },
         {
             "name": "English (Coqui VCTK VITS ED Female)",
@@ -27731,7 +27792,13 @@
                 "https://huggingface.co/mukowaty/mimic3-voices/resolve/2b85a29b20717fdb3da37c96c9058f1bf2dd476f/voices/af_ZA/google-nwu_low/speaker_map.csv"
             ],
             "size": "76364025",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "af_mimic3_za_google_nwu_low",
+                    "name": "Afrikaans (Mimic3 Google NWU Low)"
+                }
+            ]
         },
         {
             "name": "Afrikaans (Mimic3 Google NWU 7214 Low Female)",
@@ -27813,7 +27880,13 @@
                 "https://huggingface.co/mukowaty/mimic3-voices/resolve/2b85a29b20717fdb3da37c96c9058f1bf2dd476f/voices/bn/multi_low/speaker_map.csv"
             ],
             "size": "76375956",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "bn_mimic3_multi_low",
+                    "name": "বাংলা (Mimic3 Multi Low)"
+                }
+            ]
         },
         {
             "name": "বাংলা (Mimic3 Multi Rm Low)",
@@ -27997,7 +28070,13 @@
                 "https://huggingface.co/mukowaty/mimic3-voices/resolve/2b85a29b20717fdb3da37c96c9058f1bf2dd476f/voices/de_DE/thorsten-emotion_low/speaker_map.csv"
             ],
             "size": "76358813",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "de_mimic3_de_thorsten_emotion_low",
+                    "name": "Deutsch (Mimic3 Thorsten-Emotion Low)"
+                }
+            ]
         },
         {
             "name": "Deutsch (Mimic3 Thorsten-Emotion Amused Low Male)",
@@ -28119,7 +28198,13 @@
                 "https://huggingface.co/mukowaty/mimic3-voices/resolve/2b85a29b20717fdb3da37c96c9058f1bf2dd476f/voices/en_US/cmu-arctic_low/speaker_map.csv"
             ],
             "size": "76372252",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "en_mimic3_us_cmu_arctic_low",
+                    "name": "English (Mimic3 Arctic Low)"
+                }
+            ]
         },
         {
             "name": "English (Mimic3 Arctic Awb Low)",
@@ -28264,7 +28349,13 @@
                 "https://huggingface.co/mukowaty/mimic3-voices/resolve/2b85a29b20717fdb3da37c96c9058f1bf2dd476f/voices/en_US/hifi-tts_low/speaker_map.csv"
             ],
             "size": "76341280",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "en_mimic3_us_hifi_tts_low",
+                    "name": "English (Mimic3 HiFi Low)"
+                }
+            ]
         },
         {
             "name": "English (Mimic3 HiFi 9017 Low)",
@@ -28360,7 +28451,13 @@
                 "https://huggingface.co/mukowaty/mimic3-voices/resolve/2b85a29b20717fdb3da37c96c9058f1bf2dd476f/voices/en_US/vctk_low/speaker_map.csv"
             ],
             "size": "76560378",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "en_mimic3_us_vctk_low",
+                    "name": "English (Mimic3 VCTK Low)"
+                }
+            ]
         },
         {
             "name": "English (Mimic3 VCTK P239 Low)",
@@ -29382,7 +29479,13 @@
                 "https://huggingface.co/mukowaty/mimic3-voices/resolve/2b85a29b20717fdb3da37c96c9058f1bf2dd476f/voices/it_IT/mls_low/speaker_map.csv"
             ],
             "size": "76409437",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "it_mimic3_it_mls_low",
+                    "name": "Italiano (Mimic3 MLS Low)"
+                }
+            ]
         },
         {
             "name": "Italiano (Mimic3 MLS 1595 Low)",
@@ -29689,7 +29792,13 @@
                 "https://huggingface.co/mukowaty/mimic3-voices/resolve/2b85a29b20717fdb3da37c96c9058f1bf2dd476f/voices/jv_ID/google-gmu_low/speaker_map.csv"
             ],
             "size": "76413916",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "jv_mimic3_id_google_gmu_low",
+                    "name": "Basa Jawa (Mimic3 Google GMU Low)"
+                }
+            ]
         },
         {
             "name": "Basa Jawa (Mimic3 Google GMU 07875 Low)",
@@ -29996,7 +30105,13 @@
                 "https://huggingface.co/mukowaty/mimic3-voices/resolve/2b85a29b20717fdb3da37c96c9058f1bf2dd476f/voices/ne_NP/ne-google_low/speaker_map.csv"
             ],
             "size": "76378663",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "ne_mimic3_np_ne_google_low",
+                    "name": "नेपाली (Mimic3 Google Low)"
+                }
+            ]
         },
         {
             "name": "नेपाली (Mimic3 Google 0546 Low)",
@@ -30347,7 +30462,13 @@
                 "https://huggingface.co/mukowaty/mimic3-voices/resolve/2b85a29b20717fdb3da37c96c9058f1bf2dd476f/voices/tn_ZA/google-nwu_low/speaker_map.csv"
             ],
             "size": "76389983",
-            "hidden": true
+            "hidden": true,
+            "packs": [
+                {
+                    "id": "tn_mimic3_za_google_nwu_low",
+                    "name": "Setswana (Mimic3 Google NWU Low)"
+                }
+            ]
         },
         {
             "name": "Setswana (Mimic3 Google NWU 1932 Low)",

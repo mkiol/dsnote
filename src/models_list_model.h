@@ -25,6 +25,7 @@ class ModelsListModel : public SelectableItemModel {
     Q_OBJECT
     Q_PROPERTY(bool downloading READ downloading NOTIFY downloadingChanged)
     Q_PROPERTY(QString lang READ lang WRITE setLang NOTIFY langChanged)
+    Q_PROPERTY(QString pack READ pack WRITE setPack NOTIFY packChanged)
     Q_PROPERTY(unsigned int roleFilterFlags READ roleFilterFlags WRITE
                    setRoleFilterFlags NOTIFY roleFilterFlagsChanged)
     Q_PROPERTY(unsigned int featureFilterFlags READ featureFilterFlags WRITE
@@ -125,6 +126,7 @@ class ModelsListModel : public SelectableItemModel {
     void itemChanged(int idx);
     void downloadingChanged();
     void langChanged();
+    void packChanged();
     void roleFilterFlagsChanged();
     void featureFilterFlagsChanged();
     void disabledFeatureFilterFlagsChanged();
@@ -134,6 +136,7 @@ class ModelsListModel : public SelectableItemModel {
     int m_changedItem = -1;
     bool m_downloading = false;
     QString m_lang;
+    QString m_pack;
     unsigned int m_roleFilterFlags = ModelRoleFilterFlags::RoleDefault;
     unsigned int m_featureFilterFlags = ModelFeatureFilterFlags::FeatureDefault;
     unsigned int m_disabledFeatureFilterFlags =
@@ -146,12 +149,14 @@ class ModelsListModel : public SelectableItemModel {
     void updateItem(ListItem *oldItem, const ListItem *newItem) override;
     inline bool downloading() const { return m_downloading; }
     inline QString lang() const { return m_lang; }
+    inline QString pack() const { return m_pack; }
     inline auto roleFilterFlags() const { return m_roleFilterFlags; }
     inline auto featureFilterFlags() const { return m_featureFilterFlags; }
     inline auto disabledFeatureFilterFlags() const {
         return m_disabledFeatureFilterFlags;
     }
     void setLang(const QString &lang);
+    void setPack(const QString &pack);
     void setRoleFilterFlags(unsigned roleFilterFlags);
     void setFeatureFilterFlags(unsigned int featureFilterFlags);
     void updateDownloading(const std::vector<models_manager::model_t> &models);
@@ -167,6 +172,9 @@ class ModelsListItem : public SelectableItem {
         NameRole = Qt::DisplayRole,
         IdRole = Qt::UserRole,
         LangIdRole,
+        PackIdRole,
+        PackCountRole,
+        PackAvailableCountRole,
         AvailableRole,
         DlMultiRole,
         DlOffRole,
@@ -193,11 +201,13 @@ class ModelsListItem : public SelectableItem {
 
     struct DownloadInfo {
         QStringList urls;
-        QString size = 0;
+        QString size;
     };
 
-    ModelsListItem(QObject *parent = nullptr) : SelectableItem{parent} {}
+    explicit ModelsListItem(QObject *parent = nullptr)
+        : SelectableItem{parent} {}
     ModelsListItem(const QString &id, QString name, QString lang_id,
+                   QString pack_id, int pack_count, int pack_available_count,
                    ModelsListModel::ModelRole role, License license,
                    DownloadInfo download_info, bool available = true,
                    bool dl_multi = false, bool dl_off = false,
@@ -209,6 +219,9 @@ class ModelsListItem : public SelectableItem {
     inline QString id() const override { return m_id; }
     inline QString name() const { return m_name; }
     inline QString lang_id() const { return m_lang_id; }
+    inline QString pack_id() const { return m_pack_id; }
+    inline int pack_count() const { return m_pack_count; }
+    inline int pack_available_count() const { return m_pack_available_count; }
     inline ModelsListModel::ModelRole modelRole() const { return m_role; }
     inline bool available() const { return m_available; }
     inline bool dl_multi() const { return m_dl_multi; }
@@ -232,6 +245,9 @@ class ModelsListItem : public SelectableItem {
     QString m_id;
     QString m_name;
     QString m_lang_id;
+    QString m_pack_id;
+    int m_pack_count = 0;
+    int m_pack_available_count = 0;
     ModelsListModel::ModelRole m_role = ModelsListModel::ModelRole::Stt;
     License m_license;
     DownloadInfo m_download_info;
