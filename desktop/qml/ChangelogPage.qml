@@ -21,6 +21,9 @@ DialogPage {
         text: "<p>" + qsTr("User Interface") + ":</p>
         <ul>
         <li><i>Speech Note</i> has been translated into Norwegian language.</li>
+        <li>Grouped models.
+            Models that provide multiple sub-models (for example, TTS models that provide different voices)
+            are shown in groups. This makes it easier to find models in the model browser.</li>
         </ul>
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
@@ -57,6 +60,11 @@ DialogPage {
             For convenience, you can also insert predefined control tags using text context menu <i>Insert control tag</i>.</li>
         <li>Welsh language. New language is enabled with <i>Piper</i> voice.</li>
         <li>New <i>Piper</i> voices for Spanish, Italian and English</li>
+        </ul>
+        <p>" + qsTr("Translator") + ":</p>
+        <ul>
+        <li>Improved Translator UI. The <i>Translate</i>, <i>Switch languages</i> and <i>Add</i> buttons have been
+            placed between text areas which is more convenient.</li>
         </ul>
         <p>Flatpak:</p>
         <ul>

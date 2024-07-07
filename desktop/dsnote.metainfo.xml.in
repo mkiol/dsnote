@@ -103,6 +103,9 @@
       <p>User Interface:</p>
       <ul>
       <li>Speech Note has been translated into Norwegian language.</li>
+      <li>Grouped models.
+          Models that provide multiple sub-models (for example, TTS models that provide different voices)
+          are shown in groups. This makes it easier to find models in the model browser.</li>
       </ul>
       <p>Speech to Text:</p>
       <ul>
@@ -134,6 +137,12 @@
           For convenience, you can also insert predefined control tags using text context menu 'Insert control tag'.</li>
       <li>Welsh language. New language is enabled with 'Piper' voice.</li>
       <li>New 'Piper' voices for Spanish, Italian and English</li>
+      </ul>
+      <p>Translator:</p>
+      <ul>
+      <li>Improved Translator UI.
+          The 'Translate', 'Switch languages' and 'Add' buttons have been
+          placed between text areas which is more convenient.</li>
       </ul>
       <p>Flatpak:</p>
       <ul>
