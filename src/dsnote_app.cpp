@@ -1221,6 +1221,11 @@ void dsnote_app::set_active_tts_model_or_lang(const QString &model_or_lang) {
 void dsnote_app::set_active_mnt_lang(const QString &lang) {
     if (m_active_mnt_lang != lang) {
         qDebug() << "app active mnt lang:" << m_active_mnt_lang << "=>" << lang;
+
+        if (lang == active_mnt_out_lang()) {
+            m_active_mnt_out_lang = m_active_mnt_lang;
+        }
+
         m_active_mnt_lang = lang;
 
         update_available_mnt_out_langs();
@@ -1692,6 +1697,19 @@ void dsnote_app::update_available_mnt_out_langs() {
                  << new_available_mnt_out_langs_map.size();
         m_available_mnt_out_langs_map =
             std::move(new_available_mnt_out_langs_map);
+
+        if (m_available_mnt_out_langs_map.contains(active_mnt_out_lang())) {
+            if (settings::instance()->launch_mode() ==
+                settings::launch_mode_t::app_stanalone) {
+                speech_service::instance()->set_default_mnt_out_lang(
+                    active_mnt_out_lang());
+            } else {
+                qDebug() << "[app => dbus] set DefaultMntOutLang:"
+                         << active_mnt_out_lang();
+                m_dbus_service.setDefaultMntOutLang(active_mnt_out_lang());
+            }
+        }
+
         emit available_mnt_out_langs_changed();
     }
 }
