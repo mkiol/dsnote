@@ -23,8 +23,6 @@ Item {
     property bool canRedo: true
     property bool canClear: true
     property bool canPaste: true
-    property bool canPushAdd: false
-    property bool canPushReplace: false
     property bool canReadSelected: false
     property bool canReadAll: false
     property bool canTranslateSelected: false
@@ -32,13 +30,10 @@ Item {
     readonly property bool _fitContent: scrollView.availableHeight - 4 * appWin.padding >= scrollView.contentHeight
     readonly property bool _contextActive: _textFormatCombo.hovered || copyButton.hovered || clearButton.hovered ||
                                            undoButton.hovered || redoButton.hovered || pasteButton.hovered ||
-                                           textPushButtonAdd.hovered || textPushButtonReplace.hovered ||
                                            _fitContent
     signal clearClicked()
     signal copyClicked()
     signal undoFallbackClicked()
-    signal pushAddClicked()
-    signal pushReplaceClicked()
     signal readSelectedClicked(int start, int end);
     signal translateSelectedClicked(int start, int end);
 
@@ -239,35 +234,6 @@ Item {
                 radius: 2
                 anchors.fill: parent
                 color: "transparent"
-            }
-        }
-
-        Row {
-            Layout.alignment: Qt.AlignLeft
-            spacing: appWin.padding
-
-            Button {
-                id: textPushButtonAdd
-
-                text: qsTr("Add")
-                visible: root.canPushAdd
-                onClicked: root.pushAddClicked()
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Add the translated text to the note.")
-                hoverEnabled: true
-            }
-
-            Button {
-                id: textPushButtonReplace
-
-                text: qsTr("Replace")
-                visible: root.canPushReplace
-                onClicked: root.pushReplaceClicked()
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Replace the note with translated text and switch languages.")
-                hoverEnabled: true
             }
         }
 

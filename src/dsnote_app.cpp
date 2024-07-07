@@ -4682,11 +4682,14 @@ void dsnote_app::set_app_window(QObject *app_window) {
 }
 
 void dsnote_app::switch_translated_text() {
-    if (m_translated_text.isEmpty()) return;
-
     switch_mnt_langs();
 
-    update_note(m_translated_text, true);
+    if (m_translated_text.isEmpty()) {
+        if (settings::instance()->translate_when_typing()) translate_delayed();
+    } else {
+        update_note(m_translated_text, true);
+        translate_delayed();
+    }
 }
 
 void dsnote_app::update_audio_sources() {

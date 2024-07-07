@@ -75,7 +75,7 @@ ColumnLayout {
 
         property bool verticalMode: appWin.width <= appWin.height
 
-        columns: verticalMode ? 1 : 2
+        columns: verticalMode ? 1 : 3
         Layout.fillHeight: true
         Layout.fillWidth: true
 
@@ -228,6 +228,64 @@ ColumnLayout {
             }
         }
 
+        GridLayout {
+            columns: grid.verticalMode ? 4 : 1
+            Layout.alignment: Qt.AlignCenter
+
+            Button {
+                text: qsTr("Translate")
+                display: grid.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                icon.name: grid.verticalMode ? "go-down-symbolic" : "go-next-symbolic"
+                Layout.alignment: Qt.AlignCenter
+                enabled: app.state === DsnoteApp.StateIdle && !_settings.translate_when_typing && app.note.length !== 0
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Translate")
+                hoverEnabled: true
+
+                onClicked: {
+                    app.translate()
+                }
+            }
+
+            ToolSeparator {
+                orientation: grid.verticalMode ? Qt.Vertical : Qt.Horizontal
+            }
+
+            Button {
+                text: qsTr("Switch languages")
+                display: AbstractButton.IconOnly
+                icon.name: "media-playlist-repeat-symbolic"
+                Layout.alignment: Qt.AlignCenter
+                enabled: app.mnt_configured && app.state === DsnoteApp.StateIdle
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Replace the note with translated text and switch languages.")
+                hoverEnabled: true
+
+                onClicked: {
+                    app.switch_translated_text()
+                }
+            }
+
+            Button {
+                text: qsTr("Add")
+                display: AbstractButton.IconOnly
+                icon.name: grid.verticalMode ? "go-up-symbolic" : "go-previous-symbolic"
+                Layout.alignment: Qt.AlignCenter
+                enabled: app.translated_text.length !== 0
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Add the translated text to the note.")
+                hoverEnabled: true
+
+                onClicked: {
+                    if (app.note.length === 0) app.switch_translated_text()
+                    else app.update_note(app.translated_text, false)
+                }
+            }
+        }
+
         ColumnLayout {
             id: mntOutColumn
 
@@ -240,7 +298,7 @@ ColumnLayout {
                 background: Item {}
                 bottomPadding: 0
                 rightPadding: appWin.padding
-                topPadding: grid.verticalMode ? appWin.padding : 0
+                topPadding: 0
                 leftPadding: grid.verticalMode ? appWin.padding : 0
 
                 ScrollTextArea {
@@ -256,8 +314,6 @@ ColumnLayout {
                     canUndo: false
                     canRedo: false
                     canPaste: false
-                    canPushAdd: app.translated_text.length !== 0
-                    canPushReplace: app.translated_text.length !== 0 && app.note.length !== 0
                     canReadSelected: mntOutCombo.second.button.enabled
                     canReadAll: canReadSelected
                     textArea {
@@ -266,13 +322,6 @@ ColumnLayout {
                         }
                     }
                     onCopyClicked: app.copy_translation_to_clipboard()
-                    onPushAddClicked: {
-                        if (app.note.length === 0) app.switch_translated_text()
-                        else app.update_note(app.translated_text, false)
-                    }
-                    onPushReplaceClicked: {
-                        app.switch_translated_text()
-                    }
                     onReadSelectedClicked: {
                         app.play_speech_translator_selected(start, end, true)
                     }
@@ -366,37 +415,25 @@ ColumnLayout {
         leftPadding: appWin.padding
 
         GridLayout {
-            columns: root.verticalMode ? (mntOutCombo.verticalMode ? 1 : 2) : 2
+            columns: (translateSwitch.implicitWidth + cleanSwitch.implicitWidth + 2 * columnSpacing) > appWin.width ? 1 : 2
+
             columnSpacing: appWin.padding
             rowSpacing: appWin.padding
 
-            RowLayout {
-                Layout.alignment: Qt.AlignCenter
+            Switch {
+                id: translateSwitch
 
-                Button {
-                    id: translateButton
-                    enabled: app.state === DsnoteApp.StateIdle && !_settings.translate_when_typing
-                    text: qsTr("Translate")
-                    onClicked: {
-                        app.translate()
-                    }
-                }
-
-                Switch {
-                    enabled: app.state === DsnoteApp.StateIdle
-                    text: qsTr("Translate as you type")
-                    checked: _settings.translate_when_typing
-                    onClicked: {
-                        _settings.translate_when_typing = !_settings.translate_when_typing
-                    }
-                }
-
-                ToolSeparator {
-                    visible: !root.verticalMode
+                enabled: app.state === DsnoteApp.StateIdle
+                text: qsTr("Translate as you type")
+                checked: _settings.translate_when_typing
+                onClicked: {
+                    _settings.translate_when_typing = !_settings.translate_when_typing
                 }
             }
 
             Switch {
+                id: cleanSwitch
+
                 Layout.alignment: Qt.AlignCenter
                 enabled: app.state === DsnoteApp.StateIdle &&
                          _settings.mnt_text_format !== Settings.TextFormatSubRip
