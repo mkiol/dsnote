@@ -162,7 +162,18 @@ void whisperspeech_engine::create_model() {
 
 bool whisperspeech_engine::model_created() const { return static_cast<bool>(m_model); }
 
-void whisperspeech_engine::reset_ref_voice() { m_speaker.reset(); }
+void whisperspeech_engine::reset_ref_voice() {
+    auto task = py_executor::instance()->execute([&]() {
+        try {
+            m_speaker.reset();
+        } catch (const std::exception& err) {
+            LOGE("py error: " << err.what());
+        }
+        return std::any{};
+    });
+
+    if (task) task->get();
+}
 
 bool whisperspeech_engine::encode_speech_impl(
     const std::string& text, [[maybe_unused]] unsigned int speed,
