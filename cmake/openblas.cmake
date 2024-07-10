@@ -1,10 +1,5 @@
-if(WITH_SFOS)
-    set(openblas_source_url "https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.21/OpenBLAS-0.3.21.tar.gz")
-    set(openblas_checksum "f36ba3d7a60e7c8bcc54cd9aaa9b1223dd42eaf02c811791c37e8ca707c241ca")
-else()
-    set(openblas_source_url "https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.26/OpenBLAS-0.3.26.tar.gz")
-    set(openblas_checksum "4e6e4f5cb14c209262e33e6816d70221a2fe49eb69eaf0a06f065598ac602c68")
-endif()
+set(openblas_source_url "https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.27/OpenBLAS-0.3.27.tar.gz")
+set(openblas_checksum "aa2d68b1564fe2b13bc292672608e9cdeeeb6dc34995512e65c3b10f4599e897")
 
 set(openblas_opts
     -DCMAKE_BUILD_TYPE=Release
@@ -25,6 +20,8 @@ if(arch_arm32)
     list(APPEND openblas_opts -DTARGET=ARMV7)
 elseif(arch_arm64)
     list(APPEND openblas_opts -DTARGET=ARMV8)
+    list(APPEND openblas_opts "-DDYNAMIC_LIST:string=CORTEXA53\\\\\\\\\\\\;CORTEXA57")
+    message(STATUS ${openblas_opts})
 endif()
 
 ExternalProject_Add(openblas
@@ -36,6 +33,5 @@ ExternalProject_Add(openblas
     CMAKE_ARGS ${openblas_opts}
     BUILD_ALWAYS False
 )
-
 
 list(APPEND deps openblas)

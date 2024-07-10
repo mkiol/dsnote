@@ -12,8 +12,13 @@ configure_file("${sfos_dir}/dbus_app.service.in" "${PROJECT_BINARY_DIR}/dbus_app
 install(FILES "${PROJECT_BINARY_DIR}/dbus_app.service" DESTINATION share/dbus-1/services RENAME ${info_dbus_app_service}.service)
 
 if(BUILD_WHISPERCPP)
+    set(whispercpp_ver "1.6.2")
+    install(FILES "${external_lib_dir}/libwhisper-openblas.so.${whispercpp_ver}" DESTINATION ${lib_install_dir})
+    install(FILES "${external_lib_dir}/libwhisper-openblas.so.1" DESTINATION ${lib_install_dir})
     install(FILES "${external_lib_dir}/libwhisper-openblas.so" DESTINATION ${lib_install_dir})
-    install(FILES "${external_lib_dir}/libwhisper-fallback.so" DESTINATION DESTINATION ${lib_install_dir})
+    install(FILES "${external_lib_dir}/libwhisper-fallback.so.${whispercpp_ver}" DESTINATION ${lib_install_dir})
+    install(FILES "${external_lib_dir}/libwhisper-fallback.so.1" DESTINATION ${lib_install_dir})
+    install(FILES "${external_lib_dir}/libwhisper-fallback.so" DESTINATION ${lib_install_dir})
 endif()
 
 if(DOWNLOAD_LIBSTT)
