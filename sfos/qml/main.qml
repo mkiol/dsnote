@@ -239,10 +239,10 @@ ApplicationWindow {
             }         
 
             HintLabel {
-                enabled: _settings.hint_translator
+                enabled: (_settings.hint_done_flags & Settings.HintDoneTranslator) == 0
                 text: qsTr("To switch between %1 and %2 modes use option in pull-down menu.")
-                .arg("<i>" + qsTr("Notepad") + "</i>").arg("<i>" + qsTr("Translator") + "</i>")
-                onClicked: _settings.hint_translator = false
+                          .arg("<i>" + qsTr("Notepad") + "</i>").arg("<i>" + qsTr("Translator") + "</i>")
+                onClicked: _settings.set_hint_done(Settings.HintDoneTranslator)
             }
 
             AddTextDialog {

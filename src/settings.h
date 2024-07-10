@@ -462,7 +462,8 @@ class settings : public QSettings, public singleton<settings> {
     enum hint_done_flags_t : unsigned int {
         HintDoneNone = 0U,
         HintDoneAddon = 1U << 0U,
-        HintDoneHwAccel = 1U << 1U
+        HintDoneHwAccel = 1U << 1U,
+        HintDoneTranslator = 1U << 2U,
     };
     Q_ENUM(hint_done_flags_t)
 
