@@ -3337,7 +3337,7 @@ void dsnote_app::handle_translator_settings_changed() {
 void dsnote_app::handle_note_changed() {
     emit note_changed();
 
-    if (note().isEmpty()) {
+    if (!settings::instance()->subtitles_support() || note().isEmpty()) {
         settings::instance()->set_stt_tts_text_format(
             settings::text_format_t::TextFormatRaw);
         settings::instance()->set_mnt_text_format(

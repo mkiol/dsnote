@@ -602,9 +602,9 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
     auto stats = report_stats(
         buf.size(), m_sample_rate,
         static_cast<size_t>(
-            std::max(0LL, std::chrono::duration_cast<std::chrono::milliseconds>(
-                              std::chrono::steady_clock::now() - decoding_start)
-                              .count())));
+            std::max(0L, std::chrono::duration_cast<std::chrono::milliseconds>(
+                             std::chrono::steady_clock::now() - decoding_start)
+                             .count())));
 
     auto result =
         merge_texts(m_intermediate_text.value_or(std::string{}), os.str());

@@ -96,6 +96,17 @@ Page {
                             }
                             description: qsTr("Text is appended to the note in the same line or after line break.")
                         }
+
+                        TextSwitch {
+                            checked: _settings.subtitles_support
+                            automaticCheck: false
+                            text: qsTr("Subtitles support")
+                            description: qsTr("Enable support for subtitles.") + " " +
+                                         qsTr("When this option is enabled, options related to subtitles are visible in the user interface.")
+                            onClicked: {
+                                _settings.subtitles_support = !_settings.subtitles_support
+                            }
+                        }
                     }
                 }
 
@@ -132,13 +143,27 @@ Page {
                                             .arg("<i>" + qsTr("Listen") + "</i>")
                         }
 
+                        TextSwitch {
+                            checked: _settings.stt_insert_stats
+                            automaticCheck: false
+                            text: qsTr("Insert statistics")
+                            onClicked: {
+                                _settings.stt_insert_stats = !_settings.stt_insert_stats
+                            }
+                            description: qsTr("Inserts processing related information to the text, such as processing time and audio length.") + " " +
+                                         qsTr("This option can be useful for comparing the performance of different models, engines and their parameters.") + " " +
+                                         qsTr("This option does not work with all engines.")
+                        }
+
                         SectionHeader {
+                            visible: _settings.subtitles_support
                             text: qsTr("Subtitles")
                         }
 
                         Slider {
                             id: subSegDurSlider
 
+                            visible: _settings.subtitles_support
                             label: qsTr("Minimum segment duration")
                             opacity: enabled ? 1.0 : Theme.opacityLow
                             width: parent.width
@@ -160,6 +185,7 @@ Page {
                         }
 
                         PaddedLabel {
+                            visible: _settings.subtitles_support
                             font.pixelSize: Theme.fontSizeExtraSmall
                             color: Theme.secondaryColor
                             text: qsTr("Set the minimum duration (in seconds) of the subtitle segment.") + " " +
@@ -167,6 +193,7 @@ Page {
                         }
 
                         TextSwitch {
+                            visible: _settings.subtitles_support
                             checked: _settings.sub_break_lines
                             automaticCheck: false
                             text: qsTr("Break text lines")
@@ -178,7 +205,7 @@ Page {
                         Slider {
                             id: subMinLineSlider
 
-                            visible: _settings.sub_break_lines
+                            visible: _settings.sub_break_lines && _settings.subtitles_support
                             label: qsTr("Minimum line length")
                             opacity: enabled ? 1.0 : Theme.opacityLow
                             width: parent.width
@@ -204,7 +231,7 @@ Page {
                         Slider {
                             id: subMaxLineSlider
 
-                            visible: _settings.sub_break_lines
+                            visible: _settings.sub_break_lines && _settings.subtitles_support
                             label: qsTr("Maximum line length")
                             opacity: enabled ? 1.0 : Theme.opacityLow
                             width: parent.width
@@ -289,10 +316,12 @@ Page {
                         }
 
                         SectionHeader {
+                            visible: _settings.subtitles_support
                             text: qsTr("Subtitles")
                         }
 
                         ComboBox {
+                            visible: _settings.subtitles_support
                             label: qsTr("Sync speech with timestamps")
                             currentIndex: {
                                 if (_settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOff) return 0
@@ -325,8 +354,8 @@ Page {
                         }
 
                         PaddedLabel {
-                            visible: _settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnFitOnlyIfLonger ||
-                                     _settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnAlwaysFit
+                            visible: _settings.subtitles_support && (_settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnFitOnlyIfLonger ||
+                                     _settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnAlwaysFit)
                             font.pixelSize: Theme.fontSizeSmall
                             color: Theme.secondaryColor
                             text: qsTr("When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.")

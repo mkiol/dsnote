@@ -220,6 +220,7 @@ Item {
                     height: root.textAreaHeight
                     highlighted: true
                     canClear: false
+                    canSwitch: app.mnt_configured && app.state === DsnoteApp.StateIdle
                     textArea {
                         //placeholderText: qsTr("Translation")
                         onTextChanged: {
@@ -228,6 +229,7 @@ Item {
                     }
                     onClearClicked: root.translatedNoteTextArea.textArea.text = ""
                     onCopyClicked: app.copy_translation_to_clipboard()
+                    onSwitchClicked: app.switch_translated_text()
 
                     BusyIndicatorWithProgress {
                         anchors.centerIn: parent

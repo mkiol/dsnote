@@ -852,10 +852,14 @@ void settings::set_translate_when_typing(bool value) {
 }
 
 settings::text_format_t settings::mnt_text_format() const {
-    return static_cast<text_format_t>(
-        value(QStringLiteral("mnt_text_format"),
-              static_cast<int>(text_format_t::TextFormatRaw))
-            .toInt());
+    if (subtitles_support()) {
+        return static_cast<text_format_t>(
+            value(QStringLiteral("mnt_text_format"),
+                  static_cast<int>(text_format_t::TextFormatRaw))
+                .toInt());
+    }
+
+    return text_format_t::TextFormatRaw;
 }
 
 void settings::set_mnt_text_format(text_format_t value) {
@@ -866,10 +870,14 @@ void settings::set_mnt_text_format(text_format_t value) {
 }
 
 settings::text_format_t settings::stt_tts_text_format() const {
-    return static_cast<text_format_t>(
-        value(QStringLiteral("stt_tts_text_format"),
-              static_cast<int>(text_format_t::TextFormatRaw))
-            .toInt());
+    if (subtitles_support()) {
+        return static_cast<text_format_t>(
+            value(QStringLiteral("stt_tts_text_format"),
+                  static_cast<int>(text_format_t::TextFormatRaw))
+                .toInt());
+    }
+
+    return text_format_t::TextFormatRaw;
 }
 
 void settings::set_stt_tts_text_format(text_format_t value) {
@@ -2413,5 +2421,22 @@ void settings::set_stt_insert_stats(bool value) {
     if (stt_insert_stats() != value) {
         setValue(QStringLiteral("stt_insert_stats"), value);
         emit stt_insert_stats_changed();
+    }
+}
+
+bool settings::subtitles_support() const {
+#ifdef USE_SFOS
+    return value(QStringLiteral("subtitles_support"), false).toBool();
+#else
+    return true;
+#endif
+}
+
+void settings::set_subtitles_support(bool value) {
+    if (subtitles_support() != value) {
+        setValue(QStringLiteral("subtitles_support"), value);
+        emit subtitles_support_changed();
+        emit stt_tts_text_format_changed();
+        emit mnt_text_format_changed();
     }
 }

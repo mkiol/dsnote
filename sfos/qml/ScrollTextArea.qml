@@ -18,6 +18,7 @@ SilicaItem {
     property bool canUndo: false
     property bool canRedo: false
     property bool canClear: true
+    property bool canSwitch: false
     readonly property bool canScrollBeginning: !flick.atYBeginning && flick.contentHeight > 0
     readonly property bool canScrollBottom: !flick.atYEnd && flick.contentHeight > 0
     property alias placeholderLabel: _placeholderLabel.text
@@ -28,6 +29,7 @@ SilicaItem {
     signal copyClicked()
     signal undoClicked()
     signal formatClicked()
+    signal switchClicked()
 
     function scrollToBottom() {
         if (canScrollBottom) {
@@ -103,6 +105,7 @@ SilicaItem {
         opacity: root.textArea.highlighted ? 0.0 :
                  root.enabled && (flick.moving || copyButton.pressed || clearButton.pressed ||
                                   undoButton.pressed || bottomButton.pressed || beginningButton.pressed ||
+                                  switchButton.pressed ||
                  flick.contentHeight <= (root.height - size)) ? 1.0 : 0.4
         Behavior on opacity { FadeAnimator {} }
         visible: opacity > 0.0
@@ -119,7 +122,7 @@ SilicaItem {
             preferredWidth: Theme.buttonWidthExtraSmall
             anchors.left: parent.left
             height: parent.size
-            visible: text.length !== 0
+            visible: _settings.subtitles_support && text.length !== 0
             onClicked: root.formatClicked()
             color: root.formatInvalid ? Theme.errorColor : Theme.primaryColor
             backgroundColor: Theme.rgba(color, 0.05)
@@ -186,6 +189,16 @@ SilicaItem {
                 onClicked: {
                     root.scrollToBeginning()
                 }
+            }
+            IconButton {
+                id: switchButton
+
+                width: toolsRow.size
+                height: toolsRow.size
+                visible: root.canSwitch
+                icon.width: width; icon.height: height
+                icon.source: "image://theme/icon-m-transfer?" + (pressed ? Theme.highlightColor : Theme.primaryColor)
+                onClicked: root.switchClicked()
             }
         }
 
