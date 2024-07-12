@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,19 +14,32 @@ Page {
     id: root
 
     property string langId
+    property string packId: ""
     property string langName
+    property string packName: ""
     readonly property bool langsView: langId.length == 0
-    readonly property var model: langsView ? service.langs_model : service.models_model
+    readonly property bool packView: packId.length !== 0
+    readonly property bool modelView: !langsView && !packView
+    readonly property var model: langsView ? service.langs_model :
+                                 packView ? service.pack_model : service.models_model
 
-    function reset(lang_id) {
+    function reset(lang_id, pack_id) {
         service.models_model.lang = lang_id
-        service.models_model.filter = ""
-        service.models_model.roleFilter = ModelsListModel.AllModels
+        service.pack_model.pack = pack_id
+
         if (langsView) service.langs_model.filter = ""
+        if (packView) {
+            service.pack_model.roleFilter = ModelsListModel.AllModels
+            service.pack_model.filter = ""
+        }
+        if (modelView) {
+            service.models_model.roleFilter = ModelsListModel.AllModels
+            service.models_model.filter = ""
+        }
     }
 
     Component.onCompleted: {
-        reset(root.langId)
+        reset(root.langId, root.packId)
     }
 
     allowedOrientations: Orientation.All
@@ -49,7 +62,7 @@ Page {
             id: searchPageHeader
 
             width: root.width
-            title: langsView ? qsTr("Languages") : root.langName
+            title: root.langsView ? qsTr("Languages") : root.packView ? root.packName : root.langName
             view: listView
             comboModel: [
                 qsTr("All"),
@@ -59,10 +72,10 @@ Page {
                 qsTr("Other")
             ]
             combo {
-                visible: !root.langsView
+                visible: !root.langsView && !root.packView
                 label: qsTr("Model type")
                 currentIndex: {
-                    if (root.langsView) return
+                    if (root.langsView || root.packView) return
                     switch (service.models_model.roleFilterFlags) {
                     case ModelsListModel.RoleAll:
                         return 0
@@ -109,6 +122,8 @@ Page {
             id: modelItemDelegate
             ModelItem {
                 mobj: model
+                langName: root.langName
+                langId: root.langId
                 progress: model.progress
             }
         }

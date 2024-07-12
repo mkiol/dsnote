@@ -417,6 +417,7 @@ std::vector<models_manager::model_t> models_manager::models(
     struct model_status {
         bool available = false;
         bool downloading = false;
+        bool default_for_lang = false;
         unsigned int pack_count = 0;
         unsigned int pack_available_count = 0;
     };
@@ -466,10 +467,10 @@ std::vector<models_manager::model_t> models_manager::models(
 
                       if (pack_id.isEmpty() && !model.pack_id.isEmpty()) {
                           auto& pm = pack_status_map[model.pack_id];
-                          if (!pm.available && model.available)
-                              pm.available = true;
-                          if (!pm.downloading && model.downloading)
-                              pm.downloading = true;
+                          pm.available = pm.available || model.available;
+                          pm.downloading = pm.downloading || model.downloading;
+                          pm.default_for_lang =
+                              pm.default_for_lang || model.default_for_lang;
                           ++pm.pack_count;
                           if (model.available) ++pm.pack_available_count;
                           return;
@@ -509,6 +510,7 @@ std::vector<models_manager::model_t> models_manager::models(
             model.downloading = status.downloading;
             model.pack_count = status.pack_count;
             model.pack_available_count = status.pack_available_count;
+            model.default_for_lang = status.default_for_lang;
         }
     });
 

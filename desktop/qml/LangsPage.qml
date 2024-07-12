@@ -17,7 +17,7 @@ DialogPage {
     property string langId
     property string packId: ""
     property string langName
-    property string packName
+    property string packName: ""
     readonly property bool langsView: langId.length === 0
     readonly property bool packView: packId.length !== 0
     readonly property real _rightMargin: listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible ?

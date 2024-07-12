@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,14 +14,29 @@ SimpleListItem {
     id: root
 
     property var mobj: null
+    property string packId: ""
+    property string langId
+    property string langName
     property double progress: 0.0
     readonly property bool defaultModelForLangAllowed: mobj.role === ModelsListModel.Stt ||
                                                        mobj.role === ModelsListModel.Tts
     readonly property color itemColor: highlighted ? Theme.highlightColor : Theme.primaryColor
     readonly property color secondaryItemColor: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+    readonly property bool packView: packId.length !== 0
+    readonly property bool isPack: mobj && mobj.pack_id.length !== 0
 
     function formatProgress(progress) {
         return progress > 0.0 ? Math.round(progress * 100) + "%" : ""
+    }
+
+    function showPack() {
+        var lang_id = langId
+        var lang_name = langName
+        var pack_id = mobj.pack_id
+        var pack_name = mobj.name
+
+        pageStack.push(Qt.resolvedUrl("LangsPage.qml"),
+                       {langId: lang_id, langName: lang_name, packId: pack_id, packName: pack_name})
     }
 
     title.horizontalAlignment: Text.AlignLeft
@@ -32,10 +47,11 @@ SimpleListItem {
     }
 
     Component {
-        id: menuComp
+        id: modelMenuComp
         ContextMenu {
             MenuItem {
-                visible: root.mobj.available && root.defaultModelForLangAllowed && !root.mobj.default_for_lang
+                visible: !root.isPack && root.mobj.available &&
+                         root.defaultModelForLangAllowed && !root.mobj.default_for_lang
                 text: qsTr("Set as default for this language")
                 onClicked: {
                     if (root.mobj.default_for_lang) return
@@ -64,6 +80,16 @@ SimpleListItem {
         }
     }
 
+    Component {
+        id: packMenuComp
+        ContextMenu {
+            MenuItem {
+                text: qsTr("Show models")
+                onClicked: showPack()
+            }
+        }
+    }
+
     onProgressChanged: progressLabel.text = formatProgress(root.progress)
     Connections {
         target: service
@@ -80,37 +106,49 @@ SimpleListItem {
         }
     }
 
-    menu: menuComp
+    menu: isPack ? packMenuComp : modelMenuComp
 
-    textRightMargin: root.mobj.available || root.mobj.downloading ?
-                         Theme.horizontalPageMargin + Theme.iconSizeMedium : Theme.horizontalPageMargin
+    textRightMargin: Theme.horizontalPageMargin +
+                     (root.mobj.available || root.mobj.downloading ? Theme.iconSizeMedium : 0) +
+                     (root.isPack ? Theme.iconSizeMedium : 0)
 
-    Image {
-        visible: root.mobj.available
-        source: "image://theme/icon-m-certificates?" + root.itemColor
+    Row {
         anchors.right: parent.right
         anchors.rightMargin: Theme.horizontalPageMargin
         anchors.verticalCenter: parent.verticalCenter
         height: Theme.iconSizeMedium
-        width: Theme.iconSizeMedium
-    }
 
-    BusyIndicator {
-        visible: root.mobj.downloading
-        anchors.right: parent.right
-        anchors.rightMargin: Theme.horizontalPageMargin
-        anchors.verticalCenter: parent.verticalCenter
-        height: Theme.iconSizeMedium
-        width: Theme.iconSizeMedium
-        running: visible
+        Image {
+            visible: root.mobj.available
+            anchors.verticalCenter: parent.verticalCenter
+            source: "image://theme/icon-m-certificates?" + root.itemColor
+            height: Theme.iconSizeMedium
+            width: Theme.iconSizeMedium
+        }
 
-        Label {
-            id: progressLabel
-            color: Theme.highlightColor
-            anchors.centerIn: parent
-            font.pixelSize: Theme.fontSizeTiny
+        BusyIndicator {
+            visible: root.mobj.downloading
+            anchors.verticalCenter: parent.verticalCenter
+            height: Theme.iconSizeMedium
+            width: Theme.iconSizeMedium
+            running: visible
+
+            Label {
+                id: progressLabel
+                color: Theme.highlightColor
+                anchors.centerIn: parent
+                font.pixelSize: Theme.fontSizeTiny
+            }
+        }
+
+        Image {
+            visible: root.isPack
+            source: "image://theme/icon-m-forward?" + root.itemColor
+            anchors.verticalCenter: parent.verticalCenter
+            height: Theme.iconSizeMedium
+            width: Theme.iconSizeMedium
         }
     }
 
-    onClicked: openMenu()
+    onClicked: isPack ? showPack() : openMenu()
 }

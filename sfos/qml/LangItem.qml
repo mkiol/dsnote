@@ -27,6 +27,8 @@ SimpleListItem {
 
     function reset(lang_id) {
         service.models_model.lang = lang_id
+        service.pack_model.lang = ""
+        service.pack_model.pack = ""
         service.models_model.filter = ""
         service.models_model.roleFilter = ModelsListModel.AllModels
     }
