@@ -27242,6 +27242,73 @@
             "recommended_model": "ca_bergamot_caen"
         },
         {
+            "name": "English to Lithuanian",
+            "model_id": "en_bergamot_enlt",
+            "engine": "mnt_bergamot",
+            "lang_id": "en",
+            "trg_lang_id": "lt",
+            "checksum": "8aed18",
+            "checksum_quick": "a45ae493",
+            "size": "14821712",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/bcf55865e7030d9b9648d679d939027415dc2daa/models/dev/enlt/model.enlt.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/bcf55865e7030d9b9648d679d939027415dc2daa/models/dev/enlt/lex.50.50.enlt.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/bcf55865e7030d9b9648d679d939027415dc2daa/models/dev/enlt/vocab.enlt.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "recommended_model": "lt_bergamot_lten"
+        },
+        {
+            "name": "hrvatski na engleski (Croatian to English)",
+            "model_id": "hr_bergamot_hren",
+            "engine": "mnt_bergamot",
+            "lang_id": "hr",
+            "trg_lang_id": "en",
+            "checksum": "fdd2a15f",
+            "checksum_quick": "47bbb084",
+            "size": "15349416",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/bcf55865e7030d9b9648d679d939027415dc2daa/models/dev/hren/model.hren.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/bcf55865e7030d9b9648d679d939027415dc2daa/models/dev/hren/lex.50.50.hren.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/bcf55865e7030d9b9648d679d939027415dc2daa/models/dev/hren/vocab.hren.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "latviešu uz angļu (Latvian to English)",
+            "model_id": "lv_bergamot_lven",
+            "engine": "mnt_bergamot",
+            "lang_id": "lv",
+            "trg_lang_id": "en",
+            "checksum": "987542a6",
+            "checksum_quick": "53b74f86",
+            "size": "33200889",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/bcf55865e7030d9b9648d679d939027415dc2daa/models/dev/lven/model.lven.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/bcf55865e7030d9b9648d679d939027415dc2daa/models/dev/lven/lex.50.50.lven.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/bcf55865e7030d9b9648d679d939027415dc2daa/models/dev/lven/vocab.lven.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            }
+        },
+        {
             "name": "Català a anglès (Catalan to English)",
             "model_id": "ca_bergamot_caen",
             "engine": "mnt_bergamot",
@@ -27668,21 +27735,22 @@
             "lang_id": "lt",
             "trg_lang_id": "en",
             "score": 0,
-            "checksum": "61c9d35a",
-            "checksum_quick": "2e0779a9",
-            "size": "37651409",
+            "checksum": "d8f472a6",
+            "checksum_quick": "d1749b96",
+            "size": "37426725",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/c923ed0bc06ff747f2d791754536241739206697/models/dev/lten/model.lten.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/c923ed0bc06ff747f2d791754536241739206697/models/dev/lten/lex.50.50.lten.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/c923ed0bc06ff747f2d791754536241739206697/models/dev/lten/vocab.lten.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/bcf55865e7030d9b9648d679d939027415dc2daa/models/dev/lten/model.lten.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/bcf55865e7030d9b9648d679d939027415dc2daa/models/dev/lten/lex.50.50.lten.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/bcf55865e7030d9b9648d679d939027415dc2daa/models/dev/lten/vocab.lten.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
                 "name": "Mozilla Public License Version 2.0",
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
-            }
+            },
+            "recommended_model": "en_bergamot_enlt"
         },
         {
             "name": "Ελληνικά προς Αγγλικά (Greek to English)",
@@ -27737,21 +27805,21 @@
             "lang_id": "sl",
             "trg_lang_id": "en",
             "score": 0,
-            "checksum": "96dfb88f",
-            "checksum_quick": "935117e3",
+            "checksum": "e7033b19",
+            "checksum_quick": "4f99ac36",
+            "size": "37563477",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/7aadb7b7e5a92ba087db66bf211b44b704c0b291/models/dev/slen/model.slen.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/7aadb7b7e5a92ba087db66bf211b44b704c0b291/models/dev/slen/lex.50.50.slen.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/7aadb7b7e5a92ba087db66bf211b44b704c0b291/models/dev/slen/vocab.slen.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/bcf55865e7030d9b9648d679d939027415dc2daa/models/dev/slen/model.slen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/bcf55865e7030d9b9648d679d939027415dc2daa/models/dev/slen/lex.50.50.slen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/bcf55865e7030d9b9648d679d939027415dc2daa/models/dev/slen/vocab.slen.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
                 "name": "Mozilla Public License Version 2.0",
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
-            },
-            "size": "15103765"
+            }
         },
         {
             "name": "Türkçeden İngilizceye (Turkish to English)",
