@@ -28,7 +28,7 @@ DialogPage {
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
         <li>The name of the all Whisper models has been changed to <i>WhisperCpp</i> to better reflect the engine behind them.
-            Currently, Whisper is supported with <i>WhisperCpp</i> and <i>FasterWhisper</i> engines.
+            Whisper is currently supported by the <i>WhisperCpp</i> and <i>FasterWhisper</i> engines.
             Both engines are optimized to achieve the best performance.</li>
         <li>Separate settings for engines.
             The configuration of each engine has been separated in the settings.
@@ -65,6 +65,8 @@ DialogPage {
         <ul>
         <li>Improved Translator UI. The <i>Translate</i>, <i>Switch languages</i> and <i>Add</i> buttons have been
             placed between text areas which is more convenient.</li>
+        <li>New models: English to Lithuanian, Croatian to English, Latvian to English</li>
+        <li>Updated models: Lithuanian to English, Slovenian to English</li>
         </ul>
         <p>Flatpak:</p>
         <ul>

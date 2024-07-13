@@ -35,6 +35,45 @@ Page {
             LogItem {
                 text: "<p>" + qsTr("User Interface") + ":</p>
                 <ul>
+                <li><i>Speech Note</i> has been translated into Norwegian language.</li>
+                <li>Grouped models.
+                    Models that provide multiple sub-models (for example, TTS models that provide different voices)
+                    are shown in groups. This makes it easier to find models in the model browser.</li>
+                <li>Option to enable/disable support for subtitles. Subtitle support is a niche functionality.
+                    To simplify the user interface, the subtitle options is not visible by default.
+                    To enable them, use the <i>Subtitles support</i> option in the settings.</li>
+                </ul>
+                <p>" + qsTr("Speech to Text") + ":</p>
+                <ul>
+                <li>The name of the all Whisper models has been changed to <i>WhisperCpp</i> to better reflect the engine behind them.
+                    Whisper is currently supported by the <i>WhisperCpp</i> engine, which is optimized for best performance.</li>
+                <li>Quicker decoding with <i>WhisperCpp</i>.
+                    Optimization for short sentences has been added to <i>WhisperCpp</i> engine. With it, the speed of STT has doubled.</li>
+                <li>Option for inserting processing statistics.
+                    New settings option allows inserting processing related information to the text after decoding,
+                    such as processing time and audio length. This can be useful for comparing the performance of different models,
+                    engines and their parameters. Option works only with <i>WhisperCpp</i> engine.
+                </ul>
+                <p>" + qsTr("Text to Speech") + ":</p>
+                <ul>
+                <li>Welsh language. New language is enabled with <i>Piper</i> voice.</li>
+                <li>New <i>Piper</i> voices for Spanish, Italian and English</li>
+                </ul>
+                <p>" + qsTr("Translator") + ":</p>
+                <ul>
+                <li>New button for switching languages. <i>Switch languages</i> button have been placed is translated text area.</li>
+                <li>New models: English to Lithuanian, Croatian to English, Latvian to English</li>
+                <li>Updated models: Lithuanian to English, Slovenian to English</li>
+                </ul>"
+            }
+
+            SectionHeader {
+                text: qsTr("Version %1").arg("4.5.0")
+            }
+
+            LogItem {
+                text: "<p>" + qsTr("User Interface") + ":</p>
+                <ul>
                 <li>Import subtitles in many formats and subtitles embedded into video file.
                     You can import and export subtitles in SRT, WebVTT and ASS formats.
                     If your video file contains one or many subtitle streams, you can import the selected subtitles into notepad.</li>
