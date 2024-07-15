@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -27,6 +27,7 @@ fasterwhisper_engine::fasterwhisper_engine(config_t config,
                                            callbacks_t call_backs)
     : stt_engine{std::move(config), std::move(call_backs)} {
     m_speech_buf.reserve(m_speech_max_size);
+    m_auto_lang = m_config.lang == "auto";
 }
 
 fasterwhisper_engine::~fasterwhisper_engine() {
@@ -306,12 +307,24 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
 
             auto seg_tuple = m_model->attr("transcribe")(
                 "audio"_a = array, "beam_size"_a = m_config.beam_search,
-                "language"_a = m_config.lang,
+                "language"_a = m_auto_lang ? static_cast<py::object>(py::none())
+                                           : static_cast<py::object>(
+                                                 py::str(m_config.lang)),
                 "task"_a = m_config.translate && m_config.has_option('t')
                                ? "translate"
                                : "transcribe");
 
             auto segments = *seg_tuple.cast<py::list>().begin();
+
+            std::string auto_lang = [&] {
+                if (!m_auto_lang) return m_config.lang;
+                if (seg_tuple.cast<py::list>().size() < 2) return m_config.lang;
+                auto lang = seg_tuple.cast<py::list>()[1]
+                                .attr("language")
+                                .cast<std::string>();
+                LOGD("auto lang: " << lang);
+                return lang;
+            }();
 
             std::ostringstream os;
 
@@ -357,16 +370,18 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
 
             m_segment_offset += i;
 
-            return os.str();
+            return std::pair<std::string, std::string>(os.str(),
+                                                       std::move(auto_lang));
         } catch (const std::exception& err) {
             LOGE("fasterwhisper py error: " << err.what());
-            return std::string{""};
+            return std::pair<std::string, std::string>({}, {});
         }
     });
 
     if (!task) return;
 
-    auto text = std::any_cast<std::string>(task->get());
+    auto [text, auto_lang] =
+        std::any_cast<std::pair<std::string, std::string>>(task->get());
 
     if (m_thread_exit_requested) return;
 
@@ -387,5 +402,5 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
 #endif
 
     if (!m_intermediate_text || m_intermediate_text != result)
-        set_intermediate_text(result);
+        set_intermediate_text(result, auto_lang);
 }

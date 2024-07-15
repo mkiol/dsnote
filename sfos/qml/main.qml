@@ -26,6 +26,23 @@ ApplicationWindow {
 
     DsnoteApp {
         id: app
+
+        Component.onCompleted: {
+            if (_files_to_open.length > 0) {
+                appWin.activate()
+
+                if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
+                    var list_of_files = _files_to_open
+                    addTextDialog.addHandler = function(){app.import_files(list_of_files, false)}
+                    addTextDialog.replaceHandler = function(){app.import_files(list_of_files, true)}
+                    addTextDialog.show()
+                } else {
+                    app.import_files(_files_to_open, _settings.file_import_action === Settings.FileImportActionReplace)
+                }
+            }
+            app.execute_action_name(_requested_action, _requested_extra)
+            app.import_files(_files_to_open, false)
+        }
     }
 
     Component {
@@ -306,26 +323,14 @@ ApplicationWindow {
                 onNote_copied: toast.show(qsTr("Copied!"))
                 onTranscribe_done: toast.show(qsTr("Import from the file is complete!"))
                 onSave_note_to_file_done: toast.show(qsTr("Export to file is complete!"))
-                Component.onCompleted: {
-                    if (_files_to_open.length > 0) {
-                        appWin.activate()
-
-                        if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
-                            var list_of_files = _files_to_open
-                            addTextDialog.addHandler = function(){app.import_files(list_of_files, false)}
-                            addTextDialog.replaceHandler = function(){app.import_files(list_of_files, true)}
-                            addTextDialog.show()
-                        } else {
-                            app.import_files(_files_to_open, _settings.file_import_action === Settings.FileImportActionReplace)
-                        }
-                    }
-                    app.execute_action_name(_requested_action, _requested_extra)
-                    app.import_files(_files_to_open, false)
-                }
                 onImport_file_multiple_streams: {
                     pageStack.push(Qt.resolvedUrl("StreamSelectionDialog.qml"),
                                    {acceptDestination: root, acceptDestinationAction: PageStackAction.Pop,
                                     filePath: file_path, replace: replace, streams: streams})
+                }
+                onStt_auto_lang_changed: {
+                    if (app.stt_auto_lang_name.length > 0)
+                        toast.show(app.stt_auto_lang_name)
                 }
                 onError: {
                     switch (type) {

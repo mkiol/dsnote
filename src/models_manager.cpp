@@ -404,6 +404,7 @@ std::vector<models_manager::lang_t> models_manager::langs() const {
                    });
 
     std::sort(list.begin(), list.end(), [](const auto& a, const auto& b) {
+        if (a.id == "auto") return true;
         return QString::compare(a.id, b.id, Qt::CaseInsensitive) < 0;
     });
 
@@ -621,6 +622,10 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
                             model.download_progress});
         }
     }
+
+    std::sort(list.begin(), list.end(), [](const auto& a, const auto& b) {
+        return QString::compare(a.id, b.id, Qt::CaseInsensitive) < 0;
+    });
 
     return list;
 }
@@ -1415,6 +1420,8 @@ auto models_manager::extract_langs(const QJsonArray& langs_jarray) {
             continue;
         }
 
+        auto auto_lang = lang_id == "auto";
+
 #ifdef USE_SFOS
         if (lang_id == "am") {  // fidel script is not available on sfos
             langs.emplace(
@@ -1424,13 +1431,21 @@ auto models_manager::extract_langs(const QJsonArray& langs_jarray) {
         } else {
             langs.emplace(
                 lang_id,
-                std::pair{obj.value(QLatin1String{"name"}).toString(),
-                          obj.value(QLatin1String{"name_en"}).toString()});
+                std::pair{
+                    auto_lang ? tr("Auto detected")
+                              : obj.value(QLatin1String{"name"}).toString(),
+                    auto_lang
+                        ? QStringLiteral("Auto detected")
+                        : obj.value(QLatin1String{"name_en"}).toString()});
         }
 #else
         langs.emplace(
-            lang_id, std::pair{obj.value(QLatin1String{"name"}).toString(),
-                               obj.value(QLatin1String{"name_en"}).toString()});
+            lang_id,
+            std::pair{auto_lang ? tr("Auto detected")
+                                : obj.value(QLatin1String{"name"}).toString(),
+                      auto_lang
+                          ? QStringLiteral("Auto detected")
+                          : obj.value(QLatin1String{"name_en"}).toString()});
 #endif
     }
 
@@ -2187,11 +2202,16 @@ auto models_manager::extract_models(
             return false;
         }();
 
+        auto model_name = obj.value(QLatin1String{"name"}).toString();
+        if (lang_id == "auto") {
+            model_name.replace(QLatin1String("Auto"), tr("Auto detected"));
+        }
+
         priv_model_t model{
             /*engine=*/engine,
             /*lang_id=*/std::move(lang_id),
             /*lang_code=*/obj.value(QLatin1String{"lang_code"}).toString(),
-            /*name=*/obj.value(QLatin1String{"name"}).toString(),
+            /*name=*/std::move(model_name),
             /*file_name=*/std::move(file_name),
             /*checksum=*/std::move(checksum),
             /*checksum_quick=*/std::move(checksum_quick),
@@ -2616,7 +2636,11 @@ void models_manager::generate_checksums() {
             pair.second.urls.empty())
             return;
         if (!pair.second.alias_of.isEmpty()) return;
-        if (pair.second.checksum.isEmpty()) {
+
+        if (pair.second.checksum.isEmpty() ||
+            std::any_of(
+                pair.second.sup_models.cbegin(), pair.second.sup_models.cend(),
+                [](const auto& sup) { return sup.checksum.isEmpty(); })) {
             qDebug() << pair.first;
             m_models_for_gen_checksum.insert(pair);
         }

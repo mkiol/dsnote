@@ -1314,12 +1314,13 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             }
 
             stt_engine::callbacks_t call_backs{
-                /*text_decoded=*/[this](const std::string &text) {
-                    handle_stt_text_decoded(text);
+                /*text_decoded=*/[this](const std::string &text,
+                                        const std::string &lang) {
+                    handle_stt_text_decoded(text, lang);
                 },
                 /*intermediate_text_decoded=*/
-                [this](const std::string &text) {
-                    handle_stt_intermediate_text_decoded(text);
+                [this](const std::string &text, const std::string &lang) {
+                    handle_stt_intermediate_text_decoded(text, lang);
                 },
                 /*speech_detection_status_changed=*/
                 [this](stt_engine::speech_detection_status_t status) {
@@ -1994,19 +1995,20 @@ bool speech_service::restart_text_repair_engine(const QVariantMap &options) {
 }
 
 void speech_service::handle_stt_intermediate_text_decoded(
-    const std::string &text) {
+    const std::string &text, const std::string &lang) {
     if (m_current_task) {
         m_last_intermediate_text_task = m_current_task->id;
         emit stt_intermediate_text_decoded(QString::fromStdString(text),
-                                           m_current_task->model_id,
+                                           QString::fromStdString(lang),
                                            m_current_task->id);
     } else {
         qWarning() << "current task does not exist";
     }
 }
 
-void speech_service::handle_stt_text_decoded(const QString &, const QString &,
-                                             int task_id) {
+void speech_service::handle_stt_text_decoded(
+    [[maybe_unused]] const QString &text, [[maybe_unused]] const QString &lang,
+    int task_id) {
     if (m_current_task && m_current_task->id == task_id &&
         m_current_task->speech_mode == speech_mode_t::single_sentence) {
         stt_stop_listen(m_current_task->id);
@@ -2410,16 +2412,18 @@ void speech_service::handle_mnt_progress_changed(int task_id) {
     }
 }
 
-void speech_service::handle_stt_text_decoded(const std::string &text) {
+void speech_service::handle_stt_text_decoded(const std::string &text,
+                                             const std::string &lang) {
     if (m_current_task) {
         if (m_previous_task &&
             m_last_intermediate_text_task == m_previous_task->id) {
             emit stt_text_decoded(QString::fromStdString(text),
-                                  m_previous_task->model_id,
+                                  QString::fromStdString(lang),
                                   m_previous_task->id);
         } else {
             emit stt_text_decoded(QString::fromStdString(text),
-                                  m_current_task->model_id, m_current_task->id);
+                                  QString::fromStdString(lang),
+                                  m_current_task->id);
         }
     } else {
         qWarning() << "current task does not exist";

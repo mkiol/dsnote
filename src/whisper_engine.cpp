@@ -231,6 +231,12 @@ void whisper_engine::open_whisper_lib() {
     m_whisper_api.whisper_ctx_init_openvino_encoder = reinterpret_cast<
         decltype(m_whisper_api.whisper_ctx_init_openvino_encoder)>(
         dlsym(m_whisperlib_handle, "whisper_ctx_init_openvino_encoder"));
+    m_whisper_api.whisper_full_lang_id =
+        reinterpret_cast<decltype(m_whisper_api.whisper_full_lang_id)>(
+            dlsym(m_whisperlib_handle, "whisper_full_lang_id"));
+    m_whisper_api.whisper_lang_str =
+        reinterpret_cast<decltype(m_whisper_api.whisper_lang_str)>(
+            dlsym(m_whisperlib_handle, "whisper_lang_str"));
 
     if (!m_whisper_api.ok()) {
         LOGE("failed to register whisper api");
@@ -493,6 +499,12 @@ whisper_full_params whisper_engine::make_wparams() {
 
     wparams.language = m_config.lang_code.empty() ? m_config.lang.c_str()
                                                   : m_config.lang_code.c_str();
+    if (strcmp(wparams.language, "auto") == 0) {
+        wparams.language = nullptr;
+        m_auto_lang = true;
+    }
+
+    wparams.detect_language = false;
     wparams.beam_search = {static_cast<int>(m_config.beam_search), 0.0};
     wparams.suppress_blank = true;
     wparams.suppress_non_speech_tokens = true;
@@ -517,7 +529,8 @@ whisper_full_params whisper_engine::make_wparams() {
             file >> wparams.audio_ctx;
             LOGD("openvino audio_ctx: " << wparams.audio_ctx);
         }
-    } else if (m_config.audio_ctx_conf == audio_ctx_conf_t::custom) {
+    } else if (!m_auto_lang &&
+               m_config.audio_ctx_conf == audio_ctx_conf_t::custom) {
         wparams.audio_ctx = m_config.audio_ctx_size;
     }
 
@@ -540,7 +553,7 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
     bool subrip = m_config.text_format == text_format_t::subrip;
 
     if (m_config.audio_ctx_conf == audio_ctx_conf_t::dynamic &&
-        !use_openvino()) {
+        !use_openvino() && !m_auto_lang) {
         // short audio clips optimization
         // https://github.com/ggerganov/whisper.cpp/issues/1855
         m_wparams.audio_ctx = std::min<int>(
@@ -606,6 +619,24 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
                              std::chrono::steady_clock::now() - decoding_start)
                              .count())));
 
+    auto auto_lang_id = [&]() -> std::string {
+        if (m_auto_lang) {
+            auto lang_number =
+                m_whisper_api.whisper_full_lang_id(m_whisper_ctx);
+            if (lang_number < 0) {
+                LOGW("auto lang not detected");
+                return m_config.lang;
+            }
+
+            const auto* lang_id = m_whisper_api.whisper_lang_str(lang_number);
+            LOGD("auto lang: " << lang_id);
+
+            return lang_id;
+        } else {
+            return m_config.lang;
+        }
+    }();
+
     auto result =
         merge_texts(m_intermediate_text.value_or(std::string{}), os.str());
 
@@ -616,5 +647,5 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 #endif
 
     if (!m_intermediate_text || m_intermediate_text != result)
-        set_intermediate_text(result);
+        set_intermediate_text(result, auto_lang_id);
 }

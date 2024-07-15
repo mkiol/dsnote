@@ -314,6 +314,8 @@ class whisper_engine : public stt_engine {
         int (*whisper_ctx_init_openvino_encoder)(
             void* ctx, const char* model_path, const char* device,
             const char* cache_dir) = nullptr;
+        int (*whisper_full_lang_id)(void* ctx) = nullptr;
+        const char* (*whisper_lang_str)(int id) = nullptr;
         inline auto ok() const {
             return whisper_init_from_file_with_params &&
                    whisper_print_system_info && whisper_full &&
@@ -321,7 +323,8 @@ class whisper_engine : public stt_engine {
                    whisper_full_get_segment_t0 && whisper_full_get_segment_t1 &&
                    whisper_free && whisper_full_default_params &&
                    whisper_context_default_params &&
-                   whisper_ctx_init_openvino_encoder;
+                   whisper_ctx_init_openvino_encoder && whisper_full_lang_id &&
+                   whisper_lang_str;
         }
     };
 
@@ -330,6 +333,7 @@ class whisper_engine : public stt_engine {
     void* m_whisperlib_handle = nullptr;
     void* m_whisper_ctx = nullptr;
     whisper_full_params m_wparams{};
+    bool m_auto_lang = false;
 
     void open_whisper_lib();
     void create_model();

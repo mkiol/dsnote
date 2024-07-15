@@ -424,10 +424,12 @@ class speech_service : public QObject, public singleton<speech_service> {
                                        std::string &&out_text,
                                        const std::string &out_lang);
     void handle_ttt_text_repaired(const QString &text, int task_id);
-    void handle_stt_text_decoded(const std::string &text);
-    void handle_stt_text_decoded(const QString &text, const QString &model_id,
+    void handle_stt_text_decoded(const std::string &text,
+                                 const std::string &lang);
+    void handle_stt_text_decoded(const QString &text, const QString &lang,
                                  int task_id);
-    void handle_stt_intermediate_text_decoded(const std::string &text);
+    void handle_stt_intermediate_text_decoded(const std::string &text,
+                                              const std::string &lang);
     void handle_tts_speech_encoded(const std::string &text,
                                    const std::string &audio_file_path,
                                    tts_engine::audio_format_t format,

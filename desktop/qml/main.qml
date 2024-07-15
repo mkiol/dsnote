@@ -460,6 +460,11 @@ ApplicationWindow {
             streamSelectionDialog.open()
         }
 
+        onStt_auto_lang_changed: {
+            if (stt_auto_lang_name.length > 0)
+                toast.show(stt_auto_lang_name)
+        }
+
         onError: {
             switch (type) {
             case DsnoteApp.ErrorFileSource:

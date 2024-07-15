@@ -88,8 +88,10 @@ class stt_engine {
                                     const sub_config_t& sub_config);
 
     struct callbacks_t {
-        std::function<void(const std::string& text)> text_decoded;
-        std::function<void(const std::string& text)> intermediate_text_decoded;
+        std::function<void(const std::string& text, const std::string& lang)>
+            text_decoded;
+        std::function<void(const std::string& text, const std::string& lang)>
+            intermediate_text_decoded;
         std::function<void(speech_detection_status_t status)>
             speech_detection_status_changed;
         std::function<void()> sentence_timeout;
@@ -219,6 +221,7 @@ class stt_engine {
     bool m_thread_exit_requested = false;
     in_buf_t m_in_buf;
     std::optional<std::string> m_intermediate_text;
+    std::string m_intermediate_lang;
     vad m_vad;
     denoiser m_denoiser{16000, denoiser::task_flags::task_denoise_hard |
                                    denoiser::task_flags::task_normalize};
@@ -249,7 +252,8 @@ class stt_engine {
     void free_buf(lock_type_t lock);
     void free_buf();
     void set_speech_detection_status(speech_detection_status_t status);
-    void set_intermediate_text(const std::string& text);
+    void set_intermediate_text(const std::string& text,
+                               const std::string& lang);
     void set_state(state_t new_state);
     void reset_in_processing();
     void process();

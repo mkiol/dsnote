@@ -123,7 +123,7 @@ ColumnLayout {
             icon.name: "audio-input-microphone-symbolic"
             enabled: app.stt_configured && (app.state === DsnoteApp.StateIdle ||
                                             app.state === DsnoteApp.StateListeningManual)
-            comboToolTip: qsTr("Speech to Text model")
+            comboToolTip: qsTr("Speech to Text model") + (app.stt_auto_lang_name.length > 0 ? (" | " + app.stt_auto_lang_name) : "")
             comboPlaceholderText: qsTr("No Speech to Text model")
             checkToolTip: qsTr("Translate to English")
             combo {

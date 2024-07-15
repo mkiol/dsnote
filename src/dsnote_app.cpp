@@ -564,6 +564,8 @@ void dsnote_app::handle_stt_intermediate_text(const QString &text,
         return;
     }
 
+    update_stt_auto_lang(lang);
+
     if (m_intermediate_text != text) {
         m_intermediate_text = text;
         emit intermediate_text_changed();
@@ -652,6 +654,8 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
         qWarning() << "invalid task id";
         return;
     }
+
+    update_stt_auto_lang(lang);
 
     switch (m_text_destination) {
         case text_destination_t::note_add:
@@ -1171,6 +1175,7 @@ void dsnote_app::set_active_stt_model(const QString &model) {
         qDebug() << "app active stt model:" << m_active_stt_model << "=>"
                  << model;
         m_active_stt_model = model;
+        update_stt_auto_lang({});
         emit active_stt_model_changed();
     }
 }
@@ -4774,6 +4779,125 @@ void dsnote_app::hide_tray() {
 #ifdef USE_DESKTOP
     m_tray.hide();
 #endif
+}
+
+void dsnote_app::update_stt_auto_lang(QString lang_id) {
+    if (!active_stt_model().startsWith("auto_")) lang_id.clear();
+
+    if (m_stt_auto_lang_id == lang_id) return;
+
+    qDebug() << "stt auto lang changed:" << m_stt_auto_lang_id << "=>"
+             << lang_id;
+    m_stt_auto_lang_id = lang_id;
+    emit stt_auto_lang_changed();
+}
+
+QString dsnote_app::stt_auto_lang_name() const {
+    static const std::unordered_map<QString, QString> langs = {
+        {QStringLiteral("en"), tr("English")},
+        {QStringLiteral("zh"), tr("Chinese")},
+        {QStringLiteral("de"), tr("German")},
+        {QStringLiteral("es"), tr("Spanish")},
+        {QStringLiteral("ru"), tr("Russian")},
+        {QStringLiteral("ko"), tr("Korean")},
+        {QStringLiteral("fr"), tr("French")},
+        {QStringLiteral("ja"), tr("Japanese")},
+        {QStringLiteral("pt"), tr("Portuguese")},
+        {QStringLiteral("tr"), tr("Turkish")},
+        {QStringLiteral("pl"), tr("Polish")},
+        {QStringLiteral("ca"), tr("Catalan")},
+        {QStringLiteral("nl"), tr("Dutch")},
+        {QStringLiteral("ar"), tr("Arabic")},
+        {QStringLiteral("sv"), tr("Swedish")},
+        {QStringLiteral("it"), tr("Italian")},
+        {QStringLiteral("id"), tr("Indonesian")},
+        {QStringLiteral("hi"), tr("Hindi")},
+        {QStringLiteral("fi"), tr("Finnish")},
+        {QStringLiteral("vi"), tr("Vietnamese")},
+        {QStringLiteral("he"), tr("Hebrew")},
+        {QStringLiteral("uk"), tr("Ukrainian")},
+        {QStringLiteral("el"), tr("Greek")},
+        {QStringLiteral("ms"), tr("Malay")},
+        {QStringLiteral("cs"), tr("Czech")},
+        {QStringLiteral("ro"), tr("Romanian")},
+        {QStringLiteral("da"), tr("Danish")},
+        {QStringLiteral("hu"), tr("Hungarian")},
+        {QStringLiteral("ta"), tr("Tamil")},
+        {QStringLiteral("no"), tr("Norwegian")},
+        {QStringLiteral("th"), tr("Thai")},
+        {QStringLiteral("ur"), tr("Urdu")},
+        {QStringLiteral("hr"), tr("Croatian")},
+        {QStringLiteral("bg"), tr("Bulgarian")},
+        {QStringLiteral("lt"), tr("Lithuanian")},
+        {QStringLiteral("la"), tr("Latin")},
+        {QStringLiteral("mi"), tr("Maori")},
+        {QStringLiteral("ml"), tr("Malayalam")},
+        {QStringLiteral("cy"), tr("Welsh")},
+        {QStringLiteral("sk"), tr("Slovak")},
+        {QStringLiteral("te"), tr("Telugu")},
+        {QStringLiteral("fa"), tr("Persian")},
+        {QStringLiteral("lv"), tr("Latvian")},
+        {QStringLiteral("bn"), tr("Bengali")},
+        {QStringLiteral("sr"), tr("Serbian")},
+        {QStringLiteral("az"), tr("Azerbaijani")},
+        {QStringLiteral("sl"), tr("Slovenian")},
+        {QStringLiteral("kn"), tr("Kannada")},
+        {QStringLiteral("et"), tr("Estonian")},
+        {QStringLiteral("mk"), tr("Macedonian")},
+        {QStringLiteral("br"), tr("Breton")},
+        {QStringLiteral("eu"), tr("Basque")},
+        {QStringLiteral("is"), tr("Icelandic")},
+        {QStringLiteral("hy"), tr("Armenian")},
+        {QStringLiteral("ne"), tr("Nepali")},
+        {QStringLiteral("mn"), tr("Mongolian")},
+        {QStringLiteral("bs"), tr("Bosnian")},
+        {QStringLiteral("kk"), tr("Kazakh")},
+        {QStringLiteral("sq"), tr("Albanian")},
+        {QStringLiteral("sw"), tr("Swahili")},
+        {QStringLiteral("gl"), tr("Galician")},
+        {QStringLiteral("mr"), tr("Marathi")},
+        {QStringLiteral("pa"), tr("Punjabi")},
+        {QStringLiteral("si"), tr("Sinhala")},
+        {QStringLiteral("km"), tr("Khmer")},
+        {QStringLiteral("sn"), tr("Shona")},
+        {QStringLiteral("yo"), tr("Yoruba")},
+        {QStringLiteral("so"), tr("Somali")},
+        {QStringLiteral("af"), tr("Afrikaans")},
+        {QStringLiteral("oc"), tr("Occitan")},
+        {QStringLiteral("ka"), tr("Georgian")},
+        {QStringLiteral("be"), tr("Belarusian")},
+        {QStringLiteral("tg"), tr("Tajik")},
+        {QStringLiteral("sd"), tr("Sindhi")},
+        {QStringLiteral("gu"), tr("Gujarati")},
+        {QStringLiteral("am"), tr("Amharic")},
+        {QStringLiteral("yi"), tr("Yiddish")},
+        {QStringLiteral("lo"), tr("Lao")},
+        {QStringLiteral("uz"), tr("Uzbek")},
+        {QStringLiteral("fo"), tr("Faroese")},
+        {QStringLiteral("ht"), tr("Haitian creole")},
+        {QStringLiteral("ps"), tr("Pashto")},
+        {QStringLiteral("tk"), tr("Turkmen")},
+        {QStringLiteral("nn"), tr("Nynorsk")},
+        {QStringLiteral("mt"), tr("Maltese")},
+        {QStringLiteral("sa"), tr("Sanskrit")},
+        {QStringLiteral("lb"), tr("Luxembourgish")},
+        {QStringLiteral("my"), tr("Myanmar")},
+        {QStringLiteral("bo"), tr("Tibetan")},
+        {QStringLiteral("tl"), tr("Tagalog")},
+        {QStringLiteral("mg"), tr("Malagasy")},
+        {QStringLiteral("as"), tr("Assamese")},
+        {QStringLiteral("tt"), tr("Tatar")},
+        {QStringLiteral("haw"), tr("Hawaiian")},
+        {QStringLiteral("ln"), tr("Lingala")},
+        {QStringLiteral("ha"), tr("Hausa")},
+        {QStringLiteral("ba"), tr("Bashkir")},
+        {QStringLiteral("jw"), tr("Javanese")},
+        {QStringLiteral("su"), tr("Sundanese")},
+        {QStringLiteral("yue"), tr("Cantonese")}};
+
+    auto it = langs.find(m_stt_auto_lang_id);
+    if (it == langs.end()) return {};
+    return it->second;
 }
 
 void dsnote_app::register_hotkeys() {

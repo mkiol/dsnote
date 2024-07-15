@@ -460,12 +460,15 @@ std::string stt_engine::merge_texts(const std::string& old_text,
     return old_text + " " + new_text;
 }
 
-void stt_engine::set_intermediate_text(const std::string& text) {
+void stt_engine::set_intermediate_text(const std::string& text,
+                                       const std::string& lang) {
     if (m_intermediate_text != text) {
         m_intermediate_text = text;
+        m_intermediate_lang = lang;
         if (m_intermediate_text->empty() ||
             m_intermediate_text->size() >= m_min_text_size) {
-            m_call_backs.intermediate_text_decoded(m_intermediate_text.value());
+            m_call_backs.intermediate_text_decoded(m_intermediate_text.value(),
+                                                   m_intermediate_lang);
         }
     }
 }
@@ -521,13 +524,14 @@ void stt_engine::flush(flush_t type) {
         if ((type == flush_t::regular || type == flush_t::eof ||
              m_config.speech_mode != speech_mode_t::single_sentence) &&
             m_intermediate_text->size() >= m_min_text_size) {
-            m_call_backs.text_decoded(m_intermediate_text.value());
+            m_call_backs.text_decoded(m_intermediate_text.value(),
+                                      m_intermediate_lang);
 
             if (m_config.speech_mode == speech_mode_t::single_sentence) {
                 set_speech_started(false);
             }
         }
-        set_intermediate_text("");
+        set_intermediate_text("", m_intermediate_lang);
     }
 
     m_intermediate_text.reset();

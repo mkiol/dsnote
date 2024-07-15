@@ -365,7 +365,8 @@ void ds_engine::decode_speech(const ds_buf_t& buf, bool eof) {
             m_config.sub_config.max_line_length, segments.second);
 
         set_intermediate_text(
-            text_tools::segments_to_subrip_text(segments.second));
+            text_tools::segments_to_subrip_text(segments.second),
+            m_config.lang);
     } else {
         auto* cstr = eof ? m_ds_api.STT_FinishStream(m_ds_stream)
                          : m_ds_api.STT_IntermediateDecode(m_ds_stream);
@@ -397,6 +398,6 @@ void ds_engine::decode_speech(const ds_buf_t& buf, bool eof) {
         if (m_punctuator) result = m_punctuator->process(result);
 
         if (!m_intermediate_text || m_intermediate_text != result)
-            set_intermediate_text(result);
+            set_intermediate_text(result, m_config.lang);
     }
 }

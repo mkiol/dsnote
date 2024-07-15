@@ -308,7 +308,8 @@ void april_engine::decode_speech(april_buf_t& buf, bool eof) {
             m_config.sub_config.min_line_length,
             m_config.sub_config.max_line_length, m_segments);
 
-        set_intermediate_text(text_tools::segments_to_subrip_text(m_segments));
+        set_intermediate_text(text_tools::segments_to_subrip_text(m_segments),
+                              m_config.lang);
 
         m_result_prev_segment.clear();
         m_result_size_consumed = 0;
@@ -326,7 +327,7 @@ void april_engine::decode_speech(april_buf_t& buf, bool eof) {
         }
 
         if (!m_intermediate_text || m_intermediate_text != result) {
-            set_intermediate_text(result);
+            set_intermediate_text(result, m_config.lang);
         }
 
         if (eof) m_result_prev_segment.clear();

@@ -78,6 +78,10 @@ class dsnote_app : public QObject {
                    NOTIFY available_stt_models_changed)
     Q_PROPERTY(bool stt_translate_needed READ stt_translate_needed NOTIFY
                    active_stt_model_changed)
+    Q_PROPERTY(QString stt_auto_lang_id READ stt_auto_lang_id NOTIFY
+                   stt_auto_lang_changed)
+    Q_PROPERTY(QString stt_auto_lang_name READ stt_auto_lang_name NOTIFY
+                   stt_auto_lang_changed)
 
     // tts ref voices
     Q_PROPERTY(int active_tts_ref_voice_idx READ active_tts_ref_voice_idx NOTIFY
@@ -466,6 +470,7 @@ class dsnote_app : public QObject {
     void audio_devices_changed();
     void audio_source_changed();
     void audio_sources_changed();
+    void stt_auto_lang_changed();
 
    private:
     enum class action_t {
@@ -588,7 +593,7 @@ class dsnote_app : public QObject {
     bool m_ttt_diacritizer_ar_configured = false;
     bool m_ttt_diacritizer_he_configured = false;
     bool m_ttt_punctuation_configured = false;
-
+    QString m_stt_auto_lang_id;
     dest_file_info_t m_dest_file_info;
     QString m_translated_text;
     QString m_prev_text;
@@ -871,6 +876,9 @@ class dsnote_app : public QObject {
     }
     void repair_text(text_repair_task_type_t task_type);
     void switch_mnt_langs();
+    inline QString stt_auto_lang_id() const { return m_stt_auto_lang_id; }
+    void update_stt_auto_lang(QString lang_id);
+    QString stt_auto_lang_name() const;
 #ifdef USE_DESKTOP
     void execute_tray_action(tray_icon::action_t action, int value);
 #endif

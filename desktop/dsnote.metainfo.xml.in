@@ -112,6 +112,9 @@
       <li>The name of the all Whisper models has been changed to 'WhisperCpp' to better reflect the engine behind them.
           Whisper is currently supported by the 'WhisperCpp' and 'FasterWhisper' engines.
           Both engines are optimized to achieve the best performance.</li>
+      <li>Automatic language detection in STT.
+          To automatically detect the language during STT, select one of the models that is in the 'Auto detected'
+          category in the language list.</li>
       <li>Separate settings for engines.
           The configuration of each engine has been separated in the settings.
           You can separately set the parameters for 'WhisperCpp' and 'FasterWhisper'.

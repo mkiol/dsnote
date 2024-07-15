@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -34,8 +34,8 @@ class fasterwhisper_engine : public stt_engine {
     inline static const int m_threads = 8;
 
     std::optional<py::object> m_model;
-
     whisper_buf_t m_speech_buf;
+    bool m_auto_lang = false;
 
     void create_model();
     samples_process_result_t process_buff() override;
