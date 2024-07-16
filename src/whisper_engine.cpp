@@ -107,6 +107,11 @@ bool whisper_engine::use_openvino() const {
            !m_config.model_files.openvino_model_file.empty();
 }
 
+bool whisper_engine::use_gpu() const {
+    return m_config.use_gpu && (m_config.gpu_device.api == gpu_api_t::cuda ||
+                                m_config.gpu_device.api == gpu_api_t::rocm);
+}
+
 void whisper_engine::open_whisper_lib() {
 #ifdef ARCH_ARM_32
     if (cpu_tools::cpuinfo().feature_flags &
@@ -499,10 +504,7 @@ whisper_full_params whisper_engine::make_wparams() {
 
     wparams.language = m_config.lang_code.empty() ? m_config.lang.c_str()
                                                   : m_config.lang_code.c_str();
-    if (strcmp(wparams.language, "auto") == 0) {
-        wparams.language = nullptr;
-        m_auto_lang = true;
-    }
+    if (strcmp(wparams.language, "auto") == 0) wparams.language = nullptr;
 
     wparams.detect_language = false;
     wparams.beam_search = {static_cast<int>(m_config.beam_search), 0.0};
@@ -519,6 +521,7 @@ whisper_full_params whisper_engine::make_wparams() {
     wparams.abort_callback_user_data = &m_thread_exit_requested;
     wparams.print_progress = false;
     wparams.print_timestamps = false;
+    wparams.audio_ctx = 1500;
 
     if (!m_config.model_files.openvino_model_file.empty()) {
         // read audio_ctx from config file for openvino
@@ -529,8 +532,8 @@ whisper_full_params whisper_engine::make_wparams() {
             file >> wparams.audio_ctx;
             LOGD("openvino audio_ctx: " << wparams.audio_ctx);
         }
-    } else if (!m_auto_lang &&
-               m_config.audio_ctx_conf == audio_ctx_conf_t::custom) {
+    } else if (m_config.audio_ctx_conf == audio_ctx_conf_t::custom &&
+               !use_gpu()) {
         wparams.audio_ctx = m_config.audio_ctx_size;
     }
 
@@ -553,7 +556,7 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
     bool subrip = m_config.text_format == text_format_t::subrip;
 
     if (m_config.audio_ctx_conf == audio_ctx_conf_t::dynamic &&
-        !use_openvino() && !m_auto_lang) {
+        !use_openvino() && !use_gpu()) {
         // short audio clips optimization
         // https://github.com/ggerganov/whisper.cpp/issues/1855
         m_wparams.audio_ctx = std::min<int>(
@@ -570,11 +573,16 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
         auto n = m_whisper_api.whisper_full_n_segments(m_whisper_ctx);
         LOGD("decoded segments: " << n);
 
+        bool add_spc = false;
+        int seg_n = 0;
         for (auto i = 0; i < n; ++i) {
             std::string text =
                 m_whisper_api.whisper_full_get_segment_text(m_whisper_ctx, i);
+            if (text.empty()) continue;
+            if (text.at(0) == '!') text.erase(0, 1);
             rtrim(text);
             ltrim(text);
+            if (text.empty()) continue;
 #ifdef DEBUG
             LOGD("segment " << i << ": " << text);
 #endif
@@ -599,12 +607,15 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 
                 text_tools::segment_to_subrip_text(segment, os);
             } else {
-                if (i != 0) os << ' ';
+                if (add_spc) os << ' ';
                 os << text;
+                add_spc = true;
             }
+
+            ++seg_n;
         }
 
-        m_segment_offset += n;
+        m_segment_offset += seg_n;
     } else {
         LOGE("whisper error: " << ret);
         return;
@@ -620,7 +631,7 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
                              .count())));
 
     auto auto_lang_id = [&]() -> std::string {
-        if (m_auto_lang) {
+        if (!m_wparams.language) {  // auto-detected lang
             auto lang_number =
                 m_whisper_api.whisper_full_lang_id(m_whisper_ctx);
             if (lang_number < 0) {
@@ -640,7 +651,7 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
     auto result =
         merge_texts(m_intermediate_text.value_or(std::string{}), os.str());
 
-    if (m_config.insert_stats) result.append(" " + stats);
+    if (m_config.insert_stats && !result.empty()) result.append(" " + stats);
 
 #ifdef DEBUG
     LOGD("speech decoded: text=" << result);

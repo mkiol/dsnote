@@ -333,7 +333,6 @@ class whisper_engine : public stt_engine {
     void* m_whisperlib_handle = nullptr;
     void* m_whisper_ctx = nullptr;
     whisper_full_params m_wparams{};
-    bool m_auto_lang = false;
 
     void open_whisper_lib();
     void create_model();
@@ -350,6 +349,7 @@ class whisper_engine : public stt_engine {
     void stop_processing_impl() override;
     void start_processing_impl() override;
     bool use_openvino() const;
+    bool use_gpu() const;
 };
 
 #endif  // WHISPER_ENGINE_H
