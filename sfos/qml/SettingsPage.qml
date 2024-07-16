@@ -144,6 +144,17 @@ Page {
                         }
 
                         TextSwitch {
+                            checked: _settings.whisper_translate
+                            automaticCheck: false
+                            text: qsTr("Translate to English")
+                            description: qsTr("Speech will be automatically translated into English.") + " " +
+                                         qsTr("The option works only with %1 models.").arg("<i>" + qsTr("WhisperCpp") + "</i>")
+                            onClicked: {
+                                _settings.whisper_translate = !_settings.whisper_translate
+                            }
+                        }
+
+                        TextSwitch {
                             checked: _settings.stt_insert_stats
                             automaticCheck: false
                             text: qsTr("Insert statistics")

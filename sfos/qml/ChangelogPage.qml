@@ -53,6 +53,8 @@ Page {
                     language, so if you know the language, it is recommended to use models for specific language.</li>
                 <li>Quicker decoding with <i>WhisperCpp</i>.
                     Optimization for short sentences has been added to <i>WhisperCpp</i> engine. With it, the speed of STT has doubled.</li>
+                <li>Translate to English option for <i>WhisperCpp</i> models.
+                    When enabled, speech is automatically translated into English.</li>
                 <li>Option for inserting processing statistics.
                     New settings option allows inserting processing related information to the text after decoding,
                     such as processing time and audio length. This can be useful for comparing the performance of different models,
