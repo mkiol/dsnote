@@ -61,7 +61,7 @@ Dialog {
                 currentIndex: _settings.default_export_tab === Settings.DefaultExportTabText ? 0 : 1
                 label: qsTr("Export destination")
                 menu: ContextMenu {
-                    MenuItem { text: qsTr("Export to text or subtitle file") }
+                    MenuItem { text: _settings.subtitles_support ? qsTr("Export to text or subtitle file") : qsTr("Export to text file") }
                     MenuItem { text: qsTr("Export to audio file") }
                 }
                 onCurrentIndexChanged: {
@@ -161,6 +161,7 @@ Dialog {
                 }
 
                 ComboBox {
+                    visible: _settings.subtitles_support
                     label: qsTr("Text file format")
                     currentIndex: {
                         switch (_settings.text_file_format) {

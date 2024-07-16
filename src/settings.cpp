@@ -746,6 +746,8 @@ void settings::set_text_file_format(text_file_format_t value) {
 }
 
 settings::text_file_format_t settings::text_file_format() const {
+    if (!subtitles_support()) return text_file_format_t::TextFileFormatRaw;
+
     return static_cast<text_file_format_t>(
         value(QStringLiteral("text_file_format"),
               static_cast<int>(text_file_format_t::TextFileFormatAuto))
@@ -1108,6 +1110,10 @@ settings::audio_format_t settings::filename_to_audio_format_static(
 }
 
 QString settings::text_file_ext_from_filename(const QString& filename) {
+    if (!settings::instance()->subtitles_support())
+        return text_file_format_to_ext(
+            settings::text_file_format_t::TextFileFormatRaw);
+
     if (settings::instance()->text_file_format() ==
         settings::text_file_format_t::TextFileFormatAuto) {
         return text_file_format_to_ext(
@@ -1125,6 +1131,9 @@ settings::text_file_format_t settings::filename_to_text_file_format(
 
 settings::text_file_format_t settings::filename_to_text_file_format_static(
     const QString& filename) {
+    if (!settings::instance()->subtitles_support())
+        return text_file_format_t::TextFileFormatRaw;
+
     if (filename.endsWith(QLatin1String(".txt"), Qt::CaseInsensitive))
         return text_file_format_t::TextFileFormatRaw;
     if (filename.endsWith(QLatin1String(".srt"), Qt::CaseInsensitive))
@@ -1133,6 +1142,7 @@ settings::text_file_format_t settings::filename_to_text_file_format_static(
         return text_file_format_t::TextFileFormatAss;
     if (filename.endsWith(QLatin1String(".vtt"), Qt::CaseInsensitive))
         return text_file_format_t::TextFileFormatVtt;
+
     return text_file_format_t::TextFileFormatAuto;
 }
 
