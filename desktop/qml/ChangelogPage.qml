@@ -32,8 +32,8 @@ DialogPage {
             Both engines are optimized to achieve the best performance.</li>
         <li>Automatic language detection in STT.
             To automatically detect the language during STT, select one of the models that is in the <i>Auto detected</i>
-            category in the language list. <i>Auto detected</i> models are slightly slower than models with a specific
-            language, so if you know the language, it is recommended to use models for specific language.</li>
+            category in the language list. STT with <i>Auto detected</i> models are slower than models with a defined language,
+            so if you know the language, it is recommended to use models for a specific language.</li>
         <li>Separate settings for engines.
             The configuration of each engine has been separated in the settings.
             You can separately set the parameters for <i>WhisperCpp</i> and <i>FasterWhisper</i>.
