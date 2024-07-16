@@ -211,7 +211,7 @@ DialogPage {
     placeholderLabel {
         text: qsTr("You haven't created voice samples yet.") + " " +
               qsTr("Use %1 to make a new one.").arg("<i>" + createNewButton.text + "</i>")
-        enabled: root.listViewStackItem.currentItem.width.model.length === 0
+        enabled: root.listViewStackItem.currentItem.model.length === 0
     }
 
     Component {
