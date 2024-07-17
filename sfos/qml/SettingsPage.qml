@@ -148,7 +148,7 @@ Page {
                             automaticCheck: false
                             text: qsTr("Translate to English")
                             description: qsTr("Speech will be automatically translated into English.") + " " +
-                                         qsTr("The option works only with %1 models.").arg("<i>" + qsTr("WhisperCpp") + "</i>")
+                                         qsTr("The option works only with %1 models.").arg("<i>WhisperCpp</i>")
                             onClicked: {
                                 _settings.whisper_translate = !_settings.whisper_translate
                             }

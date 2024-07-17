@@ -42,7 +42,7 @@ ColumnLayout {
 
     TipMessage {
         indends: 1
-        visible: root.use_gpu && root.devices.length <= 1
+        visible: root.enabled && root.use_gpu && root.devices.length <= 1
         text: qsTr("A suitable hardware accelerator could not be found.")
     }
 
@@ -50,7 +50,7 @@ ColumnLayout {
         id: gpuCombo
 
         indends: 1
-        visible: root.use_gpu && root.devices.length > 1
+        visible: root.enabled && root.use_gpu && root.devices.length > 1
         label.text: qsTr("Hardware accelerator")
         toolTip: qsTr("Select preferred hardware accelerator.")
         comboBox {
@@ -65,7 +65,7 @@ ColumnLayout {
     TipMessage {
         indends: 2
         color: palette.text
-        visible: root.use_gpu && root.devices.length > 1 && gpuCombo.displayText.search("ROCm") !== -1
+        visible: root.enabled && root.use_gpu && root.devices.length > 1 && gpuCombo.displayText.search("ROCm") !== -1
         text: qsTr("Tip: If you observe problems with hardware acceleration, try to enable %1 option.")
               .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
               qsTr("Override GPU version") + "</i>")
@@ -75,14 +75,14 @@ ColumnLayout {
     TipMessage {
         indends: 2
         color: palette.text
-        visible: root.use_gpu && root.devices.length > 1 && gpuCombo.displayText.search("OpenVINO") !== -1
+        visible: root.enabled && root.use_gpu && root.devices.length > 1 && gpuCombo.displayText.search("OpenVINO") !== -1
         text: qsTr("Tip: OpenVINO acceleration is most effective when processing long sentences with large models.") + " " +
               qsTr("For short sentences, better results can be obtained without hardware acceleration enabled.")
     }
 
     TipMessage {
         indends: 1
-        visible: root.use_gpu && ((_settings.error_flags & Settings.ErrorCudaUnknown) > 0)
+        visible: root.enabled && root.use_gpu && ((_settings.error_flags & Settings.ErrorCudaUnknown) > 0)
         text: qsTr("Most likely, NVIDIA kernel module has not been fully initialized.") + " " +
               qsTr("Try executing %1 before running Speech Note.").arg("<i>\"nvidia-modprobe -c 0 -u\"</i>")
     }

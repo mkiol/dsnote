@@ -479,7 +479,7 @@ DialogPage {
 
                 Layout.fillWidth: true
                 Layout.topMargin: appWin.padding
-                currentIndex: sttEnginesBar.currentIndex
+                currentIndex: app.feature_fasterwhisper_stt ? sttEnginesBar.currentIndex : 0
 
                 ColumnLayout {
                     id: whispercppTab
@@ -618,6 +618,8 @@ DialogPage {
 
                 ColumnLayout {
                     id: fasterwhisperTab
+
+                    visible: app.feature_fasterwhisper_stt
 
                     SpinBoxForm {
                         id: fasterwhisperThreadsSpinBox
@@ -861,9 +863,12 @@ DialogPage {
                 Layout.fillWidth: true
                 Layout.topMargin: appWin.padding
                 currentIndex: ttsEnginesBar.currentIndex
+                visible: ttsEnginesBar.visible
 
                 ColumnLayout {
                     id: coquiTab
+
+                    visible: app.feature_coqui_tts
 
                     GpuComboBox {
                         enabled: app.feature_coqui_gpu
@@ -877,6 +882,8 @@ DialogPage {
 
                 ColumnLayout {
                     id: whisperspeechTab
+
+                    visible: app.feature_whisperspeech_tts
 
                     GpuComboBox {
                         enabled: app.feature_whisperspeech_gpu
