@@ -69,7 +69,7 @@ Page {
                 <p>" + qsTr("Translator") + ":</p>
                 <ul>
                 <li>New button for switching languages. <i>Switch languages</i> button have been placed is translated text area.</li>
-                <li>New models: English to Lithuanian, Croatian to English, Latvian to English</li>
+                <li>New models: English to Lithuanian, Croatian to English, Latvian to English, Danish to English</li>
                 <li>Updated models: Lithuanian to English, Slovenian to English</li>
                 </ul>"
             }

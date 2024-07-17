@@ -27933,6 +27933,29 @@
             "size": "15250843"
         },
         {
+            "name": "dansk til engelsk (Danish to English)",
+            "model_id": "da_bergamot_daen",
+            "engine": "mnt_bergamot",
+            "lang_id": "da",
+            "trg_lang_id": "en",
+            "score": 0,
+            "checksum": "c6949672",
+            "checksum_quick": "bb15b51f",
+            "size": "15112467",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/5a2e6bc62fc8acc86e01b3d4165f56021ee23fcf/models/dev/daen/model.daen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/5a2e6bc62fc8acc86e01b3d4165f56021ee23fcf/models/dev/daen/lex.50.50.daen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/5a2e6bc62fc8acc86e01b3d4165f56021ee23fcf/models/dev/daen/vocab.daen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            }
+        },
+        {
             "name": "Afrikaans (Mimic3 Google NWU Low)",
             "model_id": "af_mimic3_za_google_nwu_low",
             "engine": "tts_mimic3",

@@ -70,7 +70,7 @@ DialogPage {
         <ul>
         <li>Improved Translator UI. The <i>Translate</i>, <i>Switch languages</i> and <i>Add</i> buttons have been
             placed between text areas which is more convenient.</li>
-        <li>New models: English to Lithuanian, Croatian to English, Latvian to English</li>
+        <li>New models: English to Lithuanian, Croatian to English, Latvian to English, Danish to English</li>
         <li>Updated models: Lithuanian to English, Slovenian to English</li>
         </ul>
         <p>Flatpak:</p>
