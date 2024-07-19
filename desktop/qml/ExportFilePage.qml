@@ -18,6 +18,7 @@ DialogPage {
     property bool translated: false
     readonly property bool verticalMode: bar.implicitWidth > (width - 2 * appWin.padding)
     readonly property alias mode: modeCombo.currentIndex
+    readonly property bool disable_manual_file_path: _settings.is_flatpak()
     readonly property bool canAccept: {
         switch(mode) {
         case 0:
@@ -161,6 +162,8 @@ DialogPage {
             Connections {
                 target: _settings
                 onText_file_format_changed: {
+                    if (root.disable_manual_file_path) return
+
                     pathField0.text =
                             _settings.add_ext_to_text_file_path(pathField0.text)
                 }
@@ -172,12 +175,15 @@ DialogPage {
 
                 label.text: qsTr("File path")
                 textField.onTextChanged: root0.check_filename()
-                textField.readOnly: _settings.is_flatpak()
+                textField.readOnly: root.disable_manual_file_path
+                textField.placeholderText: root.disable_manual_file_path ? qsTr("Select file to export") : qsTr("Specify file to export")
                 button {
-                    text: qsTr("Change")
+                    text: qsTr("Select file")
                     onClicked: fileWriteDialog0.open()
                 }
                 Component.onCompleted: {
+                    if (root.disable_manual_file_path) return
+
                     textField.text = _settings.text_file_save_dir + "/" +
                                      _settings.text_file_save_filename
                 }
@@ -352,6 +358,8 @@ DialogPage {
                 Connections {
                     target: _settings
                     onAudio_format_changed: {
+                        if (root.disable_manual_file_path) return
+
                         pathField1.text =
                                 _settings.add_ext_to_audio_file_path(pathField1.text)
                     }
@@ -363,12 +371,15 @@ DialogPage {
 
                     label.text: qsTr("File path")
                     textField.onTextChanged: root1.check_filename()
-                    textField.readOnly: _settings.is_flatpak()
+                    textField.readOnly: root.disable_manual_file_path
+                    textField.placeholderText: root.disable_manual_file_path ? qsTr("Select file to export") : qsTr("Specify file to export")
                     button {
                         text: qsTr("Change")
                         onClicked: fileWriteDialog1.open()
                     }
                     Component.onCompleted: {
+                        if (root.disable_manual_file_path) return
+
                         textField.text = _settings.audio_file_save_dir + "/" +
                                          _settings.audio_file_save_filename
                     }
