@@ -1650,6 +1650,14 @@ void models_manager::extract_sup_models(const QString& model_id,
         sup_model_t sup_model;
         sup_model.role = sup_model_role_from_name(
             sup_obj.value(QLatin1String{"role"}).toString());
+
+#if defined ARCH_X86_64
+        if (sup_model.role == sup_model_role_t::openvino) {
+            // ignoring openvino models on arm
+            continue;
+        }
+#endif
+
         sup_model.file_name =
             sup_obj.value(QLatin1String{"file_name"}).toString();
         if (sup_model.file_name.isEmpty())
