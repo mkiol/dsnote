@@ -1651,7 +1651,7 @@ void models_manager::extract_sup_models(const QString& model_id,
         sup_model.role = sup_model_role_from_name(
             sup_obj.value(QLatin1String{"role"}).toString());
 
-#if defined ARCH_X86_64
+#if defined ARCH_ARM_32 || defined ARCH_ARM_64
         if (sup_model.role == sup_model_role_t::openvino) {
             // ignoring openvino models on arm
             continue;
