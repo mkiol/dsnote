@@ -289,6 +289,13 @@ class settings : public QSettings, public singleton<settings> {
             set_gpu_overrided_version NOTIFY gpu_overrided_version_changed)
 
     // engine options
+#define ENGINE_OPTS(name)                                                 \
+    Q_PROPERTY(                                                           \
+        bool name##_autolang_with_sup READ name##_autolang_with_sup WRITE \
+            set_##name##_autolang_with_sup NOTIFY name##_changed)
+
+    ENGINE_OPTS(whispercpp)
+#undef ENGINE_OPTS
 
 #define ENGINE_OPTS(name)                                                    \
     Q_PROPERTY(bool name##_gpu_flash_attn READ name##_gpu_flash_attn WRITE   \
@@ -781,6 +788,13 @@ class settings : public QSettings, public singleton<settings> {
     void set_gpu_override_version(bool value);
     QString gpu_overrided_version();
     void set_gpu_overrided_version(QString new_value);
+
+#define ENGINE_OPTS(name)                  \
+    bool name##_autolang_with_sup() const; \
+    void set_##name##_autolang_with_sup(bool value);
+
+    ENGINE_OPTS(whispercpp)
+#undef ENGINE_OPTS
 
 #define ENGINE_OPTS(name)                             \
     bool name##_gpu_flash_attn() const;               \

@@ -166,6 +166,17 @@ Page {
                                          qsTr("This option does not work with all engines.")
                         }
 
+//                        TextSwitch {
+//                            checked: _settings.whispercpp_autolang_with_sup
+//                            automaticCheck: false
+//                            text: qsTr("Use %1 model for automatic language detection").arg("<i>Tiny</i>")
+//                            onClicked: {
+//                                _settings.whispercpp_autolang_with_sup = !_settings.whispercpp_autolang_with_sup
+//                            }
+//                            description: qsTr("In automatic language detection, the %1 model is used instead of the selected model.").arg("<i>Tiny</i>") + " " +
+//                                         qsTr("This reduces processing time, but the automatically detected language may be incorrect.")
+//                        }
+
                         SectionHeader {
                             visible: _settings.subtitles_support
                             text: qsTr("Subtitles")

@@ -589,6 +589,22 @@ DialogPage {
                         hoverEnabled: true
                     }
 
+                    CheckBox {
+                        id: whispercppAutolangSupCheckBox
+
+                        checked: _settings.whispercpp_autolang_with_sup
+                        text: qsTr("Use %1 model for automatic language detection").arg("<i>Tiny</i>")
+                        onCheckedChanged: {
+                            _settings.whispercpp_autolang_with_sup = checked
+                        }
+
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("In automatic language detection, the %1 model is used instead of the selected model.").arg("<i>Tiny</i>") + " " +
+                                      qsTr("This reduces processing time, but the automatically detected language may be incorrect.")
+                        hoverEnabled: true
+                    }
+
                     GpuComboBox {
                         id: whispercppGpuComboBox
 

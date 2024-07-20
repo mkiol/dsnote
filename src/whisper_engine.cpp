@@ -339,6 +339,16 @@ void whisper_engine::create_model() {
         }
     }
 
+    if (!m_whisper_sup_ctx && !m_config.model_files.scorer_file.empty()) {
+        // sup model
+        m_whisper_sup_ctx = m_whisper_api.whisper_init_from_file_with_params(
+            m_config.model_files.scorer_file.c_str(), params);
+
+        if (m_whisper_sup_ctx == nullptr) {
+            LOGW("failed to create sup whisper model");
+        }
+    }
+
     LOGD("whisper model created");
 }
 
@@ -565,6 +575,32 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 
     LOGD("audio_ctx: " << m_wparams.audio_ctx);
 
+    bool auto_lang = m_wparams.language == nullptr;
+
+    if (m_whisper_sup_ctx && auto_lang) {
+        // use sup model to detect language
+        m_wparams.detect_language = true;
+
+        if (auto ret = m_whisper_api.whisper_full(m_whisper_sup_ctx, m_wparams,
+                                                  buf.data(), buf.size());
+            ret == 0) {
+            auto lang_number =
+                m_whisper_api.whisper_full_lang_id(m_whisper_sup_ctx);
+            if (lang_number >= 0) {
+                const auto* lang_id =
+                    m_whisper_api.whisper_lang_str(lang_number);
+                LOGD("auto lang with sup: " << lang_id);
+                m_wparams.language = lang_id;
+            } else {
+                LOGW("auto lang not detected with sup");
+            }
+        } else {
+            LOGE("whisper error sup" << ret);
+        }
+
+        m_wparams.detect_language = false;
+    }
+
     std::ostringstream os;
 
     if (auto ret = m_whisper_api.whisper_full(m_whisper_ctx, m_wparams,
@@ -644,9 +680,11 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 
             return lang_id;
         } else {
-            return m_config.lang;
+            return m_wparams.language;
         }
     }();
+
+    if (auto_lang) m_wparams.language = nullptr;
 
     auto result =
         merge_texts(m_intermediate_text.value_or(std::string{}), os.str());

@@ -1508,6 +1508,24 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
 #endif
 }
 
+#define ENGINE_OPTS(name)                                                   \
+    bool settings::name##_autolang_with_sup() const {                       \
+        return value(QStringLiteral("service/" #name "_autolang_with_sup"), \
+                     true)                                                  \
+            .toBool();                                                      \
+    }                                                                       \
+    void settings::set_##name##_autolang_with_sup(bool value) {             \
+        if (name##_autolang_with_sup() != value) {                          \
+            setValue(QStringLiteral("service/" #name "_autolang_with_sup"), \
+                     value);                                                \
+            emit name##_changed();                                          \
+            set_restart_required(true);                                     \
+        }                                                                   \
+    }
+
+ENGINE_OPTS(whispercpp)
+#undef ENGINE_OPTS
+
 #define ENGINE_OPTS(name)                                                      \
     bool settings::name##_gpu_flash_attn() const {                             \
         return value(QStringLiteral("service/" #name "_gpu_flash_attn"), true) \

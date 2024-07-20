@@ -2066,8 +2066,8 @@ auto models_manager::extract_models(
             size = alias.size;
             comp = alias.comp;
             urls = alias.urls;
+            sup_models = alias.sup_models;
             extract_sup_models(model_id, obj, sup_models);
-            if (sup_models.empty()) sup_models = alias.sup_models;
             if (speaker.isEmpty()) speaker = alias.speaker;
             exists = alias.exists;
             available = alias.available;

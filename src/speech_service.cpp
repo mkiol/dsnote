@@ -1262,6 +1262,11 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                 return stt_engine::audio_ctx_conf_t::dynamic;
             }();
             config.audio_ctx_size = settings::instance()->whispercpp_audioctx_size_value();
+
+            if (!settings::instance()->whispercpp_autolang_with_sup()) {
+                // disable auto-lang with sup model
+                config.model_files.scorer_file.clear();
+            }
         } else if (model_config->stt->engine == models_manager::model_engine_t::stt_fasterwhisper) {
             ENGINE_OPTS(fasterwhisper)
         }
@@ -1300,6 +1305,13 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             if (config.use_gpu != m_stt_engine->use_gpu() ||
                 config.gpu_device != m_stt_engine->gpu_device())
                 return true;
+            if (m_stt_engine->audio_ctx_conf() != config.audio_ctx_conf)
+                return true;
+            if (m_stt_engine->audio_ctx_size() != config.audio_ctx_size)
+                return true;
+            if (m_stt_engine->cpu_threads() != config.cpu_threads) return true;
+            if (m_stt_engine->beam_search() != config.beam_search) return true;
+
             return false;
         }();
 

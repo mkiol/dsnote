@@ -110,7 +110,7 @@ class stt_engine {
 
         inline bool operator==(const gpu_device_t& rhs) const {
             return platform_name == rhs.platform_name && name == rhs.name &&
-                   id == rhs.id;
+                   id == rhs.id && flash_attn == rhs.flash_attn;
         }
         inline bool operator!=(const gpu_device_t& rhs) const {
             return !(*this == rhs);
@@ -177,6 +177,10 @@ class stt_engine {
     }
     inline bool stop_requested() const { return m_thread_exit_requested; }
     inline void set_insert_stats(bool value) { m_config.insert_stats = value; }
+    inline auto audio_ctx_conf() const { return m_config.audio_ctx_conf; }
+    inline auto audio_ctx_size() const { return m_config.audio_ctx_size; }
+    inline auto cpu_threads() const { return m_config.cpu_threads; }
+    inline auto beam_search() const { return m_config.beam_search; }
 
    protected:
     enum class lock_type_t { free, processed, borrowed };

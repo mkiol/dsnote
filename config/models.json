@@ -4101,31 +4101,91 @@
             "name": "Auto (WhisperCpp Base)",
             "model_id": "auto_whisper_base",
             "model_alias_of": "multilang_whisper_base",
-            "lang_id": "auto"
+            "lang_id": "auto",
+            "sups": [
+                {
+                    "role": "scorer",
+                    "file_name": "multilang_whisper_tiny.ggml",
+                    "checksum": "79e4b65d",
+                    "checksum_quick": "a52e4625",
+                    "size": "32152673",
+                    "urls": [
+                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/multilang/ggml-tiny-q5_0.bin"
+                    ]
+                }
+            ]
         },
         {
             "name": "Auto (WhisperCpp Small)",
             "model_id": "auto_whisper_small",
             "model_alias_of": "multilang_whisper_small",
-            "lang_id": "auto"
+            "lang_id": "auto",
+            "sups": [
+                {
+                    "role": "scorer",
+                    "file_name": "multilang_whisper_tiny.ggml",
+                    "checksum": "79e4b65d",
+                    "checksum_quick": "a52e4625",
+                    "size": "32152673",
+                    "urls": [
+                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/multilang/ggml-tiny-q5_0.bin"
+                    ]
+                }
+            ]
         },
         {
             "name": "Auto (WhisperCpp Medium)",
             "model_id": "auto_whisper_medium",
             "model_alias_of": "multilang_whisper_medium",
-            "lang_id": "auto"
+            "lang_id": "auto",
+            "sups": [
+                {
+                    "role": "scorer",
+                    "file_name": "multilang_whisper_tiny.ggml",
+                    "checksum": "79e4b65d",
+                    "checksum_quick": "a52e4625",
+                    "size": "32152673",
+                    "urls": [
+                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/multilang/ggml-tiny-q5_0.bin"
+                    ]
+                }
+            ]
         },
         {
             "name": "Auto (WhisperCpp Large-v3)",
             "model_id": "auto_whisper_large",
             "model_alias_of": "multilang_whisper_large",
-            "lang_id": "auto"
+            "lang_id": "auto",
+            "sups": [
+                {
+                    "role": "scorer",
+                    "file_name": "multilang_whisper_tiny.ggml",
+                    "checksum": "79e4b65d",
+                    "checksum_quick": "a52e4625",
+                    "size": "32152673",
+                    "urls": [
+                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/multilang/ggml-tiny-q5_0.bin"
+                    ]
+                }
+            ]
         },
         {
             "name": "Auto (WhisperCpp Large-v2)",
             "model_id": "auto_whisper_large2",
             "model_alias_of": "multilang_whisper_large2",
-            "lang_id": "auto"
+            "lang_id": "auto",
+            "sups": [
+                {
+                    "role": "scorer",
+                    "file_name": "multilang_whisper_tiny.ggml",
+                    "checksum": "79e4b65d",
+                    "checksum_quick": "a52e4625",
+                    "size": "32152673",
+                    "urls": [
+                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/multilang/ggml-tiny-q5_0.bin"
+                    ]
+                }
+            ]
         },
         {
             "name": "Español (WhisperCpp Tiny)",

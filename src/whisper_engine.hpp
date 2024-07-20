@@ -332,6 +332,7 @@ class whisper_engine : public stt_engine {
     whisper_api m_whisper_api;
     void* m_whisperlib_handle = nullptr;
     void* m_whisper_ctx = nullptr;
+    void* m_whisper_sup_ctx = nullptr;
     whisper_full_params m_wparams{};
 
     void open_whisper_lib();
