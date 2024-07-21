@@ -1739,161 +1739,35 @@ void settings::set_num_threads(int value) {
     }
 }
 
-QString settings::hotkey_start_listening() const {
-    return value(QStringLiteral("hotkey_start_listening"),
-                 QStringLiteral("Ctrl+Alt+Shift+L"))
-        .toString();
-}
-
-void settings::set_hotkey_start_listening(const QString& value) {
-    if (value != hotkey_start_listening()) {
-        setValue(QStringLiteral("hotkey_start_listening"), value);
-        emit hotkeys_changed();
+#define HOTKEY_OPT(name, key)                                              \
+    QString settings::hotkey_##name() const {                              \
+        return value(QStringLiteral("hotkey_" #name), QStringLiteral(key)) \
+            .toString();                                                   \
+    }                                                                      \
+    void settings::set_hotkey_##name(const QString& value) {               \
+        if (value != hotkey_##name()) {                                    \
+            setValue(QStringLiteral("hotkey_" #name), value);              \
+            emit hotkeys_changed();                                        \
+        }                                                                  \
+    }                                                                      \
+    void settings::reset_hotkey_##name() {                                 \
+        set_hotkey_##name(QStringLiteral(key));                            \
     }
-}
 
-QString settings::hotkey_start_listening_active_window() const {
-    return value(QStringLiteral("hotkey_start_listening_active_window"),
-                 QStringLiteral("Ctrl+Alt+Shift+K"))
-        .toString();
-}
+HOTKEY_OPT(start_listening, "Ctrl+Alt+Shift+L")
+HOTKEY_OPT(start_listening_active_window, "Ctrl+Alt+Shift+K")
+HOTKEY_OPT(start_listening_clipboard, "Ctrl+Alt+Shift+J")
+HOTKEY_OPT(stop_listening, "Ctrl+Alt+Shift+S")
+HOTKEY_OPT(start_reading, "Ctrl+Alt+Shift+R")
+HOTKEY_OPT(start_reading_clipboard, "Ctrl+Alt+Shift+E")
+HOTKEY_OPT(pause_resume_reading, "Ctrl+Alt+Shift+P")
+HOTKEY_OPT(cancel, "Ctrl+Alt+Shift+C")
+HOTKEY_OPT(switch_to_next_stt_model, "Ctrl+Alt+Shift+B")
+HOTKEY_OPT(switch_to_next_tts_model, "Ctrl+Alt+Shift+M")
+HOTKEY_OPT(switch_to_prev_stt_model, "Ctrl+Alt+Shift+V")
+HOTKEY_OPT(switch_to_prev_tts_model, "Ctrl+Alt+Shift+N")
 
-void settings::set_hotkey_start_listening_active_window(const QString& value) {
-    if (value != hotkey_start_listening_active_window()) {
-        setValue(QStringLiteral("hotkey_start_listening_active_window"), value);
-        emit hotkeys_changed();
-    }
-}
-
-QString settings::hotkey_start_listening_clipboard() const {
-    return value(QStringLiteral("hotkey_start_listening_clipboard"),
-                 QStringLiteral("Ctrl+Alt+Shift+J"))
-        .toString();
-}
-
-void settings::set_hotkey_start_listening_clipboard(const QString& value) {
-    if (value != hotkey_start_listening_clipboard()) {
-        setValue(QStringLiteral("hotkey_start_listening_clipboard"), value);
-        emit hotkeys_changed();
-    }
-}
-
-QString settings::hotkey_stop_listening() const {
-    return value(QStringLiteral("hotkey_stop_listening"),
-                 QStringLiteral("Ctrl+Alt+Shift+S"))
-        .toString();
-}
-
-void settings::set_hotkey_stop_listening(const QString& value) {
-    if (value != hotkey_stop_listening()) {
-        setValue(QStringLiteral("hotkey_stop_listening"), value);
-        emit hotkeys_changed();
-    }
-}
-
-QString settings::hotkey_start_reading() const {
-    return value(QStringLiteral("hotkey_start_reading"),
-                 QStringLiteral("Ctrl+Alt+Shift+R"))
-        .toString();
-}
-
-void settings::set_hotkey_start_reading(const QString& value) {
-    if (value != hotkey_start_reading()) {
-        setValue(QStringLiteral("hotkey_start_reading"), value);
-        emit hotkeys_changed();
-    }
-}
-
-QString settings::hotkey_start_reading_clipboard() const {
-    return value(QStringLiteral("hotkey_start_reading_clipboard"),
-                 QStringLiteral("Ctrl+Alt+Shift+E"))
-        .toString();
-}
-
-void settings::set_hotkey_start_reading_clipboard(const QString& value) {
-    if (value != hotkey_start_reading_clipboard()) {
-        setValue(QStringLiteral("hotkey_start_reading_clipboard"), value);
-        emit hotkeys_changed();
-    }
-}
-
-QString settings::hotkey_pause_resume_reading() const {
-    return value(QStringLiteral("hotkey_pause_resume_reading"),
-                 QStringLiteral("Ctrl+Alt+Shift+P"))
-        .toString();
-}
-
-void settings::set_hotkey_pause_resume_reading(const QString& value) {
-    if (value != hotkey_pause_resume_reading()) {
-        setValue(QStringLiteral("hotkey_pause_resume_reading"), value);
-        emit hotkeys_changed();
-    }
-}
-
-QString settings::hotkey_cancel() const {
-    return value(QStringLiteral("hotkey_cancel"),
-                 QStringLiteral("Ctrl+Alt+Shift+C"))
-        .toString();
-}
-
-void settings::set_hotkey_cancel(const QString& value) {
-    if (value != hotkey_cancel()) {
-        setValue(QStringLiteral("hotkey_cancel"), value);
-        emit hotkeys_changed();
-    }
-}
-
-QString settings::hotkey_switch_to_next_stt_model() const {
-    return value(QStringLiteral("hotkey_switch_to_next_stt_model"),
-                 QStringLiteral("Ctrl+Alt+Shift+B"))
-        .toString();
-}
-
-void settings::set_hotkey_switch_to_next_stt_model(const QString& value) {
-    if (value != hotkey_switch_to_next_stt_model()) {
-        setValue(QStringLiteral("hotkey_switch_to_next_stt_model"), value);
-        emit hotkeys_changed();
-    }
-}
-
-QString settings::hotkey_switch_to_prev_stt_model() const {
-    return value(QStringLiteral("hotkey_switch_to_prev_stt_model"),
-                 QStringLiteral("Ctrl+Alt+Shift+V"))
-        .toString();
-}
-
-void settings::set_hotkey_switch_to_prev_stt_model(const QString& value) {
-    if (value != hotkey_switch_to_prev_stt_model()) {
-        setValue(QStringLiteral("hotkey_switch_to_prev_stt_model"), value);
-        emit hotkeys_changed();
-    }
-}
-
-QString settings::hotkey_switch_to_next_tts_model() const {
-    return value(QStringLiteral("hotkey_switch_to_next_tts_model"),
-                 QStringLiteral("Ctrl+Alt+Shift+M"))
-        .toString();
-}
-
-void settings::set_hotkey_switch_to_next_tts_model(const QString& value) {
-    if (value != hotkey_switch_to_next_stt_model()) {
-        setValue(QStringLiteral("hotkey_switch_to_next_tts_model"), value);
-        emit hotkeys_changed();
-    }
-}
-
-QString settings::hotkey_switch_to_prev_tts_model() const {
-    return value(QStringLiteral("hotkey_switch_to_prev_tts_model"),
-                 QStringLiteral("Ctrl+Alt+Shift+N"))
-        .toString();
-}
-
-void settings::set_hotkey_switch_to_prev_tts_model(const QString& value) {
-    if (value != hotkey_switch_to_prev_stt_model()) {
-        setValue(QStringLiteral("hotkey_switch_to_prev_tts_model"), value);
-        emit hotkeys_changed();
-    }
-}
+#undef HOTKEY_OPT
 
 settings::desktop_notification_policy_t settings::desktop_notification_policy()
     const {

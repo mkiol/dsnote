@@ -22,6 +22,7 @@ GridLayout {
     property alias textField: _textField
     property alias button: _button
     property alias text: _textField.text
+    property string toolTipButton: button.text
     property bool compact: true
 
     columns: verticalMode ? 1 : button.visible ? 3 : 2
@@ -57,5 +58,10 @@ GridLayout {
 
         visible: text.length !== 0
         Layout.leftMargin: root.verticalMode ? (root.indends + 1) * appWin.padding : 0
+
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: button.display === AbstractButton.IconOnly ? hovered : false
+        ToolTip.text: root.toolTipButton
+        hoverEnabled: true
     }
 }

@@ -957,6 +957,12 @@ DialogPage {
                     text: _settings.hotkey_start_listening
                     onTextChanged: _settings.hotkey_start_listening = text
                 }
+                button {
+                    icon.name: "edit-reset-symbolic"
+                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                    text: qsTr("Reset")
+                    onClicked: _settings.reset_hotkey_start_listening()
+                }
             }
 
             TextFieldForm {
@@ -966,6 +972,12 @@ DialogPage {
                 textField {
                     text: _settings.hotkey_start_listening_active_window
                     onTextChanged: _settings.hotkey_start_listening_active_window = text
+                }
+                button {
+                    icon.name: "edit-reset-symbolic"
+                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                    text: qsTr("Reset")
+                    onClicked: _settings.reset_hotkey_start_listening_active_window()
                 }
             }
 
@@ -977,6 +989,12 @@ DialogPage {
                     text: _settings.hotkey_start_listening_clipboard
                     onTextChanged: _settings.hotkey_start_listening_clipboard = text
                 }
+                button {
+                    icon.name: "edit-reset-symbolic"
+                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                    text: qsTr("Reset")
+                    onClicked: _settings.reset_hotkey_start_listening_clipboard()
+                }
             }
 
             TextFieldForm {
@@ -986,6 +1004,12 @@ DialogPage {
                 textField {
                     text: _settings.hotkey_stop_listening
                     onTextChanged: _settings.hotkey_stop_listening = text
+                }
+                button {
+                    icon.name: "edit-reset-symbolic"
+                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                    text: qsTr("Reset")
+                    onClicked: _settings.reset_hotkey_stop_listening()
                 }
             }
 
@@ -997,6 +1021,12 @@ DialogPage {
                     text: _settings.hotkey_start_reading
                     onTextChanged: _settings.hotkey_start_reading = text
                 }
+                button {
+                    icon.name: "edit-reset-symbolic"
+                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                    text: qsTr("Reset")
+                    onClicked: _settings.reset_hotkey_start_reading()
+                }
             }
 
             TextFieldForm {
@@ -1006,6 +1036,12 @@ DialogPage {
                 textField {
                     text: _settings.hotkey_start_reading_clipboard
                     onTextChanged: _settings.hotkey_start_reading_clipboard = text
+                }
+                button {
+                    icon.name: "edit-reset-symbolic"
+                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                    text: qsTr("Reset")
+                    onClicked: _settings.reset_hotkey_start_reading_clipboard()
                 }
             }
 
@@ -1017,6 +1053,12 @@ DialogPage {
                     text: _settings.hotkey_pause_resume_reading
                     onTextChanged: _settings.hotkey_pause_resume_reading = text
                 }
+                button {
+                    icon.name: "edit-reset-symbolic"
+                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                    text: qsTr("Reset")
+                    onClicked: _settings.reset_hotkey_pause_resume_reading()
+                }
             }
 
             TextFieldForm {
@@ -1026,6 +1068,12 @@ DialogPage {
                 textField {
                     text: _settings.hotkey_cancel
                     onTextChanged: _settings.hotkey_cancel = text
+                }
+                button {
+                    icon.name: "edit-reset-symbolic"
+                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                    text: qsTr("Reset")
+                    onClicked: _settings.reset_hotkey_cancel()
                 }
             }
 
@@ -1037,6 +1085,12 @@ DialogPage {
                     text: _settings.hotkey_switch_to_next_stt_model
                     onTextChanged: _settings.hotkey_switch_to_next_stt_model = text
                 }
+                button {
+                    icon.name: "edit-reset-symbolic"
+                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                    text: qsTr("Reset")
+                    onClicked: _settings.reset_hotkey_switch_to_next_stt_model()
+                }
             }
 
             TextFieldForm {
@@ -1046,6 +1100,12 @@ DialogPage {
                 textField {
                     text: _settings.hotkey_switch_to_prev_stt_model
                     onTextChanged: _settings.hotkey_switch_to_prev_stt_model = text
+                }
+                button {
+                    icon.name: "edit-reset-symbolic"
+                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                    text: qsTr("Reset")
+                    onClicked: _settings.reset_hotkey_switch_to_prev_stt_model()
                 }
             }
 
@@ -1057,6 +1117,12 @@ DialogPage {
                     text: _settings.hotkey_switch_to_next_tts_model
                     onTextChanged: _settings.hotkey_switch_to_next_tts_model = text
                 }
+                button {
+                    icon.name: "edit-reset-symbolic"
+                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                    text: qsTr("Reset")
+                    onClicked: _settings.reset_hotkey_switch_to_next_tts_model()
+                }
             }
 
             TextFieldForm {
@@ -1066,6 +1132,12 @@ DialogPage {
                 textField {
                     text: _settings.hotkey_switch_to_prev_tts_model
                     onTextChanged: _settings.hotkey_switch_to_prev_tts_model = text
+                }
+                button {
+                    icon.name: "edit-reset-symbolic"
+                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                    text: qsTr("Reset")
+                    onClicked: _settings.reset_hotkey_switch_to_prev_tts_model()
                 }
             }
 

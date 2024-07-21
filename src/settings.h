@@ -107,45 +107,26 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(bool mtag READ mtag WRITE set_mtag NOTIFY mtag_changed)
     Q_PROPERTY(bool hotkeys_enabled READ hotkeys_enabled WRITE
                    set_hotkeys_enabled NOTIFY hotkeys_enabled_changed)
-    Q_PROPERTY(QString hotkey_start_listening READ hotkey_start_listening WRITE
-                   set_hotkey_start_listening NOTIFY hotkeys_changed)
-    Q_PROPERTY(
-        QString hotkey_start_listening_active_window READ
-            hotkey_start_listening_active_window WRITE
-                set_hotkey_start_listening_active_window NOTIFY hotkeys_changed)
-    Q_PROPERTY(
-        QString hotkey_start_listening_clipboard READ
-            hotkey_start_listening_clipboard WRITE
-                set_hotkey_start_listening_clipboard NOTIFY hotkeys_changed)
-    Q_PROPERTY(QString hotkey_stop_listening READ hotkey_stop_listening WRITE
-                   set_hotkey_stop_listening NOTIFY hotkeys_changed)
-    Q_PROPERTY(QString hotkey_start_reading READ hotkey_start_reading WRITE
-                   set_hotkey_start_reading NOTIFY hotkeys_changed)
-    Q_PROPERTY(
-        QString hotkey_start_reading_clipboard READ
-            hotkey_start_reading_clipboard WRITE
-                set_hotkey_start_reading_clipboard NOTIFY hotkeys_changed)
-    Q_PROPERTY(
-        QString hotkey_pause_resume_reading READ hotkey_pause_resume_reading
-            WRITE set_hotkey_pause_resume_reading NOTIFY hotkeys_changed)
-    Q_PROPERTY(QString hotkey_cancel READ hotkey_cancel WRITE set_hotkey_cancel
-                   NOTIFY hotkeys_changed)
-    Q_PROPERTY(
-        QString hotkey_switch_to_next_stt_model READ
-            hotkey_switch_to_next_stt_model WRITE
-                set_hotkey_switch_to_next_stt_model NOTIFY hotkeys_changed)
-    Q_PROPERTY(
-        QString hotkey_switch_to_next_tts_model READ
-            hotkey_switch_to_next_tts_model WRITE
-                set_hotkey_switch_to_next_tts_model NOTIFY hotkeys_changed)
-    Q_PROPERTY(
-        QString hotkey_switch_to_prev_stt_model READ
-            hotkey_switch_to_prev_stt_model WRITE
-                set_hotkey_switch_to_prev_stt_model NOTIFY hotkeys_changed)
-    Q_PROPERTY(
-        QString hotkey_switch_to_prev_tts_model READ
-            hotkey_switch_to_prev_tts_model WRITE
-                set_hotkey_switch_to_prev_tts_model NOTIFY hotkeys_changed)
+
+#define HOTKEY_OPT(name)                                      \
+    Q_PROPERTY(QString hotkey_##name READ hotkey_##name WRITE \
+                   set_hotkey_##name NOTIFY hotkeys_changed)
+
+    HOTKEY_OPT(start_listening)
+    HOTKEY_OPT(start_listening_active_window)
+    HOTKEY_OPT(start_listening_clipboard)
+    HOTKEY_OPT(stop_listening)
+    HOTKEY_OPT(start_reading)
+    HOTKEY_OPT(start_reading_clipboard)
+    HOTKEY_OPT(pause_resume_reading)
+    HOTKEY_OPT(cancel)
+    HOTKEY_OPT(switch_to_next_stt_model)
+    HOTKEY_OPT(switch_to_next_tts_model)
+    HOTKEY_OPT(switch_to_prev_stt_model)
+    HOTKEY_OPT(switch_to_prev_tts_model)
+
+#undef HOTKEY_OPT
+
     Q_PROPERTY(
         bool use_toggle_for_hotkey READ use_toggle_for_hotkey WRITE
             set_use_toggle_for_hotkey NOTIFY use_toggle_for_hotkey_changed)
@@ -590,30 +571,27 @@ class settings : public QSettings, public singleton<settings> {
     QString audio_format_str() const;
     bool hotkeys_enabled() const;
     void set_hotkeys_enabled(bool value);
-    QString hotkey_start_listening() const;
-    void set_hotkey_start_listening(const QString &value);
-    QString hotkey_start_listening_active_window() const;
-    void set_hotkey_start_listening_active_window(const QString &value);
-    QString hotkey_start_listening_clipboard() const;
-    void set_hotkey_start_listening_clipboard(const QString &value);
-    QString hotkey_stop_listening() const;
-    void set_hotkey_stop_listening(const QString &value);
-    QString hotkey_start_reading() const;
-    void set_hotkey_start_reading(const QString &value);
-    QString hotkey_start_reading_clipboard() const;
-    void set_hotkey_start_reading_clipboard(const QString &value);
-    QString hotkey_pause_resume_reading() const;
-    void set_hotkey_pause_resume_reading(const QString &value);
-    QString hotkey_cancel() const;
-    void set_hotkey_cancel(const QString &value);
-    QString hotkey_switch_to_next_stt_model() const;
-    void set_hotkey_switch_to_next_stt_model(const QString &value);
-    QString hotkey_switch_to_next_tts_model() const;
-    void set_hotkey_switch_to_next_tts_model(const QString &value);
-    QString hotkey_switch_to_prev_stt_model() const;
-    void set_hotkey_switch_to_prev_stt_model(const QString &value);
-    QString hotkey_switch_to_prev_tts_model() const;
-    void set_hotkey_switch_to_prev_tts_model(const QString &value);
+
+#define HOTKEY_OPT(name)                          \
+    QString hotkey_##name() const;                \
+    void set_hotkey_##name(const QString &value); \
+    Q_INVOKABLE void reset_hotkey_##name();
+
+    HOTKEY_OPT(start_listening)
+    HOTKEY_OPT(start_listening_active_window)
+    HOTKEY_OPT(start_listening_clipboard)
+    HOTKEY_OPT(stop_listening)
+    HOTKEY_OPT(start_reading)
+    HOTKEY_OPT(start_reading_clipboard)
+    HOTKEY_OPT(pause_resume_reading)
+    HOTKEY_OPT(cancel)
+    HOTKEY_OPT(switch_to_next_stt_model)
+    HOTKEY_OPT(switch_to_next_tts_model)
+    HOTKEY_OPT(switch_to_prev_stt_model)
+    HOTKEY_OPT(switch_to_prev_tts_model)
+
+#undef HOTKEY_OPT
+
     void set_use_toggle_for_hotkey(bool value);
     bool use_toggle_for_hotkey() const;
     desktop_notification_policy_t desktop_notification_policy() const;
