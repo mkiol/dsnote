@@ -1,6 +1,6 @@
-diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/CMakeLists.txt bergamot-patched/3rd_party/marian-dev/CMakeLists.txt
+diff -ruN bergamot-org/3rd_party/marian-dev/CMakeLists.txt bergamot-patched/3rd_party/marian-dev/CMakeLists.txt
 --- bergamot-org/3rd_party/marian-dev/CMakeLists.txt	2023-07-08 17:36:56.190113017 +0200
-+++ bergamot-patched/3rd_party/marian-dev/CMakeLists.txt	2023-07-31 16:16:57.177324709 +0200
++++ bergamot-patched/3rd_party/marian-dev/CMakeLists.txt	2024-07-25 07:56:55.305860788 +0200
 @@ -57,6 +57,17 @@
  option(USE_SIMD_UTILS "Enable simde to target instruction sets" OFF)
  option(COMPILE_WITHOUT_EXCEPTIONS "Compile without exceptions" OFF)
@@ -151,7 +151,17 @@ diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/CMakeLists.txt be
      set(CMAKE_RDYNAMIC_FLAG "-rdynamic")
    endif(CMAKE_COMPILER_IS_GNUCC)
  
-@@ -606,7 +622,7 @@
+@@ -426,6 +442,9 @@
+   endif()
+ endif()
+ 
++string(REPLACE " -Werror" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
++message(STATUS "cpp flags: ${CMAKE_CXX_FLAGS}")
++
+ find_package(CUDA "9.0") # TODO: only enable FP16-related options for compute_70 and higher.
+ if(CUDA_FOUND)
+   # CUDA >= 10.0 requires CMake >= 3.12.2
+@@ -606,7 +625,7 @@
    endif(USE_INTGEMM)
  
    if(USE_RUY OR USE_RUY_SGEMM)
@@ -160,7 +170,7 @@ diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/CMakeLists.txt be
    endif(USE_RUY OR USE_RUY_SGEMM)
  
    add_definitions(-DCOMPILE_CPU=1)        # Move the compile CPU definition on top since we want to compile intgemm when we set compile CPU
-@@ -626,6 +642,8 @@
+@@ -626,6 +645,8 @@
      add_definitions(-DBLAS_FOUND=1)
    elseif(USE_RUY_SGEMM)
      add_compile_definitions(USE_RUY_SGEMM=1)
@@ -169,7 +179,7 @@ diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/CMakeLists.txt be
    else(USE_ONNX_SGEMM)
      if(USE_MKL)
        find_package(MKL)
-@@ -636,16 +654,9 @@
+@@ -636,16 +657,9 @@
        set(BLAS_FOUND TRUE)
        add_definitions(-DBLAS_FOUND=1 -DMKL_FOUND=1)
      else(MKL_FOUND)
@@ -189,7 +199,36 @@ diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/CMakeLists.txt be
      endif(MKL_FOUND)
    endif(USE_ONNX_SGEMM)
  
-diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt bergamot-patched/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt
+diff -ruN bergamot-org/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.cpp bergamot-patched/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.cpp
+--- bergamot-org/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.cpp	2023-07-08 17:36:56.220113018 +0200
++++ bergamot-patched/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.cpp	2024-07-24 20:35:35.469465595 +0200
+@@ -17,6 +17,12 @@
+ #include <faiss/utils/random.h>
+ #include "common/logging.h"
+ 
++#ifdef __SSE__
++#include <xmmintrin.h>
++#else
++#warning SSE is not available. Code will not compile!
++#endif
++
+ using namespace faiss;
+ 
+ 
+diff -ruN bergamot-org/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.h bergamot-patched/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.h
+--- bergamot-org/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.h	2023-07-08 17:36:56.220113018 +0200
++++ bergamot-patched/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.h	2024-07-24 20:36:54.729260486 +0200
+@@ -22,6 +22,9 @@
+ #include <x86intrin.h>
+ #endif
+ 
++#ifdef __SSE__
++#include <xmmintrin.h>
++#endif
+ 
+ namespace faiss {
+ 
+diff -ruN bergamot-org/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt bergamot-patched/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt
 --- bergamot-org/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt	2023-07-08 17:37:11.273446808 +0200
 +++ bergamot-patched/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt	2023-07-20 14:56:52.285377752 +0200
 @@ -13,7 +13,7 @@
@@ -201,7 +240,7 @@ diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/src/3rd_party/int
    if (COMPILE_WASM)
      # Disabling Pthreads + memory growth warning to be an error for WASM
      # Pthreads + memory growth causes JS accessing the wasm memory to be slow
-diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h bergamot-patched/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h
+diff -ruN bergamot-org/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h bergamot-patched/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h
 --- bergamot-org/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h	2023-07-08 17:37:23.063447169 +0200
 +++ bergamot-patched/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h	2023-07-30 18:56:02.133335033 +0200
 @@ -257,6 +257,12 @@
@@ -217,7 +256,7 @@ diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/src/3rd_party/sim
  // FMA version
  static inline v4sf log_ps(v4sf x)
  {
-diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/src/common/binary.cpp bergamot-patched/3rd_party/marian-dev/src/common/binary.cpp
+diff -ruN bergamot-org/3rd_party/marian-dev/src/common/binary.cpp bergamot-patched/3rd_party/marian-dev/src/common/binary.cpp
 --- bergamot-org/3rd_party/marian-dev/src/common/binary.cpp	2023-07-08 17:36:56.233446352 +0200
 +++ bergamot-patched/3rd_party/marian-dev/src/common/binary.cpp	2023-07-29 19:12:08.582096263 +0200
 @@ -19,7 +19,7 @@
@@ -281,7 +320,7 @@ diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/src/common/binary
                                                        // non-aligned models can be read with the same procedure.
                                                        // No version-bump required. Gets 5-8% of speed back when mmapped.
  }
-diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/src/layers/lsh.cpp bergamot-patched/3rd_party/marian-dev/src/layers/lsh.cpp
+diff -ruN bergamot-org/3rd_party/marian-dev/src/layers/lsh.cpp bergamot-patched/3rd_party/marian-dev/src/layers/lsh.cpp
 --- bergamot-org/3rd_party/marian-dev/src/layers/lsh.cpp	2023-07-08 17:36:56.240113019 +0200
 +++ bergamot-patched/3rd_party/marian-dev/src/layers/lsh.cpp	2023-07-22 12:16:53.558584438 +0200
 @@ -2,9 +2,7 @@
@@ -380,7 +419,7 @@ diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/src/layers/lsh.cp
                                   input->value_type());
    return scatter(lowest, -1, idx, aff);
  }
-diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/src/layers/lsh.h bergamot-patched/3rd_party/marian-dev/src/layers/lsh.h
+diff -ruN bergamot-org/3rd_party/marian-dev/src/layers/lsh.h bergamot-patched/3rd_party/marian-dev/src/layers/lsh.h
 --- bergamot-org/3rd_party/marian-dev/src/layers/lsh.h	2023-07-22 12:04:17.035228319 +0200
 +++ bergamot-patched/3rd_party/marian-dev/src/layers/lsh.h	2023-07-22 12:04:51.138562678 +0200
 @@ -9,11 +9,7 @@
@@ -396,7 +435,7 @@ diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/src/layers/lsh.h 
  
    Expr apply(Expr query, Expr values, Expr bias);
  
-diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/src/tensors/cpu/integer_common.h bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/integer_common.h
+diff -ruN bergamot-org/3rd_party/marian-dev/src/tensors/cpu/integer_common.h bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/integer_common.h
 --- bergamot-org/3rd_party/marian-dev/src/tensors/cpu/integer_common.h	2023-07-08 17:36:56.243446352 +0200
 +++ bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/integer_common.h	2023-07-31 11:43:04.106649054 +0200
 @@ -27,6 +27,13 @@
@@ -463,7 +502,7 @@ diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/src/tensors/cpu/i
      float * output_tensor = reinterpret_cast<float *>(&(*item.bytes.begin()));
      // Explicitly calculate n once beforehand because the compiler does not pick up on its
      // static nature, and will end up calling marian::Shape::dim() a lot.
-diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h
+diff -ruN bergamot-org/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h
 --- bergamot-org/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h	2023-07-08 17:36:56.243446352 +0200
 +++ bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h	2023-07-31 16:19:47.100665027 +0200
 @@ -28,6 +28,30 @@
@@ -519,7 +558,7 @@ diff -ruN '--exclude=*.user' bergamot-org/3rd_party/marian-dev/src/tensors/cpu/r
      vst1q_s8(&dst[ 1*rows + dstRowBegin], vreinterpretq_s8_s32(vcombine_s32( vget_low_s32(x1.val[0]),  vget_low_s32(x5.val[0]))));
      vst1q_s8(&dst[ 2*rows + dstRowBegin], vreinterpretq_s8_s32(vcombine_s32( vget_low_s32(x2.val[0]),  vget_low_s32(x6.val[0]))));
      vst1q_s8(&dst[ 3*rows + dstRowBegin], vreinterpretq_s8_s32(vcombine_s32( vget_low_s32(x3.val[0]),  vget_low_s32(x7.val[0]))));
-diff -ruN '--exclude=*.user' bergamot-org/bergamot_api.cpp bergamot-patched/bergamot_api.cpp
+diff -ruN bergamot-org/bergamot_api.cpp bergamot-patched/bergamot_api.cpp
 --- bergamot-org/bergamot_api.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ bergamot-patched/bergamot_api.cpp	2023-12-14 19:30:25.683358065 +0100
 @@ -0,0 +1,89 @@
@@ -612,7 +651,7 @@ diff -ruN '--exclude=*.user' bergamot-org/bergamot_api.cpp bergamot-patched/berg
 +void bergamot_api_cancel(void* handle) {
 +  static_cast<bergamot_api*>(handle)->cancel();
 +}
-diff -ruN '--exclude=*.user' bergamot-org/bergamot_api.h bergamot-patched/bergamot_api.h
+diff -ruN bergamot-org/bergamot_api.h bergamot-patched/bergamot_api.h
 --- bergamot-org/bergamot_api.h	1970-01-01 01:00:00.000000000 +0100
 +++ bergamot-patched/bergamot_api.h	2023-12-13 15:10:15.516819002 +0100
 @@ -0,0 +1,38 @@
@@ -654,7 +693,7 @@ diff -ruN '--exclude=*.user' bergamot-org/bergamot_api.h bergamot-patched/bergam
 +}
 +
 +#endif  // BERGAMOT_API_H
-diff -ruN '--exclude=*.user' bergamot-org/CMakeLists.txt bergamot-patched/CMakeLists.txt
+diff -ruN bergamot-org/CMakeLists.txt bergamot-patched/CMakeLists.txt
 --- bergamot-org/CMakeLists.txt	2023-07-08 17:36:50.510112843 +0200
 +++ bergamot-patched/CMakeLists.txt	2023-11-20 11:53:08.937187708 +0100
 @@ -53,7 +53,7 @@
@@ -690,7 +729,7 @@ diff -ruN '--exclude=*.user' bergamot-org/CMakeLists.txt bergamot-patched/CMakeL
  option(COMPILE_PYTHON "Compile python bindings. Intended to be activated with setup.py" OFF)
 Binary files bergamot-org/.git/index and bergamot-patched/.git/index differ
 Binary files bergamot-org/.git/modules/3rd_party/marian-dev/index and bergamot-patched/.git/modules/3rd_party/marian-dev/index differ
-diff -ruN '--exclude=*.user' bergamot-org/src/translator/logging.h bergamot-patched/src/translator/logging.h
+diff -ruN bergamot-org/src/translator/logging.h bergamot-patched/src/translator/logging.h
 --- bergamot-org/src/translator/logging.h	2023-07-08 17:36:50.513446177 +0200
 +++ bergamot-patched/src/translator/logging.h	2023-07-10 19:45:04.590367854 +0200
 @@ -16,7 +16,7 @@

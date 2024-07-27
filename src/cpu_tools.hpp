@@ -10,26 +10,26 @@
 
 #include <iostream>
 #include <istream>
-#include <string>
 
 namespace cpu_tools {
 enum class arch_t { unknown, x86_64, arm32, arm64 };
 
 enum feature_flags_t : unsigned int {
-    none = 0,
-    avx = 1 << 0,
-    avx2 = 1 << 1,
-    avx512 = 1 << 2,
-    fma = 1 << 3,
-    f16c = 1 << 4,
-    asimd = 1 << 5
+    none = 0U,
+    avx = 1U << 0U,
+    avx2 = 1U << 1U,
+    avx512 = 1U << 2U,
+    fma = 1U << 3U,
+    f16c = 1U << 4U,
+    asimd = 1U << 5U,
+    sse4_1 = 1U << 6U
 };
 
 struct cpuinfo_t {
     unsigned int number_of_processors = 0;
     unsigned int feature_flags = feature_flags_t::none;
 
-    inline bool operator==(const cpuinfo_t& rhs) {
+    inline bool operator==(const cpuinfo_t& rhs) const {
         return number_of_processors == rhs.number_of_processors &&
                feature_flags == rhs.feature_flags;
     }

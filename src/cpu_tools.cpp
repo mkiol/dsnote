@@ -7,13 +7,9 @@
 
 #include "cpu_tools.hpp"
 
-#include <algorithm>
-#include <array>
 #include <fstream>
-#include <iterator>
 #include <regex>
 #include <string>
-#include <thread>
 
 #include "logger.hpp"
 
@@ -49,6 +45,8 @@ std::ostream& operator<<(std::ostream& os, cpu_tools::cpuinfo_t cpuinfo) {
         os << "f16c, ";
     if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::asimd)
         os << "asimd, ";
+    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::sse4_1)
+        os << "sse4.1, ";
 
     os << "]";
 
@@ -113,6 +111,8 @@ cpuinfo_t parse_cpuinfo(std::istream& stream) {
                     cpuinfo.feature_flags |= feature_flags_t::f16c;
                 if (pieces_match[2].str().find("asimd") != std::string::npos)
                     cpuinfo.feature_flags |= feature_flags_t::asimd;
+                if (pieces_match[2].str().find("sse4_1") != std::string::npos)
+                    cpuinfo.feature_flags |= feature_flags_t::sse4_1;
 
                 LOGD("cpu flags: " << pieces_match[2].str());
                 flags_done = true;

@@ -44,10 +44,10 @@ if(arch_x8664)
             -DBLAS_LIB_PATH=${blas_lib_path}
             -DBLAS_INC_DIR=${blas_include_dir}
             -DUSE_INTRINSICS_SSE2=ON
-            -DUSE_INTRINSICS_SSE3=OFF
-            -DUSE_INTRINSICS_SSE41=OFF
+            -DUSE_INTRINSICS_SSE3=ON
+            -DUSE_INTRINSICS_SSE41=ON
             -DUSE_INTRINSICS_SSE42=OFF
-            -DUSE_INTRINSICS_AVX=ON
+            -DUSE_INTRINSICS_AVX=OFF
             -DUSE_INTRINSICS_AVX2=OFF
             -DUSE_INTRINSICS_AVX512=OFF
             -DUSE_INTRINSICS_FMA=OFF
@@ -56,6 +56,7 @@ if(arch_x8664)
             -DBUILD_ARCH=${bergamot_build_arch}
             -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
             -DBERGAMOTAPI_TARGET_NAME=bergamot_api-fallback
+            -DCMAKE_VERBOSE_MAKEFILE=ON
         BUILD_ALWAYS False
     )
 
@@ -86,7 +87,7 @@ ExternalProject_Add(bergamot
         -DUSE_INTRINSICS_SSE41=ON
         -DUSE_INTRINSICS_SSE42=ON
         -DUSE_INTRINSICS_AVX=ON
-        -DUSE_INTRINSICS_AVX2=ON
+        -DUSE_INTRINSICS_AVX2=OFF
         -DUSE_INTRINSICS_AVX512=OFF
         -DUSE_INTRINSICS_FMA=ON
         -DUSE_INTRINSICS_ARMV7_NEON=OFF

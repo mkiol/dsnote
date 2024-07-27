@@ -147,6 +147,8 @@
       <li>Improved Translator UI.
           The 'Translate', 'Switch languages' and 'Add' buttons have been
           placed between text areas which is more convenient.</li>
+      <li>Support for older hardware.
+          Until now, the translator did not work on older processors without AVX expansion. Now there is no such restriction anymore.</li>
       <li>New models: English to Lithuanian, Croatian to English, Latvian to English, Danish to English</li>
       <li>Updated models: Lithuanian to English, Slovenian to English</li>
       </ul>
