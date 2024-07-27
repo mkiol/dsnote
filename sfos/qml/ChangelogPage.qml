@@ -64,7 +64,7 @@ Page {
                 <ul>
                 <li>Welsh language. New language is enabled with <i>Piper</i> voice.</li>
                 <li>New <i>Piper</i> voices for Spanish, Italian and English</li>
-                <li>New <i>RHVoice</i> voice for Slovak</li>
+                <li>New <i>RHVoice</i> voices for Slovak and Croatian</li>
                 </ul>
                 <p>" + qsTr("Translator") + ":</p>
                 <ul>
