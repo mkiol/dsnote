@@ -1539,6 +1539,9 @@ ENGINE_OPTS(whispercpp)
             set_restart_required(true);                                        \
         }                                                                      \
     }                                                                          \
+    void settings::reset_##name##_gpu_flash_attn() {                           \
+        set_##name##_gpu_flash_attn(false);                                    \
+    }                                                                          \
     int settings::name##_cpu_threads() const {                                 \
         return std::clamp<int>(                                                \
             value(QStringLiteral("service/" #name "_cpu_threads"), 4).toInt(), \
@@ -1551,6 +1554,9 @@ ENGINE_OPTS(whispercpp)
             set_restart_required(true);                                        \
         }                                                                      \
     }                                                                          \
+    void settings::reset_##name##_cpu_threads() {                              \
+        set_##name##_cpu_threads(4);                                           \
+    }                                                                          \
     int settings::name##_beam_search() const {                                 \
         return std::clamp<int>(                                                \
             value(QStringLiteral("service/" #name "_beam_search"), 1).toInt(), \
@@ -1562,6 +1568,9 @@ ENGINE_OPTS(whispercpp)
             emit name##_changed();                                             \
             set_restart_required(true);                                        \
         }                                                                      \
+    }                                                                          \
+    void settings::reset_##name##_beam_search() {                              \
+        set_##name##_beam_search(1);                                           \
     }                                                                          \
     settings::option_t settings::name##_audioctx_size() const {                \
         return static_cast<settings::option_t>(                                \
@@ -1577,6 +1586,9 @@ ENGINE_OPTS(whispercpp)
             set_restart_required(true);                                        \
         }                                                                      \
     }                                                                          \
+    void settings::reset_##name##_audioctx_size() {                            \
+        set_##name##_audioctx_size(settings::option_t::OptionAuto);            \
+    }                                                                          \
     int settings::name##_audioctx_size_value() const {                         \
         return value(QStringLiteral("service/" #name "_audioctx_size_value"),  \
                      1500)                                                     \
@@ -1590,13 +1602,16 @@ ENGINE_OPTS(whispercpp)
             set_restart_required(true);                                        \
         }                                                                      \
     }                                                                          \
-    void settings::reset_##name##_options() {                                  \
-        set_##name##_gpu_flash_attn(false);                                    \
-        set_##name##_cpu_threads(4);                                           \
-        set_##name##_beam_search(1);                                           \
-        set_##name##_use_gpu(false);                                           \
-        set_##name##_audioctx_size(settings::option_t::OptionAuto);            \
+    void settings::reset_##name##_audioctx_size_value() {                      \
         set_##name##_audioctx_size_value(1500);                                \
+    }                                                                          \
+    void settings::reset_##name##_options() {                                  \
+        reset_##name##_gpu_flash_attn();                                       \
+        reset_##name##_cpu_threads();                                          \
+        reset_##name##_beam_search();                                          \
+        set_##name##_use_gpu(false);                                           \
+        reset_##name##_audioctx_size();                                        \
+        reset_##name##_audioctx_size_value();                                  \
     }
 
 ENGINE_OPTS(whispercpp)

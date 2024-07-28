@@ -774,17 +774,22 @@ class settings : public QSettings, public singleton<settings> {
     ENGINE_OPTS(whispercpp)
 #undef ENGINE_OPTS
 
-#define ENGINE_OPTS(name)                             \
-    bool name##_gpu_flash_attn() const;               \
-    void set_##name##_gpu_flash_attn(bool value);     \
-    int name##_cpu_threads() const;                   \
-    void set_##name##_cpu_threads(int value);         \
-    int name##_beam_search() const;                   \
-    void set_##name##_beam_search(int value);         \
-    option_t name##_audioctx_size() const;            \
-    void set_##name##_audioctx_size(option_t value);  \
-    int name##_audioctx_size_value() const;           \
-    void set_##name##_audioctx_size_value(int value); \
+#define ENGINE_OPTS(name)                                  \
+    bool name##_gpu_flash_attn() const;                    \
+    void set_##name##_gpu_flash_attn(bool value);          \
+    Q_INVOKABLE void reset_##name##_gpu_flash_attn();      \
+    int name##_cpu_threads() const;                        \
+    void set_##name##_cpu_threads(int value);              \
+    Q_INVOKABLE void reset_##name##_cpu_threads();         \
+    int name##_beam_search() const;                        \
+    void set_##name##_beam_search(int value);              \
+    Q_INVOKABLE void reset_##name##_beam_search();         \
+    option_t name##_audioctx_size() const;                 \
+    void set_##name##_audioctx_size(option_t value);       \
+    Q_INVOKABLE void reset_##name##_audioctx_size();       \
+    int name##_audioctx_size_value() const;                \
+    void set_##name##_audioctx_size_value(int value);      \
+    Q_INVOKABLE void reset_##name##_audioctx_size_value(); \
     Q_INVOKABLE void reset_##name##_options();
     ENGINE_OPTS(whispercpp)
     ENGINE_OPTS(fasterwhisper)

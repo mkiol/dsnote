@@ -501,6 +501,12 @@ DialogPage {
                                 _settings.whispercpp_cpu_threads = spinBox.value;
                             }
                         }
+                        button {
+                            icon.name: "edit-reset-symbolic"
+                            display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                            text: qsTr("Reset")
+                            onClicked: _settings.reset_whispercpp_cpu_threads()
+                        }
                     }
 
                     SpinBoxForm {
@@ -518,6 +524,12 @@ DialogPage {
                             onValueChanged: {
                                 _settings.whispercpp_beam_search = spinBox.value;
                             }
+                        }
+                        button {
+                            icon.name: "edit-reset-symbolic"
+                            display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                            text: qsTr("Reset")
+                            onClicked: _settings.reset_whispercpp_beam_search()
                         }
                     }
 
@@ -553,6 +565,15 @@ DialogPage {
                                 }
                             }
                         }
+                        button {
+                            icon.name: "edit-reset-symbolic"
+                            display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                            text: qsTr("Reset")
+                            onClicked: {
+                                _settings.reset_whispercpp_audioctx_size()
+                                _settings.reset_whispercpp_audioctx_size_value()
+                            }
+                        }
                     }
 
                     SpinBoxForm {
@@ -569,6 +590,12 @@ DialogPage {
                             onValueChanged: {
                                 _settings.whispercpp_audioctx_size_value = spinBox.value;
                             }
+                        }
+                        button {
+                            icon.name: "edit-reset-symbolic"
+                            display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                            text: qsTr("Reset")
+                            onClicked: _settings.reset_whispercpp_audioctx_size_value()
                         }
                         toolTip: qsTr("A smaller value speeds up decoding, but can have a negative impact on accuracy.")
                     }
@@ -615,21 +642,6 @@ DialogPage {
                         onUse_gpuChanged: _settings.whispercpp_use_gpu = use_gpu
                         onDevice_indexChanged: _settings.whispercpp_gpu_device_idx = device_index
                     }
-
-                    // Button {
-                    //     text: qsTr("Reset to default values")
-                    //     Layout.alignment: Qt.AlignHCenter
-
-                    //     onClicked: {
-                    //         _settings.reset_whispercpp_options()
-                    //         whispercppGpuComboBox.use_gpu = _settings.whispercpp_use_gpu
-                    //         whispercppFlashAttnCheckBox.checked = _settings.whispercpp_gpu_flash_attn
-                    //         whispercppBeamSpinBox.spinBox.value = _settings.whispercpp_beam_search
-                    //         whispercppThreadsSpinBox.spinBox.value = _settings.whispercpp_cpu_threads
-                    //         whispercppContextSizeComboBox.comboBox.currentIndex = 0
-                    //         whispercppContextSizeSpinBox.spinBox.value = 1500
-                    //     }
-                    // }
                 }
 
                 ColumnLayout {
@@ -654,6 +666,12 @@ DialogPage {
                                 _settings.fasterwhisper_cpu_threads = spinBox.value;
                             }
                         }
+                        button {
+                            icon.name: "edit-reset-symbolic"
+                            display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                            text: qsTr("Reset")
+                            onClicked: _settings.reset_fasterwhisper_cpu_threads()
+                        }
                     }
 
                     SpinBoxForm {
@@ -671,6 +689,12 @@ DialogPage {
                             onValueChanged: {
                                 _settings.fasterwhisper_beam_search = spinBox.value;
                             }
+                        }
+                        button {
+                            icon.name: "edit-reset-symbolic"
+                            display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                            text: qsTr("Reset")
+                            onClicked: _settings.reset_fasterwhisper_beam_search()
                         }
                     }
 
@@ -700,19 +724,6 @@ DialogPage {
                         onUse_gpuChanged: _settings.fasterwhisper_use_gpu = use_gpu
                         onDevice_indexChanged: _settings.fasterwhisper_gpu_device_idx = device_index
                     }
-
-                    // Button {
-                    //     text: qsTr("Reset to default values")
-                    //     Layout.alignment: Qt.AlignHCenter
-
-                    //     onClicked: {
-                    //         _settings.reset_fasterwhisper_options()
-                    //         fasterwhisperGpuComboBox.use_gpu = _settings.fasterwhisper_use_gpu
-                    //         fasterwhisperFlashAttnCheckBox.checked = _settings.fasterwhisper_gpu_flash_attn
-                    //         fasterwhisperBeamSpinBox.spinBox.value = _settings.fasterwhisper_beam_search
-                    //         fasterwhisperThreadsSpinBox.spinBox.value = _settings.fasterwhisper_cpu_threads
-                    //     }
-                    // }
                 }
             }
         }

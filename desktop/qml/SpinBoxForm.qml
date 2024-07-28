@@ -21,8 +21,11 @@ GridLayout {
     property alias spinBox: _spinBox
     property string toolTip: ""
     property alias value: _spinBox.value
+    property alias button: _button
+    property string toolTipButton: button.text
+    property bool compact: true
 
-    columns: verticalMode ? 1 : 2
+    columns: verticalMode ? 1 : button.visible ? 3 : 2
     columnSpacing: appWin.padding
     rowSpacing: appWin.padding
     Layout.fillWidth: true
@@ -37,9 +40,9 @@ GridLayout {
     SpinBox {
         id: _spinBox
 
-        Layout.fillWidth: verticalMode
-        Layout.preferredWidth: verticalMode ? 0 : parent.width / 2
-        Layout.leftMargin: verticalMode ? (root.indends + 1) * appWin.padding : 0
+        Layout.fillWidth: root.verticalMode
+        Layout.preferredWidth: root.verticalMode ? 0 : ((parent.width / 2) - (_button.visible && root.compact ? _button.width + root.columnSpacing : 0))
+        Layout.leftMargin: root.verticalMode ? (root.indends + 1) * appWin.padding : 0
 
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
         ToolTip.visible: hovered && root.toolTip.length !== 0
@@ -49,5 +52,17 @@ GridLayout {
         Component.onCompleted: {
             spinBox.contentItem.color = palette.text
         }
+    }
+
+    Button {
+        id: _button
+
+        visible: text.length !== 0
+        Layout.leftMargin: root.verticalMode ? (root.indends + 1) * appWin.padding : 0
+
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: button.display === AbstractButton.IconOnly ? hovered : false
+        ToolTip.text: root.toolTipButton
+        hoverEnabled: true
     }
 }
