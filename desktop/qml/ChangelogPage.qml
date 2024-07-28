@@ -72,8 +72,9 @@ DialogPage {
             placed between text areas which is more convenient.</li>
         <li>Support for older hardware.
             Until now, the translator did not work on older processors without AVX expansion. Now there is no such restriction anymore.</li>
-        <li>New models: English to Lithuanian, Croatian to English, Latvian to English, Danish to English</li>
-        <li>Updated models: Lithuanian to English, Slovenian to English</li>
+        <li>New models: English to Lithuanian, Croatian to English, Latvian to English, Danish to English, Serbian to English,
+            Slovak to English, Bosnian to English, Vietnamese to English</li>
+        <li>Updated models: Lithuanian to English, Slovenian to English, Russian to English, Ukrainian to English</li>
         </ul>
         <p>Flatpak:</p>
         <ul>
