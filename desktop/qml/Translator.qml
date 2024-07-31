@@ -237,7 +237,7 @@ ColumnLayout {
                 display: grid.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
                 icon.name: grid.verticalMode ? "go-down-symbolic" : "go-next-symbolic"
                 Layout.alignment: Qt.AlignCenter
-                enabled: app.state === DsnoteApp.StateIdle && !_settings.translate_when_typing && app.note.length !== 0
+                enabled: app.mnt_configured && app.state === DsnoteApp.StateIdle && !_settings.translate_when_typing && app.note.length !== 0
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Translate")
