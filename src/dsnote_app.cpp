@@ -2132,7 +2132,12 @@ void dsnote_app::listen_internal() {
             : settings::text_format_t::TextFormatRaw;
     options.insert("text_format", static_cast<int>(text_format));
     options.insert("audio_input", s->audio_input_device());
-    options.insert("insert_stats", s->stt_insert_stats());
+    bool insert_stats =
+        m_text_destination == text_destination_t::note_add ||
+                m_text_destination == text_destination_t::note_replace
+            ? s->sub_min_segment_dur()
+            : false;
+    options.insert("insert_stats", insert_stats);
     options.insert("sub_min_segment_dur", s->sub_min_segment_dur());
     if (s->sub_break_lines()) {
         options.insert("sub_min_line_length", s->sub_min_line_length());
