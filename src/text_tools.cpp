@@ -758,6 +758,14 @@ std::string remove_control_tags(const std::string& text) {
     return std::regex_replace(text, rx, " ");
 }
 
+void remove_stats_tag(std::string& text) {
+    static const std::regex rx{
+        "\\s*\\[audio\\-length\\:\\s*\\d+ms,\\s*processing\\-time\\:\\s*\\d+"
+        "ms\\]"};
+
+    text = std::regex_replace(text, rx, "");
+}
+
 std::vector<taged_segment_t> split_by_control_tags(const std::string& text) {
     std::vector<taged_segment_t> parts;
 

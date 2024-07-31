@@ -310,6 +310,8 @@ static text_tools::text_format_t text_fromat_from_mnt_format(
 }
 
 std::string mnt_engine::translate_internal(std::string text) {
+    text_tools::remove_stats_tag(text);
+
     if (m_config.clean_text) {
         switch (m_config.text_format) {
             case text_format_t::raw:

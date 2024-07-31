@@ -298,9 +298,10 @@ std::string tts_engine::find_file_with_name_prefix(std::string dir_path,
     return {};
 }
 
-void tts_engine::push_tasks(const std::string& text, task_type_t type) {
+void tts_engine::push_tasks(std::string&& text, task_type_t type) {
     auto tasks = make_tasks(
-        text, m_config.split_into_sentences && !m_config.has_option('q'), type);
+        std::move(text),
+        m_config.split_into_sentences && !m_config.has_option('q'), type);
 
     if (tasks.empty()) {
         LOGW("no task to process");
@@ -319,20 +320,20 @@ void tts_engine::push_tasks(const std::string& text, task_type_t type) {
     m_cv.notify_one();
 }
 
-void tts_engine::encode_speech(const std::string& text) {
+void tts_engine::encode_speech(std::string text) {
     if (is_shutdown()) return;
 
     LOGD("tts encode speech");
 
-    push_tasks(text, task_type_t::speech_encoding);
+    push_tasks(std::move(text), task_type_t::speech_encoding);
 }
 
-void tts_engine::restore_text(const std::string& text) {
+void tts_engine::restore_text(std::string text) {
     if (is_shutdown()) return;
 
     LOGD("tts restore text");
 
-    push_tasks(text, task_type_t::text_restoration);
+    push_tasks(std::move(text), task_type_t::text_restoration);
 }
 
 void tts_engine::set_speech_speed(unsigned int speech_speed) {
@@ -502,12 +503,14 @@ void tts_engine::make_plain_tasks(
     }
 }
 
-std::vector<tts_engine::task_t> tts_engine::make_tasks(const std::string& text,
+std::vector<tts_engine::task_t> tts_engine::make_tasks(std::string text,
                                                        bool split,
                                                        task_type_t type) const {
     std::vector<tts_engine::task_t> tasks;
 
     auto speed{m_config.speech_speed};
+
+    text_tools::remove_stats_tag(text);
 
     if (m_config.text_format == text_format_t::subrip) {
         make_subrip_tasks(text, speed, 0, type, tasks);

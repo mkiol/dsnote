@@ -73,6 +73,7 @@ std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
     const std::string& nb_data = {});
 std::vector<taged_segment_t> split_by_control_tags(const std::string& text);
 std::string remove_control_tags(const std::string& text);
+void remove_stats_tag(std::string& text);
 void restore_caps(std::string& text);
 void to_lower_case(std::string& text);
 void trim_lines(std::string& text);
