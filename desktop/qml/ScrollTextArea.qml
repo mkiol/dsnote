@@ -71,8 +71,6 @@ Item {
             wrapMode: TextEdit.WordWrap
             verticalAlignment: TextEdit.AlignTop
             font: _settings.notepad_font
-            Keys.onUpPressed: scrollView.ScrollBar.vertical.decrease()
-            Keys.onDownPressed: scrollView.ScrollBar.vertical.increase()
 
             TextContextMenu {
                 disableNative: true
