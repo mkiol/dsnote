@@ -2135,7 +2135,7 @@ void dsnote_app::listen_internal() {
     bool insert_stats =
         m_text_destination == text_destination_t::note_add ||
                 m_text_destination == text_destination_t::note_replace
-            ? s->sub_min_segment_dur()
+            ? s->stt_insert_stats()
             : false;
     options.insert("insert_stats", insert_stats);
     options.insert("sub_min_segment_dur", s->sub_min_segment_dur());
