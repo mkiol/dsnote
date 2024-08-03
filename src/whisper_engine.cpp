@@ -661,10 +661,11 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 
     auto stats = report_stats(
         buf.size(), m_sample_rate,
-        static_cast<size_t>(
-            std::max(0L, std::chrono::duration_cast<std::chrono::milliseconds>(
-                             std::chrono::steady_clock::now() - decoding_start)
-                             .count())));
+        static_cast<size_t>(std::max(
+            0L, static_cast<long int>(
+                    std::chrono::duration_cast<std::chrono::milliseconds>(
+                        std::chrono::steady_clock::now() - decoding_start)
+                        .count()))));
 
     auto auto_lang_id = [&]() -> std::string {
         if (!m_wparams.language) {  // auto-detected lang
