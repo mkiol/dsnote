@@ -57,7 +57,7 @@ Following languages are supported:
 | ar          | Arabic        |                      | ●                 | ●              |                     | ●               |                   | ●                | ●                | ●               |                  |                         | ●                 |
 | bg          | Bulgarian     |                      | ●                 |                |                     |                 |                   | ●                |                  | ●               |                  |                         |                   |
 | bn          | Bengali       |                      | ●                 |                |                     |                 |                   | ●                |                  | ●               | ●                |                         |                   |
-| bs          | Bosnian       |                      | ●                 |                |                     |                 |                   | ●                |                  |                 |                  |                         |                   |
+| bs          | Bosnian       |                      | ●                 |                |                     |                 |                   | ●                |                  |                 |                  |                         | ●                 |
 | ca          | Catalan       | ●                    | ●                 | ●              |                     | ●               |                   | ●                |                  | ●               |                  |                         | ●                 |
 | cs          | Czech         | ●                    | ●                 | ●              |                     | ●               | ●                 | ●                | ●                | ●               |                  |                         | ●                 |
 | cy          | Welsh         |                      |                   |                |                     | ●               |                   |                  |                  |                 |                  |                         |                   |
@@ -77,7 +77,7 @@ Following languages are supported:
 | ha          | Hausa         |                      | ●                 |                |                     |                 |                   |                  |                  |                 | ●                |                         |                   |
 | he          | Hebrew        |                      | ●                 |                |                     |                 |                   |                  |                  | ●               |                  |                         |                   |
 | hi          | Hindi         |                      | ●                 | ●              |                     |                 |                   | ●                |                  |                 |                  |                         |                   |
-| hr          | Croatian      |                      | ●                 |                |                     |                 |                   | ●                | ●                | ●               |                  |                         |                   |
+| hr          | Croatian      |                      | ●                 |                |                     |                 | ●                 | ●                | ●                | ●               |                  |                         |                   |
 | hu          | Hungarian     | ● (e)                | ●                 |                |                     | ●               |                   | ●                | ●                | ●               | ●                |                         | ●                 |
 | id          | Indonesian    | ● (e)                | ●                 |                |                     |                 |                   | ●                | ●                | ●               |                  |                         |                   |
 | is          | Icelandic     |                      | ●                 |                |                     | ●               |                   | ●                |                  | ●               |                  |                         | ●                 |
@@ -91,7 +91,7 @@ Following languages are supported:
 | la          | Latin         |                      |                   |                |                     |                 |                   | ●                |                  | ●               |                  |                         |                   |
 | lb          | Luxembourgish |                      |                   |                |                     | ●               |                   |                  |                  |                 |                  |                         |                   |
 | lt          | Lithuanian    |                      | ●                 |                |                     |                 |                   | ●                | ●                | ●               |                  |                         | ●                 |
-| lv          | Latvian       | ●                    | ●                 |                |                     |                 |                   | ●                |                  | ●               |                  |                         |                   |
+| lv          | Latvian       | ●                    | ●                 |                |                     |                 |                   | ●                |                  | ●               |                  |                         | ●                 |
 | mk          | Macedonian    |                      | ●                 |                |                     |                 | ●                 | ●                |                  |                 |                  |                         |                   |
 | mn          | Mongolian     | ● (e)                | ●                 |                |                     |                 |                   |                  |                  | ●               |                  |                         |                   |
 | mr          | Marathi       |                      | ●                 |                |                     |                 |                   |                  |                  | ●               |                  |                         |                   |
@@ -107,7 +107,7 @@ Following languages are supported:
 | sk          | Slovak        |                      | ●                 |                |                     | ●               | ●                 | ●                |                  | ●               |                  |                         |                   |
 | sl          | Slovenian     | ● (e)                | ●                 |                |                     | ●               |                   | ●                |                  | ●               |                  |                         | ●                 |
 | sq          | Albanian      |                      | ●                 |                |                     |                 | ●                 | ●                |                  | ●               |                  |                         |                   |
-| sr          | Serbian       |                      | ●                 |                |                     | ●               | ●                 | ●                |                  |                 |                  |                         |                   |
+| sr          | Serbian       |                      | ●                 |                |                     | ●               | ●                 | ●                |                  |                 |                  |                         | ●                 |
 | sv          | Swedish       |                      | ●                 | ●              |                     | ●               |                   | ●                | ●                | ●               | ●                |                         |                   |
 | sw          | Swahili       | ●                    | ●                 |                |                     | ●               |                   | ●                |                  | ●               |                  |                         |                   |
 | te          | Telugu        |                      | ●                 |                |                     |                 |                   | ●                |                  |                 | ●                |                         |                   |
@@ -118,7 +118,7 @@ Following languages are supported:
 | tt          | Tatar         |                      | ●                 |                |                     |                 | ●                 | ●                |                  | ●               |                  |                         |                   |
 | uk          | Ukrainian     | ●                    | ●                 | ●              |                     | ●               | ●                 | ●                |                  | ●               | ●                |                         | ●                 |
 | uz          | Uzbek         |                      | ●                 | ●              |                     |                 |                   | ●                |                  | ●               |                  |                         |                   |
-| vi          | Vietnamese    |                      | ●                 | ●              |                     | ●               |                   | ●                |                  | ●               |                  |                         |                   |
+| vi          | Vietnamese    |                      | ●                 | ●              |                     | ●               |                   | ●                |                  | ●               |                  |                         | ●                 |
 | yo          | Yoruba        | ● (e)                | ●                 |                |                     |                 |                   |                  |                  | ●               | ●                |                         |                   |
 | zh          | Chinese       | ●                    | ●                 | ●              |                     | ●               |                   | ●                |                  | ●               |                  |                         |                   |
 
@@ -155,7 +155,7 @@ Add-ons add the capability of GPU acceleration, which speeds up some operations 
 Base package and add-ons contain many "heavy" libraries like CUDA, ROCm, Torch and Python libraries.
 Due to this, the size of the packages and the space required after installation are significant.
 If you don't need all the functionalities, you can use much smaller "Tiny" package
-(available on [Releases](https://github.com/mkiol/dsnote/releases/tag/v4.5.0) page),
+(available on [Releases](https://github.com/mkiol/dsnote/releases/tag/v4.6.0) page),
 which provides only the basic features. If you need, you can also use "Tiny" packages together with GPU acceleration add-on.
 
 Comparison between Base, Tiny and Add-ons Flatpak packages:
@@ -387,6 +387,7 @@ please consider doing one or two of the following:
 
 ## Reviews and demos
 
+- [Speech Note 4.6 changes video](https://www.youtube.com/watch?v=AVW5OY63wjg) (Speech Note 4.6)
 - [Screenshots](https://gitlab.com/mkiol/dsnote/-/tree/main/desktop/screenshots) (Speech Note 4.5)
 - [Speech Note 4.5 changes video](https://youtu.be/S9MJ7y8-bcw) (Speech Note 4.5)
 - [Marco's Box](https://www.marcosbox.org/2024/02/speech-note-trascrivi-e-traduci-offline-.html) (Speech Note 4.4, Italian)
