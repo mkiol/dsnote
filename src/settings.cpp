@@ -1528,7 +1528,8 @@ ENGINE_OPTS(whispercpp)
 
 #define ENGINE_OPTS(name)                                                      \
     bool settings::name##_gpu_flash_attn() const {                             \
-        return value(QStringLiteral("service/" #name "_gpu_flash_attn"), true) \
+        return value(QStringLiteral("service/" #name "_gpu_flash_attn"),       \
+                     false)                                                    \
             .toBool();                                                         \
     }                                                                          \
     void settings::set_##name##_gpu_flash_attn(bool value) {                   \
