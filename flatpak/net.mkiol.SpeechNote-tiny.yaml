@@ -626,6 +626,8 @@ modules:
       - type: archive
         url: https://github.com/Skycoder42/QHotkey/archive/cd72a013275803fce33e028fc8b05ae32248da1f.zip
         sha256: 55995114e8b5947cb6a59a19a53840eaf81fddc420fd3d180dcb0db9d8d33e13
+      - type: patch
+        path: ../patches/qhotkey.patch
 
   - name: april-asr
     buildsystem: cmake-ninja

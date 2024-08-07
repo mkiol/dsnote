@@ -1,0 +1,92 @@
+diff -ruN qhotkey-org/QHotkey/qhotkey_x11.cpp qhotkey-patched/QHotkey/qhotkey_x11.cpp
+--- qhotkey-org/QHotkey/qhotkey_x11.cpp	2023-04-18 11:14:52.000000000 +0200
++++ qhotkey-patched/QHotkey/qhotkey_x11.cpp	2024-08-07 20:11:03.301925791 +0200
+@@ -112,8 +112,86 @@
+ 			return QStringLiteral("XF86AudioRecord");
+ 		case Qt::Key_MediaStop :
+ 			return QStringLiteral("XF86AudioStop");
+-		default :
+-			return QKeySequence(keycode).toString(QKeySequence::NativeText);
++                case Qt::Key_Back:
++                    return QStringLiteral("XF86Back");
++                case Qt::Key_Forward:
++                    return QStringLiteral("XF86Forward");
++                case Qt::Key_Stop:
++                    return QStringLiteral("XF86Stop");
++                case Qt::Key_Refresh:
++                    return QStringLiteral("XF86Refresh");
++                case Qt::Key_Favorites:
++                    return QStringLiteral("XF86Favorites");
++                case Qt::Key_OpenUrl:
++                    return QStringLiteral("XF86OpenURL");
++                case Qt::Key_HomePage:
++                    return QStringLiteral("XF86HomePage");
++                case Qt::Key_Search:
++                    return QStringLiteral("XF86Search");
++                case Qt::Key_LaunchMail:
++                    return QStringLiteral("XF86Mail");
++                case Qt::Key_LaunchMedia:
++                    return QStringLiteral("XF86MyComputer");
++                case Qt::Key_Memo:
++                    return QStringLiteral("XF86Memo");
++                case Qt::Key_History:
++                    return QStringLiteral("XF86History");
++                case Qt::Key_AddFavorite:
++                    return QStringLiteral("XF86AddFavorite");
++                case Qt::Key_HotLinks:
++                    return QStringLiteral("XF86HotLinks");
++                case Qt::Key_Calculator:
++                    return QStringLiteral("XF86Calculator");
++                case Qt::Key_Calendar :
++                    return QStringLiteral("XF86Calendar");
++                case Qt::Key_Documents :
++                    return QStringLiteral("XF86Documents");
++                case Qt::Key_Tools :
++                    return QStringLiteral("XF86Tools");
++                case Qt::Key_Pictures :
++                    return QStringLiteral("XF86Pictures");
++                case Qt::Key_Music :
++                    return QStringLiteral("XF86Music");
++                case Qt::Key_Time :
++                    return QStringLiteral("XF86Time");
++                case Qt::Key_Option:
++                    return QStringLiteral("XF86Option");
++                case Qt::Key_Display:
++                    return QStringLiteral("XF86Display");
++                case Qt::Key_Launch0:
++                    return QStringLiteral("XF86Launch0");
++                case Qt::Key_Launch1:
++                    return QStringLiteral("XF86Launch1");
++                case Qt::Key_Launch2:
++                    return QStringLiteral("XF86Launch2");
++                case Qt::Key_Launch3:
++                    return QStringLiteral("XF86Launch3");
++                case Qt::Key_Launch4:
++                    return QStringLiteral("XF86Launch4");
++                case Qt::Key_Launch5:
++                    return QStringLiteral("XF86Launch5");
++                case Qt::Key_Launch6:
++                    return QStringLiteral("XF86Launch6");
++                case Qt::Key_Launch7:
++                    return QStringLiteral("XF86Launch7");
++                case Qt::Key_Launch8:
++                    return QStringLiteral("XF86Launch8");
++                case Qt::Key_Launch9:
++                    return QStringLiteral("XF86Launch9");
++                case Qt::Key_LaunchA:
++                    return QStringLiteral("XF86LaunchA");
++                case Qt::Key_LaunchB:
++                    return QStringLiteral("XF86LaunchB");
++                case Qt::Key_LaunchC:
++                    return QStringLiteral("XF86LaunchC");
++                case Qt::Key_LaunchD:
++                    return QStringLiteral("XF86LaunchD");
++                case Qt::Key_LaunchE:
++                    return QStringLiteral("XF86LaunchE");
++                case Qt::Key_LaunchF:
++                     return QStringLiteral("XF86LaunchF");
++                default :
++                    return QKeySequence(keycode).toString(QKeySequence::NativeText);
+ 	}
+ }
+ 
