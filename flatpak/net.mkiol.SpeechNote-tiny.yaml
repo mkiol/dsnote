@@ -18,7 +18,7 @@ finish-args:
   - --filesystem=xdg-music
   - --filesystem=xdg-documents
   - --filesystem=xdg-videos
-  - --env=LD_LIBRARY_PATH=/app/extensions/nvidia/lib:/app/extensions/amd/lib:/app/extensions/cpu/lib:/app/extensions/nvidia/cuda/lib64:/app/extensions/amd/rocm/lib
+  - --env=LD_LIBRARY_PATH=/app/extensions/nvidia/lib:/app/extensions/amd/lib:/app/extensions/cpu/lib:/app/extensions/nvidia/cuda/lib64:/app/extensions/amd/rocm/lib:/app/extensions/amd/rocm/lib
   - --env=OPENCL_VENDOR_PATH=/app/opt/opencl/vendors
   - --env=QT_QUICK_CONTROLS_HOVER_ENABLED=1
   - --talk-name=org.freedesktop.Notifications
