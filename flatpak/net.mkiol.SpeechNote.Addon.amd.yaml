@@ -2,7 +2,6 @@ id: net.mkiol.SpeechNote.Addon.amd
 runtime: net.mkiol.SpeechNote
 sdk: org.kde.Sdk//5.15-23.08
 build-extension: true
-appstream-compose: false
 build-options:
   no-debuginfo: true
   prefix: /app/extensions/amd
@@ -359,6 +358,8 @@ modules:
       - -DWHISPER_BUILD_TESTS=OFF
       - -DWHISPER_BUILD_EXAMPLES=OFF
       - -DWHISPER_HIPBLAS=ON
+      - -DWHISPER_NO_AVX2=ON
+      - -DWHISPER_NO_FMA=ON
       - -DWHISPER_TARGET_NAME=whisper-hipblas
       - -DCMAKE_C_FLAGS='-O3'
       - -DCMAKE_CXX_FLAGS='-O3'

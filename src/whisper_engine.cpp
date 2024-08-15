@@ -134,8 +134,6 @@ void whisper_engine::open_whisper_lib() {
 #else
     if (auto cpuinfo = cpu_tools::cpuinfo();
         cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx &&
-        cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx2 &&
-        cpuinfo.feature_flags & cpu_tools::feature_flags_t::fma &&
         cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) {
         if (m_config.use_gpu) {
             if (m_config.gpu_device.api == gpu_api_t::cuda) {
@@ -181,13 +179,24 @@ void whisper_engine::open_whisper_lib() {
         }
 
         if (m_whisperlib_handle == nullptr) {
-            LOGD("using whisper-openblas");
-            m_whisperlib_handle = dlopen("libwhisper-openblas.so", RTLD_LAZY);
-            if (m_whisperlib_handle == nullptr)
-                LOGE("failed to open libwhisper-openblas.so: " << dlerror());
+            if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx2) {
+                LOGD("using whisper-openblas (avx2)");
+                m_whisperlib_handle =
+                    dlopen("libwhisper-openblas.so", RTLD_LAZY);
+                if (m_whisperlib_handle == nullptr)
+                    LOGE(
+                        "failed to open libwhisper-openblas.so: " << dlerror());
+            } else {
+                LOGD("using whisper-fallback1 (avx)");
+                m_whisperlib_handle =
+                    dlopen("libwhisper-fallback1.so", RTLD_LAZY);
+                if (m_whisperlib_handle == nullptr)
+                    LOGE("failed to open libwhisper-fallback1.so: "
+                         << dlerror());
+            }
         }
     } else {
-        LOGW("using whisper-fallback");
+        LOGW("using whisper-fallback (no avx)");
         m_whisperlib_handle = dlopen("libwhisper-fallback.so", RTLD_LAZY);
         if (m_whisperlib_handle == nullptr)
             LOGE("failed to open libwhisper-fallback.so: " << dlerror());
