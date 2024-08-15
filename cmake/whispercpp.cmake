@@ -225,7 +225,7 @@ ExternalProject_Add(whispercppfallback
         -DWHISPER_NO_AVX=ON -DWHISPER_NO_AVX2=ON -DWHISPER_NO_FMA=ON -DWHISPER_NO_F16C=ON
         -DCMAKE_C_FLAGS=${whispercppfallback_flags} -DCMAKE_CXX_FLAGS=${whispercppfallback_flags}
         -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
-        -DWHISPER_TARGET_NAME=whisper-fallback2
+        -DWHISPER_TARGET_NAME=whisper-fallback
     BUILD_ALWAYS False
 )
 
