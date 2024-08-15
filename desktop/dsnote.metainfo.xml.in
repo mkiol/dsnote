@@ -98,6 +98,29 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
+    <release version="4.6.1" date="2024-08-15">
+      <description>
+      <p>General:</p>
+      <ul>
+      <li>Fix: The application failed to start when the processor did not support the required CPU extension.</li>
+      </ul>
+      <p>" + qsTr("User Interface") + ":</p>
+      <ul>
+      <li>Swedish translation has been updated.</li>
+      </ul>
+      <p>Accessibility:</p>
+      <ul>
+      <li>Fix: Special keyboard keys were not supported as a keyboard shortcut.
+          Examples: 'Favorites', 'Launch Mail', 'Refresh', 'Home Page', 'Calculator' and many more...</li>
+      </ul>
+      <p>Translator:</p>
+      <ul>
+      <li>New models: English to Latvian, English to Danish, English to Croatian, English to Slovenian,
+          Indonesian to English, Romanian to English</li>
+      <li>Updated models: English to Hungarian, Czech to English, Greek to English</li>
+      </ul>
+      </description>
+    </release>
     <release version="4.6.0" date="2024-07-28">
       <description>
       <p>User Interface:</p>

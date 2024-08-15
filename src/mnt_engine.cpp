@@ -134,7 +134,8 @@ mnt_engine::~mnt_engine() {
 void mnt_engine::open_lib() {
 #ifdef ARCH_X86_64
     if (auto cpuinfo = cpu_tools::cpuinfo();
-        cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) {
+        cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx &&
+        cpuinfo.feature_flags & cpu_tools::feature_flags_t::bmi2) {
         m_lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
     } else if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::sse4_1) {
         LOGW("avx not supported => using bergamot-fallback");
@@ -176,7 +177,8 @@ bool mnt_engine::available() {
     void* lib_handle = nullptr;
 #ifdef ARCH_X86_64
     if (auto cpuinfo = cpu_tools::cpuinfo();
-        cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) {
+        cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx &&
+        cpuinfo.feature_flags & cpu_tools::feature_flags_t::bmi2) {
         lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
     } else if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::sse4_1) {
         lib_handle = dlopen("libbergamot_api-fallback.so", RTLD_LAZY);

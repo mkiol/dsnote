@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sv" sourcelanguage="en_US">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sv" sourcelanguage="en_US">
 <context>
     <name>AboutPage</name>
     <message>
@@ -241,7 +239,7 @@
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="64"/>
         <source>Export to text file</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportera till textfil</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="65"/>
@@ -450,18 +448,18 @@
         <location filename="../desktop/qml/ExportFilePage.qml" line="179"/>
         <location filename="../desktop/qml/ExportFilePage.qml" line="375"/>
         <source>Select file to export</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj fil för export</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="179"/>
         <location filename="../desktop/qml/ExportFilePage.qml" line="375"/>
         <source>Specify file to export</source>
-        <translation type="unfinished"></translation>
+        <translation>Specificera fil för export</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="181"/>
         <source>Select file</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj fil</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="240"/>
@@ -539,72 +537,72 @@
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="30"/>
         <source>Use hardware acceleration</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd hårdvaruacceleration</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="37"/>
         <source>If a suitable hardware accelerator (CPU or graphics card) is found in the system, it will be used to speed up processing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Om en lämplig hårdvaruaccelerator (CPU eller grafikkort) hittas i systemet kommer den att användas för att påskynda bearbetningen.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="38"/>
         <source>Hardware acceleration significantly reduces the time of decoding.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hårdvaruacceleration minskar avkodningstiden avsevärt.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="39"/>
         <source>Disable this option if you observe problems.</source>
-        <translation type="unfinished"></translation>
+        <translation>Avaktivera detta alternativ om du stöter på problem.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="46"/>
         <source>A suitable hardware accelerator could not be found.</source>
-        <translation type="unfinished"></translation>
+        <translation>En lämplig hårdvaruaccelerator kunde inte hittas.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="54"/>
         <source>Hardware accelerator</source>
-        <translation type="unfinished"></translation>
+        <translation>Hårdvaruaccelerator</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="55"/>
         <source>Select preferred hardware accelerator.</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj önskad hårdvaruaccelerator.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="69"/>
         <source>Tip: If you observe problems with hardware acceleration, try to enable %1 option.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tips: Om du får problem med hårdvaruacceleration kan du försöka aktivera %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="70"/>
         <source>Other</source>
-        <translation type="unfinished">Annat</translation>
+        <translation>Annat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="71"/>
         <source>Override GPU version</source>
-        <translation type="unfinished">Åsidosätt GPU-version</translation>
+        <translation>Åsidosätt GPU-version</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="79"/>
         <source>Tip: OpenVINO acceleration is most effective when processing long sentences with large models.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tips: OpenVINO-acceleration är mest effektiv när du bearbetar långa meningar med stora modeller.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="80"/>
         <source>For short sentences, better results can be obtained without hardware acceleration enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>För korta meningar kan bättre resultat erhållas utan att hårdvaruacceleration är aktiverad.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="86"/>
         <source>Most likely, NVIDIA kernel module has not been fully initialized.</source>
-        <translation type="unfinished">Troligtvis har NVIDIA-kärnmodulen inte initierats helt.</translation>
+        <translation>Troligtvis har NVIDIA-kärnmodulen inte initierats helt.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="87"/>
         <source>Try executing %1 before running Speech Note.</source>
-        <translation type="unfinished">Prova att köra %1 innan du kör Speech Note.</translation>
+        <translation>Försök att köra %1 innan du startar Speech Note.</translation>
     </message>
 </context>
 <context>
@@ -757,18 +755,12 @@
     <message numerus="yes">
         <location filename="../desktop/qml/LangsPage.qml" line="301"/>
         <source>%n voice(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%n röst</numerusform><numerusform>%n röster</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../desktop/qml/LangsPage.qml" line="302"/>
         <source>%n model(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%n modell</numerusform><numerusform>%n modeller</numerusform></translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="407"/>
@@ -939,14 +931,6 @@
         <location filename="../desktop/qml/MainToolBar.qml" line="195"/>
         <source>Voice samples are used in speech synthesis with voice cloning.</source>
         <translation>Röstprover används i talsyntes med röstkloning.</translation>
-    </message>
-    <message>
-        <source>Switch to Notepad</source>
-        <translation type="vanished">Byt till anteckningar</translation>
-    </message>
-    <message>
-        <source>Switch to Translator</source>
-        <translation type="vanished">Byt till översättare</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="267"/>
@@ -1168,13 +1152,9 @@
         <translation>Motor</translation>
     </message>
     <message>
-        <source>Supported GPU acceleration</source>
-        <translation type="vanished">GPU-acceleration som stöds</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="150"/>
         <source>Supported hardware acceleration</source>
-        <translation type="unfinished"></translation>
+        <translation>Hårdvaruacceleration som stöds</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="176"/>
@@ -1278,7 +1258,7 @@
     <message>
         <location filename="../sfos/qml/ModelItem.qml" line="87"/>
         <source>Show models</source>
-        <translation type="unfinished">Visa modeller</translation>
+        <translation>Visa modeller</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ModelItem.qml" line="65"/>
@@ -1439,12 +1419,12 @@
     <message>
         <location filename="../desktop/qml/PackFilteringWidget.qml" line="29"/>
         <source>Type to search</source>
-        <translation type="unfinished">Skriv för att söka</translation>
+        <translation>Skriv för att söka</translation>
     </message>
     <message>
         <location filename="../desktop/qml/PackFilteringWidget.qml" line="46"/>
         <source>Clear text</source>
-        <translation type="unfinished">Ta bort text</translation>
+        <translation>Rensa textfältet</translation>
     </message>
 </context>
 <context>
@@ -1452,32 +1432,32 @@
     <message>
         <location filename="../sfos/qml/PackItem.qml" line="39"/>
         <source>Set as default for this language</source>
-        <translation type="unfinished">Ange som standard för detta språk</translation>
+        <translation>Ange som standard för detta språk</translation>
     </message>
     <message>
         <location filename="../sfos/qml/PackItem.qml" line="49"/>
         <source>Enable</source>
-        <translation type="unfinished">Aktivera</translation>
+        <translation>Aktivera</translation>
     </message>
     <message>
         <location filename="../sfos/qml/PackItem.qml" line="49"/>
         <source>Download</source>
-        <translation type="unfinished">Ladda ner</translation>
+        <translation>Ladda ner</translation>
     </message>
     <message>
         <location filename="../sfos/qml/PackItem.qml" line="55"/>
         <source>Disable</source>
-        <translation type="unfinished">Avaktivera</translation>
+        <translation>Avaktivera</translation>
     </message>
     <message>
         <location filename="../sfos/qml/PackItem.qml" line="55"/>
         <source>Delete</source>
-        <translation type="unfinished">Ta bort</translation>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <location filename="../sfos/qml/PackItem.qml" line="61"/>
         <source>Cancel</source>
-        <translation type="unfinished">Avbryt</translation>
+        <translation>Avbryt</translation>
     </message>
 </context>
 <context>
@@ -1490,7 +1470,7 @@
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="115"/>
         <source>Read All</source>
-        <translation type="unfinished"></translation>
+        <translation>Läs alla</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="129"/>
@@ -1510,7 +1490,7 @@
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="160"/>
         <source>Translate All</source>
-        <translation type="unfinished"></translation>
+        <translation>Översätt alla</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="176"/>
@@ -1525,7 +1505,7 @@
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="83"/>
         <source>Insert control tag</source>
-        <translation type="unfinished"></translation>
+        <translation>Infoga kontrolltagg</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="225"/>
@@ -1536,22 +1516,6 @@
         <location filename="../desktop/qml/ScrollTextArea.qml" line="225"/>
         <source>The text format may be incorrect!</source>
         <translation>Textformatet kan vara felaktigt!</translation>
-    </message>
-    <message>
-        <source>Add</source>
-        <translation type="vanished">Lägg till</translation>
-    </message>
-    <message>
-        <source>Add the translated text to the note.</source>
-        <translation type="vanished">Lägg till översatt text till anteckningen.</translation>
-    </message>
-    <message>
-        <source>Replace</source>
-        <translation type="vanished">Ersätt</translation>
-    </message>
-    <message>
-        <source>Replace the note with translated text and switch languages.</source>
-        <translation type="vanished">Ersätt anteckningen med översatt text och växla språk.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="254"/>
@@ -1632,17 +1596,17 @@
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="103"/>
         <source>Subtitles support</source>
-        <translation type="unfinished"></translation>
+        <translation>Undertextstöd</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="104"/>
         <source>Enable support for subtitles.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera stöd för undertexter.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="105"/>
         <source>When this option is enabled, options related to subtitles are visible in the user interface.</source>
-        <translation type="unfinished"></translation>
+        <translation>När det här alternativet är aktiverat visas alternativ relaterade till undertexter i användargränssnittet.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="118"/>
@@ -1677,17 +1641,17 @@
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="149"/>
         <source>Translate to English</source>
-        <translation type="unfinished">Översätt till Engelska</translation>
+        <translation>Översätt till Engelska</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="150"/>
         <source>Speech will be automatically translated into English.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tal kommer automatiskt att översättas till Engelska.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="151"/>
         <source>The option works only with %1 models.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alternativet fungerar bara med %1-modeller.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="311"/>
@@ -1842,31 +1806,6 @@
         <translation>Tillgänglighet</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="785"/>
-        <source>When this option is disabled, tags are ignored.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="794"/>
-        <source>To use control tags, insert %1 into the text.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="796"/>
-        <source>The following control tags are currently supported:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="798"/>
-        <source>Changes speed.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="799"/>
-        <source>Inserts silence.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1213"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="1216"/>
         <source>Auto</source>
@@ -1971,54 +1910,14 @@
         <translation>Använd anpassad grafisk stil</translation>
     </message>
     <message>
-        <source>No audio source could be found.</source>
-        <translation type="vanished">Ingen ljudkälla hittades.</translation>
-    </message>
-    <message>
-        <source>Make sure the microphone is properly connected.</source>
-        <translation type="vanished">Kontrollera att mikrofonen är korrekt ansluten.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="363"/>
         <source>This option only works with models that do not natively support punctuation.</source>
         <translation>Det här alternativet fungerar bara med modeller som inte har inbyggt stöd för skiljetecken.</translation>
     </message>
     <message>
-        <source>If a suitable graphics card is found in the system, it will be used to accelerate processing.</source>
-        <translation type="vanished">Om ett lämpligt grafikkort hittas i systemet, kommer det att användas för att påskynda bearbetningen.</translation>
-    </message>
-    <message>
-        <source>GPU hardware acceleration significantly reduces the time of decoding.</source>
-        <translation type="vanished">GPU-hårdvaruacceleration minskar avkodningstiden avsevärt.</translation>
-    </message>
-    <message>
-        <source>A suitable graphics card could not be found.</source>
-        <translation type="vanished">Inget passande grafikkort kunde identifieras.</translation>
-    </message>
-    <message>
-        <source>Most likely, NVIDIA kernel module has not been fully initialized.</source>
-        <translation type="vanished">Troligtvis har NVIDIA-kärnmodulen inte initierats helt.</translation>
-    </message>
-    <message>
-        <source>Try executing %1 before running Speech Note.</source>
-        <translation type="vanished">Prova att köra %1 innan du kör Speech Note.</translation>
-    </message>
-    <message>
-        <source>Graphics card</source>
-        <translation type="vanished">Grafikkort</translation>
-    </message>
-    <message>
-        <source>Select preferred graphics card for hardware acceleration.</source>
-        <translation type="vanished">Välj föredraget grafikkort för hårdvaruacceleration.</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="310"/>
         <source>Restore diacritics before speech synthesis</source>
         <translation>Återställa diakritiska tecken före talsyntes</translation>
-    </message>
-    <message>
-        <source>GPU hardware acceleration significantly reduces the time of speech synthesis.</source>
-        <translation type="vanished">GPU-hårdvaruacceleration minskar tiden för talsyntes avsevärt.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="347"/>
@@ -2323,8 +2222,29 @@
         <translation>Ange max antal simultana CPU-trådar.</translation>
     </message>
     <message>
-        <source>Graphics card options</source>
-        <translation type="vanished">Grafikkortsalternativ</translation>
+        <location filename="../desktop/qml/SettingsPage.qml" line="785"/>
+        <source>When this option is disabled, tags are ignored.</source>
+        <translation>När det här alternativet är inaktiverat ignoreras taggar.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="794"/>
+        <source>To use control tags, insert %1 into the text.</source>
+        <translation>Om du vill använda kontrolltaggar infogar du %1 i texten.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="796"/>
+        <source>The following control tags are currently supported:</source>
+        <translation>Följande kontrolltaggar stöds för närvarande:</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="798"/>
+        <source>Changes speed.</source>
+        <translation>Ändrar hastighet.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="799"/>
+        <source>Inserts silence.</source>
+        <translation>Infogar tystnad.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1233"/>
@@ -2399,159 +2319,159 @@
         <location filename="../desktop/qml/SettingsPage.qml" line="492"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="645"/>
         <source>A higher value does not necessarily speed up decoding.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett högre värde påskyndar inte nödvändigtvis avkodningen.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="455"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="851"/>
         <source>Engine options</source>
-        <translation type="unfinished"></translation>
+        <translation>Motoralternativ</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="509"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="662"/>
         <source>Beam search width</source>
-        <translation type="unfinished"></translation>
+        <translation>Bredd på strålsökning</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="510"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="663"/>
         <source>A higher value may improve quality, but decoding time may also increase.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett högre värde kan förbättra kvaliteten, men avkodningstiden kan också öka.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="527"/>
         <source>Audio context size</source>
-        <translation type="unfinished"></translation>
+        <translation>Storlek på ljudkontext</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="531"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="573"/>
         <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett mindre värde påskyndar avkodningen, men kan vara negativt för noggrannheten.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="528"/>
         <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
-        <translation type="unfinished"></translation>
+        <translation>När %1 har angetts justeras storleken dynamiskt för varje ljudsegment.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="160"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="380"/>
         <source>Insert statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Infoga statistik</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="164"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="387"/>
         <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation type="unfinished"></translation>
+        <translation>Infogar bearbetningsrelaterad information i texten, till exempel bearbetningstid och ljudlängd.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="165"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="388"/>
         <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det här alternativet kan vara användbart för att jämföra prestanda för olika modeller, motorer och deras parametrar.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="166"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="389"/>
         <source>This option does not work with all engines.</source>
-        <translation type="unfinished"></translation>
+        <translation>Detta alternativ fungerar inte med alla motorer.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="528"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="542"/>
         <source>Dynamic</source>
-        <translation type="unfinished"></translation>
+        <translation>Dynamisk</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="529"/>
         <source>When %1 is set, the default fixed size is used.</source>
-        <translation type="unfinished"></translation>
+        <translation>När %1 har angetts används den fasta standardstorleken.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="530"/>
         <source>To define a custom size, use the %1 option.</source>
-        <translation type="unfinished"></translation>
+        <translation>Om du vill definiera en anpassad storlek använder du alternativet %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="530"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="544"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Anpassat</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="563"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Storlek</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="580"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="681"/>
         <source>Use Flash Attention</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd &quot;Flash Attention&quot;</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="587"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="688"/>
         <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;Flash Attention&quot; kan minska tiden för avkodning när du använder GPU-acceleration.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="588"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="689"/>
         <source>Disable this option if you observe problems.</source>
-        <translation type="unfinished"></translation>
+        <translation>Avaktivera detta alternativ om du stöter på problem.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="172"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="596"/>
         <source>Use %1 model for automatic language detection</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd modellen %1, för automatisk språkidentifiering.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="176"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="603"/>
         <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vid automatisk språkidentifiering används modellen %1 i stället för den valda modellen.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="177"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="604"/>
         <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Detta minskar bearbetningstiden, men det automatiskt identifierade språket kan vara felaktigt.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="775"/>
         <source>Use control tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd kontrolltaggar</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="784"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="793"/>
         <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation type="unfinished"></translation>
+        <translation>Med kontrolltaggar kan du dynamiskt ändra hastigheten på syntetiserad text eller lägga till tystnad mellan meningar.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="798"/>
         <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 är ett flyttal i intervallet 0.1 till 2.0.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="799"/>
         <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 är ett flyttal och %2 är ett enhetsnamn (%3).</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1227"/>
         <source>Hardware acceleration options</source>
-        <translation type="unfinished"></translation>
+        <translation>Alternativ för hårdvaruacceleration</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1270"/>
         <source>Try to find OpenVINO compatible hardware in the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>Försök att hitta OpenVINO-kompatibel hårdvara i systemet.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="1324"/>
@@ -2589,10 +2509,6 @@
         <translation>Kontrollera förekomsten av de nödvändiga Python-biblioteken.</translation>
     </message>
     <message>
-        <source>Use GPU acceleration</source>
-        <translation type="vanished">Använd GPU-acceleration</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="297"/>
         <source>Audio input device</source>
         <translation>Enhet för ljudinmatning</translation>
@@ -2601,14 +2517,6 @@
         <location filename="../desktop/qml/SettingsPage.qml" line="298"/>
         <source>Select preferred audio input device.</source>
         <translation>Välj önskad ljudinmatningsenhet.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when using Speech to Text.</source>
-        <translation type="vanished">Inaktivera det här alternativet om du får problem när du använder tal-till-text.</translation>
-    </message>
-    <message>
-        <source>Tip: If you observe problems with GPU acceleration, try to enable %1 option.</source>
-        <translation type="vanished">Tips: Om du upptäcker problem med GPU-acceleration kan du försöka aktivera alternativet %1.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="182"/>
@@ -2710,10 +2618,6 @@
         <location filename="../desktop/qml/SettingsPage.qml" line="769"/>
         <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
         <translation>Den faktiska hastigheten efter efterbehandling av ljud är mycket mer förutsägbar, men talets naturlighet kan minska.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when using Text to Speech.</source>
-        <translation type="vanished">Inaktivera det här alternativet om du får problem när du använder tal-till-text.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="395"/>
@@ -3039,7 +2943,7 @@
     <message>
         <location filename="../desktop/qml/Translator.qml" line="256"/>
         <source>Switch languages</source>
-        <translation type="unfinished"></translation>
+        <translation>Växla språk</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="364"/>
@@ -3077,17 +2981,17 @@
     <message>
         <location filename="../desktop/qml/Translator.qml" line="263"/>
         <source>Replace the note with translated text and switch languages.</source>
-        <translation type="unfinished">Ersätt anteckningen med översatt text och växla språk.</translation>
+        <translation>Ersätt anteckningen med översatt text och byt språk.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="272"/>
         <source>Add</source>
-        <translation type="unfinished">Lägg till</translation>
+        <translation>Lägg till</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="279"/>
         <source>Add the translated text to the note.</source>
-        <translation type="unfinished">Lägg till översatt text till anteckningen.</translation>
+        <translation>Lägg till den översatta texten till anteckningen.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="344"/>
@@ -3363,506 +3267,518 @@
     <message>
         <location filename="../src/dsnote_app.cpp" line="4797"/>
         <source>English</source>
-        <translation type="unfinished"></translation>
+        <translation>Engelska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4798"/>
         <source>Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Kinesiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4799"/>
         <source>German</source>
-        <translation type="unfinished">Tyska</translation>
+        <translation>Tyska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4800"/>
         <source>Spanish</source>
-        <translation type="unfinished">Spanska</translation>
+        <translation>Spanska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4801"/>
         <source>Russian</source>
-        <translation type="unfinished">Ryska</translation>
+        <translation>Ryska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4802"/>
         <source>Korean</source>
-        <translation type="unfinished">Korenska</translation>
+        <translation>Koreanska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4803"/>
         <source>French</source>
-        <translation type="unfinished">Franska</translation>
+        <translation>Franska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4804"/>
         <source>Japanese</source>
-        <translation type="unfinished">Japanska</translation>
+        <translation>Japanska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4805"/>
         <source>Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>Portugisiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4806"/>
         <source>Turkish</source>
-        <translation type="unfinished"></translation>
+        <translation>Turkiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4807"/>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>Polska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4808"/>
         <source>Catalan</source>
-        <translation type="unfinished"></translation>
+        <translation>Katalanska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4809"/>
         <source>Dutch</source>
-        <translation type="unfinished">Nederländska</translation>
+        <translation>Nederländska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4810"/>
         <source>Arabic</source>
-        <translation type="unfinished">Arabiska</translation>
+        <translation>Arabiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4811"/>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation>Svenska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4812"/>
         <source>Italian</source>
-        <translation type="unfinished">Italienska</translation>
+        <translation>Italienska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4813"/>
         <source>Indonesian</source>
-        <translation type="unfinished"></translation>
+        <translation>Indonesiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4814"/>
         <source>Hindi</source>
-        <translation type="unfinished"></translation>
+        <translation>Hindi</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4815"/>
         <source>Finnish</source>
-        <translation type="unfinished"></translation>
+        <translation>Finska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4816"/>
         <source>Vietnamese</source>
-        <translation type="unfinished"></translation>
+        <translation>Vietnamesiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4817"/>
         <source>Hebrew</source>
-        <translation type="unfinished">Hebreiska</translation>
+        <translation>Hebreiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4818"/>
         <source>Ukrainian</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukrainska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4819"/>
         <source>Greek</source>
-        <translation type="unfinished"></translation>
+        <translation>Grekiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4820"/>
         <source>Malay</source>
-        <translation type="unfinished"></translation>
+        <translation>Malajiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4821"/>
         <source>Czech</source>
-        <translation type="unfinished"></translation>
+        <translation>Tjeckiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4822"/>
         <source>Romanian</source>
-        <translation type="unfinished"></translation>
+        <translation>Rumänska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4823"/>
         <source>Danish</source>
-        <translation type="unfinished"></translation>
+        <translation>Danska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4824"/>
         <source>Hungarian</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungerska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4825"/>
         <source>Tamil</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamilska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4826"/>
         <source>Norwegian</source>
-        <translation type="unfinished"></translation>
+        <translation>Norska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4827"/>
         <source>Thai</source>
-        <translation type="unfinished"></translation>
+        <translation>Thailändska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4828"/>
         <source>Urdu</source>
-        <translation type="unfinished"></translation>
+        <translation>Urdu</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4829"/>
         <source>Croatian</source>
-        <translation type="unfinished"></translation>
+        <translation>Kroatiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4830"/>
         <source>Bulgarian</source>
-        <translation type="unfinished"></translation>
+        <translation>Bulgariska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4831"/>
         <source>Lithuanian</source>
-        <translation type="unfinished"></translation>
+        <translation>Litauiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4832"/>
         <source>Latin</source>
-        <translation type="unfinished"></translation>
+        <translation>Latin</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4833"/>
         <source>Maori</source>
-        <translation type="unfinished"></translation>
+        <translation>Maori</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4834"/>
         <source>Malayalam</source>
-        <translation type="unfinished"></translation>
+        <translation>Malayalam</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4835"/>
         <source>Welsh</source>
-        <translation type="unfinished"></translation>
+        <translation>Walesiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4836"/>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>Slovakiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4837"/>
         <source>Telugu</source>
-        <translation type="unfinished"></translation>
+        <translation>Telugu</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4838"/>
         <source>Persian</source>
-        <translation type="unfinished">Persiska</translation>
+        <translation>Persiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4839"/>
         <source>Latvian</source>
-        <translation type="unfinished"></translation>
+        <translation>Lettiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4840"/>
         <source>Bengali</source>
-        <translation type="unfinished"></translation>
+        <translation>Bengali</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4841"/>
         <source>Serbian</source>
-        <translation type="unfinished"></translation>
+        <translation>Serbiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4842"/>
         <source>Azerbaijani</source>
-        <translation type="unfinished"></translation>
+        <translation>Azerbajdzjanska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4843"/>
         <source>Slovenian</source>
-        <translation type="unfinished"></translation>
+        <translation>Slovenska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4844"/>
         <source>Kannada</source>
-        <translation type="unfinished"></translation>
+        <translation>Kannada</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4845"/>
         <source>Estonian</source>
-        <translation type="unfinished"></translation>
+        <translation>Estniska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4846"/>
         <source>Macedonian</source>
-        <translation type="unfinished"></translation>
+        <translation>Makedonska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4847"/>
         <source>Breton</source>
-        <translation type="unfinished"></translation>
+        <translation>Bretonska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4848"/>
         <source>Basque</source>
-        <translation type="unfinished"></translation>
+        <translation>Baskiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4849"/>
         <source>Icelandic</source>
-        <translation type="unfinished"></translation>
+        <translation>Isländska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4850"/>
         <source>Armenian</source>
-        <translation type="unfinished"></translation>
+        <translation>Armeniska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4851"/>
         <source>Nepali</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepali</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4852"/>
         <source>Mongolian</source>
-        <translation type="unfinished"></translation>
+        <translation>Mongoliska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4853"/>
         <source>Bosnian</source>
-        <translation type="unfinished"></translation>
+        <translation>Bosniska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4854"/>
         <source>Kazakh</source>
-        <translation type="unfinished"></translation>
+        <translation>Kazakiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4855"/>
         <source>Albanian</source>
-        <translation type="unfinished"></translation>
+        <translation>Albanska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4856"/>
         <source>Swahili</source>
-        <translation type="unfinished">Swahili</translation>
+        <translation>Swahili</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4857"/>
         <source>Galician</source>
-        <translation type="unfinished"></translation>
+        <translation>Galisiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4858"/>
         <source>Marathi</source>
-        <translation type="unfinished"></translation>
+        <translation>Marathi</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4859"/>
         <source>Punjabi</source>
-        <translation type="unfinished"></translation>
+        <translation>Punjabi</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4860"/>
         <source>Sinhala</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinhala</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4861"/>
         <source>Khmer</source>
-        <translation type="unfinished"></translation>
+        <translation>Khmer</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4862"/>
         <source>Shona</source>
-        <translation type="unfinished"></translation>
+        <translation>Shona</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4863"/>
         <source>Yoruba</source>
-        <translation type="unfinished"></translation>
+        <translation>Yoruba</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4864"/>
         <source>Somali</source>
-        <translation type="unfinished"></translation>
+        <translation>Somaliska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4865"/>
         <source>Afrikaans</source>
-        <translation type="unfinished"></translation>
+        <translation>Afrikaan</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4866"/>
         <source>Occitan</source>
-        <translation type="unfinished"></translation>
+        <translation>Occitanska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4867"/>
         <source>Georgian</source>
-        <translation type="unfinished"></translation>
+        <translation>Georgiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4868"/>
         <source>Belarusian</source>
-        <translation type="unfinished"></translation>
+        <translation>Vitryska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4869"/>
         <source>Tajik</source>
-        <translation type="unfinished"></translation>
+        <translation>Tadzjikiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4870"/>
         <source>Sindhi</source>
-        <translation type="unfinished"></translation>
+        <translation>Sindhi</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4871"/>
         <source>Gujarati</source>
-        <translation type="unfinished"></translation>
+        <translation>Gujarati</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4872"/>
         <source>Amharic</source>
-        <translation type="unfinished"></translation>
+        <translation>Amharic</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4873"/>
         <source>Yiddish</source>
-        <translation type="unfinished"></translation>
+        <translation>Yiddish</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4874"/>
         <source>Lao</source>
-        <translation type="unfinished"></translation>
+        <translation>Laotiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4875"/>
         <source>Uzbek</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzbekiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4876"/>
         <source>Faroese</source>
-        <translation type="unfinished"></translation>
+        <translation>Färöiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4877"/>
         <source>Haitian creole</source>
-        <translation type="unfinished"></translation>
+        <translation>Haitiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4878"/>
         <source>Pashto</source>
-        <translation type="unfinished"></translation>
+        <translation>Pashto</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4879"/>
         <source>Turkmen</source>
-        <translation type="unfinished"></translation>
+        <translation>Turkmeniska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4880"/>
         <source>Nynorsk</source>
-        <translation type="unfinished"></translation>
+        <translation>Nynorska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4881"/>
         <source>Maltese</source>
-        <translation type="unfinished"></translation>
+        <translation>Maltesiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4882"/>
         <source>Sanskrit</source>
-        <translation type="unfinished"></translation>
+        <translation>Sanskrit</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4883"/>
         <source>Luxembourgish</source>
-        <translation type="unfinished"></translation>
+        <translation>Luxemburgiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4884"/>
         <source>Myanmar</source>
-        <translation type="unfinished"></translation>
+        <translation>Myanmar</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4885"/>
         <source>Tibetan</source>
-        <translation type="unfinished"></translation>
+        <translation>Tibetanska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4886"/>
         <source>Tagalog</source>
-        <translation type="unfinished"></translation>
+        <translation>Tagalog</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4887"/>
         <source>Malagasy</source>
-        <translation type="unfinished"></translation>
+        <translation>Malagassiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4888"/>
         <source>Assamese</source>
-        <translation type="unfinished"></translation>
+        <translation>Assamesiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4889"/>
         <source>Tatar</source>
-        <translation type="unfinished"></translation>
+        <translation>Tatariska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4890"/>
         <source>Hawaiian</source>
-        <translation type="unfinished"></translation>
+        <translation>Hawaiianska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4891"/>
         <source>Lingala</source>
-        <translation type="unfinished"></translation>
+        <translation>Lingala</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4892"/>
         <source>Hausa</source>
-        <translation type="unfinished"></translation>
+        <translation>Hausa</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4893"/>
         <source>Bashkir</source>
-        <translation type="unfinished"></translation>
+        <translation>Basjkiriska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4894"/>
         <source>Javanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Javanesiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4895"/>
         <source>Sundanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Sundanesiska</translation>
     </message>
     <message>
         <location filename="../src/dsnote_app.cpp" line="4896"/>
         <source>Cantonese</source>
-        <translation type="unfinished"></translation>
+        <translation>Kantonesiska</translation>
     </message>
 </context>
 <context>
     <name>main</name>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="371"/>
+        <location filename="../desktop/qml/main.qml" line="507"/>
+        <source>Error: Translator model has not been set up yet.</source>
+        <translation>Fel: Översättarmodell har ännu inte angetts.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="317"/>
+        <location filename="../desktop/qml/main.qml" line="411"/>
+        <source>The model download is complete!</source>
+        <translation>Modellnerladdningen är slutförd!</translation>
+    </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="260"/>
         <source>To switch between %1 and %2 modes use option in pull-down menu.</source>
@@ -3877,18 +3793,6 @@
         <location filename="../sfos/qml/main.qml" line="261"/>
         <source>Translator</source>
         <translation>Översättare</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="371"/>
-        <location filename="../desktop/qml/main.qml" line="507"/>
-        <source>Error: Translator model has not been set up yet.</source>
-        <translation>Fel: Översättarmodell har ännu inte angetts.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="317"/>
-        <location filename="../desktop/qml/main.qml" line="411"/>
-        <source>The model download is complete!</source>
-        <translation>Modellnerladdningen är slutförd!</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="318"/>
@@ -4040,26 +3944,22 @@
     <message>
         <location filename="../desktop/qml/main.qml" line="240"/>
         <source>To enable GPU acceleration, install either %1 or %2 add-on.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>To enable GPU acceleration, install either %1 add-on for AMD graphics card or %2 add-on for NVIDIA graphics card.</source>
-        <translation type="vanished">Om du vill aktivera GPU-acceleration installerar du antingen %1-tillägget för AMD-grafikkort eller %2-tillägget för NVIDIA-grafikkort.</translation>
+        <translation>Om du vill aktivera GPU-acceleration installerar du antingen tillägget %1 eller %2.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="266"/>
         <source>Most likely, NVIDIA kernel module has not been fully initialized.</source>
-        <translation type="unfinished">Troligtvis har NVIDIA-kärnmodulen inte initierats helt.</translation>
+        <translation>Troligtvis har NVIDIA-kärnmodulen inte initierats helt.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="267"/>
         <source>Try executing %1 before running Speech Note.</source>
-        <translation type="unfinished">Prova att köra %1 innan du kör Speech Note.</translation>
+        <translation>Försök att köra %1 innan du startar Speech Note.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="255"/>
         <source>To speed up processing, enable hardware acceleration in the settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>För att påskynda bearbetningen, kan du aktivera hårdvaruacceleration i inställningarna.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="382"/>
@@ -4125,7 +4025,7 @@
         <location filename="../src/models_manager.cpp" line="1444"/>
         <location filename="../src/models_manager.cpp" line="2215"/>
         <source>Auto detected</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatiskt identifierad</translation>
     </message>
 </context>
 <context>
@@ -4159,10 +4059,6 @@
         <translation>Japanska</translation>
     </message>
     <message>
-        <source>GPU acceleration</source>
-        <translation type="vanished">GPU-acceleration</translation>
-    </message>
-    <message>
         <location filename="../src/speech_service.cpp" line="2849"/>
         <location filename="../src/speech_service.cpp" line="2859"/>
         <location filename="../src/speech_service.cpp" line="2918"/>
@@ -4171,7 +4067,7 @@
         <location filename="../src/speech_service.cpp" line="2964"/>
         <location filename="../src/speech_service.cpp" line="2973"/>
         <source>HW acceleration</source>
-        <translation type="unfinished"></translation>
+        <translation>Hv-acceleration</translation>
     </message>
     <message>
         <location filename="../src/speech_service.cpp" line="2872"/>

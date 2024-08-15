@@ -22,7 +22,8 @@ enum feature_flags_t : unsigned int {
     fma = 1U << 3U,
     f16c = 1U << 4U,
     asimd = 1U << 5U,
-    sse4_1 = 1U << 6U
+    sse4_1 = 1U << 6U,
+    bmi2 = 1U << 7U
 };
 
 struct cpuinfo_t {

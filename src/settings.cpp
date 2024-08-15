@@ -1402,8 +1402,11 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
     bool disable_whisperspeech_cuda =
         (hw_feature_flags &
          hw_feature_flags_t::hw_feature_tts_whisperspeech_cuda) == 0;
-    bool disable_coqui_hip = disable_coqui_cuda;
-    bool disable_whisperspeech_hip = disable_whisperspeech_cuda;
+    bool disable_coqui_hip =
+        (hw_feature_flags & hw_feature_flags_t::hw_feature_tts_coqui_hip) == 0;
+    bool disable_whisperspeech_hip =
+        (hw_feature_flags &
+         hw_feature_flags_t::hw_feature_tts_whisperspeech_hip) == 0;
 
     auto result = gpu_tools::available_devices(
         /*cuda=*/hw_scan_cuda(),
@@ -1528,7 +1531,8 @@ ENGINE_OPTS(whispercpp)
 
 #define ENGINE_OPTS(name)                                                      \
     bool settings::name##_gpu_flash_attn() const {                             \
-        return value(QStringLiteral("service/" #name "_gpu_flash_attn"), true) \
+        return value(QStringLiteral("service/" #name "_gpu_flash_attn"),       \
+                     false)                                                    \
             .toBool();                                                         \
     }                                                                          \
     void settings::set_##name##_gpu_flash_attn(bool value) {                   \

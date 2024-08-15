@@ -59,6 +59,7 @@ if(arch_x8664)
                 -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
                 -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
                 -DWHISPER_CLBLAST=ON
+                -DWHISPER_NO_AVX2=ON -DWHISPER_NO_FMA=ON
                 -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
                 -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
                 -DWHISPER_TARGET_NAME=whisper-clblast
@@ -92,6 +93,7 @@ if(arch_x8664)
                 -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
                 -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
                 -DWHISPER_CUDA=ON
+                -DWHISPER_NO_AVX2=ON -DWHISPER_NO_FMA=ON
                 -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
                 -DGGML_CUDA_ARCHITECTURES=${CMAKE_CUDA_ARCHITECTURES}
                 -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
@@ -122,6 +124,7 @@ if(arch_x8664)
                 -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
                 -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
                 -DWHISPER_HIPBLAS=ON
+                -DWHISPER_NO_AVX2=ON -DWHISPER_NO_FMA=ON
                 -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
                 -DGGML_ROCM_ARCHITECTURES=${CMAKE_HIP_ARCHITECTURES}
                 -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
@@ -148,6 +151,7 @@ if(arch_x8664)
                 -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
                 -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
                 -DWHISPER_OPENVINO=ON
+                -DWHISPER_NO_AVX2=ON -DWHISPER_NO_FMA=ON
                 -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
                 -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
                 -DWHISPER_TARGET_NAME=whisper-openvino
@@ -176,6 +180,30 @@ endif()
 
 message(STATUS "OpenBLAS lib: ${blas_lib_path}")
 message(STATUS "OpenBLAS include: ${blas_include_dir}")
+
+ExternalProject_Add(whispercppfallback1
+    SOURCE_DIR ${external_dir}/whispercppfallback1
+    BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercppfallback1
+    INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+    URL "${whispercpp_source_url}"
+    URL_HASH SHA256=${whispercpp_checksum}
+    PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
+                -i ${patches_dir}/whispercpp.patch ||
+                    echo "patch cmd failed, likely already patched"
+    CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+        -DCMAKE_INSTALL_LIBDIR=lib
+        -DBLAS_LIB_PATH=${blas_lib_path}
+        -DBLAS_INC_DIR=${blas_include_dir}
+        -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
+        -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
+        -DWHISPER_OPENBLAS=ON
+        -DWHISPER_NO_AVX2=ON -DWHISPER_NO_FMA=ON
+        -DCMAKE_C_FLAGS=${whispercppfallback_flags} -DCMAKE_CXX_FLAGS=${whispercppfallback_flags}
+        -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
+        -DWHISPER_TARGET_NAME=whisper-fallback1
+    BUILD_ALWAYS False
+)
 
 ExternalProject_Add(whispercppfallback
     SOURCE_DIR ${external_dir}/whispercppfallback
@@ -226,7 +254,9 @@ ExternalProject_Add(whispercppopenblas
 
 if(BUILD_OPENBLAS)
     ExternalProject_Add_StepDependencies(whispercppfallback configure openblas)
+    ExternalProject_Add_StepDependencies(whispercppfallback1 configure openblas)
     ExternalProject_Add_StepDependencies(whispercppopenblas configure openblas)
 endif()
 
+list(APPEND deps whispercppopenblas whispercppfallback1)
 list(APPEND deps whispercppopenblas whispercppfallback)

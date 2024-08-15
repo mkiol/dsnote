@@ -1238,15 +1238,16 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         config.insert_stats = stt_insert_stats_from_options(options);
 
         // clang-format off
-#define ENGINE_OPTS(name) \
-        config.beam_search = settings::instance()->name##_beam_search(); \
-        config.cpu_threads = settings::instance()->name##_cpu_threads(); \
-        if (settings::instance()->name##_use_gpu() && settings::instance()->has_##name##_gpu_device()) { \
-            if (auto device = make_gpu_device<stt_engine>(settings::instance()->name##_gpu_device(), settings::instance()->name##_auto_gpu_device())) { \
+#define ENGINE_OPTS(name_) \
+        config.beam_search = settings::instance()->name_##_beam_search(); \
+        config.cpu_threads = settings::instance()->name_##_cpu_threads(); \
+        if (settings::instance()->name_##_use_gpu() && settings::instance()->has_##name_##_gpu_device()) { \
+            if (auto device = make_gpu_device<stt_engine>(settings::instance()->name_##_gpu_device(), settings::instance()->name_##_auto_gpu_device())) { \
                 config.gpu_device = std::move(*device); \
                 config.gpu_device.flash_attn = \
                     (config.gpu_device.api == stt_engine::gpu_api_t::cuda || config.gpu_device.api == stt_engine::gpu_api_t::rocm) && \
-                    settings::instance()->name##_gpu_flash_attn(); \
+                    settings::instance()->name_##_gpu_flash_attn() && \
+                    config.gpu_device.name.find("ZLUDA") == std::string::npos; \
                 config.use_gpu = true; \
             } \
         }
@@ -2842,24 +2843,32 @@ QVariantMap speech_service::features_availability() {
                              "WhisperSpeech TTS"});
 #ifdef ARCH_X86_64
             bool tts_coqui_cuda =
-                py_availability->coqui_tts && py_availability->torch_cuda;
+                py_availability->coqui_tts &&
+                (py_availability->torch_cuda || py_availability->torch_hip);
             m_features_availability.insert(
                 "coqui-tts-gpu",
                 QVariantList{tts_coqui_cuda,
                              "Coqui TTS " + tr("HW acceleration")});
-            if (tts_coqui_cuda)
+            if (tts_coqui_cuda && py_availability->torch_cuda)
                 hw_feature_flags |=
                     settings::hw_feature_flags_t::hw_feature_tts_coqui_cuda;
+            if (tts_coqui_cuda && py_availability->torch_hip)
+                hw_feature_flags |=
+                    settings::hw_feature_flags_t::hw_feature_tts_coqui_hip;
 
-            bool tts_whisperspeech_cuda = py_availability->whisperspeech_tts &&
-                                          py_availability->torch_cuda;
+            bool tts_whisperspeech_cuda =
+                py_availability->whisperspeech_tts &&
+                (py_availability->torch_cuda || py_availability->torch_hip);
             m_features_availability.insert(
                 "whisperspeech-tts-gpu",
                 QVariantList{tts_whisperspeech_cuda,
                              "WhisperSpeech TTS " + tr("HW acceleration")});
-            if (tts_whisperspeech_cuda)
+            if (tts_whisperspeech_cuda && py_availability->torch_cuda)
                 hw_feature_flags |= settings::hw_feature_flags_t::
                     hw_feature_tts_whisperspeech_cuda;
+            if (tts_whisperspeech_cuda && py_availability->torch_hip)
+                hw_feature_flags |= settings::hw_feature_flags_t::
+                    hw_feature_tts_whisperspeech_hip;
 #endif
             m_features_availability.insert(
                 "coqui-tts-ja", QVariantList{py_availability->coqui_tts &&

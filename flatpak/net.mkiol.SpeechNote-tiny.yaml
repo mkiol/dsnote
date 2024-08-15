@@ -329,6 +329,7 @@ modules:
       - -DUSE_INTRINSICS_SSE3=ON
       - -DUSE_INTRINSICS_SSE41=ON
       - -DUSE_INTRINSICS_SSE42=OFF
+      - -DUSE_INTRINSICS_FMA=OFF
       - -DUSE_INTRINSICS_AVX=OFF
       - -DUSE_INTRINSICS_AVX2=OFF
       - -DUSE_INTRINSICS_AVX512=OFF
@@ -353,6 +354,7 @@ modules:
       - -DUSE_INTRINSICS_SSE3=ON
       - -DUSE_INTRINSICS_SSE41=ON
       - -DUSE_INTRINSICS_SSE42=ON
+      - -DUSE_INTRINSICS_FMA=OFF
       - -DUSE_INTRINSICS_AVX=ON
       - -DUSE_INTRINSICS_AVX2=OFF
       - -DUSE_INTRINSICS_AVX512=OFF
@@ -509,7 +511,33 @@ modules:
       - type: patch
         path: ../patches/whispercpp.patch
 
+  - name: whispercpp-fallback1
+    only-arches:
+      - x86_64
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS=ON
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+      - -DWHISPER_OPENBLAS=ON
+      - -DWHISPER_NO_AVX2=ON
+      - -DWHISPER_NO_FMA=ON
+      - -DWHISPER_TARGET_NAME=whisper-fallback1
+      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
+      - -DCMAKE_C_FLAGS='-O3 -I$$C_INCLUDE_PATH/openblas'
+      - -DCMAKE_CXX_FLAGS='-O3 -I$$CPLUS_INCLUDE_PATH/openblas'
+    sources:
+      - type: archive
+        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.6.2.tar.gz
+        sha256: da7988072022acc3cfa61b370b3c51baad017f1900c3dc4e68cb276499f66894
+      - type: patch
+        path: ../patches/whispercpp.patch
+
   - name: whispercpp-fallback
+    only-arches:
+      - x86_64
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
@@ -568,6 +596,8 @@ modules:
       - -DWHISPER_BUILD_TESTS=OFF
       - -DWHISPER_BUILD_EXAMPLES=OFF
       - -DWHISPER_CLBLAST=ON
+      - -DWHISPER_NO_AVX2=ON
+      - -DWHISPER_NO_FMA=ON
       - -DWHISPER_TARGET_NAME=whisper-clblast
       - -DCMAKE_C_FLAGS='-O3'
       - -DCMAKE_CXX_FLAGS='-O3'
@@ -626,6 +656,8 @@ modules:
       - type: archive
         url: https://github.com/Skycoder42/QHotkey/archive/cd72a013275803fce33e028fc8b05ae32248da1f.zip
         sha256: 55995114e8b5947cb6a59a19a53840eaf81fddc420fd3d180dcb0db9d8d33e13
+      - type: patch
+        path: ../patches/qhotkey.patch
 
   - name: april-asr
     buildsystem: cmake-ninja

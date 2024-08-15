@@ -86,6 +86,8 @@ modules:
       - -DWHISPER_BUILD_TESTS=OFF
       - -DWHISPER_BUILD_EXAMPLES=OFF
       - -DWHISPER_CUDA=ON
+      - -DWHISPER_NO_AVX2=ON
+      - -DWHISPER_NO_FMA=ON
       - -DWHISPER_TARGET_NAME=whisper-cublas
       - -DCMAKE_C_FLAGS='-O3'
       - -DCMAKE_CXX_FLAGS='-O3'

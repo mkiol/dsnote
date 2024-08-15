@@ -20,6 +20,13 @@
   <url type="bugtracker">https://github.com/mkiol/dsnote/issues</url>
   <update_contact>dsnote_AT_mkiol.net</update_contact>
   <releases>
+    <release version="1.2.1" date="2024-08-15">
+      <description>
+        <ul>
+        <li>AVX2 and FMA are no longer required to run WhisperCpp when using GPU acceleration.</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.2.0" date="2024-06-15">
       <description>
         <ul>

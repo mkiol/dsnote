@@ -16,6 +16,7 @@ inline static const auto python_site_path = "python/site-packages";
 struct libs_availability_t {
     bool coqui_tts = false;
     bool torch_cuda = false;
+    bool torch_hip = false;
     bool faster_whisper = false;
     bool mimic3_tts = false;
     bool whisperspeech_tts = false;
