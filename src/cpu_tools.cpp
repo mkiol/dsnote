@@ -47,6 +47,8 @@ std::ostream& operator<<(std::ostream& os, cpu_tools::cpuinfo_t cpuinfo) {
         os << "asimd, ";
     if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::sse4_1)
         os << "sse4.1, ";
+    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::bmi2)
+        os << "bmi2, ";
 
     os << "]";
 
@@ -113,6 +115,8 @@ cpuinfo_t parse_cpuinfo(std::istream& stream) {
                     cpuinfo.feature_flags |= feature_flags_t::asimd;
                 if (pieces_match[2].str().find("sse4_1") != std::string::npos)
                     cpuinfo.feature_flags |= feature_flags_t::sse4_1;
+                if (pieces_match[2].str().find("bmi2") != std::string::npos)
+                    cpuinfo.feature_flags |= feature_flags_t::bmi2;
 
                 LOGD("cpu flags: " << pieces_match[2].str());
                 flags_done = true;

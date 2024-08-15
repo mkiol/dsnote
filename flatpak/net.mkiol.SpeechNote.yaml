@@ -20,7 +20,7 @@ finish-args:
   - --filesystem=xdg-videos
   - --env=PYTORCH_TENSOREXPR=0
   - --env=PYTHONPATH=/app/extensions/nvidia/lib/python3.11/site-packages:/app/extensions/amd/lib/python3.11/site-packages:/app/extensions/cpu/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
-  - --env=LD_LIBRARY_PATH=/app/opt/intel/lib:/app/extensions/nvidia/lib:/app/extensions/amd/lib:/app/extensions/cpu/lib:/app/extensions/nvidia/cuda/lib64:/app/extensions/amd/rocm/lib:/app/extensions/amd/rocm/lib
+  - --env=LD_LIBRARY_PATH=/app/opt/intel/lib:/app/extensions/nvidia/lib:/app/extensions/amd/lib:/app/extensions/cpu/lib:/app/extensions/nvidia/cuda/lib64:/app/extensions/amd/rocm/lib
   - --env=OPENCL_VENDOR_PATH=/app/opt/opencl/vendors
   - --env=PERL5LIB=/app/lib/perl5/site_perl
   - --env=QT_QUICK_CONTROLS_HOVER_ENABLED=1
@@ -342,6 +342,7 @@ modules:
       - -DUSE_INTRINSICS_SSE3=ON
       - -DUSE_INTRINSICS_SSE41=ON
       - -DUSE_INTRINSICS_SSE42=OFF
+      - -DUSE_INTRINSICS_FMA=OFF
       - -DUSE_INTRINSICS_AVX=OFF
       - -DUSE_INTRINSICS_AVX2=OFF
       - -DUSE_INTRINSICS_AVX512=OFF
@@ -366,6 +367,7 @@ modules:
       - -DUSE_INTRINSICS_SSE3=ON
       - -DUSE_INTRINSICS_SSE41=ON
       - -DUSE_INTRINSICS_SSE42=ON
+      - -DUSE_INTRINSICS_FMA=OFF
       - -DUSE_INTRINSICS_AVX=ON
       - -DUSE_INTRINSICS_AVX2=OFF
       - -DUSE_INTRINSICS_AVX512=OFF
