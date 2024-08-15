@@ -35,6 +35,23 @@ Page {
             LogItem {
                 text: "<p>" + qsTr("User Interface") + ":</p>
                 <ul>
+                <li>Swedish translation has been updated.</li>
+                </ul>
+                <p>" + qsTr("Translator") + ":</p>
+                <ul>
+                <li>New models: English to Latvian, English to Danish, English to Croatian, English to Slovenian,
+                    Indonesian to English, Romanian to English</li>
+                <li>Updated models: English to Hungarian, Czech to English, Greek to English</li>
+                </ul>"
+            }
+
+            SectionHeader {
+                text: qsTr("Version %1").arg("4.6.0")
+            }
+
+            LogItem {
+                text: "<p>" + qsTr("User Interface") + ":</p>
+                <ul>
                 <li><i>Speech Note</i> has been translated into Norwegian language.</li>
                 <li>Grouped models.
                     Models that provide multiple sub-models (for example, TTS models that provide different voices)

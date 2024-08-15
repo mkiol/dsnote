@@ -7,7 +7,7 @@ Name:       harbour-dsnote
 # << macros
 
 Summary:        Speech Note
-Version:        4.6.0
+Version:        4.6.1
 Release:        1
 Group:          Qt/Qt
 License:        LICENSE

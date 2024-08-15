@@ -18,6 +18,32 @@ DialogPage {
     }
 
     RichLabel {
+        text: "<p>General:</p>
+        <ul>
+        <li>Fix: The application failed to start when the processor did not support the required CPU extension.</li>
+        </ul>
+        <p>" + qsTr("User Interface") + ":</p>
+        <ul>
+        <li>Swedish translation has been updated.</li>
+        </ul>
+        <p>" + qsTr("Accessibility") + ":</p>
+        <ul>
+        <li>Fix: Special keyboard keys were not supported as a keyboard shortcut.
+            Examples: <i>Favorites</i>, <i>Launch Mail</i>, <i>Refresh</i>, <i>Home Page</i>, <i>Calculator</i> and many more...</li>
+        </ul>
+        <p>" + qsTr("Translator") + ":</p>
+        <ul>
+        <li>New models: English to Latvian, English to Danish, English to Croatian, English to Slovenian,
+            Indonesian to English, Romanian to English</li>
+        <li>Updated models: English to Hungarian, Czech to English, Greek to English</li>
+        </ul>"
+    }
+
+    SectionLabel {
+        text: qsTr("Version %1").arg("4.6.0")
+    }
+
+    RichLabel {
         text: "<p>" + qsTr("User Interface") + ":</p>
         <ul>
         <li><i>Speech Note</i> has been translated into Norwegian language.</li>
