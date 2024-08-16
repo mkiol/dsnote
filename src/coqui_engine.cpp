@@ -186,8 +186,10 @@ void coqui_engine::create_model() {
             model_file.find("fairseq") != std::string::npos ||
             model_file.find("xtts") != std::string::npos;
 
-        auto use_cuda = m_config.use_gpu &&
-                        py_executor::instance()->libs_availability->torch_cuda;
+        auto use_cuda =
+            m_config.use_gpu &&
+            (py_executor::instance()->libs_availability->torch_cuda ||
+             py_executor::instance()->libs_availability->torch_hip);
 
         LOGD("using device: " << (use_cuda ? "cuda" : "cpu") << " "
                               << m_config.gpu_device.id);

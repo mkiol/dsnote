@@ -43,7 +43,7 @@ std::ostream& operator<<(std::ostream& os,
        << ", gruut_sw=" << availability.gruut_sw
        << ", mecab=" << availability.mecab
        << ", torch-cuda=" << availability.torch_cuda
-       << ", torch-hip=" << availability.torch_cuda;
+       << ", torch-hip=" << availability.torch_hip;
 
     return os;
 }

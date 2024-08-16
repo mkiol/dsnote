@@ -117,8 +117,10 @@ void whisperspeech_engine::create_model() {
 
         LOGD("model files: " << s2a_file << " " << t2s_file);
 
-        auto use_cuda = m_config.use_gpu &&
-                        py_executor::instance()->libs_availability->torch_cuda;
+        auto use_cuda =
+            m_config.use_gpu &&
+            (py_executor::instance()->libs_availability->torch_cuda ||
+             py_executor::instance()->libs_availability->torch_hip);
 
         LOGD("using device: " << (use_cuda ? "cuda" : "cpu") << " "
                               << m_config.gpu_device.id);

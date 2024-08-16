@@ -18,7 +18,8 @@ using namespace pybind11::literals;
 
 punctuator::punctuator(const std::string& model_path, int device) {
     auto task = py_executor::instance()->execute(
-        [&, dev = py_executor::instance()->libs_availability->torch_cuda
+        [&, dev = (py_executor::instance()->libs_availability->torch_cuda ||
+                   py_executor::instance()->libs_availability->torch_hip)
                       ? device
                       : -1]() {
             try {
