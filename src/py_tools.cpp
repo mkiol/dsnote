@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -29,6 +29,7 @@ std::ostream& operator<<(std::ostream& os,
                          const py_tools::libs_availability_t& availability) {
     os << "coqui-tts=" << availability.coqui_tts
        << ", faster-whisper=" << availability.faster_whisper
+       << ", ctranslate2-cuda=" << availability.ctranslate2_cuda
        << ", mimic3-tts=" << availability.mimic3_tts
        << ", whisperspeech-tts=" << availability.whisperspeech_tts
        << ", transformers=" << availability.transformers
@@ -103,6 +104,15 @@ libs_availability_t libs_availability() {
             availability.faster_whisper = true;
         } catch (const std::exception& err) {
             LOGD("faster-whisper check py error: " << err.what());
+        }
+
+        try {
+            LOGD("checking: ctranslate2-cuda");
+            availability.ctranslate2_cuda =
+                py::len(py::module_::import("ctranslate2")
+                            .attr("get_supported_compute_types")("cuda")) > 0;
+        } catch (const std::exception& err) {
+            LOGD("ctranslate2-cuda check py error: " << err.what());
         }
 
         try {

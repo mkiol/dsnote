@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,6 +18,7 @@ struct libs_availability_t {
     bool torch_cuda = false;
     bool torch_hip = false;
     bool faster_whisper = false;
+    bool ctranslate2_cuda = false;
     bool mimic3_tts = false;
     bool whisperspeech_tts = false;
     bool transformers = false;

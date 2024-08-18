@@ -2919,8 +2919,9 @@ QVariantMap speech_service::features_availability() {
                 QVariantList{py_availability->faster_whisper,
                              "FasterWhisper STT"});
 #ifdef ARCH_X86_64
-            bool stt_fasterwhisper_cuda =
-                py_availability->faster_whisper && has_cuda && has_cudnn;
+            bool stt_fasterwhisper_cuda = py_availability->faster_whisper &&
+                                          py_availability->ctranslate2_cuda &&
+                                          has_cuda && has_cudnn;
             m_features_availability.insert(
                 "faster-whisper-stt-gpu",
                 QVariantList{stt_fasterwhisper_cuda,
