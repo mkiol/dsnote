@@ -3,7 +3,7 @@ compatible=('*:noble' '*:24.04')
 
 _pkgname='dsnote'
 pkgname="${_pkgname}"
-pkgver=4.5.0
+pkgver=4.6.1
 pkgrel=1
 pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
 arch=(
@@ -84,7 +84,7 @@ url="https://github.com/mkiol/dsnote"
 license=('MPL-2.0')
 
 source=(https://github.com/mkiol/dsnote/archive/refs/tags/v${pkgver}.tar.gz)
-sha256sums=('fbdd53dd1ee1b48a6ef475f33ed710473e591840cb984e203f346ba79ef1ecbd')
+sha256sums=('301ec08dff6afa8ea321c74fc25aa1b42423d3d2ee1da840ac80b40e391332b3')
 
 build() {
     cd "${srcdir}/${_pkgname}-${pkgver}"
