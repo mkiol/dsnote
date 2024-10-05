@@ -660,13 +660,13 @@ else()
         ${ffmpeg_avdevice_LIBRARIES}
         ${ffmpeg_avfilter_LIBRARIES}
         ${ffmpeg_avformat_LIBRARIES}
-        ${ffmpeg_avcoodec_LIBRARIES}
+        ${ffmpeg_avcodec_LIBRARIES}
         ${ffmpeg_swresample_LIBRARIES}
         ${ffmpeg_swscale_LIBRARIES}
         ${ffmpeg_avutil_LIBRARIES})
     list(APPEND includes
         ${ffmpeg_avutil_INCLUDE_DIRS}
-        ${ffmpeg_avcoodec_INCLUDE_DIRS}
+        ${ffmpeg_avcodec_INCLUDE_DIRS}
         ${ffmpeg_avformat_INCLUDE_DIRS}
         ${ffmpeg_avdevice_INCLUDE_DIRS}
         ${ffmpeg_avfilter_INCLUDE_DIRS}

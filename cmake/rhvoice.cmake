@@ -1,6 +1,12 @@
 set(rhvoice_source_url "https://github.com/RHVoice/RHVoice.git")
 set(rhvoice_tag "71a1a830d2d860688ffcbb0d27d4de260136d161")
 
+find_package(Boost)
+if(NOT ${Boost_FOUND})
+   message(FATAL_ERROR "Boost not found but it is required by RHVoice")
+endif()
+
+
 ExternalProject_Add(rhvoice
     SOURCE_DIR ${external_dir}/rhvoice
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/rhvoice

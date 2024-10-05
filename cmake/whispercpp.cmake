@@ -12,23 +12,13 @@ list(JOIN whispercppfallback_flags " " whispercppfallback_flags)
 
 if(arch_x8664)
     if(BUILD_WHISPERCPP_CLBLAST)
-        set(opencl_source_url "https://github.com/KhronosGroup/OpenCL-Headers.git")
-        set(opencl_tag "4fdcfb0ae675f2f63a9add9552e0af62c2b4ed30")
-
         set(clblast_source_url "https://github.com/CNugteren/CLBlast.git")
         set(clblast_tag "e3ce21bb937f07b8282dccf4823e2acbdf286d17")
 
-        ExternalProject_Add(opencl
-            SOURCE_DIR ${external_dir}/opencl
-            BINARY_DIR ${PROJECT_BINARY_DIR}/external/opencl
-            INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-            GIT_REPOSITORY "${opencl_source_url}"
-            GIT_TAG ${opencl_tag}
-            UPDATE_COMMAND ""
-            CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
-                -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
-            BUILD_ALWAYS False
-        )
+        find_package(OpenCL)
+        if(NOT ${OpenCL_FOUND})
+           message(FATAL_ERROR "OpenCL not found but it is required by whisper.cpp-clblast")
+        endif()
 
         ExternalProject_Add(clblast
             SOURCE_DIR ${external_dir}/clblast
@@ -66,8 +56,6 @@ if(arch_x8664)
             BUILD_ALWAYS False
         )
 
-        ExternalProject_Add_StepDependencies(clblast configure opencl)
-        ExternalProject_Add_StepDependencies(whispercppclblast configure opencl)
         ExternalProject_Add_StepDependencies(whispercppclblast configure clblast)
 
         list(APPEND deps whispercppclblast)

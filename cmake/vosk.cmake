@@ -43,6 +43,8 @@ if(BUILD_VOSK)
 
     ExternalProject_Add_StepDependencies(kaldi configure openfst)
 
+    set(vosk_flags "-O3 -I${external_include_dir}")
+
     ExternalProject_Add(vosk
         SOURCE_DIR ${external_dir}/vosk
         BINARY_DIR ${PROJECT_BINARY_DIR}/external/vosk
@@ -55,7 +57,7 @@ if(BUILD_VOSK)
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
             -DCMAKE_INSTALL_INCLUDEDIR=${external_include_dir} -DCMAKE_POSITION_INDEPENDENT_CODE=ON
             -DCMAKE_LIBRARY_PATH=${external_lib_dir} -DCMAKE_INCLUDE_PATH=${external_include_dir}
-            -DCMAKE_CXX_FLAGS=-O3
+            -DCMAKE_CXX_FLAGS=${vosk_flags}
         BUILD_ALWAYS False
     )
 
