@@ -1,9 +1,6 @@
 set(rubberband_source_url "https://breakfastquay.com/files/releases/rubberband-3.3.0.tar.bz2")
 set(rubberband_checksum "d9ef89e2b8ef9f85b13ac3c2faec30e20acf2c9f3a9c8c45ce637f2bc95e576c")
 
-unset(meson_bin CACHE)
-find_program(meson_bin meson)
-message(STATUS meson_bin=${meson_bin})
 if(${meson_bin} MATCHES "-NOTFOUND$")
    message(FATAL_ERROR "meson not found but it is required to build rubberband")
 endif()

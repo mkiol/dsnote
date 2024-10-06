@@ -4,6 +4,16 @@ set(mbrola_checksum "c01ded2c0a05667e6df2439c1c02b011a5df2bfdf49e24a524630686aea
 set(espeak_source_url "https://github.com/rhasspy/espeak-ng/archive/8593723f10cfd9befd50de447f14bf0a9d2a14a4.zip")
 set(espeak_checksum "cc8092f23a28ccd79b1c5e62984a4c4ac1959d2d0b8193ac208d728c620bd5ed")
 
+if(${autoconf_bin} MATCHES "-NOTFOUND$")
+   message(FATAL_ERROR "autoconf not found but it is required to build espeak")
+endif()
+if(${automake_bin} MATCHES "-NOTFOUND$")
+   message(FATAL_ERROR "automake not found but it is required to build espeak")
+endif()
+if(${libtool_bin} MATCHES "-NOTFOUND$")
+   message(FATAL_ERROR "libtool not found but it is required to build espeak")
+endif()
+
 ExternalProject_Add(mbrola
     SOURCE_DIR ${external_dir}/mbrola
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/mbrola
@@ -24,7 +34,7 @@ ExternalProject_Add(espeak
     URL_HASH SHA256=${espeak_checksum}
     CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> &&
         <BINARY_DIR>/autogen.sh &&
-        <BINARY_DIR>/configure --prefix=<INSTALL_DIR> --with-pic
+        <BINARY_DIR>/configure --prefix=<INSTALL_DIR> --libdir=<INSTALL_DIR>/lib --with-pic
         --with-pcaudiolib=no --with-sonic=no --with-speechplayer=no
         --with-mbrola=yes --enable-static --with-extdict-ru
     BUILD_COMMAND ${MAKE}

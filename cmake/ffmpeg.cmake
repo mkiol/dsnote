@@ -34,7 +34,8 @@ ExternalProject_Add(lame
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${lame_source_url}"
     URL_HASH SHA256=${lame_checksum}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --bindir=<INSTALL_DIR>/bin
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
+        --bindir=<INSTALL_DIR>/bin --libdir=<INSTALL_DIR>/lib
         --enable-static=true --enable-shared=false
         --enable-nasm --disable-decoder --disable-analyzer-hooks
         --disable-frontend --with-pic=yes
@@ -49,7 +50,8 @@ ExternalProject_Add(ogg
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${ogg_source_url}"
     URL_HASH SHA256=${ogg_checksum}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --bindir=<INSTALL_DIR>/bin
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
+        --bindir=<INSTALL_DIR>/bin --libdir=<INSTALL_DIR>/lib
         --enable-static=true --enable-shared=false --with-pic=yes
     BUILD_COMMAND ${MAKE}
     BUILD_ALWAYS False
@@ -62,7 +64,8 @@ ExternalProject_Add(vorbis
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${vorbis_source_url}"
     URL_HASH SHA256=${vorbis_checksum}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --bindir=<INSTALL_DIR>/bin
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
+        --bindir=<INSTALL_DIR>/bin --libdir=<INSTALL_DIR>/lib
         --enable-static=true --enable-shared=false
         --disable-oggtest --with-pic=yes
     BUILD_COMMAND ${MAKE}

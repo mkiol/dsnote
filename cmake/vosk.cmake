@@ -6,14 +6,27 @@ if(BUILD_VOSK)
     set(vosk_source_url "https://github.com/alphacep/vosk-api/archive/128c216c6137a36fbf5b0bf64d03501e91a6eeaa.zip")
     set(vosk_checksum "1f716b8132d5678823db0531b2c8285a")
 
+    if(${autoconf_bin} MATCHES "-NOTFOUND$")
+       message(FATAL_ERROR "autoconf not found but it is required to build vosk")
+    endif()
+    if(${automake_bin} MATCHES "-NOTFOUND$")
+       message(FATAL_ERROR "automake not found but it is required to build vosk")
+    endif()
+    if(${libtool_bin} MATCHES "-NOTFOUND$")
+       message(FATAL_ERROR "libtool not found but it is required to build vosk")
+    endif()
+
     ExternalProject_Add(openfst
         SOURCE_DIR ${external_dir}/openfst
         BINARY_DIR ${PROJECT_BINARY_DIR}/external/openfst
         INSTALL_DIR ${PROJECT_BINARY_DIR}/external
         URL "${openfst_source_url}"
         URL_MD5 "${openfst_checksum}"
+        PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
+                    -i ${patches_dir}/openfst.patch ||
+                        echo "patch cmd failed, likely already patched"
         CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> && autoreconf -fi &&
-            <BINARY_DIR>/configure --prefix=<INSTALL_DIR>
+            <BINARY_DIR>/configure --prefix=<INSTALL_DIR> --libdir=<INSTALL_DIR>/lib
             --disable-bin --disable-dependency-tracking --enable-compact-fsts --enable-compress
             --enable-const-fsts --enable-far --enable-linear-fsts --enable-lookahead-fsts
             --enable-mpdt --enable-ngram-fsts --enable-pdt --disable-shared --enable-static

@@ -7,7 +7,8 @@ ExternalProject_Add(libarchive
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${libarchive_source_url}"
     URL_MD5 "${libarchive_checksum}"
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --bindir=<INSTALL_DIR>/bin
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
+        --bindir=<INSTALL_DIR>/bin --libdir=<INSTALL_DIR>/lib
         --enable-shared=no --enable-static=yes --disable-acl --disable-xattr --disable-largefile
         --without-zstd --without-lz4 --without-libiconv-prefix --without-iconv --without-libb2
         --without-bz2lib --with-zlib --without-cng --without-openssl --without-xml2 --without-expat

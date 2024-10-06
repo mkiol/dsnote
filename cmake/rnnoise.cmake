@@ -1,6 +1,16 @@
 set(rnnoise_source_url "https://github.com/GregorR/rnnoise-nu/archive/26269304e120499485438cd93acf5127c6908c68.zip")
 set(rnnoise_checksum "fafe9bbf0e2b15df4a628434bea99dd3")
 
+if(${autoconf_bin} MATCHES "-NOTFOUND$")
+   message(FATAL_ERROR "autoconf not found but it is required to build rnnoise")
+endif()
+if(${automake_bin} MATCHES "-NOTFOUND$")
+   message(FATAL_ERROR "automake not found but it is required to build rnnoise")
+endif()
+if(${libtool_bin} MATCHES "-NOTFOUND$")
+   message(FATAL_ERROR "libtool not found but it is required to build rnnoise")
+endif()
+
 # adding prefix rnnoise_ to avoid symbol collision with libopus
 set(rnnoise_cflags
     "-Dpitch_downsample=rnnoise_pitch_downsample \
@@ -19,7 +29,7 @@ ExternalProject_Add(rnnoise
     URL "${rnnoise_source_url}"
     URL_MD5 "${rnnoise_checksum}"
     CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> && <BINARY_DIR>/autogen.sh &&
-        <BINARY_DIR>/configure --prefix=<INSTALL_DIR>
+        <BINARY_DIR>/configure --prefix=<INSTALL_DIR> --libdir=<INSTALL_DIR>/lib
         --disable-examples --disable-doc --disable-shared --enable-static --with-pic
         CFLAGS=${rnnoise_cflags}
     BUILD_COMMAND ${MAKE}
