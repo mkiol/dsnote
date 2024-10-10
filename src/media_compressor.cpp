@@ -1207,10 +1207,10 @@ void media_compressor::write_to_buf(const char* data, int size) {
     lock.unlock();
 }
 
-int media_compressor::write_packet_callback(void* opaque, uint8_t* buf,
+int media_compressor::write_packet_callback(void* opaque, ff_buf_type buf,
                                             int buf_size) {
     static_cast<media_compressor*>(opaque)->write_to_buf(
-        reinterpret_cast<char*>(buf), buf_size);
+        reinterpret_cast<const char*>(buf), buf_size);
 
     return buf_size;
 }

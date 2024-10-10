@@ -409,7 +409,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         target_link_options(compiler_flags INTERFACE "-pie")
     endif()
 else()
-    target_compile_options(compiler_flags INTERFACE "-pie;-Wall;-Wextra;-Wpedantic;-O3;-g")
+    target_compile_options(compiler_flags INTERFACE "-pie;-Wall;-Wextra;-Wpedantic;-Wno-attributes;-O3;-g")
     target_link_options(compiler_flags INTERFACE "-pie;-flto;-fno-fat-lto-objects")
 endif()
 
@@ -669,6 +669,10 @@ else()
     pkg_search_module(ffmpeg_avfilter REQUIRED libavfilter>=8.44.100)
     pkg_search_module(ffmpeg_swresample REQUIRED libswresample>=4.3.100)
     pkg_search_module(ffmpeg_swscale REQUIRED libswscale>=6.7.100)
+
+    string(REGEX REPLACE "^([0-9]+).*$" "\\1" ffmpeg_ver ${ffmpeg_avformat_VERSION})
+    message(STATUS "found ffmpeg version: ${ffmpeg_ver}")
+
     list(APPEND deps_libs
         ${ffmpeg_avdevice_LIBRARIES}
         ${ffmpeg_avfilter_LIBRARIES}

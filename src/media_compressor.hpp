@@ -242,7 +242,15 @@ class media_compressor {
         task_finished_callback_t&& task_finished_callback);
     void write_to_buf(const char* data, int size);
     void setup_decoder(const AVStream* in_stream, AVCodecContext** in_av_ctx);
-    static int write_packet_callback(void* opaque, uint8_t* buf, int buf_size);
+
+#if FF_API_AVIO_WRITE_NONCONST
+    using ff_buf_type = uint8_t*;
+#else
+    using ff_buf_type = const uint8_t*;
+#endif
+    static int write_packet_callback(void* opaque, ff_buf_type buf,
+                                     int buf_size);
+
     std::ofstream m_pcm_file;
 };
 
