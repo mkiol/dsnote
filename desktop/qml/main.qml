@@ -223,7 +223,9 @@ ApplicationWindow {
 
             warning: true
             visible: _settings.error_flags & Settings.ErrorMoreThanOneGpuAddons
-            text: qsTr("Both NVIDIA and AMD GPU acceleration add-ons are installed, which is not optimal. Uninstall one of them.")
+            text: qsTr("Both %1 and %2 GPU acceleration add-ons are installed, which is not optimal. Uninstall one of them.")
+                      .arg("NVIDIA")
+                      .arg("AMD")
         }
 
         MainTipMessage {
@@ -236,10 +238,14 @@ ApplicationWindow {
                      (((_settings.system_flags & Settings.SystemAmdGpu) > 0) ||
                       ((_settings.system_flags & Settings.SystemNvidiaGpu) > 0))
             onCloseClicked: _settings.set_hint_done(Settings.HintDoneAddon)
-            text: qsTr("The Flatpak add-on for GPU acceleration is not installed.") + " " +
-                  qsTr("To enable GPU acceleration, install either %1 or %2 add-on.")
-                          .arg("<i><b>Speech Note AMD (net.mkiol.SpeechNote.Addon.amd)</b></i>")
-                          .arg("<i><b>Speech Note NVIDIA (net.mkiol.SpeechNote.Addon.nvidia)</b></i>")
+            text: {
+                var nvidia_addon = (_settings.system_flags & Settings.SystemNvidiaGpu) > 0;
+                qsTr("%1 graphics card has been detected. To add GPU acceleration support, install the %2 Flatpak add-on.")
+                    .arg(nvidia_addon ? "NVIDIA" :
+                                        "AMD")
+                    .arg(nvidia_addon ? "<i><b>Speech Note NVIDIA (net.mkiol.SpeechNote.Addon.nvidia)</b></i>" :
+                                        "<i><b>Speech Note AMD (net.mkiol.SpeechNote.Addon.amd)</b></i>")
+            }
         }
 
         MainTipMessage {
@@ -250,7 +256,9 @@ ApplicationWindow {
                      ((_settings.system_flags & Settings.SystemHwAccel) > 0) &&
                      ((_settings.hint_done_flags & Settings.HintDoneHwAccel) == 0) &&
                      !_settings.whispercpp_use_gpu && !_settings.fasterwhisper_use_gpu &&
-                     !_settings.coqui_use_gpu && !_settings.whisperspeech_use_gpu
+                     !_settings.coqui_use_gpu && !_settings.whisperspeech_use_gpu &&
+                     (((_settings.system_flags & Settings.SystemAmdGpu) > 0) ||
+                      ((_settings.system_flags & Settings.SystemNvidiaGpu) > 0))
             onCloseClicked: _settings.set_hint_done(Settings.HintDoneHwAccel)
             text: qsTr("To speed up processing, enable hardware acceleration in the settings.")
         }
@@ -263,8 +271,10 @@ ApplicationWindow {
                      ((app.feature_whispercpp_gpu && _settings.whispercpp_use_gpu) ||
                       (app.feature_fasterwhisper_gpu && _settings.fasterwhisper_use_gpu)) &&
                      ((_settings.error_flags & Settings.ErrorCudaUnknown) > 0)
-            text: qsTr("Most likely, NVIDIA kernel module has not been fully initialized.") + " " +
-                  qsTr("Try executing %1 before running Speech Note.").arg("<i>\"nvidia-modprobe -c 0 -u\"</i>")
+            text: qsTr("Most likely, %1 kernel module has not been fully initialized.") + " " +
+                  qsTr("Try executing %2 before running Speech Note.")
+                      .arg("NVIDIA")
+                      .arg("<i>\"nvidia-modprobe -c 0 -u\"</i>")
         }
 
         Translator {

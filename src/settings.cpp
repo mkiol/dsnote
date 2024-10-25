@@ -2274,16 +2274,16 @@ unsigned int settings::addon_flags() const { return m_addon_flags; }
 void settings::update_addon_flags() {
     unsigned int new_flags = addon_flags_t::AddonNone;
 
+    bool has_nvidia_addon =
+        QFileInfo::exists(QStringLiteral("/app/extensions/nvidia"));
+    bool has_amd_addon =
+        QFileInfo::exists(QStringLiteral("/app/extensions/amd"));
 #ifdef USE_FLATPAK
-    if (QFileInfo::exists(QStringLiteral("/app/extensions/nvidia"))) {
-        new_flags |= addon_flags_t::AddonNvidia;
-        qDebug() << "nvidia addon exists";
-    }
-    if (QFileInfo::exists(QStringLiteral("/app/extensions/amd"))) {
-        new_flags |= addon_flags_t::AddonAmd;
-        qDebug() << "amd addon exists";
-    }
+    qDebug() << "addons:" << (has_nvidia_addon ? "nvidia" : "")
+             << (has_amd_addon ? "amd" : "");
 #endif
+    if (has_nvidia_addon) new_flags |= addon_flags_t::AddonNvidia;
+    if (has_amd_addon) new_flags |= addon_flags_t::AddonAmd;
 
     if (new_flags != m_addon_flags) {
         m_addon_flags = new_flags;
