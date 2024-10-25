@@ -18,6 +18,25 @@ DialogPage {
     }
 
     RichLabel {
+        text: "<p>" + qsTr("User Interface") + ":</p>
+        <ul>
+        <li></li>
+        </ul>
+        <p>" + qsTr("Accessibility") + ":</p>
+        <ul>
+        <li></li>
+        </ul>
+        <p>" + qsTr("Translator") + ":</p>
+        <ul>
+        <li></li>
+        </ul>"
+    }
+
+    SectionLabel {
+        text: qsTr("Version %1").arg("4.6.1")
+    }
+
+    RichLabel {
         text: "<p>General:</p>
         <ul>
         <li>Fix: The application failed to start when the processor did not support the required CPU extension.</li>

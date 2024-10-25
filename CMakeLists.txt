@@ -127,8 +127,8 @@ set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
 set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
-set(info_conf_version "93")
-set(info_version_type "")
+set(info_conf_version "94")
+set(info_version_type "-beta")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · Locness3 · DevSJR · Vovkiv · Niklas Halvorsen")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
@@ -143,7 +143,7 @@ if (WITH_DESKTOP)
     endif()
 endif()
 
-project(${id} VERSION 4.6.1)
+project(${id} VERSION 4.7.0)
 
 set(arch_arm32 0)
 set(arch_arm64 0)

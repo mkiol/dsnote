@@ -27923,12 +27923,12 @@
             "trg_lang_id": "cs",
             "checksum": "ab055d6a",
             "checksum_quick": "6f2e1bbc",
-            "size": "35969555",
+            "size": "36146489",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/4aa963c5e2ce1c264c811e0dbdcf151465b9b951/models/dev/encs/model.encs.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/4aa963c5e2ce1c264c811e0dbdcf151465b9b951/models/dev/encs/lex.50.50.encs.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/4aa963c5e2ce1c264c811e0dbdcf151465b9b951/models/dev/encs/vocab.encs.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/ae00dc0603eb8d727f3cbbaa13ba2519b4f9dbdc/models/prod/encs/model.encs.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/ae00dc0603eb8d727f3cbbaa13ba2519b4f9dbdc/models/prod/encs/lex.50.50.encs.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/ae00dc0603eb8d727f3cbbaa13ba2519b4f9dbdc/models/prod/encs/vocab.encs.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
@@ -28123,19 +28123,42 @@
             "recommended_model": "nl_bergamot_nlen"
         },
         {
+            "name": "English to Greek",
+            "model_id": "en_bergamot_enel",
+            "engine": "mnt_bergamot",
+            "lang_id": "en",
+            "trg_lang_id": "el",
+            "checksum": "b4994e70",
+            "checksum_quick": "2238045b",
+            "size": "14596329",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/6d33a2784c8690618eb72cb60ba04ee997830c89/models/prod/enel/model.enel.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/6d33a2784c8690618eb72cb60ba04ee997830c89/models/prod/enel/lex.50.50.enel.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/6d33a2784c8690618eb72cb60ba04ee997830c89/models/prod/enel/vocab.enel.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "recommended_model": "el_bergamot_elen"
+        },
+        {
             "name": "English to Russian",
             "model_id": "en_bergamot_enru",
             "engine": "mnt_bergamot",
             "lang_id": "en",
             "trg_lang_id": "ru",
-            "checksum": "69122085",
-            "checksum_quick": "32d10eb1",
-            "size": "35302005",
+            "checksum": "6b753c7d",
+            "checksum_quick": "fa0fcbc3",
+            "size": "53296309",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/4aa963c5e2ce1c264c811e0dbdcf151465b9b951/models/dev/enru/model.enru.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/4aa963c5e2ce1c264c811e0dbdcf151465b9b951/models/dev/enru/lex.50.50.enru.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/4aa963c5e2ce1c264c811e0dbdcf151465b9b951/models/dev/enru/vocab.enru.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/6d33a2784c8690618eb72cb60ba04ee997830c89/models/dev/enru/model.enru.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/6d33a2784c8690618eb72cb60ba04ee997830c89/models/dev/enru/lex.50.50.enru.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/6d33a2784c8690618eb72cb60ba04ee997830c89/models/dev/enru/vocab.enru.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
@@ -28454,12 +28477,12 @@
             "trg_lang_id": "ro",
             "checksum": "adde1e28",
             "checksum_quick": "f3d727d9",
-            "size": "14467082",
+            "size": "36149535",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/4aa963c5e2ce1c264c811e0dbdcf151465b9b951/models/dev/enro/model.enro.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/4aa963c5e2ce1c264c811e0dbdcf151465b9b951/models/dev/enro/lex.50.50.enro.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/4aa963c5e2ce1c264c811e0dbdcf151465b9b951/models/dev/enro/vocab.enro.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/ae00dc0603eb8d727f3cbbaa13ba2519b4f9dbdc/models/prod/enro/model.enro.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/ae00dc0603eb8d727f3cbbaa13ba2519b4f9dbdc/models/prod/enro/lex.50.50.enro.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/ae00dc0603eb8d727f3cbbaa13ba2519b4f9dbdc/models/prod/enro/vocab.enro.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
@@ -28498,14 +28521,14 @@
             "engine": "mnt_bergamot",
             "lang_id": "id",
             "trg_lang_id": "en",
-            "checksum": "4a86b4b3",
-            "checksum_quick": "7ed824a9",
-            "size": "15225122",
+            "checksum": "e8a4a67d",
+            "checksum_quick": "536469a1",
+            "size": "14634012",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/54f32a60bca591f2f9c71e0af09223e1aa046780/models/prod/iden/model.iden.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/54f32a60bca591f2f9c71e0af09223e1aa046780/models/prod/iden/lex.50.50.iden.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/54f32a60bca591f2f9c71e0af09223e1aa046780/models/prod/iden/vocab.iden.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/ae00dc0603eb8d727f3cbbaa13ba2519b4f9dbdc/models/prod/enid/model.enid.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/ae00dc0603eb8d727f3cbbaa13ba2519b4f9dbdc/models/prod/enid/lex.50.50.enid.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/ae00dc0603eb8d727f3cbbaa13ba2519b4f9dbdc/models/prod/enid/vocab.enid.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
@@ -28535,7 +28558,8 @@
                 "name": "Mozilla Public License Version 2.0",
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
-            }
+            },
+            "recommended_model": "en_bergamot_enro"
         },
         {
             "name": "hrvatski na engleski (Croatian to English)",
@@ -29037,6 +29061,29 @@
                 "https://github.com/mozilla/firefox-translations-models/raw/4aa963c5e2ce1c264c811e0dbdcf151465b9b951/models/prod/elen/model.elen.intgemm.alphas.bin.gz",
                 "https://github.com/mozilla/firefox-translations-models/raw/4aa963c5e2ce1c264c811e0dbdcf151465b9b951/models/prod/elen/lex.50.50.elen.s2t.bin.gz",
                 "https://github.com/mozilla/firefox-translations-models/raw/4aa963c5e2ce1c264c811e0dbdcf151465b9b951/models/prod/elen/vocab.elen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "recommended_model": "en_bergamot_enel"
+        },
+        {
+            "name": "中文到英文 (Chinese to English)",
+            "model_id": "zh_bergamot_zhen",
+            "engine": "mnt_bergamot",
+            "lang_id": "zh",
+            "trg_lang_id": "en",
+            "checksum": "a4dd255a",
+            "checksum_quick": "f8abbe4c",
+            "size": "23724286",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/d97d4ce5ff9d3a266051230046ce4f705132c13f/models/dev/zhen/model.zhen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/d97d4ce5ff9d3a266051230046ce4f705132c13f/models/dev/zhen/lex.50.50.zhen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/d97d4ce5ff9d3a266051230046ce4f705132c13f/models/dev/zhen/vocab.zhen.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
