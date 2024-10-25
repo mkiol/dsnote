@@ -27,5 +27,3 @@ endfunction()
 qt5_create_translation(qm_files ${CMAKE_SOURCE_DIR}/src ${desktop_dir}/qml ${sfos_dir}/qml ${ts_files})
 
 add_translations_resource(translations_res ${qm_files})
-
-list(APPEND deps_lib translations_res)

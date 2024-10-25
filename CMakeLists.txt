@@ -352,17 +352,9 @@ add_library(dsnote_lib STATIC ${dsnote_lib_sources})
 # resources
 
 set(resources "")
-
-if(WITH_DESKTOP)
-    list(APPEND resources
-        "${desktop_dir}/resources.qrc"
-        ${translations_resource_file})
-endif()
-
-if(WITH_SFOS)
-    list(APPEND resources
-        "${sfos_dir}/resources.qrc")
-endif()
+list(APPEND resources
+    "${desktop_dir}/resources.qrc"
+    ${translations_resource_file})
 
 # executable
 
@@ -457,10 +449,6 @@ unset(automake_bin CACHE)
 find_program(automake_bin automake)
 unset(libtool_bin CACHE)
 find_program(libtool_bin libtool)
-
-if(${meson_bin} MATCHES "-NOTFOUND$")
-   message(FATAL_ERROR "meson not found but it is required to build rubberband")
-endif()
 
 pkg_search_module(zlib REQUIRED zlib)
 list(APPEND deps_libs ${zlib_LIBRARIES})
