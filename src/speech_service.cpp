@@ -2833,6 +2833,7 @@ QVariantMap speech_service::features_availability() {
 #ifdef ARCH_X86_64
             auto has_cuda = gpu_tools::has_cuda_runtime();
             auto has_cudnn = gpu_tools::has_cudnn();
+            auto has_hip = gpu_tools::has_hip();
 #endif
             m_features_availability.insert(
                 "coqui-tts",
@@ -2843,30 +2844,41 @@ QVariantMap speech_service::features_availability() {
                              "WhisperSpeech TTS"});
 #ifdef ARCH_X86_64
             bool tts_coqui_cuda =
-                py_availability->coqui_tts &&
-                (py_availability->torch_cuda || py_availability->torch_hip);
+                py_availability->coqui_tts && py_availability->torch_cuda;
+            bool tts_coqui_hip =
+                py_availability->coqui_tts && py_availability->torch_hip;
             m_features_availability.insert(
-                "coqui-tts-gpu",
+                "coqui-tts-cuda",
                 QVariantList{tts_coqui_cuda,
-                             "Coqui TTS " + tr("HW acceleration")});
-            if (tts_coqui_cuda && py_availability->torch_cuda)
+                             "Coqui TTS CUDA " + tr("HW acceleration")});
+            m_features_availability.insert(
+                "coqui-tts-hip",
+                QVariantList{tts_coqui_cuda,
+                             "Coqui TTS ROCm " + tr("HW acceleration")});
+            if (tts_coqui_cuda)
                 hw_feature_flags |=
                     settings::hw_feature_flags_t::hw_feature_tts_coqui_cuda;
-            if (tts_coqui_cuda && py_availability->torch_hip)
+            if (tts_coqui_hip)
                 hw_feature_flags |=
                     settings::hw_feature_flags_t::hw_feature_tts_coqui_hip;
 
-            bool tts_whisperspeech_cuda =
-                py_availability->whisperspeech_tts &&
-                (py_availability->torch_cuda || py_availability->torch_hip);
+            bool tts_whisperspeech_cuda = py_availability->whisperspeech_tts &&
+                                          py_availability->torch_cuda;
+            bool tts_whisperspeech_hip = py_availability->whisperspeech_tts &&
+                                         py_availability->torch_hip;
             m_features_availability.insert(
-                "whisperspeech-tts-gpu",
-                QVariantList{tts_whisperspeech_cuda,
-                             "WhisperSpeech TTS " + tr("HW acceleration")});
-            if (tts_whisperspeech_cuda && py_availability->torch_cuda)
+                "whisperspeech-tts-cuda",
+                QVariantList{
+                    tts_whisperspeech_cuda,
+                    "WhisperSpeech TTS CUDA " + tr("HW acceleration")});
+            m_features_availability.insert(
+                "whisperspeech-tts-hip",
+                QVariantList{tts_whisperspeech_hip, "WhisperSpeech TTS ROCm " +
+                                                        tr("HW acceleration")});
+            if (tts_whisperspeech_cuda)
                 hw_feature_flags |= settings::hw_feature_flags_t::
                     hw_feature_tts_whisperspeech_cuda;
-            if (tts_whisperspeech_cuda && py_availability->torch_hip)
+            if (tts_whisperspeech_hip)
                 hw_feature_flags |= settings::hw_feature_flags_t::
                     hw_feature_tts_whisperspeech_hip;
 #endif
@@ -2922,13 +2934,26 @@ QVariantMap speech_service::features_availability() {
             bool stt_fasterwhisper_cuda = py_availability->faster_whisper &&
                                           py_availability->ctranslate2_cuda &&
                                           has_cuda && has_cudnn;
+            bool stt_fasterwhisper_hip = py_availability->faster_whisper &&
+                                         py_availability->ctranslate2_cuda &&
+                                         has_hip;
             m_features_availability.insert(
-                "faster-whisper-stt-gpu",
-                QVariantList{stt_fasterwhisper_cuda,
-                             "FasterWhisper STT " + tr("HW acceleration")});
-            if (stt_fasterwhisper_cuda)
+                "faster-whisper-stt-cuda",
+                QVariantList{
+                    stt_fasterwhisper_cuda,
+                    "FasterWhisper STT CUDA " + tr("HW acceleration")});
+            m_features_availability.insert(
+                "faster-whisper-stt-hip",
+                QVariantList{stt_fasterwhisper_hip, "FasterWhisper STT ROCm " +
+                                                        tr("HW acceleration")});
+            if (stt_fasterwhisper_cuda) {
                 hw_feature_flags |= settings::hw_feature_flags_t::
                     hw_feature_stt_fasterwhisper_cuda;
+            }
+            if (stt_fasterwhisper_hip) {
+                hw_feature_flags |= settings::hw_feature_flags_t::
+                    hw_feature_stt_fasterwhisper_hip;
+            }
 #endif
             m_features_availability.insert(
                 "punctuator", QVariantList{py_availability->transformers,

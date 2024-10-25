@@ -4002,7 +4002,8 @@ bool dsnote_app::feature_fasterwhisper_stt() const {
 }
 
 bool dsnote_app::feature_fasterwhisper_gpu() const {
-    return feature_available("faster-whisper-stt-gpu", false);
+    return feature_available("faster-whisper-stt-cuda", false) ||
+           feature_available("faster-whisper-stt-hip", false);
 }
 
 bool dsnote_app::feature_coqui_tts() const {
@@ -4010,7 +4011,8 @@ bool dsnote_app::feature_coqui_tts() const {
 }
 
 bool dsnote_app::feature_coqui_gpu() const {
-    return feature_available("coqui-tts-gpu", false);
+    return feature_available("coqui-tts-cuda", false) ||
+           feature_available("coqui-tts-hip", false);
 }
 
 bool dsnote_app::feature_whisperspeech_tts() const {
@@ -4018,7 +4020,8 @@ bool dsnote_app::feature_whisperspeech_tts() const {
 }
 
 bool dsnote_app::feature_whisperspeech_gpu() const {
-    return feature_available("whisperspeech-tts-gpu", false);
+    return feature_available("whisperspeech-tts-cuda", false) ||
+           feature_available("whisperspeech-tts-hip", false);
 }
 
 bool dsnote_app::feature_punctuator() const {

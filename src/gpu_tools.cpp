@@ -890,6 +890,8 @@ bool has_cudnn() {
     return has_lib("libcudnn.so.8");
 }
 
+bool has_hip() { return has_lib("libamdhip64.so"); }
+
 bool has_openvino() { return has_lib("libopenvino_c.so"); }
 
 void rocm_override_gfx_version(const std::string& arch_version) {

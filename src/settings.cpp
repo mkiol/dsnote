@@ -157,6 +157,9 @@ QDebug operator<<(QDebug d, settings::hw_feature_flags_t hw_features) {
     if (hw_features &
         settings::hw_feature_flags_t::hw_feature_stt_fasterwhisper_cuda)
         d << "stt-fasterwhisper-cuda,";
+    if (hw_features &
+        settings::hw_feature_flags_t::hw_feature_stt_fasterwhisper_hip)
+        d << "stt-fasterwhisper-hip,";
     if (hw_features & settings::hw_feature_flags_t::hw_feature_tts_coqui_cuda)
         d << "tts-coqui-cuda,";
     if (hw_features & settings::hw_feature_flags_t::hw_feature_tts_coqui_hip)
@@ -1385,6 +1388,9 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
     bool disable_fasterwhisper_cuda =
         (hw_feature_flags &
          hw_feature_flags_t::hw_feature_stt_fasterwhisper_cuda) == 0;
+    bool disable_fasterwhisper_hip =
+        (hw_feature_flags &
+         hw_feature_flags_t::hw_feature_stt_fasterwhisper_hip) == 0;
     bool disable_whispercpp_cuda =
         (hw_feature_flags &
          hw_feature_flags_t::hw_feature_stt_whispercpp_cuda) == 0;
@@ -1399,11 +1405,11 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
          hw_feature_flags_t::hw_feature_stt_whispercpp_opencl) == 0;
     bool disable_coqui_cuda =
         (hw_feature_flags & hw_feature_flags_t::hw_feature_tts_coqui_cuda) == 0;
+    bool disable_coqui_hip =
+        (hw_feature_flags & hw_feature_flags_t::hw_feature_tts_coqui_hip) == 0;
     bool disable_whisperspeech_cuda =
         (hw_feature_flags &
          hw_feature_flags_t::hw_feature_tts_whisperspeech_cuda) == 0;
-    bool disable_coqui_hip =
-        (hw_feature_flags & hw_feature_flags_t::hw_feature_tts_coqui_hip) == 0;
     bool disable_whisperspeech_hip =
         (hw_feature_flags &
          hw_feature_flags_t::hw_feature_tts_whisperspeech_hip) == 0;
@@ -1451,13 +1457,15 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
                     break;
                 }
                 case gpu_tools::api_t::rocm: {
-                    if (disable_whispercpp_hip && disable_coqui_hip &&
-                        disable_whisperspeech_hip)
+                    if (disable_fasterwhisper_hip && disable_whispercpp_hip &&
+                        disable_coqui_hip && disable_whisperspeech_hip)
                         return;
                     auto item =
                         QStringLiteral("%1, %2, %3")
                             .arg("ROCm", QString::number(device.id),
                                  QString::fromStdString(device.name).trimmed());
+                    if (!disable_fasterwhisper_hip)
+                        m_fasterwhisper_gpu_devices.push_back(item);
                     if (!disable_whispercpp_hip)
                         m_whispercpp_gpu_devices.push_back(item);
                     if (!disable_coqui_hip) m_coqui_gpu_devices.push_back(item);

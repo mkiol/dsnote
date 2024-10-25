@@ -231,8 +231,8 @@ std::ostream& operator<<(std::ostream& os, const stt_engine::config_t& config) {
        << ", insert-stats=" << config.insert_stats
        << ", use-gpu=" << config.use_gpu << ", gpu-device=["
        << config.gpu_device << "]"
-       << ", sub-config=[" << config.sub_config << "]";
-
+       << ", sub-config=[" << config.sub_config << "]"
+       << ", translate=" << config.translate;
     return os;
 }
 

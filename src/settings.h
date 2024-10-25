@@ -464,15 +464,17 @@ class settings : public QSettings, public singleton<settings> {
         hw_feature_stt_whispercpp_openvino = 1U << 2U,
         hw_feature_stt_whispercpp_opencl = 1U << 3U,
         hw_feature_stt_fasterwhisper_cuda = 1U << 4U,
-        hw_feature_tts_coqui_cuda = 1U << 5U,
-        hw_feature_tts_coqui_hip = 1U << 6U,
-        hw_feature_tts_whisperspeech_cuda = 1U << 7U,
-        hw_feature_tts_whisperspeech_hip = 1U << 8U,
+        hw_feature_stt_fasterwhisper_hip = 1U << 5U,
+        hw_feature_tts_coqui_cuda = 1U << 6U,
+        hw_feature_tts_coqui_hip = 1U << 7U,
+        hw_feature_tts_whisperspeech_cuda = 1U << 8U,
+        hw_feature_tts_whisperspeech_hip = 1U << 9U,
         hw_feature_all =
             hw_feature_stt_whispercpp_cuda | hw_feature_stt_whispercpp_hip |
             hw_feature_stt_whispercpp_openvino |
             hw_feature_stt_whispercpp_opencl |
-            hw_feature_stt_fasterwhisper_cuda | hw_feature_tts_coqui_cuda |
+            hw_feature_stt_fasterwhisper_cuda |
+            hw_feature_stt_fasterwhisper_hip | hw_feature_tts_coqui_cuda |
             hw_feature_tts_coqui_hip | hw_feature_tts_whisperspeech_cuda |
             hw_feature_tts_whisperspeech_hip
     };

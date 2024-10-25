@@ -95,9 +95,30 @@ void fasterwhisper_engine::create_model() {
         auto n_threads = static_cast<int>(
             std::min(m_config.cpu_threads,
                      std::max(1U, std::thread::hardware_concurrency())));
-        auto use_cuda = m_config.use_gpu &&
-                        m_config.gpu_device.api == gpu_api_t::cuda &&
-                        gpu_tools::has_cudnn();
+        auto use_cuda =
+            m_config.use_gpu && ((m_config.gpu_device.api == gpu_api_t::cuda &&
+                                  gpu_tools::has_cudnn()) ||
+                                 (m_config.gpu_device.api == gpu_api_t::rocm &&
+                                  gpu_tools::has_hip()));
+
+        auto use_flash_attn = m_config.gpu_device.flash_attn && [] {
+            auto ct2_ver_str = py::module_::import("ctranslate2")
+                                   .attr("__version__")
+                                   .cast<std::string>();
+
+            if (ct2_ver_str.empty()) return false;
+
+            int major = 0, minor = 0, revision = 0;
+            auto ret = sscanf(ct2_ver_str.c_str(), "%d.%d.%d", &major, &minor,
+                              &revision);
+            LOGD("ctranslate2 version: " << major << '.' << minor << '.'
+                                         << revision << " (parsed: " << ret
+                                         << ")");
+
+            // flash_attention argument is supported in ctranslate2 from
+            // version 4.3.1
+            return ret == 3 && major >= 4 && minor >= 3 && revision >= 1;
+        }();
 
         LOGD("cpu info: arch=" << cpu_tools::arch() << ", cores="
                                << std::thread::hardware_concurrency());
@@ -105,17 +126,25 @@ void fasterwhisper_engine::create_model() {
                                << std::thread::hardware_concurrency());
         LOGD("using device: " << (use_cuda ? "cuda" : "cpu") << " "
                               << m_config.gpu_device.id);
-        LOGD("using flash-attention: " << m_config.gpu_device.flash_attn);
+        LOGD("using flash-attention: " << use_flash_attn);
 
         auto make_model = [&] {
             auto fw = py::module_::import("faster_whisper");
 
-            m_model.emplace(fw.attr("WhisperModel")(
-                "model_size_or_path"_a = m_config.model_files.model_file,
-                "device"_a = use_cuda ? "cuda" : "cpu",
-                "device_index"_a = use_cuda ? m_config.gpu_device.id : 0,
-                "local_files_only"_a = true, "cpu_threads"_a = n_threads,
-                "flash_attention"_a = m_config.gpu_device.flash_attn));
+            if (use_flash_attn) {
+                m_model.emplace(fw.attr("WhisperModel")(
+                    "model_size_or_path"_a = m_config.model_files.model_file,
+                    "device"_a = use_cuda ? "cuda" : "cpu",
+                    "device_index"_a = use_cuda ? m_config.gpu_device.id : 0,
+                    "local_files_only"_a = true, "cpu_threads"_a = n_threads,
+                    "flash_attention"_a = m_config.gpu_device.flash_attn));
+            } else {
+                m_model.emplace(fw.attr("WhisperModel")(
+                    "model_size_or_path"_a = m_config.model_files.model_file,
+                    "device"_a = use_cuda ? "cuda" : "cpu",
+                    "device_index"_a = use_cuda ? m_config.gpu_device.id : 0,
+                    "local_files_only"_a = true, "cpu_threads"_a = n_threads));
+            }
         };
 
         try {

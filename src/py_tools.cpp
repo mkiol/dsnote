@@ -108,9 +108,11 @@ libs_availability_t libs_availability() {
 
         try {
             LOGD("checking: ctranslate2-cuda");
+            auto ct2 = py::module_::import("ctranslate2");
+            LOGD("ctranslate2 version: "
+                 << ct2.attr("__version__").cast<std::string>());
             availability.ctranslate2_cuda =
-                py::len(py::module_::import("ctranslate2")
-                            .attr("get_supported_compute_types")("cuda")) > 0;
+                py::len(ct2.attr("get_supported_compute_types")("cuda")) > 0;
         } catch (const std::exception& err) {
             LOGD("ctranslate2-cuda check py error: " << err.what());
         }

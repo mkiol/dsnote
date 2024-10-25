@@ -36,6 +36,7 @@ void add_hip_devices(std::vector<device>& devices);
 void add_openvino_devices(std::vector<device>& devices);
 bool has_cuda_runtime();
 bool has_cudnn();
+bool has_hip();
 bool has_openvino();
 bool has_nvidia_gpu();
 bool has_amd_gpu();
