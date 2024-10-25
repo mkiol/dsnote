@@ -20,7 +20,7 @@ finish-args:
   - --filesystem=xdg-videos
   - --env=PYTORCH_TENSOREXPR=0
   - --env=PYTHONPATH=/app/extensions/nvidia/lib/python3.11/site-packages:/app/extensions/amd/lib/python3.11/site-packages:/app/extensions/cpu/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
-  - --env=LD_LIBRARY_PATH=/app/opt/intel/lib:/app/extensions/nvidia/lib:/app/extensions/amd/lib:/app/extensions/cpu/lib:/app/extensions/nvidia/cuda/lib64:/app/extensions/amd/rocm/lib:/app/extensions/amd/zluda
+  - --env=LD_LIBRARY_PATH=/app/opt/intel/lib:/app/extensions/nvidia/lib:/app/extensions/amd/lib:/app/extensions/cpu/lib:/app/extensions/nvidia/cuda/lib64:/app/extensions/amd/rocm/lib:/app/extensions/amd/rocm/lib/llvm/lib:/app/extensions/amd/zluda
   - --env=OPENCL_VENDOR_PATH=/app/opt/opencl/vendors
   - --env=PERL5LIB=/app/lib/perl5/site_perl
   - --env=QT_QUICK_CONTROLS_HOVER_ENABLED=1
@@ -499,8 +499,8 @@ modules:
       - --extra-libs=-lvorbis -logg -lm
     sources:
       - type: archive
-        url: https://ffmpeg.org/releases/ffmpeg-6.1.1.tar.xz
-        sha256: 8684f4b00f94b85461884c3719382f1261f0d9eb3d59640a1f4ac0873616f968
+        url: https://ffmpeg.org/releases/ffmpeg-7.1.tar.xz
+        sha256: 40973d44970dbc83ef302b0609f2e74982be2d85916dd2ee7472d30678a7abe6
       - type: patch
         path: ../patches/ffmpeg.patch
 
@@ -713,8 +713,6 @@ modules:
         url: https://www.cpan.org/src/5.0/perl-5.38.0.tar.gz
         sha256: 213ef58089d2f2c972ea353517dc60ec3656f050dcc027666e118b508423e517
 
-  - python3-modules-x86-64.yaml
-
   - name: oneapi
     only-arches:
       - x86_64
@@ -750,6 +748,8 @@ modules:
       - type: archive
         url: https://github.com/oneapi-src/oneDNN/archive/refs/tags/v3.3.1.tar.gz
         sha256: e0b7a9452162e854cf08b4e90bcd1b382b9903ace6a61503a872573880d24c3f
+
+  - python3-modules-x86-64.yaml
 
   - name: python3-pybind11
     buildsystem: simple
