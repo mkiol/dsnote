@@ -2237,6 +2237,7 @@ void settings::disable_hw_scan() {
     set_hw_scan_cuda(false);
     set_hw_scan_hip(false);
     set_hw_scan_opencl(false);
+    set_hw_scan_openvino(false);
     set_restart_required(false);
 }
 
