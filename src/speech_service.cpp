@@ -1232,38 +1232,55 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         config.text_format = stt_text_fromat_from_settings_format(
             text_format_from_options(options));
         config.sub_config = stt_sub_config_from_options(options);
-        config.beam_search = settings::instance()->whispercpp_beam_search();
-        config.cpu_threads = settings::instance()->whispercpp_cpu_threads();
         config.cache_dir = settings::instance()->cache_dir().toStdString();
         config.insert_stats = stt_insert_stats_from_options(options);
 
         // clang-format off
 #define ENGINE_OPTS(name_) \
-        config.beam_search = settings::instance()->name_##_beam_search(); \
-        config.cpu_threads = settings::instance()->name_##_cpu_threads(); \
+        switch(settings::instance()->name_##_profile()) {  \
+        case settings::engine_profile_t::EngineProfilePerformance: \
+            config.beam_search = 1; \
+            config.cpu_threads = 4; \
+            config.audio_ctx_conf = stt_engine::audio_ctx_conf_t::dynamic; \
+            config.audio_ctx_size = 1500; \
+            break; \
+        case settings::engine_profile_t::EngineProfileQuality: \
+            config.beam_search = 5; \
+            config.cpu_threads = 4; \
+            config.audio_ctx_conf = stt_engine::audio_ctx_conf_t::no_change; \
+            config.audio_ctx_size = 1500; \
+            break; \
+        case settings::engine_profile_t::EngineProfileCustom: \
+            config.beam_search = settings::instance()->name_##_beam_search(); \
+            config.cpu_threads = settings::instance()->name_##_cpu_threads(); \
+            config.audio_ctx_conf = []{ \
+                switch(settings::instance()->name_##_audioctx_size()) { \
+                case settings::option_t::OptionAuto: return stt_engine::audio_ctx_conf_t::dynamic; \
+                case settings::option_t::OptionDefault: return stt_engine::audio_ctx_conf_t::no_change; \
+                case settings::option_t::OptionCustom: return stt_engine::audio_ctx_conf_t::custom; \
+                } \
+                return stt_engine::audio_ctx_conf_t::dynamic; \
+            }(); \
+            config.audio_ctx_size = settings::instance()->name_##_audioctx_size_value(); \
+            break; \
+        } \
         if (settings::instance()->name_##_use_gpu() && settings::instance()->has_##name_##_gpu_device()) { \
             if (auto device = make_gpu_device<stt_engine>(settings::instance()->name_##_gpu_device(), settings::instance()->name_##_auto_gpu_device())) { \
                 config.gpu_device = std::move(*device); \
-                config.gpu_device.flash_attn = \
-                    (config.gpu_device.api == stt_engine::gpu_api_t::cuda || config.gpu_device.api == stt_engine::gpu_api_t::rocm) && \
-                    settings::instance()->name_##_gpu_flash_attn() && \
-                    config.gpu_device.name.find("ZLUDA") == std::string::npos; \
+                if (settings::instance()->name_##_profile() == settings::engine_profile_t::EngineProfileCustom) { \
+                    config.gpu_device.flash_attn = \
+                        (config.gpu_device.api == stt_engine::gpu_api_t::cuda || config.gpu_device.api == stt_engine::gpu_api_t::rocm) && \
+                        settings::instance()->name_##_gpu_flash_attn() && \
+                        config.gpu_device.name.find("ZLUDA") == std::string::npos; \
+                } else { \
+                    config.gpu_device.flash_attn = false; \
+                } \
                 config.use_gpu = true; \
             } \
         }
         
         if (model_config->stt->engine == models_manager::model_engine_t::stt_whisper) {
             ENGINE_OPTS(whispercpp)
-            config.audio_ctx_conf = []{
-                switch(settings::instance()->whispercpp_audioctx_size()) {
-                case settings::option_t::OptionAuto: return stt_engine::audio_ctx_conf_t::dynamic;
-                case settings::option_t::OptionDefault: return stt_engine::audio_ctx_conf_t::no_change;
-                case settings::option_t::OptionCustom: return stt_engine::audio_ctx_conf_t::custom;
-                }
-                return stt_engine::audio_ctx_conf_t::dynamic;
-            }();
-            config.audio_ctx_size = settings::instance()->whispercpp_audioctx_size_value();
-
             if (!settings::instance()->whispercpp_autolang_with_sup()) {
                 // disable auto-lang with sup model
                 config.model_files.scorer_file.clear();

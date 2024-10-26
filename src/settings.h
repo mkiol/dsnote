@@ -289,13 +289,13 @@ class settings : public QSettings, public singleton<settings> {
                    set_##name##_audioctx_size NOTIFY name##_changed)         \
     Q_PROPERTY(                                                              \
         int name##_audioctx_size_value READ name##_audioctx_size_value WRITE \
-            set_##name##_audioctx_size_value NOTIFY name##_changed)
+            set_##name##_audioctx_size_value NOTIFY name##_changed)          \
+    Q_PROPERTY(engine_profile_t name##_profile READ name##_profile WRITE     \
+                   set_##name##_profile NOTIFY name##_changed)
 
     ENGINE_OPTS(whispercpp)
     ENGINE_OPTS(fasterwhisper)
 #undef ENGINE_OPTS
-
-    // faster-whisper
 
 #define ENGINE_OPTS(name)                                                    \
     Q_PROPERTY(bool name##_use_gpu READ name##_use_gpu WRITE                 \
@@ -419,6 +419,13 @@ class settings : public QSettings, public singleton<settings> {
         DefaultExportTabAudio = 1
     };
     Q_ENUM(default_export_tab_t)
+
+    enum class engine_profile_t {
+        EngineProfilePerformance = 0,
+        EngineProfileQuality = 1,
+        EngineProfileCustom = 2,
+    };
+    Q_ENUM(engine_profile_t)
 
     enum class tts_tag_mode_t {
         TtsTagModeDisable = 0,
@@ -791,8 +798,11 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE void reset_##name##_audioctx_size();       \
     int name##_audioctx_size_value() const;                \
     void set_##name##_audioctx_size_value(int value);      \
+    engine_profile_t name##_profile() const;               \
+    void set_##name##_profile(engine_profile_t value);     \
     Q_INVOKABLE void reset_##name##_audioctx_size_value(); \
     Q_INVOKABLE void reset_##name##_options();
+
     ENGINE_OPTS(whispercpp)
     ENGINE_OPTS(fasterwhisper)
 #undef ENGINE_OPTS

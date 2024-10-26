@@ -1585,12 +1585,12 @@ ENGINE_OPTS(whispercpp)
         set_##name##_beam_search(1);                                           \
     }                                                                          \
     settings::option_t settings::name##_audioctx_size() const {                \
-        return static_cast<settings::option_t>(                                \
+        return static_cast<option_t>(                                          \
             value(QStringLiteral("service/" #name "_audioctx_size"),           \
-                  static_cast<int>(settings::option_t::OptionAuto))            \
+                  static_cast<int>(option_t::OptionAuto))                      \
                 .toInt());                                                     \
     }                                                                          \
-    void settings::set_##name##_audioctx_size(settings::option_t value) {      \
+    void settings::set_##name##_audioctx_size(option_t value) {                \
         if (name##_audioctx_size() != value) {                                 \
             setValue(QStringLiteral("service/" #name "_audioctx_size"),        \
                      static_cast<int>(value));                                 \
@@ -1599,7 +1599,7 @@ ENGINE_OPTS(whispercpp)
         }                                                                      \
     }                                                                          \
     void settings::reset_##name##_audioctx_size() {                            \
-        set_##name##_audioctx_size(settings::option_t::OptionAuto);            \
+        set_##name##_audioctx_size(option_t::OptionAuto);                      \
     }                                                                          \
     int settings::name##_audioctx_size_value() const {                         \
         return value(QStringLiteral("service/" #name "_audioctx_size_value"),  \
@@ -1610,6 +1610,21 @@ ENGINE_OPTS(whispercpp)
         if (name##_audioctx_size_value() != value) {                           \
             setValue(QStringLiteral("service/" #name "_audioctx_size_value"),  \
                      value);                                                   \
+            emit name##_changed();                                             \
+            set_restart_required(true);                                        \
+        }                                                                      \
+    }                                                                          \
+    settings::engine_profile_t settings::name##_profile() const {              \
+        return static_cast<engine_profile_t>(                                  \
+            value(                                                             \
+                QStringLiteral("service/" #name "_profile"),                   \
+                static_cast<int>(engine_profile_t::EngineProfilePerformance))  \
+                .toInt());                                                     \
+    }                                                                          \
+    void settings::set_##name##_profile(engine_profile_t value) {              \
+        if (name##_profile() != value) {                                       \
+            setValue(QStringLiteral("service/" #name "_profile"),              \
+                     static_cast<int>(value));                                 \
             emit name##_changed();                                             \
             set_restart_required(true);                                        \
         }                                                                      \

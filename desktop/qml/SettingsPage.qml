@@ -484,9 +484,46 @@ DialogPage {
                 ColumnLayout {
                     id: whispercppTab
 
+                    ComboBoxForm {
+                        label.text: qsTr("Profile")
+                        toolTip: qsTr("Profiles allow you to change the processing parameters in the engine.") + " " +
+                                 qsTr("You can set the parameters to get the fastest processing (%1) or the highest accuracy (%2).")
+                                 .arg("<i>" + qsTr("Best performance") + "</i>")
+                                 .arg("<i>" + qsTr("Best quality") + "</i>") + " " +
+                                 qsTr("If you want to manually set individual engine parameters, select %1.")
+                                 .arg("<i>" + qsTr("Custom") + "</i>")
+                        comboBox {
+                            currentIndex: {
+                                switch(_settings.whispercpp_profile) {
+                                case Settings.EngineProfilePerformance: return 0
+                                case Settings.EngineProfileQuality: return 1
+                                case Settings.EngineProfileCustom: return 2
+                                }
+                                return 0
+                            }
+                            model: [
+                                qsTr("Best performance"),
+                                qsTr("Best quality"),
+                                qsTr("Custom")
+                            ]
+                            onActivated: {
+                                if (index === 0) {
+                                    _settings.whispercpp_profile = Settings.EngineProfilePerformance
+                                } else if (index === 1) {
+                                    _settings.whispercpp_profile = Settings.EngineProfileQuality
+                                } else if (index === 2) {
+                                    _settings.whispercpp_profile = Settings.EngineProfileCustom
+                                } else {
+                                    _settings.whispercpp_profile = Settings.EngineProfilePerformance
+                                }
+                            }
+                        }
+                    }
+
                     SpinBoxForm {
                         id: whispercppThreadsSpinBox
 
+                        visible: _settings.whispercpp_profile === Settings.EngineProfileCustom
                         label.text: qsTr("Number of simultaneous threads")
                         toolTip: qsTr("Set the maximum number of simultaneous CPU threads.") + " " +
                                  qsTr("A higher value does not necessarily speed up decoding.")
@@ -512,6 +549,7 @@ DialogPage {
                     SpinBoxForm {
                         id: whispercppBeamSpinBox
 
+                        visible: _settings.whispercpp_profile === Settings.EngineProfileCustom
                         label.text: qsTr("Beam search width")
                         toolTip: qsTr("A higher value may improve quality, but decoding time may also increase.")
                         spinBox {
@@ -536,6 +574,7 @@ DialogPage {
                     ComboBoxForm {
                         id: whispercppContextSizeComboBox
 
+                        visible: _settings.whispercpp_profile === Settings.EngineProfileCustom
                         label.text: qsTr("Audio context size")
                         toolTip: qsTr("When %1 is set, the size is adjusted dynamically for each audio chunk.").arg("<i>" + qsTr("Dynamic") + "</i>") + " " +
                                  qsTr("When %1 is set, the default fixed size is used.").arg("<i>" + qsTr("Default") + "</i>") + " " +
@@ -580,7 +619,8 @@ DialogPage {
                         id: whispercppContextSizeSpinBox
 
                         indends: 1
-                        visible: _settings.whispercpp_audioctx_size === Settings.OptionCustom
+                        visible: _settings.whispercpp_profile === Settings.EngineProfileCustom &&
+                                 _settings.whispercpp_audioctx_size === Settings.OptionCustom
                         label.text: qsTr("Size")
                         spinBox {
                             from: 1
@@ -603,6 +643,7 @@ DialogPage {
                     CheckBox {
                         id: whispercppFlashAttnCheckBox
 
+                        visible: _settings.whispercpp_profile === Settings.EngineProfileCustom
                         checked: _settings.whispercpp_gpu_flash_attn
                         text: qsTr("Use Flash Attention")
                         onCheckedChanged: {
@@ -649,9 +690,46 @@ DialogPage {
 
                     visible: app.feature_fasterwhisper_stt
 
+                    ComboBoxForm {
+                        label.text: qsTr("Profile")
+                        toolTip: qsTr("Profiles allow you to change the processing parameters in the engine.") + " " +
+                                 qsTr("You can set the parameters to get the fastest processing (%1) or the highest accuracy (%2).")
+                                 .arg("<i>" + qsTr("Best performance") + "</i>")
+                                 .arg("<i>" + qsTr("Best quality") + "</i>") + " " +
+                                 qsTr("If you want to manually set individual engine parameters, select %1.")
+                                 .arg("<i>" + qsTr("Custom") + "</i>")
+                        comboBox {
+                            currentIndex: {
+                                switch(_settings.fasterwhisper_profile) {
+                                case Settings.EngineProfilePerformance: return 0
+                                case Settings.EngineProfileQuality: return 1
+                                case Settings.EngineProfileCustom: return 2
+                                }
+                                return 0
+                            }
+                            model: [
+                                qsTr("Best performance"),
+                                qsTr("Best quality"),
+                                qsTr("Custom")
+                            ]
+                            onActivated: {
+                                if (index === 0) {
+                                    _settings.fasterwhisper_profile = Settings.EngineProfilePerformance
+                                } else if (index === 1) {
+                                    _settings.fasterwhisper_profile = Settings.EngineProfileQuality
+                                } else if (index === 2) {
+                                    _settings.fasterwhisper_profile = Settings.EngineProfileCustom
+                                } else {
+                                    _settings.fasterwhisper_profile = Settings.EngineProfilePerformance
+                                }
+                            }
+                        }
+                    }
+
                     SpinBoxForm {
                         id: fasterwhisperThreadsSpinBox
 
+                        visible: _settings.fasterwhisper_profile === Settings.EngineProfileCustom
                         label.text: qsTr("Number of simultaneous threads")
                         toolTip: qsTr("Set the maximum number of simultaneous CPU threads.") + " " +
                                  qsTr("A higher value does not necessarily speed up decoding.")
@@ -677,6 +755,7 @@ DialogPage {
                     SpinBoxForm {
                         id: fasterwhisperBeamSpinBox
 
+                        visible: _settings.fasterwhisper_profile === Settings.EngineProfileCustom
                         label.text: qsTr("Beam search width")
                         toolTip: qsTr("A higher value may improve quality, but decoding time may also increase.")
                         spinBox {
@@ -701,6 +780,7 @@ DialogPage {
                     CheckBox {
                         id: fasterwhisperFlashAttnCheckBox
 
+                        visible: _settings.fasterwhisper_profile === Settings.EngineProfileCustom
                         checked: _settings.fasterwhisper_gpu_flash_attn
                         text: qsTr("Use Flash Attention")
                         onCheckedChanged: {
