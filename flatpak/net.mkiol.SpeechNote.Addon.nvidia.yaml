@@ -75,30 +75,27 @@ modules:
     only-arches:
       - x86_64
     buildsystem: cmake-ninja
-    build-options:
-      env:
-        HOST_COMPILER: /usr/lib/sdk/llvm16/bin/clang++
-        CUDAHOSTCXX: /usr/lib/sdk/llvm16/bin/clang++
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DGGML_NATIVE=OFF
+      - -DGGML_CUDA=ON
+      - -DCMAKE_CUDA_ARCHITECTURES=50;52;53;60;61;62;70;72;75;80;86;87;89;90;90a
+      - -DCUDAToolkit_ROOT=/app/extensions/nvidia/cuda
+      - -DCMAKE_CUDA_COMPILER=/app/extensions/nvidia/cuda/bin/nvcc
+      - -DGGML_AVX=ON
+      - -DGGML_AVX2=OFF
+      - -DGGML_FMA=OFF
+      - -DGGML_F16C=ON
       - -DBUILD_SHARED_LIBS=ON
       - -DWHISPER_BUILD_TESTS=OFF
       - -DWHISPER_BUILD_EXAMPLES=OFF
-      - -DWHISPER_CUDA=ON
-      - -DWHISPER_NO_AVX2=ON
-      - -DWHISPER_NO_FMA=ON
+      - -DCMAKE_C_FLAGS=-O3
+      - -DCMAKE_CXX_FLAGS=-O3
       - -DWHISPER_TARGET_NAME=whisper-cublas
-      - -DCMAKE_C_FLAGS='-O3'
-      - -DCMAKE_CXX_FLAGS='-O3'
-      - -DCMAKE_CUDA_FLAGS=' -allow-unsupported-compiler'
-      - -DCUDAToolkit_ROOT=/app/extensions/nvidia/cuda
-      - -DCMAKE_CUDA_COMPILER=/app/extensions/nvidia/cuda/bin/nvcc
-      - -DGGML_CUDA_ARCHITECTURES=50;52;53;60;61;62;70;72;75;80;86;87;89;90;90a
     sources:
       - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.6.2.tar.gz
-        sha256: da7988072022acc3cfa61b370b3c51baad017f1900c3dc4e68cb276499f66894
+        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.7.1.tar.gz
+        sha256: 97f19a32212f2f215e538ee37a16ff547aaebc54817bd8072034e02466ce6d55
       - type: patch
         path: ../patches/whispercpp.patch
 

@@ -495,19 +495,23 @@ modules:
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DGGML_NATIVE=OFF
+      - -DGGML_BLAS=ON
+      - -DGGML_BLAS_VENDOR=OpenBLAS
+      - -DGGML_AVX=ON
+      - -DGGML_AVX2=ON
+      - -DGGML_FMA=ON
+      - -DGGML_F16C=ON
       - -DBUILD_SHARED_LIBS=ON
       - -DWHISPER_BUILD_TESTS=OFF
       - -DWHISPER_BUILD_EXAMPLES=OFF
-      - -DWHISPER_OPENBLAS=ON
+      - -DCMAKE_C_FLAGS=-O3
+      - -DCMAKE_CXX_FLAGS=-O3
       - -DWHISPER_TARGET_NAME=whisper-openblas
-      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
-      - -DCMAKE_C_FLAGS='-O3 -I$$C_INCLUDE_PATH/openblas'
-      - -DCMAKE_CXX_FLAGS='-O3 -I$$CPLUS_INCLUDE_PATH/openblas'
     sources:
       - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.6.2.tar.gz
-        sha256: da7988072022acc3cfa61b370b3c51baad017f1900c3dc4e68cb276499f66894
+        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.7.1.tar.gz
+        sha256: 97f19a32212f2f215e538ee37a16ff547aaebc54817bd8072034e02466ce6d55
       - type: patch
         path: ../patches/whispercpp.patch
 
@@ -517,21 +521,23 @@ modules:
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DGGML_NATIVE=OFF
+      - -DGGML_BLAS=ON
+      - -DGGML_BLAS_VENDOR=OpenBLAS
+      - -DGGML_AVX=ON
+      - -DGGML_AVX2=OFF
+      - -DGGML_FMA=OFF
+      - -DGGML_F16C=ON
       - -DBUILD_SHARED_LIBS=ON
       - -DWHISPER_BUILD_TESTS=OFF
       - -DWHISPER_BUILD_EXAMPLES=OFF
-      - -DWHISPER_OPENBLAS=ON
-      - -DWHISPER_NO_AVX2=ON
-      - -DWHISPER_NO_FMA=ON
+      - -DCMAKE_C_FLAGS=-O3
+      - -DCMAKE_CXX_FLAGS=-O3
       - -DWHISPER_TARGET_NAME=whisper-fallback1
-      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
-      - -DCMAKE_C_FLAGS='-O3 -I$$C_INCLUDE_PATH/openblas'
-      - -DCMAKE_CXX_FLAGS='-O3 -I$$CPLUS_INCLUDE_PATH/openblas'
     sources:
       - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.6.2.tar.gz
-        sha256: da7988072022acc3cfa61b370b3c51baad017f1900c3dc4e68cb276499f66894
+        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.7.1.tar.gz
+        sha256: 97f19a32212f2f215e538ee37a16ff547aaebc54817bd8072034e02466ce6d55
       - type: patch
         path: ../patches/whispercpp.patch
 
@@ -541,23 +547,23 @@ modules:
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DGGML_NATIVE=OFF
+      - -DGGML_BLAS=ON
+      - -DGGML_BLAS_VENDOR=OpenBLAS
+      - -DGGML_AVX=OFF
+      - -DGGML_AVX2=OFF
+      - -DGGML_FMA=OFF
+      - -DGGML_F16C=OFF
       - -DBUILD_SHARED_LIBS=ON
       - -DWHISPER_BUILD_TESTS=OFF
       - -DWHISPER_BUILD_EXAMPLES=OFF
-      - -DWHISPER_OPENBLAS=ON
-      - -DWHISPER_NO_AVX=ON
-      - -DWHISPER_NO_AVX2=ON
-      - -DWHISPER_NO_FMA=ON
-      - -DWHISPER_NO_F16C=ON
+      - -DCMAKE_C_FLAGS=-O3
+      - -DCMAKE_CXX_FLAGS=-O3
       - -DWHISPER_TARGET_NAME=whisper-fallback
-      - -DBLAS_LIB_PATH=/app/lib/libopenblas.so
-      - -DCMAKE_C_FLAGS='-O3 -I$$C_INCLUDE_PATH/openblas'
-      - -DCMAKE_CXX_FLAGS='-O3 -I$$CPLUS_INCLUDE_PATH/openblas'
     sources:
       - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.6.2.tar.gz
-        sha256: da7988072022acc3cfa61b370b3c51baad017f1900c3dc4e68cb276499f66894
+        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.7.1.tar.gz
+        sha256: 97f19a32212f2f215e538ee37a16ff547aaebc54817bd8072034e02466ce6d55
       - type: patch
         path: ../patches/whispercpp.patch
 
@@ -581,9 +587,9 @@ modules:
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
       - -DTUNERS=OFF
     sources:
-      - type: git
-        url: https://github.com/CNugteren/CLBlast.git
-        commit: e3ce21bb937f07b8282dccf4823e2acbdf286d17
+      - type: archive
+        url: https://github.com/CNugteren/CLBlast/archive/refs/tags/1.6.3.tar.gz
+        sha256: c05668c7461e8440fce48c9f7a8966a6f9e0923421acd7c0357ece9b1d83f20e
 
   - name: whispercpp-clblast
     only-arches:
@@ -598,15 +604,16 @@ modules:
       - -DWHISPER_CLBLAST=ON
       - -DWHISPER_NO_AVX2=ON
       - -DWHISPER_NO_FMA=ON
+      - -DCMAKE_C_FLAGS=-O3
+      - -DCMAKE_CXX_FLAGS=-O3
       - -DWHISPER_TARGET_NAME=whisper-clblast
-      - -DCMAKE_C_FLAGS='-O3'
-      - -DCMAKE_CXX_FLAGS='-O3'
     sources:
+        # Using older whisper.cpp version because the latest one doesn't support OpenCL
       - type: archive
         url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.6.2.tar.gz
         sha256: da7988072022acc3cfa61b370b3c51baad017f1900c3dc4e68cb276499f66894
       - type: patch
-        path: ../patches/whispercpp.patch
+        path: ../patches/whispercpp-clblast.patch
 
   - name: libnumbertext
     buildsystem: autotools

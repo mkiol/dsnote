@@ -1,7 +1,7 @@
-set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.6.2.tar.gz")
-set(whispercpp_checksum "da7988072022acc3cfa61b370b3c51baad017f1900c3dc4e68cb276499f66894")
+set(whispercpp_source_url "https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.7.1.tar.gz")
+set(whispercpp_checksum "97f19a32212f2f215e538ee37a16ff547aaebc54817bd8072034e02466ce6d55")
 
-set(whispercpp_flags -O3 -ffast-math -I${external_include_dir}/openblas)
+set(whispercpp_flags -O3 -ffast-math -fno-finite-math-only -I${external_include_dir}/openblas)
 set(whispercppfallback_flags ${whispercpp_flags})
 if(arch_arm32)
     list(APPEND whispercpp_flags -mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access)
@@ -12,8 +12,12 @@ list(JOIN whispercppfallback_flags " " whispercppfallback_flags)
 
 if(arch_x8664)
     if(BUILD_WHISPERCPP_CLBLAST)
-        set(clblast_source_url "https://github.com/CNugteren/CLBlast.git")
-        set(clblast_tag "e3ce21bb937f07b8282dccf4823e2acbdf286d17")
+        # Using older whisper.cpp version because the latest one doesn't support OpenCL
+        set(whispercpp_clblast_source_url "https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.6.2.tar.gz")
+        set(whispercpp_clblast_checksum "da7988072022acc3cfa61b370b3c51baad017f1900c3dc4e68cb276499f66894")
+
+        set(clblast_source_url "https://github.com/CNugteren/CLBlast/archive/refs/tags/1.6.3.tar.gz")
+        set(clblast_checksum "c05668c7461e8440fce48c9f7a8966a6f9e0923421acd7c0357ece9b1d83f20e")
 
         find_package(OpenCL)
         if(NOT ${OpenCL_FOUND})
@@ -24,8 +28,8 @@ if(arch_x8664)
             SOURCE_DIR ${external_dir}/clblast
             BINARY_DIR ${PROJECT_BINARY_DIR}/external/clblast
             INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-            GIT_REPOSITORY "${clblast_source_url}"
-            GIT_TAG ${clblast_tag}
+            URL "${clblast_source_url}"
+            URL_HASH SHA256=${clblast_checksum}
             UPDATE_COMMAND ""
             CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
                 -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_POSITION_INDEPENDENT_CODE=ON
@@ -38,10 +42,10 @@ if(arch_x8664)
             SOURCE_DIR ${external_dir}/whispercppclblast
             BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercppclblast
             INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-            URL "${whispercpp_source_url}"
-            URL_HASH SHA256=${whispercpp_checksum}
+            URL "${whispercpp_clblast_source_url}"
+            URL_HASH SHA256=${whispercpp_clblast_checksum}
             PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
-                        -i ${patches_dir}/whispercpp.patch ||
+                        -i ${patches_dir}/whispercpp-clblast.patch ||
                             echo "patch cmd failed, likely already patched"
             CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
                 -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
@@ -78,12 +82,12 @@ if(arch_x8664)
             CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
                 -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
                 -DCMAKE_INSTALL_LIBDIR=lib
-                -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
+                -DGGML_NATIVE=OFF
+                -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=${CMAKE_CUDA_ARCHITECTURES}
+                -DGGML_AVX=ON -DGGML_AVX2=OFF -DGGML_FMA=OFF -DGGML_F16C=ON
+                -DBUILD_SHARED_LIBS=ON
                 -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
-                -DWHISPER_CUDA=ON
-                -DWHISPER_NO_AVX2=ON -DWHISPER_NO_FMA=ON
                 -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
-                -DGGML_CUDA_ARCHITECTURES=${CMAKE_CUDA_ARCHITECTURES}
                 -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
                 -DWHISPER_TARGET_NAME=whisper-cublas
             BUILD_ALWAYS False
@@ -94,7 +98,7 @@ if(arch_x8664)
 
     if(BUILD_WHISPERCPP_HIPBLAS)
         if (NOT DEFINED CMAKE_HIP_ARCHITECTURES)
-            set(CMAKE_HIP_ARCHITECTURES "gfx801 gfx802 gfx803 gfx805 gfx810 gfx900 gfx902 gfx904 gfx906 gfx908 gfx909 gfx90a gfx90c gfx940 gfx1010 gfx1011 gfx1012 gfx1013 gfx1030 gfx1031 gfx1032 gfx1033 gfx1034 gfx1035 gfx1036 gfx1100 gfx1101 gfx1102 gfx1103")
+            set(CMAKE_HIP_ARCHITECTURES "gfx801\\\\\\\\\\\\;gfx802\\\\\\\\\\\\;gfx803\\\\\\\\\\\\;gfx805\\\\\\\\\\\\;gfx810\\\\\\\\\\\\;gfx900\\\\\\\\\\\\;gfx902\\\\\\\\\\\\;gfx904\\\\\\\\\\\\;gfx906\\\\\\\\\\\\;gfx908\\\\\\\\\\\\;gfx909\\\\\\\\\\\\;gfx90a\\\\\\\\\\\\;gfx90c\\\\\\\\\\\\;gfx940\\\\\\\\\\\\;gfx1010\\\\\\\\\\\\;gfx1011\\\\\\\\\\\\;gfx1012\\\\\\\\\\\\;gfx1013\\\\\\\\\\\\;gfx1030\\\\\\\\\\\\;gfx1031\\\\\\\\\\\\;gfx1032\\\\\\\\\\\\;gfx1033\\\\\\\\\\\\;gfx1034\\\\\\\\\\\\;gfx1035\\\\\\\\\\\\;gfx1036\\\\\\\\\\\\;gfx1100\\\\\\\\\\\\;gfx1101\\\\\\\\\\\\;gfx1102\\\\\\\\\\\\;gfx1103")
         endif()
 
         ExternalProject_Add(whispercpphipblas
@@ -109,12 +113,12 @@ if(arch_x8664)
             CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
                 -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
                 -DCMAKE_INSTALL_LIBDIR=lib
-                -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
+                -DGGML_NATIVE=OFF
+                -DGGML_HIPBLAS=ON -DCMAKE_HIP_ARCHITECTURES=${CMAKE_HIP_ARCHITECTURES}
+                -DGGML_AVX=ON -DGGML_AVX2=OFF -DGGML_FMA=OFF -DGGML_F16C=ON
+                -DBUILD_SHARED_LIBS=ON
                 -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
-                -DWHISPER_HIPBLAS=ON
-                -DWHISPER_NO_AVX2=ON -DWHISPER_NO_FMA=ON
                 -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
-                -DGGML_ROCM_ARCHITECTURES=${CMAKE_HIP_ARCHITECTURES}
                 -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
                 -DWHISPER_TARGET_NAME=whisper-hipblas
             BUILD_ALWAYS False
@@ -136,11 +140,13 @@ if(arch_x8664)
             CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
                 -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
                 -DCMAKE_INSTALL_LIBDIR=lib
-                -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
-                -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
+                -DGGML_NATIVE=OFF
+                -DGGML_BLAS=ON -DGGML_BLAS_VENDOR=OpenBLAS
+                -DGGML_AVX=ON -DGGML_AVX2=OFF -DGGML_FMA=OFF -DGGML_F16C=ON
                 -DWHISPER_OPENVINO=ON
-                -DWHISPER_NO_AVX2=ON -DWHISPER_NO_FMA=ON
-                -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
+                -DBUILD_SHARED_LIBS=ON
+                -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
+                -DCMAKE_C_FLAGS=${whispercppfallback_flags} -DCMAKE_CXX_FLAGS=${whispercppfallback_flags}
                 -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
                 -DWHISPER_TARGET_NAME=whisper-openvino
             BUILD_ALWAYS False
@@ -150,24 +156,11 @@ if(arch_x8664)
     endif(BUILD_WHISPERCPP_OPENVINO)
 endif()
 
-if(BUILD_OPENBLAS)
-    set(blas_lib_path ${external_lib_dir}/libopenblas.so)
-    set(blas_include_dir ${external_include_dir}/openblas)
-else()
+if(NOT ${BUILD_OPENBLAS})
     set(BLA_STATIC OFF)
     set(BLA_VENDOR "OpenBLAS")
     find_package(BLAS REQUIRED)
-
-    find_path(BLAS_INCLUDE_DIRS NAMES cblas.h
-        PATHS ${CMAKE_PREFIX_PATH}/include/openblas /usr/include/openblas
-        /usr/local/include/openblas $ENV{BLAS_HOME}/include REQUIRED)
-
-    set(blas_lib_path ${BLAS_LIBRARIES})
-    set(blas_include_dir ${BLAS_INCLUDE_DIRS})
 endif()
-
-message(STATUS "OpenBLAS lib: ${blas_lib_path}")
-message(STATUS "OpenBLAS include: ${blas_include_dir}")
 
 ExternalProject_Add(whispercppfallback1
     SOURCE_DIR ${external_dir}/whispercppfallback1
@@ -181,12 +174,11 @@ ExternalProject_Add(whispercppfallback1
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
         -DCMAKE_INSTALL_LIBDIR=lib
-        -DBLAS_LIB_PATH=${blas_lib_path}
-        -DBLAS_INC_DIR=${blas_include_dir}
-        -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
+        -DGGML_NATIVE=OFF
+        -DGGML_BLAS=ON -DGGML_BLAS_VENDOR=OpenBLAS
+        -DGGML_AVX=ON -DGGML_AVX2=OFF -DGGML_FMA=OFF -DGGML_F16C=ON
+        -DBUILD_SHARED_LIBS=ON
         -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
-        -DWHISPER_OPENBLAS=ON
-        -DWHISPER_NO_AVX2=ON -DWHISPER_NO_FMA=ON
         -DCMAKE_C_FLAGS=${whispercppfallback_flags} -DCMAKE_CXX_FLAGS=${whispercppfallback_flags}
         -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
         -DWHISPER_TARGET_NAME=whisper-fallback1
@@ -205,12 +197,11 @@ ExternalProject_Add(whispercppfallback
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
         -DCMAKE_INSTALL_LIBDIR=lib
-        -DBLAS_LIB_PATH=${blas_lib_path}
-        -DBLAS_INC_DIR=${blas_include_dir}
-        -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
+        -DGGML_NATIVE=OFF
+        -DGGML_BLAS=ON -DGGML_BLAS_VENDOR=OpenBLAS
+        -DGGML_AVX=OFF -DGGML_AVX2=OFF -DGGML_FMA=OFF -DGGML_F16C=OFF
+        -DBUILD_SHARED_LIBS=ON
         -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
-        -DWHISPER_OPENBLAS=ON
-        -DWHISPER_NO_AVX=ON -DWHISPER_NO_AVX2=ON -DWHISPER_NO_FMA=ON -DWHISPER_NO_F16C=ON
         -DCMAKE_C_FLAGS=${whispercppfallback_flags} -DCMAKE_CXX_FLAGS=${whispercppfallback_flags}
         -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
         -DWHISPER_TARGET_NAME=whisper-fallback
@@ -229,11 +220,11 @@ ExternalProject_Add(whispercppopenblas
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
         -DCMAKE_INSTALL_LIBDIR=lib
-        -DBLAS_LIB_PATH=${blas_lib_path}
-        -DBLAS_INC_DIR=${blas_include_dir}
-        -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
+        -DGGML_NATIVE=OFF
+        -DGGML_BLAS=ON -DGGML_BLAS_VENDOR=OpenBLAS
+        -DGGML_AVX=ON -DGGML_AVX2=ON -DGGML_FMA=ON -DGGML_F16C=ON
+        -DBUILD_SHARED_LIBS=ON
         -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
-        -DWHISPER_OPENBLAS=ON
         -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
         -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
         -DWHISPER_TARGET_NAME=whisper-openblas

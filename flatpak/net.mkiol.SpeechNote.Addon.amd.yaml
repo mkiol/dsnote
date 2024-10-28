@@ -353,26 +353,29 @@ modules:
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DBUILD_SHARED_LIBS=ON
-      - -DWHISPER_BUILD_TESTS=OFF
-      - -DWHISPER_BUILD_EXAMPLES=OFF
-      - -DWHISPER_HIPBLAS=ON
-      - -DWHISPER_NO_AVX2=ON
-      - -DWHISPER_NO_FMA=ON
-      - -DWHISPER_TARGET_NAME=whisper-hipblas
-      - -DCMAKE_C_FLAGS='-O3'
-      - -DCMAKE_CXX_FLAGS='-O3'
+      - -DGGML_NATIVE=OFF
+      - -DGGML_HIPBLAS=ON
+      - -DCMAKE_HIP_ARCHITECTURES=gfx801;gfx802;gfx803;gfx805;gfx810;gfx900;gfx902;gfx904;gfx906;gfx908;gfx909;gfx90a;gfx90c;gfx940;gfx1010;gfx1011;gfx1012;gfx1013;gfx1030;gfx1031;gfx1032;gfx1033;gfx1034;gfx1035;gfx1036;gfx1100;gfx1101;gfx1102;gfx1103
       - -DROCM_PATH=/app/extensions/amd/rocm
       - -Dhip_DIR=/app/extensions/amd/rocm/hip
       - -Drocblas_DIR=/app/extensions/amd/rocm/rocblas
       - -DHIP_PLATFORM=amd
-      - -DGGML_ROCM_ARCHITECTURES=gfx801 gfx802 gfx803 gfx805 gfx810 gfx900 gfx902 gfx904 gfx906 gfx908 gfx909 gfx90a gfx90c gfx940 gfx1010 gfx1011 gfx1012 gfx1013 gfx1030 gfx1031 gfx1032 gfx1033 gfx1034 gfx1035 gfx1036 gfx1100 gfx1101 gfx1102 gfx1103
+      - -DGGML_AVX=ON
+      - -DGGML_AVX2=OFF
+      - -DGGML_FMA=OFF
+      - -DGGML_F16C=ON
+      - -DBUILD_SHARED_LIBS=ON
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+      - -DCMAKE_C_FLAGS=-O3
+      - -DCMAKE_CXX_FLAGS=-O3
+      - -DWHISPER_TARGET_NAME=whisper-hipblas
     sources:
       - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.6.2.tar.gz
-        sha256: da7988072022acc3cfa61b370b3c51baad017f1900c3dc4e68cb276499f66894
+        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.7.1.tar.gz
+        sha256: 97f19a32212f2f215e538ee37a16ff547aaebc54817bd8072034e02466ce6d55
       - type: patch
         path: ../patches/whispercpp.patch
+
 
 
