@@ -14,23 +14,20 @@ modules:
       - x86_64
     buildsystem: simple
     build-commands:
-      - mkdir rocm_src
+      - mkdir -p ${FLATPAK_DEST}/rocm
       - |
         set -e
         for f in *.deb; do
           if [ -f "$f" ]; then
-            mv "$f" rocm_src
-            cd rocm_src
             ar x "$f"
             rm control.tar.*
             rm debian-binary
             tar -xf data.tar.*
             rm data.tar.*
-            cd ..
           fi
         done
-      - mkdir -p ${FLATPAK_DEST}/rocm
-      - mv --no-target-directory rocm_src/opt/rocm-5.7.3 ${FLATPAK_DEST}/rocm
+      - mv --no-target-directory opt/rocm* ${FLATPAK_DEST}/rocm
+      - chmod -R 644 ${FLATPAK_DEST}/rocm/lib/llvm/share/gdb/python/ompd/*.so*
     build-options:
       strip: true
     cleanup:
@@ -55,177 +52,12 @@ modules:
       - /rocm/lib/cmake
       - /rocm/lib/rocmmod
       - /rocm/lib/CMakeFiles
+      - /rocm/lib/llvm/lib-debug
+      - /rocm/lib/llvm/share
       - /rocm/libexec
       - /rocm/llvm
     sources:
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocm-opencl/rocm-opencl_2.0.0.50703-116~22.04_amd64.deb
-        sha256: 4b52ede8f3c3b1f010fd335c7640c4b6406b7f948c6efe16323c69f4b619f014
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/c/comgr/comgr_2.5.0.50703-116~22.04_amd64.deb
-        sha256: 0fe96e30fe1927f90f271f2bbb0c90fd88be2007af63b7f805f5bd7deab14731
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hipblas/hipblas_1.1.0.50703-116~22.04_amd64.deb
-        sha256: 66bf98ad332af3bba005ac57f2f8f0e924fefb01a9ca83ac3356955d4a317a50
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hipblas-dev/hipblas-dev_1.1.0.50703-116~22.04_amd64.deb
-        sha256: 27c2c03fcd878f54bb997f1c6cab71c39304f9f4cfd5e846705cc4737237be12
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hipblaslt/hipblaslt_0.3.0.50703-116~22.04_amd64.deb
-        sha256: 8b8779e30258b8799f3d9220687161f227a31a51a53e774e3f2d99806a9d719d
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hipblaslt-dev/hipblaslt-dev_0.3.0.50703-116~22.04_amd64.deb
-        sha256: 27b15c672c3d6404d13c42a308b62169a942645013027406423657f5f6a81038
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hipcc/hipcc_1.0.0.50703-116~22.04_amd64.deb
-        sha256: a10cf62e642e52e3e0f74991082d86eac7067d884d14b188515cbbfe5b36d09d
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hipcub-dev/hipcub-dev_2.13.1.50703-116~22.04_amd64.deb
-        sha256: ed531a27f9d2ecd177c2122dbd542dbc36bd7a211b90bd64c5d2fd25c1107dc7
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hip-dev/hip-dev_5.7.31921.50703-116~22.04_amd64.deb
-        sha256: 78dbe4c78224891ae748a5e6223052c9f0db5c4966b45ccd4e245aff143263da
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hipfft/hipfft_1.0.12.50703-116~22.04_amd64.deb
-        sha256: 6817a3e7481070269efbe212811be70a87b6485c84ba62c01d182cf9ea576961
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hipfft-dev/hipfft-dev_1.0.12.50703-116~22.04_amd64.deb
-        sha256: ba5d8909c6b6d6e79d7ff1e8febbb959e18f17a7f9007eded2b7729e4b962171
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hipfort-dev/hipfort-dev_0.4.0.50703-116~22.04_amd64.deb
-        sha256: 2d775d130d3351e78e610206351eb14b3f9834ff9b0dc3e757e0b1e4a53d8930
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hip-runtime-amd/hip-runtime-amd_5.7.31921.50703-116~22.04_amd64.deb
-        sha256: 30f516319b8e858b643bcc14c1c7e290dfb46aab0a8f0a2904f66e1fb4d56348
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hip-runtime-nvidia/hip-runtime-nvidia_5.7.31921.50703-116~22.04_amd64.deb
-        sha256: 81d6b75d30ca7eab38bfc1096479277ee6f724693093eb197cb9d3bdac14cbfd
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hipsolver/hipsolver_1.8.2.50703-116~22.04_amd64.deb
-        sha256: d969c1155bcecd334b40a57e27e226d10d568a071d5599fc5ff3119781baf947
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hipsolver-dev/hipsolver-dev_1.8.2.50703-116~22.04_amd64.deb
-        sha256: f6e687b17113f27cd5c3dd03d04f5fbe30ce734dbff3cbd62b4689e0b4ff758a
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hipsparse/hipsparse_2.3.8.50703-116~22.04_amd64.deb
-        sha256: 399ba7f37029e1e65f3af90dd52392760c30df04ff71874c05de6dec402dcf28
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hipsparse-dev/hipsparse-dev_2.3.8.50703-116~22.04_amd64.deb
-        sha256: 074d539aaae15111d59fe0ba5d38d2f4c2002e08d14ba21dff984df77abb91ff
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hsa-rocr/hsa-rocr_1.11.0.50703-116~22.04_amd64.deb
-        sha256: 6782c57b4d527403a021397d924fcd6befc4d47777ef36b787c5e5dc691c9d8c
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/h/hsa-rocr-dev/hsa-rocr-dev_1.11.0.50703-116~22.04_amd64.deb
-        sha256: 16a59abcf1641d4a4eab14474f1abd7c3a92647f66c9feb5f31301234acc59ef
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocblas/rocblas_3.1.0.50703-116~22.04_amd64.deb
-        sha256: 7906a1a09340b057d2a3ca18b18aecf7beb19651218975869af831f41c0e079e
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocblas-dev/rocblas-dev_3.1.0.50703-116~22.04_amd64.deb
-        sha256: 163f4ba4cea8d5c4cf07264d4ffe261bb9e53e7dea31c6568dbba991b45b3c3d
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocfft/rocfft_1.0.23.50703-116~22.04_amd64.deb
-        sha256: b90c9cac6855f750e75f77186546ceace95412d2aec82760842e86880c9a5b68
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocfft-dev/rocfft-dev_1.0.23.50703-116~22.04_amd64.deb
-        sha256: 6992800883e420ad090ba0b9dccffa243756d90bd114098162c8300f857a010c
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocm-cmake/rocm-cmake_0.10.0.50703-116~22.04_amd64.deb
-        sha256: 54fd8503e41921612335c5188221a31db025e0aed869cca733fae6c75791f90b
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocm-core/rocm-core_5.7.3.50703-116~22.04_amd64.deb
-        sha256: 2b016dc6a05b5528a3759338a4f0121f7d5bff5580056c6313e61fc50538fbef
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocm-dev/rocm-dev_5.7.3.50703-116~22.04_amd64.deb
-        sha256: af539c73c48b8c9f26314408695bac4c8af522409d7ffe95a266fdb86870d93d
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocm-device-libs/rocm-device-libs_1.0.0.50703-116~22.04_amd64.deb
-        sha256: 65c9be74f78c18e0ef9d2e2e3bfbf1f26cae2e7d93a481c395b9846929379d26
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocm-hip-libraries/rocm-hip-libraries_5.7.3.50703-116~22.04_amd64.deb
-        sha256: 7ce7e7a634adfec6131d22a327a6907388d960611a7902efefd1b13fa0e9f949
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocm-hip-runtime/rocm-hip-runtime_5.7.3.50703-116~22.04_amd64.deb
-        sha256: 7463b276918fd37894462a792c3722db559da66cb836620105cc1fd8fe555083
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocm-hip-runtime-dev/rocm-hip-runtime-dev_5.7.3.50703-116~22.04_amd64.deb
-        sha256: bf774f652e4177486db901a89abf7a57d660be95d2cf35d69ef228a842608edd
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocm-hip-sdk/rocm-hip-sdk_5.7.3.50703-116~22.04_amd64.deb
-        sha256: 41437054e03009d6b75fedd73edb488228abef56c27ff2dd8cb60f9034550d84
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocm-language-runtime/rocm-language-runtime_5.7.3.50703-116~22.04_amd64.deb
-        sha256: ad7701050e08cea5e343ed6d80300ba3715d13299c50b41bcd0f0f795aeb8354
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocm-libs/rocm-libs_5.7.3.50703-116~22.04_amd64.deb
-        sha256: 605041184e98085a8f0dc6056013aec222aa519bfd4ae07d9c01efe247cfb6b7
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocm-llvm/rocm-llvm_17.0.0.23382.50703-116~22.04_amd64.deb
-        sha256: f20a3a3d768b7904b48b91260f3c3b2308554f1d38f0d086a3c86bc189dd0e06
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocm-ml-libraries/rocm-ml-libraries_5.7.3.50703-116~22.04_amd64.deb
-        sha256: 9525d5637f6ee749d9a9dd60863c89da170ef638aeab4c1c5222872831ccec13
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocsolver/rocsolver_3.23.0.50703-116~22.04_amd64.deb
-        sha256: aa39943c33b51de74c57dbbce3307ea560bd20b8a710457e520067c516847a23
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocsolver-dev/rocsolver-dev_3.23.0.50703-116~22.04_amd64.deb
-        sha256: 90635898e67bd1d0c8efcfbbe8b8857b28fb82525d0701130fa772776dcb2c3a
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocsparse/rocsparse_2.5.4.50703-116~22.04_amd64.deb
-        sha256: 57e8c759db9ce4c81e9a078e0dc2a7d6b8fbb9357b81fc0d6b390547b42c8779
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocsparse-dev/rocsparse-dev_2.5.4.50703-116~22.04_amd64.deb
-        sha256: 10420c978d02eec458f6ca279736810a9aff4b13476d2720091620af4185e28a
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/roctracer/roctracer_4.1.0.50703-116~22.04_amd64.deb
-        sha256: 4e1269702c775beec72ef12d25f835b0164149d0fd6316d115887596a3a9e556
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/roctracer-dev/roctracer-dev_4.1.0.50703-116~22.04_amd64.deb
-        sha256: be92a2832ec044353f2327648dcaaac4c0009a78d7315c304cd71314f4ac8d76
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/m/miopen-hip/miopen-hip_2.20.0.50703-116~22.04_amd64.deb
-        sha256: 6c9cace32d7746d863542e8996e5291d791056d5d1c5f0c8b1d94a0d3b620840
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/m/miopen-hip-dev/miopen-hip-dev_2.20.0.50703-116~22.04_amd64.deb
-        sha256: 659ab52b5cd4fce08139a80f00ed169013450abadba77f95a785a5f366783c76
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/m/miopen-hip-gfx900kdb/miopen-hip-gfx900kdb_2.20.0.50703-116~22.04_amd64.deb
-        sha256: 4e4cac495bef33978a4fb0d7612df92713a1bf1d99fcf3d75fbf9c8fbb1ccec3
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/m/miopen-hip-gfx1030kdb/miopen-hip-gfx1030kdb_2.20.0.50703-116~22.04_amd64.deb
-        sha256: 9a9c7399bbb02ed8e8b9fb29c0851284f73f65204cc21665575b1cd033b9f2ec
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/m/miopen-hip-gfx906kdb/miopen-hip-gfx906kdb_2.20.0.50703-116~22.04_amd64.deb
-        sha256: 5bb6f7aa6709989b768493a3ac0aff40d736efce20f356b8aec1c69ce3f0c10d
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/m/miopen-hip-gfx908kdb/miopen-hip-gfx908kdb_2.20.0.50703-116~22.04_amd64.deb
-        sha256: 671231c92f3ebcf47205434f4372965f1c0f5e0fe5823f2900725558cca316f4
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/m/miopen-hip-gfx90akdb/miopen-hip-gfx90akdb_2.20.0.50703-116~22.04_amd64.deb
-        sha256: 5ff01ef4725bdf958274e86f236fe1d3e25a9171e3521d39c029c2d1c832ebba
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocrand/rocrand_2.10.17.50703-116~22.04_amd64.deb
-        sha256: f683ba6d4c121c62cf9cf6983dcac1f64146e79036a5924bc401abea6d6b371a
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocrand-dev/rocrand-dev_2.10.17.50703-116~22.04_amd64.deb
-        sha256: 1e77b64a59a6e9bee301024b58275d451f4d594d9a3be027f8ca7be0f1365089
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rccl/rccl_2.17.1.50703-116~22.04_amd64.deb
-        sha256: e22c8b88d88f9ea49dbd23c3171e4c7f0e4e44daeed27b41dbd5ceddcfa7c4f9
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rccl-dev/rccl-dev_2.17.1.50703-116~22.04_amd64.deb
-        sha256: d1c16ebafab351565509e877bf34d503806ef860f8d9cdb59cb085ed333a12ac
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocthrust-dev/rocthrust-dev_2.18.0.50703-116~22.04_amd64.deb
-        sha256: 7fcc86142e57fee9582aed87e4aab707329bf7bc5a5594e13167adf750f402f6
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocprim-dev/rocprim-dev_2.13.1.50703-116~22.04_amd64.deb
-        sha256: edf1ec36e1720ddaacc45f3e3aa1ac423d637ff3eea4dfca82960bbe37874351
-      - type: file
-        url: https://repo.radeon.com/rocm/apt/5.7.3/pool/main/r/rocm-smi-lib/rocm-smi-lib_5.0.0.50703-116~22.04_amd64.deb
-        sha256: e694d833c7b11cdaeb6afebccc102d8415908286296dafa0c7e7119ac0e2627b
+      - rocm-deb-sources.yaml
 
   - name: oneapi
     only-arches:
@@ -355,7 +187,7 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DGGML_NATIVE=OFF
       - -DGGML_HIPBLAS=ON
-      - -DCMAKE_HIP_ARCHITECTURES=gfx801;gfx802;gfx803;gfx805;gfx810;gfx900;gfx902;gfx904;gfx906;gfx908;gfx909;gfx90a;gfx90c;gfx940;gfx1010;gfx1011;gfx1012;gfx1013;gfx1030;gfx1031;gfx1032;gfx1033;gfx1034;gfx1035;gfx1036;gfx1100;gfx1101;gfx1102;gfx1103
+      - -DCMAKE_HIP_ARCHITECTURES=gfx900;gfx902;gfx904;gfx906;gfx908;gfx909;gfx90a;gfx90c;gfx940;gfx1010;gfx1011;gfx1012;gfx1013;gfx1030;gfx1031;gfx1032;gfx1033;gfx1034;gfx1035;gfx1036;gfx1100;gfx1101;gfx1102;gfx1103
       - -DROCM_PATH=/app/extensions/amd/rocm
       - -Dhip_DIR=/app/extensions/amd/rocm/hip
       - -Drocblas_DIR=/app/extensions/amd/rocm/rocblas
@@ -376,6 +208,3 @@ modules:
         sha256: 97f19a32212f2f215e538ee37a16ff547aaebc54817bd8072034e02466ce6d55
       - type: patch
         path: ../patches/whispercpp.patch
-
-
-
