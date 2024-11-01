@@ -50,7 +50,7 @@ class stt_engine {
     };
     friend std::ostream& operator<<(std::ostream& os, vad_mode_t mode);
 
-    enum class gpu_api_t { opencl, cuda, rocm, openvino };
+    enum class gpu_api_t { opencl, cuda, rocm, openvino, vulkan };
     friend std::ostream& operator<<(std::ostream& os, gpu_api_t api);
 
     enum class audio_ctx_conf_t { dynamic, no_change, custom };

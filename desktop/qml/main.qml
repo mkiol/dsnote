@@ -240,7 +240,7 @@ ApplicationWindow {
             onCloseClicked: _settings.set_hint_done(Settings.HintDoneAddon)
             text: {
                 var nvidia_addon = (_settings.system_flags & Settings.SystemNvidiaGpu) > 0;
-                qsTr("%1 graphics card has been detected. To add GPU acceleration support, install the %2 Flatpak add-on.")
+                qsTr("%1 graphics card has been detected. To add most efficient GPU acceleration support, install Flatpak add-on: %2.")
                     .arg(nvidia_addon ? "NVIDIA" :
                                         "AMD")
                     .arg(nvidia_addon ? "<i><b>Speech Note NVIDIA (net.mkiol.SpeechNote.Addon.nvidia)</b></i>" :
@@ -271,9 +271,8 @@ ApplicationWindow {
                      ((app.feature_whispercpp_gpu && _settings.whispercpp_use_gpu) ||
                       (app.feature_fasterwhisper_gpu && _settings.fasterwhisper_use_gpu)) &&
                      ((_settings.error_flags & Settings.ErrorCudaUnknown) > 0)
-            text: qsTr("Most likely, %1 kernel module has not been fully initialized.") + " " +
-                  qsTr("Try executing %2 before running Speech Note.")
-                      .arg("NVIDIA")
+            text: qsTr("Most likely, %1 kernel module has not been fully initialized.").arg("NVIDIA") + " " +
+                  qsTr("Try executing %1 before running Speech Note.")
                       .arg("<i>\"nvidia-modprobe -c 0 -u\"</i>")
         }
 

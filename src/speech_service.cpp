@@ -1149,6 +1149,13 @@ static std::optional<typename Engine::gpu_device_t> make_gpu_device(
             device.name = l.at(1).trimmed().toStdString();
             return device;
         }
+        if (l.at(0).trimmed() == "Vulkan") {
+            typename Engine::gpu_device_t device;
+            device.api = Engine::gpu_api_t::vulkan;
+            device.id = l.at(1).trimmed().toInt();
+            device.name = l.at(2).trimmed().toStdString();
+            return device;
+        }
     } else {
         qWarning() << "invalid gpu device str:" << gpu_str << auto_device_str;
     }
@@ -2982,13 +2989,16 @@ QVariantMap speech_service::features_availability() {
                     tr("Diacritics restoration for Hebrew")});
 
             bool stt_ds = ds_engine::available();
+            bool stt_whispercpp = whisper_engine::available();
             bool mnt = mnt_engine::available();
 
             m_features_availability.insert(
                 "coqui-stt", QVariantList{stt_ds, "Coqui/DeepSpeech STT"});
             m_features_availability.insert("translator",
                                            QVariantList{mnt, "Translator"});
-
+            m_features_availability.insert(
+                "whispercpp-stt",
+                QVariantList{stt_whispercpp, "WhisperCpp STT "});
 #ifdef ARCH_X86_64
             bool stt_whispercpp_cuda = whisper_engine::has_cuda();
             m_features_availability.insert(
@@ -3026,6 +3036,15 @@ QVariantMap speech_service::features_availability() {
             if (stt_whispercpp_opencl)
                 hw_feature_flags |= settings::hw_feature_flags_t::
                     hw_feature_stt_whispercpp_opencl;
+
+            bool stt_whispercpp_vulkan = whisper_engine::has_vulkan();
+            m_features_availability.insert(
+                "whispercpp-stt-vulkan",
+                QVariantList{stt_whispercpp_vulkan,
+                             "WhisperCpp STT Vulkan " + tr("HW acceleration")});
+            if (stt_whispercpp_vulkan)
+                hw_feature_flags |= settings::hw_feature_flags_t::
+                    hw_feature_stt_whispercpp_vulkan;
 #endif
             auto tts_rhvoice = rhvoice_engine::available();
             m_features_availability.insert(
@@ -3059,6 +3078,7 @@ QVariantMap speech_service::features_availability() {
                  /*stt_fasterwhisper=*/py_availability->faster_whisper,
                  /*stt_ds=*/stt_ds,
                  /*stt_vosk=*/stt_vosk,
+                 /*stt_whispercpp=*/stt_whispercpp,
                  /*mnt_bergamot=*/mnt,
                  /*ttt_hftc=*/py_availability->transformers,
                  /*option_r=*/has_uroman});

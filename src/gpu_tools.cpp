@@ -15,6 +15,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -141,6 +142,110 @@ struct ov_version {
 struct ov_available_devices {
     char** devices;
     size_t size;
+};
+
+#define VK_MAKE_API_VERSION(variant, major, minor, patch)            \
+    ((((uint32_t)(variant)) << 29U) | (((uint32_t)(major)) << 22U) | \
+     (((uint32_t)(minor)) << 12U) | ((uint32_t)(patch)))
+#define VK_API_VERSION_1_0 VK_MAKE_API_VERSION(0, 1, 0, 0)
+#define VK_MAKE_VERSION(major, minor, patch)                       \
+    ((((uint32_t)(major)) << 22U) | (((uint32_t)(minor)) << 12U) | \
+     ((uint32_t)(patch)))
+
+enum VkResult {
+    VK_SUCCESS = 0,
+    VK_NOT_READY = 1,
+    VK_TIMEOUT = 2,
+    VK_EVENT_SET = 3,
+    VK_EVENT_RESET = 4,
+    VK_INCOMPLETE = 5,
+    VK_ERROR_OUT_OF_HOST_MEMORY = -1,
+    VK_ERROR_OUT_OF_DEVICE_MEMORY = -2,
+    VK_ERROR_INITIALIZATION_FAILED = -3,
+    VK_ERROR_DEVICE_LOST = -4,
+    VK_ERROR_MEMORY_MAP_FAILED = -5,
+    VK_ERROR_LAYER_NOT_PRESENT = -6,
+    VK_ERROR_EXTENSION_NOT_PRESENT = -7,
+    VK_ERROR_FEATURE_NOT_PRESENT = -8,
+    VK_ERROR_INCOMPATIBLE_DRIVER = -9,
+    VK_ERROR_TOO_MANY_OBJECTS = -10,
+    VK_ERROR_FORMAT_NOT_SUPPORTED = -11,
+    VK_ERROR_FRAGMENTED_POOL = -12,
+    VK_ERROR_UNKNOWN = -13
+};
+
+enum VkStructureType {
+    VK_STRUCTURE_TYPE_APPLICATION_INFO = 0,
+    VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO = 1
+};
+
+enum VkInstanceCreateFlags {
+    VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR = 0x00000001
+};
+
+enum VkPhysicalDeviceType {
+    VK_PHYSICAL_DEVICE_TYPE_OTHER = 0,
+    VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU = 1,
+    VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU = 2,
+    VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU = 3,
+    VK_PHYSICAL_DEVICE_TYPE_CPU = 4
+};
+
+#define VK_FALSE 0U
+#define VK_LOD_CLAMP_NONE 1000.0F
+#define VK_QUEUE_FAMILY_IGNORED (~0U)
+#define VK_REMAINING_ARRAY_LAYERS (~0U)
+#define VK_REMAINING_MIP_LEVELS (~0U)
+#define VK_SUBPASS_EXTERNAL (~0U)
+#define VK_TRUE 1U
+#define VK_WHOLE_SIZE (~0ULL)
+#define VK_MAX_MEMORY_TYPES 32U
+#define VK_MAX_PHYSICAL_DEVICE_NAME_SIZE 256U
+#define VK_UUID_SIZE 16U
+#define VK_MAX_EXTENSION_NAME_SIZE 256U
+#define VK_MAX_DESCRIPTION_SIZE 256U
+#define VK_MAX_MEMORY_HEAPS 16U
+
+struct VkExtensionProperties {
+    char extensionName[VK_MAX_EXTENSION_NAME_SIZE];
+    uint32_t specVersion;
+};
+
+struct VkApplicationInfo {
+    VkStructureType sType;
+    const void* pNext;
+    const char* pApplicationName;
+    uint32_t applicationVersion;
+    const char* pEngineName;
+    uint32_t engineVersion;
+    uint32_t apiVersion;
+};
+
+struct VkInstanceCreateInfo {
+    VkStructureType sType;
+    const void* pNext;
+    VkInstanceCreateFlags flags;
+    const VkApplicationInfo* pApplicationInfo;
+    uint32_t enabledLayerCount;
+    const char* const* ppEnabledLayerNames;
+    uint32_t enabledExtensionCount;
+    const char* const* ppEnabledExtensionNames;
+};
+
+struct VkPhysicalDeviceProperties {
+    uint32_t apiVersion;
+    uint32_t driverVersion;
+    uint32_t vendorID;
+    uint32_t deviceID;
+    VkPhysicalDeviceType deviceType;
+    char deviceName[VK_MAX_PHYSICAL_DEVICE_NAME_SIZE];
+    char padding[1024];
+};
+
+struct VkPhysicalDeviceProperties2 {
+    VkStructureType sType;
+    void* pNext;
+    VkPhysicalDeviceProperties properties;
 };
 
 struct opencl_api {
@@ -484,6 +589,78 @@ struct hip_api {
     }
 };
 
+struct vulkan_api {
+    void* handle = nullptr;
+    VkResult (*vkEnumerateInstanceExtensionProperties)(
+        const char*, uint32_t*, VkExtensionProperties*) = nullptr;
+    VkResult (*vkCreateInstance)(const VkInstanceCreateInfo*, const void*,
+                                 void**) = nullptr;
+    VkResult (*vkEnumeratePhysicalDevices)(void*, uint32_t*, void**) = nullptr;
+    void (*vkGetPhysicalDeviceProperties2)(
+        void*, VkPhysicalDeviceProperties2*) = nullptr;
+    void (*vkDestroyInstance)(void*, const void*) = nullptr;
+
+    vulkan_api() {
+        handle = dlopen("libvulkan.so.1", RTLD_LAZY);
+        if (!handle) {
+            LOGW("failed to open vulkan lib: " << dlerror());
+            throw std::runtime_error("failed to open vulkan lib");
+        }
+
+        vkEnumerateInstanceExtensionProperties =
+            reinterpret_cast<decltype(vkEnumerateInstanceExtensionProperties)>(
+                dlsym(handle, "vkEnumerateInstanceExtensionProperties"));
+        if (!vkEnumerateInstanceExtensionProperties) {
+            LOGW("failed to sym vkEnumerateInstanceExtensionProperties");
+            dlclose(handle);
+            throw std::runtime_error(
+                "failed to sym vkEnumerateInstanceExtensionProperties");
+        }
+
+        vkCreateInstance = reinterpret_cast<decltype(vkCreateInstance)>(
+            dlsym(handle, "vkCreateInstance"));
+        if (!vkCreateInstance) {
+            LOGW("failed to sym vkCreateInstance");
+            dlclose(handle);
+            throw std::runtime_error("failed to sym vkCreateInstance");
+        }
+
+        vkEnumeratePhysicalDevices =
+            reinterpret_cast<decltype(vkEnumeratePhysicalDevices)>(
+                dlsym(handle, "vkEnumeratePhysicalDevices"));
+        if (!vkEnumeratePhysicalDevices) {
+            LOGW("failed to sym vkEnumeratePhysicalDevices");
+            dlclose(handle);
+            throw std::runtime_error(
+                "failed to sym vkEnumeratePhysicalDevices");
+        }
+
+        vkGetPhysicalDeviceProperties2 =
+            reinterpret_cast<decltype(vkGetPhysicalDeviceProperties2)>(
+                dlsym(handle, "vkGetPhysicalDeviceProperties2"));
+        if (!vkGetPhysicalDeviceProperties2) {
+            LOGW("failed to sym vkGetPhysicalDeviceProperties2");
+            dlclose(handle);
+            throw std::runtime_error(
+                "failed to sym vkGetPhysicalDeviceProperties2");
+        }
+
+        vkDestroyInstance = reinterpret_cast<decltype(vkDestroyInstance)>(
+            dlsym(handle, "vkDestroyInstance"));
+        if (!vkDestroyInstance) {
+            LOGW("failed to sym vkDestroyInstance");
+            dlclose(handle);
+            throw std::runtime_error("failed to sym vkDestroyInstance");
+        }
+    }
+
+    ~vulkan_api() {
+        if (handle) {
+            dlclose(handle);
+        }
+    }
+};
+
 static bool file_exists(const char* name) {
     struct stat buffer {};
     return (stat(name, &buffer) == 0);
@@ -615,12 +792,14 @@ static void add_cuda_dev_devices(std::vector<device>& devices) {
     }
 }
 
-available_devices_result available_devices(bool cuda, bool hip, bool openvino,
-                                           bool opencl, bool opencl_always) {
+available_devices_result available_devices(bool cuda, bool hip, bool vulkan,
+                                           bool openvino, bool opencl,
+                                           bool opencl_always) {
     available_devices_result result;
 
     if (hip) add_hip_devices(result.devices);
     if (cuda) result.error = add_cuda_devices(result.devices);
+    if (vulkan) add_vulkan_devices(result.devices);
     if (openvino) add_openvino_devices(result.devices);
     if (opencl && (opencl_always || result.devices.empty()))
         add_opencl_devices(result.devices);
@@ -871,6 +1050,133 @@ void add_openvino_devices(std::vector<device>& devices) {
     }
 }
 
+void add_vulkan_devices(std::vector<device>& devices) {
+    LOGD("scanning for vulkan devices");
+
+    try {
+        vulkan_api api;
+
+        VkApplicationInfo appInfo{};
+        appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+        appInfo.pApplicationName = "dsnote";
+        appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+        appInfo.pEngineName = "dsnote";
+        appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+        appInfo.apiVersion = VK_API_VERSION_1_0;
+
+        VkInstanceCreateInfo createInfo{};
+        createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+        createInfo.pApplicationInfo = &appInfo;
+
+        uint32_t extensionsCount = 0;
+        if (auto ret = api.vkEnumerateInstanceExtensionProperties(
+                nullptr, &extensionsCount, nullptr);
+            ret != VK_SUCCESS) {
+            LOGE("vkEnumerateInstanceExtensionProperties error: " << ret);
+            return;
+        }
+
+        if (extensionsCount > 0) {
+            std::vector<VkExtensionProperties> extensions(extensionsCount);
+            if (auto ret = api.vkEnumerateInstanceExtensionProperties(
+                    nullptr, &extensionsCount, extensions.data());
+                ret != VK_SUCCESS) {
+                LOGE("vkEnumerateInstanceExtensionProperties error: " << ret);
+                return;
+            }
+
+            std::ostringstream ss;
+            for (const auto& ext : extensions) ss << ext.extensionName << ",";
+            LOGD("vulkan extensions: " << ss.str());
+        }
+
+        void* instance = nullptr;
+        if (auto ret = api.vkCreateInstance(&createInfo, nullptr, &instance);
+            ret != VK_SUCCESS) {
+            LOGE("vkCreateInstance error: " << ret);
+            return;
+        }
+
+        uint32_t pdevicesCount = 0;
+        if (auto ret = api.vkEnumeratePhysicalDevices(instance, &pdevicesCount,
+                                                      nullptr);
+            ret != VK_SUCCESS) {
+            LOGE("vkEnumeratePhysicalDevices error: " << ret);
+
+            api.vkDestroyInstance(instance, nullptr);
+            return;
+        }
+
+        if (pdevicesCount == 0) {
+            api.vkDestroyInstance(instance, nullptr);
+            return;
+        }
+
+        std::vector<void*> pdevices(pdevicesCount);
+        if (auto ret = api.vkEnumeratePhysicalDevices(instance, &pdevicesCount,
+                                                      pdevices.data());
+            ret != VK_SUCCESS) {
+            LOGE("vkEnumeratePhysicalDevices error: " << ret);
+            api.vkDestroyInstance(instance, nullptr);
+            return;
+        }
+
+        auto type_str = [](VkPhysicalDeviceType type) {
+            switch (type) {
+                case VK_PHYSICAL_DEVICE_TYPE_OTHER:
+                    return "other";
+                case VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU:
+                    return "integrated-gpu";
+                case VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU:
+                    return "discrete-gpu";
+                case VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU:
+                    return "virtual-gpu";
+                case VK_PHYSICAL_DEVICE_TYPE_CPU:
+                    return "cpu";
+                default:
+                    return "unknown";
+            }
+        };
+
+        const size_t max_nb_of_devices =
+            16;  // whisper.cpp supports up to 16 vulkan devs
+
+        for (size_t i = 0; i < pdevices.size(); ++i) {
+            const auto& device = pdevices[i];
+
+            VkPhysicalDeviceProperties2 prop{};
+            api.vkGetPhysicalDeviceProperties2(device, &prop);
+
+            LOGD("vulkan device: " << i << " id=" << prop.properties.deviceID
+                                   << ", name=" << prop.properties.deviceName
+                                   << ", type="
+                                   << type_str(prop.properties.deviceType));
+
+            if (prop.properties.deviceType !=
+                    VkPhysicalDeviceType::
+                        VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU &&
+                prop.properties.deviceType !=
+                    VkPhysicalDeviceType::
+                        VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) {
+                LOGD("not gpu device, skipping");
+                continue;
+            }
+
+            if (i >= max_nb_of_devices) {
+                LOGD("already have the max nb of vulkan devices, skipping");
+                continue;
+            }
+
+            devices.push_back({/*id=*/static_cast<uint32_t>(i), api_t::vulkan,
+                               /*name=*/prop.properties.deviceName,
+                               /*platform_name=*/{}});
+        }
+
+        api.vkDestroyInstance(instance, nullptr);
+    } catch ([[maybe_unused]] const std::runtime_error& err) {
+    }
+}
+
 static bool has_lib(const char* name) {
     auto* handle = dlopen(name, RTLD_LAZY);
     if (!handle) {
@@ -893,6 +1199,8 @@ bool has_cudnn() {
 bool has_hip() { return has_lib("libamdhip64.so"); }
 
 bool has_openvino() { return has_lib("libopenvino_c.so"); }
+
+bool has_vulkan() { return has_lib("libvulkan.so.1"); }
 
 void rocm_override_gfx_version(const std::string& arch_version) {
     const auto* value = getenv("HSA_OVERRIDE_GFX_VERSION");

@@ -220,6 +220,7 @@ class dsnote_app : public QObject {
     // features
 #define FEATURE_OPT(name) \
     Q_PROPERTY(bool feature_##name READ feature_##name NOTIFY features_changed)
+    FEATURE_OPT(whispercpp_stt)
     FEATURE_OPT(whispercpp_gpu)
     FEATURE_OPT(fasterwhisper_stt)
     FEATURE_OPT(fasterwhisper_gpu)
@@ -817,6 +818,7 @@ class dsnote_app : public QObject {
     bool feature_available(const QString &name, bool default_value) const;
 
 #define FEATURE_OPT(name) bool feature_##name() const;
+    FEATURE_OPT(whispercpp_stt)
     FEATURE_OPT(whispercpp_gpu)
     FEATURE_OPT(fasterwhisper_stt)
     FEATURE_OPT(fasterwhisper_gpu)

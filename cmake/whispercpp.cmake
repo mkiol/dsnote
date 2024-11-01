@@ -154,6 +154,38 @@ if(arch_x8664)
 
         list(APPEND deps whispercppopenvino)
     endif(BUILD_WHISPERCPP_OPENVINO)
+
+    if(BUILD_WHISPERCPP_VULKAN)
+        find_package(Vulkan)
+        if(NOT ${Vulkan_FOUND})
+           message(FATAL_ERROR "Vulkan not found but it is required by whisper.cpp-vulkan")
+        endif()
+
+        ExternalProject_Add(whispercppvulkan
+            SOURCE_DIR ${external_dir}/whispercppvulkan
+            BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercppvulkan
+            INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+            URL "${whispercpp_source_url}"
+            URL_HASH SHA256=${whispercpp_checksum}
+            PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
+                        -i ${patches_dir}/whispercpp.patch ||
+                            echo "patch cmd failed, likely already patched"
+            CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+                -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+                -DCMAKE_INSTALL_LIBDIR=lib
+                -DGGML_NATIVE=OFF
+                -DGGML_VULKAN=ON
+                -DGGML_AVX=ON -DGGML_AVX2=OFF -DGGML_FMA=OFF -DGGML_F16C=ON
+                -DBUILD_SHARED_LIBS=ON
+                -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
+                -DCMAKE_C_FLAGS=${whispercppfallback_flags} -DCMAKE_CXX_FLAGS=${whispercppfallback_flags}
+                -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
+                -DWHISPER_TARGET_NAME=whisper-vulkan
+            BUILD_ALWAYS False
+        )
+
+        list(APPEND deps whispercppvulkan)
+    endif(BUILD_WHISPERCPP_VULKAN)
 endif()
 
 if(NOT ${BUILD_OPENBLAS})

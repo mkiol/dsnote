@@ -244,6 +244,7 @@ QDebug operator<<(QDebug d,
     if (models_availability.stt_fasterwhisper) d << "stt_fasterwhisper,";
     if (models_availability.stt_ds) d << "stt_ds,";
     if (models_availability.stt_vosk) d << "stt_vosk,";
+    if (models_availability.stt_whispercpp) d << "stt_whispercpp,";
     if (models_availability.mnt_bergamot) d << "mnt_bergamot,";
     if (models_availability.ttt_hftc) d << "ttt_hftc";
     if (models_availability.option_r) d << "option_r,";
@@ -2170,6 +2171,11 @@ auto models_manager::extract_models(
                 qDebug() << "ignoring vosk model:" << model_id;
                 continue;
             }
+            if (!models_availability->stt_whispercpp &&
+                engine == model_engine_t::stt_whisper) {
+                qDebug() << "ignoring whispercpp model:" << model_id;
+                continue;
+            }
             if (!models_availability->mnt_bergamot &&
                 engine == model_engine_t::mnt_bergamot) {
                 qDebug() << "ignoring bergamot model:" << model_id;
@@ -2746,6 +2752,11 @@ void models_manager::update_models_using_availability_internal() {
         }
         if (!m_models_availability->stt_vosk &&
             pair.second.engine == model_engine_t::stt_vosk) {
+            pair.second.disabled = true;
+            return;
+        }
+        if (!m_models_availability->stt_whispercpp &&
+            pair.second.engine == model_engine_t::stt_whisper) {
             pair.second.disabled = true;
             return;
         }

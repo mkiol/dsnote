@@ -281,10 +281,12 @@ struct whisper_full_params {
 
 class whisper_engine : public stt_engine {
    public:
+    static bool available();
     static bool has_cuda();
     static bool has_hip();
     static bool has_openvino();
     static bool has_opencl();
+    static bool has_vulkan();
 
     whisper_engine(config_t config, callbacks_t call_backs);
     ~whisper_engine() override;

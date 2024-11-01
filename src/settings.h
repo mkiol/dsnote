@@ -155,6 +155,8 @@ class settings : public QSettings, public singleton<settings> {
                    set_hw_scan_openvino NOTIFY hw_scan_openvino_changed)
     Q_PROPERTY(bool hw_scan_openvino_gpu READ hw_scan_openvino_gpu WRITE
                    set_hw_scan_openvino_gpu NOTIFY hw_scan_openvino_gpu_changed)
+    Q_PROPERTY(bool hw_scan_vulkan READ hw_scan_vulkan WRITE set_hw_scan_vulkan
+                   NOTIFY hw_scan_vulkan_changed)
     Q_PROPERTY(QString active_tts_ref_voice READ active_tts_ref_voice WRITE
                    set_active_tts_ref_voice NOTIFY active_tts_ref_voice_changed)
     Q_PROPERTY(QString active_tts_for_in_mnt_ref_voice READ
@@ -470,16 +472,18 @@ class settings : public QSettings, public singleton<settings> {
         hw_feature_stt_whispercpp_hip = 1U << 1U,
         hw_feature_stt_whispercpp_openvino = 1U << 2U,
         hw_feature_stt_whispercpp_opencl = 1U << 3U,
-        hw_feature_stt_fasterwhisper_cuda = 1U << 4U,
-        hw_feature_stt_fasterwhisper_hip = 1U << 5U,
-        hw_feature_tts_coqui_cuda = 1U << 6U,
-        hw_feature_tts_coqui_hip = 1U << 7U,
-        hw_feature_tts_whisperspeech_cuda = 1U << 8U,
-        hw_feature_tts_whisperspeech_hip = 1U << 9U,
+        hw_feature_stt_whispercpp_vulkan = 1U << 4U,
+        hw_feature_stt_fasterwhisper_cuda = 1U << 5U,
+        hw_feature_stt_fasterwhisper_hip = 1U << 6U,
+        hw_feature_tts_coqui_cuda = 1U << 7U,
+        hw_feature_tts_coqui_hip = 1U << 8U,
+        hw_feature_tts_whisperspeech_cuda = 1U << 9U,
+        hw_feature_tts_whisperspeech_hip = 1U << 10U,
         hw_feature_all =
             hw_feature_stt_whispercpp_cuda | hw_feature_stt_whispercpp_hip |
             hw_feature_stt_whispercpp_openvino |
             hw_feature_stt_whispercpp_opencl |
+            hw_feature_stt_whispercpp_vulkan |
             hw_feature_stt_fasterwhisper_cuda |
             hw_feature_stt_fasterwhisper_hip | hw_feature_tts_coqui_cuda |
             hw_feature_tts_coqui_hip | hw_feature_tts_whisperspeech_cuda |
@@ -623,6 +627,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_hw_scan_openvino(bool value);
     bool hw_scan_openvino_gpu() const;
     void set_hw_scan_openvino_gpu(bool value);
+    bool hw_scan_vulkan() const;
+    void set_hw_scan_vulkan(bool value);
     QString active_tts_ref_voice() const;
     void set_active_tts_ref_voice(const QString &value);
     QString active_tts_for_in_mnt_ref_voice() const;
@@ -861,6 +867,7 @@ class settings : public QSettings, public singleton<settings> {
     void hw_scan_opencl_legacy_changed();
     void hw_scan_openvino_changed();
     void hw_scan_openvino_gpu_changed();
+    void hw_scan_vulkan_changed();
     void active_tts_ref_voice_changed();
     void active_tts_for_in_mnt_ref_voice_changed();
     void active_tts_for_out_mnt_ref_voice_changed();

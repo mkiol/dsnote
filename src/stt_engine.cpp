@@ -151,6 +151,9 @@ std::ostream& operator<<(std::ostream& os, stt_engine::gpu_api_t api) {
         case stt_engine::gpu_api_t::openvino:
             os << "openvino";
             break;
+        case stt_engine::gpu_api_t::vulkan:
+            os << "vulkan";
+            break;
     }
 
     return os;

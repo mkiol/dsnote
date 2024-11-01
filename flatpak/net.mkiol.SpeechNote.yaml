@@ -44,6 +44,8 @@ cleanup:
   - /lib/python3.11/site-packages/pypinyin/__pycache__
   - /lib/python3.11/site-packages/pandas/tests
   - /lib/python3.11/site-packages/torchvision*
+  - /lib/libSPIRV*
+  - /lib/libshaderc*
   - /lib/debug/opt
   - /share/cmake
   - /share/doc
@@ -55,6 +57,8 @@ cleanup:
   - /share/ffmpeg
   - /share/aclocal
   - /bin/spellout
+  - /bin/vulkan*
+  - /bin/speak*
   - "*.a"
   - "*.la"
 add-extensions:
@@ -886,8 +890,8 @@ modules:
       - -DWHISPER_OPENVINO=ON
       - -DOpenVINO_DIR=/app/opt/intel/openvino/runtime/cmake
       - -DGGML_AVX=ON
-      - -DGGML_AVX2=ON
-      - -DGGML_FMA=ON
+      - -DGGML_AVX2=OFF
+      - -DGGML_FMA=OFF
       - -DGGML_F16C=ON
       - -DBUILD_SHARED_LIBS=ON
       - -DWHISPER_BUILD_TESTS=OFF
@@ -895,6 +899,68 @@ modules:
       - -DCMAKE_C_FLAGS=-O3
       - -DCMAKE_CXX_FLAGS=-O3
       - -DWHISPER_TARGET_NAME=whisper-openvino
+    sources:
+      - type: archive
+        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.7.1.tar.gz
+        sha256: 97f19a32212f2f215e538ee37a16ff547aaebc54817bd8072034e02466ce6d55
+      - type: patch
+        path: ../patches/whispercpp.patch
+
+  - name: shaderc
+    only-arches:
+      - x86_64
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DSHADERC_SKIP_COPYRIGHT_CHECK=ON
+      - -DSHADERC_SKIP_EXAMPLES=ON
+      - -DSHADERC_SKIP_TESTS=ON
+      - -DSPIRV_SKIP_EXECUTABLES=ON
+      - -DENABLE_GLSLANG_BINARIES=OFF
+    cleanup:
+      - /bin
+      - /include
+      - /lib
+    sources:
+      - type: git
+        url: https://github.com/google/shaderc.git
+        tag: v2024.1
+        commit: 47a9387ef5b3600d30d84c71ec77a59dc7db46fa
+      - type: git
+        url: https://github.com/KhronosGroup/SPIRV-Tools.git
+        tag: v2024.3
+        commit: 0cfe9e7219148716dfd30b37f4d21753f098707a
+        dest: third_party/spirv-tools
+      - type: git
+        url: https://github.com/KhronosGroup/SPIRV-Headers.git
+        tag: vulkan-sdk-1.3.290.0
+        commit: 2acb319af38d43be3ea76bfabf3998e5281d8d12
+        dest: third_party/spirv-headers
+      - type: git
+        url: https://github.com/KhronosGroup/glslang.git
+        tag: 14.3.0
+        commit: fa9c3deb49e035a8abcabe366f26aac010f6cbfb
+        dest: third_party/glslang
+
+  - name: whispercpp-vulkan
+    only-arches:
+      - x86_64
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DGGML_NATIVE=OFF
+      - -DGGML_VULKAN=ON
+      - -DGGML_AVX=ON
+      - -DGGML_AVX2=OFF
+      - -DGGML_FMA=OFF
+      - -DGGML_F16C=ON
+      - -DBUILD_SHARED_LIBS=ON
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+      - -DCMAKE_C_FLAGS=-O3
+      - -DCMAKE_CXX_FLAGS=-O3
+      - -DWHISPER_TARGET_NAME=whisper-vulkan
     sources:
       - type: archive
         url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.7.1.tar.gz

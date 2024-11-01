@@ -159,8 +159,8 @@ Dialog {
                     var f = root.model.features;
                     if (f & ModelsListModel.FeatureEngineSttWhisper) {
                         if (f & ModelsListModel.FeatureHwOpenVino)
-                            return "NVIDIA CUDA, AMD ROCm, OpenVINO, OpenCL"
-                        return "NVIDIA CUDA, AMD ROCm, OpenCL"
+                            return "NVIDIA CUDA, AMD ROCm, Vulkan, OpenVINO, OpenCL"
+                        return "NVIDIA CUDA, AMD ROCm, Vulkan, OpenCL"
                     } else if (f & ModelsListModel.FeatureEngineSttFasterWhisper)
                         return "NVIDIA CUDA"
                     else if (f & ModelsListModel.FeatureEngineTtsCoqui)

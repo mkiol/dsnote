@@ -453,16 +453,21 @@ DialogPage {
 
             SectionLabel {
                 text: qsTr("Engine options")
+                visible: sttEnginesBar.visible
             }
 
             TabBar {
                 id: sttEnginesBar
 
                 Layout.fillWidth: true
-                currentIndex: app.feature_fasterwhisper_stt ? _settings.settings_stt_engine_idx : 0
+                currentIndex: !app.feature_whispercpp_stt ? 1 :
+                              !app.feature_fasterwhisper_stt ? 0 :
+                              _settings.settings_stt_engine_idx
                 onCurrentIndexChanged: _settings.settings_stt_engine_idx = currentIndex
+                visible: app.feature_whispercpp_stt || app.feature_fasterwhisper_stt
 
                 TabButton {
+                    enabled: app.feature_whispercpp_stt
                     text: "WhisperCpp"
                     width: implicitWidth
                 }
@@ -479,10 +484,13 @@ DialogPage {
 
                 Layout.fillWidth: true
                 Layout.topMargin: appWin.padding
-                currentIndex: app.feature_fasterwhisper_stt ? sttEnginesBar.currentIndex : 0
+                currentIndex: sttEnginesBar.currentIndex
+                visible: sttEnginesBar.visible
 
                 ColumnLayout {
                     id: whispercppTab
+
+                    visible: app.feature_whispercpp_stt
 
                     ComboBoxForm {
                         label.text: qsTr("Profile")
@@ -676,7 +684,7 @@ DialogPage {
                     GpuComboBox {
                         id: whispercppGpuComboBox
 
-                        enabled: _settings.hw_accel_supported() && app.feature_whispercpp_gpu
+                        visible: _settings.hw_accel_supported() && app.feature_whispercpp_gpu
                         devices: _settings.whispercpp_gpu_devices
                         device_index: _settings.whispercpp_gpu_device_idx
                         use_gpu: _settings.whispercpp_use_gpu
@@ -797,7 +805,7 @@ DialogPage {
                     GpuComboBox {
                         id: fasterwhisperGpuComboBox
 
-                        enabled: _settings.hw_accel_supported() && app.feature_fasterwhisper_gpu
+                        visible: _settings.hw_accel_supported() && app.feature_fasterwhisper_gpu
                         devices: _settings.fasterwhisper_gpu_devices
                         device_index: _settings.fasterwhisper_gpu_device_idx
                         use_gpu: _settings.fasterwhisper_use_gpu
@@ -940,26 +948,29 @@ DialogPage {
 
             SectionLabel {
                 text: qsTr("Engine options")
-                visible: app.feature_coqui_tts || app.feature_whisperspeech_tts
+                visible: ttsEnginesBar.visible
             }
 
             TabBar {
                 id: ttsEnginesBar
 
                 Layout.fillWidth: true
-                currentIndex: !app.feature_coqui_tts ? 1 : !app.feature_whisperspeech_tts ? 0 : _settings.settings_tts_engine_idx
+                currentIndex: !(app.feature_coqui_tts && app.feature_coqui_gpu) ? 1 :
+                              !(app.feature_whisperspeech_tts && app.feature_whisperspeech_gpu) ? 0 :
+                              _settings.settings_tts_engine_idx
                 onCurrentIndexChanged: _settings.settings_tts_engine_idx = currentIndex
-                visible: app.feature_coqui_tts || app.feature_whisperspeech_tts
+                visible: (app.feature_coqui_tts && app.feature_coqui_gpu) ||
+                         (app.feature_whisperspeech_tts && app.feature_whisperspeech_gpu)
 
                 TabButton {
                     text: "Coqui"
-                    enabled: app.feature_coqui_tts
+                    enabled: app.feature_coqui_tts && app.feature_coqui_gpu
                     width: implicitWidth
                 }
 
                 TabButton {
                     text: "WhisperSpeech"
-                    enabled: app.feature_whisperspeech_tts
+                    enabled: app.feature_whisperspeech_tts && app.feature_whisperspeech_gpu
                     width: implicitWidth
                 }
             }
@@ -975,10 +986,9 @@ DialogPage {
                 ColumnLayout {
                     id: coquiTab
 
-                    visible: app.feature_coqui_tts
+                    visible: app.feature_coqui_tts && app.feature_coqui_gpu
 
                     GpuComboBox {
-                        enabled: app.feature_coqui_gpu
                         devices: _settings.coqui_gpu_devices
                         device_index: _settings.coqui_gpu_device_idx
                         use_gpu: _settings.coqui_use_gpu
@@ -990,10 +1000,9 @@ DialogPage {
                 ColumnLayout {
                     id: whisperspeechTab
 
-                    visible: app.feature_whisperspeech_tts
+                    visible: app.feature_whisperspeech_tts && app.feature_whisperspeech_gpu
 
                     GpuComboBox {
-                        enabled: app.feature_whisperspeech_gpu
                         devices: _settings.whisperspeech_gpu_devices
                         device_index: _settings.whisperspeech_gpu_device_idx
                         use_gpu: _settings.whisperspeech_use_gpu
@@ -1400,7 +1409,7 @@ DialogPage {
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Try to find NVIDIA CUDA compatible graphic cards in the system.") + " " +
+                    ToolTip.text: qsTr("Try to find %1 compatible graphic cards in the system.").arg("NVIDIA CUDA") + " " +
                                   qsTr("Disable this option if you observe problems when launching the application.")
                     hoverEnabled: true
                 }
@@ -1415,7 +1424,22 @@ DialogPage {
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Try to find AMD ROCm compatible graphic cards in the system.") + " " +
+                    ToolTip.text: qsTr("Try to find %1 compatible graphic cards in the system.").arg("AMD ROCm") + " " +
+                                  qsTr("Disable this option if you observe problems when launching the application.")
+                    hoverEnabled: true
+                }
+
+                CheckBox {
+                    visible: _settings.hw_accel_supported()
+                    checked: _settings.hw_scan_vulkan
+                    text: qsTr("Use %1").arg("Vulkan")
+                    onCheckedChanged: {
+                        _settings.hw_scan_vulkan = checked
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Try to find %1 compatible graphic cards in the system.").arg("Vulkan") + " " +
                                   qsTr("Disable this option if you observe problems when launching the application.")
                     hoverEnabled: true
                 }
@@ -1430,7 +1454,7 @@ DialogPage {
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Try to find OpenVINO compatible hardware in the system.") + " " +
+                    ToolTip.text: qsTr("Try to find %1 compatible hardware in the system.").arg("OpenVINO") + " " +
                                   qsTr("Disable this option if you observe problems when launching the application.")
                     hoverEnabled: true
                 }
@@ -1445,7 +1469,7 @@ DialogPage {
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Try to find OpenCL compatible graphic cards in the system.") + " " +
+                    ToolTip.text: qsTr("Try to find %1 compatible graphic cards in the system.").arg("OpenCL") + " " +
                                   qsTr("Disable this option if you observe problems when launching the application.")
                     hoverEnabled: true
                 }

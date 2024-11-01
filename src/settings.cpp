@@ -155,6 +155,9 @@ QDebug operator<<(QDebug d, settings::hw_feature_flags_t hw_features) {
         settings::hw_feature_flags_t::hw_feature_stt_whispercpp_opencl)
         d << "stt-whispercpp-opencl,";
     if (hw_features &
+        settings::hw_feature_flags_t::hw_feature_stt_whispercpp_vulkan)
+        d << "stt-whispercpp-vulkan,";
+    if (hw_features &
         settings::hw_feature_flags_t::hw_feature_stt_fasterwhisper_cuda)
         d << "stt-fasterwhisper-cuda,";
     if (hw_features &
@@ -1378,6 +1381,7 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
 
     qDebug() << "scan cuda:" << hw_scan_cuda();
     qDebug() << "scan hip:" << hw_scan_hip();
+    qDebug() << "scan vulkan:" << hw_scan_vulkan();
     qDebug() << "scan openvino:" << hw_scan_openvino();
     qDebug() << "scan openvino_gpu:" << hw_scan_openvino_gpu();
     qDebug() << "scan opencl:" << hw_scan_opencl();
@@ -1403,6 +1407,9 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
     bool disable_whispercpp_opencl =
         (hw_feature_flags &
          hw_feature_flags_t::hw_feature_stt_whispercpp_opencl) == 0;
+    bool disable_whispercpp_vulkan =
+        (hw_feature_flags &
+         hw_feature_flags_t::hw_feature_stt_whispercpp_vulkan) == 0;
     bool disable_coqui_cuda =
         (hw_feature_flags & hw_feature_flags_t::hw_feature_tts_coqui_cuda) == 0;
     bool disable_coqui_hip =
@@ -1417,6 +1424,7 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
     auto result = gpu_tools::available_devices(
         /*cuda=*/hw_scan_cuda(),
         /*hip=*/hw_scan_hip(),
+        /*vulkan=*/hw_scan_vulkan(),
         /*openvino=*/hw_scan_openvino(),
         /*opencl=*/hw_scan_opencl(),
         /*opencl_always=*/true);
@@ -1488,6 +1496,14 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
                                  QString::fromStdString(device.name).trimmed(),
                                  QString::fromStdString(device.platform_name)
                                      .trimmed()));
+                    break;
+                case gpu_tools::api_t::vulkan:
+                    if (disable_whispercpp_vulkan) return;
+                    m_whispercpp_gpu_devices.push_back(
+                        QStringLiteral("%1, %2, %3")
+                            .arg(
+                                "Vulkan", QString::number(device.id),
+                                QString::fromStdString(device.name).trimmed()));
                     break;
             }
         });
@@ -2100,6 +2116,19 @@ void settings::set_hw_scan_openvino_gpu(bool value) {
     }
 }
 
+bool settings::hw_scan_vulkan() const {
+    return value(QStringLiteral("hw_scan_vulkan"), true).toBool();
+}
+
+void settings::set_hw_scan_vulkan(bool value) {
+    if (value != hw_scan_vulkan()) {
+        setValue(QStringLiteral("hw_scan_vulkan"), value);
+        emit hw_scan_vulkan_changed();
+
+        set_restart_required(true);
+    }
+}
+
 settings::tts_subtitles_sync_mode_t settings::tts_subtitles_sync() const {
     return static_cast<settings::tts_subtitles_sync_mode_t>(
         value(QStringLiteral("tts_subtitles_sync"),
@@ -2253,6 +2282,7 @@ void settings::disable_hw_scan() {
     set_hw_scan_hip(false);
     set_hw_scan_opencl(false);
     set_hw_scan_openvino(false);
+    set_hw_scan_vulkan(false);
     set_restart_required(false);
 }
 

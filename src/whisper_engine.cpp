@@ -54,10 +54,10 @@ whisper_engine::~whisper_engine() {
     unsetenv("GGML_OPENCL_DEVICE");
 }
 
-bool whisper_engine::has_cuda() {
-    auto* handle = dlopen("libwhisper-cublas.so", RTLD_LAZY);
+static bool try_open_lib(const char* lib) {
+    auto* handle = dlopen(lib, RTLD_LAZY);
     if (!handle) {
-        LOGW("failed to open whisper-cublas lib: " << dlerror());
+        LOGW("failed to open whisper lib: " << dlerror());
         return false;
     }
 
@@ -66,40 +66,27 @@ bool whisper_engine::has_cuda() {
     return true;
 }
 
+bool whisper_engine::available() {
+    std::array libs = {"libwhisper-openblas.so", "libwhisper.so"};
+
+    return std::any_of(libs.cbegin(), libs.cend(),
+                       [](const auto& lib) { return try_open_lib(lib); });
+}
+
+bool whisper_engine::has_cuda() { return try_open_lib("libwhisper-cublas.so"); }
+
 bool whisper_engine::has_openvino() {
-    auto* handle = dlopen("libwhisper-openvino.so", RTLD_LAZY);
-    if (!handle) {
-        LOGW("failed to open whisper-openvino lib: " << dlerror());
-        return false;
-    }
-
-    dlclose(handle);
-
-    return true;
+    return try_open_lib("libwhisper-openvino.so");
 }
 
 bool whisper_engine::has_opencl() {
-    auto* handle = dlopen("libwhisper-clblast.so", RTLD_LAZY);
-    if (!handle) {
-        LOGW("failed to open whisper-clblast lib: " << dlerror());
-        return false;
-    }
-
-    dlclose(handle);
-
-    return true;
+    return try_open_lib("libwhisper-clblast.so");
 }
 
-bool whisper_engine::has_hip() {
-    auto* handle = dlopen("libwhisper-hipblas.so", RTLD_LAZY);
-    if (!handle) {
-        LOGW("failed to open whisper-hipblas lib: " << dlerror());
-        return false;
-    }
+bool whisper_engine::has_hip() { return try_open_lib("libwhisper-hipblas.so"); }
 
-    dlclose(handle);
-
-    return true;
+bool whisper_engine::has_vulkan() {
+    return try_open_lib("libwhisper-vulkan.so");
 }
 
 bool whisper_engine::use_openvino() const {
@@ -149,6 +136,12 @@ void whisper_engine::open_whisper_lib() {
                     dlopen("libwhisper-hipblas.so", RTLD_LAZY);
                 if (m_whisperlib_handle == nullptr)
                     LOGE("failed to open libwhisper-hipblas.so: " << dlerror());
+            } else if (m_config.gpu_device.api == gpu_api_t::vulkan) {
+                LOGD("using whisper-vulkan");
+
+                m_whisperlib_handle = dlopen("libwhisper-vulkan.so", RTLD_LAZY);
+                if (m_whisperlib_handle == nullptr)
+                    LOGE("failed to open libwhisper-vulkan.so: " << dlerror());
             } else if (use_openvino()) {
                 LOGD("using whisper-openvino");
 

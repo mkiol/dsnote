@@ -3990,11 +3990,16 @@ bool dsnote_app::feature_available(const QString &name,
     return default_value;
 }
 
+bool dsnote_app::feature_whispercpp_stt() const {
+    return feature_available("whispercpp-stt", false);
+}
+
 bool dsnote_app::feature_whispercpp_gpu() const {
     return feature_available("whispercpp-stt-cuda", false) ||
            feature_available("whispercpp-stt-hip", false) ||
            feature_available("whispercpp-stt-opencl", false) ||
-           feature_available("whispercpp-stt-openvino", false);
+           feature_available("whispercpp-stt-openvino", false) ||
+           feature_available("whispercpp-stt-vulkan", false);
 }
 
 bool dsnote_app::feature_fasterwhisper_stt() const {
