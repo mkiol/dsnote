@@ -40,8 +40,8 @@ modules:
         sha256: e435dfa75b1d7195c7b8378c3859f0445cd88c6b0375c181ed66823a9ceb7524
       - &id021
         type: file
-        url: https://files.pythonhosted.org/packages/d2/05/e6600db80270777c4a64238a98d442f0fd07cc8915be2a1c16da7f2b9e74/sympy-1.12-py3-none-any.whl
-        sha256: c3588cd4295d0c0f603d0f2ae780587e64e2efeedb3521e46b9bb1d08d184fa5
+        url: https://files.pythonhosted.org/packages/b2/fe/81695a1aa331a842b582453b605175f419fe8540355886031328089d840a/sympy-1.13.1-py3-none-any.whl
+        sha256: db36cdc64bf61b9b24578b6f7bab1ecdd2452cf008f34faa33776680c26d66f8
       - &id001
         type: file
         url: https://files.pythonhosted.org/packages/b7/f4/6a90020cd2d93349b442bfcb657d0dc91eee65491600b2cb1d388bc98e6b/typing_extensions-4.9.0-py3-none-any.whl
@@ -61,14 +61,14 @@ modules:
     sources:
       - &id022
         type: file
-        url: https://download.pytorch.org/whl/cpu/torch-2.2.1%2Bcpu-cp311-cp311-linux_x86_64.whl
-        dest-filename: torch-2.2.1+cpu-cp311-cp311-linux_x86_64.whl
-        sha256: 6bc973d5632374b92b4b293817b4d2ff8c8ce1c784c748b471dba1fffcd9c333
+        url: https://download.pytorch.org/whl/cpu-cxx11-abi/torch-2.5.1%2Bcpu.cxx11.abi-cp311-cp311-linux_x86_64.whl
+        dest-filename: torch-2.5.1+cpu.cxx11.abi-cp311-cp311-linux_x86_64.whl
+        sha256: 05a962994d5e64832e6aff275a41cb12ead0a38632c4806b84de1b4f118d1a3b
       - &id039
         type: file
-        url: https://download.pytorch.org/whl/cpu/torchaudio-2.2.1%2Bcpu-cp311-cp311-linux_x86_64.whl
-        dest-filename: torchaudio-2.2.1+cpu-cp311-cp311-linux_x86_64.whl
-        sha256: bb5eac4b5fa715b451b34aeb336c30b2f943922e8774e07ea39831a81c773f8e
+        url: https://download.pytorch.org/whl/cpu/torchaudio-2.5.1%2Bcpu-cp311-cp311-linux_x86_64.whl
+        dest-filename: torchaudio-2.5.1+cpu-cp311-cp311-linux_x86_64.whl
+        sha256: 209f8e7efff818d2066f49c27c8097f2246f8bf6fd743c69bcf8dce80c63ee80
 
   - name: python3-setuptools_scm
     buildsystem: simple
@@ -101,7 +101,7 @@ modules:
         PYTHONPATH: /app/extensions/cpu/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} "accelerate==0.27.0" --no-build-isolation
+        --prefix=${FLATPAK_DEST} "accelerate" --no-build-isolation
     sources:
       - *id002
       - *id003
@@ -110,8 +110,8 @@ modules:
         url: https://files.pythonhosted.org/packages/7b/5e/efd033ab7199a0b2044dab3b9f7a4f6670e6a52c089de572e928d2873b06/PyYAML-6.0.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
         sha256: d2b04aac4d386b172d5b9692e2d2da8de7bfb6c387fa4f801fbf6fb2e6ba4673
       - type: file
-        url: https://files.pythonhosted.org/packages/c8/14/73c3d62e709c2ace755c826997b12f883f3cb6b138dec63ac1e2a68cd910/accelerate-0.27.0-py3-none-any.whl
-        sha256: 87eb754a1600a63d6fdbf8683603800388544456bfbdaaf622b89458005937de
+        url: https://files.pythonhosted.org/packages/73/e7/e61feefda1b483f0d53a320909051252175ccbfea29ab99bd62df6083c81/accelerate-1.1.0-py3-none-any.whl
+        sha256: babee98bd3692cfb0537db3f96f36b5d4e29809776b406d32aaf593d4eeb574c
       - &id024
         type: file
         url: https://files.pythonhosted.org/packages/ba/06/a07f096c664aeb9f01624f858c3add0a4e913d6c96257acb4fce61e7de14/certifi-2024.2.2-py3-none-any.whl
@@ -124,8 +124,8 @@ modules:
       - *id005
       - &id026
         type: file
-        url: https://files.pythonhosted.org/packages/28/03/7d3c7153113ec59cfb31e3b8ee773f5f420a0dd7d26d40442542b96675c3/huggingface_hub-0.20.3-py3-none-any.whl
-        sha256: d988ae4f00d3e307b0c80c6a05ca6dbb7edba8bba3079f74cda7d9c2e562a7b6
+        url: https://files.pythonhosted.org/packages/60/bf/cea0b9720c32fa01b0c4ec4b16b9f4ae34ca106b202ebbae9f03ab98cd8f/huggingface_hub-0.26.2-py3-none-any.whl
+        sha256: 98c2a5a8e786c7b2cb6fdeb2740893cba4d53e312572ed3d8afafda65b128c46
       - &id027
         type: file
         url: https://files.pythonhosted.org/packages/c2/e7/a82b05cf63a603df6e68d59ae6a68bf5064484a0718ea5033660af4b54a9/idna-3.6-py3-none-any.whl
@@ -147,8 +147,8 @@ modules:
         sha256: 58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f
       - &id030
         type: file
-        url: https://files.pythonhosted.org/packages/8e/cf/b32d236cc01429bf2827bd1d8d81fa5a34a6cc7fb3499506f5d1aa19dcb8/safetensors-0.4.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: 02697f8f2be8ca3c37a4958702dbdb1864447ef765e18b5328a1617022dcf164
+        url: https://files.pythonhosted.org/packages/e6/ee/69e498a892f208bd1da4104d4b9be887f8611bf4942144718b6738482250/safetensors-0.4.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: a6c19feda32b931cae0acd42748a670bdf56bee6476a046af20181ad3fee4090
       - *id021
       - *id022
       - &id031
@@ -170,7 +170,7 @@ modules:
         PYTHONPATH: /app/extensions/cpu/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} "transformers==4.37.2" --no-build-isolation
+        --prefix=${FLATPAK_DEST} "transformers" --no-build-isolation
     sources:
       - *id023
       - *id024
@@ -189,13 +189,13 @@ modules:
       - *id030
       - &id035
         type: file
-        url: https://files.pythonhosted.org/packages/3c/33/9b6dbae3f7f1e25d6bf06cd511d4cd9694c805465aafbceb77f306f7826d/tokenizers-0.15.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: f49068cf51f49c231067f1a8c9fc075ff960573f6b2a956e8e1b0154fb638ea5
+        url: https://files.pythonhosted.org/packages/09/6c/1b573998fe3f0e18ac5d434e43966de2d225d6837f099ce0df7df4274c87/tokenizers-0.20.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: ef3f1ae08fa9aea5891cbd69df29913e11d3841798e0bfb1ff78b78e4e7ea0a4
       - *id031
       - &id036
         type: file
-        url: https://files.pythonhosted.org/packages/85/f6/c5065913119c41ecad148c34e3a861f719e16b89a522287213698da911fc/transformers-4.37.2-py3-none-any.whl
-        sha256: 595a8b12a1fcc4ad0ced49ce206c58e17be68c85d7aee3d7546d04a32c910d2e
+        url: https://files.pythonhosted.org/packages/75/d5/294a09a62bdd88da9a1007a341d4f8fbfc43be520c101e6afb526000e9f4/transformers-4.46.1-py3-none-any.whl
+        sha256: f77b251a648fd32e3d14b5e7e27c913b7c29154940f519e4c8c3aa6061df0f05
       - *id001
       - *id032
 
@@ -897,8 +897,8 @@ modules:
         url: https://files.pythonhosted.org/packages/33/c9/751b6401887f4b50f9307cc1e53d287b3dc77c375c126aeb6335aff73ccb/HyperPyYAML-1.2.2-py3-none-any.whl
         sha256: 3c5864bdc8864b2f0fbd7bc495e7e8fdf2dfd5dd80116f72da27ca96a128bdeb
       - type: file
-        url: https://files.pythonhosted.org/packages/de/32/14022eea7761f5a5d1e3a827351c3279b7f6e95feaf477dc9c5429a3b682/WhisperSpeech-0.8-py3-none-any.whl
-        sha256: e28315dd6da39dd3cc457f4d67e4a13549f421a3cba6be57e203d8165af8574d
+        url: https://files.pythonhosted.org/packages/86/d2/79287f07e8c5fce780b68ac0e01c195c8e4e5a8874d4d8c3a1dc65da71a2/WhisperSpeech-0.8.9-py3-none-any.whl
+        sha256: 6cf9bbe2619dba5233799827464b46ac5b4af7552bd97406867ac552a30e860f
       - type: file
         url: https://files.pythonhosted.org/packages/39/b8/3059245adb5e4421222aab3852ac7f47d68eba82c8c62b88928ec1c69431/fastcore-1.5.29-py3-none-any.whl
         sha256: a7d7e89faf968f2d8584df2deca344c3974f6cf476e1299cd3c067d8fa7440e9

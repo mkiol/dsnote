@@ -168,16 +168,16 @@ modules:
         --prefix=${FLATPAK_DEST} torch torchaudio --no-build-isolation
     sources:
       - type: file
-        url: https://download.pytorch.org/whl/rocm5.7/torch-2.2.1%2Brocm5.7-cp311-cp311-linux_x86_64.whl
-        dest-filename: torch-2.2.1+rocm5.7-cp311-cp311-linux_x86_64.whl
-        sha256: 90b68d286582ae3fc0253b0e9598a71683db13d43aadfe9ffac9e80a4630a920
+        url: https://download.pytorch.org/whl/rocm6.2/torch-2.5.1%2Brocm6.2-cp311-cp311-linux_x86_64.whl
+        dest-filename: torch-2.5.1+rocm6.2-cp311-cp311-linux_x86_64.whl
+        sha256: 9c4c4d985923d0e31aab4108c56a1586ca599ab26abc919833b890f7f40dcc01
       - type: file
-        url: https://download.pytorch.org/whl/rocm5.7/torchaudio-2.2.1%2Brocm5.7-cp311-cp311-linux_x86_64.whl
-        dest-filename: torchaudio-2.2.1+rocm5.7-cp311-cp311-linux_x86_64.whl
-        sha256: 4f09dac8e96e46b83692d3c976ce6c8374cd6cce964057dc4b9dcae3800a2157
+        url: https://download.pytorch.org/whl/rocm6.2/torchaudio-2.5.1%2Brocm6.2-cp311-cp311-linux_x86_64.whl
+        dest-filename: torchaudio-2.5.1+rocm6.2-cp311-cp311-linux_x86_64.whl
+        sha256: 334e2c8936533c656095022d89fcb74ac23278ac88e2210b63f49c1810c88e91
       - type: file
-        url: https://download.pytorch.org/whl/pytorch_triton_rocm-2.2.0-cp311-cp311-linux_x86_64.whl
-        sha256: f8ac03d7e4114bd37c3ed1f98d84cdb15f1b1c5b3c0ecac305ada0d683520b9d
+        url: https://download.pytorch.org/whl/pytorch_triton_rocm-3.1.0-cp311-cp311-linux_x86_64.whl
+        sha256: 4b0a563986aa591ecbbfd69d53f171447f64ba453cecaafd80d853b3f1047eca
 
   - name: whispercpp-hipblas
     only-arches:

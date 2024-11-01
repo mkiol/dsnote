@@ -25,6 +25,7 @@
         <ul>
         <li>whisper.cpp update to version 1.7.1</li>
         <li>ROCm update to version 6.2.2</li>
+        <li>PyTorch update to version 2.5.1</li>
         </ul>
       </description>
     </release>
