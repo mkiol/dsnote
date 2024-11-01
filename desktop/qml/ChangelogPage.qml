@@ -18,17 +18,32 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("User Interface") + ":</p>
+        text: "<p>" + qsTr("Speech to Text") + ":</p>
         <ul>
-        <li></li>
-        </ul>
-        <p>" + qsTr("Accessibility") + ":</p>
-        <ul>
-        <li></li>
+        <li>Support for <i>Vulkan</i> GPU acceleration in <i>WhisperCpp</i>.
+            Vulkan acceleration enables much faster STT decoding with Intel, AMD or NVIDIA graphics cards.
+            With Vulkan, decoding is quicker than OpenCL, but still slightly slower compared to CUDA or ROCm.
+            The biggest advantage of Vulkan is that you can use it without installing any GPU acceleration add-ons.
+            As a reminder, GPU acceleration is not enabled by default. Use the option in <i>Settings</i> to turn it on.</li>
+        <li>New <i>Whisper Large Turbo</i> model for both <i>WhisperCpp</i> and <i>FasterWhisper</i>.
+            <i>Turbo</i> is a finetuned version of a pruned <i>Whisper Large-v3</i>. It's the exact same model,
+            except that the number of decoding layers have reduced. As a result, the model is way faster,
+            at the expense of a minor quality degradation.
+            <i>Turbo</i> model does not have the ability to translate into English, as does the regular Large model.</li>
+        <li>Simplified engine configuration options. Instead of multiple options, you can now select a Profile,
+            which allows you to change the engine's processing parameters.
+            There are three profiles to choose from: <i>Best Performance</i>, <i>Best Quality</i> and <i>Custom</i>.</li>
         </ul>
         <p>" + qsTr("Translator") + ":</p>
         <ul>
-        <li></li>
+        <li>New models: English to Finnish, English to Turkish, English to Swedish, Swedish to English,
+            English to Slovak, English to Indonesian, English to Romanian, English to Greek, Chinese to English</li>
+        <li>Updated models: English to Catalan, English to Russian, English to Ukrainian, English to Czech</li>
+        </ul>
+        <p>Flatpak</p>
+        <ul>
+        <li>whisper.cpp update to version 1.7.1</li>
+        <li>PyTorch update to version 2.5.1</li>
         </ul>"
     }
 

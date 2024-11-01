@@ -98,6 +98,34 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
+    <release version="4.7.0" date="2024-11-01">
+      <description>
+      <p>Speech to Text:</p>
+      <ul>
+      <li>Support for Vulkan GPU acceleration in 'WhisperCpp'.
+          Vulkan acceleration enables much faster STT decoding with Intel, AMD or NVIDIA graphics cards.
+          The biggest advantage of Vulkan is that you can use it without installing any GPU acceleration add-ons.</li>
+      <li>New 'Whisper Large Turbo' model for both 'WhisperCpp' and 'FasterWhisper'.
+          Turbo is a finetuned version of a pruned 'Whisper Large-v3'. It's the exact same model,
+          except that the number of decoding layers have reduced. As a result, the model is way faster,
+          at the expense of a minor quality degradation.</li>
+      <li>Simplified engine configuration options. Instead of multiple options, you can now select a Profile,
+          which allows you to change the engine's processing parameters.
+          There are three profiles to choose from: 'Best Performance', 'Best Quality' and 'Custom'.</li>
+      </ul>
+      <p>Translator:</p>
+      <ul>
+      <li>New models: English to Finnish, English to Turkish, English to Swedish, Swedish to English,
+          English to Slovak, English to Indonesian, English to Romanian, English to Greek, Chinese to English</li>
+      <li>Updated models: English to Catalan, English to Russian, English to Ukrainian, English to Czech</li>
+      </ul>
+      <p>Flatpak:</p>
+      <ul>
+      <li>whisper.cpp update to version 1.7.1</li>
+      <li>PyTorch update to version 2.5.1</li>
+      </ul>
+      </description>
+    </release>
     <release version="4.6.1" date="2024-08-15">
       <description>
       <p>General:</p>
