@@ -889,7 +889,7 @@ modules:
         PYTHONPATH: /app/extensions/cpu/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} whisperspeech --no-build-isolation
+        --prefix=${FLATPAK_DEST} whisperspeech webdataset --no-build-isolation
     sources:
       - *id022
       - *id039
@@ -920,3 +920,9 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/0a/45/82fe9b5696eb5dd4f84632f75b549b48bed0c33a5920b6309fbafd7e3477/vocos-0.1.0-py3-none-any.whl
         sha256: 0ac13eaef68596074301e912d781399b3defa4b4ca60b6bc52c8a4b9209ca235
+      - type: file
+        url: https://files.pythonhosted.org/packages/fa/93/e8c04e80e82391a6e51f218ca49720f64236bc824e92152a2633b74cf7ab/braceexpand-0.1.7-py2.py3-none-any.whl
+        sha256: 91332d53de7828103dcae5773fb43bc34950b0c8160e35e0f44c4427a3b85014
+      - type: file
+        url: https://files.pythonhosted.org/packages/8e/84/cf2319c375f4e061f27354685295905dc81105d2a2d2239baaf6f6e73c87/webdataset-0.2.100-py3-none-any.whl
+        sha256: f70a8e1f6d4f5268b364bd6f77fe8a1168ea14e7e9ed455d71f8d29585fd86af
