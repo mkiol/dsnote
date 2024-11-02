@@ -1192,8 +1192,8 @@ static bool has_lib(const char* name) {
 bool has_cuda_runtime() { return has_lib("libcudart.so"); }
 
 bool has_cudnn() {
-    if (has_lib("libcudnn.so")) return true;
-    return has_lib("libcudnn.so.8");
+    return has_lib("libcudnn.so") || has_lib("libcudnn.so.9") ||
+           has_lib("libcudnn.so.8");
 }
 
 bool has_hip() { return has_lib("libamdhip64.so"); }

@@ -128,8 +128,8 @@ modules:
         done
     sources:
       - type: archive
-        url: https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-x86_64/cudnn-linux-x86_64-8.9.2.26_cuda12-archive.tar.xz
-        sha256: ccafd7d15c2bf26187d52d79d9ccf95104f4199980f5075a7c1ee3347948ce32
+        url: https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-x86_64/cudnn-linux-x86_64-9.5.1.17_cuda12-archive.tar.xz
+        sha256: 35dd20b9c68324ae1288ac36f66ab1f318d2bfecfafb703a82617aa283272be4
 
   - name: nccl
     only-arches:
