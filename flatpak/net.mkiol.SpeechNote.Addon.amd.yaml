@@ -179,6 +179,27 @@ modules:
         url: https://download.pytorch.org/whl/pytorch_triton_rocm-3.1.0-cp311-cp311-linux_x86_64.whl
         sha256: 4b0a563986aa591ecbbfd69d53f171447f64ba453cecaafd80d853b3f1047eca
 
+  - name: suitesparse
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DBUILD_STATIC_LIBS=OFF
+      - -DBUILD_SHARED_LIBS=ON
+      - -DSUITESPARSE_ENABLE_PROJECTS=cholmod;amd;colamd;cxsparse
+    cleanup:
+      - /bin
+      - /include
+      - /lib/cmake
+      - /lib/debug
+      - /lib/*.a
+      - /lib/*.la
+      - /lib/pkgconfig
+      - /share/man
+    sources:
+      - type: git
+        url: https://github.com/DrTimothyAldenDavis/SuiteSparse.git
+        tag: v7.8.3
+        commit: d3c4926d2c47fd6ae558e898bfc072ade210a2a1
+
   - name: whispercpp-hipblas
     only-arches:
       - x86_64
@@ -192,6 +213,7 @@ modules:
       - -Dhip_DIR=/app/extensions/amd/rocm/hip
       - -Drocblas_DIR=/app/extensions/amd/rocm/rocblas
       - -DHIP_PLATFORM=amd
+      - -DGGML_OPENMP=OFF
       - -DGGML_AVX=ON
       - -DGGML_AVX2=OFF
       - -DGGML_FMA=OFF
