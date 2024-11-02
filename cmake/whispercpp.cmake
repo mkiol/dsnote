@@ -62,6 +62,12 @@ if(arch_x8664)
 
         ExternalProject_Add_StepDependencies(whispercppclblast configure clblast)
 
+        if(BUILD_WHISPERCPP_VULKAN)
+            ExternalProject_Add_StepDependencies(whispercppclblast install whispercppvulkan)
+        else()
+            ExternalProject_Add_StepDependencies(whispercppclblast install whispercppfallback)
+        endif()
+
         list(APPEND deps whispercppclblast)
     endif(BUILD_WHISPERCPP_CLBLAST)
 
@@ -92,6 +98,16 @@ if(arch_x8664)
                 -DWHISPER_TARGET_NAME=whisper-cublas
             BUILD_ALWAYS False
         )
+
+        if(BUILD_WHISPERCPP_CLBLAST)
+            ExternalProject_Add_StepDependencies(whispercppcublas install whispercppclblast)
+        else()
+            if(BUILD_WHISPERCPP_VULKAN)
+                ExternalProject_Add_StepDependencies(whispercppcublas install whispercppvulkan)
+            else()
+                ExternalProject_Add_StepDependencies(whispercppcublas install whispercppfallback)
+            endif()
+        endif()
 
         list(APPEND deps whispercppcublas)
     endif(BUILD_WHISPERCPP_CUBLAS)
@@ -124,6 +140,20 @@ if(arch_x8664)
             BUILD_ALWAYS False
         )
 
+        if(BUILD_WHISPERCPP_CUBLAS)
+            ExternalProject_Add_StepDependencies(whispercpphipblas install whispercppcublas)
+        else()
+            if(BUILD_WHISPERCPP_CLBLAST)
+                ExternalProject_Add_StepDependencies(whispercpphipblas install whispercppclblast)
+            else()
+                if(BUILD_WHISPERCPP_VULKAN)
+                    ExternalProject_Add_StepDependencies(whispercpphipblas install whispercppvulkan)
+                else()
+                    ExternalProject_Add_StepDependencies(whispercpphipblas install whispercppfallback)
+                endif()
+            endif()
+        endif()
+
         list(APPEND deps whispercpphipblas)
     endif(BUILD_WHISPERCPP_HIPBLAS)
 
@@ -151,6 +181,24 @@ if(arch_x8664)
                 -DWHISPER_TARGET_NAME=whisper-openvino
             BUILD_ALWAYS False
         )
+
+        if(BUILD_WHISPERCPP_HIPBLAS)
+            ExternalProject_Add_StepDependencies(whispercppopenvino install whispercpphipblas)
+        else()
+            if(BUILD_WHISPERCPP_CUBLAS)
+                ExternalProject_Add_StepDependencies(whispercppopenvino install whispercppcublas)
+            else()
+                if(BUILD_WHISPERCPP_CLBLAST)
+                    ExternalProject_Add_StepDependencies(whispercppopenvino install whispercppclblast)
+                else()
+                    if(BUILD_WHISPERCPP_VULKAN)
+                        ExternalProject_Add_StepDependencies(whispercppopenvino install whispercppvulkan)
+                    else()
+                        ExternalProject_Add_StepDependencies(whispercppopenvino install whispercppfallback)
+                    endif()
+                endif()
+            endif()
+        endif()
 
         list(APPEND deps whispercppopenvino)
     endif(BUILD_WHISPERCPP_OPENVINO)
@@ -183,6 +231,8 @@ if(arch_x8664)
                 -DWHISPER_TARGET_NAME=whisper-vulkan
             BUILD_ALWAYS False
         )
+
+        ExternalProject_Add_StepDependencies(whispercppvulkan install whispercppfallback)
 
         list(APPEND deps whispercppvulkan)
     endif(BUILD_WHISPERCPP_VULKAN)
@@ -268,6 +318,12 @@ if(BUILD_OPENBLAS)
     ExternalProject_Add_StepDependencies(whispercppfallback1 configure openblas)
     ExternalProject_Add_StepDependencies(whispercppopenblas configure openblas)
 endif()
+
+# make sequential rather than parallel installing of different types of whisper.cpp
+# order: whispercppopenblas => whispercppfallback1 => whispercppfallback => whispercppvulkan
+#        => whispercppclblast => whispercppcublas => whispercpphipblas => whispercppopenvino
+ExternalProject_Add_StepDependencies(whispercppfallback install whispercppfallback1)
+ExternalProject_Add_StepDependencies(whispercppfallback1 install whispercppopenblas)
 
 list(APPEND deps whispercppopenblas whispercppfallback1)
 list(APPEND deps whispercppopenblas whispercppfallback)
