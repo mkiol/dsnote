@@ -2877,7 +2877,7 @@ QVariantMap speech_service::features_availability() {
                              "Coqui TTS CUDA " + tr("HW acceleration")});
             m_features_availability.insert(
                 "coqui-tts-hip",
-                QVariantList{tts_coqui_cuda,
+                QVariantList{tts_coqui_hip,
                              "Coqui TTS ROCm " + tr("HW acceleration")});
             if (tts_coqui_cuda)
                 hw_feature_flags |=
