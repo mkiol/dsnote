@@ -44,6 +44,7 @@
         <file>qml/TextContextMenu.qml</file>
         <file>qml/GpuComboBox.qml</file>
         <file>qml/MainTipMessage.qml</file>
+        <file>qml/AddonInstallDialog.qml</file>
         <file alias="config/models.json">../config/models.json</file>
         <file alias="nonbreaking_prefixes/ca.txt">../nonbreaking_prefixes/ca.txt</file>
         <file alias="nonbreaking_prefixes/cs.txt">../nonbreaking_prefixes/cs.txt</file>

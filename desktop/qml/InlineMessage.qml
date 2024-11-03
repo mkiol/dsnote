@@ -14,6 +14,8 @@ Control {
 
      property color color: palette.highlight
      property bool closable: false
+     property alias actionButton: _actionButton
+     property string actionButtonToolTip: ""
      default property alias content: column.data
 
      signal closeClicked
@@ -35,17 +37,12 @@ Control {
 
          y: appWin.padding
          x: appWin.padding
-         width: parent.width - 3*x - (root.closable ? closeButton.width : 0)
+         width: parent.width - 3*x - buttonsRow.width
      }
 
-     Button {
-         id: closeButton
+     RowLayout {
+         id: buttonsRow
 
-         visible: root.closable
-         icon.name: "window-close-symbolic"
-         onClicked: root.closeClicked()
-         height: Math.min(implicitHeight, column.height)
-         width: height
          anchors {
              right: parent.right
              rightMargin: appWin.padding
@@ -53,9 +50,31 @@ Control {
              topMargin: appWin.padding
          }
 
-         ToolTip.visible: hovered
-         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-         ToolTip.text: qsTr("Close")
-         hoverEnabled: true
+         Button {
+             id: _actionButton
+
+             Layout.preferredHeight: Math.min(implicitHeight, column.height)
+
+             visible: icon.name.length > 0 || text.length > 0
+             ToolTip.text: root.actionButtonToolTip
+             ToolTip.visible: hovered && root.actionButtonToolTip.length > 0
+             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+             hoverEnabled: true
+         }
+
+         Button {
+             id: closeButton
+
+             Layout.preferredHeight: Math.min(implicitHeight, column.height)
+             Layout.preferredWidth: height
+
+             visible: root.closable
+             icon.name: "window-close-symbolic"
+             onClicked: root.closeClicked()
+             ToolTip.visible: hovered
+             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+             ToolTip.text: qsTr("Close")
+             hoverEnabled: true
+         }
      }
  }

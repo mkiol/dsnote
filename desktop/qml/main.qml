@@ -239,12 +239,25 @@ ApplicationWindow {
                       ((_settings.system_flags & Settings.SystemNvidiaGpu) > 0))
             onCloseClicked: _settings.set_hint_done(Settings.HintDoneAddon)
             text: {
-                var nvidia_addon = (_settings.system_flags & Settings.SystemNvidiaGpu) > 0;
-                qsTr("%1 graphics card has been detected. To add most efficient GPU acceleration support, install Flatpak add-on: %2.")
-                    .arg(nvidia_addon ? "NVIDIA" :
-                                        "AMD")
-                    .arg(nvidia_addon ? "<i><b>Speech Note NVIDIA (net.mkiol.SpeechNote.Addon.nvidia)</b></i>" :
-                                        "<i><b>Speech Note AMD (net.mkiol.SpeechNote.Addon.amd)</b></i>")
+                var nvidia_addon = (_settings.system_flags & Settings.SystemNvidiaGpu) > 0
+                var amd_addon = (_settings.system_flags & Settings.SystemAmdGpu) > 0
+                var txt = ""
+                if (nvidia_addon && amd_addon) {
+                    txt = qsTr("Both %1 and %2 graphics cards have been detected.").arg("NVIDIA").arg("AMD")
+                } else {
+                    txt = qsTr("%1 graphics card has been detected.").arg(nvidia_addon ? "NVIDIA" : "AMD")
+                }
+                txt += " " + qsTr("To add GPU acceleration support, install the additional Flatpak add-on.")
+            }
+
+            actionButtonToolTip: qsTr("Click to see instructions for installing the add-on.")
+            actionButton {
+                text: qsTr("Install")
+                onClicked: {
+                    var nvidia_addon = (_settings.system_flags & Settings.SystemNvidiaGpu) > 0;
+                    if (nvidia_addon) addonInstallDialog.openNvidia()
+                    else addonInstallDialog.openAmd()
+                }
             }
         }
 
@@ -347,6 +360,12 @@ ApplicationWindow {
 
         onAddClicked: addHandler()
         onReplaceClicked: replaceHandler()
+    }
+
+    AddonInstallDialog {
+        id: addonInstallDialog
+
+        anchors.centerIn: parent
     }
 
     StreamSelectionDialog {
