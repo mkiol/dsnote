@@ -46,6 +46,8 @@ class dsnote_app : public QObject {
                    can_undo_or_redu_note_changed)
     Q_PROPERTY(bool can_redo_note READ can_redo_note NOTIFY
                    can_undo_or_redu_note_changed)
+    Q_PROPERTY(int last_cursor_position READ last_cursor_position WRITE
+                   set_last_cursor_position NOTIFY last_cursor_position_changed)
 
     // player
     Q_PROPERTY(bool player_ready READ player_ready NOTIFY player_ready_changed)
@@ -472,6 +474,7 @@ class dsnote_app : public QObject {
     void audio_source_changed();
     void audio_sources_changed();
     void stt_auto_lang_changed();
+    void last_cursor_position_changed();
 
    private:
     enum class action_t {
@@ -617,6 +620,7 @@ class dsnote_app : public QObject {
     audio_device_manager m_audio_dm;
     QStringList m_audio_sources;
     QObject *m_app_window = nullptr;
+    int m_last_cursor_position = -1;
 #ifdef USE_X11_FEATURES
     struct hotkeys_t {
         QHotkey start_listening;
@@ -778,11 +782,13 @@ class dsnote_app : public QObject {
     void connect_service_signals();
     void start_keepalive();
     QVariantMap translations() const;
-    static QString insert_to_note(QString note, QString new_text,
-                                  const QString &lang,
-                                  settings::insert_mode_t mode);
+    static std::pair<QString, int> insert_to_note(QString note,
+                                                  QString new_text,
+                                                  const QString &lang,
+                                                  settings::insert_mode_t mode,
+                                                  int last_cursor_position);
     QString note() const;
-    void set_note(const QString text);
+    void set_note(const QString &text);
     bool can_undo_note() const;
     bool can_redo_note() const;
     bool can_undo_or_redu_note() const;
@@ -881,6 +887,8 @@ class dsnote_app : public QObject {
     inline QString stt_auto_lang_id() const { return m_stt_auto_lang_id; }
     void update_stt_auto_lang(QString lang_id);
     QString stt_auto_lang_name() const;
+    void set_last_cursor_position(int position);
+    inline int last_cursor_position() const { return m_last_cursor_position; }
 #ifdef USE_DESKTOP
     void execute_tray_action(tray_icon::action_t action, int value);
 #endif

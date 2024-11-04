@@ -18,11 +18,17 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Speech to Text") + ":</p>
+        text: "<p>" + qsTr("User Interface") + ":</p>
+        <ul>
+        <li>Inserting text at the cursor position.
+            To insert text at the cursor position rather than at the end of the note,
+            change <i>Text appending mode</i> option to <i>Add at the cursor position</i> in the settings.</li>
+        </ul>
+        <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
         <li>Support for <i>Vulkan</i> GPU acceleration in <i>WhisperCpp</i>.
             Vulkan acceleration enables much faster STT decoding with Intel, AMD or NVIDIA graphics cards.
-            With Vulkan, decoding is quicker than OpenCL, but still slightly slower compared to CUDA or ROCm.
+            With Vulkan, decoding is quicker than with OpenVINO, OpenCL and ROCm, but still slightly slower compared to CUDA.
             The biggest advantage of Vulkan is that you can use it without installing any GPU acceleration add-ons.
             As a reminder, GPU acceleration is not enabled by default. Use the option in <i>Settings</i> to turn it on.</li>
         <li>New <i>Whisper Large Turbo</i> model for both <i>WhisperCpp</i> and <i>FasterWhisper</i>.

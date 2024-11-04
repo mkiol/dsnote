@@ -139,29 +139,33 @@ DialogPage {
             }
 
             ComboBoxForm {
-                label.text: qsTr("Text appending style")
-                toolTip: qsTr("Text is appended to the note in the same line or after line break.")
+                label.text: qsTr("Text appending mode")
+                toolTip: qsTr("Specifies where to add new text to a note.")
                 comboBox {
                     currentIndex: {
-                        if (_settings.insert_mode === Settings.InsertInLine) return 0
-                        if (_settings.insert_mode === Settings.InsertNewLine) return 1
-                        if (_settings.insert_mode === Settings.InsertAfterEmptyLine) return 2
-                        return 0
+                        if (_settings.insert_mode === Settings.InsertInLine) return 1
+                        if (_settings.insert_mode === Settings.InsertNewLine) return 2
+                        if (_settings.insert_mode === Settings.InsertAfterEmptyLine) return 3
+                        if (_settings.insert_mode === Settings.InsertAtCursor) return 0
+                        return 2
                     }
                     model: [
-                        qsTr("In line"),
-                        qsTr("After line break"),
-                        qsTr("After empty line")
+                        qsTr("Add at the cursor position"),
+                        qsTr("Add to last line"),
+                        qsTr("Add after line break"),
+                        qsTr("Add after empty line")
                     ]
                     onActivated: {
                         if (index === 0) {
-                            _settings.insert_mode = Settings.InsertInLine
+                            _settings.insert_mode = Settings.InsertAtCursor
                         } else if (index === 1) {
-                            _settings.insert_mode = Settings.InsertNewLine
+                            _settings.insert_mode = Settings.InsertInLine
                         } else if (index === 2) {
+                            _settings.insert_mode = Settings.InsertNewLine
+                        } else if (index === 3) {
                             _settings.insert_mode = Settings.InsertAfterEmptyLine
                         } else {
-                            _settings.insert_mode = Settings.InsertInLine
+                            _settings.insert_mode = Settings.InsertNewLine
                         }
                     }
                 }

@@ -17,6 +17,7 @@ Item {
     property alias textFormatInvalid: _textFormatComboRedBorder.visible
     property color textColor: palette.text
     property bool showTranslate: false
+    property bool showInsertIndicator: false
     property bool showControlTags: false
     property bool canUndo: true
     property bool canUndoFallback: false
@@ -71,6 +72,28 @@ Item {
             wrapMode: TextEdit.WordWrap
             verticalAlignment: TextEdit.AlignTop
             font: _settings.notepad_font
+            onCursorPositionChanged: cursorIndicator.update(cursorPosition)
+            Component.onCompleted: cursorIndicator.update(-1)
+            onTextChanged: cursorIndicator.update(cursorPosition)
+
+            Rectangle {
+                id: cursorIndicator
+
+                function update(position) {
+                    if (root.textArea.text.length === 0) position = 0
+                    else if (position < 0) position = root.textArea.text.length
+
+                    var rect = root.textArea.positionToRectangle(position)
+
+                    width = rect.width
+                    height = rect.height
+                    x = rect.x
+                    y = rect.y
+                }
+
+                visible: root.showInsertIndicator && !parent.activeFocus
+                color: parent.palette.text
+            }
 
             TextContextMenu {
                 disableNative: true

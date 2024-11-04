@@ -107,11 +107,11 @@ ColumnLayout {
                     canTranslateSelected: mntInCombo.first.enabled && mntInCombo.first.combo.model.length !== 0
                     canTranslateAll: canTranslateSelected
                     showControlTags: canReadSelected
+                    showInsertIndicator: _settings.insert_mode === Settings.InsertInLine
                     textArea {
                         placeholderText: app.mnt_configured ? qsTr("Type here text to translate from...") : ""
-                        onTextChanged: {
-                            app.note = root.noteTextArea.textArea.text
-                        }
+                        onTextChanged: app.note = root.noteTextArea.textArea.text
+                        onCursorPositionChanged: app.last_cursor_position = root.noteTextArea.textArea.cursorPosition
                     }
                     textFormatInvalid: {
                         if (root.noteTextArea.textArea.text.length == 0) return false

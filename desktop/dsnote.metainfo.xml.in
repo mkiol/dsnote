@@ -100,6 +100,12 @@
   <releases>
     <release version="4.7.0" date="2024-11-01">
       <description>
+      <p>User Interface:</p>
+      <ul>
+      <li>Inserting text at the cursor position.
+          To insert text at the cursor position rather than at the end of the note,
+          change 'Text appending mode' option to 'Add at the cursor position' in the settings.</li>
+      </ul>
       <p>Speech to Text:</p>
       <ul>
       <li>Support for Vulkan GPU acceleration in 'WhisperCpp'.

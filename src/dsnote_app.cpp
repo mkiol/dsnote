@@ -316,6 +316,8 @@ dsnote_app::dsnote_app(QObject *parent)
             &dsnote_app::register_hotkeys);
     connect(settings::instance(), &settings::audio_input_device_changed, this,
             [this] { emit audio_source_changed(); });
+    connect(settings::instance(), &settings::insert_mode_changed, this,
+            [this] { set_last_cursor_position(-1); });
 
     connect(this, &dsnote_app::service_state_changed, this, [this] {
         auto reset_progress = [this]() {
@@ -578,58 +580,126 @@ static std::pair<QChar, QString> full_stop(const QString &lang) {
     return {'.', " "};
 }
 
-QString dsnote_app::insert_to_note(QString note, QString new_text,
-                                   const QString &lang,
-                                   settings::insert_mode_t mode) {
-    if (new_text.isEmpty()) return note;
-
-    QTextStream ss{&note, QIODevice::WriteOnly};
+std::pair<QString, int> dsnote_app::insert_to_note(QString note,
+                                                   QString new_text,
+                                                   const QString &lang,
+                                                   settings::insert_mode_t mode,
+                                                   int last_cursor_position) {
+    if (new_text.isEmpty()) return {std::move(note), last_cursor_position};
 
     auto [dot, space] = full_stop(lang);
 
-    switch (mode) {
-        case settings::insert_mode_t::InsertInLine:
-            if (!note.isEmpty()) {
-                auto last_char = note.at(note.size() - 1);
-                if (last_char.isLetterOrNumber())
-                    ss << dot << space;
-                else if (last_char == dot)
-                    ss << space;
-                else if (!last_char.isSpace())
-                    ss << ' ';
+    bool insert_into_cursor_position =
+        mode == settings::insert_mode_t::InsertAtCursor && !note.isEmpty() &&
+        last_cursor_position >= 0 && last_cursor_position <= note.size();
+
+    if (insert_into_cursor_position) {
+        QString note_prefix = note.mid(0, last_cursor_position);
+        QString note_sufix = note.mid(last_cursor_position);
+        QTextStream ss{&note_prefix, QIODevice::WriteOnly};
+
+        // insert space to prefix if needed
+        if (!note_prefix.isEmpty() &&
+            !note_prefix.at(note_prefix.size() - 1).isSpace() &&
+            !new_text.at(0).isSpace() && !new_text.at(0).isPunct()) {
+            ss << ' ';
+        }
+
+        // make new text start upper or lower
+        new_text[0] =
+            note_prefix.isEmpty() || note_prefix.trimmed().right(1) == dot
+                ? new_text[0].toUpper()
+                : new_text[0].toLower();
+
+        if (new_text.at(new_text.size() - 1) == dot) {
+            // remove trailing dot if sufix starts with dot or doesn't start
+            // with upper
+            auto tsufix = note_sufix.trimmed();
+            if (!tsufix.isEmpty() &&
+                ((tsufix.at(0).isLower() && !tsufix.at(0).isUpper()) ||
+                 tsufix.at(0) == dot)) {
+                new_text = new_text.left(new_text.size() - 1);
             }
-            break;
-        case settings::insert_mode_t::InsertNewLine:
-            if (!note.isEmpty()) {
-                auto last_char = note.at(note.size() - 1);
-                if (last_char.isLetterOrNumber())
-                    ss << dot << '\n';
-                else if (last_char != '\n')
-                    ss << '\n';
+        } else if (new_text.at(new_text.size() - 1).isLetterOrNumber()) {
+            // add trailing dot if sufix starts with with upper
+            auto tsufix = note_sufix.trimmed();
+            if (!tsufix.isEmpty() && tsufix.at(0).isUpper() &&
+                !tsufix.at(0).isLower()) {
+                new_text += dot;
             }
-            break;
-        case settings::insert_mode_t::InsertAfterEmptyLine:
-            if (!note.isEmpty()) {
-                auto last_char = note.at(note.size() - 1);
-                auto one_before_last_char =
-                    note.size() > 1 ? note.at(note.size() - 2) : '\0';
-                if (last_char.isLetterOrNumber())
-                    ss << dot << "\n\n";
-                else if (last_char == '\n' && one_before_last_char != '\n')
-                    ss << '\n';
-                else if (last_char != '\n')
-                    ss << "\n\n";
+        }
+
+        ss << new_text;
+
+        last_cursor_position = note_prefix.size();
+
+        if (!note_sufix.isEmpty()) {
+            // insert space if needed
+            if (!new_text.at(new_text.size() - 1).isSpace() &&
+                !note_sufix.at(0).isSpace() && !note_sufix.at(0).isPunct()) {
+                ss << ' ';
             }
-            break;
+
+            // make sufix star upper or lower
+            if (new_text.trimmed().right(1) == dot) {
+                note_sufix[0] = note_sufix[0].toUpper();
+            }
+            ss << note_sufix;
+        } else {
+            // insert dot if needed
+            if (note_prefix.at(note_prefix.size() - 1).isLetterOrNumber())
+                ss << dot;
+        }
+
+        return {std::move(note_prefix), last_cursor_position};
+    } else {
+        QTextStream ss{&note, QIODevice::WriteOnly};
+
+        switch (mode) {
+            case settings::insert_mode_t::InsertAtCursor:
+            case settings::insert_mode_t::InsertInLine:
+                if (!note.isEmpty()) {
+                    auto last_char = note.at(note.size() - 1);
+                    if (last_char.isLetterOrNumber() && new_text.at(0) != dot)
+                        ss << dot << space;
+                    else if (last_char == dot && !new_text.at(0).isSpace())
+                        ss << space;
+                    else if (!last_char.isSpace() && !new_text.at(0).isSpace())
+                        ss << ' ';
+                }
+                break;
+            case settings::insert_mode_t::InsertNewLine:
+                if (!note.isEmpty()) {
+                    auto last_char = note.at(note.size() - 1);
+                    if (last_char.isLetterOrNumber() && new_text.at(0) != dot)
+                        ss << dot << '\n';
+                    else if (last_char != '\n' && new_text.at(0) != '\n')
+                        ss << '\n';
+                }
+                break;
+            case settings::insert_mode_t::InsertAfterEmptyLine:
+                if (!note.isEmpty()) {
+                    auto last_char = note.at(note.size() - 1);
+                    auto one_before_last_char =
+                        note.size() > 1 ? note.at(note.size() - 2) : '\0';
+                    if (last_char.isLetterOrNumber())
+                        ss << dot << "\n\n";
+                    else if (last_char == '\n' && one_before_last_char != '\n')
+                        ss << '\n';
+                    else if (last_char != '\n')
+                        ss << "\n\n";
+                }
+                break;
+        }
+
+        new_text[0] = new_text[0].toUpper();
+
+        ss << new_text;
+
+        if (new_text.at(new_text.size() - 1).isLetterOrNumber()) ss << dot;
+
+        return {std::move(note), note.size()};
     }
-
-    new_text[0] = new_text[0].toUpper();
-
-    ss << new_text;
-
-    if (new_text.at(new_text.size() - 1).isLetterOrNumber()) ss << dot;
-
-    return note;
 }
 
 void dsnote_app::handle_stt_text_decoded(const QString &text,
@@ -658,27 +728,34 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
     update_stt_auto_lang(lang);
 
     switch (m_text_destination) {
-        case text_destination_t::note_add:
+        case text_destination_t::note_add: {
             make_undo();
-            set_note(
+            auto n =
                 insert_to_note(settings::instance()->note(), text, lang,
                                settings::instance()->stt_tts_text_format() ==
                                        settings::text_format_t::TextFormatSubRip
                                    ? settings::insert_mode_t::InsertInLine
-                                   : settings::instance()->insert_mode()));
+                                   : settings::instance()->insert_mode(),
+                               m_last_cursor_position);
+            set_note(n.first);
+            set_last_cursor_position(n.second);
             this->m_intermediate_text.clear();
             emit text_changed();
             emit intermediate_text_changed();
             break;
-        case text_destination_t::note_replace:
+        }
+        case text_destination_t::note_replace: {
             make_undo();
-            set_note(insert_to_note(QString{}, text, lang,
-                                    settings::instance()->insert_mode()));
+            auto n = insert_to_note(QString{}, text, lang,
+                                    settings::instance()->insert_mode(), -1);
+            set_note(n.first);
+            set_last_cursor_position(n.second);
             m_text_destination = text_destination_t::note_add;
             this->m_intermediate_text.clear();
             emit text_changed();
             emit intermediate_text_changed();
             break;
+        }
         case text_destination_t::active_window:
 #ifdef USE_X11_FEATURES
             m_fake_keyboard.emplace();
@@ -3286,7 +3363,7 @@ void dsnote_app::set_translated_text(const QString text) {
 
 QString dsnote_app::note() const { return settings::instance()->note(); }
 
-void dsnote_app::set_note(const QString text) {
+void dsnote_app::set_note(const QString &text) {
     auto old = can_undo_or_redu_note();
     settings::instance()->set_note(text);
     if (old != can_undo_or_redu_note()) emit can_undo_or_redu_note_changed();
@@ -3298,9 +3375,13 @@ void dsnote_app::update_note(const QString &text, bool replace) {
 
     if (replace) {
         set_note(text);
+        set_last_cursor_position(text.size());
     } else {
-        set_note(insert_to_note(settings::instance()->note(), text, "",
-                                settings::instance()->insert_mode()));
+        auto n = insert_to_note(settings::instance()->note(), text, "",
+                                settings::instance()->insert_mode(),
+                                m_last_cursor_position);
+        set_note(n.first);
+        set_last_cursor_position(n.second);
     }
 }
 
@@ -3576,10 +3657,14 @@ bool dsnote_app::import_text_file(const QString &input_file, bool replace) {
     make_undo();
 
     if (replace) {
-        set_note(file.readAll());
+        auto n = QString::fromUtf8(file.readAll());
+        set_note(n);
+        set_last_cursor_position(n.size());
     } else {
-        set_note(insert_to_note(settings::instance()->note(), file.readAll(),
-                                "", settings::instance()->insert_mode()));
+        auto n = insert_to_note(settings::instance()->note(), file.readAll(),
+                                "", settings::instance()->insert_mode(), -1);
+        set_note(n.first);
+        set_last_cursor_position(n.second);
     }
 
     return true;
@@ -4792,6 +4877,13 @@ void dsnote_app::hide_tray() {
 #ifdef USE_DESKTOP
     m_tray.hide();
 #endif
+}
+
+void dsnote_app::set_last_cursor_position(int position) {
+    if (m_last_cursor_position != position) {
+        m_last_cursor_position = position;
+        emit last_cursor_position_changed();
+    }
 }
 
 void dsnote_app::update_stt_auto_lang(QString lang_id) {

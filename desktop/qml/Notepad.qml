@@ -32,6 +32,10 @@ ColumnLayout {
         onActive_stt_model_changed: root.update()
         onActive_tts_model_changed: root.update()
         onNote_changed: update()
+        onLast_cursor_position_changed: {
+            if (app.last_cursor_position === root.noteTextArea.textArea.cursorPosition) return
+            root.noteTextArea.textArea.cursorPosition = app.last_cursor_position
+        }
     }
 
     function update() {
@@ -69,14 +73,14 @@ ColumnLayout {
         canReadSelected: listenReadCombos.second.button.enabled
         canReadAll: canReadSelected
         showControlTags: canReadSelected
+        showInsertIndicator: _settings.insert_mode === Settings.InsertAtCursor
         textArea {
             placeholderText: app.stt_configured || app.tts_configured ?
                                  qsTr("Type here or press %1 to make a note...")
                                     .arg("<i>" + qsTr("Listen") + "</i>") : ""
             readOnly: root.readOnly
-            onTextChanged: {
-                app.note = root.noteTextArea.textArea.text
-            }
+            onTextChanged: app.note = root.noteTextArea.textArea.text
+            onCursorPositionChanged: app.last_cursor_position = root.noteTextArea.textArea.cursorPosition
         }
         textFormatInvalid: {
             if (root.noteTextArea.textArea.text.length == 0) return false
