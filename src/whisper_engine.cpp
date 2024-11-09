@@ -114,10 +114,21 @@ void whisper_engine::open_whisper_lib() {
             LOGE("failed to open libwhisper-fallback.so: " << dlerror());
     }
 #elif ARCH_ARM_64
-    LOGD("using whisper-openblas");
-    m_whisperlib_handle = dlopen("libwhisper-openblas.so", RTLD_LAZY);
-    if (m_whisperlib_handle == nullptr)
-        LOGE("failed to open libwhisper-openblas.so: " << dlerror());
+    if (m_config.use_gpu) {
+        if (m_config.gpu_device.api == gpu_api_t::vulkan) {
+            LOGD("using whisper-vulkan");
+
+            m_whisperlib_handle = dlopen("libwhisper-vulkan.so", RTLD_LAZY);
+            if (m_whisperlib_handle == nullptr)
+                LOGE("failed to open libwhisper-vulkan.so: " << dlerror());
+        }
+    }
+    if (m_whisperlib_handle == nullptr) {
+        LOGD("using whisper-openblas");
+        m_whisperlib_handle = dlopen("libwhisper-openblas.so", RTLD_LAZY);
+        if (m_whisperlib_handle == nullptr)
+            LOGE("failed to open libwhisper-openblas.so: " << dlerror());
+    }
 #else
     if (auto cpuinfo = cpu_tools::cpuinfo();
         cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx &&

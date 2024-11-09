@@ -661,14 +661,26 @@ struct vulkan_api {
     }
 };
 
-static bool file_exists(const char* name) {
+[[maybe_unused]] static bool file_exists(const char* name) {
     struct stat buffer {};
     return (stat(name, &buffer) == 0);
 }
 
-bool has_nvidia_gpu() { return file_exists("/dev/nvidiactl"); }
+bool has_nvidia_gpu() {
+#ifdef ARCH_X86_64
+    return file_exists("/dev/nvidiactl");
+#else
+    return false;
+#endif
+}
 
-bool has_amd_gpu() { return file_exists("/dev/kfd"); }
+bool has_amd_gpu() {
+#ifdef ARCH_X86_64
+    return file_exists("/dev/kfd");
+#else
+    return false;
+#endif
+}
 
 static cudaHipError add_cuda_runtime_devices(std::vector<device>& devices) {
     LOGD("scanning for cuda runtime devices");
@@ -792,18 +804,24 @@ static void add_cuda_dev_devices(std::vector<device>& devices) {
     }
 }
 
-available_devices_result available_devices(bool cuda, bool hip, bool vulkan,
-                                           bool openvino, bool opencl,
-                                           bool opencl_always) {
+available_devices_result available_devices(
+    [[maybe_unused]] bool cuda, [[maybe_unused]] bool hip,
+    [[maybe_unused]] bool vulkan, [[maybe_unused]] bool openvino,
+    [[maybe_unused]] bool opencl, [[maybe_unused]] bool opencl_always) {
     available_devices_result result;
 
-    if (hip) add_hip_devices(result.devices);
+#ifdef ARCH_X86_64
     if (cuda) result.error = add_cuda_devices(result.devices);
+#endif
+#ifndef ARCH_X86_32
     if (vulkan) add_vulkan_devices(result.devices);
+#endif
+#ifdef ARCH_X86_64
+    if (hip) add_hip_devices(result.devices);
     if (openvino) add_openvino_devices(result.devices);
     if (opencl && (opencl_always || result.devices.empty()))
         add_opencl_devices(result.devices);
-
+#endif
     return result;
 }
 
@@ -1158,12 +1176,12 @@ void add_vulkan_devices(std::vector<device>& devices) {
                 prop.properties.deviceType !=
                     VkPhysicalDeviceType::
                         VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) {
-                LOGD("not gpu device, skipping");
+                LOGD("not vulkan gpu device => skipping");
                 continue;
             }
 
             if (i >= max_nb_of_devices) {
-                LOGD("already have the max nb of vulkan devices, skipping");
+                LOGD("already have the max nb of vulkan devices => skipping");
                 continue;
             }
 
@@ -1189,18 +1207,46 @@ static bool has_lib(const char* name) {
     return true;
 }
 
-bool has_cuda_runtime() { return has_lib("libcudart.so"); }
-
-bool has_cudnn() {
-    return has_lib("libcudnn.so") || has_lib("libcudnn.so.9") ||
-           has_lib("libcudnn.so.8");
+bool has_cuda_runtime() {
+#ifdef ARCH_X86_64
+    return has_lib("libcudart.so");
+#else
+    return false;
+#endif
 }
 
-bool has_hip() { return has_lib("libamdhip64.so"); }
+bool has_cudnn() {
+#ifdef ARCH_X86_64
+    return has_lib("libcudnn.so") || has_lib("libcudnn.so.9") ||
+           has_lib("libcudnn.so.8");
+#else
+    return false;
+#endif
+}
 
-bool has_openvino() { return has_lib("libopenvino_c.so"); }
+bool has_hip() {
+#ifdef ARCH_X86_64
+    return has_lib("libamdhip64.so");
+#else
+    return false;
+#endif
+}
 
-bool has_vulkan() { return has_lib("libvulkan.so.1"); }
+bool has_openvino() {
+#ifdef ARCH_X86_64
+    return has_lib("libopenvino_c.so");
+#else
+    return false;
+#endif
+}
+
+bool has_vulkan() {
+#ifdef ARCH_ARM_32
+    return false;
+#else
+    return has_lib("libvulkan.so.1");
+#endif
+}
 
 void rocm_override_gfx_version(const std::string& arch_version) {
     const auto* value = getenv("HSA_OVERRIDE_GFX_VERSION");

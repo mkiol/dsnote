@@ -497,11 +497,11 @@ class settings : public QSettings, public singleton<settings> {
 
     settings();
 
-    launch_mode_t launch_mode() const;
-    void set_launch_mode(launch_mode_t launch_mode);
+    static launch_mode_t launch_mode;
     QString module_checksum(const QString &name) const;
     void set_module_checksum(const QString &name, const QString &value);
     void scan_hw_devices(unsigned int hw_feature_flags);
+    void update_hw_devices_from_fa(const QVariantMap &features_availability);
     void disable_hw_scan();
     void disable_py_scan();
 #ifdef USE_DESKTOP
@@ -518,6 +518,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_insert_mode(insert_mode_t value);
     mode_t mode() const;
     void set_mode(mode_t value);
+    void update_addon_flags_from_fa(const QVariantMap &features_availability);
+    void update_system_flags_from_fa(const QVariantMap &features_availability);
 
     QString audio_file_save_dir() const;
     void set_audio_file_save_dir(const QString &value);
@@ -961,7 +963,6 @@ class settings : public QSettings, public singleton<settings> {
     void update_addon_flags();
     void update_system_flags();
 
-    launch_mode_t m_launch_mode = launch_mode_t::app_stanalone;
     QString m_note;
 };
 

@@ -71,17 +71,17 @@ Page {
                         }
 
                         ComboBox {
-                            label: qsTr("Text appending style")
+                            label: qsTr("Text appending mode")
                             currentIndex: {
                                 if (_settings.insert_mode === Settings.InsertInLine) return 0
                                 if (_settings.insert_mode === Settings.InsertNewLine) return 1
                                 if (_settings.insert_mode === Settings.InsertAfterEmptyLine) return 2
-                                return 0
+                                return 1
                             }
                             menu: ContextMenu {
-                                MenuItem { text: qsTr("In line") }
-                                MenuItem { text: qsTr("After line break") }
-                                MenuItem { text: qsTr("After empty line") }
+                                MenuItem { text: qsTr("Add to last line") }
+                                MenuItem { text: qsTr("Add after line break") }
+                                MenuItem { text: qsTr("Add after empty line") }
                             }
                             onCurrentIndexChanged: {
                                 if (currentIndex === 0) {
@@ -91,10 +91,10 @@ Page {
                                 } else if (currentIndex === 2) {
                                     _settings.insert_mode = Settings.InsertAfterEmptyLine
                                 } else {
-                                    _settings.insert_mode = Settings.InsertInLine
+                                    _settings.insert_mode = Settings.InsertNewLine
                                 }
                             }
-                            description: qsTr("Text is appended to the note in the same line or after line break.")
+                            description: qsTr("Specifies where to add new text to a note.")
                         }
 
                         TextSwitch {
@@ -175,6 +175,44 @@ Page {
 //                            }
 //                            description: qsTr("In automatic language detection, the %1 model is used instead of the selected model.").arg("<i>Tiny</i>") + " " +
 //                                         qsTr("This reduces processing time, but the automatically detected language may be incorrect.")
+//                        }
+
+//                        TextSwitch {
+//                            visible: _settings.hw_accel_supported() && app.feature_whispercpp_gpu
+//                            checked: _settings.whispercpp_use_gpu
+//                            automaticCheck: false
+//                            text: qsTr("Use hardware acceleration")
+//                            onClicked: {
+//                                _settings.whispercpp_use_gpu = !_settings.whispercpp_use_gpu
+//                            }
+//                            description: qsTr("If a suitable hardware accelerator (CPU or graphics card) is found in the system, it will be used to speed up processing.") + " " +
+//                                         qsTr("Hardware acceleration significantly reduces the time of decoding.") + " " +
+//                                         qsTr("Disable this option if you observe problems.")
+//                        }
+
+//                        PaddedLabel {
+//                            visible: _settings.hw_accel_supported() && app.feature_whispercpp_gpu &&
+//                                     _settings.whispercpp_use_gpu && _settings.whispercpp_gpu_devices.length <= 1
+//                            font.pixelSize: Theme.fontSizeExtraSmall
+//                            color: Theme.errorColor
+//                            text: qsTr("A suitable hardware accelerator could not be found.")
+//                        }
+
+//                        ComboBox {
+//                            label: qsTr("Hardware accelerator")
+//                            visible: _settings.hw_accel_supported() && app.feature_whispercpp_gpu &&
+//                                     _settings.whispercpp_use_gpu && _settings.whispercpp_gpu_devices.length > 1
+//                            currentIndex: _settings.whispercpp_gpu_device_idx
+//                            menu: ContextMenu {
+//                                Repeater {
+//                                    model: _settings.whispercpp_gpu_devices
+//                                    MenuItem { text: modelData }
+//                                }
+//                            }
+//                            onCurrentIndexChanged: {
+//                                _settings.whispercpp_gpu_device_idx = currentIndex
+//                            }
+//                            description: qsTr("Select preferred hardware accelerator.")
 //                        }
 
                         SectionHeader {

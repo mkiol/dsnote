@@ -158,9 +158,20 @@ static settings::audio_quality_t tts_audio_quality_from_options(
     return settings::audio_quality_t::AudioQualityVbrMedium;
 }
 
+static QVariantList variant_list_from_list(const QStringList &list) {
+    QVariantList vlist;
+
+    vlist.reserve(list.size());
+    for (const auto &item : list) {
+        vlist.push_back(item);
+    }
+
+    return vlist;
+}
+
 speech_service::speech_service(QObject *parent)
     : QObject{parent}, m_dbus_service_adaptor{this} {
-    qDebug() << "starting service:" << settings::instance()->launch_mode();
+    qDebug() << "starting service:" << settings::launch_mode;
 
     connect(models_manager::instance(), &models_manager::models_changed, this,
             &speech_service::handle_models_changed);
@@ -239,8 +250,7 @@ speech_service::speech_service(QObject *parent)
     connect(
         settings::instance(), &settings::default_stt_model_changed, this,
         [this]() {
-            if (settings::instance()->launch_mode() ==
-                settings::launch_mode_t::service) {
+            if (settings::launch_mode == settings::launch_mode_t::service) {
                 auto model = default_stt_model();
                 qDebug() << "[service => dbus] signal "
                             "DefaultSttModelPropertyChanged:"
@@ -250,8 +260,7 @@ speech_service::speech_service(QObject *parent)
 
             emit default_stt_model_changed();
 
-            if (settings::instance()->launch_mode() ==
-                settings::launch_mode_t::service) {
+            if (settings::launch_mode == settings::launch_mode_t::service) {
                 auto lang = default_stt_lang();
                 qDebug()
                     << "[service => dbus] signal DefaultSttLangPropertyChanged:"
@@ -265,8 +274,7 @@ speech_service::speech_service(QObject *parent)
     connect(
         settings::instance(), &settings::default_tts_model_changed, this,
         [this]() {
-            if (settings::instance()->launch_mode() ==
-                settings::launch_mode_t::service) {
+            if (settings::launch_mode == settings::launch_mode_t::service) {
                 auto model = default_tts_model();
                 qDebug() << "[service => dbus] signal "
                             "DefaultTtsModelPropertyChanged:"
@@ -276,8 +284,7 @@ speech_service::speech_service(QObject *parent)
 
             emit default_tts_model_changed();
 
-            if (settings::instance()->launch_mode() ==
-                settings::launch_mode_t::service) {
+            if (settings::launch_mode == settings::launch_mode_t::service) {
                 auto lang = default_tts_lang();
                 qDebug()
                     << "[service => dbus] signal DefaultTtsLangPropertyChanged:"
@@ -293,8 +300,7 @@ speech_service::speech_service(QObject *parent)
         [this]() {
             qDebug() << "default_mnt_lang_changed:"
                      << settings::instance()->default_mnt_lang();
-            if (settings::instance()->launch_mode() ==
-                settings::launch_mode_t::service) {
+            if (settings::launch_mode == settings::launch_mode_t::service) {
                 auto lang = default_mnt_lang();
                 qDebug() << "[service => dbus] signal "
                             "DefaultMntLangPropertyChanged:"
@@ -311,8 +317,7 @@ speech_service::speech_service(QObject *parent)
     connect(
         settings::instance(), &settings::default_mnt_out_lang_changed, this,
         [this]() {
-            if (settings::instance()->launch_mode() ==
-                settings::launch_mode_t::service) {
+            if (settings::launch_mode == settings::launch_mode_t::service) {
                 auto lang = default_mnt_out_lang();
                 qDebug() << "[service => dbus] signal "
                             "DefaultMntOutLangPropertyChanged:"
@@ -324,8 +329,7 @@ speech_service::speech_service(QObject *parent)
         },
         Qt::QueuedConnection);
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::service) {
+    if (settings::launch_mode == settings::launch_mode_t::service) {
         connect(
             this, &speech_service::state_changed, this,
             [this]() {
@@ -547,8 +551,7 @@ speech_service::speech_service(QObject *parent)
         }
     });
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::service) {
+    if (settings::launch_mode == settings::launch_mode_t::service) {
         m_keepalive_timer.start();
     }
 
@@ -2961,15 +2964,18 @@ QVariantMap speech_service::features_availability() {
             bool stt_fasterwhisper_hip = py_availability->faster_whisper &&
                                          py_availability->ctranslate2_cuda &&
                                          has_hip;
+            stt_fasterwhisper_hip =
+                false;  // right now, ct2 doesn't support hip
             m_features_availability.insert(
                 "faster-whisper-stt-cuda",
                 QVariantList{
                     stt_fasterwhisper_cuda,
                     "FasterWhisper STT CUDA " + tr("HW acceleration")});
-            m_features_availability.insert(
+            // consider this: https://github.com/arlo-phoenix/CTranslate2-rocm
+            /*m_features_availability.insert(
                 "faster-whisper-stt-hip",
-                QVariantList{stt_fasterwhisper_hip, "FasterWhisper STT ROCm " +
-                                                        tr("HW acceleration")});
+                QVariantList{stt_fasterwhisper_hip, "FasterWhisper
+                STT ROCm " + tr("HW acceleration")});*/
             if (stt_fasterwhisper_cuda) {
                 hw_feature_flags |= settings::hw_feature_flags_t::
                     hw_feature_stt_fasterwhisper_cuda;
@@ -2990,6 +2996,7 @@ QVariantMap speech_service::features_availability() {
 
             bool stt_ds = ds_engine::available();
             bool stt_whispercpp = whisper_engine::available();
+            bool stt_whispercpp_vulkan = whisper_engine::has_vulkan();
             bool mnt = mnt_engine::available();
 
             m_features_availability.insert(
@@ -2999,6 +3006,13 @@ QVariantMap speech_service::features_availability() {
             m_features_availability.insert(
                 "whispercpp-stt",
                 QVariantList{stt_whispercpp, "WhisperCpp STT "});
+            m_features_availability.insert(
+                "whispercpp-stt-vulkan",
+                QVariantList{stt_whispercpp_vulkan,
+                             "WhisperCpp STT Vulkan " + tr("HW acceleration")});
+            if (stt_whispercpp_vulkan)
+                hw_feature_flags |= settings::hw_feature_flags_t::
+                    hw_feature_stt_whispercpp_vulkan;
 #ifdef ARCH_X86_64
             bool stt_whispercpp_cuda = whisper_engine::has_cuda();
             m_features_availability.insert(
@@ -3036,15 +3050,6 @@ QVariantMap speech_service::features_availability() {
             if (stt_whispercpp_opencl)
                 hw_feature_flags |= settings::hw_feature_flags_t::
                     hw_feature_stt_whispercpp_opencl;
-
-            bool stt_whispercpp_vulkan = whisper_engine::has_vulkan();
-            m_features_availability.insert(
-                "whispercpp-stt-vulkan",
-                QVariantList{stt_whispercpp_vulkan,
-                             "WhisperCpp STT Vulkan " + tr("HW acceleration")});
-            if (stt_whispercpp_vulkan)
-                hw_feature_flags |= settings::hw_feature_flags_t::
-                    hw_feature_stt_whispercpp_vulkan;
 #endif
             auto tts_rhvoice = rhvoice_engine::available();
             m_features_availability.insert(
@@ -3084,6 +3089,30 @@ QVariantMap speech_service::features_availability() {
                  /*option_r=*/has_uroman});
 
             settings::instance()->scan_hw_devices(hw_feature_flags);
+
+            m_features_availability.insert(
+                "whispercpp-gpu-devices",
+                variant_list_from_list(
+                    settings::instance()->whispercpp_gpu_devices()));
+            m_features_availability.insert(
+                "fasterwhisper-gpu-devices",
+                variant_list_from_list(
+                    settings::instance()->fasterwhisper_gpu_devices()));
+            m_features_availability.insert(
+                "coqui-gpu-devices",
+                variant_list_from_list(
+                    settings::instance()->coqui_gpu_devices()));
+            m_features_availability.insert(
+                "whisperspeech-gpu-devices",
+                variant_list_from_list(
+                    settings::instance()->whisperspeech_gpu_devices()));
+
+            m_features_availability.insert(
+                "addon-flags",
+                QVariantList{} << settings::instance()->addon_flags());
+            m_features_availability.insert(
+                "system-flags",
+                QVariantList{} << settings::instance()->system_flags());
 
             refresh_status();
 
@@ -4193,15 +4222,13 @@ int speech_service::current_task_id() const {
 int speech_service::dbus_state() const { return static_cast<int>(state()); }
 
 void speech_service::start_keepalive_current_task() {
-    if (settings::instance()->launch_mode() != settings::launch_mode_t::service)
-        return;
+    if (settings::launch_mode != settings::launch_mode_t::service) return;
 
     m_keepalive_current_task_timer.start();
 }
 
 void speech_service::stop_keepalive_current_task() {
-    if (settings::instance()->launch_mode() != settings::launch_mode_t::service)
-        return;
+    if (settings::launch_mode != settings::launch_mode_t::service) return;
 
     m_keepalive_current_task_timer.stop();
 }

@@ -337,8 +337,7 @@ static void start_app(const cmd_options& options, app_server& dbus_app_server) {
     if (options.hw_scan_off) settings::instance()->disable_hw_scan();
     if (options.py_scan_off) settings::instance()->disable_py_scan();
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         speech_service::instance();
 
         if (options.gen_cheksums)
@@ -451,10 +450,11 @@ int main(int argc, char* argv[]) {
 
     if (cmd_opts.reset_models) models_manager::reset_models();
 
+    settings::launch_mode = cmd_opts.launch_mode;
+
     switch (cmd_opts.launch_mode) {
         case settings::launch_mode_t::service:
             qDebug() << "starting service";
-            settings::instance()->set_launch_mode(cmd_opts.launch_mode);
             start_service(cmd_opts);
             exit_program();
             break;
@@ -470,7 +470,7 @@ int main(int argc, char* argv[]) {
     app_server dbus_app_server;
     QGuiApplication::setApplicationName(QStringLiteral(APP_ID));
 
-    settings::instance()->set_launch_mode(cmd_opts.launch_mode);
+    settings::instance();
 
     start_app(cmd_opts, dbus_app_server);
 

@@ -571,46 +571,44 @@ modules:
       - type: patch
         path: ../patches/whispercpp.patch
 
-  - name: shaderc
-    only-arches:
-      - x86_64
-    buildsystem: cmake-ninja
-    builddir: true
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DSHADERC_SKIP_COPYRIGHT_CHECK=ON
-      - -DSHADERC_SKIP_EXAMPLES=ON
-      - -DSHADERC_SKIP_TESTS=ON
-      - -DSPIRV_SKIP_EXECUTABLES=ON
-      - -DENABLE_GLSLANG_BINARIES=OFF
-    cleanup:
-      - /bin
-      - /include
-      - /lib
-    sources:
-      - type: git
-        url: https://github.com/google/shaderc.git
-        tag: v2024.1
-        commit: 47a9387ef5b3600d30d84c71ec77a59dc7db46fa
-      - type: git
-        url: https://github.com/KhronosGroup/SPIRV-Tools.git
-        tag: v2024.3
-        commit: 0cfe9e7219148716dfd30b37f4d21753f098707a
-        dest: third_party/spirv-tools
-      - type: git
-        url: https://github.com/KhronosGroup/SPIRV-Headers.git
-        tag: vulkan-sdk-1.3.290.0
-        commit: 2acb319af38d43be3ea76bfabf3998e5281d8d12
-        dest: third_party/spirv-headers
-      - type: git
-        url: https://github.com/KhronosGroup/glslang.git
-        tag: 14.3.0
-        commit: fa9c3deb49e035a8abcabe366f26aac010f6cbfb
-        dest: third_party/glslang
+  # - name: shaderc
+  #   only-arches:
+  #     - x86_64
+  #   buildsystem: cmake-ninja
+  #   builddir: true
+  #   config-opts:
+  #     - -DCMAKE_BUILD_TYPE=Release
+  #     - -DSHADERC_SKIP_COPYRIGHT_CHECK=ON
+  #     - -DSHADERC_SKIP_EXAMPLES=ON
+  #     - -DSHADERC_SKIP_TESTS=ON
+  #     - -DSPIRV_SKIP_EXECUTABLES=ON
+  #     - -DENABLE_GLSLANG_BINARIES=OFF
+  #   cleanup:
+  #     - /bin
+  #     - /include
+  #     - /lib
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/google/shaderc.git
+  #       tag: v2024.1
+  #       commit: 47a9387ef5b3600d30d84c71ec77a59dc7db46fa
+  #     - type: git
+  #       url: https://github.com/KhronosGroup/SPIRV-Tools.git
+  #       tag: v2024.3
+  #       commit: 0cfe9e7219148716dfd30b37f4d21753f098707a
+  #       dest: third_party/spirv-tools
+  #     - type: git
+  #       url: https://github.com/KhronosGroup/SPIRV-Headers.git
+  #       tag: vulkan-sdk-1.3.290.0
+  #       commit: 2acb319af38d43be3ea76bfabf3998e5281d8d12
+  #       dest: third_party/spirv-headers
+  #     - type: git
+  #       url: https://github.com/KhronosGroup/glslang.git
+  #       tag: 14.3.0
+  #       commit: fa9c3deb49e035a8abcabe366f26aac010f6cbfb
+  #       dest: third_party/glslang
 
   - name: whispercpp-vulkan
-    only-arches:
-      - x86_64
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release

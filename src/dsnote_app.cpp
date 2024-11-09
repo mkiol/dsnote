@@ -288,7 +288,7 @@ dsnote_app::dsnote_app(QObject *parent)
                            "/org/freedesktop/Notifications",
                            QDBusConnection::sessionBus()},
       m_audio_dm{[&] { emit audio_devices_changed(); }} {
-    qDebug() << "starting app:" << settings::instance()->launch_mode();
+    qDebug() << "starting app:" << settings::launch_mode;
 
     QDir{cache_dir()}.canonicalPath();
 
@@ -431,8 +431,7 @@ dsnote_app::dsnote_app(QObject *parent)
             &OrgFreedesktopNotificationsInterface::ActionInvoked, this,
             &dsnote_app::handle_desktop_notification_action_invoked);
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         connect_service_signals();
         update_service_state();
     } else {
@@ -519,8 +518,7 @@ void dsnote_app::create_player() {
 }
 
 void dsnote_app::request_reload() {
-    if (settings::instance()->launch_mode() != settings::launch_mode_t::app)
-        return;
+    if (settings::launch_mode != settings::launch_mode_t::app) return;
 
     if (!m_features_availability.isEmpty()) {
         qDebug() << "[app => dbus] Reload after fau";
@@ -544,8 +542,7 @@ void dsnote_app::update_listen() {
 
 void dsnote_app::handle_stt_intermediate_text(const QString &text,
                                               const QString &lang, int task) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
 #ifdef DEBUG
         qDebug() << "stt intermediate text decoded:" << text << lang << task;
 #else
@@ -704,8 +701,7 @@ std::pair<QString, int> dsnote_app::insert_to_note(QString note,
 
 void dsnote_app::handle_stt_text_decoded(const QString &text,
                                          const QString &lang, int task) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
 #ifdef DEBUG
         qDebug() << "stt text decoded:" << text << lang << task;
 #else
@@ -774,8 +770,7 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
 
 void dsnote_app::handle_tts_partial_speech(const QString &text,
                                          int task) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
 #ifdef DEBUG
         qDebug() << "tts partial speech:" << text << task;
 #else
@@ -801,8 +796,7 @@ void dsnote_app::handle_tts_partial_speech(const QString &text,
 }
 
 void dsnote_app::connect_service_signals() {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         connect(
             speech_service::instance(), &speech_service::models_changed, this,
             [this] {
@@ -999,8 +993,7 @@ void dsnote_app::connect_service_signals() {
 }
 
 void dsnote_app::handle_stt_models_changed(const QVariantMap &models) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         qDebug() << "stt models changed";
     } else {
         qDebug() << "[dbus => app] signal SttModelsPropertyChanged";
@@ -1014,8 +1007,7 @@ void dsnote_app::handle_stt_models_changed(const QVariantMap &models) {
 }
 
 void dsnote_app::handle_tts_models_changed(const QVariantMap &models) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         qDebug() << "tts models changed";
     } else {
         qDebug() << "[dbus => app] signal TtsModelsPropertyChanged";
@@ -1033,8 +1025,7 @@ void dsnote_app::handle_tts_models_changed(const QVariantMap &models) {
 }
 
 void dsnote_app::handle_mnt_langs_changed(const QVariantMap &langs) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         qDebug() << "mnt langs changed";
     } else {
         qDebug() << "[dbus => app] signal MntLangsPropertyChanged";
@@ -1050,8 +1041,7 @@ void dsnote_app::handle_mnt_langs_changed(const QVariantMap &langs) {
 }
 
 void dsnote_app::handle_ttt_models_changed(const QVariantMap &models) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         qDebug() << "ttt models changed";
     } else {
         qDebug() << "[dbus => app] signal TttModelsPropertyChanged";
@@ -1064,8 +1054,7 @@ void dsnote_app::handle_ttt_models_changed(const QVariantMap &models) {
 }
 
 void dsnote_app::handle_state_changed(int status) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
         qDebug() << "[dbus => app] signal StatusPropertyChanged:" << status;
     }
@@ -1074,8 +1063,7 @@ void dsnote_app::handle_state_changed(int status) {
 }
 
 void dsnote_app::handle_task_state_changed(int state) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
         qDebug() << "[dbus => app] signal TaskStatePropertyChanged:" << state;
     }
@@ -1089,8 +1077,7 @@ void dsnote_app::handle_task_state_changed(int state) {
 }
 
 void dsnote_app::handle_current_task_changed(int task) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
         qDebug() << "[dbus => app] signal CurrentTaskPropertyChanged:" << task;
     }
@@ -1119,8 +1106,7 @@ void dsnote_app::handle_current_task_changed(int task) {
 }
 
 void dsnote_app::handle_tts_play_speech_finished(int task) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
         qDebug() << "[dbus => app] signal TtsPlaySpeechFinished:" << task;
     }
@@ -1131,8 +1117,7 @@ void dsnote_app::handle_tts_play_speech_finished(int task) {
 
 void dsnote_app::handle_ttt_repair_text_finished(const QString &text,
                                                  int task) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
         qDebug() << "[dbus => app] signal TttRepairTextFinished:" << task;
     }
@@ -1149,8 +1134,7 @@ void dsnote_app::handle_ttt_repair_text_finished(const QString &text,
 
 void dsnote_app::handle_tts_speech_to_file_finished(const QStringList &files,
                                                     int task) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
         qDebug() << "[dbus => app] signal TtsSpeechToFileFinished:" << task;
     }
@@ -1184,8 +1168,7 @@ void dsnote_app::handle_tts_speech_to_file_finished(const QStringList &files,
 
 void dsnote_app::handle_tts_speech_to_file_progress(double new_progress,
                                                     int task) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
         qDebug() << "[dbus => app] signal TtsSpeechToFileProgress:"
                  << new_progress << task;
@@ -1201,8 +1184,7 @@ void dsnote_app::handle_tts_speech_to_file_progress(double new_progress,
 }
 
 void dsnote_app::handle_mnt_translate_progress(double new_progress, int task) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
         qDebug() << "[dbus => app] signal MntTranslateProgress:" << new_progress
                  << task;
@@ -1223,8 +1205,7 @@ void dsnote_app::handle_mnt_translate_finished(
     [[maybe_unused]] const QString &in_text,
     [[maybe_unused]] const QString &in_lang, const QString &out_text,
     [[maybe_unused]] const QString &out_lang, int task) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
         qDebug() << "[dbus => app] signal MntTranslateFinished:" << task;
     }
@@ -1237,8 +1218,7 @@ void dsnote_app::handle_mnt_translate_finished(
 }
 
 void dsnote_app::handle_stt_default_model_changed(const QString &model) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
         qDebug() << "[dbus => app] signal SttDefaultModelPropertyChanged:"
                  << model;
@@ -1332,8 +1312,7 @@ void dsnote_app::set_active_mnt_out_lang(const QString &lang) {
 }
 
 void dsnote_app::handle_tts_default_model_changed(const QString &model) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
         qDebug() << "[dbus => app] signal TtsDefaultModelPropertyChanged:"
                  << model;
@@ -1343,8 +1322,7 @@ void dsnote_app::handle_tts_default_model_changed(const QString &model) {
 }
 
 void dsnote_app::handle_mnt_default_lang_changed(const QString &lang) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
         qDebug() << "[dbus => app] signal MntDefaultLangPropertyChanged:"
                  << lang;
@@ -1354,8 +1332,7 @@ void dsnote_app::handle_mnt_default_lang_changed(const QString &lang) {
 }
 
 void dsnote_app::handle_mnt_default_out_lang_changed(const QString &lang) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
         qDebug() << "[dbus => app] signal MntDefaultOutLangPropertyChanged:"
                  << lang;
@@ -1393,8 +1370,7 @@ void dsnote_app::set_active_tts_model_for_out_mnt(const QString &model) {
 
 void dsnote_app::handle_stt_file_transcribe_progress(double new_progress,
                                                      int task) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
         qDebug() << "[dbus => app] signal SttFileTranscribeProgress:"
                  << new_progress << task;
@@ -1412,8 +1388,7 @@ void dsnote_app::handle_stt_file_transcribe_progress(double new_progress,
 }
 
 void dsnote_app::handle_stt_file_transcribe_finished(int task) {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
         qDebug() << "[dbus => app] signal SttFileTranscribeFinished:" << task;
     }
@@ -1431,8 +1406,7 @@ void dsnote_app::handle_stt_file_transcribe_finished(int task) {
 void dsnote_app::handle_service_error(int code) {
     auto error_code = static_cast<error_t>(code);
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         qDebug() << "service error:" << error_code;
     } else {
         qDebug() << "[dbus => app] signal ErrorOccured:" << code << error_code;
@@ -1457,8 +1431,7 @@ void dsnote_app::update_progress() {
     double new_stt_progress = 0.0;
     double new_tts_progress = 0.0;
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_stt_progress =
             speech_service::instance()->stt_transcribe_file_progress(
                 m_primary_task.current);
@@ -1488,8 +1461,7 @@ void dsnote_app::update_progress() {
 void dsnote_app::update_current_task() {
     const auto old = another_app_connected();
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         auto new_current_task = speech_service::instance()->current_task_id();
 
         if (m_current_task != new_current_task) {
@@ -1514,8 +1486,7 @@ void dsnote_app::update_current_task() {
 void dsnote_app::update_service_state() {
     service_state_t new_state;
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_state =
             static_cast<service_state_t>(speech_service::instance()->state());
     } else {
@@ -1573,8 +1544,7 @@ void dsnote_app::update_active_mnt_out_lang_idx() {
 void dsnote_app::update_available_stt_models() {
     QVariantMap new_available_stt_models_map{};
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_available_stt_models_map =
             speech_service::instance()->available_stt_models();
     } else {
@@ -1594,8 +1564,7 @@ void dsnote_app::update_available_stt_models() {
 void dsnote_app::update_available_tts_models() {
     QVariantMap new_available_tts_models_map{};
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_available_tts_models_map =
             speech_service::instance()->available_tts_models();
     } else {
@@ -1741,8 +1710,7 @@ void dsnote_app::update_available_tts_models_for_out_mnt() {
 void dsnote_app::update_available_mnt_langs() {
     QVariantMap new_available_mnt_langs_map{};
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_available_mnt_langs_map =
             speech_service::instance()->available_mnt_langs();
     } else {
@@ -1763,8 +1731,7 @@ void dsnote_app::update_available_mnt_langs() {
 void dsnote_app::update_available_mnt_out_langs() {
     QVariantMap new_available_mnt_out_langs_map{};
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_available_mnt_out_langs_map =
             speech_service::instance()->mnt_out_langs(m_active_mnt_lang);
     } else {
@@ -1781,7 +1748,7 @@ void dsnote_app::update_available_mnt_out_langs() {
             std::move(new_available_mnt_out_langs_map);
 
         if (m_available_mnt_out_langs_map.contains(active_mnt_out_lang())) {
-            if (settings::instance()->launch_mode() ==
+            if (settings::launch_mode ==
                 settings::launch_mode_t::app_stanalone) {
                 speech_service::instance()->set_default_mnt_out_lang(
                     active_mnt_out_lang());
@@ -1922,8 +1889,7 @@ void dsnote_app::set_active_stt_model_idx(int idx) {
         idx < m_available_stt_models_map.size()) {
         auto id = std::next(m_available_stt_models_map.cbegin(), idx).key();
 
-        if (settings::instance()->launch_mode() ==
-            settings::launch_mode_t::app_stanalone) {
+        if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
             speech_service::instance()->set_default_stt_model(id);
         } else {
             qDebug() << "[app => dbus] set DefaultSttModel:" << idx << id;
@@ -1973,8 +1939,7 @@ void dsnote_app::set_active_tts_model_idx(int idx) {
         idx < m_available_tts_models_map.size()) {
         auto id = std::next(m_available_tts_models_map.cbegin(), idx).key();
 
-        if (settings::instance()->launch_mode() ==
-            settings::launch_mode_t::app_stanalone) {
+        if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
             speech_service::instance()->set_default_tts_model(id);
         } else {
             qDebug() << "[app => dbus] set DefaultTtsModel:" << idx << id;
@@ -2059,8 +2024,7 @@ void dsnote_app::set_active_mnt_lang_idx(int idx) {
         idx < m_available_mnt_langs_map.size()) {
         auto id = std::next(m_available_mnt_langs_map.cbegin(), idx).key();
 
-        if (settings::instance()->launch_mode() ==
-            settings::launch_mode_t::app_stanalone) {
+        if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
             speech_service::instance()->set_default_mnt_lang(id);
         } else {
             qDebug() << "[app => dbus] set DefaultMntLang:" << idx << id;
@@ -2074,8 +2038,7 @@ void dsnote_app::set_active_mnt_out_lang_idx(int idx) {
         idx < m_available_mnt_out_langs_map.size()) {
         auto id = std::next(m_available_mnt_out_langs_map.cbegin(), idx).key();
 
-        if (settings::instance()->launch_mode() ==
-            settings::launch_mode_t::app_stanalone) {
+        if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
             speech_service::instance()->set_default_mnt_out_lang(id);
         } else {
             qDebug() << "[app => dbus] set DefaultMntOutLang:" << idx << id;
@@ -2088,8 +2051,7 @@ void dsnote_app::switch_mnt_langs() {
     auto in_id = active_mnt_lang();
     auto out_id = active_mnt_out_lang();
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         speech_service::instance()->set_default_mnt_lang(out_id);
         speech_service::instance()->set_default_mnt_out_lang(in_id);
     } else {
@@ -2120,8 +2082,7 @@ void dsnote_app::cancel() {
             return;
     }
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         if (m_primary_task) {
             if (m_primary_task.current != INVALID_TASK) {
                 speech_service::instance()->cancel(m_primary_task.current);
@@ -2166,7 +2127,7 @@ void dsnote_app::transcribe_file(const QString &file_path, int stream_index,
         options.insert("sub_max_line_length", s->sub_max_line_length());
     }
 
-    if (s->launch_mode() == settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->stt_transcribe_file(
             file_path, {},
             s->whisper_translate() ? QStringLiteral("en") : QString{}, options);
@@ -2221,7 +2182,7 @@ void dsnote_app::listen_internal() {
         options.insert("sub_max_line_length", s->sub_max_line_length());
     }
 
-    if (s->launch_mode() == settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->stt_start_listen(
             static_cast<speech_service::speech_mode_t>(s->speech_mode()), {},
             s->whisper_translate() ? QStringLiteral("en") : QString{}, options);
@@ -2240,8 +2201,7 @@ void dsnote_app::listen_internal() {
 
 void dsnote_app::stop_listen() {
     if (m_primary_task) {
-        if (settings::instance()->launch_mode() ==
-            settings::launch_mode_t::app_stanalone) {
+        if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
             speech_service::instance()->stt_stop_listen(m_primary_task.current);
         } else {
             qDebug() << "[app => dbus] call SttStopListen";
@@ -2253,8 +2213,7 @@ void dsnote_app::stop_listen() {
 void dsnote_app::pause_speech() {
     if (!m_primary_task) return;
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         if (m_primary_task.current != INVALID_TASK) {
             speech_service::instance()->tts_pause_speech(
                 m_primary_task.current);
@@ -2276,8 +2235,7 @@ void dsnote_app::pause_speech() {
 void dsnote_app::resume_speech() {
     if (!m_primary_task) return;
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         if (m_primary_task.current != INVALID_TASK) {
             speech_service::instance()->tts_resume_speech(
                 m_primary_task.current);
@@ -2335,8 +2293,7 @@ void dsnote_app::play_speech_internal(const QString &text,
         if (l.size() > 1) options.insert("ref_voice_file", l.at(1));
     }
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->tts_play_speech(text, model_id,
                                                                options);
     } else {
@@ -2433,8 +2390,7 @@ void dsnote_app::repair_text(text_repair_task_type_t task_type) {
         static_cast<int>(settings::instance()->stt_tts_text_format()));
     options.insert("task_type", static_cast<int>(task_type));
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->ttt_repair_text(note(), options);
     } else {
         qDebug() << "[app => dbus] call TttRepairText";
@@ -2522,8 +2478,7 @@ void dsnote_app::translate_internal(const QString &text) {
             "text_format",
             static_cast<int>(settings::instance()->mnt_text_format()));
 
-        if (settings::instance()->launch_mode() ==
-            settings::launch_mode_t::app_stanalone) {
+        if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
             new_task = speech_service::instance()->mnt_translate(
                 text, m_active_mnt_lang, m_active_mnt_out_lang, options);
         } else {
@@ -2652,8 +2607,7 @@ void dsnote_app::speech_to_file_internal(
     m_dest_file_info.title_tag = title_tag;
     m_dest_file_info.track_tag = track_tag;
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->tts_speech_to_file(
             text, model_id, options);
     } else {
@@ -2693,8 +2647,7 @@ void dsnote_app::set_service_state(service_state_t new_service_state) {
 
         m_service_state = new_service_state;
 
-        if (settings::instance()->launch_mode() ==
-                settings::launch_mode_t::app &&
+        if (settings::launch_mode == settings::launch_mode_t::app &&
             m_service_state == service_state_t::StateIdle &&
             m_service_reload_called) {
             m_service_reload_update_done = true;
@@ -2776,8 +2729,7 @@ void dsnote_app::update_task_state() {
     }
 
     int task_state_from_service = 0;
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         task_state_from_service = speech_service::instance()->task_state();
     } else {
         qDebug() << "[app => dbus] get TaskState";
@@ -2900,8 +2852,7 @@ QString dsnote_app::active_mnt_out_lang_name() const {
 void dsnote_app::update_active_stt_model() {
     QString new_stt_model;
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_stt_model = speech_service::instance()->default_stt_model();
     } else {
         qDebug() << "[app => dbus] get DefaultSttModel";
@@ -2982,8 +2933,7 @@ int dsnote_app::active_mnt_out_lang_idx() const {
 void dsnote_app::update_active_tts_model() {
     QString new_tts_model;
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_tts_model = speech_service::instance()->default_tts_model();
     } else {
         qDebug() << "[app => dbus] get DefaultTtsModel";
@@ -3037,8 +2987,7 @@ void dsnote_app::update_active_mnt_lang() {
 
     QString new_mnt_lang;
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_mnt_lang = speech_service::instance()->default_mnt_lang();
     } else {
         qDebug() << "[app => dbus] get DefaultMntLang";
@@ -3061,8 +3010,7 @@ void dsnote_app::update_active_mnt_out_lang() {
 
     QString new_mnt_out_lang;
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_mnt_out_lang = speech_service::instance()->default_mnt_out_lang();
     } else {
         qDebug() << "[app => dbus] get DefaultMntOutLang";
@@ -3078,9 +3026,7 @@ void dsnote_app::update_active_mnt_out_lang() {
 }
 
 void dsnote_app::do_keepalive() {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone)
-        return;
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) return;
 
     qDebug() << "[app => dbus] call KeepAliveService";
     const auto time = m_dbus_service.KeepAliveService();
@@ -3105,9 +3051,7 @@ void dsnote_app::do_keepalive() {
 }
 
 void dsnote_app::start_keepalive() {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone)
-        return;
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) return;
 
     if (!m_keepalive_current_task_timer.isActive() &&
         (m_primary_task == m_current_task)) {
@@ -3118,9 +3062,7 @@ void dsnote_app::start_keepalive() {
 }
 
 void dsnote_app::handle_keepalive_task_timeout() {
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone)
-        return;
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) return;
 
     const auto send_ka = [this](int task) {
         qDebug() << "[app => dbus] call KeepAliveTask";
@@ -3146,8 +3088,7 @@ void dsnote_app::handle_keepalive_task_timeout() {
 }
 
 QVariantMap dsnote_app::translations() const {
-    if (settings::instance()->launch_mode() ==
-            settings::launch_mode_t::service &&
+    if (settings::launch_mode == settings::launch_mode_t::service &&
         connected())
         return m_dbus_service.translations();
 
@@ -3267,8 +3208,7 @@ void dsnote_app::update_configured_state() {
 bool dsnote_app::busy() const {
     return m_service_state == service_state_t::StateBusy ||
            another_app_connected() ||
-           (settings::instance()->launch_mode() ==
-                settings::launch_mode_t::app &&
+           (settings::launch_mode == settings::launch_mode_t::app &&
             !m_service_reload_update_done);
 }
 
@@ -4139,8 +4079,7 @@ QVariantList dsnote_app::features_availability() {
 
     auto old_features_availability = m_features_availability;
 
-    if (settings::instance()->launch_mode() ==
-        settings::launch_mode_t::app_stanalone) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         m_features_availability =
             speech_service::instance()->features_availability();
     } else {
@@ -4157,6 +4096,14 @@ QVariantList dsnote_app::features_availability() {
                 qdbus_cast<QVariantList>(it.value().value<QDBusArgument>()));
             ++it;
         }
+
+        // update hw devices and flags only in app mode
+        settings::instance()->update_hw_devices_from_fa(
+            m_features_availability);
+        settings::instance()->update_system_flags_from_fa(
+            m_features_availability);
+        settings::instance()->update_addon_flags_from_fa(
+            m_features_availability);
     }
 
 #ifdef USE_DESKTOP
@@ -4178,7 +4125,10 @@ QVariantList dsnote_app::features_availability() {
     auto it = m_features_availability.cbegin();
     while (it != m_features_availability.cend()) {
         auto val = it.value().toList();
-        if (val.size() > 1) list.push_back(QVariantList{val.at(0), val.at(1)});
+        if (val.size() > 1 && val.at(0).type() == QVariant::Bool &&
+            val.at(1).type() == QVariant::String) {
+            list.push_back(QVariantList{val.at(0), val.at(1)});
+        }
         ++it;
     }
 
@@ -4189,8 +4139,7 @@ QVariantList dsnote_app::features_availability() {
             settings::instance()->set_translator_mode(false);
         }
 
-        if (settings::instance()->launch_mode() ==
-            settings::launch_mode_t::app) {
+        if (settings::launch_mode == settings::launch_mode_t::app) {
             models_manager::instance()->update_models_using_availability(
                 {/*tts_coqui=*/feature_available("coqui-tts", false),
                  /*tts_mimic3=*/feature_available("mmic3-tts", false),

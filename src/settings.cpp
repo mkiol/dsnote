@@ -24,10 +24,7 @@
 #include <thread>
 
 #include "config.h"
-#ifdef ARCH_X86_64
 #include "gpu_tools.hpp"
-#endif
-
 #include "module_tools.hpp"
 
 QDebug operator<<(QDebug d, settings::mode_t mode) {
@@ -141,6 +138,17 @@ static QString audio_format_to_str(settings::audio_format_t format) {
     return QStringLiteral("mp3");
 }
 
+static QStringList string_list_from_list(const QVariantList& list) {
+    QStringList slist;
+
+    slist.reserve(list.size());
+    for (const auto& item : list) {
+        slist.push_back(item.toString());
+    }
+
+    return slist;
+}
+
 QDebug operator<<(QDebug d, settings::hw_feature_flags_t hw_features) {
     if (hw_features &
         settings::hw_feature_flags_t::hw_feature_stt_whispercpp_cuda)
@@ -177,6 +185,8 @@ QDebug operator<<(QDebug d, settings::hw_feature_flags_t hw_features) {
     return d;
 }
 
+settings::launch_mode_t settings::launch_mode = launch_mode_t::app_stanalone;
+
 settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     qDebug() << "app:" << APP_ORG << APP_ID;
     qDebug() << "config location:"
@@ -190,9 +200,13 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     qDebug() << "settings file:" << fileName();
     qDebug() << "platform:" << QGuiApplication::platformName();
 
-    update_addon_flags();
-    update_system_flags();
-    enforce_num_threads();
+    if (launch_mode != launch_mode_t::app) {
+        // in app mode, flags are updated in fa
+        update_addon_flags();
+        update_system_flags();
+
+        enforce_num_threads();
+    }
 
     // remove qml cache
     QDir{QStandardPaths::writableLocation(QStandardPaths::CacheLocation) +
@@ -1016,17 +1030,11 @@ bool settings::py_supported() const {
 }
 
 bool settings::hw_accel_supported() const {
-#ifdef ARCH_X86_64
+#ifndef ARCH_ARM_32
     return true;
 #else
     return false;
 #endif
-}
-
-settings::launch_mode_t settings::launch_mode() const { return m_launch_mode; }
-
-void settings::set_launch_mode(launch_mode_t launch_mode) {
-    m_launch_mode = launch_mode;
 }
 
 QString settings::module_checksum(const QString& name) const {
@@ -1364,9 +1372,27 @@ void settings::enforce_num_threads() const {
         setenv("OMP_NUM_THREADS", std::to_string(num_threads).c_str(), 1);
     }
 }
+void settings::update_hw_devices_from_fa(
+    const QVariantMap& features_availability) {
+#define ENGINE_OPTS(name)                                                    \
+    if (features_availability.contains(#name "-gpu-devices")) {              \
+        m_##name##_gpu_devices = string_list_from_list(                      \
+            features_availability.value(#name "-gpu-devices").toList());     \
+        qDebug() << #name "-gpu-devices from fa:" << m_##name##_gpu_devices; \
+    } else {                                                                 \
+        qDebug() << "no " #name "-gpu-devices from fa";                      \
+    }
+
+    ENGINE_OPTS(whispercpp)
+    ENGINE_OPTS(fasterwhisper)
+    ENGINE_OPTS(coqui)
+    ENGINE_OPTS(whisperspeech)
+#undef ENGINE_OPTS
+
+    emit gpu_devices_changed();
+}
 
 void settings::scan_hw_devices(unsigned int hw_feature_flags) {
-#ifdef ARCH_X86_64
 #define ENGINE_OPTS(name)           \
     m_##name##_gpu_devices.clear(); \
     m_##name##_gpu_devices.push_back(tr("Auto"));
@@ -1532,7 +1558,6 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
     }
 
     update_system_flags();
-#endif
 }
 
 #define ENGINE_OPTS(name)                                                   \
@@ -2224,26 +2249,19 @@ void settings::set_settings_tts_engine_idx(int value) {
 }
 
 bool settings::gpu_override_version() const {
-#ifdef ARCH_X86_64
     return value(QStringLiteral("service/gpu_override_version"), false)
         .toBool();
-#else
-    return false;
-#endif
 }
 
 void settings::set_gpu_override_version([[maybe_unused]] bool value) {
-#ifdef ARCH_X86_64
     if (gpu_override_version() != value) {
         setValue(QStringLiteral("service/gpu_override_version"), value);
         emit gpu_override_version_changed();
         set_restart_required(true);
     }
-#endif
 }
 
 QString settings::gpu_overrided_version() {
-#ifdef ARCH_X86_64
     auto val =
         value(QStringLiteral("service/gpu_overrided_version"), {}).toString();
 
@@ -2254,13 +2272,9 @@ QString settings::gpu_overrided_version() {
     }
 
     return val;
-#else
-    return {};
-#endif
 }
 
 void settings::set_gpu_overrided_version([[maybe_unused]] QString new_value) {
-#ifdef ARCH_X86_64
     auto old_value =
         value(QStringLiteral("service/gpu_overrided_version"), {}).toString();
     if (new_value.isEmpty() && !m_rocm_gpu_versions.empty()) {
@@ -2274,7 +2288,6 @@ void settings::set_gpu_overrided_version([[maybe_unused]] QString new_value) {
         emit gpu_overrided_version_changed();
         set_restart_required(true);
     }
-#endif
 }
 
 void settings::disable_hw_scan() {
@@ -2332,6 +2345,7 @@ void settings::update_addon_flags() {
 
     if (new_flags != m_addon_flags) {
         m_addon_flags = new_flags;
+        qDebug() << "addon-flags" << m_addon_flags;
         emit addon_flags_changed();
 
         if (m_addon_flags & addon_flags_t::AddonNvidia &&
@@ -2346,10 +2360,21 @@ void settings::update_addon_flags() {
     }
 }
 
+void settings::update_addon_flags_from_fa(
+    const QVariantMap& features_availability) {
+    if (features_availability.contains("addon-flags")) {
+        auto vl = features_availability.value("addon-flags").toList();
+        if (!vl.isEmpty()) m_addon_flags = vl.front().toUInt();
+        qDebug() << "addon-flags from fa:" << m_addon_flags;
+        emit addon_flags_changed();
+    } else {
+        qDebug() << "no addon-flags from fa";
+    }
+}
+
 unsigned int settings::system_flags() const { return m_system_flags; }
 
 void settings::update_system_flags() {
-#ifdef ARCH_X86_64
     unsigned int new_flags = system_flags_t::SystemNone;
 
     if (gpu_tools::has_nvidia_gpu()) {
@@ -2371,9 +2396,21 @@ void settings::update_system_flags() {
 
     if (new_flags != m_system_flags) {
         m_system_flags = new_flags;
+        qDebug() << "system-flags:" << m_system_flags;
         emit system_flags_changed();
     }
-#endif
+}
+
+void settings::update_system_flags_from_fa(
+    const QVariantMap& features_availability) {
+    if (features_availability.contains("system-flags")) {
+        auto vl = features_availability.value("system-flags").toList();
+        if (!vl.isEmpty()) m_system_flags = vl.front().toUInt();
+        qDebug() << "system-flags from fa:" << m_system_flags;
+        emit system_flags_changed();
+    } else {
+        qDebug() << "no system-flags from fa";
+    }
 }
 
 unsigned int settings::error_flags() const { return m_error_flags; }
