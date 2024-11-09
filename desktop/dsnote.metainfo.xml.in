@@ -120,6 +120,10 @@
           which allows you to change the engine's processing parameters.
           There are three profiles to choose from: 'Best Performance', 'Best Quality' and 'Custom'.</li>
       </ul>
+      <p>Text to Speech:</p>
+      <ul>
+      <li>New 'Piper' voice for Latvian</li>
+      </ul>
       <p>Translator:</p>
       <ul>
       <li>New models: English to Finnish, English to Turkish, English to Swedish, Swedish to English,

@@ -41,6 +41,10 @@ DialogPage {
             which allows you to change the engine's processing parameters.
             There are three profiles to choose from: <i>Best Performance</i>, <i>Best Quality</i> and <i>Custom</i>.</li>
         </ul>
+        <p>" + qsTr("Text to Speech") + ":</p>
+        <ul>
+        <li>New <i>Piper</i> voice for Latvian</li>
+        </ul>
         <p>" + qsTr("Translator") + ":</p>
         <ul>
         <li>New models: English to Finnish, English to Turkish, English to Swedish, Swedish to English,

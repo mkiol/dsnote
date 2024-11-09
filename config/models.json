@@ -23813,6 +23813,26 @@
             }
         },
         {
+            "name": "Latviešu (Piper Aivars Medium Male)",
+            "model_id": "lv_piper_aivars_medium",
+            "engine": "tts_piper",
+            "lang_id": "lv",
+            "checksum": "fd906c3e",
+            "checksum_quick": "f8aca3b3",
+            "size": "63534664",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/3d796cc2f2c884b3517c527507e084f7bb245aea/lv/lv_LV/aivars/medium/lv_LV-aivars-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/3d796cc2f2c884b3517c527507e084f7bb245aea/lv/lv_LV/aivars/medium/lv_LV-aivars-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
             "name": "Kiswahili (Piper Lanfrica Medium Male)",
             "model_id": "sw_piper_cd_lanfrica_medium",
             "engine": "tts_piper",
