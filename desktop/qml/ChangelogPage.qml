@@ -20,6 +20,7 @@ DialogPage {
     RichLabel {
         text: "<p>" + qsTr("User Interface") + ":</p>
         <ul>
+        <li><i>Speech Note</i> has been translated into Slovenian language.</li>
         <li>Inserting text at the cursor position.
             To insert text at the cursor position rather than at the end of the note,
             change <i>Text appending mode</i> option to <i>Add at the cursor position</i> in the settings.</li>
