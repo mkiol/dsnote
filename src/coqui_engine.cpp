@@ -43,18 +43,16 @@ coqui_engine::~coqui_engine() {
 void coqui_engine::stop() {
     tts_engine::stop();
 
-    if (m_model) {
-        auto task = py_executor::instance()->execute([&]() {
-            try {
-                m_model.reset();
-            } catch (const std::exception& err) {
-                LOGE("py error: " << err.what());
-            }
-            return std::any{};
-        });
+    auto task = py_executor::instance()->execute([&]() {
+        try {
+            m_model.reset();
+        } catch (const std::exception& err) {
+            LOGE("py error: " << err.what());
+        }
+        return std::any{};
+    });
 
-        if (task) task->get();
-    }
+    if (task) task->get();
 
     LOGD("coqui stopped");
 }
