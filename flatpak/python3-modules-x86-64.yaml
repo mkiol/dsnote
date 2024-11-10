@@ -61,9 +61,9 @@ modules:
     sources:
       - &id022
         type: file
-        url: https://download.pytorch.org/whl/cpu-cxx11-abi/torch-2.5.1%2Bcpu.cxx11.abi-cp311-cp311-linux_x86_64.whl
-        dest-filename: torch-2.5.1+cpu.cxx11.abi-cp311-cp311-linux_x86_64.whl
-        sha256: 05a962994d5e64832e6aff275a41cb12ead0a38632c4806b84de1b4f118d1a3b
+        url: https://download.pytorch.org/whl/cpu/torch-2.5.1%2Bcpu-cp311-cp311-linux_x86_64.whl
+        dest-filename: torch-2.5.1+cpu-cp311-cp311-linux_x86_64.whl
+        sha256: 07d7c9e069123d5af08b0cf0013d74f680b2d8be7d9e2cf561a52c90c55d9409
       - &id039
         type: file
         url: https://download.pytorch.org/whl/cpu/torchaudio-2.5.1%2Bcpu-cp311-cp311-linux_x86_64.whl
