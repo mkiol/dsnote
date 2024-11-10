@@ -2,7 +2,7 @@
 
 _pkgname='dsnote'
 pkgname="${_pkgname}-git"
-pkgver=r1039.6f26237
+pkgver=r1266.b3206a1
 pkgrel=1
 pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
 arch=(
@@ -32,6 +32,7 @@ depends=(
   'rubberband'
   'taglib'
   'xz'
+  'vulkan-icd-loader'
 )
 makedepends=(
   'boost'
@@ -42,10 +43,10 @@ makedepends=(
   'patchelf'
   'pybind11'
   'qt5-tools'
+  'vulkan-headers'
 )
 makedepends_x86_64=(
 #  'cuda'
-#  'rocm-hip-sdk'
 )
 optdepends=(
   'python-accelerate: Support for Punctuation and Hebrew Diacritics restoration'
@@ -56,8 +57,6 @@ optdepends=(
 optdepends_x86_64=(
   'cuda: Support for GPU acceleration on NVidia graphic cards'
   'cudnn: Support for GPU acceleration on NVidia graphic cards'
-  'rocblas: Support for GPU acceleration on AMD graphic cards'
-  'rocm-opencl-runtime: Support for GPU acceleration on AMD graphic cards'
 )
 options=('!debug')
 provides=(${_pkgname})
@@ -88,13 +87,14 @@ build() {
         -DBUILD_FFMPEG=ON \
         -DBUILD_TAGLIB=OFF \
         -DBUILD_VOSK=OFF \
+        -DBUILD_WHISPERCPP_VULKAN=ON \
         -DBUILD_QQC2_BREEZE_STYLE=ON \
         -DDOWNLOAD_VOSK=ON \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -Wno-dev"
 
   #################### !! IMPORTANT!! ######################
-  # CUDA and/or ROCm support are experimental and may break!
+  # CUDA support are experimental and may break!
   # In order to enable support for either, please uncomment
   # the respective entry in makedepends_x86_64 (or install
   # the dependency package first) and change FULL_BUILD
@@ -104,12 +104,9 @@ build() {
   FULL_BUILD=false
 
   if [[ "${CARCH}" == "x86_64" ]]; then
-    # Do not build for CUDA if needed package is not found
-    pacman -Qi cuda &> /dev/null && $FULL_BUILD || CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=OFF"
+    # Build for CUDA if needed package is found
+    pacman -Qi cuda &> /dev/null && $FULL_BUILD && CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=ON -DCMAKE_CUDA_ARCHITECTURES=native"
     pacman -Qi cuda &> /dev/null && $FULL_BUILD && export CUDA_PATH=/opt/cuda
-
-    # Do not build for HIP if needed package is not found
-    pacman -Qi rocm-hip-sdk &> /dev/null && $FULL_BUILD || CMAKE+=" -DBUILD_WHISPERCPP_HIPBLAS=OFF"
   fi
 
   CI_BUILD=false
