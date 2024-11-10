@@ -3113,6 +3113,9 @@ QVariantMap speech_service::features_availability() {
             m_features_availability.insert(
                 "system-flags",
                 QVariantList{} << settings::instance()->system_flags());
+            m_features_availability.insert(
+                "error-flags",
+                QVariantList{} << settings::instance()->error_flags());
 
             refresh_status();
 

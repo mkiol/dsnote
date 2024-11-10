@@ -440,7 +440,9 @@ class settings : public QSettings, public singleton<settings> {
     enum error_flags_t : unsigned int {
         ErrorNoError = 0U,
         ErrorCudaUnknown = 1U << 0U,
-        ErrorMoreThanOneGpuAddons = 1U << 1U
+        ErrorMoreThanOneGpuAddons = 1U << 1U,
+        ErrorIncompatibleNvidiaGpuAddon = 1U << 2U,
+        ErrorIncompatibleAmdGpuAddon = 1U << 3U
     };
     Q_ENUM(error_flags_t)
 

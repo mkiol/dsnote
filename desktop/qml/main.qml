@@ -216,7 +216,8 @@ ApplicationWindow {
         spacing: 0
 
         readonly property bool showingTip: warningTip1.visible || warningTip2.visible ||
-                                           warningTip3.visible || warningTip4.visible
+                                           warningTip3.visible || warningTip4.visible ||
+                                           warningTip5.visible || warningTip6.visible
 
         MainTipMessage {
             id: warningTip1
@@ -226,6 +227,28 @@ ApplicationWindow {
             text: qsTr("Both %1 and %2 GPU acceleration add-ons are installed, which is not optimal. Uninstall one of them.")
                       .arg("NVIDIA")
                       .arg("AMD")
+        }
+
+        MainTipMessage {
+            id: warningTip5
+
+            warning: true
+            visible: _settings.error_flags & Settings.ErrorIncompatibleNvidiaGpuAddon
+            text: qsTr("This version of %1 is not compatible with the installed %2 GPU acceleration add-on.")
+                  .arg("<i>Speech Note</i>")
+                  .arg("NVIDIA") + " " +
+                  qsTr("The required version of the add-on is %1.").arg(APP_ADDON_VERSION)
+        }
+
+        MainTipMessage {
+            id: warningTip6
+
+            warning: true
+            visible: _settings.error_flags & Settings.ErrorIncompatibleAmdGpuAddon
+            text: qsTr("This version of %1 is not compatible with the installed %2 GPU acceleration add-on.")
+                .arg("<i>Speech Note</i>")
+                .arg("AMD") + " " +
+                qsTr("The required version of the add-on is %1.").arg(APP_ADDON_VERSION)
         }
 
         MainTipMessage {

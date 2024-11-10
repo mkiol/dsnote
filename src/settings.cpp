@@ -11,8 +11,11 @@
 #include <QQuickStyle>
 #endif
 #include <QCoreApplication>
+#include <QDate>
 #include <QDebug>
 #include <QDir>
+#include <QDomDocument>
+#include <QFile>
 #include <QFileInfo>
 #include <QGuiApplication>
 #include <QRegExp>
@@ -2331,17 +2334,79 @@ unsigned int settings::addon_flags() const { return m_addon_flags; }
 
 void settings::update_addon_flags() {
     unsigned int new_flags = addon_flags_t::AddonNone;
-
-    bool has_nvidia_addon =
-        QFileInfo::exists(QStringLiteral("/app/extensions/nvidia"));
-    bool has_amd_addon =
-        QFileInfo::exists(QStringLiteral("/app/extensions/amd"));
 #ifdef USE_FLATPAK
-    qDebug() << "addons:" << (has_nvidia_addon ? "nvidia" : "")
-             << (has_amd_addon ? "amd" : "");
+    auto nvidia_metainfo_file = QStringLiteral(
+        "/app/extensions/nvidia/share/metainfo/"
+        "net.mkiol.SpeechNote.Addon.nvidia.metainfo.xml");
+    auto amd_metainfo_file = QStringLiteral(
+        "/app/extensions/amd/share/metainfo/"
+        "net.mkiol.SpeechNote.Addon.amd.metainfo.xml");
+
+    bool has_nvidia_addon = QFileInfo::exists(nvidia_metainfo_file);
+    bool has_amd_addon = QFileInfo::exists(amd_metainfo_file);
+
+    auto get_addon_ver = [](const QString& metainfo_file) -> QString {
+        QDomDocument doc{};
+        QFile file{metainfo_file};
+        if (!file.open(QIODevice::ReadOnly)) {
+            qWarning() << "cannot open addon metainfo file:" << metainfo_file;
+            return {};
+        }
+
+        if (!doc.setContent(&file)) {
+            qWarning() << "cannot parse addon metainfo file:" << metainfo_file;
+            file.close();
+            return {};
+        }
+
+        auto release_elements =
+            doc.elementsByTagName(QStringLiteral("release"));
+
+        QDate latest_date;
+        QString latest_ver;
+        for (int i = 0; i < release_elements.size(); ++i) {
+            auto ele = release_elements.at(i).toElement();
+            if (!ele.hasAttribute("version") || !ele.hasAttribute("date"))
+                continue;
+            auto date = QDate::fromString(ele.attribute("date"), Qt::ISODate);
+            if (date.isValid() &&
+                (latest_date.isNull() || date > latest_date)) {
+                latest_date = date;
+                latest_ver = ele.attribute("version");
+            }
+        }
+
+        return latest_ver;
+    };
+
+    if (has_nvidia_addon) {
+        new_flags |= addon_flags_t::AddonNvidia;
+        auto ver = get_addon_ver(nvidia_metainfo_file);
+        qDebug() << "flatpak addon detected: nvidia" << ver;
+        if (!ver.startsWith(APP_ADDON_VERSION, Qt::CaseInsensitive)) {
+            qWarning() << "*********************************************";
+            qWarning()
+                << "NVIDIA GPU acceleration add-on version is incompatible. "
+                   "Required version is " APP_ADDON_VERSION ".";
+            qWarning() << "*********************************************";
+            add_error_flags(error_flags_t::ErrorIncompatibleNvidiaGpuAddon);
+        }
+    }
+
+    if (has_amd_addon) {
+        new_flags |= addon_flags_t::AddonAmd;
+        auto ver = get_addon_ver(amd_metainfo_file);
+        qDebug() << "flatpak addon detected: amd" << ver;
+        if (!ver.startsWith(APP_ADDON_VERSION, Qt::CaseInsensitive)) {
+            qWarning() << "*********************************************";
+            qWarning()
+                << "AMD GPU acceleration add-on version is incompatible. "
+                   "Required version is " APP_ADDON_VERSION ".";
+            qWarning() << "*********************************************";
+            add_error_flags(error_flags_t::ErrorIncompatibleAmdGpuAddon);
+        }
+    }
 #endif
-    if (has_nvidia_addon) new_flags |= addon_flags_t::AddonNvidia;
-    if (has_amd_addon) new_flags |= addon_flags_t::AddonAmd;
 
     if (new_flags != m_addon_flags) {
         m_addon_flags = new_flags;
@@ -2410,6 +2475,15 @@ void settings::update_system_flags_from_fa(
         emit system_flags_changed();
     } else {
         qDebug() << "no system-flags from fa";
+    }
+
+    if (features_availability.contains("error-flags")) {
+        auto vl = features_availability.value("error-flags").toList();
+        if (!vl.isEmpty()) m_error_flags = vl.front().toUInt();
+        qDebug() << "error-flags from fa:" << m_error_flags;
+        emit error_flags_changed();
+    } else {
+        qDebug() << "no error-flags from fa";
     }
 }
 

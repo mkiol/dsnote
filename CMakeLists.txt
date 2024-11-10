@@ -131,6 +131,7 @@ set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_conf_version "95")
+set(info_addon_version "1.3") # if run as a flatpak pkg, the required add-on version
 set(info_version_type "-beta")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · Locness3 · DevSJR · Vovkiv · Niklas Halvorsen · Matjaž Jeran")
@@ -486,7 +487,7 @@ list(APPEND deps_libs ${pulse_LIBRARIES})
 list(APPEND includes ${pulse_INCLUDE_DIRS})
 
 find_package(Qt5 COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick DBus LinguistTools REQUIRED)
-list(APPEND deps_libs Qt5::Core Qt5::Network Qt5::Multimedia Qt5::Gui Qt5::Quick Qt5::DBus)
+list(APPEND deps_libs Qt5::Core Qt5::Network Qt5::Multimedia Qt5::Gui Qt5::Quick Qt5::DBus Qt5::Xml)
 
 if(WITH_DESKTOP)
     find_package(Qt5 COMPONENTS QuickControls2 Widgets REQUIRED)

@@ -382,6 +382,8 @@ static void start_app(const cmd_options& options, app_server& dbus_app_server) {
     context->setContextProperty(QStringLiteral("APP_TRANSLATORS_STR"),
                                 APP_TRANSLATORS_STR);
     context->setContextProperty(QStringLiteral("APP_LIBS_STR"), APP_LIBS_STR);
+    context->setContextProperty(QStringLiteral("APP_ADDON_VERSION"),
+                                APP_ADDON_VERSION);
     context->setContextProperty(QStringLiteral("_settings"),
                                 settings::instance());
     context->setContextProperty(QStringLiteral("_files_to_open"),
@@ -441,6 +443,9 @@ int main(int argc, char* argv[]) {
     initAvLogger();
 
     qDebug() << "app version:" << APP_VERSION;
+#ifdef USE_FLATPAK
+    qDebug() << "required addon version:" << APP_ADDON_VERSION;
+#endif
 
     cpu_tools::cpuinfo();
 
