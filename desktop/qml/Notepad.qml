@@ -41,6 +41,7 @@ ColumnLayout {
     function update() {
         if (noteTextArea.textArea.text !== app.note) {
             noteTextArea.textArea.text = app.note
+            noteTextArea.textArea.cursorPosition = noteTextArea.textArea.text.length
             noteTextArea.scrollToBottom()
         }
 
