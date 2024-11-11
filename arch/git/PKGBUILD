@@ -23,16 +23,16 @@ depends=(
   'openblas'
   'perl'
   'python>=3.11'
+  'qqc2-desktop-style5'
   'qt5-base'
   'qt5-declarative'
-  'qt5-x11extras'
   'qt5-multimedia'
   'qt5-quickcontrols2'
-  'qqc2-desktop-style5'
+  'qt5-x11extras'
   'rubberband'
   'taglib'
-  'xz'
   'vulkan-icd-loader'
+  'xz'
 )
 makedepends=(
   'boost'
@@ -55,9 +55,9 @@ optdepends=(
   'tts: Support for Coqui TTS models'
 )
 optdepends_x86_64=(
+  'amdvlk: Vulkan support for AMD GPU (AMDVLK Open)'
   'cuda: Support for GPU acceleration on NVidia graphic cards'
   'cudnn: Support for GPU acceleration on NVidia graphic cards'
-  'amdvlk: Vulkan support for AMD GPU (AMDVLK Open)'
   'nvidia-utils: Vulkan support for NVidia GPU'
   'vulkan-intel: Vulkan support for Intel GPU'
   'vulkan-radeon: Vulkan support for AMD RADV'
