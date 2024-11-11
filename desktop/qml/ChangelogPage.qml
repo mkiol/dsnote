@@ -21,9 +21,10 @@ DialogPage {
         text: "<p>" + qsTr("User Interface") + ":</p>
         <ul>
         <li><i>Speech Note</i> has been translated into Slovenian language.</li>
-        <li>Inserting text at the cursor position.
+        <li>New modes for inserting text at the cursor position or replacing the current note.
             To insert text at the cursor position rather than at the end of the note,
-            change <i>Text appending mode</i> option to <i>Add at the cursor position</i> in the settings.</li>
+            change <i>Text appending mode</i> option to <i>Add at the cursor position</i> in the settings.
+            When the <i>Replace an existing note</i> option is set, whenever new text is added, it will replace the existing note.</li>
         </ul>
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>

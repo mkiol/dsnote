@@ -582,7 +582,13 @@ std::pair<QString, int> dsnote_app::insert_to_note(QString note,
                                                    const QString &lang,
                                                    settings::insert_mode_t mode,
                                                    int last_cursor_position) {
-    if (new_text.isEmpty()) return {std::move(note), last_cursor_position};
+    if (mode == settings::insert_mode_t::InsertReplace) {
+        return {std::move(new_text), new_text.size()};
+    }
+
+    if (new_text.isEmpty()) {
+        return {std::move(note), last_cursor_position};
+    }
 
     auto [dot, space] = full_stop(lang);
 

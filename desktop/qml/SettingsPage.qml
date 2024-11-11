@@ -147,13 +147,15 @@ DialogPage {
                         if (_settings.insert_mode === Settings.InsertNewLine) return 2
                         if (_settings.insert_mode === Settings.InsertAfterEmptyLine) return 3
                         if (_settings.insert_mode === Settings.InsertAtCursor) return 0
+                        if (_settings.insert_mode === Settings.InsertReplace) return 4
                         return 2
                     }
                     model: [
                         qsTr("Add at the cursor position"),
                         qsTr("Add to last line"),
                         qsTr("Add after line break"),
-                        qsTr("Add after empty line")
+                        qsTr("Add after empty line"),
+                        qsTr("Replace an existing note")
                     ]
                     onActivated: {
                         if (index === 0) {
@@ -164,6 +166,8 @@ DialogPage {
                             _settings.insert_mode = Settings.InsertNewLine
                         } else if (index === 3) {
                             _settings.insert_mode = Settings.InsertAfterEmptyLine
+                        } else if (index === 4) {
+                            _settings.insert_mode = Settings.InsertReplace
                         } else {
                             _settings.insert_mode = Settings.InsertNewLine
                         }

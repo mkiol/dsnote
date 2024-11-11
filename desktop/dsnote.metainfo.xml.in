@@ -103,9 +103,10 @@
       <p>User Interface:</p>
       <ul>
       <li>Speech Note has been translated into Slovenian language.</li>
-      <li>Inserting text at the cursor position.
+      <li>New modes for inserting text at the cursor position or replacing the current note.
           To insert text at the cursor position rather than at the end of the note,
-          change 'Text appending mode' option to 'Add at the cursor position' in the settings.</li>
+          change 'Text appending mode' option to 'Add at the cursor position' in the settings.
+          When the 'Replace an existing note' option is set, whenever new text is added, it will replace the existing note.</li>
       </ul>
       <p>Speech to Text:</p>
       <ul>
