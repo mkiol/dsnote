@@ -1865,8 +1865,8 @@ settings::desktop_notification_policy_t settings::desktop_notification_policy()
     const {
     return static_cast<desktop_notification_policy_t>(
         value(QStringLiteral("desktop_notification_policy"),
-              static_cast<int>(desktop_notification_policy_t::
-                                   DesktopNotificationWhenInacvtive))
+              static_cast<int>(
+                  desktop_notification_policy_t::DesktopNotificationNever))
             .toInt());
 }
 

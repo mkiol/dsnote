@@ -14,7 +14,7 @@
 #include "settings.h"
 
 tray_icon::tray_icon(QObject* parent)
-    : QSystemTrayIcon{QIcon{QStringLiteral(":/app_icon.png")}, parent} {
+    : QSystemTrayIcon{QIcon{app_icon}, parent} {
     setToolTip(APP_NAME);
 
     make_menu();
@@ -28,8 +28,15 @@ tray_icon::tray_icon(QObject* parent)
                 show();
             else
                 hide();
+            update_icon();
         },
         Qt::QueuedConnection);
+
+    // timer for animated icon
+    m_animated_icon_timer.setSingleShot(false);
+    m_animated_icon_timer.setInterval(250);  // 0.5s
+    connect(&m_animated_icon_timer, &QTimer::timeout, this,
+            &tray_icon::update_animated_icon, Qt::QueuedConnection);
 
     if (s->use_tray()) show();
 }
@@ -38,6 +45,7 @@ void tray_icon::set_state(state_t state) {
     if (m_state != state) {
         m_state = state;
         update_menu();
+        update_icon();
     }
 }
 
@@ -45,6 +53,99 @@ void tray_icon::set_task_state(task_state_t task_state) {
     if (m_task_state != task_state) {
         m_task_state = task_state;
         update_menu();
+    }
+}
+
+void tray_icon::update_icon() {
+    if (isVisible()) {
+        switch (m_state) {
+            case state_t::idle:
+                m_animated_icon_timer.stop();
+                break;
+            case state_t::busy:
+            case state_t::stt:
+            case state_t::stt_file:
+            case state_t::tts:
+            case state_t::tts_file:
+            case state_t::mnt:
+                m_animated_icon_timer.start();
+                break;
+        }
+    } else {
+        m_animated_icon_timer.stop();
+    }
+
+    update_animated_icon();
+}
+
+void tray_icon::update_animated_icon() {
+    m_icon_idx = (m_icon_idx + 1) % 2;
+
+    enum class action_t : uint8_t { none, app, busy, pause, speech };
+    action_t action = action_t::none;
+
+    if (isVisible()) {
+        switch (m_state) {
+            case state_t::idle:
+                action = action_t::app;
+                break;
+            case state_t::busy:
+            case state_t::tts_file:
+            case state_t::stt_file:
+            case state_t::mnt:
+                action = action_t::busy;
+                break;
+            case state_t::tts:
+            case state_t::stt:
+                switch (m_task_state) {
+                    case task_state_t::idle:
+                        action = action_t::app;
+                        break;
+                    case task_state_t::initializing:
+                    case task_state_t::cancelling:
+                        action = action_t::busy;
+                        break;
+                    case task_state_t::paused:
+                        action = action_t::pause;
+                        break;
+                    case task_state_t::processing:
+                        if (m_state == state_t::tts) {
+                            action = action_t::busy;
+                            break;
+                        }
+                        [[fallthrough]];
+                    case task_state_t::playing:
+                        action = action_t::speech;
+                        break;
+                }
+                break;
+        }
+    } else {
+        action = action_t::app;
+    }
+
+    switch (action) {
+        case action_t::none:
+            break;
+        case action_t::app:
+            setIcon(QIcon{app_icon});
+            break;
+        case action_t::busy:
+            setIcon(
+                QIcon{QStringLiteral(":/busy_icon_%1.png").arg(m_icon_idx)});
+            break;
+        case action_t::pause:
+            setIcon(
+                QIcon{QStringLiteral(":/pause_icon_%1.png").arg(m_icon_idx)});
+            break;
+        case action_t::speech:
+            setIcon(
+                QIcon{QStringLiteral(":/speech_icon_%1.png").arg(m_icon_idx)});
+            break;
+    }
+
+    if (!isVisible()) {
+        m_animated_icon_timer.stop();
     }
 }
 

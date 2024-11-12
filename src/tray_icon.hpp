@@ -12,6 +12,7 @@
 #include <QMenu>
 #include <QObject>
 #include <QSystemTrayIcon>
+#include <QTimer>
 #include <QVariantMap>
 #include <unordered_map>
 
@@ -54,6 +55,7 @@ class tray_icon : public QSystemTrayIcon {
     void action_triggered(action_t action, int value);
 
    private:
+    inline static const auto app_icon = QStringLiteral(":/app_icon.png");
     QMenu m_menu;
     state_t m_state = state_t::busy;
     task_state_t m_task_state = task_state_t::idle;
@@ -62,9 +64,13 @@ class tray_icon : public QSystemTrayIcon {
     QString m_active_stt_model;
     QVariantList m_tts_models;
     QString m_active_tts_model;
+    QTimer m_animated_icon_timer;
+    uint8_t m_icon_idx = 0;
 
     void make_menu();
     void update_menu();
+    void update_icon();
+    void update_animated_icon();
 };
 
 #endif  // TRAYICON_H
