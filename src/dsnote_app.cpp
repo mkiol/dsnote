@@ -13,6 +13,7 @@
 #include <QDir>
 #include <QFile>
 #include <QGuiApplication>
+#include <QKeySequence>
 #include <QRegExp>
 #include <QTextStream>
 #include <algorithm>
@@ -4762,6 +4763,14 @@ void dsnote_app::update_auto_text_format() {
 
 void dsnote_app::set_app_window(QObject *app_window) {
     m_app_window = app_window;
+}
+
+QString dsnote_app::special_key_name(int key) const {
+    if (key < 0x01000000) {
+        // not special key
+        return {};
+    }
+    return QKeySequence(key).toString();
 }
 
 void dsnote_app::switch_translated_text() {
