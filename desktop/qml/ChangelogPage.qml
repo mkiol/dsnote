@@ -25,6 +25,8 @@ DialogPage {
             To insert text at the cursor position rather than at the end of the note,
             change <i>Text appending mode</i> option to <i>Add at the cursor position</i> in the settings.
             When the <i>Replace an existing note</i> option is set, whenever new text is added, it will replace the existing note.</li>
+        <li>Status indication in the system tray icon.
+            When using the system tray icon, statuses such as processing, listening, etc. are presented with an animated tray icon.</li>
         </ul>
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
@@ -51,6 +53,12 @@ DialogPage {
         <li>New models: English to Finnish, English to Turkish, English to Swedish, Swedish to English,
             English to Slovak, English to Indonesian, English to Romanian, English to Greek, Chinese to English</li>
         <li>Updated models: English to Catalan, English to Russian, English to Ukrainian, English to Czech</li>
+        </ul>
+        <p>" + qsTr("Accessibility") + ":</p>
+        <ul>
+        <li>Option to scan special keystrokes when setting keyboard shortcuts (X11 only).
+            If you want to use special keys as shortcuts (so-called multimedia keys),
+            instead of typing their name, you can automatically set the key by pressing it.</li>
         </ul>
         <p>Flatpak</p>
         <ul>
