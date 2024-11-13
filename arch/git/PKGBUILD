@@ -99,7 +99,7 @@ build() {
 
   #################### !! IMPORTANT!! ######################
   # CUDA support is experimental and may break!
-  # In order to enable support for either, please uncomment
+  # In order to enable support for it, please uncomment
   # the respective entry in makedepends_x86_64 (or install
   # the dependency package first) and change FULL_BUILD
   # value below to true *before* making the build.
