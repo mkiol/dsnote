@@ -10,6 +10,7 @@
 #include <dirent.h>
 #include <dlfcn.h>
 #include <fmt/format.h>
+#include <fmt/ranges.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -73,6 +74,18 @@ bool whisper_engine::available() {
                        [](const auto& lib) { return try_open_lib(lib); });
 }
 
+void whisper_engine::set_visible_devices() const {
+    if (m_config.use_gpu && m_config.gpu_device.api == gpu_api_t::vulkan &&
+        !m_config.available_devices.empty()) {
+        auto devs_str =
+            fmt::format("{}", fmt::join(m_config.available_devices, ","));
+        LOGD("setting GGML_VK_VISIBLE_DEVICES=" << devs_str);
+        setenv("GGML_VK_VISIBLE_DEVICES", devs_str.c_str(), 1);
+    } else {
+        unsetenv("GGML_VK_VISIBLE_DEVICES");
+    }
+}
+
 bool whisper_engine::has_cuda() { return try_open_lib("libwhisper-cublas.so"); }
 
 bool whisper_engine::has_openvino() {
@@ -100,6 +113,7 @@ bool whisper_engine::use_gpu() const {
 }
 
 void whisper_engine::open_whisper_lib() {
+    set_visible_devices();
 #ifdef ARCH_ARM_32
     if (cpu_tools::cpuinfo().feature_flags &
         cpu_tools::feature_flags_t::asimd) {

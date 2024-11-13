@@ -1215,6 +1215,22 @@ static bool stt_insert_stats_from_options(const QVariantMap &options) {
     return false;
 }
 
+static std::vector<int> whispercpp_vulkan_devices() {
+    std::vector<int> devs;
+
+    auto dev_strs = settings::instance()->whispercpp_gpu_devices();
+    if (dev_strs.size() > 2) {
+        for (auto it = std::next(dev_strs.cbegin()); it != dev_strs.cend();
+             ++it) {
+            auto l = it->split(',');
+            if (l.size() <= 2 || l.at(0).trimmed() != "Vulkan") continue;
+            devs.push_back(l.at(1).trimmed().toInt());
+        }
+    }
+
+    return devs;
+}
+
 QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                                            const QString &model_id,
                                            const QString &out_lang_id,
@@ -1291,6 +1307,9 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         
         if (model_config->stt->engine == models_manager::model_engine_t::stt_whisper) {
             ENGINE_OPTS(whispercpp)
+            if (config.gpu_device.api == stt_engine::gpu_api_t::vulkan) {
+                config.available_devices = whispercpp_vulkan_devices();
+            }
             if (!settings::instance()->whispercpp_autolang_with_sup()) {
                 // disable auto-lang with sup model
                 config.model_files.scorer_file.clear();
@@ -2857,11 +2876,7 @@ QVariantMap speech_service::features_availability() {
             qDebug() << "features availability ready";
             unsigned int hw_feature_flags =
                 settings::hw_feature_flags_t::hw_feature_none;
-#ifdef ARCH_X86_64
-            auto has_cuda = gpu_tools::has_cuda_runtime();
-            auto has_cudnn = gpu_tools::has_cudnn();
-            auto has_hip = gpu_tools::has_hip();
-#endif
+
             m_features_availability.insert(
                 "coqui-tts",
                 QVariantList{py_availability->coqui_tts, "Coqui TTS"});
@@ -2870,6 +2885,10 @@ QVariantMap speech_service::features_availability() {
                 QVariantList{py_availability->whisperspeech_tts,
                              "WhisperSpeech TTS"});
 #ifdef ARCH_X86_64
+            auto has_cuda = gpu_tools::has_cuda_runtime();
+            auto has_cudnn = gpu_tools::has_cudnn();
+            auto has_hip = gpu_tools::has_hip();
+
             bool tts_coqui_cuda =
                 py_availability->coqui_tts && py_availability->torch_cuda;
             bool tts_coqui_hip =

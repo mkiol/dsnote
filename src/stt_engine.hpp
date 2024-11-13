@@ -139,6 +139,7 @@ class stt_engine {
         text_format_t text_format = text_format_t::raw;
         std::string options;
         gpu_device_t gpu_device;
+        std::vector<int> available_devices;
         sub_config_t sub_config;
         inline bool has_option(char c) const {
             return options.find(c) != std::string::npos;
