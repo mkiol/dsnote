@@ -406,6 +406,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void show_tray();
     Q_INVOKABLE void hide_tray();
     Q_INVOKABLE void set_app_window(QObject *app_window);
+    Q_INVOKABLE QString special_key_name(int key) const;
 
    signals:
     void active_stt_model_changed();

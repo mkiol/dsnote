@@ -927,10 +927,16 @@ void settings::set_hint_done(settings::hint_done_flags_t value) {
 }
 
 settings::insert_mode_t settings::insert_mode() const {
-    return static_cast<insert_mode_t>(
+    auto val = static_cast<insert_mode_t>(
         value(QStringLiteral("insert_mode"),
               static_cast<int>(insert_mode_t::InsertNewLine))
             .toInt());
+#ifdef USE_SFOS
+    // InsertAtCursor is not supported on SFOS
+    if (val == insert_mode_t::InsertAtCursor)
+        val = insert_mode_t::InsertNewLine;
+#endif
+    return val;
 }
 
 void settings::set_insert_mode(insert_mode_t value) {
@@ -1859,8 +1865,8 @@ settings::desktop_notification_policy_t settings::desktop_notification_policy()
     const {
     return static_cast<desktop_notification_policy_t>(
         value(QStringLiteral("desktop_notification_policy"),
-              static_cast<int>(desktop_notification_policy_t::
-                                   DesktopNotificationWhenInacvtive))
+              static_cast<int>(
+                  desktop_notification_policy_t::DesktopNotificationNever))
             .toInt());
 }
 

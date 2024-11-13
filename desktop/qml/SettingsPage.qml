@@ -147,13 +147,15 @@ DialogPage {
                         if (_settings.insert_mode === Settings.InsertNewLine) return 2
                         if (_settings.insert_mode === Settings.InsertAfterEmptyLine) return 3
                         if (_settings.insert_mode === Settings.InsertAtCursor) return 0
+                        if (_settings.insert_mode === Settings.InsertReplace) return 4
                         return 2
                     }
                     model: [
                         qsTr("Add at the cursor position"),
                         qsTr("Add to last line"),
                         qsTr("Add after line break"),
-                        qsTr("Add after empty line")
+                        qsTr("Add after empty line"),
+                        qsTr("Replace an existing note")
                     ]
                     onActivated: {
                         if (index === 0) {
@@ -164,6 +166,8 @@ DialogPage {
                             _settings.insert_mode = Settings.InsertNewLine
                         } else if (index === 3) {
                             _settings.insert_mode = Settings.InsertAfterEmptyLine
+                        } else if (index === 4) {
+                            _settings.insert_mode = Settings.InsertReplace
                         } else {
                             _settings.insert_mode = Settings.InsertNewLine
                         }
@@ -1053,195 +1057,147 @@ DialogPage {
                 hoverEnabled: true
             }
 
-            TextFieldForm {
+            ShortcutForm {
                 indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-                label.text: qsTr("Start listening")
-                textField {
-                    text: _settings.hotkey_start_listening
-                    onTextChanged: _settings.hotkey_start_listening = text
-                }
-                button {
-                    icon.name: "edit-reset-symbolic"
-                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
-                    text: qsTr("Reset")
-                    onClicked: _settings.reset_hotkey_start_listening()
+                label: qsTr("Start listening")
+                text: _settings.hotkey_start_listening
+                onTextChanged: _settings.hotkey_start_listening = text
+                onResetClicked: {
+                    _settings.reset_hotkey_start_listening()
+                    text = _settings.hotkey_start_listening
                 }
             }
 
-            TextFieldForm {
+            ShortcutForm {
                 indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts && app.feature_text_active_window
-                label.text: qsTr("Start listening, text to active window")
-                textField {
-                    text: _settings.hotkey_start_listening_active_window
-                    onTextChanged: _settings.hotkey_start_listening_active_window = text
-                }
-                button {
-                    icon.name: "edit-reset-symbolic"
-                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
-                    text: qsTr("Reset")
-                    onClicked: _settings.reset_hotkey_start_listening_active_window()
+                label: qsTr("Start listening, text to active window")
+                text: _settings.hotkey_start_listening_active_window
+                onTextChanged: _settings.hotkey_start_listening_active_window = text
+                onResetClicked: {
+                    _settings.reset_hotkey_start_listening_active_window()
+                    text = _settings.hotkey_start_listening_active_window
                 }
             }
 
-            TextFieldForm {
+            ShortcutForm {
                 indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-                label.text: qsTr("Start listening, text to clipboard")
-                textField {
-                    text: _settings.hotkey_start_listening_clipboard
-                    onTextChanged: _settings.hotkey_start_listening_clipboard = text
-                }
-                button {
-                    icon.name: "edit-reset-symbolic"
-                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
-                    text: qsTr("Reset")
-                    onClicked: _settings.reset_hotkey_start_listening_clipboard()
+                label: qsTr("Start listening, text to clipboard")
+                text: _settings.hotkey_start_listening_clipboard
+                onTextChanged: _settings.hotkey_start_listening_clipboard = text
+                onResetClicked: {
+                    _settings.reset_hotkey_start_listening_clipboard()
+                    text = _settings.hotkey_start_listening_clipboard
                 }
             }
 
-            TextFieldForm {
+            ShortcutForm {
                 indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-                label.text: qsTr("Stop listening")
-                textField {
-                    text: _settings.hotkey_stop_listening
-                    onTextChanged: _settings.hotkey_stop_listening = text
-                }
-                button {
-                    icon.name: "edit-reset-symbolic"
-                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
-                    text: qsTr("Reset")
-                    onClicked: _settings.reset_hotkey_stop_listening()
+                label: qsTr("Stop listening")
+                text: _settings.hotkey_stop_listening
+                onTextChanged: _settings.hotkey_stop_listening = text
+                onResetClicked: {
+                    _settings.reset_hotkey_stop_listening()
+                    text = _settings.hotkey_stop_listening
                 }
             }
 
-            TextFieldForm {
+            ShortcutForm {
                 indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-                label.text: qsTr("Start reading")
-                textField {
-                    text: _settings.hotkey_start_reading
-                    onTextChanged: _settings.hotkey_start_reading = text
-                }
-                button {
-                    icon.name: "edit-reset-symbolic"
-                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
-                    text: qsTr("Reset")
-                    onClicked: _settings.reset_hotkey_start_reading()
+                label: qsTr("Start reading")
+                text: _settings.hotkey_start_reading
+                onTextChanged: _settings.hotkey_start_reading = text
+                onResetClicked: {
+                    _settings.reset_hotkey_start_reading()
+                    text = _settings.hotkey_start_reading
                 }
             }
 
-            TextFieldForm {
+            ShortcutForm {
                 indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-                label.text: qsTr("Start reading text from clipboard")
-                textField {
-                    text: _settings.hotkey_start_reading_clipboard
-                    onTextChanged: _settings.hotkey_start_reading_clipboard = text
-                }
-                button {
-                    icon.name: "edit-reset-symbolic"
-                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
-                    text: qsTr("Reset")
-                    onClicked: _settings.reset_hotkey_start_reading_clipboard()
+                label: qsTr("Start reading text from clipboard")
+                text: _settings.hotkey_start_reading_clipboard
+                onTextChanged: _settings.hotkey_start_reading_clipboard = text
+                onResetClicked: {
+                    _settings.reset_hotkey_start_reading_clipboard()
+                    text = _settings.hotkey_start_reading_clipboard
                 }
             }
 
-            TextFieldForm {
+            ShortcutForm {
                 indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-                label.text: qsTr("Pause/Resume reading")
-                textField {
-                    text: _settings.hotkey_pause_resume_reading
-                    onTextChanged: _settings.hotkey_pause_resume_reading = text
-                }
-                button {
-                    icon.name: "edit-reset-symbolic"
-                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
-                    text: qsTr("Reset")
-                    onClicked: _settings.reset_hotkey_pause_resume_reading()
+                label: qsTr("Pause/Resume reading")
+                text: _settings.hotkey_pause_resume_reading
+                onTextChanged: _settings.hotkey_pause_resume_reading = text
+                onResetClicked: {
+                    _settings.reset_hotkey_pause_resume_reading()
+                    text = _settings.hotkey_pause_resume_reading
                 }
             }
 
-            TextFieldForm {
+            ShortcutForm {
                 indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-                label.text: qsTr("Cancel")
-                textField {
-                    text: _settings.hotkey_cancel
-                    onTextChanged: _settings.hotkey_cancel = text
-                }
-                button {
-                    icon.name: "edit-reset-symbolic"
-                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
-                    text: qsTr("Reset")
-                    onClicked: _settings.reset_hotkey_cancel()
+                label: qsTr("Cancel")
+                text: _settings.hotkey_cancel
+                onTextChanged: _settings.hotkey_cancel = text
+                onResetClicked: {
+                    _settings.reset_hotkey_cancel()
+                    text = _settings.hotkey_cancel
                 }
             }
 
-            TextFieldForm {
+            ShortcutForm {
                 indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-                label.text: qsTr("Switch to next STT model")
-                textField {
-                    text: _settings.hotkey_switch_to_next_stt_model
-                    onTextChanged: _settings.hotkey_switch_to_next_stt_model = text
-                }
-                button {
-                    icon.name: "edit-reset-symbolic"
-                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
-                    text: qsTr("Reset")
-                    onClicked: _settings.reset_hotkey_switch_to_next_stt_model()
+                label: qsTr("Switch to next STT model")
+                text: _settings.hotkey_switch_to_next_stt_model
+                onTextChanged: _settings.hotkey_switch_to_next_stt_model = text
+                onResetClicked: {
+                    _settings.reset_hotkey_switch_to_next_stt_model()
+                    text = _settings.hotkey_switch_to_next_stt_model
                 }
             }
 
-            TextFieldForm {
+            ShortcutForm {
                 indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-                label.text: qsTr("Switch to previous STT model")
-                textField {
-                    text: _settings.hotkey_switch_to_prev_stt_model
-                    onTextChanged: _settings.hotkey_switch_to_prev_stt_model = text
-                }
-                button {
-                    icon.name: "edit-reset-symbolic"
-                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
-                    text: qsTr("Reset")
-                    onClicked: _settings.reset_hotkey_switch_to_prev_stt_model()
+                label: qsTr("Switch to previous STT model")
+                text: _settings.hotkey_switch_to_prev_stt_model
+                onTextChanged: _settings.hotkey_switch_to_prev_stt_model = text
+                onResetClicked: {
+                    _settings.reset_hotkey_switch_to_prev_stt_model()
+                    text = _settings.hotkey_switch_to_prev_stt_model
                 }
             }
 
-            TextFieldForm {
+            ShortcutForm {
                 indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-                label.text: qsTr("Switch to next TTS model")
-                textField {
-                    text: _settings.hotkey_switch_to_next_tts_model
-                    onTextChanged: _settings.hotkey_switch_to_next_tts_model = text
-                }
-                button {
-                    icon.name: "edit-reset-symbolic"
-                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
-                    text: qsTr("Reset")
-                    onClicked: _settings.reset_hotkey_switch_to_next_tts_model()
+                label: qsTr("Switch to next TTS model")
+                text: _settings.hotkey_switch_to_next_tts_model
+                onTextChanged: _settings.hotkey_switch_to_next_tts_model = text
+                onResetClicked: {
+                    _settings.reset_hotkey_switch_to_next_tts_model()
+                    text = _settings.hotkey_switch_to_next_tts_model
                 }
             }
 
-            TextFieldForm {
+            ShortcutForm {
                 indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-                label.text: qsTr("Switch to previous TTS model")
-                textField {
-                    text: _settings.hotkey_switch_to_prev_tts_model
-                    onTextChanged: _settings.hotkey_switch_to_prev_tts_model = text
-                }
-                button {
-                    icon.name: "edit-reset-symbolic"
-                    display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
-                    text: qsTr("Reset")
-                    onClicked: _settings.reset_hotkey_switch_to_prev_tts_model()
+                label: qsTr("Switch to previous TTS model")
+                text: _settings.hotkey_switch_to_prev_tts_model
+                onTextChanged: _settings.hotkey_switch_to_prev_tts_model = text
+                onResetClicked: {
+                    _settings.reset_hotkey_switch_to_prev_tts_model()
+                    text = _settings.hotkey_switch_to_prev_tts_model
                 }
             }
 

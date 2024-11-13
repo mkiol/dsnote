@@ -338,7 +338,8 @@ class settings : public QSettings, public singleton<settings> {
         InsertNewLine = 0,
         InsertInLine = 1,
         InsertAfterEmptyLine = 2,
-        InsertAtCursor = 3
+        InsertAtCursor = 3,
+        InsertReplace = 4
     };
     Q_ENUM(insert_mode_t)
 

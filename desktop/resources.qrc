@@ -45,6 +45,7 @@
         <file>qml/GpuComboBox.qml</file>
         <file>qml/MainTipMessage.qml</file>
         <file>qml/AddonInstallDialog.qml</file>
+        <file>qml/ShortcutForm.qml</file>
         <file alias="config/models.json">../config/models.json</file>
         <file alias="nonbreaking_prefixes/ca.txt">../nonbreaking_prefixes/ca.txt</file>
         <file alias="nonbreaking_prefixes/cs.txt">../nonbreaking_prefixes/cs.txt</file>
@@ -74,5 +75,11 @@
         <file alias="nonbreaking_prefixes/tr.txt">../nonbreaking_prefixes/tr.txt</file>
         <file alias="app_icon.svg">dsnote.svg</file>
         <file alias="app_icon.png">dsnote.png</file>
+        <file alias="speech_icon_0.png">dsnote_tray_speech_0.png</file>
+        <file alias="speech_icon_1.png">dsnote_tray_speech_1.png</file>
+        <file alias="busy_icon_0.png">dsnote_tray_busy_0.png</file>
+        <file alias="busy_icon_1.png">dsnote_tray_busy_1.png</file>
+        <file alias="pause_icon_0.png">dsnote_tray_pause_0.png</file>
+        <file alias="pause_icon_1.png">dsnote_tray_pause_1.png</file>
     </qresource>
 </RCC>

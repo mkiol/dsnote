@@ -76,12 +76,14 @@ Page {
                                 if (_settings.insert_mode === Settings.InsertInLine) return 0
                                 if (_settings.insert_mode === Settings.InsertNewLine) return 1
                                 if (_settings.insert_mode === Settings.InsertAfterEmptyLine) return 2
+                                if (_settings.insert_mode === Settings.InsertReplace) return 3
                                 return 1
                             }
                             menu: ContextMenu {
                                 MenuItem { text: qsTr("Add to last line") }
                                 MenuItem { text: qsTr("Add after line break") }
                                 MenuItem { text: qsTr("Add after empty line") }
+                                MenuItem { text: qsTr("Replace an existing note") }
                             }
                             onCurrentIndexChanged: {
                                 if (currentIndex === 0) {
@@ -90,6 +92,8 @@ Page {
                                     _settings.insert_mode = Settings.InsertNewLine
                                 } else if (currentIndex === 2) {
                                     _settings.insert_mode = Settings.InsertAfterEmptyLine
+                                } else if (currentIndex === 3) {
+                                    _settings.insert_mode = Settings.InsertReplace
                                 } else {
                                     _settings.insert_mode = Settings.InsertNewLine
                                 }

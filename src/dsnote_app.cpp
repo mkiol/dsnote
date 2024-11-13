@@ -13,6 +13,7 @@
 #include <QDir>
 #include <QFile>
 #include <QGuiApplication>
+#include <QKeySequence>
 #include <QRegExp>
 #include <QTextStream>
 #include <algorithm>
@@ -582,7 +583,13 @@ std::pair<QString, int> dsnote_app::insert_to_note(QString note,
                                                    const QString &lang,
                                                    settings::insert_mode_t mode,
                                                    int last_cursor_position) {
-    if (new_text.isEmpty()) return {std::move(note), last_cursor_position};
+    if (mode == settings::insert_mode_t::InsertReplace) {
+        return {std::move(new_text), new_text.size()};
+    }
+
+    if (new_text.isEmpty()) {
+        return {std::move(note), last_cursor_position};
+    }
 
     auto [dot, space] = full_stop(lang);
 
@@ -603,18 +610,21 @@ std::pair<QString, int> dsnote_app::insert_to_note(QString note,
         }
 
         // make new text start upper or lower
-        new_text[0] =
-            note_prefix.isEmpty() || note_prefix.trimmed().right(1) == dot
-                ? new_text[0].toUpper()
-                : new_text[0].toLower();
+        auto tprefix = note_prefix.trimmed();
+        new_text[0] = note_prefix.isEmpty() || tprefix.right(1) == dot ||
+                              tprefix.right(1) == '?' || tprefix.right(1) == '!'
+                          ? new_text[0].toUpper()
+                          : new_text[0].toLower();
 
-        if (new_text.at(new_text.size() - 1) == dot) {
+        if (auto c = new_text.at(new_text.size() - 1);
+            c == dot || c == '?' || c == '!') {
             // remove trailing dot if sufix starts with dot or doesn't start
             // with upper
             auto tsufix = note_sufix.trimmed();
             if (!tsufix.isEmpty() &&
                 ((tsufix.at(0).isLower() && !tsufix.at(0).isUpper()) ||
-                 tsufix.at(0) == dot)) {
+                 tsufix.at(0) == dot || tsufix.at(0) == '?' ||
+                 tsufix.at(0) == '!')) {
                 new_text = new_text.left(new_text.size() - 1);
             }
         } else if (new_text.at(new_text.size() - 1).isLetterOrNumber()) {
@@ -638,7 +648,9 @@ std::pair<QString, int> dsnote_app::insert_to_note(QString note,
             }
 
             // make sufix star upper or lower
-            if (new_text.trimmed().right(1) == dot) {
+            auto tnew = new_text.trimmed();
+            if (tnew.right(1) == dot || tnew.right(1) == '?' ||
+                tnew.right(1) == '!') {
                 note_sufix[0] = note_sufix[0].toUpper();
             }
             ss << note_sufix;
@@ -686,6 +698,8 @@ std::pair<QString, int> dsnote_app::insert_to_note(QString note,
                     else if (last_char != '\n')
                         ss << "\n\n";
                 }
+                break;
+            case settings::insert_mode_t::InsertReplace:
                 break;
         }
 
@@ -4749,6 +4763,14 @@ void dsnote_app::update_auto_text_format() {
 
 void dsnote_app::set_app_window(QObject *app_window) {
     m_app_window = app_window;
+}
+
+QString dsnote_app::special_key_name(int key) const {
+    if (key < 0x01000000) {
+        // not special key
+        return {};
+    }
+    return QKeySequence(key).toString();
 }
 
 void dsnote_app::switch_translated_text() {
