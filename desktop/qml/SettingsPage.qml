@@ -1400,6 +1400,23 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Try to find %1 compatible graphic cards in the system.").arg("Vulkan") + " " +
+                                  qsTr("Only dedicated graphics cards are included. To search for integrated graphics cards, also enable %1.")
+                                       .arg("<i>" + qsTr("Use %1 (Integrated GPU)").arg("Vulkan %1") + "</i>") + " " +
+                                  qsTr("Disable this option if you observe problems when launching the application.")
+                    hoverEnabled: true
+                }
+
+                CheckBox {
+                    visible: _settings.hw_accel_supported()
+                    checked: _settings.hw_scan_vulkan_igpu
+                    text: qsTr("Use %1").arg("Vulkan iGPU")
+                    onCheckedChanged: {
+                        _settings.hw_scan_vulkan_igpu = checked
+                    }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Try to find %1 compatible integrated graphic cards in the system.").arg("Vulkan") + " " +
                                   qsTr("Disable this option if you observe problems when launching the application.")
                     hoverEnabled: true
                 }
@@ -1419,6 +1436,21 @@ DialogPage {
                     hoverEnabled: true
                 }
 
+                // CheckBox {
+                //     visible: _settings.hw_accel_supported()
+                //     checked: _settings.hw_scan_openvino_gpu
+                //     text: qsTr("Use %1").arg("OpenVINO GPU")
+                //     onCheckedChanged: {
+                //         _settings.hw_scan_openvino_gpu = checked
+                //     }
+
+                //     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                //     ToolTip.visible: hovered
+                //     ToolTip.text: qsTr("Try to find %1 compatible graphic cards in the system.").arg("OpenVINO") + " " +
+                //                   qsTr("Disable this option if you observe problems when launching the application.")
+                //     hoverEnabled: true
+                // }
+
                 CheckBox {
                     visible: _settings.hw_accel_supported()
                     checked: _settings.hw_scan_opencl
@@ -1437,10 +1469,16 @@ DialogPage {
                 CheckBox {
                     visible: _settings.hw_accel_supported()
                     checked: _settings.hw_scan_opencl_legacy
-                    text: qsTr("Use %1").arg("OpenCL (Clover)")
+                    text: qsTr("Use %1").arg("OpenCL Clover")
                     onCheckedChanged: {
                         _settings.hw_scan_opencl_legacy = checked
                     }
+
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Try to find %1 compatible graphic cards in the system.").arg("OpenCL Clover") + " " +
+                                  qsTr("Disable this option if you observe problems when launching the application.")
+                    hoverEnabled: true
                 }
 
                 CheckBox {

@@ -1414,13 +1414,9 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
 
     m_rocm_gpu_versions.clear();
 
-    qDebug() << "scan cuda:" << hw_scan_cuda();
-    qDebug() << "scan hip:" << hw_scan_hip();
-    qDebug() << "scan vulkan:" << hw_scan_vulkan();
-    qDebug() << "scan openvino:" << hw_scan_openvino();
-    qDebug() << "scan openvino_gpu:" << hw_scan_openvino_gpu();
-    qDebug() << "scan opencl:" << hw_scan_opencl();
-    qDebug() << "scan opencl legacy:" << hw_scan_opencl_legacy();
+#define X(name, dvalue) qDebug() << "scan " #name ":" << hw_scan_##name();
+    GPU_SCAN_TABLE
+#undef X
     qDebug() << "hw feature flags:"
              << static_cast<hw_feature_flags_t>(hw_feature_flags);
 
@@ -1460,19 +1456,18 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
         /*cuda=*/hw_scan_cuda(),
         /*hip=*/hw_scan_hip(),
         /*vulkan=*/hw_scan_vulkan(),
+        /*vulkan_igpu=*/hw_scan_vulkan_igpu(),
         /*openvino=*/hw_scan_openvino(),
+        /*openvino_gpu=*/hw_scan_openvino_gpu(),
         /*opencl=*/hw_scan_opencl(),
-        /*opencl_always=*/true);
+        /*opencl_clover=*/hw_scan_opencl_legacy());
 
     std::for_each(
         result.devices.cbegin(), result.devices.cend(),
-        [&, disable_clover = !hw_scan_opencl_legacy(),
-         disable_ov_gpu = !hw_scan_openvino_gpu()](const auto& device) {
+        [&](const auto& device) {
             switch (device.api) {
                 case gpu_tools::api_t::opencl:
                     if (disable_whispercpp_opencl) return;
-                    if (disable_clover && device.platform_name == "Clover")
-                        return;
                     m_whispercpp_gpu_devices.push_back(
                         QStringLiteral("%1, %2, %3")
                             .arg(
@@ -1520,11 +1515,6 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
                 }
                 case gpu_tools::api_t::openvino:
                     if (disable_whispercpp_openvino) return;
-                    if (disable_ov_gpu && QString::fromStdString(device.name)
-                                              .contains(QLatin1String{"GPU"},
-                                                        Qt::CaseInsensitive)) {
-                        return;
-                    }
                     m_whispercpp_gpu_devices.push_back(
                         QStringLiteral("%1, %2, %3")
                             .arg("OpenVINO",
@@ -2070,98 +2060,19 @@ void settings::set_tts_use_engine_speed_control(bool value) {
     }
 }
 
-bool settings::hw_scan_cuda() const {
-    return value(QStringLiteral("hw_scan_cuda"), true).toBool();
-}
-
-void settings::set_hw_scan_cuda(bool value) {
-    if (value != hw_scan_cuda()) {
-        setValue(QStringLiteral("hw_scan_cuda"), value);
-        emit hw_scan_cuda_changed();
-
-        set_restart_required(true);
+#define X(name, dvalue)                                                  \
+    bool settings::hw_scan_##name() const {                              \
+        return value(QStringLiteral("hw_scan_" #name), dvalue).toBool(); \
+    }                                                                    \
+    void settings::set_hw_scan_##name(bool value) {                      \
+        if (value != hw_scan_##name()) {                                 \
+            setValue(QStringLiteral("hw_scan_" #name), value);           \
+            emit hw_scan_##name##_changed();                             \
+            set_restart_required(true);                                  \
+        }                                                                \
     }
-}
-
-bool settings::hw_scan_hip() const {
-    return value(QStringLiteral("hw_scan_hip"), true).toBool();
-}
-
-void settings::set_hw_scan_hip(bool value) {
-    if (value != hw_scan_hip()) {
-        setValue(QStringLiteral("hw_scan_hip"), value);
-        emit hw_scan_hip_changed();
-
-        set_restart_required(true);
-    }
-}
-
-bool settings::hw_scan_opencl() const {
-    return value(QStringLiteral("hw_scan_opencl"), true).toBool();
-}
-
-void settings::set_hw_scan_opencl(bool value) {
-    if (value != hw_scan_opencl()) {
-        setValue(QStringLiteral("hw_scan_opencl"), value);
-        emit hw_scan_opencl_changed();
-
-        set_restart_required(true);
-    }
-}
-
-bool settings::hw_scan_opencl_legacy() const {
-    return value(QStringLiteral("hw_scan_opencl_legacy"), false).toBool();
-}
-
-void settings::set_hw_scan_opencl_legacy(bool value) {
-    if (value != hw_scan_opencl_legacy()) {
-        setValue(QStringLiteral("hw_scan_opencl_legacy"), value);
-        emit hw_scan_opencl_legacy_changed();
-
-        set_restart_required(true);
-    }
-}
-
-bool settings::hw_scan_openvino() const {
-    return value(QStringLiteral("hw_scan_openvino"), true).toBool();
-}
-
-void settings::set_hw_scan_openvino(bool value) {
-    if (value != hw_scan_openvino()) {
-        setValue(QStringLiteral("hw_scan_openvino"), value);
-        emit hw_scan_openvino_changed();
-
-        set_restart_required(true);
-    }
-}
-
-bool settings::hw_scan_openvino_gpu() const {
-    return value(QStringLiteral("hw_scan_openvino_gpu"),
-                 false /* OpenVINO INT4 models don't work on GPU */)
-        .toBool();
-}
-
-void settings::set_hw_scan_openvino_gpu(bool value) {
-    if (value != hw_scan_openvino_gpu()) {
-        setValue(QStringLiteral("hw_scan_openvino_gpu"), value);
-        emit hw_scan_openvino_gpu_changed();
-
-        set_restart_required(true);
-    }
-}
-
-bool settings::hw_scan_vulkan() const {
-    return value(QStringLiteral("hw_scan_vulkan"), true).toBool();
-}
-
-void settings::set_hw_scan_vulkan(bool value) {
-    if (value != hw_scan_vulkan()) {
-        setValue(QStringLiteral("hw_scan_vulkan"), value);
-        emit hw_scan_vulkan_changed();
-
-        set_restart_required(true);
-    }
-}
+GPU_SCAN_TABLE
+#undef X
 
 settings::tts_subtitles_sync_mode_t settings::tts_subtitles_sync() const {
     return static_cast<settings::tts_subtitles_sync_mode_t>(
@@ -2300,12 +2211,9 @@ void settings::set_gpu_overrided_version([[maybe_unused]] QString new_value) {
 }
 
 void settings::disable_hw_scan() {
-    set_hw_scan_cuda(false);
-    set_hw_scan_hip(false);
-    set_hw_scan_opencl(false);
-    set_hw_scan_openvino(false);
-    set_hw_scan_vulkan(false);
-    set_restart_required(false);
+#define X(name, dvalue) set_hw_scan_##name(false);
+    GPU_SCAN_TABLE
+#undef X
 }
 
 void settings::disable_py_scan() {

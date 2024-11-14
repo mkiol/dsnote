@@ -15,6 +15,15 @@
 namespace gpu_tools {
 enum class api_t : uint8_t { opencl, cuda, rocm, openvino, vulkan };
 enum class error_t : uint8_t { no_error, cuda_uknown_error };
+enum scan_flags_t : uint8_t {
+    none = 0U,
+    opencl_default = 1U << 0U,
+    opencl_clover = 1U << 1U,
+    vulkan_default = 1U << 2U,
+    vulkan_igpu = 1U << 3U,
+    openvino_default = 1U << 4U,
+    openvino_gpu = 1U << 5U
+};
 
 struct device {
     uint32_t id;
@@ -29,13 +38,14 @@ struct available_devices_result {
 };
 
 available_devices_result available_devices(bool cuda, bool hip, bool vulkan,
-                                           bool openvino, bool opencl,
-                                           bool opencl_always);
-void add_opencl_devices(std::vector<device>& devices);
+                                           bool vulkan_igpu, bool openvino,
+                                           bool openvino_gpu, bool opencl,
+                                           bool opencl_clover);
+void add_opencl_devices(std::vector<device>& devices, uint8_t flags);
 error_t add_cuda_devices(std::vector<device>& devices);
 void add_hip_devices(std::vector<device>& devices);
-void add_openvino_devices(std::vector<device>& devices);
-void add_vulkan_devices(std::vector<device>& devices);
+void add_openvino_devices(std::vector<device>& devices, uint8_t flags);
+void add_vulkan_devices(std::vector<device>& devices, uint8_t flags);
 bool has_cuda_runtime();
 bool has_cudnn();
 bool has_hip();

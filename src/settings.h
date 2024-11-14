@@ -21,6 +21,17 @@
 #include "qdebug.h"
 #include "singleton.h"
 
+// gpi_api_name, default_value
+#define GPU_SCAN_TABLE      \
+    X(cuda, true)           \
+    X(hip, true)            \
+    X(opencl, true)         \
+    X(opencl_legacy, false) \
+    X(openvino, true)       \
+    X(openvino_gpu, false)  \
+    X(vulkan, true)         \
+    X(vulkan_igpu, false)
+
 class settings : public QSettings, public singleton<settings> {
     Q_OBJECT
 
@@ -142,21 +153,13 @@ class settings : public QSettings, public singleton<settings> {
                    set_actions_api_enabled NOTIFY actions_api_enabled_changed)
     Q_PROPERTY(bool diacritizer_enabled READ diacritizer_enabled WRITE
                    set_diacritizer_enabled NOTIFY diacritizer_enabled_changed)
-    Q_PROPERTY(bool hw_scan_cuda READ hw_scan_cuda WRITE set_hw_scan_cuda NOTIFY
-                   hw_scan_cuda_changed)
-    Q_PROPERTY(bool hw_scan_hip READ hw_scan_hip WRITE set_hw_scan_hip NOTIFY
-                   hw_scan_hip_changed)
-    Q_PROPERTY(bool hw_scan_opencl READ hw_scan_opencl WRITE set_hw_scan_opencl
-                   NOTIFY hw_scan_opencl_changed)
-    Q_PROPERTY(
-        bool hw_scan_opencl_legacy READ hw_scan_opencl_legacy WRITE
-            set_hw_scan_opencl_legacy NOTIFY hw_scan_opencl_legacy_changed)
-    Q_PROPERTY(bool hw_scan_openvino READ hw_scan_openvino WRITE
-                   set_hw_scan_openvino NOTIFY hw_scan_openvino_changed)
-    Q_PROPERTY(bool hw_scan_openvino_gpu READ hw_scan_openvino_gpu WRITE
-                   set_hw_scan_openvino_gpu NOTIFY hw_scan_openvino_gpu_changed)
-    Q_PROPERTY(bool hw_scan_vulkan READ hw_scan_vulkan WRITE set_hw_scan_vulkan
-                   NOTIFY hw_scan_vulkan_changed)
+
+#define X(name, dvalue)                                      \
+    Q_PROPERTY(bool hw_scan_##name READ hw_scan_##name WRITE \
+                   set_hw_scan_##name NOTIFY hw_scan_##name##_changed)
+    GPU_SCAN_TABLE
+#undef X
+
     Q_PROPERTY(QString active_tts_ref_voice READ active_tts_ref_voice WRITE
                    set_active_tts_ref_voice NOTIFY active_tts_ref_voice_changed)
     Q_PROPERTY(QString active_tts_for_in_mnt_ref_voice READ
@@ -251,7 +254,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(QString default_mnt_lang READ default_mnt_lang WRITE
                    set_default_mnt_lang NOTIFY default_mnt_lang_changed)
     Q_PROPERTY(QString default_mnt_out_lang READ default_mnt_out_lang WRITE
-                   set_default_mnt_out_lang NOTIFY default_mnt_out_lang_changed)    
+                   set_default_mnt_out_lang NOTIFY default_mnt_out_lang_changed)
     Q_PROPERTY(QString audio_input_device READ audio_input_device WRITE
                    set_audio_input_device NOTIFY audio_input_device_changed)
     Q_PROPERTY(bool py_feature_scan READ py_feature_scan WRITE
@@ -621,20 +624,13 @@ class settings : public QSettings, public singleton<settings> {
     void set_actions_api_enabled(bool value);
     bool diacritizer_enabled() const;
     void set_diacritizer_enabled(bool value);
-    bool hw_scan_cuda() const;
-    void set_hw_scan_cuda(bool value);
-    bool hw_scan_hip() const;
-    void set_hw_scan_hip(bool value);
-    bool hw_scan_opencl() const;
-    void set_hw_scan_opencl(bool value);
-    bool hw_scan_opencl_legacy() const;
-    void set_hw_scan_opencl_legacy(bool value);
-    bool hw_scan_openvino() const;
-    void set_hw_scan_openvino(bool value);
-    bool hw_scan_openvino_gpu() const;
-    void set_hw_scan_openvino_gpu(bool value);
-    bool hw_scan_vulkan() const;
-    void set_hw_scan_vulkan(bool value);
+
+#define X(name, dvalue)          \
+    bool hw_scan_##name() const; \
+    void set_hw_scan_##name(bool value);
+    GPU_SCAN_TABLE
+#undef X
+
     QString active_tts_ref_voice() const;
     void set_active_tts_ref_voice(const QString &value);
     QString active_tts_for_in_mnt_ref_voice() const;
@@ -867,13 +863,11 @@ class settings : public QSettings, public singleton<settings> {
     void desktop_notification_details_changed();
     void actions_api_enabled_changed();
     void diacritizer_enabled_changed();
-    void hw_scan_cuda_changed();
-    void hw_scan_hip_changed();
-    void hw_scan_opencl_changed();
-    void hw_scan_opencl_legacy_changed();
-    void hw_scan_openvino_changed();
-    void hw_scan_openvino_gpu_changed();
-    void hw_scan_vulkan_changed();
+
+#define X(name, dvalue) void hw_scan_##name##_changed();
+    GPU_SCAN_TABLE
+#undef X
+
     void active_tts_ref_voice_changed();
     void active_tts_for_in_mnt_ref_voice_changed();
     void active_tts_for_out_mnt_ref_voice_changed();
