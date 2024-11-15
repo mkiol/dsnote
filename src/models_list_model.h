@@ -121,6 +121,7 @@ class ModelsListModel : public SelectableItemModel {
     Q_INVOKABLE void addFeatureFilterFlag(ModelFeatureFilterFlags flag);
     Q_INVOKABLE void removeFeatureFilterFlag(ModelFeatureFilterFlags flag);
     Q_INVOKABLE void resetFeatureFilterFlags();
+    Q_INVOKABLE unsigned int countForRole(ModelRole role) const;
 
    signals:
     void itemChanged(int idx);

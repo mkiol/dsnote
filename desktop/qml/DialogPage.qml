@@ -18,6 +18,7 @@ Dialog {
     property alias flickItem: flick
     property alias placeholderLabel: _placeholderLabel
     property alias footerLabel: _footerLabel
+    property alias frame: _frame
     readonly property bool listViewExists: !listViewStackItem.empty
     readonly property real _rightMargin: scrollBar.visible ? appWin.padding + scrollBar.width : appWin.padding
     readonly property real _leftMargin: appWin.padding
@@ -86,7 +87,7 @@ Dialog {
     }
 
     Frame {
-        id: frame
+        id: _frame
 
         anchors.fill: parent
         topPadding: 1

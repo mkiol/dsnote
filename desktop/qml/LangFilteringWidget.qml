@@ -22,6 +22,11 @@ RowLayout {
         Layout.fillWidth: true
     }
 
+    Connections {
+        target: root.lang_model
+        onFilterChanged: langsSearchTextField.text = root.lang_model.filter
+    }
+
     TextField {
         id: langsSearchTextField
 

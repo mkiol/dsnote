@@ -434,6 +434,28 @@ void ModelsListModel::updateDownloading(
     }
 }
 
+unsigned int ModelsListModel::countForRole(ModelRole role) const {
+    models_manager::model_role_t mm_role = models_manager::model_role_t::stt;
+    switch (role) {
+        case ModelRole::Stt:
+            mm_role = models_manager::model_role_t::stt;
+            break;
+        case ModelRole::Tts:
+            mm_role = models_manager::model_role_t::tts;
+            break;
+        case ModelRole::Mnt:
+            mm_role = models_manager::model_role_t::mnt;
+            break;
+        case ModelRole::Ttt:
+            mm_role = models_manager::model_role_t::ttt;
+            break;
+    }
+
+    auto v = models_manager::instance()->count(m_lang, mm_role);
+
+    return v;
+}
+
 ModelsListItem::ModelsListItem(
     const QString &id, QString name, QString lang_id, QString pack_id,
     int pack_count, int pack_available_count, ModelsListModel::ModelRole role,

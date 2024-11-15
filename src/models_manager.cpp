@@ -2441,6 +2441,7 @@ bool models_manager::parse_models_file_might_reset() {
             update_models_using_availability_internal();
 
         qDebug() << "models changed";
+        update_counts();
         emit models_changed();
         m_busy_value.store(false);
         emit busy_changed();
@@ -2790,5 +2791,35 @@ void models_manager::update_models_using_availability(
 
     update_models_using_availability_internal();
 
+    update_counts();
+
     emit models_changed();
+}
+
+void models_manager::update_counts() {
+    m_counts.clear();
+
+    for (const auto& [id, model] : m_models) {
+        if (model.disabled || model.hidden) {
+            continue;
+        }
+
+        auto l_it = m_counts.find(model.lang_id);
+        if (l_it == m_counts.end()) {
+            auto r = m_counts.insert({model.lang_id, {}});
+            l_it = r.first;
+        }
+
+        ++(l_it->second.emplace(role_of_engine(model.engine), 0).first->second);
+    }
+}
+
+unsigned int models_manager::count(const QString& lang,
+                                   model_role_t role) const {
+    auto l_it = m_counts.find(lang);
+    if (l_it == m_counts.end()) return 0;
+
+    auto r_it = l_it->second.find(role);
+    if (r_it == l_it->second.end()) return 0;
+    return r_it->second;
 }

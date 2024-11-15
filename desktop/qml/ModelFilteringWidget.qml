@@ -18,6 +18,8 @@ ColumnLayout {
     property var models_model: service.models_model
     readonly property alias filtering_visible: filterButton.checked
 
+    onOpenedChanged: reset()
+
     function open() {
         filterButton.checked = true
     }
@@ -87,6 +89,11 @@ ColumnLayout {
         }
     }
 
+    Connections {
+        target: root.models_model
+        onFilterChanged: modelsSearchTextField.text = root.models_model.filter
+    }
+
     RowLayout {
         spacing: appWin.padding * 0.5
 
@@ -126,16 +133,16 @@ ColumnLayout {
             width: filterButton.width + 2
             height: filterButton.height + 2
 
-            Rectangle {
-                anchors.fill: parent
-                visible: root.models_model.featureFilterFlags !== ModelsListModel.FeatureDefault ||
-                         root.models_model.roleFilterFlags !== ModelsListModel.RoleDefault
-                height: 1
-                radius: 5
-                width: filterButton.width
-                color: filterButton.palette.highlight
-                opacity: 0.5
-            }
+            // Rectangle {
+            //     anchors.fill: parent
+            //     visible: root.models_model.featureFilterFlags !== ModelsListModel.FeatureDefault ||
+            //              root.models_model.roleFilterFlags !== ModelsListModel.RoleDefault
+            //     height: 1
+            //     radius: 5
+            //     width: filterButton.width
+            //     color: filterButton.palette.highlight
+            //     opacity: 0.5
+            // }
 
             Button {
                 id: filterButton

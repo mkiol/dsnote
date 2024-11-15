@@ -209,12 +209,13 @@ class models_manager : public QObject, public singleton<models_manager> {
     std::unordered_map<QString, lang_basic_t> available_langs_map() const;
     std::unordered_map<QString, lang_basic_t> available_langs_of_role_map(
         model_role_t role) const;
+    unsigned int count(const QString& lang, model_role_t role) const;
     [[nodiscard]] bool model_exists(const QString& id) const;
     [[nodiscard]] bool has_model_of_role(model_role_t role) const;
     void download_model(const QString& id);
     void cancel_model_download(const QString& id);
     void delete_model(const QString& id);
-    [[nodiscard]] inline bool busy() const { return m_busy_value; }
+    [[nodiscard]] bool busy() const { return m_busy_value; }
     void reload();
     double model_download_progress(const QString& id) const;
     void set_default_model_for_lang(const QString& model_id);
@@ -336,6 +337,8 @@ class models_manager : public QObject, public singleton<models_manager> {
     models_t::iterator m_it_for_gen_checksum;
     bool m_delayed_gen_checksum = false;
     std::optional<models_availability_t> m_models_availability;
+    std::unordered_map<QString, std::unordered_map<model_role_t, unsigned int>>
+        m_counts;  // lang => role => count
 
     static QLatin1String download_type_str(download_type type);
     static QLatin1String comp_type_str(comp_type type);
@@ -422,6 +425,7 @@ class models_manager : public QObject, public singleton<models_manager> {
                                          feature_flags new_feature);
     void handle_download_model_finished(const QString& id,
                                         bool download_not_needed);
+    void update_counts();
 };
 
 #endif  // MODELS_MANAGER_H

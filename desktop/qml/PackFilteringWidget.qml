@@ -22,6 +22,11 @@ RowLayout {
         Layout.fillWidth: true
     }
 
+    Connections {
+        target: root.models_model
+        onFilterChanged: searchTextField.text = root.models_model.filter
+    }
+
     TextField {
         id: searchTextField
 

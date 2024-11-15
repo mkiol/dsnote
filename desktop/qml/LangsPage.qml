@@ -23,6 +23,7 @@ DialogPage {
     readonly property real _rightMargin: listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible ?
                                              appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
                                              appWin.padding
+    readonly property bool verticalMode: modelTypeTabBar.implicitWidth > (root.width - 2 * appWin.padding)
 
     title: langsView ? qsTr("Languages") : packView ? packName : langName
 
@@ -54,6 +55,33 @@ DialogPage {
         }
 
         listViewStackItem.push(listViewComp, {langId: langId, langName: langName})
+
+        updateTabIndex()
+    }
+
+    function updateTabIndex() {
+        // 0 - STT
+        // 1 - TTS
+        // 2 - MNT
+        // 3 - Other
+
+        sttTabButton.enabled = service.models_model.countForRole(ModelsListModel.Stt) > 0
+        ttsTabButton.enabled = service.models_model.countForRole(ModelsListModel.Tts) > 0
+        mntTabButton.enabled = service.models_model.countForRole(ModelsListModel.Mnt) > 0
+        otherTabButton.enabled = service.models_model.countForRole(ModelsListModel.Ttt) > 0
+
+        if (sttTabButton.enabled) {
+            modelTypeTabBar.currentIndex = 0
+        } else if (ttsTabButton.enabled) {
+            modelTypeTabBar.currentIndex = 1
+        } else if (mntTabButton.enabled) {
+            modelTypeTabBar.currentIndex = 2
+        } else if (otherTabButton.enabled) {
+            modelTypeTabBar.currentIndex = 3
+        } else {
+            sttTabButton.enabled = true
+            modelTypeTabBar.currentIndex = 0
+        }
     }
 
     function switchToPack(packId, packName) {
@@ -92,29 +120,39 @@ DialogPage {
         root.packId = listViewStackItem.currentItem.packId
     }
 
+    function updateModels() {
+        if (root.langsView || root.packView) return
+
+        if (modelFilteringWidget.opened) {
+            service.models_model.roleFilterFlags = ModelsListModel.RoleDefault
+        } else {
+            switch(modelTypeTabBar.currentIndex) {
+            case 0: service.models_model.roleFilterFlags = ModelsListModel.RoleStt; break
+            case 1: service.models_model.roleFilterFlags = ModelsListModel.RoleTts; break
+            case 2: service.models_model.roleFilterFlags = ModelsListModel.RoleMnt; break
+            case 3: service.models_model.roleFilterFlags = ModelsListModel.RoleOther; break
+            default: service.models_model.roleFilterFlags =  ModelsListModel.RoleDefault; break
+            }
+        }
+    }
+
     Component.onCompleted: {
         listViewStackItem.push(listViewComp)
 
         service.langs_model.filter = ""
         reset(root.langId, "", true)
+        updateModels()
     }
 
-    header: Item {
+    header: ColumnLayout {
         visible: root.title.length !== 0
-        height:  visible ? Math.max(titleLabel.height,
-                                    langFilteringWidget.height,
-                                    modelFilteringWidget.height)
-                           + appWin.padding : 0
+        spacing: appWin.padding
 
         RowLayout {
-            anchors {
-                left: parent.left
-                leftMargin: root.leftPadding
-                right: parent.right
-                rightMargin: root.rightPadding
-                top: parent.top
-                topMargin: root.topPadding
-            }
+            Layout.fillWidth: true
+            Layout.leftMargin: root.leftPadding
+            Layout.rightMargin: root.rightPadding
+            Layout.topMargin: root.topPadding
 
             Label {
                 id: titleLabel
@@ -137,6 +175,7 @@ DialogPage {
                 Layout.alignment: Qt.AlignTop | Qt.AlignRight
                 visible: !root.langsView && !root.packView
                 height: visible ? implicitWidth : 0
+                onOpenedChanged: root.updateModels()
             }
 
             LangFilteringWidget {
@@ -153,6 +192,91 @@ DialogPage {
                 Layout.rightMargin: appWin.padding
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                 visible: root.packView
+            }
+        }
+
+
+        ColumnLayout {
+            visible: root.verticalMode
+            Layout.fillWidth: true
+            Layout.leftMargin: root.leftPadding + appWin.padding
+            Layout.rightMargin: root.rightPadding + appWin.padding
+
+            ComboBox {
+                id: modelTypeComboBar
+
+                Layout.fillWidth: true
+                onCurrentIndexChanged: {
+                    if (currentIndex === 0 && !sttTabButton.enabled ||
+                        currentIndex === 1 && !ttsTabButton.enabled ||
+                        currentIndex === 2 && !mntTabButton.enabled ||
+                        currentIndex === 3 && !otherTabButton.enabled) {
+
+                        if (sttTabButton.enabled) {
+                            currentIndex = 0
+                        } else if (ttsTabButton.enabled) {
+                            currentIndex = 1
+                        } else if (mntTabButton.enabled) {
+                            currentIndex = 2
+                        } else if (otherTabButton.enabled) {
+                            currentIndex = 3
+                        }
+
+                        return;
+                    }
+
+                    modelTypeTabBar.currentIndex = currentIndex
+                }
+
+                model: [
+                    qsTr("Speech to Text"),
+                    qsTr("Text to Speech"),
+                    qsTr("Translator"),
+                    qsTr("Other")
+                ]
+            }
+        }
+
+        TabBar {
+            id: modelTypeTabBar
+
+            Layout.fillWidth: true
+            currentIndex: 0
+            onCurrentIndexChanged: {
+                modelTypeComboBar.currentIndex = currentIndex
+                updateModels()
+            }
+            visible: !root.verticalMode && !root.langsView &&
+                     !root.packView && !modelFilteringWidget.opened
+            Layout.leftMargin: root.leftPadding + appWin.padding
+            Layout.rightMargin: root.rightPadding + appWin.padding
+
+            TabButton {
+                id: sttTabButton
+
+                text: qsTr("Speech to Text")
+                width: implicitWidth
+            }
+
+            TabButton {
+                id: ttsTabButton
+
+                text: qsTr("Text to Speech")
+                width: implicitWidth
+            }
+
+            TabButton {
+                id: mntTabButton
+
+                text: qsTr("Translator")
+                width: implicitWidth
+            }
+
+            TabButton {
+                id: otherTabButton
+
+                text: qsTr("Other")
+                width: implicitWidth
             }
         }
     }
@@ -353,6 +477,7 @@ DialogPage {
                 bottomInset: 0
                 topPadding: 0
                 bottomPadding: 0
+                leftPadding: packDelegate.leftPadding
                 height: downloadButton.height
 
                 contentItem: RowLayout {
@@ -484,18 +609,17 @@ DialogPage {
             focus: true
             clip: true
             spacing: appWin.padding
-
+            anchors.top: parent.top
             Keys.onUpPressed: listViewScrollBar.decrease()
             Keys.onDownPressed: listViewScrollBar.increase()
-
             ScrollBar.vertical: ScrollBar {
                 id: listViewScrollBar
             }
-
             model: langsView ? service.langs_model : packView ? service.pack_model : service.models_model
             delegate: langsView ? langItemDelegate : modelItemDelegate
             section.property: "role"
-            section.delegate: root.langsView ? null : modelSectionDelegate
+            // dont show sections when displaying languages and when filtering widget is hidded
+            section.delegate: root.langsView || !modelFilteringWidget.opened ? null : modelSectionDelegate
         }
     }
 }
