@@ -37,6 +37,7 @@ RowLayout {
         Layout.preferredWidth: 2 * appWin.buttonWithIconWidth
         onTextChanged: root.lang_model.filter = text.toLowerCase().trim()
         color: palette.text
+        Accessible.name: qsTr("Language search")
 
         TextContextMenu {}
     }
@@ -44,6 +45,8 @@ RowLayout {
     Button {
         Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
         icon.name: "edit-clear-symbolic"
+        text: qsTr("Clear text")
+        display: AbstractButton.IconOnly
         onClicked: langsSearchTextField.text = ""
 
         ToolTip.visible: hovered

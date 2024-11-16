@@ -52,6 +52,8 @@ GridLayout {
         Component.onCompleted: {
             spinBox.contentItem.color = palette.text
         }
+
+        Accessible.name: root.label.text
     }
 
     Button {

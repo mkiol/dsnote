@@ -56,6 +56,8 @@ DialogPage {
 
             Button {
                 icon.name: "go-previous-symbolic"
+                text: qsTr("Go back")
+                display: AbstractButton.IconOnly
                 DialogButtonBox.buttonRole: DialogButtonBox.ResetRole
                 Keys.onReturnPressed: appWin.openDialog("VoiceMgmtPage.qml")
                 onClicked: appWin.openDialog("VoiceMgmtPage.qml")
@@ -269,6 +271,8 @@ DialogPage {
             Layout.preferredWidth: verticalMode ? gridVoiceName.width : gridVoiceName.width / 2
             Layout.leftMargin: verticalMode ? appWin.padding : 0
             color: palette.text
+
+            Accessible.name: qsTr("Voice name")
 
             TextContextMenu {}
         }

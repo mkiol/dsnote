@@ -50,6 +50,8 @@ GridLayout {
         ToolTip.visible: hovered && root.toolTip.length !== 0
         ToolTip.text: root.toolTip
         hoverEnabled: true
+
+        Accessible.name: root.label.text
     }
 
     Button {

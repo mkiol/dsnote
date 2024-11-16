@@ -55,6 +55,7 @@ DialogPage {
         }
 
         listViewStackItem.push(listViewComp, {langId: langId, langName: langName})
+        listViewStackItem.focus = true
 
         updateTabIndex()
     }
@@ -91,6 +92,7 @@ DialogPage {
 
         listViewStackItem.push(listViewComp, {langId: root.langId, langName: root.langName,
                                    packId: packId, packName: packName})
+        listViewStackItem.focus = true
     }
 
     function switchToLangs() {
@@ -107,12 +109,14 @@ DialogPage {
         }
 
         listViewStackItem.pop()
+        listViewStackItem.focus = true
     }
 
     function switchPop() {
         if (listViewStackItem.depth < 2) return
 
         listViewStackItem.pop()
+        listViewStackItem.focus = true
 
         root.langName = listViewStackItem.currentItem.langName
         root.packName = listViewStackItem.currentItem.packName
@@ -142,6 +146,8 @@ DialogPage {
         service.langs_model.filter = ""
         reset(root.langId, "", true)
         updateModels()
+
+        listViewStackItem.focus = true
     }
 
     header: ColumnLayout {
@@ -254,29 +260,49 @@ DialogPage {
             TabButton {
                 id: sttTabButton
 
-                text: qsTr("Speech to Text")
                 width: implicitWidth
+                action: Action {
+                    text: qsTr("Speech to Text")
+                    onTriggered: {
+                        checked = true
+                    }
+                }
             }
 
             TabButton {
                 id: ttsTabButton
 
-                text: qsTr("Text to Speech")
                 width: implicitWidth
+                action: Action {
+                    text: qsTr("Text to Speech")
+                    onTriggered: {
+                        checked = true
+                    }
+                }
             }
 
             TabButton {
                 id: mntTabButton
 
-                text: qsTr("Translator")
                 width: implicitWidth
+                action: Action {
+                    text: qsTr("Translator")
+                    onTriggered: {
+                        checked = true
+                    }
+                }
             }
 
             TabButton {
                 id: otherTabButton
 
-                text: qsTr("Other")
                 width: implicitWidth
+                action: Action {
+                    text: qsTr("Other")
+                    onTriggered: {
+                        checked = true
+                    }
+                }
             }
         }
     }
@@ -294,19 +320,25 @@ DialogPage {
 
             Button {
                 visible: root.listViewStackItem.depth > 1
-                icon.name: "go-previous-symbolic"
+                display: AbstractButton.IconOnly
                 DialogButtonBox.buttonRole: DialogButtonBox.ResetRole
-                Keys.onReturnPressed: root.switchPop()
-                onClicked: root.switchPop()
+                action: Action {
+                    icon.name: "go-previous-symbolic"
+                    text: qsTr("Go back")
+                    shortcut: StandardKey.Back
+                    onTriggered: root.switchPop()
+                }
             }
 
             Button {
                 id: closeButton
 
-                text: qsTr("Close")
-                //icon.name: "window-close-symbolic"
-                onClicked: root.reject()
-                Keys.onEscapePressed: root.reject()
+                action: Action {
+                    icon.name: "window-close-symbolic"
+                    text: qsTr("Close")
+                    shortcut: StandardKey.Cancel
+                    onTriggered: root.reject()
+                }
             }
         }
     }
@@ -337,6 +369,8 @@ DialogPage {
                 text: "\u2714"
                 font.bold: true
             }
+
+            Accessible.name: model.name
         }
     }
 
@@ -376,6 +410,7 @@ DialogPage {
                 width: parent.width
                 text: model.name
                 onClicked: root.switchToPack(model.id, model.name)
+                Accessible.name: model.name
 
                 contentItem: RowLayout {
                     Text {
@@ -479,6 +514,7 @@ DialogPage {
                 bottomPadding: 0
                 leftPadding: packDelegate.leftPadding
                 height: downloadButton.height
+                Accessible.name: model.name
 
                 contentItem: RowLayout {
                     Label {
@@ -523,13 +559,15 @@ DialogPage {
                         id: infoButton
 
                         icon.name: "help-about-symbolic"
+                        display: AbstractButton.IconOnly
+                        text: qsTr("Show model details")
                         onClicked: control.show_info()
                         enabled: control.infoAvailable
                         Layout.alignment: Qt.AlignVCenter
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Show model details")
+                        ToolTip.text: text
                         hoverEnabled: true
                     }
 

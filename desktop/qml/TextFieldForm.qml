@@ -50,6 +50,8 @@ GridLayout {
         ToolTip.text: root.toolTip
         hoverEnabled: true
 
+        Accessible.name: root.label.text
+
         TextContextMenu {}
     }
 

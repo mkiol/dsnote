@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.0
+import QtQuick 2.12
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2 as Dialogs
 import QtQuick.Layouts 1.3
@@ -34,8 +34,21 @@ ToolBar {
                     ToolButton {
                         id: menuButton
 
-                        icon.name: "open-menu-symbolic"
-                        onClicked: menuMenu.open()
+                        display: AbstractButton.IconOnly
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Open Menu")
+                        hoverEnabled: true
+
+                        action: Action {
+                            icon.name: "open-menu-symbolic"
+                            text: qsTr("Menu")
+                            shortcut: "F10"
+                            onTriggered: {
+                                menuButton.focus = true
+                                menuMenu.open()
+                            }
+                        }
 
                         Menu {
                             id: menuMenu
@@ -44,23 +57,31 @@ ToolBar {
                             MenuItem {
                                 id: settingMenuItem
 
-                                text: qsTr("Settings")
-                                icon.name: "document-properties-symbolic"
-                                onClicked: appWin.openDialog("SettingsPage.qml")
+                                action: Action {
+                                    icon.name: "document-properties-symbolic"
+                                    text: qsTr("Settings")
+                                    shortcut: StandardKey.Preferences
+                                    onTriggered: appWin.openDialog("SettingsPage.qml")
+                                }
                             }
 
                             MenuItem {
-                                text: qsTr("About %1").arg(APP_NAME)
-                                icon.name: "starred-symbolic"
-                                onClicked: appWin.openDialog("AboutPage.qml")
+                                action: Action {
+                                    icon.name: "starred-symbolic"
+                                    text: qsTr("About %1").arg(APP_NAME)
+                                    onTriggered: appWin.openDialog("AboutPage.qml")
+                                }
                             }
 
                             MenuItem {
-                                icon.name: "application-exit-symbolic"
-                                text: qsTr("Quit")
-                                onClicked: {
-                                    appWin.close()
-                                    Qt.quit()
+                                action: Action {
+                                    icon.name: "application-exit-symbolic"
+                                    text: qsTr("Quit")
+                                    shortcut: StandardKey.Quit
+                                    onTriggered:  {
+                                        appWin.close()
+                                        Qt.quit()
+                                    }
                                 }
                             }
                         }
@@ -74,8 +95,11 @@ ToolBar {
                     ToolButton {
                         id: fileButton
 
-                        text: qsTr("File")
-                        onClicked: fileMenu.open()
+                        action: Action {
+                            text: qsTr("File")
+                            shortcut: "Ctrl+F"
+                            onTriggered: fileMenu.open()
+                        }
 
                         Menu {
                             id: fileMenu
@@ -83,11 +107,12 @@ ToolBar {
                             y: fileButton.height
 
                             MenuItem {
-                                text: qsTr("Import from a file")
-                                icon.name: "document-open-symbolic"
                                 enabled: !app.busy && app.state === DsnoteApp.StateIdle
-                                onClicked: {
-                                    fileReadDialog.open()
+                                action: Action {
+                                    icon.name: "document-open-symbolic"
+                                    text: qsTr("Import from a file")
+                                    shortcut: StandardKey.Open
+                                    onTriggered: fileReadDialog.open()
                                 }
 
                                 ToolTip.visible: hovered
@@ -100,12 +125,14 @@ ToolBar {
                             MenuSeparator {}
 
                             MenuItem {
-                                text: qsTr("Export to a file")
-                                icon.name: "document-save-symbolic"
-                                enabled: app.note.length !== 0 && !app.busy && app.state === DsnoteApp.StateIdle
-                                onClicked: {
-                                    appWin.openDialog("ExportFilePage.qml", {"translated": false})
+                                action: Action {
+                                    enabled: app.note.length !== 0 && !app.busy && app.state === DsnoteApp.StateIdle
+                                    icon.name: "document-save-symbolic"
+                                    text: qsTr("Export to a file")
+                                    shortcut: StandardKey.Save
+                                    onTriggered: appWin.openDialog("ExportFilePage.qml", {"translated": false})
                                 }
+
 
                                 ToolTip.visible: hovered
                                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -114,14 +141,14 @@ ToolBar {
                             }
 
                             MenuItem {
-                                text: qsTr("Export the translation to a file")
-                                icon.name: "document-save-symbolic"
-                                enabled: app.translated_text.length !== 0 && _settings.translator_mode && !app.busy && app.state === DsnoteApp.StateIdle
+                                action: Action {
+                                    enabled: app.translated_text.length !== 0 && _settings.translator_mode && !app.busy && app.state === DsnoteApp.StateIdle
+                                    icon.name: "document-save-symbolic"
+                                    text: qsTr("Export the translation to a file")
+                                    onTriggered: appWin.openDialog("ExportFilePage.qml", {"translated": true})
+                                }
                                 visible: enabled
                                 height: visible ? implicitHeight : 0
-                                onClicked: {
-                                    appWin.openDialog("ExportFilePage.qml", {"translated": true})
-                                }
 
                                 ToolTip.visible: hovered
                                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -132,9 +159,12 @@ ToolBar {
                     }
 
                     ToolButton {
-                        text: qsTr("Languages")
-                        onClicked: appWin.openDialog("LangsPage.qml")
-                        enabled: !app.busy
+                        action: Action {
+                            enabled: !app.busy
+                            text: qsTr("Languages")
+                            shortcut: "Ctrl+L"
+                            onTriggered: appWin.openDialog("LangsPage.qml")
+                        }
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -145,9 +175,12 @@ ToolBar {
                     ToolButton {
                         id: repairTextButton
 
-                        text: qsTr("Repair text")
                         visible: _settings.show_repair_text && !_settings.translator_mode
-                        onClicked: rapairTextMenu.open()
+                        action: Action {
+                            enabled: !app.busy && _settings.show_repair_text && !_settings.translator_mode
+                            text: qsTr("Repair text")
+                            onTriggered: rapairTextMenu.open()
+                        }
 
                         Menu {
                             id: rapairTextMenu
@@ -155,27 +188,33 @@ ToolBar {
                             y: repairTextButton.height
 
                             MenuItem {
-                                text: qsTr("Restore punctuation")
-                                enabled: !app.busy && app.state === DsnoteApp.StateIdle &&
-                                         app.feature_punctuator && app.ttt_punctuation_configured &&
-                                         app.note.length !== 0
-                                onClicked: app.restore_punctuation()
+                                action: Action {
+                                    enabled: !app.busy && app.state === DsnoteApp.StateIdle &&
+                                             app.feature_punctuator && app.ttt_punctuation_configured &&
+                                             app.note.length !== 0
+                                    text: qsTr("Restore punctuation")
+                                    onTriggered: app.restore_punctuation()
+                                }
                             }
 
                             MenuItem {
-                                text: qsTr("Restore diacritical marks (%1)").arg(qsTr("Arabic"))
-                                enabled: !app.busy && app.state === DsnoteApp.StateIdle &&
-                                         app.ttt_diacritizer_ar_configured &&
-                                         app.note.length !== 0
-                                onClicked: app.restore_diacritics_ar()
+                                action: Action {
+                                    enabled: !app.busy && app.state === DsnoteApp.StateIdle &&
+                                             app.ttt_diacritizer_ar_configured &&
+                                             app.note.length !== 0
+                                    text: qsTr("Restore diacritical marks (%1)").arg(qsTr("Arabic"))
+                                    onTriggered: app.restore_diacritics_ar()
+                                }
                             }
 
                             MenuItem {
-                                text: qsTr("Restore diacritical marks (%1)").arg(qsTr("Hebrew"))
-                                enabled: !app.busy && app.state === DsnoteApp.StateIdle &&
-                                         app.feature_diacritizer_he && app.ttt_diacritizer_he_configured &&
-                                         app.note.length !== 0
-                                onClicked: app.restore_diacritics_he()
+                                action: Action {
+                                    enabled: !app.busy && app.state === DsnoteApp.StateIdle &&
+                                             app.feature_diacritizer_he && app.ttt_diacritizer_he_configured &&
+                                             app.note.length !== 0
+                                    text: qsTr("Restore diacritical marks (%1)").arg(qsTr("Hebrew"))
+                                    onTriggered: app.restore_diacritics_he()
+                                }
                             }
                         }
                     }
@@ -183,12 +222,15 @@ ToolBar {
                     ToolButton {
                         id: voicesButton
 
-                        visible: (app.tts_ref_voice_needed && !_settings.translator_mode) ||
-                                 (_settings.translator_mode && (app.tts_for_in_mnt_ref_voice_needed || app.tts_for_out_mnt_ref_voice_needed))
-                        opacity: enabled ? 1.0 : 0.6
+                        visible: enabled
                         Layout.alignment: Qt.AlignLeft
-                        text: qsTr("Voice samples")
-                        onClicked: appWin.openDialog("VoiceMgmtPage.qml")
+                        action: Action {
+                            enabled: (app.tts_ref_voice_needed && !_settings.translator_mode) ||
+                                     (_settings.translator_mode && (app.tts_for_in_mnt_ref_voice_needed || app.tts_for_out_mnt_ref_voice_needed))
+                            text: qsTr("Voice samples")
+                            shortcut: "Ctrl+V"
+                            onTriggered: appWin.openDialog("VoiceMgmtPage.qml")
+                        }
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -238,14 +280,26 @@ ToolBar {
                     }
 
                     TabButton {
-                        text: qsTr("Notepad")
                         width: implicitWidth
+                        action: Action {
+                            text: qsTr("Notepad")
+                            shortcut: "Ctrl+N"
+                            onTriggered: {
+                                checked = true
+                            }
+                        }
                     }
 
                     TabButton {
-                        text: qsTr("Translator")
                         width: implicitWidth
-                        enabled: app.feature_translator
+                        action: Action {
+                            enabled: app.feature_translator
+                            text: qsTr("Translator")
+                            shortcut: "Ctrl+T"
+                            onTriggered: {
+                                checked = true
+                            }
+                        }
                     }
                 }
 

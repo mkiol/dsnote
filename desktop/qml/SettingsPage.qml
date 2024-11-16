@@ -64,6 +64,8 @@ DialogPage {
             text: qsTr("Other")
             width: implicitWidth
         }
+
+        Accessible.name: qsTr("Setting sections")
     }
 
     ColumnLayout {
@@ -485,6 +487,8 @@ DialogPage {
                     text: "FasterWhisper"
                     width: implicitWidth
                 }
+
+                Accessible.name: qsTr("Engine options")
             }
 
             StackLayout {
@@ -981,6 +985,8 @@ DialogPage {
                     enabled: app.feature_whisperspeech_tts && app.feature_whisperspeech_gpu
                     width: implicitWidth
                 }
+
+                Accessible.name: qsTr("Engine options")
             }
 
             StackLayout {

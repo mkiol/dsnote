@@ -98,6 +98,7 @@ ColumnLayout {
                 ScrollTextArea {
                     id: _noteTextArea
 
+                    name: qsTr("Text to translate from")
                     enabled: !root.readOnly && app.mnt_configured
                     anchors.fill: parent
                     canUndoFallback: app.can_undo_note
@@ -217,12 +218,15 @@ ColumnLayout {
                         rightPadding: grid.verticalMode ? appWin.padding : 0
                     }
                     button {
-                        text: qsTr("Read")
-                        enabled: mntInCombo.second.enabled &&
-                                 !mntInCombo.second.off &&
-                                 app.note.length !== 0 &&
-                                 (!app.tts_for_in_mnt_ref_voice_needed || app.available_tts_ref_voices.length !== 0)
-                        onClicked: app.play_speech_translator(false)
+                        action: Action {
+                            enabled: mntInCombo.second.enabled &&
+                                     !mntInCombo.second.off &&
+                                     app.note.length !== 0 &&
+                                     (!app.tts_for_in_mnt_ref_voice_needed || app.available_tts_ref_voices.length !== 0)
+                            text: qsTr("Read")
+                            shortcut: "Ctrl+Alt+Shift+R"
+                            onTriggered: app.play_speech_translator(false)
+                        }
                     }
                 }
             }
@@ -304,6 +308,7 @@ ColumnLayout {
                 ScrollTextArea {
                     id: _translatedNoteTextArea
 
+                    name: qsTr("Translated text")
                     enabled: !root.readOnly && app.mnt_configured && app.translated_text.length !== 0
                     anchors.fill: parent
                     textColor: {
@@ -392,13 +397,16 @@ ColumnLayout {
                                          appWin.padding : 0
                     }
                     button {
-                        text: qsTr("Read")
-                        enabled: mntOutCombo.second.enabled &&
-                                 !mntOutCombo.second.off &&
-                                 app.translated_text.length !== 0 &&
-                                 app.state !== DsnoteApp.StateTranslating &&
-                                 (!app.tts_for_out_mnt_ref_voice_needed || app.available_tts_ref_voices.length !== 0)
-                        onClicked: app.play_speech_translator(true)
+                        action: Action {
+                            enabled: mntOutCombo.second.enabled &&
+                                     !mntOutCombo.second.off &&
+                                     app.translated_text.length !== 0 &&
+                                     app.state !== DsnoteApp.StateTranslating &&
+                                     (!app.tts_for_out_mnt_ref_voice_needed || app.available_tts_ref_voices.length !== 0)
+                            text: qsTr("Read")
+                            shortcut: "Ctrl+Alt+Shift+T"
+                            onTriggered: app.play_speech_translator(true)
+                        }
                     }
                 }
             }

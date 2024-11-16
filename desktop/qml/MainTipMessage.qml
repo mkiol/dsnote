@@ -19,4 +19,8 @@ TipMessage {
     Layout.leftMargin: appWin.padding
     Layout.rightMargin: appWin.padding
     closable: true
+
+    Accessible.role: Accessible.Notification
+    Accessible.name: warning ? qsTr("Warning message") : qsTr("Information message")
+    Accessible.description: text
 }

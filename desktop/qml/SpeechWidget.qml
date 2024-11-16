@@ -212,26 +212,33 @@ RowLayout {
 
                     Layout.alignment: Qt.AlignBottom
                     Layout.preferredHeight: _icon.implicitHeight
-                    icon.name: app.task_state === DsnoteApp.TaskStateSpeechPaused ?
-                                   "media-playback-start-symbolic" : "media-playback-pause-symbolic"
-                    enabled: app.task_state !== DsnoteApp.TaskStateCancelling &&
-                             app.state === DsnoteApp.StatePlayingSpeech &&
-                             (app.task_state === DsnoteApp.TaskStateProcessing ||
-                              app.task_state === DsnoteApp.TaskStateSpeechPlaying ||
-                              app.task_state === DsnoteApp.TaskStateSpeechPaused)
                     visible: !stopButton.visible
-                    onClicked: {
-                        if (app.task_state === DsnoteApp.TaskStateSpeechPaused)
-                            app.resume_speech()
-                        else
-                            app.pause_speech()
-                    }
+                    display: AbstractButton.IconOnly
 
                     ToolTip.visible: hovered
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.text: app.task_state === DsnoteApp.TaskStateSpeechPaused ?
                                       qsTr("Resume reading") : qsTr("Pause reading")
                     hoverEnabled: true
+
+                    action: Action {
+                        enabled: app.task_state !== DsnoteApp.TaskStateCancelling &&
+                                 app.state === DsnoteApp.StatePlayingSpeech &&
+                                 (app.task_state === DsnoteApp.TaskStateProcessing ||
+                                  app.task_state === DsnoteApp.TaskStateSpeechPlaying ||
+                                  app.task_state === DsnoteApp.TaskStateSpeechPaused)
+                        icon.name: app.task_state === DsnoteApp.TaskStateSpeechPaused ?
+                                       "media-playback-start-symbolic" : "media-playback-pause-symbolic"
+                        text: app.task_state === DsnoteApp.TaskStateSpeechPaused ?
+                                  qsTr("Resume reading") : qsTr("Pause reading")
+                        shortcut: "Ctrl+Alt+Shift+P"
+                        onTriggered: {
+                            if (app.task_state === DsnoteApp.TaskStateSpeechPaused)
+                                app.resume_speech()
+                            else
+                                app.pause_speech()
+                        }
+                    }
                 }
 
                 Button {
@@ -240,24 +247,28 @@ RowLayout {
                     Layout.fillWidth: root.verticalMode
                     Layout.alignment: Qt.AlignBottom
                     Layout.preferredHeight: _icon.implicitHeight
-                    icon.name: "media-playback-stop-symbolic"
-                    enabled: app.task_state !== DsnoteApp.TaskStateCancelling &&
-                             app.task_state !== DsnoteApp.TaskStateProcessing &&
-                             app.task_state !== DsnoteApp.TaskStateInitializing &&
-                             (app.state === DsnoteApp.StateListeningSingleSentence ||
-                              app.state === DsnoteApp.StateListeningManual ||
-                              app.state === DsnoteApp.StateListeningAuto)
 
                     visible: app.state === DsnoteApp.StateListeningSingleSentence ||
                              app.state === DsnoteApp.StateListeningManual ||
                              app.state === DsnoteApp.StateListeningAuto
-                    text: qsTr("Stop")
-                    onClicked: app.stop_listen()
 
                     ToolTip.visible: hovered
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.text: qsTr("Stops listening. The already captured voice is decoded into text.")
                     hoverEnabled: true
+
+                    action: Action {
+                        enabled: app.task_state !== DsnoteApp.TaskStateCancelling &&
+                                 app.task_state !== DsnoteApp.TaskStateProcessing &&
+                                 app.task_state !== DsnoteApp.TaskStateInitializing &&
+                                 (app.state === DsnoteApp.StateListeningSingleSentence ||
+                                  app.state === DsnoteApp.StateListeningManual ||
+                                  app.state === DsnoteApp.StateListeningAuto)
+                        icon.name: "media-playback-stop-symbolic"
+                        text: qsTr("Stop")
+                        shortcut: "Ctrl+Alt+Shift+P"
+                        onTriggered: app.stop_listen()
+                    }
                 }
 
                 Button {
@@ -266,21 +277,25 @@ RowLayout {
                     Layout.fillWidth: root.verticalMode
                     Layout.alignment: Qt.AlignBottom
                     Layout.preferredHeight: _icon.implicitHeight
-                    icon.name: "action-unavailable-symbolic"
-                    enabled: app.task_state !== DsnoteApp.TaskStateCancelling &&
-                             (app.task_state === DsnoteApp.TaskStateProcessing ||
-                             app.task_state === DsnoteApp.TaskStateInitializing ||
-                             app.state === DsnoteApp.StateTranscribingFile ||
-                             app.state === DsnoteApp.StateListeningSingleSentence ||
-                             app.state === DsnoteApp.StateListeningManual ||
-                             app.state === DsnoteApp.StateListeningAuto ||
-                             app.state === DsnoteApp.StatePlayingSpeech ||
-                             app.state === DsnoteApp.StateWritingSpeechToFile ||
-                             app.state === DsnoteApp.StateTranslating ||
-                             app.state === DsnoteApp.StateExporting ||
-                             app.state === DsnoteApp.StateImporting)
-                    text: qsTr("Cancel")
-                    onClicked: app.cancel()
+
+                    action: Action {
+                        icon.name: "action-unavailable-symbolic"
+                        enabled: app.task_state !== DsnoteApp.TaskStateCancelling &&
+                                 (app.task_state === DsnoteApp.TaskStateProcessing ||
+                                 app.task_state === DsnoteApp.TaskStateInitializing ||
+                                 app.state === DsnoteApp.StateTranscribingFile ||
+                                 app.state === DsnoteApp.StateListeningSingleSentence ||
+                                 app.state === DsnoteApp.StateListeningManual ||
+                                 app.state === DsnoteApp.StateListeningAuto ||
+                                 app.state === DsnoteApp.StatePlayingSpeech ||
+                                 app.state === DsnoteApp.StateWritingSpeechToFile ||
+                                 app.state === DsnoteApp.StateTranslating ||
+                                 app.state === DsnoteApp.StateExporting ||
+                                 app.state === DsnoteApp.StateImporting)
+                        text: qsTr("Cancel")
+                        shortcut: "Ctrl+Alt+Shift+C"
+                        onTriggered: app.cancel()
+                    }
                 }
             }
         }

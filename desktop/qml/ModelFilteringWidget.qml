@@ -111,6 +111,7 @@ ColumnLayout {
             Layout.preferredWidth: 2 * appWin.buttonWithIconWidth
             onTextChanged: root.models_model.filter = text.toLowerCase().trim()
             color: palette.text
+            Accessible.name: qsTr("Model search")
 
             TextContextMenu {}
         }
@@ -120,6 +121,8 @@ ColumnLayout {
 
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
             icon.name: "edit-clear-symbolic"
+            text: qsTr("Clear text")
+            display: AbstractButton.IconOnly
             onClicked: modelsSearchTextField.text = ""
 
             ToolTip.visible: hovered
@@ -149,9 +152,14 @@ ColumnLayout {
 
                 flat: true
                 icon.name: "filter-symbolic"
+                text: qsTr("Filter options for models")
+                display: AbstractButton.IconOnly
                 checkable: true
                 anchors.centerIn: parent
                 implicitHeight: appWin.buttonHeightShort
+
+                Accessible.description: checked ? qsTr("Hide filter options") : qsTr("Show filter options")
+                Accessible.name: text
 
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -194,6 +202,8 @@ ColumnLayout {
 
                     root.update(modelType_combo.currentIndex)
                 }
+
+                Accessible.name: qsTr("Filtering by model type")
             }
 
             Label {
@@ -217,6 +227,8 @@ ColumnLayout {
                 ]
 
                 onCurrentIndexChanged: root.update(currentIndex)
+
+                Accessible.name: qsTr("Model types")
             }
 
             Button {
@@ -250,6 +262,8 @@ ColumnLayout {
 
                     root.update(engine_combo.currentIndex)
                 }
+
+                Accessible.name: qsTr("Filtering by engine type")
             }
 
             Label {
@@ -281,6 +295,8 @@ ColumnLayout {
                 ]
 
                 onCurrentIndexChanged: root.update(currentIndex)
+
+                Accessible.name: qsTr("Engine types")
             }
 
             Button {
@@ -314,6 +330,8 @@ ColumnLayout {
 
                     root.update(speed_combo.currentIndex)
                 }
+
+                Accessible.name: qsTr("Filtering by speed")
             }
 
             Label {
@@ -336,6 +354,8 @@ ColumnLayout {
                 ]
 
                 onCurrentIndexChanged: root.update(currentIndex)
+
+                Accessible.name: qsTr("Speed levels")
             }
 
             Button {
@@ -371,6 +391,8 @@ ColumnLayout {
 
                     root.update(quality_combo.currentIndex)
                 }
+
+                Accessible.name: qsTr("Filtering by quality")
             }
 
             Label {
@@ -393,6 +415,8 @@ ColumnLayout {
                 ]
 
                 onCurrentIndexChanged: root.update(currentIndex)
+
+                Accessible.name: qsTr("Quality levels")
             }
 
             Button {
@@ -428,6 +452,8 @@ ColumnLayout {
 
                     root.update(caps_combo.currentIndex)
                 }
+
+                Accessible.name: qsTr("Filtering by additional capabilities")
             }
 
             Label {
@@ -451,6 +477,8 @@ ColumnLayout {
                 ]
 
                 onCurrentIndexChanged: root.update(currentIndex)
+
+                Accessible.name: qsTr("Additional capabilities")
             }
 
             Button {

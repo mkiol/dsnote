@@ -12,6 +12,7 @@ import QtQuick.Layouts 1.3
 Item {
     id: root
 
+    property string name: ""
     property alias textArea: _textArea
     property alias textFormatCombo: _textFormatCombo
     property alias textFormatInvalid: _textFormatComboRedBorder.visible
@@ -75,6 +76,7 @@ Item {
             onCursorPositionChanged: cursorIndicator.update(cursorPosition)
             Component.onCompleted: cursorIndicator.update(-1)
             onTextChanged: cursorIndicator.update(cursorPosition)
+            Accessible.name: root.name
 
             Rectangle {
                 id: cursorIndicator
@@ -256,6 +258,8 @@ Item {
                 anchors.fill: parent
                 color: "transparent"
             }
+
+            Accessible.name: qsTr("Text formats")
         }
 
         Item {
@@ -267,6 +271,8 @@ Item {
 
             Layout.alignment: Qt.AlignRight
             icon.name: "edit-copy-symbolic"
+            text: qsTr("Copy")
+            display: AbstractButton.IconOnly
             onClicked: root.copyClicked()
             visible: root.textArea.text.length !== 0
 
@@ -280,6 +286,8 @@ Item {
 
             Layout.alignment: Qt.AlignRight
             icon.name: "edit-paste-symbolic"
+            text: qsTr("Paste")
+            display: AbstractButton.IconOnly
             onClicked: root.textArea.paste()
             visible: root.canPaste && root.textArea.canPaste
 
@@ -293,6 +301,8 @@ Item {
 
             Layout.alignment: Qt.AlignRight
             icon.name: "edit-delete-symbolic"
+            text: qsTr("Clear")
+            display: AbstractButton.IconOnly
             onClicked: root.clearClicked()
             visible: root.canClear && !root.textArea.readOnly && root.textArea.text.length !== 0
 
@@ -306,6 +316,8 @@ Item {
 
             Layout.alignment: Qt.AlignRight
             icon.name: "edit-undo-symbolic"
+            text: qsTr("Undo")
+            display: AbstractButton.IconOnly
             onClicked: {
                 if (root.textArea.canUndo)
                     root.textArea.undo()
@@ -324,6 +336,8 @@ Item {
 
             Layout.alignment: Qt.AlignRight
             icon.name: "edit-redo-symbolic"
+            text: qsTr("Redo")
+            display: AbstractButton.IconOnly
             onClicked: root.textArea.redo()
             visible: !root.textArea.readOnly && root.canRedo && root.textArea.canRedo
 

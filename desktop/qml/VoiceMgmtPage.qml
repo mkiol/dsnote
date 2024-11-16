@@ -165,6 +165,9 @@ DialogPage {
                 anchors.rightMargin: appWin.padding
                 icon.name: app.player_playing && app.player_current_voice_ref_idx === index ?
                                "media-playback-stop-symbolic" : "media-playback-start-symbolic"
+                display: AbstractButton.IconOnly
+                text: app.player_playing && app.player_current_voice_ref_idx === index ?
+                          qsTr("Stop") : qsTr("Play")
                 onClicked: {
                     control.editActive = false
 

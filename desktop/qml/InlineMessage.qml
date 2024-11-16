@@ -70,6 +70,8 @@ Control {
 
              visible: root.closable
              icon.name: "window-close-symbolic"
+             text: qsTr("Close")
+             display: AbstractButton.IconOnly
              onClicked: root.closeClicked()
              ToolTip.visible: hovered
              ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval

@@ -75,6 +75,8 @@ RowLayout {
             ComboBox {
                 id: _combo
 
+                property string desc: root.comboToolTip + (implicitWidth > width ? " | " + currentText : "")
+
                 Layout.fillWidth: verticalMode ? true : root.comboFillWidth
                 Layout.preferredWidth: root.verticalMode ? implicitWidth : root.comboPrefWidth
                 Layout.alignment: Qt.AlignVCenter
@@ -82,8 +84,9 @@ RowLayout {
                 displayText: root.off ? root.comboPlaceholderText : currentText
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: root.comboToolTip + (implicitWidth > width ? " | " + currentText : "")
+                ToolTip.text: desc
                 hoverEnabled: true
+                Accessible.name: desc
 
                 Rectangle {
                     id: _comboRedBorder
@@ -100,6 +103,8 @@ RowLayout {
             ComboBox {
                 id: _combo2
 
+                property string desc: root.combo2ToolTip + (implicitWidth > width ? " | " + currentText : "")
+
                 visible: false
                 Layout.preferredWidth: appWin.buttonWidth * 1.5
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
@@ -107,8 +112,9 @@ RowLayout {
                 displayText: !model || model.length === 0 ? root.combo2PlaceholderText : currentText
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: root.combo2ToolTip + (implicitWidth > width ? " | " + currentText : "")
+                ToolTip.text: desc
                 hoverEnabled: true
+                Accessible.name: desc
 
                 Rectangle {
                     id: _combo2RedBorder
@@ -125,14 +131,17 @@ RowLayout {
             ComboBox {
                 id: _combo3
 
+                property string desc: root.combo3ToolTip + (implicitWidth > width ? " | " + currentText : "")
+
                 visible: false
                 Layout.preferredWidth: appWin.buttonWidth
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                 enabled: !root.off
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: root.combo3ToolTip + (implicitWidth > width ? " | " + currentText : "")
+                ToolTip.text: desc
                 hoverEnabled: true
+                Accessible.name: desc
 
                 Rectangle {
                     id: _combo3RedBorder
@@ -156,6 +165,7 @@ RowLayout {
                 //ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: root.checkToolTip
                 hoverEnabled: true
+                Accessible.name: root.checkToolTip
             }
 
             Button {
@@ -170,6 +180,8 @@ RowLayout {
 
                 Layout.alignment: Qt.AlignVCenter
                 Layout.preferredWidth: appWin.buttonWidth
+
+                Accessible.description: root.buttonToolTip
             }
         }
     }

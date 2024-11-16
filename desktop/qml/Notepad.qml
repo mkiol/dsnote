@@ -69,6 +69,7 @@ ColumnLayout {
         Layout.leftMargin: appWin.padding
         Layout.rightMargin: appWin.padding
 
+        name: qsTr("Notepad")
         enabled: root.enabled
         canUndoFallback: app.can_undo_note
         canReadSelected: listenReadCombos.second.button.enabled
@@ -144,7 +145,6 @@ ColumnLayout {
                 }
             }
             button {
-                text: qsTr("Listen")
                 onClicked: {
                     if (_settings.speech_mode !== Settings.SpeechManual &&
                             app.state === DsnoteApp.StateIdle &&
@@ -161,6 +161,11 @@ ColumnLayout {
                             app.task_state === DsnoteApp.TaskStateIdle) {
                         app.listen()
                     }
+                }
+
+                action: Action {
+                    text: qsTr("Listen")
+                    shortcut: "Ctrl+Alt+Shift+L"
                 }
             }
         }
@@ -230,12 +235,15 @@ ColumnLayout {
                 onActivated: _settings.speech_speed = index + 1
             }
             button {
-                enabled: listenReadCombos.second.enabled &&
-                         !listenReadCombos.second.off &&
-                         app.note.length !== 0 &&
-                         (!app.tts_ref_voice_needed || app.available_tts_ref_voices.length !== 0)
-                text: qsTr("Read")
-                onClicked: app.play_speech()
+                action: Action {
+                    enabled: listenReadCombos.second.enabled &&
+                             !listenReadCombos.second.off &&
+                             app.note.length !== 0 &&
+                             (!app.tts_ref_voice_needed || app.available_tts_ref_voices.length !== 0)
+                    text: qsTr("Read")
+                    shortcut: "Ctrl+Alt+Shift+R"
+                    onTriggered: app.play_speech()
+                }
             }
         }
     }
