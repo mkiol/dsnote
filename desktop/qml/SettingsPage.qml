@@ -1421,6 +1421,21 @@ DialogPage {
                     hoverEnabled: true
                 }
 
+                // CheckBox {
+                //     visible: _settings.hw_accel_supported()
+                //     checked: _settings.hw_scan_vulkan_cpu
+                //     text: qsTr("Use %1").arg("Vulkan CPU")
+                //     onCheckedChanged: {
+                //         _settings.hw_scan_vulkan_cpu = checked
+                //     }
+
+                //     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                //     ToolTip.visible: hovered
+                //     ToolTip.text: qsTr("Try to find %1 compatible CPU in the system.").arg("Vulkan") + " " +
+                //                   qsTr("Disable this option if you observe problems when launching the application.")
+                //     hoverEnabled: true
+                // }
+
                 CheckBox {
                     visible: _settings.hw_accel_supported()
                     checked: _settings.hw_scan_openvino

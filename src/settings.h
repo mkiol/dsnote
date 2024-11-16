@@ -22,15 +22,17 @@
 #include "singleton.h"
 
 // gpi_api_name, default_value
-#define GPU_SCAN_TABLE      \
-    X(cuda, true)           \
-    X(hip, true)            \
-    X(opencl, true)         \
-    X(opencl_legacy, false) \
-    X(openvino, true)       \
-    X(openvino_gpu, false)  \
-    X(vulkan, true)         \
-    X(vulkan_igpu, false)
+#define GPU_SCAN_TABLE                                                 \
+    X(cuda, true)                                                      \
+    X(hip, true)                                                       \
+    X(opencl, true)                                                    \
+    X(opencl_legacy, false) /* modern GPUs are not supported */        \
+    X(openvino, true)                                                  \
+    X(openvino_gpu,                                                    \
+      false) /* configured models are INT4 and not supported on GPU */ \
+    X(vulkan, true)                                                    \
+    X(vulkan_igpu, false) /* most likely will not work well */         \
+    X(vulkan_cpu, false)  /* will work but extremely slow */
 
 class settings : public QSettings, public singleton<settings> {
     Q_OBJECT

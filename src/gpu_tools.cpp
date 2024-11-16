@@ -805,48 +805,6 @@ static void add_cuda_dev_devices(std::vector<device>& devices) {
     }
 }
 
-available_devices_result available_devices(
-    [[maybe_unused]] bool cuda, [[maybe_unused]] bool hip,
-    [[maybe_unused]] bool vulkan, [[maybe_unused]] bool vulkan_igpu,
-    [[maybe_unused]] bool openvino, [[maybe_unused]] bool openvino_gpu,
-    [[maybe_unused]] bool opencl, [[maybe_unused]] bool opencl_clover) {
-    available_devices_result result;
-
-#ifdef ARCH_X86_64
-    if (cuda) {
-        result.error = add_cuda_devices(result.devices);
-    }
-#endif
-#ifndef ARCH_ARM_32
-    if (vulkan || vulkan_igpu) {
-        uint8_t flags = scan_flags_t::none;
-        if (vulkan) flags |= scan_flags_t::vulkan_default;
-        if (vulkan_igpu) flags |= scan_flags_t::vulkan_igpu;
-        add_vulkan_devices(result.devices, flags);
-    }
-#endif
-#ifdef ARCH_X86_64
-    if (hip) {
-        add_hip_devices(result.devices);
-    }
-
-    if (openvino || openvino_gpu) {
-        uint8_t flags = scan_flags_t::none;
-        if (openvino) flags |= scan_flags_t::openvino_default;
-        if (openvino_gpu) flags |= scan_flags_t::openvino_gpu;
-        add_openvino_devices(result.devices, flags);
-    }
-
-    if (opencl || opencl_clover) {
-        uint8_t flags = scan_flags_t::none;
-        if (opencl) flags |= scan_flags_t::opencl_default;
-        if (opencl_clover) flags |= scan_flags_t::opencl_clover;
-        add_opencl_devices(result.devices, flags);
-    }
-#endif
-    return result;
-}
-
 error_t add_cuda_devices(std::vector<device>& devices) {
     LOGD("scanning for cuda devices");
 
@@ -1003,7 +961,7 @@ void add_opencl_devices(std::vector<device>& devices, uint8_t flags) {
                      << "]");
 
                 if ((type & CL_DEVICE_TYPE_GPU) == 0) {
-                    LOGD("not opencl gpu device => skipping");
+                    LOGD("opencl unsupported device => skipping");
                     continue;
                 }
 
@@ -1015,7 +973,7 @@ void add_opencl_devices(std::vector<device>& devices, uint8_t flags) {
                 }
 
                 if (!is_clover && (flags & scan_flags_t::opencl_default) == 0) {
-                    LOGD("not opencl clover device => skipping");
+                    LOGD("opencl default device => skipping");
                     continue;
                 }
 
@@ -1103,7 +1061,7 @@ void add_openvino_devices(std::vector<device>& devices, uint8_t flags) {
             }
 
             if (!is_gpu && (flags & scan_flags_t::openvino_default) == 0) {
-                LOGD("no openvino gpu device => skipping");
+                LOGD("openvino default device => skipping");
                 continue;
             }
 
@@ -1225,8 +1183,10 @@ void add_vulkan_devices(std::vector<device>& devices, uint8_t flags) {
                         VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU &&
                 prop.properties.deviceType !=
                     VkPhysicalDeviceType::
-                        VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) {
-                LOGD("not vulkan gpu device => skipping");
+                        VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU &&
+                prop.properties.deviceType !=
+                    VkPhysicalDeviceType::VK_PHYSICAL_DEVICE_TYPE_CPU) {
+                LOGD("vulkan unsupported device => skipping");
                 continue;
             }
 
@@ -1239,8 +1199,17 @@ void add_vulkan_devices(std::vector<device>& devices, uint8_t flags) {
                 continue;
             }
 
-            if (!is_igpu && (flags & scan_flags_t::vulkan_default) == 0) {
-                LOGD("no vulkan igpu device => skipping");
+            bool is_cpu = prop.properties.deviceType ==
+                          VkPhysicalDeviceType::VK_PHYSICAL_DEVICE_TYPE_CPU;
+
+            if (is_cpu && (flags & scan_flags_t::vulkan_cpu) == 0) {
+                LOGD("vulkan cpu device => skipping");
+                continue;
+            }
+
+            if (!is_igpu && !is_cpu &&
+                (flags & scan_flags_t::vulkan_default) == 0) {
+                LOGD("vulkan default device => skipping");
                 continue;
             }
 
@@ -1257,6 +1226,50 @@ void add_vulkan_devices(std::vector<device>& devices, uint8_t flags) {
         api.vkDestroyInstance(instance, nullptr);
     } catch ([[maybe_unused]] const std::runtime_error& err) {
     }
+}
+
+available_devices_result available_devices(
+    [[maybe_unused]] bool cuda, [[maybe_unused]] bool hip,
+    [[maybe_unused]] bool vulkan, [[maybe_unused]] bool vulkan_igpu,
+    [[maybe_unused]] bool vulkan_cpu, [[maybe_unused]] bool openvino,
+    [[maybe_unused]] bool openvino_gpu, [[maybe_unused]] bool opencl,
+    [[maybe_unused]] bool opencl_clover) {
+    available_devices_result result;
+
+#ifdef ARCH_X86_64
+    if (cuda) {
+        result.error = add_cuda_devices(result.devices);
+    }
+#endif
+#ifndef ARCH_ARM_32
+    if (vulkan || vulkan_igpu) {
+        uint8_t flags = scan_flags_t::none;
+        if (vulkan) flags |= scan_flags_t::vulkan_default;
+        if (vulkan_igpu) flags |= scan_flags_t::vulkan_igpu;
+        if (vulkan_cpu) flags |= scan_flags_t::vulkan_cpu;
+        add_vulkan_devices(result.devices, flags);
+    }
+#endif
+#ifdef ARCH_X86_64
+    if (hip) {
+        add_hip_devices(result.devices);
+    }
+
+    if (openvino || openvino_gpu) {
+        uint8_t flags = scan_flags_t::none;
+        if (openvino) flags |= scan_flags_t::openvino_default;
+        if (openvino_gpu) flags |= scan_flags_t::openvino_gpu;
+        add_openvino_devices(result.devices, flags);
+    }
+
+    if (opencl || opencl_clover) {
+        uint8_t flags = scan_flags_t::none;
+        if (opencl) flags |= scan_flags_t::opencl_default;
+        if (opencl_clover) flags |= scan_flags_t::opencl_clover;
+        add_opencl_devices(result.devices, flags);
+    }
+#endif
+    return result;
 }
 
 static bool has_lib(const char* name) {

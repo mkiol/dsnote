@@ -1457,6 +1457,7 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
         /*hip=*/hw_scan_hip(),
         /*vulkan=*/hw_scan_vulkan(),
         /*vulkan_igpu=*/hw_scan_vulkan_igpu(),
+        /*vulkan_cpu=*/hw_scan_vulkan_cpu(),
         /*openvino=*/hw_scan_openvino(),
         /*openvino_gpu=*/hw_scan_openvino_gpu(),
         /*opencl=*/hw_scan_opencl(),
