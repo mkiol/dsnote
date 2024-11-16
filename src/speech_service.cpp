@@ -1219,7 +1219,7 @@ static std::vector<int> whispercpp_vulkan_devices() {
     std::vector<int> devs;
 
     auto dev_strs = settings::instance()->whispercpp_gpu_devices();
-    if (dev_strs.size() > 2) {
+    if (dev_strs.size() > 1) {
         for (auto it = std::next(dev_strs.cbegin()); it != dev_strs.cend();
              ++it) {
             auto l = it->split(',');
