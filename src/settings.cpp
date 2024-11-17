@@ -1752,7 +1752,7 @@ QString settings::audio_input_device() const {
     return value(QStringLiteral("audio_input_device")).toString();
 }
 
-void settings::set_audio_input_device(QString value) {
+void settings::set_audio_input_device(const QString& value) {
     if (value != audio_input_device()) {
         setValue(QStringLiteral("audio_input_device"), value);
         emit audio_input_device_changed();
@@ -1822,7 +1822,7 @@ void settings::set_num_threads(int value) {
     }
 }
 
-#define HOTKEY_OPT(name, key)                                              \
+#define X(name, key)                                                       \
     QString settings::hotkey_##name() const {                              \
         return value(QStringLiteral("hotkey_" #name), QStringLiteral(key)) \
             .toString();                                                   \
@@ -1836,28 +1836,15 @@ void settings::set_num_threads(int value) {
     void settings::reset_hotkey_##name() {                                 \
         set_hotkey_##name(QStringLiteral(key));                            \
     }
-
-HOTKEY_OPT(start_listening, "Ctrl+Alt+Shift+L")
-HOTKEY_OPT(start_listening_active_window, "Ctrl+Alt+Shift+K")
-HOTKEY_OPT(start_listening_clipboard, "Ctrl+Alt+Shift+J")
-HOTKEY_OPT(stop_listening, "Ctrl+Alt+Shift+S")
-HOTKEY_OPT(start_reading, "Ctrl+Alt+Shift+R")
-HOTKEY_OPT(start_reading_clipboard, "Ctrl+Alt+Shift+E")
-HOTKEY_OPT(pause_resume_reading, "Ctrl+Alt+Shift+P")
-HOTKEY_OPT(cancel, "Ctrl+Alt+Shift+C")
-HOTKEY_OPT(switch_to_next_stt_model, "Ctrl+Alt+Shift+B")
-HOTKEY_OPT(switch_to_next_tts_model, "Ctrl+Alt+Shift+M")
-HOTKEY_OPT(switch_to_prev_stt_model, "Ctrl+Alt+Shift+V")
-HOTKEY_OPT(switch_to_prev_tts_model, "Ctrl+Alt+Shift+N")
-
-#undef HOTKEY_OPT
+HOTKEY_TABLE
+#undef X
 
 settings::desktop_notification_policy_t settings::desktop_notification_policy()
     const {
     return static_cast<desktop_notification_policy_t>(
         value(QStringLiteral("desktop_notification_policy"),
-              static_cast<int>(
-                  desktop_notification_policy_t::DesktopNotificationNever))
+              static_cast<int>(desktop_notification_policy_t::
+                                   DesktopNotificationWhenInacvtive))
             .toInt());
 }
 

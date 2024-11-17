@@ -142,6 +142,10 @@
           instead of typing their name, you can automatically set the key by pressing it.</li>
       <li>Keyboard shortcuts enabled for several user interface elements.
           Elements such as menu items or buttons can be controlled using the keyboard shortcuts.</li>
+      <li>New 'Actions' and global keyboard shotcut to force translation of text in STT:
+          'start-listening-translate', 'start-listening-translate-active-window', 'start-listening-translate-clipboard'.
+          The decoded text is always translated into English when the "translate" action is triggered.
+          This only works when using Whisper models.</li>
       </ul>
       <p>Flatpak:</p>
       <ul>

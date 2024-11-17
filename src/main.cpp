@@ -117,8 +117,11 @@ static cmd_options check_options(const QCoreApplication& app) {
         QStringLiteral("action"),
         QStringLiteral(
             "Invokes an <action>. Supported actions are: "
-            "start-listening, start-listening-active-window, "
-            "start-listening-clipboard, stop-listening, "
+            "start-listening, start-listening-translate, "
+            "start-listening-active-window, "
+            "start-listening-translate-active-window, "
+            "start-listening-clipboard, start-listening-translate-clipboard, "
+            "stop-listening, "
             "start-reading, start-reading-clipboard, pause-resume-reading, "
             "cancel, switch-to-next-stt-model, switch-to-prev-stt-model, "
             "switch-to-next-tts-model, switch-to-prev-tts-model, "
@@ -142,10 +145,11 @@ static cmd_options check_options(const QCoreApplication& app) {
 
     QCommandLineOption hwscanoff_opt{
         QStringLiteral("hw-scan-off"),
-        QStringLiteral("Disables scanning for CUDA, ROCm, OpenVINO and OpenCL "
-                       "compatible hardware. "
-                       "Use this option when you observing problems in "
-                       "starting the app.")};
+        QStringLiteral(
+            "Disables scanning for CUDA, ROCm, Vulkan, OpenVINO and OpenCL "
+            "compatible hardware. "
+            "Use this option when you observing problems in "
+            "starting the app.")};
     parser.addOption(hwscanoff_opt);
 
     QCommandLineOption pyscanoff_opt{
@@ -211,32 +215,19 @@ static cmd_options check_options(const QCoreApplication& app) {
 
     auto action = parser.value(action_opt);
     if (!action.isEmpty()) {
-        if (action.compare("start-listening", Qt::CaseInsensitive) != 0 &&
-            action.compare("start-listening-active-window",
-                           Qt::CaseInsensitive) != 0 &&
-            action.compare("start-listening-clipboard", Qt::CaseInsensitive) !=
-                0 &&
-            action.compare("stop-listening", Qt::CaseInsensitive) != 0 &&
-            action.compare("start-reading", Qt::CaseInsensitive) != 0 &&
-            action.compare("start-reading-clipboard", Qt::CaseInsensitive) !=
-                0 &&
-            action.compare("pause-resume-reading", Qt::CaseInsensitive) != 0 &&
-            action.compare("cancel", Qt::CaseInsensitive) != 0 &&
-            action.compare("switch-to-next-stt-model", Qt::CaseInsensitive) !=
-                0 &&
-            action.compare("switch-to-prev-stt-model", Qt::CaseInsensitive) !=
-                0 &&
-            action.compare("switch-to-next-tts-model", Qt::CaseInsensitive) !=
-                0 &&
-            action.compare("switch-to-prev-tts-model", Qt::CaseInsensitive) !=
-                0 &&
-            action.compare("set-stt-model", Qt::CaseInsensitive) != 0 &&
-            action.compare("set-tts-model", Qt::CaseInsensitive) != 0) {
+        if (true
+#define X(name, str) &&action.compare(str, Qt::CaseInsensitive) != 0
+            ACTION_TABLE
+#undef X
+        ) {
             fmt::print(
                 stderr,
                 "Invalid action. Use one option from the following: "
-                "start-listening, start-listening-active-window, "
-                "start-listening-clipboard, stop-listening, "
+                "start-listening, start-listening-translate, "
+                "start-listening-active-window, "
+                "start-listening-translate-active-window, "
+                "start-listening-clipboard, "
+                "start-listening-translate-clipboard, stop-listening, "
                 "start-reading, start-reading-clipboard, pause-resume-reading, "
                 "cancel, switch-to-next-stt-model, switch-to-prev-stt-model, "
                 "switch-to-next-tts-model, switch-to-prev-tts-model, "

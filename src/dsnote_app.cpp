@@ -194,48 +194,12 @@ QDebug operator<<(QDebug d, dsnote_app::file_import_result_t result) {
 
 QDebug operator<<(QDebug d, dsnote_app::action_t action) {
     switch (action) {
-        case dsnote_app::action_t::start_listening:
-            d << "start-listening";
-            break;
-        case dsnote_app::action_t::start_listening_active_window:
-            d << "start-listening-active-window";
-            break;
-        case dsnote_app::action_t::start_listening_clipboard:
-            d << "start-listening-clipboard";
-            break;
-        case dsnote_app::action_t::stop_listening:
-            d << "stop-listening";
-            break;
-        case dsnote_app::action_t::start_reading:
-            d << "start-reading";
-            break;
-        case dsnote_app::action_t::start_reading_clipboard:
-            d << "start-reading-clipboard";
-            break;
-        case dsnote_app::action_t::pause_resume_reading:
-            d << "pause-resume-reading";
-            break;
-        case dsnote_app::action_t::cancel:
-            d << "cancel";
-            break;
-        case dsnote_app::action_t::switch_to_next_stt_model:
-            d << "switch-to-next-stt-model";
-            break;
-        case dsnote_app::action_t::switch_to_prev_stt_model:
-            d << "switch-to-prev-stt-model";
-            break;
-        case dsnote_app::action_t::switch_to_next_tts_model:
-            d << "switch-to-next-tts-model";
-            break;
-        case dsnote_app::action_t::switch_to_prev_tts_model:
-            d << "switch-to-prev-tts-model";
-            break;
-        case dsnote_app::action_t::set_stt_model:
-            d << "set-stt-model";
-            break;
-        case dsnote_app::action_t::set_tts_model:
-            d << "set-tts-model";
-            break;
+#define X(name, str)                 \
+    case dsnote_app::action_t::name: \
+        d << str;                    \
+        break;
+        ACTION_TABLE
+#undef X
     }
 
     return d;
@@ -2158,20 +2122,35 @@ void dsnote_app::transcribe_file(const QString &file_path, int stream_index,
 
 void dsnote_app::listen() {
     m_text_destination = text_destination_t::note_add;
-    listen_internal();
+    listen_internal(stt_translate_req_t::conf);
+}
+
+void dsnote_app::listen_translate() {
+    m_text_destination = text_destination_t::note_add;
+    listen_internal(stt_translate_req_t::on);
 }
 
 void dsnote_app::listen_to_active_window() {
     m_text_destination = text_destination_t::active_window;
-    listen_internal();
+    listen_internal(stt_translate_req_t::conf);
+}
+
+void dsnote_app::listen_translate_to_active_window() {
+    m_text_destination = text_destination_t::active_window;
+    listen_internal(stt_translate_req_t::on);
 }
 
 void dsnote_app::listen_to_clipboard() {
     m_text_destination = text_destination_t::clipboard;
-    listen_internal();
+    listen_internal(stt_translate_req_t::conf);
 }
 
-void dsnote_app::listen_internal() {
+void dsnote_app::listen_translate_to_clipboard() {
+    m_text_destination = text_destination_t::clipboard;
+    listen_internal(stt_translate_req_t::on);
+}
+
+void dsnote_app::listen_internal(stt_translate_req_t translate_req) {
     auto *s = settings::instance();
 
     int new_task = 0;
@@ -2196,15 +2175,27 @@ void dsnote_app::listen_internal() {
         options.insert("sub_max_line_length", s->sub_max_line_length());
     }
 
+    auto out_lang = [&]() {
+        switch (translate_req) {
+            case stt_translate_req_t::conf:
+                return s->whisper_translate() ? QStringLiteral("en")
+                                              : QString{};
+            case stt_translate_req_t::on:
+                return QStringLiteral("en");
+            case stt_translate_req_t::off:
+                return QString{};
+        }
+        return QString{};
+    }();
+
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->stt_start_listen(
             static_cast<speech_service::speech_mode_t>(s->speech_mode()), {},
-            s->whisper_translate() ? QStringLiteral("en") : QString{}, options);
+            out_lang, options);
     } else {
         qDebug() << "[app => dbus] call SttStartListen2:" << s->speech_mode();
         new_task = m_dbus_service.SttStartListen2(
-            static_cast<int>(s->speech_mode()), {},
-            s->whisper_translate() ? QStringLiteral("en") : QString{}, options);
+            static_cast<int>(s->speech_mode()), {}, out_lang, options);
     }
 
     m_primary_task.set(new_task);
@@ -4206,43 +4197,13 @@ void dsnote_app::execute_action_name(const QString &action_name,
         return;
     }
 
-    if (action_name.compare("start-listening", Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::start_listening, extra);
-    } else if (action_name.compare("start-listening-active-window",
-                                   Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::start_listening_active_window, extra);
-    } else if (action_name.compare("start-listening-clipboard",
-                                   Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::start_listening_clipboard, extra);
-    } else if (action_name.compare("stop-listening", Qt::CaseInsensitive) ==
-               0) {
-        execute_action(action_t::stop_listening, extra);
-    } else if (action_name.compare("start-reading", Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::start_reading, extra);
-    } else if (action_name.compare("start-reading-clipboard",
-                                   Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::start_reading_clipboard, extra);
-    } else if (action_name.compare("pause-resume-reading",
-                                   Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::pause_resume_reading, extra);
-    } else if (action_name.compare("cancel", Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::cancel, extra);
-    } else if (action_name.compare("switch-to-next-stt-model",
-                                   Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::switch_to_next_stt_model, extra);
-    } else if (action_name.compare("switch-to-prev-stt-model",
-                                   Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::switch_to_prev_stt_model, extra);
-    } else if (action_name.compare("switch-to-next-tts-model",
-                                   Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::switch_to_next_tts_model, extra);
-    } else if (action_name.compare("switch-to-prev-tts-model",
-                                   Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::switch_to_prev_tts_model, extra);
-    } else if (action_name.compare("set-stt-model", Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::set_stt_model, extra);
-    } else if (action_name.compare("set-tts-model", Qt::CaseInsensitive) == 0) {
-        execute_action(action_t::set_tts_model, extra);
+    if (false) {
+#define X(name, str)                                               \
+    }                                                              \
+    else if (action_name.compare(str, Qt::CaseInsensitive) == 0) { \
+        execute_action(action_t::name, extra);
+        ACTION_TABLE
+#undef X
     } else {
         qWarning() << "invalid action:" << action_name << extra;
     }
@@ -4307,13 +4268,25 @@ void dsnote_app::execute_action(action_t action, const QString &extra) {
         case dsnote_app::action_t::start_listening:
             listen();
             break;
+        case dsnote_app::action_t::start_listening_translate:
+            listen_translate();
+            break;
         case dsnote_app::action_t::start_listening_active_window:
 #ifdef USE_X11_FEATURES
             if (settings::instance()->is_xcb()) listen_to_active_window();
 #endif
             break;
+        case dsnote_app::action_t::start_listening_translate_active_window:
+#ifdef USE_X11_FEATURES
+            if (settings::instance()->is_xcb())
+                listen_translate_to_active_window();
+#endif
+            break;
         case dsnote_app::action_t::start_listening_clipboard:
             listen_to_clipboard();
+            break;
+        case dsnote_app::action_t::start_listening_translate_clipboard:
+            listen_translate_to_clipboard();
             break;
         case dsnote_app::action_t::stop_listening:
             stop_listen();
@@ -4985,30 +4958,12 @@ void dsnote_app::register_hotkeys() {
         return;
     }
 
-    QObject::disconnect(&m_hotkeys.start_listening);
-    QObject::disconnect(&m_hotkeys.start_listening_active_window);
-    QObject::disconnect(&m_hotkeys.start_listening_clipboard);
-    QObject::disconnect(&m_hotkeys.stop_listening);
-    QObject::disconnect(&m_hotkeys.start_reading);
-    QObject::disconnect(&m_hotkeys.start_reading_clipboard);
-    QObject::disconnect(&m_hotkeys.pause_resume_reading);
-    QObject::disconnect(&m_hotkeys.cancel);
-    QObject::disconnect(&m_hotkeys.switch_to_next_stt_model);
-    QObject::disconnect(&m_hotkeys.switch_to_prev_stt_model);
-    QObject::disconnect(&m_hotkeys.switch_to_next_tts_model);
-    QObject::disconnect(&m_hotkeys.switch_to_prev_tts_model);
-    m_hotkeys.start_listening.setRegistered(false);
-    m_hotkeys.start_listening_active_window.setRegistered(false);
-    m_hotkeys.start_listening_clipboard.setRegistered(false);
-    m_hotkeys.stop_listening.setRegistered(false);
-    m_hotkeys.start_reading.setRegistered(false);
-    m_hotkeys.start_reading_clipboard.setRegistered(false);
-    m_hotkeys.pause_resume_reading.setRegistered(false);
-    m_hotkeys.cancel.setRegistered(false);
-    m_hotkeys.switch_to_next_stt_model.setRegistered(false);
-    m_hotkeys.switch_to_prev_stt_model.setRegistered(false);
-    m_hotkeys.switch_to_next_tts_model.setRegistered(false);
-    m_hotkeys.switch_to_prev_tts_model.setRegistered(false);
+#define X(name, key) QObject::disconnect(&m_hotkeys.name);
+    HOTKEY_TABLE
+#undef X
+#define X(name, key) m_hotkeys.name.setRegistered(false);
+    HOTKEY_TABLE
+#undef X
 
     if (s->hotkeys_enabled()) {
         if (!s->hotkey_start_listening().isEmpty()) {
@@ -5027,6 +4982,27 @@ void dsnote_app::register_hotkeys() {
                         execute_action(action_t::stop_listening, {});
                     } else {
                         execute_action(action_t::start_listening, {});
+                    }
+                });
+        }
+
+        if (!s->hotkey_start_listening_translate().isEmpty()) {
+            m_hotkeys.start_listening_translate.setShortcut(
+                QKeySequence{s->hotkey_start_listening_translate()}, true);
+            QObject::connect(
+                &m_hotkeys.start_listening_translate, &QHotkey::activated, this,
+                [&]() {
+                    qDebug() << "hot key activated: start-listening-translate";
+                    if (settings::instance()->use_toggle_for_hotkey() &&
+                        (service_state() ==
+                             service_state_t::StateListeningSingleSentence ||
+                         service_state() ==
+                             service_state_t::StateListeningManual ||
+                         service_state() ==
+                             service_state_t::StateListeningAuto)) {
+                        execute_action(action_t::stop_listening, {});
+                    } else {
+                        execute_action(action_t::start_listening_translate, {});
                     }
                 });
         }
@@ -5054,6 +5030,32 @@ void dsnote_app::register_hotkeys() {
                 });
         }
 
+        if (!s->hotkey_start_listening_translate_active_window().isEmpty()) {
+            m_hotkeys.start_listening_translate_active_window.setShortcut(
+                QKeySequence{
+                    s->hotkey_start_listening_translate_active_window()},
+                true);
+            QObject::connect(
+                &m_hotkeys.start_listening_translate_active_window,
+                &QHotkey::activated, this, [&]() {
+                    qDebug() << "hot key activated: "
+                                "start-listening-translate-active-window";
+                    if (settings::instance()->use_toggle_for_hotkey() &&
+                        (service_state() ==
+                             service_state_t::StateListeningSingleSentence ||
+                         service_state() ==
+                             service_state_t::StateListeningManual ||
+                         service_state() ==
+                             service_state_t::StateListeningAuto)) {
+                        execute_action(action_t::stop_listening, {});
+                    } else {
+                        execute_action(
+                            action_t::start_listening_translate_active_window,
+                            {});
+                    }
+                });
+        }
+
         if (!s->hotkey_start_listening_clipboard().isEmpty()) {
             m_hotkeys.start_listening_clipboard.setShortcut(
                 QKeySequence{s->hotkey_start_listening_clipboard()}, true);
@@ -5071,6 +5073,30 @@ void dsnote_app::register_hotkeys() {
                         execute_action(action_t::stop_listening, {});
                     } else {
                         execute_action(action_t::start_listening_clipboard, {});
+                    }
+                });
+        }
+
+        if (!s->hotkey_start_listening_translate_clipboard().isEmpty()) {
+            m_hotkeys.start_listening_translate_clipboard.setShortcut(
+                QKeySequence{s->hotkey_start_listening_translate_clipboard()},
+                true);
+            QObject::connect(
+                &m_hotkeys.start_listening_translate_clipboard,
+                &QHotkey::activated, this, [&]() {
+                    qDebug() << "hot key activated: "
+                                "start-listening-translate-clipboard";
+                    if (settings::instance()->use_toggle_for_hotkey() &&
+                        (service_state() ==
+                             service_state_t::StateListeningSingleSentence ||
+                         service_state() ==
+                             service_state_t::StateListeningManual ||
+                         service_state() ==
+                             service_state_t::StateListeningAuto)) {
+                        execute_action(action_t::stop_listening, {});
+                    } else {
+                        execute_action(
+                            action_t::start_listening_translate_clipboard, {});
                     }
                 });
         }

@@ -1077,6 +1077,18 @@ DialogPage {
 
             ShortcutForm {
                 indends: 1
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
+                label: qsTr("Start listening, always translate")
+                text: _settings.hotkey_start_listening_translate
+                onTextChanged: _settings.hotkey_start_listening_translate = text
+                onResetClicked: {
+                    _settings.reset_hotkey_start_listening_translate()
+                    text = _settings.hotkey_start_listening_translate
+                }
+            }
+
+            ShortcutForm {
+                indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts && app.feature_text_active_window
                 label: qsTr("Start listening, text to active window")
                 text: _settings.hotkey_start_listening_active_window
@@ -1089,6 +1101,18 @@ DialogPage {
 
             ShortcutForm {
                 indends: 1
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts && app.feature_text_active_window
+                label: qsTr("Start listening, always translate, text to active window")
+                text: _settings.hotkey_start_listening_translate_active_window
+                onTextChanged: _settings.hotkey_start_listening_translate_active_window = text
+                onResetClicked: {
+                    _settings.reset_hotkey_start_listening_translate_active_window()
+                    text = _settings.hotkey_start_listening_translate_active_window
+                }
+            }
+
+            ShortcutForm {
+                indends: 1
                 visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
                 label: qsTr("Start listening, text to clipboard")
                 text: _settings.hotkey_start_listening_clipboard
@@ -1096,6 +1120,18 @@ DialogPage {
                 onResetClicked: {
                     _settings.reset_hotkey_start_listening_clipboard()
                     text = _settings.hotkey_start_listening_clipboard
+                }
+            }
+
+            ShortcutForm {
+                indends: 1
+                visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
+                label: qsTr("Start listening, always translate, text to clipboard")
+                text: _settings.hotkey_start_listening_translate_clipboard
+                onTextChanged: _settings.hotkey_start_listening_translate_clipboard = text
+                onResetClicked: {
+                    _settings.reset_hotkey_start_listening_translate_clipboard()
+                    text = _settings.hotkey_start_listening_translate_clipboard
                 }
             }
 
@@ -1230,8 +1266,11 @@ DialogPage {
                       qsTr("The following actions are currently supported:") +
                       "</p><ul>" +
                       "<li><i>start-listening</i> - " + qsTr("Starts listening.") + "</li>" +
+                      "<li><i>start-listening-translate</i> - " + qsTr("Starts listening and always translate decoded text.") + "</li>" +
                       "<li><i>start-listening-active-window</i> (X11) - " + qsTr("Starts listening. The decoded text is inserted into the active window.") + "</li>" +
+                      "<li><i>start-listening-translate-active-window</i> (X11) - " + qsTr("Starts listening. The decoded text is translated and inserted into the active window.") + "</li>" +
                       "<li><i>start-listening-clipboard</i> - " + qsTr("Starts listening. The decoded text is copied to the clipboard.") + "</li>" +
+                      "<li><i>start-listening-translate-clipboard</i> - " + qsTr("Starts listening. The decoded text is translated and copied to the clipboard.") + "</li>" +
                       "<li><i>stop-listening</i> - " + qsTr("Stops listening. The already captured voice is decoded into text.") + "</li>" +
                       "<li><i>start-reading</i> - " + qsTr("Starts reading.") + "</li>" +
                       "<li><i>start-reading-clipboard</i> (X11) - " + qsTr("Starts reading text from the clipboard.") + "</li>" +

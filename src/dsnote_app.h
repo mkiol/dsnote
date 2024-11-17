@@ -35,6 +35,28 @@
 #include "recorder.hpp"
 #include "settings.h"
 
+// name, name_str
+#define ACTION_TABLE                                                  \
+    X(start_listening, "start-listening")                             \
+    X(start_listening_translate, "start-listening-translate")         \
+    X(start_listening_active_window, "start-listening-active-window") \
+    X(start_listening_translate_active_window,                        \
+      "start-listening-translate-active-window")                      \
+    X(start_listening_clipboard, "start-listening-clipboard")         \
+    X(start_listening_translate_clipboard,                            \
+      "start-listening-translate-clipboard")                          \
+    X(stop_listening, "stop-listening")                               \
+    X(start_reading, "start-reading")                                 \
+    X(start_reading_clipboard, "start-reading-clipboard")             \
+    X(pause_resume_reading, "pause-resume-reading")                   \
+    X(cancel, "cancel")                                               \
+    X(switch_to_next_stt_model, "switch-to-next-stt-model")           \
+    X(switch_to_next_tts_model, "switch-to-next-tts-model")           \
+    X(switch_to_prev_stt_model, "switch-to-prev-stt-model")           \
+    X(switch_to_prev_tts_model, "switch-to-prev-tts-model")           \
+    X(set_stt_model, "set-stt-model")                                 \
+    X(set_tts_model, "set-tts-model")
+
 class dsnote_app : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString intermediate_text READ intermediate_text NOTIFY
@@ -334,8 +356,11 @@ class dsnote_app : public QObject {
                                  bool replace);
     Q_INVOKABLE void cancel();
     Q_INVOKABLE void listen();
+    Q_INVOKABLE void listen_translate();
     Q_INVOKABLE void listen_to_active_window();
+    Q_INVOKABLE void listen_translate_to_active_window();
     Q_INVOKABLE void listen_to_clipboard();
+    Q_INVOKABLE void listen_translate_to_clipboard();
     Q_INVOKABLE void stop_listen();
     Q_INVOKABLE void play_speech();
     Q_INVOKABLE void play_speech_selected(int start, int end);
@@ -478,21 +503,10 @@ class dsnote_app : public QObject {
     void last_cursor_position_changed();
 
    private:
-    enum class action_t {
-        start_listening,
-        start_listening_active_window,
-        start_listening_clipboard,
-        stop_listening,
-        start_reading,
-        start_reading_clipboard,
-        pause_resume_reading,
-        cancel,
-        switch_to_next_stt_model,
-        switch_to_prev_stt_model,
-        switch_to_next_tts_model,
-        switch_to_prev_tts_model,
-        set_stt_model,
-        set_tts_model
+    enum class action_t : uint8_t {
+#define X(name, str) name,
+        ACTION_TABLE
+#undef X
     };
     friend QDebug operator<<(QDebug d, action_t type);
 
@@ -546,6 +560,8 @@ class dsnote_app : public QObject {
     };
 
     enum class mc_state_t { idle, extracting_subtitles };
+
+    enum class stt_translate_req_t { conf, on, off };
 
     struct dest_file_info_t {
         QString input_path;
@@ -624,18 +640,9 @@ class dsnote_app : public QObject {
     int m_last_cursor_position = -1;
 #ifdef USE_X11_FEATURES
     struct hotkeys_t {
-        QHotkey start_listening;
-        QHotkey start_listening_active_window;
-        QHotkey start_listening_clipboard;
-        QHotkey stop_listening;
-        QHotkey start_reading;
-        QHotkey start_reading_clipboard;
-        QHotkey pause_resume_reading;
-        QHotkey cancel;
-        QHotkey switch_to_next_stt_model;
-        QHotkey switch_to_prev_stt_model;
-        QHotkey switch_to_next_tts_model;
-        QHotkey switch_to_prev_tts_model;
+#define X(name, key) QHotkey name;
+        HOTKEY_TABLE
+#undef X
     };
 
     hotkeys_t m_hotkeys;
@@ -795,7 +802,7 @@ class dsnote_app : public QObject {
     bool can_undo_or_redu_note() const;
     QString translated_text() const;
     void set_translated_text(const QString text);
-    void listen_internal();
+    void listen_internal(stt_translate_req_t translate_req);
     void speech_to_file_internal(const QString &text, const QString &model_id,
                                  const QString &dest_file,
                                  const QString &title_tag, const QString &track,

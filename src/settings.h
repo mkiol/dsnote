@@ -21,7 +21,7 @@
 #include "qdebug.h"
 #include "singleton.h"
 
-// gpi_api_name, default_value
+// name, default value
 #define GPU_SCAN_TABLE                                                 \
     X(cuda, true)                                                      \
     X(hip, true)                                                       \
@@ -33,6 +33,24 @@
     X(vulkan, true)                                                    \
     X(vulkan_igpu, false) /* most likely will not work well */         \
     X(vulkan_cpu, false)  /* will work but extremely slow */
+
+// name, default key
+#define HOTKEY_TABLE                                               \
+    X(start_listening, "Ctrl+Alt+Shift+L")                         \
+    X(start_listening_translate, "Ctrl+Alt+Shift+/")               \
+    X(start_listening_active_window, "Ctrl+Alt+Shift+K")           \
+    X(start_listening_translate_active_window, "Ctrl+Alt+Shift+.") \
+    X(start_listening_clipboard, "Ctrl+Alt+Shift+J")               \
+    X(start_listening_translate_clipboard, "Ctrl+Alt+Shift+,")     \
+    X(stop_listening, "Ctrl+Alt+Shift+S")                          \
+    X(start_reading, "Ctrl+Alt+Shift+R")                           \
+    X(start_reading_clipboard, "Ctrl+Alt+Shift+E")                 \
+    X(pause_resume_reading, "Ctrl+Alt+Shift+P")                    \
+    X(cancel, "Ctrl+Alt+Shift+C")                                  \
+    X(switch_to_next_stt_model, "Ctrl+Alt+Shift+B")                \
+    X(switch_to_next_tts_model, "Ctrl+Alt+Shift+M")                \
+    X(switch_to_prev_stt_model, "Ctrl+Alt+Shift+V")                \
+    X(switch_to_prev_tts_model, "Ctrl+Alt+Shift+N")
 
 class settings : public QSettings, public singleton<settings> {
     Q_OBJECT
@@ -121,24 +139,11 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(bool hotkeys_enabled READ hotkeys_enabled WRITE
                    set_hotkeys_enabled NOTIFY hotkeys_enabled_changed)
 
-#define HOTKEY_OPT(name)                                      \
+#define X(name, keys)                                         \
     Q_PROPERTY(QString hotkey_##name READ hotkey_##name WRITE \
                    set_hotkey_##name NOTIFY hotkeys_changed)
-
-    HOTKEY_OPT(start_listening)
-    HOTKEY_OPT(start_listening_active_window)
-    HOTKEY_OPT(start_listening_clipboard)
-    HOTKEY_OPT(stop_listening)
-    HOTKEY_OPT(start_reading)
-    HOTKEY_OPT(start_reading_clipboard)
-    HOTKEY_OPT(pause_resume_reading)
-    HOTKEY_OPT(cancel)
-    HOTKEY_OPT(switch_to_next_stt_model)
-    HOTKEY_OPT(switch_to_next_tts_model)
-    HOTKEY_OPT(switch_to_prev_stt_model)
-    HOTKEY_OPT(switch_to_prev_tts_model)
-
-#undef HOTKEY_OPT
+    HOTKEY_TABLE
+#undef X
 
     Q_PROPERTY(
         bool use_toggle_for_hotkey READ use_toggle_for_hotkey WRITE
@@ -596,25 +601,12 @@ class settings : public QSettings, public singleton<settings> {
     bool hotkeys_enabled() const;
     void set_hotkeys_enabled(bool value);
 
-#define HOTKEY_OPT(name)                          \
+#define X(name, keys)                             \
     QString hotkey_##name() const;                \
     void set_hotkey_##name(const QString &value); \
     Q_INVOKABLE void reset_hotkey_##name();
-
-    HOTKEY_OPT(start_listening)
-    HOTKEY_OPT(start_listening_active_window)
-    HOTKEY_OPT(start_listening_clipboard)
-    HOTKEY_OPT(stop_listening)
-    HOTKEY_OPT(start_reading)
-    HOTKEY_OPT(start_reading_clipboard)
-    HOTKEY_OPT(pause_resume_reading)
-    HOTKEY_OPT(cancel)
-    HOTKEY_OPT(switch_to_next_stt_model)
-    HOTKEY_OPT(switch_to_next_tts_model)
-    HOTKEY_OPT(switch_to_prev_stt_model)
-    HOTKEY_OPT(switch_to_prev_tts_model)
-
-#undef HOTKEY_OPT
+    HOTKEY_TABLE
+#undef X
 
     void set_use_toggle_for_hotkey(bool value);
     bool use_toggle_for_hotkey() const;
@@ -756,7 +748,7 @@ class settings : public QSettings, public singleton<settings> {
     QStringList enabled_models();
     void set_enabled_models(const QStringList &value);
     QString audio_input_device() const;
-    void set_audio_input_device(QString value);
+    void set_audio_input_device(const QString &value);
     bool py_feature_scan() const;
     void set_py_feature_scan(bool value);
     int num_threads() const;

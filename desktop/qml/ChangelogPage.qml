@@ -60,12 +60,16 @@ DialogPage {
         <ul>
         <li>Option to scan special keystrokes when setting keyboard shortcuts (X11 only).
             If you want to use special keys as shortcuts (so-called multimedia keys),
-            instead of typing their name, you can automatically set the key by pressing it.</li>
+            instead of typing their names, you can automatically set the key by pressing it.</li>
         <li>Keyboard shortcuts enabled for several user interface elements.
             Elements such as menu items or buttons can be controlled using the keyboard shortcuts.
-            Examples: Switch to Notepad (Ctrl+N), Switch to Translator (Ctrl+T), Open <i>Languages</i> (Ctrl+L),
+            Examples: Switch to Notepad (Ctrl+N), Switch to Translator (Ctrl+T), Open Languages (Ctrl+L),
             Read (Ctrl+Alt+Shift+R), Listen (Ctrl+Alt+Shift+L), Stop (Ctrl+Alt+Shift+S),
             Cancel (Ctrl+Alt+Shift+C), Pause (Ctrl+Alt+Shift+P) and more...</li>
+        <li>New <i>Actions</i> and global keyboard shotcut to force translation of text in STT:
+            <i>start-listening-translate</i>, <i>start-listening-translate-active-window</i>, <i>start-listening-translate-clipboard</i>.
+            The decoded text is always translated into English when the \"translate\" action is triggered.
+            This only works when using Whisper models.</li>
         </ul>
         <p>Flatpak</p>
         <ul>
