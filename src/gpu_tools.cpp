@@ -1242,7 +1242,7 @@ available_devices_result available_devices(
     }
 #endif
 #ifndef ARCH_ARM_32
-    if (vulkan || vulkan_igpu) {
+    if (vulkan || vulkan_igpu || vulkan_cpu) {
         uint8_t flags = scan_flags_t::none;
         if (vulkan) flags |= scan_flags_t::vulkan_default;
         if (vulkan_igpu) flags |= scan_flags_t::vulkan_igpu;

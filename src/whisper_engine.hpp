@@ -353,7 +353,7 @@ class whisper_engine : public stt_engine {
     void start_processing_impl() override;
     bool use_openvino() const;
     bool use_gpu() const;
-    void set_visible_devices() const;
+    void set_visible_devices();
 };
 
 #endif  // WHISPER_ENGINE_H

@@ -74,13 +74,28 @@ bool whisper_engine::available() {
                        [](const auto& lib) { return try_open_lib(lib); });
 }
 
-void whisper_engine::set_visible_devices() const {
+void whisper_engine::set_visible_devices() {
     if (m_config.use_gpu && m_config.gpu_device.api == gpu_api_t::vulkan &&
         !m_config.available_devices.empty()) {
         auto devs_str =
             fmt::format("{}", fmt::join(m_config.available_devices, ","));
         LOGD("setting GGML_VK_VISIBLE_DEVICES=" << devs_str);
         setenv("GGML_VK_VISIBLE_DEVICES", devs_str.c_str(), 1);
+
+        // update dev-id because dev-id in whisper.cpp is an index of device
+        // listed in GGML_VK_VISIBLE_DEVICES, not an index of device in vulkan
+        // enumeratePhysicalDevices array
+        auto dev_it = std::find(m_config.available_devices.cbegin(),
+                                m_config.available_devices.cend(),
+                                m_config.gpu_device.id);
+        if (dev_it != m_config.available_devices.cend()) {
+            auto new_id = static_cast<int>(
+                std::distance(m_config.available_devices.cbegin(), dev_it));
+            if (new_id != m_config.gpu_device.id)
+                LOGD("changing vulkan dev id: " << m_config.gpu_device.id
+                                                << " => " << new_id);
+            m_config.gpu_device.id = new_id;
+        }
     } else {
         unsetenv("GGML_VK_VISIBLE_DEVICES");
     }
