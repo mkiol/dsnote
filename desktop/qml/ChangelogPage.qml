@@ -27,12 +27,14 @@ DialogPage {
             When the <i>Replace an existing note</i> option is set, whenever new text is added, it will replace the existing note.</li>
         <li>Status indication in the system tray icon.
             When using the system tray icon, statuses such as processing, listening, etc. are presented with an animated tray icon.</li>
+        <li>Models grouped by type in model browser.
+            To improve usability, instead of a list containing models of all types, models are grouped by type in separate tabs.</li>
         </ul>
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>
         <li>Support for <i>Vulkan</i> GPU acceleration in <i>WhisperCpp</i>.
             Vulkan acceleration enables much faster STT decoding with Intel, AMD or NVIDIA graphics cards.
-            With Vulkan, decoding is quicker than with OpenVINO, OpenCL and ROCm, but still slightly slower compared to CUDA.
+            With Vulkan, decoding is quicker than with OpenVINO, OpenCL and ROCm, but still may be slightly slower compared to CUDA.
             The biggest advantage of Vulkan is that you can use it without installing any GPU acceleration add-ons.
             As a reminder, GPU acceleration is not enabled by default. Use the option in <i>Settings</i> to turn it on.</li>
         <li>New <i>Whisper Large Turbo</i> model for both <i>WhisperCpp</i> and <i>FasterWhisper</i>.
@@ -59,6 +61,11 @@ DialogPage {
         <li>Option to scan special keystrokes when setting keyboard shortcuts (X11 only).
             If you want to use special keys as shortcuts (so-called multimedia keys),
             instead of typing their name, you can automatically set the key by pressing it.</li>
+        <li>Keyboard shortcuts enabled for several user interface elements.
+            Elements such as menu items or buttons can be controlled using the keyboard shortcuts.
+            Examples: Switch to Notepad (Ctrl+N), Switch to Translator (Ctrl+T), Open <i>Languages</i> (Ctrl+L),
+            Read (Ctrl+Alt+Shift+R), Listen (Ctrl+Alt+Shift+L), Stop (Ctrl+Alt+Shift+S),
+            Cancel (Ctrl+Alt+Shift+C), Pause (Ctrl+Alt+Shift+P) and more...</li>
         </ul>
         <p>Flatpak</p>
         <ul>

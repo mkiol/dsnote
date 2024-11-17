@@ -144,6 +144,7 @@ ColumnLayout {
                     _settings.whisper_translate = !_settings.whisper_translate
                 }
             }
+            buttonToolTip: qsTr("Listen") + " (Ctrl+Alt+Shift+L)"
             button {
                 onClicked: {
                     if (_settings.speech_mode !== Settings.SpeechManual &&
@@ -234,6 +235,7 @@ ColumnLayout {
                 }
                 onActivated: _settings.speech_speed = index + 1
             }
+            buttonToolTip: qsTr("Read") + " (Ctrl+Alt+Shift+R)"
             button {
                 action: Action {
                     enabled: listenReadCombos.second.enabled &&

@@ -37,7 +37,7 @@ ToolBar {
                         display: AbstractButton.IconOnly
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Open Menu")
+                        ToolTip.text: qsTr("Open Menu") + " (F10)"
                         hoverEnabled: true
 
                         action: Action {
@@ -100,6 +100,11 @@ ToolBar {
                             shortcut: "Ctrl+F"
                             onTriggered: fileMenu.open()
                         }
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("File") + " (Ctrl+F)"
+                        hoverEnabled: true
 
                         Menu {
                             id: fileMenu
@@ -168,7 +173,7 @@ ToolBar {
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Set languages and download models.")
+                        ToolTip.text: qsTr("Languages") + " (Ctrl+L)"
                         hoverEnabled: true
                     }
 
@@ -234,7 +239,7 @@ ToolBar {
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Voice samples are used in speech synthesis with voice cloning.")
+                        ToolTip.text: qsTr("Voice samples") + " (Ctrl+V)"
                         hoverEnabled: true
 
                         Dot {
@@ -288,6 +293,11 @@ ToolBar {
                                 checked = true
                             }
                         }
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Notepad") + " (Ctrl+N)"
+                        hoverEnabled: true
                     }
 
                     TabButton {
@@ -300,6 +310,11 @@ ToolBar {
                                 checked = true
                             }
                         }
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Translator") + " (Ctrl+T)"
+                        hoverEnabled: true
                     }
                 }
 

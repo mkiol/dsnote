@@ -217,8 +217,8 @@ RowLayout {
 
                     ToolTip.visible: hovered
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.text: app.task_state === DsnoteApp.TaskStateSpeechPaused ?
-                                      qsTr("Resume reading") : qsTr("Pause reading")
+                    ToolTip.text: (app.task_state === DsnoteApp.TaskStateSpeechPaused ?
+                                      qsTr("Resume reading") : qsTr("Pause reading")) + " (Ctrl+Alt+Shift+P)"
                     hoverEnabled: true
 
                     action: Action {
@@ -254,7 +254,7 @@ RowLayout {
 
                     ToolTip.visible: hovered
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.text: qsTr("Stops listening. The already captured voice is decoded into text.")
+                    ToolTip.text: qsTr("Stops listening. The already captured voice is decoded into text.") + " (Ctrl+Alt+Shift+S)"
                     hoverEnabled: true
 
                     action: Action {
@@ -266,7 +266,7 @@ RowLayout {
                                   app.state === DsnoteApp.StateListeningAuto)
                         icon.name: "media-playback-stop-symbolic"
                         text: qsTr("Stop")
-                        shortcut: "Ctrl+Alt+Shift+P"
+                        shortcut: "Ctrl+Alt+Shift+S"
                         onTriggered: app.stop_listen()
                     }
                 }
@@ -277,6 +277,11 @@ RowLayout {
                     Layout.fillWidth: root.verticalMode
                     Layout.alignment: Qt.AlignBottom
                     Layout.preferredHeight: _icon.implicitHeight
+
+                    ToolTip.visible: hovered
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.text: qsTr("Cancel") + " (Ctrl+Alt+Shift+C)"
+                    hoverEnabled: true
 
                     action: Action {
                         icon.name: "action-unavailable-symbolic"

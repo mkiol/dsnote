@@ -109,6 +109,8 @@
           When the 'Replace an existing note' option is set, whenever new text is added, it will replace the existing note.</li>
       <li>Status indication in the system tray icon.
           When using the system tray icon, statuses such as processing, listening, etc. are presented with an animated tray icon.</li>
+      <li>Models grouped by type in model browser.
+          To improve usability, instead of a list containing models of all types, models are grouped by type in separate tabs.</li>
       </ul>
       <p>Speech to Text:</p>
       <ul>
@@ -138,6 +140,8 @@
       <li>Option to scan special keystrokes when setting keyboard shortcuts (X11 only).
           If you want to use special keys as shortcuts (so-called multimedia keys),
           instead of typing their name, you can automatically set the key by pressing it.</li>
+      <li>Keyboard shortcuts enabled for several user interface elements.
+          Elements such as menu items or buttons can be controlled using the keyboard shortcuts.</li>
       </ul>
       <p>Flatpak:</p>
       <ul>

@@ -224,7 +224,6 @@ ColumnLayout {
                                      app.note.length !== 0 &&
                                      (!app.tts_for_in_mnt_ref_voice_needed || app.available_tts_ref_voices.length !== 0)
                             text: qsTr("Read")
-                            shortcut: "Ctrl+Alt+Shift+R"
                             onTriggered: app.play_speech_translator(false)
                         }
                     }
@@ -239,16 +238,17 @@ ColumnLayout {
             Button {
                 text: qsTr("Translate")
                 display: grid.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
-                icon.name: grid.verticalMode ? "go-down-symbolic" : "go-next-symbolic"
                 Layout.alignment: Qt.AlignCenter
-                enabled: app.mnt_configured && app.state === DsnoteApp.StateIdle && !_settings.translate_when_typing && app.note.length !== 0
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Translate")
+                ToolTip.text: qsTr("Translate") + " (Ctrl+Alt+Shift+T)"
                 hoverEnabled: true
-
-                onClicked: {
-                    app.translate()
+                action: Action {
+                    enabled: app.mnt_configured && app.state === DsnoteApp.StateIdle && !_settings.translate_when_typing && app.note.length !== 0
+                    icon.name: grid.verticalMode ? "go-down-symbolic" : "go-next-symbolic"
+                    text: qsTr("Translate")
+                    shortcut: "Ctrl+Alt+Shift+T"
+                    onTriggered: app.translate()
                 }
             }
 
@@ -257,18 +257,18 @@ ColumnLayout {
             }
 
             Button {
-                text: qsTr("Switch languages")
                 display: AbstractButton.IconOnly
-                icon.name: "media-playlist-repeat-symbolic"
                 Layout.alignment: Qt.AlignCenter
-                enabled: app.mnt_configured && app.state === DsnoteApp.StateIdle
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Replace the note with translated text and switch languages.")
+                ToolTip.text: qsTr("Replace the note with translated text and switch languages.") + " (Ctrl+Alt+Shift+O)"
                 hoverEnabled: true
-
-                onClicked: {
-                    app.switch_translated_text()
+                action: Action {
+                    enabled: app.mnt_configured && app.state === DsnoteApp.StateIdle
+                    icon.name: "media-playlist-repeat-symbolic"
+                    text: qsTr("Switch languages")
+                    shortcut: "Ctrl+Alt+Shift+O"
+                    onTriggered: app.switch_translated_text()
                 }
             }
 
@@ -396,6 +396,7 @@ ColumnLayout {
                         leftPadding: grid.verticalMode || !mntOutCombo.verticalMode ?
                                          appWin.padding : 0
                     }
+                    buttonToolTip: qsTr("Read") + " (Ctrl+Alt+Shift+R)"
                     button {
                         action: Action {
                             enabled: mntOutCombo.second.enabled &&
@@ -404,7 +405,7 @@ ColumnLayout {
                                      app.state !== DsnoteApp.StateTranslating &&
                                      (!app.tts_for_out_mnt_ref_voice_needed || app.available_tts_ref_voices.length !== 0)
                             text: qsTr("Read")
-                            shortcut: "Ctrl+Alt+Shift+T"
+                            shortcut: "Ctrl+Alt+Shift+R"
                             onTriggered: app.play_speech_translator(true)
                         }
                     }
