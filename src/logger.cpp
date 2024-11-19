@@ -118,11 +118,11 @@ Logger::Message::~Message() {
             *Logger::m_file << line;
             Logger::m_file->flush();
         } else {
-            fmt::print(stderr, line);
+            fmt::print(stderr, "{}", line);
             fflush(stderr);
         }
     } catch (const std::runtime_error &e) {
         fmt::print(stderr, "logger error: {}\n", e.what());
-        fmt::print(stderr, "{}\n", str);
+        fmt::print(stderr, "logger str: {}\n", str);
     }
 }
