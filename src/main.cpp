@@ -54,6 +54,7 @@
 #include "settings.h"
 #include "speech_config.h"
 #include "speech_service.h"
+#include "text_tools.hpp"
 
 static void exit_program() {
     qDebug() << "exiting";
@@ -81,7 +82,7 @@ struct cmd_options {
     bool reset_models = false;
     bool start_in_tray = false;
     QString action;
-    QString id;
+    QString extra;
     QStringList files;
     QString log_file;
 };
@@ -122,7 +123,8 @@ static cmd_options check_options(const QCoreApplication& app) {
             "start-listening-translate-active-window, "
             "start-listening-clipboard, start-listening-translate-clipboard, "
             "stop-listening, "
-            "start-reading, start-reading-clipboard, pause-resume-reading, "
+            "start-reading, start-reading-clipboard, start-reading-text, "
+            "pause-resume-reading, "
             "cancel, switch-to-next-stt-model, switch-to-prev-stt-model, "
             "switch-to-next-tts-model, switch-to-prev-tts-model, "
             "set-stt-model, set-tts-model."),
@@ -131,10 +133,19 @@ static cmd_options check_options(const QCoreApplication& app) {
 
     QCommandLineOption id_opt{
         QStringLiteral("id"),
-        QStringLiteral("Language or model id. Used together with set-stt-model "
-                       "or set-tts-model action."),
+        QStringLiteral(
+            "Language or model id. Used together with "
+            "start-listening-clipboard, start-reading-text, set-stt-model "
+            "or set-tts-model action."),
         QStringLiteral("id")};
     parser.addOption(id_opt);
+
+    QCommandLineOption text_opt{
+        QStringLiteral("text"),
+        QStringLiteral("Text to read. Used together with "
+                       "start-reading-text."),
+        QStringLiteral("text")};
+    parser.addOption(text_opt);
 
     QCommandLineOption gen_checksum_opt{
         QStringLiteral("gen-checksums"),
@@ -228,20 +239,45 @@ static cmd_options check_options(const QCoreApplication& app) {
                 "start-listening-translate-active-window, "
                 "start-listening-clipboard, "
                 "start-listening-translate-clipboard, stop-listening, "
-                "start-reading, start-reading-clipboard, pause-resume-reading, "
+                "start-reading, start-reading-clipboard, start-reading-text, "
+                "pause-resume-reading, "
                 "cancel, switch-to-next-stt-model, switch-to-prev-stt-model, "
                 "switch-to-next-tts-model, switch-to-prev-tts-model, "
                 "set-stt-model, set-tts-model.\n");
             options.valid = false;
         } else {
+            auto id = parser.value(id_opt);
+            bool id_ok =
+                !id.isEmpty() && text_tools::valid_model_id(id.toStdString());
+            auto text = parser.value(text_opt);
+
             if (action.compare("set-stt-model", Qt::CaseInsensitive) == 0 ||
                 action.compare("set-tts-model", Qt::CaseInsensitive) == 0) {
-                auto id = parser.value(id_opt);
-                if (id.isEmpty()) {
-                    fmt::print(stderr, "Missing language or model id.\n");
+                if (!id_ok) {
+                    fmt::print(stderr,
+                               "Missing or invalid language or model id (use "
+                               "option --{}).\n",
+                               id_opt.valueName().toStdString());
                     options.valid = false;
                 } else {
-                    options.id = std::move(id);
+                    options.extra = QStringLiteral("{%1}").arg(id);
+                }
+            } else if (action.compare("start-reading-text",
+                                      Qt::CaseInsensitive) == 0) {
+                if (text.isEmpty()) {
+                    fmt::print(stderr,
+                               "Missing text to read (use option --{}).\n",
+                               text_opt.valueName().toStdString());
+                    options.valid = false;
+                } else if (!id_ok) {
+                    options.extra = std::move(text);
+                } else {
+                    options.extra = QStringLiteral("{%1}%2").arg(id, text);
+                }
+            } else if (action.compare("start-reading-clipboard",
+                                      Qt::CaseInsensitive) == 0) {
+                if (id_ok) {
+                    options.extra = QStringLiteral("{%1}").arg(id);
                 }
             }
 
@@ -381,7 +417,8 @@ static void start_app(const cmd_options& options, app_server& dbus_app_server) {
                                 options.files);
     context->setContextProperty(QStringLiteral("_requested_action"),
                                 options.action);
-    context->setContextProperty(QStringLiteral("_requested_extra"), options.id);
+    context->setContextProperty(QStringLiteral("_requested_extra"),
+                                options.extra);
     context->setContextProperty(QStringLiteral("_start_in_tray"),
                                 options.start_in_tray);
     context->setContextProperty(QStringLiteral("_app_server"),

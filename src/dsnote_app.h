@@ -48,6 +48,7 @@
     X(stop_listening, "stop-listening")                               \
     X(start_reading, "start-reading")                                 \
     X(start_reading_clipboard, "start-reading-clipboard")             \
+    X(start_reading_text, "start-reading-text")                       \
     X(pause_resume_reading, "pause-resume-reading")                   \
     X(cancel, "cancel")                                               \
     X(switch_to_next_stt_model, "switch-to-next-stt-model")           \
@@ -364,7 +365,8 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void stop_listen();
     Q_INVOKABLE void play_speech();
     Q_INVOKABLE void play_speech_selected(int start, int end);
-    Q_INVOKABLE void play_speech_from_clipboard();
+    Q_INVOKABLE void play_speech_from_text(const QString &text,
+                                           const QString &model_id);
     Q_INVOKABLE void play_speech_translator(bool transtalated);
     Q_INVOKABLE void play_speech_translator_selected(int start, int end,
                                                      bool transtalated);

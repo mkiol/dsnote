@@ -1274,6 +1274,7 @@ DialogPage {
                       "<li><i>stop-listening</i> - " + qsTr("Stops listening. The already captured voice is decoded into text.") + "</li>" +
                       "<li><i>start-reading</i> - " + qsTr("Starts reading.") + "</li>" +
                       "<li><i>start-reading-clipboard</i> (X11) - " + qsTr("Starts reading text from the clipboard.") + "</li>" +
+                      "<li><i>start-reading-text</i> (X11) - " + qsTr("Starts reading text from command-line option --text.") + "</li>" +
                       "<li><i>pause-resume-reading</i> - " + qsTr("Pauses or resumes reading.") + "</li>" +
                       "<li><i>cancel</i> - " + qsTr("Cancels any of the above operations.") + "</li>" +
                       "<li><i>switch-to-next-stt-model</i> - " + qsTr("Switches to next STT model.") + "</li>" +

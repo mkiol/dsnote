@@ -58,8 +58,8 @@ DialogPage {
         </ul>
         <p>" + qsTr("Accessibility") + ":</p>
         <ul>
-        <li>Option to scan special keystrokes when setting keyboard shortcuts (X11 only).
-            If you want to use special keys as shortcuts (so-called multimedia keys),
+        <li>Option to scan special key strokes when setting keyboard shortcuts (X11 only).
+            If you want to use special keys as shortcuts (so-called \"multimedia keys\"),
             instead of typing their names, you can automatically set the key by pressing it.</li>
         <li>Keyboard shortcuts enabled for several user interface elements.
             Elements such as menu items or buttons can be controlled using the keyboard shortcuts.
@@ -70,6 +70,8 @@ DialogPage {
             <i>start-listening-translate</i>, <i>start-listening-translate-active-window</i>, <i>start-listening-translate-clipboard</i>.
             The decoded text is always translated into English when the \"translate\" action is triggered.
             This only works when using Whisper models.</li>
+        <li>New <i>Action</i> to read text from command-line option: <i>start-reading-text</i>.
+            To pass text, use the <i>--text</i> command-line option.</li>
         </ul>
         <p>Flatpak</p>
         <ul>

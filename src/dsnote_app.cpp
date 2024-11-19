@@ -2409,11 +2409,13 @@ void dsnote_app::repair_text(text_repair_task_type_t task_type) {
     emit intermediate_text_changed();
 }
 
-void dsnote_app::play_speech_from_clipboard() {
-    play_speech_internal(
-        QGuiApplication::clipboard()->text(), {},
-        tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
-        settings::text_format_t::TextFormatRaw);
+void dsnote_app::play_speech_from_text(const QString &text,
+                                       const QString &model_id) {
+    play_speech_internal(text, model_id,
+                         tts_ref_voice_needed_by_id(model_id)
+                             ? active_tts_ref_voice()
+                             : QString{},
+                         settings::text_format_t::TextFormatRaw);
 }
 
 void dsnote_app::play_speech_translator(bool transtalated) {
@@ -4262,7 +4264,8 @@ void dsnote_app::execute_action(action_t action, const QString &extra) {
         return;
     }
 
-    qDebug() << "executing action:" << action << extra;
+    qDebug() << "executing action:" << action
+             << "extra =" << extra.trimmed().left(10);
 
     switch (action) {
         case dsnote_app::action_t::start_listening:
@@ -4295,8 +4298,19 @@ void dsnote_app::execute_action(action_t action, const QString &extra) {
             play_speech();
             break;
         case dsnote_app::action_t::start_reading_clipboard:
-            play_speech_from_clipboard();
+        case dsnote_app::action_t::start_reading_text: {
+            auto segment =
+                text_tools::raw_taged_segment_from_text(extra.toStdString());
+            play_speech_from_text(
+                action == action_t::start_reading_clipboard
+                    ? QGuiApplication::clipboard()->text()
+                    : QString::fromStdString(segment.text),
+                segment.tags.empty() ||
+                        !text_tools::valid_model_id(segment.tags.front())
+                    ? QString{}
+                    : QString::fromStdString(segment.tags.front()));
             break;
+        }
         case dsnote_app::action_t::pause_resume_reading:
             if (task_state() == service_task_state_t::TaskStateSpeechPaused)
                 resume_speech();

@@ -146,6 +146,8 @@
           'start-listening-translate', 'start-listening-translate-active-window', 'start-listening-translate-clipboard'.
           The decoded text is always translated into English when the "translate" action is triggered.
           This only works when using Whisper models.</li>
+      <li>New 'Action' to read text from the command-line option: 'start-reading-text'.
+          To pass text, use the '--text' option in the command-line interface.</li>
       </ul>
       <p>Flatpak:</p>
       <ul>

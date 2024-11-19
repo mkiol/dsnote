@@ -45,6 +45,11 @@ struct taged_segment_t {
     std::vector<tag_t> tags;
 };
 
+struct raw_taged_segment_t {
+    std::string text;
+    std::vector<std::string> tags;
+};
+
 struct break_line_info {
     bool break_line = false;
     size_t count = 0;
@@ -72,7 +77,9 @@ std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
     const std::string& text, split_engine_t engine, const std::string& lang,
     const std::string& nb_data = {});
 std::vector<taged_segment_t> split_by_control_tags(const std::string& text);
+raw_taged_segment_t raw_taged_segment_from_text(const std::string& text);
 std::string remove_control_tags(const std::string& text);
+bool valid_model_id(const std::string& id);
 void remove_stats_tag(std::string& text);
 void restore_caps(std::string& text);
 void to_lower_case(std::string& text);

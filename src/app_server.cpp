@@ -13,6 +13,8 @@
 #include <QFileInfo>
 #include <algorithm>
 
+#include "text_tools.hpp"
+
 app_server::app_server(QObject *parent)
     : QObject{parent},
 #ifdef USE_SFOS
@@ -85,11 +87,12 @@ void app_server::activateRequested(const QStringList& arguments,
 
     if (arguments.isEmpty()) return;
 
-    QString action_name;
-    QString id_name;
+    QString action;
+    QString id;
+    QString text;
     QStringList files;
 
-    enum class option_t { none, action, id };
+    enum class option_t : uint8_t { none, action, id, text };
     option_t option = option_t::none;
 
     std::for_each(
@@ -103,16 +106,23 @@ void app_server::activateRequested(const QStringList& arguments,
                 option = option_t::id;
                 return;
             }
+            if (argument == "--text") {
+                option = option_t::text;
+                return;
+            }
             if (argument.startsWith('-')) {
                 option = option_t::none;
                 return;
             }
 
             if (option == option_t::action) {
-                action_name = argument;
+                action = argument;
                 option = option_t::none;
             } else if (option == option_t::id) {
-                id_name = argument;
+                id = argument;
+                option = option_t::none;
+            } else if (option == option_t::text) {
+                text = argument;
                 option = option_t::none;
             } else {
                 auto scheme = QUrl{argument}.scheme();
@@ -127,10 +137,40 @@ void app_server::activateRequested(const QStringList& arguments,
             }
         });
 
-    if (action_name.isEmpty())
+    if (action.isEmpty()) {
         files_to_open(files);
-    else
-        emit action_requested(action_name, id_name);
+    } else {
+        QString extra;
+        bool id_ok =
+            !id.isEmpty() && text_tools::valid_model_id(id.toStdString());
+
+        if (action.compare("set-stt-model", Qt::CaseInsensitive) == 0 ||
+            action.compare("set-tts-model", Qt::CaseInsensitive) == 0) {
+            if (!id_ok) {
+                qWarning() << "missing or invalid language or model id";
+                return;
+            }
+            extra = QStringLiteral("{%1}").arg(id);
+        } else if (action.compare("start-reading-text", Qt::CaseInsensitive) ==
+                   0) {
+            if (text.isEmpty()) {
+                qWarning() << "missing text to read";
+                return;
+            }
+            if (!id_ok) {
+                extra = std::move(text);
+            } else {
+                extra = QStringLiteral("{%1}%2").arg(id, text);
+            }
+        } else if (action.compare("start-reading-clipboard",
+                                  Qt::CaseInsensitive) == 0) {
+            if (id_ok) {
+                extra = QStringLiteral("{%1}").arg(id);
+            }
+        }
+
+        emit action_requested(action, extra);
+    }
 }
 
 void app_server::activateActionRequested(const QString& actionName,

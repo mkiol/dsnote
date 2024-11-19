@@ -711,7 +711,7 @@ void convert_control_tags_to_html(std::string& text) {
     std::string out_text;
 
     static const std::regex rx{
-        "\\s*\\{\\s*[a-zA-Z]+\\:\\s*[\\d\\.]*\\s*[a-zA-Z]*\\s*\\}\\s*"};
+        "\\s*\\{\\s*[a-zA-Z_]+\\:\\s*[\\d\\.]*\\s*[a-zA-Z_]*\\s*\\}\\s*"};
 
     std::smatch match;
     auto it = text.cbegin();
@@ -733,7 +733,8 @@ void convert_html_to_control_tags(std::string& text) {
     std::string out_text;
 
     static const std::regex rx{
-        "<code>(\\s*\\{\\s*[a-zA-Z]+\\:\\s*[\\d\\.]*\\s*[a-zA-Z]*\\s*\\}\\s*)</"
+        "<code>(\\s*\\{\\s*[a-zA-Z_]+\\:\\s*[\\d\\.]*\\s*[a-zA-Z_]*\\s*\\}\\s*)"
+        "</"
         "code>"};
 
     std::smatch match;
@@ -751,9 +752,14 @@ void convert_html_to_control_tags(std::string& text) {
     text.assign(std::move(out_text));
 }
 
+bool valid_model_id(const std::string& id) {
+    static const std::regex rx{"[a-zA-Z_\\d]+"};
+    return std::regex_match(id, rx);
+}
+
 std::string remove_control_tags(const std::string& text) {
     static const std::regex rx{
-        "\\s?\\{\\s*([a-zA-Z]+)\\:\\s*([\\d\\.]*)\\s*([a-zA-Z]*)\\s*\\}\\s?"};
+        "\\s?\\{\\s*([a-zA-Z_]+)\\:\\s*([\\d\\.]*)\\s*([a-zA-Z_]*)\\s*\\}\\s?"};
 
     return std::regex_replace(text, rx, " ");
 }
@@ -770,7 +776,7 @@ std::vector<taged_segment_t> split_by_control_tags(const std::string& text) {
     std::vector<taged_segment_t> parts;
 
     static const std::regex rx{
-        "\\s*\\{\\s*([a-zA-Z]+)\\:\\s*([\\d\\.]*)\\s*([a-zA-Z]*)\\s*\\}\\s*"};
+        "\\s*\\{\\s*([a-zA-Z_]+)\\:\\s*([\\d\\.]*)\\s*([a-zA-Z_]*)\\s*\\}\\s*"};
 
     std::vector<tag_t> pending_tags;
 
@@ -819,6 +825,31 @@ std::vector<taged_segment_t> split_by_control_tags(const std::string& text) {
     setlocale(LC_NUMERIC, old_locale);
 
     return parts;
+}
+
+raw_taged_segment_t raw_taged_segment_from_text(const std::string& text) {
+    raw_taged_segment_t segment;
+
+    static const std::regex rx{"\\s*\\{\\s*([a-zA-Z_\\d\\:\\.\\s]+)\\s*}\\s*"};
+
+    std::smatch match;
+    auto it = text.cbegin();
+
+    const char* old_locale = setlocale(LC_NUMERIC, "C");
+
+    while (std::regex_search(it, text.cend(), match, rx)) {
+        if (match.size() > 1) {
+            segment.tags.push_back(match[1]);
+        }
+
+        it = match.suffix().first;
+    }
+
+    setlocale(LC_NUMERIC, old_locale);
+
+    segment.text = std::regex_replace(text, rx, " ");
+
+    return segment;
 }
 
 void segment_to_subrip_text(const segment_t& segment, std::ostringstream& os) {
