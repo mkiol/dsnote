@@ -25751,7 +25751,7 @@
             "size": "7618694"
         },
         {
-            "name": "Multilingual (WhisperSpeech Tiny)",
+            "name": "Multilingual (WhisperSpeech Q4 Tiny)",
             "model_id": "multilang_whisperspeech_q4_tiny_enpl",
             "engine": "tts_whisperspeech",
             "lang_id": "multilang",
@@ -25815,7 +25815,7 @@
             "hidden": true
         },
         {
-            "name": "Multilingual (WhisperSpeech Base)",
+            "name": "Multilingual (WhisperSpeech Q4 Base)",
             "model_id": "multilang_whisperspeech_q4_base_enpl",
             "engine": "tts_whisperspeech",
             "lang_id": "multilang",
@@ -25879,7 +25879,7 @@
             "hidden": true
         },
         {
-            "name": "Multilingual (WhisperSpeech Small)",
+            "name": "Multilingual (WhisperSpeech Q4 Small)",
             "model_id": "multilang_whisperspeech_q4_small_enpl",
             "engine": "tts_whisperspeech",
             "lang_id": "multilang",
@@ -25943,6 +25943,70 @@
             "hidden": true
         },
         {
+            "name": "Multilingual (WhisperSpeech 1.95 Small)",
+            "model_id": "multilang_whisperspeech_small",
+            "engine": "tts_whisperspeech",
+            "lang_id": "multilang",
+            "checksum": "6d91d8b8",
+            "checksum_quick": "76a0fbea",
+            "size": "808903180",
+            "options": "x0",
+            "features": [
+                "tts_voice_cloning"
+            ],
+            "sups": [
+                {
+                    "role": "hub",
+                    "file_name": "torch_encodec_24khz_hub",
+                    "checksum": "ce95470c",
+                    "checksum_quick": "d1c8f228",
+                    "size": "93179721",
+                    "comp": "dir",
+                    "urls": [
+                        "https://dl.fbaipublicfiles.com/encodec/v0/encodec_24khz-d7cc33bc.th"
+                    ]
+                },
+                {
+                    "role": "hub",
+                    "file_name": "hf_speechbrain--spkrec-ecapa-voxceleb_hub",
+                    "checksum": "99c1afd4",
+                    "checksum_quick": "c4956ec8",
+                    "size": "88991666",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/hyperparams.yaml",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/embedding_model.ckpt",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/mean_var_norm_emb.ckpt",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/classifier.ckpt",
+                        "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb/resolve/eac27266f68caa806381260bd44ace38b136c76a/label_encoder.txt"
+                    ]
+                },
+                {
+                    "role": "hub",
+                    "file_name": "hf_charactr--vocos-encodec-24khz_hub",
+                    "checksum": "70d3c237",
+                    "checksum_quick": "df465f3",
+                    "size": "40365403",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/charactr/vocos-encodec-24khz/resolve/4e61d082c08045a4c11e5b148ad93b1d0c591a14/pytorch_model.bin",
+                        "https://huggingface.co/charactr/vocos-encodec-24khz/resolve/4e61d082c08045a4c11e5b148ad93b1d0c591a14/config.yaml"
+                    ]
+                }
+            ],
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            },
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/WhisperSpeech/WhisperSpeech/resolve/0f05dcab0838f1afc061063d432c2664901a5eef/s2a-v1.95-small-fast-en.model",
+                "https://huggingface.co/WhisperSpeech/WhisperSpeech/resolve/0f05dcab0838f1afc061063d432c2664901a5eef/t2s-v1.95-small-8lang.model"
+            ],
+            "hidden": true
+        },
+        {
             "name": "English (WhisperSpeech Tiny)",
             "model_id": "en_whisperspeech_q4_tiny_enpl",
             "model_alias_of": "multilang_whisperspeech_q4_tiny_enpl",
@@ -25968,8 +26032,8 @@
         },
         {
             "name": "English (WhisperSpeech Small)",
-            "model_id": "en_whisperspeech_q4_small_enpl",
-            "model_alias_of": "multilang_whisperspeech_q4_small_enpl",
+            "model_id": "en_whisperspeech_small",
+            "model_alias_of": "multilang_whisperspeech_small",
             "lang_id": "en"
         },
         {
@@ -25977,6 +26041,42 @@
             "model_id": "pl_whisperspeech_q4_small_enpl",
             "model_alias_of": "multilang_whisperspeech_q4_small_enpl",
             "lang_id": "pl"
+        },
+        {
+            "name": "Deutsch (WhisperSpeech Small)",
+            "model_id": "de_whisperspeech_small",
+            "model_alias_of": "multilang_whisperspeech_small",
+            "lang_id": "de"
+        },
+        {
+            "name": "Français (WhisperSpeech Small)",
+            "model_id": "fr_whisperspeech_small",
+            "model_alias_of": "multilang_whisperspeech_small",
+            "lang_id": "fr"
+        },
+        {
+            "name": "Italiano (WhisperSpeech Small)",
+            "model_id": "it_whisperspeech_small",
+            "model_alias_of": "multilang_whisperspeech_small",
+            "lang_id": "it"
+        },
+        {
+            "name": "Nederlands (WhisperSpeech Small)",
+            "model_id": "nl_whisperspeech_small",
+            "model_alias_of": "multilang_whisperspeech_small",
+            "lang_id": "nl"
+        },
+        {
+            "name": "Español (WhisperSpeech Small)",
+            "model_id": "es_whisperspeech_small",
+            "model_alias_of": "multilang_whisperspeech_small",
+            "lang_id": "es"
+        },
+        {
+            "name": "Português (WhisperSpeech Small)",
+            "model_id": "pt_whisperspeech_small",
+            "model_alias_of": "multilang_whisperspeech_small",
+            "lang_id": "pt"
         },
         {
             "name": "Multilingual (Coqui YourTTS)",

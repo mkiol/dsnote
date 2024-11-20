@@ -49,6 +49,7 @@ DialogPage {
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>
         <li>New <i>Piper</i> voice for Latvian</li>
+        <li>New <i>WhisperSpeech Small</i> model for: English, Italian, German, French, Spanish, Dutch and Portuguese</li>
         </ul>
         <p>" + qsTr("Translator") + ":</p>
         <ul>
@@ -70,8 +71,8 @@ DialogPage {
             <i>start-listening-translate</i>, <i>start-listening-translate-active-window</i>, <i>start-listening-translate-clipboard</i>.
             The decoded text is always translated into English when the \"translate\" action is triggered.
             This only works when using Whisper models.</li>
-        <li>New <i>Action</i> to read text from command-line option: <i>start-reading-text</i>.
-            To pass text, use the <i>--text</i> command-line option.</li>
+        <li>New <i>Action</i> to read text from the command-line option: <i>start-reading-text</i>.
+            To pass text, use the <i>--text</i> option in the command-line interface.</li>
         </ul>
         <p>Flatpak</p>
         <ul>

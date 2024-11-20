@@ -128,6 +128,7 @@
       <p>Text to Speech:</p>
       <ul>
       <li>New 'Piper' voice for Latvian</li>
+      <li>New 'WhisperSpeech Small' model for: English, Italian, German, French, Spanish, Dutch and Portuguese</li>
       </ul>
       <p>Translator:</p>
       <ul>
