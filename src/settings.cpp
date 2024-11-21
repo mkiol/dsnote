@@ -1708,31 +1708,46 @@ ENGINE_OPTS(fasterwhisper)
                    : m_##name##_gpu_devices.at(1);                            \
     }                                                                         \
     QString settings::name##_gpu_device() const {                             \
-        auto device_str =                                                     \
+        auto v =                                                              \
             value(QStringLiteral("service/" #name "_gpu_device")).toString(); \
-        if (std::find(std::next(m_##name##_gpu_devices.cbegin()),             \
-                      m_##name##_gpu_devices.cend(),                          \
-                      device_str) == m_##name##_gpu_devices.cend()) {         \
-            return {};                                                        \
-        }                                                                     \
-        return device_str;                                                    \
+        auto vl = v.split(',');                                               \
+        if (vl.size() < 2) return {};                                         \
+        auto it = std::find_if(                                               \
+            m_##name##_gpu_devices.cbegin(), m_##name##_gpu_devices.cend(),   \
+            [&vl](const auto& vv) {                                           \
+                auto vvl = vv.split(',');                                     \
+                return vvl.size() > 2 &&                                      \
+                       vvl.at(0).trimmed() == vl.at(0).trimmed() &&           \
+                       vvl.at(2).trimmed() == vl.at(1).trimmed();             \
+            });                                                               \
+        if (it == m_##name##_gpu_devices.cend()) return {};                   \
+        return *it;                                                           \
     }                                                                         \
-    void settings::set_##name##_gpu_device(QString value) {                   \
-        if (std::find(std::next(m_##name##_gpu_devices.cbegin()),             \
-                      m_##name##_gpu_devices.cend(),                          \
-                      value) == m_##name##_gpu_devices.cend())                \
-            value.clear();                                                    \
-        if (value != name##_gpu_device()) {                                   \
-            setValue(QStringLiteral("service/" #name "_gpu_device"), value);  \
+    void settings::set_##name##_gpu_device(const QString& value) {            \
+        auto vl = value.split(',');                                           \
+        auto n = vl.size() > 2 ? QStringLiteral("%1,%2").arg(                 \
+                                     vl.at(0).trimmed(), vl.at(2).trimmed())  \
+                               : "";                                          \
+        auto v =                                                              \
+            settings::value(QStringLiteral("service/" #name "_gpu_device"))   \
+                .toString();                                                  \
+        if (v != n) {                                                         \
+            setValue(QStringLiteral("service/" #name "_gpu_device"), n);      \
             emit name##_gpu_device_changed();                                 \
             set_restart_required(true);                                       \
         }                                                                     \
     }                                                                         \
     int settings::name##_gpu_device_idx() const {                             \
-        auto current_device = name##_gpu_device();                            \
-        if (current_device.isEmpty()) return 0;                               \
-        auto it = std::find(m_##name##_gpu_devices.cbegin(),                  \
-                            m_##name##_gpu_devices.cend(), current_device);   \
+        auto vl = name##_gpu_device().split(',');                             \
+        if (vl.size() < 3) return 0;                                          \
+        auto it = std::find_if(                                               \
+            m_##name##_gpu_devices.cbegin(), m_##name##_gpu_devices.cend(),   \
+            [&vl](const auto& vv) {                                           \
+                auto vvl = vv.split(',');                                     \
+                return vvl.size() > 2 &&                                      \
+                       vvl.at(0).trimmed() == vl.at(0).trimmed() &&           \
+                       vvl.at(2).trimmed() == vl.at(2).trimmed();             \
+            });                                                               \
         if (it == m_##name##_gpu_devices.cend()) return 0;                    \
         return std::distance(m_##name##_gpu_devices.cbegin(), it);            \
     }                                                                         \

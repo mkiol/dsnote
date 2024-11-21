@@ -31,8 +31,8 @@
     X(openvino_gpu,                                                    \
       false) /* configured models are INT4 and not supported on GPU */ \
     X(vulkan, true)                                                    \
-    X(vulkan_igpu, false) /* most likely will not work well */         \
-    X(vulkan_cpu, false)  /* will work but extremely slow */
+    X(vulkan_igpu, true)                                               \
+    X(vulkan_cpu, false) /* will work but extremely slow */
 
 // name, default key
 #define HOTKEY_TABLE                                               \
@@ -809,15 +809,15 @@ class settings : public QSettings, public singleton<settings> {
     ENGINE_OPTS(fasterwhisper)
 #undef ENGINE_OPTS
 
-#define ENGINE_OPTS(name)                             \
-    bool name##_use_gpu() const;                      \
-    void set_##name##_use_gpu(bool value);            \
-    Q_INVOKABLE bool has_##name##_gpu_device() const; \
-    QStringList name##_gpu_devices() const;           \
-    QString name##_gpu_device() const;                \
-    QString name##_auto_gpu_device() const;           \
-    void set_##name##_gpu_device(QString value);      \
-    int name##_gpu_device_idx() const;                \
+#define ENGINE_OPTS(name)                               \
+    bool name##_use_gpu() const;                        \
+    void set_##name##_use_gpu(bool value);              \
+    Q_INVOKABLE bool has_##name##_gpu_device() const;   \
+    QStringList name##_gpu_devices() const;             \
+    QString name##_gpu_device() const;                  \
+    QString name##_auto_gpu_device() const;             \
+    void set_##name##_gpu_device(const QString &value); \
+    int name##_gpu_device_idx() const;                  \
     void set_##name##_gpu_device_idx(int value);
     ENGINE_OPTS(whispercpp)
     ENGINE_OPTS(fasterwhisper)
