@@ -45,6 +45,8 @@ DialogPage {
         <li>Simplified engine configuration options. Instead of multiple options, you can now select a Profile,
             which allows you to change the engine's processing parameters.
             There are three profiles to choose from: <i>Best Performance</i>, <i>Best Quality</i> and <i>Custom</i>.</li>
+        <li>Echo mode. After processing, the decoded text will be immediately read out using the currently set Text to Speech model.
+            To enable, use the option in the settings (<i>Speech to Text</i> &rarr; <i>Echo mode</i>).</li>
         </ul>
         <p>" + qsTr("Text to Speech") + ":</p>
         <ul>

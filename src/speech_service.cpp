@@ -2079,7 +2079,14 @@ void speech_service::handle_stt_sentence_timeout(int task_id) {
 }
 
 void speech_service::handle_stt_engine_eof(int task_id) {
-    qDebug() << "engine eof";
+    qDebug() << "stt engine eof:" << task_id;
+
+    if (!m_current_task || m_current_task->id != task_id ||
+        m_current_task->engine != engine_t::stt) {
+        qDebug() << "ignoring stt eof";
+        return;
+    }
+
     if (audio_source_type() == source_t::file && m_stt_engine &&
         !m_stt_engine->stop_requested())
         emit stt_file_transcribe_finished(task_id);
@@ -2087,7 +2094,7 @@ void speech_service::handle_stt_engine_eof(int task_id) {
 }
 
 void speech_service::handle_stt_engine_error(int task_id) {
-    qDebug() << "stt engine error";
+    qDebug() << "stt engine error:" << task_id;
 
     emit error(error_t::stt_engine);
 
@@ -2101,7 +2108,7 @@ void speech_service::handle_stt_engine_error(int task_id) {
 }
 
 void speech_service::handle_stt_engine_stopped(int task_id) {
-    qDebug() << "stt engine stopped";
+    qDebug() << "stt engine stopped:" << task_id;
 
     if (current_task_id() == task_id) stop_stt_engine();
 }
@@ -3474,6 +3481,9 @@ int speech_service::tts_play_speech(const QString &text, QString lang,
         return INVALID_TASK;
     }
 
+    if (m_stt_engine) m_stt_engine->stop();
+    restart_audio_source({});
+
     if (m_tts_engine) m_tts_engine->encode_speech(text.toStdString());
 
     start_keepalive_current_task();
@@ -3545,7 +3555,7 @@ int speech_service::cancel(int task) {
         return FAILURE;
     }
 
-    qDebug() << "cancel";
+    qDebug() << "cancel:" << task;
 
     if (!m_current_task) {
         qWarning() << "no current task";
@@ -3774,7 +3784,7 @@ void speech_service::stop_stt_engine() {
 
     restart_audio_source({});
 
-    if (m_current_task) {
+    if (m_current_task && m_current_task->engine == engine_t::stt) {
         m_current_task.reset();
         stop_keepalive_current_task();
         emit current_task_changed();
@@ -3882,8 +3892,9 @@ void speech_service::update_task_state() {
     // 6 = Canceling
 
     auto new_task_state = [&] {
-        if (m_stt_engine && m_stt_engine->stopping()) {
-            return 6;
+        if (m_player.state() == QMediaPlayer::State::PlayingState &&
+            m_state == state_t::playing_speech) {
+            return 4;
         } else if (m_stt_engine && m_stt_engine->started()) {
             switch (m_stt_engine->speech_detection_status()) {
                 case stt_engine::speech_detection_status_t::speech_detected:
@@ -3895,9 +3906,6 @@ void speech_service::update_task_state() {
                 case stt_engine::speech_detection_status_t::no_speech:
                     break;
             }
-        } else if (m_player.state() == QMediaPlayer::State::PlayingState &&
-                   m_state == state_t::playing_speech) {
-            return 4;
         } else if (m_player.state() == QMediaPlayer::State::PausedState ||
                    (m_player.state() == QMediaPlayer::State::StoppedState &&
                     m_state == state_t::playing_speech && m_current_task &&
@@ -3934,6 +3942,8 @@ void speech_service::update_task_state() {
                 case mnt_engine::state_t::stopped:
                     break;
             }
+        } else if (m_stt_engine && m_stt_engine->stopping()) {
+            return 6;
         } else if (m_text_repair_engine &&
                    m_text_repair_engine->state() !=
                        text_repair_engine::state_t::idle &&
@@ -3988,10 +3998,8 @@ void speech_service::refresh_status() {
     } else if (audio_source_type() == source_t::mic) {
         if (!m_current_task) {
             qWarning() << "no current task but source is mic";
-            return;
-        }
-
-        if (m_current_task->engine == engine_t::tts) {
+            new_state = state_t::idle;
+        } else if (m_current_task->engine == engine_t::tts) {
             new_state = state_t::playing_speech;
         } else if (m_current_task->engine == engine_t::mnt) {
             new_state = state_t::translating;

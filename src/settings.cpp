@@ -2443,3 +2443,14 @@ void settings::set_subtitles_support(bool value) {
         emit mnt_text_format_changed();
     }
 }
+
+bool settings::stt_echo() const {
+    return value(QStringLiteral("stt_echo"), false).toBool();
+}
+
+void settings::set_stt_echo(bool value) {
+    if (stt_echo() != value) {
+        setValue(QStringLiteral("stt_echo"), value);
+        emit stt_echo_changed();
+    }
+}

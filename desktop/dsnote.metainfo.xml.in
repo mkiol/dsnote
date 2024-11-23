@@ -124,6 +124,7 @@
       <li>Simplified engine configuration options. Instead of multiple options, you can now select a Profile,
           which allows you to change the engine's processing parameters.
           There are three profiles to choose from: 'Best Performance', 'Best Quality' and 'Custom'.</li>
+      <li>Echo mode. After processing, the decoded text will be immediately read out using the currently set Text to Speech model.</li>
       </ul>
       <p>Text to Speech:</p>
       <ul>

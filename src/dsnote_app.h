@@ -575,6 +575,16 @@ class dsnote_app : public QObject {
             settings::audio_format_t::AudioFormatWav;
     };
 
+    enum class stt_request_t : uint8_t {
+        listen,
+        listen_translate,
+        listen_active_window,
+        listen_translate_active_window,
+        listen_clipboard,
+        listen_translate_clipboard
+    };
+    friend QDebug operator<<(QDebug d, dsnote_app::stt_request_t request);
+
     QString m_active_stt_model;
     QVariantMap m_available_stt_models_map;
     QString m_active_tts_model;
@@ -640,6 +650,8 @@ class dsnote_app : public QObject {
     QStringList m_audio_sources;
     QObject *m_app_window = nullptr;
     int m_last_cursor_position = -1;
+    std::optional<stt_request_t> m_current_stt_request;
+    std::optional<stt_request_t> m_pending_stt_request;
 #ifdef USE_X11_FEATURES
     struct hotkeys_t {
 #define X(name, key) QHotkey name;

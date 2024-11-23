@@ -218,6 +218,31 @@ QDebug operator<<(QDebug d, dsnote_app::auto_text_format_t format) {
     return d;
 }
 
+QDebug operator<<(QDebug d, dsnote_app::stt_request_t request) {
+    switch (request) {
+        case dsnote_app::stt_request_t::listen:
+            d << "listen";
+            break;
+        case dsnote_app::stt_request_t::listen_translate:
+            d << "listen-translate";
+            break;
+        case dsnote_app::stt_request_t::listen_active_window:
+            d << "listen-active-window";
+            break;
+        case dsnote_app::stt_request_t::listen_translate_active_window:
+            d << "listen-translate-active-window";
+            break;
+        case dsnote_app::stt_request_t::listen_clipboard:
+            d << "listen-clipboard";
+            break;
+        case dsnote_app::stt_request_t::listen_translate_clipboard:
+            d << "listen-translate-clipboard";
+            break;
+    }
+
+    return d;
+}
+
 static QString audio_quality_to_str(settings::audio_quality_t quality) {
     switch (quality) {
         case settings::audio_quality_t::AudioQualityVbrHigh:
@@ -576,7 +601,8 @@ std::pair<QString, int> dsnote_app::insert_to_note(QString note,
         // make new text start upper or lower
         auto tprefix = note_prefix.trimmed();
         new_text[0] = note_prefix.isEmpty() || tprefix.right(1) == dot ||
-                              tprefix.right(1) == '?' || tprefix.right(1) == '!'
+                              tprefix.right(1) == QChar{'?'} ||
+                              tprefix.right(1) == QChar{'!'}
                           ? new_text[0].toUpper()
                           : new_text[0].toLower();
 
@@ -613,8 +639,8 @@ std::pair<QString, int> dsnote_app::insert_to_note(QString note,
 
             // make sufix star upper or lower
             auto tnew = new_text.trimmed();
-            if (tnew.right(1) == dot || tnew.right(1) == '?' ||
-                tnew.right(1) == '!') {
+            if (tnew.right(1) == dot || tnew.right(1) == QChar{'?'} ||
+                tnew.right(1) == QChar{'!'}) {
                 note_sufix[0] = note_sufix[0].toUpper();
             }
             ss << note_sufix;
@@ -744,6 +770,18 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
             emit text_decoded_to_clipboard();
             break;
     }
+
+    if (settings::instance()->stt_echo()) {
+        if (service_state() == service_state_t::StateListeningAuto &&
+            m_current_stt_request) {
+            // in always-on listening, set pending request to resume listening
+            // just after playing speech
+            m_pending_stt_request = m_current_stt_request;
+        }
+        play_speech_from_text(text, {});
+    }
+
+    m_current_stt_request.reset();
 }
 
 void dsnote_app::handle_tts_partial_speech(const QString &text,
@@ -800,7 +838,7 @@ void dsnote_app::connect_service_signals() {
             this,
             [this] {
                 handle_task_state_changed(
-                    static_cast<int>(speech_service::instance()->task_state()));
+                    speech_service::instance()->task_state());
             },
             Qt::QueuedConnection);
         connect(
@@ -1089,8 +1127,34 @@ void dsnote_app::handle_tts_play_speech_finished(int task) {
         qDebug() << "[dbus => app] signal TtsPlaySpeechFinished:" << task;
     }
 
-    this->m_intermediate_text.clear();
-    emit intermediate_text_changed();
+    if (m_pending_stt_request) {
+        auto request = m_pending_stt_request.value();
+        m_pending_stt_request.reset();
+
+        switch (request) {
+            case dsnote_app::stt_request_t::listen:
+                listen();
+                break;
+            case dsnote_app::stt_request_t::listen_translate:
+                listen_translate();
+                break;
+            case dsnote_app::stt_request_t::listen_active_window:
+                listen_to_active_window();
+                break;
+            case dsnote_app::stt_request_t::listen_translate_active_window:
+                listen_translate_to_active_window();
+                break;
+            case dsnote_app::stt_request_t::listen_clipboard:
+                listen_to_clipboard();
+                break;
+            case dsnote_app::stt_request_t::listen_translate_clipboard:
+                listen_translate_to_clipboard();
+                break;
+        }
+    } else {
+        this->m_intermediate_text.clear();
+        emit intermediate_text_changed();
+    }
 }
 
 void dsnote_app::handle_ttt_repair_text_finished(const QString &text,
@@ -2043,6 +2107,8 @@ void dsnote_app::switch_mnt_langs() {
 void dsnote_app::cancel() {
     if (busy()) return;
 
+    m_pending_action.reset();
+
     if (!m_open_files_delay_timer.isActive()) reset_files_queue();
 
     switch (m_mc.state()) {
@@ -2122,31 +2188,37 @@ void dsnote_app::transcribe_file(const QString &file_path, int stream_index,
 
 void dsnote_app::listen() {
     m_text_destination = text_destination_t::note_add;
+    m_current_stt_request = stt_request_t::listen;
     listen_internal(stt_translate_req_t::conf);
 }
 
 void dsnote_app::listen_translate() {
     m_text_destination = text_destination_t::note_add;
+    m_current_stt_request = stt_request_t::listen_translate;
     listen_internal(stt_translate_req_t::on);
 }
 
 void dsnote_app::listen_to_active_window() {
     m_text_destination = text_destination_t::active_window;
+    m_current_stt_request = stt_request_t::listen_active_window;
     listen_internal(stt_translate_req_t::conf);
 }
 
 void dsnote_app::listen_translate_to_active_window() {
     m_text_destination = text_destination_t::active_window;
+    m_current_stt_request = stt_request_t::listen_translate_active_window;
     listen_internal(stt_translate_req_t::on);
 }
 
 void dsnote_app::listen_to_clipboard() {
     m_text_destination = text_destination_t::clipboard;
+    m_current_stt_request = stt_request_t::listen_clipboard;
     listen_internal(stt_translate_req_t::conf);
 }
 
 void dsnote_app::listen_translate_to_clipboard() {
     m_text_destination = text_destination_t::clipboard;
+    m_current_stt_request = stt_request_t::listen_translate_clipboard;
     listen_internal(stt_translate_req_t::on);
 }
 
@@ -3366,8 +3438,7 @@ void dsnote_app::undo_or_redu_note() {
 void dsnote_app::handle_translator_settings_changed() {
     if (settings::instance()->translator_mode()) {
         if (settings::instance()->translate_when_typing()) translate_delayed();
-    } else if (m_files_to_open.empty() &&
-               task_state() != service_task_state_t::TaskStateCancelling) {
+    } else if (service_state() == service_state_t::StateTranslating) {
         cancel();
     }
 }

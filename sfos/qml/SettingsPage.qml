@@ -159,6 +159,16 @@ Page {
                         }
 
                         TextSwitch {
+                            checked: _settings.stt_echo
+                            automaticCheck: false
+                            text: qsTr("Echo mode")
+                            onClicked: {
+                                _settings.stt_echo = !_settings.stt_echo
+                            }
+                            description: qsTr("After processing, the decoded text will be immediately read out using the currently set Text to Speech model.")
+                        }
+
+                        TextSwitch {
                             checked: _settings.stt_insert_stats
                             automaticCheck: false
                             text: qsTr("Insert statistics")

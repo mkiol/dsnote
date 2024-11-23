@@ -384,8 +384,19 @@ DialogPage {
             }
 
             CheckBox {
-                id: statsCheckBox
+                checked: _settings.stt_echo
+                text: qsTr("Echo mode")
+                onCheckedChanged: {
+                    _settings.stt_echo = checked
+                }
 
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("After processing, the decoded text will be immediately read out using the currently set Text to Speech model.")
+                hoverEnabled: true
+            }
+
+            CheckBox {
                 checked: _settings.stt_insert_stats
                 text: qsTr("Insert statistics")
                 onCheckedChanged: {
