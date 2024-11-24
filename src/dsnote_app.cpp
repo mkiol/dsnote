@@ -238,6 +238,9 @@ QDebug operator<<(QDebug d, dsnote_app::stt_request_t request) {
         case dsnote_app::stt_request_t::listen_translate_clipboard:
             d << "listen-translate-clipboard";
             break;
+        case dsnote_app::stt_request_t::transcribe_file:
+            d << "transcribe-file";
+            break;
     }
 
     return d;
@@ -771,17 +774,18 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
             break;
     }
 
-    if (settings::instance()->stt_echo()) {
+    // echo mode handling
+    if (settings::instance()->stt_echo() && m_current_stt_request &&
+        m_current_stt_request.value() != stt_request_t::transcribe_file) {
         if (service_state() == service_state_t::StateListeningAuto &&
             m_current_stt_request) {
             // in always-on listening, set pending request to resume listening
             // just after playing speech
             m_pending_stt_request = m_current_stt_request;
         }
+
         play_speech_from_text(text, {});
     }
-
-    m_current_stt_request.reset();
 }
 
 void dsnote_app::handle_tts_partial_speech(const QString &text,
@@ -1149,6 +1153,8 @@ void dsnote_app::handle_tts_play_speech_finished(int task) {
                 break;
             case dsnote_app::stt_request_t::listen_translate_clipboard:
                 listen_translate_to_clipboard();
+                break;
+            case dsnote_app::stt_request_t::transcribe_file:
                 break;
         }
     } else {
@@ -2107,7 +2113,8 @@ void dsnote_app::switch_mnt_langs() {
 void dsnote_app::cancel() {
     if (busy()) return;
 
-    m_pending_action.reset();
+    m_current_stt_request.reset();
+    m_pending_stt_request.reset();
 
     if (!m_open_files_delay_timer.isActive()) reset_files_queue();
 
@@ -2170,6 +2177,8 @@ void dsnote_app::transcribe_file(const QString &file_path, int stream_index,
         options.insert("sub_min_line_length", s->sub_min_line_length());
         options.insert("sub_max_line_length", s->sub_max_line_length());
     }
+
+    m_current_stt_request = stt_request_t::transcribe_file;
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->stt_transcribe_file(
