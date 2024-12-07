@@ -38,6 +38,7 @@
         <file>qml/Dot.qml</file>
         <file>qml/HorizontalLine.qml</file>
         <file>qml/TextFieldForm.qml</file>
+        <file>qml/TextFieldComboForm.qml</file>
         <file>qml/ComboBoxForm.qml</file>
         <file>qml/TipMessage.qml</file>
         <file>qml/SpinBoxForm.qml</file>
@@ -46,6 +47,12 @@
         <file>qml/MainTipMessage.qml</file>
         <file>qml/AddonInstallDialog.qml</file>
         <file>qml/ShortcutForm.qml</file>
+        <file>qml/RuleMgmtPage.qml</file>
+        <file>qml/RuleEditPage.qml</file>
+        <file>qml/DoubleTextArea.qml</file>
+        <file>qml/HelpDialog.qml</file>
+        <file>qml/RowForm.qml</file>
+        <file>qml/TextFieldWithHelpForm.qml</file>
         <file alias="config/models.json">../config/models.json</file>
         <file alias="nonbreaking_prefixes/ca.txt">../nonbreaking_prefixes/ca.txt</file>
         <file alias="nonbreaking_prefixes/cs.txt">../nonbreaking_prefixes/cs.txt</file>

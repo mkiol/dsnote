@@ -113,6 +113,21 @@ DialogPage {
                 hoverEnabled: true
             }
 
+            CheckBox {
+                checked: _settings.trans_rules_enabled
+                text: qsTr("Enable %1").arg("<i>" + qsTr("Rules") + "</i>")
+                onCheckedChanged: {
+                    _settings.trans_rules_enabled = checked
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("%1 allows you to create text transformations that can be applied after Speech to Text or before Text to Speech.").arg("<i>" + qsTr("Rules") + "</i>") + " " +
+                              qsTr("With %1, you can easily and flexibly correct errors in decoded text or correct mispronounced words.").arg("<i>" + qsTr("Rules") + "</i>") + " " +
+                              qsTr("To configure the rules you need, go to %1 on the main toolbar.").arg("<i>" + qsTr("Rules") + "</i>")
+                hoverEnabled: true
+            }
+
             ComboBoxForm {
                 label.text: qsTr("File import action")
                 toolTip: qsTr("The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.")

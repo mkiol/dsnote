@@ -21,6 +21,10 @@ DialogPage {
         return (time_ms / 1000).toFixed(1)
     }
 
+    function cancel() {
+        appWin.openDialog("VoiceMgmtPage.qml")
+    }
+
     function export_voice() {
         if (!root.canCreate) return
 
@@ -55,15 +59,6 @@ DialogPage {
             }
 
             Button {
-                icon.name: "go-previous-symbolic"
-                text: qsTr("Go back")
-                display: AbstractButton.IconOnly
-                DialogButtonBox.buttonRole: DialogButtonBox.ResetRole
-                Keys.onReturnPressed: appWin.openDialog("VoiceMgmtPage.qml")
-                onClicked: appWin.openDialog("VoiceMgmtPage.qml")
-            }
-
-            Button {
                 text: qsTr("Create")
                 enabled: root.canCreate
                 icon.name: "document-save-symbolic"
@@ -76,8 +71,8 @@ DialogPage {
 
                 text: qsTr("Cancel")
                 icon.name: "action-unavailable-symbolic"
-                onClicked: root.reject()
-                Keys.onEscapePressed: root.reject()
+                Keys.onReturnPressed: root.cancel()
+                onClicked: root.cancel()
             }
         }
     }

@@ -246,6 +246,13 @@ QDebug operator<<(QDebug d, dsnote_app::stt_request_t request) {
     return d;
 }
 
+QDebug operator<<(QDebug d, const dsnote_app::trans_rule_t &rule) {
+    d.nospace() << "name=" << rule.name << ", type=" << rule.type
+                << ", pattern=" << rule.pattern << ", replace=" << rule.replace
+                << ", flags=[" << rule.flags << "]";
+    return d;
+}
+
 static QString audio_quality_to_str(settings::audio_quality_t quality) {
     switch (quality) {
         case settings::audio_quality_t::AudioQualityVbrHigh:
@@ -706,8 +713,194 @@ std::pair<QString, int> dsnote_app::insert_to_note(QString note,
     }
 }
 
-void dsnote_app::handle_stt_text_decoded(const QString &text,
-                                         const QString &lang, int task) {
+settings::trans_rule_flags_t dsnote_app::apply_trans_rule(
+    QString &text, const trans_rule_t &rule) {
+    using trans_rule_type_t = settings::trans_rule_type_t;
+    using trans_rule_flags_t = settings::trans_rule_flags_t;
+
+    // qDebug() << "trans rule:" << rule;
+
+    bool rule_matches = false;
+
+    switch (rule.type) {
+        case trans_rule_type_t::TransRuleTypeNone:
+            break;
+        case trans_rule_type_t::TransRuleTypeMatchSimple:
+            rule_matches = text.contains(rule.pattern, Qt::CaseInsensitive)
+                               ? rule.flags
+                               : trans_rule_flags_t::TransRuleNone;
+            break;
+        case trans_rule_type_t::TransRuleTypeMatchRe:
+            rule_matches =
+                text.contains(QRegExp{rule.pattern, Qt::CaseInsensitive});
+            break;
+        case trans_rule_type_t::TransRuleTypeReplaceSimple: {
+            rule_matches = text.contains(rule.pattern, Qt::CaseInsensitive);
+            if (rule_matches)
+                text.replace(rule.pattern, rule.replace, Qt::CaseInsensitive);
+            break;
+        }
+        case trans_rule_type_t::TransRuleTypeReplaceRe: {
+            auto replace = rule.replace;
+            replace.replace("\\n", "\n");
+
+            QRegExp rx{rule.pattern, Qt::CaseInsensitive};
+
+            rule_matches = text.contains(rx);
+            if (rule_matches) {
+                if (!rule.replace.contains("\\U") && !replace.contains("\\u")) {
+                    text.replace(rx, replace);
+                } else {
+                    int pos = 0;
+                    while ((pos = rx.indexIn(text, pos)) != -1) {
+                        QString after = replace;
+                        for (int i = 1; i < rx.captureCount() + 1; ++i) {
+                            after.replace(QStringLiteral("\\U\\%1").arg(i),
+                                          rx.cap(i).toUpper());
+                            after.replace(QStringLiteral("\\u\\%1").arg(i),
+                                          rx.cap(i).toLower());
+                            after.replace(QStringLiteral("\\%1").arg(i),
+                                          rx.cap(i));
+                        }
+                        text.replace(pos, rx.matchedLength(), after);
+                        pos += after.size();
+                    }
+                }
+            }
+
+            break;
+        }
+    }
+
+    return rule_matches ? (rule.flags | trans_rule_flags_t::TransRuleMatched)
+                        : trans_rule_flags_t::TransRuleNone;
+}
+
+dsnote_app::trans_rule_result_t dsnote_app::transform_text(
+    QString &text, transform_text_target_t target, const QString &lang) {
+    trans_rule_result_t result;
+
+    for (const auto &vrule : settings::instance()->trans_rules()) {
+        auto vl = vrule.toList();
+        if (vl.size() < 6) continue;
+
+        auto flags =
+            static_cast<settings::trans_rule_flags_t>(vl.at(0).toUInt());
+
+        switch (target) {
+            case transform_text_target_t::stt:
+                if ((flags &
+                     settings::trans_rule_flags_t::TransRuleTargetStt) == 0)
+                    continue;
+                break;
+            case transform_text_target_t::tts:
+                if ((flags &
+                     settings::trans_rule_flags_t::TransRuleTargetTts) == 0)
+                    continue;
+                break;
+        }
+
+        auto langs = vl.at(5).toString().trimmed();
+        if (lang.isEmpty()) {
+            if (!langs.isEmpty()) {
+                // rule for specific language but tts lang is unknown
+                continue;
+            }
+        } else {
+            if (!langs.isEmpty() &&
+                !langs.contains(lang, Qt::CaseInsensitive)) {
+                // rule for different language
+                continue;
+            }
+        }
+
+        auto actions = apply_trans_rule(
+            text, {/*flags=*/flags,
+                   /*type=*/
+                   static_cast<settings::trans_rule_type_t>(vl.at(1).toUInt()),
+                   /*name=*/vl.at(2).toString(),
+                   /*pattern=*/vl.at(3).toString(),
+                   /*replace=*/vl.at(4).toString()});
+
+        result.action_flags |= actions;
+    }
+
+    return result;
+}
+
+QVariantList dsnote_app::test_trans_rule(const QString &text,
+                                         const QString &pattern,
+                                         const QString &replace,
+                                         unsigned int type) {
+    QString out_text{text};
+
+    if (pattern.isEmpty()) {
+        qWarning() << "invalid trans rule";
+        return {false, out_text};
+    }
+
+    auto flags = apply_trans_rule(
+        out_text, {/*flags=*/settings::trans_rule_flags_t::TransRuleNone,
+                   /*type=*/static_cast<settings::trans_rule_type_t>(type),
+                   /*name=*/{},
+                   /*pattern=*/pattern,
+                   /*replace=*/replace});
+
+    return {(flags & settings::trans_rule_flags_t::TransRuleMatched) > 0,
+            out_text};
+}
+
+bool dsnote_app::trans_rule_re_pattern_valid(const QString &pattern) {
+    return QRegExp{pattern}.isValid();
+}
+
+void dsnote_app::update_trans_rule(int index, unsigned int flags,
+                                   const QString &name, const QString &pattern,
+                                   const QString &replace, const QString &langs,
+                                   unsigned int type) {
+    if (pattern.isEmpty()) {
+        qWarning() << "invalid trans rule";
+        return;
+    }
+
+    auto rules = settings::instance()->trans_rules();
+    if (index >= rules.size()) {
+        qWarning() << "invalid trans rule index";
+        return;
+    }
+
+    QVariantList rule{
+        /*[0] flags=*/flags,
+        /*[1] type=*/
+        static_cast<std::underlying_type_t<settings::trans_rule_type_t>>(type),
+        /*[2] name=*/name,
+        /*[3] pattern=*/pattern,
+        /*[4] replace=*/replace,
+        /*[5] langs=*/langs,
+    };
+
+    if (index < 0) {
+        // new rule
+        rules.push_back(rule);
+    } else {
+        // update existing rule
+        rules[index] = rule;
+    }
+
+    settings::instance()->set_trans_rules(rules);
+}
+
+QString dsnote_app::trans_rules_test_text() const { return m_translated_text; }
+
+void dsnote_app::set_trans_rules_test_text(const QString &value) {
+    if (m_translated_text != value) {
+        m_translated_text = value;
+        emit trans_rules_test_text_changed();
+    }
+}
+
+void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
+                                         int task) {
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
 #ifdef DEBUG
         qDebug() << "stt text decoded:" << text << lang << task;
@@ -729,6 +922,10 @@ void dsnote_app::handle_stt_text_decoded(const QString &text,
     }
 
     update_stt_auto_lang(lang);
+
+    if (settings::instance()->trans_rules_enabled()) {
+        transform_text(text, transform_text_target_t::stt, lang);
+    }
 
     switch (m_text_destination) {
         case text_destination_t::note_add: {
@@ -2340,13 +2537,22 @@ void dsnote_app::resume_speech() {
     }
 }
 
-void dsnote_app::play_speech_internal(const QString &text,
-                                      const QString &model_id,
+QString dsnote_app::lang_from_model_id(const QString &model_id) {
+    auto l = model_id.split('_');
+    return l.isEmpty() ? QString{} : l.front().toLower();
+}
+
+void dsnote_app::play_speech_internal(QString text, const QString &model_id,
                                       const QString &ref_voice,
                                       settings::text_format_t text_format) {
     if (text.isEmpty()) {
         qWarning() << "text is empty";
         return;
+    }
+
+    if (settings::instance()->trans_rules_enabled()) {
+        transform_text(text, transform_text_target_t::tts,
+                       lang_from_model_id(model_id));
     }
 
     int new_task = 0;
@@ -2396,7 +2602,8 @@ void dsnote_app::play_speech_internal(const QString &text,
 
 void dsnote_app::play_speech() {
     play_speech_internal(
-        note(), {}, tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
+        note(), active_tts_model(),
+        tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
         settings::instance()->stt_tts_text_format());
 }
 
@@ -2411,7 +2618,7 @@ void dsnote_app::play_speech_selected(int start, int end) {
     if (start == end) return;
 
     play_speech_internal(
-        note().mid(start, end - start), {},
+        note().mid(start, end - start), active_tts_model(),
         tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
         settings::instance()->stt_tts_text_format());
 }
@@ -2589,7 +2796,7 @@ void dsnote_app::speech_to_file(const QString &dest_file,
     m_dest_file_info = dest_file_info_t{};
 
     speech_to_file_internal(
-        note(), {}, dest_file, title_tag, track_tag,
+        note(), active_tts_model(), dest_file, title_tag, track_tag,
         tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
         settings::instance()->stt_tts_text_format(),
         settings::instance()->audio_format(),
@@ -2628,7 +2835,7 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
 }
 
 void dsnote_app::speech_to_file_internal(
-    const QString &text, const QString &model_id, const QString &dest_file,
+    QString text, const QString &model_id, const QString &dest_file,
     const QString &title_tag, const QString &track_tag,
     const QString &ref_voice, settings::text_format_t text_format,
     settings::audio_format_t audio_format,
@@ -2641,6 +2848,11 @@ void dsnote_app::speech_to_file_internal(
     if (dest_file.isEmpty()) {
         qWarning() << "dest file is empty";
         return;
+    }
+
+    if (settings::instance()->trans_rules_enabled()) {
+        transform_text(text, transform_text_target_t::tts,
+                       lang_from_model_id(model_id));
     }
 
     int new_task = 0;
@@ -3531,7 +3743,7 @@ void dsnote_app::export_to_audio_mix(const QString &input_file,
     m_dest_file_info.input_stream_index = input_stream_index;
 
     speech_to_file_internal(
-        note(), {}, dest_file, title_tag, track_tag,
+        note(), active_tts_model(), dest_file, title_tag, track_tag,
         tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
         settings::instance()->stt_tts_text_format(),
         settings::audio_format_t::AudioFormatOggOpus,

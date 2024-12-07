@@ -18,13 +18,19 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("User Interface") + ":</p>
+        text: "<p>" + qsTr("General") + ":</p>
         <ul>
-        <li><i>Speech Note</i> has been translated into Slovenian language.</li>
+        <li><i>Rules</i> for text transformations that can be applied after Speech to Text or before Text to Speech.
+            With <i>Rules</i>, you can easily and flexibly correct errors in decoded text or correct mispronounced words.
+            <i>Rules</i> are disabled by default. To use them, you must enable them in the settings (<i>User Interface</i> &rarr; <i>Rules</i>).</li>
         <li>New modes for inserting text at the cursor position or replacing the current note.
             To insert text at the cursor position rather than at the end of the note,
             change <i>Text appending mode</i> option to <i>Add at the cursor position</i> in the settings.
             When the <i>Replace an existing note</i> option is set, whenever new text is added, it will replace the existing note.</li>
+        </ul>
+        <p>" + qsTr("User Interface") + ":</p>
+        <ul>
+        <li><i>Speech Note</i> has been translated into Slovenian language.</li>
         <li>Status indication in the system tray icon.
             When using the system tray icon, statuses such as processing, listening, etc. are presented with an animated tray icon.</li>
         <li>Models grouped by type in model browser.

@@ -20,13 +20,13 @@ GridLayout {
     property alias label: _label
     property string toolTip: ""
     property alias textField: _textField
-    property alias button: _button
+    property alias comboBox: _comboBox
     property alias text: _textField.text
-    property string toolTipButton: button.text
+    property string toolTipCombo: comboBox.text
     property bool compact: true
     property bool valid: true
 
-    columns: verticalMode ? 1 : button.visible ? 3 : 2
+    columns: verticalMode ? 1 : comboBox.visible ? 3 : 2
     columnSpacing: appWin.padding
     rowSpacing: appWin.padding
     Layout.fillWidth: true
@@ -42,7 +42,8 @@ GridLayout {
         id: _textField
 
         Layout.fillWidth: root.verticalMode
-        Layout.preferredWidth: root.verticalMode ? 0 : ((parent.width / 2) - (_button.visible && root.compact ? _button.width + root.columnSpacing : 0))
+        Layout.preferredWidth: root.verticalMode ? 0 :
+             ((parent.width / 2) - (_comboBox.visible && root.compact ? _comboBox.width + root.columnSpacing : 0))
         Layout.leftMargin: root.verticalMode ? (root.indends + 1) * appWin.padding : 0
         color: root.valid ? palette.text : "red"
 
@@ -56,15 +57,16 @@ GridLayout {
         TextContextMenu {}
     }
 
-    Button {
-        id: _button
+    ComboBox {
+        id: _comboBox
 
-        visible: text.length !== 0
         Layout.leftMargin: root.verticalMode ? (root.indends + 1) * appWin.padding : 0
 
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: button.display === AbstractButton.IconOnly ? hovered : false
-        ToolTip.text: root.toolTipButton
+        ToolTip.visible: hovered && root.toolTip.length !== 0
+        ToolTip.text: root.toolTipCombo
         hoverEnabled: true
+
+        Accessible.name: root.label.text
     }
 }

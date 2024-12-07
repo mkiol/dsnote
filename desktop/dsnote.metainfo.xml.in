@@ -98,15 +98,20 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.7.0" date="2024-11-09">
+    <release version="4.7.0" date="2024-12-07">
       <description>
-      <p>User Interface:</p>
+      <p>General:</p>
       <ul>
-      <li>Speech Note has been translated into Slovenian language.</li>
+      <li>Rules for text transformations that can be applied after Speech to Text or before Text to Speech.
+          With Rules, you can easily and flexibly correct errors in decoded text or correct mispronounced words.
       <li>New modes for inserting text at the cursor position or replacing the current note.
           To insert text at the cursor position rather than at the end of the note,
           change 'Text appending mode' option to 'Add at the cursor position' in the settings.
           When the 'Replace an existing note' option is set, whenever new text is added, it will replace the existing note.</li>
+      </ul>
+      <p>User Interface:</p>
+      <ul>
+      <li>Speech Note has been translated into Slovenian language.</li>
       <li>Status indication in the system tray icon.
           When using the system tray icon, statuses such as processing, listening, etc. are presented with an animated tray icon.</li>
       <li>Models grouped by type in model browser.

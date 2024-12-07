@@ -241,6 +241,9 @@ class dsnote_app : public QObject {
         service_state_t state READ service_state NOTIFY service_state_changed)
     Q_PROPERTY(
         QVariantMap translations READ translations NOTIFY connected_changed)
+    Q_PROPERTY(
+        QString trans_rules_test_text READ trans_rules_test_text WRITE
+            set_trans_rules_test_text NOTIFY trans_rules_test_text_changed)
 
     // features
 #define FEATURE_OPT(name) \
@@ -434,6 +437,17 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void hide_tray();
     Q_INVOKABLE void set_app_window(QObject *app_window);
     Q_INVOKABLE QString special_key_name(int key) const;
+    /* used in QML, returns list: [0] bool:matched, [0] string:out-text */
+    Q_INVOKABLE QVariantList test_trans_rule(const QString &text,
+                                             const QString &pattern,
+                                             const QString &replace,
+                                             unsigned int type);
+    Q_INVOKABLE void update_trans_rule(int index, unsigned int flags,
+                                       const QString &name,
+                                       const QString &pattern,
+                                       const QString &replace,
+                                       const QString &langs, unsigned int type);
+    Q_INVOKABLE bool trans_rule_re_pattern_valid(const QString &pattern);
 
    signals:
     void active_stt_model_changed();
@@ -503,6 +517,7 @@ class dsnote_app : public QObject {
     void audio_sources_changed();
     void stt_auto_lang_changed();
     void last_cursor_position_changed();
+    void trans_rules_test_text_changed();
 
    private:
     enum class action_t : uint8_t {
@@ -586,6 +601,22 @@ class dsnote_app : public QObject {
     };
     friend QDebug operator<<(QDebug d, dsnote_app::stt_request_t request);
 
+    struct trans_rule_t {
+        settings::trans_rule_flags_t flags =
+            settings::trans_rule_flags_t::TransRuleNone;
+        settings::trans_rule_type_t type =
+            settings::trans_rule_type_t::TransRuleTypeNone;
+        QString name;
+        QString pattern;
+        QString replace;
+    };
+    friend QDebug operator<<(QDebug d, const trans_rule_t &rule);
+
+    struct trans_rule_result_t {
+        std::underlying_type_t<settings::trans_rule_flags_t> action_flags =
+            settings::trans_rule_flags_t::TransRuleNone;
+    };
+
     QString m_active_stt_model;
     QVariantMap m_available_stt_models_map;
     QString m_active_tts_model;
@@ -653,6 +684,7 @@ class dsnote_app : public QObject {
     int m_last_cursor_position = -1;
     std::optional<stt_request_t> m_current_stt_request;
     std::optional<stt_request_t> m_pending_stt_request;
+    QString m_trans_rules_test_text;
 #ifdef USE_X11_FEATURES
     struct hotkeys_t {
 #define X(name, key) QHotkey name;
@@ -675,8 +707,7 @@ class dsnote_app : public QObject {
     [[nodiscard]] QVariantList available_tts_models_for_in_mnt() const;
     [[nodiscard]] QVariantList available_tts_models_for_out_mnt() const;
     void handle_models_changed();
-    void handle_stt_text_decoded(const QString &text, const QString &lang,
-                                 int task);
+    void handle_stt_text_decoded(QString text, const QString &lang, int task);
     void handle_tts_partial_speech(const QString &text, int task);
     bool busy() const;
     void update_configured_state();
@@ -716,49 +747,49 @@ class dsnote_app : public QObject {
     void handle_stt_intermediate_text(const QString &text, const QString &lang,
                                       int task);
     [[nodiscard]] int active_stt_model_idx() const;
-    inline QString active_stt_model() { return m_active_stt_model; }
+    QString active_stt_model() { return m_active_stt_model; }
     QString active_stt_model_name() const;
     [[nodiscard]] int active_tts_model_idx() const;
-    inline QString active_tts_model() { return m_active_tts_model; }
+    QString active_tts_model() { return m_active_tts_model; }
     QString active_tts_model_name() const;
     [[nodiscard]] int active_tts_ref_voice_idx() const;
-    inline QString active_tts_ref_voice() { return m_active_tts_ref_voice; }
+    QString active_tts_ref_voice() { return m_active_tts_ref_voice; }
     QString active_tts_ref_voice_name() const;
     [[nodiscard]] int active_tts_for_in_mnt_ref_voice_idx() const;
-    inline QString active_tts_for_in_mnt_ref_voice() {
+    QString active_tts_for_in_mnt_ref_voice() {
         return m_active_tts_for_in_mnt_ref_voice;
     }
     QString active_tts_for_in_mnt_ref_voice_name() const;
     [[nodiscard]] int active_tts_for_out_mnt_ref_voice_idx() const;
-    inline QString active_tts_for_out_mnt_ref_voice() {
+    QString active_tts_for_out_mnt_ref_voice() {
         return m_active_tts_for_out_mnt_ref_voice;
     }
     QString active_tts_for_out_mnt_ref_voice_name() const;
-    inline QString active_mnt_lang() { return m_active_mnt_lang; }
+    QString active_mnt_lang() { return m_active_mnt_lang; }
     QString active_mnt_lang_name() const;
     [[nodiscard]] int active_mnt_lang_idx() const;
-    inline QString active_mnt_out_lang() { return m_active_mnt_out_lang; }
+    QString active_mnt_out_lang() { return m_active_mnt_out_lang; }
     QString active_mnt_out_lang_name() const;
     [[nodiscard]] int active_mnt_out_lang_idx() const;
     [[nodiscard]] int active_tts_model_for_in_mnt_idx() const;
-    inline QString active_tts_model_for_in_mnt() {
+    QString active_tts_model_for_in_mnt() {
         return m_active_tts_model_for_in_mnt;
     }
     QString active_tts_model_for_in_mnt_name() const;
     [[nodiscard]] int active_tts_model_for_out_mnt_idx() const;
-    inline QString active_tts_model_for_out_mnt() {
+    QString active_tts_model_for_out_mnt() {
         return m_active_tts_model_for_out_mnt;
     }
     QString active_tts_model_for_out_mnt_name() const;
-    inline QString intermediate_text() const { return m_intermediate_text; }
+    QString intermediate_text() const { return m_intermediate_text; }
     void update_active_stt_lang_idx();
     void update_active_tts_lang_idx();
     void update_active_mnt_lang_idx();
     void update_active_mnt_out_lang_idx();
-    inline service_state_t service_state() const { return m_service_state; }
-    inline auto task_state() const { return m_task_state; }
-    inline auto auto_text_format() const { return m_auto_text_format; }
-    inline auto mc_progress() const { return m_mc.progress(); }
+    service_state_t service_state() const { return m_service_state; }
+    auto task_state() const { return m_task_state; }
+    auto auto_text_format() const { return m_auto_text_format; }
+    auto mc_progress() const { return m_mc.progress(); }
     QStringList audio_sources() const;
     QString audio_source();
     void update_audio_sources();
@@ -818,14 +849,14 @@ class dsnote_app : public QObject {
     QString translated_text() const;
     void set_translated_text(const QString text);
     void listen_internal(stt_translate_req_t translate_req);
-    void speech_to_file_internal(const QString &text, const QString &model_id,
+    void speech_to_file_internal(QString text, const QString &model_id,
                                  const QString &dest_file,
                                  const QString &title_tag, const QString &track,
                                  const QString &ref_voice,
                                  settings::text_format_t text_format,
                                  settings::audio_format_t audio_format,
                                  settings::audio_quality_t audio_quality);
-    void play_speech_internal(const QString &text, const QString &model_id,
+    void play_speech_internal(QString text, const QString &model_id,
                               const QString &ref_voice,
                               settings::text_format_t text_format);
     void export_to_file_internal(const QString &text, const QString &dest_file);
@@ -902,19 +933,28 @@ class dsnote_app : public QObject {
     static QStringList make_streams_names(
         const std::vector<media_compressor::stream_t> &streams);
     QString tts_ref_voice_auto_name() const;
-    inline int player_current_voice_ref_idx() const {
+    int player_current_voice_ref_idx() const {
         return m_player_current_voice_ref_idx;
     }
     void repair_text(text_repair_task_type_t task_type);
     void switch_mnt_langs();
-    inline QString stt_auto_lang_id() const { return m_stt_auto_lang_id; }
+    QString stt_auto_lang_id() const { return m_stt_auto_lang_id; }
     void update_stt_auto_lang(QString lang_id);
     QString stt_auto_lang_name() const;
     void set_last_cursor_position(int position);
-    inline int last_cursor_position() const { return m_last_cursor_position; }
+    int last_cursor_position() const { return m_last_cursor_position; }
 #ifdef USE_DESKTOP
     void execute_tray_action(tray_icon::action_t action, int value);
 #endif
+    enum class transform_text_target_t { tts, stt };
+    static trans_rule_result_t transform_text(QString &text,
+                                              transform_text_target_t target,
+                                              const QString &lang);
+    static settings::trans_rule_flags_t apply_trans_rule(
+        QString &text, const trans_rule_t &rule);
+    QString trans_rules_test_text() const;
+    void set_trans_rules_test_text(const QString &text);
+    static QString lang_from_model_id(const QString &model_id);
 };
 
 #endif  // DSNOTE_APP_H

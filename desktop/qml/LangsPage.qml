@@ -328,6 +328,10 @@ DialogPage {
                     shortcut: StandardKey.Back
                     onTriggered: root.switchPop()
                 }
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: text
+                hoverEnabled: true
             }
 
             Button {
@@ -647,7 +651,6 @@ DialogPage {
             focus: true
             clip: true
             spacing: appWin.padding
-            anchors.top: parent.top
             Keys.onUpPressed: listViewScrollBar.decrease()
             Keys.onDownPressed: listViewScrollBar.increase()
             ScrollBar.vertical: ScrollBar {
@@ -658,6 +661,9 @@ DialogPage {
             section.property: "role"
             // dont show sections when displaying languages and when filtering widget is hidded
             section.delegate: root.langsView || !modelFilteringWidget.opened ? null : modelSectionDelegate
+            header: Item {
+                height: appWin.padding
+            }
         }
     }
 }

@@ -188,6 +188,53 @@ QDebug operator<<(QDebug d, settings::hw_feature_flags_t hw_features) {
     return d;
 }
 
+QDebug operator<<(QDebug d, settings::trans_rule_type_t type) {
+    switch (type) {
+        case settings::trans_rule_type_t::TransRuleTypeNone:
+            d << "none";
+            break;
+        case settings::trans_rule_type_t::TransRuleTypeReplaceSimple:
+            d << "replace-simple";
+            break;
+        case settings::trans_rule_type_t::TransRuleTypeReplaceRe:
+            d << "replace-re";
+            break;
+        case settings::trans_rule_type_t::TransRuleTypeMatchSimple:
+            d << "match-simple";
+            break;
+        case settings::trans_rule_type_t::TransRuleTypeMatchRe:
+            d << "match-re";
+            break;
+    }
+
+    return d;
+}
+
+QDebug operator<<(QDebug d, settings::trans_rule_flags_t flags) {
+    if (flags == settings::trans_rule_flags_t::TransRuleNone) {
+        d << "none";
+    } else {
+        if (flags & settings::trans_rule_flags_t::TransRuleMatched)
+            d << "matched,";
+        if (flags & settings::trans_rule_flags_t::TransRuleTargetStt)
+            d << "target-stt,";
+        if (flags & settings::trans_rule_flags_t::TransRuleTargetTts)
+            d << "target-tts,";
+        if (flags & settings::trans_rule_flags_t::TransRuleActionStop)
+            d << "action-stop,";
+        if (flags & settings::trans_rule_flags_t::TransRuleActionStopListening)
+            d << "action-stop-listening,";
+        if (flags &
+            settings::trans_rule_flags_t::TransRuleActionDeleteLastSentence)
+            d << "action-delete-last-sentence,";
+        if (flags &
+            settings::trans_rule_flags_t::TransRuleActionReadLastSentence)
+            d << "action-read-last-sentence,";
+    }
+
+    return d;
+}
+
 settings::launch_mode_t settings::launch_mode = launch_mode_t::app_stanalone;
 
 settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
@@ -2453,4 +2500,164 @@ void settings::set_stt_echo(bool value) {
         setValue(QStringLiteral("stt_echo"), value);
         emit stt_echo_changed();
     }
+}
+
+bool settings::trans_rules_enabled() const {
+    return value(QStringLiteral("trans_rules_enabled"), false).toBool();
+}
+
+void settings::set_trans_rules_enabled(bool value) {
+    if (trans_rules_enabled() != value) {
+        setValue(QStringLiteral("trans_rules_enabled"), value);
+        emit trans_rules_enabled_changed();
+    }
+}
+
+QVariantList settings::make_default_trans_rules() {
+    std::underlying_type_t<trans_rule_flags_t> flags =
+        trans_rule_flags_t::TransRuleNone;
+
+    QVariantList rules;
+    rules.push_back(QVariantList{
+        /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetStt,
+        /*[1] type=*/
+        static_cast<std::underlying_type_t<trans_rule_type_t>>(
+            trans_rule_type_t::TransRuleTypeReplaceRe),
+        /*[2] name=*/
+        tr("Example: Replace \"%1\" with \"%2\" and start the next word with a "
+           "capital letter")
+            .arg("period", "."),
+        /*[3] pattern=*/
+        QString{"[\\s\\,\\?\\!\\.]*period[\\s\\,\\?\\!\\.]*(\\w)?"},
+        /*[4] replace=*/QString{". \\U\\1"},
+        /*[5] langs=*/QString{"en"}});
+    rules.push_back(QVariantList{
+        /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetStt,
+        /*[1] type=*/
+        static_cast<std::underlying_type_t<trans_rule_type_t>>(
+            trans_rule_type_t::TransRuleTypeReplaceRe),
+        /*[2] name=*/
+        tr("Example: Replace \"%1\" with \"%2\" and start the next word with a "
+           "lowercase letter")
+            .arg("comma", ","),
+        /*[3] pattern=*/
+        QString{"[\\s\\,\\?\\!\\.]*comma[\\s\\,\\?\\!\\.]*(\\w)?"},
+        /*[4] replace=*/QString{", \\u\\1"},
+        /*[5] langs=*/QString{"en"}});
+    rules.push_back(QVariantList{
+        /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetStt,
+        /*[1] type=*/
+        static_cast<std::underlying_type_t<trans_rule_type_t>>(
+            trans_rule_type_t::TransRuleTypeReplaceRe),
+        /*[2] name=*/
+        tr("Example: Insert newline instead of the word \"%1\"")
+            .arg("new line"),
+        /*[3] pattern=*/
+        QString{"[\\s*\\,]?new[\\s\\-]*line[\\s\\,\\?\\!\\.]*"},
+        /*[4] replace=*/QString{".\\n"},
+        /*[5] langs=*/QString{"en"}});
+    rules.push_back(QVariantList{
+        /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetTts,
+        /*[1] type=*/
+        static_cast<std::underlying_type_t<trans_rule_type_t>>(
+            trans_rule_type_t::TransRuleTypeReplaceSimple),
+        /*[2] name=*/
+        tr("Example: Add silence after \"%1\"").arg("."),
+        /*[3] pattern=*/
+        QString{"."},
+        /*[4] replace=*/QString{". {silence:1s}"},
+        /*[5] langs=*/QString{}});
+    rules.push_back(QVariantList{
+        /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetTts,
+        /*[1] type=*/
+        static_cast<std::underlying_type_t<trans_rule_type_t>>(
+            trans_rule_type_t::TransRuleTypeReplaceRe),
+        /*[2] name=*/
+        tr("Example: Correct pronunciation of the Polish name \"%1\"")
+            .arg("Michał"),
+        /*[3] pattern=*/
+        QString{"Micha[lł]"},
+        /*[4] replace=*/QString{"Me how"},
+        /*[5] langs=*/QString{"en"}});
+    return rules;
+}
+
+QVariantList settings::trans_rules() const {
+    if (contains(QStringLiteral("trans_rules"))) {
+        return value(QStringLiteral("trans_rules"), {}).toList();
+    }
+
+    return make_default_trans_rules();
+}
+
+void settings::set_trans_rules(const QVariantList& value) {
+    if (trans_rules() != value) {
+        setValue(QStringLiteral("trans_rules"), value);
+        emit trans_rules_changed();
+    }
+}
+
+void settings::trans_rule_set_flag(int index, unsigned int mask, bool enabled) {
+    if (index < 0) return;
+    auto rules = trans_rules();
+    if (rules.size() > index) {
+        auto l = rules[index].toList();
+        if (l.isEmpty() || (l[0].toUInt() & mask) == enabled) return;
+        if (enabled) {
+            l[0] = l[0].toUInt() | mask;
+        } else {
+            l[0] = l[0].toUInt() & ~mask;
+        }
+        rules[index] = l;
+        set_trans_rules(rules);
+    }
+}
+
+void settings::trans_rule_set_target_stt(int index, bool enabled) {
+    trans_rule_set_flag(index, trans_rule_flags_t::TransRuleTargetStt, enabled);
+}
+
+void settings::trans_rule_set_target_tts(int index, bool enabled) {
+    trans_rule_set_flag(index, trans_rule_flags_t::TransRuleTargetTts, enabled);
+}
+
+void settings::trans_rule_delete(int index) {
+    if (index < 0) return;
+    auto rules = trans_rules();
+    if (rules.size() > index) {
+        rules.erase(std::next(rules.begin(), index));
+        set_trans_rules(rules);
+    }
+}
+
+void settings::trans_rule_move_up(int index) {
+    if (index <= 0) return;
+    auto rules = trans_rules();
+    if (rules.size() <= index) return;
+    rules.swapItemsAt(index - 1, index);
+    set_trans_rules(rules);
+}
+
+void settings::trans_rule_move_down(int index) {
+    if (index < 0) return;
+    auto rules = trans_rules();
+    if (rules.size() <= index + 1) return;
+    rules.swapItemsAt(index + 1, index);
+    set_trans_rules(rules);
+}
+
+void settings::trans_rule_clone(int index) {
+    if (index < 0) return;
+    auto rules = trans_rules();
+    if (index >= rules.size()) return;
+    auto rule = rules.at(index).toList();
+    auto name = rule.at(2).toString();
+    if (name.isEmpty()) {
+        name = tr("Clone of \"%1\"").arg(index + 1);
+    } else {
+        name = tr("Clone of \"%1\"").arg(name);
+    }
+    rule[2] = name;
+    rules.insert(index + 1, rule);
+    set_trans_rules(rules);
 }

@@ -241,7 +241,10 @@ class settings : public QSettings, public singleton<settings> {
                    set_subtitles_support NOTIFY subtitles_support_changed)
     Q_PROPERTY(
         bool stt_echo READ stt_echo WRITE set_stt_echo NOTIFY stt_echo_changed)
-
+    Q_PROPERTY(QVariantList trans_rules READ trans_rules WRITE set_trans_rules
+                   NOTIFY trans_rules_changed)
+    Q_PROPERTY(bool trans_rules_enabled READ trans_rules_enabled WRITE
+                   set_trans_rules_enabled NOTIFY trans_rules_enabled_changed)
     // service
 
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -479,6 +482,7 @@ class settings : public QSettings, public singleton<settings> {
         HintDoneAddon = 1U << 0U,
         HintDoneHwAccel = 1U << 1U,
         HintDoneTranslator = 1U << 2U,
+        HintDoneRules = 1U << 3U
     };
     Q_ENUM(hint_done_flags_t)
 
@@ -509,6 +513,35 @@ class settings : public QSettings, public singleton<settings> {
 
     enum class option_t { OptionAuto = 0, OptionDefault = 1, OptionCustom = 2 };
     Q_ENUM(option_t)
+
+    enum trans_rule_flags_t : unsigned int {
+        TransRuleNone = 0U,
+        TransRuleMatched = 1U << 0U,
+        TransRuleTargetStt = 1U << 5U,
+        TransRuleTargetTts = 1U << 6U,
+        TransRuleActionStop = 1U << 10U,
+        TransRuleActionStopListening = 1U << 11U,
+        TransRuleActionDeleteLastSentence = 1U << 12U,
+        TransRuleActionReadLastSentence = 1U << 13U,
+    };
+    Q_ENUM(trans_rule_flags_t)
+    friend trans_rule_flags_t operator|(trans_rule_flags_t a,
+                                        trans_rule_flags_t b) {
+        return static_cast<trans_rule_flags_t>(
+            static_cast<std::underlying_type_t<trans_rule_flags_t>>(a) |
+            static_cast<std::underlying_type_t<trans_rule_flags_t>>(b));
+    }
+    friend QDebug operator<<(QDebug d, trans_rule_flags_t flags);
+
+    enum class trans_rule_type_t : uint8_t {
+        TransRuleTypeNone = 0,
+        TransRuleTypeReplaceSimple = 1,
+        TransRuleTypeReplaceRe = 2,
+        TransRuleTypeMatchSimple = 3,
+        TransRuleTypeMatchRe = 4,
+    };
+    Q_ENUM(trans_rule_type_t)
+    friend QDebug operator<<(QDebug d, trans_rule_type_t type);
 
     settings();
 
@@ -686,6 +719,10 @@ class settings : public QSettings, public singleton<settings> {
     void set_subtitles_support(bool value);
     bool stt_echo() const;
     void set_stt_echo(bool value);
+    bool trans_rules_enabled() const;
+    void set_trans_rules_enabled(bool value);
+    QVariantList trans_rules() const;
+    void set_trans_rules(const QVariantList &value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -736,6 +773,12 @@ class settings : public QSettings, public singleton<settings> {
         const QString &filename);
     Q_INVOKABLE bool is_debug() const;
     Q_INVOKABLE bool is_native_style() const;
+    Q_INVOKABLE void trans_rule_set_target_stt(int index, bool enabled);
+    Q_INVOKABLE void trans_rule_set_target_tts(int index, bool enabled);
+    Q_INVOKABLE void trans_rule_delete(int index);
+    Q_INVOKABLE void trans_rule_move_up(int index);
+    Q_INVOKABLE void trans_rule_move_down(int index);
+    Q_INVOKABLE void trans_rule_clone(int index);
 
     // service
     QString models_dir() const;
@@ -897,6 +940,8 @@ class settings : public QSettings, public singleton<settings> {
     void stt_insert_stats_changed();
     void subtitles_support_changed();
     void stt_echo_changed();
+    void trans_rules_enabled_changed();
+    void trans_rules_changed();
 
     // service
     void models_dir_changed();
@@ -958,6 +1003,8 @@ class settings : public QSettings, public singleton<settings> {
     void add_error_flags(error_flags_t new_flag);
     void update_addon_flags();
     void update_system_flags();
+    static QVariantList make_default_trans_rules();
+    void trans_rule_set_flag(int index, unsigned int mask, bool enabled);
 
     QString m_note;
 };

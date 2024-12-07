@@ -100,6 +100,15 @@ ApplicationWindow {
         modelInfoLoader.setSource("ModelInfoPage.qml", {model: model})
     }
 
+    function openPopup(comp) {
+        popupLoader.sourceComponent = comp
+    }
+
+    function closePopup() {
+        if (popupLoader.item) popupLoader.item.close()
+        popupLoader.sourceComponent = undefined
+    }
+
     function update() {
         notepad.update()
         translator.update()
@@ -401,6 +410,17 @@ ApplicationWindow {
 
         onAccepted: {
             app.import_file(filePath, selectedIndex, replace)
+        }
+    }
+
+    Loader {
+        id: popupLoader
+
+        anchors.centerIn: parent
+        anchors.fill: parent
+        onLoaded: {
+            item.onClosed.connect(function(){popupLoader.sourceComponent = undefined});
+            item.open()
         }
     }
 

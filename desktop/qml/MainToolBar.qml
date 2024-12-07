@@ -254,6 +254,21 @@ ToolBar {
                             }
                         }
                     }
+
+                    ToolButton {
+                        visible: _settings.trans_rules_enabled
+                        Layout.alignment: Qt.AlignLeft
+                        action: Action {
+                            text: qsTr("Rules")
+                            shortcut: "Ctrl+R"
+                            onTriggered: appWin.openDialog("RuleMgmtPage.qml")
+                        }
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: qsTr("Rules") + " (Ctrl+R)"
+                        hoverEnabled: true
+                    }
                 }
 
                 Item {
