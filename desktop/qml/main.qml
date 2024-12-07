@@ -103,10 +103,13 @@ ApplicationWindow {
     function openPopup(comp) {
         popupLoader.sourceComponent = comp
     }
-
+    function openPopupFile(file, props) {
+        popupLoader.setSource(file, props)
+    }
     function closePopup() {
         if (popupLoader.item) popupLoader.item.close()
         popupLoader.sourceComponent = undefined
+        popupLoader.source = ""
     }
 
     function update() {
@@ -287,8 +290,7 @@ ApplicationWindow {
                 text: qsTr("Install")
                 onClicked: {
                     var nvidia_addon = (_settings.system_flags & Settings.SystemNvidiaGpu) > 0;
-                    if (nvidia_addon) addonInstallDialog.openNvidia()
-                    else addonInstallDialog.openAmd()
+                    appWin.openPopupFile("AddonInstallDialog.qml", {nvidiaAddon: nvidia_addon})
                 }
             }
         }
@@ -394,12 +396,6 @@ ApplicationWindow {
         onReplaceClicked: replaceHandler()
     }
 
-    AddonInstallDialog {
-        id: addonInstallDialog
-
-        anchors.centerIn: parent
-    }
-
     StreamSelectionDialog {
         id: streamSelectionDialog
 
@@ -419,7 +415,10 @@ ApplicationWindow {
         anchors.centerIn: parent
         anchors.fill: parent
         onLoaded: {
-            item.onClosed.connect(function(){popupLoader.sourceComponent = undefined});
+            item.onClosed.connect(function(){
+                popupLoader.sourceComponent = undefined
+                popupLoader.source = ""
+            });
             item.open()
         }
     }
