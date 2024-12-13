@@ -20,9 +20,9 @@ DialogPage {
 
     function defaultRuleName(type, pattern, replace) {
         switch(type) {
-        case Settings.TransRuleTypeMatchSimple:
-        case Settings.TransRuleTypeMatchRe:
-            return qsTr("Match: %1").arg(pattern)
+        // case Settings.TransRuleTypeMatchSimple:
+        // case Settings.TransRuleTypeMatchRe:
+        //     return qsTr("Match: %1").arg(pattern)
         case Settings.TransRuleTypeReplaceSimple:
         case Settings.TransRuleTypeReplaceRe:
             return qsTr("Replace: %1").arg(pattern + " \u2192 " + replace)
@@ -269,29 +269,6 @@ DialogPage {
                     hoverEnabled: true
                 }
             }
-        }
-    }
-
-    DoubleTextArea {
-        id: _testTextArea
-
-        preferredHeight: appWin.buttonHeight
-
-        textArea1 {
-            placeholderText: qsTr("Insert here text for rule testing")
-            onTextChanged: root.testRule()
-            font: _settings.notepad_font
-        }
-
-        textArea2 {
-            placeholderText: qsTr("Text after applying rule")
-            readOnly: true
-            color: {
-                var c = palette.text
-                return Qt.rgba(c.r, c.g, c.b, 0.8)
-            }
-            onTextChanged: root.testRule()
-            font: _settings.notepad_font
         }
     }
 

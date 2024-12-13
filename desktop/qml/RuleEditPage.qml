@@ -32,9 +32,9 @@ DialogPage {
 
     function defaultRuleName(type, pattern, replace) {
         switch(type) {
-        case Settings.TransRuleTypeMatchSimple:
-        case Settings.TransRuleTypeMatchRe:
-            return qsTr("Match: %1").arg(pattern)
+        // case Settings.TransRuleTypeMatchSimple:
+        // case Settings.TransRuleTypeMatchRe:
+        //     return qsTr("Match: %1").arg(pattern)
         case Settings.TransRuleTypeReplaceSimple:
         case Settings.TransRuleTypeReplaceRe:
             return qsTr("Replace: %1").arg(pattern + " \u2192 " + replace)

@@ -13,10 +13,10 @@ GridLayout {
     id: root
 
     property int indends: 0
-    property bool verticalMode: parent.verticalMode !== undefined ? parent.verticalMode :
+    property bool verticalMode: parent !== undefined ? parent.verticalMode !== undefined ? parent.verticalMode :
                                 parent.parent.verticalMode !== undefined ? parent.parent.verticalMode :
                                 parent.parent.parent.verticalMode !== undefined ? parent.parent.parent.verticalMode :
-                                false
+                                false : false
     property alias label: _label
     property alias comboBox: _comboBox
     property string toolTip: ""
@@ -31,6 +31,7 @@ GridLayout {
     columnSpacing: appWin.padding
     rowSpacing: appWin.padding
     Layout.fillWidth: true
+    width: parent.width
 
     Label {
         id: _label

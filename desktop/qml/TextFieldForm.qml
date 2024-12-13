@@ -30,6 +30,7 @@ GridLayout {
     columnSpacing: appWin.padding
     rowSpacing: appWin.padding
     Layout.fillWidth: true
+    width: parent.width
 
     Label {
         id: _label

@@ -266,9 +266,7 @@ DialogPage {
             Layout.preferredWidth: verticalMode ? gridVoiceName.width : gridVoiceName.width / 2
             Layout.leftMargin: verticalMode ? appWin.padding : 0
             color: palette.text
-
             Accessible.name: qsTr("Voice name")
-
             TextContextMenu {}
         }
     }

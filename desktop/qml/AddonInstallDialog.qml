@@ -40,7 +40,7 @@ HelpDialog {
         wrapMode: Text.Wrap
         textFormat: Text.RichText
 
-        text: "&rarr; " + qsTr("Use the software manager application on your system and install %2, or")
+        text: "&rarr; " + qsTr("Use the software manager application on your system and install %1, or")
         .arg(root.nvidiaAddon ? "<i><b>Speech Note NVIDIA</b></i>" : "<i><b>Speech Note AMD</b></i>")
     }
 

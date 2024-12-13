@@ -37,7 +37,7 @@ RowLayout {
         Layout.preferredWidth: 2 * appWin.buttonWithIconWidth
         onTextChanged: root.lang_model.filter = text.toLowerCase().trim()
         color: palette.text
-        Accessible.name: qsTr("Language search")
+        Accessible.description: placeholderText
 
         TextContextMenu {}
     }

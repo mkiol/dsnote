@@ -111,7 +111,7 @@ ColumnLayout {
             Layout.preferredWidth: 2 * appWin.buttonWithIconWidth
             onTextChanged: root.models_model.filter = text.toLowerCase().trim()
             color: palette.text
-            Accessible.name: qsTr("Model search")
+            Accessible.description: placeholderText
 
             TextContextMenu {}
         }

@@ -2,6 +2,12 @@
     <qresource prefix="/">
         <file>qml/main.qml</file>
         <file>qml/SettingsPage.qml</file>
+        <file>qml/SettingsGeneralPage.qml</file>
+        <file>qml/SettingsUiPage.qml</file>
+        <file>qml/SettingsSttPage.qml</file>
+        <file>qml/SettingsTtsPage.qml</file>
+        <file>qml/SettingsAccessebilityPage.qml</file>
+        <file>qml/SettingsAdvancedPage.qml</file>
         <file>qml/LangsPage.qml</file>
         <file>qml/SpeechIndicator.qml</file>
         <file>qml/PlaceholderLabel.qml</file>
@@ -80,13 +86,13 @@
         <file alias="nonbreaking_prefixes/sv.txt">../nonbreaking_prefixes/sv.txt</file>
         <file alias="nonbreaking_prefixes/ta.txt">../nonbreaking_prefixes/ta.txt</file>
         <file alias="nonbreaking_prefixes/tr.txt">../nonbreaking_prefixes/tr.txt</file>
-        <file alias="app_icon.svg">dsnote.svg</file>
-        <file alias="app_icon.png">dsnote.png</file>
-        <file alias="speech_icon_0.png">dsnote_tray_speech_0.png</file>
-        <file alias="speech_icon_1.png">dsnote_tray_speech_1.png</file>
-        <file alias="busy_icon_0.png">dsnote_tray_busy_0.png</file>
-        <file alias="busy_icon_1.png">dsnote_tray_busy_1.png</file>
-        <file alias="pause_icon_0.png">dsnote_tray_pause_0.png</file>
-        <file alias="pause_icon_1.png">dsnote_tray_pause_1.png</file>
+        <file alias="app_icon.svg">icons/dsnote.svg</file>
+        <file alias="app_icon.png">icons/dsnote.png</file>
+        <file alias="speech_icon_0.png">icons/tray/dsnote_tray_speech_0.png</file>
+        <file alias="speech_icon_1.png">icons/tray/dsnote_tray_speech_1.png</file>
+        <file alias="busy_icon_0.png">icons/tray/dsnote_tray_busy_0.png</file>
+        <file alias="busy_icon_1.png">icons/tray/dsnote_tray_busy_1.png</file>
+        <file alias="pause_icon_0.png">icons/tray/dsnote_tray_pause_0.png</file>
+        <file alias="pause_icon_1.png">icons/tray/dsnote_tray_pause_1.png</file>
     </qresource>
 </RCC>
