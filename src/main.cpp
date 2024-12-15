@@ -22,7 +22,6 @@
 #include <csignal>
 #include <cstdlib>
 #include <memory>
-#include <optional>
 #include <utility>
 
 #ifdef USE_SFOS
@@ -40,11 +39,11 @@
 #else
 #include <QApplication>
 #include <QQmlApplicationEngine>
-#include <memory>
 #endif
 
 #include "app_server.hpp"
 #include "avlogger.hpp"
+#include "cmd_options.hpp"
 #include "config.h"
 #include "cpu_tools.hpp"
 #include "dsnote_app.h"
@@ -71,23 +70,7 @@ static void signal_handler(int sig) {
     exit_program();
 }
 
-struct cmd_options {
-    bool valid = true;
-    settings::launch_mode_t launch_mode =
-        settings::launch_mode_t::app_stanalone;
-    bool verbose = false;
-    bool gen_cheksums = false;
-    bool hw_scan_off = false;
-    bool py_scan_off = false;
-    bool reset_models = false;
-    bool start_in_tray = false;
-    QString action;
-    QString extra;
-    QStringList files;
-    QString log_file;
-};
-
-static cmd_options check_options(const QCoreApplication& app) {
+static cmd::options check_options(const QCoreApplication& app) {
     QCommandLineParser parser;
 
     parser.addPositionalArgument(
@@ -113,6 +96,21 @@ static cmd_options check_options(const QCoreApplication& app) {
     QCommandLineOption verbose_opt{QStringLiteral("verbose"),
                                    QStringLiteral("Enables debug output.")};
     parser.addOption(verbose_opt);
+
+    QCommandLineOption print_state_opt{
+        QStringLiteral("print-state"),
+        QStringLiteral("Prints the current state.")};
+    parser.addOption(print_state_opt);
+
+    QCommandLineOption print_models_opt{
+        QStringLiteral("print-available-models"),
+        QStringLiteral("Prints list of available STT and TTS model IDs.")};
+    parser.addOption(print_models_opt);
+
+    QCommandLineOption print_active_model_opt{
+        QStringLiteral("print-active-models"),
+        QStringLiteral("Prints the currently active STT and TTS model IDs.")};
+    parser.addOption(print_active_model_opt);
 
     QCommandLineOption action_opt{
         QStringLiteral("action"),
@@ -194,7 +192,7 @@ static cmd_options check_options(const QCoreApplication& app) {
 
     parser.process(app);
 
-    cmd_options options;
+    cmd::options options;
 
     if (parser.isSet(appstandalone_opt)) {
         if (!parser.isSet(app_opt) && !parser.isSet(sttservice_opt)) {
@@ -285,11 +283,21 @@ static cmd_options check_options(const QCoreApplication& app) {
         }
     }
 
+    if (parser.isSet(print_models_opt)) {
+        options.model_list_types =
+            cmd::model_type_flag::stt | cmd::model_type_flag::tts;
+    }
+    if (parser.isSet(print_active_model_opt)) {
+        options.active_model_types =
+            cmd::model_type_flag::stt | cmd::model_type_flag::tts;
+    }
+
     options.log_file = parser.value(log_file_opt);
     options.verbose = parser.isSet(verbose_opt);
     options.gen_cheksums = parser.isSet(gen_checksum_opt);
     options.hw_scan_off = parser.isSet(hwscanoff_opt);
     options.py_scan_off = parser.isSet(pyscanoff_opt);
+    options.print_state = parser.isSet(print_state_opt);
     options.reset_models = parser.isSet(resetmodels_opt);
     options.files = parser.positionalArguments();
 #ifdef USE_DESKTOP
@@ -349,7 +357,7 @@ static void install_translator() {
     }
 }
 
-static void start_service(const cmd_options& options) {
+static void start_service(const cmd::options& options) {
     if (options.hw_scan_off) settings::instance()->disable_hw_scan();
     if (options.py_scan_off) settings::instance()->disable_py_scan();
 
@@ -360,7 +368,8 @@ static void start_service(const cmd_options& options) {
     QGuiApplication::exec();
 }
 
-static void start_app(const cmd_options& options, app_server& dbus_app_server) {
+static void start_app(const cmd::options& options,
+                      app_server& dbus_app_server) {
     if (options.hw_scan_off) settings::instance()->disable_hw_scan();
     if (options.py_scan_off) settings::instance()->disable_py_scan();
 
@@ -413,12 +422,6 @@ static void start_app(const cmd_options& options, app_server& dbus_app_server) {
                                 APP_ADDON_VERSION);
     context->setContextProperty(QStringLiteral("_settings"),
                                 settings::instance());
-    context->setContextProperty(QStringLiteral("_files_to_open"),
-                                options.files);
-    context->setContextProperty(QStringLiteral("_requested_action"),
-                                options.action);
-    context->setContextProperty(QStringLiteral("_requested_extra"),
-                                options.extra);
     context->setContextProperty(QStringLiteral("_start_in_tray"),
                                 options.start_in_tray);
     context->setContextProperty(QStringLiteral("_app_server"),
@@ -500,7 +503,7 @@ int main(int argc, char* argv[]) {
     }
 
     QGuiApplication::setApplicationName(QStringLiteral(APP_DBUS_APP_ID));
-    app_server dbus_app_server;
+    app_server dbus_app_server{cmd_opts};
     QGuiApplication::setApplicationName(QStringLiteral(APP_ID));
 
     settings::instance();

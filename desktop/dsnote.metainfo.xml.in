@@ -103,11 +103,12 @@
       <p>General:</p>
       <ul>
       <li>Rules for text transformations that can be applied after Speech to Text or before Text to Speech.
-          With Rules, you can easily and flexibly correct errors in decoded text or correct mispronounced words.
+          With Rules, you can easily and flexibly correct errors in decoded text or correct mispronounced words.</li>
       <li>New modes for inserting text at the cursor position or replacing the current note.
           To insert text at the cursor position rather than at the end of the note,
           change 'Text appending mode' option to 'Add at the cursor position' in the settings.
           When the 'Replace an existing note' option is set, whenever new text is added, it will replace the existing note.</li>
+      <li>DBus API for integration with external applications</li>
       </ul>
       <p>User Interface:</p>
       <ul>
@@ -116,6 +117,8 @@
           When using the system tray icon, statuses such as processing, listening, etc. are presented with an animated tray icon.</li>
       <li>Models grouped by type in model browser.
           To improve usability, instead of a list containing models of all types, models are grouped by type in separate tabs.</li>
+      <li>Command line options for printing available or active model IDs.</li>
+      <li>Command line option to print the current status of the application.</li>
       </ul>
       <p>Speech to Text:</p>
       <ul>

@@ -1,0 +1,89 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+<interface name="@info_dbus_app_interface@">
+  <!-- Currently active STT model ID -->
+  <property name="ActiveSttModelId" type="s" access="read" />
+  <signal name="ActiveSttModelIdPropertyChanged">
+    <arg name="activeSttModelId" type="s" direction="out" />
+  </signal>
+
+  <!-- Currently active TTS model ID -->
+  <property name="ActiveTtsModelId" type="s" access="read" />
+  <signal name="ActiveTtsModelIdPropertyChanged">
+    <arg name="activeTtsModelId" type="s" direction="out" />
+  </signal>
+
+  <!-- State of the application. Supported states are:
+      Unknown = 0,
+      NotConfigured = 1,
+      Busy = 2,
+      Idle = 3,
+      ListeningManual = 4,
+      ListeningAuto = 5,
+      TranscribingFile = 6,
+      ListeningSingleSentence = 7,
+      PlayingSpeech = 8,
+      WritingSpeechToFile = 9,
+      Translating = 10,
+      RepairingText = 11,
+      Importing = 20,
+      Exporting = 21
+  -->
+  <property name="State" type="i" access="read" />
+  <signal name="StatePropertyChanged">
+    <arg name="state" type="i" direction="out" />
+  </signal>
+
+  <!-- State of the current task. Supported states are:
+      Idle = 0,
+      SpeechDetected = 1,
+      Processing = 2,
+      Initializing = 3,
+      SpeechPlaying = 4,
+      SpeechPaused = 5,
+      Cancelling = 6
+  -->
+  <property name="TaskState" type="i" access="read" />
+  <signal name="TaskStatePropertyChanged">
+    <arg name="state" type="i" direction="out" />
+  </signal>
+
+  <!-- Invokes an action. Supported actions are:
+      start-listening,
+      start-listening-translate,
+      start-listening-active-window,
+      start-listening-translate-active-window,
+      start-listening-clipboard,
+      start-listening-translate-clipboard,
+      stop-listening,
+      start-reading,
+      start-reading-clipboard,
+      start-reading-text,
+      pause-resume-reading,
+      cancel,
+      switch-to-next-stt-model,
+      switch-to-prev-stt-model,
+      switch-to-next-tts-model,
+      switch-to-prev-tts-model,
+      set-stt-model,
+      set-tts-model
+  -->
+  <method name="InvokeAction">
+    <arg name="action_name" type="s" direction="in" />
+    <!-- optional argument (e.g. model-id, text to read) -->
+    <arg name="argument" type="s" direction="in" />
+  </method>
+
+  <!-- Returns available STT model IDs -->
+  <method name="GetSttModelIds">
+    <arg name="models" type="as" direction="out" />
+  </method>
+
+  <!-- Returns available TTS model IDs -->
+  <method name="GetTtsModelIds">
+    <arg name="models" type="as" direction="out" />
+  </method>
+</interface>
+</node>
+

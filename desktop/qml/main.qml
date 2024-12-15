@@ -490,21 +490,13 @@ ApplicationWindow {
         onStt_configuredChanged: showWelcome()
         onTts_configuredChanged: showWelcome()
         Component.onCompleted: {
-            if (_start_in_tray) show_tray()
-            if (_files_to_open.length > 0) {
-                appWin.show()
+            // register app in dbus server
+            _app_server.setDsnoteApp(app)
 
-                if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
-                    var list_of_files = _files_to_open
-                    addTextDialog.addHandler = function(){app.import_files(list_of_files, false)}
-                    addTextDialog.replaceHandler = function(){app.import_files(list_of_files, true)}
-                    addTextDialog.open()
-                } else {
-                    app.import_files(_files_to_open, _settings.file_import_action === Settings.FileImportActionReplace)
-                }
-            }
-            app.execute_action_name(_requested_action, _requested_extra)
+            if (_start_in_tray) show_tray()
+
             app.set_app_window(appWin);
+
             showWelcome()
         }
 

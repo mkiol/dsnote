@@ -448,6 +448,8 @@ class dsnote_app : public QObject {
                                        const QString &replace,
                                        const QString &langs, unsigned int type);
     Q_INVOKABLE bool trans_rule_re_pattern_valid(const QString &pattern);
+    Q_INVOKABLE QStringList available_stt_model_ids() const;
+    Q_INVOKABLE QStringList available_tts_model_ids() const;
 
    signals:
     void active_stt_model_changed();

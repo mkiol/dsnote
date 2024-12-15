@@ -191,7 +191,7 @@ bool mnt_engine::available() {
 #endif
 
     if (lib_handle == nullptr) {
-        LOGE("failed to open bergamot lib: " << dlerror());
+        LOGW("failed to open bergamot lib: " << dlerror());
         return false;
     }
 

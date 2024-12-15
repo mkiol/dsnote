@@ -103,14 +103,14 @@ bool ds_engine::available() {
 #ifdef ARCH_X86_64
     if ((cpu_tools::cpuinfo().feature_flags &
          cpu_tools::feature_flags_t::avx) == 0) {
-        LOGE("avx not supported but ds engine needs it");
+        LOGW("avx not supported but ds engine needs it");
         return false;
     }
 #endif
 
     auto lib_handle = dlopen("libstt.so", RTLD_LAZY);
     if (lib_handle == nullptr) {
-        LOGE("failed to open stt lib: " << dlerror());
+        LOGW("failed to open stt lib: " << dlerror());
         return false;
     }
 

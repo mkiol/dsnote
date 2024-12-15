@@ -27,6 +27,7 @@ DialogPage {
             To insert text at the cursor position rather than at the end of the note,
             change <i>Text appending mode</i> option to <i>Add at the cursor position</i> in the settings.
             When the <i>Replace an existing note</i> option is set, whenever new text is added, it will replace the existing note.</li>
+        <li>DBus API for integration with external applications</li>
         </ul>
         <p>" + qsTr("User Interface") + ":</p>
         <ul>
@@ -36,6 +37,13 @@ DialogPage {
         <li>Models grouped by type in model browser.
             To improve usability, instead of a list containing models of all types, models are grouped by type in separate tabs.</li>
         <li>New <i>General</i> and <i>Advanced</i> tabs have been added to <i>Settings</i>.</li>
+        <li>Command line options for printing available or active model IDs.
+            Use <i>--print-available-models</i> or <i>--print-active-models</i> to list all available model IDs or the currently active model IDs.</li>
+        <li>Command line option to print the current status of the application.
+            Use <i>--print-state</i> to see the current state.
+            This option can be useful when integrating with external programs or widgets on the desktop.
+            To see all available command line options, run the command: <i>" + (_settings.is_flatpak() ? "flatpak run net.mkiol.SpeechNote" : "dsnote") + " --help</i></li>
+        </li>
         </ul>
         <p>" + qsTr("Speech to Text") + ":</p>
         <ul>

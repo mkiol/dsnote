@@ -100,6 +100,7 @@ set(info_dbus_speech_service "net.mkiol.Speech")
 set(info_dbus_speech_interface "net.mkiol.Speech")
 set(info_dbus_app_service "net.mkiol.dsnote")
 set(info_dbus_app_path "/net/mkiol/dsnote")
+set(info_dbus_app_interface "net.mkiol.dsnote")
 set(info_dbus_app_id ${id})
 set(info_id ${id})
 set(info_binary_id ${id})
@@ -112,12 +113,14 @@ if(WITH_SFOS)
     set(info_dbus_speech_interface "org.mkiol.Speech")
     set(info_dbus_app_service "org.mkiol.dsnote")
     set(info_dbus_app_path "/org/mkiol/dsnote")
+    set(info_dbus_app_interface "org.mkiol.dsnote")
     set(info_binary_id "harbour-dsnote")
     set(info_app_icon_id "harbour-dsnote")
 endif()
 if(WITH_FLATPAK)
     set(info_dbus_app_service "net.mkiol.SpeechNote")
     set(info_dbus_app_path "/net/mkiol/SpeechNote")
+    set(info_dbus_app_interface "net.mkiol.SpeechNote")
     set(info_dbus_app_id "SpeechNote")
     set(info_app_icon_id "net.mkiol.SpeechNote")
 endif()
@@ -256,6 +259,8 @@ set(dsnote_lib_sources
     ${sources_dir}/dbus_speech_inf.h
     ${sources_dir}/dbus_application_adaptor.cpp
     ${sources_dir}/dbus_application_adaptor.h
+    ${sources_dir}/dbus_application_inf.cpp
+    ${sources_dir}/dbus_application_inf.h
     ${sources_dir}/dbus_notifications_inf.cpp
     ${sources_dir}/dbus_notifications_inf.h
     ${sources_dir}/dirmodel.cpp
@@ -359,6 +364,7 @@ set(dsnote_lib_sources
     ${sources_dir}/whisperspeech_engine.cpp
     ${sources_dir}/audio_device_manager.cpp
     ${sources_dir}/audio_device_manager.hpp
+    ${sources_dir}/cmd_options.hpp
 )
 
 if(WITH_DESKTOP)
@@ -375,7 +381,40 @@ endif()
 
 configure_file(config.h.in config.h)
 
+set(dbus_dsnote_interface_file "${PROJECT_BINARY_DIR}/${info_dbus_app_interface}.xml")
+configure_file(${dbus_dir}/dsnote.xml.in ${dbus_dsnote_interface_file})
+find_package(Qt5 COMPONENTS DBus REQUIRED)
+
+unset(qdbusxml2cpp_bin CACHE)
+find_program(qdbusxml2cpp_bin qdbusxml2cpp)
+if(${qdbusxml2cpp_bin} MATCHES "-NOTFOUND$")
+   find_program(qdbusxml2cpp_bin qdbusxml2cpp-qt5)
+   if(${qdbusxml2cpp_bin} MATCHES "-NOTFOUND$")
+      message(FATAL_ERROR "qdbusxml2cpp not found but it is required")
+   endif()
+endif()
+add_custom_command(
+    OUTPUT dbus_dsnote_adaptor.h dbus_dsnote_adaptor.cpp
+    COMMAND ${qdbusxml2cpp_bin} ${info_dbus_app_interface}.xml -m -a dbus_dsnote_adaptor -c DsnoteAdaptor
+    DEPENDS ${info_dbus_app_interface}.xml
+    COMMENT "generate dbus app adaptor sources"
+)
+qt5_generate_moc("${PROJECT_BINARY_DIR}/dbus_dsnote_adaptor.h" dbus_dsnote_adaptor.moc)
+macro_add_file_dependencies(dbus_dsnote_adaptor.cpp dbus_dsnote_adaptor.moc)
+add_custom_command(
+    OUTPUT dbus_dsnote_inf.h dbus_dsnote_inf.cpp
+    COMMAND ${qdbusxml2cpp_bin} ${info_dbus_app_interface}.xml -m -p dbus_dsnote_inf -c DsnoteDbusInterface
+    DEPENDS ${info_dbus_app_interface}.xml
+    COMMENT "generate dbus app inf sources"
+)
+qt5_generate_moc("${PROJECT_BINARY_DIR}/dbus_dsnote_inf.h" dbus_dsnote_inf.moc)
+macro_add_file_dependencies(dbus_dsnote_inf.cpp dbus_dsnote_inf.moc)
+list(APPEND dsnote_lib_sources
+    dbus_dsnote_adaptor.cpp dbus_dsnote_adaptor.h
+    dbus_dsnote_inf.cpp dbus_dsnote_inf.h)
+
 add_library(dsnote_lib STATIC ${dsnote_lib_sources})
+set_property(TARGET dsnote_lib PROPERTY AUTOMOC ON)
 
 # resources
 
@@ -515,8 +554,6 @@ if(WITH_DESKTOP)
             list(APPEND deps_libs ${qhotkey_path})
         endif()
     endif()
-
-    include(${cmake_path}/kdbusservice.cmake)
 endif()
 
 if(BUILD_PYTHON_MODULE)

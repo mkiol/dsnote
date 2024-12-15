@@ -13,7 +13,7 @@ else()
     install(FILES "${PROJECT_BINARY_DIR}/dbus_app.service" DESTINATION share/dbus-1/services RENAME ${info_binary_id}.service)
 endif()
 
-install(FILES "${desktop_dir}/${info_binary_id}.svg" DESTINATION share/icons/hicolor/scalable/apps)
+install(FILES "${desktop_dir}/icons/${info_binary_id}.svg" DESTINATION share/icons/hicolor/scalable/apps)
 install(FILES "${desktop_dir}/icons/16x16/${info_binary_id}.png" DESTINATION share/icons/hicolor/16x16/apps)
 install(FILES "${desktop_dir}/icons/32x32/${info_binary_id}.png" DESTINATION share/icons/hicolor/32x32/apps)
 install(FILES "${desktop_dir}/icons/48x48/${info_binary_id}.png" DESTINATION share/icons/hicolor/48x48/apps)
