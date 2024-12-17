@@ -6,6 +6,9 @@ build-options:
   no-debuginfo: true
   prefix: /app/extensions/amd
 cleanup:
+  - /bin
+  - /lib/cmake
+  - /lib/pkgconfig
   - /include
   - "*.a"
 modules:
@@ -38,6 +41,7 @@ modules:
       - /rocm/miopen*
       - /rocm/rccl*
       - /rocm/oam
+      - /rocm/share/doc
       - /rocm/share/dec
       - /rocm/share/hip
       - /rocm/share/hipfort
@@ -230,3 +234,11 @@ modules:
         sha256: 97f19a32212f2f215e538ee37a16ff547aaebc54817bd8072034e02466ce6d55
       - type: patch
         path: ../patches/whispercpp.patch
+
+  - name: metadata
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 -t ${FLATPAK_DEST}/share/metainfo ${FLATPAK_ID}.metainfo.xml
+    sources:
+      - type: file
+        path: net.mkiol.SpeechNote.Addon.amd.metainfo.xml
