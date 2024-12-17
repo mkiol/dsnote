@@ -448,8 +448,10 @@ class dsnote_app : public QObject {
                                        const QString &replace,
                                        const QString &langs, unsigned int type);
     Q_INVOKABLE bool trans_rule_re_pattern_valid(const QString &pattern);
-    Q_INVOKABLE QStringList available_stt_model_ids() const;
-    Q_INVOKABLE QStringList available_tts_model_ids() const;
+    [[nodiscard]] Q_INVOKABLE QList<QStringList> available_stt_models_info()
+        const;
+    [[nodiscard]] Q_INVOKABLE QList<QStringList> available_tts_models_info()
+        const;
 
    signals:
     void active_stt_model_changed();
@@ -700,7 +702,6 @@ class dsnote_app : public QObject {
 #ifdef USE_DESKTOP
     tray_icon m_tray;
 #endif
-
     [[nodiscard]] QVariantList available_stt_models() const;
     [[nodiscard]] QVariantList available_tts_models() const;
     [[nodiscard]] QVariantList available_tts_ref_voices() const;

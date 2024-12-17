@@ -22,6 +22,9 @@ app_server::app_server(const cmd::options &options, QObject *parent)
     : QObject{parent},
       m_dbus_application_adaptor{this},
       m_dbus_dsnote_adaptor{this} {
+    qRegisterMetaType<QList<QStringList>>("QList<QStringList>");
+    qDBusRegisterMetaType<QList<QStringList>>();
+
     auto con = QDBusConnection::sessionBus();
 
     if (con.registerService(DBUS_SERVICE_NAME) &&
@@ -96,31 +99,85 @@ void app_server::request_another_instance(const cmd::options &options) {
                        iface.taskState());
         }
 
-        if (options.model_list_types & cmd::model_type_flag::stt) {
-            QDBusReply<QStringList> reply = iface.GetSttModelIds();
-            if (reply.isValid()) {
-                fmt::print("Available STT models:\n");
-                for (const auto &id : reply.value()) {
-                    fmt::print("\t{}\n", id.toStdString());
-                }
+        auto max_id_size = [](const QList<QStringList> &models) {
+            return std::accumulate(
+                models.cbegin(), models.cend(), 0,
+                [](int size, const auto &model) {
+                    return std::max(
+                        model.size() < 2 ? size : model.at(0).size(), size);
+                });
+        };
+
+        auto print_models = [](const char *name, int max_id_size,
+                               const QList<QStringList> &models) {
+            fmt::print("Available {} models: {}\n", name, models.size());
+
+            for (const auto &model : models) {
+                if (model.size() < 2) continue;
+                fmt::print(fmt::format("\t{{:{}}} \"{{}}\"\n", max_id_size),
+                           model.at(0).toStdString(),
+                           model.at(1).toStdString());
+            }
+        };
+
+        auto print_active_model = [](const char *name, int max_id_size,
+                                     const QStringList &model) {
+            fmt::print("Active {} model:\n", name);
+            fmt::print(fmt::format("\t{{:{}}} \"{{}}\"\n", max_id_size),
+                       model.size() > 1 ? model.at(0).toStdString() : "-",
+                       model.size() > 1 ? model.at(1).toStdString() : "-");
+        };
+
+        int g_max_size = 1;
+
+        if ((options.model_list_types & cmd::model_type_flag::stt) &&
+            (options.model_list_types & cmd::model_type_flag::tts)) {
+            QDBusReply<QList<QStringList>> replyStt = iface.GetSttModels();
+            QDBusReply<QList<QStringList>> replyTts = iface.GetTtsModels();
+            if (replyStt.isValid() && replyTts.isValid()) {
+                auto listStt = replyStt.value();
+                auto listTts = replyTts.value();
+                g_max_size =
+                    std::max(max_id_size(listStt), max_id_size(listTts));
+                print_models("STT", g_max_size, listStt);
+                print_models("TTS", g_max_size, listTts);
+            }
+        } else if ((options.model_list_types & cmd::model_type_flag::stt)) {
+            QDBusReply<QList<QStringList>> replyStt = iface.GetSttModels();
+            if (replyStt.isValid()) {
+                auto listStt = replyStt.value();
+                g_max_size = max_id_size(listStt);
+                print_models("STT", g_max_size, listStt);
+            }
+        } else if ((options.model_list_types & cmd::model_type_flag::tts)) {
+            QDBusReply<QList<QStringList>> replyTts = iface.GetTtsModels();
+            if (replyTts.isValid()) {
+                auto listStt = replyTts.value();
+                g_max_size = max_id_size(listStt);
+                print_models("STT", g_max_size, listStt);
             }
         }
-        if (options.model_list_types & cmd::model_type_flag::tts) {
-            QDBusReply<QStringList> reply = iface.GetTtsModelIds();
-            if (reply.isValid()) {
-                fmt::print("Available TTS models:\n");
-                for (const auto &id : reply.value()) {
-                    fmt::print("\t{}\n", id.toStdString());
-                }
-            }
-        }
-        if (options.active_model_types & cmd::model_type_flag::stt) {
-            fmt::print("Active STT model:\n\t{}\n",
-                       iface.activeSttModelId().toStdString());
-        }
-        if (options.active_model_types & cmd::model_type_flag::tts) {
-            fmt::print("Active TTS model:\n\t{}\n",
-                       iface.activeTtsModelId().toStdString());
+
+        if ((options.active_model_types & cmd::model_type_flag::stt) &&
+            (options.active_model_types & cmd::model_type_flag::tts)) {
+            auto modelStt = iface.activeSttModel();
+            auto modelTts = iface.activeTtsModel();
+            g_max_size = std::max(
+                g_max_size,
+                std::max(modelStt.size() > 1 ? modelStt.at(0).size() : 1,
+                         modelTts.size() > 1 ? modelTts.at(0).size() : 1));
+            print_active_model("STT", g_max_size, modelStt);
+            print_active_model("TTS", g_max_size, modelTts);
+        } else if (options.active_model_types & cmd::model_type_flag::stt) {
+            auto modelStt = iface.activeSttModel();
+            g_max_size = std::max(
+                g_max_size, modelStt.size() > 1 ? modelStt.at(0).size() : 1);
+            print_active_model("STT", g_max_size, modelStt);
+        } else if (options.active_model_types & cmd::model_type_flag::tts) {
+            auto modelTts = iface.activeTtsModel();
+            g_max_size = std::max(
+                g_max_size, modelTts.size() > 1 ? modelTts.at(0).size() : 1);
+            print_active_model("TTS", g_max_size, modelTts);
         }
     }
 }
@@ -134,11 +191,11 @@ void app_server::files_to_open(const QStringList &files) {
 }
 
 void app_server::handle_active_stt_model_change() {
-    emit ActiveSttModelIdPropertyChanged(active_stt_model_id());
+    emit ActiveSttModelPropertyChanged(active_stt_model());
 }
 
 void app_server::handle_active_tts_model_change() {
-    emit ActiveTtsModelIdPropertyChanged(active_tts_model_id());
+    emit ActiveTtsModelPropertyChanged(active_tts_model());
 }
 
 void app_server::handle_state_change() { emit StatePropertyChanged(state()); }
@@ -169,28 +226,28 @@ void app_server::InvokeAction(const QString &action_name,
     emit action_requested(action_name, argument);
 }
 
-QStringList app_server::GetSttModelIds() {
-    qDebug() << "[dbus app] GetSttModelIds called";
+QList<QStringList> app_server::GetSttModels() {
+    qDebug() << "[dbus app] GetSttModels called";
 
-    QStringList list;
+    QList<QStringList> list;
 
     if (!m_dsnote_app) return list;
 
-    QMetaObject::invokeMethod(m_dsnote_app, "available_stt_model_ids",
-                              Q_RETURN_ARG(QStringList, list));
+    QMetaObject::invokeMethod(m_dsnote_app, "available_stt_models_info",
+                              Q_RETURN_ARG(QList<QStringList>, list));
 
     return list;
 }
 
-QStringList app_server::GetTtsModelIds() {
-    qDebug() << "[dbus app] GetTtsModelIds called";
+QList<QStringList> app_server::GetTtsModels() {
+    qDebug() << "[dbus app] GetTtsModels called";
 
-    QStringList list;
+    QList<QStringList> list;
 
     if (!m_dsnote_app) return list;
 
-    QMetaObject::invokeMethod(m_dsnote_app, "available_tts_model_ids",
-                              Q_RETURN_ARG(QStringList, list));
+    QMetaObject::invokeMethod(m_dsnote_app, "available_tts_models_info",
+                              Q_RETURN_ARG(QList<QStringList>, list));
 
     return list;
 }
@@ -222,16 +279,24 @@ void app_server::Open(const QStringList &uris,
     files_to_open(files);
 }
 
-QString app_server::active_stt_model_id() const {
-    qDebug() << "[dbus app] ActiveSttModelId called";
-    return m_dsnote_app ? m_dsnote_app->property("active_stt_model").toString()
-                        : QString{};
+QStringList app_server::active_stt_model() const {
+    qDebug() << "[dbus app] ActiveSttModel called";
+    return m_dsnote_app
+               ? QStringList{}
+                     << m_dsnote_app->property("active_stt_model").toString()
+                     << m_dsnote_app->property("active_stt_model_name")
+                            .toString()
+               : QStringList{};
 }
 
-QString app_server::active_tts_model_id() const {
-    qDebug() << "[dbus app] ActiveTtsModelId called";
-    return m_dsnote_app ? m_dsnote_app->property("active_tts_model").toString()
-                        : QString{};
+QStringList app_server::active_tts_model() const {
+    qDebug() << "[dbus app] ActiveTtsModel called";
+    return m_dsnote_app
+               ? QStringList{}
+                     << m_dsnote_app->property("active_tts_model").toString()
+                     << m_dsnote_app->property("active_tts_model_name")
+                            .toString()
+               : QStringList{};
 }
 
 int app_server::state() const {

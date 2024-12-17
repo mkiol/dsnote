@@ -2020,18 +2020,6 @@ QVariantList dsnote_app::available_stt_models() const {
     return list;
 }
 
-QStringList dsnote_app::available_stt_model_ids() const {
-    QStringList list;
-
-    for (auto it = m_available_stt_models_map.constBegin();
-         it != m_available_stt_models_map.constEnd(); ++it) {
-        const auto v = it.value().toStringList();
-        if (!v.isEmpty()) list.push_back(v.at(0));
-    }
-
-    return list;
-}
-
 QVariantList dsnote_app::available_tts_models() const {
     QVariantList list;
 
@@ -2044,13 +2032,23 @@ QVariantList dsnote_app::available_tts_models() const {
     return list;
 }
 
-QStringList dsnote_app::available_tts_model_ids() const {
-    QStringList list;
+QList<QStringList> dsnote_app::available_stt_models_info() const {
+    QList<QStringList> list;
+
+    for (auto it = m_available_stt_models_map.constBegin();
+         it != m_available_stt_models_map.constEnd(); ++it) {
+        list.push_back(it.value().toStringList());
+    }
+
+    return list;
+}
+
+QList<QStringList> dsnote_app::available_tts_models_info() const {
+    QList<QStringList> list;
 
     for (auto it = m_available_tts_models_map.constBegin();
          it != m_available_tts_models_map.constEnd(); ++it) {
-        const auto v = it.value().toStringList();
-        if (!v.isEmpty()) list.push_back(v.at(0));
+        list.push_back(it.value().toStringList());
     }
 
     return list;

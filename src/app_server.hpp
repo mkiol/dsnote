@@ -27,8 +27,8 @@ class app_server : public QObject {
     Q_OBJECT
 
     // bus dsnote api
-    Q_PROPERTY(QString ActiveSttModelId READ active_stt_model_id CONSTANT)
-    Q_PROPERTY(QString ActiveTtsModelId READ active_tts_model_id CONSTANT)
+    Q_PROPERTY(QStringList ActiveSttModel READ active_stt_model CONSTANT)
+    Q_PROPERTY(QStringList ActiveTtsModel READ active_tts_model CONSTANT)
     Q_PROPERTY(int State READ state CONSTANT)
     Q_PROPERTY(int TaskState READ task_state CONSTANT)
 
@@ -46,16 +46,16 @@ class app_server : public QObject {
     // dbus dsnote api
     Q_INVOKABLE void InvokeAction(const QString &action_name,
                                   const QString &argument);
-    Q_INVOKABLE QStringList GetSttModelIds();
-    Q_INVOKABLE QStringList GetTtsModelIds();
+    Q_INVOKABLE QList<QStringList> GetSttModels();
+    Q_INVOKABLE QList<QStringList> GetTtsModels();
 
    signals:
     void activate_requested();
     void action_requested(QString action_name, QString action_extra);
     void files_to_open_requested(const QStringList &files);
     // dbus dsnote api
-    void ActiveSttModelIdPropertyChanged(const QString &id);
-    void ActiveTtsModelIdPropertyChanged(const QString &id);
+    void ActiveSttModelPropertyChanged(const QStringList &id);
+    void ActiveTtsModelPropertyChanged(const QStringList &id);
     void StatePropertyChanged(int state);
     void TaskStatePropertyChanged(int state);
 
@@ -73,8 +73,8 @@ class app_server : public QObject {
 
     void files_to_open(const QStringList &files);
     void request_another_instance(const cmd::options &options);
-    QString active_stt_model_id() const;
-    QString active_tts_model_id() const;
+    QStringList active_stt_model() const;
+    QStringList active_tts_model() const;
     int state() const;
     int task_state() const;
    private Q_SLOTS:

@@ -2,16 +2,18 @@
 "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node>
 <interface name="@info_dbus_app_interface@">
-  <!-- Currently active STT model ID -->
-  <property name="ActiveSttModelId" type="s" access="read" />
-  <signal name="ActiveSttModelIdPropertyChanged">
-    <arg name="activeSttModelId" type="s" direction="out" />
+  <!-- Currently active STT model -->
+  <!-- [0]=>model ID, [1]=>model name -->
+  <property name="ActiveSttModel" type="as" access="read" />
+  <signal name="ActiveSttModelPropertyChanged">
+    <arg name="activeSttModel" type="as" direction="out" />
   </signal>
 
   <!-- Currently active TTS model ID -->
-  <property name="ActiveTtsModelId" type="s" access="read" />
-  <signal name="ActiveTtsModelIdPropertyChanged">
-    <arg name="activeTtsModelId" type="s" direction="out" />
+  <!-- [0]=>model ID, [1]=>model name -->
+  <property name="ActiveTtsModel" type="as" access="read" />
+  <signal name="ActiveTtsModelPropertyChanged">
+    <arg name="activeTtsModel" type="as" direction="out" />
   </signal>
 
   <!-- State of the application. Supported states are:
@@ -75,14 +77,18 @@
     <arg name="argument" type="s" direction="in" />
   </method>
 
-  <!-- Returns available STT model IDs -->
-  <method name="GetSttModelIds">
-    <arg name="models" type="as" direction="out" />
+  <!-- Returns available STT models -->
+  <method name="GetSttModels">
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;QStringList&gt;"/>
+    <!-- [x][0]=>model ID, [x][1]=>model name -->
+    <arg name="models" type="aas" direction="out" />
   </method>
 
   <!-- Returns available TTS model IDs -->
-  <method name="GetTtsModelIds">
-    <arg name="models" type="as" direction="out" />
+  <method name="GetTtsModels">
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;QStringList&gt;"/>
+    <!-- [x][0]=>model ID, [x][1]=>model name -->
+    <arg name="models" type="aas" direction="out" />
   </method>
 </interface>
 </node>

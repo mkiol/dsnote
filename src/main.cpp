@@ -104,12 +104,12 @@ static cmd::options check_options(const QCoreApplication& app) {
 
     QCommandLineOption print_models_opt{
         QStringLiteral("print-available-models"),
-        QStringLiteral("Prints list of available STT and TTS model IDs.")};
+        QStringLiteral("Prints list of available STT and TTS models.")};
     parser.addOption(print_models_opt);
 
     QCommandLineOption print_active_model_opt{
         QStringLiteral("print-active-models"),
-        QStringLiteral("Prints the currently active STT and TTS model IDs.")};
+        QStringLiteral("Prints the currently active STT and TTS models.")};
     parser.addOption(print_active_model_opt);
 
     QCommandLineOption action_opt{
