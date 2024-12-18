@@ -38,7 +38,7 @@ DialogPage {
             To improve usability, instead of a list containing models of all types, models are grouped by type in separate tabs.</li>
         <li>New <i>General</i> and <i>Advanced</i> tabs have been added to <i>Settings</i>.</li>
         <li>Command line options for printing available or active model IDs.
-            Use <i>--print-available-models</i> or <i>--print-active-models</i> to list all available model IDs or the currently active model IDs.</li>
+            Use <i>--print-available-models</i> or <i>--print-active-model</i> to list all available models or the currently active model.</li>
         <li>Command line option to print the current status of the application.
             Use <i>--print-state</i> to see the current state.
             This option can be useful when integrating with external programs or widgets on the desktop.

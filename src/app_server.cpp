@@ -87,16 +87,18 @@ void app_server::request_another_instance(const cmd::options &options) {
                              {});
     }
 
-    if (options.model_list_types != cmd::model_type_flag::none ||
-        options.active_model_types != cmd::model_type_flag::none ||
-        options.print_state) {
+    if (options.models_to_print_roles != cmd::role_none ||
+        options.active_model_to_print_role != cmd::role_none ||
+        options.state_scope_to_print_flag != cmd::scope_none) {
         DsnoteDbusInterface iface(DBUS_SERVICE_NAME, DBUS_SERVICE_PATH,
                                   QDBusConnection::sessionBus());
         iface.setTimeout(DBUS_TIMEOUT_MS);
 
-        if (options.print_state) {
-            fmt::print("State:\n\t{}\nTask state:\n\t{}\n", iface.state(),
-                       iface.taskState());
+        if (options.state_scope_to_print_flag & cmd::scope_general) {
+            fmt::print("General state:\n\t{}\n", iface.state());
+        }
+        if (options.state_scope_to_print_flag & cmd::scope_task) {
+            fmt::print("Task state:\n\t{}\n", iface.taskState());
         }
 
         auto max_id_size = [](const QList<QStringList> &models) {
@@ -130,8 +132,8 @@ void app_server::request_another_instance(const cmd::options &options) {
 
         int g_max_size = 1;
 
-        if ((options.model_list_types & cmd::model_type_flag::stt) &&
-            (options.model_list_types & cmd::model_type_flag::tts)) {
+        if ((options.models_to_print_roles & cmd::role_stt) &&
+            (options.models_to_print_roles & cmd::role_tts)) {
             QDBusReply<QList<QStringList>> replyStt = iface.GetSttModels();
             QDBusReply<QList<QStringList>> replyTts = iface.GetTtsModels();
             if (replyStt.isValid() && replyTts.isValid()) {
@@ -142,14 +144,14 @@ void app_server::request_another_instance(const cmd::options &options) {
                 print_models("STT", g_max_size, listStt);
                 print_models("TTS", g_max_size, listTts);
             }
-        } else if ((options.model_list_types & cmd::model_type_flag::stt)) {
+        } else if (options.models_to_print_roles & cmd::role_stt) {
             QDBusReply<QList<QStringList>> replyStt = iface.GetSttModels();
             if (replyStt.isValid()) {
                 auto listStt = replyStt.value();
                 g_max_size = max_id_size(listStt);
                 print_models("STT", g_max_size, listStt);
             }
-        } else if ((options.model_list_types & cmd::model_type_flag::tts)) {
+        } else if (options.models_to_print_roles & cmd::role_tts) {
             QDBusReply<QList<QStringList>> replyTts = iface.GetTtsModels();
             if (replyTts.isValid()) {
                 auto listStt = replyTts.value();
@@ -158,8 +160,8 @@ void app_server::request_another_instance(const cmd::options &options) {
             }
         }
 
-        if ((options.active_model_types & cmd::model_type_flag::stt) &&
-            (options.active_model_types & cmd::model_type_flag::tts)) {
+        if ((options.active_model_to_print_role & cmd::role_stt) &&
+            (options.active_model_to_print_role & cmd::role_tts)) {
             auto modelStt = iface.activeSttModel();
             auto modelTts = iface.activeTtsModel();
             g_max_size = std::max(
@@ -168,12 +170,12 @@ void app_server::request_another_instance(const cmd::options &options) {
                          modelTts.size() > 1 ? modelTts.at(0).size() : 1));
             print_active_model("STT", g_max_size, modelStt);
             print_active_model("TTS", g_max_size, modelTts);
-        } else if (options.active_model_types & cmd::model_type_flag::stt) {
+        } else if (options.active_model_to_print_role & cmd::role_stt) {
             auto modelStt = iface.activeSttModel();
             g_max_size = std::max(
                 g_max_size, modelStt.size() > 1 ? modelStt.at(0).size() : 1);
             print_active_model("STT", g_max_size, modelStt);
-        } else if (options.active_model_types & cmd::model_type_flag::tts) {
+        } else if (options.active_model_to_print_role & cmd::role_tts) {
             auto modelTts = iface.activeTtsModel();
             g_max_size = std::max(
                 g_max_size, modelTts.size() > 1 ? modelTts.at(0).size() : 1);

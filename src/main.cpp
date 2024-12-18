@@ -99,17 +99,24 @@ static cmd::options check_options(const QCoreApplication& app) {
 
     QCommandLineOption print_state_opt{
         QStringLiteral("print-state"),
-        QStringLiteral("Prints the current state.")};
+        QStringLiteral(
+            "Prints the current state in the application for the "
+            "specified <scope>. Supported scopes are: general, task."),
+        QStringLiteral("scope")};
     parser.addOption(print_state_opt);
 
     QCommandLineOption print_models_opt{
         QStringLiteral("print-available-models"),
-        QStringLiteral("Prints list of available STT and TTS models.")};
+        QStringLiteral("Prints a list of available models for the specified "
+                       "<role>. Supported roles are: tts, stt."),
+        QStringLiteral("role")};
     parser.addOption(print_models_opt);
 
     QCommandLineOption print_active_model_opt{
-        QStringLiteral("print-active-models"),
-        QStringLiteral("Prints the currently active STT and TTS models.")};
+        QStringLiteral("print-active-model"),
+        QStringLiteral("Prints the currently active model for the specified "
+                       "<role>. Supported roles are: tts, stt."),
+        QStringLiteral("role")};
     parser.addOption(print_active_model_opt);
 
     QCommandLineOption action_opt{
@@ -283,13 +290,49 @@ static cmd::options check_options(const QCoreApplication& app) {
         }
     }
 
-    if (parser.isSet(print_models_opt)) {
-        options.model_list_types =
-            cmd::model_type_flag::stt | cmd::model_type_flag::tts;
+    auto models_role_to_print = parser.value(print_models_opt);
+    if (!models_role_to_print.isEmpty()) {
+        if (models_role_to_print.contains("stt", Qt::CaseInsensitive)) {
+            options.models_to_print_roles |= cmd::role_stt;
+        }
+        if (models_role_to_print.contains("tts", Qt::CaseInsensitive)) {
+            options.models_to_print_roles |= cmd::role_tts;
+        }
+        if (options.models_to_print_roles == cmd::role_none) {
+            fmt::print(stderr, "Invalid model role in --{} option.\n",
+                       print_models_opt.names().front().toStdString());
+            options.valid = false;
+        }
     }
-    if (parser.isSet(print_active_model_opt)) {
-        options.active_model_types =
-            cmd::model_type_flag::stt | cmd::model_type_flag::tts;
+
+    auto active_model_role_to_print = parser.value(print_active_model_opt);
+    if (!active_model_role_to_print.isEmpty()) {
+        if (active_model_role_to_print.contains("stt", Qt::CaseInsensitive)) {
+            options.active_model_to_print_role |= cmd::role_stt;
+        }
+        if (active_model_role_to_print.contains("tts", Qt::CaseInsensitive)) {
+            options.active_model_to_print_role |= cmd::role_tts;
+        }
+        if (options.active_model_to_print_role == cmd::role_none) {
+            fmt::print(stderr, "Invalid model role in --{} option.\n",
+                       print_active_model_opt.names().front().toStdString());
+            options.valid = false;
+        }
+    }
+
+    auto state_scope_to_print = parser.value(print_state_opt);
+    if (!state_scope_to_print.isEmpty()) {
+        if (state_scope_to_print.contains("general", Qt::CaseInsensitive)) {
+            options.state_scope_to_print_flag |= cmd::scope_general;
+        }
+        if (state_scope_to_print.contains("task", Qt::CaseInsensitive)) {
+            options.state_scope_to_print_flag |= cmd::scope_task;
+        }
+        if (options.state_scope_to_print_flag == cmd::scope_none) {
+            fmt::print(stderr, "Invalid state scope in --{} option.\n",
+                       print_state_opt.names().front().toStdString());
+            options.valid = false;
+        }
     }
 
     options.log_file = parser.value(log_file_opt);
@@ -297,7 +340,6 @@ static cmd::options check_options(const QCoreApplication& app) {
     options.gen_cheksums = parser.isSet(gen_checksum_opt);
     options.hw_scan_off = parser.isSet(hwscanoff_opt);
     options.py_scan_off = parser.isSet(pyscanoff_opt);
-    options.print_state = parser.isSet(print_state_opt);
     options.reset_models = parser.isSet(resetmodels_opt);
     options.files = parser.positionalArguments();
 #ifdef USE_DESKTOP

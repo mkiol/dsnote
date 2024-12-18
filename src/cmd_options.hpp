@@ -15,7 +15,16 @@
 #include "settings.h"
 
 namespace cmd {
-enum model_type_flag : uint8_t { none = 0, stt = 1 << 0, tts = 1 << 1 };
+enum role_flag : uint8_t {
+    role_none = 0,
+    role_stt = 1 << 0,
+    role_tts = 1 << 1
+};
+enum scope_flag : uint8_t {
+    scope_none = 0,
+    scope_general = 1 << 0,
+    scope_task = 1 << 1
+};
 
 struct options {
     bool valid = true;
@@ -27,11 +36,9 @@ struct options {
     bool py_scan_off = false;
     bool reset_models = false;
     bool start_in_tray = false;
-    bool print_state = false;
-    std::underlying_type_t<model_type_flag> model_list_types =
-        model_type_flag::none;
-    std::underlying_type_t<model_type_flag> active_model_types =
-        model_type_flag::none;
+    std::underlying_type_t<scope_flag> state_scope_to_print_flag = scope_none;
+    std::underlying_type_t<role_flag> models_to_print_roles = role_none;
+    std::underlying_type_t<role_flag> active_model_to_print_role = role_none;
     QString action;
     QString extra;
     QStringList files;
