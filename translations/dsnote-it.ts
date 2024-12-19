@@ -101,38 +101,38 @@
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="17"/>
         <source>Install Flatpak add-on</source>
-        <translation type="unfinished"></translation>
+        <translation>Installa il componente aggiuntivo Flatpak</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="33"/>
         <source>To install Flatpak add-on, which provides GPU acceleration support for %1 graphics card, follow one of the steps below.</source>
-        <translation type="unfinished"></translation>
+        <translation>Per installare il componente aggiuntivo Flatpak, che fornisce supporto per l&apos;accelerazione GPU per la scheda grafica %1, seguire uno dei passaggi indicati di seguito.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="43"/>
         <source>Use the software manager application on your system and install %1, or</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilizzare l&apos;applicazione di gestione software sul sistema e installare %1, oppure</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="52"/>
         <source>Run the following command in the terminal:</source>
-        <translation type="unfinished"></translation>
+        <translation>Eseguire il seguente comando nel terminale:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="70"/>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="85"/>
         <source>The add-on enables faster processing when using the following Speech to Text and Text to Speech engines:</source>
-        <translation type="unfinished"></translation>
+        <translation>Il componente aggiuntivo consente un&apos;elaborazione più rapida quando si utilizzano i seguenti motori Speech to Text e Text to Speech:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="97"/>
         <source>If you&apos;re interested in fast and accurate Speech to Text processing, consider using %1 with Vulkan hardware acceleration, which works without installing an add-on.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se sei interessato a un&apos;elaborazione rapida e precisa della conversione da voce a testo, prendi in considerazione l&apos;utilizzo di %1 con accelerazione hardware Vulkan, che funziona senza dover installare alcun componente aggiuntivo.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="106"/>
         <source>Note that installing the add-on requires a significant amount of disk space.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tieni presente che l&apos;installazione del componente aggiuntivo richiede una notevole quantità di spazio su disco.</translation>
     </message>
 </context>
 <context>
@@ -148,18 +148,18 @@
         <location filename="../sfos/qml/ChangelogPage.qml" line="49"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="96"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="17"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="94"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="120"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="191"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="284"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="384"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="480"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="497"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="551"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="587"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="615"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="630"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="655"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="102"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="128"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="199"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="292"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="392"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="488"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="505"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="559"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="595"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="623"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="638"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="663"/>
         <source>Version %1</source>
         <translation>Versione %1</translation>
     </message>
@@ -167,67 +167,67 @@
         <location filename="../sfos/qml/ChangelogPage.qml" line="40"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="86"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="134"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="63"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="111"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="172"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="253"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="358"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="410"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="501"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="591"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="71"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="119"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="180"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="261"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="366"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="418"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="509"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="599"/>
         <source>Translator</source>
         <translation>Traduttore</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ChangelogPage.qml" line="80"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="122"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="58"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="161"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="232"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="335"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="437"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="524"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="565"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="605"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="619"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="639"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="659"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="66"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="169"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="240"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="343"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="445"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="532"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="573"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="613"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="627"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="647"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="667"/>
         <source>Text to Speech</source>
         <translation>Text to Speech</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChangelogPage.qml" line="21"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Generale</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="69"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="106"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="263"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="388"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="77"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="114"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="271"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="396"/>
         <source>Accessibility</source>
         <translation>Accessibilità</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ChangelogPage.qml" line="63"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="117"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="40"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="131"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="223"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="312"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="414"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="484"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="505"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="555"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="623"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="646"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="663"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="48"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="139"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="231"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="320"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="422"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="492"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="513"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="563"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="631"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="654"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="671"/>
         <source>Speech to Text</source>
         <translation>Speech to Text</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="369"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="462"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="377"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="470"/>
         <source>Other</source>
         <translation>Altro</translation>
     </message>
@@ -235,16 +235,16 @@
         <location filename="../sfos/qml/ChangelogPage.qml" line="36"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="53"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="100"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="31"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="102"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="124"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="195"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="299"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="399"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="535"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="580"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="599"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="634"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="32"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="110"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="132"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="203"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="307"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="407"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="543"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="588"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="607"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="642"/>
         <source>User Interface</source>
         <translation>Interfaccia utente</translation>
     </message>
@@ -646,20 +646,12 @@
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="79"/>
         <source>Tip: %1 acceleration is most effective when processing long sentences with large models.</source>
-        <translation type="unfinished"></translation>
+        <translation>Suggerimento: l&apos;accelerazione %1 è più efficace quando si elaborano frasi lunghe con modelli di grandi dimensioni.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="80"/>
         <source>For short sentences, better results can be obtained with %1 or without hardware acceleration enabled.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tip: OpenVINO acceleration is most effective when processing long sentences with large models.</source>
-        <translation type="vanished">Suggerimento: l&apos;accelerazione OpenVINO è più efficace quando si elaborano frasi lunghe con modelli di grandi dimensioni.</translation>
-    </message>
-    <message>
-        <source>For short sentences, better results can be obtained without hardware acceleration enabled.</source>
-        <translation type="vanished">Per frasi brevi, è possibile ottenere risultati migliori senza abilitare l&apos;accelerazione hardware.</translation>
+        <translation>Per frasi brevi, è possibile ottenere risultati migliori con %1 o senza l&apos;accelerazione hardware abilitata.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="86"/>
@@ -742,8 +734,8 @@
 <context>
     <name>InlineMessage</name>
     <message>
-        <location filename="../desktop/qml/InlineMessage.qml" line="73"/>
-        <location filename="../desktop/qml/InlineMessage.qml" line="78"/>
+        <location filename="../desktop/qml/InlineMessage.qml" line="74"/>
+        <location filename="../desktop/qml/InlineMessage.qml" line="79"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -873,7 +865,7 @@
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="327"/>
         <source>Go back</source>
-        <translation type="unfinished"></translation>
+        <translation>Torna indietro</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="591"/>
@@ -898,12 +890,12 @@
     <message>
         <location filename="../desktop/qml/MainTipMessage.qml" line="24"/>
         <source>Warning message</source>
-        <translation type="unfinished"></translation>
+        <translation>Messaggio di avvertimento</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainTipMessage.qml" line="24"/>
         <source>Information message</source>
-        <translation type="unfinished"></translation>
+        <translation>Messaggio informativo</translation>
     </message>
 </context>
 <context>
@@ -977,18 +969,14 @@
         <translation>Lingue</translation>
     </message>
     <message>
-        <source>Set languages and download models.</source>
-        <translation type="vanished">Imposta le lingue e scarica i modelli.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="40"/>
         <source>Open Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri il menu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="45"/>
         <source>Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Menu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="125"/>
@@ -1046,11 +1034,7 @@
         <location filename="../desktop/qml/MainToolBar.qml" line="262"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="269"/>
         <source>Rules</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Voice samples are used in speech synthesis with voice cloning.</source>
-        <translation type="vanished">I campioni vocali vengono utilizzati nella sintesi vocale con la clonazione della voce.</translation>
+        <translation>Regole</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="351"/>
@@ -1100,7 +1084,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="155"/>
         <source>Filter options for models</source>
-        <translation type="unfinished"></translation>
+        <translation>Opzioni di filtro per i modelli</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="161"/>
@@ -1111,12 +1095,12 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="206"/>
         <source>Filtering by model type</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtraggio per tipo di modello</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="231"/>
         <source>Model types</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipi di modello</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="242"/>
@@ -1126,7 +1110,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="266"/>
         <source>Filtering by engine type</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtraggio per tipo di motore</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="270"/>
@@ -1136,7 +1120,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="299"/>
         <source>Engine types</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipi di motore</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="310"/>
@@ -1146,7 +1130,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="334"/>
         <source>Filtering by speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtraggio per velocità</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="338"/>
@@ -1172,7 +1156,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="358"/>
         <source>Speed levels</source>
-        <translation type="unfinished"></translation>
+        <translation>Livelli di velocità</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="369"/>
@@ -1192,7 +1176,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="395"/>
         <source>Filtering by quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtraggio per qualità</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="399"/>
@@ -1212,7 +1196,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="419"/>
         <source>Quality levels</source>
-        <translation type="unfinished"></translation>
+        <translation>Livelli di qualità</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="430"/>
@@ -1232,7 +1216,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="456"/>
         <source>Filtering by additional capabilities</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtraggio per funzionalità aggiuntive</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="460"/>
@@ -1547,7 +1531,7 @@
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="72"/>
         <source>Notepad</source>
-        <translation type="unfinished">Blocco note</translation>
+        <translation>Blocco note</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="132"/>
@@ -1646,255 +1630,251 @@
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="31"/>
         <source>Edit rule</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="31"/>
-        <source>Create a new rule</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica regola</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="40"/>
         <source>Replace: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sostituisci: %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="92"/>
         <location filename="../desktop/qml/RuleEditPage.qml" line="263"/>
         <source>Pattern</source>
-        <translation type="unfinished"></translation>
+        <translation>Modello</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="97"/>
         <source>A pattern is used to find a match in the text and replace it with another text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Un modello viene utilizzato per trovare una corrispondenza nel testo e sostituirla con un altro testo.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="99"/>
         <source>To define a more advanced pattern, you can use a regular expression.</source>
-        <translation type="unfinished"></translation>
+        <translation>Per definire un modello più avanzato, puoi utilizzare un&apos;espressione regolare.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="106"/>
         <source>When defining a regular expression pattern, you can use tags for the following character classes:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="108"/>
-        <source>Matches any character (including newline).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="109"/>
-        <source>Matches a newline.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="110"/>
-        <source>Matches a non-digit.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="111"/>
-        <source>Matches a whitespace character.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="112"/>
-        <source>Matches a non-whitespace character.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="113"/>
-        <source>Matches a word character.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="114"/>
-        <source>Matches a non-word character.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="124"/>
-        <source>Matches %1, %2 and %3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="125"/>
-        <source>Matches any text put in square brackets.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="126"/>
-        <source>Captures any word ending in a period.</source>
-        <translation type="unfinished"></translation>
+        <translation>Quando si definisce un modello di espressione regolare, è possibile utilizzare tag per le seguenti classi di caratteri:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="136"/>
         <location filename="../desktop/qml/RuleEditPage.qml" line="277"/>
         <source>Replacement text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="141"/>
-        <source>A replacement text is inserted instead of the text matched by the pattern.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="236"/>
-        <source>Pattern type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="238"/>
-        <source>Type of a pattern.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="98"/>
-        <source>A simple pattern is just plain text.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="122"/>
-        <source>Here are some examples of regular expression patterns:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="142"/>
-        <source>Simple replacement text is just plain text.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="143"/>
-        <source>To define more advanced replacement, you can use a regular expression pattern that contains capturing groups.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="150"/>
-        <source>To pass the captured text from the pattern as a replacement, use the following tags:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="152"/>
-        <source>Resolves to the text captured in the first capture group.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="153"/>
-        <source>Resolves to the text captured in the second capture group.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="154"/>
-        <source>Makes all characters in the first capture group be capitalized.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="155"/>
-        <source>Causes all characters in the first capture group to be lowercase.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="173"/>
-        <source>Save</source>
-        <translation type="unfinished">Salva</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="183"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Testo sostitutivo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="200"/>
         <location filename="../desktop/qml/RuleEditPage.qml" line="202"/>
         <source>Type here to see how the rule changes the text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Digita qui per vedere come la regola modifica il testo.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="210"/>
         <location filename="../desktop/qml/RuleEditPage.qml" line="212"/>
         <source>Text after applying the rule.</source>
-        <translation type="unfinished"></translation>
+        <translation>Testo dopo l&apos;applicazione della regola.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="210"/>
         <source>Red color means that pattern doesn&apos;t match the text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il colore rosso indica che il motivo non corrisponde al testo.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="239"/>
-        <source>You can simply replace the found text or replace the text with a regular expression.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="236"/>
+        <source>Pattern type</source>
+        <translation>Tipo di modello</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="252"/>
-        <source>Replace (Regular expression)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="288"/>
-        <source>Name</source>
-        <translation type="unfinished">Nome</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="289"/>
-        <source>Optional name of the rule. If the name is not specified, the default name will be used.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="299"/>
-        <source>Languages</source>
-        <translation type="unfinished">Lingue</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="305"/>
-        <source>All languages</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="314"/>
-        <source>List of language codes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="317"/>
-        <source>A comma separated list of language codes for which the rule should be enabled.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="318"/>
-        <source>Example: %1 means that the rule applies only to Czech, Slovak and Polish languages.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="326"/>
-        <source>Types of usage</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="332"/>
-        <source>Speech to Text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="342"/>
-        <source>Text to Speech</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="352"/>
-        <source>Read the text</source>
-        <translation type="unfinished"></translation>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="238"/>
+        <source>Type of a pattern.</source>
+        <translation>Tipo di un modello.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="251"/>
         <source>Replace</source>
-        <translation type="unfinished">Sostituisci</translation>
+        <translation>Sostituire</translation>
     </message>
     <message>
-        <source>Add text to the current note or replace it?</source>
-        <translation type="obsolete">Aggiungere testo alla nota corrente o sostituirlo?</translation>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="31"/>
+        <source>Create a new rule</source>
+        <translation>Crea una nuova regola</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="108"/>
+        <source>Matches any character (including newline).</source>
+        <translation>Corrisponde a qualsiasi carattere (incluso il carattere di nuova riga).</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="109"/>
+        <source>Matches a newline.</source>
+        <translation>Corrisponde a una nuova riga.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="110"/>
+        <source>Matches a non-digit.</source>
+        <translation>Corrisponde a un valore non numerico.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="111"/>
+        <source>Matches a whitespace character.</source>
+        <translation>Corrisponde a un carattere di spazio vuoto.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="112"/>
+        <source>Matches a non-whitespace character.</source>
+        <translation>Corrisponde a un carattere diverso da uno spazio.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="113"/>
+        <source>Matches a word character.</source>
+        <translation>Corrisponde a un carattere di parola.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="114"/>
+        <source>Matches a non-word character.</source>
+        <translation>Corrisponde a un carattere non-parola.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="124"/>
+        <source>Matches %1, %2 and %3.</source>
+        <translation>Corrisponde a %1, %2 e %3.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="125"/>
+        <source>Matches any text put in square brackets.</source>
+        <translation>Corrisponde a qualsiasi testo inserito tra parentesi quadre.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="126"/>
+        <source>Captures any word ending in a period.</source>
+        <translation>Cattura qualsiasi parola che termina con un punto.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="141"/>
+        <source>A replacement text is inserted instead of the text matched by the pattern.</source>
+        <translation>Cattura qualsiasi parola che termina con un punto.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="98"/>
+        <source>A simple pattern is just plain text.</source>
+        <translation>Un modello semplice è semplicemente del testo.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="122"/>
+        <source>Here are some examples of regular expression patterns:</source>
+        <translation>Ecco alcuni esempi di modelli di espressioni regolari:</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="142"/>
+        <source>Simple replacement text is just plain text.</source>
+        <translation>Il testo sostitutivo semplice è semplicemente testo normale.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="143"/>
+        <source>To define more advanced replacement, you can use a regular expression pattern that contains capturing groups.</source>
+        <translation>Per definire una sostituzione più avanzata, è possibile utilizzare un modello di espressione regolare che contenga gruppi di cattura.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="150"/>
+        <source>To pass the captured text from the pattern as a replacement, use the following tags:</source>
+        <translation>Per passare il testo catturato dal modello come sostituzione, utilizzare i seguenti tag:</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="152"/>
+        <source>Resolves to the text captured in the first capture group.</source>
+        <translation>Si risolve nel testo catturato nel primo gruppo di cattura.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="153"/>
+        <source>Resolves to the text captured in the second capture group.</source>
+        <translation>Si risolve nel testo catturato nel secondo gruppo di cattura.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="154"/>
+        <source>Makes all characters in the first capture group be capitalized.</source>
+        <translation>Fa sì che tutti i caratteri del primo gruppo di cattura siano in maiuscolo.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="155"/>
+        <source>Causes all characters in the first capture group to be lowercase.</source>
+        <translation>Fa sì che tutti i caratteri nel primo gruppo di cattura siano in minuscolo.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="173"/>
+        <source>Save</source>
+        <translation>Salva</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="183"/>
+        <source>Cancel</source>
+        <translation>Annulla</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="239"/>
+        <source>You can simply replace the found text or replace the text with a regular expression.</source>
+        <translation>Puoi semplicemente sostituire il testo trovato oppure sostituirlo con un&apos;espressione regolare.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="252"/>
+        <source>Replace (Regular expression)</source>
+        <translation>Sostituisci (Espressione regolare)</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="288"/>
+        <source>Name</source>
+        <translation>Nome</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="289"/>
+        <source>Optional name of the rule. If the name is not specified, the default name will be used.</source>
+        <translation>Nome facoltativo della regola. Se il nome non è specificato, verrà utilizzato il nome predefinito.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="299"/>
+        <source>Languages</source>
+        <translation>Lingue</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="305"/>
+        <source>All languages</source>
+        <translation>Tutte le lingue</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="314"/>
+        <source>List of language codes</source>
+        <translation>Elenco dei codici di lingua</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="317"/>
+        <source>A comma separated list of language codes for which the rule should be enabled.</source>
+        <translation>Elenco separato da virgole dei codici lingua per i quali la regola dovrebbe essere abilitata.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="318"/>
+        <source>Example: %1 means that the rule applies only to Czech, Slovak and Polish languages.</source>
+        <translation>Esempio: %1 significa che la regola si applica solo alle lingue ceca, slovacca e polacca.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="326"/>
+        <source>Types of usage</source>
+        <translation>Tipi di utilizzo</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="332"/>
+        <source>Speech to Text</source>
+        <translation>Da sintesi vocale a testo</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="342"/>
+        <source>Text to Speech</source>
+        <translation>Testo in sintesi vocale</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="352"/>
+        <source>Read the text</source>
+        <translation>Leggi il testo</translation>
     </message>
 </context>
 <context>
@@ -1905,137 +1885,129 @@
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="55"/>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="56"/>
         <source>Rules</source>
-        <translation type="unfinished"></translation>
+        <translation>Regole</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="28"/>
         <source>Replace: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sostituisci: %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="55"/>
         <source>%1 allows you to create text transformations that can be applied after Speech to Text or before Text to Speech.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 consente di creare trasformazioni di testo che possono essere applicate dopo la conversione da voce a testo o prima della conversione da testo a voce.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="56"/>
         <source>With %1, you can easily and flexibly correct errors in decoded text or correct mispronounced words.</source>
-        <translation type="unfinished"></translation>
+        <translation>Con %1 puoi correggere in modo semplice e flessibile gli errori nel testo decodificato o le parole pronunciate male.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="63"/>
         <source>Rules are applied to text sequentially, starting from the rule at the top to the bottom.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="65"/>
-        <source>Listening</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="65"/>
-        <source>Reading</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="72"/>
-        <source>Here are examples of typical use of the rules:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="74"/>
-        <source>Converting a word (e.g., &quot;period&quot;, &quot;comma&quot;) into a punctuation mark in Speech to Text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="75"/>
-        <source>Inserting a new line into a note while dictating</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="76"/>
-        <source>Changing the spelling of foreign language names (e.g., first or last names) to make the pronunciation correct</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="77"/>
-        <source>Removing special characters from text that cause mispronunciation by Text to Speech engine</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="92"/>
-        <source>Create a new rule</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="101"/>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="121"/>
-        <source>Close</source>
-        <translation type="unfinished">Chiudi</translation>
-    </message>
-    <message>
-        <source>Disable</source>
-        <translation type="obsolete">Disabilita</translation>
-    </message>
-    <message>
-        <source>Enable</source>
-        <translation type="obsolete">Abilita</translation>
+        <translation>Le regole vengono applicate al testo in sequenza, partendo dalla regola in alto e andando verso il basso.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="64"/>
         <source>Text transformation is performed automatically in the background when text is received from the Speech to Text engine (%1) or before text is sent to the Text to Speech engine (%2).</source>
-        <translation type="unfinished"></translation>
+        <translation>La trasformazione del testo viene eseguita automaticamente in background quando il testo viene ricevuto dal motore di conversione da voce a testo (%1) o prima che il testo venga inviato al motore di conversione da testo a voce (%2).</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="65"/>
+        <source>Listening</source>
+        <translation>Ascolto</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="65"/>
+        <source>Reading</source>
+        <translation>Lettura</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="72"/>
+        <source>Here are examples of typical use of the rules:</source>
+        <translation>Ecco alcuni esempi di utilizzo tipico delle regole:</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="74"/>
+        <source>Converting a word (e.g., &quot;period&quot;, &quot;comma&quot;) into a punctuation mark in Speech to Text</source>
+        <translation>Convertire una parola (ad esempio, &quot;punto&quot;, &quot;virgola&quot;) in un segno di punteggiatura in Speech to Text</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="75"/>
+        <source>Inserting a new line into a note while dictating</source>
+        <translation>Inserimento di una nuova riga in una nota durante la dettatura</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="76"/>
+        <source>Changing the spelling of foreign language names (e.g., first or last names) to make the pronunciation correct</source>
+        <translation>Modificare l&apos;ortografia dei nomi in lingua straniera (ad esempio, nomi o cognomi) per renderne corretta la pronuncia</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="77"/>
+        <source>Removing special characters from text that cause mispronunciation by Text to Speech engine</source>
+        <translation>Rimozione dei caratteri speciali dal testo che causano errori di pronuncia tramite il motore di conversione testo-voce</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="92"/>
+        <source>Create a new rule</source>
+        <translation>Crea una nuova regola</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="101"/>
+        <source>Help</source>
+        <translation>Aiuto</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="121"/>
+        <source>Close</source>
+        <translation>Chiudi</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="165"/>
         <source>Move up</source>
-        <translation type="unfinished"></translation>
+        <translation>Sposta su</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="177"/>
         <source>Move down</source>
-        <translation type="unfinished"></translation>
+        <translation>Sposta giù</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="207"/>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="210"/>
         <source>Speech to Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Da sintesi vocale a testo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="223"/>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="226"/>
         <source>Text to Speech</source>
-        <translation type="unfinished"></translation>
+        <translation>Testo in sintesi vocale</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="232"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="246"/>
         <source>Clone</source>
-        <translation type="unfinished"></translation>
+        <translation>Clona</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="262"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="276"/>
         <source>You haven&apos;t created any rules yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Non hai ancora creato alcuna regola.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="277"/>
         <source>Use %1 to make a new one.</source>
-        <translation type="unfinished">Usa %1 per crearne uno nuovo.</translation>
+        <translation>Usa %1 per crearne uno nuova.</translation>
     </message>
 </context>
 <context>
@@ -2098,7 +2070,7 @@
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="262"/>
         <source>Text formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Formati di testo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="274"/>
@@ -2129,2309 +2101,6 @@
         <location filename="../desktop/qml/ScrollTextArea.qml" line="346"/>
         <source>Redo</source>
         <translation>Rifare</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsAccessebilityPage</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Impostazioni</translation>
-    </message>
-    <message>
-        <source>Restart the application to apply changes.</source>
-        <translation type="obsolete">Riavviare l&apos;applicazione per applicare le modifiche.</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="obsolete">Interfaccia utente</translation>
-    </message>
-    <message>
-        <source>Accessibility</source>
-        <translation type="obsolete">Accessibilità</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Altro</translation>
-    </message>
-    <message>
-        <source>Remember the last note</source>
-        <translation type="obsolete">Ricorda l&apos;ultima nota</translation>
-    </message>
-    <message>
-        <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation type="obsolete">La nota verrà salvata automaticamente, quindi quando riavvii l&apos;app, la tua ultima nota sarà sempre disponibile.</translation>
-    </message>
-    <message>
-        <source>Repair text</source>
-        <translation type="obsolete">Ripara testo</translation>
-    </message>
-    <message>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation type="obsolete">Una volta abilitato, sulla barra degli strumenti principale viene visualizzato un menu con le opzioni di correzione del testo.</translation>
-    </message>
-    <message>
-        <source>File import action</source>
-        <translation type="obsolete">Azione di importazione del file</translation>
-    </message>
-    <message>
-        <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation type="obsolete">L&apos;azione durante l&apos;importazione di una nota da un file. Puoi aggiungere testo importato a una nota esistente o sostituire una nota esistente.</translation>
-    </message>
-    <message>
-        <source>Ask whether to add or replace</source>
-        <translation type="obsolete">Chiedi se aggiungere o sostituire</translation>
-    </message>
-    <message>
-        <source>Add to an existing note</source>
-        <translation type="obsolete">Aggiungi a una nota esistente</translation>
-    </message>
-    <message>
-        <source>Replace an existing note</source>
-        <translation type="obsolete">Sostituisci una nota esistente</translation>
-    </message>
-    <message>
-        <source>Font in text editor</source>
-        <translation type="obsolete">Carattere nell&apos;editor di testo</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Predefinito</translation>
-    </message>
-    <message>
-        <source>Change</source>
-        <translation type="obsolete">Modifica</translation>
-    </message>
-    <message>
-        <source>Please choose a font</source>
-        <translation type="obsolete">Scegli un carattere</translation>
-    </message>
-    <message>
-        <source>Show desktop notification</source>
-        <translation type="obsolete">Mostra notifica desktop</translation>
-    </message>
-    <message>
-        <source>Show desktop notification while reading or listening.</source>
-        <translation type="obsolete">Mostra notifiche sul desktop durante la lettura o l&apos;ascolto.</translation>
-    </message>
-    <message>
-        <source>Never</source>
-        <translation type="obsolete">Mai</translation>
-    </message>
-    <message>
-        <source>When in background</source>
-        <translation type="obsolete">Quando in background</translation>
-    </message>
-    <message>
-        <source>Always</source>
-        <translation type="obsolete">Sempre</translation>
-    </message>
-    <message>
-        <source>Include recognized or read text in notifications</source>
-        <translation type="obsolete">Includere testo riconosciuto o letto nelle notifiche</translation>
-    </message>
-    <message>
-        <source>Use system tray icon</source>
-        <translation type="obsolete">Utilizza l&apos;icona nella barra delle applicazioni</translation>
-    </message>
-    <message>
-        <source>Start minimized to the system tray</source>
-        <translation type="obsolete">Inizia minimizzato nella barra delle applicazioni</translation>
-    </message>
-    <message>
-        <source>Use custom graphical style</source>
-        <translation type="obsolete">Utilizza uno stile grafico personalizzato</translation>
-    </message>
-    <message>
-        <source>Graphical style</source>
-        <translation type="obsolete">Stile grafico</translation>
-    </message>
-    <message>
-        <source>Application graphical interface style.</source>
-        <translation type="obsolete">Stile dell&apos;interfaccia grafica dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation type="obsolete">Modificare se si osservano problemi con colori errati in un tema scuro.</translation>
-    </message>
-    <message>
-        <source>Audio input device</source>
-        <translation type="obsolete">Dispositivo di ingresso audio</translation>
-    </message>
-    <message>
-        <source>Select preferred audio input device.</source>
-        <translation type="obsolete">Seleziona il dispositivo di input audio preferito.</translation>
-    </message>
-    <message>
-        <source>Listening mode</source>
-        <translation type="obsolete">Modalità di ascolto</translation>
-    </message>
-    <message>
-        <source>One sentence</source>
-        <translation type="obsolete">Una frase</translation>
-    </message>
-    <message>
-        <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
-        <translation type="obsolete">Cliccando sul pulsante %1 inizia l&apos;ascolto, che termina quando viene riconosciuta la prima frase.</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="obsolete">Ascoltare</translation>
-    </message>
-    <message>
-        <source>Press and hold</source>
-        <translation type="obsolete">Premere e tenere premuto</translation>
-    </message>
-    <message>
-        <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation type="obsolete">Premendo e tenendo premuto il pulsante %1 si abilita l&apos;ascolto. Quando smetti di tenere premuto, l&apos;ascolto si spegne.</translation>
-    </message>
-    <message>
-        <source>Always on</source>
-        <translation type="obsolete">Sempre attivo</translation>
-    </message>
-    <message>
-        <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation type="obsolete">Dopo aver fatto clic sul pulsante %1, l&apos;ascolto è sempre attivo.</translation>
-    </message>
-    <message>
-        <source>Restore punctuation</source>
-        <translation type="obsolete">Ripristina la punteggiatura</translation>
-    </message>
-    <message>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation type="obsolete">Abilita ripristino avanzato della punteggiatura dopo il riconoscimento vocale. Per farlo funzionare, assicurati di aver abilitato il modello %1 per la tua lingua.</translation>
-    </message>
-    <message>
-        <source>Punctuation</source>
-        <translation type="obsolete">Punteggiatura</translation>
-    </message>
-    <message>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation type="obsolete">Quando questa opzione è abilitata, l&apos;inizializzazione del modello richiede molto più tempo e l&apos;utilizzo della memoria è molto più elevato.</translation>
-    </message>
-    <message>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation type="obsolete">Questa opzione funziona solo con i modelli che non supportano nativamente la punteggiatura.</translation>
-    </message>
-    <message>
-        <source>To make %1 work, download %2 model.</source>
-        <translation type="obsolete">Per far funzionare %1, scarica il modello %2.</translation>
-    </message>
-    <message>
-        <source>Insert statistics</source>
-        <translation type="obsolete">Inserisci statistiche</translation>
-    </message>
-    <message>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation type="obsolete">Inserisce nel testo informazioni relative all&apos;elaborazione, come il tempo di elaborazione e la durata dell&apos;audio.</translation>
-    </message>
-    <message>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation type="obsolete">Questa opzione può essere utile per confrontare le prestazioni di diversi modelli, motori e i loro parametri.</translation>
-    </message>
-    <message>
-        <source>This option does not work with all engines.</source>
-        <translation type="obsolete">Questa opzione non funziona con tutti i motori.</translation>
-    </message>
-    <message>
-        <source>Subtitles</source>
-        <translation type="obsolete">Sottotitoli</translation>
-    </message>
-    <message>
-        <source>Minimum segment duration</source>
-        <translation type="obsolete">Durata minima del segmento</translation>
-    </message>
-    <message>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation type="obsolete">Imposta la durata minima (in secondi) del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation type="obsolete">Questa opzione funziona solo con i modelli %1 e %2.</translation>
-    </message>
-    <message>
-        <source>Break text lines</source>
-        <translation type="obsolete">Interrompi le righe di testo</translation>
-    </message>
-    <message>
-        <source>Minimum line length</source>
-        <translation type="obsolete">Lunghezza minima della linea</translation>
-    </message>
-    <message>
-        <source>Maximum line length</source>
-        <translation type="obsolete">Lunghezza massima della linea</translation>
-    </message>
-    <message>
-        <source>Engine options</source>
-        <translation type="obsolete">Opzioni del motore</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">Personalizzato</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Numero di thread simultanei</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Imposta il numero massimo di thread CPU simultanei.</translation>
-    </message>
-    <message>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation type="obsolete">Un valore più alto non accelera necessariamente la decodifica.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Reset</translation>
-    </message>
-    <message>
-        <source>Beam search width</source>
-        <translation type="obsolete">Ampiezza del fascio di ricerca</translation>
-    </message>
-    <message>
-        <source>A higher value may improve quality, but decoding time may also increase.</source>
-        <translation type="obsolete">Un valore più alto può migliorare la qualità, ma anche il tempo di decodifica può aumentare.</translation>
-    </message>
-    <message>
-        <source>Audio context size</source>
-        <translation type="obsolete">Dimensioni del contesto audio</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
-        <translation type="obsolete">Quando %1 è impostato, la dimensione viene regolata dinamicamente per ogni blocco audio.</translation>
-    </message>
-    <message>
-        <source>Dynamic</source>
-        <translation type="obsolete">Dinamico</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the default fixed size is used.</source>
-        <translation type="obsolete">Quando %1 è impostato, viene utilizzata la dimensione fissa predefinita.</translation>
-    </message>
-    <message>
-        <source>To define a custom size, use the %1 option.</source>
-        <translation type="obsolete">Per definire una dimensione personalizzata, utilizzare l&apos;opzione %1.</translation>
-    </message>
-    <message>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation type="obsolete">Un valore inferiore accelera la decodifica, ma può avere un impatto negativo sulla precisione.</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation type="obsolete">Dimensione</translation>
-    </message>
-    <message>
-        <source>Use Flash Attention</source>
-        <translation type="obsolete">Usa l&apos;attenzione flash</translation>
-    </message>
-    <message>
-        <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation type="obsolete">Flash Attenzione può ridurre il tempo di decodifica quando si utilizza l&apos;accelerazione GPU.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi.</translation>
-    </message>
-    <message>
-        <source>Use %1 model for automatic language detection</source>
-        <translation type="obsolete">Utilizza il modello %1 per il rilevamento automatico della lingua</translation>
-    </message>
-    <message>
-        <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
-        <translation type="obsolete">Nel rilevamento automatico della lingua, viene utilizzato il modello %1 al posto del modello selezionato.</translation>
-    </message>
-    <message>
-        <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
-        <translation type="obsolete">Ciò riduce il tempo di elaborazione, ma la lingua rilevata automaticamente potrebbe non essere corretta.</translation>
-    </message>
-    <message>
-        <source>Restore diacritical marks before speech synthesis</source>
-        <translation type="obsolete">Ripristina i segni diacritici prima della sintesi vocale</translation>
-    </message>
-    <message>
-        <source>This works only for Arabic and Hebrew languages.</source>
-        <translation type="obsolete">Funziona solo per le lingua araba ed ebraica.</translation>
-    </message>
-    <message>
-        <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation type="obsolete">Il ripristino dei segni diacritici per la lingua ebraica non è disponibile.</translation>
-    </message>
-    <message>
-        <source>Split text into sentences</source>
-        <translation type="obsolete">Dividere il testo in frasi</translation>
-    </message>
-    <message>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation type="obsolete">Il testo sarà suddiviso in frasi e la sintesi vocale per ciascuna frase verrà eseguita in parallelo.</translation>
-    </message>
-    <message>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">Ciò accelera la lettura, ma in alcuni modelli la naturalezza del parlato potrebbe essere ridotta.</translation>
-    </message>
-    <message>
-        <source>Use engine speed control</source>
-        <translation type="obsolete">Utilizzare il controllo della velocità del motore vocale</translation>
-    </message>
-    <message>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation type="obsolete">Se il motore TTS supporta il controllo della velocità, verrà utilizzato.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation type="obsolete">Quando questa opzione è disabilitata, la manipolazione della velocità avviene durante la post-elaborazione audio.</translation>
-    </message>
-    <message>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">La velocità effettiva dopo la post-elaborazione dell&apos;audio è molto più prevedibile, ma la naturalezza del parlato potrebbe risultare ridotta.</translation>
-    </message>
-    <message>
-        <source>Use control tags</source>
-        <translation type="obsolete">Utilizza i tag di controllo</translation>
-    </message>
-    <message>
-        <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation type="obsolete">I tag di controllo ti consentono di modificare dinamicamente la velocità del testo sintetizzato o aggiungere silenzio tra le frasi.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, tags are ignored.</source>
-        <translation type="obsolete">Quando questa opzione è disabilitata, i tag vengono ignorati.</translation>
-    </message>
-    <message>
-        <source>To use control tags, insert %1 into the text.</source>
-        <translation type="obsolete">Per utilizzare i tag di controllo, inserisci %1 nel testo.</translation>
-    </message>
-    <message>
-        <source>The following control tags are currently supported:</source>
-        <translation type="obsolete">Attualmente sono supportati i seguenti tag di controllo:</translation>
-    </message>
-    <message>
-        <source>Changes speed.</source>
-        <translation type="obsolete">Cambia velocità.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation type="obsolete">%1 è un numero a virgola mobile compreso tra 0,1 e 2,0.</translation>
-    </message>
-    <message>
-        <source>Inserts silence.</source>
-        <translation type="obsolete">Inserisce il silenzio.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation type="obsolete">%1 è un numero a virgola mobile e %2 è un nome di unità (%3).</translation>
-    </message>
-    <message>
-        <source>Sync speech with timestamps</source>
-        <translation type="obsolete">Sincronizza il parlato con i timestamp</translation>
-    </message>
-    <message>
-        <source>Don&apos;t sync</source>
-        <translation type="obsolete">Non sincronizzare</translation>
-    </message>
-    <message>
-        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation type="obsolete">I timestamp dei sottotitoli vengono ignorati durante la lettura o l&apos;esportazione in un file.</translation>
-    </message>
-    <message>
-        <source>Sync but don&apos;t adjust speed</source>
-        <translation type="obsolete">Sincronizza ma non regola la velocità</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp.</translation>
-    </message>
-    <message>
-        <source>Sync and increase speed to fit</source>
-        <translation type="obsolete">Sincronizza e aumenta la velocità per adattarti</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp. La velocità viene regolata automaticamente in modo che la durata del discorso non sia mai superiore alla durata del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>Sync and increase or decrease speed to fit</source>
-        <translation type="obsolete">Sincronizza e aumenta o diminuisci la velocità per adattarla</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp. La velocità viene regolata automaticamente in modo che la durata del discorso corrisponda esattamente alla durata del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation type="obsolete">Quando è impostato il formato testo dei sottotitoli SRT, la modifica della velocità del parlato è disabilitata poiché la velocità verrà regolata automaticamente.</translation>
-    </message>
-    <message>
-        <source>Use global keyboard shortcuts</source>
-        <translation type="obsolete">Utilizza i tasti di scelta rapida globali</translation>
-    </message>
-    <message>
-        <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
-        <translation type="obsolete">Le scorciatoie ti consentono di avviare o interrompere l&apos;ascolto e la lettura utilizzando la tastiera.</translation>
-    </message>
-    <message>
-        <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
-        <translation type="obsolete">Il risultato della sintesi vocale in testo può essere aggiunto alla nota corrente, inserito in qualsiasi finestra attiva (attualmente in primo piano) o copiato negli appunti.</translation>
-    </message>
-    <message>
-        <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation type="obsolete">La lettura della sintesi vocale può avvenire dalla nota corrente o dal testo negli appunti.</translation>
-    </message>
-    <message>
-        <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
-        <translation type="obsolete">Le scorciatoie da tastiera funzionano anche quando l&apos;applicazione non è attiva (ad esempio ridotta a icona o in background).</translation>
-    </message>
-    <message>
-        <source>This feature only works under X11.</source>
-        <translation type="obsolete">Questa funzionalità funziona solo con X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="obsolete">Attiva comportamento</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="obsolete">Le scorciatoie Avvia ascolto/lettura interromperanno anche l&apos;ascolto/lettura se vengono attivate mentre l&apos;ascolto/lettura è attivo.</translation>
-    </message>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Inizia ad ascoltare</translation>
-    </message>
-    <message>
-        <source>Start listening, text to active window</source>
-        <translation type="obsolete">Inizia ad ascoltare, invia il testo alla finestra attiva</translation>
-    </message>
-    <message>
-        <source>Start listening, text to clipboard</source>
-        <translation type="obsolete">Inizia ad ascoltare, invia il testo agli appunti</translation>
-    </message>
-    <message>
-        <source>Start reading</source>
-        <translation type="obsolete">Inizia a leggere</translation>
-    </message>
-    <message>
-        <source>Start reading text from clipboard</source>
-        <translation type="obsolete">Inizia a leggere il testo dagli appunti</translation>
-    </message>
-    <message>
-        <source>Pause/Resume reading</source>
-        <translation type="obsolete">Pausa/Riprendi la lettura</translation>
-    </message>
-    <message>
-        <source>Switch to next STT model</source>
-        <translation type="obsolete">Passa al modello STT successivo</translation>
-    </message>
-    <message>
-        <source>Switch to previous STT model</source>
-        <translation type="obsolete">Passa al modello STT precedente</translation>
-    </message>
-    <message>
-        <source>Switch to next TTS model</source>
-        <translation type="obsolete">Passa al modello TTS successivo</translation>
-    </message>
-    <message>
-        <source>Switch to previous TTS model</source>
-        <translation type="obsolete">Passa al modello TTS precedente</translation>
-    </message>
-    <message>
-        <source>Allow external applications to invoke actions</source>
-        <translation type="obsolete">Consenti alle applicazioni esterne di attivare azioni</translation>
-    </message>
-    <message>
-        <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">L&apos;azione consente all&apos;applicazione esterna di richiamare determinate operazioni quando %1 è in esecuzione.</translation>
-    </message>
-    <message>
-        <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Le azioni consentono alle applicazioni esterne di eseguire determinate funzioni quando %1 è in esecuzione.</translation>
-    </message>
-    <message>
-        <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation type="obsolete">L&apos;azione può essere avviata tramite DBus o tramite opzioni della riga di comando.</translation>
-    </message>
-    <message>
-        <source>The following actions are currently supported:</source>
-        <translation type="obsolete">Attualmente sono supportate le seguenti azioni:</translation>
-    </message>
-    <message>
-        <source>Starts listening.</source>
-        <translation type="obsolete">Inizia ad ascoltare.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is inserted into the active window.</source>
-        <translation type="obsolete">Inizia ad ascoltare. Il testo decodificato viene inserito nella finestra attiva.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation type="obsolete">Inizia ad ascoltare. Il testo decodificato viene copiato negli appunti.</translation>
-    </message>
-    <message>
-        <source>Starts reading.</source>
-        <translation type="obsolete">Inizia a leggere.</translation>
-    </message>
-    <message>
-        <source>Starts reading text from the clipboard.</source>
-        <translation type="obsolete">Inizia a leggere il testo dagli appunti.</translation>
-    </message>
-    <message>
-        <source>Pauses or resumes reading.</source>
-        <translation type="obsolete">Mette in pausa o riprende la lettura.</translation>
-    </message>
-    <message>
-        <source>Cancels any of the above operations.</source>
-        <translation type="obsolete">Annulla una qualsiasi delle operazioni precedenti.</translation>
-    </message>
-    <message>
-        <source>Switches to next STT model.</source>
-        <translation type="obsolete">Passa al modello STT successivo.</translation>
-    </message>
-    <message>
-        <source>Switches to previous STT model.</source>
-        <translation type="obsolete">Passa al modello STT precedente.</translation>
-    </message>
-    <message>
-        <source>Switches to next TTS model.</source>
-        <translation type="obsolete">Passa al modello TTS successivo.</translation>
-    </message>
-    <message>
-        <source>Switches to previous TTS model.</source>
-        <translation type="obsolete">Passa al modello TTS precedente.</translation>
-    </message>
-    <message>
-        <source>Sets STT model.</source>
-        <translation type="obsolete">Imposta il modello STT.</translation>
-    </message>
-    <message>
-        <source>Sets TTS model.</source>
-        <translation type="obsolete">Imposta il modello TTS.</translation>
-    </message>
-    <message>
-        <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation type="obsolete">Ad esempio, per attivare l&apos;azione %1, eseguire il comando seguente: %2.</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation type="obsolete">Archiviazione</translation>
-    </message>
-    <message>
-        <source>Location of language files</source>
-        <translation type="obsolete">Posizione dei file di lingua</translation>
-    </message>
-    <message>
-        <source>Directory where language files are downloaded to and stored.</source>
-        <translation type="obsolete">Directory in cui vengono scaricati e archiviati i file della lingua.</translation>
-    </message>
-    <message>
-        <source>Clear cache on close</source>
-        <translation type="obsolete">Svuota la cache alla chiusura</translation>
-    </message>
-    <message>
-        <source>When closing, delete all cached audio files.</source>
-        <translation type="obsolete">Alla chiusura, elimina tutti i file audio memorizzati nella cache.</translation>
-    </message>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Disponibilità di funzionalità opzionali</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="obsolete">Nascondi le impostazioni avanzate</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="obsolete">Mostra impostazioni avanzate</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Opzioni della CPU</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Automatico</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Opzioni di accelerazione hardware</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uso %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi durante l&apos;avvio dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Sostituisci la versione della GPU</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Sostituisci la versione della GPU AMD.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Abilita questa opzione se noti problemi durante l&apos;utilizzo dell&apos;accelerazione GPU con la scheda grafica AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Versione</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Il valore ha lo stesso effetto della variabile di ambiente %1.</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Componi file</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">File di composizione X11 utilizzato in %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Inserisci nella finestra attiva</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Librerie</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Utilizza le librerie Python</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Verificare la presenza delle librerie Python richieste.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Posizione delle librerie Python</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Directory delle librerie Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Lascia vuoto per utilizzare il valore predefinito.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Questa opzione può essere utile se usi il modulo %1 per gestire le librerie Python.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Salva</translation>
-    </message>
-    <message>
-        <source>Select Directory</source>
-        <translation type="obsolete">Seleziona directory</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsAdvanced</name>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Disponibilità di funzionalità opzionali</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Opzioni della CPU</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Numero di thread simultanei</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Imposta il numero massimo di thread CPU simultanei.</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Automatico</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Opzioni di accelerazione hardware</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uso %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi durante l&apos;avvio dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Sostituisci la versione della GPU</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Sostituisci la versione della GPU AMD.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Abilita questa opzione se noti problemi durante l&apos;utilizzo dell&apos;accelerazione GPU con la scheda grafica AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Versione</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Il valore ha lo stesso effetto della variabile di ambiente %1.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Reset</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Componi file</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">File di composizione X11 utilizzato in %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Inserisci nella finestra attiva</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Librerie</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Utilizza le librerie Python</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Verificare la presenza delle librerie Python richieste.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Posizione delle librerie Python</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Directory delle librerie Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Lascia vuoto per utilizzare il valore predefinito.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Questa opzione può essere utile se usi il modulo %1 per gestire le librerie Python.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Salva</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsAdvancedPage</name>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Disponibilità di funzionalità opzionali</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Opzioni della CPU</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Numero di thread simultanei</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Imposta il numero massimo di thread CPU simultanei.</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Automatico</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Opzioni di accelerazione hardware</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uso %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi durante l&apos;avvio dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Sostituisci la versione della GPU</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Sostituisci la versione della GPU AMD.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Abilita questa opzione se noti problemi durante l&apos;utilizzo dell&apos;accelerazione GPU con la scheda grafica AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Versione</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Il valore ha lo stesso effetto della variabile di ambiente %1.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Reset</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Componi file</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">File di composizione X11 utilizzato in %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Inserisci nella finestra attiva</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Librerie</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Utilizza le librerie Python</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Verificare la presenza delle librerie Python richieste.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Posizione delle librerie Python</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Directory delle librerie Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Lascia vuoto per utilizzare il valore predefinito.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Questa opzione può essere utile se usi il modulo %1 per gestire le librerie Python.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Salva</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsGeneralPage</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Impostazioni</translation>
-    </message>
-    <message>
-        <source>Restart the application to apply changes.</source>
-        <translation type="obsolete">Riavviare l&apos;applicazione per applicare le modifiche.</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="obsolete">Interfaccia utente</translation>
-    </message>
-    <message>
-        <source>Accessibility</source>
-        <translation type="obsolete">Accessibilità</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Altro</translation>
-    </message>
-    <message>
-        <source>Remember the last note</source>
-        <translation type="obsolete">Ricorda l&apos;ultima nota</translation>
-    </message>
-    <message>
-        <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation type="obsolete">La nota verrà salvata automaticamente, quindi quando riavvii l&apos;app, la tua ultima nota sarà sempre disponibile.</translation>
-    </message>
-    <message>
-        <source>Repair text</source>
-        <translation type="obsolete">Ripara testo</translation>
-    </message>
-    <message>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation type="obsolete">Una volta abilitato, sulla barra degli strumenti principale viene visualizzato un menu con le opzioni di correzione del testo.</translation>
-    </message>
-    <message>
-        <source>File import action</source>
-        <translation type="obsolete">Azione di importazione del file</translation>
-    </message>
-    <message>
-        <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation type="obsolete">L&apos;azione durante l&apos;importazione di una nota da un file. Puoi aggiungere testo importato a una nota esistente o sostituire una nota esistente.</translation>
-    </message>
-    <message>
-        <source>Ask whether to add or replace</source>
-        <translation type="obsolete">Chiedi se aggiungere o sostituire</translation>
-    </message>
-    <message>
-        <source>Add to an existing note</source>
-        <translation type="obsolete">Aggiungi a una nota esistente</translation>
-    </message>
-    <message>
-        <source>Replace an existing note</source>
-        <translation type="obsolete">Sostituisci una nota esistente</translation>
-    </message>
-    <message>
-        <source>Font in text editor</source>
-        <translation type="obsolete">Carattere nell&apos;editor di testo</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Predefinito</translation>
-    </message>
-    <message>
-        <source>Change</source>
-        <translation type="obsolete">Modifica</translation>
-    </message>
-    <message>
-        <source>Please choose a font</source>
-        <translation type="obsolete">Scegli un carattere</translation>
-    </message>
-    <message>
-        <source>Show desktop notification</source>
-        <translation type="obsolete">Mostra notifica desktop</translation>
-    </message>
-    <message>
-        <source>Show desktop notification while reading or listening.</source>
-        <translation type="obsolete">Mostra notifiche sul desktop durante la lettura o l&apos;ascolto.</translation>
-    </message>
-    <message>
-        <source>Never</source>
-        <translation type="obsolete">Mai</translation>
-    </message>
-    <message>
-        <source>When in background</source>
-        <translation type="obsolete">Quando in background</translation>
-    </message>
-    <message>
-        <source>Always</source>
-        <translation type="obsolete">Sempre</translation>
-    </message>
-    <message>
-        <source>Include recognized or read text in notifications</source>
-        <translation type="obsolete">Includere testo riconosciuto o letto nelle notifiche</translation>
-    </message>
-    <message>
-        <source>Use system tray icon</source>
-        <translation type="obsolete">Utilizza l&apos;icona nella barra delle applicazioni</translation>
-    </message>
-    <message>
-        <source>Start minimized to the system tray</source>
-        <translation type="obsolete">Inizia minimizzato nella barra delle applicazioni</translation>
-    </message>
-    <message>
-        <source>Use custom graphical style</source>
-        <translation type="obsolete">Utilizza uno stile grafico personalizzato</translation>
-    </message>
-    <message>
-        <source>Graphical style</source>
-        <translation type="obsolete">Stile grafico</translation>
-    </message>
-    <message>
-        <source>Application graphical interface style.</source>
-        <translation type="obsolete">Stile dell&apos;interfaccia grafica dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation type="obsolete">Modificare se si osservano problemi con colori errati in un tema scuro.</translation>
-    </message>
-    <message>
-        <source>Audio input device</source>
-        <translation type="obsolete">Dispositivo di ingresso audio</translation>
-    </message>
-    <message>
-        <source>Select preferred audio input device.</source>
-        <translation type="obsolete">Seleziona il dispositivo di input audio preferito.</translation>
-    </message>
-    <message>
-        <source>Listening mode</source>
-        <translation type="obsolete">Modalità di ascolto</translation>
-    </message>
-    <message>
-        <source>One sentence</source>
-        <translation type="obsolete">Una frase</translation>
-    </message>
-    <message>
-        <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
-        <translation type="obsolete">Cliccando sul pulsante %1 inizia l&apos;ascolto, che termina quando viene riconosciuta la prima frase.</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="obsolete">Ascoltare</translation>
-    </message>
-    <message>
-        <source>Press and hold</source>
-        <translation type="obsolete">Premere e tenere premuto</translation>
-    </message>
-    <message>
-        <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation type="obsolete">Premendo e tenendo premuto il pulsante %1 si abilita l&apos;ascolto. Quando smetti di tenere premuto, l&apos;ascolto si spegne.</translation>
-    </message>
-    <message>
-        <source>Always on</source>
-        <translation type="obsolete">Sempre attivo</translation>
-    </message>
-    <message>
-        <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation type="obsolete">Dopo aver fatto clic sul pulsante %1, l&apos;ascolto è sempre attivo.</translation>
-    </message>
-    <message>
-        <source>Restore punctuation</source>
-        <translation type="obsolete">Ripristina la punteggiatura</translation>
-    </message>
-    <message>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation type="obsolete">Abilita ripristino avanzato della punteggiatura dopo il riconoscimento vocale. Per farlo funzionare, assicurati di aver abilitato il modello %1 per la tua lingua.</translation>
-    </message>
-    <message>
-        <source>Punctuation</source>
-        <translation type="obsolete">Punteggiatura</translation>
-    </message>
-    <message>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation type="obsolete">Quando questa opzione è abilitata, l&apos;inizializzazione del modello richiede molto più tempo e l&apos;utilizzo della memoria è molto più elevato.</translation>
-    </message>
-    <message>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation type="obsolete">Questa opzione funziona solo con i modelli che non supportano nativamente la punteggiatura.</translation>
-    </message>
-    <message>
-        <source>To make %1 work, download %2 model.</source>
-        <translation type="obsolete">Per far funzionare %1, scarica il modello %2.</translation>
-    </message>
-    <message>
-        <source>Insert statistics</source>
-        <translation type="obsolete">Inserisci statistiche</translation>
-    </message>
-    <message>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation type="obsolete">Inserisce nel testo informazioni relative all&apos;elaborazione, come il tempo di elaborazione e la durata dell&apos;audio.</translation>
-    </message>
-    <message>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation type="obsolete">Questa opzione può essere utile per confrontare le prestazioni di diversi modelli, motori e i loro parametri.</translation>
-    </message>
-    <message>
-        <source>This option does not work with all engines.</source>
-        <translation type="obsolete">Questa opzione non funziona con tutti i motori.</translation>
-    </message>
-    <message>
-        <source>Subtitles</source>
-        <translation type="obsolete">Sottotitoli</translation>
-    </message>
-    <message>
-        <source>Minimum segment duration</source>
-        <translation type="obsolete">Durata minima del segmento</translation>
-    </message>
-    <message>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation type="obsolete">Imposta la durata minima (in secondi) del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation type="obsolete">Questa opzione funziona solo con i modelli %1 e %2.</translation>
-    </message>
-    <message>
-        <source>Break text lines</source>
-        <translation type="obsolete">Interrompi le righe di testo</translation>
-    </message>
-    <message>
-        <source>Minimum line length</source>
-        <translation type="obsolete">Lunghezza minima della linea</translation>
-    </message>
-    <message>
-        <source>Maximum line length</source>
-        <translation type="obsolete">Lunghezza massima della linea</translation>
-    </message>
-    <message>
-        <source>Engine options</source>
-        <translation type="obsolete">Opzioni del motore</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">Personalizzato</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Numero di thread simultanei</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Imposta il numero massimo di thread CPU simultanei.</translation>
-    </message>
-    <message>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation type="obsolete">Un valore più alto non accelera necessariamente la decodifica.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Reset</translation>
-    </message>
-    <message>
-        <source>Beam search width</source>
-        <translation type="obsolete">Ampiezza del fascio di ricerca</translation>
-    </message>
-    <message>
-        <source>A higher value may improve quality, but decoding time may also increase.</source>
-        <translation type="obsolete">Un valore più alto può migliorare la qualità, ma anche il tempo di decodifica può aumentare.</translation>
-    </message>
-    <message>
-        <source>Audio context size</source>
-        <translation type="obsolete">Dimensioni del contesto audio</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
-        <translation type="obsolete">Quando %1 è impostato, la dimensione viene regolata dinamicamente per ogni blocco audio.</translation>
-    </message>
-    <message>
-        <source>Dynamic</source>
-        <translation type="obsolete">Dinamico</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the default fixed size is used.</source>
-        <translation type="obsolete">Quando %1 è impostato, viene utilizzata la dimensione fissa predefinita.</translation>
-    </message>
-    <message>
-        <source>To define a custom size, use the %1 option.</source>
-        <translation type="obsolete">Per definire una dimensione personalizzata, utilizzare l&apos;opzione %1.</translation>
-    </message>
-    <message>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation type="obsolete">Un valore inferiore accelera la decodifica, ma può avere un impatto negativo sulla precisione.</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation type="obsolete">Dimensione</translation>
-    </message>
-    <message>
-        <source>Use Flash Attention</source>
-        <translation type="obsolete">Usa l&apos;attenzione flash</translation>
-    </message>
-    <message>
-        <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation type="obsolete">Flash Attenzione può ridurre il tempo di decodifica quando si utilizza l&apos;accelerazione GPU.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi.</translation>
-    </message>
-    <message>
-        <source>Use %1 model for automatic language detection</source>
-        <translation type="obsolete">Utilizza il modello %1 per il rilevamento automatico della lingua</translation>
-    </message>
-    <message>
-        <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
-        <translation type="obsolete">Nel rilevamento automatico della lingua, viene utilizzato il modello %1 al posto del modello selezionato.</translation>
-    </message>
-    <message>
-        <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
-        <translation type="obsolete">Ciò riduce il tempo di elaborazione, ma la lingua rilevata automaticamente potrebbe non essere corretta.</translation>
-    </message>
-    <message>
-        <source>Restore diacritical marks before speech synthesis</source>
-        <translation type="obsolete">Ripristina i segni diacritici prima della sintesi vocale</translation>
-    </message>
-    <message>
-        <source>This works only for Arabic and Hebrew languages.</source>
-        <translation type="obsolete">Funziona solo per le lingua araba ed ebraica.</translation>
-    </message>
-    <message>
-        <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation type="obsolete">Il ripristino dei segni diacritici per la lingua ebraica non è disponibile.</translation>
-    </message>
-    <message>
-        <source>Split text into sentences</source>
-        <translation type="obsolete">Dividere il testo in frasi</translation>
-    </message>
-    <message>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation type="obsolete">Il testo sarà suddiviso in frasi e la sintesi vocale per ciascuna frase verrà eseguita in parallelo.</translation>
-    </message>
-    <message>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">Ciò accelera la lettura, ma in alcuni modelli la naturalezza del parlato potrebbe essere ridotta.</translation>
-    </message>
-    <message>
-        <source>Use engine speed control</source>
-        <translation type="obsolete">Utilizzare il controllo della velocità del motore vocale</translation>
-    </message>
-    <message>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation type="obsolete">Se il motore TTS supporta il controllo della velocità, verrà utilizzato.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation type="obsolete">Quando questa opzione è disabilitata, la manipolazione della velocità avviene durante la post-elaborazione audio.</translation>
-    </message>
-    <message>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">La velocità effettiva dopo la post-elaborazione dell&apos;audio è molto più prevedibile, ma la naturalezza del parlato potrebbe risultare ridotta.</translation>
-    </message>
-    <message>
-        <source>Use control tags</source>
-        <translation type="obsolete">Utilizza i tag di controllo</translation>
-    </message>
-    <message>
-        <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation type="obsolete">I tag di controllo ti consentono di modificare dinamicamente la velocità del testo sintetizzato o aggiungere silenzio tra le frasi.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, tags are ignored.</source>
-        <translation type="obsolete">Quando questa opzione è disabilitata, i tag vengono ignorati.</translation>
-    </message>
-    <message>
-        <source>To use control tags, insert %1 into the text.</source>
-        <translation type="obsolete">Per utilizzare i tag di controllo, inserisci %1 nel testo.</translation>
-    </message>
-    <message>
-        <source>The following control tags are currently supported:</source>
-        <translation type="obsolete">Attualmente sono supportati i seguenti tag di controllo:</translation>
-    </message>
-    <message>
-        <source>Changes speed.</source>
-        <translation type="obsolete">Cambia velocità.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation type="obsolete">%1 è un numero a virgola mobile compreso tra 0,1 e 2,0.</translation>
-    </message>
-    <message>
-        <source>Inserts silence.</source>
-        <translation type="obsolete">Inserisce il silenzio.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation type="obsolete">%1 è un numero a virgola mobile e %2 è un nome di unità (%3).</translation>
-    </message>
-    <message>
-        <source>Sync speech with timestamps</source>
-        <translation type="obsolete">Sincronizza il parlato con i timestamp</translation>
-    </message>
-    <message>
-        <source>Don&apos;t sync</source>
-        <translation type="obsolete">Non sincronizzare</translation>
-    </message>
-    <message>
-        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation type="obsolete">I timestamp dei sottotitoli vengono ignorati durante la lettura o l&apos;esportazione in un file.</translation>
-    </message>
-    <message>
-        <source>Sync but don&apos;t adjust speed</source>
-        <translation type="obsolete">Sincronizza ma non regola la velocità</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp.</translation>
-    </message>
-    <message>
-        <source>Sync and increase speed to fit</source>
-        <translation type="obsolete">Sincronizza e aumenta la velocità per adattarti</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp. La velocità viene regolata automaticamente in modo che la durata del discorso non sia mai superiore alla durata del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>Sync and increase or decrease speed to fit</source>
-        <translation type="obsolete">Sincronizza e aumenta o diminuisci la velocità per adattarla</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp. La velocità viene regolata automaticamente in modo che la durata del discorso corrisponda esattamente alla durata del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation type="obsolete">Quando è impostato il formato testo dei sottotitoli SRT, la modifica della velocità del parlato è disabilitata poiché la velocità verrà regolata automaticamente.</translation>
-    </message>
-    <message>
-        <source>Use global keyboard shortcuts</source>
-        <translation type="obsolete">Utilizza i tasti di scelta rapida globali</translation>
-    </message>
-    <message>
-        <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
-        <translation type="obsolete">Le scorciatoie ti consentono di avviare o interrompere l&apos;ascolto e la lettura utilizzando la tastiera.</translation>
-    </message>
-    <message>
-        <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
-        <translation type="obsolete">Il risultato della sintesi vocale in testo può essere aggiunto alla nota corrente, inserito in qualsiasi finestra attiva (attualmente in primo piano) o copiato negli appunti.</translation>
-    </message>
-    <message>
-        <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation type="obsolete">La lettura della sintesi vocale può avvenire dalla nota corrente o dal testo negli appunti.</translation>
-    </message>
-    <message>
-        <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
-        <translation type="obsolete">Le scorciatoie da tastiera funzionano anche quando l&apos;applicazione non è attiva (ad esempio ridotta a icona o in background).</translation>
-    </message>
-    <message>
-        <source>This feature only works under X11.</source>
-        <translation type="obsolete">Questa funzionalità funziona solo con X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="obsolete">Attiva comportamento</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="obsolete">Le scorciatoie Avvia ascolto/lettura interromperanno anche l&apos;ascolto/lettura se vengono attivate mentre l&apos;ascolto/lettura è attivo.</translation>
-    </message>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Inizia ad ascoltare</translation>
-    </message>
-    <message>
-        <source>Start listening, text to active window</source>
-        <translation type="obsolete">Inizia ad ascoltare, invia il testo alla finestra attiva</translation>
-    </message>
-    <message>
-        <source>Start listening, text to clipboard</source>
-        <translation type="obsolete">Inizia ad ascoltare, invia il testo agli appunti</translation>
-    </message>
-    <message>
-        <source>Start reading</source>
-        <translation type="obsolete">Inizia a leggere</translation>
-    </message>
-    <message>
-        <source>Start reading text from clipboard</source>
-        <translation type="obsolete">Inizia a leggere il testo dagli appunti</translation>
-    </message>
-    <message>
-        <source>Pause/Resume reading</source>
-        <translation type="obsolete">Pausa/Riprendi la lettura</translation>
-    </message>
-    <message>
-        <source>Switch to next STT model</source>
-        <translation type="obsolete">Passa al modello STT successivo</translation>
-    </message>
-    <message>
-        <source>Switch to previous STT model</source>
-        <translation type="obsolete">Passa al modello STT precedente</translation>
-    </message>
-    <message>
-        <source>Switch to next TTS model</source>
-        <translation type="obsolete">Passa al modello TTS successivo</translation>
-    </message>
-    <message>
-        <source>Switch to previous TTS model</source>
-        <translation type="obsolete">Passa al modello TTS precedente</translation>
-    </message>
-    <message>
-        <source>Allow external applications to invoke actions</source>
-        <translation type="obsolete">Consenti alle applicazioni esterne di attivare azioni</translation>
-    </message>
-    <message>
-        <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">L&apos;azione consente all&apos;applicazione esterna di richiamare determinate operazioni quando %1 è in esecuzione.</translation>
-    </message>
-    <message>
-        <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Le azioni consentono alle applicazioni esterne di eseguire determinate funzioni quando %1 è in esecuzione.</translation>
-    </message>
-    <message>
-        <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation type="obsolete">L&apos;azione può essere avviata tramite DBus o tramite opzioni della riga di comando.</translation>
-    </message>
-    <message>
-        <source>The following actions are currently supported:</source>
-        <translation type="obsolete">Attualmente sono supportate le seguenti azioni:</translation>
-    </message>
-    <message>
-        <source>Starts listening.</source>
-        <translation type="obsolete">Inizia ad ascoltare.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is inserted into the active window.</source>
-        <translation type="obsolete">Inizia ad ascoltare. Il testo decodificato viene inserito nella finestra attiva.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation type="obsolete">Inizia ad ascoltare. Il testo decodificato viene copiato negli appunti.</translation>
-    </message>
-    <message>
-        <source>Starts reading.</source>
-        <translation type="obsolete">Inizia a leggere.</translation>
-    </message>
-    <message>
-        <source>Starts reading text from the clipboard.</source>
-        <translation type="obsolete">Inizia a leggere il testo dagli appunti.</translation>
-    </message>
-    <message>
-        <source>Pauses or resumes reading.</source>
-        <translation type="obsolete">Mette in pausa o riprende la lettura.</translation>
-    </message>
-    <message>
-        <source>Cancels any of the above operations.</source>
-        <translation type="obsolete">Annulla una qualsiasi delle operazioni precedenti.</translation>
-    </message>
-    <message>
-        <source>Switches to next STT model.</source>
-        <translation type="obsolete">Passa al modello STT successivo.</translation>
-    </message>
-    <message>
-        <source>Switches to previous STT model.</source>
-        <translation type="obsolete">Passa al modello STT precedente.</translation>
-    </message>
-    <message>
-        <source>Switches to next TTS model.</source>
-        <translation type="obsolete">Passa al modello TTS successivo.</translation>
-    </message>
-    <message>
-        <source>Switches to previous TTS model.</source>
-        <translation type="obsolete">Passa al modello TTS precedente.</translation>
-    </message>
-    <message>
-        <source>Sets STT model.</source>
-        <translation type="obsolete">Imposta il modello STT.</translation>
-    </message>
-    <message>
-        <source>Sets TTS model.</source>
-        <translation type="obsolete">Imposta il modello TTS.</translation>
-    </message>
-    <message>
-        <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation type="obsolete">Ad esempio, per attivare l&apos;azione %1, eseguire il comando seguente: %2.</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation type="obsolete">Archiviazione</translation>
-    </message>
-    <message>
-        <source>Location of language files</source>
-        <translation type="obsolete">Posizione dei file di lingua</translation>
-    </message>
-    <message>
-        <source>Directory where language files are downloaded to and stored.</source>
-        <translation type="obsolete">Directory in cui vengono scaricati e archiviati i file della lingua.</translation>
-    </message>
-    <message>
-        <source>Clear cache on close</source>
-        <translation type="obsolete">Svuota la cache alla chiusura</translation>
-    </message>
-    <message>
-        <source>When closing, delete all cached audio files.</source>
-        <translation type="obsolete">Alla chiusura, elimina tutti i file audio memorizzati nella cache.</translation>
-    </message>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Disponibilità di funzionalità opzionali</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="obsolete">Nascondi le impostazioni avanzate</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="obsolete">Mostra impostazioni avanzate</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Opzioni della CPU</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Automatico</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Opzioni di accelerazione hardware</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uso %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi durante l&apos;avvio dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Sostituisci la versione della GPU</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Sostituisci la versione della GPU AMD.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Abilita questa opzione se noti problemi durante l&apos;utilizzo dell&apos;accelerazione GPU con la scheda grafica AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Versione</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Il valore ha lo stesso effetto della variabile di ambiente %1.</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Componi file</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">File di composizione X11 utilizzato in %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Inserisci nella finestra attiva</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Librerie</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Utilizza le librerie Python</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Verificare la presenza delle librerie Python richieste.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Posizione delle librerie Python</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Directory delle librerie Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Lascia vuoto per utilizzare il valore predefinito.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Questa opzione può essere utile se usi il modulo %1 per gestire le librerie Python.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Salva</translation>
-    </message>
-    <message>
-        <source>Select Directory</source>
-        <translation type="obsolete">Seleziona directory</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsOtherPage</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Impostazioni</translation>
-    </message>
-    <message>
-        <source>Restart the application to apply changes.</source>
-        <translation type="obsolete">Riavviare l&apos;applicazione per applicare le modifiche.</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="obsolete">Interfaccia utente</translation>
-    </message>
-    <message>
-        <source>Accessibility</source>
-        <translation type="obsolete">Accessibilità</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Altro</translation>
-    </message>
-    <message>
-        <source>Remember the last note</source>
-        <translation type="obsolete">Ricorda l&apos;ultima nota</translation>
-    </message>
-    <message>
-        <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation type="obsolete">La nota verrà salvata automaticamente, quindi quando riavvii l&apos;app, la tua ultima nota sarà sempre disponibile.</translation>
-    </message>
-    <message>
-        <source>Repair text</source>
-        <translation type="obsolete">Ripara testo</translation>
-    </message>
-    <message>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation type="obsolete">Una volta abilitato, sulla barra degli strumenti principale viene visualizzato un menu con le opzioni di correzione del testo.</translation>
-    </message>
-    <message>
-        <source>File import action</source>
-        <translation type="obsolete">Azione di importazione del file</translation>
-    </message>
-    <message>
-        <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation type="obsolete">L&apos;azione durante l&apos;importazione di una nota da un file. Puoi aggiungere testo importato a una nota esistente o sostituire una nota esistente.</translation>
-    </message>
-    <message>
-        <source>Ask whether to add or replace</source>
-        <translation type="obsolete">Chiedi se aggiungere o sostituire</translation>
-    </message>
-    <message>
-        <source>Add to an existing note</source>
-        <translation type="obsolete">Aggiungi a una nota esistente</translation>
-    </message>
-    <message>
-        <source>Replace an existing note</source>
-        <translation type="obsolete">Sostituisci una nota esistente</translation>
-    </message>
-    <message>
-        <source>Font in text editor</source>
-        <translation type="obsolete">Carattere nell&apos;editor di testo</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Predefinito</translation>
-    </message>
-    <message>
-        <source>Change</source>
-        <translation type="obsolete">Modifica</translation>
-    </message>
-    <message>
-        <source>Please choose a font</source>
-        <translation type="obsolete">Scegli un carattere</translation>
-    </message>
-    <message>
-        <source>Show desktop notification</source>
-        <translation type="obsolete">Mostra notifica desktop</translation>
-    </message>
-    <message>
-        <source>Show desktop notification while reading or listening.</source>
-        <translation type="obsolete">Mostra notifiche sul desktop durante la lettura o l&apos;ascolto.</translation>
-    </message>
-    <message>
-        <source>Never</source>
-        <translation type="obsolete">Mai</translation>
-    </message>
-    <message>
-        <source>When in background</source>
-        <translation type="obsolete">Quando in background</translation>
-    </message>
-    <message>
-        <source>Always</source>
-        <translation type="obsolete">Sempre</translation>
-    </message>
-    <message>
-        <source>Include recognized or read text in notifications</source>
-        <translation type="obsolete">Includere testo riconosciuto o letto nelle notifiche</translation>
-    </message>
-    <message>
-        <source>Use system tray icon</source>
-        <translation type="obsolete">Utilizza l&apos;icona nella barra delle applicazioni</translation>
-    </message>
-    <message>
-        <source>Start minimized to the system tray</source>
-        <translation type="obsolete">Inizia minimizzato nella barra delle applicazioni</translation>
-    </message>
-    <message>
-        <source>Use custom graphical style</source>
-        <translation type="obsolete">Utilizza uno stile grafico personalizzato</translation>
-    </message>
-    <message>
-        <source>Graphical style</source>
-        <translation type="obsolete">Stile grafico</translation>
-    </message>
-    <message>
-        <source>Application graphical interface style.</source>
-        <translation type="obsolete">Stile dell&apos;interfaccia grafica dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation type="obsolete">Modificare se si osservano problemi con colori errati in un tema scuro.</translation>
-    </message>
-    <message>
-        <source>Audio input device</source>
-        <translation type="obsolete">Dispositivo di ingresso audio</translation>
-    </message>
-    <message>
-        <source>Select preferred audio input device.</source>
-        <translation type="obsolete">Seleziona il dispositivo di input audio preferito.</translation>
-    </message>
-    <message>
-        <source>Listening mode</source>
-        <translation type="obsolete">Modalità di ascolto</translation>
-    </message>
-    <message>
-        <source>One sentence</source>
-        <translation type="obsolete">Una frase</translation>
-    </message>
-    <message>
-        <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
-        <translation type="obsolete">Cliccando sul pulsante %1 inizia l&apos;ascolto, che termina quando viene riconosciuta la prima frase.</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="obsolete">Ascoltare</translation>
-    </message>
-    <message>
-        <source>Press and hold</source>
-        <translation type="obsolete">Premere e tenere premuto</translation>
-    </message>
-    <message>
-        <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation type="obsolete">Premendo e tenendo premuto il pulsante %1 si abilita l&apos;ascolto. Quando smetti di tenere premuto, l&apos;ascolto si spegne.</translation>
-    </message>
-    <message>
-        <source>Always on</source>
-        <translation type="obsolete">Sempre attivo</translation>
-    </message>
-    <message>
-        <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation type="obsolete">Dopo aver fatto clic sul pulsante %1, l&apos;ascolto è sempre attivo.</translation>
-    </message>
-    <message>
-        <source>Restore punctuation</source>
-        <translation type="obsolete">Ripristina la punteggiatura</translation>
-    </message>
-    <message>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation type="obsolete">Abilita ripristino avanzato della punteggiatura dopo il riconoscimento vocale. Per farlo funzionare, assicurati di aver abilitato il modello %1 per la tua lingua.</translation>
-    </message>
-    <message>
-        <source>Punctuation</source>
-        <translation type="obsolete">Punteggiatura</translation>
-    </message>
-    <message>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation type="obsolete">Quando questa opzione è abilitata, l&apos;inizializzazione del modello richiede molto più tempo e l&apos;utilizzo della memoria è molto più elevato.</translation>
-    </message>
-    <message>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation type="obsolete">Questa opzione funziona solo con i modelli che non supportano nativamente la punteggiatura.</translation>
-    </message>
-    <message>
-        <source>To make %1 work, download %2 model.</source>
-        <translation type="obsolete">Per far funzionare %1, scarica il modello %2.</translation>
-    </message>
-    <message>
-        <source>Insert statistics</source>
-        <translation type="obsolete">Inserisci statistiche</translation>
-    </message>
-    <message>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation type="obsolete">Inserisce nel testo informazioni relative all&apos;elaborazione, come il tempo di elaborazione e la durata dell&apos;audio.</translation>
-    </message>
-    <message>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation type="obsolete">Questa opzione può essere utile per confrontare le prestazioni di diversi modelli, motori e i loro parametri.</translation>
-    </message>
-    <message>
-        <source>This option does not work with all engines.</source>
-        <translation type="obsolete">Questa opzione non funziona con tutti i motori.</translation>
-    </message>
-    <message>
-        <source>Subtitles</source>
-        <translation type="obsolete">Sottotitoli</translation>
-    </message>
-    <message>
-        <source>Minimum segment duration</source>
-        <translation type="obsolete">Durata minima del segmento</translation>
-    </message>
-    <message>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation type="obsolete">Imposta la durata minima (in secondi) del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation type="obsolete">Questa opzione funziona solo con i modelli %1 e %2.</translation>
-    </message>
-    <message>
-        <source>Break text lines</source>
-        <translation type="obsolete">Interrompi le righe di testo</translation>
-    </message>
-    <message>
-        <source>Minimum line length</source>
-        <translation type="obsolete">Lunghezza minima della linea</translation>
-    </message>
-    <message>
-        <source>Maximum line length</source>
-        <translation type="obsolete">Lunghezza massima della linea</translation>
-    </message>
-    <message>
-        <source>Engine options</source>
-        <translation type="obsolete">Opzioni del motore</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">Personalizzato</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Numero di thread simultanei</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Imposta il numero massimo di thread CPU simultanei.</translation>
-    </message>
-    <message>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation type="obsolete">Un valore più alto non accelera necessariamente la decodifica.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Reset</translation>
-    </message>
-    <message>
-        <source>Beam search width</source>
-        <translation type="obsolete">Ampiezza del fascio di ricerca</translation>
-    </message>
-    <message>
-        <source>A higher value may improve quality, but decoding time may also increase.</source>
-        <translation type="obsolete">Un valore più alto può migliorare la qualità, ma anche il tempo di decodifica può aumentare.</translation>
-    </message>
-    <message>
-        <source>Audio context size</source>
-        <translation type="obsolete">Dimensioni del contesto audio</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
-        <translation type="obsolete">Quando %1 è impostato, la dimensione viene regolata dinamicamente per ogni blocco audio.</translation>
-    </message>
-    <message>
-        <source>Dynamic</source>
-        <translation type="obsolete">Dinamico</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the default fixed size is used.</source>
-        <translation type="obsolete">Quando %1 è impostato, viene utilizzata la dimensione fissa predefinita.</translation>
-    </message>
-    <message>
-        <source>To define a custom size, use the %1 option.</source>
-        <translation type="obsolete">Per definire una dimensione personalizzata, utilizzare l&apos;opzione %1.</translation>
-    </message>
-    <message>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation type="obsolete">Un valore inferiore accelera la decodifica, ma può avere un impatto negativo sulla precisione.</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation type="obsolete">Dimensione</translation>
-    </message>
-    <message>
-        <source>Use Flash Attention</source>
-        <translation type="obsolete">Usa l&apos;attenzione flash</translation>
-    </message>
-    <message>
-        <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation type="obsolete">Flash Attenzione può ridurre il tempo di decodifica quando si utilizza l&apos;accelerazione GPU.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi.</translation>
-    </message>
-    <message>
-        <source>Use %1 model for automatic language detection</source>
-        <translation type="obsolete">Utilizza il modello %1 per il rilevamento automatico della lingua</translation>
-    </message>
-    <message>
-        <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
-        <translation type="obsolete">Nel rilevamento automatico della lingua, viene utilizzato il modello %1 al posto del modello selezionato.</translation>
-    </message>
-    <message>
-        <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
-        <translation type="obsolete">Ciò riduce il tempo di elaborazione, ma la lingua rilevata automaticamente potrebbe non essere corretta.</translation>
-    </message>
-    <message>
-        <source>Restore diacritical marks before speech synthesis</source>
-        <translation type="obsolete">Ripristina i segni diacritici prima della sintesi vocale</translation>
-    </message>
-    <message>
-        <source>This works only for Arabic and Hebrew languages.</source>
-        <translation type="obsolete">Funziona solo per le lingua araba ed ebraica.</translation>
-    </message>
-    <message>
-        <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation type="obsolete">Il ripristino dei segni diacritici per la lingua ebraica non è disponibile.</translation>
-    </message>
-    <message>
-        <source>Split text into sentences</source>
-        <translation type="obsolete">Dividere il testo in frasi</translation>
-    </message>
-    <message>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation type="obsolete">Il testo sarà suddiviso in frasi e la sintesi vocale per ciascuna frase verrà eseguita in parallelo.</translation>
-    </message>
-    <message>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">Ciò accelera la lettura, ma in alcuni modelli la naturalezza del parlato potrebbe essere ridotta.</translation>
-    </message>
-    <message>
-        <source>Use engine speed control</source>
-        <translation type="obsolete">Utilizzare il controllo della velocità del motore vocale</translation>
-    </message>
-    <message>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation type="obsolete">Se il motore TTS supporta il controllo della velocità, verrà utilizzato.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation type="obsolete">Quando questa opzione è disabilitata, la manipolazione della velocità avviene durante la post-elaborazione audio.</translation>
-    </message>
-    <message>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">La velocità effettiva dopo la post-elaborazione dell&apos;audio è molto più prevedibile, ma la naturalezza del parlato potrebbe risultare ridotta.</translation>
-    </message>
-    <message>
-        <source>Use control tags</source>
-        <translation type="obsolete">Utilizza i tag di controllo</translation>
-    </message>
-    <message>
-        <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation type="obsolete">I tag di controllo ti consentono di modificare dinamicamente la velocità del testo sintetizzato o aggiungere silenzio tra le frasi.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, tags are ignored.</source>
-        <translation type="obsolete">Quando questa opzione è disabilitata, i tag vengono ignorati.</translation>
-    </message>
-    <message>
-        <source>To use control tags, insert %1 into the text.</source>
-        <translation type="obsolete">Per utilizzare i tag di controllo, inserisci %1 nel testo.</translation>
-    </message>
-    <message>
-        <source>The following control tags are currently supported:</source>
-        <translation type="obsolete">Attualmente sono supportati i seguenti tag di controllo:</translation>
-    </message>
-    <message>
-        <source>Changes speed.</source>
-        <translation type="obsolete">Cambia velocità.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation type="obsolete">%1 è un numero a virgola mobile compreso tra 0,1 e 2,0.</translation>
-    </message>
-    <message>
-        <source>Inserts silence.</source>
-        <translation type="obsolete">Inserisce il silenzio.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation type="obsolete">%1 è un numero a virgola mobile e %2 è un nome di unità (%3).</translation>
-    </message>
-    <message>
-        <source>Sync speech with timestamps</source>
-        <translation type="obsolete">Sincronizza il parlato con i timestamp</translation>
-    </message>
-    <message>
-        <source>Don&apos;t sync</source>
-        <translation type="obsolete">Non sincronizzare</translation>
-    </message>
-    <message>
-        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation type="obsolete">I timestamp dei sottotitoli vengono ignorati durante la lettura o l&apos;esportazione in un file.</translation>
-    </message>
-    <message>
-        <source>Sync but don&apos;t adjust speed</source>
-        <translation type="obsolete">Sincronizza ma non regola la velocità</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp.</translation>
-    </message>
-    <message>
-        <source>Sync and increase speed to fit</source>
-        <translation type="obsolete">Sincronizza e aumenta la velocità per adattarti</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp. La velocità viene regolata automaticamente in modo che la durata del discorso non sia mai superiore alla durata del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>Sync and increase or decrease speed to fit</source>
-        <translation type="obsolete">Sincronizza e aumenta o diminuisci la velocità per adattarla</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp. La velocità viene regolata automaticamente in modo che la durata del discorso corrisponda esattamente alla durata del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation type="obsolete">Quando è impostato il formato testo dei sottotitoli SRT, la modifica della velocità del parlato è disabilitata poiché la velocità verrà regolata automaticamente.</translation>
-    </message>
-    <message>
-        <source>Use global keyboard shortcuts</source>
-        <translation type="obsolete">Utilizza i tasti di scelta rapida globali</translation>
-    </message>
-    <message>
-        <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
-        <translation type="obsolete">Le scorciatoie ti consentono di avviare o interrompere l&apos;ascolto e la lettura utilizzando la tastiera.</translation>
-    </message>
-    <message>
-        <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
-        <translation type="obsolete">Il risultato della sintesi vocale in testo può essere aggiunto alla nota corrente, inserito in qualsiasi finestra attiva (attualmente in primo piano) o copiato negli appunti.</translation>
-    </message>
-    <message>
-        <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation type="obsolete">La lettura della sintesi vocale può avvenire dalla nota corrente o dal testo negli appunti.</translation>
-    </message>
-    <message>
-        <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
-        <translation type="obsolete">Le scorciatoie da tastiera funzionano anche quando l&apos;applicazione non è attiva (ad esempio ridotta a icona o in background).</translation>
-    </message>
-    <message>
-        <source>This feature only works under X11.</source>
-        <translation type="obsolete">Questa funzionalità funziona solo con X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="obsolete">Attiva comportamento</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="obsolete">Le scorciatoie Avvia ascolto/lettura interromperanno anche l&apos;ascolto/lettura se vengono attivate mentre l&apos;ascolto/lettura è attivo.</translation>
-    </message>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Inizia ad ascoltare</translation>
-    </message>
-    <message>
-        <source>Start listening, text to active window</source>
-        <translation type="obsolete">Inizia ad ascoltare, invia il testo alla finestra attiva</translation>
-    </message>
-    <message>
-        <source>Start listening, text to clipboard</source>
-        <translation type="obsolete">Inizia ad ascoltare, invia il testo agli appunti</translation>
-    </message>
-    <message>
-        <source>Start reading</source>
-        <translation type="obsolete">Inizia a leggere</translation>
-    </message>
-    <message>
-        <source>Start reading text from clipboard</source>
-        <translation type="obsolete">Inizia a leggere il testo dagli appunti</translation>
-    </message>
-    <message>
-        <source>Pause/Resume reading</source>
-        <translation type="obsolete">Pausa/Riprendi la lettura</translation>
-    </message>
-    <message>
-        <source>Switch to next STT model</source>
-        <translation type="obsolete">Passa al modello STT successivo</translation>
-    </message>
-    <message>
-        <source>Switch to previous STT model</source>
-        <translation type="obsolete">Passa al modello STT precedente</translation>
-    </message>
-    <message>
-        <source>Switch to next TTS model</source>
-        <translation type="obsolete">Passa al modello TTS successivo</translation>
-    </message>
-    <message>
-        <source>Switch to previous TTS model</source>
-        <translation type="obsolete">Passa al modello TTS precedente</translation>
-    </message>
-    <message>
-        <source>Allow external applications to invoke actions</source>
-        <translation type="obsolete">Consenti alle applicazioni esterne di attivare azioni</translation>
-    </message>
-    <message>
-        <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">L&apos;azione consente all&apos;applicazione esterna di richiamare determinate operazioni quando %1 è in esecuzione.</translation>
-    </message>
-    <message>
-        <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Le azioni consentono alle applicazioni esterne di eseguire determinate funzioni quando %1 è in esecuzione.</translation>
-    </message>
-    <message>
-        <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation type="obsolete">L&apos;azione può essere avviata tramite DBus o tramite opzioni della riga di comando.</translation>
-    </message>
-    <message>
-        <source>The following actions are currently supported:</source>
-        <translation type="obsolete">Attualmente sono supportate le seguenti azioni:</translation>
-    </message>
-    <message>
-        <source>Starts listening.</source>
-        <translation type="obsolete">Inizia ad ascoltare.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is inserted into the active window.</source>
-        <translation type="obsolete">Inizia ad ascoltare. Il testo decodificato viene inserito nella finestra attiva.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation type="obsolete">Inizia ad ascoltare. Il testo decodificato viene copiato negli appunti.</translation>
-    </message>
-    <message>
-        <source>Starts reading.</source>
-        <translation type="obsolete">Inizia a leggere.</translation>
-    </message>
-    <message>
-        <source>Starts reading text from the clipboard.</source>
-        <translation type="obsolete">Inizia a leggere il testo dagli appunti.</translation>
-    </message>
-    <message>
-        <source>Pauses or resumes reading.</source>
-        <translation type="obsolete">Mette in pausa o riprende la lettura.</translation>
-    </message>
-    <message>
-        <source>Cancels any of the above operations.</source>
-        <translation type="obsolete">Annulla una qualsiasi delle operazioni precedenti.</translation>
-    </message>
-    <message>
-        <source>Switches to next STT model.</source>
-        <translation type="obsolete">Passa al modello STT successivo.</translation>
-    </message>
-    <message>
-        <source>Switches to previous STT model.</source>
-        <translation type="obsolete">Passa al modello STT precedente.</translation>
-    </message>
-    <message>
-        <source>Switches to next TTS model.</source>
-        <translation type="obsolete">Passa al modello TTS successivo.</translation>
-    </message>
-    <message>
-        <source>Switches to previous TTS model.</source>
-        <translation type="obsolete">Passa al modello TTS precedente.</translation>
-    </message>
-    <message>
-        <source>Sets STT model.</source>
-        <translation type="obsolete">Imposta il modello STT.</translation>
-    </message>
-    <message>
-        <source>Sets TTS model.</source>
-        <translation type="obsolete">Imposta il modello TTS.</translation>
-    </message>
-    <message>
-        <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation type="obsolete">Ad esempio, per attivare l&apos;azione %1, eseguire il comando seguente: %2.</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation type="obsolete">Archiviazione</translation>
-    </message>
-    <message>
-        <source>Location of language files</source>
-        <translation type="obsolete">Posizione dei file di lingua</translation>
-    </message>
-    <message>
-        <source>Directory where language files are downloaded to and stored.</source>
-        <translation type="obsolete">Directory in cui vengono scaricati e archiviati i file della lingua.</translation>
-    </message>
-    <message>
-        <source>Clear cache on close</source>
-        <translation type="obsolete">Svuota la cache alla chiusura</translation>
-    </message>
-    <message>
-        <source>When closing, delete all cached audio files.</source>
-        <translation type="obsolete">Alla chiusura, elimina tutti i file audio memorizzati nella cache.</translation>
-    </message>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Disponibilità di funzionalità opzionali</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="obsolete">Nascondi le impostazioni avanzate</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="obsolete">Mostra impostazioni avanzate</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Opzioni della CPU</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Automatico</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Opzioni di accelerazione hardware</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uso %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi durante l&apos;avvio dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Sostituisci la versione della GPU</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Sostituisci la versione della GPU AMD.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Abilita questa opzione se noti problemi durante l&apos;utilizzo dell&apos;accelerazione GPU con la scheda grafica AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Versione</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Il valore ha lo stesso effetto della variabile di ambiente %1.</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Componi file</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">File di composizione X11 utilizzato in %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Inserisci nella finestra attiva</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Librerie</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Utilizza le librerie Python</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Verificare la presenza delle librerie Python richieste.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Posizione delle librerie Python</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Directory delle librerie Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Lascia vuoto per utilizzare il valore predefinito.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Questa opzione può essere utile se usi il modulo %1 per gestire le librerie Python.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Salva</translation>
-    </message>
-    <message>
-        <source>Select Directory</source>
-        <translation type="obsolete">Seleziona directory</translation>
     </message>
 </context>
 <context>
@@ -4490,31 +2159,31 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="74"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="89"/>
         <source>Text appending mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modalità di aggiunta del testo</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="83"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="102"/>
         <source>Add to last line</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi all&apos;ultima riga</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="84"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="103"/>
         <source>Add after line break</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi dopo l&apos;interruzione di riga</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="85"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="104"/>
         <source>Add after empty line</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi dopo la riga vuota</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="101"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="90"/>
         <source>Specifies where to add new text to a note.</source>
-        <translation type="unfinished"></translation>
+        <translation>Specifica dove aggiungere nuovo testo a una nota.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="107"/>
@@ -4617,46 +2286,9 @@
         <translation>Dopo aver fatto clic sul pulsante %1, l&apos;ascolto è sempre attivo.</translation>
     </message>
     <message>
-        <source>Text appending style</source>
-        <translation type="vanished">Stile di aggiunta del testo</translation>
-    </message>
-    <message>
-        <source>In line</source>
-        <translation type="vanished">In linea</translation>
-    </message>
-    <message>
-        <source>After line break</source>
-        <translation type="vanished">Dopo l&apos;interruzione di riga</translation>
-    </message>
-    <message>
-        <source>Text is appended to the note in the same line or after line break.</source>
-        <translation type="vanished">Il testo viene aggiunto alla nota nella stessa riga o dopo l&apos;interruzione di riga.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="85"/>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation>Abilita ripristino avanzato della punteggiatura dopo il riconoscimento vocale. Per farlo funzionare, assicurati di aver abilitato il modello %1 per la tua lingua.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="87"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="99"/>
-        <source>Punctuation</source>
-        <translation>Punteggiatura</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="98"/>
-        <source>To make %1 work, download %2 model.</source>
-        <translation>Per far funzionare %1, scarica il modello %2.</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="441"/>
         <source>Other</source>
         <translation>Altro</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="88"/>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation>Quando questa opzione è abilitata, l&apos;inizializzazione del modello richiede molto più tempo e l&apos;utilizzo della memoria è molto più elevato.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="457"/>
@@ -4683,12 +2315,6 @@
         <translation>Imposta predefinito</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="78"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="99"/>
-        <source>Restore punctuation</source>
-        <translation>Ripristina la punteggiatura</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="334"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="57"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="89"/>
@@ -4709,7 +2335,7 @@
         <location filename="../desktop/qml/SettingsPage.qml" line="67"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="91"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Avanzato</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="35"/>
@@ -4723,146 +2349,6 @@
         <location filename="../desktop/qml/SettingsPage.qml" line="90"/>
         <source>Accessibility</source>
         <translation>Accessibilità</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="76"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="79"/>
-        <source>Auto</source>
-        <translation>Automatico</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="116"/>
-        <source>Graphical style</source>
-        <translation>Stile grafico</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="117"/>
-        <source>Application graphical interface style.</source>
-        <translation>Stile dell&apos;interfaccia grafica dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="118"/>
-        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation>Modificare se si osservano problemi con colori errati in un tema scuro.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="49"/>
-        <source>Show desktop notification</source>
-        <translation>Mostra notifica desktop</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="61"/>
-        <source>Never</source>
-        <translation>Mai</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="62"/>
-        <source>When in background</source>
-        <translation>Quando in background</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="63"/>
-        <source>Always</source>
-        <translation>Sempre</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="50"/>
-        <source>Show desktop notification while reading or listening.</source>
-        <translation>Mostra notifiche sul desktop durante la lettura o l&apos;ascolto.</translation>
-    </message>
-    <message>
-        <source>After empty line</source>
-        <translation type="vanished">Dopo la linea vuota</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="21"/>
-        <source>Font in text editor</source>
-        <translation>Carattere nell&apos;editor di testo</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="327"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="341"/>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="27"/>
-        <source>Default</source>
-        <translation>Predefinito</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="41"/>
-        <source>Please choose a font</source>
-        <translation>Scegli un carattere</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="81"/>
-        <source>Include recognized or read text in notifications</source>
-        <translation>Includere testo riconosciuto o letto nelle notifiche</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="89"/>
-        <source>Use system tray icon</source>
-        <translation>Utilizza l&apos;icona nella barra delle applicazioni</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="99"/>
-        <source>Start minimized to the system tray</source>
-        <translation>Inizia minimizzato nella barra delle applicazioni</translation>
-    </message>
-    <message>
-        <source>Show %1 options</source>
-        <translation type="vanished">Mostra opzioni %1</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="35"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="50"/>
-        <source>Show %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="35"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="42"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="43"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="44"/>
-        <source>Rules</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="42"/>
-        <source>%1 allows you to create text transformations that can be applied after Speech to Text or before Text to Speech.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="43"/>
-        <source>With %1, you can easily and flexibly correct errors in decoded text or correct mispronounced words.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="44"/>
-        <source>To configure the rules you need, go to %1 on the main toolbar.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="50"/>
-        <source>Repair text</source>
-        <translation>Ripara testo</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="57"/>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation>Una volta abilitato, sulla barra degli strumenti principale viene visualizzato un menu con le opzioni di correzione del testo.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="101"/>
-        <source>Add at the cursor position</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="107"/>
-        <source>Use custom graphical style</source>
-        <translation>Utilizza uno stile grafico personalizzato</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="89"/>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation>Questa opzione funziona solo con i modelli che non supportano nativamente la punteggiatura.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="362"/>
@@ -4938,6 +2424,146 @@
         <translation>Quando è impostato il formato testo dei sottotitoli SRT, la modifica della velocità del parlato è disabilitata poiché la velocità verrà regolata automaticamente.</translation>
     </message>
     <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="448"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="160"/>
+        <source>When closing, delete all cached audio files.</source>
+        <translation>Alla chiusura, elimina tutti i file audio memorizzati nella cache.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="174"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="117"/>
+        <source>Insert statistics</source>
+        <translation>Inserisci statistiche</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="178"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="124"/>
+        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
+        <translation>Inserisce nel testo informazioni relative all&apos;elaborazione, come il tempo di elaborazione e la durata dell&apos;audio.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="179"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="125"/>
+        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
+        <translation>Questa opzione può essere utile per confrontare le prestazioni di diversi modelli, motori e i loro parametri.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="180"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="126"/>
+        <source>This option does not work with all engines.</source>
+        <translation>Questa opzione non funziona con tutti i motori.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="164"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="104"/>
+        <source>Echo mode</source>
+        <translation>Modalità eco</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="168"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="111"/>
+        <source>After processing, the decoded text will be immediately read out using the currently set Text to Speech model.</source>
+        <translation>Dopo l&apos;elaborazione, il testo decodificato verrà immediatamente letto utilizzando il modello di conversione da testo a voce attualmente impostato.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="42"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="86"/>
+        <source>General</source>
+        <translation>Generale</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="234"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="394"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="131"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="102"/>
+        <source>Subtitles</source>
+        <translation>Sottotitoli</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="241"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="135"/>
+        <source>Minimum segment duration</source>
+        <translation>Durata minima del segmento</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="265"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="136"/>
+        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
+        <translation>Imposta la durata minima (in secondi) del segmento dei sottotitoli.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="266"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="137"/>
+        <source>This option only works with %1 and %2 models.</source>
+        <translation>Questa opzione funziona solo con i modelli %1 e %2.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="273"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="151"/>
+        <source>Break text lines</source>
+        <translation>Interrompi le righe di testo</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="283"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="160"/>
+        <source>Minimum line length</source>
+        <translation>Lunghezza minima della linea</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="309"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="177"/>
+        <source>Maximum line length</source>
+        <translation>Lunghezza massima della linea</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="372"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="43"/>
+        <source>Split text into sentences</source>
+        <translation>Dividere il testo in frasi</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="373"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="50"/>
+        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
+        <translation>Il testo sarà suddiviso in frasi e la sintesi vocale per ciascuna frase verrà eseguita in parallelo.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="374"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="51"/>
+        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
+        <translation>Ciò accelera la lettura, ma in alcuni modelli la naturalezza del parlato potrebbe essere ridotta.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="383"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="57"/>
+        <source>Use engine speed control</source>
+        <translation>Utilizzare il controllo della velocità del motore vocale</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="384"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="64"/>
+        <source>If the TTS engine supports speed control, it will be used.</source>
+        <translation>Se il motore TTS supporta il controllo della velocità, verrà utilizzato.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="385"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="65"/>
+        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
+        <translation>Quando questa opzione è disabilitata, la manipolazione della velocità avviene durante la post-elaborazione audio.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="386"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="66"/>
+        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
+        <translation>La velocità effettiva dopo la post-elaborazione dell&apos;audio è molto più prevedibile, ma la naturalezza del parlato potrebbe risultare ridotta.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="447"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="153"/>
+        <source>Clear cache on close</source>
+        <translation>Svuota la cache alla chiusura</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="23"/>
         <source>Use global keyboard shortcuts</source>
         <translation>Utilizza i tasti di scelta rapida globali</translation>
@@ -4985,7 +2611,7 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="68"/>
         <source>Start listening, always translate</source>
-        <translation type="unfinished"></translation>
+        <translation>Inizia ad ascoltare, traduci sempre</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="80"/>
@@ -4995,7 +2621,7 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="92"/>
         <source>Start listening, always translate, text to active window</source>
-        <translation type="unfinished"></translation>
+        <translation>Inizia ad ascoltare, traduci sempre, testo nella finestra attiva</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="104"/>
@@ -5005,7 +2631,7 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="116"/>
         <source>Start listening, always translate, text to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Inizia ad ascoltare, traduci sempre, testo negli appunti</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="128"/>
@@ -5085,7 +2711,7 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="256"/>
         <source>Starts listening and always translate decoded text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inizia ad ascoltare e traduce sempre il testo decodificato.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="257"/>
@@ -5095,7 +2721,7 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="258"/>
         <source>Starts listening. The decoded text is translated and inserted into the active window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inizia l&apos;ascolto. Il testo decodificato viene tradotto e inserito nella finestra attiva.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="259"/>
@@ -5105,7 +2731,7 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="260"/>
         <source>Starts listening. The decoded text is translated and copied to the clipboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inizia l&apos;ascolto. Il testo decodificato viene tradotto e copiato negli appunti.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="261"/>
@@ -5125,7 +2751,7 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="264"/>
         <source>Starts reading text from command-line option --text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvia la lettura del testo dall&apos;opzione della riga di comando --text.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="265"/>
@@ -5173,16 +2799,9 @@
         <translation>Ad esempio, per attivare l&apos;azione %1, eseguire il comando seguente: %2.</translation>
     </message>
     <message>
-        <source>Storage</source>
-        <translation type="vanished">Archiviazione</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="vanished">Nascondi le impostazioni avanzate</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="vanished">Mostra impostazioni avanzate</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="29"/>
+        <source>Availability of optional features</source>
+        <translation>Disponibilità di funzionalità opzionali</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="64"/>
@@ -5197,12 +2816,6 @@
         <translation>Numero di thread simultanei</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="42"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="86"/>
-        <source>General</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="69"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="275"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="481"/>
@@ -5210,29 +2823,15 @@
         <translation>Imposta il numero massimo di thread CPU simultanei.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="82"/>
-        <source>When this option is disabled, tags are ignored.</source>
-        <translation>Quando questa opzione è disabilitata, i tag vengono ignorati.</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="76"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="79"/>
+        <source>Auto</source>
+        <translation>Automatico</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="91"/>
-        <source>To use control tags, insert %1 into the text.</source>
-        <translation>Per utilizzare i tag di controllo, inserisci %1 nel testo.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="93"/>
-        <source>The following control tags are currently supported:</source>
-        <translation>Attualmente sono supportati i seguenti tag di controllo:</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="95"/>
-        <source>Changes speed.</source>
-        <translation>Cambia velocità.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="96"/>
-        <source>Inserts silence.</source>
-        <translation>Inserisce il silenzio.</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="90"/>
+        <source>Hardware acceleration options</source>
+        <translation>Opzioni di accelerazione hardware</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="96"/>
@@ -5246,14 +2845,13 @@
         <translation>Uso %1</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="448"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="160"/>
-        <source>When closing, delete all cached audio files.</source>
-        <translation>Alla chiusura, elimina tutti i file audio memorizzati nella cache.</translation>
-    </message>
-    <message>
-        <source>Try to find NVIDIA CUDA compatible graphic cards in the system.</source>
-        <translation type="vanished">Prova a trovare schede grafiche compatibili con NVIDIA CUDA nel sistema.</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="103"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="118"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="133"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="210"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="225"/>
+        <source>Try to find %1 compatible graphic cards in the system.</source>
+        <translation>Prova a trovare %1 schede grafiche compatibili nel sistema.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="104"/>
@@ -5268,12 +2866,24 @@
         <translation>Disattiva questa opzione se noti problemi durante l&apos;avvio dell&apos;applicazione.</translation>
     </message>
     <message>
-        <source>Try to find AMD ROCm compatible graphic cards in the system.</source>
-        <translation type="vanished">Prova a trovare schede grafiche compatibili con AMD ROCm nel sistema.</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="134"/>
+        <source>Only dedicated graphics cards are included. To search for integrated graphics cards, also enable %1.</source>
+        <translation>Sono incluse solo le schede grafiche dedicate. Per cercare le schede grafiche integrate, abilita anche %1.</translation>
     </message>
     <message>
-        <source>Try to find OpenCL compatible graphic cards in the system.</source>
-        <translation type="vanished">Prova a trovare schede grafiche compatibili con OpenCL nel sistema.</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="135"/>
+        <source>Use %1 (Integrated GPU)</source>
+        <translation>Usa %1 (GPU integrata)</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="150"/>
+        <source>Try to find %1 compatible integrated graphic cards in the system.</source>
+        <translation>Prova a trovare %1 schede grafiche integrate compatibili nel sistema.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="180"/>
+        <source>Try to find %1 compatible hardware in the system.</source>
+        <translation>Prova a trovare l&apos;hardware compatibile con %1 nel sistema.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="233"/>
@@ -5301,15 +2911,162 @@
         <translation>Il valore ha lo stesso effetto della variabile di ambiente %1.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="29"/>
-        <source>Availability of optional features</source>
-        <translation>Disponibilità di funzionalità opzionali</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="255"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="291"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="316"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="357"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="384"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="497"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="522"/>
+        <source>Reset</source>
+        <translation>Reset</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="276"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="482"/>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation>Un valore più alto non accelera necessariamente la decodifica.</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="261"/>
+        <source>Libraries</source>
+        <translation>Librerie</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="266"/>
+        <source>Use Python libriaries</source>
+        <translation>Utilizza le librerie Python</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="273"/>
+        <source>Check the presence of the required Python libraries.</source>
+        <translation>Verificare la presenza delle librerie Python richieste.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="284"/>
+        <source>Location of Python libraries</source>
+        <translation>Posizione delle librerie Python</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="285"/>
+        <source>Python libraries directory (%1).</source>
+        <translation>Directory delle librerie Python (%1).</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="285"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="289"/>
+        <source>Leave blank to use the default value.</source>
+        <translation>Lascia vuoto per utilizzare il valore predefinito.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="286"/>
+        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
+        <translation>Questa opzione può essere utile se usi il modulo %1 per gestire le librerie Python.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="292"/>
+        <source>Save</source>
+        <translation>Salva</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="304"/>
+        <source>Compose file</source>
+        <translation>Componi file</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="305"/>
+        <source>X11 compose file used in %1.</source>
+        <translation>File di composizione X11 utilizzato in %1.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="305"/>
+        <source>Insert into active window</source>
+        <translation>Inserisci nella finestra attiva</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="35"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="50"/>
+        <source>Show %1</source>
+        <translation>Mostra %1</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="35"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="42"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="43"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="44"/>
+        <source>Rules</source>
+        <translation>Regole</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="42"/>
+        <source>%1 allows you to create text transformations that can be applied after Speech to Text or before Text to Speech.</source>
+        <translation>%1 consente di creare trasformazioni di testo che possono essere applicate dopo la conversione da voce a testo o prima della conversione da testo a voce.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="43"/>
+        <source>With %1, you can easily and flexibly correct errors in decoded text or correct mispronounced words.</source>
+        <translation>Con %1 puoi correggere in modo semplice e flessibile gli errori nel testo decodificato o le parole pronunciate male.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="44"/>
+        <source>To configure the rules you need, go to %1 on the main toolbar.</source>
+        <translation>Con %1 puoi correggere in modo semplice e flessibile gli errori nel testo decodificato o le parole pronunciate male.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="50"/>
+        <source>Repair text</source>
+        <translation>Ripara testo</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="57"/>
+        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
+        <translation>Una volta abilitato, sulla barra degli strumenti principale viene visualizzato un menu con le opzioni di correzione del testo.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="101"/>
+        <source>Add at the cursor position</source>
+        <translation>Aggiungi alla posizione del cursore</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="130"/>
+        <source>Select Directory</source>
+        <translation>Seleziona directory</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="23"/>
+        <source>Audio input device</source>
+        <translation>Dispositivo di ingresso audio</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="24"/>
+        <source>Select preferred audio input device.</source>
+        <translation>Seleziona il dispositivo di input audio preferito.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="78"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="99"/>
+        <source>Restore punctuation</source>
+        <translation>Ripristina la punteggiatura</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="85"/>
+        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
+        <translation>Abilita ripristino avanzato della punteggiatura dopo il riconoscimento vocale. Per farlo funzionare, assicurati di aver abilitato il modello %1 per la tua lingua.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="87"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="99"/>
+        <source>Punctuation</source>
+        <translation>Punteggiatura</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="88"/>
+        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
+        <translation>Quando questa opzione è abilitata, l&apos;inizializzazione del modello richiede molto più tempo e l&apos;utilizzo della memoria è molto più elevato.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="89"/>
+        <source>This option only works with models that do not natively support punctuation.</source>
+        <translation>Questa opzione funziona solo con i modelli che non supportano nativamente la punteggiatura.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="98"/>
+        <source>To make %1 work, download %2 model.</source>
+        <translation>Per far funzionare %1, scarica il modello %2.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="192"/>
@@ -5323,19 +3080,19 @@
         <location filename="../desktop/qml/SettingsSttPage.qml" line="235"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="441"/>
         <source>Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profilo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="236"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="442"/>
         <source>Profiles allow you to change the processing parameters in the engine.</source>
-        <translation type="unfinished"></translation>
+        <translation>I profili consentono di modificare i parametri di elaborazione nel motore.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="237"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="443"/>
         <source>You can set the parameters to get the fastest processing (%1) or the highest accuracy (%2).</source>
-        <translation type="unfinished"></translation>
+        <translation>È possibile impostare i parametri per ottenere l&apos;elaborazione più rapida (%1) o la massima precisione (%2).</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="238"/>
@@ -5343,7 +3100,7 @@
         <location filename="../desktop/qml/SettingsSttPage.qml" line="444"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="458"/>
         <source>Best performance</source>
-        <translation type="unfinished"></translation>
+        <translation>Prestazione migliore</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="239"/>
@@ -5351,13 +3108,29 @@
         <location filename="../desktop/qml/SettingsSttPage.qml" line="445"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="459"/>
         <source>Best quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Qualità migliore</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="240"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="446"/>
         <source>If you want to manually set individual engine parameters, select %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se si desidera impostare manualmente i singoli parametri del motore, selezionare %1.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="241"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="254"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="328"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="342"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="447"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="460"/>
+        <source>Custom</source>
+        <translation>Personalizzato</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="276"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="482"/>
+        <source>A higher value does not necessarily speed up decoding.</source>
+        <translation>Un valore più alto non accelera necessariamente la decodifica.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="300"/>
@@ -5377,39 +3150,9 @@
         <translation>Dimensioni del contesto audio</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="329"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="387"/>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation>Un valore inferiore accelera la decodifica, ma può avere un impatto negativo sulla precisione.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="326"/>
         <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
         <translation>Quando %1 è impostato, la dimensione viene regolata dinamicamente per ogni blocco audio.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="174"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="117"/>
-        <source>Insert statistics</source>
-        <translation>Inserisci statistiche</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="178"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="124"/>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation>Inserisce nel testo informazioni relative all&apos;elaborazione, come il tempo di elaborazione e la durata dell&apos;audio.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="179"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="125"/>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation>Questa opzione può essere utile per confrontare le prestazioni di diversi modelli, motori e i loro parametri.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="180"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="126"/>
-        <source>This option does not work with all engines.</source>
-        <translation>Questa opzione non funziona con tutti i motori.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="326"/>
@@ -5423,31 +3166,22 @@
         <translation>Quando %1 è impostato, viene utilizzata la dimensione fissa predefinita.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="327"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="341"/>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="27"/>
+        <source>Default</source>
+        <translation>Predefinito</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="328"/>
         <source>To define a custom size, use the %1 option.</source>
         <translation>Per definire una dimensione personalizzata, utilizzare l&apos;opzione %1.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="241"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="254"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="328"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="342"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="447"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="460"/>
-        <source>Custom</source>
-        <translation>Personalizzato</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="164"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="104"/>
-        <source>Echo mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="168"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="111"/>
-        <source>After processing, the decoded text will be immediately read out using the currently set Text to Speech model.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="329"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="387"/>
+        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
+        <translation>Un valore inferiore accelera la decodifica, ma può avere un impatto negativo sulla precisione.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="371"/>
@@ -5488,160 +3222,6 @@
         <translation>Ciò riduce il tempo di elaborazione, ma la lingua rilevata automaticamente potrebbe non essere corretta.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="72"/>
-        <source>Use control tags</source>
-        <translation>Utilizza i tag di controllo</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="81"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="90"/>
-        <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation>I tag di controllo ti consentono di modificare dinamicamente la velocità del testo sintetizzato o aggiungere silenzio tra le frasi.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="95"/>
-        <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation>%1 è un numero a virgola mobile compreso tra 0,1 e 2,0.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="96"/>
-        <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation>%1 è un numero a virgola mobile e %2 è un nome di unità (%3).</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="90"/>
-        <source>Hardware acceleration options</source>
-        <translation>Opzioni di accelerazione hardware</translation>
-    </message>
-    <message>
-        <source>Try to find OpenVINO compatible hardware in the system.</source>
-        <translation type="vanished">Prova a trovare l&apos;hardware compatibile con OpenVINO nel sistema.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="255"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="291"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="316"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="357"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="384"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="497"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="522"/>
-        <source>Reset</source>
-        <translation>Reset</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="304"/>
-        <source>Compose file</source>
-        <translation>Componi file</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="305"/>
-        <source>X11 compose file used in %1.</source>
-        <translation>File di composizione X11 utilizzato in %1.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="305"/>
-        <source>Insert into active window</source>
-        <translation>Inserisci nella finestra attiva</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="261"/>
-        <source>Libraries</source>
-        <translation>Librerie</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="103"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="118"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="133"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="210"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="225"/>
-        <source>Try to find %1 compatible graphic cards in the system.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="134"/>
-        <source>Only dedicated graphics cards are included. To search for integrated graphics cards, also enable %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="135"/>
-        <source>Use %1 (Integrated GPU)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="150"/>
-        <source>Try to find %1 compatible integrated graphic cards in the system.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="180"/>
-        <source>Try to find %1 compatible hardware in the system.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="266"/>
-        <source>Use Python libriaries</source>
-        <translation>Utilizza le librerie Python</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="273"/>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation>Verificare la presenza delle librerie Python richieste.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="23"/>
-        <source>Audio input device</source>
-        <translation>Dispositivo di ingresso audio</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="24"/>
-        <source>Select preferred audio input device.</source>
-        <translation>Seleziona il dispositivo di input audio preferito.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="234"/>
-        <location filename="../sfos/qml/SettingsPage.qml" line="394"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="131"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="102"/>
-        <source>Subtitles</source>
-        <translation>Sottotitoli</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="241"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="135"/>
-        <source>Minimum segment duration</source>
-        <translation>Durata minima del segmento</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="265"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="136"/>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation>Imposta la durata minima (in secondi) del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="266"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="137"/>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation>Questa opzione funziona solo con i modelli %1 e %2.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="273"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="151"/>
-        <source>Break text lines</source>
-        <translation>Interrompi le righe di testo</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="283"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="160"/>
-        <source>Minimum line length</source>
-        <translation>Lunghezza minima della linea</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="309"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="177"/>
-        <source>Maximum line length</source>
-        <translation>Lunghezza massima della linea</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="22"/>
         <source>Restore diacritical marks before speech synthesis</source>
         <translation>Ripristina i segni diacritici prima della sintesi vocale</translation>
@@ -5657,2879 +3237,120 @@
         <translation>Il ripristino dei segni diacritici per la lingua ebraica non è disponibile.</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="372"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="43"/>
-        <source>Split text into sentences</source>
-        <translation>Dividere il testo in frasi</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="373"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="50"/>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation>Il testo sarà suddiviso in frasi e la sintesi vocale per ciascuna frase verrà eseguita in parallelo.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="374"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="51"/>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation>Ciò accelera la lettura, ma in alcuni modelli la naturalezza del parlato potrebbe essere ridotta.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="383"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="57"/>
-        <source>Use engine speed control</source>
-        <translation>Utilizzare il controllo della velocità del motore vocale</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="384"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="64"/>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation>Se il motore TTS supporta il controllo della velocità, verrà utilizzato.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="385"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="65"/>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation>Quando questa opzione è disabilitata, la manipolazione della velocità avviene durante la post-elaborazione audio.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="386"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="66"/>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation>La velocità effettiva dopo la post-elaborazione dell&apos;audio è molto più prevedibile, ma la naturalezza del parlato potrebbe risultare ridotta.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="447"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="153"/>
-        <source>Clear cache on close</source>
-        <translation>Svuota la cache alla chiusura</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="284"/>
-        <source>Location of Python libraries</source>
-        <translation>Posizione delle librerie Python</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="285"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="289"/>
-        <source>Leave blank to use the default value.</source>
-        <translation>Lascia vuoto per utilizzare il valore predefinito.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="285"/>
-        <source>Python libraries directory (%1).</source>
-        <translation>Directory delle librerie Python (%1).</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="286"/>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation>Questa opzione può essere utile se usi il modulo %1 per gestire le librerie Python.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="292"/>
-        <source>Save</source>
-        <translation>Salva</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="130"/>
-        <source>Select Directory</source>
-        <translation>Seleziona directory</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsPage-bak</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Impostazioni</translation>
-    </message>
-    <message>
-        <source>Restart the application to apply changes.</source>
-        <translation type="obsolete">Riavviare l&apos;applicazione per applicare le modifiche.</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="obsolete">Interfaccia utente</translation>
-    </message>
-    <message>
-        <source>Accessibility</source>
-        <translation type="obsolete">Accessibilità</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Altro</translation>
-    </message>
-    <message>
-        <source>Remember the last note</source>
-        <translation type="obsolete">Ricorda l&apos;ultima nota</translation>
-    </message>
-    <message>
-        <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation type="obsolete">La nota verrà salvata automaticamente, quindi quando riavvii l&apos;app, la tua ultima nota sarà sempre disponibile.</translation>
-    </message>
-    <message>
-        <source>Repair text</source>
-        <translation type="obsolete">Ripara testo</translation>
-    </message>
-    <message>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation type="obsolete">Una volta abilitato, sulla barra degli strumenti principale viene visualizzato un menu con le opzioni di correzione del testo.</translation>
-    </message>
-    <message>
-        <source>File import action</source>
-        <translation type="obsolete">Azione di importazione del file</translation>
-    </message>
-    <message>
-        <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation type="obsolete">L&apos;azione durante l&apos;importazione di una nota da un file. Puoi aggiungere testo importato a una nota esistente o sostituire una nota esistente.</translation>
-    </message>
-    <message>
-        <source>Ask whether to add or replace</source>
-        <translation type="obsolete">Chiedi se aggiungere o sostituire</translation>
-    </message>
-    <message>
-        <source>Add to an existing note</source>
-        <translation type="obsolete">Aggiungi a una nota esistente</translation>
-    </message>
-    <message>
-        <source>Replace an existing note</source>
-        <translation type="obsolete">Sostituisci una nota esistente</translation>
-    </message>
-    <message>
-        <source>Font in text editor</source>
-        <translation type="obsolete">Carattere nell&apos;editor di testo</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Predefinito</translation>
-    </message>
-    <message>
-        <source>Change</source>
-        <translation type="obsolete">Modifica</translation>
-    </message>
-    <message>
-        <source>Please choose a font</source>
-        <translation type="obsolete">Scegli un carattere</translation>
-    </message>
-    <message>
-        <source>Show desktop notification</source>
-        <translation type="obsolete">Mostra notifica desktop</translation>
-    </message>
-    <message>
-        <source>Show desktop notification while reading or listening.</source>
-        <translation type="obsolete">Mostra notifiche sul desktop durante la lettura o l&apos;ascolto.</translation>
-    </message>
-    <message>
-        <source>Never</source>
-        <translation type="obsolete">Mai</translation>
-    </message>
-    <message>
-        <source>When in background</source>
-        <translation type="obsolete">Quando in background</translation>
-    </message>
-    <message>
-        <source>Always</source>
-        <translation type="obsolete">Sempre</translation>
-    </message>
-    <message>
-        <source>Include recognized or read text in notifications</source>
-        <translation type="obsolete">Includere testo riconosciuto o letto nelle notifiche</translation>
-    </message>
-    <message>
-        <source>Use system tray icon</source>
-        <translation type="obsolete">Utilizza l&apos;icona nella barra delle applicazioni</translation>
-    </message>
-    <message>
-        <source>Start minimized to the system tray</source>
-        <translation type="obsolete">Inizia minimizzato nella barra delle applicazioni</translation>
-    </message>
-    <message>
-        <source>Use custom graphical style</source>
-        <translation type="obsolete">Utilizza uno stile grafico personalizzato</translation>
-    </message>
-    <message>
-        <source>Graphical style</source>
-        <translation type="obsolete">Stile grafico</translation>
-    </message>
-    <message>
-        <source>Application graphical interface style.</source>
-        <translation type="obsolete">Stile dell&apos;interfaccia grafica dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation type="obsolete">Modificare se si osservano problemi con colori errati in un tema scuro.</translation>
-    </message>
-    <message>
-        <source>Audio input device</source>
-        <translation type="obsolete">Dispositivo di ingresso audio</translation>
-    </message>
-    <message>
-        <source>Select preferred audio input device.</source>
-        <translation type="obsolete">Seleziona il dispositivo di input audio preferito.</translation>
-    </message>
-    <message>
-        <source>Listening mode</source>
-        <translation type="obsolete">Modalità di ascolto</translation>
-    </message>
-    <message>
-        <source>One sentence</source>
-        <translation type="obsolete">Una frase</translation>
-    </message>
-    <message>
-        <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
-        <translation type="obsolete">Cliccando sul pulsante %1 inizia l&apos;ascolto, che termina quando viene riconosciuta la prima frase.</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="obsolete">Ascoltare</translation>
-    </message>
-    <message>
-        <source>Press and hold</source>
-        <translation type="obsolete">Premere e tenere premuto</translation>
-    </message>
-    <message>
-        <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation type="obsolete">Premendo e tenendo premuto il pulsante %1 si abilita l&apos;ascolto. Quando smetti di tenere premuto, l&apos;ascolto si spegne.</translation>
-    </message>
-    <message>
-        <source>Always on</source>
-        <translation type="obsolete">Sempre attivo</translation>
-    </message>
-    <message>
-        <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation type="obsolete">Dopo aver fatto clic sul pulsante %1, l&apos;ascolto è sempre attivo.</translation>
-    </message>
-    <message>
-        <source>Restore punctuation</source>
-        <translation type="obsolete">Ripristina la punteggiatura</translation>
-    </message>
-    <message>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation type="obsolete">Abilita ripristino avanzato della punteggiatura dopo il riconoscimento vocale. Per farlo funzionare, assicurati di aver abilitato il modello %1 per la tua lingua.</translation>
-    </message>
-    <message>
-        <source>Punctuation</source>
-        <translation type="obsolete">Punteggiatura</translation>
-    </message>
-    <message>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation type="obsolete">Quando questa opzione è abilitata, l&apos;inizializzazione del modello richiede molto più tempo e l&apos;utilizzo della memoria è molto più elevato.</translation>
-    </message>
-    <message>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation type="obsolete">Questa opzione funziona solo con i modelli che non supportano nativamente la punteggiatura.</translation>
-    </message>
-    <message>
-        <source>To make %1 work, download %2 model.</source>
-        <translation type="obsolete">Per far funzionare %1, scarica il modello %2.</translation>
-    </message>
-    <message>
-        <source>Insert statistics</source>
-        <translation type="obsolete">Inserisci statistiche</translation>
-    </message>
-    <message>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation type="obsolete">Inserisce nel testo informazioni relative all&apos;elaborazione, come il tempo di elaborazione e la durata dell&apos;audio.</translation>
-    </message>
-    <message>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation type="obsolete">Questa opzione può essere utile per confrontare le prestazioni di diversi modelli, motori e i loro parametri.</translation>
-    </message>
-    <message>
-        <source>This option does not work with all engines.</source>
-        <translation type="obsolete">Questa opzione non funziona con tutti i motori.</translation>
-    </message>
-    <message>
-        <source>Subtitles</source>
-        <translation type="obsolete">Sottotitoli</translation>
-    </message>
-    <message>
-        <source>Minimum segment duration</source>
-        <translation type="obsolete">Durata minima del segmento</translation>
-    </message>
-    <message>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation type="obsolete">Imposta la durata minima (in secondi) del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation type="obsolete">Questa opzione funziona solo con i modelli %1 e %2.</translation>
-    </message>
-    <message>
-        <source>Break text lines</source>
-        <translation type="obsolete">Interrompi le righe di testo</translation>
-    </message>
-    <message>
-        <source>Minimum line length</source>
-        <translation type="obsolete">Lunghezza minima della linea</translation>
-    </message>
-    <message>
-        <source>Maximum line length</source>
-        <translation type="obsolete">Lunghezza massima della linea</translation>
-    </message>
-    <message>
-        <source>Engine options</source>
-        <translation type="obsolete">Opzioni del motore</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">Personalizzato</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Numero di thread simultanei</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Imposta il numero massimo di thread CPU simultanei.</translation>
-    </message>
-    <message>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation type="obsolete">Un valore più alto non accelera necessariamente la decodifica.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Reset</translation>
-    </message>
-    <message>
-        <source>Beam search width</source>
-        <translation type="obsolete">Ampiezza del fascio di ricerca</translation>
-    </message>
-    <message>
-        <source>A higher value may improve quality, but decoding time may also increase.</source>
-        <translation type="obsolete">Un valore più alto può migliorare la qualità, ma anche il tempo di decodifica può aumentare.</translation>
-    </message>
-    <message>
-        <source>Audio context size</source>
-        <translation type="obsolete">Dimensioni del contesto audio</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
-        <translation type="obsolete">Quando %1 è impostato, la dimensione viene regolata dinamicamente per ogni blocco audio.</translation>
-    </message>
-    <message>
-        <source>Dynamic</source>
-        <translation type="obsolete">Dinamico</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the default fixed size is used.</source>
-        <translation type="obsolete">Quando %1 è impostato, viene utilizzata la dimensione fissa predefinita.</translation>
-    </message>
-    <message>
-        <source>To define a custom size, use the %1 option.</source>
-        <translation type="obsolete">Per definire una dimensione personalizzata, utilizzare l&apos;opzione %1.</translation>
-    </message>
-    <message>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation type="obsolete">Un valore inferiore accelera la decodifica, ma può avere un impatto negativo sulla precisione.</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation type="obsolete">Dimensione</translation>
-    </message>
-    <message>
-        <source>Use Flash Attention</source>
-        <translation type="obsolete">Usa l&apos;attenzione flash</translation>
-    </message>
-    <message>
-        <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation type="obsolete">Flash Attenzione può ridurre il tempo di decodifica quando si utilizza l&apos;accelerazione GPU.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi.</translation>
-    </message>
-    <message>
-        <source>Use %1 model for automatic language detection</source>
-        <translation type="obsolete">Utilizza il modello %1 per il rilevamento automatico della lingua</translation>
-    </message>
-    <message>
-        <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
-        <translation type="obsolete">Nel rilevamento automatico della lingua, viene utilizzato il modello %1 al posto del modello selezionato.</translation>
-    </message>
-    <message>
-        <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
-        <translation type="obsolete">Ciò riduce il tempo di elaborazione, ma la lingua rilevata automaticamente potrebbe non essere corretta.</translation>
-    </message>
-    <message>
-        <source>Restore diacritical marks before speech synthesis</source>
-        <translation type="obsolete">Ripristina i segni diacritici prima della sintesi vocale</translation>
-    </message>
-    <message>
-        <source>This works only for Arabic and Hebrew languages.</source>
-        <translation type="obsolete">Funziona solo per le lingua araba ed ebraica.</translation>
-    </message>
-    <message>
-        <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation type="obsolete">Il ripristino dei segni diacritici per la lingua ebraica non è disponibile.</translation>
-    </message>
-    <message>
-        <source>Split text into sentences</source>
-        <translation type="obsolete">Dividere il testo in frasi</translation>
-    </message>
-    <message>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation type="obsolete">Il testo sarà suddiviso in frasi e la sintesi vocale per ciascuna frase verrà eseguita in parallelo.</translation>
-    </message>
-    <message>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">Ciò accelera la lettura, ma in alcuni modelli la naturalezza del parlato potrebbe essere ridotta.</translation>
-    </message>
-    <message>
-        <source>Use engine speed control</source>
-        <translation type="obsolete">Utilizzare il controllo della velocità del motore vocale</translation>
-    </message>
-    <message>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation type="obsolete">Se il motore TTS supporta il controllo della velocità, verrà utilizzato.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation type="obsolete">Quando questa opzione è disabilitata, la manipolazione della velocità avviene durante la post-elaborazione audio.</translation>
-    </message>
-    <message>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">La velocità effettiva dopo la post-elaborazione dell&apos;audio è molto più prevedibile, ma la naturalezza del parlato potrebbe risultare ridotta.</translation>
-    </message>
-    <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="72"/>
         <source>Use control tags</source>
-        <translation type="obsolete">Utilizza i tag di controllo</translation>
+        <translation>Utilizza i tag di controllo</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="81"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="90"/>
         <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation type="obsolete">I tag di controllo ti consentono di modificare dinamicamente la velocità del testo sintetizzato o aggiungere silenzio tra le frasi.</translation>
+        <translation>I tag di controllo ti consentono di modificare dinamicamente la velocità del testo sintetizzato o aggiungere silenzio tra le frasi.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="82"/>
         <source>When this option is disabled, tags are ignored.</source>
-        <translation type="obsolete">Quando questa opzione è disabilitata, i tag vengono ignorati.</translation>
+        <translation>Quando questa opzione è disabilitata, i tag vengono ignorati.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="91"/>
         <source>To use control tags, insert %1 into the text.</source>
-        <translation type="obsolete">Per utilizzare i tag di controllo, inserisci %1 nel testo.</translation>
+        <translation>Per utilizzare i tag di controllo, inserisci %1 nel testo.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="93"/>
         <source>The following control tags are currently supported:</source>
-        <translation type="obsolete">Attualmente sono supportati i seguenti tag di controllo:</translation>
+        <translation>Attualmente sono supportati i seguenti tag di controllo:</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="95"/>
         <source>Changes speed.</source>
-        <translation type="obsolete">Cambia velocità.</translation>
+        <translation>Cambia velocità.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="95"/>
         <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation type="obsolete">%1 è un numero a virgola mobile compreso tra 0,1 e 2,0.</translation>
+        <translation>%1 è un numero a virgola mobile compreso tra 0,1 e 2,0.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="96"/>
         <source>Inserts silence.</source>
-        <translation type="obsolete">Inserisce il silenzio.</translation>
+        <translation>Inserisce il silenzio.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="96"/>
         <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation type="obsolete">%1 è un numero a virgola mobile e %2 è un nome di unità (%3).</translation>
+        <translation>%1 è un numero a virgola mobile e %2 è un nome di unità (%3).</translation>
     </message>
     <message>
-        <source>Sync speech with timestamps</source>
-        <translation type="obsolete">Sincronizza il parlato con i timestamp</translation>
-    </message>
-    <message>
-        <source>Don&apos;t sync</source>
-        <translation type="obsolete">Non sincronizzare</translation>
-    </message>
-    <message>
-        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation type="obsolete">I timestamp dei sottotitoli vengono ignorati durante la lettura o l&apos;esportazione in un file.</translation>
-    </message>
-    <message>
-        <source>Sync but don&apos;t adjust speed</source>
-        <translation type="obsolete">Sincronizza ma non regola la velocità</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp.</translation>
-    </message>
-    <message>
-        <source>Sync and increase speed to fit</source>
-        <translation type="obsolete">Sincronizza e aumenta la velocità per adattarti</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp. La velocità viene regolata automaticamente in modo che la durata del discorso non sia mai superiore alla durata del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>Sync and increase or decrease speed to fit</source>
-        <translation type="obsolete">Sincronizza e aumenta o diminuisci la velocità per adattarla</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp. La velocità viene regolata automaticamente in modo che la durata del discorso corrisponda esattamente alla durata del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation type="obsolete">Quando è impostato il formato testo dei sottotitoli SRT, la modifica della velocità del parlato è disabilitata poiché la velocità verrà regolata automaticamente.</translation>
-    </message>
-    <message>
-        <source>Use global keyboard shortcuts</source>
-        <translation type="obsolete">Utilizza i tasti di scelta rapida globali</translation>
-    </message>
-    <message>
-        <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
-        <translation type="obsolete">Le scorciatoie ti consentono di avviare o interrompere l&apos;ascolto e la lettura utilizzando la tastiera.</translation>
-    </message>
-    <message>
-        <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
-        <translation type="obsolete">Il risultato della sintesi vocale in testo può essere aggiunto alla nota corrente, inserito in qualsiasi finestra attiva (attualmente in primo piano) o copiato negli appunti.</translation>
-    </message>
-    <message>
-        <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation type="obsolete">La lettura della sintesi vocale può avvenire dalla nota corrente o dal testo negli appunti.</translation>
-    </message>
-    <message>
-        <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
-        <translation type="obsolete">Le scorciatoie da tastiera funzionano anche quando l&apos;applicazione non è attiva (ad esempio ridotta a icona o in background).</translation>
-    </message>
-    <message>
-        <source>This feature only works under X11.</source>
-        <translation type="obsolete">Questa funzionalità funziona solo con X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="obsolete">Attiva comportamento</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="obsolete">Le scorciatoie Avvia ascolto/lettura interromperanno anche l&apos;ascolto/lettura se vengono attivate mentre l&apos;ascolto/lettura è attivo.</translation>
-    </message>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Inizia ad ascoltare</translation>
-    </message>
-    <message>
-        <source>Start listening, text to active window</source>
-        <translation type="obsolete">Inizia ad ascoltare, invia il testo alla finestra attiva</translation>
-    </message>
-    <message>
-        <source>Start listening, text to clipboard</source>
-        <translation type="obsolete">Inizia ad ascoltare, invia il testo agli appunti</translation>
-    </message>
-    <message>
-        <source>Start reading</source>
-        <translation type="obsolete">Inizia a leggere</translation>
-    </message>
-    <message>
-        <source>Start reading text from clipboard</source>
-        <translation type="obsolete">Inizia a leggere il testo dagli appunti</translation>
-    </message>
-    <message>
-        <source>Pause/Resume reading</source>
-        <translation type="obsolete">Pausa/Riprendi la lettura</translation>
-    </message>
-    <message>
-        <source>Switch to next STT model</source>
-        <translation type="obsolete">Passa al modello STT successivo</translation>
-    </message>
-    <message>
-        <source>Switch to previous STT model</source>
-        <translation type="obsolete">Passa al modello STT precedente</translation>
-    </message>
-    <message>
-        <source>Switch to next TTS model</source>
-        <translation type="obsolete">Passa al modello TTS successivo</translation>
-    </message>
-    <message>
-        <source>Switch to previous TTS model</source>
-        <translation type="obsolete">Passa al modello TTS precedente</translation>
-    </message>
-    <message>
-        <source>Allow external applications to invoke actions</source>
-        <translation type="obsolete">Consenti alle applicazioni esterne di attivare azioni</translation>
-    </message>
-    <message>
-        <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">L&apos;azione consente all&apos;applicazione esterna di richiamare determinate operazioni quando %1 è in esecuzione.</translation>
-    </message>
-    <message>
-        <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Le azioni consentono alle applicazioni esterne di eseguire determinate funzioni quando %1 è in esecuzione.</translation>
-    </message>
-    <message>
-        <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation type="obsolete">L&apos;azione può essere avviata tramite DBus o tramite opzioni della riga di comando.</translation>
-    </message>
-    <message>
-        <source>The following actions are currently supported:</source>
-        <translation type="obsolete">Attualmente sono supportate le seguenti azioni:</translation>
-    </message>
-    <message>
-        <source>Starts listening.</source>
-        <translation type="obsolete">Inizia ad ascoltare.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is inserted into the active window.</source>
-        <translation type="obsolete">Inizia ad ascoltare. Il testo decodificato viene inserito nella finestra attiva.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation type="obsolete">Inizia ad ascoltare. Il testo decodificato viene copiato negli appunti.</translation>
-    </message>
-    <message>
-        <source>Starts reading.</source>
-        <translation type="obsolete">Inizia a leggere.</translation>
-    </message>
-    <message>
-        <source>Starts reading text from the clipboard.</source>
-        <translation type="obsolete">Inizia a leggere il testo dagli appunti.</translation>
-    </message>
-    <message>
-        <source>Pauses or resumes reading.</source>
-        <translation type="obsolete">Mette in pausa o riprende la lettura.</translation>
-    </message>
-    <message>
-        <source>Cancels any of the above operations.</source>
-        <translation type="obsolete">Annulla una qualsiasi delle operazioni precedenti.</translation>
-    </message>
-    <message>
-        <source>Switches to next STT model.</source>
-        <translation type="obsolete">Passa al modello STT successivo.</translation>
-    </message>
-    <message>
-        <source>Switches to previous STT model.</source>
-        <translation type="obsolete">Passa al modello STT precedente.</translation>
-    </message>
-    <message>
-        <source>Switches to next TTS model.</source>
-        <translation type="obsolete">Passa al modello TTS successivo.</translation>
-    </message>
-    <message>
-        <source>Switches to previous TTS model.</source>
-        <translation type="obsolete">Passa al modello TTS precedente.</translation>
-    </message>
-    <message>
-        <source>Sets STT model.</source>
-        <translation type="obsolete">Imposta il modello STT.</translation>
-    </message>
-    <message>
-        <source>Sets TTS model.</source>
-        <translation type="obsolete">Imposta il modello TTS.</translation>
-    </message>
-    <message>
-        <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation type="obsolete">Ad esempio, per attivare l&apos;azione %1, eseguire il comando seguente: %2.</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation type="obsolete">Archiviazione</translation>
-    </message>
-    <message>
-        <source>Location of language files</source>
-        <translation type="obsolete">Posizione dei file di lingua</translation>
-    </message>
-    <message>
-        <source>Directory where language files are downloaded to and stored.</source>
-        <translation type="obsolete">Directory in cui vengono scaricati e archiviati i file della lingua.</translation>
-    </message>
-    <message>
-        <source>Clear cache on close</source>
-        <translation type="obsolete">Svuota la cache alla chiusura</translation>
-    </message>
-    <message>
-        <source>When closing, delete all cached audio files.</source>
-        <translation type="obsolete">Alla chiusura, elimina tutti i file audio memorizzati nella cache.</translation>
-    </message>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Disponibilità di funzionalità opzionali</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="obsolete">Nascondi le impostazioni avanzate</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="obsolete">Mostra impostazioni avanzate</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Opzioni della CPU</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Automatico</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Opzioni di accelerazione hardware</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uso %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi durante l&apos;avvio dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Sostituisci la versione della GPU</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Sostituisci la versione della GPU AMD.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Abilita questa opzione se noti problemi durante l&apos;utilizzo dell&apos;accelerazione GPU con la scheda grafica AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Versione</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Il valore ha lo stesso effetto della variabile di ambiente %1.</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Componi file</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">File di composizione X11 utilizzato in %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Inserisci nella finestra attiva</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Librerie</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Utilizza le librerie Python</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Verificare la presenza delle librerie Python richieste.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Posizione delle librerie Python</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Directory delle librerie Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Lascia vuoto per utilizzare il valore predefinito.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Questa opzione può essere utile se usi il modulo %1 per gestire le librerie Python.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Salva</translation>
-    </message>
-    <message>
-        <source>Select Directory</source>
-        <translation type="obsolete">Seleziona directory</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsSttPage</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Impostazioni</translation>
-    </message>
-    <message>
-        <source>Restart the application to apply changes.</source>
-        <translation type="obsolete">Riavviare l&apos;applicazione per applicare le modifiche.</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="obsolete">Interfaccia utente</translation>
-    </message>
-    <message>
-        <source>Accessibility</source>
-        <translation type="obsolete">Accessibilità</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Altro</translation>
-    </message>
-    <message>
-        <source>Remember the last note</source>
-        <translation type="obsolete">Ricorda l&apos;ultima nota</translation>
-    </message>
-    <message>
-        <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation type="obsolete">La nota verrà salvata automaticamente, quindi quando riavvii l&apos;app, la tua ultima nota sarà sempre disponibile.</translation>
-    </message>
-    <message>
-        <source>Repair text</source>
-        <translation type="obsolete">Ripara testo</translation>
-    </message>
-    <message>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation type="obsolete">Una volta abilitato, sulla barra degli strumenti principale viene visualizzato un menu con le opzioni di correzione del testo.</translation>
-    </message>
-    <message>
-        <source>File import action</source>
-        <translation type="obsolete">Azione di importazione del file</translation>
-    </message>
-    <message>
-        <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation type="obsolete">L&apos;azione durante l&apos;importazione di una nota da un file. Puoi aggiungere testo importato a una nota esistente o sostituire una nota esistente.</translation>
-    </message>
-    <message>
-        <source>Ask whether to add or replace</source>
-        <translation type="obsolete">Chiedi se aggiungere o sostituire</translation>
-    </message>
-    <message>
-        <source>Add to an existing note</source>
-        <translation type="obsolete">Aggiungi a una nota esistente</translation>
-    </message>
-    <message>
-        <source>Replace an existing note</source>
-        <translation type="obsolete">Sostituisci una nota esistente</translation>
-    </message>
-    <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="21"/>
         <source>Font in text editor</source>
-        <translation type="obsolete">Carattere nell&apos;editor di testo</translation>
+        <translation>Carattere nell&apos;editor di testo</translation>
     </message>
     <message>
-        <source>Default</source>
-        <translation type="obsolete">Predefinito</translation>
-    </message>
-    <message>
-        <source>Change</source>
-        <translation type="obsolete">Modifica</translation>
-    </message>
-    <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="41"/>
         <source>Please choose a font</source>
-        <translation type="obsolete">Scegli un carattere</translation>
+        <translation>Scegli un carattere</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="49"/>
         <source>Show desktop notification</source>
-        <translation type="obsolete">Mostra notifica desktop</translation>
+        <translation>Mostra notifica desktop</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="50"/>
         <source>Show desktop notification while reading or listening.</source>
-        <translation type="obsolete">Mostra notifiche sul desktop durante la lettura o l&apos;ascolto.</translation>
+        <translation>Mostra notifiche sul desktop durante la lettura o l&apos;ascolto.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="61"/>
         <source>Never</source>
-        <translation type="obsolete">Mai</translation>
+        <translation>Mai</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="62"/>
         <source>When in background</source>
-        <translation type="obsolete">Quando in background</translation>
+        <translation>Quando in background</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="63"/>
         <source>Always</source>
-        <translation type="obsolete">Sempre</translation>
+        <translation>Sempre</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="81"/>
         <source>Include recognized or read text in notifications</source>
-        <translation type="obsolete">Includere testo riconosciuto o letto nelle notifiche</translation>
+        <translation>Includere testo riconosciuto o letto nelle notifiche</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="89"/>
         <source>Use system tray icon</source>
-        <translation type="obsolete">Utilizza l&apos;icona nella barra delle applicazioni</translation>
+        <translation>Utilizza l&apos;icona nella barra delle applicazioni</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="99"/>
         <source>Start minimized to the system tray</source>
-        <translation type="obsolete">Inizia minimizzato nella barra delle applicazioni</translation>
+        <translation>Inizia minimizzato nella barra delle applicazioni</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="107"/>
         <source>Use custom graphical style</source>
-        <translation type="obsolete">Utilizza uno stile grafico personalizzato</translation>
+        <translation>Utilizza uno stile grafico personalizzato</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="116"/>
         <source>Graphical style</source>
-        <translation type="obsolete">Stile grafico</translation>
+        <translation>Stile grafico</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="117"/>
         <source>Application graphical interface style.</source>
-        <translation type="obsolete">Stile dell&apos;interfaccia grafica dell&apos;applicazione.</translation>
+        <translation>Stile dell&apos;interfaccia grafica dell&apos;applicazione.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="118"/>
         <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation type="obsolete">Modificare se si osservano problemi con colori errati in un tema scuro.</translation>
-    </message>
-    <message>
-        <source>Audio input device</source>
-        <translation type="obsolete">Dispositivo di ingresso audio</translation>
-    </message>
-    <message>
-        <source>Select preferred audio input device.</source>
-        <translation type="obsolete">Seleziona il dispositivo di input audio preferito.</translation>
-    </message>
-    <message>
-        <source>Listening mode</source>
-        <translation type="obsolete">Modalità di ascolto</translation>
-    </message>
-    <message>
-        <source>One sentence</source>
-        <translation type="obsolete">Una frase</translation>
-    </message>
-    <message>
-        <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
-        <translation type="obsolete">Cliccando sul pulsante %1 inizia l&apos;ascolto, che termina quando viene riconosciuta la prima frase.</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="obsolete">Ascoltare</translation>
-    </message>
-    <message>
-        <source>Press and hold</source>
-        <translation type="obsolete">Premere e tenere premuto</translation>
-    </message>
-    <message>
-        <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation type="obsolete">Premendo e tenendo premuto il pulsante %1 si abilita l&apos;ascolto. Quando smetti di tenere premuto, l&apos;ascolto si spegne.</translation>
-    </message>
-    <message>
-        <source>Always on</source>
-        <translation type="obsolete">Sempre attivo</translation>
-    </message>
-    <message>
-        <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation type="obsolete">Dopo aver fatto clic sul pulsante %1, l&apos;ascolto è sempre attivo.</translation>
-    </message>
-    <message>
-        <source>Restore punctuation</source>
-        <translation type="obsolete">Ripristina la punteggiatura</translation>
-    </message>
-    <message>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation type="obsolete">Abilita ripristino avanzato della punteggiatura dopo il riconoscimento vocale. Per farlo funzionare, assicurati di aver abilitato il modello %1 per la tua lingua.</translation>
-    </message>
-    <message>
-        <source>Punctuation</source>
-        <translation type="obsolete">Punteggiatura</translation>
-    </message>
-    <message>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation type="obsolete">Quando questa opzione è abilitata, l&apos;inizializzazione del modello richiede molto più tempo e l&apos;utilizzo della memoria è molto più elevato.</translation>
-    </message>
-    <message>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation type="obsolete">Questa opzione funziona solo con i modelli che non supportano nativamente la punteggiatura.</translation>
-    </message>
-    <message>
-        <source>To make %1 work, download %2 model.</source>
-        <translation type="obsolete">Per far funzionare %1, scarica il modello %2.</translation>
-    </message>
-    <message>
-        <source>Insert statistics</source>
-        <translation type="obsolete">Inserisci statistiche</translation>
-    </message>
-    <message>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation type="obsolete">Inserisce nel testo informazioni relative all&apos;elaborazione, come il tempo di elaborazione e la durata dell&apos;audio.</translation>
-    </message>
-    <message>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation type="obsolete">Questa opzione può essere utile per confrontare le prestazioni di diversi modelli, motori e i loro parametri.</translation>
-    </message>
-    <message>
-        <source>This option does not work with all engines.</source>
-        <translation type="obsolete">Questa opzione non funziona con tutti i motori.</translation>
-    </message>
-    <message>
-        <source>Subtitles</source>
-        <translation type="obsolete">Sottotitoli</translation>
-    </message>
-    <message>
-        <source>Minimum segment duration</source>
-        <translation type="obsolete">Durata minima del segmento</translation>
-    </message>
-    <message>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation type="obsolete">Imposta la durata minima (in secondi) del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation type="obsolete">Questa opzione funziona solo con i modelli %1 e %2.</translation>
-    </message>
-    <message>
-        <source>Break text lines</source>
-        <translation type="obsolete">Interrompi le righe di testo</translation>
-    </message>
-    <message>
-        <source>Minimum line length</source>
-        <translation type="obsolete">Lunghezza minima della linea</translation>
-    </message>
-    <message>
-        <source>Maximum line length</source>
-        <translation type="obsolete">Lunghezza massima della linea</translation>
-    </message>
-    <message>
-        <source>Engine options</source>
-        <translation type="obsolete">Opzioni del motore</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">Personalizzato</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Numero di thread simultanei</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Imposta il numero massimo di thread CPU simultanei.</translation>
-    </message>
-    <message>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation type="obsolete">Un valore più alto non accelera necessariamente la decodifica.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Reset</translation>
-    </message>
-    <message>
-        <source>Beam search width</source>
-        <translation type="obsolete">Ampiezza del fascio di ricerca</translation>
-    </message>
-    <message>
-        <source>A higher value may improve quality, but decoding time may also increase.</source>
-        <translation type="obsolete">Un valore più alto può migliorare la qualità, ma anche il tempo di decodifica può aumentare.</translation>
-    </message>
-    <message>
-        <source>Audio context size</source>
-        <translation type="obsolete">Dimensioni del contesto audio</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
-        <translation type="obsolete">Quando %1 è impostato, la dimensione viene regolata dinamicamente per ogni blocco audio.</translation>
-    </message>
-    <message>
-        <source>Dynamic</source>
-        <translation type="obsolete">Dinamico</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the default fixed size is used.</source>
-        <translation type="obsolete">Quando %1 è impostato, viene utilizzata la dimensione fissa predefinita.</translation>
-    </message>
-    <message>
-        <source>To define a custom size, use the %1 option.</source>
-        <translation type="obsolete">Per definire una dimensione personalizzata, utilizzare l&apos;opzione %1.</translation>
-    </message>
-    <message>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation type="obsolete">Un valore inferiore accelera la decodifica, ma può avere un impatto negativo sulla precisione.</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation type="obsolete">Dimensione</translation>
-    </message>
-    <message>
-        <source>Use Flash Attention</source>
-        <translation type="obsolete">Usa l&apos;attenzione flash</translation>
-    </message>
-    <message>
-        <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation type="obsolete">Flash Attenzione può ridurre il tempo di decodifica quando si utilizza l&apos;accelerazione GPU.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi.</translation>
-    </message>
-    <message>
-        <source>Use %1 model for automatic language detection</source>
-        <translation type="obsolete">Utilizza il modello %1 per il rilevamento automatico della lingua</translation>
-    </message>
-    <message>
-        <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
-        <translation type="obsolete">Nel rilevamento automatico della lingua, viene utilizzato il modello %1 al posto del modello selezionato.</translation>
-    </message>
-    <message>
-        <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
-        <translation type="obsolete">Ciò riduce il tempo di elaborazione, ma la lingua rilevata automaticamente potrebbe non essere corretta.</translation>
-    </message>
-    <message>
-        <source>Restore diacritical marks before speech synthesis</source>
-        <translation type="obsolete">Ripristina i segni diacritici prima della sintesi vocale</translation>
-    </message>
-    <message>
-        <source>This works only for Arabic and Hebrew languages.</source>
-        <translation type="obsolete">Funziona solo per le lingua araba ed ebraica.</translation>
-    </message>
-    <message>
-        <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation type="obsolete">Il ripristino dei segni diacritici per la lingua ebraica non è disponibile.</translation>
-    </message>
-    <message>
-        <source>Split text into sentences</source>
-        <translation type="obsolete">Dividere il testo in frasi</translation>
-    </message>
-    <message>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation type="obsolete">Il testo sarà suddiviso in frasi e la sintesi vocale per ciascuna frase verrà eseguita in parallelo.</translation>
-    </message>
-    <message>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">Ciò accelera la lettura, ma in alcuni modelli la naturalezza del parlato potrebbe essere ridotta.</translation>
-    </message>
-    <message>
-        <source>Use engine speed control</source>
-        <translation type="obsolete">Utilizzare il controllo della velocità del motore vocale</translation>
-    </message>
-    <message>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation type="obsolete">Se il motore TTS supporta il controllo della velocità, verrà utilizzato.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation type="obsolete">Quando questa opzione è disabilitata, la manipolazione della velocità avviene durante la post-elaborazione audio.</translation>
-    </message>
-    <message>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">La velocità effettiva dopo la post-elaborazione dell&apos;audio è molto più prevedibile, ma la naturalezza del parlato potrebbe risultare ridotta.</translation>
-    </message>
-    <message>
-        <source>Use control tags</source>
-        <translation type="obsolete">Utilizza i tag di controllo</translation>
-    </message>
-    <message>
-        <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation type="obsolete">I tag di controllo ti consentono di modificare dinamicamente la velocità del testo sintetizzato o aggiungere silenzio tra le frasi.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, tags are ignored.</source>
-        <translation type="obsolete">Quando questa opzione è disabilitata, i tag vengono ignorati.</translation>
-    </message>
-    <message>
-        <source>To use control tags, insert %1 into the text.</source>
-        <translation type="obsolete">Per utilizzare i tag di controllo, inserisci %1 nel testo.</translation>
-    </message>
-    <message>
-        <source>The following control tags are currently supported:</source>
-        <translation type="obsolete">Attualmente sono supportati i seguenti tag di controllo:</translation>
-    </message>
-    <message>
-        <source>Changes speed.</source>
-        <translation type="obsolete">Cambia velocità.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation type="obsolete">%1 è un numero a virgola mobile compreso tra 0,1 e 2,0.</translation>
-    </message>
-    <message>
-        <source>Inserts silence.</source>
-        <translation type="obsolete">Inserisce il silenzio.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation type="obsolete">%1 è un numero a virgola mobile e %2 è un nome di unità (%3).</translation>
-    </message>
-    <message>
-        <source>Sync speech with timestamps</source>
-        <translation type="obsolete">Sincronizza il parlato con i timestamp</translation>
-    </message>
-    <message>
-        <source>Don&apos;t sync</source>
-        <translation type="obsolete">Non sincronizzare</translation>
-    </message>
-    <message>
-        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation type="obsolete">I timestamp dei sottotitoli vengono ignorati durante la lettura o l&apos;esportazione in un file.</translation>
-    </message>
-    <message>
-        <source>Sync but don&apos;t adjust speed</source>
-        <translation type="obsolete">Sincronizza ma non regola la velocità</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp.</translation>
-    </message>
-    <message>
-        <source>Sync and increase speed to fit</source>
-        <translation type="obsolete">Sincronizza e aumenta la velocità per adattarti</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp. La velocità viene regolata automaticamente in modo che la durata del discorso non sia mai superiore alla durata del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>Sync and increase or decrease speed to fit</source>
-        <translation type="obsolete">Sincronizza e aumenta o diminuisci la velocità per adattarla</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp. La velocità viene regolata automaticamente in modo che la durata del discorso corrisponda esattamente alla durata del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation type="obsolete">Quando è impostato il formato testo dei sottotitoli SRT, la modifica della velocità del parlato è disabilitata poiché la velocità verrà regolata automaticamente.</translation>
-    </message>
-    <message>
-        <source>Use global keyboard shortcuts</source>
-        <translation type="obsolete">Utilizza i tasti di scelta rapida globali</translation>
-    </message>
-    <message>
-        <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
-        <translation type="obsolete">Le scorciatoie ti consentono di avviare o interrompere l&apos;ascolto e la lettura utilizzando la tastiera.</translation>
-    </message>
-    <message>
-        <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
-        <translation type="obsolete">Il risultato della sintesi vocale in testo può essere aggiunto alla nota corrente, inserito in qualsiasi finestra attiva (attualmente in primo piano) o copiato negli appunti.</translation>
-    </message>
-    <message>
-        <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation type="obsolete">La lettura della sintesi vocale può avvenire dalla nota corrente o dal testo negli appunti.</translation>
-    </message>
-    <message>
-        <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
-        <translation type="obsolete">Le scorciatoie da tastiera funzionano anche quando l&apos;applicazione non è attiva (ad esempio ridotta a icona o in background).</translation>
-    </message>
-    <message>
-        <source>This feature only works under X11.</source>
-        <translation type="obsolete">Questa funzionalità funziona solo con X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="obsolete">Attiva comportamento</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="obsolete">Le scorciatoie Avvia ascolto/lettura interromperanno anche l&apos;ascolto/lettura se vengono attivate mentre l&apos;ascolto/lettura è attivo.</translation>
-    </message>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Inizia ad ascoltare</translation>
-    </message>
-    <message>
-        <source>Start listening, text to active window</source>
-        <translation type="obsolete">Inizia ad ascoltare, invia il testo alla finestra attiva</translation>
-    </message>
-    <message>
-        <source>Start listening, text to clipboard</source>
-        <translation type="obsolete">Inizia ad ascoltare, invia il testo agli appunti</translation>
-    </message>
-    <message>
-        <source>Start reading</source>
-        <translation type="obsolete">Inizia a leggere</translation>
-    </message>
-    <message>
-        <source>Start reading text from clipboard</source>
-        <translation type="obsolete">Inizia a leggere il testo dagli appunti</translation>
-    </message>
-    <message>
-        <source>Pause/Resume reading</source>
-        <translation type="obsolete">Pausa/Riprendi la lettura</translation>
-    </message>
-    <message>
-        <source>Switch to next STT model</source>
-        <translation type="obsolete">Passa al modello STT successivo</translation>
-    </message>
-    <message>
-        <source>Switch to previous STT model</source>
-        <translation type="obsolete">Passa al modello STT precedente</translation>
-    </message>
-    <message>
-        <source>Switch to next TTS model</source>
-        <translation type="obsolete">Passa al modello TTS successivo</translation>
-    </message>
-    <message>
-        <source>Switch to previous TTS model</source>
-        <translation type="obsolete">Passa al modello TTS precedente</translation>
-    </message>
-    <message>
-        <source>Allow external applications to invoke actions</source>
-        <translation type="obsolete">Consenti alle applicazioni esterne di attivare azioni</translation>
-    </message>
-    <message>
-        <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">L&apos;azione consente all&apos;applicazione esterna di richiamare determinate operazioni quando %1 è in esecuzione.</translation>
-    </message>
-    <message>
-        <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Le azioni consentono alle applicazioni esterne di eseguire determinate funzioni quando %1 è in esecuzione.</translation>
-    </message>
-    <message>
-        <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation type="obsolete">L&apos;azione può essere avviata tramite DBus o tramite opzioni della riga di comando.</translation>
-    </message>
-    <message>
-        <source>The following actions are currently supported:</source>
-        <translation type="obsolete">Attualmente sono supportate le seguenti azioni:</translation>
-    </message>
-    <message>
-        <source>Starts listening.</source>
-        <translation type="obsolete">Inizia ad ascoltare.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is inserted into the active window.</source>
-        <translation type="obsolete">Inizia ad ascoltare. Il testo decodificato viene inserito nella finestra attiva.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation type="obsolete">Inizia ad ascoltare. Il testo decodificato viene copiato negli appunti.</translation>
-    </message>
-    <message>
-        <source>Starts reading.</source>
-        <translation type="obsolete">Inizia a leggere.</translation>
-    </message>
-    <message>
-        <source>Starts reading text from the clipboard.</source>
-        <translation type="obsolete">Inizia a leggere il testo dagli appunti.</translation>
-    </message>
-    <message>
-        <source>Pauses or resumes reading.</source>
-        <translation type="obsolete">Mette in pausa o riprende la lettura.</translation>
-    </message>
-    <message>
-        <source>Cancels any of the above operations.</source>
-        <translation type="obsolete">Annulla una qualsiasi delle operazioni precedenti.</translation>
-    </message>
-    <message>
-        <source>Switches to next STT model.</source>
-        <translation type="obsolete">Passa al modello STT successivo.</translation>
-    </message>
-    <message>
-        <source>Switches to previous STT model.</source>
-        <translation type="obsolete">Passa al modello STT precedente.</translation>
-    </message>
-    <message>
-        <source>Switches to next TTS model.</source>
-        <translation type="obsolete">Passa al modello TTS successivo.</translation>
-    </message>
-    <message>
-        <source>Switches to previous TTS model.</source>
-        <translation type="obsolete">Passa al modello TTS precedente.</translation>
-    </message>
-    <message>
-        <source>Sets STT model.</source>
-        <translation type="obsolete">Imposta il modello STT.</translation>
-    </message>
-    <message>
-        <source>Sets TTS model.</source>
-        <translation type="obsolete">Imposta il modello TTS.</translation>
-    </message>
-    <message>
-        <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation type="obsolete">Ad esempio, per attivare l&apos;azione %1, eseguire il comando seguente: %2.</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation type="obsolete">Archiviazione</translation>
-    </message>
-    <message>
-        <source>Location of language files</source>
-        <translation type="obsolete">Posizione dei file di lingua</translation>
-    </message>
-    <message>
-        <source>Directory where language files are downloaded to and stored.</source>
-        <translation type="obsolete">Directory in cui vengono scaricati e archiviati i file della lingua.</translation>
-    </message>
-    <message>
-        <source>Clear cache on close</source>
-        <translation type="obsolete">Svuota la cache alla chiusura</translation>
-    </message>
-    <message>
-        <source>When closing, delete all cached audio files.</source>
-        <translation type="obsolete">Alla chiusura, elimina tutti i file audio memorizzati nella cache.</translation>
-    </message>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Disponibilità di funzionalità opzionali</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="obsolete">Nascondi le impostazioni avanzate</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="obsolete">Mostra impostazioni avanzate</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Opzioni della CPU</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Automatico</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Opzioni di accelerazione hardware</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uso %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi durante l&apos;avvio dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Sostituisci la versione della GPU</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Sostituisci la versione della GPU AMD.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Abilita questa opzione se noti problemi durante l&apos;utilizzo dell&apos;accelerazione GPU con la scheda grafica AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Versione</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Il valore ha lo stesso effetto della variabile di ambiente %1.</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Componi file</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">File di composizione X11 utilizzato in %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Inserisci nella finestra attiva</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Librerie</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Utilizza le librerie Python</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Verificare la presenza delle librerie Python richieste.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Posizione delle librerie Python</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Directory delle librerie Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Lascia vuoto per utilizzare il valore predefinito.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Questa opzione può essere utile se usi il modulo %1 per gestire le librerie Python.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Salva</translation>
-    </message>
-    <message>
-        <source>Select Directory</source>
-        <translation type="obsolete">Seleziona directory</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsTtsPage</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Impostazioni</translation>
-    </message>
-    <message>
-        <source>Restart the application to apply changes.</source>
-        <translation type="obsolete">Riavviare l&apos;applicazione per applicare le modifiche.</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="obsolete">Interfaccia utente</translation>
-    </message>
-    <message>
-        <source>Accessibility</source>
-        <translation type="obsolete">Accessibilità</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Altro</translation>
-    </message>
-    <message>
-        <source>Remember the last note</source>
-        <translation type="obsolete">Ricorda l&apos;ultima nota</translation>
-    </message>
-    <message>
-        <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation type="obsolete">La nota verrà salvata automaticamente, quindi quando riavvii l&apos;app, la tua ultima nota sarà sempre disponibile.</translation>
-    </message>
-    <message>
-        <source>Repair text</source>
-        <translation type="obsolete">Ripara testo</translation>
-    </message>
-    <message>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation type="obsolete">Una volta abilitato, sulla barra degli strumenti principale viene visualizzato un menu con le opzioni di correzione del testo.</translation>
-    </message>
-    <message>
-        <source>File import action</source>
-        <translation type="obsolete">Azione di importazione del file</translation>
-    </message>
-    <message>
-        <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation type="obsolete">L&apos;azione durante l&apos;importazione di una nota da un file. Puoi aggiungere testo importato a una nota esistente o sostituire una nota esistente.</translation>
-    </message>
-    <message>
-        <source>Ask whether to add or replace</source>
-        <translation type="obsolete">Chiedi se aggiungere o sostituire</translation>
-    </message>
-    <message>
-        <source>Add to an existing note</source>
-        <translation type="obsolete">Aggiungi a una nota esistente</translation>
-    </message>
-    <message>
-        <source>Replace an existing note</source>
-        <translation type="obsolete">Sostituisci una nota esistente</translation>
-    </message>
-    <message>
-        <source>Font in text editor</source>
-        <translation type="obsolete">Carattere nell&apos;editor di testo</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Predefinito</translation>
-    </message>
-    <message>
-        <source>Change</source>
-        <translation type="obsolete">Modifica</translation>
-    </message>
-    <message>
-        <source>Please choose a font</source>
-        <translation type="obsolete">Scegli un carattere</translation>
-    </message>
-    <message>
-        <source>Show desktop notification</source>
-        <translation type="obsolete">Mostra notifica desktop</translation>
-    </message>
-    <message>
-        <source>Show desktop notification while reading or listening.</source>
-        <translation type="obsolete">Mostra notifiche sul desktop durante la lettura o l&apos;ascolto.</translation>
-    </message>
-    <message>
-        <source>Never</source>
-        <translation type="obsolete">Mai</translation>
-    </message>
-    <message>
-        <source>When in background</source>
-        <translation type="obsolete">Quando in background</translation>
-    </message>
-    <message>
-        <source>Always</source>
-        <translation type="obsolete">Sempre</translation>
-    </message>
-    <message>
-        <source>Include recognized or read text in notifications</source>
-        <translation type="obsolete">Includere testo riconosciuto o letto nelle notifiche</translation>
-    </message>
-    <message>
-        <source>Use system tray icon</source>
-        <translation type="obsolete">Utilizza l&apos;icona nella barra delle applicazioni</translation>
-    </message>
-    <message>
-        <source>Start minimized to the system tray</source>
-        <translation type="obsolete">Inizia minimizzato nella barra delle applicazioni</translation>
-    </message>
-    <message>
-        <source>Use custom graphical style</source>
-        <translation type="obsolete">Utilizza uno stile grafico personalizzato</translation>
-    </message>
-    <message>
-        <source>Graphical style</source>
-        <translation type="obsolete">Stile grafico</translation>
-    </message>
-    <message>
-        <source>Application graphical interface style.</source>
-        <translation type="obsolete">Stile dell&apos;interfaccia grafica dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation type="obsolete">Modificare se si osservano problemi con colori errati in un tema scuro.</translation>
-    </message>
-    <message>
-        <source>Audio input device</source>
-        <translation type="obsolete">Dispositivo di ingresso audio</translation>
-    </message>
-    <message>
-        <source>Select preferred audio input device.</source>
-        <translation type="obsolete">Seleziona il dispositivo di input audio preferito.</translation>
-    </message>
-    <message>
-        <source>Listening mode</source>
-        <translation type="obsolete">Modalità di ascolto</translation>
-    </message>
-    <message>
-        <source>One sentence</source>
-        <translation type="obsolete">Una frase</translation>
-    </message>
-    <message>
-        <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
-        <translation type="obsolete">Cliccando sul pulsante %1 inizia l&apos;ascolto, che termina quando viene riconosciuta la prima frase.</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="obsolete">Ascoltare</translation>
-    </message>
-    <message>
-        <source>Press and hold</source>
-        <translation type="obsolete">Premere e tenere premuto</translation>
-    </message>
-    <message>
-        <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation type="obsolete">Premendo e tenendo premuto il pulsante %1 si abilita l&apos;ascolto. Quando smetti di tenere premuto, l&apos;ascolto si spegne.</translation>
-    </message>
-    <message>
-        <source>Always on</source>
-        <translation type="obsolete">Sempre attivo</translation>
-    </message>
-    <message>
-        <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation type="obsolete">Dopo aver fatto clic sul pulsante %1, l&apos;ascolto è sempre attivo.</translation>
-    </message>
-    <message>
-        <source>Restore punctuation</source>
-        <translation type="obsolete">Ripristina la punteggiatura</translation>
-    </message>
-    <message>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation type="obsolete">Abilita ripristino avanzato della punteggiatura dopo il riconoscimento vocale. Per farlo funzionare, assicurati di aver abilitato il modello %1 per la tua lingua.</translation>
-    </message>
-    <message>
-        <source>Punctuation</source>
-        <translation type="obsolete">Punteggiatura</translation>
-    </message>
-    <message>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation type="obsolete">Quando questa opzione è abilitata, l&apos;inizializzazione del modello richiede molto più tempo e l&apos;utilizzo della memoria è molto più elevato.</translation>
-    </message>
-    <message>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation type="obsolete">Questa opzione funziona solo con i modelli che non supportano nativamente la punteggiatura.</translation>
-    </message>
-    <message>
-        <source>To make %1 work, download %2 model.</source>
-        <translation type="obsolete">Per far funzionare %1, scarica il modello %2.</translation>
-    </message>
-    <message>
-        <source>Insert statistics</source>
-        <translation type="obsolete">Inserisci statistiche</translation>
-    </message>
-    <message>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation type="obsolete">Inserisce nel testo informazioni relative all&apos;elaborazione, come il tempo di elaborazione e la durata dell&apos;audio.</translation>
-    </message>
-    <message>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation type="obsolete">Questa opzione può essere utile per confrontare le prestazioni di diversi modelli, motori e i loro parametri.</translation>
-    </message>
-    <message>
-        <source>This option does not work with all engines.</source>
-        <translation type="obsolete">Questa opzione non funziona con tutti i motori.</translation>
-    </message>
-    <message>
-        <source>Subtitles</source>
-        <translation type="obsolete">Sottotitoli</translation>
-    </message>
-    <message>
-        <source>Minimum segment duration</source>
-        <translation type="obsolete">Durata minima del segmento</translation>
-    </message>
-    <message>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation type="obsolete">Imposta la durata minima (in secondi) del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation type="obsolete">Questa opzione funziona solo con i modelli %1 e %2.</translation>
-    </message>
-    <message>
-        <source>Break text lines</source>
-        <translation type="obsolete">Interrompi le righe di testo</translation>
-    </message>
-    <message>
-        <source>Minimum line length</source>
-        <translation type="obsolete">Lunghezza minima della linea</translation>
-    </message>
-    <message>
-        <source>Maximum line length</source>
-        <translation type="obsolete">Lunghezza massima della linea</translation>
-    </message>
-    <message>
-        <source>Engine options</source>
-        <translation type="obsolete">Opzioni del motore</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">Personalizzato</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Numero di thread simultanei</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Imposta il numero massimo di thread CPU simultanei.</translation>
-    </message>
-    <message>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation type="obsolete">Un valore più alto non accelera necessariamente la decodifica.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Reset</translation>
-    </message>
-    <message>
-        <source>Beam search width</source>
-        <translation type="obsolete">Ampiezza del fascio di ricerca</translation>
-    </message>
-    <message>
-        <source>A higher value may improve quality, but decoding time may also increase.</source>
-        <translation type="obsolete">Un valore più alto può migliorare la qualità, ma anche il tempo di decodifica può aumentare.</translation>
-    </message>
-    <message>
-        <source>Audio context size</source>
-        <translation type="obsolete">Dimensioni del contesto audio</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
-        <translation type="obsolete">Quando %1 è impostato, la dimensione viene regolata dinamicamente per ogni blocco audio.</translation>
-    </message>
-    <message>
-        <source>Dynamic</source>
-        <translation type="obsolete">Dinamico</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the default fixed size is used.</source>
-        <translation type="obsolete">Quando %1 è impostato, viene utilizzata la dimensione fissa predefinita.</translation>
-    </message>
-    <message>
-        <source>To define a custom size, use the %1 option.</source>
-        <translation type="obsolete">Per definire una dimensione personalizzata, utilizzare l&apos;opzione %1.</translation>
-    </message>
-    <message>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation type="obsolete">Un valore inferiore accelera la decodifica, ma può avere un impatto negativo sulla precisione.</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation type="obsolete">Dimensione</translation>
-    </message>
-    <message>
-        <source>Use Flash Attention</source>
-        <translation type="obsolete">Usa l&apos;attenzione flash</translation>
-    </message>
-    <message>
-        <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation type="obsolete">Flash Attenzione può ridurre il tempo di decodifica quando si utilizza l&apos;accelerazione GPU.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi.</translation>
-    </message>
-    <message>
-        <source>Use %1 model for automatic language detection</source>
-        <translation type="obsolete">Utilizza il modello %1 per il rilevamento automatico della lingua</translation>
-    </message>
-    <message>
-        <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
-        <translation type="obsolete">Nel rilevamento automatico della lingua, viene utilizzato il modello %1 al posto del modello selezionato.</translation>
-    </message>
-    <message>
-        <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
-        <translation type="obsolete">Ciò riduce il tempo di elaborazione, ma la lingua rilevata automaticamente potrebbe non essere corretta.</translation>
-    </message>
-    <message>
-        <source>Restore diacritical marks before speech synthesis</source>
-        <translation type="obsolete">Ripristina i segni diacritici prima della sintesi vocale</translation>
-    </message>
-    <message>
-        <source>This works only for Arabic and Hebrew languages.</source>
-        <translation type="obsolete">Funziona solo per le lingua araba ed ebraica.</translation>
-    </message>
-    <message>
-        <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation type="obsolete">Il ripristino dei segni diacritici per la lingua ebraica non è disponibile.</translation>
-    </message>
-    <message>
-        <source>Split text into sentences</source>
-        <translation type="obsolete">Dividere il testo in frasi</translation>
-    </message>
-    <message>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation type="obsolete">Il testo sarà suddiviso in frasi e la sintesi vocale per ciascuna frase verrà eseguita in parallelo.</translation>
-    </message>
-    <message>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">Ciò accelera la lettura, ma in alcuni modelli la naturalezza del parlato potrebbe essere ridotta.</translation>
-    </message>
-    <message>
-        <source>Use engine speed control</source>
-        <translation type="obsolete">Utilizzare il controllo della velocità del motore vocale</translation>
-    </message>
-    <message>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation type="obsolete">Se il motore TTS supporta il controllo della velocità, verrà utilizzato.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation type="obsolete">Quando questa opzione è disabilitata, la manipolazione della velocità avviene durante la post-elaborazione audio.</translation>
-    </message>
-    <message>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">La velocità effettiva dopo la post-elaborazione dell&apos;audio è molto più prevedibile, ma la naturalezza del parlato potrebbe risultare ridotta.</translation>
-    </message>
-    <message>
-        <source>Use control tags</source>
-        <translation type="obsolete">Utilizza i tag di controllo</translation>
-    </message>
-    <message>
-        <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation type="obsolete">I tag di controllo ti consentono di modificare dinamicamente la velocità del testo sintetizzato o aggiungere silenzio tra le frasi.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, tags are ignored.</source>
-        <translation type="obsolete">Quando questa opzione è disabilitata, i tag vengono ignorati.</translation>
-    </message>
-    <message>
-        <source>To use control tags, insert %1 into the text.</source>
-        <translation type="obsolete">Per utilizzare i tag di controllo, inserisci %1 nel testo.</translation>
-    </message>
-    <message>
-        <source>The following control tags are currently supported:</source>
-        <translation type="obsolete">Attualmente sono supportati i seguenti tag di controllo:</translation>
-    </message>
-    <message>
-        <source>Changes speed.</source>
-        <translation type="obsolete">Cambia velocità.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation type="obsolete">%1 è un numero a virgola mobile compreso tra 0,1 e 2,0.</translation>
-    </message>
-    <message>
-        <source>Inserts silence.</source>
-        <translation type="obsolete">Inserisce il silenzio.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation type="obsolete">%1 è un numero a virgola mobile e %2 è un nome di unità (%3).</translation>
-    </message>
-    <message>
-        <source>Sync speech with timestamps</source>
-        <translation type="obsolete">Sincronizza il parlato con i timestamp</translation>
-    </message>
-    <message>
-        <source>Don&apos;t sync</source>
-        <translation type="obsolete">Non sincronizzare</translation>
-    </message>
-    <message>
-        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation type="obsolete">I timestamp dei sottotitoli vengono ignorati durante la lettura o l&apos;esportazione in un file.</translation>
-    </message>
-    <message>
-        <source>Sync but don&apos;t adjust speed</source>
-        <translation type="obsolete">Sincronizza ma non regola la velocità</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp.</translation>
-    </message>
-    <message>
-        <source>Sync and increase speed to fit</source>
-        <translation type="obsolete">Sincronizza e aumenta la velocità per adattarti</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp. La velocità viene regolata automaticamente in modo che la durata del discorso non sia mai superiore alla durata del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>Sync and increase or decrease speed to fit</source>
-        <translation type="obsolete">Sincronizza e aumenta o diminuisci la velocità per adattarla</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp. La velocità viene regolata automaticamente in modo che la durata del discorso corrisponda esattamente alla durata del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation type="obsolete">Quando è impostato il formato testo dei sottotitoli SRT, la modifica della velocità del parlato è disabilitata poiché la velocità verrà regolata automaticamente.</translation>
-    </message>
-    <message>
-        <source>Use global keyboard shortcuts</source>
-        <translation type="obsolete">Utilizza i tasti di scelta rapida globali</translation>
-    </message>
-    <message>
-        <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
-        <translation type="obsolete">Le scorciatoie ti consentono di avviare o interrompere l&apos;ascolto e la lettura utilizzando la tastiera.</translation>
-    </message>
-    <message>
-        <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
-        <translation type="obsolete">Il risultato della sintesi vocale in testo può essere aggiunto alla nota corrente, inserito in qualsiasi finestra attiva (attualmente in primo piano) o copiato negli appunti.</translation>
-    </message>
-    <message>
-        <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation type="obsolete">La lettura della sintesi vocale può avvenire dalla nota corrente o dal testo negli appunti.</translation>
-    </message>
-    <message>
-        <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
-        <translation type="obsolete">Le scorciatoie da tastiera funzionano anche quando l&apos;applicazione non è attiva (ad esempio ridotta a icona o in background).</translation>
-    </message>
-    <message>
-        <source>This feature only works under X11.</source>
-        <translation type="obsolete">Questa funzionalità funziona solo con X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="obsolete">Attiva comportamento</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="obsolete">Le scorciatoie Avvia ascolto/lettura interromperanno anche l&apos;ascolto/lettura se vengono attivate mentre l&apos;ascolto/lettura è attivo.</translation>
-    </message>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Inizia ad ascoltare</translation>
-    </message>
-    <message>
-        <source>Start listening, text to active window</source>
-        <translation type="obsolete">Inizia ad ascoltare, invia il testo alla finestra attiva</translation>
-    </message>
-    <message>
-        <source>Start listening, text to clipboard</source>
-        <translation type="obsolete">Inizia ad ascoltare, invia il testo agli appunti</translation>
-    </message>
-    <message>
-        <source>Start reading</source>
-        <translation type="obsolete">Inizia a leggere</translation>
-    </message>
-    <message>
-        <source>Start reading text from clipboard</source>
-        <translation type="obsolete">Inizia a leggere il testo dagli appunti</translation>
-    </message>
-    <message>
-        <source>Pause/Resume reading</source>
-        <translation type="obsolete">Pausa/Riprendi la lettura</translation>
-    </message>
-    <message>
-        <source>Switch to next STT model</source>
-        <translation type="obsolete">Passa al modello STT successivo</translation>
-    </message>
-    <message>
-        <source>Switch to previous STT model</source>
-        <translation type="obsolete">Passa al modello STT precedente</translation>
-    </message>
-    <message>
-        <source>Switch to next TTS model</source>
-        <translation type="obsolete">Passa al modello TTS successivo</translation>
-    </message>
-    <message>
-        <source>Switch to previous TTS model</source>
-        <translation type="obsolete">Passa al modello TTS precedente</translation>
-    </message>
-    <message>
-        <source>Allow external applications to invoke actions</source>
-        <translation type="obsolete">Consenti alle applicazioni esterne di attivare azioni</translation>
-    </message>
-    <message>
-        <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">L&apos;azione consente all&apos;applicazione esterna di richiamare determinate operazioni quando %1 è in esecuzione.</translation>
-    </message>
-    <message>
-        <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Le azioni consentono alle applicazioni esterne di eseguire determinate funzioni quando %1 è in esecuzione.</translation>
-    </message>
-    <message>
-        <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation type="obsolete">L&apos;azione può essere avviata tramite DBus o tramite opzioni della riga di comando.</translation>
-    </message>
-    <message>
-        <source>The following actions are currently supported:</source>
-        <translation type="obsolete">Attualmente sono supportate le seguenti azioni:</translation>
-    </message>
-    <message>
-        <source>Starts listening.</source>
-        <translation type="obsolete">Inizia ad ascoltare.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is inserted into the active window.</source>
-        <translation type="obsolete">Inizia ad ascoltare. Il testo decodificato viene inserito nella finestra attiva.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation type="obsolete">Inizia ad ascoltare. Il testo decodificato viene copiato negli appunti.</translation>
-    </message>
-    <message>
-        <source>Starts reading.</source>
-        <translation type="obsolete">Inizia a leggere.</translation>
-    </message>
-    <message>
-        <source>Starts reading text from the clipboard.</source>
-        <translation type="obsolete">Inizia a leggere il testo dagli appunti.</translation>
-    </message>
-    <message>
-        <source>Pauses or resumes reading.</source>
-        <translation type="obsolete">Mette in pausa o riprende la lettura.</translation>
-    </message>
-    <message>
-        <source>Cancels any of the above operations.</source>
-        <translation type="obsolete">Annulla una qualsiasi delle operazioni precedenti.</translation>
-    </message>
-    <message>
-        <source>Switches to next STT model.</source>
-        <translation type="obsolete">Passa al modello STT successivo.</translation>
-    </message>
-    <message>
-        <source>Switches to previous STT model.</source>
-        <translation type="obsolete">Passa al modello STT precedente.</translation>
-    </message>
-    <message>
-        <source>Switches to next TTS model.</source>
-        <translation type="obsolete">Passa al modello TTS successivo.</translation>
-    </message>
-    <message>
-        <source>Switches to previous TTS model.</source>
-        <translation type="obsolete">Passa al modello TTS precedente.</translation>
-    </message>
-    <message>
-        <source>Sets STT model.</source>
-        <translation type="obsolete">Imposta il modello STT.</translation>
-    </message>
-    <message>
-        <source>Sets TTS model.</source>
-        <translation type="obsolete">Imposta il modello TTS.</translation>
-    </message>
-    <message>
-        <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation type="obsolete">Ad esempio, per attivare l&apos;azione %1, eseguire il comando seguente: %2.</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation type="obsolete">Archiviazione</translation>
-    </message>
-    <message>
-        <source>Location of language files</source>
-        <translation type="obsolete">Posizione dei file di lingua</translation>
-    </message>
-    <message>
-        <source>Directory where language files are downloaded to and stored.</source>
-        <translation type="obsolete">Directory in cui vengono scaricati e archiviati i file della lingua.</translation>
-    </message>
-    <message>
-        <source>Clear cache on close</source>
-        <translation type="obsolete">Svuota la cache alla chiusura</translation>
-    </message>
-    <message>
-        <source>When closing, delete all cached audio files.</source>
-        <translation type="obsolete">Alla chiusura, elimina tutti i file audio memorizzati nella cache.</translation>
-    </message>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Disponibilità di funzionalità opzionali</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="obsolete">Nascondi le impostazioni avanzate</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="obsolete">Mostra impostazioni avanzate</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Opzioni della CPU</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Automatico</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Opzioni di accelerazione hardware</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uso %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi durante l&apos;avvio dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Sostituisci la versione della GPU</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Sostituisci la versione della GPU AMD.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Abilita questa opzione se noti problemi durante l&apos;utilizzo dell&apos;accelerazione GPU con la scheda grafica AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Versione</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Il valore ha lo stesso effetto della variabile di ambiente %1.</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Componi file</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">File di composizione X11 utilizzato in %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Inserisci nella finestra attiva</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Librerie</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Utilizza le librerie Python</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Verificare la presenza delle librerie Python richieste.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Posizione delle librerie Python</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Directory delle librerie Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Lascia vuoto per utilizzare il valore predefinito.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Questa opzione può essere utile se usi il modulo %1 per gestire le librerie Python.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Salva</translation>
-    </message>
-    <message>
-        <source>Select Directory</source>
-        <translation type="obsolete">Seleziona directory</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsUiPage</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Impostazioni</translation>
-    </message>
-    <message>
-        <source>Restart the application to apply changes.</source>
-        <translation type="obsolete">Riavviare l&apos;applicazione per applicare le modifiche.</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="obsolete">Interfaccia utente</translation>
-    </message>
-    <message>
-        <source>Accessibility</source>
-        <translation type="obsolete">Accessibilità</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Altro</translation>
-    </message>
-    <message>
-        <source>Remember the last note</source>
-        <translation type="obsolete">Ricorda l&apos;ultima nota</translation>
-    </message>
-    <message>
-        <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation type="obsolete">La nota verrà salvata automaticamente, quindi quando riavvii l&apos;app, la tua ultima nota sarà sempre disponibile.</translation>
-    </message>
-    <message>
-        <source>Repair text</source>
-        <translation type="obsolete">Ripara testo</translation>
-    </message>
-    <message>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation type="obsolete">Una volta abilitato, sulla barra degli strumenti principale viene visualizzato un menu con le opzioni di correzione del testo.</translation>
-    </message>
-    <message>
-        <source>File import action</source>
-        <translation type="obsolete">Azione di importazione del file</translation>
-    </message>
-    <message>
-        <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation type="obsolete">L&apos;azione durante l&apos;importazione di una nota da un file. Puoi aggiungere testo importato a una nota esistente o sostituire una nota esistente.</translation>
-    </message>
-    <message>
-        <source>Ask whether to add or replace</source>
-        <translation type="obsolete">Chiedi se aggiungere o sostituire</translation>
-    </message>
-    <message>
-        <source>Add to an existing note</source>
-        <translation type="obsolete">Aggiungi a una nota esistente</translation>
-    </message>
-    <message>
-        <source>Replace an existing note</source>
-        <translation type="obsolete">Sostituisci una nota esistente</translation>
-    </message>
-    <message>
-        <source>Font in text editor</source>
-        <translation type="obsolete">Carattere nell&apos;editor di testo</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Predefinito</translation>
-    </message>
-    <message>
-        <source>Change</source>
-        <translation type="obsolete">Modifica</translation>
-    </message>
-    <message>
-        <source>Please choose a font</source>
-        <translation type="obsolete">Scegli un carattere</translation>
-    </message>
-    <message>
-        <source>Show desktop notification</source>
-        <translation type="obsolete">Mostra notifica desktop</translation>
-    </message>
-    <message>
-        <source>Show desktop notification while reading or listening.</source>
-        <translation type="obsolete">Mostra notifiche sul desktop durante la lettura o l&apos;ascolto.</translation>
-    </message>
-    <message>
-        <source>Never</source>
-        <translation type="obsolete">Mai</translation>
-    </message>
-    <message>
-        <source>When in background</source>
-        <translation type="obsolete">Quando in background</translation>
-    </message>
-    <message>
-        <source>Always</source>
-        <translation type="obsolete">Sempre</translation>
-    </message>
-    <message>
-        <source>Include recognized or read text in notifications</source>
-        <translation type="obsolete">Includere testo riconosciuto o letto nelle notifiche</translation>
-    </message>
-    <message>
-        <source>Use system tray icon</source>
-        <translation type="obsolete">Utilizza l&apos;icona nella barra delle applicazioni</translation>
-    </message>
-    <message>
-        <source>Start minimized to the system tray</source>
-        <translation type="obsolete">Inizia minimizzato nella barra delle applicazioni</translation>
-    </message>
-    <message>
-        <source>Use custom graphical style</source>
-        <translation type="obsolete">Utilizza uno stile grafico personalizzato</translation>
-    </message>
-    <message>
-        <source>Graphical style</source>
-        <translation type="obsolete">Stile grafico</translation>
-    </message>
-    <message>
-        <source>Application graphical interface style.</source>
-        <translation type="obsolete">Stile dell&apos;interfaccia grafica dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation type="obsolete">Modificare se si osservano problemi con colori errati in un tema scuro.</translation>
-    </message>
-    <message>
-        <source>Audio input device</source>
-        <translation type="obsolete">Dispositivo di ingresso audio</translation>
-    </message>
-    <message>
-        <source>Select preferred audio input device.</source>
-        <translation type="obsolete">Seleziona il dispositivo di input audio preferito.</translation>
-    </message>
-    <message>
-        <source>Listening mode</source>
-        <translation type="obsolete">Modalità di ascolto</translation>
-    </message>
-    <message>
-        <source>One sentence</source>
-        <translation type="obsolete">Una frase</translation>
-    </message>
-    <message>
-        <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
-        <translation type="obsolete">Cliccando sul pulsante %1 inizia l&apos;ascolto, che termina quando viene riconosciuta la prima frase.</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="obsolete">Ascoltare</translation>
-    </message>
-    <message>
-        <source>Press and hold</source>
-        <translation type="obsolete">Premere e tenere premuto</translation>
-    </message>
-    <message>
-        <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation type="obsolete">Premendo e tenendo premuto il pulsante %1 si abilita l&apos;ascolto. Quando smetti di tenere premuto, l&apos;ascolto si spegne.</translation>
-    </message>
-    <message>
-        <source>Always on</source>
-        <translation type="obsolete">Sempre attivo</translation>
-    </message>
-    <message>
-        <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation type="obsolete">Dopo aver fatto clic sul pulsante %1, l&apos;ascolto è sempre attivo.</translation>
-    </message>
-    <message>
-        <source>Restore punctuation</source>
-        <translation type="obsolete">Ripristina la punteggiatura</translation>
-    </message>
-    <message>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation type="obsolete">Abilita ripristino avanzato della punteggiatura dopo il riconoscimento vocale. Per farlo funzionare, assicurati di aver abilitato il modello %1 per la tua lingua.</translation>
-    </message>
-    <message>
-        <source>Punctuation</source>
-        <translation type="obsolete">Punteggiatura</translation>
-    </message>
-    <message>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation type="obsolete">Quando questa opzione è abilitata, l&apos;inizializzazione del modello richiede molto più tempo e l&apos;utilizzo della memoria è molto più elevato.</translation>
-    </message>
-    <message>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation type="obsolete">Questa opzione funziona solo con i modelli che non supportano nativamente la punteggiatura.</translation>
-    </message>
-    <message>
-        <source>To make %1 work, download %2 model.</source>
-        <translation type="obsolete">Per far funzionare %1, scarica il modello %2.</translation>
-    </message>
-    <message>
-        <source>Insert statistics</source>
-        <translation type="obsolete">Inserisci statistiche</translation>
-    </message>
-    <message>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation type="obsolete">Inserisce nel testo informazioni relative all&apos;elaborazione, come il tempo di elaborazione e la durata dell&apos;audio.</translation>
-    </message>
-    <message>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation type="obsolete">Questa opzione può essere utile per confrontare le prestazioni di diversi modelli, motori e i loro parametri.</translation>
-    </message>
-    <message>
-        <source>This option does not work with all engines.</source>
-        <translation type="obsolete">Questa opzione non funziona con tutti i motori.</translation>
-    </message>
-    <message>
-        <source>Subtitles</source>
-        <translation type="obsolete">Sottotitoli</translation>
-    </message>
-    <message>
-        <source>Minimum segment duration</source>
-        <translation type="obsolete">Durata minima del segmento</translation>
-    </message>
-    <message>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation type="obsolete">Imposta la durata minima (in secondi) del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation type="obsolete">Questa opzione funziona solo con i modelli %1 e %2.</translation>
-    </message>
-    <message>
-        <source>Break text lines</source>
-        <translation type="obsolete">Interrompi le righe di testo</translation>
-    </message>
-    <message>
-        <source>Minimum line length</source>
-        <translation type="obsolete">Lunghezza minima della linea</translation>
-    </message>
-    <message>
-        <source>Maximum line length</source>
-        <translation type="obsolete">Lunghezza massima della linea</translation>
-    </message>
-    <message>
-        <source>Engine options</source>
-        <translation type="obsolete">Opzioni del motore</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">Personalizzato</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Numero di thread simultanei</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Imposta il numero massimo di thread CPU simultanei.</translation>
-    </message>
-    <message>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation type="obsolete">Un valore più alto non accelera necessariamente la decodifica.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Reset</translation>
-    </message>
-    <message>
-        <source>Beam search width</source>
-        <translation type="obsolete">Ampiezza del fascio di ricerca</translation>
-    </message>
-    <message>
-        <source>A higher value may improve quality, but decoding time may also increase.</source>
-        <translation type="obsolete">Un valore più alto può migliorare la qualità, ma anche il tempo di decodifica può aumentare.</translation>
-    </message>
-    <message>
-        <source>Audio context size</source>
-        <translation type="obsolete">Dimensioni del contesto audio</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
-        <translation type="obsolete">Quando %1 è impostato, la dimensione viene regolata dinamicamente per ogni blocco audio.</translation>
-    </message>
-    <message>
-        <source>Dynamic</source>
-        <translation type="obsolete">Dinamico</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the default fixed size is used.</source>
-        <translation type="obsolete">Quando %1 è impostato, viene utilizzata la dimensione fissa predefinita.</translation>
-    </message>
-    <message>
-        <source>To define a custom size, use the %1 option.</source>
-        <translation type="obsolete">Per definire una dimensione personalizzata, utilizzare l&apos;opzione %1.</translation>
-    </message>
-    <message>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation type="obsolete">Un valore inferiore accelera la decodifica, ma può avere un impatto negativo sulla precisione.</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation type="obsolete">Dimensione</translation>
-    </message>
-    <message>
-        <source>Use Flash Attention</source>
-        <translation type="obsolete">Usa l&apos;attenzione flash</translation>
-    </message>
-    <message>
-        <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation type="obsolete">Flash Attenzione può ridurre il tempo di decodifica quando si utilizza l&apos;accelerazione GPU.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi.</translation>
-    </message>
-    <message>
-        <source>Use %1 model for automatic language detection</source>
-        <translation type="obsolete">Utilizza il modello %1 per il rilevamento automatico della lingua</translation>
-    </message>
-    <message>
-        <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
-        <translation type="obsolete">Nel rilevamento automatico della lingua, viene utilizzato il modello %1 al posto del modello selezionato.</translation>
-    </message>
-    <message>
-        <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
-        <translation type="obsolete">Ciò riduce il tempo di elaborazione, ma la lingua rilevata automaticamente potrebbe non essere corretta.</translation>
-    </message>
-    <message>
-        <source>Restore diacritical marks before speech synthesis</source>
-        <translation type="obsolete">Ripristina i segni diacritici prima della sintesi vocale</translation>
-    </message>
-    <message>
-        <source>This works only for Arabic and Hebrew languages.</source>
-        <translation type="obsolete">Funziona solo per le lingua araba ed ebraica.</translation>
-    </message>
-    <message>
-        <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation type="obsolete">Il ripristino dei segni diacritici per la lingua ebraica non è disponibile.</translation>
-    </message>
-    <message>
-        <source>Split text into sentences</source>
-        <translation type="obsolete">Dividere il testo in frasi</translation>
-    </message>
-    <message>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation type="obsolete">Il testo sarà suddiviso in frasi e la sintesi vocale per ciascuna frase verrà eseguita in parallelo.</translation>
-    </message>
-    <message>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">Ciò accelera la lettura, ma in alcuni modelli la naturalezza del parlato potrebbe essere ridotta.</translation>
-    </message>
-    <message>
-        <source>Use engine speed control</source>
-        <translation type="obsolete">Utilizzare il controllo della velocità del motore vocale</translation>
-    </message>
-    <message>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation type="obsolete">Se il motore TTS supporta il controllo della velocità, verrà utilizzato.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation type="obsolete">Quando questa opzione è disabilitata, la manipolazione della velocità avviene durante la post-elaborazione audio.</translation>
-    </message>
-    <message>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">La velocità effettiva dopo la post-elaborazione dell&apos;audio è molto più prevedibile, ma la naturalezza del parlato potrebbe risultare ridotta.</translation>
-    </message>
-    <message>
-        <source>Use control tags</source>
-        <translation type="obsolete">Utilizza i tag di controllo</translation>
-    </message>
-    <message>
-        <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation type="obsolete">I tag di controllo ti consentono di modificare dinamicamente la velocità del testo sintetizzato o aggiungere silenzio tra le frasi.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, tags are ignored.</source>
-        <translation type="obsolete">Quando questa opzione è disabilitata, i tag vengono ignorati.</translation>
-    </message>
-    <message>
-        <source>To use control tags, insert %1 into the text.</source>
-        <translation type="obsolete">Per utilizzare i tag di controllo, inserisci %1 nel testo.</translation>
-    </message>
-    <message>
-        <source>The following control tags are currently supported:</source>
-        <translation type="obsolete">Attualmente sono supportati i seguenti tag di controllo:</translation>
-    </message>
-    <message>
-        <source>Changes speed.</source>
-        <translation type="obsolete">Cambia velocità.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation type="obsolete">%1 è un numero a virgola mobile compreso tra 0,1 e 2,0.</translation>
-    </message>
-    <message>
-        <source>Inserts silence.</source>
-        <translation type="obsolete">Inserisce il silenzio.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation type="obsolete">%1 è un numero a virgola mobile e %2 è un nome di unità (%3).</translation>
-    </message>
-    <message>
-        <source>Sync speech with timestamps</source>
-        <translation type="obsolete">Sincronizza il parlato con i timestamp</translation>
-    </message>
-    <message>
-        <source>Don&apos;t sync</source>
-        <translation type="obsolete">Non sincronizzare</translation>
-    </message>
-    <message>
-        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation type="obsolete">I timestamp dei sottotitoli vengono ignorati durante la lettura o l&apos;esportazione in un file.</translation>
-    </message>
-    <message>
-        <source>Sync but don&apos;t adjust speed</source>
-        <translation type="obsolete">Sincronizza ma non regola la velocità</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp.</translation>
-    </message>
-    <message>
-        <source>Sync and increase speed to fit</source>
-        <translation type="obsolete">Sincronizza e aumenta la velocità per adattarti</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp. La velocità viene regolata automaticamente in modo che la durata del discorso non sia mai superiore alla durata del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>Sync and increase or decrease speed to fit</source>
-        <translation type="obsolete">Sincronizza e aumenta o diminuisci la velocità per adattarla</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation type="obsolete">Il parlato è sincronizzato in base ai timestamp. La velocità viene regolata automaticamente in modo che la durata del discorso corrisponda esattamente alla durata del segmento dei sottotitoli.</translation>
-    </message>
-    <message>
-        <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation type="obsolete">Quando è impostato il formato testo dei sottotitoli SRT, la modifica della velocità del parlato è disabilitata poiché la velocità verrà regolata automaticamente.</translation>
-    </message>
-    <message>
-        <source>Use global keyboard shortcuts</source>
-        <translation type="obsolete">Utilizza i tasti di scelta rapida globali</translation>
-    </message>
-    <message>
-        <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
-        <translation type="obsolete">Le scorciatoie ti consentono di avviare o interrompere l&apos;ascolto e la lettura utilizzando la tastiera.</translation>
-    </message>
-    <message>
-        <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
-        <translation type="obsolete">Il risultato della sintesi vocale in testo può essere aggiunto alla nota corrente, inserito in qualsiasi finestra attiva (attualmente in primo piano) o copiato negli appunti.</translation>
-    </message>
-    <message>
-        <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation type="obsolete">La lettura della sintesi vocale può avvenire dalla nota corrente o dal testo negli appunti.</translation>
-    </message>
-    <message>
-        <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
-        <translation type="obsolete">Le scorciatoie da tastiera funzionano anche quando l&apos;applicazione non è attiva (ad esempio ridotta a icona o in background).</translation>
-    </message>
-    <message>
-        <source>This feature only works under X11.</source>
-        <translation type="obsolete">Questa funzionalità funziona solo con X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="obsolete">Attiva comportamento</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="obsolete">Le scorciatoie Avvia ascolto/lettura interromperanno anche l&apos;ascolto/lettura se vengono attivate mentre l&apos;ascolto/lettura è attivo.</translation>
-    </message>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Inizia ad ascoltare</translation>
-    </message>
-    <message>
-        <source>Start listening, text to active window</source>
-        <translation type="obsolete">Inizia ad ascoltare, invia il testo alla finestra attiva</translation>
-    </message>
-    <message>
-        <source>Start listening, text to clipboard</source>
-        <translation type="obsolete">Inizia ad ascoltare, invia il testo agli appunti</translation>
-    </message>
-    <message>
-        <source>Start reading</source>
-        <translation type="obsolete">Inizia a leggere</translation>
-    </message>
-    <message>
-        <source>Start reading text from clipboard</source>
-        <translation type="obsolete">Inizia a leggere il testo dagli appunti</translation>
-    </message>
-    <message>
-        <source>Pause/Resume reading</source>
-        <translation type="obsolete">Pausa/Riprendi la lettura</translation>
-    </message>
-    <message>
-        <source>Switch to next STT model</source>
-        <translation type="obsolete">Passa al modello STT successivo</translation>
-    </message>
-    <message>
-        <source>Switch to previous STT model</source>
-        <translation type="obsolete">Passa al modello STT precedente</translation>
-    </message>
-    <message>
-        <source>Switch to next TTS model</source>
-        <translation type="obsolete">Passa al modello TTS successivo</translation>
-    </message>
-    <message>
-        <source>Switch to previous TTS model</source>
-        <translation type="obsolete">Passa al modello TTS precedente</translation>
-    </message>
-    <message>
-        <source>Allow external applications to invoke actions</source>
-        <translation type="obsolete">Consenti alle applicazioni esterne di attivare azioni</translation>
-    </message>
-    <message>
-        <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">L&apos;azione consente all&apos;applicazione esterna di richiamare determinate operazioni quando %1 è in esecuzione.</translation>
-    </message>
-    <message>
-        <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Le azioni consentono alle applicazioni esterne di eseguire determinate funzioni quando %1 è in esecuzione.</translation>
-    </message>
-    <message>
-        <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation type="obsolete">L&apos;azione può essere avviata tramite DBus o tramite opzioni della riga di comando.</translation>
-    </message>
-    <message>
-        <source>The following actions are currently supported:</source>
-        <translation type="obsolete">Attualmente sono supportate le seguenti azioni:</translation>
-    </message>
-    <message>
-        <source>Starts listening.</source>
-        <translation type="obsolete">Inizia ad ascoltare.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is inserted into the active window.</source>
-        <translation type="obsolete">Inizia ad ascoltare. Il testo decodificato viene inserito nella finestra attiva.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation type="obsolete">Inizia ad ascoltare. Il testo decodificato viene copiato negli appunti.</translation>
-    </message>
-    <message>
-        <source>Starts reading.</source>
-        <translation type="obsolete">Inizia a leggere.</translation>
-    </message>
-    <message>
-        <source>Starts reading text from the clipboard.</source>
-        <translation type="obsolete">Inizia a leggere il testo dagli appunti.</translation>
-    </message>
-    <message>
-        <source>Pauses or resumes reading.</source>
-        <translation type="obsolete">Mette in pausa o riprende la lettura.</translation>
-    </message>
-    <message>
-        <source>Cancels any of the above operations.</source>
-        <translation type="obsolete">Annulla una qualsiasi delle operazioni precedenti.</translation>
-    </message>
-    <message>
-        <source>Switches to next STT model.</source>
-        <translation type="obsolete">Passa al modello STT successivo.</translation>
-    </message>
-    <message>
-        <source>Switches to previous STT model.</source>
-        <translation type="obsolete">Passa al modello STT precedente.</translation>
-    </message>
-    <message>
-        <source>Switches to next TTS model.</source>
-        <translation type="obsolete">Passa al modello TTS successivo.</translation>
-    </message>
-    <message>
-        <source>Switches to previous TTS model.</source>
-        <translation type="obsolete">Passa al modello TTS precedente.</translation>
-    </message>
-    <message>
-        <source>Sets STT model.</source>
-        <translation type="obsolete">Imposta il modello STT.</translation>
-    </message>
-    <message>
-        <source>Sets TTS model.</source>
-        <translation type="obsolete">Imposta il modello TTS.</translation>
-    </message>
-    <message>
-        <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation type="obsolete">Ad esempio, per attivare l&apos;azione %1, eseguire il comando seguente: %2.</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation type="obsolete">Archiviazione</translation>
-    </message>
-    <message>
-        <source>Location of language files</source>
-        <translation type="obsolete">Posizione dei file di lingua</translation>
-    </message>
-    <message>
-        <source>Directory where language files are downloaded to and stored.</source>
-        <translation type="obsolete">Directory in cui vengono scaricati e archiviati i file della lingua.</translation>
-    </message>
-    <message>
-        <source>Clear cache on close</source>
-        <translation type="obsolete">Svuota la cache alla chiusura</translation>
-    </message>
-    <message>
-        <source>When closing, delete all cached audio files.</source>
-        <translation type="obsolete">Alla chiusura, elimina tutti i file audio memorizzati nella cache.</translation>
-    </message>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Disponibilità di funzionalità opzionali</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="obsolete">Nascondi le impostazioni avanzate</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="obsolete">Mostra impostazioni avanzate</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Opzioni della CPU</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Automatico</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Opzioni di accelerazione hardware</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uso %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Disattiva questa opzione se noti problemi durante l&apos;avvio dell&apos;applicazione.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Sostituisci la versione della GPU</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Sostituisci la versione della GPU AMD.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Abilita questa opzione se noti problemi durante l&apos;utilizzo dell&apos;accelerazione GPU con la scheda grafica AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Versione</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Il valore ha lo stesso effetto della variabile di ambiente %1.</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Componi file</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">File di composizione X11 utilizzato in %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Inserisci nella finestra attiva</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Librerie</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Utilizza le librerie Python</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Verificare la presenza delle librerie Python richieste.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Posizione delle librerie Python</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Directory delle librerie Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Lascia vuoto per utilizzare il valore predefinito.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Questa opzione può essere utile se usi il modulo %1 per gestire le librerie Python.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Salva</translation>
-    </message>
-    <message>
-        <source>Select Directory</source>
-        <translation type="obsolete">Seleziona directory</translation>
+        <translation>Modificare se si osservano problemi con colori errati in un tema scuro.</translation>
     </message>
 </context>
 <context>
@@ -8537,22 +3358,22 @@
     <message>
         <location filename="../desktop/qml/ShortcutForm.qml" line="58"/>
         <source>Press a special key...</source>
-        <translation type="unfinished"></translation>
+        <translation>Premi un tasto speciale...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ShortcutForm.qml" line="58"/>
         <source>Detect special key</source>
-        <translation type="unfinished"></translation>
+        <translation>Rileva tasto speciale</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ShortcutForm.qml" line="63"/>
         <source>Detect special key presses (multimedia keys)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rilevare pressioni di tasti speciali (tasti multimediali)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ShortcutForm.qml" line="87"/>
         <source>Reset</source>
-        <translation type="unfinished">Reset</translation>
+        <translation>Reset</translation>
     </message>
 </context>
 <context>
@@ -8746,7 +3567,7 @@
     <message>
         <location filename="../desktop/qml/TextFieldWithHelpForm.qml" line="40"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Aiuto</translation>
     </message>
 </context>
 <context>
@@ -8870,7 +3691,7 @@
     <message>
         <location filename="../desktop/qml/Translator.qml" line="101"/>
         <source>Text to translate from</source>
-        <translation type="unfinished"></translation>
+        <translation>Testo da tradurre da</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="191"/>
@@ -8912,7 +3733,7 @@
     <message>
         <location filename="../desktop/qml/Translator.qml" line="311"/>
         <source>Translated text</source>
-        <translation type="unfinished"></translation>
+        <translation>Testo tradotto</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="349"/>
@@ -9091,12 +3912,12 @@
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="170"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferma</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="170"/>
         <source>Play</source>
-        <translation type="unfinished">Avvia</translation>
+        <translation>Avvia</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="189"/>
@@ -9151,548 +3972,548 @@
 <context>
     <name>dsnote_app</name>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4027"/>
+        <location filename="../src/dsnote_app.cpp" line="4049"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4030"/>
+        <location filename="../src/dsnote_app.cpp" line="4052"/>
         <source>Video</source>
         <translation>Video</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4033"/>
+        <location filename="../src/dsnote_app.cpp" line="4055"/>
         <source>Subtitles</source>
         <translation>Sottotitoli</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4042"/>
+        <location filename="../src/dsnote_app.cpp" line="4064"/>
         <source>Unnamed stream</source>
         <translation>Flusso senza nome</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4263"/>
+        <location filename="../src/dsnote_app.cpp" line="4285"/>
         <source>Show</source>
         <translation>Mostra</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4417"/>
+        <location filename="../src/dsnote_app.cpp" line="4439"/>
         <source>Global keyboard shortcuts</source>
         <translation>Tasti di scelta rapida globali</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4420"/>
+        <location filename="../src/dsnote_app.cpp" line="4442"/>
         <source>Insert text to active window</source>
         <translation>Inserisci testo nella finestra attiva</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4782"/>
+        <location filename="../src/dsnote_app.cpp" line="4804"/>
         <source>Voice</source>
         <translation>Voce</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5068"/>
-        <location filename="../src/dsnote_app.cpp" line="5093"/>
+        <location filename="../src/dsnote_app.cpp" line="5090"/>
+        <location filename="../src/dsnote_app.cpp" line="5115"/>
         <source>Auto</source>
         <translation>Automatico</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5152"/>
+        <location filename="../src/dsnote_app.cpp" line="5174"/>
         <source>English</source>
         <translation>Inglese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5153"/>
+        <location filename="../src/dsnote_app.cpp" line="5175"/>
         <source>Chinese</source>
         <translation>Cinese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5154"/>
+        <location filename="../src/dsnote_app.cpp" line="5176"/>
         <source>German</source>
         <translation>Tedesco</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5155"/>
+        <location filename="../src/dsnote_app.cpp" line="5177"/>
         <source>Spanish</source>
         <translation>Spagnolo</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5156"/>
+        <location filename="../src/dsnote_app.cpp" line="5178"/>
         <source>Russian</source>
         <translation>Russo</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5157"/>
+        <location filename="../src/dsnote_app.cpp" line="5179"/>
         <source>Korean</source>
         <translation>Coreano</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5158"/>
+        <location filename="../src/dsnote_app.cpp" line="5180"/>
         <source>French</source>
         <translation>Francese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5159"/>
+        <location filename="../src/dsnote_app.cpp" line="5181"/>
         <source>Japanese</source>
         <translation>Giapponese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5160"/>
+        <location filename="../src/dsnote_app.cpp" line="5182"/>
         <source>Portuguese</source>
         <translation>Portoghese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5161"/>
+        <location filename="../src/dsnote_app.cpp" line="5183"/>
         <source>Turkish</source>
         <translation>Turco</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5162"/>
+        <location filename="../src/dsnote_app.cpp" line="5184"/>
         <source>Polish</source>
         <translation>Polacco</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5163"/>
+        <location filename="../src/dsnote_app.cpp" line="5185"/>
         <source>Catalan</source>
         <translation>Catalano</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5164"/>
+        <location filename="../src/dsnote_app.cpp" line="5186"/>
         <source>Dutch</source>
         <translation>Olandese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5165"/>
+        <location filename="../src/dsnote_app.cpp" line="5187"/>
         <source>Arabic</source>
         <translation>Arabo</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5166"/>
+        <location filename="../src/dsnote_app.cpp" line="5188"/>
         <source>Swedish</source>
         <translation>Svedese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5167"/>
+        <location filename="../src/dsnote_app.cpp" line="5189"/>
         <source>Italian</source>
         <translation>Italiano</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5168"/>
+        <location filename="../src/dsnote_app.cpp" line="5190"/>
         <source>Indonesian</source>
         <translation>Indonesiano</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5169"/>
+        <location filename="../src/dsnote_app.cpp" line="5191"/>
         <source>Hindi</source>
         <translation>Hindi</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5170"/>
+        <location filename="../src/dsnote_app.cpp" line="5192"/>
         <source>Finnish</source>
         <translation>Finlandese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5171"/>
+        <location filename="../src/dsnote_app.cpp" line="5193"/>
         <source>Vietnamese</source>
         <translation>vietnamita</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5172"/>
+        <location filename="../src/dsnote_app.cpp" line="5194"/>
         <source>Hebrew</source>
         <translation>Ebraico</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5173"/>
+        <location filename="../src/dsnote_app.cpp" line="5195"/>
         <source>Ukrainian</source>
         <translation>Ucraino</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5174"/>
+        <location filename="../src/dsnote_app.cpp" line="5196"/>
         <source>Greek</source>
         <translation>Greco</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5175"/>
+        <location filename="../src/dsnote_app.cpp" line="5197"/>
         <source>Malay</source>
         <translation>Malese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5176"/>
+        <location filename="../src/dsnote_app.cpp" line="5198"/>
         <source>Czech</source>
         <translation>Ceco</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5177"/>
+        <location filename="../src/dsnote_app.cpp" line="5199"/>
         <source>Romanian</source>
         <translation>Rumeno</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5178"/>
+        <location filename="../src/dsnote_app.cpp" line="5200"/>
         <source>Danish</source>
         <translation>Danese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5179"/>
+        <location filename="../src/dsnote_app.cpp" line="5201"/>
         <source>Hungarian</source>
         <translation>Ungherese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5180"/>
+        <location filename="../src/dsnote_app.cpp" line="5202"/>
         <source>Tamil</source>
         <translation>Tamil</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5181"/>
+        <location filename="../src/dsnote_app.cpp" line="5203"/>
         <source>Norwegian</source>
         <translation>Norvegese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5182"/>
+        <location filename="../src/dsnote_app.cpp" line="5204"/>
         <source>Thai</source>
         <translation>Tailandese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5183"/>
+        <location filename="../src/dsnote_app.cpp" line="5205"/>
         <source>Urdu</source>
         <translation>Urdu</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5184"/>
+        <location filename="../src/dsnote_app.cpp" line="5206"/>
         <source>Croatian</source>
         <translation>Croato</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5185"/>
+        <location filename="../src/dsnote_app.cpp" line="5207"/>
         <source>Bulgarian</source>
         <translation>Bulgaro</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5186"/>
+        <location filename="../src/dsnote_app.cpp" line="5208"/>
         <source>Lithuanian</source>
         <translation>Lituano</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5187"/>
+        <location filename="../src/dsnote_app.cpp" line="5209"/>
         <source>Latin</source>
         <translation>Latino</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5188"/>
+        <location filename="../src/dsnote_app.cpp" line="5210"/>
         <source>Maori</source>
         <translation>Maori</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5189"/>
+        <location filename="../src/dsnote_app.cpp" line="5211"/>
         <source>Malayalam</source>
         <translation>Malayalam</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5190"/>
+        <location filename="../src/dsnote_app.cpp" line="5212"/>
         <source>Welsh</source>
         <translation>Gallese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5191"/>
+        <location filename="../src/dsnote_app.cpp" line="5213"/>
         <source>Slovak</source>
         <translation>Slovacco</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5192"/>
+        <location filename="../src/dsnote_app.cpp" line="5214"/>
         <source>Telugu</source>
         <translation>Telugu</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5193"/>
+        <location filename="../src/dsnote_app.cpp" line="5215"/>
         <source>Persian</source>
         <translation>Persiano</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5194"/>
+        <location filename="../src/dsnote_app.cpp" line="5216"/>
         <source>Latvian</source>
         <translation>Lettone</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5195"/>
+        <location filename="../src/dsnote_app.cpp" line="5217"/>
         <source>Bengali</source>
         <translation>Bengalese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5196"/>
+        <location filename="../src/dsnote_app.cpp" line="5218"/>
         <source>Serbian</source>
         <translation>Serbo</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5197"/>
+        <location filename="../src/dsnote_app.cpp" line="5219"/>
         <source>Azerbaijani</source>
         <translation>Azerbaigiano</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5198"/>
+        <location filename="../src/dsnote_app.cpp" line="5220"/>
         <source>Slovenian</source>
         <translation>Sloveno</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5199"/>
+        <location filename="../src/dsnote_app.cpp" line="5221"/>
         <source>Kannada</source>
         <translation>Kannada</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5200"/>
+        <location filename="../src/dsnote_app.cpp" line="5222"/>
         <source>Estonian</source>
         <translation>Estone</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5201"/>
+        <location filename="../src/dsnote_app.cpp" line="5223"/>
         <source>Macedonian</source>
         <translation>Macedone</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5202"/>
+        <location filename="../src/dsnote_app.cpp" line="5224"/>
         <source>Breton</source>
         <translation>Bretone</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5203"/>
+        <location filename="../src/dsnote_app.cpp" line="5225"/>
         <source>Basque</source>
         <translation>Basco</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5204"/>
+        <location filename="../src/dsnote_app.cpp" line="5226"/>
         <source>Icelandic</source>
         <translation>Islandese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5205"/>
+        <location filename="../src/dsnote_app.cpp" line="5227"/>
         <source>Armenian</source>
         <translation>Armeno</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5206"/>
+        <location filename="../src/dsnote_app.cpp" line="5228"/>
         <source>Nepali</source>
         <translation>Nepalese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5207"/>
+        <location filename="../src/dsnote_app.cpp" line="5229"/>
         <source>Mongolian</source>
         <translation>Mongolo</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5208"/>
+        <location filename="../src/dsnote_app.cpp" line="5230"/>
         <source>Bosnian</source>
         <translation>Bosniaco</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5209"/>
+        <location filename="../src/dsnote_app.cpp" line="5231"/>
         <source>Kazakh</source>
         <translation>Bosniaco</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5210"/>
+        <location filename="../src/dsnote_app.cpp" line="5232"/>
         <source>Albanian</source>
         <translation>Albanese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5211"/>
+        <location filename="../src/dsnote_app.cpp" line="5233"/>
         <source>Swahili</source>
         <translation>Swahili</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5212"/>
+        <location filename="../src/dsnote_app.cpp" line="5234"/>
         <source>Galician</source>
         <translation>Galiziano</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5213"/>
+        <location filename="../src/dsnote_app.cpp" line="5235"/>
         <source>Marathi</source>
         <translation>Marathi</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5214"/>
+        <location filename="../src/dsnote_app.cpp" line="5236"/>
         <source>Punjabi</source>
         <translation>Punjabi</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5215"/>
+        <location filename="../src/dsnote_app.cpp" line="5237"/>
         <source>Sinhala</source>
         <translation>Singalese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5216"/>
+        <location filename="../src/dsnote_app.cpp" line="5238"/>
         <source>Khmer</source>
         <translation>Khmer</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5217"/>
+        <location filename="../src/dsnote_app.cpp" line="5239"/>
         <source>Shona</source>
         <translation>Shona</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5218"/>
+        <location filename="../src/dsnote_app.cpp" line="5240"/>
         <source>Yoruba</source>
         <translation>Yoruba</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5219"/>
+        <location filename="../src/dsnote_app.cpp" line="5241"/>
         <source>Somali</source>
         <translation>Somalo</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5220"/>
+        <location filename="../src/dsnote_app.cpp" line="5242"/>
         <source>Afrikaans</source>
         <translation>Africano</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5221"/>
+        <location filename="../src/dsnote_app.cpp" line="5243"/>
         <source>Occitan</source>
         <translation>Occitano</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5222"/>
+        <location filename="../src/dsnote_app.cpp" line="5244"/>
         <source>Georgian</source>
         <translation>Georgiano</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5223"/>
+        <location filename="../src/dsnote_app.cpp" line="5245"/>
         <source>Belarusian</source>
         <translation>Bielorusso</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5224"/>
+        <location filename="../src/dsnote_app.cpp" line="5246"/>
         <source>Tajik</source>
         <translation>Tagico</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5225"/>
+        <location filename="../src/dsnote_app.cpp" line="5247"/>
         <source>Sindhi</source>
         <translation>Sindhi</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5226"/>
+        <location filename="../src/dsnote_app.cpp" line="5248"/>
         <source>Gujarati</source>
         <translation>Gujarati</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5227"/>
+        <location filename="../src/dsnote_app.cpp" line="5249"/>
         <source>Amharic</source>
         <translation>Amarico</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5228"/>
+        <location filename="../src/dsnote_app.cpp" line="5250"/>
         <source>Yiddish</source>
         <translation>Yiddish</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5229"/>
+        <location filename="../src/dsnote_app.cpp" line="5251"/>
         <source>Lao</source>
         <translation>Laotiano</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5230"/>
+        <location filename="../src/dsnote_app.cpp" line="5252"/>
         <source>Uzbek</source>
         <translation>Uzbeco</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5231"/>
+        <location filename="../src/dsnote_app.cpp" line="5253"/>
         <source>Faroese</source>
         <translation>Faroese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5232"/>
+        <location filename="../src/dsnote_app.cpp" line="5254"/>
         <source>Haitian creole</source>
         <translation>Creolo haitiano</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5233"/>
+        <location filename="../src/dsnote_app.cpp" line="5255"/>
         <source>Pashto</source>
         <translation>Pashto</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5234"/>
+        <location filename="../src/dsnote_app.cpp" line="5256"/>
         <source>Turkmen</source>
         <translation>Turkmeno</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5235"/>
+        <location filename="../src/dsnote_app.cpp" line="5257"/>
         <source>Nynorsk</source>
         <translation>Nynorsk</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5236"/>
+        <location filename="../src/dsnote_app.cpp" line="5258"/>
         <source>Maltese</source>
         <translation>Maltese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5237"/>
+        <location filename="../src/dsnote_app.cpp" line="5259"/>
         <source>Sanskrit</source>
         <translation>Sanscrito</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5238"/>
+        <location filename="../src/dsnote_app.cpp" line="5260"/>
         <source>Luxembourgish</source>
         <translation>Lussemburghese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5239"/>
+        <location filename="../src/dsnote_app.cpp" line="5261"/>
         <source>Myanmar</source>
         <translation>Myanmar</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5240"/>
+        <location filename="../src/dsnote_app.cpp" line="5262"/>
         <source>Tibetan</source>
         <translation>Tibetano</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5241"/>
+        <location filename="../src/dsnote_app.cpp" line="5263"/>
         <source>Tagalog</source>
         <translation>Tagalog</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5242"/>
+        <location filename="../src/dsnote_app.cpp" line="5264"/>
         <source>Malagasy</source>
         <translation>Malgascio</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5243"/>
+        <location filename="../src/dsnote_app.cpp" line="5265"/>
         <source>Assamese</source>
         <translation>Assamese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5244"/>
+        <location filename="../src/dsnote_app.cpp" line="5266"/>
         <source>Tatar</source>
         <translation>Tartaro</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5245"/>
+        <location filename="../src/dsnote_app.cpp" line="5267"/>
         <source>Hawaiian</source>
         <translation>Hawaiano</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5246"/>
+        <location filename="../src/dsnote_app.cpp" line="5268"/>
         <source>Lingala</source>
         <translation>Lingala</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5247"/>
+        <location filename="../src/dsnote_app.cpp" line="5269"/>
         <source>Hausa</source>
         <translation>Hausa</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5248"/>
+        <location filename="../src/dsnote_app.cpp" line="5270"/>
         <source>Bashkir</source>
         <translation>Baschiro</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5249"/>
+        <location filename="../src/dsnote_app.cpp" line="5271"/>
         <source>Javanese</source>
         <translation>Javanese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5250"/>
+        <location filename="../src/dsnote_app.cpp" line="5272"/>
         <source>Sundanese</source>
         <translation>Sundanese</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5251"/>
+        <location filename="../src/dsnote_app.cpp" line="5273"/>
         <source>Cantonese</source>
         <translation>Cantonese</translation>
     </message>
@@ -9701,13 +4522,13 @@
     <name>main</name>
     <message>
         <location filename="../sfos/qml/main.qml" line="371"/>
-        <location filename="../desktop/qml/main.qml" line="577"/>
+        <location filename="../desktop/qml/main.qml" line="570"/>
         <source>Error: Translator model has not been set up yet.</source>
         <translation>Errore: il modello del traduttore non è stato ancora impostato.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="317"/>
-        <location filename="../desktop/qml/main.qml" line="481"/>
+        <location filename="../desktop/qml/main.qml" line="482"/>
         <source>The model download is complete!</source>
         <translation>Il download del modello è completo!</translation>
     </message>
@@ -9728,73 +4549,73 @@
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="318"/>
-        <location filename="../desktop/qml/main.qml" line="482"/>
+        <location filename="../desktop/qml/main.qml" line="483"/>
         <source>Error: Couldn&apos;t download the model file.</source>
         <translation>Errore: impossibile scaricare il file del modello.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="323"/>
-        <location filename="../desktop/qml/main.qml" line="511"/>
+        <location filename="../desktop/qml/main.qml" line="504"/>
         <source>Copied!</source>
         <translation>Copiato!</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="324"/>
-        <location filename="../desktop/qml/main.qml" line="512"/>
+        <location filename="../desktop/qml/main.qml" line="505"/>
         <source>Import from the file is complete!</source>
         <translation>L&apos;importazione dal file è completata!</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="325"/>
-        <location filename="../desktop/qml/main.qml" line="513"/>
+        <location filename="../desktop/qml/main.qml" line="506"/>
         <source>Export to file is complete!</source>
         <translation>L&apos;esportazione nel file è completata!</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="338"/>
-        <location filename="../desktop/qml/main.qml" line="541"/>
+        <location filename="../desktop/qml/main.qml" line="534"/>
         <source>Error: Audio file processing has failed.</source>
         <translation>Errore: l&apos;elaborazione del file audio non è riuscita.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="341"/>
-        <location filename="../desktop/qml/main.qml" line="544"/>
+        <location filename="../desktop/qml/main.qml" line="537"/>
         <source>Error: Couldn&apos;t access Microphone.</source>
         <translation>Errore: impossibile accedere al microfono.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="344"/>
-        <location filename="../desktop/qml/main.qml" line="547"/>
+        <location filename="../desktop/qml/main.qml" line="540"/>
         <source>Error: Speech to Text engine initialization has failed.</source>
         <translation>Errore: l&apos;inizializzazione del motore di sintesi vocale non è riuscita.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="347"/>
-        <location filename="../desktop/qml/main.qml" line="550"/>
+        <location filename="../desktop/qml/main.qml" line="543"/>
         <source>Error: Text to Speech engine initialization has failed.</source>
         <translation>Errore: l&apos;inizializzazione del motore di sintesi vocale non è riuscita.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="350"/>
-        <location filename="../desktop/qml/main.qml" line="553"/>
+        <location filename="../desktop/qml/main.qml" line="546"/>
         <source>Error: Translation engine initialization has failed.</source>
         <translation>Errore: l&apos;inizializzazione del motore di traduzione non è riuscita.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="365"/>
-        <location filename="../desktop/qml/main.qml" line="571"/>
+        <location filename="../desktop/qml/main.qml" line="564"/>
         <source>Error: Speech to Text model has not been set up yet.</source>
         <translation>Errore: il modello di sintesi vocale non è stato ancora configurato.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="368"/>
-        <location filename="../desktop/qml/main.qml" line="574"/>
+        <location filename="../desktop/qml/main.qml" line="567"/>
         <source>Error: Text to Speech model has not been set up yet.</source>
         <translation>Errore: il modello di sintesi vocale da testo a parlato non è stato ancora configurato.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="377"/>
-        <location filename="../desktop/qml/main.qml" line="583"/>
+        <location filename="../desktop/qml/main.qml" line="576"/>
         <source>Error: An unknown problem has occurred.</source>
         <translation>Errore: si è verificato un problema sconosciuto.</translation>
     </message>
@@ -9864,125 +4685,109 @@
         <translation>Avvia</translation>
     </message>
     <message>
-        <source>Both NVIDIA and AMD GPU acceleration add-ons are installed, which is not optimal. Uninstall one of them.</source>
-        <translation type="vanished">Sono installati componenti aggiuntivi di accelerazione GPU NVIDIA e AMD, il che non è ottimale. Disinstallarne uno.</translation>
-    </message>
-    <message>
-        <source>The Flatpak add-on for GPU acceleration is not installed.</source>
-        <translation type="vanished">Il componente aggiuntivo Flatpak per l&apos;accelerazione GPU non è installato.</translation>
-    </message>
-    <message>
-        <source>To enable GPU acceleration, install either %1 or %2 add-on.</source>
-        <translation type="vanished">Per abilitare l&apos;accelerazione GPU, installa il componente aggiuntivo %1 o %2.</translation>
-    </message>
-    <message>
-        <source>Most likely, NVIDIA kernel module has not been fully initialized.</source>
-        <translation type="vanished">Molto probabilmente, il modulo del kernel NVIDIA non è stato completamente inizializzato.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="322"/>
+        <location filename="../desktop/qml/main.qml" line="323"/>
         <source>Try executing %1 before running Speech Note.</source>
         <translation>Prova a eseguire %1 prima di eseguire Speech Note.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="310"/>
+        <location filename="../desktop/qml/main.qml" line="311"/>
         <source>To speed up processing, enable hardware acceleration in the settings.</source>
         <translation>Per accelerare l&apos;elaborazione, abilitare l&apos;accelerazione hardware nelle impostazioni.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="239"/>
         <source>Both %1 and %2 GPU acceleration add-ons are installed, which is not optimal. Uninstall one of them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sono installati entrambi i componenti aggiuntivi di accelerazione GPU %1 e %2, il che non è ottimale. Disinstallane uno.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="249"/>
         <location filename="../desktop/qml/main.qml" line="260"/>
         <source>This version of %1 is not compatible with the installed %2 GPU acceleration add-on.</source>
-        <translation type="unfinished"></translation>
+        <translation>Questa versione di %1 non è compatibile con il componente aggiuntivo di accelerazione GPU %2 installato.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="252"/>
         <location filename="../desktop/qml/main.qml" line="263"/>
         <source>The required version of the add-on is %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>La versione richiesta del componente aggiuntivo è %1.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="281"/>
+        <location filename="../desktop/qml/main.qml" line="282"/>
         <source>Both %1 and %2 graphics cards have been detected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sono state rilevate entrambe le schede grafiche %1 e %2.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="283"/>
+        <location filename="../desktop/qml/main.qml" line="284"/>
         <source>%1 graphics card has been detected.</source>
-        <translation type="unfinished"></translation>
+        <translation>È stata rilevata la scheda grafica %1.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="285"/>
+        <location filename="../desktop/qml/main.qml" line="286"/>
         <source>To add GPU acceleration support, install the additional Flatpak add-on.</source>
-        <translation type="unfinished"></translation>
+        <translation>Per aggiungere il supporto all&apos;accelerazione GPU, installare il componente aggiuntivo Flatpak.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="288"/>
+        <location filename="../desktop/qml/main.qml" line="289"/>
         <source>Click to see instructions for installing the add-on.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fare clic per visualizzare le istruzioni per l&apos;installazione del componente aggiuntivo.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="290"/>
+        <location filename="../desktop/qml/main.qml" line="291"/>
         <source>Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Installa</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="321"/>
+        <location filename="../desktop/qml/main.qml" line="322"/>
         <source>Most likely, %1 kernel module has not been fully initialized.</source>
-        <translation type="unfinished"></translation>
+        <translation>Molto probabilmente il modulo kernel %1 non è stato completamente inizializzato.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="452"/>
+        <location filename="../desktop/qml/main.qml" line="453"/>
         <source>Restart the application to apply changes.</source>
         <translation>Riavviare l&apos;applicazione per applicare le modifiche.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="514"/>
+        <location filename="../desktop/qml/main.qml" line="507"/>
         <source>Text repair is complete!</source>
         <translation>La riparazione del testo è completa!</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="524"/>
+        <location filename="../desktop/qml/main.qml" line="517"/>
         <source>Text copied to clipboard!</source>
         <translation>Testo copiato negli appunti!</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="559"/>
+        <location filename="../desktop/qml/main.qml" line="552"/>
         <source>Error: Couldn&apos;t repair the text.</source>
         <translation>Errore: impossibile riparare il testo.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="353"/>
-        <location filename="../desktop/qml/main.qml" line="556"/>
+        <location filename="../desktop/qml/main.qml" line="549"/>
         <source>Error: Not all text has been translated.</source>
         <translation>Errore: non tutto il testo è stato tradotto.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="356"/>
-        <location filename="../desktop/qml/main.qml" line="562"/>
+        <location filename="../desktop/qml/main.qml" line="555"/>
         <source>Error: Couldn&apos;t export to the file.</source>
         <translation>Errore: impossibile esportare nel file.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="359"/>
-        <location filename="../desktop/qml/main.qml" line="565"/>
+        <location filename="../desktop/qml/main.qml" line="558"/>
         <source>Error: Couldn&apos;t import the file.</source>
         <translation>Errore: impossibile importare il file.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="362"/>
-        <location filename="../desktop/qml/main.qml" line="568"/>
+        <location filename="../desktop/qml/main.qml" line="561"/>
         <source>Error: Couldn&apos;t import. The file does not contain audio or subtitles.</source>
         <translation>Errore: impossibile importare. Il file non contiene audio o sottotitoli.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="374"/>
-        <location filename="../desktop/qml/main.qml" line="580"/>
+        <location filename="../desktop/qml/main.qml" line="573"/>
         <source>Error: Couldn&apos;t download a licence.</source>
         <translation>Errore: impossibile scaricare una licenza.</translation>
     </message>
@@ -10023,33 +4828,32 @@
     <message>
         <location filename="../src/settings.cpp" line="2527"/>
         <source>Example: Replace &quot;%1&quot; with &quot;%2&quot; and start the next word with a capital letter</source>
-        <translation type="unfinished"></translation>
+        <translation>Esempio: sostituisci &quot;%1&quot; con &quot;%2&quot; e inizia la parola successiva con una lettera maiuscola</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="2540"/>
         <source>Example: Replace &quot;%1&quot; with &quot;%2&quot; and start the next word with a lowercase letter</source>
-        <translation type="unfinished"></translation>
+        <translation>Esempio: sostituisci &quot;%1&quot; con &quot;%2&quot; e inizia la parola successiva con una lettera minuscola</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="2553"/>
         <source>Example: Insert newline instead of the word &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Esempio: Inserisci una nuova riga al posto della parola &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="2565"/>
         <source>Example: Add silence after &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Esempio: Aggiungi silenzio dopo &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="2576"/>
         <source>Example: Correct pronunciation of the Polish name &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Esempio: Pronuncia corretta del nome polacco &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="2656"/>
         <location filename="../src/settings.cpp" line="2658"/>
         <source>Clone of &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Clone di &quot;%1&quot;</translation>
     </message>
 </context>
 <context>
