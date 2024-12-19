@@ -36,7 +36,7 @@ DialogPage {
             When using the system tray icon, statuses such as processing, listening, etc. are presented with an animated tray icon.</li>
         <li>Models grouped by type in model browser.
             To improve usability, instead of a list containing models of all types, models are grouped by type in separate tabs.</li>
-        <li>New <i>General</i> and <i>Advanced</i> tabs have been added to <i>Settings</i>.</li>
+        <li>New <i>General</i> and <i>Advanced</i> tabs in <i>Settings</i>.</li>
         <li>Command line options for printing available or active model IDs.
             Use <i>--print-available-models</i> or <i>--print-active-model</i> to list all available models or the currently active model.</li>
         <li>Command line option to print the current status of the application.

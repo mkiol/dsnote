@@ -2556,17 +2556,17 @@ QVariantList settings::make_default_trans_rules() {
         QString{"[\\s*\\,]?new[\\s\\-]*line[\\s\\,\\?\\!\\.]*"},
         /*[4] replace=*/QString{".\\n"},
         /*[5] langs=*/QString{"en"}});
-    rules.push_back(QVariantList{
-        /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetTts,
-        /*[1] type=*/
-        static_cast<std::underlying_type_t<trans_rule_type_t>>(
-            trans_rule_type_t::TransRuleTypeReplaceSimple),
-        /*[2] name=*/
-        tr("Example: Add silence after \"%1\"").arg("."),
-        /*[3] pattern=*/
-        QString{"."},
-        /*[4] replace=*/QString{". {silence:1s}"},
-        /*[5] langs=*/QString{}});
+    // rules.push_back(QVariantList{
+    //     /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetTts,
+    //     /*[1] type=*/
+    //     static_cast<std::underlying_type_t<trans_rule_type_t>>(
+    //         trans_rule_type_t::TransRuleTypeReplaceSimple),
+    //     /*[2] name=*/
+    //     tr("Example: Add silence after \"%1\"").arg("."),
+    //     /*[3] pattern=*/
+    //     QString{"."},
+    //     /*[4] replace=*/QString{". {silence:1s}"},
+    //     /*[5] langs=*/QString{}});
     rules.push_back(QVariantList{
         /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetTts,
         /*[1] type=*/
