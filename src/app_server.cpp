@@ -35,11 +35,12 @@ app_server::app_server(const cmd::options &options, QObject *parent)
         m_pending_request_timer.setInterval(500);  // 1s;
         connect(
             &m_pending_request_timer, &QTimer::timeout, this,
-            [this, options]() {
+            [this, options, count = 10]() mutable {
                 if (state() > 2) {
                     qDebug() << "pending request";
                     request_another_instance(options);
-                } else {
+                } else if (count > 0) {
+                    --count;
                     m_pending_request_timer.start();
                 }
             },
