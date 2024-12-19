@@ -9,7 +9,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
-Control {
+Frame {
      id: root
 
      property color color: palette.highlight
@@ -23,20 +23,13 @@ Control {
      padding: appWin.padding
      implicitHeight: column.height + 2 * appWin.padding
 
-     background: Rectangle {
-         id: bgBorderRect
-
-         border.width: 1
-         border.color: root.color
-         color: "transparent"
-         radius: 3
+     Component.onCompleted: {
+         if (background && background.color) background.color = palette.toolTipBase
      }
 
      ColumnLayout {
          id: column
 
-         y: appWin.padding
-         x: appWin.padding
          width: parent.width - 3*x - buttonsRow.width
      }
 
@@ -45,9 +38,7 @@ Control {
 
          anchors {
              right: parent.right
-             rightMargin: appWin.padding
              top: parent.top
-             topMargin: appWin.padding
          }
 
          Button {
