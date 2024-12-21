@@ -417,8 +417,8 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void show_desktop_notification(const QString &summary,
                                                const QString &body,
                                                bool permanent = false);
-    Q_INVOKABLE void execute_action_name(const QString &action_name,
-                                         const QString &extra);
+    Q_INVOKABLE QVariantMap execute_action_name(const QString &action_name,
+                                                const QString &extra);
     Q_INVOKABLE QVariantList features_availability();
     Q_INVOKABLE QString download_content(const QUrl &url);
     Q_INVOKABLE void player_import_from_url(const QUrl &url);
@@ -448,10 +448,8 @@ class dsnote_app : public QObject {
                                        const QString &replace,
                                        const QString &langs, unsigned int type);
     Q_INVOKABLE bool trans_rule_re_pattern_valid(const QString &pattern);
-    [[nodiscard]] Q_INVOKABLE QList<QStringList> available_stt_models_info()
-        const;
-    [[nodiscard]] Q_INVOKABLE QList<QStringList> available_tts_models_info()
-        const;
+    [[nodiscard]] Q_INVOKABLE QVariantList available_stt_models_info() const;
+    [[nodiscard]] Q_INVOKABLE QVariantList available_tts_models_info() const;
 
    signals:
     void active_stt_model_changed();
@@ -530,6 +528,12 @@ class dsnote_app : public QObject {
 #undef X
     };
     friend QDebug operator<<(QDebug d, action_t type);
+
+    enum class action_error_code_t {
+        success = 0,
+        not_enabled = 10,
+        unknown_name = 99
+    };
 
     enum class text_repair_task_type_t {
         none = 0,

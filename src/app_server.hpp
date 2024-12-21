@@ -8,7 +8,6 @@
 #ifndef APP_SERVER_HPP
 #define APP_SERVER_HPP
 
-#include <QList>
 #include <QObject>
 #include <QString>
 #include <QStringList>
@@ -27,8 +26,8 @@ class app_server : public QObject {
     Q_OBJECT
 
     // bus dsnote api
-    Q_PROPERTY(QStringList ActiveSttModel READ active_stt_model CONSTANT)
-    Q_PROPERTY(QStringList ActiveTtsModel READ active_tts_model CONSTANT)
+    Q_PROPERTY(QVariantMap ActiveSttModel READ active_stt_model CONSTANT)
+    Q_PROPERTY(QVariantMap ActiveTtsModel READ active_tts_model CONSTANT)
     Q_PROPERTY(int State READ state CONSTANT)
     Q_PROPERTY(int TaskState READ task_state CONSTANT)
 
@@ -44,18 +43,18 @@ class app_server : public QObject {
     Q_INVOKABLE void Open(const QStringList &uris,
                           const QVariantMap &platform_data);
     // dbus dsnote api
-    Q_INVOKABLE void InvokeAction(const QString &action_name,
-                                  const QString &argument);
-    Q_INVOKABLE QList<QStringList> GetSttModels();
-    Q_INVOKABLE QList<QStringList> GetTtsModels();
+    Q_INVOKABLE QVariantMap InvokeAction(const QString &action_name,
+                                         const QDBusVariant &argument);
+    Q_INVOKABLE QVariantList GetSttModels();
+    Q_INVOKABLE QVariantList GetTtsModels();
 
    signals:
     void activate_requested();
     void action_requested(QString action_name, QString action_extra);
     void files_to_open_requested(const QStringList &files);
     // dbus dsnote api
-    void ActiveSttModelPropertyChanged(const QStringList &id);
-    void ActiveTtsModelPropertyChanged(const QStringList &id);
+    void ActiveSttModelPropertyChanged(const QVariantMap &id);
+    void ActiveTtsModelPropertyChanged(const QVariantMap &id);
     void StatePropertyChanged(int state);
     void TaskStatePropertyChanged(int state);
 
@@ -66,17 +65,25 @@ class app_server : public QObject {
         QStringLiteral(APP_DBUS_APP_PATH)};
     static const int DBUS_TIMEOUT_MS = 10000;  // 10s
 
+    enum class action_error_code_t {
+        success = 0,
+        not_enabled = 10,
+        unknown_name = 99
+    };
+
     ApplicationAdaptor m_dbus_application_adaptor;
     DsnoteAdaptor m_dbus_dsnote_adaptor;
     QObject* m_dsnote_app = nullptr;
     QTimer m_pending_request_timer;
 
     void files_to_open(const QStringList &files);
-    void request_another_instance(const cmd::options &options);
-    QStringList active_stt_model() const;
-    QStringList active_tts_model() const;
+    int request_another_instance(const cmd::options &options);
+    QVariantMap active_stt_model() const;
+    QVariantMap active_tts_model() const;
     int state() const;
     int task_state() const;
+    QVariantMap invoke_action(const QString &action_name,
+                              const QVariant &argument);
    private Q_SLOTS:
     void handle_active_stt_model_change();
     void handle_active_tts_model_change();

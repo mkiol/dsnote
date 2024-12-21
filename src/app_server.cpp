@@ -22,9 +22,6 @@ app_server::app_server(const cmd::options &options, QObject *parent)
     : QObject{parent},
       m_dbus_application_adaptor{this},
       m_dbus_dsnote_adaptor{this} {
-    qRegisterMetaType<QList<QStringList>>("QList<QStringList>");
-    qDBusRegisterMetaType<QList<QStringList>>();
-
     auto con = QDBusConnection::sessionBus();
 
     if (con.registerService(DBUS_SERVICE_NAME) &&
@@ -50,14 +47,12 @@ app_server::app_server(const cmd::options &options, QObject *parent)
         qDebug() << "dbus app service registration failed => maybe another "
                     "instance is running";
 
-        request_another_instance(options);
-
-        exit(0);
+        exit(request_another_instance(options));
     }
 }
 
-void app_server::request_another_instance(const cmd::options &options) {
-    if (!options.valid) return;
+int app_server::request_another_instance(const cmd::options &options) {
+    if (!options.valid) return 1;
 
     if (options.action.isEmpty()) {
         if (!options.files.isEmpty()) {
@@ -76,24 +71,43 @@ void app_server::request_another_instance(const cmd::options &options) {
                      << uris;
             iface.Open(uris, {}).waitForFinished();
         }
-    } else {
-        OrgFreedesktopApplicationInterface iface{DBUS_SERVICE_NAME,
-                                                 DBUS_SERVICE_PATH,
-                                                 QDBusConnection::sessionBus()};
-        iface.setTimeout(DBUS_TIMEOUT_MS);
+    }
 
-        qDebug() << "[dbus client] calling ActivateAction on another instance:"
+    DsnoteDbusInterface iface(DBUS_SERVICE_NAME, DBUS_SERVICE_PATH,
+                              QDBusConnection::sessionBus());
+    iface.setTimeout(DBUS_TIMEOUT_MS);
+
+    if (!options.action.isEmpty()) {
+        qDebug() << "[dbus client] calling InvokeAction on another instance:"
                  << options.action;
-        iface.ActivateAction(options.action, QVariantList{} << options.extra,
-                             {});
+        auto result =
+            iface.InvokeAction(options.action, QDBusVariant{options.extra});
+        result.waitForFinished();
+
+        if (result.isValid()) {
+            auto error = static_cast<action_error_code_t>(
+                result.value().value("error").toInt());
+            qDebug() << "action result error code:" << static_cast<int>(error);
+            switch (error) {
+                case action_error_code_t::success:
+                    break;
+                case action_error_code_t::not_enabled:
+                    fmt::print(stderr,
+                               "Action has failed. Action invocation is "
+                               "not enabled in settings.\n");
+                    return static_cast<int>(error);
+                case action_error_code_t::unknown_name:
+                    fmt::print(
+                        stderr,
+                        "Action has failed. Invalid name of the action.\n");
+                    return static_cast<int>(error);
+            }
+        }
     }
 
     if (options.models_to_print_roles != cmd::role_none ||
         options.active_model_to_print_role != cmd::role_none ||
         options.state_scope_to_print_flag != cmd::scope_none) {
-        DsnoteDbusInterface iface(DBUS_SERVICE_NAME, DBUS_SERVICE_PATH,
-                                  QDBusConnection::sessionBus());
-        iface.setTimeout(DBUS_TIMEOUT_MS);
 
         if (options.state_scope_to_print_flag & cmd::scope_general) {
             fmt::print("General state:\n\t{}\n", iface.state());
@@ -102,41 +116,52 @@ void app_server::request_another_instance(const cmd::options &options) {
             fmt::print("Task state:\n\t{}\n", iface.taskState());
         }
 
-        auto max_id_size = [](const QList<QStringList> &models) {
+        auto max_id_size = [](const QVariantList &models) {
             return std::accumulate(
-                models.cbegin(), models.cend(), 0,
-                [](int size, const auto &model) {
-                    return std::max(
-                        model.size() < 2 ? size : model.at(0).size(), size);
+                models.cbegin(), models.cend(), 0, [](int size, const auto &m) {
+                    QVariantMap model = qdbus_cast<QVariantMap>(
+                        m.template value<QDBusArgument>());
+                    return std::max(model.contains("id")
+                                        ? model.value("id").toString().size()
+                                        : size,
+                                    size);
                 });
         };
 
         auto print_models = [](const char *name, int max_id_size,
-                               const QList<QStringList> &models) {
+                               const QVariantList &models) {
             fmt::print("Available {} models: {}\n", name, models.size());
 
-            for (const auto &model : models) {
-                if (model.size() < 2) continue;
-                fmt::print(fmt::format("\t{{:{}}} \"{{}}\"\n", max_id_size),
-                           model.at(0).toStdString(),
-                           model.at(1).toStdString());
+            for (const auto &m : models) {
+                QVariantMap model =
+                    qdbus_cast<QVariantMap>(m.value<QDBusArgument>());
+                if (!model.contains("id")) continue;
+                fmt::print(fmt::format("\t{{:{}}} \"{{}}\"\n",
+                                       max_id_size > 0 ? max_id_size : 10),
+                           model.value("id").toString().toStdString(),
+                           model.value("name").toString().toStdString());
             }
         };
 
         auto print_active_model = [](const char *name, int max_id_size,
-                                     const QStringList &model) {
+                                     const QVariantMap &model) {
             fmt::print("Active {} model:\n", name);
-            fmt::print(fmt::format("\t{{:{}}} \"{{}}\"\n", max_id_size),
-                       model.size() > 1 ? model.at(0).toStdString() : "-",
-                       model.size() > 1 ? model.at(1).toStdString() : "-");
+            fmt::print(fmt::format("\t{{:{}}} \"{{}}\"\n",
+                                   max_id_size > 0 ? max_id_size : 10),
+                       model.contains("id")
+                           ? model.value("id").toString().toStdString()
+                           : "-",
+                       model.contains("name")
+                           ? model.value("name").toString().toStdString()
+                           : "-");
         };
 
         int g_max_size = 1;
 
         if ((options.models_to_print_roles & cmd::role_stt) &&
             (options.models_to_print_roles & cmd::role_tts)) {
-            QDBusReply<QList<QStringList>> replyStt = iface.GetSttModels();
-            QDBusReply<QList<QStringList>> replyTts = iface.GetTtsModels();
+            QDBusReply<QVariantList> replyStt = iface.GetSttModels();
+            QDBusReply<QVariantList> replyTts = iface.GetTtsModels();
             if (replyStt.isValid() && replyTts.isValid()) {
                 auto listStt = replyStt.value();
                 auto listTts = replyTts.value();
@@ -146,14 +171,14 @@ void app_server::request_another_instance(const cmd::options &options) {
                 print_models("TTS", g_max_size, listTts);
             }
         } else if (options.models_to_print_roles & cmd::role_stt) {
-            QDBusReply<QList<QStringList>> replyStt = iface.GetSttModels();
+            QDBusReply<QVariantList> replyStt = iface.GetSttModels();
             if (replyStt.isValid()) {
                 auto listStt = replyStt.value();
                 g_max_size = max_id_size(listStt);
                 print_models("STT", g_max_size, listStt);
             }
         } else if (options.models_to_print_roles & cmd::role_tts) {
-            QDBusReply<QList<QStringList>> replyTts = iface.GetTtsModels();
+            QDBusReply<QVariantList> replyTts = iface.GetTtsModels();
             if (replyTts.isValid()) {
                 auto listStt = replyTts.value();
                 g_max_size = max_id_size(listStt);
@@ -165,24 +190,34 @@ void app_server::request_another_instance(const cmd::options &options) {
             (options.active_model_to_print_role & cmd::role_tts)) {
             auto modelStt = iface.activeSttModel();
             auto modelTts = iface.activeTtsModel();
-            g_max_size = std::max(
-                g_max_size,
-                std::max(modelStt.size() > 1 ? modelStt.at(0).size() : 1,
-                         modelTts.size() > 1 ? modelTts.at(0).size() : 1));
+            g_max_size =
+                std::max(g_max_size,
+                         std::max(modelStt.contains("id")
+                                      ? modelStt.value("id").toString().size()
+                                      : 1,
+                                  modelTts.contains("id")
+                                      ? modelTts.value("id").toString().size()
+                                      : 1));
             print_active_model("STT", g_max_size, modelStt);
             print_active_model("TTS", g_max_size, modelTts);
         } else if (options.active_model_to_print_role & cmd::role_stt) {
             auto modelStt = iface.activeSttModel();
-            g_max_size = std::max(
-                g_max_size, modelStt.size() > 1 ? modelStt.at(0).size() : 1);
+            g_max_size = std::max(g_max_size,
+                                  modelStt.contains("id")
+                                      ? modelStt.value("id").toString().size()
+                                      : 1);
             print_active_model("STT", g_max_size, modelStt);
         } else if (options.active_model_to_print_role & cmd::role_tts) {
             auto modelTts = iface.activeTtsModel();
-            g_max_size = std::max(
-                g_max_size, modelTts.size() > 1 ? modelTts.at(0).size() : 1);
+            g_max_size = std::max(g_max_size,
+                                  modelTts.contains("id")
+                                      ? modelTts.value("id").toString().size()
+                                      : 1);
             print_active_model("TTS", g_max_size, modelTts);
         }
     }
+
+    return 0;
 }
 
 void app_server::files_to_open(const QStringList &files) {
@@ -222,35 +257,46 @@ void app_server::setDsnoteApp(QObject *app) {
             SLOT(handle_task_state_change()), Qt::QueuedConnection);
 }
 
-void app_server::InvokeAction(const QString &action_name,
-                              const QString &argument) {
+QVariantMap app_server::InvokeAction(const QString &action_name,
+                                     const QDBusVariant &argument) {
     qDebug() << "[dbus app] InvokeAction called:" << action_name;
 
-    emit action_requested(action_name, argument);
+    return invoke_action(action_name, argument.variant());
 }
 
-QList<QStringList> app_server::GetSttModels() {
+QVariantMap app_server::invoke_action(const QString &action_name,
+                                      const QVariant &argument) {
+    QVariantMap map;
+
+    QMetaObject::invokeMethod(
+        m_dsnote_app, "execute_action_name", Q_RETURN_ARG(QVariantMap, map),
+        Q_ARG(QString, action_name), Q_ARG(QString, argument.toString()));
+
+    return map;
+}
+
+QVariantList app_server::GetSttModels() {
     qDebug() << "[dbus app] GetSttModels called";
 
-    QList<QStringList> list;
+    QVariantList list;
 
-    if (!m_dsnote_app) return list;
-
-    QMetaObject::invokeMethod(m_dsnote_app, "available_stt_models_info",
-                              Q_RETURN_ARG(QList<QStringList>, list));
+    if (m_dsnote_app) {
+        QMetaObject::invokeMethod(m_dsnote_app, "available_stt_models_info",
+                                  Q_RETURN_ARG(QVariantList, list));
+    }
 
     return list;
 }
 
-QList<QStringList> app_server::GetTtsModels() {
+QVariantList app_server::GetTtsModels() {
     qDebug() << "[dbus app] GetTtsModels called";
 
-    QList<QStringList> list;
+    QVariantList list;
 
     if (!m_dsnote_app) return list;
 
     QMetaObject::invokeMethod(m_dsnote_app, "available_tts_models_info",
-                              Q_RETURN_ARG(QList<QStringList>, list));
+                              Q_RETURN_ARG(QVariantList, list));
 
     return list;
 }
@@ -282,24 +328,34 @@ void app_server::Open(const QStringList &uris,
     files_to_open(files);
 }
 
-QStringList app_server::active_stt_model() const {
+QVariantMap app_server::active_stt_model() const {
     qDebug() << "[dbus app] ActiveSttModel called";
-    return m_dsnote_app
-               ? QStringList{}
-                     << m_dsnote_app->property("active_stt_model").toString()
-                     << m_dsnote_app->property("active_stt_model_name")
-                            .toString()
-               : QStringList{};
+
+    QVariantMap map;
+
+    if (m_dsnote_app) {
+        map.insert(QStringLiteral("id"),
+                   m_dsnote_app->property("active_stt_model").toString());
+        map.insert(QStringLiteral("name"),
+                   m_dsnote_app->property("active_stt_model_name").toString());
+    }
+
+    return map;
 }
 
-QStringList app_server::active_tts_model() const {
+QVariantMap app_server::active_tts_model() const {
     qDebug() << "[dbus app] ActiveTtsModel called";
-    return m_dsnote_app
-               ? QStringList{}
-                     << m_dsnote_app->property("active_tts_model").toString()
-                     << m_dsnote_app->property("active_tts_model_name")
-                            .toString()
-               : QStringList{};
+
+    QVariantMap map;
+
+    if (m_dsnote_app) {
+        map.insert(QStringLiteral("id"),
+                   m_dsnote_app->property("active_tts_model").toString());
+        map.insert(QStringLiteral("name"),
+                   m_dsnote_app->property("active_tts_model_name").toString());
+    }
+
+    return map;
 }
 
 int app_server::state() const {

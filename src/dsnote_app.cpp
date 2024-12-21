@@ -2032,23 +2032,29 @@ QVariantList dsnote_app::available_tts_models() const {
     return list;
 }
 
-QList<QStringList> dsnote_app::available_stt_models_info() const {
-    QList<QStringList> list;
+QVariantList dsnote_app::available_stt_models_info() const {
+    QVariantList list;
 
     for (auto it = m_available_stt_models_map.constBegin();
          it != m_available_stt_models_map.constEnd(); ++it) {
-        list.push_back(it.value().toStringList());
+        QVariantMap map;
+        map.insert(QStringLiteral("id"), it.key());
+        map.insert(QStringLiteral("name"), it.value().toStringList().at(1));
+        list.push_back(map);
     }
 
     return list;
 }
 
-QList<QStringList> dsnote_app::available_tts_models_info() const {
-    QList<QStringList> list;
+QVariantList dsnote_app::available_tts_models_info() const {
+    QVariantList list;
 
     for (auto it = m_available_tts_models_map.constBegin();
          it != m_available_tts_models_map.constEnd(); ++it) {
-        list.push_back(it.value().toStringList());
+        QVariantMap map;
+        map.insert(QStringLiteral("id"), it.key());
+        map.insert(QStringLiteral("name"), it.value().toStringList().at(1));
+        list.push_back(map);
     }
 
     return list;
@@ -4504,13 +4510,23 @@ void dsnote_app::execute_pending_action() {
     m_pending_action.reset();
 }
 
-void dsnote_app::execute_action_name(const QString &action_name,
-                                     const QString &extra) {
-    if (action_name.isEmpty()) return;
+QVariantMap dsnote_app::execute_action_name(const QString &action_name,
+                                            const QString &extra) {
+    QVariantMap result;
+
+    auto update_result = [&result](action_error_code_t error_code) {
+        result.insert(QStringLiteral("error"), static_cast<int>(error_code));
+    };
+
+    if (action_name.isEmpty()) {
+        update_result(action_error_code_t::unknown_name);
+        return result;
+    }
 
     if (!settings::instance()->actions_api_enabled()) {
         qWarning() << "actions api is not enabled in the settings";
-        return;
+        update_result(action_error_code_t::not_enabled);
+        return result;
     }
 
     if (false) {
@@ -4522,7 +4538,12 @@ void dsnote_app::execute_action_name(const QString &action_name,
 #undef X
     } else {
         qWarning() << "invalid action:" << action_name << extra;
+        update_result(action_error_code_t::unknown_name);
+        return result;
     }
+
+    update_result(action_error_code_t::success);
+    return result;
 }
 
 #ifdef USE_DESKTOP
