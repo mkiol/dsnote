@@ -312,9 +312,9 @@ void app_server::ActivateAction(
     [[maybe_unused]] const QVariantMap &platform_data) {
     qDebug() << "[dbus app] ActivateAction called:" << action_name;
 
-    emit action_requested(action_name, parameter.isEmpty()
-                                           ? QString{}
-                                           : parameter.front().toString());
+    invoke_action(action_name, parameter.isEmpty()
+                                   ? QString{}
+                                   : parameter.front().toString());
 }
 
 void app_server::Open(const QStringList &uris,

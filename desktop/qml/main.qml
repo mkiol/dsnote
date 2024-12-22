@@ -459,7 +459,6 @@ ApplicationWindow {
             appWin.show()
             appWin.raise()
         }
-        onAction_requested: app.execute_action_name(action_name, action_extra)
         onFiles_to_open_requested: {
             if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
                 var list_of_files = files
