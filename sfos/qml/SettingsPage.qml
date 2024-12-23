@@ -147,6 +147,35 @@ Page {
                                             .arg("<i>" + qsTr("Listen") + "</i>")
                         }
 
+                        ComboBox {
+                            label: qsTr("Profile")
+                            currentIndex: {
+                                switch(_settings.whispercpp_profile) {
+                                case Settings.EngineProfilePerformance: return 0
+                                case Settings.EngineProfileQuality: return 1
+                                }
+                                return 0
+                            }
+                            menu: ContextMenu {
+                                MenuItem { text: qsTr("Best performance") }
+                                MenuItem { text: qsTr("Best quality") }
+                            }
+                            onCurrentIndexChanged: {
+                                if (currentIndex === 0) {
+                                    _settings.whispercpp_profile = Settings.EngineProfilePerformance
+                                } else if (currentIndex === 1) {
+                                    _settings.whispercpp_profile = Settings.EngineProfileQuality
+                                } else {
+                                    _settings.whispercpp_profile = Settings.EngineProfilePerformance
+                                }
+                            }
+                            description: qsTr("Profiles allow you to change the processing parameters in the engine.") + " " +
+                                         qsTr("You can set the parameters to get the fastest processing (%1) or the highest accuracy (%2).")
+                                         .arg("<i>" + qsTr("Best performance") + "</i>")
+                                         .arg("<i>" + qsTr("Best quality") + "</i>") + " " +
+                                         qsTr("The option works only with %1 models.").arg("<i>WhisperCpp</i>")
+                        }
+
                         TextSwitch {
                             checked: _settings.whisper_translate
                             automaticCheck: false
