@@ -37,7 +37,7 @@ DialogPage {
         <li>Models grouped by type in model browser.
             To improve usability, instead of a list containing models of all types, models are grouped by type in separate tabs.</li>
         <li>New <i>General</i> and <i>Advanced</i> tabs in <i>Settings</i>.</li>
-        <li>Command line options for printing available or active model IDs.
+        <li>Command line options for printing available or active model.
             Use <i>--print-available-models</i> or <i>--print-active-model</i> to list all available models or the currently active model.</li>
         <li>Command line option to print the current status of the application.
             Use <i>--print-state</i> to see the current state.

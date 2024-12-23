@@ -117,7 +117,7 @@
           When using the system tray icon, statuses such as processing, listening, etc. are presented with an animated tray icon.</li>
       <li>Models grouped by type in model browser.
           To improve usability, instead of a list containing models of all types, models are grouped by type in separate tabs.</li>
-      <li>Command line options for printing available or active model IDs.</li>
+      <li>Command line options for printing available or active model.</li>
       <li>Command line option to print the current status of the application.</li>
       </ul>
       <p>Speech to Text:</p>

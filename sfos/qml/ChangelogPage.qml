@@ -33,6 +33,40 @@ Page {
             }
 
             LogItem {
+                text: "<p>" + qsTr("General") + ":</p>
+                <ul>
+                <li>New mode for replacing the current note instead of appending new text to it.
+                    When the <i>Replace an existing note</i> option is set, whenever new text is added, it will replace the existing note.</li>
+                </ul>
+                <p>" + qsTr("User Interface") + ":</p>
+                <ul>
+                <li><i>Speech Note</i> has been translated into Slovenian language.</li>
+                </ul>
+                <p>" + qsTr("Speech to Text") + ":</p>
+                <ul>
+                <li>Settings option <i>Profile</i> which allows you to change <i>WhisperCpp</i> processing parameters.
+                    There are two profiles to choose from: <i>Best Performance</i>, <i>Best Quality</i>.</li>
+                <li>Echo mode. After processing, the decoded text will be immediately read out using the currently set Text to Speech model.
+                    To enable, use the option in the settings (<i>Speech to Text</i> &rarr; <i>Echo mode</i>).</li>
+                <li>Update the <i>whisper.cpp</i> library to version 1.7.1. This provides a 10% increase in STT speed with <i>WhisperCpp</i> models.</li>
+                </ul>
+                <p>" + qsTr("Text to Speech") + ":</p>
+                <ul>
+                <li>New <i>Piper</i> voice for Latvian</li>
+                </ul>
+                <p>" + qsTr("Translator") + ":</p>
+                <ul>
+                <li>New models: English to Finnish, English to Turkish, English to Swedish, Swedish to English,
+                    English to Slovak, English to Indonesian, English to Romanian, English to Greek, Chinese to English</li>
+                <li>Updated models: English to Catalan, English to Russian, English to Ukrainian, English to Czech</li>
+                </ul>"
+            }
+
+            SectionHeader {
+                text: qsTr("Version %1").arg("4.6.1")
+            }
+
+            LogItem {
                 text: "<p>" + qsTr("User Interface") + ":</p>
                 <ul>
                 <li>Swedish translation has been updated.</li>
