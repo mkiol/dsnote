@@ -245,6 +245,12 @@ class settings : public QSettings, public singleton<settings> {
                    NOTIFY trans_rules_changed)
     Q_PROPERTY(bool trans_rules_enabled READ trans_rules_enabled WRITE
                    set_trans_rules_enabled NOTIFY trans_rules_enabled_changed)
+
+    Q_PROPERTY(
+        fake_keyboard_type_t fake_keyboard_type READ fake_keyboard_type WRITE
+            set_fake_keyboard_type NOTIFY fake_keyboard_type_changed)
+    Q_PROPERTY(int fake_keyboard_delay READ fake_keyboard_delay WRITE
+                   set_fake_keyboard_delay NOTIFY fake_keyboard_delay_changed)
     // service
 
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -543,6 +549,12 @@ class settings : public QSettings, public singleton<settings> {
     Q_ENUM(trans_rule_type_t)
     friend QDebug operator<<(QDebug d, trans_rule_type_t type);
 
+    enum class fake_keyboard_type_t {
+        FakeKeyboardTypeNative = 0,
+        FakeKeyboardTypeXdo = 1
+    };
+    Q_ENUM(fake_keyboard_type_t)
+
     settings();
 
     static launch_mode_t launch_mode;
@@ -723,6 +735,10 @@ class settings : public QSettings, public singleton<settings> {
     void set_trans_rules_enabled(bool value);
     QVariantList trans_rules() const;
     void set_trans_rules(const QVariantList &value);
+    fake_keyboard_type_t fake_keyboard_type() const;
+    void set_fake_keyboard_type(fake_keyboard_type_t value);
+    int fake_keyboard_delay() const;
+    void set_fake_keyboard_delay(int value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -942,6 +958,8 @@ class settings : public QSettings, public singleton<settings> {
     void stt_echo_changed();
     void trans_rules_enabled_changed();
     void trans_rules_changed();
+    void fake_keyboard_type_changed();
+    void fake_keyboard_delay_changed();
 
     // service
     void models_dir_changed();

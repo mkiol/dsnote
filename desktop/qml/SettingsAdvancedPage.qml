@@ -299,10 +299,35 @@ ColumnLayout {
         text: "X11"
     }
 
-    TextFieldForm {
+    ComboBoxForm {
         visible: _settings.is_xcb()
+        label.text: qsTranslate("SettingsPage", "Fake keyboard type")
+        toolTip: qsTranslate("SettingsPage", "Keystroke sending method in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>")
+        comboBox {
+            currentIndex: {
+                if (_settings.fake_keyboard_type === Settings.FakeKeyboardTypeNative) return 0
+                if (_settings.fake_keyboard_type === Settings.FakeKeyboardTypeXdo) return 1
+                return 0
+            }
+            model: [
+                qsTranslate("SettingsPage", "Native"),
+                "XDO"
+            ]
+            onActivated: {
+                if (index === 1) {
+                    _settings.fake_keyboard_type = Settings.FakeKeyboardTypeXdo
+                } else {
+                    _settings.fake_keyboard_type = Settings.FakeKeyboardTypeNative
+                }
+            }
+        }
+    }
+
+    TextFieldForm {
+        visible: _settings.is_xcb() && _settings.fake_keyboard_type === Settings.FakeKeyboardTypeNative
         label.text: qsTranslate("SettingsPage", "Compose file")
-        toolTip: qsTranslate("SettingsPage", "X11 compose file used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>")
+        toolTip: qsTranslate("SettingsPage", "X11 compose file used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>") + " " +
+                 qsTranslate("SettingsPage", "Leave blank to use the default value.")
         textField {
             text: _settings.x11_compose_file
             onTextChanged: _settings.x11_compose_file = text

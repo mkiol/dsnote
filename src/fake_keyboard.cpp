@@ -15,17 +15,15 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <stdio.h>
+#include <xdo.h>
 #include <xkbcommon/xkbcommon-compose.h>
 #include <xkbcommon/xkbcommon-x11.h>
 #include <xkbcommon/xkbcommon.h>
 
 #include <QFile>
 #include <QX11Info>
-#include <algorithm>
-#include <chrono>
 #include <cstdlib>
 #include <optional>
-#include <thread>
 
 static XKeyEvent create_key_event(Display *display, Window &win,
                                   Window &win_root,
@@ -52,74 +50,89 @@ static XKeyEvent create_key_event(Display *display, Window &win,
     return event;
 }
 
-fake_keyboard::fake_keyboard(QObject *parent)
-    : QObject{parent},
-      m_x11_display{QX11Info::display()},
-      m_xcb_conn{QX11Info::connection()} {
-    if (!m_x11_display) throw std::runtime_error{"no x11 display"};
+fake_keyboard::fake_keyboard(QObject *parent) : QObject{parent} {
+    if (settings::instance()->fake_keyboard_type() ==
+        settings::fake_keyboard_type_t::FakeKeyboardTypeXdo) {
+        qDebug() << "using xdo fake-keyboard";
 
-    if (!m_xcb_conn) throw std::runtime_error{"no xcb connection"};
+        if (!QX11Info::display()) throw std::runtime_error{"no x11 display"};
 
-    auto device_id = xkb_x11_get_core_keyboard_device_id(m_xcb_conn);
-    if (device_id == -1) throw std::runtime_error{"no xkb keyboard"};
+        m_xdo = xdo_new_with_opened_display(QX11Info::display(), nullptr, 0);
+        if (!m_xdo) throw std::runtime_error{"can't create xdo"};
+    } else {
+        qDebug() << "using native fake-keyboard";
 
-    m_xkb_ctx = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
-    if (!m_xkb_ctx) throw std::runtime_error{"no xkb context"};
+        m_x11_display = QX11Info::display();
+        if (!m_x11_display) throw std::runtime_error{"no x11 display"};
 
-    m_xkb_keymap = xkb_x11_keymap_new_from_device(
-        m_xkb_ctx, m_xcb_conn, device_id, XKB_KEYMAP_COMPILE_NO_FLAGS);
-    if (!m_xkb_keymap) {
-        xkb_context_unref(m_xkb_ctx);
-        m_xkb_ctx = nullptr;
-        throw std::runtime_error{"no xkb keymap"};
-    }
+        m_xcb_conn = QX11Info::connection();
+        if (!m_xcb_conn) throw std::runtime_error{"no xcb connection"};
 
-    m_num_layouts = xkb_keymap_num_layouts(m_xkb_keymap);
-    if (m_num_layouts == 0) {
-        xkb_context_unref(m_xkb_ctx);
-        m_xkb_ctx = nullptr;
-        throw std::runtime_error{"no xkb layouts"};
-    }
-    if (m_num_layouts > XkbGroup4Index + 1) m_num_layouts = XkbGroup4Index + 1;
+        auto device_id = xkb_x11_get_core_keyboard_device_id(m_xcb_conn);
+        if (device_id == -1) throw std::runtime_error{"no xkb keyboard"};
 
-    qDebug() << "keyboard layouts:";
-    for (unsigned int i = 0; i < m_num_layouts; ++i) {
-        const auto *name = xkb_keymap_layout_get_name(m_xkb_keymap, i);
-        qDebug() << i << ":" << name;
-    }
+        m_xkb_ctx = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
+        if (!m_xkb_ctx) throw std::runtime_error{"no xkb context"};
 
-    if (auto compose_file = settings::instance()->x11_compose_file();
-        !compose_file.isEmpty()) {
-        qDebug() << "using compose file:" << compose_file;
-        if (auto *file = fopen(compose_file.toStdString().c_str(), "r")) {
-            m_xkb_compose_table = xkb_compose_table_new_from_file(
-                m_xkb_ctx, file, "C", XKB_COMPOSE_FORMAT_TEXT_V1,
-                XKB_COMPOSE_COMPILE_NO_FLAGS);
-            fclose(file);
-        } else {
-            qWarning() << "can't open compose file";
+        m_xkb_keymap = xkb_x11_keymap_new_from_device(
+            m_xkb_ctx, m_xcb_conn, device_id, XKB_KEYMAP_COMPILE_NO_FLAGS);
+        if (!m_xkb_keymap) {
+            xkb_context_unref(m_xkb_ctx);
+            m_xkb_ctx = nullptr;
+            throw std::runtime_error{"no xkb keymap"};
         }
+
+        m_num_layouts = xkb_keymap_num_layouts(m_xkb_keymap);
+        if (m_num_layouts == 0) {
+            xkb_context_unref(m_xkb_ctx);
+            m_xkb_ctx = nullptr;
+            throw std::runtime_error{"no xkb layouts"};
+        }
+        if (m_num_layouts > XkbGroup4Index + 1)
+            m_num_layouts = XkbGroup4Index + 1;
+
+        qDebug() << "keyboard layouts:";
+        for (unsigned int i = 0; i < m_num_layouts; ++i) {
+            const auto *name = xkb_keymap_layout_get_name(m_xkb_keymap, i);
+            qDebug() << i << ":" << name;
+        }
+
+        if (auto compose_file = settings::instance()->x11_compose_file();
+            !compose_file.isEmpty()) {
+            qDebug() << "using compose file:" << compose_file;
+            if (auto *file = fopen(compose_file.toStdString().c_str(), "r")) {
+                m_xkb_compose_table = xkb_compose_table_new_from_file(
+                    m_xkb_ctx, file, "C", XKB_COMPOSE_FORMAT_TEXT_V1,
+                    XKB_COMPOSE_COMPILE_NO_FLAGS);
+                fclose(file);
+            } else {
+                qWarning() << "can't open compose file";
+            }
+        }
+        if (!m_xkb_compose_table)
+            m_xkb_compose_table = xkb_compose_table_new_from_locale(
+                m_xkb_ctx, "C", XKB_COMPOSE_COMPILE_NO_FLAGS);
+        if (!m_xkb_compose_table)
+            qWarning() << "can't compile xkb compose table";
+
+        m_root_window = XDefaultRootWindow(m_x11_display);
+        int revert;
+        XGetInputFocus(m_x11_display, &m_focus_window, &revert);
+
+        connect(this, &fake_keyboard::send_keyevent_request, this,
+                &fake_keyboard::send_keyevent, Qt::QueuedConnection);
+
+        m_delay_timer.setSingleShot(false);
+        m_delay_timer.setInterval(settings::instance()->fake_keyboard_delay());
+
+        connect(&m_delay_timer, &QTimer::timeout, this,
+                &fake_keyboard::send_keyevent, Qt::QueuedConnection);
     }
-    if (!m_xkb_compose_table)
-        m_xkb_compose_table = xkb_compose_table_new_from_locale(
-            m_xkb_ctx, "C", XKB_COMPOSE_COMPILE_NO_FLAGS);
-    if (!m_xkb_compose_table) qWarning() << "can't compile xkb compose table";
-
-    m_root_window = XDefaultRootWindow(m_x11_display);
-    int revert;
-    XGetInputFocus(m_x11_display, &m_focus_window, &revert);
-
-    connect(this, &fake_keyboard::send_keyevent_request, this,
-            &fake_keyboard::send_keyevent, Qt::QueuedConnection);
-
-    m_delay_timer.setSingleShot(false);
-    m_delay_timer.setInterval(10);  // send key event every 10ms
-
-    connect(&m_delay_timer, &QTimer::timeout, this,
-            &fake_keyboard::send_keyevent, Qt::QueuedConnection);
 }
 
 fake_keyboard::~fake_keyboard() {
+    if (m_xdo_thread.joinable()) m_xdo_thread.join();
+    if (m_xdo) xdo_free(m_xdo);
     if (m_xkb_compose_table) xkb_compose_table_unref(m_xkb_compose_table);
     if (m_xkb_ctx) xkb_context_unref(m_xkb_ctx);
 }
@@ -207,17 +220,28 @@ std::vector<fake_keyboard::key_code_t> fake_keyboard::key_from_character(
 }
 
 void fake_keyboard::send_text(const QString &text) {
-    auto num_layouts = xkb_keymap_num_layouts(m_xkb_keymap);
-    if (num_layouts < 1) {
-        qWarning() << "no xkb layouts";
-        return;
+    if (text.isEmpty()) return;
+
+    if (settings::instance()->fake_keyboard_type() ==
+        settings::fake_keyboard_type_t::FakeKeyboardTypeXdo) {
+        m_xdo_thread = std::thread([this, text]() {
+            xdo_enter_text_window(
+                m_xdo, CURRENTWINDOW, text.toStdString().c_str(),
+                settings::instance()->fake_keyboard_delay() * 100);
+        });
+    } else {
+        auto num_layouts = xkb_keymap_num_layouts(m_xkb_keymap);
+        if (num_layouts < 1) {
+            qWarning() << "no xkb layouts";
+            return;
+        }
+
+        m_text = text;
+
+        m_text_cursor = 0;
+
+        m_delay_timer.start();
     }
-
-    m_text = text;
-
-    m_text_cursor = 0;
-
-    m_delay_timer.start();
 }
 
 void fake_keyboard::send_keyevent() {

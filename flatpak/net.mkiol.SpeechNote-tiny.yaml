@@ -741,6 +741,16 @@ modules:
         url: https://xkbcommon.org/download/libxkbcommon-1.6.0.tar.xz
         sha256: 0edc14eccdd391514458bc5f5a4b99863ed2d651e4dd761a90abf4f46ef99c2b
 
+  - name: xdo
+    buildsystem: simple
+    build-commands:
+      - make
+      - make PREFIX=${FLATPAK_DEST} install
+    sources:
+      - type: archive
+        url: https://github.com/jordansissel/xdotool/archive/33092d8a74d60c9ad3ab39c4f05b90e047ea51d8.zip
+        sha256: cba1c7d0c23cc60cd0b1f5483f84296ff91360598e2c19c57395aec530af99ad
+
   - name: dsnote
     buildsystem: cmake-ninja
     config-opts:
@@ -772,6 +782,7 @@ modules:
       - -DBUILD_APRILASR=OFF
       - -DBUILD_HTML2MD=OFF
       - -DBUILD_MADDY=OFF
+      - -DBUILD_XDO=OFF
       - -DWITH_PY=OFF
     post-install:
       - install -d ${FLATPAK_DEST}/extensions

@@ -15,11 +15,13 @@
 #include <QTimer>
 #include <QX11Info>
 #include <queue>
+#include <thread>
 
 struct xcb_connection_t;
 struct xkb_context;
 struct xkb_keymap;
 struct xkb_compose_table;
+struct xdo;
 
 class fake_keyboard : public QObject {
     Q_OBJECT
@@ -41,6 +43,7 @@ class fake_keyboard : public QObject {
 
    private:
     Display* m_x11_display = nullptr;
+    xdo* m_xdo = nullptr;
     xcb_connection_t* m_xcb_conn = nullptr;
     xkb_context* m_xkb_ctx = nullptr;
     xkb_keymap* m_xkb_keymap = nullptr;
@@ -52,6 +55,7 @@ class fake_keyboard : public QObject {
     QTimer m_delay_timer;
     unsigned int m_num_layouts = 0;
     std::queue<key_code_t> m_keys_to_send_queue;
+    std::thread m_xdo_thread;
 
     void send_keyevent();
     std::vector<fake_keyboard::key_code_t> key_from_character(

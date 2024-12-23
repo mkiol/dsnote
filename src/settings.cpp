@@ -2661,3 +2661,28 @@ void settings::trans_rule_clone(int index) {
     rules.insert(index + 1, rule);
     set_trans_rules(rules);
 }
+
+settings::fake_keyboard_type_t settings::fake_keyboard_type() const {
+    return static_cast<fake_keyboard_type_t>(
+        value(QStringLiteral("fake_keyboard_type"),
+              static_cast<int>(fake_keyboard_type_t::FakeKeyboardTypeNative))
+            .toInt());
+}
+
+void settings::set_fake_keyboard_type(fake_keyboard_type_t value) {
+    if (fake_keyboard_type() != value) {
+        setValue(QStringLiteral("fake_keyboard_type"), static_cast<int>(value));
+        emit fake_keyboard_type_changed();
+    }
+}
+
+int settings::fake_keyboard_delay() const {
+    return value(QStringLiteral("fake_keyboard_delay"), 10).toInt();
+}
+
+void settings::set_fake_keyboard_delay(int value) {
+    if (fake_keyboard_delay() != value) {
+        setValue(QStringLiteral("fake_keyboard_delay"), value);
+        emit fake_keyboard_delay_changed();
+    }
+}
