@@ -2634,7 +2634,7 @@ void settings::trans_rule_move_up(int index) {
     if (index <= 0) return;
     auto rules = trans_rules();
     if (rules.size() <= index) return;
-    rules.swapItemsAt(index - 1, index);
+    std::swap(rules[index - 1], rules[index]);
     set_trans_rules(rules);
 }
 
@@ -2642,7 +2642,7 @@ void settings::trans_rule_move_down(int index) {
     if (index < 0) return;
     auto rules = trans_rules();
     if (rules.size() <= index + 1) return;
-    rules.swapItemsAt(index + 1, index);
+    std::swap(rules[index + 1], rules[index]);
     set_trans_rules(rules);
 }
 

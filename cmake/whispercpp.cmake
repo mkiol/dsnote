@@ -16,6 +16,12 @@ if(NOT ${BUILD_OPENBLAS})
     find_package(BLAS REQUIRED)
 endif()
 
+set(whispercpp_patch_file "${patches_dir}/whispercpp.patch")
+if(WITH_SFOS)
+    # extra patch for SFOS with fixes for very old GCC
+    set(whispercpp_patch_file "${patches_dir}/whispercpp-sfos.patch")
+endif()
+
 if(BUILD_WHISPERCPP_CLBLAST)
     # Using older whisper.cpp version because the latest one doesn't support OpenCL
     set(whispercpp_clblast_source_url "https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.6.2.tar.gz")
@@ -88,7 +94,7 @@ if(BUILD_WHISPERCPP_CUBLAS)
         URL "${whispercpp_source_url}"
         URL_HASH SHA256=${whispercpp_checksum}
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
-                    -i ${patches_dir}/whispercpp.patch ||
+                    -i ${whispercpp_patch_file} ||
                         echo "patch cmd failed, likely already patched"
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
@@ -129,7 +135,7 @@ if(BUILD_WHISPERCPP_HIPBLAS)
         URL "${whispercpp_source_url}"
         URL_HASH SHA256=${whispercpp_checksum}
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
-                    -i ${patches_dir}/whispercpp.patch ||
+                    -i ${whispercpp_patch_file} ||
                         echo "patch cmd failed, likely already patched"
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
@@ -170,7 +176,7 @@ if(BUILD_WHISPERCPP_OPENVINO)
         URL "${whispercpp_source_url}"
         URL_HASH SHA256=${whispercpp_checksum}
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
-                    -i ${patches_dir}/whispercpp.patch ||
+                    -i ${whispercpp_patch_file} ||
                         echo "patch cmd failed, likely already patched"
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
@@ -221,7 +227,7 @@ if(BUILD_WHISPERCPP_VULKAN)
         URL "${whispercpp_source_url}"
         URL_HASH SHA256=${whispercpp_checksum}
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
-                    -i ${patches_dir}/whispercpp.patch ||
+                    -i ${whispercpp_patch_file} ||
                         echo "patch cmd failed, likely already patched"
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
@@ -250,7 +256,7 @@ ExternalProject_Add(whispercppfallback1
     URL "${whispercpp_source_url}"
     URL_HASH SHA256=${whispercpp_checksum}
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
-                -i ${patches_dir}/whispercpp.patch ||
+                -i ${whispercpp_patch_file} ||
                     echo "patch cmd failed, likely already patched"
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
@@ -274,7 +280,7 @@ ExternalProject_Add(whispercppfallback
     URL "${whispercpp_source_url}"
     URL_HASH SHA256=${whispercpp_checksum}
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
-                -i ${patches_dir}/whispercpp.patch ||
+                -i ${whispercpp_patch_file} ||
                     echo "patch cmd failed, likely already patched"
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
@@ -298,7 +304,7 @@ ExternalProject_Add(whispercppopenblas
     URL "${whispercpp_source_url}"
     URL_HASH SHA256=${whispercpp_checksum}
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
-                -i ${patches_dir}/whispercpp.patch ||
+                -i ${whispercpp_patch_file} ||
                     echo "patch cmd failed, likely already patched"
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
