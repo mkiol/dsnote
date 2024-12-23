@@ -19,6 +19,7 @@ depends=(
   'kdbusaddons5'
   'libarchive'
   'libpulse'
+  'libxtst'
   'ocl-icd'
   'openblas'
   'perl'
