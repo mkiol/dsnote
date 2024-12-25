@@ -550,7 +550,7 @@ class settings : public QSettings, public singleton<settings> {
     friend QDebug operator<<(QDebug d, trans_rule_type_t type);
 
     enum class fake_keyboard_type_t {
-        FakeKeyboardTypeNative = 0,
+        FakeKeyboardTypeLegacy = 0,
         FakeKeyboardTypeXdo = 1
     };
     Q_ENUM(fake_keyboard_type_t)

@@ -301,23 +301,23 @@ ColumnLayout {
 
     ComboBoxForm {
         visible: _settings.is_xcb()
-        label.text: qsTranslate("SettingsPage", "Fake keyboard type")
-        toolTip: qsTranslate("SettingsPage", "Keystroke sending method in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>")
+        label.text: qsTranslate("SettingsPage", "Keystroke sending method")
+        toolTip: qsTranslate("SettingsPage", "Keystroke sending method used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>")
         comboBox {
             currentIndex: {
-                if (_settings.fake_keyboard_type === Settings.FakeKeyboardTypeNative) return 0
+                if (_settings.fake_keyboard_type === Settings.FakeKeyboardTypeLegacy) return 0
                 if (_settings.fake_keyboard_type === Settings.FakeKeyboardTypeXdo) return 1
-                return 0
+                return 1
             }
             model: [
-                qsTranslate("SettingsPage", "Native"),
+                qsTranslate("SettingsPage", "Legacy"),
                 "XDO"
             ]
             onActivated: {
-                if (index === 1) {
-                    _settings.fake_keyboard_type = Settings.FakeKeyboardTypeXdo
+                if (index === 0) {
+                    _settings.fake_keyboard_type = Settings.FakeKeyboardTypeLegacy
                 } else {
-                    _settings.fake_keyboard_type = Settings.FakeKeyboardTypeNative
+                    _settings.fake_keyboard_type = Settings.FakeKeyboardTypeXdo
                 }
             }
         }

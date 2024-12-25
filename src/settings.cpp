@@ -2665,7 +2665,7 @@ void settings::trans_rule_clone(int index) {
 settings::fake_keyboard_type_t settings::fake_keyboard_type() const {
     return static_cast<fake_keyboard_type_t>(
         value(QStringLiteral("fake_keyboard_type"),
-              static_cast<int>(fake_keyboard_type_t::FakeKeyboardTypeNative))
+              static_cast<int>(fake_keyboard_type_t::FakeKeyboardTypeXdo))
             .toInt());
 }
 
