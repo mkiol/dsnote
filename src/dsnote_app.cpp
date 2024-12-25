@@ -981,7 +981,7 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
             m_pending_stt_request = m_current_stt_request;
         }
 
-        play_speech_from_text(text, {});
+        play_speech_from_text(text, active_tts_model());
     }
 }
 
@@ -4642,7 +4642,7 @@ void dsnote_app::execute_action(action_t action, const QString &extra) {
                     : QString::fromStdString(segment.text),
                 segment.tags.empty() ||
                         !text_tools::valid_model_id(segment.tags.front())
-                    ? QString{}
+                    ? active_tts_model()
                     : QString::fromStdString(segment.tags.front()));
             break;
         }
