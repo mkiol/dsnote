@@ -84,12 +84,13 @@ DialogPage {
             Examples: Switch to Notepad (Ctrl+N), Switch to Translator (Ctrl+T), Open Languages (Ctrl+L),
             Read (Ctrl+Alt+Shift+R), Listen (Ctrl+Alt+Shift+L), Stop (Ctrl+Alt+Shift+S),
             Cancel (Ctrl+Alt+Shift+C), Pause (Ctrl+Alt+Shift+P) and more...</li>
-        <li>New <i>Actions</i> and global keyboard shotcut to force translation of text in STT:
+        <li>New <i>Actions</i> and global keyboard shortcut to force translation of text in STT:
             <i>start-listening-translate</i>, <i>start-listening-translate-active-window</i>, <i>start-listening-translate-clipboard</i>.
             The decoded text is always translated into English when the \"translate\" action is triggered.
             This only works when using Whisper models.</li>
         <li>New <i>Action</i> to read text from the command-line option: <i>start-reading-text</i>.
             To pass text, use the <i>--text</i> option in the command-line interface.</li>
+        <li>Fix: <i>Insert into active window</i> didn't work for all applications.</li>
         </ul>
         <p>Flatpak</p>
         <ul>
