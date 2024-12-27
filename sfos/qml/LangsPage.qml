@@ -29,11 +29,11 @@ Page {
 
         if (langsView) service.langs_model.filter = ""
         if (packView) {
-            service.pack_model.roleFilter = ModelsListModel.AllModels
+            service.pack_model.roleFilterFlags = ModelsListModel.RoleAll
             service.pack_model.filter = ""
         }
         if (modelView) {
-            service.models_model.roleFilter = ModelsListModel.AllModels
+            service.models_model.roleFilterFlags = ModelsListModel.RoleAll
             service.models_model.filter = ""
         }
     }

@@ -4461,7 +4461,6 @@ QVariantList dsnote_app::features_availability() {
 
     if (old_features_availability != m_features_availability) {
         auto translator_enabled = feature_available("translator", false);
-
         if (!translator_enabled) {
             settings::instance()->set_translator_mode(false);
         }
@@ -4485,6 +4484,7 @@ QVariantList dsnote_app::features_availability() {
                  feature_available("faster-whisper-stt", false),
                  /*stt_ds=*/feature_available("coqui-stt", false),
                  /*stt_vosk=*/feature_available("vosk-stt", false),
+                 /*stt_whisper=*/feature_available("whispercpp-stt", false),
                  /*mnt_bergamot=*/translator_enabled,
                  /*ttt_hftc=*/feature_available("punctuator", false),
                  /*option_r=*/feature_available("coqui-tts-ko", false)});

@@ -36,7 +36,7 @@ DialogPage {
 
         if (!reset_filter) return
 
-        service.models_model.roleFilter = ModelsListModel.AllModels
+        service.models_model.roleFilterFlags = ModelsListModel.RoleDefault
         modelFilteringWidget.close()
         modelFilteringWidget.reset()
         modelFilteringWidget.update()
@@ -58,6 +58,7 @@ DialogPage {
         listViewStackItem.focus = true
 
         updateTabIndex()
+        updateModels()
     }
 
     function updateTabIndex() {
