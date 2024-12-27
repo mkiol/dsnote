@@ -141,10 +141,10 @@ Details of models which are currently configured for download are described in
 # Flatpak base package
 flatpak install net.mkiol.SpeechNote
 
-# AMD add-on package
+# Optional AMD add-on package
 flatpak install net.mkiol.SpeechNote.Addon.amd
 
-# NVIDIA add-on package
+# Optional NVIDIA add-on package
 flatpak install net.mkiol.SpeechNote.Addon.nvidia
 ```
 
@@ -406,6 +406,10 @@ please consider doing one or two of the following:
 
 - [Speech Note 4.6 changes video](https://www.youtube.com/watch?v=AVW5OY63wjg) (Speech Note 4.6)
 - [Screenshots](https://gitlab.com/mkiol/dsnote/-/tree/main/desktop/screenshots) (Speech Note 4.5)
+- [lwn.net](https://lwn.net/Articles/987315/) (Speech Note 4.6)
+- [Softpedia](https://linux.softpedia.com/get/Utilities/Speech-Note-104828.shtml) (Speech Note 4.6)
+- [OSTechNix](https://ostechnix.com/speech-note-speech-recognition-text-to-speech-translation-app-for-linux/) (Speech Note 4.6)
+- [Best FREE Speech-to-Text For Linux Mint video](https://www.youtube.com/watch?v=VDMbWUfHsbk) (Speech Note 4.6)
 - [Speech Note 4.5 changes video](https://youtu.be/S9MJ7y8-bcw) (Speech Note 4.5)
 - [Marco's Box](https://www.marcosbox.org/2024/02/speech-note-trascrivi-e-traduci-offline-.html) (Speech Note 4.4, Italian)
 - [Marco's Box video](https://www.youtube.com/watch?v=6fNgZlh-O-w) (Speech Note 4.4, Italian)
