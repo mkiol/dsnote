@@ -62,16 +62,16 @@ Following languages are supported:
 | cs          | Czech         | ●                    | ●                 | ●              |                     | ●               | ●                 | ●                | ●                | ●               |                  |                         | ●                 |
 | cy          | Welsh         |                      |                   |                |                     | ●               |                   |                  |                  |                 |                  |                         |                   |
 | da          | Danish        |                      | ●                 |                |                     | ●               |                   | ●                |                  | ●               |                  |                         | ●                 |
-| de          | German        | ●                    | ●                 | ●              |                     | ●               |                   | ●                |                  | ●               | ●                |                         | ●                 |
+| de          | German        | ●                    | ●                 | ●              |                     | ●               |                   | ●                |                  | ●               | ●                | ●                       | ●                 |
 | el          | Greek         | ● (e)                | ●                 |                |                     | ●               |                   | ●                |                  | ●               | ●                |                         | ●                 |
 | en          | English       | ●                    | ●                 | ●              | ●                   | ●               | ●                 | ●                |                  | ●               | ●                | ●                       | ●                 |
 | eo          | Esperanto     |                      |                   | ●              |                     |                 | ●                 | ●                |                  |                 |                  |                         |                   |
-| es          | Spanish       | ●                    | ●                 | ●              |                     | ●               |                   | ●                |                  | ●               | ●                |                         | ●                 |
+| es          | Spanish       | ●                    | ●                 | ●              |                     | ●               |                   | ●                |                  | ●               | ●                | ●                       | ●                 |
 | et          | Estonian      | ● (e)                | ●                 |                |                     |                 |                   | ●                | ●                | ●               |                  |                         | ●                 |
 | eu          | Basque        | ● (e)                | ●                 |                |                     |                 |                   | ●                |                  | ●               |                  |                         |                   |
 | fa          | Persian       | ●                    | ●                 | ●              |                     | ●               |                   | ●                | ●                | ●               | ●                |                         | ●                 |
 | fi          | Finnish       | ●                    | ●                 |                |                     | ●               |                   | ●                |                  | ●               | ●                |                         | ●                 |
-| fr          | French        | ●                    | ●                 | ●              | ●                   | ●               |                   | ●                |                  | ●               | ●                |                         | ●                 |
+| fr          | French        | ●                    | ●                 | ●              | ●                   | ●               |                   | ●                |                  | ●               | ●                | ●                       | ●                 |
 | ga          | Irish         |                      |                   |                |                     |                 |                   | ●                |                  | ●               |                  |                         |                   |
 | gu          | Gujarati      |                      | ●                 |                |                     |                 |                   | ●                |                  |                 | ●                |                         |                   |
 | ha          | Hausa         |                      | ●                 |                |                     |                 |                   |                  |                  |                 | ●                |                         |                   |
@@ -79,9 +79,9 @@ Following languages are supported:
 | hi          | Hindi         |                      | ●                 | ●              |                     |                 |                   | ●                |                  |                 |                  |                         |                   |
 | hr          | Croatian      |                      | ●                 |                |                     |                 | ●                 | ●                | ●                | ●               |                  |                         |                   |
 | hu          | Hungarian     | ● (e)                | ●                 |                |                     | ●               |                   | ●                | ●                | ●               | ●                |                         | ●                 |
-| id          | Indonesian    | ● (e)                | ●                 |                |                     |                 |                   | ●                | ●                | ●               |                  |                         |                   |
+| id          | Indonesian    | ● (e)                | ●                 |                |                     |                 |                   | ●                | ●                | ●               |                  |                         | ●                 |
 | is          | Icelandic     |                      | ●                 |                |                     | ●               |                   | ●                |                  | ●               |                  |                         | ●                 |
-| it          | Italian       | ●                    | ●                 | ●              |                     | ●               |                   | ●                |                  | ●               | ●                |                         | ●                 |
+| it          | Italian       | ●                    | ●                 | ●              |                     | ●               |                   | ●                |                  | ●               | ●                | ●                       | ●                 |
 | ja          | Japanese      |                      | ●                 | ●              |                     |                 |                   | ●                |                  | ●               |                  |                         |                   |
 | jv          | Javanese      |                      | ●                 |                |                     |                 |                   |                  |                  |                 | ●                |                         |                   |
 | ka          | Georgian      |                      | ●                 |                |                     | ●               | ●                 | ●                |                  |                 |                  |                         |                   |
@@ -91,24 +91,24 @@ Following languages are supported:
 | la          | Latin         |                      |                   |                |                     |                 |                   | ●                |                  | ●               |                  |                         |                   |
 | lb          | Luxembourgish |                      |                   |                |                     | ●               |                   |                  |                  |                 |                  |                         |                   |
 | lt          | Lithuanian    |                      | ●                 |                |                     |                 |                   | ●                | ●                | ●               |                  |                         | ●                 |
-| lv          | Latvian       | ●                    | ●                 |                |                     |                 |                   | ●                |                  | ●               |                  |                         | ●                 |
+| lv          | Latvian       | ●                    | ●                 |                |                     | ●               |                   | ●                |                  | ●               |                  |                         | ●                 |
 | mk          | Macedonian    |                      | ●                 |                |                     |                 | ●                 | ●                |                  |                 |                  |                         |                   |
 | mn          | Mongolian     | ● (e)                | ●                 |                |                     |                 |                   |                  |                  | ●               |                  |                         |                   |
 | mr          | Marathi       |                      | ●                 |                |                     |                 |                   |                  |                  | ●               |                  |                         |                   |
 | ms          | Malay         |                      | ●                 |                |                     |                 |                   | ●                | ●                | ●               |                  |                         |                   |
 | mt          | Maltese       |                      | ●                 |                |                     |                 |                   | ●                |                  | ●               |                  |                         |                   |
 | ne          | Nepali        |                      | ●                 |                |                     | ●               |                   | ●                |                  |                 | ●                |                         |                   |
-| nl          | Dutch         | ● (e)                | ●                 | ●              |                     | ●               |                   | ●                |                  | ●               | ●                |                         | ●                 |
+| nl          | Dutch         | ● (e)                | ●                 | ●              |                     | ●               |                   | ●                |                  | ●               | ●                | ●                       | ●                 |
 | no          | Norwegian     |                      | ●                 |                |                     | ●               |                   | ●                |                  |                 |                  |                         | ●                 |
 | pl          | Polish        | ●                    | ●                 | ●              | ●                   | ●               | ●                 | ●                | ●                | ●               | ●                | ●                       | ●                 |
 | pt          | Portuguese    | ● (e)                | ●                 | ●              |                     | ●               |                   | ●                | ●                | ●               |                  |                         | ●                 |
-| ro          | Romanian      | ● (e)                | ●                 |                |                     | ●               |                   | ●                | ●                | ●               |                  |                         |                   |
+| ro          | Romanian      | ● (e)                | ●                 |                |                     | ●               |                   | ●                | ●                | ●               |                  |                         | ●                 |
 | ru          | Russian       | ●                    | ●                 | ●              |                     | ●               | ●                 | ●                |                  |                 | ●                |                         | ●                 |
-| sk          | Slovak        |                      | ●                 |                |                     | ●               | ●                 | ●                |                  | ●               |                  |                         |                   |
+| sk          | Slovak        |                      | ●                 |                |                     | ●               | ●                 | ●                |                  | ●               |                  |                         | ●                 |
 | sl          | Slovenian     | ● (e)                | ●                 |                |                     | ●               |                   | ●                |                  | ●               |                  |                         | ●                 |
 | sq          | Albanian      |                      | ●                 |                |                     |                 | ●                 | ●                |                  | ●               |                  |                         |                   |
 | sr          | Serbian       |                      | ●                 |                |                     | ●               | ●                 | ●                |                  |                 |                  |                         | ●                 |
-| sv          | Swedish       |                      | ●                 | ●              |                     | ●               |                   | ●                | ●                | ●               | ●                |                         |                   |
+| sv          | Swedish       |                      | ●                 | ●              |                     | ●               |                   | ●                | ●                | ●               | ●                |                         | ●                 |
 | sw          | Swahili       | ●                    | ●                 |                |                     | ●               |                   | ●                |                  | ●               |                  |                         |                   |
 | te          | Telugu        |                      | ●                 |                |                     |                 |                   | ●                |                  |                 | ●                |                         |                   |
 | th          | Thai          | ● (e)                | ●                 |                |                     |                 |                   | ●                |                  | ●               |                  |                         |                   |
@@ -120,7 +120,7 @@ Following languages are supported:
 | uz          | Uzbek         |                      | ●                 | ●              |                     |                 |                   | ●                |                  | ●               |                  |                         |                   |
 | vi          | Vietnamese    |                      | ●                 | ●              |                     | ●               |                   | ●                |                  | ●               |                  |                         | ●                 |
 | yo          | Yoruba        | ● (e)                | ●                 |                |                     |                 |                   |                  |                  | ●               | ●                |                         |                   |
-| zh          | Chinese       | ●                    | ●                 | ●              |                     | ●               |                   | ●                |                  | ●               |                  |                         |                   |
+| zh          | Chinese       | ●                    | ●                 | ●              |                     | ●               |                   | ●                |                  | ●               |                  |                         | ●                 |
 
 <sup>(e) experimental, most likely doesn't work well</sup>
 <br/>
@@ -136,6 +136,18 @@ Details of models which are currently configured for download are described in
 ## How to install
 
 - Linux Desktop: [Flatpak](https://flathub.org/apps/net.mkiol.SpeechNote)
+
+```sh
+# Flatpak base package
+flatpak install net.mkiol.SpeechNote
+
+# AMD add-on package
+flatpak install net.mkiol.SpeechNote.Addon.amd
+
+# NVIDIA add-on package
+flatpak install net.mkiol.SpeechNote.Addon.nvidia
+```
+
 - Arch Linux (AUR):
   - [dsnote](https://aur.archlinux.org/packages/dsnote)
   - [dsnote-git](https://aur.archlinux.org/packages/dsnote-git)
@@ -143,7 +155,7 @@ Details of models which are currently configured for download are described in
 
 ### Flatpak packages
 
-Starting from v4.4.0, the app distributed via Flatpak (published on Flathub) consists of the following packages:
+The app distributed via Flatpak (published on Flathub) consists of the following packages:
 
  - Base package "Speech Note" (net.mkiol.SpeechNote)
  - Add-on for AMD graphics card "Speech Note AMD" (net.mkiol.SpeechNote.Addon.amd)
@@ -162,32 +174,36 @@ Comparison between Base, Tiny and Add-ons Flatpak packages:
 
 | **Sizes**     | **Base** | **Tiny** | **AMD add-on** | **NVIDIA add-on** |
 | ------------- | ---------| ---------| -------------- | ----------------- |
-| Download size | 0.9 GiB  |  70 MiB  |  +2.1 GiB      | +3.8 GiB          |
-| Unpacked size | 2.9 GiB  | 170 MiB  | +11.5 GiB      | +6.9 GiB          |
+| Download size | 0.9 GiB  |  70 MiB  |  +7.6 GiB      | +3.7 GiB          |
+| Unpacked size | 3.2 GiB  | 170 MiB  | +31.2 GiB      | +6.4 GiB          |
 
-| **Features**                         | **Base** | **Tiny** | **AMD add-on** | **NVIDIA add-on** |
-| ------------------------------------ | ---------| ---------| -------------- | ----------------- |
-| Coqui/DeepSpeech STT                 | +        | +        |                |                   |
-| Vosk STT                             | +        | +        |                |                   |
-| Whisper (whisper.cpp) STT            | +        | +        |                |                   |
-| Whisper (whisper.cpp) STT AMD GPU    | -        | -        | +              |                   |
-| Whisper (whisper.cpp) STT NVIDIA GPU | -        | -        |                | +                 |
-| Faster Whisper STT                   | +        | -        |                |                   |
-| Faster Whisper STT NVIDIA GPU        | -        | -        |                | +                 |
-| April-ASR STT                        | +        | +        |                |                   |
-| eSpeak TTS                           | +        | +        |                |                   |
-| MBROLA TTS                           | +        | +        |                |                   |
-| Piper TTS                            | +        | +        |                |                   |
-| RHVoice TTS                          | +        | +        |                |                   |
-| Coqui TTS                            | +        | -        |                |                   |
-| Coqui TTS AMD GPU                    | -        | -        | +              |                   |
-| Coqui TTS NVIDIA GPU                 | -        | -        |                | +                 |
-| Mimic3 TTS                           | +        | -        |                |                   |
-| WhisperSpeech TTS                    | +        | -        |                |                   |
-| WhisperSpeech TTS AMD GPU            | -        | -        | +              |                   |
-| WhisperSpeech TTS NVIDIA GPU         | -        | -        |                | +                 |
-| Punctuation restoration              | +        | -        |                |                   |
-| Translator                           | +        | +        |                |                   |
+| **Features**                            | **Base** | **Tiny** | **AMD add-on** | **NVIDIA add-on** |
+| --------------------------------------- | ---------| ---------| -------------- | ----------------- |
+| Coqui/DeepSpeech STT                    | +        | +        |                |                   |
+| Vosk STT                                | +        | +        |                |                   |
+| Whisper (whisper.cpp) STT               | +        | +        |                |                   |
+| Whisper (whisper.cpp) STT OpenCL ROCm   | -        | -        | +              |                   |
+| Whisper (whisper.cpp) STT OpenCL NVIDIA | +        | +        |                |                   |
+| Whisper (whisper.cpp) STT ROCm          | -        | -        | +              |                   |
+| Whisper (whisper.cpp) STT CUDA          | -        | -        |                | +                 |
+| Whisper (whisper.cpp) STT OpenVINO      | +        | -        |                |                   |
+| Whisper (whisper.cpp) STT Vulkan        | +        | +        |                |                   |
+| Faster Whisper STT                      | +        | -        |                |                   |
+| Faster Whisper STT CUDA                 | -        | -        |                | +                 |
+| April-ASR STT                           | +        | +        |                |                   |
+| eSpeak TTS                              | +        | +        |                |                   |
+| MBROLA TTS                              | +        | +        |                |                   |
+| Piper TTS                               | +        | +        |                |                   |
+| RHVoice TTS                             | +        | +        |                |                   |
+| Coqui TTS                               | +        | -        |                |                   |
+| Coqui TTS ROCm                          | -        | -        | +              |                   |
+| Coqui TTS CUDA                          | -        | -        |                | +                 |
+| Mimic3 TTS                              | +        | -        |                |                   |
+| WhisperSpeech TTS                       | +        | -        |                |                   |
+| WhisperSpeech TTS ROCm                  | -        | -        | +              |                   |
+| WhisperSpeech TTS CUDA                  | -        | -        |                | +                 |
+| Punctuation restoration                 | +        | -        |                |                   |
+| Translator                              | +        | +        |                |                   |
 
 ### Beta version
 
@@ -201,7 +217,7 @@ Beta version is available in "flathub-beta" repository. Follow [these instructio
 
 It is also possible to build and install the latest development (git) or latest stable (release) version from the repository using the provided PKGBUILD file (please note that the same remarks about building on Linux apply):
 
-```
+```sh
 git clone <git repository url>
 
 cd dsnote/arch/git      # build latest git version
@@ -213,7 +229,7 @@ makepkg -si
 
 ### Flatpak
 
-```
+```sh
 git clone <git repository url>
 
 cd dsnote/flatpak
@@ -224,7 +240,7 @@ flatpak-builder --user --install-deps-from=flathub --repo="/path/to/local/flatpa
 
 ### Sailfish OS
 
-```
+```sh
 git clone <git repository url>
 
 cd dsnote
@@ -244,7 +260,7 @@ Speech Note has many build-time and run-time dependencies. This includes shared 
 is to use Flatpak tool-chain (Flatpak manifest file and [flatpak-builder](https://docs.flatpak.org/en/latest/flatpak-builder.html)).
 If you want to make a direct build (i.e. without flatpak) it is also possible but more complicated.
 
-```
+```sh
 git clone <git repository url>
 
 cd dsnote
@@ -317,7 +333,7 @@ For example:
 }
 ```
 
-```
+```sh
 flatpak run net.mkiol.SpeechNote --verbose --gen-checksums
 ```
 
@@ -343,7 +359,7 @@ please consider doing one or two of the following:
 - Give a &#11088; on [GitHub](https://github.com/mkiol/dsnote) or/and [GitLab](https://gitlab.com/mkiol/dsnote).
 - Write a review in your applications manager app (Discover, Software or any other).
 - Tell others about this app by mentioning it on social media.
-- If you have spare money, make a small donation via [Liberapay](https://liberapay.com/mkiol/donate).
+- If you have spare money, make a small donation via [ko-fi (one time)](https://ko-fi.com/mkiol) or [Liberapay (recurring)](https://liberapay.com/mkiol/donate).
 
 ## Libraries
 
@@ -384,6 +400,7 @@ please consider doing one or two of the following:
 - [html2md](https://tim-gromeyer.github.io/html2md/)
 - [maddy](https://github.com/progsource/maddy)
 - [WhisperSpeech](https://collabora.github.io/WhisperSpeech/)
+- [libxdo](https://github.com/jordansissel/xdotool)
 
 ## Reviews and demos
 

@@ -136,13 +136,13 @@ set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_conf_version "96")
 set(info_addon_version "1.3") # if run as a flatpak pkg, the required add-on version
-set(info_version_type "-beta")
+set(info_version_type "")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · Locness3 · DevSJR · Vovkiv · Niklas Halvorsen · Matjaž Jeran")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · nlohmann JSON · eSpeak NG · Bergamot Translator · \
 Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis · Opus · TagLib · \
-libnumbertext · april-asr · html2md · maddy")
+libnumbertext · april-asr · html2md · maddy · libxdo")
 if (WITH_DESKTOP)
     set(info_libs_str "${info_libs_str} · KDBusAddons")
 
