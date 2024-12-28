@@ -80,7 +80,7 @@ Dialog {
                 bottomMargin: root.bottomPadding
             }
             text: qsTr("Close")
-            //icon.name: "window-close-symbolic"
+            icon.name: "window-close-symbolic"
             onClicked: root.reject()
             Keys.onEscapePressed: root.reject()
         }

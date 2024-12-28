@@ -96,6 +96,9 @@ DialogPage {
         <ul>
         <li>whisper.cpp update to version 1.7.1</li>
         <li>PyTorch update to version 2.5.1</li>
+        <li>The Flatpak GPU acceleration add-on for AMD is no longer recommended.
+            If you have already installed the AMD add-on, you should uninstall it.
+            Better results can be achieved with Vulkan acceleration, which does not require the add-on.</li>
         </ul>"
     }
 

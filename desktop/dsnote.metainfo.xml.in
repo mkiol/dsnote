@@ -98,7 +98,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.7.0" date="2024-12-23">
+    <release version="4.7.0" date="2024-12-28">
       <description>
       <p>General:</p>
       <ul>
@@ -163,6 +163,8 @@
       <ul>
       <li>whisper.cpp update to version 1.7.1</li>
       <li>PyTorch update to version 2.5.1</li>
+      <li>The Flatpak GPU acceleration add-on for AMD is no longer recommended.
+          Better results can be achieved with Vulkan acceleration, which does not require the add-on.</li>
       </ul>
       </description>
     </release>

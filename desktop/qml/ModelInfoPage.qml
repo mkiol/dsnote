@@ -40,6 +40,7 @@ Dialog {
             }
 
             Button {
+                icon.name: "window-close-symbolic"
                 text: qsTr("Close")
                 onClicked: root.reject()
             }

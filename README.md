@@ -141,11 +141,11 @@ Details of models which are currently configured for download are described in
 # Flatpak base package
 flatpak install net.mkiol.SpeechNote
 
-# Optional AMD add-on package
-flatpak install net.mkiol.SpeechNote.Addon.amd
-
 # Optional NVIDIA add-on package
 flatpak install net.mkiol.SpeechNote.Addon.nvidia
+
+# Optional AMD add-on package (not recommended)
+flatpak install net.mkiol.SpeechNote.Addon.amd
 ```
 
 - Arch Linux (AUR):
@@ -158,8 +158,8 @@ flatpak install net.mkiol.SpeechNote.Addon.nvidia
 The app distributed via Flatpak (published on Flathub) consists of the following packages:
 
  - Base package "Speech Note" (net.mkiol.SpeechNote)
- - Add-on for AMD graphics card "Speech Note AMD" (net.mkiol.SpeechNote.Addon.amd)
- - Add-on for NVIDIA graphics card "Speech Note NVIDIA" (net.mkiol.SpeechNote.Addon.nvidia)
+ - Optional add-on for NVIDIA graphics card "Speech Note NVIDIA" (net.mkiol.SpeechNote.Addon.nvidia)
+ - Optional (and not recommended) add-on for AMD graphics card "Speech Note AMD" (net.mkiol.SpeechNote.Addon.amd)
 
 Base package includes all the dependencies needed to run every feature of the application.
 Add-ons add the capability of GPU acceleration, which speeds up some operations in the application.
@@ -170,12 +170,15 @@ If you don't need all the functionalities, you can use much smaller "Tiny" packa
 (available on [Releases](https://github.com/mkiol/dsnote/releases) page),
 which provides only the basic features. If you need, you can also use "Tiny" packages together with GPU acceleration add-on.
 
+It is not recommended to install the AMD add-on. It is very large in size and does not provide many benefits.
+In addition, ROCm 6.x included in the add-on may cause problems on some GPUs.
+
 Comparison between Base, Tiny and Add-ons Flatpak packages:
 
 | **Sizes**     | **Base** | **Tiny** | **AMD add-on** | **NVIDIA add-on** |
 | ------------- | ---------| ---------| -------------- | ----------------- |
-| Download size | 0.9 GiB  |  70 MiB  |  +7.6 GiB      | +3.7 GiB          |
-| Unpacked size | 3.2 GiB  | 170 MiB  | +31.2 GiB      | +6.4 GiB          |
+| Download size | 0.9 GiB  |  70 MiB  |  +7.1 GiB      | +3.7 GiB          |
+| Unpacked size | 3.2 GiB  | 170 MiB  | +25.6 GiB      | +6.4 GiB          |
 
 | **Features**                            | **Base** | **Tiny** | **AMD add-on** | **NVIDIA add-on** |
 | --------------------------------------- | ---------| ---------| -------------- | ----------------- |

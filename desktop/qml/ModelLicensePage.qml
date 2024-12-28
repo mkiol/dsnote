@@ -92,6 +92,7 @@ Dialog {
             }
             Button {
                 visible: !root.acceptHandler
+                icon.name: "window-close-symbolic"
                 text: qsTr("Close")
                 onClicked: root.reject()
             }

@@ -63,7 +63,7 @@ DialogPage {
             }
 
             text: qsTr("Close")
-            //icon.name: "window-close-symbolic"
+            icon.name: "window-close-symbolic"
             onClicked: root.reject()
             Keys.onEscapePressed: root.reject()
         }
@@ -236,6 +236,9 @@ DialogPage {
 
             model: app.available_tts_ref_voices
             delegate: voiceDelegate
+            header: Item {
+                height: appWin.padding
+            }
         }
     }
 }

@@ -49,6 +49,10 @@ modules:
       - /rocm/share/rccl
       - /rocm/share/rocm
       - /rocm/share/miopen/perf_models
+      - /rocm/share/openmp-extras
+      - /rocm/share/rocmcmakebuildtools
+      - /rocm/share/rocprofiler*
+      - /rocm/share/modulefiles
       - /rocm/.info
       - /rocm/include
       - /rocm/opencl
@@ -162,6 +166,7 @@ modules:
       - /lib/python3.11/site-packages/torch/lib/libMIOpen*
       - /lib/python3.11/site-packages/torch/lib/librccl*
       - /lib/python3.11/site-packages/torch/lib/libnuma*
+      - /lib/python3.11/site-packages/torch/lib/hipblas*
       - /lib/python3.11/site-packages/torch/lib/msccl-algorithms
       - /lib/python3.11/site-packages/torch/include
     build-options:
