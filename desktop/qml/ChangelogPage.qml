@@ -99,7 +99,8 @@ DialogPage {
         <li>The Flatpak GPU acceleration add-on for AMD is no longer recommended.
             If you have already installed the AMD add-on, you should uninstall it.
             Better results can be achieved with Vulkan acceleration, which does not require the add-on.</li>
-        </ul>"
+        </ul>
+        <p>Video presentation of all new features: <a href='https://www.youtube.com/watch?v=cEht4Fts6Bo'>https://www.youtube.com/watch?v=cEht4Fts6Bo</a></p>"
     }
 
     SectionLabel {
@@ -196,7 +197,8 @@ DialogPage {
         <li>New library: OpenVINO version 2024.1.0.15008</li>
         <li>whisper.cpp update to version 1.6.2</li>
         <li>CTranslate2 update to version 4.3.1</li>
-        </ul>"
+        </ul>
+        <p>Video presentation of all new features: <a href='https://www.youtube.com/watch?v=AVW5OY63wjg'>https://www.youtube.com/watch?v=AVW5OY63wjg</a></p>"
     }
 
     SectionLabel {
@@ -289,7 +291,8 @@ DialogPage {
         <li>PyTorch update to version 2.2.1</li>
         <li>CTranslate2 update to version 4.2.1</li>
         <li>Faster-Whisper update to version 1.0.2</li>
-        </ul>"
+        </ul>
+        <p>Video presentation of all new features: <a href='https://www.youtube.com/watch?v=S9MJ7y8-bcw'>https://www.youtube.com/watch?v=S9MJ7y8-bcw</a></p>"
     }
 
     SectionLabel {
