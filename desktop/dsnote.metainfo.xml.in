@@ -104,6 +104,11 @@
       <ul>
       <li>Fix: The application failed to start when the processor did not support AVX CPU extension.</li>
       </ul>
+      <p>Translator:</p>
+      <ul>
+      <li>New models: Korean to English, Japanese to English</li>
+      <li>Updated models: Chinese to English</li>
+      </ul>
       </description>
     </release>
     <release version="4.7.0" date="2024-12-28">

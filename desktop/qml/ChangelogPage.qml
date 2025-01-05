@@ -21,6 +21,11 @@ DialogPage {
         text: "<p>" + qsTr("General") + ":</p>
         <ul>
         <li>Fix: The application failed to start when the processor did not support AVX CPU extension.</li>
+        </ul>
+        <p>" + qsTr("Translator") + ":</p>
+        <ul>
+        <li>New models: Korean to English, Japanese to English</li>
+        <li>Updated models: Chinese to English</li>
         </ul>"
     }
 
