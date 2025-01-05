@@ -1,4 +1,4 @@
-/* Copyright (C) 2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -302,7 +302,7 @@ ColumnLayout {
     ComboBoxForm {
         visible: _settings.is_xcb()
         label.text: qsTranslate("SettingsPage", "Keystroke sending method")
-        toolTip: qsTranslate("SettingsPage", "Keystroke sending method used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>")
+        toolTip: qsTranslate("SettingsPage", "Simulated keystroke sending method used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>")
         comboBox {
             currentIndex: {
                 if (_settings.fake_keyboard_type === Settings.FakeKeyboardTypeLegacy) return 0
@@ -323,8 +323,23 @@ ColumnLayout {
         }
     }
 
+    SpinBoxForm {
+        visible: _settings.is_xcb() && _settings.fake_keyboard_type === Settings.FakeKeyboardTypeLegacy
+        label.text: qsTranslate("SettingsPage", "Keystroke delay")
+        toolTip: qsTranslate("SettingsPage", "The delay between simulated keystrokes used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>")
+        spinBox {
+            from: 1
+            to: 1000
+            stepSize: 1
+            value: _settings.fake_keyboard_delay
+            onValueChanged: {
+                _settings.fake_keyboard_delay = spinBox.value;
+            }
+        }
+    }
+
     TextFieldForm {
-        visible: _settings.is_xcb() && _settings.fake_keyboard_type === Settings.FakeKeyboardTypeNative
+        visible: _settings.is_xcb() && _settings.fake_keyboard_type === Settings.FakeKeyboardTypeLegacy
         label.text: qsTranslate("SettingsPage", "Compose file")
         toolTip: qsTranslate("SettingsPage", "X11 compose file used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>") + " " +
                  qsTranslate("SettingsPage", "Leave blank to use the default value.")
