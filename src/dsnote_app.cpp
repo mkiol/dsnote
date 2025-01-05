@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -5010,7 +5010,6 @@ void dsnote_app::update_tray_state() {
 #ifdef USE_DESKTOP
     switch (m_service_state) {
         case service_state_t::StateUnknown:
-        case service_state_t::StateNotConfigured:
         case service_state_t::StateBusy:
         case service_state_t::StateImporting:
         case service_state_t::StateExporting:
@@ -5018,6 +5017,7 @@ void dsnote_app::update_tray_state() {
             m_tray.set_state(tray_icon::state_t::busy);
             break;
         case service_state_t::StateIdle:
+        case service_state_t::StateNotConfigured:
             m_tray.set_state(tray_icon::state_t::idle);
             break;
         case service_state_t::StateListeningManual:
