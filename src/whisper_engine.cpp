@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -68,10 +68,39 @@ static bool try_open_lib(const char* lib) {
 }
 
 bool whisper_engine::available() {
-    std::array libs = {"libwhisper-openblas.so", "libwhisper.so"};
+    bool available = false;
 
-    return std::any_of(libs.cbegin(), libs.cend(),
-                       [](const auto& lib) { return try_open_lib(lib); });
+#ifdef ARCH_ARM_32
+    auto cpuinfo = cpu_tools::cpuinfo();
+    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::asimd) {
+        available = try_open_lib("libwhisper-openblas.so");
+    }
+    if (!available) {
+        available = try_open_lib("libwhisper-fallback.so");
+    }
+#elif ARCH_ARM_64
+    available = try_open_lib("libwhisper-openblas.so");
+#else
+    auto cpuinfo = cpu_tools::cpuinfo();
+    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx2) {
+        available = try_open_lib("libwhisper-openblas.so");
+    }
+    if (!available &&
+        (cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx)) {
+        available = try_open_lib("libwhisper-fallback1.so");
+    }
+    if (!available) {
+        available = try_open_lib("libwhisper-fallback.so");
+    }
+    if (!available) {
+        available = try_open_lib("libwhisper.so");
+    }
+#endif
+    if (!available) {
+        available = try_open_lib("libwhisper.so");
+    }
+
+    return available;
 }
 
 void whisper_engine::set_visible_devices() {
@@ -101,23 +130,63 @@ void whisper_engine::set_visible_devices() {
     }
 }
 
-bool whisper_engine::has_cuda() { return try_open_lib("libwhisper-cublas.so"); }
+bool whisper_engine::has_cuda() {
+    auto cpuinfo = cpu_tools::cpuinfo();
+    if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
+        (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
+        LOGD("whisper-cublas is not supported due to lack of avx");
+        return false;
+    }
+    return try_open_lib("libwhisper-cublas.so");
+}
 
 bool whisper_engine::has_openvino() {
+    auto cpuinfo = cpu_tools::cpuinfo();
+    if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
+        (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
+        LOGD("whisper-openvino is not supported due to lack of avx");
+        return false;
+    }
     return try_open_lib("libwhisper-openvino.so");
 }
 
 bool whisper_engine::has_opencl() {
+    auto cpuinfo = cpu_tools::cpuinfo();
+    if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
+        (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
+        LOGD("whisper-clblast is not supported due to lack of avx");
+        return false;
+    }
     return try_open_lib("libwhisper-clblast.so");
 }
 
-bool whisper_engine::has_hip() { return try_open_lib("libwhisper-hipblas.so"); }
+bool whisper_engine::has_hip() {
+    auto cpuinfo = cpu_tools::cpuinfo();
+    if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
+        (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
+        LOGD("whisper-hip is not supported due to lack of avx");
+        return false;
+    }
+    return try_open_lib("libwhisper-hipblas.so");
+}
 
 bool whisper_engine::has_vulkan() {
+    auto cpuinfo = cpu_tools::cpuinfo();
+    if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
+        (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
+        LOGD("whisper-vulkan is not supported due to lack of avx");
+        return false;
+    }
     return try_open_lib("libwhisper-vulkan.so");
 }
 
 bool whisper_engine::use_openvino() const {
+    auto cpuinfo = cpu_tools::cpuinfo();
+    if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
+        (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
+        LOGD("whisper-openvino is not supported due to lack of avx");
+        return false;
+    }
     return m_config.gpu_device.api == gpu_api_t::openvino &&
            !m_config.model_files.openvino_model_file.empty();
 }

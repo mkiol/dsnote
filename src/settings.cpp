@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -2677,7 +2677,8 @@ void settings::set_fake_keyboard_type(fake_keyboard_type_t value) {
 }
 
 int settings::fake_keyboard_delay() const {
-    return value(QStringLiteral("fake_keyboard_delay"), 10).toInt();
+    auto v = value(QStringLiteral("fake_keyboard_delay"), 10).toInt();
+    return std::clamp(v, 1, 1000);
 }
 
 void settings::set_fake_keyboard_delay(int value) {

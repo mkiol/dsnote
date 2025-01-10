@@ -98,6 +98,19 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
+    <release version="4.7.1" date="2024-01-05">
+      <description>
+      <p>General:</p>
+      <ul>
+      <li>Fix: The application failed to start when the processor did not support AVX CPU extension.</li>
+      </ul>
+      <p>Translator:</p>
+      <ul>
+      <li>New models: Korean to English, Japanese to English</li>
+      <li>Updated models: Chinese to English</li>
+      </ul>
+      </description>
+    </release>
     <release version="4.7.0" date="2024-12-28">
       <description>
       <p>General:</p>
@@ -174,7 +187,7 @@
       <ul>
       <li>Fix: The application failed to start when the processor did not support the required CPU extension.</li>
       </ul>
-      <p>" + qsTr("User Interface") + ":</p>
+      <p>User Interface:</p>
       <ul>
       <li>Swedish translation has been updated.</li>
       </ul>

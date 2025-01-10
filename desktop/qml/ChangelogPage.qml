@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,6 +15,22 @@ DialogPage {
 
     SectionLabel {
         text: qsTr("Version %1").arg(APP_VERSION)
+    }
+
+    RichLabel {
+        text: "<p>" + qsTr("General") + ":</p>
+        <ul>
+        <li>Fix: The application failed to start when the processor did not support AVX CPU extension.</li>
+        </ul>
+        <p>" + qsTr("Translator") + ":</p>
+        <ul>
+        <li>New models: Korean to English, Japanese to English</li>
+        <li>Updated models: Chinese to English</li>
+        </ul>"
+    }
+
+    SectionLabel {
+        text: qsTr("Version %1").arg("4.7.0")
     }
 
     RichLabel {

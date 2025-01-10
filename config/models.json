@@ -29196,14 +29196,58 @@
             "engine": "mnt_bergamot",
             "lang_id": "zh",
             "trg_lang_id": "en",
-            "checksum": "a4dd255a",
-            "checksum_quick": "f8abbe4c",
-            "size": "23724286",
+            "checksum": "2e0ce348",
+            "checksum_quick": "12ba44ef",
+            "size": "49940364",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/d97d4ce5ff9d3a266051230046ce4f705132c13f/models/dev/zhen/model.zhen.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/d97d4ce5ff9d3a266051230046ce4f705132c13f/models/dev/zhen/lex.50.50.zhen.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/d97d4ce5ff9d3a266051230046ce4f705132c13f/models/dev/zhen/vocab.zhen.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/e3c15a005424ac6b0459e606ee7565cf78c09419/models/dev/zhen/model.zhen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/e3c15a005424ac6b0459e606ee7565cf78c09419/models/dev/zhen/lex.50.50.zhen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/e3c15a005424ac6b0459e606ee7565cf78c09419/models/dev/zhen/vocab.zhen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "日本語から英語へ (Japanese to English)",
+            "model_id": "ja_bergamot_jaen",
+            "engine": "mnt_bergamot",
+            "lang_id": "ja",
+            "trg_lang_id": "en",
+            "checksum": "209ddb2",
+            "checksum_quick": "9498a796",
+            "size": "48658976",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/e3c15a005424ac6b0459e606ee7565cf78c09419/models/dev/jaen/model.jaen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/e3c15a005424ac6b0459e606ee7565cf78c09419/models/dev/jaen/lex.50.50.jaen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/e3c15a005424ac6b0459e606ee7565cf78c09419/models/dev/jaen/vocab.jaen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "한국어에서 영어로 (Korean to English",
+            "model_id": "ko_bergamot_koen",
+            "engine": "mnt_bergamot",
+            "lang_id": "ko",
+            "trg_lang_id": "en",
+            "checksum": "dc13dfc7",
+            "checksum_quick": "5ce29417",
+            "size": "48236101",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/e3c15a005424ac6b0459e606ee7565cf78c09419/models/dev/koen/model.koen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/e3c15a005424ac6b0459e606ee7565cf78c09419/models/dev/koen/lex.50.50.koen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/e3c15a005424ac6b0459e606ee7565cf78c09419/models/dev/koen/vocab.koen.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
