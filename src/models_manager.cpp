@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
+﻿/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -31,7 +31,6 @@
 #include <functional>
 #include <iostream>
 #include <set>
-#include <sstream>
 #include <string>
 #include <thread>
 #include <utility>
@@ -196,6 +195,9 @@ QDebug operator<<(QDebug d, models_manager::model_engine_t engine) {
             break;
         case models_manager::model_engine_t::tts_whisperspeech:
             d << "tts-whisperspeech";
+            break;
+        case models_manager::model_engine_t::tts_sam:
+            d << "tts-sam";
             break;
         case models_manager::model_engine_t::mnt_bergamot:
             d << "mnt-bergamot";
@@ -1484,9 +1486,33 @@ models_manager::langs_of_role_t models_manager::make_langs_of_role(
     return langs_of_role;
 }
 
+bool models_manager::is_modelless_engine(model_engine_t engine) {
+    switch (engine) {
+        case model_engine_t::tts_espeak:
+        case model_engine_t::tts_sam:
+            return true;
+        case model_engine_t::stt_ds:
+        case model_engine_t::stt_vosk:
+        case model_engine_t::stt_whisper:
+        case model_engine_t::stt_fasterwhisper:
+        case model_engine_t::stt_april:
+        case model_engine_t::ttt_hftc:
+        case model_engine_t::ttt_tashkeel:
+        case model_engine_t::ttt_unikud:
+        case model_engine_t::tts_coqui:
+        case model_engine_t::tts_piper:
+        case model_engine_t::tts_rhvoice:
+        case model_engine_t::tts_mimic3:
+        case model_engine_t::tts_whisperspeech:
+        case model_engine_t::mnt_bergamot:
+            return false;
+    }
+
+    throw std::runtime_error("unknown engine");
+}
+
 bool models_manager::model_checksum_ok(const priv_model_t& model) {
-    if (model.engine == model_engine_t::tts_espeak && model.urls.empty())
-        return true;
+    if (is_modelless_engine(model.engine) && model.urls.empty()) return true;
 
     if (!checksum_ok(model.checksum, model.checksum_quick, model.file_name))
         return false;
@@ -1571,6 +1597,7 @@ models_manager::model_role_t models_manager::role_of_engine(
         case model_engine_t::tts_rhvoice:
         case model_engine_t::tts_mimic3:
         case model_engine_t::tts_whisperspeech:
+        case model_engine_t::tts_sam:
             return model_role_t::tts;
         case model_engine_t::mnt_bergamot:
             return model_role_t::mnt;
@@ -1600,6 +1627,7 @@ models_manager::model_engine_t models_manager::engine_from_name(
     if (name == QStringLiteral("tts_mimic3")) return model_engine_t::tts_mimic3;
     if (name == QStringLiteral("tts_whisperspeech"))
         return model_engine_t::tts_whisperspeech;
+    if (name == QStringLiteral("tts_sam")) return model_engine_t::tts_sam;
     if (name == QStringLiteral("mnt_bergamot"))
         return model_engine_t::mnt_bergamot;
 
@@ -1752,6 +1780,8 @@ models_manager::feature_flags models_manager::add_new_feature(
         case feature_flags::engine_tts_coqui:
         case feature_flags::engine_tts_mimic3:
         case feature_flags::engine_tts_whisperspeech:
+        case feature_flags::engine_tts_sam:
+        case feature_flags::engine_mnt:
         case feature_flags::engine_other:
             if (existing_features & feature_flags::engine_stt_ds ||
                 existing_features & feature_flags::engine_stt_vosk ||
@@ -1764,6 +1794,8 @@ models_manager::feature_flags models_manager::add_new_feature(
                 existing_features & feature_flags::engine_tts_coqui ||
                 existing_features & feature_flags::engine_tts_mimic3 ||
                 existing_features & feature_flags::engine_tts_whisperspeech ||
+                existing_features & feature_flags::engine_tts_sam ||
+                existing_features & feature_flags::engine_mnt ||
                 existing_features & feature_flags::engine_other) {
                 return existing_features;
             }
@@ -1889,20 +1921,32 @@ models_manager::feature_flags models_manager::add_implicit_feature_flags(
                     existing_features, feature_flags::fast_processing);
             break;
         case model_engine_t::tts_espeak:
+            existing_features =
+                add_new_feature(existing_features,
+                                feature_flags::engine_tts_espeak) |
+                add_new_feature(existing_features,
+                                feature_flags::fast_processing) |
+                add_new_feature(existing_features, feature_flags::low_quality);
+            break;
+        case model_engine_t::tts_sam:
+            existing_features =
+                add_new_feature(existing_features,
+                                feature_flags::engine_tts_sam) |
+                add_new_feature(existing_features,
+                                feature_flags::fast_processing) |
+                add_new_feature(existing_features, feature_flags::low_quality);
+            break;
         case model_engine_t::tts_rhvoice:
             existing_features =
                 add_new_feature(existing_features,
-                                engine == model_engine_t::tts_espeak
-                                    ? feature_flags::engine_tts_espeak
-                                    : feature_flags::engine_tts_rhvoice) |
+                                feature_flags::engine_tts_rhvoice) |
                 add_new_feature(existing_features,
                                 feature_flags::fast_processing) |
                 add_new_feature(existing_features, feature_flags::low_quality);
             break;
         case model_engine_t::mnt_bergamot:
             existing_features =
-                add_new_feature(existing_features,
-                                feature_flags::engine_other) |
+                add_new_feature(existing_features, feature_flags::engine_mnt) |
                 add_new_feature(existing_features,
                                 feature_flags::fast_processing) |
                 add_new_feature(existing_features,
@@ -2011,6 +2055,8 @@ auto models_manager::extract_models(
             if (score == -1) {
                 if (engine == model_engine_t::tts_espeak)
                     score = default_score_tts_espeak;
+                else if (engine == model_engine_t::tts_sam)
+                    score = default_score_tts_sam;
                 else
                     score = default_score;
             }
@@ -2026,7 +2072,7 @@ auto models_manager::extract_models(
 
             auto aurls = obj.value(QLatin1String{"urls"}).toArray();
             if (aurls.isEmpty()) {
-                if (engine == model_engine_t::tts_espeak) {
+                if (is_modelless_engine(engine)) {
                     file_name.clear();
                 } else {
                     qWarning() << "urls should be non empty array";
@@ -2266,7 +2312,7 @@ auto models_manager::extract_models(
                         model.exists = true;
                     }
                 }
-            } else if (engine == model_engine_t::tts_espeak &&
+            } else if (is_modelless_engine(engine) &&
                        (model.sup_models.empty() ||
                         (sup_models_exist(model.sup_models) &&
                          sup_models_checksum_ok(model.sup_models)))) {
@@ -2306,10 +2352,15 @@ auto models_manager::extract_models(
             }
         }
 
+        /* implicit options */
+
         if (model.engine == model_engine_t::tts_coqui &&
             !model.options.contains('c')) {
             // add char replacement option for all coqui tts models
             model.options.push_back('c');
+        } else if (model.engine == model_engine_t::tts_sam) {
+            // add split by words option for all sam tts models
+            model.options.push_back('w');
         } else if ((model.engine == model_engine_t::stt_whisper ||
                     model.engine == model_engine_t::stt_fasterwhisper) &&
                    !model.disabled && !model.hidden &&
@@ -2332,7 +2383,9 @@ void models_manager::update_dl_multi(models_manager::models_t& models) {
     std::for_each(models.cbegin(), models.cend(), [&](const auto& pair) {
         const auto& model = pair.second;
 
-        if (model.disabled || model.hidden) return;
+        if (model.disabled || model.hidden ||
+            (is_modelless_engine(model.engine) && model.urls.empty()))
+            return;
 
         if (model.available) {
             if (auto it = available_map.find(model.urls_hash);
@@ -2355,6 +2408,11 @@ void models_manager::update_dl_multi(models_manager::models_t& models) {
         auto& model = pair.second;
 
         if (model.disabled || model.hidden) return;
+
+        if (is_modelless_engine(model.engine) && model.urls.empty()) {
+            model.dl_multi = true;
+            return;
+        }
 
         auto it = available_map.find(model.urls_hash);
 
@@ -2536,6 +2594,7 @@ QString models_manager::file_name_from_id(const QString& id,
         case model_engine_t::tts_rhvoice:
         case model_engine_t::tts_mimic3:
         case model_engine_t::tts_whisperspeech:
+        case model_engine_t::tts_sam:
         case model_engine_t::mnt_bergamot:
             return id;
     }
@@ -2647,8 +2706,7 @@ void models_manager::generate_checksums() {
 
     qDebug() << "generating checksums for:";
     std::for_each(m_models.cbegin(), m_models.cend(), [&](const auto& pair) {
-        if (pair.second.engine == model_engine_t::tts_espeak &&
-            pair.second.urls.empty())
+        if (is_modelless_engine(pair.second.engine) && pair.second.urls.empty())
             return;
         if (!pair.second.alias_of.isEmpty()) return;
 

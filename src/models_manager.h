@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -58,6 +58,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         tts_rhvoice,
         tts_mimic3,
         tts_whisperspeech,
+        tts_sam,
         mnt_bergamot
     };
     friend QDebug operator<<(QDebug d, model_engine_t engine);
@@ -82,12 +83,14 @@ class models_manager : public QObject, public singleton<models_manager> {
         engine_tts_coqui = 1U << 14U,
         engine_tts_mimic3 = 1U << 15U,
         engine_tts_whisperspeech = 1U << 16U,
-        engine_other = 1U << 17U,
-        hw_openvino = 1U << 18U,
+        engine_tts_sam = 1U << 17U,
+        engine_mnt = 1U << 22U,
+        engine_other = 1U << 23U,
         generic_end = engine_other,
-        stt_start = 1U << 20U,
+        hw_openvino = 1U << 24U,
+        stt_start = 1U << 25U,
         stt_intermediate_results = stt_start,
-        stt_punctuation = 1U << 21U,
+        stt_punctuation = 1U << 26U,
         stt_end = stt_punctuation,
         tts_start = 1U << 30U,
         tts_voice_cloning = tts_start,
@@ -298,6 +301,7 @@ class models_manager : public QObject, public singleton<models_manager> {
          * s - tts, avoid "punto" issue
          * 0 - tts, add extra silence
          * q - tts, do not split into sentences
+         * w - tts, split by words
          * i - stt, punctuation supported
          * t - stt, translate to english supported
          */
@@ -321,6 +325,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     inline static const QString models_file{QStringLiteral("models.json")};
     inline static const int default_score = 2;
     inline static const int default_score_tts_espeak = 1;
+    inline static const int default_score_tts_sam = 1;
     using langs_t = std::unordered_map<QString, std::pair<QString, QString>>;
     using models_t = std::unordered_map<QString, priv_model_t>;
     using langs_of_role_t = std::unordered_map<model_role_t, std::set<QString>>;
@@ -426,6 +431,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     void handle_download_model_finished(const QString& id,
                                         bool download_not_needed);
     void update_counts();
+    static bool is_modelless_engine(model_engine_t engine);
 };
 
 #endif  // MODELS_MANAGER_H

@@ -35,6 +35,7 @@
 #include "py_executor.hpp"
 #include "py_tools.hpp"
 #include "rhvoice_engine.hpp"
+#include "sam_engine.hpp"
 #include "settings.h"
 #include "text_tools.hpp"
 #include "vosk_engine.hpp"
@@ -1445,6 +1446,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                     case models_manager::model_engine_t::tts_rhvoice:
                     case models_manager::model_engine_t::tts_mimic3:
                     case models_manager::model_engine_t::tts_whisperspeech:
+                    case models_manager::model_engine_t::tts_sam:
                     case models_manager::model_engine_t::mnt_bergamot:
                         throw std::runtime_error{
                             "invalid model engine, expected stt"};
@@ -1686,6 +1688,10 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                     models_manager::model_engine_t::tts_espeak &&
                 type != typeid(espeak_engine))
                 return true;
+            if (model_config->tts->engine ==
+                    models_manager::model_engine_t::tts_sam &&
+                type != typeid(sam_engine))
+                return true;
 
             if (m_tts_engine->model_files() != config.model_files) return true;
 
@@ -1791,6 +1797,10 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                         break;
                     case models_manager::model_engine_t::tts_whisperspeech:
                         m_tts_engine = std::make_unique<whisperspeech_engine>(
+                            std::move(config), std::move(call_backs));
+                        break;
+                    case models_manager::model_engine_t::tts_sam:
+                        m_tts_engine = std::make_unique<sam_engine>(
                             std::move(config), std::move(call_backs));
                         break;
                     case models_manager::model_engine_t::ttt_hftc:

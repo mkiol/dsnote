@@ -81,6 +81,9 @@ QDebug operator<<(QDebug d, ModelsListModel::ModelFeatureFilterFlags flags) {
                 FeatureEngineTtsWhisperSpeech:
                 d << "engine-tts-whisper-speech";
                 break;
+            case ModelsListModel::ModelFeatureFilterFlags::FeatureEngineMnt:
+                d << "engine-mnt";
+                break;
             case ModelsListModel::ModelFeatureFilterFlags::FeatureEngineOther:
                 d << "engine-other";
                 break;
@@ -576,6 +579,7 @@ void ModelsListItem::update(const ModelsListItem *item) {
         m_dl_multi = item->dl_multi();
         m_dl_off = item->dl_off();
         m_pack_available_count = item->pack_available_count();
+
         emit itemDataChanged();
     }
 }

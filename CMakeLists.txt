@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+# Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -53,7 +53,8 @@ option(BUILD_QHOTKEY "download sources of qhotkey lib, build and link statically
 option(BUILD_APRILASR "download sources of april-asr lib, build and link statically" ON)
 option(BUILD_HTML2MD "download sources of html2md lib, build and link statically" ON)
 option(BUILD_MADDY "download sources of maddy lib" ON)
-option(BUILD_XDO "download sources of xdo lib" ON)
+option(BUILD_XDO "download sources of xdo lib and link statically" ON)
+option(BUILD_SAM "download sources of sam and link statically" ON)
 option(BUILD_QQC2_BREEZE_STYLE "download sources of QQC2 Breeze Style, build and install" OFF)
 
 if(${WITH_DESKTOP} AND ${WITH_SFOS})
@@ -134,15 +135,15 @@ set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
 set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
-set(info_conf_version "97")
+set(info_conf_version "98")
 set(info_addon_version "1.3") # if run as a flatpak pkg, the required add-on version
-set(info_version_type "")
+set(info_version_type "-beta")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · Locness3 · DevSJR · Vovkiv · Niklas Halvorsen · Matjaž Jeran · Victor Alonso Barberan")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · nlohmann JSON · eSpeak NG · Bergamot Translator · \
 Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis · Opus · TagLib · \
-libnumbertext · april-asr · html2md · maddy · libxdo")
+libnumbertext · april-asr · html2md · maddy · libxdo · SAM")
 if (WITH_DESKTOP)
     set(info_libs_str "${info_libs_str} · KDBusAddons")
 
@@ -151,7 +152,7 @@ if (WITH_DESKTOP)
     endif()
 endif()
 
-project(${id} VERSION 4.7.1)
+project(${id} VERSION 4.8.0)
 
 set(arch_arm32 0)
 set(arch_arm64 0)
@@ -366,6 +367,8 @@ set(dsnote_lib_sources
     ${sources_dir}/audio_device_manager.cpp
     ${sources_dir}/audio_device_manager.hpp
     ${sources_dir}/cmd_options.hpp
+    ${sources_dir}/sam_engine.cpp
+    ${sources_dir}/sam_engine.hpp
 )
 
 if(WITH_DESKTOP)
@@ -748,6 +751,13 @@ endif()
 
 if(BUILD_MADDY)
     include(${cmake_path}/maddy.cmake)
+endif()
+
+if(BUILD_SAM)
+    include(${cmake_path}/sam.cmake)
+else()
+    find_library(sam_path sam_api REQUIRED)
+    list(APPEND deps_libs ${sam_path})
 endif()
 
 if(WITH_SFOS)

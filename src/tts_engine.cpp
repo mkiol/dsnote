@@ -304,7 +304,13 @@ std::string tts_engine::find_file_with_name_prefix(std::string dir_path,
 void tts_engine::push_tasks(std::string&& text, task_type_t type) {
     auto tasks = make_tasks(
         std::move(text),
-        m_config.split_into_sentences && !m_config.has_option('q'), type);
+        [this]() {
+            if (m_config.has_option('w')) return split_type_t::by_words;
+            if (m_config.has_option('q') || !m_config.split_into_sentences)
+                return split_type_t::none;
+            return split_type_t::by_sentence;
+        }(),
+        type);
 
     if (tasks.empty()) {
         LOGW("no task to process");
@@ -405,7 +411,7 @@ std::string tts_engine::path_to_output_silence_file(
                        sample_rate, file_ext_for_format(format));
 }
 
-static bool file_exists(const std::string& file_path) {
+bool tts_engine::file_exists(const std::string& file_path) {
     struct stat buffer {};
     return stat(file_path.c_str(), &buffer) == 0;
 }
@@ -462,52 +468,110 @@ void tts_engine::make_subrip_tasks(
     }
 }
 
+// source: https://rosettacode.org/wiki/Word_wrap#C++
+static std::vector<std::string> wrap(const std::string& text,
+                                     size_t line_length) {
+    std::vector<std::string> wrapped;
+    std::istringstream words(text);
+    std::string word;
+    std::ostringstream line;
+
+    if (words >> word) {
+        line << word;
+        size_t space_left = line_length - word.length();
+        while (words >> word) {
+            if (space_left < word.length() + 1) {
+                wrapped.push_back(line.str());
+                line = {};
+                line << word;
+                space_left = line_length - word.length();
+            } else {
+                line << ' ' << word;
+                space_left -= word.length() + 1;
+            }
+        }
+    }
+
+    if (line.tellp() > 0) wrapped.push_back(line.str());
+
+    return wrapped;
+}
+
 void tts_engine::make_plain_tasks(
-    const std::string& text, bool split, unsigned int speed,
+    const std::string& text, split_type_t split_type, unsigned int speed,
     unsigned int silence_duration, task_type_t type,
     std::vector<tts_engine::task_t>& tasks) const {
-    if (split) {
-        auto engine = m_config.has_option('a')
-                          ? text_tools::split_engine_t::astrunc
-                          : text_tools::split_engine_t::ssplit;
-        auto [parts, _] =
-            text_tools::split(text, engine, m_config.lang, m_config.nb_data);
-        if (parts.empty()) {
+    switch (split_type) {
+        case split_type_t::by_sentence: {
+            auto [parts, _] = text_tools::split(
+                text,
+                m_config.has_option('a') ? text_tools::split_engine_t::astrunc
+                                         : text_tools::split_engine_t::ssplit,
+                m_config.lang, m_config.nb_data);
+            if (parts.empty()) {
+                task_t task;
+                task.speed = speed;
+                task.silence_duration = silence_duration;
+                task.type = type;
+                tasks.push_back(std::move(task));
+            } else {
+                tasks.reserve(parts.size());
+                for (auto& part : parts) {
+                    trim(part);
+                    if (!part.empty()) {
+                        task_t task;
+                        task.text = std::move(part);
+                        task.speed = speed;
+                        task.silence_duration = silence_duration;
+                        task.type = type;
+                        tasks.push_back(std::move(task));
+                    }
+                }
+            }
+            break;
+        }
+        case split_type_t::by_words: {
+            auto parts = wrap(text, 100);
+            if (parts.empty()) {
+                task_t task;
+                task.speed = speed;
+                task.silence_duration = silence_duration;
+                task.type = type;
+                tasks.push_back(std::move(task));
+            } else {
+                tasks.reserve(parts.size());
+                for (auto& part : parts) {
+                    trim(part);
+                    if (!part.empty()) {
+                        task_t task;
+                        task.text = std::move(part);
+                        task.speed = speed;
+                        task.silence_duration = silence_duration;
+                        task.type = type;
+                        tasks.push_back(std::move(task));
+                    }
+                }
+            }
+            break;
+        }
+        case split_type_t::none: {
+            auto t_text{text};
+            text_tools::trim_line(t_text);
+
             task_t task;
+            task.text = std::move(t_text);
             task.speed = speed;
             task.silence_duration = silence_duration;
             task.type = type;
+
             tasks.push_back(std::move(task));
-        } else {
-            tasks.reserve(parts.size());
-            for (auto& part : parts) {
-                trim(part);
-                if (!part.empty()) {
-                    task_t task;
-                    task.text = std::move(part);
-                    task.speed = speed;
-                    task.silence_duration = silence_duration;
-                    task.type = type;
-                    tasks.push_back(std::move(task));
-                }
-            }
+            break;
         }
-    } else {
-        auto t_text{text};
-        text_tools::trim_line(t_text);
-
-        task_t task;
-        task.text = std::move(t_text);
-        task.speed = speed;
-        task.silence_duration = silence_duration;
-        task.type = type;
-
-        tasks.push_back(std::move(task));
     }
 }
 
 std::vector<tts_engine::task_t> tts_engine::make_tasks(std::string text,
-                                                       bool split,
+                                                       split_type_t split_type,
                                                        task_type_t type) const {
     std::vector<tts_engine::task_t> tasks;
 
@@ -524,11 +588,11 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(std::string text,
     if (tasks.empty()) {
         switch (m_config.tag_mode) {
             case tag_mode_t::disable:
-                make_plain_tasks(text, split, speed, 0, type, tasks);
+                make_plain_tasks(text, split_type, speed, 0, type, tasks);
                 break;
             case tag_mode_t::ignore:
-                make_plain_tasks(text_tools::remove_control_tags(text), split, speed, 0,
-                                 type, tasks);
+                make_plain_tasks(text_tools::remove_control_tags(text),
+                                 split_type, speed, 0, type, tasks);
                 break;
             case tag_mode_t::support:
                 for (const auto& part : text_tools::split_by_control_tags(text)) {
@@ -547,8 +611,8 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(std::string text,
                         }
                     }
 
-                    make_plain_tasks(part.text, split, speed, silent_duration,
-                                     type, tasks);
+                    make_plain_tasks(part.text, split_type, speed,
+                                     silent_duration, type, tasks);
                 }
                 break;
         }
@@ -560,6 +624,46 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(std::string text,
     }
 
     return tasks;
+}
+
+bool tts_engine::convert_wav_to_16bits(const std::string& wav_file) {
+    {
+        std::ifstream is{wav_file, std::ios::binary | std::ios::ate};
+        if (!is) {
+            LOGE("failed to open input file: " << wav_file);
+            return false;
+        }
+
+        size_t size = is.tellg();
+        if (size < sizeof(wav_header)) {
+            LOGE("file header is too short");
+            return false;
+        }
+
+        is.seekg(0, std::ios::beg);
+        auto header = read_wav_header(is);
+
+        LOGD("wav file info before convert: sample-rate="
+             << header.sample_rate << ", channels=" << header.num_channels
+             << ", bits=" << header.bits_per_sample);
+
+        if (header.bits_per_sample == 16)
+            return true;  // already converted to 16bits
+    }
+
+    auto tmp_file = wav_file + "_tmp.wav";
+
+    media_compressor{}.decompress_to_file({wav_file}, tmp_file, {});
+
+    if (!file_exists(tmp_file)) {
+        LOGE("file doesn't exist after convert: " << tmp_file);
+        return false;
+    }
+
+    unlink(wav_file.c_str());
+    rename(tmp_file.c_str(), wav_file.c_str());
+
+    return true;
 }
 
 bool tts_engine::post_process_wav(const std::string& wav_file,
@@ -593,7 +697,8 @@ bool tts_engine::post_process_wav(const std::string& wav_file,
     size -= header_size;
 
     LOGD("wav file info: sample-rate=" << header.sample_rate
-                                       << ", channels=" << header.num_channels);
+                                       << ", channels=" << header.num_channels
+                                       << ", bits=" << header.bits_per_sample);
 
     auto silence_size =
         (header.num_channels * silence_duration_msec * header.sample_rate) /
@@ -746,6 +851,8 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
 
             return std::string{};
         }
+
+        convert_wav_to_16bits(output_file_wav);
 
         post_process_wav(output_file_wav, m_config.has_option('0') ? 150 : 0);
 
@@ -1037,6 +1144,7 @@ void tts_engine::write_wav_header(int sample_rate, int sample_width,
     header.num_channels = channels;
     header.bytes_per_sec = sample_rate * sample_width * channels;
     header.block_align = sample_width * channels;
+    header.bits_per_sample = 8 * sample_width;
     wav_file.write(reinterpret_cast<const char*>(&header), sizeof(wav_header));
 }
 

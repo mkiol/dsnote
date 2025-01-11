@@ -18,6 +18,19 @@ DialogPage {
     }
 
     RichLabel {
+        text: "<p>" + qsTr("Text to Speech") + ":</p>
+        <ul>
+        <li>S.A.M. TTS engine. S.A.M. is a small speech synthesizer designed for the Commodore 64.
+            It features a robotic voice that evokes a strong sense of nostalgia.
+            The S.A.M. voice is available in English only.</li>
+        </ul>"
+    }
+
+    SectionLabel {
+        text: qsTr("Version %1").arg("4.7.1")
+    }
+
+    RichLabel {
         text: "<p>" + qsTr("General") + ":</p>
         <ul>
         <li>Fix: The application failed to start when the processor did not support AVX CPU extension.</li>

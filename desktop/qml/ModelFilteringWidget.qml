@@ -64,7 +64,9 @@ ColumnLayout {
             case 8: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsPiper; break
             case 9: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsRhvoice; break
             case 10: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsWhisperSpeech; break
-            case 11: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineOther; break
+            case 11: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsSam; break
+            case 12: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineMnt; break
+            case 13: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineOther; break
             }
         } else if (speed_checkBox.checked) {
             switch(index) {
@@ -291,6 +293,8 @@ ColumnLayout {
                     "Piper TTS",
                     "RHVoice TTS",
                     "WhisperSpeech TTS",
+                    "SAM TTS",
+                    "Bergamot MT",
                     qsTr("Other")
                 ]
 

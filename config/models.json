@@ -25214,6 +25214,12 @@
             "lang_id": "tn"
         },
         {
+            "name": "English (Commodore 64 S.A.M.)",
+            "model_id": "en_sam_en",
+            "engine": "tts_sam",
+            "lang_id": "en"
+        },
+        {
             "name": "Esperanto (RHVoice Spomenka Female)",
             "model_id": "eo_rhvoice_spomenka",
             "engine": "tts_rhvoice",

@@ -76,13 +76,15 @@ class ModelsListModel : public SelectableItemModel {
         FeatureEngineTtsCoqui = 1U << 14U,
         FeatureEngineTtsMimic3 = 1U << 15U,
         FeatureEngineTtsWhisperSpeech = 1U << 16U,
-        FeatureEngineTtsEnd = FeatureEngineTtsWhisperSpeech,
-        FeatureEngineOther = 1U << 17U,
-        FeatureHwOpenVino = 1U << 18U,
+        FeatureEngineTtsSam = 1U << 17U,
+        FeatureEngineTtsEnd = FeatureEngineTtsSam,
+        FeatureEngineMnt = 1U << 22U,
+        FeatureEngineOther = 1U << 23U,
         FeatureGenericEnd = FeatureEngineOther,
-        FeatureSttStart = 1U << 20U,
+        FeatureHwOpenVino = 1U << 24U,
+        FeatureSttStart = 1U << 25U,
         FeatureSttIntermediateResults = FeatureSttStart,
-        FeatureSttPunctuation = 1U << 21U,
+        FeatureSttPunctuation = 1U << 26U,
         FeatureSttEnd = FeatureSttPunctuation,
         FeatureTtsStart = 1U << 30U,
         FeatureTtsVoiceCloning = FeatureTtsStart,
@@ -95,7 +97,8 @@ class ModelsListModel : public SelectableItemModel {
         FeatureAllTtsEngines = FeatureEngineTtsEspeak | FeatureEngineTtsPiper |
                                FeatureEngineTtsRhvoice | FeatureEngineTtsCoqui |
                                FeatureEngineTtsMimic3 |
-                               FeatureEngineTtsWhisperSpeech,
+                               FeatureEngineTtsWhisperSpeech |
+                               FeatureEngineTtsSam,
         FeatureAll = FeatureFastProcessing | FeatureMediumProcessing |
                      FeatureSlowProcessing | FeatureQualityHigh |
                      FeatureQualityMedium | FeatureQualityLow |

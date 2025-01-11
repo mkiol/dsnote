@@ -203,6 +203,7 @@ class tts_engine {
         task_flag_first = 1U << 0U,
         task_flag_last = 1U << 1U
     };
+    enum class split_type_t { none, by_sentence, by_words };
 
     struct task_t {
         std::string text;
@@ -260,9 +261,9 @@ class tts_engine {
     void process_encode_speech(const task_t& task, size_t& speech_time,
                                double progress);
     void process_restore_text(const task_t& task, std::string& restored_text);
-    std::vector<task_t> make_tasks(std::string text, bool split,
+    std::vector<task_t> make_tasks(std::string text, split_type_t split_type,
                                    task_type_t type) const;
-    void make_plain_tasks(const std::string& text, bool split,
+    void make_plain_tasks(const std::string& text, split_type_t split_type,
                           unsigned int speed, unsigned int silence_duration,
                           task_type_t type, std::vector<task_t>& tasks) const;
     void make_subrip_tasks(const std::string& text, unsigned int speed,
@@ -280,6 +281,8 @@ class tts_engine {
     }
     static bool post_process_wav(const std::string& wav_file,
                                  size_t silence_duration_msec);
+    static bool file_exists(const std::string& file_path);
+    static bool convert_wav_to_16bits(const std::string& wav_file);
 };
 
 #endif // TTS_ENGINE_HPP
