@@ -16,13 +16,17 @@ ColumnLayout {
     id: root
 
     property bool verticalMode: parent ? parent.verticalMode : false
-    readonly property var features: app.features_availability()
+    property var features: app.features_availability()
 
     Connections {
         target: app
         onFeatures_availability_updated: {
             root.features = app.features_availability()
         }
+    }
+
+    Component.onCompleted: {
+        app.update_freature_statuses()
     }
 
     SectionLabel {
@@ -282,7 +286,8 @@ ColumnLayout {
         indends: 1
         visible: _settings.py_feature_scan && !_settings.is_flatpak()
         label.text: qsTranslate("SettingsPage", "Location of Python libraries")
-        toolTip: qsTranslate("SettingsPage", "Python libraries directory (%1).").arg("<i>PYTHONPATH</i>") + " " + qsTranslate("SettingsPage", "Leave blank to use the default value.") + " " +
+        toolTip: qsTranslate("SettingsPage", "Python libraries directory (%1).").arg("<i>PYTHONPATH</i>") + " " +
+                 qsTranslate("SettingsPage", "Leave blank to use the default value.") + " " +
                  qsTranslate("SettingsPage", "This option may be useful if you use %1 module to manage Python libraries.").arg("<i>venv</i>")
         textField {
             text: _settings.py_path
@@ -295,36 +300,45 @@ ColumnLayout {
     }
 
     SectionLabel {
-        visible: _settings.is_xcb()
-        text: "X11"
+        visible: app.feature_fake_keyboard
+        text: qsTranslate("SettingsPage", "Insert into active window")
     }
 
     ComboBoxForm {
-        visible: _settings.is_xcb()
+        id: fakeKeyboardCombo
+
+        visible: app.feature_fake_keyboard && _settings.is_xcb()
         label.text: qsTranslate("SettingsPage", "Keystroke sending method")
-        toolTip: qsTranslate("SettingsPage", "Simulated keystroke sending method used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>")
+        toolTip: qsTranslate("SettingsPage", "Simulated keystroke sending method used in %1.")
+                    .arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>")
         comboBox {
             currentIndex: {
                 if (_settings.fake_keyboard_type === Settings.FakeKeyboardTypeLegacy) return 0
                 if (_settings.fake_keyboard_type === Settings.FakeKeyboardTypeXdo) return 1
-                return 1
+                if (_settings.fake_keyboard_type === Settings.FakeKeyboardTypeYdo) return 2
+                return _settings.is_xcb() ? 1 : 2
             }
             model: [
                 qsTranslate("SettingsPage", "Legacy"),
-                "XDO"
+                "XDO",
+                "YDO"
             ]
             onActivated: {
                 if (index === 0) {
                     _settings.fake_keyboard_type = Settings.FakeKeyboardTypeLegacy
-                } else {
+                } else if (index === 1) {
                     _settings.fake_keyboard_type = Settings.FakeKeyboardTypeXdo
+                } else if (index === 2) {
+                    _settings.fake_keyboard_type = Settings.FakeKeyboardTypeYdo
+                } else {
+                    _settings.fake_keyboard_type = _settings.is_xcb() ? Settings.FakeKeyboardTypeXdo : Settings.FakeKeyboardTypeYdo;
                 }
             }
         }
     }
 
     SpinBoxForm {
-        visible: _settings.is_xcb() && _settings.fake_keyboard_type === Settings.FakeKeyboardTypeLegacy
+        visible: app.feature_fake_keyboard && _settings.fake_keyboard_type !== Settings.FakeKeyboardTypeXdo
         label.text: qsTranslate("SettingsPage", "Keystroke delay")
         toolTip: qsTranslate("SettingsPage", "The delay between simulated keystrokes used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>")
         spinBox {
@@ -339,7 +353,7 @@ ColumnLayout {
     }
 
     TextFieldForm {
-        visible: _settings.is_xcb() && _settings.fake_keyboard_type === Settings.FakeKeyboardTypeLegacy
+        visible: app.feature_fake_keyboard && _settings.fake_keyboard_type === Settings.FakeKeyboardTypeLegacy
         label.text: qsTranslate("SettingsPage", "Compose file")
         toolTip: qsTranslate("SettingsPage", "X11 compose file used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>") + " " +
                  qsTranslate("SettingsPage", "Leave blank to use the default value.")

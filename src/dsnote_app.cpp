@@ -957,9 +957,14 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
             break;
         }
         case text_destination_t::active_window:
-#ifdef USE_X11_FEATURES
-            m_fake_keyboard.emplace();
-            m_fake_keyboard->send_text(text);
+#ifdef USE_DESKTOP
+            try {
+                m_fake_keyboard.emplace();
+                m_fake_keyboard->send_text(text);
+            } catch (const std::runtime_error &err) {
+                qWarning() << "fake-keyboard error:" << err.what();
+            }
+
             emit text_decoded_to_active_window();
 #else
             qWarning() << "send to keyboard is not implemented";
@@ -4401,6 +4406,33 @@ bool dsnote_app::feature_translator() const {
     return feature_available("translator", true);
 }
 
+bool dsnote_app::feature_fake_keyboard() const {
+    return feature_available("fake-keyboard", false);
+}
+
+void dsnote_app::update_freature_statuses() {
+    // update fake-keyboard status
+    if (m_features_availability.contains(QStringLiteral("fake-keyboard"))) {
+#ifdef USE_X11_FEATURES
+        auto has_xbc = settings::instance()->is_xcb();
+#else
+        auto has_xbc = false;
+#endif
+        auto new_value = has_xbc || fake_keyboard::has_ydo();
+        auto current_value =
+            m_features_availability.value(QStringLiteral("fake-keyboard"))
+                .toList();
+        if (current_value.isEmpty() ||
+            new_value != current_value.front().toBool()) {
+            m_features_availability.insert(
+                QStringLiteral("fake-keyboard"),
+                QVariantList{has_xbc || fake_keyboard::has_ydo(),
+                             tr("Insert text to active window")});
+            emit features_changed();
+        }
+    }
+}
+
 QVariantList dsnote_app::features_availability() {
     QVariantList list;
 
@@ -4444,8 +4476,8 @@ QVariantList dsnote_app::features_availability() {
             "ui-global-shortcuts",
             QVariantList{has_xbc, tr("Global keyboard shortcuts")});
         m_features_availability.insert(
-            "ui-text-active-window",
-            QVariantList{has_xbc, tr("Insert text to active window")});
+            "fake-keyboard", QVariantList{has_xbc || fake_keyboard::has_ydo(),
+                                          tr("Insert text to active window")});
     }
 #endif
 
@@ -4610,15 +4642,10 @@ void dsnote_app::execute_action(action_t action, const QString &extra) {
             listen_translate();
             break;
         case dsnote_app::action_t::start_listening_active_window:
-#ifdef USE_X11_FEATURES
-            if (settings::instance()->is_xcb()) listen_to_active_window();
-#endif
+            listen_to_active_window();
             break;
         case dsnote_app::action_t::start_listening_translate_active_window:
-#ifdef USE_X11_FEATURES
-            if (settings::instance()->is_xcb())
-                listen_translate_to_active_window();
-#endif
+            listen_translate_to_active_window();
             break;
         case dsnote_app::action_t::start_listening_clipboard:
             listen_to_clipboard();

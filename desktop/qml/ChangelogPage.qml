@@ -23,6 +23,15 @@ DialogPage {
         <li>S.A.M. TTS engine. S.A.M. is a small speech synthesizer designed for the Commodore 64.
             It features a robotic voice that evokes a strong sense of nostalgia.
             The S.A.M. voice is available in English only.</li>
+        </ul>
+        <p>" + qsTr("Accessibility") + ":</p>
+        <ul>
+        <li>Support for <i>Insert into active window</i> under Wayland.
+            Using <i>start-listening-active-window</i> or <i>start-listening-translate-active-window</i>
+            actions you can directly insert the decoded text into any window which is currently in focus.
+            This feature worked under X11 only but now it is also suppored under Wayland.
+            For actions to work, <i>ydotool</i> daemon must be installed and running.
+            If you are using Flatpak, also make sure that the application has permission to access <i>ydotool</i> daemon socket file.</li>
         </ul>"
     }
 

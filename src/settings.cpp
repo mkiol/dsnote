@@ -2663,10 +2663,18 @@ void settings::trans_rule_clone(int index) {
 }
 
 settings::fake_keyboard_type_t settings::fake_keyboard_type() const {
+#ifdef USE_X11_FEATURES
+    if (is_wayland()) {
+        return fake_keyboard_type_t::FakeKeyboardTypeYdo;
+    }
+
     return static_cast<fake_keyboard_type_t>(
         value(QStringLiteral("fake_keyboard_type"),
               static_cast<int>(fake_keyboard_type_t::FakeKeyboardTypeXdo))
             .toInt());
+#else
+    return fake_keyboard_type_t::FakeKeyboardTypeYdo;
+#endif
 }
 
 void settings::set_fake_keyboard_type(fake_keyboard_type_t value) {

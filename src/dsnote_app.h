@@ -20,10 +20,10 @@
 
 #ifdef USE_X11_FEATURES
 #include <qhotkey.h>
-#include "fake_keyboard.hpp"
 #endif
 
 #ifdef USE_DESKTOP
+#include "fake_keyboard.hpp"
 #include "tray_icon.hpp"
 #endif
 
@@ -261,6 +261,7 @@ class dsnote_app : public QObject {
     FEATURE_OPT(global_shortcuts)
     FEATURE_OPT(text_active_window)
     FEATURE_OPT(translator)
+    FEATURE_OPT(fake_keyboard)
 #undef FEATURE_OPT
 
     Q_PROPERTY(auto_text_format_t auto_text_format READ auto_text_format NOTIFY
@@ -450,6 +451,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE bool trans_rule_re_pattern_valid(const QString &pattern);
     [[nodiscard]] Q_INVOKABLE QVariantList available_stt_models_info() const;
     [[nodiscard]] Q_INVOKABLE QVariantList available_tts_models_info() const;
+    Q_INVOKABLE void update_freature_statuses();
 
    signals:
     void active_stt_model_changed();
@@ -701,9 +703,9 @@ class dsnote_app : public QObject {
     };
 
     hotkeys_t m_hotkeys;
-    std::optional<fake_keyboard> m_fake_keyboard;
 #endif
 #ifdef USE_DESKTOP
+    std::optional<fake_keyboard> m_fake_keyboard;
     tray_icon m_tray;
 #endif
     [[nodiscard]] QVariantList available_stt_models() const;
@@ -898,6 +900,7 @@ class dsnote_app : public QObject {
     FEATURE_OPT(global_shortcuts)
     FEATURE_OPT(text_active_window)
     FEATURE_OPT(translator)
+    FEATURE_OPT(fake_keyboard)
 #undef FEATURE_OPT
 
     void request_reload();

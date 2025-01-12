@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 
 option(WITH_DESKTOP "enable desktop ui" OFF)
 option(WITH_SFOS "enable sfos ui" OFF)
@@ -83,15 +83,33 @@ if(WITH_DESKTOP)
 endif()
 
 if(WITH_SFOS)
-    if (${WITH_PY} AND NOT ${BUILD_PYTHON_MODULE})
+    if(${WITH_PY} AND NOT ${BUILD_PYTHON_MODULE})
         set(BUILD_PYTHON_MODULE ON)
         message(WARNING "enabling BUILD_PYTHON_MODULE because WITH_PY is on")
     endif()
-    if (WITH_X11_FEATURES)
+    if(WITH_X11_FEATURES)
         set(WITH_X11_FEATURES OFF)
         message(WARNING "disabling WITH_X11_FEATURES on sfos")
     endif()
-    set(BUILD_QQC2_DESKTOP_STYLE OFF)
+    if(BUILD_XDO)
+        set(BUILD_XDO OFF)
+        message(WARNING "disabling BUILD_XDO on sfos")
+    endif()
+    if(BUILD_QQC2_DESKTOP_STYLE)
+        set(BUILD_QQC2_DESKTOP_STYLE OFF)
+        message(WARNING "disabling BUILD_QQC2_DESKTOP_STYLE on sfos")
+    endif()
+endif()
+
+if(NOT ${WITH_X11_FEATURES})
+    if(BUILD_XDO)
+        set(BUILD_XDO OFF)
+        message(WARNING "disabling BUILD_XDO because WITH_X11_FEATURES is off")
+    endif()
+    if(BUILD_QHOTKEY)
+        set(BUILD_QHOTKEY OFF)
+        message(WARNING "disabling BUILD_QHOTKEY because WITH_X11_FEATURES is off")
+    endif()
 endif()
 
 set(id "dsnote")
@@ -143,12 +161,12 @@ set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashin
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · nlohmann JSON · eSpeak NG · Bergamot Translator · \
 Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis · Opus · TagLib · \
-libnumbertext · april-asr · html2md · maddy · libxdo · SAM")
-if (WITH_DESKTOP)
+libnumbertext · april-asr · html2md · maddy · SAM")
+if(WITH_DESKTOP)
     set(info_libs_str "${info_libs_str} · KDBusAddons")
 
-    if (WITH_X11_FEATURES)
-        set(info_libs_str "${info_libs_str} · QHotkey")
+    if(WITH_X11_FEATURES)
+        set(info_libs_str "${info_libs_str} · QHotkey · libxdo")
     endif()
 endif()
 
@@ -374,11 +392,7 @@ set(dsnote_lib_sources
 if(WITH_DESKTOP)
     list(APPEND dsnote_lib_sources
         ${sources_dir}/tray_icon.hpp
-        ${sources_dir}/tray_icon.cpp)
-endif()
-
-if(WITH_X11_FEATURES)
-    list(APPEND dsnote_lib_sources
+        ${sources_dir}/tray_icon.cpp
         ${sources_dir}/fake_keyboard.hpp
         ${sources_dir}/fake_keyboard.cpp)
 endif()

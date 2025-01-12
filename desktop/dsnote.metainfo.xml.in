@@ -98,7 +98,25 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.7.1" date="2024-01-05">
+    <release version="4.8.0" date="2025-01-12">
+      <description>
+      <p>Text to Speech:</p>
+      <ul>
+      <li>S.A.M. TTS engine. S.A.M. is a small speech synthesizer designed for the Commodore 64.
+          It features a robotic voice that evokes a strong sense of nostalgia.
+          The S.A.M. voice is available in English only.</li>
+      </ul>
+      <p>Accessibility:</p>
+      <ul>
+      <li>Support for 'Insert into active window' under Wayland.
+          Using 'start-listening-active-window' or 'start-listening-translate-active-window'
+          actions you can directly insert the decoded text into any window which is currently in focus.
+          This feature worked under X11 only but now it is also suppored under Wayland.
+          For actions to work, 'ydotool' daemon must be installed and running.</li>
+      </ul>
+      </description>
+    </release>
+    <release version="4.7.1" date="2025-01-05">
       <description>
       <p>General:</p>
       <ul>

@@ -551,7 +551,8 @@ class settings : public QSettings, public singleton<settings> {
 
     enum class fake_keyboard_type_t {
         FakeKeyboardTypeLegacy = 0,
-        FakeKeyboardTypeXdo = 1
+        FakeKeyboardTypeXdo = 1,
+        FakeKeyboardTypeYdo = 2
     };
     Q_ENUM(fake_keyboard_type_t)
 

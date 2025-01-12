@@ -17,6 +17,10 @@ ColumnLayout {
 
     property bool verticalMode: parent ? parent.verticalMode : false
 
+    Component.onCompleted: {
+        app.update_freature_statuses()
+    }
+
     CheckBox {
         visible: app.feature_global_shortcuts
         checked: _settings.hotkeys_enabled
@@ -254,14 +258,14 @@ ColumnLayout {
               "</p><ul>" +
               "<li><i>start-listening</i> - " + qsTranslate("SettingsPage", "Starts listening.") + "</li>" +
               "<li><i>start-listening-translate</i> - " + qsTranslate("SettingsPage", "Starts listening and always translate decoded text.") + "</li>" +
-              "<li><i>start-listening-active-window</i> (X11) - " + qsTranslate("SettingsPage", "Starts listening. The decoded text is inserted into the active window.") + "</li>" +
-              "<li><i>start-listening-translate-active-window</i> (X11) - " + qsTranslate("SettingsPage", "Starts listening. The decoded text is translated and inserted into the active window.") + "</li>" +
+              "<li><i>start-listening-active-window</i> - " + qsTranslate("SettingsPage", "Starts listening. The decoded text is inserted into the active window.") + "</li>" +
+              "<li><i>start-listening-translate-active-window</i> - " + qsTranslate("SettingsPage", "Starts listening. The decoded text is translated and inserted into the active window.") + "</li>" +
               "<li><i>start-listening-clipboard</i> - " + qsTranslate("SettingsPage", "Starts listening. The decoded text is copied to the clipboard.") + "</li>" +
               "<li><i>start-listening-translate-clipboard</i> - " + qsTranslate("SettingsPage", "Starts listening. The decoded text is translated and copied to the clipboard.") + "</li>" +
               "<li><i>stop-listening</i> - " + qsTranslate("SettingsPage", "Stops listening. The already captured voice is decoded into text.") + "</li>" +
               "<li><i>start-reading</i> - " + qsTranslate("SettingsPage", "Starts reading.") + "</li>" +
               "<li><i>start-reading-clipboard</i> (X11) - " + qsTranslate("SettingsPage", "Starts reading text from the clipboard.") + "</li>" +
-              "<li><i>start-reading-text</i> (X11) - " + qsTranslate("SettingsPage", "Starts reading text from command-line option --text.") + "</li>" +
+              "<li><i>start-reading-text</i> - " + qsTranslate("SettingsPage", "Starts reading text from command-line option --text.") + "</li>" +
               "<li><i>pause-resume-reading</i> - " + qsTranslate("SettingsPage", "Pauses or resumes reading.") + "</li>" +
               "<li><i>cancel</i> - " + qsTranslate("SettingsPage", "Cancels any of the above operations.") + "</li>" +
               "<li><i>switch-to-next-stt-model</i> - " + qsTranslate("SettingsPage", "Switches to next STT model.") + "</li>" +
@@ -276,6 +280,19 @@ ColumnLayout {
                       .arg(_settings.is_flatpak() ?
                         "<i>flatpak run net.mkiol.SpeechNote --action start-listening</i>" :
                         "<i>dsnote --action start-listening</i>")
+    }
+
+    TipMessage {
+        color: "red"
+        indends: 1
+        visible: _settings.actions_api_enabled && !app.feature_fake_keyboard
+        text: qsTranslate("SettingsPage", "Unable to connect to %1 daemon.")
+                .arg("<i>ydotool</i>") + " " +
+              qsTranslate("SettingsPage", "For %1 action to work, %2 daemon must be installed and running.")
+                .arg("<i>start-listening-active-window</i>")
+                .arg("<i>ydotool</i>") + (_settings.is_flatpak() ? (" " +
+              qsTranslate("SettingsPage", "Also make sure that the Flatpak application has permission to access %1 daemon socket file.")
+                        .arg("<i>ydotool</i>")) : "")
     }
 
     Item {
