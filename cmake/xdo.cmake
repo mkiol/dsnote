@@ -17,5 +17,9 @@ list(APPEND deps_libs "${external_lib_dir}/libxdo.a")
 list(APPEND deps xdo)
 
 # libxdo depends on Xtst and Xinerama
-find_package(X11 COMPONENTS Xtst Xinerama REQUIRED)
-list(APPEND deps_libs X11::Xtst X11::Xinerama)
+pkg_search_module(xtst REQUIRED xtst)
+list(APPEND deps_libs ${xtst_LIBRARIES})
+list(APPEND includes ${xtst_INCLUDE_DIRS})
+pkg_search_module(xinerama REQUIRED xinerama)
+list(APPEND deps_libs ${xinerama_LIBRARIES})
+list(APPEND includes ${xinerama_INCLUDE_DIRS})
