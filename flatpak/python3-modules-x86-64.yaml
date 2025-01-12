@@ -883,6 +883,8 @@ modules:
 
   - name: python3-whisperspeech
     buildsystem: simple
+    cleanup:
+      - /bin
     build-options:
       no-debuginfo: true
       env:
