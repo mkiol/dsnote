@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr" sourcelanguage="en_US">
+<TS version="2.1" language="fr_CA" sourcelanguage="en_US">
 <context>
     <name>AboutPage</name>
     <message>
@@ -34,7 +34,7 @@
         <location filename="../sfos/qml/AboutPage.qml" line="77"/>
         <location filename="../desktop/qml/AboutPage.qml" line="86"/>
         <source>%1 is developed as an open source project under %2.</source>
-        <translation>‎%1 est développé en projet open-source sous %2.‎</translation>
+        <translation>‎%1 est un logiciel libre sous licence %2.‎</translation>
     </message>
     <message>
         <location filename="../sfos/qml/AboutPage.qml" line="83"/>
@@ -81,7 +81,7 @@
         <location filename="../sfos/qml/AddTextDialog.qml" line="33"/>
         <location filename="../desktop/qml/AddTextDialog.qml" line="34"/>
         <source>Add text to the current note or replace it?</source>
-        <translation>Ajouter le texte à la note courante ou la remplacer&#xa0;?</translation>
+        <translation>Ajouter le texte à la note actuelle ou la remplacer?</translation>
     </message>
     <message>
         <location filename="../sfos/qml/AddTextDialog.qml" line="41"/>
@@ -525,7 +525,7 @@
         <location filename="../desktop/qml/ExportFilePage.qml" line="179"/>
         <location filename="../desktop/qml/ExportFilePage.qml" line="375"/>
         <source>Specify file to export</source>
-        <translation>Spécifier le fichier à exporter</translation>
+        <translation>Préciser le fichier à exporter</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="181"/>
@@ -681,7 +681,7 @@
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="16"/>
         <source>Welcome!</source>
-        <translation>Bienvenue&#xa0;!</translation>
+        <translation>Bienvenue!</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="19"/>
@@ -732,7 +732,7 @@
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="32"/>
         <source>Have fun with %1!</source>
-        <translation>Amusez-vous bien avec %1&#x202f;&#xa0;!</translation>
+        <translation>Amusez-vous bien avec %1&#x202f;!</translation>
     </message>
 </context>
 <context>
@@ -1218,7 +1218,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="435"/>
         <source>In case of STT, it is the accuracy of speech recognition.</source>
-        <translation>Dans le cas de la transcription automatique, il s’agit de la justesse de la reconnaissance vocale.</translation>
+        <translation>Dans le cas de la transcription automatique, il s’agit de la précision de la reconnaissance vocale.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="436"/>
@@ -2077,7 +2077,7 @@
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="248"/>
         <source>The text format may be incorrect!</source>
-        <translation>Le format du texte est peut-être erroné&#xa0;!</translation>
+        <translation>Le format du texte est peut-être erroné!</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="262"/>
@@ -2749,7 +2749,7 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="265"/>
         <source>Stops listening. The already captured voice is decoded into text.</source>
-        <translation>Met fin à l’écoute et décode le texte de la voix déjà capturée.</translation>
+        <translation>Met fin à l’écoute et décode le texte de la dictée déjà capturée.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="266"/>
@@ -4595,7 +4595,7 @@
         <location filename="../sfos/qml/main.qml" line="317"/>
         <location filename="../desktop/qml/main.qml" line="487"/>
         <source>The model download is complete!</source>
-        <translation>Le téléchargement du modèle est terminé&#xa0;!</translation>
+        <translation>Le téléchargement du modèle est terminé!</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="260"/>
@@ -4622,19 +4622,19 @@
         <location filename="../sfos/qml/main.qml" line="323"/>
         <location filename="../desktop/qml/main.qml" line="509"/>
         <source>Copied!</source>
-        <translation>Copié&#xa0;!</translation>
+        <translation>Copié!</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="324"/>
         <location filename="../desktop/qml/main.qml" line="510"/>
         <source>Import from the file is complete!</source>
-        <translation>L’importation du fichier est terminée&#xa0;!</translation>
+        <translation>L’importation du fichier est terminée!</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="325"/>
         <location filename="../desktop/qml/main.qml" line="511"/>
         <source>Export to file is complete!</source>
-        <translation>L’exportation vers le fichier est terminée&#xa0;!</translation>
+        <translation>L’exportation vers le fichier est terminée!</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="338"/>
@@ -4814,12 +4814,12 @@
     <message>
         <location filename="../desktop/qml/main.qml" line="512"/>
         <source>Text repair is complete!</source>
-        <translation>La réparation du texte est terminée&#xa0;!</translation>
+        <translation>La réparation du texte est terminée!</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="522"/>
         <source>Text copied to clipboard!</source>
-        <translation>Texte copié dans le presse-papiers&#xa0;!</translation>
+        <translation>Texte copié dans le presse-papiers!</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="557"/>
