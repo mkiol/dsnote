@@ -1251,6 +1251,31 @@
             "hidden": true
         },
         {
+            "name": "Multilingual (FasterWhisper CrisperWhisper)",
+            "model_id": "multilang_fasterwhisper_crisperwhisper",
+            "engine": "stt_fasterwhisper",
+            "lang_id": "multilang",
+            "checksum": "8145cc54",
+            "checksum_quick": "adae19ca",
+            "size": "1555161323",
+            "comp": "dir",
+            "info-url": "https://github.com/nyrahealth/CrisperWhisper",
+            "urls": [
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/db1cdb5990df067cf53670d86241330c7ea454cf/faster-whisper-crisper-int8/model.bin",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/db1cdb5990df067cf53670d86241330c7ea454cf/faster-whisper-crisper-int8/config.json",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/db1cdb5990df067cf53670d86241330c7ea454cf/faster-whisper-crisper-int8/tokenizer.json",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/db1cdb5990df067cf53670d86241330c7ea454cf/faster-whisper-crisper-int8/vocabulary.json",
+                "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/db1cdb5990df067cf53670d86241330c7ea454cf/faster-whisper-crisper-int8/preprocessor_config.json"
+            ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution NonCommertial 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": true
+            },
+            "hidden": true
+        },
+        {
             "name": "English (FasterWhisper Tiny)",
             "model_id": "en_fasterwhisper_tiny",
             "engine": "stt_fasterwhisper",
@@ -1415,6 +1440,12 @@
             "name": "English (FasterWhisper Large-v3 Turbo)",
             "model_id": "en_fasterwhisper_large3_turbo",
             "model_alias_of": "multilang_fasterwhisper_large3_turbo",
+            "lang_id": "en"
+        },
+        {
+            "name": "English (FasterWhisper CrisperWhisper)",
+            "model_id": "en_fasterwhisper_crisperwhisper",
+            "model_alias_of": "multilang_fasterwhisper_crisperwhisper",
             "lang_id": "en"
         },
         {
@@ -1625,6 +1656,12 @@
             "name": "Deutsch (FasterWhisper Large-v3 Turbo)",
             "model_id": "de_fasterwhisper_large3_turbo",
             "model_alias_of": "multilang_fasterwhisper_large3_turbo",
+            "lang_id": "de"
+        },
+        {
+            "name": "Deutsch (FasterWhisper CrisperWhisper)",
+            "model_id": "de_fasterwhisper_crisperwhisper",
+            "model_alias_of": "multilang_fasterwhisper_crisperwhisper",
             "lang_id": "de"
         },
         {

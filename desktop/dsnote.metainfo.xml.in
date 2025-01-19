@@ -106,6 +106,13 @@
           It features a robotic voice that evokes a strong sense of nostalgia.
           The S.A.M. voice is available in English only.</li>
       </ul>
+      <p>Speech to Text:</p>
+      <ul>
+      <li>New 'CrisperWhisper' model for 'FasterWhisper' engine.
+          CrisperWhisper is designed for fast, precise, and verbatim speech recognition with accurate word-level timestamps.
+          Unlike the original Whisper, which tends to omit disfluencies and follows more of a intended transcription style,
+          CrisperWhisper aims to transcribe every spoken word exactly as it is, including fillers, pauses, stutters and false starts.
+          CrisperWhisper model is enabled only for English and German languages.</li>
       <p>Accessibility:</p>
       <ul>
       <li>Support for 'Insert into active window' under Wayland.

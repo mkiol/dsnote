@@ -24,6 +24,14 @@ DialogPage {
             It features a robotic voice that evokes a strong sense of nostalgia.
             The S.A.M. voice is available in English only.</li>
         </ul>
+        <p>" + qsTr("Speech to Text") + ":</p>
+        <ul>
+        <li>New <i>CrisperWhisper</i> model for <i>FasterWhisper</i> engine.
+            <i>CrisperWhisper</i> is designed for fast, precise, and verbatim speech recognition with accurate word-level timestamps.
+            Unlike the original Whisper, which tends to omit disfluencies and follows more of a intended transcription style,
+            <i>CrisperWhisper</i> aims to transcribe every spoken word exactly as it is, including fillers, pauses, stutters and false starts.
+            <i>CrisperWhisper</i> model is enabled only for English and German languages.</li>
+        </ul>
         <p>" + qsTr("Accessibility") + ":</p>
         <ul>
         <li>Support for <i>Insert into active window</i> under Wayland.
