@@ -1,9 +1,9 @@
 maintainer=("LFdev <lfdev+deb@envs.net>")
-compatible=('*:noble' '*:24.04')
+compatible=('*:oracular' '*:24.10')
 
 _pkgname='dsnote'
 pkgname="${_pkgname}"
-pkgver=4.6.1
+pkgver=4.7.1
 pkgrel=1
 pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
 arch=(
@@ -12,23 +12,26 @@ arch=(
 depends=(
     'breeze-icon-theme'
     'hicolor-icon-theme'
-    'libarchive13'
+    'libarchive13t64'
     'libc6'
     'libfmt9'
     'libkf5dbusaddons5'
     'liblzma5'
     'libopenblas0'
-    'libpython3.11'
+    'libpython3.12t64'
     'libqt5multimedia5'
     'libqt5multimedia5-plugins'
     'libqt5quickcontrols2-5'
     'libqt5x11extras5'
     'librubberband2'
     'libtag1v5'
+    'libvulkan1'
+    'libxinerama1'
+    'libxtst6'
     'ocl-icd-libopencl1'
     'perl'
-    'python3>=3.11'
-    'qml-module-org-kde-qqc2breezestyle'
+    'python3'
+#    'qml-module-org-kde-qqc2breezestyle'
     'qml-module-org-kde-qqc2desktopstyle'
     'qml-module-org-kde-quickcharts'
     'qml-module-qtquick-controls'
@@ -56,7 +59,11 @@ makedepends=(
     'librubberband-dev'
     'libtag1-dev'
     'libtool'
+    'libtool-bin'
+    'libvulkan-dev'
+    'libxinerama-dev'
     'libxkbcommon-x11-dev'
+    'libxtst-dev'
     'ocl-icd-opencl-dev'
     'patchelf'
     'pybind11-dev'
@@ -69,14 +76,12 @@ makedepends=(
     'zlib1g-dev'
     'nvidia-cuda-dev'     # Support for GPU acceleration on NVidia GPU
     'nvidia-cuda-toolkit' # Support for GPU acceleration on NVidia GPU
-#    'rocm-hip-sdk'        # Support GPU acceleration on AMD GPU
 )
 optdepends=(
     'intel-opencl-icd: Support for Intel GPU acceleration with OpenCL'
     'libcudart12: Support for GPU acceleration on NVidia GPU'
+    'mesa-vulkan-drivers: Vulkan support'
     'nvidia-cudnn: Support for GPU acceleration on NVidia GPU'
-    'rocblas: Support for GPU acceleration on AMD GPU'
-    'rocm-opencl-runtime: Support for GPU acceleration on AMD GPU'
 )
 
 conflicts=(${_pkgname}-git)
@@ -84,7 +89,7 @@ url="https://github.com/mkiol/dsnote"
 license=('MPL-2.0')
 
 source=(https://github.com/mkiol/dsnote/archive/refs/tags/v${pkgver}.tar.gz)
-sha256sums=('301ec08dff6afa8ea321c74fc25aa1b42423d3d2ee1da840ac80b40e391332b3')
+sha256sums=('6b3c5029b32b272bd5238fb830c3aadce0cec438f7bece13bb304a7e52676b1b')
 
 build() {
     cd "${srcdir}/${_pkgname}-${pkgver}"
@@ -102,19 +107,20 @@ build() {
         -DBUILD_FFMPEG=ON \
         -DBUILD_TAGLIB=OFF \
         -DBUILD_VOSK=OFF \
+        -DBUILD_WHISPERCPP_VULKAN=ON \
         -DBUILD_QQC2_BREEZE_STYLE=ON \
         -DDOWNLOAD_VOSK=ON \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -Wno-dev"
 
-    # Do not build for CUDA if needed packages are not found
+    # Build for CUDA if needed packages are found
     dpkg -s nvidia-cuda-dev &> /dev/null && CUDA1=true || CUDA1=false
     dpkg -s nvidia-cuda-toolkit &> /dev/null && CUDA2=true || CUDA2=false
-    $CUDA1 && $CUDA2 || CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=OFF"
+    $CUDA1 && $CUDA2 && CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=ON -DCMAKE_CUDA_ARCHITECTURES=native"
 
-    # Do not build for HIP if needed package is not found
-    dpkg -s rocm-hip-sdk &> /dev/null && ROCM=true || ROCM=false
-    $ROCM || CMAKE+=" -DBUILD_WHISPERCPP_HIPBLAS=OFF"
+    TEST_BUILD=true
+    # Disable bergamot and RHVoice (shorter build time - for test only)
+    $TEST_BUILD && CMAKE+=" -DBUILD_BERGAMOT=OFF -DBUILD_RHVOICE=OFF -DBUILD_RHVOICE_MODULE=OFF"
 
     cmake ../ $CMAKE
 
