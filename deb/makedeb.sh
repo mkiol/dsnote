@@ -48,9 +48,9 @@ dpkg -s nvidia-cuda-dev &> /dev/null && CUDA1=true || CUDA1=false
 dpkg -s nvidia-cuda-toolkit &> /dev/null && CUDA2=true || CUDA2=false
 $CUDA1 && $CUDA2 && CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=ON -DCMAKE_CUDA_ARCHITECTURES=native"
 
-# Do not build for HIP if needed package is not found
-dpkg -s rocm-hip-sdk &> /dev/null && ROCM=true || ROCM=false
-$ROCM || CMAKE+=" -DBUILD_WHISPERCPP_HIPBLAS=OFF"
+TEST_BUILD=false
+# Disable bergamot and RHVoice (shorter build time - for test only)
+$TEST_BUILD && CMAKE+=" -DBUILD_BERGAMOT=OFF -DBUILD_RHVOICE=OFF -DBUILD_RHVOICE_MODULE=OFF"
 
 cmake ../ $CMAKE
 
