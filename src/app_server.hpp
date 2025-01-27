@@ -81,7 +81,7 @@ class app_server : public QObject {
     QVariantMap active_tts_model() const;
     int state() const;
     int task_state() const;
-    QVariantMap invoke_action(const QString &action_name,
+    QVariantMap invoke_action(const QString &action_id,
                               const QVariant &argument);
    private Q_SLOTS:
     void handle_active_stt_model_change();

@@ -1,4 +1,4 @@
-/* Copyright (C) 2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -22,7 +22,7 @@ ColumnLayout {
     }
 
     CheckBox {
-        visible: app.feature_global_shortcuts
+        visible: app.feature_hotkeys
         checked: _settings.hotkeys_enabled
         text: qsTranslate("SettingsPage", "Use global keyboard shortcuts")
         onCheckedChanged: {
@@ -34,203 +34,46 @@ ColumnLayout {
         ToolTip.text: qsTranslate("SettingsPage", "Shortcuts allow you to start or stop listening and reading using keyboard.") + " " +
                       qsTranslate("SettingsPage", "Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.") + " " +
                       qsTranslate("SettingsPage", "Text to Speech reading can be from current note or from text in the clipboard.") + " " +
-                      qsTranslate("SettingsPage", "Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).") + " " +
-                      qsTranslate("SettingsPage", "This feature only works under X11.")
+                      qsTranslate("SettingsPage", "Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).")
         hoverEnabled: true
     }
 
-    CheckBox {
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-        checked: _settings.use_toggle_for_hotkey
-        text: qsTranslate("SettingsPage", "Toggle behavior")
-        onCheckedChanged: {
-            _settings.use_toggle_for_hotkey = checked
-        }
+    Button {
+        visible: _settings.hotkeys_enabled && app.feature_hotkeys
+        text: qsTranslate("SettingsPage", "Configure global keyboard shortcuts")
         Layout.leftMargin: appWin.padding
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTranslate("SettingsPage", "Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.")
-        hoverEnabled: true
-    }
-
-    ShortcutForm {
-        indends: 1
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-        label: qsTranslate("SettingsPage", "Start listening")
-        text: _settings.hotkey_start_listening
-        onTextChanged: _settings.hotkey_start_listening = text
-        onResetClicked: {
-            _settings.reset_hotkey_start_listening()
-            text = _settings.hotkey_start_listening
+        onClicked: {
+            switch(_settings.hotkeys_type) {
+            case Settings.HotkeysTypeX11:
+                appWin.openPopup(hotkeysEditDialog)
+                break
+            case Settings.HotkeysTypePortal:
+                app.open_hotkeys_editor();
+                break
+            }
         }
     }
 
-    ShortcutForm {
-        indends: 1
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-        label: qsTranslate("SettingsPage", "Start listening, always translate")
-        text: _settings.hotkey_start_listening_translate
-        onTextChanged: _settings.hotkey_start_listening_translate = text
-        onResetClicked: {
-            _settings.reset_hotkey_start_listening_translate()
-            text = _settings.hotkey_start_listening_translate
-        }
-    }
+    Component {
+        id: hotkeysEditDialog
 
-    ShortcutForm {
-        indends: 1
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts && app.feature_text_active_window
-        label: qsTranslate("SettingsPage", "Start listening, text to active window")
-        text: _settings.hotkey_start_listening_active_window
-        onTextChanged: _settings.hotkey_start_listening_active_window = text
-        onResetClicked: {
-            _settings.reset_hotkey_start_listening_active_window()
-            text = _settings.hotkey_start_listening_active_window
-        }
-    }
-
-    ShortcutForm {
-        indends: 1
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts && app.feature_text_active_window
-        label: qsTranslate("SettingsPage", "Start listening, always translate, text to active window")
-        text: _settings.hotkey_start_listening_translate_active_window
-        onTextChanged: _settings.hotkey_start_listening_translate_active_window = text
-        onResetClicked: {
-            _settings.reset_hotkey_start_listening_translate_active_window()
-            text = _settings.hotkey_start_listening_translate_active_window
-        }
-    }
-
-    ShortcutForm {
-        indends: 1
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-        label: qsTranslate("SettingsPage", "Start listening, text to clipboard")
-        text: _settings.hotkey_start_listening_clipboard
-        onTextChanged: _settings.hotkey_start_listening_clipboard = text
-        onResetClicked: {
-            _settings.reset_hotkey_start_listening_clipboard()
-            text = _settings.hotkey_start_listening_clipboard
-        }
-    }
-
-    ShortcutForm {
-        indends: 1
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-        label: qsTranslate("SettingsPage", "Start listening, always translate, text to clipboard")
-        text: _settings.hotkey_start_listening_translate_clipboard
-        onTextChanged: _settings.hotkey_start_listening_translate_clipboard = text
-        onResetClicked: {
-            _settings.reset_hotkey_start_listening_translate_clipboard()
-            text = _settings.hotkey_start_listening_translate_clipboard
-        }
-    }
-
-    ShortcutForm {
-        indends: 1
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-        label: qsTranslate("SettingsPage", "Stop listening")
-        text: _settings.hotkey_stop_listening
-        onTextChanged: _settings.hotkey_stop_listening = text
-        onResetClicked: {
-            _settings.reset_hotkey_stop_listening()
-            text = _settings.hotkey_stop_listening
-        }
-    }
-
-    ShortcutForm {
-        indends: 1
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-        label: qsTranslate("SettingsPage", "Start reading")
-        text: _settings.hotkey_start_reading
-        onTextChanged: _settings.hotkey_start_reading = text
-        onResetClicked: {
-            _settings.reset_hotkey_start_reading()
-            text = _settings.hotkey_start_reading
-        }
-    }
-
-    ShortcutForm {
-        indends: 1
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-        label: qsTranslate("SettingsPage", "Start reading text from clipboard")
-        text: _settings.hotkey_start_reading_clipboard
-        onTextChanged: _settings.hotkey_start_reading_clipboard = text
-        onResetClicked: {
-            _settings.reset_hotkey_start_reading_clipboard()
-            text = _settings.hotkey_start_reading_clipboard
-        }
-    }
-
-    ShortcutForm {
-        indends: 1
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-        label: qsTranslate("SettingsPage", "Pause/Resume reading")
-        text: _settings.hotkey_pause_resume_reading
-        onTextChanged: _settings.hotkey_pause_resume_reading = text
-        onResetClicked: {
-            _settings.reset_hotkey_pause_resume_reading()
-            text = _settings.hotkey_pause_resume_reading
-        }
-    }
-
-    ShortcutForm {
-        indends: 1
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-        label: qsTranslate("SettingsPage", "Cancel")
-        text: _settings.hotkey_cancel
-        onTextChanged: _settings.hotkey_cancel = text
-        onResetClicked: {
-            _settings.reset_hotkey_cancel()
-            text = _settings.hotkey_cancel
-        }
-    }
-
-    ShortcutForm {
-        indends: 1
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-        label: qsTranslate("SettingsPage", "Switch to next STT model")
-        text: _settings.hotkey_switch_to_next_stt_model
-        onTextChanged: _settings.hotkey_switch_to_next_stt_model = text
-        onResetClicked: {
-            _settings.reset_hotkey_switch_to_next_stt_model()
-            text = _settings.hotkey_switch_to_next_stt_model
-        }
-    }
-
-    ShortcutForm {
-        indends: 1
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-        label: qsTranslate("SettingsPage", "Switch to previous STT model")
-        text: _settings.hotkey_switch_to_prev_stt_model
-        onTextChanged: _settings.hotkey_switch_to_prev_stt_model = text
-        onResetClicked: {
-            _settings.reset_hotkey_switch_to_prev_stt_model()
-            text = _settings.hotkey_switch_to_prev_stt_model
-        }
-    }
-
-    ShortcutForm {
-        indends: 1
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-        label: qsTranslate("SettingsPage", "Switch to next TTS model")
-        text: _settings.hotkey_switch_to_next_tts_model
-        onTextChanged: _settings.hotkey_switch_to_next_tts_model = text
-        onResetClicked: {
-            _settings.reset_hotkey_switch_to_next_tts_model()
-            text = _settings.hotkey_switch_to_next_tts_model
-        }
-    }
-
-    ShortcutForm {
-        indends: 1
-        visible: _settings.hotkeys_enabled && app.feature_global_shortcuts
-        label: qsTranslate("SettingsPage", "Switch to previous TTS model")
-        text: _settings.hotkey_switch_to_prev_tts_model
-        onTextChanged: _settings.hotkey_switch_to_prev_tts_model = text
-        onResetClicked: {
-            _settings.reset_hotkey_switch_to_prev_tts_model()
-            text = _settings.hotkey_switch_to_prev_tts_model
+        HelpDialog {
+            title: qsTranslate("SettingsPage", "Global keyboard shortcuts")
+            Repeater {
+                model: _settings.hotkeys_table
+                ShortcutForm {
+                    verticalMode: root.verticalMode
+                    psize: (appWin.width / 2) - (4 * appWin.padding)
+                    visible: _settings.hotkeys_enabled && app.feature_hotkeys
+                    label: modelData[1]
+                    text: modelData[2]
+                    onTextChanged: _settings.set_hotkey(modelData[0], text);
+                    onResetClicked: {
+                        _settings.reset_hotkey(modelData[0])
+                        text = modelData[2]
+                    }
+                }
+            }
         }
     }
 
@@ -293,6 +136,19 @@ ColumnLayout {
                 .arg("<i>ydotool</i>") + (_settings.is_flatpak() ? (" " +
               qsTranslate("SettingsPage", "Also make sure that the Flatpak application has permission to access %1 daemon socket file.")
                         .arg("<i>ydotool</i>")) : "")
+    }
+
+    CheckBox {
+        checked: _settings.use_toggle_for_hotkey
+        text: qsTranslate("SettingsPage", "Toggle behavior for actions")
+        onCheckedChanged: {
+            _settings.use_toggle_for_hotkey = checked
+        }
+
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: hovered
+        ToolTip.text: qsTranslate("SettingsPage", "Start listening/reading shortcuts or actions will also stop listening/reading if they are triggered while listening/reading is active.")
+        hoverEnabled: true
     }
 
     Item {

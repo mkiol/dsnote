@@ -14,6 +14,7 @@
 #include <QString>
 #include <QStringList>
 #include <QUrl>
+#include <QVariantList>
 #ifdef USE_DESKTOP
 #include <QQmlApplicationEngine>
 #endif
@@ -35,22 +36,63 @@
     X(vulkan_cpu, false) /* will work but extremely slow */
 
 // name, default key
-#define HOTKEY_TABLE                                               \
-    X(start_listening, "Ctrl+Alt+Shift+L")                         \
-    X(start_listening_translate, "Ctrl+Alt+Shift+/")               \
-    X(start_listening_active_window, "Ctrl+Alt+Shift+K")           \
-    X(start_listening_translate_active_window, "Ctrl+Alt+Shift+.") \
-    X(start_listening_clipboard, "Ctrl+Alt+Shift+J")               \
-    X(start_listening_translate_clipboard, "Ctrl+Alt+Shift+,")     \
-    X(stop_listening, "Ctrl+Alt+Shift+S")                          \
-    X(start_reading, "Ctrl+Alt+Shift+R")                           \
-    X(start_reading_clipboard, "Ctrl+Alt+Shift+E")                 \
-    X(pause_resume_reading, "Ctrl+Alt+Shift+P")                    \
-    X(cancel, "Ctrl+Alt+Shift+C")                                  \
-    X(switch_to_next_stt_model, "Ctrl+Alt+Shift+B")                \
-    X(switch_to_next_tts_model, "Ctrl+Alt+Shift+M")                \
-    X(switch_to_prev_stt_model, "Ctrl+Alt+Shift+V")                \
-    X(switch_to_prev_tts_model, "Ctrl+Alt+Shift+N")
+#define HOTKEY_TABLE                                                           \
+    X(start_listening, "start-listening",                                      \
+      QCoreApplication::translate("SettingsPage", "Start listening"),          \
+      "Ctrl+Alt+Shift+L")                                                      \
+    X(start_listening_translate, "start-listening-translate",                  \
+      QCoreApplication::translate("SettingsPage",                              \
+                                  "Start listening, always translate"),        \
+      "Ctrl+Alt+Shift+/")                                                      \
+    X(start_listening_active_window, "start-listening-active-window",          \
+      QCoreApplication::translate("SettingsPage",                              \
+                                  "Start listening, text to active window"),   \
+      "Ctrl+Alt+Shift+K")                                                      \
+    X(start_listening_translate_active_window,                                 \
+      "start-listening-translate-active-window",                               \
+      QCoreApplication::translate(                                             \
+          "SettingsPage",                                                      \
+          "Start listening, always translate, text to active window"),         \
+      "Ctrl+Alt+Shift+.")                                                      \
+    X(start_listening_clipboard, "start-listening-clipboard",                  \
+      QCoreApplication::translate("SettingsPage",                              \
+                                  "Start listening, text to clipboard"),       \
+      "Ctrl+Alt+Shift+J")                                                      \
+    X(start_listening_translate_clipboard,                                     \
+      "start-listening-translate-clipboard",                                   \
+      QCoreApplication::translate(                                             \
+          "SettingsPage",                                                      \
+          "Start listening, always translate, text to clipboard"),             \
+      "Ctrl+Alt+Shift+,")                                                      \
+    X(stop_listening, "stop-listening",                                        \
+      QCoreApplication::translate("SettingsPage", "Stop listening"),           \
+      "Ctrl+Alt+Shift+S")                                                      \
+    X(start_reading, "start-reading",                                          \
+      QCoreApplication::translate("SettingsPage", "Start reading"),            \
+      "Ctrl+Alt+Shift+R")                                                      \
+    X(start_reading_clipboard, "start-reading-clipboard",                      \
+      QCoreApplication::translate("SettingsPage",                              \
+                                  "Start reading text from clipboard"),        \
+      "Ctrl+Alt+Shift+E")                                                      \
+    X(pause_resume_reading, "pause-resume-reading",                            \
+      QCoreApplication::translate("SettingsPage", "Pause/Resume reading"),     \
+      "Ctrl+Alt+Shift+P")                                                      \
+    X(cancel, "cancel", QCoreApplication::translate("SettingsPage", "Cancel"), \
+      "Ctrl+Alt+Shift+C")                                                      \
+    X(switch_to_next_stt_model, "switch-to-next-stt-model",                    \
+      QCoreApplication::translate("SettingsPage", "Switch to next STT model"), \
+      "Ctrl+Alt+Shift+B")                                                      \
+    X(switch_to_next_tts_model, "switch-to-next-tts-model",                    \
+      QCoreApplication::translate("SettingsPage", "Switch to next TTS model"), \
+      "Ctrl+Alt+Shift+M")                                                      \
+    X(switch_to_prev_stt_model, "switch-to-prev-stt-model",                    \
+      QCoreApplication::translate("SettingsPage",                              \
+                                  "Switch to previous STT model"),             \
+      "Ctrl+Alt+Shift+V")                                                      \
+    X(switch_to_prev_tts_model, "switch-to-prev-tts-model",                    \
+      QCoreApplication::translate("SettingsPage",                              \
+                                  "Switch to previous TTS model"),             \
+      "Ctrl+Alt+Shift+N")
 
 class settings : public QSettings, public singleton<settings> {
     Q_OBJECT
@@ -138,8 +180,11 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(bool mtag READ mtag WRITE set_mtag NOTIFY mtag_changed)
     Q_PROPERTY(bool hotkeys_enabled READ hotkeys_enabled WRITE
                    set_hotkeys_enabled NOTIFY hotkeys_enabled_changed)
-
-#define X(name, keys)                                         \
+    Q_PROPERTY(hotkeys_type_t hotkeys_type READ hotkeys_type WRITE
+                   set_hotkeys_type NOTIFY hotkeys_type_changed)
+    Q_PROPERTY(QVariantList hotkeys_table READ hotkeys_table NOTIFY
+                   hotkeys_table_changed)
+#define X(name, id, desc, keys)                               \
     Q_PROPERTY(QString hotkey_##name READ hotkey_##name WRITE \
                    set_hotkey_##name NOTIFY hotkeys_changed)
     HOTKEY_TABLE
@@ -556,6 +601,9 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(fake_keyboard_type_t)
 
+    enum class hotkeys_type_t { HotkeysTypeX11 = 0, HotkeysTypePortal = 1 };
+    Q_ENUM(hotkeys_type_t)
+
     settings();
 
     static launch_mode_t launch_mode;
@@ -646,18 +694,23 @@ class settings : public QSettings, public singleton<settings> {
     void set_mtag(bool value);
     bool mtag() const;
     QString audio_format_str() const;
+
     bool hotkeys_enabled() const;
     void set_hotkeys_enabled(bool value);
-
-#define X(name, keys)                             \
+    hotkeys_type_t hotkeys_type() const;
+    void set_hotkeys_type(hotkeys_type_t value);
+    QVariantList hotkeys_table() const;
+    Q_INVOKABLE void reset_hotkey(const QString &id);
+    Q_INVOKABLE void set_hotkey(const QString &id, const QString &value);
+#define X(name, id, desc, keys)                   \
     QString hotkey_##name() const;                \
     void set_hotkey_##name(const QString &value); \
     Q_INVOKABLE void reset_hotkey_##name();
     HOTKEY_TABLE
 #undef X
-
     void set_use_toggle_for_hotkey(bool value);
     bool use_toggle_for_hotkey() const;
+
     desktop_notification_policy_t desktop_notification_policy() const;
     void set_desktop_notification_policy(desktop_notification_policy_t value);
     bool desktop_notification_details() const;
@@ -917,6 +970,8 @@ class settings : public QSettings, public singleton<settings> {
     void mtag_changed();
     void hotkeys_enabled_changed();
     void hotkeys_changed();
+    void hotkeys_type_changed();
+    void hotkeys_table_changed();
     void desktop_notification_policy_changed();
     void desktop_notification_details_changed();
     void actions_api_enabled_changed();

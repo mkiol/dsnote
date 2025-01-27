@@ -113,6 +113,7 @@
           Unlike the original Whisper, which tends to omit disfluencies and follows more of a intended transcription style,
           CrisperWhisper aims to transcribe every spoken word exactly as it is, including fillers, pauses, stutters and false starts.
           CrisperWhisper model is enabled only for English and German languages.</li>
+      </ul>
       <p>Accessibility:</p>
       <ul>
       <li>Support for 'Insert into active window' under Wayland.
@@ -120,6 +121,11 @@
           actions you can directly insert the decoded text into any window which is currently in focus.
           This feature worked under X11 only but now it is also suppored under Wayland.
           For actions to work, 'ydotool' daemon must be installed and running.</li>
+      <li>Support for 'Global keyboard shortcuts' under Wayland.
+          Until now, this capability was only available under X11.
+          Now integration with 'XDG Desktop Portal' has been added, making global keyboard shortcuts possible also under Wayland.
+          For shortcuts to work, your desktop enviroment has to support
+          'GlobalShortcuts' interface on 'XDG Desktop Portal' service.</li>
       </ul>
       </description>
     </release>

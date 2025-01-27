@@ -310,10 +310,6 @@ dsnote_app::dsnote_app(QObject *parent)
     connect(settings::instance(), &settings::mnt_text_format_changed, this,
             &dsnote_app::handle_translator_settings_changed,
             Qt::QueuedConnection);
-    connect(settings::instance(), &settings::hotkeys_enabled_changed, this,
-            &dsnote_app::register_hotkeys);
-    connect(settings::instance(), &settings::hotkeys_changed, this,
-            &dsnote_app::register_hotkeys);
     connect(settings::instance(), &settings::audio_input_device_changed, this,
             [this] { emit audio_source_changed(); });
     connect(settings::instance(), &settings::insert_mode_changed, this,
@@ -457,7 +453,6 @@ dsnote_app::dsnote_app(QObject *parent)
     }
 
     update_available_tts_ref_voices();
-    register_hotkeys();
     handle_note_changed();
     update_audio_sources();
 
@@ -468,6 +463,10 @@ dsnote_app::dsnote_app(QObject *parent)
             });
     connect(&m_tray, &tray_icon::action_triggered, this,
             &dsnote_app::execute_tray_action);
+    connect(&m_gs_manager, &global_hotkeys_manager::hotkey_activated, this,
+            [this](const QString &action_id, const QString &extra) {
+                execute_action_id(action_id, extra, true);
+            });
 #endif
 }
 
@@ -4394,14 +4393,6 @@ bool dsnote_app::feature_diacritizer_he() const {
     return feature_available("diacritizer-he", false);
 }
 
-bool dsnote_app::feature_global_shortcuts() const {
-    return feature_available("ui-global-shortcuts", false);
-}
-
-bool dsnote_app::feature_text_active_window() const {
-    return feature_available("ui-text-active-window", false);
-}
-
 bool dsnote_app::feature_translator() const {
     return feature_available("translator", true);
 }
@@ -4410,15 +4401,20 @@ bool dsnote_app::feature_fake_keyboard() const {
     return feature_available("fake-keyboard", false);
 }
 
+bool dsnote_app::feature_hotkeys() const {
+    return feature_available("hotkeys", false);
+}
+
+bool dsnote_app::feature_hotkeys_portal() const {
+    return m_gs_manager.is_portal_supported();
+}
+
 void dsnote_app::update_freature_statuses() {
+    bool changed = false;
+
     // update fake-keyboard status
     if (m_features_availability.contains(QStringLiteral("fake-keyboard"))) {
-#ifdef USE_X11_FEATURES
-        auto has_xbc = settings::instance()->is_xcb();
-#else
-        auto has_xbc = false;
-#endif
-        auto new_value = has_xbc || fake_keyboard::has_ydo();
+        auto new_value = fake_keyboard::is_supported();
         auto current_value =
             m_features_availability.value(QStringLiteral("fake-keyboard"))
                 .toList();
@@ -4426,10 +4422,27 @@ void dsnote_app::update_freature_statuses() {
             new_value != current_value.front().toBool()) {
             m_features_availability.insert(
                 QStringLiteral("fake-keyboard"),
-                QVariantList{has_xbc || fake_keyboard::has_ydo(),
-                             tr("Insert text to active window")});
-            emit features_changed();
+                QVariantList{new_value, tr("Insert text to active window")});
+            changed = true;
         }
+    }
+
+    // update hotkeys status
+    if (m_features_availability.contains(QStringLiteral("hotkeys"))) {
+        auto new_value = m_gs_manager.is_supported();
+        auto current_value =
+            m_features_availability.value(QStringLiteral("hotkeys")).toList();
+        if (current_value.isEmpty() ||
+            new_value != current_value.front().toBool()) {
+            m_features_availability.insert(
+                QStringLiteral("hotkeys"),
+                QVariantList{new_value, tr("Global keyboard shortcuts")});
+            changed = true;
+        }
+    }
+
+    if (changed) {
+        emit features_changed();
     }
 }
 
@@ -4467,16 +4480,11 @@ QVariantList dsnote_app::features_availability() {
 
 #ifdef USE_DESKTOP
     if (!m_features_availability.isEmpty()) {
-#ifdef USE_X11_FEATURES
-        auto has_xbc = settings::instance()->is_xcb();
-#else
-        auto has_xbc = false;
-#endif
         m_features_availability.insert(
-            "ui-global-shortcuts",
-            QVariantList{has_xbc, tr("Global keyboard shortcuts")});
+            "hotkeys", QVariantList{m_gs_manager.is_supported(),
+                                    tr("Global keyboard shortcuts")});
         m_features_availability.insert(
-            "fake-keyboard", QVariantList{has_xbc || fake_keyboard::has_ydo(),
+            "fake-keyboard", QVariantList{fake_keyboard::is_supported(),
                                           tr("Insert text to active window")});
     }
 #endif
@@ -4542,34 +4550,35 @@ void dsnote_app::execute_pending_action() {
     m_pending_action.reset();
 }
 
-QVariantMap dsnote_app::execute_action_name(const QString &action_name,
-                                            const QString &extra) {
+QVariantMap dsnote_app::execute_action_id(const QString &action_id,
+                                          const QString &extra,
+                                          bool trusted_source) {
     QVariantMap result;
 
     auto update_result = [&result](action_error_code_t error_code) {
         result.insert(QStringLiteral("error"), static_cast<int>(error_code));
     };
 
-    if (action_name.isEmpty()) {
+    if (action_id.isEmpty()) {
         update_result(action_error_code_t::unknown_name);
         return result;
     }
 
-    if (!settings::instance()->actions_api_enabled()) {
+    if (!trusted_source && !settings::instance()->actions_api_enabled()) {
         qWarning() << "actions api is not enabled in the settings";
         update_result(action_error_code_t::not_enabled);
         return result;
     }
 
     if (false) {
-#define X(name, str)                                               \
-    }                                                              \
-    else if (action_name.compare(str, Qt::CaseInsensitive) == 0) { \
+#define X(name, str)                                             \
+    }                                                            \
+    else if (action_id.compare(str, Qt::CaseInsensitive) == 0) { \
         execute_action(action_t::name, extra);
         ACTION_TABLE
 #undef X
     } else {
-        qWarning() << "invalid action:" << action_name << extra;
+        qWarning() << "invalid action:" << action_id << extra;
         update_result(action_error_code_t::unknown_name);
         return result;
     }
@@ -4623,6 +4632,49 @@ void dsnote_app::execute_tray_action(tray_icon::action_t action, int value) {
 }
 #endif
 
+dsnote_app::action_t dsnote_app::convert_action(action_t action) const {
+    if (!settings::instance()->use_toggle_for_hotkey()) {
+        // no conversion if toggle is disabled
+        return action;
+    }
+
+    switch (action) {
+        case dsnote_app::action_t::start_listening:
+        case dsnote_app::action_t::start_listening_translate:
+        case dsnote_app::action_t::start_listening_active_window:
+        case dsnote_app::action_t::start_listening_translate_active_window:
+        case dsnote_app::action_t::start_listening_clipboard:
+        case dsnote_app::action_t::start_listening_translate_clipboard:
+            if (service_state() ==
+                    service_state_t::StateListeningSingleSentence ||
+                service_state() == service_state_t::StateListeningManual ||
+                service_state() == service_state_t::StateListeningAuto) {
+                action = action_t::stop_listening;
+            }
+            break;
+        case dsnote_app::action_t::start_reading:
+        case dsnote_app::action_t::start_reading_clipboard:
+        case dsnote_app::action_t::start_reading_text: {
+            if (service_state() == service_state_t::StatePlayingSpeech) {
+                action = action_t::cancel;
+            }
+            break;
+        }
+        case dsnote_app::action_t::stop_listening:
+        case dsnote_app::action_t::pause_resume_reading:
+        case dsnote_app::action_t::cancel:
+        case dsnote_app::action_t::switch_to_next_stt_model:
+        case dsnote_app::action_t::switch_to_prev_stt_model:
+        case dsnote_app::action_t::switch_to_next_tts_model:
+        case dsnote_app::action_t::switch_to_prev_tts_model:
+        case dsnote_app::action_t::set_stt_model:
+        case dsnote_app::action_t::set_tts_model:
+            break;
+    }
+
+    return action;
+}
+
 void dsnote_app::execute_action(action_t action, const QString &extra) {
     if (busy()) {
         m_pending_action = std::make_pair(action, extra);
@@ -4634,7 +4686,13 @@ void dsnote_app::execute_action(action_t action, const QString &extra) {
     qDebug() << "executing action:" << action
              << "extra =" << extra.trimmed().left(10);
 
-    switch (action) {
+    auto caction = convert_action(action);
+
+    if (caction != action) {
+        qDebug() << "converting action:" << action << "=>" << caction;
+    }
+
+    switch (caction) {
         case dsnote_app::action_t::start_listening:
             listen();
             break;
@@ -4664,7 +4722,7 @@ void dsnote_app::execute_action(action_t action, const QString &extra) {
             auto segment =
                 text_tools::raw_taged_segment_from_text(extra.toStdString());
             play_speech_from_text(
-                action == action_t::start_reading_clipboard
+                caction == action_t::start_reading_clipboard
                     ? QGuiApplication::clipboard()->text()
                     : QString::fromStdString(segment.text),
                 segment.tags.empty() ||
@@ -5325,267 +5383,8 @@ QString dsnote_app::stt_auto_lang_name() const {
     return it->second;
 }
 
-void dsnote_app::register_hotkeys() {
-#ifdef USE_X11_FEATURES
-    auto *s = settings::instance();
-
-    if (!s->is_xcb()) {
-        qWarning() << "hot keys are supported only under x11";
-        return;
-    }
-
-#define X(name, key) QObject::disconnect(&m_hotkeys.name);
-    HOTKEY_TABLE
-#undef X
-#define X(name, key) m_hotkeys.name.setRegistered(false);
-    HOTKEY_TABLE
-#undef X
-
-    if (s->hotkeys_enabled()) {
-        if (!s->hotkey_start_listening().isEmpty()) {
-            m_hotkeys.start_listening.setShortcut(
-                QKeySequence{s->hotkey_start_listening()}, true);
-            QObject::connect(
-                &m_hotkeys.start_listening, &QHotkey::activated, this, [&]() {
-                    qDebug() << "hot key activated: start-listening";
-                    if (settings::instance()->use_toggle_for_hotkey() &&
-                        (service_state() ==
-                             service_state_t::StateListeningSingleSentence ||
-                         service_state() ==
-                             service_state_t::StateListeningManual ||
-                         service_state() ==
-                             service_state_t::StateListeningAuto)) {
-                        execute_action(action_t::stop_listening, {});
-                    } else {
-                        execute_action(action_t::start_listening, {});
-                    }
-                });
-        }
-
-        if (!s->hotkey_start_listening_translate().isEmpty()) {
-            m_hotkeys.start_listening_translate.setShortcut(
-                QKeySequence{s->hotkey_start_listening_translate()}, true);
-            QObject::connect(
-                &m_hotkeys.start_listening_translate, &QHotkey::activated, this,
-                [&]() {
-                    qDebug() << "hot key activated: start-listening-translate";
-                    if (settings::instance()->use_toggle_for_hotkey() &&
-                        (service_state() ==
-                             service_state_t::StateListeningSingleSentence ||
-                         service_state() ==
-                             service_state_t::StateListeningManual ||
-                         service_state() ==
-                             service_state_t::StateListeningAuto)) {
-                        execute_action(action_t::stop_listening, {});
-                    } else {
-                        execute_action(action_t::start_listening_translate, {});
-                    }
-                });
-        }
-
-        if (!s->hotkey_start_listening_active_window().isEmpty()) {
-            m_hotkeys.start_listening_active_window.setShortcut(
-                QKeySequence{s->hotkey_start_listening_active_window()}, true);
-            QObject::connect(
-                &m_hotkeys.start_listening_active_window, &QHotkey::activated,
-                this, [&]() {
-                    qDebug()
-                        << "hot key activated: start-listening-active-window";
-                    if (settings::instance()->use_toggle_for_hotkey() &&
-                        (service_state() ==
-                             service_state_t::StateListeningSingleSentence ||
-                         service_state() ==
-                             service_state_t::StateListeningManual ||
-                         service_state() ==
-                             service_state_t::StateListeningAuto)) {
-                        execute_action(action_t::stop_listening, {});
-                    } else {
-                        execute_action(action_t::start_listening_active_window,
-                                       {});
-                    }
-                });
-        }
-
-        if (!s->hotkey_start_listening_translate_active_window().isEmpty()) {
-            m_hotkeys.start_listening_translate_active_window.setShortcut(
-                QKeySequence{
-                    s->hotkey_start_listening_translate_active_window()},
-                true);
-            QObject::connect(
-                &m_hotkeys.start_listening_translate_active_window,
-                &QHotkey::activated, this, [&]() {
-                    qDebug() << "hot key activated: "
-                                "start-listening-translate-active-window";
-                    if (settings::instance()->use_toggle_for_hotkey() &&
-                        (service_state() ==
-                             service_state_t::StateListeningSingleSentence ||
-                         service_state() ==
-                             service_state_t::StateListeningManual ||
-                         service_state() ==
-                             service_state_t::StateListeningAuto)) {
-                        execute_action(action_t::stop_listening, {});
-                    } else {
-                        execute_action(
-                            action_t::start_listening_translate_active_window,
-                            {});
-                    }
-                });
-        }
-
-        if (!s->hotkey_start_listening_clipboard().isEmpty()) {
-            m_hotkeys.start_listening_clipboard.setShortcut(
-                QKeySequence{s->hotkey_start_listening_clipboard()}, true);
-            QObject::connect(
-                &m_hotkeys.start_listening_clipboard, &QHotkey::activated, this,
-                [&]() {
-                    qDebug() << "hot key activated: start-listening-clipboard";
-                    if (settings::instance()->use_toggle_for_hotkey() &&
-                        (service_state() ==
-                             service_state_t::StateListeningSingleSentence ||
-                         service_state() ==
-                             service_state_t::StateListeningManual ||
-                         service_state() ==
-                             service_state_t::StateListeningAuto)) {
-                        execute_action(action_t::stop_listening, {});
-                    } else {
-                        execute_action(action_t::start_listening_clipboard, {});
-                    }
-                });
-        }
-
-        if (!s->hotkey_start_listening_translate_clipboard().isEmpty()) {
-            m_hotkeys.start_listening_translate_clipboard.setShortcut(
-                QKeySequence{s->hotkey_start_listening_translate_clipboard()},
-                true);
-            QObject::connect(
-                &m_hotkeys.start_listening_translate_clipboard,
-                &QHotkey::activated, this, [&]() {
-                    qDebug() << "hot key activated: "
-                                "start-listening-translate-clipboard";
-                    if (settings::instance()->use_toggle_for_hotkey() &&
-                        (service_state() ==
-                             service_state_t::StateListeningSingleSentence ||
-                         service_state() ==
-                             service_state_t::StateListeningManual ||
-                         service_state() ==
-                             service_state_t::StateListeningAuto)) {
-                        execute_action(action_t::stop_listening, {});
-                    } else {
-                        execute_action(
-                            action_t::start_listening_translate_clipboard, {});
-                    }
-                });
-        }
-
-        if (!s->hotkey_stop_listening().isEmpty()) {
-            m_hotkeys.stop_listening.setShortcut(
-                QKeySequence{s->hotkey_stop_listening()}, true);
-            QObject::connect(
-                &m_hotkeys.stop_listening, &QHotkey::activated, this, [&]() {
-                    qDebug() << "hot key activated: stop-listening";
-                    execute_action(action_t::stop_listening, {});
-                });
-        }
-
-        if (!s->hotkey_start_reading().isEmpty()) {
-            m_hotkeys.start_reading.setShortcut(
-                QKeySequence{s->hotkey_start_reading()}, true);
-            QObject::connect(&m_hotkeys.start_reading, &QHotkey::activated,
-                             this, [&]() {
-                                 qDebug() << "hot key activated: start-reading";
-                                 if (settings::instance()
-                                         ->use_toggle_for_hotkey() &&
-                                     service_state() ==
-                                         service_state_t::StatePlayingSpeech) {
-                                     execute_action(action_t::cancel, {});
-                                 } else {
-                                     execute_action(action_t::start_reading,
-                                                    {});
-                                 }
-                             });
-        }
-
-        if (!s->hotkey_start_reading_clipboard().isEmpty()) {
-            m_hotkeys.start_reading_clipboard.setShortcut(
-                QKeySequence{s->hotkey_start_reading_clipboard()}, true);
-            QObject::connect(
-                &m_hotkeys.start_reading_clipboard, &QHotkey::activated, this,
-                [&]() {
-                    qDebug() << "hot key activated: start-reading-clipboard";
-                    if (settings::instance()->use_toggle_for_hotkey() &&
-                        service_state() ==
-                            service_state_t::StatePlayingSpeech) {
-                        execute_action(action_t::cancel, {});
-                    } else {
-                        execute_action(action_t::start_reading_clipboard, {});
-                    }
-                });
-        }
-
-        if (!s->hotkey_pause_resume_reading().isEmpty()) {
-            m_hotkeys.pause_resume_reading.setShortcut(
-                QKeySequence{s->hotkey_pause_resume_reading()}, true);
-            QObject::connect(
-                &m_hotkeys.pause_resume_reading, &QHotkey::activated, this,
-                [&]() {
-                    qDebug() << "hot key activated: pause-resume-reading";
-                    execute_action(action_t::pause_resume_reading, {});
-                });
-        }
-
-        if (!s->hotkey_cancel().isEmpty()) {
-            m_hotkeys.cancel.setShortcut(QKeySequence{s->hotkey_cancel()},
-                                         true);
-            QObject::connect(&m_hotkeys.cancel, &QHotkey::activated, this,
-                             [&]() {
-                                 qDebug() << "hot key activated: cancel";
-                                 execute_action(action_t::cancel, {});
-                             });
-        }
-
-        if (!s->hotkey_switch_to_next_stt_model().isEmpty()) {
-            m_hotkeys.switch_to_next_stt_model.setShortcut(
-                QKeySequence{s->hotkey_switch_to_next_stt_model()}, true);
-            QObject::connect(
-                &m_hotkeys.switch_to_next_stt_model, &QHotkey::activated, this,
-                [&]() {
-                    qDebug() << "hot key activated: switch-to-next-stt-model";
-                    execute_action(action_t::switch_to_next_stt_model, {});
-                });
-        }
-
-        if (!s->hotkey_switch_to_prev_stt_model().isEmpty()) {
-            m_hotkeys.switch_to_prev_stt_model.setShortcut(
-                QKeySequence{s->hotkey_switch_to_prev_stt_model()}, true);
-            QObject::connect(
-                &m_hotkeys.switch_to_prev_stt_model, &QHotkey::activated, this,
-                [&]() {
-                    qDebug() << "hot key activated: switch-to-prev-stt-model";
-                    execute_action(action_t::switch_to_prev_stt_model, {});
-                });
-        }
-
-        if (!s->hotkey_switch_to_next_tts_model().isEmpty()) {
-            m_hotkeys.switch_to_next_tts_model.setShortcut(
-                QKeySequence{s->hotkey_switch_to_next_tts_model()}, true);
-            QObject::connect(
-                &m_hotkeys.switch_to_next_tts_model, &QHotkey::activated, this,
-                [&]() {
-                    qDebug() << "hot key activated: switch-to-next-tts-model";
-                    execute_action(action_t::switch_to_next_tts_model, {});
-                });
-        }
-
-        if (!s->hotkey_switch_to_prev_tts_model().isEmpty()) {
-            m_hotkeys.switch_to_prev_tts_model.setShortcut(
-                QKeySequence{s->hotkey_switch_to_prev_tts_model()}, true);
-            QObject::connect(
-                &m_hotkeys.switch_to_prev_tts_model, &QHotkey::activated, this,
-                [&]() {
-                    qDebug() << "hot key activated: switch-to-prev-tts-model";
-                    execute_action(action_t::switch_to_prev_tts_model, {});
-                });
-        }
-    }
+void dsnote_app::open_hotkeys_editor() {
+#ifdef USE_DESKTOP
+    m_gs_manager.set_portal_bindings();
 #endif
 }

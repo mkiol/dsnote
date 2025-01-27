@@ -363,6 +363,37 @@ ColumnLayout {
         }
     }
 
+    SectionLabel {
+        visible: hotkeysCombo.visible
+        text: qsTranslate("SettingsPage", "Other options")
+    }
+
+    ComboBoxForm {
+        id: hotkeysCombo
+
+        visible: app.feature_hotkeys && app.feature_hotkeys_portal && _settings.is_xcb()
+        label.text: qsTranslate("SettingsPage", "Global keyboard shortcuts method")
+        toolTip: qsTranslate("SettingsPage", "Method used to set global keyboard shortcuts.")
+        comboBox {
+            currentIndex: {
+                if (_settings.hotkeys_type === Settings.HotkeysTypeX11) return 0
+                if (_settings.hotkeys_type === Settings.HotkeysTypePortal) return 1
+                return _settings.is_xcb() ? 0 : 1
+            }
+            model: [
+                "X11",
+                "XDG Desktop Portal"
+            ]
+            onActivated: {
+                if (index === 0) {
+                    _settings.hotkeys_type = Settings.HotkeysTypeX11
+                } else if (index === 1) {
+                    _settings.hotkeys_type = Settings.HotkeysTypePortal
+                }
+            }
+        }
+    }
+
     Item {
         Layout.fillHeight: true
     }

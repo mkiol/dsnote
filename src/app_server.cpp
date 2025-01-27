@@ -264,13 +264,14 @@ QVariantMap app_server::InvokeAction(const QString &action_name,
     return invoke_action(action_name, argument.variant());
 }
 
-QVariantMap app_server::invoke_action(const QString &action_name,
+QVariantMap app_server::invoke_action(const QString &action_id,
                                       const QVariant &argument) {
     QVariantMap map;
 
     QMetaObject::invokeMethod(
-        m_dsnote_app, "execute_action_name", Q_RETURN_ARG(QVariantMap, map),
-        Q_ARG(QString, action_name), Q_ARG(QString, argument.toString()));
+        m_dsnote_app, "execute_action_id", Q_RETURN_ARG(QVariantMap, map),
+        Q_ARG(QString, action_id), Q_ARG(QString, argument.toString()),
+        Q_ARG(bool, false));
 
     return map;
 }

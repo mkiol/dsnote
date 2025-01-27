@@ -138,6 +138,37 @@ fake_keyboard::~fake_keyboard() {
     if (m_ydo_daemon_socket >= 0) ::close(m_ydo_daemon_socket);
 }
 
+bool fake_keyboard::is_supported() {
+    return is_legacy_supported() || is_xdo_supported() || is_ydo_supported();
+}
+
+bool fake_keyboard::is_xdo_supported() {
+#ifdef USE_X11_FEATURES
+    return settings::instance()->is_xcb();
+#else
+    return false;
+#endif
+}
+
+bool fake_keyboard::is_ydo_supported() {
+    auto ydo_daemon_socket = make_ydo_socket();
+
+    if (ydo_daemon_socket < 0) {
+        return false;
+    }
+
+    ::close(ydo_daemon_socket);
+    return true;
+}
+
+bool fake_keyboard::is_legacy_supported() {
+#ifdef USE_X11_FEATURES
+    return settings::instance()->is_xcb();
+#else
+    return false;
+#endif
+}
+
 // Copied from https://github.com/ReimuNotMoe/ydotool
 void fake_keyboard::ydo_uinput_emit(uint16_t type, uint16_t code, int32_t val,
                                     bool syn_report) {
@@ -211,17 +242,6 @@ int fake_keyboard::make_ydo_socket() {
     }
 
     return ydo_daemon_socket;
-}
-
-bool fake_keyboard::has_ydo() {
-    auto ydo_daemon_socket = make_ydo_socket();
-
-    if (ydo_daemon_socket < 0) {
-        return false;
-    }
-
-    ::close(ydo_daemon_socket);
-    return true;
 }
 
 void fake_keyboard::init_ydo() {

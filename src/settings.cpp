@@ -1822,7 +1822,6 @@ void settings::set_audio_input_device(const QString& value) {
 }
 
 bool settings::hotkeys_enabled() const {
-    if (!is_xcb()) return false;  // hotkeys are x11 feature
     return value(QStringLiteral("hotkeys_enabled"), false).toBool();
 }
 
@@ -1830,6 +1829,28 @@ void settings::set_hotkeys_enabled(bool value) {
     if (value != hotkeys_enabled()) {
         setValue(QStringLiteral("hotkeys_enabled"), value);
         emit hotkeys_enabled_changed();
+    }
+}
+
+settings::hotkeys_type_t settings::hotkeys_type() const {
+#ifdef USE_X11_FEATURES
+    if (is_wayland()) {
+        return hotkeys_type_t::HotkeysTypePortal;
+    }
+
+    return static_cast<hotkeys_type_t>(
+        value(QStringLiteral("hotkeys_type"),
+              static_cast<int>(hotkeys_type_t::HotkeysTypeX11))
+            .toInt());
+#else
+    return hotkeys_type_t::HotkeysTypePortal;
+#endif
+}
+
+void settings::set_hotkeys_type(hotkeys_type_t value) {
+    if (value != hotkeys_type()) {
+        setValue(QStringLiteral("hotkeys_type"), static_cast<int>(value));
+        emit hotkeys_type_changed();
     }
 }
 
@@ -1884,7 +1905,36 @@ void settings::set_num_threads(int value) {
     }
 }
 
-#define X(name, key)                                                       \
+QVariantList settings::hotkeys_table() const {
+    QVariantList table;
+#define X(name, id, desc, key) \
+    table.push_back(QStringList{id, desc, hotkey_##name()});
+    HOTKEY_TABLE
+#undef X
+    return table;
+}
+
+void settings::reset_hotkey(const QString& requested_id) {
+#define X(name, id, desc, key) \
+    if (requested_id == id) {  \
+        reset_hotkey_##name(); \
+        return;                \
+    }
+    HOTKEY_TABLE
+#undef X
+}
+
+void settings::set_hotkey(const QString& requested_id, const QString& value) {
+#define X(name, id, desc, key)    \
+    if (requested_id == id) {     \
+        set_hotkey_##name(value); \
+        return;                   \
+    }
+    HOTKEY_TABLE
+#undef X
+}
+
+#define X(name, id, desc, key)                                             \
     QString settings::hotkey_##name() const {                              \
         return value(QStringLiteral("hotkey_" #name), QStringLiteral(key)) \
             .toString();                                                   \
@@ -1897,6 +1947,7 @@ void settings::set_num_threads(int value) {
     }                                                                      \
     void settings::reset_hotkey_##name() {                                 \
         set_hotkey_##name(QStringLiteral(key));                            \
+        emit hotkeys_table_changed();                                      \
     }
 HOTKEY_TABLE
 #undef X

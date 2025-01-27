@@ -398,7 +398,13 @@ if(WITH_DESKTOP)
         ${sources_dir}/tray_icon.hpp
         ${sources_dir}/tray_icon.cpp
         ${sources_dir}/fake_keyboard.hpp
-        ${sources_dir}/fake_keyboard.cpp)
+        ${sources_dir}/fake_keyboard.cpp
+        ${sources_dir}/global_hotkeys_manager.cpp
+        ${sources_dir}/global_hotkeys_manager.hpp
+        ${sources_dir}/dbus_portal_globalshortcuts_inf.cpp
+        ${sources_dir}/dbus_portal_globalshortcuts_inf.h
+        ${sources_dir}/dbus_portal_request_inf.cpp
+        ${sources_dir}/dbus_portal_request_inf.h)
 endif()
 
 configure_file(config.h.in config.h)

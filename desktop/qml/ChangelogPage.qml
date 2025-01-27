@@ -40,6 +40,13 @@ DialogPage {
             This feature worked under X11 only but now it is also suppored under Wayland.
             For actions to work, <i>ydotool</i> daemon must be installed and running.
             If you are using Flatpak, also make sure that the application has permission to access <i>ydotool</i> daemon socket file.</li>
+        <li>Support for <i>Global keyboard shortcuts</i> under Wayland.
+            Global keyboard shortcuts allow you to start or stop listening and reading using keyboard
+            even when the application is not active (e.g. minimized or in the background).
+            Until now, this capability was only available under X11.
+            Now integration with <i>XDG Desktop Portal</i> has been added, making global keyboard shortcuts possible also under Wayland.
+            For shortcuts to work, your desktop enviroment has to support
+            <i>GlobalShortcuts</i> interface on <i>XDG Desktop Portal</i> service.</li>
         </ul>"
     }
 

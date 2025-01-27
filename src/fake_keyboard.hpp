@@ -37,7 +37,10 @@ class fake_keyboard : public QObject {
         unsigned int layout = 0;
     };
 
-    static bool has_ydo();
+    static bool is_supported();
+    static bool is_xdo_supported();
+    static bool is_ydo_supported();
+    static bool is_legacy_supported();
 
     fake_keyboard(QObject* parent = nullptr);
     ~fake_keyboard();

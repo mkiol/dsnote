@@ -1,4 +1,4 @@
-/* Copyright (C) 2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -21,27 +21,27 @@ GridLayout {
     property alias text: _textField.text
     property bool compact: true
     property bool scanning: false
+    property int psize: 500
+
     signal resetClicked()
 
-    columns: verticalMode ? 1 : 4
+    columns: verticalMode ? 1 : 3
     columnSpacing: appWin.padding
     rowSpacing: appWin.padding
-    Layout.fillWidth: true
 
     Label {
         id: _label
 
-        Layout.fillWidth: true
-        Layout.leftMargin: root.indends * appWin.padding
+        Layout.preferredWidth: root.verticalMode ? psize * 2 : psize
     }
 
     TextField {
         id: _textField
 
         enabled: !root.scanning
-        Layout.fillWidth: root.verticalMode
-        Layout.preferredWidth: root.verticalMode ? 0 : ((parent.width / 2) - (_scanButton.width + _resetButton.width + 2 * root.columnSpacing))
-        Layout.leftMargin: root.verticalMode ? (root.indends + 1) * appWin.padding : 0
+        Layout.preferredWidth: (root.verticalMode ? psize * 2 : (psize - (_scanButton.width + _resetButton.width + 2 * root.columnSpacing))) - 3 * appWin.padding
+        Layout.leftMargin: root.verticalMode ? appWin.padding : 0
+        Layout.rightMargin: root.verticalMode ? 3 * appWin.padding : 0
         color: palette.text
 
         TextContextMenu {}
@@ -50,7 +50,8 @@ GridLayout {
     RowLayout {
         id: buttonRow
 
-        Layout.leftMargin: root.verticalMode ? (root.indends + 1) * appWin.padding : 0
+        Layout.leftMargin: root.verticalMode ? appWin.padding : 0
+        Layout.rightMargin: root.verticalMode ? 0 : 3 * appWin.padding
 
         Button {
             id: _scanButton

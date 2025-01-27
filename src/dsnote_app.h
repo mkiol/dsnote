@@ -18,12 +18,9 @@
 #include <optional>
 #include <queue>
 
-#ifdef USE_X11_FEATURES
-#include <qhotkey.h>
-#endif
-
 #ifdef USE_DESKTOP
 #include "fake_keyboard.hpp"
+#include "global_hotkeys_manager.hpp"
 #include "tray_icon.hpp"
 #endif
 
@@ -57,6 +54,22 @@
     X(switch_to_prev_tts_model, "switch-to-prev-tts-model")           \
     X(set_stt_model, "set-stt-model")                                 \
     X(set_tts_model, "set-tts-model")
+
+#define FEATURE_TABLE    \
+    X(whispercpp_stt)    \
+    X(whispercpp_gpu)    \
+    X(fasterwhisper_stt) \
+    X(fasterwhisper_gpu) \
+    X(whisperspeech_tts) \
+    X(whisperspeech_gpu) \
+    X(coqui_tts)         \
+    X(coqui_gpu)         \
+    X(punctuator)        \
+    X(diacritizer_he)    \
+    X(translator)        \
+    X(fake_keyboard)     \
+    X(hotkeys)           \
+    X(hotkeys_portal)
 
 class dsnote_app : public QObject {
     Q_OBJECT
@@ -246,23 +259,10 @@ class dsnote_app : public QObject {
             set_trans_rules_test_text NOTIFY trans_rules_test_text_changed)
 
     // features
-#define FEATURE_OPT(name) \
+#define X(name) \
     Q_PROPERTY(bool feature_##name READ feature_##name NOTIFY features_changed)
-    FEATURE_OPT(whispercpp_stt)
-    FEATURE_OPT(whispercpp_gpu)
-    FEATURE_OPT(fasterwhisper_stt)
-    FEATURE_OPT(fasterwhisper_gpu)
-    FEATURE_OPT(whisperspeech_tts)
-    FEATURE_OPT(whisperspeech_gpu)
-    FEATURE_OPT(coqui_tts)
-    FEATURE_OPT(coqui_gpu)
-    FEATURE_OPT(punctuator)
-    FEATURE_OPT(diacritizer_he)
-    FEATURE_OPT(global_shortcuts)
-    FEATURE_OPT(text_active_window)
-    FEATURE_OPT(translator)
-    FEATURE_OPT(fake_keyboard)
-#undef FEATURE_OPT
+    FEATURE_TABLE
+#undef X
 
     Q_PROPERTY(auto_text_format_t auto_text_format READ auto_text_format NOTIFY
                    auto_text_format_changed)
@@ -418,8 +418,9 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void show_desktop_notification(const QString &summary,
                                                const QString &body,
                                                bool permanent = false);
-    Q_INVOKABLE QVariantMap execute_action_name(const QString &action_name,
-                                                const QString &extra);
+    Q_INVOKABLE QVariantMap execute_action_id(const QString &action_id,
+                                              const QString &extra,
+                                              bool trusted_source);
     Q_INVOKABLE QVariantList features_availability();
     Q_INVOKABLE QString download_content(const QUrl &url);
     Q_INVOKABLE void player_import_from_url(const QUrl &url);
@@ -452,6 +453,7 @@ class dsnote_app : public QObject {
     [[nodiscard]] Q_INVOKABLE QVariantList available_stt_models_info() const;
     [[nodiscard]] Q_INVOKABLE QVariantList available_tts_models_info() const;
     Q_INVOKABLE void update_freature_statuses();
+    Q_INVOKABLE void open_hotkeys_editor();
 
    signals:
     void active_stt_model_changed();
@@ -695,18 +697,10 @@ class dsnote_app : public QObject {
     std::optional<stt_request_t> m_current_stt_request;
     std::optional<stt_request_t> m_pending_stt_request;
     QString m_trans_rules_test_text;
-#ifdef USE_X11_FEATURES
-    struct hotkeys_t {
-#define X(name, key) QHotkey name;
-        HOTKEY_TABLE
-#undef X
-    };
-
-    hotkeys_t m_hotkeys;
-#endif
 #ifdef USE_DESKTOP
     std::optional<fake_keyboard> m_fake_keyboard;
     tray_icon m_tray;
+    global_hotkeys_manager m_gs_manager;
 #endif
     [[nodiscard]] QVariantList available_stt_models() const;
     [[nodiscard]] QVariantList available_tts_models() const;
@@ -877,32 +871,17 @@ class dsnote_app : public QObject {
                                               int stream_index, bool replace);
     void open_next_file();
     void reset_files_queue();
-    void register_hotkeys();
     void execute_action(action_t action, const QString &extra);
+    action_t convert_action(action_t action) const;
     void execute_pending_action();
     void process_pending_desktop_notification();
     void handle_desktop_notification_closed(uint id, uint reason);
     void handle_desktop_notification_action_invoked(uint id,
                                                     const QString &action_key);
     bool feature_available(const QString &name, bool default_value) const;
-
-#define FEATURE_OPT(name) bool feature_##name() const;
-    FEATURE_OPT(whispercpp_stt)
-    FEATURE_OPT(whispercpp_gpu)
-    FEATURE_OPT(fasterwhisper_stt)
-    FEATURE_OPT(fasterwhisper_gpu)
-    FEATURE_OPT(whisperspeech_tts)
-    FEATURE_OPT(whisperspeech_gpu)
-    FEATURE_OPT(coqui_tts)
-    FEATURE_OPT(coqui_gpu)
-    FEATURE_OPT(punctuator)
-    FEATURE_OPT(diacritizer_he)
-    FEATURE_OPT(global_shortcuts)
-    FEATURE_OPT(text_active_window)
-    FEATURE_OPT(translator)
-    FEATURE_OPT(fake_keyboard)
-#undef FEATURE_OPT
-
+#define X(name) bool feature_##name() const;
+    FEATURE_TABLE
+#undef X
     void request_reload();
     bool stt_translate_needed_by_id(const QString &id) const;
     bool tts_ref_voice_needed_by_id(const QString &id) const;
