@@ -27,5 +27,5 @@ Then install the .deb file created in the current directory:
 sudo apt install dsnote_*_amd64.deb
 ```
 
-PS: Support for GPU acceleration is experimental and may break. The build is tested on Ubuntu 24.10 only, but may work with the currelt LTS (24.04) as well (if it does not work, try removing the CUDA packages to build without CUDA support).
+PS: Support for GPU acceleration is experimental and may break. The build is tested on Ubuntu 24.10 only, but may work with the current LTS (24.04) as well (if it does not work, try removing the CUDA packages to build without CUDA support).
 
