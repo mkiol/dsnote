@@ -23,10 +23,6 @@ Frame {
      padding: appWin.padding
      implicitHeight: column.height + 2 * appWin.padding
 
-     Component.onCompleted: {
-         if (background && background.color) background.color = palette.toolTipBase
-     }
-
      ColumnLayout {
          id: column
 
