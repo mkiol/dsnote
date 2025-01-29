@@ -356,8 +356,10 @@ dsnote_app::dsnote_app(QObject *parent)
 #ifdef USE_DESKTOP
     connect(this, &dsnote_app::available_stt_models_changed, this,
             [this]() { m_tray.set_stt_models(available_stt_models()); });
-    connect(this, &dsnote_app::active_stt_model_changed, this,
-            [this]() { m_tray.set_active_stt_model(active_stt_model_name()); });
+    connect(this, &dsnote_app::active_stt_model_changed, this, [this]() {
+        m_tray.set_active_stt_model(active_stt_model_name(),
+                                    stt_translate_needed());
+    });
     connect(this, &dsnote_app::available_tts_models_changed, this,
             [this]() { m_tray.set_tts_models(available_tts_models()); });
     connect(this, &dsnote_app::active_tts_model_changed, this,
@@ -4425,6 +4427,9 @@ void dsnote_app::update_freature_statuses() {
                 QVariantList{new_value, tr("Insert text to active window")});
             changed = true;
         }
+#ifdef USE_DESKTOP
+        m_tray.set_fake_keyboard_supported(new_value);
+#endif
     }
 
     // update hotkeys status
@@ -4483,9 +4488,11 @@ QVariantList dsnote_app::features_availability() {
         m_features_availability.insert(
             "hotkeys", QVariantList{m_gs_manager.is_supported(),
                                     tr("Global keyboard shortcuts")});
+        auto fake_keyboard_supported = fake_keyboard::is_supported();
         m_features_availability.insert(
-            "fake-keyboard", QVariantList{fake_keyboard::is_supported(),
+            "fake-keyboard", QVariantList{fake_keyboard_supported,
                                           tr("Insert text to active window")});
+        m_tray.set_fake_keyboard_supported(fake_keyboard_supported);
     }
 #endif
 
@@ -4593,11 +4600,21 @@ void dsnote_app::execute_tray_action(tray_icon::action_t action, int value) {
         case tray_icon::action_t::start_listening:
             execute_action(action_t::start_listening, {});
             break;
+        case tray_icon::action_t::start_listening_translate:
+            execute_action(action_t::start_listening_translate, {});
+            break;
         case tray_icon::action_t::start_listening_active_window:
             execute_action(action_t::start_listening_active_window, {});
             break;
+        case tray_icon::action_t::start_listening_translate_active_window:
+            execute_action(action_t::start_listening_translate_active_window,
+                           {});
+            break;
         case tray_icon::action_t::start_listening_clipboard:
             execute_action(action_t::start_listening_clipboard, {});
+            break;
+        case tray_icon::action_t::start_listening_translate_clipboard:
+            execute_action(action_t::start_listening_translate_clipboard, {});
             break;
         case tray_icon::action_t::stop_listening:
             execute_action(action_t::stop_listening, {});

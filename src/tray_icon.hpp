@@ -21,8 +21,11 @@ class tray_icon : public QSystemTrayIcon {
    public:
     enum class action_t {
         start_listening,
+        start_listening_translate,
         start_listening_active_window,
+        start_listening_translate_active_window,
         start_listening_clipboard,
+        start_listening_translate_clipboard,
         stop_listening,
         start_reading,
         start_reading_clipboard,
@@ -47,9 +50,10 @@ class tray_icon : public QSystemTrayIcon {
     void set_state(state_t state);
     void set_task_state(task_state_t task_state);
     void set_stt_models(QVariantList&& stt_models);
-    void set_active_stt_model(QString&& stt_model);
+    void set_active_stt_model(QString&& stt_model, bool translate_supported);
     void set_tts_models(QVariantList&& tts_models);
     void set_active_tts_model(QString&& tts_model);
+    void set_fake_keyboard_supported(bool supported);
 
    signals:
     void action_triggered(action_t action, int value);
@@ -66,6 +70,8 @@ class tray_icon : public QSystemTrayIcon {
     QString m_active_tts_model;
     QTimer m_animated_icon_timer;
     uint8_t m_icon_idx = 0;
+    bool m_stt_translate_supported = false;
+    bool m_fake_keyboard_supported = false;
 
     void make_menu();
     void update_menu();

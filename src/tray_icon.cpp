@@ -155,8 +155,24 @@ void tray_icon::update_menu() {
         auto tts_configured = !m_active_tts_model.isEmpty();
 
         switch (p.first) {
-            case action_t::start_listening:
+            case action_t::start_listening_translate_active_window:
+                p.second->setProperty(
+                    "enabled", stt_configured && m_state == state_t::idle &&
+                                   m_stt_translate_supported &&
+                                   m_fake_keyboard_supported);
+                break;
+            case action_t::start_listening_translate:
+            case action_t::start_listening_translate_clipboard:
+                p.second->setProperty("enabled", stt_configured &&
+                                                     m_state == state_t::idle &&
+                                                     m_stt_translate_supported);
+                break;
             case action_t::start_listening_active_window:
+                p.second->setProperty("enabled", stt_configured &&
+                                                     m_state == state_t::idle &&
+                                                     m_fake_keyboard_supported);
+                break;
+            case action_t::start_listening:
             case action_t::start_listening_clipboard:
                 p.second->setProperty(
                     "enabled", stt_configured && m_state == state_t::idle);
@@ -244,20 +260,31 @@ void tray_icon::make_menu() {
         m_menu.addAction(
             QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
             tr("Start listening")));
-#ifdef USE_X11_FEATURES
-    if (settings::instance()->is_xcb()) {
-        m_actions.emplace(
-            action_t::start_listening_active_window,
-            m_menu.addAction(QIcon::fromTheme(QStringLiteral(
-                                 "audio-input-microphone-symbolic")),
-                             tr("Start listening, text to active window")));
-    }
-#endif
+    m_actions.emplace(
+        action_t::start_listening_translate,
+        m_menu.addAction(
+            QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
+            tr("Start listening, always translate")));
+    m_actions.emplace(
+        action_t::start_listening_active_window,
+        m_menu.addAction(
+            QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
+            tr("Start listening, text to active window")));
+    m_actions.emplace(
+        action_t::start_listening_translate_active_window,
+        m_menu.addAction(
+            QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
+            tr("Start listening, always translate, text to active window")));
     m_actions.emplace(
         action_t::start_listening_clipboard,
         m_menu.addAction(
             QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
             tr("Start listening, text to clipboard")));
+    m_actions.emplace(
+        action_t::start_listening_translate_clipboard,
+        m_menu.addAction(
+            QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
+            tr("Start listening, always translate, text to clipboard")));
     m_actions.emplace(
         action_t::stop_listening,
         m_menu.addAction(
@@ -326,8 +353,10 @@ void tray_icon::set_stt_models(QVariantList&& stt_models) {
     update_menu();
 }
 
-void tray_icon::set_active_stt_model(QString&& stt_model) {
+void tray_icon::set_active_stt_model(QString&& stt_model,
+                                     bool translate_supported) {
     m_active_stt_model = std::move(stt_model);
+    m_stt_translate_supported = translate_supported;
     update_menu();
 }
 
@@ -339,4 +368,11 @@ void tray_icon::set_tts_models(QVariantList&& tts_models) {
 void tray_icon::set_active_tts_model(QString&& tts_model) {
     m_active_tts_model = std::move(tts_model);
     update_menu();
+}
+
+void tray_icon::set_fake_keyboard_supported(bool supported) {
+    if (m_fake_keyboard_supported != supported) {
+        m_fake_keyboard_supported = supported;
+        update_menu();
+    }
 }
