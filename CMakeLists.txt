@@ -536,11 +536,11 @@ if(WITH_DESKTOP)
         find_package(Qt5 COMPONENTS X11Extras REQUIRED)
         list(APPEND deps_libs Qt5::X11Extras)
 
-        pkg_search_module(xkbcommon REQUIRED xkbcommon)
+        pkg_search_module(xkbcommon REQUIRED xkbcommon>=1.6.0)
         list(APPEND deps_libs ${xkbcommon_LIBRARIES})
         list(APPEND includes ${xkbcommon_INCLUDE_DIRS})
 
-        pkg_search_module(xkbcommonx11 REQUIRED xkbcommon-x11)
+        pkg_search_module(xkbcommonx11 REQUIRED xkbcommon-x11>=1.6.0)
         list(APPEND deps_libs ${xkbcommonx11_LIBRARIES})
         list(APPEND includes ${xkbcommonx11_INCLUDE_DIRS})
 
