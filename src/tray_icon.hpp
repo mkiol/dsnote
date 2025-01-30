@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,7 +14,8 @@
 #include <QSystemTrayIcon>
 #include <QTimer>
 #include <QVariantMap>
-#include <unordered_map>
+#include <utility>
+#include <vector>
 
 class tray_icon : public QSystemTrayIcon {
     Q_OBJECT
@@ -61,9 +62,10 @@ class tray_icon : public QSystemTrayIcon {
    private:
     inline static const auto app_icon = QStringLiteral(":/app_icon.png");
     QMenu m_menu;
+    QMenu m_menu_translate;
     state_t m_state = state_t::busy;
     task_state_t m_task_state = task_state_t::idle;
-    std::unordered_map<action_t, QObject*> m_actions;
+    std::vector<std::pair<action_t, QObject*>> m_actions;
     QVariantList m_stt_models;
     QString m_active_stt_model;
     QVariantList m_tts_models;

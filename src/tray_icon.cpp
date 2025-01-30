@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -250,89 +250,105 @@ void tray_icon::update_menu() {
                 break;
         }
     });
+
+    QMenu* new_menu = m_stt_translate_supported ? &m_menu_translate : &m_menu;
+    if (contextMenu() != new_menu) {
+        setContextMenu(new_menu);
+    }
 }
 
 void tray_icon::make_menu() {
     m_actions.clear();
 
-    m_actions.emplace(
-        action_t::start_listening,
-        m_menu.addAction(
-            QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
-            tr("Start listening")));
-    m_actions.emplace(
-        action_t::start_listening_translate,
-        m_menu.addAction(
-            QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
-            tr("Start listening, always translate")));
-    m_actions.emplace(
-        action_t::start_listening_active_window,
-        m_menu.addAction(
-            QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
-            tr("Start listening, text to active window")));
-    m_actions.emplace(
+    auto add_action_to_menu = [this](action_t action_type, const char* icon,
+                                     const QString& text, QMenu& menu) {
+        auto* action = menu.addAction(QIcon::fromTheme(icon), text);
+        m_actions.emplace_back(action_type, action);
+    };
+    auto add_menu_to_menu = [this](action_t action_type, const char* icon,
+                                   QMenu& menu) {
+        auto* action = menu.addMenu(QIcon::fromTheme(icon), QString{});
+        m_actions.emplace_back(action_type, action);
+    };
+
+    add_action_to_menu(action_t::start_listening,
+                       "audio-input-microphone-symbolic", tr("Start listening"),
+                       m_menu);
+    add_action_to_menu(action_t::start_listening,
+                       "audio-input-microphone-symbolic", tr("Start listening"),
+                       m_menu_translate);
+    add_action_to_menu(
+        action_t::start_listening_translate, "audio-input-microphone-symbolic",
+        tr("Start listening, always translate"), m_menu_translate);
+    add_action_to_menu(action_t::start_listening_active_window,
+                       "audio-input-microphone-symbolic",
+                       tr("Start listening, text to active window"), m_menu);
+    add_action_to_menu(action_t::start_listening_active_window,
+                       "audio-input-microphone-symbolic",
+                       tr("Start listening, text to active window"),
+                       m_menu_translate);
+    add_action_to_menu(
         action_t::start_listening_translate_active_window,
-        m_menu.addAction(
-            QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
-            tr("Start listening, always translate, text to active window")));
-    m_actions.emplace(
-        action_t::start_listening_clipboard,
-        m_menu.addAction(
-            QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
-            tr("Start listening, text to clipboard")));
-    m_actions.emplace(
+        "audio-input-microphone-symbolic",
+        tr("Start listening, always translate, text to active window"),
+        m_menu_translate);
+    add_action_to_menu(action_t::start_listening_clipboard,
+                       "audio-input-microphone-symbolic",
+                       tr("Start listening, text to clipboard"), m_menu);
+    add_action_to_menu(
+        action_t::start_listening_clipboard, "audio-input-microphone-symbolic",
+        tr("Start listening, text to clipboard"), m_menu_translate);
+    add_action_to_menu(
         action_t::start_listening_translate_clipboard,
-        m_menu.addAction(
-            QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
-            tr("Start listening, always translate, text to clipboard")));
-    m_actions.emplace(
-        action_t::stop_listening,
-        m_menu.addAction(
-            QIcon::fromTheme(QStringLiteral("media-playback-stop-symbolic")),
-            tr("Stop listening")));
-    m_actions.emplace(
-        action_t::change_stt_model,
-        m_menu.addMenu(
-            QIcon::fromTheme(QStringLiteral("audio-input-microphone-symbolic")),
-            QString{}));
+        "audio-input-microphone-symbolic",
+        tr("Start listening, always translate, text to clipboard"),
+        m_menu_translate);
+    add_action_to_menu(action_t::stop_listening, "media-playback-stop-symbolic",
+                       tr("Stop listening"), m_menu);
+    add_action_to_menu(action_t::stop_listening, "media-playback-stop-symbolic",
+                       tr("Stop listening"), m_menu_translate);
+    add_menu_to_menu(action_t::change_stt_model,
+                     "audio-input-microphone-symbolic", m_menu);
+    add_menu_to_menu(action_t::change_stt_model,
+                     "audio-input-microphone-symbolic", m_menu_translate);
     m_menu.addSeparator();
-    m_actions.emplace(
-        action_t::start_reading,
-        m_menu.addAction(
-            QIcon::fromTheme(QStringLiteral("audio-speakers-symbolic")),
-            tr("Start reading")));
-    m_actions.emplace(
-        action_t::start_reading_clipboard,
-        m_menu.addAction(
-            QIcon::fromTheme(QStringLiteral("audio-speakers-symbolic")),
-            tr("Start reading text from clipboard")));
-    m_actions.emplace(
-        action_t::pause_resume_reading,
-        m_menu.addAction(
-            QIcon::fromTheme(QStringLiteral("media-playback-pause-symbolic")),
-            tr("Pause/Resume reading")));
-    m_actions.emplace(
-        action_t::change_tts_model,
-        m_menu.addMenu(
-            QIcon::fromTheme(QStringLiteral("audio-speakers-symbolic")),
-            QString{}));
+    m_menu_translate.addSeparator();
+    add_action_to_menu(action_t::start_reading, "audio-speakers-symbolic",
+                       tr("Start reading"), m_menu);
+    add_action_to_menu(action_t::start_reading, "audio-speakers-symbolic",
+                       tr("Start reading"), m_menu_translate);
+    add_action_to_menu(action_t::start_reading_clipboard,
+                       "audio-speakers-symbolic",
+                       tr("Start reading text from clipboard"), m_menu);
+    add_action_to_menu(
+        action_t::start_reading_clipboard, "audio-speakers-symbolic",
+        tr("Start reading text from clipboard"), m_menu_translate);
+    add_action_to_menu(action_t::pause_resume_reading,
+                       "media-playback-pause-symbolic",
+                       tr("Pause/Resume reading"), m_menu);
+    add_action_to_menu(action_t::pause_resume_reading,
+                       "media-playback-pause-symbolic",
+                       tr("Pause/Resume reading"), m_menu_translate);
+    add_menu_to_menu(action_t::change_tts_model, "audio-speakers-symbolic",
+                     m_menu);
+    add_menu_to_menu(action_t::change_tts_model, "audio-speakers-symbolic",
+                     m_menu_translate);
     m_menu.addSeparator();
-    m_actions.emplace(
-        action_t::cancel,
-        m_menu.addAction(
-            QIcon::fromTheme(QStringLiteral("action-unavailable-symbolic")),
-            tr("Cancel")));
+    m_menu_translate.addSeparator();
+    add_action_to_menu(action_t::cancel, "action-unavailable-symbolic",
+                       tr("Cancel"), m_menu);
+    add_action_to_menu(action_t::cancel, "action-unavailable-symbolic",
+                       tr("Cancel"), m_menu_translate);
     m_menu.addSeparator();
-    m_actions.emplace(
-        action_t::toggle_app_window,
-        m_menu.addAction(
-            QIcon::fromTheme(QStringLiteral("view-restore-symbolic")),
-            tr("Show/Hide")));
-    m_actions.emplace(
-        action_t::quit,
-        m_menu.addAction(
-            QIcon::fromTheme(QStringLiteral("application-exit-symbolic")),
-            tr("Quit")));
+    m_menu_translate.addSeparator();
+    add_action_to_menu(action_t::toggle_app_window, "view-restore-symbolic",
+                       tr("Show/Hide"), m_menu);
+    add_action_to_menu(action_t::toggle_app_window, "view-restore-symbolic",
+                       tr("Show/Hide"), m_menu_translate);
+    add_action_to_menu(action_t::quit, "application-exit-symbolic", tr("Quit"),
+                       m_menu);
+    add_action_to_menu(action_t::quit, "application-exit-symbolic", tr("Quit"),
+                       m_menu_translate);
 
     std::for_each(m_actions.cbegin(), m_actions.cend(), [this](const auto& p) {
         if (typeid(*p.second) == typeid(QAction)) {
@@ -344,8 +360,6 @@ void tray_icon::make_menu() {
     });
 
     update_menu();
-
-    setContextMenu(&m_menu);
 }
 
 void tray_icon::set_stt_models(QVariantList&& stt_models) {
