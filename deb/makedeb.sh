@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION="4.6.1"
+VERSION="4.7.1"
 REV="1"
 ARCH="amd64"
 LDIR="$(
@@ -15,7 +15,7 @@ DS_DOC="${DS_DIR}/usr/share/doc/dsnote"
 SOURCEDIR="dsnote-${VERSION}"
 SOURCEFILE="v${VERSION}.tar.gz"
 SOURCEURL="https://github.com/mkiol/dsnote/archive/refs/tags/${SOURCEFILE}"
-SHA256SUM="301ec08dff6afa8ea321c74fc25aa1b42423d3d2ee1da840ac80b40e391332b3"
+SHA256SUM="6b3c5029b32b272bd5238fb830c3aadce0cec438f7bece13bb304a7e52676b1b"
 
 wget -c -q --show-progress "$SOURCEURL"
 echo "${SHA256SUM}  ${SOURCEFILE}" | sha256sum --check
@@ -37,19 +37,20 @@ CMAKE="-DCMAKE_BUILD_TYPE=Release -DWITH_DESKTOP=ON \
         -DBUILD_FFMPEG=ON \
         -DBUILD_TAGLIB=OFF \
         -DBUILD_VOSK=OFF \
+        -DBUILD_WHISPERCPP_VULKAN=ON \
         -DBUILD_QQC2_BREEZE_STYLE=ON \
         -DDOWNLOAD_VOSK=ON \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -Wno-dev"
 
-# Do not build for CUDA if needed packages are not found
+# Build for CUDA if needed packages are found
 dpkg -s nvidia-cuda-dev &> /dev/null && CUDA1=true || CUDA1=false
 dpkg -s nvidia-cuda-toolkit &> /dev/null && CUDA2=true || CUDA2=false
-$CUDA1 && $CUDA2 || CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=OFF"
+$CUDA1 && $CUDA2 && CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=ON -DCMAKE_CUDA_ARCHITECTURES=native"
 
-# Do not build for HIP if needed package is not found
-dpkg -s rocm-hip-sdk &> /dev/null && ROCM=true || ROCM=false
-$ROCM || CMAKE+=" -DBUILD_WHISPERCPP_HIPBLAS=OFF"
+TEST_BUILD=false
+# Disable bergamot and RHVoice (shorter build time - for test only)
+$TEST_BUILD && CMAKE+=" -DBUILD_BERGAMOT=OFF -DBUILD_RHVOICE=OFF -DBUILD_RHVOICE_MODULE=OFF"
 
 cmake ../ $CMAKE
 
