@@ -149,8 +149,20 @@ flatpak install net.mkiol.SpeechNote.Addon.amd
 ```
 
 - Arch Linux (AUR):
+
   - [dsnote](https://aur.archlinux.org/packages/dsnote)
   - [dsnote-git](https://aur.archlinux.org/packages/dsnote-git)
+
+- openSUSE ([Packman repository](https://en.opensuse.org/Additional_package_repositories#Packman))
+
+```sh
+# Base package
+zypper in speechnote
+
+# Optional support for Python-based features in Speech Note
+zypper in speechnote-python-modules
+```
+
 - Sailfish OS: [OpenRepos](https://openrepos.net/content/mkiol/speech-note)
 
 ### Flatpak packages
@@ -237,8 +249,11 @@ git clone <git repository url>
 
 cd dsnote/flatpak
 
-flatpak-builder --user --install-deps-from=flathub --repo="/path/to/local/flatpak/repo" "/path/to/output/dir" net.mkiol.SpeechNote.yaml
+# build a base package
+flatpak-builder --force-clean --user --install-deps-from=flathub --repo="<name or /path/to/local/flatpak/repo>" "/path/to/output/dir" net.mkiol.SpeechNote.yaml
 
+# build an optional NVIDIA add-on package
+flatpak-builder --force-clean --user --install-deps-from=flathub --repo="<name or /path/to/local/flatpak/repo>" "/path/to/output/dir" net.mkiol.SpeechNote.Addon.nvidia.yaml
 ```
 
 ### Sailfish OS
