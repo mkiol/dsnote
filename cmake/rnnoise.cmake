@@ -20,7 +20,8 @@ set(rnnoise_cflags
     -Dcelt_iir=rnnoise_celt_iir \
     -D_celt_autocorr=rnnoise__celt_autocorr \
     -Dcompute_gru=rnnoise_compute_gru \
-    -Dcompute_dense=rnnoise_compute_dense")
+    -Dcompute_dense=rnnoise_compute_dense \
+    -fpie")
 
 ExternalProject_Add(rnnoise
     SOURCE_DIR ${external_dir}/rnnoise

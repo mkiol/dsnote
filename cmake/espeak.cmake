@@ -1,5 +1,5 @@
-set(mbrola_source_url "https://github.com/numediart/MBROLA/archive/refs/tags/3.3.tar.gz")
-set(mbrola_checksum "c01ded2c0a05667e6df2439c1c02b011a5df2bfdf49e24a524630686aea2b558")
+set(mbrola_source_url "https://github.com/numediart/MBROLA/archive/bf17e9e1416a647979ac683657a536e8ca5d880e.zip")
+set(mbrola_checksum "5a7c02a926dc48ab6d1af0e4c8ab53fc191a7e4337de6df57b6706e140fa3087")
 
 set(espeak_source_url "https://github.com/rhasspy/espeak-ng/archive/8593723f10cfd9befd50de447f14bf0a9d2a14a4.zip")
 set(espeak_checksum "cc8092f23a28ccd79b1c5e62984a4c4ac1959d2d0b8193ac208d728c620bd5ed")
@@ -36,8 +36,9 @@ ExternalProject_Add(espeak
         <BINARY_DIR>/autogen.sh &&
         <BINARY_DIR>/configure --prefix=<INSTALL_DIR> --libdir=<INSTALL_DIR>/lib --with-pic
         --with-pcaudiolib=no --with-sonic=no --with-speechplayer=no
-        --with-mbrola=yes --enable-static --with-extdict-ru
-    BUILD_COMMAND ${MAKE}
+        --with-mbrola=yes --enable-static=yes --enable-shared=yes
+        --with-extdict-ru --enable-rpath=no
+    BUILD_COMMAND LD_LIBRARY_PATH=<BINARY_DIR>/src/.libs make
     BUILD_ALWAYS False
     INSTALL_COMMAND make DESTDIR=/ install
 )

@@ -10,6 +10,10 @@ endif()
 list(JOIN whispercpp_flags " " whispercpp_flags)
 list(JOIN whispercppfallback_flags " " whispercppfallback_flags)
 
+if(arch_x8664)
+    set(whispercpp_additional_lib_path "/usr/lib64")
+endif()
+
 if(NOT ${BUILD_OPENBLAS})
     set(BLA_STATIC OFF)
     set(BLA_VENDOR "OpenBLAS")
@@ -68,6 +72,7 @@ if(BUILD_WHISPERCPP_CLBLAST)
             -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
             -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
             -DWHISPER_TARGET_NAME=whisper-clblast
+            -DCMAKE_LIBRARY_PATH=${whispercpp_additional_lib_path}
         BUILD_ALWAYS False
     )
 
@@ -107,6 +112,7 @@ if(BUILD_WHISPERCPP_CUBLAS)
             -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
             -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
             -DWHISPER_TARGET_NAME=whisper-cublas
+            -DCMAKE_LIBRARY_PATH=${whispercpp_additional_lib_path}
         BUILD_ALWAYS False
     )
 
@@ -148,6 +154,7 @@ if(BUILD_WHISPERCPP_HIPBLAS)
             -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
             -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
             -DWHISPER_TARGET_NAME=whisper-hipblas
+            -DCMAKE_LIBRARY_PATH=${whispercpp_additional_lib_path}
         BUILD_ALWAYS False
     )
 
@@ -190,6 +197,7 @@ if(BUILD_WHISPERCPP_OPENVINO)
             -DCMAKE_C_FLAGS=${whispercppfallback_flags} -DCMAKE_CXX_FLAGS=${whispercppfallback_flags}
             -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
             -DWHISPER_TARGET_NAME=whisper-openvino
+            -DCMAKE_LIBRARY_PATH=${whispercpp_additional_lib_path}
         BUILD_ALWAYS False
     )
 
@@ -217,8 +225,10 @@ endif(BUILD_WHISPERCPP_OPENVINO)
 if(BUILD_WHISPERCPP_VULKAN)
     find_package(Vulkan)
     if(NOT ${Vulkan_FOUND})
-    message(FATAL_ERROR "Vulkan not found but it is required by whisper.cpp-vulkan")
+        message(FATAL_ERROR "Vulkan not found but it is required by whisper.cpp-vulkan")
     endif()
+
+    set(whispercppvulkan_flags "${whispercppfallback_flags} -fpie")
 
     ExternalProject_Add(whispercppvulkan
         SOURCE_DIR ${external_dir}/whispercppvulkan
@@ -238,9 +248,10 @@ if(BUILD_WHISPERCPP_VULKAN)
             -DGGML_AVX=ON -DGGML_AVX2=OFF -DGGML_FMA=OFF -DGGML_F16C=ON
             -DBUILD_SHARED_LIBS=ON
             -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
-            -DCMAKE_C_FLAGS=${whispercppfallback_flags} -DCMAKE_CXX_FLAGS=${whispercppfallback_flags}
+            -DCMAKE_C_FLAGS=${whispercppvulkan_flags} -DCMAKE_CXX_FLAGS=${whispercppvulkan_flags}
             -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
             -DWHISPER_TARGET_NAME=whisper-vulkan
+            -DCMAKE_LIBRARY_PATH=${whispercpp_additional_lib_path}
         BUILD_ALWAYS False
     )
 
@@ -270,6 +281,7 @@ ExternalProject_Add(whispercppfallback1
         -DCMAKE_C_FLAGS=${whispercppfallback_flags} -DCMAKE_CXX_FLAGS=${whispercppfallback_flags}
         -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
         -DWHISPER_TARGET_NAME=whisper-fallback1
+        -DCMAKE_LIBRARY_PATH=${whispercpp_additional_lib_path}
     BUILD_ALWAYS False
 )
 
@@ -294,6 +306,7 @@ ExternalProject_Add(whispercppfallback
         -DCMAKE_C_FLAGS=${whispercppfallback_flags} -DCMAKE_CXX_FLAGS=${whispercppfallback_flags}
         -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
         -DWHISPER_TARGET_NAME=whisper-fallback
+        -DCMAKE_LIBRARY_PATH=${whispercpp_additional_lib_path}
     BUILD_ALWAYS False
 )
 
@@ -318,6 +331,7 @@ ExternalProject_Add(whispercppopenblas
         -DCMAKE_C_FLAGS=${whispercpp_flags} -DCMAKE_CXX_FLAGS=${whispercpp_flags}
         -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
         -DWHISPER_TARGET_NAME=whisper-openblas
+        -DCMAKE_LIBRARY_PATH=${whispercpp_additional_lib_path}
     BUILD_ALWAYS False
 )
 
