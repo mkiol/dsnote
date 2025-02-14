@@ -55,6 +55,7 @@ option(BUILD_HTML2MD "download sources of html2md lib, build and link statically
 option(BUILD_MADDY "download sources of maddy lib" ON)
 option(BUILD_XDO "download sources of xdo lib and link statically" ON)
 option(BUILD_SAM "download sources of sam and link statically" ON)
+option(BUILD_XKBCOMMON "download sources of xkbcommon build and link statically" OFF)
 option(BUILD_QQC2_BREEZE_STYLE "download sources of QQC2 Breeze Style, build and install" OFF)
 
 # options used only for testing
@@ -535,13 +536,17 @@ if(WITH_DESKTOP)
         find_package(Qt5 COMPONENTS X11Extras REQUIRED)
         list(APPEND deps_libs Qt5::X11Extras)
 
-        pkg_search_module(xkbcommon REQUIRED xkbcommon>=1.6.0)
-        list(APPEND deps_libs ${xkbcommon_LIBRARIES})
-        list(APPEND includes ${xkbcommon_INCLUDE_DIRS})
+        if(BUILD_XKBCOMMON)
+            include(${cmake_path}/xkbcommon.cmake)
+        else()
+            pkg_search_module(xkbcommon REQUIRED xkbcommon>=1.6.0)
+            list(APPEND deps_libs ${xkbcommon_LIBRARIES})
+            list(APPEND includes ${xkbcommon_INCLUDE_DIRS})
 
-        pkg_search_module(xkbcommonx11 REQUIRED xkbcommon-x11>=1.6.0)
-        list(APPEND deps_libs ${xkbcommonx11_LIBRARIES})
-        list(APPEND includes ${xkbcommonx11_INCLUDE_DIRS})
+            pkg_search_module(xkbcommonx11 REQUIRED xkbcommon-x11>=1.6.0)
+            list(APPEND deps_libs ${xkbcommonx11_LIBRARIES})
+            list(APPEND includes ${xkbcommonx11_INCLUDE_DIRS})
+        endif()
 
         if(BUILD_QHOTKEY)
             include(${cmake_path}/qhotkey.cmake)

@@ -38,7 +38,7 @@ ExternalProject_Add(espeak
         --with-pcaudiolib=no --with-sonic=no --with-speechplayer=no
         --with-mbrola=yes --enable-static=yes --enable-shared=yes
         --with-extdict-ru --enable-rpath=no
-    BUILD_COMMAND LD_LIBRARY_PATH=<BINARY_DIR>/src/.libs make
+    BUILD_COMMAND export LD_LIBRARY_PATH=<BINARY_DIR>/src/.libs && make
     BUILD_ALWAYS False
     INSTALL_COMMAND make DESTDIR=/ install
 )
