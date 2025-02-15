@@ -28,7 +28,9 @@
 
 #include "config.h"
 #include "gpu_tools.hpp"
+#include "logger.hpp"
 #include "module_tools.hpp"
+#include "qtlogger.hpp"
 
 QDebug operator<<(QDebug d, settings::mode_t mode) {
     switch (mode) {
@@ -238,17 +240,15 @@ QDebug operator<<(QDebug d, settings::trans_rule_flags_t flags) {
 settings::launch_mode_t settings::launch_mode = launch_mode_t::app_stanalone;
 
 settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
-    qDebug() << "app:" << APP_ORG << APP_ID;
-    qDebug() << "config location:"
-             << QStandardPaths::writableLocation(
-                    QStandardPaths::ConfigLocation);
-    qDebug() << "data location:"
-             << QStandardPaths::writableLocation(
-                    QStandardPaths::AppDataLocation);
-    qDebug() << "cache location:"
-             << QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-    qDebug() << "settings file:" << fileName();
-    qDebug() << "platform:" << QGuiApplication::platformName();
+    LOGD("app: " << APP_ORG << " " << APP_ID);
+    LOGD("config location: "
+         << QStandardPaths::writableLocation(QStandardPaths::ConfigLocation));
+    LOGD("data location: " << QStandardPaths::writableLocation(
+             QStandardPaths::AppDataLocation));
+    LOGD("cache location: "
+         << QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
+    LOGD("settings file: " << fileName());
+    LOGD("platform:" << QGuiApplication::platformName());
 
     if (launch_mode != launch_mode_t::app) {
         // in app mode, flags are updated in fa
@@ -1335,11 +1335,11 @@ bool settings::is_native_style() const { return m_native_style; }
 static bool use_default_qt_style() {
     const auto* desk_name_str = getenv("XDG_CURRENT_DESKTOP");
     if (!desk_name_str) {
-        qDebug() << "no XDG_CURRENT_DESKTOP";
+        LOGD("no XDG_CURRENT_DESKTOP");
         return false;
     }
 
-    qDebug() << "XDG_CURRENT_DESKTOP:" << desk_name_str;
+    LOGD("XDG_CURRENT_DESKTOP: " << desk_name_str);
 
     QString desk_name{desk_name_str};
 
@@ -1369,15 +1369,15 @@ void settings::update_qt_style(QQmlApplicationEngine* engine) {
 
     auto styles = QQuickStyle::availableStyles();
 
-    qDebug() << "available styles:" << styles;
-    qDebug() << "style paths:" << QQuickStyle::stylePathList();
-    qDebug() << "import paths:" << engine->importPathList();
-    qDebug() << "library paths:" << QCoreApplication::libraryPaths();
+    LOGD("available styles: " << styles);
+    LOGD("style paths: " << QQuickStyle::stylePathList());
+    LOGD("import paths: " << engine->importPathList());
+    LOGD("library paths: " << QCoreApplication::libraryPaths());
 
     QString style;
 
     if (qt_style_auto()) {
-        qDebug() << "using auto qt style";
+        LOGD("using auto qt style");
 
         if (styles.contains(default_qt_style_fallback)) {
             style = use_default_qt_style() && styles.contains(default_qt_style)
@@ -1386,7 +1386,7 @@ void settings::update_qt_style(QQmlApplicationEngine* engine) {
         } else if (styles.contains(default_qt_style)) {
             style = default_qt_style;
         } else {
-            qWarning() << "default qt style not found";
+            LOGW("default qt style not found");
         }
     } else {
         auto idx = qt_style_idx();
@@ -1394,16 +1394,16 @@ void settings::update_qt_style(QQmlApplicationEngine* engine) {
         if (idx >= 0 && idx < styles.size()) style = styles.at(idx);
 
         if (!styles.contains(style)) {
-            qWarning() << "qt style not found:" << style;
+            LOGW("qt style not found: " << style);
             style.clear();
         }
     }
 
     if (style.isEmpty()) {
-        qDebug() << "don't forcing any qt style";
+        LOGD("don't forcing any qt style");
         m_native_style = true;
     } else {
-        qDebug() << "switching to style:" << style;
+        LOGD("switching to style: " << style);
 
         QQuickStyle::setStyle(style);
 
@@ -1421,7 +1421,7 @@ void settings::enforce_num_threads() const {
                        std::max(std::thread::hardware_concurrency(), 2U) - 1)
             : 0;
 
-    qDebug() << "enforcing num threads:" << num_threads;
+    LOGD("enforcing num threads: " << num_threads);
 
     if (num_threads > 0) {
         setenv("OPENBLAS_NUM_THREADS", std::to_string(num_threads).c_str(), 1);
@@ -1430,13 +1430,13 @@ void settings::enforce_num_threads() const {
 }
 void settings::update_hw_devices_from_fa(
     const QVariantMap& features_availability) {
-#define ENGINE_OPTS(name)                                                    \
-    if (features_availability.contains(#name "-gpu-devices")) {              \
-        m_##name##_gpu_devices = string_list_from_list(                      \
-            features_availability.value(#name "-gpu-devices").toList());     \
-        qDebug() << #name "-gpu-devices from fa:" << m_##name##_gpu_devices; \
-    } else {                                                                 \
-        qDebug() << "no " #name "-gpu-devices from fa";                      \
+#define ENGINE_OPTS(name)                                                \
+    if (features_availability.contains(#name "-gpu-devices")) {          \
+        m_##name##_gpu_devices = string_list_from_list(                  \
+            features_availability.value(#name "-gpu-devices").toList()); \
+        LOGD(#name "-gpu-devices from fa: " << m_##name##_gpu_devices);  \
+    } else {                                                             \
+        LOGD("no " #name "-gpu-devices from fa");                        \
     }
 
     ENGINE_OPTS(whispercpp)
@@ -1461,11 +1461,11 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
 
     m_rocm_gpu_versions.clear();
 
-#define X(name, dvalue) qDebug() << "scan " #name ":" << hw_scan_##name();
+#define X(name, dvalue) LOGD("scan " #name ":" << hw_scan_##name());
     GPU_SCAN_TABLE
 #undef X
-    qDebug() << "hw feature flags:"
-             << static_cast<hw_feature_flags_t>(hw_feature_flags);
+    LOGD("hw feature flags: "
+         << static_cast<hw_feature_flags_t>(hw_feature_flags));
 
     bool disable_fasterwhisper_cuda =
         (hw_feature_flags &
@@ -1596,11 +1596,12 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
 
     if (result.error == gpu_tools::error_t::cuda_uknown_error &&
         (!is_flatpak() || addon_flags() & addon_flags_t::AddonNvidia) > 0) {
-        qWarning() << "*********************************************";
-        qWarning() << "Most likely, NVIDIA kernel module has not been fully "
-                      "initialized. Try executing 'nvidia-modprobe -c 0 -u' "
-                      "before running Speech Note";
-        qWarning() << "*********************************************";
+        LOGW("*********************************************");
+        LOGW(
+            "Most likely, NVIDIA kernel module has not been fully "
+            "initialized. Try executing 'nvidia-modprobe -c 0 -u' "
+            "before running Speech Note");
+        LOGW("*********************************************");
         add_error_flags(error_flags_t::ErrorCudaUnknown);
     }
 
@@ -2364,12 +2365,12 @@ void settings::update_addon_flags() {
         QDomDocument doc{};
         QFile file{metainfo_file};
         if (!file.open(QIODevice::ReadOnly)) {
-            qWarning() << "cannot open addon metainfo file:" << metainfo_file;
+            LOGW("cannot open addon metainfo file: " << metainfo_file);
             return {};
         }
 
         if (!doc.setContent(&file)) {
-            qWarning() << "cannot parse addon metainfo file:" << metainfo_file;
+            LOGW("cannot parse addon metainfo file: " << metainfo_file);
             file.close();
             return {};
         }
@@ -2397,13 +2398,13 @@ void settings::update_addon_flags() {
     if (has_nvidia_addon) {
         new_flags |= addon_flags_t::AddonNvidia;
         auto ver = get_addon_ver(nvidia_metainfo_file);
-        qDebug() << "flatpak addon detected: nvidia" << ver;
+        LOGD("flatpak addon detected: nvidia " << ver);
         if (!ver.startsWith(APP_ADDON_VERSION, Qt::CaseInsensitive)) {
-            qWarning() << "*********************************************";
-            qWarning()
-                << "NVIDIA GPU acceleration add-on version is incompatible. "
-                   "Required version is " APP_ADDON_VERSION ".";
-            qWarning() << "*********************************************";
+            LOGW("*********************************************");
+            LOGW(
+                "NVIDIA GPU acceleration add-on version is incompatible. "
+                "Required version is " APP_ADDON_VERSION ".");
+            LOGW("*********************************************");
             add_error_flags(error_flags_t::ErrorIncompatibleNvidiaGpuAddon);
         }
     }
@@ -2411,13 +2412,13 @@ void settings::update_addon_flags() {
     if (has_amd_addon) {
         new_flags |= addon_flags_t::AddonAmd;
         auto ver = get_addon_ver(amd_metainfo_file);
-        qDebug() << "flatpak addon detected: amd" << ver;
+        LOGD("flatpak addon detected: amd " << ver);
         if (!ver.startsWith(APP_ADDON_VERSION, Qt::CaseInsensitive)) {
-            qWarning() << "*********************************************";
-            qWarning()
-                << "AMD GPU acceleration add-on version is incompatible. "
-                   "Required version is " APP_ADDON_VERSION ".";
-            qWarning() << "*********************************************";
+            LOGW("*********************************************");
+            LOGW(
+                "AMD GPU acceleration add-on version is incompatible. "
+                "Required version is " APP_ADDON_VERSION ".");
+            LOGW("*********************************************");
             add_error_flags(error_flags_t::ErrorIncompatibleAmdGpuAddon);
         }
     }
@@ -2425,16 +2426,17 @@ void settings::update_addon_flags() {
 
     if (new_flags != m_addon_flags) {
         m_addon_flags = new_flags;
-        qDebug() << "addon-flags" << m_addon_flags;
+        LOGD("addon-flags: " << m_addon_flags);
         emit addon_flags_changed();
 
         if (m_addon_flags & addon_flags_t::AddonNvidia &&
             m_addon_flags & addon_flags_t::AddonAmd) {
-            qWarning() << "*********************************************";
-            qWarning() << "Both NVIDIA and AMD GPU acceleration add-ons are "
-                          "installed, which is not optimal. "
-                          "Uninstall one of them.";
-            qWarning() << "*********************************************";
+            LOGW("*********************************************");
+            LOGW(
+                "Both NVIDIA and AMD GPU acceleration add-ons are "
+                "installed, which is not optimal. "
+                "Uninstall one of them.");
+            LOGW("*********************************************");
             add_error_flags(error_flags_t::ErrorMoreThanOneGpuAddons);
         }
     }
@@ -2445,10 +2447,10 @@ void settings::update_addon_flags_from_fa(
     if (features_availability.contains("addon-flags")) {
         auto vl = features_availability.value("addon-flags").toList();
         if (!vl.isEmpty()) m_addon_flags = vl.front().toUInt();
-        qDebug() << "addon-flags from fa:" << m_addon_flags;
+        LOGD("addon-flags from fa: " << m_addon_flags);
         emit addon_flags_changed();
     } else {
-        qDebug() << "no addon-flags from fa";
+        LOGD("no addon-flags from fa");
     }
 }
 
@@ -2459,11 +2461,11 @@ void settings::update_system_flags() {
 
     if (gpu_tools::has_nvidia_gpu()) {
         new_flags |= system_flags_t::SystemNvidiaGpu;
-        qDebug() << "nvidia gpu detected";
+        LOGD("nvidia gpu detected");
     }
     if (gpu_tools::has_amd_gpu()) {
         new_flags |= system_flags_t::SystemAmdGpu;
-        qDebug() << "amd gpu detected";
+        LOGD("amd gpu detected");
     }
 
     if (m_whispercpp_gpu_devices.size() > 1 ||
@@ -2471,12 +2473,12 @@ void settings::update_system_flags() {
         m_coqui_gpu_devices.size() > 1 ||
         m_whisperspeech_gpu_devices.size() > 1) {
         new_flags |= system_flags_t::SystemHwAccel;
-        qDebug() << "hw accel detected";
+        LOGD("hw accel detected");
     }
 
     if (new_flags != m_system_flags) {
         m_system_flags = new_flags;
-        qDebug() << "system-flags:" << m_system_flags;
+        LOGD("system-flags: " << m_system_flags);
         emit system_flags_changed();
     }
 }
@@ -2486,19 +2488,19 @@ void settings::update_system_flags_from_fa(
     if (features_availability.contains("system-flags")) {
         auto vl = features_availability.value("system-flags").toList();
         if (!vl.isEmpty()) m_system_flags = vl.front().toUInt();
-        qDebug() << "system-flags from fa:" << m_system_flags;
+        LOGD("system-flags from fa: " << m_system_flags);
         emit system_flags_changed();
     } else {
-        qDebug() << "no system-flags from fa";
+        LOGD("no system-flags from fa");
     }
 
     if (features_availability.contains("error-flags")) {
         auto vl = features_availability.value("error-flags").toList();
         if (!vl.isEmpty()) m_error_flags = vl.front().toUInt();
-        qDebug() << "error-flags from fa:" << m_error_flags;
+        LOGD("error-flags from fa: " << m_error_flags);
         emit error_flags_changed();
     } else {
-        qDebug() << "no error-flags from fa";
+        LOGD("no error-flags from fa");
     }
 }
 

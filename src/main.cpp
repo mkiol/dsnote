@@ -56,7 +56,7 @@
 #include "text_tools.hpp"
 
 static void exit_program() {
-    qDebug() << "exiting";
+    LOGD("exiting");
 
     speech_service::remove_cached_files();
 
@@ -65,7 +65,7 @@ static void exit_program() {
 }
 
 static void signal_handler(int sig) {
-    qDebug() << "received signal:" << sig;
+    LOGD("received signal: " << sig);
 
     exit_program();
 }
@@ -383,19 +383,19 @@ static void install_translator() {
     if (!translator->load(QLocale{}, QStringLiteral("dsnote"),
                           QStringLiteral("-"), trans_dir,
                           QStringLiteral(".qm"))) {
-        qDebug() << "failed to load translation:" << QLocale::system().name()
-                 << trans_dir;
+        LOGD("failed to load translation: " << QLocale::system().name() << " "
+                                            << trans_dir);
         if (!translator->load(QStringLiteral("dsnote-en"), trans_dir)) {
-            qDebug() << "failed to load default translation";
+            LOGE("failed to load default translation");
             delete translator;
             return;
         }
     } else {
-        qDebug() << "translation:" << QLocale::system().name();
+        LOGD("translation: " << QLocale::system().name());
     }
 
     if (!QGuiApplication::installTranslator(translator)) {
-        qWarning() << "failed to install translation";
+        LOGW("failed to install translation");
     }
 }
 
@@ -434,7 +434,7 @@ static void start_app(const cmd::options& options,
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 7, 0)
     QGuiApplication::setDesktopFileName(APP_ICON_ID);
-    qDebug() << "desktop file:" << QGuiApplication::desktopFileName();
+    LOGD("desktop file: " << QGuiApplication::desktopFileName());
 #endif
 #endif
     register_types();
@@ -479,7 +479,7 @@ static void start_app(const cmd::options& options,
         QCoreApplication::instance(),
         [url](const QObject* obj, const QUrl& objUrl) {
             if (!obj && url == objUrl) {
-                qCritical() << "failed to create qml object";
+                LOGE("failed to create qml object");
                 QCoreApplication::exit(-1);
             }
         },
@@ -515,9 +515,9 @@ int main(int argc, char* argv[]) {
     initQtLogger();
     initAvLogger();
 
-    qDebug() << "app version:" << APP_VERSION;
+    LOGD("app version: " << APP_VERSION);
 #ifdef USE_FLATPAK
-    qDebug() << "required addon version:" << APP_ADDON_VERSION;
+    LOGD("required addon version: " << APP_ADDON_VERSION);
 #endif
 
     cpu_tools::cpuinfo();
@@ -532,15 +532,15 @@ int main(int argc, char* argv[]) {
 
     switch (cmd_opts.launch_mode) {
         case settings::launch_mode_t::service:
-            qDebug() << "starting service";
+            LOGD("starting service");
             start_service(cmd_opts);
             exit_program();
             break;
         case settings::launch_mode_t::app_stanalone:
-            qDebug() << "starting standalone app";
+            LOGD("starting standalone app");
             break;
         case settings::launch_mode_t::app:
-            qDebug() << "starting app";
+            LOGD("starting app");
             break;
     }
 
