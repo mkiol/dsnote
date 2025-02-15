@@ -242,6 +242,21 @@ cd dsnote/arch/release  # build latest release version
 makepkg -si
 ```
 
+### RHEL/Fedora/Rocky Linux
+
+It is also possible to build and install the latest development version from the repository using the provided SPEC file and helper `make_rpm.sh` script:
+
+```sh
+git clone <git repository url>
+
+cd dsnote/fedora
+
+# optionally install build dependencies
+dnf in rpmdevtools autoconf automake boost-devel cmake fmt-devel kf5-kdbusaddons-devel libXinerama-devel libXtst-devel libarchive-devel libtool libxdo-devel libxkbcommon-x11-devel meson openblas-devel pybind11-devel python3-devel python3-pybind11 qt5-linguist qt5-qtmultimedia-devel qt5-qtquickcontrols2-devel qt5-qtx11extras-devel rubberband-devel taglib-devel xz-devel
+
+make_rpm.sh
+```
+
 ### Flatpak
 
 ```sh
