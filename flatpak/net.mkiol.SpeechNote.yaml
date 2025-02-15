@@ -820,8 +820,8 @@ modules:
       - -DBUILD_EXE=OFF
     sources:
       - type: archive
-        url: https://github.com/tim-gromeyer/html2md/archive/refs/tags/v1.5.3.tar.gz
-        sha256: 9853eeb1d2b1ca34ee7143521d03daacbcfac57a1763180ebd0730595cb46961
+        url: https://github.com/tim-gromeyer/html2md/archive/refs/tags/v1.6.4.tar.gz
+        sha256: e34c80981d6ee5f4a699985dc4a68b0b280542a5c5e5780fdebc3ba0ca30553d
       - type: patch
         path: ../patches/html2md.patch
 
