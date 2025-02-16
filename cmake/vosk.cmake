@@ -96,7 +96,7 @@ if(DOWNLOAD_VOSK)
 
     set(vosk_archive "${PROJECT_BINARY_DIR}/vosk.zip")
 
-    file(DOWNLOAD ${vosk_url} ${vosk_archive} ${external_lib_dir} STATUS vosk_status)
+    file(DOWNLOAD ${vosk_url} ${vosk_archive} STATUS vosk_status)
     file(ARCHIVE_EXTRACT INPUT ${vosk_archive} DESTINATION ${external_dir}/vosk)
     find_file(vosk_lib_path libvosk.so PATHS ${external_dir}/vosk/*/ REQUIRED NO_DEFAULT_PATH)
     find_file(vosk_header_path vosk_api.h PATHS ${external_dir}/vosk/*/ REQUIRED NO_DEFAULT_PATH)

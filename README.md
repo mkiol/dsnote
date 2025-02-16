@@ -252,9 +252,9 @@ git clone <git repository url>
 cd dsnote/fedora
 
 # optionally install build dependencies
-dnf in rpmdevtools autoconf automake boost-devel cmake fmt-devel kf5-kdbusaddons-devel libXinerama-devel libXtst-devel libarchive-devel libtool libxdo-devel libxkbcommon-x11-devel meson openblas-devel pybind11-devel python3-devel python3-pybind11 qt5-linguist qt5-qtmultimedia-devel qt5-qtquickcontrols2-devel qt5-qtx11extras-devel rubberband-devel taglib-devel xz-devel
+dnf install rpmdevtools autoconf automake boost-devel cmake git kf5-kdbusaddons-devel libarchive-devel libxdo-devel libXinerama-devel libxkbcommon-x11-devel libXtst-devel libtool meson openblas-devel patchelf pybind11-devel python3-devel python3-pybind11 qt5-linguist qt5-qtmultimedia-devel qt5-qtquickcontrols2-devel qt5-qtx11extras-devel rubberband-devel taglib-devel vulkan-headers
 
-make_rpm.sh
+./make_rpm.sh
 ```
 
 ### Flatpak

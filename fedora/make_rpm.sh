@@ -36,8 +36,14 @@ tarball_path="$out_dir/$tarball_filename"
 
 echo
 echo "To install all the packages required for the build:"
-echo "dnf install $build_requires"
+echo "dnf install rpmdevtools $build_requires"
 echo
+
+if ! command -v rpmbuild 2>&1 >/dev/null
+then
+    echo "rpmbuild could not be found"
+    exit 1
+fi
 
 cd "$self_dir" &&
 ln -sf --no-target-directory "$src_dir" "$(realpath "$src_dir_ver")" &&
@@ -59,6 +65,6 @@ rm -rf "$rpmbuild_dir" &&
 mkdir -p "$rpmbuild_dir"/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS} &&
 mv "$tarball_path" "$rpmbuild_dir/SOURCES/$tarball_filename" &&
 cp "$spec_file" "$rpmbuild_dir/SPECS/$name.spec" &&
-rpmbuild --define "_topdir $rpmbuild_dir" --clean -ba "$rpmbuild_dir/SPECS/$name.spec" &&
+QA_RPATHS=$((0x0002)) rpmbuild --define "_topdir $rpmbuild_dir" --clean -ba "$rpmbuild_dir/SPECS/$name.spec" &&
 find "$rpmbuild_dir" -type f -name "*.rpm" -exec cp -- "{}" "$out_dir/" \;
 

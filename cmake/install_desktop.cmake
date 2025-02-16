@@ -23,19 +23,23 @@ install(FILES "${desktop_dir}/icons/128x128/${info_binary_id}.png" DESTINATION s
 install(FILES "${desktop_dir}/icons/256x256/${info_binary_id}.png" DESTINATION share/icons/hicolor/256x256/apps)
 install(FILES "${desktop_dir}/icons/512x512/${info_binary_id}.png" DESTINATION share/icons/hicolor/512x512/apps)
 
-if(${patchelf_bin} MATCHES "-NOTFOUND$")
-   message(FATAL_ERROR "patchelf not found but it is required to install files")
-endif()
+function(check_patchelf)
+    if(${patchelf_bin} MATCHES "-NOTFOUND$")
+        message(FATAL_ERROR "patchelf not found but it is required to install files")
+    endif()
+endfunction()
 
 function(strip_all file)
     install(CODE "execute_process(COMMAND ${CMAKE_STRIP} --strip-all ${file})")
 endfunction()
 
 function(remove_runpath file)
+    check_patchelf()
     install(CODE "execute_process(COMMAND ${patchelf_bin} --remove-rpath ${file})")
 endfunction()
 
 function(set_runpath file)
+    check_patchelf()
     install(CODE "execute_process(COMMAND ${patchelf_bin} --remove-rpath ${file})")
     install(CODE "execute_process(COMMAND ${patchelf_bin} --set-rpath ${rpath_install_dir} ${file})")
 endfunction()

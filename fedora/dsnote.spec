@@ -18,6 +18,7 @@ BuildRequires:  libxdo-devel
 BuildRequires:  libXinerama-devel
 BuildRequires:  libxkbcommon-x11-devel
 BuildRequires:  libXtst-devel
+BuildRequires:  libtool
 BuildRequires:  meson
 BuildRequires:  openblas-devel
 BuildRequires:  patchelf
@@ -39,6 +40,7 @@ Requires:       (qqc2-desktop-style < 6 or kf5-qqc2-desktop-style)
 Requires:       qt5-qtquickcontrols
 Requires:       qt5-qtquickcontrols2
 Requires:       vulkan-loader
+Recommends:     ydotool
 
 %description
 Speech Note let you take, read and translate notes in multiple languages.
@@ -48,6 +50,7 @@ without using a network connection. Your privacy is always respected.
 No data is sent to the Internet.
 
 %global debug_package %{nil}
+%global source_date_epoch_from_changelog  %{nil}
 
 %prep
 %autosetup

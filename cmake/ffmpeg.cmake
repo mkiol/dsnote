@@ -22,7 +22,8 @@ ExternalProject_Add(nasm
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${nasm_source_url}"
     URL_HASH SHA256=${nasm_checksum}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
+    CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> &&
+        <BINARY_DIR>/configure --prefix=<INSTALL_DIR>
     BUILD_COMMAND ${MAKE}
     BUILD_ALWAYS False
     INSTALL_COMMAND make DESTDIR=/ install
@@ -50,9 +51,11 @@ ExternalProject_Add(ogg
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${ogg_source_url}"
     URL_HASH SHA256=${ogg_checksum}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
-        --bindir=<INSTALL_DIR>/bin --libdir=<INSTALL_DIR>/lib
-        --enable-static=true --enable-shared=false --with-pic=yes
+    CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> &&
+        autoreconf -vfi &&
+        <BINARY_DIR>/configure --prefix=<INSTALL_DIR>
+            --bindir=<INSTALL_DIR>/bin --libdir=<INSTALL_DIR>/lib
+            --enable-static=true --enable-shared=false --with-pic=yes
     BUILD_COMMAND ${MAKE}
     BUILD_ALWAYS False
     INSTALL_COMMAND make DESTDIR=/ install

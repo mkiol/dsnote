@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 
 option(WITH_DESKTOP "enable desktop ui" OFF)
 option(WITH_SFOS "enable sfos ui" OFF)
@@ -264,11 +264,12 @@ set(deps "") # dependencies of dsnote_lib and dsnote
 set(deps_libs "") # libs to link to dsnote_lib and dsnote
 
 # global config
-
 set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_SKIP_RPATH ON)
+set(ENV{PKG_CONFIG_PATH} $ENV{PKG_CONFIG_PATH}:${PROJECT_BINARY_DIR})
+message(STATUS "PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}")
 
 # includes
 
@@ -688,7 +689,7 @@ endif()
 if(BUILD_OPENBLAS)
     include(${cmake_path}/openblas.cmake)
 else()
-    pkg_search_module(openblas REQUIRED openblas)
+    include(${cmake_path}/openblas_pkgconfig.cmake)
 endif()
 
 if(BUILD_APRILASR)

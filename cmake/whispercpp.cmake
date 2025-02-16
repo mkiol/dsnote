@@ -10,14 +10,13 @@ endif()
 list(JOIN whispercpp_flags " " whispercpp_flags)
 list(JOIN whispercppfallback_flags " " whispercppfallback_flags)
 
-if(arch_x8664)
-    set(whispercpp_additional_lib_path "/usr/lib64")
-endif()
-
 if(NOT ${BUILD_OPENBLAS})
     set(BLA_STATIC OFF)
     set(BLA_VENDOR "OpenBLAS")
     find_package(BLAS REQUIRED)
+
+    cmake_path(GET BLAS_LIBRARIES PARENT_PATH openblas_lib_dir)
+    set(whispercpp_additional_lib_path "${openblas_lib_dir}")
 endif()
 
 set(whispercpp_patch_file "${patches_dir}/whispercpp.patch")
@@ -62,7 +61,9 @@ if(BUILD_WHISPERCPP_CLBLAST)
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                     -i ${patches_dir}/whispercpp-clblast.patch ||
                         echo "patch cmd failed, likely already patched"
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}
+            ${CMAKE_COMMAND} -S <SOURCE_DIR> -B <BINARY_DIR>
+            -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
             -DCMAKE_INSTALL_LIBDIR=lib
             -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON
@@ -101,7 +102,9 @@ if(BUILD_WHISPERCPP_CUBLAS)
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                     -i ${whispercpp_patch_file} ||
                         echo "patch cmd failed, likely already patched"
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}
+            ${CMAKE_COMMAND} -S <SOURCE_DIR> -B <BINARY_DIR>
+            -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
             -DCMAKE_INSTALL_LIBDIR=lib
             -DGGML_NATIVE=OFF
@@ -143,7 +146,9 @@ if(BUILD_WHISPERCPP_HIPBLAS)
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                     -i ${whispercpp_patch_file} ||
                         echo "patch cmd failed, likely already patched"
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}
+            ${CMAKE_COMMAND} -S <SOURCE_DIR> -B <BINARY_DIR>
+            -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
             -DCMAKE_INSTALL_LIBDIR=lib
             -DGGML_NATIVE=OFF
@@ -185,7 +190,9 @@ if(BUILD_WHISPERCPP_OPENVINO)
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                     -i ${whispercpp_patch_file} ||
                         echo "patch cmd failed, likely already patched"
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}
+            ${CMAKE_COMMAND} -S <SOURCE_DIR> -B <BINARY_DIR>
+            -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
             -DCMAKE_INSTALL_LIBDIR=lib
             -DGGML_NATIVE=OFF
@@ -239,7 +246,9 @@ if(BUILD_WHISPERCPP_VULKAN)
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                     -i ${whispercpp_patch_file} ||
                         echo "patch cmd failed, likely already patched"
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}
+            ${CMAKE_COMMAND} -S <SOURCE_DIR> -B <BINARY_DIR>
+            -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
             -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
             -DCMAKE_INSTALL_LIBDIR=lib
@@ -269,7 +278,9 @@ ExternalProject_Add(whispercppfallback1
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${whispercpp_patch_file} ||
                     echo "patch cmd failed, likely already patched"
-    CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}
+        ${CMAKE_COMMAND} -S <SOURCE_DIR> -B <BINARY_DIR>
+        -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
         -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
         -DCMAKE_INSTALL_LIBDIR=lib
@@ -294,7 +305,9 @@ ExternalProject_Add(whispercppfallback
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${whispercpp_patch_file} ||
                     echo "patch cmd failed, likely already patched"
-    CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}
+        ${CMAKE_COMMAND} -S <SOURCE_DIR> -B <BINARY_DIR>
+        -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
         -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
         -DCMAKE_INSTALL_LIBDIR=lib
@@ -319,7 +332,9 @@ ExternalProject_Add(whispercppopenblas
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${whispercpp_patch_file} ||
                     echo "patch cmd failed, likely already patched"
-    CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}
+        ${CMAKE_COMMAND} -S <SOURCE_DIR> -B <BINARY_DIR>
+        -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
         -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
         -DCMAKE_INSTALL_LIBDIR=lib
