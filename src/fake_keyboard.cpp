@@ -30,13 +30,17 @@
 #include <X11/XKBlib.h>
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
-#include <stdio.h>
 #include <xdo.h>
 #include <xkbcommon/xkbcommon-compose.h>
 #include <xkbcommon/xkbcommon-x11.h>
 #include <xkbcommon/xkbcommon.h>
 
+#include <cstdio>
 #include <optional>
+#include <string>
+
+#include "logger.hpp"
+#include "qtlogger.hpp"
 
 static XKeyEvent create_key_event(Display *display, Window &win,
                                   Window &win_root,
@@ -212,40 +216,55 @@ void fake_keyboard::ydo_type_char(char c) {
 int fake_keyboard::make_ydo_socket() {
     auto ydo_daemon_socket = socket(AF_UNIX, SOCK_DGRAM, 0);
     if (ydo_daemon_socket < 0) {
-        qDebug() << "failed to create ydo socket";
+        LOGW("failed to create ydo socket");
         return -1;
     }
 
-    sockaddr_un sa{};
-    sa.sun_family = AF_UNIX;
+    auto connect_socket = [&](const std::string &file) {
+        sockaddr_un sa{};
+        sa.sun_family = AF_UNIX;
 
-    char *env_ys = getenv("YDOTOOL_SOCKET");
-    char *env_xrd = getenv("XDG_RUNTIME_DIR");
+        snprintf(sa.sun_path, sizeof(sa.sun_path) - 1, "%s", file.c_str());
+
+        if (::connect(ydo_daemon_socket, (const struct sockaddr *)&sa,
+                      sizeof(sa))) {
+            int err = errno;
+            LOGD("failed to connect ydo socket: " << sa.sun_path << " "
+                                                  << strerror(err));
+            return false;
+        }
+
+        LOGD("connected ydo socket: " << sa.sun_path);
+        return true;
+    };
+
+    auto *env_ys = getenv("YDOTOOL_SOCKET");
+    auto *env_xrd = getenv("XDG_RUNTIME_DIR");
 
     if (env_ys) {
-        snprintf(sa.sun_path, sizeof(sa.sun_path) - 1, "%s", env_ys);
+        if (!connect_socket(env_ys)) {
+            close(ydo_daemon_socket);
+            return -1;
+        }
     } else if (env_xrd) {
-        snprintf(sa.sun_path, sizeof(sa.sun_path) - 1, "%s/.ydotool_socket",
-                 env_xrd);
+        if (!connect_socket(std::string{env_xrd} + "/.ydotool_socket")) {
+            if (!connect_socket("/tmp/.ydotool_socket")) {
+                close(ydo_daemon_socket);
+                return -1;
+            }
+        }
     } else {
-        snprintf(sa.sun_path, sizeof(sa.sun_path) - 1, "%s",
-                 "/tmp/.ydotool_socket");
-    }
-
-    if (::connect(ydo_daemon_socket, (const struct sockaddr *)&sa,
-                  sizeof(sa))) {
-        int err = errno;
-        qDebug() << "failed to connect ydo socket" << sa.sun_path
-                 << strerror(err);
-        close(ydo_daemon_socket);
-        return -1;
+        if (!connect_socket("/tmp/.ydotool_socket")) {
+            close(ydo_daemon_socket);
+            return -1;
+        }
     }
 
     return ydo_daemon_socket;
 }
 
 void fake_keyboard::init_ydo() {
-    qDebug() << "using ydo fake-keyboard";
+    LOGD("using ydo fake-keyboard");
 
     m_ydo_daemon_socket = make_ydo_socket();
     if (m_ydo_daemon_socket < 0) {
@@ -326,7 +345,7 @@ void fake_keyboard::send_keyevent_ydo() {
 void fake_keyboard::send_text_legacy(const QString &text) {
     auto num_layouts = xkb_keymap_num_layouts(m_xkb_keymap);
     if (num_layouts < 1) {
-        qWarning() << "no xkb layouts";
+        LOGW("no xkb layouts");
         return;
     }
 
@@ -348,7 +367,7 @@ void fake_keyboard::send_text_xdo(const QString &text) {
 }
 
 void fake_keyboard::init_legacy() {
-    qDebug() << "using legacy fake-keyboard";
+    LOGD("using legacy fake-keyboard");
 
     m_x11_display = QX11Info::display();
     if (!m_x11_display) throw std::runtime_error{"no x11 display"};
@@ -378,28 +397,28 @@ void fake_keyboard::init_legacy() {
     }
     if (m_num_layouts > XkbGroup4Index + 1) m_num_layouts = XkbGroup4Index + 1;
 
-    qDebug() << "keyboard layouts:";
+    LOGD("keyboard layouts: ");
     for (unsigned int i = 0; i < m_num_layouts; ++i) {
         const auto *name = xkb_keymap_layout_get_name(m_xkb_keymap, i);
-        qDebug() << i << ":" << name;
+        LOGD(" " << i << ":" << name);
     }
 
     if (auto compose_file = settings::instance()->x11_compose_file();
         !compose_file.isEmpty()) {
-        qDebug() << "using compose file:" << compose_file;
+        LOGD("using compose file: " << compose_file);
         if (auto *file = fopen(compose_file.toStdString().c_str(), "r")) {
             m_xkb_compose_table = xkb_compose_table_new_from_file(
                 m_xkb_ctx, file, "C", XKB_COMPOSE_FORMAT_TEXT_V1,
                 XKB_COMPOSE_COMPILE_NO_FLAGS);
             fclose(file);
         } else {
-            qWarning() << "can't open compose file";
+            LOGW("can't open compose file");
         }
     }
     if (!m_xkb_compose_table)
         m_xkb_compose_table = xkb_compose_table_new_from_locale(
             m_xkb_ctx, "C", XKB_COMPOSE_COMPILE_NO_FLAGS);
-    if (!m_xkb_compose_table) qWarning() << "can't compile xkb compose table";
+    if (!m_xkb_compose_table) LOGW("can't compile xkb compose table");
 
     m_method = method_t::legacy;
 
@@ -418,7 +437,7 @@ void fake_keyboard::init_legacy() {
 }
 
 void fake_keyboard::init_xdo() {
-    qDebug() << "using xdo fake-keyboard";
+    LOGD("using xdo fake-keyboard");
 
     if (!QX11Info::display()) throw std::runtime_error{"no x11 display"};
 

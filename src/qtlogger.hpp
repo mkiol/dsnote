@@ -8,8 +8,11 @@
 #ifndef QTLOGGER_HPP
 #define QTLOGGER_HPP
 
+#include <QDBusError>
 #include <QString>
 #include <QStringList>
+#include <QVariant>
+#include <QVariantMap>
 #include <iostream>
 
 std::ostream &operator<<(std::ostream &os, const QString &msg);

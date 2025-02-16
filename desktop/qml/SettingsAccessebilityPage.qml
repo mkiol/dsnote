@@ -18,7 +18,7 @@ ColumnLayout {
     property bool verticalMode: parent ? parent.verticalMode : false
 
     Component.onCompleted: {
-        app.update_freature_statuses()
+        app.update_feature_statuses()
     }
 
     CheckBox {

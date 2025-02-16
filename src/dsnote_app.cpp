@@ -23,6 +23,7 @@
 #include "downloader.hpp"
 #include "media_compressor.hpp"
 #include "mtag_tools.hpp"
+#include "qtlogger.hpp"
 #include "speech_service.h"
 
 QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
@@ -288,6 +289,7 @@ dsnote_app::dsnote_app(QObject *parent)
                            "/org/freedesktop/Notifications",
                            QDBusConnection::sessionBus()},
       m_audio_dm{[&] { emit audio_devices_changed(); }} {
+    initQtLogger();
     qDebug() << "starting app:" << settings::launch_mode;
 
     QDir{cache_dir()}.canonicalPath();
@@ -4403,6 +4405,10 @@ bool dsnote_app::feature_fake_keyboard() const {
     return feature_available("fake-keyboard", false);
 }
 
+bool dsnote_app::feature_fake_keyboard_ydo() const {
+    return fake_keyboard::is_ydo_supported();
+}
+
 bool dsnote_app::feature_hotkeys() const {
     return feature_available("hotkeys", false);
 }
@@ -4411,7 +4417,7 @@ bool dsnote_app::feature_hotkeys_portal() const {
     return m_gs_manager.is_portal_supported();
 }
 
-void dsnote_app::update_freature_statuses() {
+void dsnote_app::update_feature_statuses() {
     bool changed = false;
 
     // update fake-keyboard status

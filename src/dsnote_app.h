@@ -68,6 +68,7 @@
     X(diacritizer_he)    \
     X(translator)        \
     X(fake_keyboard)     \
+    X(fake_keyboard_ydo) \
     X(hotkeys)           \
     X(hotkeys_portal)
 
@@ -452,7 +453,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE bool trans_rule_re_pattern_valid(const QString &pattern);
     [[nodiscard]] Q_INVOKABLE QVariantList available_stt_models_info() const;
     [[nodiscard]] Q_INVOKABLE QVariantList available_tts_models_info() const;
-    Q_INVOKABLE void update_freature_statuses();
+    Q_INVOKABLE void update_feature_statuses();
     Q_INVOKABLE void open_hotkeys_editor();
 
    signals:

@@ -8,7 +8,6 @@
 #ifndef FAKE_KEYBOARD_HPP
 #define FAKE_KEYBOARD_HPP
 
-#include <QDebug>
 #include <QObject>
 #include <QString>
 #include <QStringList>

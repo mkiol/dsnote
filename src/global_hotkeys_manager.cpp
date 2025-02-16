@@ -11,6 +11,8 @@
 
 #include "config.h"
 #include "dbus_portal_request_inf.h"
+#include "logger.hpp"
+#include "qtlogger.hpp"
 #include "settings.h"
 
 using PortalShortcut = QPair<QString, QVariantMap>;
@@ -78,8 +80,7 @@ void global_hotkeys_manager::enable_or_disable() {
 
 void global_hotkeys_manager::enable_portal() {
     if (!is_portal_supported()) {
-        qWarning()
-            << "can't enable global hotkeys becuase portal is not supported";
+        LOGW("can't enable global hotkeys becuase portal is not supported");
         return;
     }
 
@@ -98,12 +99,12 @@ void global_hotkeys_manager::handle_portal_activated(
     [[maybe_unused]] const QDBusObjectPath &session_handle,
     const QString &action_id, [[maybe_unused]] qulonglong timestamp,
     [[maybe_unused]] const QVariantMap &options) {
-    qDebug() << "portal hotkey activated:" << action_id;
+    LOGD("portal hotkey activated: " << action_id);
     emit hotkey_activated(action_id, {});
 }
 
 void global_hotkeys_manager::create_portal_session() {
-    qDebug() << "[dbus] call CreateSession";
+    LOGD("[dbus] call CreateSession");
 
     auto reply = m_portal_inf.CreateSession({
         {QLatin1String("session_handle_token"), APP_ID},
@@ -113,12 +114,12 @@ void global_hotkeys_manager::create_portal_session() {
     reply.waitForFinished();
 
     if (reply.isError()) {
-        qWarning() << "can't connect to portal global shortcuts service:"
-                   << reply.error().message();
+        LOGW("can't connect to portal global shortcuts service: "
+             << reply.error().message());
         return;
     }
 
-    qDebug() << "connecting to portal service:" << reply.value().path();
+    LOGD("connecting to portal service: " << reply.value().path());
 
     QDBusConnection::sessionBus().connect(
         DBUS_SERVICE_NAME, reply.value().path(),
@@ -130,24 +131,24 @@ void global_hotkeys_manager::create_portal_session() {
 void global_hotkeys_manager::handle_create_session_response(
     uint res, const QVariantMap &results) {
     if (res != 0) {
-        qWarning() << "failed to create portal session:" << res << results;
+        LOGW("failed to create portal session: " << res);
         return;
     }
 
     m_portal_session = QDBusObjectPath{results["session_handle"].toString()};
 
-    qDebug() << "portal session created successfully";
+    LOGD("portal session created successfully");
 
     enable_or_disable();
 }
 
 void global_hotkeys_manager::fetch_portal_shortcuts() {
-    qDebug() << "[dbus] call ListShortcuts";
+    LOGD("[dbus] call ListShortcuts");
 
     auto reply = m_portal_inf.ListShortcuts(m_portal_session, {});
     reply.waitForFinished();
     if (reply.isError()) {
-        qWarning() << "failed to call ListShortcuts" << reply.error();
+        LOGW("failed to call ListShortcuts: " << reply.error().message());
         return;
     }
 
@@ -164,13 +165,12 @@ void global_hotkeys_manager::fetch_portal_shortcuts() {
 void global_hotkeys_manager::handle_list_shortcuts_response(
     uint code, const QVariantMap &results) {
     if (code != 0) {
-        qDebug() << "failed to get the list of portal hotkeys" << code
-                 << results;
+        LOGW("failed to get the list of portal hotkeys: " << code);
         return;
     }
 
     if (!results.contains("shortcuts")) {
-        qWarning() << "no shortcuts in portal reply:" << results;
+        LOGW("no shortcuts in portal reply");
         return;
     }
 
@@ -180,9 +180,9 @@ void global_hotkeys_manager::handle_list_shortcuts_response(
 
     QString desc;
     for (auto it = s.cbegin(), it_end = s.cend(); it != it_end; ++it) {
-        qDebug() << "portal hotkey:" << it->first
-                 << it->second["description"].toString()
-                 << it->second["trigger_description"].toString();
+        LOGD("portal hotkey: " << it->first << " "
+                               << it->second["description"].toString() << " "
+                               << it->second["trigger_description"].toString());
     }
 
     if (s.isEmpty()) {
@@ -205,16 +205,16 @@ void global_hotkeys_manager::handle_list_shortcuts_response(
     }();
 
     if (all_shortcuts_configured) {
-        qDebug() << "portal global shortcuts already configured";
+        LOGD("portal global shortcuts already configured");
     } else {
         set_portal_bindings();
     }
 }
 
 void global_hotkeys_manager::handle_bind_shortcuts_response(
-    uint code, const QVariantMap &results) {
+    uint code, [[maybe_unused]] const QVariantMap &results) {
     if (code != 0) {
-        qDebug() << "failed to bind portal shortcuts" << code << results;
+        LOGW("failed to bind portal shortcuts: " << code);
         return;
     }
 }
@@ -227,7 +227,7 @@ QString global_hotkeys_manager::get_portal_request_token() {
 
 void global_hotkeys_manager::set_portal_bindings() {
     if (!is_portal_supported()) {
-        qWarning() << "portal not supported";
+        LOGW("portal not supported");
         return;
     }
 
@@ -265,14 +265,14 @@ void global_hotkeys_manager::set_portal_bindings() {
     HOTKEY_TABLE
 #undef X
 
-    qDebug() << "[dbus] call BindShortcuts";
+    LOGD("[dbus] call BindShortcuts");
 
     auto reply = m_portal_inf.BindShortcuts(
         m_portal_session, shortcuts, /*parent_window*/ {},
         {{"handle_token", get_portal_request_token()}});
     reply.waitForFinished();
     if (reply.isError()) {
-        qWarning() << "failed to call BindShortcuts:" << reply.error();
+        LOGW("failed to call BindShortcuts: " << reply.error().message());
         return;
     }
 
@@ -299,8 +299,7 @@ void global_hotkeys_manager::disable_x11() {
 
 void global_hotkeys_manager::enable_x11() {
     if (!is_x11_supported()) {
-        qWarning()
-            << "can't enable global hotkeys becuase x11 is not supported";
+        LOGW("can't enable global hotkeys becuase x11 is not supported");
         return;
     }
 
@@ -310,9 +309,10 @@ void global_hotkeys_manager::enable_x11() {
     if (!s->hotkey_##name().isEmpty()) {                                      \
         if (!m_x11_hotkeys.name.setShortcut(QKeySequence{s->hotkey_##name()}, \
                                             true)) {                          \
-            qWarning() << "failed to register global hotkey, perhaps it is "  \
-                          "already in use:"                                   \
-                       << s->hotkey_##name();                                 \
+            LOGW(                                                             \
+                "failed to register global hotkey, perhaps it is "            \
+                "already in use: "                                            \
+                << s->hotkey_##name());                                       \
         }                                                                     \
         m_x11_hotkeys.name.setProperty("action", id);                         \
         QObject::connect(&m_x11_hotkeys.name, &QHotkey::activated, this,      \
@@ -325,7 +325,7 @@ void global_hotkeys_manager::enable_x11() {
 
 void global_hotkeys_manager::handle_x11_activated() {
     auto action_id = sender()->property("action").toString();
-    qDebug() << "x11 hotkey activated:" << action_id;
+    LOGD("x11 hotkey activated: " << action_id);
     emit hotkey_activated(action_id, {});
 }
 

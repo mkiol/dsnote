@@ -16,17 +16,9 @@ ColumnLayout {
     id: root
 
     property bool verticalMode: parent ? parent.verticalMode : false
-    property var features: app.features_availability()
-
-    Connections {
-        target: app
-        onFeatures_availability_updated: {
-            root.features = app.features_availability()
-        }
-    }
 
     Component.onCompleted: {
-        app.update_freature_statuses()
+        app.update_feature_statuses()
     }
 
     SectionLabel {
@@ -45,7 +37,7 @@ ColumnLayout {
         Repeater {
             id: featureRepeter
 
-            model: root.features
+            model: appWin.features
 
             RowLayout {
                 Layout.fillWidth: true
@@ -361,6 +353,21 @@ ColumnLayout {
             text: _settings.x11_compose_file
             onTextChanged: _settings.x11_compose_file = text
         }
+    }
+
+    TipMessage {
+        color: "red"
+        indends: 1
+        visible: _settings.fake_keyboard_type === Settings.FakeKeyboardTypeYdo &&
+                 app.feature_fake_keyboard &&
+                 !app.feature_fake_keyboard_ydo
+        text: qsTranslate("SettingsPage", "Unable to connect to %1 daemon.")
+                .arg("<i>ydotool</i>") + " " +
+              qsTranslate("SettingsPage", "For %1 action to work, %2 daemon must be installed and running.")
+                .arg("<i>start-listening-active-window</i>")
+                .arg("<i>ydotool</i>") + (_settings.is_flatpak() ? (" " +
+              qsTranslate("SettingsPage", "Also make sure that the Flatpak application has permission to access %1 daemon socket file.")
+                        .arg("<i>ydotool</i>")) : "")
     }
 
     SectionLabel {

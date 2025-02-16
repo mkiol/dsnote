@@ -31,6 +31,7 @@ ApplicationWindow {
     readonly property alias buttonWithIconWidth: _dummyButtonWithIcon.width
     readonly property alias buttonHeight: _dummyButton.height
     readonly property double buttonHeightShort: buttonHeight * 0.8
+    property var features: app.features_availability()
 
     property var _dialogPage
 
@@ -531,6 +532,10 @@ ApplicationWindow {
         onStt_auto_lang_changed: {
             if (stt_auto_lang_name.length > 0)
                 toast.show(stt_auto_lang_name)
+        }
+
+        onFeatures_availability_updated: {
+            appWin.features = app.features_availability()
         }
 
         onError: {
