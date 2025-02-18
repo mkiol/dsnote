@@ -1,11 +1,11 @@
-Name:           dsnote
-Version:        4.8.0b1
+Name:           %{?NAME}%{!?NAME:dsnote}
+Version:        %{?VERSION}%{!?VERSION:%(date +%%Y%%m%%d)}
 Release:        1%{?dist}
 Summary:        Speech Note: Take, read and translate notes in multiple languages
 
 License:        MPL-2.0
 URL:            https://github.com/mkiol/dsnote
-Source0:        https://gitlab.com/mkiol/dsnote/-/archive/main/dsnote-main.tar.gz
+Source0:        %{name}-%{version}.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  automake
