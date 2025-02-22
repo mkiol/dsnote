@@ -86,15 +86,19 @@
        stop-listening
        start-reading
        start-reading-clipboard
-       start-reading-text
+       start-reading-text *
        pause-resume-reading
        cancel
        switch-to-next-stt-model
        switch-to-prev-stt-model
        switch-to-next-tts-model
        switch-to-prev-tts-model
-       set-stt-model
-       set-tts-model
+       set-stt-model *
+       set-tts-model *
+
+      *) Optional 'argument' is used to pass model-id or
+      text to read. To pass both, set 'argument' to
+      "{model-id}text to read".
   -->
   <method name="InvokeAction">
     <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantMap"/>

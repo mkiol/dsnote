@@ -265,7 +265,7 @@ static cmd::options check_options(const QCoreApplication& app) {
                                id_opt.valueName().toStdString());
                     options.valid = false;
                 } else {
-                    options.extra = QStringLiteral("{%1}").arg(id);
+                    options.extra = QStringLiteral("%1").arg(id);
                 }
             } else if (action.compare("start-reading-text",
                                       Qt::CaseInsensitive) == 0) {
@@ -282,7 +282,7 @@ static cmd::options check_options(const QCoreApplication& app) {
             } else if (action.compare("start-reading-clipboard",
                                       Qt::CaseInsensitive) == 0) {
                 if (id_ok) {
-                    options.extra = QStringLiteral("{%1}").arg(id);
+                    options.extra = QStringLiteral("%1").arg(id);
                 }
             }
 
