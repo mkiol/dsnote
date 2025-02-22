@@ -248,7 +248,7 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     LOGD("cache location: "
          << QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
     LOGD("settings file: " << fileName());
-    LOGD("platform:" << QGuiApplication::platformName());
+    LOGD("platform: " << QGuiApplication::platformName());
 
     if (launch_mode != launch_mode_t::app) {
         // in app mode, flags are updated in fa
@@ -1001,6 +1001,17 @@ void settings::set_x11_compose_file(const QString& value) {
     if (x11_compose_file() != value) {
         setValue(QStringLiteral("x11_compose_file"), value);
         emit x11_compose_file_changed();
+    }
+}
+
+QString settings::fake_keyboard_layout() const {
+    return value(QStringLiteral("fake_keyboard_layout"), {}).toString();
+}
+
+void settings::set_fake_keyboard_layout(const QString& value) {
+    if (fake_keyboard_layout() != value) {
+        setValue(QStringLiteral("fake_keyboard_layout"), value);
+        emit fake_keyboard_layout_changed();
     }
 }
 

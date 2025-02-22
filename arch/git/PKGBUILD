@@ -36,6 +36,7 @@ depends=(
   'rubberband'
   'taglib'
   'vulkan-icd-loader'
+  'wayland'
   'xz'
 )
 makedepends=(
@@ -57,6 +58,7 @@ optdepends=(
   'python-torchaudio: Support for Coqui TTS models'
   'python-transformers: Support for Punctuation and Hebrew Diacritics restoration'
   'tts: Support for Coqui TTS models'
+  'ydotool: Support for inserting text into active window in Wayland'
 )
 optdepends_x86_64=(
   'amdvlk: Vulkan support for AMD GPU (AMDVLK Open)'

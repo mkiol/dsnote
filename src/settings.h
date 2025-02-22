@@ -253,6 +253,8 @@ class settings : public QSettings, public singleton<settings> {
                    set_show_repair_text NOTIFY show_repair_text_changed)
     Q_PROPERTY(QString x11_compose_file READ x11_compose_file WRITE
                    set_x11_compose_file NOTIFY x11_compose_file_changed)
+    Q_PROPERTY(QString fake_keyboard_layout READ fake_keyboard_layout WRITE
+                   set_fake_keyboard_layout NOTIFY fake_keyboard_layout_changed)
     Q_PROPERTY(bool tts_split_into_sentences READ tts_split_into_sentences WRITE
                    set_tts_split_into_sentences NOTIFY
                        tts_split_into_sentences_changed)
@@ -769,6 +771,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_mix_volume_change(int value);
     QString x11_compose_file() const;
     void set_x11_compose_file(const QString &value);
+    QString fake_keyboard_layout() const;
+    void set_fake_keyboard_layout(const QString &value);
     int settings_stt_engine_idx() const;
     void set_settings_stt_engine_idx(int value);
     int settings_tts_engine_idx() const;
@@ -1002,6 +1006,7 @@ class settings : public QSettings, public singleton<settings> {
     void mix_volume_change_changed();
     void show_repair_text_changed();
     void x11_compose_file_changed();
+    void fake_keyboard_layout_changed();
     void tts_split_into_sentences_changed();
     void tts_use_engine_speed_control_changed();
     void use_toggle_for_hotkey_changed();

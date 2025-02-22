@@ -29,9 +29,11 @@ BuildRequires:  qt5-linguist
 BuildRequires:  qt5-qtmultimedia-devel
 BuildRequires:  qt5-qtquickcontrols2-devel
 BuildRequires:  qt5-qtx11extras-devel
+BuildRequires:  qt5-qtbase-private-devel
 BuildRequires:  rubberband-devel
 BuildRequires:  taglib-devel
 BuildRequires:  vulkan-headers
+BuildRequires:  wayland-devel
 Requires:       kf5-kquickcharts
 Requires:       kf5-sonnet
 Requires:       python3

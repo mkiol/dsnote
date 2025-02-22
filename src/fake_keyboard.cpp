@@ -11,7 +11,9 @@
 #include "settings.h"
 // clang-format on
 
+#include <fmt/format.h>
 #include <linux/uinput.h>
+#include <qpa/qplatformnativeinterface.h>
 #include <sys/epoll.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
@@ -20,27 +22,30 @@
 #include <sys/types.h>
 #include <sys/un.h>
 #include <unistd.h>
+#include <xkbcommon/xkbcommon-compose.h>
+#include <xkbcommon/xkbcommon.h>
 
 #include <QFile>
+#include <QGuiApplication>
+#include <QLocale>
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
+#include <optional>
+#include <string>
+#include <tuple>
+
+#include "logger.hpp"
+#include "qtlogger.hpp"
+
+using namespace std::chrono_literals;
 
 #ifdef USE_X11_FEATURES
 #include <X11/XKBlib.h>
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <xdo.h>
-#include <xkbcommon/xkbcommon-compose.h>
 #include <xkbcommon/xkbcommon-x11.h>
-#include <xkbcommon/xkbcommon.h>
-
-#include <cstdio>
-#include <optional>
-#include <string>
-
-#include "logger.hpp"
-#include "qtlogger.hpp"
 
 static XKeyEvent create_key_event(Display *display, Window &win,
                                   Window &win_root,
@@ -68,52 +73,6 @@ static XKeyEvent create_key_event(Display *display, Window &win,
 }
 #endif  // USE_X11_FEATURES
 
-// Copied from https://github.com/ReimuNotMoe/ydotool
-#define FLAG_UPPERCASE 0x8000000
-static const int32_t ascii2keycode_map[128] = {
-    // 00 - 0f
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, KEY_TAB, KEY_ENTER, -1, -1, -1, -1, -1,
-
-    // 10 - 1f
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-
-    // 20 - 2f
-    KEY_SPACE, KEY_1 | FLAG_UPPERCASE, KEY_APOSTROPHE | FLAG_UPPERCASE,
-    KEY_3 | FLAG_UPPERCASE, KEY_4 | FLAG_UPPERCASE, KEY_5 | FLAG_UPPERCASE,
-    KEY_7 | FLAG_UPPERCASE, KEY_APOSTROPHE, KEY_9 | FLAG_UPPERCASE,
-    KEY_0 | FLAG_UPPERCASE, KEY_8 | FLAG_UPPERCASE, KEY_EQUAL | FLAG_UPPERCASE,
-    KEY_COMMA, KEY_MINUS, KEY_DOT, KEY_SLASH,
-
-    // 30 - 3f
-    KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9,
-    KEY_SEMICOLON | FLAG_UPPERCASE, KEY_SEMICOLON, KEY_COMMA | FLAG_UPPERCASE,
-    KEY_EQUAL, KEY_DOT | FLAG_UPPERCASE, KEY_SLASH | FLAG_UPPERCASE,
-
-    // 40 - 4f
-    KEY_2 | FLAG_UPPERCASE, KEY_A | FLAG_UPPERCASE, KEY_B | FLAG_UPPERCASE,
-    KEY_C | FLAG_UPPERCASE, KEY_D | FLAG_UPPERCASE, KEY_E | FLAG_UPPERCASE,
-    KEY_F | FLAG_UPPERCASE, KEY_G | FLAG_UPPERCASE, KEY_H | FLAG_UPPERCASE,
-    KEY_I | FLAG_UPPERCASE, KEY_J | FLAG_UPPERCASE, KEY_K | FLAG_UPPERCASE,
-    KEY_L | FLAG_UPPERCASE, KEY_M | FLAG_UPPERCASE, KEY_N | FLAG_UPPERCASE,
-    KEY_O | FLAG_UPPERCASE,
-
-    // 50 - 5f
-    KEY_P | FLAG_UPPERCASE, KEY_Q | FLAG_UPPERCASE, KEY_R | FLAG_UPPERCASE,
-    KEY_S | FLAG_UPPERCASE, KEY_T | FLAG_UPPERCASE, KEY_U | FLAG_UPPERCASE,
-    KEY_V | FLAG_UPPERCASE, KEY_W | FLAG_UPPERCASE, KEY_X | FLAG_UPPERCASE,
-    KEY_Y | FLAG_UPPERCASE, KEY_Z | FLAG_UPPERCASE, KEY_LEFTBRACE,
-    KEY_BACKSLASH, KEY_RIGHTBRACE, KEY_6 | FLAG_UPPERCASE,
-    KEY_MINUS | FLAG_UPPERCASE,
-
-    // 60 - 6f
-    KEY_GRAVE, KEY_A, KEY_B, KEY_C, KEY_D, KEY_E, KEY_F, KEY_G, KEY_H, KEY_I,
-    KEY_J, KEY_K, KEY_L, KEY_M, KEY_N, KEY_O,
-
-    // 70 - 7f
-    KEY_P, KEY_Q, KEY_R, KEY_S, KEY_T, KEY_U, KEY_V, KEY_W, KEY_X, KEY_Y, KEY_Z,
-    KEY_LEFTBRACE | FLAG_UPPERCASE, KEY_BACKSLASH | FLAG_UPPERCASE,
-    KEY_RIGHTBRACE | FLAG_UPPERCASE, KEY_GRAVE | FLAG_UPPERCASE, -1};
-
 fake_keyboard::fake_keyboard(QObject *parent) : QObject{parent} {
 #ifdef USE_X11_FEATURES
     switch (settings::instance()->fake_keyboard_type()) {
@@ -133,12 +92,22 @@ fake_keyboard::fake_keyboard(QObject *parent) : QObject{parent} {
 }
 
 fake_keyboard::~fake_keyboard() {
+    {
+        std::lock_guard lock{m_wl_mtx};
+        disconnect_wayland();
+    }
 #ifdef USE_X11_FEATURES
     if (m_xdo_thread.joinable()) m_xdo_thread.join();
     if (m_xdo) xdo_free(m_xdo);
-    if (m_xkb_compose_table) xkb_compose_table_unref(m_xkb_compose_table);
-    if (m_xkb_ctx) xkb_context_unref(m_xkb_ctx);
 #endif
+    if (m_xkb_compose_table) {
+        xkb_compose_table_unref(m_xkb_compose_table);
+        m_xkb_compose_table = nullptr;
+    }
+    if (m_xkb_ctx) {
+        xkb_context_unref(m_xkb_ctx);
+        m_xkb_ctx = nullptr;
+    }
     if (m_ydo_daemon_socket >= 0) ::close(m_ydo_daemon_socket);
 }
 
@@ -175,7 +144,7 @@ bool fake_keyboard::is_legacy_supported() {
 
 // Copied from https://github.com/ReimuNotMoe/ydotool
 void fake_keyboard::ydo_uinput_emit(uint16_t type, uint16_t code, int32_t val,
-                                    bool syn_report) {
+                                    bool syn_report) const {
     input_event ie{};
     ie.type = type;
     ie.code = code;
@@ -191,25 +160,167 @@ void fake_keyboard::ydo_uinput_emit(uint16_t type, uint16_t code, int32_t val,
     }
 }
 
-// Copied from https://github.com/ReimuNotMoe/ydotool
-void fake_keyboard::ydo_type_char(char c) {
-    int kdef = ascii2keycode_map[static_cast<unsigned char>(c)];
-    if (kdef == -1) {
-        return;
+xkb_keycode_t fake_keyboard::get_l3_shift_keycode() {
+    xkb_keycode_t keycode = 0;
+
+    if (!m_xkb_keymap) {
+        LOGE("xkb_keymap not initialized");
+        return keycode;
     }
 
-    uint16_t kc = kdef & 0xffff;
-
-    if (kdef & FLAG_UPPERCASE) {
-        ydo_uinput_emit(EV_KEY, KEY_LEFTSHIFT, 1, 1);
+    auto *state = xkb_state_new(m_xkb_keymap);
+    if (!state) {
+        LOGE("failed to create xkb state");
+        return keycode;
     }
-    ydo_uinput_emit(EV_KEY, kc, 1, 1);
 
-    usleep(20000);
+    auto min_keycode = xkb_keymap_min_keycode(m_xkb_keymap);
+    auto max_keycode = xkb_keymap_max_keycode(m_xkb_keymap);
+    const xkb_keysym_t *syms_out = nullptr;
+    for (xkb_keycode_t kc = min_keycode; kc <= max_keycode; ++kc) {
+        auto num_keysym = xkb_state_key_get_syms(state, kc, &syms_out);
+        for (int i = 0; i < num_keysym; ++i) {
+            if (syms_out[i] == XKB_KEY_ISO_Level3_Shift) {
+                LOGD("l3_shift is mapped to keycode: " << kc << " " << i);
+                keycode = kc;
+            }
+        }
+    }
 
-    ydo_uinput_emit(EV_KEY, kc, 0, 1);
-    if (kdef & FLAG_UPPERCASE) {
-        ydo_uinput_emit(EV_KEY, KEY_LEFTSHIFT, 0, 1);
+    xkb_state_unref(state);
+    return keycode;
+}
+
+std::vector<fake_keyboard::key_code_t> fake_keyboard::key_from_character(
+    /*UTF-32*/ uint32_t character) {
+    if (!m_xkb_keymap) {
+        LOGE("xkb_keymap not initialized");
+        return {};
+    }
+
+    auto in_sym = xkb_utf32_to_keysym(character);
+
+    const size_t XKB_KEYSYM_NAME_MAX_SIZE = 28;
+    char name[XKB_KEYSYM_NAME_MAX_SIZE];
+    auto ret = xkb_keysym_get_name(in_sym, name, sizeof(name));
+    if (ret < 0 || static_cast<size_t>(ret) >= sizeof(name)) {
+        LOGE("failed to get name of keysym");
+        return {};
+    }
+
+    auto find_key_layout =
+        [&](xkb_keysym_t sym) -> std::optional<fake_keyboard::key_code_t> {
+        fake_keyboard::key_code_t key;
+        key.sym = sym;
+
+        auto min_keycode = xkb_keymap_min_keycode(m_xkb_keymap);
+        auto max_keycode = xkb_keymap_max_keycode(m_xkb_keymap);
+        for (xkb_keycode_t keycode = min_keycode; keycode <= max_keycode;
+             ++keycode) {
+            const auto *key_name =
+                xkb_keymap_key_get_name(m_xkb_keymap, keycode);
+            if (!key_name) {
+                continue;
+            }
+
+            auto find_key = [&](xkb_layout_index_t layout) {
+                const auto *layout_name =
+                    xkb_keymap_layout_get_name(m_xkb_keymap, layout);
+                if (!layout_name) {
+                    return;
+                }
+
+                auto num_levels = xkb_keymap_num_levels_for_key(
+                    m_xkb_keymap, keycode, layout);
+                for (xkb_level_index_t level = 0; level < num_levels; ++level) {
+                    const xkb_keysym_t *syms = nullptr;
+
+                    auto num_syms = xkb_keymap_key_get_syms_by_level(
+                        m_xkb_keymap, keycode, layout, level, &syms);
+                    for (int sym_idx = 0; sym_idx < num_syms; ++sym_idx) {
+                        if (syms[sym_idx] == key.sym) {
+                            key.layout = layout;
+                            key.mask = level;
+                            key.code = keycode;
+                            return;
+                        }
+                    }
+                }
+            };
+
+            auto num_layouts =
+                xkb_keymap_num_layouts_for_key(m_xkb_keymap, keycode);
+            if (m_keyboard_layout_idx > -1) {
+                find_key(
+                    static_cast<xkb_layout_index_t>(m_keyboard_layout_idx));
+                if (key.code > 0) return key;
+            } else {
+                for (xkb_layout_index_t layout = 0; layout < num_layouts;
+                     ++layout) {
+                    find_key(layout);
+                    if (key.code > 0) return key;
+                }
+            }
+        }
+
+        return std::nullopt;
+    };
+
+    auto find_compose_keys = [&](xkb_keysym_t sym) {
+        std::vector<fake_keyboard::key_code_t> keys;
+
+        if (!m_xkb_compose_table) return keys;
+
+        auto *iter = xkb_compose_table_iterator_new(m_xkb_compose_table);
+        if (!iter) return keys;
+
+        xkb_compose_table_entry *entry = nullptr;
+        while ((entry = xkb_compose_table_iterator_next(iter))) {
+            if (xkb_compose_table_entry_keysym(entry) == sym) {
+                size_t sequence_length = 0;
+                const auto *sequence =
+                    xkb_compose_table_entry_sequence(entry, &sequence_length);
+                if (sequence && sequence_length > 0) {
+                    for (size_t i = 0; i < sequence_length; ++i) {
+                        auto key = find_key_layout(sequence[i]);
+                        if (key) keys.push_back(*key);
+                    }
+                    break;
+                }
+            }
+        }
+
+        xkb_compose_table_iterator_free(iter);
+
+        return keys;
+    };
+
+    // return single key code
+    if (auto key = find_key_layout(in_sym)) return {*key};
+
+    // return compose key codes
+    if (auto keys = find_compose_keys(in_sym); !keys.empty()) return keys;
+
+    return {};
+}
+
+void fake_keyboard::ydo_type_char(uint32_t c) {
+    auto keycodes = key_from_character(c);
+    for (const auto &keycode : keycodes) {
+        bool shift = keycode.mask == 1 || keycode.mask == 3;
+        bool l3_shift = keycode.mask == 2 || keycode.mask == 3;
+
+        if (shift) ydo_uinput_emit(EV_KEY, KEY_LEFTSHIFT, 1, true);
+        if (l3_shift && m_l3_shift_keycode > 8)
+            ydo_uinput_emit(EV_KEY, m_l3_shift_keycode - 8, 1, true);
+        ydo_uinput_emit(EV_KEY, keycode.code - 8, 1, true);
+
+        std::this_thread::sleep_for(20ms);
+
+        ydo_uinput_emit(EV_KEY, keycode.code - 8, 0, true);
+        if (l3_shift && m_l3_shift_keycode > 8)
+            ydo_uinput_emit(EV_KEY, m_l3_shift_keycode - 8, 0, true);
+        if (shift) ydo_uinput_emit(EV_KEY, KEY_LEFTSHIFT, 0, true);
     }
 }
 
@@ -263,12 +374,99 @@ int fake_keyboard::make_ydo_socket() {
     return ydo_daemon_socket;
 }
 
+void fake_keyboard::make_compose_table(const char *compose_file) {
+    if (m_xkb_compose_table) return;  // already created
+
+    LOGD("trying compose file: " << compose_file);
+
+    if (auto *file = fopen(compose_file, "r")) {
+        m_xkb_compose_table = xkb_compose_table_new_from_file(
+            m_xkb_ctx, file, "C", XKB_COMPOSE_FORMAT_TEXT_V1,
+            XKB_COMPOSE_COMPILE_NO_FLAGS);
+        std::ignore = fclose(file);
+    } else {
+        LOGW("can't open compose file: " << compose_file);
+    }
+};
+
 void fake_keyboard::init_ydo() {
     LOGD("using ydo fake-keyboard");
 
     m_ydo_daemon_socket = make_ydo_socket();
     if (m_ydo_daemon_socket < 0) {
         throw std::runtime_error{"failed to connect to ydo daemon"};
+    }
+
+    m_xkb_ctx = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
+    if (!m_xkb_ctx) throw std::runtime_error{"no xkb context"};
+
+#ifdef USE_X11_FEATURES
+    auto *xcb_conn = QX11Info::connection();
+    if (xcb_conn) {
+        auto device_id = xkb_x11_get_core_keyboard_device_id(xcb_conn);
+        if (device_id == -1) throw std::runtime_error{"no xkb keyboard"};
+
+        m_xkb_keymap = xkb_x11_keymap_new_from_device(
+            m_xkb_ctx, xcb_conn, device_id, XKB_KEYMAP_COMPILE_NO_FLAGS);
+        if (!m_xkb_keymap) {
+            xkb_context_unref(m_xkb_ctx);
+            m_xkb_ctx = nullptr;
+            throw std::runtime_error{"no xkb keymap"};
+        }
+    }
+#endif
+
+    if (!m_xkb_keymap) connect_wayland();
+
+    if (m_xkb_keymap) {
+        m_num_layouts = xkb_keymap_num_layouts(m_xkb_keymap);
+        if (m_num_layouts == 0) {
+            xkb_context_unref(m_xkb_ctx);
+            m_xkb_ctx = nullptr;
+            throw std::runtime_error{"no xkb layouts"};
+        }
+
+        LOGD("keyboard layouts: ");
+        auto layout_str = settings::instance()->fake_keyboard_layout();
+        int layout_idx = -1;
+        if (!layout_str.isEmpty()) {
+            bool ok = false;
+            auto idx = layout_str.toInt(&ok);
+            if (ok) layout_idx = idx;
+        }
+        for (unsigned int i = 0; i < m_num_layouts; ++i) {
+            const auto *name = xkb_keymap_layout_get_name(m_xkb_keymap, i);
+            LOGD(" " << i << ":" << name);
+
+            if (m_keyboard_layout_idx < 0 &&
+                (layout_idx == static_cast<int>(i) ||
+                 (!layout_str.isEmpty() &&
+                  QString{name}.contains(layout_str, Qt::CaseInsensitive)))) {
+                m_keyboard_layout_idx = static_cast<int>(i);
+            }
+        }
+        if (m_keyboard_layout_idx < 0) {
+            m_keyboard_layout_idx = 0;  // default
+        }
+        LOGD("keyboard layout to use: " << m_keyboard_layout_idx);
+
+        m_l3_shift_keycode = get_l3_shift_keycode();
+    }
+
+    if (m_xkb_ctx) {
+        if (auto compose_file = settings::instance()->x11_compose_file();
+            !compose_file.isEmpty()) {
+            make_compose_table(compose_file.toStdString().c_str());
+        }
+        make_compose_table(fmt::format("/usr/share/X11/locale/{}.UTF-8/Compose",
+                                       QLocale::system().name().toStdString())
+                               .c_str());
+        make_compose_table("/usr/share/X11/locale/C/Compose");
+        if (!m_xkb_compose_table) {
+            m_xkb_compose_table = xkb_compose_table_new_from_locale(
+                m_xkb_ctx, "C", XKB_COMPOSE_COMPILE_NO_FLAGS);
+        }
+        if (!m_xkb_compose_table) LOGW("can't compile xkb compose table");
     }
 
     m_method = method_t::ydo;
@@ -304,7 +502,7 @@ void fake_keyboard::send_text(const QString &text) {
 }
 
 void fake_keyboard::send_text_ydo(const QString &text) {
-    m_text = text;
+    m_text = text.toStdU32String();
 
     m_text_cursor = 0;
 
@@ -336,7 +534,7 @@ void fake_keyboard::send_keyevent() {
 }
 
 void fake_keyboard::send_keyevent_ydo() {
-    ydo_type_char(m_text.at(m_text_cursor).toLatin1());
+    ydo_type_char(m_text.at(m_text_cursor));
 
     ++m_text_cursor;
 }
@@ -349,7 +547,7 @@ void fake_keyboard::send_text_legacy(const QString &text) {
         return;
     }
 
-    m_text = text;
+    m_text = text.toStdU32String();
 
     m_text_cursor = 0;
 
@@ -405,15 +603,7 @@ void fake_keyboard::init_legacy() {
 
     if (auto compose_file = settings::instance()->x11_compose_file();
         !compose_file.isEmpty()) {
-        LOGD("using compose file: " << compose_file);
-        if (auto *file = fopen(compose_file.toStdString().c_str(), "r")) {
-            m_xkb_compose_table = xkb_compose_table_new_from_file(
-                m_xkb_ctx, file, "C", XKB_COMPOSE_FORMAT_TEXT_V1,
-                XKB_COMPOSE_COMPILE_NO_FLAGS);
-            fclose(file);
-        } else {
-            LOGW("can't open compose file");
-        }
+        make_compose_table(compose_file.toStdString().c_str());
     }
     if (!m_xkb_compose_table)
         m_xkb_compose_table = xkb_compose_table_new_from_locale(
@@ -447,9 +637,9 @@ void fake_keyboard::init_xdo() {
     m_method = method_t::xdo;
 }
 
-std::vector<fake_keyboard::key_code_t> fake_keyboard::key_from_character(
+std::vector<fake_keyboard::key_code_t> fake_keyboard::key_from_character_x11(
     /*UTF-32*/ uint32_t character) {
-    auto sym = xkb_utf32_to_keysym(character);
+    auto in_sym = xkb_utf32_to_keysym(character);
 
     auto find_key_layout =
         [&](xkb_keysym_t sym) -> std::optional<fake_keyboard::key_code_t> {
@@ -462,7 +652,7 @@ std::vector<fake_keyboard::key_code_t> fake_keyboard::key_from_character(
                 xkb_keymap_num_levels_for_key(m_xkb_keymap, key.code, l);
 
             for (unsigned int i = 0; i < num_levels_for_key; ++i) {
-                const xkb_keysym_t *syms_out;
+                const xkb_keysym_t *syms_out = nullptr;
                 auto sym_size = xkb_keymap_key_get_syms_by_level(
                     m_xkb_keymap, key.code, l, i, &syms_out);
                 for (int ii = 0; ii < sym_size; ++ii) {
@@ -495,7 +685,7 @@ std::vector<fake_keyboard::key_code_t> fake_keyboard::key_from_character(
         auto *iter = xkb_compose_table_iterator_new(m_xkb_compose_table);
         if (!iter) return keys;
 
-        xkb_compose_table_entry *entry;
+        xkb_compose_table_entry *entry = nullptr;
         while ((entry = xkb_compose_table_iterator_next(iter))) {
             if (xkb_compose_table_entry_keysym(entry) == sym) {
                 size_t sequence_length = 0;
@@ -517,21 +707,21 @@ std::vector<fake_keyboard::key_code_t> fake_keyboard::key_from_character(
     };
 
     // return single key code
-    if (auto key = find_key_layout(sym)) return {*key};
+    if (auto key = find_key_layout(in_sym)) return {*key};
 
     // return compose key codes
-    if (auto keys = find_compose_keys(sym); !keys.empty()) return keys;
+    if (auto keys = find_compose_keys(in_sym); !keys.empty()) return keys;
 
     // fallback, just return key code without layout
     fake_keyboard::key_code_t key;
-    key.sym = sym;
+    key.sym = in_sym;
     key.code = XKeysymToKeycode(m_x11_display, key.sym);
     return {key};
 }
 
 void fake_keyboard::send_keyevent_legacy() {
     if (m_keys_to_send_queue.empty()) {
-        for (auto key : key_from_character(m_text.at(m_text_cursor).unicode()))
+        for (auto key : key_from_character_x11(m_text.at(m_text_cursor)))
             m_keys_to_send_queue.push(key);
         ++m_text_cursor;
     }
@@ -555,3 +745,143 @@ void fake_keyboard::send_keyevent_legacy() {
     m_keys_to_send_queue.pop();
 }
 #endif
+
+void fake_keyboard::connect_wayland() {
+    LOGD("connect wayland");
+
+    std::lock_guard lock{m_wl_mtx};
+
+    auto *native = QGuiApplication::platformNativeInterface();
+    if (!native) {
+        LOGW("can't get native interface");
+        return;
+    }
+
+    m_wl_display = static_cast<wl_display *>(
+        native->nativeResourceForIntegration("display"));
+    if (!m_wl_display) {
+        LOGW("can't get wl display interface");
+        return;
+    }
+
+    m_wl_registry = wl_display_get_registry(m_wl_display);
+    wl_registry_add_listener(m_wl_registry, &wly_global_listener, this);
+
+    auto *cb = wl_display_sync(m_wl_display);
+    wl_callback_add_listener(cb, &wly_callback, nullptr);
+
+    wl_display_roundtrip(m_wl_display);
+
+    LOGD("wayland roundtrip done");
+
+    disconnect_wayland();
+}
+
+void fake_keyboard::disconnect_wayland() {
+    if (m_wl_keyboard) {
+        wl_keyboard_release(m_wl_keyboard);
+        m_wl_keyboard = nullptr;
+    }
+    if (m_wl_seat) {
+        wl_seat_release(m_wl_seat);
+        m_wl_seat = nullptr;
+    }
+    if (m_wl_registry) {
+        wl_registry_destroy(m_wl_registry);
+        m_wl_registry = nullptr;
+    }
+}
+
+void fake_keyboard::wly_global_callback(void *data, wl_registry *registry,
+                                        uint32_t id, const char *interface,
+                                        uint32_t version) {
+    LOGD("wl global: interface=" << interface << " version=" << version);
+
+    const uint32_t required_seat_interface_ver = 7;
+
+    auto *self = static_cast<fake_keyboard *>(data);
+
+    if (strcmp(interface, wl_seat_interface.name) == 0 &&
+        version >= required_seat_interface_ver) {
+        self->m_wl_seat = static_cast<wl_seat *>(wl_registry_bind(
+            registry, id, &wl_seat_interface, required_seat_interface_ver));
+        wl_seat_add_listener(self->m_wl_seat, &wly_seat_listener, self);
+    }
+
+    wl_display_roundtrip(self->m_wl_display);
+}
+
+void fake_keyboard::wly_global_remove_callback(
+    [[maybe_unused]] void *data, [[maybe_unused]] wl_registry *registry,
+    [[maybe_unused]] uint32_t id) {
+}
+
+void fake_keyboard::wly_callback_callback([[maybe_unused]] void *data,
+                                          wl_callback *cb,
+                                          [[maybe_unused]] uint32_t time) {
+    wl_callback_destroy(cb);
+}
+
+void fake_keyboard::wly_seat_capabilities(void *data, wl_seat *wl_seat,
+                                          uint32_t capabilities) {
+    auto *self = static_cast<fake_keyboard *>(data);
+
+    if ((capabilities & WL_SEAT_CAPABILITY_KEYBOARD) && !self->m_wl_keyboard) {
+        self->m_wl_keyboard = wl_seat_get_keyboard(wl_seat);
+        wl_keyboard_add_listener(self->m_wl_keyboard, &wly_keyboard_listener,
+                                 self);
+        wl_display_roundtrip(self->m_wl_display);
+    } else {
+        LOGW("wayland seat doesn't have keyboard capa");
+    }
+}
+
+void fake_keyboard::wly_seat_name([[maybe_unused]] void *data,
+                                  [[maybe_unused]] wl_seat *wl_seat,
+                                  [[maybe_unused]] const char *name) {}
+
+void fake_keyboard::wly_keyboard_keymap(
+    void *data, [[maybe_unused]] wl_keyboard *wl_keyboard, uint32_t format,
+    int32_t fd, uint32_t size) {
+    if (format != WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1) {
+        LOGW("unsupported keymap format");
+        return;
+    }
+
+    auto *map_shm =
+        static_cast<char *>(mmap(nullptr, size, PROT_READ, MAP_SHARED, fd, 0));
+    if (map_shm == MAP_FAILED) {
+        LOGW("map shm failed");
+        return;
+    }
+
+    auto *self = static_cast<fake_keyboard *>(data);
+    self->m_xkb_keymap = xkb_keymap_new_from_string(
+        self->m_xkb_ctx, map_shm, XKB_KEYMAP_FORMAT_TEXT_V1,
+        XKB_KEYMAP_COMPILE_NO_FLAGS);
+
+    munmap(map_shm, size);
+    close(fd);
+}
+
+void fake_keyboard::wly_keyboard_enter(
+    [[maybe_unused]] void *data, [[maybe_unused]] wl_keyboard *wl_keyboard,
+    [[maybe_unused]] uint32_t serial, [[maybe_unused]] wl_surface *surface,
+    [[maybe_unused]] wl_array *keys) {}
+void fake_keyboard::wly_keyboard_leave(
+    [[maybe_unused]] void *data, [[maybe_unused]] wl_keyboard *wl_keyboard,
+    [[maybe_unused]] uint32_t serial, [[maybe_unused]] wl_surface *surface) {}
+void fake_keyboard::wly_keyboard_key([[maybe_unused]] void *data,
+                                     [[maybe_unused]] wl_keyboard *wl_keyboard,
+                                     [[maybe_unused]] uint32_t serial,
+                                     [[maybe_unused]] uint32_t time,
+                                     [[maybe_unused]] uint32_t key,
+                                     [[maybe_unused]] uint32_t state) {}
+void fake_keyboard::wly_keyboard_modifiers(
+    [[maybe_unused]] void *data, [[maybe_unused]] wl_keyboard *wl_keyboard,
+    [[maybe_unused]] uint32_t serial, [[maybe_unused]] uint32_t mods_depressed,
+    [[maybe_unused]] uint32_t mods_latched,
+    [[maybe_unused]] uint32_t mods_locked, [[maybe_unused]] uint32_t group) {}
+void fake_keyboard::wly_keyboard_repeat_info(
+    [[maybe_unused]] void *data, [[maybe_unused]] wl_keyboard *wl_keyboard,
+    [[maybe_unused]] int32_t rate, [[maybe_unused]] int32_t delay) {}

@@ -5,6 +5,8 @@ if(${meson_bin} MATCHES "-NOTFOUND$")
    message(FATAL_ERROR "meson not found but it is required to build xkbcommon")
 endif()
 
+set(DSNOTE_XKB_CONFIG_ROOT "/usr/share/X11/xkb" CACHE PATH "Path of xkbcommon config root")
+
 ExternalProject_Add(xkbcommon
     SOURCE_DIR ${external_dir}/xkbcommon
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/xkbcommon
@@ -12,9 +14,10 @@ ExternalProject_Add(xkbcommon
     URL ${xkbcommon_source_url}
     URL_HASH SHA256=${xkbcommon_checksum}
     CONFIGURE_COMMAND ${meson_bin} setup --prefix=<INSTALL_DIR> --buildtype=release --libdir=lib
-        -Denable-wayland=false
+        -Denable-wayland=true
         -Denable-tools=false
         -Denable-x11=$<IF:$<BOOL:${WITH_X11_FEATURES}>,true,false>
+        -Dxkb-config-root=${DSNOTE_XKB_CONFIG_ROOT}
         -Denable-bash-completion=false
         -Ddefault_library=static
         <BINARY_DIR> <SOURCE_DIR>

@@ -530,24 +530,17 @@ if(WITH_DESKTOP)
     find_package(Qt5 COMPONENTS QuickControls2 Widgets REQUIRED)
     list(APPEND deps_libs Qt5::QuickControls2 Qt5::Widgets)
 
+    pkg_search_module(wayland REQUIRED wayland-client)
+    list(APPEND deps_libs ${wayland_LIBRARIES})
+    list(APPEND includes ${wayland_INCLUDE_DIRS})
+    include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+
     if(WITH_X11_FEATURES)
         find_package(X11 REQUIRED)
         list(APPEND deps_libs X11)
 
         find_package(Qt5 COMPONENTS X11Extras REQUIRED)
         list(APPEND deps_libs Qt5::X11Extras)
-
-        if(BUILD_XKBCOMMON)
-            include(${cmake_path}/xkbcommon.cmake)
-        else()
-            pkg_search_module(xkbcommon REQUIRED xkbcommon>=1.6.0)
-            list(APPEND deps_libs ${xkbcommon_LIBRARIES})
-            list(APPEND includes ${xkbcommon_INCLUDE_DIRS})
-
-            pkg_search_module(xkbcommonx11 REQUIRED xkbcommon-x11>=1.6.0)
-            list(APPEND deps_libs ${xkbcommonx11_LIBRARIES})
-            list(APPEND includes ${xkbcommonx11_INCLUDE_DIRS})
-        endif()
 
         if(BUILD_QHOTKEY)
             include(${cmake_path}/qhotkey.cmake)
@@ -563,6 +556,18 @@ if(WITH_DESKTOP)
             list(APPEND deps_libs ${xdo_LIBRARIES})
             list(APPEND includes ${xdo_INCLUDE_DIRS})
         endif()
+    endif()
+
+    if(BUILD_XKBCOMMON)
+        include(${cmake_path}/xkbcommon.cmake)
+    else()
+        pkg_search_module(xkbcommon REQUIRED xkbcommon>=1.6.0)
+        list(APPEND deps_libs ${xkbcommon_LIBRARIES})
+        list(APPEND includes ${xkbcommon_INCLUDE_DIRS})
+
+        pkg_search_module(xkbcommonx11 REQUIRED xkbcommon-x11>=1.6.0)
+        list(APPEND deps_libs ${xkbcommonx11_LIBRARIES})
+        list(APPEND includes ${xkbcommonx11_INCLUDE_DIRS})
     endif()
 endif()
 

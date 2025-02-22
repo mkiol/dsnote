@@ -292,7 +292,7 @@ ColumnLayout {
     }
 
     SectionLabel {
-        visible: app.feature_fake_keyboard
+        visible: app.feature_fake_keyboard || ydoMessage.visible
         text: qsTranslate("SettingsPage", "Insert into active window")
     }
 
@@ -345,7 +345,7 @@ ColumnLayout {
     }
 
     TextFieldForm {
-        visible: app.feature_fake_keyboard && _settings.fake_keyboard_type === Settings.FakeKeyboardTypeLegacy
+        visible: app.feature_fake_keyboard && _settings.fake_keyboard_type !== Settings.FakeKeyboardTypeXdo
         label.text: qsTranslate("SettingsPage", "Compose file")
         toolTip: qsTranslate("SettingsPage", "X11 compose file used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>") + " " +
                  qsTranslate("SettingsPage", "Leave blank to use the default value.")
@@ -355,11 +355,23 @@ ColumnLayout {
         }
     }
 
+    TextFieldForm {
+        visible: app.feature_fake_keyboard && _settings.fake_keyboard_type === Settings.FakeKeyboardTypeYdo
+        label.text: qsTranslate("SettingsPage", "Keyboard layout")
+        toolTip: qsTranslate("SettingsPage", "Keyboard layout used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>") + " " +
+                 qsTranslate("SettingsPage", "Leave blank to use the default value.")
+        textField {
+            text: _settings.fake_keyboard_layout
+            onTextChanged: _settings.fake_keyboard_layout = text
+        }
+    }
+
     TipMessage {
+        id: ydoMessage
+
         color: "red"
         indends: 1
         visible: _settings.fake_keyboard_type === Settings.FakeKeyboardTypeYdo &&
-                 app.feature_fake_keyboard &&
                  !app.feature_fake_keyboard_ydo
         text: qsTranslate("SettingsPage", "Unable to connect to %1 daemon.")
                 .arg("<i>ydotool</i>") + " " +
