@@ -3,7 +3,7 @@
 _pkgname='dsnote'
 pkgname="${_pkgname}"
 pkgver=4.7.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
 arch=(
   'x86_64'
@@ -16,7 +16,10 @@ depends=(
   'fmt'
   'glslang'
   'hicolor-icon-theme'
+  'kconfigwidgets5'
   'kdbusaddons5'
+  'kiconthemes5'
+  'kirigami2'
   'libarchive'
   'libpulse'
   'libxinerama'
@@ -25,7 +28,6 @@ depends=(
   'openblas'
   'perl'
   'python>=3.11'
-  'qqc2-desktop-style5'
   'qt5-base'
   'qt5-declarative'
   'qt5-multimedia'
