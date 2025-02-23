@@ -18,19 +18,23 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Text to Speech") + ":</p>
-        <ul>
-        <li>S.A.M. TTS engine. S.A.M. is a small speech synthesizer designed for the Commodore 64.
-            It features a robotic voice that evokes a strong sense of nostalgia.
-            The S.A.M. voice is available in English only.</li>
-        </ul>
-        <p>" + qsTr("Speech to Text") + ":</p>
+        text: "<p>" + qsTr("Speech to Text") + ":</p>
         <ul>
         <li>New <i>CrisperWhisper</i> model for <i>FasterWhisper</i> engine.
             <i>CrisperWhisper</i> is designed for fast, precise, and verbatim speech recognition with accurate word-level timestamps.
             Unlike the original Whisper, which tends to omit disfluencies and follows more of a intended transcription style,
             <i>CrisperWhisper</i> aims to transcribe every spoken word exactly as it is, including fillers, pauses, stutters and false starts.
             <i>CrisperWhisper</i> model is enabled only for English and German languages.</li>
+        </ul>
+        <p>" + qsTr("Text to Speech") + ":</p>
+        <ul>
+        <li>S.A.M. TTS engine. S.A.M. is a small speech synthesizer designed for the Commodore 64.
+            It features a robotic voice that evokes a strong sense of nostalgia.
+            The S.A.M. voice is available in English only.</li>
+        <li><i>Normalize audio</i> setting option.
+            Use this option to enable/disable audio volume normalization.
+            The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.
+            Disable this option if you observe this problem.</li>
         </ul>
         <p>" + qsTr("Accessibility") + ":</p>
         <ul>

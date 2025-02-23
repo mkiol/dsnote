@@ -262,6 +262,8 @@ class settings : public QSettings, public singleton<settings> {
         bool tts_use_engine_speed_control READ tts_use_engine_speed_control
             WRITE set_tts_use_engine_speed_control NOTIFY
                 tts_use_engine_speed_control_changed)
+    Q_PROPERTY(bool tts_normalize_audio READ tts_normalize_audio WRITE
+                   set_tts_normalize_audio NOTIFY tts_normalize_audio_changed)
     Q_PROPERTY(
         unsigned int error_flags READ error_flags NOTIFY error_flags_changed)
     Q_PROPERTY(unsigned int hint_done_flags READ hint_done_flags NOTIFY
@@ -748,6 +750,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_tts_split_into_sentences(bool value);
     bool tts_use_engine_speed_control() const;
     void set_tts_use_engine_speed_control(bool value);
+    bool tts_normalize_audio() const;
+    void set_tts_normalize_audio(bool value);
     bool clean_ref_voice() const;
     void set_clean_ref_voice(bool value);
     unsigned int addon_flags() const;
@@ -1009,6 +1013,7 @@ class settings : public QSettings, public singleton<settings> {
     void fake_keyboard_layout_changed();
     void tts_split_into_sentences_changed();
     void tts_use_engine_speed_control_changed();
+    void tts_normalize_audio_changed();
     void use_toggle_for_hotkey_changed();
     void error_flags_changed();
     void settings_stt_engine_idx_changed();

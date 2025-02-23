@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -30,6 +30,23 @@ Page {
 
             SectionHeader {
                 text: qsTr("Version %1").arg(APP_VERSION)
+            }
+
+            LogItem {
+                text: "<p>" + qsTr("Text to Speech") + ":</p>
+                <ul>
+                <li>S.A.M. TTS engine. S.A.M. is a small speech synthesizer designed for the Commodore 64.
+                    It features a robotic voice that evokes a strong sense of nostalgia.
+                    The S.A.M. voice is available in English only.</li>
+                <li><i>Normalize audio</i> setting option.
+                    Use this option to enable/disable audio volume normalization.
+                    The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.
+                    Disable this option if you observe this problem.</li>
+                </ul>"
+            }
+
+            SectionHeader {
+                text: qsTr("Version %1").arg("4.7.0")
             }
 
             LogItem {

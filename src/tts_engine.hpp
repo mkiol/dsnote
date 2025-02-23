@@ -82,13 +82,13 @@ class tts_engine {
         std::string diacritizer_path;
         std::string hub_path;
 
-        inline bool operator==(const model_files_t& rhs) const {
+        bool operator==(const model_files_t& rhs) const {
             return model_path == rhs.model_path &&
                    vocoder_path == rhs.vocoder_path &&
                    diacritizer_path == rhs.diacritizer_path &&
                    hub_path == rhs.hub_path;
         };
-        inline bool operator!=(const model_files_t& rhs) const {
+        bool operator!=(const model_files_t& rhs) const {
             return !(*this == rhs);
         };
     };
@@ -111,11 +111,11 @@ class tts_engine {
         std::string name;
         std::string platform_name;
 
-        inline bool operator==(const gpu_device_t& rhs) const {
+        bool operator==(const gpu_device_t& rhs) const {
             return platform_name == rhs.platform_name && name == rhs.name &&
                    id == rhs.id;
         }
-        inline bool operator!=(const gpu_device_t& rhs) const {
+        bool operator!=(const gpu_device_t& rhs) const {
             return !(*this == rhs);
         }
     };
@@ -140,10 +140,12 @@ class tts_engine {
         unsigned int speech_speed = 10;
         bool split_into_sentences = true;
         bool use_engine_speed_control = true;
+        bool normalize_audio = true;
         bool use_gpu = false;
         gpu_device_t gpu_device;
         audio_format_t audio_format = audio_format_t::wav;
-        inline bool has_option(char c) const {
+
+        bool has_option(char c) const {
             return options.find(c) != std::string::npos;
         }
     };
@@ -154,42 +156,35 @@ class tts_engine {
     void start();
     void stop();
     void request_stop();
-    inline auto lang() const { return m_config.lang; }
-    inline void set_lang(const std::string& value) { m_config.lang = value; }
-    inline auto lang_code() const { return m_config.lang_code; }
-    inline void set_lang_code(const std::string& value) {
-        m_config.lang_code = value;
-    }
-    inline auto model_files() const { return m_config.model_files; }
-    inline auto state() const { return m_state; }
-    inline auto speaker() const { return m_config.speaker_id; }
-    inline void set_speaker(const std::string& value) {
-        m_config.speaker_id = value;
-    }
-    inline auto use_gpu() const { return m_config.use_gpu; }
-    inline auto gpu_device() const { return m_config.gpu_device; }
-    inline auto ref_voice_file() const { return m_config.ref_voice_file; }
-    inline void restart() { m_restart_requested = true; }
-    inline auto text_format() const { return m_config.text_format; }
-    inline void set_text_format(text_format_t value) {
-        m_config.text_format = value;
-    }
-    inline auto split_into_sentences() const {
-        return m_config.split_into_sentences;
-    }
-    inline void set_split_into_sentences(bool value) {
+    auto lang() const { return m_config.lang; }
+    void set_lang(const std::string& value) { m_config.lang = value; }
+    auto lang_code() const { return m_config.lang_code; }
+    void set_lang_code(const std::string& value) { m_config.lang_code = value; }
+    auto model_files() const { return m_config.model_files; }
+    auto state() const { return m_state; }
+    auto speaker() const { return m_config.speaker_id; }
+    void set_speaker(const std::string& value) { m_config.speaker_id = value; }
+    auto use_gpu() const { return m_config.use_gpu; }
+    auto gpu_device() const { return m_config.gpu_device; }
+    auto ref_voice_file() const { return m_config.ref_voice_file; }
+    void restart() { m_restart_requested = true; }
+    auto text_format() const { return m_config.text_format; }
+    void set_text_format(text_format_t value) { m_config.text_format = value; }
+    auto split_into_sentences() const { return m_config.split_into_sentences; }
+    void set_split_into_sentences(bool value) {
         m_config.split_into_sentences = value;
     }
-    inline auto use_engine_speed_control() const {
+    auto use_engine_speed_control() const {
         return m_config.use_engine_speed_control;
     }
-    inline void set_use_engine_speed_control(bool value) {
+    void set_use_engine_speed_control(bool value) {
         m_config.use_engine_speed_control = value;
     }
-    inline void set_sync_subs(subtitles_sync_mode_t value) {
+    void set_normalize_audio(bool value) { m_config.normalize_audio = value; }
+    void set_sync_subs(subtitles_sync_mode_t value) {
         m_config.sync_subs = value;
     }
-    inline void set_tag_mode(tag_mode_t value) { m_config.tag_mode = value; }
+    void set_tag_mode(tag_mode_t value) { m_config.tag_mode = value; }
     void encode_speech(std::string text);
     void restore_text(std::string text);
     static std::string merge_wav_files(std::vector<std::string>&& files);
@@ -214,7 +209,7 @@ class tts_engine {
         task_type_t type = task_type_t::speech_encoding;
         unsigned int flags = task_flags::task_flag_none;
 
-        inline bool empty() const {
+        bool empty() const {
             return text.empty() && t0 == 0LL && t1 == 0LL &&
                    silence_duration == 0UL;
         }
@@ -275,12 +270,12 @@ class tts_engine {
     void make_silence_wav_file(size_t duration_msec, unsigned int sample_rate,
                                const std::string& output_file) const;
     void push_tasks(std::string&& text, task_type_t type);
-    inline bool is_shutdown() const {
+    bool is_shutdown() const {
         return m_state == state_t::stopping || m_state == state_t::stopped ||
                m_state == state_t::error;
     }
-    static bool post_process_wav(const std::string& wav_file,
-                                 size_t silence_duration_msec);
+    bool post_process_wav(const std::string& wav_file,
+                          size_t silence_duration_msec) const;
     static bool file_exists(const std::string& file_path);
     static bool convert_wav_to_16bits(const std::string& wav_file);
 };

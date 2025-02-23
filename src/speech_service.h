@@ -527,6 +527,15 @@ class speech_service : public QObject, public singleton<speech_service> {
     static void setup_modules();
     static void setup_env();
     void clean_tts_queue();
+    static bool get_bool_value_from_options(const QString &name,
+                                            bool default_value,
+                                            const QVariantMap &options);
+    static int get_int_value_from_options(const QString &name,
+                                          int default_value,
+                                          const QVariantMap &options);
+    static QString get_string_value_from_options(const QString &name,
+                                                 const QString &default_value,
+                                                 const QVariantMap &options);
 
     // DBus
     Q_INVOKABLE int Cancel(int task);

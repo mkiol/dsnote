@@ -2173,6 +2173,17 @@ void settings::set_tts_use_engine_speed_control(bool value) {
     }
 }
 
+bool settings::tts_normalize_audio() const {
+    return value(QStringLiteral("tts_normalize_audio"), true).toBool();
+}
+
+void settings::set_tts_normalize_audio(bool value) {
+    if (value != tts_normalize_audio()) {
+        setValue(QStringLiteral("tts_normalize_audio"), value);
+        emit tts_normalize_audio_changed();
+    }
+}
+
 #define X(name, dvalue)                                                  \
     bool settings::hw_scan_##name() const {                              \
         return value(QStringLiteral("hw_scan_" #name), dvalue).toBool(); \

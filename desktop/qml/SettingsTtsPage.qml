@@ -68,6 +68,21 @@ ColumnLayout {
     }
 
     CheckBox {
+        checked: _settings.tts_normalize_audio
+        text: qsTranslate("SettingsPage", "Normalize audio")
+        onCheckedChanged: {
+            _settings.tts_normalize_audio = checked
+        }
+
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: hovered
+        ToolTip.text: qsTranslate("SettingsPage", "The volume of the audio will be normalized.") + " " +
+                      qsTranslate("SettingsPage", "The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.") + " " +
+                      qsTranslate("SettingsPage", "Disable this option if you observe this problem.")
+        hoverEnabled: true
+    }
+
+    CheckBox {
         checked: _settings.tts_tag_mode === Settings.TtsTagModeSupport
         text: qsTranslate("SettingsPage", "Use control tags")
         onCheckedChanged: {

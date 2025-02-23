@@ -418,6 +418,18 @@ Page {
                             }
                         }
 
+                        TextSwitch {
+                            checked: _settings.tts_normalize_audio
+                            automaticCheck: false
+                            text: qsTr("Normalize audio")
+                            description: qsTr("The volume of the audio will be normalized.") + " " +
+                                         qsTr("The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.") + " " +
+                                         qsTr("Disable this option if you observe this problem.")
+                            onClicked: {
+                                _settings.tts_normalize_audio = !_settings.tts_normalize_audio
+                            }
+                        }
+
                         SectionHeader {
                             visible: _settings.subtitles_support
                             text: qsTr("Subtitles")

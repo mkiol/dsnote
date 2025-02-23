@@ -1115,6 +1115,33 @@ QString speech_service::lang_from_model_id(const QString &model_id) {
     return l.first();
 }
 
+bool speech_service::get_bool_value_from_options(const QString &name,
+                                                 bool default_value,
+                                                 const QVariantMap &options) {
+    if (options.contains(name))
+        return options.value(name, default_value).toBool();
+    return default_value;
+}
+
+int speech_service::get_int_value_from_options(const QString &name,
+                                               int default_value,
+                                               const QVariantMap &options) {
+    if (options.contains(name)) {
+        bool ok = false;
+        auto value = options.value(name).toInt(&ok);
+        if (ok) return value;
+    }
+    return default_value;
+}
+
+QString speech_service::get_string_value_from_options(
+    const QString &name, const QString &default_value,
+    const QVariantMap &options) {
+    if (options.contains(name))
+        return options.value(name, default_value).toString();
+    return default_value;
+}
+
 template <typename Engine>
 static std::optional<typename Engine::gpu_device_t> make_gpu_device(
     const QString &gpu_str, const QString &auto_device_str) {
@@ -1167,16 +1194,6 @@ static std::optional<typename Engine::gpu_device_t> make_gpu_device(
     return std::nullopt;
 }
 
-static settings::text_format_t text_format_from_options(
-    const QVariantMap &options) {
-    if (options.contains(QStringLiteral("text_format"))) {
-        bool ok = false;
-        auto value = options.value(QStringLiteral("text_format")).toInt(&ok);
-        if (ok) return static_cast<settings::text_format_t>(value);
-    }
-    return settings::text_format_t::TextFormatRaw;
-}
-
 static stt_engine::text_format_t stt_text_fromat_from_settings_format(
     settings::text_format_t format) {
     switch (format) {
@@ -1204,16 +1221,6 @@ static stt_engine::sub_config_t stt_sub_config_from_options(
         sub_config.max_line_length = options.value(k).toUInt();
 
     return sub_config;
-}
-
-static bool stt_insert_stats_from_options(const QVariantMap &options) {
-    if (options.contains(QStringLiteral("insert_stats"))) {
-        bool ok = false;
-        auto value = options.value(QStringLiteral("insert_stats")).toInt(&ok);
-        if (ok) return value;
-    }
-
-    return false;
 }
 
 static std::vector<int> whispercpp_vulkan_devices() {
@@ -1257,10 +1264,14 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                            config.lang != "en";
         config.options = model_config->options.toStdString();
         config.text_format = stt_text_fromat_from_settings_format(
-            text_format_from_options(options));
+            static_cast<settings::text_format_t>(get_int_value_from_options(
+                "text_format",
+                static_cast<int>(settings::text_format_t::TextFormatRaw),
+                options)));
         config.sub_config = stt_sub_config_from_options(options);
         config.cache_dir = settings::instance()->cache_dir().toStdString();
-        config.insert_stats = stt_insert_stats_from_options(options);
+        config.insert_stats =
+            get_bool_value_from_options("insert_stats", false, options);
 
         // clang-format off
 #define ENGINE_OPTS(name_) \
@@ -1494,27 +1505,6 @@ static tts_engine::audio_format_t format_from_cache_format(
     throw std::runtime_error{"invalid format"};
 }
 
-static QString tts_ref_voice_file_from_options(const QVariantMap &options) {
-    if (options.contains(QStringLiteral("ref_voice_file")))
-        return options.value(QStringLiteral("ref_voice_file")).toString();
-    return {};
-}
-
-static bool tts_split_into_sentences_from_options(const QVariantMap &options) {
-    if (options.contains(QStringLiteral("split_into_sentences")))
-        return options.value(QStringLiteral("split_into_sentences"), true)
-            .toBool();
-    return true;
-}
-
-static bool tts_use_engine_speed_control_from_options(
-    const QVariantMap &options) {
-    if (options.contains(QStringLiteral("use_engine_speed_control")))
-        return options.value(QStringLiteral("use_engine_speed_control"), true)
-            .toBool();
-    return true;
-}
-
 static tts_engine::subtitles_sync_mode_t tts_subtitles_sync_mode_from_settings(
     settings::tts_subtitles_sync_mode_t mode) {
     switch (mode) {
@@ -1532,16 +1522,6 @@ static tts_engine::subtitles_sync_mode_t tts_subtitles_sync_mode_from_settings(
     throw std::runtime_error("invalid subtitles sync mode");
 }
 
-static settings::tts_subtitles_sync_mode_t sync_subs_from_options(
-    const QVariantMap &options) {
-    if (options.contains(QStringLiteral("sync_subs"))) {
-        bool ok = false;
-        auto value = options.value(QStringLiteral("sync_subs")).toInt(&ok);
-        if (ok) return static_cast<settings::tts_subtitles_sync_mode_t>(value);
-    }
-    return settings::tts_subtitles_sync_mode_t::TtsSubtitleSyncOff;
-}
-
 static tts_engine::text_format_t tts_text_fromat_from_settings_format(
     settings::text_format_t format) {
     switch (format) {
@@ -1554,16 +1534,6 @@ static tts_engine::text_format_t tts_text_fromat_from_settings_format(
     }
 
     throw std::runtime_error("invalid text format");
-}
-
-static settings::tts_tag_mode_t tts_tag_mode_from_options(
-    const QVariantMap &options) {
-    if (options.contains(QStringLiteral("tag_mode"))) {
-        bool ok = false;
-        auto value = options.value(QStringLiteral("tag_mode")).toInt(&ok);
-        if (ok) return static_cast<settings::settings::tts_tag_mode_t>(value);
-    }
-    return settings::settings::tts_tag_mode_t::TtsTagModeSupport;
 }
 
 static tts_engine::tag_mode_t tts_tag_mode_from_settings_tag_mode(
@@ -1602,21 +1572,37 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         config.speaker_id = model_config->tts->speaker.toStdString();
         config.options = model_config->options.toStdString();
         config.text_format = tts_text_fromat_from_settings_format(
-            text_format_from_options(options));
+            static_cast<settings::text_format_t>(get_int_value_from_options(
+                "text_format",
+                static_cast<int>(settings::text_format_t::TextFormatRaw),
+                options)));
         config.sync_subs = tts_subtitles_sync_mode_from_settings(
-            sync_subs_from_options(options));
+            static_cast<
+                settings::tts_subtitles_sync_mode_t>(get_int_value_from_options(
+                "sync_subs",
+                static_cast<int>(
+                    settings::tts_subtitles_sync_mode_t::TtsSubtitleSyncOff),
+                options)));
         config.audio_format = format_from_cache_format(
             settings::instance()->cache_audio_format());
         config.ref_voice_file =
-            tts_ref_voice_file_from_options(options).toStdString();
+            get_string_value_from_options("ref_voice_file", {}, options)
+                .toStdString();
         config.lang_code = model_config->tts->lang_code.toStdString();
         config.split_into_sentences =
-            tts_split_into_sentences_from_options(options);
-        config.use_engine_speed_control =
-            tts_use_engine_speed_control_from_options(options);
-        config.speech_speed = tts_speech_speed_from_options(options);
+            get_bool_value_from_options("split_into_sentences", true, options);
+        config.use_engine_speed_control = get_bool_value_from_options(
+            "use_engine_speed_control", true, options);
+        config.normalize_audio =
+            get_bool_value_from_options("normalize_audio", true, options);
+        config.speech_speed = std::clamp(
+            get_int_value_from_options("speech_speed", 10, options), 1, 20);
         config.tag_mode = tts_tag_mode_from_settings_tag_mode(
-            tts_tag_mode_from_options(options));
+            static_cast<settings::tts_tag_mode_t>(get_int_value_from_options(
+                "tag_mode",
+                static_cast<int>(
+                    settings::settings::tts_tag_mode_t::TtsTagModeSupport),
+                options)));
 
         // clang-format off
 #define ENGINE_OPTS(name) \
@@ -1833,6 +1819,7 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             m_tts_engine->set_lang(config.lang);
             m_tts_engine->set_lang_code(config.lang_code);
             m_tts_engine->set_tag_mode(config.tag_mode);
+            m_tts_engine->set_normalize_audio(config.normalize_audio);
             m_tts_engine->restart();
         }
 
@@ -1843,12 +1830,6 @@ QString speech_service::restart_tts_engine(const QString &model_id,
 
     qWarning() << "failed to restart tts engine, no valid model";
     return {};
-}
-
-static bool mnt_clean_text_from_options(const QVariantMap &options) {
-    if (options.contains(QStringLiteral("clean_text")))
-        return options.value(QStringLiteral("clean_text")).toBool();
-    return false;
 }
 
 static mnt_engine::text_format_t mnt_text_fromat_from_settings_format(
@@ -1882,9 +1863,13 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
         config.lang = model_config->mnt->lang_id.toStdString();
         config.out_lang = model_config->mnt->out_lang_id.toStdString();
         config.options = model_config->options.toStdString();
-        config.clean_text = mnt_clean_text_from_options(options);
+        config.clean_text =
+            get_bool_value_from_options("clean_text", false, options);
         config.text_format = mnt_text_fromat_from_settings_format(
-            text_format_from_options(options));
+            static_cast<settings::text_format_t>(get_int_value_from_options(
+                "text_format",
+                static_cast<int>(settings::text_format_t::TextFormatRaw),
+                options)));
 
         QFile nb_file{QStringLiteral(":/nonbreaking_prefixes/%1.txt")
                           .arg(model_config->mnt->lang_id.split('-').first())};
@@ -1997,7 +1982,10 @@ bool speech_service::restart_text_repair_engine(const QVariantMap &options) {
                     .toStdString();
         config.options = model_config->options.toStdString();
         config.text_format = text_repair_text_fromat_from_settings_format(
-            text_format_from_options(options));
+            static_cast<settings::text_format_t>(get_int_value_from_options(
+                "text_format",
+                static_cast<int>(settings::text_format_t::TextFormatRaw),
+                options)));
         config.share_dir =
             module_tools::path_to_share_dir_for_path("/libnumbertext")
                 .toStdString();
@@ -3435,17 +3423,6 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
     update_task_state();
 
     return m_current_task->id;
-}
-
-unsigned int speech_service::tts_speech_speed_from_options(
-    const QVariantMap &options) {
-    if (options.contains(QStringLiteral("speech_speed"))) {
-        bool ok = false;
-        auto speed = options.value(QStringLiteral("speech_speed")).toInt(&ok);
-        if (ok) return std::clamp(speed, 1, 20);
-    }
-
-    return 10;
 }
 
 int speech_service::tts_play_speech(const QString &text, QString lang,

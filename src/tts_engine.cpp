@@ -186,6 +186,7 @@ std::ostream& operator<<(std::ostream& os, const tts_engine::config_t& config) {
        << ", speech-speed=" << config.speech_speed
        << ", split-into-sentences=" << config.split_into_sentences
        << ", use-engine-speed-control=" << config.use_engine_speed_control
+       << ", normalize-audio=" << config.normalize_audio
        << ", use-gpu=" << config.use_gpu << ", gpu-device=["
        << config.gpu_device << "]"
        << ", audio-format=" << config.audio_format;
@@ -385,7 +386,7 @@ void tts_engine::set_state(state_t new_state) {
 }
 
 static decltype(timespec::tv_sec) create_date_sec(const std::string& file) {
-    struct stat result;
+    struct stat result{};
     if (stat(file.c_str(), &result) == 0) return result.st_ctim.tv_sec;
     return 0;
 }
@@ -398,7 +399,8 @@ std::string tts_engine::path_to_output_file(const std::string& text,
         m_config.model_files.vocoder_path + m_config.ref_voice_file +
         std::to_string(create_date_sec(m_config.ref_voice_file)) +
         m_config.model_files.diacritizer_path + m_config.speaker_id +
-        m_config.lang + (do_speech_change ? "1" : "0") +
+        m_config.lang + (m_config.normalize_audio ? "1" : "0") +
+        (do_speech_change ? "1" : "0") +
         (speech_speed == 10 ? "" : std::to_string(speech_speed)));
     return m_config.cache_dir + "/" + std::to_string(hash) + '.' +
            file_ext_for_format(m_config.audio_format);
@@ -667,7 +669,7 @@ bool tts_engine::convert_wav_to_16bits(const std::string& wav_file) {
 }
 
 bool tts_engine::post_process_wav(const std::string& wav_file,
-                                  size_t silence_duration_msec) {
+                                  size_t silence_duration_msec) const {
     std::ifstream is{wav_file, std::ios::binary | std::ios::ate};
     if (!is) {
         LOGE("failed to open input file: " << wav_file);
@@ -708,33 +710,44 @@ bool tts_engine::post_process_wav(const std::string& wav_file,
     write_wav_header(header.sample_rate, sizeof(int16_t), header.num_channels,
                      (size + silence_size) / sizeof(int16_t), os);
 
-    denoiser dn{static_cast<int>(header.sample_rate),
-                denoiser::task_flags::task_normalize_two_pass, size};
-
     static const size_t buf_size = 8192;
     char buf[buf_size];
 
-    auto tmp_size = size;
-    while (is && tmp_size > 0) {
-        auto size_to_read = std::min<size_t>(tmp_size, buf_size);
-        is.read(buf, size_to_read);
+    if (m_config.normalize_audio) {
+        denoiser dn{static_cast<int>(header.sample_rate),
+                    denoiser::task_flags::task_normalize_two_pass, size};
 
-        dn.process_char(buf, size_to_read);
+        auto tmp_size = size;
+        while (is && tmp_size > 0) {
+            auto size_to_read = std::min<size_t>(tmp_size, buf_size);
+            is.read(buf, size_to_read);
 
-        tmp_size -= size_to_read;
-    }
+            dn.process_char(buf, size_to_read);
 
-    is.seekg(header_size);
-    tmp_size = size;
+            tmp_size -= size_to_read;
+        }
 
-    while (is && tmp_size > 0) {
-        auto size_to_read = std::min<size_t>(tmp_size, buf_size);
-        is.read(buf, size_to_read);
+        is.seekg(header_size);
+        tmp_size = size;
 
-        dn.normalize_second_pass_char(buf, size_to_read);
+        while (is && tmp_size > 0) {
+            auto size_to_read = std::min<size_t>(tmp_size, buf_size);
+            is.read(buf, size_to_read);
 
-        os.write(buf, size_to_read);
-        tmp_size -= size_to_read;
+            dn.normalize_second_pass_char(buf, size_to_read);
+
+            os.write(buf, size_to_read);
+            tmp_size -= size_to_read;
+        }
+    } else {
+        // copy data without normalization
+        auto tmp_size = size;
+        while (is && tmp_size > 0) {
+            auto size_to_read = std::min<size_t>(tmp_size, buf_size);
+            is.read(buf, size_to_read);
+            os.write(buf, size_to_read);
+            tmp_size -= size_to_read;
+        }
     }
 
     if (silence_size > 0) {

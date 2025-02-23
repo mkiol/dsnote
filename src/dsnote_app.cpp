@@ -2613,6 +2613,8 @@ void dsnote_app::play_speech_internal(QString text, const QString &model_id,
                    settings::instance()->tts_split_into_sentences());
     options.insert("use_engine_speed_control",
                    settings::instance()->tts_use_engine_speed_control());
+    options.insert("normalize_audio",
+                   settings::instance()->tts_normalize_audio());
     options.insert("tag_mode",
                    static_cast<int>(settings::instance()->tts_tag_mode()));
 
@@ -2914,6 +2916,8 @@ void dsnote_app::speech_to_file_internal(
                    settings::instance()->tts_split_into_sentences());
     options.insert("use_engine_speed_control",
                    settings::instance()->tts_use_engine_speed_control());
+    options.insert("normalize_audio",
+                   settings::instance()->tts_normalize_audio());
     options.insert("tag_mode",
                    static_cast<int>(settings::instance()->tts_tag_mode()));
 
