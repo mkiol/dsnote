@@ -18,7 +18,11 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Speech to Text") + ":</p>
+        text: "<p>" + qsTr("User Interface") + "</p>
+        <ul>
+        <li><i>Speech Note</i> has been translated into Arabic, Catalan, Spanish and French-Canadian languages.</li>
+        </ul>
+        <p>" + qsTr("Speech to Text") + "</p>
         <ul>
         <li>New <i>CrisperWhisper</i> model for <i>FasterWhisper</i> engine.
             <i>CrisperWhisper</i> is designed for fast, precise, and verbatim speech recognition with accurate word-level timestamps.
@@ -26,7 +30,7 @@ DialogPage {
             <i>CrisperWhisper</i> aims to transcribe every spoken word exactly as it is, including fillers, pauses, stutters and false starts.
             <i>CrisperWhisper</i> model is enabled only for English and German languages.</li>
         </ul>
-        <p>" + qsTr("Text to Speech") + ":</p>
+        <p>" + qsTr("Text to Speech") + "</p>
         <ul>
         <li>S.A.M. TTS engine. S.A.M. is a small speech synthesizer designed for the Commodore 64.
             It features a robotic voice that evokes a strong sense of nostalgia.
@@ -36,7 +40,7 @@ DialogPage {
             The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.
             Disable this option if you observe this problem.</li>
         </ul>
-        <p>" + qsTr("Accessibility") + ":</p>
+        <p>" + qsTr("Accessibility") + "</p>
         <ul>
         <li>Support for <i>Insert into active window</i> under Wayland.
             Using <i>start-listening-active-window</i> or <i>start-listening-translate-active-window</i>
@@ -59,11 +63,11 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("General") + ":</p>
+        text: "<p>" + qsTr("General") + "</p>
         <ul>
         <li>Fix: The application failed to start when the processor did not support AVX CPU extension.</li>
         </ul>
-        <p>" + qsTr("Translator") + ":</p>
+        <p>" + qsTr("Translator") + "</p>
         <ul>
         <li>New models: Korean to English, Japanese to English</li>
         <li>Updated models: Chinese to English</li>
@@ -75,7 +79,7 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("General") + ":</p>
+        text: "<p>" + qsTr("General") + "</p>
         <ul>
         <li><i>Rules</i> for text transformations that can be applied after Speech to Text or before Text to Speech.
             With <i>Rules</i>, you can easily and flexibly correct errors in decoded text or correct mispronounced words.
@@ -86,7 +90,7 @@ DialogPage {
             When the <i>Replace an existing note</i> option is set, whenever new text is added, it will replace the existing note.</li>
         <li>DBus API for integration with external applications</li>
         </ul>
-        <p>" + qsTr("User Interface") + ":</p>
+        <p>" + qsTr("User Interface") + "</p>
         <ul>
         <li><i>Speech Note</i> has been translated into Slovenian language.</li>
         <li>Status indication in the system tray icon.
@@ -102,7 +106,7 @@ DialogPage {
             To see all available command line options, run the command: <i>" + (_settings.is_flatpak() ? "flatpak run net.mkiol.SpeechNote" : "dsnote") + " --help</i></li>
         </li>
         </ul>
-        <p>" + qsTr("Speech to Text") + ":</p>
+        <p>" + qsTr("Speech to Text") + "</p>
         <ul>
         <li>Support for <i>Vulkan</i> GPU acceleration in <i>WhisperCpp</i>.
             Vulkan acceleration enables much faster STT decoding with Intel, AMD or NVIDIA graphics cards.
@@ -120,18 +124,18 @@ DialogPage {
         <li>Echo mode. After processing, the decoded text will be immediately read out using the currently set Text to Speech model.
             To enable, use the option in the settings (<i>Speech to Text</i> &rarr; <i>Echo mode</i>).</li>
         </ul>
-        <p>" + qsTr("Text to Speech") + ":</p>
+        <p>" + qsTr("Text to Speech") + "</p>
         <ul>
         <li>New <i>Piper</i> voice for Latvian</li>
         <li>New <i>WhisperSpeech Small</i> model for: English, Italian, German, French, Spanish, Dutch and Portuguese</li>
         </ul>
-        <p>" + qsTr("Translator") + ":</p>
+        <p>" + qsTr("Translator") + "</p>
         <ul>
         <li>New models: English to Finnish, English to Turkish, English to Swedish, Swedish to English,
             English to Slovak, English to Indonesian, English to Romanian, English to Greek, Chinese to English</li>
         <li>Updated models: English to Catalan, English to Russian, English to Ukrainian, English to Czech</li>
         </ul>
-        <p>" + qsTr("Accessibility") + ":</p>
+        <p>" + qsTr("Accessibility") + "</p>
         <ul>
         <li>Option to scan special key strokes when setting keyboard shortcuts (X11 only).
             If you want to use special keys as shortcuts (so-called \"multimedia keys\"),
@@ -169,16 +173,16 @@ DialogPage {
         <ul>
         <li>Fix: The application failed to start when the processor did not support the required CPU extension.</li>
         </ul>
-        <p>" + qsTr("User Interface") + ":</p>
+        <p>" + qsTr("User Interface") + "</p>
         <ul>
         <li>Swedish translation has been updated.</li>
         </ul>
-        <p>" + qsTr("Accessibility") + ":</p>
+        <p>" + qsTr("Accessibility") + "</p>
         <ul>
         <li>Fix: Special keyboard keys were not supported as a keyboard shortcut.
             Examples: <i>Favorites</i>, <i>Launch Mail</i>, <i>Refresh</i>, <i>Home Page</i>, <i>Calculator</i> and many more...</li>
         </ul>
-        <p>" + qsTr("Translator") + ":</p>
+        <p>" + qsTr("Translator") + "</p>
         <ul>
         <li>New models: English to Latvian, English to Danish, English to Croatian, English to Slovenian,
             Indonesian to English, Romanian to English</li>
@@ -191,14 +195,14 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("User Interface") + ":</p>
+        text: "<p>" + qsTr("User Interface") + "</p>
         <ul>
         <li><i>Speech Note</i> has been translated into Norwegian language.</li>
         <li>Grouped models.
             Models that provide multiple sub-models (for example, TTS models that provide different voices)
             are shown in groups. This makes it easier to find models in the model browser.</li>
         </ul>
-        <p>" + qsTr("Speech to Text") + ":</p>
+        <p>" + qsTr("Speech to Text") + "</p>
         <ul>
         <li>The name of the all Whisper models has been changed to <i>WhisperCpp</i> to better reflect the engine behind them.
             Whisper is currently supported by the <i>WhisperCpp</i> and <i>FasterWhisper</i> engines.
@@ -228,7 +232,7 @@ DialogPage {
             engines and their parameters. Option works only with <i>WhisperCpp</i> and <i>FasterWhisper</i> engines
             (<i>Speech to Text</i> &rarr; <i>Insert statistics</i>).</li>
         </ul>
-        <p>" + qsTr("Text to Speech") + ":</p>
+        <p>" + qsTr("Text to Speech") + "</p>
         <ul>
         <li>Control tags for advance TTS processing.
             Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.
@@ -239,7 +243,7 @@ DialogPage {
         <li>New <i>Piper</i> voices for Spanish, Italian and English</li>
         <li>New <i>RHVoice</i> voices for Slovak and Croatian</li>
         </ul>
-        <p>" + qsTr("Translator") + ":</p>
+        <p>" + qsTr("Translator") + "</p>
         <ul>
         <li>Improved Translator UI. The <i>Translate</i>, <i>Switch languages</i> and <i>Add</i> buttons have been
             placed between text areas which is more convenient.</li>
@@ -263,7 +267,7 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("User Interface") + ":</p>
+        text: "<p>" + qsTr("User Interface") + "</p>
         <ul>
         <li>Import subtitles embedded into video file.
             If your video file contains one or many subtitle streams, you can import the selected subtitles into notepad.</li>
@@ -291,7 +295,7 @@ DialogPage {
         <li><i>Speech Note</i> has been translated into Ukrainian and Russian languages.</li>
         <li>Fix: Cancellation was blocking the user interface.</li>
         </ul>
-        <p>" + qsTr("Speech to Text") + ":</p>
+        <p>" + qsTr("Speech to Text") + "</p>
         <ul>
         <li>Updated <a href='https://huggingface.co/distil-whisper/distil-large-v3'>Distil</a> model for English: <i>Distil Large-v3</i>.
             New model is enabled for WhisperCpp and FasterWhisper engines.</li>
@@ -300,7 +304,7 @@ DialogPage {
             <a href='https://huggingface.co/Aspik101/distil-whisper-large-v3-pl'>Polish</a></li>
         <li>Fix: Punctuation model could not be downloaded.</li>
         </ul>
-        <p>" + qsTr("Text to Speech") + ":</p>
+        <p>" + qsTr("Text to Speech") + "</p>
         <ul>
         <li><a href='https://collabora.github.io/WhisperSpeech/'>WhisperSpeech</a> engine
             that generates voice with exceptional naturalness.
@@ -321,7 +325,7 @@ DialogPage {
         <li>Speech audio is always normalized after TTS processing.</li>
         <li>Fix: Mimic3 models could not be downloaded.</li>
         </ul>
-        <p>" + qsTr("Translator") + ":</p>
+        <p>" + qsTr("Translator") + "</p>
         <ul>
         <li>New models: Greek to English, Maltese to English,
             Slovenian to English, Turkish to English, English to Catalan</li>
@@ -331,7 +335,7 @@ DialogPage {
         <li>Context menu option to translate from cursor position or translate only selected text.
             To activate context menu use mouse right click.</li>
         </ul>
-        <p>" + qsTr("Accessibility") + ":</p>
+        <p>" + qsTr("Accessibility") + "</p>
         <ul>
         <li>New <i>Actions</i> for STT/TTS models switching: <i>switch-to-next-stt-model</i>, <i>switch-to-prev-stt-model</i>,
             <i>switch-to-next-tts-model</i>, <i>switch-to-prev-tts-model</i>, <i>set-stt-model</i>, <i>set-tts-model</i></li>
@@ -368,7 +372,7 @@ DialogPage {
         <li>AMD ROCm runtime update to version 5.6</li>
         <li>PyTorch update to version 2.1.1</li>
         </ul>
-        <p>" + qsTr("User Interface") + ":</p>
+        <p>" + qsTr("User Interface") + "</p>
         <ul>
         <li>Improvements to the model browser.
             You can check various model properties such as size, license, and the URLs from which the model is downloaded.</li>
@@ -381,7 +385,7 @@ DialogPage {
         <li>Setting option to enable/disable including of recognized or read text in desktop notifications
             (<i>User Interface</i> &rarr; <i>Include recognized or read text in notifications</i>)</li>
         </ul>
-        <p>" + qsTr("Speech to Text") + ":</p>
+        <p>" + qsTr("Speech to Text") + "</p>
         <ul>
         <li>Marathi language. New language is enabled with <i>WhisperCpp</i> and <i>FasterWhisper</i> models.</li>
         <li>New version of FasterWhisper Large model: <i>FasterWhisper Large-v3</i></li>
@@ -404,7 +408,7 @@ DialogPage {
         <li>Support for multiple audio streams in a video file. If the video file contains more than one audio stream,
             you are asked to select which one to transcribe.</li>
         </ul>
-        <p>" + qsTr("Text to Speech") + ":</p>
+        <p>" + qsTr("Text to Speech") + "</p>
         <ul>
         <li>Marathi language. New language is enabled with Coqui MMS model.</li>
         <li>Voice cloning with Coqui XTTS and YourTTS models.
@@ -427,7 +431,7 @@ DialogPage {
             the generated speech will be synchronized with the subtitle timestamps.
             This can be useful if you want to make voice over.</li>
         </ul>
-        <p>" + qsTr("Translator") + ":</p>
+        <p>" + qsTr("Translator") + "</p>
         <ul>
         <li>New model: Lithuanian to English</li>
         <li>Option to force text cleaning before translation.
@@ -438,7 +442,7 @@ DialogPage {
             To enable, use the drop-down menu at the bottom of the text area.</li>
         <li>Translation progress indicator</li>
         </ul>
-        <p>" + qsTr("Other") + ":</p>
+        <p>" + qsTr("Other") + "</p>
         <ul>
         <li>Setting option to override GPU version
             (<i>Other</i> &rarr; <i>Override GPU version</i>).
@@ -457,7 +461,7 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Accessibility") + ":</p>
+        text: "<p>" + qsTr("Accessibility") + "</p>
         <ul>
         <li>Global keyboard shortcuts. Shortcuts allow you to start or stop listening and reading using keyboard.
             Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).
@@ -468,7 +472,7 @@ DialogPage {
             option. You can enable <i>Actions</i> in the settings
             (<i>User Interface</i> &rarr; <i>Allow external applications to invoke actions</i>).</li>
         </ul>
-        <p>" + qsTr("User Interface") + ":</p>
+        <p>" + qsTr("User Interface") + "</p>
         <ul>
         <li>Desktop notifications. By default, when <i>Speech Note</i> is in the background, desktop notifications
             are shown to indicate starting or ending of listening and reading. Desktop notifications are especially useful
@@ -479,11 +483,11 @@ DialogPage {
         <li>Speech speed control option has been moved to the main application window.</li>
         <li>Fix: Application did not use native widgets on some platforms.</li>
         </ul>
-        <p>" + qsTr("Translator") + ":</p>
+        <p>" + qsTr("Translator") + "</p>
         <ul>
         <li>New model: English to Hungarian</li>
         </ul>
-        <p>" + qsTr("Speech to Text") + ":</p>
+        <p>" + qsTr("Speech to Text") + "</p>
         <ul>
         <li>New languages: Afrikaans, Gujarati, Hausa, Telugu, Tswana, Javanese, Hebrew</li>
         <li>New engine: <i>Faster Whisper</i>. It provides slightly better performance compared to the existing engine
@@ -506,7 +510,7 @@ DialogPage {
         <li>New version of Whisper Large model: <i>Whisper Large-v3</i></li>
         <li>Fix: CUDA acceleration for Whisper models did not work on NVIDIA graphic cards with Maxwell architecture.</li>
         </ul>
-        <p>" + qsTr("Text to Speech") + ":</p>
+        <p>" + qsTr("Text to Speech") + "</p>
         <ul>
         <li>New languages: Afrikaans, Gujarati, Hausa, Telugu, Tswana, Javanese, Hebrew</li>
         <li>New engine: <i>Mimic 3</i> with voices for the following languages:
@@ -531,7 +535,7 @@ DialogPage {
         <li>Fix: <i>Coqui</i> Chinese MMS Hakka and Min Nan voices were broken.</li>
         <li>Fix: Exporting to audio file was not possible when text was very long.</li>
         </ul>
-        <p>" + qsTr("Other") + ":</p>
+        <p>" + qsTr("Other") + "</p>
         <ul>
         <li>Setting option to disable support for certain graphic cards
             (<i>Other</i> &rarr; <i>Graphics cards support</i>). Use this option if you observe problems
@@ -553,7 +557,7 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Speech to Text") + ":</p>
+        text: "<p>" + qsTr("Speech to Text") + "</p>
         <ul>
         <li>Improved AMD GPU acceleration support for <i>Whisper</i> models.
             Whisper GPU accelerator for AMD cards uses OpenCL interface.
@@ -570,11 +574,11 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Translator") + ":</p>
+        text: "<p>" + qsTr("Translator") + "</p>
         <ul>
         <li>New models: Hungarian to English, Finnish to English</li>
         </ul>
-        <p>" + qsTr("Speech to Text") + ":</p>
+        <p>" + qsTr("Speech to Text") + "</p>
         <ul>
         <li>Support for video files transcription. With <i>Transcribe a file</i> menu option you can convert
             audio file or audio from video file to text.
@@ -593,7 +597,7 @@ DialogPage {
             Use the option in <i>Settings</i> to turn it on.
             Disable, if you observe any problems when using Speech to Text with Whisper models.</li>
         </ul>
-        <p>" + qsTr("Text to Speech") + ":</p>
+        <p>" + qsTr("Text to Speech") + "</p>
         <ul>
         <li>Save audio in compressed formats (MP3 or Ogg Vorbis). You can also save metadata tags to the audio file,
             such as track number, title, artist or album.</li>
@@ -604,7 +608,7 @@ DialogPage {
         <li>Update of RHVoice voice for Uzbek.</li>
         <li>Fix: Many Coqui models couldn't read the numbers or the reading wasn't correct.</li>
         </ul>
-        <p>" + qsTr("User Interface") + ":</p>
+        <p>" + qsTr("User Interface") + "</p>
         <ul>
         <li>Menu options: <i>Open a text file</i> and <i>Save to a text file</i></li>
         <li>Command line option to open files. If you want to associate text, audio or video files
@@ -624,7 +628,7 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Speech to Text") + ":</p>
+        text: "<p>" + qsTr("Speech to Text") + "</p>
         <ul>
         <li>Support for GPU acceleration for Whisper models.
             If a suitable graphics card is found in the system, it will be used to accelerate processing.
@@ -634,7 +638,7 @@ DialogPage {
         </li>
         <li>Fix: Whisper model wasn't able to decode short speech sentences.</li>
         </ul>
-        <p>" + qsTr("Text to Speech") + ":</p>
+        <p>" + qsTr("Text to Speech") + "</p>
         <ul>
         <li>Option <i>Speech speed</i> in <i>Settings</i> to make synthesized speech slower or faster.</li>
         <li>New models from <a href='https://ai.meta.com/blog/multilingual-model-speech-recognition'>Massively Multilingual Speech (MMS)</a> project.
@@ -649,7 +653,7 @@ DialogPage {
         <li>Update of RHVoice voices for Slovak and Czech.</li>
         <li>Fix: Splitting text into sentences was incorrect for: Georgian, Japanese, Bengali, Nepali and Hindi.</li>
         </ul>
-        <p>" + qsTr("User Interface") + ":</p>
+        <p>" + qsTr("User Interface") + "</p>
         <ul>
         <li>Option to change font size in text editor</li>
         </ul>"
@@ -660,7 +664,7 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Translator") + ":</p>
+        text: "<p>" + qsTr("Translator") + "</p>
               <ul>
               <li>Support for offline translations between following languages: Catalan, Bulgarian, Czech, Danish,
                   English, Spanish, German, Estonian, French, Italian, Polish, Portuguese, Norwegian, Iranian, Dutch,
@@ -668,13 +672,13 @@ DialogPage {
               <li><i>Translator</i> uses models that were created as part of <a href='https://browser.mt/'>Bergamot project</a>.</li>
               <li>To switch between <i>Notepad</i> and <i>Translator</i> modes, use the toggle buttons in the upper right corner.</li>
               </ul>
-              <p>" + qsTr("User Interface") + ":</p>
+              <p>" + qsTr("User Interface") + "</p>
               <ul>
               <li>User interface has been redesign. It is more handy and better supports portrait view for mobile.</li>
               <li>Settings option to force specific <i>Interface style</i> has been added. It is useful to overcome UI glitches when app is running under GNOME desktop environment.</li>
               <li>Application has been translated to new languages: Dutch and Italian.</li>
               </ul>
-              <p>" + qsTr("Text to Speech") + ":</p>
+              <p>" + qsTr("Text to Speech") + "</p>
               <ul>
               <li>All existing Piper models have been updated.</li>
               <li>New Piper voices for: English, Swedish, Turkish, Polish, German, Spanish, Finnish, French, Ukrainian, Russian,
@@ -688,11 +692,11 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Text to Speech") + ":</p>
+        text: "<p>" + qsTr("Text to Speech") + "</p>
         <ul>
         <li>New Coqui voice for English: Jenny</li>
         </ul>
-        <p>" + qsTr("Speech to Text") + ":</p>
+        <p>" + qsTr("Speech to Text") + "</p>
         <ul>
         <li>Quicker decoding when using DeepSpeech/Coqui models (especially on ARM CPU)</li>
         </ul>"
@@ -703,19 +707,19 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("User Interface") + ":</p>
+        text: "<p>" + qsTr("User Interface") + "</p>
         <ul>
         <li>Option to show recent changes in the app (About -> Changes)</li>
         <li>French translation update (Many thanks to L'Africain)</li>
         </ul>
-        <p>" + qsTr("Text to Speech") + ":</p>
+        <p>" + qsTr("Text to Speech") + "</p>
         <ul>
         <li>New Piper model for Chinese</li>
         <li>New RHVoice model for Uzbek</li>
         <li>Updated RHVoice models for Ukrainian</li>
         <li>Piper and RHVoice engines updated to most recent versions</li>
         </ul>
-        <p>" + qsTr("Speech to Text") + ":</p>
+        <p>" + qsTr("Speech to Text") + "</p>
         <ul>
         <li>Whisper 'Large' models enabled for all languages</li>
         <li>Whisper supported on older CPUs (i.e. CPUs without AVX/AVX2 extensions)</li>
@@ -728,11 +732,11 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Text to Speech") + ":</p>
+        text: "<p>" + qsTr("Text to Speech") + "</p>
         <ul>
         <li>New Piper models for: Icelandic, Swedish and Russian</li>
         </ul>
-        <p>" + qsTr("Speech to Text") + ":</p>
+        <p>" + qsTr("Speech to Text") + "</p>
         <ul>
         <li>Whisper fine-tuned models for: Czech, Slovak, Slovenian, Romanian, Russian, Hungarian and Polish</li>
         <li>Standard Whisper models enabled also for:

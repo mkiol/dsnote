@@ -15,6 +15,12 @@ DialogPage {
     id: root
 
     readonly property bool verticalMode: width < appWin.height
+    readonly property real _rightMargin: (!root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
+                                             appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
+                                             appWin.padding
+    readonly property real _leftMargin: (root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
+                                             appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
+                                             appWin.padding
 
     title: qsTr("Rules")
 
@@ -146,6 +152,7 @@ DialogPage {
 
             width: root.listViewStackItem.currentItem.width
             height: deleteButton.height
+            leftPadding: root._leftMargin
 
             RowLayout {
                 anchors.verticalCenter: parent.verticalCenter

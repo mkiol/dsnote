@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,15 +13,14 @@ Dialog {
     id: root
 
     default property alias content: column.data
-    //property alias listViewItem: listView
     property alias listViewStackItem: listViewStack
     property alias flickItem: flick
     property alias placeholderLabel: _placeholderLabel
     property alias footerLabel: _footerLabel
     property alias frame: _frame
     readonly property bool listViewExists: !listViewStackItem.empty
-    readonly property real _rightMargin: scrollBar.visible ? appWin.padding + scrollBar.width : appWin.padding
-    readonly property real _leftMargin: appWin.padding
+    readonly property real _rightMargin: (!root.mirrored && scrollBar.visible) ? appWin.padding + scrollBar.width : appWin.padding
+    readonly property real _leftMargin: (root.mirrored && scrollBar.visible) ? appWin.padding + scrollBar.width : appWin.padding
 
     implicitHeight: Math.min(
                         header.height + flick.contentHeight + (listViewExists ? root.parent.height : 0) + footer.height + 8 * verticalPadding,

@@ -20,9 +20,13 @@ DialogPage {
     property string packName: ""
     readonly property bool langsView: langId.length === 0
     readonly property bool packView: packId.length !== 0
-    readonly property real _rightMargin: listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible ?
+    readonly property real _rightMargin: (!root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
                                              appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
                                              appWin.padding
+    readonly property real _leftMargin: (root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
+                                             appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
+                                             appWin.padding
+
     readonly property bool verticalMode: modelTypeTabBar.implicitWidth > (root.width - 2 * appWin.padding)
 
     title: langsView ? qsTr("Languages") : packView ? packName : langName
@@ -40,6 +44,7 @@ DialogPage {
         modelFilteringWidget.close()
         modelFilteringWidget.reset()
         modelFilteringWidget.update()
+
     }
 
     function switchToModels(langId, langName) {
@@ -355,6 +360,7 @@ DialogPage {
             width: ListView.view.width
             text: model.name
             onClicked: root.switchToModels(model.id, model.name)
+            leftPadding: root._leftMargin
 
             BusyIndicator {
                 visible: !model.available
@@ -416,6 +422,7 @@ DialogPage {
                 text: model.name
                 onClicked: root.switchToPack(model.id, model.name)
                 Accessible.name: model.name
+                leftPadding: root._leftMargin
 
                 contentItem: RowLayout {
                     Text {

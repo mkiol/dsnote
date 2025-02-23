@@ -28,6 +28,10 @@ DialogPage {
         color: "red"
     }
 
+    LayoutFixer {
+        id: fixer
+    }
+
     TabBar {
         id: bar
 
@@ -126,6 +130,8 @@ DialogPage {
                 replace("SettingsAdvancedPage.qml")
                 break
             }
+
+            fixer.fix()
         }
 
         Component.onCompleted: {

@@ -44,7 +44,8 @@ Dialog {
             id: column
 
             width: Math.min(column.implicitWidth, root.parent.width - root.leftPadding - root.rightPadding) -
-                    (flick.ScrollBar.vertical.visible ? flick.ScrollBar.vertical.width : root.rightPadding)
+                    (((!root.mirrored && flick.ScrollBar.vertical.visible) ? flick.ScrollBar.vertical.width : root.rightPadding) + x)
+            x: (root.mirrored && flick.ScrollBar.vertical.visible) ? flick.ScrollBar.vertical.width : 0
         }
     }
 }

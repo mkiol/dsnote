@@ -14,6 +14,12 @@ DialogPage {
     id: root
 
     readonly property bool verticalMode: width < appWin.height
+    readonly property real _rightMargin: (!root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
+                                             appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
+                                             appWin.padding
+    readonly property real _leftMargin: (root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
+                                             appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
+                                             appWin.padding
 
     title: qsTr("Voice samples")
 
@@ -99,6 +105,7 @@ DialogPage {
 
             width: root.listViewStackItem.currentItem.width
             height: deleteButton.height
+            leftPadding: root._leftMargin
 
             Label {
                 id: nameField
@@ -108,7 +115,7 @@ DialogPage {
                 elide: Text.ElideRight
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
-                anchors.leftMargin: appWin.padding
+                anchors.leftMargin: root._leftMargin
                 anchors.right: renameButton.left
                 anchors.rightMargin: appWin.padding
             }

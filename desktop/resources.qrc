@@ -59,6 +59,7 @@
         <file>qml/HelpDialog.qml</file>
         <file>qml/RowForm.qml</file>
         <file>qml/TextFieldWithHelpForm.qml</file>
+        <file>qml/LayoutFixer.qml</file>
         <file alias="config/models.json">../config/models.json</file>
         <file alias="nonbreaking_prefixes/ca.txt">../nonbreaking_prefixes/ca.txt</file>
         <file alias="nonbreaking_prefixes/cs.txt">../nonbreaking_prefixes/cs.txt</file>

@@ -98,13 +98,19 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.8.0" date="2025-01-12">
+    <release version="4.8.0" date="2025-02-23">
       <description>
+      <p>User Interface:</p>
+      <ul>
+      <li>Speech Note has been translated into Arabic, Catalan, Spanish and French-Canadian languages.</li>
+      </ul>
       <p>Text to Speech:</p>
       <ul>
       <li>S.A.M. TTS engine. S.A.M. is a small speech synthesizer designed for the Commodore 64.
           It features a robotic voice that evokes a strong sense of nostalgia.
           The S.A.M. voice is available in English only.</li>
+      <li>'Normalize audio' setting option.
+          Use this option to enable/disable audio volume normalization.</li>
       </ul>
       <p>Speech to Text:</p>
       <ul>
