@@ -48,7 +48,9 @@ Currently these are used:
 
 ## Languages and Models
 
-Following languages are supported:
+Speech Note installation package does not include checkpoint files for supported models, but instead they can be easily downloaded using the graphical model browser built into the application.
+
+Following languages and models are supported and enable for download:
 
 | **Lang ID** | **Name**      | **DeepSpeech (STT)** | **Whisper (STT)** | **Vosk (STT)** | **April-ASR (STT)** | **Piper (TTS)** | **RHVoice (TTS)** | **espeak (TTS)** | **MBROLA (TTS)** | **Coqui (TTS)** | **Mimic3 (TTS)** | **WhisperSpeech (TTS)** | **Bergamot (MT)** |
 | ----------- | ------------- | -------------------- | ----------------- | -------------- | ------------------- | --------------- | ----------------- | ---------------- | ---------------- | --------------- | ---------------- | ----------------------- | ----------------- |
