@@ -1,4 +1,11 @@
+
+%global debug_package %{nil}
+%global source_date_epoch_from_changelog  %{nil}
+%global __brp_check_rpaths %{nil}
+
+# provided NAME through environment or default "dsnote"
 Name:           %{?NAME}%{!?NAME:dsnote}
+# provided VERSION through environment or default "the current date"
 Version:        %{?VERSION}%{!?VERSION:%(date +%%Y%%m%%d)}
 Release:        1%{?dist}
 Summary:        Speech Note: Take, read and translate notes in multiple languages
@@ -9,6 +16,7 @@ Source0:        %{name}-%{version}.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  automake
+BuildRequires:  bison
 BuildRequires:  boost-devel
 BuildRequires:  cmake
 BuildRequires:  git
@@ -29,11 +37,9 @@ BuildRequires:  qt5-linguist
 BuildRequires:  qt5-qtmultimedia-devel
 BuildRequires:  qt5-qtquickcontrols2-devel
 BuildRequires:  qt5-qtx11extras-devel
-BuildRequires:  qt5-qtbase-private-devel
 BuildRequires:  rubberband-devel
 BuildRequires:  taglib-devel
 BuildRequires:  vulkan-headers
-BuildRequires:  wayland-devel
 Requires:       kf5-kquickcharts
 Requires:       kf5-sonnet
 Requires:       python3
@@ -51,14 +57,12 @@ Text and voice processing take place entirely offline, locally on your computer,
 without using a network connection. Your privacy is always respected.
 No data is sent to the Internet.
 
-%global debug_package %{nil}
-%global source_date_epoch_from_changelog  %{nil}
 
 %prep
 %autosetup
 
 %build
-%cmake3 \
+%cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DWITH_DESKTOP=ON \
     -DBUILD_VOSK=OFF \
@@ -82,4 +86,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.*
 %{_datadir}/metainfo/%{name}.metainfo.xml
-%{_datadir}/dbus-1/services/dsnote.service
+%{_datadir}/dbus-1/services/*.service

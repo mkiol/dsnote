@@ -68,7 +68,7 @@ rm -rf "$rpmbuild_dir" &&
 mkdir -p "$rpmbuild_dir"/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS} &&
 mv "$tarball_path" "$rpmbuild_dir/SOURCES/$tarball_filename" &&
 cp "$spec_file" "$rpmbuild_dir/SPECS/$NAME.spec" &&
-QA_RPATHS=$((0x0002)) rpmbuild --clean -ba \
+rpmbuild --clean -ba \
     --define "_topdir $rpmbuild_dir" \
     --define "VERSION $VERSION" \
     --define "NAME $NAME" \

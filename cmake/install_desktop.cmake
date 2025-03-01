@@ -7,11 +7,7 @@ configure_file("${desktop_dir}/${info_id}.metainfo.xml.in" "${PROJECT_BINARY_DIR
 install(FILES "${PROJECT_BINARY_DIR}/${info_app_icon_id}.metainfo.xml" DESTINATION share/metainfo)
 
 configure_file("${desktop_dir}/dbus_app.service.in" "${PROJECT_BINARY_DIR}/dbus_app.service")
-if(WITH_FLATPAK)
-    install(FILES "${PROJECT_BINARY_DIR}/dbus_app.service" DESTINATION share/dbus-1/services RENAME ${info_dbus_app_service}.service)
-else()
-    install(FILES "${PROJECT_BINARY_DIR}/dbus_app.service" DESTINATION share/dbus-1/services RENAME ${info_binary_id}.service)
-endif()
+install(FILES "${PROJECT_BINARY_DIR}/dbus_app.service" DESTINATION share/dbus-1/services RENAME ${info_dbus_app_service}.service)
 
 install(FILES "${desktop_dir}/icons/${info_binary_id}.svg" DESTINATION share/icons/hicolor/scalable/apps)
 install(FILES "${desktop_dir}/icons/16x16/${info_binary_id}.png" DESTINATION share/icons/hicolor/16x16/apps)
