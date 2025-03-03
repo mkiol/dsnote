@@ -57,14 +57,15 @@ optdepends=(
   'python-accelerate: Support for Punctuation and Hebrew Diacritics restoration'
   'python-torchaudio: Support for Coqui TTS models'
   'python-transformers: Support for Punctuation and Hebrew Diacritics restoration'
-  'tts: Support for Coqui TTS models'
   'ydotool: Support for inserting text into active window in Wayland'
 )
 optdepends_x86_64=(
   'amdvlk: Vulkan support for AMD GPU (AMDVLK Open)'
+  'coqui-tts: Support for Coqui TTS models'
   'cuda: Support for GPU acceleration on NVidia graphic cards'
   'cudnn: Support for GPU acceleration on NVidia graphic cards'
   'nvidia-utils: Vulkan support for NVidia GPU'
+  'python-faster-whisper: Support for FasterWhisper TTS models'
   'vulkan-intel: Vulkan support for Intel GPU'
   'vulkan-radeon: Vulkan support for AMD RADV'
 )
