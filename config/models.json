@@ -1259,7 +1259,7 @@
             "checksum_quick": "adae19ca",
             "size": "1555161323",
             "comp": "dir",
-            "info-url": "https://github.com/nyrahealth/CrisperWhisper",
+            "info": "https://github.com/nyrahealth/CrisperWhisper",
             "urls": [
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/db1cdb5990df067cf53670d86241330c7ea454cf/faster-whisper-crisper-int8/model.bin",
                 "https://huggingface.co/mukowaty/faster-whisper-int8/resolve/db1cdb5990df067cf53670d86241330c7ea454cf/faster-whisper-crisper-int8/config.json",
@@ -22535,7 +22535,7 @@
             "checksum_quick": "d753997",
             "size": "63552729",
             "comp": "dir",
-            "info-url": "https://brycebeattie.com/files/tts",
+            "info": "https://brycebeattie.com/files/tts",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/en/en_US/bryce/medium/en_US-bryce-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/en/en_US/bryce/medium/en_US-bryce-medium.onnx.json"
@@ -22550,7 +22550,7 @@
             "checksum_quick": "85d055e9",
             "size": "63552728",
             "comp": "dir",
-            "info-url": "https://brycebeattie.com/files/tts",
+            "info": "https://brycebeattie.com/files/tts",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/en/en_US/john/medium/en_US-john-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/en/en_US/john/medium/en_US-john-medium.onnx.json"
@@ -22565,7 +22565,7 @@
             "checksum_quick": "bac45b17",
             "size": "63552731",
             "comp": "dir",
-            "info-url": "https://brycebeattie.com/files/tts",
+            "info": "https://brycebeattie.com/files/tts",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/en/en_US/norman/medium/en_US-norman-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/en/en_US/norman/medium/en_US-norman-medium.onnx.json"
@@ -22580,7 +22580,7 @@
             "checksum_quick": "e0e285fe",
             "size": "63532397",
             "comp": "dir",
-            "info-url": "https://git.techiaith.bangor.ac.uk/data-porth-technolegau-iaith/corpws-talentau-llais",
+            "info": "https://git.techiaith.bangor.ac.uk/data-porth-technolegau-iaith/corpws-talentau-llais",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/cy/cy_GB/gwryw_gogleddol/medium/cy_GB-gwryw_gogleddol-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/cy/cy_GB/gwryw_gogleddol/medium/cy_GB-gwryw_gogleddol-medium.onnx.json"
@@ -23340,7 +23340,7 @@
             "checksum_quick": "9681e5f",
             "size": "63534521",
             "comp": "dir",
-            "info-url": "https://huggingface.co/datasets/paolapersico1/Voice-Dataset-Italian",
+            "info": "https://huggingface.co/datasets/paolapersico1/Voice-Dataset-Italian",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/it/it_IT/paola/medium/it_IT-paola-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2083514c726ed4e54d15dbf8d86285d6059642f0/it/it_IT/paola/medium/it_IT-paola-medium.onnx.json"
@@ -26176,6 +26176,7 @@
             "features": [
                 "tts_voice_cloning"
             ],
+            "info": "https://huggingface.co/coqui/XTTS-v2",
             "license": {
                 "id": "CPML",
                 "name": "Coqui Public Model License 1.0.0",
@@ -26202,6 +26203,7 @@
             "features": [
                 "tts_voice_cloning"
             ],
+            "info": "https://huggingface.co/coqui/XTTS-v2",
             "license": {
                 "id": "CPML",
                 "name": "Coqui Public Model License 1.0.0",
@@ -26342,6 +26344,7 @@
             "features": [
                 "tts_voice_cloning"
             ],
+            "info": "https://huggingface.co/capleaf/viXTTS",
             "license": {
                 "id": "CPML",
                 "name": "Coqui Public Model License 1.0.0",
@@ -26638,7 +26641,7 @@
             "checksum": "db2e0561",
             "checksum_quick": "96981f57",
             "comp": "dir",
-            "info": "source of model: https://github.com/Sharonio/roboshaul",
+            "info": "https://github.com/Sharonio/roboshaul",
             "urls": [
                 "https://drive.usercontent.google.com/download?id=1dExa0AZqmyjz8rSZz1noyQY9aF7dR8ew&export=download&confirm=t&file=model.pth",
                 "https://drive.usercontent.google.com/download?id=1eK1XR_ZwuUy4yWh80nui-q5PBifJsYfy&export=download&confirm=t&file=config.json"
@@ -32456,7 +32459,7 @@
             "checksum_quick": "cc11dd93",
             "size": "3763407097",
             "comp": "dir",
-            "info-url": "https://huggingface.co/parler-tts/parler-tts-mini-v1.1",
+            "info": "https://huggingface.co/parler-tts/parler-tts-mini-v1.1",
             "urls": [
                 "https://huggingface.co/parler-tts/parler-tts-mini-v1.1/resolve/fbb2dd281092c5b414ef29cf9d8895f386f1feef/model.safetensors",
                 "https://huggingface.co/parler-tts/parler-tts-mini-v1.1/resolve/fbb2dd281092c5b414ef29cf9d8895f386f1feef/config.json",
@@ -32489,7 +32492,7 @@
             "checksum_quick": "769a5fd4",
             "size": "9335524709",
             "comp": "dir",
-            "info-url": "https://huggingface.co/parler-tts/parler-tts-large-v1",
+            "info": "https://huggingface.co/parler-tts/parler-tts-large-v1",
             "urls": [
                 "https://huggingface.co/parler-tts/parler-tts-large-v1/resolve/50cb4b874c83902f930d7c2e753224c15654f11e/model-00001-of-00002.safetensors",
                 "https://huggingface.co/parler-tts/parler-tts-large-v1/resolve/50cb4b874c83902f930d7c2e753224c15654f11e/model-00002-of-00002.safetensors",
@@ -32523,7 +32526,7 @@
             "checksum_quick": "50ef696f",
             "size": "3514743411",
             "comp": "dir",
-            "info-url": "https://huggingface.co/parler-tts/parler-tts-mini-v1",
+            "info": "https://huggingface.co/parler-tts/parler-tts-mini-v1",
             "urls": [
                 "https://huggingface.co/parler-tts/parler-tts-mini-v1/resolve/0392b9451a601e528fd863bbb0598431fee810d9/model.safetensors",
                 "https://huggingface.co/parler-tts/parler-tts-mini-v1/resolve/0392b9451a601e528fd863bbb0598431fee810d9/config.json",
@@ -32554,7 +32557,7 @@
             "checksum_quick": "ccede0c2",
             "size": "2591470815",
             "comp": "dir",
-            "info-url": "https://huggingface.co/parler-tts/parler-tts-mini-expresso",
+            "info": "https://huggingface.co/parler-tts/parler-tts-mini-expresso",
             "urls": [
                 "https://huggingface.co/parler-tts/parler-tts-mini-expresso/resolve/95d88b6f8b2b43dfb0f5c111f484addbaa1c69ed/model.safetensors",
                 "https://huggingface.co/parler-tts/parler-tts-mini-expresso/resolve/95d88b6f8b2b43dfb0f5c111f484addbaa1c69ed/config.json",
@@ -32585,7 +32588,7 @@
             "checksum_quick": "8cc1f353",
             "size": "1269555378",
             "comp": "dir",
-            "info-url": "https://huggingface.co/parler-tts/parler-tts-tiny-v1",
+            "info": "https://huggingface.co/parler-tts/parler-tts-tiny-v1",
             "urls": [
                 "https://huggingface.co/parler-tts/parler-tts-tiny-v1/resolve/fe1bd939bb05464d39a76e20cf8a35d4e6885571/model.safetensors",
                 "https://huggingface.co/parler-tts/parler-tts-tiny-v1/resolve/fe1bd939bb05464d39a76e20cf8a35d4e6885571/config.json",
@@ -32616,7 +32619,7 @@
             "checksum_quick": "454f8b11",
             "size": "3763407102",
             "comp": "dir",
-            "info-url": "https://huggingface.co/parler-tts/parler-tts-mini-multilingual",
+            "info": "https://huggingface.co/parler-tts/parler-tts-mini-multilingual",
             "urls": [
                 "https://huggingface.co/parler-tts/parler-tts-mini-multilingual/resolve/e0e121325d1f0471756ef67b159d889f4b7db231/model.safetensors",
                 "https://huggingface.co/parler-tts/parler-tts-mini-multilingual/resolve/e0e121325d1f0471756ef67b159d889f4b7db231/config.json",
@@ -32649,7 +32652,7 @@
             "checksum_quick": "ec170ee6",
             "size": "3763407248",
             "comp": "dir",
-            "info-url": "https://huggingface.co/parler-tts/parler-tts-mini-multilingual-v1.1",
+            "info": "https://huggingface.co/parler-tts/parler-tts-mini-multilingual-v1.1",
             "urls": [
                 "https://huggingface.co/parler-tts/parler-tts-mini-multilingual-v1.1/resolve/11b27d57855dec1ce0914ba1f12363bf2ea75ba3/model.safetensors",
                 "https://huggingface.co/parler-tts/parler-tts-mini-multilingual-v1.1/resolve/11b27d57855dec1ce0914ba1f12363bf2ea75ba3/config.json",

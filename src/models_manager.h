@@ -157,6 +157,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         unsigned int pack_count = 0;
         unsigned int pack_available_count = 0;
         std::vector<pack_t> packs;
+        QString info;
         QString speaker;
         QString trg_lang_id;
         int score = 2;
@@ -290,6 +291,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         std::vector<sup_model_t> sup_models;
         QString pack_id;
         std::vector<pack_t> packs;
+        QString info;
         QString speaker;
         QString trg_lang_id;
         QString alias_of;

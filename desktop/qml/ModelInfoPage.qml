@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -260,6 +260,32 @@ Dialog {
             }
 
             Label {
+                visible: root.model.info.length !== 0
+                text: qsTr("Model card")
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            }
+
+            RichLabel {
+                visible: root.model.info.length !== 0
+                text: "<a href='" + root.model.info + "'>" + root.model.info + "</a>"
+                font.bold: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            }
+
+            Label {
+                visible: root.model.download_urls.length !== 0
+                text: qsTr("Total download size")
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            }
+
+            Label {
+                visible: root.model.download_urls.length !== 0
+                text: root.model.download_size
+                font.bold: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            }
+
+            Label {
                 visible: licenseLabel.visible
                 text: qsTr("License")
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
@@ -282,19 +308,6 @@ Dialog {
                     text: qsTr("Show license")
                     onClicked: appWin.showModelLicenseDialog(root.model.license_id, root.model.license_name, root.model.license_url, null)
                 }
-            }
-
-            Label {
-                visible: root.model.download_urls.length !== 0
-                text: qsTr("Total download size")
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-            }
-
-            Label {
-                visible: root.model.download_urls.length !== 0
-                text: root.model.download_size
-                font.bold: true
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
             }
 
             Label {

@@ -252,6 +252,7 @@ ListItem *ModelsListModel::makeItem(const models_manager::model_t &model) {
         /*license=*/
         {model.license.id, model.license.name, model.license.url,
          model.license.accept_required},
+        /*info=*/std::move(model.info),
         /*download_info=*/std::move(download_info),
         /*available=*/model.available,
         /*dl_multi=*/model.dl_multi,
@@ -473,14 +474,15 @@ unsigned int ModelsListModel::countForRole(ModelRole role) const {
 ModelsListItem::ModelsListItem(
     const QString &id, QString name, QString lang_id, QString pack_id,
     int pack_count, int pack_available_count, ModelsListModel::ModelRole role,
-    License license, DownloadInfo download_info, bool available, bool dl_multi,
-    bool dl_off, unsigned int features, int score, bool default_for_lang,
-    bool downloading, double progress, QObject *parent)
+    License license, QString info, DownloadInfo download_info, bool available,
+    bool dl_multi, bool dl_off, unsigned int features, int score,
+    bool default_for_lang, bool downloading, double progress, QObject *parent)
     : SelectableItem{parent},
       m_id{id},
       m_name{std::move(name)},
       m_lang_id{std::move(lang_id)},
       m_pack_id{std::move(pack_id)},
+      m_info{std::move(info)},
       m_pack_count{pack_count},
       m_pack_available_count{pack_available_count},
       m_role{role},
@@ -521,6 +523,7 @@ QHash<int, QByteArray> ModelsListItem::roleNames() const {
         QByteArrayLiteral("license_accept_required");
     names[DownloadUrlsRole] = QByteArrayLiteral("download_urls");
     names[DownloadSizeRole] = QByteArrayLiteral("download_size");
+    names[InfoRole] = QByteArrayLiteral("info");
     return names;
 }
 
@@ -568,6 +571,8 @@ QVariant ModelsListItem::data(int role) const {
             return download_urls();
         case DownloadSizeRole:
             return download_size();
+        case InfoRole:
+            return info();
         default:
             break;
     }

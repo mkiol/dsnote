@@ -197,7 +197,8 @@ class ModelsListItem : public SelectableItem {
         LicenseUrlRole,
         LicenseAccceptRequiredRole,
         DownloadUrlsRole,
-        DownloadSizeRole
+        DownloadSizeRole,
+        InfoRole
     };
 
     struct License {
@@ -217,11 +218,12 @@ class ModelsListItem : public SelectableItem {
     ModelsListItem(const QString &id, QString name, QString lang_id,
                    QString pack_id, int pack_count, int pack_available_count,
                    ModelsListModel::ModelRole role, License license,
-                   DownloadInfo download_info, bool available = true,
-                   bool dl_multi = false, bool dl_off = false,
-                   unsigned int features = 0, int score = 2,
-                   bool default_for_lang = false, bool downloading = false,
-                   double progress = 0.0, QObject *parent = nullptr);
+                   QString info, DownloadInfo download_info,
+                   bool available = true, bool dl_multi = false,
+                   bool dl_off = false, unsigned int features = 0,
+                   int score = 2, bool default_for_lang = false,
+                   bool downloading = false, double progress = 0.0,
+                   QObject *parent = nullptr);
     QVariant data(int role) const override;
     QHash<int, QByteArray> roleNames() const override;
     QString id() const override { return m_id; }
@@ -246,12 +248,14 @@ class ModelsListItem : public SelectableItem {
     QStringList download_urls() const { return m_download_info.urls; }
     QString download_size() const { return m_download_info.size; }
     void update(const ModelsListItem *item);
+    QString info() const { return m_info; };
 
    private:
     QString m_id;
     QString m_name;
     QString m_lang_id;
     QString m_pack_id;
+    QString m_info;
     int m_pack_count = 0;
     int m_pack_available_count = 0;
     ModelsListModel::ModelRole m_role = ModelsListModel::ModelRole::Stt;

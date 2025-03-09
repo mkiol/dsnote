@@ -458,6 +458,7 @@ std::vector<models_manager::model_t> models_manager::models(
                                                  /*pack_count=*/0,
                                                  /*pack_available_count=*/0,
                                                  /*packs=*/{},
+                                                 /*info=*/{},
                                                  /*speaker=*/{},
                                                  /*trg_lang_id=*/{},
                                                  /*score=*/model.score,
@@ -498,6 +499,7 @@ std::vector<models_manager::model_t> models_manager::models(
                           /*pack_count=*/{},
                           /*pack_available_count=*/{},
                           /*packs=*/model.packs,
+                          /*info=*/model.info,
                           /*speaker=*/model.speaker,
                           /*trg_lang_id=*/model.trg_lang_id,
                           /*score=*/model.score,
@@ -616,6 +618,7 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
                             /*pack_count=*/0,
                             /*pack_available_count=*/0,
                             /*packs=*/model.packs,
+                            model.info,
                             model.speaker,
                             model.trg_lang_id,
                             model.score,
@@ -2060,6 +2063,7 @@ auto models_manager::extract_models(
         int score = obj.value(QLatin1String{"score"}).toInt(-1);
         bool available = false, exists = false;
         QString speaker = obj.value(QLatin1String{"speaker"}).toString();
+        QString info = obj.value(QLatin1String{"info"}).toString();
         QString options = obj.value(QLatin1String{"options"}).toString();
         license_t license;
         feature_flags features = feature_flags::no_flags;
@@ -2143,6 +2147,7 @@ auto models_manager::extract_models(
             available = alias.available;
             if (trg_lang_id.isEmpty()) trg_lang_id = alias.trg_lang_id;
             options = merge_options(options, alias.options);
+            if (info.isEmpty()) info = alias.info;
 
             if (engine == model_engine_t::mnt_bergamot &&
                 trg_lang_id.isEmpty()) {
@@ -2313,6 +2318,7 @@ auto models_manager::extract_models(
             /*sup_models=*/std::move(sup_models),
             /*pack_id=*/std::move(pack_id),
             /*packs=*/std::move(packs),
+            /*info=*/std::move(info),
             /*speaker=*/speaker,
             /*trg_lang_id=*/std::move(trg_lang_id),
             /*alias_of=*/model_alias_of,
